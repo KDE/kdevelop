@@ -146,3 +146,5 @@ ConfigPage::ConfigPageType ConfigPage::configPageType() const
 }
 
 } // namespace KDevelop
+
+#include "moc_configpage.cpp"

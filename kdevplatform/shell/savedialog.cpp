@@ -83,3 +83,4 @@ void KSaveSelectDialog::save( )
     accept();
 }
 
+#include "moc_savedialog.cpp"

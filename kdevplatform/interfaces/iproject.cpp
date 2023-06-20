@@ -29,3 +29,4 @@ IProject::~IProject()
 
 }
 
+#include "moc_iproject.cpp"

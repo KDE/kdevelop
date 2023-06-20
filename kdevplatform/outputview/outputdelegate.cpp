@@ -79,3 +79,5 @@ void OutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
 }
 
 }
+
+#include "moc_outputdelegate.cpp"

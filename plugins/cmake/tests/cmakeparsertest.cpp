@@ -111,3 +111,5 @@ void CMakeParserTest::testParserWithBadData_data()
 // }
 
 QTEST_GUILESS_MAIN( CMakeParserTest )
+
+#include "moc_cmakeparsertest.cpp"

@@ -108,3 +108,5 @@ void TemplatePage::extractTemplate()
     const QString destination = QFileDialog::getExistingDirectory() + QLatin1Char('/') + info.baseName();
     archive->directory()->copyTo(destination);
 }
+
+#include "moc_templatepage.cpp"

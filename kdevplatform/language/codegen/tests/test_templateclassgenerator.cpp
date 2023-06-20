@@ -312,3 +312,5 @@ std::unique_ptr<TemplateClassGenerator> TestTemplateClassGenerator::loadTemplate
 }
 
 QTEST_GUILESS_MAIN(TestTemplateClassGenerator)
+
+#include "moc_test_templateclassgenerator.cpp"

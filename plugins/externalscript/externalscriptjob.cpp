@@ -396,3 +396,5 @@ void ExternalScriptJob::receivedStdoutLines(const QStringList& lines)
 {
     m_stdout += lines;
 }
+
+#include "moc_externalscriptjob.cpp"

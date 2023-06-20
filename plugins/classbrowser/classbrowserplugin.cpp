@@ -161,3 +161,4 @@ void ClassBrowserPlugin::showDefinition(const DeclarationPointer& declaration)
 }
 
 #include "classbrowserplugin.moc"
+#include "moc_classbrowserplugin.cpp"

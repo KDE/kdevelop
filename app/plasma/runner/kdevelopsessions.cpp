@@ -114,3 +114,4 @@ void KDevelopSessions::run(const Plasma::RunnerContext &context, const Plasma::Q
 }
 
 #include "kdevelopsessions.moc"
+#include "moc_kdevelopsessions.cpp"

@@ -116,3 +116,6 @@ void SvnMoveJob::setForce( bool force )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setForce( force );
 }
+
+#include "moc_svnmovejob_p.cpp"
+#include "moc_svnmovejob.cpp"

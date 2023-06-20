@@ -47,3 +47,5 @@ void RefactoringProgressDialog::processUses(const KDevelop::ReferencedTopDUConte
     }
 }
 }
+
+#include "moc_refactoringdialog.cpp"

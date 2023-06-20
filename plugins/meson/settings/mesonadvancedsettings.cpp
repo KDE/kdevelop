@@ -63,3 +63,5 @@ bool MesonAdvancedSettings::hasMesonChanged()
 
     return false;
 }
+
+#include "moc_mesonadvancedsettings.cpp"

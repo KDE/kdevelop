@@ -168,3 +168,4 @@ int QtHelpPlugin::configPages() const
 }
 
 #include "qthelpplugin.moc"
+#include "moc_qthelpplugin.cpp"

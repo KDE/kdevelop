@@ -36,3 +36,5 @@ void TestHighlighting::testInitialization()
     CodeHighlighting highlighting(this);
     QVERIFY(highlighting.attributeForDepth(0));
 }
+
+#include "moc_test_highlighting.cpp"

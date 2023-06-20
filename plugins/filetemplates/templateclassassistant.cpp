@@ -578,3 +578,5 @@ QUrl TemplateClassAssistant::baseUrl() const
 {
     return d->baseUrl;
 }
+
+#include "moc_templateclassassistant.cpp"

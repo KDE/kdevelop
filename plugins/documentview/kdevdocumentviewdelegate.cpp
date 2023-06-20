@@ -32,3 +32,4 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
     }
 }
 
+#include "moc_kdevdocumentviewdelegate.cpp"

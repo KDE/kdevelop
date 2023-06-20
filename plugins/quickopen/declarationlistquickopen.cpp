@@ -22,3 +22,5 @@ void DeclarationListDataProvider::reset()
     DUChainItemDataProvider::clearFilter();
     setItems(m_items);
 }
+
+#include "moc_declarationlistquickopen.cpp"

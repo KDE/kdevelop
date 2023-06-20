@@ -101,3 +101,4 @@ void OpenProjectPage::comboTextChanged( const QString& file )
 
 }
 
+#include "moc_openprojectpage.cpp"

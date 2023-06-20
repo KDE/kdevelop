@@ -86,3 +86,5 @@ KDevelop::OutputModel* ScratchpadJob::outputModel() const
 {
     return static_cast<KDevelop::OutputModel*>(model());
 }
+
+#include "moc_scratchpadjob.cpp"

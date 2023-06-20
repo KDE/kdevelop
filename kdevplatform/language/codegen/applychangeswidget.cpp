@@ -201,3 +201,5 @@ void ApplyChangesWidget::updateDiffView(int index)
     d->m_index = index == -1 ? d->m_index : index;
 }
 }
+
+#include "moc_applychangeswidget.cpp"

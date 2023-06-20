@@ -315,3 +315,4 @@ void FileTemplatesPlugin::previewTemplate()
 }
 
 #include "filetemplatesplugin.moc"
+#include "moc_filetemplatesplugin.cpp"

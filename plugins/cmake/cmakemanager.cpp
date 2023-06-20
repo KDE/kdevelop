@@ -811,3 +811,4 @@ KDevelop::Path CMakeManager::compiler(KDevelop::ProjectTargetItem* item) const
 }
 
 #include "cmakemanager.moc"
+#include "moc_cmakemanager.cpp"

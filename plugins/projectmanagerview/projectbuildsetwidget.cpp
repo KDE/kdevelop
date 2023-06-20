@@ -242,3 +242,4 @@ void ProjectBuildSetWidget::moveToTop()
                                                        QItemSelectionModel::Current );
 }
 
+#include "moc_projectbuildsetwidget.cpp"

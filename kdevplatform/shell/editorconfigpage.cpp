@@ -119,3 +119,4 @@ ConfigPage* EditorConfigPage::childPage(int number)
 }
 
 #include "editorconfigpage.moc"
+#include "moc_editorconfigpage.cpp"

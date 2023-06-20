@@ -231,3 +231,5 @@ void StandardOutputViewTest::testStandardToolViews_data()
     QTest::newRow("test") << KDevelop::IOutputView::TestView;
     QTest::newRow("vcs") << KDevelop::IOutputView::VcsView;
 }
+
+#include "moc_test_standardoutputview.cpp"

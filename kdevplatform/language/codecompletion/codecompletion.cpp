@@ -120,3 +120,5 @@ void CodeCompletion::checkDocument(Document* textDocument)
 
     connect(textDocument, &Document::viewCreated, this, &CodeCompletion::viewCreated);
 }
+
+#include "moc_codecompletion.cpp"

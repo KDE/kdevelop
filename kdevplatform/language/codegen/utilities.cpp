@@ -108,3 +108,5 @@ IndexedString fetchImplementationFileForClass(const Declaration& targetClass)
 }
 }
 }
+
+#include "moc_utilities.cpp"

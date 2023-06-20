@@ -233,3 +233,4 @@ void PartDocument::addPartForView(QWidget* w, KParts::Part* p)
 
 }
 
+#include "moc_partdocument.cpp"

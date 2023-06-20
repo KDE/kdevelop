@@ -325,3 +325,5 @@ BEGINTESTFAILFUNCIMPL(FunctionScopeTest, missingBrace, "No closing brace for fun
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL(FunctionScopeTest, missingBrace, "eval(SOMETHINGELSE){\n")
+
+#include "moc_functionscopetest.cpp"

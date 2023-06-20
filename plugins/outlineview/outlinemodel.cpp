@@ -206,3 +206,5 @@ void OutlineModel::activate(const QModelIndex& realIndex)
     }
     ICore::self()->documentController()->activateDocument(m_lastDoc, range);
 }
+
+#include "moc_outlinemodel.cpp"

@@ -35,3 +35,5 @@ void TestDocument::viewDeletion()
 }
 
 QTEST_MAIN(TestDocument)
+
+#include "moc_test_document.cpp"

@@ -179,3 +179,4 @@ KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
 }
 
 #include "plugin.moc"
+#include "moc_plugin.cpp"

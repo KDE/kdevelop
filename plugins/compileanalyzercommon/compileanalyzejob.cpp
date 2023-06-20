@@ -160,3 +160,5 @@ void CompileAnalyzeJob::childProcessExited(int exitCode, QProcess::ExitStatus ex
 }
 
 }
+
+#include "moc_compileanalyzejob.cpp"

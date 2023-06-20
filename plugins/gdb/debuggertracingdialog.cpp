@@ -107,3 +107,5 @@ void DebuggerTracingDialog::accept()
         QDialog::accept();
     }
 }
+
+#include "moc_debuggertracingdialog.cpp"

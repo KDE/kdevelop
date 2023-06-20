@@ -209,3 +209,5 @@ void ConfigDialog::applyChanges(ConfigPage* page)
     button(QDialogButtonBox::Apply)->setEnabled(false);
     emit configSaved(page);
 }
+
+#include "moc_configdialog.cpp"

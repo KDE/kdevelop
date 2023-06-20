@@ -142,3 +142,5 @@ void ConfigWidget::applyChange(F toolChanger)
     toolChanger(&m_tools[idx]);
     emit changed();
 }
+
+#include "moc_configwidget.cpp"

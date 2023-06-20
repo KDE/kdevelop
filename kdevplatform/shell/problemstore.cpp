@@ -323,3 +323,4 @@ ProblemStoreNode* ProblemStore::rootNode() const
 
 }
 
+#include "moc_problemstore.cpp"

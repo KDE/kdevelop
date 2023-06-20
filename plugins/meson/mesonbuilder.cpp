@@ -286,3 +286,4 @@ QString MesonBuilder::errorDescription() const
 }
 
 #include "mesonbuilder.moc"
+#include "moc_mesonbuilder.cpp"

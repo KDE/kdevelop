@@ -48,3 +48,5 @@ void TestUiController::showErrorMessage()
     QTest::qWait(10);
     QCOMPARE(c->activeMainWindow()->size().width(), initialWidth);
 }
+
+#include "moc_test_uicontroller.cpp"

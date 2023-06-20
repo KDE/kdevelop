@@ -135,3 +135,5 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
 
     DUChain::self()->emitUpdateReady(document(), duChain());
 }
+
+#include "moc_cmakeparsejob.cpp"

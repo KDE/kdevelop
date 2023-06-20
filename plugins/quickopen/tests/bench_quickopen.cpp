@@ -289,3 +289,5 @@ void BenchQuickOpen::benchProjectFileFilter_files_data()
     QTest::addRow("%d projects", fileCounts.size()) << fileCounts << false;
     QTest::addRow("%d projects and one open file", fileCounts.size()) << fileCounts << true;
 }
+
+#include "moc_bench_quickopen.cpp"

@@ -520,3 +520,4 @@ KDevelop::Path QMakeProjectManager::compiler(KDevelop::ProjectTargetItem* p) con
 }
 
 #include "qmakemanager.moc"
+#include "moc_qmakemanager.cpp"

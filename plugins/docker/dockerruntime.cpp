@@ -249,3 +249,5 @@ QString DockerRuntime::findExecutable(const QString& executableName) const
 
     return QStandardPaths::findExecutable(executableName, rtPaths);
 }
+
+#include "moc_dockerruntime.cpp"

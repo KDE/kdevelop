@@ -52,3 +52,5 @@ void CheckListItemProxyStyle::drawCheckBox(QPainter* painter, const QStyleOption
 }
 
 }
+
+#include "moc_checklistitemproxystyle.cpp"

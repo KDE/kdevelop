@@ -90,3 +90,5 @@ QString AndroidRuntime::findExecutable(const QString& executableName) const
 
     return QStandardPaths::findExecutable(executableName, rtPaths);
 }
+
+#include "moc_androidruntime.cpp"

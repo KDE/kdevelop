@@ -904,3 +904,5 @@ void TestAssistants::testHeaderGuardAssistant_data()
             "#endif // WHITESPACE_AT_START_H_INCLUDED"
         );
 }
+
+#include "moc_test_assistants.cpp"

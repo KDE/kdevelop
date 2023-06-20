@@ -45,3 +45,5 @@ void LineEdit::timeOut()
 }
 
 } // End of namespace gh
+
+#include "moc_ghlineedit.cpp"

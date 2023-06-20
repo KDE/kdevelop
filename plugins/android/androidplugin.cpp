@@ -46,3 +46,4 @@ KDevelop::ConfigPage* AndroidPlugin::configPage(int number, QWidget* parent)
 }
 
 #include "androidplugin.moc"
+#include "moc_androidplugin.cpp"

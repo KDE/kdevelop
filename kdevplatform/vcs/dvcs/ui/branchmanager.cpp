@@ -276,3 +276,5 @@ void BranchManager::diffJobFinished(KJob* job)
     showVcsDiff(patch);
     close();
 }
+
+#include "moc_branchmanager.cpp"

@@ -106,3 +106,6 @@ void SvnCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRepository,
         m_job->setMapping(sourceRepository, destinationDirectory, recursion);
     }
 }
+
+#include "moc_svncheckoutjob_p.cpp"
+#include "moc_svncheckoutjob.cpp"

@@ -636,3 +636,5 @@ void CodeHighlighting::aboutToRemoveText(const KTextEditor::Range& range)
     }
 }
 }
+
+#include "moc_codehighlighting.cpp"

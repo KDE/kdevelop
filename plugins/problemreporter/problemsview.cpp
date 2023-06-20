@@ -515,3 +515,5 @@ void ProblemsView::setFilter(const QString& filterText, int tabIdx)
 }
 
 }
+
+#include "moc_problemsview.cpp"

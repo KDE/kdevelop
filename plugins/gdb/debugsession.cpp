@@ -314,3 +314,5 @@ void DebugSession::handleCoreFile(const ResultRecord& r)
         stopDebugger();
     }
 }
+
+#include "moc_debugsession.cpp"

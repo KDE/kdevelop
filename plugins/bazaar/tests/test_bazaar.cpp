@@ -343,3 +343,5 @@ void TestBazaar::removeTempDirs()
 }
 
 QTEST_MAIN(TestBazaar)
+
+#include "moc_test_bazaar.cpp"

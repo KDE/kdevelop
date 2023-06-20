@@ -303,3 +303,5 @@ void ProjectPathsWidget::changeCompilerForPath()
         }
     }
 }
+
+#include "moc_projectpathswidget.cpp"

@@ -18,3 +18,5 @@ ISourceFormatterController::~ISourceFormatterController()
 }
 
 }
+
+#include "moc_isourceformattercontroller.cpp"

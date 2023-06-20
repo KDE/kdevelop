@@ -363,3 +363,5 @@ void ProjectItemDataProvider::enableData(const QStringList& items, const QString
         m_itemTypes = NoItems;
     }
 }
+
+#include "moc_projectitemquickopen.cpp"

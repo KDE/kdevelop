@@ -213,3 +213,4 @@ QString ExecuteScriptPlugin::scriptAppConfigTypeId() const
 
 
 #include "executescriptplugin.moc"
+#include "moc_executescriptplugin.cpp"

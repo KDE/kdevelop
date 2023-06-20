@@ -213,3 +213,4 @@ void OutputJob::setVerbosity(OutputJob::OutputJobVerbosity verbosity)
     d->verbosity = verbosity;
 }
 
+#include "moc_outputjob.cpp"

@@ -79,3 +79,5 @@ QIcon MakeBuilderPreferences::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("run-build"));
 }
+
+#include "moc_makebuilderpreferences.cpp"

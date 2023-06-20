@@ -15,3 +15,4 @@ ILanguageController::ILanguageController(QObject *parent)
 
 }
 
+#include "moc_ilanguagecontroller.cpp"

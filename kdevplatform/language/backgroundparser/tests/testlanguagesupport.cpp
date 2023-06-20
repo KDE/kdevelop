@@ -26,3 +26,5 @@ QString TestLanguageSupport::name() const
 {
     return QStringLiteral("TestLanguageSupport");
 }
+
+#include "moc_testlanguagesupport.cpp"

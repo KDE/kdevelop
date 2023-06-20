@@ -75,3 +75,4 @@ void WorkingSetWidget::setChangedSignificantly()
     setVisible(!workingSet()->isEmpty());
 }
 
+#include "moc_workingsetwidget.cpp"

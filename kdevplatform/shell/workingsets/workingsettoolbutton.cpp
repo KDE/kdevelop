@@ -161,3 +161,4 @@ void WorkingSetToolButton::buttonTriggered()
     }
 }
 
+#include "moc_workingsettoolbutton.cpp"

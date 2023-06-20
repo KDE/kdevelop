@@ -101,3 +101,4 @@ void Plugin::reloadDB()
 }
 
 #include "plugin.moc"
+#include "moc_plugin.cpp"

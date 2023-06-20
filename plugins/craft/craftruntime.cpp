@@ -180,3 +180,5 @@ EnvironmentVariable::EnvironmentVariable(const QByteArray& name, const QByteArra
     , value(value)
 {
 }
+
+#include "moc_craftruntime.cpp"

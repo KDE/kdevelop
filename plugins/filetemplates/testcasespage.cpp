@@ -60,3 +60,5 @@ void TestCasesPage::identifierChanged(const QString& identifier)
 {
     emit isValid(!identifier.isEmpty());
 }
+
+#include "moc_testcasespage.cpp"

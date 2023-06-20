@@ -160,3 +160,4 @@ KDevelop::ConfigPage* DockerPlugin::configPage(int number, QWidget* parent)
 }
 
 #include "dockerplugin.moc"
+#include "moc_dockerplugin.cpp"

@@ -38,3 +38,5 @@ ProviderModel::ProviderModel(QObject *parent)
 }
 
 } // End of namespace gh
+
+#include "moc_ghprovidermodel.cpp"

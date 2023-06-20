@@ -295,3 +295,5 @@ void CompilersModel::updateCompiler(const QItemSelection& compiler)
     }
     emit compilerChanged();
 }
+
+#include "moc_compilersmodel.cpp"

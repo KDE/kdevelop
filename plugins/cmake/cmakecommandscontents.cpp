@@ -177,3 +177,5 @@ QVector<QString> CMakeCommandsContents::names(ICMakeDocumentation::Type t) const
 {
     return m_namesForType[t];
 }
+
+#include "moc_cmakecommandscontents.cpp"

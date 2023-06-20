@@ -239,3 +239,5 @@ void ProblemInlineNoteProvider::paintInlineNote(const KTextEditor::InlineNote& n
     painter.setPen(colors.foreground);
     painter.drawText(boundingRect, Qt::AlignLeft, text);
 }
+
+#include "moc_probleminlinenoteprovider.cpp"

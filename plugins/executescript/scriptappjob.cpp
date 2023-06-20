@@ -236,4 +236,4 @@ KDevelop::OutputModel* ScriptAppJob::model()
     return qobject_cast<KDevelop::OutputModel*>(OutputJob::model());
 }
 
-
+#include "moc_scriptappjob.cpp"

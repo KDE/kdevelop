@@ -25,3 +25,5 @@ bool VariableSortProxyModel::lessThan(const QModelIndex &left, const QModelIndex
 }
 
 }
+
+#include "moc_variablesortmodel.cpp"

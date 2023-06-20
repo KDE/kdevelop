@@ -82,3 +82,5 @@ void KDevelop::PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent
     m_movingRange = nullptr;
     m_tracker.clear();
 }
+
+#include "moc_persistentmovingrangeprivate.cpp"

@@ -25,3 +25,5 @@ QString DockerPreferences::name() const
 {
     return QStringLiteral("Docker");
 }
+
+#include "moc_dockerpreferences.cpp"

@@ -60,3 +60,5 @@ void NoProjectCustomIncludePaths::openAddIncludeDirectoryDialog()
 
     appendCustomIncludePath(dirName);
 }
+
+#include "moc_noprojectcustomincludepaths.cpp"

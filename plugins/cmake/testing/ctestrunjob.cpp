@@ -224,3 +224,5 @@ void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endR
         }
     }
 }
+
+#include "moc_ctestrunjob.cpp"

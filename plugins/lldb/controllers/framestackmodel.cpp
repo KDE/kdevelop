@@ -102,3 +102,5 @@ void LldbFrameStackModel::handleThreadInfo(const ResultRecord& r)
     }
     stoppedAtThread = -1;
 }
+
+#include "moc_framestackmodel.cpp"

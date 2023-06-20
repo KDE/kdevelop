@@ -366,3 +366,5 @@ KProcess* DVcsJob::process() const
 
     return d->childproc;
 }
+
+#include "moc_dvcsjob.cpp"

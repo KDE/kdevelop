@@ -571,3 +571,4 @@ QList<QVariant> mergeCustomHighlighting(const QStringList& strings_, const QList
     return totalHighlighting;
 }
 
+#include "moc_expandingwidgetmodel.cpp"

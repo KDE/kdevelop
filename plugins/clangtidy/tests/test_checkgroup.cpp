@@ -228,3 +228,5 @@ void TestCheckGroup::testSetEnabledChecks()
 
 
 QTEST_GUILESS_MAIN(TestCheckGroup)
+
+#include "moc_test_checkgroup.cpp"

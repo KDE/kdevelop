@@ -88,3 +88,5 @@ QVector<ModelData> ProblemModelSet::models() const
 }
 
 }
+
+#include "moc_problemmodelset.cpp"

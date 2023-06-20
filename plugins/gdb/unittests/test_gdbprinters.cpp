@@ -522,3 +522,4 @@ void QtPrintersTest::testKDevelopTypes()
 QTEST_MAIN(QtPrintersTest)
 
 #include "test_gdbprinters.moc"
+#include "moc_test_gdbprinters.cpp"

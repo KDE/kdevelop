@@ -236,3 +236,4 @@ void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup cfg, 
     cfg.sync();
 }
 
+#include "moc_scriptappconfig.cpp"

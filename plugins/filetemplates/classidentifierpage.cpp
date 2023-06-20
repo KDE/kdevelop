@@ -66,3 +66,5 @@ void ClassIdentifierPage::setFocusToFirstEditWidget()
 {
     d->classid->identifierLineEdit->setFocus();
 }
+
+#include "moc_classidentifierpage.cpp"

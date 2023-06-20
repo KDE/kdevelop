@@ -166,3 +166,5 @@ void QuickOpenEmbeddedWidgetCombiner::resetNavigationState()
         }
     }
 }
+
+#include "moc_quickopenembeddedwidgetcombiner.cpp"

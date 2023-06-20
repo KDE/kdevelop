@@ -130,3 +130,4 @@ void TestCompileAnalyzeJob::testJob()
 QTEST_GUILESS_MAIN(TestCompileAnalyzeJob)
 
 #include "test_compileanalyzejob.moc"
+#include "moc_test_compileanalyzejob.cpp"

@@ -967,3 +967,5 @@ void SourceFormatterController::resetUi()
 }
 
 }
+
+#include "moc_sourceformattercontroller.cpp"

@@ -65,3 +65,5 @@ KastenToolViewWidget::~KastenToolViewWidget()
 }
 
 }
+
+#include "moc_kastentoolviewwidget.cpp"

@@ -77,3 +77,4 @@ void GitPluginCheckInRepositoryJob::repositoryQueryFinished(int)
     emit finished(requestSucceeded);
 }
 
+#include "moc_gitplugincheckinrepositoryjob.cpp"

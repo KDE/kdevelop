@@ -109,3 +109,5 @@ void OutputWidgetConfig::openDialog(QWidget* dialogParent)
     dialogLayout->addWidget(buttonBox);
     dialog->open();
 }
+
+#include "moc_outputwidgetconfig.cpp"

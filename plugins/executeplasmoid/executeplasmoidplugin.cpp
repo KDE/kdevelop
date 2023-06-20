@@ -81,3 +81,4 @@ QString ExecutePlasmoidPlugin::terminal(ILaunchConfiguration* /*config*/) const
 }
 
 #include "executeplasmoidplugin.moc"
+#include "moc_executeplasmoidplugin.cpp"

@@ -57,3 +57,5 @@ QIcon CMakeBuilderPreferences::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("cmake"));
 }
+
+#include "moc_cmakebuilderpreferences.cpp"

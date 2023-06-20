@@ -126,3 +126,5 @@ void TestModels::testVcsFileChangesModel()
 }
 
 QTEST_MAIN(TestModels)
+
+#include "moc_test_models.cpp"

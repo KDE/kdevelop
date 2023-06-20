@@ -128,3 +128,5 @@ void ScopeTest::testIfElse()
     bool ret = d.parse(&ast);
     QVERIFY(ret);
 }
+
+#include "moc_scopetest.cpp"

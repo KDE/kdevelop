@@ -259,3 +259,4 @@ void BuilderJob::start()
     ExecuteCompositeJob::start();
 }
 
+#include "moc_builderjob.cpp"

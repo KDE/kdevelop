@@ -364,3 +364,5 @@ void KDevDocumentView::drawBranches(QPainter* painter, const QRect& rect, const 
 
     QTreeView::drawBranches(painter, rect, index);
 }
+
+#include "moc_kdevdocumentview.cpp"

@@ -93,3 +93,5 @@ ClassWidget::~ClassWidget()
 {
     delete m_model;
 }
+
+#include "moc_classwidget.cpp"

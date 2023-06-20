@@ -591,3 +591,4 @@ void CustomScriptPreferences::moreVariablesClicked(bool)
 }
 
 #include "customscript_plugin.moc"
+#include "moc_customscript_plugin.cpp"

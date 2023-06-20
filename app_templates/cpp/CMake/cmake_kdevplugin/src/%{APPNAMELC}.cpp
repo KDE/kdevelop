@@ -16,3 +16,4 @@ K_PLUGIN_FACTORY_WITH_JSON(%{APPNAMEID}Factory, "%{APPNAMELC}.json", registerPlu
 
 // needed for QObject class created from K_PLUGIN_FACTORY_WITH_JSON
 #include "%{APPNAMELC}.moc"
+#include "moc_%{APPNAMELC}.cpp"

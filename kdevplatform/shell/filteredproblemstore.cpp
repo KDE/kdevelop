@@ -317,3 +317,5 @@ bool FilteredProblemStorePrivate::match(const IProblem::Ptr &problem) const
 }
 
 }
+
+#include "moc_filteredproblemstore.cpp"

@@ -30,3 +30,4 @@ ICore *ICore::self()
 
 }
 
+#include "moc_icore.cpp"

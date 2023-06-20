@@ -172,3 +172,5 @@ void NativeAppJob::start()
 
     OutputExecuteJob::start();
 }
+
+#include "moc_nativeappjob.cpp"

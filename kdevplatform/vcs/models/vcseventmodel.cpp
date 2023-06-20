@@ -192,3 +192,5 @@ void VcsEventLogModel::jobReceivedResults(KJob* job)
 }
 
 }
+
+#include "moc_vcseventmodel.cpp"

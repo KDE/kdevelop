@@ -41,3 +41,4 @@ void CheckInRepositoryJob::abort()
 
 } // namespace KDevelop
 
+#include "moc_icontentawareversioncontrol.cpp"

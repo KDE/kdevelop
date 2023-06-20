@@ -123,3 +123,5 @@ void CompileAnalyzeProblemModel::forceFullUpdate()
 }
 
 }
+
+#include "moc_compileanalyzeproblemmodel.cpp"

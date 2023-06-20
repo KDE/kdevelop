@@ -166,3 +166,5 @@ void TemplateOptionsPage::setFocusToFirstEditWidget()
         d->firstEditWidget->setFocus();
     }
 }
+
+#include "moc_templateoptionspage.cpp"

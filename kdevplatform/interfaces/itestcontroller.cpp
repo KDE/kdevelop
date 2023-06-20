@@ -19,3 +19,4 @@ ITestController::~ITestController()
 
 }
 
+#include "moc_itestcontroller.cpp"

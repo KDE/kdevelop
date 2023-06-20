@@ -80,4 +80,4 @@ QIcon BGPreferences::icon() const
 
 }
 
-
+#include "moc_bgpreferences.cpp"

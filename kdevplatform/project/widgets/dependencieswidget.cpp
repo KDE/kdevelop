@@ -165,3 +165,5 @@ QVariantList DependenciesWidget::dependencies() const
     }
     return deps;
 }
+
+#include "moc_dependencieswidget.cpp"

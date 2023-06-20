@@ -435,3 +435,5 @@ void AStylePreferences::afterParensChanged()
 
     updatePreviewText();
 }
+
+#include "moc_astyle_preferences.cpp"

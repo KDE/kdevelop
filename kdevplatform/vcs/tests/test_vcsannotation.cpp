@@ -138,3 +138,5 @@ void TestVcsAnnotation::testAssignOperator()
 }
 
 QTEST_GUILESS_MAIN(TestVcsAnnotation)
+
+#include "moc_test_vcsannotation.cpp"

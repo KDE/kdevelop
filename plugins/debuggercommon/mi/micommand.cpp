@@ -391,3 +391,5 @@ qint64 MICommand::totalProcessingTime() const
 {
     return m_completeTimestamp - m_enqueueTimestamp;
 }
+
+#include "moc_micommand.cpp"

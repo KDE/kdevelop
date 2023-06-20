@@ -68,3 +68,5 @@ void SessionListModel::openSession(const QString& sessionId)
 {
     KDevelopSessionsWatch::openSession(sessionId);
 }
+
+#include "moc_sessionlistmodel.cpp"

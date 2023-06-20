@@ -328,3 +328,6 @@ void SvnDiffJob::setDiff( const QString& diff )
 
     emit resultsReady( this );
 }
+
+#include "moc_svndiffjob.cpp"
+#include "moc_svndiffjob_p.cpp"

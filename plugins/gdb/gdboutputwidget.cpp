@@ -433,3 +433,5 @@ bool GDBOutputWidget::showInternalCommands() const
 {
     return m_showInternalCommands;
 }
+
+#include "moc_gdboutputwidget.cpp"

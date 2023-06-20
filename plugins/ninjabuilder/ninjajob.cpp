@@ -224,3 +224,5 @@ NinjaJob::CommandType NinjaJob::commandType() const
 {
     return m_commandType;
 }
+
+#include "moc_ninjajob.cpp"

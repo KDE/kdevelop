@@ -88,3 +88,5 @@ QIcon LanguagePreferences::icon() const
 }
 
 }
+
+#include "moc_languagepreferences.cpp"

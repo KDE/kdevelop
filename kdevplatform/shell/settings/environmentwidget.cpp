@@ -326,3 +326,4 @@ void EnvironmentWidget::onSelectedProfileChanged(int selectedProfileIndex)
 }
 
 #include "environmentwidget.moc"
+#include "moc_environmentwidget.cpp"

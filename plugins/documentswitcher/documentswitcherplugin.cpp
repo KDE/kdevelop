@@ -242,4 +242,4 @@ void DocumentSwitcherPlugin::enableActions()
 }
 
 #include "documentswitcherplugin.moc"
-
+#include "moc_documentswitcherplugin.cpp"

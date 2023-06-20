@@ -130,3 +130,5 @@ HelpNetworkAccessManager * QtHelpProviderAbstract::networkAccess() const
 {
     return m_nam;
 }
+
+#include "moc_qthelpproviderabstract.cpp"

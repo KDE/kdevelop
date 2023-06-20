@@ -213,3 +213,4 @@ void FlatpakPlugin::executeOnRemoteDevice()
 }
 
 #include "flatpakplugin.moc"
+#include "moc_flatpakplugin.cpp"

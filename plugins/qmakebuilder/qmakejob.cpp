@@ -108,3 +108,5 @@ bool QMakeJob::doKill()
     m_cmd->kill();
     return true;
 }
+
+#include "moc_qmakejob.cpp"

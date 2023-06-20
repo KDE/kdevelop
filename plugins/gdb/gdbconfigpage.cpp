@@ -167,5 +167,4 @@ KDevelop::LaunchConfigurationPage* GdbConfigPageFactory::createWidget( QWidget* 
     return new GdbConfigPage( parent );
 }
 
-
-
+#include "moc_gdbconfigpage.cpp"

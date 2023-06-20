@@ -137,3 +137,5 @@ void TestDebugSession::stepOut()
 {
     m_sessionState = PausedState;
 }
+
+#include "moc_testdebugsession.cpp"

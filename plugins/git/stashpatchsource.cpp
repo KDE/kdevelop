@@ -72,3 +72,5 @@ void StashPatchSource::updatePatchFile(KDevelop::VcsJob* job)
 
     emit patchChanged();
 }
+
+#include "moc_stashpatchsource.cpp"

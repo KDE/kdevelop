@@ -437,3 +437,5 @@ QList<IDocumentationProvider*> ProvidersModel::providers()
 {
     return mProviders;
 }
+
+#include "moc_documentationview.cpp"

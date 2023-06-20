@@ -18,3 +18,5 @@ IDocumentationController::~IDocumentationController()
 }
 
 }
+
+#include "moc_idocumentationcontroller.cpp"

@@ -48,3 +48,5 @@ void AnalyzersPreferences::reset()
 }
 
 }
+
+#include "moc_analyzerspreferences.cpp"

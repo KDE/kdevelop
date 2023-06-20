@@ -1914,3 +1914,5 @@ bool DUChain::compareToDisk()
     return true;
 }
 }
+
+#include "moc_duchain.cpp"

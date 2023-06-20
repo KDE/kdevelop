@@ -118,3 +118,5 @@ bool FilteredAllClassesFolder::isClassFiltered(const KDevelop::QualifiedIdentifi
 {
     return !a_id.last().toString().contains(m_filterString, Qt::CaseInsensitive);
 }
+
+#include "moc_allclassesfolder.cpp"

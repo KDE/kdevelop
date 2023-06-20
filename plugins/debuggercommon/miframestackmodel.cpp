@@ -140,3 +140,5 @@ void MIFrameStackModel::fetchFrames(int threadNumber, int from, int to)
     c->setThread(threadNumber);
     session()->addCommand(std::move(c));
 }
+
+#include "moc_miframestackmodel.cpp"

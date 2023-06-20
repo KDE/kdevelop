@@ -138,3 +138,4 @@ CodeUtilsPlugin::~CodeUtilsPlugin()
 }
 
 #include "codeutilsplugin.moc"
+#include "moc_codeutilsplugin.cpp"

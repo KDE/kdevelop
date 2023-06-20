@@ -93,3 +93,5 @@ void AsyncTreeView::resizeColumnsAutomatically()
         resizeColumns();
     }
 }
+
+#include "moc_treeview.cpp"

@@ -297,3 +297,5 @@ void MesonOptionStringView::updated()
     m_option->setValue(m_input->text());
     setChanged(m_option->isUpdated());
 }
+
+#include "moc_mesonoptionbaseview.cpp"

@@ -135,3 +135,5 @@ void TestVcsItemEvent::testAssignOperator()
 }
 
 QTEST_GUILESS_MAIN(TestVcsItemEvent)
+
+#include "moc_test_vcsitemevent.cpp"

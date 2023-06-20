@@ -81,3 +81,4 @@ void TestCppcheckJob::testJob()
 QTEST_GUILESS_MAIN(TestCppcheckJob)
 
 #include "test_cppcheckjob.moc"
+#include "moc_test_cppcheckjob.cpp"

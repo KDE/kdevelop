@@ -31,3 +31,5 @@ void ItemRepositoryTestBase::cleanupTestCase()
     ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryDir.path());
     globalItemRepositoryRegistry().shutdown();
 }
+
+#include "moc_itemrepositorytestbase.cpp"

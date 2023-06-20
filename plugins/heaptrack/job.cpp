@@ -131,3 +131,5 @@ void Job::postProcessStdout(const QStringList& lines)
 }
 
 }
+
+#include "moc_job.cpp"

@@ -107,3 +107,5 @@ void TestExecuteCompositeJob::runTwoJobs()
     QVERIFY(!slave2);
     QVERIFY(!master);
 }
+
+#include "moc_test_executecompositejob.cpp"

@@ -54,3 +54,4 @@ void KDevWelcomePagePlugin::unload()
 }
 
 #include "welcomepageplugin.moc"
+#include "moc_welcomepageplugin.cpp"

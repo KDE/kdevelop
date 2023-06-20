@@ -20,3 +20,4 @@ ISession::~ISession()
 
 }
 
+#include "moc_isession.cpp"

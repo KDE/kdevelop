@@ -217,3 +217,4 @@ void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint, const QString 
 
 }
 
+#include "moc_ibreakpointcontroller.cpp"

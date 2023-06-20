@@ -200,3 +200,4 @@ KJob* NinjaBuilder::install(KDevelop::ProjectBaseItem* dom, const QUrl& installP
 }
 
 #include "ninjabuilder.moc"
+#include "moc_ninjabuilder.cpp"

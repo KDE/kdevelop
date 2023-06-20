@@ -273,3 +273,5 @@ void TestStringHelpers::testParamIterator()
     QVERIFY(!it);
     QCOMPARE(it.position(), endPosition);
 }
+
+#include "moc_test_stringhelpers.cpp"

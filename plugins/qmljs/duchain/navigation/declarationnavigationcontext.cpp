@@ -52,3 +52,5 @@ void DeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType::Ptr typ
 
 
 }
+
+#include "moc_declarationnavigationcontext.cpp"

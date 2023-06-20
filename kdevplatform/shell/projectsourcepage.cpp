@@ -294,3 +294,5 @@ QUrl ProjectSourcePage::workingDir() const
 {
     return m_ui->workingDir->url();
 }
+
+#include "moc_projectsourcepage.cpp"

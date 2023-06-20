@@ -280,3 +280,5 @@ void TestWorkingSetController::restoreSplits()
 }
 
 QTEST_MAIN(TestWorkingSetController)
+
+#include "moc_test_workingsets.cpp"

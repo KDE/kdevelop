@@ -192,3 +192,5 @@ void ParseProjectJob::queueFilesToParse()
 
     d->filesToParse = {}; // free memory or prevent detaching
 }
+
+#include "moc_parseprojectjob.cpp"

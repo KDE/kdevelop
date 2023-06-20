@@ -84,3 +84,5 @@ QIcon SourceFormatterSettings::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("text-field"));
 }
+
+#include "moc_sourceformattersettings.cpp"

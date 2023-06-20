@@ -21,3 +21,5 @@ bool SvnLocationWidget::isCorrect() const
 {
     return !url().isRelative();
 }
+
+#include "moc_svnlocationwidget.cpp"

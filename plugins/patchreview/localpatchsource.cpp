@@ -118,3 +118,5 @@ void LocalPatchWidget::updatePatchFromEdit()
     m_lpatch->setBaseDir(m_ui->baseDir->url());
     m_lpatch->setAlreadyApplied(m_ui->applied->checkState() == Qt::Checked);
 }
+
+#include "moc_localpatchsource.cpp"

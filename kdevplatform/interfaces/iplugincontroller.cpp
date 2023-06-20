@@ -28,3 +28,4 @@ IPluginController::~IPluginController()
 
 }
 
+#include "moc_iplugincontroller.cpp"

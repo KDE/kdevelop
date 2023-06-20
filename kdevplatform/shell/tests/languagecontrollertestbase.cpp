@@ -124,3 +124,5 @@ void LanguageControllerTestBase::nonmatchingLanguagesForUrlTestData()
     QTest::newRow("existent archive with extension") << existentTestUrl("N.tar.gz");
     QTest::newRow("existent archive w/o extension") << existentTestUrl("z");
 }
+
+#include "moc_languagecontrollertestbase.cpp"

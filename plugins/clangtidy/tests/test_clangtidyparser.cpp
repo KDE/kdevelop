@@ -91,3 +91,5 @@ void TestClangTidyParser::testParser()
 }
 
 QTEST_GUILESS_MAIN(TestClangTidyParser)
+
+#include "moc_test_clangtidyparser.cpp"

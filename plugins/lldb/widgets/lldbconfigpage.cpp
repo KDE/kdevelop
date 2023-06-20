@@ -102,3 +102,5 @@ KDevelop::LaunchConfigurationPage * LldbConfigPageFactory::createWidget(QWidget*
 {
     return new LldbConfigPage(parent);
 }
+
+#include "moc_lldbconfigpage.cpp"

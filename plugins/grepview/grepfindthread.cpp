@@ -241,3 +241,5 @@ QStringList GrepFindFilesThread::parseInclude(const QString& inc)
     // Split around commas or spaces
     return inc.split(QRegExp(QStringLiteral(",|\\s")), Qt::SkipEmptyParts);
 }
+
+#include "moc_grepfindthread.cpp"

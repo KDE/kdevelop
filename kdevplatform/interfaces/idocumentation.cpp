@@ -18,3 +18,5 @@ IDocumentation::~IDocumentation()
 {}
 
 }
+
+#include "moc_idocumentation.cpp"

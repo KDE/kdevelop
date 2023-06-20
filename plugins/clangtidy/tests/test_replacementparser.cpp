@@ -154,3 +154,5 @@ void ReplacementsParserTester::doTest()
 }
 
 QTEST_GUILESS_MAIN(ReplacementsParserTester);
+
+#include "moc_test_replacementparser.cpp"

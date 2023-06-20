@@ -82,4 +82,4 @@ void CopyJob::finish(KJob*)
     emit resultsReady(this);
 }
 
-
+#include "moc_copyjob.cpp"

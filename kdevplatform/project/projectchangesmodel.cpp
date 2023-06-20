@@ -279,3 +279,5 @@ void ProjectChangesModel::branchNameReady(VcsJob* job)
 
     reload(QList<IProject*>() << project);
 }
+
+#include "moc_projectchangesmodel.cpp"

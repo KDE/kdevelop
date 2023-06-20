@@ -47,3 +47,5 @@ void NavigationToolTip::setNavigationWidget(QWidget* widget)
     }
 }
 }
+
+#include "moc_navigationtooltip.cpp"

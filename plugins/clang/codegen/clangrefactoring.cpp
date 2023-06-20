@@ -274,3 +274,5 @@ DocumentChangeSet::ChangeResult ClangRefactoring::applyChangesToDeclarations(con
 
     return KDevelop::DocumentChangeSet::ChangeResult::successfulResult();
 }
+
+#include "moc_clangrefactoring.cpp"

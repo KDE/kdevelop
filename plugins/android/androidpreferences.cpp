@@ -25,3 +25,5 @@ QString AndroidPreferences::name() const
 {
     return QStringLiteral("Android");
 }
+
+#include "moc_androidpreferences.cpp"

@@ -59,3 +59,5 @@ int TestVariableController::updatedTimes() const
 {
     return m_updatedTimes;
 }
+
+#include "moc_testvariablecontroller.cpp"

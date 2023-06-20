@@ -35,3 +35,5 @@ DataAccessRepository* TestParseJob::dataAccessInformation()
 {
     return nullptr;
 }
+
+#include "moc_testparsejob.cpp"

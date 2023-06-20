@@ -16,3 +16,5 @@ GdbVariable::GdbVariable(DebugSession *session, TreeModel *model, TreeItem *pare
     : MIVariable(session, model, parent, expression, display)
 {
 }
+
+#include "moc_gdbvariable.cpp"

@@ -79,3 +79,5 @@ void TestController::namedAreas()
 }
 
 QTEST_MAIN(TestController)
+
+#include "moc_test_controller.cpp"

@@ -46,3 +46,5 @@ void RuntimesPreferences::reset()
 }
 
 }
+
+#include "moc_runtimespreferences.cpp"

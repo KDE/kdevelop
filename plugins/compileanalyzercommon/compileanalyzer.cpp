@@ -324,3 +324,5 @@ void CompileAnalyzer::fillContextMenuExtension(ContextMenuExtension &extension,
 }
 
 }
+
+#include "moc_compileanalyzer.cpp"

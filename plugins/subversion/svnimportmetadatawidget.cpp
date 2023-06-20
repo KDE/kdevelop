@@ -73,4 +73,4 @@ bool SvnImportMetadataWidget::hasValidData() const
     return !m_ui->message->toPlainText().isEmpty() && !m_ui->srcEdit->text().isEmpty();
 }
 
-
+#include "moc_svnimportmetadatawidget.cpp"

@@ -102,3 +102,5 @@ OktetaWidget::~OktetaWidget()
 }
 
 }
+
+#include "moc_oktetawidget.cpp"

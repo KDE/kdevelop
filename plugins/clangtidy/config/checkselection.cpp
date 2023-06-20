@@ -126,3 +126,5 @@ void CheckSelection::onEnabledChecksChanged()
 }
 
 }
+
+#include "moc_checkselection.cpp"

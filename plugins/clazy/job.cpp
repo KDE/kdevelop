@@ -251,3 +251,5 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 }
 
 }
+
+#include "moc_job.cpp"

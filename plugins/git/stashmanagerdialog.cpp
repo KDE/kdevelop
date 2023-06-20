@@ -162,3 +162,5 @@ void StashModel::stashListReady(KJob* _job)
         appendRow(item);
     };
 }
+
+#include "moc_stashmanagerdialog.cpp"

@@ -164,3 +164,4 @@ void TemplatePreviewToolView::selectedRendererChanged()
     documentChanged(m_original);
 }
 
+#include "moc_templatepreviewtoolview.cpp"

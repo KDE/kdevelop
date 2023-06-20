@@ -157,3 +157,6 @@ void SvnCommitJob::setRecursive( bool recursive )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setRecursive( recursive );
 }
+
+#include "moc_svncommitjob_p.cpp"
+#include "moc_svncommitjob.cpp"

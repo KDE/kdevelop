@@ -545,3 +545,5 @@ void TestProjectModel::testProjectFileIcon()
 }
 
 QTEST_MAIN(TestProjectModel)
+
+#include "moc_test_projectmodel.cpp"

@@ -286,3 +286,5 @@ GrepJobSettings GrepJob::settings() const
 {
     return m_settings;
 }
+
+#include "moc_grepjob.cpp"

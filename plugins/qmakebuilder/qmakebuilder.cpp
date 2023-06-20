@@ -161,3 +161,4 @@ KJob* QMakeBuilder::maybePrependConfigureJob(ProjectBaseItem* dom, KJob* job, Bu
 }
 
 #include "qmakebuilder.moc"
+#include "moc_qmakebuilder.cpp"

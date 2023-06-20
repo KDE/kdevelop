@@ -58,3 +58,5 @@ void DocumentSwitcherTreeView::drawBranches(QPainter* painter, const QRect& rect
     // this means that for people who have the feature disabled, we get some padding on the left,
     // but that is OK imo
 }
+
+#include "moc_documentswitchertreeview.cpp"

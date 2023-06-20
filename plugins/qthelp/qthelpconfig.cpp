@@ -352,3 +352,4 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
 }
 
 #include "qthelpconfig.moc"
+#include "moc_qthelpconfig.cpp"

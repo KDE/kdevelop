@@ -791,4 +791,4 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
 }
 
 #include "projectmanagerviewplugin.moc"
-
+#include "moc_projectmanagerviewplugin.cpp"

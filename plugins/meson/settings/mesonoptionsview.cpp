@@ -135,3 +135,5 @@ MesonOptsPtr MesonOptionsView::options()
 {
     return m_options;
 }
+
+#include "moc_mesonoptionsview.cpp"

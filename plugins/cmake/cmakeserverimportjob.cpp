@@ -161,3 +161,5 @@ void CMakeServerImportJob::processResponse(const QJsonObject& response)
         qCDebug(CMAKE) << "unhandled message" << response;
     }
 }
+
+#include "moc_cmakeserverimportjob.cpp"

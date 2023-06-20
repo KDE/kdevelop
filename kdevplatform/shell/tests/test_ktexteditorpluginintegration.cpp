@@ -184,3 +184,4 @@ void TestKTextEditorPluginIntegration::testPluginUnload()
 QTEST_MAIN(TestKTextEditorPluginIntegration)
 
 #include <test_ktexteditorpluginintegration.moc>
+#include "moc_test_ktexteditorpluginintegration.cpp"

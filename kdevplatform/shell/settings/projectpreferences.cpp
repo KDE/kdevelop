@@ -56,3 +56,4 @@ QIcon ProjectPreferences::icon() const
 
 }
 
+#include "moc_projectpreferences.cpp"

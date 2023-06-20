@@ -361,3 +361,5 @@ void ProjectSelectionPage::setCurrentTemplate (const QString& fileName)
         ui->templateType->setCurrentIndex(indexes.at(2).row());
     }
 }
+
+#include "moc_projectselectionpage.cpp"

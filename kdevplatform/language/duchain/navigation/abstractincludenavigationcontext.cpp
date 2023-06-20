@@ -170,3 +170,5 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
     //modifyHtml() += "}<br />";
 }
 }
+
+#include "moc_abstractincludenavigationcontext.cpp"

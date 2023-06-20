@@ -571,3 +571,5 @@ void MainWindow::newTabRequested()
 
     d->fileNew();
 }
+
+#include "moc_mainwindow.cpp"

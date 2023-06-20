@@ -80,3 +80,5 @@ void ProjectTargetsComboBox::setCurrentItemPath(const QStringList& str)
 {
     setCurrentIndex(str.isEmpty() && count() ? 0 : findText(KDevelop::joinWithEscaping(str, QLatin1Char('/'), QLatin1Char('\\'))));
 }
+
+#include "moc_projecttargetscombobox.cpp"

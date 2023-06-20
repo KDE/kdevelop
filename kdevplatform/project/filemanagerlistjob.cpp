@@ -203,3 +203,5 @@ void FileManagerListJob::start()
 {
     startNextJob();
 }
+
+#include "moc_filemanagerlistjob.cpp"

@@ -59,3 +59,5 @@ QStandardItemModel * TestAggregateModel::newModel()
 
 
 QTEST_MAIN(TestAggregateModel)
+
+#include "moc_test_aggregatemodel.cpp"

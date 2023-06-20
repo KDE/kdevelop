@@ -9,3 +9,5 @@
 KDevelop::VcsLocationWidget::VcsLocationWidget(QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {}
+
+#include "moc_vcslocationwidget.cpp"

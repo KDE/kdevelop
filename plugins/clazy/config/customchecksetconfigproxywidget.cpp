@@ -32,3 +32,5 @@ void CustomCheckSetConfigProxyWidget::setChecks(const QString& checks)
 }
 
 }
+
+#include "moc_customchecksetconfigproxywidget.cpp"

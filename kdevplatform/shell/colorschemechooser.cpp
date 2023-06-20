@@ -79,3 +79,5 @@ void ColorSchemeChooser::slotSchemeChanged(QAction* triggeredAction)
 }
 
 }  // namespace KDevelop
+
+#include "moc_colorschemechooser.cpp"

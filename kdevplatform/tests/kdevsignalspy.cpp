@@ -44,3 +44,5 @@ void KDevSignalSpy::signalEmitted()
     m_loop->quit();
 }
 } // KDevelop
+
+#include "moc_kdevsignalspy.cpp"

@@ -379,3 +379,4 @@ void WorkingSetToolTipWidget::labelClicked()
 }
 
 #include "workingsettooltipwidget.moc"
+#include "moc_workingsettooltipwidget.cpp"

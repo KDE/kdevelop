@@ -141,3 +141,5 @@ QString QtHelpQtDoc::name() const
 {
     return i18n("QtHelp");
 }
+
+#include "moc_qthelpqtdoc.cpp"

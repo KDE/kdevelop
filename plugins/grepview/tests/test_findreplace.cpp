@@ -304,3 +304,5 @@ void FindReplaceTest::testReplace()
 
 
 QTEST_MAIN(FindReplaceTest)
+
+#include "moc_test_findreplace.cpp"

@@ -73,3 +73,5 @@ void TestTemplatesModel::templateIndexes()
 
 
 QTEST_GUILESS_MAIN(TestTemplatesModel)
+
+#include "moc_test_templatesmodel.cpp"

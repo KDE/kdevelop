@@ -258,3 +258,5 @@ void OverridesPage::setFocusToFirstEditWidget()
 {
     d->overrides->overridesTree->setFocus();
 }
+
+#include "moc_overridespage.cpp"

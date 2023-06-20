@@ -481,3 +481,4 @@ int MesonManager::perProjectConfigPages() const
 }
 
 #include "mesonmanager.moc"
+#include "moc_mesonmanager.cpp"

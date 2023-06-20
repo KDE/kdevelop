@@ -36,4 +36,4 @@ void KDevDocumentSelection::select( const QItemSelection & selection,
     QItemSelectionModel::select( selection, command );
 }
 
-
+#include "moc_kdevdocumentselection.cpp"

@@ -315,3 +315,5 @@ void PlasmoidExecutionConfigType::suggestionTriggered()
     cfg.writeEntry("PlasmoidIdentifier", relUrl);
     emit signalAddLaunchConfiguration(config);
 }
+
+#include "moc_plasmoidexecutionconfig.cpp"

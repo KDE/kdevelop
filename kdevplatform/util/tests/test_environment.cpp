@@ -188,3 +188,5 @@ void TestEnvironment::testExpandVariables()
         QCOMPARE(env.value(it.key()), it.value());
     }
 }
+
+#include "moc_test_environment.cpp"

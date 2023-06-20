@@ -167,3 +167,5 @@ void VcsChangesView::openSelected(const QModelIndex& index)
     
     ICore::self()->documentController()->openDocument(url);
 }
+
+#include "moc_vcschangesview.cpp"

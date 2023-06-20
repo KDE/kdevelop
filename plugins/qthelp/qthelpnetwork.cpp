@@ -74,3 +74,5 @@ QNetworkReply *HelpNetworkAccessManager::createRequest(Operation op, const QNetw
 	}
 	return QNetworkAccessManager::createRequest(op, request, outgoingData);
 }
+
+#include "moc_qthelpnetwork.cpp"

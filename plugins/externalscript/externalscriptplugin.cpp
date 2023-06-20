@@ -409,3 +409,4 @@ void ExternalScriptPlugin::setupKeys(int start, int end)
 }
 
 #include "externalscriptplugin.moc"
+#include "moc_externalscriptplugin.cpp"

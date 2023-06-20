@@ -17,3 +17,5 @@ void KDevelopSessionsPlugin::registerTypes(const char* uri)
 
     qmlRegisterType<SessionListModel>(uri, 1, 0, "SessionListModel");
 }
+
+#include "moc_kdevelopsessionsplugin.cpp"

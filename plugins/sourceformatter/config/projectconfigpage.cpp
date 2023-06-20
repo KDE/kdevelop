@@ -79,3 +79,5 @@ void ProjectConfigPage::apply()
 }
 
 }
+
+#include "moc_projectconfigpage.cpp"

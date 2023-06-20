@@ -451,3 +451,5 @@ QColor ColorCache::foregroundColor() const
     return m_foregroundColor;
 }
 }
+
+#include "moc_colorcache.cpp"

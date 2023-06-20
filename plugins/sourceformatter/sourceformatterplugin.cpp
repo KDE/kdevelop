@@ -42,3 +42,4 @@ KDevelop::ConfigPage* SourceFormatterPlugin::perProjectConfigPage(int number, co
 
 // needed for QObject class created from K_PLUGIN_FACTORY_WITH_JSON
 #include "sourceformatterplugin.moc"
+#include "moc_sourceformatterplugin.cpp"

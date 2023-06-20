@@ -132,3 +132,5 @@ void TestPluginEnabling::loadPluginNormalDefaults()
 }
 
 QTEST_MAIN(TestPluginEnabling)
+
+#include "moc_test_pluginenabling.cpp"

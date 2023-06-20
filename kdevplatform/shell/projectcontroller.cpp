@@ -1368,3 +1368,5 @@ void ProjectController::reparseProject(IProject* project, bool forceUpdate, bool
 }
 
 }
+
+#include "moc_projectcontroller.cpp"

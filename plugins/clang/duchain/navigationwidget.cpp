@@ -113,3 +113,4 @@ QString ClangNavigationWidget::shortDescription(const IncludeItem& includeItem)
 }
 
 #include "navigationwidget.moc"
+#include "moc_navigationwidget.cpp"

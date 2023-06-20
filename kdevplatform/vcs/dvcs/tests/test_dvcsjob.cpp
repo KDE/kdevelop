@@ -43,3 +43,5 @@ void TestDVcsJob::testJob()
 
 
 QTEST_MAIN(TestDVcsJob)
+
+#include "moc_test_dvcsjob.cpp"

@@ -805,3 +805,5 @@ void OutputWidget::updateFilterInputAppearance(FilteredViews::const_iterator cur
                   currentView->filter.errorString()));
     }
 }
+
+#include "moc_outputwidget.cpp"

@@ -128,3 +128,5 @@ void DistributedVersionControlPlugin::ctxBranchManager()
 }
 
 #endif
+
+#include "moc_dvcsplugin.cpp"

@@ -57,3 +57,4 @@ QString ProjectModelSaver::indexToConfigString(const QModelIndex& index) const
 
 }
 
+#include "moc_projectmodelsaver.cpp"

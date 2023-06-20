@@ -375,3 +375,5 @@ void TestCMakeManager::testExecutableOutputPath()
     const CTestSuite* suite = static_cast<CTestSuite*>(ICore::self()->testController()->findTestSuite(project, "mytest"));
     QCOMPARE(suite->executable(), exePath);
 }
+
+#include "moc_test_cmakemanager.cpp"

@@ -19,3 +19,4 @@ IDebugController::~IDebugController()
 
 }
 
+#include "moc_idebugcontroller.cpp"

@@ -166,3 +166,5 @@ QHash< QString, Grantlee::Filter* > KDevFilters::filters(const QString& name)
 
     return filters;
 }
+
+#include "moc_kdevfilters.cpp"

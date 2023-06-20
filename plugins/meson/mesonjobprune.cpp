@@ -86,3 +86,5 @@ bool MesonJobPrune::doKill()
 {
     return m_job->kill();
 }
+
+#include "moc_mesonjobprune.cpp"

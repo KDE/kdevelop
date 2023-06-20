@@ -142,3 +142,5 @@ void ClassTree::highlightIdentifier(const KDevelop::IndexedQualifiedIdentifier& 
     horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
     expand(index);
 }
+
+#include "moc_classtree.cpp"

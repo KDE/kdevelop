@@ -61,3 +61,5 @@ KDevelop::ProjectBaseItem* ProjectProxyModel::itemFromProxyIndex( const QModelIn
 {
     return projectModel()->itemFromIndex( mapToSource(idx));
 }
+
+#include "moc_projectproxymodel.cpp"

@@ -634,3 +634,4 @@ void PatchReviewPlugin::executeFileReviewAction()
 }
 
 #include "patchreview.moc"
+#include "moc_patchreview.cpp"

@@ -739,3 +739,5 @@ QSize KDevelop::UsesWidget::sizeHint() const
         ret.setHeight(300);
     return ret;
 }
+
+#include "moc_useswidget.cpp"

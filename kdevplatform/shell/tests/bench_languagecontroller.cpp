@@ -84,3 +84,5 @@ void BenchLanguageController::benchmarkLanguagesForUrlNoMatch()
 }
 
 QTEST_MAIN(BenchLanguageController)
+
+#include "moc_bench_languagecontroller.cpp"

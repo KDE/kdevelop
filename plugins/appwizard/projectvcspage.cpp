@@ -146,3 +146,5 @@ bool ProjectVcsPage::shouldContinue()
 
     return m_currentImportWidget->hasValidData();
 }
+
+#include "moc_projectvcspage.cpp"

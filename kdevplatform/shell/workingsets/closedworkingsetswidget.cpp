@@ -116,3 +116,4 @@ void ClosedWorkingSetsWidget::addWorkingSet( WorkingSet* set )
     m_buttons[set] = button;
 }
 
+#include "moc_closedworkingsetswidget.cpp"

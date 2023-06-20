@@ -138,3 +138,4 @@ void TestMICommandQueue::clearQueue()
 QTEST_GUILESS_MAIN(TestMICommandQueue)
 
 #include "test_micommandqueue.moc"
+#include "moc_test_micommandqueue.cpp"

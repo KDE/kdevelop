@@ -17,3 +17,5 @@ void TestBreakpointController::sendMaybe(Breakpoint* breakpoint)
 {
     Q_UNUSED(breakpoint);
 }
+
+#include "moc_testbreakpointcontroller.cpp"

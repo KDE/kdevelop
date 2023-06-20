@@ -18,3 +18,4 @@ IProjectProvider::~IProjectProvider()
 
 }
 
+#include "moc_iprojectprovider.cpp"

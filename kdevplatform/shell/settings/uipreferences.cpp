@@ -55,3 +55,4 @@ QString UiPreferences::fullName() const
     return i18n("Configure User Interface");
 }
 
+#include "moc_uipreferences.cpp"

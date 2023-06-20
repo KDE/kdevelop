@@ -119,3 +119,5 @@ QString JobGlobalParameters::error() const
 }
 
 }
+
+#include "moc_jobparameters.cpp"

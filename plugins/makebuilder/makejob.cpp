@@ -300,3 +300,5 @@ bool MakeJob::isNMake(const QString& makeBin)
 {
     return !QFileInfo(makeBin).baseName().compare(QLatin1String("nmake"), Qt::CaseInsensitive);
 }
+
+#include "moc_makejob.cpp"

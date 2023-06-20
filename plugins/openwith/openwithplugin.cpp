@@ -293,3 +293,4 @@ void OpenWithPlugin::openFilesInternal( const QList<QUrl>& files )
 }
 
 #include "openwithplugin.moc"
+#include "moc_openwithplugin.cpp"

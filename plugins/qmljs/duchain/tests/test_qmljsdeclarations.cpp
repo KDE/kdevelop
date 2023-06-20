@@ -274,3 +274,5 @@ void TestDeclarations::testQMLtypesImportPaths()
     path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtMultimedia"), QStringLiteral("5.6"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 }
+
+#include "moc_test_qmljsdeclarations.cpp"

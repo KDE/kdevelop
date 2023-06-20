@@ -149,3 +149,5 @@ void TestCTestFindSuites::testQtTestCases()
 }
 
 QTEST_MAIN(TestCTestFindSuites)
+
+#include "moc_test_ctestfindsuites.cpp"

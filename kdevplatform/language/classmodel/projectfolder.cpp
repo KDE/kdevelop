@@ -81,3 +81,5 @@ bool FilteredProjectFolder::isClassFiltered(const KDevelop::QualifiedIdentifier&
 {
     return !a_id.last().toString().contains(m_filterString, Qt::CaseInsensitive);
 }
+
+#include "moc_projectfolder.cpp"

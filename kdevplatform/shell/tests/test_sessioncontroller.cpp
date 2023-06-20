@@ -255,3 +255,5 @@ void TestSessionController::tryLockSession()
 }
 
 QTEST_GUILESS_MAIN(TestSessionController)
+
+#include "moc_test_sessioncontroller.cpp"

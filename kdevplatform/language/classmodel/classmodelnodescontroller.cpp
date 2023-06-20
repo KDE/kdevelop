@@ -60,3 +60,5 @@ void ClassModelNodesController::updateChangedFiles()
     // Processed all files.
     m_updatedFiles.clear();
 }
+
+#include "moc_classmodelnodescontroller.cpp"

@@ -84,3 +84,5 @@ void ImportJob::start()
 }
 }
 }
+
+#include "moc_cmakefileapiimportjob.cpp"

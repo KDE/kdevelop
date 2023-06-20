@@ -506,3 +506,5 @@ void TestProblems::testSeverity_data()
     QTest::newRow("hint-unused-variable") << QByteArray("int main() { int foo = 0; return 0; }") << IProblem::Hint;
     QTest::newRow("hint-unused-parameter") << QByteArray("int main(int argc, char**) { return 0; }") << IProblem::Hint;
 }
+
+#include "moc_test_problems.cpp"

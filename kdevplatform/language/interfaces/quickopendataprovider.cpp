@@ -72,3 +72,5 @@ bool extractLineNumber(const QString& from, QString& path, uint& lineNumber)
     }
 }
 }
+
+#include "moc_quickopendataprovider.cpp"

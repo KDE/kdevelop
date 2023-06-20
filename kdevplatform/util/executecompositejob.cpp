@@ -145,3 +145,5 @@ void ExecuteCompositeJob::setAbortOnError(bool abort)
 }
 
 }
+
+#include "moc_executecompositejob.cpp"

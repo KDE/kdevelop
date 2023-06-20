@@ -405,3 +405,5 @@ void LexerTest::scope_data()
     expectedends << 2 << 3;
     QTest::newRow("row1") << "foo{" << expectedtokens << expectedbegins << expectedends;
 }
+
+#include "moc_lexertest.cpp"

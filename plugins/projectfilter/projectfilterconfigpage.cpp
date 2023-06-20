@@ -207,3 +207,5 @@ QString ProjectFilterConfigPage::name() const
 {
     return i18nc("@title:tab", "Project Filter");
 }
+
+#include "moc_projectfilterconfigpage.cpp"

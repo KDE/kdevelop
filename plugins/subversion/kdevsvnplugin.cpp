@@ -441,3 +441,4 @@ ThreadWeaver::Queue* KDevSvnPlugin::jobQueue() const
 }
 
 #include "kdevsvnplugin.moc"
+#include "moc_kdevsvnplugin.cpp"

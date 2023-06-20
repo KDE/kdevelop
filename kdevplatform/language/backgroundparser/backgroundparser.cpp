@@ -1038,3 +1038,5 @@ void BackgroundParser::updateProgressBar()
 
     emit showProgress(this, 0, d->m_progressMax, d->m_progressDone);
 }
+
+#include "moc_backgroundparser.cpp"

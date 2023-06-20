@@ -303,3 +303,4 @@ void CheckSetManageWidget::onEnabledChecksChanged(const QString& selection)
 }
 
 #include "checksetmanagewidget.moc"
+#include "moc_checksetmanagewidget.cpp"

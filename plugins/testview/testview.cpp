@@ -390,3 +390,4 @@ QList< QAction* > TestView::contextMenuActions()
     return m_contextMenuActions;
 }
 
+#include "moc_testview.cpp"

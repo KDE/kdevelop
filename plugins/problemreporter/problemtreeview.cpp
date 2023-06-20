@@ -239,3 +239,4 @@ void ProblemTreeView::showEvent(QShowEvent* event)
 }
 
 #include "problemtreeview.moc"
+#include "moc_problemtreeview.cpp"

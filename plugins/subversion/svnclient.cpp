@@ -315,3 +315,5 @@ void SvnClient::emitLogEventReceived( const KDevelop::VcsEvent& ev )
 {
     emit logEventReceived( ev );
 }
+
+#include "moc_svnclient.cpp"

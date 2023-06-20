@@ -362,3 +362,5 @@ void TestProjectLoad::addDuringImport()
     //      esp. when adding a file at a point where the parent folder was already imported
     //      or removing a file that was already imported
 }
+
+#include "moc_test_projectload.cpp"

@@ -329,3 +329,5 @@ void WorkingSetController::clearWorkingSet(Sublime::Area * area)
     newSet->loadToArea(area);
     Q_ASSERT(newSet->fileList().isEmpty());
 }
+
+#include "moc_workingsetcontroller.cpp"

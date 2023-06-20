@@ -57,3 +57,5 @@ QWidget* UsesNavigationContext::widget() const
 {
     return m_widget;
 }
+
+#include "moc_usesnavigationcontext.cpp"

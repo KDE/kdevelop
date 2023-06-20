@@ -387,3 +387,5 @@ void CheckListModel::emitSubGroupDataChanged(const QModelIndex& subGroupIndex)
 }
 
 }
+
+#include "moc_checklistmodel.cpp"

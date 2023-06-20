@@ -211,3 +211,5 @@ void ProblemHighlighter::clearProblems()
 {
     setProblems({});
 }
+
+#include "moc_problemhighlighter.cpp"

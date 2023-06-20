@@ -70,3 +70,5 @@ QDebug operator<<(QDebug debug, PrintLastModified p)
     debug << p.lastModified.toString(Qt::ISODateWithMs);
     return debug;
 }
+
+#include "moc_cmakeprojectdata.cpp"

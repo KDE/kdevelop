@@ -82,3 +82,5 @@ void ProcessSelectionDialog::selectionChanged(const QItemSelection &selected)
 {
     m_attachButton->setEnabled(selected.count());
 }
+
+#include "moc_processselection.cpp"

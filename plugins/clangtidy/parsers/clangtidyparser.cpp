@@ -93,3 +93,5 @@ void ClangTidyParser::addData(const QStringList& stdoutList)
 }
 
 } // namespace ClangTidy
+
+#include "moc_clangtidyparser.cpp"

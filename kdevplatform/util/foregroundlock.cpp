@@ -233,3 +233,5 @@ static struct StaticLock
 private:
     Q_DISABLE_COPY(StaticLock)
 } staticLock;
+
+#include "moc_foregroundlock.cpp"

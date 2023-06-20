@@ -472,6 +472,4 @@ bool GrepOutputModel::hasResults()
     return(m_matchCount > 0);
 }
 
-
-
-
+#include "moc_grepoutputmodel.cpp"

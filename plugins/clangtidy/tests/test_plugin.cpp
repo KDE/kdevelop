@@ -37,3 +37,5 @@ void TestClangTidyPlugin::testPlugin()
 }
 
 QTEST_GUILESS_MAIN(TestClangTidyPlugin);
+
+#include "moc_test_plugin.cpp"

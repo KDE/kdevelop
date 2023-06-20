@@ -203,3 +203,5 @@ void TestFiles::testFiles()
         QVERIFY(top->problems().isEmpty());
     }
 }
+
+#include "moc_test_files.cpp"

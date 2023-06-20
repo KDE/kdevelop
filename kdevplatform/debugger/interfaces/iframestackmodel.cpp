@@ -35,3 +35,5 @@ IDebugSession* IFrameStackModel::session() const
 }
 
 }
+
+#include "moc_iframestackmodel.cpp"

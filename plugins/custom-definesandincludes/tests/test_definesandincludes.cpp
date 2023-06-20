@@ -136,3 +136,5 @@ void TestDefinesAndIncludes::testEmptyProject()
 }
 
 QTEST_MAIN(TestDefinesAndIncludes)
+
+#include "moc_test_definesandincludes.cpp"

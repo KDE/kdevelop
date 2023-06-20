@@ -199,3 +199,5 @@ bool PerforceImportMetadataWidget::validateP4port(const QString&  projectDir) co
     }
     return true;
 }
+
+#include "moc_perforceimportmetadatawidget.cpp"

@@ -351,3 +351,5 @@ bool STTY::findExternalTTY(const QString& termApp)
     return true;
 }
 // **************************************************************************
+
+#include "moc_stty.cpp"

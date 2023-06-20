@@ -16,3 +16,5 @@ GitJob::GitJob(const QDir& workingDir, KDevelop::IPlugin* parent, KDevelop::Outp
     setType(VcsJob::UserType);
     process()->setEnv(QStringLiteral("GIT_OPTIONAL_LOCKS"), QStringLiteral("0"));
 }
+
+#include "moc_gitjob.cpp"

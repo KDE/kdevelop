@@ -43,3 +43,4 @@ void {{ name }}::{{ case }}()
 
 QTEST_MAIN({{ name }})
 #include "{{ output_file_header|cut:".h" }}.moc"
+#include "moc_{{ output_file_header|cut:".h" }}.cpp"

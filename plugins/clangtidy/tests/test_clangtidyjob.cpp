@@ -90,3 +90,4 @@ void TestClangTidyJob::testJob()
 QTEST_GUILESS_MAIN(TestClangTidyJob)
 
 #include "test_clangtidyjob.moc"
+#include "moc_test_clangtidyjob.cpp"

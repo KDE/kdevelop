@@ -300,3 +300,4 @@ void CMakeCodeCompletionModel::executeCompletionItem(View* view, const Range& wo
     }
 }
 
+#include "moc_cmakecodecompletionmodel.cpp"

@@ -478,3 +478,5 @@ void DebugSession::handleSessionStateChange(IDebugSession::DebuggerState state)
         breakpointController()->setDeleteDuplicateBreakpoints(false);
     }
 }
+
+#include "moc_debugsession.cpp"

@@ -134,3 +134,5 @@ void TestAreaWalker::toolViewWalkerModes()
 }
 
 QTEST_MAIN(TestAreaWalker)
+
+#include "moc_test_areawalker.cpp"

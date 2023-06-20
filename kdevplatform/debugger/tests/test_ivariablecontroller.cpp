@@ -75,3 +75,5 @@ void TestIVariableController::cleanupTestCase()
     delete m_debugSession;
     TestCore::shutdown();
 }
+
+#include "moc_test_ivariablecontroller.cpp"

@@ -86,3 +86,5 @@ void TestTemplateRenderer::kdevFiltersWithLookup()
 
 
 QTEST_MAIN(TestTemplateRenderer)
+
+#include "moc_test_templaterenderer.cpp"

@@ -100,3 +100,5 @@ void VcsCommitDialog::cancel()
 }
 
 }
+
+#include "moc_vcscommitdialog.cpp"

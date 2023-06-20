@@ -163,3 +163,5 @@ void TestVcsAnnotationLine::testAssignOperator()
 }
 
 QTEST_GUILESS_MAIN(TestVcsAnnotationLine)
+
+#include "moc_test_vcsannotationline.cpp"

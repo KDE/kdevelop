@@ -114,3 +114,5 @@ void TestOutputModel::bench_data()
 }
 
 }
+
+#include "moc_test_outputmodel.cpp"

@@ -131,3 +131,5 @@ void MesonListEditor::currentItemChanged()
         m_ui->b_last->setDisabled(false);
     }
 }
+
+#include "moc_mesonlisteditor.cpp"

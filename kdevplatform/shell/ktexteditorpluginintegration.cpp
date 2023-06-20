@@ -509,3 +509,4 @@ void MainWindow::splitView(Qt::Orientation orientation)
 }
 
 #include "ktexteditorpluginintegration.moc"
+#include "moc_ktexteditorpluginintegration.cpp"

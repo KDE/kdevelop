@@ -373,3 +373,5 @@ void TestAstyle::testKdeFrameworks_data()
     expected = QStringLiteral("    switch (myEnum) {\n    case Value1:\n        doSomething();\n    }\n");
     QTest::newRow("switch-statement") << initial << leftContext << rightContext << expected;
 }
+
+#include "moc_test_astyle.cpp"

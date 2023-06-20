@@ -50,4 +50,4 @@ void Example2Main::close()
     delete area()->removeView(activeView());
 }
 
-
+#include "moc_example2main.cpp"

@@ -240,3 +240,5 @@ QStringList RegisterControllerGeneral_x86::registerNamesForGroup(const GroupsNam
 
     return QStringList();
 }
+
+#include "moc_registercontroller_x86.cpp"

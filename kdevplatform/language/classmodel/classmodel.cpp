@@ -257,3 +257,5 @@ void ClassModel::removeProjectNode(IProject* project)
     m_topNode->removeNode(m_projectNodes[project]);
     m_projectNodes.remove(project);
 }
+
+#include "moc_classmodel.cpp"

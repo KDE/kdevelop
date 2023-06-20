@@ -167,3 +167,5 @@ void ExternalScriptView::editScript()
         item->save();
     }
 }
+
+#include "moc_externalscriptview.cpp"

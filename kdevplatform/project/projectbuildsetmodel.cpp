@@ -418,3 +418,5 @@ void ProjectBuildSetModel::moveRowsToTop(int row, int count)
 }
 
 }
+
+#include "moc_projectbuildsetmodel.cpp"

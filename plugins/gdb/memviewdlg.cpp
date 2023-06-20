@@ -463,3 +463,4 @@ void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
 } // end of namespace KDevMI
 
 #include "memviewdlg.moc"
+#include "moc_memviewdlg.cpp"

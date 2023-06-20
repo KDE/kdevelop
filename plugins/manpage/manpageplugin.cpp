@@ -151,3 +151,4 @@ IDocumentation::Ptr ManPagePlugin::homePage() const
 }
 
 #include "manpageplugin.moc"
+#include "moc_manpageplugin.cpp"

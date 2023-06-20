@@ -72,3 +72,5 @@ void KDevelop::DocumentationFindWidget::hideEvent(QHideEvent* event)
     emit searchFinished();
     QWidget::hideEvent(event);
 }
+
+#include "moc_documentationfindwidget.cpp"

@@ -100,3 +100,6 @@ void SvnAddJob::setRecursive( bool recursive )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setRecursive( recursive );
 }
+
+#include "moc_svnaddjob.cpp"
+#include "moc_svnaddjob_p.cpp"

@@ -327,3 +327,5 @@ void QmlCompletionTest::testContainsText_data()
 
 
 }
+
+#include "moc_test_qmljscompletion.cpp"

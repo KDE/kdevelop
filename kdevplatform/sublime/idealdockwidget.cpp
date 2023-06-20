@@ -200,3 +200,5 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
         area->raiseToolView(view);
     }
 }
+
+#include "moc_idealdockwidget.cpp"

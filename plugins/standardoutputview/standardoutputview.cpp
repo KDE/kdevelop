@@ -303,3 +303,5 @@ void StandardOutputView::setTitle(int outputId, const QString& title)
         widget->setTitle(outputId, title);
     }
 }
+
+#include "moc_standardoutputview.cpp"

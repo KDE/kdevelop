@@ -690,3 +690,5 @@ QList< KTextEditor::MovingRange* > PatchHighlighter::ranges() const
 {
     return m_ranges.keys();
 }
+
+#include "moc_patchhighlighter.cpp"

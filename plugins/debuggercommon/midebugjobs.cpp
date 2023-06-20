@@ -198,3 +198,5 @@ void MIAttachProcessJob::start()
         done();
     }
 }
+
+#include "moc_midebugjobs.cpp"

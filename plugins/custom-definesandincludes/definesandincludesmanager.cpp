@@ -393,3 +393,4 @@ int DefinesAndIncludesManager::configPages() const
 }
 
 #include "definesandincludesmanager.moc"
+#include "moc_definesandincludesmanager.cpp"

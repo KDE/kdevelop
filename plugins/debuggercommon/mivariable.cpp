@@ -344,3 +344,5 @@ QString MIVariable::formatValue(const QString &rawValue) const
 {
     return rawValue;
 }
+
+#include "moc_mivariable.cpp"

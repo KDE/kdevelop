@@ -112,3 +112,5 @@ void RenameAction::execute()
 
     emit executed(this);
 }
+
+#include "moc_renameaction.cpp"

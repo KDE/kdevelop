@@ -54,3 +54,5 @@ void QtTestDelegate::highlight(QStyleOptionViewItem& option, const KStatefulBrus
     option.font.setBold(bold);
     option.palette.setBrush(QPalette::Text, brush.brush(option.palette));
 }
+
+#include "moc_qttestdelegate.cpp"

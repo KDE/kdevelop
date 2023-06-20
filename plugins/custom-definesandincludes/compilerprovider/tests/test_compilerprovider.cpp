@@ -238,3 +238,5 @@ void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
 }
 
 QTEST_MAIN(TestCompilerProvider)
+
+#include "moc_test_compilerprovider.cpp"

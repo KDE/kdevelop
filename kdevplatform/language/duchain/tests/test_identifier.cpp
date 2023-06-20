@@ -196,3 +196,5 @@ void TestIdentifier::benchQidCopyPush()
         copy.push(id);
     }
 }
+
+#include "moc_test_identifier.cpp"

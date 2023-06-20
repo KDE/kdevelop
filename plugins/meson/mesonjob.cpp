@@ -59,3 +59,5 @@ QUrl MesonJob::workingDirectory() const
 {
     return m_project->path().toUrl();
 }
+
+#include "moc_mesonjob.cpp"

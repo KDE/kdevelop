@@ -411,3 +411,4 @@ QIcon CMakePreferences::icon() const
     return QIcon::fromTheme(QStringLiteral("cmake"));
 }
 
+#include "moc_cmakepreferences.cpp"

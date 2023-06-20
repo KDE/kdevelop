@@ -78,3 +78,5 @@ void RenameFileAction::execute()
     }
     emit executed(this);
 }
+
+#include "moc_renamefileaction.cpp"

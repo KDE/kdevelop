@@ -211,4 +211,4 @@ QModelIndex AggregateModel::index(int row, int column, const QModelIndex &parent
 
 }
 
-
+#include "moc_aggregatemodel.cpp"

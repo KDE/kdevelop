@@ -60,3 +60,5 @@ void TemplateConfig::defaults()
 void TemplateConfig::reset()
 {
 }
+
+#include "moc_templateconfig.cpp"

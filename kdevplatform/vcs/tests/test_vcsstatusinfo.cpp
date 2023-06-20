@@ -103,3 +103,5 @@ void TestVcsStatusInfo::testAssignOperator()
 }
 
 QTEST_GUILESS_MAIN(TestVcsStatusInfo)
+
+#include "moc_test_vcsstatusinfo.cpp"

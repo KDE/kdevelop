@@ -227,3 +227,5 @@ void RegistersView::insertAction(const QString& name, Qt::Key k)
 
     connect(a, &QAction::triggered, this, [this, a](){ menuTriggered(a->text()); });
 }
+
+#include "moc_registersview.cpp"

@@ -89,4 +89,4 @@ void KDevDocumentViewPlugin::unload()
 }
 
 #include "kdevdocumentviewplugin.moc"
-
+#include "moc_kdevdocumentviewplugin.cpp"

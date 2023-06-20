@@ -439,4 +439,4 @@ ProblemStore* ProblemModel::store() const
 
 }
 
-
+#include "moc_problemmodel.cpp"

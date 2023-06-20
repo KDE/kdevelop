@@ -827,3 +827,4 @@ void Container::focusInEvent(QFocusEvent* event)
 }
 
 #include "container.moc"
+#include "moc_container.cpp"

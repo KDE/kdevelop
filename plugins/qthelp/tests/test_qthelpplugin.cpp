@@ -249,3 +249,5 @@ void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
     QEXPECT_FAIL("", "doc should be null here", Continue);
     QVERIFY(!doc);
 }
+
+#include "moc_test_qthelpplugin.cpp"

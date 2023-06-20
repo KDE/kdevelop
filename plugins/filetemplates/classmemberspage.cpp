@@ -101,3 +101,5 @@ void ClassMembersPage::setFocusToFirstEditWidget()
 {
     d->editListWidget->lineEdit()->setFocus();
 }
+
+#include "moc_classmemberspage.cpp"

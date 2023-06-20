@@ -335,3 +335,4 @@ ContextMenuExtension BazaarPlugin::contextMenuExtension(Context* context, QWidge
     return menuExt;
 }
 
+#include "moc_bazaarplugin.cpp"

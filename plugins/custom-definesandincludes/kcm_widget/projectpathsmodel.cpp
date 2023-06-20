@@ -216,3 +216,4 @@ QString ProjectPathsModel::sanitizePath( const QString& path, bool expectRelativ
     return sanitizeUrl( url, needRelative );
 }
 
+#include "moc_projectpathsmodel.cpp"

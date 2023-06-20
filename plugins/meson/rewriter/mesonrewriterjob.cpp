@@ -109,3 +109,5 @@ void MesonRewriterJob::start()
     auto future = QtConcurrent::run(this, &MesonRewriterJob::execute);
     m_futureWatcher.setFuture(future);
 }
+
+#include "moc_mesonrewriterjob.cpp"

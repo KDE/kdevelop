@@ -149,3 +149,4 @@ ConfigPage* ProjectFilterProvider::perProjectConfigPage(int i, const ProjectConf
 }
 
 #include "projectfilterprovider.moc"
+#include "moc_projectfilterprovider.cpp"

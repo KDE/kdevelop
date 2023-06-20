@@ -27,3 +27,5 @@ QUrl SelectCoreDialog::core() const
 {
     return m_ui.coreFile->url();
 }
+
+#include "moc_selectcoredialog.cpp"

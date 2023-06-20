@@ -77,4 +77,4 @@ void KDevFileManagerPlugin::unload()
 }
 
 #include "kdevfilemanagerplugin.moc"
-
+#include "moc_kdevfilemanagerplugin.cpp"

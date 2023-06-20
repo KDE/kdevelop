@@ -198,3 +198,5 @@ void ParserWidget::updateEnablements()
     m_ui->parserOptionsOpenCl->setEnabled(m_ui->languageStandardsOpenCl->currentIndex() == customProfileIdx);
     m_ui->parserOptionsCuda->setEnabled(m_ui->languageStandardsCuda->currentIndex() == customProfileIdx);
 }
+
+#include "moc_parserwidget.cpp"

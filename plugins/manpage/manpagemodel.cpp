@@ -254,3 +254,5 @@ const QString& ManPageModel::errorString() const
 {
     return m_errorString;
 }
+
+#include "moc_manpagemodel.cpp"

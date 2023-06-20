@@ -134,3 +134,5 @@ void TestToolViewToolBar::toolViewMove()
 }
 
 QTEST_MAIN(TestToolViewToolBar)
+
+#include "moc_test_toolviewtoolbar.cpp"

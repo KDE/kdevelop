@@ -140,3 +140,5 @@ void FocusedTreeView::rowsRemoved(const QModelIndex& parent, int first, int last
 }
 
 }
+
+#include "moc_focusedtreeview.cpp"

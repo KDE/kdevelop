@@ -71,3 +71,5 @@ bool GitNameEmailDialog::isGlobal() const
 {
     return ui->globalCheckBox->isChecked();
 }
+
+#include "moc_gitnameemaildialog.cpp"

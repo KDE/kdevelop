@@ -403,3 +403,4 @@ void TestProjectFilter::bench_data()
     }
 }
 
+#include "moc_test_projectfilter.cpp"

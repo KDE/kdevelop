@@ -150,3 +150,5 @@ void QMakeBuilderPreferences::removeBuildConfig()
         }
     }
 }
+
+#include "moc_qmakebuilderpreferences.cpp"

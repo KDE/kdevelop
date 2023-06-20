@@ -188,3 +188,4 @@ void CMakeCacheDelegate::closingEditor(QWidget * editor, QAbstractItemDelegate::
 //     QItemDelegate::updateEditorGeometry( editor, option, index );
 // }
 
+#include "moc_cmakecachedelegate.cpp"

@@ -341,3 +341,5 @@ QIcon MesonConfigPage::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("run-build"));
 }
+
+#include "moc_mesonconfigpage.cpp"

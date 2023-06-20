@@ -561,3 +561,5 @@ bool ParseJob::hasTracker() const
     return d->tracker;
 }
 }
+
+#include "moc_parsejob.cpp"

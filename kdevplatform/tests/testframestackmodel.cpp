@@ -23,3 +23,5 @@ void TestFrameStackModel::fetchFrames(int threadNumber, int from, int to)
     Q_UNUSED(from);
     Q_UNUSED(to);
 }
+
+#include "moc_testframestackmodel.cpp"

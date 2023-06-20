@@ -96,4 +96,4 @@ void Example1Main::updateTitle(Sublime::Area *area)
     main->setWindowTitle(area->objectName());
 }
 
-
+#include "moc_example1main.cpp"

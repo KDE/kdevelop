@@ -86,3 +86,5 @@ void TestCppcheckParser::testParser()
 }
 
 QTEST_GUILESS_MAIN(TestCppcheckParser)
+
+#include "moc_test_cppcheckparser.cpp"

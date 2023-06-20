@@ -19,3 +19,5 @@ void WaitForUpdate::updateReady(const KDevelop::IndexedString& /*url*/,
     m_ready = true;
     m_topContext = topContext;
 }
+
+#include "moc_waitforupdate.cpp"

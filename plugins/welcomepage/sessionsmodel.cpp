@@ -80,3 +80,5 @@ void SessionsModel::sessionDeleted(const QString& id)
         }
     }
 }
+
+#include "moc_sessionsmodel.cpp"

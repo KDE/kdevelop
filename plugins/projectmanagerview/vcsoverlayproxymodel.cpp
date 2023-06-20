@@ -131,3 +131,5 @@ QModelIndex VcsOverlayProxyModel::indexFromProject(QObject* project)
     }
     return QModelIndex();
 }
+
+#include "moc_vcsoverlayproxymodel.cpp"

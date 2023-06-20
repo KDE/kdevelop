@@ -87,3 +87,5 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
     emit userCommandOutput(fullCommand + QLatin1Char('\n'));
     return true;
 }
+
+#include "moc_gdb.cpp"

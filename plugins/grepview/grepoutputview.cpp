@@ -488,3 +488,5 @@ void GrepOutputView::updateScrollArea()
     for (int col = 0; col < model()->columnCount(); ++col)
         resultsTreeView->resizeColumnToContents(col);
 }
+
+#include "moc_grepoutputview.cpp"

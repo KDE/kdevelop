@@ -372,3 +372,5 @@ const ParsingEnvironment* ClangParseJob::environment() const
 {
     return &m_environment;
 }
+
+#include "moc_clangparsejob.cpp"

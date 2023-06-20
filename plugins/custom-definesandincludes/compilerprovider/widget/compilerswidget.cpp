@@ -229,3 +229,5 @@ KDevelop::ConfigPage::ConfigPageType CompilersWidget::configPageType() const
 {
     return ConfigPage::LanguageConfigPage;
 }
+
+#include "moc_compilerswidget.cpp"

@@ -43,3 +43,5 @@ QSize KExpandableLineEdit::sizeHint() const
 
     return idealSize;
 }
+
+#include "moc_expandablelineedit.cpp"

@@ -59,3 +59,4 @@ void OutlineViewPlugin::unload()
 }
 
 #include "outlineviewplugin.moc"
+#include "moc_outlineviewplugin.cpp"

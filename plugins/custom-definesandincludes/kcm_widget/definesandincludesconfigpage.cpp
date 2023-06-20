@@ -79,3 +79,5 @@ QIcon DefinesAndIncludesConfigPage::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("kdevelop"));
 }
+
+#include "moc_definesandincludesconfigpage.cpp"

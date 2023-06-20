@@ -373,3 +373,5 @@ int VcsAnnotationItemDelegate::widthHintFromViewWidth(int viewWidth) const
 {
     return viewWidth * m_maxWidthViewPercent / 100;
 }
+
+#include "moc_vcsannotationitemdelegate.cpp"

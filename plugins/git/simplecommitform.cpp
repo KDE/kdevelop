@@ -220,3 +220,5 @@ void SimpleCommitForm::clearError()
         m_inlineError->animatedHide();
     }
 }
+
+#include "moc_simplecommitform.cpp"

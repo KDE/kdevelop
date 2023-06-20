@@ -31,3 +31,4 @@ bool IProjectController::parseAllProjectSources()
 
 }
 
+#include "moc_iprojectcontroller.cpp"

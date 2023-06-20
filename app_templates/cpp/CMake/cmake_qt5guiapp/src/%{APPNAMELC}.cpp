@@ -9,3 +9,5 @@
 }
 
 %{APPNAMEID}::~%{APPNAMEID}() = default;
+
+#include "moc_%{APPNAMELC}.cpp"

@@ -164,3 +164,5 @@ void ProviderWidget::searchRepo()
 }
 
 } // End of namespace gh
+
+#include "moc_ghproviderwidget.cpp"

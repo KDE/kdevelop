@@ -610,3 +610,5 @@ const QPixmap* DebugController::executionPointPixmap()
 }
 
 }
+
+#include "moc_debugcontroller.cpp"

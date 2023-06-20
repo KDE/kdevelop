@@ -60,3 +60,5 @@ void BookmarkHandler::openBookmark( const KBookmark & bm, Qt::MouseButtons, Qt::
 {
     emit openUrl(bm.url());
 }
+
+#include "moc_bookmarkhandler.cpp"

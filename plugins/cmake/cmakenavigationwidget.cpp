@@ -49,3 +49,4 @@ CMakeNavigationWidget::CMakeNavigationWidget(const KDevelop::DUChainPointer< KDe
 }
 
 #include "cmakenavigationwidget.moc"
+#include "moc_cmakenavigationwidget.cpp"

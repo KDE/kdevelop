@@ -137,3 +137,4 @@ QWidget* CMakeDoc::documentationWidget(KDevelop::DocumentationFindWidget* findWi
 
 #include "cmakedocumentation.moc"
 #include "moc_cmakedoc.cpp"
+#include "moc_cmakedocumentation.cpp"

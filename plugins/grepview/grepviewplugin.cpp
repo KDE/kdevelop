@@ -237,3 +237,5 @@ void GrepViewPlugin::jobFinished(KJob* job)
         emit grepJobFinished(job->error() == KJob::NoError);
     }
 }
+
+#include "moc_grepviewplugin.cpp"

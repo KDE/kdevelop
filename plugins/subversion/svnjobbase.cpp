@@ -210,4 +210,4 @@ void SvnJobBase::outputMessage(const QString& message)
     }
 }
 
-
+#include "moc_svnjobbase.cpp"

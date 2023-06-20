@@ -195,3 +195,4 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
     }
 }
 
+#include "moc_qmljsparsejob.cpp"

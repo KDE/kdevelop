@@ -75,3 +75,5 @@ void PruneJob::jobFinished(KJob* job)
     emitResult();
     m_job = nullptr;
 }
+
+#include "moc_prunejob.cpp"

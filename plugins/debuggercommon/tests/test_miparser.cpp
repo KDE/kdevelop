@@ -210,3 +210,5 @@ void TestMIParser::testParseLine()
 }
 
 QTEST_GUILESS_MAIN(TestMIParser)
+
+#include "moc_test_miparser.cpp"

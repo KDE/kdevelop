@@ -92,3 +92,5 @@ bool ManPageDocumentationWidget::eventFilter(QObject* watched, QEvent* event)
         event->ignore(); // Propagate to DocumentationView
     return QStackedWidget::eventFilter(watched, event);
 }
+
+#include "moc_manpagedocumentationwidget.cpp"

@@ -1820,3 +1820,4 @@ void KDevMI::LLDB::LldbTest::testEnvironmentCd()
 QTEST_MAIN(KDevMI::LLDB::LldbTest)
 
 #include "test_lldb.moc"
+#include "moc_test_lldb.cpp"

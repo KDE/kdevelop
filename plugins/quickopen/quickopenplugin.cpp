@@ -1171,3 +1171,4 @@ QLineEdit* QuickOpenPlugin::createQuickOpenLine(const QStringList& scopes, const
 }
 
 #include "quickopenplugin.moc"
+#include "moc_quickopenplugin.cpp"

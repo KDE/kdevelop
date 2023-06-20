@@ -604,3 +604,4 @@ void PatchReviewToolView::testJobResult(KJob* job)
 }
 
 #include "patchreviewtoolview.moc"
+#include "moc_patchreviewtoolview.cpp"

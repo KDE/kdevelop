@@ -217,4 +217,4 @@ KDevelop::TreeItem* KDevelop::TreeModel::root() const
     return d->root;
 }
 
-
+#include "moc_treemodel.cpp"

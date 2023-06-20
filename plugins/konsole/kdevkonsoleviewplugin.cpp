@@ -80,4 +80,4 @@ KDevKonsoleViewPlugin::~KDevKonsoleViewPlugin()
 }
 
 #include "kdevkonsoleviewplugin.moc"
-
+#include "moc_kdevkonsoleviewplugin.cpp"

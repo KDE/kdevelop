@@ -264,3 +264,4 @@ void ProblemReporterPlugin::updateOpenedDocumentsHighlight()
 }
 
 #include "problemreporterplugin.moc"
+#include "moc_problemreporterplugin.cpp"

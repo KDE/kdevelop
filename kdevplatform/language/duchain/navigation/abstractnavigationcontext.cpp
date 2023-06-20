@@ -614,3 +614,5 @@ const Colorizer AbstractNavigationContext::importantHighlight(QStringLiteral(
 const Colorizer AbstractNavigationContext::commentHighlight(QStringLiteral("303030"));
 const Colorizer AbstractNavigationContext::nameHighlight(QStringLiteral("000000"), Colorizer::Bold);
 }
+
+#include "moc_abstractnavigationcontext.cpp"

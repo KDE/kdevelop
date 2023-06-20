@@ -376,3 +376,4 @@ QString AStylePlugin::indentingSample(AStylePreferences::Language lang)
 }
 
 #include "astyle_plugin.moc"
+#include "moc_astyle_plugin.cpp"

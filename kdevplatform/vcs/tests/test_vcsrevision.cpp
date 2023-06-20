@@ -128,3 +128,5 @@ void TestVcsRevision::testAssignOperator()
 }
 
 QTEST_GUILESS_MAIN(TestVcsRevision)
+
+#include "moc_test_vcsrevision.cpp"

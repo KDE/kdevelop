@@ -19,3 +19,5 @@ bool AppWizardPageWidget::shouldContinue()
 {
     return true;
 }
+
+#include "moc_appwizardpagewidget.cpp"

@@ -150,3 +150,5 @@ void ZoomController::resetZoom()
 {
     setFactor(defaultFactor);
 }
+
+#include "moc_zoomcontroller.cpp"

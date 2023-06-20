@@ -395,3 +395,5 @@ void DebuggerConsoleView::handleSessionChanged(KDevelop::IDebugSession* s)
 
      handleDebuggerStateChange(s_none, session->debuggerState());
 }
+
+#include "moc_debuggerconsoleview.cpp"

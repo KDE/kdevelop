@@ -49,3 +49,5 @@ KDevelop::CodeHighlightingInstance* ClangHighlighting::createInstance() const
 {
     return new Instance(this);
 }
+
+#include "moc_clanghighlighting.cpp"

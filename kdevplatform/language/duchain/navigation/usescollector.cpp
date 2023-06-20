@@ -464,3 +464,5 @@ IndexedDeclaration UsesCollector::declaration() const
 {
     return m_declaration;
 }
+
+#include "moc_usescollector.cpp"

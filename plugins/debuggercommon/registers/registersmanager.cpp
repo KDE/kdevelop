@@ -155,3 +155,5 @@ void RegistersManager::setController(IRegisterController* c)
 
     m_registersView->enable(c ? true : false);
 }
+
+#include "moc_registersmanager.cpp"

@@ -245,3 +245,5 @@ void MIVariableController::stateChanged(IDebugSession::DebuggerState state)
         debugSession()->markAllVariableDead();
     }
 }
+
+#include "moc_mivariablecontroller.cpp"

@@ -308,3 +308,4 @@ void MIDebuggerPlugin::showStatusMessage(const QString& msg, int timeout)
 }
 
 #include "midebuggerplugin.moc"
+#include "moc_midebuggerplugin.cpp"

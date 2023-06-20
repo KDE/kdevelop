@@ -153,3 +153,5 @@ void ProblemReporterModel::rebuildProblemList()
 
     endResetModel();
 }
+
+#include "moc_problemreportermodel.cpp"

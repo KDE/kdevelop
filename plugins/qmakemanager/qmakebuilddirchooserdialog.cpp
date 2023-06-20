@@ -81,3 +81,5 @@ void QMakeBuildDirChooserDialog::validate()
 {
     m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(m_chooserUi->validate());
 }
+
+#include "moc_qmakebuilddirchooserdialog.cpp"

@@ -173,3 +173,4 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
     }
 }
 
+#include "moc_idealtoolbutton.cpp"

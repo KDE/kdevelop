@@ -113,3 +113,5 @@ void ProjectConfigPage::updateCommandLine()
 }
 
 }
+
+#include "moc_projectconfigpage.cpp"

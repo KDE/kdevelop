@@ -23,3 +23,5 @@ void TestLanguageController::addTestLanguage(ILanguageSupport* languageSupport, 
 {
     addLanguageSupport(languageSupport, mimetypes);
 }
+
+#include "moc_testlanguagecontroller.cpp"

@@ -747,3 +747,5 @@ void MIBreakpointController::programStopped(const AsyncRecord& r)
 
     notifyHit(row, msg);
 }
+
+#include "moc_mibreakpointcontroller.cpp"

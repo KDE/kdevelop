@@ -116,3 +116,4 @@ void HeaderGuardAssistant::createActions()
 }
 
 #include "headerguardassistant.moc"
+#include "moc_headerguardassistant.cpp"

@@ -74,3 +74,5 @@ bool TestPluginController::unloadPlugin(const QString& plugin)
     Q_UNUSED(plugin);
     return false;
 }
+
+#include "moc_testplugincontroller.cpp"

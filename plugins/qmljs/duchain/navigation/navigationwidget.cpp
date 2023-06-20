@@ -40,3 +40,5 @@ NavigationWidget::NavigationWidget(const KDevelop::IncludeItem& includeItem,
     setContext(NavigationContextPointer(context));
 }
 }
+
+#include "moc_navigationwidget.cpp"

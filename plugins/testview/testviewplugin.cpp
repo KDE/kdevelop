@@ -132,3 +132,4 @@ void TestViewPlugin::jobStateChanged()
 }
 
 #include "testviewplugin.moc"
+#include "moc_testviewplugin.cpp"

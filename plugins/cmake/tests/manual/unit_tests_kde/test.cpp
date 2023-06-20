@@ -42,3 +42,5 @@ void KdeTest::cleanupTestCase()
 }
 
 QTEST_GUILESS_MAIN( KdeTest )
+
+#include "moc_test.cpp"

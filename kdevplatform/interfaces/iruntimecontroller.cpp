@@ -9,3 +9,5 @@
 KDevelop::IRuntimeController::IRuntimeController() = default;
 
 KDevelop::IRuntimeController::~IRuntimeController() = default;
+
+#include "moc_iruntimecontroller.cpp"

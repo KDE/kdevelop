@@ -462,4 +462,4 @@ KTextEditorIntegration::MainWindow *MainWindowPrivate::kateWrapper() const
 }
 
 #include "mainwindow_actions.cpp"
-
+#include "moc_mainwindow_p.cpp"

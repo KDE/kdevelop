@@ -212,3 +212,5 @@ bool MesonNewBuildDir::isConfigValid() const
 {
     return m_configIsValid;
 }
+
+#include "moc_mesonnewbuilddir.cpp"

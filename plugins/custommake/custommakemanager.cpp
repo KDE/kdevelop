@@ -333,3 +333,4 @@ KDevelop::Path CustomMakeManager::compiler(KDevelop::ProjectTargetItem* item) co
 }
 
 #include "custommakemanager.moc"
+#include "moc_custommakemanager.cpp"

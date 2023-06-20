@@ -385,3 +385,5 @@ Watcher::Watcher(BrowseManager* manager)
         m_manager->applyEventFilter(view, true);
     }
 }
+
+#include "moc_browsemanager.cpp"

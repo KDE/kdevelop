@@ -626,3 +626,5 @@ void SourceFormatterSelectionEdit::updatePreview()
     d->view->setCursorPosition(KTextEditor::Cursor(0, 0));
     d->document->setReadWrite(false);
 }
+
+#include "moc_sourceformatterselectionedit.cpp"

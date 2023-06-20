@@ -45,3 +45,5 @@ void RebaseDialog::performRebase()
     ICore::self()->runController()->registerJob(job);
     accept();
 }
+
+#include "moc_rebasedialog.cpp"

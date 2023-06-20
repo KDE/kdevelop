@@ -733,3 +733,5 @@ void BreakpointModel::setupMovingCursor(KTextEditor::Document* document, Breakpo
         breakpoint->setMovingCursor(cursor);
     }
 }
+
+#include "moc_breakpointmodel.cpp"

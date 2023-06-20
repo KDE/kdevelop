@@ -72,3 +72,5 @@ void UiHelper::showMenu(const QString& name)
     
     action->menu()->popup(QCursor::pos());
 }
+
+#include "moc_uihelper.cpp"

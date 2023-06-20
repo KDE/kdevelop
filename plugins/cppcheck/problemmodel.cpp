@@ -156,3 +156,5 @@ void ProblemModel::forceFullUpdate()
 }
 
 }
+
+#include "moc_problemmodel.cpp"

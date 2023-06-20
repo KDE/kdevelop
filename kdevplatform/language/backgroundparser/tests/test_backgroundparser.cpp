@@ -435,3 +435,5 @@ void TestBackgroundparser::testSuspendResume()
     parser->resume();
     QVERIFY(m_jobPlan.runJobs(100));
 }
+
+#include "moc_test_backgroundparser.cpp"

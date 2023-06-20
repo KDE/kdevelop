@@ -104,3 +104,5 @@ QString LldbVariable::formatValue(const QString& value) const
     }
     return value;
 }
+
+#include "moc_variable.cpp"

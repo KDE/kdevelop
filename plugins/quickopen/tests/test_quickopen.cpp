@@ -432,3 +432,5 @@ void TestQuickOpen::testProjectFileFilter()
     provider.reset();
     QVERIFY(!provider.itemCount());
 }
+
+#include "moc_test_quickopen.cpp"

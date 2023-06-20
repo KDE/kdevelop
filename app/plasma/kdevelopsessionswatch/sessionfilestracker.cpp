@@ -177,3 +177,5 @@ void SessionFilesTracker::updateSessions()
         setSessionDataList(observer, m_sessionDataList);
     }
 }
+
+#include "moc_sessionfilestracker.cpp"

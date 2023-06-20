@@ -150,3 +150,5 @@ void TestSvnImport::validateImport( const QString& repourl, QTemporaryDir& check
 }
 
 QTEST_MAIN(TestSvnImport)
+
+#include "moc_test_svnimport.cpp"

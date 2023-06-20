@@ -105,4 +105,4 @@ void IncludesModel::addIncludeInternal( const QString& includePath )
     m_includes << includePath;
 }
 
-
+#include "moc_includesmodel.cpp"

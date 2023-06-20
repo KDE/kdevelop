@@ -128,3 +128,4 @@ void ViewBarContainer::hideViewBar(QWidget* viewBar)
 }
 
 #include "viewbarcontainer.moc"
+#include "moc_viewbarcontainer.cpp"

@@ -98,3 +98,6 @@ void SvnCopyJob::setSourceLocation( const QUrl &url )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setSourceLocation( url );
 }
+
+#include "moc_svncopyjob.cpp"
+#include "moc_svncopyjob_p.cpp"

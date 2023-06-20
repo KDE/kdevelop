@@ -406,3 +406,5 @@ StaticNamespaceFolderNode* DocumentClassesFolder::namespaceFolder(const KDevelop
     } else
         return *iter;
 }
+
+#include "moc_documentclassesfolder.cpp"

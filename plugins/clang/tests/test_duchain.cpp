@@ -2649,3 +2649,5 @@ void TestDUChain::testBitWidthUpdate()
     }
 #endif
 }
+
+#include "moc_test_duchain.cpp"

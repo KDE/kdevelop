@@ -301,3 +301,5 @@ void ChecksWidget::setEditable(bool editable)
 }
 
 }
+
+#include "moc_checkswidget.cpp"

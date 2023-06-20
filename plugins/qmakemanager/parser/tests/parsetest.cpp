@@ -97,3 +97,5 @@ void ParseTest::cleanup()
     ast = nullptr;
     QVERIFY(ast == nullptr);
 }
+
+#include "moc_parsetest.cpp"

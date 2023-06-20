@@ -177,3 +177,5 @@ void TestDocumentController::testEmptyUrl()
 }
 
 QTEST_MAIN(TestDocumentController)
+
+#include "moc_test_documentcontroller.cpp"

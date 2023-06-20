@@ -61,3 +61,5 @@ QString KDevelop::StandardVcsLocationWidget::projectName() const
 {
     return m_urlWidget->url().fileName();
 }
+
+#include "moc_standardvcslocationwidget.cpp"

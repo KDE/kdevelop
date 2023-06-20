@@ -367,3 +367,5 @@ bool TestKdevFormatSource::readLines(const QString& path, QStringList& lines) co
 
     return true;
 }
+
+#include "moc_test_kdevformatsource.cpp"

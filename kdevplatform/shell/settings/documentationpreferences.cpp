@@ -48,3 +48,5 @@ void DocumentationPreferences::reset()
 }
 
 }
+
+#include "moc_documentationpreferences.cpp"

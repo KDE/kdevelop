@@ -458,3 +458,4 @@ ProblemScope BypassSet::scope() const
 }
 
 #include "watcheddocumentset.moc"
+#include "moc_watcheddocumentset.cpp"

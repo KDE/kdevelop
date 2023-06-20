@@ -176,3 +176,5 @@ void TestIndexedString::testCString()
     QCOMPARE(str.index(), 0u);
     QVERIFY(str.isEmpty());
 }
+
+#include "moc_test_indexedstring.cpp"

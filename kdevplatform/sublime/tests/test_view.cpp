@@ -65,3 +65,4 @@ void TestView::viewReimplementation()
 QTEST_MAIN(TestView)
 
 #include "test_view.moc"
+#include "moc_test_view.cpp"

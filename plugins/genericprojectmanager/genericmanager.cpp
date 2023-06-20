@@ -19,3 +19,4 @@ GenericProjectManager::GenericProjectManager( QObject* parent, const QVariantLis
 }
 
 #include "genericmanager.moc"
+#include "moc_genericmanager.cpp"

@@ -136,3 +136,5 @@ void SourceFormatterJob::formatFile(const QUrl& url)
         ICore::self()->uiController()->postMessage(message);
     }
 }
+
+#include "moc_sourceformatterjob.cpp"

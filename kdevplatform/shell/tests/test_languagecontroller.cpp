@@ -88,3 +88,5 @@ void TestLanguageController::testLanguagesForUrlNoMatch_data()
 }
 
 QTEST_MAIN(TestLanguageController)
+
+#include "moc_test_languagecontroller.cpp"

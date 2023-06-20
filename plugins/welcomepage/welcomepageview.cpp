@@ -60,3 +60,5 @@ void WelcomePageWidget::areaChanged(Sublime::Area* area)
 {
     rootContext()->setContextProperty(QStringLiteral("area"), area->objectName());
 }
+
+#include "moc_welcomepageview.cpp"

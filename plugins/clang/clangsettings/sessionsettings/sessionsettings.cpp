@@ -50,3 +50,5 @@ KDevelop::ConfigPage::ConfigPageType SessionSettings::configPageType() const
 {
     return ConfigPage::LanguageConfigPage;
 }
+
+#include "moc_sessionsettings.cpp"

@@ -451,3 +451,5 @@ void CheckSetSelectionManager::onDefaultCheckSetSelectionChanged(const QString& 
 }
 
 }
+
+#include "moc_checksetselectionmanager.cpp"

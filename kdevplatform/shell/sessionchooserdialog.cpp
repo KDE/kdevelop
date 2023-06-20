@@ -214,3 +214,4 @@ void SessionChooserDialog::deleteButtonPressed()
     }
 }
 
+#include "moc_sessionchooserdialog.cpp"

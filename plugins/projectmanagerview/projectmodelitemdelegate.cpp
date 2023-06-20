@@ -213,3 +213,5 @@ bool ProjectModelItemDelegate::helpEvent(QHelpEvent* event,
 
     return QItemDelegate::helpEvent(event, view, option, index);
 }
+
+#include "moc_projectmodelitemdelegate.cpp"

@@ -232,3 +232,5 @@ OktetaDocument::~OktetaDocument()
 }
 
 }
+
+#include "moc_oktetadocument.cpp"

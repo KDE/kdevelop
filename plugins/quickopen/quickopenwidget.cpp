@@ -547,3 +547,4 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
 }
 
 #include "quickopenwidget.moc"
+#include "moc_quickopenwidget.cpp"

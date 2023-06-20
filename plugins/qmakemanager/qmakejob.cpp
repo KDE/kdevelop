@@ -143,3 +143,5 @@ void QMakeJob::processFinished(int exitCode, QProcess::ExitStatus status)
 
     emitResult();
 }
+
+#include "moc_qmakejob.cpp"

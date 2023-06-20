@@ -634,3 +634,5 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn()
     QCOMPARE(item1.lineNo , lineNr);
     QCOMPARE(item1.columnNo , column);
 }
+
+#include "moc_test_filteringstrategy.cpp"

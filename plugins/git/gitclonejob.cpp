@@ -28,3 +28,5 @@ void GitCloneJob::processResult()
         emit infoMessage(this, info);
     }
 }
+
+#include "moc_gitclonejob.cpp"

@@ -295,3 +295,5 @@ void TestStringHandler::testNormalizeLineEndings_data()
         << QByteArray("\r\n\n\r\r\r\n\r")
         << QByteArray("\n\n\n\n\n\n");
 }
+
+#include "moc_test_stringhandler.cpp"

@@ -81,3 +81,5 @@ void TestKTextEditorHelpers::testExtractCursor_data()
         << KTextEditor::Cursor::invalid()
         << QStringLiteral("widget.cpp#n");
 }
+
+#include "moc_test_texteditorhelpers.cpp"

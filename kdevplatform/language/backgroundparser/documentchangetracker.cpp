@@ -484,3 +484,4 @@ RevisionReference DocumentChangeTracker::diskRevision() const
 }
 
 #include "documentchangetracker.moc"
+#include "moc_documentchangetracker.cpp"

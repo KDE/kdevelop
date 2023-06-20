@@ -264,3 +264,4 @@ void Scratchpad::createActionsForMainWindow(Sublime::MainWindow* window, QString
 
 
 #include "scratchpad.moc"
+#include "moc_scratchpad.cpp"

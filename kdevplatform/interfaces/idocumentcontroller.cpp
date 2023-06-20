@@ -23,4 +23,4 @@ KDevelop::IDocument* IDocumentController::openDocument( const QUrl &url,
 
 }
 
-
+#include "moc_idocumentcontroller.cpp"

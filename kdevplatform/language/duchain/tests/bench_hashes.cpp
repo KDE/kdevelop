@@ -316,3 +316,5 @@ void BenchHashes::typeRepo_data()
     QTest::newRow("unordered_map") << 5;
     QTest::newRow("nested-vector") << 6;
 }
+
+#include "moc_bench_hashes.cpp"

@@ -90,3 +90,5 @@ QString MacroNavigationContext::retrievePreprocessedBody(const DocumentCursor& /
     // TODO: Implement me. Still not exactly sure what do to here...
     return QString();
 }
+
+#include "moc_macronavigationcontext.cpp"

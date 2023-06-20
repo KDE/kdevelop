@@ -354,3 +354,4 @@ IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *_action) const
 }
 
 #include "idealbuttonbarwidget.moc"
+#include "moc_idealbuttonbarwidget.cpp"

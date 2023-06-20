@@ -67,3 +67,4 @@ ILauncher* LaunchConfigurationType::launcherForId(const QString& id) const
 
 }
 
+#include "moc_launchconfigurationtype.cpp"

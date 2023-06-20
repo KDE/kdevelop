@@ -222,3 +222,4 @@ QModelIndex ScratchpadView::currentIndex() const
 
 #include "scratchpadview.moc"
 #include "moc_emptymessagelistview.cpp"
+#include "moc_scratchpadview.cpp"

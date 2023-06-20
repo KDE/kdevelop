@@ -587,3 +587,5 @@ void RepoStatusModel::branchNameReady(VcsJob* job)
 
     reload(QList<IProject*>() << project);
 }
+
+#include "moc_repostatusmodel.cpp"

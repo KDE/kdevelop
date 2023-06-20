@@ -60,3 +60,5 @@ void CommandLineWidget::updateCommandLine()
 }
 
 }
+
+#include "moc_commandlinewidget.cpp"

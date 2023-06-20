@@ -189,3 +189,4 @@ KDevelop::Path CustomBuildSystem::compiler(KDevelop::ProjectTargetItem* item) co
 }
 
 #include "custombuildsystemplugin.moc"
+#include "moc_custombuildsystemplugin.cpp"

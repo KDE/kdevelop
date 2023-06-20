@@ -57,3 +57,5 @@ Visualizer::~Visualizer()
 }
 
 }
+
+#include "moc_visualizer.cpp"

@@ -20,4 +20,4 @@ VcsImportMetadataWidget::~VcsImportMetadataWidget()
 
 }
 
-
+#include "moc_vcsimportmetadatawidget.cpp"

@@ -80,3 +80,5 @@ void CheckerStatus::stop()
 }
 
 }
+
+#include "moc_checkerstatus.cpp"

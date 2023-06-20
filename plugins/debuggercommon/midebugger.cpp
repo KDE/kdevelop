@@ -366,3 +366,5 @@ void MIDebugger::processErrored(QProcess::ProcessError error)
         emit exited(true, i18n("Process crashed"));
     }
 }
+
+#include "moc_midebugger.cpp"

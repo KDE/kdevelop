@@ -294,3 +294,4 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
 }
 
 #include "switchtobuddyplugin.moc"
+#include "moc_switchtobuddyplugin.cpp"

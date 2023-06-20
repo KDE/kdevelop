@@ -237,3 +237,5 @@ QString DUChainItemDataProvider::itemText(const DUChainItem& data) const
 void DUChainItemDataProvider::reset()
 {
 }
+
+#include "moc_duchainitemquickopen.cpp"

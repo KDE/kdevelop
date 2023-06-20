@@ -226,3 +226,5 @@ void TestTestController::testResults()
 
 
 QTEST_GUILESS_MAIN(TestTestController)
+
+#include "moc_test_testcontroller.cpp"

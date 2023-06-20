@@ -148,3 +148,4 @@ KDevCategoryItem* KDevDocumentModel::category( const QString& category ) const
     return nullptr;
 }
 
+#include "moc_kdevdocumentmodel.cpp"

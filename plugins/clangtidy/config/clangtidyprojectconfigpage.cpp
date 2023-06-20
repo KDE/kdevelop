@@ -111,3 +111,5 @@ void ProjectConfigPage::onChecksChanged(const QString& checks)
 }
 
 } // namespace ClangTidy
+
+#include "moc_clangtidyprojectconfigpage.cpp"

@@ -465,3 +465,5 @@ void ProjectTreeView::drawBranches(QPainter* painter, const QRect& rect, const Q
 
     QTreeView::drawBranches(painter, rect, index);
 }
+
+#include "moc_projecttreeview.cpp"

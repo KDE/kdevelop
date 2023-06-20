@@ -1591,3 +1591,4 @@ void ContextBrowserPlugin::HistoryEntry::setCursorPosition(const KTextEditor::Cu
 }
 
 #include "contextbrowser.moc"
+#include "moc_contextbrowser.cpp"

@@ -447,3 +447,5 @@ QIcon MesonRewriterPage::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("run-build"));
 }
+
+#include "moc_mesonrewriterpage.cpp"

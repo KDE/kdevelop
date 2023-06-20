@@ -88,3 +88,4 @@ void TestCustomBuildSystemPlugin::loadMultiPathProject()
               Path( QStringLiteral("file:///") + QDir::temp().absolutePath() + QStringLiteral("/multipathproject/build/src") ) );
 }
 
+#include "moc_test_custombuildsystemplugin.cpp"

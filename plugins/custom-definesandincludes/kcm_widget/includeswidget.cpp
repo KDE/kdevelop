@@ -143,3 +143,4 @@ void IncludesWidget::checkIfIncludePathExist()
     ui->errorWidget->animatedHide();
 }
 
+#include "moc_includeswidget.cpp"

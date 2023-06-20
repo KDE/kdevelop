@@ -345,3 +345,4 @@ QVector<QTextLayout::FormatRange> ExpandingDelegate::highlightingFromVariantList
     return ret;
 }
 
+#include "moc_expandingdelegate.cpp"

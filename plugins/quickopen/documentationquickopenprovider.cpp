@@ -133,3 +133,5 @@ void DocumentationQuickOpenProvider::reset()
 {
     m_results.clear();
 }
+
+#include "moc_documentationquickopenprovider.cpp"

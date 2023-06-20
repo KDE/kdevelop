@@ -96,3 +96,4 @@ KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
 } // namespace ClangTidy
 
 #include "plugin.moc"
+#include "moc_plugin.cpp"

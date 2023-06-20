@@ -117,3 +117,5 @@ void TestProject::removeFromFileSet(ProjectFileItem* file)
 void TestProjectController::initialize()
 {
 }
+
+#include "moc_testproject.cpp"

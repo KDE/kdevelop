@@ -74,3 +74,5 @@ void ExpandingTree::drawBranches(QPainter* painter, const QRect& rect, const QMo
     }
     QTreeView::drawBranches(painter, rect, index);
 }
+
+#include "moc_expandingtree.cpp"

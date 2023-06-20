@@ -114,3 +114,5 @@ int Message::priority() const
 }
 
 }
+
+#include "moc_message.cpp"

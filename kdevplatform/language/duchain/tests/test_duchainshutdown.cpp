@@ -83,3 +83,5 @@ void TestDUChainShutdown::runTest()
 }
 
 QTEST_MAIN(TestDUChainShutdown)
+
+#include "moc_test_duchainshutdown.cpp"

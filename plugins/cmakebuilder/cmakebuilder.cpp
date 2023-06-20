@@ -254,3 +254,4 @@ KDevelop::ConfigPage* CMakeBuilder::configPage(int number, QWidget* parent)
 
 
 #include "cmakebuilder.moc"
+#include "moc_cmakebuilder.cpp"

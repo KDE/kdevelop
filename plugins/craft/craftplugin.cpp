@@ -85,3 +85,4 @@ CraftPlugin::CraftPlugin(QObject* parent, const QVariantList& /*args*/)
 }
 
 #include "craftplugin.moc"
+#include "moc_craftplugin.cpp"

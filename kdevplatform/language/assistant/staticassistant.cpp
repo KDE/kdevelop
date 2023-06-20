@@ -34,3 +34,5 @@ ILanguageSupport* StaticAssistant::supportedLanguage() const
 
     return d->m_supportedLanguage;
 }
+
+#include "moc_staticassistant.cpp"

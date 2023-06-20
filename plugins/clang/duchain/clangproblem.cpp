@@ -274,3 +274,5 @@ void ClangFixitAction::execute()
     changes.applyAllChanges();
     emit executed(this);
 }
+
+#include "moc_clangproblem.cpp"

@@ -89,3 +89,5 @@ void ClangTidyPreferences::reset()
     ConfigPage::reset();
     ui->checksets->reload();
 }
+
+#include "moc_clangtidypreferences.cpp"

@@ -304,3 +304,5 @@ void TestClangUtils::testGetCursorSignature_data()
         << QByteArray("class klass { template<typename T> bool operator < (const T&); };")
         << "bool klass::operator<(const T&)";
 }
+
+#include "moc_test_clangutils.cpp"

@@ -478,3 +478,5 @@ bool QuickOpenModel::execute(const QModelIndex& index, QString& filterText)
 
     return false;
 }
+
+#include "moc_quickopenmodel.cpp"

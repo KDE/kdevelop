@@ -198,3 +198,5 @@ void EnvironmentProfileListModel::saveToConfig(KConfig* config)
 {
     saveSettings(config);
 }
+
+#include "moc_environmentprofilelistmodel.cpp"

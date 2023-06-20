@@ -217,3 +217,5 @@ void TestViewActivation::activationAfterRemovalSimplestCase()
 }
 
 QTEST_MAIN(TestViewActivation)
+
+#include "moc_test_viewactivation.cpp"

@@ -334,3 +334,5 @@ Path CMakeBuildDirChooser::buildFolder() const { return Path(m_chooserUi->buildF
 QString CMakeBuildDirChooser::buildType() const { return m_chooserUi->buildType->currentText(); }
 
 QString CMakeBuildDirChooser::extraArguments() const { return m_chooserUi->extraArguments->currentText(); }
+
+#include "moc_cmakebuilddirchooser.cpp"

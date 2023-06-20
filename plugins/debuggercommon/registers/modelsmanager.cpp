@@ -351,3 +351,5 @@ void ModelsManager::setMode(const QString& group, Mode mode)
         }
     }
 }
+
+#include "moc_modelsmanager.cpp"

@@ -55,3 +55,5 @@ void CheckSetSelectionComboBox::onCurrentIndexChanged()
 }
 
 }
+
+#include "moc_checksetselectioncombobox.cpp"

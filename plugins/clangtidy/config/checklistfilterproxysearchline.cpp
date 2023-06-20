@@ -46,3 +46,5 @@ void CheckListFilterProxySearchLine::updateFilter()
 }
 
 }
+
+#include "moc_checklistfilterproxysearchline.cpp"

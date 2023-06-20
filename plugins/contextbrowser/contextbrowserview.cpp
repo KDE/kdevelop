@@ -389,3 +389,5 @@ void ContextBrowserView::setSpecialNavigationWidget(QWidget* widget)
         widget->deleteLater();
     }
 }
+
+#include "moc_contextbrowserview.cpp"

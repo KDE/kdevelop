@@ -219,3 +219,5 @@ void BranchesListModel::setCurrentBranch(const QString& branch)
     connect(job, &VcsJob::finished, this, &BranchesListModel::currentBranchChanged);
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
+
+#include "moc_brancheslistmodel.cpp"

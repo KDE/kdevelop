@@ -164,3 +164,5 @@ void CraftRuntimeTest::testStartProcessEnv()
 
     QVERIFY(p.readAllStandardOutput().contains("site-packages"));
 }
+
+#include "moc_test_craftruntime.cpp"

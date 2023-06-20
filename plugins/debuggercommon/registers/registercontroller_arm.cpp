@@ -178,3 +178,5 @@ QStringList RegisterController_Arm::registerNamesForGroup(const GroupsName& grou
 
     return QStringList();
 }
+
+#include "moc_registercontroller_arm.cpp"

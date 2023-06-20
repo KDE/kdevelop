@@ -254,3 +254,4 @@ void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int val
 
 }
 
+#include "moc_statusbar.cpp"

@@ -133,3 +133,4 @@ QString PlasmoidExecutionJob::workingDirectory(ILaunchConfiguration* cfg)
     return workingDirectory;
 }
 
+#include "moc_plasmoidexecutionjob.cpp"

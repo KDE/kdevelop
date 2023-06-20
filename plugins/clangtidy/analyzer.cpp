@@ -92,3 +92,5 @@ KDevelop::CompileAnalyzeJob * Analyzer::createJob(KDevelop::IProject* project,
 }
 
 }
+
+#include "moc_analyzer.cpp"

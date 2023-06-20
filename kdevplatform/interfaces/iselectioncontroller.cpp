@@ -20,3 +20,4 @@ ISelectionController::~ISelectionController()
 
 }
 
+#include "moc_iselectioncontroller.cpp"

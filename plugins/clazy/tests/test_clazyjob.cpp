@@ -136,3 +136,4 @@ void TestClazyJob::testJob()
 QTEST_GUILESS_MAIN(TestClazyJob)
 
 #include "test_clazyjob.moc"
+#include "moc_test_clazyjob.cpp"

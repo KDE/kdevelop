@@ -207,3 +207,5 @@ void QMakeBuildDirChooser::setExtraArgs(const QString& args)
 {
     kcfg_extraArgs->setText(args);
 }
+
+#include "moc_qmakebuilddirchooser.cpp"

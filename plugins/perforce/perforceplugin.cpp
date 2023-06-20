@@ -672,4 +672,4 @@ KDevelop::VcsJob* PerforcePlugin::errorsFound(const QString& error, KDevelop::Ou
     return j;
 }
 
-
+#include "moc_perforceplugin.cpp"

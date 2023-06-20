@@ -396,3 +396,5 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
 
     return destination;
 }
+
+#include "moc_templatesmodel.cpp"

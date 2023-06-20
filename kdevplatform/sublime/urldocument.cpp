@@ -93,3 +93,5 @@ QString UrlDocument::title(TitleType type) const
 }
 
 }
+
+#include "moc_urldocument.cpp"

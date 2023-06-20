@@ -158,3 +158,6 @@ void SvnStatusJob::addToStats( const KDevelop::VcsStatusInfo& info )
         qCDebug(PLUGIN_SVN) << "Already have this info:";
     }
 }
+
+#include "moc_svnstatusjob_p.cpp"
+#include "moc_svnstatusjob.cpp"

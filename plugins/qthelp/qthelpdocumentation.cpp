@@ -289,3 +289,5 @@ bool HomeDocumentation::eventFilter(QObject* obj, QEvent* event)
     }
     return QObject::eventFilter(obj, event);
 }
+
+#include "moc_qthelpdocumentation.cpp"

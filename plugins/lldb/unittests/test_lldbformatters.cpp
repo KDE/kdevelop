@@ -974,3 +974,4 @@ void LldbFormattersTest::testKDevelopTypes()
 QTEST_MAIN(LldbFormattersTest)
 
 #include "test_lldbformatters.moc"
+#include "moc_test_lldbformatters.cpp"

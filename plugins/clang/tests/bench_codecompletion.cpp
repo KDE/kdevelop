@@ -81,3 +81,5 @@ void BenchCodeCompletion::benchCodeCompletion()
         } while (!m_model->rowCount());
     }
 }
+
+#include "moc_bench_codecompletion.cpp"

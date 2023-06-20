@@ -67,3 +67,4 @@ void DefinesWidget::deleteDefine()
     }
 }
 
+#include "moc_defineswidget.cpp"

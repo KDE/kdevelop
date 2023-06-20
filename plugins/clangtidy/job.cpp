@@ -186,3 +186,5 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 }
 
 } // namespace ClangTidy
+
+#include "moc_job.cpp"

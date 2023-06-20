@@ -85,3 +85,5 @@ void TestPluginController::benchPluginForExtension()
 }
 
 QTEST_MAIN( TestPluginController)
+
+#include "moc_test_plugincontroller.cpp"

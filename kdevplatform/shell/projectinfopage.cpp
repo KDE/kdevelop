@@ -53,3 +53,4 @@ void ProjectInfoPage::populateProjectFileCombo(const QVector<ProjectFileChoice>&
 
 }
 
+#include "moc_projectinfopage.cpp"

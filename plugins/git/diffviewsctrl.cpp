@@ -413,3 +413,5 @@ void DiffViewsCtrl::gotoSrcLine()
         delta += 1;
     }
 }
+
+#include "moc_diffviewsctrl.cpp"

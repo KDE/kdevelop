@@ -131,3 +131,4 @@ OktetaPlugin::~OktetaPlugin()
 }
 
 #include "oktetaplugin.moc"
+#include "moc_oktetaplugin.cpp"

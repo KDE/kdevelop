@@ -14,3 +14,5 @@ BreakpointController::BreakpointController(DebugSession* parent)
     : MIBreakpointController(parent)
 {
 }
+
+#include "moc_breakpointcontroller.cpp"

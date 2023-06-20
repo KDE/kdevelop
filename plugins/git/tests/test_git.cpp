@@ -672,3 +672,4 @@ void GitInitTest::testStash()
 QTEST_MAIN(GitInitTest)
 
 // #include "gittest.moc"
+#include "moc_test_git.cpp"

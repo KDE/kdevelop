@@ -92,3 +92,5 @@ EnvironmentProfileList EnvironmentSelectionWidget::environmentProfiles() const
 }
 
 }
+
+#include "moc_environmentselectionwidget.cpp"

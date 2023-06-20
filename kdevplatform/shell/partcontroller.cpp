@@ -255,3 +255,4 @@ void PartController::setupActions()
 
 }
 
+#include "moc_partcontroller.cpp"

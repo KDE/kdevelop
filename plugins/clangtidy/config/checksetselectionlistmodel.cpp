@@ -324,3 +324,5 @@ void CheckSetSelectionListModel::setSelection(int row, const QString& selection)
 }
 
 }
+
+#include "moc_checksetselectionlistmodel.cpp"

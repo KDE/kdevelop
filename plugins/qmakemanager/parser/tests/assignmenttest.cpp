@@ -257,3 +257,5 @@ void AssignmentTest::cleanup()
     ast = nullptr;
     QVERIFY(ast == nullptr);
 }
+
+#include "moc_assignmenttest.cpp"

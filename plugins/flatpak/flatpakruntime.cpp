@@ -263,3 +263,5 @@ KDevelop::Path FlatpakRuntime::buildPath() const
     file.addPath(QStringLiteral("kdevelop"));
     return file;
 }
+
+#include "moc_flatpakruntime.cpp"

@@ -9,3 +9,5 @@
 using namespace KDevelop;
 
 KDevelop::IRuntime::~IRuntime() = default;
+
+#include "moc_iruntime.cpp"

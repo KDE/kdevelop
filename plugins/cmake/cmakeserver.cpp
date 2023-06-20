@@ -207,3 +207,5 @@ void CMakeServer::codemodel()
 {
     sendCommand({ {QStringLiteral("type"), QStringLiteral("codemodel")} });
 }
+
+#include "moc_cmakeserver.cpp"

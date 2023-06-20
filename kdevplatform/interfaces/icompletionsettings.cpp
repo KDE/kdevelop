@@ -11,3 +11,4 @@ ICompletionSettings::~ICompletionSettings() {
 }
 }
 
+#include "moc_icompletionsettings.cpp"

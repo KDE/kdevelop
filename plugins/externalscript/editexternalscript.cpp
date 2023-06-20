@@ -168,3 +168,5 @@ void EditExternalScript::validate()
     buttonBox->button(QDialogButtonBox::Ok)->setEnabled(valid);
     buttonBox->button(QDialogButtonBox::Apply)->setEnabled(valid);
 }
+
+#include "moc_editexternalscript.cpp"

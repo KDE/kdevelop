@@ -212,3 +212,5 @@ QString ISourceFormatter::missingExecutableMessage(const QString &name)
 }
 
 }
+
+#include "moc_isourceformatter.cpp"

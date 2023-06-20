@@ -268,3 +268,5 @@ QString MessageWidget::text() const
 }
 
 }
+
+#include "moc_messagewidget.cpp"

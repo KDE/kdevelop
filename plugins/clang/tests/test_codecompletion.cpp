@@ -1684,3 +1684,5 @@ void TestCodeCompletion::testIgnoreGccBuiltins()
         executeCompletionTest(file.topContext(), {});
     }
 }
+
+#include "moc_test_codecompletion.cpp"

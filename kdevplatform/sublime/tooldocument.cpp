@@ -61,3 +61,4 @@ QString ToolDocument::documentSpecifier() const
 
 }
 
+#include "moc_tooldocument.cpp"

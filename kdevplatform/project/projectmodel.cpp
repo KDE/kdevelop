@@ -1171,3 +1171,5 @@ ProjectVisitor::~ProjectVisitor()
 
 
 }
+
+#include "moc_projectmodel.cpp"

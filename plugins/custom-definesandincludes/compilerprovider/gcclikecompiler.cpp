@@ -252,3 +252,5 @@ GccLikeCompiler::GccLikeCompiler(const QString& name, const QString& path, bool 
 {
     connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, &GccLikeCompiler::invalidateCache);
 }
+
+#include "moc_gcclikecompiler.cpp"

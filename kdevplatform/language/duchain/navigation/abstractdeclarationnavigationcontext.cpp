@@ -898,3 +898,5 @@ QString AbstractDeclarationNavigationContext::declarationSizeInformation(const D
     return {};
 }
 }
+
+#include "moc_abstractdeclarationnavigationcontext.cpp"

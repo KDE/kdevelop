@@ -115,3 +115,6 @@ void SvnImportJob::setMessage( const QString& msg )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setMessage( msg );
 }
+
+#include "moc_svnimportjob.cpp"
+#include "moc_svnimportjob_p.cpp"

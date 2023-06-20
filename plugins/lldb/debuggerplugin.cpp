@@ -127,3 +127,4 @@ DebugSession* LldbDebuggerPlugin::createSession()
 }
 
 #include "debuggerplugin.moc"
+#include "moc_debuggerplugin.cpp"

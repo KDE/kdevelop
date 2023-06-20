@@ -173,3 +173,5 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc,
                      this, SLOT(updateValue()));
     l->addWidget(view);
 }
+
+#include "moc_propertypreviewwidget.cpp"

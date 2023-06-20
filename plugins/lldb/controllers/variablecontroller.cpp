@@ -48,3 +48,5 @@ void VariableController::update()
         debugSession()->updateAllVariables();
     }
 }
+
+#include "moc_variablecontroller.cpp"

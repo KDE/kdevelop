@@ -91,3 +91,4 @@ QIcon EnvironmentPreferences::icon() const
 
 }
 
+#include "moc_environmentpreferences.cpp"

@@ -119,3 +119,5 @@ QSize AreaDisplay::sizeHint() const
     hint = hint.boundedTo(QSize(hint.width(), m_mainWindow->menuBar()->height()-1));
     return hint;
 }
+
+#include "moc_areadisplay.cpp"

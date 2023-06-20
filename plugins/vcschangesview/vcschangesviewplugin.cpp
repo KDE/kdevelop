@@ -88,3 +88,4 @@ ProjectChangesModel* VcsProjectIntegrationPlugin::model()
 }
 
 #include "vcschangesviewplugin.moc"
+#include "moc_vcschangesviewplugin.cpp"

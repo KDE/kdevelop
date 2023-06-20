@@ -70,3 +70,5 @@ bool LldbDebugger::start(KConfigGroup& config, const QStringList& extraArguments
 
     return true;
 }
+
+#include "moc_lldbdebugger.cpp"

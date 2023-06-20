@@ -145,3 +145,5 @@ void TestSvnRecursiveAdd::test()
 }
 
 QTEST_MAIN(TestSvnRecursiveAdd)
+
+#include "moc_test_svnrecursiveadd.cpp"

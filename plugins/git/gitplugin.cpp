@@ -1776,3 +1776,4 @@ QString GitPlugin::readConfigOption(const QUrl& repository, const QString& key)
 }
 
 #include "gitplugin.moc"
+#include "moc_gitplugin.cpp"

@@ -22,3 +22,5 @@ KDevelop::CodeCompletionWorker* CodeCompletionModel::createCompletionWorker()
 }
 
 }
+
+#include "moc_model.cpp"

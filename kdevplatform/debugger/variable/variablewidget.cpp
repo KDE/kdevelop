@@ -331,3 +331,4 @@ void VariableTree::stopOnChange()
 }
 }
 
+#include "moc_variablewidget.cpp"

@@ -79,3 +79,5 @@ void SvnSSLTrustDialog::buttonClicked(QAbstractButton *button)
     }
     accept();
 }
+
+#include "moc_svnssldialog.cpp"

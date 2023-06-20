@@ -89,4 +89,4 @@ void PluginPreferences::reset()
 
 }
 
-
+#include "moc_pluginpreferences.cpp"

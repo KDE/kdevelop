@@ -67,3 +67,5 @@ bool IdealButtonBarLayout::eventFilter(QObject* watched, QEvent* event)
 
     return QBoxLayout::eventFilter(watched, event);
 }
+
+#include "moc_ideallayout.cpp"

@@ -225,3 +225,5 @@ void BenchIndexedString::bench_swap()
         swap(a, b);
     }
 }
+
+#include "moc_bench_indexedstring.cpp"

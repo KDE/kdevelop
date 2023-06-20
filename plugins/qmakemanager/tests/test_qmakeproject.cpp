@@ -148,3 +148,5 @@ void TestQMakeProject::testBuildDirectory()
     auto buildJob = buildManager->builder()->configure(project);
     QVERIFY(buildJob->exec());
 }
+
+#include "moc_test_qmakeproject.cpp"

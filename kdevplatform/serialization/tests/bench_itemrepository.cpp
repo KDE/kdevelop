@@ -245,3 +245,5 @@ void BenchItemRepository::shouldDoReferenceCounting()
         QCOMPARE(count, 0);
     }
 }
+
+#include "moc_bench_itemrepository.cpp"

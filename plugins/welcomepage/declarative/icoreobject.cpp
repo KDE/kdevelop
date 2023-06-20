@@ -15,3 +15,5 @@ QObject* ICoreObject::self() const
 {
     return KDevelop::ICore::self();
 }
+
+#include "moc_icoreobject.cpp"

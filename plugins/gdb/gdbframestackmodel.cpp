@@ -19,3 +19,5 @@ DebugSession* GdbFrameStackModel::session()
 {
     return static_cast<DebugSession *>(FrameStackModel::session());
 }
+
+#include "moc_gdbframestackmodel.cpp"

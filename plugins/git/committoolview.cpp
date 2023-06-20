@@ -489,3 +489,4 @@ void CommitToolView::commitActiveProject()
 }
 
 #include "committoolview.moc"
+#include "moc_committoolview.cpp"

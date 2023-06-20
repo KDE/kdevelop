@@ -12,3 +12,5 @@ ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
 {
     refresh();
 }
+
+#include "moc_projecttemplatesmodel.cpp"

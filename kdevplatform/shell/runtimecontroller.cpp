@@ -158,3 +158,4 @@ void KDevelop::RuntimeController::addRuntimes(KDevelop::IRuntime * runtime)
 }
 
 #include "runtimecontroller.moc"
+#include "moc_runtimecontroller.cpp"

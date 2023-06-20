@@ -543,3 +543,5 @@ void StandardDocumentationView::keyReleaseEvent(QKeyEvent* event)
 #ifndef USE_QTWEBKIT
 #include "standarddocumentationview.moc"
 #endif
+
+#include "moc_standarddocumentationview.cpp"

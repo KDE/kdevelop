@@ -69,3 +69,5 @@ void UnityLauncher::update(const QVariantMap &properties)
     message.setArguments({m_launcherId, properties});
     QDBusConnection::sessionBus().send(message);
 }
+
+#include "moc_unitylauncher.cpp"

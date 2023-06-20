@@ -583,3 +583,4 @@ void GrepDialog::updateSettings()
     m_settings.searchPaths = searchPaths->currentText();
 }
 
+#include "moc_grepdialog.cpp"

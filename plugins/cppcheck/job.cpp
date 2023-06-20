@@ -206,3 +206,5 @@ void Job::emitProblems()
 }
 
 }
+
+#include "moc_job.cpp"

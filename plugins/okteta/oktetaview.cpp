@@ -36,3 +36,5 @@ OktetaView::~OktetaView()
 }
 
 }
+
+#include "moc_oktetaview.cpp"

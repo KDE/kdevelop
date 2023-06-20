@@ -408,3 +408,5 @@ void TestShellBuddy::testsplitViewBuddies()
 
 
 QTEST_MAIN(TestShellBuddy)
+
+#include "moc_test_shellbuddy.cpp"

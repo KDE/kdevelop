@@ -501,3 +501,5 @@ void IdealController::loadSettings()
     else
         m_mainWindow->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 }
+
+#include "moc_idealcontroller.cpp"

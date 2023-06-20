@@ -190,3 +190,4 @@ QPair<QWidget*, KTextEditor::Range> KDevQmlJsPlugin::specialLanguageObjectNaviga
 }
 
 #include "kdevqmljsplugin.moc"
+#include "moc_kdevqmljsplugin.cpp"

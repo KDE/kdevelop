@@ -98,3 +98,5 @@ QString EnvironmentSelectionModel::reloadSelectedItem(const QString& currentProf
 }
 
 } // namespace KDevelop
+
+#include "moc_environmentselectionmodel.cpp"

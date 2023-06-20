@@ -251,3 +251,5 @@ void ProblemNavigationContext::executeAction(int index)
         return;
     }
 }
+
+#include "moc_problemnavigationcontext.cpp"

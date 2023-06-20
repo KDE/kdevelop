@@ -198,3 +198,5 @@ MesonOptViewPtr MesonRewriterOptionContainer::view()
 {
     return m_optView;
 }
+
+#include "moc_mesonrewriterinput.cpp"

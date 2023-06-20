@@ -280,3 +280,5 @@ MesonTestSuitesPtr MesonIntrospectJob::tests()
 {
     return m_res_tests;
 }
+
+#include "moc_mesonintrospectjob.cpp"

@@ -176,3 +176,5 @@ bool ProjectConfigSkeleton::writeConfig()
     emit configChanged();
     return true;
 }
+
+#include "moc_projectconfigskeleton.cpp"

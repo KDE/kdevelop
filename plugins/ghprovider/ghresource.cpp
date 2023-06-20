@@ -216,3 +216,5 @@ void Resource::slotOrgs(KIO::Job *job, const QByteArray &data)
 }
 
 } // End of namespace gh
+
+#include "moc_ghresource.cpp"

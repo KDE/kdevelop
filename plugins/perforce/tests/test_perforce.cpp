@@ -194,3 +194,4 @@ void PerforcePluginTest::testDiff()
 
 QTEST_MAIN(PerforcePluginTest)
 
+#include "moc_test_perforce.cpp"

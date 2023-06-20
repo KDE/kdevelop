@@ -45,3 +45,5 @@ QIcon GlobalConfigPage::icon() const
 }
 
 }
+
+#include "moc_globalconfigpage.cpp"

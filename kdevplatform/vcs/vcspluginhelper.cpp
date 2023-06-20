@@ -548,4 +548,4 @@ void VcsPluginHelper::pull()
 
 }
 
-
+#include "moc_vcspluginhelper.cpp"

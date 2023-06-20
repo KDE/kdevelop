@@ -158,3 +158,4 @@ void TestMICommand::testQObjectCommandHandler()
 QTEST_GUILESS_MAIN(TestMICommand)
 
 #include "test_micommand.moc"
+#include "moc_test_micommand.cpp"

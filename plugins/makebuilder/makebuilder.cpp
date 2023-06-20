@@ -142,3 +142,4 @@ KDevelop::ConfigPage* MakeBuilder::perProjectConfigPage(int number, const KDevel
 }
 
 #include "makebuilder.moc"
+#include "moc_makebuilder.cpp"

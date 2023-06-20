@@ -108,3 +108,5 @@ void GlobalConfigPage::reset()
 }
 
 }
+
+#include "moc_globalconfigpage.cpp"

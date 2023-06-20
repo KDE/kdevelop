@@ -321,3 +321,5 @@ void CompilerProvider::retrieveUserDefinedCompilers()
         registerCompiler(c);
     }
 }
+
+#include "moc_compilerprovider.cpp"

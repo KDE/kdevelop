@@ -400,3 +400,5 @@ void IRegisterController::setMode(Mode m, const GroupsName& group)
         }
     }
 }
+
+#include "moc_registercontroller.cpp"

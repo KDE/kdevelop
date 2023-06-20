@@ -87,3 +87,5 @@ bool CTestFindJob::doKill()
     KDevelop::ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
     return true;
 }
+
+#include "moc_ctestfindjob.cpp"

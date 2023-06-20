@@ -49,3 +49,5 @@ void SelectionController::cleanup()
 }
 
 }
+
+#include "moc_selectioncontroller.cpp"

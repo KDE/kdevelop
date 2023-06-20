@@ -1276,3 +1276,5 @@ void MIDebugSession::setSourceInitFile(bool enable)
 {
     m_sourceInitFile = enable;
 }
+
+#include "moc_midebugsession.cpp"

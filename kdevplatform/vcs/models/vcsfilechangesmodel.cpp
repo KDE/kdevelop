@@ -295,3 +295,5 @@ bool VcsFileChangesModel::removeUrl(const QUrl& url)
 }
 
 }
+
+#include "moc_vcsfilechangesmodel.cpp"

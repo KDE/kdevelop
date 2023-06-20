@@ -525,3 +525,5 @@ void DisassembleWidget::showDisassemblyFlavorHandler(const ResultRecord& r)
     }
     m_disassembleWindow->setDisassemblyFlavor(disassemblyFlavor);
 }
+
+#include "moc_disassemblewidget.cpp"

@@ -116,3 +116,5 @@ QHash< QString, QUrl > TestGenerationTest::urls (const SourceFileTemplate& file)
 
 
 QTEST_GUILESS_MAIN(TestGenerationTest)
+
+#include "moc_test_generationtest.cpp"

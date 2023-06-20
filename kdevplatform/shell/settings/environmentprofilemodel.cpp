@@ -223,3 +223,5 @@ void EnvironmentProfileModel::onProfileAboutToBeRemoved(const QString& profileNa
         setCurrentProfile(QString());
     }
 }
+
+#include "moc_environmentprofilemodel.cpp"

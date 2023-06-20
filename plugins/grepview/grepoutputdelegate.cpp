@@ -157,3 +157,5 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
     }
     return ret;
 }
+
+#include "moc_grepoutputdelegate.cpp"

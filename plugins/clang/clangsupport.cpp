@@ -433,3 +433,4 @@ void ClangSupport::enableKeywordCompletion(KTextEditor::View* view)
 }
 
 #include "clangsupport.moc"
+#include "moc_clangsupport.cpp"

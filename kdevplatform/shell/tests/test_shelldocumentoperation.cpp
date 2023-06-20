@@ -132,3 +132,5 @@ void TestShellDocumentOperation::testKateDocumentAndViewCreation()
 }
 
 QTEST_MAIN(TestShellDocumentOperation)
+
+#include "moc_test_shelldocumentoperation.cpp"

@@ -88,3 +88,5 @@ void OutlineWidget::expandFirstLevel()
         m_tree->expand(m_proxy->index(i, 0));
     }
 }
+
+#include "moc_outlinewidget.cpp"

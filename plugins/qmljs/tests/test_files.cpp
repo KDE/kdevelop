@@ -126,3 +126,5 @@ void TestFiles::parseAndCheck(const QString& fileName, bool check)
     }
   }
 }
+
+#include "moc_test_files.cpp"

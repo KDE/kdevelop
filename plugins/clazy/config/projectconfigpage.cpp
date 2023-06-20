@@ -220,3 +220,5 @@ void ProjectConfigPage::onChecksChanged(const QString& checks)
 }
 
 }
+
+#include "moc_projectconfigpage.cpp"

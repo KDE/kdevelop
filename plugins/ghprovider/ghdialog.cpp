@@ -183,3 +183,5 @@ void Dialog::revokeAccess()
 }
 
 } // End of namespace gh
+
+#include "moc_ghdialog.cpp"

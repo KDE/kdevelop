@@ -239,3 +239,5 @@ void TestVcsDiff::testAssignOperator()
 }
 
 QTEST_GUILESS_MAIN(TestVcsDiff)
+
+#include "moc_test_vcsdiff.cpp"

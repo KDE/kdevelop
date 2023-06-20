@@ -120,3 +120,4 @@ FooNew::~FooNew() {
     m_projectController->closeAllProjects();
 }
 
+#include "moc_test_refactoring.cpp"

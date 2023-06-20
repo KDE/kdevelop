@@ -48,3 +48,5 @@ void QtHelpProvider::setIconName(const QString& iconName)
 {
     m_iconName = iconName;
 }
+
+#include "moc_qthelpprovider.cpp"

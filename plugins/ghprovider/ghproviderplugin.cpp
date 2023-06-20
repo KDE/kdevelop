@@ -43,3 +43,4 @@ IProjectProviderWidget * ProviderPlugin::providerWidget(QWidget *parent)
 } // End of namespace gh
 
 #include "ghproviderplugin.moc"
+#include "moc_ghproviderplugin.cpp"

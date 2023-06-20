@@ -209,4 +209,4 @@ KDevelop::Path CMakeCacheModel::filePath() const
     return m_filePath;
 }
 
-
+#include "moc_cmakecachemodel.cpp"

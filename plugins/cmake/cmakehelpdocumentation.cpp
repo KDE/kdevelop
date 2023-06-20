@@ -43,3 +43,5 @@ bool CMakeHomeDocumentation::eventFilter(QObject* watched, QEvent* event)
         event->ignore(); // Propagate to DocumentationView
     return QObject::eventFilter(watched, event);
 }
+
+#include "moc_cmakehelpdocumentation.cpp"

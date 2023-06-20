@@ -212,3 +212,5 @@ void TestVcsLocation::testAssignOperator()
 }
 
 QTEST_GUILESS_MAIN(TestVcsLocation)
+
+#include "moc_test_vcslocation.cpp"

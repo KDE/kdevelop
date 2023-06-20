@@ -134,3 +134,5 @@ void TestFormattingHelpers::testFuzzyMatching_data()
         << QStringLiteral("\n\nvoid foo() {\nstring a = \"very long\";\n}")
         << expectedOutput;
 }
+
+#include "moc_test_formattinghelpers.cpp"

@@ -137,3 +137,6 @@ void SvnInfoJob::setInfo( const SvnInfoHolder& info )
     m_info = info;
     emit resultsReady( this );
 }
+
+#include "moc_svninfojob.cpp"
+#include "moc_svninfojob_p.cpp"

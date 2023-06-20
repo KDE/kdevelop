@@ -135,3 +135,5 @@ KTextEditor::Document* TemplatePreview::document() const
 {
     return m_preview.data();
 }
+
+#include "moc_templatepreview.cpp"

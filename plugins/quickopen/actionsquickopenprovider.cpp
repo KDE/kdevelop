@@ -117,3 +117,5 @@ void ActionsQuickOpenProvider::reset()
 {
     m_results.clear();
 }
+
+#include "moc_actionsquickopenprovider.cpp"

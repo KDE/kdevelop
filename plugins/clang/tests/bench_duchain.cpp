@@ -63,3 +63,5 @@ void BenchDUChain::benchDUChainBuilder()
 }
 
 QTEST_MAIN(BenchDUChain)
+
+#include "moc_bench_duchain.cpp"

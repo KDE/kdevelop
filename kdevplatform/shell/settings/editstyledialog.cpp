@@ -113,3 +113,5 @@ QString EditStyleDialog::content()
     }
     return QString();
 }
+
+#include "moc_editstyledialog.cpp"

@@ -19,3 +19,5 @@ DebugSession *VariableController::debugSession() const
 {
     return static_cast<DebugSession*>(const_cast<QObject*>(QObject::parent()));
 }
+
+#include "moc_variablecontroller.cpp"

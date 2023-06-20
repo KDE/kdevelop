@@ -70,3 +70,5 @@ void CodeCompletionTestBase::init()
 {
     m_projectController->closeAllProjects();
 }
+
+#include "moc_codecompletiontestbase.cpp"

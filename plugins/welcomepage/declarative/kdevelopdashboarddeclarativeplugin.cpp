@@ -48,3 +48,4 @@ void KDevplatformDeclarativePlugin::registerTypes(const char* uri)
 }
 
 #include "kdevelopdashboarddeclarativeplugin.moc"
+#include "moc_kdevelopdashboarddeclarativeplugin.cpp"
