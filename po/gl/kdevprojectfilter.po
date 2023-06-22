@@ -1,40 +1,38 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Marce Villarino <mvillarino@kde-espana.org>, 2013.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-13 00:55+0000\n"
-"PO-Revision-Date: 2019-07-14 09:56+0200\n"
+"PO-Revision-Date: 2023-06-21 08:56+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: filtermodel.cpp:76
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
-msgstr "Patrón"
+msgstr "Padrón"
 
 #: filtermodel.cpp:78
-#, fuzzy, kde-format
-#| msgid "Targets"
+#, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "Obxectivos"
 
 #: filtermodel.cpp:80
-#, fuzzy, kde-format
-#| msgid "Action"
+#, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "Acción"
@@ -71,22 +69,19 @@ msgstr ""
 "filtros aplícanse ou só a ficheiros, só a cartafoles ou a ambos os dous."
 
 #: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
-#, fuzzy, kde-format
-#| msgid "Files and Folders"
+#, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "Ficheiros e cartafoles"
 
 #: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Folders"
+#, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "Cartafoles"
 
 #: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
-#, fuzzy, kde-format
-#| msgid "Files"
+#, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "Ficheiros"
@@ -107,15 +102,13 @@ msgstr ""
 "aplicar un patrón incluínte <code>«*.cpp»</code>."
 
 #: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
-#, fuzzy, kde-format
-#| msgid "Include"
+#, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "Incluír"
 
 #: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
-#, fuzzy, kde-format
-#| msgid "Exclude"
+#, kde-format
 msgctxt "@item"
 msgid "Exclude"
 msgstr "Excluír"
@@ -136,23 +129,19 @@ msgstr ""
 "Os filtros que acaban en <code>«/»</code> nunca han casar con ficheiros."
 
 #: projectfilterconfigpage.cpp:198
-#, fuzzy, kde-format
-#| msgid "Configure Project Filter"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Project Filter"
 msgstr "Configurar o filtro do proxecto"
 
 #: projectfilterconfigpage.cpp:208
-#, fuzzy, kde-format
-#| msgid "Project Filter"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "Filtro do proxecto"
 
 #: projectfilterprovider.cpp:76
-#, fuzzy, kde-format
-#| msgid "Exclude Item From Project"
-#| msgid_plural "Exclude Items From Project"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
@@ -167,14 +156,13 @@ msgid_plural ""
 "A filter for the items was added. To undo, use the project filter settings."
 msgstr[0] ""
 "Engadiuse un filtro para o elemento. Para desfacer, use os parámetros de "
-"filtraxe do proxecto."
+"filtro do proxecto."
 msgstr[1] ""
 "Engadiuse un filtro para os elementos. Para desfacer, use os parámetros de "
-"filtraxe do proxecto."
+"filtro do proxecto."
 
 #: projectfilterprovider.cpp:117
-#, fuzzy, kde-format
-#| msgid "Project Filter Added"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"
 msgstr "Engadiuse o filtro do proxecto"
@@ -191,32 +179,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: projectfiltersettings.ui:34
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "Engadir"
 
 #. i18n: ectx: property (text), widget (QPushButton, remove)
 #: projectfiltersettings.ui:49
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr "Eliminar"
+msgstr "Retirar"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveUp)
 #: projectfiltersettings.ui:61
-#, fuzzy, kde-format
-#| msgid "Move Up"
+#, kde-format
 msgctxt "@action:button"
 msgid "Move Up"
 msgstr "Subir"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveDown)
 #: projectfiltersettings.ui:73
-#, fuzzy, kde-format
-#| msgid "Move Down"
+#, kde-format
 msgctxt "@action:button"
 msgid "Move Down"
 msgstr "Baixar"
