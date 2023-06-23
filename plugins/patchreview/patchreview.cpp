@@ -31,9 +31,15 @@
 #include <sublime/message.h>
 #include <util/path.h>
 
+#ifdef WITH_KOMPAREDIFF2_5_4_OR_NEWER
+#include <KompareDiff2/DiffSettings>
+#include <KompareDiff2/Kompare>
+#include <KompareDiff2/KompareModelList>
+#else
 #include <libkomparediff2/komparemodellist.h>
 #include <libkomparediff2/kompare.h>
 #include <libkomparediff2/diffsettings.h>
+#endif
 
 #include <KTextEditor/Document>
 #include <KTextEditor/ModificationInterface>
@@ -256,7 +262,11 @@ void PatchReviewPlugin::updateKompareModel() {
         m_kompareInfo->depth = m_patch->depth();
         m_kompareInfo->applied = m_patch->isAlreadyApplied();
 
+#ifdef WITH_KOMPAREDIFF2_5_4_OR_NEWER
+        m_modelList.reset(new Diff2::KompareModelList(m_diffSettings.data(), this));
+#else
         m_modelList.reset( new Diff2::KompareModelList( m_diffSettings.data(), new QWidget, this ) );
+#endif
         m_modelList->slotKompareInfo( m_kompareInfo.data() );
 
         try {

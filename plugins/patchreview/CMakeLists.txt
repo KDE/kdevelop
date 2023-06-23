@@ -47,6 +47,12 @@ target_link_libraries(kdevpatchreview
     KF5::TextEditor
     KF5::Parts
 )
+if (LibKompareDiff2_VERSION VERSION_GREATER_EQUAL 5.4.0)
+    # KompareDiff2 installs a working version header only since 5.4 (23.08.0)
+    # so to work also with old versions instead of the sources including
+    # the version header a compile definition flag is used
+    target_compile_definitions(kdevpatchreview PRIVATE WITH_KOMPAREDIFF2_5_4_OR_NEWER)
+endif()
 if (KF5Purpose_FOUND)
     target_compile_definitions(kdevpatchreview PRIVATE WITH_PURPOSE)
     target_link_libraries(kdevpatchreview KF5::PurposeWidgets)

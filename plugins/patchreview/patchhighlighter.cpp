@@ -6,8 +6,13 @@
 
 #include "patchhighlighter.h"
 
+#ifdef WITH_KOMPAREDIFF2_5_4_OR_NEWER
+#include <KompareDiff2/Difference>
+#include <KompareDiff2/DiffModel>
+#else
 #include <libkomparediff2/difference.h>
 #include <libkomparediff2/diffmodel.h>
+#endif
 
 #include "patchreview.h"
 #include "debug.h"

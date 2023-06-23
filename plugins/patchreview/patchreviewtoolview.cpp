@@ -8,8 +8,15 @@
 #include "localpatchsource.h"
 #include "patchreview.h"
 #include "debug.h"
+
+#ifdef WITH_KOMPAREDIFF2_5_4_OR_NEWER
+#include <KompareDiff2/DiffModelList>
+#include <KompareDiff2/KompareModelList>
+#else
 #include <libkomparediff2/diffmodellist.h>
 #include <libkomparediff2/komparemodellist.h>
+#endif
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <vcs/models/vcsfilechangesmodel.h>
