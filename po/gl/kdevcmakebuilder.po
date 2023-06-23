@@ -7,14 +7,14 @@
 # Xabier Villar <xabier.villar@gmail.com>, 2012.
 # Xosé <xosecalvo@gmail.com>, 2013.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2020-03-07 07:58+0100\n"
+"PO-Revision-Date: 2023-06-22 06:19+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: cmakebuilder.cpp:105
 #, kde-format
@@ -35,45 +35,40 @@ msgid "Could not find a builder for %1"
 msgstr "Non se puido atopar un construtor para %1."
 
 #: cmakebuilder.cpp:195
-#, fuzzy, kde-format
-#| msgid "No Build Directory configured, cannot install"
+#, kde-format
 msgid "No build directory configured, cannot install"
 msgstr ""
-"Non é posíbel instalar porque non se configurou un directorio de construción"
+"Non é posíbel instalar porque non se configurou un directorio de construción."
 
 #: cmakebuilder.cpp:205
-#, fuzzy, kde-format
-#| msgid "No Build Directory configured, cannot configure"
+#, kde-format
 msgid "No build directory configured, cannot configure"
 msgstr ""
-"Non é posíbel configurar porque non se configurou o directorio de construción"
+"Non é posíbel configurar porque non se configurou o directorio de "
+"construción."
 
 #: cmakebuilderpreferences.cpp:40
-#, fuzzy, kde-format
-#| msgid "CMake"
+#, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
 #: cmakebuilderpreferences.cpp:45
-#, fuzzy, kde-format
-#| msgid "Configure Global CMake Settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"
 msgstr "Configurar a configuración global de CMake"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: cmakebuilderpreferences.ui:20
-#, fuzzy, kde-format
-#| msgid "Default CMake executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Default CMake executable:"
 msgstr "Executábel predeterminado de CMake:"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: cmakebuilderpreferences.ui:37
-#, fuzzy, kde-format
-#| msgid "Default generator:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Default generator:"
 msgstr "Xerador predeterminado:"
@@ -99,8 +94,7 @@ msgid "CMake: %1"
 msgstr "CMake: %1"
 
 #: prunejob.cpp:39
-#, fuzzy, kde-format
-#| msgid "No Build Directory configured, cannot clear the build directory"
+#, kde-format
 msgid "No build directory configured, cannot clear the build directory"
 msgstr ""
 "Non se pode limpar o directorio de construción porque non se configurou."
