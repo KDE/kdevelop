@@ -522,13 +522,13 @@ msgid ""
 "Cannot run script '%1' since it tries to access the editor contents but no "
 "document is open."
 msgstr ""
-"Non é posíbel executar o script «%1» porque intenta acceder ao contido do "
+"Non é posíbel executar o guión «%1» porque intenta acceder ao contido do "
 "editor pero non hai ningún documento aberto."
 
 #: externalscriptjob.cpp:224
 #, kde-format
 msgid "Running external script: %1"
-msgstr "Estase a executar un script externo: %1"
+msgstr "Estase a executar un guión externo: %1"
 
 #: externalscriptjob.cpp:268
 #, kde-format
@@ -630,8 +630,8 @@ msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
 "i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
 msgstr ""
-"<p>Está seguro de que quere retirar a configuración do script externo <i>%1</"
-"i>?</p><p><i>Nota:</i> O script en si non vai ser eliminado.</p>"
+"<p>Está seguro de que quere retirar a configuración do guión externo <i>%1</"
+"i>?</p><p><i>Nota:</i> O guión en si non vai ser eliminado.</p>"
 
 #: externalscriptview.cpp:149
 #, fuzzy, kde-format

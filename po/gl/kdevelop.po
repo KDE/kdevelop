@@ -781,7 +781,7 @@ msgstr ""
 #, kde-format
 msgid "Shows all available sessions and lets you select one to open."
 msgstr ""
-"Mostra todas as sesións dispoñíbeis e permite escoller unha para abrila."
+"Amosa todas as sesións dispoñíbeis e permite escoller unha para abrila."
 
 #: main.cpp:479
 #, kde-format

@@ -30,8 +30,8 @@ msgid ""
 "There is a quoting error in the script for the launch configuration '%1'. "
 "Aborting start."
 msgstr ""
-"Hai un erro de aspas no script da configuración de iniciar «%1». "
-"Interrómpese o inicio."
+"Hai un erro de aspas no guión da configuración de iniciar «%1». Interrómpese "
+"o inicio."
 
 #: executescriptplugin.cpp:76
 #, kde-format
@@ -39,7 +39,7 @@ msgid ""
 "A shell meta character was included in the script for the launch "
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
-"Incluíuse un carácter meta de consola no script da configuración de iniciar "
+"Incluíuse un carácter meta de consola no guión da configuración de iniciar "
 "«%1», o que non se admite de momento. Interrómpese o inicio."
 
 #: executescriptplugin.cpp:93
@@ -107,12 +107,12 @@ msgstr "Configurar a aplicación de script"
 #: scriptappconfig.cpp:126
 #, kde-format
 msgid "Executes Script Applications"
-msgstr "Executa aplicacións de script"
+msgstr "Executa aplicacións de guión"
 
 #: scriptappconfig.cpp:136 scriptappconfig.cpp:186
 #, kde-format
 msgid "Script Application"
-msgstr "Aplicación de script"
+msgstr "Aplicación de guión"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: scriptappconfig.ui:29
