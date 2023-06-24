@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Marce Villarino <mvillarino@kde-espana.org>, 2013.
 # Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail.com>, 2015.
-# Adrian Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+# Adrian Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2019-10-27 07:42+0100\n"
+"PO-Revision-Date: 2023-06-23 08:20+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.11.70\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: ghdialog.cpp:25
 #, kde-format
@@ -42,29 +42,25 @@ msgid "You are logged in as <b>%1</b>.<br/>%2"
 msgstr "Está identificado como <b>%1</b>.<br/>%2"
 
 #: ghdialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Log Out"
+#, kde-format
 msgctxt "@action:button"
 msgid "Log Out"
 msgstr "Saír"
 
 #: ghdialog.cpp:64
-#, fuzzy, kde-format
-#| msgid "Force Sync"
+#, kde-format
 msgctxt "@action:button"
 msgid "Force Sync"
 msgstr "Forzar a sincronización"
 
 #: ghdialog.cpp:78
-#, fuzzy, kde-format
-#| msgid "Authorize"
+#, kde-format
 msgctxt "@action:button"
 msgid "Authorize"
 msgstr "Autorizar"
 
 #: ghdialog.cpp:92
-#, fuzzy, kde-format
-#| msgid "GitHub Account"
+#, kde-format
 msgctxt "@title:window"
 msgid "GitHub Account"
 msgstr "Conta de GitHub"
@@ -93,8 +89,7 @@ msgstr ""
 "%2"
 
 #: ghdialog.cpp:129
-#, fuzzy, kde-format
-#| msgid "GitHub Authorization Failed"
+#, kde-format
 msgctxt "@title:window"
 msgid "GitHub Authorization Failed"
 msgstr "Fallou a autorización de GitHub"
@@ -113,25 +108,22 @@ msgstr ""
 "%2"
 
 #: ghdialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "GitHub Account Authorized"
+#, kde-format
 msgctxt "@title:window"
 msgid "GitHub Account Authorized"
 msgstr "Autorizouse a conta de Github"
 
 #: ghdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Authentication Code"
+#, kde-format
 msgctxt "@title:window"
 msgid "Authentication Code"
 msgstr "Código de autenticación"
 
 #: ghdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "OTP Code"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "OTP Code:"
-msgstr "Código OTP"
+msgstr "Código OTP:"
 
 #: ghdialog.cpp:176
 #, kde-format
@@ -144,25 +136,22 @@ msgid "GitHub"
 msgstr "GitHub"
 
 #: ghproviderwidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Buscar"
+msgstr "Buscar…"
 
 #: ghproviderwidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "You can press the Return key if you do not want to wait"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
-msgstr "Pode premer a tecla Intro se non quere agardar"
+msgstr "Pode premer a tecla Intro se non quere agardar."
 
 #: ghproviderwidget.cpp:70
-#, fuzzy, kde-format
-#| msgid "Click this button to configure your GitHub account"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure your GitHub account"
-msgstr "Prema este botón para configurar a conta en GitHub"
+msgstr "Configurar a conta en GitHub."
 
 #: ghproviderwidget.cpp:87
 #, kde-format
@@ -174,22 +163,19 @@ msgstr ""
 "proxecto de GitHub."
 
 #: ghproviderwidget.cpp:87
-#, fuzzy, kde-format
-#| msgid "GitHub Provider Error"
+#, kde-format
 msgctxt "@title:window"
 msgid "GitHub Provider Error"
 msgstr "Erro de fornecedor de GitHub"
 
 #: ghproviderwidget.cpp:105
-#, fuzzy, kde-format
-#| msgid "User"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "User"
-msgstr "Usuario"
+msgstr "Usuaria"
 
 #: ghproviderwidget.cpp:106
-#, fuzzy, kde-format
-#| msgid "Organization"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Organization"
 msgstr "Organización"

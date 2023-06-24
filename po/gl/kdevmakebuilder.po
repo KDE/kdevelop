@@ -1,116 +1,105 @@
 # translation of kdevmakebuilder.po to galician
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # mvillarino <mvillarino@users.sourceforge.net>, 2008, 2009.
 # Marce Villarino <mvillarino@kde-espana.es>, 2009, 2013.
 # Xosé <xosecalvo@gmail.com>, 2012, 2013.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2016.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2019-02-14 19:24+0100\n"
+"PO-Revision-Date: 2023-06-23 08:20+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: makebuilderpreferences.cpp:70
-#, fuzzy, kde-format
-#| msgid "Make"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Make"
 msgstr "Make"
 
 #: makebuilderpreferences.cpp:75
-#, fuzzy, kde-format
-#| msgid "Configure Make settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Make Settings"
 msgstr "Configurar os parámetros de Make"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: makeconfig.ui:32
-#, fuzzy, kde-format
-#| msgid "&Abort on first error:"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Abort on first error:"
 msgstr "&Interromper co primeiro erro:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: makeconfig.ui:52
-#, fuzzy, kde-format
-#| msgid "&Display commands but do not execute them:"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Display commands but do not execute them:"
-msgstr "&Mostrar as ordes pero non executalas:"
+msgstr "Amosar as or&des pero non executalas:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_31)
 #: makeconfig.ui:72
-#, fuzzy, kde-format
-#| msgid "Insta&ll as root:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Insta&ll as root:"
 msgstr "Insta&lar como root:"
 
 #. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
 #: makeconfig.ui:95
-#, fuzzy, kde-format
-#| msgid "Root installation &command:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Root installation &command:"
 msgstr "Or&de de instalación como root:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: makeconfig.ui:133
-#, fuzzy, kde-format
-#| msgid "&Number of simultaneous jobs:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "&Number of simultaneous jobs:"
 msgstr "&Número de traballos simultáneos:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: makeconfig.ui:156
-#, fuzzy, kde-format
-#| msgid "&Make executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Make executable:"
 msgstr "Executábel de &Make:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: makeconfig.ui:179
-#, fuzzy, kde-format
-#| msgid "Default make &target:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Default make &target:"
 msgstr "Ob&xectivo predeterminado de make:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: makeconfig.ui:199
-#, fuzzy, kde-format
-#| msgid "Additional ma&ke options:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Additional ma&ke options:"
 msgstr "Parámetros adicionais de ma&ke:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: makeconfig.ui:219
-#, fuzzy, kde-format
-#| msgid "Active environment &profile:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Active environment &profile:"
-msgstr "&Perfil de ambiente activo:"
+msgstr "&Perfil do contorno activo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: makeconfig.ui:263
-#, fuzzy, kde-format
-#| msgid "Override number of &jobs:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Override number of &jobs:"
 msgstr "Redefinir a cantidade de &traballos:"

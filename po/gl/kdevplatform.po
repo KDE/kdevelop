@@ -207,7 +207,7 @@ msgid ""
 "breakpoint item allows you to change the breakpoint and will take you to the "
 "source in the editor window."
 msgstr ""
-"Mostra unha lista dos puntos de parada co seu estado actual. Pode premer un "
+"Amosa unha lista dos puntos de parada co seu estado actual. Pode premer un "
 "elemento de punto de parada para cambialo, e levarao á fonte na xanela de "
 "edición."
 
@@ -2696,7 +2696,7 @@ msgstr "Configurar as notificacións"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
-msgstr "Mostra un diálogo para configurar as notificacións."
+msgstr "Amosa un diálogo para configurar as notificacións."
 
 #: shell/mainwindow_p.cpp:231
 #, fuzzy, kde-format
@@ -2716,8 +2716,7 @@ msgstr "Mostrar unha lista con todos os complementos gardados"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
-msgstr ""
-"Mostra un diálogo con información sobre todos os complementos cargados."
+msgstr "Amosa un diálogo con información sobre todos os complementos cargados."
 
 #: shell/mainwindow_p.cpp:236
 #, fuzzy, kde-format
@@ -5803,7 +5802,7 @@ msgstr "© 2009 David Nolden"
 #: util/duchainify/main.cpp:263
 #, kde-format
 msgid "file or directory"
-msgstr "ficheiro ou directorio"
+msgstr "ficheiro ou cartafol"
 
 #: util/duchainify/main.cpp:266
 #, kde-format

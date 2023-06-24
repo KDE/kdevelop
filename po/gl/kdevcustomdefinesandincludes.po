@@ -364,7 +364,7 @@ msgid ""
 "Configure which macros and include directories/files will be added to the "
 "parser during project parsing:"
 msgstr ""
-"Configure que macros e ficheiros ou directorios de inclusión se engaden ao "
+"Configure que macros e ficheiros ou cartafoles de inclusión se engaden ao "
 "analizador do proxecto:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_reparse)
