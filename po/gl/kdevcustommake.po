@@ -1,23 +1,25 @@
 # translation of kdevcustommake.po to Galician
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # mvillarino <mvillarino@users.sourceforge.net>, 2008.
 # Marce Villarino <mvillarino@gmail.com>, 2009.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustommake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2015-03-12 19:43+0100\n"
-"Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2023-06-24 12:22+0200\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: makefileresolver/makefileresolver.cpp:230
 #, kde-format
@@ -51,7 +53,7 @@ msgstr "O nome de ficheiro %1 semella estar mal formado"
 #: makefileresolver/makefileresolver.cpp:475
 #, kde-format
 msgid "Failed to extract new working directory"
-msgstr "Non foi posíbel extraer o novo directorio de traballo."
+msgstr "Non foi posíbel extraer o novo cartafol de traballo."
 
 #: makefileresolver/makefileresolver.cpp:475
 #: makefileresolver/makefileresolver.cpp:504
@@ -73,7 +75,7 @@ msgstr "A cadea de parámetro «%1» non semella ser válida. A saída foi: %2."
 #: makefileresolver/makefileresolver.cpp:500
 #, kde-format
 msgid "The directory \"%1\" does not exist. Output was: %2."
-msgstr "O directorio «%1» non existe. A saída foi: %2."
+msgstr "O cartafol «%1» non existe. A saída foi: %2."
 
 #: makefileresolver/makefileresolver.cpp:504
 #, kde-format

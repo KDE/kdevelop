@@ -79,7 +79,7 @@ msgstr "O &executábel de QMake:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Build directory:"
-msgstr "&Directorio de construción:"
+msgstr "&Cartafol de construción:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qmakebuilddirchooser.ui:62

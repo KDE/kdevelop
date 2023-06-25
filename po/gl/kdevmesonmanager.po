@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2019, 2023.
 #
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2019-08-03 16:08+0200\n"
+"PO-Revision-Date: 2023-06-24 10:18+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.04.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -35,7 +35,7 @@ msgstr "Non se puido adquirir o complemento de construtor de Ninja"
 #: mesonbuilder.cpp:141 mesonbuilder.cpp:265
 #, kde-format
 msgid "The current build directory for %1 is invalid"
-msgstr "O directorio de construción actual de %1 é incorrecto"
+msgstr "O cartafol de construción actual de %1 é incorrecto"
 
 #: mesonbuilder.cpp:164
 #, kde-format
@@ -43,14 +43,13 @@ msgid ""
 "The directory '%1' is not empty and does not seem to be an already "
 "configured build directory"
 msgstr ""
-"O directorio «%1» non está baleiro e non parece ser un directorio de "
-"construción xa configurado"
+"O cartafol «%1» non está baleiro e non parece ser un cartafol de construción "
+"xa configurado"
 
 #: mesonbuilder.cpp:169
 #, kde-format
 msgid "The directory '%1' cannot be used as a meson build directory"
-msgstr ""
-"O directorio «%1» non pode usarse como directorio de construción de Meson"
+msgstr "O cartafol «%1» non pode usarse como cartafol de construción de Meson"
 
 #: mesonbuilder.cpp:172 mesonjobprune.cpp:55
 #, kde-format
@@ -59,7 +58,7 @@ msgid ""
 "not specified"
 msgstr ""
 "A configuración de construción actual está rota porque non se indicou o "
-"directorio de construción"
+"cartafol de construción"
 
 #: mesonbuilder.cpp:176
 #, kde-format
@@ -80,7 +79,7 @@ msgstr "Erro interno: o xestor do sistema de construción non é MesonManager"
 #: mesonbuilder.cpp:196 mesonbuilder.cpp:226
 #, kde-format
 msgid "Failed to create a new build directory"
-msgstr "Non se puido crear un novo directorio de construción"
+msgstr "Non se puido crear un novo cartafol de construción"
 
 #: mesonjob.cpp:27 mesonjobprune.cpp:27
 #, kde-format
@@ -90,12 +89,12 @@ msgstr "Meson"
 #: mesonjobprune.cpp:43
 #, kde-format
 msgid "The directory '%1' is already pruned"
-msgstr "Xa se destruíu o directorio «%1»"
+msgstr "Xa se destruíu o cartafol «%1»"
 
 #: mesonjobprune.cpp:49
 #, kde-format
 msgid "The directory '%1' does not appear to be a meson build directory"
-msgstr "O directorio «%1» non parece un directorio de construción de Meson"
+msgstr "O cartafol «%1» non parece un cartafol de construción de Meson"
 
 #: mesonjobprune.cpp:50
 #, kde-format
@@ -121,7 +120,7 @@ msgstr "** A destrución fallou: %1 **"
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Import Failed"
-msgstr ""
+msgstr "A importación do proxecto fallou"
 
 #: mesonmanager.cpp:111
 #, kde-format
@@ -132,7 +131,7 @@ msgstr "Erro de construtor de Meson: %1"
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr ""
-"A importación de %1 fallou porque non se puido crear un directorio de "
+"A importación de %1 fallou porque non se puido crear un cartafol de "
 "construción."
 
 #: mintro/mesonintrospectjob.cpp:115
@@ -176,7 +175,7 @@ msgstr ""
 #: mintro/mesonintrospectjob.cpp:241 settings/mesonconfigpage.cpp:194
 #, kde-format
 msgid "The current build directory is invalid"
-msgstr "O directorio de construción actual é incorrecto"
+msgstr "O cartafol de construción actual é incorrecto"
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format
@@ -190,64 +189,57 @@ msgstr "A saída do reescritor de «%1» non é un obxecto"
 
 #. i18n: ectx: property (text), widget (QPushButton, b_showAdvanced)
 #: settings/mesonadvancedsettings.ui:29
-#, fuzzy, kde-format
-#| msgid "Show advanced configuration"
+#, kde-format
 msgctxt "@action:button"
 msgid "Show Advanced Configuration"
-msgstr "Mostrar a configuración avanzada"
+msgstr "Amosar a configuración avanzada"
 
 #. i18n: ectx: property (title), widget (QGroupBox, container)
 #: settings/mesonadvancedsettings.ui:36
-#, fuzzy, kde-format
-#| msgid "Advanced configuration"
+#, kde-format
 msgctxt "@title:group"
 msgid "Advanced Configuration"
 msgstr "Configuración avanzada"
 
 #. i18n: ectx: property (text), widget (QLabel, l_mesonArgs)
 #: settings/mesonadvancedsettings.ui:44
-#, fuzzy, kde-format
-#| msgid "Extra Meson arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Extra Meson arguments:"
 msgstr "Argumentos adicionais de Meson:"
 
 #. i18n: ectx: property (text), widget (QLabel, l_backend)
 #: settings/mesonadvancedsettings.ui:57
-#, fuzzy, kde-format
-#| msgid "Meson backend:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Meson backend:"
-msgstr "Infraestrutura de Meson:"
+msgstr "Motor de Meson:"
 
 #. i18n: ectx: property (text), widget (QLabel, l_mesonExe)
 #: settings/mesonadvancedsettings.ui:70
-#, fuzzy, kde-format
-#| msgid "Meson executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Meson executable:"
 msgstr "Executábel de Meson:"
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, i_mesonArgs)
 #: settings/mesonadvancedsettings.ui:80
-#, fuzzy, kde-format
-#| msgid "Changing this will reset the build options"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Changing this will reset the build options."
-msgstr "Cambiar isto restabelece as opcións de construción"
+msgstr "Cambiar isto restabelece as opcións de construción."
 
+# well-spelled: meson
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_mesonExe)
 #: settings/mesonadvancedsettings.ui:93
-#, fuzzy, kde-format
-#| msgid "Path to the meson executable"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/mesonexecutable"
-msgstr "Ruta do executábel de Meson"
+msgstr "/ruta/do/executábel/de/meson"
 
 #. i18n: ectx: property (text), widget (QPushButton, b_hideAdvanced)
 #: settings/mesonadvancedsettings.ui:102
-#, fuzzy, kde-format
-#| msgid "Hide advanced configuration"
+#, kde-format
 msgctxt "@action:button"
 msgid "Hide Advanced Configuration"
 msgstr "Agochar a configuración avanzada"
@@ -260,35 +252,35 @@ msgstr "Estado: %1"
 #: settings/mesonconfigpage.cpp:182
 #, kde-format
 msgid "The current build directory does not exist"
-msgstr "O directorio de construción actual non existe"
+msgstr "O cartafol de construción actual non existe"
 
 #: settings/mesonconfigpage.cpp:185
 #, kde-format
 msgid "The current build directory is empty"
-msgstr "O directorio de construción actual está baleiro"
+msgstr "O cartafol de construción actual está baleiro"
 
 #: settings/mesonconfigpage.cpp:188
 #, kde-format
 msgid "Build directory configured"
-msgstr "Configurouse o directorio de construción"
+msgstr "Configurouse o cartafol de construción"
 
 #: settings/mesonconfigpage.cpp:191
 #, kde-format
 msgid "This meson build directory is not fully configured"
 msgstr ""
-"Este directorio de construción de Meson non está completamente configurado"
+"Este cartafol de construción de Meson non está completamente configurado"
 
 #: settings/mesonconfigpage.cpp:197
 #, kde-format
 msgid "This directory does not seem to be a meson build directory"
-msgstr "O directorio non parece un directorio de construción de Meson"
+msgstr "O cartafol non parece un cartafol de construción de Meson"
 
 #: settings/mesonconfigpage.cpp:200
 #, kde-format
 msgid "Invalid build directory configuration (empty build directory string)"
 msgstr ""
-"Configuración incorrecta de directorio de construción (cadea baleira de "
-"directorio de construción)"
+"Configuración incorrecta de cartafol de construción (cadea baleira de "
+"cartafol de construción)"
 
 #: settings/mesonconfigpage.cpp:203
 #, kde-format
@@ -308,15 +300,13 @@ msgstr[0] "%1 opción cambiou"
 msgstr[1] "%1 opcións cambiaron"
 
 #: settings/mesonconfigpage.cpp:332
-#, fuzzy, kde-format
-#| msgid "Meson"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Meson"
 msgstr "Meson"
 
 #: settings/mesonconfigpage.cpp:337
-#, fuzzy, kde-format
-#| msgid "Meson project configuration"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Configuration"
 msgstr "Configuración de proxecto de Meson"
@@ -390,11 +380,10 @@ msgid "Last"
 msgstr "Último"
 
 #: settings/mesonnewbuilddir.cpp:39
-#, fuzzy, kde-format
-#| msgid "Configure a build directory - %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "Configurar un directorio de construción - %1"
+msgstr "Configurar un cartafol de construción — %1"
 
 #: settings/mesonnewbuilddir.cpp:137
 #, kde-format
@@ -404,34 +393,33 @@ msgstr "O executábel de Meson indicado non existe"
 #: settings/mesonnewbuilddir.cpp:145
 #, kde-format
 msgid "Creating new build directory"
-msgstr "Creando o novo directorio de construción"
+msgstr "Creando o novo cartafol de construción"
 
 #: settings/mesonnewbuilddir.cpp:148
 #, kde-format
 msgid "Using an already configured build directory"
-msgstr "Usando o directorio de construción xa configurado"
+msgstr "Usando o cartafol de construción xa configurado"
 
 #: settings/mesonnewbuilddir.cpp:151
 #, kde-format
 msgid "Using a broken meson build directory (this should be fine)"
 msgstr ""
-"Abrir un directorio de construción de Meson roto (non debería ser un "
-"problema)"
+"Abrir un cartafol de construción de Meson roto (non debería ser un problema)"
 
 #: settings/mesonnewbuilddir.cpp:154
 #, kde-format
 msgid "Cannot use specified directory"
-msgstr "Non se pode usar o directorio indicado"
+msgstr "Non se pode usar o cartafol indicado"
 
 #: settings/mesonnewbuilddir.cpp:157
 #, kde-format
 msgid "There are already files in the build directory"
-msgstr "Xa hai ficheiros no directorio de construción"
+msgstr "Xa hai ficheiros no cartafol de construción"
 
 #: settings/mesonnewbuilddir.cpp:160
 #, kde-format
 msgid "The build directory field must not be empty"
-msgstr "O campo do directorio de construción non debe estar baleiro"
+msgstr "O campo do cartafol de construción non debe estar baleiro"
 
 #: settings/mesonnewbuilddir.cpp:163
 #, kde-format
@@ -442,13 +430,13 @@ msgstr "Acadou código inaccesíbel. Isto é un fallo"
 #: settings/mesonnewbuilddir.ui:19
 #, kde-format
 msgid "Build directory:"
-msgstr "Directorio de construción:"
+msgstr "Cartafol de construción:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_buildDir)
 #: settings/mesonnewbuilddir.ui:32
 #, kde-format
 msgid "Full Path to the new build directory"
-msgstr "Ruta completa do novo directorio de construción"
+msgstr "Ruta completa do novo cartafol de construción"
 
 #. i18n: ectx: property (text), widget (QLabel, l_name)
 #. i18n: ectx: property (text), widget (QLabel, l_dispProject)
@@ -462,7 +450,7 @@ msgstr "Nome:"
 #: settings/mesonoptionbaseview.ui:48
 #, kde-format
 msgid "Reset to default value"
-msgstr "Restaurar o valor predeterminado"
+msgstr "Restaurar o valor predeterminado."
 
 #. i18n: ectx: property (title), widget (QGroupBox, c_main)
 #: settings/mesonoptionsview.ui:32
@@ -480,7 +468,7 @@ msgstr "Núcleo"
 #: settings/mesonoptionsview.ui:102
 #, kde-format
 msgid "Backend"
-msgstr "Infraestrutura"
+msgstr "Motor"
 
 #. i18n: ectx: attribute (title), widget (QWidget, t_base)
 #: settings/mesonoptionsview.ui:159
@@ -498,7 +486,7 @@ msgstr "Compilador"
 #: settings/mesonoptionsview.ui:273
 #, kde-format
 msgid "Directories"
-msgstr "Directorios"
+msgstr "Cartafoles"
 
 #. i18n: ectx: attribute (title), widget (QWidget, t_user)
 #. i18n: ectx: attribute (title), widget (QWidget, t_project)
@@ -531,32 +519,28 @@ msgstr "Escribindo os datos do proxecto…"
 #: settings/mesonrewriterpage.cpp:191
 #, kde-format
 msgid "Loading meson rewriter data failed"
-msgstr "A carga de datos do reescritor de Meson fallou"
+msgstr "A carga de datos do reescritor de meson fallou"
 
 #: settings/mesonrewriterpage.cpp:406
-#, fuzzy, kde-format
-#| msgid "Select one new meson option to add"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Additional Meson Option"
-msgstr "Seleccione unha nova opción de Meson para engadir"
+msgstr "Seleccione unha opción adicional de Meson"
 
 #: settings/mesonrewriterpage.cpp:407
-#, fuzzy, kde-format
-#| msgid "Select meson option to add"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Meson option to add:"
-msgstr "Seleccione a opción de Meson para engadir"
+msgstr "Opción de Meson para engadir:"
 
 #: settings/mesonrewriterpage.cpp:438
-#, fuzzy, kde-format
-#| msgid "Project"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Project"
 msgstr "Proxecto"
 
 #: settings/mesonrewriterpage.cpp:443
-#, fuzzy, kde-format
-#| msgid "Meson project settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Settings"
 msgstr "Configuración de proxecto de Meson"
@@ -571,7 +555,7 @@ msgstr "Configuración de proxecto de Meson"
 #: settings/mesonrewriterpage.ui:39
 #, kde-format
 msgid "Project settings"
-msgstr "Configuración do proxecto"
+msgstr "Configuración do proxecto."
 
 #. i18n: ectx: property (text), widget (QLabel, l_project)
 #: settings/mesonrewriterpage.ui:74

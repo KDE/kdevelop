@@ -38,14 +38,13 @@ msgstr "Non se puido atopar un construtor para %1."
 #, kde-format
 msgid "No build directory configured, cannot install"
 msgstr ""
-"Non é posíbel instalar porque non se configurou un directorio de construción."
+"Non é posíbel instalar porque non se configurou un cartafol de construción."
 
 #: cmakebuilder.cpp:205
 #, kde-format
 msgid "No build directory configured, cannot configure"
 msgstr ""
-"Non é posíbel configurar porque non se configurou o directorio de "
-"construción."
+"Non é posíbel configurar porque non se configurou o cartafol de construción."
 
 #: cmakebuilderpreferences.cpp:40
 #, kde-format
@@ -86,7 +85,7 @@ msgstr "Erro interno: non se indicou un proxecto para configurar."
 #: cmakejob.cpp:63
 #, kde-format
 msgid "Failed to create build directory %1."
-msgstr "Non se puido crear un o directorio de construción %1."
+msgstr "Non se puido crear un o cartafol de construción %1."
 
 #: cmakejob.cpp:139
 #, kde-format
@@ -96,13 +95,12 @@ msgstr "CMake: %1"
 #: prunejob.cpp:39
 #, kde-format
 msgid "No build directory configured, cannot clear the build directory"
-msgstr ""
-"Non se pode limpar o directorio de construción porque non se configurou."
+msgstr "Non se pode limpar o cartafol de construción porque non se configurou."
 
 #: prunejob.cpp:45
 #, kde-format
 msgid "Wrong build directory, cannot clear the build directory"
-msgstr "Non é posíbel  limpar o directorio de construción porque é incorrecto"
+msgstr "Non é posíbel  limpar o cartafol de construción porque é incorrecto"
 
 #: prunejob.cpp:57
 #, kde-format

@@ -40,38 +40,38 @@ msgstr "Configurar un directorio de construción para %1"
 #: cmakebuilddirchooser.cpp:198
 #, kde-format
 msgid "You need to specify a build directory."
-msgstr "Debe especificar un directorio de construción."
+msgstr "Debe especificar un cartafol de construción."
 
 #: cmakebuilddirchooser.cpp:205
 #, kde-format
 msgid "Using an already created build directory."
-msgstr "Usando o directorio de construción xa creado."
+msgstr "Usando o cartafol de construción xa creado."
 
 #: cmakebuilddirchooser.cpp:216
 #, kde-format
 msgid "Creating a new build directory."
-msgstr "Creando un novo directorio de construción."
+msgstr "Creando un novo cartafol de construción."
 
 #: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "Build directory already configured."
-msgstr "O directorio de construción xa está configurado."
+msgstr "O cartafol de construción xa está configurado."
 
 #: cmakebuilddirchooser.cpp:224
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr ""
-"Este directorio de construción é para %1, pero o directorio do proxecto é %2."
+"Este cartafol de construción é para %1, pero o directorio do proxecto é %2."
 
 #: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "You may not select a relative build directory."
-msgstr "Non pode escoller un directorio de construción relativo."
+msgstr "Non pode escoller un cartafol de construción relativo."
 
 #: cmakebuilddirchooser.cpp:229
 #, kde-format
 msgid "The selected build directory is not empty."
-msgstr "O directorio de construción escollido non está baleiro."
+msgstr "O cartafol de construción escollido non está baleiro."
 
 #. i18n: ectx: property (text), widget (QLabel, availableLabel)
 #: cmakebuilddirchooser.ui:32
