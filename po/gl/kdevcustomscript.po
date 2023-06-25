@@ -74,7 +74,7 @@ msgstr ""
 "Descrición:<br /><br /><b>clang-format</b> é un formatador de código "
 "automático do proxecto LLVM. Permite varias opcións de estilo de formatado "
 "mediante un ficheiro de configuración <b>.clang-format</b> que adoita "
-"atoparse no directorio raíz dos proxectos."
+"atoparse no cartafol raíz dos proxectos."
 
 #: customscript_plugin.cpp:278
 #, kde-format
