@@ -63,9 +63,6 @@
      <property name="toolTip">
       <string comment="@info:tooltip">Select a Qt Help file...</string>
      </property>
-     <property name="filter">
-      <string notr="true">*.qch|Qt Compressed Help (.qch)</string>
-     </property>
      <property name="placeholderText">
       <string comment="@info:placeholder">Select a Qt Help file...</string>
      </property>

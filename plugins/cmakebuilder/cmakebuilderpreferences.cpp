@@ -11,6 +11,10 @@
 #include "cmakebuilderconfig.h"
 #include "cmakeutils.h"
 
+#ifdef Q_OS_WIN
+#include <kio_version.h>
+#endif
+
 CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWidget* parent)
     : KDevelop::ConfigPage(plugin, CMakeBuilderSettings::self(), parent)
 {
@@ -18,7 +22,11 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWid
     m_prefsUi->setupUi(this);
 
 #ifdef Q_OS_WIN
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 108, 0)
+    m_prefsUi->kcfg_cmakeExecutable->setNameFilter(QStringLiteral("*.exe"));
+#else
     m_prefsUi->kcfg_cmakeExecutable->setFilter(QStringLiteral("*.exe"));
+#endif
 #endif
 
     m_prefsUi->kcfg_cmakeExecutable->setToolTip(CMakeBuilderSettings::self()->cmakeExecutableItem()->whatsThis());
