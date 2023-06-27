@@ -276,11 +276,122 @@ public:
      */
     virtual FuzzyMatchResult add(const QChar* characterLocation, bool isInserted) = 0;
 
+    /**
+     * Informs this matcher that the first exact match of a character in unformatted and formatted text just occurred.
+     *
+     * May be called twice. For example, the first call right after construction indicates that the ranges
+     * do not begin at a context-text boundary, and thus the matcher should not fail if a character, which is
+     * forbidden at a boundary, is removed or inserted before the second (regular) call when the exact match occurs.
+     */
+    virtual void firstNonWhitespaceCharacterMatch() = 0;
+    /**
+     * Specifies the locations in the two matched ranges of the last exact match of a character.
+     *
+     * Call this function if the ranges end at a context-text boundary.
+     * The function must be called after all fuzzy characters, which precede
+     * the last-match addresses in the iteration order, have been added.
+     * Prints an explaining warning when @c false is returned.
+     *
+     * @param removalRangeMatchAddress the address of the last matching character (or the very first
+     *                                 address if there were no matches) in the complete string or view,
+     *                                 from which fuzzy characters can be removed.
+     * @param insertionRangeMatchAddress the address of the last matching character (or the very first
+     *                                   address if there were no matches) in the complete string or view,
+     *                                   into which fuzzy characters can be inserted.
+     * @return @c false if matching fails immediately.
+     */
+    virtual bool lastNonWhitespaceCharacterMatch(const QChar* removalRangeMatchAddress,
+                                                 const QChar* insertionRangeMatchAddress) = 0;
+
 protected:
     FuzzyMatcher() = default;
 };
 
-class DoubleQuoteFuzzyMatcher : public FuzzyMatcher
+/**
+ * This class reports a match failure if a double quote is removed or inserted at the boundary between context and text.
+ * That is, after a nonempty left context and before the first exact non-whitespace character match between
+ * prefix and text, or after the last exact non-whitespace character match and before text or nonempty right context.
+ *
+ * Such a removal or insertion should cancel formatting, because whitespace within string literals is significant,
+ * but the implementation of formatted text extraction is not sophisticated enough to distinguish it from regular
+ * whitespace that is subject to formatting manipulations. So the combination of a double quote insertion/removal
+ * by a formatter and an unlucky selection of a text fragment for formatting can cause whitespace changes within
+ * a string literal. The purpose of this class is to reduce the probability of such a quiet breaking code change.
+ */
+class BoundaryFuzzyMatcher : public FuzzyMatcher
+{
+public:
+    /**
+     * Indicates that higher addresses are encountered before lower addresses (reverse iteration).
+     */
+    void setReverseAddressDirection()
+    {
+        m_reverseAddressDirection = true;
+    }
+
+    void firstNonWhitespaceCharacterMatch() override
+    {
+        m_allowDoubleQuoteChanges = true;
+    }
+
+    bool lastNonWhitespaceCharacterMatch(const QChar* removalRangeMatchAddress,
+                                         const QChar* insertionRangeMatchAddress) override
+    {
+        if (!validate(m_lastRemovedDoubleQuoteAddress, removalRangeMatchAddress)) {
+            printFailureWarning(false);
+            return false;
+        }
+        if (!validate(m_lastInsertedDoubleQuoteAddress, insertionRangeMatchAddress)) {
+            printFailureWarning(true);
+            return false;
+        }
+        m_allowDoubleQuoteChanges = false;
+        return true;
+    }
+
+protected:
+    /**
+     * Derived classes must call this function each time a double quote is passed to add().
+     * @return @c false if matching fails immediately.
+     */
+    bool addDoubleQuote(const QChar* location, bool isInserted)
+    {
+        Q_ASSERT(location);
+        Q_ASSERT(*location == QLatin1Char{'"'});
+        if (!m_allowDoubleQuoteChanges) {
+            printFailureWarning(isInserted);
+            return false;
+        }
+        (isInserted ? m_lastInsertedDoubleQuoteAddress : m_lastRemovedDoubleQuoteAddress) = location;
+        return true;
+    }
+
+private:
+    bool validate(const QChar* lastDoubleQuoteAddress, const QChar* lastMatchAddress) const
+    {
+        if (!lastDoubleQuoteAddress) {
+            return true;
+        }
+        // lastDoubleQuoteAddress can equal lastMatchAddress in case there were no matches (lastMatchAddress
+        // is the very first address, i.e. the beginning of the range, then), and the formatter happened to
+        // remove or insert a double quote at this same address. In this case we correctly return false.
+        return m_reverseAddressDirection ? lastDoubleQuoteAddress > lastMatchAddress
+                                         : lastDoubleQuoteAddress < lastMatchAddress;
+    }
+
+    static void printFailureWarning(bool isInserted)
+    {
+        qCWarning(UTIL) << "giving up formatting because the formatter" << (isInserted ? "inserted" : "removed")
+                        << "a double quote at a context-text boundary";
+    }
+
+    bool m_reverseAddressDirection = false;
+    bool m_allowDoubleQuoteChanges = false;
+    const QChar* m_lastRemovedDoubleQuoteAddress = nullptr;
+    const QChar* m_lastInsertedDoubleQuoteAddress = nullptr;
+};
+
+class DoubleQuoteFuzzyMatcher : public BoundaryFuzzyMatcher
 {
 public:
     FuzzyMatchResult add(const QChar* characterLocation, bool isInserted) override
@@ -288,7 +399,8 @@ public:
         Q_ASSERT(characterLocation);
         const auto c = *characterLocation;
         if (c == QLatin1Char{'"'}) {
-            return m_validator.addDoubleQuote(isInserted) ? FuzzyMatchResult::Fuzzy : FuzzyMatchResult::MatchingFailed;
+            const bool valid = addDoubleQuote(characterLocation, isInserted) && m_validator.addDoubleQuote(isInserted);
+            return valid ? FuzzyMatchResult::Fuzzy : FuzzyMatchResult::MatchingFailed;
         }
         return isFuzzy(c) ? FuzzyMatchResult::Fuzzy : FuzzyMatchResult::NotFuzzy;
     }
@@ -308,7 +420,7 @@ private:
  * Supports only direct iteration over a string [view], that is, each added insertion
  * address must be greater than all previous added insertion addresses. Same for removal addresses.
  */
-class CompleteFuzzyMatcher : public FuzzyMatcher
+class CompleteFuzzyMatcher : public BoundaryFuzzyMatcher
 {
 public:
     struct Range
@@ -342,9 +454,11 @@ public:
 
         const auto c = *characterLocation;
         switch (c.unicode()) {
-        case '"':
-            return m_doubleQuoteValidator.addDoubleQuote(isInserted) ? FuzzyMatchResult::Fuzzy
-                                                                     : FuzzyMatchResult::MatchingFailed;
+        case '"': {
+            const bool valid =
+                addDoubleQuote(characterLocation, isInserted) && m_doubleQuoteValidator.addDoubleQuote(isInserted);
+            return valid ? FuzzyMatchResult::Fuzzy : FuzzyMatchResult::MatchingFailed;
+        }
         case '/':
         case '*': {
             const auto*& prev = m_lastEndOfCommentAddresses[isInserted];
@@ -498,8 +612,11 @@ public:
     };
 
     /// Call this destructive function once, because it transitions this object into an undefined state.
-    Result match()
+    Result match(bool isEndAContextTextBoundary = true)
     {
+        bool characterMatchOccurred = false;
+        auto lastPrefixCharacterMatchIt = m_prefixFirst;
+        auto lastTextCharacterMatchIt = m_textFirst;
         for (;; ++m_textFirst, ++m_prefixFirst) {
             skipWhitespace(m_prefixFirst, m_prefixLast);
             if (m_prefixFirst == m_prefixLast) {
@@ -521,7 +638,22 @@ public:
             if (*m_prefixFirst != *m_textFirst && !skipToMatchingPositions()) {
                 break;
             }
+
+            if (*m_prefixFirst == *m_textFirst) {
+                if (!characterMatchOccurred) {
+                    characterMatchOccurred = true;
+                    m_fuzzyMatcher.firstNonWhitespaceCharacterMatch();
+                }
+                lastPrefixCharacterMatchIt = m_prefixFirst;
+                lastTextCharacterMatchIt = m_textFirst;
+            }
         }
+
+        if (isEndAContextTextBoundary && m_result.hasMatched) {
+            m_result.hasMatched = m_fuzzyMatcher.lastNonWhitespaceCharacterMatch(&*lastPrefixCharacterMatchIt,
+                                                                                 &*lastTextCharacterMatchIt);
+        }
+
         return m_result;
     }
 
@@ -782,13 +914,14 @@ private:
  * Skips whitespace. Skips fuzzy (defined by isFuzzy()) characters using the given @p fuzzyMatcher.
  * @return whether the match was successful.
  */
-bool matchFormattedText(const QString& text, QStringView formattedText, CompleteFuzzyMatcher&& fuzzyMatcher)
+bool matchFormattedText(const QString& text, QStringView formattedText, CompleteFuzzyMatcher&& fuzzyMatcher,
+                        bool isEndAContextTextBoundary)
 {
     // This intermediary view guarantees that iterators passed to PrefixMatcher() are of the same type.
     const QStringView textView = text;
     PrefixMatcher prefixMatcher(textView.cbegin(), textView.cend(), formattedText.cbegin(), formattedText.cend(),
                                 fuzzyMatcher);
-    auto result = prefixMatcher.match();
+    auto result = prefixMatcher.match(isEndAContextTextBoundary);
     if (!result.hasMatched) {
         return false;
     }
@@ -930,6 +1063,8 @@ QString KDevelop::extractFormattedTextFromContext(const QString& _formattedMerge
 
     if (!leftContext.isEmpty()) {
         DoubleQuoteFuzzyMatcher fuzzyMatcher;
+        // Inform the matcher that the beginning of the left context is not a context-text boundary.
+        fuzzyMatcher.firstNonWhitespaceCharacterMatch();
         PrefixMatcher prefixMatcher(leftContext.cbegin(), leftContext.cend(), formattedMergedText.cbegin(),
                                     formattedMergedText.cend(), fuzzyMatcher);
         const auto result = prefixMatcher.match();
@@ -955,6 +1090,9 @@ QString KDevelop::extractFormattedTextFromContext(const QString& _formattedMerge
 
     if (!rightContext.isEmpty()) {
         DoubleQuoteFuzzyMatcher fuzzyMatcher;
+        fuzzyMatcher.setReverseAddressDirection();
+        // Inform the matcher that the end of the right context is not a context-text boundary.
+        fuzzyMatcher.firstNonWhitespaceCharacterMatch();
         PrefixMatcher prefixMatcher(rightContext.crbegin(), rightContext.crend(), formattedMergedText.crbegin(),
                                     formattedMergedText.crend(), fuzzyMatcher);
         const auto result = prefixMatcher.match();
@@ -979,6 +1117,10 @@ QString KDevelop::extractFormattedTextFromContext(const QString& _formattedMerge
 
     CompleteFuzzyMatcher fuzzyMatcher({&*text.cbegin(), &*text.cend()},
                                       {&*_formattedMergedText.cbegin(), &*_formattedMergedText.cend()});
+    if (leftContext.isEmpty()) {
+        // Inform the matcher that the beginning of the text is not a context-text boundary.
+        fuzzyMatcher.firstNonWhitespaceCharacterMatch();
+    }
     if (hasUnmatchedDoubleQuote) {
         // The formatter inserted or removed a double quote into each context. A double quote inserted into
         // or removed from text would be a matching closing or moved across context-text boundaries double quote.
@@ -986,7 +1128,8 @@ QString KDevelop::extractFormattedTextFromContext(const QString& _formattedMerge
         // a match failure rather than the usual opening and closing double quotes, which they are not.
         fuzzyMatcher.disableMatchingDoubleQuotes();
     }
-    if (!matchFormattedText(text, formattedMergedText, std::move(fuzzyMatcher))) {
+    if (!matchFormattedText(text, formattedMergedText, std::move(fuzzyMatcher),
+                            /*isEndAContextTextBoundary =*/!rightContext.isEmpty())) {
         return text;
     }
 

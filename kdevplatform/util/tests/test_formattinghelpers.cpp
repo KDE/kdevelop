@@ -265,6 +265,84 @@ void TestFormattingHelpers::testFuzzyMatching_data()
         str->replace('}', '{');
     }
     addNewRow("remove-braces-around-commented-out-opening-brace-text");
+
+    leftContext = "    \"A very very looooooooooooooong";
+    selectedText = " string this is. Even ";
+    rightContext = "longer now.\"\n";
+    formattedMergedText = "    \"A very very looooooooooooooong string this is. \"\n    \"Even longer now.\"\n";
+    expectedOutput = " string this is. \"\n    \"Even ";
+    addNewRow("insert-double-quotes-within-text");
+
+    formattedMergedText = "    \"A very very \"\n    \"looooooooooooooong string this is. Even longer now.\"\n";
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quotes-in-left-context");
+
+    formattedMergedText = "    \"A very very looooooooooooooong string this is. Even longer\"\n    \" now.\"\n";
+    addNewRow("insert-double-quotes-in-right-context");
+
+    // In the following 5 test data rows, an inserted pair of double quotes is at a context-text boundary.
+    // extractFormattedTextFromContext() gives up formatting, prints a warning and returns selectedText
+    // in order to reduce the risk of breaking whitespace changes within string literals.
+
+    formattedMergedText = "    \"A very very looooooooooooooong\"\n    \" string this is. Even longer now.\"\n";
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quotes-just-before-text");
+
+    formattedMergedText = "    \"A very very looooooooooooooong \"\n    \"string this is. Even longer now.\"\n";
+    addNewRow("insert-double-quotes-after-initial-space-in-text");
+
+    formattedMergedText = "    \"A very very looooooooooooooong string this is. Even \"\n    \"longer now.\"\n";
+    addNewRow("insert-double-quotes-just-after-text");
+
+    selectedText.chop(1);
+    rightContext.push_front(' ');
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quotes-after-space-just-after-text");
+
+    leftContext.push_back(' ');
+    selectedText.remove(0, 1);
+    formattedMergedText = "    \"A very very looooooooooooooong\"\n    \" string this is. Even longer now.\"\n";
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quotes-before-space-just-before-text");
+
+    leftContext = "\"this is ";
+    selectedText = "a\"\n\" rather ";
+    rightContext = "short string\"";
+    formattedMergedText = "\"this is a rather short string\"";
+    expectedOutput = "a rather ";
+    addNewRow("remove-double-quotes-from-text");
+
+    leftContext = "\"this \"\n\"is ";
+    selectedText = "a rather ";
+    addNewRow("remove-double-quotes-from-left-context");
+
+    leftContext = "\"this is ";
+    rightContext = "short \"\n\"string\"";
+    addNewRow("remove-double-quotes-from-right-context");
+
+    // In the following 5 test data rows, a removed pair of double quotes is at a context-text boundary.
+    // extractFormattedTextFromContext() gives up formatting, prints a warning and returns selectedText
+    // in order to reduce the risk of breaking whitespace changes within string literals.
+
+    rightContext = "\"\n\"short string\"";
+    addNewRow("remove-double-quotes-just-before-right-context");
+
+    selectedText = "a rather\"\n\" ";
+    rightContext = "short string\"";
+    expectedOutput = selectedText;
+    addNewRow("remove-double-quotes-before-final-space-in-text");
+
+    selectedText = "\"\n\"a rather ";
+    expectedOutput = selectedText;
+    addNewRow("remove-double-quotes-at-the-beginning-of-text");
+
+    leftContext = "\"this is \"\n\"";
+    selectedText = "a rather ";
+    expectedOutput = selectedText;
+    addNewRow("remove-double-quotes-at-the-end-of-left-context");
+
+    leftContext = "\"this is\"\n\" ";
+    addNewRow("remove-double-quotes-before-final-space-in-left-context");
 }
 
 #include "moc_test_formattinghelpers.cpp"
