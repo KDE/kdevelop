@@ -343,6 +343,298 @@ void TestFormattingHelpers::testFuzzyMatching_data()
 
     leftContext = "\"this is\"\n\" ";
     addNewRow("remove-double-quotes-before-final-space-in-left-context");
+
+    leftContext = "auto textData = [&text]";
+    selectedText = "(){return text.constData();};";
+    rightContext = QString();
+    formattedMergedText = R"(auto textData = [&text] {
+    return text.constData();
+};)";
+    expectedOutput = formattedMergedText.mid(leftContext.size());
+    addNewRow("remove-empty-lambda-parens-at-text-beginning");
+
+    selectedText.remove(0, 2);
+    formattedMergedText = R"(auto textData = [&text]() {
+    return text.constData();
+};)";
+    expectedOutput = formattedMergedText.mid(leftContext.size());
+    addNewRow("insert-empty-lambda-parens-at-text-beginning");
+
+    leftContext = R"(
+    if (good) {
+        auto msg = prepare();
+        send(m);)";
+    selectedText = R"(
+    } else if (other) {
+        play();
+    } else
+        cancel();
+)";
+    rightContext = QString();
+    formattedMergedText = R"(
+    if (good) {
+        auto msg = prepare();
+        send(m);
+    } else {
+        if (other)
+            play();
+        else
+            cancel();
+    }
+)";
+    expectedOutput = R"(
+    } else {
+        if (other)
+            play();
+        else
+            cancel();
+    }
+)";
+    addNewRow("insert-then-remove-brace-in-text");
+
+    leftContext = "int tryClose() {";
+    selectedText = R"(
+    if (x) {if (y) { close();  }
+})";
+    rightContext = "return 0;}\n\n ";
+    formattedMergedText = R"(
+int tryClose()
+{
+    if (x)
+        if (y)
+            close();
+    return 0;
+})";
+    expectedOutput = R"(
+    if (x)
+        if (y)
+            close();
+    )";
+    addNewRow("remove-2-brace-pairs");
+
+    leftContext = "void tryClose() {";
+    selectedText = R"(
+    if (x) {if (y) { close();  }
+})";
+    rightContext = "}\n\n ";
+    formattedMergedText = R"(
+void tryClose()
+{
+    if (x)
+        if (y)
+            close();
+})";
+    expectedOutput = R"(
+    if (x)
+        if (y)
+            close();
+)";
+    addNewRow("remove-2-brace-pairs-single-closing-brace-in-right-context");
+
+    // All test data rows below contain invalid and bogus formatting. Their purpose is to test
+    // the behavior of extractFormattedTextFromContext() in corner cases and to increase test coverage.
+
+    leftContext = "int t = 5;  ";
+    selectedText = "\nauto å=3;";
+    rightContext = QString();
+    formattedMergedText = "int t = 5;\nauto a=3;";
+    expectedOutput = selectedText;
+    addNewRow("replace-non-ascii-with-ascii-character");
+
+    formattedMergedText = "int u = 5;\nauto å=3;";
+    addNewRow("replace-non-fuzzy-character");
+
+    formattedMergedText = "int t = {};\nauto å=3;";
+    addNewRow("replace-non-fuzzy-with-fuzzy-character");
+
+    rightContext = '\\';
+    formattedMergedText = "int t = 5;\nauto å=3; _";
+    addNewRow("replace-fuzzy-with-non-fuzzy-character");
+
+    formattedMergedText = "int t = 5;\nauto å=3; _\\";
+    addNewRow("insert-non-fuzzy-character-at-right-context-beginning");
+
+    rightContext = "X\\";
+    formattedMergedText = "int t = 5;\nauto å=3; X_\\";
+    addNewRow("insert-non-fuzzy-before-fuzzy-character");
+
+    formattedMergedText = "int t = 5;\nauto å=3;\\";
+    addNewRow("remove-non-fuzzy-character");
+
+    rightContext = QString();
+    formattedMergedText = "// \"\"\n  int t = 5;\nauto å=3;\n";
+    expectedOutput = "\nauto å=3;\n";
+    addNewRow("insert-fuzzy-characters-before-left-context");
+
+    leftContext = "std::cout << \";\n";
+    selectedText = "pin();";
+    formattedMergedText = "std::cout << \"\";\n" + selectedText + '\n';
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quote-in-left-context-empty-right-context");
+
+    rightContext = "clear();\n";
+    formattedMergedText += rightContext;
+    addNewRow("insert-double-quote-in-left-context");
+
+    formattedMergedText += '"';
+    expectedOutput += '\n';
+    addNewRow("insert-double-quote-in-left-and-right-context");
+
+    {
+        auto prevSelectedText = selectedText;
+        selectedText += "  std::string str=\"sample string\";";
+        formattedMergedText.replace(prevSelectedText, prevSelectedText + "\nstd::string str=\"sample\" \" string\";");
+    }
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quote-in-left-and-right-context-and-double-quotes-in-text");
+
+    formattedMergedText.replace("\" \" string\";", " strin\"g;");
+    expectedOutput = "pin();\nstd::string str=\"sample strin\"g;\n";
+    addNewRow("insert-double-quote-in-left-and-right-context-and-move-double-quote-in-text");
+
+    leftContext = ' ';
+    selectedText = " s ";
+    rightContext = ' ';
+    formattedMergedText = "s\"\"";
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quotes-at-text-end");
+
+    rightContext = QString();
+    expectedOutput = formattedMergedText;
+    addNewRow("insert-double-quotes-at-text-end-empty-right-context");
+
+    selectedText += '\\';
+    formattedMergedText += '\\';
+    expectedOutput = formattedMergedText;
+    addNewRow("insert-double-quotes-before-a-fuzzy-character-at-text-end-empty-right-context");
+
+    rightContext = '\n';
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quotes-before-a-fuzzy-character-at-text-end");
+
+    selectedText += '\\';
+    formattedMergedText += '\\';
+    expectedOutput = formattedMergedText;
+    addNewRow("insert-double-quotes-before-2-fuzzy-characters-at-text-end");
+
+    formattedMergedText.insert(formattedMergedText.size() - 3, "\n ");
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quoted-whitespace-before-2-fuzzy-characters-at-text-end");
+
+    selectedText.replace(selectedText.size() - 1, 1, "{}");
+    formattedMergedText.replace(formattedMergedText.size() - 1, 1, "{}");
+    expectedOutput = formattedMergedText;
+    addNewRow("insert-double-quotes-before-3-fuzzy-characters-at-text-end");
+
+    selectedText.insert(selectedText.size() - 3, '*');
+    addNewRow("replace-asterisk-with-double-quotes-before-3-fuzzy-characters-at-text-end");
+
+    selectedText.insert(selectedText.size() - 3, '*');
+    addNewRow("replace-2-asterisks-with-double-quotes-before-3-fuzzy-characters-at-text-end");
+
+    selectedText[selectedText.size() - 5] = '(';
+    selectedText[selectedText.size() - 4] = ')';
+    addNewRow("replace-parens-with-double-quotes-before-3-fuzzy-characters-at-text-end");
+
+    selectedText[selectedText.size() - 5] = ')';
+    expectedOutput = selectedText;
+    addNewRow("replace-2-closing-parens-with-double-quotes");
+
+    leftContext = ' ';
+    selectedText = " s ";
+    rightContext = ' ';
+    formattedMergedText = "\"\"s";
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quotes-at-text-beginning");
+
+    leftContext = QString();
+    expectedOutput = formattedMergedText;
+    addNewRow("insert-double-quotes-at-text-beginning-empty-left-context");
+
+    leftContext.swap(selectedText);
+    expectedOutput = QString();
+    addNewRow("insert-double-quotes-at-left-context-beginning-empty-text");
+
+    selectedText = ' ';
+    addNewRow("insert-double-quotes-at-left-context-beginning");
+
+    selectedText = QString();
+    formattedMergedText = "s\"\"";
+    addNewRow("insert-double-quotes-at-left-context-end-empty-text");
+
+    leftContext = '\n';
+    selectedText = "\"X";
+    rightContext = QString();
+    formattedMergedText = "\n*X\n";
+    expectedOutput = selectedText;
+    addNewRow("replace-double-quote-with-asterisk-at-text-beginning");
+
+    selectedText.back() = '\\';
+    formattedMergedText.replace('X', '\\');
+    expectedOutput = selectedText;
+    addNewRow("replace-double-quote-with-asterisk-at-all-fuzzy-text-beginning");
+
+    selectedText = "{}X";
+    formattedMergedText = "\"{}X\n";
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quote-before-fuzzy-characters-at-text-beginning");
+
+    leftContext = 'L';
+    rightContext = 'R';
+    selectedText.push_front('a');
+    formattedMergedText = "\"La\"\"{}X R\"";
+    expectedOutput = selectedText;
+    addNewRow("insert-double-quotes-in-contexts-and-in-text");
+
+    leftContext = ' ';
+    selectedText = "XY";
+    rightContext = 'r';
+    formattedMergedText = "X Y r";
+    expectedOutput = "X Y ";
+    addNewRow("insert-spaces-within-and-after-text");
+
+    formattedMergedText[1] = '"';
+    expectedOutput = selectedText;
+    addNewRow("insert-a-double-quote-in-text");
+
+    formattedMergedText[1] = '(';
+    addNewRow("insert-a-paren-in-text");
+
+    formattedMergedText = "X(()Y r";
+    addNewRow("insert-odd-number-of-parens-in-text");
+
+    formattedMergedText = "*X Y /r/";
+    expectedOutput = "*X Y /";
+    addNewRow("insert-3-fuzzy-characters");
+
+    formattedMergedText.push_front('/');
+    expectedOutput = selectedText;
+    addNewRow("start-comment-before-text");
+
+    formattedMergedText = "/*/X Y /r/";
+    addNewRow("start-comment-and-insert-slash-before-text");
+
+    formattedMergedText.insert(2, '*');
+    expectedOutput = "/**/X Y /";
+    addNewRow("insert-comment-before-text");
+
+    formattedMergedText = "*//*XYr";
+    expectedOutput = selectedText;
+    addNewRow("insert-inverted-comment-before-text");
+
+    rightContext = QString();
+    formattedMergedText = "XY*";
+    expectedOutput = formattedMergedText;
+    addNewRow("insert-asterisk-at-text-and-string-end");
+
+    leftContext = "abc";
+    selectedText = 'b';
+    formattedMergedText = "ab";
+    expectedOutput = selectedText;
+    addNewRow("formatted-text-a-substring-of-left-context");
+
+    formattedMergedText.push_back('/');
+    addNewRow("formatted-text-a-substring-of-left-context-except-for-fuzzy-character-at-end");
 }
 
 #include "moc_test_formattinghelpers.cpp"
