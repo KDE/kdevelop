@@ -383,7 +383,7 @@ msgid ""
 msgstr ""
 "Non se especificou ningún perfil de ambiente, semella deberse a unha "
 "configuración corrompida, comprobe a configuración de execución «%1». "
-"Empregarase o perfil de ambiente predeterminado."
+"Usarase o perfil de ambiente predeterminado."
 
 #: nativeappjob.cpp:142
 #, fuzzy, kde-format
