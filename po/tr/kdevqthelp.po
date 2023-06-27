@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-09 00:44+0000\n"
+"POT-Creation-Date: 2023-06-27 00:46+0000\n"
 "PO-Revision-Date: 2022-10-13 00:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -21,75 +21,81 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 22.08.1\n"
 
-#: qthelpconfig.cpp:47
+#: qthelpconfig.cpp:47 qthelpconfig.cpp:49
+#, fuzzy, kde-format
+#| msgid "Qt Compressed Help file is not valid."
+msgid "Qt Compressed Help Files"
+msgstr "Qt Sıkıştırılmış Yardım dosyası, geçerli değil."
+
+#: qthelpconfig.cpp:53
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "Girdiyi Değşitir"
 
-#: qthelpconfig.cpp:49
+#: qthelpconfig.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "Yeni Girdi Ekle"
 
-#: qthelpconfig.cpp:67
+#: qthelpconfig.cpp:73
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "Ad, boş olamaz."
 
-#: qthelpconfig.cpp:102
+#: qthelpconfig.cpp:108
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Yeni Belgelendirme Al"
 
-#: qthelpconfig.cpp:118
+#: qthelpconfig.cpp:124
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr "\"qmake -query\" komutu, QtHelp dosyası için (QCH) yol sağlayamadı."
 
-#: qthelpconfig.cpp:206
+#: qthelpconfig.cpp:212
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Belgelendirme, GHNS tarafından sağlanmaktadır"
 
-#: qthelpconfig.cpp:232
+#: qthelpconfig.cpp:238
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Qt Sıkıştırılmış Yardım dosyası, geçerli değil."
 
-#: qthelpconfig.cpp:241
+#: qthelpconfig.cpp:247
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Belgelendirme, halihazırda içe aktarıldı"
 
-#: qthelpconfig.cpp:293
+#: qthelpconfig.cpp:299
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Qt Yardımı"
 
-#: qthelpconfig.cpp:298
+#: qthelpconfig.cpp:304
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Qt Yardımı Ayarlarını Yapılandır"
 
-#: qthelpconfig.cpp:323
+#: qthelpconfig.cpp:329
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Değiştir"
 
-#: qthelpconfig.cpp:329
+#: qthelpconfig.cpp:335
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "Sil"
 
-#: qthelpconfig.cpp:335
+#: qthelpconfig.cpp:341
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
@@ -194,7 +200,7 @@ msgid "Select a Qt Help file..."
 msgstr "Bir Qt Yardımı dosyası seçin..."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
-#: qthelpconfigeditdialog.ui:70
+#: qthelpconfigeditdialog.ui:67
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."

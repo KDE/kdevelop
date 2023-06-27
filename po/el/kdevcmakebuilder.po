@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-06-27 00:46+0000\n"
 "PO-Revision-Date: 2019-08-27 10:14+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -41,14 +41,14 @@ msgstr "Δεν έχει διαμορφωθεί κατάλογος κατασκε
 msgid "No build directory configured, cannot configure"
 msgstr "Δεν έχει διαμορφωθεί κατάλογος κατασκευής, αδυναμία διαμόρφωσης"
 
-#: cmakebuilderpreferences.cpp:40
+#: cmakebuilderpreferences.cpp:48
 #, fuzzy, kde-format
 #| msgid "CMake"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: cmakebuilderpreferences.cpp:45
+#: cmakebuilderpreferences.cpp:53
 #, fuzzy, kde-format
 #| msgid "Configure Global CMake Settings"
 msgctxt "@title:tab"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-09 00:44+0000\n"
+"POT-Creation-Date: 2023-06-27 00:46+0000\n"
 "PO-Revision-Date: 2021-08-31 10:19+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19,75 +19,81 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Lokalize 20.12.2\n"
 
-#: qthelpconfig.cpp:47
+#: qthelpconfig.cpp:47 qthelpconfig.cpp:49
+#, fuzzy, kde-format
+#| msgid "Qt Compressed Help file is not valid."
+msgid "Qt Compressed Help Files"
+msgstr "Stisnjena datoteka s pomočjo Qt ni veljavna."
+
+#: qthelpconfig.cpp:53
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "Spremeni vnos"
 
-#: qthelpconfig.cpp:49
+#: qthelpconfig.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "Dodaj nov vnos"
 
-#: qthelpconfig.cpp:67
+#: qthelpconfig.cpp:73
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "Ime ne more biti prazno."
 
-#: qthelpconfig.cpp:102
+#: qthelpconfig.cpp:108
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Dobi novo dokumentacijo"
 
-#: qthelpconfig.cpp:118
+#: qthelpconfig.cpp:124
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr "Ukaz »qmake -query« ni mogel ponuditi poti do datoteke QtHelp (QCH)."
 
-#: qthelpconfig.cpp:206
+#: qthelpconfig.cpp:212
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Dokumentacijo ponuja GHNS"
 
-#: qthelpconfig.cpp:232
+#: qthelpconfig.cpp:238
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Stisnjena datoteka s pomočjo Qt ni veljavna."
 
-#: qthelpconfig.cpp:241
+#: qthelpconfig.cpp:247
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Dokumentacija je že uvožena"
 
-#: qthelpconfig.cpp:293
+#: qthelpconfig.cpp:299
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Pomoč za Qt"
 
-#: qthelpconfig.cpp:298
+#: qthelpconfig.cpp:304
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Nastavite možnosti pomoči za Qt"
 
-#: qthelpconfig.cpp:323
+#: qthelpconfig.cpp:329
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Spremeni"
 
-#: qthelpconfig.cpp:329
+#: qthelpconfig.cpp:335
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "Izbriši"
 
-#: qthelpconfig.cpp:335
+#: qthelpconfig.cpp:341
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
@@ -192,7 +198,7 @@ msgid "Select a Qt Help file..."
 msgstr "Izberite datoteko pomoči Qt..."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
-#: qthelpconfigeditdialog.ui:70
+#: qthelpconfigeditdialog.ui:67
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."

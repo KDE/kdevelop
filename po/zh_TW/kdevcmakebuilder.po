@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-06-27 00:46+0000\n"
 "PO-Revision-Date: 2018-12-02 21:10+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -42,14 +42,14 @@ msgstr "未設定編譯目錄，無法安裝"
 msgid "No build directory configured, cannot configure"
 msgstr "未設定編譯目錄，無法設定"
 
-#: cmakebuilderpreferences.cpp:40
+#: cmakebuilderpreferences.cpp:48
 #, fuzzy, kde-format
 #| msgid "CMake"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: cmakebuilderpreferences.cpp:45
+#: cmakebuilderpreferences.cpp:53
 #, fuzzy, kde-format
 #| msgid "Configure Global CMake Settings"
 msgctxt "@title:tab"

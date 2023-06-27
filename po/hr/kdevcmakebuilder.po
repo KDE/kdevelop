@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-06-27 00:46+0000\n"
 "PO-Revision-Date: 2010-01-24 16:58+0100\n"
 "Last-Translator: Andrej Dundovic <adundovi@gmail.com>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -40,14 +40,14 @@ msgstr ""
 msgid "No build directory configured, cannot configure"
 msgstr ""
 
-#: cmakebuilderpreferences.cpp:40
+#: cmakebuilderpreferences.cpp:48
 #, fuzzy, kde-format
 #| msgid "CMake: %1"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake: %1"
 
-#: cmakebuilderpreferences.cpp:45
+#: cmakebuilderpreferences.cpp:53
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"

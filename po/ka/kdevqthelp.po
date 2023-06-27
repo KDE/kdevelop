@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-09 00:44+0000\n"
+"POT-Creation-Date: 2023-06-27 00:46+0000\n"
 "PO-Revision-Date: 2022-08-24 05:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,75 +18,81 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: qthelpconfig.cpp:47
+#: qthelpconfig.cpp:47 qthelpconfig.cpp:49
+#, fuzzy, kde-format
+#| msgid "Qt Compressed Help file is not valid."
+msgid "Qt Compressed Help Files"
+msgstr "Qt-ს შეკუმშული დახმარების ფაილი არასწორია."
+
+#: qthelpconfig.cpp:53
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "ელემენტის ჩასწორება"
 
-#: qthelpconfig.cpp:49
+#: qthelpconfig.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "ელემენტის დამატება"
 
-#: qthelpconfig.cpp:67
+#: qthelpconfig.cpp:73
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "ცარიელი სახელი არ შეიძლება იყოს."
 
-#: qthelpconfig.cpp:102
+#: qthelpconfig.cpp:108
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "ახალი დოკუმენტაციის მიღება"
 
-#: qthelpconfig.cpp:118
+#: qthelpconfig.cpp:124
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr "ბრძანება \"qmake -query\" არ გაძლევთ ბილიკს QtHelp-მდე (QCH)."
 
-#: qthelpconfig.cpp:206
+#: qthelpconfig.cpp:212
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "GHNS-ის მიერ წარმოდგენილი დოკუმენტაცია"
 
-#: qthelpconfig.cpp:232
+#: qthelpconfig.cpp:238
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Qt-ს შეკუმშული დახმარების ფაილი არასწორია."
 
-#: qthelpconfig.cpp:241
+#: qthelpconfig.cpp:247
 #, kde-format
 msgid "Documentation already imported"
 msgstr "დოკუმენტაცია უკვე შემოტანილია"
 
-#: qthelpconfig.cpp:293
+#: qthelpconfig.cpp:299
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Qt-ის დახმარება"
 
-#: qthelpconfig.cpp:298
+#: qthelpconfig.cpp:304
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Qt-ის დახმარების მორგება"
 
-#: qthelpconfig.cpp:323
+#: qthelpconfig.cpp:329
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "ჩასწორება"
 
-#: qthelpconfig.cpp:329
+#: qthelpconfig.cpp:335
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "წაშლა"
 
-#: qthelpconfig.cpp:335
+#: qthelpconfig.cpp:341
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
@@ -191,7 +197,7 @@ msgid "Select a Qt Help file..."
 msgstr "აირჩიეთ Qt-ის დახმარების ფაილი..."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
-#: qthelpconfigeditdialog.ui:70
+#: qthelpconfigeditdialog.ui:67
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."

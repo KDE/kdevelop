@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-06-27 00:46+0000\n"
 "PO-Revision-Date: 2020-07-20 08:37+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -42,13 +42,13 @@ msgstr "Не вказано каталогу для збирання, встан
 msgid "No build directory configured, cannot configure"
 msgstr "Не вказано каталогу для збирання, запуск configure неможливий"
 
-#: cmakebuilderpreferences.cpp:40
+#: cmakebuilderpreferences.cpp:48
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: cmakebuilderpreferences.cpp:45
+#: cmakebuilderpreferences.cpp:53
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"
