@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-27 00:46+0000\n"
-"PO-Revision-Date: 2022-10-13 00:50+0300\n"
+"PO-Revision-Date: 2023-06-27 11:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,13 +19,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #: qthelpconfig.cpp:47 qthelpconfig.cpp:49
-#, fuzzy, kde-format
-#| msgid "Qt Compressed Help file is not valid."
+#, kde-format
 msgid "Qt Compressed Help Files"
-msgstr "Qt Sıkıştırılmış Yardım dosyası, geçerli değil."
+msgstr "Qt Sıkıştırılmış Yardım Dosyaları"
 
 #: qthelpconfig.cpp:53
 #, kde-format
@@ -176,14 +175,14 @@ msgstr "Ad:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a name"
-msgstr "Bir ad girin"
+msgstr "Bir ad gir"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:44
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
-msgstr "Bir ad seçin..."
+msgstr "Bir ad seç..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qthelpconfigeditdialog.ui:51
@@ -197,14 +196,14 @@ msgstr "Yol:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a Qt Help file..."
-msgstr "Bir Qt Yardımı dosyası seçin..."
+msgstr "Bir Qt Yardımı dosyası seç..."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:67
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
-msgstr "Bir Qt Yardımı dosyası seçin..."
+msgstr "Bir Qt Yardımı dosyası seç..."
 
 #: qthelpdocumentation.cpp:181
 #, kde-format
