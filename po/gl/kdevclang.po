@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Adrian Chaves <adrian@chaves.io>, 2018, 2019, 2020.
+# Adrian Chaves <adrian@chaves.io>, 2018, 2019, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2020-02-16 09:29+0100\n"
+"PO-Revision-Date: 2023-06-28 08:01+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -15,75 +15,63 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:36
-#, fuzzy, kde-format
-#| msgid "C/C++ Helpers"
+#, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Helpers"
 msgstr "Asistentes de C e C++"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:41
-#, fuzzy, kde-format
-#| msgid "Configure C/C++ Helpers"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Helpers"
 msgstr "Configurar os asistentes de C e C++"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: clangsettings/sessionsettings/sessionsettings.ui:29
-#, fuzzy, kde-format
-#| msgid "Code-completion"
+#, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
 msgstr "Completación de código"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:35
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If disabled, macros will not be included in the "
-#| "code-completion results. This can improve the responsiveness of code-"
-#| "completion in some cases.</p><p><br/></p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "If disabled, macros will not be included in the code completion results. "
 "This can improve the responsiveness of code completion in some cases."
 msgstr ""
-"<html><head/><body><p>Se se desactiva, non se incluirán macros nos "
-"resultados da completación de código. Isto pode mellorar o velocidade de "
-"resposta da completación de código en algúns casos.</p><p><br/></p></body></"
-"html>"
+"Se se desactiva, non se incluirán macros nos resultados da completación de "
+"código. Isto pode mellorar a velocidade de resposta da completación de "
+"código en algúns casos."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:38
-#, fuzzy, kde-format
-#| msgid "Add macros to code-completion"
+#, kde-format
 msgctxt "@option:check"
 msgid "Add macros to code completion"
 msgstr "Engadir macros á completación de código."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
 #: clangsettings/sessionsettings/sessionsettings.ui:51
-#, fuzzy, kde-format
-#| msgid "Enable Look-ahead code-completion"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable Look-ahead code completion"
 msgstr "Activar a completación de código con vista cara adiante."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: clangsettings/sessionsettings/sessionsettings.ui:64
-#, fuzzy, kde-format
-#| msgid "Assistants"
+#, kde-format
 msgctxt "@title:group"
 msgid "Assistants"
 msgstr "Asistentes"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forwardDeclare)
 #: clangsettings/sessionsettings/sessionsettings.ui:70
-#, fuzzy, kde-format
-#| msgid "Forward declare assistant"
+#, kde-format
 msgctxt "@option:check"
 msgid "Forward declare assistant"
 msgstr "Asistente de declaración adiantada."
@@ -103,15 +91,13 @@ msgstr ""
 "Para máis información, consulte: https://bugs.kde.org/show_bug.cgi?id=393779"
 
 #: clangsupport.cpp:278
-#, fuzzy, kde-format
-#| msgid "Rename Declaration"
+#, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
-msgstr "Cambiar de nome a declaración"
+msgstr "Renomear a declaración"
 
 #: clangsupport.cpp:285
-#, fuzzy, kde-format
-#| msgid "Move into Source"
+#, kde-format
 msgctxt "@action"
 msgid "Move into Source"
 msgstr "Mover á fonte"
@@ -119,7 +105,7 @@ msgstr "Mover á fonte"
 #: codecompletion/context.cpp:147
 #, kde-format
 msgid "Override %1"
-msgstr "Sobrepor %1"
+msgstr "Sobredefinir %1"
 
 #: codecompletion/context.cpp:344
 #, kde-format
@@ -149,12 +135,12 @@ msgstr "Macros"
 #: codecompletion/context.cpp:1396
 #, kde-format
 msgid "Abstract Override"
-msgstr "Sobreposición abstracta"
+msgstr "Sobredefinición abstracta"
 
 #: codecompletion/context.cpp:1397
 #, kde-format
 msgid "Virtual Override"
-msgstr "Sobreposición virtual"
+msgstr "Sobredefinición virtual"
 
 #: codecompletion/context.cpp:1412
 #, kde-format
@@ -204,8 +190,7 @@ msgid "Adapt Signature"
 msgstr "Adaptar a sinatura"
 
 #: codegen/clangrefactoring.cpp:82
-#, fuzzy, kde-format
-#| msgid "Rename %1"
+#, kde-format
 msgctxt "@action"
 msgid "Rename %1"
 msgstr "Renomear %1"

@@ -1,13 +1,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2014, 2016, 2017, 2020.
+# Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-27 00:46+0000\n"
-"PO-Revision-Date: 2020-09-17 16:19+0200\n"
+"PO-Revision-Date: 2023-06-28 14:14+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -15,13 +15,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: qthelpconfig.cpp:47 qthelpconfig.cpp:49
-#, fuzzy, kde-format
-#| msgid "Qt Compressed Help file is not valid."
+#, kde-format
 msgid "Qt Compressed Help Files"
-msgstr "Soubor komprimované nápovědy Qt není platný."
+msgstr "Zkomprimované soubory nápovědy Qt"
 
 #: qthelpconfig.cpp:53
 #, kde-format

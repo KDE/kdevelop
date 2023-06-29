@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-27 00:46+0000\n"
-"PO-Revision-Date: 2022-08-24 05:25+0200\n"
+"PO-Revision-Date: 2023-06-28 05:40+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,13 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: qthelpconfig.cpp:47 qthelpconfig.cpp:49
-#, fuzzy, kde-format
-#| msgid "Qt Compressed Help file is not valid."
+#, kde-format
 msgid "Qt Compressed Help Files"
-msgstr "Qt-ს შეკუმშული დახმარების ფაილი არასწორია."
+msgstr "Qt-ს შეკუმშული დახმარების ფაილები"
 
 #: qthelpconfig.cpp:53
 #, kde-format
