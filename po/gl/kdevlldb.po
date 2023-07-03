@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Adrian Chaves <adrian@chaves.io>, 2018, 2019.
+# Adrian Chaves <adrian@chaves.io>, 2018, 2019, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2019-10-27 07:42+0100\n"
+"PO-Revision-Date: 2023-06-30 08:46+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.11.70\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: controllers/framestackmodel.cpp:85
 #, kde-format
@@ -28,8 +28,7 @@ msgid "LLDB"
 msgstr "LLDB"
 
 #: debuggerplugin.cpp:93
-#, fuzzy, kde-format
-#| msgid "LLDB Console"
+#, kde-format
 msgctxt "@title:window"
 msgid "LLDB Console"
 msgstr "Consola de LLDB"
@@ -38,7 +37,8 @@ msgstr "Consola de LLDB"
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr ""
-"Intentando executar unha orde do usuario nunha versión incompatíbel de LLDB."
+"Intentando executar unha orde da persoa usuaria nunha versión incompatíbel "
+"de LLDB."
 
 #: debugsession.cpp:336
 #, kde-format
@@ -108,166 +108,146 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "Interromper a sesión"
 
 #: widgets/lldbconfigpage.cpp:67
-#, fuzzy, kde-format
-#| msgid "LLDB Configuration"
+#, kde-format
 msgctxt "@title:tab"
 msgid "LLDB Configuration"
 msgstr "Configuración de LLDB"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
 #: widgets/lldbconfigpage.ui:29
-#, fuzzy, kde-format
-#| msgid "Debugger"
+#, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
 msgstr "Depurador"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/lldbconfigpage.ui:35
-#, fuzzy, kde-format
-#| msgid "Debugger executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger executable:"
 msgstr "Executábel do depurador:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
 #: widgets/lldbconfigpage.ui:42
-#, fuzzy, kde-format
-#| msgid "Override path to lldb-mi executable"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to lldb-mi executable..."
-msgstr "Sobrepor a ruta do executábel de lldb-mi"
+msgstr "Sobredefinir a ruta do executábel de lldb-mi…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/lldbconfigpage.ui:49
-#, fuzzy, kde-format
-#| msgid "Additional arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Additional arguments:"
 msgstr "Argumentos adicionais:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: widgets/lldbconfigpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
-msgstr "Ambiente:"
+msgstr "Contorno:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
 #: widgets/lldbconfigpage.ui:85
-#, fuzzy, kde-format
-#| msgid "Inherit system environment"
+#, kde-format
 msgctxt "@option:check"
 msgid "Inherit system environment"
-msgstr "Herdar o ambiente do sistema."
+msgstr "Herdar o contorno do sistema."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
 #: widgets/lldbconfigpage.ui:95
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title:group"
 msgid "Options"
 msgstr "Opcións"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: widgets/lldbconfigpage.ui:101
-#, fuzzy, kde-format
-#| msgid "Config script:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Config script:"
-msgstr "Script de configuración:"
+msgstr "Guión de configuración:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
 #: widgets/lldbconfigpage.ui:108
-#, fuzzy, kde-format
-#| msgid "/path/to/lldb/config/script"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/lldb/config/script"
-msgstr "/ruta/ao/script/de/configuración/de/lldb"
+msgstr "/ruta/ao/guión/de/configuración/de/lldb"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: widgets/lldbconfigpage.ui:115
-#, fuzzy, kde-format
-#| msgid "Start debugger with:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Start debugger with:"
 msgstr "Iniciar o depurador con:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:123
-#, fuzzy, kde-format
-#| msgid "Application Output"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
 msgstr "Saída da aplicación"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:128
-#, fuzzy, kde-format
-#| msgid "LLDB Console"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "LLDB Console"
 msgstr "Consola de LLDB"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:133
-#, fuzzy, kde-format
-#| msgid "Frame Stack"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
-msgstr "Pila de chamadas"
+msgstr "Rima de chamadas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: widgets/lldbconfigpage.ui:141
-#, fuzzy, kde-format
-#| msgid "Break on start:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Break on start:"
 msgstr "Parar ao iniciar:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
 #: widgets/lldbconfigpage.ui:158
-#, fuzzy, kde-format
-#| msgid "Remo&te Debugging"
+#, kde-format
 msgctxt "@title:group"
 msgid "Remo&te Debugging"
 msgstr "Depuración remo&ta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: widgets/lldbconfigpage.ui:167
-#, fuzzy, kde-format
-#| msgid "Remote server:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Remote server:"
 msgstr "Servidor remoto:"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
 #: widgets/lldbconfigpage.ui:174
-#, fuzzy, kde-format
-#| msgid "host:port"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "host:port"
 msgstr "servidor:porto"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: widgets/lldbconfigpage.ui:181
-#, fuzzy, kde-format
-#| msgid "Remote work path:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Remote work path:"
 msgstr "Ruta de traballo remota:"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
 #: widgets/lldbconfigpage.ui:188
-#, fuzzy, kde-format
-#| msgid "/path/to/a/on-device/writable/directory"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
-msgstr "/ruta/a/un/directorio/no/dispositivo/con/permisos/de/escritura"
+msgstr "/ruta/a/un/cartafol/no/dispositivo/con/permisos/de/escritura"
 
 #~ msgid "Startup error"
 #~ msgstr "Erro de inicio"
