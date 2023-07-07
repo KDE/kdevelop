@@ -508,7 +508,7 @@ struct Visitor
         return context;
     }
 
-    template<CXTypeKind TK, EnableIf<CursorKindTraits::integralType(TK) != -1> = dummy>
+    template<CXTypeKind TK, EnableIf<CursorKindTraits::integralType(TK) != IntegralType::TypeNotIntegralType> = dummy>
     AbstractType *createType(CXType, CXCursor)
     {
         // TODO: would be nice to instantiate a ConstantIntegralType here and set a value if possible

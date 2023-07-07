@@ -214,7 +214,7 @@ constexpr IntegralType::CommonIntegralTypes integralType(CXTypeKind TK)
       ||TK == CXType_Char_S
       ||TK == CXType_UChar
       ||TK == CXType_SChar)     ?  IntegralType::TypeChar
-    : static_cast<IntegralType::CommonIntegralTypes>(-1);
+    : IntegralType::TypeNotIntegralType;
 }
 
 constexpr bool isArrayType(CXTypeKind TK)

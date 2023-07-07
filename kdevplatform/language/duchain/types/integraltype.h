@@ -50,7 +50,8 @@ public:
         TypeChar16_t,
         TypeChar32_t,
         TypeHalf,
-        TypeLanguageSpecific = 200
+        TypeLanguageSpecific = 200,
+        TypeNotIntegralType = 255
     };
 
     /// Default constructor
