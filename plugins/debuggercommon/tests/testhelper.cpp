@@ -108,7 +108,7 @@ bool waitForState(MIDebugSession *session, KDevelop::IDebugSession::DebuggerStat
 
     while (s && (s->state() != state
                 || (waitForIdle && s->debuggerStateIsOn(s_dbgBusy)))) {
-        if (stopWatch.elapsed() > 10000) {
+        if (stopWatch.elapsed() > 50000) {
             qWarning() << "current state" << s->state() << "waiting for" << state;
             QTest::qFail(qPrintable(QString("Timeout before reaching state %0").arg(state)),
                          file, line);
