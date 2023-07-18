@@ -1180,12 +1180,22 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
                 ret &= openDocumentsWithSplitSeparators( index, group, isFirstView );
             }
         }else{
+            const auto url = QUrl::fromUserInput(urlsWithSeparators.front());
+
+            // The file name of a remote URL that ends with a slash is empty, but such a URL can still reference a file.
+            // The opposite condition is asserted in DocumentControllerPrivate::openDocumentInternal(),
+            // which is (indirectly) called below.
+            if (url.isLocalFile() && url.fileName().isEmpty()) {
+                qCDebug(SHELL) << "cannot open a directory" << url.toString();
+                return false;
+            }
+
             while(index->isSplit())
                 index = index->first();
             // Simply open the document into the area index
-            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(urlsWithSeparators.front()),
-                        KTextEditor::Cursor::invalid(),
-                        IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
+            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(
+                url, KTextEditor::Cursor::invalid(),
+                IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
             auto *sublimeDoc = dynamic_cast<Sublime::Document*>(doc);
             if (sublimeDoc) {
                 Sublime::View* view = sublimeDoc->createView();
