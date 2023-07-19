@@ -26,8 +26,7 @@
       <string comment="@action:button">Drop</string>
      </property>
      <property name="icon">
-      <iconset theme="edit-delete">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="edit-delete"/>
      </property>
     </widget>
    </item>
@@ -40,8 +39,7 @@
       <string comment="@action:button">Pop</string>
      </property>
      <property name="icon">
-      <iconset theme="vcs-stash-pop">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="vcs-stash-pop"/>
      </property>
     </widget>
    </item>
@@ -54,8 +52,7 @@
       <string comment="@action:button">Show</string>
      </property>
      <property name="icon">
-      <iconset theme="document-preview">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="document-preview"/>
      </property>
     </widget>
    </item>
@@ -88,8 +85,7 @@
       <string comment="@action:button">Apply</string>
      </property>
      <property name="icon">
-      <iconset theme="dialog-ok-apply">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="dialog-ok-apply"/>
      </property>
     </widget>
    </item>
@@ -115,8 +111,7 @@
       <string comment="@action:button">Branch</string>
      </property>
      <property name="icon">
-      <iconset theme="vcs-branch">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="vcs-branch"/>
      </property>
     </widget>
    </item>

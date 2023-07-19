@@ -21,8 +21,7 @@
           <string comment="@info:tooltip">Previous file</string>
          </property>
          <property name="icon">
-          <iconset theme="arrow-left">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="arrow-left"/>
          </property>
         </widget>
        </item>
@@ -32,8 +31,7 @@
           <string comment="@info:tooltip">Previous difference</string>
          </property>
          <property name="icon">
-          <iconset theme="arrow-up">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="arrow-up"/>
          </property>
         </widget>
        </item>
@@ -43,8 +41,7 @@
           <string comment="@info:tooltip">Next difference</string>
          </property>
          <property name="icon">
-          <iconset theme="arrow-down">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="arrow-down"/>
          </property>
         </widget>
        </item>
@@ -54,8 +51,7 @@
           <string comment="@info:tooltip">Next file</string>
          </property>
          <property name="icon">
-          <iconset theme="arrow-right">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="arrow-right"/>
          </property>
         </widget>
        </item>
@@ -81,8 +77,7 @@
           <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="icon">
-          <iconset theme="view-refresh">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="view-refresh"/>
          </property>
         </widget>
        </item>
@@ -95,8 +90,7 @@
           <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="icon">
-          <iconset theme="preflight-verifier">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="preflight-verifier"/>
          </property>
         </widget>
        </item>
@@ -145,8 +139,7 @@
           <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="icon">
-          <iconset theme="dialog-cancel">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="dialog-cancel"/>
          </property>
         </widget>
        </item>
