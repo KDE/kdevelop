@@ -29,9 +29,7 @@
             <string comment="@action:button">Add</string>
            </property>
            <property name="icon">
-            <iconset theme="list-add">
-             <normaloff/>
-            </iconset>
+            <iconset theme="list-add"/>
            </property>
           </widget>
          </item>
@@ -41,9 +39,7 @@
             <string comment="@action:button">Remove</string>
            </property>
            <property name="icon">
-            <iconset theme="edit-delete">
-             <normaloff/>
-            </iconset>
+            <iconset theme="edit-delete"/>
            </property>
           </widget>
          </item>

@@ -34,9 +34,7 @@
           <string comment="@action:button">Add</string>
          </property>
          <property name="icon">
-          <iconset theme="list-add">
-           <normaloff/>
-          </iconset>
+          <iconset theme="list-add"/>
          </property>
          <property name="default">
           <bool>true</bool>
@@ -49,9 +47,7 @@
           <string comment="@action:button">Remove</string>
          </property>
          <property name="icon">
-          <iconset theme="edit-delete">
-           <normaloff/>
-          </iconset>
+          <iconset theme="edit-delete"/>
          </property>
         </widget>
        </item>
@@ -61,9 +57,7 @@
           <string comment="@action:button">Move Up</string>
          </property>
          <property name="icon">
-          <iconset theme="arrow-up">
-           <normaloff/>
-          </iconset>
+          <iconset theme="arrow-up"/>
          </property>
         </widget>
        </item>
@@ -73,9 +67,7 @@
           <string comment="@action:button">Move Down</string>
          </property>
          <property name="icon">
-          <iconset theme="arrow-down">
-           <normaloff/>
-          </iconset>
+          <iconset theme="arrow-down"/>
          </property>
         </widget>
        </item>
