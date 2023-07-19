@@ -86,7 +86,11 @@ void MimeTypeCache::addMimeType(const QString& mimeTypeName, ILanguageSupport* l
 
 QList<ILanguageSupport*> MimeTypeCache::languagesForFileName(const QString& fileName) const
 {
-    Q_ASSERT(!fileName.isEmpty());
+    if (fileName.isEmpty()) {
+        // The file name of a remote URL that ends with a slash is empty, but such a URL can still reference a file.
+        // An empty file name cannot match a MIME type.
+        return {};
+    }
 
     QList<ILanguageSupport*> languages;
     // lastLanguageEquals() helps to improve performance by skipping checks for an already added language.
@@ -350,8 +354,8 @@ ILanguageSupport* LanguageController::language(const QString &name) const
 QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
 {
     if (url.isEmpty()) {
-        // url of an unsaved document is actually empty, which causes an assertion failure in
-        // MimeTypeCache::languagesForFileName(). We couldn't find a language for an empty URL anyway.
+        // The URL of an unsaved document is empty.
+        // The code below cannot find a language for an empty URL.
         return {};
     }
 
