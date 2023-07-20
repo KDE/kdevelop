@@ -40,6 +40,17 @@ public:
     void setModel(QAbstractItemModel* model) override;
     int sizeHintForColumn(int column) const override;
 
+    /**
+     * Resize columns to contents.
+     *
+     * Call this function after modifying the @a wordWrap property to rewrap lines
+     * immediately rather than only after subsequent vertical scrolling.
+     */
+    void fitColumns();
+
+protected:
+    void resizeEvent(QResizeEvent* event) override;
+
 private Q_SLOTS:
     void rowsAboutToBeInserted(const QModelIndex& parent, int first, int last);
     void rowsRemoved(const QModelIndex& parent, int first, int last);

@@ -106,11 +106,15 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         addAction(m_focusOnSelect);
     }
 
+    QAction* action;
+    action = new QAction(QIcon::fromTheme(QStringLiteral("text-wrap")), i18nc("@action", "Word Wrap"), this);
+    action->setCheckable(true);
+    connect(action, &QAction::toggled, this, &OutputWidget::setWordWrap);
+    addAction(action);
+
     auto *separator = new QAction(this);
     separator->setSeparator(true);
     addAction(separator);
-
-    QAction* action;
 
     action = new QAction(QIcon::fromTheme(QStringLiteral("go-first")), i18nc("@action", "First Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectFirstItem);
@@ -141,6 +145,12 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     connect(clearAction, &QAction::triggered, this, &OutputWidget::clearModel);
     addAction(clearAction);
 
+    if (data->type & KDevelop::IOutputView::MultipleView) {
+        connect(m_tabwidget, &QTabWidget::currentChanged, this, &OutputWidget::currentViewChanged);
+    } else if (data->type == KDevelop::IOutputView::HistoryView) {
+        connect(m_stackwidget, &QStackedWidget::currentChanged, this, &OutputWidget::currentViewChanged);
+    }
+
     if( data->option & KDevelop::IOutputView::AddFilterAction )
     {
         auto *separator = new QAction(this);
@@ -159,15 +169,6 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 
         connect(m_filterInput, &QLineEdit::textEdited,
                 this, &OutputWidget::outputFilter );
-        if( data->type & KDevelop::IOutputView::MultipleView )
-        {
-            connect(m_tabwidget, &QTabWidget::currentChanged,
-                    this, &OutputWidget::updateFilter);
-        } else if ( data->type == KDevelop::IOutputView::HistoryView )
-        {
-            connect(m_stackwidget, &QStackedWidget::currentChanged,
-                    this, &OutputWidget::updateFilter);
-        }
     }
 
     if (!data->configSubgroupName.isEmpty()
@@ -544,8 +545,9 @@ QTreeView* OutputWidget::createListView(int id)
         listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
         listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
         listview->setHeaderHidden(true);
-        listview->setUniformRowHeights(true);
         listview->setRootIsDecorated(false);
+        listview->setUniformRowHeights(!m_wordWrap);
+        listview->setWordWrap(m_wordWrap);
         listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
 
         if (data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AutoScroll) {
@@ -644,6 +646,30 @@ void OutputWidget::previousOutput()
         m_stackwidget->setCurrentIndex( m_stackwidget->currentIndex()-1 );
     }
     enableActions();
+}
+
+void OutputWidget::setWordWrap(bool enable)
+{
+    m_wordWrap = enable;
+
+    auto* const widget = currentWidget();
+    if (!widget) {
+        return; // this happens in test_standardoutputview when the last view is removed
+    }
+    auto* const view = qobject_cast<KDevelop::FocusedTreeView*>(widget);
+    if (!view) {
+        qCWarning(PLUGIN_STANDARDOUTPUTVIEW) << "current widget is not a FocusedTreeView:" << widget;
+        return;
+    }
+
+    if (view->wordWrap() == m_wordWrap) {
+        Q_ASSERT(view->uniformRowHeights() == !m_wordWrap);
+        return; // nothing changed
+    }
+
+    view->setUniformRowHeights(!m_wordWrap);
+    view->setWordWrap(m_wordWrap);
+    view->fitColumns();
 }
 
 void OutputWidget::enableActions()
@@ -753,6 +779,16 @@ void OutputWidget::updateFilter(int index)
     }
 
     updateFilterInputAppearance(fvIt);
+}
+
+void OutputWidget::currentViewChanged(int index)
+{
+    if (data->option & KDevelop::IOutputView::AddFilterAction) {
+        updateFilter(index);
+    }
+
+    // Update wordwrap status for new view
+    setWordWrap(m_wordWrap);
 }
 
 void OutputWidget::setTitle(int outputId, const QString& title)

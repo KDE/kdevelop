@@ -23,6 +23,7 @@ public:
     explicit OutputDelegate( QObject* parent = nullptr );
     ~OutputDelegate() override;
     void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const override;
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 
 private:
     const QScopedPointer<class OutputDelegatePrivate> d_ptr;

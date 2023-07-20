@@ -4,6 +4,7 @@
 
 #include "focusedtreeview.h"
 
+#include <QResizeEvent>
 #include <QScrollBar>
 #include <QTimer>
 
@@ -79,6 +80,37 @@ int FocusedTreeView::sizeHintForColumn(int column) const
         return maxWidth;
     }
     return columnWidth(column);
+}
+
+void FocusedTreeView::fitColumns()
+{
+    if (!model()) {
+        return;
+    }
+
+    for (int c = 0, columnCount = model()->columnCount(); c < columnCount; ++c) {
+        resizeColumnToContents(c);
+    }
+}
+
+void FocusedTreeView::resizeEvent(QResizeEvent* event)
+{
+    QTreeView::resizeEvent(event);
+
+    // Rewrap lines when the width changes.
+    if (wordWrap() && event->size().width() != event->oldSize().width()) {
+        // fitColumns() calls resizeColumnToContents(), which executes items layout
+        // scheduled here (QTreeView::setWordWrap() also schedules items layout).
+        // Redoing the items layout is necessary for correct rewrapping, but causes a roughly
+        // 5-second-long UI freeze inside QItemDelegate::sizeHint() when the user selects
+        // a 100'000th line of output. The freeze happens because non-uniform row heights (necessary
+        // for word-wrapping) force QTreeView to calculate heights of all items above the selected one.
+        // The number of consecutive resize events does not affect the duration of the resulting UI freeze.
+        scheduleDelayedItemsLayout();
+        // Resizing columns to contents here rewraps lines immediately rather than only after subsequent vertical
+        // scrolling. This is relatively fast and does not noticeably contribute to the UI freeze duration.
+        fitColumns();
+    }
 }
 
 void FocusedTreeView::delayedAutoScrollAndResize()

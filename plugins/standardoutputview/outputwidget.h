@@ -66,10 +66,12 @@ Q_SIGNALS:
 private Q_SLOTS:
     void nextOutput();
     void previousOutput();
+    void setWordWrap(bool);
     void copySelection();
     void selectAll();
     void outputFilter(const QString& filter);
     void updateFilter(int index);
+    void currentViewChanged(int index);
     void clearModel();
 
 private:
@@ -134,6 +136,7 @@ private:
     KExpandableLineEdit* m_filterInput;
     QWidgetAction* m_filterAction;
     OutputWidgetConfig* m_outputWidgetConfig;
+    bool m_wordWrap = false;
 };
 
 #endif
