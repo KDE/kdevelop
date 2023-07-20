@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-27 00:45+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -373,7 +373,7 @@ msgstr "Öz-özünə"
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
-#: shell/launchconfigurationdialog.ui:114
+#: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Ad"
@@ -482,28 +482,28 @@ msgid "&Stop on Change"
 msgstr "&Dəyişdirdikdə dayanmaq"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: documentation/documentationfindwidget.ui:43
+#: documentation/documentationfindwidget.ui:42
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Find:"
 msgstr "Tapın:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
-#: documentation/documentationfindwidget.ui:57
+#: documentation/documentationfindwidget.ui:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to next match"
 msgstr "Növbəti tapılana keçin"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
-#: documentation/documentationfindwidget.ui:71
+#: documentation/documentationfindwidget.ui:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to previous match"
 msgstr "Əvvəlki tapılana keçin"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
-#: documentation/documentationfindwidget.ui:85
+#: documentation/documentationfindwidget.ui:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Match case sensitive"
@@ -2476,14 +2476,14 @@ msgid "Add"
 msgstr "Əlavə edin"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
-#: shell/launchconfigurationdialog.ui:41
+#: shell/launchconfigurationdialog.ui:39
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Silin"
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
-#: shell/launchconfigurationdialog.ui:88
+#: shell/launchconfigurationdialog.ui:84
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
@@ -4603,7 +4603,7 @@ msgid "Load Template From File"
 msgstr "Şablonu fayldan yükləmək"
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:38
+#: shell/settings/templatepage.ui:36
 #, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"

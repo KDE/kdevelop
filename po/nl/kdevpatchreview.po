@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-25 00:50+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2020-07-21 12:05+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -190,63 +190,63 @@ msgid "Previous file"
 msgstr "Vorig bestand"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
-#: patchreview.ui:32
+#: patchreview.ui:31
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous difference"
 msgstr "Vorig verschil"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
-#: patchreview.ui:43
+#: patchreview.ui:41
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next difference"
 msgstr "Volgend verschil"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
-#: patchreview.ui:54
+#: patchreview.ui:51
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next file"
 msgstr "Volgend bestand"
 
 #. i18n: ectx: property (text), widget (QToolButton, updateButton)
-#: patchreview.ui:78
+#: patchreview.ui:74
 #, kde-format
 msgctxt "@action:button"
 msgid "Update"
 msgstr "Bijwerken"
 
 #. i18n: ectx: property (text), widget (QToolButton, testsButton)
-#: patchreview.ui:92
+#: patchreview.ui:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Run Tests"
 msgstr "Testen uitvoeren"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportReview)
-#: patchreview.ui:126
+#: patchreview.ui:120
 #, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
 msgstr "Diff exporteren..."
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
-#: patchreview.ui:142
+#: patchreview.ui:136
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel Review"
 msgstr "Overzicht annuleren"
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
-#: patchreview.ui:156
+#: patchreview.ui:149
 #, kde-format
 msgctxt "@action:button"
 msgid "Finish Review"
 msgstr "Nalezen beëindigen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
-#: patchreview.ui:175
+#: patchreview.ui:168
 #, kde-format
 msgctxt "@title:group"
 msgid "Changes"

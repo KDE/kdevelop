@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2022-09-26 17:12+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -654,7 +654,7 @@ msgid "Remove the selected stash"
 msgstr "Remover a modificação temporária seleccionada"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
-#: stashmanagerdialog.ui:37
+#: stashmanagerdialog.ui:36
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch and drop the stash"
@@ -662,42 +662,42 @@ msgstr ""
 "Aplica a modificação em si e apaga-a da lista de modificações temporárias"
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
-#: stashmanagerdialog.ui:40
+#: stashmanagerdialog.ui:39
 #, kde-format
 msgctxt "@action:button"
 msgid "Pop"
 msgstr "Retirar"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, show)
-#: stashmanagerdialog.ui:51
+#: stashmanagerdialog.ui:49
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the content of the stash"
 msgstr "Mostrar o conteúdo da modificação temporária"
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
-#: stashmanagerdialog.ui:54
+#: stashmanagerdialog.ui:52
 #, kde-format
 msgctxt "@action:button"
 msgid "Show"
 msgstr "Mostrar"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, apply)
-#: stashmanagerdialog.ui:85
+#: stashmanagerdialog.ui:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch"
 msgstr "Aplica a modificação temporária"
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
-#: stashmanagerdialog.ui:88
+#: stashmanagerdialog.ui:85
 #, kde-format
 msgctxt "@action:button"
 msgid "Apply"
 msgstr "Aplicar"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, branch)
-#: stashmanagerdialog.ui:112
+#: stashmanagerdialog.ui:108
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new branch and apply the stash there, then drop the stash"
@@ -706,7 +706,7 @@ msgstr ""
 "lista de modificações temporárias"
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
-#: stashmanagerdialog.ui:115
+#: stashmanagerdialog.ui:111
 #, kde-format
 msgctxt "@action:button"
 msgid "Branch"

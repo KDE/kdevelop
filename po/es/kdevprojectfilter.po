@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-13 00:55+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2020-07-25 19:32+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -184,21 +184,21 @@ msgid "Add"
 msgstr "Añadir"
 
 #. i18n: ectx: property (text), widget (QPushButton, remove)
-#: projectfiltersettings.ui:49
+#: projectfiltersettings.ui:47
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Eliminar"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveUp)
-#: projectfiltersettings.ui:61
+#: projectfiltersettings.ui:57
 #, kde-format
 msgctxt "@action:button"
 msgid "Move Up"
 msgstr "Subir"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveDown)
-#: projectfiltersettings.ui:73
+#: projectfiltersettings.ui:67
 #, kde-format
 msgctxt "@action:button"
 msgid "Move Down"

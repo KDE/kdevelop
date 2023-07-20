@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2022-09-26 20:20+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -648,49 +648,49 @@ msgid "Remove the selected stash"
 msgstr "Tar bort det valda gömslet"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
-#: stashmanagerdialog.ui:37
+#: stashmanagerdialog.ui:36
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch and drop the stash"
 msgstr "Verkställer gömslets programfix och kastar gömslet"
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
-#: stashmanagerdialog.ui:40
+#: stashmanagerdialog.ui:39
 #, kde-format
 msgctxt "@action:button"
 msgid "Pop"
 msgstr "Plocka bort"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, show)
-#: stashmanagerdialog.ui:51
+#: stashmanagerdialog.ui:49
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the content of the stash"
 msgstr "Visa innehållet i gömslet"
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
-#: stashmanagerdialog.ui:54
+#: stashmanagerdialog.ui:52
 #, kde-format
 msgctxt "@action:button"
 msgid "Show"
 msgstr "Visa"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, apply)
-#: stashmanagerdialog.ui:85
+#: stashmanagerdialog.ui:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch"
 msgstr "Verkställer gömslets programfix"
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
-#: stashmanagerdialog.ui:88
+#: stashmanagerdialog.ui:85
 #, kde-format
 msgctxt "@action:button"
 msgid "Apply"
 msgstr "Verkställ"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, branch)
-#: stashmanagerdialog.ui:112
+#: stashmanagerdialog.ui:108
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new branch and apply the stash there, then drop the stash"
@@ -698,7 +698,7 @@ msgstr ""
 "Skapar en ny gren och verkställer gömslet i den, kastar därefter gömslet."
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
-#: stashmanagerdialog.ui:115
+#: stashmanagerdialog.ui:111
 #, kde-format
 msgctxt "@action:button"
 msgid "Branch"

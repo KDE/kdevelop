@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-25 00:50+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2016-07-11 19:33+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -205,7 +205,7 @@ msgid "Previous file"
 msgstr "Edellinen tiedosto"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
-#: patchreview.ui:32
+#: patchreview.ui:31
 #, fuzzy, kde-format
 #| msgid "Previous difference"
 msgctxt "@info:tooltip"
@@ -213,7 +213,7 @@ msgid "Previous difference"
 msgstr "Edellinen ero"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
-#: patchreview.ui:43
+#: patchreview.ui:41
 #, fuzzy, kde-format
 #| msgid "Next difference"
 msgctxt "@info:tooltip"
@@ -221,7 +221,7 @@ msgid "Next difference"
 msgstr "Seuraava ero"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
-#: patchreview.ui:54
+#: patchreview.ui:51
 #, fuzzy, kde-format
 #| msgid "Next file"
 msgctxt "@info:tooltip"
@@ -229,7 +229,7 @@ msgid "Next file"
 msgstr "Seuraava tiedosto"
 
 #. i18n: ectx: property (text), widget (QToolButton, updateButton)
-#: patchreview.ui:78
+#: patchreview.ui:74
 #, fuzzy, kde-format
 #| msgid "Update"
 msgctxt "@action:button"
@@ -237,7 +237,7 @@ msgid "Update"
 msgstr "Päivitä"
 
 #. i18n: ectx: property (text), widget (QToolButton, testsButton)
-#: patchreview.ui:92
+#: patchreview.ui:87
 #, fuzzy, kde-format
 #| msgid "Run Tests"
 msgctxt "@action:button"
@@ -245,7 +245,7 @@ msgid "Run Tests"
 msgstr "Suorita testit"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportReview)
-#: patchreview.ui:126
+#: patchreview.ui:120
 #, fuzzy, kde-format
 #| msgid "Export Diff..."
 msgctxt "@action:button"
@@ -253,7 +253,7 @@ msgid "Export Diff..."
 msgstr "Vie erot…"
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
-#: patchreview.ui:142
+#: patchreview.ui:136
 #, fuzzy, kde-format
 #| msgid "Cancel Review"
 msgctxt "@action:button"
@@ -261,7 +261,7 @@ msgid "Cancel Review"
 msgstr "Peru katselmointi"
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
-#: patchreview.ui:156
+#: patchreview.ui:149
 #, fuzzy, kde-format
 #| msgid "Finish Review"
 msgctxt "@action:button"
@@ -269,7 +269,7 @@ msgid "Finish Review"
 msgstr "Lopeta katselmointi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
-#: patchreview.ui:175
+#: patchreview.ui:168
 #, fuzzy, kde-format
 #| msgid "Changes"
 msgctxt "@title:group"

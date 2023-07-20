@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2014-04-26 15:37+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -661,7 +661,7 @@ msgid "Remove the selected stash"
 msgstr "Fjerner den valgte branch"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
-#: stashmanagerdialog.ui:37
+#: stashmanagerdialog.ui:36
 #, fuzzy, kde-format
 #| msgid "Applies stash's patch and drops the stash"
 msgctxt "@info:tooltip"
@@ -669,7 +669,7 @@ msgid "Apply stash's patch and drop the stash"
 msgstr "Anvender rettelse fra stash, og dropper stashet"
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
-#: stashmanagerdialog.ui:40
+#: stashmanagerdialog.ui:39
 #, fuzzy, kde-format
 #| msgid "Pop"
 msgctxt "@action:button"
@@ -677,7 +677,7 @@ msgid "Pop"
 msgstr "Pop"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, show)
-#: stashmanagerdialog.ui:51
+#: stashmanagerdialog.ui:49
 #, fuzzy, kde-format
 #| msgid "Show the contents of the stash"
 msgctxt "@info:tooltip"
@@ -685,7 +685,7 @@ msgid "Show the content of the stash"
 msgstr "Vis indholdet af stashen"
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
-#: stashmanagerdialog.ui:54
+#: stashmanagerdialog.ui:52
 #, fuzzy, kde-format
 #| msgid "Show"
 msgctxt "@action:button"
@@ -693,7 +693,7 @@ msgid "Show"
 msgstr "Vis"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, apply)
-#: stashmanagerdialog.ui:85
+#: stashmanagerdialog.ui:82
 #, fuzzy, kde-format
 #| msgid "Applies stash's patch"
 msgctxt "@info:tooltip"
@@ -701,7 +701,7 @@ msgid "Apply stash's patch"
 msgstr "Anvender rettelse fra stash"
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
-#: stashmanagerdialog.ui:88
+#: stashmanagerdialog.ui:85
 #, fuzzy, kde-format
 #| msgid "Apply"
 msgctxt "@action:button"
@@ -709,7 +709,7 @@ msgid "Apply"
 msgstr "Anvend"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, branch)
-#: stashmanagerdialog.ui:112
+#: stashmanagerdialog.ui:108
 #, fuzzy, kde-format
 #| msgid ""
 #| "Creates a new branch and applies the stash there, then it drops the stash."
@@ -719,7 +719,7 @@ msgstr ""
 "Opretter en ny branch og anvender stashet der, dropper derefter stashet."
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
-#: stashmanagerdialog.ui:115
+#: stashmanagerdialog.ui:111
 #, fuzzy, kde-format
 #| msgid "Branch"
 msgctxt "@action:button"

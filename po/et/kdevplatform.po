@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-27 00:45+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -373,7 +373,7 @@ msgstr "Automaatne"
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
-#: shell/launchconfigurationdialog.ui:114
+#: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Nimi"
@@ -482,7 +482,7 @@ msgid "&Stop on Change"
 msgstr "&Peata muutumisel"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: documentation/documentationfindwidget.ui:43
+#: documentation/documentationfindwidget.ui:42
 #, fuzzy, kde-format
 #| msgid "Find:"
 msgctxt "@label:textbox"
@@ -490,7 +490,7 @@ msgid "Find:"
 msgstr "Otsing:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
-#: documentation/documentationfindwidget.ui:57
+#: documentation/documentationfindwidget.ui:56
 #, fuzzy, kde-format
 #| msgid "Jump to next match"
 msgctxt "@info:tooltip"
@@ -498,7 +498,7 @@ msgid "Jump to next match"
 msgstr "Liigu järgmisele vastele"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
-#: documentation/documentationfindwidget.ui:71
+#: documentation/documentationfindwidget.ui:69
 #, fuzzy, kde-format
 #| msgid "Jump to previous match"
 msgctxt "@info:tooltip"
@@ -506,7 +506,7 @@ msgid "Jump to previous match"
 msgstr "Liigu eelmisele vastele"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
-#: documentation/documentationfindwidget.ui:85
+#: documentation/documentationfindwidget.ui:82
 #, fuzzy, kde-format
 #| msgid "Match case sensitive"
 msgctxt "@info:tooltip"
@@ -2613,7 +2613,7 @@ msgid "Add"
 msgstr "Lisa"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
-#: shell/launchconfigurationdialog.ui:41
+#: shell/launchconfigurationdialog.ui:39
 #, fuzzy, kde-format
 #| msgid "Remove"
 msgctxt "@action:button"
@@ -2621,7 +2621,7 @@ msgid "Remove"
 msgstr "Eemaldamine"
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
-#: shell/launchconfigurationdialog.ui:88
+#: shell/launchconfigurationdialog.ui:84
 #, fuzzy, kde-format
 #| msgid "Debugger:"
 msgctxt "@label:listbox"
@@ -4928,7 +4928,7 @@ msgid "Load Template From File"
 msgstr "Laadi mall failist"
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:38
+#: shell/settings/templatepage.ui:36
 #, fuzzy, kde-format
 #| msgid "Clone Template"
 msgctxt "@action:button"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-25 00:50+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2020-07-24 13:47+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -187,63 +187,63 @@ msgid "Previous file"
 msgstr "Föregående fil"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
-#: patchreview.ui:32
+#: patchreview.ui:31
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous difference"
 msgstr "Föregående skillnad"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
-#: patchreview.ui:43
+#: patchreview.ui:41
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next difference"
 msgstr "Nästa skillnad"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
-#: patchreview.ui:54
+#: patchreview.ui:51
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next file"
 msgstr "Nästa fil"
 
 #. i18n: ectx: property (text), widget (QToolButton, updateButton)
-#: patchreview.ui:78
+#: patchreview.ui:74
 #, kde-format
 msgctxt "@action:button"
 msgid "Update"
 msgstr "Uppdatera"
 
 #. i18n: ectx: property (text), widget (QToolButton, testsButton)
-#: patchreview.ui:92
+#: patchreview.ui:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Run Tests"
 msgstr "Kör tester"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportReview)
-#: patchreview.ui:126
+#: patchreview.ui:120
 #, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
 msgstr "Exportera jämförelse..."
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
-#: patchreview.ui:142
+#: patchreview.ui:136
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel Review"
 msgstr "Avbryt granskning"
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
-#: patchreview.ui:156
+#: patchreview.ui:149
 #, kde-format
 msgctxt "@action:button"
 msgid "Finish Review"
 msgstr "Slutför granskning"
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
-#: patchreview.ui:175
+#: patchreview.ui:168
 #, kde-format
 msgctxt "@title:group"
 msgid "Changes"

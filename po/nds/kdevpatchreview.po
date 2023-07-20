@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-25 00:50+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2012-02-02 07:40+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -207,7 +207,7 @@ msgid "Previous file"
 msgstr "Verleden Verscheel"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
-#: patchreview.ui:32
+#: patchreview.ui:31
 #, fuzzy, kde-format
 #| msgid "Previous difference"
 msgctxt "@info:tooltip"
@@ -215,7 +215,7 @@ msgid "Previous difference"
 msgstr "Verleden Verscheel"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
-#: patchreview.ui:43
+#: patchreview.ui:41
 #, fuzzy, kde-format
 #| msgid "Next difference"
 msgctxt "@info:tooltip"
@@ -223,14 +223,14 @@ msgid "Next difference"
 msgstr "Nakamen Verscheel"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
-#: patchreview.ui:54
+#: patchreview.ui:51
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next file"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, updateButton)
-#: patchreview.ui:78
+#: patchreview.ui:74
 #, fuzzy, kde-format
 #| msgid "Update"
 msgctxt "@action:button"
@@ -238,14 +238,14 @@ msgid "Update"
 msgstr "Opfrischen"
 
 #. i18n: ectx: property (text), widget (QToolButton, testsButton)
-#: patchreview.ui:92
+#: patchreview.ui:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Run Tests"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, exportReview)
-#: patchreview.ui:126
+#: patchreview.ui:120
 #, fuzzy, kde-format
 #| msgid "Export Diff..."
 msgctxt "@action:button"
@@ -253,7 +253,7 @@ msgid "Export Diff..."
 msgstr "Verscheel exporteren..."
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
-#: patchreview.ui:142
+#: patchreview.ui:136
 #, fuzzy, kde-format
 #| msgid "Cancel Review"
 msgctxt "@action:button"
@@ -261,7 +261,7 @@ msgid "Cancel Review"
 msgstr "Bekieken afbreken"
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
-#: patchreview.ui:156
+#: patchreview.ui:149
 #, fuzzy, kde-format
 #| msgid "Finish Review"
 msgctxt "@action:button"
@@ -269,7 +269,7 @@ msgid "Finish Review"
 msgstr "Bekieken afsluten"
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
-#: patchreview.ui:175
+#: patchreview.ui:168
 #, fuzzy, kde-format
 #| msgid "Changes"
 msgctxt "@title:group"

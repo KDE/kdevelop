@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-27 00:45+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2022-07-13 13:28+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -366,7 +366,7 @@ msgstr "자동"
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
-#: shell/launchconfigurationdialog.ui:114
+#: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "이름"
@@ -473,28 +473,28 @@ msgid "&Stop on Change"
 msgstr "변경 시 정지(&S)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: documentation/documentationfindwidget.ui:43
+#: documentation/documentationfindwidget.ui:42
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Find:"
 msgstr "찾기:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
-#: documentation/documentationfindwidget.ui:57
+#: documentation/documentationfindwidget.ui:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to next match"
 msgstr "다음 일치로 이동"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
-#: documentation/documentationfindwidget.ui:71
+#: documentation/documentationfindwidget.ui:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to previous match"
 msgstr "이전 일치로 이동"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
-#: documentation/documentationfindwidget.ui:85
+#: documentation/documentationfindwidget.ui:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Match case sensitive"
@@ -2441,14 +2441,14 @@ msgid "Add"
 msgstr "추가"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
-#: shell/launchconfigurationdialog.ui:41
+#: shell/launchconfigurationdialog.ui:39
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "삭제"
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
-#: shell/launchconfigurationdialog.ui:88
+#: shell/launchconfigurationdialog.ui:84
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
@@ -4531,7 +4531,7 @@ msgid "Load Template From File"
 msgstr "파일에서 템플릿 불러오기"
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:38
+#: shell/settings/templatepage.ui:36
 #, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"

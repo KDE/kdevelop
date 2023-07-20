@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-07-20 00:47+0000\n"
 "PO-Revision-Date: 2021-08-04 10:28-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -164,7 +164,7 @@ msgid "Create a new include path entry from this URL"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeIncludePath)
-#: kcm_widget/includeswidget.ui:62
+#: kcm_widget/includeswidget.ui:60
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current include path entry"
