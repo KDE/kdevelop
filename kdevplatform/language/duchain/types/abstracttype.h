@@ -184,6 +184,10 @@ public:
     ///Since this is used by the type-repository, it must compare ALL members of the data type.
     virtual bool equals(const AbstractType* rhs) const;
 
+    ///Should return whether this type contains the given one
+    ///For types holding only a single type, this is identical to equals()
+    virtual bool contains(const AbstractType* type) const;
+
     /**
      * Should create a clone of the source-type, with as much data copied as possible without breaking the du-chain.
      * */

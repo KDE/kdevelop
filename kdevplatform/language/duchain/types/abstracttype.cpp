@@ -125,6 +125,11 @@ bool AbstractType::equals(const AbstractType* rhs) const
         && d_func()->m_alignOfExponent == rhs->d_func()->m_alignOfExponent;
 }
 
+bool AbstractType::contains(const AbstractType* type) const
+{
+    return equals(type);
+}
+
 uint AbstractType::hash() const
 {
     return KDevHash() << d_func()->typeClassId << d_func()->m_modifiers << d_func()->m_sizeOf
