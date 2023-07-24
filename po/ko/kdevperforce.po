@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Shinjo Park <kde@peremen.name>, 2014, 2019, 2020.
+# Shinjo Park <kde@peremen.name>, 2014, 2019, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2020-10-04 20:15+0200\n"
+"PO-Revision-Date: 2023-07-23 20:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: perforceplugin.cpp:108
 #, kde-format
@@ -66,16 +66,18 @@ msgid ""
 "Unable to find perforce executable. Is it installed on the system? Is it in "
 "your PATH?"
 msgstr ""
+"perforce 실행 파일을 찾을 수 없습니다. 시스템에 설치되어 있습니까? PATH에 경"
+"로가 지정되어 있습니까?"
 
 #: ui/perforceimportmetadatawidget.cpp:152
 #, kde-format
 msgid "P4 Client failed with exit code: %1"
-msgstr ""
+msgstr "P4 클라이언트 실패, 종료 코드: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:196
 #, kde-format
 msgid "P4 Client failed with error code: %1"
-msgstr ""
+msgstr "P4 클라이언트 실패, 오류 코드: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: ui/perforceimportmetadatawidget.ui:29
@@ -107,9 +109,9 @@ msgid ""
 "running on the same host. Port numbers must be in the range 1024 through "
 "32767"
 msgstr ""
-"Perforce 프로그램에 사용할 P4PORT의 형식은 protocol:host:port이며, Perforce "
-"프로그램과 버전 관리 서비스가 같은 호스트에 실행 중이라면 port만 입력하십시"
-"오. 포트 번호는 1024부터 32767 사이에 있어야 합니다"
+"Perforce 앱에 사용할 P4PORT의 형식은 protocol:host:port이며, Perforce 앱과 버"
+"전 관리 서비스가 같은 호스트에 실행 중이라면 port만 입력하십시오. 포트 번호"
+"는 1024부터 32767 사이에 있어야 합니다"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4user)
 #: ui/perforceimportmetadatawidget.ui:90

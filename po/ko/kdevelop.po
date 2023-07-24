@@ -467,7 +467,7 @@ msgstr "Kurt Granroth"
 #: main.cpp:416
 #, kde-format
 msgid "KDE application templates"
-msgstr "KDE 프로그램 템플릿"
+msgstr "KDE 앱 템플릿"
 
 #: main.cpp:417
 #, kde-format
@@ -477,7 +477,7 @@ msgstr "Ian Reinhart Geiser"
 #: main.cpp:417
 #, kde-format
 msgid "Dist part, bash support, application templates"
-msgstr "Dist 부분, 배시 지원, 프로그램 템플릿"
+msgstr "Dist 부분, 배시 지원, 앱 템플릿"
 
 #: main.cpp:418
 #, kde-format
@@ -787,7 +787,7 @@ msgid ""
 "The executable that should be debugged must follow - including arguments.\n"
 "Example: kdevelop --debug gdb myapp --foo bar"
 msgstr ""
-"지정한 프로그램과 디버거로 KDevelop에서 디버깅을 시작합니다.\n"
+"지정한 앱과 디버거로 KDevelop에서 디버깅을 시작합니다.\n"
 "디버그할 실행 파일을 인자를 포함하여 지정해야 합니다.\n"
 "예: kdevelop --debug gdb myapp --foo bar"
 

@@ -78,17 +78,17 @@ msgstr "다른 인스턴스 실행"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
-msgstr "네이티브 프로그램 설정"
+msgstr "네이티브 앱 설정"
 
 #: nativeappconfig.cpp:166
 #, kde-format
 msgid "Executes Native Applications"
-msgstr "네이티브 프로그램 실행"
+msgstr "네이티브 앱 실행"
 
 #: nativeappconfig.cpp:176
 #, kde-format
 msgid "Native Application"
-msgstr "네이티브 프로그램"
+msgstr "네이티브 앱"
 
 #: nativeappconfig.cpp:241
 #, kde-format
@@ -201,9 +201,9 @@ msgid ""
 "interact with applications requiring user input from a terminal emulator. To "
 "run such applications, you should use an external terminal.</p>"
 msgstr ""
-"<p>기본적으로 프로그램은 백그라운드에서 실행되며 도구 보기에 출력만 표시됩니"
-"다. 터미널 에뮬레이터를 통해서 사용자 입력을 받아들이는 프로그램을 사용할 수 "
-"없습니다. 그러한 프로그램을 실행하려면 외부 터미널을 사용하십시오.</p>"
+"<p>기본적으로 앱은 백그라운드에서 실행되며 도구 보기에 출력만 표시됩니다. 터"
+"미널 에뮬레이터를 통해서 사용자 입력을 받아들이는 앱을 사용할 수 없습니다. 그"
+"러한 앱을 실행하려면 외부 터미널을 사용하십시오.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:209
@@ -276,8 +276,7 @@ msgid ""
 "directly depend, to be built and/or installed before running the application."
 msgstr ""
 "실행 파일을 시작하기 전에 지정한 동작을 수행합니다. 실행 파일에서 직접적으로 "
-"의존하지 않는 프로젝트의 일부를 프로그램 실행 전에 빌드 및 설치할 수 있도록 "
-"합니다."
+"의존하지 않는 프로젝트의 일부를 앱 실행 전에 빌드 및 설치할 수 있도록 합니다."
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:298

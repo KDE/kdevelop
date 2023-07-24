@@ -74,9 +74,9 @@ msgid ""
 "by configuring the launches and selecting the one you want to use in the "
 "<em>Current Launch Configuration</em> sub-menu."
 msgstr ""
-"여기에서 보는 것처럼 프로그램을 실행하거나 추가 런타임 정보가 필요한 경우 디"
-"버그할 수 있습니다. 실행할 프로그램을 선택하려면 실행 종류를 구성하고 <em>현"
-"재 실행 설정</em> 하위 메뉴에서 실행할 것을 선택하십시오."
+"여기에서 보는 것처럼 앱을 실행하거나 추가 런타임 정보가 필요한 경우 디버그할 "
+"수 있습니다. 실행할 앱을 선택하려면 실행 종류를 구성하고 <em>현재 실행 설정</"
+"em> 하위 메뉴에서 실행할 것을 선택하십시오."
 
 #: qml/area_review.qml:38
 msgid "Review a Patch"

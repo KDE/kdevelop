@@ -87,17 +87,17 @@ msgstr "인터프리터 입력 및 선택..."
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Script Application"
-msgstr "스크립트 프로그램 설정"
+msgstr "스크립트 앱 설정"
 
 #: scriptappconfig.cpp:126
 #, kde-format
 msgid "Executes Script Applications"
-msgstr "스크립트 프로그램 실행"
+msgstr "스크립트 앱 실행"
 
 #: scriptappconfig.cpp:136 scriptappconfig.cpp:186
 #, kde-format
 msgid "Script Application"
-msgstr "스크립트 프로그램"
+msgstr "스크립트 앱"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: scriptappconfig.ui:29
@@ -304,7 +304,7 @@ msgstr "시작 중: %1"
 #: scriptappjob.cpp:184
 #, kde-format
 msgid "*** Killed Application ***"
-msgstr "*** 프로그램 강제 종료됨 ***"
+msgstr "*** 앱 강제 종료됨 ***"
 
 #: scriptappjob.cpp:195
 #, kde-format

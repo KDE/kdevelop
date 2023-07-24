@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Shinjo Park <kde@peremen.name>, 2019, 2020, 2021, 2022.
+# Shinjo Park <kde@peremen.name>, 2019, 2020, 2021, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2022-07-13 13:06+0200\n"
+"PO-Revision-Date: 2023-07-23 20:37+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: committoolview.cpp:206 committoolview.cpp:207
 #, kde-format
@@ -631,21 +631,19 @@ msgstr "새 브랜치 이름 입력:"
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
-msgstr ""
+msgstr "%1. %2: %3"
 
 #: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
-msgstr ""
+msgstr "%1(%2에 생성됨)"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, drop)
 #: stashmanagerdialog.ui:23
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Remove the selected branch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr "선택한 브랜치 삭제"
+msgstr "선택한 스태시 삭제"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:37

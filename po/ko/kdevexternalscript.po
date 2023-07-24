@@ -419,7 +419,7 @@ msgstr "외부 스크립트 실행: %1"
 #: externalscriptjob.cpp:268
 #, kde-format
 msgid "*** Killed Application ***"
-msgstr "*** 프로그램 강제 종료됨 ***"
+msgstr "*** 앱 강제 종료됨 ***"
 
 #: externalscriptjob.cpp:348
 #, kde-format
