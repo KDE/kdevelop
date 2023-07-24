@@ -36,7 +36,7 @@ msgstr "내장형 편집기"
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
-msgstr "외부 프로그램"
+msgstr "외부 앱"
 
 #: openwithplugin.cpp:166
 #, kde-format

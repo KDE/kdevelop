@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Shinjo Park <kde@peremen.name>, 2020, 2022.
+# Shinjo Park <kde@peremen.name>, 2020, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:57+0000\n"
-"PO-Revision-Date: 2022-07-13 13:05+0200\n"
+"PO-Revision-Date: 2023-07-23 20:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -225,7 +225,7 @@ msgstr "<br /><em>캐시 문서:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "잘못된 CMake 파일 API 프로젝트 데이터"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -233,15 +233,7 @@ msgid "CMake Content Page"
 msgstr "CMake 내용 페이지"
 
 #: cmakemanager.cpp:650
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to configure project '%1' (error message: %2). As a result, "
-#| "KDevelop's code understanding will likely be broken.\n"
-#| "\n"
-#| "To fix this issue, please ensure that the project's CMakeLists.txt files "
-#| "are correct, and KDevelop is configured to use the correct CMake version "
-#| "and settings. Then right-click the project item in the projects tool view "
-#| "and click 'Reload'."
+#, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
 "code understanding may be wrong.\n"
@@ -249,12 +241,11 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
-"'%1' 프로젝트를 설정할 수 없습니다(오류 메시지: %2). KDevelop에서 코드를 올바"
-"르게 이해할 수 없을 수도 있습니다.\n"
+"'%1' 프로젝트를 설정하는 중 오래된 CMake 데이터를 발견했습니다. KDevelop에서 "
+"코드를 올바르게 이해할 수 없을 수도 있습니다.\n"
 "\n"
-"이 문제를 고치려면 프로젝트의 CMakeLists.txt 파일이 올바른지 확인하고 올바른 "
-"CMake 버전과 설정을 사용하도록 설정했는지 확인하십시오. 그 다음 프로젝트 목록"
-"의 프로젝트 항목을 오른쪽 단추로 클릭한 다음 '새로 고침'을 선택하십시오."
+"이 문제를 고치려면 프로젝트 도구 보기의 프로젝트 항목을 오른쪽 단추로 클릭한 "
+"다음 '새로 고침'을 선택하십시오."
 
 #: cmakemanager.cpp:661
 #, kde-format

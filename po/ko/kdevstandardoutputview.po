@@ -1,17 +1,17 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2020, 2021.
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2020, 2021, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-24 00:45+0000\n"
-"PO-Revision-Date: 2021-05-20 01:22+0200\n"
+"PO-Revision-Date: 2023-07-23 20:39+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: outputwidget.cpp:44
@@ -61,7 +61,7 @@ msgstr "활성 항목 선택"
 #, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
-msgstr "항목 선택 시 초점 맞추기"
+msgstr "항목 선택 시 포커스 맞추기"
 
 #: outputwidget.cpp:115
 #, kde-format
@@ -103,7 +103,7 @@ msgstr "찾기..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "%1 출력 설정"
 
 #: outputwidget.cpp:804
 #, kde-format
@@ -111,31 +111,31 @@ msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
 "error"
 msgid "Filter regular expression pattern error at offset %1: %2"
-msgstr ""
+msgstr "위치 %1에서 필터 정규 표현식 패턴 오류 발생: %2"
 
 #: outputwidgetconfig.cpp:64
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "%1 출력 설정"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "출력 보기 줄 수 제한"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "자동으로 오래된 출력 보기 닫기"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "최대 출력 보기 개수"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -144,6 +144,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"보기 개수가 이 값을 초과할 때\n"
+"오래된 출력 보기를 닫습니다"
 
 #: standardoutputview.cpp:100
 #, kde-format

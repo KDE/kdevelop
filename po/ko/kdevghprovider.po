@@ -28,7 +28,7 @@ msgstr ""
 #, kde-format
 msgctxt "%1 is the URL with the GitHub token settings"
 msgid "You can check the authorization for this application and others at %1"
-msgstr "이 프로그램 및 다른 프로그램의 인증 상태를 %1 페이지에서 확인하십시오"
+msgstr "이 앱 및 다른 앱의 인증 상태를 %1 페이지에서 확인하십시오"
 
 #: ghdialog.cpp:54
 #, kde-format

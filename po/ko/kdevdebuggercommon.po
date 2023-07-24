@@ -139,9 +139,9 @@ msgid ""
 "The core file contains an image of the program memory at the time it "
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
-"<b>코어 파일 시험</b><p>프로그램이 세그멘테이션 오류 등으로 종료되었을 때 생"
-"성되는 코어 파일을 분석합니다. 코어 파일은 프로그램이 충돌했을 당시의 프로그"
-"램 메모리 이미지가 들어 있으며 사후 분석을 할 수 있습니다.</p>"
+"<b>코어 파일 시험</b><p>앱이 세그멘테이션 오류 등으로 종료되었을 때 생성되는 "
+"코어 파일을 분석합니다. 코어 파일은 앱이 충돌했을 당시의 앱 메모리 이미지가 "
+"들어 있으며 사후 분석을 할 수 있습니다.</p>"
 
 #: midebuggerplugin.cpp:124
 #, kde-format
@@ -275,12 +275,12 @@ msgstr "디버거 중지됨"
 #: midebugsession.cpp:428
 #, kde-format
 msgid "Application is running"
-msgstr "프로그램이 실행 중"
+msgstr "앱이 실행 중"
 
 #: midebugsession.cpp:433
 #, kde-format
 msgid "Application is paused"
-msgstr "프로그램이 일시 정지됨"
+msgstr "앱이 일시 정지됨"
 
 #: midebugsession.cpp:748
 #, kde-format
@@ -505,7 +505,7 @@ msgstr "Return 키를 눌렀을 때 마지막 명령 반복"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
-msgstr "프로그램의 실행을 일시 정지하여 GDB 명령 입력"
+msgstr "앱의 실행을 일시 정지하여 GDB 명령 입력"
 
 #: widgets/debuggerconsoleview.cpp:72
 #, kde-format

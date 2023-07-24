@@ -51,8 +51,8 @@ msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
 "skeleton for your application from a set of templates."
 msgstr ""
-"KDevelop 프로그램 마법사를 시작합니다. 템플릿 목록에서 프로그램 코드의 뼈대"
-"를 만들 수 있도록 도와 줍니다."
+"KDevelop 앱 마법사를 시작합니다. 템플릿 목록에서 앱 코드의 뼈대를 만들 수 있"
+"도록 도와 줍니다."
 
 #: appwizardplugin.cpp:106
 #, kde-format

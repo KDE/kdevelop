@@ -90,7 +90,7 @@ msgstr "디버거 도구 모음"
 #: lldblauncher.cpp:50
 #, kde-format
 msgid "Debug a native application in LLDB"
-msgstr "LLDB로 네이티브 프로그램 디버그"
+msgstr "LLDB로 네이티브 앱 디버그"
 
 #: lldblauncher.cpp:75
 #, kde-format
@@ -188,7 +188,7 @@ msgstr "디버거 시작:"
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
-msgstr "프로그램 출력"
+msgstr "앱 출력"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:128
