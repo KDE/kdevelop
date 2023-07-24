@@ -34,10 +34,10 @@ MesonJob::MesonJob(const Meson::BuildDir& buildDir, IProject* project, MesonJob:
 
     switch (m_commandType) {
     case CONFIGURE:
-        *this << QStringLiteral("--backend") << buildDir.mesonBackend;
+        *this << QStringLiteral("setup") << QStringLiteral("--backend") << buildDir.mesonBackend;
         break;
     case RE_CONFIGURE:
-        *this << QStringLiteral("--reconfigure");
+        *this << QStringLiteral("setup") << QStringLiteral("--reconfigure");
         break;
     case SET_CONFIG:
         *this << QStringLiteral("configure");
