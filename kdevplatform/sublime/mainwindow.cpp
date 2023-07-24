@@ -92,11 +92,11 @@ QList<View*> MainWindow::topViews() const
     return topViews;
 }
 
-QList<Container*> MainWindow::containers() const
+QSet<Container*> MainWindow::containers() const
 {
     Q_D(const MainWindow);
 
-    return d->viewContainers.values();
+    return QSet<Container*>(d->viewContainers.cbegin(), d->viewContainers.cend());
 }
 
 void MainWindow::setArea(Area *area)

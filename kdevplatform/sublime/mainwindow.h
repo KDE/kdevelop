@@ -9,6 +9,7 @@
 
 #include <QList>
 #include <QMenu>
+#include <QSet>
 
 #include <KParts/MainWindow>
 
@@ -79,7 +80,7 @@ public:
     /**Returns a list of all views which are on top of their corresponding view stacks*/
     QList<View*> topViews() const;
 
-    QList<Container*> containers() const;
+    QSet<Container*> containers() const;
 
     /**Returns the view that is closest to the given global position, or zero.*/
     View* viewForPosition(const QPoint& globalPos) const;
