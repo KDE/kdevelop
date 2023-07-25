@@ -267,24 +267,38 @@ bool DebugSession::loadCoreFile(KDevelop::ILaunchConfiguration*,
 
 void DebugSession::handleVersion(const QStringList& s)
 {
-    const auto response = s.value(0);
-    qCDebug(DEBUGGERGDB) << response;
-    // minimal version is 7.0,0
-    QRegularExpression rx(QStringLiteral("([0-9]+)\\.([0-9]+)(\\.([0-9]+))?"));
-    const auto match = rx.match(response);
-    if (!match.hasMatch() || QVersionNumber::fromString(match.capturedRef(0).toString()) < QVersionNumber(7, 0, 0)) {
-        if (!qobject_cast<QGuiApplication*>(qApp))  {
-            //for unittest
-            qFatal("You need a graphical application.");
+    static const QVersionNumber minRequiredVersion(7, 0, 0);
+    static const QRegularExpression versionRegExp(QStringLiteral("([0-9]+)\\.([0-9]+)(\\.([0-9]+))?"));
+    QString detectedVersion = i18n("<unknown version>");
+
+    for (const QString& response : s) {
+        qCDebug(DEBUGGERGDB) << response;
+
+        if (!response.contains(QLatin1String{"GNU gdb"})) {
+            continue; // this line is not a version string, skip it
         }
 
-        const QString messageText = i18n("<b>You need gdb 7.0.0 or higher.</b><br />"
-                                         "You are using: %1",
-                                         response);
-        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
-        ICore::self()->uiController()->postMessage(message);
-        stopDebugger();
+        const auto match = versionRegExp.match(response);
+        if (match.hasMatch() && QVersionNumber::fromString(match.capturedView()) >= minRequiredVersion) {
+            return; // Early exit. Version check passed.
+        }
+
+        detectedVersion = response;
     }
+
+    if (!qobject_cast<QGuiApplication*>(qApp)) {
+        //for unittest
+        qFatal("You need a graphical application.");
+    }
+
+    // TODO: reuse minRequiredVersion in the error message text when the minimum
+    // required GDB version changes or the message is modified for some other reason.
+    const QString messageText = i18n("<b>You need gdb 7.0.0 or higher.</b><br />"
+        "You are using: %1",
+        detectedVersion);
+    auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+    ICore::self()->uiController()->postMessage(message);
+    stopDebugger();
 }
 
 void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
