@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-20 00:47+0000\n"
-"PO-Revision-Date: 2023-07-23 20:37+0200\n"
+"PO-Revision-Date: 2023-07-24 22:16+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -627,7 +627,7 @@ msgstr "파일 크기가 %1이며 한계 %2를 초과합니다."
 #: language/backgroundparser/parsejob.cpp:327
 #, kde-format
 msgid "Could not open file '%1'"
-msgstr "파일 '%1'을(를) 열 수 없음"
+msgstr "'%1' 파일을 열 수 없음"
 
 #: language/backgroundparser/parsejob.cpp:330
 #, kde-format
