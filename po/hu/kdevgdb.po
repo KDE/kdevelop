@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-07-26 02:29+0000\n"
 "PO-Revision-Date: 2014-09-08 22:56+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -123,18 +123,23 @@ msgstr ""
 "ellenőrizze a futási beállítást: „%1”. Az alapértelmezett környezetcsoport "
 "használata."
 
-#: debugsession.cpp:281
+#: debugsession.cpp:272
+#, kde-format
+msgid "<unknown version>"
+msgstr ""
+
+#: debugsession.cpp:296
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr ""
 "<b>A gdb 7.0.0 vagy magasabb verziója szükséges.</b><br />Az ön verziója: %1"
 
-#: debugsession.cpp:294
+#: debugsession.cpp:308
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Nem sikerült elindítani a hibakeresőt:</b><br />"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:322
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
