@@ -21,6 +21,8 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/editor/documentrange.h>
 
+#include <QFileInfo>
+#include <QLibraryInfo>
 #include <QTest>
 
 QTEST_GUILESS_MAIN(TestDeclarations)
@@ -263,8 +265,13 @@ void TestDeclarations::testQMLtypesImportPaths()
     path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick.Window"), QStringLiteral("2.2"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick.XmlListModel"), QStringLiteral("2.0"));
-    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+    // This test fails if the Qt XML Patterns module is not installed and the QtQuick.XmlListModel module is missing.
+    const QString xmlListModelPath =
+        QLibraryInfo::location(QLibraryInfo::Qml2ImportsPath) + "/QtQuick/XmlListModel/qmldir";
+    if (QFileInfo{xmlListModelPath}.isFile()) {
+        path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.XmlListModel", "2.0");
+        QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+    }
 
     // QtQml QML modules
     path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQml.Models"), QStringLiteral("2.3"));
