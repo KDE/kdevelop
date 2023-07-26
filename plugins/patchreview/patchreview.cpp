@@ -606,6 +606,13 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension(KDevelop:
     } else if ( context->type() == KDevelop::Context::EditorContext ) {
         auto* econtext = static_cast<KDevelop::EditorContext*>(context);
         urls << econtext->url();
+
+        if (urls.constFirst().isEmpty()) {
+            // This must be an Untitled document. The Review Patch action makes no sense for an unsaved document,
+            // and triggering it causes an assertion failure in DocumentControllerPrivate::openDocumentInternal().
+            // Do not add our context menu item to prevent this.
+            urls.clear();
+        }
     }
 
     if (urls.size() == 1) {
