@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-26 02:29+0000\n"
-"PO-Revision-Date: 2023-07-13 23:51+0300\n"
+"PO-Revision-Date: 2023-07-26 12:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -120,7 +120,7 @@ msgstr ""
 #: debugsession.cpp:272
 #, kde-format
 msgid "<unknown version>"
-msgstr ""
+msgstr "<bilinmeyen sürüm>"
 
 #: debugsession.cpp:296
 #, kde-format
@@ -259,7 +259,7 @@ msgstr "Seçenekler"
 #, kde-format
 msgctxt "@option:check"
 msgid "Display static &members:"
-msgstr "Durgun &üyeleri göster:"
+msgstr "Durgun &üyeleri görüntüle:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
 #: gdbconfigpage.ui:111
@@ -273,7 +273,7 @@ msgid ""
 "but if you need to debug into these values then\n"
 "check this option."
 msgstr ""
-"Durgun üyeleri göstermek, GDB'nin KDE\n"
+"Durgun üyeleri görüntülemek, GDB'nin KDE\n"
 "ve QT içindeki veri üretimini yavaşlatır.\n"
 "QString ve arkadaşlarının güvendiği verinin\n"
 "\"imzasını\" değiştirebilir; ancak bu değerlerin\n"
@@ -284,7 +284,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Display &demangled names:"
-msgstr "Düzgünleştirilmiş a&dları göster:"
+msgstr "Düzgünleştirilmiş a&dları görüntüle:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
 #: gdbconfigpage.ui:133
@@ -615,4 +615,4 @@ msgstr "Yeni Bellek Görüntüleyicisi"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
-msgstr "Yeni bir bellek görüntüleyici aç"
+msgstr "Yeni bir bellek görüntüleyicisi aç"
