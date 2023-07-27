@@ -928,7 +928,18 @@ public Q_SLOTS:
 };
 static MemberAccessReplacer s_memberAccessReplacer;
 
+bool areAllResultsOverloadCandidates(const CXCodeCompleteResults& results)
+{
+#if CINDEX_VERSION_MINOR >= 30
+    return std::all_of(results.Results, results.Results + results.NumResults, [](const CXCompletionResult& result) {
+        return result.CursorKind == CXCursor_OverloadCandidate;
+    });
+#else
+    // CXCursor_OverloadCandidate is unavailable in this version, so we return true only if there are no results.
+    return results.NumResults == 0;
+#endif
 }
+} // namespace
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
                                                        const ParseSessionData::Ptr& sessionData,
@@ -1025,8 +1036,10 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
 
             m_valid = false;
 
-            if (!m_results || m_results->NumResults == 0) {
-                return;
+            // Overload candidate completions do not make sense after '->', but Clang proposes such a completion after
+            // a digit sometimes. Ignore the overload candidate completions to prevent a wrong '.' to '->' replacement.
+            if (!m_results || areAllResultsOverloadCandidates(*m_results)) {
+                return; // do not replace '.' with '->', because there are no useful completions after '->'
             }
 
             const auto diagnostic = clang_codeCompleteGetDiagnostic(m_results.get(), 0);

@@ -645,6 +645,19 @@ void TestCodeCompletion::testReplaceMemberAccess_data()
         QTest::newRow("no replacement in aggregate initializer with floating point number") << code << cis;
     }
 
+    // See https://bugs.kde.org/show_bug.cgi?id=468605
+    {
+        const auto code = QString::fromLatin1(
+            "struct Test { int a; float b; };"
+            "int main(int argc, char **argv) { Test foo{1, \n2.");
+
+        CompletionItems cis;
+        cis.position = {1, 2};
+        cis.completions = QStringList{};
+        cis.code = code;
+        QTest::newRow("no replacement in aggregate initializer with floating point number 2") << code << cis;
+    }
+
     {
         const auto code = QString::fromLatin1(
             "typedef struct myStruct { int x; } myStruct;"
