@@ -5,63 +5,54 @@
 # Stelios <sstavra@gmail.com>, 2011, 2012, 2013, 2017, 2019.
 # Dimitrios Glentadakis <dglent@gmail.com>, 2012.
 # Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+# Petros Vidalis <pvidalis@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2019-08-19 11:03+0300\n"
-"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"PO-Revision-Date: 2023-07-28 11:13+0300\n"
+"Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: appwizarddialog.cpp:23
-#, fuzzy, kde-format
-#| msgid "Create New Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New Project"
-msgstr "Δημιουργία νέου έργου"
+msgstr "Δημιουργία Νέου Έργου"
 
 #: appwizarddialog.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "Page for general configuration options"
-#| msgid "General"
+#, kde-format
 msgctxt "@title:tab Page for general configuration options"
 msgid "General"
 msgstr "Γενικά"
 
 #: appwizarddialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "Page for version control options"
-#| msgid "Version Control"
+#, kde-format
 msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "Έλεγχος εκδόσεων"
 
 #: appwizardplugin.cpp:69
-#, fuzzy, kde-format
-#| msgid "New From Template..."
+#, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "Νέο από πρότυπο..."
+msgstr "Νέο Από Πρότυπο..."
 
 #: appwizardplugin.cpp:71
-#, fuzzy, kde-format
-#| msgid "Generate a new project from a template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "Δημιουργία ενός νέου έργου από ένα πρότυπο"
 
 #: appwizardplugin.cpp:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "This starts KDevelop's application wizard. It helps you to generate a "
-#| "skeleton for your application from a set of templates."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
@@ -71,10 +62,9 @@ msgstr ""
 "σκελετού για την εφαρμογή σας από ένα σύνολο προτύπων."
 
 #: appwizardplugin.cpp:106
-#, fuzzy, kde-format
-#| msgid "Could not create project from template\n"
+#, kde-format
 msgid "Could not create project from template."
-msgstr "Αδυναμία δημιουργίας έργου από πρότυπο\n"
+msgstr "Αδυναμία δημιουργίας έργου από πρότυπο."
 
 #: appwizardplugin.cpp:134
 #, kde-format
@@ -82,11 +72,10 @@ msgid "Please see the Version Control tool view."
 msgstr "Δείτε την προβολή εργαλείων ελέγχου έκδοσης."
 
 #: appwizardplugin.cpp:136
-#, fuzzy, kde-format
-#| msgid "Version Control System Error"
+#, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
-msgstr "Σφάλμα συστήματος ελέγχου έκδοσης"
+msgstr "Σφάλμα Συστήματος Ελέγχου Έκδοσης"
 
 #: appwizardplugin.cpp:152
 #, kde-format
@@ -94,10 +83,9 @@ msgid "Could not initialize DVCS repository"
 msgstr "Αδυναμία αρχικοποίησης αποθετηρίου DVCS"
 
 #: appwizardplugin.cpp:161
-#, fuzzy, kde-format
-#| msgid "Could not add files to the DVCS repository"
+#, kde-format
 msgid "Could not check status of the DVCS repository"
-msgstr "Αδυναμία προσθήκης αρχείων στο αποθετήριο DVCS"
+msgstr "Αδυναμία ελέγχου κατάστασης αποθετηρίου DVCS"
 
 #: appwizardplugin.cpp:174
 #, kde-format
@@ -135,32 +123,28 @@ msgid "Project Templates"
 msgstr "Πρότυπα έργου"
 
 #: projectselectionpage.cpp:56
-#, fuzzy, kde-format
-#| msgid "Category"
+#, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Κατηγορία"
 
 #: projectselectionpage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Project Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Τύπος έργου"
 
 #: projectselectionpage.cpp:67
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
-msgstr "Ανάκτηση περισσότερων προτύπων"
+msgstr "Ανάκτηση Περισσότερων Προτύπων"
 
 #: projectselectionpage.cpp:74
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
-msgstr "Φόρτωση προτύπων από αρχείο"
+msgstr "Φόρτωση Προτύπων από Αρχείο"
 
 #: projectselectionpage.cpp:170
 #, kde-format
@@ -202,47 +186,41 @@ msgstr ""
 "τη συνέχεια;"
 
 #: projectselectionpage.cpp:308
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"
-msgstr "Φόρτωση προτύπων από αρχείο"
+msgstr "Φόρτωση Προτύπων από Αρχείο"
 
 #. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
 #: projectselectionpage.ui:38
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:group"
 msgid "Properties"
 msgstr "Ιδιότητες"
 
 #. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
 #: projectselectionpage.ui:44
-#, fuzzy, kde-format
-#| msgid "Project name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Project name:"
 msgstr "Όνομα έργου:"
 
 #. i18n: ectx: property (text), widget (QLabel, locationLabel)
 #: projectselectionpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Location:"
 msgstr "Τοποθεσία:"
 
 #: projectvcspage.cpp:33
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox No Version Control Support chosen"
 msgid "None"
 msgstr "Κανένα"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectvcspage.ui:30
-#, fuzzy, kde-format
-#| msgid "Version control system:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Version control system:"
 msgstr "Σύστημα ελέγχου έκδοσης:"
