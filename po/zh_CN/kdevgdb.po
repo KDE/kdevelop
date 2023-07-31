@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-26 00:44+0000\n"
-"PO-Revision-Date: 2023-07-23 12:28\n"
+"PO-Revision-Date: 2023-07-30 07:09\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -111,7 +111,7 @@ msgstr "没有指定环境组，似乎配置损坏，请检查运行配置“%1�
 #: debugsession.cpp:272
 #, kde-format
 msgid "<unknown version>"
-msgstr ""
+msgstr "<未知版本>"
 
 #: debugsession.cpp:296
 #, kde-format
@@ -152,7 +152,7 @@ msgstr "一个程序正在被调试。你想终止正在运行的调试会话并
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "中止当前会话"
 
 #: gdbconfigpage.cpp:162
 #, kde-format
