@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2009, 2010.
-# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-20 00:47+0000\n"
-"PO-Revision-Date: 2022-08-03 09:58+0200\n"
+"PO-Revision-Date: 2023-07-25 12:16+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -410,7 +410,7 @@ msgstr "Avlusningsvariabler"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Ändra automatiskt storlek på kolumner vid klick"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -1819,10 +1819,9 @@ msgid "Running %1"
 msgstr "Kör %1"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "&Färgschema"
+msgstr "&Fönsterfärgschema"
 
 #: shell/configdialog.cpp:31
 #, kde-format
