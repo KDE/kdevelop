@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-07-09 00:43+0000\n"
-"PO-Revision-Date: 2022-08-30 13:06+0300\n"
+"PO-Revision-Date: 2023-08-02 01:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #: contextbrowser.cpp:164
 #, kde-format
@@ -85,13 +85,13 @@ msgstr "&Sonraki Kullanım"
 #, kde-format
 msgctxt "@action"
 msgid "Context Browser"
-msgstr "Bağlam Tarayıcı"
+msgstr "Bağlam Tarayıcısı"
 
 #: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
 #, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
-msgstr "Kod Tarayıcı"
+msgstr "Kod Tarayıcısı"
 
 #: contextbrowser.cpp:312
 #, kde-format
@@ -144,4 +144,4 @@ msgstr "Geçerli görünümün kilidini aç"
 #: kdevcontextbrowser.rc:25
 #, kde-format
 msgid "Code Browser Toolbar"
-msgstr "Kod Tarayıcı Araç Çubuğu"
+msgstr "Kod Tarayıcısı Araç Çubuğu"
