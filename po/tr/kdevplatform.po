@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-20 00:47+0000\n"
-"PO-Revision-Date: 2023-06-04 02:04+0300\n"
+"PO-Revision-Date: 2023-08-02 01:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2372,7 +2372,7 @@ msgstr "Düzenleyici"
 #: shell/editorconfigpage.cpp:104
 #, kde-format
 msgid "Configure Text Editor"
-msgstr "Metin Düzenleyiciyi Yapılandır"
+msgstr "Metin Düzenleyicisini Yapılandır"
 
 #: shell/environmentconfigurebutton.cpp:73
 #, kde-format
@@ -4517,12 +4517,12 @@ msgstr "Çalışma Zamanlarını Yapılandır"
 #: shell/sourceformattercontroller.cpp:228
 #, kde-format
 msgid "Source Formatter"
-msgstr "Kaynak Biçimlendirici"
+msgstr "Kaynak Biçimlendiricisi"
 
 #: shell/settings/sourceformattersettings.cpp:80
 #, kde-format
 msgid "Configure Source Formatter"
-msgstr "Kaynak Biçimlendiriciyi Yapılandır"
+msgstr "Kaynak Biçimlendiricisini Yapılandır"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/sourceformattersettings.ui:20
