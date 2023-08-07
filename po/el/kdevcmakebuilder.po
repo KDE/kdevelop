@@ -4,20 +4,21 @@
 # Toussis Manolis <manolis@koppermind.homelinux.org>, 2008, 2009.
 # Stelios <sstavra@gmail.com>, 2011, 2019.
 # Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+# Petros Vidalis <pvidalis@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-27 00:46+0000\n"
-"PO-Revision-Date: 2019-08-27 10:14+0300\n"
-"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"PO-Revision-Date: 2023-08-06 16:54+0300\n"
+"Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: cmakebuilder.cpp:105
 #, kde-format
@@ -30,43 +31,37 @@ msgid "Could not find a builder for %1"
 msgstr "Αδυναμία εύρεσης κατασκευαστή για το %1"
 
 #: cmakebuilder.cpp:195
-#, fuzzy, kde-format
-#| msgid "No Build Directory configured, cannot install"
+#, kde-format
 msgid "No build directory configured, cannot install"
-msgstr "Δεν έχει διαμορφωθεί κατάλογος κατασκευής, αδυναμία εγκατάστασης"
+msgstr "Δεν έχει διαμορφωθεί φάκελος κατασκευής, αδυναμία εγκατάστασης"
 
 #: cmakebuilder.cpp:205
-#, fuzzy, kde-format
-#| msgid "No Build Directory configured, cannot configure"
+#, kde-format
 msgid "No build directory configured, cannot configure"
-msgstr "Δεν έχει διαμορφωθεί κατάλογος κατασκευής, αδυναμία διαμόρφωσης"
+msgstr "Δεν έχει διαμορφωθεί φάκελος κατασκευής, αδυναμία διαμόρφωσης"
 
 #: cmakebuilderpreferences.cpp:48
-#, fuzzy, kde-format
-#| msgid "CMake"
+#, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
 #: cmakebuilderpreferences.cpp:53
-#, fuzzy, kde-format
-#| msgid "Configure Global CMake Settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"
 msgstr "Διαμόρφωση καθολικών ρυθμίσεων CMake"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: cmakebuilderpreferences.ui:20
-#, fuzzy, kde-format
-#| msgid "Default CMake executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Default CMake executable:"
 msgstr "Προκαθορισμένο CMake εκτελέσιμο:"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: cmakebuilderpreferences.ui:37
-#, fuzzy, kde-format
-#| msgid "Default generator:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Default generator:"
 msgstr "Προκαθορισμένη γεννήτρια:"
@@ -79,15 +74,12 @@ msgstr "CMake"
 #: cmakejob.cpp:56
 #, kde-format
 msgid "Internal error: no project specified to configure."
-msgstr ""
+msgstr "Εσωτερικό σφάλμα: δε καθορίστηκε έργο για διαμόρφωση."
 
 #: cmakejob.cpp:63
-#, fuzzy, kde-format
-#| msgid "Wrong build directory, cannot clear the build directory"
+#, kde-format
 msgid "Failed to create build directory %1."
-msgstr ""
-"Λανθασμένος κατάλογος κατασκευής, αδυναμία καθαρισμού του καταλόγου "
-"κατασκευής"
+msgstr "Αποτυχία δημιουργίας φακέλου %1."
 
 #: cmakejob.cpp:139
 #, kde-format
@@ -95,19 +87,17 @@ msgid "CMake: %1"
 msgstr "CMake: %1"
 
 #: prunejob.cpp:39
-#, fuzzy, kde-format
-#| msgid "No Build Directory configured, cannot clear the build directory"
+#, kde-format
 msgid "No build directory configured, cannot clear the build directory"
 msgstr ""
-"Δεν έχει διαμορφωθεί κατάλογος κατασκευής, αδυναμία καθαρισμού του καταλόγου "
+"Δεν έχει διαμορφωθεί φάκελος κατασκευής, αδυναμία καθαρισμού του φακέλου "
 "κατασκευής"
 
 #: prunejob.cpp:45
 #, kde-format
 msgid "Wrong build directory, cannot clear the build directory"
 msgstr ""
-"Λανθασμένος κατάλογος κατασκευής, αδυναμία καθαρισμού του καταλόγου "
-"κατασκευής"
+"Λανθασμένος φάκελος κατασκευής, αδυναμία καθαρισμού του φακέλου κατασκευής"
 
 #: prunejob.cpp:57
 #, kde-format

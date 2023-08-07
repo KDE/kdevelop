@@ -1,0 +1,48 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Petros Vidalis <pvidalis@gmail.com>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2023-08-06 17:07+0300\n"
+"Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 22.12.3\n"
+
+#: outlinenode.cpp:169
+#, kde-format
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr "<anonymous>"
+
+#: outlineviewplugin.cpp:49 outlinewidget.cpp:33
+#, kde-format
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Περίγραμμα"
+
+#: outlinewidget.cpp:47
+#, kde-format
+msgctxt "@action"
+msgid "Sort Alphabetically"
+msgstr "Ταξινόμηση αλφαβητικά"
+
+#: outlinewidget.cpp:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Sort items alphabetically"
+msgstr "Ταξινόμηση αντικειμένων αλφαβητικά"
+
+#: outlinewidget.cpp:60
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Φίλτρο..."

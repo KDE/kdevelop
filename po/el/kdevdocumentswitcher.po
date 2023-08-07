@@ -3,26 +3,27 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Stelios <sstavra@gmail.com>, 2011.
+# Petros Vidalis <pvidalis@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevdocumentswitcher\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2013-02-03 12:58+0200\n"
-"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"PO-Revision-Date: 2023-08-06 16:55+0300\n"
+"Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: documentswitcherplugin.cpp:65
-#, fuzzy, kde-format
-#| msgid "Last Used Views"
+#, kde-format
 msgctxt "@action"
 msgid "Last Used Views"
-msgstr "Πρόσφατες αναγνώσεις"
+msgstr "Πρόσφατες προβολές"
 
 #: documentswitcherplugin.cpp:68
 #, fuzzy, kde-format

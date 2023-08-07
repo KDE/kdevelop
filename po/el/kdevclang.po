@@ -2,75 +2,66 @@
 # This file is distributed under the same license as the kdevelop package.
 #
 # Stelios <sstavra@gmail.com>, 2019.
+# Petros Vidalis <pvidalis@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2019-08-26 11:12+0300\n"
-"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"PO-Revision-Date: 2023-08-06 12:57+0300\n"
+"Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:36
-#, fuzzy, kde-format
-#| msgid "C/C++ Helpers"
+#, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Helpers"
 msgstr "C/C++ βοηθοί"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:41
-#, fuzzy, kde-format
-#| msgid "Configure C/C++ Helpers"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Helpers"
 msgstr "Διαμόρφωση C/C++ βοηθών"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: clangsettings/sessionsettings/sessionsettings.ui:29
-#, fuzzy, kde-format
-#| msgid "Code-completion"
+#, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
 msgstr "Συμπλήρωση κώδικα"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:35
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If disabled, macros will not be included in the "
-#| "code-completion results. This can improve the responsiveness of code-"
-#| "completion in some cases.</p><p><br/></p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "If disabled, macros will not be included in the code completion results. "
 "This can improve the responsiveness of code completion in some cases."
 msgstr ""
-"<html><head/><body><p>Αν απενεργοποιηθεί, οι μακροεντολές δεν θα "
-"συμπεριληφθούν στα αποτελέσματα συμπλήρωσης κώδικα. Έτσι βελτιώνεται η "
-"απόκριση της συμπλήρωσης σε ορισμένες περιπτώσεις.</p><p><br/></p></body></"
-"html>"
+"Αν απενεργοποιηθεί, οι μακροεντολές δεν θα συμπεριληφθούν στα αποτελέσματα "
+"συμπλήρωσης κώδικα. Έτσι βελτιώνεται η απόκριση της συμπλήρωσης σε ορισμένες "
+"περιπτώσεις."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:38
-#, fuzzy, kde-format
-#| msgid "Add macros to code-completion"
+#, kde-format
 msgctxt "@option:check"
 msgid "Add macros to code completion"
 msgstr "Προσθήκη μακροεντολών στη συμπλήρωση κώδικα"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
 #: clangsettings/sessionsettings/sessionsettings.ui:51
-#, fuzzy, kde-format
-#| msgid "Enable Look-ahead code-completion"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable Look-ahead code completion"
-msgstr "Ενεργοποίηση συμπλήρωσης κώδικα προληπτικά"
+msgstr "Ενεργοποίηση προληπτικής συμπλήρωσης κώδικα"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: clangsettings/sessionsettings/sessionsettings.ui:64
@@ -96,21 +87,20 @@ msgid ""
 "this.\n"
 "See also: https://bugs.kde.org/show_bug.cgi?id=393779"
 msgstr ""
-"Η include διαδρομή «%1» της clang δεν είναι έγκυρη (λείπει το cpuid.h).\n"
+"Η include διαδρομή «%1» της clang δεν είναι έγκυρη (λείπει το cpuid.h "
+"header).\n"
 "Ρυθμίστε τη μεταβλητή KDEV_CLANG_BUILTIN_DIR χειροκίνητα για να το "
 "διορθώσετε αυτό.\n"
 "Δείτε επίσης: https://bugs.kde.org/show_bug.cgi?id=393779"
 
 #: clangsupport.cpp:278
-#, fuzzy, kde-format
-#| msgid "Rename Declaration"
+#, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "Μετονομασία δήλωσης"
 
 #: clangsupport.cpp:285
-#, fuzzy, kde-format
-#| msgid "Move into Source"
+#, kde-format
 msgctxt "@action"
 msgid "Move into Source"
 msgstr "Μετακίνηση στον πηγαίο κώδικα"
@@ -123,7 +113,7 @@ msgstr "Override %1"
 #: codecompletion/context.cpp:344
 #, kde-format
 msgid "Implement %1"
-msgstr "Implement %1"
+msgstr "Υλοποίηση %1"
 
 #: codecompletion/context.cpp:1350
 #, kde-format
@@ -203,8 +193,7 @@ msgid "Adapt Signature"
 msgstr "Προσαρμογή υπογραφής"
 
 #: codegen/clangrefactoring.cpp:82
-#, fuzzy, kde-format
-#| msgid "Rename %1"
+#, kde-format
 msgctxt "@action"
 msgid "Rename %1"
 msgstr "Μετονομασία %1"
@@ -382,4 +371,4 @@ msgstr "Forward declare ως 'struct'"
 #: util/clangutils.cpp:189
 #, kde-format
 msgid "<parse error>"
-msgstr ""
+msgstr "<parse error>"
