@@ -2,20 +2,21 @@
 # This file is distributed under the same license as the kdevelop package.
 #
 # Stelios <sstavra@gmail.com>, 2019.
+# Petros Vidalis <pvidalis@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2019-08-27 09:49+0300\n"
-"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"PO-Revision-Date: 2023-08-06 15:13+0300\n"
+"Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -23,36 +24,31 @@ msgid "Clazy"
 msgstr "Clazy"
 
 #: checksdb.cpp:28
-#, fuzzy, kde-format
-#| msgid "Level 0"
+#, kde-format
 msgctxt "@item level of checks"
 msgid "Level 0"
 msgstr "Επίπεδο 0"
 
 #: checksdb.cpp:29
-#, fuzzy, kde-format
-#| msgid "Level 1"
+#, kde-format
 msgctxt "@item level of checks"
 msgid "Level 1"
 msgstr "Επίπεδο 1"
 
 #: checksdb.cpp:30
-#, fuzzy, kde-format
-#| msgid "Level 2"
+#, kde-format
 msgctxt "@item level of checks"
 msgid "Level 2"
 msgstr "Επίπεδο 2"
 
 #: checksdb.cpp:31
-#, fuzzy, kde-format
-#| msgid "Level 3"
+#, kde-format
 msgctxt "@item level of checks"
 msgid "Level 3"
 msgstr "Επίπεδο 3"
 
 #: checksdb.cpp:32
-#, fuzzy, kde-format
-#| msgid "Manual Level"
+#, kde-format
 msgctxt "@item level of checks"
 msgid "Manual Level"
 msgstr "Χειροκίνητο επίπεδο"
@@ -109,90 +105,83 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Check Set"
-msgstr ""
+msgstr "Εισάγετε το όνομα της νέας σειράς ελέγχου"
 
 #: config/checksetmanagewidget.cpp:95
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr ""
+msgstr "Όνομα:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/checksetmanagewidget.ui:31
-#, fuzzy, kde-format
-#| msgid "Checks"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Check set:"
-msgstr "Έλεγχοι"
+msgstr "Σειρά ελέγχου:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:48
-#, fuzzy, kde-format
-#| msgid "Search checks..."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add check set"
-msgstr "Αναζήτηση ελέγχων..."
+msgstr "Προσθήκη σειράς ελέγχου"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:58
-#, fuzzy, kde-format
-#| msgid "Search checks..."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone check set"
-msgstr "Αναζήτηση ελέγχων..."
+msgstr "Κλωνοποίηση σειράς ελέγχου"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:68
-#, fuzzy, kde-format
-#| msgid "Reset checks"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove check set"
-msgstr "Επαναφορά ελέγχων"
+msgstr "Αφαίρεση σειράς ελέγχου"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr ""
+msgstr "Ορισμός προεπιλογής"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
 #: config/checksetmanagewidget.ui:88
-#, fuzzy, kde-format
-#| msgid "Reset checks"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit name of check set"
-msgstr "Επαναφορά ελέγχων"
+msgstr "Επεξεργασία ονόματος σειράς ελέγχου"
 
 #: config/checksetselectioncombobox.cpp:26
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Custom"
-msgstr ""
+msgstr "Προσαρμοσμένο"
 
 #: config/checksetselectioncombobox.cpp:30
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default (currently: %1)"
-msgstr ""
+msgstr "Χρήση προκαθορισμένου: (τρέχων: %1)"
 
 #: config/checksetselectionlistmodel.cpp:64
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (default selection)"
-msgstr ""
+msgstr "%1 (προκαθορισμένη επιλογή)"
 
 #: config/checkswidget.cpp:37
-#, fuzzy, kde-format
-#| msgid "Search checks..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search checks..."
 msgstr "Αναζήτηση ελέγχων..."
 
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #: config/checkswidget.ui:31
-#, fuzzy, kde-format
-#| msgid "Reset checks"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset Checks"
 msgstr "Επαναφορά ελέγχων"
@@ -208,24 +197,21 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: config/commandlinewidget.ui:29
-#, fuzzy, kde-format
-#| msgid "Command Line"
+#, kde-format
 msgctxt "@title:group"
 msgid "Command Line"
 msgstr "Γραμμή εντολών"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, cmdFilter)
 #: config/commandlinewidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Αναζήτηση"
+msgstr "Αναζήτηση..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
 #: config/commandlinewidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Break lines"
+#, kde-format
 msgctxt "@option:check"
 msgid "Break lines"
 msgstr "Αλλαγή γραμμών"
@@ -238,129 +224,111 @@ msgstr[0] "1 έλεγχος ανιχνεύθηκε"
 msgstr[1] "%1 έλεγχοι ανιχνεύθηκαν"
 
 #: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
-#, fuzzy, kde-format
-#| msgid "Clazy"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Clazy"
 msgstr "Clazy"
 
 #: config/globalconfigpage.cpp:84
-#, fuzzy, kde-format
-#| msgid "Configure Clazy Settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clazy Settings"
 msgstr "Διαμόρφωση ρυθμίσεων Clazy"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathBox)
 #: config/globalconfigpage.ui:29
-#, fuzzy, kde-format
-#| msgid "Paths"
+#, kde-format
 msgctxt "@title:group"
 msgid "Paths"
 msgstr "Διαδρομές"
 
 #. i18n: ectx: property (text), widget (QLabel, executableLabel)
 #: config/globalconfigpage.ui:35
-#, fuzzy, kde-format
-#| msgid "clazy-standalone:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "clazy-standalone:"
 msgstr "clazy-standalone:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_executablePath)
 #: config/globalconfigpage.ui:42
-#, fuzzy, kde-format
-#| msgid "Path to clazy-standalone executable."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Path to clazy-standalone executable."
 msgstr "Διαδρομή στο εκτελέσιμο clazy-standalone."
 
 #. i18n: ectx: property (text), widget (QLabel, docsLabel)
 #: config/globalconfigpage.ui:52
-#, fuzzy, kde-format
-#| msgid "Documentation:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Documentation:"
 msgstr "Τεκμηρίωση:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_docsPath)
 #: config/globalconfigpage.ui:59
-#, fuzzy, kde-format
-#| msgid "Path to clazy documentation directory."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Path to clazy documentation directory."
 msgstr "Διαδρομή στον κατάλογο τεκμηρίωσης clazy."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
 #: config/globalconfigpage.ui:85
-#, fuzzy, kde-format
-#| msgid "Run analysis jobs in parallel"
+#, kde-format
 msgctxt "@option:check"
 msgid "Run analysis jobs in parallel"
 msgstr "Παράλληλη εκτέλεση ανάλυσης εργασιών"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
 #: config/globalconfigpage.ui:94
-#, fuzzy, kde-format
-#| msgid "Use all CPU cores"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use all CPU cores"
 msgstr "Χρήση όλων των CPU πυρήνων"
 
 #. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
 #: config/globalconfigpage.ui:114
-#, fuzzy, kde-format
-#| msgid "Maximum number of threads:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
 msgstr "Μέγιστο πλήθος νημάτων:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: config/globalconfigpage.ui:133
-#, fuzzy, kde-format
-#| msgid "Output"
+#, kde-format
 msgctxt "@title:group"
 msgid "Output"
 msgstr "Έξοδος"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
 #: config/globalconfigpage.ui:139
-#, fuzzy, kde-format
-#| msgid "Hide output view during check"
+#, kde-format
 msgctxt "@option:check"
 msgid "Hide output view during check"
 msgstr "Απόκρυψη προβολής εξόδου στον έλεγχο"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_verboseOutput)
 #: config/globalconfigpage.ui:146
-#, fuzzy, kde-format
-#| msgid "Verbose output"
+#, kde-format
 msgctxt "@option:check"
 msgid "Verbose output"
 msgstr "Αναλυτική έξοδος"
 
 #. i18n: ectx: attribute (title), widget (QWidget, checksTab)
 #: config/projectconfigpage.ui:39
-#, fuzzy, kde-format
-#| msgid "Checks"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
 msgstr "Έλεγχοι"
 
 #. i18n: ectx: attribute (title), widget (QWidget, optionsTab)
 #: config/projectconfigpage.ui:66
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Options"
 msgstr "Επιλογές"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_onlyQt)
 #: config/projectconfigpage.ui:78
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do not emit warnings for non-Qt files, or in other words, if -"
-#| "DQT_CORE_LIB is missing."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB "
@@ -371,33 +339,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_onlyQt)
 #: config/projectconfigpage.ui:81
-#, fuzzy, kde-format
-#| msgid "Only Qt"
+#, kde-format
 msgctxt "@option:check"
 msgid "Only Qt"
 msgstr "Μόνο Qt"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qt4Compat)
 #: config/projectconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgid "Disable checks not compatible with Qt 4."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Disable checks not compatible with Qt 4."
-msgstr "Να απενεργοποιηθύν οι έλεγχοι που δεν είναι συμβατοί με το Qt 4."
+msgstr "Απενεργοποίηση ελέγχων που δεν είναι συμβατοί με το Qt 4."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_qt4Compat)
 #: config/projectconfigpage.ui:91
-#, fuzzy, kde-format
-#| msgid "Qt4 compatible"
+#, kde-format
 msgctxt "@option:check"
 msgid "Qt4 compatible"
 msgstr "Qt4 συμβατό"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qtDeveloper)
 #: config/projectconfigpage.ui:98
-#, fuzzy, kde-format
-#| msgid ""
-#| "For running clazy on Qt itself, optional, but honours specific guidelines."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "For running clazy on Qt itself, optional, but honors specific guidelines."
@@ -407,45 +370,35 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
 #: config/projectconfigpage.ui:101
-#, fuzzy, kde-format
-#| msgid "Qt developer"
+#, kde-format
 msgctxt "@option:check"
 msgid "Qt developer"
 msgstr "Qt προγραμματιστής"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_visitImplicitCode)
 #: config/projectconfigpage.ui:109
-#, fuzzy, kde-format
-#| msgid ""
-#| "For visiting implicit code like compiler generated constructors.\n"
-#| "None of the built-in checks benefit from this, but can be useful for "
-#| "custom checks."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "For visiting implicit code like compiler generated constructors.\n"
 "None of the built-in checks benefit from this, but can be useful for custom "
 "checks."
 msgstr ""
-"Για άνοιγμα εσωτερικευμένου κώδικα όπως constructors παραγόμενους από το "
+"Για επίσκεψη εσωτερικού κώδικα όπως constructors παραγόμενους από το "
 "μεταγλωττιστή.\n"
 "Κανένας ενσωματωμένος έλεγχος δεν επωφελείται από αυτό, αλλά μπορεί να "
 "χρησιμεύσει για προσαρμοσμένους ελέγχους."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_visitImplicitCode)
 #: config/projectconfigpage.ui:112
-#, fuzzy, kde-format
-#| msgid "Visit implicit code"
+#, kde-format
 msgctxt "@option:check"
 msgid "Visit implicit code"
-msgstr "iΆνοιγμα εσωτερικευμένου κώδικα"
+msgstr "Άνοιγμα εσωτερικού κώδικα"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ignoreIncludedFiles)
 #: config/projectconfigpage.ui:129
-#, fuzzy, kde-format
-#| msgid ""
-#| "Only emit warnings for the current file being compiled and ignore any "
-#| "includes.\n"
-#| "Useful for performance reasons."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Only emit warnings for the current file being compiled and ignore any "
@@ -453,60 +406,52 @@ msgid ""
 "Useful for performance reasons."
 msgstr ""
 "Να αποστέλλονται προειδοποιήσεις μόνο για το τρέχον αρχείο που "
-"μεταγλωττίζεται και να αγνοούνται τα includes.\n"
-"Χρήσιμο για λόγους απόδοσης.."
+"μεταγλωττίζεται και να αγνοούνται οποιουδήποτε άλλα συμπεριλαμβάνονται "
+"(includes).\n"
+"Χρήσιμο για λόγους απόδοσης."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ignoreIncludedFiles)
 #: config/projectconfigpage.ui:132
-#, fuzzy, kde-format
-#| msgid "Ignore included files"
+#, kde-format
 msgctxt "@option:check"
 msgid "Ignore included files"
-msgstr "Αγνόηση include αρχείων"
+msgstr "Αγνόηση συμπεριλαμβανόμενων (includes) αρχείων"
 
 #. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
 #: config/projectconfigpage.ui:141
-#, fuzzy, kde-format
-#| msgid "Header filter:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Header filter:"
 msgstr "Φίλτρο κεφαλίδας:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
 #: config/projectconfigpage.ui:149
-#, fuzzy, kde-format
-#| msgid ""
-#| "Regular expression matching the names of the headers to output "
-#| "diagnostics from.\n"
-#| "Diagnostics from the main file of each translation unit are always "
-#| "displayed."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Regular expression matching the names of the headers to output diagnostics "
 "from.\n"
 "Diagnostics from the main file of each translation unit are always displayed."
 msgstr ""
-"Κανονικές εκφράσεις που ταιριάζουν τα ονόματα των headers με τα διαγνωστικά "
-"εξόδου.\n"
+"Κανονικές εκφράσεις που ταιριάζουν τα ονόματα των κεφαλίδων με τα "
+"διαγνωστικά εξόδου.\n"
 "Πάντα εμφανίζονται τα διαγνωστικά από το κύριο αρχείο κάθε μεταφραστικής "
 "μονάδας."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
 #: config/projectconfigpage.ui:172
-#, fuzzy, kde-format
-#| msgid "Enable all fixits"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable all fix-its"
 msgstr "Ενεργοποίηση όλων των διορθώσεων"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:179
-#, fuzzy, kde-format
-#| msgid "Fixits will be applied to a separate file (for unit-test use only)."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Fix-its will be applied to a separate file (for unit-test use only)."
 msgstr ""
-"Οι διορθώσεις θα εφαρμόζονται σε ξεχωριστό αρχείο (για unit tests μόνο)."
+"Οι διορθώσεις θα εφαρμόζονται σε ξεχωριστό αρχείο (μόνο για unit-test)."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:182
@@ -518,12 +463,7 @@ msgstr "Χωρίς εμβόλιμες διορθώσεις"
 
 #. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
 #: config/projectconfigpage.ui:192
-#, fuzzy, kde-format
-#| msgid ""
-#| "Please backup your code before fixits applying. For better results also "
-#| "disable \n"
-#| "parallel checking, which can lead to multiple fixit applying for header "
-#| "files."
+#, kde-format
 msgid ""
 "Please backup your code before fix-its applying. For better results also "
 "disable \n"
@@ -533,28 +473,25 @@ msgstr ""
 "Κρατήστε εφεδρικό αντίγραφο του κώδικά σας πριν την εφαρμογή των διορθώσεων. "
 "Για καλύτερα \n"
 "αποτελέσματα απενεργοποιήστε τους παράλληλους ελέγχους, που μπορεί να "
-"οδηγούν σε πολλαπλές διορθώσεις για header αρχεία."
+"οδηγούν σε πολλαπλές διορθώσεις για αρχεία κεφαλίδες."
 
 #. i18n: ectx: attribute (title), widget (QWidget, extraTab)
 #: config/projectconfigpage.ui:209
-#, fuzzy, kde-format
-#| msgid "Extra Parameters"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Extra Parameters"
 msgstr "Επιπλέον παράμετροι"
 
 #. i18n: ectx: property (text), widget (QLabel, extraAppendLabel)
 #: config/projectconfigpage.ui:215
-#, fuzzy, kde-format
-#| msgid "Compiler append:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler append:"
 msgstr "Προσθήκη στο μεταγλωττιστή:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
 #: config/projectconfigpage.ui:222
-#, fuzzy, kde-format
-#| msgid "Additional parameters to append to the compiler command line."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to append to the compiler command line."
 msgstr ""
@@ -562,16 +499,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, extraPrependLabel)
 #: config/projectconfigpage.ui:232
-#, fuzzy, kde-format
-#| msgid "Compiler prepend:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler prepend:"
 msgstr "Προθεματική εισαγωγή στο μεταγλωττιστή:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
 #: config/projectconfigpage.ui:239
-#, fuzzy, kde-format
-#| msgid "Additional parameters to prepend to the compiler command line."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to prepend to the compiler command line."
 msgstr ""
@@ -580,16 +515,14 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraClazy)
 #: config/projectconfigpage.ui:249
-#, fuzzy, kde-format
-#| msgid "Additional parameters to clazy-standalone."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to clazy-standalone."
 msgstr "Πρόσθετες παράμετροι στο clazy-standalone."
 
 #. i18n: ectx: property (text), widget (QLabel, extraClazyLabel)
 #: config/projectconfigpage.ui:259
-#, fuzzy, kde-format
-#| msgid "Extra parameters:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Extra parameters:"
 msgstr "Επιπλέον παράμετροι:"
@@ -630,8 +563,7 @@ msgid "Read from Clazy analysis process failed."
 msgstr "Αποτυχία ανάγνωσης από τη διεργασία Clazy ανάλυσης."
 
 #: job.cpp:229
-#, fuzzy, kde-format
-#| msgid "Clazy Error"
+#, kde-format
 msgctxt "@title:window"
 msgid "Clazy Error"
 msgstr "Σφάλμα Clazy"

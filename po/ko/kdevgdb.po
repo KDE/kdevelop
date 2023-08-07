@@ -1,17 +1,17 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020, 2021, 2022.
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-26 02:29+0000\n"
-"PO-Revision-Date: 2022-07-13 13:06+0200\n"
+"PO-Revision-Date: 2023-08-06 20:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
@@ -110,7 +110,7 @@ msgstr ""
 #: debugsession.cpp:272
 #, kde-format
 msgid "<unknown version>"
-msgstr ""
+msgstr "<알 수 없는 버전>"
 
 #: debugsession.cpp:296
 #, kde-format
