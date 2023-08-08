@@ -7,6 +7,7 @@
         <comment xml:lang="ca@valencia">Codi font en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="cs">Zdrojový kód NVIDIA CUDA C</comment>
         <comment xml:lang="de">NVIDIA CUDA C Quelltext</comment>
+        <comment xml:lang="el">NVIDIA CUDA C πηγαίος κώδικας</comment>
         <comment xml:lang="en_GB">NVIDIA CUDA C source code</comment>
         <comment xml:lang="eo">NVIDIA CUDA C-fontkodo</comment>
         <comment xml:lang="es">Código fuente de NVIDIA CUDA C</comment>
@@ -39,6 +40,7 @@
         <comment xml:lang="ca@valencia">Capçalera en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="cs">Hlavičkový soubor NVIDIA CUDA C</comment>
         <comment xml:lang="de">NVIDIA CUDA C Header</comment>
+        <comment xml:lang="el">NVIDIA CUDA C κεφαλίδα</comment>
         <comment xml:lang="en_GB">NVIDIA CUDA C header</comment>
         <comment xml:lang="eo">NVIDIA CUDA C-kapdosiero</comment>
         <comment xml:lang="es">Cabecera de NVIDIA CUDA C</comment>
