@@ -38,6 +38,7 @@
 #include <interfaces/iuicontroller.h>
 #include <util/path.h>
 #include <util/scopeddialog.h>
+#include <util/shellutils.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>
 #include <vcs/widgets/vcsannotationitemdelegate.h>
@@ -350,6 +351,7 @@ void VcsPluginHelper::history(const VcsRevision& rev)
     dlg->setAttribute(Qt::WA_DeleteOnClose);
     dlg->setWindowTitle(i18nc("@title:window %1: path or URL, %2: name of a version control system",
                           "%2 History (%1)", url.toDisplayString(QUrl::PreferLocalFile), iface->name()));
+    KDevelop::restoreAndAutoSaveGeometry(*dlg, QStringLiteral("VCS"), QStringLiteral("HistoryDialog"));
 
     auto *mainLayout = new QVBoxLayout(dlg);
 

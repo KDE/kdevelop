@@ -12,6 +12,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
+#include <util/shellutils.h>
 #include <vcs/dvcs/dvcsjob.h>
 
 #include <QDialogButtonBox>
@@ -32,6 +33,8 @@ StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, Q
 
     m_ui = new Ui::StashManager;
     m_ui->setupUi(this);
+
+    KDevelop::restoreAndAutoSaveGeometry(*this, QStringLiteral("VCS"), QStringLiteral("StashManagerDialog"));
 
     auto* m = new StashModel(stashed, plugin, this);
     m_ui->stashView->setModel(m);

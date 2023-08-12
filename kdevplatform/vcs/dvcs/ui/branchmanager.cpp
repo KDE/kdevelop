@@ -13,6 +13,7 @@
 #include <KLocalizedString>
 
 #include "../dvcsplugin.h"
+#include <util/shellutils.h>
 #include <vcs/vcsjob.h>
 #include <vcs/models/brancheslistmodel.h>
 #include "ui_branchmanager.h"
@@ -38,6 +39,8 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     , m_dvcPlugin(executor)
 {
     setWindowTitle(i18nc("@title:window", "Branch Manager"));
+
+    KDevelop::restoreAndAutoSaveGeometry(*this, QStringLiteral("VCS"), QStringLiteral("BranchManager"));
 
     auto* mainWidget = new QWidget(this);
     auto *mainLayout = new QVBoxLayout(this);
