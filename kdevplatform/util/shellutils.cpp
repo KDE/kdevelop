@@ -5,6 +5,8 @@
 */
 
 #include "shellutils.h"
+
+#include <QDialog>
 #include <QGuiApplication>
 #include <QTextStream>
 #include <QUrl>
@@ -17,6 +19,8 @@
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
 #include <KParts/MainWindow>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 namespace KDevelop {
 bool askUser(const QString& mainText,
@@ -103,4 +107,29 @@ bool ensureWritable(const QList<QUrl>& urls)
     return true;
 }
 
+bool restoreAndAutoSaveGeometry(QDialog& dialog, const QString& configGroupName, const QString& configSubgroupName)
+{
+    static const QString entryName = QStringLiteral("windowGeometry");
+
+    // Capture strings by value, because this lambda itself is captured by another lambda
+    // connected to a signal, which is likely to be emitted after the strings are destroyed.
+    const auto useGroup = [configGroupName, configSubgroupName](auto groupUser) {
+        KConfigGroup group(KSharedConfig::openConfig(), configGroupName);
+        if (configSubgroupName.isEmpty()) {
+            return groupUser(group);
+        }
+        KConfigGroup subgroup(&group, configSubgroupName);
+        return groupUser(subgroup);
+    };
+
+    QObject::connect(&dialog, &QDialog::finished, [&dialog, useGroup] {
+        useGroup([&dialog](KConfigGroup& group) {
+            group.writeEntry(entryName, dialog.saveGeometry());
+        });
+    });
+
+    return useGroup([&dialog](const KConfigGroup& group) {
+        return dialog.restoreGeometry(group.readEntry(entryName, QByteArray{}));
+    });
+}
 }

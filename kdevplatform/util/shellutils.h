@@ -10,6 +10,7 @@
 #include "utilexport.h"
 #include <QList>
 
+class QDialog;
 class QString;
 class QUrl;
 
@@ -35,6 +36,16 @@ bool KDEVPLATFORMUTIL_EXPORT askUser(const QString& mainText,
  * */
 bool KDEVPLATFORMUTIL_EXPORT ensureWritable(const QList<QUrl>& urls);
 
+/**
+ * Restores window geometry of @p dialog from the global @c KConfigGroup [@p configGroupName][@p configSubgroupName]
+ * and connects saving of the dialog's geometry in the same config group to the dialog's @c QDialog::finished signal.
+ *
+ * @param configSubgroupName the name of a config subgroup to save and restore @p dialog's window geometry entry in.
+ *                           If empty, the entry is saved in and restored from the @p configGroupName group directly.
+ * @return @c true if @p dialog's window geometry was successfully restored; @c false otherwise.
+ */
+bool KDEVPLATFORMUTIL_EXPORT restoreAndAutoSaveGeometry(QDialog& dialog, const QString& configGroupName,
+                                                        const QString& configSubgroupName = QString{});
 }
 
 #endif // SHELLUTILS_H
