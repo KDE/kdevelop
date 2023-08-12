@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdev-clang-tidy package.
-# Tommi Nieminen <translator@legisign.org>, 2018.
+# Tommi Nieminen <translator@legisign.org>, 2018, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdev-clang-tidy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2018-09-27 15:55+0200\n"
+"PO-Revision-Date: 2023-07-27 15:12+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: analyzer.cpp:29
 #, kde-format
@@ -23,15 +23,13 @@ msgid "Clang-Tidy"
 msgstr "Clang-Tidy"
 
 #: config/checklistfilterproxysearchline.cpp:23
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Etsi"
+msgstr "Etsi…"
 
 #: config/checklistmodel.cpp:65
-#, fuzzy, kde-format
-#| msgid "All checks"
+#, kde-format
 msgctxt "@item"
 msgid "All checks"
 msgstr "Kaikki tarkistukset"
@@ -46,7 +44,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr ""
+msgstr "Nimi:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/checksetmanagewidget.ui:31
@@ -85,7 +83,7 @@ msgstr "Kaikki tarkistukset"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr ""
+msgstr "Aseta oletukseksi"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
 #: config/checksetmanagewidget.ui:88
@@ -98,30 +96,28 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Custom"
-msgstr ""
+msgstr "Mukautettu"
 
 #: config/checksetselectioncombobox.cpp:30
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default (currently: %1)"
-msgstr ""
+msgstr "Käytä oletusta (nyt: %1)"
 
 #: config/checksetselectionlistmodel.cpp:64
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (default selection)"
-msgstr ""
+msgstr "%1 (oletusvalinta)"
 
 #: config/clangtidypreferences.cpp:62 config/clangtidyprojectconfigpage.cpp:55
-#, fuzzy, kde-format
-#| msgid "Clang-Tidy"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Clang-Tidy"
 msgstr "Clang-Tidy"
 
 #: config/clangtidypreferences.cpp:67
-#, fuzzy, kde-format
-#| msgid "Configure Clang-Tidy Settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clang-Tidy Settings"
 msgstr "Clang-Tidyn asetukset"
@@ -136,80 +132,70 @@ msgstr "Sijainnit"
 
 #. i18n: ectx: property (text), widget (QLabel, clangtidyLabel)
 #: config/clangtidypreferences.ui:37
-#, fuzzy, kde-format
-#| msgid "Clang-&tidy executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Clang-&Tidy executable:"
-msgstr "&Clang-tidy-ohjelmatiedosto:"
+msgstr "&Clang-Tidy-ohjelmatiedosto:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_clangtidyPath)
 #: config/clangtidypreferences.ui:54
-#, fuzzy, kde-format
-#| msgid "The full path to the clang-tidy executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "The full path to the Clang-Tidy executable"
-msgstr "Clang-tidy-ohjelmatiedoston koko polku:"
+msgstr "Clang-Tidy-ohjelmatiedoston täysi sijainti:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
 #: config/clangtidypreferences.ui:72
-#, fuzzy, kde-format
-#| msgid "Run analysis jobs in parallel"
+#, kde-format
 msgctxt "@option:check"
 msgid "Run analysis jobs in parallel"
-msgstr "Suorita analyysityöt rinnakkain"
+msgstr "Suorita analyysityöt rinnan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
 #: config/clangtidypreferences.ui:81
-#, fuzzy, kde-format
-#| msgid "Use all CPU cores"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use all CPU cores"
-msgstr "Käytä kaikkia keskusyksikköjä"
+msgstr "Käytä kaikkia suoritinytimiä"
 
 #. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
 #: config/clangtidypreferences.ui:101
-#, fuzzy, kde-format
-#| msgid "Maximum number of threads:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
-msgstr "Säikeiden enimmäismäärä:"
+msgstr "Säikeitä enintään:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useConfigFile)
 #: config/clangtidyprojectconfigpage.ui:29
-#, fuzzy, kde-format
-#| msgid "&Use .clang-tidy file(s)"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Use .clang-tidy file(s)"
-msgstr "Käytä .&clang-tidy-tiedostoja"
+msgstr "Käytä .&clang-tidy-tiedosto(j)a"
 
 #. i18n: ectx: attribute (title), widget (QWidget, checksTab)
 #: config/clangtidyprojectconfigpage.ui:43
-#, fuzzy, kde-format
-#| msgid "Checks"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
 msgstr "Tarkistukset"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: config/clangtidyprojectconfigpage.ui:73
-#, fuzzy, kde-format
-#| msgid "Includes"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Includes"
-msgstr "Includes"
+msgstr "Sisällytykset"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: config/clangtidyprojectconfigpage.ui:79
-#, fuzzy, kde-format
-#| msgid "&Check system headers:"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Check system headers:"
 msgstr "Tarkista &järjestelmäotsakkeet:"
 
 #. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
 #: config/clangtidyprojectconfigpage.ui:92
-#, fuzzy, kde-format
-#| msgid "Header fi&lter:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Header fi&lter:"
 msgstr "&Otsakesuodatin:"
@@ -226,31 +212,24 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: config/clangtidyprojectconfigpage.ui:119
-#, fuzzy, kde-format
-#| msgid "Extra Parameters"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Extra Parameters"
 msgstr "Lisäparametrit"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: config/clangtidyprojectconfigpage.ui:125
-#, fuzzy, kde-format
-#| msgid "E&xtra parameters:"
+#, kde-format
 msgctxt "@label.textbox"
 msgid "E&xtra parameters:"
-msgstr "L&isäparametrit:"
+msgstr "&Lisäparametrit:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_additionalParameters)
 #: config/clangtidyprojectconfigpage.ui:135
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Additional command line options to pass to clang-"
-#| "tidy.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional command line options to pass to Clang-Tidy."
-msgstr ""
-"<html><head/><body><p>Clang-Tidylle välitettävät lisäkomentoriviparametrit.</"
-"p></body></html>"
+msgstr "Clang-Tidylle välitettävä lisäkomentorivivalitsimet."
 
 #: job.cpp:68
 #, kde-format
@@ -263,26 +242,22 @@ msgid "Failed to start Clang-Tidy process."
 msgstr "Clang-Tidy-prosessin käynnistys epäonnistui."
 
 #: job.cpp:147
-#, fuzzy, kde-format
-#| msgid "Clang-tidy crashed."
+#, kde-format
 msgid "Clang-Tidy crashed."
 msgstr "Clang-Tidy kaatui."
 
 #: job.cpp:151
-#, fuzzy, kde-format
-#| msgid "Clang-tidy process timed out."
+#, kde-format
 msgid "Clang-Tidy process timed out."
 msgstr "Clang-Tidy-prosessin aikakatkaisu."
 
 #: job.cpp:155
-#, fuzzy, kde-format
-#| msgid "Write to Clang-tidy process failed."
+#, kde-format
 msgid "Write to Clang-Tidy process failed."
 msgstr "Kirjoitus Clang-Tidy-prosessiin epäonnistui."
 
 #: job.cpp:159
-#, fuzzy, kde-format
-#| msgid "Read from Clang-tidy process failed."
+#, kde-format
 msgid "Read from Clang-Tidy process failed."
 msgstr "Luku Clang-Tidy-prosessista epäonnistui."
 
