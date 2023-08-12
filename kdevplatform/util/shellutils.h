@@ -9,9 +9,10 @@
 
 #include "utilexport.h"
 #include <QList>
+#include <QString>
 
-class QString;
 class QUrl;
+class QWidget;
 
 namespace KDevelop {
 
@@ -35,6 +36,19 @@ bool KDEVPLATFORMUTIL_EXPORT askUser(const QString& mainText,
  * */
 bool KDEVPLATFORMUTIL_EXPORT ensureWritable(const QList<QUrl>& urls);
 
+/**
+ * Sets up automatic saving of @p widget's window geometry in the specified application config group
+ * and attempts to restore @p widget's window geometry from the same config group.
+ *
+ * @param widget a top-level widget (in other words, a window).
+ * @param configGroupName the name of a config group.
+ * @param configSubgroupName the name of a config subgroup of the @p configGroupName group
+ *        where @p widget's window geometry entry is to be restored from and saved in.
+ *        If empty, the entry is saved in and restored from the @p configGroupName group directly.
+ * @return @c true if @p widget's window geometry was successfully restored; @c false otherwise.
+ */
+bool KDEVPLATFORMUTIL_EXPORT restoreAndAutoSaveGeometry(QWidget& widget, const QString& configGroupName,
+                                                        const QString& configSubgroupName = QString{});
 }
 
 #endif // SHELLUTILS_H

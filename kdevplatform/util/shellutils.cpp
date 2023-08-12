@@ -9,16 +9,92 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
 #include <KParts/MainWindow>
+#include <KSharedConfig>
 
+#include <QEvent>
 #include <QFile>
 #include <QGuiApplication>
 #include <QList>
 #include <QTextStream>
 #include <QUrl>
+#include <QWidget>
+
+namespace {
+
+class WidgetGeometrySaver : public QObject
+{
+    Q_OBJECT
+public:
+    explicit WidgetGeometrySaver(QWidget& widget, const QString& configGroupName, const QString& configSubgroupName)
+        : QObject(&widget)
+        , m_configGroupName{configGroupName}
+        , m_configSubgroupName{configSubgroupName}
+    {
+        widget.installEventFilter(this);
+    }
+
+    bool restoreWidgetGeometry() const
+    {
+        return widget().restoreGeometry(configGroup().readEntry(entryName(), QByteArray{}));
+    }
+
+    bool eventFilter(QObject* watched, QEvent* event) override
+    {
+        // Saving geometry on a nonspontaneous hide event is the only choice that is both reliable and safe:
+        // * the close event is received only when a dialog is dismissed via
+        //   its standard window close button and not when it is accepted or rejected;
+        // * the QDialog::finished() signal is unavailable for non-dialog widgets (less general) and is not emitted
+        //   if the dialog is explicitly hidden or destroyed while visible rather than finished normally;
+        // * Qt documentation does not directly promise to emit the QObject::destroyed() signal from ~QWidget()
+        //   as opposed to the too-late ~QObject(). Also Qt developers do not guarantee that the state
+        //   of the widget being destroyed can be safely accessed in a slot connected to this signal.
+        //   Some parts of the widget, e.g. its layout, are destroyed before the destroyed() signal is emitted.
+        // A downside of handling the hide event is that when a widget is hidden, then shown again, its geometry
+        // is saved multiple times redundantly. Fortunately, a dialog is unlikely to be shown again
+        // after being hidden. If the redundant saving becomes a bottleneck for some widget, the visibility
+        // of which changes often, a custom saving of geometry can be implemented in that widget's destructor.
+        // See also the discussion of when to save geometry at https://codereview.qt-project.org/c/qt/qtbase/+/498797
+        if (event->type() == QEvent::Hide && !event->spontaneous()) {
+            const auto& widget = this->widget();
+            Q_ASSERT(watched == &widget);
+            configGroup().writeEntry(entryName(), widget.saveGeometry());
+        }
+        return false; // do not filter any events out
+    }
+
+private:
+    static QString entryName()
+    {
+        return QStringLiteral("windowGeometry");
+    }
+
+    QWidget& widget() const
+    {
+        Q_ASSERT(parent());
+        Q_ASSERT(parent()->isWidgetType());
+        return *static_cast<QWidget*>(parent());
+    }
+
+    KConfigGroup configGroup() const
+    {
+        KConfigGroup group(KSharedConfig::openConfig(), m_configGroupName);
+        if (m_configSubgroupName.isEmpty()) {
+            return group;
+        }
+        KConfigGroup subgroup(&group, m_configSubgroupName);
+        return subgroup;
+    }
+
+    const QString m_configGroupName;
+    const QString m_configSubgroupName;
+};
+
+} // unnamed namespace
 
 namespace KDevelop {
 bool askUser(const QString& mainText,
@@ -105,4 +181,11 @@ bool ensureWritable(const QList<QUrl>& urls)
     return true;
 }
 
+bool restoreAndAutoSaveGeometry(QWidget& widget, const QString& configGroupName, const QString& configSubgroupName)
+{
+    const auto* const saver = new WidgetGeometrySaver(widget, configGroupName, configSubgroupName);
+    return saver->restoreWidgetGeometry();
 }
+}
+
+#include "shellutils.moc"

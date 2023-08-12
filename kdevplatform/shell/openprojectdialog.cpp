@@ -23,6 +23,7 @@
 #include "projectsourcepage.h"
 #include <debug.h>
 #include <interfaces/iprojectcontroller.h>
+#include <util/shellutils.h>
 
 #include <QFileDialog>
 #include <QFileInfo>
@@ -62,6 +63,11 @@ URLInfo urlInfo(const QUrl& url)
     }
     return ret;
 }
+
+QString configGroupName()
+{
+    return QStringLiteral("OpenProjectDialog");
+}
 }
 
 namespace KDevelop
@@ -76,7 +82,9 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
     , openPage(nullptr)
     , projectInfoPage(nullptr)
 {
-    resize(QSize(700, 500));
+    if (!KDevelop::restoreAndAutoSaveGeometry(*this, configGroupName(), QStringLiteral("KDE"))) {
+        resize(QSize(700, 500));
+    }
 
     // KAssistantDialog creates a help button by default, no option to prevent that
     auto helpButton = button(QDialogButtonBox::Help);
@@ -146,6 +154,7 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
         }
     } else {
         nativeDialog.assign(parent, i18nc("@title:window", "Open Project"));
+        KDevelop::restoreAndAutoSaveGeometry(*nativeDialog, configGroupName(), QStringLiteral("Native"));
         nativeDialog->setDirectoryUrl(start);
         nativeDialog->setFileMode(QFileDialog::Directory);
     }
