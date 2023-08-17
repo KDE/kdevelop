@@ -48,6 +48,7 @@
 #include "../clangsettings/clangsettingsmanager.h"
 
 #include <algorithm>
+#include <cstring>
 #include <functional>
 #include <memory>
 
@@ -499,6 +500,49 @@ bool isInsideComment(CXTranslationUnit unit, CXFile file, const KTextEditor::Cur
         }
     }
     return false;
+}
+
+/**
+ * @return whether @p result is a builtin provided by KDevelop's automatically included GCC
+ *         compatibility header, which libclang does not recognize as a builtin.
+ */
+bool isGccCompatibilityBuiltin(CXCompletionResult result)
+{
+    // The "#pragma clang system_header" line in plugins/clang/duchain/gccCompatibility/additional_floating_types.h
+    // suppresses __KDevelopClangGccCompat Namespace and __float80 TypedefDecl completions, but not _FloatX TypedefDecl
+    // completions. That's because clang_codeCompleteAt() filters out identifiers declared in a system header that start
+    // with two underscores, but not an underscore followed by a capital letter, possibly due to a libclang bug.
+    // The included typedefs substitute for separate floating-point types provided by GCC. Thus they are similar to
+    // other builtin completions, such as int and double. For this reason, they are marked as builtins rather than
+    // simply removed. The missing __float80 builtin completion shouldn't be a problem in practice, so we keep the
+    // "#pragma clang system_header" line to make this function slightly simpler and more efficient.
+
+    if (result.CursorKind != CXCursor_TypedefDecl || clang_getNumCompletionChunks(result.CompletionString) != 1
+        || clang_getCompletionChunkKind(result.CompletionString, 0) != CXCompletionChunk_TypedText) {
+        return false;
+    }
+
+    const ClangString clangString{clang_getCompletionChunkText(result.CompletionString, 0)};
+    const auto text = clangString.c_str();
+    const auto textSize = std::strlen(text);
+
+    if (textSize != 8 && textSize != 9) {
+        return false;
+    }
+
+    constexpr auto prefixSize = 6;
+    if (!std::equal(text, text + prefixSize, "_Float")) {
+        return false;
+    }
+    const auto suffixEquals = [text, textSize](const char* suffix) {
+        Q_ASSERT(std::strlen(suffix) == textSize - prefixSize);
+        return std::equal(text + prefixSize, text + textSize, suffix);
+    };
+    if (textSize == 8) {
+        return suffixEquals("32") || suffixEquals("64");
+    } else {
+        return suffixEquals("32x") || suffixEquals("64x") || suffixEquals("128");
+    }
 }
 
 QString& elideStringRight(QString& str, int length)
@@ -1091,7 +1135,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             continue;
         }
 
-        const bool isBuiltin = (result.CursorKind == CXCursor_NotImplemented);
+        const bool isBuiltin = result.CursorKind == CXCursor_NotImplemented || isGccCompatibilityBuiltin(result);
         if (isBuiltin && m_filters & NoBuiltins) {
             continue;
         }
@@ -1324,7 +1368,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             continue;
         }
 
-        if (result.CursorKind == CXCursor_MacroDefinition) {
+        if (isMacroDefinition) {
             // TODO: grouping of macros and built-in stuff
             const auto text = QString(typed + arguments);
             auto instance = new SimpleItem(text, resultType, replacement, noIcon);
@@ -1333,10 +1377,12 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 instance->markAsUnimportant();
             }
             macros.append(item);
-        } else if (result.CursorKind == CXCursor_NotImplemented) {
+        } else if (isBuiltin) {
             auto instance = new SimpleItem(typed, resultType, replacement, noIcon);
             auto item = CompletionTreeItemPointer(instance);
             builtin.append(item);
+        } else {
+            Q_UNREACHABLE();
         }
     }
 

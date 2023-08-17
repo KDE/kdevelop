@@ -214,6 +214,12 @@ QVector<CXUnsavedFile> toClangApi(const QVector<UnsavedFile>& unsavedFiles)
     return unsaved;
 }
 
+bool notClangAndGccVersionAtLeast(const QMap<QString, QString>& defines, int minGccMajorVersion)
+{
+    return !defines.contains(QStringLiteral("__clang__"))
+        && defines.value(QStringLiteral("__GNUC__")).toInt() >= minGccMajorVersion;
+}
+
 bool hasQtIncludes(const Path::List& includePaths)
 {
     return std::find_if(includePaths.begin(), includePaths.end(), [] (const Path& path) {
@@ -274,6 +280,17 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         QByteArray pchFile = pchInclude.toLocalFile().toUtf8();
         smartArgs << pchFile;
         clangArguments << pchFile.constData();
+    }
+
+    if (notClangAndGccVersionAtLeast(environment.defines(), 7)) {
+        const auto compatFile =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   QStringLiteral("kdevclangsupport/gccCompatibility/additional_floating_types.h"))
+                .toUtf8();
+        if (!compatFile.isEmpty()) {
+            smartArgs << compatFile;
+            clangArguments << "-include" << compatFile.constData();
+        }
     }
 
     if (hasQtIncludes(includes.system)) {
@@ -382,7 +399,7 @@ QByteArray ParseSessionData::writeDefinesFile(const QMap<QString, QString>& defi
             }
             definesStream << QLatin1String("#define ") << it.key() << ' ' << it.value() << '\n';
         }
-        if (!defines.contains(QStringLiteral("__clang__")) && defines.value(QStringLiteral("__GNUC__")).toInt() >= 11) {
+        if (notClangAndGccVersionAtLeast(defines, 11)) {
             /* fake GCC compatibility for __malloc__ attribute with arguments to silence warnings like this:
 
              /usr/include/stdlib.h:566:5: error: use of undeclared identifier '__builtin_free'; did you mean
