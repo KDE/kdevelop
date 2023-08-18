@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"POT-Creation-Date: 2023-08-18 00:43+0000\n"
 "PO-Revision-Date: 2012-02-02 07:37+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -20,76 +20,76 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: grepdialog.cpp:52
+#: grepdialog.cpp:54
 #, fuzzy, kde-format
 #| msgid "All Open Files"
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "All apen Dateien"
 
-#: grepdialog.cpp:53
+#: grepdialog.cpp:55
 #, fuzzy, kde-format
 #| msgid "All Open Projects"
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "All apen Projekten"
 
-#: grepdialog.cpp:185 grepdialog.cpp:525 grepviewplugin.cpp:91
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Söken un Utwesseln in Dateien"
 
-#: grepdialog.cpp:193
+#: grepdialog.cpp:267
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Söken..."
 
-#: grepdialog.cpp:260
+#: grepdialog.cpp:335
 #, fuzzy, kde-format
 #| msgid "Select in which directory you want to search."
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Söök den Orner ut, binnen den Du söken wullt."
 
-#: grepdialog.cpp:516
+#: grepdialog.cpp:608
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: grepdialog.cpp:532
+#: grepdialog.cpp:624
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr ""
 
-#: grepdialog.cpp:537
+#: grepdialog.cpp:629
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr ""
 
-#: grepjob.cpp:97
+#: grepjob.cpp:137
 #, kde-format
 msgid "Find in Files"
 msgstr "In Dateien söken"
 
-#: grepjob.cpp:113 grepjob.cpp:216
+#: grepjob.cpp:153 grepjob.cpp:256
 #, kde-format
 msgid "Search aborted"
 msgstr "Söök afbraken"
 
-#: grepjob.cpp:122
+#: grepjob.cpp:162
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Keen Dateien funnen, de op de Platzhollers passt"
 
-#: grepjob.cpp:140
+#: grepjob.cpp:180
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "Capture is the text which is \"captured\" with () in regular expressions "
@@ -101,29 +101,29 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "Mustertekenkeed mutt keen Goosfööt bargen"
 
-#: grepjob.cpp:161
+#: grepjob.cpp:201
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "Söök na <b>%2</b> in een Datei"
 msgstr[1] "Söök na <b>%2</b> in %1 Dateien"
 
-#: grepjob.cpp:182
+#: grepjob.cpp:222
 #, kde-format
 msgid "Collecting files..."
 msgstr "Dateien warrt tohoopstellt..."
 
-#: grepjob.cpp:260
+#: grepjob.cpp:300
 #, kde-format
 msgid "Failed: %1"
 msgstr ""
 
-#: grepjob.cpp:263
+#: grepjob.cpp:303
 #, kde-format
 msgid "No results found"
 msgstr "Nix funnen"
 
-#: grepjob.cpp:282
+#: grepjob.cpp:322
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"
@@ -277,21 +277,21 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "&Utwesseln"
 
-#: grepviewplugin.cpp:76
+#: grepviewplugin.cpp:78
 #, fuzzy, kde-format
 #| msgid "Find/replace in Fi&les..."
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Söken un Utwesseln in &Dateien..."
 
-#: grepviewplugin.cpp:79
+#: grepviewplugin.cpp:81
 #, fuzzy, kde-format
 #| msgid "Search for expressions over several files"
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Na Utdrück binnen mehr Dateien söken"
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:83
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Find/Replace in files</b><p>Opens the 'Find/Replace in files' dialog. "
@@ -311,14 +311,14 @@ msgstr ""
 "den in all Dateien binnen Dien angeven Ornern söcht warrt. Övereenstimmen "
 "warrt wiest, Du kannst dor direktemang hengahn un Utwesseln maken.</p>"
 
-#: grepviewplugin.cpp:129 grepviewplugin.cpp:152
+#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
 #, fuzzy, kde-format
 #| msgid "Find and replace in this folder"
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Söken un Utwesseln in dissen Orner"
 
-#: grepviewplugin.cpp:140
+#: grepviewplugin.cpp:142
 #, fuzzy, kde-format
 #| msgid "Find/replace in Fi&les..."
 msgctxt "@action:inmenu"

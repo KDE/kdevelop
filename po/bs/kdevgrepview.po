@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"POT-Creation-Date: 2023-08-18 00:43+0000\n"
 "PO-Revision-Date: 2014-02-10 00:17+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -20,42 +20,42 @@ msgstr ""
 "X-Generator: Launchpad (build 16820)\n"
 "X-Launchpad-Export-Date: 2013-10-30 05:47+0000\n"
 
-#: grepdialog.cpp:52
+#: grepdialog.cpp:54
 #, fuzzy, kde-format
 #| msgid "All Open Files"
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "Sve otvorene datoteke"
 
-#: grepdialog.cpp:53
+#: grepdialog.cpp:55
 #, fuzzy, kde-format
 #| msgid "All Open Projects"
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Svi otvoreni projekti"
 
-#: grepdialog.cpp:185 grepdialog.cpp:525 grepviewplugin.cpp:91
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Nađi/zamijeni u datotekama"
 
-#: grepdialog.cpp:193
+#: grepdialog.cpp:267
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Traži..."
 
-#: grepdialog.cpp:260
+#: grepdialog.cpp:335
 #, fuzzy, kde-format
 #| msgid "Select a directory to search in."
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Izaberi direktorij  za pretragu."
 
-#: grepdialog.cpp:516
+#: grepdialog.cpp:608
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
@@ -63,36 +63,36 @@ msgstr[0] "%2, i još %1 podatak"
 msgstr[1] "%2, i još %1 podatka"
 msgstr[2] "%2, i još %1 podataka"
 
-#: grepdialog.cpp:532
+#: grepdialog.cpp:624
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "Traži \"%1\" u %2 (u momentu %3)"
 
-#: grepdialog.cpp:537
+#: grepdialog.cpp:629
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Traži \"%1\" u %2 (u momentu %3)"
 
-#: grepjob.cpp:97
+#: grepjob.cpp:137
 #, kde-format
 msgid "Find in Files"
 msgstr "Pronađi u datotekama"
 
-#: grepjob.cpp:113 grepjob.cpp:216
+#: grepjob.cpp:153 grepjob.cpp:256
 #, kde-format
 msgid "Search aborted"
 msgstr "Traženje prekinuto"
 
-#: grepjob.cpp:122
+#: grepjob.cpp:162
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Nisu nađene datoteke koje se slažu s džoker-uzorkom"
 
-#: grepjob.cpp:140
+#: grepjob.cpp:180
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "Capture is the text which is \"captured\" with () in regular expressions "
@@ -104,7 +104,7 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "Kapture nisu dopuštene u džoker-uzorku"
 
-#: grepjob.cpp:161
+#: grepjob.cpp:201
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
@@ -112,22 +112,22 @@ msgstr[0] "Tražim <b>%2</b> u %1 datoteci"
 msgstr[1] "Tražim <b>%2</b> u %1 datoteka"
 msgstr[2] "Tražim <b>%2</b> u %1 datoteka"
 
-#: grepjob.cpp:182
+#: grepjob.cpp:222
 #, kde-format
 msgid "Collecting files..."
 msgstr "Skupljam datoteke..."
 
-#: grepjob.cpp:260
+#: grepjob.cpp:300
 #, kde-format
 msgid "Failed: %1"
 msgstr "Neuspjelo: %1"
 
-#: grepjob.cpp:263
+#: grepjob.cpp:303
 #, kde-format
 msgid "No results found"
 msgstr "Bez rezultata"
 
-#: grepjob.cpp:282
+#: grepjob.cpp:322
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"
@@ -282,21 +282,21 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "Zamijeni"
 
-#: grepviewplugin.cpp:76
+#: grepviewplugin.cpp:78
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Fi&les..."
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Nađi/Zamijeni u &datotekama..."
 
-#: grepviewplugin.cpp:79
+#: grepviewplugin.cpp:81
 #, fuzzy, kde-format
 #| msgid "Search for expressions over several files"
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Traži izraze u više datoteka"
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:83
 #, fuzzy, kde-format
 #| msgid ""
 #| "Opens the 'Find/Replace in files' dialog. There you can enter a regular "
@@ -315,14 +315,14 @@ msgstr ""
 "Preklapanja će biti prikazana, neposredno možete prebaciti na preklapanje. "
 "Također možete izvršiti izmjenu."
 
-#: grepviewplugin.cpp:129 grepviewplugin.cpp:152
+#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
 #, fuzzy, kde-format
 #| msgid "Find/Replace in This Folder"
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Pronađi/Zamjeni u ovom folderu"
 
-#: grepviewplugin.cpp:140
+#: grepviewplugin.cpp:142
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Fi&les..."
 msgctxt "@action:inmenu"

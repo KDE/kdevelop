@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"POT-Creation-Date: 2023-08-18 00:43+0000\n"
 "PO-Revision-Date: 2022-08-30 21:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -24,71 +24,71 @@ msgstr ""
 "X-POT-Import-Date: 2013-01-13 20:43:13+0000\n"
 "X-Generator: Lokalize 20.12.0\n"
 
-#: grepdialog.cpp:52
+#: grepdialog.cpp:54
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "Kaikki avoimet tiedostot"
 
-#: grepdialog.cpp:53
+#: grepdialog.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Kaikki avoimet projektit"
 
-#: grepdialog.cpp:185 grepdialog.cpp:525 grepviewplugin.cpp:91
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Etsi ja korvaa tiedostoista"
 
-#: grepdialog.cpp:193
+#: grepdialog.cpp:267
 #, kde-format
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Etsi…"
 
-#: grepdialog.cpp:260
+#: grepdialog.cpp:335
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Valitse kansio, josta etsiä"
 
-#: grepdialog.cpp:516
+#: grepdialog.cpp:608
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] "%2 ja %1 muu sijainti"
 msgstr[1] "%2 ja %1 muuta sijaintia"
 
-#: grepdialog.cpp:532
+#: grepdialog.cpp:624
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "Etsi ”%1” kohteesta %2"
 
-#: grepdialog.cpp:537
+#: grepdialog.cpp:629
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Etsi ”%1” kohteesta %2 (kello %3)"
 
-#: grepjob.cpp:97
+#: grepjob.cpp:137
 #, kde-format
 msgid "Find in Files"
 msgstr "Etsi tiedostoista"
 
-#: grepjob.cpp:113 grepjob.cpp:216
+#: grepjob.cpp:153 grepjob.cpp:256
 #, kde-format
 msgid "Search aborted"
 msgstr "Haku keskeytetty"
 
-#: grepjob.cpp:122
+#: grepjob.cpp:162
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Jokerimerkkejä vastaavia tiedostoja ei löytynyt"
 
-#: grepjob.cpp:140
+#: grepjob.cpp:180
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -96,29 +96,29 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "Mallijonossa ei sallita osamerkkijonoja"
 
-#: grepjob.cpp:161
+#: grepjob.cpp:201
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "Etsitään <b>%2</b> yhdestä tiedostosta"
 msgstr[1] "Etsitään <b>%2</b> %1 tiedostosta"
 
-#: grepjob.cpp:182
+#: grepjob.cpp:222
 #, kde-format
 msgid "Collecting files..."
 msgstr "Kerätään tiedostoja…"
 
-#: grepjob.cpp:260
+#: grepjob.cpp:300
 #, kde-format
 msgid "Failed: %1"
 msgstr "Epäonnistui: %1"
 
-#: grepjob.cpp:263
+#: grepjob.cpp:303
 #, kde-format
 msgid "No results found"
 msgstr "Ei tuloksia"
 
-#: grepjob.cpp:282
+#: grepjob.cpp:322
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"
@@ -258,19 +258,19 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "Ko&rvaa"
 
-#: grepviewplugin.cpp:76
+#: grepviewplugin.cpp:78
 #, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Etsi ja korvaa &tiedostoista…"
 
-#: grepviewplugin.cpp:79
+#: grepviewplugin.cpp:81
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Etsi lausekkeita monista tiedostoista"
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -284,13 +284,13 @@ msgstr ""
 "tiedostoista. Osumat näytetään, ja osumaan voi vaihtaa suoraan. Myös "
 "korvaaminen on mahdollista."
 
-#: grepviewplugin.cpp:129 grepviewplugin.cpp:152
+#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Etsi ja korvaa tästä kansiosta…"
 
-#: grepviewplugin.cpp:140
+#: grepviewplugin.cpp:142
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."

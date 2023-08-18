@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"POT-Creation-Date: 2023-08-18 00:43+0000\n"
 "PO-Revision-Date: 2010-07-18 15:08-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16,73 +16,73 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: grepdialog.cpp:52
+#: grepdialog.cpp:54
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr ""
 
-#: grepdialog.cpp:53
+#: grepdialog.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr ""
 
-#: grepdialog.cpp:185 grepdialog.cpp:525 grepviewplugin.cpp:91
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
 #, fuzzy, kde-format
 #| msgid "&Find in Files"
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "ファイル内を検索(&F)"
 
-#: grepdialog.cpp:193
+#: grepdialog.cpp:267
 #, fuzzy, kde-format
 #| msgid "Search"
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "検索"
 
-#: grepdialog.cpp:260
+#: grepdialog.cpp:335
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr ""
 
-#: grepdialog.cpp:516
+#: grepdialog.cpp:608
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] ""
 
-#: grepdialog.cpp:532
+#: grepdialog.cpp:624
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr ""
 
-#: grepdialog.cpp:537
+#: grepdialog.cpp:629
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr ""
 
-#: grepjob.cpp:97
+#: grepjob.cpp:137
 #, kde-format
 msgid "Find in Files"
 msgstr "ファイル内を検索"
 
-#: grepjob.cpp:113 grepjob.cpp:216
+#: grepjob.cpp:153 grepjob.cpp:256
 #, fuzzy, kde-format
 #| msgid "Search"
 msgid "Search aborted"
 msgstr "検索"
 
-#: grepjob.cpp:122
+#: grepjob.cpp:162
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr ""
 
-#: grepjob.cpp:140
+#: grepjob.cpp:180
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -90,28 +90,28 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr ""
 
-#: grepjob.cpp:161
+#: grepjob.cpp:201
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] ""
 
-#: grepjob.cpp:182
+#: grepjob.cpp:222
 #, kde-format
 msgid "Collecting files..."
 msgstr ""
 
-#: grepjob.cpp:260
+#: grepjob.cpp:300
 #, kde-format
 msgid "Failed: %1"
 msgstr ""
 
-#: grepjob.cpp:263
+#: grepjob.cpp:303
 #, kde-format
 msgid "No results found"
 msgstr ""
 
-#: grepjob.cpp:282
+#: grepjob.cpp:322
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"
@@ -253,20 +253,20 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "テンプレート:"
 
-#: grepviewplugin.cpp:76
+#: grepviewplugin.cpp:78
 #, fuzzy, kde-format
 #| msgid "Find in Fi&les..."
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "ファイル内を検索(&L)..."
 
-#: grepviewplugin.cpp:79
+#: grepviewplugin.cpp:81
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr ""
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -276,14 +276,14 @@ msgid ""
 "You can also do replacement."
 msgstr ""
 
-#: grepviewplugin.cpp:129 grepviewplugin.cpp:152
+#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
 #, fuzzy, kde-format
 #| msgid "&Find in Files"
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "ファイル内を検索(&F)"
 
-#: grepviewplugin.cpp:140
+#: grepviewplugin.cpp:142
 #, fuzzy, kde-format
 #| msgid "Find in Fi&les..."
 msgctxt "@action:inmenu"

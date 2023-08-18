@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"POT-Creation-Date: 2023-08-18 00:43+0000\n"
 "PO-Revision-Date: 2021-04-23 12:31+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -18,37 +18,37 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Lokalize 20.12.3\n"
 
-#: grepdialog.cpp:52
+#: grepdialog.cpp:54
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "Všechny otevřené soubory"
 
-#: grepdialog.cpp:53
+#: grepdialog.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Všechny otevřené projekty"
 
-#: grepdialog.cpp:185 grepdialog.cpp:525 grepviewplugin.cpp:91
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Hledat/nahradit v souborech"
 
-#: grepdialog.cpp:193
+#: grepdialog.cpp:267
 #, kde-format
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Hledat..."
 
-#: grepdialog.cpp:260
+#: grepdialog.cpp:335
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Vyberte adresář k prohledávání"
 
-#: grepdialog.cpp:516
+#: grepdialog.cpp:608
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
@@ -56,34 +56,34 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: grepdialog.cpp:532
+#: grepdialog.cpp:624
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "Hledat \"%1\" v %2"
 
-#: grepdialog.cpp:537
+#: grepdialog.cpp:629
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr ""
 
-#: grepjob.cpp:97
+#: grepjob.cpp:137
 #, kde-format
 msgid "Find in Files"
 msgstr "Najít v souborech"
 
-#: grepjob.cpp:113 grepjob.cpp:216
+#: grepjob.cpp:153 grepjob.cpp:256
 #, kde-format
 msgid "Search aborted"
 msgstr "Hledání přerušeno"
 
-#: grepjob.cpp:122
+#: grepjob.cpp:162
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr ""
 
-#: grepjob.cpp:140
+#: grepjob.cpp:180
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -91,7 +91,7 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr ""
 
-#: grepjob.cpp:161
+#: grepjob.cpp:201
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
@@ -99,22 +99,22 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: grepjob.cpp:182
+#: grepjob.cpp:222
 #, kde-format
 msgid "Collecting files..."
 msgstr "Sbírají se soubory..."
 
-#: grepjob.cpp:260
+#: grepjob.cpp:300
 #, kde-format
 msgid "Failed: %1"
 msgstr "Selhalo: %1"
 
-#: grepjob.cpp:263
+#: grepjob.cpp:303
 #, kde-format
 msgid "No results found"
 msgstr "Nenalezeny žádné výsledky"
 
-#: grepjob.cpp:282
+#: grepjob.cpp:322
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"
@@ -255,19 +255,19 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "Nah&radit"
 
-#: grepviewplugin.cpp:76
+#: grepviewplugin.cpp:78
 #, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "H&ledat/nahradit v souborech..."
 
-#: grepviewplugin.cpp:79
+#: grepviewplugin.cpp:81
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr ""
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -277,13 +277,13 @@ msgid ""
 "You can also do replacement."
 msgstr ""
 
-#: grepviewplugin.cpp:129 grepviewplugin.cpp:152
+#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Hledat/nahradit v této složce..."
 
-#: grepviewplugin.cpp:140
+#: grepviewplugin.cpp:142
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."
