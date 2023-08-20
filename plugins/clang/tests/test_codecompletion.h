@@ -15,6 +15,8 @@ class TestCodeCompletion : public CodeCompletionTestBase
     Q_OBJECT
 
 private Q_SLOTS:
+    void cleanup();
+
     void testIncludePathCompletion_data();
     void testIncludePathCompletion();
     void testIncludePathCompletionLocal();

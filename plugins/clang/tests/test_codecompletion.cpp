@@ -339,6 +339,13 @@ QExplicitlySharedDataPointer<IncludePathCompletionContext> executeIncludePathCom
     return QExplicitlySharedDataPointer<IncludePathCompletionContext>{context};
 }
 
+constexpr const char* definesAndIncludesConfigName = "CustomDefinesAndIncludes";
+
+}
+
+void TestCodeCompletion::cleanup()
+{
+    KSharedConfig::openConfig()->deleteGroup(definesAndIncludesConfigName);
 }
 
 void TestCodeCompletion::testClangCodeCompletion()
@@ -738,7 +745,7 @@ void TestCodeCompletion::testOverrideExecute()
     QTemporaryDir directory;
     TestProject testProject {Path{directory.path()}};
     auto t = testProject.path().toLocalFile();
-    auto configGroup = testProject.projectConfiguration()->group("CustomDefinesAndIncludes").group("ProjectPath0");
+    auto configGroup = testProject.projectConfiguration()->group(definesAndIncludesConfigName).group("ProjectPath0");
     configGroup.writeEntry("Path", ".");
     configGroup.writeEntry("parserArguments", cppStandard);
     configGroup.sync();
@@ -1670,7 +1677,7 @@ void TestCodeCompletion::testIgnoreGccBuiltins()
     // TODO: make it easier to change the compiler provider for testing purposes
     QTemporaryDir dir;
     auto project = new TestProject(Path(dir.path()), this);
-    auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
+    auto definesAndIncludesConfig = project->projectConfiguration()->group(definesAndIncludesConfigName);
     auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
     pathConfig.writeEntry("Path", ".");
     pathConfig.group("Compiler").writeEntry("Name", "GCC");
