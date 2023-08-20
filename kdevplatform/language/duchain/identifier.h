@@ -214,6 +214,11 @@ public:
 
     QString toString(IdentifierStringFormattingOptions options = NoOptions) const;
 
+    /**
+     * Whether this identifier begins with an underscore followed by a capital letter or by another underscore.
+     */
+    bool isReserved() const;
+
     bool operator==(const Identifier& rhs) const;
     bool operator!=(const Identifier& rhs) const;
 

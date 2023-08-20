@@ -62,11 +62,10 @@ IncludeNavigationContext::IncludeNavigationContext(const IncludeItem& item, cons
 
 bool IncludeNavigationContext::filterDeclaration(Declaration* decl)
 {
-    QString declId = decl->identifier().identifier().str();
     //filter out forward-declarations and macro-expansions without a range
     //And filter out declarations with reserved identifiers
-    return !decl->qualifiedIdentifier().toString().isEmpty() && !decl->range().isEmpty() && !decl->isForwardDeclaration()
-            && !(declId.startsWith(QLatin1String("__")) || (declId.startsWith(QLatin1Char('_')) && declId.length() > 1 && declId[1].isUpper()) );
+    return !decl->qualifiedIdentifier().toString().isEmpty() && !decl->range().isEmpty()
+        && !decl->isForwardDeclaration() && !decl->identifier().isReserved();
 }
 
 ClangNavigationWidget::ClangNavigationWidget(const DeclarationPointer& declaration, KDevelop::AbstractNavigationWidget::DisplayHints hints)

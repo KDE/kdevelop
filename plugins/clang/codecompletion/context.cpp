@@ -1276,9 +1276,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     adjustPriorityForDeclaration(found, clang_getCompletionPriority(result.CompletionString));
                 const bool bestMatch = completionPriority <= maxBestMatchCompletionPriority;
 
-                //don't set best match property for internal identifiers, also prefer declarations from current file
-                const auto isInternal = found->indexedIdentifier().identifier().toString().startsWith(QLatin1String("__"));
-                if (bestMatch && !isInternal) {
+                // don't set best match property for reserved identifiers, also prefer declarations from current file
+                const bool isReserved = found->indexedIdentifier().identifier().isReserved();
+                if (bestMatch && !isReserved) {
                     const auto matchQuality = matchQualityFromBestMatchCompletionPriority(completionPriority);
                     declarationItem->setMatchQuality(matchQuality);
 
@@ -1292,7 +1292,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
                     lookAheadMatcher.addDeclarations(found);
                 }
-                if ( isInternal ) {
+                if (isReserved) {
                     declarationItem->markAsUnimportant();
                 }
 

@@ -616,6 +616,13 @@ QString Identifier::toString(IdentifierStringFormattingOptions options) const
     return ret;
 }
 
+bool Identifier::isReserved() const
+{
+    const auto str = identifier().str();
+    constexpr QLatin1Char underscore{'_'};
+    return str.size() >= 2 && str[0] == underscore && (str[1] == underscore || str[1].isUpper());
+}
+
 bool Identifier::operator==(const Identifier& rhs) const
 {
     return index() == rhs.index();
