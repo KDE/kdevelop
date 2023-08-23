@@ -61,6 +61,13 @@ DiffViewsCtrl::DiffViewsCtrl(QObject* parent)
     // (green background for +, red background+black fg for -, gray color for @@)
     auto colors = KColorScheme();
 
+    // Prevent triggering the actions via shortcuts when a tool view, such as Terminal tool view, has focus.
+    // KTextEditor::ViewPrivate::setupActions() sets Qt::WidgetWithChildrenShortcut context
+    // for all actions it adds to the view's actionCollection(). However, only the narrower
+    // Qt::WidgetShortcut context prevents our actions from stealing key presses from a focused tool view.
+    for (auto* action : {m_stageSelectedAct, m_unstageSelectedAct, m_revertSelectedAct, m_gotoSrcLineAct}) {
+        action->setShortcutContext(Qt::WidgetShortcut);
+    }
 
     // Connect the diff windows actions
     connect(m_stageSelectedAct, &QAction::triggered, this, [=] { applySelected(Stage); });
