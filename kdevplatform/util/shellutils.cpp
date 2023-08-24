@@ -22,6 +22,55 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
+namespace {
+
+class WidgetGeometrySaver : public QObject
+{
+    Q_OBJECT
+public:
+    explicit WidgetGeometrySaver(QWidget& widget, const QString& configGroupName, const QString& configSubgroupName)
+    : QObject(&widget), m_widget{widget}, m_configGroupName{configGroupName}, m_configSubgroupName{configSubgroupName}
+    {
+        m_widget.installEventFilter(this);
+    }
+
+    bool restoreWidgetGeometry() const
+    {
+        return m_widget.restoreGeometry(configGroup().readEntry(entryName(), QByteArray{}));
+    }
+
+    bool eventFilter(QObject* watched, QEvent* event) override
+    {
+        Q_ASSERT(watched == &m_widget);
+        if (event->type() == QEvent::Close) {
+            configGroup().writeEntry(entryName(), m_widget.saveGeometry());
+        }
+        return false;
+    }
+
+private:
+    static QString entryName()
+    {
+        return QStringLiteral("windowGeometry");
+    }
+
+    KConfigGroup configGroup() const
+    {
+        KConfigGroup group(KSharedConfig::openConfig(), m_configGroupName);
+        if (m_configSubgroupName.isEmpty()) {
+            return group;
+        }
+        KConfigGroup subgroup(&group, m_configSubgroupName);
+        return subgroup;
+    }
+
+    QWidget& m_widget;
+    const QString m_configGroupName;
+    const QString m_configSubgroupName;
+};
+
+} // namespace
+
 namespace KDevelop {
 bool askUser(const QString& mainText,
              const QString& ttyPrompt,
@@ -109,27 +158,9 @@ bool ensureWritable(const QList<QUrl>& urls)
 
 bool restoreAndAutoSaveGeometry(QDialog& dialog, const QString& configGroupName, const QString& configSubgroupName)
 {
-    static const QString entryName = QStringLiteral("windowGeometry");
-
-    // Capture strings by value, because this lambda itself is captured by another lambda
-    // connected to a signal, which is likely to be emitted after the strings are destroyed.
-    const auto useGroup = [configGroupName, configSubgroupName](auto groupUser) {
-        KConfigGroup group(KSharedConfig::openConfig(), configGroupName);
-        if (configSubgroupName.isEmpty()) {
-            return groupUser(group);
-        }
-        KConfigGroup subgroup(&group, configSubgroupName);
-        return groupUser(subgroup);
-    };
-
-    QObject::connect(&dialog, &QDialog::finished, [&dialog, useGroup] {
-        useGroup([&dialog](KConfigGroup& group) {
-            group.writeEntry(entryName, dialog.saveGeometry());
-        });
-    });
-
-    return useGroup([&dialog](const KConfigGroup& group) {
-        return dialog.restoreGeometry(group.readEntry(entryName, QByteArray{}));
-    });
+    const auto* const saver = new WidgetGeometrySaver(dialog, configGroupName, configSubgroupName);
+    return saver->restoreWidgetGeometry();
 }
 }
+
+#include "shellutils.moc"
