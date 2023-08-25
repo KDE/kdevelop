@@ -3,7 +3,7 @@
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
-
+#include <QDebug>
 #include "shellutils.h"
 
 #include <QDialog>
@@ -43,6 +43,7 @@ public:
     {
         Q_ASSERT(watched == &m_widget);
         if (event->type() == QEvent::Close) {
+            qCritical() << "closing" << &m_widget;
             configGroup().writeEntry(entryName(), m_widget.saveGeometry());
         }
         return false;
