@@ -369,7 +369,9 @@ void VcsPluginHelper::history(const VcsRevision& rev)
     dlg->connect(buttonBox, &QDialogButtonBox::accepted, dlg, &QDialog::accept);
     dlg->connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
     mainLayout->addWidget(buttonBox);
-
+    QObject::connect(dlg, &QObject::destroyed, [](QObject*o) {
+        qCritical() << "DESTROYED" << o;
+    });
     dlg->show();
 }
 

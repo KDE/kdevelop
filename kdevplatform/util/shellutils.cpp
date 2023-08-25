@@ -44,6 +44,9 @@ public:
         Q_ASSERT(watched == &m_widget);
         if (event->type() == QEvent::Close) {
             qCritical() << "closing" << &m_widget;
+            //configGroup().writeEntry(entryName(), m_widget.saveGeometry());
+        } else if (event->type() == QEvent::Hide) {
+            qCritical() << "hiding" << &m_widget;
             configGroup().writeEntry(entryName(), m_widget.saveGeometry());
         }
         return false;
