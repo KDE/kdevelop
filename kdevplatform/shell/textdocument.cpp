@@ -451,14 +451,7 @@ bool TextDocument::save(DocumentSaveMode mode)
         return false;
     }
 
-    QUrl urlBeforeSave = d->document->url();
-    if (d->document->documentSave())
-    {
-        if (d->document->url() != urlBeforeSave)
-            notifyUrlChanged();
-        return true;
-    }
-    return false;
+    return d->document->documentSave();
 }
 
 IDocument::DocumentState TextDocument::state() const
