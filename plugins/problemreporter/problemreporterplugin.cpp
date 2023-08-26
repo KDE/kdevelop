@@ -140,7 +140,24 @@ void ProblemReporterPlugin::documentClosed(IDocument* doc)
         return;
 
     const IndexedString url(doc->url());
-    delete m_visualizers.take(url);
+
+    const auto it = m_visualizers.constFind(url);
+    if (it == m_visualizers.cend()) {
+        qCDebug(PLUGIN_PROBLEMREPORTER) << "closed an unregistered text document:" << doc << doc->url().toString();
+        return;
+    }
+
+    if (it.value()->document() != doc->textDocument()) {
+        // doc is being renamed, DocumentControllerPrivate::changeDocumentUrl() is closing it
+        // because of a conflict with another open modified document at doc's new URL.
+        // documentUrlChanged(doc, ...) will be invoked soon and will remove doc's visualizer. Nothing to do here.
+        qCDebug(PLUGIN_PROBLEMREPORTER) << "closed a text document that shares another text document's URL:" << doc
+                                        << doc->url().toString();
+        return;
+    }
+
+    delete it.value();
+    m_visualizers.erase(it);
     m_reHighlightNeeded.remove(url);
 }
 
@@ -179,7 +196,14 @@ void ProblemReporterPlugin::documentUrlChanged(IDocument* document, const QUrl& 
     m_visualizers.erase(it);
 
     const IndexedString currentUrl{document->url()};
-    Q_ASSERT(!m_visualizers.contains(currentUrl));
+    if (m_visualizers.contains(currentUrl)) {
+        // The renamed document must have been closed already in DocumentControllerPrivate::changeDocumentUrl()
+        // because of a conflict with another open modified document at its new URL. See a similar comment in
+        // ProblemReporterPlugin::documentClosed(). Just destroy document's obsolete visualizer here.
+        delete visualizer;
+        qCDebug(PLUGIN_PROBLEMREPORTER) << "the renamed document's URL equals another document's URL:" << document;
+        return;
+    }
     m_visualizers.insert(currentUrl, visualizer);
 }
 
