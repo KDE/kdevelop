@@ -156,11 +156,13 @@ public:
                     Q_ASSERT_X(origDoc != document, Q_FUNC_INFO, "Duplicate documentUrlChanged signal emission?");
                     if (origDoc->state() & IDocument::Modified) {
                         // given that the file has been saved, close the saved file as the other instance will become conflicted on disk
-                        document->close();
+                        document->close(); // this closing erases the iterator `it`
                         controller->activateDocument( origDoc );
                         break;
                     }
-                    // Otherwise close the original document
+                    // Otherwise close the original document, but first erase the iterator `it`,
+                    // because the closing erases documentIt, which can invalidate `it`.
+                    it.remove();
                     origDoc->close();
                 } else {
                     // Remove the original document
