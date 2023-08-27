@@ -58,6 +58,8 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/vcspluginhelper.h>
 
+#include <algorithm>
+
 #define EMPTY_DOCUMENT_URL i18n("Untitled")
 
 using namespace KDevelop;
@@ -146,38 +148,36 @@ public:
 
     void changeDocumentUrl(KDevelop::IDocument* document)
     {
-        QMutableHashIterator<QUrl, IDocument*> it = documents;
-        while (it.hasNext()) {
-            if (it.next().value() == document) {
-                const auto documentIt = documents.constFind(document->url());
-                if (documentIt != documents.constEnd()) {
-                    // Weird situation (saving as a file that is already open)
-                    IDocument* origDoc = *documentIt;
-                    Q_ASSERT_X(origDoc != document, Q_FUNC_INFO, "Duplicate documentUrlChanged signal emission?");
-                    if (origDoc->state() & IDocument::Modified) {
-                        // given that the file has been saved, close the saved file as the other instance will become conflicted on disk
-                        document->close(); // this closing erases the iterator `it`
-                        controller->activateDocument( origDoc );
-                        break;
-                    }
-                    // Otherwise close the original document, but first erase the iterator `it`,
-                    // because the closing erases documentIt, which can invalidate `it`.
-                    it.remove();
-                    origDoc->close();
-                } else {
-                    // Remove the original document
-                    it.remove();
-                }
+        const auto it = std::find(documents.cbegin(), documents.cend(), document);
+        if (it == documents.cend()) {
+            qCWarning(SHELL) << "a renamed document is not registered:" << document << document->url().toString();
+            return;
+        }
 
-                documents.insert(document->url(), document);
-
-                if (!controller->isEmptyDocumentUrl(document->url()))
-                {
-                    fileOpenRecent->addUrl(document->url());
-                }
-
-                break;
+        const auto documentIt = documents.constFind(document->url());
+        if (documentIt != documents.constEnd()) {
+            // Weird situation (saving as a file that is already open)
+            IDocument* origDoc = *documentIt;
+            Q_ASSERT_X(origDoc != document, Q_FUNC_INFO, "Duplicate documentUrlChanged signal emission?");
+            if (origDoc->state() & IDocument::Modified) {
+                // given that the file has been saved, close the saved file as the other instance will become conflicted on disk
+                document->close(); // this closing erases the iterator `it`
+                controller->activateDocument( origDoc );
+                return;
             }
+            // Otherwise close the original document, but first erase the iterator `it`,
+            // because the closing erases documentIt, which can invalidate `it`.
+            documents.erase(it);
+            origDoc->close();
+        } else {
+            documents.erase(it); // erase the previous-URL entry
+        }
+
+        documents.insert(document->url(), document);
+
+        if (!controller->isEmptyDocumentUrl(document->url()))
+        {
+            fileOpenRecent->addUrl(document->url());
         }
     }
 
