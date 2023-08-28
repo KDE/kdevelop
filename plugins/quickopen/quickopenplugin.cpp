@@ -499,7 +499,7 @@ void QuickOpenPlugin::showQuickOpenWidget(const QStringList& items, const QStrin
     m_currentWidgetHandler = dialog;
     if (preselectText) {
         KDevelop::IDocument* currentDoc = core()->documentController()->activeDocument();
-        if (currentDoc && currentDoc->isTextDocument()) {
+        if (currentDoc && currentDoc->textDocument()) {
             QString preselected = currentDoc->textSelection().isEmpty() ? currentDoc->textWord() : currentDoc->textDocument()->text(currentDoc->textSelection());
             dialog->widget()->setPreselectedText(preselected);
         }

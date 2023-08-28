@@ -79,11 +79,6 @@ public:
     virtual KParts::Part* partForView(QWidget *view) const = 0;
 
     /**
-     * Returns whether this document is a text document.
-     */
-    virtual bool isTextDocument() const;
-
-    /**
      * Set a 'pretty' name for this document. That name will be used when displaying the document in the UI,
      * instead of the filename and/or path.
      * @param name The pretty name to use. Give an empty name to reset.

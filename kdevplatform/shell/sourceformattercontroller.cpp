@@ -680,9 +680,11 @@ void SourceFormatterController::beautifyLine()
 
     KDevelop::IDocumentController *docController = KDevelop::ICore::self()->documentController();
     KDevelop::IDocument *doc = docController->activeDocument();
-    if (!doc || !doc->isTextDocument())
+    if (!doc)
         return;
     KTextEditor::Document *tDoc = doc->textDocument();
+    if (!tDoc)
+        return;
     KTextEditor::View* view = doc->activeTextView();
     if (!view)
         return;

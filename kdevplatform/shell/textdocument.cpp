@@ -273,21 +273,6 @@ TextDocument::TextDocument(const QUrl &url, ICore* core, const QString& encoding
 
 TextDocument::~TextDocument() = default;
 
-bool TextDocument::isTextDocument() const
-{
-    Q_D(const TextDocument);
-
-    if( !d->document )
-    {
-        /// @todo Somehow it can happen that d->document is zero, which makes
-        /// code relying on "isTextDocument() == (bool)textDocument()" crash
-        qCWarning(SHELL) << "Broken text-document: " << url();
-        return false;
-    }
-
-    return true;
-}
-
 KTextEditor::Document *TextDocument::textDocument() const
 {
     Q_D(const TextDocument);

@@ -85,11 +85,6 @@ void IDocument::notifyContentChanged()
     emit core()->documentController()->documentContentChanged(this);
 }
 
-bool IDocument::isTextDocument() const
-{
-    return false;
-}
-
 void IDocument::notifyTextDocumentCreated()
 {
     emit core()->documentController()->textDocumentCreated(this);

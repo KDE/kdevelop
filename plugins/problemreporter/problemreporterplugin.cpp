@@ -287,7 +287,7 @@ void ProblemReporterPlugin::updateOpenedDocumentsHighlight()
         // any opened documents. In this case documentController()->openDocuments() returns single
         // (non-text) document with url like file:///tmp/kdevelop_QW2530.patch which has fatal bug:
         // if we call isActive() method from this document the crash will happens.
-        if (!document->isTextDocument())
+        if (!document->textDocument())
             continue;
 
         IndexedString documentUrl(document->url());

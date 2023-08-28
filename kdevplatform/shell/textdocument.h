@@ -55,7 +55,6 @@ public:
     QString textLine() const override;
     QString textWord() const override;
 
-    bool isTextDocument() const override;
     KTextEditor::Document* textDocument() const override;
 
     QString documentType() const override;
