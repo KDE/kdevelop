@@ -146,13 +146,15 @@ public:
 
     }
 
-    void changeDocumentUrl(KDevelop::IDocument* document)
+    void changeDocumentUrl(KDevelop::IDocument* document, const QUrl& previousUrl)
     {
-        const auto it = std::find(documents.cbegin(), documents.cend(), document);
+        const auto it = documents.constFind(previousUrl);
         if (it == documents.cend()) {
-            qCWarning(SHELL) << "a renamed document is not registered:" << document << document->url().toString();
+            qCWarning(SHELL) << "a renamed document is not registered:" << document << previousUrl.toString()
+                             << document->url().toString();
             return;
         }
+        Q_ASSERT(it.value() == document);
 
         const auto documentIt = documents.constFind(document->url());
         if (documentIt != documents.constEnd()) {
@@ -558,8 +560,10 @@ DocumentController::DocumentController( QObject *parent )
     QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/DocumentController"),
         this, QDBusConnection::ExportScriptableSlots );
 
-    connect(this, &DocumentController::documentUrlChanged,
-            this, [this] (IDocument* document) { Q_D(DocumentController); d->changeDocumentUrl(document); });
+    connect(this, &DocumentController::documentUrlChanged, this, [this](IDocument* document, const QUrl& previousUrl) {
+        Q_D(DocumentController);
+        d->changeDocumentUrl(document, previousUrl);
+    });
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }

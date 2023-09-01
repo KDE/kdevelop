@@ -201,10 +201,11 @@ QUrl PartDocument::url() const
 
 void PartDocument::setUrl(const QUrl& newUrl)
 {
+    const auto previousUrl = Sublime::UrlDocument::url();
     Sublime::UrlDocument::setUrl(newUrl);
     if(!prettyName().isEmpty())
         setTitle(prettyName());
-    notifyUrlChanged();
+    notifyUrlChanged(previousUrl);
 }
 
 void PartDocument::setPrettyName(const QString& name)

@@ -119,9 +119,9 @@ void IDocument::setPrettyName(const QString& name)
     d->m_prettyName = name;
 }
 
-void IDocument::notifyUrlChanged()
+void IDocument::notifyUrlChanged(const QUrl& previousUrl)
 {
-    emit core()->documentController()->documentUrlChanged(this);
+    emit core()->documentController()->documentUrlChanged(this, previousUrl);
 }
 
 void IDocument::notifyLoaded()

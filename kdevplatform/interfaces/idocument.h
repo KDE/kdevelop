@@ -191,7 +191,7 @@ protected:
     void notifyActivated();
     void notifyContentChanged();
     void notifyTextDocumentCreated();
-    void notifyUrlChanged();
+    void notifyUrlChanged(const QUrl& previousUrl);
     void notifyLoaded();
 
 private:

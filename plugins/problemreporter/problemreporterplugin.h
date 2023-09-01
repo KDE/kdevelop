@@ -15,6 +15,8 @@
 #include <serialization/indexedstring.h>
 #include <language/duchain/topducontext.h>
 
+class QUrl;
+
 namespace KDevelop
 {
 class IDocument;
@@ -42,7 +44,7 @@ private Q_SLOTS:
     void updateHighlight(const KDevelop::IndexedString& url);
     void documentClosed(KDevelop::IDocument*);
     void textDocumentCreated(KDevelop::IDocument* document);
-    void documentUrlChanged(KDevelop::IDocument* document);
+    void documentUrlChanged(KDevelop::IDocument* document, const QUrl& previousUrl);
     void documentActivated(KDevelop::IDocument* document);
     void showModel(const QString& id);
 

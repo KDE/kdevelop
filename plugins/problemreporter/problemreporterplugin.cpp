@@ -41,8 +41,6 @@
 
 #include <shell/problem.h>
 
-#include <algorithm>
-
 K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevproblemreporter.json",
                            registerPlugin<ProblemReporterPlugin>();)
 
@@ -158,24 +156,24 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
                                          KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
-void ProblemReporterPlugin::documentUrlChanged(IDocument* document)
+void ProblemReporterPlugin::documentUrlChanged(IDocument* document, const QUrl& previousUrl)
 {
     if (!document->textDocument())
         return;
-    const auto it = std::find_if(m_visualizers.cbegin(), m_visualizers.cend(),
-                                 [textDocument = document->textDocument()](const ProblemVisualizer* v) {
-                                     return v->document() == textDocument;
-                                 });
+
+    qCDebug(PLUGIN_PROBLEMREPORTER) << "document URL changed from" << previousUrl.toString() << "to"
+                                    << document->url().toString();
+
+    const IndexedString previousUrlIndexed(previousUrl);
+    const auto it = m_visualizers.constFind(previousUrlIndexed);
     if (it == m_visualizers.cend()) {
-        qCWarning(PLUGIN_PROBLEMREPORTER) << "a visualizer for renamed document is missing:" << document->textDocument()
-                                          << document->url().toString();
+        qCWarning(PLUGIN_PROBLEMREPORTER)
+            << "a visualizer for renamed document is missing:" << document->textDocument();
         return;
     }
+    Q_ASSERT(it.value()->document() == document->textDocument());
 
-    const auto previousUrl = it.key();
-    qCDebug(PLUGIN_PROBLEMREPORTER) << "document URL changed from" << previousUrl.toUrl().toString() << "to"
-                                    << document->url().toString();
-    m_reHighlightNeeded.remove(previousUrl);
+    m_reHighlightNeeded.remove(previousUrlIndexed);
 
     auto* const visualizer = it.value();
     m_visualizers.erase(it);

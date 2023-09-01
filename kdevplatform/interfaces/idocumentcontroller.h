@@ -211,7 +211,7 @@ Q_SIGNALS:
     void documentLoadedPrepare( KDevelop::IDocument* document );
 
     /// Emitted when a document url has changed.
-    void documentUrlChanged( KDevelop::IDocument* document );
+    void documentUrlChanged(KDevelop::IDocument* document, const QUrl& previousUrl);
 
     friend class IDocument;
 };
