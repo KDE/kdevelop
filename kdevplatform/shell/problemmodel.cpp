@@ -75,6 +75,8 @@ ProblemModel::ProblemModel(QObject * parent, ProblemStore *store)
 
     connect(ICore::self()->documentController(), &IDocumentController::documentActivated, this, &ProblemModel::setCurrentDocument);
     connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &ProblemModel::closedDocument);
+    connect(ICore::self()->documentController(), &IDocumentController::documentUrlChanged, this,
+            &ProblemModel::documentUrlChanged);
     /// CompletionSettings include a list of todo markers we care for, so need to update
     connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this, &ProblemModel::forceFullUpdate);
 
@@ -348,6 +350,17 @@ void ProblemModel::closedDocument(IDocument* document)
     if (IndexedString(document->url()) == d->m_problems->currentDocument())
     {   // reset current document
         d->m_problems->setCurrentDocument(IndexedString());
+    }
+}
+
+void ProblemModel::documentUrlChanged(IDocument* document, const QUrl& previousUrl)
+{
+    Q_D(ProblemModel);
+
+    Q_ASSERT(thread() == QThread::currentThread());
+
+    if (d->m_problems->currentDocument() == IndexedString{previousUrl}) {
+        setCurrentDocument(document);
     }
 }
 

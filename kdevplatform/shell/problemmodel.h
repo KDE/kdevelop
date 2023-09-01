@@ -15,6 +15,8 @@
 
 #include "problemconstants.h"
 
+class QUrl;
+
 namespace KDevelop {
 class IDocument;
 class IndexedString;
@@ -193,6 +195,8 @@ private Q_SLOTS:
     virtual void setCurrentDocument(IDocument* doc);
 
     virtual void closedDocument(IDocument* doc);
+
+    void documentUrlChanged(IDocument* document, const QUrl& previousUrl);
 
     /// Triggered before the problems are rebuilt
     void onBeginRebuild();
