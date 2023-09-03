@@ -77,6 +77,7 @@ public:
 private Q_SLOTS:
     void documentClosed(IDocument* doc);
     void documentCreated(IDocument* doc);
+    void documentUrlChanged(IDocument* doc, const QUrl& previousUrl);
 };
 
 /**

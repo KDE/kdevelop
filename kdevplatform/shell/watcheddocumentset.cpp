@@ -87,23 +87,34 @@ public:
         doUpdate(flags);
     }
 
-    void addDocument(const IndexedString& doc, ActionFlags flags = {})
+    bool addDocument(const IndexedString& doc, ActionFlags flags = {})
     {
         if (m_documents.contains(doc))
-            return;
+            return false;
 
         m_documents.insert(doc);
         doUpdate(flags);
+        return true;
     }
 
-    void delDocument(const IndexedString& doc, ActionFlags flags = {})
+    bool delDocument(const IndexedString& doc, ActionFlags flags = {})
     {
         const auto documentIt = m_documents.find(doc);
         if (documentIt == m_documents.end())
-            return;
+            return false;
 
         m_documents.erase(documentIt);
         doUpdate(flags);
+        return true;
+    }
+
+    void renameDocument(const IndexedString& previousUrl, const IndexedString& currentUrl, ActionFlags flags = {})
+    {
+        const bool deleted = delDocument(previousUrl);
+        const bool added = addDocument(currentUrl);
+        if (deleted || added) {
+            doUpdate(flags);
+        }
     }
 
     void updateImports()
@@ -254,6 +265,8 @@ OpenDocumentSet::OpenDocumentSet(QObject* parent)
 
     connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &OpenDocumentSet::documentClosed);
     connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &OpenDocumentSet::documentCreated);
+    connect(ICore::self()->documentController(), &IDocumentController::documentUrlChanged, this,
+            &OpenDocumentSet::documentUrlChanged);
 }
 
 void OpenDocumentSet::documentClosed(IDocument* doc)
@@ -268,6 +281,15 @@ void OpenDocumentSet::documentCreated(IDocument* doc)
     Q_D(WatchedDocumentSet);
 
     d->addDocument(IndexedString(doc->url()), DoUpdate | DoEmit);
+}
+
+void OpenDocumentSet::documentUrlChanged(IDocument* doc, const QUrl& previousUrl)
+{
+    Q_D(WatchedDocumentSet);
+
+    if (doc->textDocument()) {
+        d->renameDocument(IndexedString{previousUrl}, IndexedString{doc->url()}, DoUpdate | DoEmit);
+    }
 }
 
 ProblemScope OpenDocumentSet::scope() const
