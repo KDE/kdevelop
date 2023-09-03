@@ -359,7 +359,11 @@ void ProblemModel::documentUrlChanged(IDocument* document, const QUrl& previousU
 
     Q_ASSERT(thread() == QThread::currentThread());
 
-    if (d->m_problems->currentDocument() == IndexedString{previousUrl}) {
+    const auto currentDocument = d->m_problems->currentDocument();
+    // If currentDocument.isEmpty(), the renamed document must have been closed already in
+    // DocumentControllerPrivate::changeDocumentUrl() because of a conflict with another open modified document at its
+    // new URL; another document at document->url() should be active now. So set the active document's URL as current.
+    if (currentDocument.isEmpty() || currentDocument == IndexedString{previousUrl}) {
         setCurrentDocument(document);
     }
 }
