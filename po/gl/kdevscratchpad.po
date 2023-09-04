@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-06-21 08:46+0200\n"
+"PO-Revision-Date: 2023-09-03 14:11+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #: scratchpad.cpp:104 scratchpadview.cpp:87
 #, kde-format
@@ -48,8 +48,8 @@ msgstr "Non se puido crear un novo bosquexo"
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr ""
-"Non se puido renomear o bosquexo: os nomes non poden incluír unha divisoria "
-"de rutas."
+"Non se puido renomear o bosquexo: os nomes non poden incluír un separador de "
+"rutas."
 
 #: scratchpad.cpp:226
 #, kde-format
