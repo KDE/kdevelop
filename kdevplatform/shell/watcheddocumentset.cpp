@@ -363,8 +363,7 @@ void CurrentProjectSet::setCurrentDocumentInternal(const IndexedString& url)
     IProject* projectForUrl = ICore::self()->projectController()->findProjectForUrl(url.toUrl());
     if (projectForUrl && projectForUrl != m_currentProject) {
         m_currentProject = projectForUrl;
-        d->setDocuments(m_currentProject->fileSet());
-        d->addDocument(IndexedString(m_currentProject->path().toLocalFile()), DoUpdate | DoEmit);
+        d->setDocuments(m_currentProject->fileSet(), DoUpdate | DoEmit);
         trackProjectFiles(m_currentProject);
     }
 }
@@ -404,10 +403,6 @@ void AllProjectSet::reload()
             if (include(indexedString)) {
                 d->addDocument(indexedString);
             }
-        }
-        const auto projectPath = IndexedString(project->path().toLocalFile());
-        if (include(projectPath)) {
-            d->addDocument(projectPath);
         }
         trackProjectFiles(project);
     }
