@@ -114,6 +114,7 @@ public:
 
 private:
     void handleCurrentDocumentChange();
+    bool include(const IndexedString& url) const override;
 
     QUrl m_currentDocumentUrl;
     const IProject* m_currentProject = nullptr;

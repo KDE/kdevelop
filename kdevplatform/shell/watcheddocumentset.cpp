@@ -400,6 +400,11 @@ void CurrentProjectSet::handleCurrentDocumentChange()
     }
 }
 
+bool CurrentProjectSet::include(const IndexedString& url) const
+{
+    return m_currentProject && m_currentProject->fileSet().contains(url);
+}
+
 ProblemScope CurrentProjectSet::scope() const
 {
     return CurrentProject;
