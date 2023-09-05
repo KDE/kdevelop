@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QSet>
+#include <QUrl>
 
 #include <serialization/indexedstring.h>
 #include <shell/shellexport.h>
@@ -88,6 +89,7 @@ public:
 
 protected:
     void trackProjectFiles(const IProject* project);
+    void stopTrackingProjectFiles(const IProject* project);
 
 protected Q_SLOTS:
     void fileAdded(KDevelop::ProjectFileItem*);
@@ -111,8 +113,10 @@ public:
     ProblemScope scope() const override;
 
 private:
-    void setCurrentDocumentInternal(const IndexedString& url); // to avoid virtual in constructor
-    IProject* m_currentProject;
+    void handleCurrentDocumentChange();
+
+    QUrl m_currentDocumentUrl;
+    const IProject* m_currentProject = nullptr;
 };
 
 /**

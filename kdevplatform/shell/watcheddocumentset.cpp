@@ -327,44 +327,76 @@ void ProjectSet::fileRenamed(const Path& oldFile, ProjectFileItem* newFile)
     fileAdded(newFile);
 }
 
+static const QObject* qobjectProjectFileManager(const IProject* project)
+{
+    Q_ASSERT(project);
+    // The implementation should derive from QObject somehow
+    return dynamic_cast<const QObject*>(project->projectFileManager());
+}
+
 void ProjectSet::trackProjectFiles(const IProject* project)
 {
-    if (project) {
-        // The implementation should derive from QObject somehow
-        auto* fileManager = dynamic_cast<QObject*>(project->projectFileManager());
-        if (fileManager) {
-            // can't use new signal/slot syntax here, IProjectFileManager is no a QObject
-            connect(fileManager, SIGNAL(fileAdded(KDevelop::ProjectFileItem*)), this,
-                    SLOT(fileAdded(KDevelop::ProjectFileItem*)));
-            connect(fileManager, SIGNAL(fileRemoved(KDevelop::ProjectFileItem*)), this,
-                    SLOT(fileRemoved(KDevelop::ProjectFileItem*)));
-            connect(fileManager, SIGNAL(fileRenamed(KDevelop::Path, KDevelop::ProjectFileItem*)), this,
-                    SLOT(fileRenamed(KDevelop::Path, KDevelop::ProjectFileItem*)));
-        }
+    auto* const fileManager = qobjectProjectFileManager(project);
+    if (!fileManager) {
+        return;
     }
+    // can't use new signal/slot syntax here, IProjectFileManager is no a QObject
+    connect(fileManager, SIGNAL(fileAdded(KDevelop::ProjectFileItem*)), this,
+            SLOT(fileAdded(KDevelop::ProjectFileItem*)));
+    connect(fileManager, SIGNAL(fileRemoved(KDevelop::ProjectFileItem*)), this,
+            SLOT(fileRemoved(KDevelop::ProjectFileItem*)));
+    connect(fileManager, SIGNAL(fileRenamed(KDevelop::Path, KDevelop::ProjectFileItem*)), this,
+            SLOT(fileRenamed(KDevelop::Path, KDevelop::ProjectFileItem*)));
+}
+
+void ProjectSet::stopTrackingProjectFiles(const IProject* project)
+{
+    auto* const fileManager = qobjectProjectFileManager(project);
+    if (!fileManager) {
+        return;
+    }
+    fileManager->disconnect(this);
 }
 
 CurrentProjectSet::CurrentProjectSet(const IndexedString& document, QObject* parent)
     : ProjectSet(parent)
-    , m_currentProject(nullptr)
+    , m_currentDocumentUrl(document.toUrl())
 {
-    setCurrentDocumentInternal(document);
+    handleCurrentDocumentChange();
+
+    // Opening or closing a project can change m_currentDocument's associated project.
+    const auto* const projectController = ICore::self()->projectController();
+    connect(projectController, &IProjectController::projectOpened, this,
+            &CurrentProjectSet::handleCurrentDocumentChange);
+    connect(projectController, &IProjectController::projectClosed, this,
+            &CurrentProjectSet::handleCurrentDocumentChange);
 }
 
 void CurrentProjectSet::setCurrentDocument(const IndexedString& url)
 {
-    setCurrentDocumentInternal(url);
+    m_currentDocumentUrl = url.toUrl();
+    handleCurrentDocumentChange();
 }
 
-void CurrentProjectSet::setCurrentDocumentInternal(const IndexedString& url)
+void CurrentProjectSet::handleCurrentDocumentChange()
 {
     Q_D(WatchedDocumentSet);
 
-    IProject* projectForUrl = ICore::self()->projectController()->findProjectForUrl(url.toUrl());
-    if (projectForUrl && projectForUrl != m_currentProject) {
-        m_currentProject = projectForUrl;
+    const auto* const projectForUrl = ICore::self()->projectController()->findProjectForUrl(m_currentDocumentUrl);
+    if (projectForUrl == m_currentProject) {
+        return;
+    }
+
+    if (m_currentProject) {
+        stopTrackingProjectFiles(m_currentProject);
+    }
+    m_currentProject = projectForUrl;
+
+    if (m_currentProject) {
         d->setDocuments(m_currentProject->fileSet(), DoUpdate | DoEmit);
         trackProjectFiles(m_currentProject);
+    } else {
+        d->clear();
     }
 }
 
