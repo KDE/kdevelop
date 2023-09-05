@@ -80,10 +80,6 @@ private Q_SLOTS:
     void documentUrlChanged(IDocument* doc, const QUrl& previousUrl);
 };
 
-/**
- * Tracks documents that are in the same project as the current file.
- * If current file is not in any project, none are tracked.
- */
 class ProjectSet : public WatchedDocumentSet
 {
     Q_OBJECT
@@ -103,7 +99,8 @@ protected:
 };
 
 /**
- * Tracks files in all open projects.
+ * Tracks documents that are in the same project as the current file.
+ * If current file is not in any project, none are tracked.
  */
 class CurrentProjectSet : public ProjectSet
 {
@@ -118,6 +115,9 @@ private:
     IProject* m_currentProject;
 };
 
+/**
+ * Tracks files in all open projects.
+ */
 class AllProjectSet : public ProjectSet
 {
     Q_OBJECT
