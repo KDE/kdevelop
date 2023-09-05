@@ -110,10 +110,6 @@ public:
 
     KDevelop::Path compiler(KDevelop::ProjectTargetItem * p) const override;
 
-Q_SIGNALS:
-    void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
-    void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
-
 private Q_SLOTS:
     void projectClosing(KDevelop::IProject*);
 
