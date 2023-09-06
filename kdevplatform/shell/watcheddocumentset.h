@@ -99,6 +99,9 @@ protected Q_SLOTS:
 
 protected:
     virtual bool include(const IndexedString& /*url*/) const { return true; }
+
+private:
+    bool m_pauseAddingFiles = false;
 };
 
 /**
