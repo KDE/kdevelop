@@ -31,13 +31,6 @@ public:
     explicit ILanguageController(QObject *parent = nullptr);
 
     /**
-     * @return the currently active languages loaded for the currently active file.
-     *
-     * The list is empty if the file's language is unsupported.
-     */
-    virtual QList<ILanguageSupport*> activeLanguages() = 0;
-
-    /**
      *@return the language for given @p name.
      */
     virtual ILanguageSupport* language(const QString &name) const = 0;

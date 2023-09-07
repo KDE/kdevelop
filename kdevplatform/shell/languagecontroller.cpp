@@ -166,17 +166,6 @@ public:
         , m_controller(controller)
     {}
 
-    void documentActivated(KDevelop::IDocument *document)
-    {
-        QUrl url = document->url();
-        if (!url.isValid()) {
-            return;
-        }
-        activeLanguages = m_controller->languagesForUrl(url);
-    }
-
-    QList<ILanguageSupport*> activeLanguages;
-
     mutable QRecursiveMutex dataMutex;
 
     LanguageHash languages; //Maps language-names to languages
@@ -234,7 +223,6 @@ void LanguageController::initialize()
 {
     Q_D(LanguageController);
 
-    d->activeLanguages = {};
     d->languages = {};
     d->languageCache = {};
     d->mimeTypeCache = {};
@@ -248,10 +236,6 @@ void LanguageController::initialize()
 
     // make sure the DUChain is setup before we try to access it from different threads at the same time
     DUChain::self();
-
-    connect(Core::self()->documentController(), &IDocumentController::documentActivated,
-            this, [this] (IDocument* document) { Q_D(LanguageController); d->documentActivated(document); },
-            Qt::UniqueConnection);
 }
 
 void LanguageController::cleanup()
@@ -260,15 +244,6 @@ void LanguageController::cleanup()
 
     QMutexLocker lock(&d->dataMutex);
     d->m_cleanedUp = true;
-}
-
-QList<ILanguageSupport*> LanguageController::activeLanguages()
-{
-    Q_D(LanguageController);
-
-    QMutexLocker lock(&d->dataMutex);
-
-    return d->activeLanguages;
 }
 
 StaticAssistantsManager* LanguageController::staticAssistantsManager() const

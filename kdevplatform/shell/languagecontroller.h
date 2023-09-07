@@ -28,8 +28,6 @@ public:
     //After this was called, no more languages will be returned
     void cleanup();
 
-    /** @copydoc ILanguageController::activeLanguages() */
-    QList<ILanguageSupport*> activeLanguages() override;
     /** @copydoc ILanguageController::language() */
     ILanguageSupport* language(const QString &name) const override;
     /** @copydoc ILanguageController::languageForUrl() */
