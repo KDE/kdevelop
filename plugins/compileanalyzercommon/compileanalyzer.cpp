@@ -84,6 +84,13 @@ CompileAnalyzer::CompileAnalyzer(IPlugin* plugin,
             this, &CompileAnalyzer::updateActions);
     connect(core()->documentController(), &KDevelop::IDocumentController::documentActivated,
             this, &CompileAnalyzer::updateActions);
+    // TODO: updateActions() should be connected to IDocumentController::documentUrlChanged as well. However, this
+    // works incorrectly, because IProjectController::findProjectForUrl() returns nullptr for a just-renamed document.
+    // The same applies to cppcheck::Plugin::updateActions(). The delayed inclusion of a renamed file into its project
+    // negatively affects correctness of other slots connected to the documentUrlChanged signal, such as
+    // CurrentProjectSet::setCurrentDocument() and (in case of custom project formatting configuration)
+    // SourceFormatterController::updateFormatTextAction(). See also a similar TODO in
+    // ProjectManagerView::ProjectManagerView().
 
     connect(core()->projectController(), &KDevelop::IProjectController::projectOpened,
             this, &CompileAnalyzer::updateActions);

@@ -105,6 +105,9 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
             locateCurrentDocument();
         }
     });
+    // TODO: the above lambda should be connected to IDocumentController::documentUrlChanged as well. However, this
+    // works incorrectly, because a renamed file is included into its project with a delay. This issue also affects
+    // other slots connected to documentUrlChanged (see a similar TODO in CompileAnalyzer::CompileAnalyzer()).
     syncActionMenu->addAction(autoSyncSubAction);
 
     const auto updateSyncAction = [syncActionMenu, syncSubAction, autoSyncSubAction] {
