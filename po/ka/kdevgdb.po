@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-26 00:44+0000\n"
-"PO-Revision-Date: 2022-09-12 09:37+0200\n"
+"PO-Revision-Date: 2023-09-06 10:38+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
 #, kde-format
@@ -105,12 +105,12 @@ msgstr ""
 #: debugsession.cpp:272
 #, kde-format
 msgid "<unknown version>"
-msgstr ""
+msgstr "<უცნობი ვერსია>"
 
 #: debugsession.cpp:296
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
-msgstr ""
+msgstr "<b>გჭირდებათ gdb 7.0.0 ან უფრო ახალი.</b><br />იყენებთ: %1"
 
 #: debugsession.cpp:308
 #, kde-format
@@ -128,7 +128,7 @@ msgstr ""
 #: gdb.cpp:68
 #, kde-format
 msgid "Could not locate the debugging shell '%1'."
-msgstr ""
+msgstr "გამართვის გარსი '%1' ვერ ვიპოვე."
 
 #: gdbconfigpage.cpp:93
 #, kde-format
@@ -154,7 +154,7 @@ msgstr "მიმდინარე სესიის გაუქმება"
 #: gdbconfigpage.cpp:162
 #, kde-format
 msgid "Executes a native application in GDB"
-msgstr ""
+msgstr "უშვებს ადგილობრივ აპლიკაციას GDB-ში"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: gdbconfigpage.ui:29
@@ -168,7 +168,7 @@ msgstr "გამმართველი"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger e&xecutable:"
-msgstr ""
+msgstr "გამმართველის &გამშვები ფაილი:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:48
@@ -194,7 +194,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to gdb executable..."
-msgstr ""
+msgstr "ბილიკის გადაფარვა gdb-ის გამშვებ ფაილამდე..."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
@@ -336,7 +336,7 @@ msgstr "გაუ&შვით გარსის სკრიპტი:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This script is sourced by gdb when the debugging starts."
-msgstr ""
+msgstr "ეს სკრიპტი გამოიყენება წყაროდ gdb-ის მიერ, როცა გამართვა დაიწყება."
 
 #. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
 #: gdbconfigpage.ui:213
