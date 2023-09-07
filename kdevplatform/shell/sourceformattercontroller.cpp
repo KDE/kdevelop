@@ -251,6 +251,8 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
             this, &SourceFormatterController::updateFormatTextAction);
     connect(Core::self()->documentController(), &IDocumentController::documentClosed,
             this, &SourceFormatterController::updateFormatTextAction);
+    connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this,
+            &SourceFormatterController::updateFormatTextAction);
 
     qRegisterMetaType<QPointer<KDevelop::TextDocument>>();
     connect(Core::self()->documentController(), &IDocumentController::documentLoaded,
