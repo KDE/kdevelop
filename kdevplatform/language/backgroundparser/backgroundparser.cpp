@@ -955,6 +955,8 @@ void BackgroundParser::documentClosed(IDocument* document)
         QMutexLocker l2(&d->m_managedMutex);
         auto urlIt = d->m_managed.find(url);
         Q_ASSERT(urlIt != d->m_managed.end());
+        Q_ASSERT(*urlIt);
+        Q_ASSERT((*urlIt)->document() == textDocument);
 
         qCDebug(LANGUAGE) << "removing" << url.str() << "from background parser";
         delete *urlIt;
