@@ -54,9 +54,6 @@ void KDevelop::PersistentMovingRangePrivate::disconnectTracker()
 void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent()
 {
     if (m_movingRange) {
-        Q_ASSERT(m_tracker);
-        Q_ASSERT(m_movingRange);
-
         m_valid = false; /// @todo More precise tracking: Why is the document being invalidated? Try
         ///            keeping the range alive. DocumentChangeTracker to the rescue.
         delete m_movingRange;
