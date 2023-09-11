@@ -35,22 +35,6 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
     }
 }
 
-void KDevelop::PersistentMovingRangePrivate::disconnectTracker()
-{
-    Q_ASSERT(m_tracker);
-    Q_ASSERT(m_movingRange);
-    // can't use new connect syntax here, MovingInterface is not a QObject
-    disconnect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this,
-               SLOT(aboutToDeleteMovingInterfaceContent()));
-    disconnect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(
-                                                 KTextEditor::Document*)), this,
-               SLOT(aboutToInvalidateMovingInterfaceContent()));
-
-    delete m_movingRange;
-    m_tracker.clear();
-    m_movingRange = nullptr;
-}
-
 void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent()
 {
     if (m_movingRange) {

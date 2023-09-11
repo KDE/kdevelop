@@ -23,8 +23,6 @@ public:
 
     void connectTracker();
 
-    void disconnectTracker();
-
     bool m_valid = false;
     bool m_shouldExpand = false;
     KTextEditor::Range m_range;
