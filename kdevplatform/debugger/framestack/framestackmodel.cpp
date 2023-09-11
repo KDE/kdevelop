@@ -100,15 +100,16 @@ void FrameStackModel::setFrames(int threadNumber, const QVector<FrameItem>& fram
     QModelIndex threadIndex = d->indexForThreadNumber(threadNumber);
     Q_ASSERT(threadIndex.isValid());
 
-    if (!d->m_frames[threadNumber].isEmpty()) {
-        beginRemoveRows(threadIndex, 0, d->m_frames[threadNumber].count()-1);
-        d->m_frames[threadNumber].clear();
+    auto& threadFrames = d->m_frames[threadNumber];
+    if (!threadFrames.empty()) {
+        beginRemoveRows(threadIndex, 0, threadFrames.size() - 1);
+        threadFrames.clear();
         endRemoveRows();
     }
 
     if (!frames.isEmpty()) {
         beginInsertRows(threadIndex, 0, frames.count()-1);
-        d->m_frames[threadNumber] = frames;
+        threadFrames = frames;
         endInsertRows();
     }
 
@@ -134,9 +135,9 @@ void FrameStackModel::insertFrames(int threadNumber, const QVector<FrameItem>& f
     QModelIndex threadIndex = d->indexForThreadNumber(threadNumber);
     Q_ASSERT(threadIndex.isValid());
 
-    beginInsertRows(threadIndex, d->m_frames[threadNumber].count()-1,
-                    d->m_frames[threadNumber].count()+frames.count()-1);
-    d->m_frames[threadNumber] << frames;
+    auto& threadFrames = d->m_frames[threadNumber];
+    beginInsertRows(threadIndex, threadFrames.size() - 1, threadFrames.size() + frames.size() - 1);
+    threadFrames << frames;
     endInsertRows();
 }
 
@@ -430,9 +431,8 @@ void FrameStackModel::fetchMoreFrames()
     const int fetch = 20 * d->m_subsequentFrameFetchOperations * d->m_subsequentFrameFetchOperations;
     if (d->m_currentThread != -1 && d->m_hasMoreFrames[d->m_currentThread]) {
         setHasMoreFrames(d->m_currentThread, false);
-        fetchFrames(d->m_currentThread,
-                    d->m_frames[d->m_currentThread].count(),
-                    d->m_frames[d->m_currentThread].count()-1+fetch);
+        const int frameCount = d->m_frames[d->m_currentThread].size();
+        fetchFrames(d->m_currentThread, frameCount, frameCount - 1 + fetch);
     }
 }
 
