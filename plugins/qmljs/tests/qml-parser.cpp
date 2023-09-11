@@ -62,7 +62,7 @@ private:
             }
         }
         if (!m_session->problems().isEmpty()) {
-            qerr << endl << "problems encountered during parsing:" << Qt::endl;
+            qerr << "\nproblems encountered during parsing:" << Qt::endl;
             foreach(const ProblemPointer problem, m_session->problems()) {
                 qerr << problem->toString();
             }

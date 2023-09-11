@@ -124,7 +124,7 @@ private:
         }
         const auto problems = m_session.problems();
         if (!problems.isEmpty()) {
-            qout << endl << "problems encountered during parsing:" << Qt::endl;
+            qout << "\nproblems encountered during parsing:" << Qt::endl;
             for (auto& p : problems) {
                 qout << p->description() << Qt::endl;
             }

@@ -92,7 +92,7 @@ private:
 
         const auto problems = m_session.problemsForFile(file);
         if (!problems.isEmpty()) {
-            qerr << Qt::endl << "problems encountered during parsing:" << Qt::endl;
+            qerr << "\nproblems encountered during parsing:" << Qt::endl;
             for (const ProblemPointer& problem : problems) {
                 qerr << problem->toString() << Qt::endl;
             }
