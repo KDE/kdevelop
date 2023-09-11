@@ -19,6 +19,7 @@
 namespace KDevelop {
 class IDocument;
 class IProject;
+class IProjectFileManager;
 class ProjectFileItem;
 class Path;
 class WatchedDocumentSetPrivate;
@@ -88,8 +89,8 @@ public:
     explicit ProjectSet(QObject* parent);
 
 protected:
-    void trackProjectFiles(const IProject* project);
-    void stopTrackingProjectFiles(const IProject* project);
+    void trackProjectFiles(const IProjectFileManager* projectFileManager);
+    void stopTrackingProjectFiles(const IProjectFileManager* projectFileManager);
 
 protected Q_SLOTS:
     void fileAdded(KDevelop::ProjectFileItem*);
@@ -137,6 +138,12 @@ protected:
     };
     explicit AllProjectSet(InitFlag initFlag, QObject* parent);
     void reload();
+
+private:
+    void projectOpened(const IProject* project);
+    void addProjectFiles(const IProject& project);
+
+    QSet<const IProjectFileManager*> m_trackedProjectFileManagers;
 };
 
 class DocumentsInPathSet : public AllProjectSet

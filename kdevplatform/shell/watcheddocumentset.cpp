@@ -327,16 +327,15 @@ void ProjectSet::fileRenamed(const Path& oldFile, ProjectFileItem* newFile)
     fileAdded(newFile);
 }
 
-static const QObject* qobjectProjectFileManager(const IProject* project)
+static const QObject* qobjectProjectFileManager(const IProjectFileManager* projectFileManager)
 {
-    Q_ASSERT(project);
     // The implementation should derive from QObject somehow
-    return dynamic_cast<const QObject*>(project->projectFileManager());
+    return dynamic_cast<const QObject*>(projectFileManager);
 }
 
-void ProjectSet::trackProjectFiles(const IProject* project)
+void ProjectSet::trackProjectFiles(const IProjectFileManager* projectFileManager)
 {
-    auto* const fileManager = qobjectProjectFileManager(project);
+    auto* const fileManager = qobjectProjectFileManager(projectFileManager);
     if (!fileManager) {
         return;
     }
@@ -349,9 +348,9 @@ void ProjectSet::trackProjectFiles(const IProject* project)
             SLOT(fileRenamed(KDevelop::Path, KDevelop::ProjectFileItem*)));
 }
 
-void ProjectSet::stopTrackingProjectFiles(const IProject* project)
+void ProjectSet::stopTrackingProjectFiles(const IProjectFileManager* projectFileManager)
 {
-    auto* const fileManager = qobjectProjectFileManager(project);
+    auto* const fileManager = qobjectProjectFileManager(projectFileManager);
     if (!fileManager) {
         return;
     }
@@ -388,13 +387,13 @@ void CurrentProjectSet::handleCurrentDocumentChange()
     }
 
     if (m_currentProject) {
-        stopTrackingProjectFiles(m_currentProject);
+        stopTrackingProjectFiles(m_currentProject->projectFileManager());
     }
     m_currentProject = projectForUrl;
 
     if (m_currentProject) {
         d->setDocuments(m_currentProject->fileSet(), DoUpdate | DoEmit);
-        trackProjectFiles(m_currentProject);
+        trackProjectFiles(m_currentProject->projectFileManager());
     } else {
         d->clear();
     }
@@ -425,6 +424,13 @@ AllProjectSet::AllProjectSet(InitFlag initFlag, QObject* parent)
     case InitFlag::SkipLoadOnInit:
         break;
     }
+
+    const auto* const projectController = ICore::self()->projectController();
+    connect(projectController, &IProjectController::projectOpened, this, &AllProjectSet::projectOpened);
+    // When a project is closed, simply reloading can be more efficient than removing the closed project's
+    // files, especially if this was the only open project. Furthermore, a single file can belong to
+    // multiple open projects. In this corner case removing the closed project's files is incorrect.
+    connect(projectController, &IProjectController::projectClosed, this, &AllProjectSet::reload);
 }
 
 void AllProjectSet::reload()
@@ -433,19 +439,58 @@ void AllProjectSet::reload()
 
     d->clear();
 
+    QSet<const IProjectFileManager*> openProjectFileManagers;
+
     const auto projects = ICore::self()->projectController()->projects();
     for (const IProject* project : projects) {
-        const auto fileSet = project->fileSet();
-        for (const IndexedString& indexedString : fileSet) {
-            if (include(indexedString)) {
-                d->addDocument(indexedString);
-            }
+        addProjectFiles(*project);
+        openProjectFileManagers.insert(project->projectFileManager());
+    }
+
+    if (m_trackedProjectFileManagers != openProjectFileManagers) {
+        const auto removedFileManagers = m_trackedProjectFileManagers - openProjectFileManagers;
+        for (auto* f : removedFileManagers) {
+            stopTrackingProjectFiles(f);
         }
-        trackProjectFiles(project);
+
+        const auto addedFileManagers = openProjectFileManagers - m_trackedProjectFileManagers;
+        for (auto* f : addedFileManagers) {
+            trackProjectFiles(f);
+        }
+
+        m_trackedProjectFileManagers = openProjectFileManagers;
     }
 
     d->updateImports();
     emit changed();
+}
+
+void AllProjectSet::projectOpened(const IProject* project)
+{
+    Q_D(WatchedDocumentSet);
+
+    addProjectFiles(*project);
+
+    const auto* const projectFileManager = project->projectFileManager();
+    if (!m_trackedProjectFileManagers.contains(projectFileManager)) {
+        trackProjectFiles(projectFileManager);
+        m_trackedProjectFileManagers.insert(projectFileManager);
+    }
+
+    d->updateImports();
+    emit changed();
+}
+
+void AllProjectSet::addProjectFiles(const IProject& project)
+{
+    Q_D(WatchedDocumentSet);
+
+    const auto fileSet = project.fileSet();
+    for (const IndexedString& document : fileSet) {
+        if (include(document)) {
+            d->addDocument(document);
+        }
+    }
 }
 
 ProblemScope AllProjectSet::scope() const
