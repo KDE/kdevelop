@@ -190,8 +190,10 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
         //frame
         if (static_cast<quintptr>(d->m_threads.count()) < index.internalId()) return QVariant();
         const ThreadItem &thread = d->m_threads.at(index.internalId()-1);
-        if (d->m_frames[thread.nr].count() <= index.row()) return QVariant();
-        const FrameItem &frame = d->m_frames[thread.nr].at(index.row());
+        const auto& threadFrames = d->m_frames[thread.nr];
+        if (index.row() >= threadFrames.size())
+            return QVariant();
+        const FrameItem& frame = threadFrames.at(index.row());
         if (index.column() == 0) {
             if (role == Qt::DisplayRole) {
                 return QVariant(QString::number(frame.nr));
