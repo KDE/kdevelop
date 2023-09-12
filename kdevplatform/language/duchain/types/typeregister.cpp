@@ -71,6 +71,7 @@ TypeSystem& TypeSystem::self()
 
 void TypeSystem::registerTypeClassInternal(AbstractTypeFactory* repo, uint dataClassSize, uint identity)
 {
+    qCDebug(LANGUAGE) << "Registering type class" << identity;
     Q_ASSERT(repo);
     Q_ASSERT(!m_factories.contains(identity));
     m_factories.insert(identity, repo);
