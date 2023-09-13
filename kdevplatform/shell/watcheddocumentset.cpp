@@ -303,7 +303,7 @@ ProjectSet::ProjectSet(QObject* parent)
     // Multiple projects can share a project file manager, e.g. CMakeManager. When a project P that
     // is being opened uses an already tracked project file manager, fileAdded() is invoked for each file
     // that belongs to P. If P contains thousands of files with many problems, KDevelop UI freezes,
-    // because a slow function ProblemTreeView::resizeColumns() is invoked on each document set change.
+    // because the ProblemReporterModel model is reset on each document set change.
     // Suspend adding files while a project is being opened. Derived classes connect to the signal
     // IProjectController::projectOpened and add all of the newly opened project's files at once, if needed.
     const auto* const projectController = ICore::self()->projectController();

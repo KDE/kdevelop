@@ -86,6 +86,7 @@ public:
     explicit ProblemModel(QObject *parent, ProblemStore *store = nullptr);
     ~ProblemModel() override;
 
+    // NOTE: keep the enumerators of Columns in sync with the sizePolicy array in ProblemTreeView::resizeColumns().
     enum Columns {
         Error,
         Source,

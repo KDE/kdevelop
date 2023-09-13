@@ -31,9 +31,6 @@ public:
     void setModel(QAbstractItemModel* model) override;
 
     void contextMenuEvent(QContextMenuEvent*) override;
-    void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
-                             const QVector<int>& roles = QVector<int>()) override;
-    void reset() override;
 
     int setFilter(const QString& filterText);
 
@@ -45,7 +42,7 @@ Q_SIGNALS:
     void changed();
 
 protected:
-    void showEvent(QShowEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
 
 private Q_SLOTS:
     void itemActivated(const QModelIndex& index);
@@ -54,6 +51,8 @@ private:
     void resizeColumns();
     ProblemReporterPlugin* m_plugin;
     QSortFilterProxyModel* m_proxy;
+    int m_averageCharWidth = -1;
+    int m_headerWidth = -1;
 };
 
 #endif

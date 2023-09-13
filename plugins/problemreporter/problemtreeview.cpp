@@ -31,6 +31,9 @@
 #include <shell/problem.h>
 #include <shell/problemconstants.h>
 
+#include <algorithm>
+#include <array>
+
 using namespace KDevelop;
 
 namespace {
@@ -117,6 +120,8 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
 
     m_proxy->setFilterKeyColumn(-1);
     m_proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    resizeColumns();
 }
 
 ProblemTreeView::~ProblemTreeView()
@@ -154,20 +159,53 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
 
 void ProblemTreeView::resizeColumns()
 {
-    for (int i = 0; i < model()->columnCount(); ++i)
-        resizeColumnToContents(i);
-}
+    // Don't simply call QTreeView::resizeColumnToContents() for each column here,
+    // because it is not useful enough to justify significant performance cost.
+    // Instead, set column widths to heuristic values independent on the contents (the problem list).
 
-void ProblemTreeView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
-{
-    QTreeView::dataChanged(topLeft, bottomRight, roles);
-    resizeColumns();
-}
+    const int averageCharWidth = fontMetrics().averageCharWidth();
+    const int headerWidth = header()->width();
+    if (averageCharWidth == m_averageCharWidth && headerWidth == m_headerWidth) {
+        // No reason to change column widths. This early return is not just an optimization: KDevelop should not
+        // gratuitously reapply unchanged heuristic column widths, because the user may have fine-tuned them manually.
+        return;
+    }
+    m_averageCharWidth = averageCharWidth;
+    m_headerWidth = headerWidth;
 
-void ProblemTreeView::reset()
-{
-    QTreeView::reset();
-    resizeColumns();
+    struct ColumnSizePolicy
+    {
+        int minWidthInCharacters;
+        int stretchFactor;
+    };
+    static constexpr std::array<ColumnSizePolicy, 5> sizePolicy{
+        ColumnSizePolicy{40, 20}, // Error
+        ColumnSizePolicy{25, 1}, //  Source
+        ColumnSizePolicy{30, 10}, // File
+        ColumnSizePolicy{10, 1}, //  Line
+        ColumnSizePolicy{10, 1}, //  Column
+    };
+    static_assert(sizePolicy.size() == ProblemModel::LastColumn);
+
+    // Cannot use std::accumulate() here, because it is not constexpr in C++17.
+    static constexpr ColumnSizePolicy total = [] {
+        ColumnSizePolicy sum{};
+        for (auto p : sizePolicy) {
+            sum.minWidthInCharacters += p.minWidthInCharacters;
+            sum.stretchFactor += p.stretchFactor;
+        }
+        return sum;
+    }();
+
+    const int remainingPixels = std::max(0, headerWidth - total.minWidthInCharacters * averageCharWidth);
+
+    // Give each column its minimum needed width. If there is any horizontal space left,
+    // distribute it among columns in proportion to their stretch factors.
+    for (std::size_t i = 0; i < sizePolicy.size(); ++i) {
+        int width = sizePolicy[i].minWidthInCharacters * averageCharWidth;
+        width += remainingPixels * sizePolicy[i].stretchFactor / total.stretchFactor;
+        setColumnWidth(i, width);
+    }
 }
 
 int ProblemTreeView::setFilter(const QString& filterText)
@@ -232,9 +270,11 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
 
 }
 
-void ProblemTreeView::showEvent(QShowEvent* event)
+void ProblemTreeView::resizeEvent(QResizeEvent* event)
 {
-    Q_UNUSED(event)
+    QTreeView::resizeEvent(event);
+    // resizeEvent() is invoked whenever this tree view is resized and also whenever the default system font
+    // changes. So the resizeColumns() call below should cover all scenarios where heuristic column widths change.
     resizeColumns();
 }
 
