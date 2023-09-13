@@ -154,7 +154,7 @@ msgid ""
 "<p>Defines what type of filtering should be applied to the output. E.g. to "
 "indicate errors by red text.</p>"
 msgstr ""
-"<p>Definix quin tipus de filtre s'hauria d'aplicar a l'eixida. P. ex. per a "
+"<p>Definix quin tipus de filtre s'hauria d'aplicar a l'eixida. P. ex., per a "
 "indicar els errors amb text roig.</p>"
 
 #: editexternalscript.cpp:106

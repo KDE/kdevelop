@@ -500,14 +500,14 @@ msgstr "Busca:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to next match"
-msgstr "Salta a la coincidència següent"
+msgstr "Salta fins a la coincidència següent"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
 #: documentation/documentationfindwidget.ui:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to previous match"
-msgstr "Salta a la coincidència anterior"
+msgstr "Salta fins a la coincidència anterior"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
 #: documentation/documentationfindwidget.ui:82
@@ -2604,13 +2604,13 @@ msgstr "Canvia a la finestra anterior."
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Next Outputmark"
-msgstr "Salta a la marca d'eixida següent"
+msgstr "Salta fins a la marca d'eixida següent"
 
 #: shell/mainwindow_p.cpp:258
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Previous Outputmark"
-msgstr "Salta a la marca d'eixida anterior"
+msgstr "Salta fins a la marca d'eixida anterior"
 
 #: shell/mainwindow_p.cpp:265
 #, kde-format

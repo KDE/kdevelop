@@ -49,7 +49,7 @@ msgid ""
 "cursor, e.g. with all the parameter of a function."
 msgstr ""
 "Afig un esquelet de comentari bàsic de Doxygen davant de la declaració baix "
-"el cursor, p. ex. amb tots els paràmetres d'una funció."
+"el cursor, p. ex., amb tots els paràmetres d'una funció."
 
 #: codeutilsplugin.cpp:85
 #, kde-format

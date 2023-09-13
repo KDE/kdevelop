@@ -180,13 +180,13 @@ msgstr "Obri ràpidament les &accions"
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Declaration"
-msgstr "Salta a la declaració"
+msgstr "Salta fins a la declaració"
 
 #: quickopenplugin.cpp:325
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Definition"
-msgstr "Salta a la definició"
+msgstr "Salta fins a la definició"
 
 #: quickopenplugin.cpp:330
 #, kde-format
