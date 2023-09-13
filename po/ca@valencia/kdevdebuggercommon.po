@@ -148,7 +148,7 @@ msgid ""
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
 "<b>Examina el fitxer de nucli</b><p>Açò carrega un fitxer de nucli, el qual "
-"normalment es crea després que l'aplicació ha fallat, p. ex. un error de "
+"normalment es crea després que l'aplicació ha fallat, p. ex., un error de "
 "segmentació. El fitxer de nucli conté una imatge de la memòria del programa "
 "al moment de la fallada, permetent-vos de fer una anàlisi post mortem.</p>"
 
@@ -629,7 +629,7 @@ msgstr "&AT&&T"
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
-"GDB utilitzarà el tipus de desassemblador AT&T (p. ex. mov 0xc(%ebp),%eax)."
+"GDB utilitzarà el tipus de desassemblador AT&T (p. ex., mov 0xc(%ebp),%eax)."
 
 #: widgets/disassemblewidget.cpp:105
 #, kde-format
@@ -644,7 +644,7 @@ msgid ""
 "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
 "+0xc])."
 msgstr ""
-"GDB utilitzarà el tipus de desassemblador Intel (p. ex. mov eax, DWORD PTR "
+"GDB utilitzarà el tipus de desassemblador Intel (p. ex., mov eax, DWORD PTR "
 "[ebp +0xc])."
 
 #: widgets/disassemblewidget.cpp:143

@@ -262,7 +262,7 @@ msgid ""
 "Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
 "from their immediately preceding closing brackets."
 msgstr ""
-"Dividix les claus abans de tancar els encapçalaments (p. ex. «else»\n"
+"Dividix les claus abans de tancar els encapçalaments (p. ex., «else»\n"
 "«catch», etc.) de la seua clau de tancament immediatament anterior."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
@@ -364,7 +364,7 @@ msgid ""
 msgstr ""
 "Igual que --break-blocks, excepte que també inserix\n"
 "línies buides al voltant dels encapçalaments de tancament\n"
-"(p. ex. «else», «catch»...).\n"
+"(p. ex., «else», «catch»...).\n"
 "\n"
 "Problemes coneguts:\n"
 "\n"
@@ -473,7 +473,7 @@ msgid ""
 "'while', ...)"
 msgstr ""
 "Inserix espais de farciment després de les capçaleres dels parèntesis (p. "
-"ex. «if», «for», «while»,...)"
+"ex., «if», «for», «while»,...)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:500
