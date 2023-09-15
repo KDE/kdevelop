@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-15 00:44+0000\n"
 "PO-Revision-Date: 2022-12-31 15:45+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -68,67 +68,67 @@ msgstr "Revert selected lines or hunk"
 msgid "Go to line in source"
 msgstr "Go to line in source"
 
-#: diffviewsctrl.cpp:102
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Unstage selected lines"
 
-#: diffviewsctrl.cpp:103
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Stage selected lines"
 
-#: diffviewsctrl.cpp:104
+#: diffviewsctrl.cpp:111
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Revert selected lines"
 
-#: diffviewsctrl.cpp:106
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Unstage selected hunk"
 
-#: diffviewsctrl.cpp:107
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Stage selected hunk"
 
-#: diffviewsctrl.cpp:108
+#: diffviewsctrl.cpp:115
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Revert selected hunk"
 
-#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:119 diffviewsctrl.cpp:125
+#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:171
+#: diffviewsctrl.cpp:178
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (staged)"
 
-#: diffviewsctrl.cpp:173
+#: diffviewsctrl.cpp:180
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Staged (%1)"
 
-#: diffviewsctrl.cpp:175
+#: diffviewsctrl.cpp:182
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Unstaged (%1)"
 
-#: diffviewsctrl.cpp:177
+#: diffviewsctrl.cpp:184
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (unstaged)"
 
-#: diffviewsctrl.cpp:332
+#: diffviewsctrl.cpp:339
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -137,7 +137,7 @@ msgstr ""
 "The selected lines will be reverted and the changes lost. This operation "
 "cannot be undone. Continue?"
 
-#: diffviewsctrl.cpp:334
+#: diffviewsctrl.cpp:341
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"

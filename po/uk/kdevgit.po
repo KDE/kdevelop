@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-15 00:44+0000\n"
 "PO-Revision-Date: 2022-09-26 08:38+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -70,67 +70,67 @@ msgstr "Скасувати зміни у позначених рядках аб�
 msgid "Go to line in source"
 msgstr "Перейти до рядка у коді"
 
-#: diffviewsctrl.cpp:102
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Скасувати позначення вибраних рядків"
 
-#: diffviewsctrl.cpp:103
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Позначити зміни у позначених рядках"
 
-#: diffviewsctrl.cpp:104
+#: diffviewsctrl.cpp:111
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Скасувати зміни у позначених рядках"
 
-#: diffviewsctrl.cpp:106
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Скасувати позначення вибраного фрагмента"
 
-#: diffviewsctrl.cpp:107
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Позначити зміни у позначеному фрагменті"
 
-#: diffviewsctrl.cpp:108
+#: diffviewsctrl.cpp:115
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Скасувати зміни у позначеному фрагменті"
 
-#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:119 diffviewsctrl.cpp:125
+#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:171
+#: diffviewsctrl.cpp:178
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (позначено)"
 
-#: diffviewsctrl.cpp:173
+#: diffviewsctrl.cpp:180
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Позначено (%1)"
 
-#: diffviewsctrl.cpp:175
+#: diffviewsctrl.cpp:182
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Не позначено (%1)"
 
-#: diffviewsctrl.cpp:177
+#: diffviewsctrl.cpp:184
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (не позначено)"
 
-#: diffviewsctrl.cpp:332
+#: diffviewsctrl.cpp:339
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -139,7 +139,7 @@ msgstr ""
 "Зміни у позначених рядка буде скасовано і втрачено. Скасувати наслідки такої "
 "дії неможливо. Продовжити виконання дії?"
 
-#: diffviewsctrl.cpp:334
+#: diffviewsctrl.cpp:341
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"

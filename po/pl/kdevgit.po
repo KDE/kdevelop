@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-15 00:44+0000\n"
 "PO-Revision-Date: 2022-11-25 21:57+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -83,67 +83,67 @@ msgstr "Wycofaj zaznaczone wiersze lub kawałek"
 msgid "Go to line in source"
 msgstr "Przejdź do wiersza w źródle"
 
-#: diffviewsctrl.cpp:102
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Odłóż zaznaczone wiersze"
 
-#: diffviewsctrl.cpp:103
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Dobierz zaznaczone wiersze"
 
-#: diffviewsctrl.cpp:104
+#: diffviewsctrl.cpp:111
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Wycofaj zaznaczone wiersze"
 
-#: diffviewsctrl.cpp:106
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Odłóż zaznaczony kawałek"
 
-#: diffviewsctrl.cpp:107
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Dobierz zaznaczony kawałek"
 
-#: diffviewsctrl.cpp:108
+#: diffviewsctrl.cpp:115
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Wycofaj zaznaczony kawałek"
 
-#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:119 diffviewsctrl.cpp:125
+#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:171
+#: diffviewsctrl.cpp:178
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (dobrane)"
 
-#: diffviewsctrl.cpp:173
+#: diffviewsctrl.cpp:180
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Dobrane (%1)"
 
-#: diffviewsctrl.cpp:175
+#: diffviewsctrl.cpp:182
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Odłożone (%1)"
 
-#: diffviewsctrl.cpp:177
+#: diffviewsctrl.cpp:184
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (odłożone)"
 
-#: diffviewsctrl.cpp:332
+#: diffviewsctrl.cpp:339
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -152,7 +152,7 @@ msgstr ""
 "Zaznaczone wiersze zostaną wycofane, a zmiany utracone. Nie można będzie "
 "wycofać tego działania. Czy kontynuować?"
 
-#: diffviewsctrl.cpp:334
+#: diffviewsctrl.cpp:341
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"

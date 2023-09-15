@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-15 00:44+0000\n"
 "PO-Revision-Date: 2023-04-25 10:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -77,67 +77,67 @@ msgstr "Отменить изменения выбранных строк или
 msgid "Go to line in source"
 msgstr "Перейти к строке в коде"
 
-#: diffviewsctrl.cpp:102
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Отменить промежуточное сохранение выбранных строк"
 
-#: diffviewsctrl.cpp:103
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Применить промежуточное сохранение выбранных строк"
 
-#: diffviewsctrl.cpp:104
+#: diffviewsctrl.cpp:111
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Отменить изменения выбранных строк"
 
-#: diffviewsctrl.cpp:106
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Отменить промежуточное сохранение выбранного блока"
 
-#: diffviewsctrl.cpp:107
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Применить промежуточное сохранение выбранного блока"
 
-#: diffviewsctrl.cpp:108
+#: diffviewsctrl.cpp:115
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Отменить изменения выбранного блока"
 
-#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:119 diffviewsctrl.cpp:125
+#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:171
+#: diffviewsctrl.cpp:178
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (с промежуточным сохранением)"
 
-#: diffviewsctrl.cpp:173
+#: diffviewsctrl.cpp:180
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Применено промежуточное сохранение (%1)"
 
-#: diffviewsctrl.cpp:175
+#: diffviewsctrl.cpp:182
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Не применено промежуточное сохранение (%1)"
 
-#: diffviewsctrl.cpp:177
+#: diffviewsctrl.cpp:184
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (без промежуточного сохранения)"
 
-#: diffviewsctrl.cpp:332
+#: diffviewsctrl.cpp:339
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -146,7 +146,7 @@ msgstr ""
 "Изменения выбранных строк будут отменены и потеряны. Это действие нельзя "
 "обратить. Продолжить?"
 
-#: diffviewsctrl.cpp:334
+#: diffviewsctrl.cpp:341
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
