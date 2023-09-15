@@ -367,13 +367,16 @@ public:
             delete doc;
             return false;
         }
-        //react on document deletion - we need to cleanup controller structures
 
-        QObject::connect(sdoc, &Sublime::Document::aboutToDelete, controller, &DocumentController::notifyDocumentClosed);
         //We check if it was already opened before
-        bool emitOpened = !documents.contains(url);
-        if(emitOpened)
+        const bool wasClosed = !documents.contains(url);
+        if (wasClosed) {
             documents[url]=doc;
+
+            // react on document deletion - we need to clean up controller structures
+            QObject::connect(sdoc, &Sublime::Document::aboutToDelete, controller,
+                             &DocumentController::notifyDocumentClosed);
+        }
 
         if (!activationParams.testFlag(IDocumentController::DoNotCreateView))
         {
@@ -516,7 +519,7 @@ public:
         }
 
         // Deferred signals, wait until it's all ready first
-        if( emitOpened ) {
+        if (wasClosed) {
             emit controller->documentOpened( doc );
         }
 
