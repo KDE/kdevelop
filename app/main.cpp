@@ -637,7 +637,7 @@ int main( int argc, char *argv[] )
 
         QFileInfo executableFileInfo(debugArgs.first());
         if (!executableFileInfo.exists()) {
-            executableFileInfo = QStandardPaths::findExecutable(debugArgs.first());
+            executableFileInfo = QFileInfo(QStandardPaths::findExecutable(debugArgs.first()));
             if (!executableFileInfo.exists()) {
                 QTextStream qerr(stderr);
                 qerr << QLatin1Char('\n') << i18nc("@info:shell", "Specified executable does not exist.") << QLatin1Char('\n');

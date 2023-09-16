@@ -56,7 +56,7 @@ public:
 
 private:
     void addCheck(const QString& checkName);
-    void applyEnabledRule(const QStringRef& rule, EnabledState enabledState);
+    void applyEnabledRule(const QStringView& rule, EnabledState enabledState);
     void resetEnabledState(EnabledState enabledState);
     void collectEnabledChecks(QStringList& enabledChecks) const;
 

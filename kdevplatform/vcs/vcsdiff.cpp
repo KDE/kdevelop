@@ -127,7 +127,8 @@ namespace
     {
         int commaPos = range.indexOf(QLatin1Char(','));
         if (commaPos > -1) {
-            return { range.midRef(0, commaPos).toInt(), range.midRef(commaPos + 1).toInt() };
+            QStringView rangev(range);
+            return { rangev.mid(0, commaPos).toInt(), rangev.mid(commaPos + 1).toInt() };
         }
         return { range.toInt(), 1 };
     }
@@ -366,7 +367,7 @@ public:
                 if (CONFLICT_RE->match(ln).hasMatch())
                     return {};
 
-                if (ln.startsWith(dest) || ln.startsWith(QLatin1Char(' ')) || ln.isEmpty() || inConflict) {
+                if (ln.startsWith(QLatin1Char(dest)) || ln.startsWith(QLatin1Char(' ')) || ln.isEmpty() || inConflict) {
                     if (dest == SRC)
                         // The -1 accounts for the fact that srcStart is 1-based
                         // but we need to return 0-based line numbers

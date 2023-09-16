@@ -73,7 +73,7 @@ QString zeroIndentation(const QString& str, int fromLine = 0)
         lines = lines.mid(fromLine);
     }
 
-    QRegExp nonWhiteSpace(QStringLiteral("\\S"));
+    QRegularExpression nonWhiteSpace(QStringLiteral("\\S"));
     int minLineStart = 10000;
     for (const auto& line : qAsConst(lines)) {
         int lineStart = line.indexOf(nonWhiteSpace);

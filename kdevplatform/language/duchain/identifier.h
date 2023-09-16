@@ -20,7 +20,7 @@
 //We use shared d-pointers, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.
 //krazy:excludeall=dpointer
 
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop {
 class IndexedTypeIdentifier;

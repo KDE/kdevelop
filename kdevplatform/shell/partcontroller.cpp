@@ -15,9 +15,9 @@
 #include <KActionCollection>
 #include <KToggleAction>
 #include <KLocalizedString>
-#include <KMimeTypeTrader>
 
 #include <KParts/Part>
+#include <KParts/PartLoader>
 
 #include <KTextEditor/View>
 #include <KTextEditor/Editor>
@@ -146,20 +146,12 @@ KParts::Part* PartController::createPart( const QString & mimeType,
         const QString & className,
         const QString & preferredName )
 {
-    KPluginFactory * editorFactory = findPartFactory(
-                                          mimeType,
-                                          partType,
-                                          preferredName );
-
-    if ( !className.isEmpty() && editorFactory )
-    {
-        return editorFactory->create<KParts::Part>(
-                   nullptr,
-                   this,
-                   className);
+    auto result = KParts::PartLoader::instantiatePartForMimeType<KParts::ReadOnlyPart>(mimeType);
+    if (!result) {
+        qCWarning(SHELL) << "failed to load part" << mimeType << result.errorText;
     }
 
-    return nullptr;
+    return result.plugin;
 }
 
 bool PartController::canCreatePart(const QUrl& url)
@@ -172,10 +164,7 @@ bool PartController::canCreatePart(const QUrl& url)
     else
         mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
 
-    KService::List offers = KMimeTypeTrader::self()->query(
-                                mimeType,
-                                QStringLiteral("KParts/ReadOnlyPart") );
-
+    const auto offers = KParts::PartLoader::partsForMimeType(mimeType);
     return offers.count() > 0;
 }
 

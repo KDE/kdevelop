@@ -44,7 +44,7 @@ public:
         : q( w )
     {
         m_copyAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18nc("@action:inmenu", "Copy Revision Id"), q);
-        m_copyAction->setShortcut(Qt::CTRL | Qt::Key_C);
+        m_copyAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_C));
         QObject::connect(m_copyAction, &QAction::triggered, q, [&] { copyRevision(); });
     }
 
@@ -144,7 +144,7 @@ void VcsEventWidgetPrivate::diffToPrevious()
     mainLayout->addWidget(mainWidget);
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
-    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    okButton->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Return));
     dlg->connect(buttonBox, &QDialogButtonBox::accepted, dlg, &QDialog::accept);
     dlg->connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
     mainLayout->addWidget(widget);
@@ -172,7 +172,7 @@ void VcsEventWidgetPrivate::diffRevisions()
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
-    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    okButton->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Return));
     dlg->connect(buttonBox, &QDialogButtonBox::accepted, dlg, &QDialog::accept);
     dlg->connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
     mainLayout->addWidget(buttonBox);

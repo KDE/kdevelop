@@ -164,7 +164,7 @@ void MainWindow::ensureVisible()
             showNormal();
         }
     }
-    KWindowSystem::forceActiveWindow(winId());
+    raise();
 }
 
 QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomElement& element)

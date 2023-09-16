@@ -1,4 +1,4 @@
-/* 
+/*
     SPDX-FileCopyrightText: 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
     SPDX-License-Identifier: LGPL-2.0-only
@@ -15,7 +15,7 @@ namespace Utils {
  * Copied from kdevelop-3.4, should be redone
  * @param index should be the index BEHIND the expression
  * */
-int expressionAt( const QString& contents, int index );
+int expressionAt(QStringView contents, int index );
 
 QString quoteExpression(const QString& expr);
 

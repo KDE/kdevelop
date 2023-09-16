@@ -111,7 +111,7 @@ bool BazaarUtils::isValidDirectory(const QUrl& dirPath)
 
 KDevelop::VcsStatusInfo BazaarUtils::parseVcsStatusInfoLine(const QString& line)
 {
-    const auto tokens = line.splitRef(QLatin1Char(' '), Qt::SkipEmptyParts);
+    const auto tokens = QStringView(line).split(QLatin1Char(' '), Qt::SkipEmptyParts);
     KDevelop::VcsStatusInfo result;
     if (tokens.size() < 2) // Don't know how to handle this situation (it is an error)
         return result;

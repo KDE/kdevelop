@@ -94,7 +94,7 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
     for (const KPluginMetaData& info : plugins) {
         m_projectPlugins.insert(info.name(), info);
 
-        QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
+        const QStringList filter = info.rawData().value(QStringLiteral("X-KDevelop-ProjectFilesFilter")).toVariant().toStringList();
 
         // some project file manager plugins like KDevGenericManager have no file filter set
         if (filter.isEmpty()) {

@@ -14,7 +14,7 @@
 class QMenu;
 class QIcon;
 class QUrl;
-class QStringList;
+#include <QStringList>
 class KConfigGroup;
 
 namespace KDevelop

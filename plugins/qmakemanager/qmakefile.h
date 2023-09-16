@@ -12,7 +12,7 @@
 
 #include "qmakefilevisitor.h"
 
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop
 {

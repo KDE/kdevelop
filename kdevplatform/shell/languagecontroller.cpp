@@ -202,7 +202,7 @@ void LanguageControllerPrivate::addLanguageSupport(KDevelop::ILanguageSupport* l
     Q_ASSERT(dynamic_cast<IPlugin*>(languageSupport));
 
     KPluginMetaData info = Core::self()->pluginController()->pluginInfo(dynamic_cast<IPlugin*>(languageSupport));
-    QStringList mimetypes = KPluginMetaData::readStringList(info.rawData(), KEY_SupportedMimeTypes());
+    QStringList mimetypes = info.rawData().value(KEY_SupportedMimeTypes()).toVariant().toStringList();
     addLanguageSupport(languageSupport, mimetypes);
 }
 

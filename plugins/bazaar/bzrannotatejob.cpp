@@ -66,13 +66,13 @@ void BzrAnnotateJob::parseNextLine()
             emit resultsReady(this);
             break;
         }
-        QString currentLine = m_outputLines[m_currentLine];
+        QStringView currentLine = m_outputLines[m_currentLine];
         if (currentLine.isEmpty()) {
             ++m_currentLine;
             continue;
         }
         bool revOk;
-        auto revision = currentLine.leftRef(currentLine.indexOf(QLatin1Char(' '))).toULong(&revOk);
+        auto revision = currentLine.left(currentLine.indexOf(QLatin1Char(' '))).toULong(&revOk);
         if (!revOk) {
             // Future compatibility - not a revision yet
             ++m_currentLine;

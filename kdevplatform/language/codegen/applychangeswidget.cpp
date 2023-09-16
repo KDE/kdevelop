@@ -8,8 +8,7 @@
 #include "applychangeswidget.h"
 
 #include <KTextEditor/Document>
-
-#include <KMimeTypeTrader>
+#include <KParts/PartLoader>
 
 #include <QAction>
 #include <QDialogButtonBox>
@@ -63,7 +62,7 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     auto mainLayout = new QVBoxLayout(this);
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
-    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    okButton->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Return));
     connect(buttonBox, &QDialogButtonBox::accepted, this, &ApplyChangesWidget::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &ApplyChangesWidget::reject);
 
@@ -156,8 +155,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString& file)
 
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(url);
 
-    KParts::ReadWritePart* part = KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(
-        mimetype.name(), widget, widget);
+    KParts::ReadWritePart* part = KParts::PartLoader::createPartInstanceForMimeType<KParts::ReadWritePart>(mimetype.name(), widget, widget);
     auto* document = qobject_cast<KTextEditor::Document*>(part);
     Q_ASSERT(document);
 

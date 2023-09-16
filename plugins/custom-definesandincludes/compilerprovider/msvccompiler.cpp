@@ -40,7 +40,7 @@ Defines MsvcCompiler::defines(Utils::LanguageType, const QString&) const
             if ( !buff.isEmpty() ) {
                 line = QString::fromUtf8(buff);
                 if ( line.startsWith( QLatin1String("#define ") ) ) {
-                    line = line.midRef(8).trimmed().toString();
+                    line = QStringView(line).mid(8).trimmed().toString();
                     int pos = line.indexOf(QLatin1Char(' '));
 
                     if ( pos != -1 ) {

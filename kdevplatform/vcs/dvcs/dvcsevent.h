@@ -13,7 +13,7 @@
 
 #include <vcs/vcsexport.h>
 
-class QStringList;
+#include <QStringList>
 class QString;
 
 namespace KDevelop

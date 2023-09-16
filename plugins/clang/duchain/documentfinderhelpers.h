@@ -13,7 +13,7 @@
 
 #include "clangprivateexport.h"
 
-class QStringList;
+#include <QStringList>
 class QString;
 
 /// Helper class for handling @see IBuddyDocumentFinder features.

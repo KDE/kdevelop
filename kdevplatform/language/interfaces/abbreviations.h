@@ -11,14 +11,13 @@
 
 #include <language/languageexport.h>
 
-class QStringList;
-class QStringRef;
+#include <QStringList>
 class QString;
 
 namespace KDevelop {
 class Path;
 
-KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviation(const QStringRef& word, const QString& typed);
+KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviation(const QStringView& word, const QString& typed);
 
 KDEVPLATFORMLANGUAGE_EXPORT bool matchesPath(const QString& path, const QString& typed);
 
@@ -32,7 +31,7 @@ KDEVPLATFORMLANGUAGE_EXPORT bool matchesPath(const QString& path, const QString&
  * @param typedFragments the fragments which were typed
  * @return bool true if match, else false
  */
-KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviationMulti(const QString& word, const QStringList& typedFragments);
+KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviationMulti(QStringView word, const QStringList& typedFragments);
 
 /**
  * @brief Matches a path against a list of search fragments.

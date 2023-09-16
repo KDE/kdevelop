@@ -154,7 +154,7 @@ bool PerforceImportMetadataWidget::validateP4user(const QString&  projectDir) co
         return false;
     }
     if(!processStdout.isEmpty()) {
-        const auto clientCmdOutput = processStdout.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+        const auto clientCmdOutput = QStringView(processStdout).split(QLatin1Char('\n'), Qt::SkipEmptyParts);
         QStringList clientItems;
         clientItems.reserve(clientCmdOutput.size());
         for (const auto& clientLine : clientCmdOutput) {

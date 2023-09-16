@@ -8,7 +8,6 @@
 #include "mainwindow_p.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QScreen>
@@ -375,9 +374,7 @@ void MainWindow::postMessage(Message* message)
 
 QString MainWindow::screenKey() const
 {
-    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QList<QScreen *> screens = QApplication::screens();
-    QRect desk = screens[scnum]->geometry();
+    QRect desk = screen()->geometry();
 
     // if the desktop is virtual then use virtual screen size
     if (QGuiApplication::primaryScreen()->virtualSiblings().size() > 1)

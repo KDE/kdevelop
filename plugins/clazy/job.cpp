@@ -149,8 +149,8 @@ void Job::processStderrLines(const QStringList& lines)
             // "real" jobs, created with public constructor.
             const auto document = m_timer.isNull() ? match.captured(1) : QFileInfo(match.captured(1)).canonicalFilePath();
 
-            const int line = match.capturedRef(2).toInt() - 1;
-            const int column = match.capturedRef(3).toInt() - 1;
+            const int line = match.capturedView(2).toInt() - 1;
+            const int column = match.capturedView(3).toInt() - 1;
 
             // TODO add KDevelop::IProblem::FinalLocationMode::ToEnd type ?
             KTextEditor::Range range(line, column, line, 1000);

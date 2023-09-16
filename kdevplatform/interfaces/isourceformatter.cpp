@@ -188,7 +188,7 @@ QString ISourceFormatter::optionMapToString(const QMap<QString, QVariant> &map)
 QMap<QString, QVariant> ISourceFormatter::stringToOptionMap(const QString &options)
 {
     QMap<QString, QVariant> map;
-    const auto pairs = options.splitRef(QLatin1Char(','), Qt::SkipEmptyParts);
+    const auto pairs = QStringView(options).split(QLatin1Char(','), Qt::SkipEmptyParts);
     for (auto& pair : pairs) {
         const int pos = pair.indexOf(QLatin1Char('='));
         map.insert(pair.left(pos).toString(), pair.mid(pos+1).toString());

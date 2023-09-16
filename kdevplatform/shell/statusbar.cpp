@@ -13,6 +13,7 @@
 
 #include <KColorScheme>
 #include <KSqueezedTextLabel>
+#include <KStatefulBrush>
 
 #include <interfaces/istatus.h>
 #include <interfaces/ilanguagecontroller.h>

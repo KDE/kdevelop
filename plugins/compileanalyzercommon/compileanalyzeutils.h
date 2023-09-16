@@ -12,7 +12,7 @@
 
 class QUrl;
 class QString;
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop
 {

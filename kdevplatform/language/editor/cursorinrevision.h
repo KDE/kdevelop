@@ -10,6 +10,7 @@
 #include <language/languageexport.h>
 
 #include <KTextEditor/Cursor>
+#include <QDebug>
 
 namespace KDevelop {
 /**

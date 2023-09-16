@@ -12,12 +12,13 @@
 #include "plugincontroller.h"
 
 #include <QElapsedTimer>
+#include <QJsonArray>
 #include <QMap>
+#include <QPluginLoader>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KPluginLoader>
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugin.h>
@@ -81,8 +82,8 @@ bool hasMandatoryProperties( const KPluginMetaData& info )
     }
 
     // the version property is only required when the plugin is not installed into the right directory
-    QVariant version = info.rawData().value(KEY_Version()).toVariant();
-    if (version.isValid() && version.value<int>() == KDEVELOP_PLUGIN_VERSION) {
+    QJsonValue version = info.rawData().value(KEY_Version());
+    if (!version.isUndefined() && version.toInt() == KDEVELOP_PLUGIN_VERSION) {
         return true;
     }
 
@@ -175,16 +176,16 @@ public:
         if (plugin.value(KEY_LoadMode()) == KEY_AlwaysOn()) {
             return false;
         }
-        const QStringList interfaces = KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces());
+        const auto interfaces = plugin.rawData().value(KEY_Interfaces()).toArray();
         qCDebug(SHELL) << "checking dependencies:" << interfaces;
         for (auto it = loadedPlugins.constBegin(), end = loadedPlugins.constEnd(); it != end; ++it) {
             const KPluginMetaData& info = it.key();
             if (info.pluginId() != plugin.pluginId()) {
-                const QStringList dependencies =
-                    KPluginMetaData::readStringList(plugin.rawData(), KEY_Required()) +
-                    KPluginMetaData::readStringList(plugin.rawData(), KEY_Optional());
-                for (const QString& dep : dependencies) {
-                    Dependency dependency(dep);
+                const auto dependencies =
+                    plugin.rawData().value(KEY_Required()).toArray() +
+                    plugin.rawData().value(KEY_Optional()).toArray();
+                for (const auto& dep : dependencies) {
+                    Dependency dependency(dep.toString());
                     if (!dependency.pluginName.isEmpty() && dependency.pluginName != plugin.pluginId()) {
                         continue;
                     }
@@ -222,7 +223,7 @@ public:
         const auto currentPlugins = plugins;
         for (const auto& info : currentPlugins) {
             if ((pluginName.isEmpty() || info.pluginId() == pluginName)
-                && (extension.isEmpty() || KPluginMetaData::readStringList(info.rawData(), KEY_Interfaces()).contains(extension))
+                && (extension.isEmpty() || info.rawData().value(KEY_Interfaces()).toArray().contains(extension))
                 && constraintsMatch(info, constraints)
                 && isEnabled(info))
             {
@@ -284,8 +285,8 @@ public:
         }
 
         KTextEditorIntegration::initialize();
-        const auto ktePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData& md) {
-            return md.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"));
+        const auto ktePlugins = KPluginMetaData::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData& md) {
+            return md.rawData().value(QStringLiteral("ServiceTypes")).toArray().contains(QStringLiteral("KDevelop/Plugin"));
         });
 
         qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << pluginIds(ktePlugins);
@@ -304,7 +305,7 @@ public:
             data[KEY_Category()] = KEY_Global();
             data[KEY_Mode()] = KEY_Gui();
             data[KEY_Version()] = KDEVELOP_PLUGIN_VERSION;
-            plugins.append({data, info.fileName(), info.metaDataFileName()});
+            plugins.append({data, info.fileName()});
         }
     }
 
@@ -319,7 +320,7 @@ PluginController::PluginController(Core *core)
 
     setObjectName(QStringLiteral("PluginController"));
 
-    auto newPlugins = KPluginLoader::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)));
+    auto newPlugins = KPluginMetaData::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)));
 
     qCDebug(SHELL) << "Found" << newPlugins.size() << "plugins:" << pluginIds(newPlugins);
     if (newPlugins.isEmpty()) {
@@ -578,14 +579,12 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     loadOptionalDependencies( info );
 
     // now we can finally load the plugin itself
-    KPluginLoader loader(info.fileName());
-    auto factory = loader.factory();
+    QPluginLoader loader(info.fileName());
+    auto factory = qobject_cast<KPluginFactory *>(loader.instance());
     if (!factory) {
         qCWarning(SHELL) << "Can't load plugin" << pluginId
-                   << "because a factory to load the plugin could not be obtained:" << loader.errorString();
-        return nullptr;
+                << "because a factory to load the plugin could not be obtained:" << loader.errorString();
     }
-
     // now create it
     auto plugin = factory->create<IPlugin>(d->core);
     if (!plugin) {
@@ -634,14 +633,14 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
 {
     Q_D(const PluginController);
 
-    const QStringList requiredList = KPluginMetaData::readStringList(info.rawData(), KEY_Required());
+    const QStringList requiredList = info.rawData().value(KEY_Required()).toVariant().toStringList();
     QSet<QString> required(requiredList.begin(), requiredList.end());
     if (!required.isEmpty()) {
-        d->foreachEnabledPlugin([&required] (const KPluginMetaData& plugin) -> bool {
-            const auto interfaces = KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces());
-            for (const QString& iface : interfaces) {
-                required.remove(iface);
-                required.remove(iface + QLatin1Char('@') + plugin.pluginId());
+        d->foreachEnabledPlugin([&required, info] (const KPluginMetaData& plugin) -> bool {
+            const auto interfaces = plugin.rawData().value(KEY_Interfaces()).toArray();
+            for (const auto& iface : interfaces) {
+                required.remove(iface.toString());
+                required.remove(iface.toString() + QLatin1Char('@') + plugin.pluginId());
             }
             return !required.isEmpty();
         });
@@ -656,9 +655,9 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
 
 void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
 {
-   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Optional());
-   for (const QString& dep : dependencies) {
-        Dependency dependency(dep);
+   const auto dependencies = info.rawData().value(KEY_Optional()).toArray();
+   for (const auto& dep : dependencies) {
+        Dependency dependency(dep.toString());
         if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
             qCDebug(SHELL) << "Couldn't load optional dependency:" << dep << info.pluginId();
         }
@@ -667,11 +666,11 @@ void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
 
 bool PluginController::loadDependencies( const KPluginMetaData& info, QString& failedDependency )
 {
-   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Required());
-   for (const QString& value : dependencies) {
-        Dependency dependency(value);
+   const auto dependencies = info.rawData().value(KEY_Required()).toArray();
+   for (const auto& value : dependencies) {
+        Dependency dependency(value.toString());
         if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
-            failedDependency = value;
+            failedDependency = value.toString();
             return false;
         }
     }

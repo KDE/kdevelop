@@ -296,7 +296,7 @@ void MainWindowPrivate::setupActions()
 
     action = actionCollection()->addAction( QStringLiteral("file_new") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-new")));
-    actionCollection()->setDefaultShortcut(action, Qt::CTRL | Qt::Key_N);
+    actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::CTRL | Qt::Key_N));
     action->setText( i18nc("@action new file", "&New" ) );
     action->setIconText( i18nc( "@action Shorter Text for 'New File' shown in the toolbar", "New") );
     connect( action, &QAction::triggered, this, &MainWindowPrivate::fileNew );

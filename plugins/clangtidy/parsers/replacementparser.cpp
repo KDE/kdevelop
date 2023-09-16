@@ -114,11 +114,11 @@ Replacement ReplacementParser::nextNode(const QRegularExpressionMatch& smatch)
 {
     Replacement repl;
 
-    if (smatch.capturedRef(1) != m_sourceFile) {
+    if (smatch.capturedView(1) != m_sourceFile) {
         return repl; // Parsing output from only one file.
     }
-    const int off = smatch.capturedRef(2).toInt();
-    const int len = smatch.capturedRef(3).toInt();
+    const int off = smatch.capturedView(2).toInt();
+    const int len = smatch.capturedView(3).toInt();
     repl.range = composeNextNodeRange(off, len);
     if (repl.range.isValid()) {
         repl.offset = off;

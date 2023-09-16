@@ -15,7 +15,7 @@ class QProcessEnvironment;
 class KConfig;
 template<typename T1, typename T2> class QMap;
 class QString;
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop {
 class EnvironmentProfileListPrivate;

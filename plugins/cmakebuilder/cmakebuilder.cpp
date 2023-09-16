@@ -106,7 +106,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             }
             KDevelop::ProjectFileItem* file = dom->file();
             int lastDot = file->text().lastIndexOf(QLatin1Char('.'));
-            const QString target = file->text().midRef(0, lastDot) + QLatin1String(".o");
+            const QString target = QStringView(file->text()).mid(0, lastDot) + QLatin1String(".o");
             build = makeBuilder->executeMakeTarget(dom->parent(), target);
             qCDebug(KDEV_CMAKEBUILDER) << "create build job for target" << build << dom << target;
         }

@@ -11,7 +11,7 @@
 
 #include <QScopedPointer>
 
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop {
 class TemplateRenderer;

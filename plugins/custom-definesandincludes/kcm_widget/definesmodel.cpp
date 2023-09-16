@@ -139,7 +139,7 @@ void DefinesModel::setDefines(const Defines& includes )
     m_defines.clear();
     m_defines.reserve(includes.size());
     for ( auto it = includes.begin(); it != includes.end(); ++it ) {
-        m_defines << qMakePair<QString,QString>( it.key(), it.value() );
+        m_defines << std::pair<QString, QString>{ it.key(), it.value() };
     }
     endResetModel();
 }

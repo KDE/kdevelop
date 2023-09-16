@@ -607,7 +607,7 @@ void DocumentController::setupActions()
 
     action = ac->addAction( QStringLiteral("file_open") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
-    ac->setDefaultShortcut(action, Qt::CTRL | Qt::Key_O);
+    ac->setDefaultShortcut(action, QKeySequence(Qt::CTRL | Qt::Key_O));
     action->setText(i18nc("@action",  "&Open..." ) );
     connect(action, &QAction::triggered,
             this, [this] { Q_D(DocumentController); d->chooseDocument(); } );
@@ -638,7 +638,7 @@ void DocumentController::setupActions()
 
     action = d->close = ac->addAction( QStringLiteral("file_close") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
-    ac->setDefaultShortcut(action, Qt::CTRL | Qt::Key_W);
+    ac->setDefaultShortcut(action, QKeySequence(Qt::CTRL | Qt::Key_W));
     action->setText( i18nc("@action", "&Close" ) );
     connect( action, &QAction::triggered, this, &DocumentController::fileClose );
     action->setToolTip( i18nc("@info:tooltip", "Close file" ) );
@@ -1084,7 +1084,7 @@ QUrl DocumentController::nextEmptyDocumentUrl()
         if (DocumentController::isEmptyDocumentUrl(doc->url())) {
             const auto match = pattern.match(doc->url().toDisplayString(QUrl::PreferLocalFile));
             if (match.hasMatch()) {
-                const int num = match.capturedRef(1).toInt();
+                const int num = match.capturedView(1).toInt();
                 nextEmptyDocNumber = qMax(nextEmptyDocNumber, num + 1);
             } else {
                 nextEmptyDocNumber = qMax(nextEmptyDocNumber, 1);

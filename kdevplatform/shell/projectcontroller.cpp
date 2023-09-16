@@ -221,7 +221,7 @@ public:
             // Do not show config pages for analyzer tools which need a buildSystemManager
             // TODO: turn into generic feature to disable plugin config pages which do not apply for a project
             if (!buildSystemManager) {
-                const auto required = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-IRequired"));
+                const auto required = info.value(QStringLiteral("X-KDevelop-IRequired"), QStringList{});
                 if (required.contains(QLatin1String("org.kdevelop.IBuildSystemManager"))) {
                     continue;
                 }
@@ -872,7 +872,7 @@ void ProjectController::openProject( const QUrl &projectFile )
         auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Abort);
         auto okButton = buttonBox->button(QDialogButtonBox::Ok);
         okButton->setDefault(true);
-        okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+        okButton->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Return));
         connect(buttonBox, &QDialogButtonBox::accepted, dialog.data(), &QDialog::accept);
         connect(buttonBox, &QDialogButtonBox::rejected, dialog.data(), &QDialog::reject);
         mainLayout->addWidget(buttonBox);

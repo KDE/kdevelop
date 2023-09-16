@@ -13,7 +13,7 @@
 #include <QByteArrayList>
 
 class QString;
-class QStringList;
+#include <QStringList>
 
 namespace FilesystemHelpers {
 /**

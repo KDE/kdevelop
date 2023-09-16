@@ -11,7 +11,7 @@
 #include "vcsexport.h"
 #include <QVariant>
 #include <QSharedDataPointer>
-class QStringList;
+#include <QStringList>
 class QString;
 
 namespace KDevelop

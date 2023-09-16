@@ -18,7 +18,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QRegularExpression>
-#include <QRegExp>
 
 #include <KProcess>
 #include <KLocalizedString>
@@ -209,7 +208,7 @@ QString MakeFileResolver::mapToBuild(const QString &path) const
   if (m_outOfSource) {
     if (wd.startsWith(m_source) && !wd.startsWith(m_build)) {
         //Move the current working-directory out of source, into the build-system
-        wd = QDir::cleanPath(m_build + QLatin1Char('/') + wd.midRef(m_source.length()));
+        wd = QDir::cleanPath(m_build + QLatin1Char('/') + QStringView(wd).mid(m_source.length()));
       }
   }
   return wd;
@@ -427,7 +426,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   executeCommand(source.createCommand(file, workingDirectory, makeParameters), workingDirectory, fullOutput);
 
   {
-    QRegExp newLineRx(QStringLiteral("\\\\\\n"));
+    QRegularExpression newLineRx(QStringLiteral("\\\\\\n"));
     fullOutput.remove(newLineRx);
   }
   ///@todo collect multiple outputs at the same time for performance-reasons
@@ -445,10 +444,10 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   ///STEP 1: Test if it is a recursive make-call
   // Do not search for recursive make-calls if we already have include-paths available. Happens in kernel modules.
   if (!includeRegularExpression().match(fullOutput).hasMatch()) {
-    QRegExp makeRx(QStringLiteral("\\bmake\\s"));
+    QRegularExpression makeRx(QStringLiteral("\\bmake\\s"));
     int offset = 0;
-    while ((offset = makeRx.indexIn(firstLine, offset)) != -1) {
-      QString prefix = firstLine.leftRef(offset).trimmed().toString();
+    while ((offset = firstLine.indexOf(makeRx, offset)) != -1) {
+      QString prefix = QStringView(firstLine).left(offset).trimmed().toString();
       if (prefix.endsWith(QLatin1String("&&")) || prefix.endsWith(QLatin1Char(';')) || prefix.isEmpty()) {
         QString newWorkingDirectory = workingDirectory;
         ///Extract the new working-directory
@@ -464,7 +463,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
           //We use the second directory. For t hat reason we search for the last index of "cd "
           int cdIndex = prefix.lastIndexOf(QLatin1String("cd "));
           if (cdIndex != -1) {
-            newWorkingDirectory = prefix.midRef(cdIndex + 3).trimmed().toString();
+            newWorkingDirectory = QStringView(prefix).mid(cdIndex + 3).trimmed().toString();
             if (QFileInfo(newWorkingDirectory).isRelative())
               newWorkingDirectory = workingDirectory + QLatin1Char('/') + newWorkingDirectory;
             newWorkingDirectory = QDir::cleanPath(newWorkingDirectory);
@@ -528,7 +527,7 @@ QRegularExpression MakeFileResolver::defineRegularExpression()
   return pattern;
 }
 
-static QString unescape(const QStringRef& input)
+static QString unescape(const QStringView& input)
 {
   QString output;
   output.reserve(input.length());
@@ -550,7 +549,7 @@ QHash<QString, QString> MakeFileResolver::extractDefinesFromCompileFlags(const Q
   auto it = defineRx.globalMatch(compileFlags);
   while (it.hasNext()) {
     const auto match = it.next();
-    const auto isUndefine = match.capturedRef(1) == QLatin1String("U");
+    const auto isUndefine = match.capturedView(1) == QLatin1String("U");
     const auto key = stringInterner.internString(match.captured(2));
     if (isUndefine) {
       defines.remove(key);
@@ -558,7 +557,7 @@ QHash<QString, QString> MakeFileResolver::extractDefinesFromCompileFlags(const Q
     }
     QString value;
     if (match.lastCapturedIndex() > 2) {
-      value = unescape(match.capturedRef(match.lastCapturedIndex()));
+      value = unescape(match.capturedView(match.lastCapturedIndex()));
     }
     defines[key] = stringInterner.internString(value);
   }
@@ -579,7 +578,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
       QString path = match.captured(2);
       if (path.startsWith(QLatin1Char('"')) || (path.startsWith(QLatin1Char('\'')) && path.length() > 2)) {
           //probable a quoted path
-          if (path.endsWith(path.leftRef(1))) {
+          if (path.endsWith(QStringView(path).left(1))) {
             //Quotation is ok, remove it
             path = path.mid(1, path.length() - 2);
           }
@@ -587,7 +586,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
       if (QDir::isRelativePath(path))
         path = workingDirectory + QLatin1Char('/') + path;
       const auto& internedPath = m_pathInterner.internPath(path);
-      const auto type = match.capturedRef(1);
+      const auto type = match.capturedView(1);
       const auto isFramework = type.startsWith(QLatin1String("-iframework"))
         || type.startsWith(QLatin1String("-F"));
       if (isFramework) {

@@ -74,7 +74,7 @@ void Job::postProcessStdout(const QStringList& lines)
 
         match = percentRegex.match(line);
         if (match.hasMatch()) {
-            setPercent(match.capturedRef(1).toULong());
+            setPercent(match.capturedView(1).toULong());
             continue;
         }
     }

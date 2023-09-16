@@ -17,7 +17,7 @@
 class QDebug;
 class QUrl;
 class QMimeType;
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop
 {

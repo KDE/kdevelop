@@ -15,6 +15,7 @@
 #include <QDirIterator>
 
 #include <KTextEditor/View>
+#include <KTextEditor/Document>
 
 #include <algorithm>
 
@@ -75,7 +76,7 @@ IncludePathProperties IncludePathProperties::parseText(const QString& text, int 
                 state = FindInclude;
                 break;
             case FindInclude:
-                if (text.midRef(idx, 7) != QLatin1String("include")) {
+                if (QStringView(text).mid(idx, 7) != QLatin1String("include")) {
                     return properties;
                 }
                 idx += 6;
@@ -230,7 +231,7 @@ public:
             }
 
             // replace the whole line
-            range.setEnd({lineNumber, line.size()});
+            range.setEnd({lineNumber, int(line.size())});
         } else {
             range.setEnd({lineNumber, properties.inputTo});
         }

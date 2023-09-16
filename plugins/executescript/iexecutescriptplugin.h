@@ -17,7 +17,7 @@ class ILaunchConfiguration;
 
 class QUrl;
 class QString;
-class QStringList;
+#include <QStringList>
 
 /**
 @author Andreas Pakulat
