@@ -20,6 +20,7 @@ find_path(CLANG_BUILTIN_DIR
     PATHS   "${LLVM_LIBRARY_DIRS}"
             "${CLANG_INCLUDE_DIRS}"
     PATH_SUFFIXES   "clang/${CLANG_VERSION_SUBDIR}/include"
+                    "../lib/clang/${CLANG_VERSION_SUBDIR}/include"
                     "../../../clang/${CLANG_VERSION_SUBDIR}/include"
     NO_DEFAULT_PATH
 )
