@@ -67,7 +67,7 @@ void ImportProjectJob::start()
     d->m_watcher = new QFutureWatcher<void>();
     connect(d->m_watcher, &QFutureWatcher<void>::finished, this, &ImportProjectJob::importDone);
     connect(d->m_watcher, &QFutureWatcher<void>::canceled, this, &ImportProjectJob::importCanceled);
-    QFuture<void> f = QtConcurrent::run(d, &ImportProjectJobPrivate::import, d->m_folder);
+    QFuture<void> f = QtConcurrent::run([this] {d->import(d->m_folder);});
     d->m_watcher->setFuture(f);
 }
 

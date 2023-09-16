@@ -14,6 +14,7 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QProcessEnvironment>
+#include <QRegularExpression>
 
 #include <debug.h>
 #define ifDebug(x)
@@ -144,7 +145,7 @@ void QMakeFileVisitor::visitAssignment(QMake::AssignmentAST* node)
         QString value = values.first().trimmed();
         QString regex = value.mid(2, value.indexOf(QLatin1Char('/'), 2));
         QString replacement = value.mid(value.indexOf(QLatin1Char('/'), 2) + 1, value.lastIndexOf(QLatin1Char('/')));
-        m_variableValues[node->identifier->value].replaceInStrings(QRegExp(regex), replacement);
+        m_variableValues[node->identifier->value].replaceInStrings(QRegularExpression(regex), replacement);
     }
 }
 

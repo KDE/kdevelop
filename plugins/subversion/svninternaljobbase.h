@@ -11,6 +11,7 @@
 #include <ThreadWeaver/Job>
 #include <QSemaphore>
 #include <QMutex>
+#include <QObject>
 
 extern "C" {
 #include <svn_wc.h>

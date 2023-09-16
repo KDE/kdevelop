@@ -17,6 +17,7 @@
 
 #include <clang-c/Index.h>
 
+#include <KTextEditor/Document>
 #include <QTextStream>
 #include <QRegularExpression>
 
@@ -233,7 +234,7 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
 
     QString functionName = ClangString(clang_getCursorSpelling(cursor)).toString();
     if (functionName.contains(QLatin1Char('<')) && !functionName.startsWith(QStringLiteral("operator<"))) {
-        stream << functionName.leftRef(functionName.indexOf(QLatin1Char('<')));
+        stream << QStringView(functionName).left(functionName.indexOf(QLatin1Char('<')));
     } else {
         stream << functionName;
     }
@@ -272,7 +273,7 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
         //KDevelop formats them as "t* x" and "t& x". Make that adjustment.
         const QString type = ClangString(clang_getTypeSpelling(clang_getCursorType(arg))).toString();
         if (type.endsWith(QLatin1String(" *")) || type.endsWith(QLatin1String(" &"))) {
-            stream << type.leftRef(type.length() - 2) << type.at(type.length() - 1);
+            stream << QStringView(type).left(type.length() - 2) << type.at(type.length() - 1);
         } else {
             stream << type;
         }

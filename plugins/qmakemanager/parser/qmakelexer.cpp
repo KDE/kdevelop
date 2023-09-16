@@ -217,7 +217,7 @@ int Lexer::nextTokenKind()
                 }
                 if (!isEndIdentifierCharacter((it - 1))) {
                     token = Parser::Token_INVALID;
-                } else if (m_content.midRef(m_tokenBegin, m_curpos - m_tokenBegin) == QLatin1String("else")) {
+                } else if (QStringView(m_content).mid(m_tokenBegin, m_curpos - m_tokenBegin) == QLatin1String("else")) {
                     token = Parser::Token_ELSE;
                 }
                 m_curpos--;

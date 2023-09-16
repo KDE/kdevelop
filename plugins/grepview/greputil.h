@@ -9,7 +9,7 @@
 #define KDEVPLATFORM_PLUGIN_GREPUTIL_H
 
 class QComboBox;
-class QStringList;
+#include <QStringList>
 class QString;
 
 /// Returns the contents of a QComboBox as a QStringList

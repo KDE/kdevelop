@@ -8,6 +8,7 @@
 #include "persistentmovingrangeprivate.h"
 #include <interfaces/icore.h>
 #include <util/foregroundlock.h>
+#include <KTextEditor/Document>
 
 KDevelop::PersistentMovingRange::PersistentMovingRange(const KTextEditor::Range& range, const IndexedString& document,
                                                        bool shouldExpand)

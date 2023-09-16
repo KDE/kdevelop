@@ -7,9 +7,7 @@
 #include "treeview.h"
 
 #include "treemodel.h"
-
-#include <QApplication>
-#include <QDesktopWidget>
+#include <QGuiApplication>
 #include <QScreen>
 
 using namespace KDevelop;

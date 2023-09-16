@@ -11,7 +11,7 @@
 
 #include "cmakecommonexport.h"
 
-class QStringList;
+#include <QStringList>
 
 namespace Ui {
     class CMakeExtraArgumentsHistory;

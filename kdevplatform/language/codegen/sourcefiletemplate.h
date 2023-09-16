@@ -14,7 +14,7 @@
 
 #include <language/languageexport.h>
 
-class QStringList;
+#include <QStringList>
 class KArchiveDirectory;
 
 namespace KDevelop {

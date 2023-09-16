@@ -420,7 +420,7 @@ QString formatComment(const QString& comment)
     if (comment.isEmpty())
         return comment;
 
-    auto lines = comment.splitRef(QLatin1Char('\n'));
+    auto lines = QStringView(comment).split(QLatin1Char('\n'));
 
     // remove common leading & trailing chars from the lines
     for (auto& l : lines) {

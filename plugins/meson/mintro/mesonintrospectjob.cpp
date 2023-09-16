@@ -243,7 +243,7 @@ void MesonIntrospectJob::start()
         return;
     }
 
-    auto future = QtConcurrent::run(this, &MesonIntrospectJob::import, m_buildDir);
+    auto future = QtConcurrent::run([this] { return import(m_buildDir); });
     m_futureWatcher.setFuture(future);
 }
 

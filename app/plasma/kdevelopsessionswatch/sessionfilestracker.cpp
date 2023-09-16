@@ -126,7 +126,7 @@ QVector<KDevelopSessionData> SessionFilesTracker::readSessionDataList() const
         }
 
         KConfig sessionDataStorage(sessionConfigFilePath, KConfig::SimpleConfig);
-        const KConfigGroup mainSessionData = sessionDataStorage.group("");
+        const KConfigGroup mainSessionData = sessionDataStorage.group(QString());
 
         const KDevelopSessionData sessionData {
             sessionDirName,

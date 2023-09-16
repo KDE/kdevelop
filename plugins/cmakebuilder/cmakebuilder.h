@@ -13,7 +13,7 @@
 #include <QUrl>
 #include <project/interfaces/iprojectbuilder.h>
 
-class QStringList;
+#include <QStringList>
 class KDialog;
 
 namespace KDevelop{

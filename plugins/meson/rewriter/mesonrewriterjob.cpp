@@ -106,7 +106,7 @@ bool MesonRewriterJob::doKill()
 
 void MesonRewriterJob::start()
 {
-    auto future = QtConcurrent::run(this, &MesonRewriterJob::execute);
+    auto future = QtConcurrent::run([this] { return execute(); });
     m_futureWatcher.setFuture(future);
 }
 

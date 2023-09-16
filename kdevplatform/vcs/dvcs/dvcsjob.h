@@ -21,7 +21,7 @@
 #include "../vcsjob.h"
 
 class QDir;
-class QStringList;
+#include <QStringList>
 
 
 namespace KDevelop

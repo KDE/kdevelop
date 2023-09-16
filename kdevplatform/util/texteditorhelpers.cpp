@@ -57,10 +57,10 @@ KTextEditor::Cursor KTextEditorHelpers::extractCursor(const QString& input, int*
         return KTextEditor::Cursor::invalid();
     }
 
-    int line = match.capturedRef(1).toInt() - 1;
+    int line = match.capturedView(1).toInt() - 1;
     // captured(2) for pattern2 will yield null QString, toInt() thus 0, so no need for if-else
     // don't use an invalid column when the line is valid
-    int column = qMax(0, match.capturedRef(2).toInt() - 1);
+    int column = qMax(0, match.capturedView(2).toInt() - 1);
 
     if (pathLength)
         *pathLength = match.capturedStart(0);

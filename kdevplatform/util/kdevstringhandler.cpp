@@ -16,13 +16,14 @@
 
 #include <QStringList>
 #include <QString>
-#include <QStringRef>
+#include <QStringView>
 #include <QByteArray>
 #include <QChar>
 #include <QDataStream>
 #include <QVariant>
 #include <QRegExp>
 #include <QTextDocument>
+#include <QIODevice>
 
 #include <algorithm>
 #include <cctype>
@@ -162,7 +163,7 @@ QByteArray escapeJavaScriptString(const QByteArray& str)
 }
 }
 
-int KDevelop::findAsciiIdentifierLength(const QStringRef& str)
+int KDevelop::findAsciiIdentifierLength(const QStringView& str)
 {
     if (str.isEmpty()) {
         return 0;
@@ -183,7 +184,7 @@ int KDevelop::findAsciiIdentifierLength(const QStringRef& str)
     return std::find_if_not(str.cbegin() + 1, str.cend(), partOfIdentifier) - str.cbegin();
 }
 
-KDevelop::VariableMatch KDevelop::matchPossiblyBracedAsciiVariable(const QStringRef& str)
+KDevelop::VariableMatch KDevelop::matchPossiblyBracedAsciiVariable(const QStringView& str)
 {
     if (str.isEmpty()) {
         return {};

@@ -13,7 +13,7 @@
 #include <QString>
 #include <QStringList>
 #include <QTest>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <QTemporaryFile>
 #include <QTemporaryDir>
@@ -70,38 +70,38 @@ void FindReplaceTest::init()
 void FindReplaceTest::testFind_data()
 {
     QTest::addColumn<QString>("subject");
-    QTest::addColumn<QRegExp>("search");
+    QTest::addColumn<QRegularExpression>("search");
     QTest::addColumn<MatchList>("matches");
 
-    QTest::newRow("Basic") << "foobar" << QRegExp("foo")
+    QTest::newRow("Basic") << "foobar" << QRegularExpression("foo")
                            << (MatchList() << Match(0, 0, 3));
-    QTest::newRow("Multiple matches") << "foobar\nbar\nbarfoo" << QRegExp("foo")
+    QTest::newRow("Multiple matches") << "foobar\nbar\nbarfoo" << QRegularExpression("foo")
                            << (MatchList() << Match(0, 0, 3) << Match(2, 3, 6));
-    QTest::newRow("Multiple on same line") << "foobarbaz" << QRegExp("ba")
+    QTest::newRow("Multiple on same line") << "foobarbaz" << QRegularExpression("ba")
                            << (MatchList() << Match(0, 3, 5) << Match(0, 6, 8));
-    QTest::newRow("Multiple sticked together") << "foofoobar" << QRegExp("foo")
+    QTest::newRow("Multiple sticked together") << "foofoobar" << QRegularExpression("foo")
                            << (MatchList() << Match(0, 0, 3) << Match(0, 3, 6));
-    QTest::newRow("RegExp (member call)") << "foo->bar ();\nbar();" << QRegExp("\\->\\s*\\b(bar)\\b\\s*\\(")
+    QTest::newRow("RegExp (member call)") << "foo->bar ();\nbar();" << QRegularExpression("\\->\\s*\\b(bar)\\b\\s*\\(")
                            << (MatchList() << Match(0, 3, 10));
     // the matching must be started after the last previous match
-    QTest::newRow("RegExp (greedy match)") << "foofooo" << QRegExp("[o]+")
+    QTest::newRow("RegExp (greedy match)") << "foofooo" << QRegularExpression("[o]+")
                            << (MatchList() << Match(0, 1, 3) << Match(0, 4, 7));
-    QTest::newRow("Matching EOL") << "foobar\nfoobar" << QRegExp("foo.*")
+    QTest::newRow("Matching EOL") << "foobar\nfoobar" << QRegularExpression("foo.*")
                            << (MatchList() << Match(0, 0, 6) << Match(1, 0, 6));
-    QTest::newRow("Matching EOL (Windows style)") << "foobar\r\nfoobar" << QRegExp("foo.*")
+    QTest::newRow("Matching EOL (Windows style)") << "foobar\r\nfoobar" << QRegularExpression("foo.*")
                            << (MatchList() << Match(0, 0, 6) << Match(1, 0, 6));
-    QTest::newRow("Empty lines handling") << "foo\n\n\n" << QRegExp("bar")
+    QTest::newRow("Empty lines handling") << "foo\n\n\n" << QRegularExpression("bar")
                            << (MatchList());
-    QTest::newRow("Can match empty string (at EOL)") << "foobar\n" << QRegExp(".*")
+    QTest::newRow("Can match empty string (at EOL)") << "foobar\n" << QRegularExpression(".*")
                            << (MatchList() << Match(0, 0, 6));
-    QTest::newRow("Matching empty string anywhere") << "foobar\n" << QRegExp("")
+    QTest::newRow("Matching empty string anywhere") << "foobar\n" << QRegularExpression("")
                            << (MatchList());
 }
 
 void FindReplaceTest::testFind()
 {
     QFETCH(QString,   subject);
-    QFETCH(QRegExp,   search);
+    QFETCH(QRegularExpression,   search);
     QFETCH(MatchList, matches);
 
     QTemporaryFile file;

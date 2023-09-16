@@ -14,7 +14,7 @@
 #include <QHash>
 #include <QString>
 
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop {
 

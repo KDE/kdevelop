@@ -72,11 +72,11 @@ void ClangTidyParser::addData(const QStringList& stdoutList)
 
         DocumentRange range;
         range.document = IndexedString(smatch.captured(1));
-        range.setBothColumns(smatch.capturedRef(3).toInt() - 1);
-        range.setBothLines(smatch.capturedRef(2).toInt() - 1);
+        range.setBothColumns(smatch.capturedView(3).toInt() - 1);
+        range.setBothLines(smatch.capturedView(2).toInt() - 1);
         problem->setFinalLocation(range);
 
-        const auto sev = smatch.capturedRef(4);
+        const auto sev = smatch.capturedView(4);
         const IProblem::Severity erity =
             (sev == QLatin1String("error")) ?   IProblem::Error :
             (sev == QLatin1String("warning")) ? IProblem::Warning :

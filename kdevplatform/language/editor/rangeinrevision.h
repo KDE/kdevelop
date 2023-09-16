@@ -11,6 +11,7 @@
 #include "cursorinrevision.h"
 
 #include <KTextEditor/Range>
+#include <QDebug>
 
 namespace KDevelop {
 /**

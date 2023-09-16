@@ -19,7 +19,7 @@ Utility objects for process output views.
 
 class QProcess;
 
-class QStringList;
+#include <QStringList>
 
 /**
 Convenience class to catch output of QProcess.
