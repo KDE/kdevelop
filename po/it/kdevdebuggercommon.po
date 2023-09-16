@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:55+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2022-07-11 01:19+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -237,23 +237,23 @@ msgstr ""
 msgid "Debugger"
 msgstr "Debugger"
 
-#: midebugjobs.cpp:84
+#: midebugjobs.cpp:86
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:105
+#: midebugjobs.cpp:107
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "«%1» non è un eseguibile"
 
-#: midebugjobs.cpp:169
+#: midebugjobs.cpp:171
 #, kde-format
 msgid "Debug core file"
 msgstr "Debug da un file core"
 
-#: midebugjobs.cpp:192
+#: midebugjobs.cpp:194
 #, kde-format
 msgid "Debug process %1"
 msgstr "Debug del processo %1"

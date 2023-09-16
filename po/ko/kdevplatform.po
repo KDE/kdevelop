@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:43+0000\n"
 "PO-Revision-Date: 2023-07-24 22:16+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -270,30 +270,30 @@ msgid "%2"
 msgid_plural "%2 (repeated %1 times)"
 msgstr[0] "%2(%1회 반복됨)"
 
-#: debugger/framestack/framestackmodel.cpp:178
+#: debugger/framestack/framestackmodel.cpp:179
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
 msgstr "#%1, 위치: %2(충돌함)"
 
-#: debugger/framestack/framestackmodel.cpp:180
+#: debugger/framestack/framestackmodel.cpp:181
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
 msgstr "#%1, 위치: %2"
 
-#: debugger/framestack/framestackmodel.cpp:279
+#: debugger/framestack/framestackmodel.cpp:282
 #, kde-format
 msgid "Depth"
 msgstr "깊이"
 
-#: debugger/framestack/framestackmodel.cpp:281
+#: debugger/framestack/framestackmodel.cpp:284
 #: language/duchain/navigation/abstractnavigationcontext.cpp:520
 #, kde-format
 msgid "Function"
 msgstr "함수"
 
-#: debugger/framestack/framestackmodel.cpp:283
+#: debugger/framestack/framestackmodel.cpp:286
 #, kde-format
 msgid "Source"
 msgstr "소스"
@@ -568,7 +568,7 @@ msgctxt "@title:menu"
 msgid "Analyze Current Project With"
 msgstr "다음으로 현재 프로젝트 분석"
 
-#: interfaces/isourceformatter.cpp:209
+#: interfaces/isourceformatter.cpp:216
 #, kde-format
 msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
@@ -2146,23 +2146,23 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "문서"
 
-#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:63 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "제목 없음"
 
-#: shell/documentcontroller.cpp:118
+#: shell/documentcontroller.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "파일 열기"
 
-#: shell/documentcontroller.cpp:119
+#: shell/documentcontroller.cpp:121
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|텍스트 파일\n"
 
-#: shell/documentcontroller.cpp:313
+#: shell/documentcontroller.cpp:318
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2171,43 +2171,43 @@ msgstr ""
 "KDevelop에서 %2 형식의 '%1' 파일의 편집기를 찾을 수 없습니다.\n"
 "일반 텍스트로 여시겠습니까?"
 
-#: shell/documentcontroller.cpp:316
+#: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "편집기를 찾을 수 없음"
 
-#: shell/documentcontroller.cpp:317
+#: shell/documentcontroller.cpp:322
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr "일반 텍스트로 열기"
 
-#: shell/documentcontroller.cpp:318
+#: shell/documentcontroller.cpp:323
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr "열지 않기"
 
-#: shell/documentcontroller.cpp:601
+#: shell/documentcontroller.cpp:608
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "열기(&O)..."
 
-#: shell/documentcontroller.cpp:604
+#: shell/documentcontroller.cpp:611
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "파일 열기"
 
-#: shell/documentcontroller.cpp:605
+#: shell/documentcontroller.cpp:612
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "파일을 편집하려고 엽니다."
 
-#: shell/documentcontroller.cpp:609
+#: shell/documentcontroller.cpp:616
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2216,74 +2216,74 @@ msgid ""
 msgstr ""
 "이 목록은 최근에 열었던 파일 목록이며, 다시 쉽게 열 수 있도록 도와 줍니다."
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:621
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "모두 저장(&L)"
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:623
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "열려 있는 모든 문서 저장"
 
-#: shell/documentcontroller.cpp:617
+#: shell/documentcontroller.cpp:624
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr "모든 열린 문서를 저장합니다. 필요한 경우 추가 정보를 묻습니다."
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:630
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "모두 새로 고침"
 
-#: shell/documentcontroller.cpp:625
+#: shell/documentcontroller.cpp:632
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "열려 있는 모든 문서 되돌리기"
 
-#: shell/documentcontroller.cpp:626
+#: shell/documentcontroller.cpp:633
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr "열려 있는 모든 문서를 이전에 저장된 상태로 되돌립니다."
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:639
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "닫기(&C)"
 
-#: shell/documentcontroller.cpp:634
+#: shell/documentcontroller.cpp:641
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "파일 닫기"
 
-#: shell/documentcontroller.cpp:635
+#: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "현재 파일을 닫습니다."
 
-#: shell/documentcontroller.cpp:640
+#: shell/documentcontroller.cpp:647
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "모두 닫기(&E)"
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:649
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "모든 열린 문서 닫기"
 
-#: shell/documentcontroller.cpp:643
+#: shell/documentcontroller.cpp:650
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2291,19 +2291,19 @@ msgid ""
 "necessary."
 msgstr "모든 열린 문서를 닫습니다. 필요한 경우 추가 정보를 묻습니다."
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:656
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "나머지 모두 닫기(&H)"
 
-#: shell/documentcontroller.cpp:651
+#: shell/documentcontroller.cpp:658
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "모든 다른 문서 닫기"
 
-#: shell/documentcontroller.cpp:652
+#: shell/documentcontroller.cpp:659
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2311,19 +2311,19 @@ msgid ""
 "document."
 msgstr "현재 활성화된 문서를 제외한 모든 열린 문서를 닫습니다."
 
-#: shell/documentcontroller.cpp:657
+#: shell/documentcontroller.cpp:664
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "현재 문서의 작성자 보기"
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:665
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "작성자 보기"
 
-#: shell/documentcontroller.cpp:1277
+#: shell/documentcontroller.cpp:1294
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2796,7 +2796,7 @@ msgstr ""
 "다.\n"
 "외부 변경 사항을 덮어쓰시겠습니까?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:442
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:427
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -2841,31 +2841,31 @@ msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
 msgstr "주시하는 모든 문서를 다시 해석"
 
-#: shell/problemmodel.cpp:319
+#: shell/problemmodel.cpp:321
 #, kde-format
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "소스"
 
-#: shell/problemmodel.cpp:321
+#: shell/problemmodel.cpp:323
 #, kde-format
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "문제점"
 
-#: shell/problemmodel.cpp:323
+#: shell/problemmodel.cpp:325
 #, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "파일"
 
-#: shell/problemmodel.cpp:325
+#: shell/problemmodel.cpp:327
 #, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr "줄"
 
-#: shell/problemmodel.cpp:327
+#: shell/problemmodel.cpp:329
 #, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"
@@ -3826,15 +3826,26 @@ msgstr "개 스레드"
 msgid "Configure Documentation"
 msgstr "문서 설정"
 
-#: shell/settings/editstyledialog.cpp:102
+#. i18n: ectx: property (toolTip), widget (QCheckBox, showPreviewCheckBox)
+#: shell/settings/editstyledialog.ui:42
 #, kde-format
-msgid "No Source Formatter available"
-msgstr "사용 가능한 소스 코드 서식 적용 도구가 없음"
+msgid ""
+"Toggle preview visibility for this style.\n"
+"Preview should be disabled for styles whose formatting depends on the file "
+"path."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
+#: shell/settings/editstyledialog.ui:45
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgid "Show Preview"
+msgstr "미리 보기"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
-#: shell/settings/editstyledialog.ui:40
-#: shell/sourceformatterselectionedit.ui:83
+#: shell/settings/editstyledialog.ui:69
+#: shell/sourceformatterselectionedit.ui:112
 #, kde-format
 msgctxt "@label"
 msgid "Preview:"
@@ -4448,7 +4459,7 @@ msgid "Configure Runtimes"
 msgstr "런타임 설정"
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:228
+#: shell/sourceformattercontroller.cpp:220
 #, kde-format
 msgid "Source Formatter"
 msgstr "소스 코드 형식 적용 도구"
@@ -4706,43 +4717,43 @@ msgstr "프로젝트 소속에 따라 위젯에 색 입히기"
 msgid "Configure User Interface"
 msgstr "사용자 인터페이스 설정"
 
-#: shell/sourceformattercontroller.cpp:234
+#: shell/sourceformattercontroller.cpp:226
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "소스 형식 재지정(&R)"
 
-#: shell/sourceformattercontroller.cpp:238
+#: shell/sourceformattercontroller.cpp:230
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "줄 형식 재지정"
 
-#: shell/sourceformattercontroller.cpp:242
+#: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr "파일 형식 재지정..."
 
-#: shell/sourceformattercontroller.cpp:243
+#: shell/sourceformattercontroller.cpp:235
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr "지정한 형식 지정 도구로 파일 형식 재지정"
 
-#: shell/sourceformattercontroller.cpp:245
+#: shell/sourceformattercontroller.cpp:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr "설정한 형식 지정 도구를 사용하는 형식 재지정 기능입니다."
 
-#: shell/sourceformattercontroller.cpp:603
+#: shell/sourceformattercontroller.cpp:610
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr "<i>%1</i>(<b>%2</b>)(으)로 선택 영역이나 파일 형식 재지정"
 
-#: shell/sourceformattercontroller.cpp:606
+#: shell/sourceformattercontroller.cpp:613
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4752,13 +4763,13 @@ msgstr ""
 "<i>%1</i> 도구의 <b>%2</b> 스타일을 사용하여 선택 영역이나 파일 전체(선택이 "
 "없을 때)의 형식을 재지정합니다."
 
-#: shell/sourceformattercontroller.cpp:608
+#: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "<i>%1</i>(<b>%2</b>)을(를) 사용하여 현재 줄 형식 재지정"
 
-#: shell/sourceformattercontroller.cpp:611
+#: shell/sourceformattercontroller.cpp:618
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4768,13 +4779,13 @@ msgstr ""
 "<i>%1</i> 도구의 <b>%2</b> 스타일을 사용하여 커서 아래 소스 코드 줄의 형식을 "
 "재지정합니다."
 
-#: shell/sourceformattercontroller.cpp:615
+#: shell/sourceformattercontroller.cpp:622
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr "지정한 형식 지정 도구로 선택 영역이나 파일 형식 재지정"
 
-#: shell/sourceformattercontroller.cpp:617
+#: shell/sourceformattercontroller.cpp:624
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4784,13 +4795,13 @@ msgstr ""
 "설정한 소스 형식 지정 도구를 사용하여 선택 영역이나 파일 전체(선택이 없을 때)"
 "의 형식을 재지정합니다."
 
-#: shell/sourceformattercontroller.cpp:619
+#: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr "지정한 형식 지정 도구로 현재 줄 형식 재지정"
 
-#: shell/sourceformattercontroller.cpp:621
+#: shell/sourceformattercontroller.cpp:628
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4798,18 +4809,18 @@ msgid ""
 "formatter."
 msgstr "설정한 형식 지정 도구를 사용하는 커서 아래 줄 형식 재지정 기능입니다."
 
-#: shell/sourceformattercontroller.cpp:856
+#: shell/sourceformattercontroller.cpp:865
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "파일 형식을 재지정하시겠습니까?"
 
-#: shell/sourceformattercontroller.cpp:857
+#: shell/sourceformattercontroller.cpp:866
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "선택한 폴더의 모든 파일의 형식을 재지정하시겠습니까?"
 
-#: shell/sourceformattercontroller.cpp:861
+#: shell/sourceformattercontroller.cpp:870
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
@@ -4831,7 +4842,7 @@ msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"
 msgstr[0] "파일 %1개 형식 재지정 중"
 
-#: shell/sourceformatterselectionedit.cpp:484
+#: shell/sourceformatterselectionedit.cpp:1087
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -4842,26 +4853,16 @@ msgstr ""
 "%2.\n"
 "삭제하시겠습니까?"
 
-#: shell/sourceformatterselectionedit.cpp:485
+#: shell/sourceformatterselectionedit.cpp:1089
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "스타일 삭제"
 
-#: shell/sourceformatterselectionedit.cpp:540
+#: shell/sourceformatterselectionedit.cpp:1149
 #, kde-format
 msgid "New %1"
 msgstr "새 %1"
-
-#: shell/sourceformatterselectionedit.cpp:543
-#, kde-format
-msgid "New Style"
-msgstr "새 스타일"
-
-#: shell/sourceformatterselectionedit.cpp:624
-#, kde-format
-msgid "No language selected"
-msgstr "언어를 선택하지 않았음"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/sourceformatterselectionedit.ui:29
@@ -4870,29 +4871,59 @@ msgctxt "@label:listbox"
 msgid "Language:"
 msgstr "언어:"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, usageHelpButton)
+#: shell/sourceformatterselectionedit.ui:44
+#, kde-format
+msgid "How to configure formatting styles"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
+#: shell/sourceformatterselectionedit.ui:49
+#, kde-format
+msgid ""
+"<p>Select languages you use one by one from the <i>Language</i> combobox "
+"below, pick the desired formatter and style for each. <i>Ctrl+Click</i> a "
+"selected style to unselect it.</p>\n"
+"<p>Configuring the right formatter and style for each used language is very "
+"important: not only explicit <i>Reformat Source</i>/<i>Line</i>/<i>Files...</"
+"i> actions are affected, but also the formatting of auto-generated, auto-"
+"refactored or auto-fixed code (for example, <i>Rename</i> context menu "
+"action).</p>\n"
+"<p>Note that KDevelop formats all <i>*.h</i> files with formatter and style "
+"configured for <i>C</i> language, even C++ headers that belong to a pure C++ "
+"project. This occurs because source formatter maps MIME types to languages.</"
+"p>"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: shell/sourceformatterselectionedit.ui:102
+#: shell/sourceformatterselectionedit.ui:134
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
 msgstr "형식 재지정 도구:"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, formatterDescriptionButton)
+#: shell/sourceformatterselectionedit.ui:152
+#, kde-format
+msgid "Description of a selected formatter"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: shell/sourceformatterselectionedit.ui:132
+#: shell/sourceformatterselectionedit.ui:183
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
 msgstr "스타일:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
-#: shell/sourceformatterselectionedit.ui:150
+#: shell/sourceformatterselectionedit.ui:201
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "새로 만들기"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
-#: shell/sourceformatterselectionedit.ui:157
+#: shell/sourceformatterselectionedit.ui:208
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -4900,7 +4931,7 @@ msgstr "편집..."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
 #. i18n: ectx: property (text), widget (QPushButton, deleteButton)
-#: shell/sourceformatterselectionedit.ui:164
+#: shell/sourceformatterselectionedit.ui:215
 #: shell/workingsets/workingsettooltipwidget.cpp:93
 #: vcs/dvcs/ui/branchmanager.ui:44
 #, kde-format
@@ -4908,7 +4939,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "삭제"
 
-#: shell/textdocument.cpp:437
+#: shell/textdocument.cpp:422
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -4919,13 +4950,13 @@ msgstr ""
 "\n"
 "덮어쓰시겠습니까?(외부 변경 사항은 손실됩니다.)"
 
-#: shell/textdocument.cpp:441
+#: shell/textdocument.cpp:426
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "파일이 외부에서 변경됨"
 
-#: shell/textdocument.cpp:705
+#: shell/textdocument.cpp:683
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " 행: %1 열: %2 "
@@ -6014,6 +6045,15 @@ msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "리비전간 차이점"
 
+#~ msgid "No Source Formatter available"
+#~ msgstr "사용 가능한 소스 코드 서식 적용 도구가 없음"
+
+#~ msgid "New Style"
+#~ msgstr "새 스타일"
+
+#~ msgid "No language selected"
+#~ msgstr "언어를 선택하지 않았음"
+
 #~ msgid "Recent Expressions"
 #~ msgstr "최근 사용한 표현식"
 
@@ -6163,9 +6203,6 @@ msgstr "리비전간 차이점"
 
 #~ msgid "Previous"
 #~ msgstr "이전"
-
-#~ msgid "Preview"
-#~ msgstr "미리 보기"
 
 #~ msgid "Project %1"
 #~ msgstr "프로젝트 %1"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2023-09-02 02:56\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,25 +17,25 @@ msgstr ""
 "X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevproblemreporter.pot\n"
 "X-Crowdin-File-ID: 4953\n"
 
-#: problemreporterplugin.cpp:94
+#: problemreporterplugin.cpp:99
 #, kde-format
 msgid "Parser"
 msgstr "解析器"
 
-#: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
+#: problemreporterplugin.cpp:100 problemreporterplugin.cpp:246
 #: problemsview.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
 msgstr "问题"
 
-#: problemreporterplugin.cpp:229
+#: problemreporterplugin.cpp:287
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr "解决问题"
 
-#: problemreporterplugin.cpp:231
+#: problemreporterplugin.cpp:289
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"

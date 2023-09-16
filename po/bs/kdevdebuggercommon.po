@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:55+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2013-12-15 19:17+0000\n"
 "Last-Translator: Nermina Ahmić <nahmic1@etf.unsa.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -261,23 +261,23 @@ msgstr "Ne kači se za proces %1: ne može se zakačiti za sam debager."
 msgid "Debugger"
 msgstr "Ispravljač grešaka"
 
-#: midebugjobs.cpp:84
+#: midebugjobs.cpp:86
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr ""
 
-#: midebugjobs.cpp:105
+#: midebugjobs.cpp:107
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr ""
 
-#: midebugjobs.cpp:169
+#: midebugjobs.cpp:171
 #, kde-format
 msgid "Debug core file"
 msgstr "Traži greške u datoteci jezgra"
 
-#: midebugjobs.cpp:192
+#: midebugjobs.cpp:194
 #, kde-format
 msgid "Debug process %1"
 msgstr "Traženje grešaka u procesu %1"

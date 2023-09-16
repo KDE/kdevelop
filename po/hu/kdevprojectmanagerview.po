@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2014-02-08 22:58+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -208,7 +208,7 @@ msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
 msgstr "Megkeresi a jelenlegi dokumentumot a projektfában és kijelöli azt."
 
-#: projectmanagerview.cpp:118
+#: projectmanagerview.cpp:121
 #, fuzzy, kde-format
 #| msgid "&Add to Target"
 msgctxt "@action"

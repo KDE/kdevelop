@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2021-11-09 00:15+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -172,7 +172,7 @@ msgctxt "@action"
 msgid "Finish Review"
 msgstr ""
 
-#: patchreview.cpp:613
+#: patchreview.cpp:620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"

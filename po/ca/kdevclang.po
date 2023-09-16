@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:43+0000\n"
 "PO-Revision-Date: 2020-07-20 12:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -106,48 +106,48 @@ msgctxt "@action"
 msgid "Move into Source"
 msgstr "Mou al codi font"
 
-#: codecompletion/context.cpp:147
+#: codecompletion/context.cpp:148
 #, kde-format
 msgid "Override %1"
 msgstr "Sobreescriu %1"
 
-#: codecompletion/context.cpp:344
+#: codecompletion/context.cpp:345
 #, kde-format
 msgid "Implement %1"
 msgstr "Implementa %1"
 
-#: codecompletion/context.cpp:1350
+#: codecompletion/context.cpp:1409
 #, kde-format
 msgid "Special"
 msgstr "Especial"
 
-#: codecompletion/context.cpp:1351
+#: codecompletion/context.cpp:1410
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Coincidències anticipades"
 
-#: codecompletion/context.cpp:1352
+#: codecompletion/context.cpp:1411
 #, kde-format
 msgid "Builtin"
 msgstr "Integrat"
 
-#: codecompletion/context.cpp:1353
+#: codecompletion/context.cpp:1412
 #, kde-format
 msgid "Macros"
 msgstr "Macros"
 
 # skip-rule: ff-abstract
-#: codecompletion/context.cpp:1396
+#: codecompletion/context.cpp:1455
 #, kde-format
 msgid "Abstract Override"
 msgstr "Sobreescriptura abstracta"
 
-#: codecompletion/context.cpp:1397
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Virtual Override"
 msgstr "Sobreescriu virtual"
 
-#: codecompletion/context.cpp:1412
+#: codecompletion/context.cpp:1471
 #, kde-format
 msgid "Implement Function"
 msgstr "Implementa funció"
@@ -330,22 +330,22 @@ msgstr "Afegeix camí cap a una inclusió personalitzada"
 msgid "Open Project"
 msgstr "Obre un projecte"
 
-#: duchain/parsesession.cpp:543
+#: duchain/parsesession.cpp:560
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Sol·licitat aquí: %1"
 
-#: duchain/parsesession.cpp:584
+#: duchain/parsesession.cpp:601
 #, kde-format
 msgid "In included file: %1"
 msgstr "Al fitxer inclòs: %1"
 
-#: duchain/parsesession.cpp:607
+#: duchain/parsesession.cpp:624
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "La capçalera no està protegida contra múltiples inclusions"
 
-#: duchain/parsesession.cpp:608
+#: duchain/parsesession.cpp:625
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

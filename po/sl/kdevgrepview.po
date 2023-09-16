@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:43+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2022-07-10 16:23+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -70,22 +70,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Poišči \"%1\" v %2 (ob času %3)"
 
-#: grepjob.cpp:137
+#: grepjob.cpp:144
 #, kde-format
 msgid "Find in Files"
 msgstr "Najdi v datotekah"
 
-#: grepjob.cpp:153 grepjob.cpp:256
-#, kde-format
-msgid "Search aborted"
-msgstr "Iskanje prekinjeno"
-
-#: grepjob.cpp:162
+#: grepjob.cpp:163
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Ni bilo najdenih datotek, ki bi se ujemale z vzorci nadomestnih znakov"
 
-#: grepjob.cpp:180
+#: grepjob.cpp:177
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -93,7 +88,7 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "Zajeto besedilo ni dovoljeno v vzorčnem nizu"
 
-#: grepjob.cpp:201
+#: grepjob.cpp:198
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
@@ -102,22 +97,27 @@ msgstr[1] "Iskanje za <b>%2</b> v %1 datoteki"
 msgstr[2] "Iskanje za <b>%2</b> v %1 datotekah"
 msgstr[3] "Iskanje za <b>%2</b> v %1 datotekah"
 
-#: grepjob.cpp:222
+#: grepjob.cpp:224
 #, kde-format
 msgid "Collecting files..."
 msgstr "Zbiranje datotek ..."
 
-#: grepjob.cpp:300
+#: grepjob.cpp:268
+#, kde-format
+msgid "Search aborted"
+msgstr "Iskanje prekinjeno"
+
+#: grepjob.cpp:314
 #, kde-format
 msgid "Failed: %1"
 msgstr "Spodletelo: %1"
 
-#: grepjob.cpp:303
+#: grepjob.cpp:317
 #, kde-format
 msgid "No results found"
 msgstr "Ni najdenih rezultatov"
 
-#: grepjob.cpp:322
+#: grepjob.cpp:336
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"

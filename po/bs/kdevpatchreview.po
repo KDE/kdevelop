@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2014-02-10 00:14+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -187,7 +187,7 @@ msgctxt "@action"
 msgid "Finish Review"
 msgstr "Završi recenziju"
 
-#: patchreview.cpp:613
+#: patchreview.cpp:620
 #, fuzzy, kde-format
 #| msgid "Edit Patch"
 msgctxt "@action:inmenu"

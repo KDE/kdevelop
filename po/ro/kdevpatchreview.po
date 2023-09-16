@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2010-01-19 23:12+0200\n"
 "Last-Translator: Sergiu Bivol <sergiu.bivol@jurnaltv.md>\n"
 "Language-Team: Română <kde-i18n-ro@kde.org>\n"
@@ -184,7 +184,7 @@ msgctxt "@action"
 msgid "Finish Review"
 msgstr "Termină revizia"
 
-#: patchreview.cpp:613
+#: patchreview.cpp:620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"

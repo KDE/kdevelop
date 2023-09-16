@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-08 00:45+0000\n"
+"POT-Creation-Date: 2023-09-16 00:43+0000\n"
 "PO-Revision-Date: 2019-07-20 18:56+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <kde-i18n-doc@kde.org>\n"
@@ -16,12 +16,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: astyle_plugin.cpp:248
-#, kde-format
+#: astyle_plugin.cpp:249
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Artistic Style</b> is a source code indenter, formatter, and "
+#| "beautifier for the C, C++, C# and Java programming languages.<br />Home "
+#| "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
+#| "sourceforge.net</a>"
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
-"for the C, C++, C# and Java programming languages.<br />Home Page: <a href="
-"\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+"for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
+"white-space:pre'>Home Page: <a href=\"http://astyle.sourceforge.net/"
+"\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
 "<b>Estilo artístico</b> é un formatador de código fonte para as linguaxes de "
 "programación C, C++, C# e Java.<br />Páxina do proxecto: <a href=\"http://"
@@ -351,8 +357,24 @@ msgctxt "@item:inlistbox brackets style"
 msgid "Run-In"
 msgstr "Run-In"
 
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBracesAdd)
+#: astyle_preferences.ui:371
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
+"'while')"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
+#: astyle_preferences.ui:374
+#, kde-format
+msgctxt "@option:check add braces to unbraced one-line conditional statements"
+msgid "Add b&races"
+msgstr ""
+
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
-#: astyle_preferences.ui:376
+#: astyle_preferences.ui:386
 #, fuzzy, kde-format
 #| msgid "Blocks"
 msgctxt "@title:group"
@@ -360,7 +382,7 @@ msgid "Blocks"
 msgstr "Bloques"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreak)
-#: astyle_preferences.ui:391
+#: astyle_preferences.ui:401
 #, fuzzy, kde-format
 #| msgid ""
 #| "Insert empty lines around unrelated blocks, labels, classes,...\n"
@@ -394,7 +416,7 @@ msgstr ""
 "2. Os comentarios separaranse do bloque.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreak)
-#: astyle_preferences.ui:394
+#: astyle_preferences.ui:404
 #, fuzzy, kde-format
 #| msgctxt "Means break unrelated blocks by a newline"
 #| msgid "&Break blocks"
@@ -403,7 +425,7 @@ msgid "&Break blocks"
 msgstr "&Separar os bloques"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreakAll)
-#: astyle_preferences.ui:412
+#: astyle_preferences.ui:422
 #, fuzzy, kde-format
 #| msgid ""
 #| "Like --break-blocks, except also insert empty lines \n"
@@ -443,7 +465,7 @@ msgstr ""
 "2. Os comentarios son separados do bloque.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreakAll)
-#: astyle_preferences.ui:415
+#: astyle_preferences.ui:425
 #, fuzzy, kde-format
 #| msgctxt "Means break all blocks with a newline"
 #| msgid "Break all bl&ocks"
@@ -452,7 +474,7 @@ msgid "Break all bl&ocks"
 msgstr "Separar &todos os bloques"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockIfElse)
-#: astyle_preferences.ui:422
+#: astyle_preferences.ui:432
 #, fuzzy, kde-format
 #| msgid "Break 'else if()' statements into two different lines."
 msgctxt "@info:tooltip"
@@ -460,7 +482,7 @@ msgid "Break 'else if()' statements into two different lines."
 msgstr "Separa as sentenzas «else if()» en dúas liñas diferentes."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
-#: astyle_preferences.ui:425
+#: astyle_preferences.ui:435
 #, fuzzy, kde-format
 #| msgctxt "Means break else if() into separate lines"
 #| msgid "Break i&f-else"
@@ -469,7 +491,7 @@ msgid "Break i&f-else"
 msgstr "Separar &if-else"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
-#: astyle_preferences.ui:435
+#: astyle_preferences.ui:445
 #, fuzzy, kde-format
 #| msgid "Padding"
 msgctxt "@title:group"
@@ -477,7 +499,7 @@ msgid "Padding"
 msgstr "Separación de palabras"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
-#: astyle_preferences.ui:450
+#: astyle_preferences.ui:460
 #, fuzzy, kde-format
 #| msgid "No change"
 msgctxt "@item:inlistbox parenthesis padding"
@@ -485,7 +507,7 @@ msgid "No change"
 msgstr "Sen cambios"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
-#: astyle_preferences.ui:455
+#: astyle_preferences.ui:465
 #, fuzzy, kde-format
 #| msgid "Unpad"
 msgctxt "@item:inlistbox parenthesis padding"
@@ -493,7 +515,7 @@ msgid "Unpad"
 msgstr "Anulación da separación"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
-#: astyle_preferences.ui:460
+#: astyle_preferences.ui:470
 #, fuzzy, kde-format
 #| msgid "Inside only"
 msgctxt "@item:inlistbox parenthesis padding"
@@ -501,7 +523,7 @@ msgid "Inside only"
 msgstr "Só dentro"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
-#: astyle_preferences.ui:465
+#: astyle_preferences.ui:475
 #, fuzzy, kde-format
 #| msgid "Outside only"
 msgctxt "@item:inlistbox parenthesis padding"
@@ -509,7 +531,7 @@ msgid "Outside only"
 msgstr "Só fora"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
-#: astyle_preferences.ui:470
+#: astyle_preferences.ui:480
 #, fuzzy, kde-format
 #| msgid "Inside and outside"
 msgctxt "@item:inlistbox parenthesis padding"
@@ -517,7 +539,7 @@ msgid "Inside and outside"
 msgstr "Dentro e fora"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadOperators)
-#: astyle_preferences.ui:480
+#: astyle_preferences.ui:490
 #, fuzzy, kde-format
 #| msgid ""
 #| "Insert space padding around operators.\n"
@@ -534,7 +556,7 @@ msgstr ""
 "Non hai ningunha opción para retirar o recheo."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadOperators)
-#: astyle_preferences.ui:483
+#: astyle_preferences.ui:493
 #, fuzzy, kde-format
 #| msgid "&Add spaces around operators"
 msgctxt "@option:check"
@@ -542,7 +564,7 @@ msgid "&Add spaces around operators"
 msgstr "Engadir espazos arredor dos &operadores"
 
 #. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
-#: astyle_preferences.ui:490
+#: astyle_preferences.ui:500
 #, fuzzy, kde-format
 #| msgid "Pad parenthesis:"
 msgctxt "@label:listbox"
@@ -550,7 +572,7 @@ msgid "Pad parenthesis:"
 msgstr "Separar os parénteses:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
-#: astyle_preferences.ui:497
+#: astyle_preferences.ui:507
 #, fuzzy, kde-format
 #| msgid ""
 #| "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
@@ -564,7 +586,7 @@ msgstr ""
 "«for», «while»,…)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
-#: astyle_preferences.ui:500
+#: astyle_preferences.ui:510
 #, fuzzy, kde-format
 #| msgid "Add spaces after parenthesis &headers"
 msgctxt "@option:check"
@@ -572,7 +594,7 @@ msgid "Add spaces after parenthesis &headers"
 msgstr "Engadir espazos despois dos &cabezallos dos parénteses"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
-#: astyle_preferences.ui:512
+#: astyle_preferences.ui:522
 #, fuzzy, kde-format
 #| msgid "One liners"
 msgctxt "@title:group"
@@ -580,7 +602,7 @@ msgid "One Liners"
 msgstr "Liñas únicas"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
-#: astyle_preferences.ui:519
+#: astyle_preferences.ui:529
 #, fuzzy, kde-format
 #| msgid ""
 #| "Do not break lines containing multiple statements into\n"
@@ -594,7 +616,7 @@ msgstr ""
 "liñas contendo unha só sentenza cada unha."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
-#: astyle_preferences.ui:522
+#: astyle_preferences.ui:532
 #, fuzzy, kde-format
 #| msgid "&Keep one-line statements"
 msgctxt "@option:check"
@@ -602,7 +624,7 @@ msgid "&Keep one-line statements"
 msgstr "Manter as sentenzas dunha li&ña"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
-#: astyle_preferences.ui:529
+#: astyle_preferences.ui:539
 #, fuzzy, kde-format
 #| msgid "Do not break blocks residing completely on one line."
 msgctxt "@info:tooltip"
@@ -610,7 +632,7 @@ msgid "Do not break blocks residing completely on one line."
 msgstr "Non racha os bloques que só ocupen unha liña."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepBlocks)
-#: astyle_preferences.ui:532
+#: astyle_preferences.ui:542
 #, fuzzy, kde-format
 #| msgid "Keep o&ne-line blocks"
 msgctxt "@option:check"
@@ -618,7 +640,7 @@ msgid "Keep o&ne-line blocks"
 msgstr "Manter os &bloques dunha liña"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOther)
-#: astyle_preferences.ui:542
+#: astyle_preferences.ui:552
 #, fuzzy, kde-format
 #| msgid "Other"
 msgctxt "@title:group"
@@ -626,7 +648,7 @@ msgid "Other"
 msgstr "Outro"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPointerAlign)
-#: astyle_preferences.ui:548
+#: astyle_preferences.ui:558
 #, fuzzy, kde-format
 #| msgid "Pointer Alignment:"
 msgctxt "@label:listbox"
@@ -634,7 +656,7 @@ msgid "Pointer Alignment:"
 msgstr "Aliñamento do punteiro:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
-#: astyle_preferences.ui:556
+#: astyle_preferences.ui:566
 #, fuzzy, kde-format
 #| msgid "No change"
 msgctxt "@item:inlistbox pointer alignment"
@@ -642,7 +664,7 @@ msgid "No change"
 msgstr "Sen cambios"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
-#: astyle_preferences.ui:561
+#: astyle_preferences.ui:571
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@item:inlistbox pointer alignment"
@@ -650,7 +672,7 @@ msgid "Name"
 msgstr "Nome"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
-#: astyle_preferences.ui:566
+#: astyle_preferences.ui:576
 #, fuzzy, kde-format
 #| msgid "Middle"
 msgctxt "@item:inlistbox pointer alignment"
@@ -658,7 +680,7 @@ msgid "Middle"
 msgstr "Medio"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
-#: astyle_preferences.ui:571
+#: astyle_preferences.ui:581
 #, fuzzy, kde-format
 #| msgid "Type"
 msgctxt "@item:inlistbox pointer alignment"

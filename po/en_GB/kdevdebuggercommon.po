@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:55+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2022-07-22 16:07+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -235,23 +235,23 @@ msgstr "Not attaching to process %1: cannot attach the debugger to itself."
 msgid "Debugger"
 msgstr "Debugger"
 
-#: midebugjobs.cpp:84
+#: midebugjobs.cpp:86
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:105
+#: midebugjobs.cpp:107
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "'%1' is not an executable"
 
-#: midebugjobs.cpp:169
+#: midebugjobs.cpp:171
 #, kde-format
 msgid "Debug core file"
 msgstr "Debug core file"
 
-#: midebugjobs.cpp:192
+#: midebugjobs.cpp:194
 #, kde-format
 msgid "Debug process %1"
 msgstr "Debug process %1"

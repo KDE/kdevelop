@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:55+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2014-02-27 11:05+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -253,25 +253,25 @@ msgstr "未附加到行程 %1：不能將除錯器本身附加到自己身上。
 msgid "Debugger"
 msgstr "除錯器"
 
-#: midebugjobs.cpp:84
+#: midebugjobs.cpp:86
 #, fuzzy, kde-format
 #| msgid "%1 (uid: %2)"
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1（使用者代碼：%2）"
 
-#: midebugjobs.cpp:105
+#: midebugjobs.cpp:107
 #, fuzzy, kde-format
 #| msgid "Could not find kdesu executable"
 msgid "'%1' is not an executable"
 msgstr "找不到 kdesu 執行檔"
 
-#: midebugjobs.cpp:169
+#: midebugjobs.cpp:171
 #, kde-format
 msgid "Debug core file"
 msgstr "除錯 Core 檔"
 
-#: midebugjobs.cpp:192
+#: midebugjobs.cpp:194
 #, kde-format
 msgid "Debug process %1"
 msgstr "除錯行程 %1"

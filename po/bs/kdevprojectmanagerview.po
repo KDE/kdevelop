@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2014-02-10 00:20+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -212,7 +212,7 @@ msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
 msgstr "Locira trenutni dokument u stablu projekta i izabira ga"
 
-#: projectmanagerview.cpp:118
+#: projectmanagerview.cpp:121
 #, fuzzy, kde-format
 #| msgid "&Add to Target"
 msgctxt "@action"

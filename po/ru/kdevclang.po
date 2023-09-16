@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:43+0000\n"
 "PO-Revision-Date: 2022-03-04 11:36+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -104,47 +104,47 @@ msgctxt "@action"
 msgid "Move into Source"
 msgstr "Переместить в код"
 
-#: codecompletion/context.cpp:147
+#: codecompletion/context.cpp:148
 #, kde-format
 msgid "Override %1"
 msgstr "Переопределить %1"
 
-#: codecompletion/context.cpp:344
+#: codecompletion/context.cpp:345
 #, kde-format
 msgid "Implement %1"
 msgstr "Реализовать %1"
 
-#: codecompletion/context.cpp:1350
+#: codecompletion/context.cpp:1409
 #, kde-format
 msgid "Special"
 msgstr "Особый"
 
-#: codecompletion/context.cpp:1351
+#: codecompletion/context.cpp:1410
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Упреждающие совпадения"
 
-#: codecompletion/context.cpp:1352
+#: codecompletion/context.cpp:1411
 #, kde-format
 msgid "Builtin"
 msgstr "Встроенный"
 
-#: codecompletion/context.cpp:1353
+#: codecompletion/context.cpp:1412
 #, kde-format
 msgid "Macros"
 msgstr "Макросы"
 
-#: codecompletion/context.cpp:1396
+#: codecompletion/context.cpp:1455
 #, kde-format
 msgid "Abstract Override"
 msgstr "Абстрактное переопределение"
 
-#: codecompletion/context.cpp:1397
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Virtual Override"
 msgstr "Виртуальное переопределение"
 
-#: codecompletion/context.cpp:1412
+#: codecompletion/context.cpp:1471
 #, kde-format
 msgid "Implement Function"
 msgstr "Реализовать функцию"
@@ -327,22 +327,22 @@ msgstr "Добавить другой путь включения"
 msgid "Open Project"
 msgstr "Открыть проект"
 
-#: duchain/parsesession.cpp:543
+#: duchain/parsesession.cpp:560
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Требуется здесь: %1"
 
-#: duchain/parsesession.cpp:584
+#: duchain/parsesession.cpp:601
 #, kde-format
 msgid "In included file: %1"
 msgstr "Во включённом файле: %1"
 
-#: duchain/parsesession.cpp:607
+#: duchain/parsesession.cpp:624
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "Заголовок не защищён от повторных включений"
 
-#: duchain/parsesession.cpp:608
+#: duchain/parsesession.cpp:625
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:43+0000\n"
 "PO-Revision-Date: 2023-08-08 14:30+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -282,30 +282,30 @@ msgid_plural "%2 (repeated %1 times)"
 msgstr[0] "%2"
 msgstr[1] "%2 (repetit %1 vegades)"
 
-#: debugger/framestack/framestackmodel.cpp:178
+#: debugger/framestack/framestackmodel.cpp:179
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
 msgstr "Núm. %1 a %2 (ha fallat)"
 
-#: debugger/framestack/framestackmodel.cpp:180
+#: debugger/framestack/framestackmodel.cpp:181
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
 msgstr "Núm. %1 a %2"
 
-#: debugger/framestack/framestackmodel.cpp:279
+#: debugger/framestack/framestackmodel.cpp:282
 #, kde-format
 msgid "Depth"
 msgstr "Profunditat"
 
-#: debugger/framestack/framestackmodel.cpp:281
+#: debugger/framestack/framestackmodel.cpp:284
 #: language/duchain/navigation/abstractnavigationcontext.cpp:520
 #, kde-format
 msgid "Function"
 msgstr "Funció"
 
-#: debugger/framestack/framestackmodel.cpp:283
+#: debugger/framestack/framestackmodel.cpp:286
 #, kde-format
 msgid "Source"
 msgstr "Codi font"
@@ -584,7 +584,7 @@ msgctxt "@title:menu"
 msgid "Analyze Current Project With"
 msgstr "Analitza el projecte actual amb el"
 
-#: interfaces/isourceformatter.cpp:209
+#: interfaces/isourceformatter.cpp:216
 #, kde-format
 msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
@@ -2181,23 +2181,23 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Documentació"
 
-#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:63 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "Sense títol"
 
-#: shell/documentcontroller.cpp:118
+#: shell/documentcontroller.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Obri un fitxer"
 
-#: shell/documentcontroller.cpp:119
+#: shell/documentcontroller.cpp:121
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Fitxer de text\n"
 
-#: shell/documentcontroller.cpp:313
+#: shell/documentcontroller.cpp:318
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2206,43 +2206,43 @@ msgstr ""
 "KDevelop no ha pogut trobar l'editor per al fitxer «%1» de tipus %2.\n"
 "Voleu obrir-lo com a text net?"
 
-#: shell/documentcontroller.cpp:316
+#: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "No s'ha pogut trobar l'editor"
 
-#: shell/documentcontroller.cpp:317
+#: shell/documentcontroller.cpp:322
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr "Com a text"
 
-#: shell/documentcontroller.cpp:318
+#: shell/documentcontroller.cpp:323
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr "No l'òbrigues"
 
-#: shell/documentcontroller.cpp:601
+#: shell/documentcontroller.cpp:608
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "O&bri..."
 
-#: shell/documentcontroller.cpp:604
+#: shell/documentcontroller.cpp:611
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Obri un fitxer"
 
-#: shell/documentcontroller.cpp:605
+#: shell/documentcontroller.cpp:612
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Obri un fitxer per a editar-lo."
 
-#: shell/documentcontroller.cpp:609
+#: shell/documentcontroller.cpp:616
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2252,19 +2252,19 @@ msgstr ""
 "Mostra una llista dels fitxers oberts recentment i permet obrir-los amb "
 "facilitat una altra vegada."
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:621
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Guarda-ho &tot"
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:623
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Guarda tots els documents oberts"
 
-#: shell/documentcontroller.cpp:617
+#: shell/documentcontroller.cpp:624
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2273,19 +2273,19 @@ msgstr ""
 "Guarda tots els documents oberts, demanant informació addicional quan siga "
 "necessari."
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:630
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Torna a carregar-ho tot"
 
-#: shell/documentcontroller.cpp:625
+#: shell/documentcontroller.cpp:632
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Revertix tots els documents oberts"
 
-#: shell/documentcontroller.cpp:626
+#: shell/documentcontroller.cpp:633
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
@@ -2293,37 +2293,37 @@ msgstr ""
 "Revertix tots els documents oberts, retornant-los al seu anterior estat de "
 "guardada."
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:639
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "Tan&ca"
 
-#: shell/documentcontroller.cpp:634
+#: shell/documentcontroller.cpp:641
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Tanca este fitxer"
 
-#: shell/documentcontroller.cpp:635
+#: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Tanca el fitxer actual."
 
-#: shell/documentcontroller.cpp:640
+#: shell/documentcontroller.cpp:647
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Tan&ca-ho tot"
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:649
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Tanca tots els documents oberts"
 
-#: shell/documentcontroller.cpp:643
+#: shell/documentcontroller.cpp:650
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2333,19 +2333,19 @@ msgstr ""
 "Tanca tots els documents oberts, demanant informació addicional quan siga "
 "necessari."
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:656
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Tanca tots &els altres"
 
-#: shell/documentcontroller.cpp:651
+#: shell/documentcontroller.cpp:658
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Tanca tots els altres documents"
 
-#: shell/documentcontroller.cpp:652
+#: shell/documentcontroller.cpp:659
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2354,19 +2354,19 @@ msgid ""
 msgstr ""
 "Tanca tots els documents oberts, amb excepció del document actualment actiu."
 
-#: shell/documentcontroller.cpp:657
+#: shell/documentcontroller.cpp:664
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Mostra «Anotació» en el document actual"
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:665
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Anotació"
 
-#: shell/documentcontroller.cpp:1277
+#: shell/documentcontroller.cpp:1294
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2846,7 +2846,7 @@ msgstr ""
 "extern.\n"
 "Voleu sobreescriure els canvis externs?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:442
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:427
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -2891,31 +2891,31 @@ msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
 msgstr "Torna a analitzar tots els documents vigilats"
 
-#: shell/problemmodel.cpp:319
+#: shell/problemmodel.cpp:321
 #, kde-format
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "Origen"
 
-#: shell/problemmodel.cpp:321
+#: shell/problemmodel.cpp:323
 #, kde-format
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "Problema"
 
-#: shell/problemmodel.cpp:323
+#: shell/problemmodel.cpp:325
 #, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "Fitxer"
 
-#: shell/problemmodel.cpp:325
+#: shell/problemmodel.cpp:327
 #, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr "Línia"
 
-#: shell/problemmodel.cpp:327
+#: shell/problemmodel.cpp:329
 #, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"
@@ -3901,15 +3901,27 @@ msgstr " fils"
 msgid "Configure Documentation"
 msgstr "Configura la documentació"
 
-#: shell/settings/editstyledialog.cpp:102
+#. i18n: ectx: property (toolTip), widget (QCheckBox, showPreviewCheckBox)
+#: shell/settings/editstyledialog.ui:42
 #, kde-format
-msgid "No Source Formatter available"
-msgstr "No hi ha disponible cap formatador del codi font"
+msgid ""
+"Toggle preview visibility for this style.\n"
+"Preview should be disabled for styles whose formatting depends on the file "
+"path."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
+#: shell/settings/editstyledialog.ui:45
+#, fuzzy, kde-format
+#| msgctxt "@label"
+#| msgid "Preview:"
+msgid "Show Preview"
+msgstr "Vista prèvia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
-#: shell/settings/editstyledialog.ui:40
-#: shell/sourceformatterselectionedit.ui:83
+#: shell/settings/editstyledialog.ui:69
+#: shell/sourceformatterselectionedit.ui:112
 #, kde-format
 msgctxt "@label"
 msgid "Preview:"
@@ -4544,7 +4556,7 @@ msgid "Configure Runtimes"
 msgstr "Configura els temps d'execució"
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:228
+#: shell/sourceformattercontroller.cpp:220
 #, kde-format
 msgid "Source Formatter"
 msgstr "Formatador del codi font"
@@ -4811,32 +4823,32 @@ msgstr "Els ginys seran de color basant-se en l'afiliació del projecte"
 msgid "Configure User Interface"
 msgstr "Configura la interfície d'usuari"
 
-#: shell/sourceformattercontroller.cpp:234
+#: shell/sourceformattercontroller.cpp:226
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "To&rna a donar format al codi font"
 
-#: shell/sourceformattercontroller.cpp:238
+#: shell/sourceformattercontroller.cpp:230
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "Torna a donar format a la línia"
 
-#: shell/sourceformattercontroller.cpp:242
+#: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr "Torna a donar format als fitxers..."
 
-#: shell/sourceformattercontroller.cpp:243
+#: shell/sourceformattercontroller.cpp:235
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr ""
 "Dona format als fitxers utilitzant els formatadors de codi font configurats"
 
-#: shell/sourceformattercontroller.cpp:245
+#: shell/sourceformattercontroller.cpp:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
@@ -4844,7 +4856,7 @@ msgstr ""
 "Funcionalitat de donar format que utilitza els formatadors de codi font que "
 "hi ha configurats."
 
-#: shell/sourceformattercontroller.cpp:603
+#: shell/sourceformattercontroller.cpp:610
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
@@ -4852,7 +4864,7 @@ msgstr ""
 "Torna a donar format a la selecció o el fitxer utilitzant <i>%1</i> (<b>%2</"
 "b>)"
 
-#: shell/sourceformattercontroller.cpp:606
+#: shell/sourceformattercontroller.cpp:613
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4862,14 +4874,14 @@ msgstr ""
 "Torna a donar format al text seleccionat o tot el fitxer si no se selecciona "
 "res, utilitzant l'eina <i>%1</i> amb l'estil <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:608
+#: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 "Torna a donar format a la línia actual utilitzant <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:611
+#: shell/sourceformattercontroller.cpp:618
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4879,7 +4891,7 @@ msgstr ""
 "Torna a donar format al codi font de la línia baix el cursor utilitzant "
 "l'eina <i>%1</i> amb l'estil <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:615
+#: shell/sourceformattercontroller.cpp:622
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4887,7 +4899,7 @@ msgstr ""
 "Torna a donar format a la selecció o el fitxer utilitzant el formatador de "
 "codi font configurat"
 
-#: shell/sourceformattercontroller.cpp:617
+#: shell/sourceformattercontroller.cpp:624
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4897,7 +4909,7 @@ msgstr ""
 "Torna a donar format al text seleccionat o tot el fitxer si no hi ha res "
 "seleccionat, utilitzant el formatador de codi font que hi ha configurat."
 
-#: shell/sourceformattercontroller.cpp:619
+#: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
@@ -4905,7 +4917,7 @@ msgstr ""
 "Torna a donar format a la línia actual utilitzant el formatador de codi font "
 "configurat"
 
-#: shell/sourceformattercontroller.cpp:621
+#: shell/sourceformattercontroller.cpp:628
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4915,18 +4927,18 @@ msgstr ""
 "Torna a donar format al codi font de la línia baix el cursor utilitzant el "
 "formatador de codi font que hi ha configurat."
 
-#: shell/sourceformattercontroller.cpp:856
+#: shell/sourceformattercontroller.cpp:865
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Torna a donar format als fitxers"
 
-#: shell/sourceformattercontroller.cpp:857
+#: shell/sourceformattercontroller.cpp:866
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Torna a donar format a tots els fitxers de la carpeta seleccionada?"
 
-#: shell/sourceformattercontroller.cpp:861
+#: shell/sourceformattercontroller.cpp:870
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
@@ -4949,7 +4961,7 @@ msgid_plural "Reformatting %1 files"
 msgstr[0] "S'està tornant a donar format a un fitxer"
 msgstr[1] "S'estan tornant a donar format a %1 fitxers"
 
-#: shell/sourceformatterselectionedit.cpp:484
+#: shell/sourceformatterselectionedit.cpp:1087
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -4960,26 +4972,16 @@ msgstr ""
 "%2.\n"
 "Segur que el voleu suprimir?"
 
-#: shell/sourceformatterselectionedit.cpp:485
+#: shell/sourceformatterselectionedit.cpp:1089
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "Supressió de l'estil"
 
-#: shell/sourceformatterselectionedit.cpp:540
+#: shell/sourceformatterselectionedit.cpp:1149
 #, kde-format
 msgid "New %1"
 msgstr "%1 nou"
-
-#: shell/sourceformatterselectionedit.cpp:543
-#, kde-format
-msgid "New Style"
-msgstr "Estil nou"
-
-#: shell/sourceformatterselectionedit.cpp:624
-#, kde-format
-msgid "No language selected"
-msgstr "No s'ha seleccionat cap llenguatge"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/sourceformatterselectionedit.ui:29
@@ -4988,29 +4990,59 @@ msgctxt "@label:listbox"
 msgid "Language:"
 msgstr "Llenguatge:"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, usageHelpButton)
+#: shell/sourceformatterselectionedit.ui:44
+#, kde-format
+msgid "How to configure formatting styles"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
+#: shell/sourceformatterselectionedit.ui:49
+#, kde-format
+msgid ""
+"<p>Select languages you use one by one from the <i>Language</i> combobox "
+"below, pick the desired formatter and style for each. <i>Ctrl+Click</i> a "
+"selected style to unselect it.</p>\n"
+"<p>Configuring the right formatter and style for each used language is very "
+"important: not only explicit <i>Reformat Source</i>/<i>Line</i>/<i>Files...</"
+"i> actions are affected, but also the formatting of auto-generated, auto-"
+"refactored or auto-fixed code (for example, <i>Rename</i> context menu "
+"action).</p>\n"
+"<p>Note that KDevelop formats all <i>*.h</i> files with formatter and style "
+"configured for <i>C</i> language, even C++ headers that belong to a pure C++ "
+"project. This occurs because source formatter maps MIME types to languages.</"
+"p>"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: shell/sourceformatterselectionedit.ui:102
+#: shell/sourceformatterselectionedit.ui:134
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
 msgstr "Formatador:"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, formatterDescriptionButton)
+#: shell/sourceformatterselectionedit.ui:152
+#, kde-format
+msgid "Description of a selected formatter"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: shell/sourceformatterselectionedit.ui:132
+#: shell/sourceformatterselectionedit.ui:183
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
 msgstr "Estil:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
-#: shell/sourceformatterselectionedit.ui:150
+#: shell/sourceformatterselectionedit.ui:201
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Nou"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
-#: shell/sourceformatterselectionedit.ui:157
+#: shell/sourceformatterselectionedit.ui:208
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -5018,7 +5050,7 @@ msgstr "Edita..."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
 #. i18n: ectx: property (text), widget (QPushButton, deleteButton)
-#: shell/sourceformatterselectionedit.ui:164
+#: shell/sourceformatterselectionedit.ui:215
 #: shell/workingsets/workingsettooltipwidget.cpp:93
 #: vcs/dvcs/ui/branchmanager.ui:44
 #, kde-format
@@ -5027,7 +5059,7 @@ msgid "Delete"
 msgstr "Suprimix"
 
 # skip-rule: punctuation-period-no
-#: shell/textdocument.cpp:437
+#: shell/textdocument.cpp:422
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5038,13 +5070,13 @@ msgstr ""
 "\n"
 "Segur que voleu sobreescriure'l? (Es perdran els canvis externs)."
 
-#: shell/textdocument.cpp:441
+#: shell/textdocument.cpp:426
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Document modificat externament"
 
-#: shell/textdocument.cpp:705
+#: shell/textdocument.cpp:683
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Línia: %1 Col.: %2 "
@@ -6162,3 +6194,12 @@ msgstr "Diferències amb l'anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferències entre revisions"
+
+#~ msgid "No Source Formatter available"
+#~ msgstr "No hi ha disponible cap formatador del codi font"
+
+#~ msgid "New Style"
+#~ msgstr "Estil nou"
+
+#~ msgid "No language selected"
+#~ msgstr "No s'ha seleccionat cap llenguatge"

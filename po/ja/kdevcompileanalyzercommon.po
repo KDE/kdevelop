@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2020-01-18 19:42-0800\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -48,17 +48,17 @@ msgctxt "@action"
 msgid "Analyze Current Project with %1"
 msgstr ""
 
-#: compileanalyzer.cpp:161
+#: compileanalyzer.cpp:168
 #, kde-format
 msgid "No suitable active file, unable to deduce project."
 msgstr ""
 
-#: compileanalyzer.cpp:173
+#: compileanalyzer.cpp:180
 #, kde-format
 msgid "Active file isn't in a project."
 msgstr ""
 
-#: compileanalyzer.cpp:186
+#: compileanalyzer.cpp:193
 #, kde-format
 msgid ""
 "Unable to start check for '%1':\n"
@@ -66,7 +66,7 @@ msgid ""
 "%2"
 msgstr ""
 
-#: compileanalyzer.cpp:216
+#: compileanalyzer.cpp:223
 #, kde-format
 msgctxt "@title:window"
 msgid "Test"

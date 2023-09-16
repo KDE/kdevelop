@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:43+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2022-07-13 13:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -62,22 +62,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "%2에서 \"%1\" 검색(시간 %3에)"
 
-#: grepjob.cpp:137
+#: grepjob.cpp:144
 #, kde-format
 msgid "Find in Files"
 msgstr "파일에서 찾기"
 
-#: grepjob.cpp:153 grepjob.cpp:256
-#, kde-format
-msgid "Search aborted"
-msgstr "검색 중단됨"
-
-#: grepjob.cpp:162
+#: grepjob.cpp:163
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "와일드카드 패턴과 일치하는 파일 없음"
 
-#: grepjob.cpp:180
+#: grepjob.cpp:177
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -85,28 +80,33 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "패턴 문자열에 캡처를 사용할 수 없음"
 
-#: grepjob.cpp:201
+#: grepjob.cpp:198
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "파일 %1개에서 <b>%2</b> 검색 중"
 
-#: grepjob.cpp:222
+#: grepjob.cpp:224
 #, kde-format
 msgid "Collecting files..."
 msgstr "파일 수집 중..."
 
-#: grepjob.cpp:300
+#: grepjob.cpp:268
+#, kde-format
+msgid "Search aborted"
+msgstr "검색 중단됨"
+
+#: grepjob.cpp:314
 #, kde-format
 msgid "Failed: %1"
 msgstr "실패: %1"
 
-#: grepjob.cpp:303
+#: grepjob.cpp:317
 #, kde-format
 msgid "No results found"
 msgstr "결과가 없습니다."
 
-#: grepjob.cpp:322
+#: grepjob.cpp:336
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"

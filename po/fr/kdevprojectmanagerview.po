@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2021-11-18 16:42+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -202,7 +202,7 @@ msgstr ""
 "Sélectionne automatiquement le document courant dans l'arborescence de "
 "projet."
 
-#: projectmanagerview.cpp:118
+#: projectmanagerview.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Show Build Targets"

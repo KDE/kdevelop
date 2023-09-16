@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:43+0000\n"
 "PO-Revision-Date: 2019-06-02 13:10+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -282,30 +282,30 @@ msgid_plural "%2 (repeated %1 times)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: debugger/framestack/framestackmodel.cpp:178
+#: debugger/framestack/framestackmodel.cpp:179
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
 msgstr "#%1 kohdassa %2 (kaatui)"
 
-#: debugger/framestack/framestackmodel.cpp:180
+#: debugger/framestack/framestackmodel.cpp:181
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
 msgstr "#%1 kohdassa %2"
 
-#: debugger/framestack/framestackmodel.cpp:279
+#: debugger/framestack/framestackmodel.cpp:282
 #, kde-format
 msgid "Depth"
 msgstr "Syvyys"
 
-#: debugger/framestack/framestackmodel.cpp:281
+#: debugger/framestack/framestackmodel.cpp:284
 #: language/duchain/navigation/abstractnavigationcontext.cpp:520
 #, kde-format
 msgid "Function"
 msgstr "Funktio"
 
-#: debugger/framestack/framestackmodel.cpp:283
+#: debugger/framestack/framestackmodel.cpp:286
 #, kde-format
 msgid "Source"
 msgstr "Lähde"
@@ -596,7 +596,7 @@ msgctxt "@title:menu"
 msgid "Analyze Current Project With"
 msgstr "Kommitoi nykyinen projekti…"
 
-#: interfaces/isourceformatter.cpp:209
+#: interfaces/isourceformatter.cpp:216
 #, kde-format
 msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
@@ -2314,24 +2314,24 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Dokumentaatio"
 
-#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:63 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "Nimetön"
 
-#: shell/documentcontroller.cpp:118
+#: shell/documentcontroller.cpp:120
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Avaa tiedosto"
 
-#: shell/documentcontroller.cpp:119
+#: shell/documentcontroller.cpp:121
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Tekstitiedosto\n"
 
-#: shell/documentcontroller.cpp:313
+#: shell/documentcontroller.cpp:318
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2340,46 +2340,46 @@ msgstr ""
 "KDevelop ei löytänyt muokkainta tyypin %2 tiedostolle ”%1”.\n"
 "Haluatko avata sen pelkkänä tekstinä?"
 
-#: shell/documentcontroller.cpp:316
+#: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "Muokkainta ei löytynyt"
 
-#: shell/documentcontroller.cpp:317
+#: shell/documentcontroller.cpp:322
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:318
+#: shell/documentcontroller.cpp:323
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:601
+#: shell/documentcontroller.cpp:608
 #, fuzzy, kde-format
 #| msgid "&Open..."
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Avaa…"
 
-#: shell/documentcontroller.cpp:604
+#: shell/documentcontroller.cpp:611
 #, fuzzy, kde-format
 #| msgid "Open file"
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Avaa tiedosto"
 
-#: shell/documentcontroller.cpp:605
+#: shell/documentcontroller.cpp:612
 #, fuzzy, kde-format
 #| msgid "Opens a file for editing."
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Avaa tiedoston muokkausta varten."
 
-#: shell/documentcontroller.cpp:609
+#: shell/documentcontroller.cpp:616
 #, fuzzy, kde-format
 #| msgid ""
 #| "This lists files which you have opened recently, and allows you to easily "
@@ -2392,21 +2392,21 @@ msgstr ""
 "Tässä luettelossa näet tiedostot, jotka olet viimeksi avannut. Voit avata "
 "tästä haluamasi tiedoston."
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:621
 #, fuzzy, kde-format
 #| msgid "Save Al&l"
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Tallenna &kaikki"
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:623
 #, fuzzy, kde-format
 #| msgid "Save all open documents"
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Tallenna kaikki avoimet tiedostot"
 
-#: shell/documentcontroller.cpp:617
+#: shell/documentcontroller.cpp:624
 #, fuzzy, kde-format
 #| msgid ""
 #| "Save all open documents, prompting for additional information when "
@@ -2416,63 +2416,63 @@ msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr "Tallenna kaikki tiedostot, kysyen tarvittaessa lisätietoja."
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:630
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Lataa kaikki uudelleen"
 
-#: shell/documentcontroller.cpp:625
+#: shell/documentcontroller.cpp:632
 #, fuzzy, kde-format
 #| msgid "Revert all open documents"
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Palauta kaikki avoimet tiedostot"
 
-#: shell/documentcontroller.cpp:626
+#: shell/documentcontroller.cpp:633
 #, fuzzy, kde-format
 #| msgid "Revert all open documents, returning to the previously saved state."
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr "Palauta kaikki avoimet tiedostot niiden aiemmin tallennettuun tilaan."
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:639
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Sulje"
 
-#: shell/documentcontroller.cpp:634
+#: shell/documentcontroller.cpp:641
 #, fuzzy, kde-format
 #| msgid "Close file"
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Sulje tiedosto"
 
-#: shell/documentcontroller.cpp:635
+#: shell/documentcontroller.cpp:642
 #, fuzzy, kde-format
 #| msgid "Closes current file."
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Sulkee nykyisen tiedoston."
 
-#: shell/documentcontroller.cpp:640
+#: shell/documentcontroller.cpp:647
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "S&ulje kaikki"
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:649
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Sulje kaikki avoimet tiedostot"
 
-#: shell/documentcontroller.cpp:643
+#: shell/documentcontroller.cpp:650
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, prompting for additional information when "
@@ -2483,21 +2483,21 @@ msgid ""
 "necessary."
 msgstr "Sulje kaikki tiedostot, kysyen tarvittaessa lisätietoja."
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:656
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Sulje kaikki &muut"
 
-#: shell/documentcontroller.cpp:651
+#: shell/documentcontroller.cpp:658
 #, fuzzy, kde-format
 #| msgid "Close all other documents"
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Sulje kaikki muut tiedostot"
 
-#: shell/documentcontroller.cpp:652
+#: shell/documentcontroller.cpp:659
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, with the exception of the currently active "
@@ -2508,21 +2508,21 @@ msgid ""
 "document."
 msgstr "Sulje kaikki tiedostot paitsi parhaillaan aktiivinen tiedosto."
 
-#: shell/documentcontroller.cpp:657
+#: shell/documentcontroller.cpp:664
 #, fuzzy, kde-format
 #| msgid "Show Annotate on current document"
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Näytä nykyisen tiedoston merkinnät"
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:665
 #, fuzzy, kde-format
 #| msgid "Annotate"
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Merkinnät"
 
-#: shell/documentcontroller.cpp:1277
+#: shell/documentcontroller.cpp:1294
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -3045,7 +3045,7 @@ msgstr ""
 "prosessi.\n"
 "Haluatko korvata ulkoiset muutokset?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:442
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:427
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3094,31 +3094,31 @@ msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
 msgstr "Sulje kaikki muut tiedostot"
 
-#: shell/problemmodel.cpp:319
+#: shell/problemmodel.cpp:321
 #, kde-format
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "Lähde"
 
-#: shell/problemmodel.cpp:321
+#: shell/problemmodel.cpp:323
 #, kde-format
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "Ongelma"
 
-#: shell/problemmodel.cpp:323
+#: shell/problemmodel.cpp:325
 #, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "Tiedosto"
 
-#: shell/problemmodel.cpp:325
+#: shell/problemmodel.cpp:327
 #, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr "Rivi"
 
-#: shell/problemmodel.cpp:327
+#: shell/problemmodel.cpp:329
 #, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"
@@ -4219,15 +4219,26 @@ msgstr " säiettä"
 msgid "Configure Documentation"
 msgstr "Ilmoitusten asetukset"
 
-#: shell/settings/editstyledialog.cpp:102
+#. i18n: ectx: property (toolTip), widget (QCheckBox, showPreviewCheckBox)
+#: shell/settings/editstyledialog.ui:42
 #, kde-format
-msgid "No Source Formatter available"
-msgstr "Lähdekoodimuotoilija ei käytettävissä"
+msgid ""
+"Toggle preview visibility for this style.\n"
+"Preview should be disabled for styles whose formatting depends on the file "
+"path."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
+#: shell/settings/editstyledialog.ui:45
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgid "Show Preview"
+msgstr "Esikatselu"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
-#: shell/settings/editstyledialog.ui:40
-#: shell/sourceformatterselectionedit.ui:83
+#: shell/settings/editstyledialog.ui:69
+#: shell/sourceformatterselectionedit.ui:112
 #, fuzzy, kde-format
 #| msgid "Preview:"
 msgctxt "@label"
@@ -4905,7 +4916,7 @@ msgid "Configure Runtimes"
 msgstr "Liitännäisten asetukset"
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:228
+#: shell/sourceformattercontroller.cpp:220
 #, kde-format
 msgid "Source Formatter"
 msgstr "Lähdekoodin muotoilu"
@@ -5203,48 +5214,48 @@ msgstr "Väritä elementit projektiyhteyden perusteella"
 msgid "Configure User Interface"
 msgstr "Käyttöliittymän asetukset"
 
-#: shell/sourceformattercontroller.cpp:234
+#: shell/sourceformattercontroller.cpp:226
 #, fuzzy, kde-format
 #| msgid "&Reformat Source"
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "&Muotoile lähdekoodi"
 
-#: shell/sourceformattercontroller.cpp:238
+#: shell/sourceformattercontroller.cpp:230
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "Muotoile rivi"
 
-#: shell/sourceformattercontroller.cpp:242
+#: shell/sourceformattercontroller.cpp:234
 #, fuzzy, kde-format
 #| msgid "Reformat files?"
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr "Muotoillaanko tiedostot?"
 
-#: shell/sourceformattercontroller.cpp:243
+#: shell/sourceformattercontroller.cpp:235
 #, fuzzy, kde-format
 #| msgid "Format file(s) using the current theme"
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr "Muotoile tiedostot käyttäen nykyistä tyyliä"
 
-#: shell/sourceformattercontroller.cpp:245
+#: shell/sourceformattercontroller.cpp:237
 #, fuzzy, kde-format
 #| msgid "Formatting functionality using <b>astyle</b> library."
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr "<b>astyle</b>-kirjastoa käyttävä muotoilutoiminnallisuus."
 
-#: shell/sourceformattercontroller.cpp:603
+#: shell/sourceformattercontroller.cpp:610
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:606
+#: shell/sourceformattercontroller.cpp:613
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5252,14 +5263,14 @@ msgid ""
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:608
+#: shell/sourceformattercontroller.cpp:615
 #, fuzzy, kde-format
 #| msgid "Reformat current line using AStyle"
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Muotoile nykyinen rivi AStyleä käyttäen"
 
-#: shell/sourceformattercontroller.cpp:611
+#: shell/sourceformattercontroller.cpp:618
 #, fuzzy, kde-format
 #| msgid ""
 #| "Source reformatting of line under cursor using <b>astyle</b> library."
@@ -5271,13 +5282,13 @@ msgstr ""
 "Kohdistimen kohdalla olevan rivin lähdekoodin uudelleenmuotoilu <b>astyle</"
 "b>-kirjastoa käyttäen."
 
-#: shell/sourceformattercontroller.cpp:615
+#: shell/sourceformattercontroller.cpp:622
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:617
+#: shell/sourceformattercontroller.cpp:624
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5285,14 +5296,14 @@ msgid ""
 "configured source formatter."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:619
+#: shell/sourceformattercontroller.cpp:626
 #, fuzzy, kde-format
 #| msgid "Reformat current line using AStyle"
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr "Muotoile nykyinen rivi AStyleä käyttäen"
 
-#: shell/sourceformattercontroller.cpp:621
+#: shell/sourceformattercontroller.cpp:628
 #, fuzzy, kde-format
 #| msgid ""
 #| "Source reformatting of line under cursor using <b>astyle</b> library."
@@ -5304,19 +5315,19 @@ msgstr ""
 "Kohdistimen kohdalla olevan rivin lähdekoodin uudelleenmuotoilu <b>astyle</"
 "b>-kirjastoa käyttäen."
 
-#: shell/sourceformattercontroller.cpp:856
+#: shell/sourceformattercontroller.cpp:865
 #, fuzzy, kde-format
 #| msgid "Reformat files?"
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Muotoillaanko tiedostot?"
 
-#: shell/sourceformattercontroller.cpp:857
+#: shell/sourceformattercontroller.cpp:866
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Muotoillaanko kaikki valitun kansion tiedostot?"
 
-#: shell/sourceformattercontroller.cpp:861
+#: shell/sourceformattercontroller.cpp:870
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgctxt "@action:button"
@@ -5343,7 +5354,7 @@ msgid_plural "Reformatting %1 files"
 msgstr[0] "Muotoillaanko tiedostot?"
 msgstr[1] "Muotoillaanko tiedostot?"
 
-#: shell/sourceformatterselectionedit.cpp:484
+#: shell/sourceformatterselectionedit.cpp:1087
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -5354,28 +5365,17 @@ msgstr ""
 "%2.\n"
 "Haluatko varmasti poistaa sen?"
 
-#: shell/sourceformatterselectionedit.cpp:485
+#: shell/sourceformatterselectionedit.cpp:1089
 #, fuzzy, kde-format
 #| msgid "Delete Working Set"
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "Poista työjoukko"
 
-#: shell/sourceformatterselectionedit.cpp:540
+#: shell/sourceformatterselectionedit.cpp:1149
 #, kde-format
 msgid "New %1"
 msgstr "Uusi %1"
-
-#: shell/sourceformatterselectionedit.cpp:543
-#, kde-format
-msgid "New Style"
-msgstr "Uusi tyyli"
-
-#: shell/sourceformatterselectionedit.cpp:624
-#, fuzzy, kde-format
-#| msgid "No Language selected"
-msgid "No language selected"
-msgstr "Kieltä ei valittu"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/sourceformatterselectionedit.ui:29
@@ -5385,16 +5385,46 @@ msgctxt "@label:listbox"
 msgid "Language:"
 msgstr "Kieli:"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, usageHelpButton)
+#: shell/sourceformatterselectionedit.ui:44
+#, kde-format
+msgid "How to configure formatting styles"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
+#: shell/sourceformatterselectionedit.ui:49
+#, kde-format
+msgid ""
+"<p>Select languages you use one by one from the <i>Language</i> combobox "
+"below, pick the desired formatter and style for each. <i>Ctrl+Click</i> a "
+"selected style to unselect it.</p>\n"
+"<p>Configuring the right formatter and style for each used language is very "
+"important: not only explicit <i>Reformat Source</i>/<i>Line</i>/<i>Files...</"
+"i> actions are affected, but also the formatting of auto-generated, auto-"
+"refactored or auto-fixed code (for example, <i>Rename</i> context menu "
+"action).</p>\n"
+"<p>Note that KDevelop formats all <i>*.h</i> files with formatter and style "
+"configured for <i>C</i> language, even C++ headers that belong to a pure C++ "
+"project. This occurs because source formatter maps MIME types to languages.</"
+"p>"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: shell/sourceformatterselectionedit.ui:102
+#: shell/sourceformatterselectionedit.ui:134
 #, fuzzy, kde-format
 #| msgid "Formatter:"
 msgctxt "@label:listbox"
 msgid "Formatter:"
 msgstr "Muotoilija:"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, formatterDescriptionButton)
+#: shell/sourceformatterselectionedit.ui:152
+#, kde-format
+msgid "Description of a selected formatter"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: shell/sourceformatterselectionedit.ui:132
+#: shell/sourceformatterselectionedit.ui:183
 #, fuzzy, kde-format
 #| msgid "Style:"
 msgctxt "@label:listbox"
@@ -5402,7 +5432,7 @@ msgid "Style:"
 msgstr "Tyyli:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
-#: shell/sourceformatterselectionedit.ui:150
+#: shell/sourceformatterselectionedit.ui:201
 #, fuzzy, kde-format
 #| msgid "New"
 msgctxt "@action:button"
@@ -5410,7 +5440,7 @@ msgid "New"
 msgstr "Uusi"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
-#: shell/sourceformatterselectionedit.ui:157
+#: shell/sourceformatterselectionedit.ui:208
 #, fuzzy, kde-format
 #| msgid "Edit..."
 msgctxt "@action:button"
@@ -5419,7 +5449,7 @@ msgstr "Muokkaa…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
 #. i18n: ectx: property (text), widget (QPushButton, deleteButton)
-#: shell/sourceformatterselectionedit.ui:164
+#: shell/sourceformatterselectionedit.ui:215
 #: shell/workingsets/workingsettooltipwidget.cpp:93
 #: vcs/dvcs/ui/branchmanager.ui:44
 #, fuzzy, kde-format
@@ -5427,7 +5457,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Poista"
 
-#: shell/textdocument.cpp:437
+#: shell/textdocument.cpp:422
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5438,13 +5468,13 @@ msgstr ""
 "\n"
 "Haluatko varmasti korvata sen? (Ulkoiset muutokset menetetään.)"
 
-#: shell/textdocument.cpp:441
+#: shell/textdocument.cpp:426
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Tiedosto on muuttunut ulkoisesti"
 
-#: shell/textdocument.cpp:705
+#: shell/textdocument.cpp:683
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Rivi: %1 Sar: %2 "
@@ -6678,6 +6708,17 @@ msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Erot versioiden välillä"
 
+#~ msgid "No Source Formatter available"
+#~ msgstr "Lähdekoodimuotoilija ei käytettävissä"
+
+#~ msgid "New Style"
+#~ msgstr "Uusi tyyli"
+
+#, fuzzy
+#~| msgid "No Language selected"
+#~ msgid "No language selected"
+#~ msgstr "Kieltä ei valittu"
+
 #~ msgid "Recent Expressions"
 #~ msgstr "Viimeaikaiset lausekkeet"
 
@@ -6959,9 +7000,6 @@ msgstr "Erot versioiden välillä"
 
 #~ msgid "Documentation Tool Bar"
 #~ msgstr "Dokumentaatiotyökalurivi"
-
-#~ msgid "Preview"
-#~ msgstr "Esikatselu"
 
 #~ msgid "Format Files"
 #~ msgstr "Muotoile tiedostot"

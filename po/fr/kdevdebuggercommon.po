@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:55+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2022-07-10 12:32+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -249,23 +249,23 @@ msgstr ""
 msgid "Debugger"
 msgstr "Débogueur"
 
-#: midebugjobs.cpp:84
+#: midebugjobs.cpp:86
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1 : %2"
 
-#: midebugjobs.cpp:105
+#: midebugjobs.cpp:107
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "« %1 » n'est pas un programme exécutable"
 
-#: midebugjobs.cpp:169
+#: midebugjobs.cpp:171
 #, kde-format
 msgid "Debug core file"
 msgstr "Déboguer un fichier « core »"
 
-#: midebugjobs.cpp:192
+#: midebugjobs.cpp:194
 #, kde-format
 msgid "Debug process %1"
 msgstr "Déboguer un processus %1"

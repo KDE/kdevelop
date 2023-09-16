@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-08 00:45+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2022-04-07 11:01-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -111,13 +111,13 @@ msgstr ""
 "arquivos na <b>subpasta</b>, usando a ferramenta <b>uncrustify</b> com o "
 "arquivo de configuração <b>uncrustify.config</b>."
 
-#: customscript_plugin.cpp:534
+#: customscript_plugin.cpp:538
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Comando:"
 
-#: customscript_plugin.cpp:543
+#: customscript_plugin.cpp:547
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -132,18 +132,18 @@ msgstr ""
 "'standard-output'.<br /><br />Se você adicionar <b>$TMPFILE</b> no comando, "
 "então <br />o arquivo temporário é usado para transferir o código."
 
-#: customscript_plugin.cpp:555
+#: customscript_plugin.cpp:559
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Mais variáveis"
 
-#: customscript_plugin.cpp:565
+#: customscript_plugin.cpp:569
 #, kde-format
 msgid "Style: %1"
 msgstr "Estilo: %1"
 
-#: customscript_plugin.cpp:578
+#: customscript_plugin.cpp:582
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -164,7 +164,7 @@ msgstr ""
 "substituído pelo caminho de um projeto aberto <br />atualmente cujo nome é "
 "&lt;nome do projeto&gt;."
 
-#: customscript_plugin.cpp:590
+#: customscript_plugin.cpp:594
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

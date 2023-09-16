@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-08 00:45+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2020-05-08 10:11+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -106,14 +106,14 @@ msgstr ""
 "b>, kasutades seadistusfaili <b>uncrustify.config</b> peal tööriista "
 "<b>uncrustify</b>."
 
-#: customscript_plugin.cpp:534
+#: customscript_plugin.cpp:538
 #, fuzzy, kde-format
 #| msgid "Command:"
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Käsk:"
 
-#: customscript_plugin.cpp:543
+#: customscript_plugin.cpp:547
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -128,19 +128,19 @@ msgstr ""
 "käsule <b>$TMPFILE</b>, siis<br />kasutatakse koodi edastamisel ajutist "
 "faili."
 
-#: customscript_plugin.cpp:555
+#: customscript_plugin.cpp:559
 #, fuzzy, kde-format
 #| msgid "More Variables"
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Rohkem muutujaid"
 
-#: customscript_plugin.cpp:565
+#: customscript_plugin.cpp:569
 #, kde-format
 msgid "Style: %1"
 msgstr "Stiil: %1"
 
-#: customscript_plugin.cpp:578
+#: customscript_plugin.cpp:582
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -168,7 +168,7 @@ msgstr ""
 "lubatud<br />ainult ajutises failis $TMPFILE.<br /><br /><b>${PROJECT_NAME}</"
 "b>asendatakse parajasti avatud<br /> sobiva nimega projekti asukohaga."
 
-#: customscript_plugin.cpp:590
+#: customscript_plugin.cpp:594
 #, fuzzy, kde-format
 #| msgid "Variable Replacements"
 msgctxt "@title:window"

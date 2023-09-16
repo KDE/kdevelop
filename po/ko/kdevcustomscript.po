@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-08 00:45+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2021-11-14 19:18+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -102,13 +102,13 @@ msgstr ""
 "<b>uncrustify</b> 도구와 <b>uncrustify.config</b> 설정 파일을 사용하여 형식"
 "을 지정합니다."
 
-#: customscript_plugin.cpp:534
+#: customscript_plugin.cpp:538
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "명령:"
 
-#: customscript_plugin.cpp:543
+#: customscript_plugin.cpp:547
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -122,18 +122,18 @@ msgstr ""
 "에서 읽어 옵니다.<br /><br />명령에 <b>$TMPFILE</b> 인자를 추가했다면<br />코"
 "드 전송에 임시 파일을 사용합니다."
 
-#: customscript_plugin.cpp:555
+#: customscript_plugin.cpp:559
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "더 많은 변수"
 
-#: customscript_plugin.cpp:565
+#: customscript_plugin.cpp:569
 #, kde-format
 msgid "Style: %1"
 msgstr "스타일: %1"
 
-#: customscript_plugin.cpp:578
+#: customscript_plugin.cpp:582
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -152,7 +152,7 @@ msgstr ""
 "><br /><b>${&lt;project_name&gt;}</b>은 현재 열려 있는 프로젝트 중<br />이름"
 "이 &lt;project_name&gt;인 프로젝트 경로로 대체됩니다."
 
-#: customscript_plugin.cpp:590
+#: customscript_plugin.cpp:594
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

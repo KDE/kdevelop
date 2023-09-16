@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2023-09-02 02:56\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -172,7 +172,7 @@ msgctxt "@action"
 msgid "Finish Review"
 msgstr "完成审阅"
 
-#: patchreview.cpp:613
+#: patchreview.cpp:620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"

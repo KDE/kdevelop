@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
+"POT-Creation-Date: 2023-09-16 00:43+0000\n"
 "PO-Revision-Date: 2022-05-07 02:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -99,47 +99,47 @@ msgctxt "@action"
 msgid "Move into Source"
 msgstr "소스로 이동"
 
-#: codecompletion/context.cpp:147
+#: codecompletion/context.cpp:148
 #, kde-format
 msgid "Override %1"
 msgstr "%1 재정의"
 
-#: codecompletion/context.cpp:344
+#: codecompletion/context.cpp:345
 #, kde-format
 msgid "Implement %1"
 msgstr "%1 구현"
 
-#: codecompletion/context.cpp:1350
+#: codecompletion/context.cpp:1409
 #, kde-format
 msgid "Special"
 msgstr "특수 기능"
 
-#: codecompletion/context.cpp:1351
+#: codecompletion/context.cpp:1410
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "룩어헤드 일치"
 
-#: codecompletion/context.cpp:1352
+#: codecompletion/context.cpp:1411
 #, kde-format
 msgid "Builtin"
 msgstr "내장"
 
-#: codecompletion/context.cpp:1353
+#: codecompletion/context.cpp:1412
 #, kde-format
 msgid "Macros"
 msgstr "매크로"
 
-#: codecompletion/context.cpp:1396
+#: codecompletion/context.cpp:1455
 #, kde-format
 msgid "Abstract Override"
 msgstr "추상 재정의"
 
-#: codecompletion/context.cpp:1397
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Virtual Override"
 msgstr "가상 재정의"
 
-#: codecompletion/context.cpp:1412
+#: codecompletion/context.cpp:1471
 #, kde-format
 msgid "Implement Function"
 msgstr "구현 함수"
@@ -321,22 +321,22 @@ msgstr "사용자 정의 인클루드 경로 추가"
 msgid "Open Project"
 msgstr "프로젝트 열기"
 
-#: duchain/parsesession.cpp:543
+#: duchain/parsesession.cpp:560
 #, kde-format
 msgid "Requested here: %1"
 msgstr "요청 위치: %1"
 
-#: duchain/parsesession.cpp:584
+#: duchain/parsesession.cpp:601
 #, kde-format
 msgid "In included file: %1"
 msgstr "포함된 파일: %1"
 
-#: duchain/parsesession.cpp:607
+#: duchain/parsesession.cpp:624
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "헤더 파일이 여러 번 포함으로부터 보호되지 않음"
 
-#: duchain/parsesession.cpp:608
+#: duchain/parsesession.cpp:625
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2012-02-02 07:06+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -208,7 +208,7 @@ msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
 msgstr "Söcht dat aktuelle Dokment binnen den Projektboom un söcht dat ut."
 
-#: projectmanagerview.cpp:118
+#: projectmanagerview.cpp:121
 #, fuzzy, kde-format
 #| msgid "Add to Buildset"
 msgctxt "@action"

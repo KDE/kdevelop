@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2023-09-16 00:44+0000\n"
 "PO-Revision-Date: 2021-11-12 00:04+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -14,25 +14,25 @@ msgstr ""
 "X-Generator: Lokalize 21.08.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: problemreporterplugin.cpp:94
+#: problemreporterplugin.cpp:99
 #, kde-format
 msgid "Parser"
 msgstr "파서"
 
-#: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
+#: problemreporterplugin.cpp:100 problemreporterplugin.cpp:246
 #: problemsview.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
 msgstr "문제점"
 
-#: problemreporterplugin.cpp:229
+#: problemreporterplugin.cpp:287
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr "문제 해결"
 
-#: problemreporterplugin.cpp:231
+#: problemreporterplugin.cpp:289
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"
