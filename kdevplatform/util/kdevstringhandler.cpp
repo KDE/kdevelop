@@ -23,6 +23,7 @@
 #include <QVariant>
 #include <QRegExp>
 #include <QTextDocument>
+#include <QIODevice>
 
 #include <algorithm>
 #include <cctype>

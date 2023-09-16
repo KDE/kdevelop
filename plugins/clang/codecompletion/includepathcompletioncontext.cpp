@@ -16,6 +16,7 @@
 #include <QDirIterator>
 
 #include <KTextEditor/View>
+#include <KTextEditor/Document>
 
 #include <algorithm>
 
@@ -233,7 +234,7 @@ public:
             }
 
             // replace the whole line
-            range.setEnd({lineNumber, line.size()});
+            range.setEnd({lineNumber, int(line.size())});
         } else {
             range.setEnd({lineNumber, properties.inputTo});
         }

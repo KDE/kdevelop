@@ -74,7 +74,7 @@ RegistersManager::RegistersManager(QWidget* parent)
 
 void RegistersManager::architectureParsedSlot(Architecture arch)
 {
-    qCDebug(DEBUGGERCOMMON) << " Current controller: " << m_registerController << "Current arch " << m_currentArchitecture;
+    qCDebug(DEBUGGERCOMMON) << " Current controller: " << m_registerController.get() << "Current arch " << m_currentArchitecture;
 
     if (m_registerController || m_currentArchitecture != undefined) {
         return;

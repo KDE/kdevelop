@@ -7,6 +7,7 @@
 
 #include "astyle_formatter.h"
 
+#include <QIODevice>
 #include <QString>
 
 #include <interfaces/isourceformatter.h>

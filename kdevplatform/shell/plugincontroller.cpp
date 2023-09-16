@@ -15,8 +15,8 @@
 
 #include <QElapsedTimer>
 #include <QJsonArray>
-#include <QJsonObject>
 #include <QMap>
+#include <QPluginLoader>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -95,8 +95,8 @@ bool hasMandatoryProperties( const KPluginMetaData& info )
     }
 
     // the version property is only required when the plugin is not installed into the right directory
-    QVariant version = info.rawData().value(KEY_Version()).toVariant();
-    if (version.isValid() && version.value<int>() == KDEVELOP_PLUGIN_VERSION) {
+    QJsonValue version = info.rawData().value(KEY_Version());
+    if (!version.isUndefined() && version.toInt() == KDEVELOP_PLUGIN_VERSION) {
         return true;
     }
 
@@ -297,7 +297,6 @@ public:
         KTextEditorIntegration::initialize();
         const auto ktePlugins =
             KPluginMetaData::findPlugins(QStringLiteral("ktexteditor"), &hasKDevelopPluginServiceType);
-
         qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << pluginIds(ktePlugins);
 
         plugins.reserve(plugins.size() + ktePlugins.size());
@@ -314,7 +313,7 @@ public:
             data[KEY_Category()] = KEY_Global();
             data[KEY_Mode()] = KEY_Gui();
             data[KEY_Version()] = KDEVELOP_PLUGIN_VERSION;
-            plugins.append({data, info.fileName(), info.metaDataFileName()});
+            plugins.append({data, info.fileName()});
         }
     }
 
@@ -595,7 +594,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
                          << "because a factory to load the plugin could not be obtained:" << factory.errorText;
         return nullptr;
     }
-
     // now create it
     auto plugin = factory.plugin->create<IPlugin>(d->core);
     if (!plugin) {

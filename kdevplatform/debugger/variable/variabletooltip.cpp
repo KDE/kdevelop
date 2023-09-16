@@ -14,7 +14,6 @@
 #include <QHeaderView>
 #include <QPushButton>
 #include <QScrollBar>
-#include <QDesktopWidget>
 #include <KLocalizedString>
 #include <QPainter>
 
@@ -47,7 +46,7 @@ protected:
     void mousePressEvent(QMouseEvent* e) override
     {
         if (e->button() == Qt::LeftButton) {
-            m_pos = e->globalPos();
+            m_pos = e->globalPosition().toPoint();
             m_startSize = m_parent->size();
             e->ignore();
         }
@@ -176,7 +175,7 @@ void VariableToolTip::slotRangeChanged(int min, int max)
 {
     Q_ASSERT(min == 0);
     Q_UNUSED(min);
-    QRect rect = QApplication::desktop()->screenGeometry(this);
+    QRect rect = screen()->geometry();
     if (pos().y() + height() + max*m_itemHeight < rect.bottom())
         resize(width(), height() + max*m_itemHeight);
     else

@@ -221,7 +221,7 @@ void DUContextDynamicData::addDeclaration(Declaration* newDeclaration)
     if (!inserted) {
         // We haven't found any child that is before this one, so prepend it
         m_localDeclarations.insert(0, newDeclaration);
-        d_func_dynamic()->m_localDeclarationsList().insert(0, newDeclaration);
+        d_func_dynamic()->m_localDeclarationsList().prepend(newDeclaration);
         Q_ASSERT(d_func()->m_localDeclarations()[0].data(m_topContext) == newDeclaration);
     }
 }
@@ -271,7 +271,7 @@ void DUContextDynamicData::addChildContext(DUContext* context)
 
     if (!inserted) {
         m_childContexts.insert(0, context);
-        d_func_dynamic()->m_childContextsList().insert(0, indexed);
+        d_func_dynamic()->m_childContextsList().prepend(indexed);
         context->m_dynamicData->m_parentContext = m_context;
     }
 }
@@ -788,7 +788,8 @@ QList<Declaration*> DUContext::findDeclarations(const QualifiedIdentifier& ident
     SearchItem item(identifier);
     item.ref.ref();
 
-    SearchItem::PtrList identifiers{SearchItem::Ptr(&item)};
+    SearchItem::PtrList identifiers;
+    identifiers.append(SearchItem::Ptr(&item));
 
     findDeclarationsInternal(identifiers,
                              position.isValid() ? position : range().end, dataType, ret,
@@ -1292,7 +1293,7 @@ void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopD
             }
 
             newItem->isExplicitlyGlobal = true;
-            identifiers.insert(0, newItem);
+            identifiers.prepend(newItem);
         }
     }
 }

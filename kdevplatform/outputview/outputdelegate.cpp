@@ -11,6 +11,7 @@
 #include "filtereditem.h"
 
 #include <KColorScheme>
+#include <KStatefulBrush>
 
 #include <QPainter>
 

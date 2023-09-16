@@ -8,7 +8,7 @@
 #include "svndiffjob_p.h"
 
 #include <QMutexLocker>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QFileInfo>
 
@@ -45,7 +45,7 @@ QString repairDiff(const QString& diff) {
         }
     }
 
-    QRegExp spaceRegExp(QStringLiteral("\\s"));
+    QRegularExpression spaceRegExp(QStringLiteral("\\s"));
 
     for(int a = 0; a < lines.size()-1; ++a) {
         const QLatin1String threeDashLineBegin("--- ");

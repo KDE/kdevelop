@@ -101,10 +101,9 @@ protected Q_SLOTS:
      *
      * @param job the subjob
      * @param plain the info message in plain text version
-     * @param rich the info message in rich text version
      * @see infoMessage()
      */
-    virtual void subjobInfoMessage(KJob *job, const QString &plain, const QString &rich);
+    virtual void subjobInfoMessage(KJob *job, const QString &plain);
 
 protected:
     std::unique_ptr<KCompoundJobPrivate> const d_ptr;

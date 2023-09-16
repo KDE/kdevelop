@@ -6,7 +6,7 @@
 */
 
 #include "astyle_stringiterator.h"
-
+#include <QIODevice>
 #include <string>
 
 AStyleStringIterator::AStyleStringIterator(const QString &text)

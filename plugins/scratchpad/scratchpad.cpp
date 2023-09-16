@@ -182,7 +182,7 @@ void Scratchpad::createScratch(const QString& name)
     }
 
     if (file.exists()) {
-        addFileToModel(file);
+        addFileToModel(QFileInfo(file));
     } else {
         emit actionFailed(i18n("Failed to create new scratch"));
     }

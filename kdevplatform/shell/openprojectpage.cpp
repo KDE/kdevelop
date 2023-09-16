@@ -9,6 +9,7 @@
 #include <QVBoxLayout>
 
 #include <KDirOperator>
+#include <KDirLister>
 #include <KFileItem>
 #include <KFileWidget>
 #include <KLocalizedString>

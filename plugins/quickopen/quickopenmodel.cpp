@@ -308,14 +308,12 @@ QVariant QuickOpenModel::data(const QModelIndex& index, int role) const
     case KTextEditor::CodeCompletionModel::IsExpandable:
         return d->isExpandable();
     case KTextEditor::CodeCompletionModel::ExpandingWidget: {
-        QVariant v;
         QWidget* w =  d->expandingWidget();
         if (w && m_expandingWidgetHeightIncrease) {
             w->resize(w->width(), w->height() + m_expandingWidgetHeightIncrease);
         }
 
-        v.setValue<QWidget*>(w);
-        return v;
+        return QVariant::fromValue<QWidget*>(w);
     }
     case ExpandingTree::ProjectPathRole:
         // TODO: put this into the QuickOpenDataBase API

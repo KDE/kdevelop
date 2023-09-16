@@ -18,7 +18,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QRegularExpression>
-#include <QRegExp>
 
 #include <KProcess>
 #include <KLocalizedString>
@@ -427,7 +426,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   executeCommand(source.createCommand(file, workingDirectory, makeParameters), workingDirectory, fullOutput);
 
   {
-    QRegExp newLineRx(QStringLiteral("\\\\\\n"));
+    QRegularExpression newLineRx(QStringLiteral("\\\\\\n"));
     fullOutput.remove(newLineRx);
   }
   ///@todo collect multiple outputs at the same time for performance-reasons
@@ -445,9 +444,9 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   ///STEP 1: Test if it is a recursive make-call
   // Do not search for recursive make-calls if we already have include-paths available. Happens in kernel modules.
   if (!includeRegularExpression().match(fullOutput).hasMatch()) {
-    QRegExp makeRx(QStringLiteral("\\bmake\\s"));
+    QRegularExpression makeRx(QStringLiteral("\\bmake\\s"));
     int offset = 0;
-    while ((offset = makeRx.indexIn(firstLine, offset)) != -1) {
+    while ((offset = firstLine.indexOf(makeRx, offset)) != -1) {
       QString prefix = QStringView{firstLine}.left(offset).trimmed().toString();
       if (prefix.endsWith(QLatin1String("&&")) || prefix.endsWith(QLatin1Char(';')) || prefix.isEmpty()) {
         QString newWorkingDirectory = workingDirectory;

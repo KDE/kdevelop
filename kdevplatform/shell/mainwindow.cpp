@@ -164,7 +164,7 @@ void MainWindow::ensureVisible()
             showNormal();
         }
     }
-    KWindowSystem::forceActiveWindow(winId());
+    raise();
 }
 
 QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomElement& element)
@@ -212,7 +212,7 @@ void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
 
 void MainWindow::dropEvent( QDropEvent* ev )
 {
-    Sublime::View* dropToView = viewForPosition(mapToGlobal(ev->pos()));
+    Sublime::View* dropToView = viewForPosition(mapToGlobal(ev->position().toPoint()));
     if(dropToView)
         activateView(dropToView);
 

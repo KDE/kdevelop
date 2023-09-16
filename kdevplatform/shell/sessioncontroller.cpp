@@ -302,7 +302,7 @@ SessionController::SessionController( QObject *parent )
     action = actionCollection()->addAction( QStringLiteral("quit"), this, SIGNAL(quitSession()) );
     action->setText( i18nc("@action", "Quit") );
     action->setMenuRole( QAction::NoRole ); // OSX: prevent QT from hiding this due to conflict with 'Quit KDevelop...'
-    actionCollection()->setDefaultShortcut( action, Qt::CTRL | Qt::Key_Q );
+    actionCollection()->setDefaultShortcut( action, QKeySequence(Qt::CTRL | Qt::Key_Q));
     action->setIcon(QIcon::fromTheme(QStringLiteral("application-exit")));
 
     d->grp = new QActionGroup( this );

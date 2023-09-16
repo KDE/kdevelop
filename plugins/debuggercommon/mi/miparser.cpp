@@ -343,7 +343,7 @@ QString MIParser::parseStringLiteral()
 
         if (translated != -1)
         {
-            message2.append(translated);
+            message2.append(QLatin1Char(translated));
             ++i;
         }
         else
