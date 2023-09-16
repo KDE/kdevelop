@@ -188,15 +188,16 @@ QString LldbCommand::cmdToSend()
             if (p < 0) p = 0; // this means the command is malformated, we proceed anyway.
 
             // move other switches like '-d' '-c' into miCommand part
-            overrideCmd = miCommand() + QLatin1Char(' ') + command_.leftRef(p);
-            command_ = QLatin1String("-f ") + command_.midRef(p, command_.length());
+            const QStringView commandView = command_;
+            overrideCmd = miCommand() + QLatin1Char(' ') + commandView.left(p);
+            command_ = QLatin1String("-f ") + commandView.mid(p);
             break;
         }
         case BreakWatch:
             if (command_.startsWith(QLatin1String("-r "))) {
-                command_ = QLatin1String("-w read ") + command_.midRef(3);
+                command_ = QLatin1String("-w read ") + QStringView{command_}.mid(3);
             } else if (command_.startsWith(QLatin1String("-a "))) {
-                command_ = QLatin1String("-w read_write ") + command_.midRef(3);
+                command_ = QLatin1String("-w read_write ") + QStringView{command_}.mid(3);
             }
             break;
         case StackListArguments:

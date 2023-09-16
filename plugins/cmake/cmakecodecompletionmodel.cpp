@@ -78,9 +78,9 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     
     for(int l=range.end().line(); l>=0 && !m_inside; --l)
     {
-        QString cline=d->line(l);
-        const QStringRef line = cline.leftRef(cline.indexOf(QLatin1Char('#')));
-        
+        const auto lineString = d->line(l);
+        const auto line = QStringView{lineString}.left(lineString.indexOf(QLatin1Char{'#'}));
+
         int close=line.lastIndexOf(QLatin1Char(')')), open=line.indexOf(QLatin1Char('('));
         
         if(close>=0 && open>=0) {
@@ -101,19 +101,20 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         for(; isPathChar(d->characterAt(start)); start-=Cursor(0,1))
         {}
         start+=Cursor(0,1);
-        
-        QString tocomplete=d->text(Range(start, range.end()-Cursor(0,1)));
-        
-        int lastdir=tocomplete.lastIndexOf(QLatin1Char('/'));
+
+        const auto toCompleteString = d->text(Range(start, range.end() - Cursor(0, 1)));
+        const QStringView toComplete = toCompleteString;
+
+        const auto lastdir = toComplete.lastIndexOf(QLatin1Char{'/'});
         QString path = KIO::upUrl(QUrl(d->url())).adjusted(QUrl::StripTrailingSlash).toLocalFile()+QLatin1Char('/');
         if(lastdir>=0) {
-            const QStringRef basePath = tocomplete.midRef(0, lastdir);
+            const auto basePath = toComplete.left(lastdir);
             path += basePath;
         }
         QDir dir(path);
-        
-        const QFileInfoList paths = dir.entryInfoList(QStringList(tocomplete.midRef(lastdir+1)+QLatin1Char('*')),
-                                              QDir::AllEntries | QDir::NoDotAndDotDot);
+
+        const auto paths = dir.entryInfoList(QStringList(toComplete.mid(lastdir + 1) + QLatin1Char{'*'}),
+                                             QDir::AllEntries | QDir::NoDotAndDotDot);
         m_paths.clear();
         m_paths.reserve(paths.size());
         for (const QFileInfo& f : paths) {

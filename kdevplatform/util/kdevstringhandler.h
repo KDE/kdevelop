@@ -11,7 +11,6 @@
 
 #include <QString>
 
-class QStringRef;
 class QByteArray;
 class QChar;
 class QStringList;
@@ -64,7 +63,7 @@ KDEVPLATFORMUTIL_EXPORT QByteArray escapeJavaScriptString(const QByteArray& str)
  *
  * @return The length of the matched prefix or 0 if there is no match
  */
-KDEVPLATFORMUTIL_EXPORT int findAsciiIdentifierLength(const QStringRef& str);
+KDEVPLATFORMUTIL_EXPORT int findAsciiIdentifierLength(QStringView str);
 
 struct KDEVPLATFORMUTIL_EXPORT VariableMatch {
     int length;     ///< The length of the matched substring in the source string
@@ -76,7 +75,7 @@ struct KDEVPLATFORMUTIL_EXPORT VariableMatch {
  *
  * @return The matching result or {} if there is no match
  */
-KDEVPLATFORMUTIL_EXPORT VariableMatch matchPossiblyBracedAsciiVariable(const QStringRef& str);
+KDEVPLATFORMUTIL_EXPORT VariableMatch matchPossiblyBracedAsciiVariable(QStringView str);
 
 /**
  * Strip ANSI sequences from string @p str

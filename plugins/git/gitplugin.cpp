@@ -712,7 +712,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
     QVariantList results;
     VcsAnnotationLine* annotation = nullptr;
     const auto output = job->output();
-    const auto lines = output.splitRef(QLatin1Char('\n'));
+    const auto lines = QStringView{output}.split(QLatin1Char('\n'));
 
     bool skipNext=false;
     QMap<QString, VcsAnnotationLine> definedRevisions;
@@ -727,8 +727,8 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         if (line.isEmpty())
             continue;
 
-        QStringRef name = line.left(line.indexOf(QLatin1Char(' ')));
-        QStringRef value = line.mid(name.size()+1);
+        const auto name = line.left(line.indexOf(QLatin1Char{' '}));
+        const auto value = line.mid(name.size() + 1);
 
         if(name==QLatin1String("author"))
             annotation->setAuthor(value.toString());
@@ -819,12 +819,14 @@ void GitPlugin::parseGitStashList(KDevelop::VcsJob* _job)
         const auto creationTime = QDateTime::fromSecsSinceEpoch(fields[3].toInt());
         const auto shortRef = QString::fromUtf8(fields[0]);
         const auto stackDepth = fields[0].mid(7, fields[0].indexOf('}')-7).toInt();
-        QStringRef branch {};
-        QStringRef parentCommitDesc {};
+
+        QStringView branch;
+        QStringView parentCommitDesc;
         if (message.startsWith(QStringLiteral("WIP on "))) {
+            const QStringView messageView = message;
             const int colPos = message.indexOf(QLatin1Char(':'), 7);
-            branch = message.midRef(7, colPos-7);
-            parentCommitDesc = message.midRef(colPos+2);
+            branch = messageView.mid(7, colPos - 7);
+            parentCommitDesc = messageView.mid(colPos + 2);
         }
 
         results << StashItem {
@@ -947,10 +949,10 @@ VcsJob* GitPlugin::branches(const QUrl &repository)
 void GitPlugin::parseGitBranchOutput(DVcsJob* job)
 {
     const auto output = job->output();
-    const auto branchListDirty = output.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+    const auto branchListDirty = QStringView{output}.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
 
     QStringList branchList;
-    for (const auto& branch : branchListDirty) {
+    for (auto branch : branchListDirty) {
         // Skip pointers to another branches (one example of this is "origin/HEAD -> origin/master");
         // "git rev-list" chokes on these entries and we do not need duplicate branches altogether.
         if (branch.contains(QLatin1String("->")))
@@ -960,11 +962,10 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
         if (branch.contains(QLatin1String("(no branch)")))
             continue;
 
-        QStringRef name = branch;
-        if (name.startsWith(QLatin1Char('*')))
-            name = branch.mid(2);
-
-        branchList << name.trimmed().toString();
+        if (branch.startsWith(QLatin1Char{'*'})) {
+            branch = branch.mid(2);
+        }
+        branchList << branch.trimmed().toString();
     }
 
     job->setResults(branchList);
@@ -1203,7 +1204,7 @@ void GitPlugin::parseLogOutput(const DVcsJob* job, QVector<DVcsEvent>& commits) 
     static QRegularExpression rx_com( QStringLiteral("commit \\w{1,40}") );
 
     const auto output = job->output();
-    const auto lines = output.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+    const auto lines = QStringView{output}.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
 
     DVcsEvent item;
     QString commitLog;
@@ -1262,7 +1263,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
     bool pushCommit = false;
 
     while (!s.atEnd()) {
-        QString line = s.readLine();
+        const auto line = s.readLine();
 
         if (commitRegex.exactMatch(line)) {
             if (pushCommit) {
@@ -1297,7 +1298,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
 
             item.addItem(itemEvent);
         } else if (line.startsWith(QLatin1String("    "))) {
-            message += line.midRef(4) + QLatin1Char('\n');
+            message += QStringView{line}.mid(4) + QLatin1Char('\n');
         }
     }
 
@@ -1334,7 +1335,7 @@ static VcsStatusInfo::State lsfilesToState(char id)
 void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 {
     const QString output = job->output();
-    const auto outputLines = output.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+    const auto outputLines = QStringView{output}.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
 
     QDir dir = job->directory();
     QMap<QUrl, VcsStatusInfo::State> allStatus;
@@ -1364,17 +1365,17 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
     const auto output = job->output();
-    const auto outputLines = output.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+    const auto outputLines = QStringView{output}.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
     QDir workingDir = job->directory();
     QDir dotGit = dotGitDirectory(QUrl::fromLocalFile(workingDir.absolutePath()));
 
     QVariantList statuses;
     QList<QUrl> processedFiles;
 
-    for (const QStringRef& line : outputLines) {
+    for (const auto line : outputLines) {
         //every line is 2 chars for the status, 1 space then the file desc
-        QStringRef curr=line.mid(3);
-        QStringRef state = line.left(2);
+        auto curr = line.mid(3);
+        const auto state = line.left(2);
 
         int arrow = curr.indexOf(QLatin1String(" -> "));
         if(arrow>=0) {
@@ -1427,8 +1428,9 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 
 void GitPlugin::parseGitVersionOutput(DVcsJob* job)
 {
-    const auto output = job->output().trimmed();
-    auto versionString = output.midRef(output.lastIndexOf(QLatin1Char(' ')));
+    const auto outputString = job->output();
+    const auto output = QStringView{outputString}.trimmed();
+    const auto versionString = output.mid(output.lastIndexOf(QLatin1Char{' '}));
     const auto minimumVersion = QVersionNumber(1, 7);
     const auto actualVersion = QVersionNumber::fromString(versionString);
     m_oldVersion = actualVersion < minimumVersion;
@@ -1466,7 +1468,7 @@ DVcsJob* GitPlugin::gitRevList(const QString& directory, const QStringList& args
 
 constexpr int _pair(char a, char b) { return a*256 + b;}
 
-GitPlugin::ExtendedState GitPlugin::parseGitState(const QStringRef& msg)
+GitPlugin::ExtendedState GitPlugin::parseGitState(QStringView msg)
 {
     Q_ASSERT(msg.size()==1 || msg.size()==2);
     ExtendedState ret = GitInvalid;

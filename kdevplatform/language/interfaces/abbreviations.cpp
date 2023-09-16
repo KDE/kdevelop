@@ -13,8 +13,7 @@
 
 namespace KDevelop {
 // Taken and adapted for kdevelop from katecompletionmodel.cpp
-static bool matchesAbbreviationHelper(const QStringRef& word, const QString& typed,
-                                      const QVarLengthArray<int, 32>& offsets,
+static bool matchesAbbreviationHelper(QStringView word, const QString& typed, const QVarLengthArray<int, 32>& offsets,
                                       int& depth, int atWord = -1, int i = 0)
 {
     int atLetter = 1;
@@ -58,7 +57,7 @@ static bool matchesAbbreviationHelper(const QStringRef& word, const QString& typ
     return true;
 }
 
-bool matchesAbbreviation(const QStringRef& word, const QString& typed)
+bool matchesAbbreviation(QStringView word, const QString& typed)
 {
     // A mismatch is very likely for random even for the first letter,
     // thus this optimization makes sense.
@@ -114,7 +113,7 @@ bool matchesPath(const QString& path, const QString& typed)
     return consumed == typed.size();
 }
 
-bool matchesAbbreviationMulti(const QString& word, const QStringList& typedFragments)
+bool matchesAbbreviationMulti(QStringView word, const QStringList& typedFragments)
 {
     if (word.size() == 0) {
         return true;
@@ -133,7 +132,7 @@ bool matchesAbbreviationMulti(const QString& word, const QStringList& typedFragm
             i++;
         }
         // if it's '/', ' ' or '::', split the word here and check the next sub-word.
-        const QStringRef wordFragment = word.midRef(lastSpace, i - lastSpace);
+        const auto wordFragment = word.mid(lastSpace, i - lastSpace);
         const QString& typedFragment = typedFragments.at(matchedFragments);
         Q_ASSERT(!typedFragment.isEmpty());
         if (!wordFragment.isEmpty() && matchesAbbreviation(wordFragment, typedFragment)) {
@@ -185,7 +184,7 @@ int matchPathFilter(const Path& toFilter, const QStringList& text, const Path& p
         if (!isMatch && isLastPathSegment && isLastSearchSegment) {
             isMatch = matchesPath(segment, typedSegment);
         } else if (!isMatch) { // check other segments for abbreviations
-            isMatch = matchesAbbreviation(segment.midRef(0), typedSegment);
+            isMatch = matchesAbbreviation(segment, typedSegment);
         }
 
         if (!isMatch) {

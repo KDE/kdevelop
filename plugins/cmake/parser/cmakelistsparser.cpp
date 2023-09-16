@@ -34,12 +34,13 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
         return value;
     }
 
+    const QStringView valueView = value;
     QString newValue;
     int last=0;
     QMap<QChar, QChar>::const_iterator itEnd = scapings.constEnd();
     for(int i=firstScape; i<value.size()-1 && i>=0; i=value.indexOf(scapingChar, i+2))
     {
-        newValue+=value.midRef(last, i-last);
+        newValue += valueView.mid(last, i - last);
         const QChar current=value[i+1];
         QMap<QChar, QChar>::const_iterator it = scapings.constFind(current);
 
@@ -50,7 +51,7 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
 
         last=i+2;
     }
-    newValue+=value.midRef(last, value.size());
+    newValue += valueView.mid(last);
 //     qCDebug(CMAKE) << "escaping" << value << newValue;
     return newValue;
 }

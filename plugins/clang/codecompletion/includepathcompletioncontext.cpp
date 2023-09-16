@@ -75,7 +75,7 @@ IncludePathProperties IncludePathProperties::parseText(const QString& text, int 
                 state = FindInclude;
                 break;
             case FindInclude:
-                if (text.midRef(idx, 7) != QLatin1String("include")) {
+                if (QStringView{text}.mid(idx, 7) != QLatin1String("include")) {
                     return properties;
                 }
                 idx += 6;
