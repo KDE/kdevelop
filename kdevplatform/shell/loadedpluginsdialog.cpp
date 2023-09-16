@@ -197,7 +197,7 @@ public:
             << button;
     }
 
-    void updateItemWidgets(const QList<QWidget*> widgets,
+    void updateItemWidgets(const QList<QWidget *> &widgets,
                            const QStyleOptionViewItem &option,
                            const QPersistentModelIndex &index) const override
     {

@@ -198,7 +198,7 @@ void EnvironmentProfileModel::setVariablesFromString(const QString& plainText)
     variables.clear();
     m_varsByIndex.clear();
 
-    const auto lines = plainText.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+    const auto lines = QStringView(plainText).split(QLatin1Char('\n'), Qt::SkipEmptyParts);
     for (const auto& line : lines) {
         const int pos = line.indexOf(QLatin1Char('='));
         // has a = and at least 1 char

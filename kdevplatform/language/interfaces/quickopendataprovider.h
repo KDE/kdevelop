@@ -15,7 +15,7 @@
 #include <language/languageexport.h>
 
 class QString;
-class QStringList;
+#include <QStringList>
 class QIcon;
 
 namespace KDevelop {

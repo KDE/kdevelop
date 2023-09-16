@@ -193,10 +193,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
         QWidget* nav = createExpandingWidget(model);
         Q_ASSERT(nav);
-
-        QVariant v;
-        v.setValue<QWidget*>(nav);
-        return v;
+        return QVariant::fromValue<QWidget *>(nav);
     }
     case CodeCompletionModel::ScopeIndex:
         return static_cast<int>(reinterpret_cast<quintptr>(m_declaration->context()));

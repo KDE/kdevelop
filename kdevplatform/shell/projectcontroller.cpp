@@ -872,7 +872,7 @@ void ProjectController::openProject( const QUrl &projectFile )
         auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Abort);
         auto okButton = buttonBox->button(QDialogButtonBox::Ok);
         okButton->setDefault(true);
-        okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+        okButton->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Return));
         connect(buttonBox, &QDialogButtonBox::accepted, dialog.data(), &QDialog::accept);
         connect(buttonBox, &QDialogButtonBox::rejected, dialog.data(), &QDialog::reject);
         mainLayout->addWidget(buttonBox);

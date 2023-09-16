@@ -9,6 +9,7 @@
 #include <QString>
 #include <QTextStream>
 #include <QVector>
+#include <QIODevice>
 
 namespace KDevelop {
 

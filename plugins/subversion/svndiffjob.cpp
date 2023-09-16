@@ -8,7 +8,7 @@
 #include "svndiffjob_p.h"
 
 #include <QMutexLocker>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QFileInfo>
 
@@ -34,7 +34,7 @@ QString repairDiff(const QString& diff) {
     for(int a = 0; a < lines.size()-1; ++a) {
         const QLatin1String indexLineBegin("Index: ");
         if(lines[a].startsWith(indexLineBegin) && lines[a+1].startsWith(QLatin1String("====="))) {
-            const QString fileName = lines[a].midRef(indexLineBegin.size()).trimmed().toString();
+            const QString fileName = QStringView(lines[a]).mid(indexLineBegin.size()).trimmed().toString();
             headers[fileName] = lines[a];
             qCDebug(PLUGIN_SVN) << "found header for" << fileName;
             lines[a] = QString();
@@ -45,7 +45,7 @@ QString repairDiff(const QString& diff) {
         }
     }
 
-    QRegExp spaceRegExp(QStringLiteral("\\s"));
+    QRegularExpression spaceRegExp(QStringLiteral("\\s"));
 
     for(int a = 0; a < lines.size()-1; ++a) {
         const QLatin1String threeDashLineBegin("--- ");

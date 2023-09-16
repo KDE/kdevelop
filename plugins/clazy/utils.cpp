@@ -75,7 +75,7 @@ public:
                     setState(HEADING);
                     html += match.captured(2);
                     setState(EMPTY);
-                    if (match.capturedRef(1).size() == 1) {
+                    if (match.capturedView(1).size() == 1) {
                         html += QStringLiteral("<hr>");
                     }
                 }

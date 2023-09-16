@@ -47,7 +47,7 @@ IFilterStrategy::Progress MakeJobCompilerFilterStrategy::progressInLine(const QS
     QRegularExpressionMatch match = re.match(line);
     if (match.hasMatch()) {
         bool ok;
-        const int percent = match.capturedRef(1).toInt(&ok);
+        const int percent = match.capturedView(1).toInt(&ok);
         if (ok) {
             // this is output from make, likely
             const QString action = match.captured(2);

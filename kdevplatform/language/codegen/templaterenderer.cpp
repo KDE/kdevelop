@@ -19,6 +19,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QRegularExpression>
 #include <QUrl>
 
 #include <KArchive>
@@ -243,7 +244,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
     DocumentChangeSet changes;
     const QDir baseDir(baseUrl.path());
 
-    QRegExp nonAlphaNumeric(QStringLiteral("\\W"));
+    QRegularExpression nonAlphaNumeric(QStringLiteral("\\W"));
     for (QHash<QString, QUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it) {
         QString cleanName = it.key().toLower();
         cleanName.replace(nonAlphaNumeric, QStringLiteral("_"));

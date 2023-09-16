@@ -267,7 +267,7 @@ static QString expandVariable(const QString &key, const QString &value,
         }
         case variableStartChar: {
             ++i;
-            const auto match = matchPossiblyBracedAsciiVariable(value.midRef(i));
+            const auto match = matchPossiblyBracedAsciiVariable(QStringView(value).mid(i));
             if (match.length == 0) {
                 expanded += currentChar; // Not a variable name start.
             } else {

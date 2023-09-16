@@ -27,14 +27,12 @@
 #include <editor/documentrange.h>
 
 namespace {
-QDebug fromTextStream(const QTextStream& out)
-{
-    if (out.device())
-        return {
-                   out.device()
-        }; return {
-               out.string()
-    };
+QDebug fromTextStream(const QTextStream& out) {
+    if (out.device()) {
+        return QDebug{out.device()};
+    }
+    return QDebug{out.string()};
+
 }
 
 }

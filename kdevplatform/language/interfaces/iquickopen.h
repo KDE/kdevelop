@@ -13,7 +13,7 @@
 
 #include <language/languageexport.h>
 
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop {
 class QuickOpenDataProviderBase;

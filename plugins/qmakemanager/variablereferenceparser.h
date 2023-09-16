@@ -11,7 +11,7 @@
 #include <QMap>
 #include <QString>
 
-class QStringList;
+#include <QStringList>
 
 class VariableInfo
 {

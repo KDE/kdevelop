@@ -10,10 +10,9 @@
 #include "interfacesexport.h"
 
 #include <QMetaType>
+#include <QStringList>
 
 class KJob;
-class QString;
-class QStringList;
 
 namespace KDevelop {
 

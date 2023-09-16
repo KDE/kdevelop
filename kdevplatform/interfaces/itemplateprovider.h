@@ -12,7 +12,7 @@
 
 class QIcon;
 class QAbstractItemModel;
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop
 {

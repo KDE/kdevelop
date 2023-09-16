@@ -15,7 +15,6 @@
 #include <QMetaObject>
 #include <QWidgetAction>
 #include <QAction>
-#include <QDesktopWidget>
 
 #include <KLocalizedString>
 #include <KPluginFactory>
@@ -913,7 +912,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
         return;
     }
 
-    m_currentWidgetHandler = create.dialog;
+    m_currentWidgetHandler = create.dialog.get();
 
     QuickOpenLineEdit* line = quickOpenLine(QStringLiteral("Outline"));
     if (!line) {
@@ -1022,7 +1021,7 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev)
     m_widget->setFocusPolicy(Qt::NoFocus);
     m_widget->setAlternativeSearchField(this);
 
-    QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
+    QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget.get();
     connect(m_widget.data(), &QuickOpenWidget::ready, this, &QuickOpenLineEdit::deactivate);
 
     connect(m_widget.data(), &QuickOpenWidget::scopesChanged, QuickOpenPlugin::self(), &QuickOpenPlugin::storeScopes);
@@ -1031,7 +1030,7 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev)
     m_widget->prepareShow();
     QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));
     widgetGeometry.setWidth(700); ///@todo Waste less space
-    QRect screenGeom = QApplication::desktop()->screenGeometry(this);
+    QRect screenGeom = screen()->geometry();
     if (widgetGeometry.right() > screenGeom.right()) {
         widgetGeometry.moveRight(screenGeom.right());
     }

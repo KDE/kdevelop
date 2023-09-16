@@ -10,6 +10,7 @@
 #include "interfacesexport.h"
 
 #include <QWidget>
+#include <KPluginFactory>
 
 class QAction;
 

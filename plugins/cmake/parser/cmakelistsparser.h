@@ -16,7 +16,7 @@
 #include <cmakecommonexport.h>
 #include <language/editor/rangeinrevision.h>
 
-class QStringList;
+#include <QStringList>
 
 struct CMakeFunctionArgument
 {

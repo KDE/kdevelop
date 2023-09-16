@@ -8,13 +8,12 @@
 
 #include <KJob>
 #include <QFutureWatcher>
+#include "cmakeprojectdata.h"
 
 namespace KDevelop
 {
 class IProject;
 }
-
-struct CMakeProjectData;
 
 namespace CMake {
 namespace FileApi {

@@ -42,8 +42,8 @@ IFilterStrategy::Progress NinjaJobCompilerFilterStrategy::progressInLine(const Q
 
     QRegularExpressionMatch match = re.match(line);
     if (match.hasMatch()) {
-        const int current = match.capturedRef(1).toInt();
-        const int total = match.capturedRef(2).toInt();
+        const int current = match.capturedView(1).toInt();
+        const int total = match.capturedView(2).toInt();
         if (current && total) {
             // this is output from ninja
             const QString action = match.captured(3);

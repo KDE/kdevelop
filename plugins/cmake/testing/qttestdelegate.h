@@ -9,6 +9,7 @@
 
 #include <QItemDelegate>
 #include <KColorScheme>
+#include <KStatefulBrush>
 
 class QtTestDelegate : public QItemDelegate
 {

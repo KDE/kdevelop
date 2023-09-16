@@ -19,7 +19,7 @@ enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN, T_TEMP };
 
 }
 
-int Utils::expressionAt( const QString& text, int index ) {
+int Utils::expressionAt(QStringView text, int index ) {
 
   if( index == 0 )
     return 0;
@@ -34,7 +34,7 @@ int Utils::expressionAt( const QString& text, int index ) {
     }
 
     QChar ch = text[ index ];
-    const QStringRef ch2 = text.midRef(index - 1, 2);
+    const auto ch2 = text.mid(index - 1, 2);
     if ((last != T_IDE) && (ch.isLetterOrNumber() || ch == QLatin1Char('_'))) {
       while (index > 0 && (text[index].isLetterOrNumber() || text[index] == QLatin1Char('_'))) {
         --index;

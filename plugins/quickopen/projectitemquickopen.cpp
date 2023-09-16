@@ -49,7 +49,7 @@ struct SubstringCache
         int result = idStr.lastIndexOf(substring, -1, Qt::CaseInsensitive);
         if (result < 0 && !idStr.isEmpty() && !substring.isEmpty()) {
             // no match; try abbreviations
-            result = matchesAbbreviation(idStr.midRef(0), substring) ? 0 : -1;
+            result = matchesAbbreviation(QStringView(idStr).mid(0), substring) ? 0 : -1;
         }
 
         //here we shift the values if the matched string is bigger than the substring,

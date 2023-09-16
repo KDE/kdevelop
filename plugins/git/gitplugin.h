@@ -333,7 +333,7 @@ private:
      * @param statusLine a line as returned by `git status --porcelain`
      * @returns the appropriate extended status
      */
-    static ExtendedState parseGitState(const QStringRef& statusLine);
+    static ExtendedState parseGitState(const QStringView& statusLine);
 
     /**
      * Maps an extended state to a basic state

@@ -98,9 +98,9 @@ void KCompoundJob::subjobFinished(KJob *job)
     removeSubjob(job);
 }
 
-void KCompoundJob::subjobInfoMessage(KJob *job, const QString &plain, const QString &rich)
+void KCompoundJob::subjobInfoMessage(KJob *job, const QString &message)
 {
-    Q_EMIT infoMessage(job, plain, rich);
+    Q_EMIT infoMessage(job, message);
 }
 
 #include "moc_kcompoundjob.cpp"

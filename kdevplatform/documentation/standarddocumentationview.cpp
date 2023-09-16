@@ -122,7 +122,7 @@ public:
         // prevent QWebEngine (Chromium) from overriding the signal handlers of KCrash
         const auto chromiumFlags = qgetenv("QTWEBENGINE_CHROMIUM_FLAGS");
         if (!chromiumFlags.contains("disable-in-process-stack-traces")) {
-            qputenv("QTWEBENGINE_CHROMIUM_FLAGS", chromiumFlags + " --disable-in-process-stack-traces");
+            qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray(chromiumFlags + " --disable-in-process-stack-traces"));
         }
         // not using the shared default profile here:
         // prevents conflicts with qthelp scheme handler being registered onto that single default profile

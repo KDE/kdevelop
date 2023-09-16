@@ -453,11 +453,11 @@ void GitInitTest::revHistory()
 
     QVERIFY(!commits[0].parents().isEmpty()); //initial commit is on the top
 
-    QVERIFY(commits[1].commit().contains(QRegExp("^\\w{,40}$")));
+    QVERIFY(commits[1].commit().contains(QRegularExpression("^\\w{,40}$")));
 
-    QVERIFY(commits[0].commit().contains(QRegExp("^\\w{,40}$")));
+    QVERIFY(commits[0].commit().contains(QRegularExpression("^\\w{,40}$")));
 
-    QVERIFY(commits[0].parents()[0].contains(QRegExp("^\\w{,40}$")));
+    QVERIFY(commits[0].parents()[0].contains(QRegularExpression("^\\w{,40}$")));
 }
 
 void GitInitTest::testAnnotation()
