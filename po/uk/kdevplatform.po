@@ -3,13 +3,13 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:43+0000\n"
-"PO-Revision-Date: 2022-12-22 05:29+0200\n"
+"PO-Revision-Date: 2023-09-16 08:53+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -3901,14 +3901,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Увімкнути або вимкнути показ попереднього перегляду для цього стилю.\n"
+"Попередній перегляд має бути вимкнено для стилів, чиє форматування залежить "
+"від шляху до файла."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Preview:"
+#, kde-format
 msgid "Show Preview"
-msgstr "Перегляд:"
+msgstr "Показати перегляд"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4983,7 +4984,7 @@ msgstr "Мова:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Як налаштувати стилі форматування"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -5002,6 +5003,21 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Виберіть використані вами мови одна за одною зі спадного списку <i>Мова</"
+"i>, який розташовано нижче. Для кожної виберіть бажаний засіб форматування і "
+"стиль. Щоб зняти позначення з позначеного стилю, скористайтеся комбінацією "
+"<i>Ctrl+клацання</i>.</p>\n"
+"<p>Правильний вибір засобу форматування і стилю для кожної використаної мови "
+"є дуже важливим: це стосується явним чином не лише дій <i>Повторне "
+"форматування коду</i>/<i>Рядок</i>/<i>Файли...</i>, але і форматування "
+"автоматично створеного, автоматично переформатованого або автоматично "
+"виправленого коду (наприклад, дій унаслідок використання пункту "
+"<i>Перейменувати</i> у контекстному меню).</p>\n"
+"<p>Зауважте, що KDevelop виконує форматування усіх файлів <i>*.h</i> за "
+"допомогою засобу форматування та стилю, який налаштовано для мови <i>C</i>, "
+"навіть для файлів заголовків C++, які належать до проєкту, де використано "
+"лише C++. Це є наслідком того, що засіб форматування коду жорстко пов'язує "
+"типи MIME з мовами програмування.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5014,7 +5030,7 @@ msgstr "Форматування:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Опис вибраного засобу форматування"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183

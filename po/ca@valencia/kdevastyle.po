@@ -1,34 +1,29 @@
 # Translation of kdevastyle.po to Catalan (Valencian)
-# Copyright (C) 2009-2022 This_file_is_part_of_KDE
+# Copyright (C) 2009-2023 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2012, 2013, 2015, 2017, 2019, 2020, 2021, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2012, 2013, 2015, 2017, 2019, 2020, 2021, 2022, 2023.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2015, 2016, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:43+0000\n"
-"PO-Revision-Date: 2022-05-08 17:18+0200\n"
+"PO-Revision-Date: 2023-09-16 12:06+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
 #: astyle_plugin.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Artistic Style</b> is a source code indenter, formatter, and "
-#| "beautifier for the C, C++, C# and Java programming languages.<br />Home "
-#| "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
-#| "sourceforge.net</a>"
+#, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
 "for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
@@ -36,8 +31,9 @@ msgid ""
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
 "<b>Estil artístic</b> és un sagnador, formatador i embellidor de codi font "
-"per a llenguatges de programació C, C++, C# i Java.<br />Lloc web: <a href="
-"\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+"per a llenguatges de programació C, C++, C# i Java.<p style='margin-top:0;"
+"white-space:pre'>Lloc web: <a href=\"http://astyle.sourceforge.net/\">http://"
+"astyle.sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
@@ -178,7 +174,7 @@ msgid ""
 "Indent a maximal # spaces in a continuous statement,\n"
 "relative to the previous line."
 msgstr ""
-"Sagna un nombre màxim d'espais a una declaració contínua,\n"
+"Sagna un nombre màxim d'espais en una sentència contínua,\n"
 "en relació amb la línia anterior."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, TextLabel3_2)
@@ -212,7 +208,7 @@ msgstr "El doble de l'actual"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum in statement:"
-msgstr "Màxim a declaració:"
+msgstr "Màxim en una sentència:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpContinuation)
 #: astyle_preferences.ui:256
@@ -321,13 +317,15 @@ msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
 msgstr ""
+"Afig claus a sentències condicionals d'una línia sense claus (p. ex., «if», "
+"«for», «while»)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
 #, kde-format
 msgctxt "@option:check add braces to unbraced one-line conditional statements"
 msgid "Add b&races"
-msgstr ""
+msgstr "Afig &claus"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
 #: astyle_preferences.ui:386
@@ -527,7 +525,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "&Keep one-line statements"
-msgstr "Man&tín declaracions d'una línia"
+msgstr "Man&tín sentències d'una línia"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:539

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:43+0000\n"
-"PO-Revision-Date: 2023-08-08 14:30+0200\n"
+"PO-Revision-Date: 2023-09-16 12:17+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3901,14 +3901,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Commuta la visibilitat de la vista prèvia per a aquest estil.\n"
+"La vista prèvia s'ha d'inhabilitar per als estils el format dels quals depèn "
+"del camí del fitxer."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Preview:"
+#, kde-format
 msgid "Show Preview"
-msgstr "Vista prèvia:"
+msgstr "Mostra la vista prèvia"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4985,7 +4986,7 @@ msgstr "Llenguatge:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Com configurar els estils de donar format"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -5004,6 +5005,19 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Seleccioneu els llenguatges que utilitzeu un a un des del quadre combinat "
+"<i>Llenguatge</i> de sota, trieu el formatador i l'estil desitjats per a "
+"cadascuna. Feu <i>Ctrl+Clic</i> en un estil seleccionat per desseleccionar-"
+"lo.</p>\n"
+"<p>És molt important configurar el formatador correcte i l'estil per a cada "
+"llenguatge usat: no només es veuen afectades les accions <i>Torna a donar "
+"format al codi font</i>/<i>Línia</i>/<i>Fitxers...</i>, sinó també el format "
+"del codi generat automàticament, refactoritzat o arreglat automàticament "
+"(per exemple, l'acció <i>Reanomena</i> del menú contextual).</p>\n"
+"<p>Tingueu en compte que el KDevelop formata tots els fitxers <i>*.h</i> amb "
+"formatador i estil configurats per al llenguatge <i>C</i>, fins i tot les "
+"capçaleres C++ que pertanyen a un projecte C++ pur. Això passa perquè el "
+"formatador d'origen assigna els tipus MIME als llenguatges.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5016,7 +5030,7 @@ msgstr "Formatador:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Descripció d'un formatador seleccionat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
@@ -6182,12 +6196,3 @@ msgstr "Diferències amb l'anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferències entre revisions"
-
-#~ msgid "No Source Formatter available"
-#~ msgstr "No hi ha disponible cap formatador del codi font"
-
-#~ msgid "New Style"
-#~ msgstr "Estil nou"
-
-#~ msgid "No language selected"
-#~ msgstr "No s'ha seleccionat cap llenguatge"

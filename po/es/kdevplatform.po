@@ -1,7 +1,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Eloy Cuadra <ecuadra@eloihr.net>
 # Javier Viñal <fjvinal@gmail.com>, 2013.
 # Sofia Priego <spriego@darksylvania.net>, 2016.
 msgid ""
@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:43+0000\n"
-"PO-Revision-Date: 2022-12-22 22:48+0100\n"
+"PO-Revision-Date: 2023-09-16 11:36+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 23.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -3904,13 +3904,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Conmutar la visibilidad de la vista previa de este estilo.\n"
+"La vista previa no debería activarse en los estilos cuyo formato dependa de "
+"la ruta del archivo."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "Vista previa"
+msgstr "Mostrar vista previa"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4982,7 +4984,7 @@ msgstr "Lenguaje:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Cómo se configuran los estilos de formateo"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -5001,6 +5003,20 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Seleccione los lenguajes que use de forma individual en la lista "
+"desplegable <i>Lenguaje</i> inferior y escoja el formateador y el estilo que "
+"prefiera para cada uno de ellos. Haga <i>Ctrl+clic</i> sobre un estilo "
+"seleccionado para deseleccionarlo.</p>\n"
+"<p>La configuración correcta del formateador y del estilo correcto para cada "
+"lenguaje que use es muy importante: no solo afecta explícitamente a las "
+"acciones <i>Reformatear el código</i>/<i>Línea</i>/<i>Archivos...</i>, sino "
+"también al formateo del código generado automáticamente, refactorizado y "
+"corregido automáticamente (por ejemplo, a la acción <i>Cambiar nombre</i> "
+"del menú de contexto).</p>\n"
+"<p>Tenga en cuenta que KDevelop formatea todos los archivos <i>*.h</i> con "
+"el formateador y el estilo configurado para el lenguaje <i>C</i>, incluso "
+"las cabeceras C++ que pertenezcan a un proyecto C++ puro. Esto se debe a que "
+"el formateador de código fuente asigna tipos MIME a los lenguajes.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5013,7 +5029,7 @@ msgstr "Formateador:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Descripción de un formateador seleccionado"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183

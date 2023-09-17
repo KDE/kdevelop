@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevastyle\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:43+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-09-16 18:07+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -19,12 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: astyle_plugin.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Artistic Style</b> is a source code indenter, formatter, and "
-#| "beautifier for the C, C++, C# and Java programming languages.<br />Home "
-#| "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
-#| "sourceforge.net</a>"
+#, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
 "for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
@@ -32,8 +27,9 @@ msgid ""
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
 "<b>Arta Stilo</b> estas fontkoda endentigilo, formatilo kaj plibeligilo por "
-"la programlingvoj C, C++, C# kaj Java.<br />Hejmpaĝo: <a href=\"http://"
-"astyle. sourceforge.net/\">http://astyle.sourceforge.net</a>"
+"la programlingvoj C, C++, C# kaj Java.<p style='margin-top:0;white-space:"
+"pre'>Hejmpaĝo: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
+"sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
@@ -318,13 +314,15 @@ msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
 msgstr ""
+"Aldoni kunigokrampojn al nekrampitaj unuliniaj kondiĉ-ordonoj (ekz. 'if', "
+"'for', 'while')"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
 #, kde-format
 msgctxt "@option:check add braces to unbraced one-line conditional statements"
 msgid "Add b&races"
-msgstr ""
+msgstr "Aldoni kunigok&rampojn"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
 #: astyle_preferences.ui:386

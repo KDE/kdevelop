@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:43+0000\n"
-"PO-Revision-Date: 2023-07-15 21:40+0100\n"
+"PO-Revision-Date: 2023-09-16 18:07+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -3841,7 +3841,7 @@ msgstr "Prokrasto:"
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " ms"
-msgstr "ms"
+msgstr " ms"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
@@ -3867,7 +3867,7 @@ msgstr "Maksimuma nombro da fadenoj:"
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " threads"
-msgstr "fadenoj"
+msgstr " fadenoj"
 
 #: shell/settings/documentationpreferences.cpp:35
 #, kde-format
@@ -3882,14 +3882,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Baskuligi antaŭvidon por ĉi tiu stilo.\n"
+"Antaŭrigardo estu malŝaltita por stiloj, kies formatado dependas de la "
+"dosiervojo."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Preview:"
+#, kde-format
 msgid "Show Preview"
-msgstr "Antaŭrigardo:"
+msgstr "Montri Antaŭrigardon"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4944,7 +4945,7 @@ msgstr "Lingvo:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Kiel agordi stilojn de formatado"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -4963,6 +4964,18 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Elektu lingvojn kiujn vi uzas unuope el la kombinujo <i>Lingvo</i> sube, "
+"elektu la deziratan formatilon kaj stilon por ĉiu. <i>Ktrl+Klaku</i> "
+"elektitan stilon por malelekti ĝin.</p>\n"
+"<p>Agordado de la ĝusta formatilo kaj stilo por ĉiu uzata lingvo estas tre "
+"grava: ne nur eksplicitaj agoj <i>Reformati Fonton</i>/<i>Linio</i>/"
+"<i>Dosieroj...</i> estas tuŝitaj, sed ankaŭ la formatado de aŭtomate "
+"generita, aŭto-refaktorita aŭ aŭto-riparita kodo (ekzemple, kuntekstmenua "
+"ago <i>Alinomi</i>).</p>\n"
+"<p>Rimarku, ke KDevelop formatas ĉiujn dosierojn <i>*.h</i> per formatilo "
+"kaj stilo agordita por <i>C</i>-lingvo, eĉ C++-kapojn kiuj apartenas al pura "
+"C++-projekto. Ĉi tio okazas ĉar fontformatilo mapas MIME-tipojn al lingvoj.</"
+"p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -4975,7 +4988,7 @@ msgstr "Formatilo:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Priskribo de elektita formatilo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183

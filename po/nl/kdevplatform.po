@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Kristof Bal <kristof.bal@gmail.com>, 2008.
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Freek de Kruijf <freekdekruijf@kde.nl>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:43+0000\n"
-"PO-Revision-Date: 2022-12-22 13:27+0100\n"
+"PO-Revision-Date: 2023-09-16 13:08+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 23.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Freek de Kruijf - 2012 t/m 2022"
+msgstr "Freek de Kruijf - 2012 t/m 2023"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -3900,13 +3900,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Zichtbaarheid van voorbeeld voor deze stijl om te schakelen.\n"
+"Voorbeeld zou uitgeschakeld moeten zijn voor stijlen waarvan de indeling "
+"afhangt van het bestandspad."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "Voorbeeld"
+msgstr "Voorbeeld tonen"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4979,7 +4981,7 @@ msgstr "Taal:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Hoe stijlen voor indeling configureren"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -4998,6 +5000,18 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Selecteer talen die u een voor een gebruikt uit de onderstaande "
+"keuzelijst <i>Taal</i>, kies voor elke de gewenste indeler en stijl. <i>Ctrl"
+"+Click</i> een geselecteerde stijl om de selectie ongedaan te maken.</p>\n"
+"<p>De juiste indeler en stijl voor elke gebruikte taal configureren is erg "
+"belangrijk: niet alleen expliciet <i>Broncode opnieuw indelen</i>/<i>Regel</"
+"i>/<i>Bestanden...</i> acties worden beïnvloed, maar ook de indeling van "
+"automatisch gegenereerde, automatisch herziene of automatisch gerepareerde "
+"broncode (bijvoorbeeld, <i>Hernoemen</i> actie in contextmenu).</p>\n"
+"<p>Merk op dat KDevelop alle <i>*.h</i> bestanden met indeler en stijl "
+"geconfigureerd voor de taal <i>C</i>, zelfs C++ headers die behoren bij een "
+"puur C++ project. Dit gebeurt omdat broncodeindeler MIME-typen aan talen "
+"koppelt.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5010,7 +5024,7 @@ msgstr "Opmaker:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Beschrijving van een geselecteerde indeler"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
