@@ -31,13 +31,10 @@ target_link_libraries(kdevqmakecommon
     KDev::Interfaces KDev::Project KDev::Util
     kdevqmakeparser)
 
-set(kdevqmakemanager_PART_SRCS
-    qmakemanager.cpp
+kdevplatform_add_plugin(KDevQMakeManager SOURCES qmakemanager.cpp
     qmakemodelitems.cpp
-    qmakejob.cpp
-)
-kdevplatform_add_plugin(kdevqmakemanager SOURCES ${kdevqmakemanager_PART_SRCS})
-target_link_libraries(kdevqmakemanager
+    qmakejob.cpp)
+target_link_libraries(KDevQMakeManager
     KDev::Interfaces
     KDev::Project
     KDev::Util

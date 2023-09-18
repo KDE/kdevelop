@@ -28,7 +28,7 @@
         "Description[x-test]": "xxScratchpad lets you quickly run and experiment with code without a full project, and even store todos.xx",
         "Description[zh_CN]": "通过刮板，您可以在没有完整项目的情况下快速运行和试验代码，甚至可以存储待办事项。",
         "Icon": "note",
-        "Id": "scratchpad",
+        "Id": "kdevscratchpad",
         "Name": "Scratchpad",
         "Name[ar]": "المفكّرة",
         "Name[az]": "İş dəftəri",

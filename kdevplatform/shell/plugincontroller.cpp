@@ -320,12 +320,18 @@ PluginController::PluginController(Core *core)
 
     setObjectName(QStringLiteral("PluginController"));
 
-    auto newPlugins = KPluginMetaData::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)));
+    const auto newPlugins = KPluginMetaData::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)));
 
     qCDebug(SHELL) << "Found" << newPlugins.size() << "plugins:" << pluginIds(newPlugins);
     if (newPlugins.isEmpty()) {
         qCWarning(SHELL) << "Did not find any plugins, check your environment.";
         qCWarning(SHELL) << "  Note: QT_PLUGIN_PATH is set to:" << qgetenv("QT_PLUGIN_PATH");
+    }
+    for (const auto &md : newPlugins) {
+        if (md.rawData()[QLatin1String("KPlugin")][QLatin1String("Id")] != md.pluginId()) {
+            qCWarning(SHELL) << "Usage of KPlugin.ID is deprecated, please make sure your plugin is properly named and drop it from the json file" << md.rawData()[QLatin1String("KPlugin")][QLatin1String("Id")] << md.pluginId();
+        }
+        Q_ASSERT(md.rawData()[QLatin1String("KPlugin")][QLatin1String("Id")] == md.pluginId());
     }
 
     d->plugins = newPlugins;
