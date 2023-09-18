@@ -15,11 +15,11 @@ declare_qt_logging_category(scratchpad_SRCS
     CATEGORY_BASENAME "scratchpad"
 )
 
-kdevplatform_add_plugin(kdevscratchpad
+kdevplatform_add_plugin(scratchpad
     SOURCES ${scratchpad_SRCS}
 )
 
-target_link_libraries(kdevscratchpad
+target_link_libraries(scratchpad
     KDev::Interfaces
     KDev::Sublime
     KDev::Util

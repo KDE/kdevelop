@@ -36,8 +36,8 @@ set(kdevqmakemanager_PART_SRCS
     qmakemodelitems.cpp
     qmakejob.cpp
 )
-kdevplatform_add_plugin(kdevqmakemanager SOURCES ${kdevqmakemanager_PART_SRCS})
-target_link_libraries(kdevqmakemanager
+kdevplatform_add_plugin(KDevQMakeManager SOURCES ${kdevqmakemanager_PART_SRCS})
+target_link_libraries(KDevQMakeManager
     KDev::Interfaces
     KDev::Project
     KDev::Util

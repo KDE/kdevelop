@@ -9,9 +9,9 @@ set(kdevgenericmanager_PART_SRCS
     genericmanager.cpp
 )
 
-kdevplatform_add_plugin(kdevgenericmanager SOURCES ${kdevgenericmanager_PART_SRCS})
+kdevplatform_add_plugin(KDevGenericManager SOURCES ${kdevgenericmanager_PART_SRCS})
 
-target_link_libraries(kdevgenericmanager
+target_link_libraries(KDevGenericManager
     KF5::KIOWidgets
     KDev::Project
 )

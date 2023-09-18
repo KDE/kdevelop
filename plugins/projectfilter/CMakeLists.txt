@@ -21,9 +21,9 @@ declare_qt_logging_category(projectfilter_SRCS
 ki18n_wrap_ui(projectfilter_SRCS projectfiltersettings.ui)
 kconfig_add_kcfg_files(projectfilter_SRCS projectfiltersettings.kcfgc)
 
-kdevplatform_add_plugin(kdevprojectfilter SOURCES ${projectfilter_SRCS})
+kdevplatform_add_plugin(KDevProjectFilter SOURCES ${projectfilter_SRCS})
 
-target_link_libraries(kdevprojectfilter
+target_link_libraries(KDevProjectFilter
     KDev::Project
     KDev::Util
     KDev::Interfaces

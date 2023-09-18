@@ -110,8 +110,8 @@ target_link_libraries(kdevcmakemanagernosettings
     Qt5::Concurrent
 )
 
-kdevplatform_add_plugin(kdevcmakemanager SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
-target_link_libraries(kdevcmakemanager
+kdevplatform_add_plugin(KDevCMakeManager SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
+target_link_libraries(KDevCMakeManager
     KDevCMakeCommon
     KDev::Util
     KDev::Interfaces
@@ -124,8 +124,8 @@ target_link_libraries(kdevcmakemanager
     Qt5::Concurrent
 )
 
-kdevplatform_add_plugin(kdevcmakedocumentation SOURCES ${cmakedoc_SRCS})
-target_link_libraries( kdevcmakedocumentation
+kdevplatform_add_plugin(KDevCMakeDocumentation SOURCES ${cmakedoc_SRCS})
+target_link_libraries(KDevCMakeDocumentation
     KDevCMakeCommon
     KDev::Interfaces
     KDev::Project

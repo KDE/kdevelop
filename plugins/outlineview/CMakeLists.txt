@@ -12,8 +12,8 @@ declare_qt_logging_category(kdevoutlineview_SRCS
     IDENTIFIER PLUGIN_OUTLINE
     CATEGORY_BASENAME "outline"
 )
-kdevplatform_add_plugin(kdevoutlineview SOURCES ${kdevoutlineview_SRCS})
-target_link_libraries(kdevoutlineview
+kdevplatform_add_plugin(KDevOutlineView SOURCES ${kdevoutlineview_SRCS})
+target_link_libraries(KDevOutlineView
     KDev::Interfaces
     KDev::Language
     KF5::CoreAddons

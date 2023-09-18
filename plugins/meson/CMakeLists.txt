@@ -56,10 +56,10 @@ declare_qt_logging_category(mesonbuilder_SRCS
     CATEGORY_BASENAME "meson"
 )
 
-kdevplatform_add_plugin(kdevmesonmanager
+kdevplatform_add_plugin(KDevMesonManager
                         SOURCES ${mesonbuilder_SRCS})
 
-target_link_libraries(kdevmesonmanager
+target_link_libraries(KDevMesonManager
     Qt5::Concurrent
     KDev::Interfaces
     KDev::Language

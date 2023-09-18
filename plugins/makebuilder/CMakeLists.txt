@@ -16,8 +16,8 @@ ki18n_wrap_ui(kdevmakebuilder_SRCS makeconfig.ui)
 kconfig_add_kcfg_files( kdevmakebuilder_SRCS makebuilderconfig.kcfgc )
 
 qt5_add_resources(kdevmakebuilder_SRCS kdevmakebuilder.qrc)
-kdevplatform_add_plugin(kdevmakebuilder SOURCES ${kdevmakebuilder_SRCS})
-target_link_libraries(kdevmakebuilder
+kdevplatform_add_plugin(KDevMakeBuilder SOURCES ${kdevmakebuilder_SRCS})
+target_link_libraries(KDevMakeBuilder
         KF5::TextEditor
         KDev::Interfaces
         KDev::Project

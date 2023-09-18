@@ -14,9 +14,9 @@ declare_qt_logging_category(welcomepage_SRCS
     CATEGORY_BASENAME "welcomepage"
 )
 
-kdevplatform_add_plugin(kdevwelcomepage SOURCES ${welcomepage_SRCS})
+kdevplatform_add_plugin(KDevWelcomePage SOURCES ${welcomepage_SRCS})
 
-target_link_libraries(kdevwelcomepage
+target_link_libraries(KDevWelcomePage
     KDev::Interfaces
     KDev::Sublime
     KDev::Shell

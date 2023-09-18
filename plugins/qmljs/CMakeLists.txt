@@ -15,14 +15,14 @@ declare_qt_logging_category(kdevqmljslanguagesupport_LOG_SRCS
     IDENTIFIER KDEV_QMLJS
     CATEGORY_BASENAME "qmljs"
 )
-kdevplatform_add_plugin(kdevqmljslanguagesupport SOURCES
+kdevplatform_add_plugin(kdevqmljs SOURCES
     qmljsparsejob.cpp
     qmljshighlighting.cpp
     kdevqmljsplugin.cpp
     navigation/propertypreviewwidget.cpp
     ${kdevqmljslanguagesupport_LOG_SRCS}
 )
-target_link_libraries(kdevqmljslanguagesupport
+target_link_libraries(kdevqmljs
     kdevqmljsduchain
     kdevqmljscompletion
     Qt5::Widgets
