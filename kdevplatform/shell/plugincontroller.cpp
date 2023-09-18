@@ -328,7 +328,7 @@ PluginController::PluginController(Core *core)
 
     setObjectName(QStringLiteral("PluginController"));
 
-    auto newPlugins =
+    const auto newPlugins =
         KPluginMetaData::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)));
 
     qCDebug(SHELL) << "Found" << newPlugins.size() << "plugins:" << pluginIds(newPlugins);

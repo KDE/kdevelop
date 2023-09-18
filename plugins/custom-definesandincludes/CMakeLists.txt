@@ -34,8 +34,8 @@ ki18n_wrap_ui(kdevdefinesandincludesmanager_SRCS
 )
 kconfig_add_kcfg_files( kdevdefinesandincludesmanager_SRCS kcm_widget/customdefinesandincludes.kcfgc)
 
-kdevplatform_add_plugin(kdevdefinesandincludesmanager SOURCES ${kdevdefinesandincludesmanager_SRCS})
-target_link_libraries( kdevdefinesandincludesmanager
+kdevplatform_add_plugin(KDevDefinesAndIncludesManager SOURCES ${kdevdefinesandincludesmanager_SRCS})
+target_link_libraries( KDevDefinesAndIncludesManager
     PRIVATE
         kdevnoprojectincludesanddefines
         kdevcompilerprovider

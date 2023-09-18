@@ -15,8 +15,8 @@ declare_qt_logging_category(cmakebuilder_SRCS
     CATEGORY_BASENAME "cmakebuilder"
 )
 ki18n_wrap_ui(cmakebuilder_SRCS cmakebuilderpreferences.ui)
-kdevplatform_add_plugin(kdevcmakebuilder SOURCES ${cmakebuilder_SRCS})
-target_link_libraries(kdevcmakebuilder
+kdevplatform_add_plugin(KDevCMakeBuilder SOURCES ${cmakebuilder_SRCS})
+target_link_libraries(KDevCMakeBuilder
     KDevCMakeCommon
     KDev::Interfaces
     KDev::OutputView
