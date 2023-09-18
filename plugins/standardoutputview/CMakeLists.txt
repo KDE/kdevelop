@@ -17,9 +17,9 @@ set(standardoutputview_LIB_SRCS
     ${standardoutputview_LOG_PART_SRCS}
 )
 
-kdevplatform_add_plugin(kdevstandardoutputview SOURCES  ${standardoutputview_LIB_SRCS})
+kdevplatform_add_plugin(KDevStandardOutputView SOURCES  ${standardoutputview_LIB_SRCS})
 
-target_link_libraries(kdevstandardoutputview
+target_link_libraries(KDevStandardOutputView
     KDev::Interfaces
     KDev::Sublime
     KDev::Util
