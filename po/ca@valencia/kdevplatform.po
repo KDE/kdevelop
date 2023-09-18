@@ -5174,7 +5174,7 @@ msgstr "Mostra una llista ordenada dels documents oberts"
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
-msgstr "(Premeu Ctrl+Tab per a canviar)"
+msgstr "(Premeu «Ctrl+Tab» per a canviar)"
 
 #: sublime/container.cpp:724
 #, kde-format

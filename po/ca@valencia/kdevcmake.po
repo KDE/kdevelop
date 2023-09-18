@@ -236,7 +236,7 @@ msgstr "<br /><em>Documentació a la memòria cau:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr "Dades de projecte no vàlides segons la API del fitxer de CMake"
+msgstr "Dades de projecte no vàlides segons l'API del fitxer de CMake"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
