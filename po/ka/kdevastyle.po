@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:43+0000\n"
-"PO-Revision-Date: 2022-04-24 19:23+0200\n"
+"PO-Revision-Date: 2023-09-17 06:32+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,22 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: astyle_plugin.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Artistic Style</b> is a source code indenter, formatter, and "
-#| "beautifier for the C, C++, C# and Java programming languages.<br />Home "
-#| "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
-#| "sourceforge.net</a>"
+#, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
 "for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
 "white-space:pre'>Home Page: <a href=\"http://astyle.sourceforge.net/"
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
-"<b>Artistic Style</b> არის წყაროს კოდის ჩაღრმავება, ფორმატირება და "
+"<b>Artistic Style</b> არის წყაროს კოდის შეწევა, ფორმატირება და "
 "გამალამაზებელი C, C++, C# და Java პროგრამირების ენებისთვის.<br />მთავარი "
 "გვერდი: <a href=\"http://astyle.sourceforge .net/\">http://astyle."
 "sourceforge.net</a>"
@@ -396,7 +391,7 @@ msgstr "პირობების(if-else) დაშლა"
 #, kde-format
 msgctxt "@title:group"
 msgid "Padding"
-msgstr ""
+msgstr "შევსება"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:460
@@ -410,7 +405,7 @@ msgstr "ცვლილების გარეშე"
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Unpad"
-msgstr ""
+msgstr "შევსების მოხსნა"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:470

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-09-18 00:44+0000\n"
 "PO-Revision-Date: 2022-01-20 19:01+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -2185,25 +2185,25 @@ msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:608
+#: shell/documentcontroller.cpp:611
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "ا&فتح..."
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "افتح ملفًا"
 
-#: shell/documentcontroller.cpp:612
+#: shell/documentcontroller.cpp:615
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr ""
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:619
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2212,76 +2212,76 @@ msgid ""
 msgstr ""
 "يسرد هذا الملفات التي قمت بفتحها مؤخراً، ويسمح لك بفتحها بسهولة مرة أخرى."
 
-#: shell/documentcontroller.cpp:621
+#: shell/documentcontroller.cpp:624
 #, fuzzy, kde-format
 #| msgid "&Remove All"
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "احفظ ال&كلّ"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr ""
 
-#: shell/documentcontroller.cpp:624
+#: shell/documentcontroller.cpp:627
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr ""
 
-#: shell/documentcontroller.cpp:630
+#: shell/documentcontroller.cpp:633
 #, fuzzy, kde-format
 #| msgid "&Remove All"
 msgctxt "@action"
 msgid "Reload All"
 msgstr "أ&عد تحميل الكلّ"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr ""
 
-#: shell/documentcontroller.cpp:633
+#: shell/documentcontroller.cpp:636
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "أ&غلق"
 
-#: shell/documentcontroller.cpp:641
+#: shell/documentcontroller.cpp:644
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr ""
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:645
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr ""
 
-#: shell/documentcontroller.cpp:647
+#: shell/documentcontroller.cpp:650
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "أ&غلق الكلّ"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "أغلق كلّ المستندات المفتوحة."
 
-#: shell/documentcontroller.cpp:650
+#: shell/documentcontroller.cpp:653
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2289,19 +2289,19 @@ msgid ""
 "necessary."
 msgstr ""
 
-#: shell/documentcontroller.cpp:656
+#: shell/documentcontroller.cpp:659
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "أغلق الب&قيّة"
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:661
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr ""
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:662
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2309,19 +2309,19 @@ msgid ""
 "document."
 msgstr ""
 
-#: shell/documentcontroller.cpp:664
+#: shell/documentcontroller.cpp:667
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr ""
 
-#: shell/documentcontroller.cpp:665
+#: shell/documentcontroller.cpp:668
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "اشرح"
 
-#: shell/documentcontroller.cpp:1294
+#: shell/documentcontroller.cpp:1297
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"

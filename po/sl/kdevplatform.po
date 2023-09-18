@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-09-18 00:44+0000\n"
 "PO-Revision-Date: 2023-09-16 09:51+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
-"%100<=4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
@@ -2232,25 +2232,25 @@ msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr "Ne odpri"
 
-#: shell/documentcontroller.cpp:608
+#: shell/documentcontroller.cpp:611
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Odpri..."
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Odpri datoteko"
 
-#: shell/documentcontroller.cpp:612
+#: shell/documentcontroller.cpp:615
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Odpre datoteko za urejanje."
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:619
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2260,19 +2260,19 @@ msgstr ""
 "To je seznam datotek, ki ste jih odprli nedavno, in vam omogoča enostavno "
 "ponovno odprtje."
 
-#: shell/documentcontroller.cpp:621
+#: shell/documentcontroller.cpp:624
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Shrani vse"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Shrani vse odprte dokumente"
 
-#: shell/documentcontroller.cpp:624
+#: shell/documentcontroller.cpp:627
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2281,56 +2281,56 @@ msgstr ""
 "Shrani vse odprte dokumente, pri čemer po potrebi povpraša po dodatnih "
 "podrobnostih."
 
-#: shell/documentcontroller.cpp:630
+#: shell/documentcontroller.cpp:633
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Znova naloži vse"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Povrni vse odprte dokumente"
 
-#: shell/documentcontroller.cpp:633
+#: shell/documentcontroller.cpp:636
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 "Povrne vse odprte dokumente, tako da jih vrne v predhodno shranjeno stanje."
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "Zapri"
 
-#: shell/documentcontroller.cpp:641
+#: shell/documentcontroller.cpp:644
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Zapri datoteko"
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:645
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Zapre trenutno datoteko."
 
-#: shell/documentcontroller.cpp:647
+#: shell/documentcontroller.cpp:650
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Zapri vse"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Zapri vse odprte dokumente"
 
-#: shell/documentcontroller.cpp:650
+#: shell/documentcontroller.cpp:653
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2340,19 +2340,19 @@ msgstr ""
 "Zapri vse odprte dokumente, pri čemer po potrebi povprašaj po dodatnih "
 "podrobnostih."
 
-#: shell/documentcontroller.cpp:656
+#: shell/documentcontroller.cpp:659
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Zapri vse ostale"
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:661
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Zapri vse ostale dokumente"
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:662
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2360,19 +2360,19 @@ msgid ""
 "document."
 msgstr "Zapri vse odprte dokumente, z izjemo trenutno dejavnega dokumenta."
 
-#: shell/documentcontroller.cpp:664
+#: shell/documentcontroller.cpp:667
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Prikaži Zabeleži na trenutnem dokumentu"
 
-#: shell/documentcontroller.cpp:665
+#: shell/documentcontroller.cpp:668
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Zabeleži"
 
-#: shell/documentcontroller.cpp:1294
+#: shell/documentcontroller.cpp:1297
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"

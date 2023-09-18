@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-09-18 00:44+0000\n"
 "PO-Revision-Date: 2023-08-26 11:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2219,25 +2219,25 @@ msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr "Açma"
 
-#: shell/documentcontroller.cpp:608
+#: shell/documentcontroller.cpp:611
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Aç..."
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Dosya aç"
 
-#: shell/documentcontroller.cpp:612
+#: shell/documentcontroller.cpp:615
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Bir dosyayı, düzenlemek için açar."
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:619
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2247,74 +2247,74 @@ msgstr ""
 "Bu, en son açtığını dosyaları listeler ve bu dosyalara yeniden kolayca "
 "erişmenizi sağlar."
 
-#: shell/documentcontroller.cpp:621
+#: shell/documentcontroller.cpp:624
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "&Tümünü Kaydet"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Açık olan tüm belgeleri kaydet"
 
-#: shell/documentcontroller.cpp:624
+#: shell/documentcontroller.cpp:627
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr "Gerektiğinde ek bilgi görüntüleyerek açık tüm belgeleri kaydet."
 
-#: shell/documentcontroller.cpp:630
+#: shell/documentcontroller.cpp:633
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Tümünü Yeniden Yükle"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Açık tüm belgeleri geri al"
 
-#: shell/documentcontroller.cpp:633
+#: shell/documentcontroller.cpp:636
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr "Tüm açık belgeleri son kaydedildikleri duruma geri döndür."
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Kapat"
 
-#: shell/documentcontroller.cpp:641
+#: shell/documentcontroller.cpp:644
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Dosyayı kapat"
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:645
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Geçerli dosyayı kapatır."
 
-#: shell/documentcontroller.cpp:647
+#: shell/documentcontroller.cpp:650
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Tümünü &Kapat"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Açık olan tüm belgeleri kapat"
 
-#: shell/documentcontroller.cpp:650
+#: shell/documentcontroller.cpp:653
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2322,19 +2322,19 @@ msgid ""
 "necessary."
 msgstr "Tüm belgeleri kapat, ek bilgi gerektiğinde uyar."
 
-#: shell/documentcontroller.cpp:656
+#: shell/documentcontroller.cpp:659
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Tüm Diğerlerini K&apat"
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:661
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Diğer tüm belgeleri kapat"
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:662
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2342,19 +2342,19 @@ msgid ""
 "document."
 msgstr "Geçerli etkin belge dışındaki tüm açık belgeleri kapat."
 
-#: shell/documentcontroller.cpp:664
+#: shell/documentcontroller.cpp:667
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Geçerli Belgedeki Bilgi Notlarını Göster"
 
-#: shell/documentcontroller.cpp:665
+#: shell/documentcontroller.cpp:668
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Bilgi Notu Ekle"
 
-#: shell/documentcontroller.cpp:1294
+#: shell/documentcontroller.cpp:1297
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -3884,14 +3884,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Bu biçem için önizleme görünürlüğünü açın/kapatın.\n"
+"Önizleme, biçimlendirmesi dosya yoluna bağımlı olan biçemler için devre dışı "
+"olmalıdır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Preview:"
+#, kde-format
 msgid "Show Preview"
-msgstr "Önizleme:"
+msgstr "Önizlemeyi Göster"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4961,7 +4962,7 @@ msgstr "Dil:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Biçimlendirme biçemlerini nasıl yapılandırmalı"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -4980,6 +4981,18 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Aşağıdaki <i>Dil</i> çoklu kutusundan kullandığınız dilleri teker teker "
+"seçin ve her biri için istediğiniz biçimlendiriciyi ve biçemi ayarlayın. "
+"Seçimi kaldırmak için biçemin üzerine <i>Kontrol+Tık</i> yapın.</p>\n"
+"<p>Kullanılan her dil için doğru biçimlendiriciyi ve biçemi seçmek çok "
+"önemlidir: Yalnızca <i>Kaynağı Yeniden Biçimlendir</i>/<i>Satır</i>/"
+"<i>Dosyalar...</i> eylemleri değil, kendiliğinden oluşturulmuş, düzenlenmiş "
+"veya düzeltilmiş kod da bundan etkilenir (örneğin, <i>Yeniden Adlandır</i> "
+"bağlam menüsü eylemi).</p>\n"
+"<p>K Geliştir'in tüm <i>*.h</i> dosyalarını <i>C</i> diline göre "
+"yapılandırdığını aklınızda bulundurun. Bu, saf bir C++ projesi için de "
+"böyledir. Bu, kaynak biçimlendiricisinin MIME türlerini dillere "
+"eşlemlemesinden dolayıdır.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -4992,7 +5005,7 @@ msgstr "Biçimlendirici:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Seçili bir biçimlendiricinin açıklaması"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
@@ -6144,36 +6157,3 @@ msgstr "Önceki ile Farkı"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Revizyonlar arasındaki fark"
-
-#~ msgid "No Source Formatter available"
-#~ msgstr "Kullanılabilir kaynak biçimlendiricisi yok"
-
-#~ msgid "New Style"
-#~ msgstr "Yeni Biçem"
-
-#~ msgid "No language selected"
-#~ msgstr "Seçili dil yok"
-
-#~ msgid "Recent Expressions"
-#~ msgstr "Son Kullanılan İfadeler"
-
-#~ msgid "Remove All"
-#~ msgstr "Tümünü Kaldır"
-
-#~ msgid "Re-evaluate All"
-#~ msgstr "Tümünü Yeniden Değerlendir"
-
-#~ msgid "Remember Value"
-#~ msgstr "Değeri Anımsa"
-
-#~ msgid "Watch Variable"
-#~ msgstr "Değişkeni İzle"
-
-#~ msgid "Reevaluate Expression"
-#~ msgstr "İfadeyi Yeniden Değerlendir"
-
-#~ msgid "Remove Expression"
-#~ msgstr "İfadeyi Kaldır"
-
-#~ msgid "Data write breakpoint"
-#~ msgstr "Veri yazma kesme noktası"

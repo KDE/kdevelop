@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-09-18 00:44+0000\n"
 "PO-Revision-Date: 2009-07-05 19:31+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -2142,25 +2142,25 @@ msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:608
+#: shell/documentcontroller.cpp:611
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr ""
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Buka fail"
 
-#: shell/documentcontroller.cpp:612
+#: shell/documentcontroller.cpp:615
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr ""
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:619
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2170,74 +2170,74 @@ msgstr ""
 "Ini memaparkan fail yang anda buka baru-baru ini, dan membenarkan anda untuk "
 "membukanya dengan mudah pada masa lain."
 
-#: shell/documentcontroller.cpp:621
+#: shell/documentcontroller.cpp:624
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Buang Semua"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr ""
 
-#: shell/documentcontroller.cpp:624
+#: shell/documentcontroller.cpp:627
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr ""
 
-#: shell/documentcontroller.cpp:630
+#: shell/documentcontroller.cpp:633
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Ulangmuat"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr ""
 
-#: shell/documentcontroller.cpp:633
+#: shell/documentcontroller.cpp:636
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "Tutup"
 
-#: shell/documentcontroller.cpp:641
+#: shell/documentcontroller.cpp:644
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Tutup S&emua"
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:645
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Tutup Dokumen"
 
-#: shell/documentcontroller.cpp:647
+#: shell/documentcontroller.cpp:650
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Tutup S&emua"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Tutup Dokumen"
 
-#: shell/documentcontroller.cpp:650
+#: shell/documentcontroller.cpp:653
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2245,19 +2245,19 @@ msgid ""
 "necessary."
 msgstr ""
 
-#: shell/documentcontroller.cpp:656
+#: shell/documentcontroller.cpp:659
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Tutup S&emua"
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:661
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Tutup Dokumen"
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:662
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2265,19 +2265,19 @@ msgid ""
 "document."
 msgstr ""
 
-#: shell/documentcontroller.cpp:664
+#: shell/documentcontroller.cpp:667
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr ""
 
-#: shell/documentcontroller.cpp:665
+#: shell/documentcontroller.cpp:668
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Status"
 
-#: shell/documentcontroller.cpp:1294
+#: shell/documentcontroller.cpp:1297
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"

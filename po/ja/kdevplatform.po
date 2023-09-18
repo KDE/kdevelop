@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-09-18 00:44+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -2244,28 +2244,28 @@ msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:608
+#: shell/documentcontroller.cpp:611
 #, fuzzy, kde-format
 #| msgid "&Open..."
 msgctxt "@action"
 msgid "&Open..."
 msgstr "開く(&O)..."
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, fuzzy, kde-format
 #| msgid "Open file"
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "ファイルを開く"
 
-#: shell/documentcontroller.cpp:612
+#: shell/documentcontroller.cpp:615
 #, fuzzy, kde-format
 #| msgid "<b>Open file</b><p>Opens a file for editing.</p>"
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "<b>ファイルを開く</b><p>編集のためにファイルを開きます。</p>"
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:619
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2273,21 +2273,21 @@ msgid ""
 "open them again."
 msgstr ""
 
-#: shell/documentcontroller.cpp:621
+#: shell/documentcontroller.cpp:624
 #, fuzzy, kde-format
 #| msgid "Save Al&l"
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "すべて保存(&L)"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, fuzzy, kde-format
 #| msgid "Save all open documents"
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "開いているすべての文書を保存します"
 
-#: shell/documentcontroller.cpp:624
+#: shell/documentcontroller.cpp:627
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Save all documents</b><p>Save all open documents, prompting for "
@@ -2299,21 +2299,21 @@ msgstr ""
 "<b>すべて保存</b><p>開いているすべての文書を保存します。必要な場合は追加の情"
 "報を求めます。</p>"
 
-#: shell/documentcontroller.cpp:630
+#: shell/documentcontroller.cpp:633
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action"
 msgid "Reload All"
 msgstr "すべてを再読み込み"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, fuzzy, kde-format
 #| msgid "Revert all open documents"
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "開いているすべての文書を元に戻します"
 
-#: shell/documentcontroller.cpp:633
+#: shell/documentcontroller.cpp:636
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Revert all documents</b><p>Revert all open documents, returning to the "
@@ -2324,42 +2324,42 @@ msgstr ""
 "<b>すべて戻す</b><p>開いているすべての文書を前回保存されたときの状態に戻しま"
 "す。</p>"
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgctxt "@action"
 msgid "&Close"
 msgstr "閉じる(&C)"
 
-#: shell/documentcontroller.cpp:641
+#: shell/documentcontroller.cpp:644
 #, fuzzy, kde-format
 #| msgid "Close File"
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "ファイルを閉じる"
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:645
 #, fuzzy, kde-format
 #| msgid "Close Document"
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "文書を閉じる"
 
-#: shell/documentcontroller.cpp:647
+#: shell/documentcontroller.cpp:650
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "すべて閉じる(&E)"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "開いているすべての文書を閉じます"
 
-#: shell/documentcontroller.cpp:650
+#: shell/documentcontroller.cpp:653
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Close all documents</b><p>Close all open documents, prompting for "
@@ -2372,21 +2372,21 @@ msgstr ""
 "<b>すべて閉じる</b><p>開いているすべての文書を閉じます。必要な場合は追加の情"
 "報を求めます。</p>"
 
-#: shell/documentcontroller.cpp:656
+#: shell/documentcontroller.cpp:659
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "他をすべて閉じる(&H)"
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:661
 #, fuzzy, kde-format
 #| msgid "Close all other documents"
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "他をすべての文書を閉じます"
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:662
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Close all other documents</b><p>Close all open documents, with the "
@@ -2399,21 +2399,21 @@ msgstr ""
 "<b>他をすべて閉じる</b><p>現在アクティブな文書を除いて、開いているすべての文"
 "書を閉じます。</p>"
 
-#: shell/documentcontroller.cpp:664
+#: shell/documentcontroller.cpp:667
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "開いているすべての文書を閉じます"
 
-#: shell/documentcontroller.cpp:665
+#: shell/documentcontroller.cpp:668
 #, fuzzy, kde-format
 #| msgid "Annotation..."
 msgctxt "@action"
 msgid "Annotate"
 msgstr "注釈..."
 
-#: shell/documentcontroller.cpp:1294
+#: shell/documentcontroller.cpp:1297
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"

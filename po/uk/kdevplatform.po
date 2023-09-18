@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-09-18 00:44+0000\n"
 "PO-Revision-Date: 2023-09-16 08:53+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -2235,25 +2235,25 @@ msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr "Не відкривати"
 
-#: shell/documentcontroller.cpp:608
+#: shell/documentcontroller.cpp:611
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "Від&крити…"
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Відкрити файл"
 
-#: shell/documentcontroller.cpp:612
+#: shell/documentcontroller.cpp:615
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Відкриває файл для редагування."
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:619
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2263,19 +2263,19 @@ msgstr ""
 "Містить файли, які було недавно відкрито, та дозволяє швидко відкрити їх "
 "знову."
 
-#: shell/documentcontroller.cpp:621
+#: shell/documentcontroller.cpp:624
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Зберегти в&сі"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Зберегти всі відкриті документи"
 
-#: shell/documentcontroller.cpp:624
+#: shell/documentcontroller.cpp:627
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2283,55 +2283,55 @@ msgid ""
 msgstr ""
 "Зберегти всі документи з запитами щодо додаткових відомостей за потреби."
 
-#: shell/documentcontroller.cpp:630
+#: shell/documentcontroller.cpp:633
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Перезавантажити все"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Повернути початковий стан всіх відкритих документів"
 
-#: shell/documentcontroller.cpp:633
+#: shell/documentcontroller.cpp:636
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr "Повернути всі відкриті документи до збереженого раніше стану."
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Закрити"
 
-#: shell/documentcontroller.cpp:641
+#: shell/documentcontroller.cpp:644
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Закрити файл"
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:645
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Закриває поточний файл."
 
-#: shell/documentcontroller.cpp:647
+#: shell/documentcontroller.cpp:650
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "&Закрити всі"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Закрити всі відкриті документи"
 
-#: shell/documentcontroller.cpp:650
+#: shell/documentcontroller.cpp:653
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2341,19 +2341,19 @@ msgstr ""
 "Закрити всі відкриті документи, за потреби запитати щодо додаткових "
 "відомостей."
 
-#: shell/documentcontroller.cpp:656
+#: shell/documentcontroller.cpp:659
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Закрити всі &інші"
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:661
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Закрити всі інші документи"
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:662
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2362,19 +2362,19 @@ msgid ""
 msgstr ""
 "Закрити всі відкриті документи, за винятком поточного активного документа."
 
-#: shell/documentcontroller.cpp:664
+#: shell/documentcontroller.cpp:667
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Показати пункт «Анотувати» для поточного документа"
 
-#: shell/documentcontroller.cpp:665
+#: shell/documentcontroller.cpp:668
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Анотувати"
 
-#: shell/documentcontroller.cpp:1294
+#: shell/documentcontroller.cpp:1297
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"

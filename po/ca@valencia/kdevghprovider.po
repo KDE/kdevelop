@@ -147,7 +147,7 @@ msgstr "Busca..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
-msgstr "Si no voleu esperar, podeu prémer la tecla de Retorn."
+msgstr "Si no voleu esperar, podeu prémer la tecla «Retorn»."
 
 #: ghproviderwidget.cpp:70
 #, kde-format
