@@ -188,7 +188,7 @@ void ProblemTreeView::resizeColumns()
     static_assert(sizePolicy.size() == ProblemModel::LastColumn);
 
     // Cannot use std::accumulate() here, because it is not constexpr in C++17.
-    static constexpr ColumnSizePolicy total = [] {
+    static constexpr ColumnSizePolicy totalAllColumns = [] {
         ColumnSizePolicy sum{};
         for (auto p : sizePolicy) {
             sum.minWidthInCharacters += p.minWidthInCharacters;
@@ -196,6 +196,15 @@ void ProblemTreeView::resizeColumns()
         }
         return sum;
     }();
+
+    ColumnSizePolicy total = totalAllColumns;
+    if (!model()->features().testFlag(ProblemModel::ShowSource)) {
+        // Disregard the size policy of the hidden Source column.
+        static constexpr auto hiddenColumn = sizePolicy[ProblemModel::Source];
+        total.minWidthInCharacters -= hiddenColumn.minWidthInCharacters;
+        total.stretchFactor -= hiddenColumn.stretchFactor;
+    }
+    Q_ASSERT(total.stretchFactor > 0);
 
     const int remainingPixels = std::max(0, headerWidth - total.minWidthInCharacters * averageCharWidth);
 
