@@ -34,6 +34,57 @@
 
 #include <KSqueezedTextLabel>
 
+#include <algorithm>
+#include <utility>
+
+namespace {
+/**
+ * @return the last two segments of @p document's path or an empty string in case of failure.
+ */
+QString documentDirAndFilename(const Sublime::Document* document)
+{
+    auto* const urlDocument = qobject_cast<const Sublime::UrlDocument*>(document);
+    if (!urlDocument) {
+        return QString{};
+    }
+    const auto path = urlDocument->url().path();
+
+    const auto lastSlashIndex = path.lastIndexOf(QLatin1Char{'/'});
+    if (lastSlashIndex <= 0) {
+        return path; // either no slash in path or a single slash is the first symbol of path
+    }
+
+    const auto penultimateSlashIndex = path.lastIndexOf(QLatin1Char{'/'}, lastSlashIndex - 1);
+    // If there is only one slash in the path, penultimateSlashIndex equals -1 and we correctly return the whole path.
+    return path.mid(penultimateSlashIndex + 1);
+}
+
+struct ActionInsertionPoint
+{
+    QAction* previous;
+    QAction* next;
+};
+
+/**
+ * Find a suitable insertion point in a list of actions.
+ *
+ * @param actions a list of actions ordered by title of their associated document case-insensitively.
+ * @param actionDocumentTitle the title of the document associated with the action to be inserted.
+ */
+ActionInsertionPoint findActionInsertionPoint(const QList<QAction*>& actions, const QString& actionDocumentTitle)
+{
+    const auto it = std::lower_bound(
+        actions.cbegin(), actions.cend(), actionDocumentTitle, [](const QAction* lhs, const QString& rhs) {
+            return lhs->data().value<Sublime::View*>()->document()->title().compare(rhs, Qt::CaseInsensitive) < 0;
+        });
+    ActionInsertionPoint ret;
+    ret.next = it == actions.cend() ? nullptr : *it;
+    ret.previous = it == actions.cbegin() ? nullptr : *(it - 1);
+    return ret;
+}
+
+} // namespace
+
 namespace Sublime {
 
 // class ContainerTabBar
@@ -119,11 +170,6 @@ private:
     Container* const m_container;
 };
 
-bool sortViews(const View* const lhs, const View* const rhs)
-{
-        return lhs->document()->title().compare(rhs->document()->title(), Qt::CaseInsensitive) < 0;
-}
-
 #ifdef Q_OS_MACOS
 // only one of these per process:
 static QMenu* currentDockMenu = nullptr;
@@ -145,61 +191,86 @@ public:
     KSqueezedTextLabel *statusCorner;
     QPointer<QWidget> leftCornerWidget;
     QToolButton* documentListButton;
-    QMenu* documentListMenu;
+    QMenu* documentListMenu; ///< a popup menu that contains an activating action for each view in this Container
     QHash<View*, QAction*> documentListActionForView;
 
     /**
-     * Updates the context menu which is shown when
-     * the document list button in the tab bar is clicked.
-     *
-     * It shall build a popup menu which contains all currently
-     * enabled views using the title their document provides.
+     * Set up @p viewAction's text and insert it into @a documentListMenu.
      */
-    void updateDocumentListPopupMenu()
+    void insertIntoDocumentListMenu(View* view, QAction* viewAction)
     {
-        qDeleteAll(documentListActionForView);
-        documentListActionForView.clear();
-        documentListMenu->clear();
+        Q_ASSERT(view);
+        Q_ASSERT(viewAction);
+        Q_ASSERT(viewAction->data().value<Sublime::View*>() == view);
 
-        // create a lexicographically sorted list
-        QVector<View*> views;
-        views.reserve(viewForWidget.size());
+        const auto viewDocumentTitle = view->document()->title();
+        const auto insertionPoint = findActionInsertionPoint(documentListMenu->actions(), viewDocumentTitle);
 
-        for (View* view : qAsConst(viewForWidget)) {
-            views << view;
-        }
-
-        std::sort(views.begin(), views.end(), sortViews);
-
-        for (int i = 0; i < views.size(); ++i) {
-            View *view = views.at(i);
-            QString visibleEntryTitle;
-            // if filename is not unique, prepend containing directory
-            if ((i < views.size() - 1 && view->document()->title() == views.at(i + 1)->document()->title())
-                || (i > 0 && view->document()->title() == views.at(i - 1)->document()->title())
-            ) {
-                auto urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
-                if (!urlDoc) {
-                    visibleEntryTitle = view->document()->title();
-                }
-                else {
-                    auto url = urlDoc->url().toString();
-                    int secondOffset = url.lastIndexOf(QLatin1Char('/'));
-                    secondOffset = url.lastIndexOf(QLatin1Char('/'), secondOffset - 1);
-                    visibleEntryTitle = url.right(url.length() - url.lastIndexOf(QLatin1Char('/'), secondOffset) - 1);
-                }
-            } else {
-                visibleEntryTitle = view->document()->title();
+        // Check if the document titles of the actions that neighbor viewAction equal viewDocumentTitle.
+        // If so, include the containing directory name in the equivalent actions' texts for disambiguation.
+        bool includeDirInViewActionText = false;
+        for (auto* neighborAction : {insertionPoint.previous, insertionPoint.next}) {
+            if (!neighborAction) {
+                continue; // no neighboring action on this side
             }
-            QAction* action = documentListMenu->addAction(visibleEntryTitle);
-            action->setData(QVariant::fromValue(view));
-            documentListActionForView[view] = action;
-            action->setIcon(view->document()->icon());
-            ///FIXME: push this code somehow into shell, such that we can access the project model for
-            ///       icons and also get a neat, short path like the document switcher.
+            const auto* const neighborView = neighborAction->data().value<View*>();
+            const auto neighborDocumentTitle = neighborView->document()->title();
+
+            if (neighborDocumentTitle.compare(viewDocumentTitle, Qt::CaseInsensitive) != 0) {
+                continue; // the titles are not equal, nothing to do
+            }
+            includeDirInViewActionText = true;
+
+            if (neighborAction->text() != neighborDocumentTitle) {
+                Q_ASSERT(neighborAction->text() == documentDirAndFilename(neighborView->document()));
+                continue; // neighborAction's text is already disambiguated
+            }
+            auto newText = documentDirAndFilename(neighborView->document());
+            if (!newText.isEmpty()) {
+                neighborAction->setText(std::move(newText));
+            }
         }
+
+        auto viewActionText = viewDocumentTitle;
+        if (includeDirInViewActionText) {
+            auto text = documentDirAndFilename(view->document());
+            if (!text.isEmpty()) {
+                viewActionText = std::move(text);
+            }
+        }
+        viewAction->setText(std::move(viewActionText));
+
+        documentListMenu->insertAction(insertionPoint.next, viewAction);
 
         setAsDockMenu();
+    }
+
+    void insertIntoDocumentListMenu(View* view)
+    {
+        Q_ASSERT(view);
+        Q_ASSERT(!documentListActionForView.contains(view));
+
+        auto* const action = new QAction(documentListMenu);
+        action->setData(QVariant::fromValue(view));
+        action->setIcon(view->document()->icon());
+        ///FIXME: push this code somehow into shell, such that we can access the project model for
+        ///       icons and also get a neat, short path like the document switcher.
+
+        documentListActionForView.insert(view, action);
+        insertIntoDocumentListMenu(view, action);
+    }
+
+    void renameInDocumentListMenu(View* view)
+    {
+        Q_ASSERT(view);
+
+        auto* const action = documentListActionForView.value(view);
+        Q_ASSERT(action);
+        // Here and in Container::removeWidget() we don't consider removing the containing directory name
+        // from the text of former neighbor actions of the [re]moved action, because if
+        // multiple recently open documents shared a file name, it still deserves disambiguation.
+        documentListMenu->removeAction(action);
+        insertIntoDocumentListMenu(view, action);
     }
 
     void setAsDockMenu()
@@ -438,8 +509,8 @@ void Container::addWidget(View *view, int position)
 
     // Update document list context menu. This has to be called before
     // setCurrentWidget, because we call the status icon and title update slots
-    // already, which in turn need the document list menu to be setup.
-    d->updateDocumentListPopupMenu();
+    // from there, which in turn require view to be present in the document list menu.
+    d->insertIntoDocumentListMenu(view);
 
     setCurrentWidget(d->stack->currentWidget());
 
@@ -504,11 +575,12 @@ void Container::documentTitleChanged(Sublime::Document* doc)
             if (tabIndex != -1) {
                 d->tabBar->setTabText(tabIndex, doc->title());
             }
+
+            // Update document list popup title
+            d->renameInDocumentListMenu(view);
             break;
         }
     }
-    // Update document list popup title
-    d->updateDocumentListPopupMenu();
 }
 
 int Container::count() const
