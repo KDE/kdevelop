@@ -5,4 +5,4 @@ remove_definitions(
 )
 
 ecm_add_test(test_docker.cpp
-        LINK_LIBRARIES Qt5::Test Qt5::Core KDev::Interfaces KDevPlatformTests)
+        LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test Qt${QT_MAJOR_VERSION}::Core KDev::Interfaces KDevPlatformTests)

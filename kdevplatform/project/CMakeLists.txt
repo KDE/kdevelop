@@ -45,8 +45,8 @@ PUBLIC
 PRIVATE
     KDev::Serialization
     KDev::Sublime
-    KF5::KIOWidgets
-    Qt5::Concurrent
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    Qt${QT_MAJOR_VERSION}::Concurrent
 )
 
 if(BUILD_TESTING)

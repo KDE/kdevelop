@@ -1,4 +1,7 @@
-find_package(OktetaGui CONFIG)
+if (${KF_MAJOR_VERSION} STREQUAL 6)
+    set(REQ_OKTETA_VERSION 0.11) # make sure we don't bring old Qt5-based okteta
+endif()
+find_package(OktetaGui ${REQ_OKTETA_VERSION} CONFIG)
 set_package_properties(OktetaGui PROPERTIES
     PURPOSE "Required for building MemoryViewer Widget."
     URL "https://kde.org/"
@@ -37,7 +40,7 @@ set(kdevgdb_UI
 
 kde_enable_exceptions()
 ki18n_wrap_ui(kdevgdb_SRCS ${kdevgdb_UI})
-qt5_add_resources(kdevgdb_SRCS kdevgdb.qrc)
+qt_add_resources(kdevgdb_SRCS kdevgdb.qrc)
 
 # common code used by plugin and unit test
 add_library(kdevgdb_static STATIC ${kdevgdb_SRCS})
@@ -47,9 +50,9 @@ target_link_libraries(kdevgdb_static
     KDev::Shell
     KDev::Interfaces
     KDev::IExecute
-    KF5::KIOWidgets
-    Qt5::Core
-    Qt5::Gui
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Gui
 )
 if(OktetaGui_FOUND)
     target_link_libraries(kdevgdb_static OktetaCore OktetaGui)

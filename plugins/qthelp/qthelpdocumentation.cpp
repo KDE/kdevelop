@@ -86,7 +86,7 @@ QString QtHelpDocumentation::description() const
         const int titleStart = match.capturedStart();
         const int titleEnd = titleStart + match.capturedEnd();
         if(titleStart != -1) {
-            const QStringRef between = dataString.midRef(titleEnd, pos-titleEnd).trimmed();
+            const QStringView between = QStringView(dataString).mid(titleEnd, pos-titleEnd).trimmed();
             if(between.isEmpty())
                 pos = titleStart;
         }

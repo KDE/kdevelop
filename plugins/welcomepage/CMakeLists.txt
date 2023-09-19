@@ -7,7 +7,7 @@ set(welcomepage_SRCS
     welcomepageview.cpp
     uihelper.cpp
 )
-qt5_add_resources(welcomepage_SRCS welcomepage.qrc)
+qt_add_resources(welcomepage_SRCS welcomepage.qrc)
 declare_qt_logging_category(welcomepage_SRCS
     TYPE PLUGIN
     IDENTIFIER PLUGIN_WELCOMEPAGE
@@ -25,8 +25,7 @@ target_link_libraries(KDevWelcomePage
     KDev::Sublime
     KDev::Shell
     KDev::Project
-    Qt5::QuickWidgets
-    KF5::Declarative
+    Qt${QT_MAJOR_VERSION}::QuickWidgets
 )
 # see https://bugs.launchpad.net/ubuntu/+source/gcc-5/+bug/1568899
 if (UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "6.0.0")

@@ -31,9 +31,12 @@ target_link_libraries(kdevgit
     KDev::Interfaces
     KDev::Vcs
     KDev::Project
-    KF5::SonnetUi
-    KF5::TextEditor
+    KF${KF_MAJOR_VERSION}::SonnetUi
+    KF${KF_MAJOR_VERSION}::TextWidgets
 )
+if (QT_MAJOR_VERSION STREQUAL 6)
+    target_link_libraries(kdevgit Qt::Core5Compat)
+endif()
 
 if(BUILD_TESTING)
     add_subdirectory(tests)

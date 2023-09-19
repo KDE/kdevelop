@@ -34,7 +34,7 @@ ki18n_wrap_ui(kdevfiletemplates_PART_SRCS
 )
 
 install(FILES kdevfiletemplates.knsrc  DESTINATION ${KDE_INSTALL_KNSRCDIR})
-qt5_add_resources(kdevfiletemplates_PART_SRCS kdevfiletemplates.qrc)
+qt_add_resources(kdevfiletemplates_PART_SRCS kdevfiletemplates.qrc)
 
 kdevplatform_add_plugin(kdevfiletemplates SOURCES ${kdevfiletemplates_PART_SRCS})
 
@@ -43,8 +43,11 @@ target_link_libraries(kdevfiletemplates
     KDev::Language
     KDev::Project
     KDev::Util
-    KF5::NewStuffWidgets
-    KF5::TextEditor
+    KF${KF_MAJOR_VERSION}::NewStuffWidgets
+    KF${KF_MAJOR_VERSION}::TextEditor
+    KF${KF_MAJOR_VERSION}::Service
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF${KF_MAJOR_VERSION}::TextWidgets
 )
 
 ########### install files ###############
@@ -94,7 +97,7 @@ if(BUILD_TESTING)
         KDev::Project
         KDev::Util
         KDev::Tests
-        KF5::NewStuffWidgets
+        KF${KF_MAJOR_VERSION}::NewStuffWidgets
     )
 
     add_subdirectory(tests)

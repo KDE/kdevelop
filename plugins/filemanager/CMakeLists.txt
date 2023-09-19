@@ -10,14 +10,14 @@ declare_qt_logging_category(kdevfilemanager_PART_SRCS
     IDENTIFIER PLUGIN_FILEMANAGER
     CATEGORY_BASENAME "filemanager"
 )
-qt5_add_resources(kdevfilemanager_PART_SRCS kdevfilemanager.qrc)
+qt_add_resources(kdevfilemanager_PART_SRCS kdevfilemanager.qrc)
 kdevplatform_add_plugin(kdevfilemanager SOURCES ${kdevfilemanager_PART_SRCS})
 target_link_libraries(kdevfilemanager
     KDev::Interfaces
     KDev::Sublime
-    KF5::Bookmarks
-    KF5::KIOCore
-    KF5::KIOFileWidgets
-    KF5::KIOWidgets
-    KF5::TextEditor
+    KF${KF_MAJOR_VERSION}::Bookmarks
+    KF${KF_MAJOR_VERSION}::KIOCore
+    KF${KF_MAJOR_VERSION}::KIOFileWidgets
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF${KF_MAJOR_VERSION}::TextEditor
 )
