@@ -67,7 +67,7 @@ private Q_SLOTS:
         KDevVarLengthArray<int, 10> array;
         array.append(1);
         array << 2;
-        array.insert(0, 0);
+        array.prepend(0);
         QCOMPARE(array.back(), 2);
         array.pop_back();
         QCOMPARE(array.back(), 1);
@@ -75,7 +75,7 @@ private Q_SLOTS:
         QVERIFY(array.removeOne(1));
         QCOMPARE(array.toList(), QList<int>() << 0 << 1);
         QCOMPARE(array.toVector(), QVector<int>() << 0 << 1);
-        array.insert(0, 42);
+        array.prepend(42);
         QCOMPARE(array.toVector(), QVector<int>() << 42 << 0 << 1);
         array.remove(0);
         QCOMPARE(array.toVector(), QVector<int>() << 0 << 1);

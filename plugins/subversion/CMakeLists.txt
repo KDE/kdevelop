@@ -55,15 +55,18 @@ ki18n_wrap_ui(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
 
 kdevplatform_add_plugin(kdevsubversion SOURCES ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS})
 target_link_libraries(kdevsubversion
-    KF5::KIOCore
-    KF5::TextEditor
-    KF5::ThreadWeaver
-    KF5::Parts
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF${KF_MAJOR_VERSION}::TextEditor
+    KF${KF_MAJOR_VERSION}::ThreadWeaver
+    KF${KF_MAJOR_VERSION}::Parts
     KDev::Interfaces
     KDev::Vcs
     KDev::OutputView
     KDev::Project
     kdevsvncpp
 )
+if(QT_MAJOR_VERSION STREQUAL 6)
+    target_link_libraries(kdevsubversion KF${KF_MAJOR_VERSION}::TextWidgets)
+endif()
 
 install(PROGRAMS org.kde.kdevelop_svn.desktop DESTINATION ${KDE_INSTALL_APPDIR})

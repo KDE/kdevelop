@@ -10,4 +10,4 @@ include(KDECMakeSettings)
 find_package(KF5 REQUIRED WidgetsAddons)
 
 add_executable(myprogram main.cpp)
-target_link_libraries(myprogram KF5::WidgetsAddons)
+target_link_libraries(myprogram KF${KF_MAJOR_VERSION}::WidgetsAddons)

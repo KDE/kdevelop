@@ -43,11 +43,7 @@
 
 #include <optional>
 
-int main(int argc, char** argv)
-{
-    KDevelop::sanitizerTestInit(argv);
-    QTEST_MAIN_IMPL(TestCodeCompletion)
-}
+QTEST_MAIN_WRAPPER(TestCodeCompletion, QApplication app(argc, argv); KDevelop::sanitizerTestInit(argv););
 
 static const auto NoMacroOrBuiltin = ClangCodeCompletionContext::ContextFilters(
     ClangCodeCompletionContext::NoBuiltins | ClangCodeCompletionContext::NoMacros);

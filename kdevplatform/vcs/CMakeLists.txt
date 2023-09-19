@@ -60,9 +60,13 @@ PUBLIC
     KDev::Interfaces
 PRIVATE
     KDev::Util
-    KF5::KIOWidgets
-    KF5::Parts
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF${KF_MAJOR_VERSION}::Parts
 )
+
+if(QT_MAJOR_VERSION STREQUAL 6)
+    target_link_libraries(KDevPlatformVcs PRIVATE KF6::TextWidgets)
+endif()
 
 install(FILES
     vcsjob.h

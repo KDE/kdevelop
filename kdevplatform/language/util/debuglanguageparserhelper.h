@@ -167,9 +167,9 @@ void setCustomArgs(ParserT* parser, QCommandLineParser* commandLineParser)
 template <class ParserT>
 int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
 {
-    qout.setCodec("UTF-8");
-    qerr.setCodec("UTF-8");
-    qin.setCodec("UTF-8");
+    qout.setEncoding(QStringConverter::Utf8);
+    qerr.setEncoding(QStringConverter::Utf8);
+    qin.setEncoding(QStringConverter::Utf8);
 
     QCoreApplication app(argc, argv);
 

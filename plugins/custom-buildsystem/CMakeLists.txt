@@ -1,4 +1,4 @@
-add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustombuildsystem\")
+add_definitions(-DTRANSLATION_DOMAIN=\"KDevCustomBuildSystem\")
 declare_qt_logging_category(custom_LOG_SRCS
     TYPE PLUGIN
     IDENTIFIER CUSTOMBUILDSYSTEM
@@ -18,12 +18,13 @@ set(custom_SRCS
 ki18n_wrap_ui(custom_SRCS configwidget.ui custombuildsystemconfigwidget.ui)
 kconfig_add_kcfg_files(custom_SRCS kcfg_custombuildsystemconfig.kcfgc )
 
-kdevplatform_add_plugin(kdevcustombuildsystem SOURCES ${custom_SRCS})
-target_link_libraries(kdevcustombuildsystem
+kdevplatform_add_plugin(KDevCustomBuildSystem SOURCES ${custom_SRCS})
+target_link_libraries(KDevCustomBuildSystem
       KDev::Project
       KDev::Interfaces
       KDev::Util
       KDev::OutputView
+      KF${KF_MAJOR_VERSION}::KIOWidgets
 )
 
 ## Unittests

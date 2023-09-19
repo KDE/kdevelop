@@ -18,7 +18,7 @@ set(test_manpagemodel_SRCS
 ecm_add_test(${test_manpagemodel_SRCS}
     TEST_NAME test_manpagemodel
     LINK_LIBRARIES
-        Qt5::Test
+        Qt${QT_MAJOR_VERSION}::Test
         KDev::Documentation
         KDev::Interfaces
         KDev::Language

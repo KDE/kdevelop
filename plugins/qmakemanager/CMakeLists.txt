@@ -29,6 +29,7 @@ ki18n_wrap_ui(qmakecommon_SRCS qmakebuilddirchooser.ui)
 add_library(kdevqmakecommon STATIC ${qmakecommon_SRCS})
 target_link_libraries(kdevqmakecommon
     KDev::Interfaces KDev::Project KDev::Util
+    KF${KF_MAJOR_VERSION}::KIOWidgets
     kdevqmakeparser)
 
 kdevplatform_add_plugin(KDevQMakeManager SOURCES qmakemanager.cpp
