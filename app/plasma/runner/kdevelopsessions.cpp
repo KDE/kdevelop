@@ -18,21 +18,17 @@
 
 K_PLUGIN_CLASS_WITH_JSON(KDevelopSessions, "kdevelopsessions.json")
 
-KDevelopSessions::KDevelopSessions(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
-    : Plasma::AbstractRunner(parent, metaData, args)
+KDevelopSessions::KDevelopSessions(QObject* parent, const KPluginMetaData& metaData)
+    : KRunner::AbstractRunner(parent, metaData)
 {
     setObjectName(QStringLiteral("KDevelop Sessions"));
 
-#if KRUNNER_VERSION < QT_VERSION_CHECK(5, 106, 0)
-    Plasma::RunnerSyntax s(QStringLiteral(":q:"), i18n("Finds KDevelop sessions matching :q:."));
-    s.addExampleQuery(QStringLiteral("kdevelop :q:"));
-#else
-    Plasma::RunnerSyntax s({QStringLiteral(":q:"), QStringLiteral("kdevelop :q:")},
-                           i18n("Finds KDevelop sessions matching :q:."));
-#endif
+    KRunner::RunnerSyntax s({QStringLiteral(":q:"), QStringLiteral("kdevelop :q:")},
+                            i18n("Finds KDevelop sessions matching :q:."));
     addSyntax(s);
 
-    addSyntax(Plasma::RunnerSyntax(QStringLiteral("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
+    addSyntax(KRunner::RunnerSyntax(QStringLiteral("kdevelop"),
+                                    i18n("Lists all the KDevelop editor sessions in your account.")));
 }
 
 KDevelopSessions::~KDevelopSessions()
@@ -44,7 +40,7 @@ void KDevelopSessions::init()
 {
     KDevelopSessionsWatch::registerObserver(this);
 
-    Plasma::AbstractRunner::init();
+    KRunner::AbstractRunner::init();
 }
 
 void KDevelopSessions::setSessionDataList(const QVector<KDevelopSessionData>& sessionDataList)
@@ -52,7 +48,7 @@ void KDevelopSessions::setSessionDataList(const QVector<KDevelopSessionData>& se
     m_sessionDataList = sessionDataList;
 }
 
-void KDevelopSessions::match(Plasma::RunnerContext &context)
+void KDevelopSessions::match(KRunner::RunnerContext& context)
 {
     QString term = context.query();
     if (term.size() < 3) {
@@ -87,39 +83,19 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
         }
 
         if (listAll || (!term.isEmpty() && session.description.contains(term, Qt::CaseInsensitive))) {
-            Plasma::QueryMatch match(this);
+            KRunner::QueryMatch match(this);
             if (listAll) {
                 // All sessions listed, but with a low priority
-#if KRUNNER_VERSION < QT_VERSION_CHECK(5, 113, 0)
-                match.setType(Plasma::QueryMatch::ExactMatch);
-#else
-                match.setCategoryRelevance(Plasma::QueryMatch::CategoryRelevance::Highest);
-#endif
+                match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Highest);
                 match.setRelevance(0.8);
             } else {
                 if (session.description.compare(term, Qt::CaseInsensitive) == 0) {
                     // parameter to kdevelop matches session exactly, bump it up!
-#if KRUNNER_VERSION < QT_VERSION_CHECK(5, 113, 0)
-                    match.setType(Plasma::QueryMatch::ExactMatch);
-#else
-                    match.setCategoryRelevance(Plasma::QueryMatch::CategoryRelevance::Highest);
-#endif
+                    match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Highest);
                     match.setRelevance(1.0);
                 } else {
                     // fuzzy match of the session in "kdevelop $session"
-#if KRUNNER_VERSION < QT_VERSION_CHECK(5, 113, 0)
-                    match.setType(Plasma::QueryMatch::PossibleMatch);
-                    // Note: using categoryRelevance CategoryRelevance::Moderate with the newer API below,
-                    // instead of the integer value equivalent CategoryRelevance::Low, despite KRunner/KF5
-                    // implementation directly casting the respective enum values.
-                    // Because only this runner is feeding the "kdevelop" category, and the only purpose of
-                    // the type property has been to sort relevance. So the value used here just needs to be
-                    // lower than CategoryRelevance::Highest. Low=30 though seems unbalanced with Highest=100,
-                    // also is partial matching not really of "low" relevance, but with the search-as-you-type
-                    // KRunner interaction also rather more common to already deliver a relevant hit.
-#else
-                    match.setCategoryRelevance(Plasma::QueryMatch::CategoryRelevance::Moderate);
-#endif
+                    match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Moderate);
                     match.setRelevance(0.8);
                 }
             }
@@ -132,7 +108,7 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
     }
 }
 
-void KDevelopSessions::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match)
+void KDevelopSessions::run(const KRunner::RunnerContext& context, const KRunner::QueryMatch& match)
 {
     Q_UNUSED(context)
     const QString sessionId = match.data().toString();

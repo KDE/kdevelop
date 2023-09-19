@@ -19,6 +19,7 @@ Dependencies:
 
 - 'on': ['Linux', 'FreeBSD']
   'require':
+    'frameworks/krunner': '@latest-kf6'
     'plasma/libksysguard': '@latest-kf6'
     'plasma/libplasma': '@latest-kf6'
 

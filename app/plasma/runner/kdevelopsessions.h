@@ -12,20 +12,18 @@
 // KF
 #include <KRunner/AbstractRunner>
 
-
-class KDevelopSessions : public Plasma::AbstractRunner
-                       , public KDevelopSessionsObserver
+class KDevelopSessions : public KRunner::AbstractRunner, public KDevelopSessionsObserver
 {
     Q_OBJECT
     Q_INTERFACES(KDevelopSessionsObserver)
 
 public:
-    KDevelopSessions(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
+    KDevelopSessions(QObject* parent, const KPluginMetaData& metaData);
     ~KDevelopSessions() override;
 
 public:
-    void match(Plasma::RunnerContext &context) override;
-    void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match) override;
+    void match(KRunner::RunnerContext& context) override;
+    void run(const KRunner::RunnerContext& context, const KRunner::QueryMatch& match) override;
 
 protected:
     void init() override;
