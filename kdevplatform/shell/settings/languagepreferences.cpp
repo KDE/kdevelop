@@ -10,7 +10,6 @@
 
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
-#include <KTextEditor/CodeCompletionInterface>
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
@@ -65,9 +64,7 @@ void LanguagePreferences::apply()
         if (Document* textDoc = doc->textDocument()) {
             const auto views = textDoc->views();
             for (View* view : views) {
-                if (auto* cc = qobject_cast<CodeCompletionInterface*>(view)) {
-                    cc->setAutomaticInvocationEnabled(preferencesDialog->kcfg_automaticInvocation->isChecked());
-                }
+                view->setAutomaticInvocationEnabled(preferencesDialog->kcfg_automaticInvocation->isChecked());
             }
         }
     }

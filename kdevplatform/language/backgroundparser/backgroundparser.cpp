@@ -20,6 +20,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KLocalizedString>
+#include <KTextEditor/Document>
 
 #include <ThreadWeaver/State>
 #include <ThreadWeaver/ThreadWeaver>

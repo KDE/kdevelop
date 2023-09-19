@@ -286,8 +286,8 @@ QStringList OpenProjectDialog::projectManagerForFile(const QString& file) const
     for (auto it = m_projectFilters.begin(), end = m_projectFilters.end(); it != end; ++it) {
         const QString& manager = it.key();
         for (const QString& filterexp : it.value()) {
-            QRegExp exp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard );
-            if ( exp.exactMatch(file) ) {
+            QRegularExpression exp(QRegularExpression::wildcardToRegularExpression(filterexp));
+            if (auto m = exp.match(file); m.hasMatch()) {
                 ret.append(manager);
             }
         }
