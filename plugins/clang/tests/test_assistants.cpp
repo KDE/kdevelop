@@ -48,11 +48,8 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
-int main(int argc, char** argv)
-{
-    KDevelop::sanitizerTestInit(argv);
-    QTEST_MAIN_IMPL(TestAssistants)
-}
+// TODO: QTEST_MAIN_WRAPPER not part of public documented API
+QTEST_MAIN_WRAPPER(TestAssistants, KDevelop::sanitizerTestInit(argv); QApplication app(argc, argv););
 
 ForegroundLock *globalTestLock = nullptr;
 StaticAssistantsManager *staticAssistantsManager() { return Core::self()->languageController()->staticAssistantsManager(); }
