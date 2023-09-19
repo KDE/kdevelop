@@ -12,7 +12,6 @@
 
 #include <KColorScheme>
 #include <KTextEditor/Document>
-#include <KTextEditor/InlineNoteInterface>
 #include <KTextEditor/View>
 
 #include <QIcon>
@@ -52,10 +51,7 @@ ProblemInlineNoteProvider::ProblemInlineNoteProvider(KTextEditor::Document* docu
     : m_document{document}
 {
     auto registerProvider = [this] (KTextEditor::Document*, KTextEditor::View* view) {
-        auto* inlineNoteIface = qobject_cast<KTextEditor::InlineNoteInterface*>(view);
-        if(inlineNoteIface) {
-            inlineNoteIface->registerInlineNoteProvider(this);
-        }
+        view->registerInlineNoteProvider(this);
     };
     for (auto* view : m_document->views()) {
        registerProvider(m_document, view);
@@ -71,10 +67,7 @@ ProblemInlineNoteProvider::~ProblemInlineNoteProvider()
         return;
     }
     for (auto* view : m_document->views()) {
-        auto* inlineNoteIface = qobject_cast<KTextEditor::InlineNoteInterface*>(view);
-        if(inlineNoteIface) {
-            inlineNoteIface->unregisterInlineNoteProvider(this);
-        }
+        view->unregisterInlineNoteProvider(this);
     }
 }
 
@@ -201,7 +194,7 @@ QSize ProblemInlineNoteProvider::inlineNoteSize(const KTextEditor::InlineNote& n
     return {layout.descriptionX + boundingRect.width() + layout.rightMargin, note.lineHeight()};
 }
 
-void ProblemInlineNoteProvider::paintInlineNote(const KTextEditor::InlineNote& note, QPainter& painter) const
+void ProblemInlineNoteProvider::paintInlineNote(const KTextEditor::InlineNote& note, QPainter &painter, Qt::LayoutDirection direction) const
 {
     InlineNoteLayout layout;
     doInlineNoteLayout(note, &layout);

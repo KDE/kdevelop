@@ -12,7 +12,7 @@
 
 #include <QAbstractTableModel>
 
-#include <KTextEditor/MarkInterface>
+#include <KTextEditor/Document>
 #include "breakpoint.h"
 
 class QUrl;
@@ -151,7 +151,7 @@ public Q_SLOTS:
     void load();
 
 private:
-    using MarkType = KTextEditor::MarkInterface::MarkTypes;
+    using MarkType = KTextEditor::Document::MarkTypes;
     static constexpr MarkType BreakpointMark = MarkType::BreakpointActive;
     static constexpr MarkType ReachedBreakpointMark = MarkType::BreakpointReached;
     static constexpr MarkType DisabledBreakpointMark = MarkType::BreakpointDisabled;
@@ -161,7 +161,7 @@ private:
         MarkType(BreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark | PendingBreakpointMark);
 
 private Q_SLOTS:
-    void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
+    void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::Document::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
     void aboutToReload();
     void aboutToInvalidateMovingInterfaceContent(KTextEditor::Document* document);
@@ -169,8 +169,7 @@ private Q_SLOTS:
     void documentSaved(KDevelop::IDocument*);
     void aboutToDeleteMovingInterfaceContent(KTextEditor::Document *document);
 
-    void markContextMenuRequested( KTextEditor::Document* document, KTextEditor::Mark mark,
-                               const QPoint &pos, bool& handled );
+    void markContextMenuRequested(KTextEditor::Document *document, KTextEditor::Mark mark, QPoint pos, bool &handled);
 
 private:
     static const QPixmap* breakpointPixmap();

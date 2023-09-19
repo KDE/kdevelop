@@ -8,8 +8,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <backgroundparser/backgroundparser.h>
-
-#include <KTextEditor/MovingInterface>
 #include <KTextEditor/Document>
 
 void KDevelop::PersistentMovingRangePrivate::connectTracker()
@@ -21,7 +19,7 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
 
     if (m_tracker) {
         // Create a moving range
-        m_movingRange = m_tracker->documentMovingInterface()->newMovingRange(m_range);
+        m_movingRange = m_tracker->document()->newMovingRange(m_range);
         if (m_shouldExpand)
             m_movingRange->setInsertBehaviors(
                 KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);

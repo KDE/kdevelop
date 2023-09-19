@@ -1285,7 +1285,6 @@ void DocumentController::vcsAnnotateCurrentDocument()
         auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
         connect(doc->textDocument(), &KTextEditor::Document::aboutToClose,
                 helper, QOverload<KTextEditor::Document*>::of(&VcsPluginHelper::disposeEventually));
-        Q_ASSERT(qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->activeTextView()));
         // can't use new signal slot syntax here, AnnotationViewInterface is not a QObject
         connect(doc->activeTextView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
                 helper, SLOT(disposeEventually(View*,bool)));
