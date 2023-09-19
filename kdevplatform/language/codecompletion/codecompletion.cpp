@@ -19,7 +19,6 @@
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 #include <KTextEditor/CodeCompletionModel>
-#include <KTextEditor/CodeCompletionInterface>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -60,11 +59,9 @@ void CodeCompletion::viewCreated(KTextEditor::Document* document, KTextEditor::V
 {
     Q_UNUSED(document);
 
-    if (auto* cc = qobject_cast<CodeCompletionInterface*>(view)) {
-        cc->registerCompletionModel(m_model);
-        qCDebug(LANGUAGE) << "Registered completion model";
-        emit registeredToView(view);
-    }
+    view->registerCompletionModel(m_model);
+    qCDebug(LANGUAGE) << "Registered completion model";
+    emit registeredToView(view);
 }
 
 void CodeCompletion::documentUrlChanged(KDevelop::IDocument* document)
@@ -87,10 +84,8 @@ void CodeCompletion::unregisterDocument(Document* textDocument)
 {
     const auto views = textDocument->views();
     for (KTextEditor::View* view : views) {
-        if (auto* cc = qobject_cast<CodeCompletionInterface*>(view)) {
-            cc->unregisterCompletionModel(m_model);
-            emit unregisteredFromView(view);
-        }
+        view->unregisterCompletionModel(m_model);
+        emit unregisteredFromView(view);
     }
 
     disconnect(textDocument, &Document::viewCreated, this, &CodeCompletion::viewCreated);

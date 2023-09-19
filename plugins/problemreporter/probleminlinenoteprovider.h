@@ -31,7 +31,7 @@ public:
 
     QVector<int> inlineNotes(int line) const override;
     QSize inlineNoteSize(const KTextEditor::InlineNote& note) const override;
-    void paintInlineNote(const KTextEditor::InlineNote& note, QPainter& painter) const override;
+    void paintInlineNote(const KTextEditor::InlineNote& note, QPainter &painter, Qt::LayoutDirection direction) const override;
 private:
     void completionSettingsChanged();
 

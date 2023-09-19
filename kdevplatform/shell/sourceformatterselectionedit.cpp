@@ -19,11 +19,11 @@
 
 #include <KMessageBox>
 #include <KTextEditor/Editor>
-#include <KTextEditor/ConfigInterface>
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 #include <KLocalizedString>
 #include <KConfig>
+#include <QListWidget>
 
 #include <QMetaType>
 #include <QMimeDatabase>
@@ -680,21 +680,16 @@ void SourceFormatterSelectionEditPrivate::updatePreview()
 
     //NOTE: this is ugly, but otherwise kate might remove tabs again :-/
     // see also: https://bugs.kde.org/show_bug.cgi?id=291074
-    auto* const iface = qobject_cast<KTextEditor::ConfigInterface*>(document);
     const QString replaceTabsConfigKey = QStringLiteral("replace-tabs");
     QVariant oldReplaceTabsConfigValue;
-    if (iface) {
-        oldReplaceTabsConfigValue = iface->configValue(replaceTabsConfigKey);
-        iface->setConfigValue(replaceTabsConfigKey, false);
-    }
+    oldReplaceTabsConfigValue = document->configValue(replaceTabsConfigKey);
+    document->setConfigValue(replaceTabsConfigKey, false);
 
     const auto& formatter = currentFormatter().formatter();
     document->setText(
         formatter.formatSourceWithStyle(currentStyle, formatter.previewText(currentStyle, mimeType), QUrl(), mimeType));
 
-    if (iface) {
-        iface->setConfigValue(replaceTabsConfigKey, oldReplaceTabsConfigValue);
-    }
+    document->setConfigValue(replaceTabsConfigKey, oldReplaceTabsConfigValue);
 
     ui.previewArea->show();
     view->setCursorPosition(KTextEditor::Cursor(0, 0));
@@ -824,15 +819,11 @@ SourceFormatterSelectionEdit::SourceFormatterSelectionEdit(QWidget* parent)
     layout2->setContentsMargins(0, 0, 0, 0);
     layout2->addWidget(d->view);
     d->ui.textEditor->setLayout(layout2);
+    d->view->setConfigValue(QStringLiteral("dynamic-word-wrap"), false);
+    d->view->setConfigValue(QStringLiteral("icon-bar"), false);
+    d->view->setConfigValue(QStringLiteral("scrollbar-minimap"), false);
     d->view->show();
 
-    KTextEditor::ConfigInterface *iface =
-    qobject_cast<KTextEditor::ConfigInterface*>(d->view);
-    if (iface) {
-        iface->setConfigValue(QStringLiteral("dynamic-word-wrap"), false);
-        iface->setConfigValue(QStringLiteral("icon-bar"), false);
-        iface->setConfigValue(QStringLiteral("scrollbar-minimap"), false);
-    }
 
     SourceFormatterController* controller = Core::self()->sourceFormatterControllerInternal();
     connect(controller, &SourceFormatterController::formatterLoaded,

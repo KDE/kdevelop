@@ -28,6 +28,8 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
+#include <KTextEditor/Document>
+
 #include "clangsettings/clangsettingsmanager.h"
 #include "duchain/clanghelpers.h"
 #include "duchain/clangpch.h"

@@ -23,7 +23,6 @@
 #include <KParts/MainWindow>
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
-#include <KTextEditor/MovingInterface>
 
 using namespace KDevelop;
 

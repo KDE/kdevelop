@@ -20,6 +20,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KLocalizedString>
+#include <KTextEditor/Document>
 
 #include <ThreadWeaver/State>
 #include <ThreadWeaver/ThreadWeaver>
@@ -67,7 +68,7 @@ QString elidedPathLeft(const QString& path, int width)
     }
     Q_ASSERT(path.size() - pos >= 0 && path.size() - pos <= width);
 
-    QStringRef elidedText = path.rightRef(path.size() - pos);
+    QStringView elidedText = QStringView(path).right(path.size() - pos);
     const QString result = placeholder + elidedText;
     return result;
 }

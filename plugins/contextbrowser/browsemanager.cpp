@@ -32,7 +32,6 @@
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KTextEditor/CodeCompletionInterface>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -212,8 +211,7 @@ bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
         }
 
         if (keyEvent->key() == magicModifier) {
-            if (qobject_cast<KTextEditor::CodeCompletionInterface*>(view) &&
-                qobject_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive()) {
+            if (view->isCompletionActive()) {
                 //Completion is active.
                 avoidMenuAltFocus();
                 m_delayedBrowsingTimer->stop();

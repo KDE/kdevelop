@@ -10,6 +10,7 @@
 #include "../duchain/stringhelpers.h"
 
 #include <QReadWriteLock>
+#include <KTextEditor/Document>
 
 namespace KDevelop {
 class ILanguageSupportPrivate

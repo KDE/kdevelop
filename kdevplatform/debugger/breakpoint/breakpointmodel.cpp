@@ -16,7 +16,6 @@
 
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <KTextEditor/MovingInterface>
 
 #include "../interfaces/icore.h"
 #include "../interfaces/idebugcontroller.h"
@@ -110,23 +109,22 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 
     KTextEditor::Document* const textDocument = doc->textDocument();
 
-    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(textDocument);
+    auto* const imark = textDocument;
     if (imark) {
         imark->setMarkDescription(BreakpointMark, i18n("Breakpoint"));
-        imark->setMarkPixmap(BreakpointMark, *breakpointPixmap());
-        imark->setMarkPixmap(PendingBreakpointMark, *pendingBreakpointPixmap());
-        imark->setMarkPixmap(ReachedBreakpointMark, *reachedBreakpointPixmap());
-        imark->setMarkPixmap(DisabledBreakpointMark, *disabledBreakpointPixmap());
-        imark->setEditableMarks(MarkInterface::Bookmark | BreakpointMark);
+        imark->setMarkIcon(BreakpointMark, *breakpointPixmap());
+        imark->setMarkIcon(PendingBreakpointMark, *pendingBreakpointPixmap());
+        imark->setMarkIcon(ReachedBreakpointMark, *reachedBreakpointPixmap());
+        imark->setMarkIcon(DisabledBreakpointMark, *disabledBreakpointPixmap());
+        imark->setEditableMarks(KTextEditor::Document::Bookmark | KTextEditor::Document::BreakpointActive);
 
         // Set up breakpoints *before* connecting to the document's signals.
         setupDocumentBreakpoints(*textDocument);
-
         // can't use new signal slot syntax here, MarkInterface is not a QObject
-        connect(textDocument, SIGNAL(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)),
-                 this, SLOT(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)));
-        connect(textDocument, SIGNAL(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
-                SLOT(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
+        connect(textDocument, &KTextEditor::Document::markChanged,
+                 this, &BreakpointModel::markChanged);
+        connect(textDocument, &KTextEditor::Document::markContextMenuRequested,
+                this, &BreakpointModel::markContextMenuRequested);
     }
 
     connect(textDocument, &KTextEditor::Document::aboutToReload, this, &BreakpointModel::aboutToReload);
@@ -279,8 +277,7 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
 
     d->reloadState = ReloadState::Idle;
 }
-
-void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, const QPoint &pos, bool& handled)
+void BreakpointModel::markContextMenuRequested(KTextEditor::Document *document, KTextEditor::Mark mark, QPoint pos, bool &handled)
 {
     int type = mark.type;
     qCDebug(DEBUGGER) << type;
@@ -291,7 +288,7 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
         if (!b) {
             QMessageBox::critical(nullptr, i18n("Breakpoint not found"), i18n("Couldn't find breakpoint at %1:%2", document->url().toString(), mark.line));
         }
-    } else if (!(type & MarkInterface::Bookmark)) // neither breakpoint nor bookmark
+    } else if (!(type & Document::Bookmark)) // neither breakpoint nor bookmark
         return;
 
     QMenu menu; // TODO: needs qwidget
@@ -307,16 +304,15 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
     menu.addSeparator();
     QAction* bookmarkAction = menu.addAction(QIcon::fromTheme(QStringLiteral("bookmark-new")), i18n("&Bookmark"));
     bookmarkAction->setCheckable(true);
-    bookmarkAction->setChecked((type & MarkInterface::Bookmark));
+    bookmarkAction->setChecked((type & Document::Bookmark));
 
     QAction* triggeredAction = menu.exec(pos);
     if (triggeredAction) {
         if (triggeredAction == bookmarkAction) {
-            KTextEditor::MarkInterface *iface = qobject_cast<KTextEditor::MarkInterface*>(document);
-            if ((type & MarkInterface::Bookmark))
-                iface->removeMark(mark.line, MarkInterface::Bookmark);
+            if ((type & Document::Bookmark))
+                document->removeMark(mark.line, Document::Bookmark);
             else
-                iface->addMark(mark.line, MarkInterface::Bookmark);
+                document->addMark(mark.line, Document::Bookmark);
         } else if (triggeredAction == breakpointAction) {
             if (b) {
                 removeBreakpoint(b);
@@ -478,7 +474,7 @@ void BreakpointModel::notifyHit(int row)
 void BreakpointModel::markChanged(
     KTextEditor::Document *document,
     KTextEditor::Mark mark,
-    KTextEditor::MarkInterface::MarkChangeAction action)
+    KTextEditor::Document::MarkChangeAction action)
 {
     Q_D(const BreakpointModel);
 
@@ -489,7 +485,7 @@ void BreakpointModel::markChanged(
     if (d->inhibitMarkChange)
         return;
 
-    if (action == KTextEditor::MarkInterface::MarkAdded) {
+    if (action == KTextEditor::Document::MarkAdded) {
         Breakpoint *b = breakpoint(document->url(), mark.line);
         if (b) {
             // This happens when the user Ctrl+clicks a mark of a breakpoint type
@@ -591,6 +587,7 @@ ScopedIncrementor BreakpointModel::markChangeGuard()
     Q_D(BreakpointModel);
 
     return ScopedIncrementor(d->inhibitMarkChange);
+
 }
 
 void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
@@ -625,7 +622,7 @@ void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document*
 
 void BreakpointModel::load()
 {
-    KConfigGroup breakpoints = ICore::self()->activeSession()->config()->group("Breakpoints");
+    KConfigGroup breakpoints = ICore::self()->activeSession()->config()->group(QStringLiteral("Breakpoints"));
     int count = breakpoints.readEntry("number", 0);
     if (count == 0)
         return;
@@ -797,17 +794,13 @@ void BreakpointModel::setupMovingCursor(Breakpoint* breakpoint, KTextEditor::Doc
     Q_ASSERT(line >= 0);
     Q_ASSERT(line < document->lines());
 
-    auto* const movingInterface = qobject_cast<KTextEditor::MovingInterface*>(document);
-    if (!movingInterface) {
-        breakpoint->stopDocumentLineTracking();
-        return;
-    }
+    breakpoint->stopDocumentLineTracking();
 
     // can't use new signal/slot syntax here, MovingInterface is not a QObject
     connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this,
             SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
 
-    breakpoint->restartDocumentLineTrackingAt(movingInterface->newMovingCursor(KTextEditor::Cursor(line, 0)));
+    breakpoint->restartDocumentLineTrackingAt(document->newMovingCursor(KTextEditor::Cursor(line, 0)));
 }
 
 #include "moc_breakpointmodel.cpp"
