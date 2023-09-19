@@ -29,7 +29,6 @@
 #include <KColorScheme>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <KTextEditor/MovingInterface>
 #include <KTextEditor/MovingRange>
 #include <KTextEditor/View>
 

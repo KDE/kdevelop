@@ -15,7 +15,7 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <KTextEditor/MarkInterface>
+#include <KTextEditor/Document>
 #include <KXMLGUIFactory>
 
 #include "../interfaces/idocument.h"
@@ -202,11 +202,7 @@ VariableCollection* DebugController::variableCollection()
 void DebugController::partAdded(KParts::Part* part)
 {
     if (auto* doc = qobject_cast<KTextEditor::Document*>(part)) {
-        auto* iface = qobject_cast<KTextEditor::MarkInterface*>(doc);
-        if( !iface )
-            return;
-
-        iface->setMarkPixmap(KTextEditor::MarkInterface::Execution, *executionPointPixmap());
+        doc->setMarkIcon(KTextEditor::Document::Execution, *executionPointPixmap());
     }
 }
 
@@ -356,14 +352,13 @@ void DebugController::clearExecutionPoint()
 
     const auto documents = documentController->openDocuments();
     for (KDevelop::IDocument* document : documents) {
-        auto* iface = qobject_cast<KTextEditor::MarkInterface*>(document->textDocument());
-        if (!iface)
+        if (!document->textDocument()) {
             continue;
-
-        const auto oldMarks = iface->marks();
+        }
+        const auto oldMarks = document->textDocument()->marks();
         for (KTextEditor::Mark* mark : oldMarks) {
-            if (mark->type & KTextEditor::MarkInterface::Execution) {
-                iface->removeMark( mark->line, KTextEditor::MarkInterface::Execution );
+            if (mark->type & KTextEditor::Document::Execution) {
+                document->textDocument()->removeMark( mark->line, KTextEditor::Document::Execution );
             }
         }
     }
@@ -382,16 +377,10 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
         ->documentController()
         ->openDocument(openUrl.first, KTextEditor::Cursor(openUrl.second, 0), IDocumentController::DoNotFocus);
 
-    if( !document )
-        return;
-
-    auto* iface = qobject_cast<KTextEditor::MarkInterface*>(document->textDocument());
-    if( !iface )
-        return;
-
+    if( document && document->textDocument() )
     {
         QSignalBlocker blocker(document->textDocument());
-        iface->addMark( lineNum, KTextEditor::MarkInterface::Execution );
+        document->textDocument()->addMark( lineNum, KTextEditor::Document::Execution );
     }
 }
 

@@ -20,7 +20,7 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
-#include <KTextEditor/MovingInterface>
+#include <KTextEditor/Document>
 #include <KTextEditor/View>
 
 #include <QAction>

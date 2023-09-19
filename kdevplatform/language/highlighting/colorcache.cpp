@@ -24,7 +24,6 @@
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KTextEditor/ConfigInterface>
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/Format>
 
@@ -197,7 +196,7 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
     QColor foreground(QColor::Invalid);
     QColor background(QColor::Invalid);
 
-    KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::dsNormal);
+    KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KSyntaxHighlighting::Theme::Normal);
     foreground = style->foreground().color();
     if (style->hasProperty(QTextFormat::BackgroundBrush)) {
         background = style->background().color();
@@ -210,11 +209,9 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
     // the signal is not defined in ConfigInterface, but according to the docs it should be
     // can't use new signal slot syntax here, since ConfigInterface is not a QObject
     if (KTextEditor::View* view = m_view.data()) {
-        Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
         // we only listen to a single view, i.e. the active one
         disconnect(view, &KTextEditor::View::configChanged, this, &ColorCache::slotViewSettingsChanged);
     }
-    Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
     connect(view, &KTextEditor::View::configChanged, this, &ColorCache::slotViewSettingsChanged);
     m_view = view;
 

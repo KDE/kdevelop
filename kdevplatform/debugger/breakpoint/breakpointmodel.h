@@ -12,7 +12,7 @@
 
 #include <QAbstractTableModel>
 
-#include <KTextEditor/MarkInterface>
+#include <KTextEditor/Document>
 #include "breakpoint.h"
 
 class QUrl;
@@ -136,10 +136,10 @@ public Q_SLOTS:
 
 private:
     enum MarkType {
-        BreakpointMark = KTextEditor::MarkInterface::BreakpointActive,
-        ReachedBreakpointMark  = KTextEditor::MarkInterface::BreakpointReached,
-        DisabledBreakpointMark = KTextEditor::MarkInterface::BreakpointDisabled,
-        PendingBreakpointMark   = KTextEditor::MarkInterface::markType08,
+        BreakpointMark = KTextEditor::Document::BreakpointActive,
+        ReachedBreakpointMark  = KTextEditor::Document::BreakpointReached,
+        DisabledBreakpointMark = KTextEditor::Document::BreakpointDisabled,
+        PendingBreakpointMark   = KTextEditor::Document::markType08,
 
         AllBreakpointMarks = BreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark | PendingBreakpointMark
     };
@@ -156,13 +156,12 @@ private Q_SLOTS:
     * In here we figure out if we need to reset the breakpoints due to
     * these source changes.
     */
-    void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
+    void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::Document::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
     void documentSaved(KDevelop::IDocument*);
     void aboutToDeleteMovingInterfaceContent(KTextEditor::Document *document);
 
-    void markContextMenuRequested( KTextEditor::Document* document, KTextEditor::Mark mark,
-                               const QPoint &pos, bool& handled );
+    void markContextMenuRequested(KTextEditor::Document *document, KTextEditor::Mark mark, QPoint pos, bool &handled);
 
 private:
     static const QPixmap* breakpointPixmap();
