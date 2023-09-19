@@ -12,6 +12,6 @@ set(kdevgenericmanager_PART_SRCS
 kdevplatform_add_plugin(KDevGenericManager SOURCES ${kdevgenericmanager_PART_SRCS})
 
 target_link_libraries(KDevGenericManager
-    KF5::KIOWidgets
+    KF6::KIOWidgets
     KDev::Project
 )

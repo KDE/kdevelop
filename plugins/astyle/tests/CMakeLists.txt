@@ -14,5 +14,5 @@ set(test_astyle_SRCS test_astyle.cpp
 
 ecm_add_test(${test_astyle_SRCS}
     TEST_NAME test_astyle
-    LINK_LIBRARIES astylelib Qt5::Test KDev::Interfaces KDev::Util)
+    LINK_LIBRARIES astylelib Qt::Test KDev::Interfaces KDev::Util)
 

@@ -28,14 +28,16 @@ set(kdevgrepview_PART_UI
 
 ki18n_wrap_ui(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
 
-qt5_add_resources(kdevgrepview_PART_SRCS kdevgrepview.qrc)
+qt_add_resources(kdevgrepview_PART_SRCS kdevgrepview.qrc)
 kdevplatform_add_plugin(kdevgrepview SOURCES ${kdevgrepview_PART_SRCS})
 
 target_link_libraries(kdevgrepview
-    KF5::Parts
-    KF5::TextEditor
-    KF5::Completion
-    KF5::TextEditor
+    KF6::Parts
+    KF6::TextEditor
+    KF6::Completion
+    KF6::TextEditor
+    KF6::Codecs
+    KF6::KIOWidgets
     KDev::Interfaces
     KDev::OutputView
     KDev::Project

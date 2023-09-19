@@ -17,4 +17,4 @@ set(test_standardOutputView_SRCS
 
 ecm_add_test(${test_standardOutputView_SRCS}
     TEST_NAME test_standardoutputview
-    LINK_LIBRARIES Qt5::Test KDev::Tests)
+    LINK_LIBRARIES Qt::Test KDev::Tests)

@@ -13,7 +13,7 @@ target_link_libraries(quickopentestbase PUBLIC
     KDev::Project
     KDev::Language
     gfx::timsort
-    Qt5::Test
+    Qt::Test
 )
 
 ecm_add_test(test_quickopen.cpp LINK_LIBRARIES quickopentestbase)

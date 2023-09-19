@@ -19,6 +19,7 @@ kdevplatform_add_plugin(kdevperforce SOURCES ${kdevperforce_PART_SRCS})
 target_link_libraries(kdevperforce
    KDev::Interfaces
    KDev::Vcs
+   KF6::KIOWidgets
 )
 
 if(BUILD_TESTING)

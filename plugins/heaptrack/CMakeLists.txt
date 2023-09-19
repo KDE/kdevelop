@@ -31,7 +31,7 @@ declare_qt_logging_category(kdevheaptrack_SRCS
 ki18n_wrap_ui(kdevheaptrack_SRCS
     config/globalconfigpage.ui
 )
-qt5_add_resources(kdevheaptrack_SRCS
+qt_add_resources(kdevheaptrack_SRCS
     kdevheaptrack.qrc
 )
 kconfig_add_kcfg_files(kdevheaptrack_CONFIG_SRCS
@@ -47,6 +47,7 @@ kdevplatform_add_plugin(kdevheaptrack
     SOURCES ${kdevheaptrack_SRCS}
 )
 target_link_libraries(kdevheaptrack
+    KF6::KIOWidgets
     kdevheaptrack_config
     KDev::Project
     KDev::IExecute
@@ -54,11 +55,6 @@ target_link_libraries(kdevheaptrack
 if(KSysGuard_FOUND)
     target_link_libraries(kdevheaptrack
         kdevdebuggercommon
-        KSysGuard::ProcessUi
-    )
-elseif(KF5SysGuard_FOUND)
-    target_link_libraries(kdevheaptrack
-        kdevdebuggercommon
-        KF5::ProcessUi
+        KSysGuard::ProcessCore
     )
 endif()

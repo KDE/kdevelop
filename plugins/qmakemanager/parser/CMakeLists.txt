@@ -26,7 +26,7 @@ endif()
 option(BUILD_qmake_parser "Build the qmake-parser debugging tool" OFF)
 if(BUILD_qmake_parser)
   add_executable(qmake-parser ${qmakecommon_LOG_SRCS} main.cpp)
-  target_link_libraries(qmake-parser kdevqmakeparser KF5::CoreAddons Qt5::Core)
+  target_link_libraries(qmake-parser kdevqmakeparser KF6::CoreAddons Qt::Core)
   install(TARGETS qmake-parser ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif()
 
@@ -36,10 +36,12 @@ target_link_libraries(kdevqmakeparser
     PUBLIC
         KDev::Util
     PRIVATE
-        KF5::CoreAddons
-        KF5::KIOCore
+        KF6::CoreAddons
+        KF6::KIOCore
+        Qt::Core5Compat
 )
 target_include_directories(kdevqmakeparser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 # for proper include stack reports with gcc when working on the parser:
 # remove ENFORCE_COMPATIBLE_ERROR_AWARE_CODE from kdevpgqt_generate
 # uncomment next line:

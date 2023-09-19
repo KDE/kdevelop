@@ -103,9 +103,9 @@ PUBLIC
     KDev::Util
     Clang::libclang
 PRIVATE
-    Qt5::Core
-    KF5::TextEditor
-    KF5::ThreadWeaver
+    Qt::Core
+    KF6::TextEditor
+    KF6::ThreadWeaver
     KDev::DefinesAndIncludesManager
     KDev::Util
     KDev::Sublime
@@ -129,14 +129,14 @@ set(kdevclangsupport_SRCS
     clanghighlighting.cpp
 )
 
-qt5_add_resources(kdevclangsupport_SRCS kdevclangsupport.qrc)
+qt_add_resources(kdevclangsupport_SRCS kdevclangsupport.qrc)
 
 kdevplatform_add_plugin(kdevclangsupport SOURCES ${kdevclangsupport_SRCS})
 target_link_libraries(kdevclangsupport
     KDevClangPrivate
 
-    KF5::ThreadWeaver
-    KF5::TextEditor
+    KF6::ThreadWeaver
+    KF6::TextEditor
     KDev::Util
     KDev::Project
     KDev::DefinesAndIncludesManager

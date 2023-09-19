@@ -45,11 +45,11 @@ endif()
 # plugin version as used e.g. in plugin installation path
 set(KDEV_PLUGIN_VERSION "${KDEVELOP_SOVERSION}")
 
-set(QT_MIN_VERSION "5.15.2")
-set(KF5_DEP_VERSION "5.91.0")
+set(QT_MIN_VERSION "6.5.0")
+set(KF_MIN_VERSION "6.0.0")
 
 # we need some parts of the ECM CMake helpers
-find_package (ECM ${KF5_DEP_VERSION} REQUIRED NO_MODULE)
+find_package (ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
@@ -71,15 +71,19 @@ include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
 include(KDevelopMacrosInternal)
 
-
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets)
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS
+    Concurrent
+    Core5Compat
+    Quick
+    QuickWidgets
+    Widgets
+)
 if(BUILD_TESTING)
-  find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
+  find_package(Qt6Test ${QT_MIN_VERSION} REQUIRED)
 endif()
 
-find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
   Config
-  Declarative
   DocTools
   IconThemes
   I18n
@@ -100,6 +104,8 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   GuiAddons
   Archive
   Notifications
+  Sonnet
+  TextWidgets
 )
 
 set(HAVE_KSYSGUARD FALSE)
@@ -108,15 +114,7 @@ set_package_properties(KSysGuard PROPERTIES
     PURPOSE "Framework for process listing. Required for the 'Attach to Process' feature"
     TYPE RECOMMENDED
 )
-if(NOT KSysGuard_FOUND)
-    # try old pre-Plasma 5.19 name
-    find_package(KF5SysGuard CONFIG)
-    set_package_properties(KF5SysGuard PROPERTIES
-        PURPOSE "Framework for process listing (older name of KSysGuard). Required for the 'Attach to Process' feature"
-        TYPE RECOMMENDED
-    )
-endif()
-if(KSysGuard_FOUND OR KF5SysGuard_FOUND)
+if(KSysGuard_FOUND)
     set(HAVE_KSYSGUARD TRUE)
 endif()
 

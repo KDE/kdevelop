@@ -8,7 +8,7 @@ add_library(kdevmakefileresolver STATIC
 )
 target_link_libraries(kdevmakefileresolver
   KDev::Interfaces KDev::Project
-  Qt5::Core Qt5::Gui KDev::Language
+  Qt::Core Qt::Gui KDev::Language
 )
 target_include_directories(kdevmakefileresolver INTERFACE
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>"

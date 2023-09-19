@@ -4,11 +4,14 @@
 Dependencies:
 - 'on': ['@all']
   'require':
-    'frameworks/kitemmodels': '@stable'
-    'frameworks/knotifyconfig': '@stable'
-    'frameworks/ktexteditor': '@stable'
-    'frameworks/threadweaver': '@stable'
-    'kdevelop/kdevelop-pg-qt': '@stable'
+    'frameworks/kcmutils': '@latest-kf6'
+    'frameworks/kitemmodels': '@latest-kf6'
+    'frameworks/knewstuff': '@latest-kf6'
+    'frameworks/knotifyconfig': '@latest-kf6'
+    'frameworks/ktexteditor': '@latest-kf6'
+    'frameworks/purpose': '@latest-kf6'
+    'frameworks/threadweaver': '@latest-kf6'
+    'kdevelop/kdevelop-pg-qt': '@latest-kf6'
     # TODO: port to libkomparediff2/qt6
     # 'sdk/libkomparediff2': '@same'
     # TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later. Once available, adapt code & reenable again.
@@ -16,7 +19,7 @@ Dependencies:
 
 - 'on': ['Linux', 'FreeBSD']
   'require':
-    'plasma/libksysguard': '@stable'
+    'plasma/libksysguard': '@latest-kf6'
 
 Options:
   per-test-timeout: 200 # the 60-second default is not enough for test_gdb

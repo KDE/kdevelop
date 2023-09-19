@@ -60,8 +60,9 @@ PUBLIC
     KDev::Interfaces
 PRIVATE
     KDev::Util
-    KF5::KIOWidgets
-    KF5::Parts
+    KF6::KIOWidgets
+    KF6::Parts
+    KF6::TextWidgets
 )
 
 install(FILES

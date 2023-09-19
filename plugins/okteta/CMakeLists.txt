@@ -9,7 +9,7 @@ SET( kdevokteta_PART_SRCS
     oktetawidget.cpp
 )
 
-qt5_add_resources(kdevokteta_PART_SRCS kdevokteta.qrc)
+qt_add_resources(kdevokteta_PART_SRCS kdevokteta.qrc)
 kdevplatform_add_plugin(kdevokteta SOURCES
 	${kdevokteta_PART_SRCS})
 
@@ -18,7 +18,7 @@ TARGET_LINK_LIBRARIES( kdevokteta
     KDev::Project
     KDev::Sublime
     KDev::Shell
-    KF5::WidgetsAddons
+    KF6::WidgetsAddons
     OktetaKastenControllers
     KastenControllers
 )

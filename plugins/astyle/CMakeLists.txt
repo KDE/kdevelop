@@ -30,9 +30,9 @@ kdevplatform_add_plugin(kdevastyle SOURCES ${kdevastyle_PART_SRCS})
 target_link_libraries(kdevastyle
     astylelib
 
-    KF5::Parts
-    KF5::KIOWidgets
-    KF5::TextEditor
+    KF6::Parts
+    KF6::KIOWidgets
+    KF6::TextEditor
 
     KDev::Interfaces
     KDev::Util)

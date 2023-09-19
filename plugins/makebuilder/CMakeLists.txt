@@ -15,10 +15,11 @@ declare_qt_logging_category(kdevmakebuilder_SRCS
 ki18n_wrap_ui(kdevmakebuilder_SRCS makeconfig.ui)
 kconfig_add_kcfg_files( kdevmakebuilder_SRCS makebuilderconfig.kcfgc )
 
-qt5_add_resources(kdevmakebuilder_SRCS kdevmakebuilder.qrc)
+qt_add_resources(kdevmakebuilder_SRCS kdevmakebuilder.qrc)
 kdevplatform_add_plugin(KDevMakeBuilder SOURCES ${kdevmakebuilder_SRCS})
 target_link_libraries(KDevMakeBuilder
-        KF5::TextEditor
+        KF6::TextEditor
+        KF6::KIOWidgets
         KDev::Interfaces
         KDev::Project
         KDev::OutputView

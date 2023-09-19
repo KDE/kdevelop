@@ -9,10 +9,10 @@ declare_qt_logging_category(flatpakplugin_SRCS
     CATEGORY_BASENAME "flatpak"
 )
 
-qt5_add_resources(flatpakplugin_SRCS kdevflatpakplugin.qrc)
+qt_add_resources(flatpakplugin_SRCS kdevflatpakplugin.qrc)
 kdevplatform_add_plugin(kdevflatpak SOURCES flatpakplugin.cpp flatpakruntime.cpp ${flatpakplugin_SRCS})
 target_link_libraries(kdevflatpak
-    KF5::CoreAddons
+    KF6::CoreAddons
     KDev::Interfaces
     KDev::Util
     KDev::OutputView

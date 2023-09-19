@@ -12,4 +12,4 @@ set(test_compilerprovider_SRCS
 
 ecm_add_test(${test_compilerprovider_SRCS}
     TEST_NAME test_compilerprovider
-    LINK_LIBRARIES kdevcompilerprovider KDev::Tests Qt5::Test)
+    LINK_LIBRARIES kdevcompilerprovider KDev::Tests Qt::Test)

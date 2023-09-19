@@ -14,12 +14,12 @@ target_link_libraries(clang-parser
 )
 
 add_library(sanitizer_test_init STATIC sanitizer_test_init.cpp)
-target_link_libraries(sanitizer_test_init PRIVATE Qt5::Core)
+target_link_libraries(sanitizer_test_init PRIVATE Qt::Core)
 
 add_library(codecompletiontestbase STATIC codecompletiontestbase.cpp)
 target_link_libraries(codecompletiontestbase PUBLIC
     KDev::Tests
-    Qt5::Test
+    Qt::Test
     KDevClangPrivate
 )
 
@@ -35,7 +35,7 @@ ecm_add_test(test_buddies.cpp
     TEST_NAME test_buddies-clang
     LINK_LIBRARIES
         KDev::Tests
-        Qt5::Test
+        Qt::Test
 )
 
 ecm_add_test(test_codecompletion.cpp
@@ -49,7 +49,7 @@ ecm_add_test(test_assistants.cpp
     TEST_NAME test_assistants
     LINK_LIBRARIES
         KDev::Tests
-        Qt5::Test
+        Qt::Test
         KDevClangPrivate
         sanitizer_test_init
 )
@@ -58,7 +58,7 @@ ecm_add_test(test_clangutils.cpp
     TEST_NAME test_clangutils
     LINK_LIBRARIES
         KDev::Tests
-        Qt5::Test
+        Qt::Test
         Clang::libclang
         KDevClangPrivate
 )
@@ -67,7 +67,7 @@ ecm_add_test(test_duchain.cpp
     TEST_NAME test_duchain-clang
     LINK_LIBRARIES
         KDev::Tests
-        Qt5::Test
+        Qt::Test
         KDevClangPrivate
         KDev::DefinesAndIncludesManager
 )
@@ -76,7 +76,7 @@ ecm_add_test(test_refactoring.cpp
     TEST_NAME test_refactoring-clang
     LINK_LIBRARIES
         KDev::Tests
-        Qt5::Test
+        Qt::Test
         KDevClangPrivate
 )
 
@@ -84,7 +84,7 @@ ecm_add_test(test_duchainutils.cpp
     TEST_NAME test_duchainutils
     LINK_LIBRARIES
         KDev::Tests
-        Qt5::Test
+        Qt::Test
         KDevClangPrivate
 )
 
@@ -92,7 +92,7 @@ ecm_add_test(test_problems.cpp
     TEST_NAME test_problems
     LINK_LIBRARIES
         KDev::Tests
-        Qt5::Test
+        Qt::Test
         KDevClangPrivate
 )
 
@@ -100,8 +100,8 @@ configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 ecm_add_test(test_files.cpp
 TEST_NAME test_files-clang
 LINK_LIBRARIES
-    Qt5::Test
-    Qt5::Core
+    Qt::Test
+    Qt::Core
     KDev::Language
     KDev::Tests
     KDev::DefinesAndIncludesManager
@@ -119,7 +119,7 @@ if(BUILD_BENCHMARKS)
         TEST_NAME bench_duchain
         LINK_LIBRARIES
             KDev::Tests
-            Qt5::Test
+            Qt::Test
             KDevClangPrivate
     )
     set_tests_properties(bench_duchain PROPERTIES TIMEOUT 30)

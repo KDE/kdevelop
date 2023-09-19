@@ -1,8 +1,8 @@
 
 add_executable(duchainify main.cpp)
 target_link_libraries(duchainify
-    KF5::KCMUtils
-    KF5::TextEditor
+    KF6::KCMUtils
+    KF6::TextEditor
     KDev::Interfaces
     KDev::Language
     KDev::Sublime

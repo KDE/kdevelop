@@ -21,5 +21,5 @@ target_link_libraries(KDevWelcomePage
     KDev::Sublime
     KDev::Shell
     KDev::Project
-    KF5::IconThemes
+    KF6::IconThemes
 )

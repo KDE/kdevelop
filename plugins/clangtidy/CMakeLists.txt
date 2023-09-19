@@ -46,7 +46,7 @@ ki18n_wrap_ui(kdevclangtidy_PART_SRCS
     config/clangtidyprojectconfigpage.ui
 )
 
-qt5_add_resources(kdevclangtidy_PART_SRCS
+qt_add_resources(kdevclangtidy_PART_SRCS
     kdevclangtidy.qrc
 )
 
@@ -67,9 +67,10 @@ target_link_libraries(kdevclangtidy
     KDev::OutputView
     KDev::Util
     KDev::Shell
-    KF5::ItemViews
-    KF5::ConfigCore
-    KF5::I18n
+    KF6::ItemViews
+    KF6::ConfigCore
+    KF6::I18n
+    KF6::KIOWidgets
 )
 
 if(BUILD_TESTING)

@@ -31,8 +31,8 @@ PUBLIC
     KDev::Util
 PRIVATE
     KDev::Sublime
-    KF5::Notifications
-    KF5::TextEditor
+    KF6::Notifications
+    KF6::TextEditor
 )
 
 install(FILES

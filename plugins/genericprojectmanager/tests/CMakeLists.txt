@@ -5,4 +5,4 @@ remove_definitions(
 )
 
 ecm_add_test(test_projectload.cpp
-    LINK_LIBRARIES Qt5::Test KDev::Project KDev::Interfaces KDev::Tests)
+    LINK_LIBRARIES Qt::Test KDev::Project KDev::Interfaces KDev::Tests)

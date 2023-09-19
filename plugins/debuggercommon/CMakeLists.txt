@@ -31,7 +31,7 @@ set(debuggercommon_SRCS
     registers/modelsmanager.cpp
     registers/converters.cpp
 )
-if(KF5SysGuard_FOUND OR KSysGuard_FOUND)
+if(KSysGuard_FOUND)
     list(APPEND debuggercommon_SRCS
         dialogs/processselection.cpp
     )
@@ -70,12 +70,13 @@ target_link_libraries(kdevdebuggercommon
     KDev::OutputView
     KDev::Sublime
     PRIVATE
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
     KDev::Util
     KDev::Language
     KDev::IExecute
+    KF6::KIOWidgets
 )
 target_include_directories(kdevdebuggercommon
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
@@ -83,12 +84,7 @@ target_include_directories(kdevdebuggercommon
 if(KSysGuard_FOUND)
     target_link_libraries(kdevdebuggercommon
         PUBLIC
-            KSysGuard::ProcessUi
-    )
-elseif(KF5SysGuard_FOUND)
-    target_link_libraries(kdevdebuggercommon
-        PUBLIC
-        KF5::ProcessUi
+            KSysGuard::ProcessCore
     )
 endif()
 

@@ -23,6 +23,7 @@ target_link_libraries(kdevcompilerprovider
         KDev::Project
         KDev::Util
         KDev::Language
+        KF6::KIOWidgets
 )
 
 option(BUILD_kdev_msvcdefinehelper "Build the msvcdefinehelper tool for retrieving msvc standard macro definitions" OFF)

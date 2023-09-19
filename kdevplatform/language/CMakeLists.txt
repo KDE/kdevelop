@@ -182,14 +182,14 @@ PUBLIC
     KDev::Serialization
     KDev::Interfaces
     KDev::Util
-    KF5::ThreadWeaver
+    KF6::ThreadWeaver
 PRIVATE
     KDev::Project
     KDev::Sublime
-    KF5::GuiAddons
-    KF5::TextEditor
-    KF5::Parts
-    KF5::Archive
+    KF6::GuiAddons
+    KF6::TextEditor
+    KF6::Parts
+    KF6::Archive
     Grantlee5::Templates
 )
 

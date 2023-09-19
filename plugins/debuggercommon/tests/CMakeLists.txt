@@ -17,23 +17,23 @@ target_link_libraries(kdevdbg_testhelper
     KDev::Debugger
     KDev::IExecute
     KDev::Interfaces
-    Qt5::Core
+    Qt::Core
     PRIVATE
     KDev::Tests
     KDev::Util
-    Qt5::Test
+    Qt::Test
 )
 
 ecm_add_test(test_miparser.cpp
-    LINK_LIBRARIES Qt5::Test kdevdebuggercommon
+    LINK_LIBRARIES Qt::Test kdevdebuggercommon
 )
 
 ecm_add_test(test_micommand.cpp
-    LINK_LIBRARIES Qt5::Test kdevdebuggercommon
+    LINK_LIBRARIES Qt::Test kdevdebuggercommon
 )
 
 ecm_add_test(test_micommandqueue.cpp
-    LINK_LIBRARIES Qt5::Test kdevdebuggercommon
+    LINK_LIBRARIES Qt::Test kdevdebuggercommon
 )
 
 set(TEST_PLUGIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/testplugindir")
@@ -44,5 +44,5 @@ target_link_libraries(testdebugger kdevdebuggercommon KDev::Tests)
 set_target_properties(testdebugger PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${TEST_PLUGIN_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}")
 
 ecm_add_test(test_midbus.cpp
-    LINK_LIBRARIES Qt5::Test Qt5::DBus Qt5::Core kdevdebuggercommon KDevPlatformTests
+    LINK_LIBRARIES Qt::Test Qt::DBus Qt::Core kdevdebuggercommon KDevPlatformTests
 )

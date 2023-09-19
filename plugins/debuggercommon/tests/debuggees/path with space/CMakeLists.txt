@@ -2,4 +2,4 @@
 set(CMAKE_AUTOMOC OFF)
 
 add_debuggable_executable(debuggee_spacedebugee SRCS "spacedebugee.cpp")
-target_link_libraries(debuggee_spacedebugee Qt5::Core)
+target_link_libraries(debuggee_spacedebugee Qt::Core)

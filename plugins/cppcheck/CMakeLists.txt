@@ -30,6 +30,7 @@ target_link_libraries(kdevcppcheck_core
     KDev::Language
     KDev::Project
     KDev::Shell
+    KF6::KIOWidgets
 )
 
 set(kdevcppcheck_SRCS
@@ -43,7 +44,7 @@ ki18n_wrap_ui(kdevcppcheck_SRCS
     config/globalconfigpage.ui
     config/projectconfigpage.ui
 )
-qt5_add_resources(kdevcppcheck_SRCS
+qt_add_resources(kdevcppcheck_SRCS
     kdevcppcheck.qrc
 )
 kdevplatform_add_plugin(kdevcppcheck

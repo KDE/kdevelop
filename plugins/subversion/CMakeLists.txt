@@ -55,10 +55,11 @@ ki18n_wrap_ui(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
 
 kdevplatform_add_plugin(kdevsubversion SOURCES ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS})
 target_link_libraries(kdevsubversion
-    KF5::KIOCore
-    KF5::TextEditor
-    KF5::ThreadWeaver
-    KF5::Parts
+    KF6::KIOWidgets
+    KF6::TextEditor
+    KF6::ThreadWeaver
+    KF6::Parts
+    KF6::TextWidgets
     KDev::Interfaces
     KDev::Vcs
     KDev::OutputView

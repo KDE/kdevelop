@@ -13,5 +13,5 @@ set(CMAKE_AUTOMOC ON)
 
 ecm_add_test(test.cpp TEST_NAME cmake-test-unittestskde)
 ecm_add_test(test_main.cpp TEST_NAME cmake-test-unittestskde-withmain)
-target_link_libraries(cmake-test-unittestskde Qt5::Test)
-target_link_libraries(cmake-test-unittestskde-withmain Qt5::Test)
+target_link_libraries(cmake-test-unittestskde Qt::Test)
+target_link_libraries(cmake-test-unittestskde-withmain Qt::Test)

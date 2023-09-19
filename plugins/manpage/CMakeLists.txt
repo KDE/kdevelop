@@ -14,8 +14,8 @@ set(kdevmanpage_SRCS
 )
 
 kdevplatform_add_plugin(KDevManPage SOURCES ${kdevmanpage_SRCS})
-target_link_libraries(KDevManPage KF5::TextEditor KDev::Language
-KDev::Documentation KDev::Interfaces KF5::KCMUtils)
+target_link_libraries(KDevManPage KF6::TextEditor KDev::Language
+KDev::Documentation KDev::Interfaces KF6::KCMUtils)
 
 install(FILES
     manpagedocumentation.css

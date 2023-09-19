@@ -25,7 +25,7 @@ declare_qt_logging_category(kdevquickopen_PART_SRCS
 ki18n_wrap_ui(kdevquickopen_PART_SRCS
   quickopenwidget.ui
 )
-qt5_add_resources(kdevquickopen_PART_SRCS kdevquickopen.qrc)
+qt_add_resources(kdevquickopen_PART_SRCS kdevquickopen.qrc)
 kdevplatform_add_plugin(kdevquickopen SOURCES ${kdevquickopen_PART_SRCS})
 target_link_libraries(kdevquickopen
     KDev::Language
@@ -33,5 +33,6 @@ target_link_libraries(kdevquickopen
     KDev::Project
     KDev::Util
     gfx::timsort
-    KF5::GuiAddons
+    KF6::GuiAddons
+    KF6::TextWidgets
 )

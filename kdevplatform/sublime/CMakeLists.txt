@@ -38,9 +38,11 @@ declare_qt_logging_category(sublime_LIB_SRCS
 kdevplatform_add_library(KDevPlatformSublime SOURCES ${sublime_LIB_SRCS})
 target_link_libraries(KDevPlatformSublime
 PUBLIC
-    KF5::Parts
+    KF6::Parts
 PRIVATE
-    KF5::KIOWidgets
+    KF6::KIOWidgets
+    KF6::I18n
+    KF6::TextWidgets
 )
 
 install(FILES

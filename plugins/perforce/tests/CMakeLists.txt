@@ -16,5 +16,5 @@ add_definitions( "-DP4_BINARY_DIR=\"${PROJECT_BINARY_DIR}\"")
 
 ecm_add_test(${perforceplugintest_SRCS}
         TEST_NAME test_kdevperforce
-        LINK_LIBRARIES Qt5::Test KDev::Vcs KDev::Util KDev::Tests )
+        LINK_LIBRARIES Qt::Test KDev::Vcs KDev::Util KDev::Tests KF6::KIOWidgets)
 

@@ -17,9 +17,9 @@ declare_qt_logging_category(kdevproblemreporter_PART_SRCS
     IDENTIFIER PLUGIN_PROBLEMREPORTER
     CATEGORY_BASENAME "problemreporter"
 )
-qt5_add_resources(kdevproblemreporter_PART_SRCS kdevproblemreporter.qrc)
+qt_add_resources(kdevproblemreporter_PART_SRCS kdevproblemreporter.qrc)
 kdevplatform_add_plugin(kdevproblemreporter SOURCES ${kdevproblemreporter_PART_SRCS})
-target_link_libraries(kdevproblemreporter KF5::TextEditor KF5::Parts KDev::Language KDev::Interfaces KDev::Util KDev::Project KDev::Shell)
+target_link_libraries(kdevproblemreporter KF6::TextEditor KF6::Parts KF6::KIOWidgets KDev::Language KDev::Interfaces KDev::Util KDev::Project KDev::Shell)
 
 if(BUILD_TESTING)
     add_subdirectory(tests)

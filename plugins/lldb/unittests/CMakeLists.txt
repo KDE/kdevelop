@@ -9,7 +9,7 @@ ecm_add_test(test_lldb.cpp
         kdevlldb_static
         kdevdbg_testhelper
         KDev::Tests
-        Qt5::Test
+        Qt::Test
 )
 
 # Unit tests for printers
@@ -18,5 +18,5 @@ ecm_add_test(test_lldbformatters.cpp
         kdevlldb_static
         kdevdbg_testhelper
         KDev::Tests
-        Qt5::Test
+        Qt::Test
 )

@@ -6,7 +6,7 @@ set(example1_SRCS
 )
 
 add_executable(example1 ${example1_SRCS})
-target_link_libraries(example1 KF5::Parts KDev::Sublime)
+target_link_libraries(example1 KF6::Parts KDev::Sublime)
 
 ########### next target ###############
 
@@ -16,4 +16,4 @@ set(example2_SRCS
 )
 
 add_executable(example2 ${example2_SRCS})
-target_link_libraries(example2 KF5::Parts KDev::Sublime)
+target_link_libraries(example2 KF6::Parts KDev::Sublime)

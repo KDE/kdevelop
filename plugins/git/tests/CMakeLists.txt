@@ -36,6 +36,6 @@ if (GIT_FOUND)
     ki18n_wrap_ui(gittest_SRCS ../rebasedialog.ui)
     ecm_add_test(${gittest_SRCS}
         TEST_NAME test_kdevgit
-        LINK_LIBRARIES Qt5::Test KDev::Vcs KDev::Util KDev::Tests
+        LINK_LIBRARIES Qt::Test KF6::SonnetUi Qt::Core5Compat KF6::TextWidgets KDev::Vcs KDev::Util KDev::Tests
         GUI)
 endif ()

@@ -5,13 +5,13 @@ remove_definitions(
 )
 
 ecm_add_test(test_outputmodel.cpp LINK_LIBRARIES
-    Qt5::Test
+    Qt::Test
     KDev::Tests
     KDev::OutputView
 )
 
 ecm_add_test(test_filteringstrategy.cpp LINK_LIBRARIES
-    Qt5::Test
+    Qt::Test
     KDev::Tests
     KDev::OutputView
 )

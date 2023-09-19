@@ -20,7 +20,8 @@ ki18n_wrap_ui( kdevexecute_PART_SRCS nativeappconfig.ui)
 kdevplatform_add_plugin(kdevexecute SOURCES ${kdevexecute_PART_SRCS})
 
 target_link_libraries(kdevexecute
-    KF5::KCMUtils
+    KF6::KCMUtils
+    KF6::KIOWidgets
     KDev::Interfaces
     KDev::Util
     KDev::Project

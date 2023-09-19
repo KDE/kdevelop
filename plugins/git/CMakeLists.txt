@@ -31,8 +31,9 @@ target_link_libraries(kdevgit
     KDev::Interfaces
     KDev::Vcs
     KDev::Project
-    KF5::SonnetUi
-    KF5::TextEditor
+    KF6::SonnetUi
+    KF6::TextWidgets
+    Qt::Core5Compat
 )
 
 if(BUILD_TESTING)

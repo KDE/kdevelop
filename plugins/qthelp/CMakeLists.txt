@@ -29,13 +29,13 @@ target_link_libraries(kdevqthelp
     KDev::Language
     KDev::Documentation
     KDev::Interfaces
-    KF5::KCMUtils
-    KF5::I18n
-    KF5::KIOWidgets
-    KF5::TextEditor
-    KF5::IconThemes
-    KF5::NewStuffWidgets
-    Qt5::Help
+    KF6::KCMUtils
+    KF6::I18n
+    KF6::KIOWidgets
+    KF6::TextEditor
+    KF6::IconWidgets
+    KF6::NewStuffWidgets
+    Qt::Help
 )
 
 if(BUILD_TESTING)

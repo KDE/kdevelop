@@ -15,8 +15,8 @@ declare_qt_logging_category(KDevPlatformSerialization_LIB_SRCS
 kdevplatform_add_library(KDevPlatformSerialization SOURCES ${KDevPlatformSerialization_LIB_SRCS})
 target_link_libraries(KDevPlatformSerialization
 PUBLIC
-    KF5::WidgetsAddons
-    KF5::I18n
+    KF6::WidgetsAddons
+    KF6::I18n
 PRIVATE
     KDev::Util
 )

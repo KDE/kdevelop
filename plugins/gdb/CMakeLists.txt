@@ -41,7 +41,7 @@ set(kdevgdb_UI
 
 kde_enable_exceptions()
 ki18n_wrap_ui(kdevgdb_SRCS ${kdevgdb_UI})
-qt5_add_resources(kdevgdb_SRCS kdevgdb.qrc)
+qt_add_resources(kdevgdb_SRCS kdevgdb.qrc)
 
 # common code used by plugin and unit test
 add_library(kdevgdb_static STATIC ${kdevgdb_SRCS})
@@ -51,9 +51,9 @@ target_link_libraries(kdevgdb_static
     KDev::Shell
     KDev::Interfaces
     KDev::IExecute
-    KF5::KIOWidgets
-    Qt5::Core
-    Qt5::Gui
+    KF6::KIOWidgets
+    Qt::Core
+    Qt::Gui
 )
 if(OktetaGui_FOUND)
     target_link_libraries(kdevgdb_static OktetaCore OktetaGui)

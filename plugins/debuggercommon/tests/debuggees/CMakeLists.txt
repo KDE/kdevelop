@@ -27,10 +27,10 @@ add_debuggable_executable(debuggee_debugeeechoenv SRCS debugeeechoenv.cpp)
 add_debuggable_executable(debuggee_debugeepath SRCS debugeepath.cpp)
 
 add_debuggable_executable(debuggee_debugeethreads SRCS debugeethreads.cpp)
-target_link_libraries(debuggee_debugeethreads Qt5::Core)
+target_link_libraries(debuggee_debugeethreads Qt::Core)
 
 add_debuggable_executable(debuggee_debugeeqt SRCS debugeeqt.cpp)
-target_link_libraries(debuggee_debugeeqt Qt5::Core)
+target_link_libraries(debuggee_debugeeqt Qt::Core)
 
 add_debuggable_executable(debuggee_debugeeexception SRCS debugeeexception.cpp)
 kde_target_enable_exceptions(debuggee_debugeeexception PRIVATE)
@@ -38,63 +38,61 @@ kde_target_enable_exceptions(debuggee_debugeeexception PRIVATE)
 add_subdirectory("path with space")
 
 add_debuggable_executable(debuggee_qstring SRCS qstring.cpp)
-target_link_libraries(debuggee_qstring Qt5::Core)
+target_link_libraries(debuggee_qstring Qt::Core)
 
 add_debuggable_executable(debuggee_qbytearray SRCS qbytearray.cpp)
-target_link_libraries(debuggee_qbytearray Qt5::Core)
+target_link_libraries(debuggee_qbytearray Qt::Core)
 
 add_debuggable_executable(debuggee_qlistcontainer SRCS qlistcontainer.cpp)
-# Allow building and testing QLinkedList deprecated in Qt 5.15:
-target_compile_options(debuggee_qlistcontainer PRIVATE -UQT_DISABLE_DEPRECATED_BEFORE)
-target_link_libraries(debuggee_qlistcontainer Qt5::Core)
+target_link_libraries(debuggee_qlistcontainer Qt::Core Qt::Core5Compat)
 
 add_debuggable_executable(debuggee_qmapint SRCS qmapint.cpp)
-target_link_libraries(debuggee_qmapint Qt5::Core)
+target_link_libraries(debuggee_qmapint Qt::Core)
 
 add_debuggable_executable(debuggee_qmapstring SRCS qmapstring.cpp)
-target_link_libraries(debuggee_qmapstring Qt5::Core)
+target_link_libraries(debuggee_qmapstring Qt::Core)
 
 add_debuggable_executable(debuggee_qmapstringbool SRCS qmapstringbool.cpp)
-target_link_libraries(debuggee_qmapstringbool Qt5::Core)
+target_link_libraries(debuggee_qmapstringbool Qt::Core)
 
 add_debuggable_executable(debuggee_qdate SRCS qdate.cpp)
-target_link_libraries(debuggee_qdate Qt5::Core)
+target_link_libraries(debuggee_qdate Qt::Core)
 
 add_debuggable_executable(debuggee_qtime SRCS qtime.cpp)
-target_link_libraries(debuggee_qtime Qt5::Core)
+target_link_libraries(debuggee_qtime Qt::Core)
 
 add_debuggable_executable(debuggee_qdatetime SRCS qdatetime.cpp)
-target_link_libraries(debuggee_qdatetime Qt5::Core)
+target_link_libraries(debuggee_qdatetime Qt::Core)
 
 add_debuggable_executable(debuggee_qurl SRCS qurl.cpp)
-target_link_libraries(debuggee_qurl Qt5::Core)
+target_link_libraries(debuggee_qurl Qt::Core)
 
 add_debuggable_executable(debuggee_qhashint SRCS qhashint.cpp)
-target_link_libraries(debuggee_qhashint Qt5::Core)
+target_link_libraries(debuggee_qhashint Qt::Core)
 
 add_debuggable_executable(debuggee_qhashstring SRCS qhashstring.cpp)
-target_link_libraries(debuggee_qhashstring Qt5::Core)
+target_link_libraries(debuggee_qhashstring Qt::Core)
 
 add_debuggable_executable(debuggee_qsetint SRCS qsetint.cpp)
-target_link_libraries(debuggee_qsetint Qt5::Core)
+target_link_libraries(debuggee_qsetint Qt::Core)
 
 add_debuggable_executable(debuggee_qsetstring SRCS qsetstring.cpp)
-target_link_libraries(debuggee_qsetstring Qt5::Core)
+target_link_libraries(debuggee_qsetstring Qt::Core)
 
 add_debuggable_executable(debuggee_qchar SRCS qchar.cpp)
-target_link_libraries(debuggee_qchar Qt5::Core)
+target_link_libraries(debuggee_qchar Qt::Core)
 
 add_debuggable_executable(debuggee_quuid SRCS quuid.cpp)
-target_link_libraries(debuggee_quuid Qt5::Core)
+target_link_libraries(debuggee_quuid Qt::Core)
 
 add_debuggable_executable(debuggee_qvariant SRCS qvariant.cpp)
-target_link_libraries(debuggee_qvariant Qt5::Core)
+target_link_libraries(debuggee_qvariant Qt::Core)
 
 add_debuggable_executable(debuggee_qlistpod SRCS qlistpod.cpp)
-target_link_libraries(debuggee_qlistpod Qt5::Core)
+target_link_libraries(debuggee_qlistpod Qt::Core)
 
 add_debuggable_executable(debuggee_ktexteditortypes SRCS ktexteditortypes.cpp)
-target_link_libraries(debuggee_ktexteditortypes Qt5::Core KF5::TextEditor)
+target_link_libraries(debuggee_ktexteditortypes Qt::Core KF6::TextEditor)
 
 add_debuggable_executable(debuggee_kdeveloptypes SRCS kdeveloptypes.cpp)
-target_link_libraries(debuggee_kdeveloptypes Qt5::Core KF5::TextEditor KDev::Util)
+target_link_libraries(debuggee_kdeveloptypes Qt::Core KF6::TextEditor KDev::Util)

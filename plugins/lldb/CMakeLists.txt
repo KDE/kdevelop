@@ -24,7 +24,7 @@ set(kdevlldb_UI
 )
 
 ki18n_wrap_ui(kdevlldb_SRCS ${kdevlldb_UI})
-qt5_add_resources(kdevlldb_SRCS kdevlldb.qrc)
+qt_add_resources(kdevlldb_SRCS kdevlldb.qrc)
 
 # common code used by plugin and unit test
 add_library(kdevlldb_static STATIC ${kdevlldb_SRCS})
@@ -35,9 +35,9 @@ target_link_libraries(kdevlldb_static
     KDev::Interfaces
     KDev::IExecute
     PRIVATE
-    Qt5::Core
-    Qt5::Gui
-    KF5::KIOWidgets
+    Qt::Core
+    Qt::Gui
+    KF6::KIOWidgets
     KDev::Shell
 )
 
@@ -52,7 +52,7 @@ target_link_libraries(kdevlldb
     KDev::OutputView
     KDev::Project
     KDev::Util
-    KF5::TextEditor
+    KF6::TextEditor
     PRIVATE
     KDev::Sublime
 )

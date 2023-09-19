@@ -42,6 +42,7 @@ target_link_libraries(KDevDefinesAndIncludesManager
         KDev::Project
         KDev::Util
         KDev::Language
+        KF6::KIOWidgets
 )
 
 option(BUILD_kdev_includepathsconverter "Build utility to modify include paths of a project from command line." ON)

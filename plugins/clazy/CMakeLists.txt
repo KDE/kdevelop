@@ -57,7 +57,7 @@ ki18n_wrap_ui(kdevclazy_SRCS
     config/globalconfigpage.ui
     config/projectconfigpage.ui
 )
-qt5_add_resources(kdevclazy_SRCS
+qt_add_resources(kdevclazy_SRCS
     kdevclazy.qrc
 )
 kdevplatform_add_plugin(kdevclazy
@@ -65,7 +65,8 @@ kdevplatform_add_plugin(kdevclazy
 )
 target_link_libraries(kdevclazy
     kdevclazy_core
-    KF5::ItemViews
+    KF6::ItemViews
+    KF6::KIOWidgets
 )
 
 ecm_install_icons(ICONS icons/128-apps-clazy.png

@@ -24,6 +24,7 @@ target_link_libraries(KDevCustomBuildSystem
       KDev::Interfaces
       KDev::Util
       KDev::OutputView
+      KF6::KIOWidgets
 )
 
 ## Unittests

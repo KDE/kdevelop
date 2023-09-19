@@ -19,11 +19,12 @@ declare_qt_logging_category(kdevprojectmanagerview_PLUGIN_SRCS
 )
 ki18n_wrap_ui( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
 
-qt5_add_resources(kdevprojectmanagerview_PLUGIN_SRCS kdevprojectmanagerview.qrc)
+qt_add_resources(kdevprojectmanagerview_PLUGIN_SRCS kdevprojectmanagerview.qrc)
 kdevplatform_add_plugin(KDevProjectManagerView SOURCES ${kdevprojectmanagerview_PLUGIN_SRCS})
 
 target_link_libraries(KDevProjectManagerView
-    KF5::TextEditor
+    KF6::TextEditor
+    KF6::KIOWidgets
     KDev::Interfaces
     KDev::Project
     KDev::Language

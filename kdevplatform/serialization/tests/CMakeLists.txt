@@ -8,7 +8,7 @@ remove_definitions(
 
 add_library(itemrepositorytestbase STATIC itemrepositorytestbase.cpp)
 target_link_libraries(itemrepositorytestbase PUBLIC
-    Qt5::Test KDev::Serialization KDev::Tests)
+    Qt::Test KDev::Serialization KDev::Tests)
 
 if(BUILD_BENCHMARKS)
     ecm_add_test(bench_itemrepository.cpp LINK_LIBRARIES itemrepositorytestbase)
@@ -18,10 +18,10 @@ if(BUILD_BENCHMARKS)
 endif()
 ecm_add_test(test_itemrepository.cpp LINK_LIBRARIES itemrepositorytestbase)
 ecm_add_test(test_itemrepositoryregistry_automatic.cpp
-    LINK_LIBRARIES Qt5::Test KDev::Serialization KDev::Tests
+    LINK_LIBRARIES Qt::Test KDev::Serialization KDev::Tests
 )
 ecm_add_test(test_itemrepositoryregistry_deferred.cpp
-    LINK_LIBRARIES Qt5::Test KDev::Serialization KDev::Tests
+    LINK_LIBRARIES Qt::Test KDev::Serialization KDev::Tests
 )
 ecm_add_test(test_indexedstring.cpp LINK_LIBRARIES itemrepositorytestbase)
 ecm_add_test(test_indexedstringview.cpp LINK_LIBRARIES itemrepositorytestbase)

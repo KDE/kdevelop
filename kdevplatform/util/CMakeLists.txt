@@ -54,14 +54,15 @@ target_link_libraries(KDevPlatformUtil
 PUBLIC
     KDev::Interfaces
 PRIVATE
-    KF5::ItemModels
-    KF5::GuiAddons
+    Qt::Core5Compat
+    KF6::ItemModels
+    KF6::GuiAddons
 )
 install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 
 add_executable(kdev_format_source kdevformatsource.cpp kdevformatfile.cpp)
 ecm_mark_nongui_executable(kdev_format_source)
-target_link_libraries(kdev_format_source Qt5::Core)
+target_link_libraries(kdev_format_source Qt::Core Qt::Core5Compat)
 install(TARGETS kdev_format_source DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES .zshrc PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ

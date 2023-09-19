@@ -115,7 +115,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/templatepage.ui
 )
 
-qt5_add_resources(KDevPlatformShell_LIB_SRCS kdevplatformshell.qrc)
+qt_add_resources(KDevPlatformShell_LIB_SRCS kdevplatformshell.qrc)
 
 
 set(kdevworkingsets_SRCS
@@ -145,7 +145,7 @@ PUBLIC
     KDev::Interfaces
 PRIVATE
     KDev::Util
-    KF5::TextEditor
+    KF6::TextEditor
 )
 
 
@@ -156,27 +156,28 @@ PUBLIC
     KDev::OutputView
     KDev::Interfaces
     KDev::Language
-    KF5::XmlGui
+    KF6::XmlGui
 PRIVATE
     KDev::Debugger
     KDev::Project
     KDev::Vcs
     KDev::Util
     KDev::Documentation
-    KF5::GuiAddons
-    KF5::ConfigWidgets
-    KF5::KIOFileWidgets
-    KF5::KIOWidgets
-    KF5::Parts
-    KF5::Notifications
-    KF5::NotifyConfig
-    KF5::TextEditor
-    KF5::JobWidgets
-    KF5::ItemViews
-    KF5::WindowSystem
-    KF5::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
-    KF5::NewStuffWidgets # template config page
-    KF5::Archive # template config page
+    KF6::GuiAddons
+    KF6::ConfigWidgets
+    KF6::KIOFileWidgets
+    KF6::KIOWidgets
+    KF6::Parts
+    KF6::Notifications
+    KF6::NotifyConfig
+    KF6::TextEditor
+    KF6::JobWidgets
+    KF6::ItemViews
+    KF6::WindowSystem
+    KF6::TextWidgets
+    KF6::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
+    KF6::NewStuffWidgets # template config page
+    KF6::Archive # template config page
     kdevworkingsets
 )
 if(APPLE)

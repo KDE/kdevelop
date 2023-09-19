@@ -25,7 +25,7 @@ declare_qt_logging_category(kdevappwizard_PART_SRCS
 ki18n_wrap_ui(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
 
 install(FILES kdevappwizard.knsrc  DESTINATION ${KDE_INSTALL_KNSRCDIR})
-qt5_add_resources(kdevappwizard_PART_SRCS kdevappwizard.qrc)
+qt_add_resources(kdevappwizard_PART_SRCS kdevappwizard.qrc)
 kdevplatform_add_plugin(kdevappwizard SOURCES ${kdevappwizard_PART_SRCS})
 
 target_link_libraries(kdevappwizard
@@ -34,7 +34,8 @@ target_link_libraries(kdevappwizard
     KDev::Language
     KDev::Sublime
     KDev::Util
-    KF5::KIOWidgets
-    KF5::NewStuffWidgets
-    KF5::Archive
+    KF6::KIOWidgets
+    KF6::NewStuffWidgets
+    KF6::Archive
+    Qt::Core5Compat
 )

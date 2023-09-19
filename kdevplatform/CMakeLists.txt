@@ -43,7 +43,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR})
 
 if(BUILD_TESTING)
-  set(KDEV_FIND_DEP_QT5TEST "find_dependency(Qt5Test \"${QT_MIN_VERSION}\")")
+  set(KDEV_FIND_DEP_QTTEST "find_dependency(Qt6Test \"${QT_MIN_VERSION}\")")
 endif()
 configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
                               "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
