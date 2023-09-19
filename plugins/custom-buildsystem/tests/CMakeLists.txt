@@ -8,7 +8,7 @@ configure_file(testconfig.h.in testconfig.h)
 
 ecm_add_test(test_custombuildsystemplugin.cpp ${custom_LOG_SRCS}
     TEST_NAME test_custombuildsystemplugin
-    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Project)
+    LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KDev::Tests KDev::Project)
 
 # Small sample app loading a dialog with the config-ui and a dummy project
 # Useful for testing UI ideas quickly

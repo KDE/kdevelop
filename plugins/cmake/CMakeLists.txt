@@ -92,7 +92,8 @@ target_link_libraries(KDevCMakeCommon
         KDev::Project
         KDev::Util
         KDev::Language
-        KF5::TextEditor
+        KF${KF_MAJOR_VERSION}::TextEditor
+        KF${KF_MAJOR_VERSION}::KIOWidgets
 )
 
 add_library( kdevcmakemanagernosettings STATIC ${cmakemanager_SRCS})
@@ -105,13 +106,13 @@ target_link_libraries(kdevcmakemanagernosettings
     KDev::Language
     KDev::Sublime
     KDev::OutputView
-    KF5::KIOWidgets
-    KF5::TextEditor
-    Qt5::Concurrent
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF${KF_MAJOR_VERSION}::TextEditor
+    Qt${QT_MAJOR_VERSION}::Concurrent
 )
 
-kdevplatform_add_plugin(kdevcmakemanager SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
-target_link_libraries(kdevcmakemanager
+kdevplatform_add_plugin(KDevCMakeManager SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
+target_link_libraries(KDevCMakeManager
     KDevCMakeCommon
     KDev::Util
     KDev::Interfaces
@@ -119,19 +120,19 @@ target_link_libraries(kdevcmakemanager
     KDev::Language
     KDev::Shell
     KDev::OutputView
-    KF5::KIOWidgets
-    KF5::TextEditor
-    Qt5::Concurrent
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF${KF_MAJOR_VERSION}::TextEditor
+    Qt${QT_MAJOR_VERSION}::Concurrent
 )
 
-kdevplatform_add_plugin(kdevcmakedocumentation SOURCES ${cmakedoc_SRCS})
-target_link_libraries( kdevcmakedocumentation
+kdevplatform_add_plugin(KDevCMakeDocumentation SOURCES ${cmakedoc_SRCS})
+target_link_libraries( KDevCMakeDocumentation
     KDevCMakeCommon
     KDev::Interfaces
     KDev::Project
     KDev::Language
     KDev::Documentation
     KDev::Sublime
-    KF5::ItemModels
-    KF5::TextEditor
+    KF${KF_MAJOR_VERSION}::ItemModels
+    KF${KF_MAJOR_VERSION}::TextEditor
 )

@@ -24,5 +24,5 @@ target_link_libraries(KDevCMakeBuilder
     KDev::Shell
     KDev::Project
     KDev::IMakeBuilder
-    KF5::KIOWidgets
+    KF${KF_MAJOR_VERSION}::KIOWidgets
 )

@@ -69,12 +69,13 @@ target_link_libraries(kdevdebuggercommon
     KDev::OutputView
     KDev::Sublime
     PRIVATE
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Gui
+    Qt${QT_MAJOR_VERSION}::Widgets
     KDev::Util
     KDev::Language
     KDev::IExecute
+     KF${KF_MAJOR_VERSION}::KIOWidgets
 )
 target_include_directories(kdevdebuggercommon
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
@@ -87,7 +88,7 @@ if(KSysGuard_FOUND)
 elseif(KF5SysGuard_FOUND)
     target_link_libraries(kdevdebuggercommon
         PUBLIC
-        KF5::ProcessUi
+        KF${KF_MAJOR_VERSION}::ProcessUi
     )
 endif()
 

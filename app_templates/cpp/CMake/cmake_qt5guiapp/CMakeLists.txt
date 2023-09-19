@@ -20,7 +20,7 @@ set(%{APPNAMELC}_SRC
 add_executable(%{APPNAMELC} ${%{APPNAMELC}_SRC})
 
 # Use the Widgets module from Qt 5.
-target_link_libraries(%{APPNAMELC} Qt5::Widgets)
+target_link_libraries(%{APPNAMELC} Qt${QT_MAJOR_VERSION}::Widgets)
 
 # Install the executable
 install(TARGETS %{APPNAMELC} DESTINATION bin)

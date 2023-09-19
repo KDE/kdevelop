@@ -4,7 +4,8 @@ set_package_properties(KF5Plasma PROPERTIES
     URL "https://www.kde.org"
     TYPE OPTIONAL)
 if(KF5Plasma_FOUND)
-    add_subdirectory(plasma)
+    # TODO Uncomment!
+    # add_subdirectory(plasma)
 endif()
 
 option(KDEVELOP_SINGLE_APP "Use QtSingleApplication as KDevelop's base" OFF)
@@ -18,7 +19,7 @@ declare_qt_logging_category(kdevelop_SRCS
     TYPE APP
 )
 
-qt5_add_resources(kdevelop_SRCS kdevelop.qrc)
+qt_add_resources(kdevelop_SRCS kdevelop.qrc)
 
 #TODO: remove CMAKE_CURRENT_SOURCE_DIR prefix when ECM is fixed
 set(kdevelop_PNG_ICONS
@@ -44,17 +45,16 @@ ecm_add_app_icon(kdevelop_SRCS
     ICONS ${kdevelop_PNG_ICONS}
 )
 
-qt5_add_resources(kdevelop_SRCS kdevelop.qrc)
+qt_add_resources(kdevelop_SRCS kdevelop.qrc)
 add_executable(kdevelop ${kdevelop_SRCS} )
 target_link_libraries(kdevelop
     KDev::Interfaces
     KDev::Shell
     KDev::Util
 
-    KF5::Declarative
-    KF5::Crash
+    KF${KF_MAJOR_VERSION}::Crash
 
-    Qt5::Quick
+    Qt${QT_MAJOR_VERSION}::Quick
 )
 IF(APPLE)
     target_link_libraries(kdevelop "-framework CoreFoundation")
@@ -101,6 +101,6 @@ endif (APPLE)
 install( PROGRAMS org.kde.kdevelop.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
 install( PROGRAMS org.kde.kdevelop_ps.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
 install( PROGRAMS org.kde.kdevelop_kdev4.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
-install( FILES kdevelop.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR} )
+install( FILES kdevelop.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR} )
 install( FILES kdevelop.xml DESTINATION ${KDE_INSTALL_MIMEDIR} )
 update_xdg_mimetypes( ${KDE_INSTALL_MIMEDIR} )

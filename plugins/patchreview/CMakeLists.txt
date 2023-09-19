@@ -33,7 +33,7 @@ declare_qt_logging_category(patchreview_PART_SRCS
 )
 ki18n_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 
-qt5_add_resources(patchreview_PART_SRCS kdevpatchreview.qrc)
+qt_add_resources(patchreview_PART_SRCS kdevpatchreview.qrc)
 kdevplatform_add_plugin(kdevpatchreview SOURCES ${patchreview_PART_SRCS})
 target_link_libraries(kdevpatchreview
     KDev::Project
@@ -43,9 +43,10 @@ target_link_libraries(kdevpatchreview
     KDev::Vcs
     KDev::Sublime
     ${LIBKOMPAREDIFF2_LIBRARIES} # from cmake config file, has matching target name, which changed for 5.1
-    KF5::IconThemes
-    KF5::TextEditor
-    KF5::Parts
+    KF${KF_MAJOR_VERSION}::IconThemes
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF${KF_MAJOR_VERSION}::TextEditor
+    KF${KF_MAJOR_VERSION}::Parts
 )
 if (LibKompareDiff2_VERSION VERSION_GREATER_EQUAL 5.4.0)
     # KompareDiff2 installs a working version header only since 5.4 (23.08.0)
@@ -55,7 +56,7 @@ if (LibKompareDiff2_VERSION VERSION_GREATER_EQUAL 5.4.0)
 endif()
 if (KF5Purpose_FOUND)
     target_compile_definitions(kdevpatchreview PRIVATE WITH_PURPOSE)
-    target_link_libraries(kdevpatchreview KF5::PurposeWidgets)
+    target_link_libraries(kdevpatchreview KF${KF_MAJOR_VERSION}::PurposeWidgets)
 elseif (KDEExperimentalPurpose_FOUND)
     target_compile_definitions(kdevpatchreview PRIVATE WITH_PURPOSE)
     target_link_libraries(kdevpatchreview KDEExperimental::PurposeWidgets)

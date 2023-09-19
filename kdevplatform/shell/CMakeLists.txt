@@ -115,7 +115,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/templatepage.ui
 )
 
-qt5_add_resources(KDevPlatformShell_LIB_SRCS kdevplatformshell.qrc)
+qt_add_resources(KDevPlatformShell_LIB_SRCS kdevplatformshell.qrc)
 
 
 set(kdevworkingsets_SRCS
@@ -145,7 +145,7 @@ PUBLIC
     KDev::Interfaces
 PRIVATE
     KDev::Util
-    KF5::TextEditor
+    KF${KF_MAJOR_VERSION}::TextEditor
 )
 
 
@@ -156,27 +156,28 @@ PUBLIC
     KDev::OutputView
     KDev::Interfaces
     KDev::Language
-    KF5::XmlGui
+    KF${KF_MAJOR_VERSION}::XmlGui
 PRIVATE
     KDev::Debugger
     KDev::Project
     KDev::Vcs
     KDev::Util
     KDev::Documentation
-    KF5::GuiAddons
-    KF5::ConfigWidgets
-    KF5::KIOFileWidgets
-    KF5::KIOWidgets
-    KF5::Parts
-    KF5::Notifications
-    KF5::NotifyConfig
-    KF5::TextEditor
-    KF5::JobWidgets
-    KF5::ItemViews
-    KF5::WindowSystem
-    KF5::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
-    KF5::NewStuffWidgets # template config page
-    KF5::Archive # template config page
+    KF${KF_MAJOR_VERSION}::GuiAddons
+    KF${KF_MAJOR_VERSION}::ConfigWidgets
+    KF${KF_MAJOR_VERSION}::KIOFileWidgets
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF${KF_MAJOR_VERSION}::Parts
+    KF${KF_MAJOR_VERSION}::Notifications
+    KF${KF_MAJOR_VERSION}::NotifyConfig
+    KF${KF_MAJOR_VERSION}::TextEditor
+    KF${KF_MAJOR_VERSION}::JobWidgets
+    KF${KF_MAJOR_VERSION}::ItemViews
+    KF${KF_MAJOR_VERSION}::WindowSystem
+    KF${KF_MAJOR_VERSION}::TextWidgets
+    KF${KF_MAJOR_VERSION}::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
+    KF${KF_MAJOR_VERSION}::NewStuffWidgets # template config page
+    KF${KF_MAJOR_VERSION}::Archive # template config page
     kdevworkingsets
 )
 if(APPLE)

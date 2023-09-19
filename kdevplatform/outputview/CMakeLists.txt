@@ -19,8 +19,8 @@ declare_qt_logging_category(outputviewinterfaces_LIB_SRCS
 kdevplatform_add_library(KDevPlatformOutputView SOURCES ${outputviewinterfaces_LIB_SRCS})
 target_link_libraries(KDevPlatformOutputView
 PUBLIC
-    KF5::CoreAddons
-    Qt5::Widgets
+    KF${KF_MAJOR_VERSION}::CoreAddons
+    Qt${QT_MAJOR_VERSION}::Widgets
 PRIVATE
     KDev::Interfaces
     KDev::Util

@@ -6,4 +6,4 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 add_executable(${PROJECT_NAME} main.cpp)
-qt5_use_modules(${PROJECT_NAME} Widgets)
+qt_use_modules(${PROJECT_NAME} Widgets)
