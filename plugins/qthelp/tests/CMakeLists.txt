@@ -28,5 +28,5 @@ ki18n_wrap_ui(test_qthelpplugin_SRCS
 
 ecm_add_test(${test_qthelpplugin_SRCS}
     TEST_NAME test_qthelpplugin
-    LINK_LIBRARIES Qt5::Test KF5::NewStuffWidgets KF5::KIOWidgets KF5::TextEditor KF5::IconThemes Qt5::Help KDev::Tests KDev::Documentation
+    LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KF${KF_MAJOR_VERSION}::NewStuffWidgets KF${KF_MAJOR_VERSION}::KIOWidgets KF${KF_MAJOR_VERSION}::TextEditor KF${KF_MAJOR_VERSION}::IconThemes Qt${QT_MAJOR_VERSION}::Help KDev::Tests KDev::Documentation
 )

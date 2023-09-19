@@ -6,7 +6,7 @@ remove_definitions(
     -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
 )
 
-qt5_wrap_ui(uifiles_SRCS
+qt_wrap_ui(uifiles_SRCS
 	utils/projectintropage.ui
 	utils/filewizardpage.ui
 	utils/newclasswidget.ui
@@ -90,7 +90,7 @@ target_include_directories(kdevqtc-qmlsupport SYSTEM PUBLIC ${CMAKE_CURRENT_SOUR
 kde_target_enable_exceptions(kdevqtc-qmlsupport PRIVATE)
 target_link_libraries(kdevqtc-qmlsupport
     PRIVATE
-        Qt5::Widgets
-        Qt5::Network
-        Qt5::Xml
+        Qt${QT_MAJOR_VERSION}::Widgets
+        Qt${QT_MAJOR_VERSION}::Network
+        Qt${QT_MAJOR_VERSION}::Xml
 )

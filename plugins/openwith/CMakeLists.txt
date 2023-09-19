@@ -4,7 +4,7 @@ set(kdevopenwith_PART_SRCS
 )
 
 kdevplatform_add_plugin(kdevopenwith SOURCES ${kdevopenwith_PART_SRCS})
-target_link_libraries(kdevopenwith KDev::Interfaces KDev::Project KDev::Util)
+target_link_libraries(kdevopenwith KDev::Interfaces KDev::Project KDev::Util KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::KIOWidgets)
 
 ########### install files ###############
 

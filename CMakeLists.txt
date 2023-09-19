@@ -45,11 +45,18 @@ endif()
 # plugin version as used e.g. in plugin installation path
 set(KDEV_PLUGIN_VERSION "${KDEVELOP_SOVERSION}")
 
-set(QT_MIN_VERSION "5.15.2")
-set(KF5_DEP_VERSION "5.91.0")
+if (BUILD_WITH_QT6)
+    set(KF_MAJOR_VERSION "6")
+    set(QT_MIN_VERSION "6.4.0")
+    set(KF_MIN_VERSION "5.240.0")
+else()
+    set(KF_MAJOR_VERSION "5")
+    set(QT_MIN_VERSION "5.15.2")
+    set(KF_MIN_VERSION "5.91.0")
+endif()
 
 # we need some parts of the ECM CMake helpers
-find_package (ECM ${KF5_DEP_VERSION} REQUIRED NO_MODULE)
+find_package (ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
@@ -71,13 +78,12 @@ include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
 include(KDevelopMacrosInternal)
 
-
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets)
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets)
 if(BUILD_TESTING)
-  find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
+  find_package(Qt${QT_MAJOR_VERSION}Test ${QT_MIN_VERSION} CONFIG REQUIRED)
 endif()
 
-find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
+find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
   Config
   Declarative
   DocTools
@@ -100,7 +106,13 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   GuiAddons
   Archive
   Notifications
+  Purpose
+  Sonnet
 )
+if(QT_MAJOR_VERSION STREQUAL 6)
+  find_package(Qt6Core5Compat ${QT_MIN_VERSION} CONFIG REQUIRED)
+  find_package(KF6TextWidgets ${KF_MIN_VERSION} CONFIG REQUIRED)
+endif()
 
 set(HAVE_KSYSGUARD FALSE)
 find_package(KSysGuard CONFIG QUIET)
@@ -108,15 +120,7 @@ set_package_properties(KSysGuard PROPERTIES
     PURPOSE "Framework for process listing. Required for the 'Attach to Process' feature"
     TYPE RECOMMENDED
 )
-if(NOT KSysGuard_FOUND)
-    # try old pre-Plasma 5.19 name
-    find_package(KF5SysGuard CONFIG)
-    set_package_properties(KF5SysGuard PROPERTIES
-        PURPOSE "Framework for process listing (older name of KSysGuard). Required for the 'Attach to Process' feature"
-        TYPE RECOMMENDED
-    )
-endif()
-if(KSysGuard_FOUND OR KF5SysGuard_FOUND)
+if(KSysGuard_FOUND)
     set(HAVE_KSYSGUARD TRUE)
 endif()
 

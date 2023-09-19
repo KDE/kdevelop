@@ -11,7 +11,7 @@ declare_qt_logging_category(kdevswitchtobuddy_PART_SRCS
     IDENTIFIER PLUGIN_SWITCHTOBUDDY
     CATEGORY_BASENAME "switchtobuddy"
 )
-qt5_add_resources(kdevswitchtobuddy_PART_SRCS kdevswitchtobuddy.qrc)
+qt_add_resources(kdevswitchtobuddy_PART_SRCS kdevswitchtobuddy.qrc)
 kdevplatform_add_plugin(kdevswitchtobuddy SOURCES ${kdevswitchtobuddy_PART_SRCS})
 
 target_link_libraries(kdevswitchtobuddy

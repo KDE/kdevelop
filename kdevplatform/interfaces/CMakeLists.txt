@@ -27,12 +27,12 @@ set(KDevPlatformInterfaces_LIB_SRCS
     idocumentation.cpp
     idocumentationcontroller.cpp
     idebugcontroller.cpp
-    ipartcontroller.cpp
     launchconfigurationpage.cpp
     launchconfigurationtype.cpp
     ilauncher.cpp
     ilaunchconfiguration.cpp
     ilaunchmode.cpp
+    ipartcontroller.cpp
     iprojectprovider.cpp
     ibuddydocumentfinder.cpp
     itemplateprovider.cpp
@@ -50,9 +50,10 @@ configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 kdevplatform_add_library(KDevPlatformInterfaces SOURCES ${KDevPlatformInterfaces_LIB_SRCS})
 target_link_libraries(KDevPlatformInterfaces
 PUBLIC
-    KF5::TextEditor
+    KF${KF_MAJOR_VERSION}::TextEditor
+    KF${KF_MAJOR_VERSION}::I18n
 PRIVATE
-    KF5::I18n
+    KF${KF_MAJOR_VERSION}::Service
 )
 
 install(FILES
@@ -86,7 +87,6 @@ install(FILES
     idocumentationproviderprovider.h
     idocumentationcontroller.h
     idebugcontroller.h
-    ipartcontroller.h
     ilaunchmode.h
     iprojectprovider.h
     ilanguagecheck.h
@@ -103,7 +103,9 @@ install(FILES
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/interfaces COMPONENT Devel
 )
 
-install(FILES
-    kdevelopplugin.desktop
-    DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR}
-)
+if (KF_MAJOR_VERSION STREQUAL 5)
+    install(FILES
+        kdevelopplugin.desktop
+        DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR}
+    )
+endif()

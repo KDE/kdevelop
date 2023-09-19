@@ -10,7 +10,7 @@ set(test_custommake_SRCS
 ecm_add_test(${test_custommake_SRCS}
     TEST_NAME test_custommake
     LINK_LIBRARIES
-        Qt5::Test
+        Qt${QT_MAJOR_VERSION}::Test
         KDev::Tests
         KDev::Project
         kdevmakefileresolver

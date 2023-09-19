@@ -23,6 +23,7 @@ target_link_libraries(kdevcompilerprovider
         KDev::Project
         KDev::Util
         KDev::Language
+        KF${KF_MAJOR_VERSION}::KIOWidgets
 )
 set_target_properties(kdevcompilerprovider PROPERTIES POSITION_INDEPENDENT_CODE ON)
 

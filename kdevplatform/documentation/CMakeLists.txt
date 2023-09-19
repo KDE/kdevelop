@@ -1,14 +1,14 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
-find_package(Qt5WebEngineWidgets CONFIG)
-if(TARGET Qt5::WebEngineWidgets)
-    set_package_properties(Qt5WebEngineWidgets PROPERTIES
+find_package(Qt${KF_MAJOR_VERSION}WebEngineWidgets CONFIG)
+if(TARGET Qt${KF_MAJOR_VERSION}::WebEngineWidgets)
+    set_package_properties(Qt${KF_MAJOR_VERSION}WebEngineWidgets PROPERTIES
         PURPOSE "QtWebEngine, for integrated documentation"
         URL "https://qt.io/"
         TYPE REQUIRED)
 else()
-    find_package(Qt5WebKitWidgets CONFIG)
-    set_package_properties(Qt5WebKitWidgets PROPERTIES
+    find_package(Qt${KF_MAJOR_VERSION}WebKitWidgets CONFIG)
+    set_package_properties(Qt${KF_MAJOR_VERSION}WebKitWidgets PROPERTIES
         PURPOSE "QtWebKit, for integrated documentation"
         URL "https://qt.io/"
         TYPE REQUIRED)
@@ -37,10 +37,10 @@ PRIVATE
 )
 
 if(USE_QTWEBKIT)
-    target_link_libraries(KDevPlatformDocumentation PRIVATE Qt5::WebKitWidgets)
+    target_link_libraries(KDevPlatformDocumentation PRIVATE Qt${QT_MAJOR_VERSION}::WebKitWidgets)
     target_compile_definitions(KDevPlatformDocumentation PUBLIC -DUSE_QTWEBKIT)
 else()
-    target_link_libraries(KDevPlatformDocumentation PRIVATE Qt5::WebEngineWidgets)
+    target_link_libraries(KDevPlatformDocumentation PRIVATE Qt${QT_MAJOR_VERSION}::WebEngineWidgets)
 endif()
 
 install(FILES

@@ -15,8 +15,8 @@ add_subdirectory(gdb)
 # END: Debuggers
 
 # BEGIN: Documentation
-find_package(Qt5Help CONFIG)
-set_package_properties(Qt5Help PROPERTIES
+find_package(Qt${KF_MAJOR_VERSION}Help CONFIG)
+set_package_properties(Qt${KF_MAJOR_VERSION}Help PROPERTIES
     PURPOSE "The Help module for the Qt toolkit, needed for the qthelp plugin"
     URL "https://www.qt.io/"
     TYPE OPTIONAL)
@@ -137,24 +137,26 @@ ecm_optional_add_subdirectory(classbrowser)
 ecm_optional_add_subdirectory(executeplasmoid)
 ecm_optional_add_subdirectory(ghprovider)
 ecm_optional_add_subdirectory(konsole)
-if (Qt5QuickWidgets_FOUND)
+if (TARGET Qt::QuickWidgets)
     add_subdirectory(welcomepage)
 endif()
 
-find_package(OktetaKastenControllers 0.4.0 CONFIG)
-set_package_properties(OktetaKastenControllers PROPERTIES
-    PURPOSE "Required for building Okteta KDevelop plugin."
-    URL "https://kde.org/"
-    TYPE OPTIONAL)
-if (OktetaKastenControllers_FOUND)
-    find_package(KastenControllers 0.4.0 CONFIG)
-
-    set_package_properties(KastenControllers PROPERTIES
+if (${KF_MAJOR_VERSION} STREQUAL 5)
+    find_package(OktetaKastenControllers 0.4.0 CONFIG)
+    set_package_properties(OktetaKastenControllers PROPERTIES
         PURPOSE "Required for building Okteta KDevelop plugin."
         URL "https://kde.org/"
         TYPE OPTIONAL)
-endif()
-if (OktetaKastenControllers_FOUND AND KastenControllers_FOUND)
-    add_subdirectory(okteta)
+    if (OktetaKastenControllers_FOUND)
+        find_package(KastenControllers 0.4.0 CONFIG)
+
+        set_package_properties(KastenControllers PROPERTIES
+            PURPOSE "Required for building Okteta KDevelop plugin."
+            URL "https://kde.org/"
+            TYPE OPTIONAL)
+    endif()
+    if (OktetaKastenControllers_FOUND AND KastenControllers_FOUND)
+        add_subdirectory(okteta)
+    endif()
 endif()
 # END: Others
