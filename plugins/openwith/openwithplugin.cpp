@@ -19,11 +19,11 @@
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
 #include <KApplicationTrader>
-#include <KMimeTypeTrader>
 #include <KParts/MainWindow>
 #include <KPluginFactory>
 #include <KService>
 #include <KOpenWithDialog>
+#include <KParts/PartLoader>
 #include <KIO/ApplicationLauncherJob>
 #include <kio_version.h>
 #if KIO_VERSION < QT_VERSION_CHECK(5, 98, 0)
@@ -52,9 +52,9 @@ bool sortActions(QAction* left, QAction* right)
     return left->text() < right->text();
 }
 
-bool isTextEditor(const KService::Ptr& service)
+bool isTextEditor(const KPluginMetaData& md)
 {
-    return service->serviceTypes().contains( QStringLiteral("KTextEditor/Document") );
+    return md.value(QLatin1String("ServiceTypes"), QStringList()).contains( QStringLiteral("KTextEditor/Document") );
 }
 
 QString defaultForMimeType(const QString& mimeType)
@@ -97,7 +97,6 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     }
 
     m_urls.clear();
-    m_services.clear();
 
     auto* filectx = dynamic_cast<FileContext*>( context );
     auto* projctx = dynamic_cast<ProjectItemContext*>( context );
@@ -125,8 +124,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(m_urls.first());
     m_mimeType = mimetype.name();
 
-    QList<QAction*> partActions = actionsForServiceType(QStringLiteral("KParts/ReadOnlyPart"), parent);
-    QList<QAction*> appActions = actionsForServiceType(QStringLiteral("Application"), parent);
+    QList<QAction*> partActions = relevantParts(parent);
+    QList<QAction*> appActions = relevantApps(parent);
 
     OpenWithContext subContext(m_urls, mimetype);
     const QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &subContext, parent);
@@ -173,29 +172,53 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     return ext;
 }
 
-QList<QAction*> OpenWithPlugin::actionsForServiceType(const QString& serviceType, QWidget* parent)
+QList<QAction*> OpenWithPlugin::relevantApps(QWidget* parent)
 {
-    const KService::List list = KMimeTypeTrader::self()->query( m_mimeType, serviceType );
-    KService::Ptr pref = KMimeTypeTrader::self()->preferredService( m_mimeType, serviceType );
+    const auto pref = KApplicationTrader::preferredService(m_mimeType);
 
-    m_services += list;
+    const KService::List list = KApplicationTrader::queryByMimeType(m_mimeType, [] (auto /*x*/) { return true; });
     QList<QAction*> actions;
     QAction* standardAction = nullptr;
     const QString defaultId = defaultForMimeType(m_mimeType);
     for (auto& svc : list) {
-        auto* act = new QAction(isTextEditor(svc) ? i18nc("@item:inmenu", "Default Editor") : svc->name(), parent);
+        auto* act = new QAction(svc->name(), parent);
         act->setIcon( QIcon::fromTheme( svc->icon() ) );
-        if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
+        const QString sid = svc->storageId();
+        connect(act, &QAction::triggered, this, [this, sid]() { open(sid); } );
+        actions << act;
+        if ( svc->storageId() == pref->storageId() ) {
+            standardAction = act;
+        }
+    }
+    std::sort(actions.begin(), actions.end(), sortActions);
+    if (standardAction) {
+        actions.removeOne(standardAction);
+        actions.prepend(standardAction);
+    }
+    return actions;
+}
+
+QList<QAction*> OpenWithPlugin::relevantParts(QWidget* parent)
+{
+    const auto list = KParts::PartLoader::partsForMimeType(m_mimeType);
+
+    QList<QAction*> actions;
+    QAction* standardAction = nullptr;
+    const QString defaultId = defaultForMimeType(m_mimeType);
+    for (auto& svc : list) {
+        auto* act = new QAction(isTextEditor(svc) ? i18nc("@item:inmenu", "Default Editor") : svc.name(), parent);
+        act->setIcon( QIcon::fromTheme( svc.iconName() ) );
+        if (svc.pluginId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
             QFont font = act->font();
             font.setBold(true);
             act->setFont(font);
         }
-        const QString sid = svc->storageId();
+        const QString sid = svc.pluginId();
         connect(act, &QAction::triggered, this, [this, sid]() { open(sid); } );
         actions << act;
         if ( isTextEditor(svc) ) {
             standardAction = act;
-        } else if ( svc->storageId() == pref->storageId() ) {
+        } else if ( !standardAction ) {
             standardAction = act;
         }
     }
@@ -254,7 +277,7 @@ void OpenWithPlugin::openService(const KService::Ptr& service)
         job->start();
     } else {
         QString prefName = service->desktopEntryName();
-        if (isTextEditor(service)) {
+        if (isTextEditor(KPluginMetaData(service->storageId()))) {
             // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of
             // a PartDocument by passing no preferredpart to the documentcontroller
             // TODO: Solve this rather inside DocumentController

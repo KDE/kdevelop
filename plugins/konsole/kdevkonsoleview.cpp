@@ -27,6 +27,7 @@
 #include <util/path.h>
 
 #include "kdevkonsoleviewplugin.h"
+#include <kparts/partloader.h>
 
 class KDevKonsoleViewPrivate
 {
@@ -40,14 +41,21 @@ public:
 
     void _k_slotTerminalClosed();
 
-    void init( KPluginFactory* factory )
+    void init()
     {
         Q_ASSERT( konsolepart == nullptr );
 
-        Q_ASSERT( factory != nullptr );
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        KPluginMetaData part(QStringLiteral("konsolepart"));
+#else
+        KPluginMetaData part(QStringLiteral("kf6/parts/konsolepart"));
+#endif
+        Q_ASSERT(part.isValid());
 
-        if ( ( konsolepart = factory->create<KParts::ReadOnlyPart>( m_view ) ) )
+        KPluginFactory::Result<KParts::Part> result = KPluginFactory::instantiatePlugin<KParts::Part>(part, m_view);
+        if ( result )
         {
+            auto konsolepart = result.plugin;
             QObject::disconnect(m_partDestroyedConnection);
             m_partDestroyedConnection = QObject::connect(konsolepart, &KParts::ReadOnlyPart::destroyed,
                                                          m_view, [&] { _k_slotTerminalClosed(); });
@@ -81,7 +89,7 @@ public:
 
         }else
         {
-            qCDebug(PLUGIN_KONSOLE) << "Couldn't create KParts::ReadOnlyPart from konsole factory!";
+            qCDebug(PLUGIN_KONSOLE) << "Couldn't create KParts::ReadOnlyPart from konsole factory!" << result.errorText;
         }
     }
 
@@ -94,7 +102,7 @@ public:
 void KDevKonsoleViewPrivate::_k_slotTerminalClosed()
 {
     konsolepart = nullptr;
-    init( mplugin->konsoleFactory() );
+    init();
 }
 
 KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent )
@@ -113,7 +121,7 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent
     d->m_vbox->setContentsMargins(0, 0, 0, 0);
     d->m_vbox->setSpacing( 0 );
 
-    d->init( d->mplugin->konsoleFactory() );
+    d->init();
 
     //TODO Make this configurable in the future,
     // but by default the konsole shouldn't

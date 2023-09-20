@@ -9,6 +9,8 @@
 
 #include <KLocalizedString>
 #include <KService>
+#include <KPluginFactory>
+#include <KParts/PartLoader>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
@@ -16,20 +18,12 @@
 #include "kdevkonsoleview.h"
 #include "debug.h"
 
-QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
+QObject* createKonsoleView( QWidget *, QObject *op, const KPluginMetaData &md, const QVariantList &args)
 {
-    KService::Ptr service = KService::serviceByDesktopName(QStringLiteral("konsolepart"));
-    KPluginFactory* factory = nullptr;
-    if (service) {
-        factory = KPluginLoader(*service.data()).factory();
-    }
-    if (!factory) {
-        qCWarning(PLUGIN_KONSOLE) << "Failed to load 'konsolepart' plugin";
-    }
-    return new KDevKonsoleViewPlugin(factory, op, args);
+    return new KDevKonsoleViewPlugin(op, args);
 }
 
-K_PLUGIN_FACTORY_WITH_JSON(KonsoleViewFactory, "kdevkonsoleview.json", registerPlugin<KDevKonsoleViewPlugin>( QString(), &createKonsoleView );)
+K_PLUGIN_FACTORY_WITH_JSON(KonsoleViewFactory, "kdevkonsoleview.json", registerPlugin<KDevKonsoleViewPlugin>( &createKonsoleView );)
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -51,10 +45,9 @@ private:
     KDevKonsoleViewPlugin *mplugin;
 };
 
-KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( KPluginFactory* konsoleFactory, QObject *parent, const QVariantList & )
+KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( QStringLiteral("kdevkonsoleview"), parent )
-    , m_konsoleFactory(konsoleFactory)
-    , m_viewFactory(konsoleFactory ? new KDevKonsoleViewFactory(this) : nullptr)
+    , m_viewFactory(new KDevKonsoleViewFactory(this))
 {
     if(!m_viewFactory) {
       setErrorDescription(i18n("Failed to load 'konsolepart' plugin"));
@@ -68,11 +61,6 @@ void KDevKonsoleViewPlugin::unload()
     if (m_viewFactory) {
         core()->uiController()->removeToolView(m_viewFactory);
     }
-}
-
-KPluginFactory* KDevKonsoleViewPlugin::konsoleFactory() const
-{
-    return m_konsoleFactory;
 }
 
 KDevKonsoleViewPlugin::~KDevKonsoleViewPlugin()

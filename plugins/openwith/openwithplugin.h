@@ -32,10 +32,10 @@ private Q_SLOTS:
     void openDefault();
 
 private:
-    QList<QAction*> actionsForServiceType(const QString& serviceType, QWidget* parent);
+    QList<QAction*> relevantParts(QWidget* parent);
+    QList<QAction*> relevantApps(QWidget* parent);
     QList<QUrl> m_urls;
     QString m_mimeType;
-    KService::List m_services;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_OPENWITHPLUGIN_H
