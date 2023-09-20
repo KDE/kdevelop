@@ -12,7 +12,7 @@
 #include <QAbstractButton>
 #include <QByteArray>
 #include <QMimeDatabase>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <QStringView>
@@ -515,12 +515,12 @@ QString SourceFormatterController::FileFormatter::addModeline(QString input) con
 {
     Q_ASSERT(m_formatter);
 
-    QRegExp kateModelineWithNewline(QStringLiteral("\\s*\\n//\\s*kate:(.*)$"));
+    QRegularExpression kateModelineWithNewline(QStringLiteral("\\s*\\n//\\s*kate:(.*)$"));
 
     // If there already is a modeline in the document, adapt it while formatting, even
     // if "add modeline" is disabled.
     if (!m_sourceFormatterConfig.readEntry(SourceFormatterController::kateModeLineConfigKey(), false)
-        && kateModelineWithNewline.indexIn(input) == -1)
+        && !kateModelineWithNewline.match(input).hasMatch())
         return input;
 
     const auto indentation = m_formatter->indentation(m_style, m_url, m_mimeType);
@@ -547,22 +547,22 @@ QString SourceFormatterController::FileFormatter::addModeline(QString input) con
 
     qCDebug(SHELL) << "created modeline: " << modeline;
 
-    QRegExp kateModeline(QStringLiteral("^\\s*//\\s*kate:(.*)$"));
+    QRegularExpression kateModeline(QStringLiteral("^\\s*//\\s*kate:(.*)$"));
 
     bool modelinefound = false;
-    QRegExp knownOptions(QStringLiteral("\\s*(indent-width|space-indent|tab-width|indent-mode|replace-tabs)"));
+    QRegularExpression knownOptions(QStringLiteral("\\s*(indent-width|space-indent|tab-width|indent-mode|replace-tabs)"));
     while (!is.atEnd()) {
         QString line = is.readLine();
         // replace only the options we care about
-        if (kateModeline.indexIn(line) >= 0) { // match
+        if (auto m = kateModeline.match(line); m.hasMatch()) { // match
             qCDebug(SHELL) << "Found a kate modeline: " << line;
             modelinefound = true;
-            QString options = kateModeline.cap(1);
+            QString options = m.captured(1);
             const QStringList optionList = options.split(QLatin1Char(';'), Qt::SkipEmptyParts);
 
             os <<  modeline;
             for (QString s : optionList) {
-                if (knownOptions.indexIn(s) < 0) { // unknown option, add it
+                if (!knownOptions.match(s).hasMatch()) { // unknown option, add it
                     if(s.startsWith(QLatin1Char(' ')))
                         s.remove(0, 1);
                     os << s << ";";
@@ -771,10 +771,10 @@ void SourceFormatterController::FileFormatter::adaptEditorIndentationMode(KTextE
 
     qCDebug(SHELL) << "adapting mode for" << m_url;
 
-    QRegExp kateModelineWithNewline(QStringLiteral("\\s*\\n//\\s*kate:(.*)$"));
+    QRegularExpression kateModelineWithNewline(QStringLiteral("\\s*\\n//\\s*kate:(.*)$"));
 
     // modelines should always take precedence
-    if( !ignoreModeline && kateModelineWithNewline.indexIn( doc->text() ) != -1 )
+    if( !ignoreModeline && !kateModelineWithNewline.match( doc->text() ).hasMatch() )
     {
         qCDebug(SHELL) << "ignoring because a kate modeline was found";
         return;

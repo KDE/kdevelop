@@ -10,6 +10,8 @@
 
 #include <QDir>
 #include <QFileDialog>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -191,8 +193,8 @@ void ProjectSelectionPage::validateData()
 
         // Validation
         int pos = 0;
-        QRegExp regex( pattern );
-        QRegExpValidator validator( regex );
+        QRegularExpression regex( pattern );
+        QRegularExpressionValidator validator( regex );
         if( validator.validate(projectName, pos) == QValidator::Invalid )
         {
             ui->locationValidWidget->setText( i18n("Invalid project name") );

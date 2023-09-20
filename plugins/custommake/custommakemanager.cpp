@@ -295,8 +295,7 @@ QStringList CustomMakeManager::parseCustomMakeFile( const Path &makefile )
         return ret;
     }
 
-    QRegExp targetRe(QStringLiteral("^ *([^\\t$.#]\\S+) *:?:(?!=).*$"));
-    targetRe.setMinimal( true );
+    QRegularExpression targetRe(QStringLiteral("^ *?([^\\t$.#]\\S+) *:?:(?!=).*?$"));
 
     QString str;
     QTextStream stream( &f );
@@ -304,9 +303,10 @@ QStringList CustomMakeManager::parseCustomMakeFile( const Path &makefile )
     {
         str = stream.readLine();
 
-        if ( targetRe.indexIn( str ) != -1 )
+        auto m = targetRe.match( str );
+        if (m.hasMatch())
         {
-            QString tmpTarget = targetRe.cap( 1 ).simplified();
+            QString tmpTarget = m.captured( 1 ).simplified();
             if ( ! ret.contains( tmpTarget ) )
                 ret.append( tmpTarget );
         }

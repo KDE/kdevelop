@@ -17,7 +17,6 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KTextEditor/Document>
-#include <KTextEditor/MarkInterface>
 #include <KTextEditor/MovingCursor>
 
 #include "breakpointmodel.h"
@@ -104,11 +103,11 @@ bool Breakpoint::setData(int index, const QVariant& value)
 
     if (index == LocationColumn) {
         QString s = value.toString();
-        QRegExp rx(QStringLiteral("^(.+):([0-9]+)$"));
-        int idx = rx.indexIn(s);
-        if (m_kind == CodeBreakpoint && idx != -1) {
-            const auto url = QUrl::fromLocalFile(rx.cap(1));
-            const auto line = rx.cap(2).toInt() - 1;
+        QRegularExpression rx(QStringLiteral("^(.+):([0-9]+)$"));
+        const auto match = rx.match(s);
+        if (m_kind == CodeBreakpoint && match.hasMatch()) {
+            const auto url = QUrl::fromLocalFile(match.captured(1));
+            const auto line = match.capturedView(2).toInt() - 1;
 
             if (isSupportedBreakpointUrl(url)) {
                 m_expression.clear();

@@ -30,6 +30,7 @@
 #include <duchain/types/typealiastype.h>
 #include <duchain/types/structuretype.h>
 #include <duchain/classdeclaration.h>
+#include <QRegularExpression>
 
 namespace KDevelop {
 class AbstractDeclarationNavigationContextPrivate
@@ -349,7 +350,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
             if (!Qt::mightBeRichText(comment)) {
                 // still might contain extra html tags for line breaks (this is the case for doxygen-style comments sometimes)
                 // let's protect them from being removed completely
-                comment.replace(QRegExp(QStringLiteral("<br */>")), QStringLiteral("\n"));
+                comment.replace(QRegularExpression(QStringLiteral("<br */>")), QStringLiteral("\n"));
                 comment = comment.toHtmlEscaped();
                 comment.replace(QLatin1Char('\n'), QLatin1String("<br />")); //Replicate newlines in html
             }
@@ -717,10 +718,10 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType:
 
         if (exchanged) {
             QString typeSuffixString = exchanged->toString();
-            QRegExp suffixExp(QStringLiteral("\\&|\\*"));
-            int suffixPos = typeSuffixString.indexOf(suffixExp);
-            if (suffixPos != -1)
-                modifyHtml() += typeHighlight(typeSuffixString.mid(suffixPos));
+            QRegularExpression suffixExp(QStringLiteral("\\&|\\*"));
+            auto match = suffixExp.match(typeSuffixString);
+            if (match.hasMatch())
+                modifyHtml() += typeHighlight(match.captured(0));
         }
     } else {
         if (idType) {

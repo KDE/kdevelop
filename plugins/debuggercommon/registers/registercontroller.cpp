@@ -12,7 +12,7 @@
 #include "mi/mi.h"
 #include "mi/micommand.h"
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QtMath>
 
 using namespace KDevMI::MI;
@@ -328,8 +328,7 @@ void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
     //{u8 = {0, 0, 128, 146, 0, 48, 197, 65}, u16 = {0, 37504, 12288, 16837}, u32 = {2457862144, 1103441920}, u64 = 4739246961893310464, f32 = {-8.07793567e-28, 24.6484375}, f64 = 710934821}
     //{u8 = {0 <repeats 16 times>}, u16 = {0, 0, 0, 0, 0, 0, 0, 0}, u32 = {0, 0, 0, 0}, u64 = {0, 0}, f32 = {0, 0, 0, 0}, f64 = {0, 0}}
 
-    QRegExp rx(QStringLiteral("^\\s*=\\s*\\{(.*)\\}"));
-    rx.setMinimal(true);
+    QRegularExpression rx(QStringLiteral("^\\s*?=\\s*?\\{(.*?)\\}"));
 
     QString registerName;
     Mode currentMode = LAST_MODE;
@@ -352,16 +351,14 @@ void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
         Q_ASSERT(start != -1);
         start += Converters::modeToString(currentMode).size();
 
-        QString value = record.mid(start);
-        int idx = rx.indexIn(value);
-        value = rx.cap(1);
+        const auto match = rx.match(record.mid(start));
+        QString value = match.captured(1);
 
-        if (idx == -1) {
+        if (match.hasMatch()) {
             //if here then value without braces: u64 = 4739246961893310464, f32 = {-8.07793567e-28, 24.6484375}, f64 = 710934821}
-            QRegExp rx2(QStringLiteral("=\\s+(.*)(\\}|,)"));
-            rx2.setMinimal(true);
-            rx2.indexIn(record, start);
-            value = rx2.cap(1);
+            QRegularExpression rx2(QStringLiteral("=\\s+?(.*?)(\\}|,)"));
+            auto m = rx2.match(record, start);
+            value = m.captured(1);
         }
         value = value.trimmed().remove(QLatin1Char(','));
         m_registers.insert(registerName, value);

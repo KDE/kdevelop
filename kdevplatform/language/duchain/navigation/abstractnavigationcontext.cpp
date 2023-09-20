@@ -551,14 +551,13 @@ QWidget* AbstractNavigationContext::widget() const
 }
 
 ///Splits the string by the given regular expression, but keeps the split-matches at the end of each line
-static QStringList splitAndKeep(QString str, const QRegExp& regExp)
+static QStringList splitAndKeep(QString str, const QRegularExpression& regExp)
 {
     QStringList ret;
-    int place = regExp.indexIn(str);
-    while (place != -1) {
-        ret << str.left(place + regExp.matchedLength());
-        str.remove(0, place + regExp.matchedLength());
-        place = regExp.indexIn(str);
+    QRegularExpressionMatch place = regExp.match(str);
+    while (place.hasMatch()) {
+        ret << place.captured(0);
+        place = regExp.match(str, place.capturedEnd(0));
     }
     ret << str;
     return ret;
@@ -568,7 +567,7 @@ void AbstractNavigationContext::addHtml(const QString& html)
 {
     Q_D(AbstractNavigationContext);
 
-    QRegExp newLineRegExp(QStringLiteral("<br>|<br */>|</p>"));
+    QRegularExpression newLineRegExp(QStringLiteral("<br>|<br */>|</p>"));
     const auto lines = splitAndKeep(html, newLineRegExp);
     for (const QString& line : lines) {
         d->m_currentText +=  line;

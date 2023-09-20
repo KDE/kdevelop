@@ -43,7 +43,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QMetaObject>
-#include <QRegExp>
 #include <QTextDocument>
 #include <QTextStream>
 #include <QTimer>

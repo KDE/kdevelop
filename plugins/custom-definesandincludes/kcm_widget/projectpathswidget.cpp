@@ -9,7 +9,7 @@
 
 #include <QFileDialog>
 #include <QPointer>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <interfaces/iproject.h>
 
@@ -250,12 +250,13 @@ void ProjectPathsWidget::batchEdit()
 
         for (auto& d : list) {
             //This matches: a=b, a=, a
-            QRegExp r(QStringLiteral("^([^=]+)(=(.*))?$"));
+            QRegularExpression r(QStringLiteral("^([^=]+)(=(.*))?$"));
 
-            if (!r.exactMatch(d)) {
+            auto m = r.match(d);
+            if (!m.hasMatch()) {
                 continue;
             }
-            defines[r.cap(1).trimmed()] = r.cap(3).trimmed();
+            defines[m.capturedView(1).trimmed().toString()] = m.capturedView(3).trimmed().toString();
         }
 
         pathsModel->setData(midx, QVariant::fromValue(defines), ProjectPathsModel::DefinesDataRole);

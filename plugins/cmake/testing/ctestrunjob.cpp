@@ -181,14 +181,14 @@ void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endR
     // For example, from:
     //      PASS   : ExpTest::testExp(sum)
     // matches "testExp"
-    static QRegExp caseRx(QStringLiteral("::([^:]*)\\("), Qt::CaseSensitive, QRegExp::RegExp2);
+    static QRegularExpression caseRx(QStringLiteral("::([^:]*)\\("));
     for (int row = startRow; row <= endRow; ++row)
     {
         QString line = m_outputModel->data(m_outputModel->index(row, 0, parent), Qt::DisplayRole).toString();
 
         QString testCase;
-        if (caseRx.indexIn(line) >= 0) {
-            testCase = caseRx.cap(1);
+        if (auto m = caseRx.match(line); m.hasMatch()) {
+            testCase = m.captured(1);
         }
 
         TestResult::TestCaseResult prevResult = m_caseResults.value(testCase, TestResult::NotRun);
