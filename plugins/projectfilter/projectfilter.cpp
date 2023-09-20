@@ -59,11 +59,12 @@ bool ProjectFilter::isValid( const Path &path, const bool isFolder ) const
             continue;
         }
         if ((!isValid && filter.type == Filter::Inclusive) || (isValid && filter.type == Filter::Exclusive)) {
-            const bool match = filter.pattern.match( relativePath ).hasMatch();
+            const auto match = filter.pattern.match( relativePath );
+            qDebug() << "match" << filter.type << relativePath << filter.pattern.pattern() << match;
             if (filter.type == Filter::Inclusive) {
-                isValid = match;
+                isValid = match.hasMatch();
             } else {
-                isValid = !match;
+                isValid = !match.hasMatch();
             }
         }
     }
