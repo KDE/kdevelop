@@ -87,8 +87,12 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
     // reads file with detected encoding
     file.seek(0);
     QTextStream stream(&file);
-    if(prober.confidence()>0.7)
-        stream.setCodec(prober.encoding().constData());
+    if(prober.confidence()>0.7) {
+        const auto encoder = QStringConverter::encodingForName(prober.encoding().constData());
+        if (encoder) {
+            stream.setEncoding(encoder.value());
+        }
+    }
     while( !stream.atEnd() )
     {
         QString data = stream.readLine();
