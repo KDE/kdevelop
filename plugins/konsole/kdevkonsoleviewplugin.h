@@ -25,8 +25,6 @@ public:
 
     void unload() override;
 
-    KPluginFactory* konsoleFactory() const;
-
 private:
     KPluginFactory* m_konsoleFactory = nullptr;
     KDevKonsoleViewFactory* m_viewFactory = nullptr;

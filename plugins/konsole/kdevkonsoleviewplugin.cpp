@@ -9,6 +9,8 @@
 
 #include <KLocalizedString>
 #include <KService>
+#include <KPluginFactory>
+#include <KParts/PartLoader>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
@@ -40,6 +42,7 @@ private:
 
 KDevKonsoleViewPlugin::KDevKonsoleViewPlugin(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevkonsoleview"), parent)
+    , m_viewFactory(new KDevKonsoleViewFactory(this))
 {
     // TODO KF6: check whether constructing a KPluginMetaData from this plugin ID still works
     // consider passing some path or prefix instead of the plugin ID to increase robustness.
@@ -61,11 +64,6 @@ void KDevKonsoleViewPlugin::unload()
     if (m_viewFactory) {
         core()->uiController()->removeToolView(m_viewFactory);
     }
-}
-
-KPluginFactory* KDevKonsoleViewPlugin::konsoleFactory() const
-{
-    return m_konsoleFactory;
 }
 
 KDevKonsoleViewPlugin::~KDevKonsoleViewPlugin()
