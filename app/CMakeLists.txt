@@ -1,11 +1,10 @@
-find_package(KF5Plasma CONFIG)
-set_package_properties(KF5Plasma PROPERTIES
+find_package(KF${KF_MAJOR_VERSION}Plasma CONFIG)
+set_package_properties(KF${KF_MAJOR_VERSION}Plasma PROPERTIES
     PURPOSE "Plasma libraries for enabling the plasma addons"
     URL "https://www.kde.org"
     TYPE OPTIONAL)
-if(KF5Plasma_FOUND)
-    # TODO Uncomment!
-    # add_subdirectory(plasma)
+if(KF${KF_MAJOR_VERSION}Plasma_FOUND)
+    add_subdirectory(plasma)
 endif()
 
 option(KDEVELOP_SINGLE_APP "Use QtSingleApplication as KDevelop's base" OFF)
