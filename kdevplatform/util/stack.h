@@ -34,8 +34,6 @@ class Stack : public QVarLengthArray<T
     using Base = QVarLengthArray<T, Prealloc>;
 
 public:
-    using Base::QVarLengthArray;
-
     inline void swap(Stack<T>& other)
     {
         // prevent Stack<->QVarLengthArray swaps

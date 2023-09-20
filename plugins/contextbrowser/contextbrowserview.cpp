@@ -288,7 +288,7 @@ void ContextBrowserView::updateMainWidget(QWidget* widget)
         qCDebug(PLUGIN_CONTEXTBROWSER) << "";
         resetWidget();
         m_navigationWidget = widget;
-        m_layout->insertWidget(1, widget, 1);
+        m_layout->addWidget(widget, 1);
         m_allowLockedUpdate = false;
         setUpdatesEnabled(true);
         if (widget->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("contextChanged(bool,bool)").constData())

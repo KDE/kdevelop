@@ -107,11 +107,12 @@ public:
         {
             defaultMainWindow = new MainWindow(m_controller);
             m_controller->addMainWindow(defaultMainWindow);
-            activeSublimeWindow = defaultMainWindow;
+            activeSublimeWindow = defaultMainWindow.get();
         }
         else
         {
-            activeSublimeWindow = defaultMainWindow = nullptr;
+            activeSublimeWindow = nullptr;
+            defaultMainWindow = nullptr;
         }
 
         m_assistantTimer.setSingleShot(true);
