@@ -7,8 +7,7 @@
 
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
-import QtQuick.Controls 2.0
-import QtQuick.Controls 1.4 as QQC1
+import QtQuick.Controls 2.15
 
 import org.kdevelop.welcomepage 4.3
 
@@ -27,26 +26,26 @@ StandardPage
 
             width: parent.width
 
-            QQC1.Button {
-                iconName: "project-development-new-template"
+            Button {
+                icon.name: "project-development-new-template"
                 text: i18n("New Project")
                 onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
             }
 
-            QQC1.Button {
+            Button {
                 text: i18n("Open Project")
-                iconName: "project-open"
+                icon.name: "project-open"
                 onClicked: ICore.projectController.openProject()
             }
 
-            QQC1.Button {
+            Button {
                 text: i18n("Fetch Project")
-                iconName: "edit-download"
+                icon.name: "edit-download"
                 onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
             }
 
-            QQC1.Button {
-                iconName: "document-open-recent"
+            Button {
+                icon.name: "document-open-recent"
                 text: i18n("Recent Projects")
                 onClicked: kdev.showMenu("project/project_open_recent")
             }

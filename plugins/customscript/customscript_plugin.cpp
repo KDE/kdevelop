@@ -29,6 +29,7 @@
 #include <debug.h>
 
 #include <QMimeType>
+#include <QPointer>
 
 #include <memory>
 

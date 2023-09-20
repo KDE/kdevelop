@@ -495,9 +495,7 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
         if (inputFile.open(QFile::ReadOnly) && outputFile.open(QFile::WriteOnly))
         {
             QTextStream input(&inputFile);
-            input.setCodec(QTextCodec::codecForName("UTF-8"));
             QTextStream output(&outputFile);
-            output.setCodec(QTextCodec::codecForName("UTF-8"));
             while(!input.atEnd())
             {
                 QString line = input.readLine();

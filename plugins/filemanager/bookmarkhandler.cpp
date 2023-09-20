@@ -29,10 +29,11 @@ BookmarkHandler::BookmarkHandler( FileManager *parent, QMenu* kpopupmenu )
     bookmarksPath.setPath(bookmarksPath.path() + QLatin1String("fsbookmarks.xml"));
     qCDebug(PLUGIN_FILEMANAGER) << bookmarksPath;
 
-    KBookmarkManager *manager = KBookmarkManager::managerForFile( bookmarksPath.toLocalFile(), QStringLiteral( "kdevplatform" ) );
-    manager->setUpdate( true );
 
-    m_bookmarkMenu = new KBookmarkMenu(manager, this, m_menu);
+    KBookmarkManager manager(bookmarksPath.toLocalFile());
+    manager.setUpdate( true );
+
+    m_bookmarkMenu = new KBookmarkMenu(&manager, this, m_menu);
     const auto actions = m_menu->actions();
 
      //remove shortcuts as they might conflict with others (eg. Ctrl+B)

@@ -331,8 +331,10 @@ void StandardDocumentationView::setOverrideCssCode(const QByteArray& cssCode)
     const auto scriptName = QStringLiteral("OverrideCss");
     auto& scripts = d->m_view->page()->scripts();
 
-    const auto oldScript = scripts.findScript(scriptName);
-    scripts.remove(oldScript);
+    const auto oldScripts = scripts.find(scriptName);
+    for (const auto &oldScript : oldScripts) {
+        scripts.remove(oldScript);
+    }
 
     if (cssCode.isEmpty()) {
         return;

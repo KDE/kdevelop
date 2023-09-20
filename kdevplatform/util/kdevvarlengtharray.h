@@ -21,8 +21,6 @@ class KDevVarLengthArray : public QVarLengthArray<T
     using Base = QVarLengthArray<T, Prealloc>;
 
 public:
-    using Base::QVarLengthArray;
-
     ///Removes exactly one occurrence of the given value from the array. Returns false if none was found.
     inline bool removeOne(const T& value);
 
