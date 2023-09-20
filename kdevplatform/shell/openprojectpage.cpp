@@ -30,7 +30,7 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, const QStringList& filte
 
     fileWidget = new KFileWidget( startUrl, this);
 
-    fileWidget->setFilter(filters.join(QLatin1Char('\n')));
+    fileWidget->setFilters({KFileFilter(i18n("Projects"), filters, {})});
 
     fileWidget->setMode( KFile::Modes( KFile::File | KFile::Directory | KFile::ExistingOnly ) );
 

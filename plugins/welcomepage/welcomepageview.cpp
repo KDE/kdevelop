@@ -9,11 +9,11 @@
 #include "uihelper.h"
 #include "sessionsmodel.h"
 
-#include <KDeclarative/KDeclarative>
 #include <KLocalizedContext>
 
 #include <QQmlContext>
 #include <QQmlComponent>
+#include <QQmlEngine>
 #include <QQmlError>
 #include <QDebug>
 
@@ -36,7 +36,6 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
     qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
 
     //setup kdeclarative library
-    KDeclarative::KDeclarative::setupEngine(engine());
     KLocalizedContext *localizedContextObject = new KLocalizedContext(engine());
     localizedContextObject->setTranslationDomain(QStringLiteral("kdevwelcomepage"));
     engine()->rootContext()->setContextObject(localizedContextObject);
