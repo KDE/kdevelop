@@ -275,7 +275,7 @@ void ActiveToolTip::resizeEvent(QResizeEvent*)
 
     // set mask from style
     QStyleOptionFrame opt;
-    opt.init(this);
+    opt.initFrom(this);
 
     QStyleHintReturnMask mask;
     if (style()->styleHint(QStyle::SH_ToolTip_Mask, &opt, this, &mask) && !mask.region.isEmpty()) {
@@ -290,7 +290,7 @@ void ActiveToolTip::paintEvent(QPaintEvent* event)
     QStylePainter painter(this);
     painter.setClipRegion(event->region());
     QStyleOptionFrame opt;
-    opt.init(this);
+    opt.initFrom(this);
     painter.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
 }
 

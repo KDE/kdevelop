@@ -39,7 +39,7 @@ protected:
     {
       QPainter painter(this);
       QStyleOptionSizeGrip opt;
-      opt.init(this);
+      opt.initFrom(this);
       opt.corner = Qt::BottomRightCorner;
       style()->drawControl(QStyle::CE_SizeGrip, &opt, &painter, this);
     }
