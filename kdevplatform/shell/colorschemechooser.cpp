@@ -12,6 +12,7 @@
 
 #include <KActionMenu>
 #include <KColorSchemeManager>
+#include <KColorSchemeMenu>
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -32,7 +33,7 @@ ColorSchemeChooser::ColorSchemeChooser(QObject* parent)
     const auto scheme(currentSchemeName());
     qCDebug(SHELL) << "Color scheme : " << scheme;
 
-    auto selectionMenu = manager->createSchemeSelectionMenu(scheme, this);
+    auto selectionMenu = KColorSchemeMenu::createMenu(manager, this);
 
     connect(selectionMenu->menu(), &QMenu::triggered,
             this, &ColorSchemeChooser::slotSchemeChanged);
