@@ -193,8 +193,11 @@ class QVectorPrinter:
 
     def children(self):
         isQt4 = has_field(self.val['d'], 'p') # Qt4 has 'p', Qt5 doesn't
+        isQt6 = has_field(self.val['d'], 'ptr') # Qt6 has d->ptr, Qt5 doesn't.
         if isQt4:
             return self._iterator(self.itype, self.val['p']['array'], self.val['p']['size'])
+        elif isQt6:
+            return self.val['d']['ptr'].cast(gdb.lookup_type("char").pointer())
         else:
             data = self.val['d'].cast(gdb.lookup_type("char").const().pointer()) + self.val['d']['offset']
             return self._iterator(self.itype, data.cast(self.itype.pointer()), self.val['d']['size'])
