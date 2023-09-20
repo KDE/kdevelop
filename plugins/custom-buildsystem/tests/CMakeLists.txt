@@ -27,4 +27,4 @@ ki18n_wrap_ui( kcm_uitest_SRCS
                         ../custombuildsystemconfigwidget.ui
                  )
 add_executable( kcm_uitest ${kcm_uitest_SRCS} )
-target_link_libraries( kcm_uitest KDev::Project KDev::Tests )
+target_link_libraries( kcm_uitest KDev::Project KDev::Tests KF6::KIOWidgets)

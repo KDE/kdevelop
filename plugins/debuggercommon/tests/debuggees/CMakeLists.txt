@@ -45,7 +45,7 @@ target_link_libraries(debuggee_qbytearray Qt${QT_MAJOR_VERSION}::Core)
 
 add_debuggable_executable(debuggee_qlistcontainer SRCS qlistcontainer.cpp)
 target_compile_options(debuggee_qlistcontainer PRIVATE -UQT_DISABLE_DEPRECATED_BEFORE)
-target_link_libraries(debuggee_qlistcontainer Qt${QT_MAJOR_VERSION}::Core)
+target_link_libraries(debuggee_qlistcontainer Qt${QT_MAJOR_VERSION}::Core Qt::Core5Compat)
 
 add_debuggable_executable(debuggee_qmapint SRCS qmapint.cpp)
 target_link_libraries(debuggee_qmapint Qt${QT_MAJOR_VERSION}::Core)
