@@ -96,7 +96,7 @@ bool hasMandatoryProperties( const KPluginMetaData& info )
 
     // the version property is only required when the plugin is not installed into the right directory
     QJsonValue version = info.rawData().value(KEY_Version());
-    if (!version.isUndefined() && version.toInt() == KDEVELOP_PLUGIN_VERSION) {
+    if (version == KDEVELOP_PLUGIN_VERSION) {
         return true;
     }
 

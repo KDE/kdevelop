@@ -23,6 +23,7 @@
 #include <KParts/PartLoader>
 #include <KPluginFactory>
 #include <KOpenWithDialog>
+#include <KParts/PartLoader>
 #include <KIO/ApplicationLauncherJob>
 #include <kio_version.h>
 #if KIO_VERSION < QT_VERSION_CHECK(5, 98, 0)
@@ -76,6 +77,11 @@ QList<QAction*> sortedActions(QList<QAction*> actions, int sortOffset)
         std::sort(actions.begin() + sortOffset, actions.end(), sortActions);
     }
     return actions;
+}
+
+bool isTextEditor(const KPluginMetaData& md)
+{
+    return md.value(QLatin1String("ServiceTypes"), QStringList()).contains( QStringLiteral("KTextEditor/Document") );
 }
 
 QAction* createAction(const QString& name, const QString& iconName, QWidget* parent, bool isDefault)
