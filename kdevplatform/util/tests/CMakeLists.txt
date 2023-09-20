@@ -26,10 +26,10 @@ ecm_add_test(test_foregroundlock.cpp
     LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KDev::Util)
 
 ecm_add_test(../kdevcoreaddons/kcompoundjobtest.cpp
-    LINK_LIBRARIES Qt5::Test KDev::Util)
+    LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KDev::Util)
 
 ecm_add_test(../kdevcoreaddons/ksequentialcompoundjobtest.cpp
-    LINK_LIBRARIES Qt5::Test KDev::Util)
+    LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KDev::Util)
 
 ecm_add_test(test_executecompositejob.cpp
     LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KDev::Util)

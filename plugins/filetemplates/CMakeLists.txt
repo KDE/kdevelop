@@ -97,6 +97,8 @@ if(BUILD_TESTING)
         KDev::Project
         KDev::Util
         KDev::Tests
+        KF6::KIOWidgets
+        KF6::TextWidgets
         KF${KF_MAJOR_VERSION}::NewStuffWidgets
     )
 
