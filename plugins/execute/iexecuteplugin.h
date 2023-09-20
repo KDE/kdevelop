@@ -16,7 +16,7 @@ class ILaunchConfiguration;
 
 class KJob;
 class QUrl;
-class QStringList;
+#include <QStringList>
 
 /**
 @author Andreas Pakulat
