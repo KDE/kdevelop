@@ -86,9 +86,21 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
 
     // reads file with detected encoding
     file.seek(0);
+    // TODO: consider using QIODevice::readLine() and QStringDecoder in place of QTextStream.
+    // The reason is the following paragraph in the documentation of QStringConverter::encodingForName():
+    //      If the name is not the name of a codec listed in the Encoding enumeration, std::nullopt
+    //      is returned. Such a name may, none the less, be accepted by the QStringConverter
+    //      constructor when Qt is built with ICU, if ICU provides a converter with the given name.
+    // The code inside the following `if` block replaced the line `stream.setCodec(prober.encoding().constData());`
+    // during porting from Qt 5 to Qt 6. The function QTextStream::setCodec(const char *codecName)
+    // removed in Qt 6 had probably supported ICU codec names.
     QTextStream stream(&file);
-    if(prober.confidence()>0.7)
-        stream.setCodec(prober.encoding().constData());
+    if (prober.confidence() > 0.7) {
+        const auto encoding = QStringConverter::encodingForName(prober.encoding().constData());
+        if (encoding) {
+            stream.setEncoding(*encoding);
+        }
+    }
     while( !stream.atEnd() )
     {
         QString data = stream.readLine();
