@@ -157,15 +157,17 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString& file)
 
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(url);
 
-    auto* part =
-        KParts::PartLoader::createPartInstanceForMimeType<KParts::ReadWritePart>(mimetype.name(), widget, widget);
-    auto* document = qobject_cast<KTextEditor::Document*>(part);
+    auto result = KParts::PartLoader::instantiatePartForMimeType<KTextEditor::Document>(mimetype.name(), widget, widget);
+    if (!result) {
+        qWarning() << "Failed to load part for mimetype" << mimetype;
+    }
+    auto* document = result.plugin;
     Q_ASSERT(document);
 
     Q_ASSERT(document->action("file_save"));
     document->action("file_save")->setEnabled(false);
 
-    m_editParts.insert(m_index, part);
+    m_editParts.insert(m_index, document);
 
     //Open the best code representation, even if it is artificial
     CodeRepresentation::Ptr repr = createCodeRepresentation(file);
