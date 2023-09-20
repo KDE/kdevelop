@@ -10,6 +10,7 @@
 #include <QString>
 #include <QExplicitlySharedDataPointer>
 #include "interfacesexport.h"
+#include "idocumentationprovider.h"
 #include <util/ksharedobject.h>
 
 class QWidget;
