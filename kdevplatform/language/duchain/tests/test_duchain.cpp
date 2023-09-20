@@ -391,7 +391,7 @@ void TestDUChain::testIndexedStrings()
         QString testString;
         int length = rand() % 10;
         for (int b = 0; b < length; ++b)
-            testString.append(( char )(rand() % 6) + 'a');
+            testString.append(QLatin1Char(( char )(rand() % 6) + 'a'));
 
         QByteArray array = testString.toUtf8();
         //qDebug() << "checking with" << testString;
@@ -914,16 +914,17 @@ void TestDUChain::testTypePtr()
     IntegralType::Ptr integralT(new IntegralType(IntegralType::TypeDouble));
 
     abstractT = integralT;
-    QCOMPARE(abstractT, integralT);
+    QCOMPARE(abstractT.get(), integralT.get());
 
     DelayedType::Ptr delayedT(new DelayedType);
-    QVERIFY(abstractT != delayedT);
+    QVERIFY(abstractT.get() != delayedT.get());
+    QVERIFY(!abstractT->equals(delayedT.get()));
 
     auto abstractT2 = abstractT;
-    QCOMPARE(abstractT2, integralT);
+    QCOMPARE(abstractT2.get(), integralT.get());
 
     auto abstractT3 = AbstractType::Ptr(integralT);
-    QCOMPARE(abstractT2, integralT);
+    QCOMPARE(abstractT2.get(), integralT.get());
 }
 
 #if 0
@@ -977,7 +978,7 @@ void TestDUChain::benchCodeModel()
 {
     const IndexedString file("testFile");
 
-    QVERIFY(!QTypeInfo<KDevelop::CodeModelItem>::isStatic);
+    QVERIFY(QTypeInfo<KDevelop::CodeModelItem>::isRelocatable);
 
     int i = 0;
     QBENCHMARK {
