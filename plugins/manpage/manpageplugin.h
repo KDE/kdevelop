@@ -12,6 +12,7 @@
 
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
+#include <interfaces/idocumentation.h>
 
 #include <QVariantList>
 #include <QProgressBar>

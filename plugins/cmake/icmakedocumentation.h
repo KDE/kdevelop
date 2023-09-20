@@ -8,6 +8,7 @@
 #define ICMAKEDOCUMENTATION_H
 
 #include <interfaces/idocumentationprovider.h>
+#include <interfaces/idocumentation.h>
 
 class QUrl;
 
