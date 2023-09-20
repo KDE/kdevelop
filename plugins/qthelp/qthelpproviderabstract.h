@@ -9,7 +9,9 @@
 #ifndef QTHELPPROVIDERABSTRACT_H
 #define QTHELPPROVIDERABSTRACT_H
 
+#include <interfaces/idocumentation.h>
 #include <interfaces/idocumentationprovider.h>
+
 #include <QObject>
 #include <QVariantList>
 #include <QHelpEngine>

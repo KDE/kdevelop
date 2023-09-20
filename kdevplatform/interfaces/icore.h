@@ -12,6 +12,7 @@
 #include "interfacesexport.h"
 
 #include "isessionlock.h"
+#include "iprojectcontroller.h"
 
 /**
  * The KDevelop namespace contains all classes provided by the KDevelop
