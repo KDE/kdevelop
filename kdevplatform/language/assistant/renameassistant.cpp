@@ -131,8 +131,8 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
         return;
 
     //If the inserted text isn't valid for a variable name, consider the editing ended
-    QRegExp validDeclName(QStringLiteral("^[0-9a-zA-Z_]*$"));
-    if (removedText.isEmpty() && !validDeclName.exactMatch(doc->text(invocationRange))) {
+    QRegularExpression validDeclName(QStringLiteral("^[0-9a-zA-Z_]*$"));
+    if (removedText.isEmpty() && !validDeclName.match(doc->text(invocationRange)).hasMatch()) {
         d->reset();
         return;
     }

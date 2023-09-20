@@ -539,10 +539,11 @@ void MIBreakpointController::createFromDebugger(const Value& miBkpt)
                 if (location == modelBreakpoint->location()) {
                     sameLocation = true;
                 } else {
-                    QRegExp rx(QStringLiteral("^(.+):(\\d+)$"));
-                    if (rx.indexIn(location) != -1 &&
-                        Utils::unquoteExpression(rx.cap(1)) == modelBreakpoint->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash) &&
-                        rx.cap(2).toInt() - 1 == modelBreakpoint->line()) {
+                    QRegularExpression rx(QStringLiteral("^(.+):(\\d+)$"));
+                    auto match = rx.match(location);
+                    if (match.hasMatch() &&
+                        Utils::unquoteExpression(match.captured(1)) == modelBreakpoint->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash) &&
+                        match.capturedView(2).toInt() - 1 == modelBreakpoint->line()) {
                         sameLocation = true;
                     }
                 }
@@ -654,11 +655,12 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
             QUrl::fromLocalFile(Utils::unquoteExpression(miBkpt[QStringLiteral("fullname")].literal())),
             miBkpt[QStringLiteral("line")].toInt() - 1);
     } else if (miBkpt.hasField(QStringLiteral("original-location"))) {
-        QRegExp rx(QStringLiteral("^(.+):(\\d+)$"));
+        QRegularExpression rx(QStringLiteral("^(.+):(\\d+)$"));
         QString location = miBkpt[QStringLiteral("original-location")].literal();
-        if (rx.indexIn(location) != -1) {
-            modelBreakpoint->setLocation(QUrl::fromLocalFile(Utils::unquoteExpression(rx.cap(1))),
-                                         rx.cap(2).toInt()-1);
+        const auto match = rx.match(location);
+        if (match.hasMatch()) {
+            modelBreakpoint->setLocation(QUrl::fromLocalFile(Utils::unquoteExpression(match.captured(1))),
+                                         match.capturedView(2).toInt()-1);
         } else {
             modelBreakpoint->setData(Breakpoint::LocationColumn, Utils::unquoteExpression(location));
         }

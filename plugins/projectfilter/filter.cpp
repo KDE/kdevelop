@@ -18,8 +18,7 @@ Filter::Filter()
 }
 
 Filter::Filter(const SerializedFilter& filter)
-    : pattern(QString(), Qt::CaseSensitive, QRegExp::WildcardUnix)
-    , targets(filter.targets)
+    : targets(filter.targets)
     , type(filter.type)
 {
     QString pattern = filter.pattern;
@@ -32,7 +31,7 @@ Filter::Filter(const SerializedFilter& filter)
         targets = Filter::Folders;
         pattern.chop(1);
     }
-    this->pattern.setPattern(pattern);
+    this->pattern.setPattern(QRegularExpression::wildcardToRegularExpression(pattern, QRegularExpression::UnanchoredWildcardConversion));
 }
 
 SerializedFilter::SerializedFilter()
