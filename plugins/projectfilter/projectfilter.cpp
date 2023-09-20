@@ -59,7 +59,7 @@ bool ProjectFilter::isValid( const Path &path, const bool isFolder ) const
             continue;
         }
         if ((!isValid && filter.type == Filter::Inclusive) || (isValid && filter.type == Filter::Exclusive)) {
-            const bool match = filter.pattern.exactMatch( relativePath );
+            const bool match = filter.pattern.match( relativePath ).hasMatch();
             if (filter.type == Filter::Inclusive) {
                 isValid = match;
             } else {

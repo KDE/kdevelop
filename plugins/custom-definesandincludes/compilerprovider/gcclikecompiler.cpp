@@ -121,13 +121,13 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
 
     // #define a 1
     // #define a
-    QRegExp defineExpression(QStringLiteral("#define\\s+(\\S+)(?:\\s+(.*)\\s*)?"));
+    QRegularExpression defineExpression(QStringLiteral("#define\\s+(\\S+)(?:\\s+(.*)\\s*)?"));
 
     while ( proc.canReadLine() ) {
         auto line = proc.readLine();
 
-        if ( defineExpression.indexIn(QString::fromUtf8(line)) != -1 ) {
-            cachedData.data[defineExpression.cap(1)] = defineExpression.cap(2).trimmed();
+        if (auto m = defineExpression.match(QString::fromUtf8(line)); m.hasMatch()) {
+            cachedData.data[m.captured(1)] = m.capturedView(2).trimmed().toString();
         }
     }
 

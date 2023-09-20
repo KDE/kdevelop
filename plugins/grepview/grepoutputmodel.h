@@ -11,13 +11,13 @@
 #ifndef KDEVPLATFORM_PLUGIN_GREPOUTPUTMODEL_H
 #define KDEVPLATFORM_PLUGIN_GREPOUTPUTMODEL_H
 
+#include <QRegularExpression>
 #include <QStandardItemModel>
 #include <QList>
 
 #include <language/codegen/documentchangeset.h>
 
 class QModelIndex;
-class QRegExp;
 
 namespace KDevelop {
     class IStatus;
@@ -29,7 +29,7 @@ public:
     using List = QList<GrepOutputItem>;
 
     GrepOutputItem(const KDevelop::DocumentChangePointer& change, const QString& text, bool checkable);
-    GrepOutputItem(const QString &filename, const QString &text, bool checkable);
+    GrepOutputItem(const QString &filename = {}, const QString &text = {}, bool checkable = false);
     ~GrepOutputItem() override;
 
     QString filename() const ;
@@ -57,7 +57,7 @@ public:
     explicit GrepOutputModel( QObject *parent = nullptr );
     ~GrepOutputModel() override;
 
-    void setRegExp(const QRegExp& re);
+    void setRegExp(const QRegularExpression& re);
     void setReplacementTemplate(const QString &tmpl);
     /// applies replacement on given text
     QString replacementFor(const QString &text);
@@ -89,7 +89,7 @@ Q_SIGNALS:
 private:    
     void makeItemsCheckable(bool checkable, GrepOutputItem* item);
     
-    QRegExp m_regExp;
+    QRegularExpression m_regExp;
     QString m_replacement;
     QString m_replacementTemplate;
     QString m_finalReplacement;

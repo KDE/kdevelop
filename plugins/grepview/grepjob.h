@@ -12,8 +12,7 @@
 
 #include <QList>
 #include <QPointer>
-#include <QRegExp>
-#include <QString>
+#include <QRegularExpression>
 #include <QUrl>
 
 #include <KJob>
@@ -102,7 +101,7 @@ private:
     QList<QUrl> m_directoryChoice;
     QString m_errorMessage;
 
-    QRegExp m_regExp;
+    QRegularExpression m_regExp;
     QString m_regExpSimple;
     QPointer<GrepOutputModel> m_outputModel;
 
@@ -126,6 +125,6 @@ private:
 
 //FIXME: this function is used externally only for tests, find a way to keep it
 //       static for a regular compilation
-GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re);
+GrepOutputItem::List grepFile(const QString &filename, const QRegularExpression &re);
 
 #endif

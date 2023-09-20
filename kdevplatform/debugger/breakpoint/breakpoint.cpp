@@ -90,11 +90,11 @@ bool Breakpoint::setData(int index, const QVariant& value)
     {
         QString s = value.toString();
         if (index == LocationColumn) {
-            QRegExp rx(QStringLiteral("^(.+):([0-9]+)$"));
-            int idx = rx.indexIn(s);
-            if (m_kind == CodeBreakpoint && idx != -1) {
-                m_url = QUrl::fromLocalFile(rx.cap(1));
-                m_line = rx.cap(2).toInt() - 1;
+            QRegularExpression rx(QStringLiteral("^(.+):([0-9]+)$"));
+            const auto match = rx.match(s);
+            if (m_kind == CodeBreakpoint && match.hasMatch()) {
+                m_url = QUrl::fromLocalFile(match.captured(1));
+                m_line = match.capturedView(2).toInt() - 1;
                 m_expression.clear();
             } else {
                 m_expression = s;

@@ -21,7 +21,7 @@
 #include <QChar>
 #include <QDataStream>
 #include <QVariant>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextDocument>
 #include <QIODevice>
 
@@ -107,7 +107,7 @@ QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode)
     switch (mode) {
     case FastMode: {
         QString result(s);
-        result.remove(QRegExp(QStringLiteral("<[^>]+>")));
+        result.remove(QRegularExpression(QStringLiteral("<[^>]+>")));
         return result;
     }
     case CompleteMode: {

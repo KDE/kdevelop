@@ -1006,7 +1006,7 @@ QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
     Q_UNUSED(ret);
     const QStringList commits = job->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
 
-    static QRegExp rx_com(QStringLiteral("commit \\w{40,40}"));
+    static QRegularExpression rx_com(QStringLiteral("commit \\w{40,40}"));
 
     QVector<DVcsEvent> commitList;
     DVcsEvent item;
@@ -1238,9 +1238,9 @@ VcsItemEvent::Actions actionsFromString(char c)
 
 void GitPlugin::parseGitLogOutput(DVcsJob * job)
 {
-    static QRegExp commitRegex(QStringLiteral("^commit (\\w{8})\\w{32}"));
-    static QRegExp infoRegex(QStringLiteral("^(\\w+):(.*)"));
-    static QRegExp modificationsRegex(QStringLiteral("^([A-Z])[0-9]*\t([^\t]+)\t?(.*)"), Qt::CaseSensitive, QRegExp::RegExp2);
+    static QRegularExpression commitRegex(QStringLiteral("^commit (\\w{8})\\w{32}"));
+    static QRegularExpression infoRegex(QStringLiteral("^(\\w+):(.*)"));
+    static QRegularExpression modificationsRegex(QStringLiteral("^([A-Z])[0-9]*\t([^\t]+)\t?(.*)"));
     //R099    plugins/git/kdevgit.desktop     plugins/git/kdevgit.desktop.cmake
     //M       plugins/grepview/CMakeLists.txt
 
@@ -1263,7 +1263,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
     while (!s.atEnd()) {
         QString line = s.readLine();
 
-        if (commitRegex.exactMatch(line)) {
+        if (auto m = commitRegex.match(line); m.hasMatch()) {
             if (pushCommit) {
                 item.setMessage(message.trimmed());
                 commits.append(QVariant::fromValue(item));
@@ -1272,19 +1272,19 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
                 pushCommit = true;
             }
             VcsRevision rev;
-            rev.setRevisionValue(commitRegex.cap(1), KDevelop::VcsRevision::GlobalNumber);
+            rev.setRevisionValue(m.captured(1), KDevelop::VcsRevision::GlobalNumber);
             item.setRevision(rev);
             message.clear();
-        } else if (infoRegex.exactMatch(line)) {
-            QString cap1 = infoRegex.cap(1);
+        } else if (auto m = infoRegex.match(line); m.hasMatch()) {
+            QStringView cap1 = m.capturedView(1);
             if (cap1 == QLatin1String("Author")) {
-                item.setAuthor(infoRegex.cap(2).trimmed());
+                item.setAuthor(m.captured(2).trimmed());
             } else if (cap1 == QLatin1String("Date")) {
-                item.setDate(QDateTime::fromSecsSinceEpoch(infoRegex.cap(2).trimmed().split(QLatin1Char(' '))[0].toUInt(), Qt::LocalTime));
+                item.setDate(QDateTime::fromSecsSinceEpoch(m.capturedView(2).trimmed().split(QLatin1Char(' '))[0].toUInt(), Qt::LocalTime));
             }
-        } else if (modificationsRegex.exactMatch(line)) {
-            VcsItemEvent::Actions a = actionsFromString(modificationsRegex.cap(1).at(0).toLatin1());
-            QString filenameA = modificationsRegex.cap(2);
+        } else if (auto m = modificationsRegex.match(line); m.hasMatch()) {
+            VcsItemEvent::Actions a = actionsFromString(m.capturedView(1).at(0).toLatin1());
+            QString filenameA = m.captured(2);
 
             VcsItemEvent itemEvent;
             itemEvent.setActions(a);

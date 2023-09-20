@@ -179,7 +179,7 @@ void GrepOutputModel::clear()
     m_matchCount = 0;
 }
 
-void GrepOutputModel::setRegExp(const QRegExp& re)
+void GrepOutputModel::setRegExp(const QRegularExpression& re)
 {
     m_regExp = re;
     m_finalUpToDate = false;

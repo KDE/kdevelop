@@ -7,7 +7,7 @@
 #ifndef KDEVPLATFORM_WILDCARDHELPERS_H
 #define KDEVPLATFORM_WILDCARDHELPERS_H
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 
@@ -21,8 +21,8 @@ namespace WildcardHelpers {
  */
 inline bool matchSinglePattern(const QString& pattern, const QString& fileName)
 {
-    QRegExp rx(pattern, Qt::CaseInsensitive, QRegExp::Wildcard);
-    return rx.exactMatch(fileName);
+    QRegularExpression rx(QRegularExpression::wildcardToRegularExpression(pattern, QRegularExpression::UnanchoredWildcardConversion), QRegularExpression::CaseInsensitiveOption);
+    return rx.match(fileName).hasMatch();
 }
 
 /**

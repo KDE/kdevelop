@@ -214,7 +214,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
 QString generateIdentifier( const QString& appname )
 {
     QString tmp = appname;
-    QRegExp re(QStringLiteral("[^a-zA-Z0-9_]"));
+    QRegularExpression re(QStringLiteral("[^a-zA-Z0-9_]"));
     return tmp.replace(re, QStringLiteral("_"));
 }
 

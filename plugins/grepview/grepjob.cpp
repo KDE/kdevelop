@@ -17,6 +17,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <QRegularExpression>
 #include <QTextStream>
 
 #include <KEncodingProber>
@@ -68,8 +69,12 @@ QDebug operator<<(QDebug debug, const GrepJobSettings& s)
     return debug;
 }
 
-GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
+GrepOutputItem::List grepFile(const QString &filename, const QRegularExpression &re)
 {
+    if (re.pattern().isEmpty()) {
+        return {};
+    }
+
     GrepOutputItem::List res;
     QFile file(filename);
 
@@ -102,20 +107,23 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
             data.chop(1);
         }
 
-        int offset = 0;
         // allow empty string matching result in an infinite loop !
-        while( re.indexIn(data, offset)!=-1 && re.cap(0).length() > 0 )
+        auto matchIt = re.globalMatch(data);
+        while( matchIt.hasNext() )
         {
-            int start = re.pos(0);
-            int end = start + re.cap(0).length();
+            const auto match = matchIt.next();
+            int start = match.capturedStart(0);
+            int end = match.capturedEnd(0);
+            if (match.capturedView().isEmpty()) { // Ignore empty matches
+                continue;
+            }
 
             DocumentChangePointer change = DocumentChangePointer(new DocumentChange(
                 IndexedString(filename),
                 KTextEditor::Range(lineno, start, lineno, end),
-                re.cap(0), QString()));
+                match.captured(0), QString()));
 
             res << GrepOutputItem(change, data, false);
-            offset = end;
         }
         lineno++;
     }
@@ -171,10 +179,10 @@ void GrepJob::slotFindFinished()
 
     if(!m_settings.regexp)
     {
-        m_settings.pattern = QRegExp::escape(m_settings.pattern);
+        m_settings.pattern = QRegularExpression::escape(m_settings.pattern);
     }
 
-    if(m_settings.regexp && QRegExp(m_settings.pattern).captureCount() > 0)
+    if(m_settings.regexp && QRegularExpression(m_settings.pattern).captureCount() > 0)
     {
         m_errorMessage = i18nc("Capture is the text which is \"captured\" with () in regular expressions "
                                     "see https://doc.qt.io/qt-5/qregexp.html#capturedTexts",
@@ -185,13 +193,16 @@ void GrepJob::slotFindFinished()
 
     QString pattern = substitudePattern(m_settings.searchTemplate, m_settings.pattern);
     m_regExp.setPattern(pattern);
-    m_regExp.setPatternSyntax(QRegExp::RegExp2);
-    m_regExp.setCaseSensitivity( m_settings.caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive );
-    if(pattern == QRegExp::escape(pattern))
+    if (m_settings.caseSensitive) {
+        m_regExp.setPatternOptions(m_regExp.patternOptions() | QRegularExpression::CaseInsensitiveOption);
+    } else {
+        m_regExp.setPatternOptions(m_regExp.patternOptions() & ~QRegularExpression::CaseInsensitiveOption);
+    }
+    if(pattern == QRegularExpression::escape(pattern))
     {
         // enable wildcard mode when possible
         // if pattern has already been escaped (raw text serch) a second escape will result in a different string anyway
-        m_regExp.setPatternSyntax(QRegExp::Wildcard);
+        m_regExp.setPattern(QRegularExpression::wildcardToRegularExpression(m_regExp.pattern(), QRegularExpression::UnanchoredWildcardConversion));
     }
 
     if (m_outputModel) {
