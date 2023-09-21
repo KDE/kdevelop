@@ -67,10 +67,10 @@ void TestPluginEnabling::loadPluginCustomDefaults_data()
     QTest::addColumn<QString>("pluginId");
     QTest::addColumn<bool>("shouldBeEnabled");
 
-    QTest::newRow("test_globaldefault") << "test_globaldefault" << false;
-    QTest::newRow("test_globalnondefault") << "test_globalnondefault" << true;
-    QTest::newRow("test_projectdefault") << "test_projectdefault" << false;
-    QTest::newRow("test_projectnondefault") << "test_projectnondefault" << true;
+    QTest::newRow("globaldefaultplugin") << "globaldefaultplugin" << false;
+    QTest::newRow("globalnondefaultplugin") << "globalnondefaultplugin" << true;
+    QTest::newRow("projectdefaultplugin") << "projectdefaultplugin" << false;
+    QTest::newRow("projectnondefaultplugin") << "projectnondefaultplugin" << true;
 }
 
 void TestPluginEnabling::loadPluginCustomDefaults()
@@ -81,8 +81,8 @@ void TestPluginEnabling::loadPluginCustomDefaults()
     AutoTestShell::init({
         // set those as default which would not be by own metadata
         // and do not set those which otherwise would, so both
-        QStringLiteral("test_globalnondefault"),
-        QStringLiteral("test_projectnondefault")
+        QStringLiteral("globalnondefaultplugin"),
+        QStringLiteral("projectnondefaultplugin")
     });
     // TODO: somehow currently the clean-up of the previous session is not yet done
     // on the next data item test run, so the session with the name is still locked
@@ -102,10 +102,10 @@ void TestPluginEnabling::loadPluginNormalDefaults_data()
     QTest::addColumn<QString>("pluginId");
     QTest::addColumn<bool>("shouldBeEnabled");
 
-    QTest::newRow("test_globaldefault") << "test_globaldefault" << true;
-    QTest::newRow("test_globalnondefault") << "test_globalnondefault" << false;
-    QTest::newRow("test_projectdefault") << "test_projectdefault" << true;
-    QTest::newRow("test_projectnondefault") << "test_projectnondefault" << false;
+    QTest::newRow("globaldefaultplugin") << "globaldefaultplugin" << true;
+    QTest::newRow("globalnondefaultplugin") << "globalnondefaultplugin" << false;
+    QTest::newRow("projectdefaultplugin") << "projectdefaultplugin" << true;
+    QTest::newRow("projectnondefaultplugin") << "projectnondefaultplugin" << false;
 }
 
 void TestPluginEnabling::loadPluginNormalDefaults()
