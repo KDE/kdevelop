@@ -24,7 +24,7 @@ void TestPluginController::initTestCase()
 {
     qApp->addLibraryPath(QStringLiteral(TEST_PLUGIN_DIR));
 
-    AutoTestShell::init({QStringLiteral("test_nonguiinterface")});
+    AutoTestShell::init({QStringLiteral("nonguiinterfaceplugin")});
     TestCore::initialize( Core::NoUi );
     m_pluginCtrl = Core::self()->pluginControllerInternal();
 }
@@ -36,10 +36,10 @@ void TestPluginController::cleanupTestCase()
 
 void TestPluginController::pluginInfo()
 {
-    IPlugin* plugin = m_pluginCtrl->loadPlugin(QStringLiteral("test_nonguiinterface"));
+    IPlugin* plugin = m_pluginCtrl->loadPlugin(QStringLiteral("nonguiinterfaceplugin"));
     QVERIFY(plugin);
     KPluginMetaData pluginInfo = m_pluginCtrl->pluginInfo(plugin);
-    QCOMPARE(pluginInfo.pluginId(), QStringLiteral("test_nonguiinterface"));
+    QCOMPARE(pluginInfo.pluginId(), QStringLiteral("nonguiinterfaceplugin"));
 }
 
 void TestPluginController::loadUnloadPlugin()
@@ -48,21 +48,21 @@ void TestPluginController::loadUnloadPlugin()
     QSignalSpy spyloading(m_pluginCtrl, SIGNAL(loadingPlugin(QString)));
     QVERIFY(spy.isValid());
     QVERIFY(spyloading.isValid());
-    m_pluginCtrl->loadPlugin(QStringLiteral("test_nonguiinterface"));
-    QVERIFY( m_pluginCtrl->plugin(QStringLiteral("test_nonguiinterface")) );
+    m_pluginCtrl->loadPlugin(QStringLiteral("nonguiinterfaceplugin"));
+    QVERIFY( m_pluginCtrl->plugin(QStringLiteral("nonguiinterfaceplugin")) );
 
     QCOMPARE(spy.size(), 1);
     QCOMPARE(spyloading.size(), 1);
 
     QList<QVariant> args = spyloading.takeFirst();
-    QCOMPARE( args.at(0).toString(), QStringLiteral("test_nonguiinterface") );
+    QCOMPARE( args.at(0).toString(), QStringLiteral("nonguiinterfaceplugin") );
 
     QSignalSpy spy2(m_pluginCtrl, SIGNAL(pluginUnloaded(KDevelop::IPlugin*)) );
     QSignalSpy spy3(m_pluginCtrl, SIGNAL(unloadingPlugin(KDevelop::IPlugin*)) );
     QVERIFY(spy2.isValid());
     QVERIFY(spy3.isValid());
-    m_pluginCtrl->unloadPlugin(QStringLiteral("test_nonguiinterface"));
-    QVERIFY( !m_pluginCtrl->plugin(QStringLiteral("test_nonguiinterface")) );
+    m_pluginCtrl->unloadPlugin(QStringLiteral("nonguiinterfaceplugin"));
+    QVERIFY( !m_pluginCtrl->plugin(QStringLiteral("nonguiinterfaceplugin")) );
 
     QCOMPARE(spy2.size(), 1);
     QCOMPARE(spy3.size(), 1);
