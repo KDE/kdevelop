@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-18 00:44+0000\n"
+"POT-Creation-Date: 2023-09-21 00:43+0000\n"
 "PO-Revision-Date: 2023-09-16 18:07+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -911,229 +911,234 @@ msgstr "Reen al %1<br />"
 msgid "enumerator "
 msgstr "nombrigilo "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:150
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
+#, kde-format
+msgid " :[value-dependent]"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
 #, kde-format
 msgid "namespace %1 "
 msgstr "nomspaco %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:161
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:169
 #, kde-format
 msgid "enumeration %1 "
 msgstr "enumeracio %1 "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:178
 #, kde-format
 msgid "(resolved forward-declaration: "
 msgstr "(solvita anonc-deklaro: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:173
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:181
 #, kde-format
 msgid ") "
 msgstr ") "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:175
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:183
 #, kde-format
 msgid "(unresolved forward-declaration) "
 msgstr "(nesolvita antaŭen-deklaro)"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:190
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:198
 #, kde-format
 msgid "possible resolution from"
 msgstr "ebla rezolucio de"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:205
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:213
 #, kde-format
 msgid "Returns: "
 msgstr "Revenoj:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:207
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:215
 #, kde-format
 msgid "Type: "
 msgstr "Tipo:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:226
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:234
 #, kde-format
 msgid "Enum: "
 msgstr "Enumo:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:228
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:236
 #, kde-format
 msgid "Container: "
 msgstr "Ujo:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:236
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:244
 #, kde-format
 msgid "Scope: %1 "
 msgstr "Amplekso: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:254
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:262
 #, kde-format
 msgid "Access: %1 "
 msgstr "Aliro: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:273
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:281
 #, kde-format
 msgid "Kind: %1 %2 "
 msgstr "Speco: %1 %2"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:275
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:283
 #, kde-format
 msgid "Kind: %1 "
 msgstr "Speco: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:287
 #, kde-format
 msgid "Deprecated"
 msgstr "Malrekomendita"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:287
 #, kde-format
 msgid "Status: %1 "
 msgstr "Stato: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:289
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:297
 #, kde-format
 msgid "Def.: "
 msgstr "Def.:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:291
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:299
 #, kde-format
 msgid "Decl.: "
 msgstr "Dekl.:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:301
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:309
 #, kde-format
 msgid " Def.: "
 msgstr " Def.: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:311
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:319
 #, kde-format
 msgid " Decl.: "
 msgstr "Dekl.: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:319
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:327
 #, kde-format
 msgid "Show uses"
 msgstr "Montri uzojn"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:357
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:365
 #, kde-format
 msgid "Show documentation for "
 msgstr "Montri dokumentaron por "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:463
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:471
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
 msgstr "<anonima>"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:480
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:488
 #, kde-format
 msgid "Overrides a "
 msgstr "Anstataŭigas a"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:481
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:508
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:489
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:516
 #, kde-format
 msgid "function"
 msgstr "funkcio"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:483
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:511
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:519
 #, kde-format
 msgid " from "
 msgstr "de"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:507
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:515
 #, kde-format
 msgid "Hides a "
 msgstr "Kaŝas a"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:531
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:539
 #, kde-format
 msgid "Overridden in "
 msgstr "Forigita en"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:548
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:556
 #, kde-format
 msgid "Overriders possible, show all"
 msgstr "Eblas superregantoj, montri ĉion"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:549
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:557
 #, kde-format
 msgid "More overriders possible, show all"
 msgstr "Pli da superregantoj eblas, montri ĉiujn"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:567
 #, kde-format
 msgid "Inherited by "
 msgstr "Heredita de"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:574
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:582
 #, kde-format
 msgid "Inheriters possible, show all"
 msgstr "Eblaj heredantoj, montri ĉiujn"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:575
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:583
 #, kde-format
 msgid "More inheriters possible, show all"
 msgstr "Pli da heredantoj eblas, montri ĉion"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:782
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:790
 #, kde-format
 msgctxt "A declaration that is unknown"
 msgid "Unknown"
 msgstr "Nekonata"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:808
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:816
 #, kde-format
 msgctxt "tells if a declaration is defining the variable's value"
 msgid "definition"
 msgstr "difino"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:813
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:821
 #, kde-format
 msgctxt "as in c++ forward declaration"
 msgid "forward"
 msgstr "anonca"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:818
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:826
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"
 msgstr "konstanta"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:871
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:879
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
 msgstr[0] "1 Bajto"
 msgstr[1] "%1 Bajtoj"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:872
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:880
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
 msgstr[0] "1 Bito"
 msgstr[1] "%1 Bitoj"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:874
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
 #, kde-format
 msgid "offset in parent: %1"
 msgstr "deŝovo en parenco: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:875
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:883
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
 msgstr "%1, %2"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:880
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:888
 #, kde-format
 msgid "size: %1 Bytes"
 msgstr "grando: %1 bajtoj"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:892
 #, kde-format
 msgid "aligned to: %1 Bytes"
 msgstr "vicigita al: %1 bajtoj"
