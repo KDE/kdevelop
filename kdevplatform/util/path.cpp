@@ -339,12 +339,11 @@ static void cleanPath(QVector<QString>* data, const bool isRemote)
         return;
     }
     const int startOffset = isRemote ? 1 : 0;
-    const auto start = data->begin() + startOffset;
 
-    auto it = start;
+    auto it = data->begin() + startOffset;
     while (it != data->end()) {
         if (*it == QLatin1String("..")) {
-            if (it == start) {
+            if (it == (data->begin() + startOffset)) {
                 it = data->erase(it);
             } else {
                 if (isWindowsDriveLetter(*(it - 1))) {
