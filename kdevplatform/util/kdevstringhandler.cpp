@@ -282,6 +282,7 @@ void KDevelop::normalizeLineEndings(QByteArray& text)
         }
         if (i + 1 < s && text[i + 1] == '\n') {
             text.remove(i, 1);
+            s -= 1;
         } else {
             text[i] = '\n';
         }
