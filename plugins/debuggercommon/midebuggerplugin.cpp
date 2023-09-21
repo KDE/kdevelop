@@ -97,7 +97,9 @@ MIDebuggerPlugin::MIDebuggerPlugin(const QString &componentName, const QString& 
 {
     core()->debugController()->initializeUi();
 
-    setupActions();
+    if (qobject_cast<QGuiApplication *>(QCoreApplication::instance())) { //For our guiless test
+        setupActions();
+    }
     setupDBus();
 }
 
