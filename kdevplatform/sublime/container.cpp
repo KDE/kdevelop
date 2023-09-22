@@ -477,8 +477,9 @@ void Container::statusIconChanged(Document* doc)
 
             // Update the document title's menu associated action
             // using the View* index map
-            Q_ASSERT(d->documentListActionForView.contains(it.value()));
-            d->documentListActionForView[it.value()]->setIcon(doc->icon());
+            auto* const action = d->documentListActionForView.value(it.value());
+            Q_ASSERT(action);
+            action->setIcon(doc->icon());
             break;
         }
     }
@@ -684,7 +685,7 @@ void Container::tabMoved(int from, int to)
     QWidget *w = d->stack->widget(from);
     d->stack->removeWidget(w);
     d->stack->insertWidget(to, w);
-    d->viewForWidget[w]->notifyPositionChanged(to);
+    viewForWidget(w)->notifyPositionChanged(to);
 }
 
 void Container::contextMenu( const QPoint& pos )
