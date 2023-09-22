@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:43+0000\n"
-"PO-Revision-Date: 2023-09-16 18:07+0100\n"
+"PO-Revision-Date: 2023-09-21 08:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -914,7 +914,7 @@ msgstr "nombrigilo "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[valordependa]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
 #, kde-format
@@ -6145,12 +6145,3 @@ msgstr "Diferenco Al Antaŭa"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferenco inter Revizioj"
-
-#~ msgid "No Source Formatter available"
-#~ msgstr "Neniu Fontformatilo disponebla"
-
-#~ msgid "New Style"
-#~ msgstr "Nova Stilo"
-
-#~ msgid "No language selected"
-#~ msgstr "Neniu lingvo elektita"

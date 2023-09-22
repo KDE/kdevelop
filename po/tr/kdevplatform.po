@@ -919,7 +919,7 @@ msgstr "numaralandırıcı "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[değere bağımlı]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
 #, kde-format

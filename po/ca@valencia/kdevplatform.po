@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:43+0000\n"
-"PO-Revision-Date: 2023-09-16 12:17+0200\n"
+"PO-Revision-Date: 2023-09-21 15:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -919,10 +919,11 @@ msgstr "Torna a %1<br />"
 msgid "enumerator "
 msgstr "numerador "
 
+# skip-rule: t-sp_2p, t-2p_sp
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[depenent-de-valor]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
 #, kde-format
