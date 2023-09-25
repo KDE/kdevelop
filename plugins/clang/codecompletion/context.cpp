@@ -534,7 +534,8 @@ bool isGccCompatibilityBuiltin(CXCompletionResult result)
     if (!std::equal(text, text + prefixSize, "_Float")) {
         return false;
     }
-    const auto suffixEquals = [text, textSize](const char* suffix) {
+    // TODO: explicitly capture [text, textSize] once building KDevelop with Visual Studio 2019 is no longer supported.
+    const auto suffixEquals = [=](const char* suffix) {
         Q_ASSERT(std::strlen(suffix) == textSize - prefixSize);
         return std::equal(text + prefixSize, text + textSize, suffix);
     };
