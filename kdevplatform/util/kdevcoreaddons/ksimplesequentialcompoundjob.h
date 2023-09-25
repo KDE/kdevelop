@@ -23,6 +23,7 @@ namespace KDevCoreAddons
  */
 class KDEVPLATFORMUTIL_EXPORT KSimpleSequentialCompoundJob : public KSequentialCompoundJob
 {
+    Q_OBJECT
 public:
     using KSequentialCompoundJob::addSubjob;
     using KSequentialCompoundJob::KSequentialCompoundJob;

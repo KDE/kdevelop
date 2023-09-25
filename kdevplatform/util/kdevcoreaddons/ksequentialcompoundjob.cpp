@@ -182,3 +182,4 @@ bool KSequentialCompoundJob::doKill()
 }
 
 #include "moc_ksequentialcompoundjob.cpp"
+#include "moc_ksimplesequentialcompoundjob.cpp"
