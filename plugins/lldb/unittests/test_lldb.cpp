@@ -1263,7 +1263,7 @@ void LldbTest::testCoreFile()
         }
     }
     if (!coreFileFound)
-        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).", SkipSingle);
+        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).");
 
     auto *session = new TestDebugSession;
     session->examineCoreFile(findExecutable(QStringLiteral("debuggee_crash")),

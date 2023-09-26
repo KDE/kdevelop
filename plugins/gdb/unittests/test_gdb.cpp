@@ -923,7 +923,7 @@ void GdbTest::testCoreFile()
         }
     }
     if (!coreFileFound)
-        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).", SkipSingle);
+        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).");
 
     auto *session = new TestDebugSession;
     session->examineCoreFile(findExecutable(QStringLiteral("debuggee_crash")),
@@ -1472,7 +1472,7 @@ void GdbTest::testRemoteDebug()
 {
     const QString gdbserverExecutable = QStandardPaths::findExecutable(QStringLiteral("gdbserver"));
     if (gdbserverExecutable.isEmpty()) {
-        QSKIP("Skipping, gdbserver not available", SkipSingle);
+        QSKIP("Skipping, gdbserver not available");
     }
 
     auto *session = new TestDebugSession;
@@ -1513,7 +1513,7 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 {
     const QString gdbserverExecutable = QStandardPaths::findExecutable(QStringLiteral("gdbserver"));
     if (gdbserverExecutable.isEmpty()) {
-        QSKIP("Skipping, gdbserver not available", SkipSingle);
+        QSKIP("Skipping, gdbserver not available");
     }
 
     auto *session = new TestDebugSession;
@@ -1565,7 +1565,7 @@ void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 {
     const QString gdbserverExecutable = QStandardPaths::findExecutable(QStringLiteral("gdbserver"));
     if (gdbserverExecutable.isEmpty()) {
-        QSKIP("Skipping, gdbserver not available", SkipSingle);
+        QSKIP("Skipping, gdbserver not available");
     }
 
     auto *session = new TestDebugSession;

@@ -188,7 +188,7 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
     if (!provider->isValid() || provider->engine()->documentsForIdentifier(QStringLiteral("QObject")).isEmpty()) {
-        QSKIP("Qt help not available", SkipSingle);
+        QSKIP("Qt help not available");
     }
 
     auto doc = provider->documentationForDeclaration(typeDecl);
@@ -216,7 +216,7 @@ void TestQtHelpPlugin::testDeclarationLookup_Method()
     QVERIFY(provider);
     if (!provider->isValid()
         || provider->engine()->documentsForIdentifier(QStringLiteral("QString::fromLatin1")).isEmpty()) {
-        QSKIP("Qt help not available", SkipSingle);
+        QSKIP("Qt help not available");
     }
 
     auto doc = provider->documentationForDeclaration(declFromLatin1);
@@ -241,7 +241,7 @@ void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
     if (!provider->isValid() || provider->engine()->documentsForIdentifier(QStringLiteral("QObject")).isEmpty()) {
-        QSKIP("Qt help not available", SkipSingle);
+        QSKIP("Qt help not available");
     }
 
     auto doc = provider->documentationForDeclaration(decl);
