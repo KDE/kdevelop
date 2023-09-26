@@ -3762,11 +3762,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Preview:"
+#, kde-format
 msgid "Show Preview"
-msgstr "Náhled:"
+msgstr "Zobrazit náhled"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -5915,9 +5913,3 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
-
-#~ msgid "New Style"
-#~ msgstr "Nový styl"
-
-#~ msgid "No language selected"
-#~ msgstr "Nebyl vybrán jazyk"
