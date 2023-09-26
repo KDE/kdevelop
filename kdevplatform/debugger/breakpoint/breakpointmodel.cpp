@@ -183,7 +183,7 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
                 iface->addMark(mark.line, MarkInterface::Bookmark);
         } else if (triggeredAction == breakpointAction) {
             if (b) {
-                b->setDeleted();
+                removeBreakpoint(b);
             } else {
                 Breakpoint* breakpoint = addCodeBreakpoint(document->url(), mark.line);
                 setupMovingCursor(document, breakpoint);
@@ -374,7 +374,7 @@ void BreakpointModel::markChanged(
         Breakpoint *b = breakpoint(document->url(), mark.line);
         if (b) {
             //there was already a breakpoint, so delete instead of adding
-            b->setDeleted();
+            removeBreakpoint(b);
             return;
         }
         Breakpoint* breakpoint = addCodeBreakpoint(document->url(), mark.line);
@@ -383,7 +383,7 @@ void BreakpointModel::markChanged(
         // Find this breakpoint and delete it
         Breakpoint *b = breakpoint(document->url(), mark.line);
         if (b) {
-            b->setDeleted();
+            removeBreakpoint(b);
         }
     }
 
@@ -423,11 +423,21 @@ const QPixmap* BreakpointModel::disabledBreakpointPixmap()
     return &pixmap;
 }
 
+void BreakpointModel::removeBreakpoint(Breakpoint* breakpoint)
+{
+    Q_D(BreakpointModel);
+
+    Q_ASSERT(breakpoint);
+    const auto row = d->breakpoints.indexOf(breakpoint);
+    Q_ASSERT(row != -1);
+    removeRow(row);
+}
+
 void BreakpointModel::toggleBreakpoint(const QUrl& url, const KTextEditor::Cursor& cursor)
 {
     Breakpoint *b = breakpoint(url, cursor.line());
     if (b) {
-        b->setDeleted();
+        removeBreakpoint(b);
     } else {
         addCodeBreakpoint(url, cursor.line());
     }

@@ -603,7 +603,7 @@ void LldbTest::testInsertBreakpointWhileRunning()
     WAIT_FOR_A_WHILE(session, 500);
 
     QCOMPARE(session->currentLine(), 25);
-    b->setDeleted();
+    breakpoints()->removeBreakpoint(b);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -638,8 +638,8 @@ void LldbTest::testInsertBreakpointWhileRunningMultiple()
 
     WAIT_FOR_A_WHILE(session, 500);
     QCOMPARE(session->currentLine(), 25);
-    b1->setDeleted();
-    b2->setDeleted();
+    breakpoints()->removeBreakpoint(b1);
+    breakpoints()->removeBreakpoint(b2);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -719,8 +719,7 @@ void LldbTest::testInsertAndRemoveBreakpointWhileRunning()
 
     KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 25);
     WAIT_FOR_A_WHILE(session, 200); // wait for feedback notification from lldb-mi
-    b->setDeleted();
-
+    breakpoints()->removeBreakpoint(b);
 
     WAIT_FOR_A_WHILE(session, 3000); // give slow debugee extra time to run
     WAIT_FOR_STATE(session, DebugSession::EndedState);

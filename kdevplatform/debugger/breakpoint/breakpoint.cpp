@@ -192,19 +192,6 @@ QVariant Breakpoint::data(int column, int role) const
     return QVariant();
 }
 
-void Breakpoint::setDeleted()
-{
-    m_deleted = true;
-    BreakpointModel* m = breakpointModel();
-    if (!m)
-        return; // already removed
-
-    if (m->breakpointIndex(this, 0).isValid()) {
-        m->removeRow(m->breakpointIndex(this, 0).row());
-    }
-    m_model = nullptr; // invalidate
-}
-
 int Breakpoint::line() const {
     return m_line;
 }

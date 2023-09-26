@@ -103,6 +103,12 @@ public:
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
+    /**
+     * Delete a given registered breakpoint.
+     * @param breakpoint a non-null pointer
+     */
+    void removeBreakpoint(Breakpoint* breakpoint);
+
     void toggleBreakpoint(const QUrl &url, const KTextEditor::Cursor& cursor);
 
 

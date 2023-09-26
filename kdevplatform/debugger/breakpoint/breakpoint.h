@@ -48,7 +48,6 @@ public:
     Breakpoint(BreakpointModel *model, const KConfigGroup& config);
 
     bool setData(int index, const QVariant& value);
-    void setDeleted();
 
     ///Note: to retrieve the full path use LocationRole, Qt::DisplayRole return only a file's name
     QVariant data(int column, int role) const;
@@ -82,6 +81,11 @@ public:
 
     int hitCount() const;
 
+    /**
+     * Check if the breakpoint is deleted.
+     * @note This method exists to ease the API transition in IBreakpointController;
+     *       it should be removed eventually, since check for already freed memory does not work.
+     */
     bool deleted() const;
     
     bool enabled() const;
