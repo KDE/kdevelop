@@ -101,6 +101,10 @@ void TestMIDBus::initTestCase()
 
 void TestMIDBus::debug()
 {
+#ifdef Q_OS_WIN
+    QSKIP("somehow, running this test makes Windows CI jobs fail via KeyboardInterrupt (^C)");
+#endif
+
     auto plugin = dynamic_cast<KDevMI::MIDebuggerPlugin*>(KDevelop::ICore::self()->pluginController()->loadPlugin(QStringLiteral("testdebugger")));
     QVERIFY(plugin);
     connect(plugin, &KDevMI::MIDebuggerPlugin::showMessage, this, &TestMIDBus::message);
