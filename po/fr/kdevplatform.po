@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:43+0000\n"
-"PO-Revision-Date: 2023-09-20 18:11+0200\n"
+"PO-Revision-Date: 2023-09-26 09:41+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -936,7 +936,7 @@ msgstr "énumérateur "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[value-dependent]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
 #, kde-format
