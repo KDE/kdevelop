@@ -401,26 +401,26 @@ static constexpr int breakpointMarkPixmapSize = 32;
 
 const QPixmap* BreakpointModel::breakpointPixmap()
 {
-  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(breakpointMarkPixmapSize, breakpointMarkPixmapSize), QIcon::Active, QIcon::Off);
-  return &pixmap;
+    static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(breakpointMarkPixmapSize, breakpointMarkPixmapSize), QIcon::Active, QIcon::Off);
+    return &pixmap;
 }
 
 const QPixmap* BreakpointModel::pendingBreakpointPixmap()
 {
-  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(breakpointMarkPixmapSize, breakpointMarkPixmapSize), QIcon::Normal, QIcon::Off);
-  return &pixmap;
+    static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(breakpointMarkPixmapSize, breakpointMarkPixmapSize), QIcon::Normal, QIcon::Off);
+    return &pixmap;
 }
 
 const QPixmap* BreakpointModel::reachedBreakpointPixmap()
 {
-  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(breakpointMarkPixmapSize, breakpointMarkPixmapSize), QIcon::Selected, QIcon::Off);
-  return &pixmap;
+    static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(breakpointMarkPixmapSize, breakpointMarkPixmapSize), QIcon::Selected, QIcon::Off);
+    return &pixmap;
 }
 
 const QPixmap* BreakpointModel::disabledBreakpointPixmap()
 {
-  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(breakpointMarkPixmapSize, breakpointMarkPixmapSize), QIcon::Disabled, QIcon::Off);
-  return &pixmap;
+    static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(breakpointMarkPixmapSize, breakpointMarkPixmapSize), QIcon::Disabled, QIcon::Off);
+    return &pixmap;
 }
 
 void BreakpointModel::toggleBreakpoint(const QUrl& url, const KTextEditor::Cursor& cursor)
