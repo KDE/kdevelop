@@ -25,6 +25,29 @@ namespace cppcheck
 
 void includesForItem(KDevelop::ProjectBaseItem* parent, QSet<KDevelop::Path>& includes)
 {
+    // FIXME: only one build system manager - QMakeManager - ever returns a nonempty include directory list
+    // for a target item. With any other project build system manager, cppcheck::Parameters::m_includeDirectories
+    // is always empty. For example, during the loop below CMakeManager prints the following debug message:
+    //     kdevelop.plugins.cmake: no information found for ""
+    // because a target item's path() is always empty.
+    // The algorithm here attempts to collect include directories for all project targets and use them to analyze any
+    // file. This algorithm can be patched up by passing the first child of a target item instead of the target item
+    // itself to IBuildSystemManager::includeDirectories(). However, the include directories would needlessly contain
+    // include paths for all unit tests then. Also each file in a target can potentially have different include paths.
+    // So perhaps the current algorithm should be replaced with something else altogether:
+    // 1. When KDevelop runs cppcheck on a single file, that file's project item should be passed to
+    // IBuildSystemManager::includeDirectories().
+    // 2. When KDevelop runs cppcheck on an entire project, it passes the project's root directory to cppcheck
+    // on the command line. cppcheck checks all source files in the given directory recursively.
+    // db0d8027749ba8c94702981ccb3062fa6c6006eb even implemented a workaround to skip cppcheck-ing files in
+    // <current build dir>/CMakeFiles/. That workaround is not perfect: what if there are multiple build
+    // subdirectories (e.g. debug and release) within the project's directory? Instead of running a single
+    // cppcheck command, we could run a separate cppcheck command for each not-filtered-out source file in
+    // the project. This way we could pass each file's project item to IBuildSystemManager::includeDirectories()
+    // and use a separate include directory list to analyze every file. But this would require determining which
+    // files should and which shouldn't be analyzed (C and C++ MIME types?), and might be slower.
+    // Apparently fixing this issue properly requires substantial refactoring and testing effort.
+
     const auto children = parent->children();
     for (auto* child : children) {
         if (child->type() == KDevelop::ProjectBaseItem::ProjectItemType::File) {
