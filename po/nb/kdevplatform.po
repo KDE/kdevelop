@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-09-21 00:43+0000\n"
 "PO-Revision-Date: 2013-04-01 11:18+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -905,229 +905,234 @@ msgstr "Tilbake til %1 <br />"
 msgid "enumerator "
 msgstr "teller "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:150
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
+#, kde-format
+msgid " :[value-dependent]"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
 #, kde-format
 msgid "namespace %1 "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:161
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:169
 #, kde-format
 msgid "enumeration %1 "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:178
 #, kde-format
 msgid "(resolved forward-declaration: "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:173
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:181
 #, kde-format
 msgid ") "
 msgstr ") "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:175
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:183
 #, kde-format
 msgid "(unresolved forward-declaration) "
 msgstr "( uløst forover-deklarasjon)"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:190
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:198
 #, kde-format
 msgid "possible resolution from"
 msgstr "mulig løsning fra"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:205
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:213
 #, kde-format
 msgid "Returns: "
 msgstr "Returnerer: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:207
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:215
 #, kde-format
 msgid "Type: "
 msgstr "Type: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:226
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:234
 #, kde-format
 msgid "Enum: "
 msgstr "Enum: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:228
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:236
 #, kde-format
 msgid "Container: "
 msgstr "Beholder: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:236
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:244
 #, kde-format
 msgid "Scope: %1 "
 msgstr "Virkeområde: %1 "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:254
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:262
 #, kde-format
 msgid "Access: %1 "
 msgstr "Tilgang: %1 "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:273
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:281
 #, kde-format
 msgid "Kind: %1 %2 "
 msgstr "Type: %1 %2 "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:275
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:283
 #, kde-format
 msgid "Kind: %1 "
 msgstr "Type: %1  "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:287
 #, kde-format
 msgid "Deprecated"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:287
 #, kde-format
 msgid "Status: %1 "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:289
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:297
 #, kde-format
 msgid "Def.: "
 msgstr "Def.: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:291
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:299
 #, kde-format
 msgid "Decl.: "
 msgstr "Dekl.: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:301
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:309
 #, kde-format
 msgid " Def.: "
 msgstr " Def.: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:311
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:319
 #, kde-format
 msgid " Decl.: "
 msgstr " Dekl.: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:319
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:327
 #, kde-format
 msgid "Show uses"
 msgstr "Vis bruk"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:357
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:365
 #, kde-format
 msgid "Show documentation for "
 msgstr "Vis dokumentasjon for "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:463
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:471
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:480
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:488
 #, kde-format
 msgid "Overrides a "
 msgstr "Overstyrer en "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:481
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:508
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:489
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:516
 #, kde-format
 msgid "function"
 msgstr "funksjon"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:483
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:511
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:519
 #, kde-format
 msgid " from "
 msgstr " fra "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:507
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:515
 #, kde-format
 msgid "Hides a "
 msgstr "Skjuler en "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:531
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:539
 #, kde-format
 msgid "Overridden in "
 msgstr "Overstyrt i "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:548
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:556
 #, kde-format
 msgid "Overriders possible, show all"
 msgstr "Overstyrere mulig, vis alle"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:549
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:557
 #, kde-format
 msgid "More overriders possible, show all"
 msgstr "Flere overstyrere mulig, vis alle"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:567
 #, kde-format
 msgid "Inherited by "
 msgstr "Arvet av "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:574
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:582
 #, kde-format
 msgid "Inheriters possible, show all"
 msgstr "Arvere mulig, vis alle"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:575
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:583
 #, kde-format
 msgid "More inheriters possible, show all"
 msgstr "Flere arvere mulig, vis alle"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:782
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:790
 #, kde-format
 msgctxt "A declaration that is unknown"
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:808
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:816
 #, kde-format
 msgctxt "tells if a declaration is defining the variable's value"
 msgid "definition"
 msgstr "definisjon"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:813
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:821
 #, kde-format
 msgctxt "as in c++ forward declaration"
 msgid "forward"
 msgstr "forover"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:818
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:826
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"
 msgstr "konstant"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:871
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:879
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:872
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:880
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
 msgstr[0] ""
 msgstr[1] ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:874
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
 #, kde-format
 msgid "offset in parent: %1"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:875
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:883
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:880
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:888
 #, kde-format
 msgid "size: %1 Bytes"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:892
 #, kde-format
 msgid "aligned to: %1 Bytes"
 msgstr ""
@@ -2182,25 +2187,25 @@ msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:608
+#: shell/documentcontroller.cpp:611
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr ""
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr ""
 
-#: shell/documentcontroller.cpp:612
+#: shell/documentcontroller.cpp:615
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr ""
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:619
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2208,74 +2213,74 @@ msgid ""
 "open them again."
 msgstr ""
 
-#: shell/documentcontroller.cpp:621
+#: shell/documentcontroller.cpp:624
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr ""
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr ""
 
-#: shell/documentcontroller.cpp:624
+#: shell/documentcontroller.cpp:627
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr ""
 
-#: shell/documentcontroller.cpp:630
+#: shell/documentcontroller.cpp:633
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr ""
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr ""
 
-#: shell/documentcontroller.cpp:633
+#: shell/documentcontroller.cpp:636
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr ""
 
-#: shell/documentcontroller.cpp:641
+#: shell/documentcontroller.cpp:644
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr ""
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:645
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr ""
 
-#: shell/documentcontroller.cpp:647
+#: shell/documentcontroller.cpp:650
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr ""
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr ""
 
-#: shell/documentcontroller.cpp:650
+#: shell/documentcontroller.cpp:653
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2283,19 +2288,19 @@ msgid ""
 "necessary."
 msgstr ""
 
-#: shell/documentcontroller.cpp:656
+#: shell/documentcontroller.cpp:659
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr ""
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:661
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr ""
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:662
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2303,19 +2308,19 @@ msgid ""
 "document."
 msgstr ""
 
-#: shell/documentcontroller.cpp:664
+#: shell/documentcontroller.cpp:667
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr ""
 
-#: shell/documentcontroller.cpp:665
+#: shell/documentcontroller.cpp:668
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr ""
 
-#: shell/documentcontroller.cpp:1294
+#: shell/documentcontroller.cpp:1297
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
