@@ -80,12 +80,39 @@ void TestCore::shutdown()
         // trigger eventloop to handle Queued connections
         // before entering cleanup
         // this can fix random crashes under certain conditions
+        // TODO: see to gain full control over execution flow instead of random waiting
         QTest::qWait(1);
 
-        self()->shutdown();
+        // The event processing by above's QTest::qWait can potentially
+        // also result in the destruction of the Core instance.
+        // So we need to recheck once more next if the instance still exists.
+        //
+        // This can happen due to calling Core::shutdown(), e.g. via the
+        // KDevelop::MainWindow destructor, which in turn could be invoked by
+        // calling close() on the window instance. QWidget::close() invokes
+        // deleteLater(), creating a QDeferredDeleteEvent for itself.
+        // Core::shutdown() also calls deleteLater() on itself, which results
+        // in a QDeferredDeleteEvent for the Core instance.
+        // Now with QTest::qWait (as of Qt 6.7) the 1 ms time window passed as
+        // argument (the minimal value possible) for its event processing is
+        // mapped onto a single 10 ms time slot. There first
+        // QCoreApplication::processEvents(QEventLoop::AllEvents, ...) and then
+        // QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete)
+        // is invoked, before the qWait method returns.
+        // The processEvents() method would process the QDeferredDeleteEvent for
+        // the KDevelop::MainWindow, and with the glib event dispatcher
+        // actually trigger posting the event to the handlers. So the destructor
+        // is invoked, which again yields in the end the QDeferredDeleteEvent for
+        // the Core, added to the current event queue.
+        // So sendPostedEvents() then picks up that new event as well for
+        // delivering it to the handlers, and thus the destructor of the Core
+        // instance is invoked in the same qWait time slot.
+        if (self()) {
+            self()->shutdown();
 
-        // wait until Core is deleted via event loop
-        QTest::qWait(1);
+            // wait until Core is deleted via event loop
+            QTest::qWait(1);
+        }
     }
 }
 
