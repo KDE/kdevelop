@@ -91,7 +91,7 @@ msgstr "Pegar fallou"
 msgid ""
 "Failed to paste. Below is a list of suboperations that have been attempted."
 msgstr ""
-"Non se puido pegar. Embaixo amósase unha lista de suboperacións que se "
+"Non foi posíbel pegar. Embaixo amósase unha lista de suboperacións que se "
 "intentaron."
 
 #. i18n: ectx: ToolBar (mainToolBar)

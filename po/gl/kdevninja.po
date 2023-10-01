@@ -22,7 +22,7 @@ msgstr ""
 #: ninjabuilder.cpp:30
 #, kde-format
 msgid "Unable to find ninja executable. Is it installed on the system?"
-msgstr "Non se pode atopar o executábel ninja. Está instalado no sistema?"
+msgstr "Non é posíbel atopar o executábel ninja. Está instalado no sistema?"
 
 #: ninjabuilder.cpp:199
 #, kde-format

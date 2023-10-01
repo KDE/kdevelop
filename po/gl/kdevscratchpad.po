@@ -32,29 +32,29 @@ msgstr "bosquexo:%1"
 #: scratchpad.cpp:168
 #, kde-format
 msgid "Failed to remove scratch: %1"
-msgstr "Non se puido retirar o bosquexo: %1"
+msgstr "Non foi posíbel retirar o bosquexo: %1"
 
 #: scratchpad.cpp:175
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
-msgstr "Non se puido crear o bosquexo: o nome xa está en uso"
+msgstr "Non foi posíbel crear o bosquexo: o nome xa está en uso"
 
 #: scratchpad.cpp:187
 #, kde-format
 msgid "Failed to create new scratch"
-msgstr "Non se puido crear un novo bosquexo"
+msgstr "Non foi posíbel crear un novo bosquexo"
 
 #: scratchpad.cpp:196
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr ""
-"Non se puido renomear o bosquexo: os nomes non poden incluír un separador de "
-"rutas."
+"Non foi posíbel renomear o bosquexo: os nomes non poden incluír un separador "
+"de rutas."
 
 #: scratchpad.cpp:226
 #, kde-format
 msgid "Failed renaming scratch."
-msgstr "Non se puido renomear o bosquexo."
+msgstr "Non foi posíbel renomear o bosquexo."
 
 #: scratchpadjob.cpp:57
 #, kde-format
@@ -69,7 +69,7 @@ msgstr "O proceso rematou co código de saída %1."
 #: scratchpadjob.cpp:80
 #, kde-format
 msgid "Failed to run scratch: %1"
-msgstr "Non se puido executar o bosquexo: %1"
+msgstr "Non foi posíbel executar o bosquexo: %1"
 
 #: scratchpadview.cpp:100
 #, kde-format

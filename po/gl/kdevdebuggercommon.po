@@ -288,12 +288,12 @@ msgstr "Depurar o proceso %1"
 #: midebugsession.cpp:208
 #, kde-format
 msgid "Running program"
-msgstr "Estase a executar o programa"
+msgstr "Executando o programa"
 
 #: midebugsession.cpp:295
 #, kde-format
 msgid "Attaching to process %1"
-msgstr "Estase a anexar ao proceso %1"
+msgstr "Anexando ao proceso %1"
 
 #: midebugsession.cpp:326
 #, kde-format
@@ -303,7 +303,7 @@ msgstr "<b>Non foi posíbel anexar o depurador:</b><br />"
 #: midebugsession.cpp:336
 #, kde-format
 msgid "Examining core file %1"
-msgstr "Estase a examinar o ficheiro core %1"
+msgstr "Examinando o ficheiro core %1"
 
 #: midebugsession.cpp:408
 #, kde-format

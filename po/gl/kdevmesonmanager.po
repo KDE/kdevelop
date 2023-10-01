@@ -25,12 +25,12 @@ msgstr "    *** ERRO DE MESON ***\n"
 #: mesonbuilder.cpp:75
 #, kde-format
 msgid "Failed to set the internally used Ninja builder"
-msgstr "Non se puido definir o construtor de Ninja que se usa internamente"
+msgstr "Non foi posíbel definir o construtor de Ninja que se usa internamente"
 
 #: mesonbuilder.cpp:78
 #, kde-format
 msgid "Failed to acquire the Ninja builder plugin"
-msgstr "Non se puido adquirir o complemento de construtor de Ninja"
+msgstr "Non foi posíbel adquirir o complemento de construtor de Ninja"
 
 #: mesonbuilder.cpp:141 mesonbuilder.cpp:265
 #, kde-format
@@ -79,7 +79,7 @@ msgstr "Erro interno: o xestor do sistema de construción non é MesonManager"
 #: mesonbuilder.cpp:196 mesonbuilder.cpp:226
 #, kde-format
 msgid "Failed to create a new build directory"
-msgstr "Non se puido crear un novo cartafol de construción"
+msgstr "Non foi posíbel crear un novo cartafol de construción"
 
 #: mesonjob.cpp:27 mesonjobprune.cpp:27
 #, kde-format
@@ -142,7 +142,7 @@ msgstr "O ficheiro de introspección «%1» non existe"
 #: mintro/mesonintrospectjob.cpp:119
 #, kde-format
 msgid "Failed to open introspection file '%1'"
-msgstr "Non se puido abrir o ficheiro de introspección «%1»"
+msgstr "Non foi posíbel abrir o ficheiro de introspección «%1»"
 
 #: mintro/mesonintrospectjob.cpp:125
 #, kde-format
@@ -180,7 +180,7 @@ msgstr "O cartafol de construción actual é incorrecto"
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format
 msgid "Failed to create a temporary file."
-msgstr "Non se puido crear un ficheiro temporal."
+msgstr "Non foi posíbel crear un ficheiro temporal."
 
 #: rewriter/mesonrewriterjob.cpp:74
 #, kde-format
@@ -409,7 +409,7 @@ msgstr ""
 #: settings/mesonnewbuilddir.cpp:154
 #, kde-format
 msgid "Cannot use specified directory"
-msgstr "Non se pode usar o cartafol indicado"
+msgstr "Non é posíbel usar o cartafol indicado"
 
 #: settings/mesonnewbuilddir.cpp:157
 #, kde-format

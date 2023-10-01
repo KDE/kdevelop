@@ -343,7 +343,7 @@ msgstr ""
 #: scriptappjob.cpp:170
 #, kde-format
 msgid "Starting: %1"
-msgstr "Estase a iniciar: %1"
+msgstr "Iniciando: %1"
 
 #: scriptappjob.cpp:184
 #, kde-format

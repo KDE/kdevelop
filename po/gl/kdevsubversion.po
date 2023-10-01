@@ -187,7 +187,7 @@ msgstr "Estanse a actualizar os externos: %1"
 #: svninternaljobbase.cpp:147
 #, kde-format
 msgid "Sending %1"
-msgstr "Estase a enviar %1"
+msgstr "Enviando %1"
 
 #: svninternaljobbase.cpp:151
 #, kde-format
@@ -197,7 +197,7 @@ msgstr "Engadindo %1 usando o tipo MIME %2."
 #: svninternaljobbase.cpp:153
 #, kde-format
 msgid "Adding %1."
-msgstr "Estase a engadir %1."
+msgstr "Engadindo %1."
 
 #: svninternaljobbase.cpp:157
 #, kde-format
@@ -212,7 +212,7 @@ msgstr "Estase a substituír %1."
 #: svninternaljobbase.cpp:165
 #, kde-format
 msgid "Transmitting file data "
-msgstr "Estase a transmitir os datos do ficheiro "
+msgstr "Transmitindo os datos do ficheiro "
 
 #: svninternaljobbase.cpp:171
 #, kde-format

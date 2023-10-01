@@ -242,7 +242,7 @@ msgstr ""
 #: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
-msgstr "Non se pode atopar o executábel de CMake. Está instalado?"
+msgstr "Non é posíbel atopar o executábel de CMake. Está instalado?"
 
 #: cmakedocumentation.cpp:81
 #, kde-format
@@ -303,7 +303,7 @@ msgid ""
 "settings. Then right-click the project item in the projects tool view and "
 "click 'Reload'."
 msgstr ""
-"Non se puido configurar o proxecto «%1» (mensaxe de erro: %2). Como "
+"Non foi posíbel configurar o proxecto «%1» (mensaxe de erro: %2). Como "
 "consecuencia, a comprensión de código de KDevelop probabelmente non "
 "funcione.\n"
 "\n"
@@ -456,7 +456,7 @@ msgstr ""
 #: settings/cmakepreferences.cpp:355
 #, kde-format
 msgid "Could not remove: %1"
-msgstr "Non se puido retirar: %1"
+msgstr "Non foi posíbel retirar: %1"
 
 #: settings/cmakepreferences.cpp:401
 #, fuzzy, kde-format

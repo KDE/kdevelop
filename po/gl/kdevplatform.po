@@ -605,8 +605,8 @@ msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
 "be executed. <br />The plugin will not work until you fix this problem."
 msgstr ""
-"Non se puido atopar o executábel %1. Verifique que estea instalado e que se "
-"poida executar.<br />O complemento non funcionará ata que corrixa este "
+"Non foi posíbel atopar o executábel %1. Verifique que estea instalado e que "
+"se poida executar.<br />O complemento non funcionará ata que corrixa este "
 "problema."
 
 #: language/assistant/renameaction.cpp:69
@@ -621,7 +621,7 @@ msgstr "Renomear «%1» como «%2»"
 #: language/codegen/basicrefactoring.cpp:365
 #, kde-format
 msgid "Failed to apply changes: %1"
-msgstr "Non se puideron aplicar os cambios: %1"
+msgstr "Non foi posíbel aplicar os cambios: %1"
 
 #: language/assistant/renameassistant.cpp:106
 #, kde-format
@@ -800,7 +800,7 @@ msgstr "&Cancelar"
 #: language/codegen/codegenerator.cpp:133
 #, kde-format
 msgid "Could not find an open document"
-msgstr "Non se puido atopar un documento aberto"
+msgstr "Non foi posíbel atopar un documento aberto"
 
 #: language/codegen/codegenerator.cpp:150
 #, kde-format
@@ -1515,7 +1515,7 @@ msgstr "Non existe o cartafol de traballo «%1» ou este non é un directorio"
 #: outputview/outputexecutejob.cpp:301
 #, kde-format
 msgid "Failed to specify program to start: %1"
-msgstr "Non se puido indicar un programa para iniciar: %1"
+msgstr "Non foi posíbel indicar un programa para iniciar: %1"
 
 #: outputview/outputexecutejob.cpp:302
 #, kde-format
@@ -2604,7 +2604,7 @@ msgstr ""
 #: shell/launchconfigurationdialog.cpp:438
 #, kde-format
 msgid "Editing %2: <b>%1</b>"
-msgstr "Estase a editar %2: <b>%1</b>"
+msgstr "Editando %2: <b>%1</b>"
 
 #: shell/launchconfigurationdialog.cpp:711
 #, fuzzy, kde-format
@@ -3141,13 +3141,13 @@ msgstr "Mostrar a xanela de progreso detallada"
 #: shell/project.cpp:99
 #, kde-format
 msgid "Loading Project %1"
-msgstr "Estase a cargar o proxecto %1"
+msgstr "Cargando o proxecto %1"
 
 #: shell/project.cpp:107
 #, kde-format
 msgctxt "%1: Project name"
 msgid "Loading %1"
-msgstr "Estase a cargar %1"
+msgstr "Cargando %1"
 
 #: shell/project.cpp:226
 #, kde-format
@@ -3181,7 +3181,7 @@ msgid ""
 "Could not load project management plugin <b>%1</b>.<br>Check that the "
 "required programs are installed, or see console output for more information."
 msgstr ""
-"Non se puido cargar o complemento de xestión de proxectos <b>%1</b>."
+"Non foi posíbel cargar o complemento de xestión de proxectos <b>%1</b>."
 "<br>Comprobe que os programas necesarios están instalados, ou consulte a "
 "saída de consola para máis información."
 
@@ -3205,7 +3205,7 @@ msgid ""
 "Could not store developer specific project configuration.\n"
 "Attention: The project settings you changed will be lost."
 msgstr ""
-"Non se puido gardar a configuración do proxecto específica do "
+"Non foi posíbel gardar a configuración do proxecto específica do "
 "desenvolvedores.\n"
 "Atención: perderanse os cambios que fixese na configuración do proxecto."
 
@@ -6593,7 +6593,7 @@ msgstr ""
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, kde-format
 msgid "Unable to commit"
-msgstr "Non se pode remitir"
+msgstr "Non é posíbel remitir"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, fuzzy, kde-format

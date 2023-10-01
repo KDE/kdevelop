@@ -22,7 +22,7 @@ msgstr ""
 #: bazaarplugin.cpp:36
 #, kde-format
 msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
-msgstr "Non se pode atopar o executábel de Bazaar (bzr). Está instalado?"
+msgstr "Non é posíbel atopar o executábel de Bazaar (bzr). Está instalado?"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

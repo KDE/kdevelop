@@ -69,7 +69,7 @@ msgid ""
 "\n"
 "%2"
 msgstr ""
-"Non se pode iniciar a comprobación para «%1»:\n"
+"Non é posíbel iniciar a comprobación para «%1»:\n"
 "\n"
 "%2"
 
@@ -96,8 +96,8 @@ msgstr ""
 #, kde-format
 msgid "Could not open compilation database file for reading: '%1'"
 msgstr ""
-"Non se puido abrir o ficheiro de base de datos de compilación para lectura: "
-"«%1»"
+"Non foi posíbel abrir o ficheiro de base de datos de compilación para "
+"lectura: «%1»"
 
 #: compileanalyzeutils.cpp:65
 #, kde-format
