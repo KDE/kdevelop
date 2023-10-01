@@ -81,10 +81,12 @@ void TestCore::shutdown()
         // this can fix random crashes under certain conditions
         QTest::qWait(1);
 
-        self()->shutdown();
+        if (self()) {
+            self()->shutdown();
 
-        // wait until Core is deleted via event loop
-        QTest::qWait(1);
+            // wait until Core is deleted via event loop
+            QTest::qWait(1);
+        }
     }
 }
 
