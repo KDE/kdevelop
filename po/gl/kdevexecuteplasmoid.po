@@ -38,7 +38,7 @@ msgstr "Iniciador de trebellos"
 #: plasmoidexecutionconfig.cpp:183
 #, kde-format
 msgid "Could not resolve the dependency: %1"
-msgstr "Non se puido satisfacer a dependencia: %1"
+msgstr "Non foi posíbel satisfacer a dependencia: %1"
 
 #: plasmoidexecutionconfig.cpp:297
 #, kde-format

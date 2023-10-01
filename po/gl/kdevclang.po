@@ -182,7 +182,7 @@ msgstr ""
 #: codegen/adaptsignatureaction.cpp:113
 #, kde-format
 msgid "Failed to apply changes: %1"
-msgstr "Non se puideron aplicar os cambios: %1"
+msgstr "Non foi posíbel aplicar os cambios: %1"
 
 #: codegen/adaptsignatureassistant.cpp:76
 #, kde-format
@@ -213,7 +213,7 @@ msgstr "Non hai ningún ficheiro de fontes dispoñíbel para %1."
 #: codegen/clangrefactoring.cpp:157
 #, kde-format
 msgid "Failed to update DUChain for %1."
-msgstr "Non se puido actualizar a cadea de declaracións de uso para %1."
+msgstr "Non foi posíbel actualizar a cadea de declaracións de uso para %1."
 
 #: codegen/clangrefactoring.cpp:161
 #, kde-format
@@ -223,7 +223,7 @@ msgstr "Perdeuse a declaración durante a actualización."
 #: codegen/clangrefactoring.cpp:167
 #, kde-format
 msgid "Cannot create definition for this declaration."
-msgstr "Non se pode crear a definición para esta declaración."
+msgstr "Non é posíbel crear a definición para esta declaración."
 
 #: codegen/clangrefactoring.cpp:174
 #, kde-format

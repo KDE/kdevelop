@@ -528,7 +528,7 @@ msgstr ""
 #: externalscriptjob.cpp:224
 #, kde-format
 msgid "Running external script: %1"
-msgstr "Estase a executar un guión externo: %1"
+msgstr "Executando un guión externo: %1"
 
 #: externalscriptjob.cpp:268
 #, kde-format

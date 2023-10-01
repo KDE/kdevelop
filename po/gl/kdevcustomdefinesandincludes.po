@@ -548,7 +548,7 @@ msgstr "Directiva #define incorrecta en %1:%2."
 #, kde-format
 msgid "Failed to save custom include paths in directory: %1"
 msgstr ""
-"Non se puido gardar as rutas de inclusión personalizadas no directorio: %1"
+"Non foi posíbel gardar as rutas de inclusión personalizadas no directorio: %1"
 
 #~ msgid "c++98"
 #~ msgstr "c++98"

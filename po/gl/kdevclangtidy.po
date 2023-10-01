@@ -271,7 +271,7 @@ msgstr "Análise de Clang-Tidy"
 #: job.cpp:142
 #, kde-format
 msgid "Failed to start Clang-Tidy process."
-msgstr "Non se puido iniciar o proceso de Clang-Tidy."
+msgstr "Non foi posíbel iniciar o proceso de Clang-Tidy."
 
 #: job.cpp:147
 #, fuzzy, kde-format

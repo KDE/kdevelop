@@ -105,7 +105,7 @@ msgid ""
 "Unable to load Clazy checks information from '%1'. Please check your "
 "settings."
 msgstr ""
-"Non se pode cargar información sobre as comprobacións de Clazy de «%1». "
+"Non é posíbel cargar información sobre as comprobacións de Clazy de «%1». "
 "Revise a configuración."
 
 #: config/checksetmanagewidget.cpp:89
@@ -609,7 +609,7 @@ msgstr "Nivel descoñecido"
 #: job.cpp:201
 #, kde-format
 msgid "Failed to start Clazy analysis process."
-msgstr "Non se puido iniciar o proceso de análise de Clazy."
+msgstr "Non foi posíbel iniciar o proceso de análise de Clazy."
 
 #: job.cpp:206
 #, kde-format
@@ -644,7 +644,7 @@ msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
 "already installed."
 msgstr ""
-"Non se pode detectar a ruta de clazy-standalone. Defina a ruta manualmente "
+"Non é posíbel detectar a ruta de clazy-standalone. Defina a ruta manualmente "
 "se xa ten Clazy instalado."
 
 #: jobparameters.cpp:42
@@ -668,7 +668,7 @@ msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
 "is already installed."
 msgstr ""
-"Non se pode detectar a ruta da documentación de Clazy. Defina a ruta "
+"Non é posíbel detectar a ruta da documentación de Clazy. Defina a ruta "
 "manualmente se xa ten Clazy instalado."
 
 #: jobparameters.cpp:67

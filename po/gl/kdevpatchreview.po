@@ -126,7 +126,8 @@ msgstr "Alternativa:<br/>"
 #: patchhighlighter.cpp:206
 #, kde-format
 msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
-msgstr "Non se puido aplicar o cambio: O texto debería ser «%1», pero é «%2»."
+msgstr ""
+"Non foi posíbel aplicar o cambio: O texto debería ser «%1», pero é «%2»."
 
 #: patchhighlighter.cpp:416 patchhighlighter.cpp:423
 #, kde-format

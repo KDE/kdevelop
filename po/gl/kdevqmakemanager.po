@@ -53,7 +53,7 @@ msgstr "O executábel de QMake non é un executábel."
 #: qmakebuilddirchooser.cpp:140
 #, kde-format
 msgid "QMake executable cannot be queried for variables."
-msgstr "Non se poden obter variábeis do executábel de QMake."
+msgstr "Non é posíbel obter variábeis do executábel de QMake."
 
 #: qmakebuilddirchooser.cpp:143
 #, kde-format

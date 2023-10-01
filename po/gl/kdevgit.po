@@ -213,7 +213,7 @@ msgstr "Gardar na configuración global"
 #: gitplugin.cpp:182
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
-msgstr "Non se pode atopar o executábel git. Está instalado no sistema?"
+msgstr "Non é posíbel atopar o executábel git. Está instalado no sistema?"
 
 #: gitplugin.cpp:191
 #, kde-format

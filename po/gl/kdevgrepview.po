@@ -99,8 +99,8 @@ msgstr "Non se permiten capturas na cadea dos padróns"
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
-msgstr[0] "Estase a buscar <b>%2</b> nun ficheiro"
-msgstr[1] "Estase a buscar <b>%2</b> en %1 ficheiros"
+msgstr[0] "Buscando <b>%2</b> nun ficheiro"
+msgstr[1] "Buscando <b>%2</b> en %1 ficheiros"
 
 #: grepjob.cpp:224
 #, kde-format

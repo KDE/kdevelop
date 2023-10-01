@@ -73,7 +73,7 @@ msgstr "Escriba un nome de usuario e un contrasinal"
 #: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
 #, kde-format
 msgid "Waiting for response"
-msgstr "Estase a agardar pola resposta"
+msgstr "Agardando pola resposta"
 
 #: ghdialog.cpp:126
 #, kde-format
@@ -159,7 +159,7 @@ msgid ""
 "The Git plugin could not be loaded which is required to import a GitHub "
 "project."
 msgstr ""
-"Non se puido cargar o complemento de Git, necesario para importar un "
+"Non foi posíbel cargar o complemento de Git, necesario para importar un "
 "proxecto de GitHub."
 
 #: ghproviderwidget.cpp:87
