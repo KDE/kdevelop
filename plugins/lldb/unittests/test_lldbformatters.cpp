@@ -889,7 +889,7 @@ void LldbFormattersTest::testQUrl()
     children.append({QStringLiteral("(path)"), QStringLiteral("\"/foo\"")});
     children.append({QStringLiteral("(query)"), QStringLiteral("\"xyz=bar\"")});
     children.append({QStringLiteral("(fragment)"), QStringLiteral("\"asdf\"")});
-    VERIFY_LOCAL(0, "u", "\"http://user@www.kdevelop.org:12345/foo?xyz=bar#asdf\"", children);
+    VERIFY_LOCAL(0, "u", "http://user@www.kdevelop.org:12345/foo?xyz=bar#asdf", children);
 }
 
 void LldbFormattersTest::testQUuid()
