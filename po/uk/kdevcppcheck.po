@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-10-02 00:41+0000\n"
 "PO-Revision-Date: 2020-07-20 08:33+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -423,7 +423,7 @@ msgstr "Спроба записати дані до процесу cppcheck за
 msgid "Read from Cppcheck process failed."
 msgstr "Спроба прочитати дані процесу cppcheck зазнала невдачі."
 
-#: parameters.cpp:122
+#: parameters.cpp:145
 #, kde-format
 msgid ""
 "It seems that this project uses Qt library. For correctly work of cppcheck "

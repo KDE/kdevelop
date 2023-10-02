@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-10-02 00:41+0000\n"
 "PO-Revision-Date: 2023-03-17 22:26+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -416,7 +416,7 @@ msgstr "Das Schreiben zum Cppcheck-Prozess ist fehlgeschlagen."
 msgid "Read from Cppcheck process failed."
 msgstr "Das Lesen vom Cppcheck-Prozess ist fehlgeschlagen."
 
-#: parameters.cpp:122
+#: parameters.cpp:145
 #, kde-format
 msgid ""
 "It seems that this project uses Qt library. For correctly work of cppcheck "

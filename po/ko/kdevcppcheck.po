@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-10-02 00:41+0000\n"
 "PO-Revision-Date: 2020-10-04 20:00+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -409,7 +409,7 @@ msgstr "Cppcheck 프로세스에 쓸 수 없습니다."
 msgid "Read from Cppcheck process failed."
 msgstr "Cppcheck 프로세스에서 읽을 수 없습니다."
 
-#: parameters.cpp:122
+#: parameters.cpp:145
 #, kde-format
 msgid ""
 "It seems that this project uses Qt library. For correctly work of cppcheck "

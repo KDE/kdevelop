@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-10-02 00:41+0000\n"
 "PO-Revision-Date: 2013-12-24 01:19-0800\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -366,7 +366,7 @@ msgstr ""
 msgid "Read from Cppcheck process failed."
 msgstr ""
 
-#: parameters.cpp:122
+#: parameters.cpp:145
 #, kde-format
 msgid ""
 "It seems that this project uses Qt library. For correctly work of cppcheck "

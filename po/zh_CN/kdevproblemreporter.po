@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:44+0000\n"
+"POT-Creation-Date: 2023-10-02 00:41+0000\n"
 "PO-Revision-Date: 2023-09-16 10:08\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -233,25 +233,25 @@ msgctxt "@title:menu"
 msgid "Scope: %1"
 msgstr "域： %1"
 
-#: problemtreeview.cpp:94
+#: problemtreeview.cpp:97
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Problems"
 msgstr "问题"
 
-#: problemtreeview.cpp:205
+#: problemtreeview.cpp:252
 #, kde-format
 msgctxt "@title:menu"
 msgid "Problem"
 msgstr "问题"
 
-#: problemtreeview.cpp:207
+#: problemtreeview.cpp:254
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Description"
 msgstr "复制描述 (&C)"
 
-#: problemtreeview.cpp:226
+#: problemtreeview.cpp:273
 #, kde-format
 msgctxt "@title:menu"
 msgid "Solve: %1"

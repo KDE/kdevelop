@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:57+0000\n"
+"POT-Creation-Date: 2023-10-02 00:41+0000\n"
 "PO-Revision-Date: 2019-08-27 10:08+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -264,7 +264,7 @@ msgstr ""
 msgid "CMake Content Page"
 msgstr "Σελίδα περιεχομένου CMake"
 
-#: cmakemanager.cpp:650
+#: cmakemanager.cpp:657
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to configure the project (error message: %1). As a result, "
@@ -289,7 +289,7 @@ msgstr ""
 "και ρυθμίσεις του CMake. Έπειτα κάνετε δεξί κλικ στο αντικείμενο στην "
 "προβολή εργαλείων του έργου και κλικ στην 'Επαναφόρτωση'."
 
-#: cmakemanager.cpp:661
+#: cmakemanager.cpp:668
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to configure the project (error message: %1). As a result, "
