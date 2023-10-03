@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:43+0000\n"
+"POT-Creation-Date: 2023-10-03 00:41+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1935,14 +1935,14 @@ msgctxt "@title:window"
 msgid "Apply Settings"
 msgstr "Ρυθμίσεις εκτέλεσης"
 
-#: shell/core.cpp:114
+#: shell/core.cpp:183
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgctxt "@title:window"
 msgid "No Plugins Found"
 msgstr "Φορτωμένα πρόσθετα"
 
-#: shell/core.cpp:115
+#: shell/core.cpp:184
 #, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
@@ -4384,14 +4384,14 @@ msgid_plural " files"
 msgstr[0] " αρχεία"
 msgstr[1] " αρχεία"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:80
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Language Support"
 msgid "Language Support"
 msgstr "Υποστήριξη γλώσσας"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:85
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr ""
@@ -4745,6 +4745,51 @@ msgstr ""
 msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
 msgstr "Ελάχιστο μέγεθος έργου για απλοποιημένη συντακτική ανάλυση"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: shell/settings/languagepreferences.ui:415
+#, kde-format
+msgctxt "@title:group"
+msgid "Storage and Memory Use"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
+#: shell/settings/languagepreferences.ui:421
+#, kde-format
+msgctxt "@label"
+msgid "Store precompiled preambles in:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
+#: shell/settings/languagepreferences.ui:436
+#, kde-format
+msgid ""
+"<p>Precompiled preambles remain in the temporary directory after KDevelop "
+"crashes and are deleted only when the same session is started again.<br>\n"
+"When the preambles are stored in memory, they are guaranteed to disappear on "
+"exit even if KDevelop crashes.<br>\n"
+"Choosing the Session Temporary Directory storage makes sense on systems "
+"where RAM is limited and the temporary directory does not use tmpfs, because "
+"the preamble files can occupy gigabytes of space.<br>\n"
+"Changing this option takes effect after restarting KDevelop.<br>\n"
+"This option has effect only if KDevelop has been built against Clang version "
+"17 or later.\n"
+"</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
+#: shell/settings/languagepreferences.ui:440
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Memory"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
+#: shell/settings/languagepreferences.ui:445
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Session Temporary Directory"
+msgstr ""
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
