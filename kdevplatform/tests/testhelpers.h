@@ -28,6 +28,14 @@
             return retval;                                                                                             \
     } while (false)
 
+#define RETURN_IF_TEST_FAILED(...)                                                                                     \
+    do {                                                                                                               \
+        if (QTest::currentTestFailed()) {                                                                              \
+            qCritical("FAILED AT: %s:%d", __FILE__, __LINE__);                                                         \
+            return __VA_ARGS__;                                                                                        \
+        }                                                                                                              \
+    } while (false)
+
 namespace QTest {
 template<>
 inline char* toString(const KDevelop::CursorInRevision& c)

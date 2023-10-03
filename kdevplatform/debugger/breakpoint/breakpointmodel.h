@@ -16,6 +16,7 @@
 #include "breakpoint.h"
 
 class QUrl;
+class TestBreakpointModel;
 
 namespace KParts { class Part; }
 namespace KTextEditor {
@@ -172,6 +173,7 @@ private:
 private:
     friend class Breakpoint;
     friend class IBreakpointController;
+    friend class ::TestBreakpointModel;
 
     void updateState(int row, Breakpoint::BreakpointState state);
     void updateHitCount(int row, int hitCount);
