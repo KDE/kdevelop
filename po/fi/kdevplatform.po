@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-03 00:41+0000\n"
+"POT-Creation-Date: 2023-10-04 00:41+0000\n"
 "PO-Revision-Date: 2019-06-02 13:10+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -5653,45 +5653,45 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Lataa"
 
-#: sublime/container.cpp:285
+#: sublime/container.cpp:356
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Rivi: 00000 Sar: 000"
 
-#: sublime/container.cpp:319
+#: sublime/container.cpp:390
 #, fuzzy, kde-format
 #| msgid "Show sorted list of opened documents"
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Näytä järjestetty luettelo avoimista tiedostoista"
 
-#: sublime/container.cpp:331
+#: sublime/container.cpp:402
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:724
+#: sublime/container.cpp:797
 #, fuzzy, kde-format
 #| msgid "Copy Filename"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Kopioi tiedostonimi"
 
-#: sublime/container.cpp:727
+#: sublime/container.cpp:800
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Sulje"
 
-#: sublime/container.cpp:729
+#: sublime/container.cpp:802
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Sulje kaikki &muut"
 
-#: sublime/container.cpp:731
+#: sublime/container.cpp:804
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action:inmenu"

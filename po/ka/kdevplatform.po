@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-03 00:41+0000\n"
+"POT-Creation-Date: 2023-10-04 00:41+0000\n"
 "PO-Revision-Date: 2023-09-17 06:33+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -4983,42 +4983,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "ჩატვირთვა"
 
-#: sublime/container.cpp:285
+#: sublime/container.cpp:356
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "ხაზი: 00000 სვეტი: 000"
 
-#: sublime/container.cpp:319
+#: sublime/container.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr ""
 
-#: sublime/container.cpp:331
+#: sublime/container.cpp:402
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:724
+#: sublime/container.cpp:797
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr ""
 
-#: sublime/container.cpp:727
+#: sublime/container.cpp:800
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "დახურვა"
 
-#: sublime/container.cpp:729
+#: sublime/container.cpp:802
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "აქტიურის გარდა ყველას დახურვა"
 
-#: sublime/container.cpp:731
+#: sublime/container.cpp:804
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

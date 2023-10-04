@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-03 00:41+0000\n"
-"PO-Revision-Date: 2023-09-21 13:24+0300\n"
+"POT-Creation-Date: 2023-10-04 00:41+0000\n"
+"PO-Revision-Date: 2023-10-03 08:27+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -4372,14 +4372,14 @@ msgstr "Мінімальні розміри проєкту для спрощен
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Використання диска та пам'яті"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Зберігати попередньо зібрані початкові частини у:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4397,20 +4397,35 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Попередньо зібрані початкові частини лишаються у тимчасовому каталозі "
+"після аварійних завершень роботи KDevelop, програма вилучає їх, лише якщо "
+"той самий сеанс буде запущено знову.<br>\n"
+"Якщо початкові частини зберігаються в оперативній пам'яті, їх точно буде "
+"вилучено при виході з програми, навіть якщо KDevelop завершить роботу "
+"аварійно.<br>\n"
+"Вибір тимчасового каталогу сеансу має сенс у системах із обмеженим об'ємом "
+"оперативної пам'яті і там, що для каталогу тимчасових даних не "
+"використовують tmpfs, оскільки файли початкових частин можуть мати об'єм у "
+"гігабайти.<br>\n"
+"Внесення змін до цього параметра набуде чинності після перезапуску KDevelop."
+"<br>\n"
+"Цей параметр працюватиме, лише якщо KDevelop було зібрано із версією Clang "
+"17 або новішою.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Пам'ять"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Тимчасовий каталог сеансу"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -5245,42 +5260,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Завантажити"
 
-#: sublime/container.cpp:285
+#: sublime/container.cpp:356
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Рядок: 00000 Кол: 000"
 
-#: sublime/container.cpp:319
+#: sublime/container.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Показати впорядкований список відкритих документів"
 
-#: sublime/container.cpp:331
+#: sublime/container.cpp:402
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Натисніть Ctrl+Tab, щоб перемкнутися)"
 
-#: sublime/container.cpp:724
+#: sublime/container.cpp:797
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Копіювати назву файла"
 
-#: sublime/container.cpp:727
+#: sublime/container.cpp:800
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Закрити"
 
-#: sublime/container.cpp:729
+#: sublime/container.cpp:802
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Закрити всі інші"
 
-#: sublime/container.cpp:731
+#: sublime/container.cpp:804
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

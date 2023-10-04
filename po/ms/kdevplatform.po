@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-03 00:41+0000\n"
+"POT-Creation-Date: 2023-10-04 00:41+0000\n"
 "PO-Revision-Date: 2009-07-05 19:31+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -4983,42 +4983,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Memuat"
 
-#: sublime/container.cpp:285
+#: sublime/container.cpp:356
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr ""
 
-#: sublime/container.cpp:319
+#: sublime/container.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr ""
 
-#: sublime/container.cpp:331
+#: sublime/container.cpp:402
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:724
+#: sublime/container.cpp:797
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Nama Fail"
 
-#: sublime/container.cpp:727
+#: sublime/container.cpp:800
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Tutup"
 
-#: sublime/container.cpp:729
+#: sublime/container.cpp:802
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Tutup S&emua"
 
-#: sublime/container.cpp:731
+#: sublime/container.cpp:804
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

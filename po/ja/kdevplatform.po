@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-03 00:41+0000\n"
+"POT-Creation-Date: 2023-10-04 00:41+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -5372,46 +5372,46 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "ロード"
 
-#: sublime/container.cpp:285
+#: sublime/container.cpp:356
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr " 行: 00000 列: 000"
 
-#: sublime/container.cpp:319
+#: sublime/container.cpp:390
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "開いているすべての文書を閉じます"
 
-#: sublime/container.cpp:331
+#: sublime/container.cpp:402
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:724
+#: sublime/container.cpp:797
 #, fuzzy, kde-format
 #| msgid "Close File"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "ファイルを閉じる"
 
-#: sublime/container.cpp:727
+#: sublime/container.cpp:800
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "閉じる"
 
-#: sublime/container.cpp:729
+#: sublime/container.cpp:802
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "他をすべて閉じる(&H)"
 
-#: sublime/container.cpp:731
+#: sublime/container.cpp:804
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action:inmenu"

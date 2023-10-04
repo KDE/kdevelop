@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-03 00:41+0000\n"
-"PO-Revision-Date: 2023-09-21 08:21+0100\n"
+"POT-Creation-Date: 2023-10-04 00:41+0000\n"
+"PO-Revision-Date: 2023-10-03 06:32+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -4342,14 +4342,14 @@ msgstr "Minimuma projekta grandeco por simpligita analizado:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Konservado kaj Memoruzado"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Konservi antaŭkompilitajn antaŭtekstojn en:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4367,20 +4367,32 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Antaŭkompilitaj antaŭtekstoj restas en la provizora dosierujo post kiam "
+"KDevelop paneas kaj estas forigitaj nur kiam la sama sesio denove komenciĝas."
+"<br>\n"
+"Kiam la antaŭtekstoj estas konservitaj en memoro, ilia malapero estas "
+"garantiita je eliro eĉ se KDevelop paneas.<br>\n"
+"Elekti la Sesian Provizoran Dosierujo-konservadon havas sencon en sistemoj "
+"kie RAM estas limigita kaj la provizora dosierujo ne uzas tmpfs, ĉar la "
+"antaŭtekstaj dosieroj povas okupi gigabajtojn da spaco.<br>\n"
+"Ŝanĝi ĉi tiun opcion efektiviĝas post rekomenco de KDevelop.<br>\n"
+"Ĉi tiu opcio efikas nur se KDevelop estis konstruita kontraŭ Clang-versio 17 "
+"aŭ posta.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Memoro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Provizora Dosierujo de Seanco"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -5201,42 +5213,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Reŝargi"
 
-#: sublime/container.cpp:285
+#: sublime/container.cpp:356
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Linio: 00000 Col: 000"
 
-#: sublime/container.cpp:319
+#: sublime/container.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Montri ordigitan liston de malfermitaj dokumentoj"
 
-#: sublime/container.cpp:331
+#: sublime/container.cpp:402
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Premu Ctrl+Tab por ŝanĝi)"
 
-#: sublime/container.cpp:724
+#: sublime/container.cpp:797
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Kopii Dosiernomon"
 
-#: sublime/container.cpp:727
+#: sublime/container.cpp:800
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Fermi"
 
-#: sublime/container.cpp:729
+#: sublime/container.cpp:802
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Fermi Ĉiujn Aliajn"
 
-#: sublime/container.cpp:731
+#: sublime/container.cpp:804
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

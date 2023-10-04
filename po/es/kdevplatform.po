@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-03 00:41+0000\n"
-"PO-Revision-Date: 2023-09-21 13:36+0200\n"
+"POT-Creation-Date: 2023-10-04 00:41+0000\n"
+"PO-Revision-Date: 2023-10-03 14:40+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -4371,14 +4371,14 @@ msgstr "Tamaño mínimo del proyecto para el análisis sintáctico simplificado:
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Uso de almacenamiento y memoria"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Guardar preámbulos precompilados en:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4396,20 +4396,33 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Los preámbulos precompilados permanecen en el directorio temporal después "
+"de los fallos de KDevelop y se borran solo cuando se vuelve a iniciar la "
+"misma sesión.<br>\n"
+"Cuando los preámbulos se guardan en memoria, se garantiza su desaparición al "
+"salir, incluso si KDevelop falla.<br>\n"
+"La elección de almacenamiento en el directorio temporal de la sesión tiene "
+"sentido en sistemas con RAM limitada y donde los directorios temporales no "
+"usan tmpfs, ya que los archivos de preámbulo pueden ocupar varios gigabytes "
+"de espacio.<br>\n"
+"El cambio de esta opción tiene efecto después de reiniciar KDevelop.<br>\n"
+"Esta opción tiene efecto solo si KDevelop se ha compilado con la versión 17 "
+"de Clang u otra posterior.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Memoria"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Directorio temporal de la sesión"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -5244,42 +5257,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Cargar"
 
-#: sublime/container.cpp:285
+#: sublime/container.cpp:356
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Línea: 00000 Col: 000"
 
-#: sublime/container.cpp:319
+#: sublime/container.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Mostrar una lista ordenada de los documentos abiertos"
 
-#: sublime/container.cpp:331
+#: sublime/container.cpp:402
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Pulse Ctrl+Tab para cambiar)"
 
-#: sublime/container.cpp:724
+#: sublime/container.cpp:797
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Copiar nombre de archivo"
 
-#: sublime/container.cpp:727
+#: sublime/container.cpp:800
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Cerrar"
 
-#: sublime/container.cpp:729
+#: sublime/container.cpp:802
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Cerrar los demás"
 
-#: sublime/container.cpp:731
+#: sublime/container.cpp:804
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
