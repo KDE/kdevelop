@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2022-09-12 09:35+0200\n"
+"PO-Revision-Date: 2023-10-04 18:51+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4\n"
 
 #: grepdialog.cpp:52
 #, kde-format
@@ -80,7 +80,7 @@ msgstr "ძებნა შეწყვეტილია"
 #: grepjob.cpp:122
 #, kde-format
 msgid "No files found matching the wildcard patterns"
-msgstr ""
+msgstr "ვაილდკარდის ნიმუშების შესაბამისი ფაილები აღმოჩენილი არაა"
 
 #: grepjob.cpp:140
 #, kde-format
@@ -155,13 +155,13 @@ msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
 "its row and column"
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
-msgstr ""
+msgstr "<b>%1</b>-ის ჩანაცვლება <b>%2</b>-ით ჩავარდა %3:%4:%5-ში"
 
 #: grepoutputview.cpp:72
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
-msgstr ""
+msgstr "ძებნა/ჩანაცვლების გამოტანის ხედი"
 
 #: grepoutputview.cpp:75
 #, kde-format
@@ -208,7 +208,7 @@ msgstr "ძებნის ისტორიის გასუფთავე�
 #: grepoutputview.cpp:325
 #, kde-format
 msgid "Do you want to replace with an empty string?"
-msgstr ""
+msgstr "გნებავთ ჩაანაცვლოთ ცარიელი სტრიქონით?"
 
 #: grepoutputview.cpp:326
 #, kde-format
@@ -241,7 +241,7 @@ msgstr "შეიყვანეთ ჩასანაცვლებელი �
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply replacement on selected items"
-msgstr ""
+msgstr "ჩანაცვლების გადატარება მონიშნულ ელემენტებზე"
 
 #. i18n: ectx: property (text), widget (QPushButton, applyButton)
 #: grepoutputview.ui:79
@@ -260,7 +260,7 @@ msgstr "ძებნა და ჩანაცვლება &ფაილე�
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
-msgstr ""
+msgstr "გამოსახულებების რამდენიმე ფაილზე ძებნა"
 
 #: grepviewplugin.cpp:81
 #, kde-format
@@ -289,7 +289,7 @@ msgstr "ფაილებში &ძებნა/ჩანაცვლება
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the regular expression you want to search for"
-msgstr ""
+msgstr "შეიყვანეთ რეგულარული გამოსახულება, რომელიც გნებავთ, მოძებნოთ"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
 #: grepwidget.ui:59
@@ -402,6 +402,8 @@ msgid ""
 "This is the regular expression template. <i>%s</i> will be replaced by the "
 "pattern, while <i>%%</i> will be replaced by <i>%</i>."
 msgstr ""
+"ეს რეგულარული გამოსახულების ნიმუშია. <i>%s</i> ნიმუშებით, ჩანაცვლდება <i>%%</"
+"i> კი <i>%</i>-ით."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
 #: grepwidget.ui:92
@@ -482,6 +484,8 @@ msgid ""
 "Enter the file name pattern of the files to search here. You may give "
 "several patterns separated by commas or spaces."
 msgstr ""
+"შეიყვანეთ მოსაძებნი ფაილის სახელის ნიმუში. შეგიძლიათ ერთზე მეტი, მძიმეებით "
+"ან გამოტოვებებით გამოყოფილი ნიმუშებიც შეიყვანოთ."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: grepwidget.ui:218

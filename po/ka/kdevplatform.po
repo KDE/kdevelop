@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-27 00:45+0000\n"
-"PO-Revision-Date: 2023-01-23 06:36+0100\n"
+"PO-Revision-Date: 2023-10-04 18:50+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -395,7 +395,7 @@ msgstr "გამმართველის ცვლადები"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "დაწკაპუნებისას სვეტების ზომის ავტომატური შეცვლა"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -530,7 +530,7 @@ msgstr "ტექსტში ძებნა..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Find in text of current documentation page"
-msgstr ""
+msgstr "მიმდინარე დოკუმენტაციის გვერდის ტექსტში ძებნა"
 
 #: interfaces/contextmenuextension.cpp:133
 #, kde-format
@@ -602,13 +602,13 @@ msgstr "ფონური დამმუშავებელი"
 #, kde-format
 msgctxt "%1: filename"
 msgid "Skipped file that is too large: '%1'"
-msgstr ""
+msgstr "გამოტოვებულია ფაილი, რომელიც მეტისმეტად დიდია: '%1'"
 
 #: language/backgroundparser/parsejob.cpp:315
 #, kde-format
 msgctxt "%1: file size, %2: limit file size"
 msgid "The file is %1 and exceeds the limit of %2."
-msgstr ""
+msgstr "ფაილის ზომაა %1 და ის აჭარბებს  %2-ის ლიმიტს."
 
 #: language/backgroundparser/parsejob.cpp:327
 #, kde-format
@@ -838,12 +838,12 @@ msgstr "%1 მეტსახელი დაიკარგა"
 #: language/duchain/classfunctiondeclaration.cpp:94
 #, kde-format
 msgid "invalid member-function %1 type %2"
-msgstr ""
+msgstr "არასწორი წევრი-ფუნქცია %1 ტიპით %2"
 
 #: language/duchain/declarationid.cpp:204
 #, kde-format
 msgid "(unknown direct declaration)"
-msgstr ""
+msgstr "(უცნობი პირდაპირი დეკლარაცია)"
 
 #: language/duchain/declarationid.cpp:207
 #, kde-format
@@ -853,7 +853,7 @@ msgstr "(აკლია)"
 #: language/duchain/forwarddeclaration.cpp:50
 #, kde-format
 msgid "context-free forward-declaration %1"
-msgstr ""
+msgstr "უკონტექსტო წინასწარი-დეკლარაცია %1"
 
 #: language/duchain/namespacealiasdeclaration.cpp:94
 #, kde-format
@@ -893,7 +893,7 @@ msgstr "ჩამონათვალი %1 "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
 #, kde-format
 msgid "(resolved forward-declaration: "
-msgstr ""
+msgstr "(ამოხსნილი წინასწარი-დეკლარაცია: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:173
 #, kde-format
@@ -903,12 +903,12 @@ msgstr ") "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:175
 #, kde-format
 msgid "(unresolved forward-declaration) "
-msgstr ""
+msgstr "(ამოუხსნელი წინასწარი-დეკლარაცია) "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:190
 #, kde-format
 msgid "possible resolution from"
-msgstr ""
+msgstr "შესაძლო ამოხსნა წყაროდან"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:205
 #, kde-format
@@ -1157,12 +1157,12 @@ msgstr "სახელების სივრცის შემოტან�
 #: language/duchain/navigation/abstractnavigationcontext.cpp:516
 #, kde-format
 msgid "Namespace alias"
-msgstr ""
+msgstr "სახელების სივრცის სინონიმი"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:523
 #, kde-format
 msgid "Forward Declaration"
-msgstr ""
+msgstr "წინასწარი დეკლარაცია"
 
 #: language/duchain/navigation/abstractnavigationwidget.cpp:194
 #, kde-format
@@ -2160,7 +2160,7 @@ msgstr "ფაილის გახსნა"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
-msgstr ""
+msgstr "გახსნის ფაილს ჩასასწორებლად."
 
 #: shell/documentcontroller.cpp:609
 #, kde-format
@@ -2169,6 +2169,8 @@ msgid ""
 "This lists files which you have opened recently, and allows you to easily "
 "open them again."
 msgstr ""
+"ეს სია შეიცავს ფაილებს, რომლებიც ახლახანს გახსენით და საშუალებას გაძლევთ, "
+"ადვილად მიაგნოთ მათ."
 
 #: shell/documentcontroller.cpp:614
 #, kde-format
@@ -4470,7 +4472,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
-msgstr ""
+msgstr "მარცხენა „დოკი“"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4478,14 +4480,14 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
-msgstr ""
+msgstr "ქვედა „დოკი“"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
-msgstr ""
+msgstr "მარჯვენა „დოკი“"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
