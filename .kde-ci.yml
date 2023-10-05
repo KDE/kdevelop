@@ -12,6 +12,7 @@ Dependencies:
     'frameworks/purpose': '@latest-kf6'
     'frameworks/kdeclarative': '@latest-kf6'
     'frameworks/kcmutils': '@latest-kf6'
+    'third-party/grantlee': '@latest'
     # 'utilities/okteta': '@latest-kf6'
     'kdevelop/kdevelop-pg-qt': '@latest-kf6'
 
