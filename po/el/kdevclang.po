@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-10-05 00:41+0000\n"
 "PO-Revision-Date: 2023-08-06 12:57+0300\n"
 "Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -115,37 +115,37 @@ msgstr "Override %1"
 msgid "Implement %1"
 msgstr "Υλοποίηση %1"
 
-#: codecompletion/context.cpp:1409
+#: codecompletion/context.cpp:1410
 #, kde-format
 msgid "Special"
 msgstr "Ειδικό"
 
-#: codecompletion/context.cpp:1410
+#: codecompletion/context.cpp:1411
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Προληπτικά ταιριάσματα"
 
-#: codecompletion/context.cpp:1411
+#: codecompletion/context.cpp:1412
 #, kde-format
 msgid "Builtin"
 msgstr "Ενσωματωμένο"
 
-#: codecompletion/context.cpp:1412
+#: codecompletion/context.cpp:1413
 #, kde-format
 msgid "Macros"
 msgstr "Μακροεντολές"
 
-#: codecompletion/context.cpp:1455
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Abstract Override"
 msgstr "Αbstract override"
 
-#: codecompletion/context.cpp:1456
+#: codecompletion/context.cpp:1457
 #, kde-format
 msgid "Virtual Override"
 msgstr "Virtual override"
 
-#: codecompletion/context.cpp:1471
+#: codecompletion/context.cpp:1472
 #, kde-format
 msgid "Implement Function"
 msgstr "Implement συνάρτηση"

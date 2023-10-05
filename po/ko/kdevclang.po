@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-10-05 00:41+0000\n"
 "PO-Revision-Date: 2022-05-07 02:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -109,37 +109,37 @@ msgstr "%1 재정의"
 msgid "Implement %1"
 msgstr "%1 구현"
 
-#: codecompletion/context.cpp:1409
+#: codecompletion/context.cpp:1410
 #, kde-format
 msgid "Special"
 msgstr "특수 기능"
 
-#: codecompletion/context.cpp:1410
+#: codecompletion/context.cpp:1411
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "룩어헤드 일치"
 
-#: codecompletion/context.cpp:1411
+#: codecompletion/context.cpp:1412
 #, kde-format
 msgid "Builtin"
 msgstr "내장"
 
-#: codecompletion/context.cpp:1412
+#: codecompletion/context.cpp:1413
 #, kde-format
 msgid "Macros"
 msgstr "매크로"
 
-#: codecompletion/context.cpp:1455
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Abstract Override"
 msgstr "추상 재정의"
 
-#: codecompletion/context.cpp:1456
+#: codecompletion/context.cpp:1457
 #, kde-format
 msgid "Virtual Override"
 msgstr "가상 재정의"
 
-#: codecompletion/context.cpp:1471
+#: codecompletion/context.cpp:1472
 #, kde-format
 msgid "Implement Function"
 msgstr "구현 함수"

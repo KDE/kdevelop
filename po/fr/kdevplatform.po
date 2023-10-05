@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-04 00:41+0000\n"
-"PO-Revision-Date: 2023-09-26 09:41+0200\n"
+"PO-Revision-Date: 2023-10-04 08:05+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -4411,14 +4411,14 @@ msgstr "Taille minimale de projet pour une analyse syntaxique simplifiée :"
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Utilisation de l'espace de stockage et de la mémoire"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Enregistrer les préambules pré-compilés dans :"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4436,20 +4436,34 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Les préambules pré-compilés restent dans le dossier temporaire après le "
+"plantage de KDevelop et sont supprimés uniquement lorsque la même session "
+"est re-démarrée. <br>\n"
+"Lorsque les préambules sont enregistrés en mémoire, ils sont sûrs de "
+"disparaître à la fermeture même si KDevelop se plante. <br>\n"
+"La sélection d'un espace de stockage dans un répertoire temporaire de "
+"session est logique sur les systèmes où la RAM est limitée et le dossier "
+"temporaire n’utilise pas « tmpfs », car les fichiers de préambule peuvent "
+"occuper des gigaoctets d’espace. <br>\n"
+"La modification de cette option prend effet après le redémarrage de KDevelop."
+"<br>\n"
+"Cette option n’a d’effet que si KDevelop a été compilé avec Clang en version "
+"17 ou supérieure. \n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Mémoire"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Dossier temporaire de session"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:43+0000\n"
+"POT-Creation-Date: 2023-10-05 00:41+0000\n"
 "PO-Revision-Date: 2020-07-20 12:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -116,38 +116,38 @@ msgstr "Sobreescriu %1"
 msgid "Implement %1"
 msgstr "Implementa %1"
 
-#: codecompletion/context.cpp:1409
+#: codecompletion/context.cpp:1410
 #, kde-format
 msgid "Special"
 msgstr "Especial"
 
-#: codecompletion/context.cpp:1410
+#: codecompletion/context.cpp:1411
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Coincidències anticipades"
 
-#: codecompletion/context.cpp:1411
+#: codecompletion/context.cpp:1412
 #, kde-format
 msgid "Builtin"
 msgstr "Integrat"
 
-#: codecompletion/context.cpp:1412
+#: codecompletion/context.cpp:1413
 #, kde-format
 msgid "Macros"
 msgstr "Macros"
 
 # skip-rule: ff-abstract
-#: codecompletion/context.cpp:1455
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Abstract Override"
 msgstr "Sobreescriptura abstracta"
 
-#: codecompletion/context.cpp:1456
+#: codecompletion/context.cpp:1457
 #, kde-format
 msgid "Virtual Override"
 msgstr "Sobreescriu virtual"
 
-#: codecompletion/context.cpp:1471
+#: codecompletion/context.cpp:1472
 #, kde-format
 msgid "Implement Function"
 msgstr "Implementa funció"
