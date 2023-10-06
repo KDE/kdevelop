@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-16 00:44+0000\n"
+"POT-Creation-Date: 2023-10-02 00:41+0000\n"
 "PO-Revision-Date: 2022-02-06 11:59+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -235,25 +235,25 @@ msgctxt "@title:menu"
 msgid "Scope: %1"
 msgstr ""
 
-#: problemtreeview.cpp:94
+#: problemtreeview.cpp:97
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Problems"
 msgstr ""
 
-#: problemtreeview.cpp:205
+#: problemtreeview.cpp:252
 #, kde-format
 msgctxt "@title:menu"
 msgid "Problem"
 msgstr ""
 
-#: problemtreeview.cpp:207
+#: problemtreeview.cpp:254
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Description"
 msgstr ""
 
-#: problemtreeview.cpp:226
+#: problemtreeview.cpp:273
 #, kde-format
 msgctxt "@title:menu"
 msgid "Solve: %1"

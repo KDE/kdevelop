@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-04 00:41+0000\n"
-"PO-Revision-Date: 2023-09-22 18:53+0200\n"
+"PO-Revision-Date: 2023-10-05 20:13+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -4352,14 +4352,14 @@ msgstr "Minimal projektstorlek för förenklad tolkning:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Lagrings- och minnesanvändning"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Lagra förkompilerade inledningar i:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4377,20 +4377,31 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Förkompilerade inledningar finns kvar i den tillfälliga katalogen efter "
+"att KDevelop kraschar och raderas först när samma session startas igen.<br>\n"
+"När inledningarna lagras i minnet försvinner de garanterat vid avslutning "
+"även om KDevelop kraschar.<br>\n"
+"Att välja lagring i Tillfällig sessionskatalog är meningsfullt på system där "
+"minnet är begränsat och den tillfälliga katalogen inte använder tmpfs, "
+"eftersom inledningsfilerna kan uppta gigabyte utrymme.<br>\n"
+"Ändringar av alternativet får effekt efter omstart av KDevelop.<br>\n"
+"Alternativ får endast effekt om KDevelop har byggts för Clang version 17 "
+"eller senare.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Minne"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Tillfällig sessionskatalog"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
