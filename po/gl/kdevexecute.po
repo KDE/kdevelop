@@ -28,7 +28,7 @@ msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
 "Aborting start."
 msgstr ""
-"Hai un erro de aspas nos argumentos da configuración de iniciar «%1». "
+"Hai un erro de comiñas nos argumentos da configuración de iniciar «%1». "
 "Interrómpese o inicio."
 
 #: executeplugin.cpp:72
@@ -56,7 +56,7 @@ msgid ""
 "There is a quoting error in the executable for the launch configuration "
 "'%1'. Aborting start."
 msgstr ""
-"Hai un erro de aspas no executábel da configuración de iniciar «%1». "
+"Hai un erro de comiñas no executábel da configuración de iniciar «%1». "
 "Interrómpese o inicio."
 
 #: executeplugin.cpp:169

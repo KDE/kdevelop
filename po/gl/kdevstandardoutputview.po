@@ -1,120 +1,109 @@
 # translation of kdevstandardoutputview.po to Galician
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # mvillarino <mvillarino@users.sourceforge.net>, 2008.
 # Xosé <xosecalvo@gmail.com>, 2009, 2012, 2013.
 # Marce Villarino <mvillarino@gmail.com>, 2009, 2013.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2016.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017.
+# SPDX-FileCopyrightText: 2023 Adrián Chaves (Gallaecio)
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-24 00:45+0000\n"
-"PO-Revision-Date: 2017-07-29 20:40+0100\n"
+"PO-Revision-Date: 2023-10-07 11:41+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #: outputwidget.cpp:44
-#, fuzzy, kde-format
-#| msgid "Enter a wild card string to filter the output view"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
-msgstr "Introduza unha cadea comodín para filtrar a vista de saída"
+msgstr ""
+"Escriba unha expresión regular que non distingue maiúsculas para filtrar a "
+"vista de saída."
 
 #: outputwidget.cpp:63
-#, fuzzy, kde-format
-#| msgid "Output View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Output View"
-msgstr "Vista da saída"
+msgstr "Vista de saída"
 
 #: outputwidget.cpp:74
-#, fuzzy, kde-format
-#| msgid "Close the currently active output view"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
-msgstr "Pechar a vista activa de saída "
+msgstr "Pechar a vista de saída activa."
 
 #: outputwidget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Close all other output views"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
-msgstr "Pechar as outras vistas de saída"
+msgstr "Pechar as outras vistas de saída."
 
 #: outputwidget.cpp:91
-#, fuzzy, kde-format
-#| msgid "Previous Output"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Output"
 msgstr "Saída anterior"
 
 #: outputwidget.cpp:94
-#, fuzzy, kde-format
-#| msgid "Next Output"
+#, kde-format
 msgctxt "@action"
 msgid "Next Output"
 msgstr "Seguinte saída"
 
 #: outputwidget.cpp:99
-#, fuzzy, kde-format
-#| msgid "Select activated Item"
+#, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
-msgstr "Escoller o elemento activado"
+msgstr "Seleccionar o elemento activado"
 
 #: outputwidget.cpp:101
-#, fuzzy, kde-format
-#| msgid "Focus when selecting Item"
+#, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
-msgstr "Focar cando se escolla un elemento"
+msgstr "Enfocar ao seleccionar un elemento"
 
 #: outputwidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "First Item"
+#, kde-format
 msgctxt "@action"
 msgid "First Item"
 msgstr "Primeiro elemento"
 
 #: outputwidget.cpp:119
-#, fuzzy, kde-format
-#| msgid "Previous Item"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "Elemento anterior"
 
 #: outputwidget.cpp:123
-#, fuzzy, kde-format
-#| msgid "Next Item"
+#, kde-format
 msgctxt "@action"
 msgid "Next Item"
 msgstr "Seguinte elemento"
 
 #: outputwidget.cpp:127
-#, fuzzy, kde-format
-#| msgid "Last Item"
+#, kde-format
 msgctxt "@action"
 msgid "Last Item"
 msgstr "Último elemento"
 
 #: outputwidget.cpp:140
-#, fuzzy, kde-format
-#| msgid "Clear"
+#, kde-format
 msgctxt "@action"
 msgid "Clear"
-msgstr "Baleirar"
+msgstr "Anular a selección"
 
 #: outputwidget.cpp:151
-#, fuzzy, kde-format
-#| msgid "Search..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Buscar…"
@@ -123,7 +112,7 @@ msgstr "Buscar…"
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Configurar a saída de «%1»"
 
 #: outputwidget.cpp:804
 #, kde-format
@@ -131,31 +120,31 @@ msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
 "error"
 msgid "Filter regular expression pattern error at offset %1: %2"
-msgstr ""
+msgstr "Erro de padrón de expresión regular de filtro na posición %1:%2."
 
 #: outputwidgetconfig.cpp:64
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Configurar a saída de «%1»"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "Limitar o número de vistas de saída."
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "Pechar automaticamente as vistas de saída máis vellas."
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "Número máximo de vistas de saída."
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -164,6 +153,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"A vista de saída máis vella péchase ao\n"
+"superar este valor o número de vistas."
 
 #: standardoutputview.cpp:100
 #, kde-format

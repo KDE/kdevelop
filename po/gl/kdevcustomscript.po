@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
+# SPDX-FileCopyrightText: 2018, 2019, 2023 Adrian Chaves <adrian@chaves.io>
 #
-# Adrian Chaves <adrian@chaves.io>, 2018, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:44+0000\n"
-"PO-Revision-Date: 2019-07-28 11:35+0200\n"
+"PO-Revision-Date: 2023-10-07 21:10+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.04.1\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #: customscript_plugin.cpp:86
 #, kde-format
@@ -32,8 +32,8 @@ msgstr ""
 "liña de ordes.<br />Pódense usar, por exemplo, os formatadores "
 "<b>uncrustify</b>, <b>astyle</b> ou <b>indent</b>.<br />A vantaxe dos "
 "formatadores para a liña de ordes é que as configuracións de formato poden "
-"compartirse facilmente por todos os membros dunha equipa, independentemente "
-"dos seus ID preferidos."
+"compartirse facilmente por todos os membros dun equipo, independentemente "
+"dos seus IDE preferidos."
 
 #: customscript_plugin.cpp:98
 #, kde-format
@@ -42,6 +42,8 @@ msgid ""
 "Note: each custom script style requires a certain tool executable to be "
 "installed. Otherwise, code will not be formatted."
 msgstr ""
+"Nota: cada estilo de guión personalizado require a instalación do executábel "
+"de certa ferramenta. Sen el o código non se formatará."
 
 #: customscript_plugin.cpp:226
 #, kde-format
@@ -97,19 +99,19 @@ msgstr ""
 "que permite usar regras de formato finas para colocar meta-ficheiros "
 "chamados  <b>format_sources</b> no sistema de ficheiros.<br /><br />Cada "
 "liña dos ficheiros <b>format_sources</b> indica unha lista de comodíns "
-"seguidos de dous puntos e a orde de formato empregada.<br /><br />A orde de "
+"seguidos de dous puntos e a orde de formato usada.<br /><br />A orde de "
 "formato debera usar <b>$TMPFILE</b> para facer referencia ao ficheiro "
-"temporal que hai que reformatar.<br /><br />Exemplo:<br /><b>*.cpp *.h : "
-"omeuformatador.sh $TMPFILE</b><br />Isto reformata todos os ficheiros que "
-"rematen en <b>.pp</b> ou <b>.h</b> usando o guión de formato personalizado "
-"<b>omeuformatador.sh</b>.<br /><br />Exemplo: <br /><b>subdir/* :uncrustify -"
-"l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />Isto reformata "
-"todos os ficheiros do subdirectorio <b>subdir</b> usando a ferramenta "
-"<b>uncrustify</b> co ficheiro de configuración <b>uncrustify.config</b>."
+"temporal que hai que formatar de novo.<br /><br />Exemplo:<br /><b>*.cpp *."
+"h : omeuformatador.sh $TMPFILE</b><br />Isto formata de novo todos os "
+"ficheiros que rematen en <b>.pp</b> ou <b>.h</b> usando o guión de formato "
+"personalizado <b>omeuformatador.sh</b>.<br /><br />Exemplo: <br /><b>subdir/"
+"* :uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br /"
+">Isto formata de novo todos os ficheiros do subcartafol <b>subdir</b> usando "
+"a ferramenta <b>uncrustify</b> co ficheiro de configuración <b>uncrustify."
+"config</b>."
 
 #: customscript_plugin.cpp:538
-#, fuzzy, kde-format
-#| msgid "Command:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Orde:"
@@ -123,15 +125,14 @@ msgid ""
 "add <b>$TMPFILE</b> into the command, then <br />a temporary file is used "
 "for transferring the code."
 msgstr ""
-"<i>Pódese introducir unha orde de consola arbitraria.</i><br />O código "
-"fonte sen formatar chégalle á orde <br />a través da entrada normal e o<br /"
-">resultado formato lese desde a saída normal.<br /><br />Se se lle engade <b>"
-"$TMPFILE</b> á orde,<br />úsase un ficheiro temporal para transferir o "
-"código."
+"<i>Pódese introducir unha orde de intérprete de ordes arbitraria.</i><br />O "
+"código fonte sen formatar chégalle á orde <br />a través da entrada normal e "
+"o<br />resultado formato lese desde a saída normal.<br /><br />Se se lle "
+"engade <b>$TMPFILE</b> á orde,<br />úsase un ficheiro temporal para "
+"transferir o código."
 
 #: customscript_plugin.cpp:559
-#, fuzzy, kde-format
-#| msgid "More Variables"
+#, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Máis variábeis"
@@ -142,16 +143,7 @@ msgid "Style: %1"
 msgstr "Estilo: %1"
 
 #: customscript_plugin.cpp:582
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
-#| ">The code will be written into the file, the temporary <br />file will be "
-#| "substituted into that position, and the result <br />will be read out of "
-#| "that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
-#| "original file. <br />The contents of the file must not be modified, "
-#| "changes are allowed <br />only in $TMPFILE.<br /><br /><b>${PROJECT_NAME}"
-#| "</b> will be replaced by the path of <br />the currently open project "
-#| "with the matching name."
+#, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
 ">The code will be written into the file, the temporary <br />file will be "
@@ -167,12 +159,11 @@ msgstr ""
 "posición e o resultado <br />lese dese ficheiro. <br /><br /><b>$FILE</b> "
 "substitúese pola ruta ao ficheiro orixinal. <br /> Non se debe modificar o "
 "contido do ficheiro; os cambios permítense <br />só en $TMPFILE.<br /><br /"
-"><b>${PROJECT_NAME}</b> substitúese pola ruta do <br />proxecto actualmente "
-"aberto co que coincida o nome."
+"><b>${&lt;nome de proxecto&gt;}</b> substitúese pola ruta dun <br />proxecto "
+"actualmente aberto nomeado &lt;nome de proxecto&gt;."
 
 #: customscript_plugin.cpp:594
-#, fuzzy, kde-format
-#| msgid "Variable Replacements"
+#, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"
 msgstr "Substitucións de variábeis"
