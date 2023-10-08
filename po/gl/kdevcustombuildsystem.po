@@ -1,165 +1,146 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Xosé <xosecalvo@gmail.com>, 2013.
 # Marce Villarino <mvillarino@kde-espana.org>, 2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018.
+# SPDX-FileCopyrightText: 2023 Adrián Chaves (Gallaecio)
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2018-04-28 19:13+0100\n"
-"Last-Translator: Adrian Chaves <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2023-10-07 12:26+0200\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #: configwidget.cpp:25
-#, fuzzy, kde-format
-#| msgid "Build"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Build"
-msgstr "Xerar"
+msgstr "Construír"
 
 #: configwidget.cpp:26
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Configure"
 msgstr "Configurar"
 
 #: configwidget.cpp:27
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Install"
 msgstr "Instalar"
 
 #: configwidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Clean"
 msgstr "Limpar"
 
 #: configwidget.cpp:29
-#, fuzzy, kde-format
-#| msgid "Prune"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Prune"
 msgstr "Eliminar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: configwidget.ui:19
-#, fuzzy, kde-format
-#| msgid "Build Directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Build directory:"
-msgstr "Directorio de construción:"
+msgstr "Cartafol de construción:"
 
+# skip-rule: trasno-leave, trasno-empty
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
 #: configwidget.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the directory where the tools are being executed in.\n"
-#| "If this is the same as the source directory you can leave it empty."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Select the directory where the tools are being executed in.\n"
 "If this is the same as the source directory you can leave it empty."
 msgstr ""
-"Escolla o directorio no que se executarán as ferramentas.\n"
-"Se é o mesmo que o directorio de orixe, pode deixalo baleiro."
+"Seleccione o cartafol no que executar as ferramentas.\n"
+"Se non se indica, usarase o cartafol da fonte."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
 #: configwidget.ui:30
-#, fuzzy, kde-format
-#| msgid "The directory where the tools are executed"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "The directory where the tools are executed in"
-msgstr "O directorio no que se executan as ferramentas"
+msgstr "O cartafol onde se executan as ferramentas."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: configwidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Build Tools"
+#, kde-format
 msgctxt "@title:group"
 msgid "Build Tools"
-msgstr "Ferramentas de compilación"
+msgstr "Ferramentas de construción"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: configwidget.ui:48
-#, fuzzy, kde-format
-#| msgid "Action:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Action:"
 msgstr "Acción:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: configwidget.ui:58
-#, fuzzy, kde-format
-#| msgid "Enable:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable:"
 msgstr "Activar:"
 
 #. i18n: ectx: property (text), widget (QLabel, execLabel)
 #: configwidget.ui:75
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Executable:"
 msgstr "Executábel:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
 #: configwidget.ui:85
-#, fuzzy, kde-format
-#| msgid ""
-#| "This is the executable that should be executed when selecting the action "
-#| "from the Project menu"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "This is the executable that should be executed when selecting the action "
 "from the Project menu"
 msgstr ""
-"Este é o executábel que se chamará cando se escolla a acción do menú Proxecto"
+"Isto é o que se executará ao seleccionar unha acción do menú de proxecto."
 
 #. i18n: ectx: property (text), widget (QLabel, argLabel)
 #: configwidget.ui:95
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
 msgstr "Argumentos:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
 #: configwidget.ui:105
-#, fuzzy, kde-format
-#| msgid "The arguments that the tool needs to execute properly."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "The arguments that the tool needs to execute properly."
-msgstr "Os argumentos que a ferramenta precisa para executarse adecuadamente."
+msgstr "Os argumentos que a ferramenta precisa para executarse."
 
 #. i18n: ectx: property (text), widget (QLabel, envLabel)
 #: configwidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
-msgstr "Entorno:"
+msgstr "Contorno:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
 #: configwidget.ui:125
-#, fuzzy, kde-format
-#| msgid "Choose a pre-configured environment for your tool"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a pre-configured environment for your tool"
-msgstr "Escolla un entorno preconfigurado para a súa ferramenta"
+msgstr "Escolla un contorno preconfigurado para a ferramenta."
 
 #: custombuildjob.cpp:67
 #, kde-format
@@ -219,8 +200,8 @@ msgstr "A ferramenta personalizada %1 do proxecto «%2» está desactivada."
 msgid ""
 "The given arguments would need a real shell, this is not supported currently."
 msgstr ""
-"Os argumentos indicados precisan dun intérprete de ordes real, isto aínda "
-"non se soporta."
+"Os argumentos indicados precisan dun intérprete de ordes real, isto non se "
+"permite actualmente."
 
 #: custombuildjob.cpp:166
 #, kde-format
@@ -230,7 +211,7 @@ msgstr "Non foi posíbel iniciar a orde."
 #: custombuildjob.cpp:169
 #, kde-format
 msgid "Command crashed."
-msgstr "A orde fallou."
+msgstr "A orde quebrou."
 
 #: custombuildjob.cpp:172
 #, kde-format
@@ -248,79 +229,64 @@ msgid "*** Finished ***"
 msgstr "*** Rematou ***"
 
 #: custombuildsystemconfig.cpp:14
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "build"
+#, kde-format
 msgctxt "@item:intext custom 'build' tool"
 msgid "build"
 msgstr "construír"
 
 #: custombuildsystemconfig.cpp:15
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "configure"
+#, kde-format
 msgctxt "@item:intext custom 'configure' tool"
 msgid "configure"
 msgstr "configurar"
 
 #: custombuildsystemconfig.cpp:16
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "install"
+#, kde-format
 msgctxt "@item:intext custom 'install' tool"
 msgid "install"
 msgstr "instalar"
 
 #: custombuildsystemconfig.cpp:17
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "clean"
+#, kde-format
 msgctxt "@item:intext custom 'clean' tool"
 msgid "clean"
 msgstr "limpar"
 
 #: custombuildsystemconfig.cpp:18
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "prune"
+#, kde-format
 msgctxt "@item:intext custom 'prune' tool"
 msgid "prune"
 msgstr "eliminar"
 
 #: custombuildsystemconfig.cpp:19
-#, fuzzy, kde-format
-#| msgid "unknown"
+#, kde-format
 msgctxt "@item:intext custom 'unknown' tool"
 msgid "unknown"
 msgstr "descoñecido"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: custombuildsystemconfigwidget.ui:31
-#, fuzzy, kde-format
-#| msgid "Build configuration:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build configuration:"
 msgstr "Configuración da construción:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: custombuildsystemconfigwidget.ui:54
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "Engadir"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeConfig)
 #: custombuildsystemconfigwidget.ui:64
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr "Eliminar"
+msgstr "Retirar"
 
 #: kcm_custombuildsystem.cpp:53
-#, fuzzy, kde-format
-#| msgid "Custom Build System"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Custom Build System"
 msgstr "Sistema de construción personalizado"
