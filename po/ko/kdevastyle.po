@@ -1,4 +1,4 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020.
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
@@ -11,7 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: astyle_plugin.cpp:248
