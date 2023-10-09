@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-04 00:41+0000\n"
-"PO-Revision-Date: 2023-07-24 22:16+0200\n"
+"PO-Revision-Date: 2023-10-08 23:15+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -900,7 +900,7 @@ msgstr "열거자"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[값에-의존]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
 #, kde-format
@@ -3839,13 +3839,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"이 스타일의 미리 보기 표시를 전환합니다.\n"
+"파일 경로에 따라서 형식을 지정하는 스타일에서는 미리 보기를 비활성화해야 합니"
+"다."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "미리 보기"
+msgstr "미리 보기 표시"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4282,14 +4284,14 @@ msgstr "다음 크기 이상의 프로젝트에 단순화된 구문 분석 사�
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "저장소와 메모리 사용"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "미리 컴파일된 전처리부 저장 위치:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4307,20 +4309,30 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>미리 컴파일된 전처리부는 KDevelop이 충돌한 후 임시 디렉터리에 유지되어 있"
+"으며 같은 세션이 다시 시작되었을 때에만 삭제됩니다.<br>\n"
+"전처리부가 메모리에 저장되어 있으면 KDevelop이 충돌했다고 하더라도 종료 후에 "
+"삭제됩니다.<br>\n"
+"전처리부 파일이 기가바이트 단위의 공간을 차지할 수 있으므로, 세션 임시 디렉터"
+"리에 저장하는 것은 RAM 크기가 제한되어 있고 임시 디렉터리가 tmpfs가 아닌 경우"
+"에만 추천합니다.<br>\n"
+"이 설정은 KDevelop을 다시 시작할 때 적용됩니다.<br>\n"
+"이 옵션은 KDevelop이 Clang 버전 17 이상으로 빌드되었을 때에만 적용됩니다.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "메모리"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "세션 임시 디렉터리"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -4925,7 +4937,7 @@ msgstr "언어:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "형식 재지정 설정 방법"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -4944,6 +4956,16 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>아래에 있는 <i>언어</i> 콤보 상자에서 사용하고자 하는 언어를 선택한 다음, "
+"각각 언어별로 형식 지정 도구를 선택할 수 있습니다. 선택한 스타일에서 <i>Ctrl"
+"+클릭</i>을 사용하면 선택을 해제합니다.</p>\n"
+"<p>각각 언어별로 올바른 형식 지정 도구와 스타일을 선택하는 것은 중요합니다. "
+"명시적인 <i>형식 재지정</i>/<i>줄</i>/<i>파일...</i> 옵션뿐만 아니라 자동 생"
+"성, 자동 리팩토링, 자동 고침된 코드(예: <i>이름 바꾸기</i> 동작)에도 적용됩니"
+"다.</p>\n"
+"<p>KDevelop은 순수 C++ 프로젝트의 C++ 헤더라고 하더라도 모든 <i>*.h</i> 파일"
+"을 <i>C</i> 언어 형식으로 서식을 지정합니다. 일부 소스 코드 형식 재지정 도구"
+"는 MIME 형식을 언어에 대응시키기 때문입니다.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -4956,7 +4978,7 @@ msgstr "형식 재지정 도구:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "선택한 서식 지정 도구 설명"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183

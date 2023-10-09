@@ -1,26 +1,21 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020.
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-16 00:43+0000\n"
-"PO-Revision-Date: 2020-10-04 19:57+0200\n"
+"PO-Revision-Date: 2023-10-08 23:07+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: astyle_plugin.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Artistic Style</b> is a source code indenter, formatter, and "
-#| "beautifier for the C, C++, C# and Java programming languages.<br />Home "
-#| "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
-#| "sourceforge.net</a>"
+#, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
 "for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
@@ -28,8 +23,8 @@ msgid ""
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
 "<b>Artistic Style</b>은 C, C++, C#, Java 소스 코드 들여쓰기 및 형식 재지정 도"
-"구입니다.<br />홈페이지: <a href=\"http://astyle.sourceforge.net/\">http://"
-"astyle.sourceforge.net</a>"
+"구입니다.<p style='margin-top:0;white-space:pre'>홈페이지: <a href=\"http://"
+"astyle.sourceforge.net/\">http://astyle.sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
@@ -313,13 +308,15 @@ msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
 msgstr ""
+"중괄호로 둘러싸지 않은 한 줄 조건문에 중괄호를 추가합니다(예: 'if', 'for', "
+"'while')"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
 #, kde-format
 msgctxt "@option:check add braces to unbraced one-line conditional statements"
 msgid "Add b&races"
-msgstr ""
+msgstr "중괄호 추가(&R)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
 #: astyle_preferences.ui:386

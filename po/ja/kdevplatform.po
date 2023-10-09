@@ -6425,11 +6425,3 @@ msgstr "前のリビジョンとの差分"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "リビジョン間の差分"
-
-#~ msgid "New Style"
-#~ msgstr "新しいファイル"
-
-#, fuzzy
-#~| msgid "No Language selected"
-#~ msgid "No language selected"
-#~ msgstr "言語が選択されていません"
