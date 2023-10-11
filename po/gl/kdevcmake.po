@@ -6,14 +6,15 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2009, 2013.
 # Adrian Chaves Fernandez <adriyetichaves@gmail.com>, 2012, 2015.
 # Xosé <xosecalvo@gmail.com>, 2013.
-# Adrian Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020.
+# SPDX-FileCopyrightText: 2023 Adrian Chaves (Gallaecio)
 #
+# SPDX-FileCopyrightText: 2023 Adrián Chaves (Gallaecio)
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:57+0000\n"
-"PO-Revision-Date: 2020-02-16 09:30+0100\n"
+"PO-Revision-Date: 2023-10-10 16:27+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -21,21 +22,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #: cmakebuilddirchooser.cpp:29
-#, fuzzy, kde-format
-#| msgid "Configure a build directory - %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "Configurar un directorio de construción - %1"
+msgstr "Configurar un cartafol de construción - %1"
 
 #: cmakebuilddirchooser.cpp:88
-#, fuzzy, kde-format
-#| msgid "Configure a build directory for %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
-msgstr "Configurar un directorio de construción para %1"
+msgstr "Configurar un cartafol de construción para %1"
 
 #: cmakebuilddirchooser.cpp:198
 #, kde-format
@@ -75,42 +74,35 @@ msgstr "O cartafol de construción escollido non está baleiro."
 
 #. i18n: ectx: property (text), widget (QLabel, availableLabel)
 #: cmakebuilddirchooser.ui:32
-#, fuzzy, kde-format
-#| msgid "Available build directories:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Available build directories:"
-msgstr "Directorios de construción dispoñíbeis:"
+msgstr "Cartafoles de construción dispoñíbeis:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
 #: cmakebuilddirchooser.ui:40
-#, fuzzy, kde-format
-#| msgid "New build directory"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "New build directory"
-msgstr "Novo directorio de construción"
+msgstr "Novo cartafol de construción"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: cmakebuilddirchooser.ui:48
-#, fuzzy, kde-format
-#| msgid "Build &directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Build &directory:"
 msgstr "&Directorio de construción:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: cmakebuilddirchooser.ui:84
-#, fuzzy, kde-format
-#| msgid "&Installation prefix:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Installation prefix:"
 msgstr "Prefixo de &instalación:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:109
-#, fuzzy, kde-format
-#| msgid ""
-#| "The prefix under which the project will be installed. Leaving this empty "
-#| "will let CMake use its default install prefix."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The prefix under which the project will be installed. Leaving this empty "
@@ -121,16 +113,14 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:112
-#, fuzzy, kde-format
-#| msgid "CMake's default install prefix"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "CMake's default install prefix"
 msgstr "Prefixo de instalación predeterminado de CMake"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build &type:"
 msgstr "&Tipo de compilación: "
@@ -138,16 +128,14 @@ msgstr "&Tipo de compilación: "
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
 #: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
-#, fuzzy, kde-format
-#| msgid "Extra arguments:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Extra arguments:"
 msgstr "Argumentos adicionais:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: cmakebuilddirchooser.ui:182
-#, fuzzy, kde-format
-#| msgid "CMake &executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "&Executábel de CMake:"
@@ -158,36 +146,31 @@ msgid "INVALID"
 msgstr "INCORRECTA"
 
 #: cmakecodecompletionmodel.cpp:197
-#, fuzzy, kde-format
-#| msgid "Command"
+#, kde-format
 msgctxt "@item"
 msgid "Command"
 msgstr "Orde"
 
 #: cmakecodecompletionmodel.cpp:198
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@item"
 msgid "Variable"
 msgstr "Variábel"
 
 #: cmakecodecompletionmodel.cpp:199
-#, fuzzy, kde-format
-#| msgid "Macro"
+#, kde-format
 msgctxt "@item"
 msgid "Macro"
 msgstr "Macro"
 
 #: cmakecodecompletionmodel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Path"
+#, kde-format
 msgctxt "@item"
 msgid "Path"
-msgstr "Rota"
+msgstr "Ruta"
 
 #: cmakecodecompletionmodel.cpp:201
-#, fuzzy, kde-format
-#| msgid "Target"
+#, kde-format
 msgctxt "@item"
 msgid "Target"
 msgstr "Obxectivo"
@@ -198,43 +181,37 @@ msgid "wrong"
 msgstr "errado"
 
 #: cmakecommandscontents.cpp:29
-#, fuzzy, kde-format
-#| msgid "Commands"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Commands"
 msgstr "Ordes"
 
 #: cmakecommandscontents.cpp:30
-#, fuzzy, kde-format
-#| msgid "Variables"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Variables"
 msgstr "Variábeis"
 
 #: cmakecommandscontents.cpp:31
-#, fuzzy, kde-format
-#| msgid "Modules"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Modules"
 msgstr "Módulos"
 
 #: cmakecommandscontents.cpp:32
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Properties"
 msgstr "Propiedades"
 
 #: cmakecommandscontents.cpp:33
-#, fuzzy, kde-format
-#| msgid "Policies"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Policies"
 msgstr "Normas"
 
 #: cmakecommandscontents.cpp:102
-#, fuzzy, kde-format
-#| msgid "<p>For better cmake documentation rendering, install rst2html</p>"
+#, kde-format
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr ""
 "<p>Instale «rst2html» para renderizar mellor a documentación de CMake.</p>"
@@ -258,7 +235,7 @@ msgstr "<br /><em>Por na caché a documentación:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "Os datos de proxecto da API de ficheiro de CMake non son válidos."
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -266,15 +243,7 @@ msgid "CMake Content Page"
 msgstr "Páxina de contido de CMake"
 
 #: cmakemanager.cpp:650
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to configure project '%1' (error message: %2). As a result, "
-#| "KDevelop's code understanding will likely be broken.\n"
-#| "\n"
-#| "To fix this issue, please ensure that the project's CMakeLists.txt files "
-#| "are correct, and KDevelop is configured to use the correct CMake version "
-#| "and settings. Then right-click the project item in the projects tool view "
-#| "and click 'Reload'."
+#, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
 "code understanding may be wrong.\n"
@@ -282,15 +251,11 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
-"Non se puido configurar o proxecto «%1» (mensaxe de erro: %2). Como "
-"consecuencia, a comprensión de código de KDevelop probablemente non "
-"funcione.\n"
+"O proxecto «%1» configurouse con datos de CMake obsoletos. Como "
+"consecuencia, a comprensión de código de KDevelop podería ser incorrecta.\n"
 "\n"
-"Para corrixir o problema asegúrese de que os ficheiros CMakeLists.txt do "
-"proxecto son correctos e de que KDevelop estea configurado para usar a "
-"versión e configuración correcta de CMake. A continuación faga clic dereito "
-"no elemento do proxecto na vista da ferramenta de proxectos e faga clic en "
-"«Recargar»."
+"Para corrixir o problema faga clic dereito no elemento do proxecto na vista "
+"da ferramenta de proxectos e faga clic en «Recargar»."
 
 #: cmakemanager.cpp:661
 #, kde-format
@@ -315,131 +280,112 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
-#, fuzzy, kde-format
-#| msgid "Cache Values"
+#, kde-format
 msgctxt "@title:group"
 msgid "Cache Values"
 msgstr "Pór na caché os valores"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: settings/cmakebuildsettings.ui:89
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgctxt "@label"
 msgid "Comment:"
 msgstr "Comentario:"
 
 #. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
 #: settings/cmakebuildsettings.ui:106
-#, fuzzy, kde-format
-#| msgid "Show Advanced"
+#, kde-format
 msgctxt "@action:button"
 msgid "Show Advanced"
-msgstr "Mostrar o avanzado"
+msgstr "Amosar o avanzado"
 
 #. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
 #: settings/cmakebuildsettings.ui:125
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:group"
 msgid "Advanced"
 msgstr "Avanzado"
 
 #. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
 #: settings/cmakebuildsettings.ui:134
-#, fuzzy, kde-format
-#| msgid "Installation prefix:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Installation prefix:"
 msgstr "Prefixo de instalación:"
 
 #. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
 #: settings/cmakebuildsettings.ui:144
-#, fuzzy, kde-format
-#| msgid "Build type:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build type:"
 msgstr "Tipo de construción:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: settings/cmakebuildsettings.ui:198
-#, fuzzy, kde-format
-#| msgid "Configure environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Configure environment:"
 msgstr "Ambiente de configuración:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: settings/cmakebuildsettings.ui:213
-#, fuzzy, kde-format
-#| msgid "Select an environment to be used"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr "Escolla un ambiente para empregar."
+msgstr "Escolla un ambiente para usar."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showInternal)
 #: settings/cmakebuildsettings.ui:225
-#, fuzzy, kde-format
-#| msgid "Show advanced values"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show advanced values"
-msgstr "Mostrar os valores avanzados"
+msgstr "Amosar os valores avanzados"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: settings/cmakebuildsettings.ui:235
-#, fuzzy, kde-format
-#| msgid "CMake executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "CMake executable:"
 msgstr "Executábel de CMake:"
 
 #: settings/cmakecachemodel.cpp:36
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nome"
 
 #: settings/cmakecachemodel.cpp:37
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Tipo"
 
 #: settings/cmakecachemodel.cpp:38
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Valor"
 
 #: settings/cmakecachemodel.cpp:39
-#, fuzzy, kde-format
-#| msgid "Comment"
+#, kde-format
 msgctxt "@title:column"
 msgid "Comment"
 msgstr "Comentario"
 
 #: settings/cmakecachemodel.cpp:40
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:column"
 msgid "Advanced"
 msgstr "Avanzado"
 
 #: settings/cmakecachemodel.cpp:41
-#, fuzzy, kde-format
-#| msgid "Strings"
+#, kde-format
 msgctxt "@title:column"
 msgid "Strings"
 msgstr "Cadeas"
 
 #: settings/cmakepreferences.cpp:346
-#, fuzzy, kde-format
-#| msgid ""
-#| "The %1 directory is about to be removed in KDevelop's list.\n"
-#| "Do you want KDevelop to remove it in the file system as well?"
+#, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
 "Do you want KDevelop to delete it in the file system as well?"
@@ -451,7 +397,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "Non eliminar"
 
 #: settings/cmakepreferences.cpp:355
 #, kde-format
@@ -459,15 +405,13 @@ msgid "Could not remove: %1"
 msgstr "Non foi posíbel retirar: %1"
 
 #: settings/cmakepreferences.cpp:401
-#, fuzzy, kde-format
-#| msgid "CMake"
+#, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
 #: settings/cmakepreferences.cpp:406
-#, fuzzy, kde-format
-#| msgid "Configure CMake settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"
 msgstr "Configura os parámetros de CMake"
