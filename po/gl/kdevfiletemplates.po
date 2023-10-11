@@ -1,56 +1,50 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Marce Villarino <mvillarino@kde-espana.org>, 2013, 2014.
 # Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail.com>, 2015.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019.
+# SPDX-FileCopyrightText: 2023 Adrián Chaves (Gallaecio)
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2019-02-23 13:39+0100\n"
+"PO-Revision-Date: 2023-10-10 16:24+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #: classidentifierpage.cpp:31
-#, fuzzy, kde-format
-#| msgid "Class name, including any namespaces"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Class name, including any namespaces"
 msgstr "Nome de clase, con todos os espazos de nome."
 
 #: classidentifierpage.cpp:32
-#, fuzzy, kde-format
-#| msgid "Inheritance type and base class name"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Inheritance type and base class name"
 msgstr "Tipo de herdanza e nome da clase base"
 
 #: classmemberspage.cpp:29
-#, fuzzy, kde-format
-#| msgid "Variable type and identifier"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Variable type and identifier"
 msgstr "Nome e identificador da variábel."
 
 #: filetemplatesplugin.cpp:69
-#, fuzzy, kde-format
-#| msgid "New From Template..."
+#, kde-format
 msgctxt "@action"
 msgid "New from Template..."
 msgstr "Novo a partir dun modelo…"
 
 #: filetemplatesplugin.cpp:71
-#, fuzzy, kde-format
-#| msgid ""
-#| "Allows you to create new source code files, such as classes or unit "
-#| "tests, using templates."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Allows you to create new source code files, such as classes or unit tests, "
@@ -60,32 +54,28 @@ msgstr ""
 "unitarias, mediante modelos."
 
 #: filetemplatesplugin.cpp:72
-#, fuzzy, kde-format
-#| msgid "Create new files from a template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create new files from a template"
 msgstr "Crear novos ficheiros a partir dun modelo"
 
 #: filetemplatesplugin.cpp:76 filetemplatesplugin.cpp:308
-#, fuzzy, kde-format
-#| msgid "Template Preview"
+#, kde-format
 msgctxt "@title:window"
 msgid "Template Preview"
 msgstr "Vista previa do modelo"
 
 #: filetemplatesplugin.cpp:115
-#, fuzzy, kde-format
-#| msgid "Create From Template..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Create from Template..."
 msgstr "Crear a partir dun modelo…"
 
 #: filetemplatesplugin.cpp:135
-#, fuzzy, kde-format
-#| msgid "Show Template Preview"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Template Preview"
-msgstr "Mostrar a vista previa do modelo"
+msgstr "Amosar a vista previa do modelo"
 
 #: filetemplatesplugin.cpp:147
 #, kde-format
@@ -93,11 +83,10 @@ msgid "File Templates"
 msgstr "Modelos de ficheiros"
 
 #: licensepage.cpp:85
-#, fuzzy, kde-format
-#| msgid "Other"
+#, kde-format
 msgctxt "@item:inlistbox other license"
 msgid "Other"
-msgstr "Outros"
+msgstr "Outras"
 
 #: licensepage.cpp:143
 #, kde-format
@@ -123,9 +112,7 @@ msgstr[0] "Ficheiro de saída incorrecto: %2"
 msgstr[1] "Ficheiros de saída incorrectos: %2"
 
 #: outputpage.cpp:171
-#, fuzzy, kde-format
-#| msgid "Output file"
-#| msgid_plural "Output files"
+#, kde-format
 msgctxt "@title:group"
 msgid "Output File"
 msgid_plural "Output Files"
@@ -133,9 +120,7 @@ msgstr[0] "Ficheiro de saída"
 msgstr[1] "Ficheiros de saída"
 
 #: outputpage.cpp:172
-#, fuzzy, kde-format
-#| msgid "Location within existing file"
-#| msgid_plural "Location within existing files"
+#, kde-format
 msgctxt "@title:group"
 msgid "Location within Existing File"
 msgid_plural "Location within Existing Files"
@@ -143,8 +128,7 @@ msgstr[0] "Lugar dentro dun ficheiro existente."
 msgstr[1] "Lugar dentro do ficheiro ou ficheiros existentes."
 
 #: outputpage.cpp:178
-#, fuzzy, kde-format
-#| msgid "%1:"
+#, kde-format
 msgctxt "@label:chooser file name arg"
 msgid "%1:"
 msgstr "%1:"
@@ -160,57 +144,49 @@ msgid "Column: "
 msgstr "Columna: "
 
 #: overridespage.cpp:37
-#, fuzzy, kde-format
-#| msgid "Public"
+#, kde-format
 msgctxt "@item access policy"
 msgid "Public"
 msgstr "Público"
 
 #: overridespage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Protected"
+#, kde-format
 msgctxt "@item access policy"
 msgid "Protected"
 msgstr "Protexido"
 
 #: overridespage.cpp:41
-#, fuzzy, kde-format
-#| msgid "Private"
+#, kde-format
 msgctxt "@item access policy"
 msgid "Private"
 msgstr "Privado"
 
 #: overridespage.cpp:51
-#, fuzzy, kde-format
-#| msgid "Constructor"
+#, kde-format
 msgctxt "@item function property"
 msgid "Constructor"
 msgstr "Construtor"
 
 #: overridespage.cpp:53
-#, fuzzy, kde-format
-#| msgid "Destructor"
+#, kde-format
 msgctxt "@item function property"
 msgid "Destructor"
 msgstr "Destrutor"
 
 #: overridespage.cpp:55
-#, fuzzy, kde-format
-#| msgid "Signal"
+#, kde-format
 msgctxt "@item function property"
 msgid "Signal"
 msgstr "Sinal"
 
 #: overridespage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Slot"
+#, kde-format
 msgctxt "@item function property"
 msgid "Slot"
 msgstr "Espazo"
 
 #: overridespage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Abstract function"
+#, kde-format
 msgctxt "@item function property"
 msgid "Abstract function"
 msgstr "Función abstracta"
@@ -223,31 +199,25 @@ msgstr ""
 "Escolla o obxectivo ao que engadir o ficheiro ou cancele para non engadilo."
 
 #: templateclassassistant.cpp:280 templateclassassistant.cpp:527
-#, fuzzy, kde-kuit-format
-#| msgid "Create Files from Template in <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@title:window"
 msgid "Create Files from Template in <filename>%1</filename>"
 msgstr "Crear ficheiros en <filename>%1</filename> a partir dun modelo"
 
 #: templateclassassistant.cpp:284 templateclassassistant.cpp:531
-#, fuzzy, kde-format
-#| msgid "Create Files from Template"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create Files from Template"
 msgstr "Crear ficheiros a partir dun modelo"
 
 #: templateclassassistant.cpp:289
-#, fuzzy, kde-format
-#| msgid "Language and Template"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Language and Template"
 msgstr "Linguaxe e modelo"
 
 #: templateclassassistant.cpp:319
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Create Files from Template <filename>%1</filename> in <filename>%2</"
-#| "filename>"
+#, kde-kuit-format
 msgctxt "@title:window"
 msgid ""
 "Create Files from Template <filename>%1</filename> in <filename>%2</filename>"
@@ -256,71 +226,61 @@ msgstr ""
 "filename>"
 
 #: templateclassassistant.cpp:325
-#, fuzzy, kde-kuit-format
-#| msgid "Create Files from Template <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@title:window"
 msgid "Create Files from Template <filename>%1</filename>"
 msgstr "Crear ficheiros a partir do modelo <filename>%1</filename>"
 
 #: templateclassassistant.cpp:331
-#, fuzzy, kde-format
-#| msgid "Class Basics"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Class Basics"
 msgstr "Fundamentos da clase"
 
 #: templateclassassistant.cpp:337
-#, fuzzy, kde-format
-#| msgid "Override Methods"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Override Methods"
 msgstr "Sobrescribir métodos"
 
 #: templateclassassistant.cpp:342
-#, fuzzy, kde-format
-#| msgid "Class Members"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Class Members"
 msgstr "Membros da clase"
 
 #: templateclassassistant.cpp:370
-#, fuzzy, kde-format
-#| msgid "Test Cases"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Test Cases"
 msgstr "Casos de proba"
 
 #: templateclassassistant.cpp:380
-#, fuzzy, kde-format
-#| msgid "License"
+#, kde-format
 msgctxt "@title:tab"
 msgid "License"
 msgstr "Licenza"
 
 #: templateclassassistant.cpp:386
-#, fuzzy, kde-format
-#| msgid "Output"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Output"
 msgstr "Saída"
 
 #: templateclassassistant.cpp:396
-#, fuzzy, kde-format
-#| msgid "Template Options"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Template Options"
 msgstr "Opcións do modelo"
 
 #: templateclassassistant.cpp:479
-#, fuzzy, kde-format
-#| msgid "Default"
+#, kde-format
 msgctxt "@item default declarations"
 msgid "Default"
 msgstr "Predeterminado"
 
 #: templateoptionspage.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1:"
+#, kde-format
 msgctxt "@label"
 msgid "%1:"
 msgstr "%1:"
@@ -341,56 +301,49 @@ msgstr "Non hai ningún documento de texto activo."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: templatepreviewtoolview.ui:30
-#, fuzzy, kde-format
-#| msgid "Template type"
+#, kde-format
 msgctxt "@title:group"
 msgid "Template Type"
 msgstr "Tipo de modelo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, projectRadioButton)
 #: templatepreviewtoolview.ui:39
-#, fuzzy, kde-format
-#| msgid "Project template"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Project template"
 msgstr "Modelo de proxecto"
 
 #. i18n: ectx: property (text), widget (QRadioButton, classRadioButton)
 #: templatepreviewtoolview.ui:49
-#, fuzzy, kde-format
-#| msgid "Class template"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Class template"
 msgstr "Modelo de clase"
 
 #. i18n: ectx: property (text), widget (QLabel, emptyLinesPolicyLabel)
 #: templatepreviewtoolview.ui:61
-#, fuzzy, kde-format
-#| msgid "&Empty lines policy"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Empty lines policy:"
 msgstr "&Comportamento coas liñas baleiras"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
 #: templatepreviewtoolview.ui:78
-#, fuzzy, kde-format
-#| msgid "Keep empty lines"
+#, kde-format
 msgctxt "@item:inlistbox empty line policy"
 msgid "Keep Empty Lines"
 msgstr "Manter as liñas baleiras"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
 #: templatepreviewtoolview.ui:83
-#, fuzzy, kde-format
-#| msgid "Remove repeated empty lines"
+#, kde-format
 msgctxt "@item:inlistbox empty line policy"
 msgid "Remove Repeated Empty Lines"
 msgstr "Retirar as liñas baleiras repetidas"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
 #: templatepreviewtoolview.ui:88
-#, fuzzy, kde-format
-#| msgid "Remove all empty lines"
+#, kde-format
 msgctxt "@item:inlistbox empty line policy"
 msgid "Remove All Empty Lines"
 msgstr "Retirar todas as liñas baleiras"
@@ -402,36 +355,31 @@ msgid "<b>Preview:</b> %1"
 msgstr "<b>Vista previa:</b> %1"
 
 #: templateselectionpage.cpp:202
-#, fuzzy, kde-format
-#| msgid "Language"
+#, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Linguaxe"
 
 #: templateselectionpage.cpp:203
-#, fuzzy, kde-format
-#| msgid "Framework"
+#, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Infraestrutura"
 
 #: templateselectionpage.cpp:204
-#, fuzzy, kde-format
-#| msgid "Template"
+#, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Modelo"
 
 #: templateselectionpage.cpp:239
-#, fuzzy, kde-format
-#| msgid "Get More Templates..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "Obter máis modelos…"
 
 #: templateselectionpage.cpp:246
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Cargar un modelo desde un ficheiro"
@@ -444,24 +392,21 @@ msgstr "Escolla a licenza para aplicar ao contido xerado."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/licensechooser.ui:44
-#, fuzzy, kde-format
-#| msgid "License type:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "License type:"
 msgstr "Tipo de licenza:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, saveLicense)
 #: ui/licensechooser.ui:64
-#, fuzzy, kde-format
-#| msgid "Click here if you want to save this license for future use"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable if you want to save this license for future use"
-msgstr "Prema aquí se quere gardar esta licenza para empregala no futuro."
+msgstr "Prema aquí se quere gardar esta licenza para usala no futuro."
 
 #. i18n: ectx: property (text), widget (QCheckBox, saveLicense)
 #: ui/licensechooser.ui:67
-#, fuzzy, kde-format
-#| msgid "Save license"
+#, kde-format
 msgctxt "@option:check"
 msgid "Save license"
 msgstr "Gardar a licenza"
@@ -486,16 +431,14 @@ msgstr "Identifique a clase e as clases das que herde."
 
 #. i18n: ectx: property (text), widget (QLabel, identifierLabel)
 #: ui/newclass.ui:35 ui/testcases.ui:35
-#, fuzzy, kde-format
-#| msgid "&Identifier:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Identifier:"
 msgstr "&Identificador:"
 
 #. i18n: ectx: property (text), widget (QLabel, inheritanceLabel)
 #: ui/newclass.ui:48
-#, fuzzy, kde-format
-#| msgid "In&heritance:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "In&heritance:"
 msgstr "&Herdanza:"
@@ -508,8 +451,7 @@ msgstr "Escolla onde gardar o contido xerado."
 
 #. i18n: ectx: property (text), widget (QCheckBox, lowerFilenameCheckBox)
 #: ui/outputlocation.ui:59
-#, fuzzy, kde-format
-#| msgid "Lower case file names"
+#, kde-format
 msgctxt "@option:check"
 msgid "Lower case file names"
 msgstr "Nomes de ficheiro en minúsculas."
@@ -522,40 +464,35 @@ msgstr "Escolla os métodos que desexe sobrescribir na nova clase."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
 #: ui/overridevirtuals.ui:42
-#, fuzzy, kde-format
-#| msgid "Superclass -> Function"
+#, kde-format
 msgctxt "@title:column"
 msgid "Superclass -> Function"
 msgstr "Superclase → Función"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
 #: ui/overridevirtuals.ui:47
-#, fuzzy, kde-format
-#| msgid "Access"
+#, kde-format
 msgctxt "@title:column"
 msgid "Access"
 msgstr "Acceso"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
 #: ui/overridevirtuals.ui:52
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:column"
 msgid "Properties"
 msgstr "Propiedades"
 
 #. i18n: ectx: property (text), widget (QPushButton, selectAllPushButton)
 #: ui/overridevirtuals.ui:62
-#, fuzzy, kde-format
-#| msgid "Select &All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Select &All"
 msgstr "Escollelo &todo"
 
 #. i18n: ectx: property (text), widget (QPushButton, deselectAllPushButton)
 #: ui/overridevirtuals.ui:69
-#, fuzzy, kde-format
-#| msgid "&Deselect All"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Deselect All"
 msgstr "&Anular a selección"
@@ -568,8 +505,7 @@ msgstr "Definir o nome da proba e os seus casos."
 
 #. i18n: ectx: property (text), widget (QLabel, testCasesLabel)
 #: ui/testcases.ui:48
-#, fuzzy, kde-format
-#| msgid "&Test cases:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Test cases:"
 msgstr "Casos de &proba:"

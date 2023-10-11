@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-04 00:41+0000\n"
-"PO-Revision-Date: 2023-09-16 10:08\n"
+"PO-Revision-Date: 2023-10-10 14:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -3801,11 +3801,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Preview:"
+#, kde-format
 msgid "Show Preview"
-msgstr "预览："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -6019,12 +6017,3 @@ msgstr "与上个修订版的差异"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修订版之间的差异"
-
-#~ msgid "No Source Formatter available"
-#~ msgstr "没有可用的源代码格式化器"
-
-#~ msgid "New Style"
-#~ msgstr "新建样式"
-
-#~ msgid "No language selected"
-#~ msgstr "未选择语言"
