@@ -68,7 +68,7 @@ msgstr "Conta de GitHub"
 #: ghdialog.cpp:98
 #, kde-format
 msgid "Enter a login and a password"
-msgstr "Escriba un nome de usuario e un contrasinal"
+msgstr "Escriba un nome de usuaria e un contrasinal"
 
 #: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
 #, kde-format

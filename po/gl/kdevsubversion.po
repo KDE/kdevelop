@@ -263,7 +263,7 @@ msgstr "Outro erro descoñecido."
 #: svnjobbase.cpp:74
 #, kde-format
 msgid "Enter Login for: %1"
-msgstr "Insira o nome de usuario en: %1"
+msgstr "Insira o nome de usuaria en: %1"
 
 #: svnjobbase.cpp:160
 #, kde-format
