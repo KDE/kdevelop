@@ -70,7 +70,7 @@ public:
      * The just returned must be started in one way or another for this method
      * to have any affect. The job will then auto-delete itself upon completion.
      */
-    Q_REQUIRED_RESULT KJob* eventuallyReadFolder(ProjectFolderItem* item);
+    [[nodiscard]] KJob* eventuallyReadFolder(ProjectFolderItem* item);
     void addJobItems(FileManagerListJob* job,
                      ProjectFolderItem* baseItem,
                      const KIO::UDSEntryList& entries);
