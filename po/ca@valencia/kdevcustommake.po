@@ -28,8 +28,8 @@ msgid ""
 "Tried include path resolution while another resolution process was still "
 "running"
 msgstr ""
-"Intenta la resolució del camí als «include» mentre s'està executant un altre "
-"procés de resolució"
+"Intenta la resolució del camí cap als «include» mentre s'està executant un "
+"altre procés de resolució"
 
 #: makefileresolver/makefileresolver.cpp:276
 #, kde-format
@@ -88,7 +88,8 @@ msgstr "La crida recursiva a «make» està amb format incorrecte"
 #, kde-format
 msgid "Could not extract include paths from make output"
 msgstr ""
-"No s'han pogut extraure els camins als «include» des de l'eixida de «make»"
+"No s'han pogut extraure els camins cap als «include» des de l'eixida de "
+"«make»"
 
 #: makefileresolver/makefileresolver.cpp:517
 #, kde-format
