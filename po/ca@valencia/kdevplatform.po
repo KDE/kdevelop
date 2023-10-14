@@ -1960,7 +1960,7 @@ msgstr "Es&tablix la posició d'execució en el cursor"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
-msgstr "Salta al cursor"
+msgstr "Salta fins al cursor"
 
 #: shell/debugcontroller.cpp:251
 #, kde-format

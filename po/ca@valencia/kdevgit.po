@@ -70,7 +70,7 @@ msgstr "Revertix les línies o el fragment seleccionat"
 #: diffviewsctrl.cpp:57
 #, kde-format
 msgid "Go to line in source"
-msgstr "Ves a la línia en el codi font"
+msgstr "Ves fins a la línia en el codi font"
 
 #: diffviewsctrl.cpp:109
 #, kde-format

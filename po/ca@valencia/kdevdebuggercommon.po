@@ -598,7 +598,7 @@ msgstr "Canvi d'&adreça"
 #, kde-format
 msgctxt "@action"
 msgid "&Jump to Cursor"
-msgstr "&Salta al cursor"
+msgstr "&Salta fins al cursor"
 
 #: widgets/disassemblewidget.cpp:93
 #, kde-format

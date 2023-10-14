@@ -171,7 +171,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new include path entry from this URL"
-msgstr "Crea una entrada nova de camí als «include» des d'este URL"
+msgstr "Crea una entrada nova de camí cap als «include» des d'este URL"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeIncludePath)
 #: kcm_widget/includeswidget.ui:60
@@ -382,14 +382,14 @@ msgstr "Edita per &lots..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new sub-project path entry."
-msgstr "Afig una entrada nova de camí al subprojecte."
+msgstr "Afig una entrada nova de camí cap al subprojecte."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removePath)
 #: kcm_widget/projectpathswidget.ui:135
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current sub-project path entry."
-msgstr "Elimina l'entrada actual del camí al subprojecte."
+msgstr "Elimina l'entrada actual del camí cap al subprojecte."
 
 #. i18n: ectx: attribute (title), widget (QWidget, includePathsPage)
 #: kcm_widget/projectpathswidget.ui:165
@@ -448,7 +448,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Custom include paths or #define's"
-msgstr "Personalitza els camins als «include» o «#define»"
+msgstr "Personalitza els camins cap als «include» o «#define»"
 
 #. i18n: ectx: property (toolTip), widget (QPlainTextEdit, customIncludePaths)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:45

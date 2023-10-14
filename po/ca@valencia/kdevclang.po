@@ -104,7 +104,7 @@ msgstr "Canvia el nom de la declaració"
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"
-msgstr "Mou al codi font"
+msgstr "Mou cap a dins del codi font"
 
 #: codecompletion/context.cpp:148
 #, kde-format
