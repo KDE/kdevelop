@@ -22,14 +22,14 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-04 00:41+0000\n"
-"PO-Revision-Date: 2023-04-23 12:21+0200\n"
+"PO-Revision-Date: 2023-10-14 11:52+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -931,7 +931,7 @@ msgstr "wyliczenie "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[zależne-od-wartości]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
 #, kde-format
@@ -3914,13 +3914,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Przestaw widoczność podglądu dla tego wyglądu.\n"
+"Podgląd powinien być wyłączony dla tych wyglądów, których formatowanie "
+"zależy od ścieżki pliku."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "Podgląd"
+msgstr "Pokaż podgląd"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4373,14 +4375,14 @@ msgstr "Najmniejszy rozmiar projektu dla uproszczonego przetwarzania:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Składowanie i wykorzystanie pamięci"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Przechowuj skompilowane preambuły w:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4398,20 +4400,33 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Skompilowane preambuły pozostają w katalogu tymczasowym po wysypaniu się "
+"KDevelopa i zostaną usunięte dopiero po ponownym rozpoczęciu tego samego "
+"posiedzenia.<br>\n"
+"W przypadku przechowywania preambuł w pamięci, możemy zapewnić, że znikną "
+"one nawet po wysypaniu się KDevelopa.<br>\n"
+"Wybranie przechowywania w Tymczasowym Katalogu Posiedzenia ma sens, gdy "
+"pamięć RAM jest ograniczona, a katalog tymczasowy nie używa tmpfs, bo pliki "
+"preambuł mogą zajmować gigabajty przestrzeni.<br>\n"
+"Zmiana tego ustawienia odniesie skutek dopiero po ponownym uruchomieniu "
+"KDevelopa.<br>\n"
+"Warunkiem zadziałania tego ustawienia jest zbudowanie KDevelopa w wersji "
+"Clanga 17 lub późniejszej.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Pamięć"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Tymczasowy Katalog Posiedzenia"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -5036,7 +5051,7 @@ msgstr "Język:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Jak ustawić wygląd formatowania"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -5055,6 +5070,19 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Zaznacz języki, których używasz jeden po drugim z poniższego pola "
+"rozwijanego <i>Języki</i>, wybierz także żądane formatowanie i wygląd dla "
+"każdego z nich. <i>Ctrl+Klik</i> na zaznaczony wygląd, aby go odznaczyć.</"
+"p>\n"
+"<p>Ustawienie właściwego formatowania i wyglądu dla każdego używanego języka "
+"jest bardzo ważne: ma to wpły nie tylko wywoływane działania takie jak "
+"<i>Przeformatuj kod</i>/<i>Wiersz</i>/<i>Pliki...</i>, lecz także na "
+"formatowanie samoutworzonego, samoprzepisanego lub samonaprawionego kodu (na "
+"przykład, działanie menu podręcznego <i>Przemianuj</i>).</p>\n"
+"<p>Pamiętaj, że KDevelop formatuje wszystkie pliki <i>*.h</i> z "
+"formatowaniem i wyglądem ustawionym dla języka <i>C</i>, nawet gdy nagłówki C"
+"++ należą do projektu czysto C++. Dzieje się tak, bo formatowanie kodu "
+"mapuje rodzaje MIME do języków.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5067,7 +5095,7 @@ msgstr "Formatowanie:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Opisu wybranego formatowania"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
