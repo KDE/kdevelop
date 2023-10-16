@@ -1,0 +1,224 @@
+# Trigger rebuild 2
+---
+name: kdevelop
+confinement: classic
+grade: stable
+base: core22
+adopt-info: kdevelop
+compression: lzo
+apps:
+    kdevelop:
+        command: usr/bin/kdevelop
+        desktop: usr/share/applications/org.kde.kdevelop.desktop
+        common-id: org.kde.kdevelop.desktop
+assumes:
+- snapd2.55.3
+environment:
+    SNAP_DESKTOP_RUNTIME: $SNAP/kf5
+    KDEV_CLANG_BUILTIN_DIR: "$SNAP/usr/lib/llvm-14/lib/clang/14.0.0/include"
+    QTWEBENGINEPROCESS_PATH: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/libexec/QtWebEngineProcess"
+    XDG_DATA_DIRS: "$XDG_DATA_DIRS:$SNAP/usr/share"
+    XDG_CONFIG_DIRS: "$XDG_CONFIG_DIRS:$SNAP/etc/xdg"
+    __EGL_VENDOR_LIBRARY_DIRS: "$SNAP/etc/glvnd/egl_vendor.d:$SNAP/usr/share/glvnd/egl_vendor.d"
+    LIBGL_DRIVERS_PATH: "$SNAP/usr/lib/${CRAFT_ARCH_TRIPLET}/dri"
+    KDEV_UNSET_ENV: LIBGL_DRIVERS_PATH
+    QML2_IMPORT_PATH: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml"
+    PATH: $PATH:$SNAP/usr/bin
+    LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/:$SNAP/usr/lib:/$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/pulseaudio"
+layout:
+    /usr/share/X11:
+        symlink: $SNAP/usr/share/X11
+package-repositories:
+-   type: apt
+    components:
+    - main
+    suites:
+    - jammy
+    key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
+    url: http://archive.neon.kde.org/user
+    key-server: keyserver.ubuntu.com
+parts:
+    mesa-patchelf:
+        plugin: nil
+        stage-packages:
+        - libgl1-mesa-dri
+        - libglu1-mesa
+        stage:
+        - "-usr/lib/${CRAFT_ARCH_TRIPLET}/dri"
+    mesa-no-patchelf:
+        plugin: nil
+        stage-packages:
+        - libgl1-mesa-dri
+        build-attributes:
+        - no-patchelf
+        stage:
+        - usr/lib/${CRAFT_ARCH_TRIPLET}/dri
+    qtconf:
+        plugin: nil
+        override-build: |
+            mkdir -p $CRAFT_PART_INSTALL/usr/bin
+            cat <<EOF > $CRAFT_PART_INSTALL/usr/bin/qt.conf
+            [Paths]
+            Prefix = ../../
+            LibraryExecutables = usr/lib/$CRAFT_ARCH_TRIPLET/qt5/libexec
+            Plugins = usr/lib/$CRAFT_ARCH_TRIPLET/qt5/plugins
+            Qml2Imports = usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml
+            Translations = usr/share/qt5/translations
+            Data = usr/share/qt5
+            EOF
+    patches:
+        plugin: dump
+        source: .
+        source-type: local
+        prime:
+        - ".*"
+    kdevelop:
+        after:
+        - mesa-patchelf
+        - mesa-no-patchelf
+        - qtconf
+        - patches
+        plugin: cmake
+        build-packages:
+        - extra-cmake-modules
+        - cmake
+        - libboost-dev
+        - libastyle-dev
+        - libkf5doctools-dev
+        - libkomparediff2-dev
+        - libsvn-dev
+        - okteta-dev
+        - libkf5purpose-dev
+        - libkf5sysguard-dev
+        - kdevelop-pg-qt
+        - libgrantlee5-dev
+        - libkf5config-dev
+        - libkf5crash-dev
+        - libkf5declarative-dev
+        - libkf5i18n-dev
+        - libkf5iconthemes-dev
+        - libkf5itemmodels-dev
+        - libkf5itemviews-dev
+        - libkf5jobwidgets-dev
+        - libkf5kcmutils-dev
+        - libkf5kio-dev
+        - libkf5newstuff-dev
+        - libkf5notifyconfig-dev
+        - libkf5parts-dev
+        - libkf5plasma-dev
+        - libkf5runner-dev
+        - libkf5service-dev
+        - libkf5syntaxhighlighting-dev
+        - libkf5texteditor-dev
+        - libkf5threadweaver-dev
+        - libkf5windowsystem-dev
+        - libkf5xmlgui-dev
+        - libqt5webkit5-dev
+        - gettext
+        - patch
+        stage-packages:
+        - konsole-kpart
+        - libgrantlee-templates5
+        - libgrantlee-textdocument5
+        - libapr1
+        - libaprutil1
+        - libastyle3
+        - libclang1-14
+        - libclang-14-dev
+        - libkasten4controllers0
+        - libkasten4core0
+        - libkasten4gui0
+        - libkasten4okteta2controllers0
+        - libkasten4okteta2core0
+        - libkasten4okteta2gui0
+        - libkomparediff2-5
+        - libokteta3core0
+        - libokteta3gui0
+        - libqca-qt5-2
+        - libserf-1-1
+        - libsvn1
+        - libutf8proc2
+        - llvm-14-dev
+        - libksysguardformatter1
+        - libprocesscore9
+        - libprocessui9
+        - libbrotli1
+        - libeditorconfig0
+        - libgstreamer-plugins-base1.0-0
+        - libgstreamer1.0-0
+        - libhyphen0
+        - liborc-0.4-0
+        - libwoff1
+        - freeglut3
+        - qt5-image-formats-plugins
+        - qml-module-qtquick2
+        - qml-module-qtquick-controls
+        - qml-module-qtquick-layouts
+        - qml-module-qtquick-window2
+        - qml-module-qtquick-xmllistmodel
+        - qml-module-qtwebkit
+        - qml-module-qtquick-controls2
+        - breeze
+        - git-all
+        - bzr
+        - libgit2-1.1
+        - kapptemplate
+        - cmake
+        - build-essential
+        - subversion
+        - openssh-client
+        - libkf5configcore5
+        - libkf5crash5
+        - libkf5declarative5
+        - libkf5i18n5
+        - libkf5iconthemes5
+        - libkf5itemmodels5
+        - libkf5itemviews5
+        - libkf5jobwidgets5
+        - libkf5kcmutils5
+        - kio
+        - libkf5newstuff5
+        - libkf5notifyconfig5
+        - libkf5parts5
+        - libkf5plasma5
+        - libkf5runner5
+        - libkf5service5
+        - libkf5syntaxhighlighting5
+        - libkf5texteditor5
+        - libkf5threadweaver5
+        - libkf5windowsystem5
+        - libkf5xmlgui5
+        - libqt5webkit5
+        - clang-14
+        - libpulse0
+        parse-info:
+        - usr/share/metainfo/org.kde.kdevelop.appdata.xml
+        source: .
+        source-type: local
+        cmake-parameters:
+        - -DCMAKE_INSTALL_PREFIX=/usr
+        - -DCMAKE_BUILD_TYPE=Release
+        - -DENABLE_TESTING=OFF
+        - -DBUILD_TESTING=OFF
+        - -DKDE_SKIP_TEST_SETTINGS=ON
+        build-attributes:
+        - enable-patchelf
+        prime:
+        - -usr/lib/*/cmake/*
+        - -usr/include/*
+        - -usr/share/ECM/*
+        - -usr/share/doc/*
+        - -usr/share/man/*
+        - -usr/share/icons/breeze-dark*
+        - -usr/bin/X11
+        - -usr/lib/gcc/$CRAFT_ARCH_TRIPLET/6.0.0
+        - -usr/lib/aspell/*
+        - -usr/lib/${CRAFT_ARCH_TRIPLET}/dri
+        override-pull: |
+            craftctl default
+            patch -p1 < ../../patches/src/snap/patches/kdevelop_unset_env.patch
+        override-build: |
+            craftctl default
+            sed -i "${CRAFT_PART_INSTALL}/usr/share/applications/org.kde.kdevelop.desktop" \
+                -e 's|Icon=kdevelop$|Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/kdevelop.svg|'
+
