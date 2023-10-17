@@ -10,8 +10,8 @@
 #include <KIO/UDSEntry>
 #include <KJob>
 
+#include <QFuture>
 #include <QQueue>
-#include <QSemaphore>
 
 #include <atomic>
 
@@ -69,7 +69,7 @@ private:
     KIO::UDSEntryList entryList;
 
     // This data is used when the currently processed folder is local.
-    QSemaphore m_listing;
+    QFuture<void> m_localFolderFuture;
 
 #ifdef TIME_IMPORT_JOB
     QElapsedTimer m_timer;

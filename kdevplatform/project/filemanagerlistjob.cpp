@@ -32,25 +32,8 @@ bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
 }
 }
 
-class SemaReleaser
-{
-public:
-    SemaReleaser(QSemaphore* sem)
-        : m_sem(sem)
-    {}
-
-    ~SemaReleaser()
-    {
-        m_sem->release();
-    }
-
-private:
-    QSemaphore* m_sem;
-};
-
 FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
     : m_item(item)
-    , m_listing(1)
 {
     setCapabilities(Killable);
 
@@ -71,10 +54,8 @@ FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
 
 FileManagerListJob::~FileManagerListJob()
 {
-    // abort and lock to ensure our background list job is stopped
     doKill();
-    m_listing.acquire();
-    Q_ASSERT(m_listing.available() == 0);
+    m_localFolderFuture.waitForFinished();
 }
 
 void FileManagerListJob::addSubDir( ProjectFolderItem* item )
@@ -116,10 +97,7 @@ void FileManagerListJob::startNextJob()
     m_item = m_listQueue.dequeue();
     if (m_item->path().isLocalFile()) {
         // optimized version for local projects using QDir directly
-        // start locking to ensure we don't get destroyed while waiting for the list to finish
-        m_listing.acquire();
-        QtConcurrent::run([this] (const Path& path) {
-            SemaReleaser lock(&m_listing);
+        m_localFolderFuture = QtConcurrent::run([this] (const Path& path) {
             if (isCanceled()) {
                 return;
             }
