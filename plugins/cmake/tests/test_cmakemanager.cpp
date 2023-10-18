@@ -366,7 +366,13 @@ void TestCMakeManager::testExecutableOutputPath()
     const auto target = targets.first()->executable();
     QVERIFY(target);
     const KDevelop::Path exePath(target->executable()->builtUrl());
-    QCOMPARE(exePath, KDevelop::Path(project->buildSystemManager()->buildDirectory(project->projectItem()), QLatin1String("randomplace/mytest")));
+    QString executableSuffix;
+#ifdef Q_OS_WIN
+    executableSuffix = ".exe";
+#endif
+    QCOMPARE(exePath,
+             Path(project->buildSystemManager()->buildDirectory(project->projectItem()),
+                  "randomplace/mytest" + executableSuffix));
 
     QVERIFY(spy.count() || spy.wait(100000));
 
