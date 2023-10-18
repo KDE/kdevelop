@@ -65,7 +65,10 @@ void TestQuickOpen::testProjectFileSwap()
     QCOMPARE(b.projectPath, aCopy.projectPath);
     QVERIFY(equivalent(b, aCopy));
 
-    const QString anotherProjectPath = QStringLiteral("/some/special/path/to/a-project");
+    QString anotherProjectPath = "/some/special/path/to/a-project";
+#ifdef Q_OS_WIN
+    anotherProjectPath.prepend("C:");
+#endif
     a.projectPath = Path{anotherProjectPath};
     QCOMPARE(a.projectPath.pathOrUrl(), anotherProjectPath);
 
