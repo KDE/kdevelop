@@ -49,7 +49,6 @@ set(KDevPlatformShell_LIB_SRCS
     sourceformatterselectionedit.cpp
     runtimecontroller.cpp
 
-    checkerstatus.cpp
     problem.cpp
     problemmodelset.cpp
     problemmodel.cpp
@@ -208,7 +207,6 @@ install(FILES
     launchconfiguration.h
     environmentconfigurebutton.h
     sourceformatterselectionedit.h
-    checkerstatus.h
     problem.h
     problemmodel.h
     problemmodelset.h
