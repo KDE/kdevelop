@@ -630,8 +630,8 @@ msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
 "i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
 msgstr ""
-"<p>Está seguro de que quere retirar a configuración do guión externo <i>%1</"
-"i>?</p><p><i>Nota:</i> O guión en si non vai ser eliminado.</p>"
+"<p>Seguro que quere retirar a configuración do guión externo <i>%1</i>?</"
+"p><p><i>Nota:</i> O guión en si non vai ser eliminado.</p>"
 
 #: externalscriptview.cpp:149
 #, fuzzy, kde-format

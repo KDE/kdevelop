@@ -3890,7 +3890,7 @@ msgid ""
 "projects will stay unaffected. Do you really want to continue?"
 msgstr ""
 "Vanse eliminar a sesión  <b>%1</b> e todas as opcións que contén. Os "
-"proxectos non se han ver afectados. Está seguro de que quere continuar?"
+"proxectos non se han ver afectados. Seguro que quere continuar?"
 
 #: shell/sessionchooserdialog.cpp:205
 #, fuzzy, kde-format
@@ -3907,7 +3907,7 @@ msgid ""
 "will stay unaffected. Do you really want to continue?"
 msgstr ""
 "Vanse eliminar esta sesión e todas as opcións que contén. Os proxectos non "
-"se han ver afectados. Está seguro de que quere continuar?"
+"se han ver afectados. Seguro que quere continuar?"
 
 #: shell/sessioncontroller.cpp:142
 #, fuzzy, kde-format
@@ -5387,7 +5387,7 @@ msgid ""
 msgstr ""
 "O estilo %1 xa se usa para as linguaxes seguintes:\n"
 "%2.\n"
-"Está seguro de que quere eliminalo?"
+"Seguro que quere eliminalo?"
 
 #: shell/sourceformatterselectionedit.cpp:1089
 #, fuzzy, kde-format
@@ -5491,7 +5491,7 @@ msgid ""
 msgstr ""
 "O ficheiro «%1» está modificado no disco.\n"
 "\n"
-"Está seguro de que quere substituílo? (Perderanse os cambios externos)."
+"Seguro que quere substituílo? (Perderanse os cambios externos)."
 
 #: shell/textdocument.cpp:426
 #, kde-format
@@ -6279,7 +6279,7 @@ msgstr "Xa existe unha galla chamada «%1»."
 #: vcs/models/brancheslistmodel.cpp:69
 #, kde-format
 msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
-msgstr "Está seguro de que quere mudar o nome de «%1» para «%2»?"
+msgstr "Seguro que quere mudar o nome de «%1» para «%2»?"
 
 #: vcs/models/vcsannotationmodel.cpp:116
 #, kde-format
