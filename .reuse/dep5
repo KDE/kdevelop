@@ -11,6 +11,6 @@ Files: app_templates/cpp/meson/meson_plaincpp/*
 Copyright: Morten Danielsen Volden <mvolden2@gmail.com>
 License: LGPL-2.1-or-later
 
-Files: snapcraft.yaml patches/*
+Files: snap/patches/*
 Copyright: Scarlett Moore <sgmoore@kde.org>
 License: LGPL-2.1-or-later

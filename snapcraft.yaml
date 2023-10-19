@@ -1,4 +1,7 @@
-# Trigger rebuild 2
+
+# SPDX-FileCopyrightText: 2023 Scarlett Moore <sgmoore@kde.org>
+#
+# SPDX-License-Identifier: CC0-1.0
 ---
 name: kdevelop
 confinement: classic
@@ -6,6 +9,7 @@ grade: stable
 base: core22
 adopt-info: kdevelop
 compression: lzo
+version: '23.08.2'
 apps:
     kdevelop:
         command: usr/bin/kdevelop
@@ -191,6 +195,7 @@ parts:
         - libqt5webkit5
         - clang-14
         - libpulse0
+        - ninja
         parse-info:
         - usr/share/metainfo/org.kde.kdevelop.appdata.xml
         source: .
