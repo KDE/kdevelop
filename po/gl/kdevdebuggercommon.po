@@ -1,19 +1,20 @@
 # translation of kdevcppdebugger.po to galician
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # mvillarino <mvillarino@users.sourceforge.net>, 2008, 2009.
 # Marce Villarino <mvillarino@kde-espana.es>, 2009.
 # Marce Villarino <mvillarino@kde-espana.es>, 2009, 2013, 2014.
 # Xosé <xosecalvo@gmail.com>, 2013.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrian Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+# SPDX-FileCopyrightText: 2023 Adrian Chaves (Gallaecio)
+#
+# SPDX-FileCopyrightText: 2023 Adrián Chaves (Gallaecio)
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-22 00:55+0000\n"
-"PO-Revision-Date: 2019-10-27 07:46+0100\n"
+"PO-Revision-Date: 2023-10-18 22:09+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -21,41 +22,36 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.11.70\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #: dialogs/processselection.cpp:28
-#, fuzzy, kde-format
-#| msgid "Attach to a Process"
+#, kde-format
 msgctxt "@title:window"
 msgid "Attach to a Process"
 msgstr "Anexar a un proceso"
 
 #: dialogs/processselection.cpp:48
-#, fuzzy, kde-format
-#| msgid "Attach"
+#, kde-format
 msgctxt "@action:button"
 msgid "Attach"
 msgstr "Anexar"
 
 #: dialogs/selectcoredialog.cpp:18
-#, fuzzy, kde-format
-#| msgid "Select Core File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "Escoller un ficheiro core"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Executable:"
 msgstr "Executábel:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/selectcoredialog.ui:32
-#, fuzzy, kde-format
-#| msgid "Core file:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Ficheiro core:"
@@ -92,8 +88,7 @@ msgstr ""
 "A resposta MI é: %2"
 
 #: midebugger.cpp:324
-#, fuzzy, kde-format
-#| msgid "Internal debugger error"
+#, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Erro interno do depurador"
@@ -129,8 +124,7 @@ msgstr ""
 "quebra sen KDevelop e informe do fallo.<br>"
 
 #: midebugger.cpp:363
-#, fuzzy, kde-format
-#| msgid "Debugger crashed"
+#, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "O depurador quebrou"
@@ -141,19 +135,13 @@ msgid "Process crashed"
 msgstr "O proceso quebrou"
 
 #: midebuggerplugin.cpp:110
-#, fuzzy, kde-format
-#| msgid "Examine Core File with %1"
+#, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Examinar o ficheiro core con %1"
 
 #: midebuggerplugin.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Examine core file</b><p>This loads a core file, which is typically "
-#| "created after the application has crashed, e.g. with a segmentation "
-#| "fault. The core file contains an image of the program memory at the time "
-#| "it crashed, allowing you to do a post-mortem analysis.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -167,16 +155,13 @@ msgstr ""
 "quebrou, permitíndolle facer unha análise post-mortem.</p>"
 
 #: midebuggerplugin.cpp:124
-#, fuzzy, kde-format
-#| msgid "Attach to Process with %1"
+#, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Anexar a un proceso con %1"
 
 #: midebuggerplugin.cpp:126
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -189,17 +174,13 @@ msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
 #: midebuggerplugin.cpp:213
-#, fuzzy, kde-format
-#| msgid "Evaluate: %1"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Avaliar: %1"
 
 #: midebuggerplugin.cpp:215
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#| "cursor.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -209,17 +190,13 @@ msgstr ""
 "p>"
 
 #: midebuggerplugin.cpp:223
-#, fuzzy, kde-format
-#| msgid "Watch: %1"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Vixiar: %1"
 
 #: midebuggerplugin.cpp:225
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Watch expression</b><p>Adds the expression under the cursor to the "
-#| "Variables/Watch list.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Watch expression</b><p>Adds the expression under the cursor to the "
@@ -246,7 +223,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "Interromper a sesión"
 
 #: midebuggerplugin.cpp:258
 #, kde-format
@@ -469,22 +446,19 @@ msgid "Segment"
 msgstr "Segmentar"
 
 #: registers/registersview.cpp:51
-#, fuzzy, kde-format
-#| msgid "Format"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "Formato"
 
 #: registers/registersview.cpp:60
-#, fuzzy, kde-format
-#| msgid "Mode"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr "Modo"
 
 #: registers/registersview.cpp:195
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Actualizar"
@@ -525,17 +499,13 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
 #: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
-#, fuzzy, kde-format
-#| msgid "Debugger Console"
+#, kde-format
 msgctxt "@title:window"
 msgid "Debugger Console"
 msgstr "Consola do depurador"
 
 #: widgets/debuggerconsoleview.cpp:49
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
-#| "can also issue any other debugger command while debugging.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
@@ -546,151 +516,127 @@ msgstr ""
 "depuración.</p>"
 
 #: widgets/debuggerconsoleview.cpp:58
-#, fuzzy, kde-format
-#| msgid "Repeat last command when hit Return"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
 msgstr "Repetir a última orde ao premer Intro"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
-#, fuzzy, kde-format
-#| msgid "Pause execution of the app to enter gdb commands"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
-msgstr "Pausa a execución do aplicativo para introducir ordes de gdb"
+msgstr "Pausa a execución do aplicativo para introducir ordes do depurador."
 
 #: widgets/debuggerconsoleview.cpp:72
-#, fuzzy, kde-format
-#| msgid "Show Internal Commands"
+#, kde-format
 msgctxt "@action"
 msgid "Show Internal Commands"
-msgstr "Mostrar as ordes internas"
+msgstr "Amosar as ordes internas"
 
 #: widgets/debuggerconsoleview.cpp:76
-#, fuzzy, kde-format
-#| msgid ""
-#| "Controls if commands issued internally by KDevelop will be shown or not."
-#| "<br>This option will affect only future commands, it will not add or "
-#| "remove already issued commands from the view."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Controls if commands issued internally by KDevelop will be shown or not."
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
-"Controla se as ordes emitidas internamente por KDevelop se han mostrar ou "
-"non.<br>Esta opción afectará só ás ordes futuras, non engadirá nin eliminará "
-"da vista ordes xa emitidas."
+"Controla se as ordes emitidas internamente por KDevelop se han amosar ou non."
+"<br>Esta opción afectará só ás ordes futuras, non engadirá nin eliminará da "
+"vista ordes xa emitidas."
 
 #: widgets/debuggerconsoleview.cpp:137
-#, fuzzy, kde-format
-#| msgid "&Command:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Command:"
 msgstr "&Orde:"
 
 #: widgets/debuggerconsoleview.cpp:159
-#, fuzzy, kde-format
-#| msgid "%1 Command Bar"
+#, kde-format
 msgctxt "@title:window"
 msgid "%1 Command Bar"
 msgstr "%1 barra de ordes"
 
 #. i18n: ectx: property (text), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:53
-#, fuzzy, kde-format
-#| msgid "Interrupt"
+#, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Interromper"
 
 #. i18n: ectx: property (text), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:70
-#, fuzzy, kde-format
-#| msgid "Repeat"
+#, kde-format
 msgctxt "@action"
 msgid "Repeat"
 msgstr "Repetir"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:73
-#, fuzzy, kde-format
-#| msgid "Repeat last sent command when hit <Return>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last sent command when hit <Return>"
 msgstr "Repetir a última orde enviada ao premer <Intro>."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
 #: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Address Selector"
+#, kde-format
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "Selector de enderezos"
 
 #: widgets/disassemblewidget.cpp:88
-#, fuzzy, kde-format
-#| msgid "Change &address"
+#, kde-format
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "Cambi&ar o enderezo"
 
 #: widgets/disassemblewidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "&Jump to Cursor"
+#, kde-format
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "&Saltar ata o cursor"
 
 #: widgets/disassemblewidget.cpp:93
-#, fuzzy, kde-format
-#| msgid "Sets the execution pointer to the current cursor position."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
 msgstr "Pon o punteiro de execución na posición do ursor."
 
 #: widgets/disassemblewidget.cpp:96
-#, fuzzy, kde-format
-#| msgid "&Run to Cursor"
+#, kde-format
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "Executar ata o &cursor"
 
 #: widgets/disassemblewidget.cpp:97
-#, fuzzy, kde-format
-#| msgid "Continues execution until the cursor position is reached."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Continúa a execución ata acadar a posición do cursor."
 
 #: widgets/disassemblewidget.cpp:100
-#, fuzzy, kde-format
-#| msgid "&AT&&T"
+#, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr "&AT&&T"
 
 #: widgets/disassemblewidget.cpp:101
-#, fuzzy, kde-format
-#| msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
 "GDB usará o modo de desensamblador de AT&T (por exemplo, mov 0xc(%ebp),%eax)."
 
 #: widgets/disassemblewidget.cpp:105
-#, fuzzy, kde-format
-#| msgid "&Intel"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr "&Intel"
 
 #: widgets/disassemblewidget.cpp:106
-#, fuzzy, kde-format
-#| msgid ""
-#| "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
-#| "+0xc])."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
@@ -700,19 +646,13 @@ msgstr ""
 "[ebp+0xc])."
 
 #: widgets/disassemblewidget.cpp:143
-#, fuzzy, kde-format
-#| msgid "Disassembly flavor"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr "Modo de desensamblador"
 
 #: widgets/disassemblewidget.cpp:174
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Machine code display</b><p>A machine code view into your running "
-#| "executable with the current instruction highlighted. You can step "
-#| "instruction by instruction using the debuggers toolbar buttons of \"step "
-#| "over\" instruction and \"step into\" instruction."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Machine code display</b><p>A machine code view into your running "
@@ -726,48 +666,42 @@ msgstr ""
 "ferramentas de depuración."
 
 #: widgets/disassemblewidget.cpp:190
-#, fuzzy, kde-format
-#| msgid "Address"
+#, kde-format
 msgctxt "@title:column"
 msgid "Address"
 msgstr "Enderezo"
 
 #: widgets/disassemblewidget.cpp:191
-#, fuzzy, kde-format
-#| msgid "Function"
+#, kde-format
 msgctxt "@title:column"
 msgid "Function"
 msgstr "Función"
 
 #: widgets/disassemblewidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Instruction"
+#, kde-format
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr "Instrución"
 
 #: widgets/disassemblewidget.cpp:212
-#, fuzzy, kde-format
-#| msgid "Disassemble/Registers View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"
 msgstr "Vista do Desensamblado/Rexistros"
 
 #. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
 #: widgets/selectaddressdialog.ui:17
-#, fuzzy, kde-format
-#| msgid "Select the address to disassemble around"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the address to disassemble around"
 msgstr "Escolla o enderezo arredor do cal desensamblar"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/selectaddressdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Select address to disassemble around"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
-msgstr "Escolla o enderezo arredor do cal desensamblar"
+msgstr "Enderezo arredor do cal desensamblar:"
 
 #~ msgid "toolBar"
 #~ msgstr "barraDeFerramentas"
