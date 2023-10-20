@@ -195,7 +195,7 @@ parts:
         - libqt5webkit5
         - clang-14
         - libpulse0
-        - ninja
+        - ninja-build
         parse-info:
         - usr/share/metainfo/org.kde.kdevelop.appdata.xml
         source: .
