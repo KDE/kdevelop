@@ -525,7 +525,7 @@ msgstr "Simon Hausmann"
 #: main.cpp:420
 #, kde-format
 msgid "Help with KParts infrastructure"
-msgstr "Ajuda amb la infraestructura de KParts"
+msgstr "Ajuda amb la infraestructura de les KPart"
 
 #: main.cpp:421
 #, kde-format

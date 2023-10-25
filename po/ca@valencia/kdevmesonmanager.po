@@ -137,7 +137,7 @@ msgstr "S'ha produït un error del constructor Meson: %1"
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr ""
-"Ha fallat la importació de %1 perquè no es podia crear cap directori de "
+"Fallada durant la importació de %1 perquè no es podia crear cap directori de "
 "construcció."
 
 #: mintro/mesonintrospectjob.cpp:115
