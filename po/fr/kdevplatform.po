@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-27 00:45+0000\n"
-"PO-Revision-Date: 2023-09-20 18:11+0200\n"
+"PO-Revision-Date: 2023-10-28 19:23+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -3035,7 +3035,7 @@ msgid ""
 "interface."
 msgstr ""
 "Le module externe d'importation de projet (%1) ne prend pas en charge "
-"l'interface IProjectFileManager."
+"l'interface « IProjectFileManager »."
 
 #: shell/project.cpp:402
 #, kde-format
@@ -5474,14 +5474,15 @@ msgstr ""
 #: util/duchainify/main.cpp:285
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
-msgstr "Afficher l'ensemble du dépôt DUChain Definitions si l'analyse réussit"
+msgstr ""
+"Afficher l'ensemble du dépôt « DUChain Definitions » si l'analyse réussit"
 
 #: util/duchainify/main.cpp:288
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
-"Afficher l'ensemble du dépôt DUChain PersistentSymbolTable si l'analyse "
+"Afficher l'ensemble du dépôt « DUChain PersistentSymbolTable » si l'analyse "
 "réussit"
 
 #: util/duchainify/main.cpp:291
