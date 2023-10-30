@@ -75,7 +75,7 @@ parts:
         source: .
         source-type: local
         prime:
-        - ".*"
+        - "snap/local/patches"
     kdevelop:
         after:
         - mesa-patchelf
@@ -221,7 +221,7 @@ parts:
         - -usr/lib/${CRAFT_ARCH_TRIPLET}/dri
         override-pull: |
             craftctl default
-            patch -p1 < ../../patches/src/snap/patches/kdevelop_unset_env.patch
+            patch -p1 < ../../patches/src/snap/local/patches/kdevelop_unset_env.patch
         override-build: |
             craftctl default
             sed -i "${CRAFT_PART_INSTALL}/usr/share/applications/org.kde.kdevelop.desktop" \

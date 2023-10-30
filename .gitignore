@@ -32,4 +32,4 @@ perf.data*
 
 # do not ignore .kdev4 files from test data
 !projectmanagers/custom-buildsystem/tests/projects/**/.kdev4
-!snap/patches/kdevelop_unset_env.patch
+!snap/local/patches/kdevelop_unset_env.patch
