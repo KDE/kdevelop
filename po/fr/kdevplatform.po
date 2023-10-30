@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-04 00:41+0000\n"
-"PO-Revision-Date: 2023-10-24 21:31+0200\n"
+"PO-Revision-Date: 2023-10-28 19:23+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -3040,7 +3040,7 @@ msgid ""
 "interface."
 msgstr ""
 "Le module externe d'importation de projet (%1) ne prend pas en charge "
-"l'interface IProjectFileManager."
+"l'interface « IProjectFileManager »."
 
 #: shell/project.cpp:402
 #, kde-format
@@ -4418,7 +4418,7 @@ msgstr "Utilisation de l'espace de stockage et de la mémoire"
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr "Enregistrer les préambules précompilés dans :"
+msgstr "Enregistrer les préambules pré compilés dans :"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4436,7 +4436,7 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
-"<p>Les préambules précompilés restent dans le dossier temporaire après le "
+"<p>Les préambules pré compilés restent dans le dossier temporaire après le "
 "plantage de KDevelop et sont supprimés uniquement lorsque la même session "
 "est re-démarrée. <br>\n"
 "Lorsque les préambules sont enregistrés en mémoire, ils sont sûrs de "
@@ -5585,14 +5585,15 @@ msgstr ""
 #: util/duchainify/main.cpp:285
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
-msgstr "Afficher l'ensemble du dépôt DUChain Definitions si l'analyse réussit"
+msgstr ""
+"Afficher l'ensemble du dépôt « DUChain Definitions » si l'analyse réussit"
 
 #: util/duchainify/main.cpp:288
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
-"Afficher l'ensemble du dépôt DUChain PersistentSymbolTable si l'analyse "
+"Afficher l'ensemble du dépôt « DUChain PersistentSymbolTable » si l'analyse "
 "réussit"
 
 #: util/duchainify/main.cpp:291
