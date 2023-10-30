@@ -42,21 +42,30 @@ package-repositories:
     url: http://archive.neon.kde.org/user
     key-server: keyserver.ubuntu.com
 parts:
-    mesa-patchelf:
-        plugin: nil
-        stage-packages:
-        - libgl1-mesa-dri
-        - libglu1-mesa
-        stage:
-        - "-usr/lib/${CRAFT_ARCH_TRIPLET}/dri"
     mesa-no-patchelf:
+        after: []
         plugin: nil
-        stage-packages:
-        - libgl1-mesa-dri
         build-attributes:
         - no-patchelf
-        stage:
-        - usr/lib/${CRAFT_ARCH_TRIPLET}/dri
+        build-packages: []
+        stage-packages:
+        - libgl1-mesa-dri
+        - libglx-mesa0
+        prime:
+        - "-lib/udev"
+        - "-usr/doc"
+        - "-usr/doc-base"
+        - "-usr/share/applications"
+        - "-usr/share/apport"
+        - "-usr/share/bug"
+        - "-usr/share/doc"
+        - "-usr/share/doc-base"
+        - "-usr/share/icons"
+        - "-usr/share/libdrm"
+        - "-usr/share/libwacom"
+        - "-usr/share/lintian"
+        - "-usr/share/man"
+        - "-usr/share/pkgconfig"
     qtconf:
         plugin: nil
         override-build: |
@@ -70,18 +79,10 @@ parts:
             Translations = usr/share/qt5/translations
             Data = usr/share/qt5
             EOF
-    patches:
-        plugin: dump
-        source: .
-        source-type: local
-        prime:
-        - "snap/local/patches"
     kdevelop:
         after:
-        - mesa-patchelf
         - mesa-no-patchelf
         - qtconf
-        - patches
         plugin: cmake
         build-packages:
         - extra-cmake-modules
@@ -192,10 +193,12 @@ parts:
         - libkf5threadweaver5
         - libkf5windowsystem5
         - libkf5xmlgui5
+        - libkf5purpose5
         - libqt5webkit5
         - clang-14
         - libpulse0
         - ninja-build
+        - libsecret-1-0
         parse-info:
         - usr/share/metainfo/org.kde.kdevelop.appdata.xml
         source: .
@@ -216,14 +219,18 @@ parts:
         - -usr/share/man/*
         - -usr/share/icons/breeze-dark*
         - -usr/bin/X11
-        - -usr/lib/gcc/$CRAFT_ARCH_TRIPLET/6.0.0
+        - "-usr/lib/gcc/${CRAFT_ARCH_TRIPLET}/6.0.0"
         - -usr/lib/aspell/*
-        - -usr/lib/${CRAFT_ARCH_TRIPLET}/dri
+        - "-usr/lib/${CRAFT_ARCH_TRIPLET}/dri"
         override-pull: |
             craftctl default
-            patch -p1 < ../../patches/src/snap/local/patches/kdevelop_unset_env.patch
+              for file in ${CRAFT_PROJECT_DIR}/snap/local/patches/*
+              do
+                patch -i $file -p 1
+              done
         override-build: |
             craftctl default
+            set -o nounset
             sed -i "${CRAFT_PART_INSTALL}/usr/share/applications/org.kde.kdevelop.desktop" \
                 -e 's|Icon=kdevelop$|Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/kdevelop.svg|'
 
