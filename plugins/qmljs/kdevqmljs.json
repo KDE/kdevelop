@@ -13,7 +13,7 @@
         "Description[et]": "QML/JS keele toetus (põhineb QtCreatori qmljs'il)",
         "Description[eu]": "QML/JS lengoaiaren euskarria («QtCreator»en «qmljs»en oinarrituta)",
         "Description[fi]": "QML/JS-kielituki (perustuu QtCreatorin qmljs:ään)",
-        "Description[fr]": "Prise en charge du langage QML/JS (utilisant qmljs de QtCreator)",
+        "Description[fr]": "Prise en charge du langage QML / JS (utilisant le module « qmljs » de QtCreator)",
         "Description[gl]": "Compatibilidade con QML/JS (baseada en qmljs de QtCreator)",
         "Description[it]": "Supporto al linguaggio QML/JS (basato su qmljs di QtCreator)",
         "Description[ko]": "QML/JS 언어 지원(QtCreator의 qmljs 기반)",
