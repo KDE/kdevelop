@@ -15,6 +15,7 @@
 
 #include "tests/autotestshell.h"
 #include "tests/testcore.h"
+#include <tests/testhelpers.h>
 
 /*
 * CHECK_TEMPLATE_VARIABLE expects second parameter as type with 'to' instead of 'Q' in begin
@@ -81,6 +82,8 @@ void TestTemplateClassGenerator::cleanupTestCase()
 void TestTemplateClassGenerator::fileLabelsCpp()
 {
     auto generator = loadTemplate(QStringLiteral("test_cpp"));
+    RETURN_IF_TEST_FAILED();
+
     QHash<QString,QString> labels = generator->fileLabels();
     QCOMPARE(labels.size(), 2);
 
@@ -97,6 +100,8 @@ void TestTemplateClassGenerator::fileLabelsCpp()
 void TestTemplateClassGenerator::fileLabelsYaml()
 {
     auto generator = loadTemplate(QStringLiteral("test_yaml"));
+    RETURN_IF_TEST_FAILED();
+
     QHash<QString,QString> labels = generator->fileLabels();
     QCOMPARE(labels.size(), 1);
 
@@ -107,6 +112,8 @@ void TestTemplateClassGenerator::fileLabelsYaml()
 void TestTemplateClassGenerator::defaultFileUrlsCpp()
 {
     auto generator = loadTemplate(QStringLiteral("test_cpp"));
+    RETURN_IF_TEST_FAILED();
+
     QHash<QString,QUrl> files = generator->fileUrls();
     QCOMPARE(files.size(), 2);
 
@@ -120,6 +127,8 @@ void TestTemplateClassGenerator::defaultFileUrlsCpp()
 void TestTemplateClassGenerator::defaultFileUrlsYaml()
 {
     auto generator = loadTemplate(QStringLiteral("test_yaml"));
+    RETURN_IF_TEST_FAILED();
+
     QHash<QString,QUrl> files = generator->fileUrls();
     QCOMPARE(files.size(), 1);
 
@@ -130,9 +139,11 @@ void TestTemplateClassGenerator::defaultFileUrlsYaml()
 void TestTemplateClassGenerator::customOptions()
 {
     auto generator = loadTemplate(QStringLiteral("test_yaml"));
+    RETURN_IF_TEST_FAILED();
     QCOMPARE(generator->sourceFileTemplate().hasCustomOptions(), false);
 
     generator = loadTemplate(QStringLiteral("test_options"));
+    RETURN_IF_TEST_FAILED();
     QCOMPARE(generator->sourceFileTemplate().hasCustomOptions(), true);
 
     // test if option data loaded with all values in same order as in kcfg file
@@ -185,6 +196,7 @@ void TestTemplateClassGenerator::customOptions()
 void TestTemplateClassGenerator::templateVariablesCpp()
 {
     auto generator = loadTemplate(QStringLiteral("test_cpp"));
+    RETURN_IF_TEST_FAILED();
     setLowercaseFileNames(generator);
 
     QVariantHash variables = generator->renderer()->variables();
@@ -197,6 +209,7 @@ void TestTemplateClassGenerator::templateVariablesCpp()
 void TestTemplateClassGenerator::templateVariablesYaml()
 {
     auto generator = loadTemplate(QStringLiteral("test_yaml"));
+    RETURN_IF_TEST_FAILED();
     setLowercaseFileNames(generator);
 
     QVariantHash variables = generator->renderer()->variables();
@@ -209,6 +222,7 @@ void TestTemplateClassGenerator::templateVariablesYaml()
 void TestTemplateClassGenerator::codeDescription()
 {
     auto generator = loadTemplate(QStringLiteral("test_yaml"));
+    RETURN_IF_TEST_FAILED();
 
     QVariantHash variables = generator->renderer()->variables();
 
@@ -240,6 +254,7 @@ void TestTemplateClassGenerator::codeDescription()
 void TestTemplateClassGenerator::generate()
 {
     auto generator = loadTemplate(QStringLiteral("test_cpp"));
+    RETURN_IF_TEST_FAILED();
 
     DocumentChangeSet changes = generator->generate();
     DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
@@ -253,7 +268,9 @@ void TestTemplateClassGenerator::generate()
 void TestTemplateClassGenerator::cppOutput()
 {
     auto generator = loadTemplate(QStringLiteral("test_cpp"));
+    RETURN_IF_TEST_FAILED();
     setLowercaseFileNames(generator);
+
     DocumentChangeSet changes = generator->generate();
     changes.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
     changes.applyAllChanges();
@@ -276,6 +293,7 @@ void TestTemplateClassGenerator::cppOutput()
 void TestTemplateClassGenerator::yamlOutput()
 {
     auto generator = loadTemplate(QStringLiteral("test_yaml"));
+    RETURN_IF_TEST_FAILED();
     setLowercaseFileNames(generator);
     generator->generate().applyAllChanges();
 
@@ -298,11 +316,13 @@ std::unique_ptr<TemplateClassGenerator> TestTemplateClassGenerator::loadTemplate
     auto generator = std::make_unique<TemplateClassGenerator>(baseUrl);
 
     QString tplDescription = QStringLiteral(CODEGEN_DATA_DIR) + "/kdevcodegentest/templates/" + name + "/" + name + ".desktop";
-    Q_ASSERT(!tplDescription.isEmpty());
+    QVERIFY_RETURN(!tplDescription.isEmpty(), nullptr);
+
     SourceFileTemplate tpl;
     tpl.addAdditionalSearchLocation(QStringLiteral(CODEGEN_TESTS_DATA_DIR) + "/kdevcodegentest/templates/");
     tpl.setTemplateDescription(tplDescription);
-    Q_ASSERT(tpl.isValid());
+    QVERIFY_RETURN(tpl.isValid(), nullptr);
+
     generator->setTemplateDescription(tpl);
     generator->setDescription(description);
     generator->setIdentifier(QStringLiteral("ClassName"));

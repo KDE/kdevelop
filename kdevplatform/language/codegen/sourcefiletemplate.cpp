@@ -196,7 +196,13 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
         } else {
             d->archive = new KTar(archiveFileName);
         }
-        d->archive->open(QIODevice::ReadOnly);
+
+        if (!d->archive->open(QIODevice::ReadOnly)) {
+            qCWarning(LANGUAGE) << "Could not open the template archive for description" << templateDescription
+                                << ", archive file" << archiveFileName << ':' << d->archive->errorString();
+            delete d->archive;
+            d->archive = nullptr;
+        }
     }
 }
 

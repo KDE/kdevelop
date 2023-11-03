@@ -238,6 +238,8 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
                                                        const QUrl& baseUrl,
                                                        const QHash<QString, QUrl>& fileUrls)
 {
+    Q_ASSERT(fileTemplate.isValid());
+
     DocumentChangeSet changes;
     const QDir baseDir(baseUrl.path());
 
