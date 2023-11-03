@@ -119,6 +119,7 @@ parts:
         - libkf5windowsystem-dev
         - libkf5xmlgui-dev
         - libqt5webkit5-dev
+        - qtbase5-dev
         - gettext
         - patch
         stage-packages:
@@ -195,6 +196,13 @@ parts:
         - libkf5xmlgui5
         - libkf5purpose5
         - libqt5webkit5
+        - libqt5core5a
+        - libqt5widgets5
+        - libqt5concurrent5
+        - libqt5quick5
+        - libqt5quickwidgets5
+        - libqt5waylandclient5
+        - libqt5waylandcompositor5
         - clang-14
         - libpulse0
         - ninja-build
