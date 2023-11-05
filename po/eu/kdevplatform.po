@@ -1,17 +1,17 @@
 # Translation for kdevplatform.po to Euskara/Basque (eu).
-# Copyright (C) 2020, This file is copyright:
+# Copyright (C) 2020-2023 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# KDE euskaratzeko proiektuko arduraduna <xalba@euskalnet.net>.
+# KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
 #
 # Translators:
 # Gontzal Pujana <gontzalpujana@protonmail.com>, 2020.
-# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2022.
+# SPDX-FileCopyrightText: 2022, 2023 Iñigo Salvador Azurmendi <xalba@ni.eus>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-27 00:45+0000\n"
-"PO-Revision-Date: 2022-11-14 07:16+0100\n"
+"PO-Revision-Date: 2023-11-04 23:30+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -277,8 +277,8 @@ msgstr "&Kendu denak"
 #, kde-format
 msgid "%2"
 msgid_plural "%2 (repeated %1 times)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2"
+msgstr[1] "%2 (%1 aldiz errepikauta)"
 
 #: debugger/framestack/framestackmodel.cpp:178
 #, kde-format
@@ -412,7 +412,7 @@ msgstr "Araztailearen aldagaiak"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Zutabeen neurria automatikoki egokitu klik egitean"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -745,17 +745,14 @@ msgstr "&Izen berria:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:35
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>\"Note: All overloaded functions, overloads, "
-#| "forward-declarations, etc. will be renamed too\"</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>&quot;Note: All overloaded functions, overloads, "
 "forward-declarations, etc. will be renamed too&quot;</p></body></html>"
 msgstr ""
-"<html><head/><body><p>\"Oharra: Gainkargatutako funtzio guztiak, gainkargak, "
-"aurrerako deklarazioak, etab. ere berrizendatuak izango dira\"</p></body></"
-"html>"
+"<html><head/><body><p>&quot;Oharra: Gainkargatutako funtzio guztiak, "
+"gainkargak, aurrerako deklarazioak, etab. ere berrizendatuko dira&quot;</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:38
@@ -1826,10 +1823,9 @@ msgid "Running %1"
 msgstr "%1 exekutatzen"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "&Kolore eskema"
+msgstr "&Leihoaren kolore-antolaera"
 
 #: shell/configdialog.cpp:31
 #, kde-format
@@ -2218,13 +2214,13 @@ msgstr "Ezin izan da editorea aurkitu"
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
-msgstr ""
+msgstr "Ireki testu arrunt gisa"
 
 #: shell/documentcontroller.cpp:318
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
-msgstr ""
+msgstr "Ez ireki"
 
 #: shell/documentcontroller.cpp:601
 #, kde-format
@@ -2838,25 +2834,21 @@ msgid "Close Document"
 msgstr "Itxi dokumentua"
 
 #: shell/partdocument.cpp:111
-#, fuzzy, kde-format
-#| msgid ""
-#| "The document \"%1\" has unsaved changes and was modified by an external "
-#| "process.\n"
-#| "Do you want to override the external changes?"
+#, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
 "process.\n"
 "Do you want to overwrite the external changes?"
 msgstr ""
-"\"%1\" dokumentua gorde gabeko aldaketak ditu eta kanpoko prozesu batengatik "
-"aldatua izan da.\n"
+"\"%1\" dokumentuak gorde gabeko aldaketak ditu eta kanpoko prozesu batek "
+"aldatua du.\n"
 "Kanpoko aldaketak gainidatzi nahi dituzu?"
 
 #: shell/partdocument.cpp:115 shell/textdocument.cpp:442
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
-msgstr ""
+msgstr "Gainidatzi kanpoko aldaketak"
 
 #: shell/problem.cpp:40
 #, kde-format
@@ -3105,7 +3097,7 @@ msgstr "Ireki dagoen proiektua berriro?"
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "Berrireki"
 
 #: shell/projectcontroller.cpp:555
 #, kde-format
@@ -3120,14 +3112,7 @@ msgid "Open or import project"
 msgstr "Ireki edo inportatu proiektua"
 
 #: shell/projectcontroller.cpp:557
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Open an existing KDevelop 4 project or import an existing Project into "
-#| "KDevelop 4. This entry allows one to select a KDevelop4 project file or "
-#| "an existing directory to open it in KDevelop. When opening an existing "
-#| "directory that does not yet have a KDevelop4 project file, the file will "
-#| "be created."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Open an existing KDevelop project or import an existing Project into "
@@ -3136,10 +3121,11 @@ msgid ""
 "directory that does not yet have a KDevelop project file, the file will be "
 "created."
 msgstr ""
-"Ireki dagoen KDevelop 4 proiektua edo inportatu dagoen proiektua KDevelop "
-"4en. Sarrera honek KDevelop4 proiektu-fitxategi edo dagoen karpeta bat "
-"hautatzen uzten du KDevelopen irekitzeko. KDevelop4 proiektu-fitxategi bat "
-"ez duen dagoen karpeta bat irekitzean, fitxategia sortuko da."
+"Dagoen KDevelop proiektu bat ireki edo dagogen proiektu bat «KDevelop»era "
+"inportatu. Sarrera horrek, KDevelop proiektu-fitxategi bat edo dagoen "
+"direktorio bat «KDevelop»ekin irekitzeko aukeratzen uzten du. Oraindik "
+"KDevelop proiektu-fitxategirik ez duen direktorio bat irekitzean, fitxategia "
+"sortu egingo da."
 
 #: shell/projectcontroller.cpp:568
 #, kde-format
@@ -3154,17 +3140,13 @@ msgid "Fetch project"
 msgstr "Eskuratu proiektua"
 
 #: shell/projectcontroller.cpp:571
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Guides the user through the project fetch and then imports it into "
-#| "KDevelop 4."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr ""
-"Erabiltzailea gidatzen du proiektuaren eskuraketatik eta gero KDevelop 4ra "
-"inportatzen du."
+"Proiektua eskuratzeko prozesuan erabiltzailea gidatzen du eta gero "
+"«KDevelop»era informatzen du."
 
 #: shell/projectcontroller.cpp:586
 #, kde-format
@@ -3920,7 +3902,7 @@ msgstr "Ez dago iturri formateatzailerik eskuragarri"
 #, kde-format
 msgctxt "@label"
 msgid "Preview:"
-msgstr "Aurreikuspena:"
+msgstr "Aurre-ikuspegia:"
 
 #: shell/settings/environmentpreferences.cpp:79
 #, kde-format
@@ -4170,23 +4152,19 @@ msgstr ""
 #: shell/settings/languagepreferences.ui:170
 #, kde-format
 msgid "Auto-Generated"
-msgstr ""
+msgstr "Automatikoki sortua"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:175
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Focus Editor"
+#, kde-format
 msgid "From Editor Theme"
-msgstr "Kontzentrazio-editorea"
+msgstr "Editore gaitik"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: shell/settings/languagepreferences.ui:186
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Global colorization intensity:"
+#, kde-format
 msgid "Global colors:"
-msgstr "Kolorizazio intentsitate globala:"
+msgstr "Kolore globalak:"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
 #. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
@@ -4197,9 +4175,8 @@ msgid ""
 "<p>This settings lets you change the intensity of globally accessible types, "
 "for example classes, methods, functions etc.</p>"
 msgstr ""
-"<p>Ezarpen honek modu globalean atzitu daitzekeen moten koloreen "
-"intentsitatea aldatzen du, adibidez klase, metodo, funtzio eta bestelakoenak."
-"</p>"
+"<p>Ezarpen horrek globalki atzigarriak diren moten intentsitatea aldatzen "
+"uzten dizu, adibidez klaseak, metodoak, funtzioak eta abar.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
 #: shell/settings/languagepreferences.ui:221
@@ -4357,7 +4334,7 @@ msgstr "Proiektuaren tamaina minimoa analisi sinplerako:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Core"
-msgstr "Oinarria"
+msgstr "Nukleoa"
 
 #: shell/settings/pluginpreferences.cpp:36
 #, kde-format
@@ -4548,12 +4525,12 @@ msgstr "Konfiguratu exekuzio-denborak"
 #: shell/sourceformattercontroller.cpp:228
 #, kde-format
 msgid "Source Formatter"
-msgstr "Iturri formateatzailea"
+msgstr "Iturri formatu emailea"
 
 #: shell/settings/sourceformattersettings.cpp:80
 #, kde-format
 msgid "Configure Source Formatter"
-msgstr "Konfiguratu iturri formateatzailea"
+msgstr "Konfiguratu sorburu-formatu emailea"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/sourceformattersettings.ui:20
@@ -4570,15 +4547,15 @@ msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without Kate modeline."
 msgstr ""
-"Gainidatzi editorearen indentazio modua Kate modeline ez duten dokumentuen "
-"formatu-estiloaren arabera."
+"Gainidatzi editorearen koskatze modua, Kate modu-lerrorik gabeko "
+"dokumentuetarako, formatu estiloaren arabera."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Override Kate Indentation Mode"
-msgstr "Gainidatzi Kate indentazio modua"
+msgstr "Gainidatzi Kate koskatze modua"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:36
@@ -4587,14 +4564,15 @@ msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
 msgstr ""
-"Gehitu Kate modeline formatua duten dokumentuen formatu-estiloaren arabera."
+"Gehitu Kate modu-lerro bat, formatudun dokumentuei, formatu estiloaren "
+"arabera."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:39
 #, kde-format
 msgctxt "@option:check"
 msgid "Add Kate Modeline"
-msgstr "Gehitu Kate modeline"
+msgstr "Gehitu Kate modu-lerroa"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
@@ -4815,41 +4793,43 @@ msgstr "Konfiguratu erabiltzaile-interfazea"
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
-msgstr "&Berriro formateatu iturria"
+msgstr "Sorburuari formatua be&rriz ematea"
 
 #: shell/sourceformattercontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
-msgstr "Berriro formateatu lerroa"
+msgstr "Lerroari formatua berriz ematea"
 
 #: shell/sourceformattercontroller.cpp:242
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr "Berriro formateatu fitxategiak..."
+msgstr "Fitxategiei formatua berriz ematea..."
 
 #: shell/sourceformattercontroller.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Format file(s) using the current theme"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr "Formateatu fitxategia(k) uneko gaia erabiliz"
+msgstr ""
+"Fitxategi(ar/e)i formatua eman, konfiguratutako sorbururen formatu "
+"emailea(k) erabiliz"
 
 #: shell/sourceformattercontroller.cpp:245
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Formatting functionality using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr "Formateatu funtzionalitatea <b>astyle</b> liburutegia erabiliz."
+msgstr ""
+"Formatua emateko funtzionaltasuna, konfiguratutako sorbururen formatu "
+"emailea(k) erabiliz."
 
 #: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
+"Hautapenari edo fitxategiari formatua berriz eman <i>%1</i> (<b>%2</b>) "
+"erabiliz"
 
 #: shell/sourceformattercontroller.cpp:606
 #, kde-format
@@ -4858,33 +4838,32 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
+"Hautatutako testuari edo fitxategi osoari formatua berriz ematen dio <i>%1</"
+"i> tresna <b>%2</b> estiloarekin erabiliz."
 
 #: shell/sourceformattercontroller.cpp:608
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reformat current line using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr "Lerroa berriro formateatu AStyle erabiliz"
+msgstr "Uneko lerroari formatua berri eman <i>%1</i> (<b>%2</b>) erabiliz"
 
 #: shell/sourceformattercontroller.cpp:611
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Source reformatting of line under cursor using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
 msgstr ""
-"Kurtsorearen azpiko lerroaren formateatze funtzionalitatea <b>astyle</b> "
-"liburutegia erabiliz."
+"Kurtsorearen azpiko sorburu lerroari formatua berriz eman <i>%1</i> tresna "
+"<b>%2</b>(e)kin erabiliz."
 
 #: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
+"Hautapenari edo fitxategiari formatua berriz eman konfiguratutako sorburuari "
+"formatua emailea erabiliz"
 
 #: shell/sourceformattercontroller.cpp:617
 #, kde-format
@@ -4893,61 +4872,61 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"Hautatutako testuari edo fitxategi osoari, ezer hautatuta ez badago, "
+"formatua berriz ematen dio konfiguratutako sorburuari formatua emailea "
+"erabiliz."
 
 #: shell/sourceformattercontroller.cpp:619
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reformat current line using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr "Lerroa berriro formateatu AStyle erabiliz"
+msgstr ""
+"Uneko lerroari formatua berriz eman konfiguratutako sorburuari formatua "
+"emailea erabiliz"
 
 #: shell/sourceformattercontroller.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Source reformatting of line under cursor using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
 msgstr ""
-"Kurtsorearen azpiko lerroaren formateatze funtzionalitatea <b>astyle</b> "
-"liburutegia erabiliz."
+"Kurtsorearen azpiko lerroari formatua berriz ematea konfiguratutako sorburu-"
+"formatu emailea erabiliz."
 
 #: shell/sourceformattercontroller.cpp:856
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr "Berriro formateatu fitxategiak?"
+msgstr "Fitxategiei formatua berriz eman?"
 
 #: shell/sourceformattercontroller.cpp:857
 #, kde-format
 msgid "Reformat all files in the selected folder?"
-msgstr "Berriro formateatu fitxategiak hautatutako karpetan?"
+msgstr "Hautatutako karpetetako fitxategiei formatua berriz eman?"
 
 #: shell/sourceformattercontroller.cpp:861
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
-msgstr "Berriro formateatu"
+msgstr "Formatua berriz eman"
 
 #: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
-msgstr "Berriro formateatzea"
+msgstr "Formatua berriz ematea"
 
 #: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
-msgstr "Berriro formateatu fitxategiak"
+msgstr "Fitxategiei formatua berriz eman"
 
 #: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"
-msgstr[0] "Fitxategi bat berriro formateatzen"
-msgstr[1] "%1 fitxategi berriro formateatzen"
+msgstr[0] "Fitxategi bati formatua berriz ematen"
+msgstr[1] "%1 fitxategiri formatua berriz ematen"
 
 #: shell/sourceformatterselectionedit.cpp:484
 #, kde-format
@@ -4956,7 +4935,7 @@ msgid ""
 "%2.\n"
 "Are you sure you want to delete it?"
 msgstr ""
-"%1 estiloa hurrengo lengoaiatan erabiltzen da:\n"
+"%1 estiloa hurrengo lengoaiatan ere erabiltzen da:\n"
 "%2.\n"
 "Ezabatu nahi duzula ziur zaude?"
 
@@ -4964,7 +4943,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
-msgstr "Estiloa ezabatzen"
+msgstr "Estiloa ezabatzea"
 
 #: shell/sourceformatterselectionedit.cpp:540
 #, kde-format
@@ -4993,7 +4972,7 @@ msgstr "Lengoaia:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
-msgstr "Formateatzailea:"
+msgstr "Formatu emailea:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:132
@@ -5499,24 +5478,21 @@ msgid "Some Files are Write-Protected"
 msgstr "Fitxategi batzuk idazketaren kontra babestuta daude"
 
 #: util/shellutils.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Failed Setting Permissions"
+#, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr "Baimenak ezartzeak huts egin du"
+msgstr "Ezarri idazteko baimenak"
 
 #: util/shellutils.cpp:84
-#, fuzzy, kde-format
-#| msgid "Ignore"
+#, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
-msgstr "Ez ikusi egin"
+msgstr "Ezikusi"
 
 #: util/shellutils.cpp:96
 #, kde-format
 msgid "Failed adding write permissions for some files."
-msgstr "Fitxategi batzuetan idazketa baimenak gehitzeak huts egin du."
+msgstr "Fitxategi batzuetan idazteko baimenak gehitzeak huts egin du."
 
 #: util/shellutils.cpp:97
 #, kde-format
@@ -5595,22 +5571,18 @@ msgstr ""
 "Mesedez, hautatu beste izen bat."
 
 #: vcs/dvcs/ui/branchmanager.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "Currently at the branch \"%1\".\n"
-#| "To remove it, please change to another branch."
+#, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
 msgstr ""
 "Unean \"%1\" adarrean.\n"
-"Kentzeko, mesedez aldatu beste adar batera."
+"Hura ezabatzeko, mesedez, aldatu beste adar batera."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
-#, fuzzy, kde-format
-#| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
+#, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
-msgstr "Ziur zaude %1 adarra betirako ezabatu nahi duzula?"
+msgstr "Ziur zaude '%1' adarra betirako ezabatu nahi duzula?"
 
 #: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
 #, kde-format

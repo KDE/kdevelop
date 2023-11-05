@@ -1,24 +1,24 @@
 # Translation for kdevcustomscript.po to Euskara/Basque (eu).
-# Copyright (C) 2022 This file is copyright:
+# Copyright (C) 2022-2023 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
+# SPDX-FileCopyrightText: 2023 KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>
 #
 # Translators:
-# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2022.
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-08 00:45+0000\n"
-"PO-Revision-Date: 2022-12-11 19:29+0100\n"
+"PO-Revision-Date: 2023-11-04 22:30+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
-"Language-Team: Basque\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #: customscript_plugin.cpp:86
 #, kde-format
@@ -99,6 +99,21 @@ msgid ""
 "b> using the <b>uncrustify</b> tool with the config-file <b>uncrustify."
 "config</b>."
 msgstr ""
+"Deskribapena:<br /><b>kdev_format_source</b> «KDevelop»ekin batera "
+"multzokatutako gidoi bat da, fitxategi-sisteman <b>format_sources</b> "
+"izeneko meta-fitxategiak ipinita, formatua emateko arau zehatzak erabiltzen "
+"uzten duena.<br /><br /><b>format_sources</b> fitxategietako lerro bakoitzak "
+"zernahitarako karaktereen zerrenda bat definitzen du, jarraian puntu eta "
+"koma eta formatua emateko erabilitako komandoa.<br /><br />Formatua emateko "
+"komandoak <b>$TMPFILE</b> erabili beharko luke formatua berritu beharreko "
+"aldi baterako fitxategiari erreferentzia egiteko.<br /><br />Adibidea:<br /"
+"><b>*.cpp *.h : myformatter $TMPFILE</b><br />Horrek <b>.cpp</b> edo <b>.h</"
+"b> bukaera duten fitxategi guztien formatuaaldatuko du neurrira ipinitako "
+"<b>myformatter</b> gidoia erabiliz.<br /><br />Adibidea: <br /><b>azpidir/"
+"* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br /"
+">Horrek <b>azpidir</b> azpi-direktorioko fitxategi guztien formatua aldatuko "
+"du <b>uncrustify</b> tresna <b>uncrustify.config</b> konfiguratzeko "
+"fitxategiarekin erabiliz."
 
 #: customscript_plugin.cpp:534
 #, kde-format
@@ -115,6 +130,11 @@ msgid ""
 "add <b>$TMPFILE</b> into the command, then <br />a temporary file is used "
 "for transferring the code."
 msgstr ""
+"<i>Oskoleko komando arbitrario bat sar dezakezu.</i><br />Formaturik gabeko "
+"sorburu-kodea komandora iristen da <br />sarrera estandarraren bidez, "
+"eta<br />formatudun emaitza irakurtzen da irteera estandarretik.<br /><br /"
+">Komandoan <b>$TMPFILE</b> gehitzen baduzu, <br />aldi baterako fitxategi "
+"bat erabiltzen da kodea transferitzeko."
 
 #: customscript_plugin.cpp:555
 #, kde-format
@@ -139,6 +159,14 @@ msgid ""
 "b> will be replaced by the path of <br />a currently open project whose name "
 "is &lt;project name&gt;."
 msgstr ""
+"<b>$TMPFILE</b> alde baterako fitxategi baten bide-izenarekin ordezkatuko da."
+"<br />Kodea fitxategian idatziko da, aldi baterako <br />fitxategia kokapen "
+"horretan ordezkatuko da, eta emaitza <br />fitxategi horretatik irakurriko "
+"da.<br /><br /><b>$FILE</b> jatorrizko fitxategiaren bide-izenarekin "
+"ordezkatuko da. <br />Fitxategiaren edukia ez da aldatu behar, aldaketak "
+"baimentzen dira, <br />bakarrik $TMPFILE fitxategian.<br /><br /><b>${&lt;"
+"proiektu-izena&gt;}</b> unean irekita dagoen <br /> &lt;proiektu-izena&gt; "
+"izeneko proiektuaren bide-izenarekin ordezkatuko da."
 
 #: customscript_plugin.cpp:590
 #, kde-format
