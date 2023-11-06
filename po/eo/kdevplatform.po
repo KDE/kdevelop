@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2023-10-03 06:32+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -1813,12 +1813,6 @@ msgstr ""
 msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "Reen al Kodo"
-
-#: shell/checkerstatus.cpp:37
-#, kde-format
-msgctxt "@info:progress"
-msgid "Running %1"
-msgstr "Ruliganta %1"
 
 #: shell/colorschemechooser.cpp:44
 #, kde-format
@@ -6202,3 +6196,7 @@ msgstr "Diferenco Al Antaŭa"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferenco inter Revizioj"
+
+#~ msgctxt "@info:progress"
+#~ msgid "Running %1"
+#~ msgstr "Ruliganta %1"

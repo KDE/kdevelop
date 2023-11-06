@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -1875,13 +1875,6 @@ msgstr ""
 msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "Кодына қайту"
-
-#: shell/checkerstatus.cpp:37
-#, fuzzy, kde-format
-#| msgid "Running"
-msgctxt "@info:progress"
-msgid "Running %1"
-msgstr "Жегілген"
 
 #: shell/colorschemechooser.cpp:44
 #, kde-format
@@ -6609,6 +6602,12 @@ msgstr "Алдыңғысымен айырмашылық"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Жетілдірім арасындағы айырмашылық"
+
+#, fuzzy
+#~| msgid "Running"
+#~ msgctxt "@info:progress"
+#~ msgid "Running %1"
+#~ msgstr "Жегілген"
 
 #~ msgid "No Source Formatter available"
 #~ msgstr "Пішімдеу құралы жоқ"

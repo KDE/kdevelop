@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2023-11-04 23:30+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -1820,12 +1820,6 @@ msgstr ""
 msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "Bueltatu kodera"
-
-#: shell/checkerstatus.cpp:37
-#, kde-format
-msgctxt "@info:progress"
-msgid "Running %1"
-msgstr "%1 exekutatzen"
 
 #: shell/colorschemechooser.cpp:44
 #, kde-format
@@ -6209,6 +6203,10 @@ msgstr "Aurrekoaren arteko diferentzia"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Berrikuspenen arteko diferentzia"
+
+#~ msgctxt "@info:progress"
+#~ msgid "Running %1"
+#~ msgstr "%1 exekutatzen"
 
 #~ msgid "No Source Formatter available"
 #~ msgstr "Ez dago iturri formateatzailerik eskuragarri"

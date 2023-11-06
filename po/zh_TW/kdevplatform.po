@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2014-04-23 15:00+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -1864,13 +1864,6 @@ msgstr ""
 msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "返回源碼區"
-
-#: shell/checkerstatus.cpp:37
-#, fuzzy, kde-format
-#| msgid "Running"
-msgctxt "@info:progress"
-msgid "Running %1"
-msgstr "執行中"
 
 #: shell/colorschemechooser.cpp:44
 #, kde-format
@@ -6617,6 +6610,12 @@ msgstr "與前一個版本的差異"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "版本之間的差異"
+
+#, fuzzy
+#~| msgid "Running"
+#~ msgctxt "@info:progress"
+#~ msgid "Running %1"
+#~ msgstr "執行中"
 
 #~ msgid "No Source Formatter available"
 #~ msgstr "沒有可用的源碼格式器"

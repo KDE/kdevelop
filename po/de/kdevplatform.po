@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2023-04-30 18:41+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -1829,12 +1829,6 @@ msgstr ""
 msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "Zurück zum Quelltext"
-
-#: shell/checkerstatus.cpp:37
-#, kde-format
-msgctxt "@info:progress"
-msgid "Running %1"
-msgstr "%1 wird ausgeführt"
 
 #: shell/colorschemechooser.cpp:44
 #, kde-format
@@ -6242,6 +6236,10 @@ msgstr "Unterschied zu vorheriger Revision"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Unterschied zwischen Revisionen"
+
+#~ msgctxt "@info:progress"
+#~ msgid "Running %1"
+#~ msgstr "%1 wird ausgeführt"
 
 #~ msgid "No Source Formatter available"
 #~ msgstr "Kein Quelltext-Formatierer verfügbar"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1900,13 +1900,6 @@ msgstr ""
 msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr ""
-
-#: shell/checkerstatus.cpp:37
-#, fuzzy, kde-format
-#| msgid "Running"
-msgctxt "@info:progress"
-msgid "Running %1"
-msgstr "Εκτελείται"
 
 #: shell/colorschemechooser.cpp:44
 #, kde-format
@@ -6792,6 +6785,12 @@ msgstr "Διαφορά με προηγούμενη"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Διαφορά μεταξύ αναθεωρήσεων"
+
+#, fuzzy
+#~| msgid "Running"
+#~ msgctxt "@info:progress"
+#~ msgid "Running %1"
+#~ msgstr "Εκτελείται"
 
 #~ msgid "No Source Formatter available"
 #~ msgstr "Δεν υπάρχει διαθέσιμος διαμορφωτής"

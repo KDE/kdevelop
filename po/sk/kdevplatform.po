@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2022-04-17 20:55+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -1849,12 +1849,6 @@ msgstr ""
 msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "Späť na kód"
-
-#: shell/checkerstatus.cpp:37
-#, kde-format
-msgctxt "@info:progress"
-msgid "Running %1"
-msgstr "Beží %1"
 
 #: shell/colorschemechooser.cpp:44
 #, fuzzy, kde-format
@@ -6613,6 +6607,10 @@ msgstr "Rozdiel od predchádzajúceho"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Rozdiel medzi revíziami"
+
+#~ msgctxt "@info:progress"
+#~ msgid "Running %1"
+#~ msgstr "Beží %1"
 
 #~ msgid "No Source Formatter available"
 #~ msgstr "Žiadny zdrojový formátovač nie je k dispozícii"

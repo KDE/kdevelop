@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2022-01-20 19:01+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -1796,12 +1796,6 @@ msgstr ""
 msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "عُد إلى الكود"
-
-#: shell/checkerstatus.cpp:37
-#, fuzzy, kde-format
-msgctxt "@info:progress"
-msgid "Running %1"
-msgstr "يعمل"
 
 #: shell/colorschemechooser.cpp:44
 #, fuzzy, kde-format
@@ -6023,6 +6017,11 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
+
+#, fuzzy
+#~ msgctxt "@info:progress"
+#~ msgid "Running %1"
+#~ msgstr "يعمل"
 
 #~ msgid "New Style"
 #~ msgstr "نمط جديد"

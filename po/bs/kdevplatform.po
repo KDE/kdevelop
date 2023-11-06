@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -1902,13 +1902,6 @@ msgstr ""
 msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "Nazad u kod"
-
-#: shell/checkerstatus.cpp:37
-#, fuzzy, kde-format
-#| msgid "Running"
-msgctxt "@info:progress"
-msgid "Running %1"
-msgstr "Pokrenuto"
 
 #: shell/colorschemechooser.cpp:44
 #, kde-format
@@ -6762,6 +6755,12 @@ msgstr "Razlika u odnosu na prethodnu"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Razlika između revizija"
+
+#, fuzzy
+#~| msgid "Running"
+#~ msgctxt "@info:progress"
+#~ msgid "Running %1"
+#~ msgstr "Pokrenuto"
 
 #~ msgid "No Source Formatter available"
 #~ msgstr "Nema formatera izvornog koda"
