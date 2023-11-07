@@ -204,9 +204,10 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     olditem->d_func()->row = -1;
     olditem->setModel( nullptr );
 
-    for(int i=row; i<rowCount(); i++) {
-        child(i)->d_func()->row--;
-        Q_ASSERT(child(i)->d_func()->row==i);
+    for (int i = row, count = d->children.size(); i < count; i++) {
+        auto sibling = d->children.at(i);
+        Q_ASSERT(sibling->d_func()->row == i + 1);
+        sibling->d_func()->row = i;
     }
 
     if( model() ) {
