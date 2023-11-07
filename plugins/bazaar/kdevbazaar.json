@@ -15,6 +15,7 @@
                 "Name[es]": "Maciej Poleski",
                 "Name[et]": "Maciej Poleski",
                 "Name[eu]": "Maciej Poleski",
+                "Name[fi]": "Maciej Poleski",
                 "Name[fr]": "Maciej Poleski",
                 "Name[gl]": "Maciej Poleski",
                 "Name[it]": "Maciej Poleski",
@@ -31,6 +32,7 @@
                 "Name[sv]": "Maciej Poleski",
                 "Name[tr]": "Maciej Poleski",
                 "Name[uk]": "Maciej Poleski",
+                "Name[x-test]": "xxMaciej Poleskixx",
                 "Name[zh_CN]": "Maciej Poleski"
             }
         ],
@@ -48,6 +50,7 @@
         "Description[es]": "Este complemento integra Bazaar en KDevelop",
         "Description[et]": "See plugin lõimib Bazaari KDevelopiga",
         "Description[eu]": "Plugin honek Bazaar KDevelopen bateratzen du",
+        "Description[fi]": "Tämä liitännäinen yhdistää KDevelopiin Bazaarin",
         "Description[fr]": "Ce module intègre Bazaar dans KDevelop",
         "Description[gl]": "Este complemento integra Bazaar con KDevelop",
         "Description[it]": "Questa estensione integra Bazaar in KDevelop",
@@ -63,6 +66,7 @@
         "Description[sv]": "Insticksprogrammet integrerar Bazaar i KDevelop",
         "Description[tr]": "Bu eklenti, Bazaar uygulamasını K Geliştir ile tümleştirir",
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Bazaar до KDevelop",
+        "Description[x-test]": "xxThis plugin integrates Bazaar to KDevelopxx",
         "Description[zh_CN]": "此插件将 Bazaar 整合到 KDevelop",
         "Description[zh_TW]": "此外掛程式將 Bazaar 整合進 KDevelop 內",
         "Icon": "bazaar",
@@ -105,6 +109,7 @@
         "Name[tr]": "Bazaar Desteği",
         "Name[ug]": "Bazaar قوللىشى",
         "Name[uk]": "Підтримка Bazaar",
+        "Name[x-test]": "xxBazaar Supportxx",
         "Name[zh_CN]": "Bazaar 支持",
         "Name[zh_TW]": "Bazaar 支援",
         "Version": "1.0"

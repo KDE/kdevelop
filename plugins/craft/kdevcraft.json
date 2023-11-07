@@ -11,6 +11,7 @@
                 "Name[eo]": "Gleb Popov",
                 "Name[es]": "Gleb Popov",
                 "Name[eu]": "Gleb Popov",
+                "Name[fi]": "Gleb Popov",
                 "Name[fr]": "Gleb Popov",
                 "Name[gl]": "Gleb Popov",
                 "Name[it]": "Gleb Popov",
@@ -23,7 +24,8 @@
                 "Name[sl]": "Gleb Popov",
                 "Name[sv]": "Gleb Popov",
                 "Name[tr]": "Gleb Popov",
-                "Name[uk]": "Gleb Popov"
+                "Name[uk]": "Gleb Popov",
+                "Name[x-test]": "xxGleb Popovxx"
             }
         ],
         "Category": "Runtimes",
@@ -35,6 +37,7 @@
         "Description[eo]": "Malkovras KDE Craft-medion kiel rultempon",
         "Description[es]": "Expone el entorno Craft de KDE como biblioteca en tiempo de ejecución",
         "Description[eu]": "KDE «Craft» exekuzio-aldiko ingurunea gisa agertzen du",
+        "Description[fi]": "Paljastaa KDE Craft -ympäristön ajonaikaisympäristönä",
         "Description[fr]": "Propose l'environnement « Craft » comme environnement d'exécution de KDE",
         "Description[gl]": "Expón o ambiente de KDE Craft como biblioteca de tempo de execución.",
         "Description[it]": "Espone l'ambiente KDE Craft come runtime",
@@ -47,6 +50,7 @@
         "Description[sv]": "Exponerar KDE Craft-miljön som körtidsprogram",
         "Description[tr]": "KDE Craft ortamını bir çalışma zamanı olarak açığa çıkarır",
         "Description[uk]": "Розкриває середовище KDE Craft, як середовище виконання",
+        "Description[x-test]": "xxExposes KDE Craft environment as a runtimexx",
         "Icon": "kdevelop",
         "Id": "kdevcraft",
         "License": "BSD3",
@@ -70,6 +74,7 @@
         "Name[sv]": "Craft körtidsprogram",
         "Name[tr]": "Craft çalıştırma ortamı",
         "Name[uk]": "Середовище виконання Craft",
+        "Name[x-test]": "xxCraft runtimexx",
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

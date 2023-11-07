@@ -31,6 +31,7 @@
                 "Name[sv]": "Anton Anikin",
                 "Name[tr]": "Anton Anikin",
                 "Name[uk]": "Anton Anikin",
+                "Name[x-test]": "xxAnton Anikinxx",
                 "Name[zh_CN]": "Anton Anikin"
             }
         ],
@@ -61,6 +62,7 @@
         "Description[sv]": "Insticksprogrammet integrerar Clazy i KDevelop",
         "Description[tr]": "Bu eklenti, Clazy'yi K Geliştir ile tümleştirir",
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Clazy до KDevelop",
+        "Description[x-test]": "xxThis plugin integrates Clazy to KDevelopxx",
         "Description[zh_CN]": "此插件整合 Clazy 到 KDevelop",
         "Icon": "clazy",
         "Id": "kdevclazy",
@@ -93,6 +95,7 @@
         "Name[sv]": "Clazy-stöd",
         "Name[tr]": "Clazy Desteği",
         "Name[uk]": "Підтримка Clazy",
+        "Name[x-test]": "xxClazy Supportxx",
         "Name[zh_CN]": "Clazy 支持"
     },
     "X-KDevelop-Category": "Global",

@@ -13,6 +13,7 @@
         "Description[es]": "Este complemento proporciona una interfaz para LLDB, un depurador para C, Obj-C y C++ de nueva generación y alto rendimiento.",
         "Description[et]": "See plugin pakub LLDB - järgmise põlvkonna äärmiselt suure jõudlusega C/Obj-C/C++ siluri - kasutajaliidest.",
         "Description[eu]": "Plugin honek aurrealde bat ematen tu LLDBntzako, C/Obj-C/C++lengoaientzako errendimendu altuko araztaile bat.",
+        "Description[fi]": "Tämä liitännäinen tarjoaa käyttöliittymän LLDB:lle, seuraavan sukupolven suorituskykyiselle C/Obj-C/C++-virheenpaikantimelle.",
         "Description[fr]": "Ce module fournit une interface pour LLDB, un débogueur de nouvelle génération, haute-performance pour le V / Objective-C / C++.",
         "Description[gl]": "Este complemento fornece unha interface para LLDB, un depurador de nova xeración de alto rendemento para C, Objective-C e C++.",
         "Description[it]": "Questa estensione fornisce un'interfaccia per LLDB, un debugger di nuova generazione ad alte prestazioni per C/Obj-C/C++.",
@@ -27,6 +28,7 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller ett gränssnitt till LLDB, nästa generations avlusare för C, Obj-C, C++ med hög prestanda.",
         "Description[tr]": "Bu eklenti, gelecek nesil, yüksek performanslı C/Obj-C/C++ hata ayıklayıcı olan LLDB için ön uç sağlar.",
         "Description[uk]": "Цей додаток є обгорткою до LLDB, високошвидкісного засобу діагностики коду мовами C/Obj-C/C++.",
+        "Description[x-test]": "xxThis plugin provides a frontend for LLDB, a next generation, high-performance C/Obj-C/C++ debugger.xx",
         "Description[zh_CN]": "此插件提供了 LLDB 前端，LLDB 是一个下一代的、高性能的 C/Obj-C/C++ 的调试器。",
         "Icon": "kdevelop",
         "Id": "kdevlldb",
@@ -59,6 +61,7 @@
         "Name[sv]": "LLDB-stöd",
         "Name[tr]": "LLDB Desteği",
         "Name[uk]": "Підтримка LLDB",
+        "Name[x-test]": "xxLLDB Supportxx",
         "Name[zh_CN]": "LLDB 支持"
     },
     "X-KDevelop-Category": "Global",

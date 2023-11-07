@@ -15,6 +15,7 @@
                 "Name[es]": "Alex Richardson",
                 "Name[et]": "Alex Richardson",
                 "Name[eu]": "Alex Richardson",
+                "Name[fi]": "Alex Richardson",
                 "Name[fr]": "Alex Richardson",
                 "Name[gl]": "Alex Richardson",
                 "Name[it]": "Alex Richardson",
@@ -31,6 +32,7 @@
                 "Name[sv]": "Alex Richardson",
                 "Name[tr]": "Alex Richardson",
                 "Name[uk]": "Alex Richardson",
+                "Name[x-test]": "xxAlex Richardsonxx",
                 "Name[zh_CN]": "Alex Richardson"
             }
         ],
@@ -60,6 +62,7 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller en vy för att visa en översikt av dokumentet som för närvarande är öppet.",
         "Description[tr]": "Bu eklenti, geçerli açık belgenin ana hattını görüntülemek için bir görünüm sağlar.",
         "Description[uk]": "За допомогою цього додатка можна переглянути схему поточного відкритого документа.",
+        "Description[x-test]": "xxThis plugin provides a view to show the outline of the currently open document.xx",
         "Description[zh_CN]": "此插件提供了一个当前显示当前打开文档的概要的视图。",
         "Icon": "code-class",
         "Id": "KDevOutlineView",
@@ -77,6 +80,7 @@
         "Name[es]": "Boceto",
         "Name[et]": "Struktuur",
         "Name[eu]": "Ingerada",
+        "Name[fi]": "Jäsennys",
         "Name[fr]": "Plan",
         "Name[gl]": "Esquema",
         "Name[it]": "Schema di massima",
@@ -92,6 +96,7 @@
         "Name[sv]": "Översikt",
         "Name[tr]": "Çerçeve",
         "Name[uk]": "Схема",
+        "Name[x-test]": "xxOutlinexx",
         "Name[zh_CN]": "轮廓"
     },
     "X-KDevelop-Category": "Global",

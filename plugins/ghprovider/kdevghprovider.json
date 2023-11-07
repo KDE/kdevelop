@@ -31,6 +31,7 @@
                 "Name[sv]": "Miquel Sabaté",
                 "Name[tr]": "Miquel Sabaté",
                 "Name[uk]": "Miquel Sabaté",
+                "Name[x-test]": "xxMiquel Sabatéxx",
                 "Name[zh_CN]": "Miquel Sabaté"
             }
         ],
@@ -46,6 +47,7 @@
         "Description[es]": "Este complemento le ayuda a obtener proyectos de GitHub",
         "Description[et]": "See plugin aitab hankida projekte Githubist",
         "Description[eu]": "Plugin honek proiektuak GitHub-etik eskuratzen laguntzen dizu.",
+        "Description[fi]": "Tämä liitännäinen auttaa Github-projektien noudossa",
         "Description[fr]": "Ce module aide à obtenir des projets depuis GitHub",
         "Description[gl]": "Este complemento permite obter proxectos de GitHub.",
         "Description[it]": "Questa estensione consente di ottenere progetti da GitHub",
@@ -60,6 +62,7 @@
         "Description[sv]": "Insticksprogrammet hjälper till att erhålla projekt från Github",
         "Description[tr]": "Bu eklenti, Github'tan projeleri almanıza yardımcı olur",
         "Description[uk]": "За допомогою цього додатка можна отримувати проєкти з GitHub",
+        "Description[x-test]": "xxThis plugin helps to obtain projects from GitHubxx",
         "Description[zh_CN]": "此插件帮助您从 GitHub 获取工程",
         "Icon": "kdevgh",
         "Id": "kdevghprovider",
@@ -93,6 +96,7 @@
         "Name[sv]": "Github-leverantör",
         "Name[tr]": "GitHub Sağlayıcısı",
         "Name[uk]": "Надавач даних GitHub",
+        "Name[x-test]": "xxGitHub Providerxx",
         "Name[zh_CN]": "GitHub 提供者"
     },
     "X-KDevelop-Category": "Global",

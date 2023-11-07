@@ -33,6 +33,7 @@
                 "Name[sv]": "Aleix Pol",
                 "Name[tr]": "Aleix Pol",
                 "Name[uk]": "Aleix Pol",
+                "Name[x-test]": "xxAleix Polxx",
                 "Name[zh_CN]": "Aleix Pol"
             }
         ],
@@ -48,6 +49,7 @@
         "Description[es]": "Expone bibliotecas en tiempo de ejecución de Android",
         "Description[et]": "Androidi käitusaegade näitamine",
         "Description[eu]": "Android-en exekuzio-denborak azaltzen ditu",
+        "Description[fi]": "Paljastaa Android-ajonaikaisympäristöt",
         "Description[fr]": "Expose les exécutifs Android",
         "Description[gl]": "Expón execucións de Android.",
         "Description[it]": "Espone i runtime di Android",
@@ -63,6 +65,7 @@
         "Description[sv]": "Exponerar Android-körtidsprogram",
         "Description[tr]": "Android çalışma zamanlarını açığa çıkarır",
         "Description[uk]": "Надає доступ до середовищ виконання Android",
+        "Description[x-test]": "xxExposes Android runtimesxx",
         "Description[zh_CN]": "暴露 Android 运行时",
         "Icon": "kdevelop",
         "Id": "kdevandroid",
@@ -97,6 +100,7 @@
         "Name[sv]": "Android-stöd",
         "Name[tr]": "Android Desteği",
         "Name[uk]": "Підтримка Android",
+        "Name[x-test]": "xxAndroid Supportxx",
         "Name[zh_CN]": "Android 支持",
         "Version": "0.1"
     },
