@@ -266,7 +266,7 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
     // Collect the opened project's files.
     const auto oldSize = m_projectFiles.size();
     KDevelop::forEachFile(project->projectItem(), [this](ProjectFileItem* fileItem) {
-        m_projectFiles.emplace_back(fileItem);
+        m_projectFiles.push_back(ProjectFile{fileItem});
     });
     const auto justAddedBegin = m_projectFiles.begin() + oldSize;
 

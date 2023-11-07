@@ -14,7 +14,6 @@
 #include <util/path.h>
 
 #include <utility>
-#include <vector>
 
 namespace KDevelop {
 class IProject;
@@ -149,7 +148,7 @@ private:
     // project files sorted by their url
     // this is done so we can limit ourselves to a relatively fast
     // filtering without any expensive sorting in reset().
-    std::vector<ProjectFile> m_projectFiles;
+    QVector<ProjectFile> m_projectFiles;
 };
 
 /**
