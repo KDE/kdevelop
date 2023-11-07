@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
+"POT-Creation-Date: 2023-11-07 01:14+0000\n"
 "PO-Revision-Date: 2022-07-14 09:50-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1638,12 +1638,12 @@ msgstr "Não foi possível criar o arquivo <i>%1</i>."
 msgid "Cannot create folder <i>%1</i>."
 msgstr "Não foi possível criar a pasta <i>%1</i>."
 
-#: project/importprojectjob.cpp:53
+#: project/importprojectjob.cpp:55
 #, kde-format
 msgid "Project Import: %1"
 msgstr "Importação do Projeto: %1"
 
-#: project/importprojectjob.cpp:85
+#: project/importprojectjob.cpp:87
 #, kde-format
 msgid "Project import canceled."
 msgstr "A importação do projeto foi cancelada."

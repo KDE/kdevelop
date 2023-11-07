@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
+"POT-Creation-Date: 2023-11-07 01:14+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -1672,12 +1672,12 @@ msgstr "<i>%1</i> файлы құрылмады."
 msgid "Cannot create folder <i>%1</i>."
 msgstr "<i>%1</i> қапшығы құрылмады."
 
-#: project/importprojectjob.cpp:53
+#: project/importprojectjob.cpp:55
 #, kde-format
 msgid "Project Import: %1"
 msgstr "Импорттайтын жоба: %1"
 
-#: project/importprojectjob.cpp:85
+#: project/importprojectjob.cpp:87
 #, kde-format
 msgid "Project import canceled."
 msgstr "Жоба импорты доғарылды."

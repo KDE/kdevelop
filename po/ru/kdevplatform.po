@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
+"POT-Creation-Date: 2023-11-07 01:14+0000\n"
 "PO-Revision-Date: 2023-04-25 11:06+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -1658,12 +1658,12 @@ msgstr "Не удалось создать файл <i>%1</i>."
 msgid "Cannot create folder <i>%1</i>."
 msgstr "Не удалось создать папку <i>%1</i>."
 
-#: project/importprojectjob.cpp:53
+#: project/importprojectjob.cpp:55
 #, kde-format
 msgid "Project Import: %1"
 msgstr "Импорт проекта: %1"
 
-#: project/importprojectjob.cpp:85
+#: project/importprojectjob.cpp:87
 #, kde-format
 msgid "Project import canceled."
 msgstr "Импорт проекта был отменён."

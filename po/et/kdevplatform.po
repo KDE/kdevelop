@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
+"POT-Creation-Date: 2023-11-07 01:14+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1658,12 +1658,12 @@ msgstr "Faili <i>%1</i> loomine nurjus."
 msgid "Cannot create folder <i>%1</i>."
 msgstr "Kataloogi <i>%1</i> loomine nurjus."
 
-#: project/importprojectjob.cpp:53
+#: project/importprojectjob.cpp:55
 #, kde-format
 msgid "Project Import: %1"
 msgstr "Projekti import: %1"
 
-#: project/importprojectjob.cpp:85
+#: project/importprojectjob.cpp:87
 #, kde-format
 msgid "Project import canceled."
 msgstr "Projekti import katkestati"

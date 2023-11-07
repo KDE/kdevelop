@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
+"POT-Creation-Date: 2023-11-07 01:14+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -1698,12 +1698,12 @@ msgstr "Ne mogu kreirati datoteku <i>%1</i>."
 msgid "Cannot create folder <i>%1</i>."
 msgstr "Ne mogu kreirati direktorij <i>%1</i>."
 
-#: project/importprojectjob.cpp:53
+#: project/importprojectjob.cpp:55
 #, kde-format
 msgid "Project Import: %1"
 msgstr "Uvoz projekta: %1"
 
-#: project/importprojectjob.cpp:85
+#: project/importprojectjob.cpp:87
 #, kde-format
 msgid "Project import canceled."
 msgstr "Uvoz projekta otkazan"
