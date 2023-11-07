@@ -188,6 +188,9 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     case CodeCompletionModel::IsExpandable:
         return QVariant(createsExpandingWidget());
     case CodeCompletionModel::ExpandingWidget: {
+        if (!createsExpandingWidget())
+            return {};
+
         QWidget* nav = createExpandingWidget(model);
         Q_ASSERT(nav);
 
