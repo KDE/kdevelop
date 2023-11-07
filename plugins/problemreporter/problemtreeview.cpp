@@ -99,6 +99,8 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setUniformRowHeights(true);
 
+    setProperty("_breeze_force_frame", true);
+
     m_proxy->setSortRole(ProblemModel::SeverityRole);
     m_proxy->setDynamicSortFilter(true);
     m_proxy->sort(0, Qt::AscendingOrder);

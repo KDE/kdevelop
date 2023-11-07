@@ -42,6 +42,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
     m_tree->setModel(m_model);
     m_tree->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     m_tree->header()->setStretchLastSection(false);
+    m_tree->setProperty("_breeze_borders_sides", QVariant::fromValue(QFlags{Qt::TopEdge}));
 
     // We need notification in the model for the collapse/expansion of nodes.
     connect(m_tree, &ClassTree::collapsed,
@@ -74,13 +75,19 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 
     auto* layout = new QHBoxLayout();
     layout->setSpacing(5);
-    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setContentsMargins(
+        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+        style()->pixelMetric(QStyle::PM_LayoutBottomMargin)
+    );
     layout->addWidget(searchLabel);
     layout->addWidget(m_searchLine);
 
     setFocusProxy(m_searchLine);
 
     auto* vbox = new QVBoxLayout(this);
+    vbox->setSpacing(0);
     vbox->setContentsMargins(0, 0, 0, 0);
     vbox->addLayout(layout);
     vbox->addWidget(m_tree);

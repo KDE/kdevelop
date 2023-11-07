@@ -169,6 +169,8 @@ ContextBrowserView::ContextBrowserView(ContextBrowserPlugin* plugin, QWidget* pa
     , m_navigationWidget(new QTextBrowser())
     , m_autoLocked(false)
 {
+    m_navigationWidget->setProperty("_breeze_force_frame", true);
+
     setWindowTitle(i18nc("@title:window", "Code Browser"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("code-context"), windowIcon()));
 

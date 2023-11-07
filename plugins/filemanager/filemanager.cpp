@@ -57,6 +57,11 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     connect(urlnav, &KUrlNavigator::urlChanged, this, &FileManager::gotoUrl);
 
     l->addWidget(urlnav);
+
+    auto separator = new QFrame(this);
+    separator->setFrameShape(QFrame::HLine);
+    l->addWidget(separator);
+
     dirop = new KDirOperator( urlnav->locationUrl(), this);
 #if KIO_VERSION < QT_VERSION_CHECK(5, 100, 0)
     dirop->setView( KFile::Tree );

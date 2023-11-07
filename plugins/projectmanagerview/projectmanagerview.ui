@@ -21,6 +21,16 @@
      </property>
      <widget class="QWidget" name="verticalLayoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="separator">
+         <property name="frameShape">
+           <enum>QFrame::HLine</enum>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="ProjectTreeView" name="projectTreeView">
          <property name="sizePolicy">

@@ -87,6 +87,7 @@ void AbstractNavigationWidget::initBrowser(int height)
     Q_ASSERT(!d->m_browser);
     Q_UNUSED(height);
     d->m_browser = new QTextBrowser;
+    d->m_browser->setProperty("_breeze_force_frame", true);
 
     d->m_browser->setOpenLinks(false);
     d->m_browser->setOpenExternalLinks(false);

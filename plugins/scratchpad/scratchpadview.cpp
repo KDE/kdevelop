@@ -55,6 +55,7 @@ private:
 EmptyMessageListView::EmptyMessageListView(QWidget* parent)
     : QListView(parent)
 {
+    setProperty("_breeze_borders_sides", QVariant::fromValue(QFlags{Qt::TopEdge}));
 }
 
 void EmptyMessageListView::paintEvent(QPaintEvent* event)
@@ -113,6 +114,8 @@ ScratchpadView::ScratchpadView(QWidget* parent, Scratchpad* scratchpad)
     });
     commandWidget->setToolTip(i18nc("@info:tooltip", "Command to run this scratch. '$f' will expand to the scratch path."));
     commandWidget->setPlaceholderText(commandWidget->toolTip());
+    commandWidget->setProperty("_breeze_borders_sides", QVariant::fromValue(QFlags{Qt::TopEdge}));
+
 
     // change active scratch when changing document
     connect(KDevelop::ICore::self()->documentController(), &KDevelop::IDocumentController::documentActivated, this,
