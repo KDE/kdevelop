@@ -226,4 +226,44 @@ void BenchIndexedString::bench_swap()
     }
 }
 
+void BenchIndexedString::bench_string_vector_data()
+{
+    QTest::addColumn<int>("type");
+    QTest::addRow("std::vector") << 0;
+    QTest::addRow("QVector") << 1;
+}
+
+void BenchIndexedString::bench_string_vector()
+{
+    auto bench = [](auto container) {
+        for (int i = 0; i < 10000; ++i) {
+            container.push_back(IndexedString(QString::number(i)));
+        }
+        // deliberately do a worst-case remove-from-front here
+        // we want to see how this performs without any noexcept move operators
+        QBENCHMARK_ONCE {
+            while (!container.empty()) {
+                container.erase(container.begin());
+            }
+        }
+    };
+
+    QFETCH(int, type);
+    switch (type) {
+    case 0: {
+        std::vector<IndexedString> container;
+        bench(container);
+        break;
+    }
+    case 1: {
+        QVector<IndexedString> container;
+        bench(container);
+        break;
+    }
+    default:
+        QFAIL("unhandled type");
+        break;
+    }
+}
+
 #include "moc_bench_indexedstring.cpp"

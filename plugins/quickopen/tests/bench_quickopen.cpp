@@ -290,4 +290,30 @@ void BenchQuickOpen::benchProjectFileFilter_files_data()
     QTest::addRow("%d projects and one open file", fileCounts.size()) << fileCounts << true;
 }
 
+void BenchQuickOpen::benchProjectFileFilter_fileRemovedFromSet_data()
+{
+    getAddRemoveData();
+}
+
+void BenchQuickOpen::benchProjectFileFilter_fileRemovedFromSet()
+{
+    QFETCH(int, files);
+
+    ProjectFileDataProvider provider;
+
+    auto project = getProjectWithFiles(files);
+    projectController->addProject(project);
+
+    const auto projectFiles = project->files();
+    QCOMPARE(projectFiles.size(), files);
+    QCOMPARE(provider.files().size(), files);
+
+    // don't use QBENCHMARK directly as the code below removes the files after one iteration
+    QBENCHMARK_ONCE {
+        qDeleteAll(projectFiles);
+    }
+
+    QCOMPARE(provider.files().size(), 0);
+}
+
 #include "moc_bench_quickopen.cpp"

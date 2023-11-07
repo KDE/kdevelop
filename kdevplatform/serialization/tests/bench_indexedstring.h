@@ -28,6 +28,9 @@ private Q_SLOTS:
     void bench_create();
     void bench_destroy();
     void bench_swap();
+
+    void bench_string_vector_data();
+    void bench_string_vector();
 };
 
 #endif // BENCH_INDEXEDSTRING_H
