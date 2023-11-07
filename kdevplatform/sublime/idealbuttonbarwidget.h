@@ -14,6 +14,7 @@
 class IdealToolButton;
 class ToolViewAction;
 class QAction;
+class QPaintEvent;
 
 class KConfigGroup;
 
@@ -63,6 +64,9 @@ public:
 
 Q_SIGNALS:
     void emptyChanged();
+
+protected:
+    void paintEvent(class QPaintEvent *) override;
 
 private:
     void showWidget(bool checked);

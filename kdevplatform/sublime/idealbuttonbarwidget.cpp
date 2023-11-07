@@ -20,6 +20,8 @@
 
 #include <QBoxLayout>
 #include <QApplication>
+#include <QStyleOption>
+#include <QStylePainter>
 
 using namespace Sublime;
 
@@ -101,6 +103,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     m_buttonsLayout = new IdealButtonBarLayout(orientation(), this);
     if (area == Qt::BottomDockWidgetArea)
     {
+        setContentsMargins(1, 1, 1, 0);
         auto *statusLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
         statusLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -119,6 +122,12 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
 
         superLayout->addLayout(m_buttonsLayout);
         superLayout->addStretch(1);
+
+        if (area == Qt::LeftDockWidgetArea) {
+            setContentsMargins(1, 1, 2, 1);
+        } else if (area == Qt::RightDockWidgetArea) {
+            setContentsMargins(2, 1, 1, 1);
+        }
     }
 }
 
@@ -352,6 +361,40 @@ IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *_action) const
 {
     return static_cast<ToolViewAction*>(_action)->dockWidget();
 }
+
+void IdealButtonBarWidget::paintEvent(class QPaintEvent *)
+{
+    QStyleOption opt;
+    opt.initFrom(this);
+    if (opt.rect.height() <= contentsMargins().top() + contentsMargins().bottom() || opt.rect.width() <= contentsMargins().left() + contentsMargins().right()) {
+        return;
+    }
+
+    const auto splitterWidth = style()->pixelMetric(QStyle::PM_SplitterWidth, nullptr, this);
+
+    if (splitterWidth == 0) {
+        return;
+    }
+
+    QStylePainter painter(this);
+
+
+    if (m_area == Qt::BottomDockWidgetArea) {
+        opt.rect.setHeight(splitterWidth);
+    } else if (m_area == Qt::LeftDockWidgetArea) {
+        opt.rect.setX(opt.rect.width() - splitterWidth);
+        opt.rect.setWidth(splitterWidth);
+        opt.state = QStyle::State_Horizontal;
+    } else if (m_area == Qt::RightDockWidgetArea) {
+        opt.rect.setWidth(splitterWidth);
+        opt.state = QStyle::State_Horizontal;
+    } else {
+        return;
+    }
+
+    painter.drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, opt);
+}
+
 
 #include "idealbuttonbarwidget.moc"
 #include "moc_idealbuttonbarwidget.cpp"
