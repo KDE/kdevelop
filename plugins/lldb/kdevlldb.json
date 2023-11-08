@@ -13,6 +13,7 @@
         "Description[es]": "Este complemento proporciona una interfaz para LLDB, un depurador para C, Obj-C y C++ de nueva generación y alto rendimiento.",
         "Description[et]": "See plugin pakub LLDB - järgmise põlvkonna äärmiselt suure jõudlusega C/Obj-C/C++ siluri - kasutajaliidest.",
         "Description[eu]": "Plugin honek aurrealde bat ematen tu LLDBntzako, C/Obj-C/C++lengoaientzako errendimendu altuko araztaile bat.",
+        "Description[fi]": "Tämä liitännäinen tarjoaa käyttöliittymän LLDB:lle, seuraavan sukupolven suorituskykyiselle C/Obj-C/C++-virheenpaikantimelle.",
         "Description[fr]": "Ce module fournit une interface pour LLDB, un débogueur de nouvelle génération, haute-performance pour le V / Objective-C / C++.",
         "Description[gl]": "Este complemento fornece unha interface para LLDB, un depurador de nova xeración de alto rendemento para C, Objective-C e C++.",
         "Description[it]": "Questa estensione fornisce un'interfaccia per LLDB, un debugger di nuova generazione ad alte prestazioni per C/Obj-C/C++.",
