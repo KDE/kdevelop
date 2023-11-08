@@ -20,7 +20,7 @@ set(RELEASE_SERVICE_BASED_PATCHLEVEL "${RELEASE_SERVICE_VERSION_MAJOR}${RELEASE_
 # pre-release versions with the corresponding final release versions: 03 with 04, 07 with 08 and 11 with 12.
 # The final subtrahend at the end of the expression ensures version continuity: KDevelop 5.11 in KDE Gear 23.04.
 math(EXPR KDEVELOP_OWN_MINOR_VERSION "${RELEASE_SERVICE_VERSION_MAJOR} * 3                  \
-                                      + (${RELEASE_SERVICE_VERSION_MINOR} + 4 - 1) / 4      \
+                                      + (${RELEASE_SERVICE_VERSION_MINOR} + 4 - 3) / 4      \
                                       - 59")
 
 # On macOS KDevelop_VERSION_MINOR is modified below. But KDEV_ITEMREPOSITORY_VERSION should depend on the
