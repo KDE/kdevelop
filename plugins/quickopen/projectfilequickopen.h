@@ -33,7 +33,7 @@ struct ProjectFile
     KDevelop::Path projectPath;
     // indexed url - only set for project files
     // currently open documents don't use this!
-    KDevelop::IndexedString indexedPath;
+    uint indexedPath;
     // true for files which reside outside of the project root
     // this happens e.g. for generated files in out-of-source build folders
     bool outsideOfProject = false;

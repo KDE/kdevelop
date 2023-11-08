@@ -16,6 +16,19 @@
 using namespace KDevelop;
 
 namespace {
+QString urlToString(const QUrl& url)
+{
+    Q_ASSERT(url.isEmpty() || !url.isRelative());
+#if !defined(QT_NO_DEBUG)
+    if (url != url.adjusted(QUrl::NormalizePathSegments)) {
+        qWarning() << "wrong url" << url << url.adjusted(QUrl::NormalizePathSegments);
+    }
+#endif
+    Q_ASSERT(url == url.adjusted(QUrl::NormalizePathSegments));
+
+    return url.isLocalFile() ? url.toLocalFile() : url.toString();
+}
+
 struct IndexedStringData
 {
     unsigned short length;
@@ -225,15 +238,8 @@ IndexedString::IndexedString(char c)
 {}
 
 IndexedString::IndexedString(const QUrl& url)
-    : IndexedString(url.isLocalFile() ? url.toLocalFile() : url.toString())
+    : IndexedString(urlToString(url))
 {
-    Q_ASSERT(url.isEmpty() || !url.isRelative());
-#if !defined(QT_NO_DEBUG)
-    if (url != url.adjusted(QUrl::NormalizePathSegments)) {
-        qWarning() << "wrong url" << url << url.adjusted(QUrl::NormalizePathSegments);
-    }
-#endif
-    Q_ASSERT(url == url.adjusted(QUrl::NormalizePathSegments));
 }
 
 IndexedString::IndexedString(QStringView string)
@@ -417,6 +423,11 @@ uint IndexedString::indexForString(const QString& str, uint hash)
 {
     const QByteArray array(str.toUtf8());
     return indexForString(array.constBegin(), array.size(), hash);
+}
+
+uint IndexedString::indexForUrl(const QUrl& url)
+{
+    return indexForString(urlToString(url));
 }
 
 QDebug operator<<(QDebug s, const IndexedString& string)

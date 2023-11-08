@@ -439,6 +439,12 @@ IndexedString ProjectBaseItem::indexedPath() const
     return IndexedString::fromIndex( d_ptr->m_pathIndex );
 }
 
+uint ProjectBaseItem::indexedPathIndex() const
+{
+    Q_D(const ProjectBaseItem);
+    return d->m_pathIndex;
+}
+
 QString ProjectBaseItem::baseName() const
 {
     return text();
@@ -1094,9 +1100,14 @@ QList<ProjectBaseItem*> ProjectModel::itemsForPath(const IndexedString& path) co
 
 ProjectBaseItem* ProjectModel::itemForPath(const IndexedString& path) const
 {
+    return itemForPath(path.index());
+}
+
+ProjectBaseItem* ProjectModel::itemForPath(uint pathIndex) const
+{
     Q_D(const ProjectModel);
 
-    return d->pathLookupTable.value(path.index());
+    return d->pathLookupTable.value(pathIndex);
 }
 
 void ProjectVisitor::visit( ProjectModel* model )

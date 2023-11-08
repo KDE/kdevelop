@@ -233,6 +233,7 @@ public:
      */
     static uint indexForString(const char* str, unsigned short length, uint hash = 0);
     static uint indexForString(const QString& str, uint hash = 0);
+    static uint indexForUrl(const QUrl& url);
 
 private:
     uint m_index = 0;

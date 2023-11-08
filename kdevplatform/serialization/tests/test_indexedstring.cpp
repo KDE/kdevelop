@@ -41,6 +41,7 @@ void TestIndexedString::testUrl()
     QFETCH(QUrl, url);
     IndexedString indexed(url);
     QCOMPARE(indexed.toUrl(), url);
+    QCOMPARE(indexed.index(), IndexedString::indexForUrl(url));
     QTEST(indexed.str(), "string");
 }
 
