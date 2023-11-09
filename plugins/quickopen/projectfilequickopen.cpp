@@ -47,20 +47,14 @@ QSet<IndexedPath> openFiles()
     const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
     openFiles.reserve(docs.size());
     for (IDocument* doc : docs) {
-        if constexpr (std::is_same_v<IndexedPath, IndexedString>) {
-            openFiles << IndexedString(doc->url());
-        } else {
-            static_assert(std::is_same_v<IndexedPath, uint>);
-            openFiles << IndexedString::indexForUrl(doc->url());
-        }
+        openFiles << IndexedPath{doc->url()};
     }
-
     return openFiles;
 }
 
-QString iconNameForPath(uint indexedPath)
+QString iconNameForPath(IndexedStringView indexedPath)
 {
-    if (indexedPath == 0) {
+    if (indexedPath.isEmpty()) {
         return QStringLiteral("tab-duplicate");
     }
     const auto* const item = ICore::self()->projectController()->projectModel()->itemForPath(indexedPath);
@@ -74,7 +68,7 @@ QString iconNameForPath(uint indexedPath)
 ProjectFile::ProjectFile(const ProjectFileItem* fileItem)
     : path{fileItem->path()}
     , projectPath{fileItem->project()->path()}
-    , indexedPath{fileItem->indexedPathIndex()}
+    , indexedPath{fileItem->indexedPathView()}
     , outsideOfProject{!projectPath.isParentOf(path)}
 {
 }
@@ -316,7 +310,7 @@ void ProjectFileDataProvider::fileRemovedFromSet(ProjectFileItem* file)
 {
     ProjectFile item;
     item.path = file->path();
-    item.indexedPath = file->indexedPathIndex();
+    item.indexedPath = file->indexedPathView();
 
     // fast-path for non-generated files
     // NOTE: figuring out whether something is generated is expensive... and since
@@ -339,7 +333,7 @@ void ProjectFileDataProvider::fileRemovedFromSet(ProjectFileItem* file)
 void ProjectFileDataProvider::reset()
 {
     updateItems([this](QVector<ProjectFile>& closedFiles) {
-        const auto open = openFiles<uint>();
+        const auto open = openFiles<IndexedStringView>();
         // Don't "optimize" by assigning m_projectFiles to closedFiles and
         // returning early if there are no open files. Such an optimization may
         // speed up this call to reset() sometimes - if the destruction of the

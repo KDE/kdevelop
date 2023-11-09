@@ -23,6 +23,7 @@
 #include <interfaces/icore.h>
 
 #include <project/projectmodel.h>
+#include <serialization/indexedstringview.h>
 
 #include <KLocalizedString>
 
@@ -104,7 +105,7 @@ private:
 Path findProjectForForPath(const IndexedString& path)
 {
     const auto model = ICore::self()->projectController()->projectModel();
-    const auto item = model->itemForPath(path);
+    const auto item = model->itemForPath(IndexedStringView::fromString(path));
     return item ? item->project()->path() : Path();
 }
 uint addedItems(const AddedItems& items)

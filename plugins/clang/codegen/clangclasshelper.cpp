@@ -20,6 +20,7 @@
 #include <language/codegen/codedescription.h>
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 #include <project/projectmodel.h>
+#include <serialization/indexedstringview.h>
 #include <util/path.h>
 
 #include <QTemporaryFile>
@@ -133,13 +134,13 @@ QString includeDirectiveArgumentFromPath(const Path& file,
     const auto includeManager = IDefinesAndIncludesManager::manager();
     const auto filePath = file.toLocalFile();
     const auto projectModel = ICore::self()->projectController()->projectModel();
-    auto item = projectModel->itemForPath(IndexedString(filePath));
+    auto item = projectModel->itemForPath(IndexedStringView{filePath});
 
     if (!item) {
         // try the folder where the file is placed and guess includes from there
         // prefer target over file
-        const auto folderPath = IndexedString(file.parent().toLocalFile());
-        clangDebug() << "File not known, guessing includes from items in folder:" << folderPath.str();
+        const IndexedStringView folderPath{file.parent().toLocalFile()};
+        clangDebug() << "File not known, guessing includes from items in folder:" << folderPath;
 
         // default to the folder, if no targets or files
         item = projectModel->itemForPath(folderPath);

@@ -25,6 +25,7 @@ install(FILES
     abstractitemrepository.h
     referencecounting.h
     indexedstring.h
+    indexedstringview.h
     itemrepositoryexampleitem.h
     itemrepository.h
     itemrepositoryregistry.h

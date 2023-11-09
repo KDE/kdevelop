@@ -22,6 +22,7 @@
 #include <interfaces/icore.h>
 #include "interfaces/iprojectfilemanager.h"
 #include <serialization/indexedstring.h>
+#include <serialization/indexedstringview.h>
 
 #include "debug.h"
 #include "path.h"
@@ -56,11 +57,6 @@ QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::Proje
     return basePath + partialpath;
 }
 
-inline uint indexForPath( const Path& path )
-{
-    return IndexedString::indexForString(path.pathOrUrl());
-}
-
 class ProjectModelPrivate
 {
 public:
@@ -80,8 +76,8 @@ public:
         return model->itemFromIndex( idx );
     }
 
-    // a hash of IndexedString::indexForString(path) <-> ProjectBaseItem for fast lookup
-    QMultiHash<uint, ProjectBaseItem*> pathLookupTable;
+    // a hash of IndexedStringView{path} -> ProjectBaseItem for fast lookup
+    QMultiHash<IndexedStringView, ProjectBaseItem*> pathLookupTable;
 };
 
 class ProjectBaseItemPrivate
@@ -96,7 +92,7 @@ public:
     Path m_path;
     QString iconName;
     int row = -1;
-    uint m_pathIndex = 0;
+    IndexedStringView m_indexedPath;
     Qt::ItemFlags flags;
 
     ProjectBaseItem::RenameStatus renameBaseItem(ProjectBaseItem* item, const QString& newName)
@@ -164,8 +160,8 @@ ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
 
-    if (model() && d->m_pathIndex) {
-        model()->d_func()->pathLookupTable.remove(d->m_pathIndex, this);
+    if (model() && !d->m_indexedPath.isEmpty()) {
+        model()->d_func()->pathLookupTable.remove(d->m_indexedPath, this);
     }
 
     if( parent() ) {
@@ -321,14 +317,14 @@ void ProjectBaseItem::setModel( ProjectModel* model )
         return;
     }
 
-    if (d->model && d->m_pathIndex) {
-        d->model->d_func()->pathLookupTable.remove(d->m_pathIndex, this);
+    if (d->model && !d->m_indexedPath.isEmpty()) {
+        d->model->d_func()->pathLookupTable.remove(d->m_indexedPath, this);
     }
 
     d->model = model;
 
-    if (model && d->m_pathIndex) {
-        model->d_func()->pathLookupTable.insert(d->m_pathIndex, this);
+    if (model && !d->m_indexedPath.isEmpty()) {
+        model->d_func()->pathLookupTable.insert(d->m_indexedPath, this);
     }
 
     for (ProjectBaseItem* item : qAsConst(d->children)) {
@@ -436,13 +432,13 @@ Path ProjectBaseItem::path() const
 
 IndexedString ProjectBaseItem::indexedPath() const
 {
-    return IndexedString::fromIndex( d_ptr->m_pathIndex );
+    return indexedPathView().toString();
 }
 
-uint ProjectBaseItem::indexedPathIndex() const
+IndexedStringView ProjectBaseItem::indexedPathView() const
 {
     Q_D(const ProjectBaseItem);
-    return d->m_pathIndex;
+    return d->m_indexedPath;
 }
 
 QString ProjectBaseItem::baseName() const
@@ -454,16 +450,16 @@ void ProjectBaseItem::setPath( const Path& path)
 {
     Q_D(ProjectBaseItem);
 
-    if (model() && d->m_pathIndex) {
-        model()->d_func()->pathLookupTable.remove(d->m_pathIndex, this);
+    if (model() && !d->m_indexedPath.isEmpty()) {
+        model()->d_func()->pathLookupTable.remove(d->m_indexedPath, this);
     }
 
     d->m_path = path;
-    d->m_pathIndex = indexForPath(path);
+    d->m_indexedPath = IndexedStringView{path.pathOrUrl()};
     setText( path.lastPathSegment() );
 
-    if (model() && d->m_pathIndex) {
-        model()->d_func()->pathLookupTable.insert(d->m_pathIndex, this);
+    if (model() && !d->m_indexedPath.isEmpty()) {
+        model()->d_func()->pathLookupTable.insert(d->m_indexedPath, this);
     }
 }
 
@@ -695,7 +691,7 @@ ProjectFileItem::ProjectFileItem( const QString& name, ProjectBaseItem* parent )
 
 ProjectFileItem::~ProjectFileItem()
 {
-    if( project() && d_ptr->m_pathIndex ) {
+    if (project() && !d_ptr->m_indexedPath.isEmpty()) {
         project()->removeFromFileSet( this );
     }
 }
@@ -792,14 +788,14 @@ void ProjectFileItem::setPath( const Path& path )
         return;
     }
 
-    if( project() && d_ptr->m_pathIndex ) {
+    if (project() && !d_ptr->m_indexedPath.isEmpty()) {
         // remove from fileset if we are in there
         project()->removeFromFileSet( this );
     }
 
     ProjectBaseItem::setPath( path );
 
-    if( project() && d_ptr->m_pathIndex ) {
+    if (project() && !d_ptr->m_indexedPath.isEmpty()) {
         // add to fileset with new path
         project()->addToFileSet( this );
     }
@@ -1095,19 +1091,14 @@ QList<ProjectBaseItem*> ProjectModel::itemsForPath(const IndexedString& path) co
 {
     Q_D(const ProjectModel);
 
-    return d->pathLookupTable.values(path.index());
+    return d->pathLookupTable.values(IndexedStringView::fromString(path));
 }
 
-ProjectBaseItem* ProjectModel::itemForPath(const IndexedString& path) const
-{
-    return itemForPath(path.index());
-}
-
-ProjectBaseItem* ProjectModel::itemForPath(uint pathIndex) const
+ProjectBaseItem* ProjectModel::itemForPath(IndexedStringView path) const
 {
     Q_D(const ProjectModel);
 
-    return d->pathLookupTable.value(pathIndex);
+    return d->pathLookupTable.value(path);
 }
 
 void ProjectVisitor::visit( ProjectModel* model )

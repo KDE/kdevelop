@@ -15,6 +15,7 @@
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/declaration.h>
 #include <serialization/indexedstring.h>
+#include <serialization/indexedstringview.h>
 
 #include <QTest>
 
@@ -85,6 +86,12 @@ template<>
 inline char* toString(const KDevelop::IndexedString& string)
 {
     return qstrdup(qPrintable(string.str()));
+}
+
+template<>
+inline char* toString(const KDevelop::IndexedStringView& string)
+{
+    return toString(string.toString());
 }
 
 template<>

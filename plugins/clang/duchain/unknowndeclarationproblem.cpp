@@ -28,6 +28,7 @@
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 
 #include <project/projectmodel.h>
+#include <serialization/indexedstringview.h>
 #include <util/path.h>
 
 #include <KLocalizedString>
@@ -377,7 +378,7 @@ KDevelop::Path::List includePaths( const KDevelop::Path& file )
 {
     // Find project's custom include paths
     const auto source = file.toLocalFile();
-    const auto item = ICore::self()->projectController()->projectModel()->itemForPath( KDevelop::IndexedString( source ) );
+    const auto item = ICore::self()->projectController()->projectModel()->itemForPath(IndexedStringView{source});
 
     return IDefinesAndIncludesManager::manager()->includes(item);
 }

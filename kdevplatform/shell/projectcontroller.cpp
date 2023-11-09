@@ -53,6 +53,7 @@
 #include <projectconfigpage.h>
 #include <language/backgroundparser/parseprojectjob.h>
 #include <interfaces/iruncontroller.h>
+#include <serialization/indexedstringview.h>
 #include <util/scopeddialog.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
@@ -1103,7 +1104,7 @@ IProject* ProjectController::findProjectForUrl( const QUrl& url ) const
         return nullptr;
     }
 
-    ProjectBaseItem* item = d->model->itemForPath(IndexedString(url));
+    const auto* const item = d->model->itemForPath(IndexedStringView{url});
     if (item) {
         return item->project();
     }

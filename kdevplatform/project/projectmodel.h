@@ -29,6 +29,7 @@ class ProjectExecutableTargetItem;
 class ProjectLibraryTargetItem;
 class ProjectModel;
 class IndexedString;
+class IndexedStringView;
 class Path;
 class ProjectModelPrivate;
 
@@ -202,7 +203,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          * lookups or memory efficient storage.
          */
         IndexedString indexedPath() const;
-        uint indexedPathIndex() const;
+        IndexedStringView indexedPathView() const;
 
         /**
          * @returns the basename of this items path (if any)
@@ -455,8 +456,7 @@ public:
     /**
      * Returns the first item for the given indexed path.
      */
-    ProjectBaseItem* itemForPath(const IndexedString& path) const;
-    ProjectBaseItem* itemForPath(uint pathIndex) const;
+    ProjectBaseItem* itemForPath(IndexedStringView path) const;
 
 private:
     const QScopedPointer<class ProjectModelPrivate> d_ptr;

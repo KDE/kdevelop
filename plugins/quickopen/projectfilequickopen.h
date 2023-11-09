@@ -10,6 +10,7 @@
 #include <language/interfaces/quickopendataprovider.h>
 #include <language/interfaces/quickopenfilter.h>
 #include <serialization/indexedstring.h>
+#include <serialization/indexedstringview.h>
 
 #include <util/path.h>
 
@@ -33,7 +34,7 @@ struct ProjectFile
     KDevelop::Path projectPath;
     // indexed url - only set for project files
     // currently open documents don't use this!
-    uint indexedPath;
+    KDevelop::IndexedStringView indexedPath;
     // true for files which reside outside of the project root
     // this happens e.g. for generated files in out-of-source build folders
     bool outsideOfProject = false;
