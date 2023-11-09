@@ -13,8 +13,6 @@
 #include <QStringView>
 #include <QUrl>
 
-#include "referencecounting.h"
-
 #include "serializationexport.h"
 
 namespace KDevelop {
