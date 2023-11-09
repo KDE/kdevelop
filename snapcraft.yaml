@@ -9,7 +9,7 @@ grade: stable
 base: core22
 adopt-info: kdevelop
 compression: lzo
-version: '23.08.2'
+version: '23.08.3'
 apps:
     kdevelop:
         command: usr/bin/kdevelop
