@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2013, 2014, 2015.
-# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2019, 2020.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2019, 2020, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevghprovider\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-23 15:28-0300\n"
+"PO-Revision-Date: 2023-11-08 14:52-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 20.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: ghdialog.cpp:25
 #, kde-format
@@ -145,7 +145,7 @@ msgstr "Pesquisar..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
-msgstr "Você pode pressionar a tecla Return se não quiser aguardar."
+msgstr "Você pode pressionar a tecla Enter se não quiser aguardar."
 
 #: ghproviderwidget.cpp:70
 #, kde-format
