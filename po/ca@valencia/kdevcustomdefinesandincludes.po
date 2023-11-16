@@ -189,7 +189,7 @@ msgid ""
 "parsed in plain C mode. By default they are parsed as C++ headers.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Marqueu-la si voleu que les capçaleres <code>*.h</"
+"<html><head/><body><p>Seleccioneu-la si voleu que les capçaleres <code>*.h</"
 "code> siguen analitzades en el mode C normal. De manera predeterminada, "
 "seran analitzades com a capçaleres de C++.</p></body></html>"
 
@@ -333,8 +333,8 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Check this if you want the project to be reparsed to apply the changes."
 msgstr ""
-"Marqueu-la si voleu que el projecte siga tornat a analitzar per a aplicar "
-"els canvis."
+"Seleccioneu-la si voleu que el projecte siga tornat a analitzar per a "
+"aplicar els canvis."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_reparse)
 #: kcm_widget/projectpathswidget.ui:32

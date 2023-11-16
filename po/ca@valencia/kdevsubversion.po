@@ -248,8 +248,8 @@ msgstr "El certificat ha caducat."
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
 msgstr ""
-"El CN (nom de la màquina) del certificat no correspon amb el nom de la "
-"màquina remota."
+"El CN (nom de l'amfitrió) del certificat no correspon amb el nom de "
+"l'amfitrió remot."
 
 #: svninternaljobbase.cpp:247
 #, kde-format
@@ -427,7 +427,7 @@ msgstr "Informació del certificat"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Hostname:"
-msgstr "Nom de la màquina:"
+msgstr "Nom de l'amfitrió:"
 
 #. i18n: ectx: property (text), widget (QLabel, hostname)
 #: ui/ssltrustdialog.ui:77

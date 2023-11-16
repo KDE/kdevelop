@@ -77,7 +77,7 @@ msgstr "Escolliu el nom de l'etiqueta"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
-msgstr "Nom de la màquina del dispositiu:"
+msgstr "Nom de l'amfitrió del dispositiu:"
 
 #: flatpakruntime.cpp:55
 #, kde-format

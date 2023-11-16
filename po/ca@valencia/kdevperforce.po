@@ -113,10 +113,10 @@ msgid ""
 "running on the same host. Port numbers must be in the range 1024 through "
 "32767"
 msgstr ""
-"El format de P4PORT per a les aplicacions Perforce és protocol:host:port, o "
-"port mateix si l'aplicació Perforce i el servei de versionat s'executen al "
-"mateix servidor. Els números de port han d'estar en l'interval des del 1024 "
-"fins al 32767"
+"El format de P4PORT per a les aplicacions Perforce és protocol:amfitrió:"
+"port, o port mateix si l'aplicació Perforce i el servei de versionat "
+"s'executen en el mateix amfitrió. Els números de port han d'estar en "
+"l'interval des del 1024 fins al 32767"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4user)
 #: ui/perforceimportmetadatawidget.ui:90
