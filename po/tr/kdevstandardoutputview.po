@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-16 00:41+0000\n"
 "PO-Revision-Date: 2023-05-24 13:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -71,49 +71,55 @@ msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "Ögeyi Seçerken Odaklan"
 
-#: outputwidget.cpp:115
+#: outputwidget.cpp:110
+#, kde-format
+msgctxt "@action"
+msgid "Word Wrap"
+msgstr ""
+
+#: outputwidget.cpp:119
 #, kde-format
 msgctxt "@action"
 msgid "First Item"
 msgstr "İlk Öge"
 
-#: outputwidget.cpp:119
+#: outputwidget.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "Önceki Öge"
 
-#: outputwidget.cpp:123
+#: outputwidget.cpp:127
 #, kde-format
 msgctxt "@action"
 msgid "Next Item"
 msgstr "Sonraki Öge"
 
-#: outputwidget.cpp:127
+#: outputwidget.cpp:131
 #, kde-format
 msgctxt "@action"
 msgid "Last Item"
 msgstr "Son Öge"
 
-#: outputwidget.cpp:140
+#: outputwidget.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr "Temizle"
 
-#: outputwidget.cpp:151
+#: outputwidget.cpp:161
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Ara..."
 
-#: outputwidget.cpp:196
+#: outputwidget.cpp:197
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
 msgstr "%1 Çıktısını Yapılandır"
 
-#: outputwidget.cpp:804
+#: outputwidget.cpp:840
 #, kde-format
 msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "

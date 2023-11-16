@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-16 00:41+0000\n"
 "PO-Revision-Date: 2023-07-23 20:39+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -63,49 +63,55 @@ msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "항목 선택 시 포커스 맞추기"
 
-#: outputwidget.cpp:115
+#: outputwidget.cpp:110
+#, kde-format
+msgctxt "@action"
+msgid "Word Wrap"
+msgstr ""
+
+#: outputwidget.cpp:119
 #, kde-format
 msgctxt "@action"
 msgid "First Item"
 msgstr "첫 항목"
 
-#: outputwidget.cpp:119
+#: outputwidget.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "이전 항목"
 
-#: outputwidget.cpp:123
+#: outputwidget.cpp:127
 #, kde-format
 msgctxt "@action"
 msgid "Next Item"
 msgstr "다음 항목"
 
-#: outputwidget.cpp:127
+#: outputwidget.cpp:131
 #, kde-format
 msgctxt "@action"
 msgid "Last Item"
 msgstr "마지막 항목"
 
-#: outputwidget.cpp:140
+#: outputwidget.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr "지우기"
 
-#: outputwidget.cpp:151
+#: outputwidget.cpp:161
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "찾기..."
 
-#: outputwidget.cpp:196
+#: outputwidget.cpp:197
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
 msgstr "%1 출력 설정"
 
-#: outputwidget.cpp:804
+#: outputwidget.cpp:840
 #, kde-format
 msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "

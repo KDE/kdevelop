@@ -30,7 +30,7 @@ msgstr ""
 #: ninjabuilder.cpp:199
 #, kde-format
 msgid "Cannot specify prefix in %1, on ninja"
-msgstr "No es pot especificar el prefix a %1, sobre el ninja"
+msgstr "No es pot especificar el prefix a %1, sobre ninja"
 
 #: ninjabuilderpreferences.cpp:35
 #, kde-format

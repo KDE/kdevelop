@@ -165,7 +165,7 @@ msgstr "No s'ha pogut substituir <b>%1</b> per <b>%2</b> a %3:%4:%5"
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
-msgstr "Vista de l'eixida de busca/substitució"
+msgstr "Vista de l'eixida de busca i substitució"
 
 #: grepoutputview.cpp:75
 #, kde-format

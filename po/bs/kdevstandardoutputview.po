@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-16 00:41+0000\n"
 "PO-Revision-Date: 2014-01-12 22:29+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -74,50 +74,56 @@ msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "Fokus pri izboru objekta"
 
-#: outputwidget.cpp:115
+#: outputwidget.cpp:110
+#, kde-format
+msgctxt "@action"
+msgid "Word Wrap"
+msgstr ""
+
+#: outputwidget.cpp:119
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "First Item"
 msgstr "Sljedeća"
 
-#: outputwidget.cpp:119
+#: outputwidget.cpp:123
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "Prethodna"
 
-#: outputwidget.cpp:123
+#: outputwidget.cpp:127
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Next Item"
 msgstr "Sljedeća"
 
-#: outputwidget.cpp:127
+#: outputwidget.cpp:131
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Last Item"
 msgstr "Sljedeća"
 
-#: outputwidget.cpp:140
+#: outputwidget.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr ""
 
-#: outputwidget.cpp:151
+#: outputwidget.cpp:161
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Traži..."
 
-#: outputwidget.cpp:196
+#: outputwidget.cpp:197
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
 msgstr ""
 
-#: outputwidget.cpp:804
+#: outputwidget.cpp:840
 #, kde-format
 msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "

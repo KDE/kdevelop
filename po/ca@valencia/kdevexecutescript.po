@@ -49,7 +49,7 @@ msgstr ""
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
-"No s'ha establit la màquina remota per a iniciar la configuració «%1». "
+"No s'ha establit l'amfitrió remot per a iniciar la configuració «%1». "
 "S'interromp."
 
 #: executescriptplugin.cpp:116
@@ -270,35 +270,35 @@ msgstr "Filtre d'anàlisi estàtica"
 #, kde-format
 msgctxt "@title:group"
 msgid "Execute on Host"
-msgstr "Executa en la màquina"
+msgstr "Executa en l'amfitrió"
 
 #. i18n: ectx: property (text), widget (QCheckBox, remoteHostCheckbox)
 #: scriptappconfig.ui:273
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute on remote host"
-msgstr "Executa en la màquina remota"
+msgstr "Executa en l'amfitrió remot"
 
 #. i18n: ectx: property (text), widget (QLabel, remoteHostLabel)
 #: scriptappconfig.ui:285
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote host (ssh):"
-msgstr "Màquina remota (ssh):"
+msgstr "Amfitrió remot (ssh):"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, remoteHost)
 #: scriptappconfig.ui:298
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "user@host"
-msgstr "usuari@màquina"
+msgstr "usuari@amfitrió"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, remoteHost)
 #: scriptappconfig.ui:301
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a remote host (user@host)"
-msgstr "Introduïu una màquina remota (usuari@màquina)"
+msgstr "Introduïu un amfitrió remot (usuari@amfitrió)"
 
 #: scriptappjob.cpp:76
 #, kde-format

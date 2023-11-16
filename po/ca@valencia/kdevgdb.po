@@ -278,7 +278,7 @@ msgstr ""
 "codi basat en les Qt. Podeu canviar la «signatura»\n"
 "de les dades de les quals depenen QString i\n"
 "companyia, però si necessiteu depurar\n"
-"estos valors, activeu esta opció."
+"estos valors, seleccioneu esta opció."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gdbconfigpage.ui:121

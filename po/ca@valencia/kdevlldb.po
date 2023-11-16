@@ -237,7 +237,7 @@ msgstr "Servidor remot:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "host:port"
-msgstr "host:port"
+msgstr "amfitrió:port"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: widgets/lldbconfigpage.ui:181
