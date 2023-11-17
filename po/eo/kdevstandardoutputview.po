@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2023-06-06 22:02+0100\n"
+"PO-Revision-Date: 2023-11-16 20:19+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -71,7 +71,7 @@ msgstr "Fokusi dum Elementelekto"
 #, kde-format
 msgctxt "@action"
 msgid "Word Wrap"
-msgstr ""
+msgstr "Vortvolvado"
 
 #: outputwidget.cpp:119
 #, kde-format

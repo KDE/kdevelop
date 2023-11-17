@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2023-05-24 08:23+0300\n"
+"PO-Revision-Date: 2023-11-16 08:12+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -74,7 +74,7 @@ msgstr "Фокусування після вибору запису"
 #, kde-format
 msgctxt "@action"
 msgid "Word Wrap"
-msgstr ""
+msgstr "Перенесення слів"
 
 #: outputwidget.cpp:119
 #, kde-format
