@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2023-05-26 22:57+0200\n"
+"PO-Revision-Date: 2023-11-17 20:21+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -72,7 +72,7 @@ msgstr "Focalizza quando selezioni l'elemento"
 #, kde-format
 msgctxt "@action"
 msgid "Word Wrap"
-msgstr ""
+msgstr "A capo automatico"
 
 #: outputwidget.cpp:119
 #, kde-format
