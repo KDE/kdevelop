@@ -20,25 +20,64 @@
 
 using KDevelop::IndexedString;
 
-/**
- * @return Return true in case @p url is in @p dir within a maximum depth of @p maxDepth
- */
-static bool isInDirectory(const QUrl& url, const QUrl& dir, int maxDepth)
+namespace {
+QString removeTrailingSlashes(QString dirPath)
 {
-    QUrl folderUrl = url.adjusted(QUrl::RemoveFilename);
+    while (!dirPath.isEmpty() && std::as_const(dirPath).back() == QLatin1Char{'/'}) {
+        dirPath.chop(1);
+    }
+    return dirPath;
+}
 
-    int currentLevel = maxDepth;
-    while(currentLevel > 0) {
-        folderUrl = folderUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
-        if ( folderUrl == dir.adjusted(QUrl::StripTrailingSlash) ) {
+/**
+ * Is the file at @p filePath in the directory at @p dirPath within a maximum depth of @p maxDepth?
+ * @param filePath the path to a file.
+ * @param dirPath the path to a file or a directory without a trailing slash
+ *                (an empty string is the root directory path).
+ * @param maxDepth maximum depth of recursion or -1 if unlimited.
+ * @note When @p dirPath points to a file rather than a directory, this function always returns @c false.
+ */
+bool isInDirectory(const QString& filePath, const QString& dirPath, int maxDepth)
+{
+    constexpr QLatin1Char slash{'/'};
+
+    Q_ASSERT(!filePath.endsWith(slash)); // the path to a file cannot end with a slash
+    Q_ASSERT(!dirPath.endsWith(slash)); // precondition
+
+    // First check whether dirPath is a parent directory of filePath.
+    // The parent directory check below is a simplified (thanks to preconditions) version of QUrl::isParentOf().
+
+    if (!filePath.startsWith(dirPath)) {
+        return false; // dirPath is not a parent directory of filePath
+    }
+
+    const auto dirPathSize = dirPath.size();
+    if (filePath.size() == dirPathSize) {
+        Q_ASSERT(filePath == dirPath);
+        return false; // dirPath points to the same file as filePath
+    }
+    Q_ASSERT(filePath.size() > dirPathSize);
+    if (filePath.at(dirPathSize) != slash) {
+        return false; // dirPath is not a parent directory of filePath
+    }
+
+    // dirPath *is* a parent directory of filePath. Check whether it is within the maxDepth limit.
+
+    if (maxDepth < 0) {
+        return true; // unlimited depth
+    }
+
+    int indexOfSlashInUrlPath = 0;
+    do {
+        indexOfSlashInUrlPath = filePath.lastIndexOf(slash, indexOfSlashInUrlPath - 1);
+        Q_ASSERT(indexOfSlashInUrlPath >= dirPathSize); // because dirPath is a parent directory of filePath
+        if (indexOfSlashInUrlPath == dirPathSize) {
             return true;
         }
-        currentLevel--;
-    }
+    } while (--maxDepth >= 0);
     return false;
 }
 
-namespace {
 class FileFinder
 {
 public:
@@ -64,27 +103,22 @@ private:
 void FileFinder::getProjectFiles(const QSet<IndexedString>& projectFileSet,
                                  const QUrl& dir, int depth, QList<QUrl>& results)
 {
+    // Cannot use dir.adjusted(QUrl::StripTrailingSlash) here, because it does not
+    // remove the single slash of the root directory. isInDirectory() requires
+    // the empty-string representation of the root directory.
+    const auto dirPath = removeTrailingSlashes(dir.path());
+
     for (const IndexedString& item : projectFileSet) {
         if (shouldAbort()) {
             break;
         }
         QUrl url = item.toUrl();
-        if( url != dir )
-        {
-            if ( depth == 0 ) {
-                if ( url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash) != dir.adjusted(QUrl::StripTrailingSlash) ) {
-                    continue;
-                }
-            } else if ( !dir.isParentOf(url) ) {
-                continue;
-            } else if ( depth > 0 ) {
-                // To ensure the current file is within the defined depth limit, navigate up the tree for as many levels
-                // as the depth value, trying to find "dir", which is the project folder. If after all the loops there
-                // is no match, it means the current file is deeper down the project tree than the limit depth, and so
-                // it must be skipped.
-                if(!isInDirectory(url, dir, depth))
-                    continue;
-            }
+        // The scheme and authority of url match those of dir, because
+        // both belong to a common project (see getProjectFileSets() below).
+        auto urlPath = url.path();
+
+        if (urlPath != dirPath && !isInDirectory(urlPath, dirPath, depth)) {
+            continue;
         }
         if (QDir::match(m_include, url.fileName()) && !WildcardHelpers::match(m_exclude, url.toLocalFile())) {
             results.push_back(std::move(url));
