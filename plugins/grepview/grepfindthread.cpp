@@ -2,6 +2,8 @@
 #include "debug.h"
 
 #include <QDir>
+#include <QDirIterator>
+#include <QFileInfo>
 #include <QSet>
 
 #include <project/projectmodel.h>
@@ -90,9 +92,11 @@ public:
 
     void getProjectFiles(const QSet<IndexedString>& projectFileSet,
                          const QUrl& dir, int depth, QList<QUrl>& results);
-    void findFiles(const QDir& dir, int depth, QList<QUrl>& results);
+    void findFiles(const QString& dirPath, int depth, QList<QUrl>& results);
 
 private:
+    void findFilesCanonical(const QString& canonicalDirPath, int depth, QList<QUrl>& results);
+
     bool shouldAbort() const { return m_abort.load(std::memory_order_relaxed); }
 
     const QStringList& m_include;
@@ -126,36 +130,45 @@ void FileFinder::getProjectFiles(const QSet<IndexedString>& projectFileSet,
     }
 }
 
-void FileFinder::findFiles(const QDir& dir, int depth, QList<QUrl>& results)
+void FileFinder::findFiles(const QString& dirPath, int depth, QList<QUrl>& results)
+{
+    const QFileInfo info(dirPath);
+    const auto canonicalFilePath = info.canonicalFilePath();
+    if (info.isDir()) {
+        findFilesCanonical(canonicalFilePath, depth, results);
+        return;
+    }
+
+    // Search in the single file at canonicalFilePath.
+    // canonicalFilePath is empty if the file does not exist.
+    if (!canonicalFilePath.isEmpty() && !WildcardHelpers::match(m_exclude, canonicalFilePath)) {
+        results.push_back(QUrl::fromLocalFile(canonicalFilePath));
+    }
+}
+
+void FileFinder::findFilesCanonical(const QString& canonicalDirPath, int depth, QList<QUrl>& results)
 {
     constexpr QDir::Filters entryFilter = QDir::NoSymLinks | QDir::NoDotAndDotDot | QDir::Readable | QDir::Hidden;
-    QFileInfoList infos = dir.entryInfoList(m_include, QDir::Files | entryFilter);
 
-    if(!QFileInfo(dir.path()).isDir())
-        infos << QFileInfo(dir.path());
-
-    for (const QFileInfo& currFile : qAsConst(infos)) {
-        QString currName = currFile.canonicalFilePath();
-        if (!WildcardHelpers::match(m_exclude, currName)) {
-            results.push_back(QUrl::fromLocalFile(currName));
+    for (QDirIterator it(canonicalDirPath, m_include, QDir::Files | entryFilter); it.hasNext();) {
+        const auto filePath = it.next();
+        if (!WildcardHelpers::match(m_exclude, filePath)) {
+            results.push_back(QUrl::fromLocalFile(filePath));
         }
     }
+
     if(depth != 0)
     {
         if (depth > 0) {
             --depth;
         }
 
-        const auto dirs = dir.entryInfoList(QStringList{}, QDir::AllDirs | entryFilter);
-        for (const QFileInfo& currDir : dirs) {
+        for (QDirIterator it(canonicalDirPath, QStringList{}, QDir::AllDirs | entryFilter); it.hasNext();) {
             if (shouldAbort()) {
                 break;
             }
-            QString canonical = currDir.canonicalFilePath();
-            if (!canonical.startsWith(dir.canonicalPath()))
-                continue;
-
-            findFiles(canonical, depth, results);
+            const auto dirPath = it.next();
+            findFilesCanonical(dirPath, depth, results);
         }
     }
 }
