@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-11-16 00:41+0000\n"
 "PO-Revision-Date: 2010-12-29 20:51+0100\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -67,49 +67,55 @@ msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr ""
 
-#: outputwidget.cpp:115
+#: outputwidget.cpp:110
 #, kde-format
 msgctxt "@action"
-msgid "First Item"
+msgid "Word Wrap"
 msgstr ""
 
 #: outputwidget.cpp:119
 #, kde-format
 msgctxt "@action"
-msgid "Previous Item"
+msgid "First Item"
 msgstr ""
 
 #: outputwidget.cpp:123
 #, kde-format
 msgctxt "@action"
-msgid "Next Item"
+msgid "Previous Item"
 msgstr ""
 
 #: outputwidget.cpp:127
 #, kde-format
 msgctxt "@action"
+msgid "Next Item"
+msgstr ""
+
+#: outputwidget.cpp:131
+#, kde-format
+msgctxt "@action"
 msgid "Last Item"
 msgstr ""
 
-#: outputwidget.cpp:140
+#: outputwidget.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr ""
 
-#: outputwidget.cpp:151
+#: outputwidget.cpp:161
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr ""
 
-#: outputwidget.cpp:196
+#: outputwidget.cpp:197
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
 msgstr ""
 
-#: outputwidget.cpp:804
+#: outputwidget.cpp:840
 #, kde-format
 msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
