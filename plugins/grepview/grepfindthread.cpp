@@ -141,6 +141,10 @@ void FileFinder::findFiles(const QDir& dir, int depth, QList<QUrl>& results)
     }
     if(depth != 0)
     {
+        if (depth > 0) {
+            --depth;
+        }
+
         constexpr QDir::Filters dirFilter = QDir::NoDotAndDotDot|QDir::AllDirs|QDir::Readable|QDir::NoSymLinks|QDir::Hidden;
         const auto dirs = dir.entryInfoList(QStringList(), dirFilter);
         for (const QFileInfo& currDir : dirs) {
@@ -150,10 +154,6 @@ void FileFinder::findFiles(const QDir& dir, int depth, QList<QUrl>& results)
             QString canonical = currDir.canonicalFilePath();
             if (!canonical.startsWith(dir.canonicalPath()))
                 continue;
-
-            if ( depth > 0 ) {
-                depth--;
-            }
 
             findFiles(canonical, depth, results);
         }
