@@ -128,7 +128,8 @@ void FileFinder::getProjectFiles(const QSet<IndexedString>& projectFileSet,
 
 void FileFinder::findFiles(const QDir& dir, int depth, QList<QUrl>& results)
 {
-    QFileInfoList infos = dir.entryInfoList(m_include, QDir::NoDotAndDotDot|QDir::Files|QDir::Readable|QDir::Hidden);
+    constexpr QDir::Filters entryFilter = QDir::NoSymLinks | QDir::NoDotAndDotDot | QDir::Readable | QDir::Hidden;
+    QFileInfoList infos = dir.entryInfoList(m_include, QDir::Files | entryFilter);
 
     if(!QFileInfo(dir.path()).isDir())
         infos << QFileInfo(dir.path());
@@ -145,8 +146,7 @@ void FileFinder::findFiles(const QDir& dir, int depth, QList<QUrl>& results)
             --depth;
         }
 
-        constexpr QDir::Filters dirFilter = QDir::NoDotAndDotDot|QDir::AllDirs|QDir::Readable|QDir::NoSymLinks|QDir::Hidden;
-        const auto dirs = dir.entryInfoList(QStringList(), dirFilter);
+        const auto dirs = dir.entryInfoList(QStringList{}, QDir::AllDirs | entryFilter);
         for (const QFileInfo& currDir : dirs) {
             if (shouldAbort()) {
                 break;
