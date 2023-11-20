@@ -216,10 +216,10 @@ QList<QUrl> getDirectoryChoice(const QString& text)
             // a semicolon in the name.
             ret.reserve(semicolonSeparatedFileList.size());
             for (const QString& file : semicolonSeparatedFileList) {
-                ret << QUrl::fromLocalFile(file).adjusted(QUrl::StripTrailingSlash);
+                ret << QUrl::fromLocalFile(file).adjusted(QUrl::StripTrailingSlash | QUrl::NormalizePathSegments);
             }
         } else {
-            auto url = QUrl::fromUserInput(text).adjusted(QUrl::StripTrailingSlash);
+            auto url = QUrl::fromUserInput(text).adjusted(QUrl::StripTrailingSlash | QUrl::NormalizePathSegments);
             if (!url.isEmpty()) {
                 ret.push_back(std::move(url));
             }
