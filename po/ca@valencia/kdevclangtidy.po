@@ -251,7 +251,7 @@ msgstr "Clang-Tidy ha fallat."
 #: job.cpp:151
 #, kde-format
 msgid "Clang-Tidy process timed out."
-msgstr "El procés de Clang-Tidy ha excedit el temps límit."
+msgstr "El procés de Clang-Tidy ha excedit el temps."
 
 #: job.cpp:155
 #, kde-format

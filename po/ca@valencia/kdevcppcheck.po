@@ -413,7 +413,7 @@ msgstr "«cppcheck» ha fallat."
 #: job.cpp:160
 #, kde-format
 msgid "Cppcheck process timed out."
-msgstr "El procés «cppcheck» ha excedit el temps límit."
+msgstr "El procés «cppcheck» ha excedit el temps."
 
 #: job.cpp:164
 #, kde-format
