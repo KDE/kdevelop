@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-27 00:45+0000\n"
-"PO-Revision-Date: 2023-11-18 16:53+0100\n"
+"PO-Revision-Date: 2023-11-23 17:53+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -4877,32 +4877,30 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"Formata o texto seleccionado ou o ficheiro completo se non hai nada "
+"seleccionado, usando o formatador de código configurado."
 
 #: shell/sourceformattercontroller.cpp:619
-#, fuzzy, kde-format
-#| msgid "Reformat current line using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr "Reformatar a liña empregando AStyle"
+msgstr "Formatar a liña actual co formatador de código configurado"
 
 #: shell/sourceformattercontroller.cpp:621
-#, fuzzy, kde-format
-#| msgid ""
-#| "Source reformatting of line under cursor using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
 msgstr ""
-"Formato da fonte da liña na que está o cursor que emprega a biblioteca "
-"<b>astyle</b>."
+"Formato da fonte da liña na que está o cursor co formatador de código "
+"configurado."
 
 #: shell/sourceformattercontroller.cpp:856
-#, fuzzy, kde-format
-#| msgid "Reformat Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr "Cambiar o formato dos ficheiros"
+msgstr "Quere formatar os ficheiros?"
 
 #: shell/sourceformattercontroller.cpp:857
 #, kde-format
@@ -4910,11 +4908,10 @@ msgid "Reformat all files in the selected folder?"
 msgstr "Cmabiar o formato de todos os ficheiros do cartafol seleccionado?"
 
 #: shell/sourceformattercontroller.cpp:861
-#, fuzzy, kde-format
-#| msgid "Reformat"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
-msgstr "Cambiar o formato"
+msgstr "Formatar"
 
 #: shell/sourceformatterjob.cpp:36
 #, kde-format
@@ -4945,11 +4942,10 @@ msgstr ""
 "Seguro que quere eliminalo?"
 
 #: shell/sourceformatterselectionedit.cpp:485
-#, fuzzy, kde-format
-#| msgid "Delete Working Set"
+#, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
-msgstr "Eliminar o conxunto de traballo"
+msgstr "Eliminando un estilo"
 
 #: shell/sourceformatterselectionedit.cpp:540
 #, kde-format
@@ -4968,40 +4964,35 @@ msgstr "Non seleccionou ningunha linguaxe"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/sourceformatterselectionedit.ui:29
-#, fuzzy, kde-format
-#| msgid "Language:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Language:"
-msgstr "Lingua:"
+msgstr "Linguaxe:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:102
-#, fuzzy, kde-format
-#| msgid "Formatter:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
 msgstr "Formatador:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:132
-#, fuzzy, kde-format
-#| msgid "Style:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
 msgstr "Estilo:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: shell/sourceformatterselectionedit.ui:150
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Novo"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
 #: shell/sourceformatterselectionedit.ui:157
-#, fuzzy, kde-format
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "Editar…"
@@ -5011,11 +5002,10 @@ msgstr "Editar…"
 #: shell/sourceformatterselectionedit.ui:164
 #: shell/workingsets/workingsettooltipwidget.cpp:93
 #: vcs/dvcs/ui/branchmanager.ui:44
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action:button"
 msgid "Delete"
-msgstr "Borrar"
+msgstr "Eliminar"
 
 #: shell/textdocument.cpp:437
 #, kde-format
@@ -5040,29 +5030,25 @@ msgid " Line: %1 Col: %2 "
 msgstr " Liña: %1 Col: %2"
 
 #: shell/uicontroller.cpp:81
-#, fuzzy, kde-format
-#| msgid "Code"
+#, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "Código"
 
 #: shell/uicontroller.cpp:92
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "area"
 msgid "Debug"
-msgstr "Depurar"
+msgstr "Depuración"
 
 #: shell/uicontroller.cpp:101
-#, fuzzy, kde-format
-#| msgid "Review"
+#, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "Revisión"
 
 #: shell/uicontroller.cpp:460
-#, fuzzy, kde-format
-#| msgid "Select Tool View to Add"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
 msgstr "Escolla a vista de utilidade para engadir"
@@ -5078,8 +5064,7 @@ msgid "<b>Working Set</b>"
 msgstr "<b>Conxunto de traballo</b>"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:94
-#, fuzzy, kde-format
-#| msgid "Remove this working set. The contained documents are not affected."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this working set. The contained documents are not affected."
 msgstr ""
@@ -5087,24 +5072,19 @@ msgstr ""
 "afectados."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:120
-#, fuzzy, kde-format
-#| msgid "Documents:"
+#, kde-format
 msgctxt "@label"
 msgid "Documents:"
 msgstr "Documentos:"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:128
-#, fuzzy, kde-format
-#| msgid "Add All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add All"
 msgstr "Engadir todo"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:129
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add all documents that are part of this working set to the currently "
-#| "active working set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Add all documents that are part of this working set to the currently active "
@@ -5114,17 +5094,13 @@ msgstr ""
 "conxunto de traballo actual."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Remove All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove All"
 msgstr "Eliminar todo"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:137
-#, fuzzy, kde-format
-#| msgid ""
-#| "Remove all documents that are part of this working set from the currently "
-#| "active working set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Remove all documents that are part of this working set from the currently "
@@ -5140,29 +5116,25 @@ msgid "Click to open and activate this document."
 msgstr "Prema para abrir e activar este documento."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:281
-#, fuzzy, kde-format
-#| msgid "Remove this file from the current working set"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this file from the current working set"
 msgstr "Eliminar este ficheiro do conxunto de traballo actual"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:286
-#, fuzzy, kde-format
-#| msgid "Add this file to the current working set"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add this file to the current working set"
 msgstr "Engadir este ficheiro ao conxunto de traballo actual"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:315
-#, fuzzy, kde-format
-#| msgid "Stash"
+#, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Reserva"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:321
-#, fuzzy, kde-format
-#| msgid "Load"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load"
 msgstr "Cargar"
@@ -5173,50 +5145,43 @@ msgid "Line: 00000 Col: 000"
 msgstr " Liña: 00000 Col: 000"
 
 #: sublime/container.cpp:319
-#, fuzzy, kde-format
-#| msgid "Show sorted list of opened documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
-msgstr "Mostrar unha lista ordenada dos documentos abertos"
+msgstr "Amosar unha lista ordenada dos documentos abertos"
 
 #: sublime/container.cpp:331
-#, fuzzy, kde-format
-#| msgid "(Press Ctrl+Tab to switch)"
+#, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(prema Ctrl+Tab para cambiar)"
 
 #: sublime/container.cpp:724
-#, fuzzy, kde-format
-#| msgid "Copy Filename"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Copiar o nome do ficheiro"
 
 #: sublime/container.cpp:727
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Pechar"
 
 #: sublime/container.cpp:729
-#, fuzzy, kde-format
-#| msgid "Close All Other"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Pechar os demais"
 
 #: sublime/container.cpp:731
-#, fuzzy, kde-format
-#| msgid "Close All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
 msgstr "Pechalo todo"
 
 #: sublime/idealbuttonbarwidget.cpp:37
-#, fuzzy, kde-format
-#| msgid "Toggle '%1' tool view."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Conmutar a vista de ferramenta «%1»."
@@ -5228,90 +5193,73 @@ msgid "Right click to add new tool views."
 msgstr "Faga clic dereito para engadir vistas de ferramentas novas."
 
 #: sublime/idealcontroller.cpp:94
-#, fuzzy, kde-format
-#| msgid "%1 Toolbar"
+#, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "Barra de ferramentas %1"
 
 #: sublime/idealdockwidget.cpp:110
-#, fuzzy, kde-format
-#| msgid "Tool View Position"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Posición da vista de ferramenta"
 
 #: sublime/idealdockwidget.cpp:114
-#, fuzzy, kde-format
-#| msgctxt "tool view position"
-#| msgid "Left"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Esquerda"
 
 #: sublime/idealdockwidget.cpp:115
-#, fuzzy, kde-format
-#| msgctxt "tool view position"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Inferior"
 
 #: sublime/idealdockwidget.cpp:116
-#, fuzzy, kde-format
-#| msgctxt "tool view position"
-#| msgid "Right"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Dereita"
 
 #: sublime/idealdockwidget.cpp:117
-#, fuzzy, kde-format
-#| msgctxt "tool view position"
-#| msgid "Detached"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Separada"
 
 #: sublime/idealdockwidget.cpp:135
-#, fuzzy, kde-format
-#| msgid "Assign Shortcut..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Asignar un atallo…"
 
 #: sublime/idealdockwidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Use this shortcut to trigger visibility of the tool view."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
-msgstr ""
-"Empregue este atallo para conmutar a visibilidade da vista de ferramenta."
+msgstr "Use este atallo para conmutar a visibilidade da vista de ferramenta."
 
 #: sublime/idealdockwidget.cpp:139
-#, fuzzy, kde-format
-#| msgid "Remove Tool View"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Retirar a vista de ferramenta"
 
 #: sublime/idealdockwidget.cpp:150
-#, fuzzy, kde-format
-#| msgid "Assign Shortcut For '%1' Tool View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
 msgstr "Asignar un atallo á vista de ferramenta «%1»"
 
 #: sublime/mainwindow_p.cpp:78
-#, fuzzy, kde-format
-#| msgid "Concentration Mode"
+#, kde-format
 msgctxt "@option:check"
 msgid "Concentration Mode"
 msgstr "Modo de concentración"
 
 #: sublime/mainwindow_p.cpp:80
-#, fuzzy, kde-format
-#| msgid "Removes most of the controls so you can focus on what matters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
 msgstr ""
@@ -5319,25 +5267,22 @@ msgstr ""
 "importante."
 
 #: sublime/mainwindow_p.cpp:87
-#, fuzzy, kde-format
-#| msgid "Show Left Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
-msgstr "Mostrar o acople á esquerda"
+msgstr "Amosar o acople á esquerda"
 
 #: sublime/mainwindow_p.cpp:94
-#, fuzzy, kde-format
-#| msgid "Show Right Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
-msgstr "Mostrar o acople á dereita"
+msgstr "Amosar o acople á dereita"
 
 #: sublime/mainwindow_p.cpp:100
-#, fuzzy, kde-format
-#| msgid "Show Bottom Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
-msgstr "Mostrar o acople no fondo"
+msgstr "Amosar o acople no fondo"
 
 #: sublime/mainwindow_p.cpp:106
 #, kde-format
@@ -5346,29 +5291,25 @@ msgid "Focus Editor"
 msgstr "Editor do foco"
 
 #: sublime/mainwindow_p.cpp:111
-#, fuzzy, kde-format
-#| msgid "Hide/Restore Docks"
+#, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
 msgstr "Agochar/Restaurar os acoples"
 
 #: sublime/mainwindow_p.cpp:116
-#, fuzzy, kde-format
-#| msgid "Next Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
 msgstr "Vista de utilidade seguinte"
 
 #: sublime/mainwindow_p.cpp:122
-#, fuzzy, kde-format
-#| msgid "Previous Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
 msgstr "Vista de utilidade anterior"
 
 #: sublime/mainwindow_p.cpp:128
-#, fuzzy, kde-format
-#| msgid "Tool Views"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Vistas de utilidades"
@@ -5545,22 +5486,19 @@ msgstr ""
 "permisos de escritura para o dono antes de gardar?"
 
 #: util/shellutils.cpp:82
-#, fuzzy, kde-format
-#| msgid "Some files are write-protected"
+#, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Algúns ficheiros están protexidos contra escritura"
 
 #: util/shellutils.cpp:83
-#, fuzzy, kde-format
-#| msgid "Failed setting permissions"
+#, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr "O estabelecemento dos permisos fallou"
+msgstr "Definir os permisos de escritura"
 
 #: util/shellutils.cpp:84
-#, fuzzy, kde-format
-#| msgid "Ignore"
+#, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ignorar"
@@ -5571,11 +5509,10 @@ msgid "Failed adding write permissions for some files."
 msgstr "O engadido dos permisos de escritura a algúns ficheiros fallou."
 
 #: util/shellutils.cpp:97
-#, fuzzy, kde-format
-#| msgid "Failed setting permissions"
+#, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
-msgstr "O estabelecemento dos permisos fallou"
+msgstr "Non foi posíbel estabelecer os permisos"
 
 #: vcs/dvcs/dvcsjob.cpp:173
 #, kde-format
@@ -5607,39 +5544,35 @@ msgid "Command exited with value %1."
 msgstr "A orde saíu co valor %1."
 
 #: vcs/dvcs/dvcsplugin.cpp:95
-#, fuzzy, kde-format
-#| msgid "Branches..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Branches..."
-msgstr "Gallas…"
+msgstr "Ramas…"
 
 #: vcs/dvcs/ui/branchmanager.cpp:38
-#, fuzzy, kde-format
-#| msgid "Branch Manager"
+#, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
-msgstr "Xestor de gallas"
+msgstr "Xestor de ramas"
 
 #: vcs/dvcs/ui/branchmanager.cpp:107
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr ""
-"Hai que escoller unha galla de base da lista antes de crear unha galla nova."
+"Hai que escoller unha rama de base da lista antes de crear unha rama nova."
 
 #: vcs/dvcs/ui/branchmanager.cpp:112
-#, fuzzy, kde-format
-#| msgid "New branch"
+#, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
-msgstr "Nova galla"
+msgstr "Nova rama"
 
 #: vcs/dvcs/ui/branchmanager.cpp:112
-#, fuzzy, kde-format
-#| msgid "Name of the new branch:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
-msgstr "Nome da galla nova:"
+msgstr "Nome da rama nova:"
 
 #: vcs/dvcs/ui/branchmanager.cpp:119
 #, kde-format
@@ -5647,31 +5580,27 @@ msgid ""
 "Branch \"%1\" already exists.\n"
 "Please, choose another name."
 msgstr ""
-"Xa existe unha galla chamada «%1».\n"
+"Xa existe unha rama chamada «%1».\n"
 "Escolla outro nome."
 
 #: vcs/dvcs/ui/branchmanager.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "Currently at the branch \"%1\".\n"
-#| "To remove it, please change to another branch."
+#, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
 msgstr ""
-"Está na galla «%1».\n"
-"Para eliminala debe cambiar a outra galla."
+"Está na rama «%1».\n"
+"Para eliminala debe cambiar a outra rama."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
-#, fuzzy, kde-format
-#| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
+#, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
-msgstr "Está seguro de que quere borrar irreversibelmente a galla «%1»?"
+msgstr "Seguro que quere eliminar de maneira irreversíbel a rama «%1»?"
 
 #: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
 #, kde-format
 msgid "Already on branch \"%1\"\n"
-msgstr "Xa está na galla «%1»\n"
+msgstr "Xa está na rama «%1»\n"
 
 #: vcs/dvcs/ui/branchmanager.cpp:181
 #, kde-format
@@ -5685,7 +5614,7 @@ msgstr ""
 #: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
-msgstr "Debe escoller unha galla da lista para fusionala coa actual."
+msgstr "Debe escoller unha rama da lista para fusionala coa actual."
 
 #: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
@@ -5693,11 +5622,10 @@ msgid "Could not create a patch for the current version."
 msgstr "Non foi posíbel crear un parche para a versión actual."
 
 #: vcs/dvcs/ui/branchmanager.cpp:262
-#, fuzzy, kde-format
-#| msgid "Unable to retrieve diff."
+#, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
-msgstr "Non se poden obter as diferenzas."
+msgstr "Non é posíbel obter as diferenzas."
 
 #: vcs/dvcs/ui/branchmanager.cpp:269
 #, kde-format
@@ -5705,103 +5633,89 @@ msgid "There are no committed differences."
 msgstr "Non hai diferenzas remitidas."
 
 #: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:285
-#, fuzzy, kde-format
-#| msgid "VCS support"
+#, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
-msgstr "Soporte de VCS"
+msgstr "Funcionalidade de VCS"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:31
-#, fuzzy, kde-format
-#| msgid "Creates new branch based on the selected branch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Creates new branch based on the selected branch"
-msgstr "Crea unha galla nova baseada na escollida"
+msgstr "Crea unha rama nova baseada na escollida"
 
 #. i18n: ectx: property (text), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:34
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action:button new branch"
 msgid "New"
-msgstr "Novo"
+msgstr "Nova"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, deleteButton)
 #: vcs/dvcs/ui/branchmanager.ui:41
-#, fuzzy, kde-format
-#| msgid "The same as git branch -D"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "The same as git branch -D"
 msgstr "O mesmo que git branch -D"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:70
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@action:button"
 msgid "Rename"
 msgstr "Renomear"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:77
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Show changes between the current branch (or staging area, if not "
-#| "empty) and the last commit on the selected branch.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Show changes between the current branch (or staging area, if not empty) "
 "and the last commit on the selected branch.</p>"
 msgstr ""
-"<p>Mostrar os cambios entre a rama actual (ou a zona temporal, se non está "
+"<p>Amosar os cambios entre a rama actual (ou a zona temporal, se non está "
 "baleira) e a última remisión na rama seleccionada.</p>"
 
 #. i18n: ectx: property (text), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:80
-#, fuzzy, kde-format
-#| msgid "Compare to Branch"
+#, kde-format
 msgctxt "@action:button"
 msgid "Compare to Branch"
 msgstr "Comparar cunha rama"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:103
-#, fuzzy, kde-format
-#| msgid "Checkout to the selected branch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Checkout to the selected branch"
-msgstr "Obter a galla escollida"
+msgstr "Obter a rama escollida"
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
-#, fuzzy, kde-format
-#| msgid "Checkout"
+#, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
 msgstr "Obter"
 
 #. i18n: ectx: property (text), widget (QPushButton, mergeButton)
 #: vcs/dvcs/ui/branchmanager.ui:116
-#, fuzzy, kde-format
-#| msgid "Merge"
+#, kde-format
 msgctxt "@action:button merge a branch"
 msgid "Merge"
 msgstr "Fusionar"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:19
-#, fuzzy, kde-format
-#| msgid "Source directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr "Directorio de orixe:"
+msgstr "Cartafol de orixe:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
 #: vcs/widgets/vcsdiffpatchsources.cpp:49
-#, fuzzy, kde-format
-#| msgid "Commit message:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "Mensaxe de remisión:"
@@ -5809,7 +5723,7 @@ msgstr "Mensaxe de remisión:"
 #: vcs/models/brancheslistmodel.cpp:64
 #, kde-format
 msgid "Branch \"%1\" already exists."
-msgstr "Xa existe unha galla chamada «%1»."
+msgstr "Xa existe unha rama chamada «%1»."
 
 #: vcs/models/brancheslistmodel.cpp:69
 #, kde-format
@@ -5832,133 +5746,112 @@ msgid "Commit message:"
 msgstr "Mensaxe de remisión:"
 
 #: vcs/models/vcseventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Revision"
 msgstr "Revisión"
 
 #: vcs/models/vcseventmodel.cpp:90
-#, fuzzy, kde-format
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:column"
 msgid "Message"
 msgstr "Mensaxe"
 
 #: vcs/models/vcseventmodel.cpp:92
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgctxt "@title:column"
 msgid "Author"
-msgstr "Autor"
+msgstr "Autoría"
 
 #: vcs/models/vcseventmodel.cpp:94
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgctxt "@title:column"
 msgid "Date"
 msgstr "Data"
 
 #: vcs/models/vcsfilechangesmodel.cpp:32
-#, fuzzy, kde-format
-#| msgid "Added"
+#, kde-format
 msgctxt "@item file was added to versioncontrolsystem"
 msgid "Added"
-msgstr "Engadido"
+msgstr "Engadiuse"
 
 #: vcs/models/vcsfilechangesmodel.cpp:34
-#, fuzzy, kde-format
-#| msgid "Deleted"
+#, kde-format
 msgctxt "@item file was deleted from versioncontrolsystem"
 msgid "Deleted"
-msgstr "Borrado"
+msgstr "Eliminouse"
 
 #: vcs/models/vcsfilechangesmodel.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "file is conflicting (versioncontrolsystem)"
-#| msgid "Has Conflicts"
+#, kde-format
 msgctxt "@item file is conflicting (versioncontrolsystem)"
 msgid "Has Conflicts"
 msgstr "Ten conflitos"
 
 #: vcs/models/vcsfilechangesmodel.cpp:38
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgctxt "@item version controlled file was modified"
 msgid "Modified"
-msgstr "Modificado"
+msgstr "Modificouse"
 
 #: vcs/models/vcsfilechangesmodel.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "file is up to date in versioncontrolsystem"
-#| msgid "Up To Date"
+#, kde-format
 msgctxt "@item file is up to date in versioncontrolsystem"
 msgid "Up To Date"
-msgstr "Actualizado"
+msgstr "Ao día"
 
 #: vcs/models/vcsfilechangesmodel.cpp:43
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "@item file is not known to versioncontrolsystem"
 msgid "Unknown"
 msgstr "Descoñecida"
 
 #: vcs/models/vcsfilechangesmodel.cpp:45
-#, fuzzy, kde-format
-#| msgctxt "Unknown VCS file status, probably a backend error"
-#| msgid "?"
+#, kde-format
 msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
 msgstr "?"
 
 #: vcs/models/vcsfilechangesmodel.cpp:131
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@title:column"
 msgid "Filename"
 msgstr "Nome do ficheiro"
 
 #: vcs/models/vcsfilechangesmodel.cpp:132
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "Estado"
 
 #: vcs/models/vcsitemeventmodel.cpp:46
-#, fuzzy, kde-format
-#| msgid "Added"
+#, kde-format
 msgctxt "@item"
 msgid "Added"
-msgstr "Engadido"
+msgstr "Engadiuse"
 
 #: vcs/models/vcsitemeventmodel.cpp:48
-#, fuzzy, kde-format
-#| msgid "Deleted"
+#, kde-format
 msgctxt "@item"
 msgid "Deleted"
-msgstr "Borrado"
+msgstr "Eliminouse"
 
 #: vcs/models/vcsitemeventmodel.cpp:50
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgctxt "@item"
 msgid "Modified"
-msgstr "Modificado"
+msgstr "Modificouse"
 
 #: vcs/models/vcsitemeventmodel.cpp:52
-#, fuzzy, kde-format
-#| msgid "Copied"
+#, kde-format
 msgctxt "@item"
 msgid "Copied"
-msgstr "Copiado"
+msgstr "Copiouse"
 
 #: vcs/models/vcsitemeventmodel.cpp:54
-#, fuzzy, kde-format
-#| msgid "Replaced"
+#, kde-format
 msgctxt "@item"
 msgid "Replaced"
-msgstr "Substituídas"
+msgstr "Substituíuse"
 
 #: vcs/models/vcsitemeventmodel.cpp:61
 #, kde-format
@@ -5967,109 +5860,94 @@ msgid ", "
 msgstr ", "
 
 #: vcs/models/vcsitemeventmodel.cpp:85
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Location"
-msgstr "Lugar"
+msgstr "Localización"
 
 #: vcs/models/vcsitemeventmodel.cpp:86
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@title:column"
 msgid "Actions"
 msgstr "Accións"
 
 #: vcs/models/vcsitemeventmodel.cpp:87
-#, fuzzy, kde-format
-#| msgid "Source Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Location"
-msgstr "Lugar de orixe"
+msgstr "Localización de orixe"
 
 #: vcs/models/vcsitemeventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Source Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Revisión de orixe"
 
 #: vcs/vcspluginhelper.cpp:84
-#, fuzzy, kde-format
-#| msgid "Commit..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Remitir…"
 
 #: vcs/vcspluginhelper.cpp:85
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Actualizar"
 
 #: vcs/vcspluginhelper.cpp:86
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Engadir"
 
 #: vcs/vcspluginhelper.cpp:87
-#, fuzzy, kde-format
-#| msgid "Show Differences..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
-msgstr "Mostrar as diferenzas…"
+msgstr "Amosar as diferenzas…"
 
 #: vcs/vcspluginhelper.cpp:88
-#, fuzzy, kde-format
-#| msgid "Revert"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Reverter"
 
 #: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:473
-#, fuzzy, kde-format
-#| msgid "History..."
+#, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Historial…"
 
 #: vcs/vcspluginhelper.cpp:90
-#, fuzzy, kde-format
-#| msgid "Annotation..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Anotación…"
 
 #: vcs/vcspluginhelper.cpp:91
-#, fuzzy, kde-format
-#| msgid "Show Diff..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
-msgstr "Mostrar as diferenzas…"
+msgstr "Amosar as diferenzas…"
 
 #: vcs/vcspluginhelper.cpp:92
-#, fuzzy, kde-format
-#| msgid "Show Diff (all files)..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
-msgstr "Mostrar as diferenzas (todos os ficheiros)…"
+msgstr "Amosar as diferenzas (todos os ficheiros)…"
 
 #: vcs/vcspluginhelper.cpp:93
-#, fuzzy, kde-format
-#| msgid "Push"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Puxar"
 
 #: vcs/vcspluginhelper.cpp:94
-#, fuzzy, kde-format
-#| msgid "Pull"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
-msgstr "Tirar"
+msgstr "Pular"
 
 #: vcs/vcspluginhelper.cpp:284
 #, kde-format
@@ -6077,16 +5955,13 @@ msgid "There are no differences."
 msgstr "Non hai diferenzas."
 
 #: vcs/vcspluginhelper.cpp:291
-#, fuzzy, kde-format
-#| msgid "Unable to get difference."
+#, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Non foi posíbel obter as diferenzas."
 
 #: vcs/vcspluginhelper.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "%1: path or URL, %2: name of a version control system"
-#| msgid "%2 History (%1)"
+#, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "Historial de %2 (%1)"
@@ -6112,24 +5987,19 @@ msgstr ""
 "%1"
 
 #: vcs/vcspluginhelper.cpp:468 vcs/widgets/vcseventwidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Copy Revision Id"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"
 msgstr "Copiar o identificador da revisión"
 
 #: vcs/widgets/standardvcslocationwidget.cpp:23
-#, fuzzy, kde-format
-#| msgid "Enter the repository URL..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
 msgstr "Introduza o URL do repositorio…"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "age"
-#| msgid "%1 year"
-#| msgid_plural "%1 years"
+#, kde-format
 msgctxt "@item age"
 msgid "%1 year"
 msgid_plural "%1 years"
@@ -6137,10 +6007,7 @@ msgstr[0] "%1 ano"
 msgstr[1] "%1 anos"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:65
-#, fuzzy, kde-format
-#| msgctxt "age"
-#| msgid "%1 month"
-#| msgid_plural "%1 months"
+#, kde-format
 msgctxt "@item age"
 msgid "%1 month"
 msgid_plural "%1 months"
@@ -6148,10 +6015,7 @@ msgstr[0] "%1 mes"
 msgstr[1] "%1 meses"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "age"
-#| msgid "%1 day"
-#| msgid_plural "%1 days"
+#, kde-format
 msgctxt "@item age"
 msgid "%1 day"
 msgid_plural "%1 days"
@@ -6159,8 +6023,7 @@ msgstr[0] "%1 día"
 msgstr[1] "%1 días"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:71
-#, fuzzy, kde-format
-#| msgid "Today"
+#, kde-format
 msgctxt "@item age"
 msgid "Today"
 msgstr "Hoxe"
@@ -6173,24 +6036,21 @@ msgstr "Por: %1"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
 #: vcs/widgets/vcscommitdialog.ui:17
-#, fuzzy, kde-format
-#| msgid "Select Files to commit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Files to Commit"
 msgstr "Seleccionar os ficheiros para remitir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Commit files:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "Remitir os ficheiros:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
 #: vcs/widgets/vcscommitdialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Recursive"
+#, kde-format
 msgctxt "@option:check"
 msgid "Recursive"
 msgstr "Recursivo"
@@ -6212,11 +6072,10 @@ msgid "Unable to commit"
 msgstr "Non é posíbel remitir"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
-#, fuzzy, kde-format
-#| msgid "Commit unsuccessful"
+#, kde-format
 msgctxt "@title:window"
 msgid "Commit Unsuccessful"
-msgstr "Non foi posíbel efectuar a remisión."
+msgstr "Non foi posíbel efectuar a remisión"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:224
 #, kde-format
@@ -6238,51 +6097,44 @@ msgstr ""
 " <pre>%2</pre></qt>"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:259
-#, fuzzy, kde-format
-#| msgid "About to commit to repository"
+#, kde-format
 msgctxt "@title:window"
 msgid "About to Commit to Repository"
 msgstr "A piques te remitir ao repositorio"
 
 #: vcs/widgets/vcsdiffwidget.cpp:86
-#, fuzzy, kde-format
-#| msgid "Difference between revision %1 and %2:"
+#, kde-format
 msgctxt "@label"
 msgid "Difference between revision %1 and %2:"
 msgstr "Diferenzas entre as revisións %1 e %2:"
 
 #. i18n: ectx: property (text), widget (QLabel, revLabel)
 #: vcs/widgets/vcsdiffwidget.ui:28
-#, fuzzy, kde-format
-#| msgid "Difference between revisions"
+#, kde-format
 msgctxt "@label"
 msgid "Difference between revisions:"
-msgstr "Diferenzas entre revisións"
+msgstr "Diferenzas entre revisións:"
 
 #: vcs/widgets/vcseventwidget.cpp:78
-#, fuzzy, kde-format
-#| msgid "Diff to previous revision"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff to Previous Revision"
 msgstr "Diferenzas coa revisión anterior"
 
 #: vcs/widgets/vcseventwidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "Diff between revisions"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff between Revisions"
 msgstr "Diferenzas entre revisións"
 
 #: vcs/widgets/vcseventwidget.cpp:138
-#, fuzzy, kde-format
-#| msgid "Difference To Previous"
+#, kde-format
 msgctxt "@title:window"
 msgid "Difference To Previous"
 msgstr "Diferenzas coa anterior"
 
 #: vcs/widgets/vcseventwidget.cpp:167
-#, fuzzy, kde-format
-#| msgid "Difference between Revisions"
+#, kde-format
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferenzas entre revisións"
