@@ -9,6 +9,7 @@
 #include "test_findreplace.h"
 
 #include <QByteArray>
+#include <QDebug>
 #include <QString>
 #include <QStringList>
 #include <QTest>
@@ -17,8 +18,10 @@
 #include <QTemporaryFile>
 #include <QTemporaryDir>
 
+#include <project/projectmodel.h>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/testproject.h>
 #include <util/filesystemhelpers.h>
 
 #include "../grepjob.h"
@@ -27,15 +30,27 @@
 
 #include <vector>
 
+using namespace KDevelop;
+
 void FindReplaceTest::initTestCase()
 {
     KDevelop::AutoTestShell::init({{}}); // do not load plugins at all
-    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
+    const auto core = TestCore::initialize(Core::NoUi);
+
+    delete core->projectController();
+    m_projectController = new TestProjectController(core);
+    core->setProjectController(m_projectController);
 }
 
 void FindReplaceTest::cleanupTestCase()
 {
     KDevelop::TestCore::shutdown();
+}
+
+void FindReplaceTest::init()
+{
+    // Ensure there are no open projects even if the last test run crashed.
+    m_projectController->closeAllProjects();
 }
 
 void FindReplaceTest::testFind_data()
@@ -192,13 +207,7 @@ void FindReplaceTest::testIncludeExcludeFilters()
     }
     QVERIFY2(errorPath.isEmpty(), qPrintable("couldn't create or write to temporary file or directory " + errorPath));
 
-    GrepJob job;
-    GrepOutputModel model;
-    job.setOutputModel(&model);
-    job.setDirectoryChoice({QUrl::fromLocalFile(tmpDir.path())});
-
     GrepJobSettings settings;
-    settings.projectFilesOnly = false;
     settings.caseSensitive = true;
     settings.regexp = false;
     settings.depth = depth;
@@ -208,30 +217,54 @@ void FindReplaceTest::testIncludeExcludeFilters()
     settings.replacementTemplate = verbatimTemplate;
     settings.files = files;
     settings.exclude = exclude;
-    job.setSettings(settings);
 
-    QVERIFY(job.exec());
+    // Modify a copy of the matchedPaths list - pathsToMatch - in order
+    // to keep matchedPaths intact for each invocation of this lambda.
+    const auto test = [&tmpDir, &settings](QStringList pathsToMatch) {
+        GrepJob job;
+        GrepOutputModel model;
+        job.setOutputModel(&model);
+        job.setDirectoryChoice({QUrl::fromLocalFile(tmpDir.path())});
+        job.setSettings(settings);
 
-    QModelIndex index;
-    const GrepOutputItem* previousItem = nullptr;
-    while (true) {
-        index = model.nextItemIndex(index);
-        if (!index.isValid()) {
-            break;
+        QVERIFY(job.exec());
+
+        QModelIndex index;
+        const GrepOutputItem* previousItem = nullptr;
+        while (true) {
+            index = model.nextItemIndex(index);
+            if (!index.isValid()) {
+                break;
+            }
+            auto* const item = dynamic_cast<const GrepOutputItem*>(model.itemFromIndex(index));
+            QVERIFY(item);
+            QVERIFY(item->isText());
+            if (item == previousItem) {
+                break; // This must be the last match.
+            }
+            previousItem = item;
+
+            const QString filename = item->filename();
+            QVERIFY2(pathsToMatch.contains(filename), qPrintable("unexpected matched file " + filename));
+            QVERIFY2(pathsToMatch.removeOne(filename),
+                     qPrintable("there must be exactly one text match for " + filename));
         }
-        auto* const item = dynamic_cast<const GrepOutputItem*>(model.itemFromIndex(index));
-        QVERIFY(item);
-        QVERIFY(item->isText());
-        if (item == previousItem) {
-            break; // This must be the last match.
-        }
-        previousItem = item;
+        QVERIFY2(pathsToMatch.empty(),
+                 qPrintable("these files should have been matched, but weren't: " + pathsToMatch.join("; ")));
+    };
 
-        const QString filename = item->filename();
-        QVERIFY2(matchedPaths.contains(filename), qPrintable("unexpected matched file " + filename));
-        QVERIFY2(matchedPaths.removeOne(filename), qPrintable("there must be exactly one text match for " + filename));
+    for (const bool projectFilesOnly : {false, true}) {
+        qDebug() << "limit to project files:" << projectFilesOnly;
+        settings.projectFilesOnly = projectFilesOnly;
+
+        if (projectFilesOnly) {
+            addTestProjectFromFileSystem(tmpDir.path());
+        }
+
+        test(matchedPaths);
+
+        m_projectController->closeAllProjects();
     }
-    QVERIFY2(matchedPaths.empty(), qPrintable("these files should have been matched, but weren't: " + matchedPaths.join("; ")));
 }
 
 void FindReplaceTest::testReplace_data()
@@ -334,6 +367,12 @@ void FindReplaceTest::testReplace()
     tempDir.remove();
 }
 
+void FindReplaceTest::addTestProjectFromFileSystem(const QString& path)
+{
+    auto* const project = new TestProject(Path{path});
+    TestProjectUtils::addChildrenFromFileSystem(project->projectItem());
+    m_projectController->addProject(project);
+}
 
 QTEST_MAIN(FindReplaceTest)
 

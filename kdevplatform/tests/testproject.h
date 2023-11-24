@@ -90,5 +90,19 @@ public:
 
     void initialize() override;
 };
+
+namespace TestProjectUtils {
+template<class T>
+T* createChild(ProjectFolderItem* parent, const QString& childName)
+{
+    return new T(childName, parent);
 }
+
+/**
+ * Iterate over all files and directories inside the given directory
+ * in the file system recursively and create a project item for each.
+ */
+KDEVPLATFORMTESTS_EXPORT void addChildrenFromFileSystem(ProjectFolderItem* parent);
+} // namespace TestProjectUtils
+} // namespace KDevelop
 #endif

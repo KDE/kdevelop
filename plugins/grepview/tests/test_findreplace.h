@@ -16,7 +16,8 @@
 
 namespace KDevelop
 {
-    class TestCore;
+class TestCore;
+class TestProjectController;
 }
 class GrepViewPlugin;
 
@@ -42,6 +43,7 @@ private:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
+    void init();
 
     void testFind();
     void testFind_data();
@@ -51,6 +53,11 @@ private Q_SLOTS:
 
     void testReplace();
     void testReplace_data();
+
+private:
+    void addTestProjectFromFileSystem(const QString& path);
+
+    KDevelop::TestProjectController* m_projectController;
 };
 
 Q_DECLARE_METATYPE(FindReplaceTest::MatchList)

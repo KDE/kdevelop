@@ -11,6 +11,7 @@
 #include <interfaces/icore.h>
 
 #include <QDir>
+#include <QDirIterator>
 
 using namespace KDevelop;
 
@@ -116,6 +117,22 @@ void TestProject::removeFromFileSet(ProjectFileItem* file)
 
 void TestProjectController::initialize()
 {
+}
+
+void TestProjectUtils::addChildrenFromFileSystem(ProjectFolderItem* parent)
+{
+    constexpr QDir::Filters entryFilter = QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden;
+    QDirIterator it(parent->path().path(), {QStringLiteral("*")}, entryFilter);
+    while (it.hasNext()) {
+        it.next();
+        const auto info = it.fileInfo();
+        if (info.isDir()) {
+            const auto child = createChild<ProjectFolderItem>(parent, info.fileName());
+            addChildrenFromFileSystem(child);
+        } else {
+            createChild<ProjectFileItem>(parent, info.fileName());
+        }
+    }
 }
 
 #include "moc_testproject.cpp"
