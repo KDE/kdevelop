@@ -44,6 +44,8 @@ add_debuggable_executable(debuggee_qbytearray SRCS qbytearray.cpp)
 target_link_libraries(debuggee_qbytearray Qt5::Core)
 
 add_debuggable_executable(debuggee_qlistcontainer SRCS qlistcontainer.cpp)
+# Allow building and testing QLinkedList deprecated in Qt 5.15:
+target_compile_options(debuggee_qlistcontainer PRIVATE -UQT_DISABLE_DEPRECATED_BEFORE)
 target_link_libraries(debuggee_qlistcontainer Qt5::Core)
 
 add_debuggable_executable(debuggee_qmapint SRCS qmapint.cpp)
