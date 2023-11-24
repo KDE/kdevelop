@@ -58,7 +58,6 @@
 #include <project/projectmodel.h>
 #include <project/helper.h>
 #include <project/interfaces/iprojectbuilder.h>
-#include <project/projectfiltermanager.h>
 #include <language/codecompletion/codecompletion.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/use.h>
@@ -72,7 +71,6 @@ K_PLUGIN_FACTORY_WITH_JSON(CMakeSupportFactory, "kdevcmakemanager.json", registe
 
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     : KDevelop::AbstractFileManagerPlugin( QStringLiteral("kdevcmakemanager"), parent )
-    , m_filter( new ProjectFilterManager( this ) )
 {
     if (CMake::findExecutable().isEmpty()) {
         setErrorDescription(i18n("Unable to find a CMake executable. Is one installed on the system?"));
@@ -736,11 +734,6 @@ void CMakeManager::projectClosing(IProject* p)
     }
 
     delete m_configureStatusMessages.take(p); // discard the message, because closing its project obsoletes it
-}
-
-ProjectFilterManager* CMakeManager::filterManager() const
-{
-    return m_filter;
 }
 
 void CMakeManager::folderAdded(KDevelop::ProjectFolderItem* folder)

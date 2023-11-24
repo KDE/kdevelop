@@ -38,8 +38,6 @@ namespace KDevelop
     class ProjectBaseItem;
     class ProjectFileItem;
     class ProjectTargetItem;
-    class ProjectFilterManager;
-    class IProjectFilter;
     class ParseJob;
     class ContextMenuExtension;
     class Context;
@@ -98,8 +96,6 @@ public:
     KDevelop::ICodeHighlighting* codeHighlighting() const override;
     QPair<QWidget*, KTextEditor::Range> specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
 
-    KDevelop::ProjectFilterManager* filterManager() const;
-
     static KDevelop::IndexedString languageName();
 
     int perProjectConfigPages() const override;
@@ -141,7 +137,6 @@ private:
     // When an error occurs during the initial project import, the project is not inserted into m_projects, but the
     // project's status message must be stored to remove it once obsolete. Thus a separate QHash for the messages.
     QHash<const KDevelop::IProject*, QPointer<Sublime::Message>> m_configureStatusMessages;
-    KDevelop::ProjectFilterManager* m_filter;
     KDevelop::ICodeHighlighting* m_highlight;
 };
 
