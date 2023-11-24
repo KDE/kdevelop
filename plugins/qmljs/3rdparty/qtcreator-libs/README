@@ -1,6 +1,6 @@
 This code here is copied from Qt Creator:
 
-http://qt.gitorious.org/qt-creator/qt-creator
+https://code.qt.io/cgit/qt-creator/qt-creator.git/
 
 This contents of this folder can be found in src/libs/. For license information see
 LICENSE.LGPL and LGPLG_EXCEPTION.TXT.
