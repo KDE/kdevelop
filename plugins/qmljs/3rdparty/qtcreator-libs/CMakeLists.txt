@@ -55,6 +55,8 @@ add_library(kdevqtc-qmlsupport STATIC
     qmljs/qmljsviewercontext.cpp
 )
 
+target_compile_options(kdevqtc-qmlsupport PRIVATE -UQT_DISABLE_DEPRECATED_BEFORE)
+
 if (APPLE) 
     target_sources(kdevqtc-qmlsupport PRIVATE utils/fileutils_mac.mm)
     target_link_libraries(kdevqtc-qmlsupport PRIVATE "-framework Foundation" )

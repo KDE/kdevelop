@@ -136,7 +136,7 @@ add_definitions(
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
 )
 ecm_set_disabled_deprecation_versions(
-    QT 5.9 # QMLJS possibly
+    QT 5.15 # Note: unset for plugins/qmljs/3rdparty/qtcreator-libs
     KF 5.91
     KSERVICE 5.81 # KMimeTypeTrader
     KCOREADDONS 5.85 # KPluginLoader::factory()
