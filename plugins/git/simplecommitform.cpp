@@ -50,7 +50,7 @@ SimpleCommitForm::SimpleCommitForm(QWidget* parent)
 
     QVBoxLayout* _vlayout = new QVBoxLayout(this);
     _vlayout->setSpacing(2);
-    _vlayout->setMargin(0);
+    _vlayout->setContentsMargins(0, 0, 0, 0);
     _vlayout->addWidget(m_inlineError);
     _vlayout->addLayout(_hlayout);
     _vlayout->addWidget(m_messageEdit);
