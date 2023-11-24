@@ -108,26 +108,31 @@ void FindReplaceTest::testIncludeExcludeFilters_data()
 
     const std::vector<Row> dataRows{
         Row{"Files filter",
-        "*.cpp,*.cc,*.h,INSTALL",
-        "",
-        {"A", "cpp", ".cp", "a.c", "INSTAL", "oINSTALL", "d./h", "d.h/c", "u/INSTALL/v", "a.cpp/b.cp", "INSTALL/h", "a.h.c"},
-        {"x/INSTALL", "x/.cpp", ".cc", "x.h", "t/s/r/.h/.cc", "INSTALL.cpp", "x/y/z/a/b/c.h", "y/b.cc", "a.hh.cc", "t.h.cc"}
-    }, Row{"Exclude filter",
-        "*",
-        "/build/,/.git/,~",
-        {"build/C", ".git/config", "~", "a/b/c/build/t/n", "build/me", "a/~/x", "a~b/c", "temp~", "a/p/test~", "a/build/b/c", "d/c/.git/t"},
-        {"d/build", "a/b/.git", "x", "a.h", "a.git", "a/.gitignore/b", ".gitignore", "buildme/now", "to build/.git"}
-    }, Row{"Files and Exclude filters",
-        "*.a,*-b,*se",
-        "/release/,/.*/,bak",
-        {"release/x.a", ".git/q-b", "a-b.c", "bak.a", "abakse", "a/bak-b", "a/x.bak", "u/v/wbakxyz", "a/.g/se", "-/b"},
-        {"a.a", "b-b", "a/release", ".a", "git/q-b", "se", "a/.se", "a/b.c/d-b", "Bse", "u/v/.a-b", "a/b/.ignorse", "ba.k/.a"}
-    }, Row{"Matching case-insensitive",
-        "A*b,*.Cd,*.AUX",
-        "GiT,garble,B.CD",
-        {"acbGArblE.cD", "git/a.b", ".git/x.cd", "b.Cd", "u/v/q", "u/v/bcd", "u/v/b.Cd", "garble.AUX"},
-        {"Ab", "a.b", "u/v/ADB", "gi.cd", ".CD", "az.cd", "u/v/w/agb", "p.AuX", "u/q.aux"}
-    }};
+            "*.cpp,*.cc,*.h,INSTALL",
+            "",
+            {"A", "cpp", ".cp", "a.c", "INSTAL", "oINSTALL", "d./h", "d.h/c", "u/INSTALL/v", "a.cpp/b.cp", "INSTALL/h",
+             "a.h.c"},
+            {"x/INSTALL", "x/.cpp", ".cc", "x.h", "t/s/r/.h/.cc", "INSTALL.cpp", "x/y/z/a/b/c.h", "y/b.cc", "a.hh.cc",
+             "t.h.cc"}},
+        Row{"Exclude filter",
+            "*",
+            "/build/,/.git/,~",
+            {"build/C", ".git/config", "~", "a/b/c/build/t/n", "build/me", "a/~/x", "a~b/c", "temp~", "a/p/test~",
+             "a/build/b/c", "d/c/.git/t"},
+            {"d/build", "a/b/.git", "x", "a.h", "a.git", "a/.gitignore/b", ".gitignore", "buildme/now",
+             "to build/.git"}},
+        Row{"Files and Exclude filters",
+            "*.a,*-b,*se",
+            "/release/,/.*/,bak",
+            {"release/x.a", ".git/q-b", "a-b.c", "bak.a", "abakse", "a/bak-b", "a/x.bak", "u/v/wbakxyz", "a/.g/se",
+             "-/b"},
+            {"a.a", "b-b", "a/release", ".a", "git/q-b", "se", "a/.se", "a/b.c/d-b", "Bse", "u/v/.a-b", "a/b/.ignorse",
+             "ba.k/.a"}},
+        Row{"Matching case-insensitive",
+            "A*b,*.Cd,*.AUX",
+            "GiT,garble,B.CD",
+            {"acbGArblE.cD", "git/a.b", ".git/x.cd", "b.Cd", "u/v/q", "u/v/bcd", "u/v/b.Cd", "garble.AUX"},
+            {"Ab", "a.b", "u/v/ADB", "gi.cd", ".CD", "az.cd", "u/v/w/agb", "p.AuX", "u/q.aux"}}};
 
     QTest::addColumn<QString>("files");
     QTest::addColumn<QString>("exclude");
