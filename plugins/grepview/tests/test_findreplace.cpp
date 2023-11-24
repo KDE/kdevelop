@@ -29,7 +29,7 @@
 
 void FindReplaceTest::initTestCase()
 {
-    KDevelop::AutoTestShell::init();
+    KDevelop::AutoTestShell::init({{}}); // do not load plugins at all
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 }
 
