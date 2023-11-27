@@ -18,7 +18,7 @@ public:
      * @param[in] depth Depth for the search. Possible values are -1 (recursive), 0 (no recursion), or integers
      *                  from 1 on indicating the level of subfolders allowed in the recursion.
      * @param[in] patterns Space-separated list of wildcard patterns to search for
-     * @param[in] exclusions Space-separated list of wildcard patterns to exclude. Matches the whole path.
+     * @param[in] exclusions Space-separated list of wildcard patterns to exclude.
      * @param[in] onlyProject Whether the search should only consider project files.
      */
     GrepFindFilesThread(QObject *parent, const QList<QUrl> &startDirs, int depth,

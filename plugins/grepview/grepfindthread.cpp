@@ -80,6 +80,21 @@ bool isInDirectory(const QString& filePath, const QString& dirPath, int maxDepth
     return false;
 }
 
+/**
+ * Returns a slash plus the path to @p filePath relative to its parent directory @p parentDirectoryPath.
+ * @param filePath the path to a file.
+ * @param parentDirectoryPath the path to a parent directory of @p filePath without a trailing slash
+ *                            (an empty string is the root directory path).
+ */
+QString removeDirectoryPrefix(QString filePath, const QString& parentDirectoryPath)
+{
+    Q_ASSERT(filePath.startsWith(parentDirectoryPath));
+    Q_ASSERT(filePath.size() > parentDirectoryPath.size());
+    Q_ASSERT(filePath.at(parentDirectoryPath.size()) == QLatin1Char{'/'});
+    filePath.remove(0, parentDirectoryPath.size());
+    return filePath;
+}
+
 class FileFinder
 {
 public:
@@ -100,11 +115,19 @@ public:
     void findFiles(const QString& dirPath, int depth, QList<QUrl>& results);
 
 private:
-    void findFilesCanonical(const QString& canonicalDirPath, int depth, QList<QUrl>& results);
+    void findFilesCanonical(const QString& canonicalDirPath, const QString& pathRelativeToSearchLocation, int depth,
+                            QList<QUrl>& results);
 
     bool shouldAbort() const { return m_abort.load(std::memory_order_relaxed); }
 
     const QStringList& m_include;
+    /**
+     * @note Matching an absolute path against the Exclude filter excludes the entire current search
+     * location if it happens to be within a higher-level directory, whose name matches the Exclude filter.
+     * Therefore, paths relative to current search location are matched against the Exclude filter.
+     * In order to match Exclude patterns such as /build/ and /.git/ all such relative paths must
+     * start with a slash, and relative paths to directories must also end with a slash.
+     */
     const QStringList& m_exclude;
     const std::atomic<bool>& m_abort;
 };
@@ -113,8 +136,8 @@ void FileFinder::getProjectFiles(const QSet<IndexedString>& projectFileSet,
                                  const QUrl& dir, int depth, QList<QUrl>& results)
 {
     // Cannot use dir.adjusted(QUrl::StripTrailingSlash) here, because it does not
-    // remove the single slash of the root directory. isInDirectory() requires
-    // the empty-string representation of the root directory.
+    // remove the single slash of the root directory. Both isInDirectory() and
+    // removeDirectoryPrefix() require the empty-string representation of the root directory.
     const auto dirPath = removeTrailingSlashes(dir.path());
 
     for (const IndexedString& item : projectFileSet) {
@@ -136,7 +159,12 @@ void FileFinder::getProjectFiles(const QSet<IndexedString>& projectFileSet,
             continue;
         }
 
-        if (QDir::match(m_include, url.fileName()) && !WildcardHelpers::match(m_exclude, url.toLocalFile())) {
+        if (!QDir::match(m_include, url.fileName())) {
+            continue;
+        }
+
+        const auto relativeFilePath = removeDirectoryPrefix(std::move(urlPath), dirPath);
+        if (!WildcardHelpers::match(m_exclude, relativeFilePath)) {
             results.push_back(std::move(url));
         }
     }
@@ -147,7 +175,7 @@ void FileFinder::findFiles(const QString& dirPath, int depth, QList<QUrl>& resul
     const QFileInfo info(dirPath);
     const auto canonicalFilePath = info.canonicalFilePath();
     if (info.isDir()) {
-        findFilesCanonical(canonicalFilePath, depth, results);
+        findFilesCanonical(canonicalFilePath, QStringLiteral("/"), depth, results);
         return;
     }
 
@@ -159,13 +187,19 @@ void FileFinder::findFiles(const QString& dirPath, int depth, QList<QUrl>& resul
     }
 }
 
-void FileFinder::findFilesCanonical(const QString& canonicalDirPath, int depth, QList<QUrl>& results)
+void FileFinder::findFilesCanonical(const QString& canonicalDirPath, const QString& pathRelativeToSearchLocation,
+                                    int depth, QList<QUrl>& results)
 {
+    constexpr QLatin1Char slash{'/'};
     constexpr QDir::Filters entryFilter = QDir::NoSymLinks | QDir::NoDotAndDotDot | QDir::Readable | QDir::Hidden;
+
+    Q_ASSERT(pathRelativeToSearchLocation.startsWith(slash));
+    Q_ASSERT(pathRelativeToSearchLocation.endsWith(slash));
 
     for (QDirIterator it(canonicalDirPath, m_include, QDir::Files | entryFilter); it.hasNext();) {
         const auto filePath = it.next();
-        if (!WildcardHelpers::match(m_exclude, filePath)) {
+        const QString relativeFilePath = pathRelativeToSearchLocation + it.fileName();
+        if (!WildcardHelpers::match(m_exclude, relativeFilePath)) {
             results.push_back(QUrl::fromLocalFile(filePath));
         }
     }
@@ -181,7 +215,10 @@ void FileFinder::findFilesCanonical(const QString& canonicalDirPath, int depth, 
                 break;
             }
             const auto dirPath = it.next();
-            findFilesCanonical(dirPath, depth, results);
+            const QString relativeDirPath = pathRelativeToSearchLocation + it.fileName() + slash;
+            if (!WildcardHelpers::match(m_exclude, relativeDirPath)) {
+                findFilesCanonical(dirPath, relativeDirPath, depth, results);
+            }
         }
     }
 }
