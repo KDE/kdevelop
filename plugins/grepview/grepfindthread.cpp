@@ -90,6 +90,11 @@ public:
         , m_abort{abort}
     {}
 
+    // dir or dirPath argument can be a path to a file, not a directory. In this case neither
+    // depth nor Files filter nor Exclude filter prevent searching within the file search location.
+    // This allows the user to specify the list of files to search in
+    // without bothering to adjust filters to match all file paths in the list.
+
     void getProjectFiles(const QSet<IndexedString>& projectFileSet,
                          const QUrl& dir, int depth, QList<QUrl>& results);
     void findFiles(const QString& dirPath, int depth, QList<QUrl>& results);
@@ -121,9 +126,16 @@ void FileFinder::getProjectFiles(const QSet<IndexedString>& projectFileSet,
         // both belong to a common project (see getProjectFileSets() below).
         auto urlPath = url.path();
 
-        if (urlPath != dirPath && !isInDirectory(urlPath, dirPath, depth)) {
+        if (urlPath == dirPath) {
+            // Do not match against filters, because this particular URL is a search location.
+            results.push_back(std::move(url));
             continue;
         }
+
+        if (!isInDirectory(urlPath, dirPath, depth)) {
+            continue;
+        }
+
         if (QDir::match(m_include, url.fileName()) && !WildcardHelpers::match(m_exclude, url.toLocalFile())) {
             results.push_back(std::move(url));
         }
@@ -141,7 +153,8 @@ void FileFinder::findFiles(const QString& dirPath, int depth, QList<QUrl>& resul
 
     // Search in the single file at canonicalFilePath.
     // canonicalFilePath is empty if the file does not exist.
-    if (!canonicalFilePath.isEmpty() && !WildcardHelpers::match(m_exclude, canonicalFilePath)) {
+    if (!canonicalFilePath.isEmpty()) {
+        // Do not match against filters, because this particular file path is a search location.
         results.push_back(QUrl::fromLocalFile(canonicalFilePath));
     }
 }
