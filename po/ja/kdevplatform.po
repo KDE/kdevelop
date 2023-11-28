@@ -6418,9 +6418,3 @@ msgstr "前のリビジョンとの差分"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "リビジョン間の差分"
-
-#, fuzzy
-#~| msgid "Loading %1"
-#~ msgctxt "@info:progress"
-#~ msgid "Running %1"
-#~ msgstr "%1 をロード中"
