@@ -28,9 +28,23 @@
 #include "../grepviewplugin.h"
 #include "../grepoutputmodel.h"
 
+#include <iterator>
 #include <vector>
 
 using namespace KDevelop;
+
+namespace {
+GrepJobSettings verbatimGrepJobSettings()
+{
+    GrepJobSettings settings;
+    settings.caseSensitive = true;
+    settings.regexp = false;
+    const QString verbatimTemplate = "%s";
+    settings.searchTemplate = verbatimTemplate;
+    settings.replacementTemplate = verbatimTemplate;
+    return settings;
+}
+}
 
 void FindReplaceTest::initTestCase()
 {
@@ -109,6 +123,96 @@ void FindReplaceTest::testFind()
     // check that file has not been altered by grepFile
     QVERIFY(file.open());
     QCOMPARE(QString(file.readAll()), subject);
+}
+
+void FindReplaceTest::testSingleFileAsDirectoryChoice()
+{
+    QTemporaryDir tmpDir;
+    QVERIFY2(tmpDir.isValid(), qPrintable("couldn't create temporary directory: " + tmpDir.errorString()));
+
+    const QByteArray fileContents = "A";
+    QString filePath = "testfile.cpp";
+
+    using FilesystemHelpers::makeAbsoluteCreateAndWrite;
+    QString errorPath = makeAbsoluteCreateAndWrite(tmpDir.path(), filePath, fileContents);
+    QVERIFY2(errorPath.isEmpty(), qPrintable("couldn't create or write to temporary file or directory " + errorPath));
+
+    const QString siblingDirPath = tmpDir.filePath("dir");
+    QVERIFY(QDir{}.mkpath(siblingDirPath));
+
+    const QString siblingDirSameStartPath = tmpDir.filePath("test");
+    QVERIFY(filePath.startsWith(siblingDirSameStartPath));
+    QVERIFY(QDir{}.mkpath(siblingDirSameStartPath));
+
+    GrepJobSettings settings = verbatimGrepJobSettings();
+    settings.pattern = fileContents;
+
+    const auto test = [filePath, &settings](const QList<QUrl>& directoryChoice, bool expectMatch) {
+        GrepJob job;
+        GrepOutputModel model;
+        job.setOutputModel(&model);
+        job.setDirectoryChoice(directoryChoice);
+        job.setSettings(settings);
+
+        QVERIFY(job.exec());
+
+        const auto index = model.nextItemIndex(QModelIndex{});
+
+        if (!expectMatch) {
+            QVERIFY(!index.isValid());
+            return;
+        }
+
+        QVERIFY(index.isValid());
+        auto* const item = dynamic_cast<const GrepOutputItem*>(model.itemFromIndex(index));
+        QVERIFY(item);
+        QVERIFY(item->isText());
+        QCOMPARE(item->filename(), filePath);
+
+        const auto nextIndex = model.nextItemIndex(index);
+        QVERIFY2(!nextIndex.isValid() || nextIndex == index, "unexpected second matched file");
+    };
+
+    const QString nonexistentFilePath = "/tmp/nonexistent/file/path.kdevelop";
+    QVERIFY2(!QFileInfo::exists(nonexistentFilePath), "what a strange file path to exist...");
+    // Test searching nowhere, in a nonexistent file and in empty directories in addition to
+    // the file set up above. The search locations, where nothing can be found, are
+    // unrelated to the main test, but do not complicate this test function much either.
+    const QList<QUrl> directoryChoices[] = {{},
+                                            {QUrl::fromLocalFile(nonexistentFilePath)},
+                                            {QUrl::fromLocalFile(siblingDirPath)},
+                                            {QUrl::fromLocalFile(siblingDirSameStartPath)},
+                                            {QUrl::fromLocalFile(filePath)}};
+
+    varyProjectFilesOnly(settings, tmpDir.path(), [this, &settings, &directoryChoices, test] {
+        if (settings.projectFilesOnly) {
+            for (const int i : {2, 3, 4}) {
+                QVERIFY(m_projectController->findProjectForUrl(directoryChoices[i].constFirst()));
+            }
+        }
+
+        for (const auto& directoryChoice : directoryChoices) {
+            qDebug() << "\tsearch locations:" << directoryChoice;
+            const bool expectMatch = &directoryChoice == &*std::rbegin(directoryChoices);
+            for (int depth = -1; depth <= 2; ++depth) {
+                // Depth makes no difference to matching a file path search location.
+                qDebug("\t\tdepth=%d", depth);
+                settings.depth = depth;
+                for (const auto files : {"*", "*.nonmatching"}) {
+                    // A file path search location is not matched against the Files filter.
+                    qDebug("\t\t\tFiles filter: \"%s\"", files);
+                    settings.files = files;
+                    for (const auto exclude : {"", "/"}) {
+                        // A file path search location is not matched against the Exclude filter.
+                        qDebug("\t\t\t\tExclude filter: \"%s\"", exclude);
+                        settings.exclude = exclude;
+
+                        test(directoryChoice, expectMatch);
+                    }
+                }
+            }
+        }
+    });
 }
 
 void FindReplaceTest::testIncludeExcludeFilters_data()
@@ -207,14 +311,9 @@ void FindReplaceTest::testIncludeExcludeFilters()
     }
     QVERIFY2(errorPath.isEmpty(), qPrintable("couldn't create or write to temporary file or directory " + errorPath));
 
-    GrepJobSettings settings;
-    settings.caseSensitive = true;
-    settings.regexp = false;
+    GrepJobSettings settings = verbatimGrepJobSettings();
     settings.depth = depth;
     settings.pattern = commonFileContents;
-    const QString verbatimTemplate = "%s";
-    settings.searchTemplate = verbatimTemplate;
-    settings.replacementTemplate = verbatimTemplate;
     settings.files = files;
     settings.exclude = exclude;
 
@@ -253,18 +352,9 @@ void FindReplaceTest::testIncludeExcludeFilters()
                  qPrintable("these files should have been matched, but weren't: " + pathsToMatch.join("; ")));
     };
 
-    for (const bool projectFilesOnly : {false, true}) {
-        qDebug() << "limit to project files:" << projectFilesOnly;
-        settings.projectFilesOnly = projectFilesOnly;
-
-        if (projectFilesOnly) {
-            addTestProjectFromFileSystem(tmpDir.path());
-        }
-
+    varyProjectFilesOnly(settings, tmpDir.path(), [&matchedPaths, test] {
         test(matchedPaths);
-
-        m_projectController->closeAllProjects();
-    }
+    });
 }
 
 void FindReplaceTest::testReplace_data()
@@ -372,6 +462,23 @@ void FindReplaceTest::addTestProjectFromFileSystem(const QString& path)
     auto* const project = new TestProject(Path{path});
     TestProjectUtils::addChildrenFromFileSystem(project->projectItem());
     m_projectController->addProject(project);
+}
+
+template<typename Test>
+void FindReplaceTest::varyProjectFilesOnly(GrepJobSettings& settings, const QString& projectPath, Test testToRun)
+{
+    for (const bool projectFilesOnly : {false, true}) {
+        qDebug() << "limit to project files:" << projectFilesOnly;
+        settings.projectFilesOnly = projectFilesOnly;
+
+        if (projectFilesOnly) {
+            addTestProjectFromFileSystem(projectPath);
+        }
+
+        testToRun();
+
+        m_projectController->closeAllProjects();
+    }
 }
 
 QTEST_MAIN(FindReplaceTest)

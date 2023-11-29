@@ -14,6 +14,8 @@
 #include <QMetaType>
 #include <QPair>
 
+struct GrepJobSettings;
+
 namespace KDevelop
 {
 class TestCore;
@@ -48,6 +50,8 @@ private Q_SLOTS:
     void testFind();
     void testFind_data();
 
+    void testSingleFileAsDirectoryChoice();
+
     void testIncludeExcludeFilters();
     void testIncludeExcludeFilters_data();
 
@@ -56,6 +60,8 @@ private Q_SLOTS:
 
 private:
     void addTestProjectFromFileSystem(const QString& path);
+    template<typename Test>
+    void varyProjectFilesOnly(GrepJobSettings& settings, const QString& projectPath, Test testToRun);
 
     KDevelop::TestProjectController* m_projectController;
 };
