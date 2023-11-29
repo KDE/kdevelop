@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-07 01:14+0000\n"
-"PO-Revision-Date: 2023-11-28 18:39+0900\n"
+"PO-Revision-Date: 2023-11-29 17:05+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -404,7 +404,7 @@ msgstr "除錯器變數"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "點擊時自動調整欄位大小"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -486,14 +486,14 @@ msgstr "尋找："
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to next match"
-msgstr ""
+msgstr "跳至下一個符合"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
 #: documentation/documentationfindwidget.ui:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to previous match"
-msgstr ""
+msgstr "跳至上一個符合"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
 #: documentation/documentationfindwidget.ui:82
@@ -538,7 +538,7 @@ msgstr "搜尋..."
 #, kde-format
 msgctxt "@action"
 msgid "Find in Text..."
-msgstr ""
+msgstr "在文本中尋找..."
 
 #: documentation/documentationview.cpp:112
 #, kde-format
@@ -2422,8 +2422,7 @@ msgid "Name"
 msgstr "名稱"
 
 #: shell/launchconfigurationdialog.cpp:714
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt ""
 "@title:column Type of the Launch Configurations (i.e. Python Application, C+"
 "+ Application)"
@@ -3698,8 +3697,7 @@ msgid "Identity"
 msgstr "身份"
 
 #: shell/sessioncontroller.cpp:589
-#, fuzzy, kde-format
-#| msgid "Contents"
+#, kde-format
 msgctxt "@title:column"
 msgid "Contents"
 msgstr "內容"
@@ -3712,8 +3710,7 @@ msgid "State"
 msgstr "狀態"
 
 #: shell/sessioncontroller.cpp:591
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "名稱"
@@ -3952,15 +3949,13 @@ msgid "%1 (default profile)"
 msgstr "使用預設設定檔（目前為：%1）"
 
 #: shell/settings/environmentprofilemodel.cpp:91
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@title:column"
 msgid "Variable"
 msgstr "變數"
 
 #: shell/settings/environmentprofilemodel.cpp:93
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "值"
@@ -5956,29 +5951,25 @@ msgid "Commit message:"
 msgstr "提交訊息："
 
 #: vcs/models/vcseventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Revision"
-msgstr "版本"
+msgstr "修訂版"
 
 #: vcs/models/vcseventmodel.cpp:90
-#, fuzzy, kde-format
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:column"
 msgid "Message"
 msgstr "訊息"
 
 #: vcs/models/vcseventmodel.cpp:92
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgctxt "@title:column"
 msgid "Author"
 msgstr "作者"
 
 #: vcs/models/vcseventmodel.cpp:94
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgctxt "@title:column"
 msgid "Date"
 msgstr "日期"
@@ -6036,15 +6027,13 @@ msgid "?"
 msgstr "?"
 
 #: vcs/models/vcsfilechangesmodel.cpp:131
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@title:column"
 msgid "Filename"
 msgstr "檔案名稱"
 
 #: vcs/models/vcsfilechangesmodel.cpp:132
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "狀態"
@@ -6091,32 +6080,28 @@ msgid ", "
 msgstr ", "
 
 #: vcs/models/vcsitemeventmodel.cpp:85
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Location"
 msgstr "位置"
 
 #: vcs/models/vcsitemeventmodel.cpp:86
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@title:column"
 msgid "Actions"
 msgstr "動作"
 
 #: vcs/models/vcsitemeventmodel.cpp:87
-#, fuzzy, kde-format
-#| msgid "Source Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Location"
 msgstr "源碼位置"
 
 #: vcs/models/vcsitemeventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Source Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Revision"
-msgstr "源碼版本"
+msgstr "源碼修訂版"
 
 #: vcs/vcspluginhelper.cpp:84
 #, fuzzy, kde-format
