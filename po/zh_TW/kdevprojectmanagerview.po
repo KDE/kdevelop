@@ -5,19 +5,20 @@
 # Frank Weng (a.k.a. Franklin) <franklin@goodhorse.idv.tw>, 2010.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2010, 2012.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2011, 2013, 2014.
+# SPDX-FileCopyrightText: 2023 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2014-04-23 15:01+0800\n"
-"Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
-"Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
+"PO-Revision-Date: 2023-11-28 18:24+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: cutcopypastehelpers.cpp:78
@@ -33,11 +34,10 @@ msgid_plural "Copy %1 items into %2"
 msgstr[0] ""
 
 #: cutcopypastehelpers.cpp:84
-#, fuzzy, kde-format
-#| msgid "Delete Files"
+#, kde-format
 msgid "Delete %1 item"
 msgid_plural "Delete %1 items"
-msgstr[0] "刪除檔案"
+msgstr[0] "刪除 %1 個項目"
 
 #: cutcopypastehelpers.cpp:93
 #, kde-format
@@ -50,10 +50,9 @@ msgid "Copy item %1 into %2"
 msgstr ""
 
 #: cutcopypastehelpers.cpp:99
-#, fuzzy, kde-format
-#| msgid "Delete Files"
+#, kde-format
 msgid "Delete item %1"
-msgstr "刪除檔案"
+msgstr "刪除項目 %1"
 
 #: cutcopypastehelpers.cpp:108
 #, kde-format
@@ -92,200 +91,173 @@ msgid "Main Toolbar"
 msgstr ""
 
 #: projectbuildsetwidget.cpp:123
-#, fuzzy, kde-format
-#| msgid "Build Set"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Build Set"
 msgstr "編譯集"
 
 #: projectbuildsetwidget.cpp:124
-#, fuzzy, kde-format
-#| msgid "Remove From Build Set"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from Build Set"
 msgstr "從編譯集中移除"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
 #: projectbuildsetwidget.ui:35
-#, fuzzy, kde-format
-#| msgid "Move the selected items to the top"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items to the top"
 msgstr "將已選取的項目移到頂端"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
 #: projectbuildsetwidget.ui:67
-#, fuzzy, kde-format
-#| msgid "Move the selected items up"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items up"
 msgstr "將已選取的項目上移"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
 #: projectbuildsetwidget.ui:83
-#, fuzzy, kde-format
-#| msgid "Move the selected item down"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected item down"
 msgstr "將已選取的項目下移"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
 #: projectbuildsetwidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Move the selected items to the bottom"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items to the bottom"
 msgstr "將已選取的項目移到底端"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #: projectbuildsetwidget.ui:177
-#, fuzzy, kde-format
-#| msgid "These items will be built in the order they are listed."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "These items will be built in the order they are listed."
 msgstr "這些項目將會依序編譯。"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectbuildsetwidget.ui:180
-#, fuzzy, kde-format
-#| msgid "Build Sequence"
+#, kde-format
 msgctxt "@title"
 msgid "Build Sequence"
 msgstr "編譯序列"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
 #: projectbuildsetwidget.ui:200
-#, fuzzy, kde-format
-#| msgid "Add currently selected items from project tree view to buildset."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add currently selected items from project tree view to the build set."
 msgstr "將專案樹狀圖中目前選取的項目加入編譯集中。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
 #: projectbuildsetwidget.ui:216
-#, fuzzy, kde-format
-#| msgid "Remove currently selected item from buildset."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
 msgstr "將目前選取的項目從編譯集中移除。"
 
 #: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:191
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@title:window"
 msgid "Projects"
 msgstr "專案"
 
 #: projectmanagerview.cpp:91
-#, fuzzy, kde-format
-#| msgid "Locate Current Document"
+#, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "定位目前的文件"
 
 #: projectmanagerview.cpp:92
-#, fuzzy, kde-format
-#| msgid "Locates the current document in the project tree and selects it."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Locates the current document in the project tree and selects it."
-msgstr "在專案樹狀圖中找到目前的文件，並選取它"
+msgstr "在專案樹狀圖中找到目前的文件，並選取它。"
 
 #: projectmanagerview.cpp:98
-#, fuzzy, kde-format
-#| msgid "Locate Current Document"
+#, kde-format
 msgctxt "@action"
 msgid "Auto-Select Current Document"
-msgstr "定位目前的文件"
+msgstr "自動選取目前的文件"
 
 #: projectmanagerview.cpp:99
-#, fuzzy, kde-format
-#| msgid "Locates the current document in the project tree and selects it."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
-msgstr "在專案樹狀圖中找到目前的文件，並選取它"
+msgstr "在專案樹狀圖中自動選取目前的文件。"
 
 #: projectmanagerview.cpp:121
-#, fuzzy, kde-format
-#| msgid "&Add to Target"
+#, kde-format
 msgctxt "@action"
 msgid "Show Build Targets"
-msgstr "新增到目標(&A)"
+msgstr "顯示編譯目標"
 
 #. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
 #: projectmanagerview.ui:33
-#, fuzzy, kde-format
-#| msgid "Project Overview"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Project Overview"
 msgstr "專案概觀"
 
 #. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
 #: projectmanagerview.ui:53
-#, fuzzy, kde-format
-#| msgid "Build Items:"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Build Items:"
 msgstr "編譯項目："
 
 #: projectmanagerviewplugin.cpp:143
-#, fuzzy, kde-format
-#| msgid "Build all Projects"
+#, kde-format
 msgctxt "@action"
 msgid "Build All Projects"
 msgstr "編譯所有的專案"
 
 #: projectmanagerviewplugin.cpp:148
-#, fuzzy, kde-format
-#| msgid "Build Selection"
+#, kde-format
 msgctxt "@action"
 msgid "Build Selection"
 msgstr "編譯選取的項目"
 
 #: projectmanagerviewplugin.cpp:149
-#, fuzzy, kde-format
-#| msgid "Build"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Build"
 msgstr "編譯"
 
 #: projectmanagerviewplugin.cpp:155
-#, fuzzy, kde-format
-#| msgid "Install Selection"
+#, kde-format
 msgctxt "@action"
 msgid "Install Selection"
 msgstr "安裝選取的項目"
 
 #: projectmanagerviewplugin.cpp:156
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Install"
 msgstr "安裝"
 
 #: projectmanagerviewplugin.cpp:162
-#, fuzzy, kde-format
-#| msgid "Clean Selection"
+#, kde-format
 msgctxt "@action"
 msgid "Clean Selection"
 msgstr "清除選取的項目"
 
 #: projectmanagerviewplugin.cpp:163
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Clean"
 msgstr "清除"
 
 #: projectmanagerviewplugin.cpp:168
-#, fuzzy, kde-format
-#| msgid "Configure Selection"
+#, kde-format
 msgctxt "@action"
 msgid "Configure Selection"
 msgstr "設定選取的項目"
 
 #: projectmanagerviewplugin.cpp:170
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Configure"
 msgstr "設定"
@@ -305,97 +277,83 @@ msgid "Prune"
 msgstr "移除"
 
 #: projectmanagerviewplugin.cpp:282
-#, fuzzy, kde-format
-#| msgid "Create File"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Create &File..."
-msgstr "建立檔案"
+msgstr "建立檔案(&F)…"
 
 #: projectmanagerviewplugin.cpp:288
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
-msgstr "建立資料夾"
+msgstr "建立資料夾(&F)…"
 
 #: projectmanagerviewplugin.cpp:295
-#, fuzzy, kde-format
-#| msgid "Build"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Build"
-msgstr "編譯"
+msgstr "編譯(&B)"
 
 #: projectmanagerviewplugin.cpp:299
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Install"
-msgstr "安裝"
+msgstr "安裝(&I)"
 
 #: projectmanagerviewplugin.cpp:303
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Clean"
-msgstr "清除"
+msgstr "清除(&C)"
 
 #: projectmanagerviewplugin.cpp:307
-#, fuzzy, kde-format
-#| msgid "Add to Build Set"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
-msgstr "新增到編譯集"
+msgstr "新增到編譯集(&A)"
 
 #: projectmanagerviewplugin.cpp:314
-#, fuzzy, kde-format
-#| msgid "Close Project"
-#| msgid_plural "Close Projects"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "C&lose Project"
 msgid_plural "Close Projects"
-msgstr[0] "關閉專案"
+msgstr[0] "關閉專案(&L)"
 
 #: projectmanagerviewplugin.cpp:320
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Reload"
-msgstr "重新載入"
+msgstr "重新載入(&R)"
 
 #: projectmanagerviewplugin.cpp:351
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remo&ve"
-msgstr "移除"
+msgstr "移除(&V)"
 
 #: projectmanagerviewplugin.cpp:355
-#, fuzzy, kde-format
-#| msgid "Rename..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Re&name..."
-msgstr "重新命名..."
+msgstr "重新命名(&N)..."
 
 #: projectmanagerviewplugin.cpp:361
-#, fuzzy, kde-format
-#| msgid "Remove From Target"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from &Target"
-msgstr "從目標移除"
+msgstr "從目標移除(&T)"
 
 #: projectmanagerviewplugin.cpp:548
-#, fuzzy, kde-format
-#| msgid "Create Folder in %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create Folder in %1"
 msgstr "在 %1 建立資料夾"
 
 #: projectmanagerviewplugin.cpp:549
-#, fuzzy, kde-format
-#| msgid "Folder Name"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Folder name:"
-msgstr "資料夾名稱"
+msgstr "資料夾名稱："
 
 #: projectmanagerviewplugin.cpp:600
 #, kde-format
@@ -404,22 +362,19 @@ msgid_plural "Do you really want to delete these %1 items?"
 msgstr[0] "您真的要刪除這 %1 個項目嗎？"
 
 #: projectmanagerviewplugin.cpp:602
-#, fuzzy, kde-format
-#| msgid "Delete Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Files"
 msgstr "刪除檔案"
 
 #: projectmanagerviewplugin.cpp:655
-#, fuzzy, kde-format
-#| msgid "Rename..."
+#, kde-format
 msgctxt "@window:title"
 msgid "Rename"
-msgstr "重新命名..."
+msgstr "重新命名"
 
 #: projectmanagerviewplugin.cpp:656
-#, fuzzy, kde-format
-#| msgid "New name for '%1':"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "New name for '%1':"
 msgstr "%1 的新名稱："
@@ -437,49 +392,43 @@ msgstr "無法重新命名 %1。"
 #: projectmanagerviewplugin.cpp:674
 #, kde-format
 msgid "'%1' is not a valid file name"
-msgstr "%1 不是合法的檔名"
+msgstr "%1 不是有效的檔名"
 
 #: projectmanagerviewplugin.cpp:688
-#, fuzzy, kde-format
-#| msgid "Create File in %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create File in %1"
 msgstr "在 %1 建立檔案"
 
 #: projectmanagerviewplugin.cpp:688
-#, fuzzy, kde-format
-#| msgid "File name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "File name:"
 msgstr "檔案名稱："
 
 #: projecttreeview.cpp:151
-#, fuzzy, kde-format
-#| msgid "&Move Here"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Move Here"
-msgstr "移到這裡(&M)"
+msgstr "移動到這裡(&M)"
 
 #: projecttreeview.cpp:157
-#, fuzzy, kde-format
-#| msgid "&Copy Here"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
 msgstr "複製到這裡(&C)"
 
 #: projecttreeview.cpp:163 projecttreeview.cpp:224
-#, fuzzy, kde-format
-#| msgid "C&ancel"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
 msgstr "取消(&A)"
 
 #: projecttreeview.cpp:218
-#, fuzzy, kde-format
-#| msgid "Add to Build Set"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
-msgstr "新增到編譯集"
+msgstr "新增到編譯目標(&A)"
 
 #: projecttreeview.cpp:348
 #, kde-format
@@ -488,8 +437,7 @@ msgid "Analyze with"
 msgstr ""
 
 #: projecttreeview.cpp:364
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."
 msgstr "開啟設定..."
