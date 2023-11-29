@@ -159,7 +159,8 @@ void FileFinder::getProjectFiles(const QSet<IndexedString>& projectFileSet,
             continue;
         }
 
-        if (!QDir::match(m_include, url.fileName())) {
+        const auto urlFileName = urlPath.mid(urlPath.lastIndexOf(QLatin1Char{'/'}) + 1);
+        if (!QDir::match(m_include, urlFileName)) {
             continue;
         }
 
