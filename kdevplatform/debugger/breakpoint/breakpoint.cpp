@@ -61,17 +61,17 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
     , m_hitCount(0)
     , m_ignoreHits(0)
 {
-    if (model) {
-        model->registerBreakpoint(this);
-    }
-
     m_kind = stringToKind(config.readEntry("kind", ""));
     m_enabled = config.readEntry("enabled", false);
     m_url = config.readEntry("url", QUrl());
     m_line = config.readEntry("line", -1);
     m_expression = config.readEntry("expression", QString());
-    setCondition(config.readEntry("condition", ""));
-    setIgnoreHits(config.readEntry("ignoreHits", 0));
+    m_condition = config.readEntry("condition", "");
+    m_ignoreHits = config.readEntry("ignoreHits", 0);
+
+    if (model) {
+        model->registerBreakpoint(this);
+    }
 }
 
 BreakpointModel *Breakpoint::breakpointModel()
