@@ -69,10 +69,24 @@ public:
 
     void setUrl(const QUrl &url);
     QUrl url() const;
-    
+
+    /**
+     * Assign a line number to the breakpoint.
+     */
     void setLine(int line);
+
+    /**
+     * Get the current breakpoint line number.
+     * @note If movingCursor() is non-null, returns the cursor's line number,
+     *       which may be different than savedLine().
+     */
     int line() const;
-    
+
+    /**
+     * Get the breakpoint saved line number.
+     */
+    int savedLine() const;
+
     void setLocation(const QUrl& url, int line);
     QString location();
 
@@ -134,6 +148,7 @@ protected:
     QString m_expression;
     QString m_errorText;
 
+    void saveMovingCursorLine();
     void reportChange(Column c);
 };
 

@@ -13,11 +13,19 @@
 
 #include <KLocalizedString>
 #include <KConfigGroup>
+#include <KTextEditor/Document>
 #include <KTextEditor/MovingCursor>
 
 #include "breakpointmodel.h"
 
 #include <array>
+
+namespace {
+bool isSupportedBreakpointUrl(const QUrl& url)
+{
+    return url.isEmpty() || (!url.isRelative() && !url.fileName().isEmpty());
+}
+} // unnamed namespace
 
 using namespace KDevelop;
 
@@ -87,24 +95,29 @@ bool Breakpoint::setData(int index, const QVariant& value)
         m_enabled = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
     }
 
-    if (index == LocationColumn || index == ConditionColumn)
-    {
+    if (index == LocationColumn) {
         QString s = value.toString();
-        if (index == LocationColumn) {
-            QRegExp rx(QStringLiteral("^(.+):([0-9]+)$"));
-            int idx = rx.indexIn(s);
-            if (m_kind == CodeBreakpoint && idx != -1) {
-                m_url = QUrl::fromLocalFile(rx.cap(1));
-                m_line = rx.cap(2).toInt() - 1;
+        QRegExp rx(QStringLiteral("^(.+):([0-9]+)$"));
+        int idx = rx.indexIn(s);
+        if (m_kind == CodeBreakpoint && idx != -1) {
+            const auto url = QUrl::fromLocalFile(rx.cap(1));
+            const auto line = rx.cap(2).toInt() - 1;
+
+            if (isSupportedBreakpointUrl(url)) {
                 m_expression.clear();
-            } else {
-                m_expression = s;
-                m_url.clear();
-                m_line = -1;
+                setLocation(url, line);
+                return true; // reportChange() is already called by setLocation()
             }
-        } else {
-            m_condition = s;
         }
+        m_expression = s;
+        // disable document line tracking for this breakpoint:
+        setMovingCursor(nullptr);
+        m_url.clear();
+        m_line = -1;
+    }
+
+    if (index == ConditionColumn) {
+        m_condition = value.toString();
     }
 
     reportChange(static_cast<Column>(index));
@@ -172,15 +185,16 @@ QVariant Breakpoint::data(int column, int role) const
     if (column == LocationColumn) {
         if (role == LocationRole || role == Qt::EditRole || role == Qt::ToolTipRole || role == Qt::DisplayRole) {
             QString ret;
-            if (m_kind == CodeBreakpoint && m_line != -1) {
-                if (role == Qt::DisplayRole) {
-                    ret = m_url.fileName();
-                } else {
-                    ret = m_url.toDisplayString(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
-                }
-                ret += QLatin1Char(':') + QString::number(m_line+1);
+            const auto currentLine = line();
+            if (m_kind == CodeBreakpoint && currentLine != -1) {
+                    if (role == Qt::DisplayRole) {
+                        ret = m_url.fileName();
+                    } else {
+                        ret = m_url.toDisplayString(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
+                    }
+                    ret += QLatin1Char(':') + QString::number(currentLine + 1);
             } else {
-                ret = m_expression;
+                    ret = m_expression;
             }
             //FIXME: there should be proper columns for function name and address.
             if (!m_address.isEmpty() && role == Qt::DisplayRole) {
@@ -194,18 +208,19 @@ QVariant Breakpoint::data(int column, int role) const
 }
 
 int Breakpoint::line() const {
+    return m_movingCursor ? m_movingCursor->line() : m_line;
+}
+
+int Breakpoint::savedLine() const
+{
     return m_line;
 }
+
 void Breakpoint::setLine(int line) {
-    Q_ASSERT(m_kind == CodeBreakpoint);
-    m_line = line;
-    reportChange(LocationColumn);
+    setLocation(m_url, line);
 }
 void Breakpoint::setUrl(const QUrl& url) {
-    Q_ASSERT(m_kind == CodeBreakpoint);
-    Q_ASSERT(url.isEmpty() || (!url.isRelative() && !url.fileName().isEmpty()));
-    m_url = url;
-    reportChange(LocationColumn);
+    setLocation(url, line());
 }
 QUrl Breakpoint::url() const {
     return m_url;
@@ -213,7 +228,21 @@ QUrl Breakpoint::url() const {
 void Breakpoint::setLocation(const QUrl& url, int line)
 {
     Q_ASSERT(m_kind == CodeBreakpoint);
-    Q_ASSERT(url.isEmpty() || (!url.isRelative() && !url.fileName().isEmpty()));
+    Q_ASSERT(isSupportedBreakpointUrl(url));
+
+    // FIXME: temporary code.
+    //        Remove the existing moving cursor if the new url or line number would invalidate it.
+    //        This will be soon replaced with a proper moving cursor setup routine.
+    if (m_movingCursor) {
+        const auto* const document = m_movingCursor->document();
+        if (line == -1 || (document && document->url() != url)) {
+            delete m_movingCursor;
+            m_movingCursor = nullptr;
+        } else {
+            m_movingCursor->setLine(line);
+        }
+    }
+
     m_url = url;
     m_line = line;
     reportChange(LocationColumn);
@@ -324,6 +353,12 @@ Breakpoint::BreakpointState Breakpoint::state() const
 QString Breakpoint::errorText() const
 {
     return m_errorText;
+}
+
+void Breakpoint::saveMovingCursorLine()
+{
+    Q_ASSERT(m_movingCursor);
+    m_line = m_movingCursor->line();
 }
 
 void KDevelop::Breakpoint::reportChange(Column c)

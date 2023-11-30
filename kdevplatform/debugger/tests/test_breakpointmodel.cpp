@@ -161,16 +161,21 @@ void TestBreakpointModel::printLines(int from, int count, const IDocument* doc)
 
 /// Verify that the breakpoint is set correctly at the expected line number.
 /// Check success with RETURN_IF_TEST_FAILED() and RETURN_IF_TEST_ABORTED().
-void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedLine, const DocumentMarks& marks)
+void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedLine, const DocumentMarks& marks,
+                                           bool expectFail)
 {
-    QEXPECT_FAIL_ABORT("CodeBreakpoint tracked line number is not updated");
+    if (expectFail) {
+        QEXPECT_FAIL_ABORT("CodeBreakpoint tracked line number is not updated");
+    }
     QCOMPARE(breakpoint->line(), expectedLine);
 
     // To be noted, there is no way to detect if an editor mark is actually
     // associated with a breakpoint instance. Because of this, the tests should
     // alternate using an enabled or disabled breakpoint to detect conflicts.
     const auto mark = marks.constFind(expectedLine);
-    QEXPECT_FAIL_ABORT("CodeBreakpoint mark does not follow the tracking");
+    if (expectFail) {
+        QEXPECT_FAIL_ABORT("CodeBreakpoint mark does not follow the tracking");
+    }
     QVERIFY(mark != marks.cend());
 
     const auto breakpointType = breakpointModel()->breakpointType(breakpoint);
@@ -179,9 +184,9 @@ void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedL
 
 /// Convenience macro for verifyBreakpoint().
 /// The fourth argument is an optional return value on failure.
-#define VERIFY_BREAKPOINT(breakpoint, expectedLine, marks, ...)                                                        \
+#define VERIFY_BREAKPOINT(breakpoint, expectedLine, marks, expectFail, ...)                                            \
     do {                                                                                                               \
-        verifyBreakpoint(breakpoint, expectedLine, marks);                                                             \
+        verifyBreakpoint(breakpoint, expectedLine, marks, expectFail);                                                 \
         RETURN_IF_TEST_FAILED(__VA_ARGS__);                                                                            \
         RETURN_IF_TEST_ABORTED(__VA_ARGS__);                                                                           \
     } while (false)
@@ -241,16 +246,19 @@ TestBreakpointModel::DocumentAndTwoBreakpoints TestBreakpointModel::setupEditAnd
 
     // test.
     doc->textDocument()->insertLine(21, "// Comment A");
-    // FIXME: adding b2 breaks b1 text line tracking.
     auto* const b2 = breakpointModel()->addCodeBreakpoint(url, 23);
     doc->textDocument()->insertLine(21, "// Comment B");
     printLines(21, 4, doc);
 
+    // saved line numbers shall not change until the document is saved.
+    QCOMPARE_RETURN(b1->savedLine(), 21, {});
+    QCOMPARE_RETURN(b2->savedLine(), 23, {});
+
     const auto marks = documentMarks(doc);
     QCOMPARE_RETURN(marks.size(), 2, {});
 
-    VERIFY_BREAKPOINT(b1, 23, marks, {});
-    VERIFY_BREAKPOINT(b2, 24, marks, {});
+    VERIFY_BREAKPOINT(b1, 23, marks, false, {});
+    VERIFY_BREAKPOINT(b2, 24, marks, true, {});
 
     return {url, doc, b1, b2};
 }
@@ -354,8 +362,8 @@ void TestBreakpointModel::testDocumentSave()
     // verify.
     QVERIFY(!b1->movingCursor());
     QVERIFY(!b2->movingCursor());
-    QCOMPARE(b1->line(), 22);
-    QCOMPARE(b2->line(), 24);
+    QCOMPARE(b1->savedLine(), 22);
+    QCOMPARE(b2->savedLine(), 24);
     const auto savedBreakpoints = readBreakpointsFromConfig();
     QCOMPARE(savedBreakpoints.size(), 2);
     QCOMPARE(savedBreakpoints.at(0)->line(), 22);
@@ -383,9 +391,9 @@ void TestBreakpointModel::testDocumentEditAndSave()
     // verify.
     QVERIFY(!b1->movingCursor());
     QVERIFY(!b2->movingCursor());
-    QCOMPARE(b1->line(), 23);
+    QCOMPARE(b1->savedLine(), 23);
     QEXPECT_FAIL("", "CodeBreakpoint b2 tracked line number is not retained", Continue);
-    QCOMPARE(b2->line(), 24);
+    QCOMPARE(b2->savedLine(), 24);
     const auto savedBreakpoints = readBreakpointsFromConfig();
     QCOMPARE(savedBreakpoints.size(), 2);
     QCOMPARE(savedBreakpoints.at(0)->line(), 23);
@@ -411,8 +419,8 @@ void TestBreakpointModel::testDocumentEditAndDiscard()
     // verify.
     QVERIFY(!b1->movingCursor());
     QVERIFY(!b2->movingCursor());
-    QCOMPARE(b1->line(), 21);
-    QCOMPARE(b2->line(), 23);
+    QCOMPARE(b1->savedLine(), 21);
+    QCOMPARE(b2->savedLine(), 23);
     const auto savedBreakpoints = readBreakpointsFromConfig();
     QCOMPARE(savedBreakpoints.size(), 2);
     QCOMPARE(savedBreakpoints.at(0)->line(), 21);

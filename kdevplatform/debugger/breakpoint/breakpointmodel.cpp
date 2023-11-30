@@ -135,11 +135,15 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
                 SLOT(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
     }
 
-    // markChanged() is not triggered for loaded breakpoints, so get them a moving cursor now
+    // Initial setup of moving cursors
     const QUrl docUrl = textDocument->url();
+    const auto docLineCount = textDocument->lines();
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (docUrl == breakpoint->url()) {
-            setupMovingCursor(textDocument, breakpoint);
+            const auto savedLine = breakpoint->savedLine();
+            if (savedLine >= 0 && savedLine < docLineCount) {
+                setupMovingCursor(textDocument, breakpoint);
+            }
         }
     }
 }
@@ -551,15 +555,21 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
     Q_D(BreakpointModel);
 
     IF_DEBUG( qCDebug(DEBUGGER); )
+    // save breakpoints in the given document.
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (breakpoint->movingCursor()) {
             if (breakpoint->movingCursor()->document() != doc->textDocument()) continue;
-            if (breakpoint->movingCursor()->line() == breakpoint->line()) continue;
+            breakpoint->saveMovingCursorLine();
+
+            // FIXME: temporary code to update the breakpoint widget UI.
+            //        marksChanged() slot should update the UI so following is not needed:
             d->dontUpdateMarks = true;
-            breakpoint->setLine(breakpoint->movingCursor()->line());
+            reportChange(breakpoint, Breakpoint::LocationColumn);
             d->dontUpdateMarks = false;
         }
     }
+
+    scheduleSave();
 }
 void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* document)
 {
