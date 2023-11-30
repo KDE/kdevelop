@@ -44,6 +44,8 @@ public:
         LocationRole = Qt::UserRole + 1 ///< Retrieves breakpoint's full path unlike Qt::DisplayRole. Note: it's only applicable to LocationColumn.
     };
 
+    Q_DISABLE_COPY_MOVE(Breakpoint)
+
     Breakpoint(BreakpointModel *model, BreakpointKind kind);
     Breakpoint(BreakpointModel *model, const KConfigGroup& config);
 
