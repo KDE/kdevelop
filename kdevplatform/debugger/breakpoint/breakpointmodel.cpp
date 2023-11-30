@@ -373,14 +373,19 @@ void BreakpointModel::markChanged(
     if (action == KTextEditor::MarkInterface::MarkAdded) {
         Breakpoint *b = breakpoint(document->url(), mark.line);
         if (b) {
-            //there was already a breakpoint, so delete instead of adding
+            // This happens when the user Ctrl+clicks a mark of a breakpoint type
+            // other than BreakpointActive (e.g. BreakpointDisabled) on a text editor border.
+            // Delete the found breakpoint instance.
             removeBreakpoint(b);
             return;
         }
+        // This happens when the user Ctrl+clicks a mark-less place of
+        // a text editor border or adds a new breakpoint via the mark context menu.
         Breakpoint* breakpoint = addCodeBreakpoint(document->url(), mark.line);
         setupMovingCursor(document, breakpoint);
     } else {
-        // Find this breakpoint and delete it
+        // This happens when the user Ctrl+clicks a BreakpointActive mark on a text editor border.
+        // Find this breakpoint instance and delete it.
         Breakpoint *b = breakpoint(document->url(), mark.line);
         if (b) {
             removeBreakpoint(b);

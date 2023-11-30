@@ -150,12 +150,6 @@ private Q_SLOTS:
 
     void slotPartAdded(KParts::Part* part);
 
-    /**
-    * Called by the TextEditor interface when the marks have changed position
-    * because the user has added or removed source.
-    * In here we figure out if we need to reset the breakpoints due to
-    * these source changes.
-    */
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
     void documentSaved(KDevelop::IDocument*);
