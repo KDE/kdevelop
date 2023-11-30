@@ -46,8 +46,7 @@ private:
     using DocumentMarks = QHash<int, KDevelop::BreakpointModel::MarkType>;
     static DocumentMarks documentMarks(const KDevelop::IDocument* doc);
     static void printLines(int from, int count, const KDevelop::IDocument* doc);
-    static void verifyBreakpoint(KDevelop::Breakpoint* breakpoint, int expectedLine, const DocumentMarks& marks,
-                                 bool expectFail);
+    static void verifyBreakpoint(KDevelop::Breakpoint* breakpoint, int expectedLine, const DocumentMarks& marks);
 
     QUrl testFileUrl(const QString& fileName) const;
 

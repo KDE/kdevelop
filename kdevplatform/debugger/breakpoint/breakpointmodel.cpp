@@ -142,7 +142,7 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
         if (docUrl == breakpoint->url()) {
             const auto savedLine = breakpoint->savedLine();
             if (savedLine >= 0 && savedLine < docLineCount) {
-                setupMovingCursor(textDocument, breakpoint);
+                setupMovingCursor(breakpoint, textDocument, savedLine);
             }
         }
     }
@@ -189,8 +189,7 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
             if (b) {
                 removeBreakpoint(b);
             } else {
-                Breakpoint* breakpoint = addCodeBreakpoint(document->url(), mark.line);
-                setupMovingCursor(document, breakpoint);
+                addCodeBreakpoint(document->url(), mark.line);
             }
         } else if (triggeredAction == enableAction) {
             b->setData(Breakpoint::EnableColumn, b->enabled() ? Qt::Unchecked : Qt::Checked);
@@ -387,8 +386,7 @@ void BreakpointModel::markChanged(
         }
         // This happens when the user Ctrl+clicks a mark-less place of
         // a text editor border or adds a new breakpoint via the mark context menu.
-        Breakpoint* breakpoint = addCodeBreakpoint(document->url(), mark.line);
-        setupMovingCursor(document, breakpoint);
+        addCodeBreakpoint(document->url(), mark.line);
     } else {
         // This happens when the user Ctrl+clicks a BreakpointActive mark on a text editor border.
         // Find this breakpoint instance and delete it.
@@ -747,18 +745,24 @@ Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) const
     return (it != d->breakpoints.constEnd()) ? *it : nullptr;
 }
 
-void BreakpointModel::setupMovingCursor(KTextEditor::Document* document, Breakpoint* breakpoint) const
+void BreakpointModel::setupMovingCursor(Breakpoint* breakpoint, KTextEditor::Document* document, int line) const
 {
-    Q_ASSERT(document->url() == breakpoint->url() && breakpoint->movingCursor() == nullptr);
+    Q_ASSERT(breakpoint);
+    Q_ASSERT(document);
+    Q_ASSERT(line >= 0);
+    Q_ASSERT(line < document->lines());
 
     auto* const movingInterface = qobject_cast<KTextEditor::MovingInterface*>(document);
-    if (movingInterface) {
-        auto* const cursor = movingInterface->newMovingCursor(KTextEditor::Cursor(breakpoint->line(), 0));
-        // can't use new signal/slot syntax here, MovingInterface is not a QObject
-        connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
-                this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
-        breakpoint->setMovingCursor(cursor);
+    if (!movingInterface) {
+        breakpoint->setMovingCursor(nullptr);
+        return;
     }
+
+    // can't use new signal/slot syntax here, MovingInterface is not a QObject
+    connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this,
+            SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
+
+    breakpoint->setMovingCursor(movingInterface->newMovingCursor(KTextEditor::Cursor(line, 0)));
 }
 
 #include "moc_breakpointmodel.cpp"

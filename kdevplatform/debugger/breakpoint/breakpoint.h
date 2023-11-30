@@ -150,6 +150,12 @@ protected:
 
     void saveMovingCursorLine();
     void reportChange(Column c);
+    /**
+     * Update or replace the breakpoint's moving cursor for the specified new location.
+     * @note Calls setMovingCursor(nullptr) if the new location is invalid or if
+     *       the breakpoint cannot have a moving cursor.
+     */
+    void updateMovingCursor(const QUrl& url, int line);
 };
 
 }

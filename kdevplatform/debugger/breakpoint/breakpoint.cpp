@@ -9,6 +9,9 @@
 
 #include "breakpoint.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+
 #include <QIcon>
 
 #include <KLocalizedString>
@@ -230,18 +233,7 @@ void Breakpoint::setLocation(const QUrl& url, int line)
     Q_ASSERT(m_kind == CodeBreakpoint);
     Q_ASSERT(isSupportedBreakpointUrl(url));
 
-    // FIXME: temporary code.
-    //        Remove the existing moving cursor if the new url or line number would invalidate it.
-    //        This will be soon replaced with a proper moving cursor setup routine.
-    if (m_movingCursor) {
-        const auto* const document = m_movingCursor->document();
-        if (line == -1 || (document && document->url() != url)) {
-            delete m_movingCursor;
-            m_movingCursor = nullptr;
-        } else {
-            m_movingCursor->setLine(line);
-        }
-    }
+    updateMovingCursor(url, line);
 
     m_url = url;
     m_line = line;
@@ -367,4 +359,41 @@ void KDevelop::Breakpoint::reportChange(Column c)
         return;
 
     breakpointModel()->reportChange(this, c);
+}
+
+void Breakpoint::updateMovingCursor(const QUrl& url, int line)
+{
+    // Can a moving cursor even be enabled?
+    if (!m_model || line < 0 || url.isEmpty()) {
+        setMovingCursor(nullptr);
+        return;
+    }
+
+    if (m_movingCursor) {
+        // Cursor is attached already, is it possible to retain it?
+        const auto* const document = m_movingCursor->document();
+        if (document && document->url() == url) {
+            if (line >= document->lines()) {
+                setMovingCursor(nullptr);
+            } else if (m_movingCursor->line() != line) {
+                m_movingCursor->setLine(line);
+            }
+            return;
+        }
+    }
+
+    // Find the document:
+    const auto* const documentController = ICore::self()->documentController();
+    const auto* const document = documentController ? documentController->documentForUrl(url) : nullptr;
+    if (document) {
+        // Either document changed or the breakpoint has no moving cursor yet.
+        const auto textDocument = document->textDocument();
+        if (textDocument && line < textDocument->lines()) {
+            m_model->setupMovingCursor(this, textDocument, line);
+            return;
+        }
+    }
+
+    // No document was found, or the location is after the last line of the new document.
+    setMovingCursor(nullptr);
 }
