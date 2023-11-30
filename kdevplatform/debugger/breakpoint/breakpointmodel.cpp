@@ -269,6 +269,8 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
         b->m_deleted = true;
         if (controller)
             controller->breakpointAboutToBeDeleted(row);
+
+        b->setMovingCursor(nullptr);
         d->breakpoints.removeAt(row);
         b->m_model = nullptr;
         // To be changed: the controller is currently still responsible for deleting the breakpoint

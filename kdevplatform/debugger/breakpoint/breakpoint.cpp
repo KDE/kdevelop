@@ -13,6 +13,7 @@
 
 #include <KLocalizedString>
 #include <KConfigGroup>
+#include <KTextEditor/MovingCursor>
 
 #include "breakpointmodel.h"
 
@@ -266,6 +267,9 @@ bool Breakpoint::enabled() const
 }
 
 void KDevelop::Breakpoint::setMovingCursor(KTextEditor::MovingCursor* cursor) {
+    if (m_movingCursor && cursor != m_movingCursor) {
+        delete m_movingCursor;
+    }
     m_movingCursor = cursor;
 }
 KTextEditor::MovingCursor* KDevelop::Breakpoint::movingCursor() const {
