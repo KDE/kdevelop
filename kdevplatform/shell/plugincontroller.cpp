@@ -21,7 +21,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KPluginLoader>
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugin.h>
@@ -590,18 +589,17 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     loadOptionalDependencies( info );
 
     // now we can finally load the plugin itself
-    KPluginLoader loader(info.fileName());
-    auto factory = loader.factory();
+    const auto factory = KPluginFactory::loadFactory(info);
     if (!factory) {
         qCWarning(SHELL) << "Can't load plugin" << pluginId
-                   << "because a factory to load the plugin could not be obtained:" << loader.errorString();
+                         << "because a factory to load the plugin could not be obtained:" << factory.errorText;
         return nullptr;
     }
 
     // now create it
-    auto plugin = factory->create<IPlugin>(d->core);
+    auto plugin = factory.plugin->create<IPlugin>(d->core);
     if (!plugin) {
-        if (auto katePlugin = factory->create<KTextEditor::Plugin>(d->core, QVariantList() << info.pluginId())) {
+        if (auto katePlugin = factory.plugin->create<KTextEditor::Plugin>(d->core, QVariantList() << info.pluginId())) {
             plugin = new KTextEditorIntegration::Plugin(katePlugin, d->core);
         } else {
             qCWarning(SHELL) << "Creating plugin" << pluginId << "failed.";
@@ -624,7 +622,8 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     d->loadedPlugins.insert(info, plugin);
     group.writeEntry(info.pluginId() + KEY_Suffix_Enabled(), true); // do the same as KPluginInfo did
     group.sync();
-    qCDebug(SHELL) << "Successfully loaded plugin" << pluginId << "from" << loader.fileName() << "- took:" << timer.elapsed() << "ms";
+    qCDebug(SHELL) << "Successfully loaded plugin" << pluginId << "from" << info.fileName()
+                   << "- took:" << timer.elapsed() << "ms";
     emit pluginLoaded( plugin );
 
     return plugin;
