@@ -15,9 +15,9 @@
 #include <KActionCollection>
 #include <KToggleAction>
 #include <KLocalizedString>
-#include <KMimeTypeTrader>
 
 #include <KParts/Part>
+#include <KParts/PartLoader>
 
 #include <KTextEditor/View>
 #include <KTextEditor/Editor>
@@ -155,9 +155,7 @@ bool PartController::canCreatePart(const QUrl& url)
         return false;
     }
 
-    KService::List offers = KMimeTypeTrader::self()->query(mimeTypeForUrl(url), QStringLiteral("KParts/ReadOnlyPart"));
-
-    return offers.count() > 0;
+    return !KParts::PartLoader::partsForMimeType(mimeTypeForUrl(url)).isEmpty();
 }
 
 KParts::Part* PartController::createPart( const QUrl & url, const QString& preferredPart )
