@@ -10,6 +10,7 @@
 #include <kdevelopsessionswatch.h>
 // KF
 #include <KLocalizedString>
+#include <KRunner/krunner_version.h>
 // Qt
 #include <QDebug>
 #include <QCollator>
@@ -21,8 +22,13 @@ KDevelopSessions::KDevelopSessions(QObject* parent, const KPluginMetaData& metaD
 {
     setObjectName(QStringLiteral("KDevelop Sessions"));
 
+#if KRUNNER_VERSION < QT_VERSION_CHECK(5, 106, 0)
     Plasma::RunnerSyntax s(QStringLiteral(":q:"), i18n("Finds KDevelop sessions matching :q:."));
     s.addExampleQuery(QStringLiteral("kdevelop :q:"));
+#else
+    Plasma::RunnerSyntax s({QStringLiteral(":q:"), QStringLiteral("kdevelop :q:")},
+                           i18n("Finds KDevelop sessions matching :q:."));
+#endif
     addSyntax(s);
 
     addSyntax(Plasma::RunnerSyntax(QStringLiteral("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
