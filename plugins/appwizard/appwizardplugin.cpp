@@ -397,7 +397,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         QDir d( dest.toLocalFile() );
         const auto data = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
         for (const KPluginMetaData& info : data) {
-            QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
+            const auto filter = info.value(QStringLiteral("X-KDevelop-ProjectFilesFilter"), QStringList());
             if (!filter.isEmpty()) {
                 if (!d.entryList(filter).isEmpty()) {
                     manager = info.pluginId();

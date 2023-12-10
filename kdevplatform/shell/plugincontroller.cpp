@@ -175,14 +175,13 @@ public:
         if (plugin.value(KEY_LoadMode()) == KEY_AlwaysOn()) {
             return false;
         }
-        const QStringList interfaces = KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces());
+        const auto interfaces = plugin.value(KEY_Interfaces(), QStringList());
         qCDebug(SHELL) << "checking dependencies:" << interfaces;
         for (auto it = loadedPlugins.constBegin(), end = loadedPlugins.constEnd(); it != end; ++it) {
             const KPluginMetaData& info = it.key();
             if (info.pluginId() != plugin.pluginId()) {
-                const QStringList dependencies =
-                    KPluginMetaData::readStringList(plugin.rawData(), KEY_Required()) +
-                    KPluginMetaData::readStringList(plugin.rawData(), KEY_Optional());
+                const auto dependencies =
+                    plugin.value(KEY_Required(), QStringList()) + plugin.value(KEY_Optional(), QStringList());
                 for (const QString& dep : dependencies) {
                     Dependency dependency(dep);
                     if (!dependency.pluginName.isEmpty() && dependency.pluginName != plugin.pluginId()) {
@@ -222,10 +221,8 @@ public:
         const auto currentPlugins = plugins;
         for (const auto& info : currentPlugins) {
             if ((pluginName.isEmpty() || info.pluginId() == pluginName)
-                && (extension.isEmpty() || KPluginMetaData::readStringList(info.rawData(), KEY_Interfaces()).contains(extension))
-                && constraintsMatch(info, constraints)
-                && isEnabled(info))
-            {
+                && (extension.isEmpty() || info.value(KEY_Interfaces(), QStringList()).contains(extension))
+                && constraintsMatch(info, constraints) && isEnabled(info)) {
                 if (!func(info)) {
                     break;
                 }
@@ -634,11 +631,11 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
 {
     Q_D(const PluginController);
 
-    const QStringList requiredList = KPluginMetaData::readStringList(info.rawData(), KEY_Required());
+    const auto requiredList = info.value(KEY_Required(), QStringList());
     QSet<QString> required(requiredList.begin(), requiredList.end());
     if (!required.isEmpty()) {
-        d->foreachEnabledPlugin([&required] (const KPluginMetaData& plugin) -> bool {
-            const auto interfaces = KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces());
+        d->foreachEnabledPlugin([&required](const KPluginMetaData& plugin) -> bool {
+            const auto interfaces = plugin.value(KEY_Interfaces(), QStringList());
             for (const QString& iface : interfaces) {
                 required.remove(iface);
                 required.remove(iface + QLatin1Char('@') + plugin.pluginId());
@@ -656,8 +653,8 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
 
 void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
 {
-   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Optional());
-   for (const QString& dep : dependencies) {
+    const auto dependencies = info.value(KEY_Optional(), QStringList());
+    for (const QString& dep : dependencies) {
         Dependency dependency(dep);
         if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
             qCDebug(SHELL) << "Couldn't load optional dependency:" << dep << info.pluginId();
@@ -667,8 +664,8 @@ void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
 
 bool PluginController::loadDependencies( const KPluginMetaData& info, QString& failedDependency )
 {
-   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Required());
-   for (const QString& value : dependencies) {
+    const auto dependencies = info.value(KEY_Required(), QStringList());
+    for (const QString& value : dependencies) {
         Dependency dependency(value);
         if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
             failedDependency = value;
