@@ -30,6 +30,7 @@
         <comment xml:lang="tr">NVIDIA CUDA C kaynak kodu</comment>
         <comment xml:lang="uk">початковий код C NVIDIA CUDA</comment>
         <comment xml:lang="zh_CN">NVIDIA CUDA C 源代码</comment>
+        <comment xml:lang="zh_TW">NVIDIA CUDA C 來源程式碼</comment>
         <sub-class-of type="text/x-c++src"/>
         <glob pattern="*.cu"/>
     </mime-type>
@@ -63,6 +64,7 @@
         <comment xml:lang="tr">NVIDIA CUDA C üstbilgisi</comment>
         <comment xml:lang="uk">файл заголовків C NVIDIA CUDA</comment>
         <comment xml:lang="zh_CN">NVIDIA CUDA C 头文件</comment>
+        <comment xml:lang="zh_TW">NVIDIA CUDA C 標頭檔</comment>
         <sub-class-of type="text/x-c++hdr"/>
         <glob pattern="*.cuh"/>
     </mime-type>
