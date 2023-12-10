@@ -9,7 +9,7 @@
 
 #include <KTextEditor/Document>
 
-#include <KMimeTypeTrader>
+#include <KParts/PartLoader>
 
 #include <QAction>
 #include <QDialogButtonBox>
@@ -156,8 +156,8 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString& file)
 
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(url);
 
-    KParts::ReadWritePart* part = KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(
-        mimetype.name(), widget, widget);
+    auto* part =
+        KParts::PartLoader::createPartInstanceForMimeType<KParts::ReadWritePart>(mimetype.name(), widget, widget);
     auto* document = qobject_cast<KTextEditor::Document*>(part);
     Q_ASSERT(document);
 
