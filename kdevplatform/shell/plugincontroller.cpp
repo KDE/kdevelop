@@ -11,7 +11,11 @@
 
 #include "plugincontroller.h"
 
+#include <algorithm>
+
 #include <QElapsedTimer>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QMap>
 
 #include <KConfigGroup>
@@ -56,6 +60,17 @@ inline QString KEY_Project() { return QStringLiteral("Project"); }
 inline QString KEY_Gui() { return QStringLiteral("GUI"); }
 inline QString KEY_AlwaysOn() { return QStringLiteral("AlwaysOn"); }
 inline QString KEY_UserSelectable() { return QStringLiteral("UserSelectable"); }
+
+// We really want to access the service types, even though the KPluginMetaData::serviceTypes API is deprecated.
+// After talking to Nicolas Fella and Christoph Cullmann this seems to be the suggested approach.
+bool hasKDevelopPluginServiceType(const KPluginMetaData& info)
+{
+    const auto pluginData = info.rawData().value(QLatin1String("KPlugin")).toObject();
+    const auto serviceTypes = pluginData.value(QLatin1String("ServiceTypes")).toArray();
+    return std::any_of(serviceTypes.begin(), serviceTypes.end(), [](const QJsonValue& value) {
+        return value.toString() == QLatin1String("KDevelop/Plugin");
+    });
+}
 
 bool isUserSelectable( const KPluginMetaData& info )
 {
@@ -281,9 +296,8 @@ public:
         }
 
         KTextEditorIntegration::initialize();
-        const auto ktePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData& md) {
-            return md.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"));
-        });
+        const auto ktePlugins =
+            KPluginMetaData::findPlugins(QStringLiteral("ktexteditor"), &hasKDevelopPluginServiceType);
 
         qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << pluginIds(ktePlugins);
 
