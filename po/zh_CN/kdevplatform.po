@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-07 01:14+0000\n"
-"PO-Revision-Date: 2023-11-25 02:29\n"
+"PO-Revision-Date: 2023-12-09 09:27\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -4619,7 +4619,7 @@ msgstr "控制是否在活动标签页旁边打开新标签页。"
 #, kde-format
 msgctxt "@option:check"
 msgid "Open new tab after current"
-msgstr "在当前页之后新建标签页"
+msgstr "在当前标签页之后新建标签页"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:106
@@ -4669,7 +4669,7 @@ msgstr "启用或禁用编辑器窗口上方的标签页栏的关闭按钮。"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show close buttons on tabs"
-msgstr "在标签上显示关闭按钮"
+msgstr "显示标签页的关闭按钮"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/uiconfig.ui:145
