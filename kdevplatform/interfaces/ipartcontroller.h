@@ -11,8 +11,6 @@
 
 #include <KParts/PartManager>
 
-class KPluginFactory;
-
 namespace KTextEditor
 {
 class Editor;
@@ -27,9 +25,6 @@ class KDEVPLATFORMINTERFACES_EXPORT IPartController : public KParts::PartManager
     Q_OBJECT
 public:
     explicit IPartController( QWidget* parent );
-    static KPluginFactory* findPartFactory( const QString& mimetype,
-                                             const QString& parttype,
-                                             const QString& preferredName = QString() );
     KParts::Part* createPart( const QString& mimetype, const QString& prefName = QString() );
 
     /**

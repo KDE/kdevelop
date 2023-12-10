@@ -15,13 +15,8 @@
 
 namespace KDevelop {
 
-IPartController::IPartController( QWidget* toplevel )
-    : KParts::PartManager( toplevel, nullptr )
-{
-}
-
-
-KPluginFactory* IPartController::findPartFactory ( const QString& mimetype, const QString& parttype, const QString& preferredName )
+namespace {
+KPluginFactory* findPartFactory(const QString& mimetype, const QString& parttype, const QString& preferredName)
 {
     // parttype may be a interface type not derived from KParts/ReadOnlyPart
     const KService::List offers = KMimeTypeTrader::self()->query( mimetype,
@@ -51,7 +46,12 @@ KPluginFactory* IPartController::findPartFactory ( const QString& mimetype, cons
 
     return nullptr;
 }
+}
 
+IPartController::IPartController(QWidget* toplevel)
+    : KParts::PartManager(toplevel, nullptr)
+{
+}
 
 KParts::Part* IPartController::createPart ( const QString& mimetype, const QString& prefName )
 {
