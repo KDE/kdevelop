@@ -19,8 +19,8 @@
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
 #include <KApplicationTrader>
-#include <KMimeTypeTrader>
 #include <KParts/MainWindow>
+#include <KParts/PartLoader>
 #include <KPluginFactory>
 #include <KOpenWithDialog>
 #include <KIO/ApplicationLauncherJob>
@@ -45,32 +45,46 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY_WITH_JSON(KDevOpenWithFactory, "kdevopenwith.json", registerPlugin<OpenWithPlugin>();)
 
 namespace {
+bool isTextPart(const QString& pluginId)
+{
+    return pluginId == QLatin1String("katepart");
+}
+
+QString defaultIdForMimeType(const QString& mimeType)
+{
+    const auto config = KSharedConfig::openConfig()->group("Open With Defaults");
+    return config.readEntry(mimeType, QString());
+}
 
 bool sortActions(QAction* left, QAction* right)
 {
     return left->text() < right->text();
 }
 
-bool isTextEditor(const KService::Ptr& service)
+QList<QAction*> sortedActions(QList<QAction*> actions, QAction* standardAction)
 {
-    return service->serviceTypes().contains( QStringLiteral("KTextEditor/Document") );
+    std::sort(actions.begin(), actions.end(), sortActions);
+    if (standardAction) {
+        actions.removeOne(standardAction);
+        actions.prepend(standardAction);
+    }
+    return actions;
 }
 
-QString defaultForMimeType(const QString& mimeType)
+QAction* createAction(const QString& name, const QString& iconName, QWidget* parent, bool isDefault)
 {
-    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
-    if (config.hasKey(mimeType)) {
-        QString storageId = config.readEntry(mimeType, QString());
-        if (!storageId.isEmpty() && KService::serviceByStorageId(storageId)) {
-            return storageId;
-        }
+    auto* action = new QAction(QIcon::fromTheme(iconName), name, parent);
+    if (isDefault) {
+        QFont font = action->font();
+        font.setBold(true);
+        action->setFont(font);
     }
-    return QString();
+    return action;
 }
 
 bool canOpenDefault(const QString& mimeType)
 {
-    if (defaultForMimeType(mimeType).isEmpty() && mimeType == QLatin1String("inode/directory")) {
+    if (defaultIdForMimeType(mimeType).isEmpty() && mimeType == QLatin1String("inode/directory")) {
         // potentially happens in non-kde environments apparently, see https://git.reviewboard.kde.org/r/122373
         return KApplicationTrader::preferredService(mimeType);
     } else {
@@ -123,8 +137,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(m_urls.first());
     m_mimeType = mimetype.name();
 
-    QList<QAction*> partActions = actionsForServiceType(QStringLiteral("KParts/ReadOnlyPart"), parent);
-    QList<QAction*> appActions = actionsForServiceType(QStringLiteral("Application"), parent);
+    auto partActions = actionsForParts(parent);
+    auto appActions = actionsForApplications(parent);
 
     OpenWithContext subContext(m_urls, mimetype);
     const QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &subContext, parent);
@@ -138,7 +152,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
         connect(other, &QAction::triggered, this, [this] {
             auto dialog = new KOpenWithDialog(m_urls, ICore::self()->uiController()->activeMainWindow());
             if (dialog->exec() == QDialog::Accepted && dialog->service()) {
-                openService(dialog->service());
+                openApplication(dialog->service());
             }
         });
         appActions << other;
@@ -171,45 +185,72 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     return ext;
 }
 
-QList<QAction*> OpenWithPlugin::actionsForServiceType(const QString& serviceType, QWidget* parent)
+QList<QAction*> OpenWithPlugin::actionsForParts(QWidget* parent)
 {
-    const KService::List list = KMimeTypeTrader::self()->query( m_mimeType, serviceType );
-    KService::Ptr pref = KMimeTypeTrader::self()->preferredService( m_mimeType, serviceType );
+    const auto parts = KParts::PartLoader::partsForMimeType(m_mimeType);
+    const auto preferredPluginId = parts.value(0).pluginId();
+    const auto defaultId = defaultIdForMimeType(m_mimeType);
 
     QList<QAction*> actions;
+    actions.reserve(parts.size());
+
     QAction* standardAction = nullptr;
-    const QString defaultId = defaultForMimeType(m_mimeType);
-    for (auto& svc : list) {
-        auto* act = new QAction(isTextEditor(svc) ? i18nc("@item:inmenu", "Default Editor") : svc->name(), parent);
-        act->setIcon( QIcon::fromTheme( svc->icon() ) );
-        if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
-            QFont font = act->font();
-            font.setBold(true);
-            act->setFont(font);
-        }
-        const QString sid = svc->storageId();
-        connect(act, &QAction::triggered, this, [this, sid]() { open(sid); } );
-        actions << act;
-        if ( isTextEditor(svc) ) {
-            standardAction = act;
-        } else if ( svc->storageId() == pref->storageId() ) {
-            standardAction = act;
+    for (const auto& part : parts) {
+        const auto pluginId = part.pluginId();
+        const auto isTextEditor = isTextPart(pluginId);
+
+        auto* action =
+            createAction(isTextEditor ? i18nc("@item:inmenu", "Default Editor") : part.name(), part.iconName(), parent,
+                         pluginId == defaultId || (defaultId.isEmpty() && isTextEditor));
+        connect(action, &QAction::triggered, this, [this, action, pluginId]() {
+            openPart(pluginId, action->text());
+        });
+        actions << action;
+
+        if (isTextEditor || pluginId == preferredPluginId) {
+            standardAction = action;
         }
     }
-    std::sort(actions.begin(), actions.end(), sortActions);
-    if (standardAction) {
-        actions.removeOne(standardAction);
-        actions.prepend(standardAction);
+
+    return sortedActions(std::move(actions), standardAction);
+}
+
+QList<QAction*> OpenWithPlugin::actionsForApplications(QWidget* parent)
+{
+    const auto preferredService = KApplicationTrader::preferredService(m_mimeType);
+    const auto services = KApplicationTrader::queryByMimeType(m_mimeType);
+    const auto defaultId = defaultIdForMimeType(m_mimeType);
+
+    QList<QAction*> actions;
+    actions.reserve(services.size());
+
+    QAction* standardAction = nullptr;
+    for (const auto& service : services) {
+        const auto storageId = service->storageId();
+
+        auto* action = createAction(service->name(), service->icon(), parent, storageId == defaultId);
+        connect(action, &QAction::triggered, this, [this, service]() {
+            openApplication(service);
+        });
+        actions << action;
+
+        if (preferredService && storageId == preferredService->storageId()) {
+            standardAction = action;
+        }
     }
-    return actions;
+
+    return sortedActions(std::move(actions), standardAction);
 }
 
 void OpenWithPlugin::openDefault()
 {
     //  check preferred handler
-    const QString defaultId = defaultForMimeType(m_mimeType);
+    const auto defaultId = defaultIdForMimeType(m_mimeType);
     if (!defaultId.isEmpty()) {
-        open(defaultId);
+        if (auto service = KService::serviceByStorageId(defaultId); service && service->isApplication())
+            openApplication(service);
+        else
+            openPart(defaultId, {});
         return;
     }
 
@@ -232,50 +273,39 @@ void OpenWithPlugin::openDefault()
     }
 }
 
-void OpenWithPlugin::open( const QString& storageid )
+void OpenWithPlugin::openPart(const QString& pluginId, const QString& name)
 {
-    openService(KService::serviceByStorageId( storageid ));
+    auto prefName = pluginId;
+    if (isTextPart(pluginId)) {
+        // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of
+        // a PartDocument by passing no preferredpart to the documentcontroller
+        // TODO: Solve this rather inside DocumentController
+        prefName.clear();
+    }
+    for (const QUrl& u : qAsConst(m_urls)) {
+        ICore::self()->documentController()->openDocument(u, prefName);
+    }
+
+    if (!name.isEmpty()) {
+        rememberDefaultChoice(pluginId, name);
+    }
 }
 
-void OpenWithPlugin::openService(const KService::Ptr& service)
+void OpenWithPlugin::openApplication(const KService::Ptr& service)
 {
-    if (service->isApplication()) {
-        auto* job = new KIO::ApplicationLauncherJob(service);
-        job->setUrls(m_urls);
-#if KIO_VERSION < QT_VERSION_CHECK(5, 98, 0)
-        job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
-#else
-        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
-#endif
-                                                  ICore::self()->uiController()->activeMainWindow()));
-        job->start();
-    } else {
-        QString prefName = service->desktopEntryName();
-        if (isTextEditor(service)) {
-            // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of
-            // a PartDocument by passing no preferredpart to the documentcontroller
-            // TODO: Solve this rather inside DocumentController
-            prefName.clear();
-        }
-        for (const QUrl& u : qAsConst(m_urls)) {
-            ICore::self()->documentController()->openDocument( u, prefName );
-        }
-    }
+    Q_ASSERT(service->isApplication());
 
-    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
-    if (service->storageId() != config.readEntry(m_mimeType, QString())) {
-        int setDefault = KMessageBox::questionTwoActions(
-            qApp->activeWindow(),
-            i18nc("%1: mime type name, %2: app/part name", "Do you want to open all '%1' files by default with %2?",
-                  m_mimeType, service->name()),
-            i18nc("@title:window", "Set as Default?"),
-            KGuiItem(i18nc("@action:button", "Set as Default"), QStringLiteral("dialog-ok")),
-            KGuiItem(i18nc("@action:button", "Do Not Set"), QStringLiteral("dialog-cancel")),
-            QStringLiteral("OpenWith-%1").arg(m_mimeType));
-        if (setDefault == KMessageBox::PrimaryAction) {
-            config.writeEntry(m_mimeType, service->storageId());
-        }
-    }
+    auto* job = new KIO::ApplicationLauncherJob(service);
+    job->setUrls(m_urls);
+#if KIO_VERSION < QT_VERSION_CHECK(5, 98, 0)
+    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
+#else
+    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
+#endif
+                                              ICore::self()->uiController()->activeMainWindow()));
+    job->start();
+
+    rememberDefaultChoice(service->storageId(), service->name());
 }
 
 void OpenWithPlugin::openFilesInternal( const QList<QUrl>& files )
@@ -287,6 +317,27 @@ void OpenWithPlugin::openFilesInternal( const QList<QUrl>& files )
     m_urls = files;
     m_mimeType = QMimeDatabase().mimeTypeForUrl(m_urls.first()).name();
     openDefault();
+}
+
+void OpenWithPlugin::rememberDefaultChoice(const QString& defaultId, const QString& name)
+{
+    auto config = KSharedConfig::openConfig()->group("Open With Defaults");
+    if (defaultId == config.readEntry(m_mimeType, QString())) {
+        return;
+    }
+
+    const auto setDefault = KMessageBox::questionTwoActions(
+        qApp->activeWindow(),
+        i18nc("%1: mime type name, %2: app/part name", "Do you want to open all '%1' files by default with %2?",
+              m_mimeType, name),
+        i18nc("@title:window", "Set as Default?"),
+        KGuiItem(i18nc("@action:button", "Set as Default"), QStringLiteral("dialog-ok")),
+        KGuiItem(i18nc("@action:button", "Do Not Set"), QStringLiteral("dialog-cancel")),
+        QStringLiteral("OpenWith-%1").arg(m_mimeType));
+
+    if (setDefault == KMessageBox::PrimaryAction) {
+        config.writeEntry(m_mimeType, defaultId);
+    }
 }
 
 #include "openwithplugin.moc"

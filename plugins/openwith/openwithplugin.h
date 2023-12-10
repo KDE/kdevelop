@@ -26,13 +26,14 @@ public:
 protected:
     void openFilesInternal( const QList<QUrl>& files ) override;
 
-private Q_SLOTS:
-    void open( const QString& storageId );
-    void openService( const KService::Ptr& service );
-    void openDefault();
-
 private:
-    QList<QAction*> actionsForServiceType(const QString& serviceType, QWidget* parent);
+    void openApplication(const KService::Ptr& service);
+    void openPart(const QString& pluginId, const QString& name);
+    void openDefault();
+    void rememberDefaultChoice(const QString& defaultId, const QString& name);
+
+    QList<QAction*> actionsForParts(QWidget* parent);
+    QList<QAction*> actionsForApplications(QWidget* parent);
     QList<QUrl> m_urls;
     QString m_mimeType;
 };

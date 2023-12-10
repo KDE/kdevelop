@@ -25,6 +25,11 @@ class KDEVPLATFORMINTERFACES_EXPORT IPartController : public KParts::PartManager
     Q_OBJECT
 public:
     explicit IPartController( QWidget* parent );
+
+    /**
+     * Returns an instance of a part for @p mimetype. If @p prefName is given and non-empty,
+     * then the part with a matching plugin ID will be returned if found.
+     */
     KParts::Part* createPart( const QString& mimetype, const QString& prefName = QString() );
 
     /**

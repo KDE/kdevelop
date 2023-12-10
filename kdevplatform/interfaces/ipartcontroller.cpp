@@ -6,11 +6,12 @@
 
 #include "ipartcontroller.h"
 
-#include <KMimeTypeTrader>
 #include <KParts/Part>
+#include <KParts/PartLoader>
 #include <KParts/ReadOnlyPart>
-#include <KService>
+#include <KPluginFactory>
 
+#include <algorithm>
 #include <array>
 
 namespace KDevelop {
@@ -18,30 +19,26 @@ namespace KDevelop {
 namespace {
 KPluginFactory* findPartFactory(const QString& mimetype, const QString& preferredName)
 {
-    const KService::List offers = KMimeTypeTrader::self()->query(mimetype, QStringLiteral("KParts/ReadOnlyPart"));
-    if ( ! offers.isEmpty() )
-    {
-        KService::Ptr ptr;
-        // if there is a preferred plugin we'll take it
-        if ( !preferredName.isEmpty() )
-        {
-            for (auto& offer : offers) {
-                if (offer->desktopEntryName() == preferredName) {
-                    ptr = offer;
-                    break;
-                }
-            }
-        }
-        // else we just take the first in the list
-        if ( !ptr )
-        {
-            ptr = offers.first();
-        }
-        KPluginLoader loader( ptr->library() );
-        return loader.factory();
+    const auto parts = KParts::PartLoader::partsForMimeType(mimetype);
+    if (parts.isEmpty()) {
+        return nullptr;
     }
 
-    return nullptr;
+    auto it = parts.end();
+
+    // if there is a preferred plugin we'll take it
+    if (!preferredName.isEmpty()) {
+        it = std::find_if(parts.begin(), parts.end(), [&preferredName](const KPluginMetaData& part) {
+            return part.pluginId() == preferredName;
+        });
+    }
+
+    // otherwise use the first available part by default
+    if (it == parts.end()) {
+        it = parts.begin();
+    }
+
+    return KPluginFactory::loadFactory(*it).plugin;
 }
 }
 
