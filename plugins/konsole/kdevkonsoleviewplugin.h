@@ -20,7 +20,7 @@ class KDevKonsoleViewPlugin : public KDevelop::IPlugin
     Q_OBJECT
 
 public:
-    KDevKonsoleViewPlugin( KPluginFactory*, QObject *parent, const QVariantList & = QVariantList() );
+    KDevKonsoleViewPlugin(QObject* parent, const QVariantList& = QVariantList());
     ~KDevKonsoleViewPlugin() override;
 
     void unload() override;
@@ -28,8 +28,8 @@ public:
     KPluginFactory* konsoleFactory() const;
 
 private:
-    KPluginFactory* m_konsoleFactory;
-    KDevKonsoleViewFactory *m_viewFactory;
+    KPluginFactory* m_konsoleFactory = nullptr;
+    KDevKonsoleViewFactory* m_viewFactory = nullptr;
 };
 
 #endif

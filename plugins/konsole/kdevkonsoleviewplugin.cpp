@@ -16,20 +16,7 @@
 #include "kdevkonsoleview.h"
 #include "debug.h"
 
-QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
-{
-    KService::Ptr service = KService::serviceByDesktopName(QStringLiteral("konsolepart"));
-    KPluginFactory* factory = nullptr;
-    if (service) {
-        factory = KPluginLoader(*service.data()).factory();
-    }
-    if (!factory) {
-        qCWarning(PLUGIN_KONSOLE) << "Failed to load 'konsolepart' plugin";
-    }
-    return new KDevKonsoleViewPlugin(factory, op, args);
-}
-
-K_PLUGIN_FACTORY_WITH_JSON(KonsoleViewFactory, "kdevkonsoleview.json", registerPlugin<KDevKonsoleViewPlugin>( QString(), &createKonsoleView );)
+K_PLUGIN_FACTORY_WITH_JSON(KonsoleViewFactory, "kdevkonsoleview.json", registerPlugin<KDevKonsoleViewPlugin>();)
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -51,16 +38,22 @@ private:
     KDevKonsoleViewPlugin *mplugin;
 };
 
-KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( KPluginFactory* konsoleFactory, QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( QStringLiteral("kdevkonsoleview"), parent )
-    , m_konsoleFactory(konsoleFactory)
-    , m_viewFactory(konsoleFactory ? new KDevKonsoleViewFactory(this) : nullptr)
+KDevKonsoleViewPlugin::KDevKonsoleViewPlugin(QObject* parent, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevkonsoleview"), parent)
 {
-    if(!m_viewFactory) {
-      setErrorDescription(i18n("Failed to load 'konsolepart' plugin"));
-    } else {
-        core()->uiController()->addToolView(i18nc("@title:window", "Terminal"), m_viewFactory);
+    // TODO KF6: check whether constructing a KPluginMetaData from this plugin ID still works
+    // consider passing some path or prefix instead of the plugin ID to increase robustness.
+    const auto factory = KPluginFactory::loadFactory(KPluginMetaData(QStringLiteral("konsolepart")));
+    if (!factory) {
+        qCWarning(PLUGIN_KONSOLE) << "Failed to load 'konsolepart' plugin:" << factory.errorText;
+        setErrorDescription(i18n("Failed to load 'konsolepart' plugin: %1", factory.errorString));
+        return;
     }
+
+    m_konsoleFactory = factory.plugin;
+    m_viewFactory = new KDevKonsoleViewFactory(this);
+
+    core()->uiController()->addToolView(i18nc("@title:window", "Terminal"), m_viewFactory);
 }
 
 void KDevKonsoleViewPlugin::unload()
