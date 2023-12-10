@@ -35,7 +35,6 @@ private:
     QList<QAction*> actionsForServiceType(const QString& serviceType, QWidget* parent);
     QList<QUrl> m_urls;
     QString m_mimeType;
-    KService::List m_services;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_OPENWITHPLUGIN_H

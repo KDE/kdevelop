@@ -97,7 +97,6 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     }
 
     m_urls.clear();
-    m_services.clear();
 
     auto* filectx = dynamic_cast<FileContext*>( context );
     auto* projctx = dynamic_cast<ProjectItemContext*>( context );
@@ -178,7 +177,6 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType(const QString& serviceType
     const KService::List list = KMimeTypeTrader::self()->query( m_mimeType, serviceType );
     KService::Ptr pref = KMimeTypeTrader::self()->preferredService( m_mimeType, serviceType );
 
-    m_services += list;
     QList<QAction*> actions;
     QAction* standardAction = nullptr;
     const QString defaultId = defaultForMimeType(m_mimeType);
