@@ -14,7 +14,6 @@ Dependencies:
     'frameworks/kcmutils': '@latest-kf6'
     'third-party/grantlee': '@latest'
     # 'utilities/okteta': '@latest-kf6'
-    'kdevelop/kdevelop-pg-qt': '@latest-kf6'
 
 - 'on': ['Linux', 'FreeBSD']
   'require':
