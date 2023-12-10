@@ -16,12 +16,9 @@
 namespace KDevelop {
 
 namespace {
-KPluginFactory* findPartFactory(const QString& mimetype, const QString& parttype, const QString& preferredName)
+KPluginFactory* findPartFactory(const QString& mimetype, const QString& preferredName)
 {
-    // parttype may be a interface type not derived from KParts/ReadOnlyPart
-    const KService::List offers = KMimeTypeTrader::self()->query( mimetype,
-                                        QStringLiteral( "KParts/ReadOnlyPart" ),
-                                        QStringLiteral( "'%1' in ServiceTypes" ).arg( parttype ) );
+    const KService::List offers = KMimeTypeTrader::self()->query(mimetype, QStringLiteral("KParts/ReadOnlyPart"));
     if ( ! offers.isEmpty() )
     {
         KService::Ptr ptr;
@@ -55,26 +52,12 @@ IPartController::IPartController(QWidget* toplevel)
 
 KParts::Part* IPartController::createPart ( const QString& mimetype, const QString& prefName )
 {
-    static const std::array<QString, 1> services = {
-        // Disable read/write parts until we can support them
-        /*"KParts/ReadWritePart",*/
-        QStringLiteral("KParts/ReadOnlyPart")
-    };
-
-    KParts::Part* part = nullptr;
-    for (auto& service : services) {
-        KPluginFactory* editorFactory = findPartFactory(mimetype, service, prefName);
-        if ( editorFactory )
-        {
-            part = editorFactory->create<KParts::ReadOnlyPart>( nullptr, this );
-            break;
-        }
+    if (auto* editorFactory = findPartFactory(mimetype, prefName)) {
+        return editorFactory->create<KParts::ReadOnlyPart>(nullptr, this);
     }
 
-    return part;
+    return nullptr;
 }
-
-
 }
 
 #include "moc_ipartcontroller.cpp"
