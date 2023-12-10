@@ -141,27 +141,6 @@ KTextEditor::Document* PartController::createTextPart()
     return editorPart()->createDocument(this);
 }
 
-KParts::Part* PartController::createPart( const QString & mimeType,
-        const QString & partType,
-        const QString & className,
-        const QString & preferredName )
-{
-    KPluginFactory * editorFactory = findPartFactory(
-                                          mimeType,
-                                          partType,
-                                          preferredName );
-
-    if ( !className.isEmpty() && editorFactory )
-    {
-        return editorFactory->create<KParts::Part>(
-                   nullptr,
-                   this,
-                   className);
-    }
-
-    return nullptr;
-}
-
 bool PartController::canCreatePart(const QUrl& url)
 {
     if (!url.isValid()) return false;

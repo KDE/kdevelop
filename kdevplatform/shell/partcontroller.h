@@ -61,10 +61,6 @@ public:
     using IPartController::createPart;
 
     KParts::Part* createPart( const QUrl &url, const QString& prefName = QString() );
-    KParts::Part* createPart( const QString &mimeType,
-                              const QString &partType,
-                              const QString &className,
-                              const QString &preferredName = QString() );
 
     bool isTextType(const QMimeType& mimeType);
 
