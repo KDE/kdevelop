@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-12-12 00:40+0000\n"
 "PO-Revision-Date: 2023-01-24 08:25+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -209,7 +209,7 @@ msgstr "Pravilniki"
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr "<p>Za boljše upodabljanje dokumentacije cmake namestite rst2html.</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:76
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr ""
@@ -236,7 +236,7 @@ msgstr "neveljavna datoteka API CMake projektnih podatkov"
 msgid "CMake Content Page"
 msgstr "Stran vsebine CMake"
 
-#: cmakemanager.cpp:657
+#: cmakemanager.cpp:655
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -251,7 +251,7 @@ msgstr ""
 "Da bi odpravili to težavo, z desno tipko miške kliknite element projekta v "
 "pogledu orodja projektov in kliknite 'Ponovno naloži'."
 
-#: cmakemanager.cpp:668
+#: cmakemanager.cpp:666
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

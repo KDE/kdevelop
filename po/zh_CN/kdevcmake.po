@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-12-12 00:40+0000\n"
 "PO-Revision-Date: 2023-12-09 09:27\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -205,7 +205,7 @@ msgstr "策略"
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr "<p>要想渲染更好的 Cmake 文档，请安装 rst2html。</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:76
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr "无法找到 CMake 执行文件，您安装它了吗？"
@@ -231,7 +231,7 @@ msgstr ""
 msgid "CMake Content Page"
 msgstr "CMake 内容页面"
 
-#: cmakemanager.cpp:657
+#: cmakemanager.cpp:655
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -241,7 +241,7 @@ msgid ""
 "view and click 'Reload'."
 msgstr ""
 
-#: cmakemanager.cpp:668
+#: cmakemanager.cpp:666
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

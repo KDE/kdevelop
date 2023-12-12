@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-12-12 00:40+0000\n"
 "PO-Revision-Date: 2019-08-27 10:08+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -236,7 +236,7 @@ msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr ""
 "<p>Για καλύτερη αποτύπωση της cmake τεκμηρίωσης, εγκαταστήστε το rst2html</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:76
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr ""
@@ -264,7 +264,7 @@ msgstr ""
 msgid "CMake Content Page"
 msgstr "Σελίδα περιεχομένου CMake"
 
-#: cmakemanager.cpp:657
+#: cmakemanager.cpp:655
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to configure the project (error message: %1). As a result, "
@@ -289,7 +289,7 @@ msgstr ""
 "και ρυθμίσεις του CMake. Έπειτα κάνετε δεξί κλικ στο αντικείμενο στην "
 "προβολή εργαλείων του έργου και κλικ στην 'Επαναφόρτωση'."
 
-#: cmakemanager.cpp:668
+#: cmakemanager.cpp:666
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to configure the project (error message: %1). As a result, "

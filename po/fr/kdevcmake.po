@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2023-12-12 00:40+0000\n"
 "PO-Revision-Date: 2023-01-23 20:19+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -220,7 +220,7 @@ msgstr ""
 "<p>Pour un meilleur rendu de la documentation « cmake », installez "
 "« rst2html ».</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:76
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr ""
@@ -248,7 +248,7 @@ msgstr "Données de projet « API » non valables dans le fichier « CMake �
 msgid "CMake Content Page"
 msgstr "Page de contenu de CMake"
 
-#: cmakemanager.cpp:657
+#: cmakemanager.cpp:655
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -264,7 +264,7 @@ msgstr ""
 "Pour corriger ce problème, veuillez vous effectuer un clic droit sur "
 "l'élément du projet dans la vue des projets et cliquer sur « Recharger »."
 
-#: cmakemanager.cpp:668
+#: cmakemanager.cpp:666
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
