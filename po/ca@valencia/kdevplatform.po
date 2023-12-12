@@ -4716,7 +4716,7 @@ msgstr "Navegació amb pestanyes"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Controls whether to open new tabs next to the active one."
-msgstr "Controla si les pestanyes noves s'òbriguen després de l'activa."
+msgstr "Controla si les pestanyes noves s'obrin després de l'activa."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:95
