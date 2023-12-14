@@ -22,7 +22,6 @@
 #include <KMimeTypeTrader>
 #include <KParts/MainWindow>
 #include <KPluginFactory>
-#include <KService>
 #include <KOpenWithDialog>
 #include <KIO/ApplicationLauncherJob>
 #include <kio_version.h>
