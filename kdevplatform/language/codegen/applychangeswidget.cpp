@@ -10,6 +10,7 @@
 #include <KTextEditor/Document>
 
 #include <KParts/PartLoader>
+#include <KParts/ReadWritePart>
 
 #include <QAction>
 #include <QDialogButtonBox>
