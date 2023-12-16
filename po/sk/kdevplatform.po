@@ -1,20 +1,20 @@
 # translation of kdevplatform.po to Slovak
 # Richard Fric <Richard.Fric@kdemail.net>, 2009.
-# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022.
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022, 2023 Roman Paholík <wizzardsk@gmail.com>
 # Matej Mrenica <matejm98mthw@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-27 00:45+0000\n"
-"PO-Revision-Date: 2022-04-17 20:55+0200\n"
+"PO-Revision-Date: 2023-12-15 20:50+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #, kde-format
@@ -544,8 +544,7 @@ msgstr "Domov"
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
 #: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:565
 #: vcs/dvcs/ui/branchmanager.ui:143
-#, fuzzy, kde-format
-#| msgid "Search..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Hľadať..."
@@ -1855,7 +1854,7 @@ msgstr "Beží %1"
 #, fuzzy, kde-format
 #| msgid "&Color Scheme"
 msgid "&Window Color Scheme"
-msgstr "Farebná schéma"
+msgstr "Farebná schéma okna"
 
 #: shell/configdialog.cpp:31
 #, fuzzy, kde-format
@@ -1885,7 +1884,7 @@ msgstr "Použiť nastavenie"
 #| msgid "Plugins"
 msgctxt "@title:window"
 msgid "No Plugins Found"
-msgstr "Moduly"
+msgstr "Nenájdené pluginy"
 
 #: shell/core.cpp:115
 #, kde-format
@@ -2307,7 +2306,7 @@ msgstr ""
 #| msgid "&Open..."
 msgctxt "@action"
 msgid "&Open..."
-msgstr "Otvoriť"
+msgstr "&Otvoriť..."
 
 #: shell/documentcontroller.cpp:604
 #, kde-format
@@ -2323,10 +2322,7 @@ msgid "Opens a file for editing."
 msgstr "Otvorí súbor pre úpravy."
 
 #: shell/documentcontroller.cpp:609
-#, fuzzy, kde-format
-#| msgid ""
-#| "This lists files which you have opened recently, and allows you to easily "
-#| "open them again."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This lists files which you have opened recently, and allows you to easily "
@@ -2465,7 +2461,7 @@ msgstr "Ukázať poznámky v aktuálnom dokumente"
 #| msgid "Annotate"
 msgctxt "@action"
 msgid "Annotate"
-msgstr "Pridanie poznámky"
+msgstr "Pridať poznámku"
 
 #: shell/documentcontroller.cpp:1277
 #, kde-format
@@ -2946,9 +2942,7 @@ msgstr "Otvoriť existujúci súbor \"%1\""
 #| msgid "Use this command to show or hide the view's statusbar"
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
-msgstr ""
-"Tento príkaz môžete použiť k zobrazeniu alebo skrytiu stavového riadku "
-"pohľadu"
+msgstr "Tento príkaz zobrazí alebo skryje stavový riadok pohľadu"
 
 #: shell/partdocument.cpp:104
 #, kde-format
@@ -3250,7 +3244,7 @@ msgstr "Znovu otvoriť súčasný projekt?"
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "Znovu otvoriť"
 
 #: shell/projectcontroller.cpp:555
 #, kde-format
@@ -3705,7 +3699,7 @@ msgstr "Nový %1 spúšťač"
 #| msgid "%1 As..."
 msgctxt "@title:menu"
 msgid "%1 As..."
-msgstr "Ako"
+msgstr "as"
 
 #: shell/runtimecontroller.cpp:26
 #, kde-format
@@ -3918,8 +3912,7 @@ msgid "Name"
 msgstr "Názov"
 
 #: shell/sessioncontroller.cpp:597
-#, fuzzy, kde-format
-#| msgid "Filter:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "Filter:"
@@ -4191,7 +4184,7 @@ msgstr "Pridať profil"
 #| msgid "Clone profile..."
 msgctxt "@info:tooltip"
 msgid "Clone profile..."
-msgstr "Klokovať profil..."
+msgstr "Klonovať profil"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
 #: shell/settings/environmentwidget.ui:59
@@ -4233,7 +4226,7 @@ msgid " file"
 msgid_plural " files"
 msgstr[0] "Súbor"
 msgstr[1] "%1 súbory"
-msgstr[2] "%1 súborov"
+msgstr[2] "%1 súbory"
 
 #: shell/settings/languagepreferences.cpp:77
 #, kde-format
@@ -5645,7 +5638,7 @@ msgstr "Predchádzajúci pohľad nástrojov"
 #| msgid "Tool Views"
 msgctxt "@title:menu"
 msgid "Tool Views"
-msgstr "Nástro&je a pohľady"
+msgstr "Zobrazenia nástrojo&v"
 
 #: sublime/mainwindow_p.cpp:134
 #, kde-format
@@ -5827,8 +5820,7 @@ msgid "Set Write Permissions"
 msgstr "Zlyhalo nastavenie oprávnení"
 
 #: util/shellutils.cpp:84
-#, fuzzy, kde-format
-#| msgid "Ignore"
+#, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ignorovať"

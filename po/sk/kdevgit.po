@@ -1,19 +1,19 @@
 # translation of kdevgit.po to Slovak
 # Richard Fric <Richard.Fric@kdemail.net>, 2010.
-# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013, 2014, 2016, 2017, 2020, 2022.
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2016, 2017, 2020, 2022, 2023 Roman Paholík <wizzardsk@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2022-04-17 20:54+0200\n"
+"PO-Revision-Date: 2023-12-15 20:49+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: committoolview.cpp:206 committoolview.cpp:207
@@ -110,14 +110,14 @@ msgid "G"
 msgstr "G"
 
 #: diffviewsctrl.cpp:171
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1 (staged)"
-msgstr ""
+msgstr "Označené"
 
 #: diffviewsctrl.cpp:173
-#, kde-format
+#, fuzzy, kde-format
 msgid "Staged (%1)"
-msgstr ""
+msgstr "Označené"
 
 #: diffviewsctrl.cpp:175
 #, kde-format
@@ -140,7 +140,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
-msgstr ""
+msgstr "Vrátiť"
 
 #: gitmessagehighlighter.cpp:66
 #, kde-format
@@ -297,18 +297,16 @@ msgid "There are pending changes, do you want to stash them first?"
 msgstr "Sú čakajúce zmeny, chcete ich najprv uložiť?"
 
 #: gitplugin.cpp:859
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Pop Stash"
+#, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr "Pop Stash"
+msgstr "Úschovňa"
 
 #: gitplugin.cpp:860
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
-msgstr ""
+msgstr "Ponechať"
 
 #: rebasedialog.cpp:25
 #, kde-format
@@ -373,7 +371,7 @@ msgstr ""
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
-msgstr ""
+msgstr "Označené"
 
 #: repostatusmodel.cpp:84
 #, kde-format
@@ -541,9 +539,9 @@ msgid "Unknown"
 msgstr "Neznáme"
 
 #: repostatusmodel.cpp:362
-#, kde-format
+#, fuzzy, kde-format
 msgid " (staged)"
-msgstr ""
+msgstr "Označené"
 
 #: repostatusmodel.cpp:370
 #, kde-format
@@ -577,9 +575,9 @@ msgid "Commit"
 msgstr "Začleniť"
 
 #: simplecommitform.cpp:65
-#, kde-format
+#, fuzzy, kde-format
 msgid "Extended commit description"
-msgstr ""
+msgstr "Rozšírený popis začlenenia..."
 
 #: simplecommitform.cpp:73
 #, kde-format
@@ -643,9 +641,9 @@ msgid "%1. %2: %3"
 msgstr ""
 
 #: stashmanagerdialog.cpp:159
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1 created on %2"
-msgstr ""
+msgstr "Vytvorené "
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, drop)
 #: stashmanagerdialog.ui:23
