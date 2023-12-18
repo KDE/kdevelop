@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-12-09 09:29\n"
+"PO-Revision-Date: 2023-12-17 11:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -81,7 +81,7 @@ msgstr "构建目录(&B)："
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Install to (target.path):"
-msgstr "安装到 (target.path)(&I)："
+msgstr "安装到 (target.path) (&I)："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qmakebuilddirchooser.ui:85
