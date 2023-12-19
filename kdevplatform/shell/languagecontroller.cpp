@@ -163,7 +163,6 @@ public:
         , staticAssistantsManager(nullptr)
         , m_cleanedUp(false)
         , problemModelSet(new ProblemModelSet(controller))
-        , m_controller(controller)
     {}
 
     mutable QRecursiveMutex dataMutex;
@@ -180,9 +179,6 @@ public:
     void addLanguageSupport(ILanguageSupport* support);
 
     ProblemModelSet* const problemModelSet;
-
-private:
-    LanguageController* const m_controller;
 };
 
 void LanguageControllerPrivate::addLanguageSupport(ILanguageSupport* languageSupport,
