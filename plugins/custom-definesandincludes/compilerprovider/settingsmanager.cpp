@@ -106,7 +106,7 @@ const ParserArguments& defaultArguments()
 
 CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
 {
-    auto grp = cfg.group("Compiler");
+    auto grp = cfg.group(QStringLiteral("Compiler"));
     auto name = grp.readEntry( ConfigConstants::compilerNameKey(), QString() );
     if (name.isEmpty()) {
         return SettingsManager::globalInstance()->provider()->defaultCompiler();
@@ -127,7 +127,7 @@ void writeCompilerToConfig(KConfigGroup& cfg, const CompilerPointer& compiler)
 {
     Q_ASSERT(compiler);
 
-    auto grp = cfg.group("Compiler");
+    auto grp = cfg.group(QStringLiteral("Compiler"));
     // Store only compiler name, path and type retrieved from registered compilers
     grp.writeEntry(ConfigConstants::compilerNameKey(), compiler->name());
 }

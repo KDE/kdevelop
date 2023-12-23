@@ -92,7 +92,7 @@ void AppWizardPlugin::slotNewProject()
             core()->projectController()->openProject(QUrl::fromLocalFile(project));
 
             KConfig templateConfig(dlg->appInfo().appTemplate);
-            KConfigGroup general(&templateConfig, "General");
+            KConfigGroup general(&templateConfig, QStringLiteral("General"));
             const QStringList fileArgs =
                 general.readEntry("ShowFilesAfterGeneration").split(QLatin1Char(','), Qt::SkipEmptyParts);
             for (const auto& fileArg : fileArgs) {
@@ -319,7 +319,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             templateFile->copyTo(temporaryDir.path());
 
             KConfig config(temporaryDir.path() + QLatin1Char('/') + templateEntry->name());
-            KConfigGroup group(&config, "General");
+            KConfigGroup group(&config, QStringLiteral("General"));
             if (group.hasKey("Icon")) {
                 const KArchiveEntry* iconEntry = arch->directory()->entry(group.readEntry("Icon"));
                 if (iconEntry && iconEntry->isFile()) {
@@ -390,7 +390,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     if (!projectFileInfo.exists()) {
         qCDebug(PLUGIN_APPWIZARD) << "creating .kdev4 file";
         KSharedConfigPtr cfg = KSharedConfig::openConfig( projectFileName, KConfig::SimpleConfig );
-        KConfigGroup project = cfg->group( "Project" );
+        KConfigGroup project = cfg->group(QStringLiteral("Project") );
         project.writeEntry( "Name", info.name );
         QString manager = QStringLiteral("KDevGenericManager");
 
@@ -408,7 +408,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         project.writeEntry( "Manager", manager );
         project.sync();
         cfg->sync();
-        KConfigGroup project2 = cfg->group( "Project" );
+        KConfigGroup project2 = cfg->group(QStringLiteral("Project") );
         qCDebug(PLUGIN_APPWIZARD) << "kdev4 file contents:" << project2.readEntry("Name", "") << project2.readEntry("Manager", "" );
     }
 
@@ -417,7 +417,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
     qCDebug(PLUGIN_APPWIZARD) << "creating developer .kdev4 file:" << developerProjectFileName;
     KSharedConfigPtr developerCfg = KSharedConfig::openConfig(developerProjectFileName, KConfig::SimpleConfig);
-    KConfigGroup developerProjectGroup = developerCfg->group("Project");
+    KConfigGroup developerProjectGroup = developerCfg->group(QStringLiteral("Project"));
     developerProjectGroup.writeEntry("VersionControlSupport", info.vcsPluginName);
     developerProjectGroup.sync();
 

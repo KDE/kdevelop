@@ -98,7 +98,7 @@ constexpr const char* secondaryTestFileName = "secondary_test.cpp";
 /// "~/.qttest/share/test_breakpointmodel/sessions/{session-UUID}/sessionrc"
 KConfigGroup breakpointConfig()
 {
-    return ICore::self()->activeSession()->config()->group("Breakpoints");
+    return ICore::self()->activeSession()->config()->group(QStringLiteral("Breakpoints"));
 }
 
 /// Qt 5.15 does not have C++11 emplace() like functionality.

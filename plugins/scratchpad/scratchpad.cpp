@@ -61,12 +61,12 @@ private:
 namespace {
 KConfigGroup scratchCommands()
 {
-    return KSharedConfig::openConfig()->group("Scratchpad").group("Commands");
+    return KSharedConfig::openConfig()->group(QStringLiteral("Scratchpad")).group(QStringLiteral("Commands"));
 }
 
 KConfigGroup mimeCommands()
 {
-    return KSharedConfig::openConfig()->group("Scratchpad").group("Mime Commands");
+    return KSharedConfig::openConfig()->group(QStringLiteral("Scratchpad")).group(QStringLiteral("Mime Commands"));
 }
 
 QString commandForScratch(const QFileInfo& file)

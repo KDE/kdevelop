@@ -108,7 +108,7 @@ public:
 
     inline KConfigGroup katePartSettingsGroup() const
     {
-        return KSharedConfig::openConfig()->group("KatePart Settings");
+        return KSharedConfig::openConfig()->group(QStringLiteral("KatePart Settings"));
     }
 
     inline QString docConfigGroupName() const

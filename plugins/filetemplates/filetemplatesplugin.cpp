@@ -265,7 +265,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
             }
 
             auto* config = new KConfig(dir.absoluteFilePath(entry), KConfig::SimpleConfig);
-            KConfigGroup group = config->group("General");
+            KConfigGroup group = config->group(QStringLiteral("General"));
 
             qCDebug(PLUGIN_FILETEMPLATES) << "General group keys:" << group.keyList();
 

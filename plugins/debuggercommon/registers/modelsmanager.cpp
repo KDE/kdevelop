@@ -56,7 +56,7 @@ using namespace KDevMI;
 ModelsManager::ModelsManager(QObject* parent)
     : QObject(parent)
     , m_models(new Models)
-    , m_config(KSharedConfig::openConfig()->group("Register models"))
+    , m_config(KSharedConfig::openConfig()->group(QStringLiteral("Register models")))
 {}
 
 ModelsManager::~ModelsManager() {}
