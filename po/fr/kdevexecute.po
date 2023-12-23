@@ -5,7 +5,7 @@
 # Vincent PINON <vincent.pinon@st.com>, 2013.
 # Simon Depiets <sdepiets@gmail.com>, 2018.
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
-# Xavier Besnard <xavier.besnard@neuf.fr>, 2020.
+# Xavier Besnard <xavier.besnard@kde.org>, 2020.
 #
 msgid ""
 msgstr ""

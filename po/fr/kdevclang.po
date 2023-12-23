@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vincent Pinon <vpinon@kde.org>, 2016.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
-# Xavier Besnard <xavier.besnard@neuf.fr>, 2020.
+# Xavier Besnard <xavier.besnard@kde.org>, 2020.
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
 #
 msgid ""
