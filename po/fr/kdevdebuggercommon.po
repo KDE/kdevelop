@@ -6,7 +6,7 @@
 # Vincent PINON <vpinon@kde.org>, 2013, 2014, 2015.
 # Simon Depiets <sdepiets@gmail.com>, 2018.
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
-# SPDX-FileCopyrightText: 2021, 2022, 2023 Xavier Besnard <xavier.besnard@neuf.fr>
+# SPDX-FileCopyrightText: 2021, 2022, 2023 Xavier Besnard <xavier.besnard@kde.org>
 #
 msgid ""
 msgstr ""

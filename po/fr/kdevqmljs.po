@@ -3,7 +3,7 @@
 # Vincent Pinon <vincent.pinon@laposte.net>, 2013.
 # Vincent PINON <vpinon@april.org>, 2014.
 # Simon Depiets <sdepiets@gmail.com>, 2018.
-# SPDX-FileCopyrightText: 2023 Xavier BESNARD <xavier.besnard@neuf.fr>
+# SPDX-FileCopyrightText: 2023 Xavier Besnard <xavier.besnard@kde.org>
 #
 msgid ""
 msgstr ""
