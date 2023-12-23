@@ -76,7 +76,7 @@ IProject* QMakeBuildDirChooser::project() const
 
 void QMakeBuildDirChooser::saveConfig()
 {
-    KConfigGroup config = KConfigGroup(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP).group(buildDir());
+    KConfigGroup config = KConfigGroup(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP()).group(buildDir());
     saveConfig(config);
 }
 
@@ -93,14 +93,14 @@ void QMakeBuildDirChooser::saveConfig(KConfigGroup& config)
 
 void QMakeBuildDirChooser::loadConfig()
 {
-    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP());
     loadConfig(cg.readEntry(QMakeConfig::BUILD_FOLDER, KDevelop::proposedBuildFolder(m_project->path()).toLocalFile()));
 }
 
 void QMakeBuildDirChooser::loadConfig(const QString& config)
 {
     // get correct group
-    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP());
     const KConfigGroup build = cg.group(config);
 
     {

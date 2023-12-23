@@ -503,7 +503,7 @@ void QMakeProjectManager::slotRunQMake()
 
     job->setQMakePath(QMakeConfig::qmakeExecutable(m_actionItem->project()));
 
-    KConfigGroup cg(m_actionItem->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KConfigGroup cg(m_actionItem->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP());
     QString installPrefix = cg.readEntry(QMakeConfig::INSTALL_PREFIX, QString());
     if (!installPrefix.isEmpty())
         job->setInstallPrefix(installPrefix);

@@ -64,9 +64,9 @@ using namespace KDevelop;
 namespace {
 namespace Config {
 namespace Strings {
-QByteArray sourceFormatter()
+QString sourceFormatter()
 {
-    return QByteArrayLiteral("SourceFormatter");
+    return QStringLiteral("SourceFormatter");
 }
 constexpr const char* useDefault = "UseDefault";
 }
@@ -426,8 +426,7 @@ auto SourceFormatterController::stylesForFormatter(const ISourceFormatter& forma
                 qCDebug(SHELL).noquote() << QStringLiteral(
                                                 "A user-defined style config group [%1][%2][%3] "
                                                 "overrides a predefined style with the same name.")
-                                                .arg(QString::fromLatin1(Config::Strings::sourceFormatter()),
-                                                     formatterKey, subgroup);
+                                                .arg(Config::Strings::sourceFormatter(), formatterKey, subgroup);
             }
             Config::populateStyleFromConfig(it->second, formatterConfig.group(subgroup));
         }

@@ -43,7 +43,7 @@ WorkingSetController::WorkingSetController()
 void WorkingSetController::initialize()
 {
     //Load all working-sets
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), QStringLiteral("Working File Sets"));
     QMap<QString, QStringList> areaConfigs;
     const auto sets = setConfig.groupList();
     for (const QString& set : sets) {

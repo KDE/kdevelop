@@ -16,7 +16,10 @@
 #include <util/path.h>
 #include <debug.h>
 
-const char QMakeConfig::CONFIG_GROUP[] = "QMake_Builder";
+QString QMakeConfig::CONFIG_GROUP()
+{
+    return QStringLiteral("QMake_Builder");
+}
 
 // TODO: migrate to more generic & consistent key term "QMake_Executable"
 const char QMakeConfig::QMAKE_EXECUTABLE[] = "QMake_Binary";
@@ -34,14 +37,14 @@ QMutex s_buildDirMutex;
 bool QMakeConfig::isConfigured(const IProject* project)
 {
     QMutexLocker lock(&s_buildDirMutex);
-    KConfigGroup cg(project->projectConfiguration(), CONFIG_GROUP);
+    KConfigGroup cg(project->projectConfiguration(), CONFIG_GROUP());
     return cg.exists() && cg.hasKey(QMAKE_EXECUTABLE) && cg.hasKey(BUILD_FOLDER);
 }
 
 Path QMakeConfig::buildDirFromSrc(const IProject* project, const Path& srcDir)
 {
     QMutexLocker lock(&s_buildDirMutex);
-    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP());
     Path buildDir = Path(cg.readEntry(QMakeConfig::BUILD_FOLDER, QString()));
     lock.unlock();
 
@@ -57,7 +60,7 @@ QString QMakeConfig::qmakeExecutable(const IProject* project)
     QString exe;
     if (project) {
         KSharedConfig::Ptr cfg = project->projectConfiguration();
-        KConfigGroup group(cfg.data(), CONFIG_GROUP);
+        KConfigGroup group(cfg.data(), CONFIG_GROUP());
         if (group.hasKey(QMAKE_EXECUTABLE)) {
             exe = group.readEntry(QMAKE_EXECUTABLE, QString());
             QFileInfo info(exe);

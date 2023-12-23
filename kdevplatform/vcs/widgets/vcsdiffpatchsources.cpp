@@ -70,7 +70,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
 
 QStringList VCSCommitDiffPatchSource::oldMessages() const
 {
-    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
+    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), QStringLiteral("VCS"));
     return vcsGroup.readEntry("OldCommitMessages", QStringList());
 }
 
@@ -79,7 +79,7 @@ void VCSCommitDiffPatchSource::addMessageToHistory(const QString& message)
     if(ICore::self()->shuttingDown())
         return;
 
-    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
+    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), QStringLiteral("VCS"));
 
     const int maxMessages = 10;
     QStringList oldMessages = vcsGroup.readEntry("OldCommitMessages", QStringList());

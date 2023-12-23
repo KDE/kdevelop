@@ -59,7 +59,7 @@ void QMakeBuildDirChooserDialog::saveConfig()
     m_chooserUi->saveConfig();
 
     // also save as current values
-    KConfigGroup config(m_chooserUi->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KConfigGroup config(m_chooserUi->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP());
     m_chooserUi->saveConfig(config);
     config.writeEntry(QMakeConfig::BUILD_FOLDER, buildDir());
 }

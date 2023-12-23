@@ -34,7 +34,7 @@ OutputWidgetConfig::OutputWidgetConfig(const QString& configSubgroupName, const 
 KConfigGroup OutputWidgetConfig::configSubgroup() const
 {
     // group is mutable, because the returned subgroup becomes read-only if group is const.
-    KConfigGroup group(KSharedConfig::openConfig(), "StandardOutputView");
+    KConfigGroup group(KSharedConfig::openConfig(), QStringLiteral("StandardOutputView"));
     return KConfigGroup(&group, m_configSubgroupName);
 }
 

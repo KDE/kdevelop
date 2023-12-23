@@ -58,7 +58,7 @@ void QMakeBuilderPreferences::reset()
 {
     qCDebug(KDEV_QMAKEBUILDER) << "loading data";
     // refresh combobox
-    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP());
     const QString buildPath = cg.readEntry(QMakeConfig::BUILD_FOLDER, QString());
 
     // update build list (this will trigger loadOtherConfig if signals are still connected)
@@ -89,7 +89,7 @@ void QMakeBuilderPreferences::apply()
     if (m_chooserUi->validate(&errormsg)) {
         // data is valid: save, once in the build dir's data and also as current data
         m_chooserUi->saveConfig();
-        KConfigGroup config(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+        KConfigGroup config(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP());
         m_chooserUi->saveConfig(config);
         config.writeEntry(QMakeConfig::BUILD_FOLDER, m_chooserUi->buildDir());
     } else {
@@ -128,7 +128,7 @@ void QMakeBuilderPreferences::removeBuildConfig()
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Removing config" << m_prefsUi->buildDirCombo->currentText();
     QString removed = m_prefsUi->buildDirCombo->currentText();
-    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP());
 
     m_prefsUi->buildDirCombo->removeItem(m_prefsUi->buildDirCombo->currentIndex());
     m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);

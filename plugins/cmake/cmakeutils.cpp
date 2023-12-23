@@ -41,7 +41,7 @@ KConfigGroup baseGroup( KDevelop::IProject* project )
     if (!project)
         return KConfigGroup();
 
-    return project->projectConfiguration()->group( Config::groupName );
+    return project->projectConfiguration()->group(Config::groupName());
 }
 
 KConfigGroup buildDirGroup( KDevelop::IProject* project, int buildDirIndex )

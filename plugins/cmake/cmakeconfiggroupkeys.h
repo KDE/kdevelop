@@ -48,11 +48,14 @@ inline constexpr const char* cmakeArgumentsKey = "Extra Arguments";
 inline constexpr const char* buildDirRuntime = "Runtime";
 }
 
-inline QByteArray groupNameBuildDir(int buildDirIndex)
+inline QString groupNameBuildDir(int buildDirIndex)
 {
-    return QByteArrayLiteral("CMake Build Directory ") + QByteArray::number(buildDirIndex);
+    return QLatin1String("CMake Build Directory ") + QString::number(buildDirIndex);
 }
 
-inline constexpr const char* groupName = "CMake";
+inline QString groupName()
+{
+    return QStringLiteral("CMake");
+}
 
 } // namespace Config

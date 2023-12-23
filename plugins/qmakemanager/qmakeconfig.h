@@ -16,7 +16,7 @@ class Path;
 class QMakeConfig
 {
 public:
-    static const char CONFIG_GROUP[];
+    static QString CONFIG_GROUP();
 
     static const char 
         QMAKE_EXECUTABLE[],

@@ -111,7 +111,9 @@ auto CompletionSettings::precompiledPreambleStorage() const -> PrecompiledPreamb
 
 CompletionSettings::CompletionSettings()
     : m_todoMarkerWords(QStringLiteral("TODO FIXME"))
-    , m_languageGroup(KSharedConfig::openConfig(), "Language Support"){}
+    , m_languageGroup(KSharedConfig::openConfig(), QStringLiteral("Language Support"))
+{
+}
 }
 
 #include "moc_completionsettings.cpp"

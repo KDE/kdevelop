@@ -437,13 +437,13 @@ Container::~Container() = default;
 
 bool Container::configTabBarVisible()
 {
-    KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
+    KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("UiSettings"));
     return group.readEntry("TabBarVisibility", 1);
 }
 
 bool Container::configCloseButtonsOnTabs()
 {
-    KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
+    KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("UiSettings"));
     return group.readEntry("CloseButtonsOnTabs", 1);
 }
 

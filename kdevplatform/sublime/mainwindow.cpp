@@ -35,7 +35,7 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 {
     connect(this, &MainWindow::destroyed, controller, QOverload<>::of(&Controller::areaReleased));
 
-    loadGeometry(KSharedConfig::openConfig()->group("Main Window"));
+    loadGeometry(KSharedConfig::openConfig()->group(QStringLiteral("Main Window")));
 
     // don't allow AllowTabbedDocks - that doesn't make sense for "ideal" UI
     setDockOptions(QMainWindow::AnimatedDocks);
@@ -359,7 +359,7 @@ void MainWindow::loadSettings()
 bool MainWindow::queryClose()
 {
 //    saveSettings();
-    KConfigGroup config(KSharedConfig::openConfig(), "Main Window");
+    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("Main Window"));
     saveGeometry(config);
     config.sync();
 

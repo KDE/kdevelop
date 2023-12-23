@@ -34,7 +34,10 @@
 using namespace KDevelop;
 
 static const char LastUsedTemplateEntry[] = "LastUsedTemplate";
-static const char FileTemplatesGroup[] = "SourceFileTemplates";
+static inline QString FileTemplatesGroup()
+{
+    return QStringLiteral("SourceFileTemplates");
+}
 
 class KDevelop::TemplateSelectionPagePrivate
 {
@@ -180,7 +183,7 @@ void TemplateSelectionPage::saveConfig()
         config = ICore::self()->activeSession()->config();
     }
 
-    KConfigGroup group(config, FileTemplatesGroup);
+    KConfigGroup group(config, FileTemplatesGroup());
     group.writeEntry(LastUsedTemplateEntry, d->selectedTemplate);
     group.sync();
 }
@@ -224,7 +227,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
         config = ICore::self()->activeSession()->config();
     }
 
-    KConfigGroup group(config, FileTemplatesGroup);
+    KConfigGroup group(config, FileTemplatesGroup());
     QString lastTemplate = group.readEntry(LastUsedTemplateEntry);
 
     QModelIndexList indexes = d->model->match(d->model->index(0, 0), TemplatesModel::DescriptionFileRole, lastTemplate, 1, Qt::MatchRecursive);

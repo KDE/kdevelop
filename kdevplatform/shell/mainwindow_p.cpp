@@ -426,7 +426,7 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
     lockAction->setCheckable(true);
     lockAction->setText(i18nc("@action:inmenu", "Lock the Panel from Hiding"));
 
-    KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+    KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("UI"));
     lockAction->setChecked(config.readEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(area), false));
 
     menu.addSeparator();
@@ -438,7 +438,7 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
     }
 
     if (triggered == lockAction) {
-        KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+        KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("UI"));
         config.writeEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(area), lockAction->isChecked());
         return;
     }

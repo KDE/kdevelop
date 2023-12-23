@@ -68,7 +68,7 @@ inline void defaultConfigure(const TestProjectPaths& paths)
 {
     KConfig config(paths.configFile.toLocalFile());
     // clear config
-    config.deleteGroup(Config::groupName);
+    config.deleteGroup(Config::groupName());
 
     // apply default configuration
     CMakeBuildDirChooser bd;
@@ -76,7 +76,7 @@ inline void defaultConfigure(const TestProjectPaths& paths)
     bd.setBuildFolder(KDevelop::Path(CMAKE_TESTS_BINARY_DIR + QStringLiteral("/build-") + paths.sourceDir.lastPathSegment()));
     // we don't want to execute, just pick the defaults from the dialog
 
-    KConfigGroup cmakeGroup = config.group(Config::groupName);
+    KConfigGroup cmakeGroup = config.group(Config::groupName());
     {
         QDir buildFolder( bd.buildFolder().toLocalFile() );
         if ( !buildFolder.exists() ) {

@@ -53,8 +53,10 @@ ProjectManagerView *ProjectManagerViewItemContext::view() const
     return m_view;
 }
 
-
-static const char sessionConfigGroup[] = "ProjectManagerView";
+static inline QString sessionConfigGroup()
+{
+    return QStringLiteral("ProjectManagerView");
+}
 static const char splitterStateConfigKey[] = "splitterState";
 static const char syncCurrentDocumentKey[] = "syncCurrentDocument";
 static const char targetsVisibleConfigKey[] = "targetsVisible";
@@ -72,7 +74,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     setWindowIcon( QIcon::fromTheme( QStringLiteral("project-development"), windowIcon() ) );
     setWindowTitle(i18nc("@title:window", "Projects"));
 
-    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
+    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup());
     if (pmviewConfig.hasKey(splitterStateConfigKey)) {
         QByteArray geometry = pmviewConfig.readEntry<QByteArray>(splitterStateConfigKey, QByteArray());
         m_ui->splitter->restoreState(geometry);
@@ -198,7 +200,7 @@ void ProjectManagerView::selectionChanged()
 
 ProjectManagerView::~ProjectManagerView()
 {
-    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
+    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup());
     pmviewConfig.writeEntry(splitterStateConfigKey, m_ui->splitter->saveState());
     pmviewConfig.sync();
 
@@ -238,14 +240,14 @@ void ProjectManagerView::expandItem(ProjectBaseItem* item)
 
 void ProjectManagerView::toggleHideTargets(bool visible)
 {
-    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
+    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup());
     pmviewConfig.writeEntry<bool>(targetsVisibleConfigKey, visible);
     m_modelFilter->showTargets(visible);
 }
 
 void ProjectManagerView::toggleSyncCurrentDocument(bool sync)
 {
-    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
+    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup());
     pmviewConfig.writeEntry<bool>(syncCurrentDocumentKey, sync);
     if (sync) {
         raiseAndLocateCurrentDocument();
