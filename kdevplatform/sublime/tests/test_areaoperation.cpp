@@ -352,7 +352,7 @@ void TestAreaOperation::simpleViewAdditionAndDeletion()
     // set TabBarOpenAfterCurrent=0, otherwise we'd have a different order of tabs
     int oldTabBarOpenAfterCurrent;
     {
-        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group(QStringLiteral("UiSettings"));
         oldTabBarOpenAfterCurrent = uiGroup.readEntry("TabBarOpenAfterCurrent", 1);
         uiGroup.writeEntry("TabBarOpenAfterCurrent", 0);
         uiGroup.sync();
@@ -401,7 +401,7 @@ void TestAreaOperation::simpleViewAdditionAndDeletion()
         1, 1, QStringLiteral("Added a single view to previously emptied mainwindow."));
 
     {
-        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group(QStringLiteral("UiSettings"));
         uiGroup.writeEntry("TabBarOpenAfterCurrent", oldTabBarOpenAfterCurrent);
         uiGroup.sync();
     }

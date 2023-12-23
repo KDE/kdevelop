@@ -229,7 +229,7 @@ CheckSetSelection CheckSetSelectionManager::loadCheckSetSelection(const QString&
     KConfig configFile(absoluteFilePath, KConfig::SimpleConfig);
 
     // check version
-    KConfigGroup formatConfigGroup = configFile.group("KDEVCTCS");
+    KConfigGroup formatConfigGroup = configFile.group(QStringLiteral("KDEVCTCS"));
     const QString formatVersion = formatConfigGroup.readEntry("Version");
     if (!formatVersion.startsWith(QLatin1String("1."))) {
         return result;
@@ -237,10 +237,10 @@ CheckSetSelection CheckSetSelectionManager::loadCheckSetSelection(const QString&
 
     result.setId(QFileInfo(absoluteFilePath).baseName());
 
-    KConfigGroup generalConfigGroup = configFile.group("General");
+    KConfigGroup generalConfigGroup = configFile.group(QStringLiteral("General"));
     result.setName(generalConfigGroup.readEntry("Name"));
 
-    KConfigGroup layoutConfigGroup = configFile.group("Checks");
+    KConfigGroup layoutConfigGroup = configFile.group(QStringLiteral("Checks"));
     result.setSelection(layoutConfigGroup.readEntry("Selection", QString()));
 
     return result;
@@ -251,13 +251,13 @@ void CheckSetSelectionManager::saveCheckSetSelection(const CheckSetSelection& ch
     const QString fileName = checkSetSelectionFilePath(checkSetSelection.id());
     KConfig configFile(fileName, KConfig::SimpleConfig);
 
-    KConfigGroup formatConfigGroup = configFile.group("KDEVCTCS");
+    KConfigGroup formatConfigGroup = configFile.group(QStringLiteral("KDEVCTCS"));
     formatConfigGroup.writeEntry("Version", "1.0");
 
-    KConfigGroup generalConfigGroup = configFile.group("General");
+    KConfigGroup generalConfigGroup = configFile.group(QStringLiteral("General"));
     generalConfigGroup.writeEntry("Name", checkSetSelection.name());
 
-    KConfigGroup layoutConfigGroup = configFile.group("Checks");
+    KConfigGroup layoutConfigGroup = configFile.group(QStringLiteral("Checks"));
     layoutConfigGroup.writeEntry("Selection", checkSetSelection.selectionAsString());
 }
 

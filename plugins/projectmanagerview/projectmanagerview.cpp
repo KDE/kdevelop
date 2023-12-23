@@ -54,10 +54,10 @@ ProjectManagerView *ProjectManagerViewItemContext::view() const
 }
 
 
-static const char sessionConfigGroup[] = "ProjectManagerView";
-static const char splitterStateConfigKey[] = "splitterState";
-static const char syncCurrentDocumentKey[] = "syncCurrentDocument";
-static const char targetsVisibleConfigKey[] = "targetsVisible";
+static constexpr QLatin1String sessionConfigGroup("ProjectManagerView");
+static constexpr QLatin1String splitterStateConfigKey("splitterState");
+static constexpr QLatin1String syncCurrentDocumentKey("syncCurrentDocument");
+static constexpr QLatin1String targetsVisibleConfigKey("targetsVisible");
 static const int projectTreeViewStrechFactor = 75; // %
 static const int projectBuildSetStrechFactor = 25; // %
 

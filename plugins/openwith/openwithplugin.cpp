@@ -62,7 +62,7 @@ bool isDirectory(const QString& mimeType)
 
 KConfigGroup defaultsConfig()
 {
-    return KSharedConfig::openConfig()->group("Open With Defaults");
+    return KSharedConfig::openConfig()->group(QStringLiteral("Open With Defaults"));
 }
 
 bool sortActions(QAction* left, QAction* right)

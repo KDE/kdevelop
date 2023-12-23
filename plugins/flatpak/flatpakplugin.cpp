@@ -192,7 +192,7 @@ void FlatpakPlugin::executeOnRemoteDevice()
     const auto runtime = qobject_cast<FlatpakRuntime*>(ICore::self()->runtimeController()->currentRuntime());
     Q_ASSERT(runtime);
 
-    KConfigGroup group(KSharedConfig::openConfig(), "Flatpak");
+    KConfigGroup group(KSharedConfig::openConfig(), QStringLiteral("Flatpak"));
     const QString lastDeviceAddress = group.readEntry("DeviceAddress");
     const QString host = QInputDialog::getText(
         ICore::self()->uiController()->activeMainWindow(), i18nc("@title:window", "Choose Tag Name"),

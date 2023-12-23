@@ -218,7 +218,7 @@ QString SourceFileTemplate::name() const
     Q_D(const SourceFileTemplate);
 
     KConfig templateConfig(d->descriptionFileName);
-    KConfigGroup cg(&templateConfig, "General");
+    KConfigGroup cg(&templateConfig, QStringLiteral("General"));
     return cg.readEntry("Name");
 }
 
@@ -227,7 +227,7 @@ QString SourceFileTemplate::type() const
     Q_D(const SourceFileTemplate);
 
     KConfig templateConfig(d->descriptionFileName);
-    KConfigGroup cg(&templateConfig, "General");
+    KConfigGroup cg(&templateConfig, QStringLiteral("General"));
     return cg.readEntry("Type", QString());
 }
 
@@ -236,7 +236,7 @@ QString SourceFileTemplate::languageName() const
     Q_D(const SourceFileTemplate);
 
     KConfig templateConfig(d->descriptionFileName);
-    KConfigGroup cg(&templateConfig, "General");
+    KConfigGroup cg(&templateConfig, QStringLiteral("General"));
     return cg.readEntry("Language", QString());
 }
 
@@ -245,7 +245,7 @@ QStringList SourceFileTemplate::category() const
     Q_D(const SourceFileTemplate);
 
     KConfig templateConfig(d->descriptionFileName);
-    KConfigGroup cg(&templateConfig, "General");
+    KConfigGroup cg(&templateConfig, QStringLiteral("General"));
     return cg.readEntry("Category", QStringList());
 }
 
@@ -254,7 +254,7 @@ QStringList SourceFileTemplate::defaultBaseClasses() const
     Q_D(const SourceFileTemplate);
 
     KConfig templateConfig(d->descriptionFileName);
-    KConfigGroup cg(&templateConfig, "General");
+    KConfigGroup cg(&templateConfig, QStringLiteral("General"));
     return cg.readEntry("BaseClasses", QStringList());
 }
 
@@ -273,7 +273,7 @@ QVector<SourceFileTemplate::OutputFile> SourceFileTemplate::outputFiles() const
     QVector<SourceFileTemplate::OutputFile> outputFiles;
 
     KConfig templateConfig(d->descriptionFileName);
-    KConfigGroup group(&templateConfig, "General");
+    KConfigGroup group(&templateConfig, QStringLiteral("General"));
 
     const QStringList files = group.readEntry("Files", QStringList());
     qCDebug(LANGUAGE) << "Files in template" << files;
@@ -299,7 +299,7 @@ bool SourceFileTemplate::hasCustomOptions() const
     Q_ASSERT(isValid());
 
     KConfig templateConfig(d->descriptionFileName);
-    KConfigGroup cg(&templateConfig, "General");
+    KConfigGroup cg(&templateConfig, QStringLiteral("General"));
     bool hasOptions = d->archive->directory()->entries().contains(cg.readEntry("OptionsFile", "options.kcfg"));
 
     qCDebug(LANGUAGE) << cg.readEntry("OptionsFile", "options.kcfg") << hasOptions;
@@ -313,7 +313,7 @@ QVector<SourceFileTemplate::ConfigOptionGroup> SourceFileTemplate::customOptions
     Q_ASSERT(isValid());
 
     KConfig templateConfig(d->descriptionFileName);
-    KConfigGroup cg(&templateConfig, "General");
+    KConfigGroup cg(&templateConfig, QStringLiteral("General"));
     const KArchiveEntry* entry = d->archive->directory()->entry(cg.readEntry("OptionsFile", "options.kcfg"));
 
     QVector<ConfigOptionGroup> optionGroups;

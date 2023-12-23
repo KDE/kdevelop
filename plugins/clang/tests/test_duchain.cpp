@@ -2225,13 +2225,13 @@ void TestDUChain::testGccCompatibility()
     // TODO: make it easier to change the compiler provider for testing purposes
     QTemporaryDir dir;
     auto project = new TestProject(Path(dir.path()), this);
-    auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
-    auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
+    auto definesAndIncludesConfig = project->projectConfiguration()->group(QStringLiteral("CustomDefinesAndIncludes"));
+    auto pathConfig = definesAndIncludesConfig.group(QStringLiteral("ProjectPath0"));
     pathConfig.writeEntry("Path", ".");
     if (!parserArguments.isEmpty()) {
         pathConfig.writeEntry("parserArguments", parserArguments);
     }
-    pathConfig.group("Compiler").writeEntry("Name", "GCC");
+    pathConfig.group(QStringLiteral("Compiler")).writeEntry(QStringLiteral("Name"), "GCC");
     m_projectController->addProject(project);
 
     {

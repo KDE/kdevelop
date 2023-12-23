@@ -27,7 +27,7 @@ PluginPreferences::PluginPreferences(QWidget* parent)
     auto* lay = new QVBoxLayout(this );
     lay->setContentsMargins(0, 0, 0, 0);
     selector = new KPluginWidget( this );
-    KConfigGroup cfgGroup(Core::self()->activeSession()->config(), "Plugins");
+    KConfigGroup cfgGroup(Core::self()->activeSession()->config(), QStringLiteral("Plugins"));
     selector->setConfig(cfgGroup);
     lay->addWidget( selector );
     QMap<QString, QVector<KPluginMetaData>> plugins;

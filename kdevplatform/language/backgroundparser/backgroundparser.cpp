@@ -422,10 +422,10 @@ public:
     {
         ///@todo re-load settings when they have been changed!
         Q_ASSERT(ICore::self()->activeSession());
-        KConfigGroup config(ICore::self()->activeSession()->config(), "Background Parser");
+        KConfigGroup config(ICore::self()->activeSession()->config(), QStringLiteral("Background Parser"));
 
         // stay backwards compatible
-        KConfigGroup oldConfig(KSharedConfig::openConfig(), "Background Parser");
+        KConfigGroup oldConfig(KSharedConfig::openConfig(), QStringLiteral("Background Parser"));
 #define BACKWARDS_COMPATIBLE_ENTRY(entry, default) \
     config.readEntry(entry, oldConfig.readEntry(entry, default))
 

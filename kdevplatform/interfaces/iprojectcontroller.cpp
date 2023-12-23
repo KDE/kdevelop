@@ -25,7 +25,7 @@ IProjectController::~IProjectController()
 
 bool IProjectController::parseAllProjectSources()
 {
-    KConfigGroup group = ICore::self()->activeSession()->config()->group( "Project Manager" );
+    KConfigGroup group = ICore::self()->activeSession()->config()->group(QStringLiteral("Project Manager"));
     return group.readEntry( "Parse All Project Sources", true );    
 }
 

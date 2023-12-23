@@ -47,15 +47,15 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
     connect(topBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
             this, &IdealController::slotDockBarContextMenuRequested);
 
-    m_docks = qobject_cast<KActionMenu*>(mainWindow->action("docks_submenu"));
+    m_docks = qobject_cast<KActionMenu*>(mainWindow->action(QStringLiteral("docks_submenu")));
 
-    m_showLeftDock = m_mainWindow->action("show_left_dock");
-    m_showRightDock = m_mainWindow->action("show_right_dock");
-    m_showBottomDock = m_mainWindow->action("show_bottom_dock");
+    m_showLeftDock = m_mainWindow->action(QStringLiteral("show_left_dock"));
+    m_showRightDock = m_mainWindow->action(QStringLiteral("show_right_dock"));
+    m_showBottomDock = m_mainWindow->action(QStringLiteral("show_bottom_dock"));
 
     // the 'show top dock' action got removed (IOW, it's never created)
     // (let's keep this code around if we ever want to reintroduce the feature...
-    m_showTopDock = m_mainWindow->action("show_top_dock");
+    m_showTopDock = m_mainWindow->action(QStringLiteral("show_top_dock"));
 
     connect(m_mainWindow, &MainWindow::settingsLoaded, this, &IdealController::loadSettings);
 
@@ -100,11 +100,11 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
       toolView->addToolBar(toolBar);
       dock->setWidget(toolView);
 
-      KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings/Docks/ToolbarEnabled");
+      KConfigGroup cg(KSharedConfig::openConfig(), QStringLiteral("UiSettings/Docks/ToolbarEnabled"));
       toolBar->setVisible(cg.readEntry(dockObjectName, true));
       connect(toolBar->toggleViewAction(), &QAction::toggled,
             this, [toolBar, dockObjectName](){
-                KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings/Docks/ToolbarEnabled");
+                KConfigGroup cg(KSharedConfig::openConfig(), QStringLiteral("UiSettings/Docks/ToolbarEnabled"));
                 cg.writeEntry(dockObjectName, toolBar->toggleViewAction()->isChecked());
             });
     }
@@ -487,7 +487,7 @@ void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)
 
 void IdealController::loadSettings()
 {
-    KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings");
+    KConfigGroup cg(KSharedConfig::openConfig(), QStringLiteral("UiSettings"));
 
     int bottomOwnsBottomLeft = cg.readEntry("BottomLeftCornerOwner", 0);
     if (bottomOwnsBottomLeft)

@@ -16,7 +16,7 @@ namespace gh
 
 Account::Account(Resource *resource)
 {
-    m_group = KConfigGroup(KSharedConfig::openConfig(), "ghprovider");
+    m_group = KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("ghprovider"));
     m_resource = resource;
 }
 

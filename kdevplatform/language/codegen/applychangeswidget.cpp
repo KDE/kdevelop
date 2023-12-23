@@ -164,8 +164,8 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString& file)
     auto* document = result.plugin;
     Q_ASSERT(document);
 
-    Q_ASSERT(document->action("file_save"));
-    document->action("file_save")->setEnabled(false);
+    Q_ASSERT(document->action(QStringLiteral("file_save")));
+    document->action(QStringLiteral("file_save"))->setEnabled(false);
 
     m_editParts.insert(m_index, document);
 

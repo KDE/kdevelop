@@ -61,7 +61,7 @@ constexpr const char* autoResizeColumnsKey = "autoResizeColumns";
 
 auto variablesViewConfigGroup()
 {
-    return KSharedConfig::openConfig()->group("Variables View");
+    return KSharedConfig::openConfig()->group(QStringLiteral("Variables View"));
 }
 
 }

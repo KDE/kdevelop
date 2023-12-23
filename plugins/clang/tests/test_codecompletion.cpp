@@ -754,7 +754,7 @@ void TestCodeCompletion::testOverrideExecute()
     QTemporaryDir directory;
     TestProject testProject {Path{directory.path()}};
     auto t = testProject.path().toLocalFile();
-    auto configGroup = testProject.projectConfiguration()->group(definesAndIncludesConfigName).group("ProjectPath0");
+    auto configGroup = testProject.projectConfiguration()->group(definesAndIncludesConfigName).group(QStringLiteral("ProjectPath0"));
     configGroup.writeEntry("Path", ".");
     configGroup.writeEntry("parserArguments", cppStandard);
     configGroup.sync();
@@ -1687,9 +1687,9 @@ void TestCodeCompletion::testIgnoreGccBuiltins()
     QTemporaryDir dir;
     auto project = new TestProject(Path(dir.path()), this);
     auto definesAndIncludesConfig = project->projectConfiguration()->group(definesAndIncludesConfigName);
-    auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
+    auto pathConfig = definesAndIncludesConfig.group(QStringLiteral("ProjectPath0"));
     pathConfig.writeEntry("Path", ".");
-    pathConfig.group("Compiler").writeEntry("Name", "GCC");
+    pathConfig.group(QStringLiteral("Compiler")).writeEntry(QStringLiteral("Name"), "GCC");
     m_projectController->addProject(project);
 
     {

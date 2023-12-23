@@ -28,9 +28,9 @@
 #include "../toolviewdata.h"
 
 namespace {
-QByteArray toolViewConfigSubgroup()
+QString toolViewConfigSubgroup()
 {
-    return QByteArrayLiteral("test_toolview");
+    return QStringLiteral("test_toolview");
 }
 QString toolViewTitle()
 {
