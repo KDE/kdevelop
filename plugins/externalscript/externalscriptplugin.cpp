@@ -262,7 +262,7 @@ void ExternalScriptPlugin::unload()
 
 KConfigGroup ExternalScriptPlugin::getConfig() const
 {
-    return KSharedConfig::openConfig()->group("External Scripts");
+    return KSharedConfig::openConfig()->group(QStringLiteral("External Scripts"));
 }
 
 QStandardItemModel* ExternalScriptPlugin::model() const

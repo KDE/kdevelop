@@ -244,7 +244,7 @@ QIcon PlasmoidExecutionConfigType::icon() const
 static bool canLaunchMetadataFile(const KDevelop::Path &path)
 {
     KConfig cfg(path.toLocalFile(), KConfig::SimpleConfig);
-    KConfigGroup group(&cfg, "Desktop Entry");
+    KConfigGroup group(&cfg, QStringLiteral("Desktop Entry"));
     QStringList services = group.readEntry("ServiceTypes", group.readEntry("X-KDE-ServiceTypes", QStringList()));
     return services.contains(QStringLiteral("Plasma/Applet"));
 }

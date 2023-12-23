@@ -123,7 +123,7 @@ void LldbFormattersTest::cleanupTestCase()
 void LldbFormattersTest::init()
 {
     //remove all breakpoints - so we can set our own in the test
-    KConfigGroup bpCfg = KSharedConfig::openConfig()->group("breakpoints");
+    KConfigGroup bpCfg = KSharedConfig::openConfig()->group(QStringLiteral("breakpoints"));
     bpCfg.writeEntry("number", 0);
     bpCfg.sync();
 

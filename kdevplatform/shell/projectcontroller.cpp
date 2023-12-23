@@ -371,7 +371,7 @@ bool writeNewProjectFile( const QString& localConfigFile, const QString& name, c
         qCDebug(SHELL) << "can't write to configfile";
         return false;
     }
-    KConfigGroup grp = cfg->group( "Project" );
+    KConfigGroup grp = cfg->group(QStringLiteral("Project") );
     grp.writeEntry( "Name", name );
     grp.writeEntry( "CreatedFrom", createdFrom );
     grp.writeEntry( "Manager", manager );
@@ -409,7 +409,7 @@ bool projectFileExists( const QUrl& u )
         return QFileInfo::exists( u.toLocalFile() );
     } else
     {
-        auto statJob = KIO::statDetails(u, KIO::StatJob::DestinationSide, KIO::StatNoDetails, KIO::HideProgressInfo);
+        auto statJob = KIO::stat(u, KIO::StatJob::DestinationSide, KIO::StatNoDetails, KIO::HideProgressInfo);
         KJobWidgets::setWindow(statJob, Core::self()->uiControllerInternal()->activeMainWindow());
         return statJob->exec();
     }
@@ -418,7 +418,7 @@ bool projectFileExists( const QUrl& u )
 bool equalProjectFile( const QString& configPath, OpenProjectDialog* dlg )
 {
     KSharedConfigPtr cfg = KSharedConfig::openConfig( configPath, KConfig::SimpleConfig );
-    KConfigGroup grp = cfg->group( "Project" );
+    KConfigGroup grp = cfg->group(QStringLiteral("Project") );
     QString defaultName = dlg->projectFileUrl().adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).fileName();
     return (grp.readEntry( "Name", QString() ) == dlg->projectName() || dlg->projectName() == defaultName) &&
            grp.readEntry( "Manager", QString() ) == dlg->projectManager();
@@ -605,13 +605,13 @@ void ProjectController::setupActions()
     d->m_core->uiControllerInternal()->area(0, QStringLiteral("code"))->addAction(action);
 
     KSharedConfig * config = KSharedConfig::openConfig().data();
-//     KConfigGroup group = config->group( "General Options" );
+//     KConfigGroup group = config->group(QStringLiteral("General Options") );
 
     d->m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openProject(QUrl)), this);
     ac->addAction( QStringLiteral("project_open_recent"), d->m_recentProjectsAction );
     d->m_recentProjectsAction->setText( i18nc("@action", "Open Recent Project" ) );
     d->m_recentProjectsAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
-    d->m_recentProjectsAction->loadEntries( KConfigGroup(config, "RecentProjects") );
+    d->m_recentProjectsAction->loadEntries( KConfigGroup(config, QStringLiteral("RecentProjects")) );
 
     auto* openProjectForFileAction = new QAction( this );
     ac->addAction(QStringLiteral("project_open_for_file"), openProjectForFileAction);
@@ -654,7 +654,7 @@ void ProjectController::saveRecentProjectsActionEntries()
         return;
 
     auto config = KSharedConfig::openConfig();
-    KConfigGroup recentGroup = config->group("RecentProjects");
+    KConfigGroup recentGroup = config->group(QStringLiteral("RecentProjects"));
     d->m_recentProjectsAction->saveEntries( recentGroup );
     config->sync();
 }
@@ -681,7 +681,7 @@ void ProjectController::initialize()
         this, QDBusConnection::ExportScriptableSlots );
 
     KSharedConfigPtr config = Core::self()->activeSession()->config();
-    KConfigGroup group = config->group( "General Options" );
+    KConfigGroup group = config->group(QStringLiteral("General Options") );
     const auto projects = group.readEntry( "Open Projects", QList<QUrl>() );
 
     connect( Core::self()->selectionController(), &ISelectionController::selectionChanged,
@@ -1155,7 +1155,7 @@ bool ProjectController::isProjectNameUsed( const QString& name ) const
 
 QUrl ProjectController::projectsBaseDirectory() const
 {
-    KConfigGroup group = ICore::self()->activeSession()->config()->group( "Project Manager" );
+    KConfigGroup group = ICore::self()->activeSession()->config()->group(QStringLiteral("Project Manager"));
     return group.readEntry("Projects Base Directory", QUrl::fromLocalFile(QDir::homePath() + QLatin1String("/projects")));
 }
 

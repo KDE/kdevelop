@@ -349,14 +349,14 @@ void GDBOutputWidget::focusInEvent(QFocusEvent* /*e*/)
 
 void GDBOutputWidget::savePartialProjectSession()
 {
-    KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
+    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("GDB Debugger"));
 
     config.writeEntry("showInternalCommands", m_showInternalCommands);
 }
 
 void GDBOutputWidget::restorePartialProjectSession()
 {
-    KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
+    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("GDB Debugger"));
 
     m_showInternalCommands = config.readEntry("showInternalCommands", false);
 }

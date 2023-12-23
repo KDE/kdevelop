@@ -97,7 +97,7 @@ NinjaJob* NinjaBuilder::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::Comm
     // Build arguments using data from KCM
     QStringList jobArguments;
     KSharedConfigPtr config = item->project()->projectConfiguration();
-    KConfigGroup group = config->group("NinjaBuilder");
+    KConfigGroup group = config->group(QStringLiteral("NinjaBuilder"));
 
     if (!group.readEntry("Abort on First Error", true)) {
         jobArguments << QStringLiteral("-k");
@@ -147,7 +147,7 @@ KJob* NinjaBuilder::install(KDevelop::ProjectBaseItem* item)
     installJob->setIsInstalling(true);
 
     KSharedConfigPtr configPtr = item->project()->projectConfiguration();
-    KConfigGroup builderGroup(configPtr, "NinjaBuilder");
+    KConfigGroup builderGroup(configPtr, QStringLiteral("NinjaBuilder"));
     bool installAsRoot = builderGroup.readEntry("Install As Root", false);
     if (installAsRoot) {
         auto* job = new KDevelop::BuilderJob;

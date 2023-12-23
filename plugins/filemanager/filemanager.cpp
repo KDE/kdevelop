@@ -46,7 +46,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     setWindowIcon(QIcon::fromTheme(QStringLiteral("folder-sync"), windowIcon()));
     setWindowTitle(i18nc("@title:window", "File System"));
 
-    KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group( "Filesystem" );
+    KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group(QStringLiteral("Filesystem"));
 
     auto *l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
@@ -85,7 +85,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 
 FileManager::~FileManager()
 {
-    KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group( "Filesystem" );
+    KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group(QStringLiteral("Filesystem"));
     cg.writeEntry( "LastLocation", urlnav->locationUrl() );
     cg.sync();
 }

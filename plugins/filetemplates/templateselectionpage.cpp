@@ -33,8 +33,8 @@
 
 using namespace KDevelop;
 
-static const char LastUsedTemplateEntry[] = "LastUsedTemplate";
-static const char FileTemplatesGroup[] = "SourceFileTemplates";
+static constexpr QLatin1String LastUsedTemplateEntry("LastUsedTemplate");
+static constexpr QLatin1String FileTemplatesGroup("SourceFileTemplates");
 
 class KDevelop::TemplateSelectionPagePrivate
 {

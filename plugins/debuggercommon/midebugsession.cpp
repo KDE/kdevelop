@@ -176,7 +176,7 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
     auto config = cfg ? cfg->config()
                 // FIXME: this is only used when attachToProcess or examineCoreFile.
                 // Change to use a global launch configuration when calling
-                : KConfigGroup(KSharedConfig::openConfig(), "GDB Config");
+                : KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("GDB Config"));
 
     if (!m_debugger->start(config, extraArguments)) {
         // debugger failed to start, ensure debugger and session state are correctly updated.

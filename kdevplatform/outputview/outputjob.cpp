@@ -57,7 +57,7 @@ void OutputJob::startOutput()
             if (d->standardToolView != -1) {
                 tvid = view->standardToolView(static_cast<IOutputView::StandardToolView>(d->standardToolView));
             } else {
-                tvid = view->registerToolView(QByteArray(), d->toolTitle, d->type, d->toolIcon);
+                tvid = view->registerToolView({}, d->toolTitle, d->type, d->toolIcon);
             }
 
             if (d->title.isEmpty())

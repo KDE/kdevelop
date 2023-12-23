@@ -450,7 +450,7 @@ void RunController::setupActions()
 //     QAction* profileAction = new QAction( QIcon::fromTheme(""), i18n("Profile Launch"), this);
 //     profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
 //     profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
-//     ac->addAction("run_profile", profileAction);
+//     ac->addaction(QStringLiteral("run_profile"), profileAction);
 //     connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
     action = d->stopAction = new QAction( QIcon::fromTheme(QStringLiteral("process-stop")), i18nc("@action", "Stop All Jobs"), this);

@@ -425,7 +425,7 @@ void Controller::loadSettings()
 {
     Q_D(Controller);
 
-    KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
+    KConfigGroup uiGroup = KSharedConfig::openConfig()->group(QStringLiteral("UiSettings"));
     d->openAfterCurrent = (uiGroup.readEntry("TabBarOpenAfterCurrent", 1) == 1);
     d->arrangeBuddies = (uiGroup.readEntry("TabBarArrangeBuddies", 1) == 1);
 }

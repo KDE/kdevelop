@@ -85,7 +85,7 @@ public:
      * @returns an tool view id that identifies the new view and is used in the other
      *          methods
      */
-    virtual int registerToolView(const QByteArray& configSubgroupName, const QString& title, ViewType type = OneView,
+    virtual int registerToolView(const QString& configSubgroupName, const QString& title, ViewType type = OneView,
                                  const QIcon& icon = QIcon(), Options option = ShowItemsButton,
                                  const QList<QAction*>& actionList = QList<QAction*>()) = 0;
 

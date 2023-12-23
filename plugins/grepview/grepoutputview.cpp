@@ -128,7 +128,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(applyButton, &QPushButton::clicked,  this, &GrepOutputView::onApply);
     connect(m_refresh, &QAction::triggered, this, &GrepOutputView::refresh);
     connect(m_clearSearchHistory, &QAction::triggered, this, &GrepOutputView::clearSearchHistory);
-    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
+    KConfigGroup cg = ICore::self()->activeSession()->config()->group(QStringLiteral("GrepDialog"));
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
     applyButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
@@ -186,7 +186,7 @@ void GrepOutputView::replacementTextChanged()
 
 GrepOutputView::~GrepOutputView()
 {
-    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
+    KConfigGroup cg = ICore::self()->activeSession()->config()->group(QStringLiteral("GrepDialog"));
     cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));
     QStringList settingsStrings;
     settingsStrings.reserve(m_settingsHistory.size() * GrepSettingsStorageItemCount);

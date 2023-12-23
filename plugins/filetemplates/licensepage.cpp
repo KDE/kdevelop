@@ -209,7 +209,7 @@ LicensePage::LicensePage(QWidget* parent)
     d->initializeLicenses();
 
     //Set the license selection to the previous one
-    KConfigGroup config(KSharedConfig::openConfig()->group("CodeGeneration"));
+    KConfigGroup config(KSharedConfig::openConfig()->group(QStringLiteral("CodeGeneration")));
     d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
     // Needed to avoid a bug where licenseComboChanged doesn't get
     // called by QComboBox if the past selection was 0
@@ -221,7 +221,7 @@ LicensePage::~LicensePage()
     if (d->license->saveLicense->isChecked() && !d->license->licenseName->text().isEmpty()) {
         d->saveLicense();
     }
-    KConfigGroup config(KSharedConfig::openConfig()->group("CodeGeneration"));
+    KConfigGroup config(KSharedConfig::openConfig()->group(QStringLiteral("CodeGeneration")));
     //Do not save invalid license numbers'
     int index = d->license->licenseComboBox->currentIndex();
     if( index >= 0 || index < d->availableLicenses.size() )

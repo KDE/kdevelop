@@ -69,7 +69,7 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
     if (preselectIndex == -1) {
         // "From File System" is quite unlikely to be what the user wants, so default to first real plugin...
         const int defaultIndex = (m_plugins.count() > 1) ? 1 : 0;
-        KConfigGroup configGroup = KSharedConfig::openConfig()->group("Providers");
+        KConfigGroup configGroup = KSharedConfig::openConfig()->group(QStringLiteral("Providers"));
         preselectIndex = configGroup.readEntry("LastProviderIndex", defaultIndex);
     }
     preselectIndex = qBound(0, preselectIndex, m_ui->sources->count() - 1);
@@ -87,7 +87,7 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
 
 ProjectSourcePage::~ProjectSourcePage()
 {
-    KConfigGroup configGroup = KSharedConfig::openConfig()->group("Providers");
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group(QStringLiteral("Providers"));
     configGroup.writeEntry("LastProviderIndex", m_ui->sources->currentIndex());
 
     delete m_ui;

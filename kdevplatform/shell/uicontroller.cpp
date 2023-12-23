@@ -594,7 +594,7 @@ void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
     }
     for (auto w : mainWindows()) {
         if (area == w->area()) {
-            Core::self()->activeSession()->config()->group("Working File Sets").writeEntry("Active Working Set", workingSet);
+            Core::self()->activeSession()->config()->group(QStringLiteral("Working File Sets")).writeEntry("Active Working Set", workingSet);
         }
     }
 }
@@ -611,7 +611,7 @@ void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
 
 void UiController::saveAllAreas(const KSharedConfigPtr& config)
 {
-    KConfigGroup uiConfig(config, "User Interface");
+    KConfigGroup uiConfig(config, QStringLiteral("User Interface"));
     int wc = mainWindows().size();
     uiConfig.writeEntry("Main Windows Count", wc);
     for (int w = 0; w < wc; ++w)
@@ -638,7 +638,7 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
 {
     Q_D(UiController);
 
-    KConfigGroup uiConfig(config, "User Interface");
+    KConfigGroup uiConfig(config, QStringLiteral("User Interface"));
     int wc = uiConfig.readEntry("Main Windows Count", 1);
 
     /* It is expected the main windows are restored before
@@ -699,7 +699,7 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
 
         // Force reload of the changes.
         showAreaInternal(mw->area(), mw);
-        mw->area()->setWorkingSet(Core::self()->activeSession()->config()->group("Working File Sets").readEntry("Active Working Set", QString()));
+        mw->area()->setWorkingSet(Core::self()->activeSession()->config()->group(QStringLiteral("Working File Sets")).readEntry("Active Working Set", QString()));
 
         mw->enableAreaSettingsSave();
     }

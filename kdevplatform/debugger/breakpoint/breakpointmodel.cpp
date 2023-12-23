@@ -649,7 +649,7 @@ void BreakpointModel::save()
         return;
     }
 
-    KConfigGroup breakpoints = activeSession->config()->group("Breakpoints");
+    KConfigGroup breakpoints = activeSession->config()->group(QStringLiteral("Breakpoints"));
     breakpoints.writeEntry("number", d->breakpoints.count());
     int i = 0;
     for (Breakpoint* b : qAsConst(d->breakpoints)) {

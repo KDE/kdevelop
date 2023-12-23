@@ -200,7 +200,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     setXMLFile("kdevclangtidy.rc");
 
     QAction* act_checkfile;
-    act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangTidyFile()));
+    act_checkfile = actionCollection()->addaction(QStringLiteral("clangtidy_file"), this, SLOT(runClangTidyFile()));
     act_checkfile->setStatusTip(i18n("Launches ClangTidy for current file"));
     act_checkfile->setText(i18n("clang-tidy"));
 
@@ -221,7 +221,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->addModel(QStringLiteral("ClangTidy"), m_model.data());
 
-    m_config = KSharedConfig::openConfig()->group("ClangTidy");
+    m_config = KSharedConfig::openConfig()->group(QStringLiteral("ClangTidy"));
     auto clangtidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
 
     // TODO(cnihelton): auto detect clang-tidy executable instead of hard-coding it.
@@ -297,7 +297,7 @@ void Plugin::runClangTidy(bool allFiles)
         return;
     }
 
-    m_config = project->projectConfiguration()->group("ClangTidy");
+    m_config = project->projectConfiguration()->group(QStringLiteral("ClangTidy"));
     if (!m_config.isValid()) {
         QMessageBox::critical(nullptr, i18n("Error starting ClangTidy"),
                               i18n("Can't load parameters. They must be set in the project settings."));

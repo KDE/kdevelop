@@ -129,7 +129,7 @@ void TemplatesModel::refresh()
                 archiveFound = true;
 
                 KConfig templateConfig(templateDescription);
-                KConfigGroup general(&templateConfig, "General");
+                KConfigGroup general(&templateConfig, QStringLiteral("General"));
                 QString name = general.readEntry("Name");
                 QString category = general.readEntry("Category");
                 QString comment = general.readEntry("Comment");
@@ -305,7 +305,7 @@ QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
 
     if (!description.isEmpty()) {
         KConfig templateConfig(description);
-        KConfigGroup general(&templateConfig, "General");
+        KConfigGroup general(&templateConfig, QStringLiteral("General"));
         const QStringList categories = general.readEntry("Category").split(QLatin1Char('/'));
 
         QStringList levels;
