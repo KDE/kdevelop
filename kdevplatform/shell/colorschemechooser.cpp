@@ -48,7 +48,7 @@ ColorSchemeChooser::ColorSchemeChooser(QObject* parent)
 QString ColorSchemeChooser::loadCurrentScheme() const
 {
     KSharedConfigPtr config = KSharedConfig::openConfig();
-    KConfigGroup cg(config, "UiSettings");
+    KConfigGroup cg(config, QStringLiteral("UiSettings"));
     // Since 5.67 KColorSchemeManager includes a system color scheme option that reacts to system
     // scheme changes. This scheme will be activated if we pass an empty string to KColorSchemeManager
     // So no need anymore to read the current global scheme ourselves if no custom one is configured.
@@ -58,7 +58,7 @@ QString ColorSchemeChooser::loadCurrentScheme() const
 void ColorSchemeChooser::saveCurrentScheme(const QString &name)
 {
     KSharedConfigPtr config = KSharedConfig::openConfig();
-    KConfigGroup cg(config, "UiSettings");
+    KConfigGroup cg(config, QStringLiteral("UiSettings"));
     cg.writeEntry("ColorScheme", name);
     cg.sync();
 }

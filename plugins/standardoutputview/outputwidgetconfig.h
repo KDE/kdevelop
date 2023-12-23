@@ -18,7 +18,7 @@ class OutputWidgetConfig : public QObject
 {
     Q_OBJECT
 public:
-    explicit OutputWidgetConfig(const QByteArray& configSubgroupName, const QString& toolViewTitle, QObject* parent);
+    explicit OutputWidgetConfig(const QString& configSubgroupName, const QString& toolViewTitle, QObject* parent);
 
     /// @return Maximum number of open output views or std::nullopt if unlimited.
     std::optional<int> maxViewCount() const;
@@ -33,7 +33,7 @@ private:
     int maxViewCount(const KConfigGroup& configSubgroup) const;
     bool isViewLimitEnabled(const KConfigGroup& configSubgroup) const;
 
-    const QByteArray m_configSubgroupName;
+    const QString m_configSubgroupName;
     const QString m_toolViewTitle;
 };
 

@@ -355,7 +355,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject* parent,
     staticQuickOpenPlugin = this;
     m_model = new QuickOpenModel(nullptr);
 
-    KConfigGroup quickopengrp = KSharedConfig::openConfig()->group("QuickOpen");
+    KConfigGroup quickopengrp = KSharedConfig::openConfig()->group(QStringLiteral("QuickOpen"));
     lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList{
         Strings::scopeProjectName(),
         Strings::scopeIncludesName(),
@@ -520,14 +520,14 @@ void QuickOpenPlugin::showQuickOpenWidget(const QStringList& items, const QStrin
 void QuickOpenPlugin::storeScopes(const QStringList& scopes)
 {
     lastUsedScopes = scopes;
-    KConfigGroup grp = KSharedConfig::openConfig()->group("QuickOpen");
+    KConfigGroup grp = KSharedConfig::openConfig()->group(QStringLiteral("QuickOpen"));
     grp.writeEntry("SelectedScopes", scopes);
 }
 
 void QuickOpenPlugin::storeItems(const QStringList& items)
 {
     lastUsedItems = items;
-    KConfigGroup grp = KSharedConfig::openConfig()->group("QuickOpen");
+    KConfigGroup grp = KSharedConfig::openConfig()->group(QStringLiteral("QuickOpen"));
     grp.writeEntry("SelectedItems", items);
 }
 

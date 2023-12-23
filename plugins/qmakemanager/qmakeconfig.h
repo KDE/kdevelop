@@ -16,15 +16,15 @@ class Path;
 class QMakeConfig
 {
 public:
-    static const char CONFIG_GROUP[];
+    static const QLatin1String CONFIG_GROUP;
 
-    static const char 
-        QMAKE_EXECUTABLE[],
-        BUILD_FOLDER[],
-        INSTALL_PREFIX[],
-        EXTRA_ARGUMENTS[],
-        BUILD_TYPE[],
-        ALL_BUILDS[];
+    static const QLatin1String
+        QMAKE_EXECUTABLE,
+        BUILD_FOLDER,
+        INSTALL_PREFIX,
+        EXTRA_ARGUMENTS,
+        BUILD_TYPE,
+        ALL_BUILDS;
 
     /**
      * Returns true when the given project is sufficiently configured.

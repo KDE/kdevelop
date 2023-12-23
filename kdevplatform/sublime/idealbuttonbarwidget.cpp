@@ -38,7 +38,7 @@ public:
         setText(title);
 
         //restore tool view shortcut config
-        KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+        KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("UI"));
         QStringList shortcutStrings = config.readEntry(QStringLiteral("Shortcut for %1").arg(title), QStringList());
         setShortcuts({ QKeySequence::fromString(shortcutStrings.value(0)), QKeySequence::fromString(shortcutStrings.value(1)) });
 
@@ -263,7 +263,7 @@ void IdealButtonBarWidget::saveOrderSettings(KConfigGroup& configGroup)
 
 bool IdealButtonBarWidget::isLocked() const
 {
-    KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+    KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("UI"));
     return config.readEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(m_area), false);
 }
 

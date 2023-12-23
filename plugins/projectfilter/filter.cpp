@@ -149,10 +149,10 @@ SerializedFilters defaultFilters()
 
 SerializedFilters readFilters(const KSharedConfigPtr& config)
 {
-    if (!config->hasGroup("Filters")) {
+    if (!config->hasGroup(QStringLiteral("Filters"))) {
         return defaultFilters();
     }
-    const KConfigGroup& group = config->group("Filters");
+    const KConfigGroup& group = config->group(QStringLiteral("Filters"));
     const int size = group.readEntry("size", -1);
     if (size == -1) {
         // fallback
@@ -162,7 +162,7 @@ SerializedFilters readFilters(const KSharedConfigPtr& config)
     SerializedFilters filters;
     filters.reserve(size);
     for (int i = 0; i < size; ++i) {
-        const QByteArray subGroup = QByteArray::number(i);
+        const QString subGroup = QString::number(i);
         if (!group.hasGroup(subGroup)) {
             continue;
         }
@@ -179,14 +179,14 @@ SerializedFilters readFilters(const KSharedConfigPtr& config)
 void writeFilters(const SerializedFilters& filters, KSharedConfigPtr config)
 {
     // clear existing
-    config->deleteGroup("Filters");
+    config->deleteGroup(QStringLiteral("Filters"));
 
     // write new
-    KConfigGroup group = config->group("Filters");
+    KConfigGroup group = config->group(QStringLiteral("Filters"));
     group.writeEntry("size", filters.size());
     int i = 0;
     for (const SerializedFilter& filter : filters) {
-        KConfigGroup subGroup = group.group(QByteArray::number(i++));
+        KConfigGroup subGroup = group.group(QString::number(i++));
         subGroup.writeEntry("pattern", filter.pattern);
         subGroup.writeEntry("targets", static_cast<int>(filter.targets));
         subGroup.writeEntry("inclusive", static_cast<int>(filter.type));

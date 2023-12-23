@@ -69,7 +69,7 @@ void GdbTest::cleanupTestCase()
 void GdbTest::init()
 {
     //remove all breakpoints - so we can set our own in the test
-    KConfigGroup breakpoints = KSharedConfig::openConfig()->group("breakpoints");
+    KConfigGroup breakpoints = KSharedConfig::openConfig()->group(QStringLiteral("breakpoints"));
     breakpoints.writeEntry("number", 0);
     breakpoints.sync();
 

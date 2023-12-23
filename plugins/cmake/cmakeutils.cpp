@@ -54,7 +54,7 @@ bool buildDirGroupExists( KDevelop::IProject* project, int buildDirIndex )
     return baseGroup(project).hasGroup(Config::groupNameBuildDir(buildDirIndex));
 }
 
-QString readBuildDirParameter(KDevelop::IProject* project, const char* key, const QString& aDefault, int buildDirectory)
+QString readBuildDirParameter(KDevelop::IProject* project, const QString &key, const QString& aDefault, int buildDirectory)
 {
     const int buildDirIndex = buildDirectory<0 ? CMake::currentBuildDirIndex(project) : buildDirectory;
     if (buildDirIndex >= 0) // NOTE: we return trimmed since we may have written bogus trailing newlines in the past...
@@ -63,7 +63,7 @@ QString readBuildDirParameter(KDevelop::IProject* project, const char* key, cons
         return aDefault;
 }
 
-void writeBuildDirParameter(KDevelop::IProject* project, const char* key, const QString& value)
+void writeBuildDirParameter(KDevelop::IProject* project, const QString &key, const QString& value)
 {
     int buildDirIndex = CMake::currentBuildDirIndex(project);
     if (buildDirIndex >= 0)
@@ -493,7 +493,7 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex)
     const KDevelop::Path builddir(buildDirGrp.readEntry( Config::Specific::buildDirPathKey, QString() ));
     const KDevelop::Path cacheFilePath( builddir, QStringLiteral("CMakeCache.txt"));
 
-    const QMap<QString, const char*> keys = {
+    const QMap<QString, QLatin1String> keys = {
         { QStringLiteral("CMAKE_COMMAND"), Config::Specific::cmakeExecutableKey },
         { QStringLiteral("CMAKE_INSTALL_PREFIX"), Config::Specific::cmakeInstallDirKey },
         { QStringLiteral("CMAKE_BUILD_TYPE"), Config::Specific::cmakeBuildTypeKey }
@@ -502,8 +502,8 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex)
     const QSet<QString> variables(keys.keyBegin(), keys.keyEnd());
     const QHash<QString, QString> cacheValues = readCacheValues(cacheFilePath, variables);
     for(auto it = cacheValues.constBegin(), itEnd = cacheValues.constEnd(); it!=itEnd; ++it) {
-        const char* const key = keys.value(it.key());
-        Q_ASSERT(key);
+        const QLatin1String key = keys.value(it.key());
+        Q_ASSERT(!key.isEmpty());
 
         // Use cache only when the config value is not set. Without this check we will always
         // overwrite values provided by the user in config dialog.

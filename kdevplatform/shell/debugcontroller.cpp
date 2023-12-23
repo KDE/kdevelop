@@ -226,7 +226,7 @@ void DebugController::setupActions()
     action->setWhatsThis( i18n("Restarts applications from the beginning.") );
     action->setEnabled(false);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(restartDebugger()));
-    ac->addAction("debug_restart", action);
+    ac->addaction(QStringLiteral("debug_restart"), action);
     #endif
 
     m_interruptDebugger = action = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-pause")), i18nc("@action", "Interrupt"), this);

@@ -19,7 +19,7 @@ CMakeExtraArgumentsHistory::CMakeExtraArgumentsHistory(KComboBox* widget)
     : m_arguments(widget)
 {
     if (m_arguments) {
-        KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");
+        KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("CMakeBuildDirChooser"));
         QStringList lastExtraArguments = config.readEntry("LastExtraArguments", QStringList());
         m_arguments->addItem(QString());
         m_arguments->addItems(lastExtraArguments);
@@ -35,7 +35,7 @@ CMakeExtraArgumentsHistory::CMakeExtraArgumentsHistory(KComboBox* widget)
 
 CMakeExtraArgumentsHistory::~CMakeExtraArgumentsHistory()
 {
-    KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");
+    KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("CMakeBuildDirChooser"));
     config.writeEntry("LastExtraArguments", list());
     config.sync();
 }

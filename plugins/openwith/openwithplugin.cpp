@@ -59,7 +59,7 @@ bool isTextEditor(const KPluginMetaData& md)
 
 QString defaultForMimeType(const QString& mimeType)
 {
-    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
+    KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("Open With Defaults"));
     if (config.hasKey(mimeType)) {
         QString storageId = config.readEntry(mimeType, QString());
         if (!storageId.isEmpty() && KService::serviceByStorageId(storageId)) {
@@ -288,7 +288,7 @@ void OpenWithPlugin::openService(const KService::Ptr& service)
         }
     }
 
-    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
+    KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("Open With Defaults"));
     if (service->storageId() != config.readEntry(m_mimeType, QString())) {
         int setDefault = KMessageBox::questionTwoActions(
             qApp->activeWindow(),

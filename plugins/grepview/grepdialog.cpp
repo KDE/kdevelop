@@ -123,7 +123,7 @@ inline QStringList excludepatterns()
 
 KConfigGroup dialogConfigGroup()
 {
-    return ICore::self()->activeSession()->config()->group("GrepDialog");
+    return ICore::self()->activeSession()->config()->group(QStringLiteral("GrepDialog"));
 }
 
 class DialogConfigReader
@@ -528,7 +528,7 @@ void GrepDialog::patternComboEditTextChanged( const QString& text)
 bool GrepDialog::checkProjectsOpened()
 {
     // only proceed if all projects have been opened
-    if (KDevelop::ICore::self()->activeSession()->config()->group("General Options").readEntry("Open Projects", QList<QUrl>()).count() !=
+    if (KDevelop::ICore::self()->activeSession()->config()->group(QStringLiteral("General Options")).readEntry("Open Projects", QList<QUrl>()).count() !=
         KDevelop::ICore::self()->projectController()->projects().count())
         return false;
 

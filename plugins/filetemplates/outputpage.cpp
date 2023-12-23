@@ -88,7 +88,7 @@ void OutputPagePrivate::updateFileNames()
     }
 
     //Save the setting for next time
-    KConfigGroup codegenGroup( KSharedConfig::openConfig(), "CodeGeneration" );
+    KConfigGroup codegenGroup(KSharedConfig::openConfig(), QStringLiteral("CodeGeneration"));
     codegenGroup.writeEntry( "LowerCaseFilenames", output->lowerFilenameCheckBox->isChecked() );
 
     validate();
@@ -217,7 +217,7 @@ void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
         baseUrl.setPath(baseUrl.path() + QLatin1Char('/'));
     }
 
-    KConfigGroup codegenGroup( KSharedConfig::openConfig(), "CodeGeneration" );
+    KConfigGroup codegenGroup( KSharedConfig::openConfig(), QStringLiteral("CodeGeneration"));
     bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
     d->output->lowerFilenameCheckBox->setChecked(lower);
 

@@ -188,7 +188,7 @@ void ProjectSelectionPage::validateData()
 
         // Read template file
         KConfig config(templatefile);
-        KConfigGroup configgroup(&config, "General");
+        KConfigGroup configgroup(&config, QStringLiteral("General"));
         QString pattern = configgroup.readEntry( "ValidProjectName" ,  "^[a-zA-Z][a-zA-Z0-9_-]+$" );
 
         // Validation

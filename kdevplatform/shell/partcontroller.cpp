@@ -205,7 +205,7 @@ void PartController::loadSettings( bool projectIsLoaded )
 
     Q_UNUSED( projectIsLoaded );
 
-    KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings");
+    KConfigGroup cg(KSharedConfig::openConfig(), QStringLiteral("UiSettings"));
     d->m_showTextEditorStatusBar = cg.readEntry("ShowTextEditorStatusBar", false);
 }
 
@@ -215,7 +215,7 @@ void PartController::saveSettings( bool projectIsLoaded )
 
     Q_UNUSED( projectIsLoaded );
 
-    KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings");
+    KConfigGroup cg(KSharedConfig::openConfig(), QStringLiteral("UiSettings"));
     cg.writeEntry("ShowTextEditorStatusBar", d->m_showTextEditorStatusBar);
 }
 

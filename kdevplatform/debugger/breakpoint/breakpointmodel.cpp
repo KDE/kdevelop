@@ -561,7 +561,7 @@ void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document*
 
 void BreakpointModel::load()
 {
-    KConfigGroup breakpoints = ICore::self()->activeSession()->config()->group("Breakpoints");
+    KConfigGroup breakpoints = ICore::self()->activeSession()->config()->group(QStringLiteral("Breakpoints"));
     int count = breakpoints.readEntry("number", 0);
     if (count == 0)
         return;
@@ -588,7 +588,7 @@ void BreakpointModel::save()
         return;
     }
 
-    KConfigGroup breakpoints = activeSession->config()->group("Breakpoints");
+    KConfigGroup breakpoints = activeSession->config()->group(QStringLiteral("Breakpoints"));
     breakpoints.writeEntry("number", d->breakpoints.count());
     int i = 0;
     for (Breakpoint* b : qAsConst(d->breakpoints)) {

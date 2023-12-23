@@ -146,7 +146,7 @@ QStringList NinjaJob::privilegedExecutionCommand() const
         return QStringList();
     }
     KSharedConfigPtr configPtr = it->project()->projectConfiguration();
-    KConfigGroup builderGroup(configPtr, "NinjaBuilder");
+    KConfigGroup builderGroup(configPtr, QStringLiteral("NinjaBuilder"));
 
     bool runAsRoot = builderGroup.readEntry("Install As Root", false);
     if (runAsRoot && m_isInstalling) {

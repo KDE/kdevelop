@@ -52,7 +52,7 @@ public:
     StandardOutputView* plugin;
     QMap<int, OutputData*> outputdata;
     KDevelop::IOutputView::ViewType type;
-    QByteArray configSubgroupName;
+    QString configSubgroupName;
     QString title;
     QIcon icon;
     int toolViewId;

@@ -114,18 +114,18 @@ QSplitter* loadToAreaPrivate(Sublime::Area *area, Sublime::AreaIndex *areaIndex,
         QStringList subgroups = setGroup.groupList();
         if (!subgroups.contains(QStringLiteral("0"))) {
             if (subgroups.contains(QStringLiteral("1"))) {
-                parentSplitter = loadToAreaPrivate(area, areaIndex, KConfigGroup(&setGroup, "1"), recycle);
+                parentSplitter = loadToAreaPrivate(area, areaIndex, KConfigGroup(&setGroup, QStringLiteral("1")), recycle);
             }
         } else if (!subgroups.contains(QStringLiteral("1"))) {
-            parentSplitter = loadToAreaPrivate(area, areaIndex, KConfigGroup(&setGroup, "0"), recycle);
+            parentSplitter = loadToAreaPrivate(area, areaIndex, KConfigGroup(&setGroup, QStringLiteral("0")), recycle);
         } else {
             areaIndex->split(setGroup.readEntry("Orientation", "Horizontal") == QLatin1String("Vertical") ? Qt::Vertical : Qt::Horizontal);
 
-            parentSplitter = loadToAreaPrivate(area, areaIndex->first(), KConfigGroup(&setGroup, "0"), recycle);
+            parentSplitter = loadToAreaPrivate(area, areaIndex->first(), KConfigGroup(&setGroup, QStringLiteral("0")), recycle);
             if (!parentSplitter) {
                 areaIndex->unsplit(areaIndex->first());
-                parentSplitter = loadToAreaPrivate(area, areaIndex, KConfigGroup(&setGroup, "1"), recycle);
-            } else if (auto *splitter = loadToAreaPrivate(area, areaIndex->second(), KConfigGroup(&setGroup, "1"), recycle)) {
+                parentSplitter = loadToAreaPrivate(area, areaIndex, KConfigGroup(&setGroup, QStringLiteral("1")), recycle);
+            } else if (auto *splitter = loadToAreaPrivate(area, areaIndex->second(), KConfigGroup(&setGroup, QStringLiteral("1")), recycle)) {
                 splitter->setSizes(setGroup.readEntry("Sizes", QList<int>({1, 1})));
                 parentSplitter = qobject_cast<QSplitter*>(splitter->parent());
             } else {
@@ -214,16 +214,16 @@ QSplitter* saveFromAreaPrivate(Sublime::AreaIndex *area, KConfigGroup setGroup, 
         } else if (!area->second()) {
             parentSplitter = saveFromAreaPrivate(area->first(), setGroup, activeView);
         } else {
-            parentSplitter = saveFromAreaPrivate(area->first(), KConfigGroup(&setGroup, "0"), activeView);
+            parentSplitter = saveFromAreaPrivate(area->first(), KConfigGroup(&setGroup, QStringLiteral("0")), activeView);
             if (!parentSplitter) {
                 parentSplitter = saveFromAreaPrivate(area->second(), setGroup, activeView);
-            } else if (saveFromAreaPrivate(area->second(), KConfigGroup(&setGroup, "1"), activeView)) {
+            } else if (saveFromAreaPrivate(area->second(), KConfigGroup(&setGroup, QStringLiteral("1")), activeView)) {
                 setGroup.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
                 setGroup.writeEntry("Sizes", parentSplitter->sizes());
             } else {
                 // move up settings of group "0"
-                KConfigGroup(&setGroup, "0").copyTo(&setGroup);
-                setGroup.deleteGroup("0");
+                KConfigGroup(&setGroup, QStringLiteral("0")).copyTo(&setGroup);
+                setGroup.deleteGroup(QStringLiteral("0"));
             }
         }
     } else {
@@ -288,7 +288,7 @@ WorkingSet::WorkingSet(const QString& id)
 
 bool WorkingSet::isEmpty() const
 {
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), QStringLiteral("Working File Sets"));
     KConfigGroup group = setConfig.group(m_id);
     return !group.hasKey("Orientation") && group.readEntry("View Count", 0) == 0;
 }
@@ -332,12 +332,12 @@ void loadFileList(QStringList& ret, const KConfigGroup& group)
         if (subgroups.contains(QStringLiteral("0"))) {
 
             {
-                KConfigGroup subgroup(&group, "0");
+                KConfigGroup subgroup(&group, QStringLiteral("0"));
                 loadFileList(ret, subgroup);
             }
 
             if (subgroups.contains(QStringLiteral("1"))) {
-                KConfigGroup subgroup(&group, "1");
+                KConfigGroup subgroup(&group, QStringLiteral("1"));
                 loadFileList(ret, subgroup);
             }
         }
@@ -359,7 +359,7 @@ void loadFileList(QStringList& ret, const KConfigGroup& group)
 QStringList WorkingSet::fileList() const
 {
     QStringList ret;
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), QStringLiteral("Working File Sets"));
     KConfigGroup group = setConfig.group(m_id);
 
     loadFileList(ret, group);
@@ -394,7 +394,7 @@ void WorkingSet::loadToArea(Sublime::Area* area) {
 
     Q_ASSERT( area->views().empty() );
 
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), QStringLiteral("Working File Sets"));
     KConfigGroup setGroup = setConfig.group(m_id);
 
     // Migrate from former by-area configs to a shared config
@@ -459,7 +459,7 @@ void WorkingSet::deleteSet(bool force, bool silent)
     if(m_areas.isEmpty() || force) {
         emit aboutToRemove(this);
 
-        KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
+        KConfigGroup setConfig(Core::self()->activeSession()->config(), QStringLiteral("Working File Sets"));
         KConfigGroup group = setConfig.group(m_id);
         group.deleteGroup();
 #ifdef SYNC_OFTEN
@@ -477,7 +477,7 @@ void WorkingSet::saveFromArea(Sublime::Area* area)
 
     bool wasPersistent = isPersistent();
 
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), QStringLiteral("Working File Sets"));
 
     KConfigGroup setGroup = setConfig.group(m_id);
     setGroup.deleteGroup();
@@ -544,7 +544,7 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View* view) {
 }
 
 void WorkingSet::setPersistent(bool persistent) {
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), QStringLiteral("Working File Sets"));
     KConfigGroup group = setConfig.group(m_id);
     group.writeEntry("persistent", persistent);
 #ifdef SYNC_OFTEN
@@ -554,7 +554,7 @@ void WorkingSet::setPersistent(bool persistent) {
 }
 
 bool WorkingSet::isPersistent() const {
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), QStringLiteral("Working File Sets"));
     KConfigGroup group = setConfig.group(m_id);
     return group.readEntry("persistent", false);
 }

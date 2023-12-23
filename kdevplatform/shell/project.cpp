@@ -293,7 +293,7 @@ public:
         qCDebug(SHELL) << "Creating KConfig object for project files" << developerTempFile << projectTempFile.fileName();
         m_cfg = KSharedConfig::openConfig( developerTempFile );
         m_cfg->addConfigSources( QStringList() << projectTempFile.fileName() );
-        KConfigGroup projectGroup( m_cfg, "Project" );
+        KConfigGroup projectGroup( m_cfg, QStringLiteral("Project"));
         return projectGroup;
     }
 

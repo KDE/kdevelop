@@ -251,7 +251,7 @@ void BuilderJob::start()
     // Automatically save all documents before starting to build
     // might need an option to turn off at some point
     // Also should be moved into the builder and there try to find target(s) for the given item and then just save the documents of that target -> list??
-    if( ICore::self()->activeSession()->config()->group("Project Manager").readEntry( "Save All Documents Before Building", true ) )
+    if( ICore::self()->activeSession()->config()->group(QStringLiteral("Project Manager")).readEntry( "Save All Documents Before Building", true ) )
     {
         ICore::self()->documentController()->saveAllDocuments( IDocument::Silent );
     }

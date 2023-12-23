@@ -25,7 +25,7 @@ using namespace KDevelop;
 namespace {
 bool wantAutoEnable(KDevelop::IProject* project, const QString& craftRoot)
 {
-    auto projectConfigGroup = project->projectConfiguration()->group("Project");
+    auto projectConfigGroup = project->projectConfiguration()->group(QStringLiteral("Project"));
     const bool haveConfigEntry = projectConfigGroup.entryMap().contains(QLatin1String("AutoEnableCraftRuntime"));
 
     if (!haveConfigEntry) {

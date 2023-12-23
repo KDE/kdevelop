@@ -58,14 +58,14 @@ KConfigGroup LaunchConfiguration::config()
 {
     Q_D(LaunchConfiguration);
 
-    return d->baseGroup.group("Data");
+    return d->baseGroup.group(QStringLiteral("Data"));
 }
 
 const KConfigGroup LaunchConfiguration::config() const
 {
     Q_D(const LaunchConfiguration);
 
-    return d->baseGroup.group("Data");
+    return d->baseGroup.group(QStringLiteral("Data"));
 }
 
 QString LaunchConfiguration::name() const
@@ -108,7 +108,7 @@ void LaunchConfiguration::setType(const QString& typeId)
     Q_ASSERT(t);
     if( t )
     {
-        d->baseGroup.deleteGroup("Data");
+        d->baseGroup.deleteGroup(QStringLiteral("Data"));
         d->type = t;
         d->baseGroup.writeEntry(LaunchConfigurationTypeEntry(), d->type->id());
         d->baseGroup.sync();

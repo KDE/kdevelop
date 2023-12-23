@@ -42,7 +42,7 @@ KJob* MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
 KJob* MakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath)
 {
     KSharedConfigPtr configPtr = dom->project()->projectConfiguration();
-    KConfigGroup builderGroup( configPtr, "MakeBuilder" );
+    KConfigGroup builderGroup( configPtr, QStringLiteral("MakeBuilder"));
     bool installAsRoot = builderGroup.readEntry("Install As Root", false);
 
     QStringList args(QStringLiteral("install"));

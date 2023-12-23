@@ -88,7 +88,7 @@ void MainWindow::createGUI(KParts::Part* part)
 
 void MainWindow::initializeCorners()
 {
-    const KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
+    const KConfigGroup cg = KSharedConfig::openConfig()->group(QStringLiteral( "UiSettings" ));
     const int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     const int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
     qCDebug(SHELL) << "Bottom Left:" << bottomleft;

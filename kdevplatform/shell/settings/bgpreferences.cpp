@@ -33,7 +33,7 @@ void BGPreferences::reset()
     ConfigPage::reset();
 
     Q_ASSERT(ICore::self()->activeSession());
-    KConfigGroup config(ICore::self()->activeSession()->config(), "Background Parser");
+    KConfigGroup config(ICore::self()->activeSession()->config(), QStringLiteral("Background Parser"));
 
     preferencesDialog->kcfg_delay->setValue(config.readEntry("Delay", 500));
     preferencesDialog->kcfg_threads->setValue(config.readEntry("Number of Threads", QThread::idealThreadCount()));
@@ -57,7 +57,7 @@ void BGPreferences::apply()
     Core::self()->languageController()->backgroundParser()->setDelay( preferencesDialog->kcfg_delay->value() );
     Core::self()->languageController()->backgroundParser()->setThreadCount( preferencesDialog->kcfg_threads->value() );
 
-    KConfigGroup config(ICore::self()->activeSession()->config(), "Background Parser");
+    KConfigGroup config(ICore::self()->activeSession()->config(), QStringLiteral("Background Parser"));
     config.writeEntry("Enabled", preferencesDialog->kcfg_enable->isChecked());
     config.writeEntry("Delay", preferencesDialog->kcfg_delay->value());
     config.writeEntry("Number of Threads", preferencesDialog->kcfg_threads->value());

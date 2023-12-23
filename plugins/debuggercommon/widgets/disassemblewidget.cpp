@@ -197,7 +197,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
 
         m_registersManager = new RegistersManager(m_splitter);
 
-        m_config = KSharedConfig::openConfig()->group("Disassemble/Registers View");
+        m_config = KSharedConfig::openConfig()->group(QStringLiteral("Disassemble/Registers View"));
 
         QByteArray state = m_config.readEntry<QByteArray>("splitterState", QByteArray());
         if (!state.isEmpty()) {

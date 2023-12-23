@@ -102,7 +102,7 @@ void TestBuddies::createFile(const QDir& dir, const QString& filename)
 void TestBuddies::enableBuddies(bool enable)
 {
     {
-        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group(QStringLiteral("UiSettings"));
         uiGroup.writeEntry("TabBarArrangeBuddies", (enable ? 1 : 0));
         uiGroup.sync();
     }
@@ -113,7 +113,7 @@ void TestBuddies::enableBuddies(bool enable)
 void TestBuddies::enableOpenAfterCurrent(bool enable)
 {
     {
-        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group(QStringLiteral("UiSettings"));
         uiGroup.writeEntry("TabBarOpenAfterCurrent", (enable ? 1 : 0));
         uiGroup.sync();
     }

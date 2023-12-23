@@ -49,7 +49,7 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     m_attachButton->setShortcut(Qt::CTRL | Qt::Key_Return);
     m_attachButton->setEnabled(false);
 
-    KConfigGroup config = KSharedConfig::openConfig()->group("GdbProcessSelectionDialog");
+    KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("GdbProcessSelectionDialog"));
     m_processList->filterLineEdit()->setText(config.readEntry("filterText", QString()));
     m_processList->loadSettings(config);
     restoreGeometry(config.readEntry("dialogGeometry", QByteArray()));
@@ -57,7 +57,7 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
 
 ProcessSelectionDialog::~ProcessSelectionDialog()
 {
-    KConfigGroup config = KSharedConfig::openConfig()->group("GdbProcessSelectionDialog");
+    KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("GdbProcessSelectionDialog"));
     config.writeEntry("filterText", m_processList->filterLineEdit()->text());
     m_processList->saveSettings(config);
     config.writeEntry("dialogGeometry", saveGeometry());
