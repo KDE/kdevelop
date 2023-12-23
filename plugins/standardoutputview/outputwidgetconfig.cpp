@@ -23,7 +23,7 @@ constexpr const char* maxViewCountConfigKey = "MaxOutputViewCount";
 constexpr const char* isViewLimitEnabledConfigKey = "IsViewLimitEnabled";
 }
 
-OutputWidgetConfig::OutputWidgetConfig(const QByteArray& configSubgroupName, const QString& toolViewTitle,
+OutputWidgetConfig::OutputWidgetConfig(const QString& configSubgroupName, const QString& toolViewTitle,
                                        QObject* parent)
     : QObject(parent)
     , m_configSubgroupName{configSubgroupName}
@@ -35,7 +35,7 @@ KConfigGroup OutputWidgetConfig::configSubgroup() const
 {
     // group is mutable, because the returned subgroup becomes read-only if group is const.
     KConfigGroup group(KSharedConfig::openConfig(), "StandardOutputView");
-    return KConfigGroup(&group, m_configSubgroupName.constData());
+    return KConfigGroup(&group, m_configSubgroupName);
 }
 
 int OutputWidgetConfig::maxViewCount(const KConfigGroup& configSubgroup) const
