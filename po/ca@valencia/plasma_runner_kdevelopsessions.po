@@ -30,7 +30,8 @@ msgstr "Busca sessions de KDevelop que coincidisquen amb :q:."
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr ""
-"Llista totes les sessions de l'editor de KDevelop que hi ha al vostre compte."
+"Llista totes les sessions de l'editor de KDevelop que hi ha en el vostre "
+"compte."
 
 #: kdevelopsessions.cpp:102
 #, kde-format
