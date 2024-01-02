@@ -35,6 +35,14 @@
 
 namespace KDevelop
 {
+namespace {
+QString mimeTypeForUrl(const QUrl& url)
+{
+    Q_ASSERT(url.isValid());
+    Q_ASSERT(!url.isEmpty());
+    return QMimeDatabase().mimeTypeForUrl(url).name();
+}
+}
 
 class PartControllerPrivate
 {
@@ -146,12 +154,8 @@ bool PartController::canCreatePart(const QUrl& url)
     if (!url.isValid()) {
         return false;
     }
-    Q_ASSERT(!url.isEmpty());
 
-    const auto mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
-    KService::List offers = KMimeTypeTrader::self()->query(
-                                mimeType,
-                                QStringLiteral("KParts/ReadOnlyPart") );
+    KService::List offers = KMimeTypeTrader::self()->query(mimeTypeForUrl(url), QStringLiteral("KParts/ReadOnlyPart"));
 
     return offers.count() > 0;
 }
@@ -161,11 +165,9 @@ KParts::Part* PartController::createPart( const QUrl & url, const QString& prefe
     if (!url.isValid()) {
         return nullptr;
     }
-    Q_ASSERT(!url.isEmpty());
 
     qCDebug(SHELL) << "creating part with url" << url << "and pref part:" << preferredPart;
-    const auto mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
-    KParts::Part* part = createPart( mimeType, preferredPart );
+    KParts::Part* part = createPart(mimeTypeForUrl(url), preferredPart);
     if (!part) {
         return nullptr;
     }
