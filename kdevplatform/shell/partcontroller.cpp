@@ -143,14 +143,12 @@ KTextEditor::Document* PartController::createTextPart()
 
 bool PartController::canCreatePart(const QUrl& url)
 {
-    if (!url.isValid()) return false;
+    if (!url.isValid()) {
+        return false;
+    }
+    Q_ASSERT(!url.isEmpty());
 
-    QString mimeType;
-    if ( url.isEmpty() )
-        mimeType = QStringLiteral("text/plain");
-    else
-        mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
-
+    const auto mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
     KService::List offers = KMimeTypeTrader::self()->query(
                                 mimeType,
                                 QStringLiteral("KParts/ReadOnlyPart") );
@@ -160,16 +158,13 @@ bool PartController::canCreatePart(const QUrl& url)
 
 KParts::Part* PartController::createPart( const QUrl & url, const QString& preferredPart )
 {
-    qCDebug(SHELL) << "creating part with url" << url << "and pref part:" << preferredPart;
-    QString mimeType;
-    if ( url.isEmpty() )
-        //create a part for empty text file
-        mimeType = QStringLiteral("text/plain");
-    else if ( !url.isValid() )
+    if (!url.isValid()) {
         return nullptr;
-    else
-        mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
+    }
+    Q_ASSERT(!url.isEmpty());
 
+    qCDebug(SHELL) << "creating part with url" << url << "and pref part:" << preferredPart;
+    const auto mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
     KParts::Part* part = createPart( mimeType, preferredPart );
     if (!part) {
         return nullptr;
