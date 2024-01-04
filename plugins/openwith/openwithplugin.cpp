@@ -66,12 +66,11 @@ bool sortActions(QAction* left, QAction* right)
     return left->text() < right->text();
 }
 
-QList<QAction*> sortedActions(QList<QAction*> actions, QAction* standardAction)
+QList<QAction*> sortedActions(QList<QAction*> actions, int sortOffset)
 {
-    std::sort(actions.begin(), actions.end(), sortActions);
-    if (standardAction) {
-        actions.removeOne(standardAction);
-        actions.prepend(standardAction);
+    if (!actions.isEmpty()) {
+        Q_ASSERT(actions.size() >= sortOffset);
+        std::sort(actions.begin() + sortOffset, actions.end(), sortActions);
     }
     return actions;
 }
@@ -200,16 +199,19 @@ QList<QAction*> OpenWithPlugin::actionsForParts(QWidget* parent)
     }
 
     const auto parts = KParts::PartLoader::partsForMimeType(m_mimeType);
-    const auto preferredPluginId = parts.value(0).pluginId();
     const auto defaultId = defaultIdForMimeType(m_mimeType);
 
     QList<QAction*> actions;
     actions.reserve(parts.size());
 
-    QAction* standardAction = nullptr;
+    int textEditorActionPos = -1;
     for (const auto& part : parts) {
         const auto pluginId = part.pluginId();
         const auto isTextEditor = isTextPart(pluginId);
+
+        if (isTextEditor) {
+            textEditorActionPos = actions.size();
+        }
 
         auto* action =
             createAction(isTextEditor ? i18nc("@item:inmenu", "Default Editor") : part.name(), part.iconName(), parent,
@@ -218,25 +220,28 @@ QList<QAction*> OpenWithPlugin::actionsForParts(QWidget* parent)
             openPart(pluginId, action->text());
         });
         actions << action;
-
-        if (isTextEditor || pluginId == preferredPluginId) {
-            standardAction = action;
-        }
     }
 
-    return sortedActions(std::move(actions), standardAction);
+    // partsForMimeType has the preferred part at the first position, let's keep it there
+    int sortOffset = 1;
+    if (textEditorActionPos > 0) {
+        // move the text editor action up front
+        actions.move(textEditorActionPos, 0);
+        // keep the user-preferred mime at the 2nd pos
+        sortOffset++;
+    }
+
+    return sortedActions(std::move(actions), sortOffset);
 }
 
 QList<QAction*> OpenWithPlugin::actionsForApplications(QWidget* parent)
 {
-    const auto preferredService = KApplicationTrader::preferredService(m_mimeType);
     const auto services = KApplicationTrader::queryByMimeType(m_mimeType);
     const auto defaultId = defaultIdForMimeType(m_mimeType);
 
     QList<QAction*> actions;
     actions.reserve(services.size());
 
-    QAction* standardAction = nullptr;
     for (const auto& service : services) {
         const auto storageId = service->storageId();
 
@@ -245,13 +250,11 @@ QList<QAction*> OpenWithPlugin::actionsForApplications(QWidget* parent)
             openApplication(service);
         });
         actions << action;
-
-        if (preferredService && storageId == preferredService->storageId()) {
-            standardAction = action;
-        }
     }
 
-    return sortedActions(std::move(actions), standardAction);
+    // queryByMimeType returns the preferred service in the first position, let's keep it there
+    const auto sortOffset = 1;
+    return sortedActions(std::move(actions), sortOffset);
 }
 
 void OpenWithPlugin::openDefault()
