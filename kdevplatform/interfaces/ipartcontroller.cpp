@@ -49,11 +49,17 @@ IPartController::IPartController(QWidget* toplevel)
 
 KParts::Part* IPartController::createPart ( const QString& mimetype, const QString& prefName )
 {
-    if (auto* editorFactory = findPartFactory(mimetype, prefName)) {
-        return editorFactory->create<KParts::ReadOnlyPart>(nullptr, this);
+    auto* editorFactory = findPartFactory(mimetype, prefName);
+    if (!editorFactory) {
+        return nullptr;
     }
 
-    return nullptr;
+    auto ret = editorFactory->create<KParts::ReadOnlyPart>(nullptr, this);
+    if (!ret) {
+        qWarning() << "failed to create ReadOnlyPart" << editorFactory->metaData().name() << mimetype << prefName;
+    }
+
+    return ret;
 }
 }
 
