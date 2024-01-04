@@ -50,6 +50,11 @@ bool isTextPart(const QString& pluginId)
     return pluginId == QLatin1String("katepart");
 }
 
+bool isDirectory(const QString& mimeType)
+{
+    return mimeType == QLatin1String("inode/directory");
+}
+
 QString defaultIdForMimeType(const QString& mimeType)
 {
     const auto config = KSharedConfig::openConfig()->group("Open With Defaults");
@@ -84,7 +89,7 @@ QAction* createAction(const QString& name, const QString& iconName, QWidget* par
 
 bool canOpenDefault(const QString& mimeType)
 {
-    if (defaultIdForMimeType(mimeType).isEmpty() && mimeType == QLatin1String("inode/directory")) {
+    if (defaultIdForMimeType(mimeType).isEmpty() && isDirectory(mimeType)) {
         // potentially happens in non-kde environments apparently, see https://git.reviewboard.kde.org/r/122373
         return KApplicationTrader::preferredService(mimeType);
     } else {
@@ -187,6 +192,13 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
 
 QList<QAction*> OpenWithPlugin::actionsForParts(QWidget* parent)
 {
+    if (isDirectory(m_mimeType)) {
+        // Don't return any parts for directories, KDevelop can only open files, not folders, thus
+        // we wouldn't ever actually do anything with the parts shown to the user here.
+        // Note that we can open a folder in an external application just fine though.
+        return {};
+    }
+
     const auto parts = KParts::PartLoader::partsForMimeType(m_mimeType);
     const auto preferredPluginId = parts.value(0).pluginId();
     const auto defaultId = defaultIdForMimeType(m_mimeType);
@@ -255,7 +267,7 @@ void OpenWithPlugin::openDefault()
     }
 
     // default handlers
-    if (m_mimeType == QLatin1String("inode/directory")) {
+    if (isDirectory(m_mimeType)) {
         KService::Ptr service = KApplicationTrader::preferredService(m_mimeType);
         auto* job = new KIO::ApplicationLauncherJob(service);
         job->setUrls(m_urls);
