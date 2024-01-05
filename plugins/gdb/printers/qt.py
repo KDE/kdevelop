@@ -769,8 +769,8 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QUrl$')] = lambda val: QUrlPrinter(val)
     pretty_printers_dict[re.compile('^QSet<.*>$')] = lambda val: QSetPrinter(val)
     pretty_printers_dict[re.compile('^QChar$')] = lambda val: QCharPrinter(val)
-    pretty_printers_dict[re.compile('^QUuid')] = lambda val: QUuidPrinter(val)
-    pretty_printers_dict[re.compile('^QVariant')] = lambda val: QVariantPrinter(val)
+    pretty_printers_dict[re.compile('^QUuid$')] = lambda val: QUuidPrinter(val)
+    pretty_printers_dict[re.compile('^QVariant$')] = lambda val: QVariantPrinter(val)
 
 
 build_dictionary ()
