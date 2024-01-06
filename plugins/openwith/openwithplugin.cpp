@@ -136,10 +136,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
         return KDevelop::ContextMenuExtension();
     }
 
-    // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
-    // TODO: Think about possible alternatives to using the mimetype of the first url.
-    QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(m_urls.first());
-    m_mimeType = mimetype.name();
+    auto mimetype = updateMimeTypeForUrls();
 
     auto partActions = actionsForParts(parent);
     auto appActions = actionsForApplications(parent);
@@ -330,7 +327,7 @@ void OpenWithPlugin::openFilesInternal( const QList<QUrl>& files )
     }
 
     m_urls = files;
-    m_mimeType = QMimeDatabase().mimeTypeForUrl(m_urls.first()).name();
+    updateMimeTypeForUrls();
     openDefault();
 }
 
@@ -353,6 +350,15 @@ void OpenWithPlugin::rememberDefaultChoice(const QString& defaultId, const QStri
     if (setDefault == KMessageBox::PrimaryAction) {
         config.writeEntry(m_mimeType, defaultId);
     }
+}
+
+QMimeType OpenWithPlugin::updateMimeTypeForUrls()
+{
+    // Fetch the MIME type of the !!first!! URL.
+    // TODO: think about possible alternatives to using the MIME type of the first URL.
+    auto mimeType = QMimeDatabase().mimeTypeForUrl(m_urls.first());
+    m_mimeType = mimeType.name();
+    return mimeType;
 }
 
 #include "openwithplugin.moc"

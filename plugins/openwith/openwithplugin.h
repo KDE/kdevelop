@@ -14,6 +14,8 @@
 
 #include "iopenwith.h"
 
+class QMimeType;
+
 class OpenWithPlugin : public KDevelop::IPlugin, public KDevelop::IOpenWith
 {
     Q_OBJECT
@@ -31,6 +33,13 @@ private:
     void openPart(const QString& pluginId, const QString& name);
     void openDefault();
     void rememberDefaultChoice(const QString& defaultId, const QString& name);
+
+    /**
+     * Update @a m_mimeType based on @a m_urls.
+     *
+     * @return the updated MIME type
+     */
+    QMimeType updateMimeTypeForUrls();
 
     QList<QAction*> actionsForParts(QWidget* parent);
     QList<QAction*> actionsForApplications(QWidget* parent);
