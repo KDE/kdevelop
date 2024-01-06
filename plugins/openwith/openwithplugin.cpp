@@ -55,9 +55,14 @@ bool isDirectory(const QString& mimeType)
     return mimeType == QLatin1String("inode/directory");
 }
 
+KConfigGroup defaultsConfig()
+{
+    return KSharedConfig::openConfig()->group("Open With Defaults");
+}
+
 QString defaultIdForMimeType(const QString& mimeType)
 {
-    const auto config = KSharedConfig::openConfig()->group("Open With Defaults");
+    const auto config = defaultsConfig();
     return config.readEntry(mimeType, QString());
 }
 
@@ -333,7 +338,7 @@ void OpenWithPlugin::openFilesInternal( const QList<QUrl>& files )
 
 void OpenWithPlugin::rememberDefaultChoice(const QString& defaultId, const QString& name)
 {
-    auto config = KSharedConfig::openConfig()->group("Open With Defaults");
+    auto config = defaultsConfig();
     if (defaultId == config.readEntry(m_mimeType, QString())) {
         return;
     }
