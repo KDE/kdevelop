@@ -60,12 +60,6 @@ KConfigGroup defaultsConfig()
     return KSharedConfig::openConfig()->group("Open With Defaults");
 }
 
-QString defaultIdForMimeType(const QString& mimeType)
-{
-    const auto config = defaultsConfig();
-    return config.readEntry(mimeType, QString());
-}
-
 bool sortActions(QAction* left, QAction* right)
 {
     return left->text() < right->text();
@@ -90,16 +84,16 @@ QAction* createAction(const QString& name, const QString& iconName, QWidget* par
     }
     return action;
 }
+} // unnamed namespace
 
-bool canOpenDefault(const QString& mimeType)
+bool OpenWithPlugin::canOpenDefault() const
 {
-    if (defaultIdForMimeType(mimeType).isEmpty() && isDirectory(mimeType)) {
+    if (m_defaultId.isEmpty() && isDirectory(m_mimeType)) {
         // potentially happens in non-kde environments apparently, see https://git.reviewboard.kde.org/r/122373
-        return KApplicationTrader::preferredService(mimeType);
+        return KApplicationTrader::preferredService(m_mimeType);
     } else {
         return true;
     }
-}
 }
 
 OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
@@ -180,7 +174,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
 
     KDevelop::ContextMenuExtension ext;
 
-    if (canOpenDefault(m_mimeType)) {
+    if (canOpenDefault()) {
         auto* openAction = new QAction(i18nc("@action:inmenu", "Open"), parent);
         openAction->setIcon( documentOpenIcon );
         connect( openAction, &QAction::triggered, this, &OpenWithPlugin::openDefault );
@@ -201,8 +195,6 @@ QList<QAction*> OpenWithPlugin::actionsForParts(QWidget* parent)
     }
 
     const auto parts = KParts::PartLoader::partsForMimeType(m_mimeType);
-    const auto defaultId = defaultIdForMimeType(m_mimeType);
-
     QList<QAction*> actions;
     actions.reserve(parts.size());
 
@@ -217,7 +209,7 @@ QList<QAction*> OpenWithPlugin::actionsForParts(QWidget* parent)
 
         auto* action =
             createAction(isTextEditor ? i18nc("@item:inmenu", "Default Editor") : part.name(), part.iconName(), parent,
-                         pluginId == defaultId || (defaultId.isEmpty() && isTextEditor));
+                         pluginId == m_defaultId || (m_defaultId.isEmpty() && isTextEditor));
         connect(action, &QAction::triggered, this, [this, action, pluginId]() {
             openPart(pluginId, action->text());
         });
@@ -239,15 +231,13 @@ QList<QAction*> OpenWithPlugin::actionsForParts(QWidget* parent)
 QList<QAction*> OpenWithPlugin::actionsForApplications(QWidget* parent)
 {
     const auto services = KApplicationTrader::queryByMimeType(m_mimeType);
-    const auto defaultId = defaultIdForMimeType(m_mimeType);
-
     QList<QAction*> actions;
     actions.reserve(services.size());
 
     for (const auto& service : services) {
         const auto storageId = service->storageId();
 
-        auto* action = createAction(service->name(), service->icon(), parent, storageId == defaultId);
+        auto* action = createAction(service->name(), service->icon(), parent, storageId == m_defaultId);
         connect(action, &QAction::triggered, this, [this, service]() {
             openApplication(service);
         });
@@ -262,12 +252,11 @@ QList<QAction*> OpenWithPlugin::actionsForApplications(QWidget* parent)
 void OpenWithPlugin::openDefault()
 {
     //  check preferred handler
-    const auto defaultId = defaultIdForMimeType(m_mimeType);
-    if (!defaultId.isEmpty()) {
-        if (auto service = KService::serviceByStorageId(defaultId); service && service->isApplication())
+    if (!m_defaultId.isEmpty()) {
+        if (auto service = KService::serviceByStorageId(m_defaultId); service && service->isApplication())
             openApplication(service);
         else
-            openPart(defaultId, {});
+            openPart(m_defaultId, {});
         return;
     }
 
@@ -338,8 +327,7 @@ void OpenWithPlugin::openFilesInternal( const QList<QUrl>& files )
 
 void OpenWithPlugin::rememberDefaultChoice(const QString& defaultId, const QString& name)
 {
-    auto config = defaultsConfig();
-    if (defaultId == config.readEntry(m_mimeType, QString())) {
+    if (defaultId == m_defaultId) {
         return;
     }
 
@@ -353,7 +341,8 @@ void OpenWithPlugin::rememberDefaultChoice(const QString& defaultId, const QStri
         QStringLiteral("OpenWith-%1").arg(m_mimeType));
 
     if (setDefault == KMessageBox::PrimaryAction) {
-        config.writeEntry(m_mimeType, defaultId);
+        m_defaultId = defaultId;
+        defaultsConfig().writeEntry(m_mimeType, m_defaultId);
     }
 }
 
@@ -363,6 +352,10 @@ QMimeType OpenWithPlugin::updateMimeTypeForUrls()
     // TODO: think about possible alternatives to using the MIME type of the first URL.
     auto mimeType = QMimeDatabase().mimeTypeForUrl(m_urls.first());
     m_mimeType = mimeType.name();
+
+    const auto config = defaultsConfig();
+    m_defaultId = config.readEntry(m_mimeType, QString());
+
     return mimeType;
 }
 

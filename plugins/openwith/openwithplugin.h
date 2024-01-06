@@ -31,11 +31,12 @@ protected:
 private:
     void openApplication(const KService::Ptr& service);
     void openPart(const QString& pluginId, const QString& name);
+    bool canOpenDefault() const;
     void openDefault();
     void rememberDefaultChoice(const QString& defaultId, const QString& name);
 
     /**
-     * Update @a m_mimeType based on @a m_urls.
+     * Update @a m_mimeType and @a m_defaultId based on @a m_urls.
      *
      * @return the updated MIME type
      */
@@ -45,6 +46,7 @@ private:
     QList<QAction*> actionsForApplications(QWidget* parent);
     QList<QUrl> m_urls;
     QString m_mimeType;
+    QString m_defaultId;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_OPENWITHPLUGIN_H
