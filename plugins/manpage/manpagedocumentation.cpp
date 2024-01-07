@@ -14,6 +14,7 @@
 #include <documentation/standarddocumentationview.h>
 
 #include <KIO/TransferJob>
+#include <KIO/StoredTransferJob>
 #include <KLocalizedString>
 
 #include <QFile>
