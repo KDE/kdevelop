@@ -20,6 +20,8 @@
 #include <QStringListModel>
 #include <QTimer>
 
+#include <KIO/ListJob>
+
 #include <limits>
 
 namespace {
