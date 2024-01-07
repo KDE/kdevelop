@@ -31,7 +31,6 @@ BookmarkHandler::BookmarkHandler( FileManager *parent, QMenu* kpopupmenu )
 
 
     KBookmarkManager manager(bookmarksPath.toLocalFile());
-    manager.setUpdate( true );
 
     m_bookmarkMenu = new KBookmarkMenu(&manager, this, m_menu);
     const auto actions = m_menu->actions();
