@@ -16,6 +16,34 @@
 
 class QMimeType;
 
+class FileOpener
+{
+public:
+    FileOpener() = default;
+    FileOpener(const KService::Ptr& service);
+    static FileOpener fromPartId(const QString& partId);
+
+    static FileOpener fromConfigEntryValue(const QString& value);
+    QString toConfigEntryValue() const;
+
+    /**
+     * @return whether this opener object is valid
+     * @note Most member functions and operators require valid opener(s) as a precondition.
+     */
+    bool isValid() const;
+
+    bool isPart() const;
+    const QString& id() const;
+
+private:
+    explicit FileOpener(bool isPart, const QString& id);
+
+    bool m_isPart = false;
+    QString m_id;
+};
+
+bool operator==(const FileOpener&, const FileOpener&);
+
 class OpenWithPlugin : public KDevelop::IPlugin, public KDevelop::IOpenWith
 {
     Q_OBJECT
@@ -33,10 +61,10 @@ private:
     void openPart(const QString& pluginId, const QString& name);
     bool canOpenDefault() const;
     void openDefault();
-    void rememberDefaultChoice(const QString& defaultId, const QString& name);
+    void rememberDefaultChoice(const FileOpener& opener, const QString& name);
 
     /**
-     * Update @a m_mimeType and @a m_defaultId based on @a m_urls.
+     * Update @a m_mimeType and @a m_defaultOpener based on @a m_urls.
      *
      * @return the updated MIME type
      */
@@ -46,7 +74,7 @@ private:
     QList<QAction*> actionsForApplications(QWidget* parent);
     QList<QUrl> m_urls;
     QString m_mimeType;
-    QString m_defaultId;
+    FileOpener m_defaultOpener;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_OPENWITHPLUGIN_H

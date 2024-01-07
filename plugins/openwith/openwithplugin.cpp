@@ -45,6 +45,8 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY_WITH_JSON(KDevOpenWithFactory, "kdevopenwith.json", registerPlugin<OpenWithPlugin>();)
 
 namespace {
+constexpr QLatin1String partIdConfigEntryValuePrefix{"PART-ID:", 8};
+
 bool isTextPart(const QString& pluginId)
 {
     return pluginId == QLatin1String("katepart");
@@ -86,9 +88,67 @@ QAction* createAction(const QString& name, const QString& iconName, QWidget* par
 }
 } // unnamed namespace
 
+FileOpener::FileOpener(const KService::Ptr& service)
+    : FileOpener(false, service->storageId())
+{
+    Q_ASSERT(service->isApplication());
+}
+
+FileOpener FileOpener::fromPartId(const QString& partId)
+{
+    return FileOpener{true, partId};
+}
+
+FileOpener FileOpener::fromConfigEntryValue(const QString& value)
+{
+    if (value.startsWith(partIdConfigEntryValuePrefix)) {
+        return FileOpener::fromPartId(value.mid(partIdConfigEntryValuePrefix.size()));
+    }
+    return FileOpener{false, value};
+}
+
+QString FileOpener::toConfigEntryValue() const
+{
+    Q_ASSERT(isValid());
+    if (m_isPart) {
+        return partIdConfigEntryValuePrefix + m_id;
+    }
+    return m_id;
+}
+
+bool FileOpener::isValid() const
+{
+    return !m_id.isEmpty();
+}
+
+bool FileOpener::isPart() const
+{
+    Q_ASSERT(isValid());
+    return m_isPart;
+}
+
+const QString& FileOpener::id() const
+{
+    Q_ASSERT(isValid());
+    return m_id;
+}
+
+FileOpener::FileOpener(bool isPart, const QString& id)
+    : m_isPart{isPart}
+    , m_id{id}
+{
+}
+
+bool operator==(const FileOpener& a, const FileOpener& b)
+{
+    Q_ASSERT(a.isValid());
+    Q_ASSERT(b.isValid());
+    return a.isPart() == b.isPart() && a.id() == b.id();
+}
+
 bool OpenWithPlugin::canOpenDefault() const
 {
-    if (m_defaultId.isEmpty() && isDirectory(m_mimeType)) {
+    if (!m_defaultOpener.isValid() && isDirectory(m_mimeType)) {
         // potentially happens in non-kde environments apparently, see https://git.reviewboard.kde.org/r/122373
         return KApplicationTrader::preferredService(m_mimeType);
     } else {
@@ -207,9 +267,10 @@ QList<QAction*> OpenWithPlugin::actionsForParts(QWidget* parent)
             textEditorActionPos = actions.size();
         }
 
-        auto* action =
-            createAction(isTextEditor ? i18nc("@item:inmenu", "Default Editor") : part.name(), part.iconName(), parent,
-                         pluginId == m_defaultId || (m_defaultId.isEmpty() && isTextEditor));
+        const bool isDefault =
+            m_defaultOpener.isValid() ? FileOpener::fromPartId(pluginId) == m_defaultOpener : isTextEditor;
+        auto* action = createAction(isTextEditor ? i18nc("@item:inmenu", "Default Editor") : part.name(),
+                                    part.iconName(), parent, isDefault);
         connect(action, &QAction::triggered, this, [this, action, pluginId]() {
             openPart(pluginId, action->text());
         });
@@ -235,9 +296,8 @@ QList<QAction*> OpenWithPlugin::actionsForApplications(QWidget* parent)
     actions.reserve(services.size());
 
     for (const auto& service : services) {
-        const auto storageId = service->storageId();
-
-        auto* action = createAction(service->name(), service->icon(), parent, storageId == m_defaultId);
+        const bool isDefault = m_defaultOpener.isValid() && service == m_defaultOpener;
+        auto* action = createAction(service->name(), service->icon(), parent, isDefault);
         connect(action, &QAction::triggered, this, [this, service]() {
             openApplication(service);
         });
@@ -252,11 +312,13 @@ QList<QAction*> OpenWithPlugin::actionsForApplications(QWidget* parent)
 void OpenWithPlugin::openDefault()
 {
     //  check preferred handler
-    if (!m_defaultId.isEmpty()) {
-        if (auto service = KService::serviceByStorageId(m_defaultId); service && service->isApplication())
-            openApplication(service);
-        else
-            openPart(m_defaultId, {});
+    if (m_defaultOpener.isValid()) {
+        if (m_defaultOpener.isPart()) {
+            openPart(m_defaultOpener.id(), {});
+        } else {
+            if (auto service = KService::serviceByStorageId(m_defaultOpener.id()); service && service->isApplication())
+                openApplication(service);
+        }
         return;
     }
 
@@ -293,7 +355,7 @@ void OpenWithPlugin::openPart(const QString& pluginId, const QString& name)
     }
 
     if (!name.isEmpty()) {
-        rememberDefaultChoice(pluginId, name);
+        rememberDefaultChoice(FileOpener::fromPartId(pluginId), name);
     }
 }
 
@@ -311,7 +373,7 @@ void OpenWithPlugin::openApplication(const KService::Ptr& service)
                                               ICore::self()->uiController()->activeMainWindow()));
     job->start();
 
-    rememberDefaultChoice(service->storageId(), service->name());
+    rememberDefaultChoice(service, service->name());
 }
 
 void OpenWithPlugin::openFilesInternal( const QList<QUrl>& files )
@@ -325,9 +387,9 @@ void OpenWithPlugin::openFilesInternal( const QList<QUrl>& files )
     openDefault();
 }
 
-void OpenWithPlugin::rememberDefaultChoice(const QString& defaultId, const QString& name)
+void OpenWithPlugin::rememberDefaultChoice(const FileOpener& opener, const QString& name)
 {
-    if (defaultId == m_defaultId) {
+    if (m_defaultOpener.isValid() && opener == m_defaultOpener) {
         return;
     }
 
@@ -341,8 +403,8 @@ void OpenWithPlugin::rememberDefaultChoice(const QString& defaultId, const QStri
         QStringLiteral("OpenWith-%1").arg(m_mimeType));
 
     if (setDefault == KMessageBox::PrimaryAction) {
-        m_defaultId = defaultId;
-        defaultsConfig().writeEntry(m_mimeType, m_defaultId);
+        m_defaultOpener = opener;
+        defaultsConfig().writeEntry(m_mimeType, m_defaultOpener.toConfigEntryValue());
     }
 }
 
@@ -354,7 +416,7 @@ QMimeType OpenWithPlugin::updateMimeTypeForUrls()
     m_mimeType = mimeType.name();
 
     const auto config = defaultsConfig();
-    m_defaultId = config.readEntry(m_mimeType, QString());
+    m_defaultOpener = FileOpener::fromConfigEntryValue(config.readEntry(m_mimeType, QString()));
 
     return mimeType;
 }
