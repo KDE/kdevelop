@@ -40,6 +40,8 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 
+#include <utility>
+
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevOpenWithFactory, "kdevopenwith.json", registerPlugin<OpenWithPlugin>();)
@@ -91,6 +93,7 @@ QAction* createAction(const QString& name, const QString& iconName, QWidget* par
 FileOpener::FileOpener(const KService::Ptr& service)
     : FileOpener(false, service->storageId())
 {
+    m_service = service;
     Q_ASSERT(service->isApplication());
 }
 
@@ -102,9 +105,21 @@ FileOpener FileOpener::fromPartId(const QString& partId)
 FileOpener FileOpener::fromConfigEntryValue(const QString& value)
 {
     if (value.startsWith(partIdConfigEntryValuePrefix)) {
+        // TODO: can the part ID be validated efficiently here? A matching plugin
+        // should be available and support the MIME type key of the config entry.
         return FileOpener::fromPartId(value.mid(partIdConfigEntryValuePrefix.size()));
     }
-    return FileOpener{false, value};
+
+    if (!value.isEmpty()) {
+        auto service = KService::serviceByStorageId(value);
+        if (service && service->isApplication()) {
+            FileOpener opener{false, value};
+            opener.m_service = std::move(service);
+            return opener;
+        }
+    }
+
+    return FileOpener{false, QString()};
 }
 
 QString FileOpener::toConfigEntryValue() const
@@ -131,6 +146,14 @@ const QString& FileOpener::id() const
 {
     Q_ASSERT(isValid());
     return m_id;
+}
+
+const KService::Ptr& FileOpener::service() const
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(!isPart());
+    Q_ASSERT(m_service);
+    return m_service;
 }
 
 FileOpener::FileOpener(bool isPart, const QString& id)
@@ -316,8 +339,7 @@ void OpenWithPlugin::openDefault()
         if (m_defaultOpener.isPart()) {
             openPart(m_defaultOpener.id(), {});
         } else {
-            if (auto service = KService::serviceByStorageId(m_defaultOpener.id()); service && service->isApplication())
-                openApplication(service);
+            openApplication(m_defaultOpener.service());
         }
         return;
     }

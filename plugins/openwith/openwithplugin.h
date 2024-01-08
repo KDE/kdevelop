@@ -35,11 +35,18 @@ public:
     bool isPart() const;
     const QString& id() const;
 
+    /**
+     * @return non-null service pointer for a valid application opener
+     * @pre !isPart()
+     */
+    const KService::Ptr& service() const;
+
 private:
     explicit FileOpener(bool isPart, const QString& id);
 
     bool m_isPart = false;
     QString m_id;
+    KService::Ptr m_service; ///< a cached service pointer
 };
 
 bool operator==(const FileOpener&, const FileOpener&);
