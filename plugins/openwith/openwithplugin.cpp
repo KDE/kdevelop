@@ -339,7 +339,7 @@ void OpenWithPlugin::openDefault()
         if (m_defaultOpener.isPart()) {
             openPart(m_defaultOpener.id(), {});
         } else {
-            openApplication(m_defaultOpener.service());
+            delegateToExternalApplication(m_defaultOpener.service());
         }
         return;
     }
@@ -347,15 +347,7 @@ void OpenWithPlugin::openDefault()
     // default handlers
     if (isDirectory(m_mimeType)) {
         KService::Ptr service = KApplicationTrader::preferredService(m_mimeType);
-        auto* job = new KIO::ApplicationLauncherJob(service);
-        job->setUrls(m_urls);
-#if KIO_VERSION < QT_VERSION_CHECK(5, 98, 0)
-        job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
-#else
-        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
-#endif
-                                                  ICore::self()->uiController()->activeMainWindow()));
-        job->start();
+        delegateToExternalApplication(service);
     } else {
         for (const QUrl& u : qAsConst(m_urls)) {
             ICore::self()->documentController()->openDocument( u );
@@ -381,7 +373,7 @@ void OpenWithPlugin::openPart(const QString& pluginId, const QString& name)
     }
 }
 
-void OpenWithPlugin::openApplication(const KService::Ptr& service)
+void OpenWithPlugin::delegateToExternalApplication(const KService::Ptr& service) const
 {
     Q_ASSERT(service->isApplication());
 
@@ -394,7 +386,11 @@ void OpenWithPlugin::openApplication(const KService::Ptr& service)
 #endif
                                               ICore::self()->uiController()->activeMainWindow()));
     job->start();
+}
 
+void OpenWithPlugin::openApplication(const KService::Ptr& service)
+{
+    delegateToExternalApplication(service);
     rememberDefaultChoice(service, service->name());
 }
 
