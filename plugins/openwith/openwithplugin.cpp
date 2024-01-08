@@ -332,12 +332,12 @@ QList<QAction*> OpenWithPlugin::actionsForApplications(QWidget* parent)
     return sortedActions(std::move(actions), sortOffset);
 }
 
-void OpenWithPlugin::openDefault()
+void OpenWithPlugin::openDefault() const
 {
     //  check preferred handler
     if (m_defaultOpener.isValid()) {
         if (m_defaultOpener.isPart()) {
-            openPart(m_defaultOpener.id(), {});
+            delegateToParts(m_defaultOpener.id());
         } else {
             delegateToExternalApplication(m_defaultOpener.service());
         }
@@ -355,7 +355,7 @@ void OpenWithPlugin::openDefault()
     }
 }
 
-void OpenWithPlugin::openPart(const QString& pluginId, const QString& name)
+void OpenWithPlugin::delegateToParts(const QString& pluginId) const
 {
     auto prefName = pluginId;
     if (isTextPart(pluginId)) {
@@ -367,10 +367,12 @@ void OpenWithPlugin::openPart(const QString& pluginId, const QString& name)
     for (const QUrl& u : qAsConst(m_urls)) {
         ICore::self()->documentController()->openDocument(u, prefName);
     }
+}
 
-    if (!name.isEmpty()) {
-        rememberDefaultChoice(FileOpener::fromPartId(pluginId), name);
-    }
+void OpenWithPlugin::openPart(const QString& pluginId, const QString& name)
+{
+    delegateToParts(pluginId);
+    rememberDefaultChoice(FileOpener::fromPartId(pluginId), name);
 }
 
 void OpenWithPlugin::delegateToExternalApplication(const KService::Ptr& service) const

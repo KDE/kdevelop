@@ -67,7 +67,8 @@ private:
     void openApplication(const KService::Ptr& service);
     void openPart(const QString& pluginId, const QString& name);
     bool canOpenDefault() const;
-    void openDefault();
+    void openDefault() const;
+    void delegateToParts(const QString& pluginId) const;
     void delegateToExternalApplication(const KService::Ptr& service) const;
     void rememberDefaultChoice(const FileOpener& opener, const QString& name);
 
