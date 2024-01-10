@@ -141,8 +141,8 @@ Item {
                 openSession();
             }
         }
-        Keys.onReturnPressed: { currentItem.Keys.onPressed(event); }
-        Keys.onEnterPressed: { currentItem.Keys.onPressed(event); }
+        Keys.onReturnPressed: { currentItem.Keys.pressed(event); }
+        Keys.onEnterPressed: { currentItem.Keys.pressed(event); }
         highlight: PlasmaComponents.Highlight {
             hover: true
         }
