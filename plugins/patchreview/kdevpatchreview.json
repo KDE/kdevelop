@@ -33,7 +33,8 @@
                 "Name[tr]": "David Nolden",
                 "Name[uk]": "David Nolden",
                 "Name[x-test]": "xxDavid Noldenxx",
-                "Name[zh_CN]": "David Nolden"
+                "Name[zh_CN]": "David Nolden",
+                "Name[zh_TW]": "David Nolden"
             }
         ],
         "Category": "Utilities",

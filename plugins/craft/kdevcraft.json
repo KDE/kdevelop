@@ -25,7 +25,8 @@
                 "Name[sv]": "Gleb Popov",
                 "Name[tr]": "Gleb Popov",
                 "Name[uk]": "Gleb Popov",
-                "Name[x-test]": "xxGleb Popovxx"
+                "Name[x-test]": "xxGleb Popovxx",
+                "Name[zh_TW]": "Gleb Popov"
             }
         ],
         "Category": "Runtimes",
@@ -75,6 +76,7 @@
         "Name[tr]": "Craft çalıştırma ortamı",
         "Name[uk]": "Середовище виконання Craft",
         "Name[x-test]": "xxCraft runtimexx",
+        "Name[zh_TW]": "Craft 執行階段",
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

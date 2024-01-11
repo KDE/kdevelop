@@ -33,7 +33,8 @@
                 "Name[tr]": "Adam Treat",
                 "Name[uk]": "Adam Treat",
                 "Name[x-test]": "xxAdam Treatxx",
-                "Name[zh_CN]": "Adam Treat"
+                "Name[zh_CN]": "Adam Treat",
+                "Name[zh_TW]": "Adam Treat"
             }
         ],
         "Category": "Utilities",

@@ -31,7 +31,8 @@
                 "Name[tr]": "Morten Danielsen Volden",
                 "Name[uk]": "Morten Danielsen Volden",
                 "Name[x-test]": "xxMorten Danielsen Voldenxx",
-                "Name[zh_CN]": "Morten Danielsen Volden"
+                "Name[zh_CN]": "Morten Danielsen Volden",
+                "Name[zh_TW]": "Morten Danielsen Volden"
             }
         ],
         "Category": "Version Control",
@@ -96,6 +97,7 @@
         "Name[uk]": "Підтримка Perforce",
         "Name[x-test]": "xxPerforce Supportxx",
         "Name[zh_CN]": "Perforce 支持",
+        "Name[zh_TW]": "Perforce 支援",
         "Version": "5.0"
     },
     "X-KDevelop-Category": "Global",

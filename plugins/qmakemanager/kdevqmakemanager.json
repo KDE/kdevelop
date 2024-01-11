@@ -30,6 +30,7 @@
         "Description[uk]": "Імпортує і дає змогу редагувати проєкти QMake",
         "Description[x-test]": "xxImports and edits QMake projectsxx",
         "Description[zh_CN]": "导入并编辑 QMake 工程",
+        "Description[zh_TW]": "匯入並編輯 QMake 專案",
         "Icon": "qtlogo",
         "Id": "KDevQMakeManager",
         "Name": "QMake Project Manager",
@@ -61,7 +62,8 @@
         "Name[tr]": "QMake Proje Yöneticisi",
         "Name[uk]": "Керування проєктами QMake",
         "Name[x-test]": "xxQMake Project Managerxx",
-        "Name[zh_CN]": "QMake 工程管理器"
+        "Name[zh_CN]": "QMake 工程管理器",
+        "Name[zh_TW]": "QMake 專案管理員"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "QMake",

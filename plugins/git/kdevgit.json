@@ -34,7 +34,8 @@
                 "Name[tr]": "Evgeniy Ivanov",
                 "Name[uk]": "Evgeniy Ivanov",
                 "Name[x-test]": "xxEvgeniy Ivanovxx",
-                "Name[zh_CN]": "Evgeniy Ivanov"
+                "Name[zh_CN]": "Evgeniy Ivanov",
+                "Name[zh_TW]": "Evgeniy Ivanov"
             }
         ],
         "Category": "Version Control",
@@ -68,7 +69,7 @@
         "Description[uk]": "Цей додаток інтегрує Git із KDevelop",
         "Description[x-test]": "xxThis plugin integrates Git to KDevelopxx",
         "Description[zh_CN]": "此插件对 KDevelop 整合 Git",
-        "Description[zh_TW]": "此外掛程式將 Git 整合進 KDevelop",
+        "Description[zh_TW]": "此外掛程式將 Git 整合進 KDevelop 內",
         "Icon": "git",
         "Id": "kdevgit",
         "License": "GPL",

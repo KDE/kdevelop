@@ -32,7 +32,8 @@
                 "Name[tr]": "Miquel Sabaté",
                 "Name[uk]": "Miquel Sabaté",
                 "Name[x-test]": "xxMiquel Sabatéxx",
-                "Name[zh_CN]": "Miquel Sabaté"
+                "Name[zh_CN]": "Miquel Sabaté",
+                "Name[zh_TW]": "Miquel Sabaté"
             }
         ],
         "Category": "Utilities",
@@ -64,6 +65,7 @@
         "Description[uk]": "За допомогою цього додатка можна отримувати проєкти з GitHub",
         "Description[x-test]": "xxThis plugin helps to obtain projects from GitHubxx",
         "Description[zh_CN]": "此插件帮助您从 GitHub 获取工程",
+        "Description[zh_TW]": "這個外掛程式幫助您從 GitHub 取得專案",
         "Icon": "kdevgh",
         "Id": "kdevghprovider",
         "License": "GPL",
@@ -97,7 +99,8 @@
         "Name[tr]": "GitHub Sağlayıcısı",
         "Name[uk]": "Надавач даних GitHub",
         "Name[x-test]": "xxGitHub Providerxx",
-        "Name[zh_CN]": "GitHub 提供者"
+        "Name[zh_CN]": "GitHub 提供者",
+        "Name[zh_TW]": "GitHub 提供者"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [

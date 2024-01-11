@@ -65,7 +65,8 @@
         "Name[tr]": "GDB Desteği",
         "Name[uk]": "Підтримка GDB",
         "Name[x-test]": "xxGDB Supportxx",
-        "Name[zh_CN]": "GDB 支持"
+        "Name[zh_CN]": "GDB 支持",
+        "Name[zh_TW]": "GDB 支援"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [

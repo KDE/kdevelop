@@ -28,6 +28,7 @@ Name[tr]=API Belgelendirmesi (QtHelp)
 Name[uk]=Документація з програмного інтерфейсу (QtHelp)
 Name[x-test]=xxAPI Documentation (QtHelp)xx
 Name[zh_CN]=API 文档 (QtHelp)
+Name[zh_TW]=API 說明文件 (QtHelp)
 
 ProvidersUrl=https://autoconfig.kde.org/ocs/providers.xml
 Categories=QCH Documentation Files

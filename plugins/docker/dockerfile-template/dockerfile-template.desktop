@@ -29,6 +29,7 @@ Name[tr]=Dockerfile
 Name[uk]=Dockerfile
 Name[x-test]=xxDockerfilexx
 Name[zh_CN]=Dockerfile
+Name[zh_TW]=Dockerfile
 Comment=A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image
 Comment[az]=Dockerfile, istifadəçinin, bir disk sürəti yığmaq üçün əmr sətrindən çağıra biləcəyi əmrlərin toplusundan ibarət bir mətn sənədidir
 Comment[ca]=Un Dockerfile és un document de text que conté totes les ordres que un usuari hauria de cridar des de la línia d'ordres per a muntar una imatge
@@ -91,6 +92,7 @@ Language[tr]=JSON
 Language[uk]=JSON
 Language[x-test]=xxJSONxx
 Language[zh_CN]=JSON
+Language[zh_TW]=JSON
 Files=Implementation
 OptionsFile=options.kcfg
 

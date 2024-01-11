@@ -33,7 +33,8 @@
                 "Name[tr]": "Alexander Dymo",
                 "Name[uk]": "Олександр Димо",
                 "Name[x-test]": "xxAlexander Dymoxx",
-                "Name[zh_CN]": "Alexander Dymo"
+                "Name[zh_CN]": "Alexander Dymo",
+                "Name[zh_TW]": "Alexander Dymo"
             }
         ],
         "Category": "Core",

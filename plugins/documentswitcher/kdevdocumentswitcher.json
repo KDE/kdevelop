@@ -33,7 +33,8 @@
                 "Name[tr]": "Andreas Pakulat",
                 "Name[uk]": "Andreas Pakulat",
                 "Name[x-test]": "xxAndreas Pakulatxx",
-                "Name[zh_CN]": "Andreas Pakulat"
+                "Name[zh_CN]": "Andreas Pakulat",
+                "Name[zh_TW]": "Andreas Pakulat"
             }
         ],
         "Category": "Utilities",

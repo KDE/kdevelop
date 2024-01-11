@@ -29,6 +29,7 @@
         "Description[uk]": "Збирач Ninja для KDevelop",
         "Description[x-test]": "xxKDevelop Ninja Builderxx",
         "Description[zh_CN]": "KDevelop Ninja 构建器",
+        "Description[zh_TW]": "KDevelop Ninja 編譯工具",
         "Icon": "kdevelop",
         "Id": "KDevNinjaBuilder",
         "Name": "Ninja Project Builder",
@@ -60,7 +61,8 @@
         "Name[tr]": "Ninja Proje Oluşturucu",
         "Name[uk]": "Збирач проєктів Ninja",
         "Name[x-test]": "xxNinja Project Builderxx",
-        "Name[zh_CN]": "Ninja 工程构建器"
+        "Name[zh_CN]": "Ninja 工程构建器",
+        "Name[zh_TW]": "Ninja 專案編譯工具"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-IRequired": [

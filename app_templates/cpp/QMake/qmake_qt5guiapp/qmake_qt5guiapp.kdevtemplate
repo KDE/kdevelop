@@ -28,6 +28,7 @@ Name[tr]=QMake Qt5 QWidgets Grafik Uygulaması
 Name[uk]=Програма з графічним інтерфейсом на основі QMake, Qt5 та QWidgets
 Name[x-test]=xxQMake Qt5 QWidgets GUI Applicationxx
 Name[zh_CN]=QMake Qt5 QWidgets 图形应用程序
+Name[zh_TW]=QMake Qt5 QWidgets 使用者介面應用程式
 Comment=Generate a QMake/Qt5 based GUI application (crossplatform compatible)
 Comment[az]=QMake/Qt5 əsaslı çoxplatformalı qrafik tətbiq hazırlayır.
 Comment[ca]=Genera una aplicació IGU basada en QMake/Qt5 (compatible amb multiplataforma)

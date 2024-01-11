@@ -31,7 +31,8 @@
                 "Name[tr]": "Carlos Nihelton",
                 "Name[uk]": "Carlos Nihelton",
                 "Name[x-test]": "xxCarlos Niheltonxx",
-                "Name[zh_CN]": "Carlos Nihelton"
+                "Name[zh_CN]": "Carlos Nihelton",
+                "Name[zh_TW]": "Carlos Nihelton"
             },
             {
                 "Name": "Friedrich W. H. Kossebau",
@@ -65,7 +66,8 @@
                 "Name[tr]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
                 "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
-                "Name[zh_CN]": "Friedrich W. H. Kossebau"
+                "Name[zh_CN]": "Friedrich W. H. Kossebau",
+                "Name[zh_TW]": "Friedrich W. H. Kossebau"
             }
         ],
         "Category": "Analyzers",
@@ -130,6 +132,7 @@
         "Name[uk]": "Підтримка Clang-Tidy",
         "Name[x-test]": "xxClang-Tidy Supportxx",
         "Name[zh_CN]": "Clang-Tidy 支持",
+        "Name[zh_TW]": "Clang-Tidy 支援",
         "Version": "0.3.3"
     },
     "X-KDevelop-Category": "Global",
