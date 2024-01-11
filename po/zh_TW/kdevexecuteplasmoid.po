@@ -3,24 +3,24 @@
 #
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2013.
 # pan93412 <pan93412@gmail.com>, 2018.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2018-12-02 21:18+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-01-10 14:42+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #: plasmoidexecutionconfig.cpp:117
-#, fuzzy, kde-format
-#| msgid "Configure Plasmoid Execution"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "設定 Plasmoid 執行"
@@ -41,64 +41,56 @@ msgid "Could not resolve the dependency: %1"
 msgstr "無法解決此相依性問題：%1"
 
 #: plasmoidexecutionconfig.cpp:297
-#, fuzzy, kde-format
-#| msgid "Plasmoids"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"
-msgstr "小元件"
+msgstr "Plasmoids"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plasmoidexecutionconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "Plasmoid"
+#, kde-format
 msgctxt "@title:group"
 msgid "Plasmoid"
 msgstr "Plasmoid"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plasmoidexecutionconfig.ui:35
-#, fuzzy, kde-format
-#| msgid "Path or name:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Path or name:"
 msgstr "路徑或名稱："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plasmoidexecutionconfig.ui:67
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
 msgstr "行為"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plasmoidexecutionconfig.ui:73
-#, fuzzy, kde-format
-#| msgid "Form factor:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Form factor:"
-msgstr "表單因子："
+msgstr "外觀尺寸："
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plasmoidexecutionconfig.ui:107
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Theme:"
 msgstr "主題："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plasmoidexecutionconfig.ui:123
-#, fuzzy, kde-format
-#| msgid "Dependencies"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "相依性"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plasmoidexecutionconfig.ui:132
-#, fuzzy, kde-format
-#| msgid "&Targets:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Targets:"
 msgstr "目標(&T)："

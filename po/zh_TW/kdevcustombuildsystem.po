@@ -2,70 +2,62 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2011, 2012, 2013.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2013-01-22 12:46+0800\n"
-"Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
-"Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
+"PO-Revision-Date: 2024-01-10 14:38+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: configwidget.cpp:25
-#, fuzzy, kde-format
-#| msgid "Build"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Build"
 msgstr "編譯"
 
 #: configwidget.cpp:26
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Configure"
 msgstr "設定"
 
 #: configwidget.cpp:27
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Install"
 msgstr "安裝"
 
 #: configwidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Clean"
 msgstr "清除"
 
 #: configwidget.cpp:29
-#, fuzzy, kde-format
-#| msgid "Prune"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Prune"
 msgstr "徹底移除"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: configwidget.ui:19
-#, fuzzy, kde-format
-#| msgid "Build Directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Build directory:"
 msgstr "編譯目錄："
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
 #: configwidget.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the directory where the tools are being executed in.\n"
-#| "If this is the same as the source directory you can leave it empty."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Select the directory where the tools are being executed in.\n"
@@ -76,76 +68,65 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
 #: configwidget.ui:30
-#, fuzzy, kde-format
-#| msgid "The directory where the tools are executed"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "The directory where the tools are executed in"
-msgstr "工具要執行的目錄"
+msgstr "工具執行時的目錄"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: configwidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Build Tools"
+#, kde-format
 msgctxt "@title:group"
 msgid "Build Tools"
 msgstr "編譯工具"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: configwidget.ui:48
-#, fuzzy, kde-format
-#| msgid "Action:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Action:"
 msgstr "動作："
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: configwidget.ui:58
-#, fuzzy, kde-format
-#| msgid "Enable:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable:"
 msgstr "開啟："
 
 #. i18n: ectx: property (text), widget (QLabel, execLabel)
 #: configwidget.ui:75
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Executable:"
 msgstr "執行檔："
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
 #: configwidget.ui:85
-#, fuzzy, kde-format
-#| msgid ""
-#| "This is the executable that should be executed when selecting the action "
-#| "from the Project menu"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "This is the executable that should be executed when selecting the action "
 "from the Project menu"
-msgstr "這是從專案選單中選擇動作時要執行的執行檔"
+msgstr "從專案選單選取動作時該執行的執行檔"
 
 #. i18n: ectx: property (text), widget (QLabel, argLabel)
 #: configwidget.ui:95
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
 msgstr "引數："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
 #: configwidget.ui:105
-#, fuzzy, kde-format
-#| msgid "The arguments that the tool needs to execute properly."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "The arguments that the tool needs to execute properly."
-msgstr "執行此工具時需要的引數。"
+msgstr "執行工具時需要的引數。"
 
 #. i18n: ectx: property (text), widget (QLabel, envLabel)
 #: configwidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
 msgstr "環境："
@@ -159,46 +140,40 @@ msgid "Choose a pre-configured environment for your tool"
 msgstr "選擇您的工具的預組態環境"
 
 #: custombuildjob.cpp:67
-#, fuzzy, kde-format
-#| msgid "Building:"
+#, kde-format
 msgctxt "Building: <command> <project item name>"
 msgid "Building: %1 %2"
-msgstr "編譯："
+msgstr "編譯中：%1 %2"
 
 #: custombuildjob.cpp:70
-#, fuzzy, kde-format
-#| msgid "Cleaning:"
+#, kde-format
 msgctxt "Cleaning: <command> <project item name>"
 msgid "Cleaning: %1 %2"
-msgstr "清除："
+msgstr "清除中：%1 %2"
 
 #: custombuildjob.cpp:73
-#, fuzzy, kde-format
-#| msgid "Installing:"
+#, kde-format
 msgctxt "Installing: <command> <project item name>"
 msgid "Installing: %1 %2"
-msgstr "安裝："
+msgstr "安裝中：%1 %2"
 
 #: custombuildjob.cpp:74
-#, fuzzy, kde-format
-#| msgid "Installing:"
+#, kde-format
 msgctxt "Installing: <command> <project item name> <installPrefix>"
 msgid "Installing: %1 %2 %3"
-msgstr "安裝："
+msgstr "安裝中：%1 %2 %3"
 
 #: custombuildjob.cpp:77
-#, fuzzy, kde-format
-#| msgid "Configuring:"
+#, kde-format
 msgctxt "Configuring: <command> <project item name>"
 msgid "Configuring: %1 %2"
-msgstr "組態："
+msgstr "設定中：%1 %2"
 
 #: custombuildjob.cpp:80
-#, fuzzy, kde-format
-#| msgid "Pruning:"
+#, kde-format
 msgctxt "Pruning: <command> <project item name>"
 msgid "Pruning: %1 %2"
-msgstr "徹底清除："
+msgstr "徹底清除中：%1 %2"
 
 #: custombuildjob.cpp:95
 #, kde-format
@@ -208,12 +183,12 @@ msgstr "未定義的編譯型態："
 #: custombuildjob.cpp:99
 #, kde-format
 msgid "No command given for custom %1 tool in project \"%2\"."
-msgstr ""
+msgstr "自訂%1工具在專案「%2」中未指定命令。"
 
 #: custombuildjob.cpp:104
 #, kde-format
 msgid "The custom %1 tool in project \"%2\" is disabled"
-msgstr ""
+msgstr "自訂%1工具在專案「%2」中已停用"
 
 #: custombuildjob.cpp:116
 #, kde-format
@@ -247,36 +222,31 @@ msgid "*** Finished ***"
 msgstr "*** 已完成 ***"
 
 #: custombuildsystemconfig.cpp:14
-#, fuzzy, kde-format
-#| msgid "Build"
+#, kde-format
 msgctxt "@item:intext custom 'build' tool"
 msgid "build"
 msgstr "編譯"
 
 #: custombuildsystemconfig.cpp:15
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@item:intext custom 'configure' tool"
 msgid "configure"
 msgstr "設定"
 
 #: custombuildsystemconfig.cpp:16
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@item:intext custom 'install' tool"
 msgid "install"
 msgstr "安裝"
 
 #: custombuildsystemconfig.cpp:17
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@item:intext custom 'clean' tool"
 msgid "clean"
 msgstr "清除"
 
 #: custombuildsystemconfig.cpp:18
-#, fuzzy, kde-format
-#| msgid "Prune"
+#, kde-format
 msgctxt "@item:intext custom 'prune' tool"
 msgid "prune"
 msgstr "徹底移除"
@@ -285,42 +255,38 @@ msgstr "徹底移除"
 #, kde-format
 msgctxt "@item:intext custom 'unknown' tool"
 msgid "unknown"
-msgstr ""
+msgstr "未知"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: custombuildsystemconfigwidget.ui:31
-#, fuzzy, kde-format
-#| msgid "Build Configuration:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build configuration:"
 msgstr "編譯組態："
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: custombuildsystemconfigwidget.ui:54
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "新增"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeConfig)
 #: custombuildsystemconfigwidget.ui:64
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "移除"
 
 #: kcm_custombuildsystem.cpp:53
-#, fuzzy, kde-format
-#| msgid "Custom Build System"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Custom Build System"
 msgstr "自訂編譯系統"
 
 #: kcm_custombuildsystem.cpp:58
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Configure a projects custom build tool and includes/defines for the language "
 "support."
-msgstr ""
+msgstr "設定專案的自訂編譯工具，以及語言支援的包含/定義"

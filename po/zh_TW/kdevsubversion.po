@@ -3,31 +3,30 @@
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
 # pan93412 <pan93412@gmail.com>, 2018.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2018-12-02 21:13+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-01-10 15:16+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: kdevsvnplugin.cpp:334
-#, fuzzy, kde-format
-#| msgid "Copy..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy..."
 msgstr "複製..."
 
 #: kdevsvnplugin.cpp:341
-#, fuzzy, kde-format
-#| msgid "Move..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Move..."
 msgstr "移動..."
@@ -38,8 +37,7 @@ msgid "Please select only one item for this operation"
 msgstr "此操作只能選擇一個項目"
 
 #: kdevsvnplugin.cpp:370
-#, fuzzy, kde-format
-#| msgid "Destination file/directory"
+#, kde-format
 msgctxt "@label"
 msgid "Destination file/directory"
 msgstr "目標檔案/目錄"
@@ -67,7 +65,7 @@ msgstr "Subversion"
 #: svnaddjob.cpp:73
 #, kde-format
 msgid "Subversion Add"
-msgstr "Subversion Add"
+msgstr "Subversion 新增"
 
 #: svnaddjob.cpp:85
 #, kde-format
@@ -77,7 +75,7 @@ msgstr "沒有足夠的資訊新增檔案"
 #: svnblamejob.cpp:130
 #, kde-format
 msgid "Subversion Annotate"
-msgstr "Subversion Annotate"
+msgstr "Subversion 註記"
 
 #: svnblamejob.cpp:144
 #, kde-format
@@ -87,12 +85,12 @@ msgstr "沒有足夠的資訊執行最後狀態註記"
 #: svncheckoutjob.cpp:84
 #, kde-format
 msgid "Subversion Checkout"
-msgstr "Subversion Checkout"
+msgstr "Subversion 簽出"
 
 #: svncheckoutjob.cpp:96
 #, kde-format
 msgid "Not enough information to checkout"
-msgstr "沒有足夠的資訊執行取出"
+msgstr "沒有足夠的資訊執行簽出"
 
 #: svncommitjob.cpp:109
 #, kde-format
@@ -236,7 +234,7 @@ msgstr "已複製 %1"
 #: svninternaljobbase.cpp:235
 #, kde-format
 msgid "Certificate is not yet valid."
-msgstr "憑證尚未合法。"
+msgstr "憑證尚未生效。"
 
 #: svninternaljobbase.cpp:239
 #, kde-format
@@ -251,7 +249,7 @@ msgstr "憑證的 CN 與遠端主機名稱不符。"
 #: svninternaljobbase.cpp:247
 #, kde-format
 msgid "Certificate authority is unknown."
-msgstr "未知的憑證認證。"
+msgstr "未知的憑證頒發機構。"
 
 #: svninternaljobbase.cpp:251
 #, kde-format
@@ -318,29 +316,25 @@ msgid "Not enough information to execute revert"
 msgstr "沒有足夠的資訊執行 revert。"
 
 #: svnssldialog.cpp:28
-#, fuzzy, kde-format
-#| msgid "SSL Server Certificate"
+#, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate"
 msgstr "SSL 伺服器憑證"
 
 #: svnssldialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Trust Permanently"
+#, kde-format
 msgctxt "@action:button"
 msgid "Trust Permanently"
 msgstr "永久信任"
 
 #: svnssldialog.cpp:31
-#, fuzzy, kde-format
-#| msgid "Trust Temporarily"
+#, kde-format
 msgctxt "@action:button"
 msgid "Trust Temporarily"
 msgstr "暫時信任"
 
 #: svnssldialog.cpp:62
-#, fuzzy, kde-format
-#| msgid "Ssl Server Certificate: %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate: %1"
 msgstr "SSL 伺服器憑證：%1"
@@ -348,17 +342,17 @@ msgstr "SSL 伺服器憑證：%1"
 #: svnstatusjob.cpp:117
 #, kde-format
 msgid "Subversion Status"
-msgstr "Subversion Status"
+msgstr "Subversion 狀態"
 
 #: svnstatusjob.cpp:131
 #, kde-format
 msgid "Not enough information to execute status job"
-msgstr "沒有足夠的資訊執行 status。"
+msgstr "沒有足夠的資訊執行狀態工作"
 
 #: svnupdatejob.cpp:107
 #, kde-format
 msgid "Subversion Update"
-msgstr "Subversion Update"
+msgstr "Subversion 更新"
 
 #: svnupdatejob.cpp:120
 #, kde-format
@@ -367,40 +361,35 @@ msgstr "沒有足夠的資訊執行更新"
 
 #. i18n: ectx: property (text), widget (QLabel, labelForSrc)
 #: ui/importmetadatawidget.ui:20
-#, fuzzy, kde-format
-#| msgid "Source directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
 msgstr "程式源碼目錄："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/importmetadatawidget.ui:27
-#, fuzzy, kde-format
-#| msgid "Repository:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Repository:"
-msgstr "主目錄："
+msgstr "版本庫："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Repository Location"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Repository location"
-msgstr "主目錄位置"
+msgstr "版本庫位置"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Choose the repository into which the source directory is imported"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the repository into which the source directory is imported"
-msgstr "選擇要匯入程式源碼的主目錄"
+msgstr "選擇要匯入程式源碼到的版本庫"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/importmetadatawidget.ui:57
-#, fuzzy, kde-format
-#| msgid "Commit message:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "提交訊息："
@@ -412,27 +401,25 @@ msgid ""
 "There were errors validating the server certificate.\n"
 "Do you want to trust this certificate?"
 msgstr ""
-"確認伺服器憑證時發生錯誤。\n"
+"驗證伺服器憑證時發生錯誤。\n"
 "您要信任此憑證嗎？"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ui/ssltrustdialog.ui:30
 #, kde-format
 msgid "Reasons why the validation failed"
-msgstr "為何確認失敗"
+msgstr "驗證失敗的原因"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: ui/ssltrustdialog.ui:52
-#, fuzzy, kde-format
-#| msgid "Certificate Information"
+#, kde-format
 msgctxt "@title:group"
 msgid "Certificate Information"
 msgstr "憑證資訊"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/ssltrustdialog.ui:64
-#, fuzzy, kde-format
-#| msgid "Hostname:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Hostname:"
 msgstr "主機名稱："
@@ -445,11 +432,10 @@ msgstr "someserver"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/ssltrustdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Issuer:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Issuer:"
-msgstr "發起者："
+msgstr "配發者："
 
 #. i18n: ectx: property (text), widget (QLabel, issuer)
 #: ui/ssltrustdialog.ui:97
@@ -459,11 +445,10 @@ msgstr "someissuer"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ui/ssltrustdialog.ui:104
-#, fuzzy, kde-format
-#| msgid "Valid From:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Valid from:"
-msgstr "合法起始日："
+msgstr "有效自："
 
 #. i18n: ectx: property (text), widget (QLabel, validFrom)
 #: ui/ssltrustdialog.ui:117
@@ -473,11 +458,10 @@ msgstr "validfrom"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: ui/ssltrustdialog.ui:124
-#, fuzzy, kde-format
-#| msgid "Valid Until:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Valid until:"
-msgstr "合法到期日："
+msgstr "有效期限："
 
 #. i18n: ectx: property (text), widget (QLabel, validUntil)
 #: ui/ssltrustdialog.ui:137
@@ -487,11 +471,10 @@ msgstr "validuntil"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ui/ssltrustdialog.ui:144
-#, fuzzy, kde-format
-#| msgid "Fingerprint:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Fingerprint:"
-msgstr "指紋:"
+msgstr "指紋："
 
 #. i18n: ectx: property (text), widget (QLabel, fingerprint)
 #: ui/ssltrustdialog.ui:157

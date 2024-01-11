@@ -1,176 +1,175 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmljs\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2016-09-22 20:30+0800\n"
-"Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
-"Language-Team: Traditional Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-01-10 15:21+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.10.0\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
 #, kde-format
 msgid "Choose the Location"
-msgstr ""
+msgstr "選擇位置"
 
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:55
 #, kde-format
 msgid "Name:"
-msgstr ""
+msgstr "名稱："
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:30
 #, kde-format
 msgid "Path:"
-msgstr ""
+msgstr "路徑："
 
 #. i18n: ectx: property (text), widget (QLabel, classNameLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:15
 #, kde-format
 msgid "&Class name:"
-msgstr ""
+msgstr "類別名稱(&C)："
 
 #. i18n: ectx: property (text), widget (QLabel, baseClassLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
 #, kde-format
 msgid "&Base class:"
-msgstr ""
+msgstr "基底類別(&B)："
 
 #. i18n: ectx: property (text), widget (QLabel, classTypeLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:48
 #, kde-format
 msgid "&Type information:"
-msgstr ""
+msgstr "類型資訊(&T)："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:59
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "無"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
 #, kde-format
 msgid "Inherits QObject"
-msgstr ""
+msgstr "繼承 QObject"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
 #, kde-format
 msgid "Inherits QWidget"
-msgstr ""
+msgstr "繼承 QWidget"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
 #, kde-format
 msgid "Inherits QDeclarativeItem - Qt Quick 1"
-msgstr ""
+msgstr "繼承 QDeclarativeItem - Qt Quick 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
 #, kde-format
 msgid "Inherits QQuickItem - Qt Quick 2"
-msgstr ""
+msgstr "繼承 QQuickItem - Qt Quick 2"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
 #, kde-format
 msgid "Based on QSharedData"
-msgstr ""
+msgstr "基於 QSharedData"
 
 #. i18n: ectx: property (text), widget (QLabel, headerLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:124
 #, kde-format
 msgid "&Header file:"
-msgstr ""
+msgstr "標頭檔(&H)："
 
 #. i18n: ectx: property (text), widget (QLabel, sourceLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:137
 #, kde-format
 msgid "&Source file:"
-msgstr ""
+msgstr "源碼檔(&S)："
 
 #. i18n: ectx: property (text), widget (QLabel, generateFormLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:150
 #, kde-format
 msgid "&Generate form:"
-msgstr ""
+msgstr "產生表單(&G)："
 
 #. i18n: ectx: property (text), widget (QLabel, formLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:167
 #, kde-format
 msgid "&Form file:"
-msgstr ""
+msgstr "表單檔(&F)："
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:180
 #, kde-format
 msgid "&Path:"
-msgstr ""
+msgstr "路徑(&P)："
 
 #. i18n: ectx: property (title), widget (QWizardPage, Utils::ProjectIntroPage)
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:14
 #, kde-format
 msgid "Introduction and Project Location"
-msgstr ""
+msgstr "簡介與專案位置"
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:65
 #, kde-format
 msgid "Create in:"
-msgstr ""
+msgstr "建立在："
 
 #. i18n: ectx: property (text), widget (QCheckBox, projectsDirectoryCheckBox)
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
 #, kde-format
 msgid "Use as default project location"
-msgstr ""
+msgstr "設為預設專案位置"
 
 #. i18n: ectx: property (text), widget (QLabel, projectLabel)
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98
 #, kde-format
 msgid "Project:"
-msgstr ""
+msgstr "專案："
 
 #: duchain/declarationbuilder.cpp:359
 #, kde-format
 msgid ""
 "Possible type mismatch between the argument type (%1) and the value passed "
 "as argument (%2)"
-msgstr ""
+msgstr "類型可能不符，參數類型為 %1，遞入為參數的數值類型為 %2"
 
 #: duchain/declarationbuilder.cpp:1008
 #, kde-format
 msgid "Module not found, some types or properties may not be recognized"
-msgstr ""
+msgstr "找不到模組，可能無法辨識某些類型或屬性"
 
 #: duchain/declarationbuilder.cpp:1203
 #, kde-format
 msgid "Mismatch between the value type (%1) and the property type (%2)"
-msgstr ""
+msgstr "數值類型 (%1) 和屬性類型 (%2) 不符"
 
 #: navigation/propertypreviewwidget.cpp:163
 #, kde-format
 msgid "Error loading QML file: %1"
-msgstr ""
+msgstr "載入 QML 檔時發生錯誤：%1"
 
 #: navigation/propertywidgets/Duration.qml:21
 #, kde-format
 msgid "Duration in milliseconds"
-msgstr ""
+msgstr "時長（毫秒）"
 
 #: navigation/propertywidgets/FontFamily.qml:30
 #: navigation/propertywidgets/FontSize.qml:39
@@ -178,33 +177,34 @@ msgstr ""
 msgctxt "example text to test a font"
 msgid "The lazy dog jumps over<br>the quick brown fox."
 msgstr ""
+"The Lazy Dog Jumps Over<br>The Quick Brown Fox.<br>廣角空房亮滑沒過麵以化骨"
 
 #: navigation/propertywidgets/FontFamily.qml:37
 #, kde-format
 msgid "Font family"
-msgstr ""
+msgstr "字型家族"
 
 #: navigation/propertywidgets/FontSize.qml:22
 #, kde-format
 msgid "Font size"
-msgstr ""
+msgstr "字型大小"
 
 #: navigation/propertywidgets/Height.qml:25
 #, kde-format
 msgid "Height of an item in pixels"
-msgstr ""
+msgstr "項目高度（像素）"
 
 #: navigation/propertywidgets/Opacity.qml:21
 #, kde-format
 msgid "Opacity of an item"
-msgstr ""
+msgstr "項目不透明度"
 
 #: navigation/propertywidgets/Spacing.qml:32
 #, kde-format
 msgid "Spacing between items"
-msgstr ""
+msgstr "項目間距"
 
 #: navigation/propertywidgets/Width.qml:24
 #, kde-format
 msgid "Width of an item in pixels"
-msgstr ""
+msgstr "項目寬度（像素）"

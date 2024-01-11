@@ -3,64 +3,55 @@
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009, 2010, 2013, 2014.
 # pan93412 <pan93412@gmail.com>, 2018.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2018-12-02 21:08+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-01-10 14:07+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "dot tw>\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: appwizarddialog.cpp:23
-#, fuzzy, kde-format
-#| msgid "Create New Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New Project"
 msgstr "建立新專案"
 
 #: appwizarddialog.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "Page for general configuration options"
-#| msgid "General"
+#, kde-format
 msgctxt "@title:tab Page for general configuration options"
 msgid "General"
 msgstr "一般"
 
 #: appwizarddialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "Page for version control options"
-#| msgid "Version Control"
+#, kde-format
 msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "版本控制"
 
 #: appwizardplugin.cpp:69
-#, fuzzy, kde-format
-#| msgid "New From Template..."
+#, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "由樣本建立(&T)..."
+msgstr "由樣本建立..."
 
 #: appwizardplugin.cpp:71
-#, fuzzy, kde-format
-#| msgid "Generate a new project from a template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "從樣本產生新的專案"
 
 #: appwizardplugin.cpp:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "This starts KDevelop's application wizard. It helps you to generate a "
-#| "skeleton for your application from a set of templates."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
@@ -70,19 +61,17 @@ msgstr ""
 "架。"
 
 #: appwizardplugin.cpp:106
-#, fuzzy, kde-format
-#| msgid "Could not create project from template\n"
+#, kde-format
 msgid "Could not create project from template."
-msgstr "無法從樣本建立新專案\n"
+msgstr "無法從樣本建立新專案。"
 
 #: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
-msgstr "請看版本控制工具檢視。"
+msgstr "請見版本控制工具檢視。"
 
 #: appwizardplugin.cpp:136
-#, fuzzy, kde-format
-#| msgid "Version Control System Error"
+#, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
 msgstr "版本控制系統發生錯誤"
@@ -90,18 +79,17 @@ msgstr "版本控制系統發生錯誤"
 #: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
-msgstr "無法初始化 DVCS 主目錄"
+msgstr "無法初始化 DVCS 版本庫"
 
 #: appwizardplugin.cpp:161
-#, fuzzy, kde-format
-#| msgid "Could not add files to the DVCS repository"
+#, kde-format
 msgid "Could not check status of the DVCS repository"
-msgstr "無法新增檔案到 DVCS 主目錄"
+msgstr "無法檢查 DVCS 版本庫的狀態"
 
 #: appwizardplugin.cpp:174
 #, kde-format
 msgid "Could not add files to the DVCS repository"
-msgstr "無法新增檔案到 DVCS 主目錄"
+msgstr "無法新增檔案到 DVCS 版本庫"
 
 #: appwizardplugin.cpp:182
 #, kde-format
@@ -134,29 +122,25 @@ msgid "Project Templates"
 msgstr "專案樣本"
 
 #: projectselectionpage.cpp:56
-#, fuzzy, kde-format
-#| msgid "Category"
+#, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr "分類"
 
 #: projectselectionpage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Project Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "專案型態"
 
 #: projectselectionpage.cpp:67
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "取得更多樣本"
 
 #: projectselectionpage.cpp:74
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "從檔案載入樣本"
@@ -164,7 +148,7 @@ msgstr "從檔案載入樣本"
 #: projectselectionpage.cpp:170
 #, kde-format
 msgid "Invalid location"
-msgstr "不合法的位置"
+msgstr "無效的位置"
 
 #: projectselectionpage.cpp:177
 #, kde-format
@@ -174,7 +158,7 @@ msgstr "空白專案名稱"
 #: projectselectionpage.cpp:198
 #, kde-format
 msgid "Invalid project name"
-msgstr "不合法的專案名稱"
+msgstr "無效的專案名稱"
 
 #: projectselectionpage.cpp:217
 #, kde-format
@@ -184,7 +168,7 @@ msgstr "無法建立子目錄，因為對 %1 的權限不足。"
 #: projectselectionpage.cpp:232
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
-msgstr "不合法的專案樣本，請選擇一個終端項目"
+msgstr "無效的專案樣本，請選擇一個終端項目"
 
 #: projectselectionpage.cpp:245
 #, kde-format
@@ -199,48 +183,41 @@ msgid ""
 msgstr "指定的路徑已存在，而且裡面有檔案。您確定要進行嗎？"
 
 #: projectselectionpage.cpp:308
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"
 msgstr "從檔案載入樣本"
 
 #. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
 #: projectselectionpage.ui:38
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:group"
 msgid "Properties"
 msgstr "屬性"
 
 #. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
 #: projectselectionpage.ui:44
-#, fuzzy, kde-format
-#| msgid "Project name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Project name:"
 msgstr "專案名稱："
 
 #. i18n: ectx: property (text), widget (QLabel, locationLabel)
 #: projectselectionpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Location:"
 msgstr "位置："
 
 #: projectvcspage.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "No Version Control Support chosen"
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox No Version Control Support chosen"
 msgid "None"
 msgstr "無"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectvcspage.ui:30
-#, fuzzy, kde-format
-#| msgid "Version control system:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Version control system:"
 msgstr "版本控制系統："

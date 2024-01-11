@@ -3,31 +3,30 @@
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2011, 2012, 2013, 2014.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:57+0000\n"
-"PO-Revision-Date: 2014-01-15 10:50+0800\n"
-"Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
-"Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
+"PO-Revision-Date: 2024-01-10 14:17+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: cmakebuilddirchooser.cpp:29
-#, fuzzy, kde-format
-#| msgid "Configure a build directory for %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "設定 %1 的編譯目錄"
+msgstr "設定編譯目錄 - %1"
 
 #: cmakebuilddirchooser.cpp:88
-#, fuzzy, kde-format
-#| msgid "Configure a build directory for %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "設定 %1 的編譯目錄"
@@ -69,35 +68,31 @@ msgstr "選取的編譯目錄非空白。"
 
 #. i18n: ectx: property (text), widget (QLabel, availableLabel)
 #: cmakebuilddirchooser.ui:32
-#, fuzzy, kde-format
-#| msgid "Already used build directory"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Available build directories:"
-msgstr "已使用編譯目錄"
+msgstr "可用編譯目錄："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
 #: cmakebuilddirchooser.ui:40
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "New build directory"
-msgstr "編譯目錄(&B)："
+msgstr "新編譯目錄"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: cmakebuilddirchooser.ui:48
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Build &directory:"
-msgstr "編譯目錄(&B)："
+msgstr "編譯目錄(&D)："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: cmakebuilddirchooser.ui:84
-#, fuzzy, kde-format
-#| msgid "&Installation Prefix:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Installation prefix:"
-msgstr "安裝前置字串(&I)："
+msgstr "安裝前綴(&I)："
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:109
@@ -106,19 +101,18 @@ msgctxt "@info:tooltip"
 msgid ""
 "The prefix under which the project will be installed. Leaving this empty "
 "will let CMake use its default install prefix."
-msgstr ""
+msgstr "專案會安裝在此前綴之下。留空會讓 CMake 使用它的預設安裝前綴。"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:112
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "CMake's default install prefix"
-msgstr ""
+msgstr "CMake 的預設安裝前綴"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build &type:"
 msgstr "編譯型態(&T)："
@@ -126,8 +120,7 @@ msgstr "編譯型態(&T)："
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
 #: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
-#, fuzzy, kde-format
-#| msgid "Extra Arguments:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Extra arguments:"
 msgstr "額外的參數："
@@ -137,44 +130,39 @@ msgstr "額外的參數："
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake &executable:"
-msgstr ""
+msgstr "CMake 執行檔(&E)："
 
 #: cmakecodecompletionmodel.cpp:189
 #, kde-format
 msgid "INVALID"
-msgstr "不合法"
+msgstr "無效"
 
 #: cmakecodecompletionmodel.cpp:197
-#, fuzzy, kde-format
-#| msgid "Command"
+#, kde-format
 msgctxt "@item"
 msgid "Command"
-msgstr "指令"
+msgstr "命令"
 
 #: cmakecodecompletionmodel.cpp:198
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@item"
 msgid "Variable"
 msgstr "變數"
 
 #: cmakecodecompletionmodel.cpp:199
-#, fuzzy, kde-format
-#| msgid "Macro"
+#, kde-format
 msgctxt "@item"
 msgid "Macro"
 msgstr "巨集"
 
 #: cmakecodecompletionmodel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Path"
+#, kde-format
 msgctxt "@item"
 msgid "Path"
 msgstr "路徑"
 
 #: cmakecodecompletionmodel.cpp:201
-#, fuzzy, kde-format
-#| msgid "Target"
+#, kde-format
 msgctxt "@item"
 msgid "Target"
 msgstr "目標"
@@ -185,36 +173,31 @@ msgid "wrong"
 msgstr "錯誤"
 
 #: cmakecommandscontents.cpp:29
-#, fuzzy, kde-format
-#| msgid "Commands"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Commands"
 msgstr "命令"
 
 #: cmakecommandscontents.cpp:30
-#, fuzzy, kde-format
-#| msgid "Variables"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Variables"
 msgstr "變數"
 
 #: cmakecommandscontents.cpp:31
-#, fuzzy, kde-format
-#| msgid "Modules"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Modules"
 msgstr "模組"
 
 #: cmakecommandscontents.cpp:32
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Properties"
 msgstr "屬性"
 
 #: cmakecommandscontents.cpp:33
-#, fuzzy, kde-format
-#| msgid "Policies"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Policies"
 msgstr "政策"
@@ -222,12 +205,12 @@ msgstr "政策"
 #: cmakecommandscontents.cpp:102
 #, kde-format
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
-msgstr ""
+msgstr "<p>安裝 rst2html 來使用較好的 CMake 說明文件繪製方式。</p>"
 
 #: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
-msgstr ""
+msgstr "找不到 CMake 執行檔。您確定有安裝它嗎？"
 
 #: cmakedocumentation.cpp:81
 #, kde-format
@@ -243,7 +226,7 @@ msgstr "<br /><em>快取文件：</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "無效的 CMake 檔案 API 專案資料"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -259,6 +242,10 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
+"已使用過時的 CMake 資料 configure 專案「%1」。因此，KDevelop 的程式碼理解可能"
+"有誤。\n"
+"\n"
+"要修正此問題，請右鍵點擊專案工具檢視中的專案項目並點選「重新載入」。"
 
 #: cmakemanager.cpp:661
 #, kde-format
@@ -271,75 +258,72 @@ msgid ""
 "settings. Then right-click the project item in the projects tool view and "
 "click 'Reload'."
 msgstr ""
+"Configure 專案「%1」時發生錯誤（錯誤訊息：%2），因此 KDevelop 的程式碼理解很"
+"可能有問題。\n"
+"\n"
+"要修正這個問題，請確定專案的 CMakeLists.txt 檔案都是正確的，並且已讓 "
+"KDevelop 使用正確的 CMake 版本和設定。確定好之後右鍵點擊專案工具檢視當中的專"
+"案項目，並點選「重新載入」。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
-#, fuzzy, kde-format
-#| msgid "Cache Values"
+#, kde-format
 msgctxt "@title:group"
 msgid "Cache Values"
 msgstr "快取值"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: settings/cmakebuildsettings.ui:89
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgctxt "@label"
 msgid "Comment:"
-msgstr "註釋:"
+msgstr "註解："
 
 #. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
 #: settings/cmakebuildsettings.ui:106
-#, fuzzy, kde-format
-#| msgid "Show Advanced"
+#, kde-format
 msgctxt "@action:button"
 msgid "Show Advanced"
 msgstr "顯示進階"
 
 #. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
 #: settings/cmakebuildsettings.ui:125
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:group"
 msgid "Advanced"
 msgstr "進階"
 
 #. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
 #: settings/cmakebuildsettings.ui:134
-#, fuzzy, kde-format
-#| msgid "&Installation Prefix:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Installation prefix:"
-msgstr "安裝前置字串(&I)："
+msgstr "安裝前綴："
 
 #. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
 #: settings/cmakebuildsettings.ui:144
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build type:"
-msgstr "編譯型態(&T)："
+msgstr "編譯型態："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: settings/cmakebuildsettings.ui:198
-#, fuzzy, kde-format
-#| msgid "Configure Environment"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Configure environment:"
-msgstr "設定環境"
+msgstr "設定環境："
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: settings/cmakebuildsettings.ui:213
-#, fuzzy, kde-format
-#| msgid "Select an environment to be used"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr "請選擇要使用的環境"
+msgstr "選擇要使用的環境"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showInternal)
 #: settings/cmakebuildsettings.ui:225
-#, fuzzy, kde-format
-#| msgid "Show Advanced Values"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show advanced values"
 msgstr "顯示進階數值"
@@ -349,39 +333,34 @@ msgstr "顯示進階數值"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake executable:"
-msgstr ""
+msgstr "CMake 執行檔："
 
 #: settings/cmakecachemodel.cpp:36
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "名稱"
 
 #: settings/cmakecachemodel.cpp:37
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "型態"
 
 #: settings/cmakecachemodel.cpp:38
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "值"
 
 #: settings/cmakecachemodel.cpp:39
-#, fuzzy, kde-format
-#| msgid "Comment"
+#, kde-format
 msgctxt "@title:column"
 msgid "Comment"
 msgstr "註解"
 
 #: settings/cmakecachemodel.cpp:40
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:column"
 msgid "Advanced"
 msgstr "進階"
@@ -390,43 +369,39 @@ msgstr "進階"
 #, kde-format
 msgctxt "@title:column"
 msgid "Strings"
-msgstr ""
+msgstr "字串"
 
 #: settings/cmakepreferences.cpp:346
-#, fuzzy, kde-format
-#| msgid ""
-#| "The %1 directory is about to be removed in KDevelop's list.\n"
-#| "Do you want KDevelop to remove it in the file system as well?"
+#, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
 "Do you want KDevelop to delete it in the file system as well?"
 msgstr ""
 "目錄 %1 即將要從 KDevelop 的清單中移除。\n"
-"您要 KDevelop 順便把該目錄從檔案系統中砍掉嗎？"
+"您要 KDevelop 順便把該目錄從檔案系統中刪除嗎？"
 
 #: settings/cmakepreferences.cpp:350
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "不要刪除"
 
 #: settings/cmakepreferences.cpp:355
-#, fuzzy, kde-format
-#| msgid "Could not remove: %1.\n"
+#, kde-format
 msgid "Could not remove: %1"
-msgstr "無法移除： %1 。\n"
+msgstr "無法移除： %1"
 
 #: settings/cmakepreferences.cpp:401
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
-msgstr ""
+msgstr "CMake"
 
 #: settings/cmakepreferences.cpp:406
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"
-msgstr ""
+msgstr "調整 CMake 設定"
 
 #: testing/ctestfindjob.cpp:23
 #, kde-format
@@ -442,14 +417,14 @@ msgstr "CTest"
 #, kde-format
 msgctxt "running test %1, %2 test case"
 msgid "CTest %1: %2"
-msgstr ""
+msgstr "CTest %1：%2"
 
 #: testing/ctestrunjob.cpp:119
 #, kde-format
 msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
-msgstr[0] ""
+msgstr[0] "CTest %2 (%1)"
 
 #~ msgid ""
 #~ "KDevelop has found several possible root directories for your project, "
