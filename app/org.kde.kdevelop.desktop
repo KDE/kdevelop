@@ -118,4 +118,5 @@ Name[tr]=Bir Oturum Aç
 Name[uk]=Відкрити сеанс
 Name[x-test]=xxOpen a Sessionxx
 Name[zh_CN]=打开会话
+Name[zh_TW]=開啟工作階段
 Exec=kdevelop --ps

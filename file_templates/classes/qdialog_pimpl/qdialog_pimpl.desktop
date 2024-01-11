@@ -27,6 +27,7 @@ Name[tr]=Kullanıcı arayüzü dosyasıyla bir iletişim kutusu (pimpl)
 Name[uk]=Діалогове вікно (pimpl) із файлом інтерфейсу користувача (UI)
 Name[x-test]=xxDialog (pimpl) with a UI Filexx
 Name[zh_CN]=使用 UI 文件的对话框 (pimpl)
+Name[zh_TW]=有 UI 檔的對話框 (pimpl)
 Comment=QDialog subclass with a separate Qt Designer file and private implementation
 Comment[az]=Ayrıca Qt Designer faylı və xüsusi tətbiqetmə ilə QDialog alt sinifi
 Comment[ca]=Subclasse QDialog amb un fitxer separat del Qt Designer i una implementació privada

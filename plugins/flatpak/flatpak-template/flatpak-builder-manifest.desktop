@@ -90,6 +90,7 @@ Language[tr]=JSON
 Language[uk]=JSON
 Language[x-test]=xxJSONxx
 Language[zh_CN]=JSON
+Language[zh_TW]=JSON
 Files=Implementation
 OptionsFile=options.kcfg
 
