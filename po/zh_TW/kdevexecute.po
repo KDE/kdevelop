@@ -4,19 +4,20 @@
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2012, 2013.
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
 # pan93412 <pan93412@gmail.com>, 2019.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2019-09-30 19:22+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-01-10 14:31+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.08.1\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: executeplugin.cpp:68
@@ -64,18 +65,16 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
-msgstr ""
+msgstr "若執行中則詢問"
 
 #: nativeappconfig.cpp:105
-#, fuzzy, kde-format
-#| msgid "Kill All Instances"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
-msgstr "強制中止所有實體"
+msgstr "砍掉所有實體"
 
 #: nativeappconfig.cpp:106
-#, fuzzy, kde-format
-#| msgid "Start Another"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "開啟另一個實體"
@@ -103,75 +102,63 @@ msgid "Compiled Binary"
 msgstr "已編譯執行檔"
 
 #: nativeappconfig.cpp:322
-#, fuzzy, kde-format
-#| msgid "Project Executables"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
 msgstr "專案執行檔"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: nativeappconfig.ui:35
-#, fuzzy, kde-format
-#| msgid "Executable"
+#, kde-format
 msgctxt "@title:group"
 msgid "Executable"
 msgstr "執行檔"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: nativeappconfig.ui:41
-#, fuzzy, kde-format
-#| msgid "Project &target:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Project &target:"
 msgstr "專案目標(&T)："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: nativeappconfig.ui:81
-#, fuzzy, kde-format
-#| msgid "E&xecutable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "E&xecutable:"
 msgstr "執行檔(&X)："
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
 #: nativeappconfig.ui:106
-#, fuzzy, kde-format
-#| msgid "Enter the executable name or absolute path to an executable file"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "executable or /path/to/executable"
-msgstr "請輸入執行檔的名稱或絕對路徑"
+msgstr "執行檔的名稱或絕對路徑"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: nativeappconfig.ui:109
-#, fuzzy, kde-format
-#| msgid "Enter the executable name or absolute path to an executable file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the executable name or the absolute path to the executable file"
-msgstr "請輸入執行檔的名稱或絕對路徑"
+msgstr "請輸入執行檔的名稱或是它的絕對路徑"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: nativeappconfig.ui:121
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
 msgstr "行為"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: nativeappconfig.ui:127
-#, fuzzy, kde-format
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Ar&guments:"
 msgstr "參數(&G)："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: nativeappconfig.ui:137
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Enter arguments to give to the executable.<br/>You "
-#| "can pass arguments containing space characters by putting them in double-"
-#| "quotes.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
@@ -183,44 +170,35 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: nativeappconfig.ui:144
-#, fuzzy, kde-format
-#| msgid "Working &directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Working &directory:"
 msgstr "工作目錄(&D)："
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: nativeappconfig.ui:154
-#, fuzzy, kde-format
-#| msgid "Select a working directory for the executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
 msgstr "請選擇執行檔的工作目錄"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: nativeappconfig.ui:161
-#, fuzzy, kde-format
-#| msgid "E&nvironment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "E&nvironment:"
 msgstr "環境(&N)："
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: nativeappconfig.ui:179
-#, fuzzy, kde-format
-#| msgid "Select an environment to be used"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
 msgstr "請選擇要使用的環境"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:206
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>By default applications will be run in the background and only their "
-#| "output will be displayed in a tool view. This makes it impossible to "
-#| "interact with applications requiring user input from a terminal emulator. "
-#| "To run such applications, you should use an external terminal.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>By default applications will be run in the background and only their "
@@ -234,25 +212,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:209
-#, fuzzy, kde-format
-#| msgid "Use external terminal:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use external terminal:"
 msgstr "使用外部終端機："
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
 #: nativeappconfig.ui:234
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "<p>Defines the command to execute the external terminal emulator. Use the "
-#| "following placeholders:</p>\n"
-#| "<dl>\n"
-#| "<dt><code>%exe</code></dt>\n"
-#| "<dd>The path to the executable selected above.</dd>\n"
-#| "<dt><code>%workdir</code></dt>\n"
-#| "<dd>The path to the working directory selected above.</dd>\n"
-#| "</dl>\n"
-#| "<p>The arguments defined above will get appended to this command.</p>"
+#, no-c-format, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines the command to execute the external terminal emulator. Use the "
@@ -265,7 +232,7 @@ msgid ""
 "</dl>\n"
 "<p>The arguments defined above will get appended to this command.</p>"
 msgstr ""
-"<p>定義要在外部終端模擬器執行的指令。您可以使用以下的取代符：</p>\n"
+"<p>定義要在用來執行外部終端模擬器指令。您可以使用以下的取代符：</p>\n"
 "<dl>\n"
 "<dt><code>%exe</code></dt>\n"
 "<dd>執行檔的路徑。</dd>\n"
@@ -279,30 +246,25 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Restart"
-msgstr ""
+msgstr "重新啟動"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: nativeappconfig.ui:272
-#, fuzzy, kde-format
-#| msgid "Dependencies"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "相依性"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: nativeappconfig.ui:278
-#, fuzzy, kde-format
-#| msgid "Act&ion:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Act&ion:"
 msgstr "動作(&I)："
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:288
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specifies the action to take for the dependencies before starting the "
-#| "executable."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Specifies the action to take for the dependencies before starting the "
@@ -328,34 +290,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:298
-#, fuzzy, kde-format
-#| msgid "Do Nothing"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Do Nothing"
 msgstr "不做任何事"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:303
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Build"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build"
 msgstr "編譯"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:308
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Build and Install"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build and Install"
 msgstr "編譯並安裝"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: nativeappconfig.ui:316
-#, fuzzy, kde-format
-#| msgid "Targets:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "目標："
@@ -370,11 +326,10 @@ msgstr ""
 "檔。"
 
 #: nativeappjob.cpp:142
-#, fuzzy, kde-format
-#| msgid "Job already running"
+#, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
-msgstr "作業已在執行"
+msgstr "工作已在執行中"
 
 #: nativeappjob.cpp:143
 #, kde-format
@@ -382,15 +337,13 @@ msgid "'%1' is already being executed."
 msgstr "「%1」正在執行。"
 
 #: nativeappjob.cpp:145
-#, fuzzy, kde-format
-#| msgid "Kill All Instances"
+#, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
-msgstr "強制中止所有實體"
+msgstr "砍掉所有實體"
 
 #: nativeappjob.cpp:146
-#, fuzzy, kde-format
-#| msgid "Start Another"
+#, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "開啟另一個實體"
@@ -399,7 +352,7 @@ msgstr "開啟另一個實體"
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"
-msgstr ""
+msgstr "記住選擇"
 
 #~ msgid "Enter arguments to give to the executable"
 #~ msgstr "請輸入要送給執行檔的參數"

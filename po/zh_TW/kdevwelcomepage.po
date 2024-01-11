@@ -1,62 +1,61 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevwelcomepage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2016-09-22 20:30+0800\n"
-"Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
-"Language-Team: Traditional Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-01-10 14:27+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.10.0\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: qml/area_code.qml:76
 msgid "Need Help?"
-msgstr ""
+msgstr "需要幫忙？"
 
 #: qml/area_code.qml:84
 msgid "KDevelop.org"
-msgstr ""
+msgstr "KDevelop.org"
 
 #: qml/area_code.qml:91
 msgid "Learn about KDevelop"
-msgstr ""
+msgstr "瞭解有關 KDevelop 的資訊"
 
 #: qml/area_code.qml:96
 msgid "Join KDevelop's team!"
-msgstr ""
+msgstr "加入 KDevelop 團隊吧！"
 
 #: qml/area_code.qml:101
 msgid "Handbook"
-msgstr ""
+msgstr "手冊"
 
 #: qml/area_debug.qml:18 qml/area_review.qml:16
 msgid "Back to code"
-msgstr ""
+msgstr "返回源碼區"
 
 #: qml/area_debug.qml:37
 msgid "Configure a new Launcher"
-msgstr ""
+msgstr "設定新的啟動器"
 
 #: qml/area_debug.qml:38
 msgid "Attach to Process"
-msgstr ""
+msgstr "附加到行程"
 
 #: qml/area_debug.qml:39
 msgid "Debug your program"
-msgstr ""
+msgstr "除錯您的程式"
 
 #: qml/area_debug.qml:41
 msgid "Debug Area"
-msgstr ""
+msgstr "除錯區域"
 
 #: qml/area_debug.qml:44
 msgid ""
@@ -64,6 +63,8 @@ msgid ""
 "program works on execution. On the <em>Run</em> menu you will find all the "
 "possible options."
 msgstr ""
+"在 <em>除錯</em> 區域您可以檢視並分析您的程式執行時如何運作。在 <em>執行</"
+"em> 選單當中有所有可能使用的選項。"
 
 #: qml/area_debug.qml:50
 msgid ""
@@ -97,19 +98,19 @@ msgstr ""
 
 #: qml/Develop.qml:32
 msgid "New Project"
-msgstr ""
+msgstr "新增專案"
 
 #: qml/Develop.qml:37
 msgid "Open Project"
-msgstr ""
+msgstr "開啟專案"
 
 #: qml/Develop.qml:43
 msgid "Fetch Project"
-msgstr ""
+msgstr "抓取專案"
 
 #: qml/Develop.qml:50
 msgid "Recent Projects"
-msgstr ""
+msgstr "最近的專案"
 
 #: qml/Develop.qml:65
 msgid ""
@@ -119,6 +120,10 @@ msgid ""
 "<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
 "KDevelop\">User Manual.</a></p>"
 msgstr ""
+"<h3>歡迎來到 KDevelop！</h3>\n"
+"<p>您可以開啟現有專案，或是透過上方按鈕建立新專案。</p>\n"
+"<p>如果您需要幫忙，請閱讀<a href=\"https://userbase.kde.org/KDevelop\">使用者"
+"手冊</a>。</p>"
 
 #: qml/Develop.qml:70
 msgid ""
@@ -135,45 +140,45 @@ msgstr ""
 
 #: qml/Develop.qml:107
 msgid "%1: %2"
-msgstr ""
+msgstr "%1：%2"
 
 #: qml/Develop.qml:126
 msgid "Sessions"
-msgstr ""
+msgstr "工作階段"
 
 #: qml/GettingStarted.qml:49
 msgid "Go!"
-msgstr ""
+msgstr "走吧！"
 
 #: qml/GettingStarted.qml:57
 msgid "Documentation for KDevelop users"
-msgstr ""
+msgstr "KDevelop 使用者用的說明文件"
 
 #: qml/GettingStarted.qml:62
 msgid "Keep up with KDevelop's development"
-msgstr ""
+msgstr "跟上 KDevelop 的開發"
 
 #: qml/GettingStarted.qml:67
 msgid "Help us improve KDevelop"
-msgstr ""
+msgstr "幫助我們改善 KDevelop"
 
 #: qml/NewsFeed.qml:136
 msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
 msgid "%1 (new)"
-msgstr ""
+msgstr "%1（新）"
 
 #: qml/NewsFeed.qml:147
 msgid "Fetching feeds..."
-msgstr ""
+msgstr "抓取 feed 中..."
 
 #: qml/NewsFeed.qml:148
 msgid "No recent news"
-msgstr ""
+msgstr "沒有最近新聞"
 
 #: qml/plugins/Branches.qml:16
 msgid "Branches"
-msgstr ""
+msgstr "分支"
 
 #: qml/plugins/Projects.qml:15
 msgid "Projects"
-msgstr ""
+msgstr "專案"

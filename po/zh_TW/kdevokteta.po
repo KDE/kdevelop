@@ -2,19 +2,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2010, 2012, 2013.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2013-01-21 17:31+0800\n"
-"Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
-"Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
+"PO-Revision-Date: 2024-01-10 15:22+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. i18n: ectx: Menu (permission)
@@ -40,7 +41,7 @@ msgstr "書籤"
 #: kdevokteta.rc:77
 #, kde-format
 msgid "Main Toolbar"
-msgstr ""
+msgstr "主工具列"
 
 #: oktetadocument.cpp:125
 #, kde-format
@@ -48,15 +49,13 @@ msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "文件 %1 有未儲存的變更。您要儲存它嗎？"
 
 #: oktetadocument.cpp:126
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "關閉文件"
 
 #: oktetaplugin.cpp:92
-#, fuzzy, kde-format
-#| msgid "Hex Editor"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Hex Editor"
 msgstr "十六進位資料編輯器"

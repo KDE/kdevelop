@@ -2,53 +2,49 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Franklin Weng <franklin@mail.everfocus.com.tw>, 2010, 2013.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2013-10-21 13:34+0800\n"
-"Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
-"Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
+"PO-Revision-Date: 2024-01-10 14:18+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. i18n: action name; 'Document' is a verb
 #: codeutilsplugin.cpp:49
-#, fuzzy, kde-format
-#| msgid "Document Declaration"
+#, kde-format
 msgctxt "@action"
 msgid "Document Declaration"
-msgstr "文件宣告"
+msgstr "為宣告加上說明"
 
 #: codeutilsplugin.cpp:50
-#, fuzzy, kde-format
-#| msgid "Alt+Shift+d"
+#, kde-format
 msgctxt "default shortcut for \"Document Declaration\""
 msgid "Alt+Shift+d"
 msgstr "Alt+Shift+d"
 
 #: codeutilsplugin.cpp:52
-#, fuzzy, kde-format
-#| msgid "Add Doxygen skeleton for declaration under cursor."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add Doxygen skeleton for declaration under cursor."
-msgstr "在游標下方加入宣告用的 Doxygen 的架構。"
+msgstr "在游標下方加入宣告用的 Doxygen 的模板。"
 
 #: codeutilsplugin.cpp:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "Adds a basic Doxygen comment skeleton in front of the declaration under "
-#| "the cursor, e.g. with all the parameter of a function."
+#, kde-format
 msgctxt "@info:whatthis"
 msgid ""
 "Adds a basic Doxygen comment skeleton in front of the declaration under the "
 "cursor, e.g. with all the parameter of a function."
-msgstr "在游標下方新增宣告用的基本的 Doxygen 架構，例如說明函式的參數等等。"
+msgstr ""
+"在游標下方宣告前方新增基本的 Doxygen 註解模板，例如說明函式的參數等等。"
 
 #: codeutilsplugin.cpp:85
 #, kde-format

@@ -4,70 +4,65 @@
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2011, 2012, 2013.
 # pan93412 <pan93412@gmail.com>, 2018.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2018-12-02 21:10+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-01-10 14:14+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "dot tw>\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: cmakebuilder.cpp:105
 #, kde-format
 msgid "Could not find the make builder. Check your installation"
-msgstr "找不到 make 編譯器。請檢查您的安裝"
+msgstr "找不到 make 編譯工具。請檢查您的安裝"
 
 #: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
 #, kde-format
 msgid "Could not find a builder for %1"
-msgstr "找不到 %1 的編譯器"
+msgstr "找不到 %1 的編譯工具"
 
 #: cmakebuilder.cpp:195
-#, fuzzy, kde-format
-#| msgid "No Build Directory configured, cannot install"
+#, kde-format
 msgid "No build directory configured, cannot install"
-msgstr "未設定編譯目錄，無法安裝"
+msgstr "未設定編譯目錄，無法 install"
 
 #: cmakebuilder.cpp:205
-#, fuzzy, kde-format
-#| msgid "No Build Directory configured, cannot configure"
+#, kde-format
 msgid "No build directory configured, cannot configure"
-msgstr "未設定編譯目錄，無法設定"
+msgstr "未設定編譯目錄，無法 configure"
 
 #: cmakebuilderpreferences.cpp:48
-#, fuzzy, kde-format
-#| msgid "CMake"
+#, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
 #: cmakebuilderpreferences.cpp:53
-#, fuzzy, kde-format
-#| msgid "Configure Global CMake Settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"
-msgstr "設定 CMake 全域設定"
+msgstr "設定 CMake 全域選項"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: cmakebuilderpreferences.ui:20
-#, fuzzy, kde-format
-#| msgid "Default CMake executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Default CMake executable:"
 msgstr "預設 CMake 執行檔："
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: cmakebuilderpreferences.ui:37
-#, fuzzy, kde-format
-#| msgid "Default generator:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Default generator:"
 msgstr "預設產生器："
@@ -80,13 +75,12 @@ msgstr "CMake"
 #: cmakejob.cpp:56
 #, kde-format
 msgid "Internal error: no project specified to configure."
-msgstr ""
+msgstr "內部錯誤：未指定要 configure 的專案。"
 
 #: cmakejob.cpp:63
-#, fuzzy, kde-format
-#| msgid "Wrong build directory, cannot clear the build directory"
+#, kde-format
 msgid "Failed to create build directory %1."
-msgstr "編譯目錄錯誤，無法清除編譯目錄"
+msgstr "建立編譯目錄 %1 時發生錯誤。"
 
 #: cmakejob.cpp:139
 #, kde-format
@@ -94,10 +88,9 @@ msgid "CMake: %1"
 msgstr "CMake：%1"
 
 #: prunejob.cpp:39
-#, fuzzy, kde-format
-#| msgid "No Build Directory configured, cannot clear the build directory"
+#, kde-format
 msgid "No build directory configured, cannot clear the build directory"
-msgstr "未設定編譯目錄，無法清除編譯目錄"
+msgstr "未設定編譯目錄，無法清除編譯目錄。"
 
 #: prunejob.cpp:45
 #, kde-format

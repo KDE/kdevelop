@@ -3,38 +3,36 @@
 #
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2013, 2014.
 # pan93412 <pan93412@gmail.com>, 2018.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2018-12-02 21:13+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-01-10 14:39+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #: filtermodel.cpp:76
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "樣式"
 
 #: filtermodel.cpp:78
-#, fuzzy, kde-format
-#| msgid "Targets"
+#, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "目標"
 
 #: filtermodel.cpp:80
-#, fuzzy, kde-format
-#| msgid "Action"
+#, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "動作"
@@ -66,22 +64,19 @@ msgstr ""
 "目標是指過濾器要比對的型態。<br />過濾器可套用於檔案，資料夾或兩者皆套用。"
 
 #: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
-#, fuzzy, kde-format
-#| msgid "Files and Folders"
+#, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "檔案與資料夾"
 
 #: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Folders"
+#, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "資料夾"
 
 #: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
-#, fuzzy, kde-format
-#| msgid "Files"
+#, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "檔案"
@@ -100,15 +95,13 @@ msgstr ""
 "\"</code> 先排除所有的檔案，再套用引入 <code>\"*.cpp\"</code> 樣式。"
 
 #: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
-#, fuzzy, kde-format
-#| msgid "Include"
+#, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "引入"
 
 #: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
-#, fuzzy, kde-format
-#| msgid "Exclude"
+#, kde-format
 msgctxt "@item"
 msgid "Exclude"
 msgstr "排除"
@@ -128,23 +121,19 @@ msgid "A filter ending on <code>\"/\"</code> can never match a file."
 msgstr "以 <code>\"/\"</code> 結尾的過濾器則不會比對檔案。"
 
 #: projectfilterconfigpage.cpp:198
-#, fuzzy, kde-format
-#| msgid "Configure Project Filter"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Project Filter"
 msgstr "設定專案過濾器"
 
 #: projectfilterconfigpage.cpp:208
-#, fuzzy, kde-format
-#| msgid "Project Filter"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "專案過濾器"
 
 #: projectfilterprovider.cpp:76
-#, fuzzy, kde-format
-#| msgid "Exclude Item From Project"
-#| msgid_plural "Exclude Items From Project"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
@@ -159,8 +148,7 @@ msgid_plural ""
 msgstr[0] "已新增此項目的過濾器。要復原，請使用專案過濾設定。"
 
 #: projectfilterprovider.cpp:117
-#, fuzzy, kde-format
-#| msgid "Project Filter Added"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"
 msgstr "專案過濾器已新增"
@@ -175,32 +163,28 @@ msgstr "設定專案資料夾中要包含或排除哪些檔案與資料夾："
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: projectfiltersettings.ui:34
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "新增"
 
 #. i18n: ectx: property (text), widget (QPushButton, remove)
 #: projectfiltersettings.ui:47
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "移除"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveUp)
 #: projectfiltersettings.ui:57
-#, fuzzy, kde-format
-#| msgid "Move Up"
+#, kde-format
 msgctxt "@action:button"
 msgid "Move Up"
 msgstr "上移"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveDown)
 #: projectfiltersettings.ui:67
-#, fuzzy, kde-format
-#| msgid "Move Down"
+#, kde-format
 msgctxt "@action:button"
 msgid "Move Down"
 msgstr "下移"
