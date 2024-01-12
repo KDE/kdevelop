@@ -47,6 +47,7 @@ private:
     static DocumentMarks documentMarks(const KDevelop::IDocument* doc);
     static void printLines(int from, int count, const KDevelop::IDocument* doc);
     static void verifyBreakpoint(KDevelop::Breakpoint* breakpoint, int expectedLine, const DocumentMarks& marks);
+    static void verifyUntrackedBreakpoint(KDevelop::Breakpoint* breakpoint, int expectedLine);
 
     QUrl testFileUrl(const QString& fileName) const;
 

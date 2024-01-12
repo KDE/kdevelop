@@ -185,6 +185,25 @@ void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedL
         RETURN_IF_TEST_ABORTED(__VA_ARGS__);                                                                           \
     } while (false)
 
+/// Verify that the breakpoint is set correctly at the expected line number,
+/// and that the document line tracking is not enabled for it.
+/// Check success with RETURN_IF_TEST_FAILED() and RETURN_IF_TEST_ABORTED().
+void TestBreakpointModel::verifyUntrackedBreakpoint(Breakpoint* breakpoint, int expectedLine)
+{
+    QVERIFY(!breakpoint->movingCursor());
+    QCOMPARE(breakpoint->line(), expectedLine);
+    QCOMPARE(breakpoint->savedLine(), expectedLine);
+}
+
+/// Convenience macro for verifyUntrackedBreakpoint().
+/// The third argument is an optional return value on failure.
+#define VERIFY_UNTRACKED_BREAKPOINT(breakpoint, expectedLine, ...)                                                     \
+    do {                                                                                                               \
+        verifyUntrackedBreakpoint(breakpoint, expectedLine);                                                           \
+        RETURN_IF_TEST_FAILED(__VA_ARGS__);                                                                            \
+        RETURN_IF_TEST_ABORTED(__VA_ARGS__);                                                                           \
+    } while (false)
+
 TestBreakpointModel::TestBreakpointModel(QObject* parent)
     : QObject(parent)
 {
@@ -348,10 +367,8 @@ void TestBreakpointModel::testDocumentSave()
     QTest::qWait(1);
 
     // verify.
-    QVERIFY(!b1->movingCursor());
-    QVERIFY(!b2->movingCursor());
-    QCOMPARE(b1->savedLine(), 22);
-    QCOMPARE(b2->savedLine(), 24);
+    VERIFY_UNTRACKED_BREAKPOINT(b1, 22, );
+    VERIFY_UNTRACKED_BREAKPOINT(b2, 24, );
     const auto savedBreakpoints = readBreakpointsFromConfig();
     QCOMPARE(savedBreakpoints.size(), 2);
     QCOMPARE(savedBreakpoints.at(0)->line(), 22);
@@ -377,10 +394,8 @@ void TestBreakpointModel::testDocumentEditAndSave()
     QTest::qWait(1);
 
     // verify.
-    QVERIFY(!b1->movingCursor());
-    QVERIFY(!b2->movingCursor());
-    QCOMPARE(b1->savedLine(), 23);
-    QCOMPARE(b2->savedLine(), 24);
+    VERIFY_UNTRACKED_BREAKPOINT(b1, 23, );
+    VERIFY_UNTRACKED_BREAKPOINT(b2, 24, );
     const auto savedBreakpoints = readBreakpointsFromConfig();
     QCOMPARE(savedBreakpoints.size(), 2);
     QCOMPARE(savedBreakpoints.at(0)->line(), 23);
@@ -403,10 +418,8 @@ void TestBreakpointModel::testDocumentEditAndDiscard()
     QTest::qWait(1);
 
     // verify.
-    QVERIFY(!b1->movingCursor());
-    QVERIFY(!b2->movingCursor());
-    QCOMPARE(b1->savedLine(), 21);
-    QCOMPARE(b2->savedLine(), 23);
+    VERIFY_UNTRACKED_BREAKPOINT(b1, 21, );
+    VERIFY_UNTRACKED_BREAKPOINT(b2, 23, );
     const auto savedBreakpoints = readBreakpointsFromConfig();
     QCOMPARE(savedBreakpoints.size(), 2);
     QCOMPARE(savedBreakpoints.at(0)->line(), 21);
