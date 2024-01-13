@@ -202,6 +202,7 @@ public:
 
         auto* a = new QAction( grp );
         a->setText( s->description() );
+        a->setToolTip(s->description());
         a->setCheckable( false );
         a->setData(QVariant::fromValue<Session*>(s));
 
