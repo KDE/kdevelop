@@ -30,6 +30,7 @@
         "Description[uk]": "Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проєкту.",
         "Description[x-test]": "xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx",
         "Description[zh_CN]": "配置在解析工程时将添加哪些宏和包含目录/文件",
+        "Description[zh_TW]": "設定專案剖析時哪些巨集和包含目錄/檔案要加到剖析器中。",
         "Icon": "kdevelop",
         "Id": "KDevDefinesAndIncludesManager",
         "Name": "Custom Defines And Includes Manager",

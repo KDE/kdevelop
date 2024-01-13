@@ -33,7 +33,8 @@
                 "Name[tr]": "Niko Sams",
                 "Name[uk]": "Niko Sams",
                 "Name[x-test]": "xxNiko Samsxx",
-                "Name[zh_CN]": "Niko Sams"
+                "Name[zh_CN]": "Niko Sams",
+                "Name[zh_TW]": "Niko Sams"
             }
         ],
         "Description": "This plugin allows running of scripts.",

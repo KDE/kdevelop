@@ -29,6 +29,7 @@
         "Description[uk]": "Забезпечує роботу сторінки вітання, яку програма показує, якщо сеанс порожній",
         "Description[x-test]": "xxProvides the welcome page visible in an empty sessionxx",
         "Description[zh_CN]": "提供空白会话的欢迎页",
+        "Description[zh_TW]": "提供空白工作階段所顯示的歡迎頁面",
         "Icon": "kdevelop",
         "Id": "KDevWelcomePage",
         "Name": "KDevelop Welcome Page",
@@ -62,7 +63,8 @@
         "Name[tr]": "K Geliştir Karşılama Sayfası",
         "Name[uk]": "Сторінка вітання KDevelop",
         "Name[x-test]": "xxKDevelop Welcome Pagexx",
-        "Name[zh_CN]": "KDevelop 欢迎页面"
+        "Name[zh_CN]": "KDevelop 欢迎页面",
+        "Name[zh_TW]": "KDevelop 歡迎頁面"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

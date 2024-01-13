@@ -34,7 +34,8 @@
                 "Name[tr]": "Aleix Pol",
                 "Name[uk]": "Aleix Pol",
                 "Name[x-test]": "xxAleix Polxx",
-                "Name[zh_CN]": "Aleix Pol"
+                "Name[zh_CN]": "Aleix Pol",
+                "Name[zh_TW]": "Aleix Pol"
             }
         ],
         "Category": "Runtimes",
@@ -102,6 +103,7 @@
         "Name[uk]": "Підтримка Android",
         "Name[x-test]": "xxAndroid Supportxx",
         "Name[zh_CN]": "Android 支持",
+        "Name[zh_TW]": "Android 支援",
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

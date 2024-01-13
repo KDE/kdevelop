@@ -30,6 +30,7 @@
         "Description[uk]": "Імпортує і дає змогу редагувати проєкти Meson",
         "Description[x-test]": "xxImports and edits Meson projectsxx",
         "Description[zh_CN]": "导入并编辑 Meson 工程",
+        "Description[zh_TW]": "匯入並編輯 Meson 專案",
         "Icon": "run-build",
         "Id": "KDevMesonManager",
         "Name": "Meson Project Manager",
@@ -61,7 +62,8 @@
         "Name[tr]": "Meson Proje Yöneticisi",
         "Name[uk]": "Керування проєктами Meson",
         "Name[x-test]": "xxMeson Project Managerxx",
-        "Name[zh_CN]": "Meson 工程管理器"
+        "Name[zh_CN]": "Meson 工程管理器",
+        "Name[zh_TW]": "Meson 專案管理員"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "Meson",

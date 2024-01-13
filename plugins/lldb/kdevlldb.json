@@ -62,7 +62,8 @@
         "Name[tr]": "LLDB Desteği",
         "Name[uk]": "Підтримка LLDB",
         "Name[x-test]": "xxLLDB Supportxx",
-        "Name[zh_CN]": "LLDB 支持"
+        "Name[zh_CN]": "LLDB 支持",
+        "Name[zh_TW]": "LLDB 支援"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [

@@ -30,6 +30,7 @@
         "Description[uk]": "За допомогою цього додатка здійснюється інтеграція з системою сторінок підручника (man)",
         "Description[x-test]": "xxThis plugin provides Manual Pages integrationxx",
         "Description[zh_CN]": "此插件提供了帮助手册整合",
+        "Description[zh_TW]": "這個外掛程式提供 Man 手冊頁面的整合",
         "EnabledByDefault": false,
         "Icon": "x-office-address-book",
         "Id": "KDevManPage",
@@ -64,7 +65,8 @@
         "Name[tr]": "Kılavuz Sayfaları",
         "Name[uk]": "Сторінки man",
         "Name[x-test]": "xxMan Pagesxx",
-        "Name[zh_CN]": "Man 手册"
+        "Name[zh_CN]": "Man 手册",
+        "Name[zh_TW]": "Man 頁面"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": [

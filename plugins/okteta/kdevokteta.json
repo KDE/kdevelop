@@ -34,7 +34,8 @@
                 "Name[tr]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
                 "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
-                "Name[zh_CN]": "Friedrich W. H. Kossebau"
+                "Name[zh_CN]": "Friedrich W. H. Kossebau",
+                "Name[zh_TW]": "Friedrich W. H. Kossebau"
             }
         ],
         "Category": "Utilities",
@@ -99,6 +100,7 @@
         "Name[uk]": "Шістнадцятковий редактор",
         "Name[x-test]": "xxHex Editorxx",
         "Name[zh_CN]": "十六进制编辑器",
+        "Name[zh_TW]": "十六進位資料編輯器",
         "Version": "0.1.0"
     },
     "X-KDevelop-Category": "Global",

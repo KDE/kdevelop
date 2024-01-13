@@ -30,6 +30,7 @@
         "Description[uk]": "Збирає проєкти QMake",
         "Description[x-test]": "xxBuilds QMake Projectsxx",
         "Description[zh_CN]": "构建 QMake 工程",
+        "Description[zh_TW]": "編譯 QMake 專案",
         "Icon": "qtlogo",
         "Id": "KDevQMakeBuilder",
         "Name": "QMake Project Builder",
@@ -61,7 +62,8 @@
         "Name[tr]": "QMake Proje Oluşturucu",
         "Name[uk]": "Засіб збирання проєктів QMake",
         "Name[x-test]": "xxQMake Project Builderxx",
-        "Name[zh_CN]": "QMake 工程构建器"
+        "Name[zh_CN]": "QMake 工程构建器",
+        "Name[zh_TW]": "QMake 專案編譯工具"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-IRequired": [
