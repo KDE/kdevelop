@@ -109,9 +109,12 @@ public:
         return nullptr;
     }
 
-    void newSession()
+    void newSession(const QString& name = {})
     {
         auto* session = new Session(QUuid::createUuid().toString());
+        if (!name.isEmpty()) {
+            session->setName(name);
+        }
 
         KProcess::startDetached(ShellExtension::getInstance()->executableFilePath(), QStringList() << QStringLiteral("-s") << session->id().toString() << standardArguments());
         delete session;
@@ -122,6 +125,18 @@ public:
             window->close();
         }
 #endif
+    }
+
+    void newNamedSession()
+    {
+        bool ok = false;
+        const QString& newSessionName = QInputDialog::getText(
+            Core::self()->uiController()->activeMainWindow(), i18nc("@title:window", "Start New Session"),
+            i18nc("@label:textbox", "New session name:"), QLineEdit::Normal, {}, &ok);
+
+        if (ok) {
+            newSession(newSessionName);
+        }
     }
 
     void deleteCurrentSession()
@@ -261,6 +276,15 @@ SessionController::SessionController( QObject *parent )
             this, [this] { Q_D(SessionController); d->newSession(); });
     action->setText( i18nc("@action:inmenu", "Start New Session") );
     action->setToolTip( i18nc("@info:tooltip", "Start a new KDevelop instance with an empty session") );
+    action->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
+
+    action = actionCollection()->addAction(QStringLiteral("new_named_session"));
+    connect(action, &QAction::triggered, this, [this] {
+        Q_D(SessionController);
+        d->newNamedSession();
+    });
+    action->setText(i18nc("@action:inmenu", "Start New Named Session..."));
+    action->setToolTip(i18nc("@info:tooltip", "Start a new KDevelop instance with an empty named session"));
     action->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
 
     action = actionCollection()->addAction(QStringLiteral("rename_session"));

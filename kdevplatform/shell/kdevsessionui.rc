@@ -1,8 +1,9 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="kdevsessionui" version="6" translationDomain="kdevplatform">
+<gui name="kdevsessionui" version="7" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="session">
             <Action name="new_session" />
+            <Action name="new_named_session" />
             <Separator />
             <ActionList name="available_sessions"/>
             <Separator />
