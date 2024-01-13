@@ -154,7 +154,7 @@ QString Session::path() const
 QString SessionPrivate::generatePrettyContents( const SessionInfo& info )
 {
     if( info.projects.isEmpty() )
-        return QString();
+        return i18n("(no projects)");
 
     QStringList projectNames;
     projectNames.reserve( info.projects.size() );
