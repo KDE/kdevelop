@@ -16,6 +16,7 @@
 
 class QMimeType;
 
+namespace OpenWithUtils {
 class FileOpener
 {
 public:
@@ -50,6 +51,7 @@ private:
 };
 
 bool operator==(const FileOpener&, const FileOpener&);
+} // namespace OpenWithUtils
 
 class OpenWithPlugin : public KDevelop::IPlugin, public KDevelop::IOpenWith
 {
@@ -70,7 +72,7 @@ private:
     void openDefault() const;
     void delegateToParts(const QString& pluginId) const;
     void delegateToExternalApplication(const KService::Ptr& service) const;
-    void rememberDefaultChoice(const FileOpener& opener, const QString& name);
+    void rememberDefaultChoice(const OpenWithUtils::FileOpener& opener, const QString& name);
 
     /**
      * Update @a m_mimeType and @a m_defaultOpener based on @a m_urls.
@@ -83,7 +85,7 @@ private:
     QList<QAction*> actionsForApplications(QWidget* parent);
     QList<QUrl> m_urls;
     QString m_mimeType;
-    FileOpener m_defaultOpener;
+    OpenWithUtils::FileOpener m_defaultOpener;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_OPENWITHPLUGIN_H

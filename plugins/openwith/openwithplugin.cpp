@@ -90,6 +90,8 @@ QAction* createAction(const QString& name, const QString& iconName, QWidget* par
 }
 } // unnamed namespace
 
+using OpenWithUtils::FileOpener;
+
 FileOpener::FileOpener(const KService::Ptr& service)
     : FileOpener(false, service->storageId())
 {
@@ -162,7 +164,7 @@ FileOpener::FileOpener(bool isPart, const QString& id)
 {
 }
 
-bool operator==(const FileOpener& a, const FileOpener& b)
+bool OpenWithUtils::operator==(const FileOpener& a, const FileOpener& b)
 {
     Q_ASSERT(a.isValid());
     Q_ASSERT(b.isValid());
