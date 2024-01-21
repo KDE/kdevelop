@@ -18,7 +18,6 @@
 class QUrl;
 class TestBreakpointModel;
 
-namespace KParts { class Part; }
 namespace KTextEditor {
 class Cursor;
 }
@@ -147,8 +146,6 @@ private:
 private Q_SLOTS:
 
     void updateMarks();
-
-    void slotPartAdded(KParts::Part* part);
 
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);

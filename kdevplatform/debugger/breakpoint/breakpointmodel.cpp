@@ -22,7 +22,6 @@
 #include "../interfaces/idebugcontroller.h"
 #include "../interfaces/idocumentcontroller.h"
 #include "../interfaces/idocument.h"
-#include "../interfaces/ipartcontroller.h"
 #include <interfaces/idebugsession.h>
 #include <interfaces/ibreakpointcontroller.h>
 #include <interfaces/isession.h>
@@ -74,25 +73,15 @@ BreakpointModel::BreakpointModel(QObject* parent)
 {
     connect(this, &BreakpointModel::dataChanged, this, &BreakpointModel::updateMarks);
 
-    if (KDevelop::ICore::self()->partController()) { //TODO remove if
-        const auto parts = KDevelop::ICore::self()->partController()->parts();
-        for (KParts::Part* p : parts) {
-            slotPartAdded(p);
-        }
-        connect(KDevelop::ICore::self()->partController(),
-                &IPartController::partAdded,
-                this,
-                &BreakpointModel::slotPartAdded);
-    }
+    auto* const documentController = ICore::self()->documentController();
+    Q_ASSERT(documentController); // BreakpointModel is created after DocumentController.
 
+    // This constructor is invoked before controllers are initialized, and thus before any documents can be opened.
+    // So our textDocumentCreated() slot will be invoked for all documents.
+    Q_ASSERT(documentController->openDocuments().empty());
+    connect(documentController, &IDocumentController::textDocumentCreated, this, &BreakpointModel::textDocumentCreated);
 
-    connect (KDevelop::ICore::self()->documentController(),
-             &IDocumentController::textDocumentCreated,
-             this,
-             &BreakpointModel::textDocumentCreated);
-    connect (KDevelop::ICore::self()->documentController(),
-                &IDocumentController::documentSaved,
-                this, &BreakpointModel::documentSaved);
+    connect(documentController, &IDocumentController::documentSaved, this, &BreakpointModel::documentSaved);
 }
 
 BreakpointModel::~BreakpointModel()
@@ -103,31 +92,22 @@ BreakpointModel::~BreakpointModel()
     qDeleteAll(d->deletedBreakpoints);
 }
 
-void BreakpointModel::slotPartAdded(KParts::Part* part)
-{
-    if (auto doc = qobject_cast<KTextEditor::Document*>(part))
-    {
-        auto *iface = qobject_cast<MarkInterface*>(doc);
-        if( !iface )
-            return;
-
-        iface->setMarkDescription(BreakpointMark, i18n("Breakpoint"));
-        iface->setMarkPixmap(BreakpointMark, *breakpointPixmap());
-        iface->setMarkPixmap(PendingBreakpointMark, *pendingBreakpointPixmap());
-        iface->setMarkPixmap(ReachedBreakpointMark, *reachedBreakpointPixmap());
-        iface->setMarkPixmap(DisabledBreakpointMark, *disabledBreakpointPixmap());
-        iface->setEditableMarks( MarkInterface::Bookmark | BreakpointMark );
-        updateMarks();
-    }
-}
-
 void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 {
     Q_D(const BreakpointModel);
 
     KTextEditor::Document* const textDocument = doc->textDocument();
 
-    if (qobject_cast<KTextEditor::MarkInterface*>(textDocument)) {
+    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(textDocument);
+    if (imark) {
+        imark->setMarkDescription(BreakpointMark, i18n("Breakpoint"));
+        imark->setMarkPixmap(BreakpointMark, *breakpointPixmap());
+        imark->setMarkPixmap(PendingBreakpointMark, *pendingBreakpointPixmap());
+        imark->setMarkPixmap(ReachedBreakpointMark, *reachedBreakpointPixmap());
+        imark->setMarkPixmap(DisabledBreakpointMark, *disabledBreakpointPixmap());
+        imark->setEditableMarks(MarkInterface::Bookmark | BreakpointMark);
+        updateMarks();
+
         // can't use new signal slot syntax here, MarkInterface is not a QObject
         connect(textDocument, SIGNAL(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)),
                  this, SLOT(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)));
