@@ -23,6 +23,10 @@ namespace Sublime {
     class Area;
 }
 
+namespace KTextEditor {
+class Document;
+}
+
 namespace KDevelop {
 class Context;
 class ContextMenuExtension;
@@ -98,6 +102,14 @@ private:
     QPointer<IDebugSession> m_currentSession;
     BreakpointModel *m_breakpointModel;
     VariableCollection *m_variableCollection;
+
+    QPointer<KTextEditor::Document> m_lastExecMarkDocument;
+    /**
+     * A line number to which the execution mark was last added.
+     * The execution mark may no longer be at this line number if the document is modified after the adding.
+     * This line number is meaningless if @a m_lastExecMarkDocument is null.
+     */
+    int m_lastExecMarkLine = -1;
 
     bool m_uiInitialized = false;
 };

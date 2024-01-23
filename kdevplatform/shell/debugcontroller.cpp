@@ -347,19 +347,39 @@ void DebugController::clearExecutionPoint()
         return;
     }
 
-    const auto documents = documentController->openDocuments();
-    for (KDevelop::IDocument* document : documents) {
-        auto* iface = qobject_cast<KTextEditor::MarkInterface*>(document->textDocument());
-        if (!iface)
-            continue;
-
-        const auto oldMarks = iface->marks();
-        for (KTextEditor::Mark* mark : oldMarks) {
-            if (mark->type & KTextEditor::MarkInterface::Execution) {
-                iface->removeMark( mark->line, KTextEditor::MarkInterface::Execution );
-            }
-        }
+    // TODO KF6: rename lastExecMarkDocument to document and remove the document variable just below.
+    auto* const lastExecMarkDocument = m_lastExecMarkDocument.data();
+    auto* const document = qobject_cast<KTextEditor::MarkInterface*>(lastExecMarkDocument);
+    // Do we even have a document with execution mark?
+    if (!document) {
+        return;
     }
+    m_lastExecMarkDocument = nullptr;
+
+    constexpr auto markTypeToRemove = KTextEditor::MarkInterface::Execution;
+
+    // Is the execution mark still at the line it was added to?
+    if (document->mark(m_lastExecMarkLine) & markTypeToRemove) {
+        document->removeMark(m_lastExecMarkLine, markTypeToRemove);
+        return;
+    }
+
+    // The execution mark is on some other line (probably because the document was edited
+    // during the current debug session). Iterate over all marks in the document to find and remove it.
+    const auto& marks = document->marks();
+    const auto it = std::find_if(marks.begin(), marks.end(), [](const KTextEditor::Mark* mark) -> bool {
+        // TODO: remove the following line once building KDevelop with Visual Studio 2019 is no longer supported.
+        constexpr auto markTypeToRemove = KTextEditor::MarkInterface::Execution;
+        return mark->type & markTypeToRemove;
+    });
+
+    if (it != marks.end()) {
+        document->removeMark(it.key(), markTypeToRemove);
+        return;
+    }
+
+    qCWarning(SHELL) << "failed to remove execution mark from"
+                     << lastExecMarkDocument->url().toString(QUrl::PreferLocalFile);
 }
 
 void DebugController::showStepInSource(const QUrl &url, int lineNum)
@@ -378,10 +398,13 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
     if( !document )
         return;
 
-    auto* iface = qobject_cast<KTextEditor::MarkInterface*>(document->textDocument());
+    auto* const textDocument = document->textDocument();
+    auto* const iface = qobject_cast<KTextEditor::MarkInterface*>(textDocument);
     if( !iface )
         return;
 
+    m_lastExecMarkDocument = textDocument;
+    m_lastExecMarkLine = lineNum;
     iface->addMark(lineNum, KTextEditor::MarkInterface::Execution);
 }
 
