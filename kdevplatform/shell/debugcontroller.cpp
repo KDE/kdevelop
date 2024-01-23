@@ -21,7 +21,6 @@
 #include "../interfaces/idocument.h"
 #include "../interfaces/icore.h"
 #include "../interfaces/idocumentcontroller.h"
-#include "../interfaces/ipartcontroller.h"
 #include "../interfaces/contextmenuextension.h"
 #include "../interfaces/context.h"
 #include "../language/interfaces/editorcontext.h"
@@ -119,6 +118,14 @@ DebugController::DebugController(QObject *parent)
     if (const auto* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
         connect(mainWindow, &Sublime::MainWindow::areaChanged, this, &DebugController::areaChanged);
     }
+
+    auto* const documentController = KDevelop::ICore::self()->documentController();
+    Q_ASSERT(documentController); // DebugController is created after DocumentController.
+
+    // This constructor is invoked before controllers are initialized, and thus before any documents can be opened.
+    // So our textDocumentCreated() slot will be invoked for all documents.
+    Q_ASSERT(documentController->openDocuments().empty());
+    connect(documentController, &IDocumentController::textDocumentCreated, this, &DebugController::textDocumentCreated);
 }
 
 void DebugController::initialize()
@@ -148,16 +155,6 @@ void DebugController::initializeUi()
         i18nc("@title:window", "Variables"),
         new DebuggerToolFactory<VariableWidget>(this, QStringLiteral("org.kdevelop.debugger.VariablesView"),
                                                 Qt::LeftDockWidgetArea));
-
-    const auto parts = KDevelop::ICore::self()->partController()->parts();
-    for (KParts::Part* p : parts) {
-        partAdded(p);
-    }
-    connect(KDevelop::ICore::self()->partController(),
-            &IPartController::partAdded,
-            this,
-            &DebugController::partAdded);
-
 
     ICore::self()->uiController()->activeMainWindow()->guiFactory()->addClient(this);
 
@@ -199,13 +196,9 @@ VariableCollection* DebugController::variableCollection()
     return m_variableCollection;
 }
 
-void DebugController::partAdded(KParts::Part* part)
+void DebugController::textDocumentCreated(KDevelop::IDocument* document)
 {
-    if (auto* doc = qobject_cast<KTextEditor::Document*>(part)) {
-        auto* iface = qobject_cast<KTextEditor::MarkInterface*>(doc);
-        if( !iface )
-            return;
-
+    if (auto* const iface = qobject_cast<KTextEditor::MarkInterface*>(document->textDocument())) {
         iface->setMarkPixmap(KTextEditor::MarkInterface::Execution, *executionPointPixmap());
     }
 }

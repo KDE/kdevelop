@@ -23,13 +23,10 @@ namespace Sublime {
     class Area;
 }
 
-namespace KParts {
-    class Part;
-}
-
 namespace KDevelop {
 class Context;
 class ContextMenuExtension;
+class IDocument;
 
 class DebugController : public IDebugController, public KXMLGUIClient
 {
@@ -70,7 +67,7 @@ private Q_SLOTS:
     void showStepInSource(const QUrl &file, int line);
     void clearExecutionPoint();
 
-    void partAdded(KParts::Part* part);
+    void textDocumentCreated(KDevelop::IDocument* document);
     void areaChanged(Sublime::Area* newArea);
 
 Q_SIGNALS:
