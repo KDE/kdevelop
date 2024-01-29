@@ -1,17 +1,17 @@
 # Translation of kdevplatform.po to Catalan
-# Copyright (C) 2009-2023 This_file_is_part_of_KDE
+# Copyright (C) 2009-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-07 01:14+0000\n"
-"PO-Revision-Date: 2023-10-03 13:51+0200\n"
+"PO-Revision-Date: 2024-01-28 20:35+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2349,7 +2349,7 @@ msgid ""
 "Close all open documents, with the exception of the currently active "
 "document."
 msgstr ""
-"Tanca tots els documents oberts, amb excepció del document actualment actiu."
+"Tanca tots els documents oberts, a excepció del document actualment actiu."
 
 #: shell/documentcontroller.cpp:667
 #, kde-format
@@ -3218,8 +3218,8 @@ msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
 msgstr ""
-"El projecte que esteu intentant obrint ja es troba obert en almenys una "
-"altra sessió.<br>Què voleu fer?"
+"El projecte que esteu intentant obrir ja es troba obert en almenys una altra "
+"sessió.<br>Què voleu fer?"
 
 #: shell/projectcontroller.cpp:861
 #, kde-format
@@ -5064,7 +5064,7 @@ msgid ""
 msgstr ""
 "<p>Seleccioneu els llenguatges que utilitzeu un a un des del quadre combinat "
 "<i>Llenguatge</i> de sota, trieu el formatador i l'estil desitjats per a "
-"cadascuna. Feu <i>Ctrl+Clic</i> en un estil seleccionat per desseleccionar-"
+"cadascuna. Feu <i>Ctrl+Clic</i> en un estil seleccionat per a desseleccionar-"
 "lo.</p>\n"
 "<p>És molt important configurar el formatador correcte i l'estil per a cada "
 "llenguatge usat: no només es veuen afectades les accions <i>Torna a donar "
