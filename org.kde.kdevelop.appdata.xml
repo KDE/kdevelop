@@ -160,6 +160,7 @@
   <screenshots>
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/kdevelop/kdevelop.png</image>
+      <caption>Main window with code editor, terminal integration and project files</caption>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
