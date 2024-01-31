@@ -28,6 +28,23 @@ class IDocument;
 class Breakpoint;
 class BreakpointModelPrivate;
 
+class ScopedIncrementor
+{
+    int& m_value;
+
+public:
+    explicit ScopedIncrementor(int& value)
+        : m_value(value)
+    {
+        ++m_value;
+    }
+    ~ScopedIncrementor()
+    {
+        --m_value;
+    }
+    Q_DISABLE_COPY_MOVE(ScopedIncrementor)
+};
+
 class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -173,6 +190,11 @@ private:
     void scheduleSave();
 
     void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
+
+    /**
+     * Call this function and keep the returned guard object alive while adding or removing document marks.
+     */
+    ScopedIncrementor markChangeGuard();
 
     /**
      * Initialize breakpoint moving cursors in a given document.

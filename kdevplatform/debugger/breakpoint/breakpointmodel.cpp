@@ -60,6 +60,9 @@ class KDevelop::BreakpointModelPrivate
 public:
     bool dirty = false;
     bool dontUpdateMarks = false;
+    /// Non-zero while KDevelop code is adding or removing a document mark.
+    /// This allows to react to user-driven mark changes without getting confused by our own code changes.
+    int inhibitMarkChange = 0;
     QList<Breakpoint*> breakpoints;
     /// FIXME: this is just an ugly workaround to not leak deleted breakpoints
     ///        a real fix would make sure that we actually delete breakpoints
@@ -338,9 +341,14 @@ void BreakpointModel::markChanged(
     KTextEditor::Mark mark,
     KTextEditor::MarkInterface::MarkChangeAction action)
 {
+    Q_D(const BreakpointModel);
+
     int type = mark.type;
     /* Is this a breakpoint mark, to begin with? */
     if (!(type & AllBreakpointMarks)) return;
+
+    if (d->inhibitMarkChange)
+        return;
 
     if (action == KTextEditor::MarkInterface::MarkAdded) {
         Breakpoint *b = breakpoint(document->url(), mark.line);
@@ -441,6 +449,13 @@ void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column co
     }
 
     scheduleSave();
+}
+
+ScopedIncrementor BreakpointModel::markChangeGuard()
+{
+    Q_D(BreakpointModel);
+
+    return ScopedIncrementor(d->inhibitMarkChange);
 }
 
 void KDevelop::BreakpointModel::updateMarks()
