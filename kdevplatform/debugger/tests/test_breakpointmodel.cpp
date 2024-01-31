@@ -120,7 +120,7 @@ TestBreakpointModel::DocumentMarks TestBreakpointModel::documentMarks(const IDoc
     const auto marks = imark->marks();
     for (const auto* mark : marks) {
         // mask to remove non-breakpoint mark type bits.
-        const auto type = mark->type & BreakpointModel::MarkType::AllBreakpointMarks;
+        const auto type = mark->type & BreakpointModel::AllBreakpointMarks;
         if (type) {
             ret.insert(mark->line, static_cast<BreakpointModel::MarkType>(type));
         }

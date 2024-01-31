@@ -111,11 +111,11 @@ void BreakpointModel::slotPartAdded(KParts::Part* part)
         if( !iface )
             return;
 
-        iface->setMarkDescription((MarkInterface::MarkTypes)BreakpointMark, i18n("Breakpoint"));
-        iface->setMarkPixmap((MarkInterface::MarkTypes)BreakpointMark, *breakpointPixmap());
-        iface->setMarkPixmap((MarkInterface::MarkTypes)PendingBreakpointMark, *pendingBreakpointPixmap());
-        iface->setMarkPixmap((MarkInterface::MarkTypes)ReachedBreakpointMark, *reachedBreakpointPixmap());
-        iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
+        iface->setMarkDescription(BreakpointMark, i18n("Breakpoint"));
+        iface->setMarkPixmap(BreakpointMark, *breakpointPixmap());
+        iface->setMarkPixmap(PendingBreakpointMark, *pendingBreakpointPixmap());
+        iface->setMarkPixmap(ReachedBreakpointMark, *reachedBreakpointPixmap());
+        iface->setMarkPixmap(DisabledBreakpointMark, *disabledBreakpointPixmap());
         iface->setEditableMarks( MarkInterface::Bookmark | BreakpointMark );
         updateMarks();
     }

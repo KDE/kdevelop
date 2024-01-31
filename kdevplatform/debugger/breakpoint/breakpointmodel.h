@@ -135,14 +135,14 @@ public Q_SLOTS:
     void load();
 
 private:
-    enum MarkType {
-        BreakpointMark = KTextEditor::MarkInterface::BreakpointActive,
-        ReachedBreakpointMark  = KTextEditor::MarkInterface::BreakpointReached,
-        DisabledBreakpointMark = KTextEditor::MarkInterface::BreakpointDisabled,
-        PendingBreakpointMark   = KTextEditor::MarkInterface::markType08,
-
-        AllBreakpointMarks = BreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark | PendingBreakpointMark
-    };
+    using MarkType = KTextEditor::MarkInterface::MarkTypes;
+    static constexpr MarkType BreakpointMark = MarkType::BreakpointActive;
+    static constexpr MarkType ReachedBreakpointMark = MarkType::BreakpointReached;
+    static constexpr MarkType DisabledBreakpointMark = MarkType::BreakpointDisabled;
+    static constexpr MarkType PendingBreakpointMark = MarkType::markType08;
+    /// A bit mask of breakpoint mark types.
+    static constexpr MarkType AllBreakpointMarks =
+        MarkType(BreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark | PendingBreakpointMark);
 
 private Q_SLOTS:
 
