@@ -45,12 +45,16 @@ BreakpointModel* IBreakpointController::breakpointModel() const
 
 void IBreakpointController::updateState(int row, Breakpoint::BreakpointState state)
 {
-    breakpointModel()->updateState(row, state);
+    auto* const modelBreakpoint = breakpointModel()->breakpoint(row);
+    Q_ASSERT(modelBreakpoint);
+    modelBreakpoint->setState(state);
 }
 
 void IBreakpointController::updateHitCount(int row, int hitCount)
 {
-    breakpointModel()->updateHitCount(row, hitCount);
+    auto* const modelBreakpoint = breakpointModel()->breakpoint(row);
+    Q_ASSERT(modelBreakpoint);
+    modelBreakpoint->setHitCount(hitCount);
 }
 
 void IBreakpointController::updateErrorText(int row, const QString& errorText)

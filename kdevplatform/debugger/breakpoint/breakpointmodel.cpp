@@ -313,28 +313,6 @@ bool KDevelop::BreakpointModel::setData(const QModelIndex& index, const QVariant
     return false;
 }
 
-void BreakpointModel::updateState(int row, Breakpoint::BreakpointState state)
-{
-    Q_D(BreakpointModel);
-
-    Breakpoint* breakpoint = d->breakpoints.at(row);
-    if (state != breakpoint->m_state) {
-        breakpoint->m_state = state;
-        reportChange(breakpoint, Breakpoint::StateColumn);
-    }
-}
-
-void BreakpointModel::updateHitCount(int row, int hitCount)
-{
-    Q_D(BreakpointModel);
-
-    Breakpoint* breakpoint = d->breakpoints.at(row);
-    if (hitCount != breakpoint->m_hitCount) {
-        breakpoint->m_hitCount = hitCount;
-        reportChange(breakpoint, Breakpoint::HitCountColumn);
-    }
-}
-
 void BreakpointModel::updateErrorText(int row, const QString& errorText)
 {
     Q_D(BreakpointModel);

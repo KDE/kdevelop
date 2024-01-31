@@ -272,6 +272,15 @@ QString Breakpoint::address() const
     return m_address;
 }
 
+void Breakpoint::setHitCount(int hits)
+{
+    if (m_hitCount == hits)
+        return;
+
+    m_hitCount = hits;
+    reportChange(HitCountColumn);
+}
+
 int Breakpoint::hitCount() const
 {
     return m_hitCount;
@@ -335,6 +344,15 @@ void Breakpoint::setExpression(const QString& e)
 QString Breakpoint::expression() const
 {
     return m_expression;
+}
+
+void Breakpoint::setState(BreakpointState state)
+{
+    if (m_state == state)
+        return;
+
+    m_state = state;
+    reportChange(StateColumn);
 }
 
 Breakpoint::BreakpointState Breakpoint::state() const

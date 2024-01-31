@@ -166,8 +166,6 @@ private:
     friend class IBreakpointController;
     friend class ::TestBreakpointModel;
 
-    void updateState(int row, Breakpoint::BreakpointState state);
-    void updateHitCount(int row, int hitCount);
     void updateErrorText(int row, const QString& errorText);
     void notifyHit(int row);
 

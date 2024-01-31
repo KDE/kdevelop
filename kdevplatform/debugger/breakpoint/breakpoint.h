@@ -96,6 +96,7 @@ public:
     void setAddress(const QString& address);
     QString address() const;
 
+    void setHitCount(int hits);
     int hitCount() const;
 
     /**
@@ -119,6 +120,7 @@ public:
     void setExpression(const QString &c);
     QString expression() const;
 
+    void setState(BreakpointState state);
     BreakpointState state() const;
     QString errorText() const;
 
