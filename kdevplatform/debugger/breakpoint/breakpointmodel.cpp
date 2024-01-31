@@ -262,7 +262,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
         if (controller)
             controller->breakpointAboutToBeDeleted(row);
 
-        b->setMovingCursor(nullptr);
+        b->stopDocumentLineTracking();
         d->breakpoints.removeAt(row);
         b->m_model = nullptr;
         // To be changed: the controller is currently still responsible for deleting the breakpoint
@@ -533,7 +533,7 @@ void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document*
 
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (breakpoint->movingCursor() && breakpoint->movingCursor()->document() == document) {
-            breakpoint->setMovingCursor(nullptr);
+            breakpoint->stopDocumentLineTracking();
         }
     }
 }
@@ -712,7 +712,7 @@ void BreakpointModel::setupMovingCursor(Breakpoint* breakpoint, KTextEditor::Doc
 
     auto* const movingInterface = qobject_cast<KTextEditor::MovingInterface*>(document);
     if (!movingInterface) {
-        breakpoint->setMovingCursor(nullptr);
+        breakpoint->stopDocumentLineTracking();
         return;
     }
 
@@ -720,7 +720,7 @@ void BreakpointModel::setupMovingCursor(Breakpoint* breakpoint, KTextEditor::Doc
     connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this,
             SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
 
-    breakpoint->setMovingCursor(movingInterface->newMovingCursor(KTextEditor::Cursor(line, 0)));
+    breakpoint->restartDocumentLineTrackingAt(movingInterface->newMovingCursor(KTextEditor::Cursor(line, 0)));
 }
 
 #include "moc_breakpointmodel.cpp"

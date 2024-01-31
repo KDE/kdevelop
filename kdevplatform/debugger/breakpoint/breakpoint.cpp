@@ -113,8 +113,7 @@ bool Breakpoint::setData(int index, const QVariant& value)
             }
         }
         m_expression = s;
-        // disable document line tracking for this breakpoint:
-        setMovingCursor(nullptr);
+        stopDocumentLineTracking();
         m_url.clear();
         m_line = -1;
     }
@@ -296,12 +295,22 @@ bool Breakpoint::enabled() const
     return m_enabled;
 }
 
-void KDevelop::Breakpoint::setMovingCursor(KTextEditor::MovingCursor* cursor) {
-    if (m_movingCursor && cursor != m_movingCursor) {
-        delete m_movingCursor;
-    }
+void Breakpoint::stopDocumentLineTracking()
+{
+    delete m_movingCursor;
+    m_movingCursor = nullptr;
+}
+
+void Breakpoint::restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor)
+{
+    Q_ASSERT(cursor);
+    Q_ASSERT(cursor != m_movingCursor);
+
+    stopDocumentLineTracking();
+
     m_movingCursor = cursor;
 }
+
 KTextEditor::MovingCursor* KDevelop::Breakpoint::movingCursor() const {
     return m_movingCursor;
 }
@@ -396,7 +405,7 @@ void Breakpoint::updateMovingCursor(const QUrl& url, int line)
 {
     // Can a moving cursor even be enabled?
     if (!m_model || line < 0 || url.isEmpty()) {
-        setMovingCursor(nullptr);
+        stopDocumentLineTracking();
         return;
     }
 
@@ -405,7 +414,7 @@ void Breakpoint::updateMovingCursor(const QUrl& url, int line)
         const auto* const document = m_movingCursor->document();
         if (document && document->url() == url) {
             if (line >= document->lines()) {
-                setMovingCursor(nullptr);
+                stopDocumentLineTracking();
             } else if (m_movingCursor->line() != line) {
                 m_movingCursor->setLine(line);
             }
@@ -426,5 +435,5 @@ void Breakpoint::updateMovingCursor(const QUrl& url, int line)
     }
 
     // No document was found, or the location is after the last line of the new document.
-    setMovingCursor(nullptr);
+    stopDocumentLineTracking();
 }
