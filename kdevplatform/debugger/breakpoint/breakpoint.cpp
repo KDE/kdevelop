@@ -284,7 +284,7 @@ bool Breakpoint::deleted() const
 
 bool Breakpoint::enabled() const
 {
-    return data(EnableColumn, Qt::CheckStateRole).toBool();
+    return m_enabled;
 }
 
 void KDevelop::Breakpoint::setMovingCursor(KTextEditor::MovingCursor* cursor) {
