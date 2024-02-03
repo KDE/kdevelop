@@ -14,6 +14,7 @@
 
 #include <debugger/debuggerexport.h>
 
+class TestBreakpointModel;
 class QVariant;
 class KConfigGroup;
 namespace KTextEditor {
@@ -124,7 +125,8 @@ public:
 protected:
     friend class BreakpointModel;
     friend class IBreakpointController;
-    
+    friend class ::TestBreakpointModel;
+
     /**
      * Return the model this breakpoint is attached to
      *
@@ -147,6 +149,8 @@ protected:
     int m_ignoreHits;
     QString m_expression;
     QString m_errorText;
+
+    uint markType() const;
 
     void saveMovingCursorLine();
     void reportChange(Column c);

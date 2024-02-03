@@ -347,6 +347,19 @@ QString Breakpoint::errorText() const
     return m_errorText;
 }
 
+uint Breakpoint::markType() const
+{
+    if (!m_enabled) {
+        return BreakpointModel::DisabledBreakpointMark;
+    } else if (m_hitCount > 0) {
+        return BreakpointModel::ReachedBreakpointMark;
+    } else if (m_state == PendingState) {
+        return BreakpointModel::PendingBreakpointMark;
+    } else {
+        return BreakpointModel::BreakpointMark;
+    }
+}
+
 void Breakpoint::saveMovingCursorLine()
 {
     Q_ASSERT(m_movingCursor);

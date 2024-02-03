@@ -172,7 +172,7 @@ void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedL
     const auto mark = marks.constFind(expectedLine);
     QVERIFY(mark != marks.cend());
 
-    const auto breakpointType = breakpointModel()->breakpointType(breakpoint);
+    const auto breakpointType = breakpoint->markType();
     QCOMPARE(static_cast<uint>(mark.value()), breakpointType);
 }
 

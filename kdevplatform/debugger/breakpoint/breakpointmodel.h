@@ -178,7 +178,6 @@ private:
     void scheduleSave();
 
     void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
-    uint breakpointType(Breakpoint *breakpoint) const;
     Breakpoint *breakpoint(const QUrl& url, int line) const;
 
     /**

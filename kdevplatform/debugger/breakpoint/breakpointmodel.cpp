@@ -472,19 +472,6 @@ void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column co
     scheduleSave();
 }
 
-uint BreakpointModel::breakpointType(Breakpoint *breakpoint) const
-{
-    uint type = BreakpointMark;
-    if (!breakpoint->enabled()) {
-        type = DisabledBreakpointMark;
-    } else if (breakpoint->hitCount() > 0) {
-        type = ReachedBreakpointMark;
-    } else if (breakpoint->state() == Breakpoint::PendingState) {
-        type = PendingBreakpointMark;
-    }
-    return type;
-}
-
 void KDevelop::BreakpointModel::updateMarks()
 {
     Q_D(BreakpointModel);
@@ -507,7 +494,7 @@ void KDevelop::BreakpointModel::updateMarks()
         if (!doc) continue;
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
-        uint type = breakpointType(breakpoint);
+        uint type = breakpoint->markType();
         IF_DEBUG( qCDebug(DEBUGGER) << type << breakpoint->url() << mark->mark(breakpoint->line()); )
 
         {
