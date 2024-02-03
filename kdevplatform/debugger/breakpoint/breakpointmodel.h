@@ -175,6 +175,12 @@ private:
     void scheduleSave();
 
     void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
+
+    /**
+     * Initialize breakpoint moving cursors in a given document.
+     */
+    void setupDocumentBreakpoints(KTextEditor::Document& document) const;
+
     Breakpoint *breakpoint(const QUrl& url, int line) const;
 
     /**

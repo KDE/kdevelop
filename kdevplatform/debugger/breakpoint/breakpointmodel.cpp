@@ -106,6 +106,10 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
         imark->setMarkPixmap(ReachedBreakpointMark, *reachedBreakpointPixmap());
         imark->setMarkPixmap(DisabledBreakpointMark, *disabledBreakpointPixmap());
         imark->setEditableMarks(MarkInterface::Bookmark | BreakpointMark);
+
+        // Set up breakpoints *before* connecting to the document's signals.
+        setupDocumentBreakpoints(*textDocument);
+
         updateMarks();
 
         // can't use new signal slot syntax here, MarkInterface is not a QObject
@@ -114,15 +118,20 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
         connect(textDocument, SIGNAL(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
                 SLOT(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
     }
+}
+
+void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) const
+{
+    Q_D(const BreakpointModel);
 
     // Initial setup of moving cursors
-    const QUrl docUrl = textDocument->url();
-    const auto docLineCount = textDocument->lines();
+    const QUrl docUrl = document.url();
+    const auto docLineCount = document.lines();
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (docUrl == breakpoint->url()) {
             const auto savedLine = breakpoint->savedLine();
             if (savedLine >= 0 && savedLine < docLineCount) {
-                setupMovingCursor(breakpoint, textDocument, savedLine);
+                setupMovingCursor(breakpoint, &document, savedLine);
             }
         }
     }
