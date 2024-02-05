@@ -5942,15 +5942,3 @@ msgstr "Разлики с предишната"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Разлики между ревизии"
-
-#, fuzzy
-#~ msgctxt "@info:progress"
-#~ msgid "Running %1"
-#~ msgstr "Зареждане на %1"
-
-#~ msgid "New Style"
-#~ msgstr "Нов стил"
-
-#, fuzzy
-#~ msgid "No language selected"
-#~ msgstr "Не е избран език"

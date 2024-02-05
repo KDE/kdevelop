@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-07 01:14+0000\n"
-"PO-Revision-Date: 2024-01-03 14:17+0100\n"
+"PO-Revision-Date: 2024-02-04 17:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -944,7 +944,7 @@ msgstr "(nesolvita antaŭen-deklaro)"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:198
 #, kde-format
 msgid "possible resolution from"
-msgstr "ebla rezolucio de"
+msgstr "ebla solvado el"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:213
 #, kde-format
