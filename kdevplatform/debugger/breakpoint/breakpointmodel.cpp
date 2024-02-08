@@ -450,6 +450,10 @@ void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column co
         QModelIndex idx = breakpointIndex(breakpoint, column);
         Q_ASSERT(idx.isValid()); // make sure we don't pass invalid indices to dataChanged()
         emit dataChanged(idx, idx);
+    } else if (column == Breakpoint::HitCountColumn) {
+        // The HitCountColumn column is not shown in the Breakpoints table. Therefore dataChanged() is not emitted and
+        // updateMarks() connected to it is not invoked. Call it manually, because hit count affects the mark type.
+        updateMarks();
     }
 
     if (IBreakpointController* controller = breakpointController()) {
