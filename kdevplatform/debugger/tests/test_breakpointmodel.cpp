@@ -159,9 +159,11 @@ void TestBreakpointModel::printLines(int from, int count, const IDocument* doc)
     }
 }
 
-/// Verify that the breakpoint is set correctly at the expected line number.
+/// Verify that the breakpoint is set correctly at the expected line number,
+/// that the document line tracking is enabled for it, and that its mark type matches the expected value.
 /// Check success with RETURN_IF_TEST_FAILED() and RETURN_IF_TEST_ABORTED().
-void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedLine, const DocumentMarks& marks)
+void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedLine, uint expectedMarkType,
+                                           const DocumentMarks& marks)
 {
     QVERIFY(breakpoint->movingCursor());
     QCOMPARE(breakpoint->line(), expectedLine);
@@ -169,18 +171,17 @@ void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedL
     // To be noted, there is no way to detect if an editor mark is actually
     // associated with a breakpoint instance. Because of this, the tests should
     // alternate using an enabled or disabled breakpoint to detect conflicts.
+    QCOMPARE(breakpoint->markType(), expectedMarkType);
     const auto mark = marks.constFind(expectedLine);
     QVERIFY(mark != marks.cend());
-
-    const auto breakpointType = breakpoint->markType();
-    QCOMPARE(static_cast<uint>(mark.value()), breakpointType);
+    QCOMPARE(static_cast<uint>(mark.value()), expectedMarkType);
 }
 
 /// Convenience macro for verifyBreakpoint().
-/// The fourth argument is an optional return value on failure.
-#define VERIFY_BREAKPOINT(breakpoint, expectedLine, marks, ...)                                                        \
+/// The fifth argument is an optional return value on failure.
+#define VERIFY_BREAKPOINT(breakpoint, expectedLine, expectedMarkType, marks, ...)                                      \
     do {                                                                                                               \
-        verifyBreakpoint(breakpoint, expectedLine, marks);                                                             \
+        verifyBreakpoint(breakpoint, expectedLine, expectedMarkType, marks);                                           \
         RETURN_IF_TEST_FAILED(__VA_ARGS__);                                                                            \
         RETURN_IF_TEST_ABORTED(__VA_ARGS__);                                                                           \
     } while (false)
@@ -270,8 +271,8 @@ TestBreakpointModel::DocumentAndTwoBreakpoints TestBreakpointModel::setupEditAnd
     const auto marks = documentMarks(doc);
     QCOMPARE_RETURN(marks.size(), 2, {});
 
-    VERIFY_BREAKPOINT(b1, 23, marks, {});
-    VERIFY_BREAKPOINT(b2, 24, marks, {});
+    VERIFY_BREAKPOINT(b1, 23, BreakpointModel::DisabledBreakpointMark, marks, {});
+    VERIFY_BREAKPOINT(b2, 24, BreakpointModel::BreakpointMark, marks, {});
 
     return {url, doc, b1, b2};
 }
@@ -356,8 +357,8 @@ void TestBreakpointModel::testDocumentSave()
 
     const auto marks = documentMarks(doc);
     QCOMPARE(marks.size(), 2);
-    VERIFY_BREAKPOINT(b1, 22, marks, );
-    VERIFY_BREAKPOINT(b2, 24, marks, );
+    VERIFY_BREAKPOINT(b1, 22, BreakpointModel::BreakpointMark, marks, );
+    VERIFY_BREAKPOINT(b2, 24, BreakpointModel::BreakpointMark, marks, );
 
     QVERIFY(doc->save());
     QVERIFY(doc->close());
