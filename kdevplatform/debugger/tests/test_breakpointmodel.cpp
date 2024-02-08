@@ -67,6 +67,9 @@ namespace {
 /// This file is always restored for a test to have same content.
 constexpr const char* primaryTestFileName = "primary_test.cpp";
 
+/// Secondary test file used as document in the temporary directory.
+constexpr const char* secondaryTestFileName = "secondary_test.cpp";
+
 /// Get breakpoint config group.
 /// NOTE: this config is written into
 /// "~/.qttest/share/test_breakpointmodel/sessions/{session-UUID}/sessionrc"
@@ -430,6 +433,71 @@ void TestBreakpointModel::testDocumentEditAndDiscard()
     QCOMPARE(savedBreakpoints.size(), 2);
     QCOMPARE(savedBreakpoints.at(0)->line(), 21);
     QCOMPARE(savedBreakpoints.at(1)->line(), 23);
+}
+
+void TestBreakpointModel::testSetLocation()
+{
+    const auto [url1, doc1, b1] = setupPrimaryDocumentAndBreakpoint();
+    RETURN_IF_TEST_FAILED();
+
+    // TEST: increment the line number.
+    b1->setLocation(url1, b1->savedLine() + 1);
+    // Verify the move of the mark and the change of location.
+    QCOMPARE(breakpointModel()->breakpoint(0), b1);
+    auto marks = documentMarks(doc1);
+    QCOMPARE(marks.size(), 1);
+    VERIFY_BREAKPOINT(b1, 22, BreakpointModel::BreakpointMark, marks, );
+
+    // Make a secondary test file and open it.
+    QVERIFY(QFile::copy(m_tempDir->filePath(primaryTestFileName), m_tempDir->filePath(secondaryTestFileName)));
+    const auto url2 = testFileUrl(secondaryTestFileName);
+    RETURN_IF_TEST_FAILED();
+    auto* const doc2 = documentController()->openDocument(url2);
+    QVERIFY(doc2);
+    QCOMPARE(doc2->url(), url2);
+
+    // TEST: Change b1 location to the secondary document.
+    b1->setLocation(url2, 21);
+    // Verify the move of the mark and the change of location.
+    QCOMPARE(b1->url(), url2);
+    QCOMPARE(breakpointModel()->breakpoint(0), b1);
+    QCOMPARE(documentMarks(doc1).size(), 0);
+    marks = documentMarks(doc2);
+    QCOMPARE(marks.size(), 1);
+    VERIFY_BREAKPOINT(b1, 21, BreakpointModel::BreakpointMark, marks, );
+
+    // TEST: Make b1 fall out of the document bounds.
+    //       This should disable b1's document line tracking.
+    const auto lineNumberAfterLastLineInDocument = doc2->textDocument()->lines();
+    b1->setLocation(url2, lineNumberAfterLastLineInDocument);
+    // Verify the removal of the mark and the change of line number.
+    VERIFY_UNTRACKED_BREAKPOINT(b1, lineNumberAfterLastLineInDocument, );
+    QCOMPARE(documentMarks(doc1).size(), 0);
+    QCOMPARE(documentMarks(doc2).size(), 0);
+}
+
+void TestBreakpointModel::testUpdateMarkType()
+{
+    const auto [url, doc, b1] = setupPrimaryDocumentAndBreakpoint();
+    RETURN_IF_TEST_FAILED();
+
+    // TEST: Change the mark type to pending.
+    b1->setState(Breakpoint::PendingState);
+    // Verify.
+    QCOMPARE(b1->state(), Breakpoint::PendingState);
+    VERIFY_BREAKPOINT(b1, 21, BreakpointModel::PendingBreakpointMark, documentMarks(doc), );
+
+    // TEST: Change the mark type to reached.
+    b1->setHitCount(1);
+    // Verify.
+    QCOMPARE(b1->hitCount(), 1);
+    VERIFY_BREAKPOINT(b1, 21, BreakpointModel::ReachedBreakpointMark, documentMarks(doc), );
+
+    // TEST: Change the mark type to disabled.
+    b1->setData(Breakpoint::EnableColumn, Qt::Unchecked);
+    // Verify.
+    QCOMPARE(b1->enabled(), false);
+    VERIFY_BREAKPOINT(b1, 21, BreakpointModel::DisabledBreakpointMark, documentMarks(doc), );
 }
 
 #include "moc_test_breakpointmodel.cpp"
