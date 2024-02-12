@@ -62,7 +62,6 @@ class KDevelop::BreakpointModelPrivate
 {
 public:
     bool dirty = false;
-    bool reinitializeBreakpoints = false;
     /// Non-zero while KDevelop code is adding or removing a document mark.
     /// This allows to react to user-driven mark changes without getting confused by our own code changes.
     int inhibitMarkChange = 0;
@@ -169,23 +168,25 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
 
     qCritical() << "aboutToInvalidateMovingInterfaceContent()";
 
+    // disconnect ourselves
     // can't use new signal/slot syntax here, MovingInterface is not a QObject
     disconnect(document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
                SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
 
     // All moving cursors are invalidated in the document after this slot, so they must be dropped
     // now to avoid using invalid line numbers. Conveniently, this also removes the associated breakpoint marks.
+    bool reinitializeBreakpoints = false;
     const QUrl docUrl = document->url();
     for (auto* const breakpoint : std::as_const(d->breakpoints)) {
         const auto* const cursor = breakpoint->movingCursor();
         if (cursor && cursor->document() == document) {
-            d->reinitializeBreakpoints = true;
+            reinitializeBreakpoints = true;
             breakpoint->stopDocumentLineTracking();
         } else {
             // Reloading may increase the document's line count. Therefore, we may be able to enable document
             // line tracking for breakpoints that are no longer out of bounds after the reloading.
             // So reinitialize if the document contains any breakpoints.
-            d->reinitializeBreakpoints = d->reinitializeBreakpoints || docUrl == breakpoint->url();
+            reinitializeBreakpoints = reinitializeBreakpoints || docUrl == breakpoint->url();
         }
     }
 
@@ -201,9 +202,12 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
     //       early-returns if the changed mark is not a breakpoint mark. In this way, removing all breakpoint marks
     //       in the loop above prevents spurious mark changes when a document is reloaded.
 
-    if (!d->reinitializeBreakpoints)
-        return;
-    ++d->inhibitMarkChange;
+    if (reinitializeBreakpoints) {
+        ++d->inhibitMarkChange;
+    } else {
+        // already disconnected ourselves => nothing to do in reloaded()
+        disconnect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
+    }
 }
 
 void BreakpointModel::reloaded(KTextEditor::Document* document)
@@ -212,18 +216,20 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
 
     qCritical() << "reloaded()";
 
+    // disconnect ourselves
+    disconnect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
+
     // can't use new signal/slot syntax here, MovingInterface is not a QObject
-    disconnect(document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-               SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
-    if (!d->reinitializeBreakpoints)
-        return;
+    const bool disconnected = disconnect(document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
+                                         SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+    if (disconnected) {
+        return; // the moving cursors have not been invalidated => the user selected "Cancel"
+    }
+
     --d->inhibitMarkChange;
 
     // reinitialize
     setupDocumentBreakpoints(*document);
-
-    // disconnect ourselves
-    disconnect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
 }
 
 void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, const QPoint &pos, bool& handled)
