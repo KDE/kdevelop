@@ -28,6 +28,10 @@
 
 #include <QFile>
 #include <QFileInfo>
+#include <QMessageBox>
+#include <QMetaEnum>
+#include <QPoint>
+#include <QScreen>
 #include <QString>
 #include <QTest>
 #include <QUrl>
@@ -62,6 +66,32 @@ static constexpr const char* testAbortPropertyName = "kdevelop.test.abort";
     } while (false)
 
 namespace {
+
+template<typename Enum>
+const char* enumeratorName(Enum enumerator)
+{
+    return QMetaEnum::fromType<Enum>().valueToKey(static_cast<int>(enumerator));
+}
+
+void showInstructionsForDialog(QMessageBox& instructions)
+{
+    // Remove the default button OK, because the user does not need to dismiss the instructions.
+    instructions.setStandardButtons(QMessageBox::NoButton);
+
+    // Show the message box before moving it, otherwise its screen() can be wrong.
+    instructions.show();
+
+    // The instructions message box appears in the center of a screen. The dialog, to which
+    // the instructions apply, appears at the same position on top and hides the instructions.
+    // Move the instructions message box down to ensure its visibility.
+    const auto* const screen = instructions.screen();
+    QVERIFY(screen);
+    // On a multi-monitor X11 system, QScreen::availableSize() ignores window manager reserved areas
+    // such as task bars and system menus, returns the same value as QScreen::size().
+    // Reserve some space under the message box for possible task bars and panels.
+    const int bottomY = screen->availableSize().height() * 3 / 4;
+    instructions.move(instructions.pos().x(), bottomY - instructions.height());
+}
 
 /// Primary test file used as document in the temporary directory.
 /// This file is always restored for a test to have same content.
@@ -216,6 +246,44 @@ void TestBreakpointModel::verifyUntrackedBreakpoint(Breakpoint* breakpoint, int 
         RETURN_IF_TEST_FAILED(__VA_ARGS__);                                                                            \
         RETURN_IF_TEST_ABORTED(__VA_ARGS__);                                                                           \
     } while (false)
+
+/// Verify that the breakpoint instances in the model are preserved.
+/// Check success with RETURN_IF_TEST_FAILED().
+void TestBreakpointModel::verifyTwoModelBreakpoints(Breakpoint* b1, Breakpoint* b2)
+{
+    QVERIFY(b1);
+    QVERIFY(b2);
+
+    QCOMPARE(breakpointModel()->rowCount(), 2);
+    QVERIFY(breakpointModel()->breakpoint(0));
+    QCOMPARE(breakpointModel()->breakpoint(0), b1);
+    QVERIFY(breakpointModel()->breakpoint(1));
+    QCOMPARE(breakpointModel()->breakpoint(1), b2);
+}
+
+void TestBreakpointModel::applyReloadModeAndReload(const QUrl& url, IDocument* doc, Breakpoint* b1)
+{
+    QFETCH(const ReloadMode, reloadMode);
+    if (reloadMode != ReloadMode::Clean) {
+        const auto* const textDoc = doc->textDocument();
+        QString text;
+        if (reloadMode == ReloadMode::DirtyBreakpointLine) {
+            // Modify text on a breakpoint's line to prevent KTextEditor from restoring the breakpoint's mark when
+            // the document is reloaded. KDevelop must ensure the breakpoint mark is restored in this case too.
+            text = textDoc->text({{0, 0}, {b1->line(), 0}});
+            text += textDoc->text({{b1->line(), 4}, textDoc->documentEnd()});
+        } else {
+            // Remove several lines from the end of the document's file.
+            // This must not affect breakpoints above the removed lines.
+            text = textDoc->text({{0, 0}, {textDoc->lines() - 3, 0}});
+        }
+
+        overwriteExistingFile(url, text);
+        RETURN_IF_TEST_FAILED();
+    }
+
+    doc->reload();
+}
 
 TestBreakpointModel::TestBreakpointModel(QObject* parent)
     : QObject(parent)
@@ -537,34 +605,11 @@ void TestBreakpointModel::testDocumentReload()
     // Wait needed for BreakpointModel::save() to complete.
     QTest::qWait(1);
 
-    QFETCH(const ReloadMode, reloadMode);
-    if (reloadMode != ReloadMode::Clean) {
-        const auto* const textDoc = doc->textDocument();
-        QString text;
-        if (reloadMode == ReloadMode::DirtyBreakpointLine) {
-            // Modify text on a breakpoint's line to prevent KTextEditor from restoring the breakpoint's mark when
-            // the document is reloaded. KDevelop must ensure the breakpoint mark is restored in this case too.
-            text = textDoc->text({{0, 0}, {b1->line(), 0}});
-            text += textDoc->text({{b1->line(), 4}, textDoc->documentEnd()});
-        } else {
-            // Remove several lines from the end of the document's file.
-            // This must not affect breakpoints above the removed lines.
-            text = textDoc->text({{0, 0}, {textDoc->lines() - 3, 0}});
-        }
+    applyReloadModeAndReload(url, doc, b1);
+    RETURN_IF_TEST_FAILED();
 
-        overwriteExistingFile(url, text);
-        RETURN_IF_TEST_FAILED();
-    }
-
-    // Reload the document.
-    doc->reload();
-
-    // Verify that the breakpoint instances in the model are preserved.
-    QCOMPARE(breakpointModel()->rowCount(), 2);
-    QVERIFY(breakpointModel()->breakpoint(0));
-    QCOMPARE(breakpointModel()->breakpoint(0), b1);
-    QVERIFY(breakpointModel()->breakpoint(1));
-    QCOMPARE(breakpointModel()->breakpoint(1), b2);
+    verifyTwoModelBreakpoints(b1, b2);
+    RETURN_IF_TEST_FAILED();
 
     // Verify the breakpoints' locations and marks.
     const auto marks = documentMarks(doc);
@@ -592,6 +637,104 @@ void TestBreakpointModel::testDocumentReload()
     QCOMPARE(savedBreakpoints.at(1)->enabled(), true);
     QCOMPARE(savedBreakpoints.at(1)->ignoreHits(), 2);
     QCOMPARE(savedBreakpoints.at(1)->condition(), "*i > 0");
+}
+
+void TestBreakpointModel::testModifiedDocumentReload_data()
+{
+    using UserChoice = CloseDocumentUserChoice;
+    QTest::addColumn<ReloadMode>("reloadMode");
+    QTest::addColumn<UserChoice>("userChoice");
+
+    for (const auto reloadMode : {ReloadMode::Clean, ReloadMode::Dirty, ReloadMode::DirtyBreakpointLine}) {
+        for (const auto userChoice : {UserChoice::Cancel, UserChoice::Discard, UserChoice::Save}) {
+            QTest::addRow("%s-%s", enumeratorName(reloadMode), enumeratorName(userChoice)) << reloadMode << userChoice;
+        }
+    }
+}
+
+void TestBreakpointModel::testModifiedDocumentReload()
+{
+#if 1
+    QSKIP(
+        "This test is not fully automatic. In order to test breakpoints when a modified document is reloaded, "
+        "disable this QSKIP() call and make choices specified by the Test Instructions dialog.");
+#endif
+
+    const auto [url, doc, b1, b2] = setupEditAndCheckPrimaryDocumentAndBreakpoints();
+    RETURN_IF_TEST_FAILED();
+    RETURN_IF_TEST_ABORTED();
+
+    // Set some extra breakpoint data that should be preserved even after a reload.
+    b1->setIgnoreHits(11);
+    b2->setHitCount(20);
+
+    QCOMPARE(doc->state(), IDocument::Modified);
+
+    using UserChoice = CloseDocumentUserChoice;
+    QFETCH(const UserChoice, userChoice);
+
+    QMessageBox choiceInstruction(
+        QMessageBox::Information, "Test Instructions",
+        QLatin1String("Choose <b>%1</b> in the Close Document warning dialog.").arg(enumeratorName(userChoice)));
+    showInstructionsForDialog(choiceInstruction);
+    RETURN_IF_TEST_FAILED();
+
+    // Testing different reload modes is important only in case of the Discard user choice, because otherwise
+    // the document either is not reloaded from disk at all (Cancel) or saved over the changes on disk first (Save).
+    // The impact of reload modes in case of the Discard user choice:
+    // 1) Clean: two lines inserted over the two breakpoint lines in the edited document are absent from disk =>
+    //    both breakpoint lines are changed by the reloading => KTextEditor does not restore any breakpoint marks.
+    // 2) Dirty: applyReloadModeAndReload() saves the edited version of the document sans a few unimportant lines at the
+    //    end => none of the breakpoint lines is changed by the reloading => KTextEditor restores both breakpoint marks.
+    // 3) DirtyBreakpointLine: applyReloadModeAndReload() saves the edited version of the document but also modifies
+    //    b1's line => b1's line is and b2's is not changed by the reloading => KTextEditor restores b2, but not b1.
+    applyReloadModeAndReload(url, doc, b1);
+    RETURN_IF_TEST_FAILED();
+
+    // Wait needed for BreakpointModel::save() to complete.
+    QTest::qWait(1);
+
+    verifyTwoModelBreakpoints(b1, b2);
+    RETURN_IF_TEST_FAILED();
+
+    QCOMPARE(doc->state(), userChoice == UserChoice::Cancel ? IDocument::Modified : IDocument::Clean);
+
+    struct
+    {
+        int b1 = 23, b2 = 24;
+    } lines, savedLines;
+    switch (userChoice) {
+    case UserChoice::Discard:
+        lines.b1 = 21;
+        lines.b2 = 23;
+        [[fallthrough]];
+    case UserChoice::Cancel:
+        savedLines.b1 = 21;
+        savedLines.b2 = 23;
+        break;
+    case UserChoice::Save:
+        break;
+    }
+
+    // Verify the breakpoints' locations and marks.
+    const auto marks = documentMarks(doc);
+    QCOMPARE(marks.size(), 2);
+    VERIFY_BREAKPOINT(b1, lines.b1, BreakpointModel::DisabledBreakpointMark, marks, );
+    VERIFY_BREAKPOINT(b2, lines.b2, BreakpointModel::ReachedBreakpointMark, marks, );
+
+    // Verify that reloading does not affect unrelated breakpoint data.
+    QCOMPARE(b1->enabled(), false);
+    QCOMPARE(b1->ignoreHits(), 11);
+    QCOMPARE(b2->enabled(), true);
+    QCOMPARE(b2->hitCount(), 20);
+
+    const auto savedBreakpoints = readBreakpointsFromConfig();
+    QCOMPARE(savedBreakpoints.size(), 2);
+    QCOMPARE(savedBreakpoints.at(0)->line(), savedLines.b1);
+    QCOMPARE(savedBreakpoints.at(0)->enabled(), false);
+    QCOMPARE(savedBreakpoints.at(0)->ignoreHits(), 11);
+    QCOMPARE(savedBreakpoints.at(1)->line(), savedLines.b2);
+    QCOMPARE(savedBreakpoints.at(1)->enabled(), true);
 }
 
 #include "moc_test_breakpointmodel.cpp"

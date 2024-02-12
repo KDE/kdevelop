@@ -315,6 +315,12 @@ void Breakpoint::stopDocumentLineTracking()
         imark->removeMark(m_movingCursor->line(), BreakpointModel::AllBreakpointMarks);
     }
 
+    removeMovingCursor();
+}
+
+void Breakpoint::removeMovingCursor()
+{
+    Q_ASSERT(m_movingCursor);
     delete m_movingCursor;
     m_movingCursor = nullptr;
 }

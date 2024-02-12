@@ -35,6 +35,9 @@ public:
     enum class ReloadMode { Clean, Dirty, DirtyBreakpointLine };
     Q_ENUM(ReloadMode)
 
+    enum class CloseDocumentUserChoice { Cancel, Discard, Save };
+    Q_ENUM(CloseDocumentUserChoice)
+
 private Q_SLOTS:
     void initTestCase();
     void init();
@@ -48,6 +51,8 @@ private Q_SLOTS:
     void testUpdateMarkType();
     void testDocumentReload_data();
     void testDocumentReload();
+    void testModifiedDocumentReload_data();
+    void testModifiedDocumentReload();
 
 private:
     using DocumentMarks = QHash<int, KDevelop::BreakpointModel::MarkType>;
@@ -56,6 +61,9 @@ private:
     static void verifyBreakpoint(KDevelop::Breakpoint* breakpoint, int expectedLine, uint expectedMarkType,
                                  const DocumentMarks& marks);
     static void verifyUntrackedBreakpoint(KDevelop::Breakpoint* breakpoint, int expectedLine);
+
+    static void verifyTwoModelBreakpoints(KDevelop::Breakpoint* b1, KDevelop::Breakpoint* b2);
+    static void applyReloadModeAndReload(const QUrl& url, KDevelop::IDocument* doc, KDevelop::Breakpoint* b1);
 
     QUrl testFileUrl(const QString& fileName) const;
 
