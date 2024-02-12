@@ -173,9 +173,11 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
     qCritical() << "aboutToInvalidateMovingInterfaceContent()";
 
     // disconnect ourselves
+    { // helper function 1 -> bool
     // can't use new signal/slot syntax here, MovingInterface is not a QObject
     disconnect(document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
                SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+    }
 
     // All moving cursors are invalidated in the document after this slot, so they must be dropped
     // now to avoid using invalid line numbers. Conveniently, this also removes the associated breakpoint marks.
@@ -210,9 +212,11 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
         return;
     }
 
+    { // helper function 2 -> void
     --d->inhibitMarkChange;
     // already disconnected ourselves and un-inhibited mark change => nothing to do in reloaded()
     disconnect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
+    }
 }
 
 void BreakpointModel::reloaded(KTextEditor::Document* document)
