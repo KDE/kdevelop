@@ -152,6 +152,8 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
 
 void BreakpointModel::aboutToReload(KTextEditor::Document* document)
 {
+    Q_D(BreakpointModel);
+
     qCritical() << "aboutToReload()";
 
     // can't use new signal/slot syntax here, MovingInterface is not a QObject
@@ -160,6 +162,8 @@ void BreakpointModel::aboutToReload(KTextEditor::Document* document)
 
     // reloaded() will reinitialize moving cursors and marks.
     connect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
+
+    ++d->inhibitMarkChange;
 }
 
 void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Document* document)
@@ -203,11 +207,12 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
     //       in the loop above prevents spurious mark changes when a document is reloaded.
 
     if (reinitializeBreakpoints) {
-        ++d->inhibitMarkChange;
-    } else {
-        // already disconnected ourselves => nothing to do in reloaded()
-        disconnect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
+        return;
     }
+
+    --d->inhibitMarkChange;
+    // already disconnected ourselves and un-inhibited mark change => nothing to do in reloaded()
+    disconnect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
 }
 
 void BreakpointModel::reloaded(KTextEditor::Document* document)
@@ -215,6 +220,8 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
     Q_D(BreakpointModel);
 
     qCritical() << "reloaded()";
+
+    --d->inhibitMarkChange;
 
     // disconnect ourselves
     disconnect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
@@ -225,8 +232,6 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
     if (disconnected) {
         return; // the moving cursors have not been invalidated => the user selected "Cancel"
     }
-
-    --d->inhibitMarkChange;
 
     // reinitialize
     setupDocumentBreakpoints(*document);
