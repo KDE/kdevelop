@@ -152,12 +152,22 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
 
 void BreakpointModel::aboutToReload(KTextEditor::Document* document)
 {
+    qCritical() << "aboutToReload()";
+
+    // can't use new signal/slot syntax here, MovingInterface is not a QObject
+    connect(document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
+            SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+}
+
+void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Document* document)
+{
     Q_D(const BreakpointModel);
 
-    // FIXME: if a modified document is reloaded, and the user clicks a button other than "Discard"
-    //        in the message box that appears, the moving cursors should not be reverted to their saved locations.
-    //        For now, document line tracking is reinitialized using saved line numbers, which works well for
-    //        an unmodified document and in case of the "Discard" user choice for a modified document.
+    qCritical() << "aboutToInvalidateMovingInterfaceContent()";
+
+    // can't use new signal/slot syntax here, MovingInterface is not a QObject
+    disconnect(document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
+               SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
 
     // All moving cursors are invalidated in the document after this slot, so they must be dropped
     // now to avoid using invalid line numbers. Conveniently, this also removes the associated breakpoint marks.
@@ -197,6 +207,12 @@ void BreakpointModel::aboutToReload(KTextEditor::Document* document)
 
 void BreakpointModel::reloaded(KTextEditor::Document* document)
 {
+    qCritical() << "reloaded()";
+
+    // can't use new signal/slot syntax here, MovingInterface is not a QObject
+    disconnect(document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
+               SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+
     // reinitialize
     setupDocumentBreakpoints(*document);
 
@@ -406,6 +422,8 @@ void BreakpointModel::markChanged(
 {
     Q_D(const BreakpointModel);
 
+    qCritical() << "markChanged()";
+
     int type = mark.type;
     /* Is this a breakpoint mark, to begin with? */
     if (!(type & AllBreakpointMarks)) return;
@@ -521,6 +539,8 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 {
     Q_D(BreakpointModel);
 
+    qCritical() << "documentSaved()";
+
     IF_DEBUG( qCDebug(DEBUGGER); )
     // save breakpoints in the given document.
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
@@ -539,6 +559,8 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* document)
 {
     Q_D(BreakpointModel);
+
+    qCritical() << "aboutToDeleteMovingInterfaceContent()";
 
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (breakpoint->movingCursor() && breakpoint->movingCursor()->document() == document) {

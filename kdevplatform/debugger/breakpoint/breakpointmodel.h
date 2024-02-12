@@ -164,6 +164,7 @@ private Q_SLOTS:
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
     void aboutToReload(KTextEditor::Document* document);
+    void aboutToInvalidateMovingInterfaceContent(KTextEditor::Document* document);
     void reloaded(KTextEditor::Document* document);
     void documentSaved(KDevelop::IDocument*);
     void aboutToDeleteMovingInterfaceContent(KTextEditor::Document *document);
