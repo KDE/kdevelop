@@ -234,15 +234,20 @@ TestBreakpointModel::DocumentAndBreakpoint TestBreakpointModel::setupPrimaryDocu
     QVERIFY_RETURN(doc, {});
     QCOMPARE_RETURN(doc->url(), url, {});
 
-    // pre-conditions.
+    // Verify the initial state of a code breakpoint.
     auto* const b1 = breakpointModel()->breakpoint(0);
     QVERIFY_RETURN(b1, {});
     QCOMPARE_RETURN(b1->url(), url, {});
-    QCOMPARE_RETURN(b1->line(), 21, {});
+    QCOMPARE_RETURN(b1->kind(), Breakpoint::CodeBreakpoint, {});
+    const auto marks = documentMarks(doc);
+    QCOMPARE_RETURN(marks.size(), 1, {});
+    VERIFY_BREAKPOINT(b1, 21, BreakpointModel::BreakpointMark, marks, {});
     QVERIFY_RETURN(b1->condition().isEmpty(), {});
     QCOMPARE_RETURN(b1->ignoreHits(), 0, {});
     QVERIFY_RETURN(b1->expression().isEmpty(), {});
-    QVERIFY_RETURN(b1->movingCursor(), {});
+    QCOMPARE_RETURN(b1->state(), Breakpoint::NotStartedState, {});
+    QCOMPARE_RETURN(b1->hitCount(), 0, {});
+    QCOMPARE_RETURN(b1->enabled(), true, {});
 
     return {url, doc, b1};
 }
