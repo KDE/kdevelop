@@ -6,41 +6,149 @@
 
 #include "processselection.h"
 
-#include <processui/ksysguardprocesslist.h>
+// #include <processui/ksysguardprocesslist.h>
+#include <processcore/process_data_model.h>
 #include <processcore/process.h>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
+#include <KConfigGroup>
+#include <KUser>
 
 #include <QAbstractItemView>
+#include <QCollator>
 #include <QDialogButtonBox>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSortFilterProxyModel>
 #include <QTreeView>
 #include <QVBoxLayout>
 
 
 using namespace KDevMI;
 
+
+class ProcessesSortFilterModel : public QSortFilterProxyModel
+{
+public:
+    enum class ProcessOwner {
+        Self,
+        Users,
+        System,
+        All
+    };
+
+    explicit ProcessesSortFilterModel(QObject *parent = nullptr)
+        : QSortFilterProxyModel(parent)
+    {
+        setSortRole(KSysGuard::ProcessDataModel::Value);
+        setSortCaseSensitivity(Qt::CaseInsensitive);
+        setSortLocaleAware(true);
+
+        setFilterRole(KSysGuard::ProcessDataModel::Value);
+        setFilterCaseSensitivity(Qt::CaseInsensitive);
+        setRecursiveFilteringEnabled(true);
+        // setAutoAcceptChildRows(true);
+    }
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override
+    {
+        auto uid = sourceModel()->data(sourceModel()->index(sourceRow, m_uidColumn, sourceParent)).toUInt();
+
+        bool filtered = false;
+        switch (m_processOwner) {
+        case ProcessOwner::Self:
+            filtered = m_currentUser.userId().nativeId() != uid;
+            break;
+        case ProcessOwner::Users:
+            filtered = uid < 1000;
+            break;
+        case ProcessOwner::System:
+            filtered = uid >= 1000;
+            break;
+        case ProcessOwner::All:
+            break;
+        }
+
+        if (filtered) {
+            return false;
+        }
+
+        return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+    }
+
+    bool filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const override
+    {
+        if (sourceColumn == m_uidColumn) {
+            return false;
+        }
+
+        return QSortFilterProxyModel::filterAcceptsColumn(sourceColumn, sourceParent);
+    }
+
+    ProcessOwner filterProcessOwner() const
+    {
+        return m_processOwner;
+    }
+
+    void setFilterProcessOwner(int uidColumn, ProcessOwner owner)
+    {
+        m_uidColumn = uidColumn;
+        m_processOwner = owner;
+        invalidateFilter();
+    }
+
+private:
+    KUser m_currentUser;
+    int m_uidColumn = 0;
+    ProcessOwner m_processOwner = ProcessOwner::Self;
+};
+
+
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     : QDialog(parent)
 {
+    m_ui.setupUi(this);
+
     setWindowTitle(i18nc("@title:window", "Attach to a Process"));
-    m_processList = new KSysGuardProcessList(this);
-    auto* mainLayout = new QVBoxLayout;
-    setLayout(mainLayout);
-    mainLayout->addWidget(m_processList);
-    auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-    mainLayout->addWidget(buttonBox);
 
-    connect(m_processList->treeView()->selectionModel(), &QItemSelectionModel::selectionChanged,
-             this, &ProcessSelectionDialog::selectionChanged);
-    m_processList->treeView()->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_processList->setState(ProcessFilter::UserProcesses);
-    m_processList->setKillButtonVisible(false);
-    m_processList->filterLineEdit()->setFocus();
-    //m_processList->setPidFilter(qApp->pid());
+    auto view = m_ui.view;
 
+    m_dataModel = new KSysGuard::ProcessDataModel(this);
+    m_dataModel->setEnabledAttributes({QStringLiteral("pid"), QStringLiteral("name"), QStringLiteral("command"), QStringLiteral("uid")});
+
+    m_sortModel = new ProcessesSortFilterModel(this);
+    m_sortModel->setSourceModel(m_dataModel);
+    m_sortModel->setFilterKeyColumn(1);
+
+    view->setModel(m_sortModel);
+    view->setSortingEnabled(true);
+
+    connect(m_ui.filterEdit, &QLineEdit::textEdited, this, [this](const QString &text) {
+        m_sortModel->setFilterFixedString(text);
+    });
+
+    connect(m_ui.processesCombo, &QComboBox::activated, this, &ProcessSelectionDialog::onProcessesComboActivated);
+
+    connect(view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ProcessSelectionDialog::selectionChanged);
+
+    connect(m_ui.buttonList, &QToolButton::toggled, this, [this](bool checked) {
+        if (checked) {
+            m_dataModel->setFlatList(true);
+            m_ui.buttonTree->setChecked(false);
+            m_ui.view->setIndentation(0);
+        }
+    });
+
+    connect(m_ui.buttonTree, &QToolButton::toggled, this, [this](bool checked) {
+        if (checked) {
+            m_dataModel->setFlatList(false);
+            m_ui.buttonList->setChecked(false);
+            m_ui.view->resetIndentation();
+        }
+    });
+
+    auto buttonBox = m_ui.buttonBox;
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     m_attachButton = buttonBox->button(QDialogButtonBox::Ok);
@@ -49,38 +157,61 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     m_attachButton->setShortcut(Qt::CTRL | Qt::Key_Return);
     m_attachButton->setEnabled(false);
 
-    KConfigGroup config = KSharedConfig::openConfig()->group("GdbProcessSelectionDialog");
-    m_processList->filterLineEdit()->setText(config.readEntry("filterText", QString()));
-    m_processList->loadSettings(config);
-    restoreGeometry(config.readEntry("dialogGeometry", QByteArray()));
+    KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("GdbProcessSelectionDialog"));
+    m_ui.filterEdit->setText(config.readEntry("filterText", QString()));
+    m_sortModel->setFilterFixedString(m_ui.filterEdit->text());
+
+    m_sortModel->sort(config.readEntry("sortColumn", 0), Qt::SortOrder(config.readEntry("sortOrder", int(Qt::AscendingOrder))));
+
+    if (config.readEntry("treeView", false)) {
+        m_ui.buttonTree->toggle();
+    }
+
+    m_ui.processesCombo->setCurrentIndex(config.readEntry("processOwner", 0));
+    onProcessesComboActivated(m_ui.processesCombo->currentIndex());
 }
 
 ProcessSelectionDialog::~ProcessSelectionDialog()
 {
-    KConfigGroup config = KSharedConfig::openConfig()->group("GdbProcessSelectionDialog");
-    config.writeEntry("filterText", m_processList->filterLineEdit()->text());
-    m_processList->saveSettings(config);
+    KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("GdbProcessSelectionDialog"));
+    config.writeEntry("filterText", m_ui.filterEdit->text());
+    config.writeEntry("sortColumn", m_sortModel->sortColumn());
+    config.writeEntry("sortOrder", int(m_sortModel->sortOrder()));
+    config.writeEntry("processOwner", int(m_sortModel->filterProcessOwner()));
+    config.writeEntry("treeView", m_ui.buttonTree->isChecked());
     config.writeEntry("dialogGeometry", saveGeometry());
 }
 
 long int ProcessSelectionDialog::pidSelected()
 {
-    QList<KSysGuard::Process*> ps=m_processList->selectedProcesses();
-    Q_ASSERT(ps.count()==1);
-
-    KSysGuard::Process* process=ps.first();
-
-    return process->pid();
-}
-
-QSize ProcessSelectionDialog::sizeHint() const
-{
-    return QSize(740, 720);
+    auto selectedIndices = m_ui.view->selectionModel()->selectedIndexes();
+    return m_sortModel->data(selectedIndices.at(0), KSysGuard::ProcessDataModel::Value).toInt();
 }
 
 void ProcessSelectionDialog::selectionChanged(const QItemSelection &selected)
 {
     m_attachButton->setEnabled(selected.count());
 }
+
+void ProcessSelectionDialog::onProcessesComboActivated(int index)
+{
+    auto uidColumn = m_dataModel->enabledAttributes().indexOf(u"uid");
+
+    switch (index) {
+    case 0:
+        m_sortModel->setFilterProcessOwner(uidColumn, ProcessesSortFilterModel::ProcessOwner::Self);
+        break;
+    case 1:
+        m_sortModel->setFilterProcessOwner(uidColumn, ProcessesSortFilterModel::ProcessOwner::Users);
+        break;
+    case 2:
+        m_sortModel->setFilterProcessOwner(uidColumn, ProcessesSortFilterModel::ProcessOwner::System);
+        break;
+    case 3:
+        m_sortModel->setFilterProcessOwner(uidColumn, ProcessesSortFilterModel::ProcessOwner::All);
+        break;
+    }
+}
+
 
 #include "moc_processselection.cpp"
