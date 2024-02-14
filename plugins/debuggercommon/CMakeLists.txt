@@ -45,6 +45,7 @@ declare_qt_logging_category(debuggercommon_SRCS
 )
 
 ki18n_wrap_ui(debuggercommon_SRCS
+    dialogs/processselection.ui
     dialogs/selectcoredialog.ui
     widgets/debuggerconsoleview.ui
     widgets/selectaddressdialog.ui

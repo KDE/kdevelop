@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ProcessSelection</class>
+ <widget class="QDialog" name="ProcessSelection">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>740</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string comment="@title:window">Attach to a Process</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="KLineEdit" name="filterEdit">
+       <property name="placeholderText">
+        <string comment="@info:placeholder">Search</string>
+       </property>
+       <property name="urlDropsEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="showClearButton" stdset="0">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="buttonList">
+       <property name="toolTip">
+        <string comment="@info:tooltip">Display as List</string>
+       </property>
+       <property name="icon">
+        <iconset theme="view-list-details"/>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="buttonTree">
+       <property name="toolTip">
+        <string comment="@info:tooltip">Display as Tree</string>
+       </property>
+       <property name="icon">
+        <iconset theme="view-list-tree"/>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="processesCombo">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
+       </property>
+       <item>
+        <property name="text">
+         <string comment="@item:inlistbox">Own Processes</string>
+        </property>
+        <property name="icon">
+         <iconset theme="view-process-own"/>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string comment="@item:inlistbox">User Processes</string>
+        </property>
+        <property name="icon">
+         <iconset theme="view-process-users"/>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string comment="@item:inlistbox">System Processes</string>
+        </property>
+        <property name="icon">
+         <iconset theme="view-process-system"/>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string comment="@item:inlistbox">All Processes</string>
+        </property>
+        <property name="icon">
+         <iconset theme="view-process-all"/>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTreeView" name="view">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="uniformRowHeights">
+      <bool>true</bool>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="headerShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>KLineEdit</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
