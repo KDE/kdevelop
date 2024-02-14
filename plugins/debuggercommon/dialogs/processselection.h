@@ -8,28 +8,38 @@
 #define PROCESSSELECTION_H
 
 #include <QDialog>
+#include "ui_processselection.h"
 
-class KSysGuardProcessList;
 class QItemSelection;
 class QPushButton;
+
+namespace KSysGuard {
+class ProcessDataModel;
+}
+
+class ProcessesSortFilterModel;
 
 namespace KDevMI {
 
 class ProcessSelectionDialog : public QDialog
 {
     Q_OBJECT
-    public:
-        explicit ProcessSelectionDialog( QWidget *parent=nullptr );
-        ~ProcessSelectionDialog() override;
-        long int pidSelected();
-        QSize sizeHint() const override;
+public:
+    explicit ProcessSelectionDialog(QWidget* parent = nullptr);
+    ~ProcessSelectionDialog() override;
+    long int pidSelected();
 
-    private Q_SLOTS:
-        void selectionChanged( const QItemSelection& selected );
+private Q_SLOTS:
+    void selectionChanged(const QItemSelection& selected);
+    void onProcessesComboActivated(int index);
 
-    private:
-        KSysGuardProcessList* m_processList;
-        QPushButton* m_attachButton;
+private:
+    Ui::ProcessSelection m_ui;
+
+    KSysGuard::ProcessDataModel* m_dataModel = nullptr;
+    ProcessesSortFilterModel* m_sortModel = nullptr;
+
+    QPushButton* m_attachButton = nullptr;
 };
 
 } // end of namespace KDevMI
