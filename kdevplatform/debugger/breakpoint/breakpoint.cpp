@@ -17,6 +17,7 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KTextEditor/Document>
+#include <KTextEditor/MarkInterface>
 #include <KTextEditor/MovingCursor>
 
 #include "breakpointmodel.h"
@@ -96,6 +97,9 @@ bool Breakpoint::setData(int index, const QVariant& value)
     if (index == EnableColumn)
     {
         m_enabled = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
+
+        // enabled affects the breakpoint mark type.
+        updateMarkType();
     }
 
     if (index == LocationColumn) {
@@ -277,6 +281,10 @@ void Breakpoint::setHitCount(int hits)
         return;
 
     m_hitCount = hits;
+
+    // hit count affects the breakpoint mark type.
+    updateMarkType();
+
     reportChange(HitCountColumn);
 }
 
@@ -297,6 +305,16 @@ bool Breakpoint::enabled() const
 
 void Breakpoint::stopDocumentLineTracking()
 {
+    if (!m_movingCursor)
+        return;
+
+    // Remove the associated breakpoint mark.
+    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(m_movingCursor->document());
+    if (imark) {
+        const auto guard = m_model->markChangeGuard();
+        imark->removeMark(m_movingCursor->line(), BreakpointModel::AllBreakpointMarks);
+    }
+
     delete m_movingCursor;
     m_movingCursor = nullptr;
 }
@@ -309,6 +327,13 @@ void Breakpoint::restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor
     stopDocumentLineTracking();
 
     m_movingCursor = cursor;
+
+    // Add a breakpoint mark at the new cursor's location.
+    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(m_movingCursor->document());
+    if (imark) {
+        const auto guard = m_model->markChangeGuard();
+        imark->addMark(m_movingCursor->line(), markType());
+    }
 }
 
 KTextEditor::MovingCursor* KDevelop::Breakpoint::movingCursor() const {
@@ -361,6 +386,10 @@ void Breakpoint::setState(BreakpointState state)
         return;
 
     m_state = state;
+
+    // BreakpointState affects the breakpoint mark type.
+    updateMarkType();
+
     reportChange(StateColumn);
 }
 
@@ -385,6 +414,35 @@ uint Breakpoint::markType() const
     } else {
         return BreakpointModel::BreakpointMark;
     }
+}
+
+void Breakpoint::updateMarkType() const
+{
+    // Do we even have a mark?
+
+    if (!m_model)
+        return;
+
+    if (!m_movingCursor)
+        return;
+
+    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(m_movingCursor->document());
+    if (!imark)
+        return;
+
+    // Yes, but don't update if type would not change:
+    const auto newMarkType = markType();
+    Q_ASSERT(newMarkType);
+    const auto docLine = m_movingCursor->line();
+    const auto oldMarkType = imark->mark(docLine) & BreakpointModel::AllBreakpointMarks;
+
+    if (oldMarkType == newMarkType) {
+        return;
+    }
+
+    const auto guard = m_model->markChangeGuard();
+    imark->removeMark(docLine, BreakpointModel::AllBreakpointMarks);
+    imark->addMark(docLine, newMarkType);
 }
 
 void Breakpoint::saveMovingCursorLine()
@@ -416,6 +474,12 @@ void Breakpoint::updateMovingCursor(const QUrl& url, int line)
             if (line >= document->lines()) {
                 stopDocumentLineTracking();
             } else if (m_movingCursor->line() != line) {
+                auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(document);
+                if (imark) {
+                    const auto guard = m_model->markChangeGuard();
+                    imark->removeMark(m_movingCursor->line(), BreakpointModel::AllBreakpointMarks);
+                    imark->addMark(line, markType());
+                }
                 m_movingCursor->setLine(line);
             }
             return;

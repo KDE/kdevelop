@@ -59,7 +59,6 @@ class KDevelop::BreakpointModelPrivate
 {
 public:
     bool dirty = false;
-    bool dontUpdateMarks = false;
     /// Non-zero while KDevelop code is adding or removing a document mark.
     /// This allows to react to user-driven mark changes without getting confused by our own code changes.
     int inhibitMarkChange = 0;
@@ -74,8 +73,6 @@ BreakpointModel::BreakpointModel(QObject* parent)
     : QAbstractTableModel(parent),
       d_ptr(new BreakpointModelPrivate)
 {
-    connect(this, &BreakpointModel::dataChanged, this, &BreakpointModel::updateMarks);
-
     auto* const documentController = ICore::self()->documentController();
     Q_ASSERT(documentController); // BreakpointModel is created after DocumentController.
 
@@ -113,8 +110,6 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
         // Set up breakpoints *before* connecting to the document's signals.
         setupDocumentBreakpoints(*textDocument);
 
-        updateMarks();
-
         // can't use new signal slot syntax here, MarkInterface is not a QObject
         connect(textDocument, SIGNAL(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)),
                  this, SLOT(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)));
@@ -127,7 +122,7 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
 {
     Q_D(const BreakpointModel);
 
-    // Initial setup of moving cursors
+    // Initial setup of moving cursors and marks.
     const QUrl docUrl = document.url();
     const auto docLineCount = document.lines();
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
@@ -275,7 +270,6 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
         d->deletedBreakpoints.append(b);
     }
     endRemoveRows();
-    updateMarks();
     scheduleSave();
     return true;
 }
@@ -436,10 +430,6 @@ void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column co
         QModelIndex idx = breakpointIndex(breakpoint, column);
         Q_ASSERT(idx.isValid()); // make sure we don't pass invalid indices to dataChanged()
         emit dataChanged(idx, idx);
-    } else if (column == Breakpoint::HitCountColumn) {
-        // The HitCountColumn column is not shown in the Breakpoints table. Therefore dataChanged() is not emitted and
-        // updateMarks() connected to it is not invoked. Call it manually, because hit count affects the mark type.
-        updateMarks();
     }
 
     if (IBreakpointController* controller = breakpointController()) {
@@ -458,69 +448,6 @@ ScopedIncrementor BreakpointModel::markChangeGuard()
     return ScopedIncrementor(d->inhibitMarkChange);
 }
 
-void KDevelop::BreakpointModel::updateMarks()
-{
-    Q_D(BreakpointModel);
-
-    if (d->dontUpdateMarks)
-        return;
-
-    const auto* const documentController = ICore::self()->documentController();
-    if (!documentController) {
-        qCDebug(DEBUGGER) << "Cannot update marks without the document controller. "
-                             "KDevelop must be exiting and the document controller already destroyed.";
-        return;
-    }
-
-    //add marks
-    for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
-        if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
-        if (breakpoint->line() == -1) continue;
-        IDocument *doc = documentController->documentForUrl(breakpoint->url());
-        if (!doc) continue;
-        KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
-        if (!mark) continue;
-        uint type = breakpoint->markType();
-        IF_DEBUG( qCDebug(DEBUGGER) << type << breakpoint->url() << mark->mark(breakpoint->line()); )
-
-        {
-            QSignalBlocker blocker(doc->textDocument());
-            if (mark->mark(breakpoint->line()) & AllBreakpointMarks) {
-                if (!(mark->mark(breakpoint->line()) & type)) {
-                    mark->removeMark(breakpoint->line(), AllBreakpointMarks);
-                    mark->addMark(breakpoint->line(), type);
-                }
-            } else {
-                mark->addMark(breakpoint->line(), type);
-            }
-        }
-    }
-
-    //remove marks
-    const auto documents = documentController->openDocuments();
-    for (IDocument* doc : documents) {
-        KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
-        if (!mark) continue;
-
-        {
-            QSignalBlocker blocker(doc->textDocument());
-            const auto oldMarks = mark->marks();
-            for (KTextEditor::Mark* m : oldMarks) {
-                if (!(m->type & AllBreakpointMarks)) continue;
-                IF_DEBUG( qCDebug(DEBUGGER) << m->line << m->type; )
-                for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
-                    if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
-                    if (doc->url() == breakpoint->url() && m->line == breakpoint->line()) {
-                        goto continueNextMark;
-                    }
-                }
-                mark->removeMark(m->line, AllBreakpointMarks);
-                continueNextMark:;
-            }
-        }
-    }
-}
-
 void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 {
     Q_D(BreakpointModel);
@@ -534,9 +461,7 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 
             // FIXME: temporary code to update the breakpoint widget UI.
             //        marksChanged() slot should update the UI so following is not needed:
-            d->dontUpdateMarks = true;
             reportChange(breakpoint, Breakpoint::LocationColumn);
-            d->dontUpdateMarks = false;
         }
     }
 
@@ -718,6 +643,8 @@ Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) const
     return (it != d->breakpoints.constEnd()) ? *it : nullptr;
 }
 
+// TODO: move into the Breakpoint class when/if the aboutToDeleteMovingInterfaceContent()
+//       connection is moved to textDocumentCreated().
 void BreakpointModel::setupMovingCursor(Breakpoint* breakpoint, KTextEditor::Document* document, int line) const
 {
     Q_ASSERT(breakpoint);

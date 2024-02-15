@@ -161,9 +161,6 @@ private:
         MarkType(BreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark | PendingBreakpointMark);
 
 private Q_SLOTS:
-
-    void updateMarks();
-
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
     void documentSaved(KDevelop::IDocument*);
@@ -197,7 +194,7 @@ private:
     ScopedIncrementor markChangeGuard();
 
     /**
-     * Initialize breakpoint moving cursors in a given document.
+     * Initialize breakpoint marks and moving cursors in a given document.
      */
     void setupDocumentBreakpoints(KTextEditor::Document& document) const;
 

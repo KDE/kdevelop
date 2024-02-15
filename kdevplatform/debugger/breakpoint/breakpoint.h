@@ -172,11 +172,12 @@ protected:
     QString m_errorText;
 
     uint markType() const;
+    void updateMarkType() const;
 
     void saveMovingCursorLine();
     void reportChange(Column c);
     /**
-     * Update or replace the breakpoint's moving cursor for the specified new location.
+     * Update or replace the breakpoint mark and moving cursor for the specified new location.
      * @note Calls stopDocumentLineTracking() if the new location is invalid or if
      *       the breakpoint cannot have a moving cursor.
      */
