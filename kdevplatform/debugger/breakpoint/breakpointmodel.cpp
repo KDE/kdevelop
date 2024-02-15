@@ -32,6 +32,9 @@
 #include <QMenu>
 #include <QMessageBox>
 
+#include <algorithm>
+#include <utility>
+
 #define IF_DEBUG(x)
 
 using namespace KDevelop;
@@ -116,6 +119,8 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
         connect(textDocument, SIGNAL(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
                 SLOT(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
     }
+
+    connect(textDocument, &KTextEditor::Document::aboutToReload, this, &BreakpointModel::aboutToReload);
 }
 
 void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) const
@@ -133,6 +138,70 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
             }
         }
     }
+}
+
+[[maybe_unused]] bool BreakpointModel::containsBreakpointMarks(const KTextEditor::Document& document)
+{
+    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(&document);
+    Q_ASSERT(imark);
+    const auto& marks = imark->marks();
+    return std::any_of(marks.cbegin(), marks.cend(), [](const KTextEditor::Mark* mark) -> bool {
+        return mark->type & AllBreakpointMarks;
+    });
+}
+
+void BreakpointModel::aboutToReload(KTextEditor::Document* document)
+{
+    Q_D(const BreakpointModel);
+
+    // FIXME: if a modified document is reloaded, and the user clicks a button other than "Discard"
+    //        in the message box that appears, the moving cursors should not be reverted to their saved locations.
+    //        For now, document line tracking is reinitialized using saved line numbers, which works well for
+    //        an unmodified document and in case of the "Discard" user choice for a modified document.
+
+    // All moving cursors are invalidated in the document after this slot, so they must be dropped
+    // now to avoid using invalid line numbers. Conveniently, this also removes the associated breakpoint marks.
+    bool reinitializeBreakpoints = false;
+    const QUrl docUrl = document->url();
+    for (auto* const breakpoint : std::as_const(d->breakpoints)) {
+        const auto* const cursor = breakpoint->movingCursor();
+        if (cursor && cursor->document() == document) {
+            reinitializeBreakpoints = true;
+            breakpoint->stopDocumentLineTracking();
+        } else {
+            // Reloading may increase the document's line count. Therefore, we may be able to enable document
+            // line tracking for breakpoints that are no longer out of bounds after the reloading.
+            // So reinitialize if the document contains any breakpoints.
+            reinitializeBreakpoints = reinitializeBreakpoints || docUrl == breakpoint->url();
+        }
+    }
+
+    // TODO: disable this costly assertion eventually.
+    Q_ASSERT(!containsBreakpointMarks(*document));
+
+    // NOTE: KTextEditor::DocumentPrivate::documentReload() stores in a local variable all document marks right after
+    //       emitting aboutToReload(). Then the reloading process removes all document marks, unless the document is
+    //       modified and the user chooses to cancel reloading when prompted.
+    //       KTextEditor::DocumentPrivate::documentReload() then re-adds all document marks and emits reloaded().
+    //       This reloading process emits markChanged() at least once per mark-ed document line. The loop above
+    //       removed all breakpoint marks in the document. Therefore, only non-breakpoint marks remain. markChanged()
+    //       early-returns if the changed mark is not a breakpoint mark. In this way, removing all breakpoint marks
+    //       in the loop above prevents spurious mark changes when a document is reloaded.
+
+    if (!reinitializeBreakpoints)
+        return;
+
+    // reloaded() will reinitialize moving cursors and marks.
+    connect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
+}
+
+void BreakpointModel::reloaded(KTextEditor::Document* document)
+{
+    // reinitialize
+    setupDocumentBreakpoints(*document);
+
+    // disconnect ourselves
+    disconnect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
 }
 
 void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, const QPoint &pos, bool& handled)

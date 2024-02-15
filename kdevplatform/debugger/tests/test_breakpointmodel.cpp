@@ -500,4 +500,62 @@ void TestBreakpointModel::testUpdateMarkType()
     VERIFY_BREAKPOINT(b1, 21, BreakpointModel::DisabledBreakpointMark, documentMarks(doc), );
 }
 
+void TestBreakpointModel::testDocumentReload()
+{
+    const auto [url, doc, b1, b2] = setupEditAndCheckPrimaryDocumentAndBreakpoints();
+    RETURN_IF_TEST_FAILED();
+    RETURN_IF_TEST_ABORTED();
+
+    // Set some extra breakpoint data that should be preserved even after a reload.
+    b1->setIgnoreHits(1);
+    b1->setCondition("i == 0");
+    b1->setHitCount(1);
+    b2->setIgnoreHits(2);
+    b2->setCondition("*i > 0");
+    b2->setHitCount(2);
+
+    QVERIFY(doc->save());
+    QCOMPARE(doc->state(), IDocument::Clean);
+
+    // Wait needed for BreakpointModel::save() to complete.
+    QTest::qWait(1);
+
+    // Reload the saved document.
+    doc->reload();
+
+    // Verify that the breakpoint instances in the model are preserved.
+    QCOMPARE(breakpointModel()->rowCount(), 2);
+    QVERIFY(breakpointModel()->breakpoint(0));
+    QCOMPARE(breakpointModel()->breakpoint(0), b1);
+    QVERIFY(breakpointModel()->breakpoint(1));
+    QCOMPARE(breakpointModel()->breakpoint(1), b2);
+
+    // Verify the breakpoints' locations and marks.
+    const auto marks = documentMarks(doc);
+    QCOMPARE(marks.size(), 2);
+    VERIFY_BREAKPOINT(b1, 23, BreakpointModel::DisabledBreakpointMark, marks, );
+    VERIFY_BREAKPOINT(b2, 24, BreakpointModel::ReachedBreakpointMark, marks, );
+
+    // Verify that reloading does not affect unrelated breakpoint data.
+    QCOMPARE(b1->enabled(), false);
+    QCOMPARE(b1->ignoreHits(), 1);
+    QCOMPARE(b1->condition(), "i == 0");
+    QCOMPARE(b1->hitCount(), 1);
+    QCOMPARE(b2->enabled(), true);
+    QCOMPARE(b2->ignoreHits(), 2);
+    QCOMPARE(b2->condition(), "*i > 0");
+    QCOMPARE(b2->hitCount(), 2);
+
+    const auto savedBreakpoints = readBreakpointsFromConfig();
+    QCOMPARE(savedBreakpoints.size(), 2);
+    QCOMPARE(savedBreakpoints.at(0)->line(), 23);
+    QCOMPARE(savedBreakpoints.at(0)->enabled(), false);
+    QCOMPARE(savedBreakpoints.at(0)->ignoreHits(), 1);
+    QCOMPARE(savedBreakpoints.at(0)->condition(), "i == 0");
+    QCOMPARE(savedBreakpoints.at(1)->line(), 24);
+    QCOMPARE(savedBreakpoints.at(1)->enabled(), true);
+    QCOMPARE(savedBreakpoints.at(1)->ignoreHits(), 2);
+    QCOMPARE(savedBreakpoints.at(1)->condition(), "*i > 0");
+}
+
 #include "moc_test_breakpointmodel.cpp"

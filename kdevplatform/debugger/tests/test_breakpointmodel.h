@@ -43,6 +43,7 @@ private Q_SLOTS:
     void testDocumentEditAndDiscard();
     void testSetLocation();
     void testUpdateMarkType();
+    void testDocumentReload();
 
 private:
     using DocumentMarks = QHash<int, KDevelop::BreakpointModel::MarkType>;

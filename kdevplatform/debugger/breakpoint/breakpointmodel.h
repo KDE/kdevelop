@@ -163,6 +163,8 @@ private:
 private Q_SLOTS:
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
+    void aboutToReload(KTextEditor::Document* document);
+    void reloaded(KTextEditor::Document* document);
     void documentSaved(KDevelop::IDocument*);
     void aboutToDeleteMovingInterfaceContent(KTextEditor::Document *document);
 
@@ -192,6 +194,11 @@ private:
      * Call this function and keep the returned guard object alive while adding or removing document marks.
      */
     ScopedIncrementor markChangeGuard();
+
+    /**
+     * Check if a document contains any breakpoint marks.
+     */
+    static bool containsBreakpointMarks(const KTextEditor::Document& document);
 
     /**
      * Initialize breakpoint marks and moving cursors in a given document.
