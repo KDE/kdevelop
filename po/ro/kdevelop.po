@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
 "PO-Revision-Date: 2012-12-22 11:41+0200\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -876,17 +876,17 @@ msgstr "Deschide sesiune KDevelop"
 msgid "Arbitrary String Which Says Something"
 msgstr ""
 
-#: plasma/runner/kdevelopsessions.cpp:24
+#: plasma/runner/kdevelopsessions.cpp:26 plasma/runner/kdevelopsessions.cpp:30
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Găsește sesiunile KDevelop ce se potrivesc cu :q:."
 
-#: plasma/runner/kdevelopsessions.cpp:28
+#: plasma/runner/kdevelopsessions.cpp:34
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Enumeră toate sesiunile KDevelop din contul dumneavoastră."
 
-#: plasma/runner/kdevelopsessions.cpp:102
+#: plasma/runner/kdevelopsessions.cpp:108
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Deschide sesiune KDevelop"

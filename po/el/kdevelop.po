@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
 "PO-Revision-Date: 2023-07-28 11:18+0300\n"
 "Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -913,19 +913,19 @@ msgstr "Συνεδρίες KDevelop"
 msgid "Arbitrary String Which Says Something"
 msgstr "Αυθαίρετη συμβολοσειρά που σημαίνει κάτι"
 
-#: plasma/runner/kdevelopsessions.cpp:24
+#: plasma/runner/kdevelopsessions.cpp:26 plasma/runner/kdevelopsessions.cpp:30
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Βρίσκει συνεδρίες KDevelop που ταιριάζουν με :q:."
 
-#: plasma/runner/kdevelopsessions.cpp:28
+#: plasma/runner/kdevelopsessions.cpp:34
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr ""
 "Τοποθετεί σε λίστα όλες τις συνεδρίες επεξεργαστή KDevelop του λογαριασμού "
 "σας."
 
-#: plasma/runner/kdevelopsessions.cpp:102
+#: plasma/runner/kdevelopsessions.cpp:108
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Άνοιγμα συνεδρίας KDevelop"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
 "PO-Revision-Date: 2013-08-24 11:00+0400\n"
 "Last-Translator: Alexander Lakhin <exclusion@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -18,17 +18,17 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: kdevelopsessions.cpp:24
+#: kdevelopsessions.cpp:26 kdevelopsessions.cpp:30
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Находит сеансы KDevelop, соответствующие :q:."
 
-#: kdevelopsessions.cpp:28
+#: kdevelopsessions.cpp:34
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Показывает все ваши сеансы редактора KDevelop."
 
-#: kdevelopsessions.cpp:102
+#: kdevelopsessions.cpp:108
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Открыть сеанс KDevelop"

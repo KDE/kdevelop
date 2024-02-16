@@ -4,37 +4,35 @@
 # pan93412 <pan93412@gmail.com>, 2018.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2009.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2018-12-08 11:42+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-02-15 17:32+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 24.01.95\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: qthelpconfig.cpp:47 qthelpconfig.cpp:49
-#, fuzzy, kde-format
-#| msgid "Qt Compressed Help file is not valid."
+#, kde-format
 msgid "Qt Compressed Help Files"
-msgstr "Qt 壓縮說明檔不合法。"
+msgstr "Qt 壓縮說明檔"
 
 #: qthelpconfig.cpp:53
-#, fuzzy, kde-format
-#| msgid "Modify Entry"
+#, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
-msgstr "變更項目"
+msgstr "修改項目"
 
 #: qthelpconfig.cpp:55
-#, fuzzy, kde-format
-#| msgid "Add New Entry"
+#, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "新增項目"
@@ -45,12 +43,10 @@ msgid "Name cannot be empty."
 msgstr "名稱不能為空白。"
 
 #: qthelpconfig.cpp:108
-#, fuzzy, kde-format
-#| msgctxt "Allow user to get some API documentation with GHNS"
-#| msgid "Get New Documentation"
+#, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
-msgstr "取得新文件"
+msgstr "取得新的說明文件"
 
 #: qthelpconfig.cpp:124
 #, kde-format
@@ -66,7 +62,7 @@ msgstr "由 GHNS 提供的文件"
 #: qthelpconfig.cpp:238
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
-msgstr "Qt 壓縮說明檔不合法。"
+msgstr "Qt 壓縮說明檔無效。"
 
 #: qthelpconfig.cpp:247
 #, kde-format
@@ -74,159 +70,139 @@ msgid "Documentation already imported"
 msgstr "文件已匯入"
 
 #: qthelpconfig.cpp:299
-#, fuzzy, kde-format
-#| msgid "Qt Help"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Qt 說明"
 
 #: qthelpconfig.cpp:304
-#, fuzzy, kde-format
-#| msgid "Configure Qt Help Settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "設定 Qt 說明"
 
 #: qthelpconfig.cpp:329
-#, fuzzy, kde-format
-#| msgid "Modify"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
-msgstr "變更"
+msgstr "修改"
 
 #: qthelpconfig.cpp:335
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "刪除"
 
 #: qthelpconfig.cpp:341
-#, fuzzy, kde-format
-#| msgid "Please uninstall this via GHNS"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
-msgstr "請使用 GHNS 解除安裝此項目"
+msgstr "請透過 GHNS 解除安裝此項目。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
 #: qthelpconfig.ui:23
-#, fuzzy, kde-format
-#| msgid "Load QtHelp Documentation from System Locations"
+#, kde-format
 msgctxt "@title:group"
 msgid "Load Qt Help Documentation from System Locations"
-msgstr "從系統位置載入 QtHelp 文件"
+msgstr "從系統位置載入 Qt Help 說明文件"
 
 #. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
 #: qthelpconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "&Load Qt API documentation:"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Load Qt API documentation:"
-msgstr "載入 Qt API 文件(&L)："
+msgstr "載入 Qt API 說明文件(&L)："
 
 #. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
 #: qthelpconfig.ui:46
-#, fuzzy, kde-format
-#| msgid "Load QtHelp files from directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Load Qt Help files from directory:"
-msgstr "從資料夾載入 QtHelp 檔案："
+msgstr "從資料夾載入 Qt Help 說明檔案："
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
 #: qthelpconfig.ui:69
-#, fuzzy, kde-format
-#| msgid "Install Additional Documentation Files"
+#, kde-format
 msgctxt "@title:group"
 msgid "Install Additional Documentation Files"
 msgstr "安裝額外的說明文件"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:104
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "名稱"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:109
-#, fuzzy, kde-format
-#| msgid "Path"
+#, kde-format
 msgctxt "@title:column"
 msgid "Path"
 msgstr "路徑"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: qthelpconfig.ui:134
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "新增"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qthelpconfigeditdialog.ui:17
-#, fuzzy, kde-format
-#| msgid "Icon:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Icon:"
 msgstr "圖示："
 
 #. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
 #: qthelpconfigeditdialog.ui:24
-#, fuzzy, kde-format
-#| msgid "Select an icon"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an icon"
 msgstr "選擇圖示"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qthelpconfigeditdialog.ui:34
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "名稱："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:41
-#, fuzzy, kde-format
-#| msgid "Enter a name"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a name"
 msgstr "輸入名稱"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:44
-#, fuzzy, kde-format
-#| msgid "Select a name"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
-msgstr "選擇名稱"
+msgstr "選擇名稱..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qthelpconfigeditdialog.ui:51
-#, fuzzy, kde-format
-#| msgid "Path:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Path:"
 msgstr "路徑："
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:64
-#, fuzzy, kde-format
-#| msgid "Select a QtHelp file..."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a Qt Help file..."
-msgstr "選擇 QtHelp 檔..."
+msgstr "選擇 Qt Help 說明檔..."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:67
-#, fuzzy, kde-format
-#| msgid "Select a QtHelp file..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
-msgstr "選擇 QtHelp 檔..."
+msgstr "選擇 Qt Help 說明檔..."
 
 #: qthelpdocumentation.cpp:181
 #, kde-format

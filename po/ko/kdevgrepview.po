@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
 "PO-Revision-Date: 2022-07-13 13:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -499,58 +499,73 @@ msgctxt "@label:spinbox"
 msgid "Depth:"
 msgstr "깊이:"
 
+#. i18n: ectx: property (toolTip), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:115
+#, kde-format
+msgid "Maximum level of subdirectory recursion"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:118
+#, kde-format
+msgid ""
+"For each search location, descend at most Depth levels of directories. "
+"Depth=0 means searching only in files directly inside selected search "
+"locations. Full Depth means no recursion limit."
+msgstr ""
+
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
-#: grepwidget.ui:118
+#: grepwidget.ui:121
 #, kde-format
 msgctxt "@item full recursion"
 msgid "Full"
 msgstr "전체"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: grepwidget.ui:131
+#: grepwidget.ui:134
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pattern:"
 msgstr "패턴:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: grepwidget.ui:144
+#: grepwidget.ui:147
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
 msgstr "파일:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: grepwidget.ui:157
+#: grepwidget.ui:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Case sensitive:"
 msgstr "대소문자 구분:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
-#: grepwidget.ui:176
+#: grepwidget.ui:179
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Case-sensitive searching."
 msgstr "대소문자를 구분해서 찾습니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: grepwidget.ui:189
+#: grepwidget.ui:192
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
 msgstr "위치:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
-#: grepwidget.ui:202
+#: grepwidget.ui:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files filter"
 msgstr "파일 필터"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
-#: grepwidget.ui:205
+#: grepwidget.ui:208
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -561,21 +576,21 @@ msgstr ""
 "으로 구분해서 입력하십시오."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: grepwidget.ui:218
+#: grepwidget.ui:221
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
 msgstr "제외:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
-#: grepwidget.ui:231
+#: grepwidget.ui:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
 msgstr "제외할 파일 패턴"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
-#: grepwidget.ui:234
+#: grepwidget.ui:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -589,42 +604,42 @@ msgstr ""
 "싸므로, 각각 패턴은 파일 경로의 일부분과도 일치할 수 있습니다.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: grepwidget.ui:314
+#: grepwidget.ui:317
 #, kde-format
 msgctxt "@option:check"
 msgid "Regular expression:"
 msgstr "정규 표현식:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
-#: grepwidget.ui:327
+#: grepwidget.ui:330
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
 msgstr "정규 표현식을 활성화하거나 비활성화합니다."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
-#: grepwidget.ui:340
+#: grepwidget.ui:343
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
 msgstr "프로젝트 파일로 제한:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
-#: grepwidget.ui:369
+#: grepwidget.ui:372
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
 msgstr "바꾸기 템플릿 입력"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: grepwidget.ui:376
+#: grepwidget.ui:379
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Replacement template:"
 msgstr "바꾸기 템플릿:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
-#: grepwidget.ui:389
+#: grepwidget.ui:392
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -635,7 +650,7 @@ msgstr ""
 "한 목록(공백 없음)일 수 있습니다."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
-#: grepwidget.ui:414
+#: grepwidget.ui:417
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"

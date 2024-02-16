@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
 "PO-Revision-Date: 2022-07-22 16:06+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -512,58 +512,73 @@ msgctxt "@label:spinbox"
 msgid "Depth:"
 msgstr "Depth:"
 
+#. i18n: ectx: property (toolTip), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:115
+#, kde-format
+msgid "Maximum level of subdirectory recursion"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:118
+#, kde-format
+msgid ""
+"For each search location, descend at most Depth levels of directories. "
+"Depth=0 means searching only in files directly inside selected search "
+"locations. Full Depth means no recursion limit."
+msgstr ""
+
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
-#: grepwidget.ui:118
+#: grepwidget.ui:121
 #, kde-format
 msgctxt "@item full recursion"
 msgid "Full"
 msgstr "Full"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: grepwidget.ui:131
+#: grepwidget.ui:134
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pattern:"
 msgstr "Pattern:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: grepwidget.ui:144
+#: grepwidget.ui:147
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
 msgstr "Files:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: grepwidget.ui:157
+#: grepwidget.ui:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Case sensitive:"
 msgstr "Case sensitive:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
-#: grepwidget.ui:176
+#: grepwidget.ui:179
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Case-sensitive searching."
 msgstr "Case-sensitive searching."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: grepwidget.ui:189
+#: grepwidget.ui:192
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
 msgstr "Location(s):"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
-#: grepwidget.ui:202
+#: grepwidget.ui:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files filter"
 msgstr "Files filter"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
-#: grepwidget.ui:205
+#: grepwidget.ui:208
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -574,21 +589,21 @@ msgstr ""
 "several patterns separated by commas or spaces."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: grepwidget.ui:218
+#: grepwidget.ui:221
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
 msgstr "Exclude:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
-#: grepwidget.ui:231
+#: grepwidget.ui:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
 msgstr "Files pattern to exclude"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
-#: grepwidget.ui:234
+#: grepwidget.ui:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -603,42 +618,42 @@ msgstr ""
 "of the file paths.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: grepwidget.ui:314
+#: grepwidget.ui:317
 #, kde-format
 msgctxt "@option:check"
 msgid "Regular expression:"
 msgstr "Regular expression:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
-#: grepwidget.ui:327
+#: grepwidget.ui:330
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
 msgstr "Enable or disable regular expression."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
-#: grepwidget.ui:340
+#: grepwidget.ui:343
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
 msgstr "Limit to project files:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
-#: grepwidget.ui:369
+#: grepwidget.ui:372
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
 msgstr "Enter the replacement template"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: grepwidget.ui:376
+#: grepwidget.ui:379
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Replacement template:"
 msgstr "Replacement template:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
-#: grepwidget.ui:389
+#: grepwidget.ui:392
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -649,7 +664,7 @@ msgstr ""
 "or a semicolon separated (without spaces) list of directories/files."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
-#: grepwidget.ui:414
+#: grepwidget.ui:417
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"

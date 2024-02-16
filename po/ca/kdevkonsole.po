@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
 "PO-Revision-Date: 2020-10-14 12:49+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -27,15 +27,16 @@ msgstr ""
 msgid "Terminal"
 msgstr "Terminal"
 
-#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Terminal"
 msgstr "Terminal"
 
-#: kdevkonsoleviewplugin.cpp:60
-#, kde-format
-msgid "Failed to load 'konsolepart' plugin"
+#: kdevkonsoleviewplugin.cpp:49
+#, fuzzy, kde-format
+#| msgid "Failed to load 'konsolepart' plugin"
+msgid "Failed to load 'konsolepart' plugin: %1"
 msgstr "Ha fallat en carregar el connector «konsolepart»"
 
 #~ msgid "Konsole"

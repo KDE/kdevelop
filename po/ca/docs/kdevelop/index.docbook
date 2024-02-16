@@ -32,7 +32,7 @@
 >&kdevelop; 4.4 (&kde; 4.9)</releaseinfo>
 <abstract>
 <para
->El &kdevelop; és un sistema de desenvolupament integrat per emprar-lo per a una àmplia varietat de tasques de programació.</para>
+>El &kdevelop; és un sistema de desenvolupament integrat per a emprar-lo per a una àmplia varietat de tasques de programació.</para>
     </abstract>
   <keywordset>
     <keyword
@@ -94,7 +94,7 @@ std::string color = my_ride.ge
 >get_color()</varname
 > ja que aquesta és l'única funció de membre de la classe <varname
 >Car</varname
-> que comença així. En comptes de continuar escrivint simplement premeu &Intro; per obtenir la paraula completa; això estalvia temps, evita errors ortogràfics, i no requereix recordar els noms exactes dels centenars o milers de funcions i classes que formen els grans projectes.</para>
+> que comença així. En comptes de continuar escrivint simplement premeu &Intro; per a obtenir la paraula completa; això estalvia temps, evita errors ortogràfics, i no requereix recordar els noms exactes dels centenars o milers de funcions i classes que formen els grans projectes.</para>
 <para
 >Com a segon exemple, suposeu que teniu un codi com aquest:</para>
 <para
@@ -155,7 +155,7 @@ double bar ()
 >projectes</emphasis
 >. Una sessió conté tots els projectes que tenen alguna cosa a veure entre si. Per als exemples que segueixen, s'assumeix que sou el desenvolupador tant d'una biblioteca com de l'aplicació que la utilitza. Podeu pensar primer en les biblioteques del KDE i després en el &kdevelop;. Un altre exemple: Diguem que sou un hacker del nucli &Linux;, però també esteu treballant en un controlador de dispositiu per a &Linux; que encara no ha estat fusionat a l'arbre del nucli.</para>
 <para
->De manera que prenent l'últim com a exemple, tindríeu una sessió al &kdevelop; que té dos projectes: el nucli &Linux; i el controlador de dispositiu. Heu d'agrupar-los en una sola sessió (en lloc de tenir dues sessions amb un sol projecte cadascuna), ja que serà útil per poder veure les funcions del nucli i l'estructuració de les dades al &kdevelop; sempre que escriviu codi font pel controlador -&pex;, per obtenir la funció del nucli i els noms de les variables expandides automàticament, o per a poder veure la documentació d'aquesta funció del nucli mentre pirategeu el controlador del dispositiu-.</para>
+>De manera que prenent l'últim com a exemple, tindríeu una sessió al &kdevelop; que té dos projectes: el nucli &Linux; i el controlador de dispositiu. Heu d'agrupar-los en una sola sessió (en lloc de tenir dues sessions amb un sol projecte cadascuna), ja que serà útil per a poder veure les funcions del nucli i l'estructuració de les dades al &kdevelop; sempre que escriviu codi font pel controlador -&pex;, per a obtenir la funció del nucli i els noms de les variables expandides automàticament, o per a poder veure la documentació d'aquesta funció del nucli mentre pirategeu el controlador del dispositiu-.</para>
 <para
 >Ara imagineu-vos que també sou un desenvolupador del KDE. Llavors tindríeu una segona sessió que conté el KDE com un projecte. Es podria, en principi, tenir una sola sessió per a tot això, però no hi ha cap motiu real: en el vostre treball al KDE, no cal accedir a les funcions del nucli o als controladors de dispositiu -i no voleu que els noms de les classes del KDE s'expandeixin automàticament mentre treballeu en el nucli de &Linux;-. Finalment, la construcció d'algunes de les biblioteques del KDE és independent de tornar a compilar el nucli de &Linux; (el qual sempre que compileu el controlador del dispositiu també seria bo tornar a compilar el nucli de &Linux; si també s'han canviat alguns dels fitxers de capçalera del nucli).</para>
 <para
@@ -165,7 +165,7 @@ double bar ()
 ><title
 >Configurar una sessió i importar un projecte existent</title>
 <para
->Seguirem amb l'exemple del nucli &Linux; i el controlador del dispositiu -possiblement voldreu substituir el vostre propi conjunt de biblioteques o projectes per aquests dos exemples. Per crear una nova sessió que contingui aquests dos projectes aneu al menú <menuchoice
+>Seguirem amb l'exemple del nucli &Linux; i el controlador del dispositiu -possiblement voldreu substituir el vostre propi conjunt de biblioteques o projectes per aquests dos exemples. Per s crear una sessió nova que contingui aquests dos projectes aneu al menú <menuchoice
 ><guimenu
 >Sessió</guimenu
 ><guimenuitem
@@ -180,7 +180,7 @@ double bar ()
 <para
 >Primer assumirem que el projecte que volem configurar -el nucli de &Linux;- resideix en algun sistema pel control de versions a un servidor, però encara no s'ha comprovat el vostre disc dur local. En aquest cas, aneu al menú <guilabel
 >Projecte</guilabel
-> per crear el nucli &Linux; com un projecte dins de la sessió actual i després feu els següents passos:</para>
+> per a crear el nucli &Linux; com un projecte dins de la sessió actual i després feu els següents passos:</para>
 <itemizedlist>
 <listitem
 ><para
@@ -190,11 +190,11 @@ double bar ()
 ><guimenuitem
 >Recupera un projecte</guimenuitem
 ></menuchoice
-> per importar un projecte. </para
+> per a importar un projecte. </para
 ></listitem>
 <listitem
 ><para
->A continuació, teniu múltiples opcions per iniciar un nou projecte en la sessió actual, depenent d'on provinguin els fitxers font: Simplement, podeu apuntar el &kdevelop; a un directori existent (vegeu l'opció 2 a continuació), o podeu demanar al &kdevelop; que obtingui les fonts des d'un repositori. </para
+>A continuació, teniu múltiples opcions per a iniciar un projecte nou en la sessió actual, depenent d'on provinguin els fitxers font: Simplement, podeu apuntar el &kdevelop; a un directori existent (vegeu l'opció 2 a continuació), o podeu demanar al &kdevelop; que obtingui les fonts des d'un repositori. </para
 ></listitem>
 <listitem
 ><para
@@ -227,7 +227,7 @@ double bar ()
 ><para
 >Premeu <guilabel
 >Obtén</guilabel
->. Això pot trigar molta estona, depenent de la velocitat de la vostra connexió i la mida del projecte. Malauradament, al &kdevelop; 4.2.x la barra de progrés en realitat no mostra res, però podeu seguir el progrés consultant periòdicament la sortida de la línia d'ordres per veure la quantitat de dades que ja s'han descarregat. </para
+>. Això pot trigar molta estona, depenent de la velocitat de la vostra connexió i la mida del projecte. Malauradament, al &kdevelop; 4.2.x la barra de progrés en realitat no mostra res, però podeu seguir el progrés consultant periòdicament la sortida de la línia d'ordres per a veure la quantitat de dades que ja s'han descarregat. </para
 ></listitem>
 </itemizedlist>
 </para
@@ -268,7 +268,7 @@ double bar ()
 ></listitem>
 <listitem
 ><para
->A continuació, el &kdevelop; començarà a analitzar tot el projecte. Una vegada més, trigarà força temps per anar a través de tots els fitxers i l'índex de les classes, &etc; A la part inferior dreta de la finestra principal, hi ha una barra de progrés que mostra el temps que pot trigar aquest procés. (Si teniu diversos nuclis de processador, podeu accelerar aquest procés anant a l'element de menú <menuchoice
+>A continuació, el &kdevelop; començarà a analitzar tot el projecte. Una vegada més, trigarà força temps per a anar a través de tots els fitxers i l'índex de les classes, &etc; A la part inferior dreta de la finestra principal, hi ha una barra de progrés que mostra el temps que pot trigar aquest procés. (Si teniu diversos nuclis de processador, podeu accelerar aquest procés anant a l'element de menú <menuchoice
 ><guimenu
 >Arranjament</guimenu
 ><guimenuitem
@@ -276,7 +276,7 @@ double bar ()
 ></menuchoice
 >, després seleccionant <guilabel
 >Analitzador en segon pla</guilabel
-> a l'esquerra, i incrementant el nombre de fils per analitzar en segon pla a la dreta). </para
+> a l'esquerra, i incrementant el nombre de fils per a analitzar en segon pla a la dreta). </para
 ></listitem>
 </itemizedlist>
 </sect2>
@@ -284,7 +284,7 @@ double bar ()
 ><title
 >Opció 2: Importar un projecte que ja es troba al disc dur</title>
 <para
->De manera alternativa, si el projecte sobre el qual voleu treballar ja existeix al vostre disc dur (&pex;, pel fet que l'heu descarregat com un fitxer TAR des d'un servidor FTP, atès que ja heu obtingut una nova versió del projecte des d'un sistema pel control de versions, o perquè és el vostre propi projecte que <emphasis
+>De manera alternativa, si el projecte sobre el qual voleu treballar ja existeix al vostre disc dur (&pex;, pel fet que l'heu descarregat com un fitxer TAR des d'un servidor FTP, atès que ja heu obtingut una versió nova del projecte des d'un sistema pel control de versions, o perquè és el vostre propi projecte que <emphasis
 >només</emphasis
 > existeix al vostre disc dur), tot seguit utilitzeu <menuchoice
 ><guimenu
@@ -301,19 +301,19 @@ double bar ()
 <para
 >La propera cosa que voldreu fer és crear altres projectes en la mateixa sessió. En l'exemple anterior, voleu afegir el controlador de dispositiu com el segon projecte, el qual es pot fer emprant exactament els mateixos passos.</para>
 <para
->Si teniu múltiples aplicacions o biblioteques, simplement repetiu els passos per afegir més i més projectes a la vostra sessió.</para>
+>Si teniu múltiples aplicacions o biblioteques, simplement repetiu els passos per a afegir més i més projectes a la vostra sessió.</para>
 </sect1>
 <sect1 id="creating-projects-from-scratch"
 ><title
 >Crear projectes a partir de zero</title>
 <para
->Per descomptat també hi ha la possibilitat d'iniciar un nou projecte des de zero. Això es pot fer emprant l'element de menú <menuchoice
+>Per descomptat també hi ha la possibilitat d'iniciar un projecte nou des de zero. Això es pot fer emprant l'element de menú <menuchoice
 ><guimenu
 >Projectes</guimenu
 ><guimenuitem
 >Nou des d'una plantilla...</guimenuitem
 ></menuchoice
->, el qual presentarà un diàleg per a la selecció de plantilles. Algunes plantilles de projecte venen amb el &kdevelop;, però encara n'hi ha més de disponibles mitjançant la instal·lació de l'aplicació <application
+>, el qual presentarà un diàleg per a la selecció de plantilles. Algunes plantilles de projectes venen amb el &kdevelop;, però encara n'hi ha més de disponibles mitjançant la instal·lació de l'aplicació <application
 >KAppTemplate</application
 >. Escolliu el tipus de projecte i el llenguatge de programació des del diàleg, introduïu un nom i una ubicació pel vostre projecte, i feu clic a <guilabel
 >Següent</guilabel
@@ -347,7 +347,7 @@ double bar ()
 ><title
 >Treballar amb el codi font</title>
 <para
->A més de la depuració, llegint i escrivint codi font és com passareu la major part del temps durant el desenvolupament de programari. Amb aquesta finalitat, el &kdevelop; ofereix moltes maneres diferents d'explorar el codi font i per fer que l'escriptura sigui més productiva. Tot plegat s'analitza en més detall en les seccions següents, el &kdevelop; no és només un editor de codi font -més aviat, és un sistema de gestió de les fonts que us dona diferents punts de vista de la informació extreta dels fitxers que en conjunt formen el codi font de la vostra sessió-.</para>
+>A més de la depuració, llegint i escrivint codi font és com passareu la major part del temps durant el desenvolupament de programari. Amb aquesta finalitat, el &kdevelop; ofereix moltes maneres diferents d'explorar el codi font i per a fer que l'escriptura sigui més productiva. Tot plegat s'analitza en més detall en les seccions següents, el &kdevelop; no és només un editor de codi font -més aviat, és un sistema de gestió de les fonts que us dona diferents punts de vista de la informació extreta dels fitxers que en conjunt formen el codi font de la vostra sessió-.</para>
 <sect1 id="tools-and-views"
 ><title
 >Eines i vistes</title>
@@ -396,7 +396,7 @@ double bar ()
 >Projectes</guilabel
 >. Feu clic sobre seu: s'obrirà una subfinestra mostrant a la part inferior els projectes que heu afegit a la sessió, i una vista a la part superior del sistema de fitxers dels directoris dels vostres projectes.</para>
 <para
->Hi ha moltes altres eines que podeu utilitzar amb el &kdevelop;, no totes són inicialment presents com a botons en el perímetre. Per afegir quelcom, aneu a l'entrada del menú <menuchoice
+>Hi ha moltes altres eines que podeu utilitzar amb el &kdevelop;, no totes són inicialment presents com a botons en el perímetre. Per a afegir alguna cosa, aneu a l'entrada del menú <menuchoice
 ><guimenu
 >Finestres</guimenu
 ><guimenuitem
@@ -455,7 +455,7 @@ double bar ()
 ><para
 ><guilabel
 >Konsole</guilabel
->: Obre una finestra de la línia d'ordres a l'interior de la finestra principal del &kdevelop;, per a una ordre ocasional que possiblement voleu introduir (&pex;, per executar <varname
+>: Obre una finestra de la línia d'ordres a l'interior de la finestra principal del &kdevelop;, per a una ordre ocasional que possiblement voleu introduir (&pex;, per a executar <varname
 >./configure</varname
 >). </para
 ></listitem>
@@ -465,7 +465,7 @@ double bar ()
 >aquí</ulink
 >.</para>
 <para
->Per a molts programadors, l'espai vertical de la pantalla és el més important. Amb aquesta finalitat, podeu organitzar les vostres vistes d'eina al marge esquerre i dret de la finestra: per moure una eina, feu clic en el seu símbol amb el &BDR; i seleccioneu una nova posició.</para>
+>Per a molts programadors, l'espai vertical de la pantalla és el més important. Amb aquesta finalitat, podeu organitzar les vostres vistes d'eina al marge esquerre i dret de la finestra: per a moure una eina, feu clic en el seu símbol amb el &BDR; i seleccioneu una posició nova.</para>
 </sect1>
 <sect1 id="exploring-source-code"
 ><title
@@ -534,7 +534,7 @@ double bar ()
 >utilities.h</filename
 >, el qual de fet resideix en un projecte diferent de la mateixa sessió) juntament amb el comentari a l'estil doxygen que acompanya la declaració.</para>
 <para
->El que fa aquests consells d'eina encara més útils és que són dinàmics: puc fer clic al contenidor per obtenir informació sobre el context en el qual es declara la variable (&ead;, sobre l'espai de noms <varname
+>El que fa aquests consells d'eina encara més útils és que són dinàmics: puc fer clic al contenidor per a obtenir informació sobre el context en el qual es declara la variable (&ead;, sobre l'espai de noms <varname
 >System</varname
 >, com on es declara, defineix, s'utilitza, o on es troba la seva documentació) i jo puc fer clic als enllaços blaus per a reiniciar la posició del cursor a la ubicació de la declaració del símbol (&pex;, en <varname
 >utilities.h</varname
@@ -602,7 +602,7 @@ double bar ()
 </screenshot
 ></para>
 <para
->Aquí, es mostra una llista dels espais de noms, classes i funcions declarats o definits al fitxer actual, el qual us dona una visió general del que succeeix en aquest fitxer i un mitjà per saltar directament a qualsevol d'aquestes declaracions o definicions sense haver de desplaçar-vos cap amunt i avall o a la cerca d'un símbol en particular.</para>
+>Aquí, es mostra una llista dels espais de noms, classes i funcions declarats o definits al fitxer actual, el qual us dona una visió general del que succeeix en aquest fitxer i un mitjà per a saltar directament a qualsevol d'aquestes declaracions o definicions sense haver de desplaçar-vos cap amunt i avall o a la cerca d'un símbol en particular.</para>
 <para
 ><note
 ><para
@@ -743,7 +743,7 @@ double bar ()
 ><title
 >Navegació en l'àmbit de fitxers i mode d'esquema</title>
 <para
->En l'àmbit del fitxer, el &kdevelop; ofereix moltes possibles maneres per navegar a través del codi font. Per exemple:</para>
+>En l'àmbit del fitxer, el &kdevelop; ofereix moltes possibles maneres per a navegar a través del codi font. Per exemple:</para>
 <itemizedlist>
 <listitem
 ><para
@@ -774,7 +774,7 @@ double bar ()
 > </caption
 > </mediaobject
 > </screenshot
-> A continuació, podeu simplement seleccionar-ne una a la qual anar, o -si n'hi ha un munt- començar a escriure qualsevol text que pot aparèixer en els noms que es mostren; en aquest cas, a mesura que escriviu, la llista es farà més i més petita a mesura que s'eliminen els noms que no coincideixen amb el text ja escrit, fins que esteu preparat per seleccionar una de les opcions. </para
+> A continuació, podeu simplement seleccionar-ne una a la qual anar, o -si n'hi ha un munt- començar a escriure qualsevol text que pot aparèixer en els noms que es mostren; en aquest cas, a mesura que escriviu, la llista es farà més i més petita a mesura que s'eliminen els noms que no coincideixen amb el text ja escrit, fins que esteu preparat per a seleccionar una de les opcions. </para
 ></listitem>
 <listitem
 ><para
@@ -823,7 +823,7 @@ double bar ()
 ><title
 >Navegar sobre l'àmbit del projecte i la sessió: Navegació semàntica</title>
 <para
->Com s'ha esmentat en altres llocs, el &kdevelop;, en general no considera els fitxers de codi font de forma individual, si no més aviat té en compte els projectes com un tot (o, més aviat, tots els projectes que formen part de la sessió actual). Com a conseqüència, ofereix moltes possibilitats per navegar a través de tots els projectes. Algunes es deriven del que ja hem discutit en l'apartat <link linkend="exploring-source-code"
+>Com s'ha esmentat en altres llocs, el &kdevelop;, en general no considera els fitxers de codi font de forma individual, si no més aviat té en compte els projectes com un tot (o, més aviat, tots els projectes que formen part de la sessió actual). Com a conseqüència, ofereix moltes possibilitats per a navegar a través de tots els projectes. Algunes es deriven del que ja hem discutit en l'apartat <link linkend="exploring-source-code"
 >Explorar el codi font</link
 >, mentre que altres són realment diferents. El punt en comú és que aquestes característiques de navegació es basen en una <emphasis
 >comprensió semàntica</emphasis
@@ -853,7 +853,7 @@ double bar ()
 ><para
 >Una manera més ràpida d'arribar a la declaració d'un símbol sense haver de fer clic sobre els enllaços del consell d'eina és habilitar temporalment <guilabel
 >Mode de navegació del codi font</guilabel
-> prement la tecla &Alt; o &Ctrl;. En aquest mode, és possible fer clic directament sobre qualsevol símbol de l'editor per passar a la seva declaració. </para
+> prement la tecla &Alt; o &Ctrl;. En aquest mode, és possible fer clic directament sobre qualsevol símbol de l'editor per a passar a la seva declaració. </para
 ></listitem>
 <listitem
 ><para
@@ -933,7 +933,7 @@ double bar ()
 ><para
 ><guilabel
 >Salta a la declaració/definició</guilabel
->: Quan s'implementa una funció (membre), sovint és necessari tornar al punt on es declara una funció, &pex;, per a mantenir la llista d'arguments de la funció sincronitzats entre la declaració i la definició, o per actualitzar la documentació. Per a fer-ho, situeu el cursor sobre el nom de la funció i seleccioneu <menuchoice
+>: Quan s'implementa una funció (membre), sovint és necessari tornar al punt on es declara una funció, &pex;, per a mantenir la llista d'arguments de la funció sincronitzats entre la declaració i la definició, o per a actualitzar la documentació. Per a fer-ho, situeu el cursor sobre el nom de la funció i seleccioneu <menuchoice
 ><guimenu
 >Navegació</guimenu
 ><guimenuitem
@@ -943,7 +943,7 @@ double bar ()
 >&Ctrl;<keycap
 >.</keycap
 ></keycombo
->)per arribar al lloc on es declara la funció. Hi ha múltiples maneres de tornar al lloc original: <itemizedlist>
+>) per a arribar al lloc on es declara la funció. Hi ha múltiples maneres de tornar al lloc original: <itemizedlist>
 <listitem
 ><para
 >Seleccionant <menuchoice
@@ -989,7 +989,7 @@ double bar ()
 ><para
 ><guilabel
 >Canvia entre la declaració/definició</guilabel
->: En l'exemple anterior, per saltar a la ubicació de la declaració de la funció actual, primer és necessari situar el cursor sobre el nom de la funció. Per evitar aquest pas, podeu seleccionar <menuchoice
+>: En l'exemple anterior, per a saltar a la ubicació de la declaració de la funció actual, primer és necessari situar el cursor sobre el nom de la funció. Per a evitar aquest pas, podeu seleccionar <menuchoice
 ><guimenu
 >Navegació</guimenu
 > <guimenuitem
@@ -999,7 +999,7 @@ double bar ()
 >&Maj;&Ctrl;<keycap
 >C</keycap
 ></keycombo
->) per saltar a la declaració de la funció dins la qual es troba actualment el cursor. Seleccionant la mateixa entrada de menú una segona vegada tornareu a la ubicació on es defineix la funció. </para
+>) per a saltar a la declaració de la funció dins la qual es troba actualment el cursor. Seleccionant la mateixa entrada de menú una segona vegada tornareu a la ubicació on es defineix la funció. </para
 ></listitem>
 <listitem
 ><para
@@ -1017,7 +1017,7 @@ double bar ()
 >&Maj;<keysym
 >Fletxa dreta</keysym
 ></keycombo
->) anireu a l'ús següent d'aquesta variable en el codi. (Tingueu en compte que això no es limita a cercar la següent ocurrència del nom de la variable, sinó més aviat té en compte que les variables amb el mateix nom però en diferents àmbits són diferents). El mateix funciona per a l'ús dels noms de la funció. Seleccionant <menuchoice
+>) anireu a l'ús següent d'aquesta variable en el codi. (Tingueu en compte que això no es limita a cercar la següent ocurrència del nom de la variable, si no més aviat té en compte que les variables amb el mateix nom però en diferents àmbits són diferents). El mateix funciona per a l'ús dels noms de la funció. Seleccionant <menuchoice
 ><guimenu
 >Navegació</guimenu
 ><guimenuitem
@@ -1135,7 +1135,7 @@ double bar ()
 ><title
 >Compleció automàtica</title>
 <para
->Probablement la més útil de totes les característiques en escriure nou codi és la compleció automàtica. Considerem, &pex;, el següent fragment de codi:</para>
+>Probablement la més útil de totes les característiques en escriure codi nou és la compleció automàtica. Considerem, &pex;, el següent fragment de codi:</para>
 <para
 ><programlisting
 >class Car {
@@ -1180,7 +1180,7 @@ void foo()
 </screenshot
 ></para>
 <para
->Tingueu en compte que podreu fer clic al consell per obtenir més informació sobre la funció, a part del seu tipus de retorn i si és pública:</para>
+>Tingueu en compte que podreu fer clic al consell per a obtenir més informació sobre la funció, a part del seu tipus de retorn i si és pública:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -1211,23 +1211,23 @@ void foo()
 <para
 ><note
 ><para
->El &kdevelop; no sempre sap quan ajudar amb la compleció del codi. Si el consell de compleció automàtica n s'obre automàticament, premeu <keycombo
+>El &kdevelop; no sempre sap quan ajudar amb la compleció del codi. Si el consell de compleció automàtica no s'obre automàticament, premeu <keycombo
 >&Ctrl;<keycap
 >Espai</keycap
 ></keycombo
-> per obrir manualment una llista de complecions. En general, per tal que funcioni la compleció automàtica, el &kdevelop; necessita analitzar els fitxers d'origen. Això succeeix en segon pla per a tots els fitxers que formen part dels projectes a la sessió actual després d'iniciar el &kdevelop;, així com després de deixar d'escriure per una fracció de segon (el retard es pot configurar).</para
+> per a obrir manualment una llista de complecions. En general, per tal que funcioni la compleció automàtica, el &kdevelop; necessita analitzar els fitxers d'origen. Això succeeix en segon pla per a tots els fitxers que formen part dels projectes a la sessió actual després d'iniciar el &kdevelop;, així com després de deixar d'escriure per una fracció de segon (el retard es pot configurar).</para
 ></note
 ></para>
 <para
 ><note
 ><para
->El &kdevelop; només analitzarà els fitxers que consideri codi font, segons el que determina el tipus MIME del fitxer. Aquest tipus no s'estableix abans de la primera vegada que es desa un fitxer; en conseqüència, la creació d'un nou fitxer i començar a escriure codi no donarà lloc a analitzar per a la compleció automàtica fins després que es desi per primera vegada.</para
+>El &kdevelop; només analitzarà els fitxers que consideri codi font, segons el que determina el tipus MIME del fitxer. Aquest tipus no s'estableix abans de la primera vegada que es desa un fitxer; en conseqüència, la creació d'un fitxer nou i començar a escriure codi no donarà lloc a analitzar per a la compleció automàtica fins després que es desi per primera vegada.</para
 ></note
 ></para>
 <para
 ><note
 ><para
->Com en la nota anterior, perquè funcioni la compleció automàtica, el &kdevelop; ha de ser capaç de trobar les declaracions en els fitxers de capçalera. Per a això, cerca en un nombre de camins predeterminats. Si no els troba automàticament, se subratllarà en vermell el nom d'un fitxer de capçalera; en aquest cas, feu clic dret sobre seu per indicar explícitament al &kdevelop; on trobar aquests fitxers i la informació que proporcionen.</para
+>Com en la nota anterior, perquè funcioni la compleció automàtica, el &kdevelop; ha de ser capaç de trobar les declaracions en els fitxers de capçalera. Per a això, cerca en un nombre de camins predeterminats. Si no els troba automàticament, se subratllarà en vermell el nom d'un fitxer de capçalera; en aquest cas, feu clic dret sobre seu per a indicar explícitament al &kdevelop; on trobar aquests fitxers i la informació que proporcionen.</para
 ></note
 ></para>
 <para
@@ -1243,13 +1243,13 @@ void foo()
 ><title
 >Afegir classes noves i implementar funcions de membre</title>
 <para
->El &kdevelop; inclou un assistent per afegir classes noves. El procediment es descriu en <link linkend="creating-a-new-class"
+>El &kdevelop; inclou un assistent per a afegir classes noves. El procediment es descriu en <link linkend="creating-a-new-class"
 >Crear una classe nova</link
 >. Una classe de C++ simple es pot crear escollint la plantilla de C++ bàsic des de la categoria <filename
 >Classe</filename
 >. En l'assistent, podem triar algunes funcions de membre predefinides, &pex;, un constructor buit, un constructor de còpia i un destructor. </para>
 <para
->Després de completar l'assistent, els fitxers nous seran creats i s'obriran a l'editor. El fitxer de capçalera ja conté guàrdies «include» i la nova classe conté totes les funcions de membre que hem seleccionat. Els dos passos següents serien documentar la classe, les seves funcions de membre i implementar-les. Més endavant parlarem sobre documentar les classes i les funcions. Per implementar les funcions especials que ja hem afegit, simplement aneu a la pestanya <guilabel
+>Després de completar l'assistent, els fitxers nous seran creats i s'obriran a l'editor. El fitxer de capçalera ja conté guàrdies «include» i la classe nova conté totes les funcions de membre que hem seleccionat. Els dos passos següents serien documentar la classe, les seves funcions de membre i implementar-les. Més endavant parlarem sobre documentar les classes i les funcions. Per a implementar les funcions especials que ja hem afegit, simplement aneu a la pestanya <guilabel
 >bus.cpp</guilabel
 > on ja es proporciona l'esquelet de les funcions:</para>
 <para>
@@ -1272,7 +1272,7 @@ void foo()
 </screenshot
 ></para>
 <para
->Per afegir noves funcions de membre, torneu a la pestanya <guilabel
+>Per a afegir funcions noves de membres, torneu a la pestanya <guilabel
 >bus.h</guilabel
 > i afegiu-hi el nom d'una funció. Per exemple, afegirem això:</para>
 <para>
@@ -1305,7 +1305,7 @@ void foo()
 >&Ctrl;&Alt;<keycap
 >S</keycap
 ></keycombo
->. Això eliminarà el codi entre claus del fitxer de capçalera (i el substituirà per un punt i coma si és necessari per posar fi a la declaració de la funció) i es mourà al fitxer d'origen:</para>
+>. Això eliminarà el codi entre claus del fitxer de capçalera (i el substituirà per un punt i coma si és necessari per a posar fi a la declaració de la funció) i es mourà al fitxer d'origen:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -1330,7 +1330,7 @@ void foo()
 >students</varname
 > probablement serà una variable de membre de la classe <varname
 >Bus</varname
->, però que encara no l'he afegit. Tingueu en compte també com el &kdevelop; la subratlla per deixar clar que no sap res sobre la variable. Però aquest problema es pot resoldre: Fent clic al nom de la variable s'obté el següent consell:</para>
+>, però que encara no l'he afegit. Tingueu en compte també com el &kdevelop; la subratlla per a deixar clar que no sap res sobre la variable. Però aquest problema es pot resoldre: Fent clic al nom de la variable s'obté el següent consell:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -1380,7 +1380,7 @@ void foo()
 </screenshot
 ></para>
 <para
->Val la pena assenyalar que el &kdevelop; extreu el tipus de la variable a declarar de l'expressió emprada per inicialitzar-la. Per exemple, si haguéssim escrit l'addició de la següent manera bastant dubtosa, hauria suggerit declarar la variable com a tipus <varname
+>Val la pena assenyalar que el &kdevelop; extreu el tipus de la variable a declarar de l'expressió emprada per a inicialitzar-la. Per exemple, si haguéssim escrit l'addició de la següent manera bastant dubtosa, hauria suggerit declarar la variable com a tipus <varname
 >double</varname
 >:</para>
 <para>
@@ -1409,7 +1409,7 @@ void foo()
 ><guimenuitem
 >Mou a l'origen</guimenuitem
 ></menuchoice
-> no sempre insereix la nova funció de membre on probablement voleu. Per exemple, és possible que vulgueu que sigui marcada com a <varname
+> no sempre insereix la funció nova de membre on probablement voleu. Per exemple, és possible que vulgueu que sigui marcada com a <varname
 >inline</varname
 > i posar-la a la part inferior del fitxer de capçalera. En un cas com aquest, escriviu la declaració i comenceu a escriure la definició de la funció de la següent manera:</para>
 <para>
@@ -1469,9 +1469,9 @@ void foo()
 ><title
 >Documentar les declaracions</title>
 <para
->El bon codi està ben documentat, tant en l'àmbit de la implementació dels algoritmes dins de les funcions com en l'àmbit de la interfície -&ead;, les classes, les funcions (de membre i globals) i les variables (de membre i globals)- s'han de documentar per explicar les seves intencions, possibles valors dels arguments, condicions prèvies i posteriors, &etc; Pel que fa a la documentació de la interfície, el <ulink url="http://www.doxygen.org"
+>El bon codi està ben documentat, tant en l'àmbit de la implementació dels algoritmes dins de les funcions com en l'àmbit de la interfície -&ead;, les classes, les funcions (de membre i globals) i les variables (de membre i globals)- s'han de documentar per a explicar les seves intencions, possibles valors dels arguments, condicions prèvies i posteriors, &etc; Pel que fa a la documentació de la interfície, el <ulink url="http://www.doxygen.org"
 >doxygen</ulink
-> s'ha convertit en l'estàndard de facto per donar format als comentaris que després es podran extreure i visualitzar en pàgines de cerca.</para>
+> s'ha convertit en l'estàndard de facto per a donar format als comentaris que després es podran extreure i visualitzar en pàgines de cerca.</para>
 <para
 >El &kdevelop; implementa aquest estil de comentaris proporcionant una drecera per a generar el marc de treball dels comentaris que documenten una funció de classe o funció de membre. Per exemple, suposeu que ja heu escrit el codi:</para>
 <para
@@ -1537,7 +1537,7 @@ void foo()
 </screenshot
 ></para>
 <para
->Mentre l'editor resti dins del comentari, el text del comentari serà ressaltat en verd (el ressaltat desapareixerà una vegada moveu el cursor fora del comentari). En arribar al final d'una línia, premeu &Intro; i el &kdevelop; iniciarà automàticament una nova línia que començarà amb un asterisc i posarà al cursor un caràcter de sagnat.</para>
+>Mentre l'editor resti dins del comentari, el text del comentari serà ressaltat en verd (el ressaltat desapareixerà una vegada moveu el cursor fora del comentari). En arribar al final d'una línia, premeu &Intro; i el &kdevelop; iniciarà automàticament una línia nova que començarà amb un asterisc i posarà al cursor un caràcter de sagnat.</para>
 <para
 >Ara documentarem la funció de membre, un cop més, posant el cursor a la línia de la declaració i seleccionant <menuchoice
 ><guimenu
@@ -1570,7 +1570,7 @@ void foo()
 </screenshot
 ></para>
 <para
->Una vegada més, el &kdevelop; generarà automàticament l'esquelet d'un comentari, inclosa la documentació per a la funció «itself», així com el seu tipus de retorn. En el cas actual, el nom de la funció és força autoexplicatiu, però moltes vegades els arguments de la funció poden no ser i han de ser documentats de manera individual. Per il·lustrar-ho, considerem una funció una mica més interessant i el comentari que generarà automàticament el &kdevelop;:</para>
+>Una vegada més, el &kdevelop; generarà automàticament l'esquelet d'un comentari, inclosa la documentació per a la funció «itself», així com el seu tipus de retorn. En el cas actual, el nom de la funció és força autoexplicatiu, però moltes vegades els arguments de la funció poden no ser i han de ser documentats de manera individual. Per a il·lustrar-ho, considerem una funció una mica més interessant i el comentari que generarà automàticament el &kdevelop;:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -1642,7 +1642,7 @@ void foo()
 ></menuchoice
 > (o fent clic dret sobre el nom i seleccionant <guilabel
 >Canvia Bus::remove_students</guilabel
->). Això mostrarà un diàleg on podreu introduir el nou nom de la funció i on també podreu veure tots els llocs on s'utilitza en realitat la funció:</para>
+>). Això mostrarà un diàleg on podreu introduir el nom nou de la funció i on també podreu veure tots els llocs on s'utilitza en realitat la funció:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -1687,7 +1687,7 @@ void foo()
 > <imageobject
 > <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
 > </inlinemediaobject
-> per afegir un retall de codi, per obtenir un diàleg com el següent:</para>
+> per a afegir un retall de codi, per a obtenir un diàleg com el següent:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -1714,7 +1714,7 @@ void foo()
 ></note
 ></para>
 <para
->Per emprar un retall ja definit, quan esteu editant codi, simplement escriviu el nom del retall com ho faríeu amb qualsevol altra nom de funció o de variable. Aquest nom restarà disponible per a compleció automàtica -el que significa que no hi ha cap problema en l'ús d'un nom llarg i descriptiu per a un fragment de codi com l'anterior- i quan accepteu el suggeriment per a la compleció automàtica (&pex;, només prement la tecla &Intro;), la part ja introduïda del nom del retall serà substituïda per l'expansió completa del retall i serà sagnat adequadament:</para>
+>Per a emprar un retall ja definit, quan esteu editant codi, simplement escriviu el nom del retall com ho faríeu amb qualsevol altra nom de funció o de variable. Aquest nom restarà disponible per a compleció automàtica -el que significa que no hi ha cap problema en l'ús d'un nom llarg i descriptiu per a un fragment de codi com l'anterior- i quan accepteu el suggeriment per a la compleció automàtica (&pex;, només prement la tecla &Intro;), la part ja introduïda del nom del retall serà substituïda per l'expansió completa del retall i serà sagnat adequadament:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -1737,7 +1737,7 @@ void foo()
 <para
 >Tingueu en compte que perquè això funcioni, la vista d'eina <guilabel
 >Retalls</guilabel
-> no s'haurà d'obrir o estar visible: només es necessita sempre la vista d'eina per a definir retalls nous. Una manera alternativa, encara que menys còmoda, per expandir un retall és simplement fer clic en la vista d'eina respectiva.</para>
+> no s'haurà d'obrir o estar visible: només es necessita sempre la vista d'eina per a definir retalls nous. Una manera alternativa, encara que menys còmoda, per a expandir un retall és simplement fer clic en la vista d'eina respectiva.</para>
 <para
 ><note
 ><para
@@ -1833,7 +1833,7 @@ void foo()
 >step-32.cc</varname
 > i <varname
 >step-1.cc</varname
->). En fer clic al signe menys en vermell es tancarà la pestanya per al fitxer corresponent. Potser el més important, en fer clic al botó anomenat corresponent us permet tancar tot el treball creat alhora (&ead;, per tancar tots els fitxers oberts). La importància de tancar un conjunt de treball, però, resideix en què no es limita a tancar tots els fitxers, sinó que realment desa el conjunt de treball i n'obre un de nou buit. Això es pot veure a continuació:</para>
+>). En fer clic al signe menys en vermell es tancarà la pestanya per al fitxer corresponent. Potser el més important, en fer clic al botó anomenat corresponent us permet tancar tot el treball creat alhora (&ead;, per a tancar tots els fitxers oberts). La importància de tancar un conjunt de treball, però, resideix en el fet que no es limita a tancar tots els fitxers, sinó que realment desa el conjunt de treball i n'obre un de nou buit. Això es pot veure a continuació:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -1942,7 +1942,7 @@ void foo()
 ></keycombo
 ></entry>
     <entry
->Obertura ràpida universal: escriure quelcom (nom de fitxer, nom de la classe, nom de la funció) i obtindreu una llista de tot el que coincideixi per triar.</entry>
+>Obertura ràpida universal: escriure quelcom (nom de fitxer, nom de la classe, nom de la funció) i obtindreu una llista de tot el que coincideixi per a triar.</entry>
   </row>
   <row>
     <entry
@@ -2156,12 +2156,12 @@ void foo()
 ><title
 >Generar el codi amb plantilles</title>
 <para
->El &kdevelop; utilitza plantilles per a la generació dels fitxers de codi font i per evitar escriure codi repetitiu. </para>
+>El &kdevelop; utilitza plantilles per a la generació dels fitxers de codi font i per a evitar escriure codi repetitiu. </para>
 <sect1 id="creating-a-new-class"
 ><title
 >Crear una classe nova</title>
 <para
->L'ús més comú per a la generació de codi probablement és escrivint noves classes. Per crear una nova classe en un projecte existent, feu clic dret en una carpeta de projecte i escolliu <guilabel
+>L'ús més comú per a la generació de codi probablement és escrivint classes noves. Per a crear una classe nova en un projecte existent, feu clic dret en una carpeta de projecte i escolliu <guilabel
 >Crea des d'una plantilla...</guilabel
 >. El mateix diàleg es pot iniciar des del menú fent clic a <menuchoice
 ><guimenu
@@ -2188,11 +2188,11 @@ void foo()
 </screenshot>
 </para>
 <para
->Primer heu d'especificar un identificador per a la nova classe. Això pot ser un nom únic (com <varname
+>Primer heu d'especificar un identificador per a la classe nova. Això pot ser un nom únic (com <varname
 >Bus</varname
 >) o un identificador complet amb espais de nom (com <varname
 >Transportation::Bus</varname
->). En aquest últim cas, el &kdevelop; analitzarà l'identificador i separarà correctament els espais de nom del nom real. A la mateixa pàgina, podeu afegir classes base per a la nova classe. Possiblement us adonareu que algunes plantilles trien una classe base pel seu compte, sou lliure d'eliminar i/o afegir altres bases. Aquí heu d'escriure la declaració d'herència completa, la qual és dependent del llenguatge, com <varname
+>). En aquest últim cas, el &kdevelop; analitzarà l'identificador i separarà correctament els espais de nom del nom real. A la mateixa pàgina, podeu afegir classes base per a la classe nova. Possiblement us adonareu que algunes plantilles trien una classe base pel seu compte, sou lliure d'eliminar i/o afegir altres bases. Aquí heu d'escriure la declaració d'herència completa, la qual és dependent del llenguatge, com <varname
 >public QObject</varname
 > per a C++, <varname
 >extends AlgunaClasse</varname
@@ -2213,11 +2213,11 @@ void foo()
 </screenshot>
 </para>
 <para
->A la pàgina següent, se us ofereix una selecció dels mètodes virtuals des de totes les classes heretades, així com alguns constructors, destructors i operadors per omissió. En marcar la casella de selecció situada al costat d'una signatura de mètode s'implementarà aquest mètode en la nova classe. </para>
+>A la pàgina següent, se us ofereix una selecció dels mètodes virtuals des de totes les classes heretades, així com alguns constructors, destructors i operadors per omissió. En marcar la casella de selecció situada al costat d'una signatura de mètode s'implementarà aquest mètode en la classe nova. </para>
 <para
 >En fer clic a <guilabel
 >Següent</guilabel
-> apareixerà una pàgina on podreu afegir membres a una classe. Depenent de la plantilla seleccionada, aquests podran aparèixer en la nova classe com a variables de membre, o la plantilla podrà crear propietats pels seus respectius «setters» i «getters». En un llenguatge on s'han de declarar els tipus de les variables, com ara C++, haureu d'especificar el tipus i el nom del membre, com ara <varname
+> apareixerà una pàgina on podreu afegir membres a una classe. Depenent de la plantilla seleccionada, aquests podran aparèixer en la classe nova com a variables de membre, o la plantilla podrà crear propietats pels seus respectius «setters» i «getters». En un llenguatge on s'han de declarar els tipus de les variables, com ara C++, haureu d'especificar el tipus i el nom del membre, com ara <varname
 >int número</varname
 > o <varname
 >QString nom</varname
@@ -2238,11 +2238,11 @@ void foo()
 </screenshot>
 </para>
 <para
->En les següents pàgines, podeu triar una llicència per a la nova classe, establiu qualsevol de les opcions personalitzades que necessiteu per a la plantilla seleccionada, i configureu les ubicacions de sortida per a tots els fitxers generats. En fer clic a <guilabel
+>En les següents pàgines, podeu triar una llicència per a la classe nova, establiu qualsevol de les opcions personalitzades que necessiteu per a la plantilla seleccionada, i configureu les ubicacions de sortida per a tots els fitxers generats. En fer clic a <guilabel
 >Finalitza</guilabel
->, completareu l'assistent i es crearà la nova classe. Els fitxers generats seran oberts a l'editor, així que podreu començar a afegir codi de seguida. </para>
+>, completareu l'assistent i es crearà la classe nova. Els fitxers generats seran oberts a l'editor, així que podreu començar a afegir codi de seguida. </para>
 <para
->Després de crear una nova classe de C++, se us donarà l'opció d'afegir la classe a l'objectiu d'un projecte. Trieu l'objectiu des de la pàgina del diàleg, o descarteu la pàgina i afegiu els fitxers a un objectiu de forma manual. </para>
+>Després de crear una classe nova de C++, se us donarà l'opció d'afegir la classe a l'objectiu d'un projecte. Trieu l'objectiu des de la pàgina del diàleg, o descarteu la pàgina i afegiu els fitxers a un objectiu de forma manual. </para>
 <para
 >Si heu triat la plantilla <filename
 >Qt Object</filename
@@ -2269,7 +2269,7 @@ void foo()
 ><title
 >Crear una prova unitària nova</title>
 <para
->Encara que la majoria dels marcs de treball per a proves requereixen que cada prova sigui també una classe, el &kdevelop; inclou un mètode per a simplificar la creació de les proves unitàries. Per crear una nova prova, feu clic dret en una carpeta de projecte i trieu <guilabel
+>Encara que la majoria dels marcs de treball per a proves requereixen que cada prova sigui també una classe, el &kdevelop; inclou un mètode per a simplificar la creació de les proves unitàries. Per a crear una prova nova, feu clic dret en una carpeta de projecte i trieu <guilabel
 >Crea des d'una plantilla...</guilabel
 >. A la pàgina per a la selecció de la plantilla, trieu <filename
 >Prova</filename
@@ -2305,7 +2305,7 @@ void foo()
 ><guimenuitem
 >Nou des d'una plantilla...</guimenuitem
 ></menuchoice
->, també podreu baixar plantilles de fitxer addicionals fent clic al botó <guilabel
+>, també podreu baixar plantilles de fitxers addicionals fent clic al botó <guilabel
 >Obtén més plantilles...</guilabel
 >. Aquest obrirà un diàleg «Obtén les novetats candents», des d'on podreu instal·lar plantilles addicionals, així com actualitzar-les o eliminar-les. També hi ha un mòdul de configuració per a les plantilles, al qual es pot arribar fent clic a <menuchoice
 ><guimenu
@@ -2315,7 +2315,7 @@ void foo()
 ><guimenuitem
 >Plantilles</guimenuitem
 ></menuchoice
->. A partir d'aquí, podreu gestionar tant les plantilles de fitxer (s'ha explicat anteriorment) com les plantilles de projecte (emprades per a la creació de projectes nous). </para>
+>. A partir d'aquí, podreu gestionar tant les plantilles de fitxers (s'ha explicat anteriorment) com les plantilles de projectes (emprades per a la creació de projectes nous). </para>
 <para>
 <screenshot>
 <screeninfo
@@ -2336,7 +2336,7 @@ void foo()
 >guia d'aprenentatge</ulink
 > i un llarg <ulink url="https://techbase.kde.org/Projects/KDevelop4/File_template_specification"
 >document d'especificació</ulink
-> per ajudar-vos. Per a copiar una plantilla instal·lada, obriu el gestor de plantilles fent clic a <menuchoice
+> per a ajudar-vos. Per a copiar una plantilla instal·lada, obriu el gestor de plantilles fent clic a <menuchoice
 ><guimenu
 >Arranjament</guimenu
 ><guisubmenu
@@ -2348,8 +2348,8 @@ void foo()
 >Extreu la plantilla</guilabel
 >. Seleccioneu una carpeta de destinació, feu clic a <guilabel
 >D'acord</guilabel
->, i el contingut de la plantilla s'extraurà a la carpeta seleccionada. Ara podeu editar la plantilla obrint els fitxers extrets i modificant-los. Una vegada acabeu, podreu importar la nova plantilla al &kdevelop; obrint el gestor de plantilles, activant la pestanya corresponent (sigui <guilabel
->Plantilles de projecte</guilabel
+>, i el contingut de la plantilla s'extraurà a la carpeta seleccionada. Ara podeu editar la plantilla obrint els fitxers extrets i modificant-los. Una vegada acabeu, podreu importar la plantilla nova al &kdevelop; obrint el gestor de plantilles, activant la pestanya corresponent (siguin <guilabel
+>Plantilles de projectes</guilabel
 > o <guilabel
 >Plantilles de fitxers</guilabel
 >) i feu clic a <guilabel
@@ -2365,7 +2365,7 @@ void foo()
 </para>
 <para
 >Si voleu escriure una plantilla des de zero, podeu començar amb una plantilla de classe per a C++ de mostra <link linkend="creating-projects-from-scratch"
->creant un nou projecte</link
+>creant un projecte nou</link
 > i seleccionant <filename
 >Plantilla de classe en C++</filename
 > a la categoria <filename
@@ -2580,7 +2580,7 @@ void foo()
 >step-32</replaceable
 > del projecte <replaceable
 >1.step-32</replaceable
-> per assegurar-me que tant la biblioteca base com el programa de l'aplicació s'han tornat a compilar i estan al dia abans d'executar realment el programa. Quan hi arribeu, és possible que també vulgueu configurar un llançament per a la depuració, feu clic al símbol <guilabel
+> per a assegurar-me que tant la biblioteca base com el programa de l'aplicació s'han tornat a compilar i estan al dia abans d'executar realment el programa. Quan hi arribeu, és possible que també vulgueu configurar un llançament per a la depuració, feu clic al símbol <guilabel
 >Depuració</guilabel
 > i afegiu el nom del programa depurador. Si aquest és el depurador per omissió del sistema (&pex;, el <application
 >gdb</application
@@ -2615,7 +2615,7 @@ void foo()
 >&Maj;<keycap
 >F9</keycap
 ></keycombo
->) i el vostre programa s'hauria d'executar en una finestra secundària separada del &kdevelop;. La imatge de dalt mostra el resultat: La nova subfinestra de l'eina <guilabel
+>) i el vostre programa s'hauria d'executar en una finestra secundària separada del &kdevelop;. La imatge de dalt mostra el resultat: La subfinestra nova de l'eina <guilabel
 >Executa</guilabel
 > a la part inferior mostra la sortida del programa que s'està executant, en aquest cas del programa <replaceable
 >step-32</replaceable
@@ -2633,7 +2633,7 @@ void foo()
 ><guimenuitem
 >Configuració de llançament actual</guimenuitem
 ></menuchoice
->. No obstant això, existeix una manera no evident per editar el nom d'una configuració: en el diàleg que s'obté quan seleccioneu <menuchoice
+>. No obstant això, existeix una manera no evident per a editar el nom d'una configuració: en el diàleg que s'obté quan seleccioneu <menuchoice
 ><guimenu
 >Executa</guimenu
 ><guimenuitem
@@ -2833,7 +2833,7 @@ void foo()
 <para
 >A vegades, un vol depurar un programa que ja s'està executant. Un escenari per a això és la depuració de programes paral·lels utilitzant <ulink url="https://computing.llnl.gov/tutorials/mpi/"
 >MPI</ulink
->, o per a la depuració d'un procés en segon pla de llarga durada. Per fer-ho, aneu a l'element de menú <menuchoice
+>, o per a la depuració d'un procés en segon pla de llarga durada. Per a fer-ho, aneu a l'element de menú <menuchoice
 ><guimenu
 >Executa</guimenu
 ><guimenuitem
@@ -3001,11 +3001,11 @@ void foo()
 >step-32.prm</varname
 > pel fet que els canvis en aquests fitxers no tenen res a veure amb els altres que vaig fer per a aquest projecte i encara no vull cometre'ls (posteriorment puc voler fer-ho en una altra comissió). Després de revisar els canvis podeu introduir un missatge de comissió en el quadre de text i prémer <guilabel
 >Comet</guilabel
-> a la dreta per enviar-ho tot. </para
+> a la dreta per a enviar-ho tot. </para
 ></listitem>
 <listitem
 ><para
->Igual que amb visualitzar les diferències, si voleu entregar un sol fitxer, també podeu fer clic dret a la finestra de l'editor per obtenir l'element de menú <menuchoice
+>Igual que amb visualitzar les diferències, si voleu entregar un sol fitxer, també podeu fer clic dret a la finestra de l'editor per a obtenir l'element de menú <menuchoice
 ><guimenu
 >Subversion</guimenu
 ><guimenuitem
@@ -3040,7 +3040,7 @@ void foo()
 ><title
 >Personalitzar el sagnat del codi</title>
 <para
->Molts de nosaltres ens agrada tenir el codi amb format d'una manera particular. Molts projectes també imposen un estil de sagnat en particular. Tampoc té perquè coincidir amb l'estil de sagnat per omissió del &kdevelop;. No obstant això, es pot personalitzar: Aneu a l'element de menú <menuchoice
+>Molts de nosaltres ens agrada tenir el codi amb format d'una manera particular. Molts projectes també imposen un estil de sagnat en particular. Tampoc té per què coincidir amb l'estil de sagnat per omissió del &kdevelop;. No obstant això, es pot personalitzar: Aneu a l'element de menú <menuchoice
 ><guimenu
 >Arranjament</guimenu
 ><guimenuitem
@@ -3092,7 +3092,7 @@ void foo()
 ><para
 >Amb el <guilabel
 >&kdevelop; 4.2.2</guilabel
->, podeu crear un nou estil per a un tipus MIME en particular (&pex;, pels fitxers de capçalera de C++), però aquest estil no es mostrarà a la llista de possibles estils per a altres tipus MIME (&pex;, pels fitxers de codi font de C++) tot i que es dona per fet que seria útil emprar el mateix estil per a ambdós tipus de fitxers. Per tant, haureu de definir l'estil dues vegades, un per a les capçaleres i un altre pels fitxers d'origen. Això ha estat informat reportat com a l'<ulink url="https://bugs.kde.org/show_bug.cgi?id=272335"
+>, podeu crear un estil nou per a un tipus MIME en particular (&pex;, pels fitxers de capçalera de C++), però aquest estil no es mostrarà a la llista de possibles estils per a altres tipus MIME (&pex;, pels fitxers de codi font de C++) tot i que es dona per fet que seria útil emprar el mateix estil per a ambdós tipus de fitxers. Per tant, haureu de definir l'estil dues vegades, un per a les capçaleres i un altre pels fitxers d'origen. Això ha estat informat reportat com a l'<ulink url="https://bugs.kde.org/show_bug.cgi?id=272335"
 >error 272335 del &kdevelop;</ulink
 >.</para
 ></note
@@ -3112,7 +3112,7 @@ void foo()
 ></menuchoice
 >. A la part superior del diàleg podeu introduir una paraula de cerca i només es mostraran les ordres que coincideixin. Després podreu editar la combinació de tecles que s'associïn amb aquesta ordre.</para>
 <para
->Dues que he trobat molt útils per canviar són establir <guilabel
+>Dues que he trobat molt útils per a canviar són establir <guilabel
 >Alinea</guilabel
 > a la tecla &Tab; (moltes persones no solen introduir les tabulacions a mà i més aviat prefereixen que l'editor decideixi la disposició del codi, amb la drecera canviada, el fet de prémer &Tab; farà que el &kdevelop; sagni/anul·li el sagnat/alineï el codi). La segona és posar <guilabel
 >Commuta el punt d'interrupció</guilabel
@@ -3186,7 +3186,7 @@ void foo()
 <para
 >Aquesta informació de context prové de diversos connectors d'implementació del llenguatge, que es poden utilitzar després de desar un determinat fitxer (així que podeu comprovar el tipus de fitxer i emprar la implementació pel llenguatge correcte).</para>
 <para
->La compleció del &kdevelop; està preparada per aparèixer a mesura que escriviu, immediatament, gairebé a tot arreu on possiblement es pot completar quelcom. Això es pot configurar a <menuchoice
+>La compleció del &kdevelop; està preparada per a aparèixer a mesura que escriviu, immediatament, gairebé a tot arreu on possiblement es pot completar quelcom. Això es pot configurar a <menuchoice
 ><guimenu
 >Configuració</guimenu
 ><guisubmenu
