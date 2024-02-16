@@ -2,146 +2,137 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2009-05-26 08:09+0800\n"
-"Last-Translator: Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv "
-"dot tw>\n"
-"Language-Team: Chinese Traditional <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-02-15 17:22+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Lokalize 24.01.95\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Frank Weng (a.k.a. Franklin)"
+msgstr "Frank Weng (a.k.a. Franklin), Kisaragi Hiu"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "franklin@goodhorse.idv.tw"
+msgstr "franklin@goodhorse.idv.tw, mail@kisaragi-hiu.com"
 
 #: qmakebuilddirchooser.cpp:124
 #, kde-format
 msgid "Please specify path to QMake executable."
-msgstr ""
+msgstr "請指定 QMake 執行檔的路徑。"
 
 #: qmakebuilddirchooser.cpp:129
-#, fuzzy, kde-format
-#| msgid "QMake project files"
+#, kde-format
 msgid "QMake executable \"%1\" does not exist."
-msgstr "QMake 專案檔"
+msgstr "QMake 執行檔 \"%1\" 不存在。"
 
 #: qmakebuilddirchooser.cpp:132
-#, fuzzy, kde-format
-#| msgid "QMake project files"
+#, kde-format
 msgid "QMake executable is not a file."
-msgstr "QMake 專案檔"
+msgstr "QMake 執行檔不是檔案。"
 
 #: qmakebuilddirchooser.cpp:135
-#, fuzzy, kde-format
-#| msgid "QMake project files"
+#, kde-format
 msgid "QMake executable is not executable."
-msgstr "QMake 專案檔"
+msgstr "QMake 執行檔沒有執行權限。"
 
 #: qmakebuilddirchooser.cpp:140
-#, fuzzy, kde-format
-#| msgid "QMake project files"
+#, kde-format
 msgid "QMake executable cannot be queried for variables."
-msgstr "QMake 專案檔"
+msgstr "QMake 執行檔無法用來詢問變數。"
 
 #: qmakebuilddirchooser.cpp:143
 #, kde-format
 msgid "No basic MkSpec file could be found for the given QMake executable."
-msgstr ""
+msgstr "找不到指定 QMake 執行檔的基礎 MkSpec 檔案。"
 
 #: qmakebuilddirchooser.cpp:150
 #, kde-format
 msgid "Please specify a build folder."
-msgstr ""
+msgstr "請指定建構資料夾。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: qmakebuilddirchooser.ui:23
-#, fuzzy, kde-format
-#| msgid "QMake project files"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "QMake &executable:"
-msgstr "QMake 專案檔"
+msgstr "QMake 執行檔(&E)："
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qmakebuilddirchooser.ui:46
-#, fuzzy, kde-format
-#| msgid "Configure error"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Build directory:"
-msgstr "設定錯誤"
+msgstr "編譯目錄(&B)："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qmakebuilddirchooser.ui:62
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Install to (target.path):"
-msgstr ""
+msgstr "安裝到 (target.path)(&I)："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qmakebuilddirchooser.ui:85
 #, kde-format
 msgctxt "@labal:listbox"
 msgid "Build &type:"
-msgstr ""
+msgstr "編譯型態(&T)："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
 #: qmakebuilddirchooser.ui:115
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "(Use default from .pro file)"
-msgstr ""
+msgstr "（使用來自 .pro 檔案的預設）"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: qmakebuilddirchooser.ui:123
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Extra arguments:"
-msgstr ""
+msgstr "額外的參數："
 
 #: qmakebuilddirchooserdialog.cpp:22
-#, fuzzy, kde-format
-#| msgid "Configure error"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory"
-msgstr "設定錯誤"
+msgstr "設定編譯目錄"
 
 #: qmakejob.cpp:33
-#, fuzzy, kde-format
-#| msgid "QMake: %1"
+#, kde-format
 msgid "Run QMake in %1"
-msgstr "QMake：%1"
+msgstr "在 %1 裡執行 QMake"
 
 #: qmakejob.cpp:137
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
-msgstr ""
+msgstr "*** 已結束，返回碼為：%1 ***"
 
 #: qmakejob.cpp:139
 #, kde-format
 msgid "*** Process aborted ***"
-msgstr ""
+msgstr "*** 行程已中止 ***"
 
 #: qmakejob.cpp:141
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
-msgstr ""
+msgstr "*** 已崩潰，返回碼為：%1 ***"
 
 #: qmakemanager.cpp:75
-#, fuzzy, kde-format
-#| msgid "QMake: %1"
+#, kde-format
 msgctxt "@action"
 msgid "Run QMake"
-msgstr "QMake：%1"
+msgstr "執行 QMake"

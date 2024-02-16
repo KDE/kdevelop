@@ -17,28 +17,29 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-01-10 14:24+0900\n"
+"PO-Revision-Date: 2024-02-15 17:28+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.01.95\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
-"Qi Liang, Wang Jian, Lee Song Chen, Xiong Jiang, Frank Weng (a.k.a. Franklin)"
+"Qi Liang, Wang Jian, Lee Song Chen, Xiong Jiang, Frank Weng (a.k.a. "
+"Franklin), Kisaragi Hiu"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 "cavendish@eyou.com, lark@linux.net.cn, leesongchen@263.net, jxiong@offtopic."
-"org, franklin@goodhorse.idv.tw"
+"org, franklin@goodhorse.idv.tw, mail@kisaragi-hiu.com"
 
 #. i18n: ectx: Menu (session)
 #: kdevelopui.rc:6
@@ -63,11 +64,10 @@ msgstr "執行(&R)"
 
 #. i18n: ectx: Menu (debug_core_menu)
 #: kdevelopui.rc:39
-#, fuzzy, kde-format
-#| msgid "Examine Core File..."
+#, kde-format
 msgctxt "@title:menu"
 msgid "Examine Core File"
-msgstr "檢視 Core 檔..."
+msgstr "檢視 Core 檔"
 
 #. i18n: ectx: Menu (debug_attach_menu)
 #: kdevelopui.rc:43
@@ -109,14 +109,14 @@ msgstr "代碼"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current File With"
-msgstr ""
+msgstr "使用工具分析目前檔案"
 
 #. i18n: ectx: Menu (analyze_project)
 #: kdevelopui.rc:119
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current Project With"
-msgstr ""
+msgstr "使用工具分析目前專案"
 
 #. i18n: ectx: Menu (window)
 #: kdevelopui.rc:128
@@ -151,10 +151,9 @@ msgid "Code"
 msgstr "程式碼"
 
 #: kdevideextension.cpp:47
-#, fuzzy, kde-format
-#| msgid "KDevelop4 Project Files"
+#, kde-format
 msgid "KDevelop Project Files"
-msgstr "KDevelop 4 專案檔"
+msgstr "KDevelop 專案檔"
 
 #: main.cpp:85
 #, kde-format
@@ -162,16 +161,14 @@ msgid "Could not open %1"
 msgstr "無法開啟檔案 %1"
 
 #: main.cpp:219
-#, fuzzy, kde-format
-#| msgid "Could not open file %1."
+#, kde-format
 msgid "Could not open file '%1'."
-msgstr "無法開啟檔案 %1。"
+msgstr "無法開啟檔案 '%1'。"
 
 #: main.cpp:242
-#, fuzzy, kde-format
-#| msgid "Could not read project file: %1"
+#, kde-format
 msgid "Could not open project '%1': %2"
-msgstr "無法讀取專案檔： %1 "
+msgstr "無法開啟專案 '%1'：%2"
 
 #: main.cpp:273
 #, kde-format
@@ -179,16 +176,13 @@ msgid "Select the session to open the document in"
 msgstr "選擇您要開啟文件的工作階段"
 
 #: main.cpp:300
-#, fuzzy, kde-format
-#| msgid ""
-#| "Cannot open unknown session %1. See --sessions switch for available "
-#| "sessions or use -cs to create a new one."
+#, kde-format
 msgid ""
 "Cannot open unknown session %1. See `--list-sessions` switch for available "
 "sessions or use `-n` to create a new one."
 msgstr ""
-"無法開啟未知的工作階段 %1。請用 --sessions 參數來看有哪些可用的工作階段，或是"
-"用 -cs 來建立新的。"
+"無法開啟未知的工作階段 %1。請用 `--list-sessions` 選項來檢視可用的工作階段，"
+"或是用 `-n` 來建立一個新的。"
 
 #: main.cpp:378
 #, kde-format
@@ -201,20 +195,19 @@ msgid "The KDevelop Integrated Development Environment"
 msgstr "KDevelop 整合開發環境"
 
 #: main.cpp:381
-#, fuzzy, kde-format
-#| msgid "Copyright 1999-2014, The KDevelop developers"
+#, kde-format
 msgid "Copyright 1999-%1, The KDevelop developers"
-msgstr "(C) 1999-2014，KDevelop 開發團隊"
+msgstr "版權所有 1999-%1，KDevelop 開發團隊"
 
 #: main.cpp:384
 #, kde-format
 msgid "Kevin Funk"
-msgstr ""
+msgstr "Kevin Funk"
 
 #: main.cpp:384
 #, kde-format
 msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
-msgstr ""
+msgstr "共同維護者、C++/Clang、QA、Windows 支援、效能、網站"
 
 #: main.cpp:385
 #, kde-format
@@ -222,10 +215,9 @@ msgid "Sven Brauch"
 msgstr "Sven Brauch"
 
 #: main.cpp:385
-#, fuzzy, kde-format
-#| msgid "Python Support, User Interface improvements"
+#, kde-format
 msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
-msgstr "Python 支援，使用者介面改進"
+msgstr "共同維護者、AppImage、Python 支援、使用者介面改善"
 
 #: main.cpp:386
 #, kde-format
@@ -233,10 +225,9 @@ msgid "Aleix Pol Gonzalez"
 msgstr "Aleix Pol Gonzalez"
 
 #: main.cpp:386
-#, fuzzy, kde-format
-#| msgid "Co-Maintainer, CMake Support, Run Support, Kross Support"
+#, kde-format
 msgid "CMake Support, Run Support, Kross Support"
-msgstr "協同維護者，CMake 支援，Run 支援，Kross 支援"
+msgstr "CMake 支援，Run 支援，Kross 支援"
 
 #: main.cpp:387
 #, kde-format
@@ -244,23 +235,20 @@ msgid "Milian Wolff"
 msgstr "Milian Wolff"
 
 #: main.cpp:387
-#, fuzzy, kde-format
-#| msgid ""
-#| "Co-Maintainer, Generic manager, Webdevelopment Plugins, Snippets, "
-#| "Performance"
+#, kde-format
 msgid ""
 "C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
-msgstr "協同維護者，一般管理員，Webdevelopment 外掛程式，片段，效能"
+msgstr "C++/Clang，一般管理員，Webdevelopment 外掛程式，片段，效能"
 
 #: main.cpp:388
 #, kde-format
 msgid "Olivier JG"
-msgstr ""
+msgstr "Olivier JG"
 
 #: main.cpp:388
 #, kde-format
 msgid "C++/Clang, DUChain, Bug Fixes"
-msgstr ""
+msgstr "C++/Clang、DUChain、錯誤修正"
 
 #: main.cpp:389
 #, kde-format
@@ -338,7 +326,7 @@ msgstr "GDB 整合，Webdevelopment 外掛程式"
 #: main.cpp:396
 #, kde-format
 msgid "Friedrich W. H. Kossebau"
-msgstr ""
+msgstr "Friedrich W. H. Kossebau"
 
 #: main.cpp:398
 #, kde-format
@@ -765,15 +753,12 @@ msgstr ""
 "您可以輸入工作階段的名稱或它的雜湊值。"
 
 #: main.cpp:473
-#, fuzzy, kde-format
-#| msgid ""
-#| "Open KDevelop with the given session.\n"
-#| "You can pass either hash or the name of the session."
+#, kde-format
 msgid ""
 "Delete the given session.\n"
 "You can pass either hash or the name of the session."
 msgstr ""
-"以指定的工作階段開啟 KDevelop。\n"
+"刪除指定的工作階段。\n"
 "您可以輸入工作階段的名稱或它的雜湊值。"
 
 #: main.cpp:477
@@ -792,10 +777,9 @@ msgid "List available sessions and quit."
 msgstr "列出可用的工作階段並離開。"
 
 #: main.cpp:483
-#, fuzzy, kde-format
-#| msgid "Open KDevelop and load the given project."
+#, kde-format
 msgid "Open KDevelop and fetch the project from the given <repo url>."
-msgstr "開啟 KDevelop 並載入指定的專案。"
+msgstr "開啟 KDevelop 並從指定的 <版本庫 URL> 抓取專案。"
 
 #: main.cpp:486
 #, kde-format
@@ -803,26 +787,24 @@ msgid ""
 "Open KDevelop and load the given project. <project> can be either a .kdev4 "
 "file or a directory path."
 msgstr ""
+"開啟 KDevelop 並載入指定專案。<project> 可以是一個 .kdev4 檔案或是一個目錄路"
+"徑。"
 
 #: main.cpp:489
-#, fuzzy, kde-format
-#| msgid ""
-#| "Start debugging an application in KDevelop with the given debugger.\n"
-#| "The binary that should be debugged must follow - including arguments.\n"
-#| "Example: kdevelop --debug gdb myapp --foo bar"
+#, kde-format
 msgid ""
 "Start debugging an application in KDevelop with the given debugger.\n"
 "The executable that should be debugged must follow - including arguments.\n"
 "Example: kdevelop --debug gdb myapp --foo bar"
 msgstr ""
 "開始以指定的除錯器在 KDevelop 中除錯。\n"
-"您要除錯的應用程式執行檔，以及它的參數要放在後面。\n"
+"您要除錯的應用程式執行檔以及它的參數必須要放在後面。\n"
 "例如：kdevelop --debug gdb myapp --foo bar"
 
 #: main.cpp:503
 #, kde-format
 msgid "Files to load, or directories to load as projects"
-msgstr ""
+msgstr "要載入的檔案，或是要作為專案載入的目錄"
 
 #: main.cpp:514
 #, kde-format
@@ -850,19 +832,16 @@ msgid "Select the session you would like to use"
 msgstr "選擇您要使用的工作階段"
 
 #: main.cpp:634
-#, fuzzy, kde-format
-#| msgctxt "@info:shell"
-#| msgid "Specify the binary you want to debug."
+#, kde-format
 msgctxt "@info:shell"
 msgid "Specify the executable you want to debug."
 msgstr "指定您要除錯的執行檔。"
 
 #: main.cpp:643
-#, fuzzy, kde-format
-#| msgid "Application does not exist"
+#, kde-format
 msgctxt "@info:shell"
 msgid "Specified executable does not exist."
-msgstr "應用程式不存在"
+msgstr "指定的執行檔不存在。"
 
 #: main.cpp:649
 #, kde-format
@@ -876,21 +855,19 @@ msgid ""
 msgstr "名為 %1 的工作階段已存在。用 -s 參數來開啟該工作階段。"
 
 #: main.cpp:673
-#, fuzzy, kde-format
-#| msgid ""
-#| "A session with the name %1 exists already. Use the -s switch to open it."
+#, kde-format
 msgid "No session with the name %1 exists."
-msgstr "名為 %1 的工作階段已存在。用 -s 參數來開啟該工作階段。"
+msgstr "不存在名為 %1 的工作階段。"
 
 #: main.cpp:680
 #, kde-format
 msgid "Could not lock session %1 for deletion."
-msgstr ""
+msgstr "無法鎖定工作階段 %1 以供刪除。"
 
 #: main.cpp:685
 #, kde-format
 msgid "Session with name %1 was successfully removed."
-msgstr ""
+msgstr "成功移除名為 %1 的工作階段。"
 
 #: main.cpp:789
 #, kde-format
