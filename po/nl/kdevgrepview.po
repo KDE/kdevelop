@@ -2,20 +2,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Kristof Bal <kristof.bal@gmail.com>, 2008.
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2020, 2022.
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2020, 2022, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2022-07-09 10:27+0200\n"
+"PO-Revision-Date: 2024-02-16 11:30+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.04.2\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: grepdialog.cpp:54
@@ -518,7 +518,7 @@ msgstr "Diepte:"
 #: grepwidget.ui:115
 #, kde-format
 msgid "Maximum level of subdirectory recursion"
-msgstr ""
+msgstr "Maximum niveau van recursie in submap"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
@@ -528,6 +528,10 @@ msgid ""
 "Depth=0 means searching only in files directly inside selected search "
 "locations. Full Depth means no recursion limit."
 msgstr ""
+"Voor elke zoeklocatie, daal af tot ten hoogste het gegeven diepteniveau van "
+"mappen. Diepte=0 betekent alleen zoeken in bestanden direct in de "
+"geselecteerde zoeklocaties. Volledige diepte betekent geen limiet aan "
+"recursie."
 
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)

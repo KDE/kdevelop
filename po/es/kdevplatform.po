@@ -1,7 +1,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
 # Javier Viñal <fjvinal@gmail.com>, 2013.
 # Sofia Priego <spriego@darksylvania.net>, 2016.
 msgid ""
@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2023-10-03 14:40+0200\n"
+"PO-Revision-Date: 2024-02-16 12:23+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -3633,9 +3633,7 @@ msgid "Delete Session"
 msgstr "Borrar sesión"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "Iniciar nueva sesión"
@@ -3679,20 +3677,17 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "Iniciar una nueva ejecución de KDevelop con una sesión vacía"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Iniciar nueva sesión"
+msgstr "Iniciar nueva sesión con nombre..."
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Iniciar una nueva ejecución de KDevelop con una sesión vacía"
+msgstr ""
+"Iniciar una nueva ejecución de KDevelop con una sesión con nombre vacía"
 
 #: shell/sessioncontroller.cpp:293
 #, kde-format

@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2022-07-10 16:23+0200\n"
+"PO-Revision-Date: 2024-02-16 19:37+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 22.04.1\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: grepdialog.cpp:54
 #, kde-format
@@ -525,7 +525,7 @@ msgstr "Globina:"
 #: grepwidget.ui:115
 #, kde-format
 msgid "Maximum level of subdirectory recursion"
-msgstr ""
+msgstr "Največja  raven rekurzije podimenika"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
@@ -535,6 +535,9 @@ msgid ""
 "Depth=0 means searching only in files directly inside selected search "
 "locations. Full Depth means no recursion limit."
 msgstr ""
+"Za vsako lokacijo iskanja se spustite do skrajne ravni globine imenikov. "
+"Globina=0 pomeni iskanje samo v datotekah neposredno znotraj izbranih "
+"iskalnih lokacij. Polna globina pomeni brez omejitve rekurzije."
 
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
