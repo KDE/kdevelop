@@ -5,9 +5,12 @@
   <project_license>GPL-2.0-or-later</project_license>
   <developer_name translate="no">KDE</developer_name>
   <developer_name translate="no" xml:lang="ca">KDE</developer_name>
+  <developer_name translate="no" xml:lang="eo">KDE</developer_name>
   <developer_name translate="no" xml:lang="es">KDE</developer_name>
+  <developer_name translate="no" xml:lang="it">KDE</developer_name>
   <developer_name translate="no" xml:lang="nl">KDE</developer_name>
   <developer_name translate="no" xml:lang="sl">KDE</developer_name>
+  <developer_name translate="no" xml:lang="tr">KDE</developer_name>
   <developer_name translate="no" xml:lang="uk">KDE</developer_name>
   <developer_name translate="no" xml:lang="x-test">xxKDExx</developer_name>
   <name>KDevelop</name>
@@ -168,9 +171,12 @@
       <image>https://cdn.kde.org/screenshots/kdevelop/kdevelop.png</image>
       <caption>Main window with code editor, terminal integration and project files</caption>
       <caption xml:lang="ca">Finestra principal amb l'editor de codi, integració del terminal i fitxers de projecte</caption>
+      <caption xml:lang="eo">Ĉefa fenestro kun kodredaktilo, terminal-integriĝo kaj projektdosieroj</caption>
       <caption xml:lang="es">Ventana principal con el editor de código, un terminal integrado y con archivos de proyecto</caption>
+      <caption xml:lang="it">La finestra principale con editor di codice, integrazione del terminale e file di progetto</caption>
       <caption xml:lang="nl">Hoofdvenster met bewerker van code, terminalintegratie en projectbestanden</caption>
       <caption xml:lang="sl">Glavno okno z urejevalnikom kode, integracijo terminala in projektnimi datotekami</caption>
+      <caption xml:lang="tr">Kod düzenleyicisi, uçbirim tümleştirmesi ve proje dosyalarını içeren ana pencere</caption>
       <caption xml:lang="uk">Головне вікно з редактором коду, інтегрованим терміналом та файлами проєкту</caption>
       <caption xml:lang="x-test">xxMain window with code editor, terminal integration and project filesxx</caption>
     </screenshot>
