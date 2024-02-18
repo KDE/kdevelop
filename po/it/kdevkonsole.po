@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Solinas Simone <ksolsim@gmail.com>, 2009, 2013, 2014.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2020.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2020.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2020, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevkonsole\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2020-10-24 00:03+0200\n"
+"PO-Revision-Date: 2024-02-16 21:14+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: kdevkonsoleview.cpp:107
 #, kde-format
@@ -31,10 +31,9 @@ msgid "Terminal"
 msgstr "Terminale"
 
 #: kdevkonsoleviewplugin.cpp:49
-#, fuzzy, kde-format
-#| msgid "Failed to load 'konsolepart' plugin"
+#, kde-format
 msgid "Failed to load 'konsolepart' plugin: %1"
-msgstr "Impossibile caricare l'estensione «konsolepart»"
+msgstr "Impossibile caricare l'estensione «konsolepart»: %1"
 
 #~ msgid "Konsole"
 #~ msgstr "Konsole"

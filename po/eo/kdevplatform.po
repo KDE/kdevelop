@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2024-02-04 17:21+0100\n"
+"PO-Revision-Date: 2024-02-17 11:46+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -3615,9 +3615,7 @@ msgid "Delete Session"
 msgstr "Forigi Seancon"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "Komenci Novan Seancon"
@@ -3658,23 +3656,19 @@ msgstr "Komenci Novan Seancon"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
-msgstr "Komenci novan ekzemplon de KDevelop kun malplena seanco"
+msgstr "Komenci novan ekzempleron de KDevelop kun malplena seanco"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Komenci Novan Seancon"
+msgstr "Komenci Novan Nomitan Seancon..."
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Komenci novan ekzemplon de KDevelop kun malplena seanco"
+msgstr "Komenci novan KDevelop-ekzempleron kun malplena nomita seanco"
 
 #: shell/sessioncontroller.cpp:293
 #, kde-format
@@ -6220,7 +6214,3 @@ msgstr "Diferenco Al Antaŭa"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferenco inter Revizioj"
-
-#~ msgctxt "@info:progress"
-#~ msgid "Running %1"
-#~ msgstr "Ruliganta %1"

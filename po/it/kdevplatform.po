@@ -6,14 +6,14 @@
 # Luciano Montanaro <mikelima@cirulla.net>, 2003.
 # Giovanni Venturi <jumpyj@tiscali.it>, 2003, 2004, 2005, 2006, 2007, 2008.
 # Nicola Ruggero <nicola@nxnt.org>, 2007.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2007, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2007, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Simone Solinas <ksolsim@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2023-10-03 21:53+0200\n"
+"PO-Revision-Date: 2024-02-16 21:12+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -3639,9 +3639,7 @@ msgid "Delete Session"
 msgstr "Elimina sessione"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "Avvia una nuova sessione"
@@ -3685,20 +3683,16 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "Avvia una nuova istanza di KDevelop con una sessione vuota"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Avvia una nuova sessione"
+msgstr "Avvia una nuova sessione con nome..."
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Avvia una nuova istanza di KDevelop con una sessione vuota"
+msgstr "Avvia una nuova istanza di KDevelop con una sessione senza nome"
 
 #: shell/sessioncontroller.cpp:293
 #, kde-format
