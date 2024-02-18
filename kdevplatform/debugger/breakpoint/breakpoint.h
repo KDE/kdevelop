@@ -108,6 +108,23 @@ public:
     
     bool enabled() const;
 
+    // NOTE: A Breakpoint is represented in the UI by a row in the Breakpoints tool view table and a mark on its
+    // document border. KTextEditor::Mark is a plain class that contains only two non-identifying data members: the
+    // mark's line number and type. A document mark tracks the text on its line. So when lines are inserted or
+    // removed above the mark's line in the document, the mark's line number is automatically adjusted to remain
+    // attached to the tracked text. A Breakpoint needs to remain associated with its document mark. For this
+    // purpose, it also tracks the mark's line number via a dedicated moving cursor. restartDocumentLineTrackingAt()
+    // assigns and stopDocumentLineTracking() destroys this moving cursor. By tracking the same document text, the
+    // breakpoint mark and moving cursor are associated. A Breakpoint uses the associated moving cursor's line
+    // number to identify and locate its mark.
+    // Unfortunately, this association between the breakpoint mark and moving cursor can be broken. When the user
+    // removes a breakpoint's line, the breakpoint mark on it is deleted, but the moving cursor remains and keeps
+    // tracking a line next to the removed one. Furthermore, when the user removes the end-of-line character between
+    // two breakpoint-marked document lines (i.e. joins the two lines into one), the mark types on those lines are
+    // bitwise-OR-ed (the last updated breakpoint mark is visible on the document border), and the two associated
+    // moving cursors end up tracking the single joined document line (though their column numbers differ, which can
+    // potentially help improve the current behavior).
+
     void stopDocumentLineTracking();
     void restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor);
 
