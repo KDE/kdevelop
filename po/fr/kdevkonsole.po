@@ -4,7 +4,7 @@
 # Joëlle Cornavin <jcornavi@club-internet.fr>, 2008, 2009.
 # Vincent PINON <vincent.pinon@st.com>, 2013, 2014.
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
-# Xavier Besnard <xavier.besnard@kde.org>, 2020.
+# SPDX-FileCopyrightText: 2020, 2024 Xavier Besnard <xavier.besnard@kde.org>
 #
 msgid ""
 msgstr ""
@@ -13,7 +13,7 @@ msgstr ""
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
 "PO-Revision-Date: 2020-10-15 09:04+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
-"X-Generator: Lokalize 20.08.2\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #: kdevkonsoleview.cpp:107
 #, kde-format
