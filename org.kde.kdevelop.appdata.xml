@@ -7,6 +7,7 @@
   <developer_name translate="no" xml:lang="ca">KDE</developer_name>
   <developer_name translate="no" xml:lang="eo">KDE</developer_name>
   <developer_name translate="no" xml:lang="es">KDE</developer_name>
+  <developer_name translate="no" xml:lang="fr">KDE</developer_name>
   <developer_name translate="no" xml:lang="it">KDE</developer_name>
   <developer_name translate="no" xml:lang="nl">KDE</developer_name>
   <developer_name translate="no" xml:lang="sl">KDE</developer_name>
@@ -173,6 +174,7 @@
       <caption xml:lang="ca">Finestra principal amb l'editor de codi, integració del terminal i fitxers de projecte</caption>
       <caption xml:lang="eo">Ĉefa fenestro kun kodredaktilo, terminal-integriĝo kaj projektdosieroj</caption>
       <caption xml:lang="es">Ventana principal con el editor de código, un terminal integrado y con archivos de proyecto</caption>
+      <caption xml:lang="fr">Fenêtre principale avec l'éditeur de code, l'intégration du terminal et des fichiers de projet</caption>
       <caption xml:lang="it">La finestra principale con editor di codice, integrazione del terminale e file di progetto</caption>
       <caption xml:lang="nl">Hoofdvenster met bewerker van code, terminalintegratie en projectbestanden</caption>
       <caption xml:lang="sl">Glavno okno z urejevalnikom kode, integracijo terminala in projektnimi datotekami</caption>
