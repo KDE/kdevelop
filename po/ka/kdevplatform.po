@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2023-09-17 06:33+0200\n"
+"PO-Revision-Date: 2024-02-19 05:50+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3493,9 +3493,7 @@ msgid "Delete Session"
 msgstr "სესიის წაშლა"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "ახალი სესიის დაწყება"
@@ -3537,12 +3535,10 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr ""
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "ახალი სესიის დაწყება"
+msgstr "ახალი სახელიანი სესიის დაწყება..."
 
 #: shell/sessioncontroller.cpp:287
 #, kde-format
@@ -5086,7 +5082,7 @@ msgstr "მარჯვენა"
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
-msgstr ""
+msgstr "მოხსნილია"
 
 #: sublime/idealdockwidget.cpp:135
 #, kde-format

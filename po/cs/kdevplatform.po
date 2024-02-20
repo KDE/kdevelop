@@ -3502,12 +3502,10 @@ msgid "Delete Session"
 msgstr "Smazat sezení"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
-msgstr "Začít nové sezení"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
 #, kde-format
@@ -3546,12 +3544,10 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr ""
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Začít nové sezení"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:287
 #, kde-format

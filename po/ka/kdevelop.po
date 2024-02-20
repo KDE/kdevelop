@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2022-04-24 19:26+0200\n"
+"PO-Revision-Date: 2024-02-19 05:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -573,7 +573,7 @@ msgstr "Julian Rockey"
 #: main.cpp:426
 #, kde-format
 msgid "Filecreate part and other bits and patches"
-msgstr ""
+msgstr "Filecreate ნაწილი და სხვა პაჩები და ნაწილები"
 
 #: main.cpp:427
 #, kde-format
@@ -806,6 +806,8 @@ msgstr "ფილების ან საქაღალდის, როგ�
 #, kde-format
 msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
 msgstr ""
+"ხელმისაწვდომი სესიები (სასურველის მისათითებლად გამოიყენეთ პარამეტრები '-s "
+"HASH' ან '-s NAME'):"
 
 #: main.cpp:515
 #, kde-format
