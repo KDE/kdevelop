@@ -9,6 +9,7 @@
 
 #include "testsexport.h"
 
+#include <interfaces/idocument.h>
 #include <language/editor/rangeinrevision.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/declaration.h>
@@ -83,6 +84,12 @@ template<>
 inline char* toString(const KDevelop::IndexedString& string)
 {
     return qstrdup(qPrintable(string.str()));
+}
+
+template<>
+inline char* toString(const KDevelop::IDocument::DocumentState& state)
+{
+    return toString(static_cast<uint>(state));
 }
 }
 
