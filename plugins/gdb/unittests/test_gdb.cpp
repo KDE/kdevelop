@@ -25,6 +25,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <tests/testhelpers.h>
 #include <shell/shellextension.h>
 
 #include <KIO/Global>

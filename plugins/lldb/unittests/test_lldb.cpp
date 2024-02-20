@@ -20,6 +20,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <tests/testhelpers.h>
 
 #include <KConfigGroup>
 #include <KIO/Global>

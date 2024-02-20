@@ -9,6 +9,7 @@
 
 #include "testsexport.h"
 
+#include <debugger/breakpoint/breakpoint.h>
 #include <interfaces/idocument.h>
 #include <language/editor/rangeinrevision.h>
 #include <language/duchain/types/abstracttype.h>
@@ -90,6 +91,18 @@ template<>
 inline char* toString(const KDevelop::IDocument::DocumentState& state)
 {
     return toString(static_cast<uint>(state));
+}
+
+template<>
+inline char* toString(const KDevelop::Breakpoint::BreakpointKind& value)
+{
+    return toString(static_cast<uint>(value));
+}
+
+template<>
+inline char* toString(const KDevelop::Breakpoint::BreakpointState& value)
+{
+    return toString(static_cast<uint>(value));
 }
 }
 
