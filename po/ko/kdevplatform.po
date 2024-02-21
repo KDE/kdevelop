@@ -1,4 +1,4 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2014, 2015, 2020, 2021, 2022, 2023, 2024 Shinjo Park <kde@peremen.name>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
@@ -11,7 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -418,9 +418,10 @@ msgstr ""
 "<b>변수 트리</b>변수 트리에서 지역 변수와 임의의 표현식의 값을 볼 수 있습니"
 "다.<br />지역 변수는 자동으로 표시되며 프로그램 실행에 따라 변경됩니다. 입력"
 "한 표현식은 값을 한 번만 계산하거나 자동으로 업데이트하도록 \"관찰\" 목록에 "
-"추가할 수 있습니다. 자동으로 업데이트되지 않는 표현식은 콘텍스트 메뉴에서 수"
-"동으로 업데이트할 수 있습니다. 표현식의 이름 열을 클릭해서 표현식의 이름을 바"
-"꿀 수 있습니다.<br />변수나 표현식의 값을 변경하려면 값을 클릭하십시오.<br />"
+"추가할 수 있습니다. 자동으로 업데이트되지 않는 표현식은 상황에 맞는 메뉴에서 "
+"수동으로 업데이트할 수 있습니다. 표현식의 이름 열을 클릭해서 표현식의 이름을 "
+"바꿀 수 있습니다.<br />변수나 표현식의 값을 변경하려면 값을 클릭하십시오."
+"<br />"
 
 #: debugger/variable/variablewidget.cpp:130
 #, kde-format
