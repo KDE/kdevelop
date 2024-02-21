@@ -11,6 +11,7 @@
   <developer_name translate="no" xml:lang="fr">KDE</developer_name>
   <developer_name translate="no" xml:lang="it">KDE</developer_name>
   <developer_name translate="no" xml:lang="ka">KDE</developer_name>
+  <developer_name translate="no" xml:lang="ko">KDE</developer_name>
   <developer_name translate="no" xml:lang="nl">KDE</developer_name>
   <developer_name translate="no" xml:lang="sl">KDE</developer_name>
   <developer_name translate="no" xml:lang="tr">KDE</developer_name>
@@ -179,6 +180,7 @@
       <caption xml:lang="fr">Fenêtre principale avec l'éditeur de code, l'intégration du terminal et des fichiers de projet</caption>
       <caption xml:lang="it">La finestra principale con editor di codice, integrazione del terminale e file di progetto</caption>
       <caption xml:lang="ka">მთავარი ფანჯარა კოდის რედაქტორის, ტერმინალის ინტეგრაციით და პროექტის ფაილებით</caption>
+      <caption xml:lang="ko">코드 편집기, 터미널 통합, 프로젝트 파일이 표시된 주 창</caption>
       <caption xml:lang="nl">Hoofdvenster met bewerker van code, terminalintegratie en projectbestanden</caption>
       <caption xml:lang="sl">Glavno okno z urejevalnikom kode, integracijo terminala in projektnimi datotekami</caption>
       <caption xml:lang="tr">Kod düzenleyicisi, uçbirim tümleştirmesi ve proje dosyalarını içeren ana pencere</caption>
