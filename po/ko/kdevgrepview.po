@@ -1,17 +1,17 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020, 2022.
+# SPDX-FileCopyrightText: 2014, 2015, 2020, 2022, 2024 Shinjo Park <kde@peremen.name>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2022-07-13 13:06+0200\n"
+"PO-Revision-Date: 2024-02-20 23:50+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: grepdialog.cpp:54
@@ -503,7 +503,7 @@ msgstr "깊이:"
 #: grepwidget.ui:115
 #, kde-format
 msgid "Maximum level of subdirectory recursion"
-msgstr ""
+msgstr "최대 하위 디렉터리 재귀 수준"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
@@ -513,6 +513,9 @@ msgid ""
 "Depth=0 means searching only in files directly inside selected search "
 "locations. Full Depth means no recursion limit."
 msgstr ""
+"각각 검색 위치에 대해서 지정한 단계까지의 하위 디렉터리만 탐색합니다. 깊이를 "
+"0으로 설정하면 해당 디렉터리에 직접 속해 있는 파일만 검색합니다. 전체 깊이로 "
+"설정하면 제한이 없습니다."
 
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)

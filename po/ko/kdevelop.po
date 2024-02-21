@@ -457,7 +457,7 @@ msgstr "Sandy Meier"
 #: main.cpp:415
 #, kde-format
 msgid "PHP support, context menu stuff"
-msgstr "PHP 지원, 콘텍스트 메뉴 항목"
+msgstr "PHP 지원, 상황에 맞는 메뉴 항목"
 
 #: main.cpp:416
 #, kde-format
