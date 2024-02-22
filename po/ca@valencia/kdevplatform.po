@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2024-01-28 20:35+0100\n"
+"PO-Revision-Date: 2024-02-16 11:07+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -3639,12 +3639,10 @@ msgid "Delete Session"
 msgstr "Suprimix la sessió"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
-msgstr "Inicia una sessió nova"
+msgstr "Inici de sessió nova"
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
 #, kde-format
@@ -3685,20 +3683,16 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "Inicia una instància nova de KDevelop amb una sessió buida"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Inicia una sessió nova"
+msgstr "Inicia una sessió nova amb nom..."
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Inicia una instància nova de KDevelop amb una sessió buida"
+msgstr "Inicia una instància nova de KDevelop amb una sessió buida amb nom"
 
 #: shell/sessioncontroller.cpp:293
 #, kde-format
