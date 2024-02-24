@@ -583,6 +583,16 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
     }
 
     scheduleSave();
+
+
+    // can't use new signal/slot syntax here, MovingInterface is not a QObject
+    const bool disconnected = disconnect(doc->textDocument(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
+                                         SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+    if (disconnected) {
+        --d->inhibitMarkChange;
+        // disconnect ourselves
+        disconnect(doc->textDocument(), &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
+    }
 }
 void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* document)
 {
