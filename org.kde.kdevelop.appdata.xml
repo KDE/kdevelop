@@ -4,20 +4,6 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0-or-later</project_license>
   <developer_name translate="no">KDE</developer_name>
-  <developer_name translate="no" xml:lang="ca">KDE</developer_name>
-  <developer_name translate="no" xml:lang="ca-valencia">KDE</developer_name>
-  <developer_name translate="no" xml:lang="cs">KDE</developer_name>
-  <developer_name translate="no" xml:lang="eo">KDE</developer_name>
-  <developer_name translate="no" xml:lang="es">KDE</developer_name>
-  <developer_name translate="no" xml:lang="fr">KDE</developer_name>
-  <developer_name translate="no" xml:lang="it">KDE</developer_name>
-  <developer_name translate="no" xml:lang="ka">KDE</developer_name>
-  <developer_name translate="no" xml:lang="ko">KDE</developer_name>
-  <developer_name translate="no" xml:lang="nl">KDE</developer_name>
-  <developer_name translate="no" xml:lang="sl">KDE</developer_name>
-  <developer_name translate="no" xml:lang="tr">KDE</developer_name>
-  <developer_name translate="no" xml:lang="uk">KDE</developer_name>
-  <developer_name translate="no" xml:lang="x-test">xxKDExx</developer_name>
   <name>KDevelop</name>
   <name xml:lang="ar">مطوّرك</name>
   <name xml:lang="bs">KDevelop</name>
