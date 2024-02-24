@@ -332,6 +332,7 @@ void Breakpoint::restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor
     auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(m_movingCursor->document());
     if (imark) {
         const auto guard = m_model->markChangeGuard();
+        qCritical()<< "restartDocumentLineTrackingAt addMark():" << m_movingCursor->line();
         imark->addMark(m_movingCursor->line(), markType());
     }
 }

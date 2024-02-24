@@ -126,7 +126,7 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) const
 {
     Q_D(const BreakpointModel);
-
+qCritical() << "---- start setupDocumentBreakpoints()";
     // Initial setup of moving cursors and marks.
     const QUrl docUrl = document.url();
     const auto docLineCount = document.lines();
@@ -138,6 +138,7 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
             }
         }
     }
+qCritical() << "---- end setupDocumentBreakpoints()";
 }
 
 [[maybe_unused]] bool BreakpointModel::containsBreakpointMarks(const KTextEditor::Document& document)
@@ -443,7 +444,13 @@ void BreakpointModel::markChanged(
 {
     Q_D(const BreakpointModel);
 
-    qCritical() << "markChanged()";
+
+    if (action == KTextEditor::MarkInterface::MarkAdded)
+        qCritical() << "markChanged(MarkAdded):"<<mark.line;
+    else {
+        Q_ASSERT(action == KTextEditor::MarkInterface::MarkRemoved);
+        qCritical() << "markChanged(MarkRemoved)" << mark.line;
+    }
 
     int type = mark.type;
     /* Is this a breakpoint mark, to begin with? */
