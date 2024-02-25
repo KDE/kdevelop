@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2024-02-17 13:47+0300\n"
+"PO-Revision-Date: 2024-02-24 22:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.04.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -687,7 +687,7 @@ msgstr "%1 projesindeki sınıflar"
 #: language/codecompletion/codecompletionitem.cpp:126
 #, kde-format
 msgid "not implemented"
-msgstr "gerçekleştirilmemiş"
+msgstr "gerçeklenmedi"
 
 #: language/codegen/basicrefactoring.cpp:90
 #, kde-format
