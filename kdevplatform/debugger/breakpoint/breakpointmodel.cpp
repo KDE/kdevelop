@@ -121,6 +121,10 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
     }
 
     connect(textDocument, &KTextEditor::Document::aboutToReload, this, &BreakpointModel::aboutToReload);
+    // can't use new signal/slot syntax here, MovingInterface is not a QObject
+    connect(textDocument, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
+            SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+    connect(textDocument, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
 }
 
 void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) const
@@ -157,12 +161,7 @@ void BreakpointModel::aboutToReload(KTextEditor::Document* document)
 
     qCritical() << "aboutToReload()";
 
-    // can't use new signal/slot syntax here, MovingInterface is not a QObject
-    connect(document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-            SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
 
-    // reloaded() will reinitialize moving cursors and marks.
-    connect(document, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
 
     ++d->inhibitMarkChange;
 }
