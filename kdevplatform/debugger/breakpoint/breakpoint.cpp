@@ -19,6 +19,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/MarkInterface>
 #include <KTextEditor/MovingCursor>
+#include <KTextEditor/MovingInterface>
 
 #include "breakpointmodel.h"
 
@@ -335,6 +336,33 @@ void Breakpoint::restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor
         qCritical()<< "restartDocumentLineTrackingAt addMark():" << m_movingCursor->line();
         imark->addMark(m_movingCursor->line(), markType());
     }
+}
+
+void KDevelop::Breakpoint::pauseDocumentLineTracking()
+{
+    Q_ASSERT(m_movingCursor);
+    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(m_movingCursor->document());
+    Q_ASSERT(imark);
+    Q_ASSERT((imark->mark(m_movingCursor->line()) & BreakpointModel::AllBreakpointMarks) == 0);
+    Q_ASSERT((imark->mark(m_line) & BreakpointModel::AllBreakpointMarks) == 0);
+
+    delete m_movingCursor;
+    m_movingCursor = nullptr;
+}
+
+void KDevelop::Breakpoint::resumeDocumentLineTracking(KTextEditor::Document& document)
+{
+    Q_ASSERT(m_line >= 0);
+    Q_ASSERT(m_line < document.lines());
+    Q_ASSERT(!m_movingCursor);
+
+    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(&document);
+    Q_ASSERT(imark);
+    Q_ASSERT((imark->mark(m_line) & BreakpointModel::AllBreakpointMarks) == markType());
+
+    auto* const movingInterface = qobject_cast<KTextEditor::MovingInterface*>(&document);
+    Q_ASSERT(movingInterface);
+    m_movingCursor = movingInterface->newMovingCursor(KTextEditor::Cursor(m_line, 0));
 }
 
 KTextEditor::MovingCursor* KDevelop::Breakpoint::movingCursor() const {
