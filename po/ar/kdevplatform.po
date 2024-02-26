@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-02-26 01:37+0000\n"
 "PO-Revision-Date: 2022-01-20 19:01+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -29,31 +29,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "safa1996alfulaij@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:144
+#: debugger/breakpoint/breakpoint.cpp:161
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "خطأ"
 
-#: debugger/breakpoint/breakpoint.cpp:150
+#: debugger/breakpoint/breakpoint.cpp:167
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "متسخ"
 
-#: debugger/breakpoint/breakpoint.cpp:152
+#: debugger/breakpoint/breakpoint.cpp:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "ينتظر"
 
-#: debugger/breakpoint/breakpoint.cpp:154
+#: debugger/breakpoint/breakpoint.cpp:171
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "نظيف"
 
-#: debugger/breakpoint/breakpoint.cpp:186
+#: debugger/breakpoint/breakpoint.cpp:204
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -128,59 +128,59 @@ msgstr "<b>نقطة التّوقّف متّسخة</b><p>لم تُمرّر الن
 msgid "Breakpoint"
 msgstr "نقطة التّوقّف"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:160
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "لم يُعثر على نقطة التّوقّف"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:160
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "تعذّر العثور على نقطة توقّف عند %1:%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:162
+#: debugger/breakpoint/breakpointmodel.cpp:166
 #, fuzzy, kde-format
 msgid "&Breakpoint"
 msgstr "نقطة التّوقّف"
 
-#: debugger/breakpoint/breakpointmodel.cpp:168
+#: debugger/breakpoint/breakpointmodel.cpp:172
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "ع&طّل نقطة التّوقّف"
 
-#: debugger/breakpoint/breakpointmodel.cpp:169
+#: debugger/breakpoint/breakpointmodel.cpp:173
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "&فعّل نقطة التّوقّف"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:176
 #, kde-format
 msgid "&Bookmark"
 msgstr "علام&ة"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:219
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "النّوع"
 
-#: debugger/breakpoint/breakpointmodel.cpp:217
+#: debugger/breakpoint/breakpointmodel.cpp:220
 #, kde-format
 msgid "Location"
 msgstr "المكان"
 
-#: debugger/breakpoint/breakpointmodel.cpp:218
+#: debugger/breakpoint/breakpointmodel.cpp:221
 #, kde-format
 msgid "Condition"
 msgstr "الشّرط"
 
-#: debugger/breakpoint/breakpointmodel.cpp:222
+#: debugger/breakpoint/breakpointmodel.cpp:225
 #, kde-format
 msgid "Active status"
 msgstr "حالة النّشاط"
 
-#: debugger/breakpoint/breakpointmodel.cpp:223
+#: debugger/breakpoint/breakpointmodel.cpp:226
 #, kde-format
 msgid "State"
 msgstr "الحالة"

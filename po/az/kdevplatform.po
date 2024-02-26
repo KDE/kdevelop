@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-02-26 01:37+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -27,31 +27,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "xxmn77@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:144
+#: debugger/breakpoint/breakpoint.cpp:161
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Xəta"
 
-#: debugger/breakpoint/breakpoint.cpp:150
+#: debugger/breakpoint/breakpoint.cpp:167
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Qeyri-aktual"
 
-#: debugger/breakpoint/breakpoint.cpp:152
+#: debugger/breakpoint/breakpoint.cpp:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Gözləyir"
 
-#: debugger/breakpoint/breakpoint.cpp:154
+#: debugger/breakpoint/breakpoint.cpp:171
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Təmizləyin"
 
-#: debugger/breakpoint/breakpoint.cpp:186
+#: debugger/breakpoint/breakpoint.cpp:204
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -129,59 +129,59 @@ msgstr ""
 msgid "Breakpoint"
 msgstr "Qırılma nöqtəsi"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:160
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Qırılma nöqtəsi tapılmadı"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:160
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "%1 daxilində qırılma nöqtəsi tapıla bilmədi: %2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:162
+#: debugger/breakpoint/breakpointmodel.cpp:166
 #, kde-format
 msgid "&Breakpoint"
 msgstr "&Qırılma nöqtəsi"
 
-#: debugger/breakpoint/breakpointmodel.cpp:168
+#: debugger/breakpoint/breakpointmodel.cpp:172
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "Qırılma nöqtəsini sön&dürün"
 
-#: debugger/breakpoint/breakpointmodel.cpp:169
+#: debugger/breakpoint/breakpointmodel.cpp:173
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Qırılma nöqtəsini aktiv &edin"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:176
 #, kde-format
 msgid "&Bookmark"
 msgstr "Ə&lfəcin"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:219
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Növ"
 
-#: debugger/breakpoint/breakpointmodel.cpp:217
+#: debugger/breakpoint/breakpointmodel.cpp:220
 #, kde-format
 msgid "Location"
 msgstr "Məkan"
 
-#: debugger/breakpoint/breakpointmodel.cpp:218
+#: debugger/breakpoint/breakpointmodel.cpp:221
 #, kde-format
 msgid "Condition"
 msgstr "Vəziyyət"
 
-#: debugger/breakpoint/breakpointmodel.cpp:222
+#: debugger/breakpoint/breakpointmodel.cpp:225
 #, kde-format
 msgid "Active status"
 msgstr "Aktiv vəziyyət"
 
-#: debugger/breakpoint/breakpointmodel.cpp:223
+#: debugger/breakpoint/breakpointmodel.cpp:226
 #, kde-format
 msgid "State"
 msgstr "Vəziyyət"

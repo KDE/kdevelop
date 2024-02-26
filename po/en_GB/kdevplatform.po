@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-02-26 01:37+0000\n"
 "PO-Revision-Date: 2022-12-31 15:45+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -29,31 +29,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "andrew_coles@yahoo.co.uk, steve.allewell@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:144
+#: debugger/breakpoint/breakpoint.cpp:161
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Error"
 
-#: debugger/breakpoint/breakpoint.cpp:150
+#: debugger/breakpoint/breakpoint.cpp:167
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Dirty"
 
-#: debugger/breakpoint/breakpoint.cpp:152
+#: debugger/breakpoint/breakpoint.cpp:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Pending"
 
-#: debugger/breakpoint/breakpoint.cpp:154
+#: debugger/breakpoint/breakpoint.cpp:171
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Clean"
 
-#: debugger/breakpoint/breakpoint.cpp:186
+#: debugger/breakpoint/breakpoint.cpp:204
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -131,59 +131,59 @@ msgstr ""
 msgid "Breakpoint"
 msgstr "Breakpoint"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:160
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Breakpoint not found"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:160
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Could not find breakpoint at %1:%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:162
+#: debugger/breakpoint/breakpointmodel.cpp:166
 #, kde-format
 msgid "&Breakpoint"
 msgstr "&Breakpoint"
 
-#: debugger/breakpoint/breakpointmodel.cpp:168
+#: debugger/breakpoint/breakpointmodel.cpp:172
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Disable Breakpoint"
 
-#: debugger/breakpoint/breakpointmodel.cpp:169
+#: debugger/breakpoint/breakpointmodel.cpp:173
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "&Enable Breakpoint"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:176
 #, kde-format
 msgid "&Bookmark"
 msgstr "&Bookmark"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:219
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Type"
 
-#: debugger/breakpoint/breakpointmodel.cpp:217
+#: debugger/breakpoint/breakpointmodel.cpp:220
 #, kde-format
 msgid "Location"
 msgstr "Location"
 
-#: debugger/breakpoint/breakpointmodel.cpp:218
+#: debugger/breakpoint/breakpointmodel.cpp:221
 #, kde-format
 msgid "Condition"
 msgstr "Condition"
 
-#: debugger/breakpoint/breakpointmodel.cpp:222
+#: debugger/breakpoint/breakpointmodel.cpp:225
 #, kde-format
 msgid "Active status"
 msgstr "Active status"
 
-#: debugger/breakpoint/breakpointmodel.cpp:223
+#: debugger/breakpoint/breakpointmodel.cpp:226
 #, kde-format
 msgid "State"
 msgstr "State"
