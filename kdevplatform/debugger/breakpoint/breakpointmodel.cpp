@@ -170,7 +170,7 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
 {
     Q_D(BreakpointModel);
 
-    qCritical() << "aboutToInvalidateMovingInterfaceContent()";
+    qCritical() << "aboutToInvalidateMovingInterfaceContent()" << document->isModified();
 
     // disconnect ourselves
     { // helper function 1 -> bool
