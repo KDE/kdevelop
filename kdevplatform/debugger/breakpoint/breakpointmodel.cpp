@@ -58,7 +58,8 @@ IBreakpointController* breakpointController()
 
 enum class ReloadState : unsigned char {
     Idle,
-    Reloading,
+    StartedReloading,
+    ZeroBreakpoints,
     Reinitialize,
     RemoveBreakpointMarksAndReinitialize
 };
@@ -182,7 +183,7 @@ void BreakpointModel::aboutToReload()
     qCritical() << "aboutToReload()";
 
     Q_ASSERT(d->reloadState == ReloadState::Idle);
-    d->reloadState = ReloadState::Reloading;
+    d->reloadState = ReloadState::StartedReloading;
 
     // KTextEditor::DocumentPrivate::documentReload() stores in a local variable all document marks right after
     // emitting aboutToReload(). Then the reloading process removes all document marks, unless the document is
@@ -205,7 +206,10 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
                                       << ", breakpoint line tracking in this document is going to break.";
         return;
     }
-    Q_ASSERT(d->reloadState == ReloadState::Reloading);
+    if (d->reloadState != ReloadState::StartedReloading) {
+        // This slot has already been invoked before during the current reload, nothing more to be done.
+        return;
+    }
 
     // All moving cursors are invalidated in the document after this slot, so they must be dropped
     // now to avoid using invalid line numbers.
@@ -229,23 +233,27 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
         }
     }
 
-    if (reinitializeBreakpoints) {
-        // At the end of the reloading process, KTextEditor restores marks on the line numbers they had at the time
-        // when reloading started, i.e. on their tracked line numbers. In contrast, KDevelop::reloaded() reinitializes
-        // breakpoint marks at their saved line numbers. If the reloaded document is unmodified in the editor, or the
-        // user opts to save the document during reload, the tracked and saved line numbers stay/become equal.
-        // If the user opts to discard document changes during reload, the tracked and saved line numbers can differ.
-        // Let us consider a breakpoint mark's tracked line number L, which is not equal to the saved line number of
-        // the associated breakpoint. If the text on the line L at the time when reloading started happens to match the
-        // text on the line L at the time when reloading ends (e.g. if the file was modified on disk in the same way as
-        // in the editor), a breakpoint mark unassociated with any breakpoint appears on the document border.
-        // In order to prevent this bug, reloaded() must remove all breakpoint marks in the document (if any exist)
-        // before reinitializing breakpoints. This needs to be done only if the user opts to discard document changes
-        // during reload. The discard is the only user choice that keeps the document modified at this point.
-        d->reloadState = hasBreakpointMarks && document->isModified()
-            ? ReloadState::RemoveBreakpointMarksAndReinitialize
-            : ReloadState::Reinitialize;
+    if (!reinitializeBreakpoints) {
+        d->reloadState = ReloadState::ZeroBreakpoints;
+        return;
     }
+
+    // At the end of the reloading process, KTextEditor restores marks on the line numbers they had at the time
+    // when reloading started, i.e. on their tracked line numbers. In contrast, KDevelop::reloaded() reinitializes
+    // breakpoint marks at their saved line numbers. If the reloaded document is unmodified in the editor, or the
+    // user opts to save the document during reload, the tracked and saved line numbers stay/become equal.
+    // If the user opts to discard document changes during reload, the tracked and saved line numbers can differ.
+    //
+    // Let us consider a breakpoint mark's tracked line number L, which is not equal to the saved line number of
+    // the associated breakpoint. If the text on the line L at the time when reloading started happens to match the
+    // text on the line L at the time when reloading ends (e.g. if the file was modified on disk in the same way as
+    // in the editor), a breakpoint mark unassociated with any breakpoint appears on the document border.
+    //
+    // In order to prevent this bug, reloaded() must remove all breakpoint marks in the document (if any exist)
+    // before reinitializing breakpoints. This needs to be done only if the user opts to discard document changes
+    // during reload. The discard is the only user choice that keeps the document modified at this point.
+    d->reloadState = hasBreakpointMarks && document->isModified() ? ReloadState::RemoveBreakpointMarksAndReinitialize
+                                                                  : ReloadState::Reinitialize;
 }
 
 void BreakpointModel::reloaded(KTextEditor::Document* document)
@@ -262,10 +270,12 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
 
     switch (d->reloadState) {
         case ReloadState::Idle:
-        case ReloadState::Reloading:
-            // There are no breakpoints at the reloaded document's URL, or the moving cursors
-            // have not been invalidated because the user opted to cancel reloading. Either way, nothing to do.
-            break;
+            Q_ASSERT(false);
+        case ReloadState::StartedReloading:
+            // Moving cursors have not been invalidated, because the user opted to cancel reloading.
+        case ReloadState::ZeroBreakpoints:
+            // There are no breakpoints at the reloaded document's URL.
+            break; // nothing to do
         case ReloadState::RemoveBreakpointMarksAndReinitialize:
             removeBreakpointMarks(*document);
             [[fallthrough]];
