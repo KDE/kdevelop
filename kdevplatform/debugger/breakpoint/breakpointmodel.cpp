@@ -181,6 +181,7 @@ void BreakpointModel::aboutToReload()
 
     qCritical() << "aboutToReload()";
 
+    Q_ASSERT(d->reloadState == ReloadState::Idle);
     d->reloadState = ReloadState::Reloading;
 
     // KTextEditor::DocumentPrivate::documentReload() stores in a local variable all document marks right after
@@ -259,18 +260,21 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
     // which where temporarily removed during the reload. So end the mark change inhibition now.
     --d->inhibitMarkChange;
 
-    if (d->reloadState == ReloadState::Reloading) {
-        // There are no breakpoints at the reloaded document's URL, or the moving cursors
-        // have not been invalidated because the user opted to cancel reloading. Either way, nothing to do.
-        return;
+    switch (d->reloadState) {
+        case ReloadState::Idle:
+        case ReloadState::Reloading:
+            // There are no breakpoints at the reloaded document's URL, or the moving cursors
+            // have not been invalidated because the user opted to cancel reloading. Either way, nothing to do.
+            break;
+        case ReloadState::RemoveBreakpointMarksAndReinitialize:
+            removeBreakpointMarks(*document);
+            [[fallthrough]];
+        case ReloadState::Reinitialize:
+            // reinitialize
+            setupDocumentBreakpoints(*document);
     }
 
-    if (d->reloadState == ReloadState::RemoveBreakpointMarksAndReinitialize) {
-        removeBreakpointMarks(*document);
-    }
-
-    // reinitialize
-    setupDocumentBreakpoints(*document);
+    d->reloadState = ReloadState::Idle;
 }
 
 void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, const QPoint &pos, bool& handled)
