@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:37+0000\n"
+"POT-Creation-Date: 2024-02-27 01:36+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -28,31 +28,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "qiilaq69@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:161
+#: debugger/breakpoint/breakpoint.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Tõrge"
 
-#: debugger/breakpoint/breakpoint.cpp:167
+#: debugger/breakpoint/breakpoint.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Räpane"
 
-#: debugger/breakpoint/breakpoint.cpp:169
+#: debugger/breakpoint/breakpoint.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Ootel"
 
-#: debugger/breakpoint/breakpoint.cpp:171
+#: debugger/breakpoint/breakpoint.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Puhas"
 
-#: debugger/breakpoint/breakpoint.cpp:204
+#: debugger/breakpoint/breakpoint.cpp:207
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -125,64 +125,64 @@ msgstr ""
 "<b> Katkestuspunkt on räpane</b><p>Katkestuspunkt, mida pole veel silurile "
 "edastatud.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:114
+#: debugger/breakpoint/breakpointmodel.cpp:106
 #, kde-format
 msgid "Breakpoint"
 msgstr "Katkestuspunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Katkestuspunkti ei leitud"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Katkestuspunkti ei leitud asukohas %1:%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:166
+#: debugger/breakpoint/breakpointmodel.cpp:222
 #, kde-format
 msgid "&Breakpoint"
 msgstr "Katkestus&punkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:228
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "K&eela katkestuspunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:173
+#: debugger/breakpoint/breakpointmodel.cpp:229
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Lu&ba katkestuspunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:176
+#: debugger/breakpoint/breakpointmodel.cpp:232
 #, kde-format
 msgid "&Bookmark"
 msgstr "&Järjehoidja"
 
-#: debugger/breakpoint/breakpointmodel.cpp:219
+#: debugger/breakpoint/breakpointmodel.cpp:275
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Tüüp"
 
-#: debugger/breakpoint/breakpointmodel.cpp:220
+#: debugger/breakpoint/breakpointmodel.cpp:276
 #, kde-format
 msgid "Location"
 msgstr "Asukoht"
 
-#: debugger/breakpoint/breakpointmodel.cpp:221
+#: debugger/breakpoint/breakpointmodel.cpp:277
 #, kde-format
 msgid "Condition"
 msgstr "Tingimus"
 
-#: debugger/breakpoint/breakpointmodel.cpp:225
+#: debugger/breakpoint/breakpointmodel.cpp:281
 #, kde-format
 msgid "Active status"
 msgstr "Aktiivne olek"
 
-#: debugger/breakpoint/breakpointmodel.cpp:226
+#: debugger/breakpoint/breakpointmodel.cpp:282
 #, kde-format
 msgid "State"
 msgstr "Olek"
@@ -334,12 +334,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr "#%1 %2() failis %3:%4\n"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#: debugger/interfaces/ibreakpointcontroller.cpp:78
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Katkestuspunkti tabamus: %1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#: debugger/interfaces/ibreakpointcontroller.cpp:85
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "Jälgimispunkti tabamus: %1"

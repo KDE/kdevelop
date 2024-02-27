@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:37+0000\n"
+"POT-Creation-Date: 2024-02-27 01:36+0000\n"
 "PO-Revision-Date: 2024-02-16 11:07+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -32,31 +32,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "manutortosa@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:161
+#: debugger/breakpoint/breakpoint.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "S'ha produït un error"
 
-#: debugger/breakpoint/breakpoint.cpp:167
+#: debugger/breakpoint/breakpoint.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Brut"
 
-#: debugger/breakpoint/breakpoint.cpp:169
+#: debugger/breakpoint/breakpoint.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Pendent"
 
-#: debugger/breakpoint/breakpoint.cpp:171
+#: debugger/breakpoint/breakpoint.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Net"
 
-#: debugger/breakpoint/breakpoint.cpp:204
+#: debugger/breakpoint/breakpoint.cpp:207
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -130,64 +130,64 @@ msgstr ""
 "<b>El punt d'interrupció està brut</b><p>El punt d'interrupció encara no "
 "s'ha passat al depurador.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:114
+#: debugger/breakpoint/breakpointmodel.cpp:106
 #, kde-format
 msgid "Breakpoint"
 msgstr "Punt d'interrupció"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "No s'ha trobat el punt d'interrupció"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "No s'ha pogut trobar el punt d'interrupció a %1:%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:166
+#: debugger/breakpoint/breakpointmodel.cpp:222
 #, kde-format
 msgid "&Breakpoint"
 msgstr "&Punt d'interrupció"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:228
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Desactiva punt d'interrupció"
 
-#: debugger/breakpoint/breakpointmodel.cpp:173
+#: debugger/breakpoint/breakpointmodel.cpp:229
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "&Activa punt d'interrupció"
 
-#: debugger/breakpoint/breakpointmodel.cpp:176
+#: debugger/breakpoint/breakpointmodel.cpp:232
 #, kde-format
 msgid "&Bookmark"
 msgstr "&Punt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:219
+#: debugger/breakpoint/breakpointmodel.cpp:275
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Tipus"
 
-#: debugger/breakpoint/breakpointmodel.cpp:220
+#: debugger/breakpoint/breakpointmodel.cpp:276
 #, kde-format
 msgid "Location"
 msgstr "Ubicació"
 
-#: debugger/breakpoint/breakpointmodel.cpp:221
+#: debugger/breakpoint/breakpointmodel.cpp:277
 #, kde-format
 msgid "Condition"
 msgstr "Condició"
 
-#: debugger/breakpoint/breakpointmodel.cpp:225
+#: debugger/breakpoint/breakpointmodel.cpp:281
 #, kde-format
 msgid "Active status"
 msgstr "Estat actiu"
 
-#: debugger/breakpoint/breakpointmodel.cpp:226
+#: debugger/breakpoint/breakpointmodel.cpp:282
 #, kde-format
 msgid "State"
 msgstr "Estat"
@@ -340,12 +340,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr "#%1 %2() a %3:%4\n"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#: debugger/interfaces/ibreakpointcontroller.cpp:78
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Punt d'interrupció assolit: %1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#: debugger/interfaces/ibreakpointcontroller.cpp:85
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "Punt d'observació assolit: %1"

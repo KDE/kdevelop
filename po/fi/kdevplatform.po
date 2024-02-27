@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:37+0000\n"
+"POT-Creation-Date: 2024-02-27 01:36+0000\n"
 "PO-Revision-Date: 2019-06-02 13:10+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -32,31 +32,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "lasse.liehu@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:161
+#: debugger/breakpoint/breakpoint.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Virhe"
 
-#: debugger/breakpoint/breakpoint.cpp:167
+#: debugger/breakpoint/breakpoint.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Likainen"
 
-#: debugger/breakpoint/breakpoint.cpp:169
+#: debugger/breakpoint/breakpoint.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Odottaa"
 
-#: debugger/breakpoint/breakpoint.cpp:171
+#: debugger/breakpoint/breakpoint.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Puhdas"
 
-#: debugger/breakpoint/breakpoint.cpp:204
+#: debugger/breakpoint/breakpoint.cpp:207
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -129,65 +129,65 @@ msgstr ""
 "<b>Keskeytyskohta on likainen</b><p>Keskeytyskohtaa ei ole vielä välitetty "
 "virheenpaikantimelle.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:114
+#: debugger/breakpoint/breakpointmodel.cpp:106
 #, kde-format
 msgid "Breakpoint"
 msgstr "Keskeytyskohta"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Keskeytyskohtaa ei löytynyt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Keskeytyskohtaa ei löytynyt kohdasta %1:%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:166
+#: debugger/breakpoint/breakpointmodel.cpp:222
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "&Breakpoint"
 msgstr "Keskeytyskohta"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:228
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "Poista &keskeytyskohta käytöstä"
 
-#: debugger/breakpoint/breakpointmodel.cpp:173
+#: debugger/breakpoint/breakpointmodel.cpp:229
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "&Ota keskeytyskohta käyttöön"
 
-#: debugger/breakpoint/breakpointmodel.cpp:176
+#: debugger/breakpoint/breakpointmodel.cpp:232
 #, kde-format
 msgid "&Bookmark"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:219
+#: debugger/breakpoint/breakpointmodel.cpp:275
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Tyyppi"
 
-#: debugger/breakpoint/breakpointmodel.cpp:220
+#: debugger/breakpoint/breakpointmodel.cpp:276
 #, kde-format
 msgid "Location"
 msgstr "Sijainti"
 
-#: debugger/breakpoint/breakpointmodel.cpp:221
+#: debugger/breakpoint/breakpointmodel.cpp:277
 #, kde-format
 msgid "Condition"
 msgstr "Ehto"
 
-#: debugger/breakpoint/breakpointmodel.cpp:225
+#: debugger/breakpoint/breakpointmodel.cpp:281
 #, kde-format
 msgid "Active status"
 msgstr "Onko aktiivinen"
 
-#: debugger/breakpoint/breakpointmodel.cpp:226
+#: debugger/breakpoint/breakpointmodel.cpp:282
 #, kde-format
 msgid "State"
 msgstr "Tila"
@@ -339,12 +339,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr "#%1 %2() tiedostossa %3:%4\n"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#: debugger/interfaces/ibreakpointcontroller.cpp:78
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Keskeytyskohtaosuma: %1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#: debugger/interfaces/ibreakpointcontroller.cpp:85
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "Seurantakohtaosuma: %1"

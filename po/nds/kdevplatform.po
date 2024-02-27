@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:37+0000\n"
+"POT-Creation-Date: 2024-02-27 01:36+0000\n"
 "PO-Revision-Date: 2012-02-02 07:34+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -30,35 +30,35 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "m.j.wiese@web.de, s_dibbern@web.de"
 
-#: debugger/breakpoint/breakpoint.cpp:161
+#: debugger/breakpoint/breakpoint.cpp:164
 #, fuzzy, kde-format
 #| msgid "Error"
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Fehler"
 
-#: debugger/breakpoint/breakpoint.cpp:167
+#: debugger/breakpoint/breakpoint.cpp:170
 #, fuzzy, kde-format
 #| msgid "dirty"
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Leeg"
 
-#: debugger/breakpoint/breakpoint.cpp:169
+#: debugger/breakpoint/breakpoint.cpp:172
 #, fuzzy, kde-format
 #| msgid "pending"
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Utstahn"
 
-#: debugger/breakpoint/breakpoint.cpp:171
+#: debugger/breakpoint/breakpoint.cpp:174
 #, fuzzy, kde-format
 #| msgid "clean"
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Goot"
 
-#: debugger/breakpoint/breakpoint.cpp:204
+#: debugger/breakpoint/breakpoint.cpp:207
 #, fuzzy, kde-format
 #| msgid "<b>%1</b> (%2)"
 msgctxt "location (address)"
@@ -132,66 +132,66 @@ msgstr ""
 "<b>Hollpunkt is leeg</b><p>De Hollpunkt wöör noch nich na den Fehlersöker "
 "övergeven</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:114
+#: debugger/breakpoint/breakpointmodel.cpp:106
 #, kde-format
 msgid "Breakpoint"
 msgstr "Hollpunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, fuzzy, kde-format
 #| msgid "Breakpoint hit: %1"
 msgid "Breakpoint not found"
 msgstr "Hollpunkt drapen: %1"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:166
+#: debugger/breakpoint/breakpointmodel.cpp:222
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "&Breakpoint"
 msgstr "Hollpunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:228
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "Hollpunkt &utmaken"
 
-#: debugger/breakpoint/breakpointmodel.cpp:173
+#: debugger/breakpoint/breakpointmodel.cpp:229
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Hollpunkt &anmaken"
 
-#: debugger/breakpoint/breakpointmodel.cpp:176
+#: debugger/breakpoint/breakpointmodel.cpp:232
 #, kde-format
 msgid "&Bookmark"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:219
+#: debugger/breakpoint/breakpointmodel.cpp:275
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Typ"
 
-#: debugger/breakpoint/breakpointmodel.cpp:220
+#: debugger/breakpoint/breakpointmodel.cpp:276
 #, kde-format
 msgid "Location"
 msgstr "Steed"
 
-#: debugger/breakpoint/breakpointmodel.cpp:221
+#: debugger/breakpoint/breakpointmodel.cpp:277
 #, kde-format
 msgid "Condition"
 msgstr "Beding"
 
-#: debugger/breakpoint/breakpointmodel.cpp:225
+#: debugger/breakpoint/breakpointmodel.cpp:281
 #, kde-format
 msgid "Active status"
 msgstr "Aktiev Status"
 
-#: debugger/breakpoint/breakpointmodel.cpp:226
+#: debugger/breakpoint/breakpointmodel.cpp:282
 #, kde-format
 msgid "State"
 msgstr "Status"
@@ -369,12 +369,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr ""
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#: debugger/interfaces/ibreakpointcontroller.cpp:78
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Hollpunkt drapen: %1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#: debugger/interfaces/ibreakpointcontroller.cpp:85
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "Luerpunkt drapen: %1"

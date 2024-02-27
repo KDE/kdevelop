@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:37+0000\n"
+"POT-Creation-Date: 2024-02-27 01:36+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -29,14 +29,14 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "manolis@koppermind.homelinux.org,sstavra@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:161
+#: debugger/breakpoint/breakpoint.cpp:164
 #, fuzzy, kde-format
 #| msgid "Error"
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: debugger/breakpoint/breakpoint.cpp:167
+#: debugger/breakpoint/breakpoint.cpp:170
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "dirty"
@@ -44,7 +44,7 @@ msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "βρώμικο"
 
-#: debugger/breakpoint/breakpoint.cpp:169
+#: debugger/breakpoint/breakpoint.cpp:172
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "pending"
@@ -52,7 +52,7 @@ msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "εκκρεμεί"
 
-#: debugger/breakpoint/breakpoint.cpp:171
+#: debugger/breakpoint/breakpoint.cpp:174
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "clean"
@@ -60,7 +60,7 @@ msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "καθαρό"
 
-#: debugger/breakpoint/breakpoint.cpp:204
+#: debugger/breakpoint/breakpoint.cpp:207
 #, fuzzy, kde-format
 #| msgctxt "project name (branch name)"
 #| msgid "%1 (%2)"
@@ -136,66 +136,66 @@ msgstr ""
 "<b>Το σημείο προσωρινής παύσης είναι βρώμικο</b><p>Το σημείο προσωρινής "
 "παύσης δεν έχει ακόμη μεταφερθεί στον debugger.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:114
+#: debugger/breakpoint/breakpointmodel.cpp:106
 #, kde-format
 msgid "Breakpoint"
 msgstr "Σημείο προσωρινής παύσης"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, fuzzy, kde-format
 #| msgid "Breakpoint hit: %1"
 msgid "Breakpoint not found"
 msgstr "Χτύπημα σημείου προσωρινής παύσης: %1"
 
-#: debugger/breakpoint/breakpointmodel.cpp:160
+#: debugger/breakpoint/breakpointmodel.cpp:216
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:166
+#: debugger/breakpoint/breakpointmodel.cpp:222
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "&Breakpoint"
 msgstr "Σημείο προσωρινής παύσης"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:228
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Απενεργοποίηση σημείου προσωρινής παύσης"
 
-#: debugger/breakpoint/breakpointmodel.cpp:173
+#: debugger/breakpoint/breakpointmodel.cpp:229
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "&Ενεργοποίηση σημείου προσωρινής παύσης"
 
-#: debugger/breakpoint/breakpointmodel.cpp:176
+#: debugger/breakpoint/breakpointmodel.cpp:232
 #, kde-format
 msgid "&Bookmark"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:219
+#: debugger/breakpoint/breakpointmodel.cpp:275
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Τύπος"
 
-#: debugger/breakpoint/breakpointmodel.cpp:220
+#: debugger/breakpoint/breakpointmodel.cpp:276
 #, kde-format
 msgid "Location"
 msgstr "Τοποθεσία"
 
-#: debugger/breakpoint/breakpointmodel.cpp:221
+#: debugger/breakpoint/breakpointmodel.cpp:277
 #, kde-format
 msgid "Condition"
 msgstr "Συνθήκη"
 
-#: debugger/breakpoint/breakpointmodel.cpp:225
+#: debugger/breakpoint/breakpointmodel.cpp:281
 #, kde-format
 msgid "Active status"
 msgstr "Ενεργή κατάσταση"
 
-#: debugger/breakpoint/breakpointmodel.cpp:226
+#: debugger/breakpoint/breakpointmodel.cpp:282
 #, kde-format
 msgid "State"
 msgstr "Κατάσταση"
@@ -364,12 +364,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr ""
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#: debugger/interfaces/ibreakpointcontroller.cpp:78
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Χτύπημα σημείου προσωρινής παύσης: %1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#: debugger/interfaces/ibreakpointcontroller.cpp:85
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "Χτύπημα σημείου παύσης δεδομένων: %1"
