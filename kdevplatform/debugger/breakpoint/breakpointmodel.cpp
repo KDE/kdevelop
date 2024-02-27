@@ -265,7 +265,7 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
     qCritical() << "reloaded()";
 
     // KTextEditor::DocumentPrivate::documentReload() just re-added all document marks,
-    // which where temporarily removed during the reload. So end the mark change inhibition now.
+    // which were temporarily removed during the reload. So end the mark change inhibition now.
     --d->inhibitMarkChange;
 
     switch (d->reloadState) {
