@@ -197,9 +197,9 @@ private:
     ScopedIncrementor markChangeGuard();
 
     /**
-     * Check if a document contains any breakpoint marks.
+     * Remove all breakpoint marks from @p document.
      */
-    static bool containsBreakpointMarks(const KTextEditor::Document& document);
+    static void removeBreakpointMarks(const KTextEditor::Document& document);
 
     /**
      * Initialize breakpoint marks and moving cursors in a given document.

@@ -174,6 +174,13 @@ protected:
     uint markType() const;
     void updateMarkType() const;
 
+    /**
+     * Destroy the associated moving cursor.
+     * @pre Document line tracking is active, i.e. the moving cursor is valid.
+     * @note The associated breakpoint mark is not touched. The calling code is
+     *       responsible for keeping the mark in sync with the breakpoint.
+     */
+    void removeMovingCursor();
     void saveMovingCursorLine();
     void reportChange(Column c);
     /**
