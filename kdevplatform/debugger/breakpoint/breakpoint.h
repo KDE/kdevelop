@@ -18,7 +18,6 @@ class TestBreakpointModel;
 class QVariant;
 class KConfigGroup;
 namespace KTextEditor {
-class Document;
 class MovingCursor;
 }
 namespace KDevelop
@@ -128,21 +127,6 @@ public:
 
     void stopDocumentLineTracking();
     void restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor);
-
-    /**
-     * Destroy the moving cursor.
-     * @pre Document line tracking is active, i.e. the moving cursor is valid.
-     * @pre The associated breakpoint mark has been temporarily removed and is currently absent.
-     */
-    void pauseDocumentLineTracking();
-    /**
-     * Create a moving cursor to start tracking at the saved line in @p document.
-     * @pre The saved line is within @p document's bounds.
-     * @pre Document line tracking is inactive, i.e. the moving cursor is null.
-     * @pre The associated breakpoint mark of the correct type has been restored
-     *      and is currently present at the saved line.
-     */
-    void resumeDocumentLineTracking(KTextEditor::Document& document);
 
     KTextEditor::MovingCursor *movingCursor() const;
 
