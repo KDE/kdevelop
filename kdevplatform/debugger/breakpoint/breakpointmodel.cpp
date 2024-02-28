@@ -257,15 +257,13 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
 {
     Q_D(BreakpointModel);
 
-    Q_ASSERT(d->reloadState != ReloadState::Idle);
-
     // KTextEditor::DocumentPrivate::documentReload() just re-added all document marks,
     // which were temporarily removed during the reload. So end the mark change inhibition now.
     --d->inhibitMarkChange;
 
     switch (d->reloadState) {
     case ReloadState::Idle:
-        Q_ASSERT(false);
+        Q_ASSERT_X(false, Q_FUNC_INFO, "KTextEditor::Document did not emit aboutToReload() before reloaded().");
     case ReloadState::StartedReloading:
         // Moving cursors have not been invalidated, because the user opted to cancel reloading.
     case ReloadState::ZeroBreakpoints:
