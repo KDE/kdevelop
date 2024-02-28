@@ -139,7 +139,7 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) const
 {
     Q_D(const BreakpointModel);
-qCritical() << "---- start setupDocumentBreakpoints()";
+
     // Initial setup of moving cursors and marks.
     const QUrl docUrl = document.url();
     const auto docLineCount = document.lines();
@@ -151,7 +151,6 @@ qCritical() << "---- start setupDocumentBreakpoints()";
             }
         }
     }
-qCritical() << "---- end setupDocumentBreakpoints()";
 }
 
 void BreakpointModel::removeBreakpointMarks(const KTextEditor::Document& document)
@@ -180,8 +179,6 @@ void BreakpointModel::aboutToReload()
 {
     Q_D(BreakpointModel);
 
-    qCritical() << "aboutToReload()";
-
     Q_ASSERT(d->reloadState == ReloadState::Idle);
     d->reloadState = ReloadState::StartedReloading;
 
@@ -197,8 +194,6 @@ void BreakpointModel::aboutToReload()
 void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Document* document)
 {
     Q_D(BreakpointModel);
-
-    qCritical() << "aboutToInvalidateMovingInterfaceContent()" << document->isModified();
 
     if (d->reloadState == ReloadState::Idle) {
         qCWarning(DEBUGGER).nospace() << "unsupported moving interface content invalidation in "
@@ -261,8 +256,6 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
     Q_D(BreakpointModel);
 
     Q_ASSERT(d->reloadState != ReloadState::Idle);
-
-    qCritical() << "reloaded()" << static_cast<int>(d->reloadState);
 
     // KTextEditor::DocumentPrivate::documentReload() just re-added all document marks,
     // which were temporarily removed during the reload. So end the mark change inhibition now.
@@ -489,14 +482,6 @@ void BreakpointModel::markChanged(
 {
     Q_D(const BreakpointModel);
 
-
-    if (action == KTextEditor::MarkInterface::MarkAdded)
-        qCritical() << "markChanged(MarkAdded):"<<mark.line << mark.type;
-    else {
-        Q_ASSERT(action == KTextEditor::MarkInterface::MarkRemoved);
-        qCritical() << "markChanged(MarkRemoved)" << mark.line << mark.type;
-    }
-
     int type = mark.type;
     /* Is this a breakpoint mark, to begin with? */
     if (!(type & AllBreakpointMarks)) return;
@@ -612,8 +597,6 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 {
     Q_D(BreakpointModel);
 
-    qCritical() << "documentSaved()";
-
     IF_DEBUG( qCDebug(DEBUGGER); )
     // save breakpoints in the given document.
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
@@ -632,8 +615,6 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* document)
 {
     Q_D(BreakpointModel);
-
-    qCritical() << "aboutToDeleteMovingInterfaceContent()";
 
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (breakpoint->movingCursor() && breakpoint->movingCursor()->document() == document) {
