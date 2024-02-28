@@ -262,19 +262,19 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
     --d->inhibitMarkChange;
 
     switch (d->reloadState) {
-        case ReloadState::Idle:
-            Q_ASSERT(false);
-        case ReloadState::StartedReloading:
-            // Moving cursors have not been invalidated, because the user opted to cancel reloading.
-        case ReloadState::ZeroBreakpoints:
-            // There are no breakpoints at the reloaded document's URL.
-            break; // nothing to do
-        case ReloadState::RemoveBreakpointMarksAndReinitialize:
-            removeBreakpointMarks(*document);
-            [[fallthrough]];
-        case ReloadState::Reinitialize:
-            // reinitialize
-            setupDocumentBreakpoints(*document);
+    case ReloadState::Idle:
+        Q_ASSERT(false);
+    case ReloadState::StartedReloading:
+        // Moving cursors have not been invalidated, because the user opted to cancel reloading.
+    case ReloadState::ZeroBreakpoints:
+        // There are no breakpoints at the reloaded document's URL.
+        break; // nothing to do
+    case ReloadState::RemoveBreakpointMarksAndReinitialize:
+        removeBreakpointMarks(*document);
+        [[fallthrough]];
+    case ReloadState::Reinitialize:
+        // reinitialize
+        setupDocumentBreakpoints(*document);
     }
 
     d->reloadState = ReloadState::Idle;
