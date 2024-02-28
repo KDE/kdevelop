@@ -262,7 +262,7 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
 
     Q_ASSERT(d->reloadState != ReloadState::Idle);
 
-    qCritical() << "reloaded()";
+    qCritical() << "reloaded()" << static_cast<int>(d->reloadState);
 
     // KTextEditor::DocumentPrivate::documentReload() just re-added all document marks,
     // which were temporarily removed during the reload. So end the mark change inhibition now.
@@ -491,10 +491,10 @@ void BreakpointModel::markChanged(
 
 
     if (action == KTextEditor::MarkInterface::MarkAdded)
-        qCritical() << "markChanged(MarkAdded):"<<mark.line;
+        qCritical() << "markChanged(MarkAdded):"<<mark.line << mark.type;
     else {
         Q_ASSERT(action == KTextEditor::MarkInterface::MarkRemoved);
-        qCritical() << "markChanged(MarkRemoved)" << mark.line;
+        qCritical() << "markChanged(MarkRemoved)" << mark.line << mark.type;
     }
 
     int type = mark.type;
