@@ -214,8 +214,8 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
     for (auto* const breakpoint : std::as_const(d->breakpoints)) {
         const auto* const cursor = breakpoint->movingCursor();
         if (cursor && cursor->document() == document) {
-            hasBreakpointMarks = true;
             reinitializeBreakpoints = true;
+            hasBreakpointMarks = true;
             // KTextEditor::Document clears marks soon after emitting aboutToInvalidateMovingInterfaceContent()
             // during a reload. Call removeMovingCursor() instead of stopDocumentLineTracking() to avoid removing marks
             // one by one in this loop, because the impending clearing of all marks at once should be more efficient.
