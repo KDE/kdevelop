@@ -88,7 +88,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::declarations(const TopDUContext*
 
     if (m_isDirect == false) {
         //Find the declaration by its qualified identifier and additionalIdentity
-        QualifiedIdentifier id(m_indirectData.identifier);
+        const auto& id = m_indirectData.identifier;
 
         auto visitDeclaration = [&](const IndexedDeclaration& indexedDecl) {
             auto decl = indexedDecl.data();
@@ -139,7 +139,7 @@ Declaration* DeclarationId::declaration(const TopDUContext* top, bool instantiat
 
     if (m_isDirect == false) {
         //Find the declaration by its qualified identifier and additionalIdentity
-        QualifiedIdentifier id(m_indirectData.identifier);
+        const auto& id = m_indirectData.identifier;
 
         auto visitDeclaration = [&](const IndexedDeclaration& indexedDecl) {
             auto decl = indexedDecl.data();
