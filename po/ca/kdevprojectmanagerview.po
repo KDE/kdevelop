@@ -455,35 +455,3 @@ msgstr "Obre la configuració..."
 msgctxt "Version control: Currently not on a branch"
 msgid "(no branch)"
 msgstr "(sense branca)"
-
-#~ msgid "Rename..."
-#~ msgstr "Reanomena..."
-
-#~ msgid "&Add to Target"
-#~ msgstr "&Afegeix a l'objectiu"
-
-#~ msgid "Project Manager"
-#~ msgstr "Gestor del projecte"
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgctxt "@action"
-#~ msgid "Build"
-#~ msgstr "Construeix"
-
-#~ msgctxt "@action"
-#~ msgid "Install"
-#~ msgstr "Instal·la"
-
-#~ msgctxt "@action"
-#~ msgid "Clean"
-#~ msgstr "Neteja"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Executa"
-
-#~| msgid "Projects"
-#~ msgid "Projects View"
-#~ msgstr "Vista de projectes"

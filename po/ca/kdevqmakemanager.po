@@ -142,18 +142,3 @@ msgstr "*** Ha fallat retornant el codi: %1 ***"
 msgctxt "@action"
 msgid "Run QMake"
 msgstr "Executa «QMake»"
-
-#~ msgid "QMake &binary:"
-#~ msgstr "&Binari de «QMake»:"
-
-#~ msgid "qmake-parser"
-#~ msgstr "Analitzador de «QMake»"
-
-#~ msgid "Parse QMake project files"
-#~ msgstr "Analitza els fitxers de projecte del «QMake»"
-
-#~ msgid "Enable output of the debug AST"
-#~ msgstr "Habilita la sortida del depurador AST"
-
-#~ msgid "QMake project files"
-#~ msgstr "Fitxers de projecte del «QMake»"

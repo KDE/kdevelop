@@ -69,9 +69,3 @@ msgstr "Cadena d'eines:"
 msgctxt "@label:textbox"
 msgid "ABI:"
 msgstr "ABI:"
-
-#~ msgid "ABI"
-#~ msgstr "ABI"
-
-#~ msgid "Form"
-#~ msgstr "Formulari"

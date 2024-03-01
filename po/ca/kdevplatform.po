@@ -6253,7 +6253,3 @@ msgstr "Diferències amb l'anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferències entre revisions"
-
-#~ msgctxt "@info:progress"
-#~ msgid "Running %1"
-#~ msgstr "S'està executant %1"
