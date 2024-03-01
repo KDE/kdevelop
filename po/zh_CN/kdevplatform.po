@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-27 01:36+0000\n"
-"PO-Revision-Date: 2024-02-05 11:40\n"
+"PO-Revision-Date: 2024-02-29 12:56\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -3538,9 +3538,7 @@ msgid "Delete Session"
 msgstr "删除会话"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "启动新会话"
@@ -3583,20 +3581,16 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "以空会话启动新的 KDevelop 实例"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "启动新会话"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "以空会话启动新的 KDevelop 实例"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:293
 #, kde-format
