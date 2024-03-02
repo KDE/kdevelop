@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014, 2015.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-03-14 19:15+0300\n"
+"PO-Revision-Date: 2024-03-01 15:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.02.0\n"
 
 #: grepdialog.cpp:54
 #, kde-format
@@ -582,14 +582,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
-msgstr "Dışarıda tut:"
+msgstr "Dışla:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:231
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
-msgstr "Dışarıda tutulacak dosya dizgileri"
+msgstr "Dışlanacak dosya dizgileri"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:234
@@ -601,10 +601,10 @@ msgid ""
 "is internally surrounded by asterisks, so that each pattern can match parts "
 "of the file paths.</p>"
 msgstr ""
-"Aramanıza dahil etmeyeceğiniz ad dizgisini buraya girin. Virgül veya "
-"boşlukla ayırdığınız birden fazla dizgi kullanabilirsiniz.<p>Her dizgi, "
-"yıldız işaretleriyle çevrili olacağından her biri dosya yollarının "
-"parçalarıyla eşleşebilir.</p>"
+"Aramanızdan dışlayacağınız ad dizgisini buraya girin. Virgül veya boşlukla "
+"ayırdığınız birden fazla dizgiyi kullanabilirsiniz.<p>Her dizgi, yıldız "
+"işaretleriyle çevrili olacağından her biri dosya yollarının parçalarıyla "
+"eşleşebilir.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: grepwidget.ui:314
