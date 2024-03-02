@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-09-06 23:06+0300\n"
+"PO-Revision-Date: 2024-03-01 15:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 24.02.0\n"
 
 #: filtermodel.cpp:76
 #, kde-format
@@ -92,12 +92,12 @@ msgid ""
 "project, you could exclude all files via <code>\"*\"</code> and then apply "
 "an inclusive <code>\"*.cpp\"</code> pattern."
 msgstr ""
-"Süzgeçler, öntanımlı olarak projedeki ögeleri dışarıda tutarlar. Daha "
-"önceden dışarıda tutan dizgilerle eşleşen ögeleri içermek için, içeren "
-"dizgiler kullanılabilir.<br />Örneğin, projenizde yalnızca <code>\".cpp\"</"
-"code> ile biten dosyalarla eşleşmek için, tüm dosyaları <code>\"*\"</code> "
-"ile dışarıda tutabilir ve sonrasında bir içeren <code>\"*.cpp\"</code> "
-"dizgisi uygulayabilirsiniz."
+"Süzgeçler, öntanımlı olarak projedeki ögeleri dışlarlar. Daha önceden "
+"dışlaıaı dizgilerle eşleşen ögeleri içermek için içeren dizgiler "
+"kullanılabilir.<br />Örneğin, projenizde yalnızca <code>\".cpp\"</code> ile "
+"biten dosyalarla eşleşmek için, tüm dosyaları <code>\"*\"</code> ile "
+"dışlayabilir ve sonrasında bir içeren <code>\"*.cpp\"</code> dizgisini "
+"uygulayabilirsiniz."
 
 #: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
 #, kde-format
@@ -109,7 +109,7 @@ msgstr "İçer"
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"
-msgstr "Dışarıda Tut"
+msgstr "Dışla"
 
 #: projectfilterconfigpage.cpp:172
 #, kde-format
@@ -144,8 +144,8 @@ msgstr "Proje Süzgeci"
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
-msgstr[0] "Projeden Ögeyi Dışarıda Tut"
-msgstr[1] "Projeden Ögeleri Dışarıda Tut"
+msgstr[0] "Projeden Ögeyi Dışla"
+msgstr[1] "Projeden Ögeleri Dışla"
 
 #: projectfilterprovider.cpp:115
 #, kde-format
@@ -174,7 +174,7 @@ msgid ""
 "included or excluded:"
 msgstr ""
 "Proje klasörünün içindeki hangi dosyaların veya klasörlerin içerileceğini "
-"veya dışarıda tutulacağını yapılandırın:"
+"veya dışlanacağını yapılandırın:"
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: projectfiltersettings.ui:34
