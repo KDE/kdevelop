@@ -108,6 +108,15 @@ BreakpointModel* breakpointModel()
     return ICore::self()->debugController()->breakpointModel();
 }
 
+/// Overwrite the contents of the local file at @p localFileUrl with @p newContents.
+/// Check success with RETURN_IF_TEST_FAILED().
+void overwriteExistingFile(const QUrl& localFileUrl, const QString& newContents)
+{
+    QFile file(localFileUrl.toLocalFile());
+    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::ExistingOnly));
+    QVERIFY(file.write(newContents.toUtf8()) != -1);
+    QVERIFY(file.flush());
+}
 } // unnamed namespace
 
 /// Gather breakpoint marks in the document.
@@ -500,6 +509,14 @@ void TestBreakpointModel::testUpdateMarkType()
     VERIFY_BREAKPOINT(b1, 21, BreakpointModel::DisabledBreakpointMark, documentMarks(doc), );
 }
 
+void TestBreakpointModel::testDocumentReload_data()
+{
+    QTest::addColumn<ReloadMode>("reloadMode");
+    QTest::newRow("Clean") << ReloadMode::Clean;
+    QTest::newRow("Dirty") << ReloadMode::Dirty;
+    QTest::newRow("DirtyBreakpointLine") << ReloadMode::DirtyBreakpointLine;
+}
+
 void TestBreakpointModel::testDocumentReload()
 {
     const auto [url, doc, b1, b2] = setupEditAndCheckPrimaryDocumentAndBreakpoints();
@@ -520,7 +537,26 @@ void TestBreakpointModel::testDocumentReload()
     // Wait needed for BreakpointModel::save() to complete.
     QTest::qWait(1);
 
-    // Reload the saved document.
+    QFETCH(const ReloadMode, reloadMode);
+    if (reloadMode != ReloadMode::Clean) {
+        const auto* const textDoc = doc->textDocument();
+        QString text;
+        if (reloadMode == ReloadMode::DirtyBreakpointLine) {
+            // Modify text on a breakpoint's line to prevent KTextEditor from restoring the breakpoint's mark when
+            // the document is reloaded. KDevelop must ensure the breakpoint mark is restored in this case too.
+            text = textDoc->text({{0, 0}, {b1->line(), 0}});
+            text += textDoc->text({{b1->line(), 4}, textDoc->documentEnd()});
+        } else {
+            // Remove several lines from the end of the document's file.
+            // This must not affect breakpoints above the removed lines.
+            text = textDoc->text({{0, 0}, {textDoc->lines() - 3, 0}});
+        }
+
+        overwriteExistingFile(url, text);
+        RETURN_IF_TEST_FAILED();
+    }
+
+    // Reload the document.
     doc->reload();
 
     // Verify that the breakpoint instances in the model are preserved.

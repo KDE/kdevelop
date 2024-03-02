@@ -32,6 +32,9 @@ class TestBreakpointModel : public QObject
 public:
     explicit TestBreakpointModel(QObject* parent = nullptr);
 
+    enum class ReloadMode { Clean, Dirty, DirtyBreakpointLine };
+    Q_ENUM(ReloadMode)
+
 private Q_SLOTS:
     void initTestCase();
     void init();
@@ -43,6 +46,7 @@ private Q_SLOTS:
     void testDocumentEditAndDiscard();
     void testSetLocation();
     void testUpdateMarkType();
+    void testDocumentReload_data();
     void testDocumentReload();
 
 private:
