@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-10-31 05:55+0100\n"
+"PO-Revision-Date: 2024-03-02 17:23+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: grepdialog.cpp:54
 #, kde-format
@@ -99,7 +99,7 @@ msgstr[1] "Buscando <b>%2</b> en %1 ficheiros"
 #: grepjob.cpp:224
 #, kde-format
 msgid "Collecting files..."
-msgstr "Estanse a recopilar os ficheiros…"
+msgstr "Recollendo os ficheiros…"
 
 #: grepjob.cpp:268
 #, kde-format
@@ -441,7 +441,7 @@ msgstr ""
 "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
-"\">n</span><span style=\" font-weight:600;\">}</span> - O elmento anterior "
+"\">n</span><span style=\" font-weight:600;\">}</span> - O elemento anterior "
 "coincide exactamente <span style=\" font-style:italic;\">n</span> veces</"
 "li>\n"
 "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"

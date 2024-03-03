@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-07 01:14+0000\n"
-"PO-Revision-Date: 2023-11-23 17:53+0100\n"
+"PO-Revision-Date: 2024-03-02 17:24+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -89,7 +89,7 @@ msgstr "O punto de parada está <a href=\"pending\">pendente</a>"
 #: debugger/breakpoint/breakpointdetails.cpp:115
 #, kde-format
 msgid "Breakpoint is <a href=\"dirty\">dirty</a>"
-msgstr "O punto de parada está <a href=\"dirty\">suxo</a>"
+msgstr "O punto de parada está <a href=\"dirty\">sucio</a>"
 
 #: debugger/breakpoint/breakpointdetails.cpp:118
 #, kde-format
@@ -129,8 +129,8 @@ msgid ""
 "<b>Breakpoint is dirty</b><p>The breakpoint has not yet been passed to the "
 "debugger.</p>"
 msgstr ""
-"<b>O punto de parada está suxo</b><p>O punto de parada aínda non se pasou ao "
-"depurador.</p>"
+"<b>O punto de parada está sucio</b><p>O punto de parada aínda non se pasou "
+"ao depurador.</p>"
 
 #: debugger/breakpoint/breakpointmodel.cpp:114
 #, kde-format
@@ -572,7 +572,7 @@ msgstr "Depuración"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Refactor"
-msgstr "Refactorizar"
+msgstr "Reorganizar"
 
 #: interfaces/contextmenuextension.cpp:136
 #, kde-format
@@ -916,7 +916,7 @@ msgstr "Retroceder ata %1<br />"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:115
 #, kde-format
 msgid "enumerator "
-msgstr "enumerador "
+msgstr "numerador "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
 #, kde-format
@@ -1815,7 +1815,7 @@ msgid ""
 "to the default code area."
 msgstr ""
 "Executa accións para cambiar a área.<br />Unha área é unha configuración "
-"dunha ferramenta para un caso de uso específico. Desde aquí pode voltar á "
+"dunha ferramenta para un caso de uso específico. Desde aquí pode volver á "
 "área de código predeterminada."
 
 #: shell/areadisplay.cpp:70
@@ -4974,7 +4974,7 @@ msgstr "Quere formatar os ficheiros?"
 #: shell/sourceformattercontroller.cpp:866
 #, kde-format
 msgid "Reformat all files in the selected folder?"
-msgstr "Cmabiar o formato de todos os ficheiros do cartafol seleccionado?"
+msgstr "Cambiar o formato de todos os ficheiros do cartafol seleccionado?"
 
 #: shell/sourceformattercontroller.cpp:870
 #, kde-format
