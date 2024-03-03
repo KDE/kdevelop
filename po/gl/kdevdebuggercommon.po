@@ -8,21 +8,21 @@
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
 # SPDX-FileCopyrightText: 2023 Adrian Chaves (Gallaecio)
 #
-# SPDX-FileCopyrightText: 2023 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2023, 2024 Adrián Chaves (Gallaecio)
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-10-18 22:09+0200\n"
+"PO-Revision-Date: 2024-03-02 17:21+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: dialogs/processselection.cpp:28
 #, kde-format
@@ -119,7 +119,7 @@ msgid ""
 "that the debug session has to be ended.<br>Try to reproduce the crash "
 "without KDevelop and report a bug.<br>"
 msgstr ""
-"<b>O depurador quebrou.</b><p>O proceso do depuraror, «%1», quebrou.<br> En "
+"<b>O depurador quebrou.</b><p>O proceso do depurador, «%1», quebrou.<br> En "
 "consecuencia debe rematarse a sesión de depuración.<br> Intente reproducir a "
 "quebra sen KDevelop e informe do fallo.<br>"
 
@@ -602,7 +602,7 @@ msgstr "&Saltar ata o cursor"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
-msgstr "Pon o punteiro de execución na posición do ursor."
+msgstr "Pon o punteiro de execución na posición do cursor."
 
 #: widgets/disassemblewidget.cpp:96
 #, kde-format
@@ -642,7 +642,7 @@ msgid ""
 "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
 "+0xc])."
 msgstr ""
-"GDB usará o modo de desensambrador de Intel (por exemplo, mov eax, DWORD PTR "
+"GDB usará o modo de desensamblador de Intel (por exemplo, mov eax, DWORD PTR "
 "[ebp+0xc])."
 
 #: widgets/disassemblewidget.cpp:143
@@ -687,7 +687,7 @@ msgstr "Instrución"
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"
-msgstr "Vista do Desensamblado/Rexistros"
+msgstr "Vista de desensamblaxe/Rexistros"
 
 #. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
 #: widgets/selectaddressdialog.ui:17

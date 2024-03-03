@@ -6,22 +6,22 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2009, 2013, 2014.
 # Xosé <xosecalvo@gmail.com>, 2013.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# SPDX-FileCopyrightText: 2023 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2023, 2024 Adrián Chaves (Gallaecio)
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-10-31 06:53+0100\n"
+"PO-Revision-Date: 2024-03-02 17:22+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
 #, kde-format
@@ -32,7 +32,7 @@ msgstr "GDB"
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers"
-msgstr "Desensamblado/Rexistros"
+msgstr "Desensamblaxe/Rexistros"
 
 #: debuggerplugin.cpp:117
 #, kde-format
@@ -91,8 +91,8 @@ msgid ""
 "it as printf debugging that does not require modifying the source.</p>"
 msgstr ""
 "<b>Activar o trazado</b>\n"
-"<p>O tracexamento é un mecanismo para imprimir automaticamente os valores "
-"das expresións escollidas e continuar a execución cando se acade un punto de "
+"<p>O seguimento é un mecanismo para imprimir automaticamente os valores das "
+"expresións escollidas e continuar a execución cando se acade un punto de "
 "parada. Pode consideralos como printf de depuración que non precisan de "
 "modificar as fontes.</p>"
 
@@ -297,7 +297,7 @@ msgid ""
 "can select to see the methods' mangled names.\n"
 "However, non-mangled names are easier to read."
 msgstr ""
-"Cando se mostra o código desensamblado pode\n"
+"Cando se mostra o código desensamblaxe pode\n"
 "escoller ver os nomes descodificados dos métodos.\n"
 "Porén, os nomes non descodificados son máis fáciles de ler."
 
