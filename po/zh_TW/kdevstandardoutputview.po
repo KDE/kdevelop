@@ -4,74 +4,67 @@
 # pan93412 <pan93412@gmail.com>, 2018.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2018-12-08 11:40+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-03-07 20:26+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "dot tw>\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: outputwidget.cpp:44
-#, fuzzy, kde-format
-#| msgid "Enter a wild card string to filter the output view"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
-msgstr "輸入萬用字元來過濾輸出檢視"
+msgstr "輸入不分大小寫的正則表達式來過濾輸出檢視"
 
 #: outputwidget.cpp:63
-#, fuzzy, kde-format
-#| msgid "Output View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Output View"
 msgstr "輸出檢視"
 
 #: outputwidget.cpp:74
-#, fuzzy, kde-format
-#| msgid "Close the currently active output view"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
 msgstr "關閉目前的輸出檢視"
 
 #: outputwidget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Close all other output views"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
 msgstr "關閉所有其他的輸出檢視"
 
 #: outputwidget.cpp:91
-#, fuzzy, kde-format
-#| msgid "Previous Output"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Output"
-msgstr "跳到前一個輸出"
+msgstr "上一個輸出"
 
 #: outputwidget.cpp:94
-#, fuzzy, kde-format
-#| msgid "Next Output"
+#, kde-format
 msgctxt "@action"
 msgid "Next Output"
-msgstr "跳到下一個輸出"
+msgstr "下一個輸出"
 
 #: outputwidget.cpp:99
-#, fuzzy, kde-format
-#| msgid "Select activated Item"
+#, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
 msgstr "選取目前的項目"
 
 #: outputwidget.cpp:101
-#, fuzzy, kde-format
-#| msgid "Focus when selecting Item"
+#, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "選取項目時取得焦點"
@@ -80,46 +73,40 @@ msgstr "選取項目時取得焦點"
 #, kde-format
 msgctxt "@action"
 msgid "Word Wrap"
-msgstr ""
+msgstr "文字折行"
 
 #: outputwidget.cpp:119
-#, fuzzy, kde-format
-#| msgid "First Item"
+#, kde-format
 msgctxt "@action"
 msgid "First Item"
-msgstr "第一個"
+msgstr "第一個項目"
 
 #: outputwidget.cpp:123
-#, fuzzy, kde-format
-#| msgid "Previous Item"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Item"
-msgstr "前一個項目"
+msgstr "上一個項目"
 
 #: outputwidget.cpp:127
-#, fuzzy, kde-format
-#| msgid "Next Item"
+#, kde-format
 msgctxt "@action"
 msgid "Next Item"
 msgstr "下一個項目"
 
 #: outputwidget.cpp:131
-#, fuzzy, kde-format
-#| msgid "Last Item"
+#, kde-format
 msgctxt "@action"
 msgid "Last Item"
-msgstr "最後一個"
+msgstr "最後一個項目"
 
 #: outputwidget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Clear"
+#, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr "清除"
 
 #: outputwidget.cpp:161
-#, fuzzy, kde-format
-#| msgid "Search..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "搜尋..."
@@ -128,7 +115,7 @@ msgstr "搜尋..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "設定%1輸出"
 
 #: outputwidget.cpp:840
 #, kde-format
@@ -136,31 +123,32 @@ msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
 "error"
 msgid "Filter regular expression pattern error at offset %1: %2"
-msgstr ""
+msgstr "過濾正則表達式在位置 %1 有錯誤：%2"
 
+# %1 是譯文所以不加空格
 #: outputwidgetconfig.cpp:64
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "設定%1輸出"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "限制輸出檢視的數量"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "自動關閉最舊的輸出檢視"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "最大輸出檢視數量"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -169,6 +157,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"最舊的輸出檢視會在輸出檢視數量\n"
+"超過此數值時被關閉"
 
 #: standardoutputview.cpp:100
 #, kde-format
