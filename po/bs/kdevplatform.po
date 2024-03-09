@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-27 01:36+0000\n"
+"POT-Creation-Date: 2024-03-09 01:41+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -131,66 +131,66 @@ msgstr ""
 "<b>Prekidna tačka je prljava</b><p>Prekidna tačka još nije proslijeđena u "
 "debager.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:106
+#: debugger/breakpoint/breakpointmodel.cpp:115
 #, kde-format
 msgid "Breakpoint"
 msgstr "Prijelomna tačka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:292
 #, fuzzy, kde-format
 #| msgid "Breakpoint hit: %1"
 msgid "Breakpoint not found"
 msgstr "Prekidna tačka dosegla: %1"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:292
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:222
+#: debugger/breakpoint/breakpointmodel.cpp:298
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "&Breakpoint"
 msgstr "Prijelomna tačka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:228
+#: debugger/breakpoint/breakpointmodel.cpp:304
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Isključi prekidnu tačku"
 
-#: debugger/breakpoint/breakpointmodel.cpp:229
+#: debugger/breakpoint/breakpointmodel.cpp:305
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "O&mogući prekidnu tačku"
 
-#: debugger/breakpoint/breakpointmodel.cpp:232
+#: debugger/breakpoint/breakpointmodel.cpp:308
 #, kde-format
 msgid "&Bookmark"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:275
+#: debugger/breakpoint/breakpointmodel.cpp:351
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Vrsta:"
 
-#: debugger/breakpoint/breakpointmodel.cpp:276
+#: debugger/breakpoint/breakpointmodel.cpp:352
 #, kde-format
 msgid "Location"
 msgstr "Lokacija"
 
-#: debugger/breakpoint/breakpointmodel.cpp:277
+#: debugger/breakpoint/breakpointmodel.cpp:353
 #, kde-format
 msgid "Condition"
 msgstr "Uslov"
 
-#: debugger/breakpoint/breakpointmodel.cpp:281
+#: debugger/breakpoint/breakpointmodel.cpp:357
 #, kde-format
 msgid "Active status"
 msgstr "Aktivni status"
 
-#: debugger/breakpoint/breakpointmodel.cpp:282
+#: debugger/breakpoint/breakpointmodel.cpp:358
 #, kde-format
 msgid "State"
 msgstr "Stanje"

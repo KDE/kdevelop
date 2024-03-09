@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-27 01:36+0000\n"
+"POT-Creation-Date: 2024-03-09 01:41+0000\n"
 "PO-Revision-Date: 2024-02-29 12:56\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -119,64 +119,64 @@ msgid ""
 "debugger.</p>"
 msgstr "<b>断点脏</b><p>断点还未被传递给调试器。</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:106
+#: debugger/breakpoint/breakpointmodel.cpp:115
 #, kde-format
 msgid "Breakpoint"
 msgstr "断点"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:292
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "找不到断点"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:292
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "无法找到位于 %1:%2 的断点"
 
-#: debugger/breakpoint/breakpointmodel.cpp:222
+#: debugger/breakpoint/breakpointmodel.cpp:298
 #, kde-format
 msgid "&Breakpoint"
 msgstr "&断点"
 
-#: debugger/breakpoint/breakpointmodel.cpp:228
+#: debugger/breakpoint/breakpointmodel.cpp:304
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "禁用断点(&D)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:229
+#: debugger/breakpoint/breakpointmodel.cpp:305
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "启用断点(&E)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:232
+#: debugger/breakpoint/breakpointmodel.cpp:308
 #, kde-format
 msgid "&Bookmark"
 msgstr "书签(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:275
+#: debugger/breakpoint/breakpointmodel.cpp:351
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "类型"
 
-#: debugger/breakpoint/breakpointmodel.cpp:276
+#: debugger/breakpoint/breakpointmodel.cpp:352
 #, kde-format
 msgid "Location"
 msgstr "位置"
 
-#: debugger/breakpoint/breakpointmodel.cpp:277
+#: debugger/breakpoint/breakpointmodel.cpp:353
 #, kde-format
 msgid "Condition"
 msgstr "条件"
 
-#: debugger/breakpoint/breakpointmodel.cpp:281
+#: debugger/breakpoint/breakpointmodel.cpp:357
 #, kde-format
 msgid "Active status"
 msgstr "活动状态"
 
-#: debugger/breakpoint/breakpointmodel.cpp:282
+#: debugger/breakpoint/breakpointmodel.cpp:358
 #, kde-format
 msgid "State"
 msgstr "状态"
