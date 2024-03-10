@@ -24,9 +24,6 @@
        <property name="placeholderText">
         <string comment="@info:placeholder">Search</string>
        </property>
-       <property name="urlDropsEnabled">
-        <bool>false</bool>
-       </property>
        <property name="showClearButton" stdset="0">
         <bool>true</bool>
        </property>
