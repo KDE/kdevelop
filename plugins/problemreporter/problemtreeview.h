@@ -49,7 +49,6 @@ private Q_SLOTS:
 
 private:
     void resizeColumns();
-    ProblemReporterPlugin* m_plugin;
     QSortFilterProxyModel* m_proxy;
     int m_averageCharWidth = -1;
     int m_headerWidth = -1;

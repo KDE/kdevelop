@@ -147,9 +147,6 @@ private:
 
     uint m_primaryColorCount;
 
-    /// Maybe make this configurable: An offset where to start stepping through the color wheel
-    uint m_colorOffset;
-
     /// the text color for the current color scheme
     QColor m_foregroundColor;
 

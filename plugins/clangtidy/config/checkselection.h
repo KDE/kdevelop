@@ -51,7 +51,6 @@ private Q_SLOTS:
     void onEnabledChecksChanged();
 
 private:
-    const CheckSet* m_checkSet = nullptr;
     CheckListModel* m_checkListModel;
     QSortFilterProxyModel* m_checksFilterProxyModel;
     QTreeView* m_checkListView;

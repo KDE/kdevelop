@@ -69,7 +69,7 @@ public:
         return ( bool )m_index;
     }
 
-    /// \copydoc
+    /// \copydoc isValid
     operator bool() const {
         return ( bool )m_index;
     }

@@ -19,7 +19,6 @@ ClangTidyPreferences::ClangTidyPreferences(CheckSetSelectionManager* checkSetSel
                                            const CheckSet* checkSet,
                                            IPlugin* plugin, QWidget* parent)
     : ConfigPage(plugin, ClangTidySettings::self(), parent)
-    , m_checkSetSelectionManager(checkSetSelectionManager)
 {
     ui = new Ui::ClangTidyPreferences();
     ui->setupUi(this);
