@@ -55,11 +55,11 @@ target_link_libraries(kdevheaptrack
 if(KSysGuard_FOUND)
     target_link_libraries(kdevheaptrack
         kdevdebuggercommon
-        KSysGuard::ProcessUi
+        KSysGuard::ProcessCore
     )
 elseif(KF5SysGuard_FOUND)
     target_link_libraries(kdevheaptrack
         kdevdebuggercommon
-        KF${KF_MAJOR_VERSION}::ProcessUi
+        KF${KF_MAJOR_VERSION}::ProcessCore
     )
 endif()

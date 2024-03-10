@@ -84,12 +84,12 @@ target_include_directories(kdevdebuggercommon
 if(KSysGuard_FOUND)
     target_link_libraries(kdevdebuggercommon
         PUBLIC
-            KSysGuard::ProcessUi
+            KSysGuard::ProcessCore
     )
 elseif(KF5SysGuard_FOUND)
     target_link_libraries(kdevdebuggercommon
         PUBLIC
-        KF${KF_MAJOR_VERSION}::ProcessUi
+        KF${KF_MAJOR_VERSION}::ProcessCore
     )
 endif()
 
