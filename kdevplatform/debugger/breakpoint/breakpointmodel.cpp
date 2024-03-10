@@ -119,7 +119,7 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
         imark->setEditableMarks(KTextEditor::Document::Bookmark | KTextEditor::Document::BreakpointActive);
 
         // Set up breakpoints *before* connecting to the document's signals.
-        setupDocumentBreakpoints(*textDocument);
+        setupDocumentBreakpoints(textDocument);
         // can't use new signal slot syntax here, MarkInterface is not a QObject
         connect(textDocument, &KTextEditor::Document::markChanged,
                  this, &BreakpointModel::markChanged);
@@ -134,28 +134,26 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
     connect(textDocument, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
 }
 
-void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) const
+void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document *document) const
 {
     Q_D(const BreakpointModel);
 
     // Initial setup of moving cursors and marks.
-    const QUrl docUrl = document.url();
-    const auto docLineCount = document.lines();
+    const QUrl docUrl = document->url();
+    const auto docLineCount = document->lines();
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (docUrl == breakpoint->url()) {
             const auto savedLine = breakpoint->savedLine();
             if (savedLine >= 0 && savedLine < docLineCount) {
-                setupMovingCursor(breakpoint, &document, savedLine);
+                setupMovingCursor(breakpoint, document, savedLine);
             }
         }
     }
 }
 
-void BreakpointModel::removeBreakpointMarks(const KTextEditor::Document& document)
+void BreakpointModel::removeBreakpointMarks(KTextEditor::Document *document)
 {
-    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(&document);
-    Q_ASSERT(imark);
-    const auto& marks = imark->marks();
+    const auto& marks = document->marks();
     if (marks.empty()) {
         return;
     }
@@ -169,7 +167,7 @@ void BreakpointModel::removeBreakpointMarks(const KTextEditor::Document& documen
     // and performance (the QList is smaller than the QHash and is ideal for the loop below).
     const auto markLines = marks.keys();
     for (const int line : markLines) {
-        imark->removeMark(line, AllBreakpointMarks);
+        document->removeMark(line, AllBreakpointMarks);
     }
 }
 
@@ -268,11 +266,11 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
         // There are no breakpoints at the reloaded document's URL.
         break; // nothing to do
     case ReloadState::CleanUpMarksAndReinitialize:
-        removeBreakpointMarks(*document);
+        removeBreakpointMarks(document);
         [[fallthrough]];
     case ReloadState::Reinitialize:
         // reinitialize
-        setupDocumentBreakpoints(*document);
+        setupDocumentBreakpoints(document);
     }
 
     d->reloadState = ReloadState::Idle;
