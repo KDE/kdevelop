@@ -198,12 +198,12 @@ private:
     /**
      * Remove all breakpoint marks from @p document.
      */
-    void removeBreakpointMarks(const KTextEditor::Document& document);
+    void removeBreakpointMarks(KTextEditor::Document *document);
 
     /**
      * Initialize breakpoint marks and moving cursors in a given document.
      */
-    void setupDocumentBreakpoints(KTextEditor::Document& document) const;
+    void setupDocumentBreakpoints(KTextEditor::Document *document) const;
 
     Breakpoint *breakpoint(const QUrl& url, int line) const;
 
