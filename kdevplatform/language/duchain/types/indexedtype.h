@@ -69,7 +69,6 @@ public:
         return ( bool )m_index;
     }
 
-    /// \copydoc
     operator bool() const {
         return ( bool )m_index;
     }
