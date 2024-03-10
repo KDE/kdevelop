@@ -255,7 +255,7 @@ public:
      * */
     const Declaration* logicalDeclaration(const TopDUContext* topContext) const;
 
-    /// \copydoc
+    /// \copydoc logicalDeclaration(const TopDUContext* topContext) const
     Declaration* logicalDeclaration(const TopDUContext* topContext);
 
     /**
