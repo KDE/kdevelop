@@ -8,7 +8,7 @@ Dependencies:
     'frameworks/knotifyconfig': '@latest-kf6'
     'frameworks/ktexteditor': '@latest-kf6'
     'frameworks/threadweaver': '@latest-kf6'
-    'sdk/libkomparediff2': '@same'
+    'sdk/libkomparediff2': 'kf6'
     'frameworks/purpose': '@latest-kf6'
     'frameworks/kdeclarative': '@latest-kf6'
     'frameworks/kcmutils': '@latest-kf6'
