@@ -9,13 +9,8 @@
 #include "patchreview.h"
 #include "debug.h"
 
-#ifdef WITH_KOMPAREDIFF2_5_4_OR_NEWER
 #include <KompareDiff2/DiffModelList>
-#include <KompareDiff2/KompareModelList>
-#else
-#include <libkomparediff2/diffmodellist.h>
-#include <libkomparediff2/komparemodellist.h>
-#endif
+#include <KompareDiff2/ModelList>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -489,11 +484,11 @@ void PatchReviewToolView::kompareModelChanged() {
 
     QMap<QUrl, KDevelop::VcsStatusInfo::State> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
 
-    const Diff2::DiffModelList* models = m_plugin->modelList()->models();
+    const auto* const models = m_plugin->modelList()->models();
     if( models )
     {
         for (auto* model : *models) {
-            const Diff2::DifferenceList* diffs = model->differences();
+            const auto* const diffs = model->differences();
             int cnt = 0;
             if ( diffs )
                 cnt = diffs->count();

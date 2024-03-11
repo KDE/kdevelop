@@ -1,9 +1,9 @@
-find_package(LibKompareDiff2 5.1 CONFIG)
-set_package_properties(LibKompareDiff2 PROPERTIES
+find_package(KompareDiff2 6.0)
+set_package_properties(KompareDiff2 PROPERTIES
     PURPOSE "Required for building the patch review plugin."
     TYPE RECOMMENDED
 )
-if (NOT LibKompareDiff2_FOUND)
+if (NOT KompareDiff2_FOUND)
     return()
 endif()
 
@@ -38,18 +38,12 @@ target_link_libraries(kdevpatchreview
     KDev::Language
     KDev::Vcs
     KDev::Sublime
-    ${LIBKOMPAREDIFF2_LIBRARIES} # from cmake config file, has matching target name, which changed for 5.1
+    KompareDiff2
     KF6::IconThemes
     KF6::KIOWidgets
     KF6::TextEditor
     KF6::Parts
 )
-if (LibKompareDiff2_VERSION VERSION_GREATER_EQUAL 5.4.0)
-    # KompareDiff2 installs a working version header only since 5.4 (23.08.0)
-    # so to work also with old versions instead of the sources including
-    # the version header a compile definition flag is used
-    target_compile_definitions(kdevpatchreview PRIVATE WITH_KOMPAREDIFF2_5_4_OR_NEWER)
-endif()
 if (KF6Purpose_FOUND)
     target_compile_definitions(kdevpatchreview PRIVATE WITH_PURPOSE)
     target_link_libraries(kdevpatchreview KF6::PurposeWidgets)

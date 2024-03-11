@@ -31,15 +31,9 @@
 #include <sublime/message.h>
 #include <util/path.h>
 
-#ifdef WITH_KOMPAREDIFF2_5_4_OR_NEWER
 #include <KompareDiff2/DiffSettings>
-#include <KompareDiff2/Kompare>
-#include <KompareDiff2/KompareModelList>
-#else
-#include <libkomparediff2/komparemodellist.h>
-#include <libkomparediff2/kompare.h>
-#include <libkomparediff2/diffsettings.h>
-#endif
+#include <KompareDiff2/Global>
+#include <KompareDiff2/ModelList>
 
 #include <KTextEditor/Document>
 #include <KTextEditor/MovingRange>
@@ -78,7 +72,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const QUrl& fileName ) {
             throw "no model";
 
         for ( int a = 0; a < m_modelList->modelCount(); ++a ) {
-            const Diff2::DiffModel* model = m_modelList->modelAt( a );
+            const auto* const model = m_modelList->modelAt(a);
             if ( !model || !model->differences() )
                 continue;
 
@@ -135,7 +129,7 @@ void PatchReviewPlugin::addHighlighting( const QUrl& highlightFile, IDocument* d
             throw "no model";
 
         for ( int a = 0; a < modelList()->modelCount(); ++a ) {
-            Diff2::DiffModel* model = modelList()->modelAt( a );
+            auto* const model = modelList()->modelAt(a);
             if ( !model )
                 continue;
 
@@ -172,7 +166,7 @@ void PatchReviewPlugin::highlightPatch() {
             throw "no model";
 
         for ( int a = 0; a < modelList()->modelCount(); ++a ) {
-            const Diff2::DiffModel* model = modelList()->modelAt( a );
+            const auto* const model = modelList()->modelAt(a);
             if ( !model )
                 continue;
 
@@ -233,7 +227,7 @@ void PatchReviewPlugin::updateKompareModel() {
     removeHighlighting();
     m_modelList.reset( nullptr );
     m_depth = 0;
-    delete m_diffSettings;
+    m_diffSettings.reset(nullptr);
     {
         IDocument* patchDoc = ICore::self()->documentController()->documentForUrl( m_patch->file() );
         if( patchDoc )
@@ -254,18 +248,14 @@ void PatchReviewPlugin::updateKompareModel() {
 
     if (!patchFile.isEmpty()) //only try to construct the model if we have a patch to load
     try {
-        m_diffSettings = new DiffSettings( nullptr );
-        m_kompareInfo.reset( new Kompare::Info() );
+        m_diffSettings.reset(new KompareDiff2::DiffSettings());
+        m_kompareInfo.reset(new KompareDiff2::Info());
         m_kompareInfo->localDestination = patchFile;
         m_kompareInfo->localSource = m_patch->baseDir().toLocalFile();
         m_kompareInfo->depth = m_patch->depth();
         m_kompareInfo->applied = m_patch->isAlreadyApplied();
 
-#ifdef WITH_KOMPAREDIFF2_5_4_OR_NEWER
-        m_modelList.reset(new Diff2::KompareModelList(m_diffSettings.data(), this));
-#else
-        m_modelList.reset( new Diff2::KompareModelList( m_diffSettings.data(), new QWidget, this ) );
-#endif
+        m_modelList.reset(new KompareDiff2::ModelList(m_diffSettings.data(), this));
         m_modelList->slotKompareInfo( m_kompareInfo.data() );
 
         try {
@@ -291,7 +281,7 @@ void PatchReviewPlugin::updateKompareModel() {
         emit patchChanged();
 
         for( int i = 0; i < m_modelList->modelCount(); i++ ) {
-            const Diff2::DiffModel* model = m_modelList->modelAt( i );
+            const auto* const model = m_modelList->modelAt(i);
             for (auto* difference : *model->differences()) {
                 difference->apply(m_patch->isAlreadyApplied());
             }
@@ -309,7 +299,7 @@ void PatchReviewPlugin::updateKompareModel() {
     m_modelList.reset( nullptr );
     m_depth = 0;
     m_kompareInfo.reset( nullptr );
-    delete m_diffSettings;
+    m_diffSettings.reset(nullptr);
 
     emit patchChanged();
 }
@@ -424,7 +414,7 @@ void PatchReviewPlugin::switchToEmptyReviewArea()
     }
 }
 
-QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
+QUrl PatchReviewPlugin::urlForFileModel(const KompareDiff2::DiffModel* model) const
 {
     KDevelop::Path path(QDir::cleanPath(m_patch->baseDir().toLocalFile()));
     QVector<QString> destPath = KDevelop::Path(QLatin1Char('/') + model->destinationPath()).segments();
@@ -519,8 +509,6 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( QStringLiteral("kdevpatchreview"), parent ),
     m_patch( nullptr ), m_factory( new PatchReviewToolViewFactory( this ) )
 {
-    qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
-
     setXMLFile( QStringLiteral("kdevpatchreview.rc") );
 
     connect( ICore::self()->documentController(), &IDocumentController::documentClosed, this, &PatchReviewPlugin::documentClosed );

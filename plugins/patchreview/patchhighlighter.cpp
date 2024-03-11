@@ -6,13 +6,8 @@
 
 #include "patchhighlighter.h"
 
-#ifdef WITH_KOMPAREDIFF2_5_4_OR_NEWER
 #include <KompareDiff2/Difference>
 #include <KompareDiff2/DiffModel>
-#else
-#include <libkomparediff2/difference.h>
-#include <libkomparediff2/diffmodel.h>
-#endif
 
 #include "patchreview.h"
 #include "debug.h"
@@ -77,7 +72,7 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
     delete currentTooltip;
 
     //Got the difference
-    Diff2::Difference* diff = m_ranges[markRange];
+    auto* const diff = m_ranges[markRange];
 
     QString html;
 #if 0
@@ -85,7 +80,7 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
         html += i18n( "<b><span style=\"color:red\">Conflict</span></b><br/>" );
 #endif
 
-    Diff2::DifferenceStringList lines;
+    KompareDiff2::DifferenceStringList lines;
 
     html += QLatin1String("<b>");
     if( diff->applied() ) {
@@ -121,11 +116,12 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
         uint currentPos = 0;
         const QString& string = line->string();
 
-        const Diff2::MarkerList& markers = line->markerList();
+        const auto markers = line->markerList();
 
         for (auto* marker : markers) {
             const QString spanText = string.mid( currentPos, marker->offset() - currentPos ).toHtmlEscaped();
-            if (marker->type() == Diff2::Marker::End && (currentPos != 0 || marker->offset() != static_cast<uint>( string.size()))) {
+            if (marker->type() == KompareDiff2::Marker::End
+                && (currentPos != 0 || marker->offset() != static_cast<uint>(string.size()))) {
                 html += QLatin1String("<b><span style=\"background:#FFBBBB\">") + spanText + QLatin1String("</span></b>");
             }else{
                 html += spanText;
@@ -174,7 +170,7 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, const KTextEdito
         handled = true;
 
         KTextEditor::MovingRange *&range = range_diff.first;
-        Diff2::Difference *&diff = range_diff.second;
+        auto* const diff = range_diff.second;
 
         QString currentText = doc->text( range->toRange() );
 
@@ -231,9 +227,11 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, const KTextEdito
     m_applying = false;
 }
 
-QPair<KTextEditor::MovingRange*, Diff2::Difference*> PatchHighlighter::rangeForMark( const KTextEditor::Mark &mark ) {
+QPair<KTextEditor::MovingRange*, KompareDiff2::Difference*>
+PatchHighlighter::rangeForMark(const KTextEditor::Mark& mark) const
+{
     if (!m_applying) {
-        for( QMap<KTextEditor::MovingRange*, Diff2::Difference*>::const_iterator it = m_ranges.constBegin(); it != m_ranges.constEnd(); ++it ) {
+        for (auto it = m_ranges.constBegin(); it != m_ranges.constEnd(); ++it) {
             if (it.value() && it.key()->start().line() <= mark.line && mark.line <= it.key()->end().line()) {
                 return qMakePair(it.key(), it.value());
             }
@@ -257,35 +255,37 @@ void PatchHighlighter::markToolTipRequested( KTextEditor::Document*, const KText
     }
 }
 
-bool PatchHighlighter::isInsertion( Diff2::Difference* diff ) {
+bool PatchHighlighter::isInsertion(const KompareDiff2::Difference* diff)
+{
     return diff->sourceLineCount() == 0;
 }
 
-bool PatchHighlighter::isRemoval( Diff2::Difference* diff ) {
+bool PatchHighlighter::isRemoval(const KompareDiff2::Difference* diff)
+{
     return diff->destinationLineCount() == 0;
 }
 
 void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber ) {
     Q_ASSERT(doc);
 
-    QPair<QList<Diff2::Difference*>, QList<Diff2::Difference*> > diffChange = m_model->linesChanged( oldLines, newLines, editLineNumber );
-    const QList<Diff2::Difference*>& inserted = diffChange.first;
-    const QList<Diff2::Difference*>& removed = diffChange.second;
+    const auto diffChange = m_model->linesChanged(oldLines, newLines, editLineNumber);
+    const auto& inserted = diffChange.first;
+    const auto& removed = diffChange.second;
 
-    for (Diff2::Difference* d : removed) {
+    for (const auto* const d : removed) {
         const auto sourceLines = d->sourceLines();
-        for (Diff2::DifferenceString* s : sourceLines)
+        for (const auto* const s : sourceLines)
             qCDebug(PLUGIN_PATCHREVIEW) << "removed source" << s->string();
         const auto destinationLines = d->destinationLines();
-        for (Diff2::DifferenceString* s : destinationLines)
+        for (const auto* const s : destinationLines)
             qCDebug(PLUGIN_PATCHREVIEW) << "removed destination" << s->string();
     }
-    for (Diff2::Difference* d : inserted) {
+    for (const auto* const d : inserted) {
         const auto sourceLines = d->sourceLines();
-        for (Diff2::DifferenceString* s : sourceLines)
+        for (const auto* const s : sourceLines)
             qCDebug(PLUGIN_PATCHREVIEW) << "inserted source" << s->string();
         const auto destinationLines = d->destinationLines();
-        for (Diff2::DifferenceString* s : destinationLines)
+        for (const auto* const s : destinationLines)
             qCDebug(PLUGIN_PATCHREVIEW) << "inserted destination" << s->string();
     }
 
@@ -303,7 +303,7 @@ void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const Q
     }
     qDeleteAll(removed);
 
-    for (Diff2::Difference* diff : inserted) {
+    for (auto* const diff : inserted) {
         int lineStart = diff->destinationLineNumber();
         if ( lineStart > 0 ) {
             --lineStart;
@@ -423,9 +423,9 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
     doc->setMarkIcon(MarkType::markType27,
                      QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize));
 
-    for (Diff2::Difference* diff : qAsConst(*m_model->differences())) {
+    for (auto* const diff : qAsConst(*m_model->differences())) {
         int line, lineCount;
-        Diff2::DifferenceStringList lines;
+        KompareDiff2::DifferenceStringList lines;
 
         if( diff->applied() ) {
             line = diff->destinationLineNumber();
@@ -517,7 +517,8 @@ void PatchHighlighter::newlineInserted(KTextEditor::Document* doc, const KTextEd
     performContentChange(doc, removedLines, insertedLines, startLine + 1);
 }
 
-PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin, bool updatePatchFromEdits )
+PatchHighlighter::PatchHighlighter(KompareDiff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin,
+                                   bool updatePatchFromEdits)
     : m_doc( kdoc ), m_plugin( plugin ), m_model( model ), m_applying( false ) {
     KTextEditor::Document* doc = kdoc->textDocument();
     if (updatePatchFromEdits) {
@@ -560,7 +561,8 @@ void PatchHighlighter::removeLineMarker( KTextEditor::MovingRange* range ) {
     }
 }
 
-void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Difference* diff ) {
+void PatchHighlighter::addLineMarker(KTextEditor::MovingRange* range, const KompareDiff2::Difference* diff)
+{
     KTextEditor::Attribute::Ptr t( new KTextEditor::Attribute() );
 
     bool isOriginalState = diff->applied() == m_plugin->patch()->isAlreadyApplied();
@@ -595,21 +597,21 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
 
     document->addMark(range->start().line(), mark);
 
-    Diff2::DifferenceStringList lines;
+    KompareDiff2::DifferenceStringList lines;
     if( diff->applied() )
         lines = diff->destinationLines();
     else
         lines = diff->sourceLines();
 
     for( int a = 0; a < lines.size(); ++a ) {
-        Diff2::DifferenceString* line = lines[a];
+        const auto* const line = lines[a];
         int currentPos = 0;
         const uint lineLength = static_cast<uint>(line->string().size());
 
-        const Diff2::MarkerList& markers = line->markerList();
+        const auto markers = line->markerList();
 
         for (auto* marker : markers) {
-            if (marker->type() == Diff2::Marker::End) {
+            if (marker->type() == KompareDiff2::Marker::End) {
                 if (currentPos != 0 || marker->offset() != lineLength) {
                     auto* const r2 = document->newMovingRange(
                         KTextEditor::Range(KTextEditor::Cursor(a + range->start().line(), currentPos),

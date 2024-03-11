@@ -12,8 +12,7 @@ Dependencies:
     'frameworks/purpose': '@latest-kf6'
     'frameworks/threadweaver': '@latest-kf6'
     'kdevelop/kdevelop-pg-qt': '@latest-kf6'
-    # TODO: port to libkomparediff2/qt6
-    # 'sdk/libkomparediff2': '@same'
+    'sdk/libkomparediff2': 'kf6'
     # TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later. Once available, adapt code & reenable again.
     # 'utilities/okteta': '@stable'
 

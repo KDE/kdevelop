@@ -25,17 +25,13 @@ namespace Sublime {
 class Area;
 }
 
-namespace Diff2
-{
-class KompareModelList;
+namespace KompareDiff2 {
 class DiffModel;
-}
-namespace Kompare
-{
-struct Info;
+class DiffSettings;
+class Info;
+class ModelList;
 }
 
-class DiffSettings;
 class PatchReviewPlugin;
 
 class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchReview, public KDevelop::ILanguageSupport
@@ -53,7 +49,8 @@ public :
         return m_patch;
     }
 
-    Diff2::KompareModelList* modelList() const {
+    KompareDiff2::ModelList* modelList() const
+    {
         return m_modelList.data();
     }
 
@@ -73,7 +70,7 @@ public :
 
     void finishReview(const QList<QUrl>& selection);
 
-    QUrl urlForFileModel( const Diff2::DiffModel* model );
+    QUrl urlForFileModel(const KompareDiff2::DiffModel* model) const;
     QAction* finishReviewAction() const { return m_finishReview; }
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
@@ -120,9 +117,9 @@ private:
     void determineState();
     #endif
 
-    QPointer< DiffSettings > m_diffSettings;
-    QScopedPointer< Kompare::Info > m_kompareInfo;
-    QScopedPointer< Diff2::KompareModelList > m_modelList;
+    QScopedPointer<KompareDiff2::DiffSettings> m_diffSettings;
+    QScopedPointer<KompareDiff2::Info> m_kompareInfo;
+    QScopedPointer<KompareDiff2::ModelList> m_modelList;
     uint m_depth = 0; // depth of the patch represented by m_modelList
     using HighlightMap = QMap<QUrl, QPointer<PatchHighlighter>>;
     HighlightMap m_highlighters;
