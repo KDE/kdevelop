@@ -29,11 +29,15 @@
 #include <KDirWatch>
 #include <KLocalizedString>
 #include <KPluginFactory>
+
+#include <QCryptographicHash>
+#include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStandardPaths>
 
 #include <algorithm>
+#include <utility>
 
 using namespace KDevelop;
 using namespace std;
@@ -214,6 +218,17 @@ QList<ProjectTargetItem*> MesonManager::targets(ProjectFolderItem* item) const
     return res;
 }
 
+static QByteArray computeHashSum(const QString& filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return QByteArray();
+    }
+    QCryptographicHash hash(QCryptographicHash::Algorithm::Sha1);
+    hash.addData(&file);
+    return hash.result();
+}
+
 void MesonManager::onMesonInfoChanged(QString path, QString projectName)
 {
     qCDebug(KDEV_Meson) << "File" << path << "changed --> reparsing project";
@@ -221,6 +236,16 @@ void MesonManager::onMesonInfoChanged(QString path, QString projectName)
     if (!foundProject) {
         return;
     }
+
+    // The import job can modify the meson-info file so only reparse
+    // if the file contents changed to avoid a potential loop
+    auto newHash = computeHashSum(path);
+    auto& storedHash = m_projectMesonInfoHashes[foundProject];
+    if (newHash == storedHash) {
+        qCDebug(KDEV_Meson) << "File" << path << "hash unchanged --> not reparsing";
+        return;
+    }
+    storedHash = std::move(newHash);
 
     KJob* job = createImportJob(foundProject->projectItem());
     foundProject->setReloadJob(job);

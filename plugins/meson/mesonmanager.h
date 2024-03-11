@@ -110,6 +110,7 @@ private:
     QHash<KDevelop::IProject*, MesonTargetsPtr> m_projectTargets;
     QHash<KDevelop::IProject*, MesonTestSuitesPtr> m_projectTestSuites;
     QHash<KDevelop::IProject*, KDirWatchPtr> m_projectWatchers;
+    QHash<KDevelop::IProject*, QByteArray> m_projectMesonInfoHashes;
 
     MesonSourcePtr sourceFromItem(KDevelop::ProjectBaseItem* item) const;
     void populateTargets(KDevelop::ProjectFolderItem* item, QVector<MesonTarget*> targets);
