@@ -9,6 +9,7 @@ Dependencies:
     'frameworks/knewstuff': '@latest-kf6'
     'frameworks/knotifyconfig': '@latest-kf6'
     'frameworks/ktexteditor': '@latest-kf6'
+    'frameworks/ktexttemplate': '@latest-kf6'
     'frameworks/purpose': '@latest-kf6'
     'frameworks/threadweaver': '@latest-kf6'
     'kdevelop/kdevelop-pg-qt': '@latest-kf6'

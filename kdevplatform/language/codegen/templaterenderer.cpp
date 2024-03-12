@@ -15,16 +15,15 @@
 
 #include <serialization/indexedstring.h>
 
-#include <grantlee/context.h>
+#include <KArchive>
+#include <KTextTemplate/Context>
 
 #include <QDir>
 #include <QFile>
 #include <QRegularExpression>
 #include <QUrl>
 
-#include <KArchive>
-
-using namespace Grantlee;
+using namespace KTextTemplate;
 
 class NoEscapeStream
     : public OutputStream
@@ -63,7 +62,7 @@ class TemplateRendererPrivate
 {
 public:
     Engine* engine;
-    Grantlee::Context context;
+    KTextTemplate::Context context;
     TemplateRenderer::EmptyLinesPolicy emptyLinesPolicy;
     QString errorString;
 };
@@ -116,10 +115,9 @@ QString TemplateRenderer::render(const QString& content, const QString& name)
     NoEscapeStream stream(&textStream);
     t->render(&stream, &d->context);
 
-    if (t->error() != Grantlee::NoError) {
+    if (t->error() != KTextTemplate::NoError) {
         d->errorString = t->errorString();
-    } else
-    {
+    } else {
         d->errorString.clear();
     }
 

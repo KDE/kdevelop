@@ -190,7 +190,7 @@ PRIVATE
     KF6::TextEditor
     KF6::Parts
     KF6::Archive
-    Grantlee5::Templates
+    KF6::TextTemplate
 )
 
 install(FILES

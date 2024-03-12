@@ -17,12 +17,9 @@ using namespace KDevelop;
 static
 QString safeString(const QVariant& variant)
 {
-    if (variant.canConvert<Grantlee::SafeString>())
-    {
-        return variant.value<Grantlee::SafeString>().get();
-    }
-    else
-    {
+    if (variant.canConvert<KTextTemplate::SafeString>()) {
+        return variant.value<KTextTemplate::SafeString>().get();
+    } else {
         return variant.toString();
     }
 }
@@ -63,7 +60,7 @@ QVariant CamelCaseFilter::doFilter(const QVariant& input, const QVariant& /*argu
         w[0] = w[0].toUpper();
         ret += w;
     }
-    return Grantlee::SafeString(ret);
+    return KTextTemplate::SafeString(ret);
 }
 
 QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
@@ -80,14 +77,14 @@ QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& /
     {
         ret[0] = ret[0].toUpper();
     }
-    return Grantlee::SafeString(ret);
+    return KTextTemplate::SafeString(ret);
 }
 
 QVariant UnderscoreFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
                                     bool /*autoescape*/) const
 {
     QString ret = words(input).join(QLatin1Char('_'));
-    return Grantlee::SafeString(ret);
+    return KTextTemplate::SafeString(ret);
 }
 
 QVariant UpperFirstFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
@@ -98,7 +95,7 @@ QVariant UpperFirstFilter::doFilter(const QVariant& input, const QVariant& /*arg
     {
         in[0] = in[0].toUpper();
     }
-    return Grantlee::SafeString(in);
+    return KTextTemplate::SafeString(in);
 }
 
 
@@ -113,7 +110,7 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
     for (const auto line : lines) {
         retLines << start + line;
     }
-    return Grantlee::SafeString(retLines.join(QLatin1Char('\n')));
+    return KTextTemplate::SafeString(retLines.join(QLatin1Char('\n')));
 }
 
 QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*argument*/,
@@ -139,7 +136,7 @@ QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*
     DUChainReadLocker locker(DUChain::lock());
     PersistentSymbolTable::self().visitDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(type)), visit);
 
-    return Grantlee::SafeString(type);
+    return KTextTemplate::SafeString(type);
 }
 
 KDevFilters::KDevFilters(QObject* parent, const QVariantList &)
@@ -152,10 +149,10 @@ KDevFilters::~KDevFilters()
 
 }
 
-QHash< QString, Grantlee::Filter* > KDevFilters::filters(const QString& name)
+QHash<QString, KTextTemplate::Filter*> KDevFilters::filters(const QString& name)
 {
     Q_UNUSED(name);
-    QHash< QString, Grantlee::Filter* > filters;
+    QHash<QString, KTextTemplate::Filter*> filters;
 
     filters[QStringLiteral("camel_case")] = new CamelCaseFilter();
     filters[QStringLiteral("camel_case_lower")] = new LowerCamelCaseFilter();

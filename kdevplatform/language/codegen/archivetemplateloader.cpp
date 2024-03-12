@@ -6,9 +6,8 @@
 
 #include "archivetemplateloader.h"
 
-#include <grantlee/engine.h>
-
 #include <KArchive>
+#include <KTextTemplate/Engine>
 
 using namespace KDevelop;
 
@@ -54,7 +53,8 @@ bool ArchiveTemplateLoader::canLoadTemplate(const QString& name) const
     });
 }
 
-Grantlee::Template ArchiveTemplateLoader::loadByName(const QString& name, const Grantlee::Engine* engine) const
+KTextTemplate::Template ArchiveTemplateLoader::loadByName(const QString& name,
+                                                          const KTextTemplate::Engine* engine) const
 {
     Q_D(const ArchiveTemplateLoader);
 
@@ -64,7 +64,7 @@ Grantlee::Template ArchiveTemplateLoader::loadByName(const QString& name, const 
         }
     }
 
-    return Grantlee::Template();
+    return KTextTemplate::Template();
 }
 
 QPair<QString, QString> ArchiveTemplateLoader::getMediaUri(const QString& fileName) const
