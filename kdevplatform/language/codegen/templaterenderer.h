@@ -23,7 +23,7 @@ class TemplateRendererPrivate;
  * @brief Convenience class for rendering multiple templates with the same context
  *
  * The TemplateRenderer provides easy access to common template operations.
- * Internally, it encapsulates a Grantlee::Engine and a Grantlee::Context.
+ * Internally, it encapsulates a KTextTemplate::Engine and a KTextTemplate::Context.
  *
  * It is used by adding a set of variables, and then rendering a template string
  * @code
@@ -34,14 +34,14 @@ class TemplateRendererPrivate;
  * // text == "Hello, World!"
  * @endcode
  *
- * If you wish to include other templates using the Grantlee {% include %} tag,
+ * If you wish to include other templates using the KTextTemplate {% include %} tag,
  * make sure TemplateRenderer can find those template by using
  * addTemplateDirectories() and addArchive(). This adds everything in the specified
  * directories or archive files to the list of files search for inclusion.
  *
  * Directories named "kdevcodegen/templates" in the "data" resource type are always included in the search path,
  * there is no need to add them explicitly. Additionally, TemplateRenderer adds the "lib" resource directories
- * to the Grantlee plugin search path, so plugins installed there will be available to templates.
+ * to the KTextTemplate plugin search path, so plugins installed there will be available to templates.
  *
  **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateRenderer
@@ -75,7 +75,7 @@ public:
     virtual ~TemplateRenderer();
 
     /**
-     * Adds @p variables to the Grantlee::Context passed to each template.
+     * Adds @p variables to the KTextTemplate::Context passed to each template.
      *
      * If the context already contains a variables with the same name as a key in @p variables,
      * it is overwritten.
@@ -84,7 +84,7 @@ public:
     void addVariables(const QVariantHash& variables);
 
     /**
-     * Adds variable with name @p name and value @p value to the Grantlee::Context passed to each template.
+     * Adds variable with name @p name and value @p value to the KTextTemplate::Context passed to each template.
      *
      * If the context already contains a variables with the same @p name, it is overwritten.
      *

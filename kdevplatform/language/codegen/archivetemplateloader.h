@@ -7,7 +7,7 @@
 #ifndef KDEVPLATFORM_ARCHIVETEMPLATELOADER_H
 #define KDEVPLATFORM_ARCHIVETEMPLATELOADER_H
 
-#include <grantlee/templateloader.h>
+#include <KTextTemplate/TemplateLoader>
 
 class KArchiveDirectory;
 namespace KDevelop {
@@ -15,13 +15,13 @@ class ArchiveTemplateLocation;
 class ArchiveTemplateLoaderPrivate;
 
 class ArchiveTemplateLoader
-    : public Grantlee::AbstractTemplateLoader
+    : public KTextTemplate::AbstractTemplateLoader
 {
 public:
     static ArchiveTemplateLoader* self();
     ~ArchiveTemplateLoader() override;
     bool canLoadTemplate(const QString& name) const override;
-    Grantlee::Template loadByName(const QString& name, const Grantlee::Engine* engine) const override;
+    KTextTemplate::Template loadByName(const QString& name, const KTextTemplate::Engine* engine) const override;
 
     QPair<QString, QString> getMediaUri(const QString& fileName) const override;
 

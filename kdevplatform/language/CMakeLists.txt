@@ -191,7 +191,7 @@ PRIVATE
     KF${KF_MAJOR_VERSION}::TextEditor
     KF${KF_MAJOR_VERSION}::Parts
     KF${KF_MAJOR_VERSION}::Archive
-    Grantlee5::Templates
+    KF6::TextTemplate
 )
 
 install(FILES
