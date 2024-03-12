@@ -15,14 +15,6 @@ set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")
 include(KDevPlatformMacros)
 include(KDevPlatformMacrosInternal)
 
-# have to set required in find_package call already
-# as macros & imported targets are used later, so would fail over that before doing summary log
-find_package(Grantlee5 CONFIG REQUIRED)
-set_package_properties(Grantlee5 PROPERTIES
-    PURPOSE "Grantlee templating library, needed for file templates"
-    URL "http://www.grantlee.org/"
-    TYPE REQUIRED)
-
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)
 set_package_properties(Boost PROPERTIES

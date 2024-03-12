@@ -51,7 +51,7 @@ public:
      * Parses template archive file and creates the UI for setting template options.
      *
      * @param fileTemplate The template archive file
-     * @param renderer A Grantlee wrapper used to render all the templates
+     * @param renderer A KTextTemplate wrapper used to render all the templates
      **/
     void load(const SourceFileTemplate& fileTemplate, TemplateRenderer* renderer);
     /**

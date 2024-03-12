@@ -108,6 +108,7 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
   Notifications
   Purpose
   Sonnet
+  TextTemplate
 )
 if(QT_MAJOR_VERSION STREQUAL 6)
   find_package(Qt6Core5Compat ${QT_MIN_VERSION} CONFIG REQUIRED)

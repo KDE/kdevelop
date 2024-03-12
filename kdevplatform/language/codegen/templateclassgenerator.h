@@ -140,14 +140,14 @@ public:
     /**
      * Adds variables @p variables to the context passed to all template files.
      *
-     * The variable values must be of a type registered with Grantlee::registerMetaType()
+     * The variable values must be of a type registered with KTextTemplate::registerMetaType()
      *
      * @param variables additional variables to be passed to all templates
      **/
     void addVariables(const QVariantHash& variables);
 
     /**
-     * Convenience function to render a string @p text as a Grantlee template
+     * Convenience function to render a string @p text as a KTextTemplate template
      **/
     QString renderString(const QString& text) const;
 
