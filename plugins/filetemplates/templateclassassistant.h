@@ -14,7 +14,7 @@ namespace KDevelop
 {
 
 /**
- * @brief An assistant for creating new source code files using Grantlee templates.
+ * @brief An assistant for creating new source code files using KTextTemplate templates.
  *
  * This assistant guides the user through generating source code from templates.
  * Currently, class and unit test templates are supported.

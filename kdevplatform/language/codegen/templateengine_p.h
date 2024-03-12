@@ -7,13 +7,13 @@
 #ifndef KDEVPLATFORM_TEMPLATEENGINE_P_H
 #define KDEVPLATFORM_TEMPLATEENGINE_P_H
 
-#include <grantlee/engine.h>
+#include <KTextTemplate/Engine>
 
 namespace KDevelop {
 class TemplateEnginePrivate
 {
 public:
-    Grantlee::Engine engine;
+    KTextTemplate::Engine engine;
 };
 }
 

@@ -17,7 +17,7 @@
 #include <QStandardPaths>
 
 using namespace KDevelop;
-using namespace Grantlee;
+using namespace KTextTemplate;
 
 TemplateEngine* TemplateEngine::self()
 {
@@ -49,10 +49,10 @@ TemplateEngine::TemplateEngine()
         qCWarning(LANGUAGE) << "No template directories found -- templating engine will not work!";
     }
 
-    Grantlee::registerMetaType<KDevelop::VariableDescription>();
-    Grantlee::registerMetaType<KDevelop::FunctionDescription>();
-    Grantlee::registerMetaType<KDevelop::InheritanceDescription>();
-    Grantlee::registerMetaType<KDevelop::ClassDescription>();
+    KTextTemplate::registerMetaType<KDevelop::VariableDescription>();
+    KTextTemplate::registerMetaType<KDevelop::FunctionDescription>();
+    KTextTemplate::registerMetaType<KDevelop::InheritanceDescription>();
+    KTextTemplate::registerMetaType<KDevelop::ClassDescription>();
 
     d->engine.addTemplateLoader(QSharedPointer<AbstractTemplateLoader>(ArchiveTemplateLoader::self()));
 }
