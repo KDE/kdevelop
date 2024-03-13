@@ -267,6 +267,9 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
     // Collect the opened project's files.
     const auto oldSize = m_projectFiles.size();
     KDevelop::forEachFile(project->projectItem(), [this](ProjectFileItem* fileItem) {
+        // TODO Qt6: benchmark the following alternatives:
+        // 1) emplace_back in place of push_back here;
+        // 2) std::vector instead of QVector m_projectFiles, i.e. revert fdb3126371bb13b778ce48f538d4836b92a384f1.
         m_projectFiles.push_back(ProjectFile{fileItem});
     });
     const auto justAddedBegin = m_projectFiles.begin() + oldSize;
