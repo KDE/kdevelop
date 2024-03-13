@@ -29,7 +29,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QMessageBox>
-#include <QMetaEnum>
 #include <QPoint>
 #include <QScreen>
 #include <QString>
@@ -66,12 +65,6 @@ static constexpr const char* testAbortPropertyName = "kdevelop.test.abort";
     } while (false)
 
 namespace {
-
-template<typename Enum>
-const char* enumeratorName(Enum enumerator)
-{
-    return QMetaEnum::fromType<Enum>().valueToKey(static_cast<int>(enumerator));
-}
 
 void showInstructionsForDialog(QMessageBox& instructions)
 {

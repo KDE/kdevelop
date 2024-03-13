@@ -14,6 +14,13 @@ class BenchIndexedString
 {
     Q_OBJECT
 
+public:
+    enum class ElementType { uint, IndexedStringView, IndexedString };
+    Q_ENUM(ElementType)
+
+    enum class ContainerType { StdVector, QVector };
+    Q_ENUM(ContainerType)
+
 private Q_SLOTS:
     void bench_index();
     void bench_length();

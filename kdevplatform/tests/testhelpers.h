@@ -17,6 +17,7 @@
 #include <serialization/indexedstring.h>
 #include <serialization/indexedstringview.h>
 
+#include <QMetaEnum>
 #include <QTest>
 
 #define QVERIFY_RETURN(statement, retval)                                                                              \
@@ -38,6 +39,14 @@
             return __VA_ARGS__;                                                                                        \
         }                                                                                                              \
     } while (false)
+
+namespace KDevelop {
+template<typename Enum>
+const char* enumeratorName(Enum enumerator)
+{
+    return QMetaEnum::fromType<Enum>().valueToKey(static_cast<int>(enumerator));
+}
+}
 
 namespace QTest {
 template<>

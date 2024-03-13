@@ -9,10 +9,12 @@
 
 #include <language/util/kdevhash.h>
 #include <serialization/indexedstring.h>
+#include <serialization/indexedstringview.h>
 #include <tests/testhelpers.h>
 
 #include <QTest>
 
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -228,40 +230,84 @@ void BenchIndexedString::bench_swap()
 
 void BenchIndexedString::bench_string_vector_data()
 {
-    QTest::addColumn<int>("type");
-    QTest::addRow("std::vector") << 0;
-    QTest::addRow("QVector") << 1;
+    QTest::addColumn<ElementType>("elementType");
+    QTest::addColumn<ContainerType>("containerType");
+
+    for (const auto elementType : {ElementType::uint, ElementType::IndexedStringView, ElementType::IndexedString}) {
+        for (const auto containerType : {ContainerType::StdVector, ContainerType::QVector}) {
+            QTest::addRow("%s<%s>", enumeratorName(containerType), enumeratorName(elementType))
+                << elementType << containerType;
+        }
+    }
+}
+
+template<class Container>
+static void benchPopFront()
+{
+    const auto toElementType = [](int i) {
+        using ElementType = typename Container::value_type;
+        const auto str = QString::number(i);
+        if constexpr (std::is_integral_v<ElementType>) {
+            return IndexedString::indexForString(str);
+        } else {
+            return ElementType{str};
+        }
+    };
+
+    Container container;
+    for (int i = 0; i < 10000; ++i) {
+        container.push_back(toElementType(i));
+    }
+    // deliberately do a worst-case remove-from-front here
+    // we want to see how this performs without any noexcept move operators
+    QBENCHMARK_ONCE {
+        while (!container.empty()) {
+            container.erase(container.begin());
+        }
+    }
 }
 
 void BenchIndexedString::bench_string_vector()
 {
-    auto bench = [](auto container) {
-        for (int i = 0; i < 10000; ++i) {
-            container.push_back(IndexedString(QString::number(i)));
-        }
-        // deliberately do a worst-case remove-from-front here
-        // we want to see how this performs without any noexcept move operators
-        QBENCHMARK_ONCE {
-            while (!container.empty()) {
-                container.erase(container.begin());
-            }
-        }
-    };
+    QFETCH(const ElementType, elementType);
+    QFETCH(const ContainerType, containerType);
 
-    QFETCH(int, type);
-    switch (type) {
-    case 0: {
-        std::vector<IndexedString> container;
-        bench(container);
+    switch (elementType) {
+    case ElementType::uint:
+        switch (containerType) {
+        case ContainerType::StdVector: {
+            benchPopFront<std::vector<uint>>();
+            break;
+        }
+        case ContainerType::QVector: {
+            benchPopFront<QVector<uint>>();
+            break;
+        }
+        }
         break;
-    }
-    case 1: {
-        QVector<IndexedString> container;
-        bench(container);
+    case ElementType::IndexedStringView:
+        switch (containerType) {
+        case ContainerType::StdVector: {
+            benchPopFront<std::vector<IndexedStringView>>();
+            break;
+        }
+        case ContainerType::QVector: {
+            benchPopFront<QVector<IndexedStringView>>();
+            break;
+        }
+        }
         break;
-    }
-    default:
-        QFAIL("unhandled type");
+    case ElementType::IndexedString:
+        switch (containerType) {
+        case ContainerType::StdVector: {
+            benchPopFront<std::vector<IndexedString>>();
+            break;
+        }
+        case ContainerType::QVector: {
+            benchPopFront<QVector<IndexedString>>();
+            break;
+        }
+        }
         break;
     }
 }
