@@ -163,6 +163,7 @@ private:
 private Q_SLOTS:
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
+    void documentUrlChanged(KDevelop::IDocument* document, const QUrl& previousUrl);
     void aboutToReload();
     void aboutToInvalidateMovingInterfaceContent(KTextEditor::Document* document);
     void reloaded(KTextEditor::Document* document);

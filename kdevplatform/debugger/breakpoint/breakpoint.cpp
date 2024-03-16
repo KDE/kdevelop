@@ -451,6 +451,12 @@ void Breakpoint::updateMarkType() const
     imark->addMark(docLine, newMarkType);
 }
 
+void Breakpoint::assignUrl(const QUrl& url)
+{
+    Q_ASSERT(!m_movingCursor || (m_movingCursor->document() && m_movingCursor->document()->url() == url));
+    m_url = url;
+}
+
 void Breakpoint::saveMovingCursorLine()
 {
     Q_ASSERT(m_movingCursor);

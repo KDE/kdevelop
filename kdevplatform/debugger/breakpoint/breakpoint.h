@@ -175,6 +175,14 @@ protected:
     void updateMarkType() const;
 
     /**
+     * Assign the document url that the breakpoint is associated with.
+     * @pre If the breakpoint has a moving cursor, then movingCursor()->document()->url()
+     *      must already be equal to @p url.
+     * @note The calling code is responsible for updating the breakpoint's LocationColumn afterwards.
+     */
+    void assignUrl(const QUrl& url);
+
+    /**
      * Destroy the associated moving cursor.
      * @pre Document line tracking is active, i.e. the moving cursor is valid.
      * @note The associated breakpoint mark is not touched. The calling code is

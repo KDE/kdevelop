@@ -38,6 +38,7 @@
 
 #include <algorithm>
 #include <utility>
+#include <vector>
 
 #define IF_DEBUG(x)
 
@@ -99,6 +100,7 @@ BreakpointModel::BreakpointModel(QObject* parent)
     Q_ASSERT(documentController->openDocuments().empty());
     connect(documentController, &IDocumentController::textDocumentCreated, this, &BreakpointModel::textDocumentCreated);
 
+    connect(documentController, &IDocumentController::documentUrlChanged, this, &BreakpointModel::documentUrlChanged);
     connect(documentController, &IDocumentController::documentSaved, this, &BreakpointModel::documentSaved);
 }
 
@@ -160,6 +162,39 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
                 setupMovingCursor(breakpoint, &document, savedLine);
             }
         }
+    }
+}
+
+void BreakpointModel::documentUrlChanged(KDevelop::IDocument* document, const QUrl& previousUrl)
+{
+    Q_D(BreakpointModel);
+
+    // Ignore non-text documents.
+    if (!document->textDocument()) {
+        return;
+    }
+
+    // We rely on previousUrl being an IDocument::url(), which is unique and never empty.
+    // An empty previousUrl is unacceptable, because a breakpoint's empty URL
+    // value means "none" and must not be replaced in the loop below.
+    Q_ASSERT(!previousUrl.isEmpty());
+
+    std::vector<Breakpoint*> updatedBreakpoints;
+    const auto destinationUrl = document->url();
+    for (auto* const breakpoint : std::as_const(d->breakpoints)) {
+        // Ignore unsuitable breakpoints.
+        if (breakpoint->kind() != Breakpoint::CodeBreakpoint || breakpoint->url() != previousUrl) {
+            continue;
+        }
+        // Update the breakpoint to use the (renamed to) destinationUrl.
+        breakpoint->assignUrl(destinationUrl);
+        updatedBreakpoints.push_back(breakpoint);
+    }
+
+    // The loop above silently reassigns URLs to restore consistency between the Breakpoint URLs and moving cursors.
+    // Notify the world about the URL changes in this separate loop to avoid possible inconsistency issues.
+    for (auto* const breakpoint : updatedBreakpoints) {
+        reportChange(breakpoint, Breakpoint::LocationColumn);
     }
 }
 
