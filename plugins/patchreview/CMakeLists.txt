@@ -3,6 +3,8 @@ set_package_properties(KompareDiff2 PROPERTIES
     PURPOSE "Required for building the patch review plugin."
     TYPE REQUIRED
 )
+set(CMAKE_FIND_DEBUG_MODE FALSE)
+
 
 find_package(KF5Purpose CONFIG QUIET)
 set_package_properties(KF5Purpose PROPERTIES DESCRIPTION "Support for patch sharing"
