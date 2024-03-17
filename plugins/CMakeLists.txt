@@ -34,7 +34,7 @@ add_subdirectory(customscript)
 # BEGIN: Languages
 ecm_optional_add_subdirectory(custom-definesandincludes)
 
-ecm_optional_add_subdirectory(qmljs)
+#ecm_optional_add_subdirectory(qmljs)
 
 find_package(Clang CONFIG)
 set(clangSearchHint "")
