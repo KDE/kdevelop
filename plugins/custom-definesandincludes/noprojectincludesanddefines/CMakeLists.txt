@@ -16,5 +16,3 @@ target_link_libraries( kdevnoprojectincludesanddefines
         KDev::Language
          KF${KF_MAJOR_VERSION}::KIOWidgets
 )
-
-set_target_properties(kdevnoprojectincludesanddefines PROPERTIES POSITION_INDEPENDENT_CODE ON)
