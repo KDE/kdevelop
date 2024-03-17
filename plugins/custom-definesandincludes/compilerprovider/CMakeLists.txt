@@ -24,7 +24,6 @@ target_link_libraries(kdevcompilerprovider
         KDev::Util
         KDev::Language
 )
-set_target_properties(kdevcompilerprovider PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 option(BUILD_kdev_msvcdefinehelper "Build the msvcdefinehelper tool for retrieving msvc standard macro definitions" OFF)
 

@@ -141,6 +141,10 @@ ecm_set_disabled_deprecation_versions(
     KI18N 5.88 # I18N_NOOP
 )
 
+# Globally enable PIC since static libraries need it for Qt staticMetaObject
+# Furthermore, without that we cannot easily compile with ASAN either
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
 # See discussion: https://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html
 add_compile_flag_if_supported(-Wno-missing-field-initializers)

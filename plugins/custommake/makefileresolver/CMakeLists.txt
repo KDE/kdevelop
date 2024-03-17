@@ -10,7 +10,6 @@ target_link_libraries(kdevmakefileresolver
   KDev::Interfaces KDev::Project
   Qt5::Core Qt5::Gui KDev::Language
 )
-set_target_properties(kdevmakefileresolver PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_include_directories(kdevmakefileresolver INTERFACE
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>"
 )

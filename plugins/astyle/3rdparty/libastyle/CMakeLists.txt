@@ -6,7 +6,6 @@ set(astylelib_SRCS
     ASLocalizer.cpp
 )
 add_library(astylelib STATIC ${astylelib_SRCS})
-set_property(TARGET astylelib PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # astyle lib throws lots of warnings with -Wdocumentation

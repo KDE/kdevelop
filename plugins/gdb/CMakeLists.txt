@@ -54,7 +54,6 @@ target_link_libraries(kdevgdb_static
 if(OktetaGui_FOUND)
     target_link_libraries(kdevgdb_static OktetaCore OktetaGui)
 endif()
-set_property(TARGET kdevgdb_static PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # The actual plugin
 set(kdevgdbplugin_SRCS
