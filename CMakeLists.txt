@@ -133,6 +133,8 @@ set_package_properties(KDevelop-PG-Qt PROPERTIES
 
 find_package(SharedMimeInfo 1.9 REQUIRED)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # added by KDE_COMPILERSETTINGS_LEVEL 5.85.0
 remove_definitions(
     -DQT_NO_KEYWORDS
