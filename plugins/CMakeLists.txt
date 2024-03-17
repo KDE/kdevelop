@@ -34,7 +34,8 @@ add_subdirectory(customscript)
 # BEGIN: Languages
 ecm_optional_add_subdirectory(custom-definesandincludes)
 
-ecm_optional_add_subdirectory(qmljs)
+# TODO: port qmljs to Qt6
+#ecm_optional_add_subdirectory(qmljs)
 
 find_package(Clang CONFIG)
 set(clangSearchHint "")
