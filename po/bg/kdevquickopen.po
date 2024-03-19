@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-03-19 01:40+0000\n"
 "PO-Revision-Date: 2011-07-26 10:52+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -57,38 +57,38 @@ msgstr "Файл:"
 msgid "Quick Open Toolbar"
 msgstr "Инструменти за бързо отваряне"
 
-#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#: projectfilequickopen.cpp:90 projectfilequickopen.cpp:159
 #, fuzzy, kde-format
 msgctxt "%1: project name"
 msgid "Project %1"
 msgstr "Проект"
 
-#: projectfilequickopen.cpp:159
+#: projectfilequickopen.cpp:160
 #, kde-format
 msgid "Not parsed yet"
 msgstr "Без синтактичен разбор все още"
 
-#: projectfilequickopen.cpp:178
+#: projectfilequickopen.cpp:179
 #, fuzzy, kde-format
 msgctxt "@item no project"
 msgid "none"
 msgstr "липсва"
 
-#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:357
 #: quickopenplugin.cpp:66
 #, fuzzy, kde-format
 msgctxt "@item quick open item type"
 msgid "Classes"
 msgstr "Класове"
 
-#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: projectitemquickopen.cpp:347 projectitemquickopen.cpp:360
 #: quickopenplugin.cpp:65
 #, fuzzy, kde-format
 msgctxt "@item quick open item type"
 msgid "Functions"
 msgstr "Функции"
 
-#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#: projectitemquickopen.cpp:355 quickopenplugin.cpp:59
 #, fuzzy, kde-format
 msgctxt "@item quick open scope"
 msgid "Project"

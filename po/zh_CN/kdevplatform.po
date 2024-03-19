@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 01:41+0000\n"
+"POT-Creation-Date: 2024-03-19 01:40+0000\n"
 "PO-Revision-Date: 2024-03-17 20:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2944,54 +2944,54 @@ msgstr ""
 "无法存储开发者相关的工程配置。\n"
 "注意：您更改的工程设置将丢失。"
 
-#: shell/projectcontroller.cpp:160
+#: shell/projectcontroller.cpp:161
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "配置工程 %1"
 
-#: shell/projectcontroller.cpp:303
+#: shell/projectcontroller.cpp:304
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "无效的位置：%1"
 
-#: shell/projectcontroller.cpp:313
+#: shell/projectcontroller.cpp:314
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "已经打开 %1，不再次打开"
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "覆盖"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr "继续使用刚才提供的工程配置打开工程"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "打开存在的文件"
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:474
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr "继续使用已有的工程配置打开工程"
 
-#: shell/projectcontroller.cpp:475
+#: shell/projectcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "取消打开工程"
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:479
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3000,41 +3000,41 @@ msgstr ""
 "已经存在工程配置文件 %1。\n"
 "您想要覆盖它还是打开已有文件？"
 
-#: shell/projectcontroller.cpp:481
+#: shell/projectcontroller.cpp:482
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "覆盖已有的工程配置"
 
-#: shell/projectcontroller.cpp:499
+#: shell/projectcontroller.cpp:500
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "无法创建配置文件 %1"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "重新打开当前工程？"
 
-#: shell/projectcontroller.cpp:514
+#: shell/projectcontroller.cpp:515
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "打开/导入工程..."
 
-#: shell/projectcontroller.cpp:556
+#: shell/projectcontroller.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "打开或导入工程"
 
-#: shell/projectcontroller.cpp:557
+#: shell/projectcontroller.cpp:558
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3045,114 +3045,114 @@ msgid ""
 "created."
 msgstr ""
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:569
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "获取工程..."
 
-#: shell/projectcontroller.cpp:570
+#: shell/projectcontroller.cpp:571
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "获取工程"
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:572
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr ""
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:587
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "关闭工程"
 
-#: shell/projectcontroller.cpp:588
+#: shell/projectcontroller.cpp:589
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "关闭全部当前选中的工程"
 
-#: shell/projectcontroller.cpp:594
+#: shell/projectcontroller.cpp:595
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "打开配置..."
 
-#: shell/projectcontroller.cpp:600
+#: shell/projectcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "提交当前工程..."
 
-#: shell/projectcontroller.cpp:601
+#: shell/projectcontroller.cpp:602
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "提交..."
 
-#: shell/projectcontroller.cpp:612
+#: shell/projectcontroller.cpp:613
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "打开最近的工程"
 
-#: shell/projectcontroller.cpp:613
+#: shell/projectcontroller.cpp:614
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "最近打开的工程。"
 
-#: shell/projectcontroller.cpp:618
+#: shell/projectcontroller.cpp:619
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "关闭当前文件的工程"
 
-#: shell/projectcontroller.cpp:769
+#: shell/projectcontroller.cpp:770
 #, kde-format
 msgid "Project already open: %1"
 msgstr "工程已经打开：%1"
 
-#: shell/projectcontroller.cpp:773
+#: shell/projectcontroller.cpp:774
 #, kde-format
 msgid "No active document"
 msgstr "无活动的文档"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:855
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "工程已经打开"
 
-#: shell/projectcontroller.cpp:857
+#: shell/projectcontroller.cpp:858
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
 msgstr "您正尝试打开的工程是其他会话的一部分。<br>您想要怎么做？"
 
-#: shell/projectcontroller.cpp:861
+#: shell/projectcontroller.cpp:862
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "添加工程到当前会话"
 
-#: shell/projectcontroller.cpp:865
+#: shell/projectcontroller.cpp:866
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "打开会话“%1”"
 
-#: shell/projectcontroller.cpp:926
+#: shell/projectcontroller.cpp:927
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "没有启用的插件支持此仓库 URL：%1"
 
-#: shell/projectcontroller.cpp:1230
+#: shell/projectcontroller.cpp:1231
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-03-19 01:40+0000\n"
 "PO-Revision-Date: 2020-07-20 08:41+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -351,17 +351,17 @@ msgstr ""
 "Вказаний заголовок не захищено від кратних включень а допомогою звичайних "
 "макросів захисту #ifndef/#define/#endif або за допомогою одинарного #pragma."
 
-#: duchain/unknowndeclarationproblem.cpp:373
+#: duchain/unknowndeclarationproblem.cpp:374
 #, kde-format
 msgid "Insert '%1'"
 msgstr "Вставити «%1»"
 
-#: duchain/unknowndeclarationproblem.cpp:433
+#: duchain/unknowndeclarationproblem.cpp:434
 #, kde-format
 msgid "Forward declare as 'class'"
 msgstr "Попередньо оголосити як «class»"
 
-#: duchain/unknowndeclarationproblem.cpp:440
+#: duchain/unknowndeclarationproblem.cpp:441
 #, kde-format
 msgid "Forward declare as 'struct'"
 msgstr "Попередньо оголосити як «struct»"

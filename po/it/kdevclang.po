@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-03-19 01:40+0000\n"
 "PO-Revision-Date: 2020-07-25 16:18+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -349,17 +349,17 @@ msgstr ""
 "Questa intestazione non è protetta da inclusioni multiple, ne' con le "
 "classiche  macro #ifndef/#define/#endif a protezione ne' con «#pragma once»."
 
-#: duchain/unknowndeclarationproblem.cpp:373
+#: duchain/unknowndeclarationproblem.cpp:374
 #, kde-format
 msgid "Insert '%1'"
 msgstr "Inserisci «%1»"
 
-#: duchain/unknowndeclarationproblem.cpp:433
+#: duchain/unknowndeclarationproblem.cpp:434
 #, kde-format
 msgid "Forward declare as 'class'"
 msgstr "Dichiara anticipatamente come «class»"
 
-#: duchain/unknowndeclarationproblem.cpp:440
+#: duchain/unknowndeclarationproblem.cpp:441
 #, kde-format
 msgid "Forward declare as 'struct'"
 msgstr "Dichiara anticipatamente come «struct»"

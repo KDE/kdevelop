@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 01:41+0000\n"
+"POT-Creation-Date: 2024-03-19 01:40+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -3228,31 +3228,31 @@ msgstr ""
 "osoblje.\n"
 "Pažnja: Projektne postavke koje ste izmijenili mogu biti izgubljene."
 
-#: shell/projectcontroller.cpp:160
+#: shell/projectcontroller.cpp:161
 #, fuzzy, kde-format
 #| msgid "Configure Project %1"
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Konfiguriši projekt %1"
 
-#: shell/projectcontroller.cpp:303
+#: shell/projectcontroller.cpp:304
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Pogrešna lokacija: %1"
 
-#: shell/projectcontroller.cpp:313
+#: shell/projectcontroller.cpp:314
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "Već otvaram %1, ne otvara se ponovo"
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, fuzzy, kde-format
 #| msgid "Override"
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Potiskivanje"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3265,14 +3265,14 @@ msgstr ""
 "Nastavite da biste otvorili projekat i koristite samo navedenu konfiguraciju "
 "projekta."
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Otvori postojeću datoteku"
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:474
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3283,7 +3283,7 @@ msgstr ""
 "Nastavite da biste otvorili projekat ali koristite postojeću konfiguraciju "
 "projekta."
 
-#: shell/projectcontroller.cpp:475
+#: shell/projectcontroller.cpp:476
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Cancel and do not open the project."
@@ -3291,7 +3291,7 @@ msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Otkaži i ne otvaraj projekat."
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:479
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3300,42 +3300,42 @@ msgstr ""
 "Već postoji projektna konfiguracijska datoteka u%1.\n"
 "Da li želite da je zamijenite ili otvorite postojeću datoteku?"
 
-#: shell/projectcontroller.cpp:481
+#: shell/projectcontroller.cpp:482
 #, fuzzy, kde-format
 #| msgid "Override existing project configuration"
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Zamijeni postojeću projektnu konfiguraciju"
 
-#: shell/projectcontroller.cpp:499
+#: shell/projectcontroller.cpp:500
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Ne mogu kreirati konfiguracijsku datoteku %1"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Ponovo otvori trenutni projekt?"
 
-#: shell/projectcontroller.cpp:514
+#: shell/projectcontroller.cpp:515
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Otvori / uvezi projekt..."
 
-#: shell/projectcontroller.cpp:556
+#: shell/projectcontroller.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Otvori ili unesi projekt"
 
-#: shell/projectcontroller.cpp:557
+#: shell/projectcontroller.cpp:558
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3358,19 +3358,19 @@ msgstr ""
 "postojeci direktorij  koji jos nema  KDevelop 4 projek datoteka, datoteka ce "
 "biti kreirana."
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:569
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Dobavi projekt..."
 
-#: shell/projectcontroller.cpp:570
+#: shell/projectcontroller.cpp:571
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Dobavi projekat"
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:572
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3381,77 +3381,77 @@ msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr "Vodi korisnika kroz projekt donesi, a zatim uvezi ga u kdevelop 4."
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:587
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Zatvori projekt(e)"
 
-#: shell/projectcontroller.cpp:588
+#: shell/projectcontroller.cpp:589
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Zatvara sve ternutno odabrane projekte"
 
-#: shell/projectcontroller.cpp:594
+#: shell/projectcontroller.cpp:595
 #, fuzzy, kde-format
 #| msgid "Open Configuration..."
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Otvori konfiguraciju...."
 
-#: shell/projectcontroller.cpp:600
+#: shell/projectcontroller.cpp:601
 #, fuzzy, kde-format
 #| msgid "Commit Current Project..."
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Potvrdi trenutni projekt..."
 
-#: shell/projectcontroller.cpp:601
+#: shell/projectcontroller.cpp:602
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Upis..."
 
-#: shell/projectcontroller.cpp:612
+#: shell/projectcontroller.cpp:613
 #, fuzzy, kde-format
 #| msgid "Open Recent Project"
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Otvori trenutni projekt"
 
-#: shell/projectcontroller.cpp:613
+#: shell/projectcontroller.cpp:614
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "otvoreni nedavni otvoren projekt."
 
-#: shell/projectcontroller.cpp:618
+#: shell/projectcontroller.cpp:619
 #, fuzzy, kde-format
 #| msgid "Open Project for Current File"
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Otvori projekt za trenutnu datoteku"
 
-#: shell/projectcontroller.cpp:769
+#: shell/projectcontroller.cpp:770
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Projekt već otvoren: %1"
 
-#: shell/projectcontroller.cpp:773
+#: shell/projectcontroller.cpp:774
 #, kde-format
 msgid "No active document"
 msgstr "Nema aktivnih dokumenta"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:855
 #, fuzzy, kde-format
 #| msgid "Project Already Open"
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "projekt je vec otvoren"
 
-#: shell/projectcontroller.cpp:857
+#: shell/projectcontroller.cpp:858
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3460,26 +3460,26 @@ msgstr ""
 "Projekt pokusavate da ga otvorite je vec otvoren u jednoj drugoj sesiji.<br> "
 "Sta zelite da uradite?"
 
-#: shell/projectcontroller.cpp:861
+#: shell/projectcontroller.cpp:862
 #, fuzzy, kde-format
 #| msgid "Add project to current session"
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Dodaj projekt u trenutnu sesiju"
 
-#: shell/projectcontroller.cpp:865
+#: shell/projectcontroller.cpp:866
 #, fuzzy, kde-format
 #| msgid "Open session %1"
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Otvori sesiju %1"
 
-#: shell/projectcontroller.cpp:926
+#: shell/projectcontroller.cpp:927
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr ""
 
-#: shell/projectcontroller.cpp:1230
+#: shell/projectcontroller.cpp:1231
 #, fuzzy, kde-format
 #| msgid "Reopen the current project?"
 msgctxt "@action"

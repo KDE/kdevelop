@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-03-19 01:40+0000\n"
 "PO-Revision-Date: 2024-03-17 20:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -56,38 +56,38 @@ msgstr "文件：%1"
 msgid "Quick Open Toolbar"
 msgstr "快速打开工具栏"
 
-#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#: projectfilequickopen.cpp:90 projectfilequickopen.cpp:159
 #, kde-format
 msgctxt "%1: project name"
 msgid "Project %1"
 msgstr "工程 %1"
 
-#: projectfilequickopen.cpp:159
+#: projectfilequickopen.cpp:160
 #, kde-format
 msgid "Not parsed yet"
 msgstr "尚未解析"
 
-#: projectfilequickopen.cpp:178
+#: projectfilequickopen.cpp:179
 #, kde-format
 msgctxt "@item no project"
 msgid "none"
 msgstr "无"
 
-#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:357
 #: quickopenplugin.cpp:66
 #, kde-format
 msgctxt "@item quick open item type"
 msgid "Classes"
 msgstr "类"
 
-#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: projectitemquickopen.cpp:347 projectitemquickopen.cpp:360
 #: quickopenplugin.cpp:65
 #, kde-format
 msgctxt "@item quick open item type"
 msgid "Functions"
 msgstr "函数"
 
-#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#: projectitemquickopen.cpp:355 quickopenplugin.cpp:59
 #, kde-format
 msgctxt "@item quick open scope"
 msgid "Project"
