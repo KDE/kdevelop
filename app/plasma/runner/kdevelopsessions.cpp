@@ -89,16 +89,36 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
             Plasma::QueryMatch match(this);
             if (listAll) {
                 // All sessions listed, but with a low priority
+#if KRUNNER_VERSION < QT_VERSION_CHECK(5, 113, 0)
                 match.setType(Plasma::QueryMatch::ExactMatch);
+#else
+                match.setCategoryRelevance(Plasma::QueryMatch::CategoryRelevance::Highest);
+#endif
                 match.setRelevance(0.8);
             } else {
                 if (session.description.compare(term, Qt::CaseInsensitive) == 0) {
                     // parameter to kdevelop matches session exactly, bump it up!
+#if KRUNNER_VERSION < QT_VERSION_CHECK(5, 113, 0)
                     match.setType(Plasma::QueryMatch::ExactMatch);
+#else
+                    match.setCategoryRelevance(Plasma::QueryMatch::CategoryRelevance::Highest);
+#endif
                     match.setRelevance(1.0);
                 } else {
                     // fuzzy match of the session in "kdevelop $session"
+#if KRUNNER_VERSION < QT_VERSION_CHECK(5, 113, 0)
                     match.setType(Plasma::QueryMatch::PossibleMatch);
+                    // Note: using categoryRelevance CategoryRelevance::Moderate with the newer API below,
+                    // instead of the integer value equivalent CategoryRelevance::Low, despite KRunner/KF5
+                    // implementation directly casting the respective enum values.
+                    // Because only this runner is feeding the "kdevelop" category, and the only purpose of
+                    // the type property has been to sort relevance. So the value used here just needs to be
+                    // lower than CategoryRelevance::Highest. Low=30 though seems unbalanced with Highest=100,
+                    // also is partial matching not really of "low" relevance, but with the search-as-you-type
+                    // KRunner interaction also rather more common to already deliver a relevant hit.
+#else
+                    match.setCategoryRelevance(Plasma::QueryMatch::CategoryRelevance::Moderate);
+#endif
                     match.setRelevance(0.8);
                 }
             }
