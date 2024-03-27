@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-03-27 10:09+0000\n"
 "PO-Revision-Date: 2013-03-29 10:56+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -28,7 +28,7 @@ msgstr "A(z) :q: mintára illeszkedő KDevelop munkamenet keresése."
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Az összes KDevelop szerkesztő munkamenet listázása a fiókjában."
 
-#: kdevelopsessions.cpp:108
+#: kdevelopsessions.cpp:128
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "KDevelop munkamenet megnyitása"

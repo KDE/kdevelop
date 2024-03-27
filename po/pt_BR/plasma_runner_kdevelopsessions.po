@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma_runner_kdevelopsessions\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-03-27 10:09+0000\n"
 "PO-Revision-Date: 2013-02-15 07:56-0200\n"
 "Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
@@ -29,7 +29,7 @@ msgstr "Localiza as sessões do KDevelop que correspondam a :q:."
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Lista todas as sessões do editor do KDevelop em sua conta."
 
-#: kdevelopsessions.cpp:108
+#: kdevelopsessions.cpp:128
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Abre uma sessão do KDevelop"

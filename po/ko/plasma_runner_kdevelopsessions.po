@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-03-27 10:09+0000\n"
 "PO-Revision-Date: 2014-03-25 02:36+0900\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -27,7 +27,7 @@ msgstr ":q:와(과) 일치하는 KDevelop 세션을 찾습니다."
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "계정에 있는 모든 KDevelop 편집기 세션을 표시합니다."
 
-#: kdevelopsessions.cpp:108
+#: kdevelopsessions.cpp:128
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "KDevelop 세션 열기"

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-03-27 10:09+0000\n"
 "PO-Revision-Date: 2024-02-15 17:28+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -897,7 +897,7 @@ msgstr "尋找符合 :q: 的 Kdevelop 工作階段。"
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "列出您的帳號中的所有 KDevelop 編輯器工作階段。"
 
-#: plasma/runner/kdevelopsessions.cpp:108
+#: plasma/runner/kdevelopsessions.cpp:128
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "開啟 KDevelop 工作階段"

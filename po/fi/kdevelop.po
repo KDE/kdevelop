@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-03-27 10:09+0000\n"
 "PO-Revision-Date: 2022-08-19 14:39+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -917,7 +917,7 @@ msgstr "Etsii :q::a vastaavia KDevelop-istuntoja."
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Luettelee kaikki käyttäjäsi Kate-istunnot."
 
-#: plasma/runner/kdevelopsessions.cpp:108
+#: plasma/runner/kdevelopsessions.cpp:128
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Avaa KDevelop-istunto"

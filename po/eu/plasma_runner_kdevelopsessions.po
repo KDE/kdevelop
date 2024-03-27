@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-03-27 10:09+0000\n"
 "PO-Revision-Date: 2022-12-05 07:23+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -30,7 +30,7 @@ msgstr ":q:(e)kin bat datozen KDevelop saioak aurkitzen ditu."
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Zure kontuko KDevelop editore saio guztiak zerrendatzen ditu."
 
-#: kdevelopsessions.cpp:108
+#: kdevelopsessions.cpp:128
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Ireki KDevelop saioa"
