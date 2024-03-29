@@ -1,11 +1,9 @@
-# TODO: port Plasma applet & KRunner plugin
-set(CMAKE_DISABLE_FIND_PACKAGE_KF5Plasma ON)
-find_package(KF5Plasma CONFIG)
-set_package_properties(KF5Plasma PROPERTIES
+find_package(Plasma)
+set_package_properties(Plasma PROPERTIES
     PURPOSE "Plasma libraries for enabling the plasma addons"
     URL "https://www.kde.org"
     TYPE OPTIONAL)
-if(KF5Plasma_FOUND)
+if(Plasma_FOUND)
     add_subdirectory(plasma)
 endif()
 

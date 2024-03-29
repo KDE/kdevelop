@@ -20,6 +20,7 @@ Dependencies:
 - 'on': ['Linux', 'FreeBSD']
   'require':
     'plasma/libksysguard': '@latest-kf6'
+    'plasma/libplasma': '@latest-kf6'
 
 Options:
   per-test-timeout: 200 # the 60-second default is not enough for test_gdb

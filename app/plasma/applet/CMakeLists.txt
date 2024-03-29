@@ -1,7 +1,4 @@
-install(DIRECTORY package/
-        DESTINATION ${KDE_INSTALL_DATADIR}/plasma/plasmoids/kdevelopsessions)
-
-install(FILES package/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} RENAME plasma-applet-kdevelopsessions.desktop)
+plasma_install_package(package org.kde.kdevelopsessions)
 
 set(kdevelopsessionsplugin_SRCS
     plugin/kdevelopsessionsplugin.cpp
@@ -12,9 +9,9 @@ add_library(kdevelopsessionsplugin SHARED ${kdevelopsessionsplugin_SRCS})
 
 target_link_libraries(kdevelopsessionsplugin
     KDevelopSessionsWatch
-    KF5::Plasma
-    KF5::I18n
-    Qt5::Qml
+    Plasma::Plasma
+    KF6::I18n
+    Qt::Qml
 )
 
 install(TARGETS kdevelopsessionsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/private/kdevelopsessions)
