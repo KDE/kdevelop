@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevwelcomepage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-04-03 22:10+0100\n"
+"PO-Revision-Date: 2024-03-28 08:18+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -48,7 +48,7 @@ msgstr "Agordu novan Lanĉilon"
 
 #: qml/area_debug.qml:38
 msgid "Attach to Process"
-msgstr "Alkroĉigu al Procezo"
+msgstr "Konekti al Procezo"
 
 #: qml/area_debug.qml:39
 msgid "Debug your program"
