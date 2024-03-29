@@ -1,9 +1,9 @@
-find_package(KF${KF_MAJOR_VERSION}Plasma CONFIG)
-set_package_properties(KF${KF_MAJOR_VERSION}Plasma PROPERTIES
+find_package(Plasma)
+set_package_properties(Plasma PROPERTIES
     PURPOSE "Plasma libraries for enabling the plasma addons"
     URL "https://www.kde.org"
     TYPE OPTIONAL)
-if(KF${KF_MAJOR_VERSION}Plasma_FOUND)
+if(Plasma_FOUND)
     add_subdirectory(plasma)
 endif()
 

@@ -9,7 +9,7 @@ add_library(kdevelopsessionsplugin SHARED ${kdevelopsessionsplugin_SRCS})
 
 target_link_libraries(kdevelopsessionsplugin
     KDevelopSessionsWatch
-    KF${KF_MAJOR_VERSION}::Plasma
+    Plasma::Plasma
     KF${KF_MAJOR_VERSION}::I18n
     Qt${QT_MAJOR_VERSION}::Qml
 )

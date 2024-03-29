@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/Applet",
     "KPlugin": {
         "Authors": [
             {
@@ -46,9 +47,8 @@
         "Description[x-test]": "xxList and launch KDevelop sessionsxx",
         "Description[zh_CN]": "列出并启动 KDevelop 会话",
         "Description[zh_TW]": "列出並啟動 KDevelop 工作階段",
-        "EnabledByDefault": true,
         "Icon": "kdevelop",
-        "Id": "kdevelopsessions",
+        "Id": "org.kde.kdevelopsessions",
         "License": "GPL",
         "Name": "KDevelop Sessions",
         "Name[ar]": "جلسات مطوّرك",
@@ -92,12 +92,8 @@
         "Name[x-test]": "xxKDevelop Sessionsxx",
         "Name[zh_CN]": "KDevelop 会话",
         "Name[zh_TW]": "KDevelop 工作階段",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
-        "Version": "0.1"
+        "Version": "0.1",
+        "Website": "https://www.kdevelop.org/"
     },
-    "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-DefaultSize": "290,340",
-    "X-Plasma-MainScript": "ui/kdevelopsessions.qml"
+    "X-Plasma-API-Minimum-Version": "6.0"
 }
