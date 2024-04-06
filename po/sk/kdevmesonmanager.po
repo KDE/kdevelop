@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevmesonmanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-04-06 01:42+0000\n"
 "PO-Revision-Date: 2022-04-17 20:48+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -113,18 +113,18 @@ msgstr "** Prerezanie úspešné **"
 msgid "** Prune failed: %1 **"
 msgstr "** Prerezanie zlyhalo: %1 **"
 
-#: mesonmanager.cpp:64
+#: mesonmanager.cpp:68
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Import Failed"
 msgstr "Import projektu zlyhal"
 
-#: mesonmanager.cpp:111
+#: mesonmanager.cpp:115
 #, kde-format
 msgid "Meson builder error: %1"
 msgstr "Chyba buildera Meson: %1"
 
-#: mesonmanager.cpp:251
+#: mesonmanager.cpp:276
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr "Import %1 zlyhal, pretože nebolo možné vytvoriť adresár zostavenia."
