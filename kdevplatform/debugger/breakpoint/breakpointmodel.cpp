@@ -117,7 +117,11 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
         imark->setMarkPixmap(PendingBreakpointMark, *pendingBreakpointPixmap());
         imark->setMarkPixmap(ReachedBreakpointMark, *reachedBreakpointPixmap());
         imark->setMarkPixmap(DisabledBreakpointMark, *disabledBreakpointPixmap());
-        imark->setEditableMarks(MarkInterface::Bookmark | BreakpointMark);
+
+        // We forbid adding breakpoints to an untitled/unsaved document. Such a document's URL is empty,
+        // in which case we don't enable breakpoint actions yet.
+        imark->setEditableMarks(textDocument->url().isEmpty() ? MarkInterface::Bookmark
+                                                              : (MarkInterface::Bookmark | BreakpointMark));
 
         // Set up breakpoints *before* connecting to the document's signals.
         setupDocumentBreakpoints(*textDocument);
@@ -285,6 +289,11 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
     int type = mark.type;
     qCDebug(DEBUGGER) << type;
 
+    auto* const iface = qobject_cast<KTextEditor::MarkInterface*>(document);
+    if (!(iface->editableMarks() & BreakpointMark)) {
+        return; // breakpoints are forbidden in this document, so let KTextEditor show its default context menu
+    }
+
     Breakpoint *b = nullptr;
     if ((type & AllBreakpointMarks)) {
         b = breakpoint(document->url(), mark.line);
@@ -312,7 +321,6 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
     QAction* triggeredAction = menu.exec(pos);
     if (triggeredAction) {
         if (triggeredAction == bookmarkAction) {
-            KTextEditor::MarkInterface *iface = qobject_cast<KTextEditor::MarkInterface*>(document);
             if ((type & MarkInterface::Bookmark))
                 iface->removeMark(mark.line, MarkInterface::Bookmark);
             else
@@ -489,6 +497,9 @@ void BreakpointModel::markChanged(
     if (d->inhibitMarkChange)
         return;
 
+    Q_ASSERT_X(!document->url().isEmpty(), Q_FUNC_INFO,
+               "Somehow a breakpoint mark appeared in an untitled/unsaved document. This is not supported.");
+
     if (action == KTextEditor::MarkInterface::MarkAdded) {
         Breakpoint *b = breakpoint(document->url(), mark.line);
         if (b) {
@@ -562,6 +573,16 @@ void BreakpointModel::toggleBreakpoint(const QUrl& url, const KTextEditor::Curso
     if (b) {
         removeBreakpoint(b);
     } else {
+        // We forbid adding breakpoints to an untitled/unsaved document by not enabling its breakpoint actions.
+        // The Toggle Breakpoint action is always enabled though, hence the check and early-return below.
+        const auto* const documentController = ICore::self()->documentController();
+        const auto* const doc = documentController ? documentController->documentForUrl(url) : nullptr;
+        const auto* const imark = doc ? qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument()) : nullptr;
+        if (imark && !(imark->editableMarks() & BreakpointMark)) {
+            // TODO: inform the user that the toggling failed.
+            return;
+        }
+
         addCodeBreakpoint(url, cursor.line());
     }
 }
@@ -598,10 +619,23 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
     Q_D(BreakpointModel);
 
     IF_DEBUG( qCDebug(DEBUGGER); )
+
+    auto* const textDocument = doc->textDocument();
+    if (!textDocument) {
+        return;
+    }
+
+    // We forbid adding breakpoints to an untitled/unsaved document by not enabling its breakpoint actions.
+    // This document might have been untitled before the saving, so enable its breakpoint actions now.
+    Q_ASSERT(!textDocument->url().isEmpty());
+    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(textDocument);
+    imark->setEditableMarks(MarkInterface::Bookmark | BreakpointMark);
+
     // save breakpoints in the given document.
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (breakpoint->movingCursor()) {
-            if (breakpoint->movingCursor()->document() != doc->textDocument()) continue;
+            if (breakpoint->movingCursor()->document() != textDocument)
+                continue;
             breakpoint->saveMovingCursorLine();
 
             // FIXME: temporary code to update the breakpoint widget UI.
