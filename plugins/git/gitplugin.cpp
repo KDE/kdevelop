@@ -1036,6 +1036,7 @@ QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
                 parent = commits[i].section(QLatin1Char(' '), section);
             }
             item.setParents(parents);
+            ++i;
 
             //Avoid Merge string
             while (!commits[i].contains(QLatin1String("Author: ")))
