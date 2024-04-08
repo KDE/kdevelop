@@ -1039,7 +1039,7 @@ QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
             ++i;
 
             //Avoid Merge string
-            while (!commits[i].contains(QLatin1String("Author: ")))
+            while (!commits[i].startsWith(QLatin1String("Author: ")))
                     ++i;
 
             item.setAuthor(commits[i].section(QStringLiteral("Author: "), 1).trimmed());
