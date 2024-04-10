@@ -12,6 +12,7 @@
 
 #include <QIcon>
 #include <QPixmap>
+#include <QPointer>
 #include <QTimer>
 
 #include <KLocalizedString>
@@ -25,6 +26,9 @@
 #include <interfaces/idebugsession.h>
 #include <interfaces/ibreakpointcontroller.h>
 #include <interfaces/isession.h>
+#include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
+
 #include <debug.h>
 #include "breakpoint.h"
 #include <KConfigGroup>
@@ -79,6 +83,8 @@ public:
     ///        a real fix would make sure that we actually delete breakpoints
     ///        right when we delete them... aka remove Breakpoint::{set}deleted
     QList<Breakpoint*> deletedBreakpoints;
+
+    QPointer<Sublime::Message> noBreakpointsInUntitledDocumentMessage;
 };
 
 BreakpointModel::BreakpointModel(QObject* parent)
@@ -569,6 +575,8 @@ void BreakpointModel::removeBreakpoint(Breakpoint* breakpoint)
 
 void BreakpointModel::toggleBreakpoint(const QUrl& url, const KTextEditor::Cursor& cursor)
 {
+    Q_D(BreakpointModel);
+
     Breakpoint *b = breakpoint(url, cursor.line());
     if (b) {
         removeBreakpoint(b);
@@ -579,7 +587,15 @@ void BreakpointModel::toggleBreakpoint(const QUrl& url, const KTextEditor::Curso
         const auto* const doc = documentController ? documentController->documentForUrl(url) : nullptr;
         const auto* const imark = doc ? qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument()) : nullptr;
         if (imark && !(imark->editableMarks() & BreakpointMark)) {
-            // TODO: inform the user that the toggling failed.
+            // Discard the previous message (if any) to prevent stacking of identical messages,
+            // which the user must dismiss one by one.
+            delete d->noBreakpointsInUntitledDocumentMessage.data();
+
+            auto* const message = new Sublime::Message(
+                i18n("A breakpoint cannot be added to an untitled document. Please save the document first."),
+                Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
+            d->noBreakpointsInUntitledDocumentMessage = message;
             return;
         }
 
