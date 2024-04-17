@@ -1,145 +1,144 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomdefinesandincludes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2016-09-22 20:30+0800\n"
-"Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
-"Language-Team: Traditional Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-04-17 07:06+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.13.0\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: compilerprovider/compilerprovider.cpp:32
 #, kde-format
 msgctxt "@item no compiler"
 msgid "None"
-msgstr ""
+msgstr "無"
 
 #: compilerprovider/widget/compilersmodel.cpp:117
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
-msgstr ""
+msgstr "名稱"
 
 #: compilerprovider/widget/compilersmodel.cpp:117
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
-msgstr ""
+msgstr "類型"
 
 #: compilerprovider/widget/compilersmodel.cpp:119
 #, kde-format
 msgctxt "@item"
 msgid "Auto-detected"
-msgstr ""
+msgstr "自動偵測"
 
 #: compilerprovider/widget/compilersmodel.cpp:120
 #, kde-format
 msgctxt "@item"
 msgid "Manual"
-msgstr ""
+msgstr "手動"
 
 #: compilerprovider/widget/compilerswidget.cpp:50
 #, kde-format
 msgctxt "@action"
 msgid "Delete Compiler"
-msgstr ""
+msgstr "刪除編譯器"
 
 #: compilerprovider/widget/compilerswidget.cpp:215
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Compilers"
-msgstr ""
+msgstr "C/C++ 編譯器"
 
 #: compilerprovider/widget/compilerswidget.cpp:220
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Compilers"
-msgstr ""
+msgstr "設定 C/C++ 編譯器"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: compilerprovider/widget/compilerswidget.ui:25
 #, kde-format
 msgctxt "@action:button"
 msgid "&Add"
-msgstr ""
+msgstr "新增(&A)"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeButton)
 #: compilerprovider/widget/compilerswidget.ui:35
 #, kde-format
 msgctxt "@action:button"
 msgid "&Remove"
-msgstr ""
+msgstr "移除(&R)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: compilerprovider/widget/compilerswidget.ui:66
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr ""
+msgstr "名稱："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: compilerprovider/widget/compilerswidget.ui:76
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Compiler executable:"
-msgstr ""
+msgstr "編譯器執行檔："
 
 #: kcm_widget/definesandincludesconfigpage.cpp:70
 #, kde-format
 msgctxt "@title:tab"
 msgid "Language Support"
-msgstr ""
+msgstr "語言支援"
 
 #: kcm_widget/definesandincludesconfigpage.cpp:75
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Language Support"
-msgstr ""
+msgstr "設定語言支援"
 
 #: kcm_widget/definesmodel.cpp:31
 #, kde-format
 msgid "Double-click here to insert a new define to be used for the path"
-msgstr ""
+msgstr "在此雙擊來插入路徑要使用的新定義"
 
 #: kcm_widget/definesmodel.cpp:67
 #, kde-format
 msgctxt "@title:column"
 msgid "Define"
-msgstr ""
+msgstr "定義"
 
 #: kcm_widget/definesmodel.cpp:69
 #, kde-format
 msgctxt "@title:column"
 msgid "Value"
-msgstr ""
+msgstr "值"
 
 #: kcm_widget/defineswidget.cpp:29
 #, kde-format
 msgctxt "@action"
 msgid "Delete Define"
-msgstr ""
+msgstr "刪除定義"
 
 #: kcm_widget/includeswidget.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Delete Include Path"
-msgstr ""
+msgstr "刪除引入路徑"
 
 #: kcm_widget/includeswidget.cpp:138
 #, kde-format
 msgctxt "%1 is an include path"
 msgid "%1 does not exist"
-msgstr ""
+msgstr "%1 不存在"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, includePathRequester)
 #: kcm_widget/includeswidget.ui:31
@@ -162,14 +161,14 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new include path entry from this URL"
-msgstr ""
+msgstr "從此 URL 建立新的引入路徑項目"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeIncludePath)
 #: kcm_widget/includeswidget.ui:60
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current include path entry"
-msgstr ""
+msgstr "刪除目前的引入路徑項目"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, parseHeadersInPlainC)
 #: kcm_widget/parserwidget.ui:20
@@ -186,14 +185,14 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Parse *.h headers in plain C"
-msgstr ""
+msgstr "用純 C 剖析 *.h 標頭檔"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: kcm_widget/parserwidget.ui:36
 #, kde-format
 msgctxt "@label:listbox"
 msgid "C++ profi&le:"
-msgstr ""
+msgstr "C++ 設定檔(&L)："
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCpp)
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsC)
@@ -207,6 +206,8 @@ msgid ""
 "<html><head/><body><p>Choose language profile. </p><p>Use &quot;Custom&quot; "
 "profile to modify parser command-line arguments</p></body></html>"
 msgstr ""
+"<html><head/><body><p>選擇語言設定檔。</p><p>使用「自訂」設定檔來修改剖析器的"
+"命令列參數</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCpp)
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsC)
@@ -217,90 +218,90 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox language standard"
 msgid "Custom"
-msgstr ""
+msgstr "自訂"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel)
 #: kcm_widget/parserwidget.ui:94
 #, kde-format
 msgctxt "@label:textbox"
 msgid "C++ co&mmand-line arguments:"
-msgstr ""
+msgstr "C++ 命令列參數(&M)："
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: kcm_widget/parserwidget.ui:120
 #, kde-format
 msgctxt "@label:listbox"
 msgid "C profi&le:"
-msgstr ""
+msgstr "C 設定檔(&L)："
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_2)
 #: kcm_widget/parserwidget.ui:178
 #, kde-format
 msgctxt "@label:textbox"
 msgid "C co&mmand-line arguments:"
-msgstr ""
+msgstr "C 命令列參數(&M)："
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: kcm_widget/parserwidget.ui:204
 #, kde-format
 msgctxt "@label:listbox"
 msgid "OpenCL C &profile:"
-msgstr ""
+msgstr "OpenCL C 設定檔(&P):"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_3)
 #: kcm_widget/parserwidget.ui:247
 #, kde-format
 msgctxt "@label:textbox"
 msgid "OpenCL C comma&nd-line arguments:"
-msgstr ""
+msgstr "OpenCL C 命令列參數(&N)："
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: kcm_widget/parserwidget.ui:273
 #, kde-format
 msgctxt "@label:listbox"
 msgid "CUDA C P&rofile:"
-msgstr ""
+msgstr "CUDA C 設定檔(&R)："
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_4)
 #: kcm_widget/parserwidget.ui:321
 #, kde-format
 msgctxt "@label:textbox"
 msgid "CUDA C comman&d-line arguments:"
-msgstr ""
+msgstr "CUDA C 命令列參數(&D)："
 
 #: kcm_widget/projectpathswidget.cpp:169
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Project Path"
-msgstr ""
+msgstr "選擇專案路徑"
 
 #: kcm_widget/projectpathswidget.cpp:184
 #, kde-format
 msgid "Are you sure you want to delete the configuration for the path '%1'?"
-msgstr ""
+msgstr "您確定要刪除路徑「%1」的設定嗎？"
 
 #: kcm_widget/projectpathswidget.cpp:186
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Path Configuration"
-msgstr ""
+msgstr "刪除路徑設定"
 
 #: kcm_widget/projectpathswidget.cpp:224
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Include Directories/Files"
-msgstr ""
+msgstr "編輯引入目錄/檔案"
 
 #: kcm_widget/projectpathswidget.cpp:232
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Defined Macros"
-msgstr ""
+msgstr "編輯已定義的巨集"
 
 #: kcm_widget/projectpathswidget.cpp:288
 #, kde-format
 msgid "Configure C/C++ parser"
-msgstr ""
+msgstr "設定 C/C++ 剖析器"
 
 #. i18n: ectx: property (text), widget (QLabel, configureLabel)
 #: kcm_widget/projectpathswidget.cpp:292 kcm_widget/projectpathswidget.ui:20
@@ -322,7 +323,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Reparse the project"
-msgstr ""
+msgstr "重新剖析專案"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QComboBox, compiler)
@@ -339,7 +340,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Compiler for path:"
-msgstr ""
+msgstr "路徑的編譯器："
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, batchEdit)
 #: kcm_widget/projectpathswidget.ui:90
@@ -353,61 +354,61 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "&Batch Edit..."
-msgstr ""
+msgstr "批次編輯(&B)..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addPath)
 #: kcm_widget/projectpathswidget.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new sub-project path entry."
-msgstr ""
+msgstr "新增子專案路徑項目。"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removePath)
 #: kcm_widget/projectpathswidget.ui:135
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current sub-project path entry."
-msgstr ""
+msgstr "刪除目前的子專案路徑項目。"
 
 #. i18n: ectx: attribute (title), widget (QWidget, includePathsPage)
 #: kcm_widget/projectpathswidget.ui:165
 #, kde-format
 msgctxt "@title:tab"
 msgid "Includes/Imports"
-msgstr ""
+msgstr "引入/匯入"
 
 #. i18n: ectx: attribute (title), widget (QWidget, definesPage)
 #: kcm_widget/projectpathswidget.ui:182
 #, kde-format
 msgctxt "@title:tab"
 msgid "Defines"
-msgstr ""
+msgstr "定義"
 
 #. i18n: ectx: attribute (title), widget (QWidget, parserPage)
 #: kcm_widget/projectpathswidget.ui:199
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Parser"
-msgstr ""
+msgstr "C/C++ 剖析器"
 
 #: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:24
 #, kde-format
 msgctxt "@title:window"
 msgid "Setup Custom Include Paths"
-msgstr ""
+msgstr "設定自訂引入路徑"
 
 #: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:57
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Include"
-msgstr ""
+msgstr "選擇要引入的目錄。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:17
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage Directory:"
-msgstr ""
+msgstr "儲存目錄："
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, storageDirectory)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:25
@@ -439,19 +440,19 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to include."
-msgstr ""
+msgstr "選擇要引入的目錄。"
 
 #. i18n: ectx: property (text), widget (QPushButton, directorySelector)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:69
 #, kde-format
 msgctxt "@action:button"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:86
 #, kde-format
 msgid "Bad #define directive in %1: %2"
-msgstr ""
+msgstr "%1 中有錯誤的 #define 宣告：%2"
 
 #: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:139
 #, kde-format

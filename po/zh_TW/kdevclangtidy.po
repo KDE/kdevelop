@@ -1,199 +1,199 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Chinese <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2024-04-17 06:59+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 24.04.70\n"
 
 #: analyzer.cpp:29
 #, kde-format
 msgid "Clang-Tidy"
-msgstr ""
+msgstr "Clang-Tidy"
 
 #: config/checklistfilterproxysearchline.cpp:23
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "搜尋..."
 
 #: config/checklistmodel.cpp:65
 #, kde-format
 msgctxt "@item"
 msgid "All checks"
-msgstr ""
+msgstr "所有檢查"
 
 #: config/checksetmanagewidget.cpp:89
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Check Set"
-msgstr ""
+msgstr "輸入新檢查集的名稱"
 
 #: config/checksetmanagewidget.cpp:95
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr ""
+msgstr "名稱："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/checksetmanagewidget.ui:31
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Check set:"
-msgstr ""
+msgstr "檢查集"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add check set"
-msgstr ""
+msgstr "新增檢查集"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone check set"
-msgstr ""
+msgstr "建立檢查集複本"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove check set"
-msgstr ""
+msgstr "移除檢查集"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr ""
+msgstr "設定為預設"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
 #: config/checksetmanagewidget.ui:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit name of check set"
-msgstr ""
+msgstr "編輯檢查集名稱"
 
 #: config/checksetselectioncombobox.cpp:26
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Custom"
-msgstr ""
+msgstr "自訂"
 
 #: config/checksetselectioncombobox.cpp:30
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default (currently: %1)"
-msgstr ""
+msgstr "使用預設（目前為：%1）"
 
 #: config/checksetselectionlistmodel.cpp:64
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (default selection)"
-msgstr ""
+msgstr "%1（預設選擇）"
 
 #: config/clangtidypreferences.cpp:62 config/clangtidyprojectconfigpage.cpp:55
 #, kde-format
 msgctxt "@title:tab"
 msgid "Clang-Tidy"
-msgstr ""
+msgstr "Clang-Tidy"
 
 #: config/clangtidypreferences.cpp:67
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clang-Tidy Settings"
-msgstr ""
+msgstr "調整 Clang-Tidy 設定"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/clangtidypreferences.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Paths"
-msgstr ""
+msgstr "路徑"
 
 #. i18n: ectx: property (text), widget (QLabel, clangtidyLabel)
 #: config/clangtidypreferences.ui:37
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Clang-&Tidy executable:"
-msgstr ""
+msgstr "Clang-&Tidy 執行檔："
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_clangtidyPath)
 #: config/clangtidypreferences.ui:54
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The full path to the Clang-Tidy executable"
-msgstr ""
+msgstr "Clang-Tidy 執行檔的完整路徑"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
 #: config/clangtidypreferences.ui:72
 #, kde-format
 msgctxt "@option:check"
 msgid "Run analysis jobs in parallel"
-msgstr ""
+msgstr "平行進行分析工作"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
 #: config/clangtidypreferences.ui:81
 #, kde-format
 msgctxt "@option:check"
 msgid "Use all CPU cores"
-msgstr ""
+msgstr "使用所有 CPU 核心"
 
 #. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
 #: config/clangtidypreferences.ui:101
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
-msgstr ""
+msgstr "最大執行緒數量："
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useConfigFile)
 #: config/clangtidyprojectconfigpage.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "&Use .clang-tidy file(s)"
-msgstr ""
+msgstr "使用 .clang-tidy 檔案們(&U)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, checksTab)
 #: config/clangtidyprojectconfigpage.ui:43
 #, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
-msgstr ""
+msgstr "檢查"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: config/clangtidyprojectconfigpage.ui:73
 #, kde-format
 msgctxt "@title:tab"
 msgid "Includes"
-msgstr ""
+msgstr "引入檔"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: config/clangtidyprojectconfigpage.ui:79
 #, kde-format
 msgctxt "@option:check"
 msgid "&Check system headers:"
-msgstr ""
+msgstr "檢查系統標頭檔(&C)："
 
 #. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
 #: config/clangtidyprojectconfigpage.ui:92
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Header fi&lter:"
-msgstr ""
+msgstr "標頭檔過濾器(&L)："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
 #: config/clangtidyprojectconfigpage.ui:105
@@ -204,54 +204,56 @@ msgid ""
 "from. Diagnostics from the main file of each translation unit are always "
 "displayed. Can be used together with -line-filter."
 msgstr ""
+"用來偵測要輸出診斷的標頭檔的名稱的正則表達式。各個翻譯單元的主檔案的診斷總是"
+"會顯示。可以與 -line-filter 同時使用。"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: config/clangtidyprojectconfigpage.ui:119
 #, kde-format
 msgctxt "@title:tab"
 msgid "Extra Parameters"
-msgstr ""
+msgstr "額外參數"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: config/clangtidyprojectconfigpage.ui:125
 #, kde-format
 msgctxt "@label.textbox"
 msgid "E&xtra parameters:"
-msgstr ""
+msgstr "額外參數(&X)："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_additionalParameters)
 #: config/clangtidyprojectconfigpage.ui:135
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional command line options to pass to Clang-Tidy."
-msgstr ""
+msgstr "要傳遞給 Clang-Tidy 的額外命令列選項。"
 
 #: job.cpp:68
 #, kde-format
 msgid "Clang-Tidy Analysis"
-msgstr ""
+msgstr "Clang-Tidy 分析"
 
 #: job.cpp:142
 #, kde-format
 msgid "Failed to start Clang-Tidy process."
-msgstr ""
+msgstr "Clang-Tidy 行程啟動失敗。"
 
 #: job.cpp:147
 #, kde-format
 msgid "Clang-Tidy crashed."
-msgstr ""
+msgstr "Clang-Tidy 已崩潰。"
 
 #: job.cpp:151
 #, kde-format
 msgid "Clang-Tidy process timed out."
-msgstr ""
+msgstr "Clang-Tidy 行程逾時。"
 
 #: job.cpp:155
 #, kde-format
 msgid "Write to Clang-Tidy process failed."
-msgstr ""
+msgstr "寫入 Clang-Tidy 行程時失敗。"
 
 #: job.cpp:159
 #, kde-format
 msgid "Read from Clang-Tidy process failed."
-msgstr ""
+msgstr "從 Clang-Tidy 行程讀取時失敗。"
