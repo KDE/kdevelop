@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-17 01:45+0000\n"
-"PO-Revision-Date: 2024-02-16 11:07+0100\n"
+"PO-Revision-Date: 2024-04-17 10:58+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -198,6 +198,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"No es pot afegir un punt d'interrupció a un document sense títol. Abans "
+"deseu el document."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format

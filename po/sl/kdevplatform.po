@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-17 01:45+0000\n"
-"PO-Revision-Date: 2024-02-16 19:58+0100\n"
+"PO-Revision-Date: 2024-04-17 07:00+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -197,6 +197,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"Prelomne točke ni mogoče dodati dokumentu brez naslova. Najprej shranite "
+"dokument."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format

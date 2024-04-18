@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-17 01:45+0000\n"
-"PO-Revision-Date: 2024-02-16 12:23+0100\n"
+"PO-Revision-Date: 2024-04-18 01:04+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.02.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -195,6 +195,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"No se puede añadir un punto de interrupción a un documento sin título. "
+"Guarde primero el documento."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -3298,7 +3300,7 @@ msgstr "No se puede crear el directorio: %1"
 #, kde-format
 msgctxt "Format of the progress bar text. progress and info"
 msgid "%1 : %p%"
-msgstr "%1 : %p%"
+msgstr "%1 : %p %"
 
 #: shell/projectsourcepage.cpp:249
 #, kde-format
