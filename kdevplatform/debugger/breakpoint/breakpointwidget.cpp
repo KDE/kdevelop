@@ -10,7 +10,7 @@
 #include <QIcon>
 #include <QGroupBox>
 #include <QVBoxLayout>
-#include <QTreeView>
+#include <QTableView>
 #include <QHeaderView>
 #include <QMenu>
 #include <QContextMenuEvent>
@@ -40,7 +40,7 @@ public:
     {
     }
 
-    QTreeView* breakpointsView = nullptr;
+    QTableView* breakpointsView = nullptr;
     BreakpointDetails* details = nullptr;
     QMenu* popup = nullptr;
     bool firstShow = true;
@@ -67,10 +67,12 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
                                           "to the source in the editor window."));
     setWindowIcon( QIcon::fromTheme( QStringLiteral( "media-playback-pause"), windowIcon() ) );
 
-    d->breakpointsView = new QTreeView(this);
+    d->breakpointsView = new QTableView(this);
+    d->breakpointsView->setShowGrid(false);
     d->breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->breakpointsView->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->breakpointsView->setRootIsDecorated(false);
+    d->breakpointsView->horizontalHeader()->setHighlightSections(false);
+    d->breakpointsView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     auto detailsContainer = new QGroupBox(i18n("Breakpoint Details"), this);
     auto detailsLayout = new QVBoxLayout(detailsContainer);
@@ -78,6 +80,8 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     detailsLayout->addWidget(d->details);
 
     setStretchFactor(0, 2);
+
+    d->breakpointsView->verticalHeader()->hide();
 
     auto* proxyModel = new PlaceholderItemProxyModel(this);
     proxyModel->setSourceModel(d->debugController->breakpointModel());
@@ -87,7 +91,7 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     connect(proxyModel, &PlaceholderItemProxyModel::dataInserted, this, &BreakpointWidget::slotDataInserted);
     d->proxyModel = proxyModel;
 
-    connect(d->breakpointsView, &QTreeView::activated, this, &BreakpointWidget::slotOpenFile);
+    connect(d->breakpointsView, &QTableView::activated, this, &BreakpointWidget::slotOpenFile);
     connect(d->breakpointsView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &BreakpointWidget::slotUpdateBreakpointDetail);
     connect(d->debugController->breakpointModel(), &BreakpointModel::rowsInserted, this, &BreakpointWidget::slotUpdateBreakpointDetail);
     connect(d->debugController->breakpointModel(), &BreakpointModel::rowsRemoved, this, &BreakpointWidget::slotUpdateBreakpointDetail);
@@ -200,7 +204,7 @@ void BreakpointWidget::showEvent(QShowEvent *)
         //for some reasons sometimes width can be very small about 200... But it doesn't matter as we use tooltip anyway.
         int width = d->breakpointsView->size().width();
 
-        QHeaderView* header = d->breakpointsView->header();
+        auto* const header = d->breakpointsView->horizontalHeader();
         header->resizeSection(Breakpoint::LocationColumn, width > 400 ? width/2 : header->sectionSize(Breakpoint::LocationColumn)*2 );
         d->firstShow = false;
     }
