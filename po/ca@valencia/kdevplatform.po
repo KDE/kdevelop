@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-19 01:46+0000\n"
-"PO-Revision-Date: 2024-02-16 11:07+0100\n"
+"PO-Revision-Date: 2024-04-17 10:58+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -198,6 +198,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"No es pot afegir un punt d'interrupció a un document sense títol. Abans "
+"guardeu el document."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -4080,8 +4082,7 @@ msgstr "Compleció de codi"
 msgctxt "@info:tooltip"
 msgid "If disabled, the code completion widget will never show automatically."
 msgstr ""
-"Si està desactivada, el giny de compleció de codi mai es mostrarà "
-"automàticament."
+"Si està marcada, el giny de compleció de codi mai es mostrarà automàticament."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: shell/settings/languagepreferences.ui:38
@@ -4273,8 +4274,8 @@ msgid ""
 "<p>When enabled, lines with errors will get additionally highlighted and "
 "their positions get marked in the scrollbar.</p>"
 msgstr ""
-"<p>Quan se selecciona, les línies amb errors es ressaltaran automàticament i "
-"les seues posicions quedaran marcades en la barra de desplaçament.</p>"
+"<p>Quan es marca, les línies amb errors es ressaltaran automàticament i les "
+"seues posicions quedaran marcades en la barra de desplaçament.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/languagepreferences.ui:257
@@ -4545,7 +4546,7 @@ msgid ""
 "may\n"
 "        be slower."
 msgstr ""
-"Si se selecciona esta opció, KDevelop programarà l'anàlisi\n"
+"Si està marcada, KDevelop programarà l'anàlisi\n"
 "        de tot el codi font trobat pel sistema de construcció actual per a "
 "la part de la\n"
 "        implementació del llenguatge apropiat\n"
@@ -4571,8 +4572,8 @@ msgid ""
 "If this option is set all open documents will be automatically saved before "
 "any build is started."
 msgstr ""
-"Si se selecciona esta opció, tots els documents oberts es guardaran "
-"automàticament abans d'iniciar qualsevol construcció."
+"Si està marcada, tots els documents oberts es guardaran automàticament abans "
+"d'iniciar qualsevol construcció."
 
 #: shell/settings/projectpreferences.cpp:44
 #, kde-format
@@ -4804,7 +4805,7 @@ msgstr "Acoblable de la dreta"
 #, kde-format
 msgctxt "@title:group"
 msgid "Tabbed Browsing"
-msgstr "Navegació amb pestanyes"
+msgstr "Navegueu amb pestanyes"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:92
@@ -4828,8 +4829,8 @@ msgid ""
 "When enabled, plugins can group related files side by side.\n"
 "For example, a header file will be opened next to the implementation file."
 msgstr ""
-"Quan se selecciona, els connectors podran agrupar els fitxers relacionats "
-"costat a costat.\n"
+"Quan es marca, els connectors poden agrupar els fitxers relacionats costat a "
+"costat.\n"
 "Per exemple, un fitxer de capçalera s'obrirà després del fitxer "
 "d'implementació."
 
@@ -5059,7 +5060,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
-msgstr "Supressió de l'estil"
+msgstr "Suprimiu l'estil"
 
 #: shell/sourceformatterselectionedit.cpp:1149
 #, kde-format
