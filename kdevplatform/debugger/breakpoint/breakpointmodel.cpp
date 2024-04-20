@@ -162,7 +162,7 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
 
     const auto docLineCount = document.lines();
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
-        if (docUrl == breakpoint->url()) {
+        if (breakpoint->kind() == Breakpoint::CodeBreakpoint && docUrl == breakpoint->url()) {
             const auto savedLine = breakpoint->savedLine();
             if (savedLine >= 0 && savedLine < docLineCount) {
                 setupMovingCursor(breakpoint, &document, savedLine);
