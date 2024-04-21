@@ -325,6 +325,7 @@ QUrl IndexedString::toUrl() const
         return {};
     }
     QUrl ret = QUrl::fromUserInput(str());
+    qCritical() << "toUrl()" << ret << str();
     Q_ASSERT(!ret.isRelative());
     return ret;
 }

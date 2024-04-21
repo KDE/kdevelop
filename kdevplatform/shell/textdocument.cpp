@@ -309,6 +309,14 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         // @see KTextEditor::Document::setEncoding
         if (!d->encoding.isEmpty())
             d->document->setEncoding(d->encoding);
+qCritical() << "createViewWidget" << url() << url().isValid() << url().isLocalFile() << url().toLocalFile() << url().isEmpty() << url().isRelative() << url().path() << url().scheme();
+    const QString normalizedUrl(QFileInfo(url().toLocalFile()).canonicalFilePath());
+    if (normalizedUrl.isEmpty()) {
+        qCritical() << "empty normalized";
+    }
+
+    // else: use canonicalFilePath to normalize
+    qCritical() << normalizedUrl<< QUrl::fromLocalFile(normalizedUrl);
 
         if (!url().isEmpty() && !DocumentController::isEmptyDocumentUrl(url()))
             d->document->openUrl( url() );
@@ -431,11 +439,13 @@ bool TextDocument::save(DocumentSaveMode mode)
             }
             break;
     }
-
+#if 1
     if (!KDevelop::ensureWritable(QList<QUrl>() << url())) {
+        qCritical() << "not writable";
         return false;
     }
-
+    qCritical() << "writable";
+#endif
     return d->document->documentSave();
 }
 

@@ -109,7 +109,7 @@ bool Breakpoint::setData(int index, const QVariant& value)
         if (m_kind == CodeBreakpoint && idx != -1) {
             const auto url = QUrl::fromLocalFile(rx.cap(1));
             const auto line = rx.cap(2).toInt() - 1;
-
+qCritical() << "setData" << url << url.isValid() << url.toLocalFile() << url.isEmpty() << url.isRelative() << url.path();
             if (isSupportedBreakpointUrl(url)) {
                 m_expression.clear();
                 setLocation(url, line);
@@ -232,7 +232,7 @@ QUrl Breakpoint::url() const {
     return m_url;
 }
 void Breakpoint::setLocation(const QUrl& url, int line)
-{
+{qCritical() << "setLocation" << url << line;
     Q_ASSERT(m_kind == CodeBreakpoint);
     Q_ASSERT(isSupportedBreakpointUrl(url));
 

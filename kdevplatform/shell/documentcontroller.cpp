@@ -352,6 +352,7 @@ public:
             previousActivePosition = previousActiveTextView->cursorPosition();
 
         QUrl url=doc->url();
+        qCritical() << "open document:" << url << url.isValid() << url.toLocalFile() << url.isEmpty() << url.isRelative() << url.path() << QFileInfo(url.path()).isAbsolute();
         UiController *uiController = Core::self()->uiControllerInternal();
         Sublime::Area *area = uiController->activeArea();
 
