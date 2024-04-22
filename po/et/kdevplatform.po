@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:14+0000\n"
+"POT-Creation-Date: 2024-04-19 01:46+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -28,31 +28,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "qiilaq69@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:144
+#: debugger/breakpoint/breakpoint.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Tõrge"
 
-#: debugger/breakpoint/breakpoint.cpp:150
+#: debugger/breakpoint/breakpoint.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Räpane"
 
-#: debugger/breakpoint/breakpoint.cpp:152
+#: debugger/breakpoint/breakpoint.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Ootel"
 
-#: debugger/breakpoint/breakpoint.cpp:154
+#: debugger/breakpoint/breakpoint.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Puhas"
 
-#: debugger/breakpoint/breakpoint.cpp:186
+#: debugger/breakpoint/breakpoint.cpp:207
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -125,67 +125,74 @@ msgstr ""
 "<b> Katkestuspunkt on räpane</b><p>Katkestuspunkt, mida pole veel silurile "
 "edastatud.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:114
+#: debugger/breakpoint/breakpointmodel.cpp:123
 #, kde-format
 msgid "Breakpoint"
 msgstr "Katkestuspunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:342
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Katkestuspunkti ei leitud"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:342
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Katkestuspunkti ei leitud asukohas %1:%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:162
+#: debugger/breakpoint/breakpointmodel.cpp:348
 #, kde-format
 msgid "&Breakpoint"
 msgstr "Katkestus&punkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:168
+#: debugger/breakpoint/breakpointmodel.cpp:354
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "K&eela katkestuspunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:169
+#: debugger/breakpoint/breakpointmodel.cpp:355
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Lu&ba katkestuspunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:358
 #, kde-format
 msgid "&Bookmark"
 msgstr "&Järjehoidja"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:400
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Tüüp"
 
-#: debugger/breakpoint/breakpointmodel.cpp:217
+#: debugger/breakpoint/breakpointmodel.cpp:401
 #, kde-format
 msgid "Location"
 msgstr "Asukoht"
 
-#: debugger/breakpoint/breakpointmodel.cpp:218
+#: debugger/breakpoint/breakpointmodel.cpp:402
 #, kde-format
 msgid "Condition"
 msgstr "Tingimus"
 
-#: debugger/breakpoint/breakpointmodel.cpp:222
+#: debugger/breakpoint/breakpointmodel.cpp:406
 #, kde-format
 msgid "Active status"
 msgstr "Aktiivne olek"
 
-#: debugger/breakpoint/breakpointmodel.cpp:223
+#: debugger/breakpoint/breakpointmodel.cpp:407
 #, kde-format
 msgid "State"
 msgstr "Olek"
+
+#: debugger/breakpoint/breakpointmodel.cpp:630
+#, kde-format
+msgid ""
+"A breakpoint cannot be added to an untitled document. Please save the "
+"document first."
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -334,12 +341,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr "#%1 %2() failis %3:%4\n"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#: debugger/interfaces/ibreakpointcontroller.cpp:78
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Katkestuspunkti tabamus: %1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#: debugger/interfaces/ibreakpointcontroller.cpp:85
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "Jälgimispunkti tabamus: %1"
@@ -541,7 +548,7 @@ msgid "Home"
 msgstr "Kodu"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
-#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:565
+#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
 #: vcs/dvcs/ui/branchmanager.ui:143
 #, kde-format
 msgctxt "@info:placeholder"
@@ -1914,125 +1921,125 @@ msgstr ""
 "\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">sellest artiklist</a>."
 
-#: shell/debugcontroller.cpp:116
+#: shell/debugcontroller.cpp:115
 #, kde-format
 msgid "Debugger"
 msgstr "Silur"
 
-#: shell/debugcontroller.cpp:138
+#: shell/debugcontroller.cpp:145
 #, fuzzy, kde-format
 #| msgid "Frame Stack"
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Väljakutsete pinu"
 
-#: shell/debugcontroller.cpp:143
+#: shell/debugcontroller.cpp:150
 #, fuzzy, kde-format
 #| msgid "Breakpoints"
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Katkestuspunktid"
 
-#: shell/debugcontroller.cpp:148
+#: shell/debugcontroller.cpp:155
 #, fuzzy, kde-format
 #| msgid "Variables"
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Muutujad"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgid "&Restart"
 msgstr "&Käivita uuesti"
 
-#: shell/debugcontroller.cpp:229
+#: shell/debugcontroller.cpp:222
 #, kde-format
 msgid "Restart program"
 msgstr "Käivita programm uuesti"
 
-#: shell/debugcontroller.cpp:230
+#: shell/debugcontroller.cpp:223
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Käivitab rakenduse otsast peale."
 
-#: shell/debugcontroller.cpp:236
+#: shell/debugcontroller.cpp:229
 #, fuzzy, kde-format
 #| msgid "Interrupt"
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Katkesta"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:230
 #, fuzzy, kde-format
 #| msgid "Interrupt application"
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Katkesta rakenduse töö"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:231
 #, fuzzy, kde-format
 #| msgid "Interrupts the debugged process or current debugger command."
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Katkestab silumisprotsessi või parajasti täidetava siluri käsu."
 
-#: shell/debugcontroller.cpp:242
+#: shell/debugcontroller.cpp:235
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Täida &kursorini"
 
-#: shell/debugcontroller.cpp:243
+#: shell/debugcontroller.cpp:236
 #, fuzzy, kde-format
 #| msgid "Run to cursor"
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Täida kursorini"
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:237
 #, fuzzy, kde-format
 #| msgid "Continues execution until the cursor position is reached."
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Täitmise jätkamine kuni kursori asukohani."
 
-#: shell/debugcontroller.cpp:249
+#: shell/debugcontroller.cpp:242
 #, fuzzy, kde-format
 #| msgid "Set E&xecution Position to Cursor"
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Määra täitmise asuko&haks kursor"
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:243
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Hüppa kursorile"
 
-#: shell/debugcontroller.cpp:251
+#: shell/debugcontroller.cpp:244
 #, fuzzy, kde-format
 #| msgid "Continue execution from the current cursor position."
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Täitmise jätkamine alates kursori aktiivsest asukohast."
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:248
 #, fuzzy, kde-format
 #| msgid "Step &Over"
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Astu ül&e"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:250
 #, fuzzy, kde-format
 #| msgid "Step over the next line"
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Astu järgmisele reale"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:251
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes one line of source in the current source file. If the source "
@@ -2048,42 +2055,42 @@ msgstr ""
 "väljakutse, täidetakse kogu funktsioon ning rakendus peatud funktsiooni "
 "väljakutsele järgneval real."
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:259
 #, fuzzy, kde-format
 #| msgid "Step over Ins&truction"
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "As&tu üle instruktsiooni"
 
-#: shell/debugcontroller.cpp:267
+#: shell/debugcontroller.cpp:260
 #, fuzzy, kde-format
 #| msgid "Step over instruction"
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Astu üle instruktsiooni"
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:261
 #, fuzzy, kde-format
 #| msgid "Steps over the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Astub üle järgmise assembleri instruktsiooni."
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:266
 #, fuzzy, kde-format
 #| msgid "Step &Into"
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Astu s&isse"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:268
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Astu sisse järgmisesse lausesse"
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:269
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes exactly one line of source. If the source line is a call to a "
@@ -2096,42 +2103,42 @@ msgstr ""
 "Täidab täpselt ühe lähtekoodi rea. Kui rida on funktsiooni väljakutse, "
 "peatatakse täitmine pärast seda, kui on sisenetud funktsiooni."
 
-#: shell/debugcontroller.cpp:283
+#: shell/debugcontroller.cpp:276
 #, fuzzy, kde-format
 #| msgid "Step into I&nstruction"
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Astu i&nstruktsiooni sisse"
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:277
 #, fuzzy, kde-format
 #| msgid "Step into instruction"
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Astu instruktsiooni sisse"
 
-#: shell/debugcontroller.cpp:285
+#: shell/debugcontroller.cpp:278
 #, fuzzy, kde-format
 #| msgid "Steps into the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Astub järgmise assembleri instruktsiooni sisse."
 
-#: shell/debugcontroller.cpp:289
+#: shell/debugcontroller.cpp:282
 #, fuzzy, kde-format
 #| msgid "Step O&ut"
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Ast&u välja"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:284
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Astub aktiivsest funktsioonist välja"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:285
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes the application until the currently executing function is "
@@ -2150,74 +2157,74 @@ msgstr ""
 "täitmine käib kõige välimises kaadris (st. main()), ei ole sellel "
 "korraldusel mingit mõju."
 
-#: shell/debugcontroller.cpp:300
+#: shell/debugcontroller.cpp:293
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Lülita katkestuspunkti"
 
-#: shell/debugcontroller.cpp:301
+#: shell/debugcontroller.cpp:294
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:295
 #, fuzzy, kde-format
 #| msgid "Toggle breakpoint"
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Lülita katkestuspunkti"
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:296
 #, fuzzy, kde-format
 #| msgid "Toggles the breakpoint at the current line in editor."
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Lülitab katkestuspunkti redaktori aktiivsel real."
 
-#: shell/debugcontroller.cpp:307
+#: shell/debugcontroller.cpp:300
 #, fuzzy, kde-format
 #| msgid "Show Current Line"
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Näita aktiivset rida"
 
-#: shell/debugcontroller.cpp:308
+#: shell/debugcontroller.cpp:301
 #, fuzzy, kde-format
 #| msgid "Show the current execution position"
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Täitmise aktiivse asukoha näitamine"
 
-#: shell/debugcontroller.cpp:309
+#: shell/debugcontroller.cpp:302
 #, fuzzy, kde-format
 #| msgid "Jumps to the execution line in the editor."
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Liikumine täitmisreale redaktoris."
 
-#: shell/debugcontroller.cpp:420
+#: shell/debugcontroller.cpp:433
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Silumine"
 
-#: shell/debugcontroller.cpp:470 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:440
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Silu käivitamist"
 
-#: shell/debugcontroller.cpp:472 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Aktiivse käivitamise silumine"
 
-#: shell/debugcontroller.cpp:473 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:486 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2227,21 +2234,21 @@ msgstr ""
 "Täidab sihtmärgi või programmi, mis on määratud aktiivses "
 "käivitamisseadistuses, siluri sees."
 
-#: shell/debugcontroller.cpp:476
+#: shell/debugcontroller.cpp:489
 #, fuzzy, kde-format
 #| msgid "&Continue"
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Jätka"
 
-#: shell/debugcontroller.cpp:478
+#: shell/debugcontroller.cpp:491
 #, fuzzy, kde-format
 #| msgid "Continue application execution"
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Rakenduse täitmise jätkamine"
 
-#: shell/debugcontroller.cpp:479
+#: shell/debugcontroller.cpp:492
 #, fuzzy, kde-format
 #| msgid ""
 #| "Continues the execution of your application in the debugger. This only "
@@ -2972,7 +2979,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "Ava olemasolev fail \"%1\""
 
-#: shell/partcontroller.cpp:252
+#: shell/partcontroller.cpp:226
 #, fuzzy, kde-format
 #| msgid "Use this command to show or hide the view's statusbar"
 msgctxt "@info:whatsthis"
@@ -3183,31 +3190,31 @@ msgstr ""
 "Arendajale omase projekti seadistuse salvestamine nurjus.\n"
 "Tähelepanu: projekti seadistused, mida oled muutnud, lähevad kaotsi."
 
-#: shell/projectcontroller.cpp:160
+#: shell/projectcontroller.cpp:161
 #, fuzzy, kde-format
 #| msgid "Configure Project %1"
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Projekti %1 seadistamine"
 
-#: shell/projectcontroller.cpp:303
+#: shell/projectcontroller.cpp:304
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Vigane asukoht: %1"
 
-#: shell/projectcontroller.cpp:313
+#: shell/projectcontroller.cpp:314
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "%1 juba avatakse, seda ei hakata uuesti avama"
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, fuzzy, kde-format
 #| msgid "Override"
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Tühista "
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3218,14 +3225,14 @@ msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr "Edasi projekti avamisega, kasutades äsja määratud projekti seadistust."
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Ava olemasolev fail"
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:474
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3235,7 +3242,7 @@ msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
 "Edasi projekti avamisega, aga kasutades olemasolevat projekti seadistust."
 
-#: shell/projectcontroller.cpp:475
+#: shell/projectcontroller.cpp:476
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Cancel and do not open the project."
@@ -3243,7 +3250,7 @@ msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Loobumine projekti avamisest."
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:479
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3252,42 +3259,42 @@ msgstr ""
 "Projekti seadistustefail %1 on juba olemas.\n"
 "Kas tühistada see või avada olemasolev fail?"
 
-#: shell/projectcontroller.cpp:481
+#: shell/projectcontroller.cpp:482
 #, fuzzy, kde-format
 #| msgid "Override existing project configuration"
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Tühista olemasolev projekti seadistus"
 
-#: shell/projectcontroller.cpp:499
+#: shell/projectcontroller.cpp:500
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Seadistustefaili %1 loomine nurjus"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Kas avada aktiivne projekt uuesti?"
 
-#: shell/projectcontroller.cpp:514
+#: shell/projectcontroller.cpp:515
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Ava/impordi projekt..."
 
-#: shell/projectcontroller.cpp:556
+#: shell/projectcontroller.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Projekti avamine või import"
 
-#: shell/projectcontroller.cpp:557
+#: shell/projectcontroller.cpp:558
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3309,19 +3316,19 @@ msgstr ""
 "kataloogi avamiseks KDevelopis. Kui avatakse olemasolev kataloog, milles "
 "pole veel KDevelop 4 projektifaili, viimane luuakse."
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:569
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Tõmba projekt..."
 
-#: shell/projectcontroller.cpp:570
+#: shell/projectcontroller.cpp:571
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Projekti tõmbamine"
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:572
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3334,77 +3341,77 @@ msgstr ""
 "Juhendab kasutajat projekti tõmbamise ajal ning võimaldab selle importida "
 "KDevelop 4."
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:587
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Sulge projektid"
 
-#: shell/projectcontroller.cpp:588
+#: shell/projectcontroller.cpp:589
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Sulgeb kõik parajasti valitud projektid"
 
-#: shell/projectcontroller.cpp:594
+#: shell/projectcontroller.cpp:595
 #, fuzzy, kde-format
 #| msgid "Open Configuration..."
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Ava seadistus..."
 
-#: shell/projectcontroller.cpp:600
+#: shell/projectcontroller.cpp:601
 #, fuzzy, kde-format
 #| msgid "Commit Current Project..."
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Kanna aktiivne projekt sisse..."
 
-#: shell/projectcontroller.cpp:601
+#: shell/projectcontroller.cpp:602
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Kanna sisse..."
 
-#: shell/projectcontroller.cpp:612
+#: shell/projectcontroller.cpp:613
 #, fuzzy, kde-format
 #| msgid "Open Recent Project"
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Ava viimati avatud projekt"
 
-#: shell/projectcontroller.cpp:613
+#: shell/projectcontroller.cpp:614
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Viimati avatud projekti avamine."
 
-#: shell/projectcontroller.cpp:618
+#: shell/projectcontroller.cpp:619
 #, fuzzy, kde-format
 #| msgid "Open Project for Current File"
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Ava aktiivse faili projekt"
 
-#: shell/projectcontroller.cpp:769
+#: shell/projectcontroller.cpp:770
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Projekt on juba avatud: %1"
 
-#: shell/projectcontroller.cpp:773
+#: shell/projectcontroller.cpp:774
 #, kde-format
 msgid "No active document"
 msgstr "Ükski dokument pole aktiivnedid"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:855
 #, fuzzy, kde-format
 #| msgid "Project Already Open"
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Projekt on juba avatud"
 
-#: shell/projectcontroller.cpp:857
+#: shell/projectcontroller.cpp:858
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3413,26 +3420,26 @@ msgstr ""
 "Projekt, mida proovid avada, on juba avatud vähemalt ühes seansis.<br>Mida "
 "soovid ette võtta?"
 
-#: shell/projectcontroller.cpp:861
+#: shell/projectcontroller.cpp:862
 #, fuzzy, kde-format
 #| msgid "Add project to current session"
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Lisa projekt aktiivsesse seanssi"
 
-#: shell/projectcontroller.cpp:865
+#: shell/projectcontroller.cpp:866
 #, fuzzy, kde-format
 #| msgid "Open session %1"
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Ava seanss %1"
 
-#: shell/projectcontroller.cpp:926
+#: shell/projectcontroller.cpp:927
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Ükski lubatud plugin ei toeta selle hoidla URL-i: %1"
 
-#: shell/projectcontroller.cpp:1230
+#: shell/projectcontroller.cpp:1231
 #, fuzzy, kde-format
 #| msgid "Reparse the Entire Project"
 msgctxt "@action"
@@ -3779,7 +3786,7 @@ msgctxt "@info:tooltip"
 msgid "Discard all modifications"
 msgstr "Unustab kõik muudatused"
 
-#: shell/session.cpp:178
+#: shell/session.cpp:157 shell/session.cpp:178
 #, kde-format
 msgid "(no projects)"
 msgstr "(projekt puudub)"
@@ -3862,7 +3869,22 @@ msgctxt "@title:window"
 msgid "Delete Session"
 msgstr "Seansi kustutamine"
 
-#: shell/sessioncontroller.cpp:129
+#: shell/sessioncontroller.cpp:134
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Start New Session"
+msgctxt "@title:window"
+msgid "Start New Session"
+msgstr "Käivita uus seanss"
+
+#: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
+#, fuzzy, kde-format
+#| msgid "New Session Name:"
+msgctxt "@label:textbox"
+msgid "New session name:"
+msgstr "Uus seansi nimi:"
+
+#: shell/sessioncontroller.cpp:144
 #, kde-format
 msgid ""
 "The current session and all contained settings will be deleted. The projects "
@@ -3871,99 +3893,108 @@ msgstr ""
 "Aktiivne seanss ja kõik selles sisalduvad seadistused kustutatakse. Projekt "
 "jääb puutumata. Kas tõesti jätkata?"
 
-#: shell/sessioncontroller.cpp:142
+#: shell/sessioncontroller.cpp:157
 #, fuzzy, kde-format
 #| msgid "Rename Session"
 msgctxt "@title:window"
 msgid "Rename Session"
 msgstr "Seansi nime muutmine"
 
-#: shell/sessioncontroller.cpp:142
-#, fuzzy, kde-format
-#| msgid "New Session Name:"
-msgctxt "@label:textbox"
-msgid "New session name:"
-msgstr "Uus seansi nimi:"
-
-#: shell/sessioncontroller.cpp:249
+#: shell/sessioncontroller.cpp:265
 #, kde-format
 msgid "Session Manager"
 msgstr "Seansihaldur"
 
-#: shell/sessioncontroller.cpp:261
+#: shell/sessioncontroller.cpp:277
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Session"
 msgstr "Käivita uus seanss"
 
-#: shell/sessioncontroller.cpp:262
+#: shell/sessioncontroller.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
 msgstr "Uue KDevelopi isendi käivitamine tühja seansiga"
 
-#: shell/sessioncontroller.cpp:268
+#: shell/sessioncontroller.cpp:286
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Start New Session"
+msgctxt "@action:inmenu"
+msgid "Start New Named Session..."
+msgstr "Käivita uus seanss"
+
+#: shell/sessioncontroller.cpp:287
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Start a new KDevelop instance with an empty session"
+msgctxt "@info:tooltip"
+msgid "Start a new KDevelop instance with an empty named session"
+msgstr "Uue KDevelopi isendi käivitamine tühja seansiga"
+
+#: shell/sessioncontroller.cpp:293
 #, fuzzy, kde-format
 #| msgid "Rename Current Session..."
 msgctxt "@action"
 msgid "Rename Current Session..."
 msgstr "Muuda aktiivse seansi nime..."
 
-#: shell/sessioncontroller.cpp:274
+#: shell/sessioncontroller.cpp:299
 #, fuzzy, kde-format
 #| msgid "Delete Current Session..."
 msgctxt "@action"
 msgid "Delete Current Session..."
 msgstr "Kustuta aktiivne seanss..."
 
-#: shell/sessioncontroller.cpp:278
+#: shell/sessioncontroller.cpp:303
 #, fuzzy, kde-format
 #| msgid "Quit"
 msgctxt "@action"
 msgid "Quit"
 msgstr "Välju"
 
-#: shell/sessioncontroller.cpp:498
+#: shell/sessioncontroller.cpp:523
 #, kde-format
 msgid "Copy of %1"
 msgstr "%1 koopia"
 
-#: shell/sessioncontroller.cpp:588
+#: shell/sessioncontroller.cpp:613
 #, fuzzy, kde-format
 #| msgid "Identity"
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "Identiteet"
 
-#: shell/sessioncontroller.cpp:589
+#: shell/sessioncontroller.cpp:614
 #, fuzzy, kde-format
 #| msgid "Contents"
 msgctxt "@title:column"
 msgid "Contents"
 msgstr "Sisu"
 
-#: shell/sessioncontroller.cpp:590
+#: shell/sessioncontroller.cpp:615
 #, fuzzy, kde-format
 #| msgid "State"
 msgctxt "@title:column"
 msgid "State"
 msgstr "Olek"
 
-#: shell/sessioncontroller.cpp:591
+#: shell/sessioncontroller.cpp:616
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nimi"
 
-#: shell/sessioncontroller.cpp:597
+#: shell/sessioncontroller.cpp:622
 #, fuzzy, kde-format
 #| msgid "Filter:"
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "Filter:"
 
-#: shell/sessioncontroller.cpp:629
+#: shell/sessioncontroller.cpp:654
 #, kde-format
 msgid "Create New Session"
 msgstr "Loo uus seanss"

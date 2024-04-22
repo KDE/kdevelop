@@ -3,20 +3,20 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2020, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2020, 2022, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-07-09 08:26+0300\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"PO-Revision-Date: 2024-02-16 09:29+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
@@ -529,58 +529,77 @@ msgctxt "@label:spinbox"
 msgid "Depth:"
 msgstr "Глибина:"
 
+#. i18n: ectx: property (toolTip), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:115
+#, kde-format
+msgid "Maximum level of subdirectory recursion"
+msgstr "Максимальний рівень рекурсії підкаталогами"
+
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:118
+#, kde-format
+msgid ""
+"For each search location, descend at most Depth levels of directories. "
+"Depth=0 means searching only in files directly inside selected search "
+"locations. Full Depth means no recursion limit."
+msgstr ""
+"Для кожного місця пошуку заглиблюватися не більше, ніж на вказану кількість "
+"каталогів. Глибина=0 означає пошук лише у файлах, які розташовано "
+"безпосередньо у вказаних місцях пошуку. Повна глибина означає прибирання "
+"будь-яких обмежень на рекурсію."
+
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
-#: grepwidget.ui:118
+#: grepwidget.ui:121
 #, kde-format
 msgctxt "@item full recursion"
 msgid "Full"
 msgstr "Без обмеження"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: grepwidget.ui:131
+#: grepwidget.ui:134
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pattern:"
 msgstr "Зразок:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: grepwidget.ui:144
+#: grepwidget.ui:147
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
 msgstr "Файли:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: grepwidget.ui:157
+#: grepwidget.ui:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Case sensitive:"
 msgstr "Врахування регістру:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
-#: grepwidget.ui:176
+#: grepwidget.ui:179
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Case-sensitive searching."
 msgstr "Пошук з урахуванням регістру."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: grepwidget.ui:189
+#: grepwidget.ui:192
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
 msgstr "Розташування:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
-#: grepwidget.ui:202
+#: grepwidget.ui:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files filter"
 msgstr "Фільтр файлів"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
-#: grepwidget.ui:205
+#: grepwidget.ui:208
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -591,21 +610,21 @@ msgstr ""
 "зразків, розділених комами або пробілами."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: grepwidget.ui:218
+#: grepwidget.ui:221
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
 msgstr "Виключити:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
-#: grepwidget.ui:231
+#: grepwidget.ui:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
 msgstr "Шаблон виключення файлів"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
-#: grepwidget.ui:234
+#: grepwidget.ui:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -620,42 +639,42 @@ msgstr ""
 "адреси файла.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: grepwidget.ui:314
+#: grepwidget.ui:317
 #, kde-format
 msgctxt "@option:check"
 msgid "Regular expression:"
 msgstr "Формальний вираз:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
-#: grepwidget.ui:327
+#: grepwidget.ui:330
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
 msgstr "Увімкнути або вимкнути використання формальних виразів."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
-#: grepwidget.ui:340
+#: grepwidget.ui:343
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
 msgstr "Обмежитися файлами проєкту:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
-#: grepwidget.ui:369
+#: grepwidget.ui:372
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
 msgstr "Вкажіть шаблон заміни"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: grepwidget.ui:376
+#: grepwidget.ui:379
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Replacement template:"
 msgstr "Шаблон заміни:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
-#: grepwidget.ui:389
+#: grepwidget.ui:392
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -667,7 +686,7 @@ msgstr ""
 "(без пробілів)."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
-#: grepwidget.ui:414
+#: grepwidget.ui:417
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"

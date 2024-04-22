@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-03-19 01:40+0000\n"
 "PO-Revision-Date: 2010-12-06 10:09+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -61,26 +61,26 @@ msgstr "Datei:"
 msgid "Quick Open Toolbar"
 msgstr "Fix-Opmaakbalken"
 
-#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#: projectfilequickopen.cpp:90 projectfilequickopen.cpp:159
 #, fuzzy, kde-format
 #| msgid "Project"
 msgctxt "%1: project name"
 msgid "Project %1"
 msgstr "Projekt"
 
-#: projectfilequickopen.cpp:159
+#: projectfilequickopen.cpp:160
 #, kde-format
 msgid "Not parsed yet"
 msgstr "Noch nich inleest"
 
-#: projectfilequickopen.cpp:178
+#: projectfilequickopen.cpp:179
 #, fuzzy, kde-format
 #| msgid "none"
 msgctxt "@item no project"
 msgid "none"
 msgstr "keen"
 
-#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:357
 #: quickopenplugin.cpp:66
 #, fuzzy, kde-format
 #| msgid "Classes"
@@ -88,7 +88,7 @@ msgctxt "@item quick open item type"
 msgid "Classes"
 msgstr "Klassen"
 
-#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: projectitemquickopen.cpp:347 projectitemquickopen.cpp:360
 #: quickopenplugin.cpp:65
 #, fuzzy, kde-format
 #| msgid "Functions"
@@ -96,7 +96,7 @@ msgctxt "@item quick open item type"
 msgid "Functions"
 msgstr "Funkschonen"
 
-#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#: projectitemquickopen.cpp:355 quickopenplugin.cpp:59
 #, fuzzy, kde-format
 #| msgid "Project"
 msgctxt "@item quick open scope"

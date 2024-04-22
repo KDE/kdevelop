@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-03-30 19:46\n"
+"POT-Creation-Date: 2024-03-19 01:40+0000\n"
+"PO-Revision-Date: 2024-04-21 04:51\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-stable/messages/kdevelop/kdevclang.pot\n"
-"X-Crowdin-File-ID: 3943\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevclang.pot\n"
+"X-Crowdin-File-ID: 4863\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:36
 #, kde-format
@@ -345,17 +345,17 @@ msgstr ""
 "头文件没有针对多次包含进行保护，用常规的 #ifndef/#define/#endif 宏防止或者用 "
 "#pragma once。"
 
-#: duchain/unknowndeclarationproblem.cpp:373
+#: duchain/unknowndeclarationproblem.cpp:374
 #, kde-format
 msgid "Insert '%1'"
 msgstr "插入“%1“"
 
-#: duchain/unknowndeclarationproblem.cpp:433
+#: duchain/unknowndeclarationproblem.cpp:434
 #, kde-format
 msgid "Forward declare as 'class'"
 msgstr "前置声明为“class”"
 
-#: duchain/unknowndeclarationproblem.cpp:440
+#: duchain/unknowndeclarationproblem.cpp:441
 #, kde-format
 msgid "Forward declare as 'struct'"
 msgstr "前置声明为“struct”"

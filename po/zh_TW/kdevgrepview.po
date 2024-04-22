@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
 "PO-Revision-Date: 2019-09-30 19:11+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -627,9 +627,24 @@ msgctxt "@label:spinbox"
 msgid "Depth:"
 msgstr "深度："
 
+#. i18n: ectx: property (toolTip), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:115
+#, kde-format
+msgid "Maximum level of subdirectory recursion"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:118
+#, kde-format
+msgid ""
+"For each search location, descend at most Depth levels of directories. "
+"Depth=0 means searching only in files directly inside selected search "
+"locations. Full Depth means no recursion limit."
+msgstr ""
+
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
-#: grepwidget.ui:118
+#: grepwidget.ui:121
 #, fuzzy, kde-format
 #| msgid "Full"
 msgctxt "@item full recursion"
@@ -637,7 +652,7 @@ msgid "Full"
 msgstr "完全"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: grepwidget.ui:131
+#: grepwidget.ui:134
 #, fuzzy, kde-format
 #| msgid "Pattern:"
 msgctxt "@label:listbox"
@@ -645,7 +660,7 @@ msgid "Pattern:"
 msgstr "樣式："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: grepwidget.ui:144
+#: grepwidget.ui:147
 #, fuzzy, kde-format
 #| msgid "Files:"
 msgctxt "@label:listbox"
@@ -653,7 +668,7 @@ msgid "Files:"
 msgstr "檔案："
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: grepwidget.ui:157
+#: grepwidget.ui:160
 #, fuzzy, kde-format
 #| msgid "Case sensitive:"
 msgctxt "@option:check"
@@ -661,7 +676,7 @@ msgid "Case sensitive:"
 msgstr "區分大小寫："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
-#: grepwidget.ui:176
+#: grepwidget.ui:179
 #, fuzzy, kde-format
 #| msgid "Case-sensitive searching."
 msgctxt "@info:tooltip"
@@ -669,7 +684,7 @@ msgid "Case-sensitive searching."
 msgstr "區分大小寫搜尋。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: grepwidget.ui:189
+#: grepwidget.ui:192
 #, fuzzy, kde-format
 #| msgid "Location(s):"
 msgctxt "@label:listbox"
@@ -677,7 +692,7 @@ msgid "Location(s):"
 msgstr "位置："
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
-#: grepwidget.ui:202
+#: grepwidget.ui:205
 #, fuzzy, kde-format
 #| msgid "Files filter."
 msgctxt "@info:tooltip"
@@ -685,7 +700,7 @@ msgid "Files filter"
 msgstr "檔案過濾器。"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
-#: grepwidget.ui:205
+#: grepwidget.ui:208
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the file name pattern of the files to search here. You may give "
@@ -697,7 +712,7 @@ msgid ""
 msgstr "請在此輸入要搜尋的檔案名稱樣式。您可以用空白或逗號來區隔多個樣式。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: grepwidget.ui:218
+#: grepwidget.ui:221
 #, fuzzy, kde-format
 #| msgid "Exclude:"
 msgctxt "@label:listbox"
@@ -705,7 +720,7 @@ msgid "Exclude:"
 msgstr "執行檔："
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
-#: grepwidget.ui:231
+#: grepwidget.ui:234
 #, fuzzy, kde-format
 #| msgid "Files pattern to exclude"
 msgctxt "@info:tooltip"
@@ -713,7 +728,7 @@ msgid "Files pattern to exclude"
 msgstr "要排除的檔案樣式"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
-#: grepwidget.ui:234
+#: grepwidget.ui:237
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the file name pattern of the files to exclude from the search here. "
@@ -731,7 +746,7 @@ msgstr ""
 "每個樣式在處理時前後都會加上星號，這表示這些樣式可以只是檔名的一部份。</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: grepwidget.ui:314
+#: grepwidget.ui:317
 #, fuzzy, kde-format
 #| msgid "Regular expression:"
 msgctxt "@option:check"
@@ -739,7 +754,7 @@ msgid "Regular expression:"
 msgstr "正規表示式："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
-#: grepwidget.ui:327
+#: grepwidget.ui:330
 #, fuzzy, kde-format
 #| msgid "Enable or disable regular expression."
 msgctxt "@info:tooltip"
@@ -747,7 +762,7 @@ msgid "Enable or disable regular expression."
 msgstr "開啟或關閉正規表示式。"
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
-#: grepwidget.ui:340
+#: grepwidget.ui:343
 #, fuzzy, kde-format
 #| msgid "Limit to project files:"
 msgctxt "@option:check"
@@ -755,7 +770,7 @@ msgid "Limit to project files:"
 msgstr "限制只搜尋專案檔："
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
-#: grepwidget.ui:369
+#: grepwidget.ui:372
 #, fuzzy, kde-format
 #| msgid "Enter the replacement template."
 msgctxt "@info:tooltip"
@@ -763,7 +778,7 @@ msgid "Enter the replacement template"
 msgstr "輸入取代樣本。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: grepwidget.ui:376
+#: grepwidget.ui:379
 #, fuzzy, kde-format
 #| msgid "Replacement template:"
 msgctxt "@label:textbox"
@@ -771,7 +786,7 @@ msgid "Replacement template:"
 msgstr "取代樣本："
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
-#: grepwidget.ui:389
+#: grepwidget.ui:392
 #, fuzzy, kde-format
 #| msgid ""
 #| "Select the location where you want to search. It can be a directory, a "
@@ -785,7 +800,7 @@ msgstr ""
 "分號分隔（但不要有空白）。"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
-#: grepwidget.ui:414
+#: grepwidget.ui:417
 #, fuzzy, kde-format
 #| msgid "Select a directory to search in."
 msgctxt "@info:tooltip"

@@ -121,3 +121,15 @@ msgstr "*** Finalitzat ***"
 #, kde-format
 msgid "Plasmoid failed to execute on %1"
 msgstr "El plasmoide ha fallat en executar a %1"
+
+#~ msgid "planar"
+#~ msgstr "Pla"
+
+#~ msgid "horizontal"
+#~ msgstr "Horitzontal"
+
+#~ msgid "vertical"
+#~ msgstr "Vertical"
+
+#~ msgid "mediacenter"
+#~ msgstr "Centre multimèdia"

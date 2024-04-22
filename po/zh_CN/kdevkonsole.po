@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-03-30 19:46\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"PO-Revision-Date: 2024-03-17 20:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,21 +14,21 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-stable/messages/kdevelop/kdevkonsole.pot\n"
-"X-Crowdin-File-ID: 24272\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevkonsole.pot\n"
+"X-Crowdin-File-ID: 24298\n"
 
 #: kdevkonsoleview.cpp:107
 #, kde-format
 msgid "Terminal"
 msgstr "命令行终端"
 
-#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Terminal"
 msgstr "命令行终端"
 
-#: kdevkonsoleviewplugin.cpp:60
+#: kdevkonsoleviewplugin.cpp:49
 #, kde-format
-msgid "Failed to load 'konsolepart' plugin"
-msgstr "加载“konsolepart”插件失败"
+msgid "Failed to load 'konsolepart' plugin: %1"
+msgstr "加载“konsolepart”插件失败：%1"

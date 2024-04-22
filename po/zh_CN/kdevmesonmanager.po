@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-03-30 19:46\n"
+"POT-Creation-Date: 2024-04-06 01:42+0000\n"
+"PO-Revision-Date: 2024-04-21 04:51\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-stable/messages/kdevelop/kdevmesonmanager.pot\n"
-"X-Crowdin-File-ID: 10812\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevmesonmanager.pot\n"
+"X-Crowdin-File-ID: 9562\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -112,18 +112,18 @@ msgstr "** 修剪成功 **"
 msgid "** Prune failed: %1 **"
 msgstr "** 修剪失败：%1 **"
 
-#: mesonmanager.cpp:64
+#: mesonmanager.cpp:68
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Import Failed"
 msgstr "工程导入失败"
 
-#: mesonmanager.cpp:111
+#: mesonmanager.cpp:115
 #, kde-format
 msgid "Meson builder error: %1"
 msgstr "Meson 构建器错误：%1"
 
-#: mesonmanager.cpp:251
+#: mesonmanager.cpp:276
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr "导入 %1 失败，因为无法创建构建目录。"

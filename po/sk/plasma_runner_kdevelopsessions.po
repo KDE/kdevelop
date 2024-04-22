@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma_runner_kdevelopsessions\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-03-27 10:09+0000\n"
 "PO-Revision-Date: 2013-11-10 20:52+0100\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -16,17 +16,17 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: kdevelopsessions.cpp:24
+#: kdevelopsessions.cpp:26 kdevelopsessions.cpp:30
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Nájde sedenia KDevelop zodpovedajúce :q:."
 
-#: kdevelopsessions.cpp:28
+#: kdevelopsessions.cpp:34
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Zobrazí všetky sedenia editora KDevelop vo vašom účte."
 
-#: kdevelopsessions.cpp:102
+#: kdevelopsessions.cpp:128
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Otvoriť sedenie KDevelop"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-04-24 19:28+0200\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"PO-Revision-Date: 2024-02-19 05:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,20 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: kdevkonsoleview.cpp:107
 #, kde-format
 msgid "Terminal"
 msgstr "ტერმინალი"
 
-#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Terminal"
 msgstr "ტერმინალი"
 
-#: kdevkonsoleviewplugin.cpp:60
+#: kdevkonsoleviewplugin.cpp:49
 #, kde-format
-msgid "Failed to load 'konsolepart' plugin"
-msgstr "'konsolepart' დამატების ჩატვირთვის შეცდომა"
+msgid "Failed to load 'konsolepart' plugin: %1"
+msgstr "'konsolepart' დამატების ჩატვირთვის შეცდომა: %1"

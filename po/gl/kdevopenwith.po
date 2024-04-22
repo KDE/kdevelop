@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
 "PO-Revision-Date: 2023-06-18 18:33+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -20,61 +20,61 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 23.04.2\n"
 
-#: openwithplugin.cpp:139
+#: openwithplugin.cpp:236
 #, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
 msgstr "Outra…"
 
-#: openwithplugin.cpp:150
+#: openwithplugin.cpp:247
 #, kde-format
 msgctxt "@title:menu"
 msgid "Open With"
 msgstr "Abrir con"
 
-#: openwithplugin.cpp:155
+#: openwithplugin.cpp:252
 #, kde-format
 msgctxt "@title:menu"
 msgid "Embedded Editors"
 msgstr "Editores incorporados"
 
-#: openwithplugin.cpp:159
+#: openwithplugin.cpp:256
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
 msgstr "Aplicacións externas"
 
-#: openwithplugin.cpp:166
+#: openwithplugin.cpp:263
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open"
 msgstr "Abrir"
 
-#: openwithplugin.cpp:186
+#: openwithplugin.cpp:297
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Default Editor"
 msgstr "Editor por omisión"
 
-#: openwithplugin.cpp:272
+#: openwithplugin.cpp:420
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
 msgstr "Quere abrir todos os ficheiros «%1» por omisión con %2?"
 
-#: openwithplugin.cpp:274
+#: openwithplugin.cpp:422
 #, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
 msgstr "Facer predeterminada?"
 
-#: openwithplugin.cpp:275
+#: openwithplugin.cpp:423
 #, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
 msgstr "Facer predeterminada"
 
-#: openwithplugin.cpp:276
+#: openwithplugin.cpp:424
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:14+0000\n"
-"PO-Revision-Date: 2024-02-04 17:21+0100\n"
+"POT-Creation-Date: 2024-04-19 01:46+0000\n"
+"PO-Revision-Date: 2024-03-27 19:34+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -29,31 +29,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "axel@esperanto-jeunes.org, okellogg@users.sourceforge.net"
 
-#: debugger/breakpoint/breakpoint.cpp:144
+#: debugger/breakpoint/breakpoint.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Eraro"
 
-#: debugger/breakpoint/breakpoint.cpp:150
+#: debugger/breakpoint/breakpoint.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Malpura"
 
-#: debugger/breakpoint/breakpoint.cpp:152
+#: debugger/breakpoint/breakpoint.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Decidota"
 
-#: debugger/breakpoint/breakpoint.cpp:154
+#: debugger/breakpoint/breakpoint.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Pura"
 
-#: debugger/breakpoint/breakpoint.cpp:186
+#: debugger/breakpoint/breakpoint.cpp:207
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -126,67 +126,74 @@ msgstr ""
 "<b>La paŭzpunkto estas malpura</b><p>La paŭzpunkto ankoraŭ ne estas "
 "transdonita al la erarseĉilo.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:114
+#: debugger/breakpoint/breakpointmodel.cpp:123
 #, kde-format
 msgid "Breakpoint"
 msgstr "haltopunkto"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:342
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Haltopunkto ne trovata"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:342
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Ne eblis trovi paŭzpunkton ĉe %1:%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:162
+#: debugger/breakpoint/breakpointmodel.cpp:348
 #, kde-format
 msgid "&Breakpoint"
 msgstr "&Haltopunkto"
 
-#: debugger/breakpoint/breakpointmodel.cpp:168
+#: debugger/breakpoint/breakpointmodel.cpp:354
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Malebligi Haltpunkton"
 
-#: debugger/breakpoint/breakpointmodel.cpp:169
+#: debugger/breakpoint/breakpointmodel.cpp:355
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "&Ebligi Haltpunkton"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:358
 #, kde-format
 msgid "&Bookmark"
 msgstr "&Legosigno"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:400
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Tipo"
 
-#: debugger/breakpoint/breakpointmodel.cpp:217
+#: debugger/breakpoint/breakpointmodel.cpp:401
 #, kde-format
 msgid "Location"
 msgstr "Loko"
 
-#: debugger/breakpoint/breakpointmodel.cpp:218
+#: debugger/breakpoint/breakpointmodel.cpp:402
 #, kde-format
 msgid "Condition"
 msgstr "Kondiĉoj"
 
-#: debugger/breakpoint/breakpointmodel.cpp:222
+#: debugger/breakpoint/breakpointmodel.cpp:406
 #, kde-format
 msgid "Active status"
 msgstr "Aktiva stato"
 
-#: debugger/breakpoint/breakpointmodel.cpp:223
+#: debugger/breakpoint/breakpointmodel.cpp:407
 #, kde-format
 msgid "State"
 msgstr "Stato"
+
+#: debugger/breakpoint/breakpointmodel.cpp:630
+#, kde-format
+msgid ""
+"A breakpoint cannot be added to an untitled document. Please save the "
+"document first."
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -336,12 +343,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr "#%1 %2() ĉe %3:%4\n"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#: debugger/interfaces/ibreakpointcontroller.cpp:78
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Trafo de rompo: %1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#: debugger/interfaces/ibreakpointcontroller.cpp:85
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "Gvatopunkto trafo: %1"
@@ -536,7 +543,7 @@ msgid "Home"
 msgstr "Hejmo"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
-#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:565
+#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
 #: vcs/dvcs/ui/branchmanager.ui:143
 #, kde-format
 msgctxt "@info:placeholder"
@@ -1860,111 +1867,111 @@ msgstr ""
 "Build_from_source#Set_up_the_runtime_environment\">ĉi tiu artikolo</a> por "
 "pliaj informoj."
 
-#: shell/debugcontroller.cpp:116
+#: shell/debugcontroller.cpp:115
 #, kde-format
 msgid "Debugger"
 msgstr "Sencimigilo"
 
-#: shell/debugcontroller.cpp:138
+#: shell/debugcontroller.cpp:145
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Framstako"
 
-#: shell/debugcontroller.cpp:143
+#: shell/debugcontroller.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Haltpunktoj"
 
-#: shell/debugcontroller.cpp:148
+#: shell/debugcontroller.cpp:155
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Variabloj"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgid "&Restart"
 msgstr "&Relanĉo"
 
-#: shell/debugcontroller.cpp:229
+#: shell/debugcontroller.cpp:222
 #, kde-format
 msgid "Restart program"
 msgstr "Restarti programon"
 
-#: shell/debugcontroller.cpp:230
+#: shell/debugcontroller.cpp:223
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Rekomencas aplikojn de la komenco."
 
-#: shell/debugcontroller.cpp:236
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Interrompoj"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:230
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Interrompi aplikaĵon"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Interrompas la sencimigitan procezon aŭ nunan erarĉimilan komandon."
 
-#: shell/debugcontroller.cpp:242
+#: shell/debugcontroller.cpp:235
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Ruli ĝis &Kursoro"
 
-#: shell/debugcontroller.cpp:243
+#: shell/debugcontroller.cpp:236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Ruli ĝis kursoro"
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Daŭrigas ruladon ĝis kiam la pozicio de la kursoro estas atingita."
 
-#: shell/debugcontroller.cpp:249
+#: shell/debugcontroller.cpp:242
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Meti &Ruligan Pozicion al la Kursoro"
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:243
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Salti al kursoro"
 
-#: shell/debugcontroller.cpp:251
+#: shell/debugcontroller.cpp:244
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Daŭrigi ruladon ekde la aktuala kursora pozicio."
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Transpaŝ&o"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:250
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Transpaŝi la sekvontan linion"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1976,37 +1983,37 @@ msgstr ""
 "alvoko al funkcio, la tuta funkcio estas plenumata kaj la app haltos ĉe la "
 "linio sekvanta la funkciovokon."
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:259
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Transpaŝi Ins&trukcion"
 
-#: shell/debugcontroller.cpp:267
+#: shell/debugcontroller.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Transpaŝi instrukcion"
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:261
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Transpaŝi la sekvontan asemblan instrukcion."
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:266
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Paŝ&i Enen"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:268
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Paŝi en la sekvontan ordonon"
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:269
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2016,37 +2023,37 @@ msgstr ""
 "Plenumas precize unu linion de fonto. Se la fontlinio estas alvoko al "
 "funkcio, tiam rulado ĉesos post kiam la funkcio estis enigita."
 
-#: shell/debugcontroller.cpp:283
+#: shell/debugcontroller.cpp:276
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Paŝi en la i&nstrukcion"
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:277
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Paŝi en la instrukcion"
 
-#: shell/debugcontroller.cpp:285
+#: shell/debugcontroller.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Paŝi en la sekvontan asemblan instrukcion."
 
-#: shell/debugcontroller.cpp:289
+#: shell/debugcontroller.cpp:282
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Paŝi E&len"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:284
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Paŝi el la aktuala funkcio"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:285
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2060,66 +2067,66 @@ msgstr ""
 "programrulado estas en la plej ekstera kadro (t.e. en main()) tiam ĉi tiu "
 "operacio ne havas efikon."
 
-#: shell/debugcontroller.cpp:300
+#: shell/debugcontroller.cpp:293
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Komuti Haltpunkton"
 
-#: shell/debugcontroller.cpp:301
+#: shell/debugcontroller.cpp:294
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:295
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Komuti haltpunkton"
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Ŝaltas la paŭzpunkton ĉe la nuna linio en redaktilo."
 
-#: shell/debugcontroller.cpp:307
+#: shell/debugcontroller.cpp:300
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Montri Aktualan Linion"
 
-#: shell/debugcontroller.cpp:308
+#: shell/debugcontroller.cpp:301
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Motri la aktualan rulpozicion"
 
-#: shell/debugcontroller.cpp:309
+#: shell/debugcontroller.cpp:302
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Saltas al la plenumata linio en la redaktilo."
 
-#: shell/debugcontroller.cpp:420
+#: shell/debugcontroller.cpp:433
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Sencimigi"
 
-#: shell/debugcontroller.cpp:470 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Sencimigi Lanĉon"
 
-#: shell/debugcontroller.cpp:472 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Sencimigi aktualan lanĉon"
 
-#: shell/debugcontroller.cpp:473 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:486 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2129,19 +2136,19 @@ msgstr ""
 "Efektivigas la celon aŭ la programon specifitan en nuntempe aktiva lanĉa "
 "agordo ene de Erarseĉilo."
 
-#: shell/debugcontroller.cpp:476
+#: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Daŭrigi"
 
-#: shell/debugcontroller.cpp:478
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Daŭrigi plenumon de aplikaĵo"
 
-#: shell/debugcontroller.cpp:479
+#: shell/debugcontroller.cpp:492
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2804,7 +2811,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "Malfermi ekzistantant dosieron \"%1\""
 
-#: shell/partcontroller.cpp:252
+#: shell/partcontroller.cpp:226
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
@@ -3007,29 +3014,29 @@ msgstr ""
 "Ne eblis konservi programistospecifan projektagordon.\n"
 "Atentu: La projektaj agordoj, kiujn vi ŝanĝis, estos perditaj."
 
-#: shell/projectcontroller.cpp:160
+#: shell/projectcontroller.cpp:161
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Agordi Projekton %1"
 
-#: shell/projectcontroller.cpp:303
+#: shell/projectcontroller.cpp:304
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Nevalida Loko: %1"
 
-#: shell/projectcontroller.cpp:313
+#: shell/projectcontroller.cpp:314
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "Jam malfermante %1, ne malfermante denove"
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Anstataŭigi"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -3037,25 +3044,25 @@ msgid ""
 msgstr ""
 "Daŭrigi malfermon de la projekto kaj uzi la ĵus provizitan projektan agordon"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Malfermi Ekzistantan Dosieron"
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:474
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr "Daŭrigi malfermon de la projekto sed uzi la ekzistantan projektagordon"
 
-#: shell/projectcontroller.cpp:475
+#: shell/projectcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Nuligi kaj ne malfermi la projekton"
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:479
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3064,41 +3071,41 @@ msgstr ""
 "Jam ekzistas projekta agorda dosiero ĉe %1.\n"
 "Ĉu vi volas anstataŭi ĝin aŭ malfermi la ekzistantan dosieron?"
 
-#: shell/projectcontroller.cpp:481
+#: shell/projectcontroller.cpp:482
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Anstataŭigi Ekzistantan Projektan Agordon"
 
-#: shell/projectcontroller.cpp:499
+#: shell/projectcontroller.cpp:500
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Ne eblas krei agordan dosieron %1"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Ĉu remalfermi la nunan projekton?"
 
-#: shell/projectcontroller.cpp:514
+#: shell/projectcontroller.cpp:515
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr "Remalfermi"
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "MalfermiImporti Projekton..."
 
-#: shell/projectcontroller.cpp:556
+#: shell/projectcontroller.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Malfermi aŭ importi projekton"
 
-#: shell/projectcontroller.cpp:557
+#: shell/projectcontroller.cpp:558
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3114,19 +3121,19 @@ msgstr ""
 "dosierujon kiu ankoraŭ ne havas KDevelop-projektdosieron, la dosiero estos "
 "kreita."
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:569
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Venigi Projekton..."
 
-#: shell/projectcontroller.cpp:570
+#: shell/projectcontroller.cpp:571
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Venigi projekton"
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:572
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3135,71 +3142,71 @@ msgstr ""
 "Gvidas la uzanton tra la projekt-kolektado kaj poste importas ĝin en "
 "KDevelop."
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:587
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Fermi Projekto(j)n"
 
-#: shell/projectcontroller.cpp:588
+#: shell/projectcontroller.cpp:589
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Fermas ĉiujn aktuale elektitajn projektojn"
 
-#: shell/projectcontroller.cpp:594
+#: shell/projectcontroller.cpp:595
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Malfermi Agordon..."
 
-#: shell/projectcontroller.cpp:600
+#: shell/projectcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Enmeti Aktualan Projketon..."
 
-#: shell/projectcontroller.cpp:601
+#: shell/projectcontroller.cpp:602
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Enmeti..."
 
-#: shell/projectcontroller.cpp:612
+#: shell/projectcontroller.cpp:613
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Malfermi Lasttempan Projekton"
 
-#: shell/projectcontroller.cpp:613
+#: shell/projectcontroller.cpp:614
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Malfermas lasttempe malfermitan projekton"
 
-#: shell/projectcontroller.cpp:618
+#: shell/projectcontroller.cpp:619
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Malfermi Projekton por Aktuala Dosiero"
 
-#: shell/projectcontroller.cpp:769
+#: shell/projectcontroller.cpp:770
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Projekto jam malfermita: %1"
 
-#: shell/projectcontroller.cpp:773
+#: shell/projectcontroller.cpp:774
 #, kde-format
 msgid "No active document"
 msgstr "Neniu aktiva dokumento"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:855
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Projekto Jam Malfermita"
 
-#: shell/projectcontroller.cpp:857
+#: shell/projectcontroller.cpp:858
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3208,24 +3215,24 @@ msgstr ""
 "La projekto, kiun vi provas malfermi, estas jam malfermita en almenaŭ unu "
 "alia seanco.<br>Kion vi volas fari?"
 
-#: shell/projectcontroller.cpp:861
+#: shell/projectcontroller.cpp:862
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Aldoni projekton al nuna seanco"
 
-#: shell/projectcontroller.cpp:865
+#: shell/projectcontroller.cpp:866
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Malfermi seancon %1"
 
-#: shell/projectcontroller.cpp:926
+#: shell/projectcontroller.cpp:927
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Neniu ebligita kromaĵo subtenas ĉi tiun deponejan URL: %1"
 
-#: shell/projectcontroller.cpp:1230
+#: shell/projectcontroller.cpp:1231
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -3542,7 +3549,7 @@ msgctxt "@info:tooltip"
 msgid "Discard all modifications"
 msgstr "Forĵeti ĉiujn modifojn"
 
-#: shell/session.cpp:178
+#: shell/session.cpp:157 shell/session.cpp:178
 #, kde-format
 msgid "(no projects)"
 msgstr "(neniuj projektoj)"
@@ -3614,7 +3621,19 @@ msgctxt "@title:window"
 msgid "Delete Session"
 msgstr "Forigi Seancon"
 
-#: shell/sessioncontroller.cpp:129
+#: shell/sessioncontroller.cpp:134
+#, kde-format
+msgctxt "@title:window"
+msgid "Start New Session"
+msgstr "Komenci Novan Seancon"
+
+#: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
+#, kde-format
+msgctxt "@label:textbox"
+msgid "New session name:"
+msgstr "Nova seancnomo:"
+
+#: shell/sessioncontroller.cpp:144
 #, kde-format
 msgid ""
 "The current session and all contained settings will be deleted. The projects "
@@ -3623,89 +3642,95 @@ msgstr ""
 "La nuna seanco kaj ĉiuj enhavitaj agordoj estos forigitaj. La projektoj "
 "restos netuŝitaj. Ĉu vi vere volas daŭrigi?"
 
-#: shell/sessioncontroller.cpp:142
+#: shell/sessioncontroller.cpp:157
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
 msgstr "Alinomi Seancon"
 
-#: shell/sessioncontroller.cpp:142
-#, kde-format
-msgctxt "@label:textbox"
-msgid "New session name:"
-msgstr "Nova seancnomo:"
-
-#: shell/sessioncontroller.cpp:249
+#: shell/sessioncontroller.cpp:265
 #, kde-format
 msgid "Session Manager"
 msgstr "Seancmastrumilo"
 
-#: shell/sessioncontroller.cpp:261
+#: shell/sessioncontroller.cpp:277
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Session"
 msgstr "Komenci Novan Seancon"
 
-#: shell/sessioncontroller.cpp:262
+#: shell/sessioncontroller.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
-msgstr "Komenci novan ekzemplon de KDevelop kun malplena seanco"
+msgstr "Komenci novan ekzempleron de KDevelop kun malplena seanco"
 
-#: shell/sessioncontroller.cpp:268
+#: shell/sessioncontroller.cpp:286
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Start New Named Session..."
+msgstr "Komenci Novan Nomitan Seancon..."
+
+#: shell/sessioncontroller.cpp:287
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Start a new KDevelop instance with an empty named session"
+msgstr "Komenci novan KDevelop-ekzempleron kun malplena nomita seanco"
+
+#: shell/sessioncontroller.cpp:293
 #, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
 msgstr "Alinomi Aktualan Seancon..."
 
-#: shell/sessioncontroller.cpp:274
+#: shell/sessioncontroller.cpp:299
 #, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
 msgstr "Forigi Aktualan Seancon..."
 
-#: shell/sessioncontroller.cpp:278
+#: shell/sessioncontroller.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Quit"
 msgstr "Forlasi"
 
-#: shell/sessioncontroller.cpp:498
+#: shell/sessioncontroller.cpp:523
 #, kde-format
 msgid "Copy of %1"
 msgstr "Kopio de %1"
 
-#: shell/sessioncontroller.cpp:588
+#: shell/sessioncontroller.cpp:613
 #, kde-format
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "Identeco"
 
-#: shell/sessioncontroller.cpp:589
+#: shell/sessioncontroller.cpp:614
 #, kde-format
 msgctxt "@title:column"
 msgid "Contents"
 msgstr "Enhavo"
 
-#: shell/sessioncontroller.cpp:590
+#: shell/sessioncontroller.cpp:615
 #, kde-format
 msgctxt "@title:column"
 msgid "State"
 msgstr "Stato"
 
-#: shell/sessioncontroller.cpp:591
+#: shell/sessioncontroller.cpp:616
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nomo"
 
-#: shell/sessioncontroller.cpp:597
+#: shell/sessioncontroller.cpp:622
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "Filtro:"
 
-#: shell/sessioncontroller.cpp:629
+#: shell/sessioncontroller.cpp:654
 #, kde-format
 msgid "Create New Session"
 msgstr "Krei Novan Seancon"
@@ -4864,13 +4889,13 @@ msgstr "Reformati Dosierojn..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr "Formati dosiero(j)n uzante la agordita(j)n fontformatilon(j)"
+msgstr "Formati dosiero(j)n uzante la agordita(j)n fontformatilo(j)n"
 
 #: shell/sourceformattercontroller.cpp:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr "Formata funkcieco uzante la agordita(j)n fontformatilon(j)."
+msgstr "Formata funkcieco uzante la agordita(j)n fontformatilo(j)n."
 
 #: shell/sourceformattercontroller.cpp:610
 #, kde-format
@@ -6196,7 +6221,3 @@ msgstr "Diferenco Al Antaŭa"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferenco inter Revizioj"
-
-#~ msgctxt "@info:progress"
-#~ msgid "Running %1"
-#~ msgstr "Ruliganta %1"

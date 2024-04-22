@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-03-19 01:40+0000\n"
 "PO-Revision-Date: 2022-01-03 13:08+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -349,17 +349,17 @@ msgstr ""
 "Dana glava ni varovana pred več vključitvami, bodisi s konvencionalnimi "
 "varovali makrov #ifndef/#define/#endif, bodisi z enkratnim #pragma."
 
-#: duchain/unknowndeclarationproblem.cpp:373
+#: duchain/unknowndeclarationproblem.cpp:374
 #, kde-format
 msgid "Insert '%1'"
 msgstr "Vstavi »%1«"
 
-#: duchain/unknowndeclarationproblem.cpp:433
+#: duchain/unknowndeclarationproblem.cpp:434
 #, kde-format
 msgid "Forward declare as 'class'"
 msgstr "Vnaprej deklariraj kot razred (»class«)"
 
-#: duchain/unknowndeclarationproblem.cpp:440
+#: duchain/unknowndeclarationproblem.cpp:441
 #, kde-format
 msgid "Forward declare as 'struct'"
 msgstr "Vnaprej deklariraj kot strukturo (»struct«)"

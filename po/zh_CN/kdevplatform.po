@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:14+0000\n"
-"PO-Revision-Date: 2024-03-30 19:46\n"
+"POT-Creation-Date: 2024-04-19 01:46+0000\n"
+"PO-Revision-Date: 2024-04-21 04:51\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-stable/messages/kdevelop/kdevplatform.pot\n"
-"X-Crowdin-File-ID: 3940\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevplatform.pot\n"
+"X-Crowdin-File-ID: 4867\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -27,31 +27,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kde-china@kde.org,i@guoyunhe.me"
 
-#: debugger/breakpoint/breakpoint.cpp:144
+#: debugger/breakpoint/breakpoint.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "错误"
 
-#: debugger/breakpoint/breakpoint.cpp:150
+#: debugger/breakpoint/breakpoint.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "脏"
 
-#: debugger/breakpoint/breakpoint.cpp:152
+#: debugger/breakpoint/breakpoint.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "待执行"
 
-#: debugger/breakpoint/breakpoint.cpp:154
+#: debugger/breakpoint/breakpoint.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "干净"
 
-#: debugger/breakpoint/breakpoint.cpp:186
+#: debugger/breakpoint/breakpoint.cpp:207
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -119,67 +119,74 @@ msgid ""
 "debugger.</p>"
 msgstr "<b>断点脏</b><p>断点还未被传递给调试器。</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:114
+#: debugger/breakpoint/breakpointmodel.cpp:123
 #, kde-format
 msgid "Breakpoint"
 msgstr "断点"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:342
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "找不到断点"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:342
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "无法找到位于 %1:%2 的断点"
 
-#: debugger/breakpoint/breakpointmodel.cpp:162
+#: debugger/breakpoint/breakpointmodel.cpp:348
 #, kde-format
 msgid "&Breakpoint"
 msgstr "&断点"
 
-#: debugger/breakpoint/breakpointmodel.cpp:168
+#: debugger/breakpoint/breakpointmodel.cpp:354
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "禁用断点(&D)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:169
+#: debugger/breakpoint/breakpointmodel.cpp:355
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "启用断点(&E)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:358
 #, kde-format
 msgid "&Bookmark"
 msgstr "书签(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:400
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "类型"
 
-#: debugger/breakpoint/breakpointmodel.cpp:217
+#: debugger/breakpoint/breakpointmodel.cpp:401
 #, kde-format
 msgid "Location"
 msgstr "位置"
 
-#: debugger/breakpoint/breakpointmodel.cpp:218
+#: debugger/breakpoint/breakpointmodel.cpp:402
 #, kde-format
 msgid "Condition"
 msgstr "条件"
 
-#: debugger/breakpoint/breakpointmodel.cpp:222
+#: debugger/breakpoint/breakpointmodel.cpp:406
 #, kde-format
 msgid "Active status"
 msgstr "活动状态"
 
-#: debugger/breakpoint/breakpointmodel.cpp:223
+#: debugger/breakpoint/breakpointmodel.cpp:407
 #, kde-format
 msgid "State"
 msgstr "状态"
+
+#: debugger/breakpoint/breakpointmodel.cpp:630
+#, kde-format
+msgid ""
+"A breakpoint cannot be added to an untitled document. Please save the "
+"document first."
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -324,12 +331,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr "#%1 %2() 于 %3:%4\n"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#: debugger/interfaces/ibreakpointcontroller.cpp:78
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "命中断点：%1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#: debugger/interfaces/ibreakpointcontroller.cpp:85
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "命中观察点：%1"
@@ -521,7 +528,7 @@ msgid "Home"
 msgstr "主页"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
-#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:565
+#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
 #: vcs/dvcs/ui/branchmanager.ui:143
 #, kde-format
 msgctxt "@info:placeholder"
@@ -1826,111 +1833,111 @@ msgstr ""
 "href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">此文章</a>了解更多信息。"
 
-#: shell/debugcontroller.cpp:116
+#: shell/debugcontroller.cpp:115
 #, kde-format
 msgid "Debugger"
 msgstr "调试器"
 
-#: shell/debugcontroller.cpp:138
+#: shell/debugcontroller.cpp:145
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "框架堆栈"
 
-#: shell/debugcontroller.cpp:143
+#: shell/debugcontroller.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "断点"
 
-#: shell/debugcontroller.cpp:148
+#: shell/debugcontroller.cpp:155
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "变量"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgid "&Restart"
 msgstr "重启(&R)"
 
-#: shell/debugcontroller.cpp:229
+#: shell/debugcontroller.cpp:222
 #, kde-format
 msgid "Restart program"
 msgstr "重新启动程序"
 
-#: shell/debugcontroller.cpp:230
+#: shell/debugcontroller.cpp:223
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "从头开始重启应用程序。"
 
-#: shell/debugcontroller.cpp:236
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "中断"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:230
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "中断应用程序"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "中断调试的进程或当前调试器命令。"
 
-#: shell/debugcontroller.cpp:242
+#: shell/debugcontroller.cpp:235
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "运行到光标处(&C)"
 
-#: shell/debugcontroller.cpp:243
+#: shell/debugcontroller.cpp:236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "运行到光标处"
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "继续执行，直到到达光标位置。"
 
-#: shell/debugcontroller.cpp:249
+#: shell/debugcontroller.cpp:242
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "设定执行位置到光标处(&X)"
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:243
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "跳转到光标处"
 
-#: shell/debugcontroller.cpp:251
+#: shell/debugcontroller.cpp:244
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "从当前光标位置继续执行。"
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "单步执行(&O)"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:250
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "单步执行下一行"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1941,37 +1948,37 @@ msgstr ""
 "在当前源文件中执行一行源代码。如果源行是对函数的调用，则执行整个函数，应用程"
 "序将在函数调用之后的行停止。"
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:259
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "单步执行指令(&T)"
 
-#: shell/debugcontroller.cpp:267
+#: shell/debugcontroller.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "单步执行指令"
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:261
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "跳过下一个汇编指令。"
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:266
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "单步跟进(&I)"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:268
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "单步跟进到下一条语句"
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:269
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1979,37 +1986,37 @@ msgid ""
 "function then execution will stop after the function has been entered."
 msgstr "只执行一行源代码。如果源行是对函数的调用，则在输入函数后将停止执行。"
 
-#: shell/debugcontroller.cpp:283
+#: shell/debugcontroller.cpp:276
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "单步跟进指令(&N)"
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:277
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "单步跟进指令"
 
-#: shell/debugcontroller.cpp:285
+#: shell/debugcontroller.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "进入下一个汇编指令。"
 
-#: shell/debugcontroller.cpp:289
+#: shell/debugcontroller.cpp:282
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "单步跳出(&U)"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:284
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "单步跳出当前函数"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:285
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2022,66 +2029,66 @@ msgstr ""
 "之后显示该行。如果程序执行在最外层框架中 (即在 main () 中)，则此操作不起作"
 "用。"
 
-#: shell/debugcontroller.cpp:300
+#: shell/debugcontroller.cpp:293
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "切换断点"
 
-#: shell/debugcontroller.cpp:301
+#: shell/debugcontroller.cpp:294
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:295
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "切换断点"
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "在编辑器中切换当前行的断点。"
 
-#: shell/debugcontroller.cpp:307
+#: shell/debugcontroller.cpp:300
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "显示当前行"
 
-#: shell/debugcontroller.cpp:308
+#: shell/debugcontroller.cpp:301
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "显示当前执行位置"
 
-#: shell/debugcontroller.cpp:309
+#: shell/debugcontroller.cpp:302
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "跳转到编辑器中的执行的行。"
 
-#: shell/debugcontroller.cpp:420
+#: shell/debugcontroller.cpp:433
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "调试"
 
-#: shell/debugcontroller.cpp:470 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "调试启动"
 
-#: shell/debugcontroller.cpp:472 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "调试当前启动"
 
-#: shell/debugcontroller.cpp:473 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:486 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2091,19 +2098,19 @@ msgstr ""
 "<b>执行程序</b><p>执行当前活动的目标或工程设置<b>运行选项</b>标签中所指定的主"
 "程序。</p>"
 
-#: shell/debugcontroller.cpp:476
+#: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "继续(&C)"
 
-#: shell/debugcontroller.cpp:478
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "继续应用程序执行"
 
-#: shell/debugcontroller.cpp:479
+#: shell/debugcontroller.cpp:492
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2751,7 +2758,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "打开存在的文件 %1"
 
-#: shell/partcontroller.cpp:252
+#: shell/partcontroller.cpp:226
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
@@ -2944,54 +2951,54 @@ msgstr ""
 "无法存储开发者相关的工程配置。\n"
 "注意：您更改的工程设置将丢失。"
 
-#: shell/projectcontroller.cpp:160
+#: shell/projectcontroller.cpp:161
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "配置工程 %1"
 
-#: shell/projectcontroller.cpp:303
+#: shell/projectcontroller.cpp:304
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "无效的位置：%1"
 
-#: shell/projectcontroller.cpp:313
+#: shell/projectcontroller.cpp:314
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "已经打开 %1，不再次打开"
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "覆盖"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr "继续使用刚才提供的工程配置打开工程"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "打开存在的文件"
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:474
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr "继续使用已有的工程配置打开工程"
 
-#: shell/projectcontroller.cpp:475
+#: shell/projectcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "取消打开工程"
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:479
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3000,41 +3007,41 @@ msgstr ""
 "已经存在工程配置文件 %1。\n"
 "您想要覆盖它还是打开已有文件？"
 
-#: shell/projectcontroller.cpp:481
+#: shell/projectcontroller.cpp:482
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "覆盖已有的工程配置"
 
-#: shell/projectcontroller.cpp:499
+#: shell/projectcontroller.cpp:500
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "无法创建配置文件 %1"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "重新打开当前工程？"
 
-#: shell/projectcontroller.cpp:514
+#: shell/projectcontroller.cpp:515
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "打开/导入工程..."
 
-#: shell/projectcontroller.cpp:556
+#: shell/projectcontroller.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "打开或导入工程"
 
-#: shell/projectcontroller.cpp:557
+#: shell/projectcontroller.cpp:558
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3045,114 +3052,114 @@ msgid ""
 "created."
 msgstr ""
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:569
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "获取工程..."
 
-#: shell/projectcontroller.cpp:570
+#: shell/projectcontroller.cpp:571
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "获取工程"
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:572
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr ""
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:587
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "关闭工程"
 
-#: shell/projectcontroller.cpp:588
+#: shell/projectcontroller.cpp:589
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "关闭全部当前选中的工程"
 
-#: shell/projectcontroller.cpp:594
+#: shell/projectcontroller.cpp:595
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "打开配置..."
 
-#: shell/projectcontroller.cpp:600
+#: shell/projectcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "提交当前工程..."
 
-#: shell/projectcontroller.cpp:601
+#: shell/projectcontroller.cpp:602
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "提交..."
 
-#: shell/projectcontroller.cpp:612
+#: shell/projectcontroller.cpp:613
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "打开最近的工程"
 
-#: shell/projectcontroller.cpp:613
+#: shell/projectcontroller.cpp:614
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "最近打开的工程。"
 
-#: shell/projectcontroller.cpp:618
+#: shell/projectcontroller.cpp:619
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "关闭当前文件的工程"
 
-#: shell/projectcontroller.cpp:769
+#: shell/projectcontroller.cpp:770
 #, kde-format
 msgid "Project already open: %1"
 msgstr "工程已经打开：%1"
 
-#: shell/projectcontroller.cpp:773
+#: shell/projectcontroller.cpp:774
 #, kde-format
 msgid "No active document"
 msgstr "无活动的文档"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:855
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "工程已经打开"
 
-#: shell/projectcontroller.cpp:857
+#: shell/projectcontroller.cpp:858
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
 msgstr "您正尝试打开的工程是其他会话的一部分。<br>您想要怎么做？"
 
-#: shell/projectcontroller.cpp:861
+#: shell/projectcontroller.cpp:862
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "添加工程到当前会话"
 
-#: shell/projectcontroller.cpp:865
+#: shell/projectcontroller.cpp:866
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "打开会话“%1”"
 
-#: shell/projectcontroller.cpp:926
+#: shell/projectcontroller.cpp:927
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "没有启用的插件支持此仓库 URL：%1"
 
-#: shell/projectcontroller.cpp:1230
+#: shell/projectcontroller.cpp:1231
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -3466,7 +3473,7 @@ msgctxt "@info:tooltip"
 msgid "Discard all modifications"
 msgstr "丢弃全部修改"
 
-#: shell/session.cpp:178
+#: shell/session.cpp:157 shell/session.cpp:178
 #, kde-format
 msgid "(no projects)"
 msgstr "(无工程)"
@@ -3537,7 +3544,19 @@ msgctxt "@title:window"
 msgid "Delete Session"
 msgstr "删除会话"
 
-#: shell/sessioncontroller.cpp:129
+#: shell/sessioncontroller.cpp:134
+#, kde-format
+msgctxt "@title:window"
+msgid "Start New Session"
+msgstr "启动新会话"
+
+#: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
+#, kde-format
+msgctxt "@label:textbox"
+msgid "New session name:"
+msgstr "新会话名："
+
+#: shell/sessioncontroller.cpp:144
 #, kde-format
 msgid ""
 "The current session and all contained settings will be deleted. The projects "
@@ -3545,89 +3564,95 @@ msgid ""
 msgstr ""
 "当前会话以及所有包含的设置都将被删除。工程将不受影响。您真的想要继续吗？"
 
-#: shell/sessioncontroller.cpp:142
+#: shell/sessioncontroller.cpp:157
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
 msgstr "重命名会话"
 
-#: shell/sessioncontroller.cpp:142
-#, kde-format
-msgctxt "@label:textbox"
-msgid "New session name:"
-msgstr "新会话名："
-
-#: shell/sessioncontroller.cpp:249
+#: shell/sessioncontroller.cpp:265
 #, kde-format
 msgid "Session Manager"
 msgstr "会话管理器"
 
-#: shell/sessioncontroller.cpp:261
+#: shell/sessioncontroller.cpp:277
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Session"
 msgstr "启动新会话"
 
-#: shell/sessioncontroller.cpp:262
+#: shell/sessioncontroller.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
 msgstr "以空会话启动新的 KDevelop 实例"
 
-#: shell/sessioncontroller.cpp:268
+#: shell/sessioncontroller.cpp:286
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Start New Named Session..."
+msgstr ""
+
+#: shell/sessioncontroller.cpp:287
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Start a new KDevelop instance with an empty named session"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:293
 #, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
 msgstr "重命名当前会话..."
 
-#: shell/sessioncontroller.cpp:274
+#: shell/sessioncontroller.cpp:299
 #, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
 msgstr "删除当前会话..."
 
-#: shell/sessioncontroller.cpp:278
+#: shell/sessioncontroller.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Quit"
 msgstr "退出"
 
-#: shell/sessioncontroller.cpp:498
+#: shell/sessioncontroller.cpp:523
 #, kde-format
 msgid "Copy of %1"
 msgstr "%1 的副本"
 
-#: shell/sessioncontroller.cpp:588
+#: shell/sessioncontroller.cpp:613
 #, kde-format
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "标识"
 
-#: shell/sessioncontroller.cpp:589
+#: shell/sessioncontroller.cpp:614
 #, kde-format
 msgctxt "@title:column"
 msgid "Contents"
 msgstr "内容"
 
-#: shell/sessioncontroller.cpp:590
+#: shell/sessioncontroller.cpp:615
 #, kde-format
 msgctxt "@title:column"
 msgid "State"
 msgstr "状态"
 
-#: shell/sessioncontroller.cpp:591
+#: shell/sessioncontroller.cpp:616
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "名称"
 
-#: shell/sessioncontroller.cpp:597
+#: shell/sessioncontroller.cpp:622
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "过滤："
 
-#: shell/sessioncontroller.cpp:629
+#: shell/sessioncontroller.cpp:654
 #, kde-format
 msgid "Create New Session"
 msgstr "创建新会话"

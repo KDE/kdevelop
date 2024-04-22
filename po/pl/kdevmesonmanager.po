@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-04-06 01:42+0000\n"
 "PO-Revision-Date: 2021-01-06 01:39+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -119,18 +119,18 @@ msgstr "** Pomyślnie przycięto **"
 msgid "** Prune failed: %1 **"
 msgstr "** Nie udało się przyciąć: %1 **"
 
-#: mesonmanager.cpp:64
+#: mesonmanager.cpp:68
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Import Failed"
 msgstr "Nie udało się zaimportować projektu"
 
-#: mesonmanager.cpp:111
+#: mesonmanager.cpp:115
 #, kde-format
 msgid "Meson builder error: %1"
 msgstr "Błąd budowniczego Meson: %1"
 
-#: mesonmanager.cpp:251
+#: mesonmanager.cpp:276
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr ""

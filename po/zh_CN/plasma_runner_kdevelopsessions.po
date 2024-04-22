@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-03-30 19:46\n"
+"POT-Creation-Date: 2024-03-27 10:09+0000\n"
+"PO-Revision-Date: 2024-03-17 20:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,21 +14,21 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-stable/messages/kdevelop/plasma_runner_kdevelopsessions."
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/plasma_runner_kdevelopsessions."
 "pot\n"
-"X-Crowdin-File-ID: 4049\n"
+"X-Crowdin-File-ID: 4986\n"
 
-#: kdevelopsessions.cpp:24
+#: kdevelopsessions.cpp:26 kdevelopsessions.cpp:30
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "查找匹配 :q: 的 KDevelop 会话。"
 
-#: kdevelopsessions.cpp:28
+#: kdevelopsessions.cpp:34
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "显示账户中所有的 KDevelop 编辑器会话。"
 
-#: kdevelopsessions.cpp:102
+#: kdevelopsessions.cpp:128
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "打开 KDevelop 会话"

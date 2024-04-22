@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2021-08-31 09:44+0200\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"PO-Revision-Date: 2024-02-16 19:35+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 20.12.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: kdevkonsoleview.cpp:107
 #, kde-format
 msgid "Terminal"
 msgstr "Terminal"
 
-#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Terminal"
 msgstr "Terminal"
 
-#: kdevkonsoleviewplugin.cpp:60
+#: kdevkonsoleviewplugin.cpp:49
 #, kde-format
-msgid "Failed to load 'konsolepart' plugin"
-msgstr "Nalaganje vstavka 'konsolepart' ni uspelo"
+msgid "Failed to load 'konsolepart' plugin: %1"
+msgstr "Nalaganje vtičnika 'konsolepart' ni uspelo: %1"
 
 #~ msgid "Konsole"
 #~ msgstr "Konsole"

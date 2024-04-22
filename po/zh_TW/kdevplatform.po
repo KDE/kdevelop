@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:14+0000\n"
+"POT-Creation-Date: 2024-04-19 01:46+0000\n"
 "PO-Revision-Date: 2023-11-29 17:05+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -32,31 +32,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "franklin@goodhorse.idv.tw"
 
-#: debugger/breakpoint/breakpoint.cpp:144
+#: debugger/breakpoint/breakpoint.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "錯誤"
 
-#: debugger/breakpoint/breakpoint.cpp:150
+#: debugger/breakpoint/breakpoint.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Dirty"
 
-#: debugger/breakpoint/breakpoint.cpp:152
+#: debugger/breakpoint/breakpoint.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "暫停"
 
-#: debugger/breakpoint/breakpoint.cpp:154
+#: debugger/breakpoint/breakpoint.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "清除"
 
-#: debugger/breakpoint/breakpoint.cpp:186
+#: debugger/breakpoint/breakpoint.cpp:207
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -124,67 +124,74 @@ msgid ""
 "debugger.</p>"
 msgstr "<b>中斷點不準確</b><p>此中斷點尚未傳送到 GDB。</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:114
+#: debugger/breakpoint/breakpointmodel.cpp:123
 #, kde-format
 msgid "Breakpoint"
 msgstr "中斷點"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:342
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "找不到中斷點"
 
-#: debugger/breakpoint/breakpointmodel.cpp:156
+#: debugger/breakpoint/breakpointmodel.cpp:342
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:162
+#: debugger/breakpoint/breakpointmodel.cpp:348
 #, kde-format
 msgid "&Breakpoint"
 msgstr "中斷點(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:168
+#: debugger/breakpoint/breakpointmodel.cpp:354
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "關閉中斷點(&D)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:169
+#: debugger/breakpoint/breakpointmodel.cpp:355
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "開啟中斷點(&D)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:172
+#: debugger/breakpoint/breakpointmodel.cpp:358
 #, kde-format
 msgid "&Bookmark"
 msgstr "書籤(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/breakpoint/breakpointmodel.cpp:400
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "類型"
 
-#: debugger/breakpoint/breakpointmodel.cpp:217
+#: debugger/breakpoint/breakpointmodel.cpp:401
 #, kde-format
 msgid "Location"
 msgstr "位置"
 
-#: debugger/breakpoint/breakpointmodel.cpp:218
+#: debugger/breakpoint/breakpointmodel.cpp:402
 #, kde-format
 msgid "Condition"
 msgstr "條件"
 
-#: debugger/breakpoint/breakpointmodel.cpp:222
+#: debugger/breakpoint/breakpointmodel.cpp:406
 #, kde-format
 msgid "Active status"
 msgstr "啟用狀態"
 
-#: debugger/breakpoint/breakpointmodel.cpp:223
+#: debugger/breakpoint/breakpointmodel.cpp:407
 #, kde-format
 msgid "State"
 msgstr "狀態"
+
+#: debugger/breakpoint/breakpointmodel.cpp:630
+#, kde-format
+msgid ""
+"A breakpoint cannot be added to an untitled document. Please save the "
+"document first."
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -330,12 +337,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr ""
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#: debugger/interfaces/ibreakpointcontroller.cpp:78
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "遇到中斷點：%1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#: debugger/interfaces/ibreakpointcontroller.cpp:85
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "遇到監看點：%1"
@@ -527,7 +534,7 @@ msgid "Home"
 msgstr "首頁"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
-#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:565
+#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
 #: vcs/dvcs/ui/branchmanager.ui:143
 #, kde-format
 msgctxt "@info:placeholder"
@@ -1838,112 +1845,112 @@ msgid ""
 "\">this article</a> for more information."
 msgstr ""
 
-#: shell/debugcontroller.cpp:116
+#: shell/debugcontroller.cpp:115
 #, kde-format
 msgid "Debugger"
 msgstr "除錯器"
 
-#: shell/debugcontroller.cpp:138
+#: shell/debugcontroller.cpp:145
 #, fuzzy, kde-format
 #| msgid "Frame Stack"
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "框架堆疊"
 
-#: shell/debugcontroller.cpp:143
+#: shell/debugcontroller.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "中斷點"
 
-#: shell/debugcontroller.cpp:148
+#: shell/debugcontroller.cpp:155
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "變數"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgid "&Restart"
 msgstr "重新啟動 (&R)"
 
-#: shell/debugcontroller.cpp:229
+#: shell/debugcontroller.cpp:222
 #, kde-format
 msgid "Restart program"
 msgstr "重新開始執行程式"
 
-#: shell/debugcontroller.cpp:230
+#: shell/debugcontroller.cpp:223
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "重新開始執行應用程式。"
 
-#: shell/debugcontroller.cpp:236
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "中斷"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:230
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "中斷應用程式"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "中斷除錯中的行程或目前執行的除錯器指令。"
 
-#: shell/debugcontroller.cpp:242
+#: shell/debugcontroller.cpp:235
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "執行到游標處(&C)"
 
-#: shell/debugcontroller.cpp:243
+#: shell/debugcontroller.cpp:236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "執行到游標處"
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "繼續執行到游標位置所在。"
 
-#: shell/debugcontroller.cpp:249
+#: shell/debugcontroller.cpp:242
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "將執行位置設到游標處(&X)"
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:243
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "跳到游標處"
 
-#: shell/debugcontroller.cpp:251
+#: shell/debugcontroller.cpp:244
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "從目前游標位置繼續執行。"
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "單步執行(&O)"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:250
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "單步執行到下一行"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1953,38 +1960,38 @@ msgid ""
 msgstr ""
 "執行一行源碼。如果該行源碼是呼叫函式，則會把整個函式執行完畢後停在下一行。"
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:259
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "單步執行指令(&T)"
 
-#: shell/debugcontroller.cpp:267
+#: shell/debugcontroller.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "單步執行指令"
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:261
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "單步執行到下一個組譯指令。"
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:266
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "單步跳入(&I)"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:268
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "單步跳入下一個敘述"
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:269
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes exactly one line of source. If the source line is a call to a "
@@ -1995,37 +2002,37 @@ msgid ""
 "function then execution will stop after the function has been entered."
 msgstr "執行源碼中一行敘述。如果程式碼是呼叫某個函式，則會停在進入函式的點。"
 
-#: shell/debugcontroller.cpp:283
+#: shell/debugcontroller.cpp:276
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "單步跳入指令(&N)"
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:277
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "單步跳入指令"
 
-#: shell/debugcontroller.cpp:285
+#: shell/debugcontroller.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "單步跳入下一個組譯指令。"
 
-#: shell/debugcontroller.cpp:289
+#: shell/debugcontroller.cpp:282
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "單步跳出(&U)"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:284
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "單步跳出目前的函式"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:285
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2037,66 +2044,66 @@ msgstr ""
 "執行應用程式，直到目前的函式執行完畢。除錯器會顯示呼叫該函式的地方。如果是在"
 "最外層的框架（也就是 main()），則這個操作不會發生作用。"
 
-#: shell/debugcontroller.cpp:300
+#: shell/debugcontroller.cpp:293
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "切換中斷點"
 
-#: shell/debugcontroller.cpp:301
+#: shell/debugcontroller.cpp:294
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:295
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "切換中斷點"
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "切換編輯器中目前的行的中斷點。"
 
-#: shell/debugcontroller.cpp:307
+#: shell/debugcontroller.cpp:300
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "顯示目前行"
 
-#: shell/debugcontroller.cpp:308
+#: shell/debugcontroller.cpp:301
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "顯示目前執行到的位置"
 
-#: shell/debugcontroller.cpp:309
+#: shell/debugcontroller.cpp:302
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:420
+#: shell/debugcontroller.cpp:433
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "除錯"
 
-#: shell/debugcontroller.cpp:470 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "除錯啟動"
 
-#: shell/debugcontroller.cpp:472 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "除錯目前的啟動"
 
-#: shell/debugcontroller.cpp:473 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:486 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2104,19 +2111,19 @@ msgid ""
 "configuration inside a Debugger."
 msgstr "在除錯器內執行目前作用中的目標，或是目前啟動設定裡指定的程式。"
 
-#: shell/debugcontroller.cpp:476
+#: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "繼續(&C)"
 
-#: shell/debugcontroller.cpp:478
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "繼續執行應用程式"
 
-#: shell/debugcontroller.cpp:479
+#: shell/debugcontroller.cpp:492
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2765,7 +2772,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "開啟現有的檔案 %1"
 
-#: shell/partcontroller.cpp:252
+#: shell/partcontroller.cpp:226
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
@@ -2964,31 +2971,31 @@ msgstr ""
 "無法儲存開發者指定專案設定。\n"
 "注意：您對此專案所做的設定變更將遺失。"
 
-#: shell/projectcontroller.cpp:160
+#: shell/projectcontroller.cpp:161
 #, fuzzy, kde-format
 #| msgid "Configure Project %1"
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "設定專案 %1"
 
-#: shell/projectcontroller.cpp:303
+#: shell/projectcontroller.cpp:304
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "不合法的位置：%1"
 
-#: shell/projectcontroller.cpp:313
+#: shell/projectcontroller.cpp:314
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "已開啟 %1，不用再開了"
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, fuzzy, kde-format
 #| msgid "Override"
 msgctxt "@action:button"
 msgid "Override"
 msgstr "覆寫"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -2999,14 +3006,14 @@ msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr "繼續使用剛剛提供的專案設定來開啟專案。"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "開啟現有的檔案"
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:474
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3015,7 +3022,7 @@ msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr "使用現有的專案設定來開啟專案。"
 
-#: shell/projectcontroller.cpp:475
+#: shell/projectcontroller.cpp:476
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Cancel and do not open the project."
@@ -3023,7 +3030,7 @@ msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "取消，不要開啟專案。"
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:479
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3032,42 +3039,42 @@ msgstr ""
 "已經有個專案設定檔在 %1。\n"
 "您要覆寫它，還是要開啟現有的檔案？"
 
-#: shell/projectcontroller.cpp:481
+#: shell/projectcontroller.cpp:482
 #, fuzzy, kde-format
 #| msgid "Override existing project configuration"
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "覆蓋現有的專案設定"
 
-#: shell/projectcontroller.cpp:499
+#: shell/projectcontroller.cpp:500
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "無法建立設定檔 %1"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "要重新開啟目前的專案嗎？"
 
-#: shell/projectcontroller.cpp:514
+#: shell/projectcontroller.cpp:515
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "開啟 / 匯入專案..."
 
-#: shell/projectcontroller.cpp:556
+#: shell/projectcontroller.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "開啟 / 匯入專案"
 
-#: shell/projectcontroller.cpp:557
+#: shell/projectcontroller.cpp:558
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3088,19 +3095,19 @@ msgstr ""
 "KDevelop4 專案檔或讓您在 KDevelop 中開啟現有的專案目錄。開啟的目錄中若沒有 "
 "KDevelop4 專案檔，則會建立新的專案檔。"
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:569
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "抓取專案..."
 
-#: shell/projectcontroller.cpp:570
+#: shell/projectcontroller.cpp:571
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "抓取專案"
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:572
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3111,95 +3118,95 @@ msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr "引導使用者抓取專案，並匯入 KDevelop 4。"
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:587
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "關閉專案"
 
-#: shell/projectcontroller.cpp:588
+#: shell/projectcontroller.cpp:589
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "關閉所有目前選取的專案"
 
-#: shell/projectcontroller.cpp:594
+#: shell/projectcontroller.cpp:595
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "開啟設定..."
 
-#: shell/projectcontroller.cpp:600
+#: shell/projectcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "提交目前的專案..."
 
-#: shell/projectcontroller.cpp:601
+#: shell/projectcontroller.cpp:602
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "提交..."
 
-#: shell/projectcontroller.cpp:612
+#: shell/projectcontroller.cpp:613
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "開啟最近的專案"
 
-#: shell/projectcontroller.cpp:613
+#: shell/projectcontroller.cpp:614
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "開啟最近的專案。"
 
-#: shell/projectcontroller.cpp:618
+#: shell/projectcontroller.cpp:619
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "為目前檔案開啟專案"
 
-#: shell/projectcontroller.cpp:769
+#: shell/projectcontroller.cpp:770
 #, kde-format
 msgid "Project already open: %1"
 msgstr "專案已開啟：%1"
 
-#: shell/projectcontroller.cpp:773
+#: shell/projectcontroller.cpp:774
 #, kde-format
 msgid "No active document"
 msgstr "沒有目前的文件。"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:855
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "專案已開啟"
 
-#: shell/projectcontroller.cpp:857
+#: shell/projectcontroller.cpp:858
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
 msgstr "您要開啟的專案已經在另一個工作階段中開啟了。<br/>您要怎麼做？"
 
-#: shell/projectcontroller.cpp:861
+#: shell/projectcontroller.cpp:862
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "將專案加入目前的工作階段"
 
-#: shell/projectcontroller.cpp:865
+#: shell/projectcontroller.cpp:866
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "開啟工作階段 %1"
 
-#: shell/projectcontroller.cpp:926
+#: shell/projectcontroller.cpp:927
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr ""
 
-#: shell/projectcontroller.cpp:1230
+#: shell/projectcontroller.cpp:1231
 #, fuzzy, kde-format
 #| msgid "Reopen the current project?"
 msgctxt "@action"
@@ -3537,7 +3544,7 @@ msgctxt "@info:tooltip"
 msgid "Discard all modifications"
 msgstr "丟棄所有的變更"
 
-#: shell/session.cpp:178
+#: shell/session.cpp:157 shell/session.cpp:178
 #, kde-format
 msgid "(no projects)"
 msgstr "（沒有專案）"
@@ -3624,105 +3631,129 @@ msgctxt "@title:window"
 msgid "Delete Session"
 msgstr "刪除工作階段"
 
-#: shell/sessioncontroller.cpp:129
-#, kde-format
-msgid ""
-"The current session and all contained settings will be deleted. The projects "
-"will stay unaffected. Do you really want to continue?"
-msgstr "目前的作業階段與所有的設定將被刪除。此專案則不受影響。您確定要繼續嗎？"
-
-#: shell/sessioncontroller.cpp:142
+#: shell/sessioncontroller.cpp:134
 #, fuzzy, kde-format
-#| msgid "Rename Session"
+#| msgctxt "@action:inmenu"
+#| msgid "Start New Session"
 msgctxt "@title:window"
-msgid "Rename Session"
-msgstr "重新命名工作階段"
+msgid "Start New Session"
+msgstr "開始新的作業階段"
 
-#: shell/sessioncontroller.cpp:142
+#: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
 #, fuzzy, kde-format
 #| msgid "New Session Name"
 msgctxt "@label:textbox"
 msgid "New session name:"
 msgstr "新的作業階段名稱"
 
-#: shell/sessioncontroller.cpp:249
+#: shell/sessioncontroller.cpp:144
+#, kde-format
+msgid ""
+"The current session and all contained settings will be deleted. The projects "
+"will stay unaffected. Do you really want to continue?"
+msgstr "目前的作業階段與所有的設定將被刪除。此專案則不受影響。您確定要繼續嗎？"
+
+#: shell/sessioncontroller.cpp:157
+#, fuzzy, kde-format
+#| msgid "Rename Session"
+msgctxt "@title:window"
+msgid "Rename Session"
+msgstr "重新命名工作階段"
+
+#: shell/sessioncontroller.cpp:265
 #, fuzzy, kde-format
 #| msgid "Kross Manager"
 msgid "Session Manager"
 msgstr "Kross 管理員"
 
-#: shell/sessioncontroller.cpp:261
+#: shell/sessioncontroller.cpp:277
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Session"
 msgstr "開始新的作業階段"
 
-#: shell/sessioncontroller.cpp:262
+#: shell/sessioncontroller.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
 msgstr "使用空白的工作階段來啟動新的 KDevelop 實體"
 
-#: shell/sessioncontroller.cpp:268
+#: shell/sessioncontroller.cpp:286
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Start New Session"
+msgctxt "@action:inmenu"
+msgid "Start New Named Session..."
+msgstr "開始新的作業階段"
+
+#: shell/sessioncontroller.cpp:287
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Start a new KDevelop instance with an empty session"
+msgctxt "@info:tooltip"
+msgid "Start a new KDevelop instance with an empty named session"
+msgstr "使用空白的工作階段來啟動新的 KDevelop 實體"
+
+#: shell/sessioncontroller.cpp:293
 #, fuzzy, kde-format
 #| msgid "Rename Current Session..."
 msgctxt "@action"
 msgid "Rename Current Session..."
 msgstr "重新命名目前的工作階段..."
 
-#: shell/sessioncontroller.cpp:274
+#: shell/sessioncontroller.cpp:299
 #, fuzzy, kde-format
 #| msgid "Delete Current Session..."
 msgctxt "@action"
 msgid "Delete Current Session..."
 msgstr "刪除目前的工作階段..."
 
-#: shell/sessioncontroller.cpp:278
+#: shell/sessioncontroller.cpp:303
 #, fuzzy, kde-format
 #| msgid "Quit"
 msgctxt "@action"
 msgid "Quit"
 msgstr "離開"
 
-#: shell/sessioncontroller.cpp:498
+#: shell/sessioncontroller.cpp:523
 #, kde-format
 msgid "Copy of %1"
 msgstr "複製 %1"
 
-#: shell/sessioncontroller.cpp:588
+#: shell/sessioncontroller.cpp:613
 #, fuzzy, kde-format
 #| msgid "Identity"
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "身份"
 
-#: shell/sessioncontroller.cpp:589
+#: shell/sessioncontroller.cpp:614
 #, kde-format
 msgctxt "@title:column"
 msgid "Contents"
 msgstr "內容"
 
-#: shell/sessioncontroller.cpp:590
+#: shell/sessioncontroller.cpp:615
 #, fuzzy, kde-format
 #| msgid "State"
 msgctxt "@title:column"
 msgid "State"
 msgstr "狀態"
 
-#: shell/sessioncontroller.cpp:591
+#: shell/sessioncontroller.cpp:616
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "名稱"
 
-#: shell/sessioncontroller.cpp:597
+#: shell/sessioncontroller.cpp:622
 #, fuzzy, kde-format
 #| msgid "Filter:"
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "過濾器："
 
-#: shell/sessioncontroller.cpp:629
+#: shell/sessioncontroller.cpp:654
 #, kde-format
 msgid "Create New Session"
 msgstr "建立新的作業階段"

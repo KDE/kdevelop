@@ -125,6 +125,7 @@ msgctxt ""
 msgid "Filter regular expression pattern error at offset %1: %2"
 msgstr "過濾正則表達式在位置 %1 有錯誤：%2"
 
+# %1 是譯文所以不加空格
 #: outputwidgetconfig.cpp:64
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"

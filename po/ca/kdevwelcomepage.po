@@ -207,3 +207,9 @@ msgstr "Branques"
 #: qml/plugins/Projects.qml:15
 msgid "Projects"
 msgstr "Projectes"
+
+#~ msgid "News"
+#~ msgstr "Notícies"
+
+#~ msgid "<br/>"
+#~ msgstr "<br/>"
