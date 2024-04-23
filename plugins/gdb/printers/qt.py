@@ -12,13 +12,20 @@ import time
 
 from helper import *
 
+# Ensure that the value obtained from QStringPrinter is valid
+def checkStringValid(val):
+    if val == "<uninitialized>": # or other
+        return False
+    return True
+
 class QStringPrinter:
 
     def __init__(self, val):
         self.val = val
 
     def to_string(self):
-        ret = ""
+        # If the value is not successfully obtained, it indicates that the string has not been initialized
+        ret = "<uninitialized>"
 
         # The QString object may not be initialized yet. In this case 'size' is a bogus value
         # or in case of Qt5, 'd' is an invalid pointer and the following lines might throw memory
@@ -26,9 +33,16 @@ class QStringPrinter:
         try:
             size = self.val['d']['size']
             if size == 0:
-                return ret
+                return '""'
+
             isQt4 = has_field(self.val['d'], 'data') # Qt4 has d->data, Qt5 doesn't.
             isQt6 = has_field(self.val['d'], 'ptr') # Qt6 has d->ptr, Qt5 doesn't.
+
+            # This restriction refers to the highest limit in QtCreator for string encoding in gdb
+            alloc = self.val['d']['alloc']
+            if size < 0 or alloc < size or alloc > 100*1000*1000:
+                return ret
+
             if isQt4:
                 dataAsCharPointer = self.val['d']['data'].cast(gdb.lookup_type("char").pointer())
             elif isQt6:
@@ -127,7 +141,11 @@ class QListPrinter:
             if isQt6:
                 size = self.d['size']
             else:
-                size = self.d['end'] - self.d['begin']
+                #check initialized  refrenced from `qdumpHelper_QList`function of qttypes.py in qtcreator
+                if (self.d['end'] < 0 or self.d['begin'] < 0):
+                    size = 0
+                else:
+                    size = self.d['end'] - self.d['begin']
 
             if self.count >= size:
                 raise StopIteration
@@ -152,7 +170,13 @@ class QListPrinter:
         if self.isQt6:
             self.size = self.d['size']
         else:
-            self.size = self.d['end'] - self.d['begin']
+            # An exception raised in other functions causes severe slowdown. Check the class invariants to detect
+            # most uninitialized objects and set their size to 0, thus reducing the number of exceptions.
+            # refrenced from 'qdumpHelper_QList' function in 'qttypes.py' of qtCreator
+            if (self.d['end'] < 0 or self.d['begin'] < 0 or (self.d['end'] < self.d['begin'])):
+                self.size = 0
+            else:
+                self.size = self.d['end'] - self.d['begin']
 
         if itype == None:
             self.itype = val.type.template_argument(0)
@@ -197,7 +221,11 @@ class QVectorPrinter:
             return self._iterator(self.itype, self.val['p']['array'], self.val['p']['size'])
         else:
             data = self.val['d'].cast(gdb.lookup_type("char").const().pointer()) + self.val['d']['offset']
-            return self._iterator(self.itype, data.cast(self.itype.pointer()), self.val['d']['size'])
+            # check initialized  refrenced from `qdumpHelper_QVector` function of qttypes.py in qtcreator
+            if (self.val['d']['alloc'] >= 1000 * 1000 * 1000 or self.val['d']['size'] <= 0):
+                return self._iterator(self.itype, data.cast(self.itype.pointer()), 0)
+            else:
+                return self._iterator(self.itype, data.cast(self.itype.pointer()), self.val['d']['size'])
 
     def to_string(self):
         size = self.val['d']['size']
@@ -362,7 +390,13 @@ class QMapPrinter:
         self.container = container
 
     def children(self):
-        if self.val['d']['size'] == 0:
+        #The actual storage location of the `ref` attribute in Qt: ref = self.val['d']['ref']['atomic']['_q_value']['_M_i']
+        #Referenced from the `qdumpHelper_Qt5_QMap` function in the `qttypes.py` file of qtCreator
+        #using similar constraints to determine if a variable is initialized
+        refPointer = self.val['d'].cast(gdb.lookup_type('int').pointer())
+        ref = refPointer.referenced_value()
+        size = self.val['d']['size']
+        if size <= 0 or size >= 100*1000*1000 or ref < -1 or ref > 100*1000:
             return []
 
         isQt4 = has_field(self.val, 'e') # Qt4 has 'e', Qt5 doesn't
@@ -577,23 +611,35 @@ class QUrlPrinter:
             addr += int_type.sizeof
             # handle QString scheme
             scheme = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            if not checkStringValid(scheme):
+                return "<uninitialized>"
             addr += string_type.sizeof
             # handle QString username
             username = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            if not checkStringValid(username):
+                return "<uninitialized>"
             addr += string_type.sizeof
             # skip QString password
             addr += string_type.sizeof
             # handle QString host
             host = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            if not checkStringValid(host):
+                return "<uninitialized>"
             addr += string_type.sizeof
             # handle QString path
             path = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            if not checkStringValid(path):
+                return "<uninitialized>"
             addr += string_type.sizeof
             # handle QString query
             query = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            if not checkStringValid(query):
+                return "<uninitialized>"
             addr += string_type.sizeof
             # handle QString fragment
             fragment = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            if not checkStringValid(fragment):
+                return "<uninitialized>"
 
             url = ""
             if len(scheme) > 0:
