@@ -804,7 +804,8 @@ void KDevelop::TextDocument::documentUrlChanged(KTextEditor::Document* document)
 {
     Q_D(TextDocument);
 
-    Q_UNUSED(document);
+    Q_ASSERT(document == d->document); // we connect only to our document's signal
+
     if (url() != d->document->url())
         setUrl(d->document->url());
 }
