@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-19 01:46+0000\n"
-"PO-Revision-Date: 2024-03-27 19:34+0100\n"
+"PO-Revision-Date: 2024-04-23 21:12+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -194,6 +194,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"Rompopunkto ne povas esti aldonata al sentitola dokumento. Bonvolu unue "
+"konservi la dokumenton."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
