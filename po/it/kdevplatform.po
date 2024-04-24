@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-19 01:46+0000\n"
-"PO-Revision-Date: 2024-02-16 21:12+0100\n"
+"PO-Revision-Date: 2024-04-19 16:43+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -202,6 +202,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"Non è possibile aggiungere un breakpoint ad un documento senza titolo. "
+"Bisogna innanzitutto salvare il file."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
