@@ -198,7 +198,7 @@ void BreakpointModel::documentUrlChanged(KDevelop::IDocument* document, const QU
     }
 }
 
-void BreakpointModel::removeBreakpointMarks(const KTextEditor::Document& document)
+void BreakpointModel::removeBreakpointMarks(KTextEditor::Document& document)
 {
     auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(&document);
     Q_ASSERT(imark);
