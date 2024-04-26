@@ -44,6 +44,13 @@ private:
     QPushButton* m_attachButton = nullptr;
 };
 
+/**
+ * Displays a process selection dialog and returns the ID of the process selected by the user.
+ *
+ * @return the selected PID or 0 if canceled
+ */
+long long askUserForProcessId(QWidget* dialogParent);
+
 } // end of namespace KDevMI
 
 #endif

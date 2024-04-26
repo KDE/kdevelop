@@ -130,14 +130,12 @@ void Plugin::launchHeaptrack()
 void Plugin::attachHeaptrack()
 {
 #if HAVE_KSYSGUARD
-    QPointer<KDevMI::ProcessSelectionDialog> dlg = new KDevMI::ProcessSelectionDialog(activeMainWindow());
-    if (!dlg->exec() || !dlg->pidSelected()) {
-        delete dlg;
+    const auto pid = KDevMI::askUserForProcessId(activeMainWindow());
+    if (pid == 0) {
         return;
     }
 
-    auto heaptrackJob = new Job(dlg->pidSelected());
-    delete dlg;
+    auto heaptrackJob = new Job(pid);
     connect(heaptrackJob, &Job::finished, this, &Plugin::jobFinished);
 
     heaptrackJob->setObjectName(heaptrackJob->statusName());

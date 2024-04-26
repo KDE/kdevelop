@@ -6,6 +6,8 @@
 
 #include "processselection.h"
 
+#include <util/scopeddialog.h>
+
 #include <processcore/process.h>
 #include <processcore/process_data_model.h>
 
@@ -193,6 +195,15 @@ void ProcessSelectionDialog::selectionChanged(const QItemSelection& newSelection
 void ProcessSelectionDialog::onProcessesComboActivated(int index)
 {
     m_sortModel->setFilterProcessOwner(static_cast<ProcessesSortFilterModel::ProcessOwner>(index));
+}
+
+long long KDevMI::askUserForProcessId(QWidget* dialogParent)
+{
+    const KDevelop::ScopedDialog<ProcessSelectionDialog> dlg(dialogParent);
+    if (dlg->exec()) {
+        return dlg->pidSelected();
+    }
+    return 0LL;
 }
 
 #include "moc_processselection.cpp"

@@ -268,15 +268,12 @@ void MIDebuggerPlugin::slotAttachProcess()
             return;
     }
 
-    QPointer<ProcessSelectionDialog> dlg = new ProcessSelectionDialog(core()->uiController()->activeMainWindow());
-    if (!dlg->exec() || !dlg->pidSelected()) {
-        delete dlg;
+    const auto pid = askUserForProcessId(core()->uiController()->activeMainWindow());
+    if (pid == 0) {
         return;
     }
 
     // TODO: move check into process selection dialog
-    int pid = dlg->pidSelected();
-    delete dlg;
     if (QApplication::applicationPid() == pid) {
         const QString messageText =
             i18n("Not attaching to process %1: cannot attach the debugger to itself.", pid);
