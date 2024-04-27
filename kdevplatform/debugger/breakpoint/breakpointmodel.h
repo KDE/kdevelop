@@ -200,7 +200,7 @@ private:
     /**
      * Remove all breakpoint marks from @p document.
      */
-    void removeBreakpointMarks(const KTextEditor::Document& document);
+    void removeBreakpointMarks(KTextEditor::Document& document);
 
     /**
      * Initialize breakpoint marks and moving cursors in a given document.

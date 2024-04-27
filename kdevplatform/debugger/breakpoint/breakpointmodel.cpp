@@ -128,11 +128,14 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 
         // We forbid adding breakpoints to an untitled/unsaved document. Such a document's URL is empty,
         // in which case we don't enable breakpoint actions yet.
-        imark->setEditableMarks(textDocument->url().isEmpty() ? MarkInterface::Bookmark
-                                                              : (MarkInterface::Bookmark | BreakpointMark));
+        if (textDocument->url().isEmpty()) {
+            imark->setEditableMarks(MarkInterface::Bookmark);
+        } else {
+            imark->setEditableMarks(MarkInterface::Bookmark | BreakpointMark);
 
-        // Set up breakpoints *before* connecting to the document's signals.
-        setupDocumentBreakpoints(*textDocument);
+            // Set up breakpoints *before* connecting to the document's signals.
+            setupDocumentBreakpoints(*textDocument);
+        }
 
         // can't use new signal slot syntax here, MarkInterface is not a QObject
         connect(textDocument, SIGNAL(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)),
@@ -154,9 +157,12 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
 
     // Initial setup of moving cursors and marks.
     const QUrl docUrl = document.url();
+    // We forbid breakpoints in documents with empty URLs. A breakpoint's empty URL value means "none".
+    Q_ASSERT(!docUrl.isEmpty());
+
     const auto docLineCount = document.lines();
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
-        if (docUrl == breakpoint->url()) {
+        if (breakpoint->kind() == Breakpoint::CodeBreakpoint && docUrl == breakpoint->url()) {
             const auto savedLine = breakpoint->savedLine();
             if (savedLine >= 0 && savedLine < docLineCount) {
                 setupMovingCursor(breakpoint, &document, savedLine);
@@ -198,7 +204,7 @@ void BreakpointModel::documentUrlChanged(KDevelop::IDocument* document, const QU
     }
 }
 
-void BreakpointModel::removeBreakpointMarks(const KTextEditor::Document& document)
+void BreakpointModel::removeBreakpointMarks(KTextEditor::Document& document)
 {
     auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(&document);
     Q_ASSERT(imark);
