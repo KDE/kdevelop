@@ -185,6 +185,11 @@ void TestFiles::testFiles()
         m_provider->parserArguments += "-std=c++14";
     } else if (QTest::currentDataTag() == QLatin1String("templates.cpp")) {
         m_provider->parserArguments += "-std=c++17";
+    } else if (QTest::currentDataTag() == QLatin1String("types.cpp")) {
+        if (clangVersionNumber() >= QVersionNumber(18, 0, 0)) {
+            // without this flag, the top->problems().isEmpty() check below fails at the line `int arr2[argc];`
+            m_provider->parserArguments += "-Wno-vla-cxx-extension";
+        }
     }
 
     const IndexedString indexedFileName(fileName);
