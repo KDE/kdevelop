@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-19 01:46+0000\n"
+"POT-Creation-Date: 2024-04-28 01:37+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -128,68 +128,68 @@ msgstr ""
 msgid "Breakpoint"
 msgstr "ブレークポイント"
 
-#: debugger/breakpoint/breakpointmodel.cpp:342
+#: debugger/breakpoint/breakpointmodel.cpp:348
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "Breakpoint not found"
 msgstr "ブレークポイント"
 
-#: debugger/breakpoint/breakpointmodel.cpp:342
+#: debugger/breakpoint/breakpointmodel.cpp:348
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:348
+#: debugger/breakpoint/breakpointmodel.cpp:354
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "&Breakpoint"
 msgstr "ブレークポイント"
 
-#: debugger/breakpoint/breakpointmodel.cpp:354
+#: debugger/breakpoint/breakpointmodel.cpp:360
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgid "&Disable Breakpoint"
 msgstr "ブレークポイントを反転"
 
-#: debugger/breakpoint/breakpointmodel.cpp:355
+#: debugger/breakpoint/breakpointmodel.cpp:361
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgid "&Enable Breakpoint"
 msgstr "ブレークポイントを反転"
 
-#: debugger/breakpoint/breakpointmodel.cpp:358
+#: debugger/breakpoint/breakpointmodel.cpp:364
 #, kde-format
 msgid "&Bookmark"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:400
+#: debugger/breakpoint/breakpointmodel.cpp:406
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "タイプ"
 
-#: debugger/breakpoint/breakpointmodel.cpp:401
+#: debugger/breakpoint/breakpointmodel.cpp:407
 #, kde-format
 msgid "Location"
 msgstr "場所"
 
-#: debugger/breakpoint/breakpointmodel.cpp:402
+#: debugger/breakpoint/breakpointmodel.cpp:408
 #, kde-format
 msgid "Condition"
 msgstr "条件"
 
-#: debugger/breakpoint/breakpointmodel.cpp:406
+#: debugger/breakpoint/breakpointmodel.cpp:412
 #, kde-format
 msgid "Active status"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:407
+#: debugger/breakpoint/breakpointmodel.cpp:413
 #, kde-format
 msgid "State"
 msgstr "状態"
 
-#: debugger/breakpoint/breakpointmodel.cpp:630
+#: debugger/breakpoint/breakpointmodel.cpp:636
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-19 01:46+0000\n"
+"POT-Creation-Date: 2024-04-28 01:37+0000\n"
 "PO-Revision-Date: 2022-04-17 20:55+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -130,64 +130,64 @@ msgstr ""
 msgid "Breakpoint"
 msgstr "Bod prerušenia"
 
-#: debugger/breakpoint/breakpointmodel.cpp:342
+#: debugger/breakpoint/breakpointmodel.cpp:348
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Breakpoint nenájdený"
 
-#: debugger/breakpoint/breakpointmodel.cpp:342
+#: debugger/breakpoint/breakpointmodel.cpp:348
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Nemôžem nájsť breakpoint na %1:%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:348
+#: debugger/breakpoint/breakpointmodel.cpp:354
 #, kde-format
 msgid "&Breakpoint"
 msgstr "Bod prerušenia"
 
-#: debugger/breakpoint/breakpointmodel.cpp:354
+#: debugger/breakpoint/breakpointmodel.cpp:360
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "Zakázať zarážku"
 
-#: debugger/breakpoint/breakpointmodel.cpp:355
+#: debugger/breakpoint/breakpointmodel.cpp:361
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Povoliť zarážku"
 
-#: debugger/breakpoint/breakpointmodel.cpp:358
+#: debugger/breakpoint/breakpointmodel.cpp:364
 #, kde-format
 msgid "&Bookmark"
 msgstr "&Záložka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:400
+#: debugger/breakpoint/breakpointmodel.cpp:406
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Typ"
 
-#: debugger/breakpoint/breakpointmodel.cpp:401
+#: debugger/breakpoint/breakpointmodel.cpp:407
 #, kde-format
 msgid "Location"
 msgstr "Umiestnenie"
 
-#: debugger/breakpoint/breakpointmodel.cpp:402
+#: debugger/breakpoint/breakpointmodel.cpp:408
 #, kde-format
 msgid "Condition"
 msgstr "Podmienka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:406
+#: debugger/breakpoint/breakpointmodel.cpp:412
 #, kde-format
 msgid "Active status"
 msgstr "Aktívny stav"
 
-#: debugger/breakpoint/breakpointmodel.cpp:407
+#: debugger/breakpoint/breakpointmodel.cpp:413
 #, kde-format
 msgid "State"
 msgstr "Stav"
 
-#: debugger/breakpoint/breakpointmodel.cpp:630
+#: debugger/breakpoint/breakpointmodel.cpp:636
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
