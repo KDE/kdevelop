@@ -20,6 +20,7 @@
 #include <KTextEditor/MarkInterface>
 #include <KTextEditor/MovingCursor>
 
+#include <QFileInfo>
 #include <QIcon>
 
 #include <array>
@@ -31,13 +32,16 @@ bool isSupportedBreakpointUrl(const QUrl& url)
     // When the user activates a breakpoint's row in Breakpoints tool view, its URL (if nonempty) is eventually
     // passed to DocumentControllerPrivate::openDocumentInternal(), and later to IndexedString's QUrl constructor,
     // which delegates to the function urlToString() in an unnamed namespace.
+    // Later IndexedString::toUrl() is called on the IndexedString object that stores the breakpoint's URL.
     // Therefore, a breakpoint URL is considered supported only if it is supported by all these functions.
     //
     // documentForUrl(), openDocumentInternal() and urlToString() assert that a (nonempty) URL is not relative.
     // documentForUrl() and openDocumentInternal() also assert that the filename of
     // a (nonempty) local-file URL is nonempty. We do not really support the weird use case
     // of breakpoints in remote URLs, so require nonempty filename of any nonempty URL here.
-    return url.isEmpty() || (!url.isRelative() && !url.fileName().isEmpty());
+    //
+    // IndexedString does not properly support a local-file URL with a relative path, so require absolute path here.
+    return url.isEmpty() || (!url.isRelative() && !url.fileName().isEmpty() && QFileInfo{url.path()}.isAbsolute());
 }
 } // unnamed namespace
 

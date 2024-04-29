@@ -117,6 +117,12 @@ void TestBreakpoint::testSetDataExpression_data()
     QTest::newRow("empty-filename") << "/a/b/c/:2";
     QTest::newRow("empty-filename-dir-extension") << "/a/b/c.d/:75";
     QTest::newRow("non-ASCII-empty-filename") << QString{nonAsciiFilePath() + "/:4"};
+
+    // a URL unsupported because of a relative path
+    QTest::newRow("single-word-path") << "noprefix:1";
+    QTest::newRow("dot-in-path") << "./dotslash:1";
+    QTest::newRow("dot-dot-in-path") << "../dotdotslash:1";
+    QTest::newRow("single-percent-sign-path") << "%:1";
 }
 
 void TestBreakpoint::testSetDataExpression()
