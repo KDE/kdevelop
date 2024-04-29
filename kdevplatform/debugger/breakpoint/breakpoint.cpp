@@ -27,6 +27,16 @@
 namespace {
 bool isSupportedBreakpointUrl(const QUrl& url)
 {
+    // Breakpoint::updateMovingCursor() passes nonempty URLs of breakpoints to DocumentController::documentForUrl().
+    // When the user activates a breakpoint's row in Breakpoints tool view, its URL (if nonempty) is eventually
+    // passed to DocumentControllerPrivate::openDocumentInternal(), and later to IndexedString's QUrl constructor,
+    // which delegates to the function urlToString() in an unnamed namespace.
+    // Therefore, a breakpoint URL is considered supported only if it is supported by all these functions.
+    //
+    // documentForUrl(), openDocumentInternal() and urlToString() assert that a (nonempty) URL is not relative.
+    // documentForUrl() and openDocumentInternal() also assert that the filename of
+    // a (nonempty) local-file URL is nonempty. We do not really support the weird use case
+    // of breakpoints in remote URLs, so require nonempty filename of any nonempty URL here.
     return url.isEmpty() || (!url.isRelative() && !url.fileName().isEmpty());
 }
 } // unnamed namespace
