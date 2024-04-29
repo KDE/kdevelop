@@ -16,20 +16,20 @@
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010, 2013.
 # Michał Smoczyk <msmoczyk@wp.pl>, 2008.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-28 01:37+0000\n"
-"PO-Revision-Date: 2023-10-14 11:52+0200\n"
+"PO-Revision-Date: 2024-04-28 11:29+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -209,6 +209,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"Nie można dodawać pułapek do nienazwanych dokumentów. Najpierw zapisz dany "
+"dokument."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -1785,9 +1787,9 @@ msgstr "Nieudane zapisywanie do %1, prawdopodobnie dysk jest pełny"
 #, kde-format
 msgid "The previous session crashed."
 msgid_plural "Session crashed %1 times in a row."
-msgstr[0] "Poprzednia sesja uległa awarii."
-msgstr[1] "Poprzednia sesja uległa %1 awariom z rzędu."
-msgstr[2] "Poprzednia sesja uległa %1 awariom z rzędu."
+msgstr[0] "Poprzednie posiedzenie wysypało się."
+msgstr[1] "Poprzednie posiedzenie wysypało się %1 razy z rzędu."
+msgstr[2] "Poprzednie posiedzenie wysypało się %1 razy z rzędu."
 
 #: serialization/itemrepositoryregistry.cpp:77
 #, kde-format
@@ -1799,7 +1801,7 @@ msgstr "Wyczyść pamięć podręczną"
 #, kde-format
 msgctxt "@title"
 msgid "Session Crashed"
-msgstr "Sesja wysypała się"
+msgstr "Posiedzenie wysypało się"
 
 #: serialization/itemrepositoryregistry.cpp:79
 #, kde-format
@@ -2984,7 +2986,8 @@ msgid ""
 "Unable to load the project file %1.<br>The project has been removed from the "
 "session."
 msgstr ""
-"Nie można wczytać pliku projektu %1.<br>Projekt został usunięty z sesji."
+"Nie można wczytać pliku projektu %1.<br>Projekt został usunięty z "
+"posiedzenia."
 
 #: shell/project.cpp:252
 #, kde-format
@@ -3234,20 +3237,20 @@ msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
 msgstr ""
-"Projekt, który próbujesz otworzyć, jest już otwarty w co najmniej jednej "
-"innej sesji.<br>Co zrobić?"
+"Projekt, który próbujesz otworzyć, jest już otwarty w co najmniej jednym "
+"innym posiedzeniu.<br>Co zrobić?"
 
 #: shell/projectcontroller.cpp:862
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
-msgstr "Dodaj projekt do bieżącej sesji"
+msgstr "Dodaj projekt do bieżącego posiedzenia"
 
 #: shell/projectcontroller.cpp:866
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
-msgstr "Otwórz sesję %1"
+msgstr "Otwórz posiedzenie %1"
 
 #: shell/projectcontroller.cpp:927
 #, kde-format
@@ -3583,13 +3586,13 @@ msgstr "(brak projektów)"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
-msgstr "Usuń sesję"
+msgstr "Usuń posiedzenie"
 
 #: shell/sessionchooserdialog.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
-msgstr "Wybierz sesję"
+msgstr "Wybierz posiedzenie"
 
 #: shell/sessionchooserdialog.cpp:63
 #, kde-format
@@ -3604,7 +3607,7 @@ msgid ""
 "Active session.\n"
 "pid %1, app %2, host %3"
 msgstr ""
-"Rozpoczęta sesja.\n"
+"Rozpoczęte posiedzenie.\n"
 "pid %1, program %2, gospodarz %3"
 
 #: shell/sessionchooserdialog.cpp:97
@@ -3616,19 +3619,19 @@ msgstr "Rozpoczęta"
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Delete Session"
-msgstr "Nie można usunąć sesji"
+msgstr "Nie można usunąć posiedzenia"
 
 #: shell/sessionchooserdialog.cpp:193
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
-msgstr "<p>Nie można usunąć zablokowanej sesji."
+msgstr "<p>Nie można usunąć zablokowanego posiedzenia."
 
 #: shell/sessionchooserdialog.cpp:196
 #, kde-format
 msgctxt "@info"
 msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
-msgstr "<p>Sesja <b>%1</b> jest zablokowana przez %2 na %3 (PID %4)."
+msgstr "<p>Posiedzenie <b>%1</b> jest zablokowane przez %2 na %3 (PID %4)."
 
 #: shell/sessionchooserdialog.cpp:204
 #, kde-format
@@ -3637,28 +3640,26 @@ msgid ""
 "The session <b>%1</b> and all contained settings will be deleted. The "
 "projects will stay unaffected. Do you really want to continue?"
 msgstr ""
-"Sesja <b>%1</b> i wszystkie zawarte ustawienia zostaną usunięte. Projekty "
-"pozostaną nieruszone. Czy na pewno chcesz kontynuować?"
+"Posiedzenie <b>%1</b> i wszystkie zawarte ustawienia zostaną usunięte. "
+"Projekty pozostaną nieruszone. Czy na pewno tego chcesz?"
 
 #: shell/sessionchooserdialog.cpp:205
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
-msgstr "Usuń sesję"
+msgstr "Usuń posiedzenie"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
-msgstr "Rozpocznij nową sesję"
+msgstr "Rozpocznij nowe posiedzenie"
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
 #, kde-format
 msgctxt "@label:textbox"
 msgid "New session name:"
-msgstr "Nowa nazwa sesji:"
+msgstr "Nazwa nowego posiedzenia:"
 
 #: shell/sessioncontroller.cpp:144
 #, kde-format
@@ -3666,59 +3667,55 @@ msgid ""
 "The current session and all contained settings will be deleted. The projects "
 "will stay unaffected. Do you really want to continue?"
 msgstr ""
-"Obecna sesja i wszystkie zawarte ustawienia zostaną usunięte. Projekty "
-"pozostaną nieruszone. Czy na pewno chcesz kontynuować?"
+"Obecne posiedzenie i wszystkie zawarte ustawienia zostaną usunięte. Projekty "
+"pozostaną nieruszone. Czy na pewno tego chcesz?"
 
 #: shell/sessioncontroller.cpp:157
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
-msgstr "Przemianuj sesję"
+msgstr "Przemianuj posiedzenie"
 
 #: shell/sessioncontroller.cpp:265
 #, kde-format
 msgid "Session Manager"
-msgstr "Zarządzanie sesją"
+msgstr "Zarządzanie posiedzeniami"
 
 #: shell/sessioncontroller.cpp:277
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Session"
-msgstr "Rozpocznij nową sesję"
+msgstr "Rozpocznij nowe posiedzenie"
 
 #: shell/sessioncontroller.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
-msgstr "Rozpocznij nowe wystąpienie KDevelop z pustą sesją"
+msgstr "Rozpocznij nowe, puste posiedzenie KDevelop"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Rozpocznij nową sesję"
+msgstr "Rozpocznij nowe, nazwane posiedzenie..."
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Rozpocznij nowe wystąpienie KDevelop z pustą sesją"
+msgstr "Rozpocznij nowe, puste posiedzenie KDevelop"
 
 #: shell/sessioncontroller.cpp:293
 #, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
-msgstr "Przemianuj bieżącą sesję..."
+msgstr "Przemianuj bieżące posiedzenie..."
 
 #: shell/sessioncontroller.cpp:299
 #, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
-msgstr "Usuń bieżącą sesję..."
+msgstr "Usuń bieżące posiedzenie..."
 
 #: shell/sessioncontroller.cpp:303
 #, kde-format
@@ -3764,7 +3761,7 @@ msgstr "Filtr:"
 #: shell/sessioncontroller.cpp:654
 #, kde-format
 msgid "Create New Session"
-msgstr "Utwórz nową sesję"
+msgstr "Utwórz nowe posiedzenie"
 
 #: shell/sessionlock.cpp:154
 #, kde-format
@@ -3798,14 +3795,15 @@ msgctxt "@info"
 msgid ""
 "Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
 msgstr ""
-"Nie udało się zająć sesji <em>%1</em>, bo jest już zajęta przez %2 na %3 "
-"(PID %4)."
+"Nie udało się zająć posiedzenia <em>%1</em>, bo jest już zajęte przez %2 na "
+"%3 (PID %4)."
 
 #: shell/sessionlock.cpp:174
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
-msgstr "Nie udało się zająć sesji <em>%1</em> (plik blokady niedostępny)."
+msgstr ""
+"Nie udało się zająć posiedzenia <em>%1</em> (plik blokady niedostępny)."
 
 #: shell/sessionlock.cpp:178
 #, kde-format
@@ -3814,8 +3812,8 @@ msgid ""
 "<p>Please, close the offending application instance or choose another "
 "session to launch.</p>"
 msgstr ""
-"<p>Zamknij program, który zajął tę sesję lub wybierz inną sesję do "
-"rozpoczęcia.</p>"
+"<p>Zamknij program, który zajął to posiedzenie lub wybierz inne posiedzenie "
+"do rozpoczęcia.</p>"
 
 #: shell/sessionlock.cpp:184
 #, kde-format
@@ -3827,19 +3825,20 @@ msgstr "Ponów rozpoczęcie"
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
-msgstr "Wybierz inną sesję"
+msgstr "Wybierz inne posiedzenie"
 
 #: shell/sessionlock.cpp:191
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
-msgstr "Nie udało się zająć sesji %1"
+msgstr "Nie udało się zająć posiedzenia %1"
 
 #: shell/sessionlock.cpp:197
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
-msgstr "Wybrana sesja %1 już jest aktywna w innym uruchomionym wystąpieniu."
+msgstr ""
+"Wybrane posiedzenie %1 już jest używane w innym uruchomionym wystąpieniu."
 
 #: shell/settings/analyzerspreferences.cpp:25
 #, kde-format
