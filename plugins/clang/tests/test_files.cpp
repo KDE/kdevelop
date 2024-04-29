@@ -43,6 +43,11 @@ bool isCudaAvailable()
     return QProcess::execute(QStringLiteral("clang"), {QStringLiteral("-xcuda"), QStringLiteral("-fsyntax-only"), QProcess::nullDevice()}) == 0;
 }
 
+QVersionNumber clangVersionNumber()
+{
+    return QVersionNumber::fromString(ClangHelpers::clangVersion());
+}
+
 QRegularExpression rangeRegularExpression()
 {
     const auto capturedCursorRegexp = QStringLiteral("(\\(\\d+, \\d+\\))");
@@ -65,7 +70,7 @@ void expandTestFilesDir(QVariantMap& testData)
         return; // nothing to adjust
     }
 
-    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) >= QVersionNumber(13, 0, 0)) {
+    if (clangVersionNumber() >= QVersionNumber(13, 0, 0)) {
         *idIt = identifier.replace(testFilesDirVariableName, TEST_FILES_DIR);
         return; // done
     }
@@ -92,7 +97,7 @@ void expandTestFilesDir(QVariantMap& testData)
 /// and does not spell out default template argument values.
 void adjustTemplateArguments(QVariantMap& testData)
 {
-    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) < QVersionNumber(16, 0, 0)) {
+    if (clangVersionNumber() < QVersionNumber(16, 0, 0)) {
         return; // nothing to adjust
     }
 
@@ -195,7 +200,7 @@ void TestFiles::testFiles()
         qDebug() << problem;
     }
 
-    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) < QVersionNumber(9, 0, 0))
+    if (clangVersionNumber() < QVersionNumber(9, 0, 0))
         QEXPECT_FAIL("lambdas.cpp", "capture with identifier and initializer aren't visited apparently", Abort);
     QVERIFY(validator.testsPassed());
 
