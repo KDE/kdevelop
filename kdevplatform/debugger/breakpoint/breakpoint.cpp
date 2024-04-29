@@ -9,18 +9,18 @@
 
 #include "breakpoint.h"
 
+#include "breakpointmodel.h"
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 
-#include <QIcon>
-
-#include <KLocalizedString>
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/MarkInterface>
 #include <KTextEditor/MovingCursor>
 
-#include "breakpointmodel.h"
+#include <QIcon>
 
 #include <array>
 
