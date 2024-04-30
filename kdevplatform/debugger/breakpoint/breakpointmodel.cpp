@@ -171,6 +171,17 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
     }
 }
 
+void BreakpointModel::detachDocumentBreakpoints(KTextEditor::Document& document) const
+{
+    Q_D(const BreakpointModel);
+
+    for (auto* const breakpoint : std::as_const(d->breakpoints)) {
+        if (breakpoint->movingCursor() && breakpoint->movingCursor()->document() == &document) {
+            breakpoint->stopDocumentLineTracking();
+        }
+    }
+}
+
 void BreakpointModel::documentUrlChanged(KDevelop::IDocument* document, const QUrl& previousUrl)
 {
     Q_D(BreakpointModel);
@@ -247,9 +258,11 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
     Q_D(BreakpointModel);
 
     if (d->reloadState == ReloadState::Idle) {
-        qCWarning(DEBUGGER).nospace() << "unsupported moving interface content invalidation in "
-                                      << document->url().toString(QUrl::PreferLocalFile)
-                                      << ", breakpoint line tracking in this document is going to break.";
+        // The document's text is about to be discarded. Remove all breakpoint marks and moving cursors from the
+        // document to preserve currently line-tracking breakpoints and their saved line numbers.
+        qCWarning(DEBUGGER) << "deactivating all breakpoints in" << document->url().toString(QUrl::PreferLocalFile)
+                            << "due to moving interface content invalidation";
+        detachDocumentBreakpoints(*document);
         return;
     }
     if (d->reloadState != ReloadState::StartedReloading) {
@@ -543,6 +556,13 @@ void BreakpointModel::markChanged(
     /* Is this a breakpoint mark, to begin with? */
     if (!(type & AllBreakpointMarks)) return;
 
+    // This slot's only purpose is to add or remove a breakpoint in response to explicit user action.
+    // Therefore, the slot is inhibited and returns early when invoked during programmatic mark changes.
+    // TODO: in certain rare and unlikely scenarios, such as a call to KTextEditor::Document::setText(),
+    // this slot is not inhibited when it should be. As a result, some breakpoint data (e.g. enabled
+    // state, line number or breakpoint condition) can be lost. Changes in KTextEditor implementation
+    // and even API additions are necessary to ensure proper inhibition.
+
     if (d->inhibitMarkChange)
         return;
 
@@ -707,13 +727,7 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 }
 void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* document)
 {
-    Q_D(BreakpointModel);
-
-    for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
-        if (breakpoint->movingCursor() && breakpoint->movingCursor()->document() == document) {
-            breakpoint->stopDocumentLineTracking();
-        }
-    }
+    detachDocumentBreakpoints(*document);
 }
 
 void BreakpointModel::load()
