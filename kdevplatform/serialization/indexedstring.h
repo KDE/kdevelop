@@ -113,12 +113,21 @@ public:
 
     /**
      * Creates an indexed string from a QUrl, this is expensive.
+     *
+     * @warning A local-file URL with a relative path is not well supported.
+     *
+     * @sa toUrl()
      */
     explicit IndexedString(const QUrl& url);
 
     /**
      * Re-construct a QUrl from this indexed string, the result can be used with the
      * QUrl-using constructor.
+     *
+     * @warning If an IndexedString is created from a local-file QUrl with a relative path (for which
+     *          QFileInfo{url.path()}.isRelative() returns true), toUrl() does not return the same URL.
+     *          It returns either an empty URL that makes the not-relative-URL assertion within fail
+     *          or a URL with the same path but http: instead of file: scheme.
      *
      * @note This is expensive.
      */

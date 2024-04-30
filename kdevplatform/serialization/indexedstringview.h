@@ -54,6 +54,10 @@ public:
 
     /**
      * Creates an indexed string view from a QUrl, this is expensive.
+     *
+     * @warning A local-file URL with a relative path is not well supported.
+     *
+     * @sa IndexedString::toUrl()
      */
     explicit IndexedStringView(const QUrl& url)
         : m_index{IndexedString::indexForUrl(url)}
