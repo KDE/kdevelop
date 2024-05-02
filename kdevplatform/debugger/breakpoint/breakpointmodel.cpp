@@ -315,8 +315,10 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
     switch (d->reloadState) {
     case ReloadState::Idle:
         Q_ASSERT_X(false, Q_FUNC_INFO, "KTextEditor::Document did not emit aboutToReload() before reloaded().");
+        break;
     case ReloadState::StartedReloading:
         // Moving cursors have not been invalidated, because the user opted to cancel reloading.
+        [[fallthrough]];
     case ReloadState::ZeroBreakpoints:
         // There are no breakpoints at the reloaded document's URL.
         break; // nothing to do
