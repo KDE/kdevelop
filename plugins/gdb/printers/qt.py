@@ -12,36 +12,40 @@ import time
 
 from helper import *
 
-# Ensure that the value obtained from QStringPrinter is valid
-def checkStringValid(val):
-    if val == "<uninitialized>": # or other
-        return False
-    return True
+UNINITIALIZED_VARIABLE = "<uninitialized>"
+MAX_CONTAINER_SIZE = 100 * 1000 * 1000
 
 class QStringPrinter:
 
+    def is_uninitialized_variable(self):
+        return self.__uninitialized
+
     def __init__(self, val):
         self.val = val
+        self.__uninitialized = False
+
+    def __make_uninitialized(self):
+        self.__uninitialized = True
+        return UNINITIALIZED_VARIABLE
 
     def to_string(self):
-        # If the value is not successfully obtained, it indicates that the string has not been initialized
-        ret = "<uninitialized>"
-
         # The QString object may not be initialized yet. In this case 'size' is a bogus value
         # or in case of Qt5, 'd' is an invalid pointer and the following lines might throw memory
         # access error. Hence the try/catch.
         try:
             size = self.val['d']['size']
             if size == 0:
-                return '""'
+                return ""
+            if size < 0 or size > MAX_CONTAINER_SIZE:
+                return self.__make_uninitialized()
 
             isQt4 = has_field(self.val['d'], 'data') # Qt4 has d->data, Qt5 doesn't.
             isQt6 = has_field(self.val['d'], 'ptr') # Qt6 has d->ptr, Qt5 doesn't.
 
             # This restriction refers to the highest limit in QtCreator for string encoding in gdb
             alloc = self.val['d']['alloc']
-            if size < 0 or alloc < size or alloc > 100*1000*1000:
-                return ret
+            if alloc != 0 and (alloc < size or alloc > MAX_CONTAINER_SIZE):
+                return self.__make_uninitialized()
 
             if isQt4:
                 dataAsCharPointer = self.val['d']['data'].cast(gdb.lookup_type("char").pointer())
@@ -49,13 +53,15 @@ class QStringPrinter:
                 dataAsCharPointer = self.val['d']['ptr'].cast(gdb.lookup_type("char").pointer())
             else:
                 dataAsCharPointer = (self.val['d'] + 1).cast(gdb.lookup_type("char").pointer())
-            ret = dataAsCharPointer.string(encoding = 'UTF-16', length = size * 2)
+            return dataAsCharPointer.string(encoding = 'UTF-16', length = size * 2)
         except Exception:
-            # swallow the exception and return empty string
-            pass
-        return ret
+            # swallow the exception, must be an uninitialized variable
+            return self.__make_uninitialized()
 
     def display_hint (self):
+        # inspired by GCC's StdStringStreamPrinter
+        if self.__uninitialized:
+            return None
         return 'string'
 
 class QByteArrayPrinter:
@@ -396,7 +402,7 @@ class QMapPrinter:
         refPointer = self.val['d'].cast(gdb.lookup_type('int').pointer())
         ref = refPointer.referenced_value()
         size = self.val['d']['size']
-        if size <= 0 or size >= 100*1000*1000 or ref < -1 or ref > 100*1000:
+        if size <= 0 or size >= MAX_CONTAINER_SIZE or ref < -1 or ref > 100*1000:
             return []
 
         isQt4 = has_field(self.val, 'e') # Qt4 has 'e', Qt5 doesn't
@@ -609,37 +615,19 @@ class QUrlPrinter:
             # handle int port
             port = addr.cast(int_type.pointer()).dereference()
             addr += int_type.sizeof
-            # handle QString scheme
-            scheme = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
-            if not checkStringValid(scheme):
-                return "<uninitialized>"
-            addr += string_type.sizeof
-            # handle QString username
-            username = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
-            if not checkStringValid(username):
-                return "<uninitialized>"
-            addr += string_type.sizeof
-            # skip QString password
-            addr += string_type.sizeof
-            # handle QString host
-            host = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
-            if not checkStringValid(host):
-                return "<uninitialized>"
-            addr += string_type.sizeof
-            # handle QString path
-            path = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
-            if not checkStringValid(path):
-                return "<uninitialized>"
-            addr += string_type.sizeof
-            # handle QString query
-            query = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
-            if not checkStringValid(query):
-                return "<uninitialized>"
-            addr += string_type.sizeof
-            # handle QString fragment
-            fragment = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
-            if not checkStringValid(fragment):
-                return "<uninitialized>"
+
+            # handle QString URL components
+            string_url_components = []
+            for _ in range(7):
+                component_printer = QStringPrinter(addr.cast(string_pointer).dereference())
+                # call QStringPrinter.to_string() first, because it determines whether the variable is initialized
+                string_url_components.append(component_printer.to_string())
+                # if at least one component is uninitialized, the entire URL object must be uninitialized as well
+                if component_printer.is_uninitialized_variable():
+                    return UNINITIALIZED_VARIABLE
+                addr += string_type.sizeof
+
+            scheme, username, __password, host, path, query, fragment = string_url_components
 
             url = ""
             if len(scheme) > 0:
