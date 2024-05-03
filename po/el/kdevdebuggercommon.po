@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-05-03 01:42+0000\n"
 "PO-Revision-Date: 2019-08-27 13:18+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -19,19 +19,77 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 18.12.3\n"
 
-#: dialogs/processselection.cpp:28
+#: dialogs/processselection.cpp:146
+#, fuzzy, kde-format
+#| msgid "Attach"
+msgctxt "@action:button"
+msgid "Attach"
+msgstr "Πρόσδεση"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ProcessSelection)
+#: dialogs/processselection.ui:14
 #, fuzzy, kde-format
 #| msgid "Attach to a Process"
 msgctxt "@title:window"
 msgid "Attach to a Process"
 msgstr "Πρόσδεση σε μια διεργασία"
 
-#: dialogs/processselection.cpp:48
+#. i18n: ectx: property (placeholderText), widget (KLineEdit, filterEdit)
+#: dialogs/processselection.ui:25
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
+#: dialogs/processselection.ui:38
 #, fuzzy, kde-format
-#| msgid "Attach"
-msgctxt "@action:button"
-msgid "Attach"
-msgstr "Πρόσδεση"
+#| msgctxt "@action:button"
+#| msgid "Display"
+msgctxt "@info:tooltip"
+msgid "Display as List"
+msgstr "Εμφάνιση"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
+#: dialogs/processselection.ui:60
+#, fuzzy, kde-format
+#| msgctxt "@action:button"
+#| msgid "Display"
+msgctxt "@info:tooltip"
+msgid "Display as Tree"
+msgstr "Εμφάνιση"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:83
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "Own Processes"
+msgstr "Πρόσδεση σε διεργασία"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:91
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "User Processes"
+msgstr "Πρόσδεση σε διεργασία"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:99
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "System Processes"
+msgstr "Πρόσδεση σε διεργασία"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:107
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "All Processes"
+msgstr "Πρόσδεση σε διεργασία"
 
 #: dialogs/selectcoredialog.cpp:18
 #, fuzzy, kde-format
@@ -1262,10 +1320,6 @@ msgstr "Επιλογή της διεύθυνσης για αποσυναρμολ
 #~ msgid "End Address:"
 #~ msgstr "Διεύθυνση τερματισμού:"
 
-#~ msgctxt "@action:button"
-#~ msgid "Display"
-#~ msgstr "Εμφάνιση"
-
 #~ msgid "Offset"
 #~ msgstr "Μετατόπιση"
 
@@ -1614,11 +1668,6 @@ msgstr "Επιλογή της διεύθυνσης για αποσυναρμολ
 #~ msgctxt "process heading"
 #~ msgid "Command"
 #~ msgstr "Εντολή"
-
-#, fuzzy
-#~| msgid "Attach to Process"
-#~ msgid "All Processes"
-#~ msgstr "Πρόσδεση σε διεργασία"
 
 #, fuzzy
 #~| msgid "Process exited"

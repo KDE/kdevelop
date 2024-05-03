@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-05-03 01:42+0000\n"
 "PO-Revision-Date: 2023-04-17 16:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -23,17 +23,71 @@ msgstr ""
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
 "X-Generator: Lokalize 22.12.3\n"
 
-#: dialogs/processselection.cpp:28
+#: dialogs/processselection.cpp:146
+#, kde-format
+msgctxt "@action:button"
+msgid "Attach"
+msgstr "Liitä"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ProcessSelection)
+#: dialogs/processselection.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Attach to a Process"
 msgstr "Liity prosessiin"
 
-#: dialogs/processselection.cpp:48
+#. i18n: ectx: property (placeholderText), widget (KLineEdit, filterEdit)
+#: dialogs/processselection.ui:25
 #, kde-format
-msgctxt "@action:button"
-msgid "Attach"
-msgstr "Liitä"
+msgctxt "@info:placeholder"
+msgid "Search"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
+#: dialogs/processselection.ui:38
+#, fuzzy, kde-format
+#| msgctxt "@action:button"
+#| msgid "Display"
+msgctxt "@info:tooltip"
+msgid "Display as List"
+msgstr "Näytä"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
+#: dialogs/processselection.ui:60
+#, fuzzy, kde-format
+#| msgctxt "@action:button"
+#| msgid "Display"
+msgctxt "@info:tooltip"
+msgid "Display as Tree"
+msgstr "Näytä"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:83
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Own Processes"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:91
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "User Processes"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:99
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "System Processes"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:107
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "All Processes"
+msgstr ""
 
 #: dialogs/selectcoredialog.cpp:18
 #, kde-format
@@ -1213,10 +1267,6 @@ msgstr "Valitse purettava osoite"
 
 #~ msgid "End Address:"
 #~ msgstr "Loppuosoite:"
-
-#~ msgctxt "@action:button"
-#~ msgid "Display"
-#~ msgstr "Näytä"
 
 #~ msgid "Offset"
 #~ msgstr "Siirrososoite"

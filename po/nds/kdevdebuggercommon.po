@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-05-03 01:42+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -20,18 +20,74 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: dialogs/processselection.cpp:28
+#: dialogs/processselection.cpp:146
+#, kde-format
+msgctxt "@action:button"
+msgid "Attach"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ProcessSelection)
+#: dialogs/processselection.ui:14
 #, fuzzy, kde-format
 #| msgid "Attach to a process"
 msgctxt "@title:window"
 msgid "Attach to a Process"
 msgstr "Perzess griepen"
 
-#: dialogs/processselection.cpp:48
+#. i18n: ectx: property (placeholderText), widget (KLineEdit, filterEdit)
+#: dialogs/processselection.ui:25
 #, kde-format
-msgctxt "@action:button"
-msgid "Attach"
+msgctxt "@info:placeholder"
+msgid "Search"
 msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
+#: dialogs/processselection.ui:38
+#, fuzzy, kde-format
+#| msgid "Display"
+msgctxt "@info:tooltip"
+msgid "Display as List"
+msgstr "Dorstellen"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
+#: dialogs/processselection.ui:60
+#, fuzzy, kde-format
+#| msgid "Display"
+msgctxt "@info:tooltip"
+msgid "Display as Tree"
+msgstr "Dorstellen"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:83
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "Own Processes"
+msgstr "Perzess griepen"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:91
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "User Processes"
+msgstr "Perzess griepen"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:99
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "System Processes"
+msgstr "Perzess griepen"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:107
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "All Processes"
+msgstr "Perzess griepen"
 
 #: dialogs/selectcoredialog.cpp:18
 #, fuzzy, kde-format
@@ -1237,12 +1293,6 @@ msgstr "Söök Adressen ut, woneem Du ümto disassembleren wullt."
 #~ msgid "End Address:"
 #~ msgstr "Ennadress:"
 
-#, fuzzy
-#~| msgid "Display"
-#~ msgctxt "@action:button"
-#~ msgid "Display"
-#~ msgstr "Dorstellen"
-
 #~ msgid "Offset"
 #~ msgstr "Verscheel"
 
@@ -1572,11 +1622,6 @@ msgstr "Söök Adressen ut, woneem Du ümto disassembleren wullt."
 #~ msgctxt "process heading"
 #~ msgid "Command"
 #~ msgstr "Befehl"
-
-#, fuzzy
-#~| msgid "Attach to Process"
-#~ msgid "All Processes"
-#~ msgstr "Perzess griepen"
 
 #, fuzzy
 #~| msgid "Process exited"

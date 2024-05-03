@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-05-03 01:42+0000\n"
 "PO-Revision-Date: 2022-07-29 16:34+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -33,17 +33,75 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: dialogs/processselection.cpp:28
+#: dialogs/processselection.cpp:146
+#, kde-format
+msgctxt "@action:button"
+msgid "Attach"
+msgstr "Załącz"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ProcessSelection)
+#: dialogs/processselection.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Attach to a Process"
 msgstr "Dołącz do procesu"
 
-#: dialogs/processselection.cpp:48
+#. i18n: ectx: property (placeholderText), widget (KLineEdit, filterEdit)
+#: dialogs/processselection.ui:25
 #, kde-format
-msgctxt "@action:button"
-msgid "Attach"
-msgstr "Załącz"
+msgctxt "@info:placeholder"
+msgid "Search"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
+#: dialogs/processselection.ui:38
+#, fuzzy, kde-format
+#| msgctxt "@action:button"
+#| msgid "Display"
+msgctxt "@info:tooltip"
+msgid "Display as List"
+msgstr "Wyświetlanie"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
+#: dialogs/processselection.ui:60
+#, fuzzy, kde-format
+#| msgctxt "@action:button"
+#| msgid "Display"
+msgctxt "@info:tooltip"
+msgid "Display as Tree"
+msgstr "Wyświetlanie"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:83
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "Own Processes"
+msgstr "Dołącz do procesu"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:91
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "User Processes"
+msgstr "Dołącz do procesu"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:99
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "System Processes"
+msgstr "Dołącz do procesu"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:107
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@item:inlistbox"
+msgid "All Processes"
+msgstr "Dołącz do procesu"
 
 #: dialogs/selectcoredialog.cpp:18
 #, kde-format
@@ -1188,10 +1246,6 @@ msgstr "Adres do rozłożenia obszaru w jego pobliżu:"
 #~ msgid "End Address:"
 #~ msgstr "Adres końcowy:"
 
-#~ msgctxt "@action:button"
-#~ msgid "Display"
-#~ msgstr "Wyświetlanie"
-
 #~ msgid "Offset"
 #~ msgstr "Przesunięcie"
 
@@ -1520,11 +1574,6 @@ msgstr "Adres do rozłożenia obszaru w jego pobliżu:"
 #~ msgctxt "process heading"
 #~ msgid "Command"
 #~ msgstr "Polecenie"
-
-#, fuzzy
-#~| msgid "Attach to Process"
-#~ msgid "All Processes"
-#~ msgstr "Dołącz do procesu"
 
 #, fuzzy
 #~| msgid "Process exited"
