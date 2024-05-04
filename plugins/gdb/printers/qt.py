@@ -48,6 +48,7 @@ class QByteArrayPrinter:
 
     def __init__(self, val):
         self.val = val
+        self.size = self.val['d']['size']
         # Qt4 has 'data', Qt5 doesn't
         self.isQt4 = has_field(self.val['d'], 'data')
         # Qt6 has d.ptr, Qt5 doesn't
@@ -78,11 +79,11 @@ class QByteArrayPrinter:
             return self.val['d'].cast(gdb.lookup_type("char").const().pointer()) + self.val['d']['offset']
 
     def children(self):
-        return self._iterator(self.stringData(), self.val['d']['size'])
+        return self._iterator(self.stringData(), self.size)
 
     def to_string(self):
         #todo: handle charset correctly
-        return self.stringData()
+        return self.stringData().string(length = self.size)
 
     def display_hint (self):
         return 'string'
