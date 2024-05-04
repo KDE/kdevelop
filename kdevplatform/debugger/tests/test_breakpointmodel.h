@@ -49,6 +49,9 @@ private Q_SLOTS:
     void testDocumentEditAndDiscard();
     void testSetLocation();
     void testUpdateMarkType();
+    void testRemoveDocumentFile();
+    void testDocumentClear();
+    void testDocumentSetText();
     void testDocumentReload_data();
     void testDocumentReload();
     void testModifiedDocumentReload_data();
@@ -73,6 +76,7 @@ private:
     using DocumentAndTwoBreakpoints =
         std::tuple<QUrl, KDevelop::IDocument*, KDevelop::Breakpoint*, KDevelop::Breakpoint*>;
     DocumentAndTwoBreakpoints setupEditAndCheckPrimaryDocumentAndBreakpoints();
+    DocumentAndTwoBreakpoints setupEditCheckAndSavePrimaryDocumentAndBreakpoints();
 
     std::unique_ptr<QTemporaryDir> m_tempDir; ///< Test working directory
 };

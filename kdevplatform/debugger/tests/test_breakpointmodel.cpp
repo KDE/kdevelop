@@ -332,6 +332,21 @@ TestBreakpointModel::DocumentAndTwoBreakpoints TestBreakpointModel::setupEditAnd
     return {url, doc, b1, b2};
 }
 
+TestBreakpointModel::DocumentAndTwoBreakpoints TestBreakpointModel::setupEditCheckAndSavePrimaryDocumentAndBreakpoints()
+{
+    auto ret = setupEditAndCheckPrimaryDocumentAndBreakpoints();
+    RETURN_IF_TEST_FAILED({});
+
+    // Save the changes done by setupEditAndCheckPrimaryDocumentAndBreakpoints().
+    auto* const doc = std::get<1>(ret);
+    QVERIFY_RETURN(doc->save(), {});
+    QCOMPARE_RETURN(doc->state(), IDocument::Clean, {});
+    // Wait needed for BreakpointModel::save() to complete.
+    QTest::qWait(1);
+
+    return ret;
+}
+
 void TestBreakpointModel::initTestCase()
 {
     AutoTestShell::init({{}});
@@ -540,6 +555,99 @@ void TestBreakpointModel::testUpdateMarkType()
     // Verify.
     QCOMPARE(b1->enabled(), false);
     VERIFY_BREAKPOINT(b1, 21, BreakpointModel::DisabledBreakpointMark, documentMarks(doc), );
+}
+
+void TestBreakpointModel::testRemoveDocumentFile()
+{
+    const auto [url, doc, b1, b2] = setupEditCheckAndSavePrimaryDocumentAndBreakpoints();
+    RETURN_IF_TEST_FAILED();
+
+    // Remove the file on disk.
+    QVERIFY(QFile::remove(m_tempDir->filePath(primaryTestFileName)));
+
+    // Discard the document.
+    QVERIFY(doc->close(IDocument::Discard));
+
+    // Wait needed to process events.
+    QTest::qWait(1);
+
+    // The breakpoints must still exist and remain unchanged.
+    verifyTwoModelBreakpoints(b1, b2);
+    RETURN_IF_TEST_FAILED();
+
+    // The breakpoint locations must be unaffected.
+    VERIFY_UNTRACKED_BREAKPOINT(b1, 23, );
+    VERIFY_UNTRACKED_BREAKPOINT(b2, 24, );
+}
+
+void TestBreakpointModel::testDocumentClear()
+{
+    const auto [url, doc, b1, b2] = setupEditCheckAndSavePrimaryDocumentAndBreakpoints();
+    RETURN_IF_TEST_FAILED();
+
+    // Remove all text in the document.
+    QVERIFY(doc->textDocument()->clear());
+
+    // Wait needed to process events.
+    QTest::qWait(1);
+
+    // No breakpoint marks can remain in the document.
+    QCOMPARE(documentMarks(doc).size(), 0);
+
+    // The breakpoints must still exist.
+    QEXPECT_FAIL("", "Breakpoints b1 and b2 were erroneously deleted.", Abort);
+    QCOMPARE(breakpointModel()->rowCount(), 2);
+    // TODO: replace the above check with the helper function call
+    //       verifyTwoModelBreakpoints(b1, b2) once this test unexpectedly passes.
+
+    // The breakpoint locations must be unaffected.
+    VERIFY_UNTRACKED_BREAKPOINT(b1, 23, );
+    VERIFY_UNTRACKED_BREAKPOINT(b2, 24, );
+}
+
+void TestBreakpointModel::testDocumentSetText()
+{
+    const auto [url, doc, b1, b2] = setupEditCheckAndSavePrimaryDocumentAndBreakpoints();
+    RETURN_IF_TEST_FAILED();
+
+    // Grab document text lines [0, b2->line()].
+    auto* const textDoc = doc->textDocument();
+    const auto newText = textDoc->text({0, 0, b2->line() + 1, 0});
+    // Replace all text in the document, shortening it.
+    QVERIFY(textDoc->setText(newText));
+
+    // Wait needed to process events.
+    QTest::qWait(1);
+
+    // A breakpoint should become detached from its document when its text line is removed or when
+    // it falls out of bounds of the document on reload. KTextEditor::Document::setText() removes
+    // all text from the document first. The document line tracking must stop before this removal
+    // to retain the line numbers. KTextEditor changes are required to make this work correctly
+    // (see the commit message of 16932f0cd159fb4666154a76ecaa8b41710c1afb). Once fixed, both the
+    // breakpoint marks and their moving cursors can be removed, and the breakpoints can be marked
+    // as inactive/detached. The breakpoints will remain inactive until the user activates them
+    // again, e.g. by double-clicking an inactive breakpoint's row in the Breakpoints tool view
+    // (such a breakpoint reactivation is not yet implemented, only planned).
+
+    // The breakpoints should become inactive/detached, so their breakpoint marks should be removed.
+    const auto marks = documentMarks(doc);
+    QEXPECT_FAIL("", "Some breakpoint marks erroneously remain in the document.", Continue);
+    QCOMPARE(marks.size(), 0);
+
+    // The breakpoints must be the same.
+    QCOMPARE(breakpointModel()->rowCount(), 2);
+    QVERIFY(breakpointModel()->breakpoint(0));
+    QVERIFY(breakpointModel()->breakpoint(1));
+    QEXPECT_FAIL("", "Breakpoint b1 was erroneously re-created.", Abort);
+    QCOMPARE(breakpointModel()->breakpoint(0), b1);
+    QEXPECT_FAIL("", "Breakpoint b2 was erroneously re-created.", Abort);
+    QCOMPARE(breakpointModel()->breakpoint(1), b2);
+    // TODO: replace the above checks with the equivalent helper function call
+    //       verifyTwoModelBreakpoints(b1, b2) once this test unexpectedly passes.
+
+    // The breakpoint locations must be unaffected.
+    VERIFY_UNTRACKED_BREAKPOINT(b1, 23, );
+    VERIFY_UNTRACKED_BREAKPOINT(b2, 24, );
 }
 
 void TestBreakpointModel::testDocumentReload_data()
