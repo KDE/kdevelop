@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-03 01:42+0000\n"
-"PO-Revision-Date: 2022-07-10 16:17+0200\n"
+"PO-Revision-Date: 2024-05-03 10:22+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 22.04.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: dialogs/processselection.cpp:146
 #, kde-format
@@ -37,50 +37,49 @@ msgstr "Pripni k opravilu"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search"
-msgstr ""
+msgstr "Išči"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
 #: dialogs/processselection.ui:38
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
-msgstr ""
+msgstr "Prikaži kot seznam"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
 #: dialogs/processselection.ui:60
-#, fuzzy, kde-format
-#| msgid "Display static &members:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
-msgstr "Prikaži statične čla&ne"
+msgstr "Prikaži kot drevo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:83
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
-msgstr ""
+msgstr "Lastna opravila"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:91
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
-msgstr ""
+msgstr "Uporabnikova opravila"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:99
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
-msgstr ""
+msgstr "Sistemska opravila"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:107
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
-msgstr ""
+msgstr "Vsa opravila"
 
 #: dialogs/selectcoredialog.cpp:18
 #, kde-format

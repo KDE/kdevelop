@@ -1,21 +1,21 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2022.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2022, 2024 Eloy Cuadra <ecuadra@eloihr.net>
 # Javier Viñal <fjvinal@gmail.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-03 01:42+0000\n"
-"PO-Revision-Date: 2022-07-09 18:26+0200\n"
+"PO-Revision-Date: 2024-05-03 16:55+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: dialogs/processselection.cpp:146
@@ -36,53 +36,49 @@ msgstr "Adjuntar a un proceso"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search"
-msgstr ""
+msgstr "Buscar"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
 #: dialogs/processselection.ui:38
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Display"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
-msgstr "Mostrar"
+msgstr "Mostrar como lista"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
 #: dialogs/processselection.ui:60
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Display"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
-msgstr "Mostrar"
+msgstr "Mostrar como árbol"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:83
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
-msgstr ""
+msgstr "Procesos propios"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:91
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
-msgstr ""
+msgstr "Procesos del usuario"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:99
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
-msgstr ""
+msgstr "Procesos del sistema"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:107
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
-msgstr ""
+msgstr "Todos los procesos"
 
 #: dialogs/selectcoredialog.cpp:18
 #, kde-format
