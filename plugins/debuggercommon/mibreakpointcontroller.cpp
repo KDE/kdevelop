@@ -18,6 +18,8 @@
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>
 
+#include <QRegExp>
+
 #include <KLocalizedString>
 
 using namespace KDevMI;

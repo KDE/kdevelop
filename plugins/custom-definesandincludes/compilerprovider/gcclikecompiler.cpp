@@ -10,6 +10,7 @@
 #include <QProcess>
 #include <QRegularExpression>
 #include <QMap>
+#include <QRegExp>
 #include <QScopeGuard>
 
 #include <interfaces/iruntime.h>

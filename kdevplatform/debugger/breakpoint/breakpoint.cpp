@@ -18,11 +18,11 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <KTextEditor/MarkInterface>
 #include <KTextEditor/MovingCursor>
 
 #include <QFileInfo>
 #include <QIcon>
+#include <QRegExp>
 
 #include <array>
 

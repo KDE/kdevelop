@@ -50,6 +50,7 @@ configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 kdevplatform_add_library(KDevPlatformInterfaces SOURCES ${KDevPlatformInterfaces_LIB_SRCS})
 target_link_libraries(KDevPlatformInterfaces
 PUBLIC
+    Qt::Core5Compat
     KF${KF_MAJOR_VERSION}::TextEditor
     KF${KF_MAJOR_VERSION}::I18n
 PRIVATE

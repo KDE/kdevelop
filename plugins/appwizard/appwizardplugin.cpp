@@ -17,6 +17,7 @@
 #include <QFileInfo>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QRegExp>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QTextCodec>
@@ -215,7 +216,7 @@ QString generateIdentifier( const QString& appname )
 {
     QString tmp = appname;
     QRegExp re(QStringLiteral("[^a-zA-Z0-9_]"));
-    return tmp.replace(re, QStringLiteral("_"));
+    return re.replaceIn(tmp, QStringLiteral("_"));
 }
 
 } // end anonymous namespace

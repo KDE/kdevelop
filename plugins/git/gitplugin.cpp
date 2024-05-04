@@ -18,8 +18,9 @@
 #include <QHash>
 #include <QMenu>
 #include <QTimer>
-#include <QRegularExpression>
 #include <QPointer>
+#include <QRegExp>
+#include <QRegularExpression>
 #include <QTemporaryFile>
 #include <QVersionNumber>
 
@@ -1047,7 +1048,7 @@ QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
     Q_UNUSED(ret);
     const QStringList commits = job->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
 
-    static QRegExp rx_com(QStringLiteral("commit \\w{40,40}"));
+    static QRegularExpression rx_com(QStringLiteral("commit \\w{40,40}"));
 
     QVector<DVcsEvent> commitList;
     DVcsEvent item;

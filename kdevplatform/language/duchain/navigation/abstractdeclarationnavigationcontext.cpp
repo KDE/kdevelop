@@ -7,6 +7,7 @@
 #include "abstractdeclarationnavigationcontext.h"
 
 #include <QTextDocument>
+#include <QRegularExpression>
 
 #include <KLocalizedString>
 
@@ -349,7 +350,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
             if (!Qt::mightBeRichText(comment)) {
                 // still might contain extra html tags for line breaks (this is the case for doxygen-style comments sometimes)
                 // let's protect them from being removed completely
-                comment.replace(QRegExp(QStringLiteral("<br */>")), QStringLiteral("\n"));
+                comment.replace(QRegularExpression(QStringLiteral("<br */>")), QStringLiteral("\n"));
                 comment = comment.toHtmlEscaped();
                 comment.replace(QLatin1Char('\n'), QLatin1String("<br />")); //Replicate newlines in html
             }
@@ -717,7 +718,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType:
 
         if (exchanged) {
             QString typeSuffixString = exchanged->toString();
-            QRegExp suffixExp(QStringLiteral("\\&|\\*"));
+            QRegularExpression suffixExp(QStringLiteral("\\&|\\*"));
             int suffixPos = typeSuffixString.indexOf(suffixExp);
             if (suffixPos != -1)
                 modifyHtml() += typeHighlight(typeSuffixString.mid(suffixPos));

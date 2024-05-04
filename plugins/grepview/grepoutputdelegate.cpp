@@ -74,7 +74,7 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
         
         // switch to normal color
         fmt.setForeground(options.palette.brush(cg, cr));
-        cur.insertText(item->text().left(rng.start().column()).remove(leftspaces), fmt);
+        cur.insertText(leftspaces.removeIn(item->text().left(rng.start().column())), fmt);
         
         fmt.setFontWeight(QFont::Bold);
         if ( !(options.state & QStyle::State_Selected) ) {

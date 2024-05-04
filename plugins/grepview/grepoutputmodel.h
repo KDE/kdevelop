@@ -13,11 +13,11 @@
 
 #include <QStandardItemModel>
 #include <QList>
+#include <QRegExp>
 
 #include <language/codegen/documentchangeset.h>
 
 class QModelIndex;
-class QRegExp;
 
 namespace KDevelop {
     class IStatus;
@@ -29,7 +29,7 @@ public:
     using List = QList<GrepOutputItem>;
 
     GrepOutputItem(const KDevelop::DocumentChangePointer& change, const QString& text, bool checkable);
-    GrepOutputItem(const QString &filename, const QString &text, bool checkable);
+    GrepOutputItem(const QString &filename = {}, const QString &text = {}, bool checkable = false);
     ~GrepOutputItem() override;
 
     QString filename() const ;

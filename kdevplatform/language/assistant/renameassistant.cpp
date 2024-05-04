@@ -22,6 +22,8 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguagesupport.h>
 
+#include <QRegExp>
+
 #include <KTextEditor/Document>
 
 #include <KLocalizedString>

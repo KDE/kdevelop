@@ -20,6 +20,8 @@
 #include <util/executecompositejob.h>
 #include <outputview/outputmodel.h>
 
+#include <QRegExp>
+
 #include <KConfigGroup>
 #include <KLocalizedString>
 

@@ -42,7 +42,7 @@ ecm_add_test(
     test_kdevformatsource.cpp 
 
     TEST_NAME test_kdevformatsource
-    LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KDev::Util
+    LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test Qt::Core5Compat KDev::Util
 )
 
 ecm_add_test(test_formattinghelpers.cpp

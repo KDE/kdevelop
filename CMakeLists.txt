@@ -78,7 +78,7 @@ include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
 include(KDevelopMacrosInternal)
 
-find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets)
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets Core5Compat)
 if(BUILD_TESTING)
   find_package(Qt${QT_MAJOR_VERSION}Test ${QT_MIN_VERSION} CONFIG REQUIRED)
 endif()
