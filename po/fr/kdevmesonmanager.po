@@ -1,19 +1,19 @@
-# SPDX-FileCopyrightText: 2020, 2021, 2023 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2020, 2021, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-06 01:42+0000\n"
-"PO-Revision-Date: 2023-10-26 18:30+0200\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2024-04-25 17:57+0200\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -241,7 +241,7 @@ msgstr "Ce changement ré-initialisera les options de compilation."
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/mesonexecutable"
-msgstr "/emplacement/de/l/exécutable/meson"
+msgstr "/emplacement/exécutable/meson"
 
 #. i18n: ectx: property (text), widget (QPushButton, b_hideAdvanced)
 #: settings/mesonadvancedsettings.ui:102

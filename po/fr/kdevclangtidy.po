@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2020, 2021, 2023 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2020, 2021, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Simon Depiets <sdepiets@gmail.com>, 2018.
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
 msgid ""
@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: kdevclangtidy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-10-26 11:22+0200\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2024-04-29 14:12+0200\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -231,22 +231,22 @@ msgstr "Pa&ramètres supplémentaires :"
 msgctxt "@info:tooltip"
 msgid "Additional command line options to pass to Clang-Tidy."
 msgstr ""
-"Options supplémentaires à transmettre à la ligne de commande clang-tidy."
+"Options supplémentaires à transmettre à la ligne de commande « clang-tidy »."
 
 #: job.cpp:68
 #, kde-format
 msgid "Clang-Tidy Analysis"
-msgstr "Analyse Clang-Tidy"
+msgstr "Analyse par le logiciel « clang-tidy »"
 
 #: job.cpp:142
 #, kde-format
 msgid "Failed to start Clang-Tidy process."
-msgstr "Impossible de démarrer le processus Clang-Tidy."
+msgstr "Impossible de démarrer le processus « clang-tidy »."
 
 #: job.cpp:147
 #, kde-format
 msgid "Clang-Tidy crashed."
-msgstr "Clang-tidy s'est arrêté brutalement."
+msgstr "Le processus « clang-tidy » s'est arrêté brutalement."
 
 #: job.cpp:151
 #, kde-format
