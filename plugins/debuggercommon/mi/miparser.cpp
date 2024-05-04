@@ -308,10 +308,9 @@ bool MIParser::parseCSV(TupleValue& value,
 
 QString MIParser::parseStringLiteral()
 {
-    QByteArray messageByteArray = m_lex->currentTokenText();
-    QString message = QString::fromUtf8(messageByteArray.constData());
+    const auto message = QString::fromUtf8(m_lex->currentTokenText());
+    const int length = message.length();
 
-    int length = message.length();
     QString message2;
     message2.reserve(length);
     // The [1,length-1] range removes quotes without extra
