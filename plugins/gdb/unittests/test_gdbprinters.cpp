@@ -107,6 +107,9 @@ void QtPrintersTest::testQString()
     gdb.execute("next");
     QVERIFY(gdb.execute("print s").contains("\"test最后一个不是特殊字符'\\\"\\\\u6211x\""));
 
+    gdb.execute("next");
+    QVERIFY(gdb.execute("print qstringLiteral").contains("= \"string literal\""));
+
     const auto isEmptyGdbString = [](const QString& str) { return str.contains("= \"\""); };
     gdb.execute("next");
     QVERIFY(isEmptyGdbString(gdb.execute("print nullString")));
@@ -366,6 +369,12 @@ void QtPrintersTest::testQUrl()
 
     const auto defaultConstructed = gdb.execute("print defaultConstructed");
     QVERIFY(defaultConstructed.contains("<invalid>"));
+
+    gdb.execute("break qurl.cpp:13");
+    gdb.execute("continue");
+
+    const auto seeminglyUninitialized = gdb.execute("print u");
+    QVERIFY(seeminglyUninitialized.contains("http://user@www.kdevelop.org:12345/foo?xyz=bar#<uninitialized>"));
 }
 
 void QtPrintersTest::testQHashInt()
