@@ -331,7 +331,15 @@ void ExternalScriptPlugin::executeScriptFromContextMenu() const
     Q_ASSERT(item);
 
     for (const QUrl& url : m_urls) {
-        KDevelop::ICore::self()->documentController()->openDocument(url);
+        // An empty URL here probably means that the user triggered an external script action from an untitled
+        // document's context menu. In this case EditorContext::url() returns an untitled KTextEditor::Document's
+        // URL, which is empty. An empty QUrl is relative, so attempting to open an empty URL makes the assertion
+        // !inputUrl.isRelative() in DocumentControllerPrivate::openDocumentInternal() fail.
+        // Therefore, do not attempt to open a document for an empty URL. In the discussed scenario the untitled
+        // document is already open and active. Thus the triggered external script action can work correctly.
+        if (!url.isEmpty()) {
+            KDevelop::ICore::self()->documentController()->openDocument(url);
+        }
         execute(item, url);
     }
 }
