@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-02-15 17:36+0900\n"
+"PO-Revision-Date: 2024-05-06 09:56+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
@@ -46,8 +46,7 @@ msgstr "記憶體"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Tracing Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Tracing Configuration"
 msgstr "追蹤設定"
@@ -72,20 +71,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
-#, fuzzy, kde-format
-#| msgid "Expressions to print:"
+#, kde-format
 msgctxt "@label"
 msgid "Expressions to print:"
 msgstr "要列印的表示式："
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:47
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Enable tracing</b>\n"
-#| "<p>Tracing is a mechanism to automatically print values of the chosen "
-#| "expressions and continue execution when breakpoint is hit. You can think "
-#| "of it as printf debugging that does not require modifying the source.</p>"
+#, kde-format
 msgctxt "@info:whatthis"
 msgid ""
 "<b>Enable tracing</b>\n"
@@ -93,22 +86,20 @@ msgid ""
 "expressions and continue execution when breakpoint is hit. You can think of "
 "it as printf debugging that does not require modifying the source.</p>"
 msgstr ""
-"<b>開啟追蹤</b> <p>所謂的追蹤是一個在遇到中斷點時，會自動印出選定的表示式計算"
-"出來的值，並繼續執行的機制。您可以把它當成用 printf 來除錯，只不過不需要變更"
-"源碼。</p>"
+"<b>開啟追蹤</b>\n"
+"<p>所謂的追蹤是一個在遇到中斷點時，會自動印出選定的表示式計算出來的值，並繼續"
+"執行的機制。您可以把它當成用 printf 來除錯，只不過不需要變更源碼。</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:50
-#, fuzzy, kde-format
-#| msgid "Enable tracing"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable tracing"
 msgstr "開啟追蹤"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
 #: debuggertracingdialog.ui:60
-#, fuzzy, kde-format
-#| msgid "Custom format string"
+#, kde-format
 msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "自訂格式字串"
@@ -150,14 +141,13 @@ msgid "Could not locate the debugging shell '%1'."
 msgstr "無法找到除錯 shell %1。"
 
 #: gdbconfigpage.cpp:93
-#, fuzzy, kde-format
-#| msgid "GDB Configuration"
+#, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
-msgstr "除錯器設定"
+msgstr "GDB 設定"
 
 #: gdbconfigpage.cpp:134
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
@@ -191,21 +181,14 @@ msgstr "除錯器執行檔(&X)："
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:48
-#, fuzzy, kde-format
-#| msgid "Gdb executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Gdb executable"
 msgstr "Gdb 執行檔"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:51
-#, fuzzy, kde-format
-#| msgid ""
-#| "To run \"gdb\" executable from $PATH, leave this field empty. To run "
-#| "custom gdb, for example, for a different architecture, enter the "
-#| "executable name here. You can either run gdb from $PATH, but with a "
-#| "different name (say, \"arm-gdb\"), by typing the name here, or specify "
-#| "full path to the gdb executable."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "To run \"gdb\" executable from $PATH, leave this field empty. To run custom "
@@ -220,23 +203,15 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Override path to gdb executable"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to gdb executable..."
-msgstr "覆蓋 gdb 可執行檔的路徑"
+msgstr "覆蓋 gdb 可執行檔的路徑…"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
 #: gdbconfigpage.ui:61 gdbconfigpage.ui:77
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want gdb to be executed by a special shell "
-#| "script, which for example properly sets the library path, insert it here "
-#| "e.g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
-#| "invoked like this: /path/to/script.sh --scriptArguments debugger --"
-#| "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
-#| "span> invoke \"debugger\" executable manually.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>If you want gdb to be executed by a special shell "
