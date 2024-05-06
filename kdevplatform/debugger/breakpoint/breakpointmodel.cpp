@@ -263,6 +263,23 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
         qCWarning(DEBUGGER) << "deactivating all breakpoints in" << document->url().toString(QUrl::PreferLocalFile)
                             << "due to moving interface content invalidation";
         detachDocumentBreakpoints(*document);
+
+        if (document->url().isEmpty()) {
+            // This happens when a document's file is deleted externally and the user presses the Close File button in
+            // the prompt that appears above the editor. In this case the KTextEditor::Document's URL is temporarily
+            // empty, because KTextEditor::DocumentPrivate::closeUrl() is called before its TextDocument is closed.
+            // A breakpoint mark's line can get out of sync with its associated moving cursor's tracked line as
+            // described in a comment about document line tracking in breakpoint.h. An out-of-sync breakpoint mark
+            // remains even after the detachDocumentBreakpoints() call above. Then
+            // KTextEditor::DocumentPrivate::clearMarks() removes the breakpoint mark and the assertion
+            // !document->url().isEmpty() in BreakpointModel::markChanged() fails. Work the assertion failure around
+            // by removing all remaining breakpoint marks from the document now.
+            // TODO: remove this workaround once we require a KTextEditor version where
+            // the temporarily empty KTextEditor::Document's URL issue is prevented
+            // as the commit message of f47916f4f655a20afade579bda61e5d5754d11dd envisions.
+            removeBreakpointMarks(*document);
+        }
+
         return;
     }
     if (d->reloadState != ReloadState::StartedReloading) {
