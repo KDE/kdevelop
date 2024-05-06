@@ -24,10 +24,19 @@ private Q_SLOTS:
 
     void testKindSetDataExpression_data();
     void testKindSetDataExpression();
+
+    void testConfigInvalidUrl_data();
     void testSetDataExpression_data();
+
     void testSetDataExpression();
+
     void testSetDataUrlAndLine_data();
+    void testConfigValidUrl_data();
+
     void testSetDataUrlAndLine();
+
+    void testConfigInvalidUrl();
+    void testConfigValidUrl();
 };
 
 #endif // KDEVPLATFORM_TEST_BREAKPOINT_H

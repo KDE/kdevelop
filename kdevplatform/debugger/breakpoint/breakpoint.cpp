@@ -10,6 +10,7 @@
 #include "breakpoint.h"
 
 #include "breakpointmodel.h"
+#include "debug.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -90,8 +91,14 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
 {
     m_kind = stringToKind(config.readEntry("kind", ""));
     m_enabled = config.readEntry("enabled", false);
+
     m_url = config.readEntry("url", QUrl());
-    m_line = config.readEntry("line", -1);
+    if (!isSupportedBreakpointUrl(m_url)) {
+        qCWarning(DEBUGGER) << "clearing unsupported URL read from config:" << m_url.toString(QUrl::PreferLocalFile);
+        m_url.clear();
+    }
+    m_line = m_url.isEmpty() ? -1 : config.readEntry("line", -1);
+
     m_expression = config.readEntry("expression", QString());
     m_condition = config.readEntry("condition", "");
     m_ignoreHits = config.readEntry("ignoreHits", 0);

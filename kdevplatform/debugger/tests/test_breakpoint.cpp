@@ -11,6 +11,9 @@
 #include <tests/testcore.h>
 #include <tests/testhelpers.h>
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMetaType>
 #include <QString>
 #include <QTest>
@@ -46,6 +49,18 @@ struct BreakpointLocation
     QUrl url;
     int line;
 };
+
+KConfigGroup generateBreakpointConfig(const BreakpointLocation& location)
+{
+    auto config = KSharedConfig::openConfig()->group("test_breakpoint");
+    config.deleteGroup();
+
+    config.writeEntry("url", location.url);
+    config.writeEntry("line", location.line);
+    config.writeEntry("expression", QString{});
+
+    return config;
+}
 
 void verifyBreakpointExpression(const Breakpoint& breakpoint, const QString& expression)
 {
@@ -101,16 +116,12 @@ void TestBreakpoint::testKindSetDataExpression()
     verifyBreakpointExpression(b, expression);
 }
 
-void TestBreakpoint::testSetDataExpression_data()
+void TestBreakpoint::testConfigInvalidUrl_data()
 {
     QTest::addColumn<QString>("expression");
 
     // no (URL, line) location regex match
-    QTest::newRow("empty") << "";
-    QTest::newRow("word") << "word";
     QTest::newRow("no-filename") << ":1";
-    QTest::newRow("no-line-number") << "/path/to/file.c:";
-    QTest::newRow("invalid-line-number") << "/a/b.py:4a";
 
     // a URL unsupported because of an empty filename
     QTest::newRow("root-path") << "/:1";
@@ -123,6 +134,20 @@ void TestBreakpoint::testSetDataExpression_data()
     QTest::newRow("dot-in-path") << "./dotslash:1";
     QTest::newRow("dot-dot-in-path") << "../dotdotslash:1";
     QTest::newRow("single-percent-sign-path") << "%:1";
+}
+
+void TestBreakpoint::testSetDataExpression_data()
+{
+    testConfigInvalidUrl_data();
+
+    // BreakpointLocation fails to parse the locations of the following test rows,
+    // therefore they cannot be in testConfigInvalidUrl_data().
+
+    // no (URL, line) location regex match
+    QTest::newRow("empty") << "";
+    QTest::newRow("word") << "word";
+    QTest::newRow("no-line-number") << "/path/to/file.c:";
+    QTest::newRow("invalid-line-number") << "/a/b.py:4a";
 }
 
 void TestBreakpoint::testSetDataExpression()
@@ -150,6 +175,11 @@ void TestBreakpoint::testSetDataUrlAndLine_data()
     QTest::newRow("non-ASCII") << QString{nonAsciiFilePath() + ":1000"};
 }
 
+void TestBreakpoint::testConfigValidUrl_data()
+{
+    testSetDataUrlAndLine_data();
+}
+
 void TestBreakpoint::testSetDataUrlAndLine()
 {
     QFETCH(const QString, location);
@@ -159,6 +189,32 @@ void TestBreakpoint::testSetDataUrlAndLine()
 
     Breakpoint b(nullptr, Breakpoint::CodeBreakpoint);
     b.setData(Breakpoint::LocationColumn, location);
+
+    verifyBreakpointLocation(b, expectedLocation);
+}
+
+void TestBreakpoint::testConfigInvalidUrl()
+{
+    QFETCH(const QString, expression);
+
+    const BreakpointLocation location(expression);
+    RETURN_IF_TEST_FAILED();
+    const auto config = generateBreakpointConfig(location);
+
+    const Breakpoint b(nullptr, config);
+
+    verifyBreakpointExpression(b, "");
+}
+
+void TestBreakpoint::testConfigValidUrl()
+{
+    QFETCH(const QString, location);
+
+    const BreakpointLocation expectedLocation(location);
+    RETURN_IF_TEST_FAILED();
+    const auto config = generateBreakpointConfig(expectedLocation);
+
+    const Breakpoint b(nullptr, config);
 
     verifyBreakpointLocation(b, expectedLocation);
 }
