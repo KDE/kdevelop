@@ -4,19 +4,20 @@
 # pan93412 <pan93412@gmail.com>, 2018.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2009.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2018-12-02 21:20+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-05-06 09:59+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: localpatchsource.cpp:34
@@ -26,30 +27,28 @@ msgstr "自訂補丁"
 
 #. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
 #: localpatchwidget.ui:29
-#, fuzzy, kde-format
-#| msgid "Patch"
+#, kde-format
 msgctxt "@title:group"
 msgid "Patch"
-msgstr "修補"
+msgstr "補丁"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: localpatchwidget.ui:38
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Base directory:"
-msgstr ""
+msgstr "基底目錄："
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
 #: localpatchwidget.ui:45
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch/base"
-msgstr ""
+msgstr "/補丁/基礎/的/路徑"
 
 #. i18n: ectx: attribute (title), widget (QWidget, fileTab)
 #: localpatchwidget.ui:56
-#, fuzzy, kde-format
-#| msgid "From File"
+#, kde-format
 msgctxt "@title:tab"
 msgid "From File"
 msgstr "從檔案"
@@ -59,12 +58,11 @@ msgstr "從檔案"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch"
-msgstr ""
+msgstr "/補丁/的/路徑"
 
 #. i18n: ectx: attribute (title), widget (QWidget, commandTab)
 #: localpatchwidget.ui:70
-#, fuzzy, kde-format
-#| msgid "From Command"
+#, kde-format
 msgctxt "@title:tab"
 msgid "From Command"
 msgstr "從指令"
@@ -74,20 +72,18 @@ msgstr "從指令"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter command to take output from..."
-msgstr ""
+msgstr "輸入要取得輸出的指令…"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
 #: localpatchwidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Patch is already applied on local version"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Patch is already applied on local version"
-msgstr "修補已套用在本地端版本"
+msgstr "補丁已套用在本地端版本"
 
 #. i18n: ectx: property (text), widget (QCheckBox, applied)
 #: localpatchwidget.ui:90
-#, fuzzy, kde-format
-#| msgid "Already applied"
+#, kde-format
 msgctxt "@option:check"
 msgid "Already applied"
 msgstr "已套用"
@@ -133,143 +129,124 @@ msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
 msgstr "無法套用此變更：文字應為 %1，但是看到 %2。"
 
 #: patchhighlighter.cpp:416 patchhighlighter.cpp:423
-#, fuzzy, kde-format
-#| msgid "Insertion"
+#, kde-format
 msgctxt "@item"
 msgid "Insertion"
 msgstr "插入"
 
 #: patchhighlighter.cpp:418 patchhighlighter.cpp:425
-#, fuzzy, kde-format
-#| msgid "Removal"
+#, kde-format
 msgctxt "@item"
 msgid "Removal"
 msgstr "移除"
 
 #: patchhighlighter.cpp:420 patchhighlighter.cpp:427
-#, fuzzy, kde-format
-#| msgid "Change"
+#, kde-format
 msgctxt "@item"
 msgid "Change"
 msgstr "變更"
 
 #: patchreview.cpp:305 patchreview.cpp:307
-#, fuzzy, kde-format
-#| msgid "Kompare Model Update"
+#, kde-format
 msgctxt "@title:window"
 msgid "Kompare Model Update"
-msgstr "Kompare 模式更新"
+msgstr "Kompare 模型更新"
 
 #: patchreview.cpp:467
-#, fuzzy, kde-format
-#| msgid "Overview"
+#, kde-format
 msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "概觀"
 
 #: patchreview.cpp:473 patchreview.cpp:549
-#, fuzzy, kde-format
-#| msgid "Patch Review"
+#, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
-msgstr "修補重新檢視"
+msgstr "補丁審閱"
 
 #: patchreview.cpp:480
-#, fuzzy, kde-format
-#| msgid "The base directory of the patch must be an absolute directory"
+#, kde-format
 msgid "The base directory of the patch must be an absolute directory."
-msgstr "補丁的基礎目錄必須為絕對路徑"
+msgstr "補丁的基礎目錄必須為絕對路徑。"
 
 #: patchreview.cpp:512 patchreview.cpp:538
-#, fuzzy, kde-format
-#| msgid "Finish Review"
+#, kde-format
 msgctxt "@action"
 msgid "Finish Review"
-msgstr "完成重新檢視"
+msgstr "完成審閱"
 
 #: patchreview.cpp:620
-#, fuzzy, kde-format
-#| msgid "Review Patch"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"
 msgstr "審閱補丁"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
 #: patchreview.ui:21
-#, fuzzy, kde-format
-#| msgid "Previous file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous file"
-msgstr "上一個差異"
+msgstr "上一個檔案"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
 #: patchreview.ui:31
-#, fuzzy, kde-format
-#| msgid "Previous difference"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous difference"
 msgstr "上一個差異"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
 #: patchreview.ui:41
-#, fuzzy, kde-format
-#| msgid "Next difference"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Next difference"
 msgstr "下一個差異"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
 #: patchreview.ui:51
-#, fuzzy, kde-format
-#| msgid "Next file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Next file"
 msgstr "下一個檔案"
 
 #. i18n: ectx: property (text), widget (QToolButton, updateButton)
 #: patchreview.ui:74
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:button"
 msgid "Update"
 msgstr "更新"
 
 #. i18n: ectx: property (text), widget (QToolButton, testsButton)
 #: patchreview.ui:87
-#, fuzzy, kde-format
-#| msgid "Run Tests"
+#, kde-format
 msgctxt "@action:button"
 msgid "Run Tests"
 msgstr "執行測試"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportReview)
 #: patchreview.ui:120
-#, fuzzy, kde-format
-#| msgid "Export Diff..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
 msgstr "匯出差異..."
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
 #: patchreview.ui:136
-#, fuzzy, kde-format
-#| msgid "Cancel Review"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel Review"
-msgstr "取消重新檢視"
+msgstr "取消審閱"
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
 #: patchreview.ui:149
-#, fuzzy, kde-format
-#| msgid "Finish Review"
+#, kde-format
 msgctxt "@action:button"
 msgid "Finish Review"
-msgstr "完成重新檢視"
+msgstr "完成審閱"
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
 #: patchreview.ui:168
-#, fuzzy, kde-format
-#| msgid "Changes"
+#, kde-format
 msgctxt "@title:group"
 msgid "Changes"
 msgstr "變更"
@@ -296,15 +273,13 @@ msgstr ""
 "%1"
 
 #: patchreviewtoolview.cpp:266
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgctxt "@action"
 msgid "Select All"
 msgstr "全部選擇"
 
 #: patchreviewtoolview.cpp:268
-#, fuzzy, kde-format
-#| msgid "Deselect All"
+#, kde-format
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "全部取消選擇"
