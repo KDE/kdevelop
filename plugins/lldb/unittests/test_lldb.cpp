@@ -210,6 +210,11 @@ void LldbTest::testEnvironmentSet()
     KDevMI::Testing::testEnvironmentSet(new TestDebugSession, QStringLiteral("LldbTestGroup"), m_iface);
 }
 
+void LldbTest::testUnsupportedUrlExpressionBreakpoints()
+{
+    KDevMI::Testing::testUnsupportedUrlExpressionBreakpoints(new TestDebugSession, m_iface, true);
+}
+
 void LldbTest::testBreakpoint()
 {
     auto *session = new TestDebugSession;

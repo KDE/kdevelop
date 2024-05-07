@@ -32,6 +32,7 @@ private Q_SLOTS:
     void testStdout();
     void testEnvironmentSet();
 
+    void testUnsupportedUrlExpressionBreakpoints();
     void testBreakpoint();
     void testBreakOnStart();
     void testDisableBreakpoint();

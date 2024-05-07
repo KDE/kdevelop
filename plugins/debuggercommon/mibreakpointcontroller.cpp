@@ -708,14 +708,8 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
     if (const auto actualLocation = ActualBreakpointLocation{miBkpt}) {
         modelBreakpoint->setLocation(QUrl::fromLocalFile(actualLocation.filePath()), actualLocation.line());
     } else if (miBkpt.hasField(QStringLiteral("original-location"))) {
-        QRegExp rx(QStringLiteral("^(.+):(\\d+)$"));
         QString location = miBkpt[QStringLiteral("original-location")].literal();
-        if (rx.indexIn(location) != -1) {
-            modelBreakpoint->setLocation(QUrl::fromLocalFile(Utils::unquoteExpression(rx.cap(1))),
-                                         rx.cap(2).toInt()-1);
-        } else {
-            modelBreakpoint->setData(Breakpoint::LocationColumn, Utils::unquoteExpression(location));
-        }
+        modelBreakpoint->setData(Breakpoint::LocationColumn, Utils::unquoteExpression(location));
     } else if (miBkpt.hasField(QStringLiteral("what"))) {
         modelBreakpoint->setExpression(miBkpt[QStringLiteral("what")].literal());
     } else {

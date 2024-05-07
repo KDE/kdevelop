@@ -125,6 +125,9 @@ private:
 void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
                         IExecutePlugin* executePlugin);
 
+void testUnsupportedUrlExpressionBreakpoints(MIDebugSession* session, IExecutePlugin* executePlugin,
+                                             bool debuggerSupportsNonAsciiExpressions);
+
 void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin,
                                 bool debuggerMovesBreakpointFromLicenseNotice);
 

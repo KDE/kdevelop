@@ -29,6 +29,9 @@
 #include <QTest>
 #include <QVariant>
 
+#include <algorithm>
+#include <array>
+
 using namespace KDevelop;
 
 namespace KDevMI::Testing {
@@ -272,6 +275,56 @@ void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
     }
     QCOMPARE(outputLines, QStringList() << "-A' \" complex --value"
                                         << "-B' \" complex --value");
+}
+
+void testUnsupportedUrlExpressionBreakpoints(MIDebugSession* session, IExecutePlugin* executePlugin,
+                                             bool debuggerSupportsNonAsciiExpressions)
+{
+    QVERIFY(session);
+    QVERIFY(executePlugin);
+
+    TestLaunchConfiguration cfg;
+
+    // Verify that the following tricky breakpoint expressions are not converted
+    // into (URL, line) pairs during a debug session.
+
+    // clang-format off
+    constexpr std::array expressions = {
+        "simple expression",
+        "non-ASCII: øü¶¥¤¿жіЬ®施ą",
+        "https://example.com/abc.txt:2",
+        "//:1",
+        "noprefix:1",
+        "./dotslash:1",
+        "../dotdotslash:1",
+    };
+    // clang-format on
+
+    std::array<Breakpoint*, expressions.size()> bpoints;
+    std::transform(expressions.cbegin(), expressions.cend(), bpoints.begin(), [](const char* expression) {
+        return breakpoints()->addCodeBreakpoint(QString::fromUtf8(expression));
+    });
+
+    const auto verifyBreakpoints = [&expressions, &bpoints](bool nonAsciiExpressionsSupported) {
+        for (std::size_t i = 0; i < expressions.size(); ++i) {
+            QCOMPARE(bpoints[i]->url(), {});
+            QCOMPARE(bpoints[i]->line(), -1);
+
+            if (i == 1 && !nonAsciiExpressionsSupported) {
+                QEXPECT_FAIL("", "Non-ASCII breakpoint expressions are unsupported", Continue);
+            }
+            QCOMPARE(bpoints[i]->expression(), expressions[i]);
+        }
+    };
+
+    verifyBreakpoints(true); // the debugger did not have a chance to break the non-ASCII expression yet
+    RETURN_IF_TEST_FAILED();
+
+    QVERIFY(session->startDebugging(&cfg, executePlugin));
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+
+    verifyBreakpoints(debuggerSupportsNonAsciiExpressions);
+    RETURN_IF_TEST_FAILED();
 }
 
 void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin,

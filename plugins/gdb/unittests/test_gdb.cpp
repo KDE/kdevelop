@@ -160,6 +160,15 @@ void GdbTest::testEnvironmentSet()
     KDevMI::Testing::testEnvironmentSet(new TestDebugSession, QStringLiteral("GdbTestGroup"), m_iface);
 }
 
+void GdbTest::testUnsupportedUrlExpressionBreakpoints()
+{
+    // GDB/MI breaks some non-ASCII characters by replacing certain bytes, e.g. \x85 with \\205 and \x96 with \\226.
+    // TODO: replace the bytes back in kdevgdb somewhere?
+    const bool debuggerSupportsNonAsciiExpressions = false;
+    KDevMI::Testing::testUnsupportedUrlExpressionBreakpoints(new TestDebugSession, m_iface,
+                                                             debuggerSupportsNonAsciiExpressions);
+}
+
 void GdbTest::testBreakpoint()
 {
     auto *session = new TestDebugSession;
