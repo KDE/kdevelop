@@ -616,6 +616,11 @@ void LldbTest::testBreakOnAccessBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void LldbTest::testBreakpointErrors()
+{
+    KDevMI::Testing::testBreakpointErrors(new TestDebugSession, m_iface, true);
+}
+
 void LldbTest::testInsertBreakpointWhileRunning()
 {
 #ifdef Q_OS_FREEBSD

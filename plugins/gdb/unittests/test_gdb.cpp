@@ -541,6 +541,11 @@ void GdbTest::testBreakOnAccessBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testBreakpointErrors()
+{
+    KDevMI::Testing::testBreakpointErrors(new TestDebugSession, m_iface, false);
+}
+
 void GdbTest::testInsertBreakpointWhileRunning()
 {
     auto *session = new TestDebugSession;

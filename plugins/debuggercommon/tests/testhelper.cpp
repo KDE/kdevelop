@@ -374,4 +374,59 @@ void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* execute
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
+void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin, bool debuggerStopsOnInvalidCondition)
+{
+    QVERIFY(session);
+    QVERIFY(executePlugin);
+
+    TestLaunchConfiguration cfg;
+
+    // The following breakpoint data makes GDB/MI (but not lldb-mi) report breakpoint errors.
+    // Verify that a debug session works correctly despite such uncommon error reports.
+
+    // clang-format off
+    constexpr std::array expressions = {
+        ":resourcepath",
+        ":resourcepath:1",
+        ":/colonslash:1",
+        ":./colondotslash",
+    };
+    constexpr std::array urls = {
+        "file::resourcepath",
+        "file::/colonslash",
+        "file::../colondotdotslash",
+    };
+    constexpr std::array conditions = {
+        "not_exist_var > 3",
+    };
+    // clang-format on
+
+    for (const auto expression : expressions) {
+        breakpoints()->addCodeBreakpoint(QString::fromUtf8(expression));
+    }
+    for (const auto url : urls) {
+        breakpoints()->addCodeBreakpoint(QUrl{QString::fromUtf8(url)}, 1);
+    }
+    for (const auto condition : conditions) {
+        auto* const breakpoint = addDebugeeBreakpoint(29);
+        breakpoint->setCondition(QString::fromUtf8(condition));
+    }
+
+    addDebugeeBreakpoint(30);
+
+    QVERIFY(session->startDebugging(&cfg, executePlugin));
+
+    if (debuggerStopsOnInvalidCondition) {
+        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+        QCOMPARE(currentMiLine(session), 29);
+        session->run();
+    }
+
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    QCOMPARE(currentMiLine(session), 30);
+    session->run();
+
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 } // end of namespace KDevMI::Testing

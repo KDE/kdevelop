@@ -45,6 +45,7 @@ private Q_SLOTS:
     void testBreakOnReadBreakpoint();
     void testBreakOnReadBreakpoint2();
     void testBreakOnAccessBreakpoint();
+    void testBreakpointErrors();
     void testInsertBreakpointWhileRunning();
     void testInsertBreakpointWhileRunningMultiple();
     void testInsertBreakpointFunctionName();

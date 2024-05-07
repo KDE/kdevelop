@@ -294,10 +294,15 @@ void MIBreakpointController::breakpointModelChanged(int row, BreakpointModel::Co
     if (m_ignoreChanges > 0)
         return;
 
+    // we are not interested in changes to other columns
+    columns &= BreakpointModel::EnableColumnFlag | BreakpointModel::LocationColumnFlag
+        | BreakpointModel::ConditionColumnFlag | BreakpointModel::IgnoreHitsColumnFlag;
+    if (!columns) {
+        return; // nothing of interest changed
+    }
+
     BreakpointDataPtr breakpoint = m_breakpoints.at(row);
-    breakpoint->dirty |= columns &
-        (BreakpointModel::EnableColumnFlag | BreakpointModel::LocationColumnFlag |
-         BreakpointModel::ConditionColumnFlag | BreakpointModel::IgnoreHitsColumnFlag);
+    breakpoint->dirty |= columns;
 
     if (breakpoint->sent != 0) {
         // Throttle the amount of commands we send to GDB; the response handler of currently

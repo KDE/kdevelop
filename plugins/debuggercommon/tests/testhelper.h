@@ -131,6 +131,8 @@ void testUnsupportedUrlExpressionBreakpoints(MIDebugSession* session, IExecutePl
 void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin,
                                 bool debuggerMovesBreakpointFromLicenseNotice);
 
+void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin, bool debuggerStopsOnInvalidCondition);
+
 } // namespace Testing
 
 } // end of namespace KDevMI
