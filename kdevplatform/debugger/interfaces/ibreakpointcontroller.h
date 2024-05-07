@@ -82,7 +82,6 @@ protected:
 
     QMap<const Breakpoint*, QSet<Breakpoint::Column> > m_dirty;
     QSet<const Breakpoint*> m_pending;
-    QMap<const Breakpoint*, QSet<Breakpoint::Column> > m_errors;
     int m_dontSendChanges;
 };
 

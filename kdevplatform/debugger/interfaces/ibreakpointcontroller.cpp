@@ -113,10 +113,6 @@ void IBreakpointController::breakpointModelChanged(int row, BreakpointModel::Col
         for (int column = 0; column < BreakpointModel::NumColumns; ++column) {
             if (columns & (1 << column)) {
                 m_dirty[breakpoint].insert(Breakpoint::Column(column));
-                auto errorIt = m_errors.find(breakpoint);
-                if (errorIt != m_errors.end()) {
-                    errorIt->remove(Breakpoint::Column(column));
-                }
             }
         }
         breakpointStateChanged(breakpoint);
@@ -204,11 +200,15 @@ void IBreakpointController::setHitCount(Breakpoint* breakpoint, int count)
 
 void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Breakpoint::Column column)
 {
+    // This function is called only in two places within a single file kdev-xdebug/breakpointcontroller.cpp.
+    // In both places Breakpoint::LocationColumn is passed as the third argument.
+    // TODO: remove the unused argument; better yet, remove this entire function that is part of obsolete API.
+    Q_UNUSED(column)
+
     BreakpointModel* model = breakpointModel();
     int row = model->breakpointIndex(breakpoint, 0).row();
 
     m_dontSendChanges++;
-    m_errors[breakpoint].insert(column);
     updateErrorText(row, msg);
     m_dontSendChanges--;
 }
