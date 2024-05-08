@@ -124,6 +124,9 @@ public:
     // bitwise-OR-ed (the last updated breakpoint mark is visible on the document border), and the two associated
     // moving cursors end up tracking the single joined document line (though their column numbers differ, which can
     // potentially help improve the current behavior).
+    // If the user types some text on an empty line with a breakpoint and presses Enter, the breakpoint mark stays
+    // on its now nonempty line, but the associated moving cursor tracks the newly inserted next line. Thus the
+    // breakpoint mark's line gets out of sync with its associated moving cursor's tracked line.
 
     void stopDocumentLineTracking();
     void restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor);
