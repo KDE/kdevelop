@@ -227,12 +227,12 @@ msgstr "Detalls del punt d'interrupció"
 #: debugger/breakpoint/breakpointwidget.cpp:84
 #, kde-format
 msgid "New code breakpoint ..."
-msgstr "Punt d'interrupció nou del codi..."
+msgstr "Punt d'interrupció nou del codi…"
 
 #: debugger/breakpoint/breakpointwidget.cpp:85
 #, kde-format
 msgid "Enter condition ..."
-msgstr "Introduïx una condició..."
+msgstr "Introduïx una condició…"
 
 #: debugger/breakpoint/breakpointwidget.cpp:117
 #, kde-format
@@ -555,13 +555,13 @@ msgstr "Inici"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Busca…"
 
 #: documentation/documentationview.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Find in Text..."
-msgstr "Busca el text..."
+msgstr "Busca el text…"
 
 #: documentation/documentationview.cpp:112
 #, kde-format
@@ -706,7 +706,7 @@ msgstr "no s'ha implementat"
 #, kde-format
 msgctxt "@action"
 msgid "Rename \"%1\"..."
-msgstr "Canvia el nom de «%1»..."
+msgstr "Canvia el nom de «%1»…"
 
 #: language/codegen/basicrefactoring.cpp:220
 #, kde-format
@@ -1686,13 +1686,13 @@ msgstr "%1 (%2)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
-msgstr "Introduïu el camí cap a un element de l'arbre de projectes..."
+msgstr "Introduïu el camí cap a un element de l'arbre de projectes…"
 
 #: project/projectitemlineedit.cpp:158
 #, kde-format
 msgctxt "@action"
 msgid "Select..."
-msgstr "Selecciona..."
+msgstr "Selecciona…"
 
 #: project/projectitemlineedit.cpp:182
 #, kde-format
@@ -1717,7 +1717,7 @@ msgstr "Introduïu una dependència per a afegir-la a la llista"
 #, kde-format
 msgctxt "@info:placedholder"
 msgid "Enter a dependency to add to the list..."
-msgstr "Introduïu una dependència per a afegir-la a la llista..."
+msgstr "Introduïu una dependència per a afegir-la a la llista…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
 #: project/widgets/dependencieswidget.ui:55
@@ -2237,7 +2237,7 @@ msgstr "No l'òbrigues"
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
-msgstr "O&bri..."
+msgstr "O&bri…"
 
 #: shell/documentcontroller.cpp:614
 #, kde-format
@@ -2541,7 +2541,7 @@ msgstr "Us permet configurar %1."
 #, kde-format
 msgctxt "@action"
 msgid "Configure Notifications..."
-msgstr "Configura les notificacions..."
+msgstr "Configura les notificacions…"
 
 #: shell/mainwindow_p.cpp:226
 #, kde-format
@@ -2721,7 +2721,7 @@ msgstr "Crea un fitxer buit."
 #, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr "Afi&g una vista d'eina..."
+msgstr "Afi&g una vista d'eina…"
 
 #: shell/mainwindow_p.cpp:311
 #, kde-format
@@ -2940,7 +2940,7 @@ msgstr "Cancel·la esta operació"
 #, kde-format
 msgctxt "@info"
 msgid "Aborting..."
-msgstr "S'està interrompent..."
+msgstr "S'està interrompent…"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:99
 #, kde-format
@@ -3118,7 +3118,7 @@ msgstr "Torne a obrir"
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
-msgstr "Obri / importa un projecte..."
+msgstr "Obri / importa un projecte…"
 
 #: shell/projectcontroller.cpp:557
 #, kde-format
@@ -3146,7 +3146,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
-msgstr "Recupera un projecte..."
+msgstr "Recupera un projecte…"
 
 #: shell/projectcontroller.cpp:571
 #, kde-format
@@ -3179,19 +3179,19 @@ msgstr "Tanca tots els projectes actualment seleccionats"
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
-msgstr "Obri la configuració..."
+msgstr "Obri la configuració…"
 
 #: shell/projectcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
-msgstr "Comet el projecte actual..."
+msgstr "Comet el projecte actual…"
 
 #: shell/projectcontroller.cpp:602
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr "Comet..."
+msgstr "Comet…"
 
 #: shell/projectcontroller.cpp:613
 #, kde-format
@@ -3352,7 +3352,7 @@ msgstr "Directori:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr "Seleccioneu el directori que s'ha d'utilitzar..."
+msgstr "Seleccioneu el directori que s'ha d'utilitzar…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
@@ -3395,7 +3395,7 @@ msgstr "La configuració de llançament actual no permet el mode «%1»."
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
-msgstr "Configura els llançaments..."
+msgstr "Configura els llançaments…"
 
 #: shell/runcontroller.cpp:428
 #, kde-format
@@ -3535,7 +3535,7 @@ msgstr "Nou iniciador de %1"
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
-msgstr "%1 com a..."
+msgstr "%1 com a…"
 
 #: shell/runtimecontroller.cpp:26
 #, kde-format
@@ -3695,7 +3695,7 @@ msgstr "Inicia una instància nova de KDevelop amb una sessió buida"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Inicia una sessió nova amb nom..."
+msgstr "Inicia una sessió nova amb nom…"
 
 #: shell/sessioncontroller.cpp:287
 #, kde-format
@@ -3707,13 +3707,13 @@ msgstr "Inicia una instància nova de KDevelop amb una sessió buida amb nom"
 #, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
-msgstr "Canvia el nom de la sessió actual..."
+msgstr "Canvia el nom de la sessió actual…"
 
 #: shell/sessioncontroller.cpp:299
 #, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
-msgstr "Suprimix la sessió actual..."
+msgstr "Suprimix la sessió actual…"
 
 #: shell/sessioncontroller.cpp:303
 #, kde-format
@@ -3986,7 +3986,7 @@ msgstr "Valor"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter variable..."
-msgstr "Introduïu una variable..."
+msgstr "Introduïu una variable…"
 
 #: shell/settings/environmentwidget.cpp:169
 #, kde-format
@@ -4012,14 +4012,14 @@ msgstr "Perfil d'entorn:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr "Afig un perfil..."
+msgstr "Afig un perfil…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone profile..."
-msgstr "Clona un perfil..."
+msgstr "Clona un perfil…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
 #: shell/settings/environmentwidget.ui:59
@@ -4923,7 +4923,7 @@ msgstr "Torna a donar format a la línia"
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr "Torna a donar format als fitxers..."
+msgstr "Torna a donar format als fitxers…"
 
 #: shell/sourceformattercontroller.cpp:235
 #, kde-format
@@ -5103,7 +5103,7 @@ msgstr ""
 "lo.</p>\n"
 "<p>És molt important configurar el formatador correcte i l'estil per a cada "
 "llenguatge utilitzat: no només es veuen afectades les accions <i>Torna a "
-"donar format al codi font</i>/<i>Línia</i>/<i>Fitxers...</i>, sinó també el "
+"donar format al codi font</i>/<i>Línia</i>/<i>Fitxers…</i>, sinó també el "
 "format del codi generat automàticament, refactoritzat o arreglat "
 "automàticament (per exemple, l'acció <i>Canvia el nom</i> del menú "
 "contextual).</p>\n"
@@ -5144,7 +5144,7 @@ msgstr "Nou"
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "Edita..."
+msgstr "Edita…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
 #. i18n: ectx: property (text), widget (QPushButton, deleteButton)
@@ -5383,7 +5383,7 @@ msgstr "Separada"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
-msgstr "Assigna una drecera..."
+msgstr "Assigna una drecera…"
 
 #: sublime/idealdockwidget.cpp:136
 #, kde-format
@@ -5699,7 +5699,7 @@ msgstr "L'ordre ha eixit amb el valor %1."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Branches..."
-msgstr "Branques..."
+msgstr "Branques…"
 
 #: vcs/dvcs/ui/branchmanager.cpp:38
 #, kde-format
@@ -6040,7 +6040,7 @@ msgstr "Revisió d'origen"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
-msgstr "Comet..."
+msgstr "Comet…"
 
 #: vcs/vcspluginhelper.cpp:85
 #, kde-format
@@ -6058,7 +6058,7 @@ msgstr "Afig"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
-msgstr "Mostra les diferències..."
+msgstr "Mostra les diferències…"
 
 #: vcs/vcspluginhelper.cpp:88
 #, kde-format
@@ -6070,25 +6070,25 @@ msgstr "Revertix"
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
-msgstr "Historial..."
+msgstr "Historial…"
 
 #: vcs/vcspluginhelper.cpp:90
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
-msgstr "Anotació..."
+msgstr "Anotació…"
 
 #: vcs/vcspluginhelper.cpp:91
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
-msgstr "Mostra les diferències..."
+msgstr "Mostra les diferències…"
 
 #: vcs/vcspluginhelper.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
-msgstr "Mostra les diferències (tots els fitxers)..."
+msgstr "Mostra les diferències (tots els fitxers)…"
 
 #: vcs/vcspluginhelper.cpp:93
 #, kde-format
@@ -6149,7 +6149,7 @@ msgstr "Copia l'ID de la revisió"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
-msgstr "Introduïu l'URL del repositori..."
+msgstr "Introduïu l'URL del repositori…"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:55
 #, kde-format

@@ -50,7 +50,7 @@ msgstr "Esquema"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
-msgstr "Navegació per l'esquema del document actiu, cliqueu per a explorar-lo"
+msgstr "Navegueu per l'esquema del document actiu, cliqueu per a explorar-lo"
 
 #: contextbrowser.cpp:235
 #, kde-format

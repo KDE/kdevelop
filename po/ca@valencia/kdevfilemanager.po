@@ -44,7 +44,7 @@ msgstr "Directori del document actual"
 #, kde-format
 msgctxt "@action"
 msgid "New File..."
-msgstr "Fitxer nou..."
+msgstr "Fitxer nou…"
 
 #: filemanager.cpp:176
 #, kde-format

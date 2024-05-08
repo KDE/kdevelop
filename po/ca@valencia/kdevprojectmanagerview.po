@@ -286,13 +286,13 @@ msgstr "Elimina"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create &File..."
-msgstr "Crea un fi&txer..."
+msgstr "Crea un fi&txer…"
 
 #: projectmanagerviewplugin.cpp:288
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
-msgstr "Crea una &carpeta..."
+msgstr "Crea una &carpeta…"
 
 #: projectmanagerviewplugin.cpp:295
 #, kde-format
@@ -342,7 +342,7 @@ msgstr "&Elimina"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Re&name..."
-msgstr "Ca&nvia el nom..."
+msgstr "Ca&nvia el nom…"
 
 #: projectmanagerviewplugin.cpp:361
 #, kde-format
@@ -448,7 +448,7 @@ msgstr "Analitza amb"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."
-msgstr "Obri la configuració..."
+msgstr "Obri la configuració…"
 
 #: vcsoverlayproxymodel.cpp:105
 #, kde-format

@@ -54,4 +54,4 @@ msgstr ""
 #: codeutilsplugin.cpp:85
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"

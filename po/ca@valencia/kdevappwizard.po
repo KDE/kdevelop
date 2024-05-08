@@ -44,7 +44,7 @@ msgstr "Control de versions"
 #, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "Nou des d'una plantilla..."
+msgstr "Nou des d'una plantilla…"
 
 #: appwizardplugin.cpp:71
 #, kde-format

@@ -93,21 +93,3 @@ msgstr "Empaquetament"
 #, kde-format
 msgid "Run on Device"
 msgstr "Executa en el dispositiu"
-
-#~ msgid "Export %1 to..."
-#~ msgstr "Exporta %1 a..."
-
-#~ msgid "Creating Flatpak %1"
-#~ msgstr "S'està creant el Flatpak %1"
-
-#~ msgid "Transferring flatpak to %1"
-#~ msgstr "S'està transferint el Flatpak a %1"
-
-#~ msgid "Transferring replicate.sh to %1"
-#~ msgstr "S'està transferint el replicate.sh a %1"
-
-#~ msgid "Installing %1 to %2"
-#~ msgstr "S'està instal·lant el %1 a %2"
-
-#~ msgid "Running %1 on %2"
-#~ msgstr "S'està executant %1 a %2"

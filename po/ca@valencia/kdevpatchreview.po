@@ -74,7 +74,7 @@ msgstr "Des d'una ordre"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter command to take output from..."
-msgstr "Introduïu una ordre de la qual prendre l'eixida..."
+msgstr "Introduïu una ordre de la qual prendre l'eixida…"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
 #: localpatchwidget.ui:87
@@ -230,7 +230,7 @@ msgstr "Executa les proves"
 #, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
-msgstr "Exporta Diff..."
+msgstr "Exporta Diff…"
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
 #: patchreview.ui:136

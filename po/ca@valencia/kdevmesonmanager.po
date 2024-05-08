@@ -318,7 +318,7 @@ msgstr "Configureu el projecte Meson"
 #: settings/mesonconfigpage.ui:41 settings/mesonconfigpage.ui:51
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, l_status)
 #. i18n: ectx: property (text), widget (QLabel, l_statusMessage)
@@ -326,7 +326,7 @@ msgstr "..."
 #: settings/mesonrewriterpage.ui:187
 #, kde-format
 msgid "Status message..."
-msgstr "Missatge d'estat..."
+msgstr "Missatge d'estat…"
 
 #. i18n: ectx: property (text), widget (QLabel, l_changed)
 #: settings/mesonconfigpage.ui:78 settings/mesonrewriterpage.ui:194
@@ -512,12 +512,12 @@ msgstr "S'està inicialitzant la IGU"
 #: settings/mesonrewriterpage.cpp:182
 #, kde-format
 msgid "Loading project data..."
-msgstr "S'estan carregant les dades del projecte..."
+msgstr "S'estan carregant les dades del projecte…"
 
 #: settings/mesonrewriterpage.cpp:185
 #, kde-format
 msgid "Writing project data..."
-msgstr "S'estan reescrivint les dades del projecte..."
+msgstr "S'estan reescrivint les dades del projecte…"
 
 #: settings/mesonrewriterpage.cpp:191
 #, kde-format

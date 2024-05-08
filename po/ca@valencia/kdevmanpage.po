@@ -29,7 +29,7 @@ msgstr "Pàgina de contingut de «man»"
 #: manpagedocumentationwidget.cpp:32
 #, kde-format
 msgid "Loading man pages..."
-msgstr "S'estan carregant les pàgines «man»..."
+msgstr "S'estan carregant les pàgines «man»…"
 
 #: manpagedocumentationwidget.cpp:86
 #, kde-format

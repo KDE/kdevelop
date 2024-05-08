@@ -26,13 +26,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy..."
-msgstr "Copia..."
+msgstr "Copia…"
 
 #: kdevsvnplugin.cpp:341
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Move..."
-msgstr "Mou..."
+msgstr "Mou…"
 
 #: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
 #, kde-format
@@ -103,7 +103,7 @@ msgstr "Comissió de subversion"
 #: svncommitjob.cpp:125
 #, kde-format
 msgid "Committing..."
-msgstr "S'està cometent..."
+msgstr "S'està cometent…"
 
 #: svncommitjob.cpp:129
 #, kde-format
