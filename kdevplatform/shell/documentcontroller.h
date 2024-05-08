@@ -53,6 +53,8 @@ public:
     explicit DocumentController( QObject *parent = nullptr );
     ~DocumentController() override;
 
+    bool isUntitledDocumentUrl(const QUrl& url) const override;
+
     /**Finds the first document object corresponding to a given url.
     @param url The Url of the document.
     @return The corresponding document, or null if not found.*/
@@ -89,7 +91,11 @@ public:
 
     using IDocumentController::openDocument;
 
-    /**checks that url is an url of empty document*/
+    /**
+     * @return whether @p url is a URL of an empty document.
+     *
+     * @note This function is equivalent to isUntitledDocumentUrl(), but static and therefore more efficient.
+     */
     static bool isEmptyDocumentUrl(const QUrl &url);
     static QUrl nextEmptyDocumentUrl();
     

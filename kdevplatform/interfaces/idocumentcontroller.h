@@ -53,6 +53,14 @@ public:
     explicit IDocumentController(QObject *parent);
 
     /**
+     * @return whether @p url matches KDevelop's untitled document URL pattern.
+     *
+     * @note An untitled document URL is a notional unique numbered IDocument::url() that disambiguates
+     *       unsaved text documents, all of which have the same empty KTextEditor::Document::url().
+     */
+    virtual bool isUntitledDocumentUrl(const QUrl& url) const = 0;
+
+    /**
      * Finds the first document object corresponding to a given url.
      *
      * @param url The Url of the document.

@@ -134,6 +134,10 @@ void TestBreakpoint::testConfigInvalidUrl_data()
     QTest::newRow("dot-in-path") << "./dotslash:1";
     QTest::newRow("dot-dot-in-path") << "../dotdotslash:1";
     QTest::newRow("single-percent-sign-path") << "%:1";
+
+    // a URL of an untitled document - also unsupported
+    QTest::newRow("untitled") << "/Untitled:54";
+    QTest::newRow("untitled-7") << "/Untitled (7):9";
 }
 
 void TestBreakpoint::testSetDataExpression_data()

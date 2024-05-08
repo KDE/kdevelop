@@ -787,6 +787,11 @@ void DocumentController::notifyDocumentClosed(Sublime::Document* doc_)
     emit documentClosed(doc);
 }
 
+bool DocumentController::isUntitledDocumentUrl(const QUrl& url) const
+{
+    return isEmptyDocumentUrl(url);
+}
+
 IDocument * DocumentController::documentForUrl( const QUrl & dirtyUrl ) const
 {
     Q_D(const DocumentController);

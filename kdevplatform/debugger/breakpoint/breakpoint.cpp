@@ -26,9 +26,16 @@
 
 #include <array>
 
+using namespace KDevelop;
+
 namespace {
 bool isSupportedBreakpointUrl(const QUrl& url)
 {
+    const auto isUntitledDocumentUrl = [](const QUrl& url) {
+        const auto* const documentController = ICore::self()->documentController();
+        return documentController && documentController->isUntitledDocumentUrl(url);
+    };
+
     // Breakpoint::updateMovingCursor() passes nonempty URLs of breakpoints to DocumentController::documentForUrl().
     // When the user activates a breakpoint's row in Breakpoints tool view, its URL (if nonempty) is eventually
     // passed to DocumentControllerPrivate::openDocumentInternal(), and later to IndexedString's QUrl constructor,
@@ -42,11 +49,14 @@ bool isSupportedBreakpointUrl(const QUrl& url)
     // of breakpoints in remote URLs, so require nonempty filename of any nonempty URL here.
     //
     // IndexedString does not properly support a local-file URL with a relative path, so require absolute path here.
-    return url.isEmpty() || (!url.isRelative() && !url.fileName().isEmpty() && QFileInfo{url.path()}.isAbsolute());
+    //
+    // BreakpointModel forbids breakpoints in untitled documents. A user can manually enter a breakpoint URL that
+    // matches KDevelop's untitled document URL pattern. Reject such a URL here to prevent bugs in other code.
+    return url.isEmpty()
+        || (!url.isRelative() && !url.fileName().isEmpty() && QFileInfo{url.path()}.isAbsolute()
+            && !isUntitledDocumentUrl(url));
 }
 } // unnamed namespace
-
-using namespace KDevelop;
 
 static const std::array<QString, Breakpoint::LastBreakpointKind> BREAKPOINT_KINDS = {
     QStringLiteral("Code"),

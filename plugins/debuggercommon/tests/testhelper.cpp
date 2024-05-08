@@ -297,6 +297,8 @@ void testUnsupportedUrlExpressionBreakpoints(MIDebugSession* session, IExecutePl
         "noprefix:1",
         "./dotslash:1",
         "../dotdotslash:1",
+        "/Untitled:3",
+        "/Untitled (123):75",
     };
     // clang-format on
 
