@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-04-30 14:26+0200\n"
+"PO-Revision-Date: 2024-05-04 10:33+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -443,12 +443,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
 #: config/projectconfigpage.ui:172
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Enable all fix-its"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable all fix-its"
-msgstr "Activer tous les fix-its."
+msgstr "Activer tous les correctifs."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:179
@@ -468,12 +466,7 @@ msgstr "Pas de fix-its sur place"
 
 #. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
 #: config/projectconfigpage.ui:192
-#, fuzzy, kde-format
-#| msgid ""
-#| "Please backup your code before fix-its applying. For better results also "
-#| "disable \n"
-#| "parallel checking, which can lead to multiple fix-it applying for header "
-#| "files."
+#, kde-format
 msgid ""
 "Please backup your code before fix-its applying. For better results also "
 "disable \n"
@@ -481,9 +474,9 @@ msgid ""
 "files."
 msgstr ""
 "Veuillez créer une copie de sauvegarde de votre code avant d'appliquer les "
-"fix-its. Pour de meilleurs résultats,\n"
-"désactivez également les vérifications parallèles, qui peuvent entraîner "
-"l'application de plusieurs fix-its sur les fichiers d'en-tête."
+"correctifs. Pour de meilleurs résultats,\n"
+"veuillez désactiver également les vérifications parallèles, qui peuvent "
+"entraîner l'application de plusieurs correctifs sur les fichiers d'en-tête."
 
 #. i18n: ectx: attribute (title), widget (QWidget, extraTab)
 #: config/projectconfigpage.ui:209

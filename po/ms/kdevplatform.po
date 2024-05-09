@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-28 03:05+0000\n"
+"POT-Creation-Date: 2024-05-09 03:28+0000\n"
 "PO-Revision-Date: 2009-07-05 19:31+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -123,64 +123,64 @@ msgstr ""
 msgid "Breakpoint"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:348
+#: debugger/breakpoint/breakpointmodel.cpp:380
 #, kde-format
 msgid "Breakpoint not found"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:348
+#: debugger/breakpoint/breakpointmodel.cpp:380
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:354
+#: debugger/breakpoint/breakpointmodel.cpp:386
 #, fuzzy, kde-format
 msgid "&Breakpoint"
 msgstr "Hidupkan"
 
-#: debugger/breakpoint/breakpointmodel.cpp:360
+#: debugger/breakpoint/breakpointmodel.cpp:392
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:361
+#: debugger/breakpoint/breakpointmodel.cpp:393
 #, fuzzy, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Hidupkan"
 
-#: debugger/breakpoint/breakpointmodel.cpp:364
+#: debugger/breakpoint/breakpointmodel.cpp:396
 #, kde-format
 msgid "&Bookmark"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:406
+#: debugger/breakpoint/breakpointmodel.cpp:438
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, fuzzy, kde-format
 msgid "Type"
 msgstr "Jenis"
 
-#: debugger/breakpoint/breakpointmodel.cpp:407
+#: debugger/breakpoint/breakpointmodel.cpp:439
 #, fuzzy, kde-format
 msgid "Location"
 msgstr "Lokasi"
 
-#: debugger/breakpoint/breakpointmodel.cpp:408
+#: debugger/breakpoint/breakpointmodel.cpp:440
 #, fuzzy, kde-format
 msgid "Condition"
 msgstr "Syarat"
 
-#: debugger/breakpoint/breakpointmodel.cpp:412
+#: debugger/breakpoint/breakpointmodel.cpp:444
 #, kde-format
 msgid "Active status"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:413
+#: debugger/breakpoint/breakpointmodel.cpp:445
 #, fuzzy, kde-format
 msgid "State"
 msgstr "Status"
 
-#: debugger/breakpoint/breakpointmodel.cpp:636
+#: debugger/breakpoint/breakpointmodel.cpp:675
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
