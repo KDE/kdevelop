@@ -23,8 +23,8 @@ qt_add_resources(kdevprojectmanagerview_PLUGIN_SRCS kdevprojectmanagerview.qrc)
 kdevplatform_add_plugin(KDevProjectManagerView SOURCES ${kdevprojectmanagerview_PLUGIN_SRCS})
 
 target_link_libraries(KDevProjectManagerView
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF6::TextEditor
+    KF6::KIOWidgets
     KDev::Interfaces
     KDev::Project
     KDev::Language

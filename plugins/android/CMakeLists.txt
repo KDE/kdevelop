@@ -12,8 +12,8 @@ kconfig_add_kcfg_files(androidplugin_SRCS androidpreferencessettings.kcfgc)
 
 kdevplatform_add_plugin(kdevandroid SOURCES androidplugin.cpp androidruntime.cpp androidpreferences.cpp ${androidplugin_SRCS})
 target_link_libraries(kdevandroid
-    KF${KF_MAJOR_VERSION}::CoreAddons
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF6::CoreAddons
+    KF6::KIOWidgets
     KDev::Interfaces
     KDev::Util
     KDev::OutputView

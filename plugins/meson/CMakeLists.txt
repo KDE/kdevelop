@@ -60,8 +60,8 @@ kdevplatform_add_plugin(KDevMesonManager
                         SOURCES ${mesonbuilder_SRCS})
 
 target_link_libraries(KDevMesonManager
-    Qt${QT_MAJOR_VERSION}::Concurrent
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    Qt::Concurrent
+    KF6::KIOWidgets
     KDev::Interfaces
     KDev::Language
     KDev::Project

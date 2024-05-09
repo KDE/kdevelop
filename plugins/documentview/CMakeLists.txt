@@ -14,5 +14,5 @@ kdevplatform_add_plugin(kdevdocumentview SOURCES ${kdevdocumentview_PART_SRCS})
 target_link_libraries(kdevdocumentview
     KDev::Interfaces
     KDev::Util
-    KF${KF_MAJOR_VERSION}::TextEditor
+    KF6::TextEditor
 )

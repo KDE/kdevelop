@@ -73,10 +73,10 @@ target_link_libraries(kdevclangtidy
     KDev::OutputView
     KDev::Util
     KDev::Shell
-    KF${KF_MAJOR_VERSION}::ItemViews
-    KF${KF_MAJOR_VERSION}::ConfigCore
-    KF${KF_MAJOR_VERSION}::I18n
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF6::ItemViews
+    KF6::ConfigCore
+    KF6::I18n
+    KF6::KIOWidgets
 )
 
 if(BUILD_TESTING)

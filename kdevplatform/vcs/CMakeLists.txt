@@ -60,8 +60,8 @@ PUBLIC
     KDev::Interfaces
 PRIVATE
     KDev::Util
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    KF${KF_MAJOR_VERSION}::Parts
+    KF6::KIOWidgets
+    KF6::Parts
 )
 
 if(QT_MAJOR_VERSION STREQUAL 6)

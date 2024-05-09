@@ -5,14 +5,14 @@ remove_definitions(
 )
 
 ecm_add_test(test_projectmodel.cpp
-    LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KDev::Interfaces KDev::Project KDev::Language KDev::Tests)
+    LINK_LIBRARIES Qt::Test KDev::Interfaces KDev::Project KDev::Language KDev::Tests)
 
 add_executable(projectmodelperformancetest
     projectmodelperformancetest.cpp
 )
 target_link_libraries(projectmodelperformancetest
-    Qt${QT_MAJOR_VERSION}::Test
-    Qt${QT_MAJOR_VERSION}::Gui
+    Qt::Test
+    Qt::Gui
     KDev::Interfaces
     KDev::Project
     KDev::Language
@@ -25,7 +25,7 @@ add_executable(abstractfilemanagerpluginimporttest
 target_link_libraries(abstractfilemanagerpluginimporttest
     KDev::Project
     KDev::Tests
-    Qt${QT_MAJOR_VERSION}::QuickWidgets
+    Qt::QuickWidgets
 )
 
 add_executable(abstractfilemanagerpluginimportbenchmark

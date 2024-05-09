@@ -6,5 +6,5 @@ remove_definitions(
 
 ecm_add_test(
     test_compileanalyzejob.cpp
-    LINK_LIBRARIES KDevCompileAnalyzerCommon Qt${QT_MAJOR_VERSION}::Test KDev::Tests
+    LINK_LIBRARIES KDevCompileAnalyzerCommon Qt::Test KDev::Tests
 )

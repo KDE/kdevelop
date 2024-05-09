@@ -15,8 +15,8 @@ add_subdirectory(gdb)
 # END: Debuggers
 
 # BEGIN: Documentation
-find_package(Qt${KF_MAJOR_VERSION}Help CONFIG)
-set_package_properties(Qt${KF_MAJOR_VERSION}Help PROPERTIES
+find_package(Qt6Help CONFIG)
+set_package_properties(Qt6Help PROPERTIES
     PURPOSE "The Help module for the Qt toolkit, needed for the qthelp plugin"
     URL "https://www.qt.io/"
     TYPE OPTIONAL)
@@ -141,7 +141,7 @@ if (TARGET Qt::QuickWidgets)
     add_subdirectory(welcomepage)
 endif()
 
-if (${KF_MAJOR_VERSION} STREQUAL 5)
+if (6 STREQUAL 5)
     find_package(OktetaKastenControllers 0.4.0 CONFIG)
     set_package_properties(OktetaKastenControllers PROPERTIES
         PURPOSE "Required for building Okteta KDevelop plugin."

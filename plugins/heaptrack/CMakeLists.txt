@@ -47,7 +47,7 @@ kdevplatform_add_plugin(kdevheaptrack
     SOURCES ${kdevheaptrack_SRCS}
 )
 target_link_libraries(kdevheaptrack
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF6::KIOWidgets
     kdevheaptrack_config
     KDev::Project
     KDev::IExecute
@@ -60,6 +60,6 @@ if(KSysGuard_FOUND)
 elseif(KF5SysGuard_FOUND)
     target_link_libraries(kdevheaptrack
         kdevdebuggercommon
-        KF${KF_MAJOR_VERSION}::ProcessCore
+        KF6::ProcessCore
     )
 endif()

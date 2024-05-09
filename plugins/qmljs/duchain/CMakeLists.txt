@@ -33,7 +33,7 @@ target_link_libraries(kdevqmljsduchain
         KDev::Util
         KDev::Project
     PRIVATE
-        KF${KF_MAJOR_VERSION}::I18n
+        KF6::I18n
 )
 
 if(BUILD_TESTING)

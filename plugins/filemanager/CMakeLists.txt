@@ -15,9 +15,9 @@ kdevplatform_add_plugin(kdevfilemanager SOURCES ${kdevfilemanager_PART_SRCS})
 target_link_libraries(kdevfilemanager
     KDev::Interfaces
     KDev::Sublime
-    KF${KF_MAJOR_VERSION}::BookmarksWidgets
-    KF${KF_MAJOR_VERSION}::KIOCore
-    KF${KF_MAJOR_VERSION}::KIOFileWidgets
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    KF${KF_MAJOR_VERSION}::TextEditor
+    KF6::BookmarksWidgets
+    KF6::KIOCore
+    KF6::KIOFileWidgets
+    KF6::KIOWidgets
+    KF6::TextEditor
 )

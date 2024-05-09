@@ -5,11 +5,11 @@ remove_definitions(
 )
 
 ecm_add_test(test_svnrecursiveadd.cpp LINK_LIBRARIES
-    Qt${QT_MAJOR_VERSION}::Test Qt${QT_MAJOR_VERSION}::Gui
+    Qt::Test Qt::Gui
     KDev::Tests KDev::Util KDev::Vcs
 )
 
 ecm_add_test(test_svnimport.cpp LINK_LIBRARIES
-    Qt${QT_MAJOR_VERSION}::Test Qt${QT_MAJOR_VERSION}::Gui
+    Qt::Test Qt::Gui
     KDev::Tests KDev::Util KDev::Vcs
 )

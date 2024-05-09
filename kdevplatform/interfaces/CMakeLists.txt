@@ -51,10 +51,10 @@ kdevplatform_add_library(KDevPlatformInterfaces SOURCES ${KDevPlatformInterfaces
 target_link_libraries(KDevPlatformInterfaces
 PUBLIC
     Qt::Core5Compat
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::I18n
+    KF6::TextEditor
+    KF6::I18n
 PRIVATE
-    KF${KF_MAJOR_VERSION}::Service
+    KF6::Service
 )
 
 install(FILES

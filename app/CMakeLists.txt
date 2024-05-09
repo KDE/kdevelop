@@ -51,9 +51,9 @@ target_link_libraries(kdevelop
     KDev::Shell
     KDev::Util
 
-    KF${KF_MAJOR_VERSION}::Crash
+    KF6::Crash
 
-    Qt${QT_MAJOR_VERSION}::Quick
+    Qt::Quick
 )
 IF(APPLE)
     target_link_libraries(kdevelop "-framework CoreFoundation")

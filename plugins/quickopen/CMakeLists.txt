@@ -33,6 +33,6 @@ target_link_libraries(kdevquickopen
     KDev::Project
     KDev::Util
     gfx::timsort
-    KF${KF_MAJOR_VERSION}::GuiAddons
-    KF${KF_MAJOR_VERSION}::TextWidgets
+    KF6::GuiAddons
+    KF6::TextWidgets
 )

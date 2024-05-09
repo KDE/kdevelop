@@ -18,7 +18,7 @@ kconfig_add_kcfg_files(dockerplugin_SRCS dockerpreferencessettings.kcfgc)
 
 kdevplatform_add_plugin(kdevdocker SOURCES dockerplugin.cpp dockerruntime.cpp dockerpreferences.cpp ${dockerplugin_SRCS})
 target_link_libraries(kdevdocker
-    KF${KF_MAJOR_VERSION}::CoreAddons
+    KF6::CoreAddons
     KDev::Interfaces
     KDev::Util
     KDev::OutputView

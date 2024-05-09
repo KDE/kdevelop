@@ -18,7 +18,7 @@ TARGET_LINK_LIBRARIES( kdevokteta
     KDev::Project
     KDev::Sublime
     KDev::Shell
-    KF${KF_MAJOR_VERSION}::WidgetsAddons
+    KF6::WidgetsAddons
     OktetaKastenControllers
     KastenControllers
 )

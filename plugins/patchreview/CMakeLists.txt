@@ -43,14 +43,14 @@ target_link_libraries(kdevpatchreview
     KDev::Vcs
     KDev::Sublime
     KompareDiff2
-    KF${KF_MAJOR_VERSION}::IconThemes
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::Parts
+    KF6::IconThemes
+    KF6::KIOWidgets
+    KF6::TextEditor
+    KF6::Parts
 )
 if (KF5Purpose_FOUND)
     target_compile_definitions(kdevpatchreview PRIVATE WITH_PURPOSE)
-    target_link_libraries(kdevpatchreview KF${KF_MAJOR_VERSION}::PurposeWidgets)
+    target_link_libraries(kdevpatchreview KF6::PurposeWidgets)
 elseif (KDEExperimentalPurpose_FOUND)
     target_compile_definitions(kdevpatchreview PRIVATE WITH_PURPOSE)
     target_link_libraries(kdevpatchreview KDEExperimental::PurposeWidgets)

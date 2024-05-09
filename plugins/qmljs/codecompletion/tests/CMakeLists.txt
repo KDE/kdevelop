@@ -6,7 +6,7 @@ remove_definitions(
 
 ecm_add_test(test_qmljscompletion.cpp
     LINK_LIBRARIES
-        Qt${QT_MAJOR_VERSION}::Test
+        Qt::Test
         KDev::Tests
         kdevqmljscompletion
 )

@@ -15,8 +15,8 @@ qt_add_resources(kdevcodeutils_PART_SRCS kdevcodeutils.qrc)
 kdevplatform_add_plugin(kdevcodeutils SOURCES ${kdevcodeutils_PART_SRCS})
 
 target_link_libraries(kdevcodeutils
-    KF${KF_MAJOR_VERSION}::Parts
-    KF${KF_MAJOR_VERSION}::TextEditor
+    KF6::Parts
+    KF6::TextEditor
     KDev::Interfaces
     KDev::Util
     KDev::Language

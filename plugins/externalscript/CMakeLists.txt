@@ -32,7 +32,7 @@ target_link_libraries(kdevexternalscript
     KDev::Sublime
     KDev::Util
     KDev::OutputView
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    KF${KF_MAJOR_VERSION}::Parts
+    KF6::TextEditor
+    KF6::KIOWidgets
+    KF6::Parts
 )

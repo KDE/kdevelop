@@ -16,8 +16,8 @@ kdevplatform_add_plugin(KDevOutlineView SOURCES ${kdevoutlineview_SRCS})
 target_link_libraries(KDevOutlineView
     KDev::Interfaces
     KDev::Language
-    KF${KF_MAJOR_VERSION}::CoreAddons
-    KF${KF_MAJOR_VERSION}::I18n
-    KF${KF_MAJOR_VERSION}::ItemModels
-    KF${KF_MAJOR_VERSION}::TextEditor
+    KF6::CoreAddons
+    KF6::I18n
+    KF6::ItemModels
+    KF6::TextEditor
 )

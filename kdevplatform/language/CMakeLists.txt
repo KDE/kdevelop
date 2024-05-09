@@ -183,14 +183,14 @@ PUBLIC
     KDev::Serialization
     KDev::Interfaces
     KDev::Util
-    KF${KF_MAJOR_VERSION}::ThreadWeaver
+    KF6::ThreadWeaver
 PRIVATE
     KDev::Project
     KDev::Sublime
-    KF${KF_MAJOR_VERSION}::GuiAddons
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::Parts
-    KF${KF_MAJOR_VERSION}::Archive
+    KF6::GuiAddons
+    KF6::TextEditor
+    KF6::Parts
+    KF6::Archive
     KF6::TextTemplate
 )
 

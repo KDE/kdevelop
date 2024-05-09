@@ -1,4 +1,4 @@
-if (${KF_MAJOR_VERSION} STREQUAL 6)
+if (6 STREQUAL 6)
     set(REQ_OKTETA_VERSION 0.11) # make sure we don't bring old Qt5-based okteta
 endif()
 find_package(OktetaGui ${REQ_OKTETA_VERSION} CONFIG)
@@ -50,9 +50,9 @@ target_link_libraries(kdevgdb_static
     KDev::Shell
     KDev::Interfaces
     KDev::IExecute
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    Qt${QT_MAJOR_VERSION}::Core
-    Qt${QT_MAJOR_VERSION}::Gui
+    KF6::KIOWidgets
+    Qt::Core
+    Qt::Gui
 )
 if(OktetaGui_FOUND)
     target_link_libraries(kdevgdb_static OktetaCore OktetaGui)

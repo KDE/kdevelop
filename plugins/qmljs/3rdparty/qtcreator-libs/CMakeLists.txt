@@ -90,7 +90,7 @@ target_include_directories(kdevqtc-qmlsupport SYSTEM PUBLIC ${CMAKE_CURRENT_SOUR
 kde_target_enable_exceptions(kdevqtc-qmlsupport PRIVATE)
 target_link_libraries(kdevqtc-qmlsupport
     PRIVATE
-        Qt${QT_MAJOR_VERSION}::Widgets
-        Qt${QT_MAJOR_VERSION}::Network
-        Qt${QT_MAJOR_VERSION}::Xml
+        Qt::Widgets
+        Qt::Network
+        Qt::Xml
 )

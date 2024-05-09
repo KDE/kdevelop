@@ -10,7 +10,7 @@ declare_qt_logging_category(craftplugin_LOG_SRCS
 #qt_add_resources(craftplugin_SRCS kdevcraftplugin.qrc)
 kdevplatform_add_plugin(kdevcraft SOURCES craftplugin.cpp craftruntime.cpp ${craftplugin_LOG_SRCS})
 target_link_libraries(kdevcraft
-    KF${KF_MAJOR_VERSION}::CoreAddons
+    KF6::CoreAddons
     KDev::Interfaces
     KDev::Util
     KDev::OutputView

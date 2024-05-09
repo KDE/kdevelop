@@ -34,9 +34,9 @@ target_link_libraries(kdevappwizard
     KDev::Language
     KDev::Sublime
     KDev::Util
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    KF${KF_MAJOR_VERSION}::NewStuffWidgets
-    KF${KF_MAJOR_VERSION}::Archive
+    KF6::KIOWidgets
+    KF6::NewStuffWidgets
+    KF6::Archive
 )
 if(QT_MAJOR_VERSION STREQUAL 6)
     target_link_libraries(kdevappwizard Qt::Core5Compat)

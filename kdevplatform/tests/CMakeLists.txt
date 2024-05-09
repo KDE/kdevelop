@@ -26,7 +26,7 @@ PUBLIC
     KDev::Project
     KDev::Debugger
 PRIVATE
-    Qt${QT_MAJOR_VERSION}::Test
+    Qt::Test
 )
 
 install(FILES

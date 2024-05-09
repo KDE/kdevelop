@@ -103,9 +103,9 @@ PUBLIC
     KDev::Util
     Clang::libclang
 PRIVATE
-    Qt${QT_MAJOR_VERSION}::Core
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::ThreadWeaver
+    Qt::Core
+    KF6::TextEditor
+    KF6::ThreadWeaver
     KDev::DefinesAndIncludesManager
     KDev::Util
     KDev::Sublime
@@ -135,8 +135,8 @@ kdevplatform_add_plugin(kdevclangsupport SOURCES ${kdevclangsupport_SRCS})
 target_link_libraries(kdevclangsupport
     KDevClangPrivate
 
-    KF${KF_MAJOR_VERSION}::ThreadWeaver
-    KF${KF_MAJOR_VERSION}::TextEditor
+    KF6::ThreadWeaver
+    KF6::TextEditor
     KDev::Util
     KDev::Project
     KDev::DefinesAndIncludesManager

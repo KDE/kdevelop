@@ -14,5 +14,5 @@ target_link_libraries( kdevnoprojectincludesanddefines
     PRIVATE
         KDev::Util
         KDev::Language
-         KF${KF_MAJOR_VERSION}::KIOWidgets
+         KF6::KIOWidgets
 )

@@ -9,12 +9,12 @@ ecm_add_test(test_gdb.cpp
         kdevgdb_static
         kdevdbg_testhelper
         KDev::Tests
-        Qt${QT_MAJOR_VERSION}::Test
+        Qt::Test
 )
 
 ecm_add_test(test_gdbprinters.cpp
     LINK_LIBRARIES
-        Qt${QT_MAJOR_VERSION}::Core
-        Qt${QT_MAJOR_VERSION}::Test
+        Qt::Core
+        Qt::Test
         kdevdebuggercommon
 )

@@ -18,8 +18,8 @@ kconfig_add_kcfg_files( kdevmakebuilder_SRCS makebuilderconfig.kcfgc )
 qt_add_resources(kdevmakebuilder_SRCS kdevmakebuilder.qrc)
 kdevplatform_add_plugin(KDevMakeBuilder SOURCES ${kdevmakebuilder_SRCS})
 target_link_libraries(KDevMakeBuilder
-        KF${KF_MAJOR_VERSION}::TextEditor
-        KF${KF_MAJOR_VERSION}::KIOWidgets
+        KF6::TextEditor
+        KF6::KIOWidgets
         KDev::Interfaces
         KDev::Project
         KDev::OutputView

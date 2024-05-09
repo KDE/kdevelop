@@ -15,7 +15,7 @@ ki18n_wrap_ui(kdevexecutescript_PART_SRCS
 )
 kdevplatform_add_plugin(kdevexecutescript SOURCES ${kdevexecutescript_PART_SRCS})
 target_link_libraries(kdevexecutescript
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF6::KIOWidgets
     KDev::Interfaces
     KDev::Util
     KDev::Project

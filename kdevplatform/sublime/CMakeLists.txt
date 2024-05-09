@@ -39,11 +39,11 @@ kdevplatform_add_library(KDevPlatformSublime SOURCES ${sublime_LIB_SRCS})
 
 target_link_libraries(KDevPlatformSublime
 PUBLIC
-    KF${KF_MAJOR_VERSION}::Parts
+    KF6::Parts
 PRIVATE
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    KF${KF_MAJOR_VERSION}::I18n
-    KF${KF_MAJOR_VERSION}::TextWidgets
+    KF6::KIOWidgets
+    KF6::I18n
+    KF6::TextWidgets
 )
 
 install(FILES

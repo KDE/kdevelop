@@ -35,9 +35,9 @@ target_link_libraries(kdevlldb_static
     KDev::Interfaces
     KDev::IExecute
     PRIVATE
-    Qt${QT_MAJOR_VERSION}::Core
-    Qt${QT_MAJOR_VERSION}::Gui
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    Qt::Core
+    Qt::Gui
+    KF6::KIOWidgets
     KDev::Shell
 )
 
@@ -52,7 +52,7 @@ target_link_libraries(kdevlldb
     KDev::OutputView
     KDev::Project
     KDev::Util
-    KF${KF_MAJOR_VERSION}::TextEditor
+    KF6::TextEditor
     PRIVATE
     KDev::Sublime
 )

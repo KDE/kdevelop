@@ -45,15 +45,9 @@ endif()
 # plugin version as used e.g. in plugin installation path
 set(KDEV_PLUGIN_VERSION "${KDEVELOP_SOVERSION}")
 
-if (BUILD_WITH_QT6)
-    set(KF_MAJOR_VERSION "6")
-    set(QT_MIN_VERSION "6.4.0")
-    set(KF_MIN_VERSION "5.240.0")
-else()
-    set(KF_MAJOR_VERSION "5")
-    set(QT_MIN_VERSION "5.15.2")
-    set(KF_MIN_VERSION "5.91.0")
-endif()
+set(KF_MAJOR_VERSION "6")
+set(QT_MIN_VERSION "6.4.0")
+set(KF_MIN_VERSION "5.240.0")
 
 # we need some parts of the ECM CMake helpers
 find_package (ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
@@ -78,12 +72,12 @@ include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
 include(KDevelopMacrosInternal)
 
-find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets Core5Compat)
+find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets Core5Compat)
 if(BUILD_TESTING)
-  find_package(Qt${QT_MAJOR_VERSION}Test ${QT_MIN_VERSION} CONFIG REQUIRED)
+  find_package(Qt6Test ${QT_MIN_VERSION} CONFIG REQUIRED)
 endif()
 
-find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
   Config
   Declarative
   DocTools

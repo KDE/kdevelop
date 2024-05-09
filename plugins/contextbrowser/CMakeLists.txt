@@ -16,4 +16,4 @@ declare_qt_logging_category(kdevcontextbrowser_PART_SRCS
 qt_add_resources(kdevcontextbrowser_PART_SRCS kdevcontextbrowser.qrc)
 kdevplatform_add_plugin(kdevcontextbrowser SOURCES ${kdevcontextbrowser_PART_SRCS})
 
-target_link_libraries(kdevcontextbrowser KDev::Interfaces KDev::Util KDev::Language KDev::Sublime KDev::Shell KF${KF_MAJOR_VERSION}::TextEditor KF${KF_MAJOR_VERSION}::Parts)
+target_link_libraries(kdevcontextbrowser KDev::Interfaces KDev::Util KDev::Language KDev::Sublime KDev::Shell KF6::TextEditor KF6::Parts)

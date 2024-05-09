@@ -30,7 +30,7 @@ target_link_libraries(kdevcppcheck_core
     KDev::Language
     KDev::Project
     KDev::Shell
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF6::KIOWidgets
 )
 
 set(kdevcppcheck_SRCS

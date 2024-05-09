@@ -32,12 +32,12 @@ qt_add_resources(kdevgrepview_PART_SRCS kdevgrepview.qrc)
 kdevplatform_add_plugin(kdevgrepview SOURCES ${kdevgrepview_PART_SRCS})
 
 target_link_libraries(kdevgrepview
-    KF${KF_MAJOR_VERSION}::Parts
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::Completion
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::Codecs
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF6::Parts
+    KF6::TextEditor
+    KF6::Completion
+    KF6::TextEditor
+    KF6::Codecs
+    KF6::KIOWidgets
     KDev::Interfaces
     KDev::OutputView
     KDev::Project

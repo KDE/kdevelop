@@ -43,11 +43,11 @@ target_link_libraries(kdevfiletemplates
     KDev::Language
     KDev::Project
     KDev::Util
-    KF${KF_MAJOR_VERSION}::NewStuffWidgets
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::Service
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    KF${KF_MAJOR_VERSION}::TextWidgets
+    KF6::NewStuffWidgets
+    KF6::TextEditor
+    KF6::Service
+    KF6::KIOWidgets
+    KF6::TextWidgets
 )
 
 ########### install files ###############
@@ -99,7 +99,7 @@ if(BUILD_TESTING)
         KDev::Tests
         KF6::KIOWidgets
         KF6::TextWidgets
-        KF${KF_MAJOR_VERSION}::NewStuffWidgets
+        KF6::NewStuffWidgets
     )
 
     add_subdirectory(tests)

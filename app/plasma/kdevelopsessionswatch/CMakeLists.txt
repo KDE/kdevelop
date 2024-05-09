@@ -18,5 +18,5 @@ target_link_libraries(KDevelopSessionsWatch
     PUBLIC
         Qt::Core
     PRIVATE
-        KF${KF_MAJOR_VERSION}::KIOGui
+        KF6::KIOGui
 )

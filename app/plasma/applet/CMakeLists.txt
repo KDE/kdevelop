@@ -10,8 +10,8 @@ add_library(kdevelopsessionsplugin SHARED ${kdevelopsessionsplugin_SRCS})
 target_link_libraries(kdevelopsessionsplugin
     KDevelopSessionsWatch
     Plasma::Plasma
-    KF${KF_MAJOR_VERSION}::I18n
-    Qt${QT_MAJOR_VERSION}::Qml
+    KF6::I18n
+    Qt::Qml
 )
 
 install(TARGETS kdevelopsessionsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/private/kdevelopsessions)

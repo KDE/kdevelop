@@ -145,7 +145,7 @@ PUBLIC
     KDev::Interfaces
 PRIVATE
     KDev::Util
-    KF${KF_MAJOR_VERSION}::TextEditor
+    KF6::TextEditor
 )
 
 
@@ -156,28 +156,28 @@ PUBLIC
     KDev::OutputView
     KDev::Interfaces
     KDev::Language
-    KF${KF_MAJOR_VERSION}::XmlGui
+    KF6::XmlGui
 PRIVATE
     KDev::Debugger
     KDev::Project
     KDev::Vcs
     KDev::Util
     KDev::Documentation
-    KF${KF_MAJOR_VERSION}::GuiAddons
-    KF${KF_MAJOR_VERSION}::ConfigWidgets
-    KF${KF_MAJOR_VERSION}::KIOFileWidgets
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    KF${KF_MAJOR_VERSION}::Parts
-    KF${KF_MAJOR_VERSION}::Notifications
-    KF${KF_MAJOR_VERSION}::NotifyConfig
-    KF${KF_MAJOR_VERSION}::TextEditor
-    KF${KF_MAJOR_VERSION}::JobWidgets
-    KF${KF_MAJOR_VERSION}::ItemViews
-    KF${KF_MAJOR_VERSION}::WindowSystem
-    KF${KF_MAJOR_VERSION}::TextWidgets
-    KF${KF_MAJOR_VERSION}::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
-    KF${KF_MAJOR_VERSION}::NewStuffWidgets # template config page
-    KF${KF_MAJOR_VERSION}::Archive # template config page
+    KF6::GuiAddons
+    KF6::ConfigWidgets
+    KF6::KIOFileWidgets
+    KF6::KIOWidgets
+    KF6::Parts
+    KF6::Notifications
+    KF6::NotifyConfig
+    KF6::TextEditor
+    KF6::JobWidgets
+    KF6::ItemViews
+    KF6::WindowSystem
+    KF6::TextWidgets
+    KF6::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
+    KF6::NewStuffWidgets # template config page
+    KF6::Archive # template config page
     kdevworkingsets
 )
 if(APPLE)

@@ -13,7 +13,7 @@ declare_qt_logging_category(kdevcustommakemanager_PART_SRCS
 qt_add_resources(kdevcustommakemanager_PART_SRCS kdevcustommakemanager.qrc)
 kdevplatform_add_plugin(KDevCustomMakeManager SOURCES ${kdevcustommakemanager_PART_SRCS})
 target_link_libraries(KDevCustomMakeManager
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF6::KIOWidgets
     KDev::Interfaces KDev::Project KDev::Util KDev::Language KDev::IMakeBuilder KDev::DefinesAndIncludesManager
     kdevmakefileresolver
 )

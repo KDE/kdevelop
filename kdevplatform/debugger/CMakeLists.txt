@@ -31,8 +31,8 @@ PUBLIC
     KDev::Util
 PRIVATE
     KDev::Sublime
-    KF${KF_MAJOR_VERSION}::Notifications
-    KF${KF_MAJOR_VERSION}::TextEditor
+    KF6::Notifications
+    KF6::TextEditor
 )
 
 install(FILES

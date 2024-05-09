@@ -1,6 +1,6 @@
 add_library(kdevelopdashboarddeclarativeplugin SHARED kdevelopdashboarddeclarativeplugin.cpp icoreobject.cpp)
 target_link_libraries(kdevelopdashboarddeclarativeplugin
-    Qt${QT_MAJOR_VERSION}::Qml
+    Qt::Qml
     KDev::Vcs
 )
 

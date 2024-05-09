@@ -65,8 +65,8 @@ kdevplatform_add_plugin(kdevclazy
 )
 target_link_libraries(kdevclazy
     kdevclazy_core
-    KF${KF_MAJOR_VERSION}::ItemViews
-    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF6::ItemViews
+    KF6::KIOWidgets
 )
 
 ecm_install_icons(ICONS icons/128-apps-clazy.png
