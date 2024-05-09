@@ -6,20 +6,20 @@
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2010, 2012.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2010, 2011, 2012.
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2012, 2013, 2014.
-# SPDX-FileCopyrightText: 2023 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023, 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-28 01:37+0000\n"
-"PO-Revision-Date: 2023-11-29 17:05+0900\n"
+"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"PO-Revision-Date: 2024-05-09 06:38+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -129,64 +129,64 @@ msgstr "<b>中斷點不準確</b><p>此中斷點尚未傳送到 GDB。</p>"
 msgid "Breakpoint"
 msgstr "中斷點"
 
-#: debugger/breakpoint/breakpointmodel.cpp:348
+#: debugger/breakpoint/breakpointmodel.cpp:380
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "找不到中斷點"
 
-#: debugger/breakpoint/breakpointmodel.cpp:348
+#: debugger/breakpoint/breakpointmodel.cpp:380
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:354
+#: debugger/breakpoint/breakpointmodel.cpp:386
 #, kde-format
 msgid "&Breakpoint"
 msgstr "中斷點(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:360
+#: debugger/breakpoint/breakpointmodel.cpp:392
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "關閉中斷點(&D)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:361
+#: debugger/breakpoint/breakpointmodel.cpp:393
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "開啟中斷點(&D)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:364
+#: debugger/breakpoint/breakpointmodel.cpp:396
 #, kde-format
 msgid "&Bookmark"
 msgstr "書籤(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:406
+#: debugger/breakpoint/breakpointmodel.cpp:438
 #: debugger/variable/variablecollection.cpp:408
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "類型"
 
-#: debugger/breakpoint/breakpointmodel.cpp:407
+#: debugger/breakpoint/breakpointmodel.cpp:439
 #, kde-format
 msgid "Location"
 msgstr "位置"
 
-#: debugger/breakpoint/breakpointmodel.cpp:408
+#: debugger/breakpoint/breakpointmodel.cpp:440
 #, kde-format
 msgid "Condition"
 msgstr "條件"
 
-#: debugger/breakpoint/breakpointmodel.cpp:412
+#: debugger/breakpoint/breakpointmodel.cpp:444
 #, kde-format
 msgid "Active status"
 msgstr "啟用狀態"
 
-#: debugger/breakpoint/breakpointmodel.cpp:413
+#: debugger/breakpoint/breakpointmodel.cpp:445
 #, kde-format
 msgid "State"
 msgstr "狀態"
 
-#: debugger/breakpoint/breakpointmodel.cpp:636
+#: debugger/breakpoint/breakpointmodel.cpp:675
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
@@ -3485,11 +3485,10 @@ msgid "Select which launch configuration to run when run is invoked."
 msgstr "請選擇執行被撤銷時要執行哪個啟動設定。"
 
 #: shell/runcontroller.cpp:588
-#, fuzzy, kde-format
-#| msgid "<%1> Unnamed job"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
-msgstr "<%1>未命名工作"
+msgstr "<%1> 未命名工作"
 
 #: shell/runcontroller.cpp:965
 #, kde-format
@@ -3497,8 +3496,7 @@ msgid "New %1 Launcher"
 msgstr "新增 %1 啟動器"
 
 #: shell/runcontroller.cpp:1002
-#, fuzzy, kde-format
-#| msgid "%1 As..."
+#, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1 為..."
@@ -3506,21 +3504,20 @@ msgstr "%1 為..."
 #: shell/runtimecontroller.cpp:26
 #, kde-format
 msgid "Host System"
-msgstr ""
+msgstr "主系統"
 
 #: shell/runtimecontroller.cpp:86
 #, kde-format
 msgid "Allows to select a runtime"
-msgstr ""
+msgstr "允許選擇執行階段"
 
 #: shell/runtimecontroller.cpp:90
 #, kde-format
 msgid "Runtime: %1"
-msgstr ""
+msgstr "執行階段：%1"
 
 #: shell/savedialog.cpp:44
-#, fuzzy, kde-format
-#| msgid "Save Modified Files?"
+#, kde-format
 msgctxt "@title:window"
 msgid "Save Modified Files?"
 msgstr "要儲存已變更的檔案嗎？"
@@ -3531,18 +3528,16 @@ msgid "The following files have been modified. Save them?"
 msgstr "以下的檔案已變更。要儲存嗎？"
 
 #: shell/savedialog.cpp:65
-#, fuzzy, kde-format
-#| msgid "Save &None"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
 msgstr "不儲存(&N)"
 
 #: shell/savedialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Discard all modifications"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
-msgstr "丟棄所有的變更"
+msgstr "捨棄所有的變更"
 
 #: shell/session.cpp:157 shell/session.cpp:178
 #, kde-format
@@ -3550,32 +3545,25 @@ msgid "(no projects)"
 msgstr "（沒有專案）"
 
 #: shell/sessionchooserdialog.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Delete session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
-msgstr "刪除工作階段..."
+msgstr "刪除工作階段"
 
 #: shell/sessionchooserdialog.cpp:50
-#, fuzzy, kde-format
-#| msgid "Pick a Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
 msgstr "選擇工作階段"
 
 #: shell/sessionchooserdialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Run"
+#, kde-format
 msgctxt "@action:button"
 msgid "Run"
 msgstr "執行"
 
 #: shell/sessionchooserdialog.cpp:95
-#, fuzzy, kde-format
-#| msgid ""
-#| "Active session.\n"
-#| "pid %1, app %2, host %3"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Active session.\n"
@@ -3590,9 +3578,7 @@ msgid "Running"
 msgstr "執行中"
 
 #: shell/sessionchooserdialog.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Cannot Delete Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Cannot Delete Session"
 msgstr "無法刪除工作階段"
@@ -3624,27 +3610,22 @@ msgid ""
 msgstr "此作業階段與所有的設定將被刪除。此專案則不受影響。您確定要繼續嗎？"
 
 #: shell/sessionchooserdialog.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Delete Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
 msgstr "刪除工作階段"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "開始新的作業階段"
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "New Session Name"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "New session name:"
-msgstr "新的作業階段名稱"
+msgstr "新的作業階段名稱："
 
 #: shell/sessioncontroller.cpp:144
 #, kde-format
@@ -3654,17 +3635,15 @@ msgid ""
 msgstr "目前的作業階段與所有的設定將被刪除。此專案則不受影響。您確定要繼續嗎？"
 
 #: shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
 msgstr "重新命名工作階段"
 
 #: shell/sessioncontroller.cpp:265
-#, fuzzy, kde-format
-#| msgid "Kross Manager"
+#, kde-format
 msgid "Session Manager"
-msgstr "Kross 管理員"
+msgstr "工作階段管理員"
 
 #: shell/sessioncontroller.cpp:277
 #, kde-format
@@ -3679,38 +3658,31 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "使用空白的工作階段來啟動新的 KDevelop 實體"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "開始新的作業階段"
+msgstr "開始新的已命名作業階段…"
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "使用空白的工作階段來啟動新的 KDevelop 實體"
+msgstr "使用已命名的空白工作階段來啟動新的 KDevelop 實體"
 
 #: shell/sessioncontroller.cpp:293
-#, fuzzy, kde-format
-#| msgid "Rename Current Session..."
+#, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
-msgstr "重新命名目前的工作階段..."
+msgstr "重新命名目前的工作階段…"
 
 #: shell/sessioncontroller.cpp:299
-#, fuzzy, kde-format
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
 msgstr "刪除目前的工作階段..."
 
 #: shell/sessioncontroller.cpp:303
-#, fuzzy, kde-format
-#| msgid "Quit"
+#, kde-format
 msgctxt "@action"
 msgid "Quit"
 msgstr "離開"
@@ -3721,8 +3693,7 @@ msgid "Copy of %1"
 msgstr "複製 %1"
 
 #: shell/sessioncontroller.cpp:613
-#, fuzzy, kde-format
-#| msgid "Identity"
+#, kde-format
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "身份"
@@ -3734,8 +3705,7 @@ msgid "Contents"
 msgstr "內容"
 
 #: shell/sessioncontroller.cpp:615
-#, fuzzy, kde-format
-#| msgid "State"
+#, kde-format
 msgctxt "@title:column"
 msgid "State"
 msgstr "狀態"
@@ -3747,8 +3717,7 @@ msgid "Name"
 msgstr "名稱"
 
 #: shell/sessioncontroller.cpp:622
-#, fuzzy, kde-format
-#| msgid "Filter:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "過濾器："
@@ -3838,24 +3807,18 @@ msgid "Analyzers"
 msgstr ""
 
 #: shell/settings/analyzerspreferences.cpp:35
-#, fuzzy, kde-format
-#| msgid "Configure Launches..."
+#, kde-format
 msgid "Configure Analyzers"
-msgstr "設定啟動器..."
+msgstr "設定分析器"
 
 #: shell/settings/bgpreferences.cpp:73
-#, fuzzy, kde-format
-#| msgid "Enable Background Parser"
+#, kde-format
 msgid "Configure Background Parser"
-msgstr "開啟背景剖析器"
+msgstr "設定背景剖析器"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:20
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Enables or disables the background parser.<br>If unsure, leave it "
-#| "enabled. Disabling the background parser will disable large parts of "
-#| "KDevelop's functionality.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Enables or disables the background parser.<br>If unsure, leave it "
@@ -3867,11 +3830,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:23
-#, fuzzy, kde-format
-#| msgid "Enable Background Parser"
+#, kde-format
 msgctxt "@title:group"
 msgid "Enable Background Parser"
-msgstr "開啟背景剖析器"
+msgstr "啟用背景剖析器"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
@@ -3885,16 +3847,14 @@ msgstr "文件在編輯時重新分析前等待的時間。"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/bgpreferences.ui:38
-#, fuzzy, kde-format
-#| msgid "Delay:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Delay:"
 msgstr "延遲："
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:48
-#, fuzzy, kde-format
-#| msgid " ms"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " ms"
 msgstr " 毫秒"
@@ -3929,11 +3889,9 @@ msgid " threads"
 msgstr " 個執行緒"
 
 #: shell/settings/documentationpreferences.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure notifications"
+#, kde-format
 msgid "Configure Documentation"
-msgstr "設定通知"
+msgstr "設定說明文件"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:42
@@ -3946,17 +3904,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview:"
+#, kde-format
 msgid "Show Preview"
-msgstr "預覽："
+msgstr "顯示預覽"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
 #: shell/settings/editstyledialog.ui:69
 #: shell/sourceformatterselectionedit.ui:112
-#, fuzzy, kde-format
-#| msgid "Preview:"
+#, kde-format
 msgctxt "@label"
 msgid "Preview:"
 msgstr "預覽："
@@ -3967,8 +3923,7 @@ msgid "Environment"
 msgstr "環境"
 
 #: shell/settings/environmentpreferences.cpp:84
-#, fuzzy, kde-format
-#| msgid "Configure environment variables"
+#, kde-format
 msgid "Configure Environment Variables"
 msgstr "設定環境變數"
 
@@ -3992,84 +3947,74 @@ msgid "Value"
 msgstr "值"
 
 #: shell/settings/environmentwidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "Enter variable ..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter variable..."
 msgstr "輸入變數..."
 
 #: shell/settings/environmentwidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "New Environment Variable"
+#, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Environment Profile"
-msgstr "新增環境變數"
+msgstr "輸入新環境變數的名稱"
 
 #: shell/settings/environmentwidget.cpp:233
 #, kde-format
 msgctxt "@title:window"
 msgid "Batch Edit Mode"
-msgstr ""
+msgstr "批次編輯模式"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
-#, fuzzy, kde-format
-#| msgid "Environment group:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Environment profile:"
-msgstr "環境群組："
+msgstr "環境設定檔："
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
 #: shell/settings/environmentwidget.ui:39
-#, fuzzy, kde-format
-#| msgid "Add New..."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr "新增..."
+msgstr "新增設定檔..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone profile..."
-msgstr "關閉檔案"
+msgstr "建立設定檔複本…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
 #: shell/settings/environmentwidget.ui:59
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove profile"
-msgstr "移除鎖定檔"
+msgstr "移除設定檔"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultProfileButton)
 #: shell/settings/environmentwidget.ui:69
-#, fuzzy, kde-format
-#| msgid "Set As Default Group"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr "設為預設群組"
+msgstr "設定為預設"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
 #: shell/settings/environmentwidget.ui:114
-#, fuzzy, kde-format
-#| msgid "Remove variable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove variable"
-msgstr "移除監看的變數"
+msgstr "移除變數"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, batchModeEditButton)
 #: shell/settings/environmentwidget.ui:130
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Batch edit mode"
-msgstr ""
+msgstr "批次編輯模式"
 
 #: shell/settings/languagepreferences.cpp:35
-#, fuzzy, kde-format
-#| msgid " files"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " file"
 msgid_plural " files"
@@ -4531,16 +4476,14 @@ msgid "Other"
 msgstr "其他"
 
 #: shell/settings/pluginpreferences.h:27
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgid "Plugins"
-msgstr "已載入的外掛程式"
+msgstr "外掛程式"
 
 #: shell/settings/pluginpreferences.h:28
-#, fuzzy, kde-format
-#| msgid "Configure Sessions"
+#, kde-format
 msgid "Configure Plugins"
-msgstr "設定工作階段"
+msgstr "設定外掛程式"
 
 #. i18n: ectx: label, entry (parseAllProjectSources), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:11
@@ -4585,10 +4528,9 @@ msgid ""
 msgstr "若設定此選項，會在編譯前先自動儲存所有開啟的文件。"
 
 #: shell/settings/projectpreferences.cpp:44
-#, fuzzy, kde-format
-#| msgid "Project %1"
+#, kde-format
 msgid "Projects"
-msgstr "專案 %1"
+msgstr "專案"
 
 #: shell/settings/projectpreferences.cpp:49
 #, fuzzy, kde-format
@@ -4719,17 +4661,15 @@ msgstr "新增 Kate 模式行"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Formatting Styles"
+#, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
-msgstr "格式化樣式中"
+msgstr "格式化樣式"
 
 #: shell/settings/templateconfig.cpp:39
-#, fuzzy, kde-format
-#| msgid "Share Templates"
+#, kde-format
 msgid "Templates"
-msgstr "分享樣本"
+msgstr "樣本"
 
 #: shell/settings/templateconfig.cpp:44
 #, fuzzy, kde-format
@@ -5209,25 +5149,22 @@ msgid " Line: %1 Col: %2 "
 msgstr " 行: %1 欄: %2 "
 
 #: shell/uicontroller.cpp:81
-#, fuzzy, kde-format
-#| msgid "Code"
+#, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "程式碼"
 
 #: shell/uicontroller.cpp:92
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "除錯"
 
 #: shell/uicontroller.cpp:101
-#, fuzzy, kde-format
-#| msgid "Review"
+#, kde-format
 msgctxt "area"
 msgid "Review"
-msgstr "重新檢視"
+msgstr "審閱"
 
 #: shell/uicontroller.cpp:460
 #, fuzzy, kde-format
@@ -5261,26 +5198,21 @@ msgid "Documents:"
 msgstr "文件："
 
 #: shell/workingsets/workingsettooltipwidget.cpp:128
-#, fuzzy, kde-format
-#| msgid "Add All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add All"
-msgstr "全部新增"
+msgstr "全部加入"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:129
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add all documents that are part of this working set to the currently "
-#| "active working set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Add all documents that are part of this working set to the currently active "
 "working set"
-msgstr "將包含於此工作集中的所有文件新增到目前使用的工作集。"
+msgstr "將此工作集當中的所有文件加入目前作用中的工作集"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Remove All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove All"
 msgstr "全部移除"
@@ -5317,15 +5249,13 @@ msgid "Add this file to the current working set"
 msgstr "將此檔案加入目前工作集"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:315
-#, fuzzy, kde-format
-#| msgid "Stash"
+#, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr "Stash"
+msgstr "貯存"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:321
-#, fuzzy, kde-format
-#| msgid "Load"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load"
 msgstr "載入"
@@ -5356,25 +5286,22 @@ msgid "Copy Filename"
 msgstr "檔案名稱"
 
 #: sublime/container.cpp:800
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "關閉"
 
 #: sublime/container.cpp:802
-#, fuzzy, kde-format
-#| msgid "Close All Ot&hers"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
-msgstr "關閉所有其它的文件(&H)"
+msgstr "關閉所有其他的"
 
 #: sublime/container.cpp:804
-#, fuzzy, kde-format
-#| msgid "Clos&e All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
-msgstr "全部關閉(&C)"
+msgstr "全部關閉"
 
 #: sublime/idealbuttonbarwidget.cpp:37
 #, fuzzy, kde-format
@@ -5947,8 +5874,7 @@ msgstr "程式源碼目錄："
 #. i18n: ectx: property (text), widget (QLabel)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
 #: vcs/widgets/vcsdiffpatchsources.cpp:49
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "提交訊息："
@@ -5964,20 +5890,17 @@ msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
 msgstr "您確定要將 \"%1\" 重新命名為 \"%2\" 嗎？"
 
 #: vcs/models/vcsannotationmodel.cpp:116
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgid "Author:"
-msgstr "作者"
+msgstr "作者："
 
 #: vcs/models/vcsannotationmodel.cpp:117
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgid "Date:"
-msgstr "日期"
+msgstr "日期："
 
 #: vcs/models/vcsannotationmodel.cpp:118
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgid "Commit message:"
 msgstr "提交訊息："
 
@@ -6170,8 +6093,7 @@ msgid "Revert"
 msgstr "返轉"
 
 #: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:473
-#, fuzzy, kde-format
-#| msgid "History..."
+#, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "歷史..."
@@ -6250,18 +6172,16 @@ msgstr ""
 "%1"
 
 #: vcs/vcspluginhelper.cpp:468 vcs/widgets/vcseventwidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Copy Revision"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"
-msgstr "複製版本"
+msgstr "複製修訂版 ID"
 
 #: vcs/widgets/standardvcslocationwidget.cpp:23
-#, fuzzy, kde-format
-#| msgid "Introduce the repository URL..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
-msgstr "導入主目錄網址..."
+msgstr "輸入版本庫網址…"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:55
 #, kde-format
@@ -6298,24 +6218,21 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
 #: vcs/widgets/vcscommitdialog.ui:17
-#, fuzzy, kde-format
-#| msgid "Select Files to commit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Files to Commit"
 msgstr "選擇要提交的檔案"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Commit Files:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "提交檔案："
 
 #. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
 #: vcs/widgets/vcscommitdialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Recursive"
+#, kde-format
 msgctxt "@option:check"
 msgid "Recursive"
 msgstr "遞迴"
@@ -6338,8 +6255,7 @@ msgid "Unable to commit"
 msgstr "無法提交"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
-#, fuzzy, kde-format
-#| msgid "Commit unsuccessful"
+#, kde-format
 msgctxt "@title:window"
 msgid "Commit Unsuccessful"
 msgstr "提交不成功"
@@ -6364,40 +6280,35 @@ msgstr ""
 "<pre>%2</pre></qt>"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:259
-#, fuzzy, kde-format
-#| msgid "About to commit to repository"
+#, kde-format
 msgctxt "@title:window"
 msgid "About to Commit to Repository"
-msgstr "準備提交主目錄"
+msgstr "即將提交到版本庫"
 
 #: vcs/widgets/vcsdiffwidget.cpp:86
-#, fuzzy, kde-format
-#| msgid "Difference between revision %1 and %2:"
+#, kde-format
 msgctxt "@label"
 msgid "Difference between revision %1 and %2:"
-msgstr "版本 %1 與 %2 的差異："
+msgstr "修訂版 %1 與 %2 的差異："
 
 #. i18n: ectx: property (text), widget (QLabel, revLabel)
 #: vcs/widgets/vcsdiffwidget.ui:28
-#, fuzzy, kde-format
-#| msgid "Difference between revisions"
+#, kde-format
 msgctxt "@label"
 msgid "Difference between revisions:"
-msgstr "版本間的差異"
+msgstr "修訂版之間的差異："
 
 #: vcs/widgets/vcseventwidget.cpp:78
-#, fuzzy, kde-format
-#| msgid "Diff to previous revision"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff to Previous Revision"
-msgstr "與前一個版本比較"
+msgstr "與前一個修訂版比對差異"
 
 #: vcs/widgets/vcseventwidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "Diff between revisions"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff between Revisions"
-msgstr "在版本之間比較"
+msgstr "在修訂版之間比對差異"
 
 #: vcs/widgets/vcseventwidget.cpp:138
 #, fuzzy, kde-format
@@ -6407,11 +6318,10 @@ msgid "Difference To Previous"
 msgstr "與前一個版本的差異"
 
 #: vcs/widgets/vcseventwidget.cpp:167
-#, fuzzy, kde-format
-#| msgid "Difference between Revisions"
+#, kde-format
 msgctxt "@title:window"
 msgid "Difference between Revisions"
-msgstr "版本之間的差異"
+msgstr "修訂版之間的差異"
 
 #, fuzzy
 #~| msgid "Running"
