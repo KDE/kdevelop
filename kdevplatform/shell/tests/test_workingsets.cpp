@@ -168,6 +168,7 @@ void TestWorkingSetController::switchArea()
     auto set = m_workingSetCtrl->workingSet(m_area->workingSet());
     set->setPersistent(true);
     m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
+    m_documentCtrl->openDocumentFromText(QString()); // add an unsaved document
 
     Core::self()->uiController()->switchToArea(QStringLiteral("debug"), IUiController::ThisWindow);
     m_area_debug = Core::self()->uiControllerInternal()->activeArea();
@@ -175,14 +176,21 @@ void TestWorkingSetController::switchArea()
     m_area_debug->setWorkingSet(setName, m_area->workingSetPersistent(), m_area);
 
     QTRY_COMPARE(m_closedSets->layout()->count(), 1); // working set 2
+    QTRY_COMPARE(m_area_debug->views().size(), 2); // check that the unsaved document is displayed, BUG 486746
 
     m_area_debug->setWorkingSet(setName2);
+    m_documentCtrl->openDocumentFromText(QString()); // add two unsaved documents
+    m_documentCtrl->openDocumentFromText(QString());
+
     QTest::qSleep(1000);
     QCOMPARE(m_closedSets->layout()->count(), 1); // working set 1, BUG 375446
 
     Core::self()->uiController()->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
      // explicitly set the current working set, as in DebugController::debuggerStateChanged
     m_area->setWorkingSet(setName2, m_area_debug->workingSetPersistent(), m_area_debug);
+
+    QTRY_COMPARE(m_area->views().size(), 3); // check that both unsaved documents are displayed, BUG 486746
+
     m_area->setWorkingSet(setName);
 
     QTRY_COMPARE(m_closedSets->layout()->count(), 1); // working set 2, BUG 375446

@@ -154,8 +154,14 @@ QSplitter* loadToAreaPrivate(Sublime::Area *area, Sublime::AreaIndex *areaIndex,
             }
             auto url = QUrl::fromUserInput(specifier);
             if (url.isLocalFile() && !QFileInfo::exists(url.path())) {
-                qCWarning(WORKINGSET) << "Unable to find file" << specifier;
-                continue;
+                // This code runs both on KDevelop start and when active area changes from Code to Debug or vice versa.
+                // If a document is already open, it can be opened again, even if its file does not exist on disk
+                // (an untitled document, opened nonexistent file or a file deleted from disk externally after opening).
+                // documentForUrl() returns a valid pointer for an already open document URL.
+                if (!Core::self()->documentControllerInternal()->documentForUrl(url)) {
+                    qCWarning(WORKINGSET) << "Unable to find file" << specifier;
+                    continue;
+                }
             }
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(url,
                              KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
