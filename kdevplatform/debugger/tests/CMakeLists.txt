@@ -6,7 +6,7 @@ remove_definitions(
 
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 
-foreach(_testFilename test_breakpointmodel.cpp test_ivariablecontroller.cpp)
+foreach(_testFilename test_breakpoint.cpp test_breakpointmodel.cpp test_ivariablecontroller.cpp)
     ecm_add_test(${_testFilename} LINK_LIBRARIES
         Qt5::Core
         Qt5::Test
