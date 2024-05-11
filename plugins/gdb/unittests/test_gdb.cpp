@@ -556,16 +556,16 @@ void GdbTest::testInsertBreakpointWhileRunningMultiple()
     WAIT_FOR_STATE(session, DebugSession::ActiveState);
     QTest::qWait(2000);
     qDebug() << "adding breakpoint";
-    KDevelop::Breakpoint *b1 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 29); // static int i=0;
-    KDevelop::Breakpoint *b2 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // ++i;
+    KDevelop::Breakpoint *b1 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 29); // ++i;
+    KDevelop::Breakpoint *b2 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
     QTest::qWait(500);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(500);
-    QCOMPARE(session->line(), 29); // static int i=0;
+    QCOMPARE(session->line(), 29);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(500);
-    QCOMPARE(session->line(), 30); // ++i;
+    QCOMPARE(session->line(), 30);
     breakpoints()->removeBreakpoint(b1);
     breakpoints()->removeBreakpoint(b2);
     session->run();
@@ -817,7 +817,7 @@ void GdbTest::testStackSwitchThread()
 
     TestFrameStackModel *stackModel = session->frameStackModel();
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 42); // t3.start();
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 42); // QThread::usleep(500000);
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
@@ -856,7 +856,7 @@ void GdbTest::testAttach()
     session->attachToProcess(debugeeProcess.processId());
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 39); // } after foo();
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 39); // the blank line in main()
     QTest::qWait(100);
     session->run();
     QTest::qWait(2000);
@@ -1354,7 +1354,7 @@ void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
     WAIT_FOR_STATE(session, DebugSession::ActiveState);
     QTest::qWait(2000);
     qDebug() << "adding breakpoint";
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // ++i;
+    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
     breakpoints()->removeBreakpoint(b);
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
