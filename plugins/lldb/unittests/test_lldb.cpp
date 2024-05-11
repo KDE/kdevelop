@@ -1248,7 +1248,7 @@ void LldbTest::testCoreFile()
                       + findExecutable(QStringLiteral("debuggee_crash")).toLocalFile();
     debugeeProcess.start();
     debugeeProcess.waitForFinished();
-    qDebug() << debugeeProcess.readAll();
+    qDebug() << "Debuggee output:\n" << debugeeProcess.readAll();
 
     bool coreFileFound = f.exists();
     if (!coreFileFound) {
@@ -1256,7 +1256,7 @@ void LldbTest::testCoreFile()
         qDebug() << "try to use coredumpctl";
         auto coredumpctl = QStandardPaths::findExecutable(QStringLiteral("coredumpctl"));
         if (!coredumpctl.isEmpty()) {
-            KProcess::execute(coredumpctl, {"-1", "-o", f.absoluteFilePath(), "dump", "debuggee_crash"});
+            KProcess::execute(coredumpctl, {"-1", "-o", f.absoluteFilePath(), "dump", "debuggee_crash"}, 5000);
             // coredumpctl seems to create an empty file "core" even if no cores can be delivered
             // (like when run inside docker containers as on KDE CI or with kernel.core_pattern=|/dev/null)
             // so also check for size != 0
