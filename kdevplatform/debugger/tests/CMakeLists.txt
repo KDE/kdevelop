@@ -1,10 +1,3 @@
-ecm_add_test(test_ivariablecontroller.cpp LINK_LIBRARIES
-    Qt5::Core
-    Qt5::Test
-    KDev::Tests
-    KDev::Debugger
-)
-
 remove_definitions(
     -DQT_NO_CAST_FROM_ASCII
     -DQT_NO_CAST_TO_ASCII
@@ -13,9 +6,11 @@ remove_definitions(
 
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 
-ecm_add_test(test_breakpointmodel.cpp LINK_LIBRARIES
-    Qt5::Core
-    Qt5::Test
-    KDev::Tests
-    KDev::Debugger
-)
+foreach(_testFilename test_breakpointmodel.cpp test_ivariablecontroller.cpp)
+    ecm_add_test(${_testFilename} LINK_LIBRARIES
+        Qt5::Core
+        Qt5::Test
+        KDev::Tests
+        KDev::Debugger
+    )
+endforeach()
