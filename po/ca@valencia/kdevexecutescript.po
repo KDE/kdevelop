@@ -97,7 +97,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Type or select an interpreter..."
-msgstr "Escriviu o seleccioneu un intèrpret..."
+msgstr "Escriviu o seleccioneu un intèrpret…"
 
 #: scriptappconfig.cpp:116
 #, kde-format

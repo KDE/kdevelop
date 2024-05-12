@@ -147,7 +147,7 @@ msgstr "Visualitza tots els problemes"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Path Filter..."
-msgstr "Filtre de camí..."
+msgstr "Filtre de camí…"
 
 #: problemsview.cpp:132
 #, kde-format
@@ -225,7 +225,7 @@ msgstr "Gravetat"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Busca…"
 
 #: problemsview.cpp:453
 #, kde-format

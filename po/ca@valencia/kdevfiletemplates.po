@@ -44,7 +44,7 @@ msgstr "Tipus de variable i identificador"
 #, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "Nou des d'una plantilla..."
+msgstr "Nou des d'una plantilla…"
 
 #: filetemplatesplugin.cpp:71
 #, kde-format
@@ -72,7 +72,7 @@ msgstr "Vista prèvia de la plantilla"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create from Template..."
-msgstr "Crea des d'una plantilla..."
+msgstr "Crea des d'una plantilla…"
 
 #: filetemplatesplugin.cpp:135
 #, kde-format
@@ -383,7 +383,7 @@ msgstr "Plantilla"
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
-msgstr "Obtín més plantilles..."
+msgstr "Obtín més plantilles…"
 
 #: templateselectionpage.cpp:246
 #, kde-format
@@ -409,7 +409,7 @@ msgstr "Tipus de llicència:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable if you want to save this license for future use"
-msgstr "Activeu si voleu guardar esta llicència per a usos futurs"
+msgstr "Marqueu-la si voleu guardar esta llicència per a usos futurs"
 
 #. i18n: ectx: property (text), widget (QCheckBox, saveLicense)
 #: ui/licensechooser.ui:67

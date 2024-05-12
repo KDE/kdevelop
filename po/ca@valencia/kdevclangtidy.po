@@ -29,7 +29,7 @@ msgstr "Clang-Tidy"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Busca…"
 
 #: config/checklistmodel.cpp:65
 #, kde-format

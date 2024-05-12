@@ -217,7 +217,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to gdb executable..."
-msgstr "Substituïx el camí cap a l'executable de «gdb»..."
+msgstr "Substituïx el camí cap a l'executable de «gdb»…"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
@@ -278,7 +278,7 @@ msgstr ""
 "codi basat en les Qt. Podeu canviar la «signatura»\n"
 "de les dades de les quals depenen QString i\n"
 "companyia, però si necessiteu depurar\n"
-"estos valors, seleccioneu esta opció."
+"estos valors, marqueu esta opció."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gdbconfigpage.ui:121
@@ -370,7 +370,7 @@ msgstr ""
 "p><p>Este script de l'intèrpret d'ordes s'executa després de l'script de "
 "configuració gdb, que ha sigut generat per gdb.</p><p>La seua finalitat és "
 "iniciar realment el procés remot.</p><p>1) Trobeu una manera d'executar una "
-"ordre remotament (rsh, ssh, telnet...)</p><p>2a) Executeu «gdbserver ... "
+"ordre remotament (rsh, ssh, telnet…)</p><p>2a) Executeu «gdbserver … "
 "aplicació» en la destinació.</p><p>O si el vostre executable conté el bloc "
 "d'adaptació de gdb:</p><p>2b) Executeu «aplicació» en la destinació.</p></"
 "body></html>"

@@ -537,7 +537,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
-msgstr "Confirmació d'eliminació de script extern"
+msgstr "Confirmeu l'eliminació de script extern"
 
 #: externalscriptview.cpp:150
 #, kde-format
@@ -550,4 +550,4 @@ msgstr "Elimina"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Filtre..."
+msgstr "Filtre…"

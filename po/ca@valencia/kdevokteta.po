@@ -67,4 +67,4 @@ msgstr "Editor hexadecimal"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Manage Byte Array View Profiles..."
-msgstr "Gestioneu els perfils de vista de matrius de bytes..."
+msgstr "Gestioneu els perfils de vista de matrius de bytes…"

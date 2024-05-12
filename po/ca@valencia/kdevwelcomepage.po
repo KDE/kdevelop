@@ -194,7 +194,7 @@ msgstr "%1 (notícia)"
 
 #: qml/NewsFeed.qml:147
 msgid "Fetching feeds..."
-msgstr "S'estan recuperant les fonts..."
+msgstr "S'estan recuperant les fonts…"
 
 #: qml/NewsFeed.qml:148
 msgid "No recent news"

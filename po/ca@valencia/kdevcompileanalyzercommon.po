@@ -28,7 +28,7 @@ msgstr "S'ha completat l'anàlisi, sense detectar cap problema."
 #: compileanalyzeproblemmodel.cpp:107
 #, kde-format
 msgid "Analysis started..."
-msgstr "S'ha iniciat l'anàlisi..."
+msgstr "S'ha iniciat l'anàlisi…"
 
 #: compileanalyzeproblemmodel.cpp:110
 #, kde-format

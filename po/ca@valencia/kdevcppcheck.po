@@ -381,7 +381,7 @@ msgstr "Línia d'ordres"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Busca…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
 #: config/projectconfigpage.ui:326
@@ -480,7 +480,7 @@ msgstr "S'ha completat l'anàlisi, sense detectar cap problema."
 #: problemmodel.cpp:137
 #, kde-format
 msgid "Analysis started..."
-msgstr "S'ha iniciat l'anàlisi..."
+msgstr "S'ha iniciat l'anàlisi…"
 
 #: problemmodel.cpp:138
 #, kde-format

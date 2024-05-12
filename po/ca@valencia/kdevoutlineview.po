@@ -47,4 +47,4 @@ msgstr "Ordena alfabèticament els elements"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Filtre..."
+msgstr "Filtre…"

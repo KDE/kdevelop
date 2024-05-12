@@ -36,7 +36,7 @@ msgstr "Torna a compilar totes les dependències per a un entorn fresc."
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
-msgstr "Exporta el paquet de Flatpak..."
+msgstr "Exporta el paquet de Flatpak…"
 
 #: flatpakplugin.cpp:52
 #, kde-format
@@ -48,7 +48,7 @@ msgstr "Exporta la construcció actual a un fitxer «bundle.flatpak»."
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
-msgstr "Envia a un dispositiu..."
+msgstr "Envia a un dispositiu…"
 
 #: flatpakplugin.cpp:92
 #, kde-format

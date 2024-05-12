@@ -229,7 +229,7 @@ msgstr "Esquema"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Quick Open..."
-msgstr "Obertura ràpida..."
+msgstr "Obertura ràpida…"
 
 #: quickopenplugin.cpp:943
 #, kde-format
