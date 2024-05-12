@@ -368,7 +368,7 @@ void LldbTest::testUpdateBreakpoint()
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    // break at line 29
+    // breakpoint 1: real line 29: foo();
     auto b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), 28);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
@@ -390,7 +390,7 @@ void LldbTest::testUpdateBreakpoint()
     QCOMPARE(b->line(), 33-1);
 
     session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop at line 25
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     QCOMPARE(session->currentLine(), 33-1);
 
