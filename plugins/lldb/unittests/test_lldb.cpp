@@ -71,6 +71,22 @@ public:
     int fetchThreadsCalled;
 };
 
+/// Check success with RETURN_IF_TEST_FAILED().
+void verifyStackFrameCountNotLessThan(const QModelIndex& threadIndex, int expectedStackFrameCount)
+{
+    const auto* const stackModel = threadIndex.model();
+    QVERIFY(stackModel);
+
+    const auto stackFrameCount = stackModel->rowCount(threadIndex);
+    qDebug() << "actual stack frame count:" << stackFrameCount;
+    qDebug() << "minimum expected count:  " << expectedStackFrameCount;
+    QVERIFY(stackFrameCount >= expectedStackFrameCount);
+
+    // the optional third last frame name is something like "___lldb_unnamed_symbol3264";
+    // the penultimate frame name is "__libc_start_main" or "__libc_start1";
+    // the last frame name is "_start".
+}
+
 class TestDebugSession : public DebugSession
 {
     Q_OBJECT
@@ -1001,13 +1017,12 @@ void LldbTest::testStack()
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
     COMPARE_DATA(tIdx, "#1 at foo()");
-    QCOMPARE(stackModel->rowCount(tIdx), 4);
+    verifyStackFrameCountNotLessThan(tIdx, 2);
+    RETURN_IF_TEST_FAILED();
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "foo()");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), m_debugeeFileName+":23");
     COMPARE_DATA(stackModel->index(1, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(1, 2, tIdx), m_debugeeFileName+":29");
-    COMPARE_DATA(stackModel->index(2, 1, tIdx), "__libc_start_main");
-    COMPARE_DATA(stackModel->index(3, 1, tIdx), "_start");
 
     session->stepOut();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -1015,11 +1030,10 @@ void LldbTest::testStack()
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
     COMPARE_DATA(tIdx, "#1 at main");
-    QCOMPARE(stackModel->rowCount(tIdx), 3);
+    verifyStackFrameCountNotLessThan(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), m_debugeeFileName+":30");
-    COMPARE_DATA(stackModel->index(1, 1, tIdx), "__libc_start_main");
-    COMPARE_DATA(stackModel->index(2, 1, tIdx), "_start");
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -1077,19 +1091,23 @@ void LldbTest::testStackFetchMore()
 
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
-    QCOMPARE(stackModel->rowCount(tIdx), 301);
+    verifyStackFrameCountNotLessThan(tIdx, 299);
+    RETURN_IF_TEST_FAILED();
     COMPARE_DATA(stackModel->index(298, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(298, 2, tIdx), fileName+":30");
-    COMPARE_DATA(stackModel->index(299, 1, tIdx), "__libc_start_main");
-    COMPARE_DATA(stackModel->index(300, 1, tIdx), "_start");
 
-    stackModel->fetchMoreFrames(); //nothing to fetch, we are at the end
-    WAIT_FOR_A_WHILE(session, 200);
-    QCOMPARE(stackModel->fetchFramesCalled, 4);
+    for (int counter = 0; counter < 2; ++counter) {
+        stackModel->fetchMoreFrames(); // possibly nothing more to fetch if we are at the end
+        WAIT_FOR_A_WHILE(session, 200);
+        qDebug() << "fetchFrames() was called" << stackModel->fetchFramesCalled << "times.";
+        QVERIFY(stackModel->fetchFramesCalled >= 4);
+        QVERIFY(stackModel->fetchFramesCalled <= 5);
 
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
-    QCOMPARE(stackModel->rowCount(tIdx), 301);
+        validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+        RETURN_IF_TEST_FAILED();
+        verifyStackFrameCountNotLessThan(tIdx, 299);
+        RETURN_IF_TEST_FAILED();
+    }
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -1113,7 +1131,8 @@ void LldbTest::testStackSwitchThread()
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
     RETURN_IF_TEST_FAILED();
     COMPARE_DATA(tIdx, "#1 at main");
-    QCOMPARE(stackModel->rowCount(tIdx), 1);
+    verifyStackFrameCountNotLessThan(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":44"); // QThread::msleep(600);
 
@@ -1128,8 +1147,8 @@ void LldbTest::testStackSwitchThread()
 
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
     RETURN_IF_TEST_FAILED();
-    int rows = stackModel->rowCount(tIdx);
-    QVERIFY(rows > 3);
+    verifyStackFrameCountNotLessThan(tIdx, 4);
+    RETURN_IF_TEST_FAILED();
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
