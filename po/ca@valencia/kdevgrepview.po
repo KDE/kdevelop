@@ -44,7 +44,7 @@ msgstr "Busca i substitució en fitxers"
 #, kde-format
 msgctxt "@action:button"
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Busca…"
 
 #: grepdialog.cpp:335
 #, kde-format
@@ -99,7 +99,7 @@ msgstr[1] "S'està buscant <b>%2</b> en %1 fitxers"
 #: grepjob.cpp:224
 #, kde-format
 msgid "Collecting files..."
-msgstr "S'estan col·leccionant els fitxers..."
+msgstr "S'estan col·leccionant els fitxers…"
 
 #: grepjob.cpp:268
 #, kde-format
@@ -258,7 +258,7 @@ msgstr "Su&bstituïx"
 #, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
-msgstr "Busca i substituïx en fi&txers..."
+msgstr "Busca i substituïx en fi&txers…"
 
 #: grepviewplugin.cpp:81
 #, kde-format
@@ -284,13 +284,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
-msgstr "Busca i substituïx en esta carpeta..."
+msgstr "Busca i substituïx en esta carpeta…"
 
 #: grepviewplugin.cpp:142
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."
-msgstr "Bu&sca i substituïx en fitxers..."
+msgstr "Bu&sca i substituïx en fitxers…"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
 #: grepwidget.ui:35

@@ -181,7 +181,7 @@ msgstr "%1 (selecció predeterminada)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search checks..."
-msgstr "Busca les comprovacions..."
+msgstr "Busca les comprovacions…"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #: config/checkswidget.ui:31
@@ -211,7 +211,7 @@ msgstr "Línia d'ordres"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Busca…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
 #: config/commandlinewidget.ui:47

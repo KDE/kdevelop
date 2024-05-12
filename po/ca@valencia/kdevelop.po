@@ -73,7 +73,7 @@ msgstr "Adjunta a un procés"
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Navigation"
-msgstr "&Navegació"
+msgstr "&Navegueu"
 
 #. i18n: ectx: Menu (file)
 #: kdevelopui.rc:89
@@ -248,7 +248,7 @@ msgstr "Olivier JG"
 #: main.cpp:388
 #, kde-format
 msgid "C++/Clang, DUChain, Bug Fixes"
-msgstr "C++/Clang, DUChain, correcció d'errors"
+msgstr "C++/Clang, DUChain, esmena d'errors"
 
 #: main.cpp:389
 #, kde-format
@@ -445,7 +445,7 @@ msgstr "Caleb Tennis"
 #: main.cpp:412
 #, kde-format
 msgid "KTabBar, bugfixes"
-msgstr "KTabBar, correcció d'errors"
+msgstr "KTabBar, esmena d'errors"
 
 #: main.cpp:413
 #, kde-format
@@ -555,7 +555,7 @@ msgstr "Falk Brettschneider"
 #: main.cpp:423
 #, kde-format
 msgid "MDI modes, QEditor, bugfixes"
-msgstr "Modes MDI, QEditor, correcció d'errors"
+msgstr "Modes MDI, QEditor, esmena d'errors"
 
 #: main.cpp:424
 #, kde-format
@@ -565,7 +565,7 @@ msgstr "Mario Scalas"
 #: main.cpp:424
 #, kde-format
 msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
-msgstr "PartExplorer, redisseny de CvsPart, pedaços, correcció d'errors"
+msgstr "PartExplorer, redisseny de CvsPart, pedaços, esmena d'errors"
 
 #: main.cpp:425
 #, kde-format
@@ -718,7 +718,7 @@ msgid ""
 "bugfixes ... "
 msgstr ""
 "Buscador de documentació, pedaços del gestor de projectes de QMake, millores "
-"en la usabilitat, correccions d'errors... "
+"en la usabilitat, esmenes d'errors… "
 
 #: main.cpp:441
 #, kde-format
@@ -738,7 +738,7 @@ msgstr "Sascha Cunz"
 #: main.cpp:442
 #, kde-format
 msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
-msgstr "Neteja i correcció d'errors a qEditor, AutoMake i moltes altres coses"
+msgstr "Neteja i esmena d'errors a qEditor, AutoMake i moltes altres coses"
 
 #: main.cpp:443
 #, kde-format

@@ -189,7 +189,7 @@ msgid ""
 "parsed in plain C mode. By default they are parsed as C++ headers.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Seleccioneu-la si voleu que les capçaleres <code>*.h</"
+"<html><head/><body><p>Marqueu-la si voleu que les capçaleres <code>*.h</"
 "code> siguen analitzades en el mode C normal. De manera predeterminada, "
 "seran analitzades com a capçaleres de C++.</p></body></html>"
 
@@ -333,8 +333,8 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Check this if you want the project to be reparsed to apply the changes."
 msgstr ""
-"Seleccioneu-la si voleu que el projecte siga tornat a analitzar per a "
-"aplicar els canvis."
+"Marqueu-la si voleu que el projecte siga tornat a analitzar per a aplicar "
+"els canvis."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_reparse)
 #: kcm_widget/projectpathswidget.ui:32
@@ -375,7 +375,7 @@ msgstr "Edita múltiples «include»/definicions alhora."
 #, kde-format
 msgctxt "@action:button"
 msgid "&Batch Edit..."
-msgstr "Edita per &lots..."
+msgstr "Edita per &lots…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addPath)
 #: kcm_widget/projectpathswidget.ui:119
@@ -473,7 +473,7 @@ msgstr "Seleccioneu un directori que s'inclourà."
 #, kde-format
 msgctxt "@action:button"
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:86
 #, kde-format

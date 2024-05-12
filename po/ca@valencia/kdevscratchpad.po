@@ -63,7 +63,7 @@ msgstr "No s'ha pogut canviar el nom del bloc de proves."
 #: scratchpadjob.cpp:57
 #, kde-format
 msgid "Running %1..."
-msgstr "%1 en execució..."
+msgstr "%1 en execució…"
 
 #: scratchpadjob.cpp:73
 #, kde-format
@@ -121,7 +121,7 @@ msgstr "Execució de bloc de proves"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Filtre..."
+msgstr "Filtre…"
 
 #: scratchpadview.cpp:204
 #, kde-format

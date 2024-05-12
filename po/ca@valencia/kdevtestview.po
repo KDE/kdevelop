@@ -43,7 +43,7 @@ msgstr "Executa les proves seleccionades"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Filtra..."
+msgstr "Filtra…"
 
 #: testview.cpp:292
 #, kde-format

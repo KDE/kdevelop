@@ -141,7 +141,7 @@ msgstr "GitHub"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Busca…"
 
 #: ghproviderwidget.cpp:58
 #, kde-format

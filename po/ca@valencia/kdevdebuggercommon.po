@@ -205,7 +205,7 @@ msgstr ""
 #: midebuggerplugin.cpp:238
 #, kde-format
 msgid "Choose a core file to examine..."
-msgstr "Seleccioneu un fitxer de nucli que s'haja d'examinar..."
+msgstr "Seleccioneu un fitxer de nucli que s'haja d'examinar…"
 
 #: midebuggerplugin.cpp:243 midebuggerplugin.cpp:263
 #, kde-format
@@ -225,7 +225,7 @@ msgstr "Interromp la sessió actual"
 #: midebuggerplugin.cpp:258
 #, kde-format
 msgid "Choose a process to attach to..."
-msgstr "Seleccioneu un procés al qual adjuntar..."
+msgstr "Seleccioneu un procés al qual adjuntar…"
 
 #: midebuggerplugin.cpp:282
 #, kde-format

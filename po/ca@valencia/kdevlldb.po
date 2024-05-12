@@ -139,7 +139,7 @@ msgstr "Executable del depurador:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to lldb-mi executable..."
-msgstr "Substituïx el camí cap a l'executable de «lldb-mi»..."
+msgstr "Substituïx el camí cap a l'executable de «lldb-mi»…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/lldbconfigpage.ui:49
