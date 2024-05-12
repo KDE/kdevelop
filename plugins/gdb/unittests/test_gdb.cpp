@@ -861,9 +861,7 @@ void GdbTest::testAttach()
     session->run();
     QTest::qWait(2000);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    if (session->line() < 39 || session->line() < 40) {
-        QCOMPARE(session->line(), 39);
-    }
+    QCOMPARE(session->line(), 40); // return 0; (GDB automatically moves the breakpoint from its no-op line)
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
