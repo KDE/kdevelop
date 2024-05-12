@@ -20,10 +20,9 @@ struct testStruct { int a; int b; int c; };
 void noop() {}
 void foo() {
     static int i=0;
-    ++i; int j = i;
+    ++i; int j = i; (void)j;
     noop();
     noop();
-    (void)j; // Suppress unused j warning
 }
 int main(int argc, char **argv) {
     std::cout << "Hello, world!" << std::endl;
