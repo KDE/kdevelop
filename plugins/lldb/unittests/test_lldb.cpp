@@ -597,13 +597,13 @@ void LldbTest::testInsertBreakpointWhileRunning()
     WAIT_FOR_A_WHILE(session, 2000);
 
     qDebug() << "adding breakpoint";
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 25);
+    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 29); // ++i;
     WAIT_FOR_A_WHILE(session, 500);
 
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     WAIT_FOR_A_WHILE(session, 500);
 
-    QCOMPARE(session->currentLine(), 25);
+    QCOMPARE(session->currentLine(), 29); // ++i;
     breakpoints()->removeBreakpoint(b);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -625,20 +625,20 @@ void LldbTest::testInsertBreakpointWhileRunningMultiple()
     WAIT_FOR_A_WHILE(session, 2000);
 
     qDebug() << "adding breakpoint";
-    auto b1 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 24);
-    auto b2 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 25);
+    auto b1 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 29); // ++i;
+    auto b2 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
 
     WAIT_FOR_A_WHILE(session, 500);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     WAIT_FOR_A_WHILE(session, 500);
-    QCOMPARE(session->currentLine(), 24);
+    QCOMPARE(session->currentLine(), 29);
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     WAIT_FOR_A_WHILE(session, 500);
-    QCOMPARE(session->currentLine(), 25);
+    QCOMPARE(session->currentLine(), 30);
     breakpoints()->removeBreakpoint(b1);
     breakpoints()->removeBreakpoint(b2);
 
@@ -718,7 +718,7 @@ void LldbTest::testInsertAndRemoveBreakpointWhileRunning()
     WAIT_FOR_STATE(session, DebugSession::ActiveState);
     WAIT_FOR_A_WHILE(session, 1000);
 
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 25);
+    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
     WAIT_FOR_A_WHILE(session, 200); // wait for feedback notification from lldb-mi
     breakpoints()->removeBreakpoint(b);
 
@@ -887,11 +887,11 @@ void LldbTest::testChangeBreakpointWhileRunning()
     auto *session = new TestDebugSession;
     TestLaunchConfiguration c(QStringLiteral("debuggee_debugeeslow"));
 
-    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:25"));
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:30")); // ++i;
     QVERIFY(session->startDebugging(&c, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
-    QVERIFY(session->currentLine() >= 24 && session->currentLine() <= 26 );
+    QCOMPARE(session->currentLine(), 29); // ++i;
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::ActiveState);
@@ -1152,7 +1152,7 @@ void LldbTest::testStackSwitchThread()
 
     TestFrameStackModel *stackModel = session->frameStackModel();
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 38);
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
@@ -1163,7 +1163,7 @@ void LldbTest::testStackSwitchThread()
     QCOMPARE(stackModel->rowCount(tIdx), 1);
     COMPARE_DATA(stackModel->index(0, 0, tIdx), "0");
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":39");
+    COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":44"); // QThread::msleep(600);
 
     tIdx = stackModel->index(1,0);
     QVERIFY(stackModel->data(tIdx).toString().startsWith("#2 at "));
@@ -1197,14 +1197,14 @@ void LldbTest::testAttach()
 
     WAIT_FOR_A_WHILE(session, 100);
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 35);
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 39); // the blank line in main()
 
     // lldb-mi silently stops when attaching to a process. Force it continue to run.
     session->addCommand(MI::ExecContinue, QString(), MI::CmdMaybeStartsRunning);
     WAIT_FOR_A_WHILE(session, 2000);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
-    QCOMPARE(session->currentLine(), 35);
+    QCOMPARE(session->currentLine(), 40); // return 0; (LLDB automatically moves the breakpoint from its no-op line)
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
