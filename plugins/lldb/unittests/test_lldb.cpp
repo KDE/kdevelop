@@ -1422,10 +1422,6 @@ void LldbTest::testVariablesWatchesQuotes()
     QModelIndex i = variableCollection()->index(0, 0);
     QCOMPARE(variableCollection()->rowCount(i), 1);
     COMPARE_DATA(variableCollection()->index(0, 0, i), quotedTestString);
-
-    QEXPECT_FAIL("",
-                 "LLDB 4.0 cannot deal with string literal in expression when debugging, causing memory access error",
-                 Abort);
     COMPARE_DATA(variableCollection()->index(0, 1, i), quotedTestString);
 
     QModelIndex testStr = variableCollection()->index(0, 0, i);
