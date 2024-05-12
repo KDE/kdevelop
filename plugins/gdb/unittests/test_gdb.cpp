@@ -1870,11 +1870,11 @@ void GdbTest::testChangeBreakpointWhileRunning()
     auto *session = new TestDebugSession;
 
     TestLaunchConfiguration c(QStringLiteral("debuggee_debugeeslow"));
-    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:30"));
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:30")); // ++i;
     session->startDebugging(&c, m_iface);
 
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QVERIFY(session->currentLine() >= 29 && session->currentLine() <= 31 );
+    QCOMPARE(session->currentLine(), 29); // ++i;
     session->run();
     WAIT_FOR_STATE(session, DebugSession::ActiveState);
     b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
