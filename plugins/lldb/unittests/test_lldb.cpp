@@ -930,12 +930,8 @@ void LldbTest::testChangeBreakpointWhileRunning()
     WAIT_FOR_STATE(session, DebugSession::ActiveState);
     qDebug() << "Enabling breakpoint";
 
-    // Use native user command works, but not through -break-enable, which is triggered by setData
-    session->addCommand(MI::NonMI, QStringLiteral("break enable"));
-    //b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
-
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
     b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
 
     session->run();
