@@ -256,7 +256,6 @@ void LldbTest::testBreakOnStart()
 
 void LldbTest::testDisableBreakpoint()
 {
-    QSKIP("Skipping... In lldb-mi -d flag has no effect when mixed with -f");
     //Description: We must stop only on the third breakpoint
 
     int firstBreakLine=28;
@@ -912,7 +911,6 @@ void LldbTest::testRegularExpressionBreakpoint()
 
 void LldbTest::testChangeBreakpointWhileRunning()
 {
-    QSKIP("Skipping... lldb-mi command -break-enable doesn't enable breakpoint");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration c(QStringLiteral("debuggee_debugeeslow"));
 
@@ -1129,7 +1127,6 @@ void LldbTest::testStackFetchMore()
 
 void LldbTest::testStackSwitchThread()
 {
-    QSKIP("Skipping... lldb-mi crashes when break at a location with multiple threads running");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeethreads"));
     QString fileName = findSourceFile("debugeethreads.cpp");
@@ -1763,8 +1760,6 @@ void LldbTest::testDebugInExternalTerminal()
 
 void LldbTest::testSpecialPath()
 {
-    QSKIP("Skipping... lldb-mi itself can't handle path with space in application dir");
-
     auto* session = new TestDebugSession;
 
     auto debugee = findExecutable(QStringLiteral("path with space/debuggee_spacedebugee"));
