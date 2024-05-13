@@ -487,7 +487,7 @@ void LldbTest::testBreakOnWriteBreakpoint()
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QCOMPARE(session->currentLine(), 23);
+    QCOMPARE(session->currentLine(), 22); // line 23: ++i; int j = i;
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->currentLine(), 24);
@@ -514,7 +514,7 @@ void LldbTest::testBreakOnWriteWithConditionBreakpoint()
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QCOMPARE(session->currentLine(), 23);
+    QCOMPARE(session->currentLine(), 22); // line 23: ++i; int j = i;
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->currentLine(), 24);
@@ -532,9 +532,16 @@ void LldbTest::testBreakOnReadBreakpoint()
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QCOMPARE(session->currentLine(), 23);
-    session->run();
+    for (int fooCall = 0; fooCall < 2; ++fooCall) {
+        WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+        QCOMPARE(session->currentLine(), 22); // ++i;
+        session->run();
+
+        WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+        QCOMPARE(session->currentLine(), 22); // int j = i;
+        session->run();
+    }
+
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
@@ -555,7 +562,11 @@ void LldbTest::testBreakOnReadBreakpoint2()
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QCOMPARE(session->currentLine(), 22);
+    QCOMPARE(session->currentLine(), 22); // ++i
+
+    session->run();
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(session->currentLine(), 22); // int j = i
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -582,12 +593,15 @@ void LldbTest::testBreakOnAccessBreakpoint()
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QCOMPARE(session->currentLine(), 22);
+    QCOMPARE(session->currentLine(), 22); // line 23: ++i (read)
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QCOMPARE(session->currentLine(), 23);
+    QCOMPARE(session->currentLine(), 22); // line 23: ++i (write)
 
+    session->run();
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(session->currentLine(), 22); // line 23: int j = i (read)
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
