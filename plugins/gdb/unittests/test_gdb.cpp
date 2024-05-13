@@ -439,23 +439,28 @@ void GdbTest::testBreakOnWriteWithConditionBreakpoint()
 
 void GdbTest::testBreakOnReadBreakpoint()
 {
-    /*
-    test disabled because of gdb bug: http://sourceware.org/bugzilla/show_bug.cgi?id=10136
-
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    KDevelop::Breakpoint *b = breakpoints()->addReadWatchpoint("foo::i");
+    breakpoints()->addReadWatchpoint("foo::i");
 
     session->startDebugging(&cfg, m_iface);
 
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->line(), 23);
-    session->run();
+    for (int fooCall = 0; fooCall < 2; ++fooCall) {
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+        QCOMPARE(session->line(), 22); // ++i;
+        session->run();
+
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+        QCOMPARE(session->line(), 22); // int j = i;
+        session->run();
+    }
+
     WAIT_FOR_STATE(session, DebugSession::EndedState);
-    */
 }
 
+// This test adds a read watchpoint during a debug session rather than before it in order to
+// work around the (already fixed) GDB bug http://sourceware.org/bugzilla/show_bug.cgi?id=10136
 void GdbTest::testBreakOnReadBreakpoint2()
 {
     auto *session = new TestDebugSession;
