@@ -25,6 +25,7 @@
 
 class TestDebugger : public KDevMI::MIDebugger
 {
+    Q_OBJECT
 public:
     TestDebugger() : KDevMI::MIDebugger() {}
     bool start(KConfigGroup&, const QStringList&) override { return true; }
