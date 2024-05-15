@@ -129,8 +129,6 @@
             - Remote work path can't contain space
             - Can't actually start inferior
     * Breakpoints
-        + Pending breakpoints doesn't work. (Break on start now works even without pending breakpoint support)
-            - Can still manually set pending breakpoints
         + Breakpoint hit count is not updated timely (limitation in lldb-mi)
         + No watchpoint support
             - Can still manually add watch point

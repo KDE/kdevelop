@@ -19,6 +19,7 @@ class BreakpointController : public MIBreakpointController
 public:
     explicit BreakpointController(DebugSession *parent);
 private:
+    QLatin1String pendingBreakpointAddress() const override;
 };
 
 } // end of namespace LLDB

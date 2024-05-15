@@ -23,6 +23,19 @@
 #include <QObject>
 #include <QTimer>
 
+class TestMIBreakpointController : public KDevMI::MIBreakpointController
+{
+    Q_OBJECT
+public:
+    using KDevMI::MIBreakpointController::MIBreakpointController;
+
+private:
+    QLatin1String pendingBreakpointAddress() const override
+    {
+        return {};
+    }
+};
+
 class TestDebugger : public KDevMI::MIDebugger
 {
     Q_OBJECT
@@ -37,7 +50,7 @@ class TestDebugSession : public KDevMI::MIDebugSession
 public:
     explicit TestDebugSession(KDevMI::MIDebuggerPlugin* plugin = nullptr)
         : KDevMI::MIDebugSession(plugin)
-        , m_breakpointController{new KDevMI::MIBreakpointController(this)}
+        , m_breakpointController{new TestMIBreakpointController(this)}
         , m_variableController{new KDevelop::TestVariableController(this)}
         , m_frameStackModel{new KDevelop::TestFrameStackModel(this)}
     {

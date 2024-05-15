@@ -357,7 +357,6 @@ void LldbTest::testDeleteBreakpoint()
 
 void LldbTest::testPendingBreakpoint()
 {
-    QSKIP("Skipping... Pending breakpoint not work on lldb-mi");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 

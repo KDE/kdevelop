@@ -750,10 +750,8 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
         breakpoint->dirty &= ~BreakpointModel::IgnoreHitsColumnFlag;
     }
 
-    breakpoint->pending = false;
-    if (miBkpt.hasField(QStringLiteral("addr")) && miBkpt[QStringLiteral("addr")].literal() == QLatin1String("<PENDING>")) {
-        breakpoint->pending = true;
-    }
+    static const auto addressField = QStringLiteral("addr");
+    breakpoint->pending = miBkpt.hasField(addressField) && miBkpt[addressField].literal() == pendingBreakpointAddress();
 
     int hitCount = 0;
     if (miBkpt.hasField(QStringLiteral("times"))) {

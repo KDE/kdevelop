@@ -15,4 +15,9 @@ BreakpointController::BreakpointController(DebugSession* parent)
 {
 }
 
+QLatin1String BreakpointController::pendingBreakpointAddress() const
+{
+    return QLatin1String("0xffffffffffffffff");
+}
+
 #include "moc_breakpointcontroller.cpp"

@@ -72,6 +72,8 @@ private Q_SLOTS:
     void programStopped(const MI::AsyncRecord &r);
 
 private:
+    virtual QLatin1String pendingBreakpointAddress() const = 0;
+
     MIDebugSession* debugSession() const;
 
     int breakpointRow(const BreakpointDataPtr& breakpoint);

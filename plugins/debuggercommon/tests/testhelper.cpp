@@ -306,7 +306,6 @@ void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* execute
     } else {
         // LLDB does not move the breakpoint from the no-op line 9 and permanently keeps it in the pending state.
         QCOMPARE(breakpointMiLine(licenseBreakpoint), 9);
-        QEXPECT_FAIL("", "kdevlldb fails to detect pending breakpoint state", Continue);
         QCOMPARE(licenseBreakpoint->state(), Breakpoint::PendingState);
     }
 
@@ -316,9 +315,6 @@ void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* execute
     // A debugger does not move the breakpoint from the last no-op line 42
     // and permanently keeps it in the pending state.
     QCOMPARE(breakpointMiLine(lastLineBreakpoint), 42);
-    if (!debuggerMovesBreakpointFromLicenseNotice) {
-        QEXPECT_FAIL("", "kdevlldb fails to detect pending breakpoint state", Continue);
-    }
     QCOMPARE(lastLineBreakpoint->state(), Breakpoint::PendingState);
 
     session->run();
