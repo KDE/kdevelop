@@ -367,7 +367,7 @@ void LldbTest::testPendingBreakpoint()
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), 28);
 
-    auto * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("test_lldb.cpp")), 10);
+    auto* const b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("debugeeqt.cpp")), 10);
     QCOMPARE(b->state(), Breakpoint::NotStartedState);
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
