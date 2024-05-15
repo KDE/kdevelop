@@ -303,6 +303,11 @@ void GdbTest::testPendingBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testBreakpointsOnNoOpLines()
+{
+    KDevMI::Testing::testBreakpointsOnNoOpLines(new TestDebugSession, m_iface, true);
+}
+
 void GdbTest::testUpdateBreakpoint()
 {
     auto *session = new TestDebugSession;

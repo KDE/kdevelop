@@ -34,6 +34,7 @@ private Q_SLOTS:
     void testChangeLocationBreakpoint();
     void testDeleteBreakpoint();
     void testPendingBreakpoint();
+    void testBreakpointsOnNoOpLines();
     void testUpdateBreakpoint();
     void testIgnoreHitsBreakpoint();
     void testConditionBreakpoint();

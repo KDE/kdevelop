@@ -20,6 +20,7 @@
 #include <QUrl>
 
 namespace KDevelop {
+class Breakpoint;
 class BreakpointModel;
 }
 
@@ -58,7 +59,20 @@ QString findSourceFile(const QString& name);
 QString findFile(const char* dir, const QString& name);
 bool isAttachForbidden(const char* file, int line);
 
+/// @return the path to the test file debugee.cpp
+QString debugeeFilePath();
+/// @return the URL of the test file debugee.cpp
+QUrl debugeeUrl();
+
 KDevelop::BreakpointModel* breakpoints();
+
+/// Add a code breakpoint to debugee.cpp at a given one-based MI line.
+KDevelop::Breakpoint* addDebugeeBreakpoint(int miLine);
+
+/// @return one-based MI line of a given breakpoint
+int breakpointMiLine(const KDevelop::Breakpoint* breakpoint);
+/// @return current one-based MI line in a given session
+int currentMiLine(const KDevelop::IDebugSession* session);
 
 bool compareData(const QModelIndex& index, const QString& expected, const char* file, int line, bool useRE = false);
 
@@ -110,6 +124,9 @@ private:
 
 void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
                         IExecutePlugin* executePlugin);
+
+void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin,
+                                bool debuggerMovesBreakpointFromLicenseNotice);
 
 } // namespace Testing
 

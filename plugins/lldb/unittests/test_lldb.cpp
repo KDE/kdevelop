@@ -373,6 +373,11 @@ void LldbTest::testPendingBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void LldbTest::testBreakpointsOnNoOpLines()
+{
+    KDevMI::Testing::testBreakpointsOnNoOpLines(new TestDebugSession, m_iface, false);
+}
+
 void LldbTest::testUpdateBreakpoint()
 {
     // Description: user might insert breakpoints using lldb console. model should

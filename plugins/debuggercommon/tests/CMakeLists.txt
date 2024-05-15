@@ -19,6 +19,7 @@ target_link_libraries(kdevdbg_testhelper
     KDev::Interfaces
     Qt5::Core
     PRIVATE
+    KDev::Tests
     KDev::Util
     Qt5::Test
 )

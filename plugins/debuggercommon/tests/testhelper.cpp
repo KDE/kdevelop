@@ -10,9 +10,12 @@
 #include "debuggers-tests-config.h"
 #include "midebugsession.h"
 
+#include <debugger/breakpoint/breakpoint.h>
+#include <debugger/breakpoint/breakpointmodel.h>
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
+#include <tests/testhelpers.h>
 #include <util/environmentprofilelist.h>
 
 #include <QAbstractItemModel>
@@ -73,9 +76,36 @@ bool isAttachForbidden(const char *file, int line)
     return false;
 }
 
+QString debugeeFilePath()
+{
+    static const QString ret = findSourceFile(QStringLiteral("debugee.cpp"));
+    return ret;
+}
+QUrl debugeeUrl()
+{
+    static const QUrl ret = QUrl::fromLocalFile(debugeeFilePath());
+    return ret;
+}
+
 BreakpointModel* breakpoints()
 {
     return ICore::self()->debugController()->breakpointModel();
+}
+
+Breakpoint* addDebugeeBreakpoint(int miLine)
+{
+    return breakpoints()->addCodeBreakpoint(debugeeUrl(), miLine - 1);
+}
+
+int breakpointMiLine(const Breakpoint* breakpoint)
+{
+    QVERIFY_RETURN(breakpoint, -12345);
+    return breakpoint->line() + 1;
+}
+int currentMiLine(const IDebugSession* session)
+{
+    QVERIFY_RETURN(session, -12345);
+    return session->currentLine() + 1;
 }
 
 bool compareData(const QModelIndex& index, const QString& expected, const char *file, int line, bool useRE)
@@ -242,6 +272,57 @@ void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
     }
     QCOMPARE(outputLines, QStringList() << "-A' \" complex --value"
                                         << "-B' \" complex --value");
+}
+
+void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin,
+                                bool debuggerMovesBreakpointFromLicenseNotice)
+{
+    TestLaunchConfiguration cfg;
+
+    const auto* const licenseBreakpoint = addDebugeeBreakpoint(9);
+    const auto* const blankLineBreakpoint = addDebugeeBreakpoint(34);
+    const auto* const lastLineBreakpoint = addDebugeeBreakpoint(42);
+
+    QVERIFY(session->startDebugging(&cfg, executePlugin));
+
+    if (debuggerMovesBreakpointFromLicenseNotice) {
+        // The lines 9-19 consist of no-op code, so GDB moves the breakpoint from line 9 to line 20. The contents
+        // of the line 20 is "void noop() {}", so GDB stops at it 4 times (4 is the number of calls to noop()).
+        for (int noopCall = 0; noopCall < 4; ++noopCall) {
+            WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+            QCOMPARE(currentMiLine(session), 20);
+            session->run();
+        }
+    }
+
+    // The lines 34 and 35 consist of no-op code, so a debugger moves
+    // the breakpoint from line 34 to line 36 and stops at it.
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    QCOMPARE(currentMiLine(session), 36);
+
+    if (debuggerMovesBreakpointFromLicenseNotice) {
+        QCOMPARE(breakpointMiLine(licenseBreakpoint), 20);
+        QCOMPARE(licenseBreakpoint->state(), KDevelop::Breakpoint::CleanState);
+    } else {
+        // LLDB does not move the breakpoint from the no-op line 9 and permanently keeps it in the pending state.
+        QCOMPARE(breakpointMiLine(licenseBreakpoint), 9);
+        QEXPECT_FAIL("", "kdevlldb fails to detect pending breakpoint state", Continue);
+        QCOMPARE(licenseBreakpoint->state(), Breakpoint::PendingState);
+    }
+
+    QCOMPARE(breakpointMiLine(blankLineBreakpoint), 36);
+    QCOMPARE(blankLineBreakpoint->state(), Breakpoint::CleanState);
+
+    // A debugger does not move the breakpoint from the last no-op line 42
+    // and permanently keeps it in the pending state.
+    QCOMPARE(breakpointMiLine(lastLineBreakpoint), 42);
+    if (!debuggerMovesBreakpointFromLicenseNotice) {
+        QEXPECT_FAIL("", "kdevlldb fails to detect pending breakpoint state", Continue);
+    }
+    QCOMPARE(lastLineBreakpoint->state(), Breakpoint::PendingState);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
 } // end of namespace KDevMI::Testing
