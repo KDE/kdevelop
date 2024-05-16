@@ -154,6 +154,8 @@ void TestFilteringStrategy::testCompilerFilterStrategy_data()
         << buildLinkerErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("python-error-line", pathType)
         << buildPythonErrorLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("tsc-error-line", pathType)
+            << buildTscErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
     }
 }
 
@@ -616,6 +618,9 @@ warning: \"SOME_MACRO\" redefined" << "/path/to/file.h" << 59 << 0 << FilteredIt
     QTest::newRow("cmake-error")
         << "CMake Error at somesubdir/CMakeLists.txt:214:"
         << "/some/path/to/a/somesubdir/CMakeLists.txt" << 213 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("tsc-error")
+        << "connectivity_environment/index.ts(43,9): error TS2304: Cannot find name 'testDevice'."
+        << "/some/path/to/a/project/connectivity_environment/index.ts" << 42 << 8 << FilteredItem::ErrorItem;
 #endif
 }
 

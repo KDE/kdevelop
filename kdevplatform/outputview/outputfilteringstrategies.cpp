@@ -292,6 +292,9 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         ErrorFormat( QStringLiteral("PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)"), 5, 6, 4, QStringLiteral("pgi") ),
         // PGI (2)
         ErrorFormat( QStringLiteral("PGF9(.*)-(.*)-(.*)-Symbol, (.*) \\((.*)\\)"), 5, 5, 4, QStringLiteral("pgi") ),
+        // TypeScript
+        ErrorFormat(QStringLiteral("^(.*)\\(([0-9]+),([0-9]+)\\): ((?:[Ww]arning|[Ee]rror) TS[0-9]+: .*)"), 1, 2, 4,
+                    QStringLiteral("tsc"), 3),
     };
 
     FilteredItem item(line);
