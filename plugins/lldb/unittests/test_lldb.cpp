@@ -40,6 +40,7 @@
 
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
+using KDevMI::Testing::breakpoints;
 using KDevMI::Testing::findExecutable;
 using KDevMI::Testing::findFile;
 using KDevMI::Testing::findSourceFile;
@@ -115,12 +116,6 @@ private:
 };
 
 } // end of anonymous namespace
-
-
-BreakpointModel* LldbTest::breakpoints()
-{
-    return m_core->debugController()->breakpointModel();
-}
 
 VariableCollection *LldbTest::variableCollection()
 {

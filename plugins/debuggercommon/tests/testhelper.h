@@ -19,6 +19,10 @@
 #include <QElapsedTimer>
 #include <QUrl>
 
+namespace KDevelop {
+class BreakpointModel;
+}
+
 class IExecutePlugin;
 class QModelIndex;
 
@@ -53,6 +57,8 @@ QUrl findExecutable(const QString& name);
 QString findSourceFile(const QString& name);
 QString findFile(const char* dir, const QString& name);
 bool isAttachForbidden(const char* file, int line);
+
+KDevelop::BreakpointModel* breakpoints();
 
 bool compareData(const QModelIndex& index, const QString& expected, const char* file, int line, bool useRE = false);
 

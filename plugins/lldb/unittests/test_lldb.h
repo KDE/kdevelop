@@ -12,7 +12,6 @@
 class IExecutePlugin;
 
 namespace KDevelop {
-class BreakpointModel;
 class TestCore;
 class Variable;
 class VariableCollection;
@@ -101,8 +100,6 @@ private Q_SLOTS:
 
 private:
     // convenient access methods
-    KDevelop::BreakpointModel *breakpoints();
-
     KDevelop::VariableCollection *variableCollection();
     KDevelop::Variable *watchVariableAt(int i);
     QModelIndex localVariableIndexAt(int i, int col = 0);

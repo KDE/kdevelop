@@ -43,6 +43,7 @@
 #include <QTemporaryFile>
 
 using KDevelop::AutoTestShell;
+using KDevMI::Testing::breakpoints;
 using KDevMI::Testing::findExecutable;
 using KDevMI::Testing::findFile;
 using KDevMI::Testing::findSourceFile;
@@ -135,11 +136,6 @@ private:
 };
 
 static const QString debugeeFileName = findSourceFile(QStringLiteral("debugee.cpp"));
-
-KDevelop::BreakpointModel* breakpoints()
-{
-    return KDevelop::ICore::self()->debugController()->breakpointModel();
-}
 
 void GdbTest::testStdOut()
 {

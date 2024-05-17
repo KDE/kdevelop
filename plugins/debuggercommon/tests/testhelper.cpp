@@ -11,6 +11,8 @@
 #include "midebugsession.h"
 
 #include <execute/iexecuteplugin.h>
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
 #include <util/environmentprofilelist.h>
 
 #include <QAbstractItemModel>
@@ -23,6 +25,8 @@
 #include <QStringList>
 #include <QTest>
 #include <QVariant>
+
+using namespace KDevelop;
 
 namespace KDevMI::Testing {
 
@@ -67,6 +71,11 @@ bool isAttachForbidden(const char *file, int line)
     }
 
     return false;
+}
+
+BreakpointModel* breakpoints()
+{
+    return ICore::self()->debugController()->breakpointModel();
 }
 
 bool compareData(const QModelIndex& index, const QString& expected, const char *file, int line, bool useRE)
