@@ -31,7 +31,7 @@ set(debuggercommon_SRCS
     registers/modelsmanager.cpp
     registers/converters.cpp
 )
-if(KF5SysGuard_FOUND OR KSysGuard_FOUND)
+if(KSysGuard_FOUND)
     list(APPEND debuggercommon_SRCS
         dialogs/processselection.cpp
     )
@@ -85,11 +85,6 @@ if(KSysGuard_FOUND)
     target_link_libraries(kdevdebuggercommon
         PUBLIC
             KSysGuard::ProcessCore
-    )
-elseif(KF5SysGuard_FOUND)
-    target_link_libraries(kdevdebuggercommon
-        PUBLIC
-        KF6::ProcessCore
     )
 endif()
 

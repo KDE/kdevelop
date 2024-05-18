@@ -57,9 +57,4 @@ if(KSysGuard_FOUND)
         kdevdebuggercommon
         KSysGuard::ProcessCore
     )
-elseif(KF5SysGuard_FOUND)
-    target_link_libraries(kdevheaptrack
-        kdevdebuggercommon
-        KF6::ProcessCore
-    )
 endif()
