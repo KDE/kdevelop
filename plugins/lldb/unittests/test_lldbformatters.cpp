@@ -31,8 +31,8 @@
 #include <vector>
 
 #define WAIT_FOR_A_WHILE_AND_IDLE(session, ms) \
-    do { if (!KDevMI::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; \
-         if (!KDevMI::waitForState((session), DebugSession::PausedState, __FILE__, __LINE__, true)) \
+    do { if (!KDevMI::Testing::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; \
+         if (!KDevMI::Testing::waitForState((session), DebugSession::PausedState, __FILE__, __LINE__, true)) \
              return; \
     } while (0)
 
@@ -50,11 +50,12 @@
 
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
-using KDevMI::findExecutable;
-using KDevMI::findSourceFile;
-using KDevMI::findFile;
-using KDevMI::compareData;
-using KDevMI::TestLaunchConfiguration;
+using KDevMI::Testing::compareData;
+using KDevMI::Testing::findExecutable;
+using KDevMI::Testing::findFile;
+using KDevMI::Testing::findSourceFile;
+using KDevMI::Testing::TestLaunchConfiguration;
+using KDevMI::Testing::waitForAWhile;
 
 class TestDebugSession : public DebugSession
 {

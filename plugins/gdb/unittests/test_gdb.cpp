@@ -43,9 +43,11 @@
 #include <QTemporaryFile>
 
 using KDevelop::AutoTestShell;
-using KDevMI::findExecutable;
-using KDevMI::findSourceFile;
-using KDevMI::findFile;
+using KDevMI::Testing::findExecutable;
+using KDevMI::Testing::findFile;
+using KDevMI::Testing::findSourceFile;
+using KDevMI::Testing::TestLaunchConfiguration;
+using KDevMI::Testing::validateColumnCountsThreadCountAndStackFrameNumbers;
 
 namespace KDevMI { namespace GDB {
 
@@ -159,7 +161,7 @@ void GdbTest::testStdOut()
 
 void GdbTest::testEnvironmentSet()
 {
-    KDevMI::testEnvironmentSet(new TestDebugSession, QStringLiteral("GdbTestGroup"), m_iface);
+    KDevMI::Testing::testEnvironmentSet(new TestDebugSession, QStringLiteral("GdbTestGroup"), m_iface);
 }
 
 void GdbTest::testBreakpoint()

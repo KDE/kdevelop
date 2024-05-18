@@ -24,7 +24,7 @@
 #include <QTest>
 #include <QVariant>
 
-namespace KDevMI {
+namespace KDevMI::Testing {
 
 QUrl findExecutable(const QString& name)
 {
@@ -235,4 +235,4 @@ void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
                                         << "-B' \" complex --value");
 }
 
-} // end of namespace KDevMI
+} // end of namespace KDevMI::Testing

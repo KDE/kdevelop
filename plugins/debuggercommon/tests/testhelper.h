@@ -23,29 +23,31 @@ class IExecutePlugin;
 class QModelIndex;
 
 #define WAIT_FOR_STATE(session, state) \
-    do { if (!KDevMI::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
+    do { if (!KDevMI::Testing::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
 
 #define WAIT_FOR_STATE_AND_IDLE(session, state) \
-    do { if (!KDevMI::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
+    do { if (!KDevMI::Testing::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
 
 #define WAIT_FOR(session, condition) \
     do { \
-        KDevMI::TestWaiter w((session), #condition, __FILE__, __LINE__); \
+        KDevMI::Testing::TestWaiter w((session), #condition, __FILE__, __LINE__); \
         while (w.waitUnless((condition))) /* nothing */ ; \
     } while(0)
 
 #define COMPARE_DATA(index, expected) \
-    do { if (!KDevMI::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
+    do { if (!KDevMI::Testing::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
 
 #define SKIP_IF_ATTACH_FORBIDDEN() \
     do { \
-        if (KDevMI::isAttachForbidden(__FILE__, __LINE__)) \
+        if (KDevMI::Testing::isAttachForbidden(__FILE__, __LINE__)) \
             return; \
     } while(0)
 
 namespace KDevMI {
 
 class MIDebugSession;
+
+namespace Testing {
 
 QUrl findExecutable(const QString& name);
 QString findSourceFile(const QString& name);
@@ -102,6 +104,8 @@ private:
 
 void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
                         IExecutePlugin* executePlugin);
+
+} // namespace Testing
 
 } // end of namespace KDevMI
 

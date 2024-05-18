@@ -36,13 +36,15 @@
 #include <QDir>
 
 #define WAIT_FOR_A_WHILE(session, ms) \
-    do { if (!KDevMI::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; } while (0)
+    do { if (!KDevMI::Testing::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; } while (0)
 
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
-using KDevMI::findExecutable;
-using KDevMI::findFile;
-using KDevMI::findSourceFile;
+using KDevMI::Testing::findExecutable;
+using KDevMI::Testing::findFile;
+using KDevMI::Testing::findSourceFile;
+using KDevMI::Testing::TestLaunchConfiguration;
+using KDevMI::Testing::validateColumnCountsThreadCountAndStackFrameNumbers;
 
 namespace {
 
@@ -210,7 +212,7 @@ void LldbTest::testStdout()
 
 void LldbTest::testEnvironmentSet()
 {
-    KDevMI::testEnvironmentSet(new TestDebugSession, QStringLiteral("LldbTestGroup"), m_iface);
+    KDevMI::Testing::testEnvironmentSet(new TestDebugSession, QStringLiteral("LldbTestGroup"), m_iface);
 }
 
 void LldbTest::testBreakpoint()
