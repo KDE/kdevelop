@@ -18,14 +18,14 @@ set(RELEASE_SERVICE_BASED_PATCHLEVEL "${RELEASE_SERVICE_VERSION_MAJOR}${RELEASE_
 # The multiplier 3 is the number of releases that share ${RELEASE_SERVICE_VERSION_MAJOR}.
 # The fraction assigns consecutive minor versions to the 3 releases - 04, 08 and 12. The rounding up groups
 # pre-release versions with the corresponding final release versions: 03 with 04, 07 with 08 and 11 with 12.
-# The final subtrahend at the end of the expression ensures version continuity: KDevelop 5.11 in KDE Gear 23.04.
+# The final subtrahend at the end of the expression ensures version continuity: KDevelop 6.0 in KDE Gear 24.08.
 math(EXPR KDEVELOP_OWN_MINOR_VERSION "${RELEASE_SERVICE_VERSION_MAJOR} * 3                  \
                                       + (${RELEASE_SERVICE_VERSION_MINOR} + 4 - 3) / 4      \
-                                      - 59")
+                                      - 74")
 
 # On macOS KDevelop_VERSION_MINOR is modified below. But KDEV_ITEMREPOSITORY_VERSION should depend on the
 # original minor version on all platforms. So the variable ${KDEVELOP_OWN_MINOR_VERSION} is used again later.
-project(KDevelop VERSION "5.${KDEVELOP_OWN_MINOR_VERSION}.${RELEASE_SERVICE_BASED_PATCHLEVEL}")
+project(KDevelop VERSION "6.${KDEVELOP_OWN_MINOR_VERSION}.${RELEASE_SERVICE_BASED_PATCHLEVEL}")
 
 # KDevelop SOVERSION
 # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
