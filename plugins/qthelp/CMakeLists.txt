@@ -33,7 +33,7 @@ target_link_libraries(kdevqthelp
     KF6::I18n
     KF6::KIOWidgets
     KF6::TextEditor
-    KF6::IconThemes
+    KF6::IconWidgets
     KF6::NewStuffWidgets
     Qt::Help
 )
