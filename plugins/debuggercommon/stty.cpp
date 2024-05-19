@@ -128,7 +128,16 @@ STTY::STTY(bool ext, const QString &termAppName)
         if (fout >= 0) {
             ttySlave = QString::fromLatin1(tty_slave);
             out = new QSocketNotifier(fout, QSocketNotifier::Read, this);
+#ifndef Q_OS_WIN
+            // This connection does not compile on Windows and produces the following error since Qt 6:
+            // error C2338: static_assert failed: 'Signal and slot arguments are not compatible (narrowing)'
+            // That's because the first argument of QSocketNotifier::activated() is QSocketDescriptor,
+            // which is implicitly convertible to int on non-Windows platforms, to Qt::HANDLE and
+            // qintptr on Windows; and STTY::OutReceived() takes an int argument.
+            // The entire definition of OutReceived() is disabled on Windows,
+            // so just disable the connection on this platform too.
             connect( out, &QSocketNotifier::activated, this, &STTY::OutReceived );
+#endif
         }
     }
 }
