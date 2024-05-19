@@ -11,6 +11,9 @@
 Language: JavaScript
 DisableFormat: true
 ---
+Language: Json
+BasedOnStyle: WebKit
+---
 
 # Style for C++
 Language: Cpp
