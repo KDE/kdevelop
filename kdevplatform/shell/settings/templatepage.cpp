@@ -13,6 +13,8 @@
 #include <language/codegen/templatesmodel.h>
 
 #include <KArchive>
+#include <KNSCore/Entry>
+#include <KNSWidgets/Button>
 #include <KZip>
 #include <KTar>
 

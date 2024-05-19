@@ -15,6 +15,7 @@
 
 #include <KMessageBox>
 #include <KLocalizedString>
+#include <KNSCore/Entry>
 #include <KNSWidgets/Button>
 #include <kio_version.h>
 

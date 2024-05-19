@@ -7,8 +7,6 @@
 #ifndef KDEVPLATFORM_TEMPLATEPAGE_H
 #define KDEVPLATFORM_TEMPLATEPAGE_H
 
-// KNSCore::Entry is only a typedef in KF5, defined here
-#include <KNSWidgets/Button>
 #include <QWidget>
 
 class QModelIndex;
@@ -20,6 +18,10 @@ class ITemplateProvider;
 namespace Ui
 {
     class TemplatePage;
+}
+
+namespace KNSCore {
+class Entry;
 }
 
 class TemplatePage : public QWidget

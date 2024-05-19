@@ -10,8 +10,9 @@
 
 #include <interfaces/configpage.h>
 
-// KNSCore::Entry is only a typedef in KF5, defined here
-#include <KNSWidgets/Button>
+namespace KNSCore {
+class Entry;
+}
 
 class QTreeWidgetItem;
 class QtHelpPlugin;
