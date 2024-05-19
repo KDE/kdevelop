@@ -267,7 +267,7 @@ void QtHelpConfig::knsUpdate(const QList<KNSCore::Entry>& list)
         return;
 
     for (const auto& e : list) {
-        if(e.status() == KNS3::Entry::Installed) {
+        if (e.status() == KNSCore::Entry::Installed) {
             // For zipped/tarred QCH fules KNewStuff also adds the directory as installed file, first file entry is assumed to be QCH file though
             if (e.installedFiles().size() >= 1) {
                 QString filename = e.installedFiles().at(0);
@@ -278,7 +278,7 @@ void QtHelpConfig::knsUpdate(const QList<KNSCore::Entry>& list)
                     qCDebug(QTHELP) << "namespace error";
                 }
             }
-        } else if(e.status() ==  KNS3::Entry::Deleted) {
+        } else if (e.status() == KNSCore::Entry::Deleted) {
             // cmp. note above for installed files
             if (e.uninstalledFiles().size() >= 1) {
                 for(int i=0; i < m_configWidget->qchTable->topLevelItemCount(); i++) {
