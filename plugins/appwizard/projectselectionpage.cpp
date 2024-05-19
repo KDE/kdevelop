@@ -17,6 +17,8 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
+#include <KNSCore/Entry>
+#include <KNSWidgets/Button>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
