@@ -42,9 +42,7 @@ private:
 KDevKonsoleViewPlugin::KDevKonsoleViewPlugin(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevkonsoleview"), parent)
 {
-    // TODO KF6: check whether constructing a KPluginMetaData from this plugin ID still works
-    // consider passing some path or prefix instead of the plugin ID to increase robustness.
-    const auto factory = KPluginFactory::loadFactory(KPluginMetaData(QStringLiteral("konsolepart")));
+    const auto factory = KPluginFactory::loadFactory(KPluginMetaData{QStringLiteral("kf6/parts/konsolepart")});
     if (!factory) {
         qCWarning(PLUGIN_KONSOLE) << "Failed to load 'konsolepart' plugin:" << factory.errorText;
         setErrorDescription(i18n("Failed to load 'konsolepart' plugin: %1", factory.errorString));
