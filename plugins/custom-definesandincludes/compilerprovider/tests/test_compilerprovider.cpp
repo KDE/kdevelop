@@ -8,7 +8,6 @@
 
 #include <QTest>
 #include <QTemporaryFile>
-#include <QSignalBlocker>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
