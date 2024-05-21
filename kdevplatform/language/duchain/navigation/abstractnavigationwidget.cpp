@@ -96,10 +96,6 @@ void AbstractNavigationWidget::initBrowser(int height)
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
-    connect(d->m_browser.data(), &QTextEdit::selectionChanged, this, [this]() {
-            Q_D(AbstractNavigationWidget);
-            d->m_browser->copy();
-        });
     connect(d->m_browser.data(), &QTextBrowser::anchorClicked, this, [this](const QUrl& url) {
             Q_D(AbstractNavigationWidget);
             d->anchorClicked(url);
