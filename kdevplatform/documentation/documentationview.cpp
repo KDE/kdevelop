@@ -274,7 +274,6 @@ void DocumentationView::updateView()
     if (mCurrent != mHistory.end()) {
         w = (*mCurrent)->documentationWidget(mFindDoc, this);
         Q_ASSERT(w);
-        QWidget::setTabOrder(mIdentifiers, w);
 
         if (auto* const standardView = qobject_cast<StandardDocumentationView*>(w)) {
             connect(standardView, &StandardDocumentationView::browseForward, this, &DocumentationView::tryBrowseForward);
