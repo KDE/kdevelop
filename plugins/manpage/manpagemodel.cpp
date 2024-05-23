@@ -106,7 +106,12 @@ void ManPageModel::indexEntries(KIO::Job* /*job*/, const KIO::UDSEntryList& entr
 {
     for (const KIO::UDSEntry& entry : entries) {
         if (entry.isDir()) {
-            m_sectionList << qMakePair(entry.stringValue(KIO::UDSEntry::UDS_URL), entry.stringValue(KIO::UDSEntry::UDS_NAME));
+            const auto url = entry.stringValue(KIO::UDSEntry::UDS_URL);
+            // Filter out the useless index entry ".". Clicking on this entry has no effect. Passing
+            // an empty URL to KIO::listDir() in initSection() prints a warning: Invalid URL: QUrl("")
+            if (!url.isEmpty()) {
+                m_sectionList << ManSection{url, entry.stringValue(KIO::UDSEntry::UDS_NAME)};
+            }
         }
     }
 }
