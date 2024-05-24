@@ -155,6 +155,9 @@ void StatusBar::updateMessage()
     for (const Message& m : qAsConst(m_messages)) {
         messages.append(m.text);
 
+        if (m.timeout == 0) {
+            continue;
+        }
         if (timeout)
             timeout = qMin(timeout, m.timeout);
         else
