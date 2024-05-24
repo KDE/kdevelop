@@ -106,8 +106,6 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
 
         statusLayout->addLayout(m_buttonsLayout);
 
-        statusLayout->addStretch(1);
-
         m_corner = new QWidget(this);
         auto *cornerLayout = new QBoxLayout(QBoxLayout::LeftToRight, m_corner);
         cornerLayout->setContentsMargins(0, 0, 0, 0);

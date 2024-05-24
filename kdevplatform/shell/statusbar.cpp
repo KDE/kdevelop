@@ -58,6 +58,8 @@ StatusBar::StatusBar(QWidget* parent)
     m_progressDialog = new ProgressDialog(this, parent); // construct this first, then progressWidget
     m_progressDialog->setVisible(false);
     m_progressWidget = new StatusbarProgressWidget(m_progressDialog, this);
+    // Fix the progress widget's width to leave the rest of the horizontal space to status messages.
+    m_progressWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
     addPermanentWidget(m_progressWidget, 0);
 }
