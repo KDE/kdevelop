@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-24 01:48+0000\n"
 "PO-Revision-Date: 2024-04-17 13:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1213,7 +1213,7 @@ msgstr "Ad alanı arması"
 msgid "Forward Declaration"
 msgstr "Önden Beyan"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
 msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
@@ -1222,7 +1222,7 @@ msgstr ""
 "(<em>Alt</em> düğmesine basılı tutarak gösterin. Ok düğmeleriyle gezinin, "
 "<em>Giriş</em> düğmesi ile etkinleştirin)"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
 msgstr "(Bu ipucunu göstermek için <em>Alt</em> düğmesini basılı tutun)"

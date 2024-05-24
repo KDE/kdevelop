@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-24 01:48+0000\n"
 "PO-Revision-Date: 2024-05-09 06:38+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -1200,14 +1200,14 @@ msgstr "命名空間別名"
 msgid "Forward Declaration"
 msgstr "前置宣告"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
 msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
 "<em>Enter</em>)"
 msgstr ""
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
 msgstr ""

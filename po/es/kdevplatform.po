@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-24 01:48+0000\n"
 "PO-Revision-Date: 2024-04-18 01:04+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -1215,7 +1215,7 @@ msgstr "Alias del espacio de nombres"
 msgid "Forward Declaration"
 msgstr "Declaración aplazada"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
 msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
@@ -1224,7 +1224,7 @@ msgstr ""
 "(Mantenga pulsada <em>Alt</em> para mostrar. Navegue con las teclas de las "
 "flechas. Active pulsando <em>Enter</em>)"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
 msgstr "(Mantenga pulsada <em>Alt</em> para mostrar esta ayuda emergente)"

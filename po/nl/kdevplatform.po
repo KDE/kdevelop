@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-24 01:48+0000\n"
 "PO-Revision-Date: 2024-04-17 10:41+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -1214,7 +1214,7 @@ msgstr "Alias van naamruimte"
 msgid "Forward Declaration"
 msgstr "Voorwaarts-declaratie"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
 msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
@@ -1223,7 +1223,7 @@ msgstr ""
 "(Hou <em>Alt</em> ingedrukt om te tonen. Navigeer met pijltjestoetsen, "
 "activeer door indrukken van <em>Enter</em>)"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
 msgstr "(Hou <em>Alt</em> ingedrukt om deze tekstballon te tonen)"

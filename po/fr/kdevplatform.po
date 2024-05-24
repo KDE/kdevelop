@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-24 01:48+0000\n"
 "PO-Revision-Date: 2024-05-06 16:16+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -1231,7 +1231,7 @@ msgstr "Alias d'espaces de noms"
 msgid "Forward Declaration"
 msgstr "Déclaration postérieure"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
 msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
@@ -1240,7 +1240,7 @@ msgstr ""
 "(Maintenir <em>Alt</em> pour afficher. Naviguer à l'aide des flèches "
 "directionnelles, activer en appuyant sur <em>Entrée</em>)"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
 msgstr "(Maintenir <em>Alt</em> pour afficher cette aide)"

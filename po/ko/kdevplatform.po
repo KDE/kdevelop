@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-24 01:48+0000\n"
 "PO-Revision-Date: 2024-02-20 23:51+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -1192,7 +1192,7 @@ msgstr "네임스페이스 별명"
 msgid "Forward Declaration"
 msgstr "전방 선언"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
 msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
@@ -1201,7 +1201,7 @@ msgstr ""
 "(<em>Alt</em> 키를 누르고 있으면 표시합니다. 화살표 키를 눌러서 탐색할 수 있"
 "으며 <em>Enter</em> 키를 누르면 활성화합니다)"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
 msgstr "(이 풍선 도움말을 표시하려면 <em>Alt</em> 키를 누르십시오)"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-24 01:48+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -1208,7 +1208,7 @@ msgstr "Ad sahəsinin ləqəbi"
 msgid "Forward Declaration"
 msgstr "Öncədən bildiriş"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
 msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
@@ -1217,7 +1217,7 @@ msgstr ""
 "(Göstərmək üçün <em>Alt</em> düyməsini basıb saxlayın. Ox düymələri ilə "
 "istiqamətləndirin, <em>Enter</em> düyməsi ilə aktivləşdirin)"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
 msgstr "(Bu ipucu göstərmək üçün <em>Alt</em> düyməsini basıb saxlayın)"

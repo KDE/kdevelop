@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-24 01:48+0000\n"
 "PO-Revision-Date: 2024-04-28 11:29+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -1228,7 +1228,7 @@ msgstr "Aliasów przestrzeni nazw"
 msgid "Forward Declaration"
 msgstr "Deklaracja w przód"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
 msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
@@ -1237,7 +1237,7 @@ msgstr ""
 "(Przytrzymaj klawisz <em>Alt</em> aby pokazać. Do poruszania się użyj "
 "strzałek, aktywuj poprzez naciśnięcie klawisza <em>Enter</em>)"
 
-#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
 msgstr "(Przytrzymaj klawisz <em>Alt</em> aby pokazać tę podpowiedź)"
