@@ -18,8 +18,6 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-#include <sublime/view.h>
-
 #include "plugincontroller.h"
 #include "core.h"
 
@@ -29,7 +27,6 @@ namespace KDevelop
 StatusBar::StatusBar(QWidget* parent)
     : QStatusBar(parent)
     , m_timer(new QTimer(this))
-    , m_currentView(nullptr)
 {
 #ifdef Q_OS_MAC
     /* At time of writing this is only required for OSX and only has effect on OSX. 
@@ -64,25 +61,6 @@ void StatusBar::removeError(QWidget* w)
 {
     removeWidget(w);
     w->deleteLater();
-}
-
-void StatusBar::viewChanged(Sublime::View* view)
-{
-    if (m_currentView)
-        m_currentView->disconnect(this);
-
-    m_currentView = view;
-
-    if (view) {
-        connect(view, &Sublime::View::statusChanged, this, &StatusBar::viewStatusChanged);
-        QStatusBar::showMessage(view->viewStatus(), 0);
-
-    }
-}
-
-void StatusBar::viewStatusChanged(Sublime::View* view)
-{
-    QStatusBar::showMessage(view->viewStatus(), 0);
 }
 
 void StatusBar::pluginLoaded(IPlugin* plugin)

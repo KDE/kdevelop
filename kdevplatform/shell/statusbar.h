@@ -13,10 +13,6 @@
 
 class QTimer;
 
-namespace Sublime {
-class View;
-}
-
 namespace KDevelop
 {
 
@@ -45,8 +41,6 @@ public:
 
     void updateMessage();
 
-    void viewChanged(Sublime::View* view);
-
 public Q_SLOTS:
     void showErrorMessage(const QString& message, int timeout);
     
@@ -56,7 +50,6 @@ private Q_SLOTS:
     void hideProgress( KDevelop::IStatus* );
     void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
     void slotTimeout();
-    void viewStatusChanged(Sublime::View* view);
 
     void pluginLoaded(KDevelop::IPlugin*);
     void removeError(QWidget*);
@@ -73,7 +66,6 @@ private:
     QHash<IStatus*, Message> m_messages;
     QTimer* const m_timer;
     QElapsedTimer m_time;
-    Sublime::View* m_currentView;
     QHash<IStatus*,ProgressItem*> m_progressItems;
     StatusbarProgressWidget* m_progressWidget; // embedded in the statusbar, shows a single progressbar & button to expand the overlay widget
     ProgressDialog* m_progressDialog; // the actual overlay widget that contains multiple progressbars and status messages
