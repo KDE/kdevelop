@@ -9,6 +9,7 @@
 #include "progresswidget/progressmanager.h"
 #include "progresswidget/progressdialog.h"
 
+#include <QDebug>
 #include <QTimer>
 
 #include <KColorScheme>
@@ -23,6 +24,12 @@
 
 namespace KDevelop
 {
+QDebug operator<<(QDebug debug, const StatusBar::Message& s)
+{
+    const QDebugStateSaver saver(debug);
+    debug.nospace() << '{' << s.text << ", " << s.timeout << '}';
+    return debug;
+}
 
 StatusBar::StatusBar(QWidget* parent)
     : QStatusBar(parent)

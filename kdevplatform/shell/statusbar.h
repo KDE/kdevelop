@@ -11,6 +11,7 @@
 #include <QHash>
 #include <QStatusBar>
 
+class QDebug;
 class QTimer;
 
 namespace KDevelop
@@ -62,6 +63,7 @@ private:
         QString text;
         int timeout;
     };
+    friend QDebug operator<<(QDebug debug, const Message& m);
 
     QHash<IStatus*, Message> m_messages;
     QTimer* const m_timer;
