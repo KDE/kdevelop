@@ -199,7 +199,7 @@ void StatusBar::showMessage( IStatus* status, const QString & message, int timeo
         if (progressItemIt != m_progressItems.constEnd()) {
             ProgressItem* i = *progressItemIt;
             i->setStatus(message);
-        } else {
+        } else if (!message.isEmpty()) { // do not display a semicolon and empty space in the aggregate status message
             Message m;
             m.text = message;
             m.timeout = timeout;
