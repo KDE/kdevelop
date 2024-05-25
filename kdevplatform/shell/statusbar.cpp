@@ -124,28 +124,31 @@ void StatusBar::showErrorMessage(const QString& message, int timeout)
     timer->start(); // triggers removeError()
 }
 
-void StatusBar::slotTimeout()
+void StatusBar::subtractFromEachMessageTimeout(int subtrahend, const IStatus* exceptThisMessage)
 {
     QMutableHashIterator<IStatus*, Message> it = m_messages;
 
     while (it.hasNext()) {
         it.next();
-        if (it.value().timeout) {
-            it.value().timeout -= m_timer->interval();
+        if (it.key() != exceptThisMessage && it.value().timeout) {
+            it.value().timeout -= subtrahend;
             if (it.value().timeout == 0)
                 it.remove();
         }
     }
+}
 
+void StatusBar::slotTimeout()
+{
+    subtractFromEachMessageTimeout(m_timer->interval());
     updateMessage();
 }
 
-void StatusBar::updateMessage()
+void StatusBar::updateMessage(const IStatus* justInsertedMessage)
 {
     if (m_timer->isActive()) {
         m_timer->stop();
-        m_timer->setInterval(m_time.elapsed());
-        slotTimeout();
+        subtractFromEachMessageTimeout(m_time.elapsed(), justInsertedMessage);
     }
 
     int timeout = 0;
@@ -201,7 +204,7 @@ void StatusBar::showMessage( IStatus* status, const QString & message, int timeo
             m.text = message;
             m.timeout = timeout;
             m_messages.insert(status, m);
-            updateMessage();
+            updateMessage(status);
         }
     });
 }

@@ -40,8 +40,6 @@ public:
 
     void registerStatus(QObject* status);
 
-    void updateMessage();
-
 public Q_SLOTS:
     void showErrorMessage(const QString& message, int timeout);
     
@@ -57,8 +55,9 @@ private Q_SLOTS:
 
 private:
     QTimer* errorTimeout(QWidget* error, int timeout);
+    void subtractFromEachMessageTimeout(int subtrahend, const KDevelop::IStatus* exceptThisMessage = nullptr);
+    void updateMessage(const KDevelop::IStatus* justInsertedMessage = nullptr);
 
-private:
     struct Message {
         QString text;
         int timeout;
