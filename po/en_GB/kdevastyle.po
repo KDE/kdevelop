@@ -1,29 +1,24 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Steve Allewell <steve.allewell@gmail.com>, 2017, 2019, 2020.
+# SPDX-FileCopyrightText: 2017, 2019, 2020, 2024 Steve Allewell <steve.allewell@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-09-19 18:06+0100\n"
+"PO-Revision-Date: 2024-05-24 19:29+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
-"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language-Team: British English\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #: astyle_plugin.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Artistic Style</b> is a source code indenter, formatter, and "
-#| "beautifier for the C, C++, C# and Java programming languages.<br />Home "
-#| "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
-#| "sourceforge.net</a>"
+#, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
 "for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
@@ -31,8 +26,9 @@ msgid ""
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
-"for the C, C++, C# and Java programming languages.<br />Home Page: <a href="
-"\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+"for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
+"white-space:pre'>Home Page: <a href=\"http://astyle.sourceforge.net/"
+"\">http://astyle.sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
@@ -316,13 +312,15 @@ msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
 msgstr ""
+"Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
+"'while')"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
 #, kde-format
 msgctxt "@option:check add braces to unbraced one-line conditional statements"
 msgid "Add b&races"
-msgstr ""
+msgstr "Add b&races"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
 #: astyle_preferences.ui:386
