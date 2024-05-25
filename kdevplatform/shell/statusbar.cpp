@@ -120,7 +120,7 @@ void StatusBar::showErrorMessage(const QString& message, int timeout)
 {
     QWidget* error = errorMessage(this, message);
     QTimer* timer = errorTimeout(error, timeout);
-    addWidget(error);
+    insertPermanentWidget(0, error);
     timer->start(); // triggers removeError()
 }
 
