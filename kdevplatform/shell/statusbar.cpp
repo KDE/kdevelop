@@ -134,7 +134,7 @@ void StatusBar::subtractFromEachMessageTimeout(int subtrahend, const IStatus* ex
         it.next();
         if (it.key() != exceptThisMessage && it.value().timeout) {
             it.value().timeout -= subtrahend;
-            if (it.value().timeout == 0)
+            if (it.value().timeout <= 0)
                 it.remove();
         }
     }
@@ -142,7 +142,13 @@ void StatusBar::subtractFromEachMessageTimeout(int subtrahend, const IStatus* ex
 
 void StatusBar::slotTimeout()
 {
+    // In theory, the actual elapsed time should be subtracted from each message's timeout. However,
+    // our coarse timer can time out several milliseconds earlier, in which case the elapsed time would be
+    // slightly less than m_timer->interval(), which is equal to the minimum positive status message timeout.
+    // So subtract the timer interval instead in order to avoid the redundant, pedantic timer restarting
+    // for several milliseconds remaining in the minimum message timeout.
     subtractFromEachMessageTimeout(m_timer->interval());
+
     updateMessage();
 }
 
@@ -175,6 +181,7 @@ void StatusBar::updateMessage(const IStatus* justInsertedMessage)
         QStatusBar::clearMessage();
 
     if (timeout) {
+        Q_ASSERT(timeout > 0);
         m_time.start();
         m_timer->start(timeout);
     }
