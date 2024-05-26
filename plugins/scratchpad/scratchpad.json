@@ -29,7 +29,6 @@
         "Description[zh_CN]": "通过刮板，您可以在没有完整项目的情况下快速运行和试验代码，甚至可以存储待办事项。",
         "Description[zh_TW]": "塗鴉區讓您快速執行程式碼進行快速實驗，不需要建立完整專案，還讓您可以儲存待辦事項。",
         "Icon": "note",
-        "Id": "scratchpad",
         "Name": "Scratchpad",
         "Name[ar]": "المفكّرة",
         "Name[az]": "İş dəftəri",

@@ -39,7 +39,6 @@
         "Description[zh_CN]": "此插件整合 Clazy 到 KDevelop",
         "Description[zh_TW]": "此外掛程式將 Clazy 整合進 KDevelop 內",
         "Icon": "clazy",
-        "Id": "kdevclazy",
         "License": "GPL",
         "Name": "Clazy Support",
         "Name[az]": "Clazy dəstəyi",

@@ -30,7 +30,6 @@
         "Description[zh_CN]": "KDevelop Make 构建器",
         "Description[zh_TW]": "KDevelop Make 編譯工具",
         "Icon": "kdevelop",
-        "Id": "KDevMakeBuilder",
         "Name": "Make Project Builder",
         "Name[az]": "Make layihəsi qurucusu",
         "Name[bs]": "Napravi graditelja projekta",

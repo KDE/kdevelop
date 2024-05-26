@@ -31,7 +31,6 @@
         "Description[zh_CN]": "导入并编辑 Meson 工程",
         "Description[zh_TW]": "匯入並編輯 Meson 專案",
         "Icon": "run-build",
-        "Id": "KDevMesonManager",
         "Name": "Meson Project Manager",
         "Name[az]": "Meson layihəsi meneceri",
         "Name[ca@valencia]": "Gestor de projectes Meson",

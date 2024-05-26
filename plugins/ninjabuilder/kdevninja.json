@@ -29,7 +29,6 @@
         "Description[zh_CN]": "KDevelop Ninja 构建器",
         "Description[zh_TW]": "KDevelop Ninja 編譯工具",
         "Icon": "kdevelop",
-        "Id": "KDevNinjaBuilder",
         "Name": "Ninja Project Builder",
         "Name[az]": "Ninja layihəsi qurucusu",
         "Name[ca@valencia]": "Constructor de projectes Ninja",

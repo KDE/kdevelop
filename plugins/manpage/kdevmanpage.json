@@ -32,7 +32,6 @@
         "Description[zh_TW]": "這個外掛程式提供 Man 手冊頁面的整合",
         "EnabledByDefault": false,
         "Icon": "x-office-address-book",
-        "Id": "KDevManPage",
         "License": "GPL",
         "Name": "Man Pages",
         "Name[az]": "Təlimat səhifələri",

@@ -37,7 +37,6 @@
         "Description[zh_CN]": "此插件在侧边视图中显示关于当前语言上下文的信息，并高亮显示相关的声明和调用。",
         "Description[zh_TW]": "此外掛程式顯示關於目前語言的資訊，並將相關的宣告與使用突顯出來。",
         "Icon": "code-context",
-        "Id": "kdevcontextbrowser",
         "License": "GPL",
         "Name": "Code Browser",
         "Name[ar]": "متصّفح الشِّفرة",

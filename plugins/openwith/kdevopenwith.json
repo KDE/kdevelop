@@ -37,7 +37,6 @@
         "Description[zh_CN]": "此插件允许使用关联的外部应用程序打开文件。",
         "Description[zh_TW]": "此外掛程式讓您可以使用外部應用程式開啟檔案。",
         "Icon": "document-open",
-        "Id": "kdevopenwith",
         "License": "GPL",
         "Name": "Open With",
         "Name[ar]": "افتح بِـ",

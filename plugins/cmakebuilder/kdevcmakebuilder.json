@@ -32,7 +32,6 @@
         "Description[zh_CN]": "构建 CMake 工程",
         "Description[zh_TW]": "編譯 CMake 專案",
         "Icon": "cmake",
-        "Id": "KDevCMakeBuilder",
         "Name": "CMake Project Builder",
         "Name[az]": "CMake layihə qurucusu",
         "Name[bs]": "CMake graditelj projekta",

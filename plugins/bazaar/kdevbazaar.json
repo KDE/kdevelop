@@ -41,7 +41,6 @@
         "Description[zh_CN]": "此插件将 Bazaar 整合到 KDevelop",
         "Description[zh_TW]": "此外掛程式將 Bazaar 整合進 KDevelop 內",
         "Icon": "bazaar",
-        "Id": "kdevbazaar",
         "License": "GPL",
         "Name": "Bazaar Support",
         "Name[ar]": "دعم بازار",

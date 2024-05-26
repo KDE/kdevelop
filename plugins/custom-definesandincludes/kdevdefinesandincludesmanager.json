@@ -31,7 +31,6 @@
         "Description[zh_CN]": "配置在解析工程时将添加哪些宏和包含目录/文件",
         "Description[zh_TW]": "設定專案剖析時哪些巨集和包含目錄/檔案要加到剖析器中。",
         "Icon": "kdevelop",
-        "Id": "KDevDefinesAndIncludesManager",
         "Name": "Custom Defines And Includes Manager",
         "Name[az]": "Fərdi təyinetmə və daxiletmə meneceri",
         "Name[ca@valencia]": "Gestor per a personalitzar les definicions i inclusions",

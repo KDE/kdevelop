@@ -37,7 +37,6 @@
         "Description[zh_CN]": "此插件允许以无操作者方式运行程序，例如，当前主机的原生方式。",
         "Description[zh_TW]": "此外掛程式允許在目前主機上執行程式。",
         "Icon": "system-run",
-        "Id": "kdevexecute",
         "License": "GPL",
         "Name": "Execute Programs",
         "Name[ar]": "نفّذ برامجًا",

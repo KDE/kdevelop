@@ -31,7 +31,6 @@
         "Description[zh_CN]": "导入并编辑 QMake 工程",
         "Description[zh_TW]": "匯入並編輯 QMake 專案",
         "Icon": "qtlogo",
-        "Id": "KDevQMakeManager",
         "Name": "QMake Project Manager",
         "Name[az]": "QMake layihə meneceri",
         "Name[ca@valencia]": "Gestor de projectes QMake",

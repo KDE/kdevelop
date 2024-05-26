@@ -41,7 +41,6 @@
         "Description[zh_CN]": "允许 KDevelop 提供 CMake 文档",
         "Description[zh_TW]": "讓 KDevelop 可以提供 CMake 說明文件",
         "Icon": "cmake",
-        "Id": "KDevCMakeDocumentation",
         "License": "GPL",
         "Name": "CMake Documentation",
         "Name[az]": "CMake sənədləşməsi",

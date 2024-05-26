@@ -32,7 +32,6 @@
         "Description[zh_CN]": "导入并编辑定制 make 工程",
         "Description[zh_TW]": "匯入並編輯自訂 make 專案",
         "Icon": "kdevelop",
-        "Id": "KDevCustomMakeManager",
         "Name": "Custom Makefile Project Manager",
         "Name[az]": "Fərdi Makefile layihə meneceri",
         "Name[bs]": "Korisnički Makefile menadžer projekta",

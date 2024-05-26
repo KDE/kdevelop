@@ -41,7 +41,6 @@
         "Description[zh_CN]": "管理源文件的模板",
         "Description[zh_TW]": "管理源碼檔的樣本",
         "Icon": "code-class",
-        "Id": "kdevfiletemplates",
         "License": "GPL",
         "Name": "File Templates Configuration",
         "Name[ar]": "ضبط قوالب الملفّات",

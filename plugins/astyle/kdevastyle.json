@@ -38,7 +38,6 @@
         "Description[x-test]": "xxA plugin for formatting of sourcecode according to a specified set of rulesxx",
         "Description[zh_CN]": "一个根据指定规则设定格式化源代码的插件",
         "Icon": "text-field",
-        "Id": "kdevastyle",
         "License": "LGPL",
         "Name": "AStyle Formatter Backend",
         "Name[az]": "AStyle formatlama modulu",

@@ -31,7 +31,6 @@
         "Description[zh_CN]": "可以用模式或正则表达式快速搜索多个文件，还可以替换。",
         "Description[zh_TW]": "允許使用樣式或正規表示式來快速搜尋與取代多個檔案。",
         "Icon": "kfind",
-        "Id": "kdevgrepview",
         "Name": "Find/Replace In Files",
         "Name[ar]": "اعثر واستبدل في الملفّات",
         "Name[az]": "Fayllarda tapın/əvəzləyin",

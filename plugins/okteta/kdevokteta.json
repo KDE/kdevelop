@@ -37,7 +37,6 @@
         "Description[x-test]": "xxEnables viewing and editing of the raw data of files (Okteta-based)xx",
         "Description[zh_CN]": "允许查看和编辑文件的原始数据 (基于 Okteta)",
         "Icon": "okteta",
-        "Id": "kdevokteta",
         "License": "GPL",
         "Name": "Hex Editor",
         "Name[ar]": "محرّر ستّ-عشريّ",

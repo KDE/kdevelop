@@ -42,7 +42,6 @@
         "Description[zh_CN]": "此插件对 KDevelop 整合 Git",
         "Description[zh_TW]": "此外掛程式將 Git 整合進 KDevelop 內",
         "Icon": "git",
-        "Id": "kdevgit",
         "License": "GPL",
         "Name": "Git Support",
         "Name[ar]": "دعم Git",

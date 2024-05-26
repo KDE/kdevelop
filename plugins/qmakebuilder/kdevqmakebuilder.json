@@ -31,7 +31,6 @@
         "Description[zh_CN]": "构建 QMake 工程",
         "Description[zh_TW]": "編譯 QMake 專案",
         "Icon": "qtlogo",
-        "Id": "KDevQMakeBuilder",
         "Name": "QMake Project Builder",
         "Name[az]": "QMake layihə qurucusu",
         "Name[ca@valencia]": "Constructor de projecte QMake",

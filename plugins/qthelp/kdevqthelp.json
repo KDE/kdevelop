@@ -38,7 +38,6 @@
         "Description[zh_CN]": "此插件提供了 QtHelp 整合",
         "Description[zh_TW]": "這個外掛程式提供 QtHelp 整合",
         "Icon": "qtlogo",
-        "Id": "kdevqthelp",
         "License": "GPL",
         "Name": "Qt Documentation",
         "Name[ar]": "توثيق كيوت",

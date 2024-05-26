@@ -29,7 +29,6 @@
         "Description[zh_CN]": "允许在伙伴文件中切换，如实现与头文件",
         "Description[zh_TW]": "允許在相關文件，如實作與標頭檔間切換。",
         "Icon": "document-multiple",
-        "Id": "kdevswitchtobuddy",
         "Name": "Switch to Buddy",
         "Name[az]": "Əlaqəli olana keçin",
         "Name[bs]": "Pređi na prijatelja",

@@ -31,7 +31,6 @@
         "Description[zh_CN]": "此插件为 KDevelop 提供了一个快速方便地访问命令行的嵌入式控制台。",
         "Description[zh_TW]": "此外掛程式提供 KDevelop 一個嵌入式的 konsole，能快速地使用命令列。",
         "Icon": "utilities-terminal",
-        "Id": "kdevkonsoleview",
         "Name": "Konsole Integration",
         "Name[ar]": "تكامل كونسول",
         "Name[az]": "Konsole inteqrasiyası",

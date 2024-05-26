@@ -43,7 +43,6 @@
         "Description[zh_CN]": "应用程序向导",
         "Description[zh_TW]": "應用程式精靈",
         "Icon": "project-development-new-template",
-        "Id": "kdevappwizard",
         "License": "GPL",
         "Name": "New Project Wizard",
         "Name[ar]": "مُرشد مشروع جديد",

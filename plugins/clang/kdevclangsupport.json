@@ -31,7 +31,6 @@
         "Description[zh_CN]": "C/C++ 语言支持 (基于 Clang)",
         "Description[zh_TW]": "C/C++ 語言支援（基於 Clang）",
         "Icon": "text-x-c++src",
-        "Id": "kdevclangsupport",
         "Name": "C++ Support",
         "Name[az]": "C++ dəstəyi",
         "Name[bs]": "C++ Podrška",

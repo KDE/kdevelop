@@ -40,7 +40,6 @@
         "Description[zh_CN]": "允许 KDevelop 管理基于 CMake 的工程",
         "Description[zh_TW]": "讓 KDevelop 能夠管理利用 CMake 的專案",
         "Icon": "cmake",
-        "Id": "KDevCMakeManager",
         "License": "GPL",
         "Name": "CMake Project Manager",
         "Name[az]": "CMake layihə meneceri",

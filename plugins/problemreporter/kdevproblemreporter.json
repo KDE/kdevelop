@@ -38,7 +38,6 @@
         "Description[zh_CN]": "此插件显示源代码中的错误。",
         "Description[zh_TW]": "此外掛程式顯示源碼中的錯誤。",
         "Icon": "emblem-important",
-        "Id": "kdevproblemreporter",
         "License": "LGPL",
         "Name": "Problem Reporter View",
         "Name[ar]": "عرض مبلّغ المشاكل",

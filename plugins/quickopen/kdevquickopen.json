@@ -38,7 +38,6 @@
         "Description[zh_CN]": "此插件允许快速访问工程文件和诸如类/函数的语言工程。",
         "Description[zh_TW]": "此外掛程式讓您快速存取專案檔案與一些語言的項目，如類別或函式等。",
         "Icon": "quickopen",
-        "Id": "kdevquickopen",
         "License": "GPL",
         "Name": "Quick Open",
         "Name[ar]": "فتح سريع",

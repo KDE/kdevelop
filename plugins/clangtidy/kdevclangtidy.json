@@ -42,7 +42,6 @@
         "Description[x-test]": "xxclang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. https://clang.llvm.org/extra/clang-tidy/xx",
         "Description[zh_CN]": "clang-tidy 提供了一个可扩展的框架，用于诊断和修复典型的编程错误，例如样式违规，接口滥用或可以通过静态分析推断出的错误。https://clang.llvm.org/extra/clang-tidy/",
         "Icon": "dialog-ok",
-        "Id": "kdevclangtidy",
         "License": "GPL",
         "Name": "Clang-Tidy Support",
         "Name[az]": "Clang-Tidy dəstəyi",

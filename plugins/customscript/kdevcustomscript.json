@@ -37,7 +37,6 @@
         "Description[x-test]": "xxA plugin for formatting C files using custom scriptsxx",
         "Description[zh_CN]": "使用自定义脚本格式化 C 文件的插件",
         "Icon": "text-field",
-        "Id": "kdevcustomscript",
         "License": "LGPL",
         "Name": "Custom Script Formatter Backend",
         "Name[az]": "Fərdi skript formatlama modulu",

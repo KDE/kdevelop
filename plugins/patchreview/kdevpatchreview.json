@@ -38,7 +38,6 @@
         "Description[zh_CN]": "此插件允许在编辑器中直接审阅补丁。",
         "Description[zh_TW]": "此外掛程式任您可以直接在編輯器裡檢視修補。",
         "Icon": "text-x-patch",
-        "Id": "kdevpatchreview",
         "License": "GPL",
         "Name": "Patch Review",
         "Name[ar]": "مراجعة الرّقع",

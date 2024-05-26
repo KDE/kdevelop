@@ -30,7 +30,6 @@
         "Description[zh_CN]": "提供让其他插件使用的文本输出工具视图，以便显示诸如编译器消息的信息。",
         "Description[zh_TW]": "提供文字輸出工具檢視給其它外掛程式使用，顯示一些像是編譯器的訊息等等。",
         "Icon": "kdevelop",
-        "Id": "KDevStandardOutputView",
         "Name": "Output View",
         "Name[ar]": "عرض الخَرْج",
         "Name[az]": "Çıxarış icmalı",

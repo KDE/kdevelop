@@ -37,7 +37,6 @@
         "Description[zh_CN]": "让您查看一个 plasmoid",
         "Description[zh_TW]": "讓您檢視一個 Plasmoid",
         "Icon": "system-run",
-        "Id": "kdevexecuteplasmoid",
         "License": "GPL",
         "Name": "Plasmoid Launcher",
         "Name[ar]": "مُطلق البلازمويد",

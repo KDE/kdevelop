@@ -37,7 +37,6 @@
         "Description[zh_CN]": "此插件集成了 Cppcheck (静态分析工具) 到 KDevelop",
         "Description[zh_TW]": "此外掛程式將 Cppcheck（靜態分析工具）整合進 KDevelop 內",
         "Icon": "cppcheck",
-        "Id": "kdevcppcheck",
         "License": "GPL",
         "Name": "Cppcheck Support",
         "Name[az]": "Cppcheck dəstəyi",

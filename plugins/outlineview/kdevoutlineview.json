@@ -37,7 +37,6 @@
         "Description[zh_CN]": "此插件提供了一个当前显示当前打开文档的概要的视图。",
         "Description[zh_TW]": "此外掛程式提供目前開啟文件的大綱。",
         "Icon": "code-class",
-        "Id": "KDevOutlineView",
         "License": "LGPL",
         "Name": "Outline",
         "Name[ar]": "محيط",

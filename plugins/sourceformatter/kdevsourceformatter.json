@@ -29,7 +29,6 @@
         "Description[zh_CN]": "配置工程中源代码应使用哪个样式进行格式化。",
         "Description[zh_TW]": "設定格式化專案原始碼時要使用的風格。",
         "Icon": "text-field",
-        "Id": "kdevsourceformatter",
         "Name": "Source Formatter",
         "Name[az]": "Mənbə formatlayıcı",
         "Name[bg]": "Форматиращ модул за програмен текст",

@@ -38,7 +38,6 @@
         "Description[zh_CN]": "运行外部脚本或应用程序来处理编辑器内容或者执行其他任意操作。",
         "Description[zh_TW]": "執行外部文稿或應用程式來運用編輯器內的內容，或是做各種動作。",
         "Icon": "system-run",
-        "Id": "kdevexternalscript",
         "License": "GPL",
         "Name": "External Scripts",
         "Name[ar]": "سكرِبتات خارجيّة",

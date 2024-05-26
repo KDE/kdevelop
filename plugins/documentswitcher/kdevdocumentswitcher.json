@@ -37,7 +37,6 @@
         "Description[zh_CN]": "KDevPlatform 的最近经常使用文档的切换器。",
         "Description[zh_TW]": "KDevPlatform 上切換最近使用的文件的切換器",
         "Icon": "document-open-recent",
-        "Id": "kdevdocumentswitcher",
         "License": "GPL",
         "Name": "Most-Recently-Used Document Switcher",
         "Name[ar]": "مبدّل المستندات المستخدمة-حديثًا",

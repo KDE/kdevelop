@@ -37,7 +37,6 @@
         "Description[zh_CN]": "此插件可以执行脚本.",
         "Description[zh_TW]": "此外掛程式允許執行文稿。",
         "Icon": "system-run",
-        "Id": "kdevexecutescript",
         "License": "GPL",
         "Name": "Execute Scripts",
         "Name[ar]": "نفّذ سكرِبتات",

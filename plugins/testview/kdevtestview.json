@@ -38,7 +38,6 @@
         "Description[zh_CN]": "让您查看并运行单元测试。",
         "Description[zh_TW]": "讓您查看並執行單元測試。",
         "Icon": "preflight-verifier",
-        "Id": "kdevtestview",
         "License": "GPL",
         "Name": "Unit Test View",
         "Name[az]": "Vahid test görünüşü",

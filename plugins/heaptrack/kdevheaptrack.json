@@ -39,7 +39,6 @@
         "Description[zh_CN]": "此插件将 Heaptrack 整合到 KDevelop",
         "Description[zh_TW]": "此外掛程式將 Heaptrack 整合進 KDevelop 內",
         "Icon": "office-chart-area",
-        "Id": "kdevheaptrack",
         "License": "GPL",
         "Name": "Heaptrack Support",
         "Name[az]": "Heaptrack dəstəyi",

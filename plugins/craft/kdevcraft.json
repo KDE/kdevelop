@@ -30,7 +30,6 @@
         "Description[uk]": "Розкриває середовище KDE Craft, як середовище виконання",
         "Description[x-test]": "xxExposes KDE Craft environment as a runtimexx",
         "Icon": "kdevelop",
-        "Id": "kdevcraft",
         "License": "BSD3",
         "Name": "Craft runtime",
         "Name[ca@valencia]": "Entorn d'execució Craft",

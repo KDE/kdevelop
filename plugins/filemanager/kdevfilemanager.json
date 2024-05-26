@@ -41,7 +41,6 @@
         "Description[zh_CN]": "此插件为 KDevelop 提供了一个文件管理器。",
         "Description[zh_TW]": "此外掛程式讓 KDevelop 可使用檔案管理員。",
         "Icon": "system-file-manager",
-        "Id": "kdevfilemanager",
         "License": "GPL",
         "Name": "KDE File Manager Integration",
         "Name[ar]": "تكامل مدير ملفّات كِيدِي",

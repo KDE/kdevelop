@@ -39,7 +39,6 @@
         "Description[x-test]": "xxExposes Android runtimesxx",
         "Description[zh_CN]": "暴露 Android 运行时",
         "Icon": "kdevelop",
-        "Id": "kdevandroid",
         "License": "GPL",
         "Name": "Android Support",
         "Name[ar]": "دعم أندرويد",

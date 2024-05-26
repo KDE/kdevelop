@@ -1,7 +1,6 @@
 {
     "KPlugin": {
         "Description": "%{APPNAME}",
-        "Id": "%{APPNAMELC}",
         "Name": "%{APPNAME}"
     },
     "X-KDevelop-Category": "Global",

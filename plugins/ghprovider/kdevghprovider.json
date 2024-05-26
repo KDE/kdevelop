@@ -37,7 +37,6 @@
         "Description[zh_CN]": "此插件帮助您从 GitHub 获取工程",
         "Description[zh_TW]": "這個外掛程式幫助您從 GitHub 取得專案",
         "Icon": "kdevgh",
-        "Id": "kdevghprovider",
         "License": "GPL",
         "Name": "GitHub Provider",
         "Name[az]": "GitHub təminatçısı",
