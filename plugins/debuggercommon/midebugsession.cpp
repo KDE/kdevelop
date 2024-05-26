@@ -1150,7 +1150,7 @@ void MIDebugSession::programNoApp(const QString& msg)
     raiseEvent(program_exited);
     raiseEvent(debugger_exited);
 
-    emit showMessage(msg, 0);
+    emit showMessage(msg, 3000);
 
     programFinished(msg);
 }
