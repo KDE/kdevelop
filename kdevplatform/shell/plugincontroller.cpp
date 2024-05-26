@@ -60,17 +60,6 @@ inline QString KEY_Gui() { return QStringLiteral("GUI"); }
 inline QString KEY_AlwaysOn() { return QStringLiteral("AlwaysOn"); }
 inline QString KEY_UserSelectable() { return QStringLiteral("UserSelectable"); }
 
-// We really want to access the service types, even though the KPluginMetaData::serviceTypes API is deprecated.
-// After talking to Nicolas Fella and Christoph Cullmann this seems to be the suggested approach.
-bool hasKDevelopPluginServiceType(const KPluginMetaData& info)
-{
-    const auto pluginData = info.rawData().value(QLatin1String("KPlugin")).toObject();
-    const auto serviceTypes = pluginData.value(QLatin1String("ServiceTypes")).toArray();
-    return std::any_of(serviceTypes.begin(), serviceTypes.end(), [](const QJsonValue& value) {
-        return value.toString() == QLatin1String("KDevelop/Plugin");
-    });
-}
-
 bool isUserSelectable( const KPluginMetaData& info )
 {
     QString loadMode = info.value(KEY_LoadMode());
@@ -296,7 +285,22 @@ public:
 
         KTextEditorIntegration::initialize();
         const auto ktePlugins =
-            KPluginMetaData::findPlugins(QStringLiteral("kf6/ktexteditor"), &hasKDevelopPluginServiceType);
+            KPluginMetaData::findPlugins(QStringLiteral("kf6/ktexteditor"), [](const KPluginMetaData& data) {
+#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 8, 0)
+                // This conditionally enabled code should become obsolete in a few months
+                // with KDE Gear 24.08 and Kate changes being in distro packages:
+                // https://commits.kde.org/kate/171d57820868db3eb711d328b2ef64c674793c3c
+
+                const auto pluginData = data.rawData().value(QLatin1String("KPlugin")).toObject();
+                const auto serviceTypes = pluginData.value(QLatin1String("ServiceTypes")).toArray();
+                if (std::any_of(serviceTypes.begin(), serviceTypes.end(), [](const QJsonValue& value) {
+                        return value.toString() == QLatin1String("KDevelop/Plugin");
+                    })) {
+                    return true;
+                }
+#endif
+                return data.value(QStringLiteral("LoadInKDevelop"), false);
+            });
 
         qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << pluginIds(ktePlugins);
 
