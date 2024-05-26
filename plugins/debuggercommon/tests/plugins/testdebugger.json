@@ -2,7 +2,6 @@
     "KPlugin": {
         "Category": "Utilities",
         "Description": "Test Debugger",
-        "Id": "testdebugger",
         "Name": "Test Debugger"
     },
     "X-KDevelop-Category": "Global",

@@ -31,7 +31,6 @@
         "Description[zh_CN]": "允许对 KDevelop 工程使用自定义构建系统",
         "Description[zh_TW]": "讓 KDevelop 專案可以使用自訂編譯系統",
         "Icon": "kdevelop",
-        "Id": "KDevCustomBuildSystem",
         "Name": "Custom Build System",
         "Name[az]": "Fərdi qurma sistemi",
         "Name[ca@valencia]": "Sistema de construcció personalitzat",
