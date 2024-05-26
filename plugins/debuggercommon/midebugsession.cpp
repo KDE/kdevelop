@@ -1188,55 +1188,6 @@ void MIDebugSession::explainDebuggerStatus()
     ICore::self()->uiController()->postMessage(message);
 }
 
-// There is no app anymore. This can be caused by program exiting
-// an invalid program specified or ...
-// gdb is still running though, but only the run command (may) make sense
-// all other commands are disabled.
-void MIDebugSession::handleNoInferior(const QString& msg)
-{
-    qCDebug(DEBUGGERCOMMON) << msg;
-
-    setDebuggerState(s_appNotStarted | s_programExited | (debuggerState() & s_shuttingDown));
-
-    destroyCmds();
-
-    // The application has existed, but it's possible that
-    // some of application output is still in the pipe. We use
-    // different pipes to communicate with gdb and to get application
-    // output, so "exited" message from gdb might have arrived before
-    // last application output. Get this last bit.
-
-    // Note: this method can be called when we open an invalid
-    // core file. In that case, tty_ won't be set.
-    if (m_tty){
-        m_tty->readRemaining();
-        // Tty is no longer usable, delete it. Without this, QSocketNotifier
-        // will continuously bomd STTY with signals, so we need to either disable
-        // QSocketNotifier, or delete STTY. The latter is simpler, since we can't
-        // reuse it for future debug sessions anyway.
-        m_tty.reset(nullptr);
-    }
-
-    stopDebugger();
-
-    raiseEvent(program_exited);
-    raiseEvent(debugger_exited);
-
-    emit showMessage(msg, 0);
-
-    handleInferiorFinished(msg);
-}
-
-void MIDebugSession::handleInferiorFinished(const QString& msg)
-{
-    QString m = QStringLiteral("*** %0 ***").arg(msg.trimmed());
-    emit inferiorStderrLines(QStringList(m));
-
-    /* Also show message in gdb window, so that users who
-       prefer to look at gdb window know what's up.  */
-    emit debuggerUserCommandOutput(m);
-}
-
 // FIXME: connect to debugger's slot.
 void MIDebugSession::defaultErrorHandler(const MI::ResultRecord& result)
 {

@@ -235,9 +235,6 @@ protected Q_SLOTS:
      */
     virtual void handleDebuggerStateChange(DBGStateFlags oldState, DBGStateFlags newState);
 
-    void handleNoInferior(const QString &msg);
-    void handleInferiorFinished(const QString &msg);
-
 protected:
     void queueCmd(std::unique_ptr<MI::MICommand> cmd);
 
