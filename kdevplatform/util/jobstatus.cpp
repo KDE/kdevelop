@@ -29,6 +29,7 @@ JobStatus::JobStatus(KJob* job, const QString& statusName, QObject* parent)
             emit showErrorMessage(i18n("Task aborted"));
         }
         emit hideProgress(this);
+        emit clearMessage(this);
         deleteLater();
     });
     connect(job, &KJob::percentChanged, this, &JobStatus::slotPercent);
