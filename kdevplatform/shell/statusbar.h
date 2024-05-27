@@ -67,7 +67,7 @@ private:
 
     struct Message {
         QString text;
-        int timeout;
+        int timeout; ///< <= 0 means no timeout; < 0 also restricts the message to progress item status
     };
     friend QDebug operator<<(QDebug debug, const Message& m);
 

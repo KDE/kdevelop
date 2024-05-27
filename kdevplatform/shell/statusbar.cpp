@@ -132,7 +132,7 @@ void StatusBar::subtractFromEachMessageTimeout(int subtrahend, const IStatus* ex
 
     while (it.hasNext()) {
         it.next();
-        if (it.key() != exceptThisMessage && it.value().timeout) {
+        if (it.key() != exceptThisMessage && it.value().timeout > 0) {
             it.value().timeout -= subtrahend;
             if (it.value().timeout <= 0)
                 it.remove();
@@ -164,6 +164,9 @@ void StatusBar::updateMessage(const IStatus* justInsertedMessage)
     QStringList messages;
     messages.reserve(m_messages.size());
     for (const Message& m : qAsConst(m_messages)) {
+        if (m.timeout < 0) {
+            continue;
+        }
         messages.append(m.text);
 
         if (m.timeout == 0) {
@@ -199,7 +202,7 @@ QString StatusBar::takeMessage(IStatus* status)
     auto message = m_messages.take(status);
     // Messages with empty text are never inserted into m_messages. Therefore, message.text is empty here
     // only if the message was default-constructed due to missing key equal to @p status in m_messages.
-    if (!message.text.isEmpty()) {
+    if (!message.text.isEmpty() && message.timeout >= 0) {
         updateMessage();
     }
     return std::move(message.text);
@@ -220,7 +223,9 @@ void StatusBar::showMessage( IStatus* status, const QString & message, int timeo
             m.text = message;
             m.timeout = timeout;
             m_messages.insert(status, m);
-            updateMessage(status);
+            if (timeout >= 0) {
+                updateMessage(status);
+            }
         }
     });
 }

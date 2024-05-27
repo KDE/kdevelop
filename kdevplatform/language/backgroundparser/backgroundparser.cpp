@@ -302,7 +302,12 @@ public:
                 m_parseJobs.count() + 1;
 
             const QString elidedPathString = elidedPathLeft(url.str(), 70);
-            emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
+            // Our status message has no timeout in order to always indicate what is being parsed. If a message
+            // without timeout is shown while our progress item is absent for some reason (happens e.g. during a debug
+            // session), it can be stuck on the status bar for a long time, possibly obscuring other status messages.
+            // Prevent this by limiting the message to our progress item's status, where it is normally shown.
+            emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString),
+                                       IStatus::limitMessageToProgressItemStatus);
 
             ThreadWeaver::QObjectDecorator* decorator = nullptr;
             {

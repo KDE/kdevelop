@@ -32,6 +32,8 @@ public:
      */
     virtual QString statusName() const = 0;
 
+    static constexpr int limitMessageToProgressItemStatus = -1;
+
 Q_SIGNALS:
     /**
      * Request the current message for this plugin to be cleared.
@@ -42,7 +44,9 @@ Q_SIGNALS:
      * Request a status \a message to be shown for this plugin, with a given \a timeout.
      *
      * \param message Message to display
-     * \param timeout Timeout in milliseconds, or pass 0 for no timeout.
+     * \param timeout Timeout in milliseconds. Pass 0 for no timeout.
+     *                Pass limitMessageToProgressItemStatus for no timeout and to prevent showing
+     *                the message on the status bar (when there is no associated progress item).
      */
     virtual void showMessage( IStatus*, const QString & message, int timeout = 0) = 0;
 
