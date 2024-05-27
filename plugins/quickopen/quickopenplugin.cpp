@@ -1114,8 +1114,6 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
 void QuickOpenLineEdit::activate()
 {
     qCDebug(PLUGIN_QUICKOPEN) << "activating";
-    setText(QString());
-    setStyleSheet(QString());
     qApp->installEventFilter(this);
 }
 void QuickOpenLineEdit::deactivate()
