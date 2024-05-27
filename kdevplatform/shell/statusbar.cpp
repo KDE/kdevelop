@@ -128,6 +128,8 @@ void StatusBar::showErrorMessage(const QString& message, int timeout)
 
 void StatusBar::subtractFromEachMessageTimeout(int subtrahend, const IStatus* exceptThisMessage)
 {
+    Q_ASSERT(subtrahend > 0);
+
     QMutableHashIterator<IStatus*, Message> it = m_messages;
 
     while (it.hasNext()) {
@@ -156,7 +158,9 @@ void StatusBar::updateMessage(const IStatus* justInsertedMessage)
 {
     if (m_timer->isActive()) {
         m_timer->stop();
-        subtractFromEachMessageTimeout(m_time.elapsed(), justInsertedMessage);
+        if (const auto subtrahend = m_time.elapsed()) {
+            subtractFromEachMessageTimeout(subtrahend, justInsertedMessage);
+        }
     }
 
     int timeout = 0;
