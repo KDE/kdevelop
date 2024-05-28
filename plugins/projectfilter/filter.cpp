@@ -73,6 +73,8 @@ static SerializedFilters generateDefaultFilters()
         QStringLiteral(".gitlab-ci.yml"),
         // https://travis-ci.org/
         QStringLiteral(".travis.yml"),
+        // https://community.kde.org/Infrastructure/Continuous_Integration_System#The_.kde-ci.yml_file
+        QStringLiteral(".kde-ci.yml"),
 
         // Code quality configs
 
