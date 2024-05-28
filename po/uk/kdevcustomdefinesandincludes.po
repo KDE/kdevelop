@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomdefinesandincludes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-05-28 01:42+0000\n"
 "PO-Revision-Date: 2022-07-09 08:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -50,19 +50,19 @@ msgctxt "@item"
 msgid "Manual"
 msgstr "Вручну"
 
-#: compilerprovider/widget/compilerswidget.cpp:50
+#: compilerprovider/widget/compilerswidget.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Delete Compiler"
 msgstr "Вилучити компілятор"
 
-#: compilerprovider/widget/compilerswidget.cpp:215
+#: compilerprovider/widget/compilerswidget.cpp:202
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Compilers"
 msgstr "Компілятори C/C++"
 
-#: compilerprovider/widget/compilerswidget.cpp:220
+#: compilerprovider/widget/compilerswidget.cpp:207
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Compilers"

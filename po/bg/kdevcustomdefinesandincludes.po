@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-05-28 01:42+0000\n"
 "PO-Revision-Date: 2021-11-09 00:15+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -47,19 +47,19 @@ msgctxt "@item"
 msgid "Manual"
 msgstr ""
 
-#: compilerprovider/widget/compilerswidget.cpp:50
+#: compilerprovider/widget/compilerswidget.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Delete Compiler"
 msgstr ""
 
-#: compilerprovider/widget/compilerswidget.cpp:215
+#: compilerprovider/widget/compilerswidget.cpp:202
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Compilers"
 msgstr ""
 
-#: compilerprovider/widget/compilerswidget.cpp:220
+#: compilerprovider/widget/compilerswidget.cpp:207
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Compilers"
