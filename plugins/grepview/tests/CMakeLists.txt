@@ -28,5 +28,5 @@ set(kdevgrepview_PART_UI
 ki18n_wrap_ui(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
 ecm_add_test(${findReplaceTest_SRCS}
     TEST_NAME test_findreplace
-    LINK_LIBRARIES Qt::Test KDev::Language KDev::Project KDev::Util KDev::Tests KF6::Codecs KF6::TextWidgets KF6::KIOWidgets
+    LINK_LIBRARIES Qt::DBus Qt::Test KDev::Language KDev::Project KDev::Util KDev::Tests KF6::Codecs KF6::TextWidgets KF6::KIOWidgets
     GUI)

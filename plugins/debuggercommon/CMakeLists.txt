@@ -71,6 +71,7 @@ target_link_libraries(kdevdebuggercommon
     KDev::Sublime
     PRIVATE
     Qt::Core
+    Qt::DBus
     Qt::Gui
     Qt::Widgets
     KDev::Util

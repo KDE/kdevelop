@@ -53,6 +53,7 @@ target_link_libraries(kdevelop
 
     KF6::Crash
 
+    Qt::DBus
     Qt::Quick
 )
 IF(APPLE)
