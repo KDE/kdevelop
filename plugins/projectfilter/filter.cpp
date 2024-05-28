@@ -55,7 +55,6 @@ namespace KDevelop {
 SerializedFilters defaultFilters()
 {
     SerializedFilters ret;
-    ret.reserve(41);
 
     // filter hidden files
     ret << SerializedFilter(QStringLiteral(".*"), Filter::Targets(Filter::Files | Filter::Folders));
