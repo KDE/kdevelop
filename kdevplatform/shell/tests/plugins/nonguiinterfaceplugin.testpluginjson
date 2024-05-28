@@ -1,7 +1,6 @@
 {
     "KPlugin": {
         "Description": "This plugin is purely for unit-test",
-        "Id": "test_nonguiinterface",
         "License": "LGPL",
         "Name": "NonGuiInterface"
     },

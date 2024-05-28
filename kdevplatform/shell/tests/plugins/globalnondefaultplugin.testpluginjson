@@ -1,7 +1,6 @@
 {
     "KPlugin": {
         "Description": "This plugin is purely for unit-test",
-        "Id": "test_globalnondefault",
         "License": "LGPL",
         "Name": "GlobalNonDefaultPlugin",
         "EnabledByDefault": false
