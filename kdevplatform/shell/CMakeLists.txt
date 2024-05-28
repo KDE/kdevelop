@@ -178,6 +178,7 @@ PRIVATE
     KF6::NewStuffWidgets # template config page
     KF6::Archive # template config page
     kdevworkingsets
+    Qt::DBus
 )
 if(APPLE)
     target_link_libraries(KDevPlatformShell PRIVATE "-framework AppKit")

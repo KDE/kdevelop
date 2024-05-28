@@ -35,4 +35,5 @@ target_link_libraries(kdevexternalscript
     KF6::TextEditor
     KF6::KIOWidgets
     KF6::Parts
+    Qt::DBus
 )

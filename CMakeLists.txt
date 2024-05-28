@@ -74,6 +74,7 @@ include(KDevelopMacrosInternal)
 find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS
     Concurrent
     Core5Compat
+    DBus
     Quick
     QuickWidgets
     Widgets

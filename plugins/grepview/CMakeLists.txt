@@ -43,6 +43,7 @@ target_link_libraries(kdevgrepview
     KDev::Project
     KDev::Util
     KDev::Language
+    Qt::DBus
 )
 
 ########### install files ###############
