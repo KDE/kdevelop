@@ -52,7 +52,7 @@ SerializedFilter::SerializedFilter(const QString& pattern, Filter::Targets targe
 
 namespace KDevelop {
 
-SerializedFilters defaultFilters()
+static SerializedFilters generateDefaultFilters()
 {
     SerializedFilters ret;
 
@@ -60,7 +60,7 @@ SerializedFilters defaultFilters()
     ret << SerializedFilter(QStringLiteral(".*"), Filter::Targets(Filter::Files | Filter::Folders));
     // but do show some with special meaning
 
-    static const std::array configFiles = {
+    const std::array configFiles = {
         // Version control
         QStringLiteral(".gitignore"),
         QStringLiteral(".gitmodules"),
@@ -108,7 +108,7 @@ SerializedFilters defaultFilters()
         ret << SerializedFilter(file, Filter::Files, Filter::Inclusive);
     }
 
-    static const std::array configFolders = {
+    const std::array configFolders = {
         // CI config folders
 
         // https://circleci.com/docs/
@@ -119,7 +119,7 @@ SerializedFilters defaultFilters()
     }
 
     // common vcs folders which we want to hide
-    static const std::array invalidFolders = {
+    const std::array invalidFolders = {
         QStringLiteral(".git"), QStringLiteral("CVS"), QStringLiteral(".svn"), QStringLiteral("_svn"),
         QStringLiteral("SCCS"), QStringLiteral("_darcs"), QStringLiteral(".hg"), QStringLiteral(".bzr"), QStringLiteral("__pycache__")
     };
@@ -128,7 +128,7 @@ SerializedFilters defaultFilters()
     }
 
     // common files which we want to hide
-    static const std::array filePatterns = {
+    const std::array filePatterns = {
         // binary files (Unix)
         QStringLiteral("*.o"), QStringLiteral("*.a"), QStringLiteral("*.so"), QStringLiteral("*.so.*"),
         // binary files (Windows)
@@ -144,6 +144,12 @@ SerializedFilters defaultFilters()
         ret << SerializedFilter(filePattern, Filter::Files);
     }
 
+    return ret;
+}
+
+SerializedFilters defaultFilters()
+{
+    static const SerializedFilters ret = generateDefaultFilters();
     return ret;
 }
 
