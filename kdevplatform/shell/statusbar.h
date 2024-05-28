@@ -58,6 +58,13 @@ private:
     void subtractFromEachMessageTimeout(int subtrahend, const KDevelop::IStatus* exceptThisMessage = nullptr);
     void updateMessage(const KDevelop::IStatus* justInsertedMessage = nullptr);
 
+    /**
+     * Remove the message stored under a given key, if any
+     *
+     * @return the removed message's text or an empty string if no message was stored under @p status
+     */
+    QString takeMessage(KDevelop::IStatus* status);
+
     struct Message {
         QString text;
         int timeout;

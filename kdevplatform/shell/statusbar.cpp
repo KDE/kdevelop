@@ -22,6 +22,8 @@
 #include "plugincontroller.h"
 #include "core.h"
 
+#include <utility>
+
 namespace KDevelop
 {
 QDebug operator<<(QDebug debug, const StatusBar::Message& s)
@@ -181,12 +183,19 @@ void StatusBar::updateMessage(const IStatus* justInsertedMessage)
 void StatusBar::clearMessage( IStatus* status )
 {
     QTimer::singleShot(0, this, [this, status]() {
-        const auto messageIt = m_messages.find(status);
-        if (messageIt != m_messages.end()) {
-            m_messages.erase(messageIt);
-            updateMessage();
-        }
+        takeMessage(status);
     });
+}
+
+QString StatusBar::takeMessage(IStatus* status)
+{
+    auto message = m_messages.take(status);
+    // Messages with empty text are never inserted into m_messages. Therefore, message.text is empty here
+    // only if the message was default-constructed due to missing key equal to @p status in m_messages.
+    if (!message.text.isEmpty()) {
+        updateMessage();
+    }
+    return std::move(message.text);
 }
 
 void StatusBar::showMessage( IStatus* status, const QString & message, int timeout)
@@ -228,9 +237,11 @@ void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int val
             return;
         auto progressItemIt = m_progressItems.find(status);
         if (progressItemIt == m_progressItems.end()) {
+            // Transfer an existing status message (if any) to the new progress item where it belongs.
+            const auto statusMessage = takeMessage(status);
             bool canBeCanceled = false;
             progressItemIt = m_progressItems.insert(status, m_progressController->createProgressItem(
-                ProgressManager::createUniqueID(), status->statusName(), QString(), canBeCanceled));
+                ProgressManager::createUniqueID(), status->statusName(), statusMessage, canBeCanceled));
         }
 
         ProgressItem* i = *progressItemIt;
