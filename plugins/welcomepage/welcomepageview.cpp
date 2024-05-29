@@ -10,6 +10,7 @@
 #include "sessionsmodel.h"
 
 #include <KLocalizedContext>
+#include <KQuickIconProvider>
 
 #include <QQmlContext>
 #include <QQmlComponent>
@@ -39,6 +40,7 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
     KLocalizedContext *localizedContextObject = new KLocalizedContext(engine());
     localizedContextObject->setTranslationDomain(QStringLiteral("kdevwelcomepage"));
     engine()->rootContext()->setContextObject(localizedContextObject);
+    engine()->addImageProvider(QStringLiteral("icon"), new KQuickIconProvider);
 
     setResizeMode(QQuickWidget::SizeRootObjectToView);
 

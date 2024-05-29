@@ -25,6 +25,7 @@ target_link_libraries(KDevWelcomePage
     KDev::Sublime
     KDev::Shell
     KDev::Project
+    KF6::IconThemes
     Qt::QuickWidgets
 )
 # see https://bugs.launchpad.net/ubuntu/+source/gcc-5/+bug/1568899
