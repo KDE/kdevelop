@@ -296,7 +296,7 @@ public:
 
         KTextEditorIntegration::initialize();
         const auto ktePlugins =
-            KPluginMetaData::findPlugins(QStringLiteral("ktexteditor"), &hasKDevelopPluginServiceType);
+            KPluginMetaData::findPlugins(QStringLiteral("kf6/ktexteditor"), &hasKDevelopPluginServiceType);
 
         qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << pluginIds(ktePlugins);
 
