@@ -23,6 +23,8 @@
 #include "../../interfaces/iuicontroller.h"
 #include <debug.h>
 
+#include <QApplication>
+
 namespace KDevelop {
 
 IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
@@ -94,6 +96,8 @@ void IBreakpointController::notifyHit(int row, const QString& msg)
         //ev->setComponentName(ICore::self()->aboutData().componentName());
         ev->sendEvent();
     }
+
+    QApplication::alert(ICore::self()->uiController()->activeMainWindow());
 }
 
 // Temporary: empty default implementation
