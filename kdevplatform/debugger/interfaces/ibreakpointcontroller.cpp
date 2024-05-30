@@ -73,18 +73,15 @@ void IBreakpointController::notifyHit(int row, const QString& msg)
     // but then again it's not clear which place would be more natural
     Breakpoint* breakpoint = model->breakpoint(row);
     KNotification* ev = nullptr;
-    QWindow *window = ICore::self()->uiController()->activeMainWindow() ? ICore::self()->uiController()->activeMainWindow()->windowHandle() : nullptr;
     switch(breakpoint->kind()) {
         case Breakpoint::CodeBreakpoint:
             ev = new KNotification(QStringLiteral("BreakpointHit"));
-            ev->setWindow(window);
             ev->setText(i18n("Breakpoint hit: %1", breakpoint->location()) + msg);
             break;
         case Breakpoint::WriteBreakpoint:
         case Breakpoint::ReadBreakpoint:
         case Breakpoint::AccessBreakpoint:
             ev = new KNotification(QStringLiteral("WatchpointHit"));
-            ev->setWindow(window);
             ev->setText(i18n("Watchpoint hit: %1", breakpoint->location()) + msg);
             break;
         default:
