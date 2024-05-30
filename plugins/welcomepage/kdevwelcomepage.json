@@ -31,6 +31,7 @@
         "Description[zh_TW]": "提供空白工作階段所顯示的歡迎頁面",
         "Icon": "kdevelop",
         "Id": "KDevWelcomePage",
+        "License": "LGPL-2.0+",
         "Name": "KDevelop Welcome Page",
         "Name[ar]": "صفحة ترحيب مطوّرك",
         "Name[az]": "KDevelop salamlama səhifəsi",
