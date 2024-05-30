@@ -7,6 +7,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_KDEVWELCOMEPAGEPLUGIN_H
 #define KDEVPLATFORM_PLUGIN_KDEVWELCOMEPAGEPLUGIN_H
 
+// KDevPlatform
 #include <interfaces/iplugin.h>
 // Qt
 #include <QPointer>
@@ -14,8 +15,9 @@
 class KDevWelcomePagePlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
+
 public:
-    KDevWelcomePagePlugin( QObject* parent, const QList<QVariant>& );
+    KDevWelcomePagePlugin(QObject* parent, const QList<QVariant>&);
 
 public:
     void unload() override;

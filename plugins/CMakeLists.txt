@@ -137,9 +137,7 @@ ecm_optional_add_subdirectory(classbrowser)
 ecm_optional_add_subdirectory(executeplasmoid)
 ecm_optional_add_subdirectory(ghprovider)
 ecm_optional_add_subdirectory(konsole)
-if (TARGET Qt::QuickWidgets)
-    add_subdirectory(welcomepage)
-endif()
+add_subdirectory(welcomepage)
 
 # TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later.
 # Once available, adapt code & reenable again. For now prevent finding the Qt5 version.
