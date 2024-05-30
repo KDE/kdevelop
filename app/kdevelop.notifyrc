@@ -100,7 +100,7 @@ Name[zh_TW]=除錯器
 
 [Event/BreakpointHit]
 Contexts=debugger
-Action=Taskbar
+Action=
 IconName=script-error
 Name=Breakpoint Hit
 Name[ar]=تصادم بنقطة توقّف
