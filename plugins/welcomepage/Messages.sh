@@ -1,3 +1,4 @@
 #!/bin/sh
-$XGETTEXT `find . -name \*.qml` --language JavaScript --kde -o $podir/kdevwelcomepage.pot
+$EXTRACTRC `find . -name \*.rc` `find . -name \*.ui` >> rc.cpp
+$XGETTEXT `find . -name \*.cc -o -name \*.cpp -o -name \*.h` -o $podir/kdevwelcomepage.pot
 rm -f rc.cpp

@@ -137,9 +137,7 @@ ecm_optional_add_subdirectory(classbrowser)
 ecm_optional_add_subdirectory(executeplasmoid)
 ecm_optional_add_subdirectory(ghprovider)
 ecm_optional_add_subdirectory(konsole)
-if (Qt5QuickWidgets_FOUND)
-    add_subdirectory(welcomepage)
-endif()
+add_subdirectory(welcomepage)
 
 find_package(OktetaKastenControllers 0.4.0 CONFIG)
 set_package_properties(OktetaKastenControllers PROPERTIES
