@@ -40,8 +40,8 @@ int main(int /*argc*/, char** /*argv*/) {
     t1.start();
     t2.start();
     t3.start();
-    QThread::usleep(500000);
-    QThread::usleep(600000);
+    QThread::msleep(500);
+    QThread::msleep(600);
     return 0;
 }
 
