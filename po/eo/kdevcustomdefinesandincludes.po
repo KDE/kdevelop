@@ -1,15 +1,15 @@
 # Translation of kdevcustomdefinesandincludes.pot into esperanto.
 # Copyright (C) 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the kdevelop package.
-# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+# Oliver Kellogg <olivermkellogg@gmail.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomdefinesandincludes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 01:42+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
-"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"PO-Revision-Date: 2024-05-30 22:41+0200\n"
+"Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -200,7 +200,7 @@ msgstr "Analizi *.h-kapojn en simpla C"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "C++ profi&le:"
-msgstr "C++-profilo:"
+msgstr "C++-profi&lo:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCpp)
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsC)
@@ -240,14 +240,14 @@ msgstr "C++ ko&mandliniaj argumentoj:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "C profi&le:"
-msgstr "C-profilo:"
+msgstr "C-profi&lo:"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_2)
 #: kcm_widget/parserwidget.ui:178
 #, kde-format
 msgctxt "@label:textbox"
 msgid "C co&mmand-line arguments:"
-msgstr "C-komandliniaj argumentoj:"
+msgstr "C-ko&mandliniaj argumentoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: kcm_widget/parserwidget.ui:204
@@ -327,7 +327,7 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Check this if you want the project to be reparsed to apply the changes."
 msgstr ""
-"Kontrolu ĉi tion, se vi volas, ke la projekto estu reviziita por apliki la "
+"Marku ĉi tion, se vi volas, ke la projekto estu reviziita por apliki la "
 "ŝanĝojn."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_reparse)

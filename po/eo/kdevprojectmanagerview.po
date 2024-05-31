@@ -2,15 +2,15 @@
 # Copyright (C) 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
-# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+# Oliver Kellogg <olivermkellogg@gmail.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-06-06 22:02+0100\n"
-"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"PO-Revision-Date: 2024-05-30 22:41+0200\n"
+"Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -317,7 +317,7 @@ msgstr "&Aldoni al Konstruaranĝo"
 msgctxt "@action:inmenu"
 msgid "C&lose Project"
 msgid_plural "Close Projects"
-msgstr[0] "Fermi Projekton"
+msgstr[0] "F&ermi Projekton"
 msgstr[1] "Fermi Projektojn"
 
 #: projectmanagerviewplugin.cpp:320
