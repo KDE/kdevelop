@@ -1,20 +1,20 @@
 # translation of kdevelop.po to
-# Version: $Revision: 1681059 $
+# Version: $Revision: 1681191 $
 # KDevelop polish translation file.
 # Translation work:
-#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
-# Corrections:
-#       Waldemar Kochaniec
-#       Jacek Stolarczyk
-#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
-#
-# Krzysztof Lichota, 2004.
+# Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Anna Wojdeł <ania@kbs.twi.tudelft.nl>
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2003, 2004.
 # Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
 # Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010, 2013.
 # Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
+# Corrections:
+# Waldemar Kochaniec
+# Jacek Stolarczyk
+#
+# Krzysztof Lichota, 2004.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
