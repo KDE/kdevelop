@@ -817,19 +817,18 @@ void GdbTest::testStackSwitchThread()
 
     TestFrameStackModel *stackModel = session->frameStackModel();
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 42); // QThread::usleep(500000);
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
-    qDebug() << stackModel->rowCount();
-    QVERIFY(stackModel->rowCount() > 2);
+    QCOMPARE(stackModel->rowCount(), 4);
 
     QModelIndex tIdx = stackModel->index(0,0);
     COMPARE_DATA(tIdx, "#1 at main");
     QCOMPARE(stackModel->rowCount(tIdx), 1);
     COMPARE_DATA(stackModel->index(0, 0, tIdx), "0");
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":43"); // QThread::usleep(500000);
+    COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":44"); // QThread::msleep(600);
 
     tIdx = stackModel->index(1,0);
     QVERIFY(stackModel->data(tIdx).toString().startsWith("#2 at "));
