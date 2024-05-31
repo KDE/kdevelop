@@ -1712,7 +1712,7 @@ void GdbTest::testThreadAndFrameInfo()
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeethreads"));
     QString fileName = findSourceFile(QStringLiteral("debugeethreads.cpp"));
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 38);
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
