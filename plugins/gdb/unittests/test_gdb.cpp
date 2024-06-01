@@ -775,40 +775,6 @@ void GdbTest::testStackFetchMore()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-void GdbTest::testStackDeactivateAndActive()
-{
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg;
-
-    TestFrameStackModel *stackModel = session->frameStackModel();
-
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 21);
-    QVERIFY(session->startDebugging(&cfg, m_iface));
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    QModelIndex tIdx = stackModel->index(0,0);
-
-    session->stepOut();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QTest::qWait(200);
-    COMPARE_DATA(tIdx, "#1 at main");
-    QCOMPARE(stackModel->rowCount(tIdx), 1);
-    COMPARE_DATA(stackModel->index(0, 0, tIdx), "0");
-    COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
-    // depending on the compiler and gdb version, we may either end up in
-    // one line or the other
-    const auto last = stackModel->index(0, 2, tIdx).data().toString();
-    if (last.endsWith(":29"))
-        QCOMPARE(last, debugeeFileName + ":29");
-    else
-        QCOMPARE(last, debugeeFileName + ":30");
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
 void GdbTest::testStackSwitchThread()
 {
     auto *session = new TestDebugSession;

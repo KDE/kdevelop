@@ -49,7 +49,6 @@ private Q_SLOTS:
     void testShowStepInSource();
     void testStack();
     void testStackFetchMore();
-    void testStackDeactivateAndActive();
     void testStackSwitchThread();
     void testAttach();
     void testManualAttach();

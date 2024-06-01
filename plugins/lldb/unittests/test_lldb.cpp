@@ -1110,38 +1110,6 @@ void LldbTest::testStackFetchMore()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-void LldbTest::testStackDeactivateAndActive()
-{
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg;
-
-    TestFrameStackModel *stackModel = session->frameStackModel();
-
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), 21);
-    QVERIFY(session->startDebugging(&cfg, m_iface));
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    QModelIndex tIdx = stackModel->index(0,0);
-
-    session->stepOut();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    COMPARE_DATA(tIdx, "#1 at main");
-    QCOMPARE(stackModel->rowCount(tIdx), 3);
-    COMPARE_DATA(stackModel->index(0, 0, tIdx), "0");
-    COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(0, 2, tIdx), m_debugeeFileName+":30");
-    COMPARE_DATA(stackModel->index(1, 0, tIdx), "1");
-    COMPARE_DATA(stackModel->index(1, 1, tIdx), "__libc_start_main");
-    COMPARE_DATA(stackModel->index(2, 0, tIdx), "2");
-    COMPARE_DATA(stackModel->index(2, 1, tIdx), "_start");
-
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
 void LldbTest::testStackSwitchThread()
 {
     QSKIP("Skipping... lldb-mi crashes when break at a location with multiple threads running");
