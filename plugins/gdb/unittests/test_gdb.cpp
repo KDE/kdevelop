@@ -670,25 +670,23 @@ void GdbTest::testStack()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     QModelIndex tIdx = stackModel->index(0,0);
-    QCOMPARE(stackModel->rowCount(QModelIndex()), 1);
-    QCOMPARE(stackModel->columnCount(QModelIndex()), 3);
-    COMPARE_DATA(tIdx, "#1 at foo");
 
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
+    COMPARE_DATA(tIdx, "#1 at foo");
     QCOMPARE(stackModel->rowCount(tIdx), 2);
-    QCOMPARE(stackModel->columnCount(tIdx), 3);
-    COMPARE_DATA(stackModel->index(0, 0, tIdx), "0");
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "foo");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), debugeeFileName+":23");
-    COMPARE_DATA(stackModel->index(1, 0, tIdx), "1");
     COMPARE_DATA(stackModel->index(1, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(1, 2, tIdx), debugeeFileName+":29");
 
-
     session->stepOut();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
     COMPARE_DATA(tIdx, "#1 at main");
     QCOMPARE(stackModel->rowCount(tIdx), 1);
-    COMPARE_DATA(stackModel->index(0, 0, tIdx), "0");
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
     // depending on the compiler and gdb version, we may either end up in
     // one line or the other
@@ -718,57 +716,50 @@ void GdbTest::testStackFetchMore()
     QCOMPARE(session->frameStackModel()->fetchFramesCalled, 1);
 
     QModelIndex tIdx = stackModel->index(0,0);
-    QCOMPARE(stackModel->rowCount(QModelIndex()), 1);
-    QCOMPARE(stackModel->columnCount(QModelIndex()), 3);
-    COMPARE_DATA(tIdx, "#1 at foo");
 
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
+    COMPARE_DATA(tIdx, "#1 at foo");
     QCOMPARE(stackModel->rowCount(tIdx), 21);
-    COMPARE_DATA(stackModel->index(0, 0, tIdx), "0");
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "foo");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":26");
-    COMPARE_DATA(stackModel->index(1, 0, tIdx), "1");
     COMPARE_DATA(stackModel->index(1, 1, tIdx), "foo");
     COMPARE_DATA(stackModel->index(1, 2, tIdx), fileName+":24");
-    COMPARE_DATA(stackModel->index(2, 0, tIdx), "2");
     COMPARE_DATA(stackModel->index(2, 1, tIdx), "foo");
     COMPARE_DATA(stackModel->index(2, 2, tIdx), fileName+":24");
-    COMPARE_DATA(stackModel->index(19, 0, tIdx), "19");
-    COMPARE_DATA(stackModel->index(20, 0, tIdx), "20");
 
     stackModel->fetchMoreFrames();
     QTest::qWait(200);
     QCOMPARE(stackModel->fetchFramesCalled, 2);
+
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
     QCOMPARE(stackModel->rowCount(tIdx), 41);
-    COMPARE_DATA(stackModel->index(20, 0, tIdx), "20");
-    COMPARE_DATA(stackModel->index(21, 0, tIdx), "21");
-    COMPARE_DATA(stackModel->index(22, 0, tIdx), "22");
-    COMPARE_DATA(stackModel->index(39, 0, tIdx), "39");
-    COMPARE_DATA(stackModel->index(40, 0, tIdx), "40");
 
     stackModel->fetchMoreFrames();
     QTest::qWait(200);
     QCOMPARE(stackModel->fetchFramesCalled, 3);
+
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
     QCOMPARE(stackModel->rowCount(tIdx), 121);
-    COMPARE_DATA(stackModel->index(40, 0, tIdx), "40");
-    COMPARE_DATA(stackModel->index(41, 0, tIdx), "41");
-    COMPARE_DATA(stackModel->index(42, 0, tIdx), "42");
-    COMPARE_DATA(stackModel->index(119, 0, tIdx), "119");
-    COMPARE_DATA(stackModel->index(120, 0, tIdx), "120");
 
     stackModel->fetchMoreFrames();
     QTest::qWait(200);
     QCOMPARE(stackModel->fetchFramesCalled, 4);
+
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
     QCOMPARE(stackModel->rowCount(tIdx), 299);
-    COMPARE_DATA(stackModel->index(120, 0, tIdx), "120");
-    COMPARE_DATA(stackModel->index(121, 0, tIdx), "121");
-    COMPARE_DATA(stackModel->index(122, 0, tIdx), "122");
-    COMPARE_DATA(stackModel->index(298, 0, tIdx), "298");
     COMPARE_DATA(stackModel->index(298, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(298, 2, tIdx), fileName+":30");
 
     stackModel->fetchMoreFrames(); //nothing to fetch, we are at the end
     QTest::qWait(200);
     QCOMPARE(stackModel->fetchFramesCalled, 4);
+
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
     QCOMPARE(stackModel->rowCount(tIdx), 299);
 
     session->run();
@@ -787,18 +778,25 @@ void GdbTest::testStackSwitchThread()
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
-    QCOMPARE(stackModel->rowCount(), 4);
-
     QModelIndex tIdx = stackModel->index(0,0);
+
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
+    RETURN_IF_TEST_FAILED();
     COMPARE_DATA(tIdx, "#1 at main");
     QCOMPARE(stackModel->rowCount(tIdx), 1);
-    COMPARE_DATA(stackModel->index(0, 0, tIdx), "0");
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":44"); // QThread::msleep(600);
 
     tIdx = stackModel->index(1,0);
+
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
+    RETURN_IF_TEST_FAILED();
     QVERIFY(stackModel->data(tIdx).toString().startsWith("#2 at "));
+
     stackModel->setCurrentThread(2);
+
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
+    RETURN_IF_TEST_FAILED();
     QTRY_VERIFY(stackModel->rowCount(tIdx) > 3);
 
     session->run();
@@ -898,8 +896,8 @@ void GdbTest::testCoreFile()
     WAIT_FOR_STATE(session, DebugSession::StoppedState);
 
     QModelIndex tIdx = stackModel->index(0,0);
-    QCOMPARE(stackModel->rowCount(QModelIndex()), 1);
-    QCOMPARE(stackModel->columnCount(QModelIndex()), 3);
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
     COMPARE_DATA(tIdx, "#1 at foo");
 
     session->stopDebugger();

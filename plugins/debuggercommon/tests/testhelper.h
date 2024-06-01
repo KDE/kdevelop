@@ -54,6 +54,11 @@ bool isAttachForbidden(const char* file, int line);
 
 bool compareData(const QModelIndex& index, const QString& expected, const char* file, int line, bool useRE = false);
 
+/// Verify that a given thread index's frame stack model has 3 columns, an expected number of threads
+/// and returns correct stack frame numbers (at column=0) for the thread index (as the parent index).
+/// Check success with RETURN_IF_TEST_FAILED().
+void validateColumnCountsThreadCountAndStackFrameNumbers(const QModelIndex& threadIndex, int expectedThreadCount);
+
 bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerState state, const char* file, int line,
                   bool waitForIdle = false);
 

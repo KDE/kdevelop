@@ -84,6 +84,22 @@ bool compareData(const QModelIndex& index, const QString& expected, const char *
                           file, line);
 }
 
+void validateColumnCountsThreadCountAndStackFrameNumbers(const QModelIndex& threadIndex, int expectedThreadCount)
+{
+    const auto* const stackModel = threadIndex.model();
+    QVERIFY(stackModel);
+
+    QCOMPARE(stackModel->columnCount(), 3);
+    QCOMPARE(stackModel->columnCount(threadIndex), 3);
+
+    QCOMPARE(stackModel->rowCount(), expectedThreadCount);
+
+    const auto stackFrameCount = stackModel->rowCount(threadIndex);
+    for (int row = 0; row < stackFrameCount; ++row) {
+        COMPARE_DATA(stackModel->index(row, 0, threadIndex), QString::number(row));
+    }
+}
+
 bool waitForAWhile(MIDebugSession *session, int ms, const char *file, int line)
 {
     QPointer<MIDebugSession> s(session); //session can get deleted in DebugController
