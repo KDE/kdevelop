@@ -6,8 +6,10 @@
 
 #include "abbreviations.h"
 
-#include <QStringList>
 #include <util/path.h>
+
+#include <QStringList>
+#include <QVarLengthArray>
 
 namespace KDevelop {
 // Taken and adapted for kdevelop from katecompletionmodel.cpp

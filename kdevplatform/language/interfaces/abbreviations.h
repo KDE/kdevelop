@@ -7,8 +7,6 @@
 #ifndef KDEVPLATFORM_ABBREVIATIONS_H
 #define KDEVPLATFORM_ABBREVIATIONS_H
 
-#include <QVarLengthArray>
-
 #include <language/languageexport.h>
 
 class QStringList;
