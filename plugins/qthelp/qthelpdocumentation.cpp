@@ -57,12 +57,102 @@ QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider, const
     , m_current(::findTitle(m_info, key))
     , lastView(nullptr)
 {
-    Q_ASSERT(m_current!=m_info.constEnd());
+    Q_ASSERT(m_current != m_info.constEnd());
 }
 
 namespace {
+// remove HTML cruft to produce a clean description
+QString cleanupDescription(QString description)
+{
+    {
+        // Completely remove the first large header found, since we don't need a header
+        const auto headerRegExp = QStringLiteral("<\\s*h\\d[^>]*>.*?<\\s*/\\s*h\\d\\s*>");
+        static const auto findHeader = QRegularExpression(headerRegExp);
+        const auto match = findHeader.match(description);
+        if (match.hasMatch()) {
+            description.remove(match.capturedStart(), match.capturedLength());
+        }
+    }
 
-QString descriptionFromHtmlData(const QString& fragment, const QString& dataString)
+    {
+        // Replace all gigantic header-font sizes with <big>
+        {
+            const auto sizeRegExp = QStringLiteral("<\\s*h\\d\\s*");
+            static const auto findSize = QRegularExpression(sizeRegExp);
+            description.replace(findSize, QStringLiteral("<big "));
+        }
+        {
+            const auto sizeCloseRegExp = QStringLiteral("<\\s*/\\s*h\\d\\s*>");
+            static const auto closeSize = QRegularExpression(sizeCloseRegExp);
+            description.replace(closeSize, QStringLiteral("</big><br />"));
+        }
+    }
+
+    {
+        // Replace paragraphs by newlines
+        const auto begin = QStringLiteral("<\\s*p\\s*>");
+        static const auto findBegin = QRegularExpression(begin);
+        description.replace(findBegin, {});
+
+        const auto end = QStringLiteral("<\\s*/p\\s*>");
+        static const auto findEnd = QRegularExpression(end);
+        description.replace(findEnd, QStringLiteral("<br />"));
+    }
+
+    {
+        // Remove links, because they won't work
+        const auto link = QStringLiteral("<\\s*a\\s*href\\s*=\\s*['\"].*?['\"]\\s*");
+        static const auto exp = QRegularExpression(link, QRegularExpression::CaseInsensitiveOption);
+        description.replace(exp, QStringLiteral("<a "));
+    }
+
+    return description;
+}
+
+// try to extract description using comment markers
+QString descriptionFromCommentMarkers(const QByteArray& utf8Fragment, const QByteArray& utf8Data)
+{
+    // find the start marker
+    const auto commentMarkerStart = utf8Data.indexOf(QByteArray("<!-- $$$" + utf8Fragment));
+    if (commentMarkerStart == -1) {
+        return {};
+    }
+
+    // find the end marker
+    auto commentMarkerEnd =
+        utf8Data.indexOf(QByteArray("<!-- @@@" + utf8Fragment), commentMarkerStart + 8 + utf8Fragment.size());
+    if (commentMarkerEnd == -1) {
+        return {};
+    }
+
+    // then cleanup the data inbetween these two places
+    return cleanupDescription(
+        QString::fromUtf8(utf8Data.mid(commentMarkerStart, commentMarkerEnd - commentMarkerStart)));
+}
+
+// try to extract description via HTML parsing using new Qt6 documentation format
+QString descriptionFromNewHtmlData(const QString& fragment, const QString& data)
+{
+    // find the header that references the fragment
+    const auto sectionStartPattern = QRegularExpression(QLatin1String("<\\s*h(\\d)[^>]*id=\"%1\"").arg(fragment));
+    const auto matchStart = sectionStartPattern.match(data);
+    if (!matchStart.hasMatch()) {
+        return {};
+    }
+
+    // if that fails find the start of the next section by the header
+    const auto headerType = matchStart.capturedView(1);
+    const auto sectionStart = matchStart.capturedStart(0);
+    const auto sectionEndPattern = QRegularExpression(QLatin1String("<\\s*h%1[^>]*id=\"").arg(headerType));
+    const auto matchEnd = sectionEndPattern.match(data, matchStart.capturedEnd(0));
+    const auto sectionEnd = matchEnd.hasMatch() ? matchEnd.capturedStart(0) : data.size();
+
+    // then cleanup the data inbetween these two places
+    return cleanupDescription(data.mid(sectionStart, sectionEnd - sectionStart));
+}
+
+// extract description via HTML parsing using the old Qt5-like documentation format
+QString descriptionFromOldHtmlData(const QString& fragment, const QString& dataString)
 {
     const QString p = QStringLiteral("((\\\")|(\\\'))");
     const QString optionalSpace = QStringLiteral(" *");
@@ -132,51 +222,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         }
     }
 
-    QString thisFragment = dataString.mid(pos, endPos - pos);
-
-    {
-        //Completely remove the first large header found, since we don't need a header
-        const QString headerRegExp = QStringLiteral("< h\\d.*>.*?< / h\\d >").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression findHeader(headerRegExp);
-        const QRegularExpressionMatch match = findHeader.match(thisFragment);
-        if (match.hasMatch()) {
-            thisFragment.remove(match.capturedStart(), match.capturedLength());
-        }
-    }
-
-    {
-        //Replace all gigantic header-font sizes with <big>
-        {
-            const QString sizeRegExp = QStringLiteral("< h\\d ").replace(QLatin1Char(' '), optionalSpace);
-            const QRegularExpression findSize(sizeRegExp);
-            thisFragment.replace(findSize, QStringLiteral("<big "));
-        }
-        {
-            const QString sizeCloseRegExp = QStringLiteral("< / h\\d >").replace(QLatin1Char(' '), optionalSpace);
-            const QRegularExpression closeSize(sizeCloseRegExp);
-            thisFragment.replace(closeSize, QStringLiteral("</big><br />"));
-        }
-    }
-
-    {
-        //Replace paragraphs by newlines
-        const QString begin = QStringLiteral("< p >").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression findBegin(begin);
-        thisFragment.replace(findBegin, {});
-
-        const QString end = QStringLiteral("< /p >").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression findEnd(end);
-        thisFragment.replace(findEnd, QStringLiteral("<br />"));
-    }
-
-    {
-        //Remove links, because they won't work
-        const QString link = QString(QStringLiteral("< a href = ") + p + QStringLiteral(".*?") + p).replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression exp(link, QRegularExpression::CaseInsensitiveOption);
-        thisFragment.replace(exp, QStringLiteral("<a "));
-    }
-
-    return thisFragment;
+    return cleanupDescription(dataString.mid(pos, endPos - pos));
 }
 
 QString descriptionFallback(const QList<QHelpLink>& info)
@@ -196,10 +242,27 @@ QString QtHelpDocumentation::description() const
     const auto url = currentUrl();
     const auto fragment = url.fragment();
 
-    // Extract a short description from the html data
-    const auto fileData = QString::fromLatin1(m_provider->engine()->fileData(url)); ///@todo encoding
-    if (auto ret = descriptionFromHtmlData(fragment, fileData); !ret.isEmpty()) {
-        return ret;
+    if (!fragment.isEmpty()) {
+        // Extract a short description from the html data
+
+        // assume the data is utf8 encoded
+        // this is true for new data at least with <meta charset="utf-8">
+        const auto utf8FileData = m_provider->engine()->fileData(url);
+
+        // first, fast pass that does not require regular expression matching
+        if (auto ret = descriptionFromCommentMarkers(fragment.toUtf8(), utf8FileData); !ret.isEmpty()) {
+            return ret;
+        }
+
+        // otherwise fallback with ugly HTML parsing using regexp magic, what could go wrong?
+        const auto fileData = QString::fromUtf8(utf8FileData);
+        if (auto ret = descriptionFromNewHtmlData(fragment, fileData); !ret.isEmpty()) {
+            return ret;
+        }
+
+        if (auto ret = descriptionFromOldHtmlData(fragment, fileData); !ret.isEmpty()) {
+            return ret;
+        }
     }
 
     return descriptionFallback(m_info);

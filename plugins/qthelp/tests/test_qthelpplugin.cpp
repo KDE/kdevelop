@@ -232,6 +232,9 @@ void TestQtHelpPlugin::testDeclarationLookup_Method()
     QCOMPARE(doc->name(), QStringLiteral("QString::fromLatin1"));
     const auto description = doc->description();
     QVERIFY(description.contains(QRegularExpression{"See also.*toLatin1"}));
+    QVERIFY(!description.contains("href"));
+    QVERIFY(!description.contains("<p"));
+    QVERIFY(!description.contains("<h3"));
 }
 
 void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
