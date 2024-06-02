@@ -304,7 +304,7 @@ void HomeDocumentation::clicked(const QModelIndex& idx)
 
 QString HomeDocumentation::name() const
 {
-    return i18n("QtHelp Home Page");
+    return i18n("%1 Home Page", m_provider->name());
 }
 
 IDocumentationProvider* HomeDocumentation::provider() const
