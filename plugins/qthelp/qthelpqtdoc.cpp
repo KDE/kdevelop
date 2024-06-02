@@ -30,7 +30,10 @@ QtHelpQtDoc::~QtHelpQtDoc() = default;
 
 QStringList QtHelpQtDoc::qmakeCandidates()
 {
-    QStringList candidates{QStringLiteral("qmake"), QStringLiteral("qmake-qt4"), QStringLiteral("qmake-qt5")};
+    QStringList candidates{
+        QStringLiteral("qmake"),  QStringLiteral("qmake-qt4"), QStringLiteral("qmake-qt5"),
+        QStringLiteral("qmake6"), QStringLiteral("qmake-qt6"),
+    };
     const auto it = std::remove_if(candidates.begin(), candidates.end(), [](const QString& candidate) {
         return QStandardPaths::findExecutable(candidate).isEmpty();
     });
