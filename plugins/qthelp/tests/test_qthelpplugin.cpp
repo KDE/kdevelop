@@ -74,6 +74,13 @@ void TestQtHelpPlugin::testDefaultValue()
     QCOMPARE(m_plugin->isQtHelpQtDocLoaded(), true);
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 0);
     QCOMPARE(m_plugin->providers().size(), 1);
+
+    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
+    if (!provider->isValid()) {
+        QSKIP("Qt help not available");
+    }
+
+    QTRY_VERIFY(provider->indexModel()->rowCount() > 0);
 }
 
 void TestQtHelpPlugin::testUnsetQtHelpDoc()

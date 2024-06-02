@@ -48,6 +48,10 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& c
         qCWarning(QTHELP) << "engine warning for" << collectionFileName << msg;
     });
 
+    // we use a writable engine (see initialization above)
+    // in Qt6 we must mark the engine as writable, otherwise registering will always fail
+    m_engine.setReadOnly(false);
+
     // we assume that the setup finished synchronously, otherwise our code does not work correctly
     // the below will catch situations when Qt would change its behavior
     bool setupFinished = false;
@@ -67,6 +71,8 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& c
     Q_ASSERT(setupFinished);
     disconnect(startedConnection);
     disconnect(finishedConnection);
+
+    Q_ASSERT(!m_engine.isReadOnly());
 
     m_engine.setUsesFilterEngine(true);
 }
