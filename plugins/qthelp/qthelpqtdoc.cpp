@@ -24,10 +24,9 @@ namespace {
 QString qmakeCandidate()
 {
     // return the first qmake executable we can find
-    const QStringList candidates {
-        QStringLiteral("qmake"),
-        QStringLiteral("qmake-qt4"),
-        QStringLiteral("qmake-qt5")
+    const QStringList candidates{
+        QStringLiteral("qmake6"),    QStringLiteral("qmake"),     QStringLiteral("qmake-qt6"),
+        QStringLiteral("qmake-qt5"), QStringLiteral("qmake-qt4"),
     };
     auto it = std::find_if(candidates.constBegin(), candidates.constEnd(), [](const QString& candidate) {
         return !QStandardPaths::findExecutable(candidate).isEmpty();
