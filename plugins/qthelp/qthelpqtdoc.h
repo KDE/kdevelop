@@ -29,6 +29,10 @@ public:
     /** @return true once the async initialization has finished */
     bool isInitialized() const { return m_isInitialized; }
 
+Q_SIGNALS:
+    /** emitted when @c isInitialized() is set to true */
+    void isInitializedChanged();
+
 private:
     QString m_path;
     bool m_isInitialized = false;
