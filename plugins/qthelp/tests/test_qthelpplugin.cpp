@@ -8,11 +8,14 @@
 #include "../qthelpplugin.h"
 #include "../qthelpprovider.h"
 #include "../qthelp_config_shared.h"
+#include "../qthelpnetwork.h"
+#include "../qthelpdocumentation.h"
 
 #include <QCoreApplication>
 #include <QHelpLink>
 #include <QRegularExpression>
 #include <QTest>
+#include <QSignalSpy>
 
 #include <interfaces/idocumentation.h>
 #include <language/duchain/duchainlock.h>
@@ -235,6 +238,22 @@ void TestQtHelpPlugin::testDeclarationLookup_Method()
     QVERIFY(!description.contains("href"));
     QVERIFY(!description.contains("<p"));
     QVERIFY(!description.contains("<h3"));
+
+    auto qtDoc = dynamic_cast<QtHelpDocumentation*>(doc.data());
+    QVERIFY(qtDoc);
+    QVERIFY(qtDoc->currentUrl().isValid());
+
+    auto nam = provider->networkAccess();
+    auto reply = nam->get(QNetworkRequest(qtDoc->currentUrl()));
+    connect(reply, &QNetworkReply::readyRead, this, [reply]() {
+        QVERIFY(!reply->readAll().isEmpty());
+    });
+
+    auto finishedSpy = QSignalSpy(reply, &QNetworkReply::finished);
+    QVERIFY(finishedSpy.wait());
+
+    QVERIFY(reply->isFinished());
+    QCOMPARE(finishedSpy.size(), 1);
 }
 
 void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()

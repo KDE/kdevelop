@@ -4,6 +4,9 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include <QMimeDatabase>
+#include <QHelpEngineCore>
+
 #include "qthelpnetwork.h"
 
 HelpNetworkAccessManager::HelpNetworkAccessManager(QHelpEngineCore* engine, QObject* parent)
@@ -14,18 +17,14 @@ HelpNetworkAccessManager::~HelpNetworkAccessManager()
 {
 }
 
-HelpNetworkReply::HelpNetworkReply(const QNetworkRequest &request, const QByteArray &fileData, const QString &mimeType)
-    : data(fileData), origLen(fileData.length())
+HelpNetworkReply::HelpNetworkReply(const QNetworkRequest& request, const QByteArray& fileData, const QString& mimeType)
+    : m_data(fileData)
 {
     setRequest(request);
-    setOpenMode(QIODevice::ReadOnly);
-
-    // Instantly finish processing if data is empty. Without this code the loadFinished()
-    // signal will never be emitted by the corresponding QWebView.
-    if (!origLen) {
-        qCDebug(QTHELP) << "Empty data for" << request.url().toDisplayString();
-        QTimer::singleShot(0, this, &QNetworkReply::finished);
-    }
+    setUrl(request.url());
+    setOperation(QNetworkAccessManager::GetOperation);
+    setFinished(true);
+    QNetworkReply::open(QIODevice::ReadOnly);
 
 #ifdef USE_QTWEBKIT
     // Fix broken CSS images (tested on Qt 5.5.1, 5.7.0, 5.9.7 and 5.14.1)
@@ -38,25 +37,30 @@ HelpNetworkReply::HelpNetworkReply(const QNetworkRequest &request, const QByteAr
     // later by offline.css  by javascript which causes flickering so we force the full stylesheet
     // from the beginning
     if (request.url().fileName().endsWith(QLatin1String(".html"))) {
-        data.replace("offline-simple.css", "offline.css");
+        m_data.replace("offline-simple.css", "offline.css");
     }
 
     setHeader(QNetworkRequest::ContentTypeHeader, mimeType);
-    setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(origLen));
-    QTimer::singleShot(0, this, &QNetworkReply::metaDataChanged);
-    QTimer::singleShot(0, this, &QIODevice::readyRead);
+    const auto contentLength = m_data.size();
+    setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(contentLength));
+
+    m_buffer.setData(m_data);
+    m_buffer.open(QIODevice::ReadOnly);
+
+    QMetaObject::invokeMethod(
+        this,
+        [this, contentLength]() {
+            emit metaDataChanged();
+            emit downloadProgress(contentLength, contentLength);
+            emit readyRead();
+            emit finished();
+        },
+        Qt::QueuedConnection);
 }
 
 qint64 HelpNetworkReply::readData(char *buffer, qint64 maxlen)
 {
-	qint64 len = qMin(qint64(data.length()), maxlen);
-	if (len) {
-		memcpy(buffer, data.constData(), len);
-		data.remove(0, len);
-	}
-	if (!data.length())
-		QTimer::singleShot(0, this, &QNetworkReply::finished);
-	return len;
+    return m_buffer.read(buffer, maxlen);
 }
 
 QNetworkReply *HelpNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData)
