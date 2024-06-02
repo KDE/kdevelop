@@ -48,9 +48,26 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& c
         qCWarning(QTHELP) << "engine warning for" << collectionFileName << msg;
     });
 
+    // we assume that the setup finished synchronously, otherwise our code does not work correctly
+    // the below will catch situations when Qt would change its behavior
+    bool setupFinished = false;
+    auto startedConnection = connect(&m_engine, &QHelpEngine::setupStarted, this, [collectionFileName]() {
+        qCDebug(QTHELP) << "setup started" << collectionFileName;
+    });
+    auto finishedConnection =
+        connect(&m_engine, &QHelpEngine::setupFinished, this, [&setupFinished, collectionFileName]() {
+            qCDebug(QTHELP) << "setup finished" << collectionFileName;
+            setupFinished = true;
+        });
+
     if( !m_engine.setupData() ) {
         qCWarning(QTHELP) << "Couldn't setup QtHelp Collection file";
     }
+
+    Q_ASSERT(setupFinished);
+    disconnect(startedConnection);
+    disconnect(finishedConnection);
+
     m_engine.setUsesFilterEngine(true);
 }
 
