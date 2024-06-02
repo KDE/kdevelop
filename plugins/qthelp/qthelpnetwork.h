@@ -7,13 +7,10 @@
 #ifndef QTHELPNETWORK_H
 #define QTHELPNETWORK_H
 
-#include "debug.h"
-
+#include <QBuffer>
 #include <QNetworkReply>
-#include <QTimer>
-#include <QHelpEngine>
-#include <QMimeDatabase>
-#include <QMimeType>
+
+class QHelpEngineCore;
 
 class HelpNetworkReply : public QNetworkReply
 {
@@ -23,18 +20,30 @@ public:
 
     void abort() override
     {
+        close();
     }
+
     qint64 bytesAvailable() const override
     {
-        return data.length() + QNetworkReply::bytesAvailable();
+        return m_buffer.bytesAvailable() + QNetworkReply::bytesAvailable();
+    }
+
+    bool isSequential() const override
+    {
+        return true;
+    }
+
+    qint64 size() const override
+    {
+        return m_buffer.size();
     }
 
 protected:
     qint64 readData(char* data, qint64 maxlen) override;
 
 private:
-    QByteArray data;
-    qint64 origLen;
+    QByteArray m_data;
+    QBuffer m_buffer;
 };
 
 class HelpNetworkAccessManager : public QNetworkAccessManager
