@@ -43,6 +43,11 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& c
     , m_nam(new HelpNetworkAccessManager(&m_engine, this))
 {
     Q_UNUSED(args);
+
+    connect(&m_engine, &QHelpEngine::warning, this, [collectionFileName](const QString& msg) {
+        qCWarning(QTHELP) << "engine warning for" << collectionFileName << msg;
+    });
+
     if( !m_engine.setupData() ) {
         qCWarning(QTHELP) << "Couldn't setup QtHelp Collection file";
     }
