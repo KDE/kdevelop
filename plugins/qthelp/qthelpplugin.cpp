@@ -55,6 +55,14 @@ void QtHelpPlugin::readConfig()
 
 void QtHelpPlugin::loadQtDocumentation(bool loadQtDoc)
 {
+    if (!m_qtDoc->isInitialized()) {
+        // defer loading until initialization has finished
+        connect(m_qtDoc, &QtHelpQtDoc::isInitializedChanged, this, [this, loadQtDoc]() {
+            loadQtDocumentation(loadQtDoc);
+        });
+        return;
+    }
+
     if(!loadQtDoc){
         m_qtDoc->unloadDocumentation();
     } else if(loadQtDoc) {

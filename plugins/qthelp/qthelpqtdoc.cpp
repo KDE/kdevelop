@@ -66,15 +66,19 @@ void QtHelpQtDoc::registerDocumentations()
 
             p->deleteLater();
             m_isInitialized = true;
+            emit isInitializedChanged();
         });
         p->start();
     } else {
         m_isInitialized = true;
+        emit isInitializedChanged();
     }
 }
 
 void QtHelpQtDoc::loadDocumentation()
 {
+    Q_ASSERT(m_isInitialized);
+
     if(m_path.isEmpty()) {
         return;
     }
@@ -97,6 +101,8 @@ void QtHelpQtDoc::loadDocumentation()
 
 void QtHelpQtDoc::unloadDocumentation()
 {
+    Q_ASSERT(m_isInitialized);
+
     const auto fileNames = qchFiles();
     for (const QString& fileName : fileNames) {
         QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
