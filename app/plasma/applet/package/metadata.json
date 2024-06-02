@@ -7,6 +7,7 @@
                 "Name": "Eike Hein"
             }
         ],
+        "BugReportUrl": "https://bugs.kde.org/enter_bug.cgi?product=kdevelop&component=Plasma%20Sessions%20Applet",
         "Category": "Utilities",
         "Description": "List and launch KDevelop sessions",
         "Description[ar]": "اعرض جلسات مطوّرك وأطلقها",
@@ -47,9 +48,12 @@
         "Description[x-test]": "xxList and launch KDevelop sessionsxx",
         "Description[zh_CN]": "列出并启动 KDevelop 会话",
         "Description[zh_TW]": "列出並啟動 KDevelop 工作階段",
+        "FormFactors": [
+            "desktop"
+        ],
         "Icon": "kdevelop",
         "Id": "org.kde.kdevelopsessions",
-        "License": "GPL",
+        "License": "GPL-2.0+",
         "Name": "KDevelop Sessions",
         "Name[ar]": "جلسات مطوّرك",
         "Name[az]": "KDevelop sessiyası",
