@@ -37,8 +37,6 @@ PlasmoidItem {
             target: kdevelopSessions
             function onExpandedChanged() {
                 if (kdevelopSessions.expanded) {
-                    view.currentIndex = 0;
-                    view.highlightItem.opacity = 1;
                     view.forceActiveFocus();
                 }
             }
@@ -80,92 +78,53 @@ PlasmoidItem {
             // translated but not used, we just need length/height
             text: i18n("Arbitrary String Which Says Something")
         }
-        Keys.forwardTo: view
 
-        ListView {
-            id: view
+        QQC2.ScrollView {
+            anchors { left: parent.left; right: parent.right; bottom: parent.bottom; top: separator.bottom; topMargin: Kirigami.Units.smallSpacing}
 
-            anchors { left: parent.left; right: scrollBar.left; bottom: parent.bottom; top: separator.bottom; topMargin: 5 }
+            ListView {
+                id: view
 
-            model: KItemModels.KSortFilterProxyModel {
-                id: filterModel
-                sourceModel: sessionsModel
-            }
-            clip: true
-            focus: true
-
-            delegate: Item {
-                id: listdelegate
-                height: textMetric.paintedHeight * 2
-
-                anchors {
-                    left: parent.left
-                    right: parent.right
+                model: KItemModels.KSortFilterProxyModel {
+                    id: filterModel
+                    sourceModel: sessionsModel
                 }
+                clip: true
+                focus: true
+                keyNavigationWraps: true
 
-                function openSession() {
-                    sessionsModel.openSession(sessionId);
-                    plasmoid.expanded = false
-                }
+                delegate: PlasmaComponents.ItemDelegate {
+                    id: listdelegate
 
-                PlasmaComponents.Label {
-                    id: sessionText
+                    width: ListView.view.width
+                    height: textMetric.paintedHeight * 2
 
-                    anchors {
-                        verticalCenter: parent.verticalCenter
-                        left: parent.left
-                        right: parent.right
-                        leftMargin: 10
-                        rightMargin: 10
-                    }
-
-                    verticalAlignment: Text.AlignVCenter
-                    text: model.display
-                    elide: Text.ElideRight
-                }
-
-                MouseArea {
-                    height: parent.height + 15
-                    anchors { left: parent.left; right: parent.right;}
                     hoverEnabled: true
+                    text: model.display
+
+                    Accessible.role: Accessible.Button
+
+                    function openSession() {
+                        sessionsModel.openSession(sessionId);
+                        kdevelopSessions.expanded = false
+                    }
 
                     onClicked: {
                         openSession();
                     }
 
-                    onEntered: {
-                        view.currentIndex = index
-                        view.highlightItem.opacity = 1
-                    }
-
-                    onExited: {
-                        view.highlightItem.opacity = 0
+                    onHoveredChanged: {
+                        if (hovered) {
+                            view.currentIndex = index;
+                        }
                     }
                 }
-                Keys.onPressed: {
-                if (event.key == Qt.Key_Enter || event.key == Qt.Key_Return)
-                    openSession();
-                }
+
+                highlight: PlasmaExtras.Highlight {}
+
+                highlightMoveDuration: Kirigami.Units.longDuration
+                highlightMoveVelocity: 1
             }
-
-            QQC2.ScrollBar.vertical: scrollBar
-
-            Keys.onReturnPressed: { currentItem.Keys.onPressed(event); }
-            Keys.onEnterPressed: { currentItem.Keys.onPressed(event); }
-            highlight: PlasmaExtras.Highlight {
-                hovered: true
-            }
-
-            highlightMoveDuration: Kirigami.Units.shortDuration
-        }
-
-        PlasmaComponents.ScrollBar {
-            id: scrollBar
-
-            anchors { bottom: parent.bottom; top: separator.top; right: parent.right }
-
-            orientation: Qt.Vertical
-            stepSize: view.count / 4
         }
     }
 }
