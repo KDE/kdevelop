@@ -30,11 +30,6 @@ PlasmoidItem {
         id: sessionsModel
     }
 
-    KSvg.Svg {
-       id: lineSvg
-       imagePath: "widgets/line"
-    }
-
     fullRepresentation: FocusScope {
         anchors.fill: parent
 
@@ -75,9 +70,8 @@ PlasmoidItem {
             id: separator
 
             anchors { left: headerRow.left; right: headerRow.right; top: headerRow.bottom }
-            svg: lineSvg
+            imagePath: "widgets/line"
             elementId: "horizontal-line"
-            height: lineSvg.elementSize("horizontal-line").height
         }
 
         Text {
