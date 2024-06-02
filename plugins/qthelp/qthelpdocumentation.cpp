@@ -30,10 +30,9 @@
 
 using namespace KDevelop;
 
-QtHelpProviderAbstract* QtHelpDocumentation::s_provider=nullptr;
-
-QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info)
-    : m_provider(s_provider)
+QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider, const QString& name,
+                                         const QList<QHelpLink>& info)
+    : m_provider(provider)
     , m_name(name)
     , m_info(info)
     , m_current(info.constBegin())
@@ -50,8 +49,9 @@ QList<QHelpLink>::const_iterator findTitle(const QList<QHelpLink>& links, const 
 }
 }
 
-QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info, const QString& key)
-    : m_provider(s_provider)
+QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider, const QString& name,
+                                         const QList<QHelpLink>& info, const QString& key)
+    : m_provider(provider)
     , m_name(name)
     , m_info(info)
     , m_current(::findTitle(m_info, key))
@@ -271,11 +271,12 @@ QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QtHelpDo
 
 void QtHelpAlternativeLink::showUrl()
 {
-    IDocumentation::Ptr newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
+    IDocumentation::Ptr newDoc(new QtHelpDocumentation(mDoc->qtHelpProvider(), mName, mDoc->info(), mName));
     ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 
-HomeDocumentation::HomeDocumentation() : m_provider(QtHelpDocumentation::s_provider)
+HomeDocumentation::HomeDocumentation(QtHelpProviderAbstract* provider)
+    : m_provider(provider)
 {
 }
 
@@ -297,7 +298,7 @@ void HomeDocumentation::clicked(const QModelIndex& idx)
     QHelpContentItem* it=model->contentItemAt(idx);
 
     const QList<QHelpLink> info{{it->url(), it->title()}};
-    IDocumentation::Ptr newDoc(new QtHelpDocumentation(it->title(), info));
+    IDocumentation::Ptr newDoc(new QtHelpDocumentation(m_provider, it->title(), info));
     ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 

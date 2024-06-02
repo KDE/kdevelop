@@ -26,8 +26,14 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
 public:
-    QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info);
-    QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info, const QString& key);
+    QtHelpDocumentation(QtHelpProviderAbstract* provider, const QString& name, const QList<QHelpLink>& info);
+    QtHelpDocumentation(QtHelpProviderAbstract* provider, const QString& name, const QList<QHelpLink>& info,
+                        const QString& key);
+
+    QtHelpProviderAbstract* qtHelpProvider() const
+    {
+        return m_provider;
+    }
 
     QString name() const override
     {
@@ -44,8 +50,6 @@ public:
         {
             return m_info;
         }
-
-        static QtHelpProviderAbstract* s_provider;
 
     public Q_SLOTS:
         void viewContextMenuRequested(const QPoint& pos);
@@ -73,7 +77,7 @@ class HomeDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
-        HomeDocumentation();
+        HomeDocumentation(QtHelpProviderAbstract* provider);
         QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = nullptr) override;
         QString description() const override { return QString(); }
         QString name() const override;
