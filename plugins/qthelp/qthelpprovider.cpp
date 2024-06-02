@@ -8,6 +8,8 @@
 
 #include "qthelpprovider.h"
 
+#include "debug.h"
+
 #include <QIcon>
 
 QtHelpProvider::QtHelpProvider(QObject *parent, const QString &fileName, const QString &name, const QString &iconName, const QVariantList &args)
@@ -16,7 +18,16 @@ QtHelpProvider::QtHelpProvider(QObject *parent, const QString &fileName, const Q
     , m_name(name)
     , m_iconName(iconName)
 {
-    m_engine.registerDocumentation(m_fileName);
+    if (!engine()->registeredDocumentations().isEmpty()) {
+        // data was already registered previously
+        Q_ASSERT(engine()->registeredDocumentations().size() == 1);
+        Q_ASSERT(engine()->documentationFileName(QHelpEngineCore::namespaceName(m_fileName)) == m_fileName);
+        return;
+    }
+
+    if (!engine()->registerDocumentation(m_fileName)) {
+        qCCritical(QTHELP) << "error >> " << fileName << engine()->error();
+    }
 }
 
 QIcon QtHelpProvider::icon() const
