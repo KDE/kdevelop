@@ -9,10 +9,11 @@
 
 #include <language/languageexport.h>
 
-#include <QLineEdit>
 #include <QObject>
 #include <QSet>
 #include <QStringList>
+
+class QLineEdit;
 
 namespace KDevelop {
 class QuickOpenDataProviderBase;

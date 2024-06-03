@@ -15,6 +15,7 @@
 #include <QAction>
 #include <QDebug>
 #include <QLayout>
+#include <QLineEdit>
 #include <QMenu>
 #include <QTimer>
 #include <QToolButton>

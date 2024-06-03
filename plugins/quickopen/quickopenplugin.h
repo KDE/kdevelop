@@ -7,13 +7,14 @@
 #ifndef KDEVPLATFORM_PLUGIN_QUICKOPENPLUGIN_H
 #define KDEVPLATFORM_PLUGIN_QUICKOPENPLUGIN_H
 
-#include <QVariant>
-#include <QPointer>
-
 #include <interfaces/iplugin.h>
 
 #include <language/interfaces/iquickopen.h>
 #include <language/interfaces/quickopendataprovider.h>
+
+#include <QLineEdit>
+#include <QPointer>
+#include <QVariant>
 
 class QAction;
 
