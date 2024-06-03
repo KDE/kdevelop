@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Andrew Coles <andrew_coles@yahoo.co.uk>, 2009, 2015.
-# Steve Allewell <steve.allewell@gmail.com>, 2016, 2017, 2020, 2022, 2023.
+# SPDX-FileCopyrightText: 2016, 2017, 2020, 2022, 2023, 2024 Steve Allewell <steve.allewell@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2023-05-27 13:08+0100\n"
+"PO-Revision-Date: 2024-06-02 12:13+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #: outputwidget.cpp:44
 #, kde-format
@@ -70,7 +70,7 @@ msgstr "Focus when Selecting Item"
 #, kde-format
 msgctxt "@action"
 msgid "Word Wrap"
-msgstr ""
+msgstr "Word Wrap"
 
 #: outputwidget.cpp:119
 #, kde-format

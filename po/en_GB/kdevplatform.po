@@ -3,21 +3,21 @@
 #
 # Andrew Coles <andrew_coles@yahoo.co.uk>, 2009, 2010, 2011.
 # Malcolm Hunter <malcolm.hunter@gmx.co.uk>, 2009.
-# Steve Allewell <steve.allewell@gmail.com>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2024 Steve Allewell <steve.allewell@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-09 03:28+0000\n"
-"PO-Revision-Date: 2022-12-31 15:45+0000\n"
+"PO-Revision-Date: 2024-06-02 12:04+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
-"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language-Team: British English\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -194,6 +194,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"A breakpoint cannot be added to an untitled document. Please save the "
+"document first."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -920,7 +922,7 @@ msgstr "enumerator "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[value-dependent]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
 #, kde-format
@@ -3615,9 +3617,7 @@ msgid "Delete Session"
 msgstr "Delete Session"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "Start New Session"
@@ -3661,20 +3661,16 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "Start a new KDevelop instance with an empty session"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Start New Session"
+msgstr "Start New Named Session..."
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Start a new KDevelop instance with an empty session"
+msgstr "Start a new KDevelop instance with an empty named session"
 
 #: shell/sessioncontroller.cpp:293
 #, kde-format
@@ -3904,13 +3900,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Toggle preview visibility for this style.\n"
+"Preview should be disabled for styles whose formatting depends on the file "
+"path."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "Preview"
+msgstr "Show Preview"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4357,14 +4355,14 @@ msgstr "Minimum project size for simplified parsing:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Storage and Memory Use"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Store precompiled preambles in:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4382,20 +4380,31 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Precompiled preambles remain in the temporary directory after KDevelop "
+"crashes and are deleted only when the same session is started again.<br>\n"
+"When the preambles are stored in memory, they are guaranteed to disappear on "
+"exit even if KDevelop crashes.<br>\n"
+"Choosing the Session Temporary Directory storage makes sense on systems "
+"where RAM is limited and the temporary directory does not use tmpfs, because "
+"the preamble files can occupy gigabytes of space.<br>\n"
+"Changing this option takes effect after restarting KDevelop.<br>\n"
+"This option has effect only if KDevelop has been built against Clang version "
+"17 or later.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Memory"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Session Temporary Directory"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -5013,7 +5022,7 @@ msgstr "Language:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "How to configure formatting styles"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -5032,6 +5041,18 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Select languages you use one by one from the <i>Language</i> combobox "
+"below, pick the desired formatter and style for each. <i>Ctrl+Click</i> a "
+"selected style to deselect it.</p>\n"
+"<p>Configuring the right formatter and style for each used language is very "
+"important: not only explicit <i>Reformat Source</i>/<i>Line</i>/<i>Files...</"
+"i> actions are affected, but also the formatting of auto-generated, auto-"
+"refactored or auto-fixed code (for example, <i>Rename</i> context menu "
+"action).</p>\n"
+"<p>Note that KDevelop formats all <i>*.h</i> files with formatter and style "
+"configured for <i>C</i> language, even C++ headers that belong to a pure C++ "
+"project. This occurs because source formatter maps MIME types to languages.</"
+"p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5044,7 +5065,7 @@ msgstr "Formatter:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Description of a selected formatter"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
