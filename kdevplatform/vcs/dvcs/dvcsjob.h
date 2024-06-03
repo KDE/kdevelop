@@ -14,15 +14,15 @@
 #ifndef KDEVPLATFORM_DVCS_JOB_H
 #define KDEVPLATFORM_DVCS_JOB_H
 
-#include <QVariant>
+#include <vcs/vcsexport.h>
+#include <vcs/vcsjob.h>
+
 #include <KProcess>
 
-#include <vcs/vcsexport.h>
-#include "../vcsjob.h"
+#include <QStringList>
+#include <QVariant>
 
 class QDir;
-class QStringList;
-
 
 namespace KDevelop
 {

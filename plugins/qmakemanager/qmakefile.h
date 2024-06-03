@@ -7,12 +7,9 @@
 #ifndef QMAKEFILE_H
 #define QMAKEFILE_H
 
-
-#include <util/stack.h>
-
 #include "qmakefilevisitor.h"
 
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop
 {
@@ -23,9 +20,6 @@ namespace QMake
 {
     class ProjectAST;
 }
-
-class Scope;
-class QMakeMkSpecs;
 
 class QMakeFile : public QMakeVariableResolver
 {

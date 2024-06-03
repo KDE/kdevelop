@@ -9,6 +9,7 @@
 #define KDEVPLATFORM_PLUGIN_IEXECUTESCRIPTPLUGIN_H
 
 #include <QObject>
+#include <QStringList>
 
 namespace KDevelop
 {
@@ -16,8 +17,6 @@ class ILaunchConfiguration;
 }
 
 class QUrl;
-class QString;
-class QStringList;
 
 /**
 @author Andreas Pakulat

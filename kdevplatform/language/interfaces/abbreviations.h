@@ -9,9 +9,7 @@
 
 #include <language/languageexport.h>
 
-class QStringList;
-class QString;
-class QStringView;
+#include <QStringList>
 
 namespace KDevelop {
 class Path;

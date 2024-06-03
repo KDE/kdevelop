@@ -9,8 +9,10 @@
 #ifndef _PROCESSLINEMAKER_H_
 #define _PROCESSLINEMAKER_H_
 
-#include <QObject>
 #include "utilexport.h"
+
+#include <QObject>
+#include <QStringList>
 
 /**
 @file processlinemaker.h
@@ -18,8 +20,6 @@ Utility objects for process output views.
 */
 
 class QProcess;
-
-class QStringList;
 
 /**
 Convenience class to catch output of QProcess.

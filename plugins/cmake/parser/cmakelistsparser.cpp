@@ -6,9 +6,10 @@
 */
 
 #include "cmakelistsparser.h"
+#include "cmListFileLexer.h"
+
 #include <debug.h>
 
-#include <util/stack.h>
 #include <QDir>
 
 QMap<QChar, QChar> whatToScape()

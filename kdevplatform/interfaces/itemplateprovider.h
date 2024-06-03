@@ -7,12 +7,13 @@
 #ifndef KDEVPLATFORM_ITEMPLATEPROVIDER_H
 #define KDEVPLATFORM_ITEMPLATEPROVIDER_H
 
-#include <QObject>
 #include "interfacesexport.h"
+
+#include <QObject>
+#include <QStringList>
 
 class QIcon;
 class QAbstractItemModel;
-class QStringList;
 
 namespace KDevelop
 {

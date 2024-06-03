@@ -9,12 +9,10 @@
 
 #include "interfacesexport.h"
 
+#include <QHash>
 #include <QList>
 #include <QObject>
-#include <QHash>
-#include <QString>
-
-class QStringList;
+#include <QStringList>
 
 namespace KDevelop {
 

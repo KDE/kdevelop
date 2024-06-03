@@ -11,11 +11,13 @@
 
 #include <KSharedConfig>
 
-class QProcessEnvironment;
+#include <QStringList>
+
 class KConfig;
-template<typename T1, typename T2> class QMap;
-class QString;
-class QStringList;
+
+template<typename T1, typename T2>
+class QMap;
+class QProcessEnvironment;
 
 namespace KDevelop {
 class EnvironmentProfileListPrivate;

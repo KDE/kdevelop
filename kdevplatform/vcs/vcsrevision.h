@@ -9,10 +9,10 @@
 #define KDEVPLATFORM_VCSREVISION_H
 
 #include "vcsexport.h"
-#include <QVariant>
+
 #include <QSharedDataPointer>
-class QStringList;
-class QString;
+#include <QStringList>
+#include <QVariant>
 
 namespace KDevelop
 {

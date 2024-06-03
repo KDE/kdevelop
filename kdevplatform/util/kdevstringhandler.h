@@ -9,11 +9,10 @@
 
 #include "utilexport.h"
 
-#include <QString>
+#include <QStringList>
 
 class QByteArray;
 class QChar;
-class QStringList;
 class QVariant;
 
 namespace KDevelop {

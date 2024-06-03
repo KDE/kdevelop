@@ -10,9 +10,9 @@
 // lib
 #include <compileanalyzercommonexport.h>
 
+#include <QStringList>
+
 class QUrl;
-class QString;
-class QStringList;
 
 namespace KDevelop
 {

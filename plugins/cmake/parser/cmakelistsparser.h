@@ -8,15 +8,13 @@
 #ifndef CMAKELISTSPARSER_H
 #define CMAKELISTSPARSER_H
 
-#include <QMetaType>
-#include <QString>
-#include <QVector>
-
-#include "cmListFileLexer.h"
 #include <cmakecommonexport.h>
+
 #include <language/editor/rangeinrevision.h>
 
-class QStringList;
+#include <QMetaType>
+#include <QStringList>
+#include <QVector>
 
 struct CMakeFunctionArgument
 {

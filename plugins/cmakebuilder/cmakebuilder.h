@@ -8,17 +8,19 @@
 #define CMAKEBUILDER_H
 
 #include <interfaces/iplugin.h>
-#include <QList>
-#include <QVariantList>
-#include <QUrl>
 #include <project/interfaces/iprojectbuilder.h>
 
-class QStringList;
+#include <QList>
+#include <QStringList>
+#include <QVariantList>
+
 class KDialog;
 
 namespace KDevelop{
     class ProjectBaseItem;
 }
+
+class QUrl;
 
 /**
  * @author Aleix Pol

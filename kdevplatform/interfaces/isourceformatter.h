@@ -7,17 +7,17 @@
 #ifndef KDEVPLATFORM_ISOURCEFORMATTER_H
 #define KDEVPLATFORM_ISOURCEFORMATTER_H
 
-#include <QMetaType>
-#include <QWidget>
-
 #include "interfacesexport.h"
+
+#include <QMetaType>
+#include <QStringList>
+#include <QWidget>
 
 #include <memory>
 
 class QDebug;
 class QUrl;
 class QMimeType;
-class QStringList;
 
 namespace KDevelop
 {

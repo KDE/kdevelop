@@ -7,15 +7,15 @@
 #ifndef CMAKEEXTRAARGUMENTS_H
 #define CMAKEEXTRAARGUMENTS_H
 
-#include <KComboBox>
-
 #include "cmakecommonexport.h"
 
-class QStringList;
+#include <QStringList>
 
 namespace Ui {
     class CMakeExtraArgumentsHistory;
 }
+
+class KComboBox;
 
 /**
 * This class augments CMake's extra arguments widget with a history feature.

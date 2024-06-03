@@ -8,13 +8,10 @@
 #ifndef KDEVPLATFORM_DVCSEVENT_H
 #define KDEVPLATFORM_DVCSEVENT_H
 
-#include <QMetaType>
-#include <QSharedDataPointer>
-
 #include <vcs/vcsexport.h>
 
-class QStringList;
-class QString;
+#include <QSharedDataPointer>
+#include <QStringList>
 
 namespace KDevelop
 {

@@ -7,7 +7,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_IEXECUTEPLUGIN_H
 #define KDEVPLATFORM_PLUGIN_IEXECUTEPLUGIN_H
 
-#include <QString>
+#include <QObject>
+#include <QStringList>
 
 namespace KDevelop
 {
@@ -15,8 +16,8 @@ class ILaunchConfiguration;
 }
 
 class KJob;
+
 class QUrl;
-class QStringList;
 
 /**
 @author Andreas Pakulat

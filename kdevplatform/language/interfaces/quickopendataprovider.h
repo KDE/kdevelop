@@ -7,15 +7,14 @@
 #ifndef KDEVPLATFORM_QUICKOPENDATAPROVIDER_H
 #define KDEVPLATFORM_QUICKOPENDATAPROVIDER_H
 
+#include <QExplicitlySharedDataPointer>
 #include <QList>
 #include <QObject>
 #include <QSet>
-#include <QExplicitlySharedDataPointer>
+#include <QStringList>
 
 #include <language/languageexport.h>
 
-class QString;
-class QStringList;
 class QIcon;
 
 namespace KDevelop {

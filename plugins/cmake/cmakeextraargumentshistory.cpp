@@ -6,8 +6,9 @@
 
 #include "cmakeextraargumentshistory.h"
 
-#include <KSharedConfig>
+#include <KComboBox>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 namespace {
 

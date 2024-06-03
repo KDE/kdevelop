@@ -7,14 +7,12 @@
 #ifndef KDEVPLATFORM_SOURCEFILETEMPLATE_H
 #define KDEVPLATFORM_SOURCEFILETEMPLATE_H
 
-#include <QString>
-#include <QList>
-#include <QVector>
-#include <QVariant>
-
 #include <language/languageexport.h>
 
-class QStringList;
+#include <QStringList>
+#include <QVariant>
+#include <QVector>
+
 class KArchiveDirectory;
 
 namespace KDevelop {

@@ -8,9 +8,9 @@
 #ifndef KDEVPLATFORM_PLUGIN_GREPUTIL_H
 #define KDEVPLATFORM_PLUGIN_GREPUTIL_H
 
+#include <QStringList>
+
 class QComboBox;
-class QStringList;
-class QString;
 
 /// Returns the contents of a QComboBox as a QStringList
 QStringList qCombo2StringList( QComboBox* combo, bool allowEmpty = false );

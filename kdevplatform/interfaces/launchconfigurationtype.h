@@ -10,11 +10,12 @@
 #include "interfacesexport.h"
 
 #include <QObject>
+#include <QStringList>
 
 class QMenu;
 class QIcon;
 class QUrl;
-class QStringList;
+
 class KConfigGroup;
 
 namespace KDevelop
