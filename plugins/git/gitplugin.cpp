@@ -716,7 +716,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
 
     bool skipNext=false;
     QMap<QString, VcsAnnotationLine> definedRevisions;
-    for (auto& line : lines) {
+    for (const auto line : lines) {
         if(skipNext) {
             skipNext=false;
             results += QVariant::fromValue(*annotation);
@@ -1339,7 +1339,7 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 
     QDir dir = job->directory();
     QMap<QUrl, VcsStatusInfo::State> allStatus;
-    for (const auto& line : outputLines) {
+    for (const auto line : outputLines) {
         VcsStatusInfo::State status = lsfilesToState(line[0].toLatin1());
 
         QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(line.mid(2).toString()));

@@ -10,6 +10,7 @@
 #include <QString>
 
 #include <algorithm>
+#include <utility>
 
 namespace {
 bool endsWithWordBoundary(QStringView str)
@@ -454,7 +455,7 @@ QString formatComment(const QString& comment)
     }
 
     QString ret;
-    for (const auto& line : qAsConst(lines)) {
+    for (const auto line : std::as_const(lines)) {
         if (!ret.isEmpty())
             ret += QLatin1Char('\n');
         ret += line;
