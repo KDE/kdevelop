@@ -706,6 +706,8 @@ QString ProjectFileItem::fileName() const
     return baseName();
 }
 
+namespace {
+
 // Maximum length of a string to still consider it as a file extension which we cache
 // This has to be a slow value, so that we don't fill our file extension cache with crap
 static const int maximumCacheExtensionLength = 3;
@@ -769,6 +771,8 @@ public:
 };
 
 Q_GLOBAL_STATIC(IconNameCache, s_cache)
+
+} // unnamed namespace
 
 QString ProjectFileItem::iconName() const
 {

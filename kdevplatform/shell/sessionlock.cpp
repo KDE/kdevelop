@@ -18,6 +18,7 @@
 #include <QDir>
 
 namespace KDevelop {
+namespace {
 QString lockFileForSession( const QString& id )
 {
     return SessionController::sessionDirectory( id ) + QLatin1String("/lock");
@@ -37,6 +38,8 @@ void forceRemoveLockfile(const QString& lockFilename)
         QFile::remove( lockFilename );
     }
 }
+
+} // unnamed namespace
 
 TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool doLocking)
 {
