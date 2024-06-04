@@ -21,7 +21,7 @@ namespace KDevelop
 class StandardDocumentationViewPrivate;
 
 /**
- * A standard documentation view, based on QtWebKit or QtWebEngine, depending on your distribution preferences.
+ * A standard documentation view, based on QtWebEngine
  */
 class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWidget
 {
