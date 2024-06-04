@@ -26,13 +26,6 @@ HelpNetworkReply::HelpNetworkReply(const QNetworkRequest& request, const QByteAr
     setFinished(true);
     QNetworkReply::open(QIODevice::ReadOnly);
 
-#ifdef USE_QTWEBKIT
-    // Fix broken CSS images (tested on Qt 5.5.1, 5.7.0, 5.9.7 and 5.14.1)
-    if (request.url().fileName() == QLatin1String("offline.css")) {
-        data.replace("../images", "images");
-    }
-#endif
-
     // Fix flickering when loading, the page has the offline-simple.css stylesheet which is replaced
     // later by offline.css  by javascript which causes flickering so we force the full stylesheet
     // from the beginning

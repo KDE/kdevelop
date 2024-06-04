@@ -23,9 +23,7 @@ always use all available functionality, as well as the most recent version. CMak
 to control which of such dependencies is used.
 
 For instance, to skip building the Subversion plugin, use
-`-DCMAKE_DISABLE_FIND_PACKAGE_SubversionLibrary=ON`. To use QtWebKit instead of QtWebEngine for
-documentation rendering when both are available, add `-DCMAKE_DISABLE_FIND_PACKAGE_Qt5WebEngineWidgets=ON` to
-the CMake arguments.
+`-DCMAKE_DISABLE_FIND_PACKAGE_SubversionLibrary=ON`.
 
 ## Contribute
 
