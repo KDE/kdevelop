@@ -269,9 +269,10 @@ void BazaarPlugin::parseBzrStatus(DVcsJob* job)
     QVariantList result;
     QSet<QString> filesWithStatus;
     QDir workingCopy = job->directory();
-    const auto output = job->output().split(QLatin1Char('\n'));
+    const auto outputString = job->output();
+    const auto output = QStringView{outputString}.split(QLatin1Char('\n'));
     result.reserve(output.size());
-    for (const auto& line : output) {
+    for (const auto line : output) {
         auto status = BazaarUtils::parseVcsStatusInfoLine(line);
         result.append(QVariant::fromValue(status));
         filesWithStatus.insert(BazaarUtils::concatenatePath(workingCopy, status.url()));

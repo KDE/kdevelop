@@ -64,7 +64,7 @@ bool isValidDirectory(const QUrl& dirPath);
 /**
  * Parses single status info line to KDevelop::VcsStatusInfo.
  */
-KDevelop::VcsStatusInfo parseVcsStatusInfoLine(const QString& line);
+KDevelop::VcsStatusInfo parseVcsStatusInfoLine(QStringView line);
 
 /**
  * Concatenates path of working copy location and relative file in working copy
