@@ -19,7 +19,6 @@
 
 namespace KDevelop { class StandardDocumentationView; }
 class QModelIndex;
-class QNetworkAccessManager;
 class QtHelpProviderAbstract;
 
 class QtHelpDocumentation : public KDevelop::IDocumentation

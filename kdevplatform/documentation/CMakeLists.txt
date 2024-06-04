@@ -23,9 +23,9 @@ kdevplatform_add_library(KDevPlatformDocumentation SOURCES ${KDevPlatformDocumen
 target_link_libraries(KDevPlatformDocumentation
 PUBLIC
     KDev::Interfaces
+    Qt::WebEngineWidgets
 PRIVATE
     KDev::Util
-    Qt::WebEngineWidgets
 )
 
 install(FILES

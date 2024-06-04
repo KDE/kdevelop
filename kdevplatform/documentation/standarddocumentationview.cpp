@@ -28,8 +28,6 @@
 #include <QWebEnginePage>
 #include <QWebEngineSettings>
 #include <QWebEngineUrlScheme>
-#include <QWebEngineUrlSchemeHandler>
-#include <QWebEngineUrlRequestJob>
 #include <QWebEngineProfile>
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
@@ -106,8 +104,8 @@ public:
             qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray(chromiumFlags + " --disable-in-process-stack-traces"));
         }
         // not using the shared default profile here:
-        // prevents conflicts with qthelp scheme handler being registered onto that single default profile
-        // due to async deletion of old pages and their CustomSchemeHandler instance
+        // prevents conflicts with custom scheme handlers being registered onto that single default profile
+        // due to async deletion of old pages and their scheme handler instance
         auto* profile = new QWebEngineProfile(parent);
         m_page = new StandardDocumentationPage(profile, parent);
         m_view = new QWebEngineView(parent);
@@ -291,43 +289,16 @@ void KDevelop::StandardDocumentationView::setHtml(const QString& html)
     d->m_view->page()->setHtml(html);
 }
 
-class CustomSchemeHandler : public QWebEngineUrlSchemeHandler
-{
-    Q_OBJECT
-public:
-    explicit CustomSchemeHandler(QNetworkAccessManager* nam, QObject *parent = nullptr)
-        : QWebEngineUrlSchemeHandler(parent), m_nam(nam) {}
-
-    void requestStarted(QWebEngineUrlRequestJob *job) override {
-        const QUrl url = job->requestUrl();
-
-        auto* const reply = m_nam->get(QNetworkRequest(url));
-
-        // Deliberately don't use job as context in this connection: if job is destroyed
-        // before reply is finished, reply would be leaked. Using reply as context does
-        // not impact behavior, but silences Clazy checker connect-3arg-lambda (level1).
-        connect(reply, &QNetworkReply::finished, reply, [reply, job = QPointer{job}] {
-            // At this point reply is no longer written to and can be safely
-            // destroyed once job ends reading from it.
-            if (job) {
-                connect(job, &QObject::destroyed, reply, &QObject::deleteLater);
-            } else {
-                reply->deleteLater();
-            }
-        });
-
-        job->reply(reply->header(QNetworkRequest::ContentTypeHeader).toByteArray(), reply);
-    }
-
-private:
-    QNetworkAccessManager* m_nam;
-};
-
-void KDevelop::StandardDocumentationView::setNetworkAccessManager(QNetworkAccessManager* manager)
+void KDevelop::StandardDocumentationView::installUrlSchemeHandler(const QByteArray& scheme,
+                                                                  QWebEngineUrlSchemeHandler* handler)
 {
     Q_D(StandardDocumentationView);
 
-    d->m_view->page()->profile()->installUrlSchemeHandler(qtHelpSchemeName(), new CustomSchemeHandler(manager, this));
+    if (QWebEngineUrlScheme::schemeByName(scheme).name() != scheme) {
+        qCWarning(DOCUMENTATION) << "Unknown scheme, it must be registered early during startup"
+                                 << "see StandardDocumentationView::registerCustomUrlSchemes";
+    }
+    d->m_view->page()->profile()->installUrlSchemeHandler(scheme, handler);
 }
 
 void KDevelop::StandardDocumentationView::setDelegateLinks(bool delegate)

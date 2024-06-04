@@ -21,7 +21,6 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/parsingenvironment.h>
 
-#include "qthelpnetwork.h"
 #include "qthelpdocumentation.h"
 #include "debug.h"
 
@@ -40,7 +39,6 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& c
     : QObject(parent)
     , m_engine(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/')
                + collectionFileName)
-    , m_nam(new HelpNetworkAccessManager(&m_engine, this))
 {
     Q_UNUSED(args);
 
@@ -150,11 +148,6 @@ IDocumentation::Ptr QtHelpProviderAbstract::homePage() const
 bool QtHelpProviderAbstract::isValid() const
 {
     return !m_engine.registeredDocumentations().isEmpty();
-}
-
-HelpNetworkAccessManager * QtHelpProviderAbstract::networkAccess() const
-{
-    return m_nam;
 }
 
 #include "moc_qthelpproviderabstract.cpp"
