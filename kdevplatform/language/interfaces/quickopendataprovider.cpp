@@ -48,29 +48,6 @@ QuickOpenDataProviderBase::~QuickOpenDataProviderBase()
 void QuickOpenDataProviderBase::enableData(const QStringList&, const QStringList&)
 {
 }
-
-bool extractLineNumber(const QString& from, QString& path, uint& lineNumber)
-{
-    int colonIndex = from.indexOf(QLatin1Char(':'));
-    if (colonIndex != -1) {
-        if (colonIndex == from.count() - 1) {
-            path = from.mid(0, colonIndex);
-            lineNumber = 0;
-        } else {
-            bool ok;
-            uint number = from.midRef(colonIndex + 1).toUInt(&ok);
-            if (ok) {
-                path = from.mid(0, colonIndex);
-                lineNumber = number;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    } else {
-        return false;
-    }
-}
 }
 
 #include "moc_quickopendataprovider.cpp"
