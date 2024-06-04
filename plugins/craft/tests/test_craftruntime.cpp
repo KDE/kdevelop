@@ -72,9 +72,10 @@ static void breakoutFromCraftRoot()
         return;
 
     auto paths = qgetenv("PATH").split(':');
-    std::remove_if(paths.begin(), paths.end(), [craftRoot](const QByteArray& path) {
+    const auto it = std::remove_if(paths.begin(), paths.end(), [craftRoot](const QByteArray& path) {
         return path.startsWith(craftRoot);
     });
+    paths.erase(it, paths.end());
     qputenv("PATH", paths.join(':'));
 
     qunsetenv("KDEROOT");
