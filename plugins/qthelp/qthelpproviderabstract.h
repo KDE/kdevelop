@@ -13,8 +13,6 @@
 #include <QObject>
 #include <QHelpEngine>
 
-class HelpNetworkAccessManager;
-
 class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationProvider
 {
     Q_OBJECT
@@ -36,13 +34,15 @@ public:
     bool isValid() const;
 
     QHelpEngine* engine() { return &m_engine; }
+    const QHelpEngine* engine() const
+    {
+        return &m_engine;
+    }
 
-    HelpNetworkAccessManager* networkAccess() const;
 public Q_SLOTS:
     void jumpedTo(const QUrl& newUrl);
 protected:
     QHelpEngine m_engine;
-    HelpNetworkAccessManager* const m_nam;
 };
 
 #endif // QTHELPPROVIDERABSTRACT_H

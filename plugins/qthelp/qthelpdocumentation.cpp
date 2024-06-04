@@ -8,22 +8,26 @@
 
 #include "qthelpdocumentation.h"
 
+#include <QBuffer>
 #include <QLabel>
 #include <QUrl>
 #include <QTreeView>
 #include <QHelpContentModel>
 #include <QHeaderView>
 #include <QMenu>
+#include <QMimeDatabase>
 #include <QMouseEvent>
 #include <QRegularExpression>
 #include <QActionGroup>
+#include <QThread>
+#include <QWebEngineUrlRequestJob>
+#include <QWebEngineUrlSchemeHandler>
 
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <documentation/standarddocumentationview.h>
-#include "qthelpnetwork.h"
 #include "qthelpproviderabstract.h"
 
 #include <algorithm>
@@ -254,7 +258,6 @@ QString descriptionFallback(const QList<QHelpLink>& info)
     }
     return titles.join(QLatin1String(", "));
 }
-
 } // unnamed namespace
 
 /// Extract a short description from the html data
@@ -299,6 +302,54 @@ QString QtHelpDocumentation::description() const
     return descriptionFallback(m_info);
 }
 
+namespace {
+
+class QtHelpSchemeHandler : public QWebEngineUrlSchemeHandler
+{
+    Q_OBJECT
+public:
+    explicit QtHelpSchemeHandler(QtHelpProviderAbstract* provider, QObject* parent = nullptr)
+        : QWebEngineUrlSchemeHandler(parent)
+        , m_provider(provider)
+    {
+    }
+
+    void requestStarted(QWebEngineUrlRequestJob* job) override
+    {
+        Q_ASSERT(QThread::currentThread() == m_provider->thread());
+
+        const auto url = job->requestUrl();
+
+        auto mimeType = QMimeDatabase().mimeTypeForUrl(url).name().toUtf8();
+        if (mimeType == "application/x-extension-html") {
+            // see also: https://bugs.kde.org/show_bug.cgi?id=288277
+            // firefox seems to add this bullshit mimetype above
+            // which breaks displaying of qthelp documentation :(
+            mimeType = QByteArrayLiteral("text/html");
+        }
+
+        auto data = m_provider->engine()->fileData(url);
+
+        // Fix flickering when loading, the page has the offline-simple.css stylesheet which is replaced
+        // later by offline.css  by javascript which causes flickering so we force the full stylesheet
+        // from the beginning
+        if (url.fileName().endsWith(QLatin1String(".html"))) {
+            data.replace("offline-simple.css", "offline.css");
+        }
+
+        auto* const buffer = new QBuffer(job);
+        buffer->setData(data);
+        buffer->open(QIODevice::ReadOnly);
+
+        job->reply(mimeType, buffer);
+    }
+
+private:
+    const QtHelpProviderAbstract* const m_provider;
+};
+
+} // unnamed namespace
+
 QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent)
 {
     if(m_info.isEmpty()) { //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
@@ -307,7 +358,7 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         auto* view = new StandardDocumentationView(findWidget, parent);
         view->initZoom(m_provider->name());
         view->setDelegateLinks(true);
-        view->setNetworkAccessManager(m_provider->networkAccess());
+        view->installUrlSchemeHandler(QByteArrayLiteral("qthelp"), new QtHelpSchemeHandler(m_provider, this));
         view->setContextMenuPolicy(Qt::CustomContextMenu);
         QObject::connect(view, &StandardDocumentationView::linkClicked, this, &QtHelpDocumentation::jumpedTo);
         connect(view, &StandardDocumentationView::customContextMenuRequested, this, &QtHelpDocumentation::viewContextMenuRequested);
@@ -415,4 +466,5 @@ bool HomeDocumentation::eventFilter(QObject* obj, QEvent* event)
     return QObject::eventFilter(obj, event);
 }
 
+#include "qthelpdocumentation.moc"
 #include "moc_qthelpdocumentation.cpp"

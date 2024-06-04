@@ -22,7 +22,6 @@
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/types/enumeratortype.h>
 
-#include "qthelpnetwork.h"
 #include "qthelpdocumentation.h"
 #include "debug.h"
 
@@ -44,7 +43,6 @@ QString QtHelpProviderAbstract::collectionFileLocation()
 QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& collectionFileName)
     : QObject(parent)
     , m_engine(collectionFileLocation() + QLatin1Char('/') + collectionFileName)
-    , m_nam(new HelpNetworkAccessManager(&m_engine, this))
 {
     connect(&m_engine, &QHelpEngine::warning, this, [collectionFileName](const QString& msg) {
         qCWarning(QTHELP) << "engine warning for" << collectionFileName << msg;
@@ -167,11 +165,6 @@ IDocumentation::Ptr QtHelpProviderAbstract::homePage() const
 bool QtHelpProviderAbstract::isValid() const
 {
     return !m_engine.registeredDocumentations().isEmpty();
-}
-
-HelpNetworkAccessManager * QtHelpProviderAbstract::networkAccess() const
-{
-    return m_nam;
 }
 
 #include "moc_qthelpproviderabstract.cpp"

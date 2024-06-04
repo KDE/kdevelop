@@ -8,7 +8,6 @@
 
 #include "../qthelp_config_shared.h"
 #include "../qthelpdocumentation.h"
-#include "../qthelpnetwork.h"
 #include "../qthelpplugin.h"
 #include "../qthelpprovider.h"
 #include "../qthelpqtdoc.h"
@@ -16,7 +15,6 @@
 #include <QCoreApplication>
 #include <QHelpLink>
 #include <QRegularExpression>
-#include <QSignalSpy>
 #include <QTest>
 
 #include <interfaces/idocumentation.h>
@@ -296,18 +294,6 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
                    const auto* const qtDoc = dynamic_cast<QtHelpDocumentation*>(doc.data());
                    QVERIFY(qtDoc);
                    QVERIFY(qtDoc->currentUrl().isValid());
-
-                   auto* const nam = provider->networkAccess();
-                   auto* const reply = nam->get(QNetworkRequest(qtDoc->currentUrl()));
-                   connect(reply, &QNetworkReply::readyRead, nam, [reply]() {
-                       QVERIFY(!reply->readAll().isEmpty());
-                   });
-
-                   auto finishedSpy = QSignalSpy(reply, &QNetworkReply::finished);
-                   QVERIFY(finishedSpy.wait());
-
-                   QVERIFY(reply->isFinished());
-                   QCOMPARE(finishedSpy.size(), 1);
                }};
 
         QTest::addRow("operator-%s", qPrintable(qmake))
