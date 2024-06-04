@@ -13,7 +13,6 @@ set(kdevqthelp_SRCS
     qthelpqtdoc.cpp
     qthelp_config_shared.cpp
     qthelpconfig.cpp # Configuration module for QtHelp plugin
-    qthelpnetwork.cpp
     ${kdevqthelp_LOG_SRCS}
 )
 

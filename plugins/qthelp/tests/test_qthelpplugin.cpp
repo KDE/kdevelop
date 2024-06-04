@@ -8,7 +8,6 @@
 #include "../qthelpplugin.h"
 #include "../qthelpprovider.h"
 #include "../qthelp_config_shared.h"
-#include "../qthelpnetwork.h"
 #include "../qthelpdocumentation.h"
 
 #include <QCoreApplication>
@@ -242,18 +241,6 @@ void TestQtHelpPlugin::testDeclarationLookup_Method()
     auto qtDoc = dynamic_cast<QtHelpDocumentation*>(doc.data());
     QVERIFY(qtDoc);
     QVERIFY(qtDoc->currentUrl().isValid());
-
-    auto nam = provider->networkAccess();
-    auto reply = nam->get(QNetworkRequest(qtDoc->currentUrl()));
-    connect(reply, &QNetworkReply::readyRead, this, [reply]() {
-        QVERIFY(!reply->readAll().isEmpty());
-    });
-
-    auto finishedSpy = QSignalSpy(reply, &QNetworkReply::finished);
-    QVERIFY(finishedSpy.wait());
-
-    QVERIFY(reply->isFinished());
-    QCOMPARE(finishedSpy.size(), 1);
 }
 
 void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()

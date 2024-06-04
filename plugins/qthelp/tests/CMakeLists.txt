@@ -17,7 +17,6 @@ set(test_qthelpplugin_SRCS
     ../qthelpqtdoc.cpp
     ../qthelp_config_shared.cpp
     ../qthelpconfig.cpp
-    ../qthelpnetwork.cpp
     ${kdevqthelp_LOG_SRCS}
 )
 ki18n_wrap_ui(test_qthelpplugin_SRCS
