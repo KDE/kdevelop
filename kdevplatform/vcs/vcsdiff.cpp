@@ -123,11 +123,11 @@ namespace
             return QString().setNum(start);
         return QString().setNum(start) + QLatin1Char(',') + QString().setNum(count);
     }
-    std::pair<uint, uint> parseRange(const QString& range)
+    std::pair<uint, uint> parseRange(QStringView range)
     {
         int commaPos = range.indexOf(QLatin1Char(','));
         if (commaPos > -1) {
-            return { range.midRef(0, commaPos).toInt(), range.midRef(commaPos + 1).toInt() };
+            return {range.left(commaPos).toInt(), range.mid(commaPos + 1).toInt()};
         }
         return { range.toInt(), 1 };
     }
@@ -241,8 +241,8 @@ namespace
             m = HUNK_HEADER_RE->match(curln);
             if (!m.hasMatch())
                 continue;
-            auto [oldStart, oldCount] = parseRange(m.captured(1));
-            auto [newStart, newCount] = parseRange(m.captured(2));
+            const auto [oldStart, oldCount] = parseRange(m.capturedView(1));
+            const auto [newStart, newCount] = parseRange(m.capturedView(2));
             auto heading = m.captured(3);
             uint firstLineIdx = lineNo;
             QStringList hunkLines;
