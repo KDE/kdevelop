@@ -62,7 +62,7 @@ void CheckGroup::addCheck(const QString& checkName)
 
     // 3. check if existing check with same prefix, if so create subgroup for them
     for (int i = 0; i < m_checks.size(); ++i) {
-        const auto& listedCheckName = m_checks[i];
+        const auto& listedCheckName = m_checks.at(i);
         if (listedCheckName.startsWith(subGroupName)) {
             auto* newSubGroup = new CheckGroup(subGroupName.toString(), this);
             newSubGroup->addCheck(listedCheckName);
@@ -114,7 +114,7 @@ void CheckGroup::applyEnabledRule(const QStringRef& rule, EnabledState enabledSt
     }
 
     for (int i = 0; i < m_checks.size(); ++i) {
-        if (m_checks[i] == rule) {
+        if (m_checks.at(i) == rule) {
             m_checksEnabledStates[i] = enabledState;
             return;
         }

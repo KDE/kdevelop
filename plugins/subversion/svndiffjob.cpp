@@ -33,14 +33,14 @@ QString repairDiff(const QString& diff) {
     QMap<QString, QString> headers;
     for(int a = 0; a < lines.size()-1; ++a) {
         const QLatin1String indexLineBegin("Index: ");
-        if(lines[a].startsWith(indexLineBegin) && lines[a+1].startsWith(QLatin1String("====="))) {
-            const QString fileName = lines[a].midRef(indexLineBegin.size()).trimmed().toString();
-            headers[fileName] = lines[a];
+        if (lines.at(a).startsWith(indexLineBegin) && lines.at(a + 1).startsWith(QLatin1String("====="))) {
+            const auto fileName = lines.at(a).midRef(indexLineBegin.size()).trimmed().toString();
+            headers[fileName] = lines.at(a);
             qCDebug(PLUGIN_SVN) << "found header for" << fileName;
             lines[a] = QString();
-            if(lines[a+1].startsWith(QLatin1String("======"))) {
-                headers[fileName] += QLatin1Char('\n') + lines[a+1];
-            lines[a+1] = QString();
+            if (lines.at(a + 1).startsWith(QLatin1String("======"))) {
+                headers[fileName] += QLatin1Char('\n') + lines.at(a + 1);
+                lines[a + 1] = QString();
             }
         }
     }
@@ -49,15 +49,15 @@ QString repairDiff(const QString& diff) {
 
     for(int a = 0; a < lines.size()-1; ++a) {
         const QLatin1String threeDashLineBegin("--- ");
-        if(lines[a].startsWith(threeDashLineBegin)) {
-            QString tail = lines[a].mid(threeDashLineBegin.size());
+        if (lines.at(a).startsWith(threeDashLineBegin)) {
+            const auto tail = lines.at(a).mid(threeDashLineBegin.size());
             if(tail.indexOf(spaceRegExp) != -1) {
                 QString file = tail.left(tail.indexOf(spaceRegExp));
                 qCDebug(PLUGIN_SVN) << "checking for" << file;
                 const auto headerIt = headers.constFind(file);
                 if (headerIt != headers.constEnd()) {
                     qCDebug(PLUGIN_SVN) << "adding header for" << file << ":" << *headerIt;
-                    lines[a] = *headerIt + QLatin1Char('\n') + lines[a];
+                    lines[a] = *headerIt + QLatin1Char('\n') + lines.at(a);
                 }
             }
         }
