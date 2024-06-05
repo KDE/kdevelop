@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-24 01:48+0000\n"
+"POT-Creation-Date: 2024-06-05 02:05+0000\n"
 "PO-Revision-Date: 2024-02-20 23:51+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -609,12 +609,12 @@ msgstr "이름 바꾸기"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr "파일의 이름을 \"%1\"에서 \"%2\"(으)로 바꿉니다."
 
-#: language/backgroundparser/backgroundparser.cpp:305
+#: language/backgroundparser/backgroundparser.cpp:309
 #, kde-format
 msgid "Parsing: %1"
 msgstr "처리 중: %1"
 
-#: language/backgroundparser/backgroundparser.cpp:610
+#: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"

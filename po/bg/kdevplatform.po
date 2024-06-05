@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-24 01:48+0000\n"
+"POT-Creation-Date: 2024-06-05 02:05+0000\n"
 "PO-Revision-Date: 2022-07-08 11:26+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -595,12 +595,12 @@ msgstr "Име на файл"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr ""
 
-#: language/backgroundparser/backgroundparser.cpp:305
+#: language/backgroundparser/backgroundparser.cpp:309
 #, kde-format
 msgid "Parsing: %1"
 msgstr ""
 
-#: language/backgroundparser/backgroundparser.cpp:610
+#: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"

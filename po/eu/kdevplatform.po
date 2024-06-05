@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-24 01:48+0000\n"
+"POT-Creation-Date: 2024-06-05 02:05+0000\n"
 "PO-Revision-Date: 2023-11-04 23:30+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -622,12 +622,12 @@ msgstr "Berrizendatu"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr "Berrizendatu \"%1\" fitxategia \"%2\"ra."
 
-#: language/backgroundparser/backgroundparser.cpp:305
+#: language/backgroundparser/backgroundparser.cpp:309
 #, kde-format
 msgid "Parsing: %1"
 msgstr "Analizatzen: %1"
 
-#: language/backgroundparser/backgroundparser.cpp:610
+#: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
