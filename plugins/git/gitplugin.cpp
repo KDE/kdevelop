@@ -1222,7 +1222,7 @@ void GitPlugin::parseLogOutput(const DVcsJob* job, QVector<DVcsEvent>& commits) 
         else
         {
             //FIXME: add this in a loop to the if, like in getAllCommits()
-            commitLog += lines[i].toString() + QLatin1Char('\n');
+            commitLog += lines[i] + QLatin1Char('\n');
         }
     }
 }
