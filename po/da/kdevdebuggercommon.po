@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-03 01:42+0000\n"
+"POT-Creation-Date: 2024-06-06 01:47+0000\n"
 "PO-Revision-Date: 2014-08-24 21:48+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -108,12 +108,12 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Kernefil:"
 
-#: mibreakpointcontroller.cpp:741
+#: mibreakpointcontroller.cpp:793
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Gammel værdi: %1"
 
-#: mibreakpointcontroller.cpp:744
+#: mibreakpointcontroller.cpp:796
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Ny værdi: %1"

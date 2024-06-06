@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-03 01:42+0000\n"
+"POT-Creation-Date: 2024-06-06 01:47+0000\n"
 "PO-Revision-Date: 2024-05-03 08:33+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -101,12 +101,12 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Minnesdump:"
 
-#: mibreakpointcontroller.cpp:741
+#: mibreakpointcontroller.cpp:793
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Tidigare värde: %1"
 
-#: mibreakpointcontroller.cpp:744
+#: mibreakpointcontroller.cpp:796
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Nytt värde: %1"

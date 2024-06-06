@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-05 02:05+0000\n"
+"POT-Creation-Date: 2024-06-06 01:47+0000\n"
 "PO-Revision-Date: 2024-02-20 23:51+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -24,32 +24,32 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kde@peremen.name"
 
-#: debugger/breakpoint/breakpoint.cpp:164
+#: debugger/breakpoint/breakpoint.cpp:195
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "오류"
 
 # 디버거에 전달되지 않은 중단점
-#: debugger/breakpoint/breakpoint.cpp:170
+#: debugger/breakpoint/breakpoint.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "전달되지 않음"
 
-#: debugger/breakpoint/breakpoint.cpp:172
+#: debugger/breakpoint/breakpoint.cpp:203
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "대기 중"
 
-#: debugger/breakpoint/breakpoint.cpp:174
+#: debugger/breakpoint/breakpoint.cpp:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "정리"
 
-#: debugger/breakpoint/breakpoint.cpp:207
+#: debugger/breakpoint/breakpoint.cpp:238
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -2330,7 +2330,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "작성자 보기"
 
-#: shell/documentcontroller.cpp:1297
+#: shell/documentcontroller.cpp:1302
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"

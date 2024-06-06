@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-03 01:42+0000\n"
+"POT-Creation-Date: 2024-06-06 01:47+0000\n"
 "PO-Revision-Date: 2023-04-17 16:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -109,12 +109,12 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Muistivedostiedosto:"
 
-#: mibreakpointcontroller.cpp:741
+#: mibreakpointcontroller.cpp:793
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br />Vanha arvo: %1"
 
-#: mibreakpointcontroller.cpp:744
+#: mibreakpointcontroller.cpp:796
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br />Uusi arvo: %1"

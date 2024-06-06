@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-05 02:05+0000\n"
+"POT-Creation-Date: 2024-06-06 01:47+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -29,14 +29,14 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "manolis@koppermind.homelinux.org,sstavra@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:164
+#: debugger/breakpoint/breakpoint.cpp:195
 #, fuzzy, kde-format
 #| msgid "Error"
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: debugger/breakpoint/breakpoint.cpp:170
+#: debugger/breakpoint/breakpoint.cpp:201
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "dirty"
@@ -44,7 +44,7 @@ msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "βρώμικο"
 
-#: debugger/breakpoint/breakpoint.cpp:172
+#: debugger/breakpoint/breakpoint.cpp:203
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "pending"
@@ -52,7 +52,7 @@ msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "εκκρεμεί"
 
-#: debugger/breakpoint/breakpoint.cpp:174
+#: debugger/breakpoint/breakpoint.cpp:205
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "clean"
@@ -60,7 +60,7 @@ msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "καθαρό"
 
-#: debugger/breakpoint/breakpoint.cpp:207
+#: debugger/breakpoint/breakpoint.cpp:238
 #, fuzzy, kde-format
 #| msgctxt "project name (branch name)"
 #| msgid "%1 (%2)"
@@ -2532,7 +2532,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "Επισήμανση"
 
-#: shell/documentcontroller.cpp:1297
+#: shell/documentcontroller.cpp:1302
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-03 01:42+0000\n"
+"POT-Creation-Date: 2024-06-06 01:47+0000\n"
 "PO-Revision-Date: 2021-06-28 00:20+0400\n"
 "Last-Translator: Kheyyam Gojayev <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -99,12 +99,12 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Özək faylı"
 
-#: mibreakpointcontroller.cpp:741
+#: mibreakpointcontroller.cpp:793
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Köhnə dəyər: %1"
 
-#: mibreakpointcontroller.cpp:744
+#: mibreakpointcontroller.cpp:796
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Yeni dəyər: %1"

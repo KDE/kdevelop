@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-05 02:05+0000\n"
+"POT-Creation-Date: 2024-06-06 01:47+0000\n"
 "PO-Revision-Date: 2024-05-02 15:03+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -29,31 +29,31 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "stefan.asserhall@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:164
+#: debugger/breakpoint/breakpoint.cpp:195
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Fel"
 
-#: debugger/breakpoint/breakpoint.cpp:170
+#: debugger/breakpoint/breakpoint.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Ändrad"
 
-#: debugger/breakpoint/breakpoint.cpp:172
+#: debugger/breakpoint/breakpoint.cpp:203
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Vilande"
 
-#: debugger/breakpoint/breakpoint.cpp:174
+#: debugger/breakpoint/breakpoint.cpp:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Rensa"
 
-#: debugger/breakpoint/breakpoint.cpp:207
+#: debugger/breakpoint/breakpoint.cpp:238
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
@@ -2368,7 +2368,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "Notera"
 
-#: shell/documentcontroller.cpp:1297
+#: shell/documentcontroller.cpp:1302
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-05 02:05+0000\n"
+"POT-Creation-Date: 2024-06-06 01:47+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -31,31 +31,31 @@ msgid "Your emails"
 msgstr ""
 "samir.ribic@etf.unsa.ba,vljubovic@smartnet.ba,dedovic.memsud94@hotmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:164
+#: debugger/breakpoint/breakpoint.cpp:195
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Greška"
 
-#: debugger/breakpoint/breakpoint.cpp:170
+#: debugger/breakpoint/breakpoint.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Prljavo"
 
-#: debugger/breakpoint/breakpoint.cpp:172
+#: debugger/breakpoint/breakpoint.cpp:203
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Čeka"
 
-#: debugger/breakpoint/breakpoint.cpp:174
+#: debugger/breakpoint/breakpoint.cpp:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Čisto"
 
-#: debugger/breakpoint/breakpoint.cpp:207
+#: debugger/breakpoint/breakpoint.cpp:238
 #, fuzzy, kde-format
 #| msgctxt "project name (branch name)"
 #| msgid "%1 (%2)"
@@ -2528,7 +2528,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "Zabilježi"
 
-#: shell/documentcontroller.cpp:1297
+#: shell/documentcontroller.cpp:1302
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
