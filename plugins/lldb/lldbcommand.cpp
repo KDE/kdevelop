@@ -171,17 +171,17 @@ QString LldbCommand::cmdToSend()
             }
             int p = command_.length() - 1;
             bool quoted = false;
-            if (command_[p] == QLatin1Char('"')) {
+            if (command_.at(p) == QLatin1Char('"')) {
                 quoted = true; // should always be the case
             }
             --p;
             for (; p >= 0; --p) {
                 // find next '"' or ' '
                 if (quoted) {
-                    if (command_[p] == QLatin1Char('"') && (p == 0 || command_[p-1] != QLatin1Char('\\')))
+                    if (command_.at(p) == QLatin1Char('"') && (p == 0 || command_.at(p - 1) != QLatin1Char('\\')))
                         break;
                 } else {
-                    if (command_[p] == QLatin1Char(' '))
+                    if (command_.at(p) == QLatin1Char(' '))
                         break;
                 }
             }
