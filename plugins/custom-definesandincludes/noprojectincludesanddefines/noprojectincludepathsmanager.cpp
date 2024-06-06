@@ -6,10 +6,6 @@
 
 #include "noprojectincludepathsmanager.h"
 
-#include <QFile>
-#include <QDir>
-#include <QFileInfo>
-
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>
@@ -18,6 +14,11 @@
 #include <serialization/indexedstring.h>
 
 #include "noprojectcustomincludepaths.h"
+
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegularExpression>
 
 #include <utility>
 
@@ -81,21 +82,27 @@ std::pair<Path::List, QHash<QString, QString>>
         const auto lines = QStringView{configurationFile.fileContents}.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
         const QFileInfo dir(configurationFile.filePath);
         const QChar dirSeparator = QDir::separator();
-        for (const auto& line : lines) {
-            const auto textLine = line.trimmed().toString();
-            if (textLine.startsWith(QLatin1String("#define "))) {
-                QStringList items = textLine.split(QLatin1Char(' '));
-                Q_ASSERT(items.size() > 1);
-                defines[items[1]] = QStringList(items.mid(2)).join(QLatin1Char(' '));
+        for (auto line : lines) {
+            line = line.trimmed();
+            if (line.empty()) {
                 continue;
             }
-            if (!textLine.isEmpty()) {
-                QFileInfo pathInfo(textLine);
-                if (pathInfo.isRelative()) {
-                    includes << Path(dir.canonicalPath() + dirSeparator + textLine);
-                } else {
-                    includes << Path(textLine);
-                }
+
+            // Do not support whitespace between parameters of function-like macros for simplicity.
+            // Though such whitespace usually still works in practice, because KDevelop joins the macro
+            // identifier and replacement-list into a #define directive line and feeds it to libclang.
+            static const QRegularExpression defineRegex(QStringLiteral("^#define\\s+(\\S+)(?:\\s+(.*))?$"));
+            if (const auto match = defineRegex.match(line); match.hasMatch()) {
+                defines.insert(match.captured(1), match.capturedView(2).trimmed().toString());
+                continue;
+            }
+
+            const auto textLine = line.toString();
+            QFileInfo pathInfo(textLine);
+            if (pathInfo.isRelative()) {
+                includes << Path(dir.canonicalPath() + dirSeparator + textLine);
+            } else {
+                includes << Path(textLine);
             }
         }
     }
