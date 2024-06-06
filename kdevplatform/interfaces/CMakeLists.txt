@@ -102,8 +102,3 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/interfaces COMPONENT Devel
 )
-
-install(FILES
-    kdevelopplugin.desktop
-    DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR}
-)
