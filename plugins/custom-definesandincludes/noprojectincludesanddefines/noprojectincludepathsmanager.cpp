@@ -134,7 +134,7 @@ void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
 
     cip->setCustomIncludePaths(pathListToStringList(paths));
 
-    QObject::connect(cip, &QDialog::accepted, cip, [this, cip, &path]() {
+    QObject::connect(cip, &QDialog::accepted, cip, [this, cip, path] {
         if (!writeIncludePaths(cip->storageDirectory(), cip->customIncludePaths())) {
             qWarning() << i18n("Failed to save custom include paths in directory: %1", cip->storageDirectory());
         }
