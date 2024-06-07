@@ -39,9 +39,8 @@ QStringList pathListToStringList(const Path::List& paths)
     }
     return sl;
 }
-}
 
-QString NoProjectIncludePathsManager::findConfigurationFile(const QString& path)
+QString findConfigurationFile(const QString& path)
 {
     QDir dir(path);
     while (dir.exists()) {
@@ -56,6 +55,8 @@ QString NoProjectIncludePathsManager::findConfigurationFile(const QString& path)
     }
     return {};
 }
+
+} // unnamed namespace
 
 std::pair<Path::List, QHash<QString, QString>> 
     NoProjectIncludePathsManager::includesAndDefines(const QString& path)
@@ -101,7 +102,7 @@ std::pair<Path::List, QHash<QString, QString>>
     return std::make_pair(includes, defines);
 }
 
-bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirectory, const QStringList& includePaths)
+static bool writeIncludePaths(const QString& storageDirectory, const QStringList& includePaths)
 {
     QDir dir(storageDirectory);
     QFileInfo customIncludePaths(dir, includePathsFile());
@@ -134,7 +135,7 @@ void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
 
     cip->setCustomIncludePaths(pathListToStringList(paths));
 
-    QObject::connect(cip, &QDialog::accepted, cip, [this, cip, path] {
+    QObject::connect(cip, &QDialog::accepted, cip, [cip, path] {
         if (!writeIncludePaths(cip->storageDirectory(), cip->customIncludePaths())) {
             qWarning() << i18n("Failed to save custom include paths in directory: %1", cip->storageDirectory());
         }

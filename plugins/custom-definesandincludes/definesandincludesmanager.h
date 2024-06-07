@@ -9,7 +9,6 @@
 
 #include <QVariantList>
 #include <QVector>
-#include <QScopedPointer>
 
 #include <interfaces/iplugin.h>
 
@@ -18,7 +17,6 @@
 #include "compilerprovider/settingsmanager.h"
 
 class CompilerProvider;
-class NoProjectIncludePathsManager;
 
 /// @brief: Class for retrieving custom defines and includes.
 class DefinesAndIncludesManager : public KDevelop::IPlugin, public KDevelop::IDefinesAndIncludesManager
@@ -67,7 +65,6 @@ private:
     QVector<Provider*> m_providers;
     QVector<BackgroundProvider*> m_backgroundProviders;
     SettingsManager* m_settings;
-    QScopedPointer<NoProjectIncludePathsManager> m_noProjectIPM;
     KDevelop::Path::List m_defaultFrameworkDirectories;
 };
 
