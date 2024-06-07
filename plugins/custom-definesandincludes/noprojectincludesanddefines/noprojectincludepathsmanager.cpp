@@ -140,4 +140,6 @@ void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
         }
         KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument(KDevelop::IndexedString(path));
     });
+
+    cip->show();
 }
