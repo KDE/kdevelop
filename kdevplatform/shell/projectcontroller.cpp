@@ -152,10 +152,7 @@ public:
             cfgDlg->appendConfigPage(page);
         }
 
-        QObject::connect(cfgDlg, &ConfigDialog::configSaved, cfgDlg, [this, proj](ConfigPage* page) {
-            Q_UNUSED(page)
-            Q_ASSERT_X(proj, Q_FUNC_INFO,
-                    "ConfigDialog signalled project config change, but no project set for configuring!");
+        QObject::connect(cfgDlg, &ConfigDialog::configSaved, proj, [this, proj] {
             emit q->projectConfigurationChanged(proj);
         });
         cfgDlg->setWindowTitle(i18nc("@title:window", "Configure Project %1", proj->name()));
