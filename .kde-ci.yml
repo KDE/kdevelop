@@ -14,6 +14,7 @@ Dependencies:
     'frameworks/kcmutils': '@latest-kf6'
     'frameworks/ktexttemplate': '@latest-kf6'
     'frameworks/knewstuff': '@latest-kf6'
+    # TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later. Once available, adapt code & reenable again.
     # 'utilities/okteta': '@latest-kf6'
     'kdevelop/kdevelop-pg-qt': '@latest-kf6'
 

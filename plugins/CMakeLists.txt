@@ -141,22 +141,25 @@ if (TARGET Qt::QuickWidgets)
     add_subdirectory(welcomepage)
 endif()
 
-if (6 STREQUAL 5)
-    find_package(OktetaKastenControllers 0.4.0 CONFIG)
-    set_package_properties(OktetaKastenControllers PROPERTIES
+# TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later.
+# Once available, adapt code & reenable again. For now prevent finding the Qt5 version.
+set(CMAKE_DISABLE_FIND_PACKAGE_OktetaKastenControllers ON)
+set(CMAKE_DISABLE_FIND_PACKAGE_KastenControllers ON)
+
+find_package(OktetaKastenControllers 0.4.0 CONFIG)
+set_package_properties(OktetaKastenControllers PROPERTIES
+    PURPOSE "Required for building Okteta KDevelop plugin."
+    URL "https://kde.org/"
+    TYPE OPTIONAL)
+if (OktetaKastenControllers_FOUND)
+    find_package(KastenControllers 0.4.0 CONFIG)
+
+    set_package_properties(KastenControllers PROPERTIES
         PURPOSE "Required for building Okteta KDevelop plugin."
         URL "https://kde.org/"
         TYPE OPTIONAL)
-    if (OktetaKastenControllers_FOUND)
-        find_package(KastenControllers 0.4.0 CONFIG)
-
-        set_package_properties(KastenControllers PROPERTIES
-            PURPOSE "Required for building Okteta KDevelop plugin."
-            URL "https://kde.org/"
-            TYPE OPTIONAL)
-    endif()
-    if (OktetaKastenControllers_FOUND AND KastenControllers_FOUND)
-        add_subdirectory(okteta)
-    endif()
+endif()
+if (OktetaKastenControllers_FOUND AND KastenControllers_FOUND)
+    add_subdirectory(okteta)
 endif()
 # END: Others

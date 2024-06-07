@@ -1,7 +1,8 @@
-if (6 STREQUAL 6)
-    set(REQ_OKTETA_VERSION 0.11) # make sure we don't bring old Qt5-based okteta
-endif()
-find_package(OktetaGui ${REQ_OKTETA_VERSION} CONFIG)
+# TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later.
+# Once available, adapt code & reenable again. For now prevent finding the Qt5 version.
+set(CMAKE_DISABLE_FIND_PACKAGE_OktetaGui ON)
+
+find_package(OktetaGui CONFIG)
 set_package_properties(OktetaGui PROPERTIES
     PURPOSE "Required for building MemoryViewer Widget."
     URL "https://kde.org/"
