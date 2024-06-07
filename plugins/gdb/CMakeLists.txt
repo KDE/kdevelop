@@ -1,3 +1,7 @@
+# TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later.
+# Once available, adapt code & reenable again. For now prevent finding the Qt5 version.
+set(CMAKE_DISABLE_FIND_PACKAGE_OktetaGui ON)
+
 find_package(OktetaGui CONFIG)
 set_package_properties(OktetaGui PROPERTIES
     PURPOSE "Required for building MemoryViewer Widget."

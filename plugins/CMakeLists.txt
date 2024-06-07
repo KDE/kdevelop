@@ -140,6 +140,11 @@ ecm_optional_add_subdirectory(ghprovider)
 ecm_optional_add_subdirectory(konsole)
 add_subdirectory(welcomepage)
 
+# TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later.
+# Once available, adapt code & reenable again. For now prevent finding the Qt5 version.
+set(CMAKE_DISABLE_FIND_PACKAGE_OktetaKastenControllers ON)
+set(CMAKE_DISABLE_FIND_PACKAGE_KastenControllers ON)
+
 find_package(OktetaKastenControllers 0.4.0 CONFIG)
 set_package_properties(OktetaKastenControllers PROPERTIES
     PURPOSE "Required for building Okteta KDevelop plugin."

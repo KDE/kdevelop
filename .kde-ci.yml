@@ -9,8 +9,9 @@ Dependencies:
     'frameworks/ktexteditor': '@stable'
     'frameworks/threadweaver': '@stable'
     'sdk/libkomparediff2': '@same'
-    'utilities/okteta': '@stable'
     'kdevelop/kdevelop-pg-qt': '@stable'
+    # TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later. Once available, adapt code & reenable again.
+    # 'utilities/okteta': '@stable'
 
 - 'on': ['Linux', 'FreeBSD']
   'require':
