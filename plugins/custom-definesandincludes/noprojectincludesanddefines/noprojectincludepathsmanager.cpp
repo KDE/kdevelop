@@ -23,13 +23,6 @@ namespace
 {
 inline QString includePathsFile() { return QStringLiteral(".kdev_include_paths"); }
 
-
-bool removeSettings(const QString& storageDirectory)
-{
-    const QString file = storageDirectory + QDir::separator() + includePathsFile();
-    return QFile::remove(file);
-}
-
 QStringList pathListToStringList(const Path::List& paths)
 {
     QStringList sl;
@@ -107,13 +100,14 @@ static bool writeIncludePaths(const QString& storageDirectory, const QStringList
     QDir dir(storageDirectory);
     QFileInfo customIncludePaths(dir, includePathsFile());
     QFile f(customIncludePaths.filePath());
+
+    if (includePaths.empty()) {
+        return f.exists() ? f.remove() : true;
+    }
     if (f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         QTextStream out(&f);
         for (const auto& customPath : includePaths) {
             out << customPath << QLatin1Char('\n');
-        }
-        if (includePaths.isEmpty()) {
-            removeSettings(storageDirectory);
         }
         return true;
     } else {
