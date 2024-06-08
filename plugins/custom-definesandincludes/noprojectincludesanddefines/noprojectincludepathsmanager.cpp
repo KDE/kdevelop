@@ -85,12 +85,8 @@ std::pair<Path::List, QHash<QString, QString>>
             const auto textLine = line.trimmed().toString();
             if (textLine.startsWith(QLatin1String("#define "))) {
                 QStringList items = textLine.split(QLatin1Char(' '));
-                if (items.length() > 1)
-                {
-                    defines[items[1]] = QStringList(items.mid(2)).join(QLatin1Char(' '));
-                }else{
-                    qWarning() << i18n("Bad #define directive in %1: %2", configurationFile.filePath, textLine);
-                }
+                Q_ASSERT(items.size() > 1);
+                defines[items[1]] = QStringList(items.mid(2)).join(QLatin1Char(' '));
                 continue;
             }
             if (!textLine.isEmpty()) {
