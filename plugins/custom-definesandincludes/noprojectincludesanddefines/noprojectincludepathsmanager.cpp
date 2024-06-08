@@ -62,7 +62,7 @@ ConfigurationFile readConfigurationFileForDir(QDir dir)
 
     QFile file(ret.filePath);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        ret.fileContents = QString::fromLocal8Bit(file.readAll());
+        ret.fileContents = QString::fromUtf8(file.readAll());
     }
 
     return ret;
@@ -117,7 +117,7 @@ static bool writeIncludePaths(const QString& storageDirectory, QStringView inclu
         return f.exists() ? f.remove() : true;
     }
     return f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)
-        && f.write(includePaths.toLocal8Bit()) != -1;
+        && f.write(includePaths.toUtf8()) != -1;
 }
 
 void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
