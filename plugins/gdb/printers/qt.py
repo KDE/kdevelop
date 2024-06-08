@@ -755,7 +755,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, 'QList', None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QStringList', 'QString')
-    pretty_printers_dict[re.compile('^QQueue')] = lambda val: QListPrinter(val, 'QQueue', None)
+    pretty_printers_dict[re.compile('^QQueue<.*>$')] = lambda val: QListPrinter(val, 'QQueue', None)
     pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val, 'QVector')
     pretty_printers_dict[re.compile('^QStack<.*>$')] = lambda val: QVectorPrinter(val, 'QStack')
     pretty_printers_dict[re.compile('^QLinkedList<.*>$')] = lambda val: QLinkedListPrinter(val)
