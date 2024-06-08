@@ -41,15 +41,14 @@ void NoProjectCustomIncludePaths::appendCustomIncludePath(const QString& path)
     m_ui->customIncludePaths->appendPlainText(path);
 }
 
-QStringList NoProjectCustomIncludePaths::customIncludePaths() const
+QString NoProjectCustomIncludePaths::customIncludePaths() const
 {
-    const QString pathsText = m_ui->customIncludePaths->document()->toPlainText();
-    return pathsText.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+    return m_ui->customIncludePaths->toPlainText();
 }
 
-void NoProjectCustomIncludePaths::setCustomIncludePaths(const QStringList& paths)
+void NoProjectCustomIncludePaths::setCustomIncludePaths(const QString& paths)
 {
-    m_ui->customIncludePaths->setPlainText(paths.join(QLatin1Char('\n')));
+    m_ui->customIncludePaths->setPlainText(paths);
 }
 
 void NoProjectCustomIncludePaths::openAddIncludeDirectoryDialog()

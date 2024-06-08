@@ -19,23 +19,19 @@
 
 #include "noprojectcustomincludepaths.h"
 
+#include <utility>
+
 namespace
 {
 inline QString includePathsFile() { return QStringLiteral(".kdev_include_paths"); }
 
-QStringList pathListToStringList(const Path::List& paths)
+QDir absoluteParentDirForPath(const QString& path)
 {
-    QStringList sl;
-    sl.reserve(paths.size());
-    for (const auto& p : paths) {
-        sl << p.path();
-    }
-    return sl;
+    return QFileInfo{path}.absoluteDir();
 }
 
-QString findConfigurationFile(const QString& path)
+QString findConfigurationFileForDir(QDir dir)
 {
-    QDir dir(path);
     while (dir.exists()) {
         QFileInfo customIncludePathsFile(dir, includePathsFile());
         if (customIncludePathsFile.exists()) {
@@ -49,25 +45,41 @@ QString findConfigurationFile(const QString& path)
     return {};
 }
 
+struct ConfigurationFile
+{
+    QString filePath;
+    QString fileContents;
+};
+
+ConfigurationFile readConfigurationFileForDir(QDir dir)
+{
+    ConfigurationFile ret;
+
+    ret.filePath = findConfigurationFileForDir(std::move(dir));
+    if (ret.filePath.isEmpty()) {
+        return ret;
+    }
+
+    QFile file(ret.filePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        ret.fileContents = QString::fromLocal8Bit(file.readAll());
+    }
+
+    return ret;
+}
+
 } // unnamed namespace
 
 std::pair<Path::List, QHash<QString, QString>> 
     NoProjectIncludePathsManager::includesAndDefines(const QString& path)
 {
-    QFileInfo fi(path);
-
-    auto pathToFile = findConfigurationFile(fi.absoluteDir().absolutePath());
-    if (pathToFile.isEmpty()) {
-        return {};
-    }
     Path::List includes;
     QHash<QString, QString> defines;
 
-    QFile f(pathToFile);
-    if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        const QString fileContent = QString::fromLocal8Bit(f.readAll());
-        const auto lines = QStringView{fileContent}.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-        QFileInfo dir(pathToFile);
+    const auto configurationFile = readConfigurationFileForDir(absoluteParentDirForPath(path));
+    if (!configurationFile.fileContents.isEmpty()) {
+        const auto lines = QStringView{configurationFile.fileContents}.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+        const QFileInfo dir(configurationFile.filePath);
         const QChar dirSeparator = QDir::separator();
         for (const auto& line : lines) {
             const auto textLine = line.trimmed().toString();
@@ -77,7 +89,7 @@ std::pair<Path::List, QHash<QString, QString>>
                 {
                     defines[items[1]] = QStringList(items.mid(2)).join(QLatin1Char(' '));
                 }else{
-                    qWarning() << i18n("Bad #define directive in %1: %2", pathToFile, textLine);
+                    qWarning() << i18n("Bad #define directive in %1: %2", configurationFile.filePath, textLine);
                 }
                 continue;
             }
@@ -90,29 +102,22 @@ std::pair<Path::List, QHash<QString, QString>>
                 }
             }
         }
-        f.close();
     }
     return std::make_pair(includes, defines);
 }
 
-static bool writeIncludePaths(const QString& storageDirectory, const QStringList& includePaths)
+static bool writeIncludePaths(const QString& storageDirectory, QStringView includePaths)
 {
     QDir dir(storageDirectory);
     QFileInfo customIncludePaths(dir, includePathsFile());
     QFile f(customIncludePaths.filePath());
 
+    includePaths = includePaths.trimmed();
     if (includePaths.empty()) {
         return f.exists() ? f.remove() : true;
     }
-    if (f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
-        QTextStream out(&f);
-        for (const auto& customPath : includePaths) {
-            out << customPath << QLatin1Char('\n');
-        }
-        return true;
-    } else {
-        return false;
-    }
+    return f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)
+        && f.write(includePaths.toLocal8Bit()) != -1;
 }
 
 void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
@@ -121,13 +126,11 @@ void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
     cip->setAttribute(Qt::WA_DeleteOnClose);
     cip->setModal(true);
 
-    QFileInfo fi(path);
-    auto dir = fi.absoluteDir().absolutePath();
-    cip->setStorageDirectory(dir);
-
-    auto paths = includesAndDefines(path).first;
-
-    cip->setCustomIncludePaths(pathListToStringList(paths));
+    {
+        auto dir = absoluteParentDirForPath(path);
+        cip->setStorageDirectory(dir.path());
+        cip->setCustomIncludePaths(readConfigurationFileForDir(std::move(dir)).fileContents);
+    }
 
     QObject::connect(cip, &QDialog::accepted, cip, [cip, path] {
         if (!writeIncludePaths(cip->storageDirectory(), cip->customIncludePaths())) {

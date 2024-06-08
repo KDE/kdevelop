@@ -26,8 +26,8 @@ public:
     QString storageDirectory() const;
 
     void appendCustomIncludePath( const QString& path );
-    QStringList customIncludePaths() const;
-    void setCustomIncludePaths( const QStringList& paths );
+    QString customIncludePaths() const;
+    void setCustomIncludePaths(const QString& paths);
 
 private:
     Ui::CustomIncludePaths* m_ui;
