@@ -241,9 +241,7 @@ Defines DefinesAndIncludesManager::defines(const QString& path, Type type) const
     if ( type & CompilerSpecific ) {
         merge(&ret, m_settings->provider()->defines(path));
     }
-    if ( type & ProjectSpecific ) {
-        merge(&ret, NoProjectIncludePathsManager::includesAndDefines(path).second);
-    }
+    merge(&ret, NoProjectIncludePathsManager::includesAndDefines(path).second);
     return ret;
 }
 
@@ -253,9 +251,7 @@ Path::List DefinesAndIncludesManager::includes(const QString& path, Type type) c
     if ( type & CompilerSpecific ) {
         ret += m_settings->provider()->includes(path);
     }
-    if ( type & ProjectSpecific ) {
-        ret += NoProjectIncludePathsManager::includesAndDefines(path).first;
-    }
+    ret += NoProjectIncludePathsManager::includesAndDefines(path).first;
     return ret;
 }
 
