@@ -302,7 +302,13 @@ Defines DefinesAndIncludesManager::definesInBackground(const QString& path) cons
         }
     }
 
-    merge(&defines, NoProjectIncludePathsManager::includesAndDefines(path).second);
+    // The return value of definesInBackground() complements and overrides that of defines().
+    // If there are zero background defines, return an empty container to signify no overriding.
+    // If there are some background defines, override them with user-set defines from
+    // NoProjectIncludePathsManager, because they must take precedence in case of conflict.
+    if (!defines.empty()) {
+        merge(&defines, NoProjectIncludePathsManager::includesAndDefines(path).second);
+    }
 
     return defines;
 }
