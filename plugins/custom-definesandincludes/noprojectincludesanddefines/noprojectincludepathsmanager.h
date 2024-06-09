@@ -14,11 +14,13 @@
 using KDevelop::Path;
 
 namespace NoProjectIncludePathsManager {
-    /// @return list of include directories for @p oath
-    std::pair<Path::List, QHash<QString, QString>> includesAndDefines( const QString& path );
+/// @return list of include directories for @p path
+Path::List includes(const QString& path);
+/// @return defines for @p path
+QHash<QString, QString> defines(const QString& path);
 
-    /// Opens the configuration page for file with the @p path
-    void openConfigurationDialog( const QString& path );
+/// Opens the configuration page for file with the @p path
+void openConfigurationDialog(const QString& path);
 }
 
 #endif // NOPROJECTINCLUDEPATHSMANAGER_H

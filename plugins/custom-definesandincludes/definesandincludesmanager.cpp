@@ -139,7 +139,7 @@ Defines DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) 
         merge(&defines, findConfigForItem(m_settings->readPaths(cfg), item).defines);
     }
 
-    merge(&defines, NoProjectIncludePathsManager::includesAndDefines(item->path().path()).second);
+    merge(&defines, NoProjectIncludePathsManager::defines(item->path().path()));
 
     return defines;
 }
@@ -183,7 +183,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
         includes += newItems;
     }
 
-    includes += NoProjectIncludePathsManager::includesAndDefines(item->path().path()).first;
+    includes += NoProjectIncludePathsManager::includes(item->path().path());
 
     return includes;
 }
@@ -241,7 +241,7 @@ Defines DefinesAndIncludesManager::defines(const QString& path, Type type) const
     if ( type & CompilerSpecific ) {
         merge(&ret, m_settings->provider()->defines(path));
     }
-    merge(&ret, NoProjectIncludePathsManager::includesAndDefines(path).second);
+    merge(&ret, NoProjectIncludePathsManager::defines(path));
     return ret;
 }
 
@@ -251,7 +251,7 @@ Path::List DefinesAndIncludesManager::includes(const QString& path, Type type) c
     if ( type & CompilerSpecific ) {
         ret += m_settings->provider()->includes(path);
     }
-    ret += NoProjectIncludePathsManager::includesAndDefines(path).first;
+    ret += NoProjectIncludePathsManager::includes(path);
     return ret;
 }
 
@@ -307,7 +307,7 @@ Defines DefinesAndIncludesManager::definesInBackground(const QString& path) cons
     // If there are some background defines, override them with user-set defines from
     // NoProjectIncludePathsManager, because they must take precedence in case of conflict.
     if (!defines.empty()) {
-        merge(&defines, NoProjectIncludePathsManager::includesAndDefines(path).second);
+        merge(&defines, NoProjectIncludePathsManager::defines(path));
     }
 
     return defines;

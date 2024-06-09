@@ -69,10 +69,8 @@ ConfigurationFile readConfigurationFileForDir(QDir dir)
     return ret;
 }
 
-} // unnamed namespace
-
-std::pair<Path::List, QHash<QString, QString>> 
-    NoProjectIncludePathsManager::includesAndDefines(const QString& path)
+std::pair<Path::List, QHash<QString, QString>> includesAndDefines(const QString& path, bool gatherIncludes,
+                                                                  bool gatherDefines)
 {
     Path::List includes;
     QHash<QString, QString> defines;
@@ -93,10 +91,15 @@ std::pair<Path::List, QHash<QString, QString>>
             // identifier and replacement-list into a #define directive line and feeds it to libclang.
             static const QRegularExpression defineRegex(QStringLiteral("^#define\\s+(\\S+)(?:\\s+(.*))?$"));
             if (const auto match = defineRegex.match(line); match.hasMatch()) {
-                defines.insert(match.captured(1), match.capturedView(2).trimmed().toString());
+                if (gatherDefines) {
+                    defines.insert(match.captured(1), match.capturedView(2).trimmed().toString());
+                }
                 continue;
             }
 
+            if (!gatherIncludes) {
+                continue;
+            }
             const auto textLine = line.toString();
             QFileInfo pathInfo(textLine);
             if (pathInfo.isRelative()) {
@@ -107,6 +110,18 @@ std::pair<Path::List, QHash<QString, QString>>
         }
     }
     return std::make_pair(includes, defines);
+}
+
+} // unnamed namespace
+
+Path::List NoProjectIncludePathsManager::includes(const QString& path)
+{
+    return includesAndDefines(path, true, false).first;
+}
+
+QHash<QString, QString> NoProjectIncludePathsManager::defines(const QString& path)
+{
+    return includesAndDefines(path, false, true).second;
 }
 
 static bool writeIncludePaths(const QString& storageDirectory, QStringView includePaths)
