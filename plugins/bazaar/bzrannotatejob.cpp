@@ -12,10 +12,11 @@
 #include <QDateTime>
 #include <QDir>
 
+#include <interfaces/iplugin.h>
+#include <util/stringviewhelpers.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
 #include <vcs/vcsrevision.h>
-#include <interfaces/iplugin.h>
 
 using namespace KDevelop;
 
@@ -72,7 +73,7 @@ void BzrAnnotateJob::parseNextLine()
             continue;
         }
         bool revOk;
-        const auto revision = currentLine.left(currentLine.indexOf(QLatin1Char{' '})).toULong(&revOk);
+        const auto revision = leftOfNeedleOrEntireView(currentLine, QLatin1Char{' '}).toULong(&revOk);
         if (!revOk) {
             // Future compatibility - not a revision yet
             ++m_currentLine;

@@ -99,6 +99,7 @@ install( FILES
     widgetcolorizer.h
     path.h
     stack.h
+    stringviewhelpers.h
     texteditorhelpers.h
     ${CMAKE_CURRENT_BINARY_DIR}/utilexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/util COMPONENT Devel)

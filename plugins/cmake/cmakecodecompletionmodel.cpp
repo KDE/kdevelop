@@ -9,12 +9,14 @@
 #include <QModelIndex>
 #include <QMimeDatabase>
 #include <QUrl>
+
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/delayedtype.h>
+#include <util/stringviewhelpers.h>
 
 #include <cmakeduchaintypes.h>
 #include "cmakeutils.h"
@@ -79,7 +81,7 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     for(int l=range.end().line(); l>=0 && !m_inside; --l)
     {
         const auto lineString = d->line(l);
-        const auto line = QStringView{lineString}.left(lineString.indexOf(QLatin1Char{'#'}));
+        const auto line = leftOfNeedleOrEntireView(lineString, QLatin1Char{'#'});
 
         int close=line.lastIndexOf(QLatin1Char(')')), open=line.indexOf(QLatin1Char('('));
         

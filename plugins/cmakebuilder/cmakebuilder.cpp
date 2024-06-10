@@ -16,6 +16,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <project/builderjob.h>
 #include <makebuilder/imakebuilder.h>
+#include <util/stringviewhelpers.h>
 
 #include "cmakejob.h"
 #include "prunejob.h"
@@ -104,9 +105,12 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             if (!makeBuilder) {
                 return new ErrorJob(this, i18n("Could not find the make builder. Check your installation"));
             }
+
             KDevelop::ProjectFileItem* file = dom->file();
-            int lastDot = file->text().lastIndexOf(QLatin1Char('.'));
-            const QString target = QStringView{file->text()}.left(lastDot) + QLatin1String(".o");
+            const auto projectFileName = file->text();
+            const auto projectFileBaseName = KDevelop::leftOfLastNeedleOrEntireView(projectFileName, QLatin1Char{'.'});
+
+            const QString target = projectFileBaseName + QLatin1String(".o");
             build = makeBuilder->executeMakeTarget(dom->parent(), target);
             qCDebug(KDEV_CMAKEBUILDER) << "create build job for target" << build << dom << target;
         }
