@@ -191,6 +191,11 @@ QMap<QString, QVariant> ISourceFormatter::stringToOptionMap(const QString &optio
     const auto pairs = QStringView{options}.split(QLatin1Char(','), Qt::SkipEmptyParts);
     for (const auto pair : pairs) {
         const int pos = pair.indexOf(QLatin1Char('='));
+        if (pos == -1) {
+            qWarning() << "Skipping invalid option without '=' in a source formatter style's Content config entry:"
+                       << pair;
+            continue;
+        }
         map.insert(pair.left(pos).toString(), pair.mid(pos+1).toString());
     }
     return map;
