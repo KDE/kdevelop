@@ -553,4 +553,4 @@ msgstr "Amprentă:"
 
 #~ msgctxt "EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
-#~ msgstr "sergiu@ase.md"
+#~ msgstr "sergiu@cip.md"

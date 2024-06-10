@@ -228,7 +228,7 @@ msgstr "QtHelp"
 
 #~ msgctxt "EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
-#~ msgstr "sergiu@ase.md"
+#~ msgstr "sergiu@cip.md"
 
 #, fuzzy
 #~| msgid "Check Qt Help documentation"

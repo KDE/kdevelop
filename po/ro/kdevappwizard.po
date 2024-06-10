@@ -264,7 +264,7 @@ msgstr "Control versiune"
 
 #~ msgctxt "EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
-#~ msgstr "sergiu@ase.md"
+#~ msgstr "sergiu@cip.md"
 
 #~ msgid "Project Wizard"
 #~ msgstr "Expert proiecte"
