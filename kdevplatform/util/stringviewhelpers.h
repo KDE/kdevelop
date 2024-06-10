@@ -7,9 +7,30 @@
 #ifndef KDEVPLATFORM_STRING_VIEW_HELPERS_H
 #define KDEVPLATFORM_STRING_VIEW_HELPERS_H
 
+#include <QString>
 #include <QStringView>
 
 namespace KDevelop {
+
+/**
+ * @pre @p offset >= 0
+ * @return @c true if the substring of @p view from position @p offset starts with @p str
+ */
+template<class String>
+constexpr bool matchesAtOffset(QStringView view, qsizetype offset, String str)
+{
+    Q_ASSERT(offset >= 0);
+    const auto strSize = str.size();
+    return offset + strSize <= view.size() && view.mid(offset, strSize) == str;
+}
+
+/**
+ * @copydoc matchesAtOffset(QStringView,qsizetype,String)
+ */
+inline bool matchesAtOffset(QStringView view, qsizetype offset, const QString& str)
+{
+    return matchesAtOffset(view, offset, QStringView{str});
+}
 
 /**
  * Finds the first occurrence of @p needle in @p view and returns

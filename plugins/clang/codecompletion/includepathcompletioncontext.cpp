@@ -11,6 +11,7 @@
 #include "duchain/clanghelpers.h"
 
 #include <language/codecompletion/abstractincludefilecompletionitem.h>
+#include <util/stringviewhelpers.h>
 
 #include <QDirIterator>
 
@@ -74,14 +75,16 @@ IncludePathProperties IncludePathProperties::parseText(const QString& text, int 
                 }
                 state = FindInclude;
                 break;
-            case FindInclude:
-                if (QStringView{text}.mid(idx, 7) != QLatin1String("include")) {
+            case FindInclude: {
+                constexpr QLatin1String includeString("include", 7);
+                if (!matchesAtOffset(text, idx, includeString)) {
                     return properties;
                 }
-                idx += 6;
+                idx += includeString.size() - 1;
                 state = FindType;
                 properties.valid = true;
                 break;
+            }
             case FindType:
                 properties.inputFrom = idx + 1;
                 if (c == QLatin1Char('"')) {
