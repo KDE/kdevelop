@@ -26,6 +26,8 @@ QString lockFileForSession( const QString& id )
 
 QString dBusServiceNameForSession(QStringView id)
 {
+    Q_ASSERT(id.startsWith(QLatin1Char{'{'}));
+    Q_ASSERT(id.endsWith(QLatin1Char{'}'}));
     // We remove starting "{" and ending "}" from the string UUID representation
     // as D-Bus apparently doesn't allow them in service names
     return QLatin1String("org.kdevelop.kdevplatform-lock-") + id.mid(1, id.size() - 2);
