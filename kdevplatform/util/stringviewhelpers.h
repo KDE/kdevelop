@@ -13,6 +13,17 @@
 namespace KDevelop {
 
 /**
+ * @pre @p pos >= 0
+ * @return a string view starting at position @p pos in @p view and extending to its end,
+ *         or an empty string view if @p pos exceeds the length of @p view
+ */
+constexpr QStringView slicedOrEmptyView(QStringView view, qsizetype pos)
+{
+    Q_ASSERT(pos >= 0);
+    return pos < view.size() ? view.mid(pos) : QStringView{};
+}
+
+/**
  * @pre @p offset >= 0
  * @return @c true if the substring of @p view from position @p offset starts with @p str
  */

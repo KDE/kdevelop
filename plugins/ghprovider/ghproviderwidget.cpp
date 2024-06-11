@@ -15,6 +15,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
+#include <util/stringviewhelpers.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/vcslocation.h>
 
@@ -90,7 +91,7 @@ KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const QUrl &dest)
 
     QString url = pos.data(ProviderModel::VcsLocationRole).toString();
     if (m_account->validAccount())
-        url = QLatin1String("https://") + m_account->token() + QLatin1Char('@') + QStringView{url}.mid(8);
+        url = QLatin1String("https://") + m_account->token() + QLatin1Char('@') + slicedOrEmptyView(url, 8);
     QUrl real = QUrl(url);
     VcsLocation loc(real);
 
