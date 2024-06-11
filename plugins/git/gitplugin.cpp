@@ -728,8 +728,14 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         if (line.isEmpty())
             continue;
 
-        const auto name = line.left(line.indexOf(QLatin1Char{' '}));
-        const auto value = line.mid(name.size() + 1);
+        constexpr QLatin1Char space{' '};
+
+        auto name = line;
+        QStringView value;
+        if (const auto spaceIndex = line.indexOf(space); spaceIndex != -1) {
+            name = line.left(spaceIndex);
+            value = line.mid(spaceIndex + 1);
+        }
 
         if(name==QLatin1String("author"))
             annotation->setAuthor(value.toString());
@@ -747,10 +753,32 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         }
         else
         {
-            const auto values = value.split(QLatin1Char(' '));
+            constexpr auto revisionValueSize = 8;
+            if (name.size() < revisionValueSize) {
+                qCWarning(PLUGIN_GIT) << "first git-blame header line does not start with a long enough SHA-1 hash:"
+                                      << line;
+                continue;
+            }
+
+            const auto valueSpaceIndex = value.indexOf(space);
+            if (valueSpaceIndex == -1) {
+                qCWarning(PLUGIN_GIT)
+                    << "first git-blame header line does not contain two line numbers separated with a space:" << line;
+                continue;
+            }
+            value = value.mid(valueSpaceIndex + 1); // skip the line number of the line in the original file
+            value = leftOfNeedleOrEntireView(value, space);
+            // value should now contain the line number of the line in the final file
+            const auto lineNumber = value.toInt();
+            if (lineNumber <= 0) {
+                // This check detects both a number less than 1 and not-a-number, in which case toInt() returns 0.
+                qCWarning(PLUGIN_GIT)
+                    << "the second (one-based) line number in the first git-blame header line is invalid:" << line;
+                continue;
+            }
 
             VcsRevision rev;
-            rev.setRevisionValue(name.left(8).toString(), KDevelop::VcsRevision::GlobalNumber);
+            rev.setRevisionValue(name.left(revisionValueSize).toString(), VcsRevision::GlobalNumber);
 
             skipNext = definedRevisions.contains(name.toString());
 
@@ -758,7 +786,8 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
                 definedRevisions.insert(name.toString(), VcsAnnotationLine());
 
             annotation = &definedRevisions[name.toString()];
-            annotation->setLineNumber(values[1].toInt() - 1);
+            // git line number is one-based but VcsAnnotationLine::lineNumber() is zero-based
+            annotation->setLineNumber(lineNumber - 1);
             annotation->setRevision(rev);
         }
     }
@@ -823,11 +852,17 @@ void GitPlugin::parseGitStashList(KDevelop::VcsJob* _job)
 
         QStringView branch;
         QStringView parentCommitDesc;
-        if (message.startsWith(QStringLiteral("WIP on "))) {
+        constexpr QLatin1String wipPrefix("WIP on ", 7);
+        if (message.startsWith(wipPrefix)) {
             const QStringView messageView = message;
-            const int colPos = message.indexOf(QLatin1Char(':'), 7);
-            branch = messageView.mid(7, colPos - 7);
-            parentCommitDesc = messageView.mid(colPos + 2);
+            const auto colonIndex = message.indexOf(QLatin1Char{':'}, wipPrefix.size());
+            if (colonIndex == -1) {
+                branch = messageView.mid(wipPrefix.size());
+                qCWarning(PLUGIN_GIT) << "missing ':' in a git stash message:" << message;
+            } else {
+                branch = messageView.mid(wipPrefix.size(), colonIndex - wipPrefix.size());
+                parentCommitDesc = slicedOrEmptyView(messageView, colonIndex + 2);
+            }
         }
 
         results << StashItem {
@@ -1341,6 +1376,11 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
     QDir dir = job->directory();
     QMap<QUrl, VcsStatusInfo::State> allStatus;
     for (const auto line : outputLines) {
+        if (line.size() < 2) {
+            qCWarning(PLUGIN_GIT) << "a git-ls-files output line is shorter than expected:" << line;
+            continue;
+        }
+
         VcsStatusInfo::State status = lsfilesToState(line[0].toLatin1());
 
         QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(line.mid(2).toString()));
@@ -1375,6 +1415,10 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 
     for (const auto line : outputLines) {
         //every line is 2 chars for the status, 1 space then the file desc
+        if (line.size() < 3) {
+            qCWarning(PLUGIN_GIT) << "a git-status --porcelain output line is shorter than expected:" << line;
+            continue;
+        }
         auto curr = line.mid(3);
         const auto state = line.left(2);
 
@@ -1389,7 +1433,9 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
             curr = curr.mid(arrow+4);
         }
 
-        if (curr.startsWith(QLatin1Char('\"')) && curr.endsWith(QLatin1Char('\"'))) { //if the path is quoted, unquote
+        constexpr QLatin1Char doubleQuote{'"'};
+        if (curr.size() >= 2 && curr.front() == doubleQuote && curr.back() == doubleQuote) {
+            // the path is quoted => unquote
             curr = curr.mid(1, curr.size()-2);
         }
 
