@@ -65,6 +65,17 @@ QStringView leftOfLastNeedleOrEntireView(QStringView view, Needle needle)
     return index == -1 ? view : view.left(index);
 }
 
+/**
+ * Finds the last occurrence of @p needle in @p view and returns
+ * the subview after the needle or the entire view if not found.
+ */
+template<typename Needle>
+QStringView rightOfLastNeedleOrEntireView(QStringView view, Needle needle)
+{
+    const auto index = view.lastIndexOf(needle);
+    return index == -1 ? view : view.mid(index + 1);
+}
+
 } // namespace KDevelop
 
 #endif // KDEVPLATFORM_STRING_VIEW_HELPERS_H

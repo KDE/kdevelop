@@ -28,6 +28,7 @@
 #include <interfaces/iuicontroller.h>
 
 #include <util/path.h>
+#include <util/stringviewhelpers.h>
 
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
@@ -1430,7 +1431,7 @@ void GitPlugin::parseGitVersionOutput(DVcsJob* job)
 {
     const auto outputString = job->output();
     const auto output = QStringView{outputString}.trimmed();
-    const auto versionString = output.mid(output.lastIndexOf(QLatin1Char{' '}));
+    const auto versionString = rightOfLastNeedleOrEntireView(output, QLatin1Char{' '});
     const auto minimumVersion = QVersionNumber(1, 7);
     const auto actualVersion = QVersionNumber::fromString(versionString);
     m_oldVersion = actualVersion < minimumVersion;
