@@ -2363,7 +2363,7 @@ msgstr "删除所选启动配置。"
 #, kde-format
 msgid ""
 "No launch configurations available. (Is any of the Execute plugins loaded?)"
-msgstr "无可用的启动配置。(是否已加载了任何执行插件？)"
+msgstr "没有可用的启动配置。(是否已加载了任何执行插件？)"
 
 #: shell/launchconfigurationdialog.cpp:197
 #, kde-format
