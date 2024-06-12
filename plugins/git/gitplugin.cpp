@@ -963,7 +963,7 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
             continue;
 
         if (branch.startsWith(QLatin1Char{'*'})) {
-            branch = branch.mid(2);
+            branch = branch.mid(1);
         }
         branchList << branch.trimmed().toString();
     }
