@@ -15,6 +15,7 @@
 #include <QProcess>
 #include <QDir>
 #include <QFileInfo>
+#include <QHash>
 #include <QMenu>
 #include <QTimer>
 #include <QRegularExpression>
@@ -57,6 +58,7 @@
 #include "debug.h"
 
 #include <array>
+#include <utility>
 
 using namespace KDevelop;
 
@@ -716,7 +718,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
     const auto lines = QStringView{output}.split(QLatin1Char('\n'));
 
     bool skipNext=false;
-    QMap<QString, VcsAnnotationLine> definedRevisions;
+    QHash<QString, VcsAnnotationLine> definedRevisions;
     for (const auto line : lines) {
         if(skipNext) {
             skipNext=false;
@@ -776,18 +778,21 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
                 continue;
             }
 
-            VcsRevision rev;
-            rev.setRevisionValue(name.left(revisionValueSize).toString(), VcsRevision::GlobalNumber);
-
-            skipNext = definedRevisions.contains(name.toString());
-
-            if(!skipNext)
-                definedRevisions.insert(name.toString(), VcsAnnotationLine());
-
             annotation = &definedRevisions[name.toString()];
+            if (annotation->revision().revisionType() == VcsRevision::Invalid) {
+                // Just inserted a default-constructed annotation line => this commit has not been encountered before.
+                // The following lines will contain the commit's details (author, time, summary, filename).
+                VcsRevision rev;
+                rev.setRevisionValue(name.left(revisionValueSize).toString(), VcsRevision::GlobalNumber);
+                annotation->setRevision(std::move(rev));
+            } else {
+                // This commit's details have already been parsed and are stored in *annotation. The uninteresting to us
+                // line of code will follow. Below we update only the line number and thus reuse the commit's details.
+                skipNext = true;
+            }
+
             // git line number is one-based but VcsAnnotationLine::lineNumber() is zero-based
             annotation->setLineNumber(lineNumber - 1);
-            annotation->setRevision(rev);
         }
     }
     job->setResults(results);
