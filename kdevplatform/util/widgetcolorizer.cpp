@@ -158,8 +158,7 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
 
         for (auto jt = block.begin(); jt != block.end(); ++jt) {
             auto fragment = jt.fragment();
-            auto text = QStringView(fragment.text()).trimmed();
-            if (!text.isEmpty()) {
+            if (!QStringView{fragment.text()}.trimmed().empty()) {
                 auto fmt = fragment.charFormat();
                 auto foreground = foregroundColor(fmt);
                 auto background = backgroundColor(fmt);
