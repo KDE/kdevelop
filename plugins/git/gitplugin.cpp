@@ -748,11 +748,10 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         else if(name.startsWith(QLatin1String("committer"))) {} //We will just store the authors
         else if(name==QLatin1String("previous")) {} //We don't need that either
         else if(name==QLatin1String("filename")) { skipNext=true; }
-        else if(name==QLatin1String("boundary")) {
-            definedRevisions.insert(QStringLiteral("boundary"), VcsAnnotationLine());
-        }
-        else
-        {
+        else if (name == QLatin1String("boundary")) {
+            // We never limit the annotation with revision range specifiers, so the initial commit
+            // in the git repository is always denoted as the boundary revision => not interesting.
+        } else {
             constexpr auto revisionValueSize = 8;
             if (name.size() < revisionValueSize) {
                 qCWarning(PLUGIN_GIT) << "first git-blame header line does not start with a long enough SHA-1 hash:"
