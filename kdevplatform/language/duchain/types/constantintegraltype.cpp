@@ -132,7 +132,7 @@ QString ConstantIntegralType::valueAsString() const
     }
 }
 
-uint ConstantIntegralType::hash() const
+size_t ConstantIntegralType::hash() const
 {
     return KDevHash(IntegralType::hash()) << d_func()->m_value;
 }

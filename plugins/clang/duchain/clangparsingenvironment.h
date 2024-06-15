@@ -96,7 +96,7 @@ public:
      * This is useful for a quick comparison, and enough to store on-disk
      * to figure out if the environment changed or not.
      */
-    uint hash() const;
+    size_t hash() const;
 
     bool operator==(const ClangParsingEnvironment& other) const;
     bool operator!=(const ClangParsingEnvironment& other) const

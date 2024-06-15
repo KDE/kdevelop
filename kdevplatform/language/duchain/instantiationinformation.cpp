@@ -110,7 +110,7 @@ bool InstantiationInformation::operator==(const InstantiationInformation& rhs) c
     return listsEqual(rhs);
 }
 
-uint InstantiationInformation::hash() const
+size_t InstantiationInformation::hash() const
 {
     KDevHash kdevhash;
     FOREACH_FUNCTION(const IndexedType &param, templateParameters) {

@@ -65,7 +65,7 @@ public:
     QualifiedIdentifier qualifiedIdentifier() const;
 
     /// Determine this identified type's hash value. \returns the hash value
-    uint hash() const;
+    size_t hash() const;
 
     /**
      * Access the identified type's declaration id, which is a unique global identifier for the

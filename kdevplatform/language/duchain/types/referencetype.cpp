@@ -101,7 +101,7 @@ AbstractType::WhichType ReferenceType::whichType() const
     return TypeReference;
 }
 
-uint ReferenceType::hash() const
+size_t ReferenceType::hash() const
 {
     return KDevHash(AbstractType::hash()) << d_func()->m_baseType.hash() << d_func()->m_isRValue;
 }

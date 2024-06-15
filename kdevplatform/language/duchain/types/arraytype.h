@@ -65,7 +65,7 @@ public:
 
     QString toString() const override;
 
-    uint hash() const override;
+    size_t hash() const override;
 
     WhichType whichType() const override;
 

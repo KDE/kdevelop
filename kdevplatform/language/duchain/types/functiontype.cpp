@@ -165,7 +165,7 @@ AbstractType::WhichType FunctionType::whichType() const
     return TypeFunction;
 }
 
-uint FunctionType::hash() const
+size_t FunctionType::hash() const
 {
     KDevHash kdevhash(AbstractType::hash());
     kdevhash << d_func()->m_returnType.hash();

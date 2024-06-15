@@ -80,7 +80,7 @@ public:
         return m_topContext;
     }
 
-    inline uint hash() const
+    inline size_t hash() const
     {
         return ( uint )((( quint64 )m_topContext) * 37);
     }

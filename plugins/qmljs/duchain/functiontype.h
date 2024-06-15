@@ -34,7 +34,7 @@ public:
 
     KDevelop::AbstractType* clone() const override;
     QString toString() const override;
-    uint hash() const override;
+    size_t hash() const override;
 
     enum {
         Identity = 30

@@ -27,7 +27,8 @@ using namespace KDevelop;
 
 struct TestItem
 {
-    TestItem(uint hash, uint dataSize) : m_hash(hash)
+    TestItem(size_t hash, uint dataSize)
+        : m_hash(hash)
         , m_dataSize(dataSize)
     {
     }
@@ -36,7 +37,7 @@ struct TestItem
 
     //Every item has to implement this function, and return a valid hash.
     //Must be exactly the same hash value as ExampleItemRequest::hash() has returned while creating the item.
-    unsigned int hash() const
+    size_t hash() const
     {
         return m_hash;
     }
@@ -55,7 +56,7 @@ struct TestItem
                && memcmp(reinterpret_cast<const char*>(this), rhs, itemSize()) == 0;
     }
 
-    uint m_hash;
+    size_t m_hash;
     uint m_dataSize;
 };
 
@@ -73,7 +74,7 @@ struct TestItemRequest
         AverageSize = 700 //This should be the approximate average size of an Item
     };
 
-    uint hash() const
+    size_t hash() const
     {
         return m_item.hash();
     }

@@ -74,7 +74,7 @@ AbstractType::WhichType StructureType::whichType() const
     return TypeStructure;
 }
 
-uint StructureType::hash() const
+size_t StructureType::hash() const
 {
     return KDevHash(AbstractType::hash()) << IdentifiedType::hash();
 }

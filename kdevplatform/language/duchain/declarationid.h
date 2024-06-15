@@ -111,7 +111,7 @@ public:
      *          depending on whether the id is direct or indirect,
      *          and thus you cannot compare hashes for declaration equality (use operator==() instead)
      */
-    uint hash() const
+    size_t hash() const
     {
         if (m_isDirect)
             return KDevHash() << m_directData.hash() << m_specialization.index();

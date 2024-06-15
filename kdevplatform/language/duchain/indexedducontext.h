@@ -39,7 +39,7 @@ public:
     {
         return m_topContext == rhs.m_topContext && m_contextIndex == rhs.m_contextIndex;
     }
-    uint hash() const
+    size_t hash() const
     {
         return KDevHash() << m_topContext << m_contextIndex;
     }

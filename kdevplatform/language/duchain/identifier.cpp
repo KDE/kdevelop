@@ -55,7 +55,7 @@ public:
         m_hash = 0;
     }
 
-    uint hash() const
+    size_t hash() const
     {
         // Since this only needs reading and the data needs not to be private, this may be called by
         // multiple threads simultaneously, so computeHash() must be thread-safe.
@@ -91,7 +91,7 @@ public:
         m_hash = kdevhash;
     }
 
-    mutable uint m_hash = 0;
+    mutable size_t m_hash = 0;
 };
 
 using DynamicIdentifierPrivate = IdentifierPrivate<true>;
@@ -110,7 +110,7 @@ struct IdentifierItemRequest
     };
 
     //Should return the hash-value associated with this request(For example the hash of a string)
-    uint hash() const
+    size_t hash() const
     {
         return m_identifier.hash();
     }
@@ -252,7 +252,7 @@ public:
         m_hash = 0;
     }
 
-    uint hash() const
+    size_t hash() const
     {
         if (m_hash == 0) {
             KDevHash hash;
@@ -286,7 +286,7 @@ struct QualifiedIdentifierItemRequest
     };
 
     //Should return the hash-value associated with this request(For example the hash of a string)
-    uint hash() const
+    size_t hash() const
     {
         return m_identifier.hash();
     }
@@ -478,7 +478,7 @@ bool Identifier::nameEquals(const Identifier& rhs) const
     return identifier() == rhs.identifier();
 }
 
-uint Identifier::hash() const
+size_t Identifier::hash() const
 {
     if (!m_index)
         return dd->hash();
@@ -962,7 +962,7 @@ bool QualifiedIdentifier::beginsWith(const QualifiedIdentifier& other) const
 
 struct Visitor
 {
-    Visitor(KDevVarLengthArray<QualifiedIdentifier>& target, uint hash)
+    Visitor(KDevVarLengthArray<QualifiedIdentifier>& target, size_t hash)
         : target(target)
         , hash(hash)
     {
@@ -976,10 +976,10 @@ struct Visitor
     }
 
     KDevVarLengthArray<QualifiedIdentifier>& target;
-    const uint hash;
+    const size_t hash;
 };
 
-uint QualifiedIdentifier::hash() const
+size_t QualifiedIdentifier::hash() const
 {
     if (m_index)
         return cd->hash();
@@ -1174,7 +1174,7 @@ void QualifiedIdentifier::prepareWrite()
     dd->clearHash();
 }
 
-uint IndexedTypeIdentifier::hash() const
+size_t IndexedTypeIdentifier::hash() const
 {
     quint32 bitfields = static_cast<quint32>(m_isConstant)
                         | (m_isReference << 1)

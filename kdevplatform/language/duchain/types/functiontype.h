@@ -108,7 +108,7 @@ public:
      */
     virtual QString partToString(SignaturePart sigPart) const;
 
-    uint hash() const override;
+    size_t hash() const override;
 
     WhichType whichType() const override;
 

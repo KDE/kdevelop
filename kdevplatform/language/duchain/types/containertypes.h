@@ -125,7 +125,7 @@ public:
     QString toString() const override;
 
     AbstractType* clone() const override;
-    uint hash() const override;
+    size_t hash() const override;
     bool equals(const AbstractType* rhs) const override;
 
     enum { Identity = 58 };
@@ -205,7 +205,7 @@ public:
     QString toString() const override;
 
     AbstractType* clone() const override;
-    uint hash() const override;
+    size_t hash() const override;
     bool equals(const AbstractType* rhs) const override;
 
     enum { Identity = 57 };

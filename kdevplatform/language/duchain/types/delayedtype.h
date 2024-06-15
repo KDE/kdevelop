@@ -69,7 +69,7 @@ public:
     Kind kind() const;
     void setKind(Kind kind);
 
-    uint hash() const override;
+    size_t hash() const override;
 
     WhichType whichType() const override;
 

@@ -195,7 +195,7 @@ public:
      */
     void setIdentifier(const IndexedString& identifier);
 
-    uint hash() const;
+    size_t hash() const;
 
     /**
      * Comparison ignoring the template-identifiers
@@ -369,7 +369,7 @@ public:
     /**
      * The hash does not respect explicitlyGlobal, only the real scope.
      */
-    uint hash() const;
+    size_t hash() const;
 
 protected:
     bool sameIdentifiers(const QualifiedIdentifier& rhs) const;
@@ -436,7 +436,7 @@ public:
 
     QString toString(IdentifierStringFormattingOptions options = NoOptions) const;
 
-    uint hash() const;
+    size_t hash() const;
 
     /**
      * The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
