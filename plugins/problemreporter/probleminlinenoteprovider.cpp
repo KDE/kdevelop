@@ -196,6 +196,8 @@ QSize ProblemInlineNoteProvider::inlineNoteSize(const KTextEditor::InlineNote& n
 
 void ProblemInlineNoteProvider::paintInlineNote(const KTextEditor::InlineNote& note, QPainter &painter, Qt::LayoutDirection direction) const
 {
+    Q_UNUSED(direction);
+
     InlineNoteLayout layout;
     doInlineNoteLayout(note, &layout);
 
