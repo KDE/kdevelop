@@ -402,6 +402,8 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
 
     // This function does not modify the item repository. write() rather than read() is called only in order to modify
     // declarationsCache and importsCache. Making these two cache data members mutable would allow to call read() here.
+    // Doing so would require us to introduce thread synchronization again to prevent data races, which is then again
+    // not going to give us anything over using write() directly here (since that guarantees sole access)
     LockedItemRepository::write<PersistentSymbolTable>([&](PersistentSymbolTableRepo& repo) {
         ifVerifyVisitNesting(const auto guard = IterationCounter(repo);)
 
