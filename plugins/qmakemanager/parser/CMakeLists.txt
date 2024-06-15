@@ -38,7 +38,7 @@ target_link_libraries(kdevqmakeparser
     PRIVATE
         KF6::CoreAddons
         KF6::KIOCore
-        Qt6::Core5Compat
+        Qt::Core5Compat
 )
 target_include_directories(kdevqmakeparser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
