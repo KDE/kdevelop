@@ -108,7 +108,7 @@ public:
     }
 };
 
-inline uint qHash(const KDevelop::CursorInRevision& cursor)
+inline size_t qHash(const KDevelop::CursorInRevision& cursor)
 {
     return cursor.line * 53 + cursor.column * 47;
 }

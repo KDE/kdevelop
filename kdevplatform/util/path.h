@@ -358,7 +358,7 @@ private:
     QVector<QString> m_data;
 };
 
-KDEVPLATFORMUTIL_EXPORT uint qHash(const Path& path);
+KDEVPLATFORMUTIL_EXPORT size_t qHash(const Path& path);
 
 /**
  * Convert the @p list of QUrls to a list of Paths.

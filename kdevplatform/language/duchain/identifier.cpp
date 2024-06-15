@@ -987,17 +987,17 @@ uint QualifiedIdentifier::hash() const
         return dd->hash();
 }
 
-uint qHash(const IndexedTypeIdentifier& id)
+size_t qHash(const IndexedTypeIdentifier& id)
 {
     return id.hash();
 }
 
-uint qHash(const QualifiedIdentifier& id)
+size_t qHash(const QualifiedIdentifier& id)
 {
     return id.hash();
 }
 
-uint qHash(const Identifier& id)
+size_t qHash(const Identifier& id)
 {
     return id.hash();
 }

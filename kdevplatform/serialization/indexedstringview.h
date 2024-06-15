@@ -122,7 +122,7 @@ inline bool operator<(IndexedStringView lhs, IndexedStringView rhs)
     return lhs.index() < rhs.index();
 }
 
-inline uint qHash(IndexedStringView str)
+inline size_t qHash(IndexedStringView str)
 {
     return str.index();
 }

@@ -242,7 +242,7 @@ private:
 } // namespace Utils
 
 QT_BEGIN_NAMESPACE
-QTCREATOR_UTILS_EXPORT uint qHash(const Utils::FileName &a);
+QTCREATOR_UTILS_EXPORT size_t qHash(const Utils::FileName &a);
 QT_END_NAMESPACE
 
 namespace std {

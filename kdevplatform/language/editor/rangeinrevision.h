@@ -121,7 +121,7 @@ public:
     }
 };
 
-inline uint qHash(const KDevelop::RangeInRevision& range)
+inline size_t qHash(const KDevelop::RangeInRevision& range)
 {
     return qHash(range.start) + qHash(range.end) * 41;
 }

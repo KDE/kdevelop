@@ -117,7 +117,7 @@ public:
     QString toString() const;
 };
 
-uint qHash(const ImportKey &info);
+size_t qHash(const ImportKey &info);
 bool operator ==(const ImportKey &i1, const ImportKey &i2);
 bool operator !=(const ImportKey &i1, const ImportKey &i2);
 bool operator <(const ImportKey &i1, const ImportKey &i2);

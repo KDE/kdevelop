@@ -148,8 +148,7 @@ private:
     QSharedDataPointer<class VcsRevisionPrivate> d;
 };
 
-KDEVPLATFORMVCS_EXPORT uint qHash( const KDevelop::VcsRevision& rev);
-
+KDEVPLATFORMVCS_EXPORT size_t qHash(const KDevelop::VcsRevision& rev);
 }
 
 Q_DECLARE_METATYPE(KDevelop::VcsRevision)

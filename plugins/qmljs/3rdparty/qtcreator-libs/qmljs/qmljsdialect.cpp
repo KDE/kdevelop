@@ -222,7 +222,7 @@ QList<Dialect> Dialect::companionLanguages() const
     return langs;
 }
 
-uint qHash(const Dialect &o)
+size_t qHash(const Dialect &o)
 {
     return uint(o.dialect());
 }

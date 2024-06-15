@@ -375,8 +375,8 @@ private:
     uint m_setIndex = 0;
 };
 
-template <class T, class Conversion, class StaticRepository, bool doReferenceCounting, class StaticAccessLocker>
-uint qHash(const StorableSet<T, Conversion, StaticRepository, doReferenceCounting, StaticAccessLocker>& set)
+template<class T, class Conversion, class StaticRepository, bool doReferenceCounting, class StaticAccessLocker>
+size_t qHash(const StorableSet<T, Conversion, StaticRepository, doReferenceCounting, StaticAccessLocker>& set)
 {
     return set.setIndex();
 }

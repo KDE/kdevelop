@@ -133,7 +133,7 @@ struct IndexedTopDUContextIndexConversion
     }
 };
 
-inline uint qHash(const IndexedTopDUContext& ctx)
+inline size_t qHash(const IndexedTopDUContext& ctx)
 {
     return ctx.index();
 }

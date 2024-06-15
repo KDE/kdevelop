@@ -54,7 +54,7 @@ enum class CodeHighlightingType {
     HighlightUses,
 };
 
-inline uint qHash(CodeHighlightingType type, uint seed = 0) noexcept
+inline size_t qHash(CodeHighlightingType type, size_t seed = 0) noexcept
 {
     return ::qHash(static_cast<int>(type), seed);
 }

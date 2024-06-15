@@ -144,7 +144,7 @@ private:
     uint m_declarationIndex;
 };
 
-inline uint qHash(const IndexedDeclaration& decl)
+inline size_t qHash(const IndexedDeclaration& decl)
 {
     return decl.hash();
 }

@@ -44,7 +44,7 @@ public:
             const int background_y = background.red()*0.299 + 0.587*background.green()
                                                             + 0.114*background.blue();
             // get random, but reproducible 8-bit values from last two bytes of the revision hash
-            const uint revisionHash = qHash(revision);
+            const auto revisionHash = qHash(revision);
             const int u = static_cast<int>((0xFF & revisionHash));
             const int v = static_cast<int>((0xFF00 & revisionHash) >> 8);
             const int r = qRound(qMin(255.0, qMax(0.0, background_y + 1.402*(v-128))));

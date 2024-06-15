@@ -144,7 +144,7 @@ QString VcsRevision::prettyValue() const
 
 }
 
-uint KDevelop::qHash( const KDevelop::VcsRevision& rev)
+size_t KDevelop::qHash(const KDevelop::VcsRevision& rev)
 {
     const auto revisionValue = rev.revisionValue();
     switch (rev.revisionType()) {

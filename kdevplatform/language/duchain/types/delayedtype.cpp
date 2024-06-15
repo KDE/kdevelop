@@ -88,7 +88,7 @@ void DelayedType::accept0(KDevelop::TypeVisitor* v) const
 /*    v->endVisit(this);*/
 }
 
-inline uint qHash(DelayedType::Kind kind)
+inline size_t qHash(DelayedType::Kind kind)
 {
     return ::qHash(static_cast<quint8>(kind));
 }

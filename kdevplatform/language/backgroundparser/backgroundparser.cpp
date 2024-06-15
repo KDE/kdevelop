@@ -105,7 +105,7 @@ struct DocumentParseTarget
     }
 };
 
-inline uint qHash(const DocumentParseTarget& target)
+inline size_t qHash(const DocumentParseTarget& target)
 {
     return target.features * 7 + target.priority * 13 + target.sequentialProcessingFlags * 17
            + static_cast<uint>(reinterpret_cast<quintptr>(target.notifyWhenReady.data()));

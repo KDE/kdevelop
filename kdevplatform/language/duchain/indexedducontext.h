@@ -120,7 +120,7 @@ private:
     uint m_contextIndex;
 };
 
-inline uint qHash(const IndexedDUContext& ctx)
+inline size_t qHash(const IndexedDUContext& ctx)
 {
     return ctx.hash();
 }

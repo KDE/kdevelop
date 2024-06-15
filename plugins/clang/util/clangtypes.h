@@ -31,7 +31,7 @@ class RangeInRevision;
 class IndexedString;
 }
 
-inline uint qHash(const CXCursor& cursor) noexcept
+inline size_t qHash(const CXCursor& cursor) noexcept
 {
     return clang_hashCursor(cursor);
 }

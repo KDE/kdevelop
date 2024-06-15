@@ -442,7 +442,7 @@ Path Path::cd(const QString& dir) const
 }
 
 namespace KDevelop {
-uint qHash(const Path& path)
+size_t qHash(const Path& path)
 {
     KDevHash hash;
     for (const QString& segment : path.segments()) {
