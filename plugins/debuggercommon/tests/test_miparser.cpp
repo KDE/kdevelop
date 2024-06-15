@@ -125,10 +125,10 @@ void TestMIParser::testParseLine_data()
 
 void TestMIParser::doTestResult(const KDevMI::MI::Value& actualValue, const QVariant& expectedValue)
 {
-    if (expectedValue.type() == QVariant::String) {
+    if (expectedValue.typeId() == qMetaTypeId<QString>()) {
         QCOMPARE((int)actualValue.kind, (int)KDevMI::MI::Value::StringLiteral);
         QCOMPARE(actualValue.literal(), expectedValue.toString());
-    } else if (expectedValue.type() == QVariant::List) {
+    } else if (expectedValue.typeId() == qMetaTypeId<QVariantList>()) {
         QCOMPARE(actualValue.kind, KDevMI::MI::Value::List);
 
         const auto expectedList = expectedValue.toList();
@@ -136,7 +136,7 @@ void TestMIParser::doTestResult(const KDevMI::MI::Value& actualValue, const QVar
         for (int i = 0; i < expectedList.size(); ++i) {
             doTestResult(actualValue[i], expectedList[i]);
         }
-    } else if (expectedValue.type() == QVariant::Map) {
+    } else if (expectedValue.typeId() == qMetaTypeId<QVariantMap>()) {
         QCOMPARE(actualValue.kind, KDevMI::MI::Value::Tuple);
 
         const auto expectedMap = expectedValue.toMap();

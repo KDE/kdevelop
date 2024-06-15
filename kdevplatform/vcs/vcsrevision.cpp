@@ -117,7 +117,8 @@ QString VcsRevision::prettyValue() const
     {
         case GlobalNumber:
         case FileNumber:
-            return (revisionValue().type() == QVariant::String ? revisionValue().toString() : QString::number(revisionValue().toLongLong()));
+            return (revisionValue().typeId() == qMetaTypeId<QString>() ? revisionValue().toString()
+                                                                       : QString::number(revisionValue().toLongLong()));
         case Special:
             switch( revisionValue().value<KDevelop::VcsRevision::RevisionSpecialType>(  ) )
             {
@@ -149,8 +150,8 @@ uint KDevelop::qHash( const KDevelop::VcsRevision& rev)
     switch (rev.revisionType()) {
         case VcsRevision::GlobalNumber:
         case VcsRevision::FileNumber:
-            return (revisionValue.type() == QVariant::String ? ::qHash(revisionValue.toString()) :
-                    ::qHash(revisionValue.toULongLong()));
+            return (revisionValue.typeId() == qMetaTypeId<QString>() ? ::qHash(revisionValue.toString())
+                                                                     : ::qHash(revisionValue.toULongLong()));
         case VcsRevision::Special:
             return ::qHash(static_cast<int>(revisionValue.value<KDevelop::VcsRevision::RevisionSpecialType>()));
         case VcsRevision::Date:
