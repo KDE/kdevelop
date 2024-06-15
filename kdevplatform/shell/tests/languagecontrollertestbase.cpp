@@ -43,11 +43,12 @@ QUrl existentTestUrl(const QString& filename)
 LanguageControllerTestBase::LanguageControllerTestBase(QObject* parent)
     : QObject(parent)
     , m_differentLanguagesUrls{
-        {testUrl("plus.cc"), "clang"},
-        {testUrl("project.cmake"), "CMake"},
-        {testUrl("patch.diff"), "diff"},
-        {testUrl("gui.qml"), "qml/js"},
-    }
+          {testUrl("plus.cc"), "clang"},
+          {testUrl("project.cmake"), "CMake"},
+          {testUrl("patch.diff"), "diff"},
+          // TODO: re-enable once we have a working QML plugin again
+          // {testUrl("gui.qml"), "qml/js"},
+      }
 {
 }
 
