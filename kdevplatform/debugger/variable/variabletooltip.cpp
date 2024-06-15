@@ -59,10 +59,8 @@ protected:
     void mouseMoveEvent(QMouseEvent* e) override
     {
         if (!m_pos.isNull()) {
-            m_parent->resize(
-                m_startSize.width() + (e->globalPos().x() - m_pos.x()),
-                m_startSize.height() + (e->globalPos().y() - m_pos.y())
-            );
+            m_parent->resize(m_startSize.width() + (e->globalPosition().x() - m_pos.x()),
+                             m_startSize.height() + (e->globalPosition().y() - m_pos.y()));
         }
     }
 private:
