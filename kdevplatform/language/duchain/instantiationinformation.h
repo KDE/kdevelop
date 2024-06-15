@@ -145,11 +145,11 @@ private:
     uint m_refCount;
 };
 
-inline uint qHash(const IndexedInstantiationInformation& info)
+inline size_t qHash(const IndexedInstantiationInformation& info)
 {
     return info.hash();
 }
-inline uint qHash(const InstantiationInformation& info)
+inline size_t qHash(const InstantiationInformation& info)
 {
     return info.hash();
 }

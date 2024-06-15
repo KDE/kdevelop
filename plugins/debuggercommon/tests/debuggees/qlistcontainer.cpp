@@ -22,7 +22,7 @@ struct A {
     int d;
 };
 
-uint qHash(const A& a)
+size_t qHash(const A& a)
 {
     return qHash(a.a) + qHash(a.b);
 }

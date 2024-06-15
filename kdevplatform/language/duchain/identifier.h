@@ -457,16 +457,16 @@ private:
     uint m_pointerConstMask : 23;
 };
 
-KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const IndexedTypeIdentifier& id);
-KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const QualifiedIdentifier& id);
-KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const Identifier& id);
+KDEVPLATFORMLANGUAGE_EXPORT size_t qHash(const IndexedTypeIdentifier& id);
+KDEVPLATFORMLANGUAGE_EXPORT size_t qHash(const QualifiedIdentifier& id);
+KDEVPLATFORMLANGUAGE_EXPORT size_t qHash(const Identifier& id);
 
-inline uint qHash(const IndexedIdentifier& id)
+inline size_t qHash(const IndexedIdentifier& id)
 {
     return id.index();
 }
 
-inline uint qHash(const IndexedQualifiedIdentifier& id)
+inline size_t qHash(const IndexedQualifiedIdentifier& id)
 {
     return id.index();
 }

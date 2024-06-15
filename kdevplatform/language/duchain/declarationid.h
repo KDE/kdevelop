@@ -190,7 +190,7 @@ private:
     IndexedInstantiationInformation m_specialization;
 };
 
-inline uint qHash(const KDevelop::DeclarationId& id)
+inline size_t qHash(const KDevelop::DeclarationId& id)
 {
     return id.hash();
 }

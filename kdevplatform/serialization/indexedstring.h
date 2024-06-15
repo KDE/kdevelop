@@ -249,7 +249,7 @@ private:
 };
 
 // the following function would need to be exported in case you'd remove the inline keyword.
-inline uint qHash(const KDevelop::IndexedString& str)
+inline size_t qHash(const KDevelop::IndexedString& str)
 {
     return str.index();
 }

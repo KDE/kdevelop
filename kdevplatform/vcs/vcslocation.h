@@ -124,7 +124,7 @@ private:
     QSharedDataPointer<class VcsLocationPrivate> d;
 };
 
-inline uint qHash( const KDevelop::VcsLocation& loc )
+inline size_t qHash(const KDevelop::VcsLocation& loc)
 {
     if( loc.type() == KDevelop::VcsLocation::LocalLocation )
     {

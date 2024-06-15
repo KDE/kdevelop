@@ -812,7 +812,7 @@ void withNtfsPermissions(const std::function<void()> &task)
 } // namespace Utils
 
 QT_BEGIN_NAMESPACE
-uint qHash(const Utils::FileName &a)
+size_t qHash(const Utils::FileName &a)
 {
     if (Utils::HostOsInfo::fileNameCaseSensitivity() == Qt::CaseInsensitive)
         return qHash(a.toString().toUpper());
