@@ -144,9 +144,9 @@ void TestCMakeManager::testTargetIncludeDirectories()
     QVERIFY(foundInTarget);
 }
 
-void TestCMakeManager::testQt5App()
+void TestCMakeManager::testQt6App()
 {
-    IProject* project = loadProject(QStringLiteral("qt5_app"));
+    IProject* project = loadProject(QStringLiteral("qt6_app"));
 
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
@@ -168,33 +168,9 @@ void TestCMakeManager::testQt5App()
     QVERIFY(foundWidgets);
 }
 
-void TestCMakeManager::testQt5AppOld()
+void TestCMakeManager::testKF6App()
 {
-    IProject* project = loadProject(QStringLiteral("qt5_app_old"));
-
-    Path mainCpp(project->path(), QStringLiteral("main.cpp"));
-    QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
-    QCOMPARE(items.size(), 2); // once the plain file, once the target
-
-    bool foundCore = false, foundGui = false, foundWidgets = false;
-    for (ProjectBaseItem* mainCppItem : items) {
-        const Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
-        for (const Path& include : includeDirs) {
-            QString filename = include.lastPathSegment();
-            foundCore |= filename == QLatin1String("QtCore");
-            foundGui |= filename == QLatin1String("QtGui");
-            foundWidgets |= filename == QLatin1String("QtWidgets");
-        }
-    }
-    QVERIFY(foundCore);
-    QVERIFY(foundGui);
-    QVERIFY(foundWidgets);
-}
-
-void TestCMakeManager::testKF5App()
-{
-    IProject* project = loadProject(QStringLiteral("kf5_app"));
+    IProject* project = loadProject(QStringLiteral("kf6_app"));
 
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));

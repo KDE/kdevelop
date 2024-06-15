@@ -33,9 +33,8 @@ private Q_SLOTS:
     void testDefines();
     void testCustomTargetSources();
     void testConditionsInSubdirectoryBasedOnRootVariables();
-    void testQt5App();
-    void testQt5AppOld();
-    void testKF5App();
+    void testQt6App();
+    void testKF6App();
     void testEnumerateTargets();
     void testFaultyTarget();
     void testParenthesesInTestArguments();
