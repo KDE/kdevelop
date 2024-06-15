@@ -206,7 +206,7 @@ bool ActiveToolTip::eventFilter(QObject* object, QEvent* e)
         if (underMouse() || insideThis(object)) {
             return false;
         } else {
-            QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPos();
+            QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPosition().toPoint();
             QRect mergedRegion = d->rect_.united(d->handleRect_);
 
             if (mergedRegion.contains(globalPos)) {
