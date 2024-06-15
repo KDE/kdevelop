@@ -23,11 +23,10 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
         if (m_shouldExpand)
             m_movingRange->setInsertBehaviors(
                 KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
-        // can't use new connect syntax here, MovingInterface is not a QObject
-        connect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this,
-                SLOT(aboutToDeleteMovingInterfaceContent()));
-        connect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-                SLOT(aboutToInvalidateMovingInterfaceContent()));
+        connect(m_tracker->document(), &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
+                &PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent);
+        connect(m_tracker->document(), &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
+                &PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent);
         m_movingRange->setAttribute(m_attribte);
         m_movingRange->setZDepth(m_zDepth);
     }

@@ -512,7 +512,6 @@ void PatchHighlighter::newlineInserted(KTextEditor::Document* doc, const KTextEd
 PatchHighlighter::PatchHighlighter( KompareDiff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin, bool updatePatchFromEdits )
     : m_doc( kdoc ), m_plugin( plugin ), m_model( model ), m_applying( false ) {
     KTextEditor::Document* doc = kdoc->textDocument();
-//     connect( kdoc, SIGNAL(destroyed(QObject*)), this, SLOT(documentDestroyed()) );
     if (updatePatchFromEdits) {
         connect(doc, &KTextEditor::Document::textInserted, this, &PatchHighlighter::textInserted);
         connect(doc, &KTextEditor::Document::lineWrapped, this, &PatchHighlighter::newlineInserted);
@@ -525,18 +524,13 @@ PatchHighlighter::PatchHighlighter( KompareDiff2::DiffModel* model, IDocument* k
     if ( doc->lines() == 0 )
         return;
 
-    //can't use new signal/slot syntax here, MarkInterface is not a QObject
-    connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
-            this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
-    connect(doc, SIGNAL(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)),
-            this, SLOT(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)));
+    connect(doc, &KTextEditor::Document::markToolTipRequested, this, &PatchHighlighter::markToolTipRequested);
+    connect(doc, &KTextEditor::Document::markClicked, this, &PatchHighlighter::markClicked);
 
-
-    //can't use new signal/slot syntax here, MovingInterface is not a QObject
-    connect(doc, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
-            this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
-    connect(doc, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
-            this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
+    connect(doc, &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
+            &PatchHighlighter::aboutToDeleteMovingInterfaceContent);
+    connect(doc, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
+            &PatchHighlighter::aboutToDeleteMovingInterfaceContent);
 
     documentReloaded(doc);
 }

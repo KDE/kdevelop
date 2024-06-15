@@ -45,7 +45,7 @@ QColor colorForSeverity(IProblem::Severity severity)
 }
 }
 
-ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
+ProblemHighlighter::ProblemHighlighter(Document* document)
     : m_document(document)
 {
     Q_ASSERT(m_document);
@@ -53,9 +53,8 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this,
             &ProblemHighlighter::settingsChanged);
     connect(m_document.data(), &Document::aboutToReload, this, &ProblemHighlighter::clearProblems);
-    // can't use new signal/slot syntax here, MovingInterface is not a QObject
-    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-            SLOT(clearProblems()));
+    connect(m_document, &Document::aboutToInvalidateMovingInterfaceContent, this, &ProblemHighlighter::clearProblems);
+    // This can't use new style connect syntax since aboutToRemoveText is only part of KateDocument
     connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)), this,
             SLOT(aboutToRemoveText(KTextEditor::Range)));
 }

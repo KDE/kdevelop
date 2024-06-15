@@ -1288,11 +1288,10 @@ void DocumentController::vcsAnnotateCurrentDocument()
     if(project && project->versionControlPlugin()) {
         auto* iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
         auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
-        connect(doc->textDocument(), &KTextEditor::Document::aboutToClose,
-                helper, QOverload<KTextEditor::Document*>::of(&VcsPluginHelper::disposeEventually));
-        // can't use new signal slot syntax here, AnnotationViewInterface is not a QObject
-        connect(doc->activeTextView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
-                helper, SLOT(disposeEventually(View*,bool)));
+        connect(doc->textDocument(), &KTextEditor::Document::aboutToClose, helper,
+                qOverload<KTextEditor::Document*>(&VcsPluginHelper::disposeEventually));
+        connect(doc->activeTextView(), &KTextEditor::View::annotationBorderVisibilityChanged, helper,
+                qOverload<KTextEditor::View*, bool>(&VcsPluginHelper::disposeEventually));
         helper->addContextDocument(url);
         helper->annotation();
     }

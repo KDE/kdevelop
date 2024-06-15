@@ -77,10 +77,8 @@ DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
     connect(document, &Document::textRemoved, this, &DocumentChangeTracker::textRemoved);
     connect(document, &Document::destroyed, this, &DocumentChangeTracker::documentDestroyed);
     connect(document, &Document::documentSavedOrUploaded, this, &DocumentChangeTracker::documentSavedOrUploaded);
-
-    // can't use new connect syntax here, MovingInterface is not a QObject
-    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-            SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+    connect(m_document, &Document::aboutToInvalidateMovingInterfaceContent, this,
+            &DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent);
 
     ModificationRevision::setEditorRevisionForFile(m_url, m_document->revision());
 

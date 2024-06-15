@@ -70,9 +70,6 @@ protected:
     Sublime::View *newView(Sublime::Document *doc) override;
 
 private:
-    Q_PRIVATE_SLOT(d_func(), void saveSessionConfig())
-    Q_PRIVATE_SLOT(d_func(), void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::Document::ModifiedOnDiskReason))
-
     void newDocumentStatus(KTextEditor::Document*);
     void populateContextMenu(KTextEditor::View*, QMenu*);
     void unpopulateContextMenu();

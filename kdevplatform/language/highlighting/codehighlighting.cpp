@@ -539,9 +539,9 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
         *highlightingIt = highlighting;
     } else {
         // we newly add this tracker, so add the connection
-        // This can't use new style connect syntax since MovingInterface is not a QObject
-        connect(tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
-                this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+        connect(tracker->document(), &Document::aboutToInvalidateMovingInterfaceContent, this,
+                &CodeHighlighting::aboutToInvalidateMovingInterfaceContent);
+        // This can't use new style connect syntax since aboutToRemoveText is only part of KateDocument
         connect(tracker->document(), SIGNAL(aboutToRemoveText(KTextEditor::Range)),
                 this, SLOT(aboutToRemoveText(KTextEditor::Range)));
         connect(tracker, &DocumentChangeTracker::destroyed, this, [this, tracker]() {

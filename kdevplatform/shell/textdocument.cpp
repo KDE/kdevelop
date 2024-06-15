@@ -327,9 +327,10 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         connect(d->document.data(), &KTextEditor::Document::documentSavedOrUploaded,
                  this, &TextDocument::documentSaved );
 
-            // can't use new signal/slot syntax here, MarkInterface is not a QObject
-        connect(d->document.data(), SIGNAL(marksChanged(KTextEditor::Document*)),
-                this, SLOT(saveSessionConfig()));
+        connect(d->document.data(), &KTextEditor::Document::marksChanged, this, [this]() {
+            Q_D(TextDocument);
+            d->saveSessionConfig();
+        });
 
         d->document->setModifiedOnDiskWarning(true);
         connect(d->document.data(), &KTextEditor::Document::modifiedOnDisk,
