@@ -33,6 +33,7 @@ TestCore::TestCore()
 TestCore* TestCore::initialize(Core::Setup mode, const QString& session)
 {
     qRegisterMetaType<QList<QUrl>>("QList<QUrl>");
+    KLocalizedString::setApplicationDomain("kdevelop");
 
     if (!Core::m_self) {
         new TestCore;
