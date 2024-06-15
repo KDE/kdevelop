@@ -44,11 +44,7 @@ public:
         , m_config(parent)
     {
         setupUi(this);
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 108, 0)
         qchRequester->setNameFilter(i18n("Qt Compressed Help Files") + QLatin1String(" (*.qch)"));
-#else
-        qchRequester->setFilter(QLatin1String("*.qch|") + i18n("Qt Compressed Help Files"));
-#endif
 
         if (modifiedItem) {
             setWindowTitle(i18nc("@title:window", "Modify Entry"));

@@ -20,9 +20,6 @@
 #include "urlinfo.h"
 
 #include <KLocalizedString>
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <Kdelibs4ConfigMigrator>
-#endif
 #include <KAboutData>
 #include <KCrash>
 
@@ -316,14 +313,6 @@ int main( int argc, char *argv[] )
     QElapsedTimer timer;
     timer.start();
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    // If possible, use the Software backend for QQuickWidget (currently used in the
-    // welcome page plugin). This means we don't need OpenGL at all, avoiding issues
-    // like https://bugs.kde.org/show_bug.cgi?id=386527.
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
-
     // Useful for valgrind runs, just `export KDEV_DISABLE_JIT=1`
     if (qEnvironmentVariableIsSet("KDEV_DISABLE_JIT")) {
         qputenv("KDEV_DISABLE_WELCOMEPAGE", "1");
@@ -452,16 +441,6 @@ int main( int argc, char *argv[] )
     QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("kdevelop"), QApplication::windowIcon()));
 
     KCrash::initialize();
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    Kdelibs4ConfigMigrator migrator(QStringLiteral("kdevelop"));
-    migrator.setConfigFiles({QStringLiteral("kdeveloprc")});
-    migrator.setUiFiles({QStringLiteral("kdevelopui.rc")});
-    migrator.migrate();
-
-    // High DPI support
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-#endif
 
     qCDebug(APP) << "Startup";
 
