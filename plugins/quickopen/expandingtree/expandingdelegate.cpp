@@ -325,7 +325,8 @@ QVector<QTextLayout::FormatRange> ExpandingDelegate::highlightingFromVariantList
     QVector<QTextLayout::FormatRange> ret;
 
     for (int i = 0; i + 2 < customHighlights.count(); i += 3) {
-        if (!customHighlights[i].canConvert(QVariant::Int) || !customHighlights[i + 1].canConvert(QVariant::Int) || !customHighlights[i + 2].canConvert<QTextFormat>()) {
+        if (!customHighlights[i].canConvert<int>() || !customHighlights[i + 1].canConvert<int>()
+            || !customHighlights[i + 2].canConvert<QTextFormat>()) {
             qCWarning(PLUGIN_QUICKOPEN) << "Unable to convert triple to custom formatting.";
             continue;
         }
