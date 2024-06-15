@@ -57,7 +57,7 @@ QString EnumerationType::toString() const
     return qualifiedIdentifier().toString();
 }
 
-uint EnumerationType::hash() const
+size_t EnumerationType::hash() const
 {
     return KDevHash(IntegralType::hash()) << IdentifiedType::hash();
 }

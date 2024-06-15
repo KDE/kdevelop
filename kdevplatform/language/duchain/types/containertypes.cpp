@@ -122,12 +122,12 @@ bool MapType::equals(const AbstractType* rhs) const
     return c && c->keyType() == d_func()->m_keyType;
 }
 
-uint ListType::hash() const
+size_t ListType::hash() const
 {
     return StructureType::hash() + (contentType().abstractType() ? contentType().abstractType()->hash() : 1);
 }
 
-uint MapType::hash() const
+size_t MapType::hash() const
 {
     return ListType::hash() + (keyType().abstractType() ? keyType().abstractType()->hash() : 1);
 }

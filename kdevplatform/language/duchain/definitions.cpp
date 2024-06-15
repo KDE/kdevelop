@@ -37,7 +37,7 @@ public:
 
     DefinitionsItem& operator=(const DefinitionsItem& rhs) = delete;
 
-    unsigned int hash() const
+    size_t hash() const
     {
         //We only compare the declaration. This allows us implementing a map, although the item-repository
         //originally represents a set.
@@ -72,7 +72,7 @@ public:
         AverageSize = 30 //This should be the approximate average size of an Item
     };
 
-    unsigned int hash() const
+    size_t hash() const
     {
         return m_item.hash();
     }

@@ -29,7 +29,7 @@ unsigned int AbstractTypeData::itemSize() const
     return TypeSystem::self().dynamicSize(*this);
 }
 
-unsigned int AbstractTypeData::hash() const
+size_t AbstractTypeData::hash() const
 {
     AbstractType::Ptr type(TypeSystem::self().create(const_cast<AbstractTypeData*>(this)));
     return type->hash();

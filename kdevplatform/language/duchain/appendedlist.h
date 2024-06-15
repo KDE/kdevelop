@@ -391,7 +391,7 @@ public:
         AverageSize = sizeof(Type) + averageAppendedBytes
     };
 
-    unsigned int hash() const
+    auto hash() const
     {
         return m_item.hash();
     }

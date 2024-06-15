@@ -43,7 +43,7 @@ QualifiedIdentifier IdentifiedType::qualifiedIdentifier() const
     return idData()->m_id.qualifiedIdentifier();
 }
 
-uint IdentifiedType::hash() const
+size_t IdentifiedType::hash() const
 {
     return idData()->m_id.hash();
 }

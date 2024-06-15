@@ -79,7 +79,7 @@ bool UnsureType::contains(const KDevelop::AbstractType* type) const
     return false;
 }
 
-uint UnsureType::hash() const
+size_t UnsureType::hash() const
 {
     KDevHash kdevhash(AbstractType::hash());
     FOREACH_FUNCTION(const IndexedType &type, d_func()->m_types)

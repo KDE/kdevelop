@@ -50,7 +50,7 @@ ClassSpecializationType::ClassSpecializationType()
     : KDevelop::StructureType(createData<ClassSpecializationType>())
 {}
 
-uint ClassSpecializationType::hash() const
+size_t ClassSpecializationType::hash() const
 {
     KDevHash kdevhash(StructureType::hash());
 

@@ -100,7 +100,7 @@ AbstractType::WhichType ArrayType::whichType() const
     return TypeArray;
 }
 
-uint ArrayType::hash() const
+size_t ArrayType::hash() const
 {
     return KDevHash(AbstractType::hash())
            << (elementType() ? elementType()->hash() : 0) << dimension();

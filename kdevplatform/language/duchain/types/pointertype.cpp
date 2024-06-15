@@ -84,7 +84,7 @@ AbstractType::WhichType PointerType::whichType() const
     return TypePointer;
 }
 
-uint PointerType::hash() const
+size_t PointerType::hash() const
 {
     return KDevHash(AbstractType::hash()) << d_func()->m_baseType.hash();
 }

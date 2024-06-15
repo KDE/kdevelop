@@ -63,7 +63,7 @@ private:
 
     // cached hash of this node data - it only includes the first four data members,
     // i.e. m_start, m_end, m_leftNode and m_rightNode
-    uint m_hash;
+    size_t m_hash;
 
 public:
     uint m_refCount = 0;
@@ -77,12 +77,12 @@ public:
     {
     }
 
-    inline uint hash() const
+    inline size_t hash() const
     {
         return m_hash;
     }
 
-    uint calculateHash() const
+    size_t calculateHash() const
     {
         return KDevHash() << m_start << m_end << m_leftNode << m_rightNode;
     }
@@ -140,7 +140,7 @@ public:
 
     ~SetNodeDataRequest();
 
-    using HashType = unsigned int;
+    using HashType = size_t;
 
     //Should return the m_hash-value associated with this request(For example the m_hash of a string)
     inline HashType hash() const
@@ -169,7 +169,7 @@ public:
 
     SetNodeData data;
 
-    uint m_hash;
+    size_t m_hash;
     SetDataRepository& repository;
     BasicSetRepository* setRepository; //May be zero when no notifications are wanted
     mutable bool m_created;

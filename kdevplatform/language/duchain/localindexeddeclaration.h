@@ -32,7 +32,7 @@ public:
     {
         return m_declarationIndex == rhs.m_declarationIndex;
     }
-    uint hash() const
+    size_t hash() const
     {
         return m_declarationIndex * 23;
     }

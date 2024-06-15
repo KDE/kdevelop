@@ -93,7 +93,7 @@ inline size_t qHash(DelayedType::Kind kind)
     return ::qHash(static_cast<quint8>(kind));
 }
 
-uint DelayedType::hash() const
+size_t DelayedType::hash() const
 {
     return KDevHash(AbstractType::hash()) << d_func()->m_identifier.hash() << d_func()->m_kind;
 }

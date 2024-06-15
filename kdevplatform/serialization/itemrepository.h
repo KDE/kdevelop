@@ -544,7 +544,7 @@ public:
     ///               The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
     /// @note modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
     ///               This allows efficiently computing the clashes using the local object map hash.
-    bool hasClashingItem(uint hash, uint modulo)
+    bool hasClashingItem(size_t hash, uint modulo)
     {
         Q_ASSERT(modulo % ObjectMapSize == 0);
 
@@ -558,7 +558,7 @@ public:
             return false;
 
         while (currentIndex) {
-            uint currentHash = itemFromIndex(currentIndex)->hash();
+            auto currentHash = itemFromIndex(currentIndex)->hash();
 
             Q_ASSERT(currentHash % ObjectMapSize == localHash);
 
@@ -594,7 +594,7 @@ public:
     }
 
     //Returns whether the given item is reachabe within this bucket, through its hash.
-    bool itemReachable(const Item* item, uint hash) const
+    bool itemReachable(const Item* item, size_t hash) const
     {
         unsigned short localHash = hash % ObjectMapSize;
         unsigned short currentIndex = m_objectMap[localHash];
@@ -608,8 +608,8 @@ public:
         return false;
     }
 
-    template <class Repository>
-    void deleteItem(unsigned short index, unsigned int hash, Repository& repository)
+    template<class Repository>
+    void deleteItem(unsigned short index, size_t hash, Repository& repository)
     {
         ifDebugLostSpace(Q_ASSERT(!lostSpace()); )
 
@@ -800,13 +800,13 @@ public:
         return changed;
     }
 
-    unsigned short nextBucketForHash(uint hash) const
+    unsigned short nextBucketForHash(size_t hash) const
     {
         m_lastUsed = 0;
         return m_nextBucketHash[hash % NextBucketHashSize];
     }
 
-    void setNextBucketForHash(unsigned int hash, unsigned short bucket)
+    void setNextBucketForHash(size_t hash, unsigned short bucket)
     {
         m_lastUsed = 0;
         prepareChange();
@@ -1255,7 +1255,7 @@ public:
     ///@param request Item to retrieve the index from
     unsigned int index(const ItemRequest& request)
     {
-        const uint hash = request.hash();
+        const size_t hash = request.hash();
         const uint size = request.itemSize();
 
         // Bucket indexes tracked while walking the bucket chain for this request hash
@@ -1544,7 +1544,7 @@ public:
 
         m_metaDataChanged = true;
 
-        const uint hash = itemFromIndex(index)->hash();
+        const size_t hash = itemFromIndex(index)->hash();
         const ushort bucket = (index >> 16);
 
         //Apart from removing the item itself, we may have to recreate the nextBucketForHash link, so we need the previous bucket
@@ -2058,8 +2058,8 @@ private:
      *
      * Will return the value returned by the lambda, returning early if truthy
      */
-    template <typename Visitor>
-    auto walkBucketChain(unsigned int hash, const Visitor& visitor) const->decltype(visitor(0, nullptr))
+    template<typename Visitor>
+    auto walkBucketChain(size_t hash, const Visitor& visitor) const -> decltype(visitor(0, nullptr))
     {
         unsigned short bucketIndex = m_firstBucketForHash[hash % bucketHashSize];
 
@@ -2279,7 +2279,7 @@ private:
     // Returns whether the given item is reachable through its hash
     bool itemReachable(const Item* item) const
     {
-        const uint hash = item->hash();
+        const size_t hash = item->hash();
 
         return walkBucketChain(hash, [=](ushort /*bucketIndex*/, const MyBucket* bucketPtr) {
             return bucketPtr->itemReachable(item, hash);
@@ -2384,7 +2384,7 @@ private:
 
     /// If mustFindBucket is zero, the whole chain is just walked. This is good for debugging for infinite recursion.
     /// @return whether @p mustFindBucket was found
-    bool walkBucketLinks(uint checkBucket, uint hash, uint mustFindBucket = 0) const
+    bool walkBucketLinks(uint checkBucket, size_t hash, uint mustFindBucket = 0) const
     {
         bool found = false;
         while (checkBucket) {
@@ -2399,7 +2399,7 @@ private:
     /// Computes the bucket where the chains opened by the buckets @p mainHead and @p intersectorHead
     /// with hash @p hash meet each other.
     /// @return <predecessor of first shared bucket in mainHead, first shared bucket>
-    QPair<unsigned int, unsigned int> hashChainIntersection(uint mainHead, uint intersectorHead, uint hash) const
+    QPair<unsigned int, unsigned int> hashChainIntersection(uint mainHead, uint intersectorHead, size_t hash) const
     {
         uint previous = 0;
         uint current = mainHead;

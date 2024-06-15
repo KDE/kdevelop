@@ -139,7 +139,7 @@ AbstractType::WhichType IntegralType::whichType() const
     return TypeIntegral;
 }
 
-uint IntegralType::hash() const
+size_t IntegralType::hash() const
 {
     return KDevHash(AbstractType::hash()) << d_func()->m_dataType;
 }
