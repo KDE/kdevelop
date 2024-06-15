@@ -33,10 +33,8 @@ target_link_libraries(kdevgit
     KDev::Project
     KF6::SonnetUi
     KF6::TextWidgets
+    Qt::Core5Compat
 )
-if (QT_MAJOR_VERSION STREQUAL 6)
-    target_link_libraries(kdevgit Qt::Core5Compat)
-endif()
 
 if(BUILD_TESTING)
     add_subdirectory(tests)

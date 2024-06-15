@@ -38,11 +38,9 @@ target_link_libraries(kdevqmakeparser
     PRIVATE
         KF6::CoreAddons
         KF6::KIOCore
+        Qt6::Core5Compat
 )
 target_include_directories(kdevqmakeparser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-if(QT_MAJOR_VERSION STREQUAL 6)
-    target_link_libraries(kdevqmakeparser PRIVATE Qt6::Core5Compat)
-endif()
 
 # for proper include stack reports with gcc when working on the parser:
 # remove ENFORCE_COMPATIBLE_ERROR_AWARE_CODE from kdevpgqt_generate

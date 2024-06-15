@@ -102,11 +102,8 @@ find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
   Notifications
   Sonnet
   TextTemplate
+  TextWidgets
 )
-if(QT_MAJOR_VERSION STREQUAL 6)
-  find_package(Qt6Core5Compat ${QT_MIN_VERSION} CONFIG REQUIRED)
-  find_package(KF6TextWidgets ${KF_MIN_VERSION} CONFIG REQUIRED)
-endif()
 
 set(HAVE_KSYSGUARD FALSE)
 find_package(KSysGuard CONFIG QUIET)

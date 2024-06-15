@@ -59,14 +59,12 @@ target_link_libraries(kdevsubversion
     KF6::TextEditor
     KF6::ThreadWeaver
     KF6::Parts
+    KF6::TextWidgets
     KDev::Interfaces
     KDev::Vcs
     KDev::OutputView
     KDev::Project
     kdevsvncpp
 )
-if(QT_MAJOR_VERSION STREQUAL 6)
-    target_link_libraries(kdevsubversion KF6::TextWidgets)
-endif()
 
 install(PROGRAMS org.kde.kdevelop_svn.desktop DESTINATION ${KDE_INSTALL_APPDIR})

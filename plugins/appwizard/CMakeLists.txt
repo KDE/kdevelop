@@ -37,7 +37,5 @@ target_link_libraries(kdevappwizard
     KF6::KIOWidgets
     KF6::NewStuffWidgets
     KF6::Archive
+    Qt::Core5Compat
 )
-if(QT_MAJOR_VERSION STREQUAL 6)
-    target_link_libraries(kdevappwizard Qt::Core5Compat)
-endif()
