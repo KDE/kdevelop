@@ -8,25 +8,37 @@
 #include "ast.h"
 
 namespace QMake {
-
-ASTVisitor::parser_fun_t ASTVisitor::_S_parser_table[] = {
-    reinterpret_cast<parser_fun_t>(&ASTVisitor::visitProject),
-    reinterpret_cast<parser_fun_t>(&ASTVisitor::visitScopeBody),
-    reinterpret_cast<parser_fun_t>(&ASTVisitor::visitAssignment),
-    reinterpret_cast<parser_fun_t>(&ASTVisitor::visitFunctionCall),
-    reinterpret_cast<parser_fun_t>(&ASTVisitor::visitSimpleScope),
-    reinterpret_cast<parser_fun_t>(&ASTVisitor::visitOr),
-    reinterpret_cast<parser_fun_t>(&ASTVisitor::visitValue),
-}; // _S_parser_table[]
-
 ASTVisitor::~ASTVisitor()
 {
 }
 
 void ASTVisitor::visitNode(AST* node)
 {
-    if (node) {
-        (this->*_S_parser_table[node->type])(node);
+    using Type = AST::Type;
+    switch (node ? node->type : Type::Invalid) {
+    case Type::Project:
+        visitProject(static_cast<ProjectAST*>(node));
+        return;
+    case Type::ScopeBody:
+        visitScopeBody(static_cast<ScopeBodyAST*>(node));
+        return;
+    case Type::Assignment:
+        visitAssignment(static_cast<AssignmentAST*>(node));
+        return;
+    case Type::FunctionCall:
+        visitFunctionCall(static_cast<FunctionCallAST*>(node));
+        return;
+    case Type::SimpleScope:
+        visitSimpleScope(static_cast<SimpleScopeAST*>(node));
+        return;
+    case Type::Or:
+        visitOr(static_cast<OrAST*>(node));
+        return;
+    case Type::Value:
+        visitValue(static_cast<ValueAST*>(node));
+        return;
+    case Type::Invalid:
+        break;
     }
 }
 
