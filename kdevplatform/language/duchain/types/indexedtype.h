@@ -110,7 +110,7 @@ private:
     uint m_index;
 };
 
-inline uint qHash(const IndexedType& type)
+inline size_t qHash(const IndexedType& type)
 {
     return type.hash();
 }

@@ -378,7 +378,7 @@ protected:
 KDEVPLATFORMLANGUAGE_EXPORT QVector<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration,
                                                              bool noEmptyRanges = false);
 
-inline uint qHash(const ReferencedTopDUContext& ctx)
+inline size_t qHash(const ReferencedTopDUContext& ctx)
 {
     return ctx.hash();
 }
