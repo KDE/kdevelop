@@ -80,12 +80,14 @@ QString QtHelpDocumentation::description() const
     } else {
 
         //Check if there is a title opening-tag right before the fragment, and if yes add it, so we have a nicely formatted caption
-        const QString titleRegExp = QStringLiteral("< h\\d class = \".*\" >").replace(QLatin1Char(' '), optionalSpace);
+        const QString titleRegExp = QStringLiteral("< h\\d class = \".*?\" >").replace(QLatin1Char(' '), optionalSpace);
         const QRegularExpression findTitle(titleRegExp);
-        const QRegularExpressionMatch match = findTitle.match(dataString, pos);
-        const int titleStart = match.capturedStart();
-        const int titleEnd = titleStart + match.capturedEnd();
+        QRegularExpressionMatch match;
+        const auto titleStart = dataString.lastIndexOf(findTitle, pos, &match);
+        Q_ASSERT(titleStart < pos);
         if(titleStart != -1) {
+            const auto titleEnd = match.capturedEnd();
+            Q_ASSERT(titleEnd <= pos);
             const auto between = QStringView{dataString}.mid(titleEnd, pos - titleEnd).trimmed();
             if(between.isEmpty())
                 pos = titleStart;
