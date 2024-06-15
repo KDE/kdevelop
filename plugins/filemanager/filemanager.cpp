@@ -57,12 +57,8 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     connect(urlnav, &KUrlNavigator::urlChanged, this, &FileManager::gotoUrl);
 
     l->addWidget(urlnav);
-    dirop = new KDirOperator( urlnav->locationUrl(), this);
-#if KIO_VERSION < QT_VERSION_CHECK(5, 100, 0)
-    dirop->setView( KFile::Tree );
-#else
+    dirop = new KDirOperator(urlnav->locationUrl(), this);
     dirop->setViewMode(KFile::Tree);
-#endif
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
     connect(dirop, &KDirOperator::urlEntered, this, &FileManager::updateNav);
     connect(dirop, &KDirOperator::contextMenuAboutToShow, this, &FileManager::fillContextMenu);
@@ -139,19 +135,6 @@ void FileManager::setupActions()
     action->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
     connect(action, &QAction::triggered, this, &FileManager::syncCurrentDocumentDirectory);
 
-#if KIO_VERSION < QT_VERSION_CHECK(5, 100, 0)
-    auto* diropActionCollection = dirop->actionCollection();
-    tbActions = {
-        diropActionCollection->action(QStringLiteral("back")),
-        diropActionCollection->action(QStringLiteral("up")),
-        diropActionCollection->action(QStringLiteral("home")),
-        diropActionCollection->action(QStringLiteral("forward")),
-        diropActionCollection->action(QStringLiteral("reload")),
-        acmBookmarks,
-        action,
-        diropActionCollection->action(QStringLiteral("sorting menu")),
-        diropActionCollection->action(QStringLiteral("show hidden")),
-#else
     tbActions = {
         dirop->action(KDirOperator::Back),
         dirop->action(KDirOperator::Up),
@@ -162,7 +145,6 @@ void FileManager::setupActions()
         action,
         dirop->action(KDirOperator::SortMenu),
         dirop->action(KDirOperator::ShowHiddenFiles),
-#endif
     };
 
     newFileAction = new QAction(this);
