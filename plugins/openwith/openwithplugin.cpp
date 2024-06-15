@@ -25,11 +25,7 @@
 #include <KOpenWithDialog>
 #include <KIO/ApplicationLauncherJob>
 #include <kio_version.h>
-#if KIO_VERSION < QT_VERSION_CHECK(5, 98, 0)
-#include <KIO/JobUiDelegate>
-#else
 #include <KIO/JobUiDelegateFactory>
-#endif
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
@@ -383,12 +379,8 @@ void OpenWithPlugin::delegateToExternalApplication(const KService::Ptr& service)
 
     auto* job = new KIO::ApplicationLauncherJob(service);
     job->setUrls(m_urls);
-#if KIO_VERSION < QT_VERSION_CHECK(5, 98, 0)
-    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
-#else
     job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
-#endif
-                                              ICore::self()->uiController()->activeMainWindow()));
+                                                       ICore::self()->uiController()->activeMainWindow()));
     job->start();
 }
 
