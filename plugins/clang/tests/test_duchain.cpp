@@ -1981,10 +1981,10 @@ static bool containsErrors(const QList<Problem::Ptr>& problems)
     return it != problems.end();
 }
 
-static bool expectedXmmintrinErrors(const QList<Problem::Ptr>& problems)
+static bool expectedError(const QList<Problem::Ptr>& problems, const QLatin1String& message)
 {
     for (const auto& problem : problems) {
-        if (problem->severity() == Problem::Error && !problem->description().contains(QLatin1String("Cannot initialize a parameter of type"))) {
+        if (problem->severity() == Problem::Error && !problem->description().contains(message)) {
             return false;
         }
     }
@@ -1996,8 +1996,14 @@ static void verifyNoErrors(TopDUContext* top, QSet<TopDUContext*>& checked)
     const auto problems = top->problems();
     if (containsErrors(problems)) {
         qDebug() << top->url() << top->problems();
-        if (top->url().str().endsWith(QLatin1String("xmmintrin.h")) && expectedXmmintrinErrors(problems)) {
+        const auto url = top->url().str();
+        if (url.endsWith(QLatin1String("xmmintrin.h"))
+            && expectedError(problems, QLatin1String("Cannot initialize a parameter of type"))) {
             QEXPECT_FAIL("", "there are still some errors in xmmintrin.h b/c some clang provided intrinsincs are more strict than the GCC ones.", Continue);
+            QVERIFY(false);
+        } else if (url.endsWith(QLatin1String("c++config.h"))
+                   && expectedError(problems, QLatin1String("Invalid suffix 'bf16' on floating constant"))) {
+            QEXPECT_FAIL("", "there are still some errors in c++config.h b/c GCC headers use C++23 suffixes", Continue);
             QVERIFY(false);
         } else {
             QFAIL("parse error detected");
