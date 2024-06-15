@@ -40,7 +40,7 @@ public:
     KDevelop::AbstractType::Ptr type() const;
     void setType(const KDevelop::AbstractType::Ptr& type);
 
-    uint hash() const override;
+    size_t hash() const override;
 
     QString toString() const override;
 

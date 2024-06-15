@@ -32,7 +32,7 @@ public:
 
     ClangParsingEnvironment::Quality environmentQuality() const;
 
-    uint environmentHash() const;
+    size_t environmentHash() const;
 
     enum {
         Identity = 142

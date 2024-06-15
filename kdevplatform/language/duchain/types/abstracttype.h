@@ -198,7 +198,7 @@ public:
      * - When two types match on equals(), it should be same.
      * - When two types don't match on equals(), it should be different with a high probability.
      * */
-    virtual uint hash() const;
+    virtual size_t hash() const;
 
     IndexedType indexed() const;
 

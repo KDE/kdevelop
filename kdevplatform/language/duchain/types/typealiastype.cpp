@@ -44,7 +44,7 @@ void TypeAliasType::setType(const AbstractType::Ptr& type)
     d_func_dynamic()->m_type = IndexedType(type);
 }
 
-uint TypeAliasType::hash() const
+size_t TypeAliasType::hash() const
 {
     return KDevHash(AbstractType::hash()) << IdentifiedType::hash() << d_func()->m_type.hash();
 }

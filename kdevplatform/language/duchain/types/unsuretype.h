@@ -57,7 +57,7 @@ public:
     QString toString() const override;
     bool equals(const KDevelop::AbstractType* rhs) const override;
     bool contains(const KDevelop::AbstractType* type) const override;
-    uint hash() const override;
+    size_t hash() const override;
     KDevelop::AbstractType::WhichType whichType() const override;
     void exchangeTypes(KDevelop::TypeExchanger* exchanger) override;
 

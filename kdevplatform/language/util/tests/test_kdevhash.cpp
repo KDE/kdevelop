@@ -36,7 +36,7 @@ void runBench()
             hash << i;
         }
     }
-    QVERIFY(static_cast<uint>(hash));
+    QVERIFY(static_cast<size_t>(hash));
 }
 }
 

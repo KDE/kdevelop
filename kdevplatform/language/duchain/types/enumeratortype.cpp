@@ -51,7 +51,7 @@ bool EnumeratorType::equals(const AbstractType* _rhs) const
     return true;
 }
 
-uint EnumeratorType::hash() const
+size_t EnumeratorType::hash() const
 {
     return KDevHash(ConstantIntegralType::hash()) << IdentifiedType::hash();
 }

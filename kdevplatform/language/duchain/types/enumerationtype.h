@@ -33,7 +33,7 @@ public:
 
     using Ptr = TypePtr<EnumerationType>;
 
-    uint hash() const override;
+    size_t hash() const override;
 
     KDevelop::AbstractType* clone() const override;
 

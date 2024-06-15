@@ -39,7 +39,7 @@ public:
         return m_contextIndex != 0;
     }
 
-    uint hash() const
+    size_t hash() const
     {
         return m_contextIndex * 29;
     }

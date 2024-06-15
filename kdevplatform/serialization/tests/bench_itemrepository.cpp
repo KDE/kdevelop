@@ -30,7 +30,7 @@ struct TestData
     {
         return sizeof(TestData) + length;
     }
-    uint hash() const
+    size_t hash() const
     {
         const char* str = reinterpret_cast<const char*>(this) + sizeof(TestData);
         return IndexedString::hashString(str, length);
@@ -92,7 +92,7 @@ struct TestDataRepositoryItemRequest
     }
     unsigned short m_length;
     const char* m_text;
-    unsigned int m_hash;
+    size_t m_hash;
 };
 
 using TestDataRepository = ItemRepository<TestData, TestDataRepositoryItemRequest, false>;

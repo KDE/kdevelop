@@ -92,7 +92,7 @@ public:
     unsigned int itemSize() const;
 
     /// Expensive
-    unsigned int hash() const;
+    size_t hash() const;
 
     void freeDynamicData()
     {

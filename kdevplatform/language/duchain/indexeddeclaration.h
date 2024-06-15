@@ -44,7 +44,7 @@ public:
 
     inline bool operator!=(const IndexedDeclaration& rhs) const { return !operator==(rhs); }
 
-    inline uint hash() const
+    inline size_t hash() const
     {
         if (isDummy())
             return 0;

@@ -39,7 +39,7 @@ public:
 
     const InstantiationInformation& information() const;
 
-    uint hash() const
+    size_t hash() const
     {
         return m_index * 73;
     }
@@ -76,7 +76,7 @@ public:
 
     bool operator==(const InstantiationInformation& rhs) const;
 
-    uint hash() const;
+    size_t hash() const;
 
     bool isValid() const
     {

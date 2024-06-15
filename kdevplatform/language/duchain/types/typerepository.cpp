@@ -31,7 +31,7 @@ public:
         AverageSize = sizeof(AbstractTypeData) + 12
     };
 
-    unsigned int hash() const
+    size_t hash() const
     {
         return m_item.hash();
     }

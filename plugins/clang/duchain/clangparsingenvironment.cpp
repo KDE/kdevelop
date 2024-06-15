@@ -118,7 +118,7 @@ ClangParsingEnvironment::Quality ClangParsingEnvironment::quality() const
     return m_quality;
 }
 
-uint ClangParsingEnvironment::hash() const
+size_t ClangParsingEnvironment::hash() const
 {
     KDevHash hash;
     hash << m_defines.size();

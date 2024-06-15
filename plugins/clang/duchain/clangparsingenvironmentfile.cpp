@@ -34,7 +34,7 @@ public:
 
     ~ClangParsingEnvironmentFileData() = default;
 
-    uint environmentHash;
+    size_t environmentHash;
     IndexedString tuUrl;
     ClangParsingEnvironment::Quality quality;
 };
@@ -101,7 +101,7 @@ ClangParsingEnvironment::Quality ClangParsingEnvironmentFile::environmentQuality
     return d_func()->quality;
 }
 
-uint ClangParsingEnvironmentFile::environmentHash() const
+size_t ClangParsingEnvironmentFile::environmentHash() const
 {
     return d_func()->environmentHash;
 }

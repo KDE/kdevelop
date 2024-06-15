@@ -1225,7 +1225,7 @@ void TestDUChain::testReparseChangeEnvironment()
     TestFile impl("#include \"" + header.url().str() + "\"\n"
                   "int main() { return foo(); }", QStringLiteral("cpp"), &header);
 
-    uint hashes[3] = {0, 0, 0};
+    size_t hashes[3] = {0, 0, 0};
 
     for (int i = 0; i < 3; ++i) {
         impl.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
@@ -1528,7 +1528,7 @@ void TestDUChain::testEnvironmentWithDifferentOrderOfElements()
     m_provider->defines.insert(QStringLiteral("key2"), QStringLiteral("value2"));
     m_provider->defines.insert(QStringLiteral("key3"), QStringLiteral("value3"));
 
-    uint previousHash = 0;
+    size_t previousHash = 0;
     for (int i: {0, 1, 2, 3}) {
         file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
 

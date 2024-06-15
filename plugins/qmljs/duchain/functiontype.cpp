@@ -35,7 +35,7 @@ KDevelop::AbstractType* FunctionType::clone() const
     return new FunctionType(*this);
 }
 
-uint FunctionType::hash() const
+size_t FunctionType::hash() const
 {
     return KDevHash(KDevelop::FunctionType::hash()) << KDevelop::IdentifiedType::hash();
 }
