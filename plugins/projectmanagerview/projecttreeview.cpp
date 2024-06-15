@@ -137,7 +137,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 {
     auto* selectionCtxt =
             static_cast<ProjectItemContext*>(KDevelop::ICore::self()->selectionController()->currentSelection());
-    ProjectBaseItem* destItem = itemAtPos(event->pos());
+    ProjectBaseItem* destItem = itemAtPos(event->position().toPoint());
     if (destItem && (dropIndicatorPosition() == AboveItem || dropIndicatorPosition() == BelowItem))
             destItem = destItem->parent();
     if (selectionCtxt && destItem)
@@ -172,7 +172,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             } else if (modifiers == Qt::ShiftModifier) {
                 executedAction = move;
             } else {
-                executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
+                executedAction = dropMenu.exec(this->mapToGlobal(event->position().toPoint()));
             }
 
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
@@ -231,7 +231,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             if (modifiers == Qt::ControlModifier) {
                 executedAction = addToTarget;
             } else {
-                executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
+                executedAction = dropMenu.exec(this->mapToGlobal(event->position().toPoint()));
             }
             if (executedAction == addToTarget) {
                 QList<ProjectFileItem*> usefulItems = fileItemsWithin(selectionCtxt->items());
