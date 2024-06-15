@@ -1460,7 +1460,8 @@ void ContextBrowserPlugin::updateDeclarationListBox(DUContext* context)
 void ContextBrowserPlugin::actionTriggered()
 {
     auto* action = qobject_cast<QAction*>(sender());
-    Q_ASSERT(action); Q_ASSERT(action->data().type() == QVariant::Int);
+    Q_ASSERT(action);
+    Q_ASSERT(action->data().typeId() == qMetaTypeId<int>());
     int historyPosition = action->data().toInt();
     // qCDebug(PLUGIN_CONTEXTBROWSER) << "history pos" << historyPosition << m_history.size() << m_history;
     if (historyPosition >= 0 && historyPosition < m_history.size()) {

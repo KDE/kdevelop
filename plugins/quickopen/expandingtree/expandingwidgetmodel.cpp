@@ -190,7 +190,7 @@ void ExpandingWidgetModel::rowSelected(const QModelIndex& idx_)
         } else {
             QVariant variant = data(idx, CodeCompletionModel::ItemSelected);
 
-            if (!isExpanded(idx) && variant.type() == QVariant::String) {
+            if (!isExpanded(idx) && variant.typeId() == qMetaTypeId<QString>()) {
                 //Either expand upwards or downwards, choose in a way that
                 //the visible fields of the new selected entry are not moved.
                 if (oldIndex.isValid() && (oldIndex < idx || (!(oldIndex < idx) && oldIndex.parent() < idx.parent()))) {
