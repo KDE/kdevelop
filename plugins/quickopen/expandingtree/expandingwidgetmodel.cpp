@@ -396,7 +396,7 @@ int ExpandingWidgetModel::basicRowHeight(const QModelIndex& idx_) const
 
     QModelIndex idx(firstColumn(idx_));
 
-    auto* delegate = qobject_cast<ExpandingDelegate*>(treeView()->itemDelegate(idx));
+    auto* delegate = qobject_cast<ExpandingDelegate*>(treeView()->itemDelegateForIndex(idx));
     if (!delegate || !idx.isValid()) {
         qCDebug(PLUGIN_QUICKOPEN) << "ExpandingWidgetModel::basicRowHeight: Could not get delegate";
         return 15;
