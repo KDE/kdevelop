@@ -21,7 +21,7 @@ class KDEVQMAKEPARSER_EXPORT Driver
 {
     public:
         Driver();
-        bool readFile( const QString&, const char* = nullptr );
+        bool readFile(const QString& filename);
         void setContent( const QString& );
         void setDebug( bool );
         bool parse( ProjectAST** ast );

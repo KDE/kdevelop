@@ -7,7 +7,6 @@
 #include "qmakedriver.h"
 
 #include <QTextStream>
-#include <QTextCodec>
 #include <QFile>
 
 #include <debug.h>
@@ -27,7 +26,7 @@ Driver::Driver()
 {
 }
 
-bool Driver::readFile(const QString& filename, const char* codec)
+bool Driver::readFile(const QString& filename)
 {
     QFile f(filename);
     if (!f.open(QIODevice::ReadOnly)) {
@@ -35,8 +34,6 @@ bool Driver::readFile(const QString& filename, const char* codec)
         return false;
     }
     QTextStream s(&f);
-    if (codec)
-        s.setCodec(QTextCodec::codecForName(codec));
     m_content = s.readAll();
     return true;
 }
