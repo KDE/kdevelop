@@ -37,7 +37,7 @@ class ProjectSourcePage : public QWidget
         void projectReceived(KJob* job);
         void reevaluateCorrection();
         void progressChanged(KJob*, unsigned long);
-        void infoMessage(KJob*, const QString& text, const QString& rich);
+        void infoMessage(KJob*, const QString& text);
         void locationChanged();
         void projectChanged(const QString& name);
         

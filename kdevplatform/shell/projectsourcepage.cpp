@@ -202,7 +202,7 @@ void ProjectSourcePage::progressChanged(KJob*, unsigned long value)
     m_ui->creationProgress->setValue(value);
 }
 
-void ProjectSourcePage::infoMessage(KJob* , const QString& text, const QString& /*rich*/)
+void ProjectSourcePage::infoMessage(KJob*, const QString& text)
 {
     m_ui->creationProgress->setFormat(i18nc("Format of the progress bar text. progress and info",
                                             "%1 : %p%", text));

@@ -21,8 +21,8 @@ JobStatus::JobStatus(KJob* job, const QString& statusName, QObject* parent)
     : QObject(parent)
     , d_ptr(new JobStatusPrivate{statusName})
 {
-    connect(job, &KJob::infoMessage, this, [this](KJob*, const QString& plain, const QString&) {
-        emit showMessage(this, plain);
+    connect(job, &KJob::infoMessage, this, [this](KJob*, const QString& message) {
+        emit showMessage(this, message);
     });
     connect(job, &KJob::finished, this, [this, job]() {
         if (job->error() == KJob::KilledJobError) {
