@@ -197,9 +197,8 @@ public:
             << button;
     }
 
-    void updateItemWidgets(const QList<QWidget*> widgets,
-                           const QStyleOptionViewItem &option,
-                           const QPersistentModelIndex &index) const override
+    void updateItemWidgets(const QList<QWidget*>& widgets, const QStyleOptionViewItem& option,
+                           const QPersistentModelIndex& index) const override
     {
         Q_UNUSED(index);
         if (widgets.isEmpty()) {
