@@ -30,7 +30,6 @@
 #include <backgroundparser/urlparselock.h>
 
 #include <KTextEditor/Document>
-#include <KTextEditor/MovingInterface>
 
 using namespace KTextEditor;
 
@@ -540,9 +539,9 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
         *highlightingIt = highlighting;
     } else {
         // we newly add this tracker, so add the connection
-        // This can't use new style connect syntax since MovingInterface is not a QObject
-        connect(tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
-                this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+        connect(tracker->document(), &Document::aboutToInvalidateMovingInterfaceContent, this,
+                &CodeHighlighting::aboutToInvalidateMovingInterfaceContent);
+        // This can't use new style connect syntax since aboutToRemoveText is only part of KTextEditor::DocumentPrivate
         connect(tracker->document(), SIGNAL(aboutToRemoveText(KTextEditor::Range)),
                 this, SLOT(aboutToRemoveText(KTextEditor::Range)));
         connect(tracker, &DocumentChangeTracker::destroyed, this, [this, tracker]() {
@@ -586,7 +585,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
             transformedRange.end().column() != (*movingIt)->end().column()) {
             Q_ASSERT(rangeIt->attribute);
             // The moving range is behind or unequal, create a new range
-            highlighting->m_highlightedRanges.push_back(tracker->documentMovingInterface()->newMovingRange(tempRange));
+            highlighting->m_highlightedRanges.push_back(tracker->document()->newMovingRange(tempRange));
             highlighting->m_highlightedRanges.back()->setAttribute(rangeIt->attribute);
             highlighting->m_highlightedRanges.back()->setZDepth(highlightingZDepth);
         } else

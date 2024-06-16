@@ -11,7 +11,6 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/Editor>
-#include <KTextEditor/ConfigInterface>
 #include <KLocalizedString>
 
 #include <QPushButton>
@@ -89,16 +88,12 @@ void EditStyleDialog::initPreview()
     layout2->setContentsMargins(0, 0, 0, 0);
     layout2->addWidget(m_view);
     m_ui.textEditor->setLayout(layout2);
-    m_view->setStatusBarEnabled(false);
-    m_view->show();
 
-    KTextEditor::ConfigInterface* iface =
-        qobject_cast<KTextEditor::ConfigInterface*>(m_view);
-    if (iface) {
-        iface->setConfigValue(QStringLiteral("dynamic-word-wrap"), false);
-        iface->setConfigValue(QStringLiteral("icon-bar"), false);
-        iface->setConfigValue(QStringLiteral("scrollbar-minimap"), false);
-    }
+    m_view->setStatusBarEnabled(false);
+    m_view->setConfigValue(QStringLiteral("dynamic-word-wrap"), false);
+    m_view->setConfigValue(QStringLiteral("icon-bar"), false);
+    m_view->setConfigValue(QStringLiteral("scrollbar-minimap"), false);
+    m_view->show();
 }
 
 void EditStyleDialog::updatePreviewText(const QString &text)

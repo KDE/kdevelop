@@ -12,7 +12,6 @@
 
 #include <KTextEditor/AnnotationInterface>
 #include <KTextEditor/View>
-#include <KTextEditor/ConfigInterface>
 #include <KTextEditor/Attribute>
 #include <KLocalizedString>
 
@@ -36,7 +35,6 @@ VcsAnnotationItemDelegate::VcsAnnotationItemDelegate(KTextEditor::View* view, KT
     , m_model(model)
 {
     // dump background brushes on schema change
-    Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
     connect(view, &KTextEditor::View::configChanged, this, &VcsAnnotationItemDelegate::resetBackgrounds);
 
     view->installEventFilter(this);

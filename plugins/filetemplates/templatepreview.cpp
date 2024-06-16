@@ -14,7 +14,6 @@
 
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
-#include <KTextEditor/ConfigInterface>
 #include <KTextEditor/Document>
 
 #include <KLocalizedString>
@@ -93,12 +92,10 @@ TemplatePreview::TemplatePreview(QWidget* parent)
     setLayout(layout);
     m_view = m_preview->createView(this);
     m_view->setStatusBarEnabled(false);
-    if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(m_view)) {
-        config->setConfigValue(QStringLiteral("icon-bar"), false);
-        config->setConfigValue(QStringLiteral("folding-bar"), false);
-        config->setConfigValue(QStringLiteral("line-numbers"), false);
-        config->setConfigValue(QStringLiteral("dynamic-word-wrap"), true);
-    }
+    m_view->setConfigValue(QStringLiteral("icon-bar"), false);
+    m_view->setConfigValue(QStringLiteral("folding-bar"), false);
+    m_view->setConfigValue(QStringLiteral("line-numbers"), false);
+    m_view->setConfigValue(QStringLiteral("dynamic-word-wrap"), true);
     layout->addWidget(m_view);
 }
 

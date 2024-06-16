@@ -25,11 +25,8 @@
 #include <KLocalizedString>
 #include <KPluginFactory>
 
-#include <KTextEditor/CodeCompletionInterface>
 #include <KTextEditor/Document>
-#include <KTextEditor/TextHintInterface>
 #include <KTextEditor/View>
-#include <KTextEditor/ConfigInterface>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -322,8 +319,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject* parent, const QVariantList&)
 ContextBrowserPlugin::~ContextBrowserPlugin()
 {
     for (auto* view : qAsConst(m_textHintProvidedViews)) {
-        auto* iface = qobject_cast<KTextEditor::TextHintInterface*>(view);
-        iface->unregisterTextHintProvider(&m_textHintProvider);
+        view->unregisterTextHintProvider(&m_textHintProvider);
     }
 
     ///TODO: QObject inheritance should suffice?
@@ -1010,15 +1006,11 @@ void ContextBrowserPlugin::viewCreated(KTextEditor::Document*, View* v)
     connect(v->document(), &KTextEditor::Document::textInserted, this, &ContextBrowserPlugin::textInserted);
     disconnect(v, &View::selectionChanged, this, &ContextBrowserPlugin::selectionChanged);
 
-    auto* iface = qobject_cast<KTextEditor::TextHintInterface*>(v);
-    if (!iface)
-        return;
-
     if (m_textHintProvidedViews.contains(v)) {
         return;
     }
-    iface->setTextHintDelay(highlightingTimeout);
-    iface->registerTextHintProvider(&m_textHintProvider);
+    v->setTextHintDelay(highlightingTimeout);
+    v->registerTextHintProvider(&m_textHintProvider);
     m_textHintProvidedViews.append(v);
 }
 
@@ -1485,8 +1477,7 @@ void ContextBrowserPlugin::doNavigate(NavigationActionType action)
         qCWarning(PLUGIN_CONTEXTBROWSER) << "sender is not a view";
         return;
     }
-    KTextEditor::CodeCompletionInterface* iface = qobject_cast<KTextEditor::CodeCompletionInterface*>(view);
-    if (!iface || iface->isCompletionActive())
+    if (view->isCompletionActive())
         return; // If code completion is active, the actions should be handled by the completion widget
 
     QWidget* widget = m_currentNavigationWidget.data();

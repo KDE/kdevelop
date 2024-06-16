@@ -21,9 +21,7 @@
 #include <shell/problem.h>
 
 #include <KTextEditor/Document>
-#include <KTextEditor/MarkInterface>
 #include <KTextEditor/View>
-#include <KTextEditor/MovingInterface>
 #include <KColorScheme>
 
 using namespace KTextEditor;
@@ -55,11 +53,8 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this,
             &ProblemHighlighter::settingsChanged);
     connect(m_document.data(), &Document::aboutToReload, this, &ProblemHighlighter::clearProblems);
-    if (qobject_cast<MovingInterface*>(m_document)) {
-        // can't use new signal/slot syntax here, MovingInterface is not a QObject
-        connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-                SLOT(clearProblems()));
-    }
+    connect(m_document, &Document::aboutToInvalidateMovingInterfaceContent, this, &ProblemHighlighter::clearProblems);
+    // This can't use new style connect syntax since aboutToRemoveText is only part of KTextEditor::DocumentPrivate
     connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)), this,
             SLOT(aboutToRemoveText(KTextEditor::Range)));
 }
@@ -98,15 +93,14 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     ///      but having no background.
     ///      also make it nicer together with other plugins, this would currently fail with
     ///      this method...
-    const uint errorMarkType = KTextEditor::MarkInterface::Error;
-    const uint warningMarkType = KTextEditor::MarkInterface::Warning;
-    auto* markIface = qobject_cast<KTextEditor::MarkInterface*>(m_document.data());
-    if (markIface && hadProblems) {
+    const uint errorMarkType = KTextEditor::Document::MarkTypes::Error;
+    const uint warningMarkType = KTextEditor::Document::MarkTypes::Warning;
+    if (hadProblems) {
         // clear previously added marks
-        const auto oldMarks = markIface->marks();
+        const auto oldMarks = m_document->marks();
         for (KTextEditor::Mark* mark : oldMarks) {
             if (mark->type & (errorMarkType | warningMarkType)) {
-                markIface->removeMark(mark->line, errorMarkType | warningMarkType);
+                m_document->removeMark(mark->line, errorMarkType | warningMarkType);
             }
         }
     }
@@ -118,9 +112,6 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     DUChainReadLocker lock;
 
     TopDUContext* top = DUChainUtils::standardContextForUrl(m_document->url());
-
-    auto* iface = qobject_cast<KTextEditor::MovingInterface*>(m_document.data());
-    Q_ASSERT(iface);
 
     for (const IProblem::Ptr& problem : problems) {
         if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
@@ -164,7 +155,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
             range.setEnd(range.end() + KTextEditor::Cursor(0, 1));
         }
 
-        KTextEditor::MovingRange* problemRange = iface->newMovingRange(range);
+        auto* const problemRange = m_document->newMovingRange(range);
         m_topHLRanges.append(problemRange);
 
         if (problem->source() != IProblem::ToDo
@@ -176,7 +167,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
             problemRange->setAttribute(attribute);
         }
 
-        if (markIface && ICore::self()->languageController()->completionSettings()->highlightProblematicLines()) {
+        if (ICore::self()->languageController()->completionSettings()->highlightProblematicLines()) {
             uint mark;
             if (problem->severity() == IProblem::Error) {
                 mark = errorMarkType;
@@ -185,7 +176,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
             } else {
                 continue;
             }
-            markIface->addMark(problem->finalLocation().start().line(), mark);
+            m_document->addMark(problem->finalLocation().start().line(), mark);
         }
     }
 }

@@ -24,9 +24,6 @@
 #include <KTextEditor/Cursor>
 #include <KTextEditor/Document>
 
-#include <KTextEditor/MovingInterface>
-#include <KTextEditor/MarkInterface>
-
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/iuicontroller.h>
@@ -68,10 +65,10 @@ QSize sizeHintForHtml( const QString& html, QSize maxSize ) {
 
 }
 
-const unsigned int PatchHighlighter::m_allmarks =
-    KTextEditor::MarkInterface::markType22 | KTextEditor::MarkInterface::markType23 |
-    KTextEditor::MarkInterface::markType24 | KTextEditor::MarkInterface::markType25 |
-    KTextEditor::MarkInterface::markType26 | KTextEditor::MarkInterface::markType27;
+using MarkType = KTextEditor::Document::MarkTypes;
+
+const unsigned int PatchHighlighter::m_allmarks = MarkType::markType22 | MarkType::markType23 | MarkType::markType24
+    | MarkType::markType25 | MarkType::markType26 | MarkType::markType27;
 
 void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::MovingRange* markRange)
 {
@@ -269,6 +266,8 @@ bool PatchHighlighter::isRemoval( Diff2::Difference* diff ) {
 }
 
 void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber ) {
+    Q_ASSERT(doc);
+
     QPair<QList<Diff2::Difference*>, QList<Diff2::Difference*> > diffChange = m_model->linesChanged( oldLines, newLines, editLineNumber );
     const QList<Diff2::Difference*>& inserted = diffChange.first;
     const QList<Diff2::Difference*>& removed = diffChange.second;
@@ -304,10 +303,6 @@ void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const Q
     }
     qDeleteAll(removed);
 
-    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(doc);
-    if ( !moving )
-        return;
-
     for (Diff2::Difference* diff : inserted) {
         int lineStart = diff->destinationLineNumber();
         if ( lineStart > 0 ) {
@@ -318,7 +313,7 @@ void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const Q
             --lineEnd;
         }
         KTextEditor::Range newRange( lineStart, 0, lineEnd, 0 );
-        KTextEditor::MovingRange * r = moving->newMovingRange( newRange );
+        auto* const r = doc->newMovingRange(newRange);
 
         m_ranges[r] = diff;
         addLineMarker( r, diff );
@@ -398,13 +393,6 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
     //The document was loaded / reloaded
     if ( !m_model->differences() )
         return;
-    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(doc);
-    if ( !moving )
-        return;
-
-    auto* markIface = qobject_cast<KTextEditor::MarkInterface*>(doc);
-    if( !markIface )
-        return;
 
     clear();
 
@@ -418,19 +406,22 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
     QImage tintedChange = QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize).toImage();
     KIconEffect::colorize( tintedChange, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
 
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType22, i18nc("@item", "Insertion") );
-    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType22, QPixmap::fromImage( tintedInsertion ) );
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType23, i18nc("@item", "Removal") );
-    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType23, QPixmap::fromImage( tintedRemoval ) );
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType24, i18nc("@item", "Change") );
-    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType24, QPixmap::fromImage( tintedChange ) );
+    doc->setMarkDescription(MarkType::markType22, i18nc("@item", "Insertion"));
+    doc->setMarkIcon(MarkType::markType22, QPixmap::fromImage(tintedInsertion));
+    doc->setMarkDescription(MarkType::markType23, i18nc("@item", "Removal"));
+    doc->setMarkIcon(MarkType::markType23, QPixmap::fromImage(tintedRemoval));
+    doc->setMarkDescription(MarkType::markType24, i18nc("@item", "Change"));
+    doc->setMarkIcon(MarkType::markType24, QPixmap::fromImage(tintedChange));
 
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType25, i18nc("@item", "Insertion" ) );
-    markIface->setMarkPixmap(KTextEditor::MarkInterface::markType25, QIcon::fromTheme(QStringLiteral("insert-text")).pixmap(markPixmapSize, markPixmapSize));
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType26, i18nc("@item", "Removal") );
-    markIface->setMarkPixmap(KTextEditor::MarkInterface::markType26, QIcon::fromTheme(QStringLiteral("edit-delete")).pixmap(markPixmapSize, markPixmapSize));
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType27, i18nc("@item", "Change") );
-    markIface->setMarkPixmap(KTextEditor::MarkInterface::markType27, QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize));
+    doc->setMarkDescription(MarkType::markType25, i18nc("@item", "Insertion"));
+    doc->setMarkIcon(MarkType::markType25,
+                     QIcon::fromTheme(QStringLiteral("insert-text")).pixmap(markPixmapSize, markPixmapSize));
+    doc->setMarkDescription(MarkType::markType26, i18nc("@item", "Removal"));
+    doc->setMarkIcon(MarkType::markType26,
+                     QIcon::fromTheme(QStringLiteral("edit-delete")).pixmap(markPixmapSize, markPixmapSize));
+    doc->setMarkDescription(MarkType::markType27, i18nc("@item", "Change"));
+    doc->setMarkIcon(MarkType::markType27,
+                     QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize));
 
     for (Diff2::Difference* diff : qAsConst(*m_model->differences())) {
         int line, lineCount;
@@ -457,7 +448,7 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
             endC.setLine( doc->lines() );
 
         if ( endC.isValid() && c.isValid() ) {
-            KTextEditor::MovingRange * r = moving->newMovingRange( KTextEditor::Range( c, endC ) );
+            auto* const r = doc->newMovingRange(KTextEditor::Range(c, endC));
             m_ranges[r] = diff;
             addLineMarker( r, diff );
         }
@@ -529,7 +520,6 @@ void PatchHighlighter::newlineInserted(KTextEditor::Document* doc, const KTextEd
 PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin, bool updatePatchFromEdits )
     : m_doc( kdoc ), m_plugin( plugin ), m_model( model ), m_applying( false ) {
     KTextEditor::Document* doc = kdoc->textDocument();
-//     connect( kdoc, SIGNAL(destroyed(QObject*)), this, SLOT(documentDestroyed()) );
     if (updatePatchFromEdits) {
         connect(doc, &KTextEditor::Document::textInserted, this, &PatchHighlighter::textInserted);
         connect(doc, &KTextEditor::Document::lineWrapped, this, &PatchHighlighter::newlineInserted);
@@ -542,35 +532,21 @@ PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, Pa
     if ( doc->lines() == 0 )
         return;
 
-    if (qobject_cast<KTextEditor::MarkInterface*>(doc)) {
-        //can't use new signal/slot syntax here, MarkInterface is not a QObject
-        connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
-                this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
-        connect(doc, SIGNAL(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)),
-                this, SLOT(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)));
-    }
-    if (qobject_cast<KTextEditor::MovingInterface*>(doc)) {
-        //can't use new signal/slot syntax here, MovingInterface is not a QObject
-        connect(doc, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
-                this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
-        connect(doc, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
-                this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
-    }
+    connect(doc, &KTextEditor::Document::markToolTipRequested, this, &PatchHighlighter::markToolTipRequested);
+    connect(doc, &KTextEditor::Document::markClicked, this, &PatchHighlighter::markClicked);
+
+    connect(doc, &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
+            &PatchHighlighter::aboutToDeleteMovingInterfaceContent);
+    connect(doc, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
+            &PatchHighlighter::aboutToDeleteMovingInterfaceContent);
 
     documentReloaded(doc);
 }
 
 void PatchHighlighter::removeLineMarker( KTextEditor::MovingRange* range ) {
-    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(range->document());
-    if ( !moving )
-        return;
-
-    auto* markIface = qobject_cast<KTextEditor::MarkInterface*>(range->document());
-    if( !markIface )
-        return;
-
+    auto* const document = range->document();
     for (int line = range->start().line(); line <= range->end().line(); ++line) {
-        markIface->removeMark(line, m_allmarks);
+        document->removeMark(line, m_allmarks);
     }
 
     // Remove all ranges that are in the same line (the line markers)
@@ -585,14 +561,6 @@ void PatchHighlighter::removeLineMarker( KTextEditor::MovingRange* range ) {
 }
 
 void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Difference* diff ) {
-    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(range->document());
-    if ( !moving )
-        return;
-
-    auto* markIface = qobject_cast<KTextEditor::MarkInterface*>(range->document());
-    if( !markIface )
-        return;
-
     KTextEditor::Attribute::Ptr t( new KTextEditor::Attribute() );
 
     bool isOriginalState = diff->applied() == m_plugin->patch()->isAlreadyApplied();
@@ -605,25 +573,27 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
     range->setAttribute( t );
     range->setZDepth( -500 );
 
-    KTextEditor::MarkInterface::MarkTypes mark;
+    MarkType mark;
 
     if( isOriginalState ) {
-        mark = KTextEditor::MarkInterface::markType27;
+        mark = MarkType::markType27;
 
         if( isInsertion( diff ) )
-            mark = KTextEditor::MarkInterface::markType25;
+            mark = MarkType::markType25;
         if( isRemoval( diff ) )
-            mark = KTextEditor::MarkInterface::markType26;
+            mark = MarkType::markType26;
     }else{
-        mark = KTextEditor::MarkInterface::markType24;
+        mark = MarkType::markType24;
 
         if( isInsertion( diff ) )
-            mark = KTextEditor::MarkInterface::markType22;
+            mark = MarkType::markType22;
         if( isRemoval( diff ) )
-            mark = KTextEditor::MarkInterface::markType23;
+            mark = MarkType::markType23;
     }
 
-    markIface->addMark( range->start().line(), mark );
+    auto* const document = range->document();
+
+    document->addMark(range->start().line(), mark);
 
     Diff2::DifferenceStringList lines;
     if( diff->applied() )
@@ -641,7 +611,9 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
         for (auto* marker : markers) {
             if (marker->type() == Diff2::Marker::End) {
                 if (currentPos != 0 || marker->offset() != lineLength) {
-                    KTextEditor::MovingRange* r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor( a + range->start().line(), currentPos ), KTextEditor::Cursor( a + range->start().line(), marker->offset() ) ) );
+                    auto* const r2 = document->newMovingRange(
+                        KTextEditor::Range(KTextEditor::Cursor(a + range->start().line(), currentPos),
+                                           KTextEditor::Cursor(a + range->start().line(), marker->offset())));
                     m_ranges[r2] = nullptr;
 
                     KTextEditor::Attribute::Ptr t( new KTextEditor::Attribute() );
@@ -660,17 +632,11 @@ void PatchHighlighter::clear() {
     if( m_ranges.empty() )
         return;
 
-    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(m_doc->textDocument());
-    if ( !moving )
-        return;
-
-    auto* markIface = qobject_cast<KTextEditor::MarkInterface*>(m_doc->textDocument());
-    if( !markIface )
-        return;
-
-    const auto lines = markIface->marks().keys();
+    auto* const document = m_doc->textDocument();
+    Q_ASSERT(document);
+    const auto lines = document->marks().keys();
     for (int line : lines) {
-        markIface->removeMark( line, m_allmarks );
+        document->removeMark(line, m_allmarks);
     }
 
     // Diff is taking care of its own objects (except removed ones)

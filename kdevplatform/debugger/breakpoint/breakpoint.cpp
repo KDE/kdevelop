@@ -18,7 +18,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <KTextEditor/MarkInterface>
 #include <KTextEditor/MovingCursor>
 
 #include <QFileInfo>
@@ -341,10 +340,9 @@ void Breakpoint::stopDocumentLineTracking()
         return;
 
     // Remove the associated breakpoint mark.
-    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(m_movingCursor->document());
-    if (imark) {
+    {
         const auto guard = m_model->markChangeGuard();
-        imark->removeMark(m_movingCursor->line(), BreakpointModel::AllBreakpointMarks);
+        m_movingCursor->document()->removeMark(m_movingCursor->line(), BreakpointModel::AllBreakpointMarks);
     }
 
     removeMovingCursor();
@@ -367,11 +365,8 @@ void Breakpoint::restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor
     m_movingCursor = cursor;
 
     // Add a breakpoint mark at the new cursor's location.
-    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(m_movingCursor->document());
-    if (imark) {
-        const auto guard = m_model->markChangeGuard();
-        imark->addMark(m_movingCursor->line(), markType());
-    }
+    const auto guard = m_model->markChangeGuard();
+    m_movingCursor->document()->addMark(m_movingCursor->line(), markType());
 }
 
 KTextEditor::MovingCursor* KDevelop::Breakpoint::movingCursor() const {
@@ -464,23 +459,21 @@ void Breakpoint::updateMarkType() const
     if (!m_movingCursor)
         return;
 
-    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(m_movingCursor->document());
-    if (!imark)
-        return;
+    auto* const document = m_movingCursor->document();
 
     // Yes, but don't update if type would not change:
     const auto newMarkType = markType();
     Q_ASSERT(newMarkType);
     const auto docLine = m_movingCursor->line();
-    const auto oldMarkType = imark->mark(docLine) & BreakpointModel::AllBreakpointMarks;
+    const auto oldMarkType = document->mark(docLine) & BreakpointModel::AllBreakpointMarks;
 
     if (oldMarkType == newMarkType) {
         return;
     }
 
     const auto guard = m_model->markChangeGuard();
-    imark->removeMark(docLine, BreakpointModel::AllBreakpointMarks);
-    imark->addMark(docLine, newMarkType);
+    document->removeMark(docLine, BreakpointModel::AllBreakpointMarks);
+    document->addMark(docLine, newMarkType);
 }
 
 void Breakpoint::assignUrl(const QUrl& url)
@@ -513,16 +506,15 @@ void Breakpoint::updateMovingCursor(const QUrl& url, int line)
 
     if (m_movingCursor) {
         // Cursor is attached already, is it possible to retain it?
-        const auto* const document = m_movingCursor->document();
+        auto* const document = m_movingCursor->document();
         if (document && document->url() == url) {
             if (line >= document->lines()) {
                 stopDocumentLineTracking();
             } else if (m_movingCursor->line() != line) {
-                auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(document);
-                if (imark) {
+                {
                     const auto guard = m_model->markChangeGuard();
-                    imark->removeMark(m_movingCursor->line(), BreakpointModel::AllBreakpointMarks);
-                    imark->addMark(line, markType());
+                    document->removeMark(m_movingCursor->line(), BreakpointModel::AllBreakpointMarks);
+                    document->addMark(line, markType());
                 }
                 m_movingCursor->setLine(line);
             }

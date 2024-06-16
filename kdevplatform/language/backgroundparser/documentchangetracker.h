@@ -19,7 +19,6 @@
 namespace KTextEditor {
 class Document;
 class MovingRange;
-class MovingInterface;
 }
 
 namespace KDevelop {
@@ -157,8 +156,6 @@ public:
      **/
     KTextEditor::Document* document() const;
 
-    KTextEditor::MovingInterface* documentMovingInterface() const;
-
     /**
      * Returns the revision object which locks the revision representing the on-disk state.
      * Returns a zero object if the file is not on disk.
@@ -213,7 +210,6 @@ protected:
     KTextEditor::MovingRange* m_changedRange;
 
     KTextEditor::Document* m_document;
-    KTextEditor::MovingInterface* m_moving;
     KDevelop::IndexedString m_url;
 
     void updateChangedRange(int delay);

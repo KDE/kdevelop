@@ -24,7 +24,6 @@
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KTextEditor/ConfigInterface>
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/Format>
 
@@ -198,18 +197,10 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
         background = style->background().color();
     }
 
-    // FIXME: this is in kateview
-//     qCDebug(LANGUAGE) << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
-//NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
-
-    // the signal is not defined in ConfigInterface, but according to the docs it should be
-    // can't use new signal slot syntax here, since ConfigInterface is not a QObject
     if (KTextEditor::View* view = m_view.data()) {
-        Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
         // we only listen to a single view, i.e. the active one
         disconnect(view, &KTextEditor::View::configChanged, this, &ColorCache::slotViewSettingsChanged);
     }
-    Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
     connect(view, &KTextEditor::View::configChanged, this, &ColorCache::slotViewSettingsChanged);
     m_view = view;
 

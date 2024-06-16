@@ -42,7 +42,6 @@
 #endif
 
 #include <KTextEditor/Document>
-#include <KTextEditor/ModificationInterface>
 #include <KTextEditor/MovingRange>
 #include <KTextEditor/View>
 
@@ -358,8 +357,7 @@ void PatchReviewPlugin::closeReview()
             // Revert modifications to the text document which we've done in updateReview
             patchDocument->setPrettyName( QString() );
             patchDocument->textDocument()->setReadWrite( true );
-            auto* modif = qobject_cast<KTextEditor::ModificationInterface*>(patchDocument->textDocument());
-            modif->setModifiedOnDiskWarning( true );
+            patchDocument->textDocument()->setModifiedOnDiskWarning(true);
         }
 
         removeHighlighting();
@@ -465,8 +463,7 @@ void PatchReviewPlugin::updateReview()
 
     futureActiveDoc->textDocument()->setReadWrite( false );
     futureActiveDoc->setPrettyName(i18nc("@title complete patch", "Overview"));
-    auto* modif = qobject_cast<KTextEditor::ModificationInterface*>(futureActiveDoc->textDocument());
-    modif->setModifiedOnDiskWarning( false );
+    futureActiveDoc->textDocument()->setModifiedOnDiskWarning(false);
 
     docController->activateDocument( futureActiveDoc );
 

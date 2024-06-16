@@ -14,7 +14,7 @@
 
 #include <KLocalizedString>
 #include <KFormat>
-#include <KTextEditor/MovingInterface>
+#include <KTextEditor/Document>
 
 #include "backgroundparser.h"
 #include <debug.h>
@@ -368,9 +368,10 @@ const KDevelop::ParseJob::Contents& ParseJob::contents() const
 struct MovingRangeTranslator
     : public DUChainVisitor
 {
-    MovingRangeTranslator(qint64 _source, qint64 _target, MovingInterface* _moving) : source(_source)
+    MovingRangeTranslator(qint64 _source, qint64 _target, KTextEditor::Document* _document)
+        : source(_source)
         , target(_target)
-        , moving(_moving)
+        , document(_document)
     {
     }
 
@@ -404,17 +405,17 @@ struct MovingRangeTranslator
         // PHP and python use top contexts that start at (0, 0) end at INT_MAX, so make sure that doesn't overflow
         // or translate the start of the top context away from (0, 0)
         if (r.start.line != 0 || r.start.column != 0) {
-            moving->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
+            document->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
         }
         if (r.end.line != std::numeric_limits<int>::max() || r.end.column != std::numeric_limits<int>::max()) {
-            moving->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
+            document->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
         }
     }
 
     KTextEditor::Range range;
     qint64 source;
     qint64 target;
-    MovingInterface* moving;
+    KTextEditor::Document* document;
 };
 
 void ParseJob::translateDUChainToRevision(TopDUContext* context)
@@ -469,11 +470,9 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
         }
 
         // Perform translation
-        MovingInterface* moving = t->documentMovingInterface();
-
         DUChainWriteLocker wLock;
 
-        MovingRangeTranslator translator(sourceRevision, targetRevision, moving);
+        MovingRangeTranslator translator(sourceRevision, targetRevision, t->document());
         context->visit(translator);
 
         const QList<ProblemPointer> problems = context->problems();

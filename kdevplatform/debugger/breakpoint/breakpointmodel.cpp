@@ -17,7 +17,6 @@
 
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <KTextEditor/MovingInterface>
 
 #include "../interfaces/icore.h"
 #include "../interfaces/idebugcontroller.h"
@@ -117,37 +116,32 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
     Q_D(const BreakpointModel);
 
     KTextEditor::Document* const textDocument = doc->textDocument();
+    Q_ASSERT(textDocument);
 
-    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(textDocument);
-    if (imark) {
-        imark->setMarkDescription(BreakpointMark, i18n("Breakpoint"));
-        imark->setMarkPixmap(BreakpointMark, *breakpointPixmap());
-        imark->setMarkPixmap(PendingBreakpointMark, *pendingBreakpointPixmap());
-        imark->setMarkPixmap(ReachedBreakpointMark, *reachedBreakpointPixmap());
-        imark->setMarkPixmap(DisabledBreakpointMark, *disabledBreakpointPixmap());
+    textDocument->setMarkDescription(BreakpointMark, i18n("Breakpoint"));
+    textDocument->setMarkIcon(BreakpointMark, *breakpointPixmap());
+    textDocument->setMarkIcon(PendingBreakpointMark, *pendingBreakpointPixmap());
+    textDocument->setMarkIcon(ReachedBreakpointMark, *reachedBreakpointPixmap());
+    textDocument->setMarkIcon(DisabledBreakpointMark, *disabledBreakpointPixmap());
 
-        // We forbid adding breakpoints to an untitled/unsaved document. Such a document's URL is empty,
-        // in which case we don't enable breakpoint actions yet.
-        if (textDocument->url().isEmpty()) {
-            imark->setEditableMarks(MarkInterface::Bookmark);
-        } else {
-            imark->setEditableMarks(MarkInterface::Bookmark | BreakpointMark);
+    // We forbid adding breakpoints to an untitled/unsaved document. Such a document's URL is empty,
+    // in which case we don't enable breakpoint actions yet.
+    if (textDocument->url().isEmpty()) {
+        textDocument->setEditableMarks(MarkType::Bookmark);
+    } else {
+        textDocument->setEditableMarks(MarkType::Bookmark | BreakpointMark);
 
-            // Set up breakpoints *before* connecting to the document's signals.
-            setupDocumentBreakpoints(*textDocument);
-        }
-
-        // can't use new signal slot syntax here, MarkInterface is not a QObject
-        connect(textDocument, SIGNAL(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)),
-                 this, SLOT(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)));
-        connect(textDocument, SIGNAL(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
-                SLOT(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
+        // Set up breakpoints *before* connecting to the document's signals.
+        setupDocumentBreakpoints(*textDocument);
     }
 
+    connect(textDocument, &KTextEditor::Document::markChanged, this, &BreakpointModel::markChanged);
+    connect(textDocument, &KTextEditor::Document::markContextMenuRequested, this,
+            &BreakpointModel::markContextMenuRequested);
+
     connect(textDocument, &KTextEditor::Document::aboutToReload, this, &BreakpointModel::aboutToReload);
-    // can't use new signal/slot syntax here, MovingInterface is not a QObject
-    connect(textDocument, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-            SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+    connect(textDocument, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
+            &BreakpointModel::aboutToInvalidateMovingInterfaceContent);
     connect(textDocument, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
 }
 
@@ -217,9 +211,7 @@ void BreakpointModel::documentUrlChanged(KDevelop::IDocument* document, const QU
 
 void BreakpointModel::removeBreakpointMarks(KTextEditor::Document& document)
 {
-    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(&document);
-    Q_ASSERT(imark);
-    const auto& marks = imark->marks();
+    const auto& marks = document.marks();
     if (marks.empty()) {
         return;
     }
@@ -233,7 +225,7 @@ void BreakpointModel::removeBreakpointMarks(KTextEditor::Document& document)
     // and performance (the QList is smaller than the QHash and is ideal for the loop below).
     const auto markLines = marks.keys();
     for (const int line : markLines) {
-        imark->removeMark(line, AllBreakpointMarks);
+        document.removeMark(line, AllBreakpointMarks);
     }
 }
 
@@ -368,8 +360,7 @@ void BreakpointModel::markContextMenuRequested(KTextEditor::Document* document, 
     int type = mark.type;
     qCDebug(DEBUGGER) << type;
 
-    auto* const iface = qobject_cast<KTextEditor::MarkInterface*>(document);
-    if (!(iface->editableMarks() & BreakpointMark)) {
+    if (!(document->editableMarks() & BreakpointMark)) {
         return; // breakpoints are forbidden in this document, so let KTextEditor show its default context menu
     }
 
@@ -379,7 +370,7 @@ void BreakpointModel::markContextMenuRequested(KTextEditor::Document* document, 
         if (!b) {
             QMessageBox::critical(nullptr, i18n("Breakpoint not found"), i18n("Couldn't find breakpoint at %1:%2", document->url().toString(), mark.line));
         }
-    } else if (!(type & MarkInterface::Bookmark)) // neither breakpoint nor bookmark
+    } else if (!(type & MarkType::Bookmark)) // neither breakpoint nor bookmark
         return;
 
     QMenu menu; // TODO: needs qwidget
@@ -395,15 +386,15 @@ void BreakpointModel::markContextMenuRequested(KTextEditor::Document* document, 
     menu.addSeparator();
     QAction* bookmarkAction = menu.addAction(QIcon::fromTheme(QStringLiteral("bookmark-new")), i18n("&Bookmark"));
     bookmarkAction->setCheckable(true);
-    bookmarkAction->setChecked((type & MarkInterface::Bookmark));
+    bookmarkAction->setChecked((type & MarkType::Bookmark));
 
     QAction* triggeredAction = menu.exec(pos);
     if (triggeredAction) {
         if (triggeredAction == bookmarkAction) {
-            if ((type & MarkInterface::Bookmark))
-                iface->removeMark(mark.line, MarkInterface::Bookmark);
+            if ((type & MarkType::Bookmark))
+                document->removeMark(mark.line, MarkType::Bookmark);
             else
-                iface->addMark(mark.line, MarkInterface::Bookmark);
+                document->addMark(mark.line, MarkType::Bookmark);
         } else if (triggeredAction == breakpointAction) {
             if (b) {
                 removeBreakpoint(b);
@@ -562,10 +553,8 @@ void BreakpointModel::notifyHit(int row)
     emit hit(row);
 }
 
-void BreakpointModel::markChanged(
-    KTextEditor::Document *document,
-    KTextEditor::Mark mark,
-    KTextEditor::MarkInterface::MarkChangeAction action)
+void BreakpointModel::markChanged(KTextEditor::Document* document, KTextEditor::Mark mark,
+                                  KTextEditor::Document::MarkChangeAction action)
 {
     Q_D(const BreakpointModel);
 
@@ -586,7 +575,7 @@ void BreakpointModel::markChanged(
     Q_ASSERT_X(!document->url().isEmpty(), Q_FUNC_INFO,
                "Somehow a breakpoint mark appeared in an untitled/unsaved document. This is not supported.");
 
-    if (action == KTextEditor::MarkInterface::MarkAdded) {
+    if (action == KTextEditor::Document::MarkAdded) {
         Breakpoint *b = breakpoint(document->url(), mark.line);
         if (b) {
             // This happens when the user Ctrl+clicks a mark of a breakpoint type
@@ -665,8 +654,8 @@ void BreakpointModel::toggleBreakpoint(const QUrl& url, const KTextEditor::Curso
         // The Toggle Breakpoint action is always enabled though, hence the check and early-return below.
         const auto* const documentController = ICore::self()->documentController();
         const auto* const doc = documentController ? documentController->documentForUrl(url) : nullptr;
-        const auto* const imark = doc ? qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument()) : nullptr;
-        if (imark && !(imark->editableMarks() & BreakpointMark)) {
+        const auto* const textDocument = doc ? doc->textDocument() : nullptr;
+        if (textDocument && !(textDocument->editableMarks() & BreakpointMark)) {
             // Discard the previous message (if any) to prevent stacking of identical messages,
             // which the user must dismiss one by one.
             delete d->noBreakpointsInUntitledDocumentMessage.data();
@@ -724,8 +713,7 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
     // We forbid adding breakpoints to an untitled/unsaved document by not enabling its breakpoint actions.
     // This document might have been untitled before the saving, so enable its breakpoint actions now.
     Q_ASSERT(!textDocument->url().isEmpty());
-    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(textDocument);
-    imark->setEditableMarks(MarkInterface::Bookmark | BreakpointMark);
+    textDocument->setEditableMarks(MarkType::Bookmark | BreakpointMark);
 
     // save breakpoints in the given document.
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
@@ -921,17 +909,10 @@ void BreakpointModel::setupMovingCursor(Breakpoint* breakpoint, KTextEditor::Doc
     Q_ASSERT(line >= 0);
     Q_ASSERT(line < document->lines());
 
-    auto* const movingInterface = qobject_cast<KTextEditor::MovingInterface*>(document);
-    if (!movingInterface) {
-        breakpoint->stopDocumentLineTracking();
-        return;
-    }
+    connect(document, &Document::aboutToDeleteMovingInterfaceContent, this,
+            &BreakpointModel::aboutToDeleteMovingInterfaceContent, Qt::UniqueConnection);
 
-    // can't use new signal/slot syntax here, MovingInterface is not a QObject
-    connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this,
-            SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
-
-    breakpoint->restartDocumentLineTrackingAt(movingInterface->newMovingCursor(KTextEditor::Cursor(line, 0)));
+    breakpoint->restartDocumentLineTrackingAt(document->newMovingCursor(KTextEditor::Cursor(line, 0)));
 }
 
 #include "moc_breakpointmodel.cpp"

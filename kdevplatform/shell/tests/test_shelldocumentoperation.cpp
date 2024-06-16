@@ -23,7 +23,6 @@
 #include <KParts/MainWindow>
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
-#include <KTextEditor/MovingInterface>
 
 using namespace KDevelop;
 
@@ -105,7 +104,7 @@ void TestShellDocumentOperation::testKateDocumentAndViewCreation()
     //assure we have only one kate view for the newly created document
     KTextEditor::Document *doc = documentController->openDocuments().at(0)->textDocument();
     QCOMPARE(doc->views().count(), 1);
-    QCOMPARE(qobject_cast<KTextEditor::MovingInterface*>(doc)->revision(), qint64(0));
+    QCOMPARE(doc->revision(), qint64(0));
 
     //also assure the view's xmlgui is plugged in
     KParts::MainWindow *main = Core::self()->uiControllerInternal()->activeMainWindow();

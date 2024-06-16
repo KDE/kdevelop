@@ -15,7 +15,6 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <KTextEditor/MarkInterface>
 #include <KXMLGUIFactory>
 
 #include "../interfaces/idocument.h"
@@ -37,6 +36,10 @@
 #include "debug.h"
 #include "uicontroller.h"
 #include "iruncontroller.h"
+
+namespace {
+constexpr auto executionMark = KTextEditor::Document::MarkTypes::Execution;
+}
 
 namespace KDevelop {
 
@@ -198,9 +201,8 @@ VariableCollection* DebugController::variableCollection()
 
 void DebugController::textDocumentCreated(KDevelop::IDocument* document)
 {
-    if (auto* const iface = qobject_cast<KTextEditor::MarkInterface*>(document->textDocument())) {
-        iface->setMarkPixmap(KTextEditor::MarkInterface::Execution, *executionPointPixmap());
-    }
+    Q_ASSERT(document->textDocument());
+    document->textDocument()->setMarkIcon(executionMark, *executionPointPixmap());
 }
 
 IDebugSession* DebugController::currentSession()
@@ -347,16 +349,14 @@ void DebugController::clearExecutionPoint()
         return;
     }
 
-    // TODO KF6: rename lastExecMarkDocument to document and remove the document variable just below.
-    auto* const lastExecMarkDocument = m_lastExecMarkDocument.data();
-    auto* const document = qobject_cast<KTextEditor::MarkInterface*>(lastExecMarkDocument);
+    auto* const document = m_lastExecMarkDocument.data();
     // Do we even have a document with execution mark?
     if (!document) {
         return;
     }
     m_lastExecMarkDocument = nullptr;
 
-    constexpr auto markTypeToRemove = KTextEditor::MarkInterface::Execution;
+    constexpr auto markTypeToRemove = executionMark;
 
     // Is the execution mark still at the line it was added to?
     if (document->mark(m_lastExecMarkLine) & markTypeToRemove) {
@@ -369,7 +369,7 @@ void DebugController::clearExecutionPoint()
     const auto& marks = document->marks();
     const auto it = std::find_if(marks.begin(), marks.end(), [](const KTextEditor::Mark* mark) -> bool {
         // TODO: remove the following line once building KDevelop with Visual Studio 2019 is no longer supported.
-        constexpr auto markTypeToRemove = KTextEditor::MarkInterface::Execution;
+        constexpr auto markTypeToRemove = executionMark;
         return mark->type & markTypeToRemove;
     });
 
@@ -378,8 +378,7 @@ void DebugController::clearExecutionPoint()
         return;
     }
 
-    qCWarning(SHELL) << "failed to remove execution mark from"
-                     << lastExecMarkDocument->url().toString(QUrl::PreferLocalFile);
+    qCWarning(SHELL) << "failed to remove execution mark from" << document->url().toString(QUrl::PreferLocalFile);
 }
 
 void DebugController::showStepInSource(const QUrl& originalUrl, int originalLine)
@@ -398,13 +397,12 @@ void DebugController::showStepInSource(const QUrl& originalUrl, int originalLine
         return;
 
     auto* const textDocument = document->textDocument();
-    auto* const iface = qobject_cast<KTextEditor::MarkInterface*>(textDocument);
-    if( !iface )
+    if (!textDocument)
         return;
 
     m_lastExecMarkDocument = textDocument;
     m_lastExecMarkLine = line;
-    iface->addMark(line, KTextEditor::MarkInterface::Execution);
+    textDocument->addMark(line, executionMark);
 }
 
 

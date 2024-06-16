@@ -54,7 +54,6 @@
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KTextEditor/ConfigInterface>
 
 #include <QAction>
 
@@ -412,9 +411,8 @@ void ClangSupport::documentActivated(IDocument* doc)
 
 static void setKeywordCompletion(KTextEditor::View* view, bool enabled)
 {
-    if (auto config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
-        config->setConfigValue(QStringLiteral("keyword-completion"), enabled);
-    }
+    Q_ASSERT(view);
+    view->setConfigValue(QStringLiteral("keyword-completion"), enabled);
 }
 
 int ClangSupport::suggestedReparseDelayForChange(KTextEditor::Document* /*doc*/, const KTextEditor::Range& /*changedRange*/,

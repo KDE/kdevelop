@@ -21,9 +21,7 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KParts/MainWindow>
-#include <KTextEditor/AnnotationInterface>
 #include <KTextEditor/Document>
-#include <KTextEditor/ModificationInterface>
 #include <KTextEditor/View>
 
 #include <interfaces/context.h>
@@ -230,10 +228,7 @@ void VcsPluginHelper::revert()
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
 
         if(doc && doc->textDocument()) {
-            auto* modif = qobject_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
-            if (modif) {
-                modif->setModifiedOnDiskWarning(false);
-            }
+            doc->textDocument()->setModifiedOnDiskWarning(false);
             doc->textDocument()->setModified(false);
         }
     }
@@ -264,9 +259,7 @@ void VcsPluginHelper::delayedModificationWarningOn()
 
         if(doc) {
             doc->reload();
-
-            auto* modif = qobject_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
-            modif->setModifiedOnDiskWarning(true);
+            doc->textDocument()->setModifiedOnDiskWarning(true);
         }
     }
 }
@@ -382,10 +375,8 @@ void VcsPluginHelper::annotation()
         doc = ICore::self()->documentController()->openDocument(url);
 
     KTextEditor::View* view = doc ? doc->activeTextView() : nullptr;
-    KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
-    auto viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(view);
-    if (viewiface && viewiface->isAnnotationBorderVisible()) {
-        viewiface->setAnnotationBorderVisible(false);
+    if (view && view->isAnnotationBorderVisible()) {
+        view->setAnnotationBorderVisible(false);
         return;
     }
 
@@ -405,28 +396,21 @@ void VcsPluginHelper::annotation()
             if (style->hasProperty(QTextFormat::BackgroundBrush)) {
                 background = style->background().color();
             }
-        }
 
-        if (annotateiface && viewiface) {
             // TODO: only create model if there is none yet (e.g. from another view)
             auto* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
                                                                                    foreground, background);
-            annotateiface->setAnnotationModel(model);
+            doc->textDocument()->setAnnotationModel(model);
 
-            auto viewifaceV2 = qobject_cast<KTextEditor::AnnotationViewInterfaceV2*>(view);
-            if (viewifaceV2) {
-                // TODO: only create delegate if there is none yet
-                auto delegate = new VcsAnnotationItemDelegate(view, model, view);
-                viewifaceV2->setAnnotationItemDelegate(delegate);
-                viewifaceV2->setAnnotationUniformItemSizes(true);
-            }
-
-            viewiface->setAnnotationBorderVisible(true);
-            // can't use new signal slot syntax here, AnnotationInterface is not a QObject
-            connect(view, SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
-                    this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
-            connect(view, SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
-                    this, SLOT(handleAnnotationBorderVisibilityChanged(View*,bool)));
+            // TODO: only create delegate if there is none yet
+            auto delegate = new VcsAnnotationItemDelegate(view, model, view);
+            view->setAnnotationItemDelegate(delegate);
+            view->setAnnotationUniformItemSizes(true);
+            view->setAnnotationBorderVisible(true);
+            connect(view, &KTextEditor::View::annotationContextMenuAboutToShow, this,
+                    &VcsPluginHelper::annotationContextMenuAboutToShow);
+            connect(view, &KTextEditor::View::annotationBorderVisibilityChanged, this,
+                    &VcsPluginHelper::handleAnnotationBorderVisibilityChanged);
         } else {
             KMessageBox::error(nullptr, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
             delete job;
@@ -441,15 +425,9 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
 {
     Q_D(VcsPluginHelper);
 
-    auto viewifaceV2 = qobject_cast<KTextEditor::AnnotationViewInterfaceV2*>(view);
-    if (viewifaceV2) {
-        viewifaceV2->annotationItemDelegate()->hideTooltip(view);
-    }
+    view->annotationItemDelegate()->hideTooltip(view);
 
-    KTextEditor::AnnotationInterface* annotateiface =
-        qobject_cast<KTextEditor::AnnotationInterface*>(view->document());
-
-    auto* model = qobject_cast<VcsAnnotationModel*>( annotateiface->annotationModel() );
+    const auto* const model = qobject_cast<VcsAnnotationModel*>(view->document()->annotationModel());
     Q_ASSERT(model);
 
     VcsRevision rev = model->revisionForLine(line);
@@ -476,17 +454,16 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
     });
 }
 
-void VcsPluginHelper::handleAnnotationBorderVisibilityChanged(View* view, bool visible)
+void VcsPluginHelper::handleAnnotationBorderVisibilityChanged(KTextEditor::View* view, bool visible)
 {
     if (visible) {
         return;
     }
 
-    disconnect(view, SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
-               this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
-
-    disconnect(view, SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
-               this, SLOT(handleAnnotationBorderVisibilityChanged(View*,bool)));
+    disconnect(view, &KTextEditor::View::annotationContextMenuAboutToShow, this,
+               &VcsPluginHelper::annotationContextMenuAboutToShow);
+    disconnect(view, &KTextEditor::View::annotationBorderVisibilityChanged, this,
+               &VcsPluginHelper::handleAnnotationBorderVisibilityChanged);
 
     // TODO: remove the model if last user of it
 }

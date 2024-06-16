@@ -21,7 +21,6 @@
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
 #include <KTextEditor/Document>
-#include <KTextEditor/MovingInterface>
 #include <KTextEditor/View>
 
 #include <QAction>

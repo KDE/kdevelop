@@ -10,7 +10,6 @@
 #include <language/languageexport.h>
 #include <serialization/indexedstring.h>
 
-#include <KTextEditor/ConfigInterface>
 #include <KTextEditor/Document>
 
 #include <memory>
@@ -30,17 +29,18 @@ class IndexedString;
 // see also: https://bugs.kde.org/show_bug.cgi?id=291074
 struct EditorDisableReplaceTabs
 {
-    explicit EditorDisableReplaceTabs(KTextEditor::Document* document) : m_iface(qobject_cast<KTextEditor::ConfigInterface*>(
-                document))
+    explicit EditorDisableReplaceTabs(KTextEditor::Document* document)
+        : m_document(document)
         , m_count(0)
     {
+        Q_ASSERT(m_document);
+
         ++m_count;
         if (m_count > 1)
             return;
-        if (m_iface) {
-            m_oldReplaceTabs = m_iface->configValue(configKey());
-            m_iface->setConfigValue(configKey(), false);
-        }
+
+        m_oldReplaceTabs = m_document->configValue(configKey());
+        m_document->setConfigValue(configKey(), false);
     }
 
     ~EditorDisableReplaceTabs()
@@ -51,8 +51,7 @@ struct EditorDisableReplaceTabs
 
         Q_ASSERT(m_count == 0);
 
-        if (m_iface)
-            m_iface->setConfigValue(configKey(), m_oldReplaceTabs);
+        m_document->setConfigValue(configKey(), m_oldReplaceTabs);
     }
 
     inline QString configKey() const
@@ -63,7 +62,7 @@ struct EditorDisableReplaceTabs
 private:
     Q_DISABLE_COPY(EditorDisableReplaceTabs)
 
-    KTextEditor::ConfigInterface* m_iface;
+    KTextEditor::Document* const m_document;
     int m_count;
     QVariant m_oldReplaceTabs;
 };

@@ -13,7 +13,6 @@
 
 #include <KColorScheme>
 #include <KLocalizedString>
-#include <KTextEditor/TextHintInterface>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
@@ -462,8 +461,7 @@ void VariableCollection::updateAutoUpdate(IDebugSession* session)
 VariableCollection::~ VariableCollection()
 {
     for (auto* view : qAsConst(m_textHintProvidedViews)) {
-        auto* iface = qobject_cast<KTextEditor::TextHintInterface*>(view);
-        iface->unregisterTextHintProvider(&m_textHintProvider);
+        view->unregisterTextHintProvider(&m_textHintProvider);
     }
 }
 
@@ -483,20 +481,17 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
                                      KTextEditor::View* view)
 {
     Q_UNUSED(doc);
-    using namespace KTextEditor;
-    auto* iface = qobject_cast<TextHintInterface*>(view);
-    if( !iface )
-        return;
+    Q_ASSERT(view);
 
     if (m_textHintProvidedViews.contains(view)) {
         return;
     }
-    connect(view, &View::destroyed, this, [this, view](QObject* obj) {
+    connect(view, &QObject::destroyed, this, [this, view](QObject* obj) {
         Q_ASSERT(obj == view);
         m_textHintProvidedViews.removeOne(view);
     });
 
-    iface->registerTextHintProvider(&m_textHintProvider);
+    view->registerTextHintProvider(&m_textHintProvider);
     m_textHintProvidedViews.append(view);
 }
 

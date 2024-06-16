@@ -149,10 +149,10 @@ TestBreakpointModel::DocumentMarks TestBreakpointModel::documentMarks(const IDoc
     DocumentMarks ret;
     // if it is not possible to get marks, fail.
     QVERIFY_RETURN(doc, ret);
-    auto* const imark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
-    QVERIFY_RETURN(imark, ret);
+    auto* const textDocument = doc->textDocument();
+    QVERIFY_RETURN(textDocument, ret);
 
-    const auto marks = imark->marks();
+    const auto marks = textDocument->marks();
     for (const auto* mark : marks) {
         // mask to remove non-breakpoint mark type bits.
         const auto type = mark->type & BreakpointModel::AllBreakpointMarks;

@@ -9,7 +9,6 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <backgroundparser/backgroundparser.h>
 
-#include <KTextEditor/MovingInterface>
 #include <KTextEditor/Document>
 
 void KDevelop::PersistentMovingRangePrivate::connectTracker()
@@ -21,15 +20,15 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
 
     if (m_tracker) {
         // Create a moving range
-        m_movingRange = m_tracker->documentMovingInterface()->newMovingRange(m_range);
+        auto* const document = m_tracker->document();
+        m_movingRange = document->newMovingRange(m_range);
         if (m_shouldExpand)
             m_movingRange->setInsertBehaviors(
                 KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
-        // can't use new connect syntax here, MovingInterface is not a QObject
-        connect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this,
-                SLOT(aboutToDeleteMovingInterfaceContent()));
-        connect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-                SLOT(aboutToInvalidateMovingInterfaceContent()));
+        connect(document, &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
+                &PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent);
+        connect(document, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
+                &PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent);
         m_movingRange->setAttribute(m_attribte);
         m_movingRange->setZDepth(m_zDepth);
     }

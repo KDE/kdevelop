@@ -15,7 +15,6 @@
 #include <debug.h>
 
 #include <KTextEditor/Document>
-#include <KTextEditor/MovingInterface>
 
 #include <QCoreApplication>
 
@@ -67,7 +66,6 @@ private:
 DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
     : m_needUpdate(false)
     , m_document(document)
-    , m_moving(nullptr)
     , m_url(IndexedString(document->url()))
 {
     Q_ASSERT(document);
@@ -79,15 +77,10 @@ DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
     connect(document, &Document::textRemoved, this, &DocumentChangeTracker::textRemoved);
     connect(document, &Document::destroyed, this, &DocumentChangeTracker::documentDestroyed);
     connect(document, &Document::documentSavedOrUploaded, this, &DocumentChangeTracker::documentSavedOrUploaded);
+    connect(document, &Document::aboutToInvalidateMovingInterfaceContent, this,
+            &DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent);
 
-    m_moving = qobject_cast<KTextEditor::MovingInterface*>(document);
-    Q_ASSERT(m_moving);
-
-    // can't use new connect syntax here, MovingInterface is not a QObject
-    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-            SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
-
-    ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());
+    ModificationRevision::setEditorRevisionForFile(m_url, document->revision());
 
     reset();
 }
@@ -107,7 +100,7 @@ void DocumentChangeTracker::reset()
     // We don't reset the insertion here, as it may continue
         m_needUpdate = false;
 
-    m_revisionAtLastReset = acquireRevision(m_moving->revision());
+    m_revisionAtLastReset = acquireRevision(m_document->revision());
     Q_ASSERT(m_revisionAtLastReset);
 }
 
@@ -115,7 +108,7 @@ RevisionReference DocumentChangeTracker::currentRevision()
 {
     VERIFY_FOREGROUND_LOCKED
 
-    return acquireRevision(m_moving->revision());
+    return acquireRevision(m_document->revision());
 }
 
 RevisionReference DocumentChangeTracker::revisionAtLastReset() const
@@ -134,11 +127,11 @@ bool DocumentChangeTracker::needUpdate() const
 
 void DocumentChangeTracker::updateChangedRange(int delay)
 {
-//     Q_ASSERT(m_moving->revision() != m_revisionAtLastReset->revision()); // May happen after reload
+    // Q_ASSERT(m_document->revision() != m_revisionAtLastReset->revision()); // May happen after reload
 
     // When reloading, textRemoved is called with an invalid m_document->url(). For that reason, we use m_url instead.
 
-    ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());
+    ModificationRevision::setEditorRevisionForFile(m_url, m_document->revision());
 
     if (needUpdate()) {
         ICore::self()->languageController()->backgroundParser()->addDocument(m_url,
@@ -213,7 +206,6 @@ void DocumentChangeTracker::documentSavedOrUploaded(KTextEditor::Document* doc, 
 void DocumentChangeTracker::documentDestroyed(QObject*)
 {
     m_document = nullptr;
-    m_moving = nullptr;
 }
 
 DocumentChangeTracker::~DocumentChangeTracker()
@@ -225,11 +217,6 @@ DocumentChangeTracker::~DocumentChangeTracker()
 Document* DocumentChangeTracker::document() const
 {
     return m_document;
-}
-
-MovingInterface* DocumentChangeTracker::documentMovingInterface() const
-{
-    return m_moving;
 }
 
 void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent(Document*)
@@ -247,10 +234,10 @@ KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDeve
     VERIFY_FOREGROUND_LOCKED
 
     if ((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision))) {
-        m_moving->transformCursor(range.start.line, range.start.column, KTextEditor::MovingCursor::MoveOnInsert,
-                                  fromRevision, toRevision);
-        m_moving->transformCursor(range.end.line, range.end.column, KTextEditor::MovingCursor::StayOnInsert,
-                                  fromRevision, toRevision);
+        m_document->transformCursor(range.start.line, range.start.column, KTextEditor::MovingCursor::MoveOnInsert,
+                                    fromRevision, toRevision);
+        m_document->transformCursor(range.end.line, range.end.column, KTextEditor::MovingCursor::StayOnInsert,
+                                    fromRevision, toRevision);
     }
 
     return range;
@@ -264,7 +251,7 @@ const
     VERIFY_FOREGROUND_LOCKED
 
     if ((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision))) {
-        m_moving->transformCursor(cursor.line, cursor.column, behavior, fromRevision, toRevision);
+        m_document->transformCursor(cursor.line, cursor.column, behavior, fromRevision, toRevision);
     }
 
     return cursor;
@@ -319,7 +306,7 @@ RevisionReference DocumentChangeTracker::acquireRevision(qint64 revision)
 {
     VERIFY_FOREGROUND_LOCKED
 
-    if (!holdingRevision(revision) && revision != m_moving->revision())
+    if (!holdingRevision(revision) && revision != m_document->revision())
         return RevisionReference();
 
     RevisionReference ret(new RevisionLockerAndClearer);
@@ -344,7 +331,7 @@ void DocumentChangeTracker::lockRevision(qint64 revision)
     else
     {
         m_revisionLocks.insert(revision, 1);
-        m_moving->lockRevision(revision);
+        m_document->lockRevision(revision);
     }
 }
 
@@ -360,7 +347,7 @@ void DocumentChangeTracker::unlockRevision(qint64 revision)
     --(*it);
 
     if (*it == 0) {
-        m_moving->unlockRevision(revision);
+        m_document->unlockRevision(revision);
         m_revisionLocks.erase(it);
     }
 }

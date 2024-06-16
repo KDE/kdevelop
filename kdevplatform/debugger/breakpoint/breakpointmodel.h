@@ -14,7 +14,7 @@
 
 #include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
-#include <KTextEditor/MarkInterface>
+#include <KTextEditor/Document>
 
 #include <QAbstractTableModel>
 
@@ -154,7 +154,7 @@ public Q_SLOTS:
     void load();
 
 private:
-    using MarkType = KTextEditor::MarkInterface::MarkTypes;
+    using MarkType = KTextEditor::Document::MarkTypes;
     static constexpr MarkType BreakpointMark = MarkType::BreakpointActive;
     static constexpr MarkType ReachedBreakpointMark = MarkType::BreakpointReached;
     static constexpr MarkType DisabledBreakpointMark = MarkType::BreakpointDisabled;
@@ -164,7 +164,8 @@ private:
         MarkType(BreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark | PendingBreakpointMark);
 
 private Q_SLOTS:
-    void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
+    void markChanged(KTextEditor::Document* document, KTextEditor::Mark mark,
+                     KTextEditor::Document::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
     void documentUrlChanged(KDevelop::IDocument* document, const QUrl& previousUrl);
     void aboutToReload();

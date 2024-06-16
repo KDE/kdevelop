@@ -20,9 +20,6 @@
 #include <KMessageBox_KDevCompat>
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
-#include <KTextEditor/ModificationInterface>
-#include <KTextEditor/CodeCompletionInterface>
-#include <KTextEditor/MarkInterface>
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
@@ -177,9 +174,6 @@ public:
         if (!iface) {
             return;
         }
-        if ( !qobject_cast<KTextEditor::ModificationInterface*>( document ) ) {
-            return;
-        }
 
         CheckInRepositoryJob* req = iface->isInRepository( document );
         if ( !req ) {
@@ -192,19 +186,19 @@ public:
                             req, &CheckInRepositoryJob::abort);
     }
 
-    void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
-        KTextEditor::ModificationInterface::ModifiedOnDiskReason reason)
+    void modifiedOnDisk(KTextEditor::Document* document, bool /*isModified*/,
+                        KTextEditor::Document::ModifiedOnDiskReason reason)
     {
         bool dirty = false;
         switch (reason)
         {
-            case KTextEditor::ModificationInterface::OnDiskUnmodified:
-                break;
-            case KTextEditor::ModificationInterface::OnDiskModified:
-            case KTextEditor::ModificationInterface::OnDiskCreated:
-            case KTextEditor::ModificationInterface::OnDiskDeleted:
-                dirty = true;
-                break;
+        case KTextEditor::Document::OnDiskUnmodified:
+            break;
+        case KTextEditor::Document::OnDiskModified:
+        case KTextEditor::Document::OnDiskCreated:
+        case KTextEditor::Document::OnDiskDeleted:
+            dirty = true;
+            break;
         }
 
         // In some cases, the VCS (e.g. git) can know whether the old contents are "valuable", i.e.
@@ -333,18 +327,16 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         connect(d->document.data(), &KTextEditor::Document::documentSavedOrUploaded,
                  this, &TextDocument::documentSaved );
 
-        if (qobject_cast<KTextEditor::MarkInterface*>(d->document)) {
-            // can't use new signal/slot syntax here, MarkInterface is not a QObject
-            connect(d->document.data(), SIGNAL(marksChanged(KTextEditor::Document*)),
-                    this, SLOT(saveSessionConfig()));
-        }
+        connect(d->document.data(), &KTextEditor::Document::marksChanged, this, [d] {
+            d->saveSessionConfig();
+        });
 
-        if (auto iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document)) {
-            iface->setModifiedOnDiskWarning(true);
-            // can't use new signal/slot syntax here, ModificationInterface is not a QObject
-            connect(d->document.data(), SIGNAL(modifiedOnDisk(KTextEditor::Document*,bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
-                this, SLOT(modifiedOnDisk(KTextEditor::Document*,bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
-        }
+        d->document->setModifiedOnDiskWarning(true);
+        connect(
+            d->document.data(), &KTextEditor::Document::modifiedOnDisk, this,
+            [d](KTextEditor::Document* document, bool isModified, KTextEditor::Document::ModifiedOnDiskReason reason) {
+                d->modifiedOnDisk(document, isModified, reason);
+            });
 
         notifyTextDocumentCreated();
     }
@@ -359,8 +351,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     connect(view, &KTextEditor::View::contextMenuAboutToShow, this, &TextDocument::populateContextMenu);
 
-    if (auto* cc = qobject_cast<KTextEditor::CodeCompletionInterface*>(view))
-        cc->setAutomaticInvocationEnabled(core()->languageController()->completionSettings()->automaticCompletionEnabled());
+    view->setAutomaticInvocationEnabled(
+        core()->languageController()->completionSettings()->automaticCompletionEnabled());
 
     return view;
 }
@@ -385,14 +377,13 @@ void TextDocument::reload()
     if (!d->document)
         return;
 
-    KTextEditor::ModificationInterface* modif=nullptr;
     if(d->state ==Dirty) {
-        modif = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
-        modif->setModifiedOnDiskWarning(false);
+        d->document->setModifiedOnDiskWarning(false);
+        d->document->documentReload();
+        d->document->setModifiedOnDiskWarning(true);
+    } else {
+        d->document->documentReload();
     }
-    d->document->documentReload();
-    if(modif)
-        modif->setModifiedOnDiskWarning(true);
 }
 
 bool TextDocument::save(DocumentSaveMode mode)
@@ -768,12 +759,10 @@ void KDevelop::TextDocument::repositoryCheckFinished(bool canRecreate) {
     if ( ! canRecreate ) {
         return;
     }
-    KTextEditor::ModificationInterface* modIface = qobject_cast<KTextEditor::ModificationInterface*>( d->document );
-    Q_ASSERT(modIface);
     // Ok, all safe, we can clean up the document. Close it if the file is gone,
     // and reload if it's still there.
     d->setStatus(d->document, false);
-    modIface->setModifiedOnDisk(KTextEditor::ModificationInterface::OnDiskUnmodified);
+    d->document->setModifiedOnDisk(KTextEditor::Document::OnDiskUnmodified);
     if ( QFile::exists(d->document->url().path()) ) {
         reload();
     } else {
