@@ -40,8 +40,8 @@ const uint MinimumCountForCache = 1;
 QDebug fromTextStream(const QTextStream& out)
 {
     if (out.device())
-        return {out.device()};
-    return {out.string()};
+        return QDebug{out.device()};
+    return QDebug{out.string()};
 }
 
 struct IndexedDeclarationHandler {
