@@ -29,14 +29,11 @@
 namespace {
 QDebug fromTextStream(const QTextStream& out)
 {
-    if (out.device())
-        return {
-                   out.device()
-        }; return {
-               out.string()
-    };
+    if (out.device()) {
+        return QDebug{out.device()};
+    }
+    return QDebug{out.string()};
 }
-
 }
 
 namespace KDevelop {
