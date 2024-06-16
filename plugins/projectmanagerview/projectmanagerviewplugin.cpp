@@ -131,7 +131,7 @@ static QList<ProjectBaseItem*> itemsFromIndexes(const QList<QPersistentModelInde
     QList<ProjectBaseItem*> items;
     ProjectModel* model = ICore::self()->projectController()->projectModel();
     items.reserve(indexes.size());
-    for (const QModelIndex& index : indexes) {
+    for (const auto& index : indexes) {
         items += model->itemFromIndex(index);
     }
     return items;
@@ -375,7 +375,7 @@ void ProjectManagerViewPlugin::closeProjects()
 {
     QList<KDevelop::IProject*> projectsToClose;
     ProjectModel* model = ICore::self()->projectController()->projectModel();
-    for (const QModelIndex& index : qAsConst(d->ctxProjectItemList)) {
+    for (const auto& index : qAsConst(d->ctxProjectItemList)) {
         KDevelop::ProjectBaseItem* item = model->itemFromIndex(index);
         if( !projectsToClose.contains( item->project() ) )
         {
