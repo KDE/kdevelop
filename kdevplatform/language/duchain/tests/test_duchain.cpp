@@ -391,7 +391,7 @@ void TestDUChain::testIndexedStrings()
         QString testString;
         int length = rand() % 10;
         for (int b = 0; b < length; ++b)
-            testString.append(( char )(rand() % 6) + 'a');
+            testString.append(QLatin1Char(rand() % 6 + 'a'));
 
         QByteArray array = testString.toUtf8();
         //qDebug() << "checking with" << testString;

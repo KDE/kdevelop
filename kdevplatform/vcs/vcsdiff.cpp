@@ -366,7 +366,7 @@ public:
                 if (CONFLICT_RE->match(ln).hasMatch())
                     return {};
 
-                if (ln.startsWith(dest) || ln.startsWith(QLatin1Char(' ')) || ln.isEmpty() || inConflict) {
+                if (ln.startsWith(QLatin1Char(dest)) || ln.startsWith(QLatin1Char(' ')) || ln.isEmpty() || inConflict) {
                     if (dest == SRC)
                         // The -1 accounts for the fact that srcStart is 1-based
                         // but we need to return 0-based line numbers
