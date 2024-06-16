@@ -219,7 +219,7 @@ SessionInfo Session::parse( const QString& id, bool mkdir )
         }
     }
 
-    ret.uuid = id;
+    ret.uuid = QUuid(id);
     ret.path = sessionPath;
     ret.config = KSharedConfig::openConfig(sessionPath + QLatin1String("/sessionrc"));
 
