@@ -314,7 +314,7 @@ public:
             data[KEY_Category()] = KEY_Global();
             data[KEY_Mode()] = KEY_Gui();
             data[KEY_Version()] = KDEVELOP_PLUGIN_VERSION;
-            plugins.append({data, info.fileName(), info.metaDataFileName()});
+            plugins.append({data, info.fileName()});
         }
     }
 
