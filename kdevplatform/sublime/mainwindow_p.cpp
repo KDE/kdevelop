@@ -80,7 +80,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     m_concentrationModeAction->setToolTip(i18nc("@info:tooltip", "Remove most of the controls so you can focus on what matters"));
     m_concentrationModeAction->setCheckable(true);
     m_concentrationModeAction->setChecked(false);
-    ac->setDefaultShortcut(m_concentrationModeAction, Qt::META | Qt::Key_C);
+    ac->setDefaultShortcut(m_concentrationModeAction, QKeySequence(Qt::META | Qt::Key_C));
     connect(m_concentrationModeAction, &QAction::toggled, this, &MainWindowPrivate::restoreConcentrationMode);
     ac->addAction(QStringLiteral("toggle_concentration_mode"), m_concentrationModeAction);
 
