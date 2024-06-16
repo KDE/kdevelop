@@ -47,7 +47,7 @@ protected:
     void mousePressEvent(QMouseEvent* e) override
     {
         if (e->button() == Qt::LeftButton) {
-            m_pos = e->globalPos();
+            m_pos = e->globalPosition().toPoint();
             m_startSize = m_parent->size();
             e->ignore();
         }
