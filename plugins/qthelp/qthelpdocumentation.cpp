@@ -60,13 +60,10 @@ QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QList<QHelpL
     Q_ASSERT(m_current!=m_info.constEnd());
 }
 
-QString QtHelpDocumentation::description() const
-{
-    const QUrl url = currentUrl();
-    //Extract a short description from the html data
-    const QString dataString = QString::fromLatin1(m_provider->engine()->fileData(url)); ///@todo encoding
+namespace {
 
-    const QString fragment = url.fragment();
+QString descriptionFromHtmlData(const QString& fragment, const QString& dataString)
+{
     const QString p = QStringLiteral("((\\\")|(\\\'))");
     const QString optionalSpace = QStringLiteral(" *");
     const QString exp = QString(QLatin1String("< a name = ") + p + fragment + p + QLatin1String(" > < / a >")).replace(QLatin1Char(' '), optionalSpace);
@@ -169,12 +166,33 @@ QString QtHelpDocumentation::description() const
         return thisFragment;
     }
 
+    return {};
+}
+
+QString descriptionFallback(const QList<QHelpLink>& info)
+{
     QStringList titles;
-    titles.reserve(m_info.size());
-    for (auto& link : qAsConst(m_info)) {
+    titles.reserve(info.size());
+    for (const auto& link : info) {
         titles.append(link.title);
     }
     return titles.join(QLatin1String(", "));
+}
+
+} // unnamed namespace
+
+QString QtHelpDocumentation::description() const
+{
+    const auto url = currentUrl();
+    const auto fragment = url.fragment();
+
+    // Extract a short description from the html data
+    const auto fileData = QString::fromLatin1(m_provider->engine()->fileData(url)); ///@todo encoding
+    if (auto ret = descriptionFromHtmlData(fragment, fileData); !ret.isEmpty()) {
+        return ret;
+    }
+
+    return descriptionFallback(m_info);
 }
 
 QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent)
