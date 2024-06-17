@@ -10,8 +10,9 @@
 #include "../qthelp_config_shared.h"
 
 #include <QCoreApplication>
-#include <QTest>
 #include <QHelpLink>
+#include <QRegularExpression>
+#include <QTest>
 
 #include <interfaces/idocumentation.h>
 #include <language/duchain/duchainlock.h>
@@ -223,7 +224,7 @@ void TestQtHelpPlugin::testDeclarationLookup_Method()
     QVERIFY(doc);
     QCOMPARE(doc->name(), QStringLiteral("QString::fromLatin1"));
     const auto description = doc->description();
-    QVERIFY(description.contains("fromLatin1"));
+    QVERIFY(description.contains(QRegularExpression{"See also.*toLatin1"}));
 }
 
 void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
