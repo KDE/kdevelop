@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 01:47+0000\n"
+"POT-Creation-Date: 2024-06-16 01:44+0000\n"
 "PO-Revision-Date: 2008-11-26 17:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -378,7 +378,7 @@ msgid ""
 "Current command original text: '%3'\n"
 msgstr ""
 
-#: midebugsession.cpp:1253
+#: midebugsession.cpp:1204
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
