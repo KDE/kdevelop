@@ -119,7 +119,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
 
     {
         //Find the title, and start from there
-        const QString titleRegExp = QStringLiteral("< h\\d class = \"title\" >").replace(QLatin1Char(' '), optionalSpace);
+        const auto titleRegExp =
+            QStringLiteral("< h\\d class = \"title\"[^>]*>").replace(QLatin1Char(' '), optionalSpace);
         const QRegularExpression findTitle(titleRegExp);
         const auto titlePos = dataString.indexOf(findTitle);
         pos = qBound(pos, titlePos, endPos);
