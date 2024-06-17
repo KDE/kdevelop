@@ -112,8 +112,10 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         const QRegularExpression lastNewLine(newLineRegExp);
         QRegularExpressionMatch match;
         const int newEnd = dataString.lastIndexOf(lastNewLine, endPos, &match);
-        if(match.isValid() && newEnd > pos)
-            endPos = newEnd + match.capturedLength();
+        if (match.isValid() && newEnd > pos) {
+            // Also remove the trailing line break to prevent two consecutive empty lines in a navigation widget.
+            endPos = newEnd;
+        }
     }
 
     {
