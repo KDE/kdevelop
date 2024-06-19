@@ -110,9 +110,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         //Find the end of the last paragraph or newline, so we don't add prefixes of the following fragment
         const QString newLineRegExp = QStringLiteral ("< br / > | < / p >").replace(QLatin1Char(' '), optionalSpace);
         const QRegularExpression lastNewLine(newLineRegExp);
-        QRegularExpressionMatch match;
-        const int newEnd = dataString.lastIndexOf(lastNewLine, endPos, &match);
-        if (match.isValid() && newEnd > pos) {
+        const auto newEnd = dataString.lastIndexOf(lastNewLine, endPos);
+        if (newEnd > pos) {
             // Also remove the trailing line break to prevent two consecutive empty lines in a navigation widget.
             endPos = newEnd;
         }
@@ -122,9 +121,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         //Find the title, and start from there
         const QString titleRegExp = QStringLiteral("< h\\d class = \"title\" >").replace(QLatin1Char(' '), optionalSpace);
         const QRegularExpression findTitle(titleRegExp);
-        const QRegularExpressionMatch match = findTitle.match(dataString);
-        if (match.isValid())
-            pos = qBound(pos, match.capturedStart(), endPos);
+        const auto titlePos = dataString.indexOf(findTitle);
+        pos = qBound(pos, titlePos, endPos);
     }
 
 
@@ -135,7 +133,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         const QString headerRegExp = QStringLiteral("< h\\d.*>.*?< / h\\d >").replace(QLatin1Char(' '), optionalSpace);
         const QRegularExpression findHeader(headerRegExp);
         const QRegularExpressionMatch match = findHeader.match(thisFragment);
-        if(match.isValid()) {
+        if (match.hasMatch()) {
             thisFragment.remove(match.capturedStart(), match.capturedLength());
         }
     }
