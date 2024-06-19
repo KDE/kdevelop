@@ -68,6 +68,21 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
     const QString optionalSpace = QStringLiteral(" *");
 
     QString::size_type pos = 0;
+
+    {
+        // Find the title, and start from it in order to skip the useless navigation bar and table of contents.
+        // In case of empty fragment (class documentation), the entire title matches the findHeader regex and
+        // is removed below. This title should be removed, because it duplicates information already present
+        // at the top of a navigation widget. A title example: "QString Class".
+        const auto titleRegExp =
+            QStringLiteral("< h\\d class = \"title\"[^>]*>").replace(QLatin1Char(' '), optionalSpace);
+        const QRegularExpression findTitle(titleRegExp);
+        const auto titlePos = dataString.indexOf(findTitle);
+        if (titlePos != -1) {
+            pos = titlePos;
+        }
+    }
+
     auto nextFragmentSearchPos = pos;
 
     if (!fragment.isEmpty()) {
@@ -75,7 +90,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
 
         const QRegularExpression findFragment(exp);
         QRegularExpressionMatch findFragmentMatch;
-        pos = dataString.indexOf(findFragment, 0, &findFragmentMatch);
+        pos = dataString.indexOf(findFragment, pos, &findFragmentMatch);
         if (pos == -1) {
             return {};
         }
@@ -116,16 +131,6 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
             endPos = newEnd;
         }
     }
-
-    {
-        //Find the title, and start from there
-        const auto titleRegExp =
-            QStringLiteral("< h\\d class = \"title\"[^>]*>").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression findTitle(titleRegExp);
-        const auto titlePos = dataString.indexOf(findTitle);
-        pos = qBound(pos, titlePos, endPos);
-    }
-
 
     QString thisFragment = dataString.mid(pos, endPos - pos);
 
