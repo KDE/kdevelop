@@ -9,10 +9,6 @@ include_directories(
     "${CMAKE_CURRENT_BINARY_DIR}/.."
 )
 
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/data"
-     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
-
-
 ecm_add_test(test_replacementparser.cpp
     ../parsers/replacementparser.cpp
     ${kdevclangtidy_LOG_SRCS}
