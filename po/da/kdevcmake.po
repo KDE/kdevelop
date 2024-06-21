@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-12 00:40+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2014-06-07 16:23+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -140,47 +140,47 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr ""
 
-#: cmakecodecompletionmodel.cpp:189
+#: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
 msgstr "UGYLDIG"
 
-#: cmakecodecompletionmodel.cpp:197
+#: cmakecodecompletionmodel.cpp:200
 #, fuzzy, kde-format
 #| msgid "Command"
 msgctxt "@item"
 msgid "Command"
 msgstr "Kommando"
 
-#: cmakecodecompletionmodel.cpp:198
+#: cmakecodecompletionmodel.cpp:201
 #, fuzzy, kde-format
 #| msgid "Variable"
 msgctxt "@item"
 msgid "Variable"
 msgstr "Variable"
 
-#: cmakecodecompletionmodel.cpp:199
+#: cmakecodecompletionmodel.cpp:202
 #, fuzzy, kde-format
 #| msgid "Macro"
 msgctxt "@item"
 msgid "Macro"
 msgstr "Makro"
 
-#: cmakecodecompletionmodel.cpp:200
+#: cmakecodecompletionmodel.cpp:203
 #, fuzzy, kde-format
 #| msgid "Path"
 msgctxt "@item"
 msgid "Path"
 msgstr "Sti"
 
-#: cmakecodecompletionmodel.cpp:201
+#: cmakecodecompletionmodel.cpp:204
 #, fuzzy, kde-format
 #| msgid "Target"
 msgctxt "@item"
 msgid "Target"
 msgstr "Mål"
 
-#: cmakecodecompletionmodel.cpp:253
+#: cmakecodecompletionmodel.cpp:256
 #, kde-format
 msgid "wrong"
 msgstr "forkert"

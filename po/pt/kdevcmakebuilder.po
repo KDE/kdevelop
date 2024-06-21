@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2020-07-20 14:44+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -13,24 +13,24 @@ msgstr ""
 "X-POFile-SpellExtra: CMake rm rf make\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: cmakebuilder.cpp:105
+#: cmakebuilder.cpp:106
 #, kde-format
 msgid "Could not find the make builder. Check your installation"
 msgstr ""
 "Não foi possível encontrar o construtor 'make'. Verifique a sua instalação"
 
-#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#: cmakebuilder.cpp:133 cmakebuilder.cpp:159 cmakebuilder.cpp:186
 #, kde-format
 msgid "Could not find a builder for %1"
 msgstr "Não foi possível encontrar um construtor para o %1"
 
-#: cmakebuilder.cpp:195
+#: cmakebuilder.cpp:199
 #, kde-format
 msgid "No build directory configured, cannot install"
 msgstr ""
 "Não está configurada nenhuma pasta de compilação; não é possível instalar"
 
-#: cmakebuilder.cpp:205
+#: cmakebuilder.cpp:209
 #, kde-format
 msgid "No build directory configured, cannot configure"
 msgstr ""

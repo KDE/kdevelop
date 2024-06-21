@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevghprovider\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2023-11-08 14:52-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -70,7 +70,7 @@ msgstr "Conta GitHub"
 msgid "Enter a login and a password"
 msgstr "Digite um nome de usuário e uma senha"
 
-#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:45
 #, kde-format
 msgid "Waiting for response"
 msgstr "Aguardando resposta"
@@ -135,25 +135,25 @@ msgstr "Digite sua senha aqui."
 msgid "GitHub"
 msgstr "GitHub"
 
-#: ghproviderwidget.cpp:57
+#: ghproviderwidget.cpp:58
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Pesquisar..."
 
-#: ghproviderwidget.cpp:58
+#: ghproviderwidget.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
 msgstr "Você pode pressionar a tecla Enter se não quiser aguardar."
 
-#: ghproviderwidget.cpp:70
+#: ghproviderwidget.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure your GitHub account"
 msgstr "Configurar a sua conta no GitHub"
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgid ""
 "The Git plugin could not be loaded which is required to import a GitHub "
@@ -162,19 +162,19 @@ msgstr ""
 "Não foi possível carregar o plugin do Git, o qual é necessário para importar "
 "um projeto do GitHub."
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "GitHub Provider Error"
 msgstr "Erro do provedor do GitHub"
 
-#: ghproviderwidget.cpp:105
+#: ghproviderwidget.cpp:106
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User"
 msgstr "Usuário"
 
-#: ghproviderwidget.cpp:106
+#: ghproviderwidget.cpp:107
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Organization"

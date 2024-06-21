@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2020-10-04 19:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17,22 +17,22 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 19.12.3\n"
 
-#: cmakebuilder.cpp:105
+#: cmakebuilder.cpp:106
 #, kde-format
 msgid "Could not find the make builder. Check your installation"
 msgstr "make 빌더를 찾을 수 없습니다. 설치 상태를 확인하십시오"
 
-#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#: cmakebuilder.cpp:133 cmakebuilder.cpp:159 cmakebuilder.cpp:186
 #, kde-format
 msgid "Could not find a builder for %1"
 msgstr "%1 빌더를 찾을 수 없음"
 
-#: cmakebuilder.cpp:195
+#: cmakebuilder.cpp:199
 #, kde-format
 msgid "No build directory configured, cannot install"
 msgstr "빌드 디렉터리가 설정되지 않아서 설치할 수 없음"
 
-#: cmakebuilder.cpp:205
+#: cmakebuilder.cpp:209
 #, kde-format
 msgid "No build directory configured, cannot configure"
 msgstr "빌드 디렉터리가 설정되지 않아서 설정할 수 없음"

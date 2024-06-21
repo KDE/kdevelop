@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-12 00:40+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2023-07-23 20:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -131,42 +131,42 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "CMake 실행 파일(&E):"
 
-#: cmakecodecompletionmodel.cpp:189
+#: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
 msgstr "잘못됨"
 
-#: cmakecodecompletionmodel.cpp:197
+#: cmakecodecompletionmodel.cpp:200
 #, kde-format
 msgctxt "@item"
 msgid "Command"
 msgstr "명령"
 
-#: cmakecodecompletionmodel.cpp:198
+#: cmakecodecompletionmodel.cpp:201
 #, kde-format
 msgctxt "@item"
 msgid "Variable"
 msgstr "변수"
 
-#: cmakecodecompletionmodel.cpp:199
+#: cmakecodecompletionmodel.cpp:202
 #, kde-format
 msgctxt "@item"
 msgid "Macro"
 msgstr "매크로"
 
-#: cmakecodecompletionmodel.cpp:200
+#: cmakecodecompletionmodel.cpp:203
 #, kde-format
 msgctxt "@item"
 msgid "Path"
 msgstr "경로"
 
-#: cmakecodecompletionmodel.cpp:201
+#: cmakecodecompletionmodel.cpp:204
 #, kde-format
 msgctxt "@item"
 msgid "Target"
 msgstr "대상"
 
-#: cmakecodecompletionmodel.cpp:253
+#: cmakecodecompletionmodel.cpp:256
 #, kde-format
 msgid "wrong"
 msgstr "잘못됨"

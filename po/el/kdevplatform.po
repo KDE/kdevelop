@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 01:47+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -629,7 +629,7 @@ msgctxt "@title:menu"
 msgid "Analyze Current Project With"
 msgstr "Υποβολή τρέχοντος έργου..."
 
-#: interfaces/isourceformatter.cpp:216
+#: interfaces/isourceformatter.cpp:221
 #, kde-format
 msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
@@ -666,12 +666,12 @@ msgstr "Μετονομασία"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr ""
 
-#: language/backgroundparser/backgroundparser.cpp:309
+#: language/backgroundparser/backgroundparser.cpp:308
 #, kde-format
 msgid "Parsing: %1"
 msgstr "Ανάλυση: %1 "
 
-#: language/backgroundparser/backgroundparser.cpp:615
+#: language/backgroundparser/backgroundparser.cpp:614
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
@@ -3251,31 +3251,31 @@ msgstr ""
 "Αδυναμία αποθήκευσης διαμόρφωσης έργου σχετικά με τους προγραμματιστές.\n"
 "Προσοχή: οι ρυθμίσεις που τροποποιήσατε θα χαθούν."
 
-#: shell/projectcontroller.cpp:161
+#: shell/projectcontroller.cpp:158
 #, fuzzy, kde-format
 #| msgid "Configure Project %1"
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Διαμόρφωση έργου %1"
 
-#: shell/projectcontroller.cpp:304
+#: shell/projectcontroller.cpp:301
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Μη έγκυρη θέση: %1"
 
-#: shell/projectcontroller.cpp:314
+#: shell/projectcontroller.cpp:311
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "Ήδη ανοίγεται το %1, δεν γίνεται άνοιγμα ξανά"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:468
 #, fuzzy, kde-format
 #| msgid "Override"
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Αντικατάσταση"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:469
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3286,14 +3286,14 @@ msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr "Συνέχιση ανοίγματος του έργου με χρήση της παρεχόμενης διαμόρφωσης."
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:470
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Άνοιγμα υπάρχοντος αρχείου"
 
-#: shell/projectcontroller.cpp:474
+#: shell/projectcontroller.cpp:471
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3303,7 +3303,7 @@ msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
 "Συνέχιση ανοίγματος του έργου αλλά με χρήση της υπάρχουσας διαμόρφωσης."
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Cancel and do not open the project."
@@ -3311,7 +3311,7 @@ msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Ακυρώστε και μην ανοίξετε το έργο."
 
-#: shell/projectcontroller.cpp:479
+#: shell/projectcontroller.cpp:476
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3320,42 +3320,42 @@ msgstr ""
 "Υπάρχει ήδη ένα αρχείο διαμόρφωσης έργου στο %1.\n"
 "Θέλετε να το παρακάμψετε ή να ανοίξετε το υπάρχον;"
 
-#: shell/projectcontroller.cpp:482
+#: shell/projectcontroller.cpp:479
 #, fuzzy, kde-format
 #| msgid "Override existing project configuration"
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Παράκαμψη της τρέχουσας διαμόρφωσης έργου"
 
-#: shell/projectcontroller.cpp:500
+#: shell/projectcontroller.cpp:497
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Αδυναμία δημιουργίας του αρχείου διαμόρφωσης του έργου %1"
 
-#: shell/projectcontroller.cpp:514
+#: shell/projectcontroller.cpp:511
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Άνοιγμα ξανά του τρέχοντος έργου;"
 
-#: shell/projectcontroller.cpp:515
+#: shell/projectcontroller.cpp:512
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:556
+#: shell/projectcontroller.cpp:553
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Άνοιγμα / Εισαγωγή έργου..."
 
-#: shell/projectcontroller.cpp:557
+#: shell/projectcontroller.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Άνοιγμα ή εισαγωγή έργου"
 
-#: shell/projectcontroller.cpp:558
+#: shell/projectcontroller.cpp:555
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3378,19 +3378,19 @@ msgstr ""
 "υπάρχοντος καταλόγου που δεν έχει ακόμη ένα αρχείο έργου KDevelop4, το "
 "αρχείο θα δημιουργηθεί."
 
-#: shell/projectcontroller.cpp:569
+#: shell/projectcontroller.cpp:566
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Προσκόμιση έργου..."
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Προσκόμιση έργου"
 
-#: shell/projectcontroller.cpp:572
+#: shell/projectcontroller.cpp:569
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3403,40 +3403,40 @@ msgstr ""
 "Καθοδηγεί τον χρήστη στην προσκόμιση του έργου και το εισαγάγει στο KDevelop "
 "4."
 
-#: shell/projectcontroller.cpp:587
+#: shell/projectcontroller.cpp:584
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Κλείσιμο έργου (έργων)"
 
-#: shell/projectcontroller.cpp:589
+#: shell/projectcontroller.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Κλείσιμο όλων των τρεχόντων επιλεγμένων έργων"
 
-#: shell/projectcontroller.cpp:595
+#: shell/projectcontroller.cpp:592
 #, fuzzy, kde-format
 #| msgid "Open Configuration..."
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Άνοιγμα διαμόρφωσης..."
 
-#: shell/projectcontroller.cpp:601
+#: shell/projectcontroller.cpp:598
 #, fuzzy, kde-format
 #| msgid "Commit Current Project..."
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Υποβολή τρέχοντος έργου..."
 
-#: shell/projectcontroller.cpp:602
+#: shell/projectcontroller.cpp:599
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Υποβολή..."
 
-#: shell/projectcontroller.cpp:613
+#: shell/projectcontroller.cpp:610
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Open recent project"
@@ -3444,37 +3444,37 @@ msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Άνοιγμα πρόσφατου έργου"
 
-#: shell/projectcontroller.cpp:614
+#: shell/projectcontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Ανοίγει το πρόσφατα ανοιγμένο έργο."
 
-#: shell/projectcontroller.cpp:619
+#: shell/projectcontroller.cpp:616
 #, fuzzy, kde-format
 #| msgid "Open Project for Current File"
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Άνοιγμα έργου για το τρέχον αρχείο"
 
-#: shell/projectcontroller.cpp:770
+#: shell/projectcontroller.cpp:767
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Το έργο είναι ήδη ανοιχτό: %1"
 
-#: shell/projectcontroller.cpp:774
+#: shell/projectcontroller.cpp:771
 #, kde-format
 msgid "No active document"
 msgstr "Δεν υπάρχουν ανοικτά έγγραφα"
 
-#: shell/projectcontroller.cpp:855
+#: shell/projectcontroller.cpp:852
 #, fuzzy, kde-format
 #| msgid "Project already open: %1"
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Το έργο είναι ήδη ανοιχτό: %1"
 
-#: shell/projectcontroller.cpp:858
+#: shell/projectcontroller.cpp:855
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3483,26 +3483,26 @@ msgstr ""
 "Το έργο που προσπαθείτε να ανοίξετε είναι ήδη ανοιχτό σε τουλάχιστο άλλη μία "
 "συνεδρία.<br>Τι θέλετε να κάνετε;"
 
-#: shell/projectcontroller.cpp:862
+#: shell/projectcontroller.cpp:859
 #, fuzzy, kde-format
 #| msgid "Add project to current session"
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Προσθήκη έργου στην τρέχουσα συνεδρία"
 
-#: shell/projectcontroller.cpp:866
+#: shell/projectcontroller.cpp:863
 #, fuzzy, kde-format
 #| msgid "Open session %1"
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Άνοιγμα συνεδρίας %1"
 
-#: shell/projectcontroller.cpp:927
+#: shell/projectcontroller.cpp:924
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr ""
 
-#: shell/projectcontroller.cpp:1231
+#: shell/projectcontroller.cpp:1228
 #, fuzzy, kde-format
 #| msgid "Reopen the current project?"
 msgctxt "@action"
@@ -4079,7 +4079,7 @@ msgstr "Φίλτρο:"
 msgid "Create New Session"
 msgstr "Δημιουργία νέας συνεδρίας"
 
-#: shell/sessionlock.cpp:154
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -4087,7 +4087,7 @@ msgid ""
 "starting a new one"
 msgstr ""
 
-#: shell/sessionlock.cpp:159
+#: shell/sessionlock.cpp:164
 #, fuzzy, kde-format
 #| msgctxt "@info:shell"
 #| msgid "running %1 instance (PID: %2) is apparently hung"
@@ -4095,7 +4095,7 @@ msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "η εκτελούμενη %1 διεργασία (PID %2) έχει προφανώς παραλύσει"
 
-#: shell/sessionlock.cpp:165
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4105,7 +4105,7 @@ msgstr ""
 "Η δοσμένη εφαρμογή δεν ανταποκρίνεται σε κλήση DBUS, ίσως να έχει "
 "καταρρεύσει ή να έχει παραλύσει."
 
-#: shell/sessionlock.cpp:170
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4114,7 +4114,7 @@ msgstr ""
 "Αποτυχία κλειδώματος της συνεδρίας <em>%1</em>, έχει ήδη κλειδωθεί από %2 "
 "στο %3 (PID %4)."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
@@ -4122,7 +4122,7 @@ msgstr ""
 "Αποτυχία κλειδώματος της συνεδρίας <em>%1</em> (αρχείο κλειδώματος δεν είναι "
 "διαθέσιμο)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4132,7 +4132,7 @@ msgstr ""
 "<p>Κλείστε την ενοχλητική διεργασία της εφαρμογής ή επιλέξτε να εκτελέσετε "
 "μιαν άλλη συνεδρία.</p>"
 
-#: shell/sessionlock.cpp:184
+#: shell/sessionlock.cpp:189
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Retry startup"
@@ -4140,7 +4140,7 @@ msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Επαναδοκιμή εκκίνησης"
 
-#: shell/sessionlock.cpp:187
+#: shell/sessionlock.cpp:192
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Choose another session"
@@ -4148,13 +4148,13 @@ msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Επιλέξτε άλλη συνεδρία"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:196
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Αποτυχία κλειδώματος συνεδρίας %1"
 
-#: shell/sessionlock.cpp:197
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

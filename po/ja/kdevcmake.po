@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-12 00:40+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2010-10-31 15:39-0700\n"
 "Last-Translator: Daniel E. Moctezuma <democtezuma@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -141,46 +141,46 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr ""
 
-#: cmakecodecompletionmodel.cpp:189
+#: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
 msgstr "不正"
 
-#: cmakecodecompletionmodel.cpp:197
+#: cmakecodecompletionmodel.cpp:200
 #, fuzzy, kde-format
 #| msgid "Command"
 msgctxt "@item"
 msgid "Command"
 msgstr "コマンド"
 
-#: cmakecodecompletionmodel.cpp:198
+#: cmakecodecompletionmodel.cpp:201
 #, fuzzy, kde-format
 #| msgid "Variable"
 msgctxt "@item"
 msgid "Variable"
 msgstr "変数"
 
-#: cmakecodecompletionmodel.cpp:199
+#: cmakecodecompletionmodel.cpp:202
 #, fuzzy, kde-format
 #| msgid "Macro"
 msgctxt "@item"
 msgid "Macro"
 msgstr "マクロ"
 
-#: cmakecodecompletionmodel.cpp:200
+#: cmakecodecompletionmodel.cpp:203
 #, fuzzy, kde-format
 #| msgid "Path"
 msgctxt "@item"
 msgid "Path"
 msgstr "パス"
 
-#: cmakecodecompletionmodel.cpp:201
+#: cmakecodecompletionmodel.cpp:204
 #, kde-format
 msgctxt "@item"
 msgid "Target"
 msgstr ""
 
-#: cmakecodecompletionmodel.cpp:253
+#: cmakecodecompletionmodel.cpp:256
 #, kde-format
 msgid "wrong"
 msgstr ""

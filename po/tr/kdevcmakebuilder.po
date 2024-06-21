@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2022-08-30 13:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -21,22 +21,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 22.08.0\n"
 
-#: cmakebuilder.cpp:105
+#: cmakebuilder.cpp:106
 #, kde-format
 msgid "Could not find the make builder. Check your installation"
 msgstr "Make yapıcısı bulunamadı. Kurulumunuzu denetleyin"
 
-#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#: cmakebuilder.cpp:133 cmakebuilder.cpp:159 cmakebuilder.cpp:186
 #, kde-format
 msgid "Could not find a builder for %1"
 msgstr "%1 için bir yapıcı bulunamadı"
 
-#: cmakebuilder.cpp:195
+#: cmakebuilder.cpp:199
 #, kde-format
 msgid "No build directory configured, cannot install"
 msgstr "Bir yapı dizini yapılandırılmamış, kurulamıyor"
 
-#: cmakebuilder.cpp:205
+#: cmakebuilder.cpp:209
 #, kde-format
 msgid "No build directory configured, cannot configure"
 msgstr "Bir yapı dizini yapılandırılmamış, proje yapılandırılamıyor"

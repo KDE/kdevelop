@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2022-03-10 15:57+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -72,7 +72,7 @@ msgstr "Учётная запись GitHub"
 msgid "Enter a login and a password"
 msgstr "Укажите имя пользователя и пароль"
 
-#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:45
 #, kde-format
 msgid "Waiting for response"
 msgstr "Ожидается ответ"
@@ -137,25 +137,25 @@ msgstr "Пожалуйста, напишите здесь ваш пароль."
 msgid "GitHub"
 msgstr "GitHub"
 
-#: ghproviderwidget.cpp:57
+#: ghproviderwidget.cpp:58
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Поиск…"
 
-#: ghproviderwidget.cpp:58
+#: ghproviderwidget.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
 msgstr "Чтобы не ждать, возможно нажать клавишу «Ввод»."
 
-#: ghproviderwidget.cpp:70
+#: ghproviderwidget.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure your GitHub account"
 msgstr "Настройте вашу учётную запись GitHub"
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgid ""
 "The Git plugin could not be loaded which is required to import a GitHub "
@@ -163,19 +163,19 @@ msgid ""
 msgstr ""
 "Не удалось загрузить расширение Git, необходимое для импорта проектов GitHub."
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "GitHub Provider Error"
 msgstr "Ошибка поставщика данных GitHub"
 
-#: ghproviderwidget.cpp:105
+#: ghproviderwidget.cpp:106
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User"
 msgstr "Пользователь"
 
-#: ghproviderwidget.cpp:106
+#: ghproviderwidget.cpp:107
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Organization"

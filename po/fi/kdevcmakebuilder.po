@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2016-01-01 13:56+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -21,25 +21,25 @@ msgstr ""
 "X-POT-Import-Date: 2012-12-01 22:20:28+0000\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: cmakebuilder.cpp:105
+#: cmakebuilder.cpp:106
 #, fuzzy, kde-format
 #| msgid "Couldn't find the make builder. Check your installation"
 msgid "Could not find the make builder. Check your installation"
 msgstr "make-käännintä ei löytynyt. Tarkista asennuksesi"
 
-#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#: cmakebuilder.cpp:133 cmakebuilder.cpp:159 cmakebuilder.cpp:186
 #, fuzzy, kde-format
 #| msgid "Couldn't find a builder for %1"
 msgid "Could not find a builder for %1"
 msgstr "Käännintä projektille %1 ei löytynyt"
 
-#: cmakebuilder.cpp:195
+#: cmakebuilder.cpp:199
 #, fuzzy, kde-format
 #| msgid "No Build Directory configured, cannot install"
 msgid "No build directory configured, cannot install"
 msgstr "Mitään käännöshakemistoa ei ole asetuksissa, ei voida asentaa"
 
-#: cmakebuilder.cpp:205
+#: cmakebuilder.cpp:209
 #, fuzzy, kde-format
 #| msgid "No Build Directory configured, cannot configure"
 msgid "No build directory configured, cannot configure"

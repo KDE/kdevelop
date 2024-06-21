@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2020-07-24 13:47+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -126,19 +126,19 @@ msgstr "Alternativ:<br/>"
 msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
 msgstr "Kunde inte införa ändringen: Texten ska vara \"%1\", men är \"%2\"."
 
-#: patchhighlighter.cpp:416 patchhighlighter.cpp:423
+#: patchhighlighter.cpp:421 patchhighlighter.cpp:428
 #, kde-format
 msgctxt "@item"
 msgid "Insertion"
 msgstr "Infogning"
 
-#: patchhighlighter.cpp:418 patchhighlighter.cpp:425
+#: patchhighlighter.cpp:423 patchhighlighter.cpp:430
 #, kde-format
 msgctxt "@item"
 msgid "Removal"
 msgstr "Borttagning"
 
-#: patchhighlighter.cpp:420 patchhighlighter.cpp:427
+#: patchhighlighter.cpp:425 patchhighlighter.cpp:432
 #, kde-format
 msgctxt "@item"
 msgid "Change"

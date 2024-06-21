@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2021-10-30 20:48+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -22,24 +22,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
-#: cmakebuilder.cpp:105
+#: cmakebuilder.cpp:106
 #, kde-format
 msgid "Could not find the make builder. Check your installation"
 msgstr ""
 "No s'ha pogut trobar el constructor del «make». Comproveu la vostra "
 "instal·lació"
 
-#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#: cmakebuilder.cpp:133 cmakebuilder.cpp:159 cmakebuilder.cpp:186
 #, kde-format
 msgid "Could not find a builder for %1"
 msgstr "No s'ha trobat un constructor per a %1"
 
-#: cmakebuilder.cpp:195
+#: cmakebuilder.cpp:199
 #, kde-format
 msgid "No build directory configured, cannot install"
 msgstr "No s'ha configurat cap directori de construcció, no es pot instal·lar"
 
-#: cmakebuilder.cpp:205
+#: cmakebuilder.cpp:209
 #, kde-format
 msgid "No build directory configured, cannot configure"
 msgstr "No s'ha configurat cap directori de construcció, no es pot configurar"

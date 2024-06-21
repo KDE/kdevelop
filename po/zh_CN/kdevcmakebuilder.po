@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,22 +17,22 @@ msgstr ""
 "X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevcmakebuilder.pot\n"
 "X-Crowdin-File-ID: 4872\n"
 
-#: cmakebuilder.cpp:105
+#: cmakebuilder.cpp:106
 #, kde-format
 msgid "Could not find the make builder. Check your installation"
 msgstr "找不到 make 构建器。请检查你的安装。"
 
-#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#: cmakebuilder.cpp:133 cmakebuilder.cpp:159 cmakebuilder.cpp:186
 #, kde-format
 msgid "Could not find a builder for %1"
 msgstr "无法为 %1 找到生成器"
 
-#: cmakebuilder.cpp:195
+#: cmakebuilder.cpp:199
 #, kde-format
 msgid "No build directory configured, cannot install"
 msgstr "未配置构建目录，无法安装"
 
-#: cmakebuilder.cpp:205
+#: cmakebuilder.cpp:209
 #, kde-format
 msgid "No build directory configured, cannot configure"
 msgstr "未配置构建目录，无法配置"

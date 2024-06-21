@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2020-01-16 19:27+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -73,7 +73,7 @@ msgstr "GitHubi konto"
 msgid "Enter a login and a password"
 msgstr "Anna kasutajanimi ja parool"
 
-#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:45
 #, kde-format
 msgid "Waiting for response"
 msgstr "Vastuse ootamine"
@@ -142,28 +142,28 @@ msgstr "Palun kirjuta siia parool."
 msgid "GitHub"
 msgstr "GitHub"
 
-#: ghproviderwidget.cpp:57
+#: ghproviderwidget.cpp:58
 #, fuzzy, kde-format
 #| msgid "Search"
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Otsing"
 
-#: ghproviderwidget.cpp:58
+#: ghproviderwidget.cpp:59
 #, fuzzy, kde-format
 #| msgid "You can press the Return key if you do not want to wait"
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
 msgstr "Kui s ei soovi oodata, võid vajutada klahvile Return."
 
-#: ghproviderwidget.cpp:70
+#: ghproviderwidget.cpp:71
 #, fuzzy, kde-format
 #| msgid "Click this button to configure your GitHub account"
 msgctxt "@info:tooltip"
 msgid "Configure your GitHub account"
 msgstr "Klõpsa sellele nupule oma GitHubi konto seadistamiseks"
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgid ""
 "The Git plugin could not be loaded which is required to import a GitHub "
@@ -172,21 +172,21 @@ msgstr ""
 "GitHubi plugina laadimine nurjus, aga seda on tarvis GitHubi projekti "
 "importimiseks."
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, fuzzy, kde-format
 #| msgid "GitHub Provider Error"
 msgctxt "@title:window"
 msgid "GitHub Provider Error"
 msgstr "GitHubi pakkuja tõrge"
 
-#: ghproviderwidget.cpp:105
+#: ghproviderwidget.cpp:106
 #, fuzzy, kde-format
 #| msgid "User"
 msgctxt "@item:inlistbox"
 msgid "User"
 msgstr "Kasutaja"
 
-#: ghproviderwidget.cpp:106
+#: ghproviderwidget.cpp:107
 #, fuzzy, kde-format
 #| msgid "Organization"
 msgctxt "@item:inlistbox"

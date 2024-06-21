@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 01:47+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2023-04-25 11:06+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -602,7 +602,7 @@ msgctxt "@title:menu"
 msgid "Analyze Current Project With"
 msgstr "Проверить текущий проект с помощью"
 
-#: interfaces/isourceformatter.cpp:216
+#: interfaces/isourceformatter.cpp:221
 #, kde-format
 msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
@@ -635,12 +635,12 @@ msgstr "Переименовать"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr "Переименовать файл из «%1» в «%2»."
 
-#: language/backgroundparser/backgroundparser.cpp:309
+#: language/backgroundparser/backgroundparser.cpp:308
 #, kde-format
 msgid "Parsing: %1"
 msgstr "Анализируется: %1"
 
-#: language/backgroundparser/backgroundparser.cpp:615
+#: language/backgroundparser/backgroundparser.cpp:614
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
@@ -3044,29 +3044,29 @@ msgstr ""
 "Сохранить конфигурацию проекта, относящуюся к разработке, не удалось.\n"
 "Внимание: ваши изменения в настройках проекта будут потеряны."
 
-#: shell/projectcontroller.cpp:161
+#: shell/projectcontroller.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Настройка проекта %1"
 
-#: shell/projectcontroller.cpp:304
+#: shell/projectcontroller.cpp:301
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Недопустимое расположение: %1"
 
-#: shell/projectcontroller.cpp:314
+#: shell/projectcontroller.cpp:311
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "Проект %1 уже открывается и не будет открыт повторно"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:468
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Заменить"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:469
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -3074,25 +3074,25 @@ msgid ""
 msgstr ""
 "Продолжить открытие проекта и использовать только что выбранную конфигурацию"
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:470
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Открыть существующий файл"
 
-#: shell/projectcontroller.cpp:474
+#: shell/projectcontroller.cpp:471
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr "Продолжить открытие проекта, но использовать существующую конфигурацию"
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Отменить операцию и не открывать проект"
 
-#: shell/projectcontroller.cpp:479
+#: shell/projectcontroller.cpp:476
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3101,41 +3101,41 @@ msgstr ""
 "Файл конфигурации проекта уже существует в %1.\n"
 "Вы хотите заменить его или открыть существующий файл?"
 
-#: shell/projectcontroller.cpp:482
+#: shell/projectcontroller.cpp:479
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Замена существующей конфигурации проекта"
 
-#: shell/projectcontroller.cpp:500
+#: shell/projectcontroller.cpp:497
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Не удалось создать файл конфигурации %1"
 
-#: shell/projectcontroller.cpp:514
+#: shell/projectcontroller.cpp:511
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Открыть текущий проект заново?"
 
-#: shell/projectcontroller.cpp:515
+#: shell/projectcontroller.cpp:512
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr "Открыть заново"
 
-#: shell/projectcontroller.cpp:556
+#: shell/projectcontroller.cpp:553
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Открыть/импортировать проект..."
 
-#: shell/projectcontroller.cpp:557
+#: shell/projectcontroller.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Открыть или импортировать проект"
 
-#: shell/projectcontroller.cpp:558
+#: shell/projectcontroller.cpp:555
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3149,19 +3149,19 @@ msgstr ""
 "файл проекта KDevelop или существующий каталог (если в этом каталоге не "
 "найдётся файл проекта KDevelop, он будет создан)."
 
-#: shell/projectcontroller.cpp:569
+#: shell/projectcontroller.cpp:566
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Получить проект..."
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Получить проект"
 
-#: shell/projectcontroller.cpp:572
+#: shell/projectcontroller.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3169,71 +3169,71 @@ msgid ""
 msgstr ""
 "Помогает пользователю получить внешний проект и импортирует его в KDevelop."
 
-#: shell/projectcontroller.cpp:587
+#: shell/projectcontroller.cpp:584
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Закрыть проект(ы)"
 
-#: shell/projectcontroller.cpp:589
+#: shell/projectcontroller.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Закрыть все выбранные проекты"
 
-#: shell/projectcontroller.cpp:595
+#: shell/projectcontroller.cpp:592
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Настроить проект..."
 
-#: shell/projectcontroller.cpp:601
+#: shell/projectcontroller.cpp:598
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Зафиксировать проект..."
 
-#: shell/projectcontroller.cpp:602
+#: shell/projectcontroller.cpp:599
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Зафиксировать..."
 
-#: shell/projectcontroller.cpp:613
+#: shell/projectcontroller.cpp:610
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Открыть проект из последних"
 
-#: shell/projectcontroller.cpp:614
+#: shell/projectcontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Открывает проект, открывавшийся одним из последних."
 
-#: shell/projectcontroller.cpp:619
+#: shell/projectcontroller.cpp:616
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Открыть проект для текущего файла"
 
-#: shell/projectcontroller.cpp:770
+#: shell/projectcontroller.cpp:767
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Проект «%1» уже открыт."
 
-#: shell/projectcontroller.cpp:774
+#: shell/projectcontroller.cpp:771
 #, kde-format
 msgid "No active document"
 msgstr "Нет активного документа."
 
-#: shell/projectcontroller.cpp:855
+#: shell/projectcontroller.cpp:852
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Проект уже открыт"
 
-#: shell/projectcontroller.cpp:858
+#: shell/projectcontroller.cpp:855
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3242,25 +3242,25 @@ msgstr ""
 "Проект, который вы пытаетесь открыть, уже открыт как минимум в одном другом "
 "сеансе.<br>Как вы хотите поступить?"
 
-#: shell/projectcontroller.cpp:862
+#: shell/projectcontroller.cpp:859
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Добавить проект в текущий сеанс"
 
-#: shell/projectcontroller.cpp:866
+#: shell/projectcontroller.cpp:863
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Открыть сеанс %1"
 
-#: shell/projectcontroller.cpp:927
+#: shell/projectcontroller.cpp:924
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr ""
 "Ни одно из включённых расширений не поддерживает этот адрес репозитория: %1"
 
-#: shell/projectcontroller.cpp:1231
+#: shell/projectcontroller.cpp:1228
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -3770,7 +3770,7 @@ msgstr "Фильтр:"
 msgid "Create New Session"
 msgstr "Создать новый сеанс"
 
-#: shell/sessionlock.cpp:154
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3780,13 +3780,13 @@ msgstr ""
 "Выявлен запущенный экземпляр %1 (PID: %2), он сделан видимым вместо запуска "
 "нового"
 
-#: shell/sessionlock.cpp:159
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "Похоже, запущенный экземпляр %1 (PID: %2) завис"
 
-#: shell/sessionlock.cpp:165
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3796,7 +3796,7 @@ msgstr ""
 "Данное приложение не отвечает на вызов DBUS, возможно оно прекратило работу "
 "или повисло."
 
-#: shell/sessionlock.cpp:170
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3805,14 +3805,14 @@ msgstr ""
 "Заблокировать сеанс <em>%1</em> не удалось, так как он уже заблокирован "
 "приложением %2 (PID %4) на компьютере %3."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr ""
 "Заблокировать сеанс <em>%1</em> не удалось (файл блокировки недоступен)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3821,25 +3821,25 @@ msgid ""
 msgstr ""
 "<p>Закройте мешающий вам экземпляр приложения или выберите другой сеанс.</p>"
 
-#: shell/sessionlock.cpp:184
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Повторить попытку запуска"
 
-#: shell/sessionlock.cpp:187
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Выбрать другой сеанс"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:196
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Ошибка блокировки сеанса %1"
 
-#: shell/sessionlock.cpp:197
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

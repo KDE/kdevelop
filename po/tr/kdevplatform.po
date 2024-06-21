@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 01:47+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2024-04-17 13:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -589,7 +589,7 @@ msgctxt "@title:menu"
 msgid "Analyze Current Project With"
 msgstr "Geçerli Projeyi Şununla Çözümle"
 
-#: interfaces/isourceformatter.cpp:216
+#: interfaces/isourceformatter.cpp:221
 #, kde-format
 msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
@@ -622,12 +622,12 @@ msgstr "Yeniden Adlandır"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr "Dosyanın adını \"%1\" yerine \"%2\" yap."
 
-#: language/backgroundparser/backgroundparser.cpp:309
+#: language/backgroundparser/backgroundparser.cpp:308
 #, kde-format
 msgid "Parsing: %1"
 msgstr "Ayrıştırılıyor: %1"
 
-#: language/backgroundparser/backgroundparser.cpp:615
+#: language/backgroundparser/backgroundparser.cpp:614
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
@@ -3013,29 +3013,29 @@ msgstr ""
 "Geliştiriciye özel proje yapılandırması saklanamıyor.\n"
 "Dikkat: Değiştirdiğiniz proje ayarları kaybolacaktır."
 
-#: shell/projectcontroller.cpp:161
+#: shell/projectcontroller.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "%1 Projesini Yapılandır"
 
-#: shell/projectcontroller.cpp:304
+#: shell/projectcontroller.cpp:301
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Geçersiz Konum: %1"
 
-#: shell/projectcontroller.cpp:314
+#: shell/projectcontroller.cpp:311
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "%1 az önce açıldı, yeniden açılmıyor"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:468
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Geçersiz Kıl"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:469
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -3043,25 +3043,25 @@ msgid ""
 msgstr ""
 "Projeyi açmayı sürdür ve yalnızca sağlanan proje yapılandırmasını kullan."
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:470
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Var Olan Dosyayı Aç"
 
-#: shell/projectcontroller.cpp:474
+#: shell/projectcontroller.cpp:471
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr "Projeyi açmayı sürdür; ancak var olan proje yapılandırmasını kullan"
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "İptal et ve projeyi açma"
 
-#: shell/projectcontroller.cpp:479
+#: shell/projectcontroller.cpp:476
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3070,41 +3070,41 @@ msgstr ""
 "%1 konumunda bir proje yapılandırma dosyası halihazırda var.\n"
 "Onu geçersiz kılmak mı yoksa var olan dosyayı açmak mı istiyorsunuz?"
 
-#: shell/projectcontroller.cpp:482
+#: shell/projectcontroller.cpp:479
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Var Olan Proje Yapılandırmasını Geçersiz Kıl"
 
-#: shell/projectcontroller.cpp:500
+#: shell/projectcontroller.cpp:497
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "%1 yapılandırma dosyası oluşturulamadı"
 
-#: shell/projectcontroller.cpp:514
+#: shell/projectcontroller.cpp:511
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Geçerli proje yeniden açılsın mı?"
 
-#: shell/projectcontroller.cpp:515
+#: shell/projectcontroller.cpp:512
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr "Yeniden Aç"
 
-#: shell/projectcontroller.cpp:556
+#: shell/projectcontroller.cpp:553
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Proje Aç / İçe Aktar..."
 
-#: shell/projectcontroller.cpp:557
+#: shell/projectcontroller.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Proje aç veya içe aktar"
 
-#: shell/projectcontroller.cpp:558
+#: shell/projectcontroller.cpp:555
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3120,19 +3120,19 @@ msgstr ""
 "Geliştir proje dosyası olmayan var olan bir dizini açarken bu dosya "
 "oluşturulacaktır."
 
-#: shell/projectcontroller.cpp:569
+#: shell/projectcontroller.cpp:566
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Proje Getir..."
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Proje getir"
 
-#: shell/projectcontroller.cpp:572
+#: shell/projectcontroller.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3141,71 +3141,71 @@ msgstr ""
 "Kullanıcıyı, proje getirme ve K Geliştir'e içe aktarma konusunda kullanıcıyı "
 "yönlendirir."
 
-#: shell/projectcontroller.cpp:587
+#: shell/projectcontroller.cpp:584
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Proje(ler)i Kapat"
 
-#: shell/projectcontroller.cpp:589
+#: shell/projectcontroller.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Seçili tüm projeleri kapatır"
 
-#: shell/projectcontroller.cpp:595
+#: shell/projectcontroller.cpp:592
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Yapılandırma Aç..."
 
-#: shell/projectcontroller.cpp:601
+#: shell/projectcontroller.cpp:598
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Geçerli Projeyi İşle..."
 
-#: shell/projectcontroller.cpp:602
+#: shell/projectcontroller.cpp:599
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "İşle..."
 
-#: shell/projectcontroller.cpp:613
+#: shell/projectcontroller.cpp:610
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Son Kullanılan Projeyi Aç"
 
-#: shell/projectcontroller.cpp:614
+#: shell/projectcontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "En son açılan projeyi açar."
 
-#: shell/projectcontroller.cpp:619
+#: shell/projectcontroller.cpp:616
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Geçerli Dosyanın Projesini Aç"
 
-#: shell/projectcontroller.cpp:770
+#: shell/projectcontroller.cpp:767
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Proje halihazırda açık: %1"
 
-#: shell/projectcontroller.cpp:774
+#: shell/projectcontroller.cpp:771
 #, kde-format
 msgid "No active document"
 msgstr "Etkin belge yok"
 
-#: shell/projectcontroller.cpp:855
+#: shell/projectcontroller.cpp:852
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Proje Halihazırda Açık"
 
-#: shell/projectcontroller.cpp:858
+#: shell/projectcontroller.cpp:855
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3214,24 +3214,24 @@ msgstr ""
 "Açmaya çalıştığınız proje en azından bir diğer oturumda zaten açık.<br>Ne "
 "yapmak istiyorsunuz?"
 
-#: shell/projectcontroller.cpp:862
+#: shell/projectcontroller.cpp:859
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Projeyi geçerli oturuma ekle"
 
-#: shell/projectcontroller.cpp:866
+#: shell/projectcontroller.cpp:863
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "%1 oturumunu aç"
 
-#: shell/projectcontroller.cpp:927
+#: shell/projectcontroller.cpp:924
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Bu depo URL'sini etkin eklentilerden hiçbiri desteklemiyor: %1"
 
-#: shell/projectcontroller.cpp:1231
+#: shell/projectcontroller.cpp:1228
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -3737,7 +3737,7 @@ msgstr "Süzgeç:"
 msgid "Create New Session"
 msgstr "Yeni Oturum Oluştur"
 
-#: shell/sessionlock.cpp:154
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3747,13 +3747,13 @@ msgstr ""
 "Çalışan %1 örneği (PID: %2) algılandı, yeni bir tane başlatmak yerine bu "
 "görünür hale getiriliyor"
 
-#: shell/sessionlock.cpp:159
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "%1 örneği (PID: %2) çalıştırılırken askıda kalmış görünüyor"
 
-#: shell/sessionlock.cpp:165
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3763,7 +3763,7 @@ msgstr ""
 "Verilen uygulama bir DBUS çağrısına yanıt vermiyor; çökmüş veya askıda "
 "kalmış olabilir."
 
-#: shell/sessionlock.cpp:170
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3772,13 +3772,13 @@ msgstr ""
 "<em>%1</em> oturumu kilitlenemedi, halihazırda %3 üzerinde %2 tarafından "
 "kilitlenmiş (PID %4)."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "<em>%1</em> oturumu kilitlenemedi (kilit dosyası yok)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3788,25 +3788,25 @@ msgstr ""
 "<p>Lütfen, sorunlu uygulamayı kapatın veya başlatma için başka bir oturum "
 "seçin.</p>"
 
-#: shell/sessionlock.cpp:184
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Başlatmayı Yeniden Dene"
 
-#: shell/sessionlock.cpp:187
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Başka Bir Oturum Seç"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:196
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "%1 Oturumu Kilitlenemedi"
 
-#: shell/sessionlock.cpp:197
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

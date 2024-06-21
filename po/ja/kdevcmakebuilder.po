@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2008-12-12 00:37+0900\n"
 "Last-Translator: Yukiko Bando <ybando@k6.dion.ne.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16,23 +16,23 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: cmakebuilder.cpp:105
+#: cmakebuilder.cpp:106
 #, kde-format
 msgid "Could not find the make builder. Check your installation"
 msgstr ""
 
-#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#: cmakebuilder.cpp:133 cmakebuilder.cpp:159 cmakebuilder.cpp:186
 #, kde-format
 msgid "Could not find a builder for %1"
 msgstr ""
 
-#: cmakebuilder.cpp:195
+#: cmakebuilder.cpp:199
 #, fuzzy, kde-format
 #| msgid "No Build Directory configured, cannot install"
 msgid "No build directory configured, cannot install"
 msgstr "ビルドディレクトリが設定されていないため、インストールできません"
 
-#: cmakebuilder.cpp:205
+#: cmakebuilder.cpp:209
 #, fuzzy, kde-format
 #| msgid "No Build Directory configured, cannot install"
 msgid "No build directory configured, cannot configure"

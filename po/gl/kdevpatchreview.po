@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2023-08-05 13:52+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -129,19 +129,19 @@ msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
 msgstr ""
 "Non foi posíbel aplicar o cambio: O texto debería ser «%1», pero é «%2»."
 
-#: patchhighlighter.cpp:416 patchhighlighter.cpp:423
+#: patchhighlighter.cpp:421 patchhighlighter.cpp:428
 #, kde-format
 msgctxt "@item"
 msgid "Insertion"
 msgstr "Inserción"
 
-#: patchhighlighter.cpp:418 patchhighlighter.cpp:425
+#: patchhighlighter.cpp:423 patchhighlighter.cpp:430
 #, kde-format
 msgctxt "@item"
 msgid "Removal"
 msgstr "Retirada"
 
-#: patchhighlighter.cpp:420 patchhighlighter.cpp:427
+#: patchhighlighter.cpp:425 patchhighlighter.cpp:432
 #, kde-format
 msgctxt "@item"
 msgid "Change"

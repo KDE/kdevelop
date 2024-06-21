@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2012-02-02 07:40+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -137,21 +137,21 @@ msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
 msgstr ""
 "De Ännern laat sik nich övernehmen. Text schull »%1« wesen, man is »%2«."
 
-#: patchhighlighter.cpp:416 patchhighlighter.cpp:423
+#: patchhighlighter.cpp:421 patchhighlighter.cpp:428
 #, fuzzy, kde-format
 #| msgid "Insertion"
 msgctxt "@item"
 msgid "Insertion"
 msgstr "Infögen"
 
-#: patchhighlighter.cpp:418 patchhighlighter.cpp:425
+#: patchhighlighter.cpp:423 patchhighlighter.cpp:430
 #, fuzzy, kde-format
 #| msgid "Removal"
 msgctxt "@item"
 msgid "Removal"
 msgstr "Wegmaken"
 
-#: patchhighlighter.cpp:420 patchhighlighter.cpp:427
+#: patchhighlighter.cpp:425 patchhighlighter.cpp:432
 #, fuzzy, kde-format
 #| msgid "Change"
 msgctxt "@item"

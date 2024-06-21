@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2019-08-28 11:09+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -208,72 +208,72 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Εγγραφή στην καθολική διαμόρφωση"
 
-#: gitplugin.cpp:182
+#: gitplugin.cpp:185
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "Αδυναμία εύρεσης του εκτελέσιμου git. Έχει εγκατασταθεί στο σύστημα;"
 
-#: gitplugin.cpp:191
+#: gitplugin.cpp:194
 #, kde-format
 msgid "Git Commit"
 msgstr ""
 
-#: gitplugin.cpp:243
+#: gitplugin.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr ""
 
-#: gitplugin.cpp:244
+#: gitplugin.cpp:247
 #, fuzzy, kde-format
 #| msgid "Git Stashes"
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Εκκρεμότητες git"
 
-#: gitplugin.cpp:245
+#: gitplugin.cpp:248
 #, fuzzy, kde-format
 #| msgid "Stash Manager"
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Διαχειριστής εκκρεμοτήτων"
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:249
 #, fuzzy, kde-format
 #| msgid "Push Stash"
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Ώθηση εκκρεμότητας"
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:250
 #, fuzzy, kde-format
 #| msgid "Pop Stash"
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Απώθηση εκκρεμότητας"
 
-#: gitplugin.cpp:280
+#: gitplugin.cpp:283
 #, kde-format
 msgid "error: %1"
 msgstr "σφάλμα: %1"
 
-#: gitplugin.cpp:379 gitplugin.cpp:390
+#: gitplugin.cpp:382 gitplugin.cpp:393
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Δε καθορίστηκε η λίστα των αρχείων"
 
-#: gitplugin.cpp:452
+#: gitplugin.cpp:455
 #, fuzzy, kde-format
 #| msgid "Could not revert changes"
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Αδυναμία επαναφοράς από αλλαγές"
 
-#: gitplugin.cpp:487
+#: gitplugin.cpp:490
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Αδυναμία επαναφοράς από αλλαγές"
 
-#: gitplugin.cpp:498
+#: gitplugin.cpp:501
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -281,41 +281,41 @@ msgstr ""
 "Τα ακόλουθα αρχεία περιέχουν αλλαγές που δεν έχουν υποβληθεί και θα χαθούν. "
 "Θα συνεχίσετε;"
 
-#: gitplugin.cpp:523
+#: gitplugin.cpp:526
 #, kde-format
 msgid "No files or message specified"
 msgstr "Δεν ορίσθηκαν αρχεία ή μήνυμα"
 
-#: gitplugin.cpp:527 gitplugin.cpp:546
+#: gitplugin.cpp:530 gitplugin.cpp:549
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Δεν ορίσθηκε διεύθυνση αλληλογραφίας ή όνομα για το git"
 
-#: gitplugin.cpp:543
+#: gitplugin.cpp:546
 #, fuzzy, kde-format
 #| msgid "No files or message specified"
 msgid "No message specified"
 msgstr "Δεν ορίσθηκαν αρχεία ή μήνυμα"
 
-#: gitplugin.cpp:617
+#: gitplugin.cpp:620
 #, kde-format
 msgid "No files to remove"
 msgstr "Δεν υπάρχουν αρχεία για αφαίρεση"
 
-#: gitplugin.cpp:858
+#: gitplugin.cpp:900
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Υπάρχουν αλλαγές σε εξέλιξη, θέλετε να τις θέσετε σε εκκρεμότητα πρώτα;"
 
-#: gitplugin.cpp:859
+#: gitplugin.cpp:901
 #, fuzzy, kde-format
 #| msgid "Pop Stash"
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Απώθηση εκκρεμότητας"
 
-#: gitplugin.cpp:860
+#: gitplugin.cpp:902
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

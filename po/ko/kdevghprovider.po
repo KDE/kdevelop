@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2020-10-04 20:10+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -64,7 +64,7 @@ msgstr "GitHub 계정"
 msgid "Enter a login and a password"
 msgstr "로그인 정보와 암호를 입력하십시오"
 
-#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:45
 #, kde-format
 msgid "Waiting for response"
 msgstr "응답 기다리는 중"
@@ -129,25 +129,25 @@ msgstr "암호를 입력하십시오."
 msgid "GitHub"
 msgstr "GitHub"
 
-#: ghproviderwidget.cpp:57
+#: ghproviderwidget.cpp:58
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "찾기..."
 
-#: ghproviderwidget.cpp:58
+#: ghproviderwidget.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
 msgstr "기다리고 싶지 않으면 Enter 키를 누르십시오."
 
-#: ghproviderwidget.cpp:70
+#: ghproviderwidget.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure your GitHub account"
 msgstr "내 GitHub 계정 설정"
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgid ""
 "The Git plugin could not be loaded which is required to import a GitHub "
@@ -155,19 +155,19 @@ msgid ""
 msgstr ""
 "GitHub 프로젝트를 설정하는 데 필요한 Git 플러그인을 불러올 수 없습니다."
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "GitHub Provider Error"
 msgstr "GitHub 공급자 오류"
 
-#: ghproviderwidget.cpp:105
+#: ghproviderwidget.cpp:106
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User"
 msgstr "사용자"
 
-#: ghproviderwidget.cpp:106
+#: ghproviderwidget.cpp:107
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Organization"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-12 00:40+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2023-01-24 01:48+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -134,42 +134,42 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "&Eseguibile di CMake:"
 
-#: cmakecodecompletionmodel.cpp:189
+#: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
 msgstr "Non valido"
 
-#: cmakecodecompletionmodel.cpp:197
+#: cmakecodecompletionmodel.cpp:200
 #, kde-format
 msgctxt "@item"
 msgid "Command"
 msgstr "Comando"
 
-#: cmakecodecompletionmodel.cpp:198
+#: cmakecodecompletionmodel.cpp:201
 #, kde-format
 msgctxt "@item"
 msgid "Variable"
 msgstr "Variabile"
 
-#: cmakecodecompletionmodel.cpp:199
+#: cmakecodecompletionmodel.cpp:202
 #, kde-format
 msgctxt "@item"
 msgid "Macro"
 msgstr "Macro"
 
-#: cmakecodecompletionmodel.cpp:200
+#: cmakecodecompletionmodel.cpp:203
 #, kde-format
 msgctxt "@item"
 msgid "Path"
 msgstr "Percorso"
 
-#: cmakecodecompletionmodel.cpp:201
+#: cmakecodecompletionmodel.cpp:204
 #, kde-format
 msgctxt "@item"
 msgid "Target"
 msgstr "Destinazione"
 
-#: cmakecodecompletionmodel.cpp:253
+#: cmakecodecompletionmodel.cpp:256
 #, kde-format
 msgid "wrong"
 msgstr "sbagliato"

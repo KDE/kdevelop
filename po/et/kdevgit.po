@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2020-01-14 21:18+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -205,73 +205,73 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Salvestamine globaalsesse seadistusse"
 
-#: gitplugin.cpp:182
+#: gitplugin.cpp:185
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "Giti täitmisfaili ei leitud. On see ikka süsteemi paigaldatud?"
 
-#: gitplugin.cpp:191
+#: gitplugin.cpp:194
 #, kde-format
 msgid "Git Commit"
 msgstr ""
 
-#: gitplugin.cpp:243
+#: gitplugin.cpp:246
 #, fuzzy, kde-format
 #| msgid "Rebase"
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Baasi muutmine"
 
-#: gitplugin.cpp:244
+#: gitplugin.cpp:247
 #, fuzzy, kde-format
 #| msgid "Git Stashes"
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Giti panipaigad"
 
-#: gitplugin.cpp:245
+#: gitplugin.cpp:248
 #, fuzzy, kde-format
 #| msgid "Stash Manager"
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Panipaikade haldur"
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:249
 #, fuzzy, kde-format
 #| msgid "Push Stash"
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Lükka panipaika üles"
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:250
 #, fuzzy, kde-format
 #| msgid "Pop Stash"
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Kõrvalda panipaik"
 
-#: gitplugin.cpp:280
+#: gitplugin.cpp:283
 #, kde-format
 msgid "error: %1"
 msgstr "viga: %1"
 
-#: gitplugin.cpp:379 gitplugin.cpp:390
+#: gitplugin.cpp:382 gitplugin.cpp:393
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Failide loend oli andmata"
 
-#: gitplugin.cpp:452
+#: gitplugin.cpp:455
 #, fuzzy, kde-format
 #| msgid "Could not revert changes"
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Muudatusi ei suudetud tühistada"
 
-#: gitplugin.cpp:487
+#: gitplugin.cpp:490
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Muudatusi ei suudetud tühistada"
 
-#: gitplugin.cpp:498
+#: gitplugin.cpp:501
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -279,40 +279,40 @@ msgstr ""
 "Järgmistel failidel on sisse kandmata muudatusi, mis lähevad kaotsi. Kas "
 "jätkata?"
 
-#: gitplugin.cpp:523
+#: gitplugin.cpp:526
 #, kde-format
 msgid "No files or message specified"
 msgstr "Faile või teadet polnud antud"
 
-#: gitplugin.cpp:527 gitplugin.cpp:546
+#: gitplugin.cpp:530 gitplugin.cpp:549
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Giti e-posti aadressi või nime pole määratud"
 
-#: gitplugin.cpp:543
+#: gitplugin.cpp:546
 #, fuzzy, kde-format
 #| msgid "No files or message specified"
 msgid "No message specified"
 msgstr "Faile või teadet polnud antud"
 
-#: gitplugin.cpp:617
+#: gitplugin.cpp:620
 #, kde-format
 msgid "No files to remove"
 msgstr "Pole ühtegi faili eemaldada"
 
-#: gitplugin.cpp:858
+#: gitplugin.cpp:900
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Leidub salvestamata muudatusi, kas panna need kõigepealt panipaika?"
 
-#: gitplugin.cpp:859
+#: gitplugin.cpp:901
 #, fuzzy, kde-format
 #| msgid "Pop Stash"
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Kõrvalda panipaik"
 
-#: gitplugin.cpp:860
+#: gitplugin.cpp:902
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

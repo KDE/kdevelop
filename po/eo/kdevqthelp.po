@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2023-06-27 22:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -204,12 +204,12 @@ msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
 msgstr "Elektu Qt-Helpdosieron..."
 
-#: qthelpdocumentation.cpp:181
+#: qthelpdocumentation.cpp:211
 #, kde-format
 msgid "Could not find any documentation for '%1'"
 msgstr "Ne eblis trovi ajnan dokumentadon por '%1'"
 
-#: qthelpdocumentation.cpp:276
+#: qthelpdocumentation.cpp:306
 #, kde-format
 msgid "QtHelp Home Page"
 msgstr "QtHelp Hejmpaĝo"

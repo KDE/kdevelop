@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-12 00:40+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2023-04-25 09:43+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -141,42 +141,42 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "&Исполняемый файл CMake:"
 
-#: cmakecodecompletionmodel.cpp:189
+#: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
 msgstr "НЕДОПУСТИМО"
 
-#: cmakecodecompletionmodel.cpp:197
+#: cmakecodecompletionmodel.cpp:200
 #, kde-format
 msgctxt "@item"
 msgid "Command"
 msgstr "Команда"
 
-#: cmakecodecompletionmodel.cpp:198
+#: cmakecodecompletionmodel.cpp:201
 #, kde-format
 msgctxt "@item"
 msgid "Variable"
 msgstr "Переменная"
 
-#: cmakecodecompletionmodel.cpp:199
+#: cmakecodecompletionmodel.cpp:202
 #, kde-format
 msgctxt "@item"
 msgid "Macro"
 msgstr "Макрос"
 
-#: cmakecodecompletionmodel.cpp:200
+#: cmakecodecompletionmodel.cpp:203
 #, kde-format
 msgctxt "@item"
 msgid "Path"
 msgstr "Путь"
 
-#: cmakecodecompletionmodel.cpp:201
+#: cmakecodecompletionmodel.cpp:204
 #, kde-format
 msgctxt "@item"
 msgid "Target"
 msgstr "Цель"
 
-#: cmakecodecompletionmodel.cpp:253
+#: cmakecodecompletionmodel.cpp:256
 #, kde-format
 msgid "wrong"
 msgstr "ошибка"

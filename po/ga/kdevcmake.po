@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop/kdevcmake.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-12 00:40+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -137,47 +137,47 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr ""
 
-#: cmakecodecompletionmodel.cpp:189
+#: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
 msgstr "NEAMHBHAILÍ"
 
-#: cmakecodecompletionmodel.cpp:197
+#: cmakecodecompletionmodel.cpp:200
 #, fuzzy, kde-format
 #| msgid "Command"
 msgctxt "@item"
 msgid "Command"
 msgstr "Ordú"
 
-#: cmakecodecompletionmodel.cpp:198
+#: cmakecodecompletionmodel.cpp:201
 #, fuzzy, kde-format
 #| msgid "Variable"
 msgctxt "@item"
 msgid "Variable"
 msgstr "Athróg"
 
-#: cmakecodecompletionmodel.cpp:199
+#: cmakecodecompletionmodel.cpp:202
 #, fuzzy, kde-format
 #| msgid "Macro"
 msgctxt "@item"
 msgid "Macro"
 msgstr "Macra"
 
-#: cmakecodecompletionmodel.cpp:200
+#: cmakecodecompletionmodel.cpp:203
 #, fuzzy, kde-format
 #| msgid "Path"
 msgctxt "@item"
 msgid "Path"
 msgstr "Conair"
 
-#: cmakecodecompletionmodel.cpp:201
+#: cmakecodecompletionmodel.cpp:204
 #, fuzzy, kde-format
 #| msgid "Target"
 msgctxt "@item"
 msgid "Target"
 msgstr "Sprioc"
 
-#: cmakecodecompletionmodel.cpp:253
+#: cmakecodecompletionmodel.cpp:256
 #, kde-format
 msgid "wrong"
 msgstr ""

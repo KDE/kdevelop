@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2023-10-26 11:26+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -76,7 +76,7 @@ msgstr "Compte « GitHub »"
 msgid "Enter a login and a password"
 msgstr "Saisissez un identifiant et un mot de passe"
 
-#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:45
 #, kde-format
 msgid "Waiting for response"
 msgstr "En attente de réponse"
@@ -141,26 +141,26 @@ msgstr "Veuillez saisir votre mot de passe ici."
 msgid "GitHub"
 msgstr "GitHub"
 
-#: ghproviderwidget.cpp:57
+#: ghproviderwidget.cpp:58
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Chercher…"
 
-#: ghproviderwidget.cpp:58
+#: ghproviderwidget.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
 msgstr ""
 "Vous pouvez appuyer sur la touche Entrée si vous ne voulez pas attendre."
 
-#: ghproviderwidget.cpp:70
+#: ghproviderwidget.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure your GitHub account"
 msgstr "Configurer votre compte GitHub"
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgid ""
 "The Git plugin could not be loaded which is required to import a GitHub "
@@ -169,19 +169,19 @@ msgstr ""
 "Le module Git n'a pas pu être chargé, alors qu'il est nécessaire pour "
 "importer un projet GitHub."
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "GitHub Provider Error"
 msgstr "Erreur du fournisseur GitHub"
 
-#: ghproviderwidget.cpp:105
+#: ghproviderwidget.cpp:106
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User"
 msgstr "Utilisateur"
 
-#: ghproviderwidget.cpp:106
+#: ghproviderwidget.cpp:107
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Organization"

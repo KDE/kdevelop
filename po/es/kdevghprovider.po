@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2020-07-25 19:23+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -69,7 +69,7 @@ msgstr "Cuenta de GitHub"
 msgid "Enter a login and a password"
 msgstr "Introduzca un usuario y su contraseña"
 
-#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:45
 #, kde-format
 msgid "Waiting for response"
 msgstr "Esperando respuesta"
@@ -134,25 +134,25 @@ msgstr "Por favor, escriba su contraseña aquí."
 msgid "GitHub"
 msgstr "GitHub"
 
-#: ghproviderwidget.cpp:57
+#: ghproviderwidget.cpp:58
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Buscar..."
 
-#: ghproviderwidget.cpp:58
+#: ghproviderwidget.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
 msgstr "Puede pulsar la tecla Intro si no desea esperar."
 
-#: ghproviderwidget.cpp:70
+#: ghproviderwidget.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure your GitHub account"
 msgstr "Configurar su cuenta de GitHub"
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgid ""
 "The Git plugin could not be loaded which is required to import a GitHub "
@@ -161,19 +161,19 @@ msgstr ""
 "El complemento Git no se puede cargar y es necesario para importar un "
 "proyecto de GitHub."
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "GitHub Provider Error"
 msgstr "Error del proveedor de GitHub"
 
-#: ghproviderwidget.cpp:105
+#: ghproviderwidget.cpp:106
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User"
 msgstr "Usuario"
 
-#: ghproviderwidget.cpp:106
+#: ghproviderwidget.cpp:107
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Organization"

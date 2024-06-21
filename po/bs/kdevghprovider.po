@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: $2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2013-11-01 01:34+0000\n"
 "Last-Translator: Samir Ribic <samir.ribic@etf.unsa.ba>\n"
 "Language-Team: none\n"
@@ -71,7 +71,7 @@ msgstr "Github nalog"
 msgid "Enter a login and a password"
 msgstr "Unesite korisničko ime i lozinku"
 
-#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:45
 #, kde-format
 msgid "Waiting for response"
 msgstr "Čekaj odgovor"
@@ -132,49 +132,49 @@ msgstr "Molim, unesite svoju lozinku ovdje"
 msgid "GitHub"
 msgstr ""
 
-#: ghproviderwidget.cpp:57
+#: ghproviderwidget.cpp:58
 #, fuzzy, kde-format
 #| msgid "Search"
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Traži"
 
-#: ghproviderwidget.cpp:58
+#: ghproviderwidget.cpp:59
 #, fuzzy, kde-format
 #| msgid "You can press the Return key if you don't want to wait"
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
 msgstr "Možete pritisnuti Enter ako ne želite čekati"
 
-#: ghproviderwidget.cpp:70
+#: ghproviderwidget.cpp:71
 #, fuzzy, kde-format
 #| msgid "Click this button to configure your Github account"
 msgctxt "@info:tooltip"
 msgid "Configure your GitHub account"
 msgstr "Kliknite ovo dugme da konfigurišete GitHub nalog"
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, kde-format
 msgid ""
 "The Git plugin could not be loaded which is required to import a GitHub "
 "project."
 msgstr ""
 
-#: ghproviderwidget.cpp:87
+#: ghproviderwidget.cpp:88
 #, fuzzy, kde-format
 #| msgid "Github Provider"
 msgctxt "@title:window"
 msgid "GitHub Provider Error"
 msgstr "Github pružalac"
 
-#: ghproviderwidget.cpp:105
+#: ghproviderwidget.cpp:106
 #, fuzzy, kde-format
 #| msgid "User"
 msgctxt "@item:inlistbox"
 msgid "User"
 msgstr "Korisnik"
 
-#: ghproviderwidget.cpp:106
+#: ghproviderwidget.cpp:107
 #, fuzzy, kde-format
 #| msgid "Organization"
 msgctxt "@item:inlistbox"

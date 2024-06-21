@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2021-12-27 18:39+0400\n"
 "Last-Translator: Kheyyam Gojayev <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -199,67 +199,67 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Ümumi tənzimləməyə yazın"
 
-#: gitplugin.cpp:182
+#: gitplugin.cpp:185
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "Git icra faylı tapıla bilmədi. O, sistemə quraşdırılıb?"
 
-#: gitplugin.cpp:191
+#: gitplugin.cpp:194
 #, kde-format
 msgid "Git Commit"
 msgstr "Git yerləşdirməsi"
 
-#: gitplugin.cpp:243
+#: gitplugin.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Bazanı köçürün"
 
-#: gitplugin.cpp:244
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git reesteri qeydləri"
 
-#: gitplugin.cpp:245
+#: gitplugin.cpp:248
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Reesterin idarəsi"
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:249
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Qeydi tətbiq edin"
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:250
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Reester qeydini çıxarın"
 
-#: gitplugin.cpp:280
+#: gitplugin.cpp:283
 #, kde-format
 msgid "error: %1"
 msgstr "xəta: %1"
 
-#: gitplugin.cpp:379 gitplugin.cpp:390
+#: gitplugin.cpp:382 gitplugin.cpp:393
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Siyahı və ya fayllar göstərilməyib"
 
-#: gitplugin.cpp:452
+#: gitplugin.cpp:455
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Dəyişikliklər sıfırlana bilmədi (siyahı və ya yol boşdur)"
 
-#: gitplugin.cpp:487
+#: gitplugin.cpp:490
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Dəyişikliklər geri qaytarıla bilmədi"
 
-#: gitplugin.cpp:498
+#: gitplugin.cpp:501
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -267,34 +267,34 @@ msgstr ""
 "Aşağıdakı fayllar göndərilməmiş dəyişikliklərdir və bunlar itiriləcəkdir, "
 "Davam edirsiniz?"
 
-#: gitplugin.cpp:523
+#: gitplugin.cpp:526
 #, kde-format
 msgid "No files or message specified"
 msgstr "Fayllar və ismarıclar göstərilməyib"
 
-#: gitplugin.cpp:527 gitplugin.cpp:546
+#: gitplugin.cpp:530 gitplugin.cpp:549
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Git üçün e-poçt və ya ad göstərilməyib"
 
-#: gitplugin.cpp:543
+#: gitplugin.cpp:546
 #, kde-format
 msgid "No message specified"
 msgstr "İsmarıc gösətrilməyib"
 
-#: gitplugin.cpp:617
+#: gitplugin.cpp:620
 #, kde-format
 msgid "No files to remove"
 msgstr "Silinəcək fayllar yoxdur"
 
-#: gitplugin.cpp:858
+#: gitplugin.cpp:900
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Göndərilməmiş dəyişikliklər var, öncə onları ehtiyyat saxlamaq "
 "istəyirsinizmi?"
 
-#: gitplugin.cpp:859
+#: gitplugin.cpp:901
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Pop Stash"
@@ -302,7 +302,7 @@ msgctxt "@action:button"
 msgid "Stash"
 msgstr "Reester qeydini çıxarın"
 
-#: gitplugin.cpp:860
+#: gitplugin.cpp:902
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

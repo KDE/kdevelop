@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2020-10-04 20:17+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -122,19 +122,19 @@ msgstr "대안:<br/>"
 msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
 msgstr "변경 사항을 적용할 수 없습니다: 텍스트가 \"%1\"이어야 하지만 \"%2\"임."
 
-#: patchhighlighter.cpp:416 patchhighlighter.cpp:423
+#: patchhighlighter.cpp:421 patchhighlighter.cpp:428
 #, kde-format
 msgctxt "@item"
 msgid "Insertion"
 msgstr "삽입"
 
-#: patchhighlighter.cpp:418 patchhighlighter.cpp:425
+#: patchhighlighter.cpp:423 patchhighlighter.cpp:430
 #, kde-format
 msgctxt "@item"
 msgid "Removal"
 msgstr "삭제"
 
-#: patchhighlighter.cpp:420 patchhighlighter.cpp:427
+#: patchhighlighter.cpp:425 patchhighlighter.cpp:432
 #, kde-format
 msgctxt "@item"
 msgid "Change"

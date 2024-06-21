@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-28 01:42+0000\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -402,7 +402,7 @@ msgctxt "@title:window"
 msgid "Setup Custom Include Paths"
 msgstr "设置自定义包含路径"
 
-#: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:57
+#: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Include"
@@ -458,12 +458,10 @@ msgctxt "@action:button"
 msgid "..."
 msgstr "..."
 
-#: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:86
-#, kde-format
-msgid "Bad #define directive in %1: %2"
-msgstr "在 %1 发现不良的 #define 指令：%2"
-
-#: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:139
+#: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:155
 #, kde-format
 msgid "Failed to save custom include paths in directory: %1"
 msgstr "无法保存自定义包含路径到目录：%1"
+
+#~ msgid "Bad #define directive in %1: %2"
+#~ msgstr "在 %1 发现不良的 #define 指令：%2"
