@@ -978,7 +978,7 @@ void TestDUChain::benchCodeModel()
 {
     const IndexedString file("testFile");
 
-    QVERIFY(!QTypeInfo<KDevelop::CodeModelItem>::isStatic);
+    QVERIFY(QTypeInfo<KDevelop::CodeModelItem>::isRelocatable);
 
     int i = 0;
     QBENCHMARK {
