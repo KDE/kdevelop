@@ -13,8 +13,8 @@
 #include <QFile>
 #include <QRegularExpression>
 #include <QVector>
-// Boost
-#include <boost/utility/string_ref.hpp>
+
+#include <string_view>
 
 using KDevelop::DocumentRange;
 using KDevelop::IndexedString;
@@ -77,7 +77,7 @@ private:
     IndexedString i_source;
     QString m_yamlContent;
     std::string m_sourceCode;
-    boost::string_ref m_sourceView;
+    std::string_view m_sourceView;
     static const QRegularExpression regex, check;
     Replacements all_replacements;
 };

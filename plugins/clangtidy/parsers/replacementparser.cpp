@@ -15,30 +15,17 @@
 #include <iterator>
 #include <tuple>
 
-#ifdef BOOST_NO_EXCEPTIONS
-// Because we are using boost we need to provide an implementation of this
-// function, because KDE disables exceptions on
-// boost libraries.
-namespace boost
-{
-void throw_exception(std::exception const& e)
-{
-    qCDebug(KDEV_CLANGTIDY) << e.what();
-}
-} // namespace boost
-#endif
-
 namespace
 {
 
 /**
 * @function
-* @brief For a given string_ref representing the source code, it counts the number of rows and the column where the
-* string_ref ends.
+* @brief For a given string view representing the source code, it counts the number of rows and the column where the
+* string view ends.
 * @param substring : a piece of the source code.
 * @return std::pair<size_t,size_t>: <b>first</b>: count of lines and <b>second</b>: column at the end.
 */
-inline std::pair<size_t, size_t> countOfRowAndColumnToTheEndOfSubstr(boost::string_ref substring)
+inline std::pair<size_t, size_t> countOfRowAndColumnToTheEndOfSubstr(std::string_view substring)
 {
     size_t line = 0, col = 0;
     for (const auto elem : substring) {
@@ -93,7 +80,7 @@ ReplacementParser::ReplacementParser(const QString& yaml_file, const QString& so
         cpp.open(m_sourceFile.toUtf8().constData());
         std::copy(std::istreambuf_iterator<char>(cpp), std::istreambuf_iterator<char>(),
                   std::back_insert_iterator<std::string>(m_sourceCode));
-        m_sourceView = boost::string_ref(m_sourceCode);
+        m_sourceView = m_sourceCode;
     }
 }
 

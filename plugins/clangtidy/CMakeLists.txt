@@ -7,10 +7,6 @@ set_package_properties(ClangTidy PROPERTIES
     TYPE RUNTIME
 )
 
-include_directories(
-    ${Boost_INCLUDE_DIRS}
-)
-
 declare_qt_logging_category(kdevclangtidy_LOG_SRCS
     TYPE PLUGIN
     IDENTIFIER KDEV_CLANGTIDY

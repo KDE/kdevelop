@@ -5,7 +5,6 @@ remove_definitions(
 )
 
 include_directories(
-    ${Boost_INCLUDE_DIRS}
     ../
     "${CMAKE_CURRENT_BINARY_DIR}/.."
 )
