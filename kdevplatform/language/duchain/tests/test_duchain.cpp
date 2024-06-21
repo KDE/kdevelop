@@ -914,16 +914,16 @@ void TestDUChain::testTypePtr()
     IntegralType::Ptr integralT(new IntegralType(IntegralType::TypeDouble));
 
     abstractT = integralT;
-    QCOMPARE(abstractT, integralT);
+    QCOMPARE(abstractT.get(), integralT.get());
 
     DelayedType::Ptr delayedT(new DelayedType);
-    QVERIFY(abstractT != delayedT);
+    QVERIFY(abstractT.get() != delayedT.get());
 
     auto abstractT2 = abstractT;
-    QCOMPARE(abstractT2, integralT);
+    QCOMPARE(abstractT2.get(), integralT.get());
 
     auto abstractT3 = AbstractType::Ptr(integralT);
-    QCOMPARE(abstractT2, integralT);
+    QCOMPARE(abstractT2.get(), integralT.get());
 }
 
 #if 0
