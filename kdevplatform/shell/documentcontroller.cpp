@@ -198,7 +198,7 @@ public:
         if (url.isLocalFile()) {
             return QFile::exists(url.toLocalFile());
         } else {
-            auto job = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatNoDetails, KIO::HideProgressInfo);
+            auto job = KIO::stat(url, KIO::StatJob::SourceSide, KIO::StatNoDetails, KIO::HideProgressInfo);
             KJobWidgets::setWindow(job, ICore::self()->uiController()->activeMainWindow());
             return job->exec();
         }
