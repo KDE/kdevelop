@@ -201,8 +201,13 @@ QSize ProblemInlineNoteProvider::inlineNoteSize(const KTextEditor::InlineNote& n
     return {layout.descriptionX + boundingRect.width() + layout.rightMargin, note.lineHeight()};
 }
 
-void ProblemInlineNoteProvider::paintInlineNote(const KTextEditor::InlineNote& note, QPainter& painter) const
+void ProblemInlineNoteProvider::paintInlineNote(const KTextEditor::InlineNote& note, QPainter& painter,
+                                                Qt::LayoutDirection direction) const
 {
+    // TODO: https://commits.kde.org/ktexteditor/1ee470de9aea37979836dd3e381cce7bc26344d7 added the third parameter -
+    // direction - to KTextEditor::InlineNoteProvider::paintInlineNote(). Should the new argument be used here somehow?
+    Q_UNUSED(direction);
+
     InlineNoteLayout layout;
     doInlineNoteLayout(note, &layout);
 
