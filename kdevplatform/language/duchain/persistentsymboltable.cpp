@@ -445,28 +445,31 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
         //    copy's constData() to filterIterator. Better yet, make CachedDeclarations = QVector<IndexedDeclaration>
         //    instead of KDevVarLengthArray<IndexedDeclaration>: the QVector::constData() pointer does not change until
         //    the QVector is modified, which it isn't in this case.
-        CachedIndexedRecursiveImports cachedImports;
-        auto it = repo.importsCache.constFind(visibility);
-        if (it != repo.importsCache.constEnd()) {
-            cachedImports = *it;
-        } else {
-            cachedImports = CachedIndexedRecursiveImports(visibility.set().stdSet());
+        const auto cachedImports = [&]() {
+            auto it = repo.importsCache.constFind(visibility);
+            if (it != repo.importsCache.constEnd()) {
+                return *it;
+            }
+
+            auto cachedImports = CachedIndexedRecursiveImports(visibility.set().stdSet());
             repo.importsCache.insert(visibility, cachedImports);
-        }
+            return cachedImports;
+        }();
 
         auto filterIterator = [&]() {
-            if (declarations.dataSize() > MinimumCountForCache) {
-                // Do visibility caching
+            if (declarations.dataSize() <= MinimumCountForCache) {
+                return FilteredDeclarationIterator(declarations.iterator(), cachedImports);
+            }
+
+            // Do visibility caching
+            const auto& cachedDeclarations = [&]() -> const CachedDeclarations& {
                 auto& cached = repo.declarationsCache[id];
                 auto cacheIt = cached.constFind(visibility);
                 if (cacheIt != cached.constEnd()) {
-                    Q_ASSERT(verifyNoDummies(*cacheIt));
-                    return FilteredDeclarationIterator(
-                        Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports, true);
+                    return *cacheIt;
                 }
 
-                auto insertIt = cached.insert(visibility, {});
-                auto& cache = *insertIt;
+                auto cache = CachedDeclarations();
                 {
                     auto cacheVisitor = [&cache](const IndexedDeclaration& decl) {
                         cache.append(decl);
@@ -481,12 +484,14 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
                     FilteredDeclarationCacheVisitor visitor(cacheVisitor, declarations.iterator(), cachedImports);
                 }
 
-                Q_ASSERT(verifyNoDummies(cache));
-                return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(), cache.size(), -1),
-                                                   cachedImports, true);
-            } else {
-                return FilteredDeclarationIterator(declarations.iterator(), cachedImports);
-            }
+                return *cached.insert(visibility, cache);
+            }();
+
+            Q_ASSERT(verifyNoDummies(cachedDeclarations));
+
+            return FilteredDeclarationIterator(
+                Declarations::Iterator(cachedDeclarations.constData(), cachedDeclarations.size(), -1), cachedImports,
+                true);
         }();
 
         for (; filterIterator; ++filterIterator) {
