@@ -224,7 +224,7 @@ QString KDevelop::stripAnsiSequences(const QString& str)
     } state = PLAIN;
 
     QString result;
-    result.reserve(str.count());
+    result.reserve(str.size());
 
     for (const QChar c : str) {
         const auto val = c.unicode();
