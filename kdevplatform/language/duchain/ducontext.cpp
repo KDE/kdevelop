@@ -221,8 +221,9 @@ void DUContextDynamicData::addDeclaration(Declaration* newDeclaration)
     if (!inserted) {
         // We haven't found any child that is before this one, so prepend it
         m_localDeclarations.insert(0, newDeclaration);
-        d_func_dynamic()->m_localDeclarationsList().prepend(newDeclaration);
-        Q_ASSERT(d_func()->m_localDeclarations()[0].data(m_topContext) == newDeclaration);
+        auto& declarations = d_func_dynamic()->m_localDeclarationsList();
+        declarations.insert(declarations.begin(), newDeclaration);
+        Q_ASSERT(declarations[0].data(m_topContext) == newDeclaration);
     }
 }
 
@@ -271,7 +272,10 @@ void DUContextDynamicData::addChildContext(DUContext* context)
 
     if (!inserted) {
         m_childContexts.insert(0, context);
-        d_func_dynamic()->m_childContextsList().prepend(indexed);
+
+        auto& childContexts = d_func_dynamic()->m_childContextsList();
+        childContexts.insert(childContexts.begin(), indexed);
+
         context->m_dynamicData->m_parentContext = m_context;
     }
 }
@@ -1293,7 +1297,7 @@ void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopD
             }
 
             newItem->isExplicitlyGlobal = true;
-            identifiers.prepend(newItem);
+            identifiers.insert(identifiers.begin(), newItem);
         }
     }
 }
