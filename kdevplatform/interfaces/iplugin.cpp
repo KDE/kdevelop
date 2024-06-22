@@ -16,6 +16,8 @@
 
 #include "iplugin.h"
 
+#include <memory>
+
 #include <KActionCollection>
 #include <KMainWindow>
 #include <KXmlGuiWindow>
@@ -148,7 +150,7 @@ public:
 
 KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* window)
 {
-    QScopedPointer<CustomXmlGUIClient> ret(new CustomXmlGUIClient(this));
+    auto ret = std::make_unique<CustomXmlGUIClient>(this);
 
     QString file;
     createActionsForMainWindow(window, file, *ret->actionCollection());
@@ -158,7 +160,7 @@ KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* wi
 
     Q_ASSERT(!file.isEmpty()); //A file must have been set
     ret->setXMLFile(file);
-    return ret.take();
+    return ret.release();
 }
 
 void KDevelop::IPlugin::createActionsForMainWindow( Sublime::MainWindow* /*window*/, QString& /*xmlFile*/, KActionCollection& /*actions*/ )
