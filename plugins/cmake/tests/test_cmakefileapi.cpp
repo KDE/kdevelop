@@ -35,7 +35,7 @@ class TestCMakeFileApi : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
-    void initTestSuite()
+    void initTestCase()
     {
         QLoggingCategory::setFilterRules(QStringLiteral("default.debug=true\nkdevelop.projectmanagers.cmake.debug=true\n"));
 
