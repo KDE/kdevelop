@@ -28,10 +28,11 @@ public:
     explicit QMakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = nullptr);
     ~QMakeBuilderPreferences() override;
 
+    QString name() const override;
+
 public Q_SLOTS:
     void apply() override;
     void reset() override;
-    QString name() const override;
 
     void loadOtherConfig(const QString &config);
     void addBuildConfig();

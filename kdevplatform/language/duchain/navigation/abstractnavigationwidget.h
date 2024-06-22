@@ -44,6 +44,8 @@ public:
 
     QSize sizeHint() const override;
 
+    NavigationContextPointer context() const;
+
 public Q_SLOTS:
     /// keyboard navigation support
     bool next() override;
@@ -63,8 +65,6 @@ public Q_SLOTS:
     void embeddedWidgetAccept();
     void embeddedWidgetUp();
     void embeddedWidgetDown();
-
-    NavigationContextPointer context() const;
 
     void navigateDeclaration(const KDevelop::IndexedDeclaration& decl);
 
