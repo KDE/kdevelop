@@ -528,7 +528,7 @@ void MIBreakpointController::notifyBreakpointModified(const AsyncRecord& r)
     const int row = rowFromDebuggerId(gdbId);
 
     if (row < 0) {
-        for (const auto& breakpoint : qAsConst(m_pendingDeleted)) {
+        for (const auto& breakpoint : std::as_const(m_pendingDeleted)) {
             if (breakpoint->debuggerId == gdbId) {
                 // Received a modification of a breakpoint whose deletion is currently
                 // in-flight; simply ignore it.

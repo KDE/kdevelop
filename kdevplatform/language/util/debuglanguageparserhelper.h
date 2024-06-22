@@ -206,7 +206,7 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
         files << "-";
     }
 
-    for (const QString& fileName : qAsConst(files)) {
+    for (const QString& fileName : std::as_const(files)) {
         if (fileName == "-") {
 #ifndef Q_OS_WIN
             if (isatty(STDIN_FILENO)) {

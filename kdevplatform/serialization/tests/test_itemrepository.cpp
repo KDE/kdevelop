@@ -247,7 +247,7 @@ private Q_SLOTS:
             repository.index(TestItemRequest(*item));
         }
 
-        for (auto item : qAsConst(items)) {
+        for (auto item : std::as_const(items)) {
             delete[] item;
         }
     }

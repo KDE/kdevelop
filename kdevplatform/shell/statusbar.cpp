@@ -168,7 +168,7 @@ void StatusBar::updateMessage(const IStatus* justInsertedMessage)
 
     QStringList messages;
     messages.reserve(m_messages.size());
-    for (const Message& m : qAsConst(m_messages)) {
+    for (const Message& m : std::as_const(m_messages)) {
         if (m.timeout < 0) {
             continue;
         }

@@ -532,8 +532,8 @@ QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outp
             changes[changeNumber].setMessage(commitMessage);
         }
     }
-    
-    for(const auto& item : qAsConst(changes)) {
+
+    for (const auto& item : std::as_const(changes)) {
         commits.prepend(QVariant::fromValue(item));
     }
     return commits;
@@ -621,7 +621,7 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
     VcsEvent item;
     QMap<qlonglong, VcsEvent> globalCommits;
     /// Move the VcsEvents to a more suitable data structure
-    for (auto& commit : qAsConst(commits)) {
+    for (auto& commit : std::as_const(commits)) {
         if (commit.canConvert<VcsEvent>()) {
             item = commit.value<VcsEvent>();
         }

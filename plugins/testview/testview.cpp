@@ -253,7 +253,7 @@ void TestView::runSelectedTests()
      * This is the somewhat-intuitive approach. Maybe a configuration should be offered.
      */
 
-    for (const QModelIndex& idx : qAsConst(indexes)) {
+    for (const QModelIndex& idx : std::as_const(indexes)) {
         QModelIndex index = m_filter->mapToSource(idx);
         if (index.parent().isValid() && indexes.contains(index.parent()))
         {

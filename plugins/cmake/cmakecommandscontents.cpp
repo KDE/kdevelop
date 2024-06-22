@@ -69,7 +69,7 @@ void CMakeCommandsContents::processOutput(int code)
     }
 
     beginInsertRows(index(type, 0, {}), 0, names.count()-1);
-    for (auto& name : qAsConst(names)) {
+    for (auto& name : std::as_const(names)) {
         m_typeForName.insert(name, type);
     }
     m_namesForType[type] = names;

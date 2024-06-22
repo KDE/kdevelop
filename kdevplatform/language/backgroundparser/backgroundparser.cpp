@@ -827,7 +827,7 @@ void BackgroundParser::updateProgressData()
         d->m_maxParseJobs = 0;
     } else {
         float additionalProgress = 0;
-        for (float progress : qAsConst(d->m_jobProgress)) {
+        for (float progress : std::as_const(d->m_jobProgress)) {
             additionalProgress += progress;
         }
 

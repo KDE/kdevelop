@@ -290,7 +290,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
             }
 
             auto* menu = new QMenu(text, parent);
-            for (QAction* action : qAsConst(actions)) {
+            for (QAction* action : std::as_const(actions)) {
                 menu->addAction(action);
             }
 

@@ -160,13 +160,13 @@ private:
         QSet<TopDUContext*> visitedContexts;
 
         m_imports.clear();
-        for (const IndexedString& doc : qAsConst(m_documents)) {
+        for (const IndexedString& doc : std::as_const(m_documents)) {
             TopDUContext* ctx = DUChain::self()->chainForDocument(doc);
             getImportsFromDU(ctx, visitedContexts);
             visitedContexts.remove(ctx);
         }
 
-        for (TopDUContext* ctx : qAsConst(visitedContexts)) {
+        for (TopDUContext* ctx : std::as_const(visitedContexts)) {
             m_imports.insert(ctx->url());
         }
     }

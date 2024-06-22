@@ -802,7 +802,7 @@ public:
     QList<CompletionTreeItemPointer> matchedItems() const
     {
         QList<CompletionTreeItemPointer> lookAheadItems;
-        for (const auto& pair: qAsConst(possibleLookAheadDeclarations)) {
+        for (const auto& pair : std::as_const(possibleLookAheadDeclarations)) {
             auto decl = pair.first;
             if (const auto matchQuality = matchedTypeToMatchQuality.value(decl->indexedType())) {
                 auto parent = pair.second;
@@ -974,7 +974,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         unsaved.Length = content.size();
 
         allUnsaved.reserve(otherUnsavedFiles.size() + 1);
-        for (const auto& f : qAsConst(otherUnsavedFiles)) {
+        for (const auto& f : std::as_const(otherUnsavedFiles)) {
             allUnsaved.append(f.toClangApi());
         }
         allUnsaved.append(unsaved);

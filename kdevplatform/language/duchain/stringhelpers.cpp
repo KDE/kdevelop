@@ -407,7 +407,7 @@ QByteArray formatComment(const QByteArray& comment)
     }
 
     QByteArray ret;
-    for (const auto& line : qAsConst(lines)) {
+    for (const auto& line : std::as_const(lines)) {
         if (!ret.isEmpty())
             ret += '\n';
         ret += line;

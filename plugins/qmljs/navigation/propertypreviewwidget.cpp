@@ -85,7 +85,7 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
     // Explore each possible supported property and return the first supported widget
     DUChainReadLocker lock;
 
-    for (const SupportedProperty& property : qAsConst(properties)) {
+    for (const SupportedProperty& property : std::as_const(properties)) {
         if (!decl || !decl->abstractType() || !decl->context() || !decl->context()->owner()) {
             continue;
         }

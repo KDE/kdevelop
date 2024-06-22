@@ -175,7 +175,7 @@ void TestCompilerProvider::testStorageNewSystem()
     includeMap[QStringLiteral("2")] = QStringLiteral("/usr/local/include/mydir");
 
     int i = 0;
-    for (auto& include : qAsConst(includeMap)) {
+    for (auto& include : std::as_const(includeMap)) {
         QCOMPARE(entry.includes.at(i++), include);
     }
 

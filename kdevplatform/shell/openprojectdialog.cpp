@@ -261,25 +261,25 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
             }
             // Now find a manager for the file(s) in our filelist.
             QVector<ProjectFileChoice> choices;
-            for (const auto& file : qAsConst(m_fileList)) {
+            for (const auto& file : std::as_const(m_fileList)) {
                 auto plugins = projectManagerForFile(file);
                 if ( plugins.contains(QStringLiteral("<built-in>")) ) {
                     plugins.removeAll(QStringLiteral("<built-in>"));
                     choices.append({i18nc("@item:inlistbox", "Open existing file \"%1\"", file), QStringLiteral("<built-in>"), QString(), QString()});
                 }
                 choices.reserve(choices.size() + plugins.size());
-                for (const auto& plugin : qAsConst(plugins)) {
+                for (const auto& plugin : std::as_const(plugins)) {
                     auto meta = m_projectPlugins.value(plugin);
                     choices.append({file + QLatin1String(" (") + plugin + QLatin1Char(')'), meta.pluginId(), meta.iconName(), file});
                 }
             }
             // add managers that work in any case (e.g. KDevGenericManager)
                 choices.reserve(choices.size() + m_genericProjectPlugins.size());
-            for (const auto& plugin : qAsConst(m_genericProjectPlugins)) {
-                qCDebug(SHELL) << plugin;
-                auto meta = m_projectPlugins.value(plugin);
-                choices.append({plugin, meta.pluginId(), meta.iconName(), QString()});
-            }
+                for (const auto& plugin : std::as_const(m_genericProjectPlugins)) {
+                    qCDebug(SHELL) << plugin;
+                    auto meta = m_projectPlugins.value(plugin);
+                    choices.append({plugin, meta.pluginId(), meta.iconName(), QString()});
+                }
             page->populateProjectFileCombo(choices);
         }
         m_url.setPath( m_url.path() + QLatin1Char('/') + m_url.fileName() + QLatin1Char('.') + ShellExtension::getInstance()->projectFileExtension() );

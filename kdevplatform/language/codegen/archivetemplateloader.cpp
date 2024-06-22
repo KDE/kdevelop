@@ -58,7 +58,7 @@ KTextTemplate::Template ArchiveTemplateLoader::loadByName(const QString& name,
 {
     Q_D(const ArchiveTemplateLoader);
 
-    for (ArchiveTemplateLocation* location : qAsConst(d->locations)) {
+    for (ArchiveTemplateLocation* location : std::as_const(d->locations)) {
         if (location->hasTemplate(name)) {
             return engine->newTemplate(location->templateContents(name), name);
         }

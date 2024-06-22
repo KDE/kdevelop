@@ -94,7 +94,7 @@ ProjectVcsPage::~ProjectVcsPage( )
 
 void ProjectVcsPage::setSourceLocation( const QUrl& s )
 {
-    for (KDevelop::VcsImportMetadataWidget* widget : qAsConst(importWidgets)) {
+    for (KDevelop::VcsImportMetadataWidget* widget : std::as_const(importWidgets)) {
         widget->setSourceLocation( KDevelop::VcsLocation( s ) );
     }
 }

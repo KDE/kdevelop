@@ -158,7 +158,7 @@ int main(int argc, char** argv)
     }
 
     runTimer.start();
-    for (auto benchmark : qAsConst(benchmarks)) {
+    for (auto benchmark : std::as_const(benchmarks)) {
         benchmark->start();
     }
 

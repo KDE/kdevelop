@@ -57,7 +57,7 @@ void TestProblemStoreNode::testChildren()
     nodes.push_back(new ProblemStoreNode());
 
     int c = 0;
-    for (ProblemStoreNode* node : qAsConst(nodes)) {
+    for (ProblemStoreNode* node : std::as_const(nodes)) {
         m_root->addChild(node);
 
         c++;

@@ -70,7 +70,7 @@ void JobPlan::parseJobCreated(ParseJob* job)
 void JobPlan::addJobsToParser()
 {
     // add parse jobs
-    for (const JobPrototype& job : qAsConst(m_jobs)) {
+    for (const JobPrototype& job : std::as_const(m_jobs)) {
         ICore::self()->languageController()->backgroundParser()->addDocument(
             job.m_url, TopDUContext::Empty, job.m_priority, this, job.m_flags
         );
@@ -96,7 +96,7 @@ bool JobPlan::runJobs(int timeoutMS)
 
     // verify they're started in the right order
     int currentBestPriority = BackgroundParser::BestPriority;
-    for (const IndexedString& url : qAsConst(m_createdJobs)) {
+    for (const IndexedString& url : std::as_const(m_createdJobs)) {
         const JobPrototype p = jobForUrl(url);
         QVERIFY_RETURN(p.m_priority >= currentBestPriority, false);
         currentBestPriority = p.m_priority;
@@ -129,7 +129,7 @@ void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext
     if (job.m_flags & ParseJob::RequiresSequentialProcessing) {
         // ensure that all jobs that respect sequential processing
         // with lower priority have been run
-        for (const JobPrototype& otherJob : qAsConst(m_jobs)) {
+        for (const JobPrototype& otherJob : std::as_const(m_jobs)) {
             if (otherJob.m_url == job.m_url) {
                 continue;
             }
@@ -300,7 +300,7 @@ void TestBackgroundparser::benchmark()
     }
 
     QBENCHMARK {
-        for (const IndexedString& url : qAsConst(jobUrls)) {
+        for (const IndexedString& url : std::as_const(jobUrls)) {
             ICore::self()->languageController()->backgroundParser()->addDocument(url);
         }
 

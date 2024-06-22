@@ -184,7 +184,7 @@ void TestProjectController::cleanup()
     for (IProject* p : projects) {
         m_projCtrl->closeProject(p);
     }
-    for (const Path& cfg : qAsConst(m_tmpConfigs)) {
+    for (const Path& cfg : std::as_const(m_tmpConfigs)) {
         QFile::remove(cfg.pathOrUrl());
     }
     qDeleteAll(m_fileManagerGarbage);

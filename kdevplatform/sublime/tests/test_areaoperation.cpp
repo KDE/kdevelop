@@ -269,7 +269,7 @@ void TestAreaOperation::checkArea2(MainWindow *mw)
     QCOMPARE(splitters.count(), 6+1); //6 child splitters + 1 central itself = 7 splitters
     int verticalSplitterCount = 0;
     int horizontalSplitterCount = 0;
-    for (QSplitter* s : qAsConst(splitters)) {
+    for (QSplitter* s : std::as_const(splitters)) {
         if (s->count() == 1)
             continue;   //this is a splitter with container inside, its orientation is not relevant
         if (s->orientation() == Qt::Vertical)
@@ -310,7 +310,7 @@ struct AreaWidgetChecker {
     AreaWidgetChecker() = default;
     Area::WalkerMode operator()(AreaIndex *index)
     {
-        for (View* view : qAsConst(index->views())) {
+        for (View* view : std::as_const(index->views())) {
             if (!view->hasWidget()) {
                 failureMessage += view->objectName() + " has no widget\n";
                 foundViewWithoutWidget = true;

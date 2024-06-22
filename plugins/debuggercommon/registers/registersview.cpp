@@ -42,7 +42,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
 
     QString group = activeViews().first();
 
-    for (QAction* act : qAsConst(m_actions)) {
+    for (QAction* act : std::as_const(m_actions)) {
         act->setChecked(false);
     }
 
@@ -99,7 +99,7 @@ void RegistersView::changeAvaliableActions()
     const QVector<Format> formats = m_modelsManager->formats(view) ;
     const QVector<Mode> modes = m_modelsManager->modes(view);
 
-    for (QAction* a : qAsConst(m_actions)) {
+    for (QAction* a : std::as_const(m_actions)) {
         bool enable = false;
         for (Format f : formats) {
             if (a->text() == Converters::formatToString(f)) {

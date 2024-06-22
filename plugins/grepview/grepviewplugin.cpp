@@ -104,7 +104,7 @@ GrepViewPlugin::~GrepViewPlugin()
 
 void GrepViewPlugin::unload()
 {
-    for (const QPointer<GrepDialog>& p : qAsConst(m_currentDialogs)) {
+    for (const QPointer<GrepDialog>& p : std::as_const(m_currentDialogs)) {
         if (p) {
             p->reject();
             p->deleteLater();

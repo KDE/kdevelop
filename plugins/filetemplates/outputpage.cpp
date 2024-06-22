@@ -248,7 +248,7 @@ QHash< QString, QUrl > OutputPage::fileUrls() const
 QHash< QString, KTextEditor::Cursor > OutputPage::filePositions() const
 {
     QHash<QString, KTextEditor::Cursor> positions;
-    for (const QString& identifier : qAsConst(d->fileIdentifiers)) {
+    for (const QString& identifier : std::as_const(d->fileIdentifiers)) {
         positions.insert(identifier, KTextEditor::Cursor(d->outputLines[identifier]->value(), d->outputColumns[identifier]->value()));
     }
     return positions;

@@ -101,7 +101,7 @@ QVector<IProblem::Ptr> ProblemStore::problems(const KDevelop::IndexedString& doc
 
     QVector<IProblem::Ptr> documentProblems;
 
-    for (auto& problem : qAsConst(d->m_allProblems)) {
+    for (auto& problem : std::as_const(d->m_allProblems)) {
         if (problem->finalLocation().document == document)
             documentProblems += problem;
     }

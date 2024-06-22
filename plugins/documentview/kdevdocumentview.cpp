@@ -234,7 +234,7 @@ void KDevDocumentView::appendActions(QMenu* menu, const QList<QAction*>& actions
 bool KDevDocumentView::selectedDocHasChanges()
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-    for (const QUrl& url : qAsConst(m_selectedDocs)) {
+    for (const QUrl& url : std::as_const(m_selectedDocs)) {
         KDevelop::IDocument* doc = dc->documentForUrl(url);
         if (!doc) continue;
         if (doc->state() != KDevelop::IDocument::Clean)
