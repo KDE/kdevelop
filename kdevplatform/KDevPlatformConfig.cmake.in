@@ -11,4 +11,7 @@ include(CMakeFindDependencyMacro)
 find_dependency(KF6TextEditor "@KF_MIN_VERSION@")
 find_dependency(KF6ThreadWeaver "@KF_MIN_VERSION@")
 
+find_dependency(Qt6Core5Compat "@QT_MIN_VERSION@")
+find_dependency(Qt6WebEngineWidgets "@QT_MIN_VERSION@") # for libKDevPlatformDocumentation
+
 include("${CMAKE_CURRENT_LIST_DIR}/KDevPlatformTargets.cmake")
