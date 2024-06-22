@@ -239,7 +239,7 @@ ClassNode* ClassNode::findSubClass(const KDevelop::IndexedQualifiedIdentifier& a
 
     /// @todo This is slow - we go over all the sub identifiers but the assumption is that
     ///       this function call is rare and the list is not that long.
-    for (Node* item : qAsConst(m_subIdentifiers)) {
+    for (Node* item : std::as_const(m_subIdentifiers)) {
         auto* classNode = dynamic_cast<ClassNode*>(item);
         if (classNode == nullptr)
             continue;
@@ -448,7 +448,7 @@ void Node::recursiveSortInternal()
     std::sort(m_children.begin(), m_children.end(), SortNodesFunctor());
 
     // Tell each node to sort it self.
-    for (Node* node : qAsConst(m_children)) {
+    for (Node* node : std::as_const(m_children)) {
         node->recursiveSortInternal();
     }
 }

@@ -757,7 +757,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
     Declaration* nearestDeclAfter = nullptr;
     int distanceAfter = INT_MAX;
 
-    for (auto& item : qAsConst(items)) {
+    for (auto& item : std::as_const(items)) {
         Declaration* decl = item.m_item.data();
 
         int distance = decl->range().start.line - cursor.line;

@@ -58,7 +58,7 @@ void ClangTidyParser::addData(const QStringList& stdoutList)
 {
     QVector<KDevelop::IProblem::Ptr> problems;
 
-    for (const auto& line : qAsConst(stdoutList)) {
+    for (const auto& line : std::as_const(stdoutList)) {
         auto smatch = m_hitRegExp.match(line);
 
         if (!smatch.hasMatch()) {

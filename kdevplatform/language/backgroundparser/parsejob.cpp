@@ -94,7 +94,7 @@ ParseJob::~ParseJob()
 {
     Q_D(ParseJob);
 
-    for (auto& p : qAsConst(d->notify)) {
+    for (auto& p : std::as_const(d->notify)) {
         if (p) {
             QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection,
                                       Q_ARG(KDevelop::IndexedString, d->url),

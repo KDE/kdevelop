@@ -173,7 +173,7 @@ void SessionFilesTracker::updateSessions()
 
     m_sessionDataList = newSessionDataList;
 
-    for (auto* observer : qAsConst(m_observers)) {
+    for (auto* observer : std::as_const(m_observers)) {
         setSessionDataList(observer, m_sessionDataList);
     }
 }

@@ -67,7 +67,7 @@ void TestKdevFormatSource::testNotFound_data()
 
     QCOMPARE(initTest(formatFileData), true);
 
-    for (const Source& source : qAsConst(m_sources)) {
+    for (const Source& source : std::as_const(m_sources)) {
         QTest::newRow(source.path.toUtf8()) << source.path << false << false << false << source.lines;
     }
 }
@@ -83,7 +83,7 @@ void TestKdevFormatSource::testNoCommands_data()
 
     QCOMPARE(initTest(formatFileData), true);
 
-    for (const Source& source : qAsConst(m_sources)) {
+    for (const Source& source : std::as_const(m_sources)) {
         QTest::newRow(source.path.toUtf8()) << source.path << true << false << false << source.lines;
     }
 }
@@ -99,7 +99,7 @@ void TestKdevFormatSource::testNotMatch_data()
 
     QCOMPARE(initTest(formatFileData), true);
 
-    for (const Source& source : qAsConst(m_sources)) {
+    for (const Source& source : std::as_const(m_sources)) {
         QTest::newRow(source.path.toUtf8()) << source.path << true << true << false << source.lines;
     }
 }
@@ -124,7 +124,7 @@ void TestKdevFormatSource::testMatch1_data()
     m_sources[1].lines.replaceInStrings(QStringLiteral("sqrt"), QStringLiteral("std::sqrt"));
     m_sources[2].lines.replaceInStrings(QStringLiteral("z"), QStringLiteral("Z"));
 
-    for (const Source& source : qAsConst(m_sources)) {
+    for (const Source& source : std::as_const(m_sources)) {
         QTest::newRow(source.path.toUtf8()) << source.path << true << true << true << source.lines;
     }
 }
@@ -285,7 +285,7 @@ bool TestKdevFormatSource::initTest(const QStringList& formatFileData)
         QStringLiteral("}")
     });
 
-    for (const Source& source : qAsConst(m_sources)) {
+    for (const Source& source : std::as_const(m_sources)) {
         if (!writeLines(source.path, source.lines))
             return false;
     }

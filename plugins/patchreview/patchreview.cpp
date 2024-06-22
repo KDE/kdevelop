@@ -421,7 +421,7 @@ QUrl PatchReviewPlugin::urlForFileModel(const KompareDiff2::DiffModel* model) co
     if (destPath.size() >= (int)m_depth) {
         destPath.remove(0, m_depth);
     }
-    for (const QString& segment : qAsConst(destPath)) {
+    for (const QString& segment : std::as_const(destPath)) {
         path.addPath(segment);
     }
     path.addPath(model->destinationFile());

@@ -64,7 +64,7 @@ void LldbVariable::formatChanged()
 {
     if(childCount())
     {
-        for (TreeItem* item : qAsConst(childItems)) {
+        for (TreeItem* item : std::as_const(childItems)) {
             Q_ASSERT(qobject_cast<MIVariable*>(item));
             if (auto* var = qobject_cast<MIVariable*>(item)) {
                 var->setFormat(format());

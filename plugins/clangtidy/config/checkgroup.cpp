@@ -53,7 +53,7 @@ void CheckGroup::addCheck(const QString& checkName)
     // 2. check if existing subgroup for prefix, if so add to that
     // include separator into subgroup name
     const auto subGroupName = QStringView{checkName}.left(nextSplitOffset + 1);
-    for (auto* subGroup : qAsConst(m_subGroups)) {
+    for (auto* subGroup : std::as_const(m_subGroups)) {
         if (subGroup->prefix() == subGroupName) {
             subGroup->addCheck(checkName);
             return;
@@ -106,7 +106,7 @@ void CheckGroup::applyEnabledRule(QStringView rule, EnabledState enabledState)
         return;
     }
 
-    for (auto* subGroup : qAsConst(m_subGroups)) {
+    for (auto* subGroup : std::as_const(m_subGroups)) {
         if (rule.startsWith(subGroup->prefix())) {
             subGroup->applyEnabledRule(rule, enabledState);
             return;
@@ -125,7 +125,7 @@ void CheckGroup::resetEnabledState(EnabledState enabledState)
 {
     m_groupEnabledState = enabledState;
 
-    for (auto* subGroup : qAsConst(m_subGroups)) {
+    for (auto* subGroup : std::as_const(m_subGroups)) {
         subGroup->resetEnabledState(EnabledInherited);
     }
     m_checksEnabledStates.fill(EnabledInherited);
@@ -292,7 +292,7 @@ void CheckGroup::setEnabledChecksCountDirtyInSuperGroups()
 
 void CheckGroup::setEnabledChecksCountDirtyInSubGroups()
 {
-    for (auto* subGroup : qAsConst(m_subGroups)) {
+    for (auto* subGroup : std::as_const(m_subGroups)) {
         subGroup->m_enabledChecksCountDirty = true;
         subGroup->setEnabledChecksCountDirtyInSubGroups();
     }

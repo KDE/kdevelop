@@ -154,7 +154,7 @@ void QuickOpenModel::textChanged(const QString& str)
     beginResetModel();
 
     m_filterText = str;
-    for (const ProviderEntry& provider : qAsConst(m_providers)) {
+    for (const ProviderEntry& provider : std::as_const(m_providers)) {
         if (provider.enabled) {
             provider.provider->setFilterText(str);
         }
@@ -193,7 +193,7 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
         return;
     }
 
-    for (const ProviderEntry& provider : qAsConst(m_providers)) {
+    for (const ProviderEntry& provider : std::as_const(m_providers)) {
         if (!qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
             continue;
         }
@@ -204,7 +204,7 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
         }
     }
 
-    for (const ProviderEntry& provider : qAsConst(m_providers)) {
+    for (const ProviderEntry& provider : std::as_const(m_providers)) {
         if (qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
             continue;
         }

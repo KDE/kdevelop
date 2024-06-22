@@ -167,7 +167,7 @@ void BenchItemRepository::removeDisk()
     TestDataRepository repo("TestDataRepositoryRemoveDisk", &mutex);
     QVERIFY(repo.statistics().totalItems == static_cast<uint>(data.size()));
     QBENCHMARK_ONCE {
-        for (uint index : qAsConst(indices)) {
+        for (uint index : std::as_const(indices)) {
             repo.deleteItem(index);
         }
 
@@ -184,7 +184,7 @@ void BenchItemRepository::lookupKey()
     QVector<uint> indices = insertData(data, repo);
     std::shuffle(indices.begin(), indices.end(), std::default_random_engine(0));
     QBENCHMARK {
-        for (uint index : qAsConst(indices)) {
+        for (uint index : std::as_const(indices)) {
             repo.itemFromIndex(index);
         }
     }

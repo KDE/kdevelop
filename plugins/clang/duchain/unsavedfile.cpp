@@ -34,7 +34,7 @@ void UnsavedFile::convertToUtf8()
 {
     m_fileNameUtf8 = m_fileName.toUtf8();
     m_contentsUtf8.clear();
-    for (const QString& line : qAsConst(m_contents)) {
+    for (const QString& line : std::as_const(m_contents)) {
         m_contentsUtf8 += line.toUtf8() + '\n';
     }
 }

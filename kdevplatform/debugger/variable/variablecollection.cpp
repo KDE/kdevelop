@@ -355,7 +355,7 @@ QList<Variable*> Locals::updateLocals(const QStringList& locals)
 
     QList<Variable*> ret;
     ret.reserve(childItems.size());
-    for (TreeItem* i : qAsConst(childItems)) {
+    for (TreeItem* i : std::as_const(childItems)) {
         Q_ASSERT(qobject_cast<Variable*>(i));
         ret << static_cast<Variable*>(i);
     }
@@ -398,7 +398,7 @@ QHash<QString, Locals*> VariablesRoot::allLocals() const
 void VariablesRoot::resetChanged()
 {
     m_watches->resetChanged();
-    for (Locals* l : qAsConst(m_locals)) {
+    for (Locals* l : std::as_const(m_locals)) {
         l->resetChanged();
     }
 }
@@ -460,7 +460,7 @@ void VariableCollection::updateAutoUpdate(IDebugSession* session)
 
 VariableCollection::~ VariableCollection()
 {
-    for (auto* view : qAsConst(m_textHintProvidedViews)) {
+    for (auto* view : std::as_const(m_textHintProvidedViews)) {
         view->unregisterTextHintProvider(&m_textHintProvider);
     }
 }

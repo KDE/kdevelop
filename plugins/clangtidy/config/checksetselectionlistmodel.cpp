@@ -104,7 +104,7 @@ void CheckSetSelectionListModel::store() const
 {
     if (!m_edited.isEmpty()) {
         QVector<CheckSetSelection> m_checkSetSelectionsToSave;
-        for (const auto& selection : qAsConst(m_checkSetSelections)) {
+        for (const auto& selection : std::as_const(m_checkSetSelections)) {
             const auto id = selection.id();
             if (m_edited.contains(id)) {
                 m_checkSetSelectionsToSave.append(selection);

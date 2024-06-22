@@ -77,7 +77,7 @@ void KDevelopSessions::match(KRunner::RunnerContext& context)
         return;
     }
 
-    for (const auto& session : qAsConst(m_sessionDataList)) {
+    for (const auto& session : std::as_const(m_sessionDataList)) {
         if (!context.isValid()) {
             return;
         }

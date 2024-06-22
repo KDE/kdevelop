@@ -99,7 +99,7 @@ void DocumentationQuickOpenProvider::setFilterText(const QString& text)
         int internalSplit = 0;
         int i = 0;
         matchingIndexes(p->indexModel(), text, QModelIndex(), idxs, internalSplit);
-        for (const QModelIndex& idx : qAsConst(idxs)) {
+        for (const QModelIndex& idx : std::as_const(idxs)) {
             m_results.insert(split + i, QuickOpenDataPointer(new DocumentationQuickOpenItem(idx, p)));
             i++;
         }

@@ -376,7 +376,7 @@ void CheckSetSelectionManager::onCheckSetSelectionsFolderChanged(const QString& 
                             m_checkSetSelections.end());
     }
 
-    for (const QString& checkSetSelectionId : qAsConst(removedCheckSetSelectionIds)) {
+    for (const QString& checkSetSelectionId : std::as_const(removedCheckSetSelectionIds)) {
         checkSetSelectionFileInfoLookup.remove(checkSetSelectionId);
         if (checkSetSelectionId == m_defaultCheckSetSelectionId) {
             m_defaultCheckSetSelectionId.clear();
@@ -437,7 +437,7 @@ void CheckSetSelectionManager::onDefaultCheckSetSelectionChanged(const QString& 
     }
 
     bool isExisting = false;
-    for (const CheckSetSelection& checkSetSelection : qAsConst(m_checkSetSelections)) {
+    for (const CheckSetSelection& checkSetSelection : std::as_const(m_checkSetSelections)) {
         if (checkSetSelection.id() == checkSetSelectionId) {
             isExisting = true;
             break;

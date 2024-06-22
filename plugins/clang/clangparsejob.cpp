@@ -344,7 +344,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
 #endif
     }
 
-    for (const auto& context : qAsConst(includedFiles)) {
+    for (const auto& context : std::as_const(includedFiles)) {
         if (!context) {
             continue;
         }

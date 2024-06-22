@@ -318,7 +318,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject* parent, const QVariantList&)
 
 ContextBrowserPlugin::~ContextBrowserPlugin()
 {
-    for (auto* view : qAsConst(m_textHintProvidedViews)) {
+    for (auto* view : std::as_const(m_textHintProvidedViews)) {
         view->unregisterTextHintProvider(&m_textHintProvider);
     }
 
@@ -522,7 +522,7 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(const TopDUCon
     QVector<KDevelop::IProblem::Ptr> closestProblems;
 
     // Show problems, located on the same line
-    for (auto& problem : qAsConst(allProblems)) {
+    for (auto& problem : std::as_const(allProblems)) {
         auto r = problem->finalLocation();
         if (r.onSingleLine() && r.start().line() == position.line())
             closestProblems += problem;
@@ -896,7 +896,7 @@ void ContextBrowserPlugin::updateForView(View* view)
 
 void ContextBrowserPlugin::updateViews()
 {
-    for (View* view : qAsConst(m_updateViews)) {
+    for (View* view : std::as_const(m_updateViews)) {
         updateForView(view);
     }
 
@@ -1048,7 +1048,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
 
             Declaration* decl = nullptr;
             //If we have a locked declaration, use that for jumping
-            for (ContextBrowserView* view : qAsConst(m_views)) {
+            for (ContextBrowserView* view : std::as_const(m_views)) {
                 decl = view->lockedDeclaration().data(); ///@todo Somehow match the correct context-browser view if there is multiple
                 if (decl)
                     break;

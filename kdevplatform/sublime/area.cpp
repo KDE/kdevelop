@@ -116,7 +116,7 @@ Area::Area(const Area &area)
 
     //clone tool views
     d->toolViews.clear();
-    for (View* view : qAsConst(area.toolViews())) {
+    for (View* view : std::as_const(area.toolViews())) {
         addToolView(view->document()->createView(), area.toolViewPosition(view));
     }
     initialize();
@@ -474,7 +474,7 @@ bool Area::closeView(View* view, bool silent)
         int viewsInOtherAreas = 0; // Number of views for the same document in other areas
         int viewsInOtherWorkingSets = 0; // Number of views for the same document in areas with different working-set
 
-        for (View* otherView : qAsConst(doc.data()->views())) {
+        for (View* otherView : std::as_const(doc.data()->views())) {
             Area* area = controller()->areaForView(otherView);
             if(area == this)
                 viewsInCurrentArea += 1;

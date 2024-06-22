@@ -146,7 +146,7 @@ bool PartDocument::close(DocumentSaveMode mode)
     //close all views and then delete ourself
     closeViews();
 
-    for (KParts::Part* part : qAsConst(d->partForView)) {
+    for (KParts::Part* part : std::as_const(d->partForView)) {
         part->deleteLater();
     }
 

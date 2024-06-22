@@ -26,7 +26,7 @@ struct WidgetFinder {
     explicit WidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
-        for (View* v : qAsConst(index->views())) {
+        for (View* v : std::as_const(index->views())) {
             if (v->hasWidget() && (v->widget() == w))
             {
                 view = v;
@@ -151,7 +151,7 @@ void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
     Q_ASSERT(index != -1);
 
     Area* area = nullptr;
-    for (Area* a : qAsConst(d->mainWindowAreas[index])) {
+    for (Area* a : std::as_const(d->mainWindowAreas[index])) {
         qCDebug(SUBLIME) << "Object name: " << a->objectName() << " id "
                      << areaTypeId;
         if (a->objectName() == areaTypeId)
@@ -173,7 +173,7 @@ void Controller::resetCurrentArea(MainWindow *mainWindow)
 
     int areaIndex = 0;
     Area* def = nullptr;
-    for (Area* a : qAsConst(d->areas)) {
+    for (Area* a : std::as_const(d->areas)) {
         if (a->objectName() == id)
         {
             def = a;

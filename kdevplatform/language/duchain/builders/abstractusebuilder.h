@@ -83,7 +83,7 @@ protected:
         DUChainReadLocker lock(DUChain::lock());
         QList<Declaration*> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id,
                                                                                                               newRange.start);
-        for (Declaration* declaration : qAsConst(declarations)) {
+        for (Declaration* declaration : std::as_const(declarations)) {
             if (!declaration->isForwardDeclaration()) {
                 declarations.clear();
                 declarations.append(declaration);

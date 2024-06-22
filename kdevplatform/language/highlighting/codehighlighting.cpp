@@ -252,7 +252,7 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
         highlightDeclaration(dec, ColorCache::self()->generatedColor(colorNum));
     }
 
-    for (Declaration* dec : qAsConst(takeFreeColors)) {
+    for (Declaration* dec : std::as_const(takeFreeColors)) {
         uint colorNum = dec->identifier().hash() % ColorCache::self()->primaryColorCount();
         uint oldColorNum = colorNum;
         while (declarationsForColors[colorNum]) {

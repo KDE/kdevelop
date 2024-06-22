@@ -62,7 +62,7 @@ void TestProblemStore::testAddProblems()
     QCOMPARE(m_store->count(), 0);
 
     int c = 0;
-    for (const IProblem::Ptr& problem : qAsConst(m_problems)) {
+    for (const IProblem::Ptr& problem : std::as_const(m_problems)) {
         m_store->addProblem(problem);
         c++;
 

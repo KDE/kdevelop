@@ -347,7 +347,7 @@ void OpenWithPlugin::openDefault() const
         KService::Ptr service = KApplicationTrader::preferredService(m_mimeType);
         delegateToExternalApplication(service);
     } else {
-        for (const QUrl& u : qAsConst(m_urls)) {
+        for (const QUrl& u : std::as_const(m_urls)) {
             ICore::self()->documentController()->openDocument( u );
         }
     }
@@ -362,7 +362,7 @@ void OpenWithPlugin::delegateToParts(const QString& pluginId) const
         // TODO: Solve this rather inside DocumentController
         prefName.clear();
     }
-    for (const QUrl& u : qAsConst(m_urls)) {
+    for (const QUrl& u : std::as_const(m_urls)) {
         ICore::self()->documentController()->openDocument(u, prefName);
     }
 }

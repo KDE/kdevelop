@@ -87,7 +87,7 @@ bool KDevFormatFile::read()
 
 bool KDevFormatFile::apply()
 {
-    for (const KDevFormatLine& formatLine : qAsConst(m_formatLines)) {
+    for (const KDevFormatLine& formatLine : std::as_const(m_formatLines)) {
         if (formatLine.wildcards.isEmpty()) {
             qStdOut() << "matched \"" << m_origFilePath << "\" without wildcard";
             return executeCommand(formatLine.command);

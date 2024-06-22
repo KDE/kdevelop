@@ -401,7 +401,7 @@ void PluginController::initialize()
     QMap<QString, bool> pluginMap;
     if( ShellExtension::getInstance()->defaultPlugins().isEmpty() )
     {
-        for (const KPluginMetaData& pi : qAsConst(d->plugins)) {
+        for (const KPluginMetaData& pi : std::as_const(d->plugins)) {
             QJsonValue enabledByDefaultValue = pi.rawData()[KEY_KPlugin()].toObject()[KEY_EnabledByDefault()];
             // plugins enabled until explicitly specified otherwise
             const bool enabledByDefault = (enabledByDefaultValue.isNull() || enabledByDefaultValue.toBool());
@@ -432,7 +432,7 @@ void PluginController::initialize()
     }
 
     // store current known set of enabled plugins
-    for (const KPluginMetaData& pi : qAsConst(d->plugins)) {
+    for (const KPluginMetaData& pi : std::as_const(d->plugins)) {
         if (isUserSelectable(pi)) {
             auto it = pluginMap.constFind(pi.pluginId());
             if (it != pluginMap.constEnd() && (it.value())) {
@@ -447,7 +447,7 @@ void PluginController::initialize()
     grp.sync();
 
     // load global plugins
-    for (const KPluginMetaData& pi : qAsConst(d->plugins)) {
+    for (const KPluginMetaData& pi : std::as_const(d->plugins)) {
         if (isGlobalPlugin(pi)) {
             loadPluginInternal(pi.pluginId());
         }
@@ -747,7 +747,7 @@ QStringList PluginController::allPluginNames() const
 
     QStringList names;
     names.reserve(d->plugins.size());
-    for (const KPluginMetaData& info : qAsConst(d->plugins)) {
+    for (const KPluginMetaData& info : std::as_const(d->plugins)) {
         names << info.pluginId();
     }
     return names;
@@ -768,7 +768,7 @@ QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensio
 
     QList<ContextMenuExtension> exts;
     exts.reserve(sortedPlugins.size());
-    for (IPlugin* plugin : qAsConst(sortedPlugins)) {
+    for (IPlugin* plugin : std::as_const(sortedPlugins)) {
         exts << plugin->contextMenuExtension(context, parent);
     }
 
@@ -786,7 +786,7 @@ QStringList PluginController::projectPlugins() const
     Q_D(const PluginController);
 
     QStringList names;
-    for (const KPluginMetaData& info : qAsConst(d->plugins)) {
+    for (const KPluginMetaData& info : std::as_const(d->plugins)) {
         if (info.value(KEY_Category()) == KEY_Project()) {
             names << info.pluginId();
         }
@@ -823,7 +823,7 @@ void PluginController::updateLoadedPlugins()
 
     QStringList defaultPlugins = ShellExtension::getInstance()->defaultPlugins();
     KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins() );
-    for (const KPluginMetaData& info : qAsConst(d->plugins)) {
+    for (const KPluginMetaData& info : std::as_const(d->plugins)) {
         if( isGlobalPlugin( info ) )
         {
             bool enabled = grp.readEntry(info.pluginId() + KEY_Suffix_Enabled(), ( defaultPlugins.isEmpty() || defaultPlugins.contains( info.pluginId() ) ) ) || !isUserSelectable( info );
@@ -855,7 +855,7 @@ void PluginController::resetToDefaults()
     QStringList plugins = ShellExtension::getInstance()->defaultPlugins();
     if( plugins.isEmpty() )
     {
-        for (const KPluginMetaData& info : qAsConst(d->plugins)) {
+        for (const KPluginMetaData& info : std::as_const(d->plugins)) {
             if (!isUserSelectable(info)) {
                 continue;
             }
@@ -867,7 +867,7 @@ void PluginController::resetToDefaults()
             }
         }
     }
-    for (const QString& s : qAsConst(plugins)) {
+    for (const QString& s : std::as_const(plugins)) {
         grp.writeEntry(s + KEY_Suffix_Enabled(), true);
     }
     grp.sync();

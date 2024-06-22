@@ -72,7 +72,7 @@ void TestProblemModelSet::initTestCase()
 
 void TestProblemModelSet::cleanupTestCase()
 {
-    for (auto& d : qAsConst(m_testData)) {
+    for (auto& d : std::as_const(m_testData)) {
         delete d.model;
     }
 
@@ -128,7 +128,7 @@ void TestProblemModelSet::testRemoveModel()
     QSignalSpy spy(m_set.data(), &ProblemModelSet::removed);
 
     int c = 0;
-    for (const TestModelData& data : qAsConst(m_testData)) {
+    for (const TestModelData& data : std::as_const(m_testData)) {
         m_set->removeModel(data.id);
         c++;
 
@@ -136,9 +136,6 @@ void TestProblemModelSet::testRemoveModel()
         QVERIFY(testModelCount >= c);
         QCOMPARE(m_set->models().count(), testModelCount - c);
     }
-
-
-
 }
 
 QTEST_MAIN(TestProblemModelSet)
