@@ -397,7 +397,7 @@ QMenu* GrepDialog::createSyncButtonMenu()
 
     // sort the remaining project URLs alphabetically
     std::sort(otherProjectUrls.begin(), otherProjectUrls.end());
-    for (const QUrl& url : qAsConst(otherProjectUrls)) {
+    for (const QUrl& url : std::as_const(otherProjectUrls)) {
         addUrlToMenu(ret, url);
     }
 

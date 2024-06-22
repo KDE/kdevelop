@@ -353,7 +353,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                 if(actions.size()==1 || !folder->parent()) {
                     separateActions.append(actions);
                 } else {
-                    for (QAction* a : qAsConst(actions)) {
+                    for (QAction* a : std::as_const(actions)) {
                         a->setText(a->property("name").toString());
                     }
                     QStringList path = model->pathFromIndex(folder->index());
@@ -366,7 +366,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
             }
             std::sort(separateActions.begin(), separateActions.end(), actionLess);
             std::sort(submenus.begin(), submenus.end(), menuLess);
-            for (QMenu* m : qAsConst(submenus)) {
+            for (QMenu* m : std::as_const(submenus)) {
                 projectMenu->addMenu(m);
             }
             projectMenu->addActions(separateActions);

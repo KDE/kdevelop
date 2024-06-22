@@ -171,7 +171,7 @@ void ParseProjectJob::queueFilesToParse()
     int processed = 0;
     // guard against reentrancy issues, see also bug 345480
     auto crashGuard = QPointer<ParseProjectJob> {this};
-    for (const IndexedString& url : qAsConst(d->filesToParse)) {
+    for (const IndexedString& url : std::as_const(d->filesToParse)) {
         ICore::self()->languageController()->backgroundParser()->addDocument(url, processingLevel,
                                                                              priority,
                                                                              this);

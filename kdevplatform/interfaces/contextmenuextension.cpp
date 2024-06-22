@@ -116,7 +116,7 @@ void populateMenuWithGroup(
         }
     }
 
-    for (QAction* action : qAsConst(groupActions)) {
+    for (QAction* action : std::as_const(groupActions)) {
         groupMenu->addAction(action);
     }
 

@@ -345,7 +345,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     if (qEnvironmentVariableIsSet("KDEV_CLANG_DISPLAY_ARGS")) {
         QTextStream out(stdout);
         out << "Invocation: clang";
-        for (const auto& arg : qAsConst(clangArguments)) {
+        for (const auto& arg : std::as_const(clangArguments)) {
             out << " " << arg;
         }
         out << " " << tuUrl.byteArray().constData() << "\n";

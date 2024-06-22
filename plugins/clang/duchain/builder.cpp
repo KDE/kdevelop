@@ -298,7 +298,7 @@ struct CurrentContext
     ~CurrentContext()
     {
         DUChainWriteLocker lock;
-        for (auto* childContext : qAsConst(previousChildContexts)) {
+        for (auto* childContext : std::as_const(previousChildContexts)) {
             if (!keepAliveContexts.contains(childContext)) {
                 delete childContext;
             }

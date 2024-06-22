@@ -366,7 +366,7 @@ ItemRepositoryRegistry::~ItemRepositoryRegistry()
         repository->close();
     }
 
-    for (QAtomicInt* counter : qAsConst(d->m_customCounters)) {
+    for (QAtomicInt* counter : std::as_const(d->m_customCounters)) {
         delete counter;
     }
 }

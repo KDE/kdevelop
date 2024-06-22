@@ -278,7 +278,7 @@ void IdealButtonBarWidget::applyOrderToLayout()
         }
     }
 
-    for (const QString& id : qAsConst(m_buttonsOrder)) {
+    for (const QString& id : std::as_const(m_buttonsOrder)) {
         if (auto b = button(id)) {
             m_buttonsLayout->addWidget(b);
         }

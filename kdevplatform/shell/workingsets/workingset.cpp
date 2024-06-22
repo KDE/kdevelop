@@ -79,7 +79,7 @@ QIcon generateIcon(const WorkingSetIconParameters& params)
         brightColor = brightColor.lighter(120 + (params.setId*13) % 55);
     }
     int at = 0;
-    for (const QRect& rect : qAsConst(rects)) {
+    for (const QRect& rect : std::as_const(rects)) {
         QColor currentColor;
         // pick the colored squares; you can get different patterns by re-ordering the "rects" list
         if ( (at + params.setId*7) % 4 < coloredCount ) {
@@ -317,7 +317,7 @@ struct DisableMainWindowUpdatesFromArea
 
     ~DisableMainWindowUpdatesFromArea() {
         if(m_area) {
-            for (Sublime::MainWindow* window : qAsConst(wasUpdatesEnabled)) {
+            for (Sublime::MainWindow* window : std::as_const(wasUpdatesEnabled)) {
                 window->setUpdatesEnabled(wasUpdatesEnabled.contains(window));
             }
         }

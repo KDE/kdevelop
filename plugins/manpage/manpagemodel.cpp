@@ -163,7 +163,7 @@ void ManPageModel::sectionLoaded()
         // End of init
         m_loaded = true;
         m_index.clear();
-        for (const auto& entries : qAsConst(m_manMap)) {
+        for (const auto& entries : std::as_const(m_manMap)) {
             m_index += entries.toList();
         }
         m_index.sort();

@@ -399,7 +399,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         bool hadActiveView = false;
         Sublime::View* activeView = d->activeView;
 
-        for (View* view : qAsConst(index->views())) {
+        for (View* view : std::as_const(index->views())) {
             QWidget *widget = view->widget(container);
 
             if (widget)
@@ -445,7 +445,7 @@ void MainWindowPrivate::reconstruct()
     {
         QSignalBlocker blocker(m_mainWindow);
         qCDebug(SUBLIME) << "RECONSTRUCT" << area << area->shownToolViews(Sublime::Left);
-        for (View* view : qAsConst(area->toolViews())) {
+        for (View* view : std::as_const(area->toolViews())) {
             QString id = view->document()->documentSpecifier();
             if (!id.isEmpty())
             {
@@ -465,7 +465,7 @@ void MainWindowPrivate::clearArea()
         m_leftTabbarCornerWidget->setParent(nullptr);
 
     //reparent tool view widgets to nullptr to prevent their deletion together with dockwidgets
-    for (View* view : qAsConst(area->toolViews())) {
+    for (View* view : std::as_const(area->toolViews())) {
         // FIXME should we really delete here??
         bool nonDestructive = true;
         idealController->removeView(view, nonDestructive);
@@ -521,7 +521,7 @@ void MainWindowPrivate::slotDockShown(Sublime::View* /*view*/, Sublime::Position
 
     QStringList ids;
     ids.reserve(finder.views.size());
-    for (View* v : qAsConst(finder.views)) {
+    for (View* v : std::as_const(finder.views)) {
         ids << v->document()->documentSpecifier();
     }
     area->setShownToolViews(pos, ids);

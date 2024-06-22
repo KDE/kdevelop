@@ -103,7 +103,7 @@ void TemplatesModel::refresh()
     d->extractTemplateDescriptions();
 
     QStringList templateArchives;
-    for (const QString& archivePath : qAsConst(d->searchPaths)) {
+    for (const QString& archivePath : std::as_const(d->searchPaths)) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
         for (const QString& file : files) {
             templateArchives.append(archivePath + file);
@@ -121,10 +121,10 @@ void TemplatesModel::refresh()
         }
     }
 
-    for (const QString& templateDescription : qAsConst(templateDescriptions)) {
+    for (const QString& templateDescription : std::as_const(templateDescriptions)) {
         QFileInfo fi(templateDescription);
         bool archiveFound = false;
-        for (const QString& templateArchive : qAsConst(templateArchives)) {
+        for (const QString& templateArchive : std::as_const(templateArchives)) {
             if (QFileInfo(templateArchive).baseName() == fi.baseName()) {
                 archiveFound = true;
 
@@ -183,7 +183,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
     searchPaths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, resourceFilter(
                                                  Template), QStandardPaths::LocateDirectory);
     searchPaths.removeDuplicates();
-    for (const QString& archivePath : qAsConst(searchPaths)) {
+    for (const QString& archivePath : std::as_const(searchPaths)) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
         for (const QString& file : files) {
             if (file.endsWith(QLatin1String(".zip")) || file.endsWith(QLatin1String(".tar.bz2"))) {
@@ -200,7 +200,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
     if (!dir.exists())
         dir.mkpath(QStringLiteral("."));
 
-    for (const QString& archName : qAsConst(templateArchives)) {
+    for (const QString& archName : std::as_const(templateArchives)) {
         qCDebug(LANGUAGE) << "processing template" << archName;
 
         QScopedPointer<KArchive> templateArchive;

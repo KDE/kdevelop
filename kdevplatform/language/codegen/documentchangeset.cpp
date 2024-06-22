@@ -485,7 +485,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     if (!removedLines.isEmpty()) {
         int offset = 0;
         std::sort(removedLines.begin(), removedLines.end());
-        for (int l : qAsConst(removedLines)) {
+        for (int l : std::as_const(removedLines)) {
             textLines.removeAt(l - offset);
             ++offset;
         }
@@ -501,7 +501,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
     using ChangesMap = QMultiMap<KTextEditor::Cursor, DocumentChangePointer>;
     ChangesMap sortedChanges;
 
-    for (const DocumentChangePointer& change : qAsConst(changes[file])) {
+    for (const DocumentChangePointer& change : std::as_const(changes[file])) {
         sortedChanges.insert(change->m_range.end(), change);
     }
 

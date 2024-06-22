@@ -102,7 +102,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
         QString nameSpace = QHelpEngineCore::namespaceName(fileName);
         if(!nameSpace.isEmpty()){
             QtHelpProvider *provider = nullptr;
-            for (QtHelpProvider* oldProvider : qAsConst(oldList)) {
+            for (QtHelpProvider* oldProvider : std::as_const(oldList)) {
                 if(QHelpEngineCore::namespaceName(oldProvider->fileName()) == nameSpace){
                     provider = oldProvider;
                     oldList.removeAll(provider);
@@ -117,7 +117,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
             }
 
             bool exist = false;
-            for (QtHelpProvider* existingProvider : qAsConst(m_qtHelpProviders)) {
+            for (QtHelpProvider* existingProvider : std::as_const(m_qtHelpProviders)) {
                 if(QHelpEngineCore::namespaceName(existingProvider->fileName()) ==  nameSpace){
                     exist = true;
                     break;
@@ -138,7 +138,7 @@ QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
 {
     QList<KDevelop::IDocumentationProvider*> list;
     list.reserve(m_qtHelpProviders.size() + (m_loadSystemQtDoc?1:0));
-    for (QtHelpProvider* provider : qAsConst(m_qtHelpProviders)) {
+    for (QtHelpProvider* provider : std::as_const(m_qtHelpProviders)) {
         list.append(provider);
     }
     if(m_loadSystemQtDoc){

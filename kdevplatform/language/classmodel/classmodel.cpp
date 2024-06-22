@@ -60,7 +60,7 @@ ClassModel::~ClassModel()
 void ClassModel::updateFilterString(const QString& a_newFilterString)
 {
     m_allClassesNode->updateFilterString(a_newFilterString);
-    for (ClassModelNodes::FilteredProjectFolder* folder : qAsConst(m_projectNodes)) {
+    for (ClassModelNodes::FilteredProjectFolder* folder : std::as_const(m_projectNodes)) {
         folder->updateFilterString(a_newFilterString);
     }
 }

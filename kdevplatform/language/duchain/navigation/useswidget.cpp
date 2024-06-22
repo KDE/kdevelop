@@ -552,7 +552,7 @@ void TopContextUsesWidget::setExpanded(bool expanded)
             setUpdatesEnabled(false);
 
             IndexedTopDUContext localTopContext(topContext);
-            for (const IndexedDeclaration& decl : qAsConst(m_allDeclarations)) {
+            for (const IndexedDeclaration& decl : std::as_const(m_allDeclarations)) {
                 if (decl.indexedTopContext() == localTopContext) {
                     addItem(new DeclarationWidget(*code, decl));
                 }

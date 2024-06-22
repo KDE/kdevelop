@@ -84,7 +84,7 @@ void FrameStackModel::setThreads(const QVector<ThreadItem>& threads)
 QModelIndex FrameStackModelPrivate::indexForThreadNumber(int threadNumber)
 {
     int i=0;
-    for (const auto& t : qAsConst(m_threads)) {
+    for (const auto& t : std::as_const(m_threads)) {
         if (t.nr == threadNumber) {
             return q->index(i, 0);
         }
@@ -349,7 +349,7 @@ QModelIndex FrameStackModel::currentThreadIndex() const
     Q_D(const FrameStackModel);
 
     int i = 0;
-    for (const ThreadItem& t : qAsConst(d->m_threads)) {
+    for (const ThreadItem& t : std::as_const(d->m_threads)) {
         if (t.nr == currentThread()) {
             return index(i, 0);
         }

@@ -65,7 +65,7 @@ void ChecksWidget::setChecksDb(const QSharedPointer<const ChecksDB>& db)
             m_ui->checksTree->setCurrentItem(levelItem);
         });
 
-        for (auto check : qAsConst(level->checks)) {
+        for (auto check : std::as_const(level->checks)) {
             auto checkItem = new QTreeWidgetItem(levelItem, { check->name }, CheckType);
             checkItem->setData(0, CheckRole, check->name);
             checkItem->setData(0, DescriptionRole, check->description);
@@ -294,7 +294,7 @@ void ChecksWidget::setEditable(bool editable)
     m_isEditable = editable;
 
     m_ui->resetButton->setEnabled(editable);
-    for (auto* item : qAsConst(m_items)) {
+    for (auto* item : std::as_const(m_items)) {
         auto flags = item->flags();
         flags.setFlag(Qt::ItemIsUserCheckable, m_isEditable);
         item->setFlags(flags);

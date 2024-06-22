@@ -81,7 +81,7 @@ DiffViewsCtrl::~DiffViewsCtrl()
     // Close the diff views so that kdevelop does
     // not show a lot of Untitled empty tabs on
     // when starting again
-    for (const auto& d : qAsConst(m_views)) {
+    for (const auto& d : std::as_const(m_views)) {
         if (d.second.doc)
             d.second.doc->close();
     }

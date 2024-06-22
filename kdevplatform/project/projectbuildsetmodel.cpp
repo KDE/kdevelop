@@ -126,7 +126,7 @@ void ProjectBuildSetModel::storeToSession( ISession* session )
     // Store the item ordering cache
     QVariantList sessionBuildItems;
     sessionBuildItems.reserve(d->orderingCache.size());
-    for (const QStringList& item : qAsConst(d->orderingCache)) {
+    for (const QStringList& item : std::as_const(d->orderingCache)) {
         sessionBuildItems.append( item );
     }
     KConfigGroup sessionBuildSetConfig = session->config()->group(QStringLiteral("Buildset"));
@@ -158,7 +158,7 @@ int ProjectBuildSetModel::findInsertionPlace( const QStringList& itemPath )
     // Points to the item which is next to last synchronization point.
     QList<BuildItem>::iterator nextItemIterator = d->items.begin();
 
-    for (auto& orderedItemPath : qAsConst(d->orderingCache)) {
+    for (auto& orderedItemPath : std::as_const(d->orderingCache)) {
         if (itemPath == orderedItemPath) {
             found = true;
             break;
@@ -357,7 +357,7 @@ void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
     Q_D(const ProjectBuildSetModel);
 
     QVariantList paths;
-    for (const BuildItem& item : qAsConst(d->items)) {
+    for (const BuildItem& item : std::as_const(d->items)) {
         if( item.itemProject() == project->name() )
             paths.append(item.itemPath());
     }

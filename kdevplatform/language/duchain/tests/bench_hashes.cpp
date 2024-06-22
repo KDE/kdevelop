@@ -286,7 +286,7 @@ void BenchHashes::typeRepo()
 
         QBENCHMARK {
             for (int i = 0; i < 100; ++i) {
-                for (const Pair& p : qAsConst(v.at(i % vectors))) {
+                for (const Pair& p : std::as_const(v.at(i % vectors))) {
                     if (p.first == i) {
                         p.second->size++;
                         break;

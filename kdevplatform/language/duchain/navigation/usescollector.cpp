@@ -163,9 +163,9 @@ void UsesCollector::startCollecting()
         ///Collect all "parsed versions" or forward-declarations etc. here, into allDeclarations
         QSet<IndexedDeclaration> allDeclarations;
 
-        for (Declaration* overload : qAsConst(decls)) {
+        for (Declaration* overload : std::as_const(decls)) {
             m_declarations = DUChainUtils::collectAllVersions(overload);
-            for (const IndexedDeclaration& d : qAsConst(m_declarations)) {
+            for (const IndexedDeclaration& d : std::as_const(m_declarations)) {
                 if (!d.data() || d.data()->id() != overload->id())
                     continue;
                 allDeclarations.insert(d);
@@ -197,7 +197,7 @@ void UsesCollector::startCollecting()
 
         ///Collect definitions for declarations
         if (m_collectDefinitions) {
-            for (const IndexedDeclaration d : qAsConst(allDeclarations)) {
+            for (const IndexedDeclaration d : std::as_const(allDeclarations)) {
                 Declaration* definition = FunctionDefinition::definition(d.data());
                 if (definition) {
                     qCDebug(LANGUAGE) << "adding definition";
@@ -212,7 +212,7 @@ void UsesCollector::startCollecting()
         QList<ReferencedTopDUContext> candidateTopContexts;
         candidateTopContexts.reserve(allDeclarations.size());
         m_declarations.reserve(allDeclarations.size());
-        for (const IndexedDeclaration d : qAsConst(allDeclarations)) {
+        for (const IndexedDeclaration d : std::as_const(allDeclarations)) {
             m_declarations << d;
             m_declarationTopContexts.insert(d.indexedTopContext());
             //We only collect declarations with the same type here..
@@ -230,7 +230,7 @@ void UsesCollector::startCollecting()
         ///to loading a whole TopDUContext.
         if (decl->inSymbolTable()) {
             //The declaration can only be used from other contexts if it is in the symbol table
-            for (const ReferencedTopDUContext& top : qAsConst(candidateTopContexts)) {
+            for (const ReferencedTopDUContext& top : std::as_const(candidateTopContexts)) {
                 if (top->parsingEnvironmentFile()) {
                     collectImporters(checker, top->parsingEnvironmentFile().data(), visited, collected);
                     //In C++, visibility is not handled strictly through the import-structure.
@@ -256,7 +256,7 @@ void UsesCollector::startCollecting()
             QSet<ParsingEnvironmentFile*> filteredCollected;
             QMap<IndexedString, bool> grepCache;
             // Filter the collected files by performing a grep
-            for (ParsingEnvironmentFile* file : qAsConst(collected)) {
+            for (ParsingEnvironmentFile* file : std::as_const(collected)) {
                 IndexedString url = file->url();
                 QMap<IndexedString, bool>::iterator grepCacheIt = grepCache.find(url);
                 if (grepCacheIt == grepCache.end()) {
@@ -279,7 +279,7 @@ void UsesCollector::startCollecting()
         ///update the "root" top-contexts that open the whole set with their imports.
         QSet<IndexedString> rootFiles;
         QSet<IndexedString> allFiles;
-        for (ParsingEnvironmentFile* importer : qAsConst(collected)) {
+        for (ParsingEnvironmentFile* importer : std::as_const(collected)) {
             QSet<IndexedString> allImports;
             QSet<ParsingEnvironmentFilePointer> visited;
             allImportedFiles(ParsingEnvironmentFilePointer(importer), allImports, visited);
@@ -296,7 +296,7 @@ void UsesCollector::startCollecting()
 
         //If we used the AllDeclarationsContextsAndUsesRecursive flag here, we would compute way too much. This way we only
         //set the minimum-features selectively on the files we really require them on.
-        for (ParsingEnvironmentFile* file : qAsConst(collected)) {
+        for (ParsingEnvironmentFile* file : std::as_const(collected)) {
             m_staticFeaturesManipulated.insert(file->url());
         }
 
@@ -309,7 +309,7 @@ void UsesCollector::startCollecting()
 
         m_waitForUpdate = rootFiles;
 
-        for (const IndexedString& file : qAsConst(rootFiles)) {
+        for (const IndexedString& file : std::as_const(rootFiles)) {
             qCDebug(LANGUAGE) << "updating root file:" << file.str();
             DUChain::self()->updateContextForUrl(file, TopDUContext::AllDeclarationsContextsAndUses, this);
         }
@@ -452,7 +452,7 @@ void UsesCollector::updateReady(const KDevelop::IndexedString& url, KDevelop::Re
             imports << KDevelop::ReferencedTopDUContext(imported.context(nullptr)->topContext());
     }
 
-    for (const KDevelop::ReferencedTopDUContext& import : qAsConst(imports)) {
+    for (const KDevelop::ReferencedTopDUContext& import : std::as_const(imports)) {
         IndexedString url = import->url();
         lock.unlock();
         updateReady(url, import);

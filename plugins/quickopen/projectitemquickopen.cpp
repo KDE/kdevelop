@@ -148,7 +148,7 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
     }
 
     KDevVarLengthArray<SubstringCache, 5> cache;
-    for (const QString& searchPart : qAsConst(search)) {
+    for (const QString& searchPart : std::as_const(search)) {
         cache.append(SubstringCache(searchPart));
     }
 
@@ -244,7 +244,7 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data(uint pos) const
         }
 
         ret.reserve(ret.size() + decls.size());
-        for (Declaration* decl : qAsConst(decls)) {
+        for (Declaration* decl : std::as_const(decls)) {
             DUChainItem item;
             item.m_item = decl;
             item.m_text = decl->qualifiedIdentifier().toString();
@@ -299,7 +299,7 @@ void ProjectItemDataProvider::reset()
     m_addedItemsCountCache.markDirty();
 
     KDevelop::DUChainReadLocker lock(DUChain::lock());
-    for (const IndexedString& u : qAsConst(m_files)) {
+    for (const IndexedString& u : std::as_const(m_files)) {
         uint count;
         const KDevelop::CodeModelItem* items;
         CodeModel::self().items(u, count, items);

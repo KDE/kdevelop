@@ -111,7 +111,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
 
     if ( !urls.isEmpty() ) {
         KDevelop::ContextMenuExtension ext;
-        for (const QUrl& url : qAsConst(urls)) {
+        for (const QUrl& url : std::as_const(urls)) {
             const KDevelop::Path file(url);
 
             auto action = new QAction(QIcon::fromTheme(QStringLiteral("text-dockerfile")), i18n("docker build '%1'", file.path()), parent);

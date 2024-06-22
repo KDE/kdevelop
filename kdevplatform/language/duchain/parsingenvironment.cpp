@@ -190,7 +190,7 @@ QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> ParsingEnvironmentFi
     }
 
     QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> ret;
-    for (const IndexedDUContext ctx : qAsConst(imp)) {
+    for (const IndexedDUContext ctx : std::as_const(imp)) {
         QExplicitlySharedDataPointer<ParsingEnvironmentFile> item = DUChain::self()->environmentFileForDocument(
             ctx.topContextIndex());
         if (item) {
@@ -219,7 +219,7 @@ QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> ParsingEnvironmentFi
     }
 
     QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> ret;
-    for (const IndexedDUContext ctx : qAsConst(imp)) {
+    for (const IndexedDUContext ctx : std::as_const(imp)) {
         QExplicitlySharedDataPointer<ParsingEnvironmentFile> f = DUChain::self()->environmentFileForDocument(
             ctx.topContextIndex());
         if (f)

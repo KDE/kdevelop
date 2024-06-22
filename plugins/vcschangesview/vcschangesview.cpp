@@ -89,7 +89,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     } else {
         QList<ProjectBaseItem*> items;
         items.reserve(projects.size());
-        for (IProject* p : qAsConst(projects)) {
+        for (IProject* p : std::as_const(projects)) {
             items += p->projectItem();
         }
 
@@ -104,7 +104,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     QList<QAction*> projectActions;
     QList<QAction*> fileActions;
     QList<QAction*> runActions;
-    for (const ContextMenuExtension& ext : qAsConst(extensions)) {
+    for (const ContextMenuExtension& ext : std::as_const(extensions)) {
         buildActions += ext.actions(ContextMenuExtension::BuildGroup);
         fileActions += ext.actions(ContextMenuExtension::FileGroup);
         projectActions += ext.actions(ContextMenuExtension::ProjectGroup);

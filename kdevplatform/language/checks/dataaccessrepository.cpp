@@ -62,7 +62,7 @@ QList<DataAccess*> DataAccessRepository::accessesInRange(const RangeInRevision& 
     Q_D(const DataAccessRepository);
 
     QList<DataAccess*> ret;
-    for (DataAccess* a : qAsConst(d->m_modifications)) {
+    for (DataAccess* a : std::as_const(d->m_modifications)) {
         if (range.contains(a->pos()))
             ret += a;
     }

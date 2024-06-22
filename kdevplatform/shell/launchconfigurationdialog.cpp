@@ -131,7 +131,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     auto* m = new QMenu(this);
     QList<LaunchConfigurationType*> types = Core::self()->runController()->launchConfigurationTypes();
     std::sort(types.begin(), types.end(), launchConfigGreaterThan); //we want it in reverse order
-    for (LaunchConfigurationType* type : qAsConst(types)) {
+    for (LaunchConfigurationType* type : std::as_const(types)) {
         connect(type, &LaunchConfigurationType::signalAddLaunchConfiguration, this, &LaunchConfigurationDialog::addConfiguration);
         QMenu* suggestionsMenu = type->launcherSuggestions();
 
@@ -156,7 +156,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
         m->insertAction(m->actions().at(0), separator);
     }
 
-    for (LaunchConfigurationType* type : qAsConst(types)) {
+    for (LaunchConfigurationType* type : std::as_const(types)) {
         auto* action = new QAction(type->icon(), type->name(), m);
         action->setProperty("configtype", QVariant::fromValue<QObject*>(type));
         connect(action, &QAction::triggered, this, &LaunchConfigurationDialog::createEmptyLauncher);
@@ -828,7 +828,7 @@ QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l ) 
 
         if( tparent )
         {
-            for (TreeItem* c : qAsConst(tparent->children)) {
+            for (TreeItem* c : std::as_const(tparent->children)) {
                 auto* li = dynamic_cast<LaunchItem*>( c );
                 if( li->launch && li->launch == l )
                 {
@@ -927,14 +927,14 @@ LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfig
 void LaunchConfigPagesContainer::setLaunchConfiguration( KDevelop::LaunchConfiguration* l )
 {
     config = l;
-    for (LaunchConfigurationPage* p : qAsConst(pages)) {
+    for (LaunchConfigurationPage* p : std::as_const(pages)) {
         p->loadFromConfiguration( config->config(), config->project() );
     }
 }
 
 void LaunchConfigPagesContainer::save()
 {
-    for (LaunchConfigurationPage* p : qAsConst(pages)) {
+    for (LaunchConfigurationPage* p : std::as_const(pages)) {
         p->saveToConfiguration( config->config() );
     }
     config->config().sync();

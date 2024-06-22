@@ -221,7 +221,7 @@ void ClangFixitAssistant::createActions()
 {
     KDevelop::IAssistant::createActions();
 
-    for (const ClangFixit& fixit : qAsConst(m_fixits)) {
+    for (const ClangFixit& fixit : std::as_const(m_fixits)) {
         addAction(IAssistantAction::Ptr(new ClangFixitAction(fixit)));
     }
 }

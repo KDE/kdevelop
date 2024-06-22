@@ -169,7 +169,7 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
 
     if ( !urls.isEmpty() ) {
         KDevelop::ContextMenuExtension ext;
-        for (const QUrl& url : qAsConst(urls)) {
+        for (const QUrl& url : std::as_const(urls)) {
             const KDevelop::Path file(url);
             const auto arches = availableArches(file);
             for (const QString& arch : arches) {

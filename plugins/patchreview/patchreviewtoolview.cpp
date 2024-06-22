@@ -277,7 +277,7 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& pos)
     }
 
     QList<QAction*> vcsActions;
-    for (const ContextMenuExtension& ext : qAsConst(extensions)) {
+    for (const ContextMenuExtension& ext : std::as_const(extensions)) {
         vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
     }
 

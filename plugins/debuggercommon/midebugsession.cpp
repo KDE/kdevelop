@@ -112,7 +112,7 @@ MIVariable* MIDebugSession::findVariableByVarobjName(const QString &varobjName) 
 
 void MIDebugSession::markAllVariableDead()
 {
-    for (auto* variable : qAsConst(m_allVariables)) {
+    for (auto* variable : std::as_const(m_allVariables)) {
         variable->markAsDead();
     }
     m_allVariables.clear();

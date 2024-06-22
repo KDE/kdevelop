@@ -72,7 +72,7 @@ void ProblemModelSet::showModel(const QString &id)
 {
     Q_D(ProblemModelSet);
 
-    for (const ModelData &data : qAsConst(d->data)) {
+    for (const ModelData& data : std::as_const(d->data)) {
         if (data.id == id) {
             emit showRequested(data.id);
             return;

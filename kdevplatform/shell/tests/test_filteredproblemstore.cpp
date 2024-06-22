@@ -168,7 +168,7 @@ void TestFilteredProblemStore::testNoGrouping()
 {
     // Add problems
     int c = 0;
-    for (const IProblem::Ptr& p : qAsConst(m_problems)) {
+    for (const IProblem::Ptr& p : std::as_const(m_problems)) {
         m_store->addProblem(p);
 
         c++;
@@ -309,7 +309,7 @@ void TestFilteredProblemStore::testPathGrouping()
     m_store->setGrouping(PathGrouping);
 
     // Add problems
-    for (const IProblem::Ptr& p : qAsConst(m_problems)) {
+    for (const IProblem::Ptr& p : std::as_const(m_problems)) {
         m_store->addProblem(p);
     }
 

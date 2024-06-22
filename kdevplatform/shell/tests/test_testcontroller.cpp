@@ -189,7 +189,7 @@ void TestTestController::testResults()
     QList<TestResult::TestCaseResult> results;
     results << TestResult::Passed << TestResult::Failed << TestResult::Error << TestResult::Skipped << TestResult::NotRun;
 
-    for (const TestResult::TestCaseResult result : qAsConst(results)) {
+    for (const TestResult::TestCaseResult result : std::as_const(results)) {
         emitTestResult(suite, result);
         QCOMPARE(spy.size(), 1);
 

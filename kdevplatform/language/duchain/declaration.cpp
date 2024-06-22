@@ -693,7 +693,7 @@ QMap<IndexedString, QVector<RangeInRevision>> Declaration::uses() const
         useContexts.append(directUseContexts.data(), directUseContexts.size());
     }
 
-    for (const IndexedTopDUContext indexedContext : qAsConst(useContexts)) {
+    for (const IndexedTopDUContext indexedContext : std::as_const(useContexts)) {
         TopDUContext* context = indexedContext.data();
         if (context) {
             QMap<RangeInRevision, bool>& ranges(tempUses[context->url()]);
@@ -778,7 +778,7 @@ QMap<IndexedString, QVector<KTextEditor::Range>> Declaration::usesCurrentRevisio
         useContexts.append(directUseContexts.data(), directUseContexts.size());
     }
 
-    for (const IndexedTopDUContext indexedContext : qAsConst(useContexts)) {
+    for (const IndexedTopDUContext indexedContext : std::as_const(useContexts)) {
         TopDUContext* context = indexedContext.data();
         if (context) {
             QMap<KTextEditor::Range, bool>& ranges(tempUses[context->url()]);

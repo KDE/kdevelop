@@ -172,7 +172,7 @@ public:
         QList<QUrl> openProjects;
         openProjects.reserve( m_projects.size() );
 
-        for (IProject* project : qAsConst(m_projects)) {
+        for (IProject* project : std::as_const(m_projects)) {
             openProjects.append(project->projectFile().toUrl());
         }
 
@@ -859,7 +859,7 @@ void ProjectController::openProject( const QUrl &projectFile )
         auto* newSession = new QRadioButton(i18nc("@option:radio", "Add project to current session"));
         sessions.layout()->addWidget(newSession);
         newSession->setChecked(true);
-        for (const Session* session : qAsConst(existingSessions)) {
+        for (const Session* session : std::as_const(existingSessions)) {
             auto* button = new QRadioButton(i18nc("@option:radio", "Open session %1", session->description()));
             button->setProperty("sessionid", session->id().toString());
             sessions.layout()->addWidget(button);
@@ -990,7 +990,7 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
     d->m_projectPlugins.remove( proj );
 
     QList<IPlugin*> otherProjectPlugins;
-    for (const QList<IPlugin*>& _list : qAsConst(d->m_projectPlugins)) {
+    for (const QList<IPlugin*>& _list : std::as_const(d->m_projectPlugins)) {
         otherProjectPlugins << _list;
     }
 
@@ -1295,7 +1295,7 @@ QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, b
 
     Path path(path_);
     IProject* sourceDirProject = nullptr, *buildDirProject = nullptr;
-    for (IProject* proj : qAsConst(d->m_projects)) {
+    for (IProject* proj : std::as_const(d->m_projects)) {
         if(proj->path().isParentOf(path) || proj->path() == path)
             sourceDirProject = proj;
         if(proj->buildSystemManager())

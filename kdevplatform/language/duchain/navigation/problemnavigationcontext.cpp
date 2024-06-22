@@ -213,7 +213,7 @@ QString ProblemNavigationContext::html(bool shorten)
     m_assistantsActions.clear();
 
     int problemIndex = 0;
-    for (auto& problem : qAsConst(m_problems)) {
+    for (auto& problem : std::as_const(m_problems)) {
         html(problem);
 
         if (++problemIndex != m_problems.size())

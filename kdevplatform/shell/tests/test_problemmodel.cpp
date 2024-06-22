@@ -93,7 +93,7 @@ void TestProblemModel::testNoGrouping()
 
     // Check if adding the problems works
     int c = 0;
-    for (const IProblem::Ptr& p : qAsConst(m_problems)) {
+    for (const IProblem::Ptr& p : std::as_const(m_problems)) {
         m_model->addProblem(p);
         c++;
 
@@ -189,7 +189,7 @@ void TestProblemModel::testPathGrouping()
 
     // Check if add problems works
     int c = 0;
-    for (const IProblem::Ptr& p : qAsConst(m_problems)) {
+    for (const IProblem::Ptr& p : std::as_const(m_problems)) {
         m_model->addProblem(p);
         c++;
 
@@ -288,7 +288,7 @@ void TestProblemModel::testSeverityGrouping()
 
     // Check if adding problems works
     int c = 0;
-    for (const IProblem::Ptr& p : qAsConst(m_problems)) {
+    for (const IProblem::Ptr& p : std::as_const(m_problems)) {
         m_model->addProblem(p);
         QVERIFY(checkSeverityGroup(c, m_problems[c]));
         c++;

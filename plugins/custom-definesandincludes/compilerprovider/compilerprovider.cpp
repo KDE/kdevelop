@@ -168,7 +168,7 @@ void CompilerProvider::projectChanged(KDevelop::IProject* p)
     }
 
     //we need to search, sdk compiler names are weird: arm-linux-androideabi-g++
-    for (auto& factory : qAsConst(m_factories)) {
+    for (auto& factory : std::as_const(m_factories)) {
         if (factory->isSupported(path)) {
             auto compiler = factory->createCompiler(path.lastPathSegment(), pathString);
             registerCompiler(compiler);
@@ -286,7 +286,7 @@ bool CompilerProvider::registerCompiler(const CompilerPointer& compiler)
         return false;
     }
 
-    for (auto& c : qAsConst(m_compilers)) {
+    for (auto& c : std::as_const(m_compilers)) {
         if (c->name() == compiler->name()) {
             return false;
         }

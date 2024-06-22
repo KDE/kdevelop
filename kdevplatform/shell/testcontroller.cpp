@@ -88,7 +88,7 @@ QList< ITestSuite* > TestController::testSuitesForProject(IProject* project) con
     Q_D(const TestController);
 
     QList<ITestSuite*> suites;
-    for (ITestSuite* suite : qAsConst(d->suites)) {
+    for (ITestSuite* suite : std::as_const(d->suites)) {
         if (suite->project() == project)
         {
             suites << suite;

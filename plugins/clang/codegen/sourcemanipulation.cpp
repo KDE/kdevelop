@@ -75,7 +75,7 @@ QString zeroIndentation(const QString& str, int fromLine = 0)
 
     QRegularExpression nonWhiteSpace(QStringLiteral("\\S"));
     int minLineStart = 10000;
-    for (const auto& line : qAsConst(lines)) {
+    for (const auto& line : std::as_const(lines)) {
         int lineStart = line.indexOf(nonWhiteSpace);
         if (lineStart < minLineStart) {
             minLineStart = lineStart;
@@ -83,7 +83,7 @@ QString zeroIndentation(const QString& str, int fromLine = 0)
     }
 
     ret.reserve(ret.size() + lines.size());
-    for (const auto& line : qAsConst(lines)) {
+    for (const auto& line : std::as_const(lines)) {
         ret << line.mid(minLineStart);
     }
 

@@ -111,7 +111,7 @@ void StaticAssistantsManagerPrivate::documentLoaded(IDocument* document)
 void StaticAssistantsManagerPrivate::textInserted(Document* doc, const Cursor& cursor, const QString& text)
 {
     auto changed = false;
-    for (auto& assistant : qAsConst(m_registeredAssistants)) {
+    for (auto& assistant : std::as_const(m_registeredAssistants)) {
         auto range = Range(cursor, cursor + Cursor(0, text.size()));
         auto wasUseful = assistant->isUseful();
         assistant->textChanged(doc, range, {});
@@ -129,7 +129,7 @@ void StaticAssistantsManagerPrivate::textRemoved(Document* doc, const Range& ran
                                                  const QString& removedText)
 {
     auto changed = false;
-    for (auto& assistant : qAsConst(m_registeredAssistants)) {
+    for (auto& assistant : std::as_const(m_registeredAssistants)) {
         auto wasUseful = assistant->isUseful();
         assistant->textChanged(doc, range, removedText);
         if (wasUseful != assistant->isUseful()) {
@@ -147,7 +147,7 @@ void StaticAssistantsManager::notifyAssistants(const IndexedString& url,
 {
     Q_D(StaticAssistantsManager);
 
-    for (auto& assistant : qAsConst(d->m_registeredAssistants)) {
+    for (auto& assistant : std::as_const(d->m_registeredAssistants)) {
         assistant->updateReady(url, context);
     }
 }
@@ -170,7 +170,7 @@ QVector<KDevelop::Problem::Ptr> KDevelop::StaticAssistantsManager::problemsForCo
 
     auto ret = QVector<KDevelop::Problem::Ptr>();
     qCDebug(LANGUAGE) << "Trying to find assistants for language" << language->name();
-    for (const auto& assistant : qAsConst(d->m_registeredAssistants)) {
+    for (const auto& assistant : std::as_const(d->m_registeredAssistants)) {
         if (assistant->supportedLanguage() != language)
             continue;
 

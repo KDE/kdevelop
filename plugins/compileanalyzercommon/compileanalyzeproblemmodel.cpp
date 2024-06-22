@@ -41,7 +41,7 @@ void CompileAnalyzeProblemModel::setMessage(const QString& message)
 // TODO Add into KDevelop::ProblemModel class ?
 bool CompileAnalyzeProblemModel::problemExists(KDevelop::IProblem::Ptr newProblem)
 {
-    for (const auto& problem : qAsConst(m_problems)) {
+    for (const auto& problem : std::as_const(m_problems)) {
         if (newProblem->source() == problem->source() &&
             newProblem->sourceString() == problem->sourceString() &&
             newProblem->severity() == problem->severity() &&

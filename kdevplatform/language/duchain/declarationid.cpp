@@ -122,7 +122,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::declarations(const TopDUContext*
 
     if (!ret.isEmpty() && m_specialization.index()) {
         KDevVarLengthArray<Declaration*> newRet;
-        for (Declaration* decl : qAsConst(ret)) {
+        for (Declaration* decl : std::as_const(ret)) {
             Declaration* specialized = decl->specialize(m_specialization, top ? top : decl->topContext());
             if (specialized)
                 newRet.append(specialized);

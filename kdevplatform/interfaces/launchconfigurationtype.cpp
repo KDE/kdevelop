@@ -57,7 +57,7 @@ ILauncher* LaunchConfigurationType::launcherForId(const QString& id) const
 {
     Q_D(const LaunchConfigurationType);
 
-    for (ILauncher* l : qAsConst(d->starters)) {
+    for (ILauncher* l : std::as_const(d->starters)) {
         if( l->id() == id ) {
            return l;
         }

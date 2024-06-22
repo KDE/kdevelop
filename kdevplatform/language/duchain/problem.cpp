@@ -36,7 +36,7 @@ LocalIndexedProblem::LocalIndexedProblem(const ProblemPointer& problem, const To
     auto& serialized = const_cast<Problem*>(problem.data())->d_func_dynamic()->diagnosticsList();
     serialized.clear();
     serialized.reserve(problem->m_diagnostics.size());
-    for (const ProblemPointer& child : qAsConst(problem->m_diagnostics)) {
+    for (const ProblemPointer& child : std::as_const(problem->m_diagnostics)) {
         serialized << LocalIndexedProblem(child, top);
     }
 
@@ -110,7 +110,7 @@ QVector<IProblem::Ptr> Problem::diagnostics() const
 {
     QVector<IProblem::Ptr> vector;
 
-    for (const auto& ptr : qAsConst(m_diagnostics)) {
+    for (const auto& ptr : std::as_const(m_diagnostics)) {
         vector.push_back(ptr);
     }
 

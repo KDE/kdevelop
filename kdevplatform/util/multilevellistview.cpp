@@ -364,7 +364,7 @@ void MultiLevelListView::setModel(QAbstractItemModel* model)
 
     d->model = model;
 
-    for (LabeledProxy* proxy : qAsConst(d->proxies)) {
+    for (LabeledProxy* proxy : std::as_const(d->proxies)) {
         dynamic_cast<QAbstractProxyModel*>(proxy)->setSourceModel(model);
     }
 

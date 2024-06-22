@@ -142,7 +142,7 @@ void ProjectFilterManager::add(IProject* project)
 
     QVector<Filter> filters;
     filters.reserve(d->m_filterProvider.size());
-    for (IProjectFilterProvider* provider : qAsConst(d->m_filterProvider)) {
+    for (IProjectFilterProvider* provider : std::as_const(d->m_filterProvider)) {
         Filter filter;
         filter.provider = provider;
         filter.filter = provider->createFilter(project);

@@ -117,7 +117,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     QList<Import> sortedImports = imports.values(file);
     std::sort(sortedImports.begin(), sortedImports.end(), importLocationLessThan);
 
-    for (const auto& import : qAsConst(sortedImports)) {
+    for (const auto& import : std::as_const(sortedImports)) {
         buildDUChain(import.file, imports, session, features, includedFiles, unsavedRevisions, parseDocument, index,
                      abortFunction);
     }
@@ -180,7 +180,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         }
         context->setFeatures(features);
 
-        for (const auto& import : qAsConst(sortedImports)) {
+        for (const auto& import : std::as_const(sortedImports)) {
             auto ctx = includedFiles.value(import.file);
             if (!ctx) {
                 // happens for cyclic imports

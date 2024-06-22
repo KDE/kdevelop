@@ -143,7 +143,7 @@ void CommandExecutor::start()
     } else {
         QStringList arguments;
         arguments.reserve(d->m_args.size());
-        for (const QString& a : qAsConst(d->m_args)) {
+        for (const QString& a : std::as_const(d->m_args)) {
             arguments << KShell::quoteArg(a);
         }
 

@@ -89,7 +89,7 @@ void RenameAction::execute()
 
     DocumentChangeSet changes;
 
-    for (const RevisionedFileRanges& ranges : qAsConst(d->m_oldDeclarationUses)) {
+    for (const RevisionedFileRanges& ranges : std::as_const(d->m_oldDeclarationUses)) {
         for (const RangeInRevision range : ranges.ranges) {
             KTextEditor::Range currentRange;
             if (ranges.revision && ranges.revision->valid()) {

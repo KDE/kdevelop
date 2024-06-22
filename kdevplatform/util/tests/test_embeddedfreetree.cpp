@@ -189,7 +189,7 @@ public:
         //1. verify order
         uint last = 0;
         uint freeCount = 0;
-        for (auto& d : qAsConst(data)) {
+        for (auto& d : std::as_const(data)) {
             if (d.value) {
                 QVERIFY(last < d.value);
                 last = d.value;

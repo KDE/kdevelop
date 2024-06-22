@@ -191,7 +191,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
 
         auto* targetsWidget = new QListWidget(d);
         targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-        for (ProjectTargetItem* target : qAsConst(targets)) {
+        for (ProjectTargetItem* target : std::as_const(targets)) {
             targetsWidget->addItem(target->text());
         }
         targetsWidget->setCurrentRow(0);

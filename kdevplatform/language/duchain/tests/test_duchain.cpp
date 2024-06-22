@@ -137,7 +137,7 @@ void TestDUChain::testStringSets()
 
         if (tempSet != realSets[a]) {
             QString dbg = QStringLiteral("created set: ");
-            for (unsigned int i : qAsConst(realSets[a]))
+            for (unsigned int i : std::as_const(realSets[a]))
                 dbg += QStringLiteral("%1 ").arg(i);
 
             qDebug() << dbg;
@@ -181,7 +181,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET a:";
                         QString dbg;
-                        for (unsigned int i : qAsConst(realSets[a]))
+                        for (unsigned int i : std::as_const(realSets[a]))
                             dbg += QStringLiteral("%1 ").arg(i);
 
                         qDebug() << dbg;
@@ -191,7 +191,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET b:";
                         QString dbg;
-                        for (unsigned int i : qAsConst(realSets[b]))
+                        for (unsigned int i : std::as_const(realSets[b]))
                             dbg += QStringLiteral("%1 ").arg(i);
 
                         qDebug() << dbg;
@@ -204,7 +204,7 @@ void TestDUChain::testStringSets()
 
                         qDebug() << "SET difference:";
                         QString dbg = QStringLiteral("real    set: ");
-                        for (unsigned int i : qAsConst(_realDifference))
+                        for (unsigned int i : std::as_const(_realDifference))
                             dbg += QStringLiteral("%1 ").arg(i);
 
                         qDebug() << dbg;
@@ -242,7 +242,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET a:";
                         QString dbg;
-                        for (unsigned int i : qAsConst(realSets[a]))
+                        for (unsigned int i : std::as_const(realSets[a]))
                             dbg += QStringLiteral("%1 ").arg(i);
 
                         qDebug() << dbg;
@@ -252,7 +252,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET b:";
                         QString dbg;
-                        for (unsigned int i : qAsConst(realSets[b]))
+                        for (unsigned int i : std::as_const(realSets[b]))
                             dbg += QStringLiteral("%1 ").arg(i);
 
                         qDebug() << dbg;
@@ -265,7 +265,7 @@ void TestDUChain::testStringSets()
 
                         qDebug() << "SET union:";
                         QString dbg = QStringLiteral("real    set: ");
-                        for (unsigned int i : qAsConst(_realUnion))
+                        for (unsigned int i : std::as_const(_realUnion))
                             dbg += QStringLiteral("%1 ").arg(i);
 
                         qDebug() << dbg;
@@ -296,11 +296,11 @@ void TestDUChain::testStringSets()
 
                 //Just for fun: Test how fast QSet intersections are
                 QSet<Index> first, second;
-                for (unsigned int i : qAsConst(realSets[a])) {
+                for (unsigned int i : std::as_const(realSets[a])) {
                     first.insert(i);
                 }
 
-                for (unsigned int i : qAsConst(realSets[b])) {
+                for (unsigned int i : std::as_const(realSets[b])) {
                     second.insert(i);
                 }
 
@@ -321,7 +321,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET a:";
                         QString dbg;
-                        for (unsigned int i : qAsConst(realSets[a]))
+                        for (unsigned int i : std::as_const(realSets[a]))
                             dbg += QStringLiteral("%1 ").arg(i);
 
                         qDebug() << dbg;
@@ -331,7 +331,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET b:";
                         QString dbg;
-                        for (unsigned int i : qAsConst(realSets[b]))
+                        for (unsigned int i : std::as_const(realSets[b]))
                             dbg += QStringLiteral("%1 ").arg(i);
 
                         qDebug() << dbg;
@@ -344,7 +344,7 @@ void TestDUChain::testStringSets()
 
                         qDebug() << "SET intersection:";
                         QString dbg = QStringLiteral("real    set: ");
-                        for (unsigned int i : qAsConst(_realIntersection))
+                        for (unsigned int i : std::as_const(_realIntersection))
                             dbg += QStringLiteral("%1 ").arg(i);
 
                         qDebug() << dbg;
@@ -453,7 +453,7 @@ struct TestContext
         collected.remove(this);
 
         DUChainReadLocker lock(DUChain::lock());
-        for (TestContext* context : qAsConst(collected)) {
+        for (TestContext* context : std::as_const(collected)) {
             QVERIFY(m_context->imports(context->m_context, CursorInRevision::invalid()));
 #ifdef TEST_NORMAL_IMPORTS
             QVERIFY(m_normalContext->imports(context->m_normalContext));
@@ -462,7 +462,7 @@ struct TestContext
 
         //Verify that no other contexts are imported
 
-        for (TestContext* context : qAsConst(allContexts)) {
+        for (TestContext* context : std::as_const(allContexts)) {
             if (context != this) {
                 QVERIFY(collected.contains(context) ||
                         !m_context->imports(context->m_context, CursorInRevision::invalid()));
@@ -479,7 +479,7 @@ struct TestContext
         if (collected.contains(this))
             return;
         collected.insert(this);
-        for (TestContext* context : qAsConst(imports)) {
+        for (TestContext* context : std::as_const(imports)) {
             context->collectImports(collected);
         }
     }
@@ -501,7 +501,7 @@ struct TestContext
         QList<TopDUContext*> list;
         QList<DUContext*> normalList;
 
-        for (TestContext* ctx : qAsConst(ctxList)) {
+        for (TestContext* ctx : std::as_const(ctxList)) {
             if (!imports.contains(ctx))
                 continue;
             list << ctx->m_context;
@@ -515,7 +515,7 @@ struct TestContext
         m_context->removeImportedParentContexts(list);
 
 #ifdef TEST_NORMAL_IMPORTS
-        for (DUContext* ctx : qAsConst(normalList)) {
+        for (DUContext* ctx : std::as_const(normalList)) {
             m_normalContext->removeImportedParentContext(ctx);
         }
 
@@ -690,7 +690,7 @@ class ThreadList
 public:
     bool join(int timeout)
     {
-        for (const QSharedPointer<QThread>& thread : qAsConst(*this)) {
+        for (const QSharedPointer<QThread>& thread : std::as_const(*this)) {
             // quit event loop
             Q_ASSERT(thread->isRunning());
             thread->quit();
@@ -705,7 +705,7 @@ public:
     }
     void start()
     {
-        for (const QSharedPointer<QThread>& thread : qAsConst(*this)) {
+        for (const QSharedPointer<QThread>& thread : std::as_const(*this)) {
             thread->start();
         }
     }

@@ -809,7 +809,7 @@ void Container::contextMenu( const QPoint& pos )
                 }
             }
             // finally close other tabs
-            for (QWidget* tab : qAsConst(otherTabs)) {
+            for (QWidget* tab : std::as_const(otherTabs)) {
                 emit requestClose(tab);
             }
         } else if ( triggered == closeAllTabsAction ) {

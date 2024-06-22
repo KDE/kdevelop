@@ -152,7 +152,7 @@ QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const Include
     QSet<QString> foundIncludePaths; // found items
 
     int pathNumber = 0;
-    for (auto searchPath : qAsConst(paths)) {
+    for (auto searchPath : std::as_const(paths)) {
         if (handledPaths.contains(searchPath)) {
             continue;
         }
@@ -272,7 +272,7 @@ QList< CompletionTreeItemPointer > IncludePathCompletionContext::completionItems
 {
     QList<CompletionTreeItemPointer> items;
 
-    for (const auto& includeItem: qAsConst(m_includeItems)) {
+    for (const auto& includeItem : std::as_const(m_includeItems)) {
         if (abort) {
             return items;
         }

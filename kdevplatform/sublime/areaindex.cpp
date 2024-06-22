@@ -83,7 +83,7 @@ AreaIndex::AreaIndex(const AreaIndex &index)
         d->second->setParent(this);
     //clone views in this index
     d->views.clear();
-    for (View* view : qAsConst(index.views())) {
+    for (View* view : std::as_const(index.views())) {
         add(view->document()->createView());
     }
 }

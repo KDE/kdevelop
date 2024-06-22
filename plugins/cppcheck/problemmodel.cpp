@@ -68,7 +68,7 @@ void ProblemModel::fixProblemFinalLocation(KDevelop::IProblem::Ptr problem)
 
 bool ProblemModel::problemExists(KDevelop::IProblem::Ptr newProblem)
 {
-    for (auto problem : qAsConst(m_problems)) {
+    for (auto problem : std::as_const(m_problems)) {
         if (newProblem->source() == problem->source() &&
             newProblem->severity() == problem->severity() &&
             newProblem->finalLocation() == problem->finalLocation() &&
