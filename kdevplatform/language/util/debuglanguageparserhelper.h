@@ -66,7 +66,7 @@ public:
     /// parse contents of a file
     void parseFile(const QString& fileName)
     {
-        if (!m_session.readFile(fileName, "utf-8")) {
+        if (!m_session.readFile(fileName)) {
             qerr << "Can't open file " << fileName << Qt::endl;
             std::exit(255);
         } else {
