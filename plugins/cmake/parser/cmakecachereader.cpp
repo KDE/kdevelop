@@ -12,7 +12,7 @@ void CacheLine::readLine(const QString& line)
 {
     m_line=line;
     int i;
-    for (i=0; i<line.count() && line[i] != QLatin1Char('='); ++i) {
+    for (i = 0; i < line.size() && line[i] != QLatin1Char('='); ++i) {
         if(line[i] == QLatin1Char(':')) {
             colon=i;
             if(endName<0)
