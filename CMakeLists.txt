@@ -45,9 +45,8 @@ endif()
 # plugin version as used e.g. in plugin installation path
 set(KDEV_PLUGIN_VERSION "${KDEVELOP_SOVERSION}")
 
-set(KF_MAJOR_VERSION "6")
 set(QT_MIN_VERSION "6.4.0")
-set(KF_MIN_VERSION "5.240.0")
+set(KF_MIN_VERSION "6.0.0")
 
 # we need some parts of the ECM CMake helpers
 find_package (ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)

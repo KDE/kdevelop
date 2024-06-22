@@ -19,6 +19,8 @@
 #include <QFileInfo>
 #include <QDir>
 
+#include <memory>
+
 namespace KDevelop
 {
 
@@ -47,7 +49,7 @@ public:
     OutputExecuteJob::JobStatus m_status;
     OutputExecuteJob::JobProperties m_properties;
     OutputModel::OutputFilterStrategy m_filteringStrategy;
-    QScopedPointer<IFilterStrategy> m_filteringStrategyPtr;
+    std::unique_ptr<IFilterStrategy> m_filteringStrategyPtr;
     QStringList m_arguments;
     QStringList m_privilegedExecutionCommand;
     QUrl m_workingDirectory;
@@ -249,7 +251,7 @@ void OutputExecuteJob::start()
     Q_ASSERT( model() );
 
     if (d->m_filteringStrategyPtr) {
-        model()->setFilteringStrategy(d->m_filteringStrategyPtr.take());
+        model()->setFilteringStrategy(d->m_filteringStrategyPtr.release());
     } else {
         model()->setFilteringStrategy(d->m_filteringStrategy);
     }
@@ -452,7 +454,7 @@ void OutputExecuteJob::setFilteringStrategy( OutputModel::OutputFilterStrategy s
     d->m_filteringStrategy = strategy;
 
     // clear the other
-    d->m_filteringStrategyPtr.reset(nullptr);
+    d->m_filteringStrategyPtr.reset();
 }
 
 void OutputExecuteJob::setFilteringStrategy(IFilterStrategy* filterStrategy)
