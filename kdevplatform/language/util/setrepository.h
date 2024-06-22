@@ -375,11 +375,6 @@ private:
     uint m_setIndex = 0;
 };
 
-template<class T, class Conversion, class StaticRepository, bool doReferenceCounting, class StaticAccessLocker>
-size_t qHash(const StorableSet<T, Conversion, StaticRepository, doReferenceCounting, StaticAccessLocker>& set)
-{
-    return set.setIndex();
-}
 /** This is a helper-class that helps inserting a bunch of items into a set without caring about grouping them together.
  *
  * It creates a much better tree-structure if many items are inserted at one time, and this class helps doing that in
@@ -537,5 +532,15 @@ struct KDEVPLATFORMLANGUAGE_EXPORT StringSetRepository
     void itemAddedToSets(uint index) override;
 };
 }
+
+template<class T, class Conversion, class StaticRepository, bool doReferenceCounting, class StaticAccessLocker>
+struct std::hash<Utils::StorableSet<T, Conversion, StaticRepository, doReferenceCounting, StaticAccessLocker>>
+{
+    std::size_t
+    operator()(const Utils::StorableSet<T, Conversion, StaticRepository, doReferenceCounting, StaticAccessLocker>& set)
+    {
+        return set.setIndex();
+    }
+};
 
 #endif
