@@ -462,6 +462,3 @@ msgstr "..."
 #, kde-format
 msgid "Failed to save custom include paths in directory: %1"
 msgstr "无法保存自定义包含路径到目录：%1"
-
-#~ msgid "Bad #define directive in %1: %2"
-#~ msgstr "在 %1 发现不良的 #define 指令：%2"
