@@ -1102,7 +1102,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
 
                 if (DUChainUtils::contextHasUse(decl->topContext(),
                                                 decl) && usingFiles.indexOf(decl->topContext()) == -1)
-                    usingFiles.insert(0, decl->topContext());
+                    usingFiles.insert(usingFiles.begin(), decl->topContext());
 
                 if (decl->range().contains(c) && decl->url() == chosen->url()) {
                     //The cursor is directly on the declaration. Jump to the first or last use.
