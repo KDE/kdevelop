@@ -62,7 +62,7 @@ ReplacementParser::ReplacementParser(const QString& yaml_file, const QString& so
 {
     if (m_yamlname.endsWith(QLatin1String(".yaml"))) {
         QFile yaml(m_yamlname);
-        yaml.open(QIODevice::ReadOnly);
+        yaml.open(QIODevice::ReadOnly | QIODevice::Text);
         m_yamlContent = QString::fromLocal8Bit(yaml.readAll());
 
         auto checkMatch = check.match(m_yamlContent);
