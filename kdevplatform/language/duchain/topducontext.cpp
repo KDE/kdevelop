@@ -1082,9 +1082,7 @@ void TopDUContext::removeImportedParentContext(DUContext* context)
 void TopDUContext::addImportedParentContexts(const QVector<QPair<TopDUContext*, CursorInRevision>>& contexts,
                                              bool temporary)
 {
-    using Pair = QPair<TopDUContext*, CursorInRevision>;
-
-    for (const Pair pair : contexts) {
+    for (const auto& pair : contexts) {
         addImportedParentContext(pair.first, pair.second, false, temporary);
     }
 }
