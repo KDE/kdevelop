@@ -7,10 +7,13 @@
 #ifndef KDEVPLATFORM_OPENPROJECTPAGE_H
 #define KDEVPLATFORM_OPENPROJECTPAGE_H
 
+#include <QList>
 #include <QWidget>
 
-class QUrl;
+class KFileFilter;
 class KFileWidget;
+
+class QUrl;
 
 namespace KDevelop
 {
@@ -20,8 +23,7 @@ class OpenProjectPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit OpenProjectPage( const QUrl& startUrl, const QStringList& filters,
-        QWidget* parent = nullptr );
+    explicit OpenProjectPage(const QUrl& startUrl, const QList<KFileFilter>& filters, QWidget* parent = nullptr);
     void setUrl(const QUrl& url);
 
 Q_SIGNALS:

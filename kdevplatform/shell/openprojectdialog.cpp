@@ -9,6 +9,7 @@
 #include "projectinfopage.h"
 
 #include <KColorScheme>
+#include <KFileFilter>
 #include <KIO/StatJob>
 #include <KIO/ListJob>
 #include <KJobWidgets>
@@ -86,14 +87,17 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
 
     const bool useKdeFileDialog = qEnvironmentVariableIsSet("KDE_FULL_SESSION");
     // Since b736adda01a19d80b2f4fb5553c1288eaca2bec5 (Make open project dialog work properly again)
-    // filters, allEntry, filterFormat only used with "KdeFileDialog"
-    QStringList filters, allEntry;
-    QString filterFormat = useKdeFileDialog
-                         ? QStringLiteral("%1|%2 (%1)")
-                         : QStringLiteral("%2 (%1)");
+    // filters, allEntry, filterFormat (now makeFileFilter) only used with "KdeFileDialog"
+    QList<KFileFilter> filters;
+    QStringList allEntry;
+    auto makeFileFilter = [](const QString& description, const QStringList& filePatterns) {
+        const auto label = QLatin1String("%1 (%2)").arg(description, filePatterns.join(QLatin1Char(' ')));
+        return KFileFilter(label, filePatterns, {});
+    };
     if (useKdeFileDialog) {
-        allEntry << QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension();
-        filters << filterFormat.arg(QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension(), ShellExtension::getInstance()->projectFileDescription());
+        const QString projectFilePattern = QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension();
+        allEntry << projectFilePattern;
+        filters << makeFileFilter(ShellExtension::getInstance()->projectFileDescription(), {projectFilePattern});
     }
     const QVector<KPluginMetaData> plugins = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
     for (const KPluginMetaData& info : plugins) {
@@ -112,12 +116,12 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
         if (useKdeFileDialog) {
             const QString desc = info.value(QStringLiteral("X-KDevelop-ProjectFilesFilterDescription"));
             allEntry += filter;
-            filters << filterFormat.arg(filter.join(QLatin1Char(' ')), desc);
+            filters << makeFileFilter(desc, filter);
         }
     }
 
     if (useKdeFileDialog)
-        filters.prepend(i18n("%1|All Project Files (%1)", allEntry.join(QLatin1Char(' '))));
+        filters.prepend(makeFileFilter(i18nc("@item:inlistbox", "All Project Files"), allEntry));
 
     QUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
     start = start.adjusted(QUrl::NormalizePathSegments);

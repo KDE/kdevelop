@@ -21,16 +21,15 @@
 namespace KDevelop
 {
 
-OpenProjectPage::OpenProjectPage( const QUrl& startUrl, const QStringList& filters,
-    QWidget* parent )
-        : QWidget( parent )
+OpenProjectPage::OpenProjectPage(const QUrl& startUrl, const QList<KFileFilter>& filters, QWidget* parent)
+    : QWidget(parent)
 {
     auto* layout = new QVBoxLayout( this );
     layout->setContentsMargins(0, 0, 0, 0);
 
     fileWidget = new KFileWidget( startUrl, this);
 
-    fileWidget->setFilter(filters.join(QLatin1Char('\n')));
+    fileWidget->setFilters(filters);
 
     fileWidget->setMode( KFile::Modes( KFile::File | KFile::Directory | KFile::ExistingOnly ) );
 
