@@ -37,6 +37,7 @@ protected:
     static void nonmatchingLanguagesForUrlTestData();
 
     KDevelop::ILanguageController* m_subject = nullptr;
+    bool m_havePatchReview = false;
 
 private:
     struct UrlEntry
@@ -44,7 +45,7 @@ private:
         QUrl url;
         QString languageName;
     };
-    const std::vector<UrlEntry> m_differentLanguagesUrls;
+    std::vector<UrlEntry> m_differentLanguagesUrls;
 };
 
 #endif // KDEVPLATFORM_LANGUAGECONTROLLERTESTBASE_H

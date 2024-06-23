@@ -8,13 +8,15 @@
 
 #include "testfilepaths.h"
 
-#include <ilanguagecontroller.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iplugincontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <languagecontroller.h>
 #include <shell/core.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testhelpers.h>
+#include <vcs/interfaces/ipatchsource.h>
 
 #include <QByteArray>
 #include <QFileInfo>
@@ -55,6 +57,13 @@ void LanguageControllerTestBase::initTestCase()
                          "KDevCMakeManager", "KDevCMakeBuilder", "KDevMakeBuilder", "KDevStandardOutputView"});
     TestCore::initialize();
     m_subject = Core::self()->languageController();
+
+    m_havePatchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>() != nullptr;
+    if (!m_havePatchReview) {
+        const auto it = m_differentLanguagesUrls.cbegin() + 2;
+        QCOMPARE(it->languageName, "diff");
+        m_differentLanguagesUrls.erase(it);
+    }
 }
 
 void LanguageControllerTestBase::init()
@@ -111,7 +120,9 @@ void LanguageControllerTestBase::matchingLanguagesForUrlTestData() const
     matchingLanguagesForUrlInBackgroundThreadTestData();
 
     QTest::newRow("existent C w/o extension") << existentTestUrl("X") << "clang";
-    QTest::newRow("existent patch w/o extension") << existentTestUrl("y") << "diff";
+    if (m_havePatchReview) {
+        QTest::newRow("existent patch w/o extension") << existentTestUrl("y") << "diff";
+    }
 }
 
 void LanguageControllerTestBase::nonmatchingLanguagesForUrlTestData()

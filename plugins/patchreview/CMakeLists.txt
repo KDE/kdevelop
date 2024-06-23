@@ -1,8 +1,11 @@
 find_package(LibKompareDiff2 5.1 CONFIG)
 set_package_properties(LibKompareDiff2 PROPERTIES
     PURPOSE "Required for building the patch review plugin."
-    TYPE REQUIRED
+    TYPE RECOMMENDED
 )
+if (NOT LibKompareDiff2_FOUND)
+    return()
+endif()
 
 find_package(KF5Purpose CONFIG QUIET)
 set_package_properties(KF5Purpose PROPERTIES DESCRIPTION "Support for patch sharing"
