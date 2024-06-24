@@ -23,11 +23,6 @@ public:
     QtHelpPlugin(QObject* parent, const QVariantList& args);
     ~QtHelpPlugin() override;
 
-    static QtHelpPlugin* self()
-    {
-        return s_plugin;
-    }
-
     QList<KDevelop::IDocumentationProvider*> providers() override;
     QList<QtHelpProvider*> qtHelpProviderLoaded();
     bool isQtHelpQtDocLoaded() const;
@@ -48,7 +43,6 @@ private:
                              const QString& searchDir);
     void loadQtHelpProvider(const QStringList& pathList, const QStringList& nameList, const QStringList& iconList);
 
-    static QtHelpPlugin* s_plugin;
     QList<QtHelpProvider*> m_qtHelpProviders;
     QtHelpQtDoc* m_qtDoc;
     bool m_loadSystemQtDoc;

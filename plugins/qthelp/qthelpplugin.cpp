@@ -19,8 +19,6 @@
 
 #include <QDirIterator>
 
-QtHelpPlugin *QtHelpPlugin::s_plugin = nullptr;
-
 K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
@@ -30,7 +28,6 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     , m_loadSystemQtDoc(false)
 {
     Q_UNUSED(args);
-    s_plugin = this;
     connect(this, &QtHelpPlugin::changedProvidersList, KDevelop::ICore::self()->documentationController(), &KDevelop::IDocumentationController::changedDocumentationProviders);
     QMetaObject::invokeMethod(this, "readConfig", Qt::QueuedConnection);
 }
