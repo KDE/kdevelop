@@ -39,7 +39,7 @@ TestQtHelpPlugin::TestQtHelpPlugin()
 
 void TestQtHelpPlugin::initTestCase()
 {
-    AutoTestShell::init({"kdevqthelp"});
+    AutoTestShell::init({"no plugins"});
 
     // Prevent SegFault, then "ICE default IO error handler doing an exit(), pid = <PID>, errno = 32"
     // crash when the test runs for at least 60 seconds. This is a workaround for QTBUG-58709.
