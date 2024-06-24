@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-06-24 01:39+0000\n"
 "PO-Revision-Date: 2020-01-14 21:15+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -232,12 +232,13 @@ msgstr "QtHelpi faili valimine..."
 msgid "Could not find any documentation for '%1'"
 msgstr "\"%1\" kohta ei leitud mingit dokumentatsiooni"
 
-#: qthelpdocumentation.cpp:306
-#, kde-format
-msgid "QtHelp Home Page"
+#: qthelpdocumentation.cpp:307
+#, fuzzy, kde-format
+#| msgid "QtHelp Home Page"
+msgid "%1 Home Page"
 msgstr "QtHelpi kodulehekülg"
 
-#: qthelpqtdoc.cpp:142
+#: qthelpqtdoc.cpp:148
 #, kde-format
 msgid "QtHelp"
 msgstr "QtHelp"

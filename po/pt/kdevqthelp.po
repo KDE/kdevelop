@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-06-24 01:39+0000\n"
 "PO-Revision-Date: 2023-07-03 00:56+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -205,12 +205,13 @@ msgstr "Seleccionar um ficheiro de Ajuda do Qt..."
 msgid "Could not find any documentation for '%1'"
 msgstr "Não foi possível encontrar qualquer documentação sobre '%1'"
 
-#: qthelpdocumentation.cpp:306
-#, kde-format
-msgid "QtHelp Home Page"
+#: qthelpdocumentation.cpp:307
+#, fuzzy, kde-format
+#| msgid "QtHelp Home Page"
+msgid "%1 Home Page"
 msgstr "Página Pessoal do QtHelp"
 
-#: qthelpqtdoc.cpp:142
+#: qthelpqtdoc.cpp:148
 #, kde-format
 msgid "QtHelp"
 msgstr "QtHelp"

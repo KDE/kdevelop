@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-16 01:44+0000\n"
+"POT-Creation-Date: 2024-06-24 01:39+0000\n"
 "PO-Revision-Date: 2023-04-17 16:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
 "X-Generator: Lokalize 22.12.3\n"
 
-#: dialogs/processselection.cpp:146
+#: dialogs/processselection.cpp:148
 #, kde-format
 msgctxt "@action:button"
 msgid "Attach"
@@ -44,7 +44,7 @@ msgid "Search"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
-#: dialogs/processselection.ui:38
+#: dialogs/processselection.ui:35
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Display"
@@ -53,7 +53,7 @@ msgid "Display as List"
 msgstr "Näytä"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
-#: dialogs/processselection.ui:60
+#: dialogs/processselection.ui:57
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Display"
@@ -62,28 +62,28 @@ msgid "Display as Tree"
 msgstr "Näytä"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:83
+#: dialogs/processselection.ui:80
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:91
+#: dialogs/processselection.ui:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:99
+#: dialogs/processselection.ui:96
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:107
+#: dialogs/processselection.ui:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
@@ -299,13 +299,13 @@ msgstr "Keskeytä nykyinen istunto"
 msgid "Choose a process to attach to..."
 msgstr "Valitse prosessi, johon liitytään…"
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:279
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Ei liittynyt prosessiin %1: virheenpaikanninta ei voi liittää itseensä."
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:299
 #, kde-format
 msgid "Debugger"
 msgstr "Virheenpaikannin"
@@ -533,7 +533,7 @@ msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Virkistä"
 
-#: stty.cpp:243
+#: stty.cpp:252
 #, kde-format
 msgid ""
 "Cannot use the tty* or pty* devices.\n"
@@ -547,17 +547,17 @@ msgstr ""
 "ja/tai lisätä käyttäjä tty-ryhmään käyttäen komentoa ”usermod -aG tty "
 "username”."
 
-#: stty.cpp:295
+#: stty.cpp:304
 #, kde-format
 msgid "%1 is incorrect terminal name"
 msgstr "%1 on virheellinen päätteen nimi"
 
-#: stty.cpp:301
+#: stty.cpp:310
 #, kde-format
 msgid "Can't create a temporary file"
 msgstr "Väliaikaistiedoston luonti epäonnistui"
 
-#: stty.cpp:348
+#: stty.cpp:357
 #, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "

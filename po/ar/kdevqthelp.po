@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-06-24 01:39+0000\n"
 "PO-Revision-Date: 2022-01-20 18:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -208,12 +208,13 @@ msgstr "اختر ملفّ مساعدة كيوت..."
 msgid "Could not find any documentation for '%1'"
 msgstr "تعذّر العثور على أيّ توثيق لِ‍ ’%1‘"
 
-#: qthelpdocumentation.cpp:306
-#, kde-format
-msgid "QtHelp Home Page"
+#: qthelpdocumentation.cpp:307
+#, fuzzy, kde-format
+#| msgid "QtHelp Home Page"
+msgid "%1 Home Page"
 msgstr "صفحة رئيسيّة QtHelp"
 
-#: qthelpqtdoc.cpp:142
+#: qthelpqtdoc.cpp:148
 #, kde-format
 msgid "QtHelp"
 msgstr "QtHelp"

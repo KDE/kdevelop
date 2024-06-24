@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-16 01:44+0000\n"
+"POT-Creation-Date: 2024-06-24 01:39+0000\n"
 "PO-Revision-Date: 2024-05-03 10:22+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: dialogs/processselection.cpp:146
+#: dialogs/processselection.cpp:148
 #, kde-format
 msgctxt "@action:button"
 msgid "Attach"
@@ -40,42 +40,42 @@ msgid "Search"
 msgstr "Išči"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
-#: dialogs/processselection.ui:38
+#: dialogs/processselection.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
 msgstr "Prikaži kot seznam"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
-#: dialogs/processselection.ui:60
+#: dialogs/processselection.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
 msgstr "Prikaži kot drevo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:83
+#: dialogs/processselection.ui:80
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
 msgstr "Lastna opravila"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:91
+#: dialogs/processselection.ui:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
 msgstr "Uporabnikova opravila"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:99
+#: dialogs/processselection.ui:96
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
 msgstr "Sistemska opravila"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:107
+#: dialogs/processselection.ui:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
@@ -273,14 +273,14 @@ msgstr "Prekini trenutno sejo"
 msgid "Choose a process to attach to..."
 msgstr "Izberite opravilo na katerega se želite pripeti..."
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:279
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Pripenjanje k opravilu %1 ni mogoče: ni se mogoče povezati z "
 "razhroščevalnikom samim."
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:299
 #, kde-format
 msgid "Debugger"
 msgstr "Razhroščevalnik"
@@ -512,7 +512,7 @@ msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Posodobi"
 
-#: stty.cpp:243
+#: stty.cpp:252
 #, kde-format
 msgid ""
 "Cannot use the tty* or pty* devices.\n"
@@ -526,17 +526,17 @@ msgstr ""
 "pty* in/ali dodati uporabnika v skupino tty z uporabo \"usermod -aG tty "
 "uporabniško_ime\"."
 
-#: stty.cpp:295
+#: stty.cpp:304
 #, kde-format
 msgid "%1 is incorrect terminal name"
 msgstr "%1 je napačno ime terminala"
 
-#: stty.cpp:301
+#: stty.cpp:310
 #, kde-format
 msgid "Can't create a temporary file"
 msgstr "Ni mogoče ustvariti začasne datoteke"
 
-#: stty.cpp:348
+#: stty.cpp:357
 #, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "

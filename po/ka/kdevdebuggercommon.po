@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-16 01:44+0000\n"
+"POT-Creation-Date: 2024-06-24 01:39+0000\n"
 "PO-Revision-Date: 2022-11-04 18:31+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2\n"
 
-#: dialogs/processselection.cpp:146
+#: dialogs/processselection.cpp:148
 #, kde-format
 msgctxt "@action:button"
 msgid "Attach"
@@ -39,42 +39,42 @@ msgid "Search"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
-#: dialogs/processselection.ui:38
+#: dialogs/processselection.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
-#: dialogs/processselection.ui:60
+#: dialogs/processselection.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:83
+#: dialogs/processselection.ui:80
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:91
+#: dialogs/processselection.ui:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:99
+#: dialogs/processselection.ui:96
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:107
+#: dialogs/processselection.ui:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
@@ -253,12 +253,12 @@ msgstr "მიმდინარე სესიის გაუქმება"
 msgid "Choose a process to attach to..."
 msgstr "აირჩიეთ მისამაგრებელი პროცესი..."
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:279
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:299
 #, kde-format
 msgid "Debugger"
 msgstr "გამმართველი"
@@ -479,7 +479,7 @@ msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "განახლება"
 
-#: stty.cpp:243
+#: stty.cpp:252
 #, kde-format
 msgid ""
 "Cannot use the tty* or pty* devices.\n"
@@ -488,17 +488,17 @@ msgid ""
 "user to the tty group using \"usermod -aG tty username\"."
 msgstr ""
 
-#: stty.cpp:295
+#: stty.cpp:304
 #, kde-format
 msgid "%1 is incorrect terminal name"
 msgstr "%1 არასწორი ტერმინალის სახელია"
 
-#: stty.cpp:301
+#: stty.cpp:310
 #, kde-format
 msgid "Can't create a temporary file"
 msgstr "დროებითი ფაილების შექმნის შეცდომა"
 
-#: stty.cpp:348
+#: stty.cpp:357
 #, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "

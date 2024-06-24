@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-16 01:44+0000\n"
+"POT-Creation-Date: 2024-06-24 01:39+0000\n"
 "PO-Revision-Date: 2024-05-24 19:29+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 24.02.2\n"
 
-#: dialogs/processselection.cpp:146
+#: dialogs/processselection.cpp:148
 #, kde-format
 msgctxt "@action:button"
 msgid "Attach"
@@ -40,42 +40,42 @@ msgid "Search"
 msgstr "Search"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
-#: dialogs/processselection.ui:38
+#: dialogs/processselection.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
 msgstr "Display as List"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
-#: dialogs/processselection.ui:60
+#: dialogs/processselection.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
 msgstr "Display as Tree"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:83
+#: dialogs/processselection.ui:80
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
 msgstr "Own Processes"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:91
+#: dialogs/processselection.ui:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
 msgstr "User Processes"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:99
+#: dialogs/processselection.ui:96
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
 msgstr "System Processes"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
-#: dialogs/processselection.ui:107
+#: dialogs/processselection.ui:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
@@ -275,12 +275,12 @@ msgstr "Abort Current Session"
 msgid "Choose a process to attach to..."
 msgstr "Choose a process to attach to..."
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:279
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "Not attaching to process %1: cannot attach the debugger to itself."
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:299
 #, kde-format
 msgid "Debugger"
 msgstr "Debugger"
@@ -507,7 +507,7 @@ msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Update"
 
-#: stty.cpp:243
+#: stty.cpp:252
 #, kde-format
 msgid ""
 "Cannot use the tty* or pty* devices.\n"
@@ -520,17 +520,17 @@ msgstr ""
 "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
 "user to the tty group using \"usermod -aG tty username\"."
 
-#: stty.cpp:295
+#: stty.cpp:304
 #, kde-format
 msgid "%1 is incorrect terminal name"
 msgstr "%1 is incorrect terminal name"
 
-#: stty.cpp:301
+#: stty.cpp:310
 #, kde-format
 msgid "Can't create a temporary file"
 msgstr "Cannot create a temporary file"
 
-#: stty.cpp:348
+#: stty.cpp:357
 #, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
