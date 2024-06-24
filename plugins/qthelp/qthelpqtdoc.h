@@ -15,7 +15,7 @@ class QtHelpQtDoc : public QtHelpProviderAbstract
 {
     Q_OBJECT
 public:
-    explicit QtHelpQtDoc(QObject* parent, const QVariantList& args);
+    explicit QtHelpQtDoc(QObject* parent);
     ~QtHelpQtDoc();
 
     QIcon icon() const override;

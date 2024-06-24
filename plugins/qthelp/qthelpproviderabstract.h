@@ -11,7 +11,6 @@
 
 #include <interfaces/idocumentationprovider.h>
 #include <QObject>
-#include <QVariantList>
 #include <QHelpEngine>
 
 class HelpNetworkAccessManager;
@@ -21,7 +20,7 @@ class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationPr
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
-    QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList & args);
+    QtHelpProviderAbstract(QObject* parent, const QString& collectionFileName);
     ~QtHelpProviderAbstract() override;
     KDevelop::IDocumentation::Ptr documentationForDeclaration (KDevelop::Declaration*) const override;
     KDevelop::IDocumentation::Ptr documentation(const QUrl& url) const override;
