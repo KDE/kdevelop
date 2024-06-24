@@ -9,16 +9,12 @@
 
 #include <tests/testcore.h>
 
-class QtHelpPlugin;
-
 class TestQtHelpPlugin : public QObject
 {
     Q_OBJECT
-public:
-    TestQtHelpPlugin();
 private:
-    KDevelop::TestCore* m_testCore;
-    QtHelpPlugin *m_plugin;
+    KDevelop::TestCore* m_testCore = nullptr;
+
 private Q_SLOTS:
     void initTestCase();
     void init();
@@ -34,7 +30,6 @@ private Q_SLOTS:
     void testDeclarationLookup_data();
     void testDeclarationLookup();
 
-    void cleanup();
     void cleanupTestCase();
 };
 

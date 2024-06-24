@@ -35,10 +35,14 @@ IDocumentation::Ptr documentationPtrFromUrl(QtHelpProviderAbstract* provider, co
 }
 }
 
+QString QtHelpProviderAbstract::collectionFileLocation()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+}
+
 QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& collectionFileName)
     : QObject(parent)
-    , m_engine(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/')
-               + collectionFileName)
+    , m_engine(collectionFileLocation() + QLatin1Char('/') + collectionFileName)
     , m_nam(new HelpNetworkAccessManager(&m_engine, this))
 {
     connect(&m_engine, &QHelpEngine::warning, this, [collectionFileName](const QString& msg) {

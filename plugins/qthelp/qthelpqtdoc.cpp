@@ -37,8 +37,8 @@ QString qmakeCandidate()
 
 }
 
-QtHelpQtDoc::QtHelpQtDoc(QObject* parent)
-    : QtHelpProviderAbstract(parent, QStringLiteral("qthelpcollection.qhc"))
+QtHelpQtDoc::QtHelpQtDoc(QObject* parent, const QString& collectionFileName)
+    : QtHelpProviderAbstract(parent, collectionFileName)
     , m_path(QString())
 {
     registerDocumentations();

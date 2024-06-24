@@ -27,6 +27,7 @@ public:
     QList<QtHelpProvider*> qtHelpProviderLoaded();
     bool isQtHelpQtDocLoaded() const;
     bool isQtHelpAvailable() const;
+    bool isInitialized() const;
 
     int configPages() const override;
     KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;

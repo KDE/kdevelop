@@ -24,7 +24,7 @@ K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugi
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent)
     , m_qtHelpProviders()
-    , m_qtDoc(new QtHelpQtDoc(this))
+    , m_qtDoc(new QtHelpQtDoc(this, QStringLiteral("qthelpcollection.qhc")))
     , m_loadSystemQtDoc(false)
 {
     Q_UNUSED(args);
@@ -157,6 +157,11 @@ bool QtHelpPlugin::isQtHelpQtDocLoaded() const
 bool QtHelpPlugin::isQtHelpAvailable() const
 {
     return !m_qtDoc->qchFiles().isEmpty();
+}
+
+bool QtHelpPlugin::isInitialized() const
+{
+    return m_qtDoc->isInitialized();
 }
 
 KDevelop::ConfigPage* QtHelpPlugin::configPage(int number, QWidget* parent)

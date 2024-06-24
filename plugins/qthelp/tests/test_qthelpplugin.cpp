@@ -8,6 +8,7 @@
 #include "../qthelpplugin.h"
 #include "../qthelpprovider.h"
 #include "../qthelp_config_shared.h"
+#include "../qthelpqtdoc.h"
 
 #include <QCoreApplication>
 #include <QHelpLink>
@@ -21,30 +22,53 @@
 #include <language/duchain/types/pointertype.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
+#include <tests/testhelpers.h>
 
 #include "testqthelpconfig.h"
 
 #include <functional>
+#include <memory>
 
 namespace {
 const QString VALID1 = QTHELP_FILES "/valid1.qch";
 const QString VALID2 = QTHELP_FILES "/valid2.qch";
 const QString INVALID = QTHELP_FILES "/invalid.qch";
 
+template<typename WriteConfigCallback>
+std::unique_ptr<QtHelpPlugin> makePlugin(KDevelop::TestCore* testCore, const WriteConfigCallback& writeConfigCallback)
+{
+    auto plugin = std::make_unique<QtHelpPlugin>(testCore, QVariantList());
+
+    // write default config and read it
+    writeConfigCallback();
+    plugin->readConfig();
+
+    // IILE to allow QTRY_VERIFY to return void on failure
+    [&]() {
+        // ensure the qmake process is finished before we continue the test
+        QTRY_VERIFY(plugin->isInitialized());
+    }();
+
+    return plugin;
+}
+
+std::unique_ptr<QtHelpPlugin> makePlugin(KDevelop::TestCore* testCore)
+{
+    return makePlugin(testCore, []() {
+        qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), QString(), true);
+    });
+}
+
+using TestDeclarationLookupProvider = std::shared_ptr<const QtHelpQtDoc>;
 using TestDeclarationLookupCallback =
     std::function<void(const KDevelop::TopDUContext* ctx, const QtHelpProviderAbstract* provider)>;
 }
 
+Q_DECLARE_METATYPE(TestDeclarationLookupProvider)
 Q_DECLARE_METATYPE(TestDeclarationLookupCallback)
 
 QTEST_MAIN(TestQtHelpPlugin)
 using namespace KDevelop;
-
-TestQtHelpPlugin::TestQtHelpPlugin()
-    : m_testCore(nullptr)
-    , m_plugin(nullptr)
-{
-}
 
 void TestQtHelpPlugin::initTestCase()
 {
@@ -60,16 +84,12 @@ void TestQtHelpPlugin::initTestCase()
 
 void TestQtHelpPlugin::init()
 {
-    m_plugin = new QtHelpPlugin(m_testCore, QVariantList());
-    // write default config and read it
-    qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), QString(), true);
-    m_plugin->readConfig();
-    QTRY_VERIFY(m_plugin->isQtHelpQtDocLoaded());
-}
-
-void TestQtHelpPlugin::cleanup()
-{
-    delete m_plugin;
+    // cleanup cached files from previous test runs
+    const auto appDataDir =
+        QDir(QtHelpProviderAbstract::collectionFileLocation(), "*.qhc", QDir::NoSort, QDir::Files | QDir::Hidden);
+    const auto entries = appDataDir.entryInfoList();
+    for (const auto& file : entries)
+        QVERIFY(QFile::remove(file.absoluteFilePath()));
 }
 
 void TestQtHelpPlugin::cleanupTestCase()
@@ -80,11 +100,14 @@ void TestQtHelpPlugin::cleanupTestCase()
 
 void TestQtHelpPlugin::testDefaultValue()
 {
-    QCOMPARE(m_plugin->isQtHelpQtDocLoaded(), true);
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 0);
-    QCOMPARE(m_plugin->providers().size(), 1);
+    auto plugin = makePlugin(m_testCore);
+    RETURN_IF_TEST_FAILED();
 
-    const auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
+    QCOMPARE(plugin->isQtHelpQtDocLoaded(), true);
+    QCOMPARE(plugin->qtHelpProviderLoaded().size(), 0);
+    QCOMPARE(plugin->providers().size(), 1);
+
+    const auto provider = dynamic_cast<QtHelpProviderAbstract*>(plugin->providers().at(0));
     if (!provider->isValid()) {
         QSKIP("Qt help not available");
     }
@@ -94,10 +117,12 @@ void TestQtHelpPlugin::testDefaultValue()
 
 void TestQtHelpPlugin::testUnsetQtHelpDoc()
 {
-    qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), QString(), false);
-    m_plugin->readConfig();
+    auto plugin = makePlugin(m_testCore, []() {
+        qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), QString(), false);
+    });
+    RETURN_IF_TEST_FAILED();
 
-    QCOMPARE(m_plugin->providers().size(), 0);
+    QCOMPARE(plugin->providers().size(), 0);
 }
 
 void TestQtHelpPlugin::testAddOneValidProvider()
@@ -107,13 +132,16 @@ void TestQtHelpPlugin::testAddOneValidProvider()
     name << QStringLiteral("file1");
     icon << QStringLiteral("myIcon");
     ghns << QStringLiteral("0");
-    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
-    m_plugin->readConfig();
 
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 1);
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->fileName(), path.at(0));
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->name(), name.at(0));
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->iconName(), icon.at(0));
+    auto plugin = makePlugin(m_testCore, [&]() {
+        qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
+    });
+    RETURN_IF_TEST_FAILED();
+
+    QCOMPARE(plugin->qtHelpProviderLoaded().size(), 1);
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->fileName(), path.at(0));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->name(), name.at(0));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->iconName(), icon.at(0));
 }
 
 void TestQtHelpPlugin::testAddTwoDifferentValidProvider()
@@ -123,18 +151,21 @@ void TestQtHelpPlugin::testAddTwoDifferentValidProvider()
     name << QStringLiteral("file1") << QStringLiteral("file2");
     icon << QStringLiteral("myIcon") << QStringLiteral("myIcon");
     ghns << QStringLiteral("0") << QStringLiteral("0");
-    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
-    m_plugin->readConfig();
 
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 2);
+    auto plugin = makePlugin(m_testCore, [&]() {
+        qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
+    });
+    RETURN_IF_TEST_FAILED();
+
+    QCOMPARE(plugin->qtHelpProviderLoaded().size(), 2);
     // first provider
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->fileName(), path.at(0));
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->name(), name.at(0));
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->iconName(), icon.at(0));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->fileName(), path.at(0));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->name(), name.at(0));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->iconName(), icon.at(0));
     // second provider
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(1)->fileName(), path.at(1));
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(1)->name(), name.at(1));
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(1)->iconName(), icon.at(1));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(1)->fileName(), path.at(1));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(1)->name(), name.at(1));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(1)->iconName(), icon.at(1));
 }
 
 void TestQtHelpPlugin::testAddInvalidProvider()
@@ -144,10 +175,13 @@ void TestQtHelpPlugin::testAddInvalidProvider()
     name << QStringLiteral("file1");
     icon << QStringLiteral("myIcon");
     ghns << QStringLiteral("0");
-    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
-    m_plugin->readConfig();
 
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 0);
+    auto plugin = makePlugin(m_testCore, [&]() {
+        qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
+    });
+    RETURN_IF_TEST_FAILED();
+
+    QCOMPARE(plugin->qtHelpProviderLoaded().size(), 0);
 }
 
 void TestQtHelpPlugin::testAddTwiceSameProvider()
@@ -157,10 +191,13 @@ void TestQtHelpPlugin::testAddTwiceSameProvider()
     name << QStringLiteral("file1") << QStringLiteral("file2");
     icon << QStringLiteral("myIcon") << QStringLiteral("myIcon");
     ghns << QStringLiteral("0") << QStringLiteral("0");
-    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
-    m_plugin->readConfig();
 
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 1);
+    auto plugin = makePlugin(m_testCore, [&]() {
+        qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
+    });
+    RETURN_IF_TEST_FAILED();
+
+    QCOMPARE(plugin->qtHelpProviderLoaded().size(), 1);
 }
 
 void TestQtHelpPlugin::testRemoveOneProvider()
@@ -170,30 +207,44 @@ void TestQtHelpPlugin::testRemoveOneProvider()
     name << QStringLiteral("file1") << QStringLiteral("file2");
     icon << QStringLiteral("myIcon") << QStringLiteral("myIcon");
     ghns << QStringLiteral("0") << QStringLiteral("0");
-    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
-    m_plugin->readConfig();
 
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 2);
+    auto plugin = makePlugin(m_testCore, [&]() {
+        qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
+    });
+    RETURN_IF_TEST_FAILED();
+
+    QCOMPARE(plugin->qtHelpProviderLoaded().size(), 2);
     // we remove the second provider
-    QtHelpProvider *provider = m_plugin->qtHelpProviderLoaded().at(0);
+    QtHelpProvider* provider = plugin->qtHelpProviderLoaded().at(0);
     path.removeAt(1);
     name.removeAt(1);
     icon.removeAt(1);
     ghns.removeAt(1);
     qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
-    m_plugin->readConfig();
+    plugin->readConfig();
 
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 1);
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0), provider);
+    QCOMPARE(plugin->qtHelpProviderLoaded().size(), 1);
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(0), provider);
 }
 
 void TestQtHelpPlugin::testDeclarationLookup_data()
 {
+    QTest::addColumn<TestDeclarationLookupProvider>("provider");
     QTest::addColumn<QString>("fileContents");
     QTest::addColumn<TestDeclarationLookupCallback>("callback");
 
+    const auto mutableProvider = std::make_shared<QtHelpQtDoc>(nullptr, "testDeclarationLookup.qhc");
+    QTRY_VERIFY(mutableProvider->isInitialized());
+
+    mutableProvider->loadDocumentation();
+
+    if (!mutableProvider->isValid() || mutableProvider->engine()->documentsForIdentifier("QObject").isEmpty())
+        QSKIP("Qt help not available");
+
+    const auto provider = TestDeclarationLookupProvider(mutableProvider);
+
     QTest::addRow("QObject")
-        << "class QObject; QObject* o;"
+        << provider << "class QObject; QObject* o;"
         << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
                auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("o"))).first();
                QVERIFY(decl);
@@ -209,7 +260,7 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
            }};
 
     QTest::addRow("QString::fromLatin1")
-        << "class QString { static QString fromLatin1(const QByteArray&); };"
+        << provider << "class QString { static QString fromLatin1(const QByteArray&); };"
         << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
                auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("QString"))).first();
                QVERIFY(decl);
@@ -223,7 +274,7 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
                QVERIFY(description.contains(QRegularExpression{"See also.*toLatin1"}));
            }};
 
-    QTest::addRow("operator") << "class C {}; bool operator<(const C& a, const C& b) { return true; }"
+    QTest::addRow("operator") << provider << "class C {}; bool operator<(const C& a, const C& b) { return true; }"
                               << TestDeclarationLookupCallback{
                                      [](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
                                          auto decl = ctx->findDeclarations(QualifiedIdentifier("operator<")).first();
@@ -238,17 +289,12 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
 
 void TestQtHelpPlugin::testDeclarationLookup()
 {
+    QFETCH(const TestDeclarationLookupProvider, provider);
     QFETCH(const QString, fileContents);
     QFETCH(const TestDeclarationLookupCallback, callback);
 
-    QVERIFY(callback);
-
-    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
-
-    if (!provider->isValid() || provider->engine()->documentsForIdentifier(QStringLiteral("QObject")).isEmpty()) {
-        QSKIP("Qt help not available");
-    }
+    QVERIFY(callback);
 
     TestFile file(fileContents, "cpp");
     QVERIFY(file.parseAndWait());
@@ -257,7 +303,7 @@ void TestQtHelpPlugin::testDeclarationLookup()
     auto ctx = file.topContext();
     QVERIFY(ctx);
 
-    callback(ctx, provider);
+    callback(ctx, provider.get());
 }
 
 #include "moc_test_qthelpplugin.cpp"
