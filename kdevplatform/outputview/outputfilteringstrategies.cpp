@@ -455,6 +455,12 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
         ErrorFormat(QStringLiteral("^(.+:)?ERROR:(.+):([1-9][0-9]*):(.+:)? '.+' should be (TRUE|FALSE)"), 2, 3, -1),
 
         // END: glib
+
+        // BEGIN: gtest
+        // ../test.cpp:16: Failure
+        // c:\foo\test.cpp:16: Failure
+        ErrorFormat(QStringLiteral("^(.+):([0-9]+): Failure"), 1, 2, -1)
+        // END: gtest
     };
 
     return match(NATIVE_APPLICATION_ERROR_FILTERS, line);

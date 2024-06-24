@@ -187,6 +187,12 @@ QString buildTscErrorLine(TestPathType pathType = UnixFilePathNoSpaces)
     outputline.append("(43,9): error TS2304: Cannot find name 'testDevice'.");
     return outputline;
 }
+
+QString buildGtestErrorLine(TestPathType pathType)
+{
+    return projectPath(pathType) + QLatin1String("test_foo_impl.cpp:311: Failure");
 }
+
+} // end namespace
 
 #endif

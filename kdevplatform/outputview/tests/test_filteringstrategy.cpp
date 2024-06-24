@@ -88,6 +88,8 @@ void TestFilteringStrategy::testNoFilterStrategy_data()
         << buildCompilerInformationLine(pathType) << FilteredItem::InvalidItem;
         QTest::newRowForPathType("python-error-line", pathType)
         << buildPythonErrorLine(pathType) << FilteredItem::InvalidItem;
+        QTest::newRowForPathType("gtest-error-line", pathType)
+            << buildGtestErrorLine(pathType) << FilteredItem::InvalidItem;
     }
     QTest::newRow("cppcheck-info-line")
     << buildCppCheckInformationLine() << FilteredItem::InvalidItem;
@@ -397,6 +399,10 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
         << "/foo/test.c"
         << 41 << 0 << FilteredItem::ErrorItem;
     // END: glib
+    // BEGIN gtest
+    QTest::newRow("gtest-error-line") << "/foo/test_foo_impl.cpp:311: Failure" << "/foo/test_foo_impl.cpp" << 310 << 0
+                                      << FilteredItem::ErrorItem;
+    // END gtest
 }
 
 void TestFilteringStrategy::testNativeAppErrorFilterStrategy()
