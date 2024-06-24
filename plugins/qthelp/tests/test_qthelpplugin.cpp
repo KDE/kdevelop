@@ -24,9 +24,20 @@
 
 #include "testqthelpconfig.h"
 
+#include <functional>
+
+namespace {
 const QString VALID1 = QTHELP_FILES "/valid1.qch";
 const QString VALID2 = QTHELP_FILES "/valid2.qch";
 const QString INVALID = QTHELP_FILES "/invalid.qch";
+
+struct TestDeclarationLookupCallback
+{
+    std::function<void(const KDevelop::TopDUContext* ctx, QtHelpProviderAbstract* provider)> run;
+};
+}
+
+Q_DECLARE_METATYPE(TestDeclarationLookupCallback)
 
 QTEST_MAIN(TestQtHelpPlugin)
 using namespace KDevelop;
@@ -181,78 +192,76 @@ void TestQtHelpPlugin::testRemoveOneProvider()
     QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0), provider);
 }
 
-void TestQtHelpPlugin::testDeclarationLookup_Class()
+void TestQtHelpPlugin::testDeclarationLookup_data()
 {
-    TestFile file(QStringLiteral("class QObject; QObject* o;"), QStringLiteral("cpp"));
+    QTest::addColumn<QString>("fileContents");
+    QTest::addColumn<TestDeclarationLookupCallback>("callback");
+
+    QTest::addRow("QObject")
+        << QStringLiteral("class QObject; QObject* o;")
+        << TestDeclarationLookupCallback{[](const TopDUContext* ctx, QtHelpProviderAbstract* provider) {
+               auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("o"))).first();
+               QVERIFY(decl);
+               auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().data())
+                                   ->declaration(nullptr);
+               QVERIFY(typeDecl);
+
+               auto doc = provider->documentationForDeclaration(typeDecl);
+               QVERIFY(doc);
+               QCOMPARE(doc->name(), QStringLiteral("QObject"));
+               const auto description = doc->description();
+               QVERIFY(description.contains("QObject"));
+           }};
+
+    QTest::addRow("QString::fromLatin1")
+        << QStringLiteral("class QString { static QString fromLatin1(const QByteArray&); };")
+        << TestDeclarationLookupCallback{[](const TopDUContext* ctx, QtHelpProviderAbstract* provider) {
+               auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("QString"))).first();
+               QVERIFY(decl);
+               auto declFromLatin1 =
+                   decl->internalContext()->findDeclarations(QualifiedIdentifier(QStringLiteral("fromLatin1"))).first();
+
+               auto doc = provider->documentationForDeclaration(declFromLatin1);
+               QVERIFY(doc);
+               QCOMPARE(doc->name(), QStringLiteral("QString::fromLatin1"));
+               const auto description = doc->description();
+               QVERIFY(description.contains(QRegularExpression{"See also.*toLatin1"}));
+           }};
+
+    QTest::addRow("operator")
+        << QStringLiteral("class C {}; bool operator<(const C& a, const C& b) { return true; }")
+        << TestDeclarationLookupCallback{[](const TopDUContext* ctx, QtHelpProviderAbstract* provider) {
+               auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("operator<"))).first();
+               QVERIFY(decl);
+
+               auto doc = provider->documentationForDeclaration(decl);
+               // TODO: We should never find a documentation entry for this (but instead, the operator< for QChar is found here)
+               QEXPECT_FAIL("", "doc should be null here", Continue);
+               QVERIFY(!doc);
+           }};
+}
+
+void TestQtHelpPlugin::testDeclarationLookup()
+{
+    QFETCH(QString, fileContents);
+    QFETCH(TestDeclarationLookupCallback, callback);
+
+    QVERIFY(callback.run);
+
+    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
+    QVERIFY(provider);
+
+    if (!provider->isValid() || provider->engine()->documentsForIdentifier(QStringLiteral("QObject")).isEmpty())
+        QSKIP("Qt help not available");
+
+    TestFile file(fileContents, QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
     auto ctx = file.topContext();
     QVERIFY(ctx);
-    auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("o"))).first();
-    QVERIFY(decl);
-    auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().data())->declaration(nullptr);
-    QVERIFY(typeDecl);
 
-    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
-    QVERIFY(provider);
-    if (!provider->isValid() || provider->engine()->documentsForIdentifier(QStringLiteral("QObject")).isEmpty()) {
-        QSKIP("Qt help not available");
-    }
-
-    auto doc = provider->documentationForDeclaration(typeDecl);
-    QVERIFY(doc);
-    QCOMPARE(doc->name(), QStringLiteral("QObject"));
-    const auto description = doc->description();
-    QVERIFY(description.contains("QObject"));
-}
-
-void TestQtHelpPlugin::testDeclarationLookup_Method()
-{
-    TestFile file(QStringLiteral("class QString { static QString fromLatin1(const QByteArray&); };"), QStringLiteral("cpp"));
-    QVERIFY(file.parseAndWait());
-
-    DUChainReadLocker lock;
-    auto ctx = file.topContext();
-    QVERIFY(ctx);
-    auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("QString"))).first();
-    auto declFromLatin1 = decl->internalContext()->findDeclarations(QualifiedIdentifier(QStringLiteral("fromLatin1"))).first();
-    QVERIFY(decl);
-
-    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
-    QVERIFY(provider);
-    if (!provider->isValid()
-        || provider->engine()->documentsForIdentifier(QStringLiteral("QString::fromLatin1")).isEmpty()) {
-        QSKIP("Qt help not available");
-    }
-
-    auto doc = provider->documentationForDeclaration(declFromLatin1);
-    QVERIFY(doc);
-    QCOMPARE(doc->name(), QStringLiteral("QString::fromLatin1"));
-    const auto description = doc->description();
-    QVERIFY(description.contains(QRegularExpression{"See also.*toLatin1"}));
-}
-
-void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
-{
-    TestFile file(QStringLiteral("class C {}; bool operator<(const C& a, const C& b) { return true; }"), QStringLiteral("cpp"));
-    QVERIFY(file.parseAndWait());
-
-    DUChainReadLocker lock;
-    auto ctx = file.topContext();
-    auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("operator<"))).first();
-    QVERIFY(decl);
-
-    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
-    QVERIFY(provider);
-    if (!provider->isValid() || provider->engine()->documentsForIdentifier(QStringLiteral("QObject")).isEmpty()) {
-        QSKIP("Qt help not available");
-    }
-
-    auto doc = provider->documentationForDeclaration(decl);
-    // TODO: We should never find a documentation entry for this (but instead, the operator< for QChar is found here)
-    QEXPECT_FAIL("", "doc should be null here", Continue);
-    QVERIFY(!doc);
+    callback.run(ctx, provider);
 }
 
 #include "moc_test_qthelpplugin.cpp"

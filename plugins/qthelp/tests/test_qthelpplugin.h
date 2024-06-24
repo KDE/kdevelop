@@ -31,9 +31,8 @@ private Q_SLOTS:
     void testAddTwiceSameProvider();
     void testRemoveOneProvider();
 
-    void testDeclarationLookup_Class();
-    void testDeclarationLookup_Method();
-    void testDeclarationLookup_OperatorFunction();
+    void testDeclarationLookup_data();
+    void testDeclarationLookup();
 
     void cleanup();
     void cleanupTestCase();
