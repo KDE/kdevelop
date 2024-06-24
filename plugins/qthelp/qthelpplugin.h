@@ -19,33 +19,39 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProviderProvider )
-    public:
-        QtHelpPlugin(QObject *parent, const QVariantList & args);
-        ~QtHelpPlugin() override;
+public:
+    QtHelpPlugin(QObject* parent, const QVariantList& args);
+    ~QtHelpPlugin() override;
 
-        static QtHelpPlugin *self() { return s_plugin; }
+    static QtHelpPlugin* self()
+    {
+        return s_plugin;
+    }
 
-        QList<KDevelop::IDocumentationProvider*> providers() override;
-        QList<QtHelpProvider*> qtHelpProviderLoaded();
-        bool isQtHelpQtDocLoaded() const;
-        bool isQtHelpAvailable() const;
+    QList<KDevelop::IDocumentationProvider*> providers() override;
+    QList<QtHelpProvider*> qtHelpProviderLoaded();
+    bool isQtHelpQtDocLoaded() const;
+    bool isQtHelpAvailable() const;
 
-        int configPages() const override;
-        KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
+    int configPages() const override;
+    KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
 
-    public Q_SLOTS:
-        void readConfig();
-    Q_SIGNALS:
-        void changedProvidersList() override;
-    private:
-        void loadQtDocumentation(bool loadQtDoc);
-        void searchHelpDirectory(QStringList& pathList, QStringList& nameList, QStringList& iconList, const QString& searchDir);
-        void loadQtHelpProvider(const QStringList& pathList, const QStringList& nameList, const QStringList& iconList);
+public Q_SLOTS:
+    void readConfig();
 
-        static QtHelpPlugin *s_plugin;
-        QList<QtHelpProvider*> m_qtHelpProviders;
-        QtHelpQtDoc* m_qtDoc;
-        bool m_loadSystemQtDoc;
+Q_SIGNALS:
+    void changedProvidersList() override;
+
+private:
+    void loadQtDocumentation(bool loadQtDoc);
+    void searchHelpDirectory(QStringList& pathList, QStringList& nameList, QStringList& iconList,
+                             const QString& searchDir);
+    void loadQtHelpProvider(const QStringList& pathList, const QStringList& nameList, const QStringList& iconList);
+
+    static QtHelpPlugin* s_plugin;
+    QList<QtHelpProvider*> m_qtHelpProviders;
+    QtHelpQtDoc* m_qtDoc;
+    bool m_loadSystemQtDoc;
 };
 
 #endif // QTHELPPLUGIN_H
