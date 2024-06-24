@@ -180,8 +180,6 @@ void TestQtHelpPlugin::testRemoveOneProvider()
 
 void TestQtHelpPlugin::testDeclarationLookup_Class()
 {
-    init();
-
     TestFile file(QStringLiteral("class QObject; QObject* o;"), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait());
 
@@ -208,8 +206,6 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
 
 void TestQtHelpPlugin::testDeclarationLookup_Method()
 {
-    init();
-
     TestFile file(QStringLiteral("class QString { static QString fromLatin1(const QByteArray&); };"), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait());
 
@@ -236,8 +232,6 @@ void TestQtHelpPlugin::testDeclarationLookup_Method()
 
 void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
 {
-    init();
-
     TestFile file(QStringLiteral("class C {}; bool operator<(const C& a, const C& b) { return true; }"), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait());
 
