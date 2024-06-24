@@ -18,13 +18,21 @@
 #include <KPluginFactory>
 
 #include <QDirIterator>
+#include <QStandardPaths>
 
 K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
+
+namespace {
+QString collectionFilePath(const QString& collectionFileName)
+{
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + collectionFileName;
+}
+}
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent)
     , m_qtHelpProviders()
-    , m_qtDoc(new QtHelpQtDoc(this))
+    , m_qtDoc(new QtHelpQtDoc(this, collectionFilePath(QStringLiteral("qthelpcollection.qhc"))))
     , m_loadSystemQtDoc(false)
 {
     Q_UNUSED(args);
@@ -100,14 +108,15 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
         if(!nameSpace.isEmpty()){
             QtHelpProvider *provider = nullptr;
             for (QtHelpProvider* oldProvider : qAsConst(oldList)) {
-                if(QHelpEngineCore::namespaceName(oldProvider->fileName()) == nameSpace){
+                if (oldProvider->nameSpace() == nameSpace) {
                     provider = oldProvider;
                     oldList.removeAll(provider);
                     break;
                 }
             }
             if(!provider){
-                provider = new QtHelpProvider(this, fileName, name, iconName);
+                provider = new QtHelpProvider(this, collectionFilePath(nameSpace + QLatin1String(".qhc")), fileName,
+                                              nameSpace, name, iconName);
             }else{
                 provider->setName(name);
                 provider->setIconName(iconName);
@@ -115,7 +124,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
 
             bool exist = false;
             for (QtHelpProvider* existingProvider : qAsConst(m_qtHelpProviders)) {
-                if(QHelpEngineCore::namespaceName(existingProvider->fileName()) ==  nameSpace){
+                if (existingProvider->nameSpace() == nameSpace) {
                     exist = true;
                     break;
                 }

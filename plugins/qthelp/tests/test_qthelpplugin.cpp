@@ -102,7 +102,8 @@ void TestQtHelpPlugin::testAddOneValidProvider()
     m_plugin->readConfig();
 
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 1);
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->fileName(), path.at(0));
+    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->qchInputFilePath(), path.at(0));
+    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->nameSpace(), "namespace1");
     QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->name(), name.at(0));
     QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->iconName(), icon.at(0));
 }
@@ -119,11 +120,13 @@ void TestQtHelpPlugin::testAddTwoDifferentValidProvider()
 
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 2);
     // first provider
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->fileName(), path.at(0));
+    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->qchInputFilePath(), path.at(0));
+    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->nameSpace(), "namespace1");
     QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->name(), name.at(0));
     QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0)->iconName(), icon.at(0));
     // second provider
-    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(1)->fileName(), path.at(1));
+    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(1)->qchInputFilePath(), path.at(1));
+    QCOMPARE(m_plugin->qtHelpProviderLoaded().at(1)->nameSpace(), QLatin1String("namespace2"));
     QCOMPARE(m_plugin->qtHelpProviderLoaded().at(1)->name(), name.at(1));
     QCOMPARE(m_plugin->qtHelpProviderLoaded().at(1)->iconName(), icon.at(1));
 }

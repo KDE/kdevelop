@@ -16,16 +16,24 @@ class QtHelpProvider : public QtHelpProviderAbstract
     Q_OBJECT
     Q_INTERFACES(KDevelop::IDocumentationProvider)
 public:
-    QtHelpProvider(QObject* parent, const QString& fileName, const QString& name, const QString& iconName);
+    /**
+     * @param collectionFilePath the path to the .qhc cache file
+     * @param qchInputFilePath the path to the .qch file that we are parsing
+     * @param nameSpace the namespace name for @p qchInputFilePath
+     */
+    QtHelpProvider(QObject* parent, const QString& collectionFilePath, const QString& qchInputFilePath,
+                   const QString& nameSpace, const QString& name, const QString& iconName);
 
     QIcon icon() const override;
     QString name() const override;
     void setName(const QString& name);
-    QString fileName() const;
+    QString qchInputFilePath() const;
+    QString nameSpace() const;
     QString iconName() const;
     void setIconName(const QString& iconName);
 private:
-    QString m_fileName;
+    QString m_qchInputFilePath;
+    QString m_nameSpace;
     QString m_name;
     QString m_iconName;
 };

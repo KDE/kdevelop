@@ -12,21 +12,25 @@
 
 #include <QIcon>
 
-QtHelpProvider::QtHelpProvider(QObject* parent, const QString& fileName, const QString& name, const QString& iconName)
-    : QtHelpProviderAbstract(parent, QHelpEngineCore::namespaceName(fileName) + QLatin1String(".qhc"))
-    , m_fileName(fileName)
+QtHelpProvider::QtHelpProvider(QObject* parent, const QString& collectionFilePath, const QString& qchInputFileName,
+                               const QString& nameSpace, const QString& name, const QString& iconName)
+    : QtHelpProviderAbstract(parent, collectionFilePath)
+    , m_qchInputFilePath(qchInputFileName)
+    , m_nameSpace(nameSpace)
     , m_name(name)
     , m_iconName(iconName)
 {
+    Q_ASSERT(QHelpEngineCore::namespaceName(m_qchInputFilePath) == nameSpace);
+
     if (!engine()->registeredDocumentations().isEmpty()) {
         // data was already registered previously
         Q_ASSERT(engine()->registeredDocumentations().size() == 1);
-        Q_ASSERT(engine()->documentationFileName(QHelpEngineCore::namespaceName(m_fileName)) == m_fileName);
+        Q_ASSERT(engine()->documentationFileName(nameSpace) == m_qchInputFilePath);
         return;
     }
 
-    if (!engine()->registerDocumentation(m_fileName)) {
-        qCCritical(QTHELP) << "error >> " << fileName << engine()->error();
+    if (!engine()->registerDocumentation(m_qchInputFilePath)) {
+        qCCritical(QTHELP) << "error >> " << m_qchInputFilePath << engine()->error();
     }
 }
 
@@ -40,9 +44,14 @@ QString QtHelpProvider::name() const
     return m_name;
 }
 
-QString QtHelpProvider::fileName() const
+QString QtHelpProvider::qchInputFilePath() const
 {
-    return m_fileName;
+    return m_qchInputFilePath;
+}
+
+QString QtHelpProvider::nameSpace() const
+{
+    return m_nameSpace;
 }
 
 QString QtHelpProvider::iconName() const

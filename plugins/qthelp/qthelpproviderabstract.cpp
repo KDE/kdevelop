@@ -11,8 +11,6 @@
 #include <QHelpIndexModel>
 #include <QHelpContentModel>
 
-#include <QStandardPaths>
-
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 
@@ -35,14 +33,13 @@ IDocumentation::Ptr documentationPtrFromUrl(QtHelpProviderAbstract* provider, co
 }
 }
 
-QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& collectionFileName)
+QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& collectionFilePath)
     : QObject(parent)
-    , m_engine(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/')
-               + collectionFileName)
+    , m_engine(collectionFilePath)
     , m_nam(new HelpNetworkAccessManager(&m_engine, this))
 {
-    connect(&m_engine, &QHelpEngine::warning, this, [collectionFileName](const QString& msg) {
-        qCWarning(QTHELP) << "engine warning for" << collectionFileName << msg;
+    connect(&m_engine, &QHelpEngine::warning, this, [collectionFilePath](const QString& msg) {
+        qCWarning(QTHELP) << "engine warning for" << collectionFilePath << msg;
     });
 
     // we use a writable engine (see initialization above)
@@ -52,12 +49,12 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& c
     // we assume that the setup finished synchronously, otherwise our code does not work correctly
     // the below will catch situations when Qt would change its behavior
     bool setupFinished = false;
-    auto startedConnection = connect(&m_engine, &QHelpEngine::setupStarted, this, [collectionFileName]() {
-        qCDebug(QTHELP) << "setup started" << collectionFileName;
+    auto startedConnection = connect(&m_engine, &QHelpEngine::setupStarted, this, [collectionFilePath]() {
+        qCDebug(QTHELP) << "setup started" << collectionFilePath;
     });
     auto finishedConnection =
-        connect(&m_engine, &QHelpEngine::setupFinished, this, [&setupFinished, collectionFileName]() {
-            qCDebug(QTHELP) << "setup finished" << collectionFileName;
+        connect(&m_engine, &QHelpEngine::setupFinished, this, [&setupFinished, collectionFilePath]() {
+            qCDebug(QTHELP) << "setup finished" << collectionFilePath;
             setupFinished = true;
         });
 
