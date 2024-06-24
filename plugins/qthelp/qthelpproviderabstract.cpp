@@ -35,15 +35,12 @@ IDocumentation::Ptr documentationPtrFromUrl(QtHelpProviderAbstract* provider, co
 }
 }
 
-QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& collectionFileName,
-                                               const QVariantList& args)
+QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& collectionFileName)
     : QObject(parent)
     , m_engine(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/')
                + collectionFileName)
     , m_nam(new HelpNetworkAccessManager(&m_engine, this))
 {
-    Q_UNUSED(args);
-
     connect(&m_engine, &QHelpEngine::warning, this, [collectionFileName](const QString& msg) {
         qCWarning(QTHELP) << "engine warning for" << collectionFileName << msg;
     });
@@ -76,7 +73,6 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& c
 
     m_engine.setUsesFilterEngine(true);
 }
-
 
 QtHelpProviderAbstract::~QtHelpProviderAbstract()
 {

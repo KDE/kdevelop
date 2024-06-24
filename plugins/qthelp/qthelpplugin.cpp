@@ -26,7 +26,7 @@ K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugi
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent)
     , m_qtHelpProviders()
-    , m_qtDoc(new QtHelpQtDoc(this, QVariantList()))
+    , m_qtDoc(new QtHelpQtDoc(this))
     , m_loadSystemQtDoc(false)
 {
     Q_UNUSED(args);
@@ -110,7 +110,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
                 }
             }
             if(!provider){
-                provider = new QtHelpProvider(this, fileName, name, iconName, QVariantList());
+                provider = new QtHelpProvider(this, fileName, name, iconName);
             }else{
                 provider->setName(name);
                 provider->setIconName(iconName);

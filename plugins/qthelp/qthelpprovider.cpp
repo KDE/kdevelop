@@ -12,8 +12,8 @@
 
 #include <QIcon>
 
-QtHelpProvider::QtHelpProvider(QObject *parent, const QString &fileName, const QString &name, const QString &iconName, const QVariantList &args)
-    : QtHelpProviderAbstract(parent, QHelpEngineCore::namespaceName(fileName) + QLatin1String(".qhc"), args)
+QtHelpProvider::QtHelpProvider(QObject* parent, const QString& fileName, const QString& name, const QString& iconName)
+    : QtHelpProviderAbstract(parent, QHelpEngineCore::namespaceName(fileName) + QLatin1String(".qhc"))
     , m_fileName(fileName)
     , m_name(name)
     , m_iconName(iconName)
