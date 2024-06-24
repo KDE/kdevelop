@@ -25,8 +25,13 @@ K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugi
 namespace {
 QString collectionFilePath(const QString& collectionFileName)
 {
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + collectionFileName;
+    return QtHelpPlugin::collectionFileLocation() + QLatin1Char('/') + collectionFileName;
 }
+}
+
+QString QtHelpPlugin::collectionFileLocation()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 }
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
@@ -166,6 +171,11 @@ bool QtHelpPlugin::isQtHelpQtDocLoaded() const
 bool QtHelpPlugin::isQtHelpAvailable() const
 {
     return !m_qtDoc->qchFiles().isEmpty();
+}
+
+bool QtHelpPlugin::isInitialized() const
+{
+    return m_qtDoc->isInitialized();
 }
 
 KDevelop::ConfigPage* QtHelpPlugin::configPage(int number, QWidget* parent)
