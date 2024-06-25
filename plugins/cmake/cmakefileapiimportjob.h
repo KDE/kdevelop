@@ -6,15 +6,16 @@
 
 #pragma once
 
+#include "cmakeprojectdata.h"
+
 #include <KJob>
+
 #include <QFutureWatcher>
 
 namespace KDevelop
 {
 class IProject;
 }
-
-struct CMakeProjectData;
 
 namespace CMake {
 namespace FileApi {

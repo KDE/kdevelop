@@ -21,8 +21,8 @@
 #include <KIconEffect>
 #include <KLocalizedString>
 #include <KParts/MainWindow>
-#include <KTextEditor/View>
 #include <KTextEditor/Cursor>
+#include <KTextEditor/Document>
 
 #include <KTextEditor/MovingInterface>
 #include <KTextEditor/MarkInterface>

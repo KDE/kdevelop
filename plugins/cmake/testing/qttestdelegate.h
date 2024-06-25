@@ -7,8 +7,9 @@
 #ifndef QTTESTDELEGATE_H
 #define QTTESTDELEGATE_H
 
+#include <KStatefulBrush>
+
 #include <QItemDelegate>
-#include <KColorScheme>
 
 class QtTestDelegate : public QItemDelegate
 {

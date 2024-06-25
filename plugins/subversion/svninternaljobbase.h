@@ -9,8 +9,10 @@
 #define KDEVPLATFORM_PLUGIN_SVNINTERNALJOBBASE_H
 
 #include <ThreadWeaver/Job>
-#include <QSemaphore>
+
 #include <QMutex>
+#include <QObject>
+#include <QSemaphore>
 
 extern "C" {
 #include <svn_wc.h>

@@ -18,8 +18,9 @@
 #include <QThread>
 
 #include <KConfigGroup>
-#include <KSharedConfig>
 #include <KLocalizedString>
+#include <KSharedConfig>
+#include <KTextEditor/Document>
 
 #include <ThreadWeaver/State>
 #include <ThreadWeaver/ThreadWeaver>

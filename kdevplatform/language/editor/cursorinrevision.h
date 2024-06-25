@@ -11,6 +11,8 @@
 
 #include <KTextEditor/Cursor>
 
+#include <QDebug>
+
 namespace KDevelop {
 /**
  * Represents a cursor (line-number and column-number) within a text document.

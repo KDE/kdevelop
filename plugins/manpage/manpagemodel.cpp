@@ -16,6 +16,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 
+#include <KIO/ListJob>
+
 #include <QDesktopServices>
 #include <QStringListModel>
 #include <QTimer>

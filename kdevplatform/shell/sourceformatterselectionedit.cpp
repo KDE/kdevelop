@@ -25,6 +25,7 @@
 #include <KLocalizedString>
 #include <KConfig>
 
+#include <QListWidget>
 #include <QMetaType>
 #include <QMimeDatabase>
 #include <QMimeType>

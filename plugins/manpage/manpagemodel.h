@@ -12,6 +12,7 @@
 #include <QAbstractItemModel>
 
 #include <KIO/Job>
+#include <KIO/UDSEntry>
 
 #include <QListIterator>
 

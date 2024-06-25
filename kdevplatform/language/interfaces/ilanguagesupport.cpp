@@ -9,6 +9,8 @@
 #include "../duchain/duchain.h"
 #include "../duchain/stringhelpers.h"
 
+#include <KTextEditor/Document>
+
 #include <QReadWriteLock>
 
 namespace KDevelop {

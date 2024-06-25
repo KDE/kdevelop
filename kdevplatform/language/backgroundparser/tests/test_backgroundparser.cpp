@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QSemaphore>
 
+#include <KTextEditor/Document>
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
 

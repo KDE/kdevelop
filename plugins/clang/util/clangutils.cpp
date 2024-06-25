@@ -17,6 +17,8 @@
 
 #include <clang-c/Index.h>
 
+#include <KTextEditor/Document>
+
 #include <QTextStream>
 #include <QRegularExpression>
 
