@@ -321,7 +321,6 @@ int main( int argc, char *argv[] )
 
     // Useful for valgrind runs, just `export KDEV_DISABLE_JIT=1`
     if (qEnvironmentVariableIsSet("KDEV_DISABLE_JIT")) {
-        qputenv("KDEV_DISABLE_WELCOMEPAGE", "1");
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
     }
 
@@ -751,9 +750,6 @@ int main( int argc, char *argv[] )
     QDBusConnection::sessionBus().registerService(QStringLiteral("org.kdevelop.kdevelop-%1").arg(app.applicationPid()));
 
     Core* core = Core::self();
-    if (!QProcessEnvironment::systemEnvironment().contains(QStringLiteral("KDEV_DISABLE_WELCOMEPAGE"))) {
-        core->pluginController()->loadPlugin(QStringLiteral("KDevWelcomePage"));
-    }
 
     const auto fetchUrlStrings = parser.values(QStringLiteral("fetch"));
     for (const auto& fetchUrlString : fetchUrlStrings) {
