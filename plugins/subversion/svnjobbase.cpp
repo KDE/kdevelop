@@ -195,7 +195,18 @@ void SvnJobBase::outputMessage(const QString& message)
 
     auto *m = qobject_cast<QStandardItemModel*>(model());
     QStandardItem *previous = m->item(m->rowCount()-1);
-    if (message == QLatin1String(".") && previous && previous->text().contains(QRegExp(QStringLiteral("\\.+"))))
+    // TODO: 564123a06239a0fa68ef95e693d7f40c72039585 introduced the check below, originally as
+    // (message == "." && previous && previous->text().contains(QRegExp("\\.+"))), and explained it:
+    // > Be smart when showing the svn output. When it says "." on committing each file,
+    // > append it to the "." on the previous line (just like svn command does).
+    // The original regex condition actually checks whether a dot character is present in previous->text()
+    // and is equivalent to the current check previous->text().contains(dot). A possible original intention
+    // was to check whether previous->text() consists entirely of dots (anchored regex), which can be implemented
+    // more efficiently via std::all_of(), optionally combined with a string emptiness check. Or perhaps
+    // the intention was to check whether previous->text() ends with dots, i.e. previous->text().endsWith(dot).
+    // This code needs to be tested in action and the check probably should be fixed.
+    constexpr QLatin1Char dot{'.'};
+    if (message == dot && previous && previous->text().contains(dot))
         previous->setText(previous->text() + message);
     else
         m->appendRow(new QStandardItem(message));
