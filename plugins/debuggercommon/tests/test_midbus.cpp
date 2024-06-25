@@ -12,8 +12,6 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <KPluginFactory>
-
 #include <QDBusAbstractAdaptor>
 #include <QDBusConnection>
 #include <QObject>

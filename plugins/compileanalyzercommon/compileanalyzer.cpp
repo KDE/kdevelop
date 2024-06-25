@@ -33,7 +33,6 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KPluginFactory>
 // Qt
 #include <QAction>
 #include <QMessageBox>
