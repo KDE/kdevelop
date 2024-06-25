@@ -42,11 +42,12 @@
 #include "clangsupport.h"
 #include "duchain/documentfinderhelpers.h"
 
+#include <KTextEditor/Document>
+
 #include <QFile>
-#include <QStringList>
 #include <QFileInfo>
 #include <QReadLocker>
-#include <memory>
+#include <QStringList>
 
 using namespace KDevelop;
 

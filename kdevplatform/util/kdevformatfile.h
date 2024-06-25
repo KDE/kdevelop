@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <QIODevice>
 #include <QString>
 #include <QTextStream>
 #include <QVector>

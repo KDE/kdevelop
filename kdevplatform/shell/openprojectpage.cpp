@@ -8,6 +8,7 @@
 
 #include <QVBoxLayout>
 
+#include <KDirLister>
 #include <KDirOperator>
 #include <KFileItem>
 #include <KFileWidget>

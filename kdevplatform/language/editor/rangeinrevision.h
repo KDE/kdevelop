@@ -12,6 +12,8 @@
 
 #include <KTextEditor/Range>
 
+#include <QDebug>
+
 namespace KDevelop {
 /**
  * Represents a range (start- and end cursor) within a text document.

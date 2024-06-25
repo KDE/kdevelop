@@ -10,6 +10,7 @@
 #include <kdevelopsessionswatch.h>
 // KF
 #include <KLocalizedString>
+#include <KPluginFactory>
 #include <krunner_version.h>
 // Qt
 #include <QDebug>

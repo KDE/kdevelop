@@ -10,6 +10,7 @@
 #include <QItemDelegate>
 
 #include <KColorScheme>
+#include <KStatefulBrush>
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iruncontroller.h>
@@ -18,7 +19,6 @@
 
 class QStyleOptionViewItem;
 class QModelIndex;
-class KStatefulBrush;
 
 namespace KDevelop
 {

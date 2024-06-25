@@ -8,6 +8,7 @@
 #include "kdevkonsoleviewplugin.h"
 
 #include <KLocalizedString>
+#include <KPluginFactory>
 #include <KService>
 
 #include <interfaces/iuicontroller.h>

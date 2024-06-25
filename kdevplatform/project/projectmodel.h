@@ -10,12 +10,10 @@
 #define KDEVPLATFORM_PROJECTMODEL_H
 
 #include <QAbstractItemModel>
+#include <QList>
 #include <QUrl>
 
 #include "projectexport.h"
-
-template<typename T1,typename T2> struct QPair;
-template<typename T> class QList;
 
 namespace KDevelop
 {

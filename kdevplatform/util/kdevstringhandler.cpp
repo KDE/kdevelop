@@ -20,6 +20,7 @@
 #include <QByteArray>
 #include <QChar>
 #include <QDataStream>
+#include <QIODevice>
 #include <QVariant>
 #include <QRegExp>
 #include <QTextDocument>

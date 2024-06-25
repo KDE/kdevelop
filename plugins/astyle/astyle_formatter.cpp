@@ -7,13 +7,14 @@
 
 #include "astyle_formatter.h"
 
-#include <QString>
-
 #include <interfaces/isourceformatter.h>
 #include <util/formattinghelpers.h>
 
 #include "astyle_stringiterator.h"
 #include "debug.h"
+
+#include <QIODevice>
+#include <QString>
 
 using namespace KDevelop;
 

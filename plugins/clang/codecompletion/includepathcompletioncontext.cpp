@@ -13,9 +13,10 @@
 #include <language/codecompletion/abstractincludefilecompletionitem.h>
 #include <util/stringviewhelpers.h>
 
-#include <QDirIterator>
-
+#include <KTextEditor/Document>
 #include <KTextEditor/View>
+
+#include <QDirIterator>
 
 #include <algorithm>
 
