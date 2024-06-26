@@ -207,10 +207,9 @@ msgid "Could not find any documentation for '%1'"
 msgstr "无法找到任何“%1”的文档"
 
 #: qthelpdocumentation.cpp:307
-#, fuzzy, kde-format
-#| msgid "QtHelp Home Page"
+#, kde-format
 msgid "%1 Home Page"
-msgstr "QtHelp 主页"
+msgstr ""
 
 #: qthelpqtdoc.cpp:148
 #, kde-format

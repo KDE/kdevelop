@@ -2,20 +2,20 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2023.
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-24 01:39+0000\n"
-"PO-Revision-Date: 2023-06-29 01:30+0200\n"
+"PO-Revision-Date: 2024-06-25 17:46+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 24.05.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: qthelpconfig.cpp:47 qthelpconfig.cpp:49
@@ -210,10 +210,9 @@ msgid "Could not find any documentation for '%1'"
 msgstr "No se puede encontrar ninguna documentación para «%1»"
 
 #: qthelpdocumentation.cpp:307
-#, fuzzy, kde-format
-#| msgid "QtHelp Home Page"
+#, kde-format
 msgid "%1 Home Page"
-msgstr "Página de inicio de QtHelp"
+msgstr "Página de inicio de %1"
 
 #: qthelpqtdoc.cpp:148
 #, kde-format
