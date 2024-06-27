@@ -913,7 +913,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
         return;
     }
 
-    m_currentWidgetHandler = create.dialog.get();
+    m_currentWidgetHandler = create.dialog;
 
     QuickOpenLineEdit* line = quickOpenLine(QStringLiteral("Outline"));
     if (!line) {
@@ -1022,7 +1022,7 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev)
     m_widget->setFocusPolicy(Qt::NoFocus);
     m_widget->setAlternativeSearchField(this);
 
-    QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget.get();
+    QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
     connect(m_widget.data(), &QuickOpenWidget::ready, this, &QuickOpenLineEdit::deactivate);
 
     connect(m_widget.data(), &QuickOpenWidget::scopesChanged, QuickOpenPlugin::self(), &QuickOpenPlugin::storeScopes);
