@@ -382,19 +382,18 @@ void DebugController::clearExecutionPoint()
                      << lastExecMarkDocument->url().toString(QUrl::PreferLocalFile);
 }
 
-void DebugController::showStepInSource(const QUrl &url, int lineNum)
+void DebugController::showStepInSource(const QUrl& originalUrl, int originalLine)
 {
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
     clearExecutionPoint();
-    qCDebug(SHELL) << url << lineNum;
+    qCDebug(SHELL) << "showing debugger step in source:" << originalUrl << originalLine;
 
     Q_ASSERT(qobject_cast<IDebugSession*>(sender()));
-    QPair<QUrl,int> openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(qMakePair<QUrl,int>( url, lineNum ));
-    KDevelop::IDocument* document = KDevelop::ICore::self()
-        ->documentController()
-        ->openDocument(openUrl.first, KTextEditor::Cursor(openUrl.second, 0), IDocumentController::DoNotFocus);
+    const auto [url, line] = static_cast<IDebugSession*>(sender())->convertToLocalUrl({originalUrl, originalLine});
 
+    const auto* const document = ICore::self()->documentController()->openDocument(url, KTextEditor::Cursor(line, 0),
+                                                                                   IDocumentController::DoNotFocus);
     if( !document )
         return;
 
@@ -404,8 +403,8 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
         return;
 
     m_lastExecMarkDocument = textDocument;
-    m_lastExecMarkLine = lineNum;
-    iface->addMark(lineNum, KTextEditor::MarkInterface::Execution);
+    m_lastExecMarkLine = line;
+    iface->addMark(line, KTextEditor::MarkInterface::Execution);
 }
 
 
