@@ -125,22 +125,21 @@ Qt::ItemFlags DefinesModel::flags( const QModelIndex& index ) const
 
 Defines DefinesModel::defines() const
 {
-    Defines ret;
-    ret.reserve(m_defines.size());
-    for (const auto& pair : m_defines) {
-        ret[pair.first] = pair.second;
-    }
-    return ret;
+    return Defines(m_defines.cbegin(), m_defines.cend());
 }
 
 void DefinesModel::setDefines(const Defines& includes )
 {
     beginResetModel();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+    m_defines.assign(includes.constKeyValueBegin(), includes.constKeyValueEnd());
+#else
     m_defines.clear();
     m_defines.reserve(includes.size());
     for ( auto it = includes.begin(); it != includes.end(); ++it ) {
         m_defines << QPair<QString, QString>{it.key(), it.value()};
     }
+#endif
     endResetModel();
 }
 
