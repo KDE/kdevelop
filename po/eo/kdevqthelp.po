@@ -2,15 +2,15 @@
 # Copyright (C) 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
-# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+# Oliver Kellogg <olivermkellogg@gmail.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-24 01:39+0000\n"
-"PO-Revision-Date: 2023-06-27 22:30+0100\n"
-"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"PO-Revision-Date: 2024-06-28 21:02+0200\n"
+"Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -210,10 +210,9 @@ msgid "Could not find any documentation for '%1'"
 msgstr "Ne eblis trovi ajnan dokumentadon por '%1'"
 
 #: qthelpdocumentation.cpp:307
-#, fuzzy, kde-format
-#| msgid "QtHelp Home Page"
+#, kde-format
 msgid "%1 Home Page"
-msgstr "QtHelp Hejmpaĝo"
+msgstr "Hejmpaĝo de %1"
 
 #: qthelpqtdoc.cpp:148
 #, kde-format
