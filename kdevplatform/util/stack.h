@@ -34,7 +34,7 @@ class Stack : public QVarLengthArray<T
     using Base = QVarLengthArray<T, Prealloc>;
 
 public:
-    using Base::QVarLengthArray;
+    using Base::Base;
 
     inline void swap(Stack<T>& other)
     {
