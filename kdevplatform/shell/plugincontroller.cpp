@@ -329,16 +329,13 @@ PluginController::PluginController(Core *core)
 
     setObjectName(QStringLiteral("PluginController"));
 
-    auto newPlugins =
-        KPluginMetaData::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)));
+    d->plugins = KPluginMetaData::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)));
 
-    qCDebug(SHELL) << "Found" << newPlugins.size() << "plugins:" << pluginIds(newPlugins);
-    if (newPlugins.isEmpty()) {
+    qCDebug(SHELL) << "Found" << d->plugins.size() << "plugins:" << pluginIds(d->plugins);
+    if (d->plugins.empty()) {
         qCWarning(SHELL) << "Did not find any plugins, check your environment.";
         qCWarning(SHELL) << "  Note: QT_PLUGIN_PATH is set to:" << qgetenv("QT_PLUGIN_PATH");
     }
-
-    d->plugins = newPlugins;
 
     d->initKTextEditorIntegration();
 
