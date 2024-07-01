@@ -150,8 +150,6 @@ public: // FIXME?
     void activateViewAndFocus(Sublime::View *view) { activateView(view, true); }
 
 private:
-    QString screenKey() const;
-
     //Inherit MainWindowOperator to access four methods below
     /**Unsets the area clearing main window.*/
     void clearArea();
@@ -159,9 +157,6 @@ private:
     void setActiveView(Sublime::View* view, bool focus = true);
     /**Sets the active tool view and focuses it.*/
     void setActiveToolView(View *view);
-
-    void saveGeometry(KConfigGroup &config) const;
-    void loadGeometry(const KConfigGroup &config);
 
 private:
     const QScopedPointer<class MainWindowPrivate> d_ptr;
