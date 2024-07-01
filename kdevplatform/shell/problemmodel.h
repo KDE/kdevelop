@@ -8,12 +8,14 @@
 #ifndef PROBLEMMODEL_H
 #define PROBLEMMODEL_H
 
-#include <shell/shellexport.h>
-#include <QAbstractItemModel>
-#include <shell/problem.h>
-#include <language/editor/documentrange.h>
-
 #include "problemconstants.h"
+
+#include <language/editor/documentrange.h>
+#include <shell/problem.h>
+#include <shell/shellexport.h>
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
+#include <QAbstractItemModel>
 
 class QUrl;
 

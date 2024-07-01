@@ -9,6 +9,9 @@
 
 #include "outputjob.h"
 #include "outputmodel.h"
+
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
 #include <QProcess>
 #include <QUrl>
 

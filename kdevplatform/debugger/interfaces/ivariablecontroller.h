@@ -7,9 +7,11 @@
 #ifndef KDEVPLATFORM_IVARIABLECONTROLLER_H
 #define KDEVPLATFORM_IVARIABLECONTROLLER_H
 
-#include <QObject>
-
 #include "idebugsession.h"
+
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
+#include <QObject>
 
 namespace KTextEditor {
 class Document;

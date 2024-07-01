@@ -7,10 +7,12 @@
 #ifndef KDEVPLATFORM_SUBLIMESUBLIMEDEFS_H
 #define KDEVPLATFORM_SUBLIMESUBLIMEDEFS_H
 
-#include <Qt>
-#include <QFlags>
-
 #include "sublimeexport.h"
+
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
+#include <QFlags>
+#include <Qt>
 
 /**
 @file sublimedefs.h

@@ -10,10 +10,12 @@
 
 #include "mi/mi.h"
 
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
 #include <QObject>
+#include <QPointer>
 #include <QString>
 #include <QStringList>
-#include <QPointer>
 
 #include <functional>
 

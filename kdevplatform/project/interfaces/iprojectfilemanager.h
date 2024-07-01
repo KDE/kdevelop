@@ -14,7 +14,7 @@
 #include <QObject>
 
 #include <project/projectexport.h>
-
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 #include <util/path.h>
 
 class KJob;

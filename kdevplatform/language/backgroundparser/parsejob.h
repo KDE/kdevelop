@@ -8,13 +8,14 @@
 #ifndef KDEVPLATFORM_PARSEJOB_H
 #define KDEVPLATFORM_PARSEJOB_H
 
-#include <QPointer>
+#include <language/duchain/topducontext.h>
+#include <language/editor/modificationrevision.h>
+#include <serialization/indexedstring.h>
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
 #include <ThreadWeaver/Sequence>
 
-#include <serialization/indexedstring.h>
-#include <language/duchain/topducontext.h>
-#include <language/editor/modificationrevision.h>
+#include <QPointer>
 
 namespace ThreadWeaver {
 class QObjectDecorator;

@@ -7,13 +7,15 @@
 #ifndef KDEVPLATFORM_ABSTRACTNAVIGATIONCONTEXT_H
 #define KDEVPLATFORM_ABSTRACTNAVIGATIONCONTEXT_H
 
+#include "../indexeddeclaration.h"
+#include "navigationaction.h"
+
+#include <language/languageexport.h>
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
 #include <QExplicitlySharedDataPointer>
 #include <QObject>
 #include <QSharedData>
-
-#include <language/languageexport.h>
-#include "../indexeddeclaration.h"
-#include "navigationaction.h"
 
 namespace KDevelop {
 class AbstractNavigationContextPrivate;

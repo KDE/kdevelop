@@ -7,15 +7,16 @@
 #ifndef KDEVPLATFORM_IDOCUMENTCONTROLLER_H
 #define KDEVPLATFORM_IDOCUMENTCONTROLLER_H
 
-#include <QObject>
-#include <QList>
-#include <QUrl>
+#include "idocument.h"
+#include "interfacesexport.h"
+
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
 #include <KTextEditor/Range>
 
-#include "interfacesexport.h"
-
-#include "idocument.h"
+#include <QList>
+#include <QObject>
+#include <QUrl>
 
 namespace KTextEditor {
     class View;

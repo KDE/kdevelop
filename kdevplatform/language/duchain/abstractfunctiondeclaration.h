@@ -8,8 +8,10 @@
 #ifndef KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H
 #define KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H
 
-#include <language/languageexport.h>
 #include "indexedducontext.h"
+
+#include <language/languageexport.h>
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
 namespace KDevelop {
 class DUContext;

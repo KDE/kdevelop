@@ -7,11 +7,13 @@
 #ifndef IPROBLEM_H
 #define IPROBLEM_H
 
-#include <QExplicitlySharedDataPointer>
-#include <QVector>
-#include <QMetaType>
-
 #include "interfacesexport.h"
+
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
+#include <QExplicitlySharedDataPointer>
+#include <QMetaType>
+#include <QVector>
 
 class QIcon;
 

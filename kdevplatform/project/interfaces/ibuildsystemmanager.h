@@ -12,6 +12,7 @@
 #include "iprojectfilemanager.h"
 
 #include <project/projectexport.h>
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
 namespace KDevelop
 {

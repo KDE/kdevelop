@@ -9,7 +9,10 @@
 #define KDEVPLATFORM_TOPDUCONTEXT_H
 
 #include "ducontext.h"
+
 #include <language/util/setrepository.h>
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
 #include <QMetaType>
 
 template <class T>

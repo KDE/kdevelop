@@ -12,6 +12,8 @@
 
 #include "declaration.h"
 
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
 namespace KDevelop {
 class ClassMemberDeclarationData;
 /**

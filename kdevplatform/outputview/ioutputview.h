@@ -7,12 +7,14 @@
 #ifndef KDEVPLATFORM_IOUTPUTVIEW_H
 #define KDEVPLATFORM_IOUTPUTVIEW_H
 
-#include <QMetaType>
+#include "outputviewexport.h"
+
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
 #include <QFlags>
 #include <QIcon>
+#include <QMetaType>
 #include <QtPlugin>
-
-#include "outputviewexport.h"
 
 class QString;
 class QAbstractItemModel;

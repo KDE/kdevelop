@@ -93,6 +93,7 @@ install( FILES
     executecompositejob.h
     convenientfreelist.h
     multilevellistview.h
+    namespacedoperatorbitwiseorworkaroundqtbug.h
     objectlist.h
     owningrawpointercontainer.h
     placeholderitemproxymodel.h

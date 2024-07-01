@@ -16,6 +16,7 @@
 #include <language/duchain/topducontext.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
 #include <QFileInfo>
 

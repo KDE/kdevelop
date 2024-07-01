@@ -7,7 +7,10 @@
 #ifndef _DBGGLOBAL_H_
 #define _DBGGLOBAL_H_
 
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
 #include <qobjectdefs.h>
+
 #include <QFlags>
 
 namespace KDevMI

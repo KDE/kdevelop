@@ -8,10 +8,12 @@
 #ifndef KDEVPLATFORM_VCSEVENT_H
 #define KDEVPLATFORM_VCSEVENT_H
 
+#include "vcsexport.h"
+
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+
 #include <QMetaType>
 #include <QSharedDataPointer>
-
-#include "vcsexport.h"
 
 class QString;
 class QDateTime;

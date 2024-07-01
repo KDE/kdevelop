@@ -10,10 +10,13 @@
 #ifndef KDEVPLATFORM_BREAKPOINTMODEL_H
 #define KDEVPLATFORM_BREAKPOINTMODEL_H
 
-#include <QAbstractTableModel>
+#include "breakpoint.h"
+
+#include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
 #include <KTextEditor/MarkInterface>
-#include "breakpoint.h"
+
+#include <QAbstractTableModel>
 
 class QUrl;
 class TestBreakpointModel;
