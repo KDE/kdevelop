@@ -8,10 +8,8 @@
 #include "mainwindow_p.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QMenuBar>
 #include <QStatusBar>
-#include <QScreen>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -34,8 +32,6 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     , d_ptr(new MainWindowPrivate(this, controller))
 {
     connect(this, &MainWindow::destroyed, controller, QOverload<>::of(&Controller::areaReleased));
-
-    loadGeometry(KSharedConfig::openConfig()->group(QStringLiteral("Main Window")));
 
     // don't allow AllowTabbedDocks - that doesn't make sense for "ideal" UI
     setDockOptions(QMainWindow::AnimatedDocks);
@@ -360,7 +356,6 @@ bool MainWindow::queryClose()
 {
 //    saveSettings();
     KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("Main Window"));
-    saveGeometry(config);
     config.sync();
 
     return KParts::MainWindow::queryClose();
@@ -371,37 +366,6 @@ void MainWindow::postMessage(Message* message)
     Q_D(MainWindow);
 
     d->postMessage(message);
-}
-
-QString MainWindow::screenKey() const
-{
-    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QList<QScreen *> screens = QApplication::screens();
-    QRect desk = screens[scnum]->geometry();
-
-    // if the desktop is virtual then use virtual screen size
-    if (QGuiApplication::primaryScreen()->virtualSiblings().size() > 1)
-        desk = QGuiApplication::primaryScreen()->virtualGeometry();
-
-    return QStringLiteral("Desktop %1 %2")
-        .arg(desk.width()).arg(desk.height());
-}
-
-void MainWindow::saveGeometry(KConfigGroup &config) const
-{
-    config.writeEntry(screenKey(), geometry());
-
-}
-void MainWindow::loadGeometry(const KConfigGroup &config)
-{
-    // The below code, essentially, is copy-paste from
-    // KMainWindow::restoreWindowSize.  Right now, that code is buggy,
-    // as per http://permalink.gmane.org/gmane.comp.kde.devel.core/52423
-    // so we implement a less theoretically correct, but working, version
-    // below
-    QRect g = config.readEntry(screenKey(), QRect());
-    if (!g.isEmpty())
-        setGeometry(g);
 }
 
 void MainWindow::enableAreaSettingsSave()
