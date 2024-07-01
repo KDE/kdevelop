@@ -13,9 +13,9 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QMetaObject>
+#include <QScreen>
 #include <QWidgetAction>
 #include <QAction>
-#include <QDesktopWidget>
 
 #include <KLocalizedString>
 #include <KPluginFactory>
@@ -1031,7 +1031,7 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev)
     m_widget->prepareShow();
     QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));
     widgetGeometry.setWidth(700); ///@todo Waste less space
-    QRect screenGeom = QApplication::desktop()->screenGeometry(this);
+    const auto screenGeom = screen()->geometry();
     if (widgetGeometry.right() > screenGeom.right()) {
         widgetGeometry.moveRight(screenGeom.right());
     }

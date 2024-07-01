@@ -13,8 +13,8 @@
 #include <QMouseEvent>
 #include <QHeaderView>
 #include <QPushButton>
+#include <QScreen>
 #include <QScrollBar>
-#include <QDesktopWidget>
 #include <KLocalizedString>
 #include <QPainter>
 
@@ -176,7 +176,7 @@ void VariableToolTip::slotRangeChanged(int min, int max)
 {
     Q_ASSERT(min == 0);
     Q_UNUSED(min);
-    QRect rect = QApplication::desktop()->screenGeometry(this);
+    const auto rect = screen()->geometry();
     if (pos().y() + height() + max*m_itemHeight < rect.bottom())
         resize(width(), height() + max*m_itemHeight);
     else
