@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevtemplates\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2014-02-10 00:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: bs <bs@kde.org>\n"
@@ -393,41 +393,41 @@ msgctxt "@item:inlistbox empty line policy"
 msgid "Remove All Empty Lines"
 msgstr "Ukloni sve prazne linije"
 
-#: templateselectionpage.cpp:73
+#: templateselectionpage.cpp:76
 #, kde-format
 msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>Pregled:</b> %1"
 
-#: templateselectionpage.cpp:202
+#: templateselectionpage.cpp:205
 #, fuzzy, kde-format
 #| msgid "Language"
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Jezik"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:206
 #, fuzzy, kde-format
 #| msgid "Framework"
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Radni okvir"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:207
 #, fuzzy, kde-format
 #| msgid "Template"
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Predložak"
 
-#: templateselectionpage.cpp:239
+#: templateselectionpage.cpp:242
 #, fuzzy, kde-format
 #| msgid "Get More Templates..."
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "Dobavi još predložaka"
 
-#: templateselectionpage.cpp:246
+#: templateselectionpage.cpp:249
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"

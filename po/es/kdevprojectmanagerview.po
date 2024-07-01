@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2021-11-11 11:53+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -163,38 +163,38 @@ msgid "Remove currently selected item from the build set."
 msgstr ""
 "Eliminar el elemento actualmente seleccionado del conjunto de construcción."
 
-#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:191
+#: projectmanagerview.cpp:75 projectmanagerviewplugin.cpp:191
 #, kde-format
 msgctxt "@title:window"
 msgid "Projects"
 msgstr "Proyectos"
 
-#: projectmanagerview.cpp:91
+#: projectmanagerview.cpp:93
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Localizar el documento actual"
 
-#: projectmanagerview.cpp:92
+#: projectmanagerview.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locates the current document in the project tree and selects it."
 msgstr "Localiza el documento actual en el árbol del proyecto y lo selecciona."
 
-#: projectmanagerview.cpp:98
+#: projectmanagerview.cpp:100
 #, kde-format
 msgctxt "@action"
 msgid "Auto-Select Current Document"
 msgstr "Seleccionar automáticamente el documento actual"
 
-#: projectmanagerview.cpp:99
+#: projectmanagerview.cpp:101
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
 msgstr ""
 "Seleccionar automáticamente el documento actual en el árbol del proyecto."
 
-#: projectmanagerview.cpp:121
+#: projectmanagerview.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Show Build Targets"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2024-04-19 16:43+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -4942,13 +4942,13 @@ msgstr ""
 "La funzionalità di formattazione utilizza lo/gli strumento/i di "
 "formattazione del sorgente configurato/i."
 
-#: shell/sourceformattercontroller.cpp:610
+#: shell/sourceformattercontroller.cpp:609
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr "Riformatta selezione o file usando <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:613
+#: shell/sourceformattercontroller.cpp:612
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4958,13 +4958,13 @@ msgstr ""
 "Riformatta il testo selezionato, o il file intero se non c'è una selezione, "
 "usando lo strumento <i>%1</i> con lo stile <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:615
+#: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Riformatta la riga corrente usando <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:618
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4974,7 +4974,7 @@ msgstr ""
 "Riformattazione del sorgente della riga sotto il cursore usando lo strumento "
 "<i>%1</i> con lo stile <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:622
+#: shell/sourceformattercontroller.cpp:621
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4982,7 +4982,7 @@ msgstr ""
 "Riformatta selezione o file usando lo strumento di formattazione del "
 "sorgente configurato"
 
-#: shell/sourceformattercontroller.cpp:624
+#: shell/sourceformattercontroller.cpp:623
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4992,7 +4992,7 @@ msgstr ""
 "Riformatta il testo selezionato, o il file intero se non c'è una selezione, "
 "usando lo strumento di formattazione del sorgente configurato."
 
-#: shell/sourceformattercontroller.cpp:626
+#: shell/sourceformattercontroller.cpp:625
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
@@ -5000,7 +5000,7 @@ msgstr ""
 "Riformatta la riga corrente usando lo strumento di formattazione del "
 "sorgente configurato"
 
-#: shell/sourceformattercontroller.cpp:628
+#: shell/sourceformattercontroller.cpp:627
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5010,18 +5010,18 @@ msgstr ""
 "Riformattazione del sorgente della riga sotto il cursore usando lo strumento "
 "di formattazione del sorgente configurato."
 
-#: shell/sourceformattercontroller.cpp:865
+#: shell/sourceformattercontroller.cpp:864
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Riformatta file?"
 
-#: shell/sourceformattercontroller.cpp:866
+#: shell/sourceformattercontroller.cpp:865
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Riformatta tutti i file nella cartella selezionata?"
 
-#: shell/sourceformattercontroller.cpp:870
+#: shell/sourceformattercontroller.cpp:869
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"

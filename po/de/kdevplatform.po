@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2023-04-30 18:41+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -4931,13 +4931,13 @@ msgstr ""
 "Formatierungsfunktion mittels des/der eingerichteten Quelltext-"
 "Formatierer(s)."
 
-#: shell/sourceformattercontroller.cpp:610
+#: shell/sourceformattercontroller.cpp:609
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr "Datei oder Auswahl mit <i>%1</i> neu formatieren (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:613
+#: shell/sourceformattercontroller.cpp:612
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4947,13 +4947,13 @@ msgstr ""
 "Der ausgewählte Text oder, falls nichts ausgewählt ist, die gesamte Datei "
 "wird mit <i>%1</i> und dem <b>%2</b>-Stil neu formatiert."
 
-#: shell/sourceformattercontroller.cpp:615
+#: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Aktuelle Zeile mit <i>%1</i> (<b>%2</b>) neu formatieren"
 
-#: shell/sourceformattercontroller.cpp:618
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4962,7 +4962,7 @@ msgid ""
 msgstr ""
 "Zeile unter dem Cursor mit <i>%1</i> und dem <b>%2</b>-Stil neu formatieren."
 
-#: shell/sourceformattercontroller.cpp:622
+#: shell/sourceformattercontroller.cpp:621
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4970,7 +4970,7 @@ msgstr ""
 "Auswahl oder Datei mit dem eingerichteten Quelltext-Formatierer neu "
 "formatieren"
 
-#: shell/sourceformattercontroller.cpp:624
+#: shell/sourceformattercontroller.cpp:623
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4980,14 +4980,14 @@ msgstr ""
 "Der ausgewählte Text oder, falls nichts ausgewählt ist, die gesamte Datei "
 "wird mit dem eingerichteten Quelltext-Formatierer neu formatiert."
 
-#: shell/sourceformattercontroller.cpp:626
+#: shell/sourceformattercontroller.cpp:625
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr ""
 "Aktuelle Zeile mit dem eingerichteten Quelltext-Formatierer neu formatieren"
 
-#: shell/sourceformattercontroller.cpp:628
+#: shell/sourceformattercontroller.cpp:627
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4997,18 +4997,18 @@ msgstr ""
 "Zeile unter dem Cursor mit dem eingerichteten Quelltext-Formatierer neu "
 "formatieren."
 
-#: shell/sourceformattercontroller.cpp:865
+#: shell/sourceformattercontroller.cpp:864
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Dateien neu formatieren?"
 
-#: shell/sourceformattercontroller.cpp:866
+#: shell/sourceformattercontroller.cpp:865
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Alle Dateien im ausgewählten Ordner neu formatieren?"
 
-#: shell/sourceformattercontroller.cpp:870
+#: shell/sourceformattercontroller.cpp:869
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"

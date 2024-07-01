@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2020-02-12 23:00+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -172,42 +172,42 @@ msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
 msgstr "Parajasti valitud elemendi eemaldamine ehituskomplektist."
 
-#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:191
+#: projectmanagerview.cpp:75 projectmanagerviewplugin.cpp:191
 #, fuzzy, kde-format
 #| msgid "Projects"
 msgctxt "@title:window"
 msgid "Projects"
 msgstr "Projektid"
 
-#: projectmanagerview.cpp:91
+#: projectmanagerview.cpp:93
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Tuvasta aktiivse dokumendi asukoht"
 
-#: projectmanagerview.cpp:92
+#: projectmanagerview.cpp:94
 #, fuzzy, kde-format
 #| msgid "Locates the current document in the project tree and selects it."
 msgctxt "@info:tooltip"
 msgid "Locates the current document in the project tree and selects it."
 msgstr "Aktiivse dokumendi asukoha tuvastamine projektipuus ja selle valimine."
 
-#: projectmanagerview.cpp:98
+#: projectmanagerview.cpp:100
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@action"
 msgid "Auto-Select Current Document"
 msgstr "Tuvasta aktiivse dokumendi asukoht"
 
-#: projectmanagerview.cpp:99
+#: projectmanagerview.cpp:101
 #, fuzzy, kde-format
 #| msgid "Locates the current document in the project tree and selects it."
 msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
 msgstr "Aktiivse dokumendi asukoha tuvastamine projektipuus ja selle valimine."
 
-#: projectmanagerview.cpp:121
+#: projectmanagerview.cpp:123
 #, fuzzy, kde-format
 #| msgid "Show Targets"
 msgctxt "@action"

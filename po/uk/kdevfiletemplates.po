@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfiletemplates\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2020-07-20 08:24+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -353,37 +353,37 @@ msgctxt "@item:inlistbox empty line policy"
 msgid "Remove All Empty Lines"
 msgstr "Вилучити всі порожні рядки"
 
-#: templateselectionpage.cpp:73
+#: templateselectionpage.cpp:76
 #, kde-format
 msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>Перегляд:</b> %1"
 
-#: templateselectionpage.cpp:202
+#: templateselectionpage.cpp:205
 #, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Мова"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:206
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Оболонка"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:207
 #, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Шаблон"
 
-#: templateselectionpage.cpp:239
+#: templateselectionpage.cpp:242
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "Отримати додаткові шаблони…"
 
-#: templateselectionpage.cpp:246
+#: templateselectionpage.cpp:249
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"

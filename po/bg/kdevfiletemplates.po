@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2021-11-09 00:15+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -338,37 +338,37 @@ msgctxt "@item:inlistbox empty line policy"
 msgid "Remove All Empty Lines"
 msgstr ""
 
-#: templateselectionpage.cpp:73
+#: templateselectionpage.cpp:76
 #, kde-format
 msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr ""
 
-#: templateselectionpage.cpp:202
+#: templateselectionpage.cpp:205
 #, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr ""
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:206
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr ""
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:207
 #, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr ""
 
-#: templateselectionpage.cpp:239
+#: templateselectionpage.cpp:242
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr ""
 
-#: templateselectionpage.cpp:246
+#: templateselectionpage.cpp:249
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"

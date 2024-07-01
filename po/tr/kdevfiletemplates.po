@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2023-01-23 20:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -345,37 +345,37 @@ msgctxt "@item:inlistbox empty line policy"
 msgid "Remove All Empty Lines"
 msgstr "Tüm Boş Satırları Kaldır"
 
-#: templateselectionpage.cpp:73
+#: templateselectionpage.cpp:76
 #, kde-format
 msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>Önizleme:</b> %1"
 
-#: templateselectionpage.cpp:202
+#: templateselectionpage.cpp:205
 #, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Dil"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:206
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Kod Kitaplığı"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:207
 #, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Şablon"
 
-#: templateselectionpage.cpp:239
+#: templateselectionpage.cpp:242
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "Daha Fazla Şablonlar Al..."
 
-#: templateselectionpage.cpp:246
+#: templateselectionpage.cpp:249
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"

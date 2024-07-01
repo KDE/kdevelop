@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2014-02-08 22:58+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -173,42 +173,42 @@ msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
 msgstr "A jelenleg kijelölt elem eltávolítása a fordítókészletből"
 
-#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:191
+#: projectmanagerview.cpp:75 projectmanagerviewplugin.cpp:191
 #, fuzzy, kde-format
 #| msgid "Projects"
 msgctxt "@title:window"
 msgid "Projects"
 msgstr "Projektek"
 
-#: projectmanagerview.cpp:91
+#: projectmanagerview.cpp:93
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "A jelenlegi dokumentum keresése"
 
-#: projectmanagerview.cpp:92
+#: projectmanagerview.cpp:94
 #, fuzzy, kde-format
 #| msgid "Locates the current document in the project tree and selects it."
 msgctxt "@info:tooltip"
 msgid "Locates the current document in the project tree and selects it."
 msgstr "Megkeresi a jelenlegi dokumentumot a projektfában és kijelöli azt."
 
-#: projectmanagerview.cpp:98
+#: projectmanagerview.cpp:100
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@action"
 msgid "Auto-Select Current Document"
 msgstr "A jelenlegi dokumentum keresése"
 
-#: projectmanagerview.cpp:99
+#: projectmanagerview.cpp:101
 #, fuzzy, kde-format
 #| msgid "Locates the current document in the project tree and selects it."
 msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
 msgstr "Megkeresi a jelenlegi dokumentumot a projektfában és kijelöli azt."
 
-#: projectmanagerview.cpp:121
+#: projectmanagerview.cpp:123
 #, fuzzy, kde-format
 #| msgid "&Add to Target"
 msgctxt "@action"

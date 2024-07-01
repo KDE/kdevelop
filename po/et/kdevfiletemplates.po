@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2020-01-16 16:48+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -391,41 +391,41 @@ msgctxt "@item:inlistbox empty line policy"
 msgid "Remove All Empty Lines"
 msgstr "Kõik tühjad read eemaldatakse"
 
-#: templateselectionpage.cpp:73
+#: templateselectionpage.cpp:76
 #, kde-format
 msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>Eelvaatlus:</b> %1"
 
-#: templateselectionpage.cpp:202
+#: templateselectionpage.cpp:205
 #, fuzzy, kde-format
 #| msgid "Language"
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Keel"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:206
 #, fuzzy, kde-format
 #| msgid "Framework"
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Raamistik"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:207
 #, fuzzy, kde-format
 #| msgid "Template"
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Mall"
 
-#: templateselectionpage.cpp:239
+#: templateselectionpage.cpp:242
 #, fuzzy, kde-format
 #| msgid "Get More Templates..."
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "Hangi rohkem malle ..."
 
-#: templateselectionpage.cpp:246
+#: templateselectionpage.cpp:249
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2014-01-20 20:21+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -388,41 +388,41 @@ msgctxt "@item:inlistbox empty line policy"
 msgid "Remove All Empty Lines"
 msgstr "Minden üres sor eltávolítása"
 
-#: templateselectionpage.cpp:73
+#: templateselectionpage.cpp:76
 #, kde-format
 msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>Előnézet:</b> %1"
 
-#: templateselectionpage.cpp:202
+#: templateselectionpage.cpp:205
 #, fuzzy, kde-format
 #| msgid "Language"
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Nyelv"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:206
 #, fuzzy, kde-format
 #| msgid "Framework"
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Keretrendszer"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:207
 #, fuzzy, kde-format
 #| msgid "Template"
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Sablon"
 
-#: templateselectionpage.cpp:239
+#: templateselectionpage.cpp:242
 #, fuzzy, kde-format
 #| msgid "Get More Templates..."
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "További sablonok beszerzése…"
 
-#: templateselectionpage.cpp:246
+#: templateselectionpage.cpp:249
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"

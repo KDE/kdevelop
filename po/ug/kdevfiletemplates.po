@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfiletemplates\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
@@ -356,40 +356,40 @@ msgctxt "@item:inlistbox empty line policy"
 msgid "Remove All Empty Lines"
 msgstr ""
 
-#: templateselectionpage.cpp:73
+#: templateselectionpage.cpp:76
 #, kde-format
 msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr ""
 
-#: templateselectionpage.cpp:202
+#: templateselectionpage.cpp:205
 #, fuzzy, kde-format
 #| msgid "Language"
 msgctxt "@title:column"
 msgid "Language"
 msgstr "تىل"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:206
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr ""
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:207
 #, fuzzy, kde-format
 #| msgid "Template"
 msgctxt "@title:column"
 msgid "Template"
 msgstr "قېلىپ"
 
-#: templateselectionpage.cpp:239
+#: templateselectionpage.cpp:242
 #, fuzzy, kde-format
 #| msgid "Create From Template"
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "قېلىپتىن قۇرۇش"
 
-#: templateselectionpage.cpp:246
+#: templateselectionpage.cpp:249
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"

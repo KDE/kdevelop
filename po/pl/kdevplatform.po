@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2024-04-28 11:29+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -4938,13 +4938,13 @@ msgid "Formatting functionality using the configured source formatter(s)."
 msgstr ""
 "Funkcja formatowania, używająca dostosowanego narzędzia formatowania kodu."
 
-#: shell/sourceformattercontroller.cpp:610
+#: shell/sourceformattercontroller.cpp:609
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr "Przeformatuj zaznaczenie lub plik, używając <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:613
+#: shell/sourceformattercontroller.cpp:612
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4954,13 +4954,13 @@ msgstr ""
 "Przeformatuj zaznaczony tekst lub cały plik, jeśli niczego nie zaznaczono, "
 "używając narzędzia <i>%1</i> wg wyglądu <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:615
+#: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Przeformatuj bieżący wiersz, używając <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:618
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4970,7 +4970,7 @@ msgstr ""
 "Przeformatuj wiersz kodu w miejscu kursora, używając narzędzia <i>%1</i> wg "
 "wyglądu <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:622
+#: shell/sourceformattercontroller.cpp:621
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4978,7 +4978,7 @@ msgstr ""
 "Przeformatuj zaznaczenie lub plik, używając dostosowanego narzędzia "
 "formatowania kodu"
 
-#: shell/sourceformattercontroller.cpp:624
+#: shell/sourceformattercontroller.cpp:623
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4988,7 +4988,7 @@ msgstr ""
 "Przeformatowuje zaznaczony tekst lub cały plik, jeśli niczego nie "
 "zaznaczono, używając narzędzia formatowania kodu."
 
-#: shell/sourceformattercontroller.cpp:626
+#: shell/sourceformattercontroller.cpp:625
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
@@ -4996,7 +4996,7 @@ msgstr ""
 "Przeformatuj bieżący wiersz, używając dostosowanego narzędzia formatowania "
 "kodu"
 
-#: shell/sourceformattercontroller.cpp:628
+#: shell/sourceformattercontroller.cpp:627
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5006,18 +5006,18 @@ msgstr ""
 "Przeformatowanie wiersza kod w miejscu kursora przy użycia dostosowanego "
 "narzędzia formatowania kodu."
 
-#: shell/sourceformattercontroller.cpp:865
+#: shell/sourceformattercontroller.cpp:864
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Przeformatowanie plików?"
 
-#: shell/sourceformattercontroller.cpp:866
+#: shell/sourceformattercontroller.cpp:865
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Przeformatować wszystkie pliki w danym katalogu?"
 
-#: shell/sourceformattercontroller.cpp:870
+#: shell/sourceformattercontroller.cpp:869
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"

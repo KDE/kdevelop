@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2024-05-06 09:55+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -337,37 +337,37 @@ msgctxt "@item:inlistbox empty line policy"
 msgid "Remove All Empty Lines"
 msgstr "移除所有的空白行"
 
-#: templateselectionpage.cpp:73
+#: templateselectionpage.cpp:76
 #, kde-format
 msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>預覽：</b>%1"
 
-#: templateselectionpage.cpp:202
+#: templateselectionpage.cpp:205
 #, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr "語言"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:206
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "框架"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:207
 #, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr "樣本"
 
-#: templateselectionpage.cpp:239
+#: templateselectionpage.cpp:242
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "取得更多樣本..."
 
-#: templateselectionpage.cpp:246
+#: templateselectionpage.cpp:249
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
