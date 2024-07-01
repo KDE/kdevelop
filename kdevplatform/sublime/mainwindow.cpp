@@ -8,7 +8,6 @@
 #include "mainwindow_p.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QScreen>

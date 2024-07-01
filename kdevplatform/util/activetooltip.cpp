@@ -9,7 +9,6 @@
 #include "debug.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QEvent>
 #include <QMenu>
 #include <QMouseEvent>
