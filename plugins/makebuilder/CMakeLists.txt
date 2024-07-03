@@ -15,7 +15,6 @@ declare_qt_logging_category(kdevmakebuilder_SRCS
 ki18n_wrap_ui(kdevmakebuilder_SRCS makeconfig.ui)
 kconfig_add_kcfg_files( kdevmakebuilder_SRCS makebuilderconfig.kcfgc )
 
-#add_library(kdevmakebuilder MODULE ${kdevmakebuilder_SRCS})
 qt5_add_resources(kdevmakebuilder_SRCS kdevmakebuilder.qrc)
 kdevplatform_add_plugin(kdevmakebuilder SOURCES ${kdevmakebuilder_SRCS})
 target_link_libraries(kdevmakebuilder
