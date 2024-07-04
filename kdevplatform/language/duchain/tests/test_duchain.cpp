@@ -918,6 +918,7 @@ void TestDUChain::testTypePtr()
 
     DelayedType::Ptr delayedT(new DelayedType);
     QVERIFY(abstractT.get() != delayedT.get());
+    QVERIFY(!abstractT->equals(delayedT.get()));
 
     auto abstractT2 = abstractT;
     QCOMPARE(abstractT2.get(), integralT.get());
