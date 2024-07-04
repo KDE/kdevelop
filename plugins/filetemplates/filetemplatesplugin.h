@@ -26,7 +26,7 @@ public:
         ProjectTemplate
     };
 
-    FileTemplatesPlugin(QObject* parent, const QVariantList& args);
+    FileTemplatesPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
     ~FileTemplatesPlugin() override;
     void unload() override;
 

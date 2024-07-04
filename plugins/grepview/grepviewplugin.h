@@ -25,7 +25,7 @@ class GrepViewPlugin : public KDevelop::IPlugin
     Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.GrepViewPlugin" )
 
 public:
-    explicit GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    explicit GrepViewPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~GrepViewPlugin() override;
 
     void unload() override;

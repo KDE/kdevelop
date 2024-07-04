@@ -30,8 +30,8 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecute.json", registerPlugin<ExecutePlugin>();)
 
-ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevexecute"), parent)
+ExecutePlugin::ExecutePlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevexecute"), parent, metaData)
 {
     m_configType = new NativeAppConfigType();
     m_configType->addLauncher( new NativeAppLauncher() );

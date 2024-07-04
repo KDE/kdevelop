@@ -222,8 +222,8 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(AStyleFactory, "kdevastyle.json", registerPlugin<AStylePlugin>();)
 
-AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
-    : IPlugin(QStringLiteral("kdevastyle"), parent)
+AStylePlugin::AStylePlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevastyle"), parent, metaData)
     , m_formatter(new AStyleFormatter())
 {
 }

@@ -177,8 +177,8 @@ bool OpenWithPlugin::canOpenDefault() const
     }
 }
 
-OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( QStringLiteral("kdevopenwith"), parent )
+OpenWithPlugin::OpenWithPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevopenwith"), parent, metaData)
 {
 }
 

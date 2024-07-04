@@ -58,7 +58,7 @@ class OpenWithPlugin : public KDevelop::IPlugin, public KDevelop::IOpenWith
     Q_OBJECT
     Q_INTERFACES( KDevelop::IOpenWith )
 public:
-    OpenWithPlugin( QObject* parent, const QVariantList& args );
+    OpenWithPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
     ~OpenWithPlugin() override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 

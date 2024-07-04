@@ -32,8 +32,8 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevDockerFactory, "kdevdocker.json", registerPlugin<
 
 using namespace KDevelop;
 
-DockerPlugin::DockerPlugin(QObject *parent, const QVariantList & /*args*/)
-    : KDevelop::IPlugin( QStringLiteral("kdevdocker"), parent )
+DockerPlugin::DockerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& /*args*/)
+    : KDevelop::IPlugin(QStringLiteral("kdevdocker"), parent, metaData)
     , m_settings(new DockerPreferencesSettings)
 {
     runtimeChanged(ICore::self()->runtimeController()->currentRuntime());

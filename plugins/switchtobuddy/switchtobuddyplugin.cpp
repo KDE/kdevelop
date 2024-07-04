@@ -77,8 +77,8 @@ QString findSwitchCandidate(const QUrl& docUrl)
 
 K_PLUGIN_FACTORY_WITH_JSON(SwitchToBuddyPluginFactory, "kdevswitchtobuddy.json", registerPlugin<SwitchToBuddyPlugin>(); )
 
-SwitchToBuddyPlugin::SwitchToBuddyPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( QStringLiteral("kdevswitchtobuddy"), parent )
+SwitchToBuddyPlugin::SwitchToBuddyPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevswitchtobuddy"), parent, metaData)
 {
     setXMLFile(QStringLiteral("kdevswitchtobuddy.rc"));
 }

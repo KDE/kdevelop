@@ -36,8 +36,7 @@ class KDEVPLATFORMVCS_EXPORT DistributedVersionControlPlugin : public IPlugin, p
     Q_OBJECT
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl KDevelop::IBranchingVersionControl)
 public:
-
-    DistributedVersionControlPlugin(QObject *parent, const QString& componentName);
+    DistributedVersionControlPlugin(const QString& componentName, QObject* parent, const KPluginMetaData& metaData);
     ~DistributedVersionControlPlugin() override;
 
     // Begin: KDevelop::IBasicVersionControl

@@ -12,11 +12,11 @@ class ProjectDefaultPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    explicit ProjectDefaultPlugin(QObject* parent, const QVariantList&);
+    explicit ProjectDefaultPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&);
 };
 
-ProjectDefaultPlugin::ProjectDefaultPlugin(QObject* parent, const QVariantList&)
-    : IPlugin(QStringLiteral("projectdefaultplugin"), parent)
+ProjectDefaultPlugin::ProjectDefaultPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("projectdefaultplugin"), parent, metaData)
 {
 }
 

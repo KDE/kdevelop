@@ -33,7 +33,7 @@ class QuickOpenPlugin
     Q_OBJECT
     Q_INTERFACES(KDevelop::IQuickOpen)
 public:
-    explicit QuickOpenPlugin(QObject* parent, const QVariantList& = QVariantList());
+    explicit QuickOpenPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~QuickOpenPlugin() override;
 
     static QuickOpenPlugin* self();

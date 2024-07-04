@@ -96,8 +96,9 @@ QString argumentsForPath(const QString& path, const ParserArguments& arguments)
 
 K_PLUGIN_FACTORY_WITH_JSON(DefinesAndIncludesManagerFactory, "kdevdefinesandincludesmanager.json", registerPlugin<DefinesAndIncludesManager>(); )
 
-DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
-    : IPlugin(QStringLiteral("kdevdefinesandincludesmanager"), parent )
+DefinesAndIncludesManager::DefinesAndIncludesManager(QObject* parent, const KPluginMetaData& metaData,
+                                                     const QVariantList&)
+    : IPlugin(QStringLiteral("kdevdefinesandincludesmanager"), parent, metaData)
     , m_settings(SettingsManager::globalInstance())
 {
     registerProvider(m_settings->provider());

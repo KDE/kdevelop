@@ -66,8 +66,9 @@ static QString patternFromSelection(const KDevelop::IDocument* doc)
     return pattern;
 }
 
-GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( QStringLiteral("kdevgrepview"), parent ), m_currentJob(nullptr)
+GrepViewPlugin::GrepViewPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevgrepview"), parent, metaData)
+    , m_currentJob(nullptr)
 {
     setXMLFile(QStringLiteral("kdevgrepview.rc"));
 

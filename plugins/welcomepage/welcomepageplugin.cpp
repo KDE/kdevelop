@@ -20,8 +20,8 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevWelcomePagePluginFactory, "kdevwelcomepage.json",
 
 using namespace KDevelop;
 
-KDevWelcomePagePlugin::KDevWelcomePagePlugin(QObject* parent, const QVariantList&)
-    : IPlugin(QStringLiteral("kdevwelcomepage"), parent)
+KDevWelcomePagePlugin::KDevWelcomePagePlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevwelcomepage"), parent, metaData)
 {
     m_welcomePageWidget = new WelcomePageWidget();
 

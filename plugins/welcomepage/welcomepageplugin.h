@@ -17,7 +17,7 @@ class KDevWelcomePagePlugin : public KDevelop::IPlugin
     Q_OBJECT
 
 public:
-    KDevWelcomePagePlugin(QObject* parent, const QList<QVariant>&);
+    KDevWelcomePagePlugin(QObject* parent, const KPluginMetaData& metaData, const QList<QVariant>&);
 
 public:
     void unload() override;

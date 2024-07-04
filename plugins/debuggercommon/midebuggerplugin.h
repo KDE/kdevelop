@@ -36,7 +36,8 @@ class MIDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IStatus
     Q_INTERFACES(KDevelop::IStatus)
 
 public:
-    MIDebuggerPlugin(const QString& componentName, const QString& displayName, QObject *parent);
+    MIDebuggerPlugin(const QString& componentName, const QString& displayName, QObject* parent,
+                     const KPluginMetaData& metaData);
     ~MIDebuggerPlugin() override;
 
     void unload() override;

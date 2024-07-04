@@ -26,7 +26,7 @@ class ProviderPlugin : public KDevelop::IPlugin, KDevelop::IProjectProvider
 
 public:
     /// Constructor.
-    explicit ProviderPlugin(QObject *parent, const QList<QVariant> &args);
+    explicit ProviderPlugin(QObject* parent, const KPluginMetaData& metaData, const QList<QVariant>& args);
 
     /// Destructor.
     ~ProviderPlugin() override;

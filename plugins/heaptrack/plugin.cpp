@@ -48,8 +48,8 @@ void postErrorMessage(const QString& messageText)
 namespace Heaptrack
 {
 
-Plugin::Plugin(QObject* parent, const QVariantList&)
-    : IPlugin(QStringLiteral("kdevheaptrack"), parent)
+Plugin::Plugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevheaptrack"), parent, metaData)
 {
     setXMLFile(QStringLiteral("kdevheaptrack.rc"));
 

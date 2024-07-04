@@ -14,6 +14,7 @@
 
 #include <tests/testhelpers.h>
 #include <tests/autotestshell.h>
+#include <tests/plugintesthelpers.h>
 #include <tests/testcore.h>
 
 #include <interfaces/iplugin.h>
@@ -53,12 +54,12 @@ class FakeFileManager : public IPlugin, public IProjectFileManager
     Q_INTERFACES(KDevelop::IProjectFileManager)
 public:
     FakeFileManager(QObject*, const QVariantList&)
-        : IPlugin(QStringLiteral("FakeFileManager"), Core::self())
+        : IPlugin("FakeFileManager", Core::self(), makeTestPluginMetaData("FakeFileManager"))
     {
     }
 
     FakeFileManager()
-        : IPlugin(QStringLiteral("FakeFileManager"), Core::self())
+        : IPlugin("FakeFileManager", Core::self(), makeTestPluginMetaData("FakeFileManager"))
     {
     }
 

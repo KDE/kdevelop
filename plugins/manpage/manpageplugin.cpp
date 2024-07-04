@@ -35,8 +35,8 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(ManPageFactory, "kdevmanpage.json", registerPlugin<ManPagePlugin>(); )
 
-ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
-    : IPlugin(QStringLiteral("kdevmanpage"), parent)
+ManPagePlugin::ManPagePlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : IPlugin(QStringLiteral("kdevmanpage"), parent, metaData)
 {
     Q_UNUSED(args);
     ManPageDocumentation::s_provider = this;

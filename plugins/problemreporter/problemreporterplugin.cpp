@@ -90,8 +90,8 @@ private:
     ProblemInlineNoteProvider m_inlineNoteProvider;
 };
 
-ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevproblemreporter"), parent)
+ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevproblemreporter"), parent, metaData)
     , m_factory(new ProblemReporterFactory)
     , m_model(new ProblemReporterModel(this))
 {

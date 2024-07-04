@@ -29,8 +29,9 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(ProjectFilterProviderFactory, "kdevprojectfilter.json", registerPlugin<ProjectFilterProvider>();)
 
-ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantList& /*args*/ )
-    : IPlugin( QStringLiteral( "kdevprojectfilter" ), parent )
+ProjectFilterProvider::ProjectFilterProvider(QObject* parent, const KPluginMetaData& metaData,
+                                             const QVariantList& /*args*/)
+    : IPlugin(QStringLiteral("kdevprojectfilter"), parent, metaData)
 {
     connect(core()->projectController(), &IProjectController::projectClosing,
             this, &ProjectFilterProvider::projectClosing);

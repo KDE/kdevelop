@@ -49,8 +49,8 @@ private:
     const ToolViewData *m_data;
 };
 
-StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(QStringLiteral("kdevstandardoutputview"), parent)
+StandardOutputView::StandardOutputView(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevstandardoutputview"), parent, metaData)
 {
     connect(KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::aboutToRemoveView,
             this, &StandardOutputView::removeSublimeView);

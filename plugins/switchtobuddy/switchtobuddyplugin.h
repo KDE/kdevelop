@@ -33,7 +33,8 @@ class SwitchToBuddyPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    explicit SwitchToBuddyPlugin( QObject *parent, const QVariantList & = QVariantList());
+    explicit SwitchToBuddyPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                 const QVariantList& = QVariantList());
     ~SwitchToBuddyPlugin() override;
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;

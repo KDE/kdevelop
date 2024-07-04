@@ -283,8 +283,8 @@ void ContextBrowserPlugin::previousContextShortcut()
 
 K_PLUGIN_FACTORY_WITH_JSON(ContextBrowserFactory, "kdevcontextbrowser.json", registerPlugin<ContextBrowserPlugin>(); )
 
-ContextBrowserPlugin::ContextBrowserPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevcontextbrowser"), parent)
+ContextBrowserPlugin::ContextBrowserPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevcontextbrowser"), parent, metaData)
     , m_viewFactory(new ContextBrowserViewFactory(this))
     , m_nextHistoryIndex(0)
     , m_textHintProvider(this)

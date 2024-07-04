@@ -55,8 +55,9 @@ private:
     VcsProjectIntegrationPlugin *m_plugin;
 };
 
-VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevvcsprojectintegration"), parent)
+VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                                         const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevvcsprojectintegration"), parent, metaData)
     , m_model(nullptr)
 {
     ICore::self()->uiController()->addToolView(i18nc("@title:window", "Project Changes"), new VCSProjectToolViewFactory(this));

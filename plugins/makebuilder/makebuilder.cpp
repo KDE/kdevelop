@@ -20,8 +20,8 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(MakeBuilderFactory, "kdevmakebuilder.json", registerPlugin<MakeBuilder>(); )
 
-MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(QStringLiteral("kdevmakebuilder"), parent)
+MakeBuilder::MakeBuilder(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevmakebuilder"), parent, metaData)
 {
 }
 

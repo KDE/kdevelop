@@ -22,7 +22,8 @@ class QMakeProjectManager : public KDevelop::AbstractFileManagerPlugin, public K
     Q_INTERFACES( KDevelop::IBuildSystemManager )
 
 public:
-    explicit QMakeProjectManager( QObject* parent = nullptr, const QVariantList& args = QVariantList() );
+    explicit QMakeProjectManager(QObject* parent, const KPluginMetaData& metaData,
+                                 const QVariantList& args = QVariantList());
 
     ~QMakeProjectManager() override;
 

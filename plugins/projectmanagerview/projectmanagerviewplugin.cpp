@@ -137,8 +137,10 @@ static QList<ProjectBaseItem*> itemsFromIndexes(const QList<QPersistentModelInde
     return items;
 }
 
-ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVariantList& )
-        : IPlugin( QStringLiteral("kdevprojectmanagerview"), parent ), d(new ProjectManagerViewPluginPrivate)
+ProjectManagerViewPlugin::ProjectManagerViewPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                                   const QVariantList&)
+    : IPlugin(QStringLiteral("kdevprojectmanagerview"), parent, metaData)
+    , d(new ProjectManagerViewPluginPrivate)
 {
     d->m_buildAll = new QAction(i18nc("@action", "Build All Projects"), this);
     d->m_buildAll->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));

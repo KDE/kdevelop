@@ -102,8 +102,8 @@ CustomMakeProvider::~CustomMakeProvider() Q_DECL_NOEXCEPT
 
 K_PLUGIN_FACTORY_WITH_JSON(CustomMakeSupportFactory, "kdevcustommakemanager.json", registerPlugin<CustomMakeManager>(); )
 
-CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args )
-    : KDevelop::AbstractFileManagerPlugin( QStringLiteral("kdevcustommakemanager"), parent )
+CustomMakeManager::CustomMakeManager(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : KDevelop::AbstractFileManagerPlugin(QStringLiteral("kdevcustommakemanager"), parent, metaData)
     , m_provider(new CustomMakeProvider(this))
 {
     Q_UNUSED(args)

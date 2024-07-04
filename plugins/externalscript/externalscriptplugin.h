@@ -25,7 +25,8 @@ class ExternalScriptPlugin
     Q_CLASSINFO("D-Bus Interface", "org.kdevelop.ExternalScriptPlugin")
 
 public:
-    explicit ExternalScriptPlugin(QObject* parent, const QVariantList& args = QVariantList());
+    explicit ExternalScriptPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                  const QVariantList& args = QVariantList());
 
     ~ExternalScriptPlugin() override;
     void unload() override;

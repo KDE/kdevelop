@@ -37,8 +37,8 @@ K_PLUGIN_FACTORY_WITH_JSON(CppcheckFactory, "kdevcppcheck.json", registerPlugin<
 namespace cppcheck
 {
 
-Plugin::Plugin(QObject* parent, const QVariantList&)
-    : IPlugin(QStringLiteral("kdevcppcheck"), parent)
+Plugin::Plugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevcppcheck"), parent, metaData)
     , m_job(nullptr)
     , m_currentProject(nullptr)
     , m_model(new ProblemModel(this))

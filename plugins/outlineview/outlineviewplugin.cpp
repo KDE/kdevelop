@@ -42,9 +42,9 @@ private:
     OutlineViewPlugin *m_plugin;
 };
 
-OutlineViewPlugin::OutlineViewPlugin(QObject *parent, const QVariantList&)
-        : KDevelop::IPlugin(QStringLiteral("kdevoutlineview"), parent)
-        , m_factory(new OutlineViewFactory(this))
+OutlineViewPlugin::OutlineViewPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevoutlineview"), parent, metaData)
+    , m_factory(new OutlineViewFactory(this))
 {
     core()->uiController()->addToolView(i18nc("@title:window", "Outline"), m_factory);
 }

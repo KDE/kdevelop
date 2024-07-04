@@ -20,7 +20,7 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProviderProvider )
 public:
-    QtHelpPlugin(QObject* parent, const QVariantList& args);
+    QtHelpPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
     ~QtHelpPlugin() override;
 
     QList<KDevelop::IDocumentationProvider*> providers() override;

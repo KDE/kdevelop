@@ -37,8 +37,8 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevFlatpakFactory, "kdevflatpak.json", registerPlugi
 
 using namespace KDevelop;
 
-FlatpakPlugin::FlatpakPlugin(QObject *parent, const QVariantList & /*args*/)
-    : KDevelop::IPlugin( QStringLiteral("kdevflatpak"), parent )
+FlatpakPlugin::FlatpakPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& /*args*/)
+    : KDevelop::IPlugin(QStringLiteral("kdevflatpak"), parent, metaData)
 {
     auto ac = actionCollection();
 

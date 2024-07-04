@@ -505,9 +505,10 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
     notifyPatchChanged();
 }
 
-PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( QStringLiteral("kdevpatchreview"), parent ),
-    m_patch( nullptr ), m_factory( new PatchReviewToolViewFactory( this ) )
+PatchReviewPlugin::PatchReviewPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevpatchreview"), parent, metaData)
+    , m_patch(nullptr)
+    , m_factory(new PatchReviewToolViewFactory(this))
 {
     setXMLFile( QStringLiteral("kdevpatchreview.rc") );
 

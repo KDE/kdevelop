@@ -17,6 +17,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
+#include <tests/plugintesthelpers.h>
 #include <tests/testframestackmodel.h>
 #include <tests/testvariablecontroller.h>
 
@@ -92,7 +93,10 @@ class TestDebuggerPlugin : public KDevMI::MIDebuggerPlugin
 {
     Q_OBJECT
 public:
-    TestDebuggerPlugin(QObject *parent, const QVariantList&) : MIDebuggerPlugin("testdebugger", "Test", parent) {}
+    TestDebuggerPlugin(QObject* parent, const QVariantList&)
+        : MIDebuggerPlugin("testdebugger", "Test", parent, KDevelop::makeTestPluginMetaData("TestDebugger"))
+    {
+    }
     ~TestDebuggerPlugin() {}
 
     KDevMI::MIDebugSession *createSession() override

@@ -416,12 +416,11 @@ void AbstractFileManagerPluginPrivate::continueWatcher(ProjectFolderItem* folder
 
 //BEGIN Plugin
 
-AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentName,
-                                                      QObject *parent,
-                                                      const QVariantList & /*args*/ )
-    : IProjectFileManager(),
-      IPlugin( componentName, parent ),
-      d_ptr(new AbstractFileManagerPluginPrivate(this))
+AbstractFileManagerPlugin::AbstractFileManagerPlugin(const QString& componentName, QObject* parent,
+                                                     const KPluginMetaData& metaData, const QVariantList& /*args*/)
+    : IProjectFileManager()
+    , IPlugin(componentName, parent, metaData)
+    , d_ptr(new AbstractFileManagerPluginPrivate(this))
 {
     connect(core()->projectController(), &IProjectController::projectClosing,
             this, [this] (IProject* project) { Q_D(AbstractFileManagerPlugin); d->projectClosing(project); });

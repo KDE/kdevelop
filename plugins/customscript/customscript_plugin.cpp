@@ -61,8 +61,8 @@ static QString replaceVariables(QString command, const QMap<QString, QString>& v
     return command;
 }
 
-CustomScriptPlugin::CustomScriptPlugin(QObject* parent, const QVariantList&)
-    : IPlugin(QStringLiteral("kdevcustomscript"), parent)
+CustomScriptPlugin::CustomScriptPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevcustomscript"), parent, metaData)
 {
     indentPluginSingleton = this;
 }

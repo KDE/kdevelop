@@ -39,8 +39,8 @@ using namespace KTextEditor;
 
 K_PLUGIN_FACTORY_WITH_JSON(CodeUtilsPluginFactory, "kdevcodeutils.json", registerPlugin<CodeUtilsPlugin>(); )
 
-CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( QStringLiteral("kdevcodeutils"), parent )
+CodeUtilsPlugin::CodeUtilsPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevcodeutils"), parent, metaData)
 {
     setXMLFile( QStringLiteral("kdevcodeutils.rc") );
 

@@ -25,7 +25,7 @@ class ClassBrowserPlugin
     Q_OBJECT
 
 public:
-    explicit ClassBrowserPlugin(QObject* parent, const QVariantList& = QVariantList());
+    explicit ClassBrowserPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~ClassBrowserPlugin() override;
 
     void setActiveClassTree(ClassTree* a_classTree) { m_activeClassTree = a_classTree; }

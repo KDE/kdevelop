@@ -94,8 +94,8 @@ QDir urlDir(const QUrl& url)
 
 }
 
-PerforcePlugin::PerforcePlugin(QObject* parent, const QVariantList&):
-    KDevelop::IPlugin(QStringLiteral("kdevperforce"), parent)
+PerforcePlugin::PerforcePlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevperforce"), parent, metaData)
     , m_common(new KDevelop::VcsPluginHelper(this, this))
     , m_perforceConfigName(QStringLiteral("p4config.txt"))
     , m_perforceExecutable(QStringLiteral("p4"))

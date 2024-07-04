@@ -16,6 +16,8 @@
 
 #include "interfacesexport.h"
 
+class KPluginMetaData;
+
 namespace Sublime {
 class MainWindow;
 }
@@ -122,8 +124,9 @@ public:
     /**Constructs a plugin.
      * @param componentName The component name for this plugin.
      * @param parent The parent object for the plugin.
+     * @param metaData The metadata of the plugin.
      */
-    IPlugin(const QString &componentName, QObject *parent);
+    IPlugin(const QString& componentName, QObject* parent, const KPluginMetaData& metaData);
 
     /**Destructs a plugin.*/
     ~IPlugin() override;

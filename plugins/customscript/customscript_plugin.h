@@ -24,7 +24,7 @@ class CustomScriptPlugin
     Q_OBJECT
     Q_INTERFACES(KDevelop::ISourceFormatter)
 public:
-    explicit CustomScriptPlugin(QObject* parent, const QVariantList& = QVariantList());
+    explicit CustomScriptPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~CustomScriptPlugin() override;
 
     QString name() const override;

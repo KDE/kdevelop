@@ -46,8 +46,8 @@ bool wantAutoEnable(KDevelop::IProject* project, const QString& craftRoot)
 }
 }
 
-CraftPlugin::CraftPlugin(QObject* parent, const QVariantList& /*args*/)
-    : IPlugin(QStringLiteral("kdevcraft"), parent)
+CraftPlugin::CraftPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& /*args*/)
+    : IPlugin(QStringLiteral("kdevcraft"), parent, metaData)
 {
     const QString pythonExecutable = CraftRuntime::findPython();
     if (pythonExecutable.isEmpty())

@@ -32,7 +32,7 @@ class KDevSvnPlugin: public KDevelop::IPlugin, public KDevelop::ICentralizedVers
     Q_OBJECT
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::ICentralizedVersionControl)
 public:
-    explicit KDevSvnPlugin(QObject *parent, const QVariantList & = QVariantList());
+    explicit KDevSvnPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~KDevSvnPlugin() override;
 
     QString name() const override;

@@ -35,7 +35,7 @@ class CppDebuggerPlugin : public MIDebuggerPlugin
 public:
     friend class DebugSession;
 
-    explicit CppDebuggerPlugin(QObject *parent, const QVariantList & = QVariantList());
+    explicit CppDebuggerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~CppDebuggerPlugin() override;
 
     void unload() override;

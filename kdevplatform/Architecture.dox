@@ -158,8 +158,10 @@ class MyPlugin: public KDevelop::IPlugin, public KDevelop::IMyInterface
     Q_OBJECT
     Q_INTERFACES(KDevelop::IMyInterface)
 public:
-    MyPlugin(QObject* parent) : IPlugin( parent )
+    MyPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+        : IPlugin(QStringLiteral("myplugin"), parent, metaData)
     {
+        Q_UNUSED(args)
     }
 };
 \endcode

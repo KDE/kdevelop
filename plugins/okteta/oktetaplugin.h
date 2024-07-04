@@ -27,9 +27,10 @@ class OktetaPlugin: public IPlugin
     Q_OBJECT
 
   public:
-    explicit OktetaPlugin( QObject* parent, const QVariantList& args = QVariantList() );
+      explicit OktetaPlugin(QObject* parent, const KPluginMetaData& metaData,
+                            const QVariantList& args = QVariantList());
 
-    ~OktetaPlugin() override;
+      ~OktetaPlugin() override;
 
   public: // KDevelop::IPlugin API
     ContextMenuExtension contextMenuExtension(Context* context, QWidget* parent) override;

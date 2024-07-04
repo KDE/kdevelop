@@ -22,7 +22,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     Q_INTERFACES( IExecutePlugin )
 
 public:
-    explicit ExecutePlugin(QObject *parent, const QVariantList & = QVariantList() );
+    explicit ExecutePlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~ExecutePlugin() override;
 
     static constexpr const char* projectTargetEntry = "Project Target";

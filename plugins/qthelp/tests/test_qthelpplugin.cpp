@@ -17,12 +17,15 @@
 #include <QRegularExpression>
 #include <QTest>
 
+#include <KPluginMetaData>
+
 #include <interfaces/idocumentation.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/types/identifiedtype.h>
 #include <language/duchain/types/pointertype.h>
 #include <tests/autotestshell.h>
+#include <tests/plugintesthelpers.h>
 #include <tests/testfile.h>
 #include <tests/testhelpers.h>
 
@@ -39,7 +42,8 @@ const QString INVALID = QTHELP_FILES "/invalid.qch";
 template<typename WriteConfigCallback>
 std::unique_ptr<QtHelpPlugin> makePlugin(KDevelop::TestCore* testCore, const WriteConfigCallback& writeConfigCallback)
 {
-    auto plugin = std::make_unique<QtHelpPlugin>(testCore, QVariantList());
+    const auto pluginMetaData = KDevelop::makeTestPluginMetaData("TestQtHelp");
+    auto plugin = std::make_unique<QtHelpPlugin>(testCore, pluginMetaData, QVariantList());
 
     // write default config and read it
     writeConfigCallback();

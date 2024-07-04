@@ -102,7 +102,7 @@ class Plugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    explicit Plugin(KTextEditor::Plugin *plugin, QObject *parent = nullptr);
+    explicit Plugin(KTextEditor::Plugin* plugin, QObject* parent, const KPluginMetaData& metaData);
     ~Plugin() override;
 
     KXMLGUIClient* createGUIForMainWindow(Sublime::MainWindow *window) override;

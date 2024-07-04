@@ -107,8 +107,8 @@ private:
 // * Constructor *
 // ***************
 
-MesonManager::MesonManager(QObject* parent, const QVariantList& args)
-    : AbstractFileManagerPlugin(QStringLiteral("KDevMesonManager"), parent, args)
+MesonManager::MesonManager(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : AbstractFileManagerPlugin(QStringLiteral("KDevMesonManager"), parent, metaData, args)
     , m_builder(new MesonBuilder(this))
 {
     if (m_builder->hasError()) {

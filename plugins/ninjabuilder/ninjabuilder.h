@@ -24,7 +24,7 @@ class NinjaBuilder
     Q_INTERFACES(KDevelop::IProjectBuilder)
 
 public:
-    explicit NinjaBuilder(QObject* parent = nullptr, const QVariantList& args = QVariantList());
+    explicit NinjaBuilder(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args = QVariantList());
 
     KJob* build(KDevelop::ProjectBaseItem* item) override;
     KJob* clean(KDevelop::ProjectBaseItem* item) override;

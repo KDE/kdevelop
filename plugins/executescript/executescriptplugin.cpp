@@ -24,8 +24,8 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecutescript.json", registerPlugin<ExecuteScriptPlugin>();)
 
-ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevexecutescript"), parent)
+ExecuteScriptPlugin::ExecuteScriptPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevexecutescript"), parent, metaData)
 {
     m_configType = new ScriptAppConfigType();
     m_configType->addLauncher( new ScriptAppLauncher( this ) );

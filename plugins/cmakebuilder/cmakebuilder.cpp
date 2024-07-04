@@ -51,8 +51,8 @@ private:
     QString m_error;
 };
 
-CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(QStringLiteral("kdevcmakebuilder"), parent)
+CMakeBuilder::CMakeBuilder(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevcmakebuilder"), parent, metaData)
 {
     addBuilder(QStringLiteral("Makefile"), QStringList{QStringLiteral("Unix Makefiles"),
                                                        QStringLiteral("NMake Makefiles"),

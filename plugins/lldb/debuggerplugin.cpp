@@ -24,8 +24,8 @@ inline void initMyResource() { Q_INIT_RESOURCE(kdevlldb); }
 
 K_PLUGIN_FACTORY_WITH_JSON(LldbDebuggerFactory, "kdevlldb.json", registerPlugin<LldbDebuggerPlugin>(); )
 
-LldbDebuggerPlugin::LldbDebuggerPlugin(QObject *parent, const QVariantList &)
-    : MIDebuggerPlugin(QStringLiteral("kdevlldb"), i18n("LLDB"), parent)
+LldbDebuggerPlugin::LldbDebuggerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : MIDebuggerPlugin(QStringLiteral("kdevlldb"), i18n("LLDB"), parent, metaData)
     , m_consoleFactory(nullptr)
     , m_disassembleFactory(nullptr)
 {

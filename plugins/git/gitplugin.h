@@ -116,8 +116,7 @@ public:
         WorkTree = 2,
     };
 
-
-    explicit GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
+    explicit GitPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args = QVariantList());
     ~GitPlugin() override;
 
     QString name() const override;

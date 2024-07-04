@@ -18,7 +18,8 @@ class KDevQmlJsPlugin : public KDevelop::IPlugin, public KDevelop::ILanguageSupp
     Q_OBJECT
     Q_INTERFACES( KDevelop::ILanguageSupport )
 public:
-    explicit KDevQmlJsPlugin( QObject* parent, const QVariantList& args = QVariantList() );
+    explicit KDevQmlJsPlugin(QObject* parent, const KPluginMetaData& metaData,
+                             const QVariantList& args = QVariantList());
     ~KDevQmlJsPlugin() override;
 
     KDevelop::ParseJob* createParseJob(const KDevelop::IndexedString& url) override;

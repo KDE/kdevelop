@@ -12,11 +12,11 @@ class GlobalNonDefaultPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    explicit GlobalNonDefaultPlugin(QObject* parent, const QVariantList&);
+    explicit GlobalNonDefaultPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&);
 };
 
-GlobalNonDefaultPlugin::GlobalNonDefaultPlugin(QObject* parent, const QVariantList&)
-    : IPlugin(QStringLiteral("globalnondefaultplugin"), parent)
+GlobalNonDefaultPlugin::GlobalNonDefaultPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("globalnondefaultplugin"), parent, metaData)
 {
 }
 

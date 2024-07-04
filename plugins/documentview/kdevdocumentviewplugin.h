@@ -23,7 +23,7 @@ public:
     };
 
 public:
-    KDevDocumentViewPlugin( QObject *parent, const QVariantList& args );
+    KDevDocumentViewPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
     ~KDevDocumentViewPlugin() override;
     void unload() override;
 

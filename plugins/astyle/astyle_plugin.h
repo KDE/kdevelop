@@ -21,7 +21,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
     Q_INTERFACES(KDevelop::ISourceFormatter)
 
 public:
-    explicit AStylePlugin(QObject *parent, const QVariantList & = QVariantList());
+    explicit AStylePlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~AStylePlugin() override;
 
     QString name() const override;

@@ -33,8 +33,10 @@ K_PLUGIN_FACTORY_WITH_JSON(DocumentSwitcherFactory, "kdevdocumentswitcher.json",
 //TODO: Show frame around view's widget while walking through
 //TODO: Make the widget transparent
 
-DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantList &/*args*/)
-    :KDevelop::IPlugin(QStringLiteral("kdevdocumentswitcher"), parent), view(nullptr)
+DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                               const QVariantList& /*args*/)
+    : KDevelop::IPlugin(QStringLiteral("kdevdocumentswitcher"), parent, metaData)
+    , view(nullptr)
 {
     setXMLFile(QStringLiteral("kdevdocumentswitcher.rc"));
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "Adding active mainwindow from constructor";

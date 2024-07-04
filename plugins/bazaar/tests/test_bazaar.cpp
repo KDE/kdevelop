@@ -15,12 +15,15 @@
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/plugintesthelpers.h>
+
 #include <QDir>
 #include <QFileInfo>
 #include <QUrl>
 #include <QDebug>
 
 #include <KIO/DeleteJob>
+#include <KPluginMetaData>
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
@@ -49,7 +52,8 @@ void TestBazaar::initTestCase()
     AutoTestShell::init({QStringLiteral("kdevbazaar")});
     TestCore::initialize(Core::NoUi);
 
-    m_plugin = new BazaarPlugin(TestCore::self());
+    const auto pluginMetaData = makeTestPluginMetaData("TestBazaar");
+    m_plugin = new BazaarPlugin(TestCore::self(), pluginMetaData);
 }
 
 void TestBazaar::cleanupTestCase()

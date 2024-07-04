@@ -10,7 +10,7 @@ class CraftPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    CraftPlugin(QObject* parent, const QVariantList& args);
+    CraftPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
 };
 
 #endif // CRAFTPLUGIN_H

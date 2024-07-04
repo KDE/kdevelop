@@ -59,8 +59,8 @@ private:
     FileTemplatesPlugin* m_plugin;
 };
 
-FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& args)
-    : IPlugin(QStringLiteral("kdevfiletemplates"), parent)
+FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : IPlugin(QStringLiteral("kdevfiletemplates"), parent, metaData)
 {
     Q_UNUSED(args);
 

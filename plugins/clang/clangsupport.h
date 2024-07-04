@@ -34,7 +34,7 @@ class ClangSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
     Q_INTERFACES(KDevelop::ILanguageSupport)
 
 public:
-    explicit ClangSupport(QObject *parent, const QVariantList& args = QVariantList());
+    explicit ClangSupport(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args = QVariantList());
     ~ClangSupport() override;
 
     /** Name Of the Language */

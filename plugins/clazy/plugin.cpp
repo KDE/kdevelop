@@ -30,8 +30,8 @@ K_PLUGIN_FACTORY_WITH_JSON(ClazyFactory, "kdevclazy.json",
 namespace Clazy
 {
 
-Plugin::Plugin(QObject* parent, const QVariantList&)
-    : IPlugin(QStringLiteral("kdevclazy"), parent)
+Plugin::Plugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevclazy"), parent, metaData)
     , m_db(nullptr)
     , m_checkSetSelectionManager(new CheckSetSelectionManager)
 {

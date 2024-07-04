@@ -177,8 +177,8 @@ QDir urlDir(const QList<QUrl>& urls) { return urlDir(urls.first()); } //TODO: co
 
 }
 
-GitPlugin::GitPlugin(QObject* parent, const QVariantList&)
-    : DistributedVersionControlPlugin(parent, QStringLiteral("kdevgit"))
+GitPlugin::GitPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : DistributedVersionControlPlugin(QStringLiteral("kdevgit"), parent, metaData)
     , m_repoStatusModel(new RepoStatusModel(this))
     , m_commitToolViewFactory(new CommitToolViewFactory(m_repoStatusModel))
 {

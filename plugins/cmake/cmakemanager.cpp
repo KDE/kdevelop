@@ -69,8 +69,8 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(CMakeSupportFactory, "kdevcmakemanager.json", registerPlugin<CMakeManager>(); )
 
-CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
-    : KDevelop::AbstractFileManagerPlugin( QStringLiteral("kdevcmakemanager"), parent )
+CMakeManager::CMakeManager(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::AbstractFileManagerPlugin(QStringLiteral("kdevcmakemanager"), parent, metaData)
 {
     if (CMake::findExecutable().isEmpty()) {
         setErrorDescription(i18n("Unable to find a CMake executable. Is one installed on the system?"));

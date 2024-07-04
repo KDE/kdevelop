@@ -21,8 +21,8 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
 
-QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
-    : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent)
+QtHelpPlugin::QtHelpPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent, metaData)
     , m_qtHelpProviders()
     , m_qtDoc(new QtHelpQtDoc(this, QtHelpQtDoc::qmakeCandidates().value(0), QStringLiteral("qthelpcollection.qhc")))
     , m_loadSystemQtDoc(false)

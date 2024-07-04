@@ -349,9 +349,8 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     connect(quickOpenNavigateFunctions, &QAction::triggered, this, &QuickOpenPlugin::quickOpenNavigateFunctions);
 }
 
-QuickOpenPlugin::QuickOpenPlugin(QObject* parent,
-                                 const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevquickopen"), parent)
+QuickOpenPlugin::QuickOpenPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevquickopen"), parent, metaData)
 {
     staticQuickOpenPlugin = this;
     m_model = new QuickOpenModel(nullptr);

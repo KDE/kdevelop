@@ -26,8 +26,8 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(QMakeBuilderFactory, "kdevqmakebuilder.json", registerPlugin<QMakeBuilder>();)
 
-QMakeBuilder::QMakeBuilder(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevqmakebuilder"), parent)
+QMakeBuilder::QMakeBuilder(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevqmakebuilder"), parent, metaData)
 {
     m_makeBuilder = core()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IMakeBuilder"));
     if (m_makeBuilder) {

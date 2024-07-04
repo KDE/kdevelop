@@ -21,7 +21,8 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     Q_INTERFACES( IExecuteScriptPlugin )
 
 public:
-    explicit ExecuteScriptPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    explicit ExecuteScriptPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                 const QVariantList& = QVariantList());
     ~ExecuteScriptPlugin() override;
 
     static constexpr const char* interpreterEntry = "Interpreter";

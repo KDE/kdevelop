@@ -13,9 +13,12 @@
 #include "../gitplugin.h"
 
 #include <tests/autotestshell.h>
+#include <tests/plugintesthelpers.h>
 #include <tests/testcore.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
+
+#include <KPluginMetaData>
 
 #include <QDebug>
 #include <QRegularExpression>
@@ -57,7 +60,8 @@ void GitInitTest::initTestCase()
     AutoTestShell::init({QStringLiteral("kdevgit")});
     TestCore::initialize();
 
-    m_plugin = new GitPlugin(TestCore::self());
+    const auto pluginMetaData = makeTestPluginMetaData("TestGit");
+    m_plugin = new GitPlugin(TestCore::self(), pluginMetaData);
 }
 
 void GitInitTest::cleanupTestCase()

@@ -36,8 +36,8 @@ K_PLUGIN_FACTORY_WITH_JSON(CMakeSupportDocFactory, "kdevcmakedocumentation.json"
 CMakeDocumentation* CMakeDoc::s_provider=nullptr;
 KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider; }
 
-CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin( QStringLiteral("kdevcmakedocumentation"), parent )
+CMakeDocumentation::CMakeDocumentation(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevcmakedocumentation"), parent, metaData)
     , m_index(new CMakeCommandsContents(this))
     , m_flatIndex(new KDescendantsProxyModel(m_index))
 {

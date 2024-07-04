@@ -25,7 +25,8 @@ class DefinesAndIncludesManager : public KDevelop::IPlugin, public KDevelop::IDe
     Q_INTERFACES( KDevelop::IDefinesAndIncludesManager )
 
 public:
-    explicit DefinesAndIncludesManager( QObject* parent, const QVariantList& args = QVariantList() );
+    explicit DefinesAndIncludesManager(QObject* parent, const KPluginMetaData& metaData,
+                                       const QVariantList& args = QVariantList());
     ~DefinesAndIncludesManager() override;
 
     ///@return list of all custom defines for @p item

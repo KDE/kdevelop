@@ -19,8 +19,8 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevGHProviderFactory, "kdevghprovider.json", registe
 namespace gh
 {
 
-ProviderPlugin::ProviderPlugin(QObject *parent, const QList<QVariant> &args)
-    : IPlugin(QStringLiteral("kdevghprovider"), parent)
+ProviderPlugin::ProviderPlugin(QObject* parent, const KPluginMetaData& metaData, const QList<QVariant>& args)
+    : IPlugin(QStringLiteral("kdevghprovider"), parent, metaData)
 {
     Q_UNUSED(args);
 }

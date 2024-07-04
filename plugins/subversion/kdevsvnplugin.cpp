@@ -59,12 +59,12 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevSvnFactory, "kdevsubversion.json", registerPlugin<KDevSvnPlugin>();)
 
-KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)
-        : KDevelop::IPlugin(QStringLiteral("kdevsubversion"), parent)
-        , m_common(new KDevelop::VcsPluginHelper(this, this))
-        , copy_action( nullptr )
-        , move_action( nullptr )
-        , m_jobQueue(new ThreadWeaver::Queue(this))
+KDevSvnPlugin::KDevSvnPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevsubversion"), parent, metaData)
+    , m_common(new KDevelop::VcsPluginHelper(this, this))
+    , copy_action(nullptr)
+    , move_action(nullptr)
+    , m_jobQueue(new ThreadWeaver::Queue(this))
 {
     qRegisterMetaType<KDevelop::VcsStatusInfo>();
     qRegisterMetaType<SvnInfoHolder>();

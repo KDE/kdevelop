@@ -156,8 +156,8 @@ QPair<TopDUContextPointer, Use> macroExpansionForPosition(const QUrl &url, const
 
 }
 
-ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
-    : IPlugin( QStringLiteral("kdevclangsupport"), parent )
+ClangSupport::ClangSupport(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevclangsupport"), parent, metaData)
     , ILanguageSupport()
     , m_highlighting(nullptr)
     , m_refactoring(nullptr)

@@ -20,7 +20,7 @@ class DockerPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    DockerPlugin(QObject *parent, const QVariantList & args);
+    DockerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
     ~DockerPlugin() override;
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;

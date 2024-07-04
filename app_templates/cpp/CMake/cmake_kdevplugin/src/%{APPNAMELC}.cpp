@@ -6,8 +6,8 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(%{APPNAMEID}Factory, "%{APPNAMELC}.json", registerPlugin<%{APPNAMEID}>(); )
 
-%{APPNAMEID}::%{APPNAMEID}(QObject *parent, const QVariantList& args)
-    : KDevelop::IPlugin(QStringLiteral("%{APPNAMELC}"), parent)
+%{APPNAMEID}::%{APPNAMEID}(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : KDevelop::IPlugin(QStringLiteral("%{APPNAMELC}"), parent, metaData)
 {
     Q_UNUSED(args);
 

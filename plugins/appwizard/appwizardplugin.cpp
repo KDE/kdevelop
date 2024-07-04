@@ -59,8 +59,8 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(AppWizardFactory, "kdevappwizard.json", registerPlugin<AppWizardPlugin>();)
 
-AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(QStringLiteral("kdevappwizard"), parent)
+AppWizardPlugin::AppWizardPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevappwizard"), parent, metaData)
 {
     setXMLFile(QStringLiteral("kdevappwizard.rc"));
 

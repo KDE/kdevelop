@@ -85,8 +85,9 @@ private:
 
 ExternalScriptPlugin* ExternalScriptPlugin::m_self = nullptr;
 
-ExternalScriptPlugin::ExternalScriptPlugin(QObject* parent, const QVariantList& /*args*/)
-    : IPlugin(QStringLiteral("kdevexternalscript"), parent)
+ExternalScriptPlugin::ExternalScriptPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                           const QVariantList& /*args*/)
+    : IPlugin(QStringLiteral("kdevexternalscript"), parent, metaData)
     , m_model(new QStandardItemModel(this))
     , m_factory(new ExternalScriptViewFactory(this))
 {
