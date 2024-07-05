@@ -22,9 +22,6 @@
 #include "custombuildsystemconfigwidget.h"
 #include <debug.h>
 
-static const char description[] =
-    I18N_NOOP("CustomBuildSystem Config Ui Test App");
-
 static const char version[] = "0.1";
 
 class State : public QObject
@@ -73,8 +70,9 @@ int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
-    KAboutData aboutData(QStringLiteral("kcm_uitest"), i18n("kcm_uitest"), version, i18n(description),
-                     KAboutLicense::GPL, i18n("(C) 2012 Andreas Pakulat"));
+    KAboutData aboutData(QStringLiteral("kcm_uitest"), i18n("kcm_uitest"), version,
+                         i18n("CustomBuildSystem Config Ui Test App"), KAboutLicense::GPL,
+                         i18n("(C) 2012 Andreas Pakulat"));
     aboutData.addAuthor( i18n("Andreas Pakulat"), QString(), QStringLiteral("apaku@gmx.de") );
     KAboutData::setApplicationData(aboutData);
 
