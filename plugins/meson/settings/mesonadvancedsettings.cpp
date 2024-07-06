@@ -38,7 +38,7 @@ void MesonAdvancedSettings::setConfig(const MesonAdvancedSettings::Data& conf)
 {
     m_ui->i_mesonArgs->setText(conf.args);
     m_ui->i_mesonExe->setUrl(conf.meson.toUrl());
-    m_ui->i_backend->setCurrentIndex(std::max(0, m_backendList.indexOf(conf.backend)));
+    m_ui->i_backend->setCurrentIndex(std::max(0, static_cast<int>(m_backendList.indexOf(conf.backend))));
 }
 
 void MesonAdvancedSettings::setSupportedBackends(const QStringList& backends)
