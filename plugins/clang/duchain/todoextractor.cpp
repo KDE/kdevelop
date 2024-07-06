@@ -113,7 +113,7 @@ private:
         // check at what line within the comment we are by just counting the newlines until now
         const int line = std::count(m_str.constBegin(), m_str.constBegin() + m_offset, QLatin1Char('\n'));
         KTextEditor::Cursor start = {line, m_offset - lineStart};
-        KTextEditor::Cursor end = {line, start.column() + text.length()};
+        KTextEditor::Cursor end = {line, start.column() + static_cast<int>(text.size())};
         m_results << Result{text, {start, end}};
 
         skipUntilNewline();

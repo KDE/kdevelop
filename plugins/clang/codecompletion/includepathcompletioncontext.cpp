@@ -234,7 +234,7 @@ public:
             }
 
             // replace the whole line
-            range.setEnd({lineNumber, line.size()});
+            range.setEnd({lineNumber, static_cast<int>(line.size())});
         } else {
             range.setEnd({lineNumber, properties.inputTo});
         }
