@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevwelcomepage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
 "PO-Revision-Date: 2023-04-21 12:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -17,127 +17,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 23.03.70\n"
 
-#: qml/area_code.qml:76
-msgid "Need Help?"
-msgstr "Yardım gerekli mi?"
-
-#: qml/area_code.qml:84
-msgid "KDevelop.org"
-msgstr "kdevelop.org"
-
-#: qml/area_code.qml:91
-msgid "Learn about KDevelop"
-msgstr "K Geliştir'i öğren"
-
-#: qml/area_code.qml:96
-msgid "Join KDevelop's team!"
-msgstr "K Geliştir takımına katıl!"
-
-#: qml/area_code.qml:101
-msgid "Handbook"
-msgstr "El Kitabı"
-
-#: qml/area_debug.qml:18 qml/area_review.qml:16
-msgid "Back to code"
-msgstr "Koda Dön"
-
-#: qml/area_debug.qml:37
-msgid "Configure a new Launcher"
-msgstr "Yeni bir Başlatıcı yapılandır"
-
-#: qml/area_debug.qml:38
-msgid "Attach to Process"
-msgstr "Sürece İliştir"
-
-#: qml/area_debug.qml:39
-msgid "Debug your program"
-msgstr "Programınızın hatalarını ayıklayın"
-
-#: qml/area_debug.qml:41
-msgid "Debug Area"
-msgstr "Hata Ayıklama Alanı"
-
-#: qml/area_debug.qml:44
-msgid ""
-"On the <em>Debug</em> area you will be able to see and analyze how your "
-"program works on execution. On the <em>Run</em> menu you will find all the "
-"possible options."
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
 msgstr ""
-"<em>Hata ayıklama</em> alanında programınızın yürütme sırasında nasıl "
-"çalıştığını görebilir ve çözümleme yapabilirsiniz. <em>Çalıştır</em> "
-"menüsünde olası tüm seçenekleri bulacaksınız."
 
-#: qml/area_debug.qml:50
-msgid ""
-"As you can see, here you can just execute your application or debug it if "
-"you need further runtime information. You can select what is going to be run "
-"by configuring the launches and selecting the one you want to use in the "
-"<em>Current Launch Configuration</em> sub-menu."
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""
-"Gördüğünüz gibi, burada daha fazla çalışma zamanı bilgisine gereksiniminiz "
-"varsa uygulamanızı yürütebilir veya hata ayıklayabilirsiniz. Başlatıcıları "
-"yapılandırarak ve <em>Geçerli Başlatma Yapılandırması</em> alt menüsünde "
-"kullanmak istediğinizi seçerek neyin çalıştırılacağını seçebilirsiniz."
 
-#: qml/area_review.qml:38
-msgid "Review a Patch"
-msgstr "Bir Yamayı Gözden Geçir"
-
-#: qml/area_review.qml:46
-msgid "Review Area"
-msgstr "Gözden Geçirme Alanı"
-
-#: qml/area_review.qml:50
-msgid ""
-"On the <em>Review</em> area you will be able to find the tools you need to "
-"review changes in your projects, either the ones you made or some external "
-"patch."
-msgstr ""
-"<em>Gözden Geçirme</em> alanında projelerinizdeki değişiklikleri incelemeniz "
-"için gereken araçları bulabileceksiniz; ya kendi yaptığınız değişiklikleri "
-"ya da bazı dış yamayı."
-
-#: qml/area_review.qml:56
-msgid ""
-"Also it will help you send the changes to the community you're contributing "
-"to, either by committing the changes, sending them by e-mail or putting them "
-"on a ReviewBoard service."
-msgstr ""
-"Ayrıca; değişiklikleri teslim ederek, e-postayla göndererek veya bir "
-"ReviewBoard hizmetine koyarak katkıda bulunduğunuz topluluğa göndermenize "
-"yardımcı olacaktır."
-
-#: qml/Develop.qml:32
-msgid "New Project"
-msgstr "Yeni Proje"
-
-#: qml/Develop.qml:37
-msgid "Open Project"
-msgstr "Proje Aç"
-
-#: qml/Develop.qml:43
-msgid "Fetch Project"
-msgstr "Proje Getir"
-
-#: qml/Develop.qml:50
-msgid "Recent Projects"
-msgstr "Son Projeler"
-
-#: qml/Develop.qml:65
-msgid ""
-"<h3>Welcome to KDevelop!</h3>\n"
-"<p>You can start working on a project by opening an existing or creating a "
-"new one via the above buttons.</p>\n"
-"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
-"KDevelop\">User Manual.</a></p>"
-msgstr ""
-"<h3>K Geliştir'e hoş geldiniz!</h3>\n"
-"<p>Yukarıdaki düğmeler aracığıyla var olan bir projeyi açarak veya yeni bir "
-"tane oluşturarak çalışmaya başlayabilirsiniz.</p>\n"
-"<p>Yardıma gereksiniminiz varsa lütfen <a href=\"https://userbase.kde.org/K "
-"Geliştir\"> Kullanıcı Kılavuzu'na</a> bir göz atın.</p>"
-
-#: qml/Develop.qml:70
+#: welcomepageview.cpp:50
+#, kde-format
 msgid ""
 "<br/>\n"
 "<h3>Note for Windows users</h3>\n"
@@ -160,47 +51,176 @@ msgstr ""
 "kde.org/K Geliştir4/Manual/WindowsSetup\">K Geliştir Windows sürümü "
 "yönergeleri</a>'ne bakın.</p>"
 
-#: qml/Develop.qml:107
-msgid "%1: %2"
-msgstr "%1: %2"
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, fuzzy, kde-format
+#| msgid "KDevelop.org"
+msgid "KDevelop"
+msgstr "kdevelop.org"
 
-#: qml/Develop.qml:126
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr "Yardım gerekli mi?"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr "kdevelop.org"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr "K Geliştir'i öğren"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr "K Geliştir takımına katıl!"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr "El Kitabı"
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr "Yeni Proje"
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr "Proje Aç"
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr "Proje Getir"
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr "Son Projeler"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
 msgid "Sessions"
 msgstr "Oturumlar"
 
-#: qml/GettingStarted.qml:49
-msgid "Go!"
-msgstr "Git!"
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>K Geliştir'e hoş geldiniz!</h3>\n"
+"<p>Yukarıdaki düğmeler aracığıyla var olan bir projeyi açarak veya yeni bir "
+"tane oluşturarak çalışmaya başlayabilirsiniz.</p>\n"
+"<p>Yardıma gereksiniminiz varsa lütfen <a href=\"https://userbase.kde.org/K "
+"Geliştir\"> Kullanıcı Kılavuzu'na</a> bir göz atın.</p>"
 
-#: qml/GettingStarted.qml:57
-msgid "Documentation for KDevelop users"
-msgstr "K Geliştir kullanıcıları için belgelendirme"
+#~ msgid "Back to code"
+#~ msgstr "Koda Dön"
 
-#: qml/GettingStarted.qml:62
-msgid "Keep up with KDevelop's development"
-msgstr "K Geliştir'in geliştirilmesine yardım edin"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "Yeni bir Başlatıcı yapılandır"
 
-#: qml/GettingStarted.qml:67
-msgid "Help us improve KDevelop"
-msgstr "K Geliştir'i iyileştirmemize yardım edin"
+#~ msgid "Attach to Process"
+#~ msgstr "Sürece İliştir"
 
-#: qml/NewsFeed.qml:136
-msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-msgid "%1 (new)"
-msgstr "%1 (yeni)"
+#~ msgid "Debug your program"
+#~ msgstr "Programınızın hatalarını ayıklayın"
 
-#: qml/NewsFeed.qml:147
-msgid "Fetching feeds..."
-msgstr "Beslemeler getiriliyor..."
+#~ msgid "Debug Area"
+#~ msgstr "Hata Ayıklama Alanı"
 
-#: qml/NewsFeed.qml:148
-msgid "No recent news"
-msgstr "Yeni haberler yok"
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options."
+#~ msgstr ""
+#~ "<em>Hata ayıklama</em> alanında programınızın yürütme sırasında nasıl "
+#~ "çalıştığını görebilir ve çözümleme yapabilirsiniz. <em>Çalıştır</em> "
+#~ "menüsünde olası tüm seçenekleri bulacaksınız."
 
-#: qml/plugins/Branches.qml:16
-msgid "Branches"
-msgstr "Dallar"
+#~ msgid ""
+#~ "As you can see, here you can just execute your application or debug it if "
+#~ "you need further runtime information. You can select what is going to be "
+#~ "run by configuring the launches and selecting the one you want to use in "
+#~ "the <em>Current Launch Configuration</em> sub-menu."
+#~ msgstr ""
+#~ "Gördüğünüz gibi, burada daha fazla çalışma zamanı bilgisine "
+#~ "gereksiniminiz varsa uygulamanızı yürütebilir veya hata "
+#~ "ayıklayabilirsiniz. Başlatıcıları yapılandırarak ve <em>Geçerli Başlatma "
+#~ "Yapılandırması</em> alt menüsünde kullanmak istediğinizi seçerek neyin "
+#~ "çalıştırılacağını seçebilirsiniz."
 
-#: qml/plugins/Projects.qml:15
-msgid "Projects"
-msgstr "Projeler"
+#~ msgid "Review a Patch"
+#~ msgstr "Bir Yamayı Gözden Geçir"
+
+#~ msgid "Review Area"
+#~ msgstr "Gözden Geçirme Alanı"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch."
+#~ msgstr ""
+#~ "<em>Gözden Geçirme</em> alanında projelerinizdeki değişiklikleri "
+#~ "incelemeniz için gereken araçları bulabileceksiniz; ya kendi yaptığınız "
+#~ "değişiklikleri ya da bazı dış yamayı."
+
+#~ msgid ""
+#~ "Also it will help you send the changes to the community you're "
+#~ "contributing to, either by committing the changes, sending them by e-mail "
+#~ "or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "Ayrıca; değişiklikleri teslim ederek, e-postayla göndererek veya bir "
+#~ "ReviewBoard hizmetine koyarak katkıda bulunduğunuz topluluğa göndermenize "
+#~ "yardımcı olacaktır."
+
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Go!"
+#~ msgstr "Git!"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "K Geliştir kullanıcıları için belgelendirme"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "K Geliştir'in geliştirilmesine yardım edin"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "K Geliştir'i iyileştirmemize yardım edin"
+
+#~ msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+#~ msgid "%1 (new)"
+#~ msgstr "%1 (yeni)"
+
+#~ msgid "Fetching feeds..."
+#~ msgstr "Beslemeler getiriliyor..."
+
+#~ msgid "No recent news"
+#~ msgstr "Yeni haberler yok"
+
+#~ msgid "Branches"
+#~ msgstr "Dallar"
+
+#~ msgid "Projects"
+#~ msgstr "Projeler"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevwelcomepage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
 "PO-Revision-Date: 2016-08-03 00:03-0700\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -14,109 +14,18 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: qml/area_code.qml:76
-msgid "Need Help?"
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
 msgstr ""
 
-#: qml/area_code.qml:84
-msgid "KDevelop.org"
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""
 
-#: qml/area_code.qml:91
-msgid "Learn about KDevelop"
-msgstr ""
-
-#: qml/area_code.qml:96
-msgid "Join KDevelop's team!"
-msgstr ""
-
-#: qml/area_code.qml:101
-msgid "Handbook"
-msgstr ""
-
-#: qml/area_debug.qml:18 qml/area_review.qml:16
-msgid "Back to code"
-msgstr ""
-
-#: qml/area_debug.qml:37
-msgid "Configure a new Launcher"
-msgstr ""
-
-#: qml/area_debug.qml:38
-msgid "Attach to Process"
-msgstr ""
-
-#: qml/area_debug.qml:39
-msgid "Debug your program"
-msgstr ""
-
-#: qml/area_debug.qml:41
-msgid "Debug Area"
-msgstr ""
-
-#: qml/area_debug.qml:44
-msgid ""
-"On the <em>Debug</em> area you will be able to see and analyze how your "
-"program works on execution. On the <em>Run</em> menu you will find all the "
-"possible options."
-msgstr ""
-
-#: qml/area_debug.qml:50
-msgid ""
-"As you can see, here you can just execute your application or debug it if "
-"you need further runtime information. You can select what is going to be run "
-"by configuring the launches and selecting the one you want to use in the "
-"<em>Current Launch Configuration</em> sub-menu."
-msgstr ""
-
-#: qml/area_review.qml:38
-msgid "Review a Patch"
-msgstr ""
-
-#: qml/area_review.qml:46
-msgid "Review Area"
-msgstr ""
-
-#: qml/area_review.qml:50
-msgid ""
-"On the <em>Review</em> area you will be able to find the tools you need to "
-"review changes in your projects, either the ones you made or some external "
-"patch."
-msgstr ""
-
-#: qml/area_review.qml:56
-msgid ""
-"Also it will help you send the changes to the community you're contributing "
-"to, either by committing the changes, sending them by e-mail or putting them "
-"on a ReviewBoard service."
-msgstr ""
-
-#: qml/Develop.qml:32
-msgid "New Project"
-msgstr ""
-
-#: qml/Develop.qml:37
-msgid "Open Project"
-msgstr ""
-
-#: qml/Develop.qml:43
-msgid "Fetch Project"
-msgstr ""
-
-#: qml/Develop.qml:50
-msgid "Recent Projects"
-msgstr ""
-
-#: qml/Develop.qml:65
-msgid ""
-"<h3>Welcome to KDevelop!</h3>\n"
-"<p>You can start working on a project by opening an existing or creating a "
-"new one via the above buttons.</p>\n"
-"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
-"KDevelop\">User Manual.</a></p>"
-msgstr ""
-
-#: qml/Develop.qml:70
+#: welcomepageview.cpp:50
+#, kde-format
 msgid ""
 "<br/>\n"
 "<h3>Note for Windows users</h3>\n"
@@ -129,47 +38,79 @@ msgid ""
 "instructions.</a></p>"
 msgstr ""
 
-#: qml/Develop.qml:107
-msgid "%1: %2"
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, kde-format
+msgid "KDevelop"
 msgstr ""
 
-#: qml/Develop.qml:126
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
 msgid "Sessions"
 msgstr ""
 
-#: qml/GettingStarted.qml:49
-msgid "Go!"
-msgstr ""
-
-#: qml/GettingStarted.qml:57
-msgid "Documentation for KDevelop users"
-msgstr ""
-
-#: qml/GettingStarted.qml:62
-msgid "Keep up with KDevelop's development"
-msgstr ""
-
-#: qml/GettingStarted.qml:67
-msgid "Help us improve KDevelop"
-msgstr ""
-
-#: qml/NewsFeed.qml:136
-msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-msgid "%1 (new)"
-msgstr ""
-
-#: qml/NewsFeed.qml:147
-msgid "Fetching feeds..."
-msgstr ""
-
-#: qml/NewsFeed.qml:148
-msgid "No recent news"
-msgstr ""
-
-#: qml/plugins/Branches.qml:16
-msgid "Branches"
-msgstr ""
-
-#: qml/plugins/Projects.qml:15
-msgid "Projects"
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
 msgstr ""

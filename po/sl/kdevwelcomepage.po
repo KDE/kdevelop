@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
 "PO-Revision-Date: 2022-01-03 09:41+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -20,127 +20,18 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: qml/area_code.qml:76
-msgid "Need Help?"
-msgstr "Potrebujete pomoč?"
-
-#: qml/area_code.qml:84
-msgid "KDevelop.org"
-msgstr "KDevelop.org"
-
-#: qml/area_code.qml:91
-msgid "Learn about KDevelop"
-msgstr "Naučite se več o KDevelop-u"
-
-#: qml/area_code.qml:96
-msgid "Join KDevelop's team!"
-msgstr "Pridružite se skupini KDevelop!"
-
-#: qml/area_code.qml:101
-msgid "Handbook"
-msgstr "Priročnik"
-
-#: qml/area_debug.qml:18 qml/area_review.qml:16
-msgid "Back to code"
-msgstr "Nazaj na kodo"
-
-#: qml/area_debug.qml:37
-msgid "Configure a new Launcher"
-msgstr "Nastavite novi zaganjalnik"
-
-#: qml/area_debug.qml:38
-msgid "Attach to Process"
-msgstr "Priklopi se k procesu"
-
-#: qml/area_debug.qml:39
-msgid "Debug your program"
-msgstr "Razhrošči svoj program"
-
-#: qml/area_debug.qml:41
-msgid "Debug Area"
-msgstr "Območje razhroščevanja"
-
-#: qml/area_debug.qml:44
-msgid ""
-"On the <em>Debug</em> area you will be able to see and analyze how your "
-"program works on execution. On the <em>Run</em> menu you will find all the "
-"possible options."
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
 msgstr ""
-"V območju <em>Razhroščevanje</em> boste lahko videli in analizirali, kako "
-"program deluje med izvajanjem. V meniju <em>Zaženi</em> boste našli vse "
-"mogoče možnosti."
 
-#: qml/area_debug.qml:50
-msgid ""
-"As you can see, here you can just execute your application or debug it if "
-"you need further runtime information. You can select what is going to be run "
-"by configuring the launches and selecting the one you want to use in the "
-"<em>Current Launch Configuration</em> sub-menu."
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""
-"Kot lahko vidite, lahko tukaj samo izvršite program ali pa ga razhroščite, "
-"če potrebujete dodatne informacije o vedenju v času izvajanja. Izberete "
-"lahko, kaj se bo zagnalo, tako da prilagodite zagone in izberete tisto, kar "
-"želite uporabiti v podmeniju <em>Trenutna prilagoditev zagona</em>."
 
-#: qml/area_review.qml:38
-msgid "Review a Patch"
-msgstr "Preglej popravek"
-
-#: qml/area_review.qml:46
-msgid "Review Area"
-msgstr "Območje pregleda"
-
-#: qml/area_review.qml:50
-msgid ""
-"On the <em>Review</em> area you will be able to find the tools you need to "
-"review changes in your projects, either the ones you made or some external "
-"patch."
-msgstr ""
-"Na področju <em>Pregled</em> lahko najdete orodja, ki jih potrebujete za "
-"pregled sprememb v projektih, bodisi tiste, ki ste jih pripravili sami, "
-"bodisi zunanje popravke."
-
-#: qml/area_review.qml:56
-msgid ""
-"Also it will help you send the changes to the community you're contributing "
-"to, either by committing the changes, sending them by e-mail or putting them "
-"on a ReviewBoard service."
-msgstr ""
-"Prav tako vam bo pomagalo, da pošljete spremembe skupnost, kateri "
-"prispevate, bodisi z objavo sprememb, pošiljanjem po e-pošti, bodisi z "
-"dajanjem v storitev pregleda ReviewBoard."
-
-#: qml/Develop.qml:32
-msgid "New Project"
-msgstr "Novi projekt"
-
-#: qml/Develop.qml:37
-msgid "Open Project"
-msgstr "Odpri projekt"
-
-#: qml/Develop.qml:43
-msgid "Fetch Project"
-msgstr "Dobavi projekt"
-
-#: qml/Develop.qml:50
-msgid "Recent Projects"
-msgstr "Zadnji projekti"
-
-#: qml/Develop.qml:65
-msgid ""
-"<h3>Welcome to KDevelop!</h3>\n"
-"<p>You can start working on a project by opening an existing or creating a "
-"new one via the above buttons.</p>\n"
-"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
-"KDevelop\">User Manual.</a></p>"
-msgstr ""
-"<h3>Dobrodošli v KDevelop!</h3>\n"
-"<p>Lahko začnete delati na projekti tako da odprete obstoječega ali "
-"ustvarite novega z gumbi zgoraj.</p>\n"
-"<p>Če potrebujete pomoč, preverite navodila na <a href=\"https://userbase."
-"kde.org/KDevelop\">User Manual.</a></p>"
-
-#: qml/Develop.qml:70
+#: welcomepageview.cpp:50
+#, kde-format
 msgid ""
 "<br/>\n"
 "<h3>Note for Windows users</h3>\n"
@@ -162,50 +53,179 @@ msgstr ""
 "userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
 "instructions.</a></p>"
 
-#: qml/Develop.qml:107
-msgid "%1: %2"
-msgstr "%1: %2"
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, fuzzy, kde-format
+#| msgid "KDevelop.org"
+msgid "KDevelop"
+msgstr "KDevelop.org"
 
-#: qml/Develop.qml:126
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr "Potrebujete pomoč?"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr "Naučite se več o KDevelop-u"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr "Pridružite se skupini KDevelop!"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr "Priročnik"
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr "Novi projekt"
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr "Odpri projekt"
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr "Dobavi projekt"
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr "Zadnji projekti"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
 msgid "Sessions"
 msgstr "Seje"
 
-#: qml/GettingStarted.qml:49
-msgid "Go!"
-msgstr "Pojdi!"
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>Dobrodošli v KDevelop!</h3>\n"
+"<p>Lahko začnete delati na projekti tako da odprete obstoječega ali "
+"ustvarite novega z gumbi zgoraj.</p>\n"
+"<p>Če potrebujete pomoč, preverite navodila na <a href=\"https://userbase."
+"kde.org/KDevelop\">User Manual.</a></p>"
 
-#: qml/GettingStarted.qml:57
-msgid "Documentation for KDevelop users"
-msgstr "Dokumentacija za uporabnike KDevelop"
+#~ msgid "Back to code"
+#~ msgstr "Nazaj na kodo"
 
-#: qml/GettingStarted.qml:62
-msgid "Keep up with KDevelop's development"
-msgstr "Nadaljujte z razvojem KDevelop-a"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "Nastavite novi zaganjalnik"
 
-#: qml/GettingStarted.qml:67
-msgid "Help us improve KDevelop"
-msgstr "Pomagajte nam izboljšati KDevelop"
+#~ msgid "Attach to Process"
+#~ msgstr "Priklopi se k procesu"
 
-#: qml/NewsFeed.qml:136
-msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-msgid "%1 (new)"
-msgstr "%1 (novo)"
+#~ msgid "Debug your program"
+#~ msgstr "Razhrošči svoj program"
 
-#: qml/NewsFeed.qml:147
-msgid "Fetching feeds..."
-msgstr "Dobavljanje virov ..."
+#~ msgid "Debug Area"
+#~ msgstr "Območje razhroščevanja"
 
-#: qml/NewsFeed.qml:148
-msgid "No recent news"
-msgstr "Ni zadnjih novic"
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options."
+#~ msgstr ""
+#~ "V območju <em>Razhroščevanje</em> boste lahko videli in analizirali, kako "
+#~ "program deluje med izvajanjem. V meniju <em>Zaženi</em> boste našli vse "
+#~ "mogoče možnosti."
 
-#: qml/plugins/Branches.qml:16
-msgid "Branches"
-msgstr "Veje"
+#~ msgid ""
+#~ "As you can see, here you can just execute your application or debug it if "
+#~ "you need further runtime information. You can select what is going to be "
+#~ "run by configuring the launches and selecting the one you want to use in "
+#~ "the <em>Current Launch Configuration</em> sub-menu."
+#~ msgstr ""
+#~ "Kot lahko vidite, lahko tukaj samo izvršite program ali pa ga "
+#~ "razhroščite, če potrebujete dodatne informacije o vedenju v času "
+#~ "izvajanja. Izberete lahko, kaj se bo zagnalo, tako da prilagodite zagone "
+#~ "in izberete tisto, kar želite uporabiti v podmeniju <em>Trenutna "
+#~ "prilagoditev zagona</em>."
 
-#: qml/plugins/Projects.qml:15
-msgid "Projects"
-msgstr "Projekti"
+#~ msgid "Review a Patch"
+#~ msgstr "Preglej popravek"
+
+#~ msgid "Review Area"
+#~ msgstr "Območje pregleda"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch."
+#~ msgstr ""
+#~ "Na področju <em>Pregled</em> lahko najdete orodja, ki jih potrebujete za "
+#~ "pregled sprememb v projektih, bodisi tiste, ki ste jih pripravili sami, "
+#~ "bodisi zunanje popravke."
+
+#~ msgid ""
+#~ "Also it will help you send the changes to the community you're "
+#~ "contributing to, either by committing the changes, sending them by e-mail "
+#~ "or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "Prav tako vam bo pomagalo, da pošljete spremembe skupnost, kateri "
+#~ "prispevate, bodisi z objavo sprememb, pošiljanjem po e-pošti, bodisi z "
+#~ "dajanjem v storitev pregleda ReviewBoard."
+
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Go!"
+#~ msgstr "Pojdi!"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "Dokumentacija za uporabnike KDevelop"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "Nadaljujte z razvojem KDevelop-a"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "Pomagajte nam izboljšati KDevelop"
+
+#~ msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+#~ msgid "%1 (new)"
+#~ msgstr "%1 (novo)"
+
+#~ msgid "Fetching feeds..."
+#~ msgstr "Dobavljanje virov ..."
+
+#~ msgid "No recent news"
+#~ msgstr "Ni zadnjih novic"
+
+#~ msgid "Branches"
+#~ msgstr "Veje"
+
+#~ msgid "Projects"
+#~ msgstr "Projekti"
 
 #~ msgid "News"
 #~ msgstr "Novice"

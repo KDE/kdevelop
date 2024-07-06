@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
 "PO-Revision-Date: 2017-09-29 15:21+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -17,128 +17,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: qml/area_code.qml:76
-msgid "Need Help?"
-msgstr "Hulp nodig?"
-
-#: qml/area_code.qml:84
-msgid "KDevelop.org"
-msgstr "KDevelop.org"
-
-#: qml/area_code.qml:91
-msgid "Learn about KDevelop"
-msgstr "Maak kennis met KDevelop"
-
-#: qml/area_code.qml:96
-msgid "Join KDevelop's team!"
-msgstr "Doe mee met het team van KDevelop"
-
-#: qml/area_code.qml:101
-msgid "Handbook"
-msgstr "Handboek"
-
-#: qml/area_debug.qml:18 qml/area_review.qml:16
-msgid "Back to code"
-msgstr "Terug naar de code"
-
-#: qml/area_debug.qml:37
-msgid "Configure a new Launcher"
-msgstr "Een nieuwe programmastarter instellen"
-
-#: qml/area_debug.qml:38
-msgid "Attach to Process"
-msgstr "Aan proces hechten"
-
-#: qml/area_debug.qml:39
-msgid "Debug your program"
-msgstr "Uw programma debuggen"
-
-#: qml/area_debug.qml:41
-msgid "Debug Area"
-msgstr "Debuggebied"
-
-#: qml/area_debug.qml:44
-msgid ""
-"On the <em>Debug</em> area you will be able to see and analyze how your "
-"program works on execution. On the <em>Run</em> menu you will find all the "
-"possible options."
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
 msgstr ""
-"In het gebied <em>Debug</em> kunt u zien en analyseren hoe uw programma "
-"werkt bij uitvoeren. In het menu <em>Uitvoeren</em> kunt u alle mogelijke "
-"opties vinden."
 
-#: qml/area_debug.qml:50
-msgid ""
-"As you can see, here you can just execute your application or debug it if "
-"you need further runtime information. You can select what is going to be run "
-"by configuring the launches and selecting the one you want to use in the "
-"<em>Current Launch Configuration</em> sub-menu."
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""
-"Zoals u kunt zien, kunt u hier gewoon uw toepassing uitvoeren of het "
-"debuggen als u meer informatie over het uitvoeren wilt hebben. U kunt "
-"selecteren wat er uitgevoerd wordt door het starten in te stellen en diegene "
-"te selecteren die u wilt gebruiken in het submenu <em>Huidige "
-"opstartconfiguratie</em> sub-menu."
 
-#: qml/area_review.qml:38
-msgid "Review a Patch"
-msgstr "Een patch nalezen"
-
-#: qml/area_review.qml:46
-msgid "Review Area"
-msgstr "Nakijkgebied"
-
-#: qml/area_review.qml:50
-msgid ""
-"On the <em>Review</em> area you will be able to find the tools you need to "
-"review changes in your projects, either the ones you made or some external "
-"patch."
-msgstr ""
-"In het gebied <em>Nakijken</em> vindt u de hulpmiddelen die u nodig hebt om "
-"wijzigingen in uw projecten te bekijken, ofwel die door u zijn gemaakt of "
-"een externe patch."
-
-#: qml/area_review.qml:56
-msgid ""
-"Also it will help you send the changes to the community you're contributing "
-"to, either by committing the changes, sending them by e-mail or putting them "
-"on a ReviewBoard service."
-msgstr ""
-"Het helpt u ook de wijzigen naar de gemeenschap te verzenden waaraan u "
-"bijdraagt, ofwel door de wijzigingen vast te leggen (committen), of door ze "
-"via e-mail te verzenden of door ze in een ReviewBoard-service te plaatsen."
-
-#: qml/Develop.qml:32
-msgid "New Project"
-msgstr "Nieuw project"
-
-#: qml/Develop.qml:37
-msgid "Open Project"
-msgstr "Project openen"
-
-#: qml/Develop.qml:43
-msgid "Fetch Project"
-msgstr "Project ophalen"
-
-#: qml/Develop.qml:50
-msgid "Recent Projects"
-msgstr "Recente projecten"
-
-#: qml/Develop.qml:65
-msgid ""
-"<h3>Welcome to KDevelop!</h3>\n"
-"<p>You can start working on a project by opening an existing or creating a "
-"new one via the above buttons.</p>\n"
-"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
-"KDevelop\">User Manual.</a></p>"
-msgstr ""
-"<h3>Welkom bij KDevelop!</h3>\n"
-"<p>U kunt beginnen met werken aan een project door een bestaande te openen "
-"of een nieuwe aan te maken met de bovenstaande knoppen.</p>\n"
-"<p>Als u hulp nodig hebt, bekijk dan de <a href=\"https://userbase.kde.org/"
-"KDevelop\">Gebruikershandleiding.</a></p>"
-
-#: qml/Develop.qml:70
+#: welcomepageview.cpp:50
+#, kde-format
 msgid ""
 "<br/>\n"
 "<h3>Note for Windows users</h3>\n"
@@ -160,50 +50,180 @@ msgstr ""
 "userbase.kde.org/KDevelop4/Manual/WindowsSetup\">Instructies voor KDevelop "
 "onder Windows.</a></p>"
 
-#: qml/Develop.qml:107
-msgid "%1: %2"
-msgstr "%1: %2"
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, fuzzy, kde-format
+#| msgid "KDevelop.org"
+msgid "KDevelop"
+msgstr "KDevelop.org"
 
-#: qml/Develop.qml:126
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr "Hulp nodig?"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr "Maak kennis met KDevelop"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr "Doe mee met het team van KDevelop"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr "Handboek"
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr "Nieuw project"
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr "Project openen"
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr "Project ophalen"
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr "Recente projecten"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
 msgid "Sessions"
 msgstr "Sessies"
 
-#: qml/GettingStarted.qml:49
-msgid "Go!"
-msgstr "Gaan!"
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>Welkom bij KDevelop!</h3>\n"
+"<p>U kunt beginnen met werken aan een project door een bestaande te openen "
+"of een nieuwe aan te maken met de bovenstaande knoppen.</p>\n"
+"<p>Als u hulp nodig hebt, bekijk dan de <a href=\"https://userbase.kde.org/"
+"KDevelop\">Gebruikershandleiding.</a></p>"
 
-#: qml/GettingStarted.qml:57
-msgid "Documentation for KDevelop users"
-msgstr "Documentatie voor gebruikers van KDevelop"
+#~ msgid "Back to code"
+#~ msgstr "Terug naar de code"
 
-#: qml/GettingStarted.qml:62
-msgid "Keep up with KDevelop's development"
-msgstr "Hou de ontwikkeling van KDevelop bij"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "Een nieuwe programmastarter instellen"
 
-#: qml/GettingStarted.qml:67
-msgid "Help us improve KDevelop"
-msgstr "Help ons om KDevelop te verbeteren"
+#~ msgid "Attach to Process"
+#~ msgstr "Aan proces hechten"
 
-#: qml/NewsFeed.qml:136
-msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-msgid "%1 (new)"
-msgstr "%1 (nieuw)"
+#~ msgid "Debug your program"
+#~ msgstr "Uw programma debuggen"
 
-#: qml/NewsFeed.qml:147
-msgid "Fetching feeds..."
-msgstr "Feeds ophalen..."
+#~ msgid "Debug Area"
+#~ msgstr "Debuggebied"
 
-#: qml/NewsFeed.qml:148
-msgid "No recent news"
-msgstr "Geen recent nieuws"
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options."
+#~ msgstr ""
+#~ "In het gebied <em>Debug</em> kunt u zien en analyseren hoe uw programma "
+#~ "werkt bij uitvoeren. In het menu <em>Uitvoeren</em> kunt u alle mogelijke "
+#~ "opties vinden."
 
-#: qml/plugins/Branches.qml:16
-msgid "Branches"
-msgstr "Branches"
+#~ msgid ""
+#~ "As you can see, here you can just execute your application or debug it if "
+#~ "you need further runtime information. You can select what is going to be "
+#~ "run by configuring the launches and selecting the one you want to use in "
+#~ "the <em>Current Launch Configuration</em> sub-menu."
+#~ msgstr ""
+#~ "Zoals u kunt zien, kunt u hier gewoon uw toepassing uitvoeren of het "
+#~ "debuggen als u meer informatie over het uitvoeren wilt hebben. U kunt "
+#~ "selecteren wat er uitgevoerd wordt door het starten in te stellen en "
+#~ "diegene te selecteren die u wilt gebruiken in het submenu <em>Huidige "
+#~ "opstartconfiguratie</em> sub-menu."
 
-#: qml/plugins/Projects.qml:15
-msgid "Projects"
-msgstr "Projecten"
+#~ msgid "Review a Patch"
+#~ msgstr "Een patch nalezen"
+
+#~ msgid "Review Area"
+#~ msgstr "Nakijkgebied"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch."
+#~ msgstr ""
+#~ "In het gebied <em>Nakijken</em> vindt u de hulpmiddelen die u nodig hebt "
+#~ "om wijzigingen in uw projecten te bekijken, ofwel die door u zijn gemaakt "
+#~ "of een externe patch."
+
+#~ msgid ""
+#~ "Also it will help you send the changes to the community you're "
+#~ "contributing to, either by committing the changes, sending them by e-mail "
+#~ "or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "Het helpt u ook de wijzigen naar de gemeenschap te verzenden waaraan u "
+#~ "bijdraagt, ofwel door de wijzigingen vast te leggen (committen), of door "
+#~ "ze via e-mail te verzenden of door ze in een ReviewBoard-service te "
+#~ "plaatsen."
+
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Go!"
+#~ msgstr "Gaan!"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "Documentatie voor gebruikers van KDevelop"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "Hou de ontwikkeling van KDevelop bij"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "Help ons om KDevelop te verbeteren"
+
+#~ msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+#~ msgid "%1 (new)"
+#~ msgstr "%1 (nieuw)"
+
+#~ msgid "Fetching feeds..."
+#~ msgstr "Feeds ophalen..."
+
+#~ msgid "No recent news"
+#~ msgstr "Geen recent nieuws"
+
+#~ msgid "Branches"
+#~ msgstr "Branches"
+
+#~ msgid "Projects"
+#~ msgstr "Projecten"
 
 #~ msgid "News"
 #~ msgstr "Nieuws"

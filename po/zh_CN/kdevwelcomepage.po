@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,122 +17,18 @@ msgstr ""
 "X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevwelcomepage.pot\n"
 "X-Crowdin-File-ID: 4915\n"
 
-#: qml/area_code.qml:76
-msgid "Need Help?"
-msgstr "需要帮助？"
-
-#: qml/area_code.qml:84
-msgid "KDevelop.org"
-msgstr "KDevelop.org"
-
-#: qml/area_code.qml:91
-msgid "Learn about KDevelop"
-msgstr "学习 KDevelop"
-
-#: qml/area_code.qml:96
-msgid "Join KDevelop's team!"
-msgstr "加入 KDevelop 团队！"
-
-#: qml/area_code.qml:101
-msgid "Handbook"
-msgstr "手册"
-
-#: qml/area_debug.qml:18 qml/area_review.qml:16
-msgid "Back to code"
-msgstr "返回代码"
-
-#: qml/area_debug.qml:37
-msgid "Configure a new Launcher"
-msgstr "配置新启动器"
-
-#: qml/area_debug.qml:38
-msgid "Attach to Process"
-msgstr "附加到进程"
-
-#: qml/area_debug.qml:39
-msgid "Debug your program"
-msgstr "调试您的程序"
-
-#: qml/area_debug.qml:41
-msgid "Debug Area"
-msgstr "调试区域"
-
-#: qml/area_debug.qml:44
-msgid ""
-"On the <em>Debug</em> area you will be able to see and analyze how your "
-"program works on execution. On the <em>Run</em> menu you will find all the "
-"possible options."
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
 msgstr ""
-"在 <em>调试</em> 区域中，您将能够查看和分析程序在执行过程中的工作情况。在 "
-"<em>运行</em> 菜单中，您可以找到所有可能的选项。"
 
-#: qml/area_debug.qml:50
-msgid ""
-"As you can see, here you can just execute your application or debug it if "
-"you need further runtime information. You can select what is going to be run "
-"by configuring the launches and selecting the one you want to use in the "
-"<em>Current Launch Configuration</em> sub-menu."
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""
-"如您所见，在这里您可以只执行应用程序，或者如果您需要进一步的运行时信息，可以"
-"调试它。通过配置启动流程并选择要在 <em>当前启动配置</em> 子菜单中使用的选项, "
-"可以选择要运行的内容。"
 
-#: qml/area_review.qml:38
-msgid "Review a Patch"
-msgstr "审核补丁"
-
-#: qml/area_review.qml:46
-msgid "Review Area"
-msgstr "审核区域"
-
-#: qml/area_review.qml:50
-msgid ""
-"On the <em>Review</em> area you will be able to find the tools you need to "
-"review changes in your projects, either the ones you made or some external "
-"patch."
-msgstr ""
-"在 <em>审核</em> 区域，您可以找到用于审核工程更改所需的工具，包括您自己的和外"
-"部的补丁。"
-
-#: qml/area_review.qml:56
-msgid ""
-"Also it will help you send the changes to the community you're contributing "
-"to, either by committing the changes, sending them by e-mail or putting them "
-"on a ReviewBoard service."
-msgstr ""
-"此外，它还将帮助您将更改发送到您所贡献的社区，或者通过提交更改、通过电子邮件"
-"发送它们或将它们放在 ReviewBoard 服务上。"
-
-#: qml/Develop.qml:32
-msgid "New Project"
-msgstr "新建工程"
-
-#: qml/Develop.qml:37
-msgid "Open Project"
-msgstr "打开工程"
-
-#: qml/Develop.qml:43
-msgid "Fetch Project"
-msgstr "获取工程"
-
-#: qml/Develop.qml:50
-msgid "Recent Projects"
-msgstr "最近的工程"
-
-#: qml/Develop.qml:65
-msgid ""
-"<h3>Welcome to KDevelop!</h3>\n"
-"<p>You can start working on a project by opening an existing or creating a "
-"new one via the above buttons.</p>\n"
-"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
-"KDevelop\">User Manual.</a></p>"
-msgstr ""
-"<h3>欢迎使用 KDevelop！</h3>\n"
-"<p>您可以打开现有的工程或通过上面的按钮创建一个新工程来开始工作。</p>\n"
-"<p>如果您需要帮助, 请查阅<a href=\"https://userbase.kde.org/KDevelop\">用户手"
-"册</a>。</p>"
-
-#: qml/Develop.qml:70
+#: welcomepageview.cpp:50
+#, kde-format
 msgid ""
 "<br/>\n"
 "<h3>Note for Windows users</h3>\n"
@@ -152,47 +48,170 @@ msgstr ""
 "<p>如果需要进一步的帮助, 请查阅 <a href=\"https://userbase.kde.org/KDevelop4/"
 "Manual/WindowsSetup\">KDevelop Windows 版说明</a>。</p>"
 
-#: qml/Develop.qml:107
-msgid "%1: %2"
-msgstr "%1：(%2)"
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, fuzzy, kde-format
+#| msgid "KDevelop.org"
+msgid "KDevelop"
+msgstr "KDevelop.org"
 
-#: qml/Develop.qml:126
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr "需要帮助？"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr "学习 KDevelop"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr "加入 KDevelop 团队！"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr "手册"
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr "新建工程"
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr "打开工程"
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr "获取工程"
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr "最近的工程"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
 msgid "Sessions"
 msgstr "会话"
 
-#: qml/GettingStarted.qml:49
-msgid "Go!"
-msgstr "开始！"
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>欢迎使用 KDevelop！</h3>\n"
+"<p>您可以打开现有的工程或通过上面的按钮创建一个新工程来开始工作。</p>\n"
+"<p>如果您需要帮助, 请查阅<a href=\"https://userbase.kde.org/KDevelop\">用户手"
+"册</a>。</p>"
 
-#: qml/GettingStarted.qml:57
-msgid "Documentation for KDevelop users"
-msgstr "KDevelop 用户文档"
+#~ msgid "Back to code"
+#~ msgstr "返回代码"
 
-#: qml/GettingStarted.qml:62
-msgid "Keep up with KDevelop's development"
-msgstr "紧跟 KDevelop 的发展！"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "配置新启动器"
 
-#: qml/GettingStarted.qml:67
-msgid "Help us improve KDevelop"
-msgstr "帮助我们改善 KDevelop！"
+#~ msgid "Attach to Process"
+#~ msgstr "附加到进程"
 
-#: qml/NewsFeed.qml:136
-msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-msgid "%1 (new)"
-msgstr "%1 (新)"
+#~ msgid "Debug your program"
+#~ msgstr "调试您的程序"
 
-#: qml/NewsFeed.qml:147
-msgid "Fetching feeds..."
-msgstr "正在抓取订阅..."
+#~ msgid "Debug Area"
+#~ msgstr "调试区域"
 
-#: qml/NewsFeed.qml:148
-msgid "No recent news"
-msgstr "没有新闻"
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options."
+#~ msgstr ""
+#~ "在 <em>调试</em> 区域中，您将能够查看和分析程序在执行过程中的工作情况。在 "
+#~ "<em>运行</em> 菜单中，您可以找到所有可能的选项。"
 
-#: qml/plugins/Branches.qml:16
-msgid "Branches"
-msgstr "分支"
+#~ msgid ""
+#~ "As you can see, here you can just execute your application or debug it if "
+#~ "you need further runtime information. You can select what is going to be "
+#~ "run by configuring the launches and selecting the one you want to use in "
+#~ "the <em>Current Launch Configuration</em> sub-menu."
+#~ msgstr ""
+#~ "如您所见，在这里您可以只执行应用程序，或者如果您需要进一步的运行时信息，可"
+#~ "以调试它。通过配置启动流程并选择要在 <em>当前启动配置</em> 子菜单中使用的"
+#~ "选项, 可以选择要运行的内容。"
 
-#: qml/plugins/Projects.qml:15
-msgid "Projects"
-msgstr "工程"
+#~ msgid "Review a Patch"
+#~ msgstr "审核补丁"
+
+#~ msgid "Review Area"
+#~ msgstr "审核区域"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch."
+#~ msgstr ""
+#~ "在 <em>审核</em> 区域，您可以找到用于审核工程更改所需的工具，包括您自己的"
+#~ "和外部的补丁。"
+
+#~ msgid ""
+#~ "Also it will help you send the changes to the community you're "
+#~ "contributing to, either by committing the changes, sending them by e-mail "
+#~ "or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "此外，它还将帮助您将更改发送到您所贡献的社区，或者通过提交更改、通过电子邮"
+#~ "件发送它们或将它们放在 ReviewBoard 服务上。"
+
+#~ msgid "%1: %2"
+#~ msgstr "%1：(%2)"
+
+#~ msgid "Go!"
+#~ msgstr "开始！"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "KDevelop 用户文档"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "紧跟 KDevelop 的发展！"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "帮助我们改善 KDevelop！"
+
+#~ msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+#~ msgid "%1 (new)"
+#~ msgstr "%1 (新)"
+
+#~ msgid "Fetching feeds..."
+#~ msgstr "正在抓取订阅..."
+
+#~ msgid "No recent news"
+#~ msgstr "没有新闻"
+
+#~ msgid "Branches"
+#~ msgstr "分支"
+
+#~ msgid "Projects"
+#~ msgstr "工程"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
 "PO-Revision-Date: 2020-01-14 21:07+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17,126 +17,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 19.08.1\n"
 
-#: qml/area_code.qml:76
-msgid "Need Help?"
-msgstr "Kas vajad abi?"
-
-#: qml/area_code.qml:84
-msgid "KDevelop.org"
-msgstr "KDevelop.org"
-
-#: qml/area_code.qml:91
-msgid "Learn about KDevelop"
-msgstr "KDevelopi tundmaõppimine"
-
-#: qml/area_code.qml:96
-msgid "Join KDevelop's team!"
-msgstr "Ühinemine KDevelopi meeskonnaga"
-
-#: qml/area_code.qml:101
-msgid "Handbook"
-msgstr "Käsiraamat"
-
-#: qml/area_debug.qml:18 qml/area_review.qml:16
-msgid "Back to code"
-msgstr "Tagasi koodi juurde"
-
-#: qml/area_debug.qml:37
-msgid "Configure a new Launcher"
-msgstr "Uue käivitaja seadistamine"
-
-#: qml/area_debug.qml:38
-msgid "Attach to Process"
-msgstr "Seondamine protsessiga"
-
-#: qml/area_debug.qml:39
-msgid "Debug your program"
-msgstr "Oma programmi silumine"
-
-#: qml/area_debug.qml:41
-msgid "Debug Area"
-msgstr "Silumise piirkond"
-
-#: qml/area_debug.qml:44
-msgid ""
-"On the <em>Debug</em> area you will be able to see and analyze how your "
-"program works on execution. On the <em>Run</em> menu you will find all the "
-"possible options."
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
 msgstr ""
-"Alas <em>Silumine</em> näeb ja saab analüüsida, kuidas programm töötab "
-"käivitamisel ja pärast seda. Kõik võimalikud valikud leiab menüüst "
-"<em>Käivitamine</em>."
 
-#: qml/area_debug.qml:50
-msgid ""
-"As you can see, here you can just execute your application or debug it if "
-"you need further runtime information. You can select what is going to be run "
-"by configuring the launches and selecting the one you want to use in the "
-"<em>Current Launch Configuration</em> sub-menu."
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""
-"Nagu näha, saab siin lihtsalt rakenduse käivitada või siis seda siluda, kui "
-"peaks olema tarvis rohkem teavet käitusaja kohta. Siin saab valida, mis "
-"käivitada, seadistades käivitamisi ja valides alammenüüst <em>Aktiivne "
-"käivitamisseadistus</em> just selle, mida vaja."
 
-#: qml/area_review.qml:38
-msgid "Review a Patch"
-msgstr "Paikade läbivaatus"
-
-#: qml/area_review.qml:46
-msgid "Review Area"
-msgstr "Läbivaatuse piirkond"
-
-#: qml/area_review.qml:50
-msgid ""
-"On the <em>Review</em> area you will be able to find the tools you need to "
-"review changes in your projects, either the ones you made or some external "
-"patch."
-msgstr ""
-"<em>Ülevaate</em> alas leiab tööriistad, mida läheb vaja projektidesse "
-"tehtud muutuste läbiuurimiseks, olgu need su enda tehtud või välised paigad."
-
-#: qml/area_review.qml:56
-msgid ""
-"Also it will help you send the changes to the community you're contributing "
-"to, either by committing the changes, sending them by e-mail or putting them "
-"on a ReviewBoard service."
-msgstr ""
-"Samuti saab siin saata muutused kogukonnale, mille hüvanguks töötad, kas "
-"muutusi sisse kandes, neid e-postiga saates või ReviewBoardi teenusesse "
-"läkitades."
-
-#: qml/Develop.qml:32
-msgid "New Project"
-msgstr "Uus projekt"
-
-#: qml/Develop.qml:37
-msgid "Open Project"
-msgstr "Ava projekt"
-
-#: qml/Develop.qml:43
-msgid "Fetch Project"
-msgstr "Tõmba projekt"
-
-#: qml/Develop.qml:50
-msgid "Recent Projects"
-msgstr "Viimati kasutatud projektid"
-
-#: qml/Develop.qml:65
-msgid ""
-"<h3>Welcome to KDevelop!</h3>\n"
-"<p>You can start working on a project by opening an existing or creating a "
-"new one via the above buttons.</p>\n"
-"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
-"KDevelop\">User Manual.</a></p>"
-msgstr ""
-"<h3>Tere tulemast kasutama KDevelopi!</h3>\n"
-"<p>Projekti kallal saab hakata kohe tööle, kui avad olemasoleva projekti või "
-"lood uue ülal asuvaid nuppe kasutades.</p>\n"
-"<p>Kui vajad abi, uuri lähemalt <a href=\"https://userbase.kde.org/KDevelop"
-"\">meie käsiraamatut.</a></p>"
-
-#: qml/Develop.qml:70
+#: welcomepageview.cpp:50
+#, kde-format
 msgid ""
 "<br/>\n"
 "<h3>Note for Windows users</h3>\n"
@@ -159,50 +51,178 @@ msgstr ""
 "org/KDevelop4/Manual/WindowsSetup\">KDevelopi kasutamise kohta Windowsis.</"
 "a></p>"
 
-#: qml/Develop.qml:107
-msgid "%1: %2"
-msgstr "%1: %2"
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, fuzzy, kde-format
+#| msgid "KDevelop.org"
+msgid "KDevelop"
+msgstr "KDevelop.org"
 
-#: qml/Develop.qml:126
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr "Kas vajad abi?"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr "KDevelopi tundmaõppimine"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr "Ühinemine KDevelopi meeskonnaga"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr "Käsiraamat"
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr "Uus projekt"
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr "Ava projekt"
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr "Tõmba projekt"
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr "Viimati kasutatud projektid"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
 msgid "Sessions"
 msgstr "Seansid"
 
-#: qml/GettingStarted.qml:49
-msgid "Go!"
-msgstr "Mine!"
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>Tere tulemast kasutama KDevelopi!</h3>\n"
+"<p>Projekti kallal saab hakata kohe tööle, kui avad olemasoleva projekti või "
+"lood uue ülal asuvaid nuppe kasutades.</p>\n"
+"<p>Kui vajad abi, uuri lähemalt <a href=\"https://userbase.kde.org/KDevelop"
+"\">meie käsiraamatut.</a></p>"
 
-#: qml/GettingStarted.qml:57
-msgid "Documentation for KDevelop users"
-msgstr "KDevelopi kasutajate dokumentatsioon"
+#~ msgid "Back to code"
+#~ msgstr "Tagasi koodi juurde"
 
-#: qml/GettingStarted.qml:62
-msgid "Keep up with KDevelop's development"
-msgstr "Kursishoidmine KDevelopi arendamisega"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "Uue käivitaja seadistamine"
 
-#: qml/GettingStarted.qml:67
-msgid "Help us improve KDevelop"
-msgstr "Kaasaaitamine KDevelopi parandamisele"
+#~ msgid "Attach to Process"
+#~ msgstr "Seondamine protsessiga"
 
-#: qml/NewsFeed.qml:136
-msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-msgid "%1 (new)"
-msgstr "%1 (uus)"
+#~ msgid "Debug your program"
+#~ msgstr "Oma programmi silumine"
 
-#: qml/NewsFeed.qml:147
-msgid "Fetching feeds..."
-msgstr "Kanalite tõmbamine ..."
+#~ msgid "Debug Area"
+#~ msgstr "Silumise piirkond"
 
-#: qml/NewsFeed.qml:148
-msgid "No recent news"
-msgstr "Värskeid uudiseid pole"
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options."
+#~ msgstr ""
+#~ "Alas <em>Silumine</em> näeb ja saab analüüsida, kuidas programm töötab "
+#~ "käivitamisel ja pärast seda. Kõik võimalikud valikud leiab menüüst "
+#~ "<em>Käivitamine</em>."
 
-#: qml/plugins/Branches.qml:16
-msgid "Branches"
-msgstr "Harud"
+#~ msgid ""
+#~ "As you can see, here you can just execute your application or debug it if "
+#~ "you need further runtime information. You can select what is going to be "
+#~ "run by configuring the launches and selecting the one you want to use in "
+#~ "the <em>Current Launch Configuration</em> sub-menu."
+#~ msgstr ""
+#~ "Nagu näha, saab siin lihtsalt rakenduse käivitada või siis seda siluda, "
+#~ "kui peaks olema tarvis rohkem teavet käitusaja kohta. Siin saab valida, "
+#~ "mis käivitada, seadistades käivitamisi ja valides alammenüüst "
+#~ "<em>Aktiivne käivitamisseadistus</em> just selle, mida vaja."
 
-#: qml/plugins/Projects.qml:15
-msgid "Projects"
-msgstr "Projektid"
+#~ msgid "Review a Patch"
+#~ msgstr "Paikade läbivaatus"
+
+#~ msgid "Review Area"
+#~ msgstr "Läbivaatuse piirkond"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch."
+#~ msgstr ""
+#~ "<em>Ülevaate</em> alas leiab tööriistad, mida läheb vaja projektidesse "
+#~ "tehtud muutuste läbiuurimiseks, olgu need su enda tehtud või välised "
+#~ "paigad."
+
+#~ msgid ""
+#~ "Also it will help you send the changes to the community you're "
+#~ "contributing to, either by committing the changes, sending them by e-mail "
+#~ "or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "Samuti saab siin saata muutused kogukonnale, mille hüvanguks töötad, kas "
+#~ "muutusi sisse kandes, neid e-postiga saates või ReviewBoardi teenusesse "
+#~ "läkitades."
+
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Go!"
+#~ msgstr "Mine!"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "KDevelopi kasutajate dokumentatsioon"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "Kursishoidmine KDevelopi arendamisega"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "Kaasaaitamine KDevelopi parandamisele"
+
+#~ msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+#~ msgid "%1 (new)"
+#~ msgstr "%1 (uus)"
+
+#~ msgid "Fetching feeds..."
+#~ msgstr "Kanalite tõmbamine ..."
+
+#~ msgid "No recent news"
+#~ msgstr "Värskeid uudiseid pole"
+
+#~ msgid "Branches"
+#~ msgstr "Harud"
+
+#~ msgid "Projects"
+#~ msgstr "Projektid"
 
 #~ msgid "News"
 #~ msgstr "Uudised"

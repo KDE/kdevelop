@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
 "PO-Revision-Date: 2023-03-06 12:37+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -21,127 +21,18 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Generator: Lokalize 20.12.0\n"
 
-#: qml/area_code.qml:76
-msgid "Need Help?"
-msgstr "Us cal ajuda?"
-
-#: qml/area_code.qml:84
-msgid "KDevelop.org"
-msgstr "KDevelop.org"
-
-#: qml/area_code.qml:91
-msgid "Learn about KDevelop"
-msgstr "Aprendre sobre el KDevelop"
-
-#: qml/area_code.qml:96
-msgid "Join KDevelop's team!"
-msgstr "Uniu-vos a l'equip del KDevelop!"
-
-#: qml/area_code.qml:101
-msgid "Handbook"
-msgstr "Manual"
-
-#: qml/area_debug.qml:18 qml/area_review.qml:16
-msgid "Back to code"
-msgstr "Tornar al codi"
-
-#: qml/area_debug.qml:37
-msgid "Configure a new Launcher"
-msgstr "Configurar un llançador nou"
-
-#: qml/area_debug.qml:38
-msgid "Attach to Process"
-msgstr "Adjuntar al procés"
-
-#: qml/area_debug.qml:39
-msgid "Debug your program"
-msgstr "Depurar el vostre programa"
-
-#: qml/area_debug.qml:41
-msgid "Debug Area"
-msgstr "Àrea de depuració"
-
-#: qml/area_debug.qml:44
-msgid ""
-"On the <em>Debug</em> area you will be able to see and analyze how your "
-"program works on execution. On the <em>Run</em> menu you will find all the "
-"possible options."
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
 msgstr ""
-"A l'àrea de <em>Depuració</em> sereu capaç de veure i analitzar la forma en "
-"què funciona el programa durant l'execució. Al menú <em>Executa</em>, "
-"trobareu totes les opcions possibles."
 
-#: qml/area_debug.qml:50
-msgid ""
-"As you can see, here you can just execute your application or debug it if "
-"you need further runtime information. You can select what is going to be run "
-"by configuring the launches and selecting the one you want to use in the "
-"<em>Current Launch Configuration</em> sub-menu."
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""
-"Com podeu veure, aquí només podreu executar la vostra aplicació o depurar-la "
-"si necessiteu més informació en temps d'execució. Podeu seleccionar el que "
-"s'executarà mitjançant la configuració dels llançaments i seleccionant el "
-"que voleu utilitzar al submenú <em>Configuració de llançament actual</em>."
 
-#: qml/area_review.qml:38
-msgid "Review a Patch"
-msgstr "Revisar un pedaç"
-
-#: qml/area_review.qml:46
-msgid "Review Area"
-msgstr "Àrea de revisió"
-
-#: qml/area_review.qml:50
-msgid ""
-"On the <em>Review</em> area you will be able to find the tools you need to "
-"review changes in your projects, either the ones you made or some external "
-"patch."
-msgstr ""
-"A l'àrea de <em>Revisió</em> sereu capaç de trobar les eines que necessiteu "
-"per a revisar els canvis en els vostres projectes, sigui els que heu "
-"realitzat o algun pedaç extern."
-
-#: qml/area_review.qml:56
-msgid ""
-"Also it will help you send the changes to the community you're contributing "
-"to, either by committing the changes, sending them by e-mail or putting them "
-"on a ReviewBoard service."
-msgstr ""
-"També us ajudarà a enviar els canvis a la comunitat on esteu contribuint, ja "
-"sigui cometre els canvis, enviar-los per correu electrònic o posar-los en un "
-"servei de junta de revisió (Reviewboard)."
-
-#: qml/Develop.qml:32
-msgid "New Project"
-msgstr "Projecte nou"
-
-#: qml/Develop.qml:37
-msgid "Open Project"
-msgstr "Obrir un projecte"
-
-#: qml/Develop.qml:43
-msgid "Fetch Project"
-msgstr "Recuperar un projecte"
-
-#: qml/Develop.qml:50
-msgid "Recent Projects"
-msgstr "Projectes recents"
-
-#: qml/Develop.qml:65
-msgid ""
-"<h3>Welcome to KDevelop!</h3>\n"
-"<p>You can start working on a project by opening an existing or creating a "
-"new one via the above buttons.</p>\n"
-"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
-"KDevelop\">User Manual.</a></p>"
-msgstr ""
-"<h3>Us donem la benvinguda al KDevelop!</h3>\n"
-"<p>Podeu començar a treballar en un projecte obrint-ne un existent o creant-"
-"ne un de nou des dels botons de la part superior.</p>\n"
-"<p>Si cal ajuda, vegeu el <a href=\"https://userbase.kde.org/KDevelop"
-"\">Manual d'usuari</a>.</p>"
-
-#: qml/Develop.qml:70
+#: welcomepageview.cpp:50
+#, kde-format
 msgid ""
 "<br/>\n"
 "<h3>Note for Windows users</h3>\n"
@@ -163,50 +54,179 @@ msgstr ""
 "<p>Si cal més ajuda, vegeu les <a href=\"https://userbase.kde.org/KDevelop4/"
 "Manual/WindowsSetup\">instruccions del KDevelop en el Windows.</a></p>"
 
-#: qml/Develop.qml:107
-msgid "%1: %2"
-msgstr "%1: %2"
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, fuzzy, kde-format
+#| msgid "KDevelop.org"
+msgid "KDevelop"
+msgstr "KDevelop.org"
 
-#: qml/Develop.qml:126
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr "Us cal ajuda?"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr "Aprendre sobre el KDevelop"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr "Uniu-vos a l'equip del KDevelop!"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr "Manual"
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr "Projecte nou"
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr "Obrir un projecte"
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr "Recuperar un projecte"
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr "Projectes recents"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
 msgid "Sessions"
 msgstr "Sessions"
 
-#: qml/GettingStarted.qml:49
-msgid "Go!"
-msgstr "Aneu-hi!"
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>Us donem la benvinguda al KDevelop!</h3>\n"
+"<p>Podeu començar a treballar en un projecte obrint-ne un existent o creant-"
+"ne un de nou des dels botons de la part superior.</p>\n"
+"<p>Si cal ajuda, vegeu el <a href=\"https://userbase.kde.org/KDevelop"
+"\">Manual d'usuari</a>.</p>"
 
-#: qml/GettingStarted.qml:57
-msgid "Documentation for KDevelop users"
-msgstr "Documentació per als usuaris del KDevelop"
+#~ msgid "Back to code"
+#~ msgstr "Tornar al codi"
 
-#: qml/GettingStarted.qml:62
-msgid "Keep up with KDevelop's development"
-msgstr "Mantenir-se al dia amb el desenvolupament del KDevelop"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "Configurar un llançador nou"
 
-#: qml/GettingStarted.qml:67
-msgid "Help us improve KDevelop"
-msgstr "Ajudeu-nos a millorar el KDevelop"
+#~ msgid "Attach to Process"
+#~ msgstr "Adjuntar al procés"
 
-#: qml/NewsFeed.qml:136
-msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-msgid "%1 (new)"
-msgstr "%1 (notícia)"
+#~ msgid "Debug your program"
+#~ msgstr "Depurar el vostre programa"
 
-#: qml/NewsFeed.qml:147
-msgid "Fetching feeds..."
-msgstr "S'estan recuperant les fonts..."
+#~ msgid "Debug Area"
+#~ msgstr "Àrea de depuració"
 
-#: qml/NewsFeed.qml:148
-msgid "No recent news"
-msgstr "No hi ha cap notícia recent"
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options."
+#~ msgstr ""
+#~ "A l'àrea de <em>Depuració</em> sereu capaç de veure i analitzar la forma "
+#~ "en què funciona el programa durant l'execució. Al menú <em>Executa</em>, "
+#~ "trobareu totes les opcions possibles."
 
-#: qml/plugins/Branches.qml:16
-msgid "Branches"
-msgstr "Branques"
+#~ msgid ""
+#~ "As you can see, here you can just execute your application or debug it if "
+#~ "you need further runtime information. You can select what is going to be "
+#~ "run by configuring the launches and selecting the one you want to use in "
+#~ "the <em>Current Launch Configuration</em> sub-menu."
+#~ msgstr ""
+#~ "Com podeu veure, aquí només podreu executar la vostra aplicació o depurar-"
+#~ "la si necessiteu més informació en temps d'execució. Podeu seleccionar el "
+#~ "que s'executarà mitjançant la configuració dels llançaments i "
+#~ "seleccionant el que voleu utilitzar al submenú <em>Configuració de "
+#~ "llançament actual</em>."
 
-#: qml/plugins/Projects.qml:15
-msgid "Projects"
-msgstr "Projectes"
+#~ msgid "Review a Patch"
+#~ msgstr "Revisar un pedaç"
+
+#~ msgid "Review Area"
+#~ msgstr "Àrea de revisió"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch."
+#~ msgstr ""
+#~ "A l'àrea de <em>Revisió</em> sereu capaç de trobar les eines que "
+#~ "necessiteu per a revisar els canvis en els vostres projectes, sigui els "
+#~ "que heu realitzat o algun pedaç extern."
+
+#~ msgid ""
+#~ "Also it will help you send the changes to the community you're "
+#~ "contributing to, either by committing the changes, sending them by e-mail "
+#~ "or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "També us ajudarà a enviar els canvis a la comunitat on esteu contribuint, "
+#~ "ja sigui cometre els canvis, enviar-los per correu electrònic o posar-los "
+#~ "en un servei de junta de revisió (Reviewboard)."
+
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Go!"
+#~ msgstr "Aneu-hi!"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "Documentació per als usuaris del KDevelop"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "Mantenir-se al dia amb el desenvolupament del KDevelop"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "Ajudeu-nos a millorar el KDevelop"
+
+#~ msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+#~ msgid "%1 (new)"
+#~ msgstr "%1 (notícia)"
+
+#~ msgid "Fetching feeds..."
+#~ msgstr "S'estan recuperant les fonts..."
+
+#~ msgid "No recent news"
+#~ msgstr "No hi ha cap notícia recent"
+
+#~ msgid "Branches"
+#~ msgstr "Branques"
+
+#~ msgid "Projects"
+#~ msgstr "Projectes"
 
 #~ msgid "News"
 #~ msgstr "Notícies"

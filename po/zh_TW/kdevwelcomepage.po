@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevwelcomepage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
 "PO-Revision-Date: 2024-03-07 20:24+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -17,119 +17,18 @@ msgstr ""
 "X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: qml/area_code.qml:76
-msgid "Need Help?"
-msgstr "需要幫忙？"
-
-#: qml/area_code.qml:84
-msgid "KDevelop.org"
-msgstr "KDevelop.org"
-
-#: qml/area_code.qml:91
-msgid "Learn about KDevelop"
-msgstr "瞭解有關 KDevelop 的資訊"
-
-#: qml/area_code.qml:96
-msgid "Join KDevelop's team!"
-msgstr "加入 KDevelop 團隊吧！"
-
-#: qml/area_code.qml:101
-msgid "Handbook"
-msgstr "手冊"
-
-#: qml/area_debug.qml:18 qml/area_review.qml:16
-msgid "Back to code"
-msgstr "返回源碼區"
-
-#: qml/area_debug.qml:37
-msgid "Configure a new Launcher"
-msgstr "設定新的啟動器"
-
-#: qml/area_debug.qml:38
-msgid "Attach to Process"
-msgstr "附加到行程"
-
-#: qml/area_debug.qml:39
-msgid "Debug your program"
-msgstr "除錯您的程式"
-
-#: qml/area_debug.qml:41
-msgid "Debug Area"
-msgstr "除錯區域"
-
-#: qml/area_debug.qml:44
-msgid ""
-"On the <em>Debug</em> area you will be able to see and analyze how your "
-"program works on execution. On the <em>Run</em> menu you will find all the "
-"possible options."
-msgstr ""
-"在 <em>除錯</em> 區域您可以檢視並分析您的程式執行時如何運作。在 <em>執行</"
-"em> 選單當中有所有可能使用的選項。"
-
-#: qml/area_debug.qml:50
-msgid ""
-"As you can see, here you can just execute your application or debug it if "
-"you need further runtime information. You can select what is going to be run "
-"by configuring the launches and selecting the one you want to use in the "
-"<em>Current Launch Configuration</em> sub-menu."
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
 msgstr ""
 
-#: qml/area_review.qml:38
-msgid "Review a Patch"
-msgstr "審閱補丁檔"
-
-#: qml/area_review.qml:46
-msgid "Review Area"
-msgstr "審閱區域"
-
-#: qml/area_review.qml:50
-msgid ""
-"On the <em>Review</em> area you will be able to find the tools you need to "
-"review changes in your projects, either the ones you made or some external "
-"patch."
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
 msgstr ""
-"在 <em>審閱</em> 區域您可以找到審閱專案變更用的工具，不管是您自己做到變更還是"
-"外部來的補丁。"
 
-#: qml/area_review.qml:56
-msgid ""
-"Also it will help you send the changes to the community you're contributing "
-"to, either by committing the changes, sending them by e-mail or putting them "
-"on a ReviewBoard service."
-msgstr ""
-"它也會幫助您將變更傳送給您在貢獻的社群，支援提交變更、透過電子郵件傳送變更還"
-"是將變更放到某 ReviewBoard 服務上。"
-
-#: qml/Develop.qml:32
-msgid "New Project"
-msgstr "新增專案"
-
-#: qml/Develop.qml:37
-msgid "Open Project"
-msgstr "開啟專案"
-
-#: qml/Develop.qml:43
-msgid "Fetch Project"
-msgstr "抓取專案"
-
-#: qml/Develop.qml:50
-msgid "Recent Projects"
-msgstr "最近的專案"
-
-#: qml/Develop.qml:65
-msgid ""
-"<h3>Welcome to KDevelop!</h3>\n"
-"<p>You can start working on a project by opening an existing or creating a "
-"new one via the above buttons.</p>\n"
-"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
-"KDevelop\">User Manual.</a></p>"
-msgstr ""
-"<h3>歡迎來到 KDevelop！</h3>\n"
-"<p>您可以開啟現有專案，或是透過上方按鈕建立新專案。</p>\n"
-"<p>如果您需要幫忙，請閱讀<a href=\"https://userbase.kde.org/KDevelop\">使用者"
-"手冊</a>。</p>"
-
-#: qml/Develop.qml:70
+#: welcomepageview.cpp:50
+#, kde-format
 msgid ""
 "<br/>\n"
 "<h3>Note for Windows users</h3>\n"
@@ -149,47 +48,160 @@ msgstr ""
 "<p>如果您需要更多幫助，請參照<a href=\"https://userbase.kde.org/KDevelop4/"
 "Manual/WindowsSetup\">在 Windows 使用 KDevelop 的說明</a>。</p>"
 
-#: qml/Develop.qml:107
-msgid "%1: %2"
-msgstr "%1：%2"
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, fuzzy, kde-format
+#| msgid "KDevelop.org"
+msgid "KDevelop"
+msgstr "KDevelop.org"
 
-#: qml/Develop.qml:126
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr "需要幫忙？"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr "瞭解有關 KDevelop 的資訊"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr "加入 KDevelop 團隊吧！"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr "手冊"
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr "新增專案"
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr "開啟專案"
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr "抓取專案"
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr "最近的專案"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
 msgid "Sessions"
 msgstr "工作階段"
 
-#: qml/GettingStarted.qml:49
-msgid "Go!"
-msgstr "走吧！"
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>歡迎來到 KDevelop！</h3>\n"
+"<p>您可以開啟現有專案，或是透過上方按鈕建立新專案。</p>\n"
+"<p>如果您需要幫忙，請閱讀<a href=\"https://userbase.kde.org/KDevelop\">使用者"
+"手冊</a>。</p>"
 
-#: qml/GettingStarted.qml:57
-msgid "Documentation for KDevelop users"
-msgstr "KDevelop 使用者用的說明文件"
+#~ msgid "Back to code"
+#~ msgstr "返回源碼區"
 
-#: qml/GettingStarted.qml:62
-msgid "Keep up with KDevelop's development"
-msgstr "跟上 KDevelop 的開發"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "設定新的啟動器"
 
-#: qml/GettingStarted.qml:67
-msgid "Help us improve KDevelop"
-msgstr "幫助我們改善 KDevelop"
+#~ msgid "Attach to Process"
+#~ msgstr "附加到行程"
 
-#: qml/NewsFeed.qml:136
-msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-msgid "%1 (new)"
-msgstr "%1（新）"
+#~ msgid "Debug your program"
+#~ msgstr "除錯您的程式"
 
-#: qml/NewsFeed.qml:147
-msgid "Fetching feeds..."
-msgstr "抓取 feed 中..."
+#~ msgid "Debug Area"
+#~ msgstr "除錯區域"
 
-#: qml/NewsFeed.qml:148
-msgid "No recent news"
-msgstr "沒有最近新聞"
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options."
+#~ msgstr ""
+#~ "在 <em>除錯</em> 區域您可以檢視並分析您的程式執行時如何運作。在 <em>執行</"
+#~ "em> 選單當中有所有可能使用的選項。"
 
-#: qml/plugins/Branches.qml:16
-msgid "Branches"
-msgstr "分支"
+#~ msgid "Review a Patch"
+#~ msgstr "審閱補丁檔"
 
-#: qml/plugins/Projects.qml:15
-msgid "Projects"
-msgstr "專案"
+#~ msgid "Review Area"
+#~ msgstr "審閱區域"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch."
+#~ msgstr ""
+#~ "在 <em>審閱</em> 區域您可以找到審閱專案變更用的工具，不管是您自己做到變更"
+#~ "還是外部來的補丁。"
+
+#~ msgid ""
+#~ "Also it will help you send the changes to the community you're "
+#~ "contributing to, either by committing the changes, sending them by e-mail "
+#~ "or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "它也會幫助您將變更傳送給您在貢獻的社群，支援提交變更、透過電子郵件傳送變更"
+#~ "還是將變更放到某 ReviewBoard 服務上。"
+
+#~ msgid "%1: %2"
+#~ msgstr "%1：%2"
+
+#~ msgid "Go!"
+#~ msgstr "走吧！"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "KDevelop 使用者用的說明文件"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "跟上 KDevelop 的開發"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "幫助我們改善 KDevelop"
+
+#~ msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+#~ msgid "%1 (new)"
+#~ msgstr "%1（新）"
+
+#~ msgid "Fetching feeds..."
+#~ msgstr "抓取 feed 中..."
+
+#~ msgid "No recent news"
+#~ msgstr "沒有最近新聞"
+
+#~ msgid "Branches"
+#~ msgstr "分支"
+
+#~ msgid "Projects"
+#~ msgstr "專案"
