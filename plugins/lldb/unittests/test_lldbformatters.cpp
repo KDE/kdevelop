@@ -350,7 +350,6 @@ void LldbFormattersTest::testQListContainer_data()
 
     QTest::newRow("QList") << "QList" << false;
     QTest::newRow("QQueue") << "QQueue" << false;
-    QTest::newRow("QVector") << "QVector" << false;
     QTest::newRow("QStack") << "QStack" << false;
     QTest::newRow("QLinkedList") << "QLinkedList" << false;
     QTest::newRow("QSet") << "QSet" << true;

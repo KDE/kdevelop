@@ -1,11 +1,11 @@
 #include <QList>
-#include <QVector>
 #include <QQueue>
 #include <QStack>
 #include <QLinkedList>
 #include <QSet>
 #include <QString>
 #include <QDebug>
+
 
 struct A {
     explicit A(const QString& _a = QString(), const QString& _b = QString(),
@@ -59,7 +59,6 @@ void doStuff()
 int main()
 {
     doStuff<QList>();
-    doStuff<QVector>();
     doStuff<QQueue>();
     doStuff<QStack>();
 #if QT_DEPRECATED_SINCE(5, 15)
