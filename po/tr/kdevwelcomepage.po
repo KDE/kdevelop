@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevwelcomepage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-06 01:47+0000\n"
-"PO-Revision-Date: 2023-04-21 12:12+0300\n"
+"PO-Revision-Date: 2024-07-07 00:37+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,17 +15,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 24.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Emir SARI"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "emir_sari@icloud.com"
 
 #: welcomepageview.cpp:50
 #, kde-format
@@ -42,21 +42,20 @@ msgid ""
 msgstr ""
 "<br/>\n"
 "<h3>Windows kullanıcıları için notlar</h3>\n"
-"<p>K Geliştir'in Windows üzerinde bir C/C++ derleyicisi ile gelmediğini "
-"unutmayınız.</p>\n"
-"<p>K Geliştir'i çalıştırmadan <i>önce</i> MinGW ile GCC'yi kurmanız veya "
-"Microsoft Visual Studio IDE'nin son bir sürümünü kurmanız ve ortamın "
+"<p>K Geliştir’in Windows üzerinde bir C/C++ derleyicisi ile gelmediğini "
+"unutmayın.</p>\n"
+"<p>K Geliştir’i çalıştırmadan <i>önce</i> MinGW ile GCC’yi kurmanız veya "
+"Microsoft Visual Studio IDE’nin son bir sürümünü kurmanız ve ortamın "
 "düzgünce kurulduğundan emin olmanız gerekmektedir.</p>\n"
 "<p>Daha fazla yardıma gereksiniminiz varsa lütfen <a href=\"https://userbase."
 "kde.org/K Geliştir4/Manual/WindowsSetup\">K Geliştir Windows sürümü "
-"yönergeleri</a>'ne bakın.</p>"
+"yönergelerine</a> bakın.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, appNameLabel)
 #: welcomepageview.ui:55
-#, fuzzy, kde-format
-#| msgid "KDevelop.org"
+#, kde-format
 msgid "KDevelop"
-msgstr "kdevelop.org"
+msgstr "K Geliştir"
 
 #. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
 #: welcomepageview.ui:82
@@ -74,7 +73,7 @@ msgstr "kdevelop.org"
 #: welcomepageview.ui:104
 #, kde-format
 msgid "Learn about KDevelop"
-msgstr "K Geliştir'i öğren"
+msgstr "K Geliştir’i öğren"
 
 #. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
 #: welcomepageview.ui:114
@@ -128,11 +127,11 @@ msgid ""
 "<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
 "KDevelop\">User Manual.</a></p>"
 msgstr ""
-"<h3>K Geliştir'e hoş geldiniz!</h3>\n"
+"<h3>K Geliştir’e hoş geldiniz!</h3>\n"
 "<p>Yukarıdaki düğmeler aracığıyla var olan bir projeyi açarak veya yeni bir "
 "tane oluşturarak çalışmaya başlayabilirsiniz.</p>\n"
 "<p>Yardıma gereksiniminiz varsa lütfen <a href=\"https://userbase.kde.org/K "
-"Geliştir\"> Kullanıcı Kılavuzu'na</a> bir göz atın.</p>"
+"Geliştir\"> Kullanıcı Kılavuzu</a>’na bir göz atın.</p>"
 
 #~ msgid "Back to code"
 #~ msgstr "Koda Dön"
