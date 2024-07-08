@@ -75,10 +75,7 @@ void MIDebugger::execute(std::unique_ptr<MICommand> command)
     m_process->write(commandUtf8);
     m_currentCmd->markAsSubmitted();
 
-    QString prettyCmd = m_currentCmd->cmdToSend();
-    prettyCmd.remove(QRegExp(QStringLiteral("set prompt \032.\n")));
-    prettyCmd = QLatin1String("(gdb) ") + prettyCmd;
-
+    const QString prettyCmd = QLatin1String("(gdb) ") + m_currentCmd->cmdToSend();
     if (m_currentCmd->isUserCommand())
         emit userCommandOutput(prettyCmd);
     else
