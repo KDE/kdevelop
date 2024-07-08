@@ -23,6 +23,8 @@
 #include "adaptsignatureaction.h"
 #include "util/clangdebug.h"
 
+#include <QRegularExpression>
+
 using namespace KDevelop;
 
 namespace
@@ -73,7 +75,7 @@ QString zeroIndentation(const QString& str, int fromLine = 0)
         lines = lines.mid(fromLine);
     }
 
-    QRegExp nonWhiteSpace(QStringLiteral("\\S"));
+    static const QRegularExpression nonWhiteSpace(QStringLiteral("\\S"));
     int minLineStart = 10000;
     for (const auto& line : qAsConst(lines)) {
         int lineStart = line.indexOf(nonWhiteSpace);
