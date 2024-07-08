@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:44+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2024-04-17 10:58+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -627,12 +627,12 @@ msgstr "Reanomena"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr "Reanomena el fitxer de «%1» a «%2»."
 
-#: language/backgroundparser/backgroundparser.cpp:308
+#: language/backgroundparser/backgroundparser.cpp:309
 #, kde-format
 msgid "Parsing: %1"
 msgstr "S'està analitzant: %1"
 
-#: language/backgroundparser/backgroundparser.cpp:614
+#: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
@@ -1651,7 +1651,7 @@ msgstr "No s'ha pogut crear la carpeta <i>%1</i>."
 msgid "Project Import: %1"
 msgstr "Importació de projecte: %1"
 
-#: project/importprojectjob.cpp:87
+#: project/importprojectjob.cpp:89
 #, kde-format
 msgid "Project import canceled."
 msgstr "S'ha cancel·lat la importació del projecte."
@@ -2117,25 +2117,25 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Salta a la línia d'execució de l'editor."
 
-#: shell/debugcontroller.cpp:433
+#: shell/debugcontroller.cpp:432
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Depura"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Llança al depurador"
 
-#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Depura el llançament actual"
 
-#: shell/debugcontroller.cpp:486 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2145,19 +2145,19 @@ msgstr ""
 "Executa l'objectiu o el programa especificat a la configuració de llançament "
 "activa dins d'un depurador."
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:488
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Continua"
 
-#: shell/debugcontroller.cpp:491
+#: shell/debugcontroller.cpp:490
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Continua l'execució de l'aplicació"
 
-#: shell/debugcontroller.cpp:492
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5037,7 +5037,7 @@ msgid_plural "Reformatting %1 files"
 msgstr[0] "S'està tornant a donar format a un fitxer"
 msgstr[1] "S'estan tornant a donar format a %1 fitxers"
 
-#: shell/sourceformatterselectionedit.cpp:1087
+#: shell/sourceformatterselectionedit.cpp:1088
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -5048,13 +5048,13 @@ msgstr ""
 "%2.\n"
 "Esteu segur que el voleu suprimir?"
 
-#: shell/sourceformatterselectionedit.cpp:1089
+#: shell/sourceformatterselectionedit.cpp:1090
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "Supressió de l'estil"
 
-#: shell/sourceformatterselectionedit.cpp:1149
+#: shell/sourceformatterselectionedit.cpp:1150
 #, kde-format
 msgid "New %1"
 msgstr "%1 nou"

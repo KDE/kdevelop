@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:44+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2021-05-15 15:28+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -636,13 +636,13 @@ msgstr "Nume fișier"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr ""
 
-#: language/backgroundparser/backgroundparser.cpp:308
+#: language/backgroundparser/backgroundparser.cpp:309
 #, fuzzy, kde-format
 #| msgid "Kind: %1 "
 msgid "Parsing: %1"
 msgstr "Gen: %1 "
 
-#: language/backgroundparser/backgroundparser.cpp:614
+#: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
@@ -1690,7 +1690,7 @@ msgstr ""
 msgid "Project Import: %1"
 msgstr ""
 
-#: project/importprojectjob.cpp:87
+#: project/importprojectjob.cpp:89
 #, kde-format
 msgid "Project import canceled."
 msgstr ""
@@ -2155,25 +2155,25 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:433
+#: shell/debugcontroller.cpp:432
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Depanare"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Depanează lansarea"
 
-#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Depanează lansarea actuală"
 
-#: shell/debugcontroller.cpp:486 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2181,20 +2181,20 @@ msgid ""
 "configuration inside a Debugger."
 msgstr ""
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:488
 #, fuzzy, kde-format
 #| msgid "Container: "
 msgctxt "@action"
 msgid "&Continue"
 msgstr "Container: "
 
-#: shell/debugcontroller.cpp:491
+#: shell/debugcontroller.cpp:490
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr ""
 
-#: shell/debugcontroller.cpp:492
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5130,7 +5130,7 @@ msgstr[0] "Reformatează linia"
 msgstr[1] "Reformatează linia"
 msgstr[2] "Reformatează linia"
 
-#: shell/sourceformatterselectionedit.cpp:1087
+#: shell/sourceformatterselectionedit.cpp:1088
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -5138,14 +5138,14 @@ msgid ""
 "Are you sure you want to delete it?"
 msgstr ""
 
-#: shell/sourceformatterselectionedit.cpp:1089
+#: shell/sourceformatterselectionedit.cpp:1090
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "Șterge"
 
-#: shell/sourceformatterselectionedit.cpp:1149
+#: shell/sourceformatterselectionedit.cpp:1150
 #, kde-format
 msgid "New %1"
 msgstr "Nou %1"

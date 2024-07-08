@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:44+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -617,12 +617,12 @@ msgstr "Adını dəyişin"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr "Faylın \"%1\" adını \"%2\" kimi dəyişin."
 
-#: language/backgroundparser/backgroundparser.cpp:308
+#: language/backgroundparser/backgroundparser.cpp:309
 #, kde-format
 msgid "Parsing: %1"
 msgstr "Təhlil olunur: %1"
 
-#: language/backgroundparser/backgroundparser.cpp:614
+#: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
@@ -1643,7 +1643,7 @@ msgstr "<i>%1</i> qovluğu yaradəla bilmir."
 msgid "Project Import: %1"
 msgstr "Layihəni idxal edin: %1"
 
-#: project/importprojectjob.cpp:87
+#: project/importprojectjob.cpp:89
 #, kde-format
 msgid "Project import canceled."
 msgstr "Layihənin idxalı ləğv edildi."
@@ -2110,25 +2110,25 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Redaktorda icra sətrinə keçir."
 
-#: shell/debugcontroller.cpp:433
+#: shell/debugcontroller.cpp:432
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Xəta Sazlama"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Başlatmanın xətalarını düzəldin"
 
-#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Cari başlatmanın xətalarını düzəldin"
 
-#: shell/debugcontroller.cpp:486 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2138,19 +2138,19 @@ msgstr ""
 "Sazlayıcı daxilindəki cari aktiv başlatma tənzimləməsində göstərilmiş "
 "hədəfin və ya proramın kodunu icra edir."
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:488
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Davam edin"
 
-#: shell/debugcontroller.cpp:491
+#: shell/debugcontroller.cpp:490
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Tətbiqin kodunun icra edilməsini davam etdirin"
 
-#: shell/debugcontroller.cpp:492
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5010,7 +5010,7 @@ msgid_plural "Reformatting %1 files"
 msgstr[0] "Bir fayl yenidən formatlanır"
 msgstr[1] "%1 fayl yenidən formatlanır"
 
-#: shell/sourceformatterselectionedit.cpp:1087
+#: shell/sourceformatterselectionedit.cpp:1088
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -5021,13 +5021,13 @@ msgstr ""
 "%2\n"
 "Onu silmək istədiyinizə əminsiniz?"
 
-#: shell/sourceformatterselectionedit.cpp:1089
+#: shell/sourceformatterselectionedit.cpp:1090
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "Üslubun silinməsi"
 
-#: shell/sourceformatterselectionedit.cpp:1149
+#: shell/sourceformatterselectionedit.cpp:1150
 #, kde-format
 msgid "New %1"
 msgstr "Yeni %1"

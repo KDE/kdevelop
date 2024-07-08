@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2022-04-17 20:46+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: customscript_plugin.cpp:86
+#: customscript_plugin.cpp:87
 #, kde-format
 msgid ""
 "<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
@@ -33,7 +33,7 @@ msgstr ""
 "je tá, že nastavenia formátovania sa dajú jednoducho zdieľať všetkými členmi "
 "tímu, nezávisle od ich preferovaného IDE."
 
-#: customscript_plugin.cpp:98
+#: customscript_plugin.cpp:99
 #, kde-format
 msgctxt "@info formatter usage hint"
 msgid ""
@@ -43,27 +43,27 @@ msgstr ""
 "Poznámka: každý vlastný štýl skriptu vyžaduje nainštalovaný určitý program. "
 "Inak sa kód nebude formátovať."
 
-#: customscript_plugin.cpp:226
+#: customscript_plugin.cpp:227
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr "Gnu odsadenie: GNU"
 
-#: customscript_plugin.cpp:237
+#: customscript_plugin.cpp:238
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr "Gnu odsadenie: Kernighan & Ritchie"
 
-#: customscript_plugin.cpp:248
+#: customscript_plugin.cpp:249
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr "Gnu odsadenie: Pôvodný štýl Berkeley"
 
-#: customscript_plugin.cpp:259
+#: customscript_plugin.cpp:260
 #, kde-format
 msgid "Clang Format"
 msgstr "Formát Clang"
 
-#: customscript_plugin.cpp:262
+#: customscript_plugin.cpp:263
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -76,7 +76,7 @@ msgstr ""
 "prostredníctvom konfiguračného súboru <b>.clang-format</b>, ktorý sa "
 "zvyčajne nachádza v koreňovom adresári projektu."
 
-#: customscript_plugin.cpp:278
+#: customscript_plugin.cpp:279
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -107,13 +107,13 @@ msgstr ""
 "podadresári <b>subdir</b> pomocou nástroja <b>uncrustify</b> s konfiguračným "
 "súborom <b>uncrustify.config</b>."
 
-#: customscript_plugin.cpp:538
+#: customscript_plugin.cpp:539
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Príkaz:"
 
-#: customscript_plugin.cpp:547
+#: customscript_plugin.cpp:548
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -127,18 +127,18 @@ msgstr ""
 "výsledok sa načíta zo štandardného výstupu.<br /><br />Ak pridáte <b>"
 "$TMPFILE</b> do príkazu, potom <br />sa na prenos kódu použije dočasný súbor."
 
-#: customscript_plugin.cpp:559
+#: customscript_plugin.cpp:560
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Viac premenných"
 
-#: customscript_plugin.cpp:569
+#: customscript_plugin.cpp:570
 #, kde-format
 msgid "Style: %1"
 msgstr "Štýl: %1"
 
-#: customscript_plugin.cpp:582
+#: customscript_plugin.cpp:583
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -157,7 +157,7 @@ msgstr ""
 "<br /> iba v $TMPFILE.<br /><br /><b>${PROJECT_NAME}</b> sa nahradí cestou "
 "<br />aktuálne otvoreného súboru projektu s daným názvom."
 
-#: customscript_plugin.cpp:594
+#: customscript_plugin.cpp:595
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

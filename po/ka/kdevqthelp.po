@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-24 01:39+0000\n"
-"PO-Revision-Date: 2023-06-28 05:40+0200\n"
+"PO-Revision-Date: 2024-07-07 07:05+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -208,10 +208,9 @@ msgid "Could not find any documentation for '%1'"
 msgstr "%1-ის დოკუმენტაციის პოვნა შეუძლებელია"
 
 #: qthelpdocumentation.cpp:307
-#, fuzzy, kde-format
-#| msgid "QtHelp Home Page"
+#, kde-format
 msgid "%1 Home Page"
-msgstr "QtHelp-ის საწყისი გვერდი"
+msgstr "%1-ის საწყისი გვერდი"
 
 #: qthelpqtdoc.cpp:148
 #, kde-format

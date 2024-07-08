@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-06 01:47+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2023-07-24 22:15+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -877,17 +877,17 @@ msgstr "KDevelop 세션"
 msgid "Arbitrary String Which Says Something"
 msgstr "무언가를 뜻하는 임의의 문자열"
 
-#: plasma/runner/kdevelopsessions.cpp:26 plasma/runner/kdevelopsessions.cpp:30
+#: plasma/runner/kdevelopsessions.cpp:27 plasma/runner/kdevelopsessions.cpp:31
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr ":q:와(과) 일치하는 KDevelop 세션을 찾습니다."
 
-#: plasma/runner/kdevelopsessions.cpp:34
+#: plasma/runner/kdevelopsessions.cpp:35
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "계정에 있는 모든 KDevelop 편집기 세션을 표시합니다."
 
-#: plasma/runner/kdevelopsessions.cpp:128
+#: plasma/runner/kdevelopsessions.cpp:129
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "KDevelop 세션 열기"

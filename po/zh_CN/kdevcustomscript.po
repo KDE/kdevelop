@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevcustomscript.pot\n"
 "X-Crowdin-File-ID: 6450\n"
 
-#: customscript_plugin.cpp:86
+#: customscript_plugin.cpp:87
 #, kde-format
 msgid ""
 "<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
@@ -32,7 +32,7 @@ msgstr ""
 "使用。<br />命令行格式化工具的优势在于格式化配置可以方便地与其他团队成员共"
 "享，而不受限制于他们使用的 IDE。"
 
-#: customscript_plugin.cpp:98
+#: customscript_plugin.cpp:99
 #, kde-format
 msgctxt "@info formatter usage hint"
 msgid ""
@@ -42,27 +42,27 @@ msgstr ""
 "注意：每个自定义脚本样式都需要安装特定的工具可执行文件。否则，代码将不会被格"
 "式化。"
 
-#: customscript_plugin.cpp:226
+#: customscript_plugin.cpp:227
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr "Gnu 缩进：GNU 风格"
 
-#: customscript_plugin.cpp:237
+#: customscript_plugin.cpp:238
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr "Gnu 缩进：Kernighan 与 Ritchie 风格"
 
-#: customscript_plugin.cpp:248
+#: customscript_plugin.cpp:249
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr "Gnu 缩进：原伯克利风格"
 
-#: customscript_plugin.cpp:259
+#: customscript_plugin.cpp:260
 #, kde-format
 msgid "Clang Format"
 msgstr "Clang 格式化"
 
-#: customscript_plugin.cpp:262
+#: customscript_plugin.cpp:263
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -74,7 +74,7 @@ msgstr ""
 "它支持多种的格式化样式选项，通过 <b>.clang-format</b> 配置文件控制，通常位于"
 "项目的根目录。"
 
-#: customscript_plugin.cpp:278
+#: customscript_plugin.cpp:279
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -102,13 +102,13 @@ msgstr ""
 "格式化子文目录 <b>subdir</b> 中的所有文件，使用 <b>uncrustify</b> 工具和配置"
 "文件 <b>uncrustify.config</b>。"
 
-#: customscript_plugin.cpp:538
+#: customscript_plugin.cpp:539
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "命令："
 
-#: customscript_plugin.cpp:547
+#: customscript_plugin.cpp:548
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -121,18 +121,18 @@ msgstr ""
 "令，格式化的结果从标准输出获取。<br /><br />如果您在命令中添加了 <b>"
 "$TMPFILE</b>，那么临时文件将用于传递代码。"
 
-#: customscript_plugin.cpp:559
+#: customscript_plugin.cpp:560
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "更多变量"
 
-#: customscript_plugin.cpp:569
+#: customscript_plugin.cpp:570
 #, kde-format
 msgid "Style: %1"
 msgstr "样式：%1"
 
-#: customscript_plugin.cpp:582
+#: customscript_plugin.cpp:583
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -150,7 +150,7 @@ msgstr ""
 "只有 <br />$TMPFILE.<br />可以修改。<br /><b>${&lt;project name&gt;}</b> 将会"
 "被 <br /> 这一当前打开的名叫&lt;project name&gt;的项目之路径替代."
 
-#: customscript_plugin.cpp:594
+#: customscript_plugin.cpp:595
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

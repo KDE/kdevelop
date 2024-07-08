@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:44+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2024-04-17 07:00+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -627,12 +627,12 @@ msgstr "Preimenuj"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr "Preimenuj datoteko iz \"%1\" v \"%2\"."
 
-#: language/backgroundparser/backgroundparser.cpp:308
+#: language/backgroundparser/backgroundparser.cpp:309
 #, kde-format
 msgid "Parsing: %1"
 msgstr "Razčlenjevanje: %1"
 
-#: language/backgroundparser/backgroundparser.cpp:614
+#: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
@@ -1660,7 +1660,7 @@ msgstr "Ni mogoče ustvariti mape <i>%1</i>."
 msgid "Project Import: %1"
 msgstr "Uvoz projekta: %1"
 
-#: project/importprojectjob.cpp:87
+#: project/importprojectjob.cpp:89
 #, kde-format
 msgid "Project import canceled."
 msgstr "Uvoz projekta je bil preklican."
@@ -2127,25 +2127,25 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Pojdi na izvajano vrstico v urejevalniku."
 
-#: shell/debugcontroller.cpp:433
+#: shell/debugcontroller.cpp:432
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Razhrošči"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Zagon razhroščevanja"
 
-#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Razhrošči trenutni zagon"
 
-#: shell/debugcontroller.cpp:486 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2155,19 +2155,19 @@ msgstr ""
 "Izvede cilj ali program, ki je določen v trenutno dejavni nastavitvi zagona, "
 "znotraj razhroščevalnika."
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:488
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "Nadaljuj"
 
-#: shell/debugcontroller.cpp:491
+#: shell/debugcontroller.cpp:490
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Nadaljuje izvajanje programa"
 
-#: shell/debugcontroller.cpp:492
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5020,7 +5020,7 @@ msgstr[1] "Preoblikovanje %1 datoteke"
 msgstr[2] "Preoblikovanje %1 datotek"
 msgstr[3] "Preoblikovanje %1 datotek"
 
-#: shell/sourceformatterselectionedit.cpp:1087
+#: shell/sourceformatterselectionedit.cpp:1088
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -5031,13 +5031,13 @@ msgstr ""
 "%2.\n"
 "Ali ste prepričani, da ga želite izbrisati?"
 
-#: shell/sourceformatterselectionedit.cpp:1089
+#: shell/sourceformatterselectionedit.cpp:1090
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "Brisanje sloga"
 
-#: shell/sourceformatterselectionedit.cpp:1149
+#: shell/sourceformatterselectionedit.cpp:1150
 #, kde-format
 msgid "New %1"
 msgstr "Nov %1"

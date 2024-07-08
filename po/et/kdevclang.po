@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-19 01:40+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2020-01-16 20:31+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -87,7 +87,7 @@ msgctxt "@option:check"
 msgid "Forward declare assistant"
 msgstr "Eeldeklaratsiooni abiline"
 
-#: clangsupport.cpp:171
+#: clangsupport.cpp:172
 #, kde-format
 msgid ""
 "The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
@@ -96,14 +96,14 @@ msgid ""
 "See also: https://bugs.kde.org/show_bug.cgi?id=393779"
 msgstr ""
 
-#: clangsupport.cpp:278
+#: clangsupport.cpp:279
 #, fuzzy, kde-format
 #| msgid "Rename Declaration"
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "Muuda deklaratsiooni nime"
 
-#: clangsupport.cpp:285
+#: clangsupport.cpp:286
 #, fuzzy, kde-format
 #| msgid "Move into Source"
 msgctxt "@action"
@@ -372,7 +372,7 @@ msgstr ""
 msgid "Forward declare as 'struct'"
 msgstr ""
 
-#: util/clangutils.cpp:189
+#: util/clangutils.cpp:191
 #, kde-format
 msgid "<parse error>"
 msgstr ""

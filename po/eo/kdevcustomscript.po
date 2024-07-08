@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2023-04-17 06:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 
-#: customscript_plugin.cpp:86
+#: customscript_plugin.cpp:87
 #, kde-format
 msgid ""
 "<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
@@ -35,7 +35,7 @@ msgstr ""
 "formatiloj estas, ke formataj agordoj povas esti facile kundividataj de ĉiuj "
 "grupanoj, sendepende de ilia preferata IDE."
 
-#: customscript_plugin.cpp:98
+#: customscript_plugin.cpp:99
 #, kde-format
 msgctxt "@info formatter usage hint"
 msgid ""
@@ -45,27 +45,27 @@ msgstr ""
 "Noto: ĉiu propra skriptstilo postulas certan ilon plenumeblan por esti "
 "instalita. Alie, kodo ne estos formatita."
 
-#: customscript_plugin.cpp:226
+#: customscript_plugin.cpp:227
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr "Gnu Indent: GNU"
 
-#: customscript_plugin.cpp:237
+#: customscript_plugin.cpp:238
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr "Gnu Indent: Kernighan & Ritchie"
 
-#: customscript_plugin.cpp:248
+#: customscript_plugin.cpp:249
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr "Gnu Indent: Origina Berkeley-deŝovstilo"
 
-#: customscript_plugin.cpp:259
+#: customscript_plugin.cpp:260
 #, kde-format
 msgid "Clang Format"
 msgstr "Clang-Formato"
 
-#: customscript_plugin.cpp:262
+#: customscript_plugin.cpp:263
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -77,7 +77,7 @@ msgstr ""
 "projekto LLVM. Ĝi subtenas diversajn formatajn stilopciojn per <b>.clang-"
 "format</b> agorda dosiero, kutime situanta en la projekta radika dosierujo."
 
-#: customscript_plugin.cpp:278
+#: customscript_plugin.cpp:279
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -108,13 +108,13 @@ msgstr ""
 "<b>subdir</b> b> uzante la ilon <b>uncrustify</b> kun la agorda dosiero "
 "<b>uncrustify.config</b>."
 
-#: customscript_plugin.cpp:538
+#: customscript_plugin.cpp:539
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Komando:"
 
-#: customscript_plugin.cpp:547
+#: customscript_plugin.cpp:548
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -129,18 +129,18 @@ msgstr ""
 "$TMPFILE</b> en la komandon, tiam <br />provizora dosiero estas uzata por "
 "transdoni la kodon."
 
-#: customscript_plugin.cpp:559
+#: customscript_plugin.cpp:560
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Pli da Variaĵoj"
 
-#: customscript_plugin.cpp:569
+#: customscript_plugin.cpp:570
 #, kde-format
 msgid "Style: %1"
 msgstr "Stilo: %1"
 
-#: customscript_plugin.cpp:582
+#: customscript_plugin.cpp:583
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -161,7 +161,7 @@ msgstr ""
 "name&gt}</b> estos anstataŭigita per la vojo de <br />aktuale malfermita "
 "projekto kies nomo estas &lt;projektnomo&gt;."
 
-#: customscript_plugin.cpp:594
+#: customscript_plugin.cpp:595
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

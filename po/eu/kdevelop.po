@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-06 01:47+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2020-07-07 15:13+0200\n"
 "Last-Translator: Gontzal Pujana <gontzalpujana@protonmail.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
@@ -902,17 +902,17 @@ msgstr "KDevelop saioak"
 msgid "Arbitrary String Which Says Something"
 msgstr "Zerbait esaten duen ausazko katea"
 
-#: plasma/runner/kdevelopsessions.cpp:26 plasma/runner/kdevelopsessions.cpp:30
+#: plasma/runner/kdevelopsessions.cpp:27 plasma/runner/kdevelopsessions.cpp:31
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr ":q:-(r)ekin bat datozen KDevelop saioak bilatzen ditu."
 
-#: plasma/runner/kdevelopsessions.cpp:34
+#: plasma/runner/kdevelopsessions.cpp:35
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Zure kontuko KDevelop editore saio guztiak zerrendatzen ditu."
 
-#: plasma/runner/kdevelopsessions.cpp:128
+#: plasma/runner/kdevelopsessions.cpp:129
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Ireki KDevelop saioa"

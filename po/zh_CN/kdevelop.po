@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-06 01:47+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2024-04-22 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -872,17 +872,17 @@ msgstr "KDevelop 会话"
 msgid "Arbitrary String Which Says Something"
 msgstr "任何有意义的字符串"
 
-#: plasma/runner/kdevelopsessions.cpp:26 plasma/runner/kdevelopsessions.cpp:30
+#: plasma/runner/kdevelopsessions.cpp:27 plasma/runner/kdevelopsessions.cpp:31
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "查找匹配 :q: 的 KDevelop 会话。"
 
-#: plasma/runner/kdevelopsessions.cpp:34
+#: plasma/runner/kdevelopsessions.cpp:35
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "显示您账户中所有的 KDevelop 编辑会话。"
 
-#: plasma/runner/kdevelopsessions.cpp:128
+#: plasma/runner/kdevelopsessions.cpp:129
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "打开 KDevelop 会话"

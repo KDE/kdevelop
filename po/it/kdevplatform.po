@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:44+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2024-04-19 16:43+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -633,12 +633,12 @@ msgstr "Rinomina"
 msgid "Rename file from \"%1\" to \"%2\"."
 msgstr "Rinomina file «%1» in «%2»."
 
-#: language/backgroundparser/backgroundparser.cpp:308
+#: language/backgroundparser/backgroundparser.cpp:309
 #, kde-format
 msgid "Parsing: %1"
 msgstr "Analisi: %1"
 
-#: language/backgroundparser/backgroundparser.cpp:614
+#: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
@@ -1657,7 +1657,7 @@ msgstr "Impossibile creare la cartella <i>%1</i>."
 msgid "Project Import: %1"
 msgstr "Importazione progetto: %1"
 
-#: project/importprojectjob.cpp:87
+#: project/importprojectjob.cpp:89
 #, kde-format
 msgid "Project import canceled."
 msgstr "Importazione progetto cancellata."
@@ -2125,25 +2125,25 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Passa alla riga in esecuzione nell'editor."
 
-#: shell/debugcontroller.cpp:433
+#: shell/debugcontroller.cpp:432
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Debug"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Debug del lancio"
 
-#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Esegue il debug del lancio attuale"
 
-#: shell/debugcontroller.cpp:486 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2153,19 +2153,19 @@ msgstr ""
 "Esegue l'obiettivo o il programma specificato nella configurazione di lancio "
 "attualmente attiva all'interno di un debugger."
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:488
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Continua"
 
-#: shell/debugcontroller.cpp:491
+#: shell/debugcontroller.cpp:490
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Continua l'esecuzione dell'applicazione"
 
-#: shell/debugcontroller.cpp:492
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5044,7 +5044,7 @@ msgid_plural "Reformatting %1 files"
 msgstr[0] "Riformattazione di un file"
 msgstr[1] "Riformattazione di %1 file"
 
-#: shell/sourceformatterselectionedit.cpp:1087
+#: shell/sourceformatterselectionedit.cpp:1088
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -5055,13 +5055,13 @@ msgstr ""
 "%2.\n"
 "Sei sicuro di volerlo eliminare?"
 
-#: shell/sourceformatterselectionedit.cpp:1089
+#: shell/sourceformatterselectionedit.cpp:1090
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "Eliminazione stili"
 
-#: shell/sourceformatterselectionedit.cpp:1149
+#: shell/sourceformatterselectionedit.cpp:1150
 #, kde-format
 msgid "New %1"
 msgstr "Nuovo %1"

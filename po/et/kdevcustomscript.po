@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2020-05-08 10:11+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 19.12.3\n"
 
-#: customscript_plugin.cpp:86
+#: customscript_plugin.cpp:87
 #, kde-format
 msgid ""
 "<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
@@ -34,7 +34,7 @@ msgstr ""
 "vormindamisseadistusi saab hõlpsalt kõigi meeskonna liikmete vahel jagada "
 "sõltumata sellest, milline on nende eelistatud IDE."
 
-#: customscript_plugin.cpp:98
+#: customscript_plugin.cpp:99
 #, kde-format
 msgctxt "@info formatter usage hint"
 msgid ""
@@ -42,27 +42,27 @@ msgid ""
 "installed. Otherwise, code will not be formatted."
 msgstr ""
 
-#: customscript_plugin.cpp:226
+#: customscript_plugin.cpp:227
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr "Gnu treppimine: GNU"
 
-#: customscript_plugin.cpp:237
+#: customscript_plugin.cpp:238
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr "Gnu treppimine: Kernighan & Ritchie"
 
-#: customscript_plugin.cpp:248
+#: customscript_plugin.cpp:249
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr "Gnu treppimine: Algne Berkeley treppimisstiil"
 
-#: customscript_plugin.cpp:259
+#: customscript_plugin.cpp:260
 #, kde-format
 msgid "Clang Format"
 msgstr "Clangi vormindus"
 
-#: customscript_plugin.cpp:262
+#: customscript_plugin.cpp:263
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -75,7 +75,7 @@ msgstr ""
 "tavaliselt paikneb projekti juurkataloogis, toetab see rohkeid "
 "vormindamisstiili valikuid."
 
-#: customscript_plugin.cpp:278
+#: customscript_plugin.cpp:279
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -106,14 +106,14 @@ msgstr ""
 "b>, kasutades seadistusfaili <b>uncrustify.config</b> peal tööriista "
 "<b>uncrustify</b>."
 
-#: customscript_plugin.cpp:538
+#: customscript_plugin.cpp:539
 #, fuzzy, kde-format
 #| msgid "Command:"
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Käsk:"
 
-#: customscript_plugin.cpp:547
+#: customscript_plugin.cpp:548
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -128,19 +128,19 @@ msgstr ""
 "käsule <b>$TMPFILE</b>, siis<br />kasutatakse koodi edastamisel ajutist "
 "faili."
 
-#: customscript_plugin.cpp:559
+#: customscript_plugin.cpp:560
 #, fuzzy, kde-format
 #| msgid "More Variables"
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Rohkem muutujaid"
 
-#: customscript_plugin.cpp:569
+#: customscript_plugin.cpp:570
 #, kde-format
 msgid "Style: %1"
 msgstr "Stiil: %1"
 
-#: customscript_plugin.cpp:582
+#: customscript_plugin.cpp:583
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -168,7 +168,7 @@ msgstr ""
 "lubatud<br />ainult ajutises failis $TMPFILE.<br /><br /><b>${PROJECT_NAME}</"
 "b>asendatakse parajasti avatud<br /> sobiva nimega projekti asukohaga."
 
-#: customscript_plugin.cpp:594
+#: customscript_plugin.cpp:595
 #, fuzzy, kde-format
 #| msgid "Variable Replacements"
 msgctxt "@title:window"

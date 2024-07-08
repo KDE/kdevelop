@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -49,87 +49,87 @@ msgstr "Reverti nescenigitajn redaktojn"
 msgid "Committing failed. See Version Control tool view."
 msgstr "Farado malsukcesis. Vidu vido de ilo de Versiokontrolo."
 
-#: diffviewsctrl.cpp:51
+#: diffviewsctrl.cpp:52
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "Scenigu elektitajn liniojn aŭ pecon"
 
-#: diffviewsctrl.cpp:53
+#: diffviewsctrl.cpp:54
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "Malscenigu elektitajn liniojn aŭ pecon"
 
-#: diffviewsctrl.cpp:55
+#: diffviewsctrl.cpp:56
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "Reverti elektitajn liniojn aŭ pecon"
 
-#: diffviewsctrl.cpp:57
+#: diffviewsctrl.cpp:58
 #, kde-format
 msgid "Go to line in source"
 msgstr "Iru al linio en fonto"
 
-#: diffviewsctrl.cpp:109
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Malscenigu elektitajn liniojn"
 
-#: diffviewsctrl.cpp:110
+#: diffviewsctrl.cpp:111
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Scenigu elektitajn liniojn"
 
-#: diffviewsctrl.cpp:111
+#: diffviewsctrl.cpp:112
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Reverti elektitajn liniojn"
 
-#: diffviewsctrl.cpp:113
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Malscenigi elektitan pecon"
 
-#: diffviewsctrl.cpp:114
+#: diffviewsctrl.cpp:115
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Scenejo elektita peco"
 
-#: diffviewsctrl.cpp:115
+#: diffviewsctrl.cpp:116
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Reverti elektitan pecon"
 
-#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
+#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
+#: diffviewsctrl.cpp:127 diffviewsctrl.cpp:133
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:178
+#: diffviewsctrl.cpp:179
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (scenigita)"
 
-#: diffviewsctrl.cpp:180
+#: diffviewsctrl.cpp:181
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Enscenigita (%1)"
 
-#: diffviewsctrl.cpp:182
+#: diffviewsctrl.cpp:183
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Nescenigita (%1)"
 
-#: diffviewsctrl.cpp:184
+#: diffviewsctrl.cpp:185
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (senscenigita)"
 
-#: diffviewsctrl.cpp:339
+#: diffviewsctrl.cpp:340
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -138,7 +138,7 @@ msgstr ""
 "La elektitaj linioj estos revertitaj kaj la ŝanĝoj perditaj. Ĉi tiu operacio "
 "ne povas esti malfarita. Ĉu daŭrigi?"
 
-#: diffviewsctrl.cpp:341
+#: diffviewsctrl.cpp:342
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"

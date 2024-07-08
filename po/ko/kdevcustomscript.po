@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2021-11-14 19:18+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Lokalize 21.08.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: customscript_plugin.cpp:86
+#: customscript_plugin.cpp:87
 #, kde-format
 msgid ""
 "<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
@@ -30,7 +30,7 @@ msgstr ""
 "다.<br />명령행 서식 도구의 장점은 모든 팀 구성원이 서로가 사용하는 IDE와는 "
 "독립적으로 설정을 공유할 수 있습니다."
 
-#: customscript_plugin.cpp:98
+#: customscript_plugin.cpp:99
 #, kde-format
 msgctxt "@info formatter usage hint"
 msgid ""
@@ -40,27 +40,27 @@ msgstr ""
 "메모: 각각 사용자 정의 스크립트 스타일별로 실행 가능한 파일이 설치되어 있어"
 "야 합니다. 그렇지 않으면 코드 형식 지정을 사용할 수 없습니다."
 
-#: customscript_plugin.cpp:226
+#: customscript_plugin.cpp:227
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr "Gnu Indent: GNU"
 
-#: customscript_plugin.cpp:237
+#: customscript_plugin.cpp:238
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr "Gnu Indent: K&R(커니핸 앤 리치)"
 
-#: customscript_plugin.cpp:248
+#: customscript_plugin.cpp:249
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr "Gnu Indent: 원본 버클리 들여쓰기 스타일"
 
-#: customscript_plugin.cpp:259
+#: customscript_plugin.cpp:260
 #, kde-format
 msgid "Clang Format"
 msgstr "Clang Format"
 
-#: customscript_plugin.cpp:262
+#: customscript_plugin.cpp:263
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -72,7 +72,7 @@ msgstr ""
 "식 재지정 도구입니다. <b>.clang-format</b> 설정 파일에 다양한 소스 코드 스타"
 "일 옵션을 지정할 수 있습니다. 대개 프로젝트 루트 디렉터리에 있습니다."
 
-#: customscript_plugin.cpp:278
+#: customscript_plugin.cpp:279
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -102,13 +102,13 @@ msgstr ""
 "<b>uncrustify</b> 도구와 <b>uncrustify.config</b> 설정 파일을 사용하여 형식"
 "을 지정합니다."
 
-#: customscript_plugin.cpp:538
+#: customscript_plugin.cpp:539
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "명령:"
 
-#: customscript_plugin.cpp:547
+#: customscript_plugin.cpp:548
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -122,18 +122,18 @@ msgstr ""
 "에서 읽어 옵니다.<br /><br />명령에 <b>$TMPFILE</b> 인자를 추가했다면<br />코"
 "드 전송에 임시 파일을 사용합니다."
 
-#: customscript_plugin.cpp:559
+#: customscript_plugin.cpp:560
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "더 많은 변수"
 
-#: customscript_plugin.cpp:569
+#: customscript_plugin.cpp:570
 #, kde-format
 msgid "Style: %1"
 msgstr "스타일: %1"
 
-#: customscript_plugin.cpp:582
+#: customscript_plugin.cpp:583
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -152,7 +152,7 @@ msgstr ""
 "><br /><b>${&lt;project_name&gt;}</b>은 현재 열려 있는 프로젝트 중<br />이름"
 "이 &lt;project_name&gt;인 프로젝트 경로로 대체됩니다."
 
-#: customscript_plugin.cpp:594
+#: customscript_plugin.cpp:595
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

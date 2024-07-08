@@ -50,10 +50,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, appNameLabel)
 #: welcomepageview.ui:55
-#, fuzzy, kde-format
-#| msgid "KDevelop.org"
+#, kde-format
 msgid "KDevelop"
-msgstr "KDevelop.org"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
 #: welcomepageview.ui:82
@@ -129,89 +128,3 @@ msgstr ""
 "<p>您可以打开现有的工程或通过上面的按钮创建一个新工程来开始工作。</p>\n"
 "<p>如果您需要帮助, 请查阅<a href=\"https://userbase.kde.org/KDevelop\">用户手"
 "册</a>。</p>"
-
-#~ msgid "Back to code"
-#~ msgstr "返回代码"
-
-#~ msgid "Configure a new Launcher"
-#~ msgstr "配置新启动器"
-
-#~ msgid "Attach to Process"
-#~ msgstr "附加到进程"
-
-#~ msgid "Debug your program"
-#~ msgstr "调试您的程序"
-
-#~ msgid "Debug Area"
-#~ msgstr "调试区域"
-
-#~ msgid ""
-#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
-#~ "program works on execution. On the <em>Run</em> menu you will find all "
-#~ "the possible options."
-#~ msgstr ""
-#~ "在 <em>调试</em> 区域中，您将能够查看和分析程序在执行过程中的工作情况。在 "
-#~ "<em>运行</em> 菜单中，您可以找到所有可能的选项。"
-
-#~ msgid ""
-#~ "As you can see, here you can just execute your application or debug it if "
-#~ "you need further runtime information. You can select what is going to be "
-#~ "run by configuring the launches and selecting the one you want to use in "
-#~ "the <em>Current Launch Configuration</em> sub-menu."
-#~ msgstr ""
-#~ "如您所见，在这里您可以只执行应用程序，或者如果您需要进一步的运行时信息，可"
-#~ "以调试它。通过配置启动流程并选择要在 <em>当前启动配置</em> 子菜单中使用的"
-#~ "选项, 可以选择要运行的内容。"
-
-#~ msgid "Review a Patch"
-#~ msgstr "审核补丁"
-
-#~ msgid "Review Area"
-#~ msgstr "审核区域"
-
-#~ msgid ""
-#~ "On the <em>Review</em> area you will be able to find the tools you need "
-#~ "to review changes in your projects, either the ones you made or some "
-#~ "external patch."
-#~ msgstr ""
-#~ "在 <em>审核</em> 区域，您可以找到用于审核工程更改所需的工具，包括您自己的"
-#~ "和外部的补丁。"
-
-#~ msgid ""
-#~ "Also it will help you send the changes to the community you're "
-#~ "contributing to, either by committing the changes, sending them by e-mail "
-#~ "or putting them on a ReviewBoard service."
-#~ msgstr ""
-#~ "此外，它还将帮助您将更改发送到您所贡献的社区，或者通过提交更改、通过电子邮"
-#~ "件发送它们或将它们放在 ReviewBoard 服务上。"
-
-#~ msgid "%1: %2"
-#~ msgstr "%1：(%2)"
-
-#~ msgid "Go!"
-#~ msgstr "开始！"
-
-#~ msgid "Documentation for KDevelop users"
-#~ msgstr "KDevelop 用户文档"
-
-#~ msgid "Keep up with KDevelop's development"
-#~ msgstr "紧跟 KDevelop 的发展！"
-
-#~ msgid "Help us improve KDevelop"
-#~ msgstr "帮助我们改善 KDevelop！"
-
-#~ msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-#~ msgid "%1 (new)"
-#~ msgstr "%1 (新)"
-
-#~ msgid "Fetching feeds..."
-#~ msgstr "正在抓取订阅..."
-
-#~ msgid "No recent news"
-#~ msgstr "没有新闻"
-
-#~ msgid "Branches"
-#~ msgstr "分支"
-
-#~ msgid "Projects"
-#~ msgstr "工程"

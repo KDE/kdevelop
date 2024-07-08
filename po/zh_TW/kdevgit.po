@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2024-05-09 06:30+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -51,94 +51,94 @@ msgstr "回復未暫存的編輯"
 msgid "Committing failed. See Version Control tool view."
 msgstr "提交失敗。請見版本控制工具檢視。"
 
-#: diffviewsctrl.cpp:51
+#: diffviewsctrl.cpp:52
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "暫存已選的行或區塊"
 
-#: diffviewsctrl.cpp:53
+#: diffviewsctrl.cpp:54
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "取消暫存已選的行或區塊"
 
-#: diffviewsctrl.cpp:55
+#: diffviewsctrl.cpp:56
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "回復已選的行或區塊"
 
-#: diffviewsctrl.cpp:57
+#: diffviewsctrl.cpp:58
 #, kde-format
 msgid "Go to line in source"
 msgstr "移動到原始碼中的行"
 
-#: diffviewsctrl.cpp:109
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "取消暫存已選的行"
 
-#: diffviewsctrl.cpp:110
+#: diffviewsctrl.cpp:111
 #, kde-format
 msgid "Stage selected lines"
 msgstr "暫存已選的行"
 
-#: diffviewsctrl.cpp:111
+#: diffviewsctrl.cpp:112
 #, kde-format
 msgid "Revert selected lines"
 msgstr "回復已選的行"
 
-#: diffviewsctrl.cpp:113
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "取消暫存已選區塊"
 
-#: diffviewsctrl.cpp:114
+#: diffviewsctrl.cpp:115
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "暫存已選區塊"
 
-#: diffviewsctrl.cpp:115
+#: diffviewsctrl.cpp:116
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "回復已選區塊"
 
-#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
+#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
+#: diffviewsctrl.cpp:127 diffviewsctrl.cpp:133
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:178
+#: diffviewsctrl.cpp:179
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1（已暫存）"
 
-#: diffviewsctrl.cpp:180
+#: diffviewsctrl.cpp:181
 #, kde-format
 msgid "Staged (%1)"
 msgstr "已暫存（%1）"
 
-#: diffviewsctrl.cpp:182
+#: diffviewsctrl.cpp:183
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "未暫存（%1）"
 
-#: diffviewsctrl.cpp:184
+#: diffviewsctrl.cpp:185
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1（未暫存）"
 
-#: diffviewsctrl.cpp:339
+#: diffviewsctrl.cpp:340
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
 "cannot be undone. Continue?"
 msgstr "所選的行將被回復，並且將會捨棄變更。這個操作無法復原。要繼續嗎？"
 
-#: diffviewsctrl.cpp:341
+#: diffviewsctrl.cpp:342
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
