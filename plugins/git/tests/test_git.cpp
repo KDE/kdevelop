@@ -18,6 +18,7 @@
 #include <vcs/vcsannotation.h>
 
 #include <QDebug>
+#include <QRegularExpression>
 #include <QTest>
 #include <QUrl>
 
@@ -454,11 +455,10 @@ void GitInitTest::revHistory()
 
     QVERIFY(!commits[0].parents().isEmpty()); //initial commit is on the top
 
-    QVERIFY(commits[1].commit().contains(QRegExp("^\\w{,40}$")));
-
-    QVERIFY(commits[0].commit().contains(QRegExp("^\\w{,40}$")));
-
-    QVERIFY(commits[0].parents()[0].contains(QRegExp("^\\w{,40}$")));
+    static const QRegularExpression commitSha1HashRegex("^[[:alnum:]]{40}$");
+    QVERIFY(commits[1].commit().contains(commitSha1HashRegex));
+    QVERIFY(commits[0].commit().contains(commitSha1HashRegex));
+    QVERIFY(commits[0].parents()[0].contains(commitSha1HashRegex));
 }
 
 void GitInitTest::testAnnotation()
