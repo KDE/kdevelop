@@ -85,12 +85,16 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
     }
 
     const bool useKdeFileDialog = qEnvironmentVariableIsSet("KDE_FULL_SESSION");
+    // Since b736adda01a19d80b2f4fb5553c1288eaca2bec5 (Make open project dialog work properly again)
+    // filters, allEntry, filterFormat only used with "KdeFileDialog"
     QStringList filters, allEntry;
     QString filterFormat = useKdeFileDialog
                          ? QStringLiteral("%1|%2 (%1)")
                          : QStringLiteral("%2 (%1)");
-    allEntry << QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension();
-    filters << filterFormat.arg(QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension(), ShellExtension::getInstance()->projectFileDescription());
+    if (useKdeFileDialog) {
+        allEntry << QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension();
+        filters << filterFormat.arg(QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension(), ShellExtension::getInstance()->projectFileDescription());
+    }
     const QVector<KPluginMetaData> plugins = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
     for (const KPluginMetaData& info : plugins) {
         m_projectPlugins.insert(info.name(), info);
@@ -102,11 +106,14 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
             m_genericProjectPlugins << info.name();
             continue;
         }
-        QString desc = info.value(QStringLiteral("X-KDevelop-ProjectFilesFilterDescription"));
 
         m_projectFilters.insert(info.name(), filter);
-        allEntry += filter;
-        filters << filterFormat.arg(filter.join(QLatin1Char(' ')), desc);
+
+        if (useKdeFileDialog) {
+            const QString desc = info.value(QStringLiteral("X-KDevelop-ProjectFilesFilterDescription"));
+            allEntry += filter;
+            filters << filterFormat.arg(filter.join(QLatin1Char(' ')), desc);
+        }
     }
 
     if (useKdeFileDialog)
