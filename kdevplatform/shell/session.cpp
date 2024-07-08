@@ -17,6 +17,7 @@
 #include <serialization/itemrepository.h>
 
 #include <QDir>
+#include <QRegularExpression>
 #include <QUrl>
 
 namespace KDevelop
@@ -169,7 +170,9 @@ QString SessionPrivate::generatePrettyContents( const SessionInfo& info )
             projectNames << project->name();
         } else {
             QString projectName = url.fileName();
-            projectName.remove(QRegExp(QStringLiteral("\\.kdev4$"), Qt::CaseInsensitive));
+            static const QRegularExpression projectFileExtensionRegex(QStringLiteral("\\.kdev4$"),
+                                                                      QRegularExpression::CaseInsensitiveOption);
+            projectName.remove(projectFileExtensionRegex);
             projectNames << projectName;
         }
     }
