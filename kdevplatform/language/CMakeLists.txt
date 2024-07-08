@@ -129,7 +129,6 @@ set(KDevPlatformLanguage_LIB_SRCS
     codecompletion/codecompletionhelper.cpp
     codecompletion/normaldeclarationcompletionitem.cpp
 
-    codegen/applychangeswidget.cpp
     codegen/coderepresentation.cpp
     codegen/documentchangeset.cpp
     codegen/duchainchangeset.cpp
@@ -344,7 +343,6 @@ install(FILES
 )
 
 install(FILES
-    codegen/applychangeswidget.h
     codegen/astchangeset.h
     codegen/duchainchangeset.h
     codegen/documentchangeset.h
