@@ -425,11 +425,8 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
   QString fullOutput;
   executeCommand(source.createCommand(file, workingDirectory, makeParameters), workingDirectory, fullOutput);
+  fullOutput.remove(QLatin1String{"\\\n"});
 
-  {
-    QRegExp newLineRx(QStringLiteral("\\\\\\n"));
-    fullOutput.remove(newLineRx);
-  }
   ///@todo collect multiple outputs at the same time for performance-reasons
   QString firstLine = fullOutput;
   int lineEnd;
