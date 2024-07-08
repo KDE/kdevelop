@@ -24,6 +24,7 @@
 
 #include "svnclient.h"
 
+namespace {
 ///@todo The subversion library returns borked diffs, where the headers are at the end. This function
 ///           takes those headers, and moves them into the correct place to create a valid working diff.
 ///           Find the source of this problem.
@@ -66,6 +67,8 @@ QString repairDiff(const QString& diff) {
     qCDebug(PLUGIN_SVN) << "repaired diff:" << ret;
     return ret;
 }
+
+} // unnamed namespace
 
 //@TODO: Handle raw diffs by using SvnCatJob to fetch both files/revisions
 
