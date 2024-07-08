@@ -8,7 +8,7 @@
 #include "svndiffjob_p.h"
 
 #include <QMutexLocker>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QFileInfo>
 
@@ -46,14 +46,13 @@ QString repairDiff(const QString& diff) {
         }
     }
 
-    QRegExp spaceRegExp(QStringLiteral("\\s"));
-
+    static const QRegularExpression whitespaceRegex(QStringLiteral("\\s"));
     for(int a = 0; a < lines.size()-1; ++a) {
         const QLatin1String threeDashLineBegin("--- ");
         if (lines.at(a).startsWith(threeDashLineBegin)) {
             const auto tail = lines.at(a).mid(threeDashLineBegin.size());
-            if(tail.indexOf(spaceRegExp) != -1) {
-                QString file = tail.left(tail.indexOf(spaceRegExp));
+            if (const auto whitespaceIndex = tail.indexOf(whitespaceRegex); whitespaceIndex != -1) {
+                const auto file = tail.left(whitespaceIndex);
                 qCDebug(PLUGIN_SVN) << "checking for" << file;
                 const auto headerIt = headers.constFind(file);
                 if (headerIt != headers.constEnd()) {
