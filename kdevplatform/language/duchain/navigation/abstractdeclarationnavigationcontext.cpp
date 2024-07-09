@@ -29,6 +29,7 @@
 #include <duchain/types/structuretype.h>
 #include <duchain/classdeclaration.h>
 
+#include <QRegularExpression>
 #include <QTextDocument>
 
 namespace KDevelop {
@@ -349,7 +350,8 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
             if (!Qt::mightBeRichText(comment)) {
                 // still might contain extra html tags for line breaks (this is the case for doxygen-style comments sometimes)
                 // let's protect them from being removed completely
-                comment.replace(QRegExp(QStringLiteral("<br */>")), QStringLiteral("\n"));
+                static const QRegularExpression brTagRegex(QStringLiteral("<br */>"));
+                comment.replace(brTagRegex, QStringLiteral("\n"));
                 comment = comment.toHtmlEscaped();
                 comment.replace(QLatin1Char('\n'), QLatin1String("<br />")); //Replicate newlines in html
             }
@@ -717,7 +719,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType:
 
         if (exchanged) {
             QString typeSuffixString = exchanged->toString();
-            QRegExp suffixExp(QStringLiteral("\\&|\\*"));
+            static const QRegularExpression suffixExp(QStringLiteral("&|\\*"));
             int suffixPos = typeSuffixString.indexOf(suffixExp);
             if (suffixPos != -1)
                 modifyHtml() += typeHighlight(typeSuffixString.mid(suffixPos));
