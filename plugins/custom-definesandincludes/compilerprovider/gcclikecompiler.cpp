@@ -6,16 +6,15 @@
 
 #include "gcclikecompiler.h"
 
-#include <QFileInfo>
-#include <QProcess>
-#include <QRegularExpression>
-#include <QMap>
-#include <QScopeGuard>
+#include <debug.h>
 
 #include <interfaces/iruntime.h>
 #include <interfaces/iruntimecontroller.h>
 
-#include <debug.h>
+#include <QFileInfo>
+#include <QProcess>
+#include <QRegularExpression>
+#include <QScopeGuard>
 
 using namespace KDevelop;
 
