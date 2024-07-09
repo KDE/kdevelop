@@ -132,11 +132,6 @@ void ClassNode::populateNode()
         addBaseAndDerived();
 }
 
-template <> inline bool qMapLessThanKey(const IndexedIdentifier& key1, const IndexedIdentifier& key2)
-{
-    return key1.index() < key2.index();
-}
-
 bool ClassNode::updateClassDeclarations()
 {
     bool hadChanges = false;
