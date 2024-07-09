@@ -14,10 +14,10 @@
 #include <language/codegen/documentchangeset.h>
 
 #include <QList>
+#include <QRegExp>
 #include <QStandardItemModel>
 
 class QModelIndex;
-class QRegExp;
 
 namespace KDevelop {
     class IStatus;

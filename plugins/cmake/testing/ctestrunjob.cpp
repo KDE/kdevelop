@@ -23,6 +23,8 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <QRegExp>
+
 using namespace KDevelop;
 
 CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, QObject* parent)

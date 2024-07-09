@@ -22,6 +22,8 @@
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>
 
+#include <QRegExp>
+
 namespace KDevelop {
 class AbstractNavigationContextPrivate
 {

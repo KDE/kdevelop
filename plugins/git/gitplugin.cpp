@@ -18,6 +18,7 @@
 #include <QHash>
 #include <QMenu>
 #include <QTimer>
+#include <QRegExp>
 #include <QRegularExpression>
 #include <QPointer>
 #include <QTemporaryFile>

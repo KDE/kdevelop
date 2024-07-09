@@ -26,6 +26,8 @@
 
 #include <KLocalizedString>
 
+#include <QRegExp>
+
 using namespace KDevelop;
 
 namespace {

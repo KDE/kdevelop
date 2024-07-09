@@ -23,6 +23,7 @@
 
 #include <QFileInfo>
 #include <QIcon>
+#include <QRegExp>
 
 #include <array>
 

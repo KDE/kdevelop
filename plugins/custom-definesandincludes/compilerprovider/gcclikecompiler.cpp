@@ -13,6 +13,7 @@
 
 #include <QFileInfo>
 #include <QProcess>
+#include <QRegExp>
 #include <QRegularExpression>
 #include <QScopeGuard>
 

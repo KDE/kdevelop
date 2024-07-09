@@ -20,6 +20,8 @@
 
 #include <KLocalizedString>
 
+#include <QRegExp>
+
 using namespace KDevMI;
 using namespace KDevMI::MI;
 using namespace KDevelop;

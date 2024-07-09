@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QReadLocker>
 #include <QReadWriteLock>
+#include <QRegExp>
 #include <QWriteLocker>
 
 #include <algorithm>

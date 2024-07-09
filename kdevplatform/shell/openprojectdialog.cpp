@@ -26,6 +26,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QPushButton>
+#include <QRegExp>
 
 namespace
 {
