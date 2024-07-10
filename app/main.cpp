@@ -313,11 +313,6 @@ int main( int argc, char *argv[] )
     QElapsedTimer timer;
     timer.start();
 
-    // If possible, use the Software backend for QQuickWidget (currently used in the
-    // welcome page plugin). This means we don't need OpenGL at all, avoiding issues
-    // like https://bugs.kde.org/show_bug.cgi?id=386527.
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
-
     // Useful for valgrind runs, just `export KDEV_DISABLE_JIT=1`
     if (qEnvironmentVariableIsSet("KDEV_DISABLE_JIT")) {
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
