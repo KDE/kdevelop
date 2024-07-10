@@ -17,6 +17,7 @@
 #include <QFileInfo>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QTextCodec>
@@ -214,7 +215,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
 QString generateIdentifier( const QString& appname )
 {
     QString tmp = appname;
-    QRegExp re(QStringLiteral("[^a-zA-Z0-9_]"));
+    static const QRegularExpression re(QStringLiteral("[^\\w]"));
     return tmp.replace(re, QStringLiteral("_"));
 }
 
