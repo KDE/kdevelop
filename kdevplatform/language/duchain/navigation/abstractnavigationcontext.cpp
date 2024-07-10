@@ -574,7 +574,7 @@ void AbstractNavigationContext::addHtml(const QString& html)
     const auto lines = splitAndKeep(html, newLineRegExp);
     for (const QString& line : lines) {
         d->m_currentText +=  line;
-        if (line.indexOf(newLineRegExp) != -1) {
+        if (newLineRegExp.indexIn(line) != -1) {
             ++d->m_currentLine;
             if (d->m_currentLine == d->m_currentPositionLine) {
                 d->m_currentText += QLatin1String(
