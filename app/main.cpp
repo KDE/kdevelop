@@ -323,7 +323,6 @@ int main( int argc, char *argv[] )
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
     }
 
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
 #ifdef Q_OS_MAC
@@ -446,10 +445,6 @@ int main( int argc, char *argv[] )
     QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("kdevelop"), QApplication::windowIcon()));
 
     KCrash::initialize();
-
-
-    // High DPI support
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     qCDebug(APP) << "Startup";
 
