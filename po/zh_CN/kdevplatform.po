@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-04-22 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -658,12 +658,12 @@ msgstr[0] "处理 %2 中 %1 个文件"
 msgid "All projects classes"
 msgstr "所有工程类"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "基类"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "派生类"
@@ -754,36 +754,6 @@ msgstr "重命名(&R)"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "取消(&C)"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "找不到打开的文档"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "找不到所选文档的工具链：%1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "查找选中范围的上下文出错"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "检查条件以生成代码出错：%1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "收集用户信息出错：%1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "生成代码出错：%1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6036,3 +6006,21 @@ msgstr "与上个修订版的差异"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修订版之间的差异"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "找不到打开的文档"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "找不到所选文档的工具链：%1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "查找选中范围的上下文出错"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "检查条件以生成代码出错：%1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "收集用户信息出错：%1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "生成代码出错：%1"

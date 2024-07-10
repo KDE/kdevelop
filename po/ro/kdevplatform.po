@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2021-05-15 15:28+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -693,12 +693,12 @@ msgstr[2] "Procesează %1 de fișiere în %2"
 msgid "All projects classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr ""
@@ -796,37 +796,6 @@ msgstr "Nume fișier"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "Renunță"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Nu a putut fi găsit un document deschis"
-
-#: language/codegen/codegenerator.cpp:150
-#, fuzzy, kde-format
-#| msgid "Could not find an open document"
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Nu a putut fi găsit un document deschis"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Eroare la căutarea contextului pentru intervalul de selecție"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Eroare la verificarea condițiilor pentru generarea codului: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Eroare la obținerea informațiilor despre utilizator: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Eroare la generarea codului: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6400,6 +6369,26 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Nu a putut fi găsit un document deschis"
+
+#, fuzzy
+#~| msgid "Could not find an open document"
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Nu a putut fi găsit un document deschis"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Eroare la căutarea contextului pentru intervalul de selecție"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Eroare la verificarea condițiilor pentru generarea codului: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Eroare la obținerea informațiilor despre utilizator: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Eroare la generarea codului: %1"
 
 #, fuzzy
 #~| msgid "Loading %1"

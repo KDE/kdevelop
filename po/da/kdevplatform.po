@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2014-08-24 21:50+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -693,12 +693,12 @@ msgstr[1] "Behandl %1 filer i %2"
 msgid "All projects classes"
 msgstr "%1|Alle projektfiler (%1)"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr ""
@@ -804,37 +804,6 @@ msgstr "&Omdøb"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Annullér"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Kunne ikke finde et åbent dokument"
-
-#: language/codegen/codegenerator.cpp:150
-#, fuzzy, kde-format
-#| msgid "Could not find an open document"
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Kunne ikke finde et åbent dokument"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Fejl med at finde kontekst i den valgte række"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Fejl med at tjekke betingelserne til at generere kode: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Fejl med at samle brugerinformation: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Fejl med at generere kode: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6772,6 +6741,26 @@ msgstr "Forskelle til før"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Forskel mellem revisioner"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Kunne ikke finde et åbent dokument"
+
+#, fuzzy
+#~| msgid "Could not find an open document"
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Kunne ikke finde et åbent dokument"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Fejl med at finde kontekst i den valgte række"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Fejl med at tjekke betingelserne til at generere kode: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Fejl med at samle brugerinformation: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Fejl med at generere kode: %1"
 
 #, fuzzy
 #~| msgid "Running"

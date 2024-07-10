@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-05-06 16:16+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -695,12 +695,12 @@ msgstr[1] "Traiter %1 fichiers dans %2"
 msgid "All projects classes"
 msgstr "Toutes les classes du projet"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Classes de base"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Classes dérivées"
@@ -792,37 +792,6 @@ msgstr "&Renommer"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Annuler"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Il est impossible de trouver un document ouvert"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Impossible de trouver la chaîne pour le document sélectionné : %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Erreur lors de la recherche de contexte pour l'intervalle de connexion"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr ""
-"Erreur lors de la vérification des conditions pour générer du code : %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Erreur lors du recueil des informations utilisateurs : %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Erreur lors de la génération du code : %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6334,6 +6303,26 @@ msgstr "Différences par rapport à la précédente"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Différences entre les révisions"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Il est impossible de trouver un document ouvert"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Impossible de trouver la chaîne pour le document sélectionné : %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr ""
+#~ "Erreur lors de la recherche de contexte pour l'intervalle de connexion"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr ""
+#~ "Erreur lors de la vérification des conditions pour générer du code : %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Erreur lors du recueil des informations utilisateurs : %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Erreur lors de la génération du code : %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

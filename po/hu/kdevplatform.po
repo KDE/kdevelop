@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2014-09-08 22:58+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -651,12 +651,12 @@ msgstr[1] ""
 msgid "All projects classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr ""
@@ -744,36 +744,6 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "&Cancel"
-msgstr ""
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr ""
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr ""
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr ""
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr ""
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr ""
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
 msgstr ""
 
 #: language/codegen/documentchangeset.cpp:112

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2023-11-04 23:30+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -677,12 +677,12 @@ msgstr[1] "Prozesatu %1 fitxategi %2n"
 msgid "All projects classes"
 msgstr "Proiektu klase guztiak"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Oinarrizko klaseak"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Eratorritako klaseak"
@@ -774,36 +774,6 @@ msgstr "&Berrizendatu"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Utzi"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Ezin izan da irekitako dokumentu bat aurkitu"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Ezin izan da hautatutako dokumentuaren katea aurkitu: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Errorea hautapen-tartearen testuingurua bilatzean"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Errorea kodea sortzeko baldintzak egiaztatzerakoan: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Errorea erabiltzaile-informazioa lortzerakoan: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Errorea kodea sortzean: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6234,6 +6204,24 @@ msgstr "Aurrekoaren arteko diferentzia"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Berrikuspenen arteko diferentzia"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Ezin izan da irekitako dokumentu bat aurkitu"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Ezin izan da hautatutako dokumentuaren katea aurkitu: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Errorea hautapen-tartearen testuingurua bilatzean"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Errorea kodea sortzeko baldintzak egiaztatzerakoan: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Errorea erabiltzaile-informazioa lortzerakoan: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Errorea kodea sortzean: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

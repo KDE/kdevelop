@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-05-09 06:38+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -666,12 +666,12 @@ msgstr[0] "在 %2 中處理 %1 個檔案"
 msgid "All projects classes"
 msgstr "所有專案類別"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr ""
@@ -762,37 +762,6 @@ msgstr "重新命名(&R)"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "取消(&C)"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "找不到開啟的文件"
-
-#: language/codegen/codegenerator.cpp:150
-#, fuzzy, kde-format
-#| msgid "Could not find an open document"
-msgid "Could not find the chain for the selected document: %1"
-msgstr "找不到開啟的文件"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "尋找選取區範圍的內文時發生錯誤"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "檢查產生代碼的狀況時發生錯誤：%1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "收集使用者資訊時發生錯誤：%1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "產生代碼時發生錯誤：%1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6322,6 +6291,26 @@ msgstr "與前一個版本的差異"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修訂版之間的差異"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "找不到開啟的文件"
+
+#, fuzzy
+#~| msgid "Could not find an open document"
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "找不到開啟的文件"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "尋找選取區範圍的內文時發生錯誤"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "檢查產生代碼的狀況時發生錯誤：%1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "收集使用者資訊時發生錯誤：%1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "產生代碼時發生錯誤：%1"
 
 #, fuzzy
 #~| msgid "Running"

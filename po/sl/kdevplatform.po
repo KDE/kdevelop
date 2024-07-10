@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-04-17 07:00+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -684,12 +684,12 @@ msgstr[3] "Obdelane %1 datoteke v %2"
 msgid "All projects classes"
 msgstr "Razredi vseh projektov"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Osnovni razredi"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Izpeljani razredi"
@@ -781,36 +781,6 @@ msgstr "Preimenuj"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "Prekliči"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Ni bilo mogoče najti odprtega dokumenta"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Ni bilo mogoče najti verige za izbran dokument: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Napaka med iskanjem konteksta za izbrani obseg"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Napaka med preverjanjem pogojev za ustvarjanje kode: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Napaka med zbiranjem uporabniških podatkov: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Napaka med ustvarjanjem kode: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6252,6 +6222,24 @@ msgstr "Razlike glede na predhodno"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Razlike med predelavama"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Ni bilo mogoče najti odprtega dokumenta"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Ni bilo mogoče najti verige za izbran dokument: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Napaka med iskanjem konteksta za izbrani obseg"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Napaka med preverjanjem pogojev za ustvarjanje kode: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Napaka med zbiranjem uporabniških podatkov: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Napaka med ustvarjanjem kode: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

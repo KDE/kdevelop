@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-04-23 21:12+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -677,12 +677,12 @@ msgstr[1] "Procezi %1 dosierojn en %2"
 msgid "All projects classes"
 msgstr "Ĉiuj projektoj klasoj"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Bazaj klasoj"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Derivaj klasoj"
@@ -773,36 +773,6 @@ msgstr "&Alinomi"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Rezigni"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Ne eblis trovi malfermitan dokumenton"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Ne eblis trovi la ĉenon por la elektita dokumento: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Eraro trovi kuntekston por elekta intervalo"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Eraro kontrolante kondiĉojn por generi kodon: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Eraro dum kolektado de uzantinformoj: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Eraro dum generado de kodo: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6223,3 +6193,21 @@ msgstr "Diferenco Al Antaŭa"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferenco inter Revizioj"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Ne eblis trovi malfermitan dokumenton"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Ne eblis trovi la ĉenon por la elektita dokumento: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Eraro trovi kuntekston por elekta intervalo"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Eraro kontrolante kondiĉojn por generi kodon: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Eraro dum kolektado de uzantinformoj: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Eraro dum generado de kodo: %1"

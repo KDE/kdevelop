@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-05-24 19:30+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -676,12 +676,12 @@ msgstr[1] "Process %1 files in %2"
 msgid "All projects classes"
 msgstr "All projects classes"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Base classes"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Derived classes"
@@ -772,36 +772,6 @@ msgstr "&Rename"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Cancel"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Could not find an open document"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Could not find the chain for the selected document: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Error finding context for selection range"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Error checking conditions to generate code: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Error Gathering user information: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Error generating code: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6216,6 +6186,24 @@ msgstr "Difference To Previous"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Difference between Revisions"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Could not find an open document"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Could not find the chain for the selected document: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Error finding context for selection range"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Error checking conditions to generate code: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Error Gathering user information: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Error generating code: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2023-04-30 18:41+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -683,12 +683,12 @@ msgstr[1] "%1 Dateien in %2 verarbeiten"
 msgid "All projects classes"
 msgstr "Alle Klassen des Projekts"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Basisklassen"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Abgeleitete Klassen"
@@ -780,37 +780,6 @@ msgstr "&Umbenennen"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Abbrechen"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Kein geöffnetes Dokument gefunden"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Die Chain für das ausgewählte Dokument wurde nicht gefunden: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Fehler beim Auffinden des Kontextes der Auswahl"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr ""
-"Fehler beim Überprüfen der Voraussetzungen, um Quelltext zu erzeugen: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Fehler beim Zusammenstellen der Benutzerinformation: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Fehler bei der Erstellung des Quelltextes: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6267,6 +6236,25 @@ msgstr "Unterschied zu vorheriger Revision"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Unterschied zwischen Revisionen"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Kein geöffnetes Dokument gefunden"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Die Chain für das ausgewählte Dokument wurde nicht gefunden: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Fehler beim Auffinden des Kontextes der Auswahl"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr ""
+#~ "Fehler beim Überprüfen der Voraussetzungen, um Quelltext zu erzeugen: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Fehler beim Zusammenstellen der Benutzerinformation: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Fehler bei der Erstellung des Quelltextes: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

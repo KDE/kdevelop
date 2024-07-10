@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-07-07 07:05+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -649,12 +649,12 @@ msgstr[1] "%1 ფაილის დამუშავება %2-ში"
 msgid "All projects classes"
 msgstr "ყველა პროექტის კლასები"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "საბაზისო კლასები"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "წარმოებული კლასები"
@@ -743,36 +743,6 @@ msgstr "&სახელის გადარქმევა"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&გაუქმება"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "ღია დოკუმენტი ვერ ვიპოვე"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "მონიშნული დოკუმენტისთვის ჯაჭვი ვერ ვიპოვე: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "მონიშნული დიაპაზონისთვის კონტექსტის მოძებნის შეცდომა"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "კოდის დასაგენერირებელი პიროებების შემოწმების შეცდომა: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "შეცდომა მომხმარებლის ინფორმაციის შეგროვებისას: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "კოდის გენერაციის შეცდომა: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -5960,6 +5930,24 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
+
+#~ msgid "Could not find an open document"
+#~ msgstr "ღია დოკუმენტი ვერ ვიპოვე"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "მონიშნული დოკუმენტისთვის ჯაჭვი ვერ ვიპოვე: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "მონიშნული დიაპაზონისთვის კონტექსტის მოძებნის შეცდომა"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "კოდის დასაგენერირებელი პიროებების შემოწმების შეცდომა: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "შეცდომა მომხმარებლის ინფორმაციის შეგროვებისას: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "კოდის გენერაციის შეცდომა: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

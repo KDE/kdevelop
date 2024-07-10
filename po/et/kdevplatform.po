@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -686,12 +686,12 @@ msgstr[1] "%1 faili töötlemine projektis %2"
 msgid "All projects classes"
 msgstr "Kõigi projektide klassid"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Baasklassid"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Tuletatud klassid"
@@ -794,36 +794,6 @@ msgstr "&Muuda nime..."
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Loobu"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Avatud dokumenti ei leitud"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Valitud dokumendile ei leitud ahelat: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Viga valikuvahemiku konteksti otsimisel"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Viga tingimuste kontrollimisel koodi genereerimiseks: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Viga kasutaja teabe kogumisel: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Viga koodi genereerimisel: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6631,6 +6601,24 @@ msgstr "Erinevus eelmisest"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Versioonide erinevus"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Avatud dokumenti ei leitud"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Valitud dokumendile ei leitud ahelat: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Viga valikuvahemiku konteksti otsimisel"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Viga tingimuste kontrollimisel koodi genereerimiseks: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Viga kasutaja teabe kogumisel: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Viga koodi genereerimisel: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

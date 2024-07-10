@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2019-06-02 13:10+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -691,12 +691,12 @@ msgstr[1] "Käsittele %1 tiedostoa projektissa %2"
 msgid "All projects classes"
 msgstr "Kaikkien projektien luokat"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Perusluokat"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Periytetyt luokat"
@@ -800,37 +800,6 @@ msgstr "&Muuta nimi"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Peru"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Avointa tiedostoa ei löytynyt"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Ei voitu löytää ketjua valitulle tiedostolle: %1"
-
-# Selection range = ?
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Virhe etsittäessä kontekstia valinta-alueelle"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Virhe tarkistettaessa ehtoja koodin luonnille: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Virhe kerättäessä käyttäjätietoja: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Virhe luotaessa koodia: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6782,6 +6751,25 @@ msgstr "Erot edelliseen"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Erot versioiden välillä"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Avointa tiedostoa ei löytynyt"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Ei voitu löytää ketjua valitulle tiedostolle: %1"
+
+# Selection range = ?
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Virhe etsittäessä kontekstia valinta-alueelle"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Virhe tarkistettaessa ehtoja koodin luonnille: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Virhe kerättäessä käyttäjätietoja: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Virhe luotaessa koodia: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -705,12 +705,12 @@ msgstr[2] "Obrađujem %1 datoteka u %2"
 msgid "All projects classes"
 msgstr "%1|Sve projektne datoteke (%1)"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr ""
@@ -817,37 +817,6 @@ msgstr "Preimenuj"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Odustani"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Nemogu naći otvoreni dokument"
-
-#: language/codegen/codegenerator.cpp:150
-#, fuzzy, kde-format
-#| msgid "Could not find an open document"
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Nemogu naći otvoreni dokument"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Greška traženja konteksta za opseg izbora"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Greška u provjeru uslova za generisanje koda: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Greška u dohvatanju informacija o korisniku: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Greška u generisanju koda: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6786,6 +6755,26 @@ msgstr "Razlika u odnosu na prethodnu"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Razlika između revizija"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Nemogu naći otvoreni dokument"
+
+#, fuzzy
+#~| msgid "Could not find an open document"
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Nemogu naći otvoreni dokument"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Greška traženja konteksta za opseg izbora"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Greška u provjeru uslova za generisanje koda: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Greška u dohvatanju informacija o korisniku: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Greška u generisanju koda: %1"
 
 #, fuzzy
 #~| msgid "Running"

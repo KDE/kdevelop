@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2022-04-17 20:55+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -685,12 +685,12 @@ msgstr[2] "Spracovaných %1 súborov v %2"
 msgid "All projects classes"
 msgstr "Všetky triedy projektov"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Základné triedy"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Derivované triedy"
@@ -787,36 +787,6 @@ msgstr "Premenovať"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "Zrušiť"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Nepodarilo sa nájsť otvorený dokument"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Nepodarilo sa nájsť reťaz pre vybraný dokument: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Chyba hľadania kontextu pre rozsah výberu"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Chyba kontroly podmienok na generovanie kódu: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Chyba pri získavaní informácie o používateľovi: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Chyba generovania kódu: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6638,6 +6608,24 @@ msgstr "Rozdiel od predchádzajúceho"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Rozdiel medzi revíziami"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Nepodarilo sa nájsť otvorený dokument"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Nepodarilo sa nájsť reťaz pre vybraný dokument: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Chyba hľadania kontextu pre rozsah výberu"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Chyba kontroly podmienok na generovanie kódu: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Chyba pri získavaní informácie o používateľovi: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Chyba generovania kódu: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

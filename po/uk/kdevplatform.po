@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-04-17 08:02+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -685,12 +685,12 @@ msgstr[3] "Обробка %1 файла у %2"
 msgid "All projects classes"
 msgstr "Усі класи проєктів"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Базові класи"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Похідні класи"
@@ -782,36 +782,6 @@ msgstr "Пере&йменувати"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Скасувати"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Не вдалося знайти відкритий документ"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Не вдалося знайти ланцюжок для вибраного документа: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Помилка під час пошуку контексту для діапазону вибору"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Помилка під час перевірки умов створення коду: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Помилка під час збирання відомостей про користувача: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Помилка під час створення коду: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6287,6 +6257,24 @@ msgstr "Різниця з попередньою"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Різниця між модифікаціями"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Не вдалося знайти відкритий документ"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Не вдалося знайти ланцюжок для вибраного документа: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Помилка під час пошуку контексту для діапазону вибору"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Помилка під час перевірки умов створення коду: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Помилка під час збирання відомостей про користувача: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Помилка під час створення коду: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2012-02-02 07:34+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -735,12 +735,12 @@ msgstr[1] "%1 Dateien binnen %2 afarbeiden"
 msgid "All projects classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr ""
@@ -839,37 +839,6 @@ msgstr "Dateinaam"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "Afbreken"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Keen opmaakt Dokment funnen"
-
-#: language/codegen/codegenerator.cpp:150
-#, fuzzy, kde-format
-#| msgid "Could not find an open document"
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Keen opmaakt Dokment funnen"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Kontext för Köörrebeet lett sik nich finnen."
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Fehler bi't Pröven vun Bedingen för't Opstellen vun Kode: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Fehler bi't Tohoopstellen vun Brukerinformatschonen: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Fehler bi't Opstellen vun Kode: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6810,6 +6779,26 @@ msgstr "Verscheel günt Verleden"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Verscheel twischen Revischonen"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Keen opmaakt Dokment funnen"
+
+#, fuzzy
+#~| msgid "Could not find an open document"
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Keen opmaakt Dokment funnen"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Kontext för Köörrebeet lett sik nich finnen."
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Fehler bi't Pröven vun Bedingen för't Opstellen vun Kode: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Fehler bi't Tohoopstellen vun Brukerinformatschonen: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Fehler bi't Opstellen vun Kode: %1"
 
 #, fuzzy
 #~| msgid "Build & Install"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-04-17 10:41+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -679,12 +679,12 @@ msgstr[1] "Verwerk %1 bestanden in %2"
 msgid "All projects classes"
 msgstr "Alle project-klassen"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Baisis klassen"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Afgeleide klassen"
@@ -776,36 +776,6 @@ msgstr "He&rnoemen"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Annuleren"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Kon geen geopend document vinden."
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Kon geen ketting vinden voor het geselecteerde document: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Fout bij het vinden van context voor het geselecteerde bereik"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Fout bij het controleren van de voorwaarden om code te genereren: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Fout bij het verzamelen van gebruikersinformatie: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Fout bij het genereren van code: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6270,6 +6240,25 @@ msgstr "Verschil met vorige"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Verschil tussen revisies"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Kon geen geopend document vinden."
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Kon geen ketting vinden voor het geselecteerde document: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Fout bij het vinden van context voor het geselecteerde bereik"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr ""
+#~ "Fout bij het controleren van de voorwaarden om code te genereren: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Fout bij het verzamelen van gebruikersinformatie: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Fout bij het genereren van code: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2024-05-02 15:03+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -678,12 +678,12 @@ msgstr[1] "Behandla %1 filer på %2"
 msgid "All projects classes"
 msgstr "Alla projektklasser"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Basklasser"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Härledda klasser"
@@ -775,36 +775,6 @@ msgstr "&Byt namn"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "A&vbryt"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Kunde inte hitta ett öppet dokument"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Kunde inte hitta kedjan för det valda dokumentet: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Fel vid sökning efter sammanhang för markeringsintervall"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Fel vid kontroll av villkor för att generera kod: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Fel vid insamling av användarinformation: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Fel vid generering av kod: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6232,6 +6202,24 @@ msgstr "Skillnad mot föregående"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Skillnad mellan versioner"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Kunde inte hitta ett öppet dokument"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Kunde inte hitta kedjan för det valda dokumentet: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Fel vid sökning efter sammanhang för markeringsintervall"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Fel vid kontroll av villkor för att generera kod: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Fel vid insamling av användarinformation: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Fel vid generering av kod: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

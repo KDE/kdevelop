@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -696,12 +696,12 @@ msgstr[0] "%2 дегендегі %1 файлды өңдеу"
 msgid "All projects classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr ""
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr ""
@@ -799,37 +799,6 @@ msgstr "Сеанстың атауын өзгерту"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr ""
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Ашылған құжат табылмады"
-
-#: language/codegen/codegenerator.cpp:150
-#, fuzzy, kde-format
-#| msgid "Could not find an open document"
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Ашылған құжат табылмады"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Таңдау ауықымының контекстін табу қатесі"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Мына құрылатын кодын шартын тексеру қатесі: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Мына пайдаланушы туралы мәлімет жинау қатесі: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Кодты жасап шығару қатесі: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6633,6 +6602,26 @@ msgstr "Алдыңғысымен айырмашылық"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Жетілдірім арасындағы айырмашылық"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Ашылған құжат табылмады"
+
+#, fuzzy
+#~| msgid "Could not find an open document"
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Ашылған құжат табылмады"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Таңдау ауықымының контекстін табу қатесі"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Мына құрылатын кодын шартын тексеру қатесі: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Мына пайдаланушы туралы мәлімет жинау қатесі: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Кодты жасап шығару қатесі: %1"
 
 #, fuzzy
 #~| msgid "Running"

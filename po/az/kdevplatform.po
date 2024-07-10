@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -672,12 +672,12 @@ msgstr[1] "%2-də/da %1 fayl işlənməsi"
 msgid "All projects classes"
 msgstr "Bütün layihə sinifləri"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Təməl siniflər"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Törəmiş siniflər"
@@ -769,36 +769,6 @@ msgstr "&Yenidən Adlandırın"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&İmtina"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Açıq sənəd tapılmadı"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Bu seçilmiş sənəd üçün zəncir tapılmadı: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Sənədin seçilmiş sahəsi üçün kontekst tapılmadı"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Kodun emalı üçün şəraitin yoxlanılmasında xəta baş verdi: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "İstifaadəçi məlumatlarının toplanmasında xəta: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Kodun emalında xəta: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6239,6 +6209,24 @@ msgstr "Əvvəlki ilə fərqi"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Buraxılışlar arasındakı fərq"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Açıq sənəd tapılmadı"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Bu seçilmiş sənəd üçün zəncir tapılmadı: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Sənədin seçilmiş sahəsi üçün kontekst tapılmadı"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Kodun emalı üçün şəraitin yoxlanılmasında xəta baş verdi: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "İstifaadəçi məlumatlarının toplanmasında xəta: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Kodun emalında xəta: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"

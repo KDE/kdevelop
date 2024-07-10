@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-10 01:44+0000\n"
 "PO-Revision-Date: 2023-04-25 11:06+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -693,12 +693,12 @@ msgstr[3] "Обработка %1 файла в %2"
 msgid "All projects classes"
 msgstr "Классы из всех проектов"
 
-#: language/classmodel/classmodelnode.cpp:343
+#: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
 msgstr "Родительские классы"
 
-#: language/classmodel/classmodelnode.cpp:374
+#: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
 msgstr "Производные классы"
@@ -790,36 +790,6 @@ msgstr "&Переименовать"
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "О&тмена"
-
-#: language/codegen/codegenerator.cpp:133
-#, kde-format
-msgid "Could not find an open document"
-msgstr "Не удалось найти открытый документ"
-
-#: language/codegen/codegenerator.cpp:150
-#, kde-format
-msgid "Could not find the chain for the selected document: %1"
-msgstr "Не удалось найти цепочку для выбранного документа: %1"
-
-#: language/codegen/codegenerator.cpp:167
-#, kde-format
-msgid "Error finding context for selection range"
-msgstr "Невозможно найти контекст для выделенного участка текста"
-
-#: language/codegen/codegenerator.cpp:172
-#, kde-format
-msgid "Error checking conditions to generate code: %1"
-msgstr "Ошибка при проверке условий для генерации кода: %1"
-
-#: language/codegen/codegenerator.cpp:179
-#, kde-format
-msgid "Error Gathering user information: %1"
-msgstr "Ошибка сбора информации о пользователе: %1"
-
-#: language/codegen/codegenerator.cpp:186
-#, kde-format
-msgid "Error generating code: %1"
-msgstr "Ошибка генерации исходного кода: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -6270,6 +6240,24 @@ msgstr "Отличие от предыдущей"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Различия между ревизиями"
+
+#~ msgid "Could not find an open document"
+#~ msgstr "Не удалось найти открытый документ"
+
+#~ msgid "Could not find the chain for the selected document: %1"
+#~ msgstr "Не удалось найти цепочку для выбранного документа: %1"
+
+#~ msgid "Error finding context for selection range"
+#~ msgstr "Невозможно найти контекст для выделенного участка текста"
+
+#~ msgid "Error checking conditions to generate code: %1"
+#~ msgstr "Ошибка при проверке условий для генерации кода: %1"
+
+#~ msgid "Error Gathering user information: %1"
+#~ msgstr "Ошибка сбора информации о пользователе: %1"
+
+#~ msgid "Error generating code: %1"
+#~ msgstr "Ошибка генерации исходного кода: %1"
 
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"
