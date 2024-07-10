@@ -18,7 +18,7 @@
 #include <QChar>
 #include <QDataStream>
 #include <QIODevice>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <QStringView>
@@ -106,8 +106,9 @@ QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode)
 {
     switch (mode) {
     case FastMode: {
+        static const QRegularExpression htmlTagRegex(QStringLiteral("<[^>]+>"));
         QString result(s);
-        result.remove(QRegExp(QStringLiteral("<[^>]+>")));
+        result.remove(htmlTagRegex);
         return result;
     }
     case CompleteMode: {
