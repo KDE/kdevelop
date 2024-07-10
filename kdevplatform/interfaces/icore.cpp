@@ -7,6 +7,10 @@
 
 #include "icore.h"
 
+// needed by moc include at the end
+// for full declaration of (pointer) type of the property projectController
+#include "iprojectcontroller.h"
+
 namespace KDevelop {
 
 ICore *ICore::m_self = nullptr;

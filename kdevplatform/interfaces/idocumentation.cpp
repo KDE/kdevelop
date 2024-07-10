@@ -6,6 +6,10 @@
 
 #include "idocumentation.h"
 
+// needed by moc include at the end
+// for full declaration of (pointer) type of the property provider
+#include "idocumentationprovider.h"
+
 namespace KDevelop
 {
 
