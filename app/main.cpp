@@ -20,7 +20,6 @@
 #include "urlinfo.h"
 
 #include <KLocalizedString>
-#include <Kdelibs4ConfigMigrator>
 #include <KAboutData>
 #include <KCrash>
 
@@ -448,10 +447,6 @@ int main( int argc, char *argv[] )
 
     KCrash::initialize();
 
-    Kdelibs4ConfigMigrator migrator(QStringLiteral("kdevelop"));
-    migrator.setConfigFiles({QStringLiteral("kdeveloprc")});
-    migrator.setUiFiles({QStringLiteral("kdevelopui.rc")});
-    migrator.migrate();
 
     // High DPI support
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
