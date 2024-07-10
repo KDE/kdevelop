@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QSet>
 
 #include <project/projectmodel.h>
@@ -238,6 +239,13 @@ FileSetCollection getProjectFileSets(const QList<QUrl>& dirs)
     return fileSets;
 }
 
+const QRegularExpression& splitPatternListRegex()
+{
+    // Split around commas or spaces.
+    static const QRegularExpression regex(QStringLiteral(",|\\s"));
+    return regex;
+}
+
 } // namespace
 
 class GrepFindFilesThreadPrivate
@@ -318,8 +326,7 @@ QList<QUrl> GrepFindFilesThread::takeFiles()
 QStringList GrepFindFilesThread::parseExclude(const QString& excl)
 {
     QStringList exclude;
-    // Split around commas or spaces
-    const auto excludesList = excl.splitRef(QRegExp(QStringLiteral(",|\\s")), Qt::SkipEmptyParts);
+    const auto excludesList = QStringView{excl}.split(splitPatternListRegex(), Qt::SkipEmptyParts);
     exclude.reserve(excludesList.size());
     for (const auto& sub : excludesList) {
         exclude << QStringLiteral("*%1*").arg(sub);
@@ -329,8 +336,7 @@ QStringList GrepFindFilesThread::parseExclude(const QString& excl)
 
 QStringList GrepFindFilesThread::parseInclude(const QString& inc)
 {
-    // Split around commas or spaces
-    return inc.split(QRegExp(QStringLiteral(",|\\s")), Qt::SkipEmptyParts);
+    return inc.split(splitPatternListRegex(), Qt::SkipEmptyParts);
 }
 
 #include "moc_grepfindthread.cpp"
