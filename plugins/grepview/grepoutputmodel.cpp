@@ -9,8 +9,10 @@
 */
 
 #include "grepoutputmodel.h"
-#include "grepviewplugin.h"
+
+#include "debug.h"
 #include "greputil.h"
+#include "grepviewplugin.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -20,9 +22,9 @@
 #include <KTextEditor/Document>
 #include <KLocalizedString>
 
-#include <QModelIndex>
+#include <QDataStream>
 #include <QFontDatabase>
-
+#include <QModelIndex>
 
 using namespace KDevelop;
 
@@ -156,6 +158,27 @@ QVariant GrepOutputItem::data ( int role ) const {
 
 GrepOutputItem::~GrepOutputItem()
 {}
+
+GrepOutputItem::GrepOutputItem()
+    : GrepOutputItem(QString{}, QString{}, false)
+{
+    qCCritical(PLUGIN_GREPVIEW) << "the unsupported default GrepOutputItem constructor is invoked";
+    Q_ASSERT(false);
+}
+
+void GrepOutputItem::read(QDataStream& in)
+{
+    qCCritical(PLUGIN_GREPVIEW) << "a GrepOutputItem is read from a stream, this is not supported";
+    Q_ASSERT(false);
+    QStandardItem::read(in);
+}
+
+void GrepOutputItem::write(QDataStream& out) const
+{
+    qCCritical(PLUGIN_GREPVIEW) << "a GrepOutputItem is written to a stream, this is not supported";
+    Q_ASSERT(false);
+    QStandardItem::write(out);
+}
 
 ///////////////////////////////////////////////////////////////
 

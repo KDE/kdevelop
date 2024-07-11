@@ -43,6 +43,28 @@ public:
 
     QVariant data ( int role = Qt::UserRole + 1 ) const override;
 
+    /**
+     * @warning Do not use the default constructor. It is provided only to prevent a compilation error in
+     * operator>>(QDataStream&, QList<T>&) [with @c T = GrepOutputItem]. This specialization of
+     * @c operator>> is instantiated by the signal and the slot with a @c const GrepOutputItem::List&
+     * parameter, as well as by the declaration Q_DECLARE_METATYPE(GrepOutputItem::List).
+     */
+    [[deprecated(
+        "Do not use the default constructor. It is never called, not tested and asserts false.")]] GrepOutputItem();
+
+    /**
+     * @warning Do not read from or write to a stream. read() and write() are overridden only to detect
+     * when they are invoked and fail. The reason is: serializing @a m_change is not straightforward
+     * and not implemented until we know when and why a GrepOutputItem needs to be serialized.
+     */
+    [[deprecated("Do not read from a stream. This function is never called, not tested and asserts false.")]] void
+    read(QDataStream& in) override;
+    /**
+     * @copydoc read
+     */
+    [[deprecated("Do not write to a stream. This function is never called, not tested and asserts false.")]] void
+    write(QDataStream& out) const override;
+
 private:
     KDevelop::DocumentChangePointer m_change;
 };
