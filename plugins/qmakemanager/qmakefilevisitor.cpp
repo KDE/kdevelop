@@ -11,9 +11,9 @@
 
 #include "parser/ast.h"
 
-#include <QStringList>
 #include <QFileInfo>
 #include <QProcessEnvironment>
+#include <QStringList>
 
 #include <debug.h>
 #define ifDebug(x)

@@ -6,9 +6,6 @@
 
 #include "session.h"
 
-#include <QDir>
-#include <QUrl>
-
 #include <KConfigGroup>
 
 #include <interfaces/iplugincontroller.h>
@@ -18,6 +15,9 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <serialization/itemrepository.h>
+
+#include <QDir>
+#include <QUrl>
 
 namespace KDevelop
 {

@@ -8,9 +8,6 @@
 #include "projectselectionpage.h"
 #include "debug.h"
 
-#include <QDir>
-#include <QFileDialog>
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLineEdit>
@@ -26,6 +23,9 @@
 
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
+
+#include <QDir>
+#include <QFileDialog>
 
 using namespace KDevelop;
 

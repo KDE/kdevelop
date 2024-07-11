@@ -6,8 +6,6 @@
 
 #include "abstractdeclarationnavigationcontext.h"
 
-#include <QTextDocument>
-
 #include <KLocalizedString>
 
 #include "../functiondeclaration.h"
@@ -30,6 +28,8 @@
 #include <duchain/types/typealiastype.h>
 #include <duchain/types/structuretype.h>
 #include <duchain/classdeclaration.h>
+
+#include <QTextDocument>
 
 namespace KDevelop {
 class AbstractDeclarationNavigationContextPrivate

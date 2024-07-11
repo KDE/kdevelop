@@ -22,10 +22,9 @@
 #include <KLocalizedString>
 
 #include <QFile>
-#include <QReadWriteLock>
 #include <QReadLocker>
+#include <QReadWriteLock>
 #include <QWriteLocker>
-
 
 #include <algorithm>
 

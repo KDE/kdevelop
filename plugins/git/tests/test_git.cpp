@@ -10,15 +10,16 @@
 
 #include "test_git.h"
 
-#include <QTest>
-#include <tests/testcore.h>
-#include <tests/autotestshell.h>
-#include <QUrl>
-#include <QDebug>
+#include "../gitplugin.h"
 
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
-#include "../gitplugin.h"
+
+#include <QDebug>
+#include <QTest>
+#include <QUrl>
 
 #define VERIFYJOB(j) \
 do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)

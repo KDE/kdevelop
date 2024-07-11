@@ -8,14 +8,16 @@
 #include "grepoutputdelegate.h"
 #include "grepoutputmodel.h"
 
-#include <QPainter>
-#include <QModelIndex>
-#include <QTextDocument>
-#include <QTextCursor>
-#include <QAbstractTextDocumentLayout>
-#include <QTextCharFormat>
-#include <QRegExp>
 #include <KLocalizedString>
+
+#include <QAbstractTextDocumentLayout>
+#include <QModelIndex>
+#include <QPainter>
+#include <QRegExp>
+#include <QTextCharFormat>
+#include <QTextCursor>
+#include <QTextDocument>
+
 #include <cmath>
 #include <algorithm>
 

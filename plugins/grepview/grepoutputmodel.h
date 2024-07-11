@@ -11,10 +11,10 @@
 #ifndef KDEVPLATFORM_PLUGIN_GREPOUTPUTMODEL_H
 #define KDEVPLATFORM_PLUGIN_GREPOUTPUTMODEL_H
 
-#include <QStandardItemModel>
-#include <QList>
-
 #include <language/codegen/documentchangeset.h>
+
+#include <QList>
+#include <QStandardItemModel>
 
 class QModelIndex;
 class QRegExp;

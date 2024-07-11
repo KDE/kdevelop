@@ -14,16 +14,16 @@
 
 #include "kdevstringhandler.h"
 
-#include <QStringList>
-#include <QString>
-#include <QStringView>
 #include <QByteArray>
 #include <QChar>
 #include <QDataStream>
 #include <QIODevice>
-#include <QVariant>
 #include <QRegExp>
+#include <QString>
+#include <QStringList>
+#include <QStringView>
 #include <QTextDocument>
+#include <QVariant>
 
 #include <algorithm>
 #include <cctype>

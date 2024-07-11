@@ -8,10 +8,6 @@
 #include "openprojectpage.h"
 #include "projectinfopage.h"
 
-#include <QPushButton>
-#include <QFileInfo>
-#include <QFileDialog>
-
 #include <KColorScheme>
 #include <KIO/StatJob>
 #include <KIO/ListJob>
@@ -26,6 +22,10 @@
 #include "projectsourcepage.h"
 #include <debug.h>
 #include <interfaces/iprojectcontroller.h>
+
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QPushButton>
 
 namespace
 {
