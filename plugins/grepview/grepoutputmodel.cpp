@@ -227,7 +227,7 @@ QString GrepOutputModel::replacementFor(const QString &text)
         m_finalReplacement = substitudePattern(m_replacementTemplate, m_replacement);
         m_finalUpToDate = true;
     }
-    return QString(text).replace(m_regExp, m_finalReplacement);
+    return m_regExp.replaceIn(text, m_finalReplacement);
 }
 
 void GrepOutputModel::activate( const QModelIndex &idx )
