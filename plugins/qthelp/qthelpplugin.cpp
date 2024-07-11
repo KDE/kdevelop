@@ -37,7 +37,8 @@ QString QtHelpPlugin::collectionFileLocation()
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent)
     , m_qtHelpProviders()
-    , m_qtDoc(new QtHelpQtDoc(this, collectionFilePath(QStringLiteral("qthelpcollection.qhc"))))
+    , m_qtDoc(new QtHelpQtDoc(this, QtHelpQtDoc::qmakeCandidates().value(0),
+                              collectionFilePath(QStringLiteral("qthelpcollection.qhc"))))
     , m_loadSystemQtDoc(false)
 {
     Q_UNUSED(args);
