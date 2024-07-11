@@ -233,58 +233,71 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
     QTest::addColumn<QString>("fileContents");
     QTest::addColumn<TestDeclarationLookupCallback>("callback");
 
-    const auto mutableProvider = std::make_shared<QtHelpQtDoc>(nullptr, "testDeclarationLookup.qhc");
-    QTRY_VERIFY(mutableProvider->isInitialized());
+    bool anyAvailable = false;
+    const auto qmakeCandidates = QtHelpQtDoc::qmakeCandidates();
+    for (const auto& qmake : qmakeCandidates) {
+        const auto mutableProvider =
+            std::make_shared<QtHelpQtDoc>(nullptr, qmake, qmake + "_testDeclarationLookup.qhc");
+        QTRY_VERIFY(mutableProvider->isInitialized());
 
-    mutableProvider->loadDocumentation();
+        mutableProvider->loadDocumentation();
 
-    if (!mutableProvider->isValid() || mutableProvider->engine()->documentsForIdentifier("QObject").isEmpty())
+        if (!mutableProvider->isValid() || mutableProvider->engine()->documentsForIdentifier("QObject").isEmpty()) {
+            qWarning() << "Qt help not available for" << qmake;
+            continue;
+        }
+
+        const auto provider = TestDeclarationLookupProvider(mutableProvider);
+
+        anyAvailable = true;
+
+        QTest::addRow("QObject-%s", qPrintable(qmake))
+            << provider << "class QObject; QObject* o;"
+            << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
+                   auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("o"))).first();
+                   QVERIFY(decl);
+                   auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().data())
+                                       ->declaration(nullptr);
+                   QVERIFY(typeDecl);
+
+                   auto doc = provider->documentationForDeclaration(typeDecl);
+                   QVERIFY(doc);
+                   QCOMPARE(doc->name(), QStringLiteral("QObject"));
+                   const auto description = doc->description();
+                   QVERIFY(description.contains("QObject"));
+               }};
+
+        QTest::addRow("QString::fromLatin1-%s", qPrintable(qmake))
+            << provider << "class QString { static QString fromLatin1(const QByteArray&); };"
+            << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
+                   auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("QString"))).first();
+                   QVERIFY(decl);
+                   auto declFromLatin1 =
+                       decl->internalContext()->findDeclarations(QualifiedIdentifier("fromLatin1")).first();
+
+                   auto doc = provider->documentationForDeclaration(declFromLatin1);
+                   QVERIFY(doc);
+                   QCOMPARE(doc->name(), QStringLiteral("QString::fromLatin1"));
+                   const auto description = doc->description();
+                   QVERIFY(description.contains(QRegularExpression{"See also.*toLatin1"}));
+               }};
+
+        QTest::addRow("operator-%s", qPrintable(qmake))
+            << provider << "class C {}; bool operator<(const C& a, const C& b) { return true; }"
+            << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
+                   auto decl = ctx->findDeclarations(QualifiedIdentifier("operator<")).first();
+                   QVERIFY(decl);
+
+                   auto doc = provider->documentationForDeclaration(decl);
+                   // TODO: We should never find a documentation entry for this (but instead, the operator< for QChar is found here)
+                   QEXPECT_FAIL("", "doc should be null here", Continue);
+                   QVERIFY(!doc);
+               }};
+    }
+
+    if (!anyAvailable) {
         QSKIP("Qt help not available");
-
-    const auto provider = TestDeclarationLookupProvider(mutableProvider);
-
-    QTest::addRow("QObject")
-        << provider << "class QObject; QObject* o;"
-        << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
-               auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("o"))).first();
-               QVERIFY(decl);
-               auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().data())
-                                   ->declaration(nullptr);
-               QVERIFY(typeDecl);
-
-               auto doc = provider->documentationForDeclaration(typeDecl);
-               QVERIFY(doc);
-               QCOMPARE(doc->name(), QStringLiteral("QObject"));
-               const auto description = doc->description();
-               QVERIFY(description.contains("QObject"));
-           }};
-
-    QTest::addRow("QString::fromLatin1")
-        << provider << "class QString { static QString fromLatin1(const QByteArray&); };"
-        << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
-               auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("QString"))).first();
-               QVERIFY(decl);
-               auto declFromLatin1 =
-                   decl->internalContext()->findDeclarations(QualifiedIdentifier("fromLatin1")).first();
-
-               auto doc = provider->documentationForDeclaration(declFromLatin1);
-               QVERIFY(doc);
-               QCOMPARE(doc->name(), QStringLiteral("QString::fromLatin1"));
-               const auto description = doc->description();
-               QVERIFY(description.contains(QRegularExpression{"See also.*toLatin1"}));
-           }};
-
-    QTest::addRow("operator") << provider << "class C {}; bool operator<(const C& a, const C& b) { return true; }"
-                              << TestDeclarationLookupCallback{
-                                     [](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
-                                         auto decl = ctx->findDeclarations(QualifiedIdentifier("operator<")).first();
-                                         QVERIFY(decl);
-
-                                         auto doc = provider->documentationForDeclaration(decl);
-                                         // TODO: We should never find a documentation entry for this (but instead, the operator< for QChar is found here)
-                                         QEXPECT_FAIL("", "doc should be null here", Continue);
-                                         QVERIFY(!doc);
-                                     }};
+    }
 }
 
 void TestQtHelpPlugin::testDeclarationLookup()

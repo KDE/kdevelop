@@ -24,7 +24,7 @@ K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugi
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent)
     , m_qtHelpProviders()
-    , m_qtDoc(new QtHelpQtDoc(this, QStringLiteral("qthelpcollection.qhc")))
+    , m_qtDoc(new QtHelpQtDoc(this, QtHelpQtDoc::qmakeCandidates().value(0), QStringLiteral("qthelpcollection.qhc")))
     , m_loadSystemQtDoc(false)
 {
     Q_UNUSED(args);
