@@ -6006,21 +6006,3 @@ msgstr "与上个修订版的差异"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修订版之间的差异"
-
-#~ msgid "Could not find an open document"
-#~ msgstr "找不到打开的文档"
-
-#~ msgid "Could not find the chain for the selected document: %1"
-#~ msgstr "找不到所选文档的工具链：%1"
-
-#~ msgid "Error finding context for selection range"
-#~ msgstr "查找选中范围的上下文出错"
-
-#~ msgid "Error checking conditions to generate code: %1"
-#~ msgstr "检查条件以生成代码出错：%1"
-
-#~ msgid "Error Gathering user information: %1"
-#~ msgstr "收集用户信息出错：%1"
-
-#~ msgid "Error generating code: %1"
-#~ msgstr "生成代码出错：%1"
