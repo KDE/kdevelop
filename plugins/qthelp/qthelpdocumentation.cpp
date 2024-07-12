@@ -72,7 +72,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         // is removed below. This title should be removed, because it duplicates information already present
         // at the top of a navigation widget. A title example: "QString Class".
         const auto titleRegExp = QStringLiteral("<h\\d +class *= *\"title\"[^>]*>");
-        const QRegularExpression findTitle(titleRegExp);
+        const auto findTitle = QRegularExpression(titleRegExp);
         const auto titlePos = dataString.indexOf(findTitle);
         if (titlePos != -1) {
             pos = titlePos;
@@ -82,10 +82,10 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
     auto nextFragmentSearchPos = pos;
 
     if (!fragment.isEmpty()) {
-        const QString exp = QString(QLatin1String("<a +name *= *(['\"])") + QRegularExpression::escape(fragment)
-                                    + QLatin1String("\\1 *> *</ *a *>"));
+        const auto exp = QString(QLatin1String("<a +name *= *(['\"])") + QRegularExpression::escape(fragment)
+                                 + QLatin1String("\\1 *> *</ *a *>"));
 
-        const QRegularExpression findFragment(exp);
+        const auto findFragment = QRegularExpression(exp);
         QRegularExpressionMatch findFragmentMatch;
         pos = dataString.indexOf(findFragment, pos, &findFragmentMatch);
         if (pos == -1) {
@@ -97,8 +97,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         // and remove the entire title using the findHeader regex below. This title should be removed, because it
         // duplicates information already present in a structured form at the top of a navigation widget. A title
         // example: "bool QString::contains(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const".
-        const QString titleRegExp = QStringLiteral("<h\\d +class *= *\".*?\" *>");
-        const QRegularExpression findTitle(titleRegExp);
+        const auto titleRegExp = QStringLiteral("<h\\d +class *= *\".*?\" *>");
+        const auto findTitle = QRegularExpression(titleRegExp);
         QRegularExpressionMatch match;
         const auto titleStart = dataString.lastIndexOf(findTitle, pos, &match);
         Q_ASSERT(titleStart < pos);
@@ -111,8 +111,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         }
     }
 
-    const QString exp = QStringLiteral("<a +name *= *(['\"])\\S*\\1 *> *</ *a *>");
-    const QRegularExpression nextFragmentExpression(exp);
+    const auto exp = QStringLiteral("<a +name *= *(['\"])\\S*\\1 *> *</ *a *>");
+    const auto nextFragmentExpression = QRegularExpression(exp);
     auto endPos = dataString.indexOf(nextFragmentExpression, nextFragmentSearchPos);
     if(endPos == -1) {
         endPos = dataString.size();
@@ -120,8 +120,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
 
     {
         //Find the end of the last paragraph or newline, so we don't add prefixes of the following fragment
-        const QString newLineRegExp = QStringLiteral("<br */ *> *| *</ *p *>");
-        const QRegularExpression lastNewLine(newLineRegExp);
+        const auto newLineRegExp = QStringLiteral("<br */ *> *| *</ *p *>");
+        const auto lastNewLine = QRegularExpression(newLineRegExp);
         const auto newEnd = dataString.lastIndexOf(lastNewLine, endPos);
         if (newEnd > pos) {
             // Also remove the trailing line break to prevent two consecutive empty lines in a navigation widget.
@@ -129,13 +129,13 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         }
     }
 
-    QString thisFragment = dataString.mid(pos, endPos - pos);
+    auto thisFragment = dataString.mid(pos, endPos - pos);
 
     {
         //Completely remove the first large header found, since we don't need a header
-        const QString headerRegExp = QStringLiteral("<h\\d.*>.*?</ *h\\d *>");
-        const QRegularExpression findHeader(headerRegExp);
-        const QRegularExpressionMatch match = findHeader.match(thisFragment);
+        const auto headerRegExp = QStringLiteral("<h\\d.*>.*?</ *h\\d *>");
+        const auto findHeader = QRegularExpression(headerRegExp);
+        const auto match = findHeader.match(thisFragment);
         if (match.hasMatch()) {
             thisFragment.remove(match.capturedStart(), match.capturedLength());
         }
@@ -144,32 +144,32 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
     {
         //Replace all gigantic header-font sizes with <big>
         {
-            const QString sizeRegExp = QStringLiteral("<h\\d *");
-            const QRegularExpression findSize(sizeRegExp);
+            const auto sizeRegExp = QStringLiteral("<h\\d *");
+            const auto findSize = QRegularExpression(sizeRegExp);
             thisFragment.replace(findSize, QStringLiteral("<big "));
         }
         {
-            const QString sizeCloseRegExp = QStringLiteral("</ *h\\d *>");
-            const QRegularExpression closeSize(sizeCloseRegExp);
+            const auto sizeCloseRegExp = QStringLiteral("</ *h\\d *>");
+            const auto closeSize = QRegularExpression(sizeCloseRegExp);
             thisFragment.replace(closeSize, QStringLiteral("</big><br />"));
         }
     }
 
     {
         //Replace paragraphs by newlines
-        const QString begin = QStringLiteral("<p *>");
-        const QRegularExpression findBegin(begin);
+        const auto begin = QStringLiteral("<p *>");
+        const auto findBegin = QRegularExpression(begin);
         thisFragment.replace(findBegin, {});
 
-        const QString end = QStringLiteral("</p *>");
-        const QRegularExpression findEnd(end);
+        const auto end = QStringLiteral("</p *>");
+        const auto findEnd = QRegularExpression(end);
         thisFragment.replace(findEnd, QStringLiteral("<br />"));
     }
 
     {
         //Remove links, because they won't work
-        const QString link = QStringLiteral("<a +href *= *(['\"]).*?\\1");
-        const QRegularExpression exp(link, QRegularExpression::CaseInsensitiveOption);
+        const auto link = QStringLiteral("<a +href *= *(['\"]).*?\\1");
+        const auto exp = QRegularExpression(link, QRegularExpression::CaseInsensitiveOption);
         thisFragment.replace(exp, QStringLiteral("<a "));
     }
 
