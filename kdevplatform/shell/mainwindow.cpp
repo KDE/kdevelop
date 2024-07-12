@@ -27,6 +27,11 @@
 #include <KWindowSystem>
 #include <KXMLGUIFactory>
 
+#define HAVE_X11 __has_include(<KX11Extras>)
+#if HAVE_X11
+#include <KX11Extras>
+#endif
+
 #include <sublime/area.h>
 #include "shellextension.h"
 #include "partcontroller.h"
@@ -164,7 +169,14 @@ void MainWindow::ensureVisible()
             showNormal();
         }
     }
-    KWindowSystem::forceActiveWindow(winId());
+
+#if HAVE_X11
+    if (KWindowSystem::isPlatformX11()) {
+        KX11Extras::forceActiveWindow(winId());
+        return;
+    }
+#endif
+    activateWindow();
 }
 
 QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomElement& element)
