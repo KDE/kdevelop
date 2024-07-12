@@ -101,14 +101,14 @@ QString cleanupDescription(QString thisFragment)
 
     {
         //Remove links, because they won't work
-        const auto link = QStringLiteral("< *a *href *= *['\"].*?['\"]");
+        const auto link = QStringLiteral("< *a[^>]*>");
         static const auto exp = QRegularExpression(link, QRegularExpression::CaseInsensitiveOption);
-        thisFragment.replace(exp, QStringLiteral("<a "));
+        thisFragment.replace(exp, QStringLiteral("<a>"));
     }
 
     {
         //Remove the unhelpful "more..." link
-        const auto moreLink = QStringLiteral("<a *>More...< */ *a *>");
+        const auto moreLink = QStringLiteral("<a>More...< */ *a *>");
         static const auto exp = QRegularExpression(moreLink, QRegularExpression::CaseInsensitiveOption);
         thisFragment.remove(exp);
     }
