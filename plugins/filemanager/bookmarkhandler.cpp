@@ -29,9 +29,7 @@ BookmarkHandler::BookmarkHandler( FileManager *parent, QMenu* kpopupmenu )
     bookmarksPath.setPath(bookmarksPath.path() + QLatin1String("fsbookmarks.xml"));
     qCDebug(PLUGIN_FILEMANAGER) << bookmarksPath;
 
-    KBookmarkManager *manager = KBookmarkManager::managerForFile( bookmarksPath.toLocalFile(), QStringLiteral( "kdevplatform" ) );
-    manager->setUpdate( true );
-
+    auto* const manager = new KBookmarkManager(bookmarksPath.toLocalFile(), this);
     m_bookmarkMenu = new KBookmarkMenu(manager, this, m_menu);
     const auto actions = m_menu->actions();
 
