@@ -12,7 +12,6 @@ set(KDevPlatformShell_LIB_SRCS
     shellextension.cpp
     core.cpp
     uicontroller.cpp
-    colorschemechooser.cpp
     projectcontroller.cpp
     project.cpp
     partcontroller.cpp
@@ -190,7 +189,6 @@ install(FILES
     shellextension.h
     core.h
     uicontroller.h
-    colorschemechooser.h
     projectcontroller.h
     project.h
     partcontroller.h

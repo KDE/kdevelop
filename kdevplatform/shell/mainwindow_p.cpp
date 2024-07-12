@@ -14,6 +14,9 @@
 #include <QMenu>
 
 #include <KActionCollection>
+#include <KActionMenu>
+#include <KColorSchemeManager>
+#include <KColorSchemeMenu>
 #include <KStandardAction>
 #include <KXMLGUIClient>
 #include <KXMLGUIFactory>
@@ -38,7 +41,6 @@
 #include "sourceformattercontroller.h"
 #include "debug.h"
 #include "ktexteditorpluginintegration.h"
-#include "colorschemechooser.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
@@ -312,7 +314,10 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18nc( "@info:whatsthis", "Adds a new tool view to this window." ) );
 
     //Load themes
-    actionCollection()->addAction(QStringLiteral("colorscheme_menu"), new ColorSchemeChooser(actionCollection()));
+    auto* const manager = new KColorSchemeManager(this);
+    auto* const colorSelectionMenu = KColorSchemeMenu::createMenu(manager, actionCollection());
+    colorSelectionMenu->menu()->setTitle(i18n("&Window Color Scheme"));
+    actionCollection()->addAction(QStringLiteral("colorscheme_menu"), colorSelectionMenu);
 }
 
 void MainWindowPrivate::toggleArea(bool b)
