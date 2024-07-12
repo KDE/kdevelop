@@ -20,6 +20,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/duchain/types/enumeratortype.h>
 
 #include "qthelpnetwork.h"
 #include "qthelpdocumentation.h"
@@ -87,19 +88,35 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declarat
     if (dec) {
         static const IndexedString qmlJs("QML/JS");
         QString id;
+        QString fallbackId;
 
         {
             DUChainReadLocker lock;
-            id = dec->qualifiedIdentifier().toString(RemoveTemplateInformation);
+            const auto qualifiedId = dec->qualifiedIdentifier();
+
+            id = qualifiedId.toString(RemoveTemplateInformation);
             if (dec->topContext()->parsingEnvironmentFile()->language() == qmlJs && !id.isEmpty())
                 id = QLatin1String("QML.") + id;
+
+            // for enumerators we might need to remove the enum, i.e. look for Qt::black instead of Qt::GlobalColor::black
+            // for enumerators in an `enum class` this removal is not appropriate, so only do that as a fallback
+            const auto qualifiedIdCount = qualifiedId.count();
+            if (qualifiedIdCount > 1 && dec->type<EnumeratorType>()) {
+                const auto enumeratorId = qualifiedId.at(qualifiedIdCount - 1).toString(RemoveTemplateInformation);
+                const auto enumId = qualifiedId.at(qualifiedIdCount - 2).toString(RemoveTemplateInformation);
+                fallbackId = id;
+                fallbackId.replace(enumId + QLatin1String("::") + enumeratorId, enumeratorId);
+            }
         }
 
-        if (!id.isEmpty()) {
-            const QList<QHelpLink> links = m_engine.documentsForIdentifier(id);
-            if(!links.isEmpty())
-                return IDocumentation::Ptr(
-                    new QtHelpDocumentation(const_cast<QtHelpProviderAbstract*>(this), id, links));
+        for (const auto& identifier : {id, fallbackId}) {
+            if (!identifier.isEmpty()) {
+                const QList<QHelpLink> links = m_engine.documentsForIdentifier(identifier);
+                if (!links.isEmpty()) {
+                    return IDocumentation::Ptr(
+                        new QtHelpDocumentation(const_cast<QtHelpProviderAbstract*>(this), id, links));
+                }
+            }
         }
     }
 
