@@ -113,6 +113,13 @@ QString cleanupDescription(QString thisFragment)
         thisFragment.remove(exp);
     }
 
+    {
+        //Remove trailing whitespace
+        const auto trailingSpace = QStringLiteral("(< *br */?>|\\s*)+$");
+        static const auto exp = QRegularExpression(trailingSpace, QRegularExpression::CaseInsensitiveOption);
+        thisFragment.remove(exp);
+    }
+
     return thisFragment;
 }
 
