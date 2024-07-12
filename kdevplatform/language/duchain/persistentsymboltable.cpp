@@ -23,6 +23,8 @@
 
 #include <language/util/setrepository.h>
 
+#include <algorithm>
+
 #if defined(QT_NO_DEBUG) && !defined(QT_FORCE_ASSERTS)
 #define VERIFY_VISIT_NESTING 0
 #define ifVerifyVisitNesting(x)
@@ -226,6 +228,17 @@ private:
     const PersistentSymbolTableRepo& repo;
 };
 #endif
+
+// EmbeddedTreeRemoveItem as used by PersistentSymbolTable::removeDeclaration could call createFreeItem()
+// and create dummies, but those would not be handled properly by our pre-filtered cache iteration
+// in visitFilteredDeclarations. As such, this utility here checks that the invariant is upheld and we
+// have no dummies in our cache.
+bool verifyNoDummies(const CachedDeclarations& declarations)
+{
+    return std::none_of(declarations.begin(), declarations.end(), [](const auto& declaration) {
+        return declaration.isDummy();
+    });
+}
 }
 
 template<>
@@ -447,8 +460,9 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
                 auto& cached = repo.declarationsCache[id];
                 auto cacheIt = cached.constFind(visibility);
                 if (cacheIt != cached.constEnd()) {
+                    Q_ASSERT(verifyNoDummies(*cacheIt));
                     return FilteredDeclarationIterator(
-                        Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports);
+                        Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports, true);
                 }
 
                 auto insertIt = cached.insert(visibility, {});
@@ -467,6 +481,7 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
                     FilteredDeclarationCacheVisitor visitor(cacheVisitor, declarations.iterator(), cachedImports);
                 }
 
+                Q_ASSERT(verifyNoDummies(cache));
                 return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(), cache.size(), -1),
                                                    cachedImports, true);
             } else {
