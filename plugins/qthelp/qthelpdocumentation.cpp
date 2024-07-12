@@ -66,7 +66,7 @@ QString cleanupDescription(QString thisFragment)
 {
     {
         //Completely remove the first large header found, since we don't need a header
-        const auto headerRegExp = QStringLiteral("<h\\d.*>.*?</ *h\\d *>");
+        const auto headerRegExp = QStringLiteral("<h\\d[^>]*>.*?</ *h\\d *>");
         static const auto findHeader = QRegularExpression(headerRegExp);
         const auto match = findHeader.match(thisFragment);
         if (match.hasMatch()) {
@@ -77,9 +77,9 @@ QString cleanupDescription(QString thisFragment)
     {
         //Replace all gigantic header-font sizes with <big>
         {
-            const auto sizeRegExp = QStringLiteral("<h\\d *");
+            const auto sizeRegExp = QStringLiteral("<h\\d[^>]*>");
             static const auto findSize = QRegularExpression(sizeRegExp);
-            thisFragment.replace(findSize, QStringLiteral("<big "));
+            thisFragment.replace(findSize, QStringLiteral("<big>"));
         }
         {
             const auto sizeCloseRegExp = QStringLiteral("</ *h\\d *>");
