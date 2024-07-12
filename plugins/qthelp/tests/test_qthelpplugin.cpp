@@ -263,7 +263,12 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
                    QVERIFY(doc);
                    QCOMPARE(doc->name(), QStringLiteral("QObject"));
                    const auto description = doc->description();
-                   QVERIFY(description.contains("QObject"));
+                   // we should have the brief section extracted
+                   QVERIFY(description.contains("The QObject class"));
+                   // the unhelpful More... link should have been removed
+                   QVERIFY(!description.contains("More..."));
+                   // we also don't want the unhelpful link description fallback
+                   QVERIFY(!description.contains("|"));
                }};
 
         QTest::addRow("QString::fromLatin1-%s", qPrintable(qmake))

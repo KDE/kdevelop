@@ -106,6 +106,13 @@ QString cleanupDescription(QString thisFragment)
         thisFragment.replace(exp, QStringLiteral("<a "));
     }
 
+    {
+        //Remove the unhelpful "more..." link
+        const auto moreLink = QStringLiteral("<a *>More...< */ *a *>");
+        static const auto exp = QRegularExpression(moreLink, QRegularExpression::CaseInsensitiveOption);
+        thisFragment.remove(exp);
+    }
+
     return thisFragment;
 }
 
@@ -246,7 +253,13 @@ QString descriptionFallback(const QList<QHelpLink>& info)
 QString QtHelpDocumentation::description() const
 {
     const auto url = currentUrl();
-    const auto fragment = url.fragment();
+
+    auto fragment = url.fragment();
+    const auto fragmentWasEmpty = fragment.isEmpty();
+    if (fragmentWasEmpty) {
+        // for classes we get an empty fragment but the `m_name` contains the class identifier, let's use that
+        fragment = m_name;
+    }
 
     // assume the data is utf8 encoded
     // this is true for new data at least with <meta charset="utf-8">
@@ -265,6 +278,14 @@ QString QtHelpDocumentation::description() const
 
     if (auto ret = descriptionFromOldHtmlData(fragment, fileData); !ret.isEmpty()) {
         return ret;
+    }
+
+    // when the url fragment was empty and we used the `m_name` instead (see above) but we still couldn't find anything
+    // then make one last attempt without any fragment at all like we always used to do
+    if (fragmentWasEmpty) {
+        if (auto ret = descriptionFromOldHtmlData({}, fileData); !ret.isEmpty()) {
+            return ret;
+        }
     }
 
     return descriptionFallback(m_info);
