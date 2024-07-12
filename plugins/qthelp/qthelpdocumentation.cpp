@@ -64,7 +64,6 @@ namespace {
 
 QString descriptionFromHtmlData(const QString& fragment, const QString& dataString)
 {
-    const QString p = QStringLiteral("((\\\")|(\\\'))");
     const QString optionalSpace = QStringLiteral(" *");
 
     QString::size_type pos = 0;
@@ -86,7 +85,9 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
     auto nextFragmentSearchPos = pos;
 
     if (!fragment.isEmpty()) {
-        const QString exp = QString(QLatin1String("< a name = ") + p + fragment + p + QLatin1String(" > < / a >")).replace(QLatin1Char(' '), optionalSpace);
+        const QString exp = QString(QLatin1String("< a name = (['\"])") + QRegularExpression::escape(fragment)
+                                    + QLatin1String("\\1 > < / a >"))
+                                .replace(QLatin1Char(' '), optionalSpace);
 
         const QRegularExpression findFragment(exp);
         QRegularExpressionMatch findFragmentMatch;
@@ -114,7 +115,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         }
     }
 
-    const QString exp = QString(QStringLiteral("< a name = ") + p + QStringLiteral("((\\S)*)") + p + QStringLiteral(" > < / a >")).replace(QLatin1Char(' '), optionalSpace);
+    const QString exp = QStringLiteral("< a name = (['\"])\\S*\\1 > < / a >").replace(QLatin1Char(' '), optionalSpace);
     const QRegularExpression nextFragmentExpression(exp);
     auto endPos = dataString.indexOf(nextFragmentExpression, nextFragmentSearchPos);
     if(endPos == -1) {
@@ -171,7 +172,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
 
     {
         //Remove links, because they won't work
-        const QString link = QString(QStringLiteral("< a href = ") + p + QStringLiteral(".*?") + p).replace(QLatin1Char(' '), optionalSpace);
+        const QString link = QStringLiteral("< a href = (['\"]).*?\\1").replace(QLatin1Char(' '), optionalSpace);
         const QRegularExpression exp(link, QRegularExpression::CaseInsensitiveOption);
         thisFragment.replace(exp, QStringLiteral("<a "));
     }
