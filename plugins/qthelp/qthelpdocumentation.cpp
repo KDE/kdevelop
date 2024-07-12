@@ -106,6 +106,13 @@ QString cleanupDescription(QString thisFragment)
         thisFragment.replace(exp, QStringLiteral("<a "));
     }
 
+    {
+        //Remove the unhelpful "more..." link
+        const auto moreLink = QStringLiteral("<a *>More...</a *>");
+        static const auto exp = QRegularExpression(moreLink, QRegularExpression::CaseInsensitiveOption);
+        thisFragment.remove(exp);
+    }
+
     return thisFragment;
 }
 
@@ -254,7 +261,11 @@ QString QtHelpDocumentation::description() const
     const auto utf8FileData = m_provider->engine()->fileData(url);
 
     // first, fast pass that does not require regular expression matching
-    if (auto ret = descriptionFromCommentMarkers(fragment.toUtf8(), utf8FileData); !ret.isEmpty()) {
+    // For classes we get an empty fragment but m_name contains the class identifier.
+    // Use the class ID, e.g. "QString", to find the markers around the brief class description,
+    // for example, <!-- $$$QString-brief -->CLASS DESCRIPTION<!-- @@@QString -->
+    const auto& fragmentOrClassName = fragment.isEmpty() ? m_name : fragment;
+    if (auto ret = descriptionFromCommentMarkers(fragmentOrClassName.toUtf8(), utf8FileData); !ret.isEmpty()) {
         return ret;
     }
 
