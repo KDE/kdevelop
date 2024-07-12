@@ -301,6 +301,31 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
                    QEXPECT_FAIL("", "doc should be null here", Continue);
                    QVERIFY(!doc);
                }};
+
+        QTest::addRow("enum-%s", qPrintable(qmake))
+            << provider << QStringLiteral("namespace Qt { enum GlobalColor { black }; }")
+            << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
+                   const auto globalColorDecl =
+                       ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("Qt::GlobalColor"))).first();
+                   QVERIFY(globalColorDecl);
+
+                   const auto globalColorDoc = provider->documentationForDeclaration(globalColorDecl);
+                   QVERIFY(globalColorDoc);
+
+                   const auto globalColorDescription = globalColorDoc->description();
+                   QVERIFY(globalColorDescription.contains("Qt::black"));
+                   QVERIFY(globalColorDescription.contains("Qt::white"));
+
+                   const auto blackDecl =
+                       ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("Qt::GlobalColor::black"))).first();
+                   QVERIFY(blackDecl);
+
+                   const auto blackDoc = provider->documentationForDeclaration(blackDecl);
+                   QVERIFY(blackDoc);
+
+                   const auto blackDescription = blackDoc->description();
+                   QCOMPARE(blackDescription, globalColorDescription);
+               }};
     }
 
     if (!anyAvailable) {
