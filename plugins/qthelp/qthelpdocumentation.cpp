@@ -64,8 +64,6 @@ namespace {
 
 QString descriptionFromHtmlData(const QString& fragment, const QString& dataString)
 {
-    const QString optionalSpace = QStringLiteral(" *");
-
     QString::size_type pos = 0;
 
     {
@@ -73,8 +71,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         // In case of empty fragment (class documentation), the entire title matches the findHeader regex and
         // is removed below. This title should be removed, because it duplicates information already present
         // at the top of a navigation widget. A title example: "QString Class".
-        const auto titleRegExp =
-            QStringLiteral("< h\\d class = \"title\"[^>]*>").replace(QLatin1Char(' '), optionalSpace);
+        const auto titleRegExp = QStringLiteral("<h\\d +class *= *\"title\"[^>]*>");
         const QRegularExpression findTitle(titleRegExp);
         const auto titlePos = dataString.indexOf(findTitle);
         if (titlePos != -1) {
@@ -85,9 +82,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
     auto nextFragmentSearchPos = pos;
 
     if (!fragment.isEmpty()) {
-        const QString exp = QString(QLatin1String("< a name = (['\"])") + QRegularExpression::escape(fragment)
-                                    + QLatin1String("\\1 > < / a >"))
-                                .replace(QLatin1Char(' '), optionalSpace);
+        const QString exp = QString(QLatin1String("<a +name *= *(['\"])") + QRegularExpression::escape(fragment)
+                                    + QLatin1String("\\1 *> *</ *a *>"));
 
         const QRegularExpression findFragment(exp);
         QRegularExpressionMatch findFragmentMatch;
@@ -101,7 +97,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         // and remove the entire title using the findHeader regex below. This title should be removed, because it
         // duplicates information already present in a structured form at the top of a navigation widget. A title
         // example: "bool QString::contains(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const".
-        const QString titleRegExp = QStringLiteral("< h\\d class = \".*?\" >").replace(QLatin1Char(' '), optionalSpace);
+        const QString titleRegExp = QStringLiteral("<h\\d +class *= *\".*?\" *>");
         const QRegularExpression findTitle(titleRegExp);
         QRegularExpressionMatch match;
         const auto titleStart = dataString.lastIndexOf(findTitle, pos, &match);
@@ -115,7 +111,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         }
     }
 
-    const QString exp = QStringLiteral("< a name = (['\"])\\S*\\1 > < / a >").replace(QLatin1Char(' '), optionalSpace);
+    const QString exp = QStringLiteral("<a +name *= *(['\"])\\S*\\1 *> *</ *a *>");
     const QRegularExpression nextFragmentExpression(exp);
     auto endPos = dataString.indexOf(nextFragmentExpression, nextFragmentSearchPos);
     if(endPos == -1) {
@@ -124,7 +120,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
 
     {
         //Find the end of the last paragraph or newline, so we don't add prefixes of the following fragment
-        const QString newLineRegExp = QStringLiteral ("< br / > | < / p >").replace(QLatin1Char(' '), optionalSpace);
+        const QString newLineRegExp = QStringLiteral("<br */ *> *| *</ *p *>");
         const QRegularExpression lastNewLine(newLineRegExp);
         const auto newEnd = dataString.lastIndexOf(lastNewLine, endPos);
         if (newEnd > pos) {
@@ -137,7 +133,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
 
     {
         //Completely remove the first large header found, since we don't need a header
-        const QString headerRegExp = QStringLiteral("< h\\d.*>.*?< / h\\d >").replace(QLatin1Char(' '), optionalSpace);
+        const QString headerRegExp = QStringLiteral("<h\\d.*>.*?</ *h\\d *>");
         const QRegularExpression findHeader(headerRegExp);
         const QRegularExpressionMatch match = findHeader.match(thisFragment);
         if (match.hasMatch()) {
@@ -148,12 +144,12 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
     {
         //Replace all gigantic header-font sizes with <big>
         {
-            const QString sizeRegExp = QStringLiteral("< h\\d ").replace(QLatin1Char(' '), optionalSpace);
+            const QString sizeRegExp = QStringLiteral("<h\\d *");
             const QRegularExpression findSize(sizeRegExp);
             thisFragment.replace(findSize, QStringLiteral("<big "));
         }
         {
-            const QString sizeCloseRegExp = QStringLiteral("< / h\\d >").replace(QLatin1Char(' '), optionalSpace);
+            const QString sizeCloseRegExp = QStringLiteral("</ *h\\d *>");
             const QRegularExpression closeSize(sizeCloseRegExp);
             thisFragment.replace(closeSize, QStringLiteral("</big><br />"));
         }
@@ -161,18 +157,18 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
 
     {
         //Replace paragraphs by newlines
-        const QString begin = QStringLiteral("< p >").replace(QLatin1Char(' '), optionalSpace);
+        const QString begin = QStringLiteral("<p *>");
         const QRegularExpression findBegin(begin);
         thisFragment.replace(findBegin, {});
 
-        const QString end = QStringLiteral("< /p >").replace(QLatin1Char(' '), optionalSpace);
+        const QString end = QStringLiteral("</p *>");
         const QRegularExpression findEnd(end);
         thisFragment.replace(findEnd, QStringLiteral("<br />"));
     }
 
     {
         //Remove links, because they won't work
-        const QString link = QStringLiteral("< a href = (['\"]).*?\\1").replace(QLatin1Char(' '), optionalSpace);
+        const QString link = QStringLiteral("<a +href *= *(['\"]).*?\\1");
         const QRegularExpression exp(link, QRegularExpression::CaseInsensitiveOption);
         thisFragment.replace(exp, QStringLiteral("<a "));
     }
