@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2024-03-01 15:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -120,7 +120,7 @@ msgstr "Sonuç yok"
 msgid "Grep: %1"
 msgstr "Grep: %1"
 
-#: grepoutputdelegate.cpp:73 grepoutputdelegate.cpp:140
+#: grepoutputdelegate.cpp:75 grepoutputdelegate.cpp:142
 #, kde-format
 msgid "Line %1: "
 msgstr "Satır %1: "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustommake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2014-08-06 12:48+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -47,44 +47,44 @@ msgstr "Gecached: %1"
 msgid "Filename %1 seems to be malformed"
 msgstr "Bestandsnaam %1 lijkt ongeldig te zijn "
 
-#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:472
 #, kde-format
 msgid "Failed to extract new working directory"
 msgstr "Extraheren van een nieuwe werkmap is mislukt"
 
-#: makefileresolver/makefileresolver.cpp:475
-#: makefileresolver/makefileresolver.cpp:504
+#: makefileresolver/makefileresolver.cpp:472
+#: makefileresolver/makefileresolver.cpp:501
 #, kde-format
 msgid "Output was: %1"
 msgstr "Uitvoer was: %1"
 
+#: makefileresolver/makefileresolver.cpp:494
 #: makefileresolver/makefileresolver.cpp:497
-#: makefileresolver/makefileresolver.cpp:500
 #, kde-format
 msgid "Recursive make call failed"
 msgstr "Recursieve make-aanroep is mislukt"
 
-#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:494
 #, kde-format
 msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
 msgstr "De parameterstring \"%1\" lijkt niet geldig te zijn. Uitvoer was: %2"
 
-#: makefileresolver/makefileresolver.cpp:500
+#: makefileresolver/makefileresolver.cpp:497
 #, kde-format
 msgid "The directory \"%1\" does not exist. Output was: %2."
 msgstr "De map \"%1\" bestaat niet. Uitvoer was: %2."
 
-#: makefileresolver/makefileresolver.cpp:504
+#: makefileresolver/makefileresolver.cpp:501
 #, kde-format
 msgid "Malformed recursive make call"
 msgstr "Recursieve make-aanroep is misvormd"
 
-#: makefileresolver/makefileresolver.cpp:516
+#: makefileresolver/makefileresolver.cpp:513
 #, kde-format
 msgid "Could not extract include paths from make output"
 msgstr "Kon geen invoegpaden extraheren uit de make-uitvoer"
 
-#: makefileresolver/makefileresolver.cpp:517
+#: makefileresolver/makefileresolver.cpp:514
 #, kde-format
 msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
 msgstr "Map: \"%1\"  Commando: \"%2\"  Uitvoer: \"%3\""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustommake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2014-08-06 07:24+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -47,44 +47,44 @@ msgstr "Lagrad i cache: %1"
 msgid "Filename %1 seems to be malformed"
 msgstr "Filnamnet %1 verkar vara felaktigt"
 
-#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:472
 #, kde-format
 msgid "Failed to extract new working directory"
 msgstr "Misslyckades extrahera ny arbetskatalog"
 
-#: makefileresolver/makefileresolver.cpp:475
-#: makefileresolver/makefileresolver.cpp:504
+#: makefileresolver/makefileresolver.cpp:472
+#: makefileresolver/makefileresolver.cpp:501
 #, kde-format
 msgid "Output was: %1"
 msgstr "Utmatning: %1"
 
+#: makefileresolver/makefileresolver.cpp:494
 #: makefileresolver/makefileresolver.cpp:497
-#: makefileresolver/makefileresolver.cpp:500
 #, kde-format
 msgid "Recursive make call failed"
 msgstr "Rekursivt bygganrop misslyckades"
 
-#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:494
 #, kde-format
 msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
 msgstr "Parameter-strängen \"%1\" verkar inte vara giltig. Utmatning: %2."
 
-#: makefileresolver/makefileresolver.cpp:500
+#: makefileresolver/makefileresolver.cpp:497
 #, kde-format
 msgid "The directory \"%1\" does not exist. Output was: %2."
 msgstr "Katalogen \"%1\" finns inte. Utmatning: %2."
 
-#: makefileresolver/makefileresolver.cpp:504
+#: makefileresolver/makefileresolver.cpp:501
 #, kde-format
 msgid "Malformed recursive make call"
 msgstr "Felformat rekursivt bygganrop"
 
-#: makefileresolver/makefileresolver.cpp:516
+#: makefileresolver/makefileresolver.cpp:513
 #, kde-format
 msgid "Could not extract include paths from make output"
 msgstr "Kunde inte extrahera deklarationssökvägar från make-utmatning"
 
-#: makefileresolver/makefileresolver.cpp:517
+#: makefileresolver/makefileresolver.cpp:514
 #, kde-format
 msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
 msgstr "Katalog: \"%1\"  Kommando: \"%2\"  Utmatning: \"%3\""

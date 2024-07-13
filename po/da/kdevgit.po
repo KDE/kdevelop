@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2014-04-26 15:37+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -196,72 +196,72 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr ""
 
-#: gitplugin.cpp:185
+#: gitplugin.cpp:186
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr ""
 
-#: gitplugin.cpp:194
+#: gitplugin.cpp:195
 #, kde-format
 msgid "Git Commit"
 msgstr ""
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr ""
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:248
 #, fuzzy, kde-format
 #| msgid "Git Stashes"
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git stashes"
 
-#: gitplugin.cpp:248
+#: gitplugin.cpp:249
 #, fuzzy, kde-format
 #| msgid "Stash Manager"
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Håndtering af stash"
 
-#: gitplugin.cpp:249
+#: gitplugin.cpp:250
 #, fuzzy, kde-format
 #| msgid "Push Stash"
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Push stash"
 
-#: gitplugin.cpp:250
+#: gitplugin.cpp:251
 #, fuzzy, kde-format
 #| msgid "Pop Stash"
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Pop stash"
 
-#: gitplugin.cpp:283
+#: gitplugin.cpp:284
 #, kde-format
 msgid "error: %1"
 msgstr "fejl: %1"
 
-#: gitplugin.cpp:382 gitplugin.cpp:393
+#: gitplugin.cpp:383 gitplugin.cpp:394
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Angav ikke listen af filer"
 
-#: gitplugin.cpp:455
+#: gitplugin.cpp:456
 #, fuzzy, kde-format
 #| msgid "Could not revert changes"
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Kunne ikke rulle ændringer tilbage"
 
-#: gitplugin.cpp:490
+#: gitplugin.cpp:491
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Kunne ikke rulle ændringer tilbage"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:502
 #, fuzzy, kde-format
 #| msgid ""
 #| "The following files have uncommited changes, which will be lost. Continue?"
@@ -271,40 +271,40 @@ msgstr ""
 "Følgende filer har ikke ikke-committede ændringer, som vil gå tabt. Vil du "
 "fortsætte?"
 
-#: gitplugin.cpp:526
+#: gitplugin.cpp:527
 #, kde-format
 msgid "No files or message specified"
 msgstr "Ingen filer eller besked angivet"
 
-#: gitplugin.cpp:530 gitplugin.cpp:549
+#: gitplugin.cpp:531 gitplugin.cpp:550
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr ""
 
-#: gitplugin.cpp:546
+#: gitplugin.cpp:547
 #, fuzzy, kde-format
 #| msgid "No files or message specified"
 msgid "No message specified"
 msgstr "Ingen filer eller besked angivet"
 
-#: gitplugin.cpp:620
+#: gitplugin.cpp:621
 #, kde-format
 msgid "No files to remove"
 msgstr "Ingen filer at fjerne"
 
-#: gitplugin.cpp:900
+#: gitplugin.cpp:901
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Der er udestående ændringer, vil du stashe dem først?"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:902
 #, fuzzy, kde-format
 #| msgid "Pop Stash"
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Pop stash"
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:903
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

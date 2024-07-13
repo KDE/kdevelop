@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustommake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2019-09-30 19:14+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -45,44 +45,44 @@ msgstr "已快取：%1"
 msgid "Filename %1 seems to be malformed"
 msgstr "%1 檔名看似格式錯誤"
 
-#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:472
 #, kde-format
 msgid "Failed to extract new working directory"
 msgstr "無法擷取新工作目錄"
 
-#: makefileresolver/makefileresolver.cpp:475
-#: makefileresolver/makefileresolver.cpp:504
+#: makefileresolver/makefileresolver.cpp:472
+#: makefileresolver/makefileresolver.cpp:501
 #, kde-format
 msgid "Output was: %1"
 msgstr "輸出：%1"
 
+#: makefileresolver/makefileresolver.cpp:494
 #: makefileresolver/makefileresolver.cpp:497
-#: makefileresolver/makefileresolver.cpp:500
 #, kde-format
 msgid "Recursive make call failed"
 msgstr "遞迴建立呼叫失敗"
 
-#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:494
 #, kde-format
 msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
 msgstr "「%1」參數字串看似無效。輸出：%2。"
 
-#: makefileresolver/makefileresolver.cpp:500
+#: makefileresolver/makefileresolver.cpp:497
 #, kde-format
 msgid "The directory \"%1\" does not exist. Output was: %2."
 msgstr "「%1」目錄不存在。輸出：%2。"
 
-#: makefileresolver/makefileresolver.cpp:504
+#: makefileresolver/makefileresolver.cpp:501
 #, kde-format
 msgid "Malformed recursive make call"
 msgstr "格式錯誤的遞迴建立呼叫"
 
-#: makefileresolver/makefileresolver.cpp:516
+#: makefileresolver/makefileresolver.cpp:513
 #, kde-format
 msgid "Could not extract include paths from make output"
 msgstr "無法從 make 輸出擷取包含路徑"
 
-#: makefileresolver/makefileresolver.cpp:517
+#: makefileresolver/makefileresolver.cpp:514
 #, kde-format
 msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
 msgstr "資料夾：\"%1\"  指令：\"%2\"  輸出：\"%3\""

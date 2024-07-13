@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2013-11-15 06:17+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -107,17 +107,17 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Core файлы:"
 
-#: mibreakpointcontroller.cpp:793
+#: mibreakpointcontroller.cpp:795
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Ескі мәні: %1"
 
-#: mibreakpointcontroller.cpp:796
+#: mibreakpointcontroller.cpp:798
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Жаңа мәні: %1"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:315
 #, fuzzy, kde-format
 #| msgctxt "<b>Internal debugger error</b>"
 #| msgid ""
@@ -132,7 +132,7 @@ msgstr ""
 "<p>gdb-ден келген жауапты талдау кезде жөндегіш компоненті бір ішкі қатеге "
 "тап болды. Қате туралы хабарлаңыз."
 
-#: midebugger.cpp:321
+#: midebugger.cpp:318
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -141,19 +141,19 @@ msgstr ""
 "Ерекшелігі: %1\n"
 "MI жауабы: %2"
 
-#: midebugger.cpp:324
+#: midebugger.cpp:321
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Жөндегіштің ішкі қатесі"
 
-#: midebugger.cpp:336 midebugsession.cpp:423
+#: midebugger.cpp:333 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "Процестен шықты"
 
-#: midebugger.cpp:345
+#: midebugger.cpp:342
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -162,12 +162,12 @@ msgstr ""
 "<b>Жөндеу басталмады.</b><p>'%1' жегілмеді. Жолы дұрыс келтірілгенін "
 "тексеріңіз."
 
-#: midebugger.cpp:353
+#: midebugger.cpp:350
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:358
+#: midebugger.cpp:355
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
@@ -180,14 +180,14 @@ msgstr ""
 "<b>Gdb қирады.</b><p>Сондықтан жөндеу сеансы аяқталып қалды.<br>Жәй gdb "
 "көмегімен қайталап көріңіз де, қате туралы хабарлаңыз.<br>"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:360
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Жөндегіш тоқтады"
 
-#: midebugger.cpp:366
+#: midebugger.cpp:363
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"

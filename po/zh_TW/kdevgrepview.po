@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2019-09-30 19:11+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -125,7 +125,7 @@ msgstr "找不到任何資料"
 msgid "Grep: %1"
 msgstr "Grep：%1"
 
-#: grepoutputdelegate.cpp:73 grepoutputdelegate.cpp:140
+#: grepoutputdelegate.cpp:75 grepoutputdelegate.cpp:142
 #, kde-format
 msgid "Line %1: "
 msgstr "第 %1 行："

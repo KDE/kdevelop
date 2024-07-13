@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2024-02-16 23:46+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -122,7 +122,7 @@ msgstr "Nessun risultato trovato"
 msgid "Grep: %1"
 msgstr "Grep: %1"
 
-#: grepoutputdelegate.cpp:73 grepoutputdelegate.cpp:140
+#: grepoutputdelegate.cpp:75 grepoutputdelegate.cpp:142
 #, kde-format
 msgid "Line %1: "
 msgstr "Riga %1: "

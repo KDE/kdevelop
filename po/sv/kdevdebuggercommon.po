@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2024-05-03 08:33+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -101,17 +101,17 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Minnesdump:"
 
-#: mibreakpointcontroller.cpp:793
+#: mibreakpointcontroller.cpp:795
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Tidigare värde: %1"
 
-#: mibreakpointcontroller.cpp:796
+#: mibreakpointcontroller.cpp:798
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Nytt värde: %1"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:315
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -123,7 +123,7 @@ msgstr ""
 "behandlades. Skicka gärna in en felrapport. Avlusningssessionen avslutas nu "
 "för att undvika en potentiell krasch."
 
-#: midebugger.cpp:321
+#: midebugger.cpp:318
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -132,18 +132,18 @@ msgstr ""
 "Undantaget är: %1\n"
 "MI-svaret är: %2"
 
-#: midebugger.cpp:324
+#: midebugger.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Internt fel i avlusaren"
 
-#: midebugger.cpp:336 midebugsession.cpp:423
+#: midebugger.cpp:333 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "Processen avslutades"
 
-#: midebugger.cpp:345
+#: midebugger.cpp:342
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -152,12 +152,12 @@ msgstr ""
 "<b>Kunde inte starta avlusaren.</b><p>Kunde inte köra '%1'. Försäkra dig om "
 "att sökvägsnamnet är riktigt angivet."
 
-#: midebugger.cpp:353
+#: midebugger.cpp:350
 #, kde-format
 msgid "Process failed to start"
 msgstr "Processen misslyckades starta"
 
-#: midebugger.cpp:358
+#: midebugger.cpp:355
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -168,13 +168,13 @@ msgstr ""
 "grund av det måste avlusningssessionen avslutas.<br>Försök att upprepa "
 "kraschen utan KDevelop och rapportera felet.<br>"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:360
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Avlusaren kraschade"
 
-#: midebugger.cpp:366
+#: midebugger.cpp:363
 #, kde-format
 msgid "Process crashed"
 msgstr "Processen kraschade"

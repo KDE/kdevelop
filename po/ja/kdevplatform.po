@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 01:44+0000\n"
+"POT-Creation-Date: 2024-07-13 01:43+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -33,31 +33,31 @@ msgstr ""
 "kom@kde.gr.jp,shinobo@leo.bakkoame.ne.jp,ikemo@wakaba.jp,hirosoft@users."
 "sourceforge.net,md81@bird.email.ne.jp,democtezuma@gmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:195
+#: debugger/breakpoint/breakpoint.cpp:196
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr ""
 
-#: debugger/breakpoint/breakpoint.cpp:201
+#: debugger/breakpoint/breakpoint.cpp:202
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr ""
 
-#: debugger/breakpoint/breakpoint.cpp:203
+#: debugger/breakpoint/breakpoint.cpp:204
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr ""
 
-#: debugger/breakpoint/breakpoint.cpp:205
+#: debugger/breakpoint/breakpoint.cpp:206
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr ""
 
-#: debugger/breakpoint/breakpoint.cpp:238
+#: debugger/breakpoint/breakpoint.cpp:239
 #, fuzzy, kde-format
 #| msgid "<b>%1</b> (%2)"
 msgctxt "location (address)"
@@ -314,7 +314,7 @@ msgid "Depth"
 msgstr "深さ"
 
 #: debugger/framestack/framestackmodel.cpp:284
-#: language/duchain/navigation/abstractnavigationcontext.cpp:520
+#: language/duchain/navigation/abstractnavigationcontext.cpp:522
 #, kde-format
 msgid "Function"
 msgstr "関数"
@@ -616,7 +616,7 @@ msgstr "ユーザ名(&U):"
 msgid "Failed to apply changes: %1"
 msgstr ""
 
-#: language/assistant/renameassistant.cpp:106
+#: language/assistant/renameassistant.cpp:108
 #, fuzzy, kde-format
 #| msgid "&Username:"
 msgid "Rename"
@@ -887,255 +887,255 @@ msgstr ""
 msgid "Import %1"
 msgstr "インポート"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:88
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:89
 #, fuzzy, kde-format
 #| msgid "Declaration"
 msgid "lost declaration"
 msgstr "宣言"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:95
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:96
 #, fuzzy, kde-format
 #| msgid "namespace %1 <br />"
 msgid "Back to %1<br />"
 msgstr "ネームスペース %1 <br />"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:115
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:116
 #, kde-format
 msgid "enumerator "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:136
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:137
 #, kde-format
 msgid " :[value-dependent]"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:158
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
 #, fuzzy, kde-format
 #| msgid "namespace %1 <br />"
 msgid "namespace %1 "
 msgstr "ネームスペース %1 <br />"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:169
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
 #, fuzzy, kde-format
 #| msgid "Rename Session"
 msgid "enumeration %1 "
 msgstr "セッション名を変更"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:178
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
 #, fuzzy, kde-format
 #| msgid "( resolved forward-declaration: "
 msgid "(resolved forward-declaration: "
 msgstr "(前方宣言を解決: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:181
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:182
 #, kde-format
 msgid ") "
 msgstr ") "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:183
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:184
 #, kde-format
 msgid "(unresolved forward-declaration) "
 msgstr "(前方宣言未解決) "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:198
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:199
 #, kde-format
 msgid "possible resolution from"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:213
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:214
 #, kde-format
 msgid "Returns: "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:215
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:216
 #, kde-format
 msgid "Type: "
 msgstr "タイプ: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:234
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:235
 #, kde-format
 msgid "Enum: "
 msgstr "列挙型:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:236
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:237
 #, kde-format
 msgid "Container: "
 msgstr "コンテナ: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:244
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:245
 #, kde-format
 msgid "Scope: %1 "
 msgstr "スコープ: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:262
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:263
 #, kde-format
 msgid "Access: %1 "
 msgstr "アクセス: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:281
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:282
 #, kde-format
 msgid "Kind: %1 %2 "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:283
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:284
 #, kde-format
 msgid "Kind: %1 "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:287
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
 #, kde-format
 msgid "Deprecated"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:287
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
 #, fuzzy, kde-format
 #| msgid "Status"
 msgid "Status: %1 "
 msgstr "状態"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:297
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:298
 #, kde-format
 msgid "Def.: "
 msgstr "定義: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:299
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:300
 #, kde-format
 msgid "Decl.: "
 msgstr "宣言: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:309
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:310
 #, kde-format
 msgid " Def.: "
 msgstr " 定義: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:319
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:320
 #, kde-format
 msgid " Decl.: "
 msgstr " 宣言: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:327
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:328
 #, kde-format
 msgid "Show uses"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:365
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:367
 #, kde-format
 msgid "Show documentation for "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:471
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:473
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:488
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:490
 #, kde-format
 msgid "Overrides a "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:489
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:516
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:518
 #, kde-format
 msgid "function"
 msgstr "関数"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:519
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:493
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:521
 #, kde-format
 msgid " from "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:515
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:517
 #, kde-format
 msgid "Hides a "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:539
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:541
 #, kde-format
 msgid "Overridden in "
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:556
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:558
 #, kde-format
 msgid "Overriders possible, show all"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:557
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
 #, kde-format
 msgid "More overriders possible, show all"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:567
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:569
 #, kde-format
 msgid "Inherited by "
 msgstr "次に継承される "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:582
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:584
 #, kde-format
 msgid "Inheriters possible, show all"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:583
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:585
 #, kde-format
 msgid "More inheriters possible, show all"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:790
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:792
 #, kde-format
 msgctxt "A declaration that is unknown"
 msgid "Unknown"
 msgstr "不明"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:816
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:818
 #, fuzzy, kde-format
 #| msgid "Definition"
 msgctxt "tells if a declaration is defining the variable's value"
 msgid "definition"
 msgstr "定義"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:821
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:823
 #, kde-format
 msgctxt "as in c++ forward declaration"
 msgid "forward"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:826
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:828
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:879
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:881
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
 msgstr[0] ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:880
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
 msgstr[0] ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
 #, fuzzy, kde-format
 #| msgid "Loading Project %1"
 msgid "offset in parent: %1"
 msgstr "プロジェクト %1 を読み込み中"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:883
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:888
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
 #, kde-format
 msgid "size: %1 Bytes"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:892
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
 msgid "aligned to: %1 Bytes"
 msgstr ""
@@ -1162,37 +1162,37 @@ msgctxt "Count of files this file was included into"
 msgid "Included by"
 msgstr ""
 
-#: language/duchain/navigation/abstractnavigationcontext.cpp:502
+#: language/duchain/navigation/abstractnavigationcontext.cpp:504
 #, kde-format
 msgid "Typedef"
 msgstr "Typedef"
 
-#: language/duchain/navigation/abstractnavigationcontext.cpp:505
+#: language/duchain/navigation/abstractnavigationcontext.cpp:507
 #, kde-format
 msgid "Class"
 msgstr "クラス"
 
-#: language/duchain/navigation/abstractnavigationcontext.cpp:507
+#: language/duchain/navigation/abstractnavigationcontext.cpp:509
 #, kde-format
 msgid "Variable"
 msgstr "変数"
 
-#: language/duchain/navigation/abstractnavigationcontext.cpp:509
+#: language/duchain/navigation/abstractnavigationcontext.cpp:511
 #, kde-format
 msgid "Namespace"
 msgstr "ネームスペース"
 
-#: language/duchain/navigation/abstractnavigationcontext.cpp:514
+#: language/duchain/navigation/abstractnavigationcontext.cpp:516
 #, kde-format
 msgid "Namespace import"
 msgstr ""
 
-#: language/duchain/navigation/abstractnavigationcontext.cpp:516
+#: language/duchain/navigation/abstractnavigationcontext.cpp:518
 #, kde-format
 msgid "Namespace alias"
 msgstr ""
 
-#: language/duchain/navigation/abstractnavigationcontext.cpp:523
+#: language/duchain/navigation/abstractnavigationcontext.cpp:525
 #, kde-format
 msgid "Forward Declaration"
 msgstr "前方宣言"
@@ -2840,52 +2840,52 @@ msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
 msgstr ""
 
-#: shell/openprojectdialog.cpp:112
+#: shell/openprojectdialog.cpp:113
 #, kde-format
 msgid "%1|All Project Files (%1)"
 msgstr ""
 
-#: shell/openprojectdialog.cpp:121
+#: shell/openprojectdialog.cpp:122
 #, fuzzy, kde-format
 #| msgid "Select the source"
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "ソースを選択"
 
-#: shell/openprojectdialog.cpp:129
+#: shell/openprojectdialog.cpp:130
 #, kde-format
 msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
 "to open as a project"
 msgstr ""
 
-#: shell/openprojectdialog.cpp:136 shell/openprojectdialog.cpp:156
+#: shell/openprojectdialog.cpp:137 shell/openprojectdialog.cpp:157
 #, fuzzy, kde-format
 #| msgid "Open recent project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "最近のプロジェクトを開きます"
 
-#: shell/openprojectdialog.cpp:144
+#: shell/openprojectdialog.cpp:145
 #, fuzzy, kde-format
 #| msgid "Project information"
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "プロジェクト情報"
 
-#: shell/openprojectdialog.cpp:207
+#: shell/openprojectdialog.cpp:208
 #, fuzzy, kde-format
 #| msgid "open %1 as project"
 msgid "Open \"%1\" as project"
 msgstr "%1 をプロジェクトとして開く"
 
-#: shell/openprojectdialog.cpp:211
+#: shell/openprojectdialog.cpp:212
 #, fuzzy, kde-format
 #| msgid "Selected URL is invalid."
 msgid "Selected URL is invalid"
 msgstr "選択された URL は不正です。"
 
-#: shell/openprojectdialog.cpp:256
+#: shell/openprojectdialog.cpp:257
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@item:inlistbox"
@@ -3664,7 +3664,7 @@ msgctxt "@info:tooltip"
 msgid "Discard all modifications"
 msgstr "すべての変更を破棄"
 
-#: shell/session.cpp:157 shell/session.cpp:178
+#: shell/session.cpp:158 shell/session.cpp:181
 #, kde-format
 msgid "(no projects)"
 msgstr "(プロジェクトなし)"

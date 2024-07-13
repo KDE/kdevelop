@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2021-06-28 00:20+0400\n"
 "Last-Translator: Kheyyam Gojayev <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -99,17 +99,17 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Özək faylı"
 
-#: mibreakpointcontroller.cpp:793
+#: mibreakpointcontroller.cpp:795
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Köhnə dəyər: %1"
 
-#: mibreakpointcontroller.cpp:796
+#: mibreakpointcontroller.cpp:798
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Yeni dəyər: %1"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:315
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -121,7 +121,7 @@ msgstr ""
 "ilə rastlaşdı. Xəta hesabatını göndərməniz xahis olunur. Baş verə biləcək "
 "qəzanın qarşısını almaq üçün sazlayıcı sesseiyası işini sonlandıracaqdır"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:318
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -130,18 +130,18 @@ msgstr ""
 "İstisna: %1\n"
 "Mİ-dən alınan cavab: %2"
 
-#: midebugger.cpp:324
+#: midebugger.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Daxili sazlayıcı xətası"
 
-#: midebugger.cpp:336 midebugsession.cpp:423
+#: midebugger.cpp:333 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "Proses başa çatdı"
 
-#: midebugger.cpp:345
+#: midebugger.cpp:342
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -150,12 +150,12 @@ msgstr ""
 "<b>Sazlayıcı başladıla bilmədi. </b><p>Başladıla bilmədi: '%1'. Yolun düzgün "
 "göstərildiyinə əmin olun."
 
-#: midebugger.cpp:353
+#: midebugger.cpp:350
 #, kde-format
 msgid "Process failed to start"
 msgstr "Prosesin başladılması uğursuz oldu"
 
-#: midebugger.cpp:358
+#: midebugger.cpp:355
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -166,13 +166,13 @@ msgstr ""
 "sazlayıcı sessiyası sonlandı.<br>KDevelop olmadan qəzanı yenidən yaratmağa "
 "cəhd edin və xəta haqqında məlumat verin.<br>"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:360
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Sazlayıcı çökdü"
 
-#: midebugger.cpp:366
+#: midebugger.cpp:363
 #, kde-format
 msgid "Process crashed"
 msgstr "Proses çökdü"

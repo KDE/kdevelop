@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2022-07-14 09:51-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -206,69 +206,69 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Gravar na configuração global"
 
-#: gitplugin.cpp:185
+#: gitplugin.cpp:186
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr ""
 "Não foi possível encontrar o executável git. Ele está instalado no sistema?"
 
-#: gitplugin.cpp:194
+#: gitplugin.cpp:195
 #, kde-format
 msgid "Git Commit"
 msgstr ""
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Rebase"
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:248
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Modificações temporárias do Git"
 
-#: gitplugin.cpp:248
+#: gitplugin.cpp:249
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Gerenciador de modificações temporárias"
 
-#: gitplugin.cpp:249
+#: gitplugin.cpp:250
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Guardar uma modificação temporária"
 
-#: gitplugin.cpp:250
+#: gitplugin.cpp:251
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Repor uma modificação temporária"
 
-#: gitplugin.cpp:283
+#: gitplugin.cpp:284
 #, kde-format
 msgid "error: %1"
 msgstr "erro: %1"
 
-#: gitplugin.cpp:382 gitplugin.cpp:393
+#: gitplugin.cpp:383 gitplugin.cpp:394
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Não foi especificada a lista de arquivos"
 
-#: gitplugin.cpp:455
+#: gitplugin.cpp:456
 #, fuzzy, kde-format
 #| msgid "Could not revert changes"
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Não foi possível reverter as alterações"
 
-#: gitplugin.cpp:490
+#: gitplugin.cpp:491
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Não foi possível reverter as alterações"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:502
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -276,35 +276,35 @@ msgstr ""
 "Os arquivos a seguir têm modificações a enviar que serão perdidas. Deseja "
 "continuar?"
 
-#: gitplugin.cpp:526
+#: gitplugin.cpp:527
 #, kde-format
 msgid "No files or message specified"
 msgstr "Não foram indicados arquivos ou uma mensagem"
 
-#: gitplugin.cpp:530 gitplugin.cpp:549
+#: gitplugin.cpp:531 gitplugin.cpp:550
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Não foi indicado o e-mail ou o nome para o Git"
 
-#: gitplugin.cpp:546
+#: gitplugin.cpp:547
 #, fuzzy, kde-format
 #| msgid "No files or message specified"
 msgid "No message specified"
 msgstr "Não foram indicados arquivos ou uma mensagem"
 
-#: gitplugin.cpp:620
+#: gitplugin.cpp:621
 #, kde-format
 msgid "No files to remove"
 msgstr "Não existem arquivos para remover"
 
-#: gitplugin.cpp:900
+#: gitplugin.cpp:901
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Existem alterações pendentes, deseja guardar temporariamente essas "
 "modificações?"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:902
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Pop Stash"
@@ -312,7 +312,7 @@ msgctxt "@action:button"
 msgid "Stash"
 msgstr "Repor uma modificação temporária"
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:903
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2010-03-13 19:16+0100\n"
 "Last-Translator: Morten Anton Bach Sjøgren <m_abs@mabs.dk>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -119,12 +119,12 @@ msgstr "Kopiér i subversion"
 msgid "Not enough information to copy file"
 msgstr "Ikke nok information til at kopiere fil"
 
-#: svndiffjob.cpp:253
+#: svndiffjob.cpp:255
 #, kde-format
 msgid "Subversion Diff"
 msgstr "Forskelle i subversion"
 
-#: svndiffjob.cpp:270
+#: svndiffjob.cpp:272
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "Ikke nok information til at vise forskelle"

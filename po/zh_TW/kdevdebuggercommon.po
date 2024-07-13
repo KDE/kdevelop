@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2014-02-27 11:05+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -106,17 +106,17 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Core 檔："
 
-#: mibreakpointcontroller.cpp:793
+#: mibreakpointcontroller.cpp:795
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br/>舊值：%1"
 
-#: mibreakpointcontroller.cpp:796
+#: mibreakpointcontroller.cpp:798
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br/>新值：%1"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:315
 #, fuzzy, kde-format
 #| msgctxt "<b>Internal debugger error</b>"
 #| msgid ""
@@ -129,7 +129,7 @@ msgid ""
 "now end to prevent potential crash"
 msgstr "<p>除錯器組件處理 gdb 的回覆時遇到內部錯誤。請回報此問題。"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:318
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -138,31 +138,31 @@ msgstr ""
 "例外：%1\n"
 "MI 回覆：%2"
 
-#: midebugger.cpp:324
+#: midebugger.cpp:321
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "內部除錯器錯誤"
 
-#: midebugger.cpp:336 midebugsession.cpp:423
+#: midebugger.cpp:333 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "行程已離開"
 
-#: midebugger.cpp:345
+#: midebugger.cpp:342
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
 "path name is specified correctly."
 msgstr "<b>無法啟動除錯器：</b><p>無法執行 %1。請確定指定的路徑是否正確。"
 
-#: midebugger.cpp:353
+#: midebugger.cpp:350
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:358
+#: midebugger.cpp:355
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
@@ -175,14 +175,14 @@ msgstr ""
 "<b>Gdb 已崩潰。</b> <p>因此，此除錯階段已被中止。<br/> 請試著用命令列執行 "
 "gdb 再試著重現此問題，並回報錯誤。<br/>"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:360
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "除錯器已停止"
 
-#: midebugger.cpp:366
+#: midebugger.cpp:363
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"

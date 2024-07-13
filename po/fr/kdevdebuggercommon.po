@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2024-05-08 19:40+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -108,17 +108,17 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Fichier « Core » :"
 
-#: mibreakpointcontroller.cpp:793
+#: mibreakpointcontroller.cpp:795
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Ancienne valeur : %1"
 
-#: mibreakpointcontroller.cpp:796
+#: mibreakpointcontroller.cpp:798
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Nouvelle valeur : %1"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:315
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -130,7 +130,7 @@ msgstr ""
 "réponse du débogueur. Veuillez envoyer un rapport de bogue. La session de "
 "débogage va maintenant prendre fin pour éviter un plantage éventuel."
 
-#: midebugger.cpp:321
+#: midebugger.cpp:318
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -139,18 +139,18 @@ msgstr ""
 "L'exception est : %1\n"
 "La réponse de MI est : %2"
 
-#: midebugger.cpp:324
+#: midebugger.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Erreur interne du débogueur"
 
-#: midebugger.cpp:336 midebugsession.cpp:423
+#: midebugger.cpp:333 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "Le processus s'est terminé"
 
-#: midebugger.cpp:345
+#: midebugger.cpp:342
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -160,12 +160,12 @@ msgstr ""
 "d'exécuter « %1 ». Vérifiez que le nom de l'emplacement est spécifié "
 "correctement."
 
-#: midebugger.cpp:353
+#: midebugger.cpp:350
 #, kde-format
 msgid "Process failed to start"
 msgstr "Impossible de démarrer le processus"
 
-#: midebugger.cpp:358
+#: midebugger.cpp:355
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -177,13 +177,13 @@ msgstr ""
 "débogage<br>Essayez de reproduire ce plantage sans KDevelop et envoyez un "
 "rapport de bogue.<br>"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:360
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Le débogueur a planté"
 
-#: midebugger.cpp:366
+#: midebugger.cpp:363
 #, kde-format
 msgid "Process crashed"
 msgstr "Le processus a planté"

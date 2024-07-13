@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2014-09-08 22:56+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -105,17 +105,17 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Magfájl:"
 
-#: mibreakpointcontroller.cpp:793
+#: mibreakpointcontroller.cpp:795
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Régi érték: %1"
 
-#: mibreakpointcontroller.cpp:796
+#: mibreakpointcontroller.cpp:798
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Új érték: %1"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:315
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -124,7 +124,7 @@ msgid ""
 "now end to prevent potential crash"
 msgstr ""
 
-#: midebugger.cpp:321
+#: midebugger.cpp:318
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -133,19 +133,19 @@ msgstr ""
 "A kivétel: %1\n"
 "Az MI válasz: %2"
 
-#: midebugger.cpp:324
+#: midebugger.cpp:321
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Belső hibakereső hiba"
 
-#: midebugger.cpp:336 midebugsession.cpp:423
+#: midebugger.cpp:333 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "A folyamat kiléptetve"
 
-#: midebugger.cpp:345
+#: midebugger.cpp:342
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -154,12 +154,12 @@ msgstr ""
 "<b>Nem sikerült elindítani a hibakeresőt.</b><p>Nem sikerült futtatni: „%1”. "
 "Győződjön meg arról, hogy az útvonal neve helyesen van-e megadva."
 
-#: midebugger.cpp:353
+#: midebugger.cpp:350
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:358
+#: midebugger.cpp:355
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
@@ -173,14 +173,14 @@ msgstr ""
 "fejezni.<br>Próbálja meg reprodukálni az összeomlást egyszerű gdb "
 "használatával és jelentse a hibát.<br>"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:360
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "A hibakereső leállítva"
 
-#: midebugger.cpp:366
+#: midebugger.cpp:363
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"

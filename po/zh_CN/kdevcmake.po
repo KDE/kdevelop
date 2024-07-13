@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-13 01:43+0000\n"
 "PO-Revision-Date: 2024-04-22 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -398,18 +398,18 @@ msgstr "配置 CMake 设置"
 msgid "Parse test suite %1"
 msgstr "解析测试套件 %1"
 
-#: testing/ctestrunjob.cpp:75
+#: testing/ctestrunjob.cpp:77
 #, kde-format
 msgid "CTest"
 msgstr "CTest"
 
-#: testing/ctestrunjob.cpp:117
+#: testing/ctestrunjob.cpp:119
 #, kde-format
 msgctxt "running test %1, %2 test case"
 msgid "CTest %1: %2"
 msgstr "CTest %1：%2"
 
-#: testing/ctestrunjob.cpp:119
+#: testing/ctestrunjob.cpp:121
 #, kde-format
 msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2020-07-20 08:21+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -118,12 +118,12 @@ msgstr "Копіювання Subversion"
 msgid "Not enough information to copy file"
 msgstr "Недостатньо відомостей для копіювання файла"
 
-#: svndiffjob.cpp:253
+#: svndiffjob.cpp:255
 #, kde-format
 msgid "Subversion Diff"
 msgstr "Diff Subversion"
 
-#: svndiffjob.cpp:270
+#: svndiffjob.cpp:272
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "Надано недостатньо відомостей для виконання команди diff"

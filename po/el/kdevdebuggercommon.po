@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2019-08-27 13:18+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -114,17 +114,17 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Αρχείο πυρήνα:"
 
-#: mibreakpointcontroller.cpp:793
+#: mibreakpointcontroller.cpp:795
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Παλιά τιμή: %1"
 
-#: mibreakpointcontroller.cpp:796
+#: mibreakpointcontroller.cpp:798
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Νέα τιμή: %1"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:315
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -137,7 +137,7 @@ msgstr ""
 "συνεδρία αποσφαλμάτωσης θα τερματιστεί τώρα για την αποφυγή πιθανής "
 "κατάρρευσης"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:318
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -146,19 +146,19 @@ msgstr ""
 "Η εξαίρεση είναι: %1\n"
 "Η απάντηση MI είναι: %2"
 
-#: midebugger.cpp:324
+#: midebugger.cpp:321
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Εσωτερικό σφάλμα debugger"
 
-#: midebugger.cpp:336 midebugsession.cpp:423
+#: midebugger.cpp:333 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "Η διεργασία τερμάτισε"
 
-#: midebugger.cpp:345
+#: midebugger.cpp:342
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -167,12 +167,12 @@ msgstr ""
 "<b>Αδυναμία εκκίνησης του debugger.</b><p>Αδυναμία εκτέλεσης του '%1'. "
 "Σιγουρευτείτε ότι δώσατε τη διαδρομή και το όνομα σωστά."
 
-#: midebugger.cpp:353
+#: midebugger.cpp:350
 #, kde-format
 msgid "Process failed to start"
 msgstr "Αποτυχία έναρξης διεργασίας"
 
-#: midebugger.cpp:358
+#: midebugger.cpp:355
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -184,14 +184,14 @@ msgstr ""
 "<br>Προσπαθήστε να αναπαραγάγετε την κατάρρευση χωρίς το KDevelop και "
 "στείλτε αναφορά σφάλματος.<br>"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:360
 #, fuzzy, kde-format
 #| msgid "Debugger crashed"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Ο debugger κατέρρευσε"
 
-#: midebugger.cpp:366
+#: midebugger.cpp:363
 #, kde-format
 msgid "Process crashed"
 msgstr "Η διεργασία κατέρρευσε"

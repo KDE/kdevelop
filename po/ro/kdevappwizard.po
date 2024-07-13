@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-13 01:43+0000\n"
 "PO-Revision-Date: 2012-12-21 04:25+0200\n"
 "Last-Translator: Sergiu Bivol <sergiu.bivol@jurnaltv.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -40,21 +40,21 @@ msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "Control versiune"
 
-#: appwizardplugin.cpp:69
+#: appwizardplugin.cpp:70
 #, fuzzy, kde-format
 #| msgid "&New Project..."
 msgctxt "@action"
 msgid "New from Template..."
 msgstr "Proiect &nou..."
 
-#: appwizardplugin.cpp:71
+#: appwizardplugin.cpp:72
 #, fuzzy, kde-format
 #| msgid "Generate a new project from a template"
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "Generează un proiect nou dintr-un șablon"
 
-#: appwizardplugin.cpp:72
+#: appwizardplugin.cpp:73
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -62,18 +62,18 @@ msgid ""
 "skeleton for your application from a set of templates."
 msgstr ""
 
-#: appwizardplugin.cpp:106
+#: appwizardplugin.cpp:107
 #, fuzzy, kde-format
 #| msgid "Create New Project"
 msgid "Could not create project from template."
 msgstr "Creează proiect nou"
 
-#: appwizardplugin.cpp:134
+#: appwizardplugin.cpp:135
 #, kde-format
 msgid "Please see the Version Control tool view."
 msgstr ""
 
-#: appwizardplugin.cpp:136
+#: appwizardplugin.cpp:137
 #, fuzzy, kde-format
 #| msgctxt "Page for version control options"
 #| msgid "Version Control"
@@ -81,120 +81,120 @@ msgctxt "@title:window"
 msgid "Version Control System Error"
 msgstr "Control versiune"
 
-#: appwizardplugin.cpp:152
+#: appwizardplugin.cpp:153
 #, kde-format
 msgid "Could not initialize DVCS repository"
 msgstr ""
 
-#: appwizardplugin.cpp:161
+#: appwizardplugin.cpp:162
 #, kde-format
 msgid "Could not check status of the DVCS repository"
 msgstr ""
 
-#: appwizardplugin.cpp:174
+#: appwizardplugin.cpp:175
 #, kde-format
 msgid "Could not add files to the DVCS repository"
 msgstr ""
 
-#: appwizardplugin.cpp:182
+#: appwizardplugin.cpp:183
 #, fuzzy, kde-format
 #| msgid "Create New Project"
 msgid "Could not import project into %1."
 msgstr "Creează proiect nou"
 
-#: appwizardplugin.cpp:199
+#: appwizardplugin.cpp:200
 #, kde-format
 msgid "Could not import project"
 msgstr ""
 
-#: appwizardplugin.cpp:207
+#: appwizardplugin.cpp:208
 #, kde-format
 msgid "Could not checkout imported project"
 msgstr ""
 
-#: appwizardplugin.cpp:332
+#: appwizardplugin.cpp:333
 #, fuzzy, kde-format
 #| msgid "Create New Project"
 msgid "Could not create new project"
 msgstr "Creează proiect nou"
 
-#: appwizardplugin.cpp:467
+#: appwizardplugin.cpp:468
 #, kde-format
 msgid "The file %1 cannot be created."
 msgstr ""
 
-#: appwizardplugin.cpp:570
+#: appwizardplugin.cpp:571
 #, kde-format
 msgid "Project Templates"
 msgstr "Șabloane de proiecte"
 
-#: projectselectionpage.cpp:56
+#: projectselectionpage.cpp:58
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr ""
 
-#: projectselectionpage.cpp:57
+#: projectselectionpage.cpp:59
 #, fuzzy, kde-format
 #| msgid "Project Templates"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Șabloane de proiecte"
 
-#: projectselectionpage.cpp:67
+#: projectselectionpage.cpp:69
 #, fuzzy, kde-format
 #| msgid "Project Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Șabloane de proiecte"
 
-#: projectselectionpage.cpp:74
+#: projectselectionpage.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr ""
 
-#: projectselectionpage.cpp:170
+#: projectselectionpage.cpp:172
 #, fuzzy, kde-format
 #| msgid "Invalid Location"
 msgid "Invalid location"
 msgstr "Locație nevalidă"
 
-#: projectselectionpage.cpp:177
+#: projectselectionpage.cpp:179
 #, kde-format
 msgid "Empty project name"
 msgstr "Denumire de proiect goală"
 
-#: projectselectionpage.cpp:198
+#: projectselectionpage.cpp:199
 #, kde-format
 msgid "Invalid project name"
 msgstr "Denumire de proiect nevalidă"
 
-#: projectselectionpage.cpp:217
+#: projectselectionpage.cpp:218
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr ""
 
-#: projectselectionpage.cpp:232
+#: projectselectionpage.cpp:233
 #, fuzzy, kde-format
 #| msgid "Invalid project name"
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Denumire de proiect nevalidă"
 
-#: projectselectionpage.cpp:245
+#: projectselectionpage.cpp:246
 #, fuzzy, kde-format
 #| msgid "Directory already exists and is not empty!"
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "Directorul există deja și nu este gol!"
 
-#: projectselectionpage.cpp:292
+#: projectselectionpage.cpp:293
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr ""
 
-#: projectselectionpage.cpp:308
+#: projectselectionpage.cpp:309
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"

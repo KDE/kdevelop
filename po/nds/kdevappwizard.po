@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-13 01:43+0000\n"
 "PO-Revision-Date: 2010-02-08 03:10+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -42,21 +42,21 @@ msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "Verschoonkuntrull"
 
-#: appwizardplugin.cpp:69
+#: appwizardplugin.cpp:70
 #, fuzzy, kde-format
 #| msgid "New From Template..."
 msgctxt "@action"
 msgid "New from Template..."
 msgstr "Nieg ut Vörlaag..."
 
-#: appwizardplugin.cpp:71
+#: appwizardplugin.cpp:72
 #, fuzzy, kde-format
 #| msgid "Generate a new project from a template"
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "Nieg Projekt ut Vörlaag opstellen"
 
-#: appwizardplugin.cpp:72
+#: appwizardplugin.cpp:73
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>New project</b><p>This starts KDevelop's application wizard. It helps "
@@ -70,128 +70,128 @@ msgstr ""
 "<b>Nieg Projekt</b><p>Dit start KDevelop sien Programm-Hölper. He hölpt Di "
 "bi't Opstellen vun en Rohbuu för Dien Programm mit en Sett vun Vörlagen.</p>"
 
-#: appwizardplugin.cpp:106
+#: appwizardplugin.cpp:107
 #, fuzzy, kde-format
 #| msgid "Could not create project from template\n"
 msgid "Could not create project from template."
 msgstr "Projekt lett sik nich ut Vörlaag opstellen\n"
 
-#: appwizardplugin.cpp:134
+#: appwizardplugin.cpp:135
 #, kde-format
 msgid "Please see the Version Control tool view."
 msgstr ""
 
-#: appwizardplugin.cpp:136
+#: appwizardplugin.cpp:137
 #, fuzzy, kde-format
 #| msgid "Version Control System:"
 msgctxt "@title:window"
 msgid "Version Control System Error"
 msgstr "Verschoonkuntrullsysteem:"
 
-#: appwizardplugin.cpp:152
+#: appwizardplugin.cpp:153
 #, kde-format
 msgid "Could not initialize DVCS repository"
 msgstr "DVCS-Archiev lett sik nich torechtmaken"
 
-#: appwizardplugin.cpp:161
+#: appwizardplugin.cpp:162
 #, fuzzy, kde-format
 #| msgid "Could not add files to the DVCS repository"
 msgid "Could not check status of the DVCS repository"
 msgstr "Dateien laat sik nich na't DVCS-Archiev tofögen."
 
-#: appwizardplugin.cpp:174
+#: appwizardplugin.cpp:175
 #, kde-format
 msgid "Could not add files to the DVCS repository"
 msgstr "Dateien laat sik nich na't DVCS-Archiev tofögen."
 
-#: appwizardplugin.cpp:182
+#: appwizardplugin.cpp:183
 #, kde-format
 msgid "Could not import project into %1."
 msgstr "Projekt lett sik nich na \"%1\" importeren"
 
-#: appwizardplugin.cpp:199
+#: appwizardplugin.cpp:200
 #, kde-format
 msgid "Could not import project"
 msgstr "Projekt lett sik nich importeren."
 
-#: appwizardplugin.cpp:207
+#: appwizardplugin.cpp:208
 #, kde-format
 msgid "Could not checkout imported project"
 msgstr "Importeert Projekt lett sik nich utlesen."
 
-#: appwizardplugin.cpp:332
+#: appwizardplugin.cpp:333
 #, kde-format
 msgid "Could not create new project"
 msgstr "Nieg Projekt lett sik nich opstellen."
 
-#: appwizardplugin.cpp:467
+#: appwizardplugin.cpp:468
 #, kde-format
 msgid "The file %1 cannot be created."
 msgstr "De Datei \"%1\" lett sik nich opstellen."
 
-#: appwizardplugin.cpp:570
+#: appwizardplugin.cpp:571
 #, kde-format
 msgid "Project Templates"
 msgstr "Projektvörlagen"
 
-#: projectselectionpage.cpp:56
+#: projectselectionpage.cpp:58
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr ""
 
-#: projectselectionpage.cpp:57
+#: projectselectionpage.cpp:59
 #, fuzzy, kde-format
 #| msgid "Project Templates"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Projektvörlagen"
 
-#: projectselectionpage.cpp:67
+#: projectselectionpage.cpp:69
 #, fuzzy, kde-format
 #| msgid "Project Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Projektvörlagen"
 
-#: projectselectionpage.cpp:74
+#: projectselectionpage.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr ""
 
-#: projectselectionpage.cpp:170
+#: projectselectionpage.cpp:172
 #, kde-format
 msgid "Invalid location"
 msgstr "Leeg Steed"
 
-#: projectselectionpage.cpp:177
+#: projectselectionpage.cpp:179
 #, kde-format
 msgid "Empty project name"
 msgstr "Leddig Projektnaam"
 
-#: projectselectionpage.cpp:198
+#: projectselectionpage.cpp:199
 #, kde-format
 msgid "Invalid project name"
 msgstr "Leeg Projektnaam"
 
-#: projectselectionpage.cpp:217
+#: projectselectionpage.cpp:218
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "Ünnerornern laat sik nich opstellen, Verlöven fehlt för: %1"
 
-#: projectselectionpage.cpp:232
+#: projectselectionpage.cpp:233
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Leeg Projektvörlaag, bitte en Ennknütt-Element utsöken."
 
-#: projectselectionpage.cpp:245
+#: projectselectionpage.cpp:246
 #, fuzzy, kde-format
 #| msgid "Path already exists and contains files"
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "Dat gifft den Orner al, un he is nich leddig!"
 
-#: projectselectionpage.cpp:292
+#: projectselectionpage.cpp:293
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
@@ -200,7 +200,7 @@ msgstr ""
 "Dat gifft den angeven Orner al, un dor sünd Dateien binnen. Wullt Du redig "
 "wiedermaken?"
 
-#: projectselectionpage.cpp:308
+#: projectselectionpage.cpp:309
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"

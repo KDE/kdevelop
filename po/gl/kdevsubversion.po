@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2023-06-23 09:17+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -120,12 +120,12 @@ msgstr "Copia de Subversion"
 msgid "Not enough information to copy file"
 msgstr "Non hai información de abondo para copiar o ficheiro"
 
-#: svndiffjob.cpp:253
+#: svndiffjob.cpp:255
 #, kde-format
 msgid "Subversion Diff"
 msgstr "Diff de Subversion"
 
-#: svndiffjob.cpp:270
+#: svndiffjob.cpp:272
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "Non se deu información de abondo para executar o diff"
