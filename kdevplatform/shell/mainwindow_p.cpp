@@ -422,7 +422,7 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         menu.addActions(actionMap.values());
     }
 
-    auto* lockAction = new QAction(this);
+    auto* const lockAction = new QAction(&menu);
     lockAction->setCheckable(true);
     lockAction->setText(i18nc("@action:inmenu", "Lock the Panel from Hiding"));
 
