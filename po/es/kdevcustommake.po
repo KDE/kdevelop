@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustommake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
 "PO-Revision-Date: 2014-08-08 16:18+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -47,45 +47,45 @@ msgstr "En caché: %1"
 msgid "Filename %1 seems to be malformed"
 msgstr "Parece que el nombre de archivo %1 está mal formado"
 
-#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:472
 #, kde-format
 msgid "Failed to extract new working directory"
 msgstr "La extracción del nuevo directorio de trabajo ha fallado"
 
-#: makefileresolver/makefileresolver.cpp:475
-#: makefileresolver/makefileresolver.cpp:504
+#: makefileresolver/makefileresolver.cpp:472
+#: makefileresolver/makefileresolver.cpp:501
 #, kde-format
 msgid "Output was: %1"
 msgstr "La salida ha sido: %1"
 
+#: makefileresolver/makefileresolver.cpp:494
 #: makefileresolver/makefileresolver.cpp:497
-#: makefileresolver/makefileresolver.cpp:500
 #, kde-format
 msgid "Recursive make call failed"
 msgstr "La llamada recursiva a make ha fallado"
 
-#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:494
 #, kde-format
 msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
 msgstr ""
 "Parece que cadena del parámetro «%1» no es válida. La salida ha sido: %2."
 
-#: makefileresolver/makefileresolver.cpp:500
+#: makefileresolver/makefileresolver.cpp:497
 #, kde-format
 msgid "The directory \"%1\" does not exist. Output was: %2."
 msgstr "El directorio «%1» no existe. La salida ha sido: %2."
 
-#: makefileresolver/makefileresolver.cpp:504
+#: makefileresolver/makefileresolver.cpp:501
 #, kde-format
 msgid "Malformed recursive make call"
 msgstr "Llamada recursiva a make mal formada"
 
-#: makefileresolver/makefileresolver.cpp:516
+#: makefileresolver/makefileresolver.cpp:513
 #, kde-format
 msgid "Could not extract include paths from make output"
 msgstr "No es posible extraer rutas de inclusión de la salida de make"
 
-#: makefileresolver/makefileresolver.cpp:517
+#: makefileresolver/makefileresolver.cpp:514
 #, kde-format
 msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
 msgstr "Carpeta: «%1»  Orden: «%2»  Salida: «%3»"
