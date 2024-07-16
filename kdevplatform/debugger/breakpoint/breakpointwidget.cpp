@@ -122,7 +122,7 @@ void BreakpointWidget::setupPopupMenu()
         this,
         SLOT(slotAddBlankBreakpoint()) );
     // Use this action also to provide a local shortcut
-    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_B, Qt::Key_C));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_B, QKeyCombination{Qt::Key_C}));
     addAction(action);
 
     newBreakpoint->addAction(
