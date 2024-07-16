@@ -8,8 +8,9 @@ Dependencies:
     'frameworks/knotifyconfig': '@stable'
     'frameworks/ktexteditor': '@stable'
     'frameworks/threadweaver': '@stable'
-    'sdk/libkomparediff2': '@same'
     'kdevelop/kdevelop-pg-qt': '@stable'
+    # TODO: port to libkomparediff2/qt6
+    # 'sdk/libkomparediff2': '@same'
     # TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later. Once available, adapt code & reenable again.
     # 'utilities/okteta': '@stable'
 
