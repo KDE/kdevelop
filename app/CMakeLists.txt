@@ -1,3 +1,5 @@
+# TODO: port Plasma applet & KRunner plugin
+set(CMAKE_DISABLE_FIND_PACKAGE_KF5Plasma ON)
 find_package(KF5Plasma CONFIG)
 set_package_properties(KF5Plasma PROPERTIES
     PURPOSE "Plasma libraries for enabling the plasma addons"
