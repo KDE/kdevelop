@@ -363,7 +363,7 @@ void BreakpointModel::reloaded(KTextEditor::Document* document)
     d->reloadState = ReloadState::Idle;
 }
 
-void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, const QPoint &pos, bool& handled)
+void BreakpointModel::markContextMenuRequested(KTextEditor::Document* document, Mark mark, QPoint pos, bool& handled)
 {
     int type = mark.type;
     qCDebug(DEBUGGER) << type;

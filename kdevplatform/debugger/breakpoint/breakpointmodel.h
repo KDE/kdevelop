@@ -173,8 +173,7 @@ private Q_SLOTS:
     void documentSaved(KDevelop::IDocument*);
     void aboutToDeleteMovingInterfaceContent(KTextEditor::Document *document);
 
-    void markContextMenuRequested( KTextEditor::Document* document, KTextEditor::Mark mark,
-                               const QPoint &pos, bool& handled );
+    void markContextMenuRequested(KTextEditor::Document* document, KTextEditor::Mark mark, QPoint pos, bool& handled);
 
 private:
     static const QPixmap* breakpointPixmap();
