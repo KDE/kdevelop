@@ -149,7 +149,7 @@ void VcsAnnotationItemDelegate::renderBackground(QPainter* painter,
     const auto revision = annotationLine.revision();
     auto brushIt = m_backgrounds.find(revision);
     if (brushIt == m_backgrounds.end()) {
-        KTextEditor::Attribute::Ptr normalStyle = option.view->defaultStyleAttribute(KTextEditor::dsNormal);
+        const auto normalStyle = option.view->defaultStyleAttribute(KSyntaxHighlighting::Theme::TextStyle::Normal);
         const auto background = (normalStyle->hasProperty(QTextFormat::BackgroundBrush)) ? normalStyle->background().color() : QColor(Qt::white);
         const int background_y = background.red()*0.299 + 0.587*background.green()
                                                         + 0.114*background.blue();
@@ -175,13 +175,13 @@ void VcsAnnotationItemDelegate::renderMessageAndAge(QPainter* painter,
 
     painter->save();
 
-    KTextEditor::Attribute::Ptr normalStyle = option.view->defaultStyleAttribute(KTextEditor::dsNormal);
+    const auto normalStyle = option.view->defaultStyleAttribute(KSyntaxHighlighting::Theme::TextStyle::Normal);
     painter->setPen(normalStyle->foreground().color());
     painter->drawText(messageRect, Qt::AlignLeading | Qt::AlignVCenter,
                       painter->fontMetrics().elidedText(messageText, Qt::ElideRight, messageRect.width()));
 
-    // TODO: defaultStyleAttribute only returns reliably for dsNormal, so what to do for a comment-like color?
-    KTextEditor::Attribute::Ptr commentStyle = option.view->defaultStyleAttribute(KTextEditor::dsNormal);
+    // TODO: defaultStyleAttribute only returns reliably for TextStyle::Normal, so what to do for a comment-like color?
+    const auto commentStyle = option.view->defaultStyleAttribute(KSyntaxHighlighting::Theme::TextStyle::Normal);
     painter->setPen(commentStyle->foreground().color());
     painter->drawText(ageRect, Qt::AlignTrailing | Qt::AlignVCenter, ageText);
 
@@ -196,8 +196,8 @@ void VcsAnnotationItemDelegate::renderAuthor(QPainter* painter,
 
     painter->save();
 
-    // TODO: defaultStyleAttribute only returns reliably for dsNormal, so what to do for a comment-like color?
-    KTextEditor::Attribute::Ptr commentStyle = option.view->defaultStyleAttribute(KTextEditor::dsNormal);
+    // TODO: defaultStyleAttribute only returns reliably for TextStyle::Normal, so what to do for a comment-like color?
+    const auto commentStyle = option.view->defaultStyleAttribute(KSyntaxHighlighting::Theme::TextStyle::Normal);
     painter->setPen(commentStyle->foreground().color());
     painter->drawText(authorRect, Qt::AlignLeading | Qt::AlignVCenter,
                       painter->fontMetrics().elidedText(authorText, Qt::ElideRight, authorRect.width()));
@@ -211,7 +211,7 @@ void VcsAnnotationItemDelegate::renderHighlight(QPainter* painter,
     // Draw a border around all adjacent entries that have the same text as the currently hovered one
     if ((option.state & QStyle::State_MouseOver) &&
         (option.annotationItemGroupingPosition & KTextEditor::StyleOptionAnnotationItem::InGroup)) {
-        KTextEditor::Attribute::Ptr style = option.view->defaultStyleAttribute(KTextEditor::dsNormal);
+        const auto style = option.view->defaultStyleAttribute(KSyntaxHighlighting::Theme::TextStyle::Normal);
         painter->setPen(style->foreground().color());
         // Use floating point coordinates to support scaled rendering
         QRectF rect(option.rect);

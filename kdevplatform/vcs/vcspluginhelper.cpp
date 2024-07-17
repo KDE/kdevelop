@@ -400,7 +400,7 @@ void VcsPluginHelper::annotation()
         QColor foreground(Qt::black);
         QColor background(Qt::white);
         if (view) {
-            KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::dsNormal);
+            const auto style = view->defaultStyleAttribute(KSyntaxHighlighting::Theme::TextStyle::Normal);
             foreground = style->foreground().color();
             if (style->hasProperty(QTextFormat::BackgroundBrush)) {
                 background = style->background().color();

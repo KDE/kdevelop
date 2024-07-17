@@ -66,7 +66,7 @@ void ConfigurableHighlightingColors::reset(ColorCache* cache, KTextEditor::View*
 
     {
         auto highlightUses = createAttribute(CodeHighlightingType::HighlightUses);
-        highlightUses->setDefaultStyle(KTextEditor::dsNormal);
+        highlightUses->setDefaultStyle(KSyntaxHighlighting::Theme::TextStyle::Normal);
         highlightUses->setForeground(highlightUses->selectedForeground());
         highlightUses->setBackground(highlightUses->selectedBackground());
         highlightUses->setBackgroundFillWhitespace(true);
@@ -77,7 +77,7 @@ void ConfigurableHighlightingColors::reset(ColorCache* cache, KTextEditor::View*
     }
     {
         auto error = createAttribute(CodeHighlightingType::Error);
-        error->setDefaultStyle(KTextEditor::dsError);
+        error->setDefaultStyle(KSyntaxHighlighting::Theme::TextStyle::Error);
     }
 }
 }
