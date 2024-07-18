@@ -183,7 +183,7 @@ protected:
      */
     bool openTypeFromName(NameT* name, bool needClass)
     {
-        return openTypeFromName(identifierForNode(name), name, needClass);
+        return openTypeFromName(this->identifierForNode(name), name, needClass);
     }
 
     /**
