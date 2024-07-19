@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-08-30 14:35+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -20,127 +20,127 @@ msgstr ""
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
 "X-Generator: Lokalize 20.12.0\n"
 
-#: committoolview.cpp:206 committoolview.cpp:207
+#: committoolview.cpp:205 committoolview.cpp:206
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Suodata tiedoston tai projektin nimellä"
 
-#: committoolview.cpp:224
+#: committoolview.cpp:223
 #, kde-format
 msgid "Refresh"
 msgstr "Virkistä"
 
-#: committoolview.cpp:225
+#: committoolview.cpp:224
 #, kde-format
 msgid "Stage selected"
 msgstr ""
 
-#: committoolview.cpp:227
+#: committoolview.cpp:226
 #, kde-format
 msgid "Unstage selected"
 msgstr ""
 
-#: committoolview.cpp:229
+#: committoolview.cpp:228
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr ""
 
-#: committoolview.cpp:482
+#: committoolview.cpp:481
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr ""
 
-#: diffviewsctrl.cpp:52
+#: diffviewsctrl.cpp:51
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:54
+#: diffviewsctrl.cpp:53
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:56
+#: diffviewsctrl.cpp:55
 #, fuzzy, kde-format
 #| msgid "Removes the selected branch"
 msgid "Revert selected lines or hunk"
 msgstr "Poistaa valitun haaran"
 
-#: diffviewsctrl.cpp:58
+#: diffviewsctrl.cpp:57
 #, kde-format
 msgid "Go to line in source"
 msgstr ""
 
-#: diffviewsctrl.cpp:110
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Unstage selected lines"
 msgstr ""
 
-#: diffviewsctrl.cpp:111
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Stage selected lines"
 msgstr ""
 
-#: diffviewsctrl.cpp:112
+#: diffviewsctrl.cpp:111
 #, fuzzy, kde-format
 #| msgid "Removes the selected branch"
 msgid "Revert selected lines"
 msgstr "Poistaa valitun haaran"
 
-#: diffviewsctrl.cpp:114
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:115
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Stage selected hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:116
+#: diffviewsctrl.cpp:115
 #, fuzzy, kde-format
 #| msgid "Removes the selected branch"
 msgid "Revert selected hunk"
 msgstr "Poistaa valitun haaran"
 
-#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "S"
 msgstr ""
 
-#: diffviewsctrl.cpp:127 diffviewsctrl.cpp:133
+#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:179
+#: diffviewsctrl.cpp:178
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (vaiheistettu)"
 
-#: diffviewsctrl.cpp:181
+#: diffviewsctrl.cpp:180
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Vaiheistettu (%1)"
 
-#: diffviewsctrl.cpp:183
+#: diffviewsctrl.cpp:182
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr ""
 
-#: diffviewsctrl.cpp:185
+#: diffviewsctrl.cpp:184
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr ""
 
-#: diffviewsctrl.cpp:340
+#: diffviewsctrl.cpp:339
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
 "cannot be undone. Continue?"
 msgstr ""
 
-#: diffviewsctrl.cpp:342
+#: diffviewsctrl.cpp:341
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"

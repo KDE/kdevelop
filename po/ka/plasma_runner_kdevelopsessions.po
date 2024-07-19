@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-04-24 19:33+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,17 +18,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: kdevelopsessions.cpp:27 kdevelopsessions.cpp:31
+#: kdevelopsessions.cpp:27
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "KDevelop-ის იმ სესიების ჩვენება, რომელიც შეიცავენ :q:."
 
-#: kdevelopsessions.cpp:35
+#: kdevelopsessions.cpp:31
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "თქვენს ანგარიშში KDevelop-ის რედაქტორის ყველა სესიის ჩვენება."
 
-#: kdevelopsessions.cpp:129
+#: kdevelopsessions.cpp:105
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "KDevelop-ის სესიის გახსნა"

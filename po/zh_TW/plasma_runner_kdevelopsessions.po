@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2013-02-21 08:31+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: kdevelopsessions.cpp:27 kdevelopsessions.cpp:31
+#: kdevelopsessions.cpp:27
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "尋找符合 :q: 的 Kdevelop 工作階段。"
 
-#: kdevelopsessions.cpp:35
+#: kdevelopsessions.cpp:31
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "列出您的帳號中的所有 KDevelop 編輯器工作階段。"
 
-#: kdevelopsessions.cpp:129
+#: kdevelopsessions.cpp:105
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "開啟 KDevelop 工作階段"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2013-03-23 14:08+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: kdevelopsessions.cpp:27 kdevelopsessions.cpp:31
+#: kdevelopsessions.cpp:27
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr ":q: याच्याशी जुळणारे के-डेव्हलप सत्र शोधा."
 
-#: kdevelopsessions.cpp:35
+#: kdevelopsessions.cpp:31
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "तुमच्या खात्यातील सर्व के-डेव्हलप संपादक सत्रांची यादी करतो."
 
-#: kdevelopsessions.cpp:129
+#: kdevelopsessions.cpp:105
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "के-डेव्हलप सत्र उघडा"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2010-05-27 22:46+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -40,21 +40,21 @@ msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "การควบคุมรุ่น"
 
-#: appwizardplugin.cpp:70
+#: appwizardplugin.cpp:69
 #, fuzzy, kde-format
 #| msgid "New From Template..."
 msgctxt "@action"
 msgid "New from Template..."
 msgstr "ใหม่จากแม่แบบ..."
 
-#: appwizardplugin.cpp:72
+#: appwizardplugin.cpp:71
 #, fuzzy, kde-format
 #| msgid "Generate a new project from a template"
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "สร้างโครงการใหม่จากแม่แบบ"
 
-#: appwizardplugin.cpp:73
+#: appwizardplugin.cpp:72
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>New project</b><p>This starts KDevelop's application wizard. It helps "
@@ -68,135 +68,135 @@ msgstr ""
 "<b>โครงการใหม่</b><p>จะเปิดเครื่องมือช่วยสร้างแอพลิเคชันของ KDevelop ซึ่งจะช่วยคุณสร้าง "
 "โครงร่างสำหรับแอพลิเคชันของคุณจากชุดแม่แบบ</p>"
 
-#: appwizardplugin.cpp:107
+#: appwizardplugin.cpp:106
 #, fuzzy, kde-format
 #| msgid "Could not create project from template\n"
 msgid "Could not create project from template."
 msgstr "ไม่สามารถสร้างโครงการจากแม่แบบได้\n"
 
-#: appwizardplugin.cpp:135
+#: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
 msgstr ""
 
-#: appwizardplugin.cpp:137
+#: appwizardplugin.cpp:136
 #, fuzzy, kde-format
 #| msgid "Version Control System:"
 msgctxt "@title:window"
 msgid "Version Control System Error"
 msgstr "ระบบควบคุมรุ่น:"
 
-#: appwizardplugin.cpp:153
+#: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
 msgstr "ไม่สามารถเริ่มคลัง DVCS"
 
-#: appwizardplugin.cpp:162
+#: appwizardplugin.cpp:161
 #, fuzzy, kde-format
 #| msgid "Could not add files to the DVCS repository"
 msgid "Could not check status of the DVCS repository"
 msgstr "ไม่สามารถเพิ่มแฟ้มไปยังคลัง DVCS ได้"
 
-#: appwizardplugin.cpp:175
+#: appwizardplugin.cpp:174
 #, kde-format
 msgid "Could not add files to the DVCS repository"
 msgstr "ไม่สามารถเพิ่มแฟ้มไปยังคลัง DVCS ได้"
 
-#: appwizardplugin.cpp:183
+#: appwizardplugin.cpp:182
 #, kde-format
 msgid "Could not import project into %1."
 msgstr "ไม่สามารถนำเข้าโครงการเข้าสู่ %1 ได้"
 
-#: appwizardplugin.cpp:200
+#: appwizardplugin.cpp:199
 #, kde-format
 msgid "Could not import project"
 msgstr "ไม่สามารถนำเข้าโครงการได้"
 
-#: appwizardplugin.cpp:208
+#: appwizardplugin.cpp:207
 #, kde-format
 msgid "Could not checkout imported project"
 msgstr "ไม่สามารถตรวจสอบข้อบกพร่องของโครงการที่นำเข้ามาได้"
 
-#: appwizardplugin.cpp:333
+#: appwizardplugin.cpp:332
 #, kde-format
 msgid "Could not create new project"
 msgstr "ไม่สามารถสร้างโครงการใหม่ได้"
 
-#: appwizardplugin.cpp:468
+#: appwizardplugin.cpp:467
 #, kde-format
 msgid "The file %1 cannot be created."
 msgstr "ไม่สามารถสร้างแฟ้ม %1 ได้"
 
-#: appwizardplugin.cpp:571
+#: appwizardplugin.cpp:568
 #, kde-format
 msgid "Project Templates"
 msgstr "แม่แบบโครงการ"
 
-#: projectselectionpage.cpp:58
+#: projectselectionpage.cpp:60
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr ""
 
-#: projectselectionpage.cpp:59
+#: projectselectionpage.cpp:61
 #, fuzzy, kde-format
 #| msgid "Project Templates"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "แม่แบบโครงการ"
 
-#: projectselectionpage.cpp:69
+#: projectselectionpage.cpp:71
 #, fuzzy, kde-format
 #| msgid "Project Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "แม่แบบโครงการ"
 
-#: projectselectionpage.cpp:76
+#: projectselectionpage.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr ""
 
-#: projectselectionpage.cpp:172
+#: projectselectionpage.cpp:174
 #, kde-format
 msgid "Invalid location"
 msgstr "ที่ตั้งไม่ถูกต้อง"
 
-#: projectselectionpage.cpp:179
+#: projectselectionpage.cpp:181
 #, kde-format
 msgid "Empty project name"
 msgstr "ชื่อโครงการว่างอยู่"
 
-#: projectselectionpage.cpp:199
+#: projectselectionpage.cpp:201
 #, kde-format
 msgid "Invalid project name"
 msgstr "ชื่อโครงการไม่ถูกต้อง"
 
-#: projectselectionpage.cpp:218
+#: projectselectionpage.cpp:220
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "ไม่สามารถสร้างไดเรกทอรีย่อยได้ เนื่องจากขาดสิทธิ์ใน: %1"
 
-#: projectselectionpage.cpp:233
+#: projectselectionpage.cpp:235
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "แม่แบบโครงการใหม่ไม่ถูกต้อง กรุณาเลือกรายการใบไม้"
 
-#: projectselectionpage.cpp:246
+#: projectselectionpage.cpp:248
 #, fuzzy, kde-format
 #| msgid "Path already exists and contains files"
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "มีพาธอยู่แล้วและมีแฟ้มอยู่"
 
-#: projectselectionpage.cpp:293
+#: projectselectionpage.cpp:295
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr "พาธที่ระบุมีอยู่แล้วและมีแฟ้มอยู่ด้วย คุณแน่ใจที่จะดำเนินการต่อหรือไม่?"
 
-#: projectselectionpage.cpp:309
+#: projectselectionpage.cpp:311
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"

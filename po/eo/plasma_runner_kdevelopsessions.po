@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2023-04-01 21:46+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: kdevelopsessions.cpp:27 kdevelopsessions.cpp:31
+#: kdevelopsessions.cpp:27
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Trovas KDevelop-seancojn kongruajn al :q:."
 
-#: kdevelopsessions.cpp:35
+#: kdevelopsessions.cpp:31
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Listigas ĉiujn KDevelop-redaktilajn seancojn en via konto."
 
-#: kdevelopsessions.cpp:129
+#: kdevelopsessions.cpp:105
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Malfermi KDevelop-seancon"

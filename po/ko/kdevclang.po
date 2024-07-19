@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-05-07 02:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -75,7 +75,7 @@ msgctxt "@option:check"
 msgid "Forward declare assistant"
 msgstr "전방 선언 도우미"
 
-#: clangsupport.cpp:172
+#: clangsupport.cpp:171
 #, kde-format
 msgid ""
 "The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
@@ -87,13 +87,13 @@ msgstr ""
 "KDEV_CLANG_BUILTIN_DIR 환경 변수를 수동으로 설정하십시오.\n"
 "같이 보기: https://bugs.kde.org/show_bug.cgi?id=393779"
 
-#: clangsupport.cpp:279
+#: clangsupport.cpp:278
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "선언 이름 바꾸기"
 
-#: clangsupport.cpp:286
+#: clangsupport.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2014-06-21 11:01+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: kdevelopsessions.cpp:27 kdevelopsessions.cpp:31
+#: kdevelopsessions.cpp:27
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Finds KDevelop sessions matching :q:."
 
-#: kdevelopsessions.cpp:35
+#: kdevelopsessions.cpp:31
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Lists all the KDevelop editor sessions in your account."
 
-#: kdevelopsessions.cpp:129
+#: kdevelopsessions.cpp:105
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Open KDevelop Session"

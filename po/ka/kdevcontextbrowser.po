@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-04-24 19:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,85 +18,85 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: contextbrowser.cpp:165
+#: contextbrowser.cpp:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
 msgstr "შემცველობის ისტორიაში დაბრუნება"
 
-#: contextbrowser.cpp:177
+#: contextbrowser.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
 msgstr "შემცველობის ისტორიაში წინ გადასვლა"
 
-#: contextbrowser.cpp:193
+#: contextbrowser.cpp:190
 #, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
 msgstr "კონტური"
 
-#: contextbrowser.cpp:194
+#: contextbrowser.cpp:191
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr "კონტური"
 
-#: contextbrowser.cpp:195
+#: contextbrowser.cpp:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr "აქტიური დოკუმენტის კონტურზე გადასვლა. დათვალიერებისთვის დააჭირეთ"
 
-#: contextbrowser.cpp:236
+#: contextbrowser.cpp:233
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
 msgstr "კოდის დათვა&ლიერების რეჟიმი"
 
-#: contextbrowser.cpp:242
+#: contextbrowser.cpp:239
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr "&წინაზე მონახულებული კონტექსტი"
 
-#: contextbrowser.cpp:248
+#: contextbrowser.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr "&შემდეგ მოსანახულებელი კონტექსტი"
 
-#: contextbrowser.cpp:254
+#: contextbrowser.cpp:251
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr "წ&ინა გამოყენება"
 
-#: contextbrowser.cpp:260
+#: contextbrowser.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "&Next Use"
 msgstr "შ&ემდეგი გამოყენება"
 
-#: contextbrowser.cpp:266
+#: contextbrowser.cpp:263
 #, kde-format
 msgctxt "@action"
 msgid "Context Browser"
 msgstr "კონტექსტის ბრაუზერი"
 
-#: contextbrowser.cpp:297 contextbrowser.cpp:377 contextbrowserview.cpp:172
+#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
 #, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr "კოდის ბრაუზერი"
 
-#: contextbrowser.cpp:313
+#: contextbrowser.cpp:310
 #, kde-format
 msgctxt "@action"
 msgid "Find Uses"
 msgstr "გამოყენებების მოძებნა"
 
-#: contextbrowser.cpp:1568
+#: contextbrowser.cpp:1559
 #, kde-format
 msgid "(changed)"
 msgstr "(შეცვლილია)"

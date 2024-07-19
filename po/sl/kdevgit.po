@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-09-27 19:04+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -21,117 +21,117 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Lokalize 22.04.1\n"
 
-#: committoolview.cpp:206 committoolview.cpp:207
+#: committoolview.cpp:205 committoolview.cpp:206
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Filtriraj po imenu datoteke/projekta"
 
-#: committoolview.cpp:224
+#: committoolview.cpp:223
 #, kde-format
 msgid "Refresh"
 msgstr "Osveži"
 
-#: committoolview.cpp:225
+#: committoolview.cpp:224
 #, kde-format
 msgid "Stage selected"
 msgstr "Priredi izbrano"
 
-#: committoolview.cpp:227
+#: committoolview.cpp:226
 #, kde-format
 msgid "Unstage selected"
 msgstr "Odpriredi izbrano"
 
-#: committoolview.cpp:229
+#: committoolview.cpp:228
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "Povrni neprirejena urejanja"
 
-#: committoolview.cpp:482
+#: committoolview.cpp:481
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr "Objavljanje ni uspelo. Oglejte si pogled orodja za nadzor različic."
 
-#: diffviewsctrl.cpp:52
+#: diffviewsctrl.cpp:51
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "Priredi izbrane vrstice ali kos"
 
-#: diffviewsctrl.cpp:54
+#: diffviewsctrl.cpp:53
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "Odpriredi izbrane vrstice ali kos"
 
-#: diffviewsctrl.cpp:56
+#: diffviewsctrl.cpp:55
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "Povrni izbrane vrstice ali kos"
 
-#: diffviewsctrl.cpp:58
+#: diffviewsctrl.cpp:57
 #, kde-format
 msgid "Go to line in source"
 msgstr "Pojdi v vrstico v izvorni kodi"
 
-#: diffviewsctrl.cpp:110
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Odpriredi izbrane vrstice"
 
-#: diffviewsctrl.cpp:111
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Priredi izbrane vrstice"
 
-#: diffviewsctrl.cpp:112
+#: diffviewsctrl.cpp:111
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Povrni izbrane vrstice"
 
-#: diffviewsctrl.cpp:114
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Odpriredi izbrani kos"
 
-#: diffviewsctrl.cpp:115
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Priredi izbrani kos"
 
-#: diffviewsctrl.cpp:116
+#: diffviewsctrl.cpp:115
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Povrni izbrani kos"
 
-#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "S"
 msgstr "P"
 
-#: diffviewsctrl.cpp:127 diffviewsctrl.cpp:133
+#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
 #, kde-format
 msgid "G"
 msgstr "N"
 
-#: diffviewsctrl.cpp:179
+#: diffviewsctrl.cpp:178
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (prirejeno)"
 
-#: diffviewsctrl.cpp:181
+#: diffviewsctrl.cpp:180
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Prirejeno (%1)"
 
-#: diffviewsctrl.cpp:183
+#: diffviewsctrl.cpp:182
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Neprirejeno (%1)"
 
-#: diffviewsctrl.cpp:185
+#: diffviewsctrl.cpp:184
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (neprirejeno)"
 
-#: diffviewsctrl.cpp:340
+#: diffviewsctrl.cpp:339
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -140,7 +140,7 @@ msgstr ""
 "Izbrane vrstice se bodo povrnjene in spremembe bodo izgubljene. Te operacije "
 "ni mogoče razveljaviti. Ali želite nadaljevati?"
 
-#: diffviewsctrl.cpp:342
+#: diffviewsctrl.cpp:341
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"

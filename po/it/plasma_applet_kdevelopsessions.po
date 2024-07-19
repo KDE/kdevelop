@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelopsessions\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2012-07-26 10:47+0200\n"
 "Last-Translator: Simone Solinas <ksolsim@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: package/contents/ui/kdevelopsessions.qml:55
+#: package/contents/ui/main.qml:58
 msgid "KDevelop Sessions"
 msgstr "Sessioni KDevelop"
 
-#: package/contents/ui/kdevelopsessions.qml:75
+#: package/contents/ui/main.qml:79
 msgid "Arbitrary String Which Says Something"
 msgstr "Stringa arbitraria che dice qualcosa"

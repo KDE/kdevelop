@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-12-04 22:35+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -20,10 +20,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 22.08.3\n"
 
-#: package/contents/ui/kdevelopsessions.qml:55
+#: package/contents/ui/main.qml:58
 msgid "KDevelop Sessions"
 msgstr "KDevelop saioak"
 
-#: package/contents/ui/kdevelopsessions.qml:75
+#: package/contents/ui/main.qml:79
 msgid "Arbitrary String Which Says Something"
 msgstr "Zerbait esaten duen kate arbitrarioa"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2023-08-02 01:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -21,85 +21,85 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 23.11.70\n"
 
-#: contextbrowser.cpp:165
+#: contextbrowser.cpp:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
 msgstr "Bağlam geçmişinde geri git"
 
-#: contextbrowser.cpp:177
+#: contextbrowser.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
 msgstr "Bağlam geçmişinde ileri git"
 
-#: contextbrowser.cpp:193
+#: contextbrowser.cpp:190
 #, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
 msgstr "Ana Hat"
 
-#: contextbrowser.cpp:194
+#: contextbrowser.cpp:191
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr "Ana Hat"
 
-#: contextbrowser.cpp:195
+#: contextbrowser.cpp:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr "Etkin belge ana hatlarında dolaş, göz atmak için tıkla"
 
-#: contextbrowser.cpp:236
+#: contextbrowser.cpp:233
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
 msgstr "Kaynak &Tarama Kipi"
 
-#: contextbrowser.cpp:242
+#: contextbrowser.cpp:239
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr "&Önceki Bakılan Bağlam"
 
-#: contextbrowser.cpp:248
+#: contextbrowser.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr "&Sonraki Bakılan Bağlam"
 
-#: contextbrowser.cpp:254
+#: contextbrowser.cpp:251
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr "&Önceki Kullanım"
 
-#: contextbrowser.cpp:260
+#: contextbrowser.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "&Next Use"
 msgstr "&Sonraki Kullanım"
 
-#: contextbrowser.cpp:266
+#: contextbrowser.cpp:263
 #, kde-format
 msgctxt "@action"
 msgid "Context Browser"
 msgstr "Bağlam Tarayıcısı"
 
-#: contextbrowser.cpp:297 contextbrowser.cpp:377 contextbrowserview.cpp:172
+#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
 #, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr "Kod Tarayıcısı"
 
-#: contextbrowser.cpp:313
+#: contextbrowser.cpp:310
 #, kde-format
 msgctxt "@action"
 msgid "Find Uses"
 msgstr "Kullanımları Bul"
 
-#: contextbrowser.cpp:1568
+#: contextbrowser.cpp:1559
 #, kde-format
 msgid "(changed)"
 msgstr "(değiştirildi)"

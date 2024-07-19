@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2013-11-15 06:17+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -193,14 +193,14 @@ msgstr "Жөндегіш тоқтады"
 msgid "Process crashed"
 msgstr "Процестен шықты"
 
-#: midebuggerplugin.cpp:110
+#: midebuggerplugin.cpp:112
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Core файлын зерттеу..."
 
-#: midebuggerplugin.cpp:112
+#: midebuggerplugin.cpp:114
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -219,14 +219,14 @@ msgstr ""
 "кейін талдауға мүмкіндік беретін, қираған кездегі бағдарламаға қатысты "
 "жадының мазмұны сақталады.</p>"
 
-#: midebuggerplugin.cpp:124
+#: midebuggerplugin.cpp:126
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Процеске ілектіру"
 
-#: midebuggerplugin.cpp:126
+#: midebuggerplugin.cpp:128
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -235,20 +235,20 @@ msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>Процеске ілектіру</b><p>Жөндегішті жегілген процеске ілектіру.</p>"
 
-#: midebuggerplugin.cpp:139
+#: midebuggerplugin.cpp:141
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:213
+#: midebuggerplugin.cpp:215
 #, fuzzy, kde-format
 #| msgid "Evaluate: %1"
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Есептеу: %1"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:217
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -260,14 +260,14 @@ msgid ""
 msgstr ""
 "<b>Өрнекті есептеу</b><p>Меңзердің астындағы өрнектің мәнін есептеп беру.</p>"
 
-#: midebuggerplugin.cpp:223
+#: midebuggerplugin.cpp:225
 #, fuzzy, kde-format
 #| msgid "Watch: %1"
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Бақылау: %1"
 
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:227
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
@@ -280,35 +280,35 @@ msgstr ""
 "<b>Өрнекті бақылау</b><p>Меңзердің астындағы өрнектіАйнымалы/Бақылау "
 "тізіміне қосу.</p>"
 
-#: midebuggerplugin.cpp:238
+#: midebuggerplugin.cpp:240
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Зерттеуге core файлын таңдау..."
 
-#: midebuggerplugin.cpp:243 midebuggerplugin.cpp:263
+#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
+#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:258
+#: midebuggerplugin.cpp:260
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Қай процеске ілектіру..."
 
-#: midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:281
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "%1 процесіне ілекпеді: жөндегіш өзі-өзіне ілекпейді."
 
-#: midebuggerplugin.cpp:299
+#: midebuggerplugin.cpp:301
 #, kde-format
 msgid "Debugger"
 msgstr "Жөндегіш"

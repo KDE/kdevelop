@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2020-10-04 20:17+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -82,94 +82,94 @@ msgctxt "@option:check"
 msgid "Already applied"
 msgstr "이미 적용됨"
 
-#: patchhighlighter.cpp:88
+#: patchhighlighter.cpp:80
 #, kde-format
 msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
 msgstr "<b><span style=\"color:red\">충돌</span></b><br/>"
 
-#: patchhighlighter.cpp:96
+#: patchhighlighter.cpp:88
 #, kde-format
 msgid "Applied.<br/>"
 msgstr "적용됨.<br/>"
 
-#: patchhighlighter.cpp:99 patchhighlighter.cpp:114
+#: patchhighlighter.cpp:91 patchhighlighter.cpp:106
 #, kde-format
 msgid "Insertion<br/>"
 msgstr "삽입<br/>"
 
-#: patchhighlighter.cpp:102 patchhighlighter.cpp:111
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:103
 #, kde-format
 msgid "Removal<br/>"
 msgstr "삭제<br/>"
 
-#: patchhighlighter.cpp:103
+#: patchhighlighter.cpp:95
 #, kde-format
 msgid "Previous:<br/>"
 msgstr "이전:<br/>"
 
-#: patchhighlighter.cpp:108
+#: patchhighlighter.cpp:100
 #, kde-format
 msgid "Reverted.<br/>"
 msgstr "되돌림.<br/>"
 
-#: patchhighlighter.cpp:116
+#: patchhighlighter.cpp:108
 #, kde-format
 msgid "Alternative:<br/>"
 msgstr "대안:<br/>"
 
-#: patchhighlighter.cpp:206
+#: patchhighlighter.cpp:199
 #, kde-format
 msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
 msgstr "변경 사항을 적용할 수 없습니다: 텍스트가 \"%1\"이어야 하지만 \"%2\"임."
 
-#: patchhighlighter.cpp:421 patchhighlighter.cpp:428
+#: patchhighlighter.cpp:409 patchhighlighter.cpp:416
 #, kde-format
 msgctxt "@item"
 msgid "Insertion"
 msgstr "삽입"
 
-#: patchhighlighter.cpp:423 patchhighlighter.cpp:430
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:419
 #, kde-format
 msgctxt "@item"
 msgid "Removal"
 msgstr "삭제"
 
-#: patchhighlighter.cpp:425 patchhighlighter.cpp:432
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:422
 #, kde-format
 msgctxt "@item"
 msgid "Change"
 msgstr "변경"
 
-#: patchreview.cpp:305 patchreview.cpp:307
+#: patchreview.cpp:294 patchreview.cpp:296
 #, kde-format
 msgctxt "@title:window"
 msgid "Kompare Model Update"
 msgstr "Kompare 모델 업데이트"
 
-#: patchreview.cpp:467
+#: patchreview.cpp:455
 #, kde-format
 msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "요약"
 
-#: patchreview.cpp:473 patchreview.cpp:549
+#: patchreview.cpp:460 patchreview.cpp:534
 #, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
 msgstr "패치 검토"
 
-#: patchreview.cpp:480
+#: patchreview.cpp:467
 #, kde-format
 msgid "The base directory of the patch must be an absolute directory."
 msgstr "패치의 기반 디렉터리는 절대 경로여야 합니다."
 
-#: patchreview.cpp:512 patchreview.cpp:538
+#: patchreview.cpp:499 patchreview.cpp:523
 #, kde-format
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "검토 끝내기"
 
-#: patchreview.cpp:620
+#: patchreview.cpp:605
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"
@@ -245,19 +245,19 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "변경"
 
-#: patchreviewtoolview.cpp:92
+#: patchreviewtoolview.cpp:87
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
 msgid_plural "%2 (%1 hunks)"
 msgstr[0] "%2(hunk %1개)"
 
-#: patchreviewtoolview.cpp:232
+#: patchreviewtoolview.cpp:227
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr "<qt>다음에서 새 요청을 찾을 수 있습니다:<br /><a href='%1'>%1</a></qt>"
 
-#: patchreviewtoolview.cpp:235
+#: patchreviewtoolview.cpp:230
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
@@ -266,30 +266,30 @@ msgstr ""
 "패치를 내보낼 수 없습니다.\n"
 "%1"
 
-#: patchreviewtoolview.cpp:266
+#: patchreviewtoolview.cpp:261
 #, kde-format
 msgctxt "@action"
 msgid "Select All"
 msgstr "모두 선택"
 
-#: patchreviewtoolview.cpp:268
+#: patchreviewtoolview.cpp:263
 #, kde-format
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "모두 선택 해제"
 
-#: patchreviewtoolview.cpp:566
+#: patchreviewtoolview.cpp:561
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "테스트 실행 중: %p%"
 
-#: patchreviewtoolview.cpp:594
+#: patchreviewtoolview.cpp:589
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "모든 테스트 %1개 통과함"
 
-#: patchreviewtoolview.cpp:598
+#: patchreviewtoolview.cpp:593
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "테스트 결과: 통과 %1개, 실패 %2개, 오류 %3개"

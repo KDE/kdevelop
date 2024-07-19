@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2013-05-05 19:36+0200\n"
 "Last-Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -18,10 +18,10 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: package/contents/ui/kdevelopsessions.qml:55
+#: package/contents/ui/main.qml:58
 msgid "KDevelop Sessions"
 msgstr "Seje za KDevelop"
 
-#: package/contents/ui/kdevelopsessions.qml:75
+#: package/contents/ui/main.qml:79
 msgid "Arbitrary String Which Says Something"
 msgstr "Poljuben niz, ki nekaj pove"

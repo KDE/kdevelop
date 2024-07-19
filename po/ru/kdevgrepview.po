@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2023-04-25 10:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -76,17 +76,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Поиск «%1» в %2 (в %3)"
 
-#: grepjob.cpp:144
+#: grepjob.cpp:156
 #, kde-format
 msgid "Find in Files"
 msgstr "Поиск в файлах"
 
-#: grepjob.cpp:163
+#: grepjob.cpp:175
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Файлы, соответствующие шаблону, не найдены"
 
-#: grepjob.cpp:177
+#: grepjob.cpp:189
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -95,7 +95,7 @@ msgid "Captures are not allowed in pattern string"
 msgstr "Группы захвата в строке поиска не допускаются"
 
 # Многоточие нужно, т.к. иначе непонятно, завершился поиск или нет. --aspotashev
-#: grepjob.cpp:198
+#: grepjob.cpp:210
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
@@ -104,27 +104,27 @@ msgstr[1] "Поиск <b>%2</b> в %1 файлах"
 msgstr[2] "Поиск <b>%2</b> в %1 файлах"
 msgstr[3] "Поиск <b>%2</b> в одном файле"
 
-#: grepjob.cpp:224
+#: grepjob.cpp:236
 #, kde-format
 msgid "Collecting files..."
 msgstr "Составление списка файлов..."
 
-#: grepjob.cpp:268
+#: grepjob.cpp:280
 #, kde-format
 msgid "Search aborted"
 msgstr "Поиск прерван"
 
-#: grepjob.cpp:314
+#: grepjob.cpp:326
 #, kde-format
 msgid "Failed: %1"
 msgstr "Произошла ошибка: %1"
 
-#: grepjob.cpp:317
+#: grepjob.cpp:329
 #, kde-format
 msgid "No results found"
 msgstr "Ничего не найдено"
 
-#: grepjob.cpp:336
+#: grepjob.cpp:348
 #, kde-format
 msgid "Grep: %1"
 msgstr "Фильтр: %1"
@@ -135,7 +135,7 @@ msgid "Line %1: "
 msgstr "Строка %1: "
 
 # [reported at bugs.kde.org] BUGME: hardcoded plurals
-#: grepoutputmodel.cpp:377
+#: grepoutputmodel.cpp:400
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
@@ -144,7 +144,7 @@ msgstr[1] "<b>%1</b> совпадения"
 msgstr[2] "<b>%1</b> совпадений"
 msgstr[3] "<b>%1</b> совпадение"
 
-#: grepoutputmodel.cpp:378
+#: grepoutputmodel.cpp:401
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
@@ -153,13 +153,13 @@ msgstr[1] "<b>%1</b> файлах"
 msgstr[2] "<b>%1</b> файлах"
 msgstr[3] "<b>%1</b> файле"
 
-#: grepoutputmodel.cpp:380
+#: grepoutputmodel.cpp:403
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
 msgstr "<b>%1 in %2</b>"
 
-#: grepoutputmodel.cpp:382
+#: grepoutputmodel.cpp:405
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
@@ -168,7 +168,7 @@ msgstr[1] "%2: %1 совпадения"
 msgstr[2] "%2: %1 совпадений"
 msgstr[3] "%2: %1 совпадение"
 
-#: grepoutputmodel.cpp:452
+#: grepoutputmodel.cpp:475
 #, kde-format
 msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "

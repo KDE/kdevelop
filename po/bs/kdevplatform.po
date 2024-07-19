@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -31,31 +31,31 @@ msgid "Your emails"
 msgstr ""
 "samir.ribic@etf.unsa.ba,vljubovic@smartnet.ba,dedovic.memsud94@hotmail.com"
 
-#: debugger/breakpoint/breakpoint.cpp:196
+#: debugger/breakpoint/breakpoint.cpp:195
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Greška"
 
-#: debugger/breakpoint/breakpoint.cpp:202
+#: debugger/breakpoint/breakpoint.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Prljavo"
 
-#: debugger/breakpoint/breakpoint.cpp:204
+#: debugger/breakpoint/breakpoint.cpp:203
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Čeka"
 
-#: debugger/breakpoint/breakpoint.cpp:206
+#: debugger/breakpoint/breakpoint.cpp:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Čisto"
 
-#: debugger/breakpoint/breakpoint.cpp:239
+#: debugger/breakpoint/breakpoint.cpp:238
 #, fuzzy, kde-format
 #| msgctxt "project name (branch name)"
 #| msgid "%1 (%2)"
@@ -131,71 +131,71 @@ msgstr ""
 "<b>Prekidna tačka je prljava</b><p>Prekidna tačka još nije proslijeđena u "
 "debager.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:123
+#: debugger/breakpoint/breakpointmodel.cpp:121
 #, kde-format
 msgid "Breakpoint"
 msgstr "Prijelomna tačka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:380
+#: debugger/breakpoint/breakpointmodel.cpp:371
 #, fuzzy, kde-format
 #| msgid "Breakpoint hit: %1"
 msgid "Breakpoint not found"
 msgstr "Prekidna tačka dosegla: %1"
 
-#: debugger/breakpoint/breakpointmodel.cpp:380
+#: debugger/breakpoint/breakpointmodel.cpp:371
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:386
+#: debugger/breakpoint/breakpointmodel.cpp:377
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "&Breakpoint"
 msgstr "Prijelomna tačka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:392
+#: debugger/breakpoint/breakpointmodel.cpp:383
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Isključi prekidnu tačku"
 
-#: debugger/breakpoint/breakpointmodel.cpp:393
+#: debugger/breakpoint/breakpointmodel.cpp:384
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "O&mogući prekidnu tačku"
 
-#: debugger/breakpoint/breakpointmodel.cpp:396
+#: debugger/breakpoint/breakpointmodel.cpp:387
 #, kde-format
 msgid "&Bookmark"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:438
-#: debugger/variable/variablecollection.cpp:408
+#: debugger/breakpoint/breakpointmodel.cpp:429
+#: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Vrsta:"
 
-#: debugger/breakpoint/breakpointmodel.cpp:439
+#: debugger/breakpoint/breakpointmodel.cpp:430
 #, kde-format
 msgid "Location"
 msgstr "Lokacija"
 
-#: debugger/breakpoint/breakpointmodel.cpp:440
+#: debugger/breakpoint/breakpointmodel.cpp:431
 #, kde-format
 msgid "Condition"
 msgstr "Uslov"
 
-#: debugger/breakpoint/breakpointmodel.cpp:444
+#: debugger/breakpoint/breakpointmodel.cpp:435
 #, kde-format
 msgid "Active status"
 msgstr "Aktivni status"
 
-#: debugger/breakpoint/breakpointmodel.cpp:445
+#: debugger/breakpoint/breakpointmodel.cpp:436
 #, kde-format
 msgid "State"
 msgstr "Stanje"
 
-#: debugger/breakpoint/breakpointmodel.cpp:675
+#: debugger/breakpoint/breakpointmodel.cpp:664
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
@@ -355,7 +355,7 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr ""
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:78
+#: debugger/interfaces/ibreakpointcontroller.cpp:79
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Prekidna tačka dosegla: %1"
@@ -380,32 +380,32 @@ msgstr "Lokalna Putanja"
 msgid "Delete"
 msgstr "Obriši"
 
-#: debugger/variable/variablecollection.cpp:209
+#: debugger/variable/variablecollection.cpp:208
 #: language/duchain/problem.cpp:190 shell/filteredproblemstore.cpp:155
 #, kde-format
 msgid "Error"
 msgstr "Greška"
 
-#: debugger/variable/variablecollection.cpp:233
+#: debugger/variable/variablecollection.cpp:232
 #, kde-format
 msgid "Auto"
 msgstr "Automatski"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
-#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:80
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Ime"
 
-#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Value"
 msgstr "Vrijednost"
 
-#: debugger/variable/variablecollection.cpp:505
+#: debugger/variable/variablecollection.cpp:500
 #, kde-format
 msgid "Locals"
 msgstr "Lokalne"
@@ -1459,7 +1459,7 @@ msgstr "Nepoznato"
 msgid "%1 of %2 : %3"
 msgstr ""
 
-#: language/util/debuglanguageparserhelper.h:183
+#: language/util/debuglanguageparserhelper.h:179
 #, kde-format
 msgid ""
 "files or - to read from STDIN, the latter is the default if nothing is "
@@ -1468,17 +1468,17 @@ msgstr ""
 "datoteke ili - za čitanje sa standardnog ulaza, ovo drugo se podrazumijeva "
 "ako nije dat parameta"
 
-#: language/util/debuglanguageparserhelper.h:186
+#: language/util/debuglanguageparserhelper.h:182
 #, kde-format
 msgid "print generated AST tree"
 msgstr "prikaži generisano AST stablo"
 
-#: language/util/debuglanguageparserhelper.h:187
+#: language/util/debuglanguageparserhelper.h:183
 #, kde-format
 msgid "print generated token stream"
 msgstr "prikaži generisani tok tokena"
 
-#: language/util/debuglanguageparserhelper.h:188
+#: language/util/debuglanguageparserhelper.h:184
 #, kde-format
 msgid "code to parse"
 msgstr "kod za parsiranje"
@@ -1879,11 +1879,6 @@ msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "Nazad u kod"
 
-#: shell/colorschemechooser.cpp:44
-#, kde-format
-msgid "&Window Color Scheme"
-msgstr ""
-
 #: shell/configdialog.cpp:31
 #, fuzzy, kde-format
 #| msgctxt "@info:status"
@@ -1921,126 +1916,126 @@ msgid ""
 "\">this article</a> for more information."
 msgstr ""
 
-#: shell/debugcontroller.cpp:115
+#: shell/debugcontroller.cpp:118
 #, fuzzy, kde-format
 #| msgid "Debugger:"
 msgid "Debugger"
 msgstr "Debager:"
 
-#: shell/debugcontroller.cpp:145
+#: shell/debugcontroller.cpp:148
 #, fuzzy, kde-format
 #| msgid "Frame Stack"
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Stek okvira"
 
-#: shell/debugcontroller.cpp:150
+#: shell/debugcontroller.cpp:153
 #, fuzzy, kde-format
 #| msgid "Breakpoints"
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Prekidne tačke"
 
-#: shell/debugcontroller.cpp:155
+#: shell/debugcontroller.cpp:158
 #, fuzzy, kde-format
 #| msgid "Variables"
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Promjenljive"
 
-#: shell/debugcontroller.cpp:221
+#: shell/debugcontroller.cpp:223
 #, kde-format
 msgid "&Restart"
 msgstr "&Ponovo pokreni"
 
-#: shell/debugcontroller.cpp:222
+#: shell/debugcontroller.cpp:224
 #, kde-format
 msgid "Restart program"
 msgstr "Ponovo pokreni program"
 
-#: shell/debugcontroller.cpp:223
+#: shell/debugcontroller.cpp:225
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Restartuj aplikaciju iz pocetka."
 
-#: shell/debugcontroller.cpp:229
+#: shell/debugcontroller.cpp:231
 #, fuzzy, kde-format
 #| msgid "Interrupt"
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Prekid"
 
-#: shell/debugcontroller.cpp:230
+#: shell/debugcontroller.cpp:232
 #, fuzzy, kde-format
 #| msgid "Interrupt application"
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Prekini aplikaciju"
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:233
 #, fuzzy, kde-format
 #| msgid "Interrupts the debugged process or current debugger command."
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Prekida debagovani proces ili trenutnu debugger komandu."
 
-#: shell/debugcontroller.cpp:235
+#: shell/debugcontroller.cpp:237
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Idi do &kursora"
 
-#: shell/debugcontroller.cpp:236
+#: shell/debugcontroller.cpp:238
 #, fuzzy, kde-format
 #| msgid "Run to cursor"
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Idi do kursora"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:239
 #, fuzzy, kde-format
 #| msgid "Continues execution until the cursor position is reached."
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Nastavlja izvršavanje dok ne dostigne poziciju kursora."
 
-#: shell/debugcontroller.cpp:242
+#: shell/debugcontroller.cpp:244
 #, fuzzy, kde-format
 #| msgid "Set E&xecution Position to Cursor"
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Postavi izvr&šnu poziciju na kursor"
 
-#: shell/debugcontroller.cpp:243
+#: shell/debugcontroller.cpp:245
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Skoči na kursot"
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:246
 #, fuzzy, kde-format
 #| msgid "Continue execution from the current cursor position."
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Nastavlja izvršavanje od trenutne kursorke pozicije"
 
-#: shell/debugcontroller.cpp:248
+#: shell/debugcontroller.cpp:250
 #, fuzzy, kde-format
 #| msgid "Step &Over"
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Korak prek&o"
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:252
 #, fuzzy, kde-format
 #| msgid "Step over the next line"
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Korak preko naredne linije"
 
-#: shell/debugcontroller.cpp:251
+#: shell/debugcontroller.cpp:253
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes one line of source in the current source file. If the source "
@@ -2056,42 +2051,42 @@ msgstr ""
 "pozvana u funkciju cije linija je izvrsena i aplikacija ce zaustavit liniju  "
 "prateci funkcijski poziv."
 
-#: shell/debugcontroller.cpp:259
+#: shell/debugcontroller.cpp:261
 #, fuzzy, kde-format
 #| msgid "Step over Ins&truction"
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Korak preko ins&trukcije"
 
-#: shell/debugcontroller.cpp:260
+#: shell/debugcontroller.cpp:262
 #, fuzzy, kde-format
 #| msgid "Step over instruction"
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Korak preko instrukcije"
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:263
 #, fuzzy, kde-format
 #| msgid "Steps over the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Koraci u narednih skupom instrukcija"
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:268
 #, fuzzy, kde-format
 #| msgid "Step &Into"
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "&Uskoči"
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:270
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Korak u narednu naredbu"
 
-#: shell/debugcontroller.cpp:269
+#: shell/debugcontroller.cpp:271
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes exactly one line of source. If the source line is a call to a "
@@ -2104,42 +2099,42 @@ msgstr ""
 "Izvrsi tacno jednu liniju izvornog koda. Ako je izvorna linija poziv u "
 "funkciju tada ce izvrsenje zaustaviti  nakon sto funkcija bude unesena."
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:278
 #, fuzzy, kde-format
 #| msgid "Step into I&nstruction"
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Korak u I&nstrukciju"
 
-#: shell/debugcontroller.cpp:277
+#: shell/debugcontroller.cpp:279
 #, fuzzy, kde-format
 #| msgid "Step into instruction"
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Korak u instrukciju"
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:280
 #, fuzzy, kde-format
 #| msgid "Steps into the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Koraci u narednom skupom instrukcija"
 
-#: shell/debugcontroller.cpp:282
+#: shell/debugcontroller.cpp:284
 #, fuzzy, kde-format
 #| msgid "Step O&ut"
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Korak iz&van"
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:286
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "istupite iz trenutne funkcije"
 
-#: shell/debugcontroller.cpp:285
+#: shell/debugcontroller.cpp:287
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes the application until the currently executing function is "
@@ -2158,73 +2153,73 @@ msgstr ""
 "Ako je izvrsavanje programa u najudaljenijem okviru   (i.e. in main()) onda "
 "ova operacija nema efekta"
 
-#: shell/debugcontroller.cpp:293
+#: shell/debugcontroller.cpp:295
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Prekidna tačka"
 
-#: shell/debugcontroller.cpp:294
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:295
+#: shell/debugcontroller.cpp:297
 #, fuzzy, kde-format
 #| msgid "Toggle breakpoint"
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Preklopi prekidnu tačku"
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:298
 #, fuzzy, kde-format
 #| msgid "Toggles the breakpoint at the current line in editor."
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Ukljucuje prekidnu tacku  na odgovarajucu liniju u editoru."
 
-#: shell/debugcontroller.cpp:300
+#: shell/debugcontroller.cpp:302
 #, fuzzy, kde-format
 #| msgid "Show Documentation"
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Prikaži dokumentaciju"
 
-#: shell/debugcontroller.cpp:301
+#: shell/debugcontroller.cpp:303
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "istupite iz trenutne funkcije"
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:304
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:432
+#: shell/debugcontroller.cpp:430
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Ispravka grešaka"
 
-#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:480 shell/runcontroller.cpp:440
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Potraži greške u pokretanju"
 
-#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Pokreni trenutno uklanjanje gresaka"
 
-#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2234,21 +2229,21 @@ msgstr ""
 "Izvrsi metu programa specificiranu u trenutno aktivnom pokretanju "
 "konfiguracije unutar debuggera."
 
-#: shell/debugcontroller.cpp:488
+#: shell/debugcontroller.cpp:486
 #, fuzzy, kde-format
 #| msgid "&Continue"
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Nastavi"
 
-#: shell/debugcontroller.cpp:490
+#: shell/debugcontroller.cpp:488
 #, fuzzy, kde-format
 #| msgid "Continue application execution"
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Nastavi aplikacijko uklanjanje"
 
-#: shell/debugcontroller.cpp:491
+#: shell/debugcontroller.cpp:489
 #, fuzzy, kde-format
 #| msgid ""
 #| "Continues the execution of your application in the debugger. This only "
@@ -2284,24 +2279,24 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Dokumentacija"
 
-#: shell/documentcontroller.cpp:63 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "Bez naslova"
 
-#: shell/documentcontroller.cpp:120
+#: shell/documentcontroller.cpp:119
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Otvori datoteku"
 
-#: shell/documentcontroller.cpp:121
+#: shell/documentcontroller.cpp:120
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Tekst fajl\n"
 
-#: shell/documentcontroller.cpp:318
+#: shell/documentcontroller.cpp:317
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2310,46 +2305,46 @@ msgstr ""
 "KDevelop nije mogao naći uređivač za datoteku'%1' tipa %2.\n"
 "Želite li je otvoriti kao obični tekst?"
 
-#: shell/documentcontroller.cpp:321
+#: shell/documentcontroller.cpp:320
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "Ne mogu naći uređivač"
 
-#: shell/documentcontroller.cpp:322
+#: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:323
+#: shell/documentcontroller.cpp:322
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:610
 #, fuzzy, kde-format
 #| msgid "&Open..."
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Otvori..."
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:613
 #, fuzzy, kde-format
 #| msgid "Open file"
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Otvori datoteku"
 
-#: shell/documentcontroller.cpp:615
+#: shell/documentcontroller.cpp:614
 #, fuzzy, kde-format
 #| msgid "Opens a file for editing."
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Otvori datoteku za uredjivanje."
 
-#: shell/documentcontroller.cpp:619
+#: shell/documentcontroller.cpp:618
 #, fuzzy, kde-format
 #| msgid ""
 #| "This lists files which you have opened recently, and allows you to easily "
@@ -2362,21 +2357,21 @@ msgstr ""
 "Spisak dokumenata koji su bili skorije otvarani, odakle ih možete lako "
 "ponovo otvoriti."
 
-#: shell/documentcontroller.cpp:624
+#: shell/documentcontroller.cpp:623
 #, fuzzy, kde-format
 #| msgid "Save Al&l"
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Snmi s&ve"
 
-#: shell/documentcontroller.cpp:626
+#: shell/documentcontroller.cpp:625
 #, fuzzy, kde-format
 #| msgid "Save all open documents"
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Snimi sve otvorene dokumente"
 
-#: shell/documentcontroller.cpp:627
+#: shell/documentcontroller.cpp:626
 #, fuzzy, kde-format
 #| msgid ""
 #| "Save all open documents, prompting for additional information when "
@@ -2388,63 +2383,63 @@ msgstr ""
 "Otvori sve otvorene dokumente, navedeno za dodatne informacije kada je to "
 "potrebno."
 
-#: shell/documentcontroller.cpp:633
+#: shell/documentcontroller.cpp:632
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Ponovo učitaj sve"
 
-#: shell/documentcontroller.cpp:635
+#: shell/documentcontroller.cpp:634
 #, fuzzy, kde-format
 #| msgid "Revert all open documents"
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Vrati sve otvorene dokumente"
 
-#: shell/documentcontroller.cpp:636
+#: shell/documentcontroller.cpp:635
 #, fuzzy, kde-format
 #| msgid "Revert all open documents, returning to the previously saved state."
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr "Vrati sve otvorene dokumente, vratite prijasnje spaseno stanje."
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:641
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Zatvori"
 
-#: shell/documentcontroller.cpp:644
+#: shell/documentcontroller.cpp:643
 #, fuzzy, kde-format
 #| msgid "Close file"
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Zatvori datoteku"
 
-#: shell/documentcontroller.cpp:645
+#: shell/documentcontroller.cpp:644
 #, fuzzy, kde-format
 #| msgid "Closes current file."
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Zatvori trentnu datoteku."
 
-#: shell/documentcontroller.cpp:650
+#: shell/documentcontroller.cpp:649
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Zatvori sv&e"
 
-#: shell/documentcontroller.cpp:652
+#: shell/documentcontroller.cpp:651
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Zatvori sve otvorene dokumente"
 
-#: shell/documentcontroller.cpp:653
+#: shell/documentcontroller.cpp:652
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, prompting for additional information when "
@@ -2457,21 +2452,21 @@ msgstr ""
 "Zatvori sve otvorene dokumente,  navedeni za dodatne informacije kada je "
 "potrebno."
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:658
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Zatvori sve d&ruge"
 
-#: shell/documentcontroller.cpp:661
+#: shell/documentcontroller.cpp:660
 #, fuzzy, kde-format
 #| msgid "Close all other documents"
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Zatvori ostale dokumente"
 
-#: shell/documentcontroller.cpp:662
+#: shell/documentcontroller.cpp:661
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, with the exception of the currently active "
@@ -2483,21 +2478,21 @@ msgid ""
 msgstr ""
 "Zatvori sve otvorene dokumente, sa izuzetkom trenutno aktiviranog dokumenta."
 
-#: shell/documentcontroller.cpp:667
+#: shell/documentcontroller.cpp:666
 #, fuzzy, kde-format
 #| msgid "Show Annotate on current document"
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Pokazi zabiljeske na trenutnom dokumentu"
 
-#: shell/documentcontroller.cpp:668
+#: shell/documentcontroller.cpp:667
 #, fuzzy, kde-format
 #| msgid "Annotate"
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Zabilježi"
 
-#: shell/documentcontroller.cpp:1302
+#: shell/documentcontroller.cpp:1299
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2642,24 +2637,24 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Debager:"
 
-#: shell/loadedpluginsdialog.cpp:280
+#: shell/loadedpluginsdialog.cpp:279
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Učitani priključci"
 
-#: shell/loadedpluginsdialog.cpp:286
+#: shell/loadedpluginsdialog.cpp:285
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\">Priključci učitani za <b>%1</b></font></html>"
 
-#: shell/mainwindow.cpp:445
+#: shell/mainwindow.cpp:457
 #, kde-format
 msgid " (read only)"
 msgstr ""
 
-#: shell/mainwindow_p.cpp:221
+#: shell/mainwindow_p.cpp:223
 #, fuzzy, kde-format
 #| msgctxt "%1 = application name"
 #| msgid "Configure %1"
@@ -2667,284 +2662,291 @@ msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
 msgstr "Podesi %1"
 
-#: shell/mainwindow_p.cpp:222
+#: shell/mainwindow_p.cpp:224
 #, fuzzy, kde-format
 #| msgid "Lets you customize %1."
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
 msgstr "Omogućava da prilagodite %1."
 
-#: shell/mainwindow_p.cpp:225
+#: shell/mainwindow_p.cpp:227
 #, fuzzy, kde-format
 #| msgid "Configure Notifications..."
 msgctxt "@action"
 msgid "Configure Notifications..."
 msgstr "Podesi obavještenja..."
 
-#: shell/mainwindow_p.cpp:226
+#: shell/mainwindow_p.cpp:228
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure notifications"
 msgstr "Podesi obavještenja"
 
-#: shell/mainwindow_p.cpp:227
+#: shell/mainwindow_p.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
 msgstr "prikazi dijalog koji dopusta konfiguraciju obavijesti."
 
-#: shell/mainwindow_p.cpp:231
+#: shell/mainwindow_p.cpp:233
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgctxt "@action"
 msgid "Loaded Plugins"
 msgstr "Učitani priključci"
 
-#: shell/mainwindow_p.cpp:232
+#: shell/mainwindow_p.cpp:234
 #, fuzzy, kde-format
 #| msgid "Show a list of all loaded plugins"
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
 msgstr "Prikazuje listu učitanih priključaka"
 
-#: shell/mainwindow_p.cpp:233
+#: shell/mainwindow_p.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
 msgstr "Prikazi dijalog sa informacijama sa svim ucitanim dodacima."
 
-#: shell/mainwindow_p.cpp:236
+#: shell/mainwindow_p.cpp:238
 #, fuzzy, kde-format
 #| msgid "&Next Window"
 msgctxt "@action"
 msgid "&Next Window"
 msgstr "&Sljedeći prozor"
 
-#: shell/mainwindow_p.cpp:239
+#: shell/mainwindow_p.cpp:241
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next window"
 msgstr "Sljedeći prozor"
 
-#: shell/mainwindow_p.cpp:240
+#: shell/mainwindow_p.cpp:242
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next window."
 msgstr "Prebacuje na sljedeći prozor."
 
-#: shell/mainwindow_p.cpp:244
+#: shell/mainwindow_p.cpp:246
 #, fuzzy, kde-format
 #| msgid "&Previous Window"
 msgctxt "@action"
 msgid "&Previous Window"
 msgstr "&Prethodni prozor"
 
-#: shell/mainwindow_p.cpp:247
+#: shell/mainwindow_p.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous window"
 msgstr "Prethodni prozor"
 
-#: shell/mainwindow_p.cpp:248
+#: shell/mainwindow_p.cpp:250
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous window."
 msgstr "Prebacuje na prethodni prozor."
 
-#: shell/mainwindow_p.cpp:252
+#: shell/mainwindow_p.cpp:254
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Next Outputmark"
 msgstr ""
 
-#: shell/mainwindow_p.cpp:258
+#: shell/mainwindow_p.cpp:260
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Previous Outputmark"
 msgstr ""
 
-#: shell/mainwindow_p.cpp:265
+#: shell/mainwindow_p.cpp:267
 #, fuzzy, kde-format
 #| msgid "Split View &Top/Bottom"
 msgctxt "@action"
 msgid "Split View &Top/Bottom"
 msgstr "Podijeli pogled &vodoravno"
 
-#: shell/mainwindow_p.cpp:268
+#: shell/mainwindow_p.cpp:270
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split horizontal"
 msgstr "Horizontalno razdvajanje"
 
-#: shell/mainwindow_p.cpp:269
+#: shell/mainwindow_p.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view horizontally."
 msgstr "Razdvojite trenutni pogled horizontalno"
 
-#: shell/mainwindow_p.cpp:273
+#: shell/mainwindow_p.cpp:275
 #, fuzzy, kde-format
 #| msgid "Split View &Left/Right"
 msgctxt "@action"
 msgid "Split View &Left/Right"
 msgstr "Podijeli pogled &uspravno"
 
-#: shell/mainwindow_p.cpp:276
+#: shell/mainwindow_p.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split vertical"
 msgstr "Vertikalno razdvajanje"
 
-#: shell/mainwindow_p.cpp:277
+#: shell/mainwindow_p.cpp:279
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view vertically."
 msgstr "Razdvojite trenutni pogled vertikalno."
 
-#: shell/mainwindow_p.cpp:280
+#: shell/mainwindow_p.cpp:282
 #, fuzzy, kde-format
 #| msgid "&Next Split View"
 msgctxt "@action"
 msgid "&Next Split View"
 msgstr "&Sljedece razdvajanje pogleda"
 
-#: shell/mainwindow_p.cpp:283
+#: shell/mainwindow_p.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next split view"
 msgstr "Sljedece razdvajanje pogleda"
 
-#: shell/mainwindow_p.cpp:284
+#: shell/mainwindow_p.cpp:286
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next split view."
 msgstr "Promijeni na sljedeci razdvojeni pogled"
 
-#: shell/mainwindow_p.cpp:288
+#: shell/mainwindow_p.cpp:290
 #, fuzzy, kde-format
 #| msgid "&Previous Split View"
 msgctxt "@action"
 msgid "&Previous Split View"
 msgstr "&Prijasnji razdvojeni pogled"
 
-#: shell/mainwindow_p.cpp:291
+#: shell/mainwindow_p.cpp:293
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous split view"
 msgstr "Prijasnji razdvojeni pogled"
 
-#: shell/mainwindow_p.cpp:292
+#: shell/mainwindow_p.cpp:294
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous split view."
 msgstr "Promijeni na prijasnji razdvojeni pogled"
 
-#: shell/mainwindow_p.cpp:300
+#: shell/mainwindow_p.cpp:302
 #, fuzzy, kde-format
 #| msgid "&New"
 msgctxt "@action new file"
 msgid "&New"
 msgstr "&Nova"
 
-#: shell/mainwindow_p.cpp:301
+#: shell/mainwindow_p.cpp:303
 #, fuzzy, kde-format
 #| msgid "New"
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
 msgstr "Novi"
 
-#: shell/mainwindow_p.cpp:303
+#: shell/mainwindow_p.cpp:305
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "New file"
 msgstr "Nova datoteka"
 
-#: shell/mainwindow_p.cpp:304
+#: shell/mainwindow_p.cpp:306
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Creates an empty file."
 msgstr "Stvori jednu praznu datoteku."
 
-#: shell/mainwindow_p.cpp:309
+#: shell/mainwindow_p.cpp:311
 #, fuzzy, kde-format
 #| msgid "&Add Tool View..."
 msgctxt "@action"
 msgid "&Add Tool View..."
 msgstr "Dodaj &ladni pogled..."
 
-#: shell/mainwindow_p.cpp:311
+#: shell/mainwindow_p.cpp:313
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add tool view"
 msgstr "Jedan alatni prikaz"
 
-#: shell/mainwindow_p.cpp:312
+#: shell/mainwindow_p.cpp:314
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Adds a new tool view to this window."
 msgstr "Dodaj novi alatni prikaz na ovom prozoru."
 
-#: shell/mainwindow_p.cpp:348
+#: shell/mainwindow_p.cpp:319
+#, kde-format
+msgid "&Window Color Scheme"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:353
 #, fuzzy, kde-format
 #| msgid "Split View Top/Bottom"
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
 msgstr "Razdvojeni prikaz gore/dolje"
 
-#: shell/mainwindow_p.cpp:351
+#: shell/mainwindow_p.cpp:356
 #, fuzzy, kde-format
 #| msgid "Split View Left/Right"
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
 msgstr "Razdvojeni prikaz lijevo/desno"
 
-#: shell/mainwindow_p.cpp:355
+#: shell/mainwindow_p.cpp:360
 #, fuzzy, kde-format
 #| msgid "New File"
 msgctxt "@action:inmenu"
 msgid "New File"
 msgstr "Nova datoteka"
 
-#: shell/mainwindow_p.cpp:361
+#: shell/mainwindow_p.cpp:366
 #, fuzzy, kde-format
 #| msgid "Reload"
 msgctxt "@action:inmenu"
 msgid "Reload"
 msgstr "Ponovo učitaj"
 
-#: shell/mainwindow_p.cpp:364
+#: shell/mainwindow_p.cpp:369
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action:inmenu"
 msgid "Reload All"
 msgstr "Ponovo učitaj sve"
 
-#: shell/mainwindow_p.cpp:404
+#: shell/mainwindow_p.cpp:409
 #, fuzzy, kde-format
 #| msgid "Add Tool View"
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
 msgstr "Dodaj alatni pogled"
 
-#: shell/mainwindow_p.cpp:427
+#: shell/mainwindow_p.cpp:432
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
 msgstr ""
 
-#: shell/openprojectdialog.cpp:113
-#, kde-format
-msgid "%1|All Project Files (%1)"
+#: shell/openprojectdialog.cpp:124
+#, fuzzy, kde-format
+#| msgid "%1|All Project Files (%1)"
+msgctxt "@item:inlistbox"
+msgid "All Project Files"
 msgstr "%1|Sve projektne datoteke (%1)"
 
-#: shell/openprojectdialog.cpp:122
+#: shell/openprojectdialog.cpp:133
 #, fuzzy, kde-format
 #| msgid "Select Source"
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "Izaberi izvor"
 
-#: shell/openprojectdialog.cpp:130
+#: shell/openprojectdialog.cpp:141
 #, kde-format
 msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
@@ -2953,33 +2955,33 @@ msgstr ""
 "Odaberite build sistem za instalaziju datoteke, postojeci KDevelop  projekt, "
 "ili bilo koji folder koji je otvoren ako projekt"
 
-#: shell/openprojectdialog.cpp:137 shell/openprojectdialog.cpp:157
+#: shell/openprojectdialog.cpp:148 shell/openprojectdialog.cpp:168
 #, fuzzy, kde-format
 #| msgid "Open Project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Otvori projekt"
 
-#: shell/openprojectdialog.cpp:145
+#: shell/openprojectdialog.cpp:156
 #, fuzzy, kde-format
 #| msgid "Project Information"
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Informacija o projektu"
 
-#: shell/openprojectdialog.cpp:208
+#: shell/openprojectdialog.cpp:219
 #, fuzzy, kde-format
 #| msgid "open %1 as project"
 msgid "Open \"%1\" as project"
 msgstr "otvori %1 kao projekt"
 
-#: shell/openprojectdialog.cpp:212
+#: shell/openprojectdialog.cpp:223
 #, fuzzy, kde-format
 #| msgid "Selected URL is invalid."
 msgid "Selected URL is invalid"
 msgstr "Odabrani URL je nevažeći"
 
-#: shell/openprojectdialog.cpp:257
+#: shell/openprojectdialog.cpp:268
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@item:inlistbox"
@@ -3017,7 +3019,7 @@ msgstr ""
 "Dokument \"%1\" ima nesnimljene promjene i izmijenjen je eksternim procsom.\n"
 "Želite li prevazići vanjske izmjene?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:427
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:418
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3747,19 +3749,19 @@ msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "Odaberite koje pokretanje konfiguracije se pokrece kada se pokrece run"
 
-#: shell/runcontroller.cpp:588
+#: shell/runcontroller.cpp:590
 #, fuzzy, kde-format
 #| msgid "<%1> Unnamed job"
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Neimenovan posao"
 
-#: shell/runcontroller.cpp:965
+#: shell/runcontroller.cpp:967
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Novi %1 pokretač"
 
-#: shell/runcontroller.cpp:1002
+#: shell/runcontroller.cpp:1004
 #, fuzzy, kde-format
 #| msgid "%1 As..."
 msgctxt "@title:menu"
@@ -4351,7 +4353,7 @@ msgctxt "@info:tooltip"
 msgid "Batch edit mode"
 msgstr ""
 
-#: shell/settings/languagepreferences.cpp:35
+#: shell/settings/languagepreferences.cpp:34
 #, fuzzy, kde-format
 #| msgid " files"
 msgctxt "@item:valuesuffix"
@@ -4361,14 +4363,14 @@ msgstr[0] " datoteke"
 msgstr[1] " datoteke"
 msgstr[2] " datoteke"
 
-#: shell/settings/languagepreferences.cpp:80
+#: shell/settings/languagepreferences.cpp:77
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Language Support"
 msgid "Language Support"
 msgstr "Jezička podrška"
 
-#: shell/settings/languagepreferences.cpp:85
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr ""
@@ -5051,7 +5053,7 @@ msgstr "Dijeli predloške"
 msgid "Configure Templates"
 msgstr "Podesi pokretanja..."
 
-#: shell/settings/templatepage.cpp:28
+#: shell/settings/templatepage.cpp:30
 #, fuzzy, kde-format
 #| msgid "Get More Templates"
 msgctxt "@action:button"
@@ -5403,7 +5405,7 @@ msgstr[0] "Reformatiraj liniju"
 msgstr[1] "Reformatiraj liniju"
 msgstr[2] "Reformatiraj liniju"
 
-#: shell/sourceformatterselectionedit.cpp:1088
+#: shell/sourceformatterselectionedit.cpp:1077
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -5414,14 +5416,14 @@ msgstr ""
 "%2.\n"
 "Da li ga sigurno želite obrisati?"
 
-#: shell/sourceformatterselectionedit.cpp:1090
+#: shell/sourceformatterselectionedit.cpp:1079
 #, fuzzy, kde-format
 #| msgid "Delete Working Set"
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "Obriši radni skup"
 
-#: shell/sourceformatterselectionedit.cpp:1150
+#: shell/sourceformatterselectionedit.cpp:1139
 #, kde-format
 msgid "New %1"
 msgstr "Novi %1"
@@ -5507,7 +5509,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Obriši"
 
-#: shell/textdocument.cpp:422
+#: shell/textdocument.cpp:413
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5519,13 +5521,13 @@ msgstr ""
 "DA li ste sigurni da je želite prebrisati? (Vanjske izmjene će biti "
 "izgubljene.)"
 
-#: shell/textdocument.cpp:426
+#: shell/textdocument.cpp:417
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Dokument je modifikovan spolja"
 
-#: shell/textdocument.cpp:683
+#: shell/textdocument.cpp:674
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " red: %1 kol: %2 "
@@ -6183,7 +6185,7 @@ msgstr "Ne mogu dobaviti razliku"
 msgid "There are no committed differences."
 msgstr "Nema razlika"
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:285
+#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:278
 #, fuzzy, kde-format
 #| msgid "VCS support"
 msgctxt "@title:window"
@@ -6471,96 +6473,96 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Revizija izvora"
 
-#: vcs/vcspluginhelper.cpp:84
+#: vcs/vcspluginhelper.cpp:82
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Upis..."
 
-#: vcs/vcspluginhelper.cpp:85
+#: vcs/vcspluginhelper.cpp:83
 #, fuzzy, kde-format
 #| msgid "Update"
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Ažuriraj"
 
-#: vcs/vcspluginhelper.cpp:86
+#: vcs/vcspluginhelper.cpp:84
 #, fuzzy, kde-format
 #| msgid "Add"
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Dodaj"
 
-#: vcs/vcspluginhelper.cpp:87
+#: vcs/vcspluginhelper.cpp:85
 #, fuzzy, kde-format
 #| msgid "Show Differences..."
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "Prikaži razlike..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:86
 #, fuzzy, kde-format
 #| msgid "Revert"
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Vrati"
 
-#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:473
+#: vcs/vcspluginhelper.cpp:87 vcs/vcspluginhelper.cpp:451
 #, fuzzy, kde-format
 #| msgid "History..."
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Historija..."
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:88
 #, fuzzy, kde-format
 #| msgid "Annotation..."
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Anotacija..."
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:89
 #, fuzzy, kde-format
 #| msgid "Show Diff..."
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "Prikaži razlike..."
 
-#: vcs/vcspluginhelper.cpp:92
+#: vcs/vcspluginhelper.cpp:90
 #, fuzzy, kde-format
 #| msgid "Show Diff (all files)..."
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "Prikaži razlike (sve datoteke)..."
 
-#: vcs/vcspluginhelper.cpp:93
+#: vcs/vcspluginhelper.cpp:91
 #, fuzzy, kde-format
 #| msgid "Push"
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Gurni"
 
-#: vcs/vcspluginhelper.cpp:94
+#: vcs/vcspluginhelper.cpp:92
 #, fuzzy, kde-format
 #| msgid "Pull"
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Povuci"
 
-#: vcs/vcspluginhelper.cpp:284
+#: vcs/vcspluginhelper.cpp:277
 #, kde-format
 msgid "There are no differences."
 msgstr "Nema razlika"
 
-#: vcs/vcspluginhelper.cpp:291
+#: vcs/vcspluginhelper.cpp:284
 #, fuzzy, kde-format
 #| msgid "Unable to get difference."
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Ne mogu dobaviti razliku"
 
-#: vcs/vcspluginhelper.cpp:359
+#: vcs/vcspluginhelper.cpp:352
 #, fuzzy, kde-format
 #| msgctxt "%1: path or URL, %2: name of a version control system"
 #| msgid "%2 History (%1)"
@@ -6568,7 +6570,7 @@ msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 Historija (%1)"
 
-#: vcs/vcspluginhelper.cpp:431
+#: vcs/vcspluginhelper.cpp:415
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6577,7 +6579,7 @@ msgstr ""
 "Ne mogu prikazati pribilješke, nedostaje interfejs KTextEditor::"
 "AnnotationInterface za editor."
 
-#: vcs/vcspluginhelper.cpp:435
+#: vcs/vcspluginhelper.cpp:419
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6588,7 +6590,7 @@ msgstr ""
 "tekstualni dokument\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:468 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:446 vcs/widgets/vcseventwidget.cpp:46
 #, fuzzy, kde-format
 #| msgid "Copy Revision"
 msgctxt "@action:inmenu"
@@ -6602,7 +6604,7 @@ msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
 msgstr "Uvedi repozitorijski URL..."
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:55
+#: vcs/widgets/vcsannotationitemdelegate.cpp:53
 #, kde-format
 msgctxt "@item age"
 msgid "%1 year"
@@ -6611,7 +6613,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:65
+#: vcs/widgets/vcsannotationitemdelegate.cpp:63
 #, kde-format
 msgctxt "@item age"
 msgid "%1 month"
@@ -6620,7 +6622,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:69
+#: vcs/widgets/vcsannotationitemdelegate.cpp:67
 #, kde-format
 msgctxt "@item age"
 msgid "%1 day"
@@ -6629,13 +6631,13 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:71
+#: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
 msgstr ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:285
+#: vcs/widgets/vcsannotationitemdelegate.cpp:283
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -6755,6 +6757,9 @@ msgstr "Razlika u odnosu na prethodnu"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Razlika između revizija"
+
+#~ msgid "%1|All Project Files (%1)"
+#~ msgstr "%1|Sve projektne datoteke (%1)"
 
 #~ msgid "Could not find an open document"
 #~ msgstr "Nemogu naći otvoreni dokument"
@@ -7187,11 +7192,6 @@ msgstr "Razlika između revizija"
 
 #~ msgid "Hide"
 #~ msgstr "Sakrij"
-
-#, fuzzy
-#~| msgid "%1|All Project Files (%1)"
-#~ msgid "All Project Files (%1)"
-#~ msgstr "%1|Sve projektne datoteke (%1)"
 
 #~ msgid "Build System:"
 #~ msgstr "Sisatem gradnje"

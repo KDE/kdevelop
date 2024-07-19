@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-08-30 21:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -73,17 +73,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Etsi ”%1” kohteesta %2 (kello %3)"
 
-#: grepjob.cpp:144
+#: grepjob.cpp:156
 #, kde-format
 msgid "Find in Files"
 msgstr "Etsi tiedostoista"
 
-#: grepjob.cpp:163
+#: grepjob.cpp:175
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Jokerimerkkejä vastaavia tiedostoja ei löytynyt"
 
-#: grepjob.cpp:177
+#: grepjob.cpp:189
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -91,34 +91,34 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "Mallijonossa ei sallita osamerkkijonoja"
 
-#: grepjob.cpp:198
+#: grepjob.cpp:210
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "Etsitään <b>%2</b> yhdestä tiedostosta"
 msgstr[1] "Etsitään <b>%2</b> %1 tiedostosta"
 
-#: grepjob.cpp:224
+#: grepjob.cpp:236
 #, kde-format
 msgid "Collecting files..."
 msgstr "Kerätään tiedostoja…"
 
-#: grepjob.cpp:268
+#: grepjob.cpp:280
 #, kde-format
 msgid "Search aborted"
 msgstr "Haku keskeytetty"
 
-#: grepjob.cpp:314
+#: grepjob.cpp:326
 #, kde-format
 msgid "Failed: %1"
 msgstr "Epäonnistui: %1"
 
-#: grepjob.cpp:317
+#: grepjob.cpp:329
 #, kde-format
 msgid "No results found"
 msgstr "Ei tuloksia"
 
-#: grepjob.cpp:336
+#: grepjob.cpp:348
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"
@@ -128,34 +128,34 @@ msgstr "Grep: %1"
 msgid "Line %1: "
 msgstr "Rivi %1: "
 
-#: grepoutputmodel.cpp:377
+#: grepoutputmodel.cpp:400
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
 msgstr[0] "<b>1</b> osuma"
 msgstr[1] "<b>%1</b> osumaa"
 
-#: grepoutputmodel.cpp:378
+#: grepoutputmodel.cpp:401
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
 msgstr[0] "<b>1</b> tiedostossa"
 msgstr[1] "<b>%1</b> tiedostossa"
 
-#: grepoutputmodel.cpp:380
+#: grepoutputmodel.cpp:403
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
 msgstr "<h3>%1 %2</h3>"
 
-#: grepoutputmodel.cpp:382
+#: grepoutputmodel.cpp:405
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
 msgstr[0] "%2: 1 osuma"
 msgstr[1] "%2: %1 osumaa"
 
-#: grepoutputmodel.cpp:452
+#: grepoutputmodel.cpp:475
 #, kde-format
 msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "

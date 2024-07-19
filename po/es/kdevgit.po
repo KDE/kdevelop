@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-09-26 21:39+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -18,119 +18,119 @@ msgstr ""
 "X-Generator: Lokalize 22.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: committoolview.cpp:206 committoolview.cpp:207
+#: committoolview.cpp:205 committoolview.cpp:206
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Filtrar por nombre de archivo/proyecto"
 
-#: committoolview.cpp:224
+#: committoolview.cpp:223
 #, kde-format
 msgid "Refresh"
 msgstr "Refrescar"
 
-#: committoolview.cpp:225
+#: committoolview.cpp:224
 #, kde-format
 msgid "Stage selected"
 msgstr "Añadir la selección"
 
-#: committoolview.cpp:227
+#: committoolview.cpp:226
 #, kde-format
 msgid "Unstage selected"
 msgstr "Quitar la selección"
 
-#: committoolview.cpp:229
+#: committoolview.cpp:228
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "Revertir las modificaciones no añadidas"
 
-#: committoolview.cpp:482
+#: committoolview.cpp:481
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr ""
 "La confirmación ha fallado. Consulte el visor de la herramienta de control "
 "de versiones."
 
-#: diffviewsctrl.cpp:52
+#: diffviewsctrl.cpp:51
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "Añadir las líneas o trozos seleccionados"
 
-#: diffviewsctrl.cpp:54
+#: diffviewsctrl.cpp:53
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "Quitar las líneas o trozos seleccionados"
 
-#: diffviewsctrl.cpp:56
+#: diffviewsctrl.cpp:55
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "Revertir las líneas o trozos seleccionados"
 
-#: diffviewsctrl.cpp:58
+#: diffviewsctrl.cpp:57
 #, kde-format
 msgid "Go to line in source"
 msgstr "Ir a línea del código"
 
-#: diffviewsctrl.cpp:110
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Quitar las líneas seleccionadas"
 
-#: diffviewsctrl.cpp:111
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Añadir la líneas seleccionadas"
 
-#: diffviewsctrl.cpp:112
+#: diffviewsctrl.cpp:111
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Revertir las líneas seleccionadas"
 
-#: diffviewsctrl.cpp:114
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Quitar el trozo seleccionado"
 
-#: diffviewsctrl.cpp:115
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Añadir el trozo seleccionado"
 
-#: diffviewsctrl.cpp:116
+#: diffviewsctrl.cpp:115
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Revertir el trozo seleccionado"
 
-#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:127 diffviewsctrl.cpp:133
+#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:179
+#: diffviewsctrl.cpp:178
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (añadido)"
 
-#: diffviewsctrl.cpp:181
+#: diffviewsctrl.cpp:180
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Añadido (%1)"
 
-#: diffviewsctrl.cpp:183
+#: diffviewsctrl.cpp:182
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Quitado (%1)"
 
-#: diffviewsctrl.cpp:185
+#: diffviewsctrl.cpp:184
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (quitado)"
 
-#: diffviewsctrl.cpp:340
+#: diffviewsctrl.cpp:339
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -139,7 +139,7 @@ msgstr ""
 "Se revertirán las líneas seleccionadas y se perderán sus cambios. Esta "
 "operación no se puede deshacer. ¿Continuar?"
 
-#: diffviewsctrl.cpp:342
+#: diffviewsctrl.cpp:341
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"

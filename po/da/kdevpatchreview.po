@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2014-01-26 17:34+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -92,102 +92,102 @@ msgctxt "@option:check"
 msgid "Already applied"
 msgstr "Allerede anvendt"
 
-#: patchhighlighter.cpp:88
+#: patchhighlighter.cpp:80
 #, kde-format
 msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
 msgstr "<b><span style=\"color:red\">Konflikt</span></b><br/>"
 
-#: patchhighlighter.cpp:96
+#: patchhighlighter.cpp:88
 #, kde-format
 msgid "Applied.<br/>"
 msgstr "Anvendt.<br/>"
 
-#: patchhighlighter.cpp:99 patchhighlighter.cpp:114
+#: patchhighlighter.cpp:91 patchhighlighter.cpp:106
 #, kde-format
 msgid "Insertion<br/>"
 msgstr "Indsættelse<br/>"
 
-#: patchhighlighter.cpp:102 patchhighlighter.cpp:111
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:103
 #, kde-format
 msgid "Removal<br/>"
 msgstr "Fjernelse<br/>"
 
-#: patchhighlighter.cpp:103
+#: patchhighlighter.cpp:95
 #, kde-format
 msgid "Previous:<br/>"
 msgstr "Forrige:<br/>"
 
-#: patchhighlighter.cpp:108
+#: patchhighlighter.cpp:100
 #, kde-format
 msgid "Reverted.<br/>"
 msgstr "Rullet tilbage.<br/>"
 
-#: patchhighlighter.cpp:116
+#: patchhighlighter.cpp:108
 #, kde-format
 msgid "Alternative:<br/>"
 msgstr "Alternativt:<br/>"
 
-#: patchhighlighter.cpp:206
+#: patchhighlighter.cpp:199
 #, kde-format
 msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
 msgstr ""
 "Kunne ikke anvende ændringen: Teksten burde være \"%1\", men er \"%2\"."
 
-#: patchhighlighter.cpp:421 patchhighlighter.cpp:428
+#: patchhighlighter.cpp:409 patchhighlighter.cpp:416
 #, fuzzy, kde-format
 #| msgid "Insertion"
 msgctxt "@item"
 msgid "Insertion"
 msgstr "Indsættelse"
 
-#: patchhighlighter.cpp:423 patchhighlighter.cpp:430
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:419
 #, fuzzy, kde-format
 #| msgid "Removal"
 msgctxt "@item"
 msgid "Removal"
 msgstr "Fjernelse"
 
-#: patchhighlighter.cpp:425 patchhighlighter.cpp:432
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:422
 #, fuzzy, kde-format
 #| msgid "Change"
 msgctxt "@item"
 msgid "Change"
 msgstr "Ændring"
 
-#: patchreview.cpp:305 patchreview.cpp:307
+#: patchreview.cpp:294 patchreview.cpp:296
 #, fuzzy, kde-format
 #| msgid "Kompare Model Update"
 msgctxt "@title:window"
 msgid "Kompare Model Update"
 msgstr "Opdatering af Kompare-model"
 
-#: patchreview.cpp:467
+#: patchreview.cpp:455
 #, fuzzy, kde-format
 #| msgid "Overview"
 msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Oversigt"
 
-#: patchreview.cpp:473 patchreview.cpp:549
+#: patchreview.cpp:460 patchreview.cpp:534
 #, fuzzy, kde-format
 #| msgid "Patch Review"
 msgctxt "@title:window"
 msgid "Patch Review"
 msgstr "Gennemgang af rettelse"
 
-#: patchreview.cpp:480
+#: patchreview.cpp:467
 #, kde-format
 msgid "The base directory of the patch must be an absolute directory."
 msgstr ""
 
-#: patchreview.cpp:512 patchreview.cpp:538
+#: patchreview.cpp:499 patchreview.cpp:523
 #, fuzzy, kde-format
 #| msgid "Finish Review"
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Afslut gennemgang"
 
-#: patchreview.cpp:620
+#: patchreview.cpp:605
 #, fuzzy, kde-format
 #| msgid "Edit Patch"
 msgctxt "@action:inmenu"
@@ -274,7 +274,7 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "Ændringer"
 
-#: patchreviewtoolview.cpp:92
+#: patchreviewtoolview.cpp:87
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
@@ -282,45 +282,45 @@ msgid_plural "%2 (%1 hunks)"
 msgstr[0] "%2 (et stykke)"
 msgstr[1] "%2, (%1 stykker)"
 
-#: patchreviewtoolview.cpp:232
+#: patchreviewtoolview.cpp:227
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr ""
 
-#: patchreviewtoolview.cpp:235
+#: patchreviewtoolview.cpp:230
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
 "%1"
 msgstr ""
 
-#: patchreviewtoolview.cpp:266
+#: patchreviewtoolview.cpp:261
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgctxt "@action"
 msgid "Select All"
 msgstr "Markér alle"
 
-#: patchreviewtoolview.cpp:268
+#: patchreviewtoolview.cpp:263
 #, fuzzy, kde-format
 #| msgid "Deselect All"
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "Afmarkér alle"
 
-#: patchreviewtoolview.cpp:566
+#: patchreviewtoolview.cpp:561
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Kører tester: %p%"
 
-#: patchreviewtoolview.cpp:594
+#: patchreviewtoolview.cpp:589
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "Test bestået"
 msgstr[1] "Alle %1 tester bestået"
 
-#: patchreviewtoolview.cpp:598
+#: patchreviewtoolview.cpp:593
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Testresultater: %1 bestået, %2 dumpet, %3 fejl"

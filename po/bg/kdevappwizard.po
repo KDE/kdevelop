@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2010-07-03 22:47+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -36,19 +36,19 @@ msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "Управление на версии"
 
-#: appwizardplugin.cpp:70
+#: appwizardplugin.cpp:69
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "New from Template..."
 msgstr "Нов от шаблон..."
 
-#: appwizardplugin.cpp:72
+#: appwizardplugin.cpp:71
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "Създаване на нов проект от шаблон"
 
-#: appwizardplugin.cpp:73
+#: appwizardplugin.cpp:72
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -58,122 +58,122 @@ msgstr ""
 "<b>Нов проект</b><p>Отваря се помощникът на KDevelop. Той ви помага да "
 "създадете скелета на вашата програма според колекция от шаблони.</p>"
 
-#: appwizardplugin.cpp:107
+#: appwizardplugin.cpp:106
 #, fuzzy, kde-format
 msgid "Could not create project from template."
 msgstr "Не може да се създаде проект от шаблон\n"
 
-#: appwizardplugin.cpp:135
+#: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
 msgstr ""
 
-#: appwizardplugin.cpp:137
+#: appwizardplugin.cpp:136
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
 msgstr "Система за управление на версии:"
 
-#: appwizardplugin.cpp:153
+#: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
 msgstr "Грешка при генериране на DVCS хранилище"
 
-#: appwizardplugin.cpp:162
+#: appwizardplugin.cpp:161
 #, fuzzy, kde-format
 msgid "Could not check status of the DVCS repository"
 msgstr "Файловете не могат да се добавят към DVCS хранилището"
 
-#: appwizardplugin.cpp:175
+#: appwizardplugin.cpp:174
 #, kde-format
 msgid "Could not add files to the DVCS repository"
 msgstr "Файловете не могат да се добавят към DVCS хранилището"
 
-#: appwizardplugin.cpp:183
+#: appwizardplugin.cpp:182
 #, kde-format
 msgid "Could not import project into %1."
 msgstr "Грешка при зареждане на проект в %1."
 
-#: appwizardplugin.cpp:200
+#: appwizardplugin.cpp:199
 #, kde-format
 msgid "Could not import project"
 msgstr "Грешка при зареждане на проект"
 
-#: appwizardplugin.cpp:208
+#: appwizardplugin.cpp:207
 #, kde-format
 msgid "Could not checkout imported project"
 msgstr "Зареденият проект не може да се провери"
 
-#: appwizardplugin.cpp:333
+#: appwizardplugin.cpp:332
 #, kde-format
 msgid "Could not create new project"
 msgstr "Не може да се създаде нов проект"
 
-#: appwizardplugin.cpp:468
+#: appwizardplugin.cpp:467
 #, kde-format
 msgid "The file %1 cannot be created."
 msgstr "Грешка при създаване на файл %1"
 
-#: appwizardplugin.cpp:571
+#: appwizardplugin.cpp:568
 #, kde-format
 msgid "Project Templates"
 msgstr "Шаблони за проект"
 
-#: projectselectionpage.cpp:58
+#: projectselectionpage.cpp:60
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr ""
 
-#: projectselectionpage.cpp:59
+#: projectselectionpage.cpp:61
 #, fuzzy, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Шаблони за проект"
 
-#: projectselectionpage.cpp:69
+#: projectselectionpage.cpp:71
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Шаблони за проект"
 
-#: projectselectionpage.cpp:76
+#: projectselectionpage.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr ""
 
-#: projectselectionpage.cpp:172
+#: projectselectionpage.cpp:174
 #, kde-format
 msgid "Invalid location"
 msgstr "Неправилно местоположение"
 
-#: projectselectionpage.cpp:179
+#: projectselectionpage.cpp:181
 #, kde-format
 msgid "Empty project name"
 msgstr "Напишете име на проекта"
 
-#: projectselectionpage.cpp:199
+#: projectselectionpage.cpp:201
 #, kde-format
 msgid "Invalid project name"
 msgstr "Неправилно име на проект"
 
-#: projectselectionpage.cpp:218
+#: projectselectionpage.cpp:220
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "Грешка при създаване на каталози, липсват правомощия в: %1"
 
-#: projectselectionpage.cpp:233
+#: projectselectionpage.cpp:235
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Неправилен шаблон на проект, изберете запис от списъка"
 
-#: projectselectionpage.cpp:246
+#: projectselectionpage.cpp:248
 #, fuzzy, kde-format
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "Пътят вече съществува и съдържа файлове"
 
-#: projectselectionpage.cpp:293
+#: projectselectionpage.cpp:295
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
@@ -182,7 +182,7 @@ msgstr ""
 "Посоченият път съществува и съдържа файлове. Сигурен ли сте, че искате да "
 "продължите?"
 
-#: projectselectionpage.cpp:309
+#: projectselectionpage.cpp:311
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"

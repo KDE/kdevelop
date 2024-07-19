@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2020-07-25 16:18+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -76,7 +76,7 @@ msgctxt "@option:check"
 msgid "Forward declare assistant"
 msgstr "Assistente per le dichiarazioni anticipate"
 
-#: clangsupport.cpp:172
+#: clangsupport.cpp:171
 #, kde-format
 msgid ""
 "The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
@@ -90,13 +90,13 @@ msgstr ""
 "KDEV_CLANG_BUILTIN_DIR per correggere il problema. Vedi anche: https://bugs."
 "kde.org/show_bug.cgi?id=393779"
 
-#: clangsupport.cpp:279
+#: clangsupport.cpp:278
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "Rinomina dichiarazione"
 
-#: clangsupport.cpp:286
+#: clangsupport.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"

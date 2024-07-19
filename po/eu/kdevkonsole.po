@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-12-05 07:11+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -25,13 +25,13 @@ msgstr ""
 msgid "Terminal"
 msgstr "Terminala"
 
-#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:57
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Terminal"
 msgstr "Terminala"
 
-#: kdevkonsoleviewplugin.cpp:50
+#: kdevkonsoleviewplugin.cpp:48
 #, fuzzy, kde-format
 #| msgid "Failed to load 'konsolepart' plugin"
 msgid "Failed to load 'konsolepart' plugin: %1"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2024-02-20 23:50+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -62,17 +62,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "%2에서 \"%1\" 검색(시간 %3에)"
 
-#: grepjob.cpp:144
+#: grepjob.cpp:156
 #, kde-format
 msgid "Find in Files"
 msgstr "파일에서 찾기"
 
-#: grepjob.cpp:163
+#: grepjob.cpp:175
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "와일드카드 패턴과 일치하는 파일 없음"
 
-#: grepjob.cpp:177
+#: grepjob.cpp:189
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -80,33 +80,33 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "패턴 문자열에 캡처를 사용할 수 없음"
 
-#: grepjob.cpp:198
+#: grepjob.cpp:210
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "파일 %1개에서 <b>%2</b> 검색 중"
 
-#: grepjob.cpp:224
+#: grepjob.cpp:236
 #, kde-format
 msgid "Collecting files..."
 msgstr "파일 수집 중..."
 
-#: grepjob.cpp:268
+#: grepjob.cpp:280
 #, kde-format
 msgid "Search aborted"
 msgstr "검색 중단됨"
 
-#: grepjob.cpp:314
+#: grepjob.cpp:326
 #, kde-format
 msgid "Failed: %1"
 msgstr "실패: %1"
 
-#: grepjob.cpp:317
+#: grepjob.cpp:329
 #, kde-format
 msgid "No results found"
 msgstr "결과가 없습니다."
 
-#: grepjob.cpp:336
+#: grepjob.cpp:348
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"
@@ -116,31 +116,31 @@ msgstr "Grep: %1"
 msgid "Line %1: "
 msgstr "줄 %1:"
 
-#: grepoutputmodel.cpp:377
+#: grepoutputmodel.cpp:400
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
 msgstr[0] "일치 <b>%1</b>개"
 
-#: grepoutputmodel.cpp:378
+#: grepoutputmodel.cpp:401
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
 msgstr[0] "파일 <b>%1</b>개"
 
-#: grepoutputmodel.cpp:380
+#: grepoutputmodel.cpp:403
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
 msgstr "<b>%2에서 %1</b>"
 
-#: grepoutputmodel.cpp:382
+#: grepoutputmodel.cpp:405
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
 msgstr[0] "%2: 일치 %1개"
 
-#: grepoutputmodel.cpp:452
+#: grepoutputmodel.cpp:475
 #, kde-format
 msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "

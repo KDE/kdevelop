@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:39+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2013-09-16 12:41+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -101,17 +101,17 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr ""
 
-#: mibreakpointcontroller.cpp:793
+#: mibreakpointcontroller.cpp:795
 #, kde-format
 msgid "<br>Old value: %1"
 msgstr "<br>Gammel verdi: %1"
 
-#: mibreakpointcontroller.cpp:796
+#: mibreakpointcontroller.cpp:798
 #, kde-format
 msgid "<br>New value: %1"
 msgstr "<br>Ny verdi: %1"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:315
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -120,7 +120,7 @@ msgid ""
 "now end to prevent potential crash"
 msgstr ""
 
-#: midebugger.cpp:321
+#: midebugger.cpp:318
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -129,18 +129,18 @@ msgstr ""
 "Unntaket er: %1\n"
 "MI-svaret er: %2"
 
-#: midebugger.cpp:324
+#: midebugger.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr ""
 
-#: midebugger.cpp:336 midebugsession.cpp:423
+#: midebugger.cpp:333 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "Prosessen avsluttet"
 
-#: midebugger.cpp:345
+#: midebugger.cpp:342
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -149,12 +149,12 @@ msgstr ""
 "<b>Klarte ikke starte feilsøkeren.<b> <p>Klarte ikke å kjøre «%1». Forsikre "
 "deg om at sti-navnet er oppgitt riktig."
 
-#: midebugger.cpp:353
+#: midebugger.cpp:350
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:358
+#: midebugger.cpp:355
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -162,24 +162,24 @@ msgid ""
 "without KDevelop and report a bug.<br>"
 msgstr ""
 
-#: midebugger.cpp:363
+#: midebugger.cpp:360
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr ""
 
-#: midebugger.cpp:366
+#: midebugger.cpp:363
 #, kde-format
 msgid "Process crashed"
 msgstr ""
 
-#: midebuggerplugin.cpp:110
+#: midebuggerplugin.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr ""
 
-#: midebuggerplugin.cpp:112
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -189,31 +189,31 @@ msgid ""
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:124
+#: midebuggerplugin.cpp:126
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr ""
 
-#: midebuggerplugin.cpp:126
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:139
+#: midebuggerplugin.cpp:141
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr ""
 
-#: midebuggerplugin.cpp:213
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr ""
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:217
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -221,13 +221,13 @@ msgid ""
 "cursor.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:223
+#: midebuggerplugin.cpp:225
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr ""
 
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:227
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -235,35 +235,35 @@ msgid ""
 "Variables/Watch list.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:238
+#: midebuggerplugin.cpp:240
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Velg en core-fil som skal undersøkes …"
 
-#: midebuggerplugin.cpp:243 midebuggerplugin.cpp:263
+#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
+#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:258
+#: midebuggerplugin.cpp:260
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Velg en prosess å koble til …"
 
-#: midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:281
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "Kobler ikke til prosess %1: kan ikke koble feilsøkeren til seg selv."
 
-#: midebuggerplugin.cpp:299
+#: midebuggerplugin.cpp:301
 #, kde-format
 msgid "Debugger"
 msgstr "Feilsøker"
@@ -653,8 +653,8 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR "
-"[ebp+0xc])."
+"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+"+0xc])."
 msgstr ""
 
 #: widgets/disassemblewidget.cpp:143
@@ -669,8 +669,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<b>Machine code display</b><p>A machine code view into your running "
 "executable with the current instruction highlighted. You can step "
-"instruction by instruction using the debuggers toolbar buttons of \"step "
-"over\" instruction and \"step into\" instruction."
+"instruction by instruction using the debuggers toolbar buttons of \"step over"
+"\" instruction and \"step into\" instruction."
 msgstr ""
 
 #: widgets/disassemblewidget.cpp:190

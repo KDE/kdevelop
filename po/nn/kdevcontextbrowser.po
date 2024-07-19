@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2008-11-26 17:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -17,85 +17,85 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: contextbrowser.cpp:165
+#: contextbrowser.cpp:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
 msgstr ""
 
-#: contextbrowser.cpp:177
+#: contextbrowser.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
 msgstr ""
 
-#: contextbrowser.cpp:193
+#: contextbrowser.cpp:190
 #, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
 msgstr ""
 
-#: contextbrowser.cpp:194
+#: contextbrowser.cpp:191
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr ""
 
-#: contextbrowser.cpp:195
+#: contextbrowser.cpp:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr ""
 
-#: contextbrowser.cpp:236
+#: contextbrowser.cpp:233
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
 msgstr ""
 
-#: contextbrowser.cpp:242
+#: contextbrowser.cpp:239
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr ""
 
-#: contextbrowser.cpp:248
+#: contextbrowser.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr ""
 
-#: contextbrowser.cpp:254
+#: contextbrowser.cpp:251
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr ""
 
-#: contextbrowser.cpp:260
+#: contextbrowser.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "&Next Use"
 msgstr ""
 
-#: contextbrowser.cpp:266
+#: contextbrowser.cpp:263
 #, kde-format
 msgctxt "@action"
 msgid "Context Browser"
 msgstr ""
 
-#: contextbrowser.cpp:297 contextbrowser.cpp:377 contextbrowserview.cpp:172
+#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
 #, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr ""
 
-#: contextbrowser.cpp:313
+#: contextbrowser.cpp:310
 #, kde-format
 msgctxt "@action"
 msgid "Find Uses"
 msgstr ""
 
-#: contextbrowser.cpp:1568
+#: contextbrowser.cpp:1559
 #, kde-format
 msgid "(changed)"
 msgstr ""

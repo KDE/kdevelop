@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2023-01-23 20:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -20,10 +20,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 22.12.1\n"
 
-#: package/contents/ui/kdevelopsessions.qml:55
+#: package/contents/ui/main.qml:58
 msgid "KDevelop Sessions"
 msgstr "K Geliştir Oturumları"
 
-#: package/contents/ui/kdevelopsessions.qml:75
+#: package/contents/ui/main.qml:79
 msgid "Arbitrary String Which Says Something"
 msgstr "Bir Şeyler Söyleyen İsteğe Bağlı Dizi"

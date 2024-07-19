@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2022-04-17 20:47+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -74,7 +74,7 @@ msgctxt "@option:check"
 msgid "Forward declare assistant"
 msgstr "Asistent doprednej deklarácie"
 
-#: clangsupport.cpp:172
+#: clangsupport.cpp:171
 #, kde-format
 msgid ""
 "The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
@@ -88,13 +88,13 @@ msgstr ""
 "opravu.\n"
 "Pozrite tiež: https://bugs.kde.org/show_bug.cgi?id=393779"
 
-#: clangsupport.cpp:279
+#: clangsupport.cpp:278
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "Premenovať deklaráciu"
 
-#: clangsupport.cpp:286
+#: clangsupport.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"

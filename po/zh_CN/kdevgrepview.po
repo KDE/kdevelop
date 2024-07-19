@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2024-04-22 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevgrepview.pot\n"
-"X-Crowdin-File-ID: 4910\n"
+"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevgrepview.pot\n"
+"X-Crowdin-File-ID: 54590\n"
 
 #: grepdialog.cpp:54
 #, kde-format
@@ -65,17 +65,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "在 %2 中搜索“%1”(于时间 %3)"
 
-#: grepjob.cpp:144
+#: grepjob.cpp:156
 #, kde-format
 msgid "Find in Files"
 msgstr "在文件中查找"
 
-#: grepjob.cpp:163
+#: grepjob.cpp:175
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "未找到匹配通配符模式的文件"
 
-#: grepjob.cpp:177
+#: grepjob.cpp:189
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -83,33 +83,33 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "模式字符串中不允许使用捕获"
 
-#: grepjob.cpp:198
+#: grepjob.cpp:210
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "正在在 %1 个文件中搜索 <b>%2</b>"
 
-#: grepjob.cpp:224
+#: grepjob.cpp:236
 #, kde-format
 msgid "Collecting files..."
 msgstr "正在收集文件..."
 
-#: grepjob.cpp:268
+#: grepjob.cpp:280
 #, kde-format
 msgid "Search aborted"
 msgstr "搜索已中止"
 
-#: grepjob.cpp:314
+#: grepjob.cpp:326
 #, kde-format
 msgid "Failed: %1"
 msgstr "失败：%1"
 
-#: grepjob.cpp:317
+#: grepjob.cpp:329
 #, kde-format
 msgid "No results found"
 msgstr "未找到结果"
 
-#: grepjob.cpp:336
+#: grepjob.cpp:348
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep：%1"
@@ -119,31 +119,31 @@ msgstr "Grep：%1"
 msgid "Line %1: "
 msgstr "第%1行："
 
-#: grepoutputmodel.cpp:377
+#: grepoutputmodel.cpp:400
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
 msgstr[0] "<b>%1</b> 次匹配"
 
-#: grepoutputmodel.cpp:378
+#: grepoutputmodel.cpp:401
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
 msgstr[0] "<b>%1</b> 个文件"
 
-#: grepoutputmodel.cpp:380
+#: grepoutputmodel.cpp:403
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
 msgstr "<b>%2 中的 %1</b>"
 
-#: grepoutputmodel.cpp:382
+#: grepoutputmodel.cpp:405
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
 msgstr[0] "%2：%1 次匹配"
 
-#: grepoutputmodel.cpp:452
+#: grepoutputmodel.cpp:475
 #, kde-format
 msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "

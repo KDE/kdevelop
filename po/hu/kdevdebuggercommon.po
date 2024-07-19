@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2014-09-08 22:56+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -186,14 +186,14 @@ msgstr "A hibakereső leállítva"
 msgid "Process crashed"
 msgstr "A folyamat kiléptetve"
 
-#: midebuggerplugin.cpp:110
+#: midebuggerplugin.cpp:112
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Magfájl vizsgálata…"
 
-#: midebuggerplugin.cpp:112
+#: midebuggerplugin.cpp:114
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -212,14 +212,14 @@ msgstr ""
 "magfájl tartalmazza a program memóriájának az összeomláskori képét, lehetővé "
 "téve az összeomlás utáni elemzést.</p>"
 
-#: midebuggerplugin.cpp:124
+#: midebuggerplugin.cpp:126
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Csatolás folyamathoz"
 
-#: midebuggerplugin.cpp:126
+#: midebuggerplugin.cpp:128
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -230,20 +230,20 @@ msgstr ""
 "<b>Csatolás folyamathoz</b><p>Egy futó folyamathoz csatolja a hibakeresőt.</"
 "p>"
 
-#: midebuggerplugin.cpp:139
+#: midebuggerplugin.cpp:141
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:213
+#: midebuggerplugin.cpp:215
 #, fuzzy, kde-format
 #| msgid "Evaluate: %1"
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Kiértékelés: %1"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:217
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -256,14 +256,14 @@ msgstr ""
 "<b>Kifejezés kiértékelése</b><p>Megjeleníti a kurzor alatti kifejezés "
 "értékét.</p>"
 
-#: midebuggerplugin.cpp:223
+#: midebuggerplugin.cpp:225
 #, fuzzy, kde-format
 #| msgid "Watch: %1"
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Figyelés: %1"
 
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:227
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
@@ -276,37 +276,37 @@ msgstr ""
 "<b>Kifejezés figyelése</b><p>Hozzáad egy kifejezést a kurzor alatti "
 "változókhoz vagy figyelőlistához.</p>"
 
-#: midebuggerplugin.cpp:238
+#: midebuggerplugin.cpp:240
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Válasszon egy vizsgálandó magfájlt…"
 
-#: midebuggerplugin.cpp:243 midebuggerplugin.cpp:263
+#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
+#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:258
+#: midebuggerplugin.cpp:260
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Válassza ki azt a folyamatot, amelyhez csatolja…"
 
-#: midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:281
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Nincs csatolva a(z) %1 folyamathoz: nem lehet a hibakeresőt saját magához "
 "csatolni."
 
-#: midebuggerplugin.cpp:299
+#: midebuggerplugin.cpp:301
 #, kde-format
 msgid "Debugger"
 msgstr "Hibakereső"

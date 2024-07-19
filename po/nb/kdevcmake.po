@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-13 01:43+0000\n"
 "PO-Revision-Date: 2013-08-11 14:59+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -396,18 +396,18 @@ msgstr ""
 msgid "Parse test suite %1"
 msgstr "Tolk testsuite %1"
 
-#: testing/ctestrunjob.cpp:75
+#: testing/ctestrunjob.cpp:77
 #, kde-format
 msgid "CTest"
 msgstr "CTest"
 
-#: testing/ctestrunjob.cpp:117
+#: testing/ctestrunjob.cpp:119
 #, kde-format
 msgctxt "running test %1, %2 test case"
 msgid "CTest %1: %2"
 msgstr ""
 
-#: testing/ctestrunjob.cpp:119
+#: testing/ctestrunjob.cpp:121
 #, kde-format
 msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"

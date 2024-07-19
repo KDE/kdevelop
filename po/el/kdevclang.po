@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2023-08-06 12:57+0300\n"
 "Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -79,7 +79,7 @@ msgctxt "@option:check"
 msgid "Forward declare assistant"
 msgstr "Βοηθός forward declare"
 
-#: clangsupport.cpp:172
+#: clangsupport.cpp:171
 #, kde-format
 msgid ""
 "The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
@@ -93,13 +93,13 @@ msgstr ""
 "διορθώσετε αυτό.\n"
 "Δείτε επίσης: https://bugs.kde.org/show_bug.cgi?id=393779"
 
-#: clangsupport.cpp:279
+#: clangsupport.cpp:278
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "Μετονομασία δήλωσης"
 
-#: clangsupport.cpp:286
+#: clangsupport.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"

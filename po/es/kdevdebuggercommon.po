@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2024-05-03 16:55+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -178,13 +178,13 @@ msgstr "El depurador ha fallado"
 msgid "Process crashed"
 msgstr "El proceso ha fallado"
 
-#: midebuggerplugin.cpp:110
+#: midebuggerplugin.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Examinar archivo de volcado de memoria con %1"
 
-#: midebuggerplugin.cpp:112
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -199,13 +199,13 @@ msgstr ""
 "contiene una imagen de la memoria del programa en el momento de su error, "
 "permitiendo hacer un análisis posterior.</p>"
 
-#: midebuggerplugin.cpp:124
+#: midebuggerplugin.cpp:126
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Adjuntar a proceso con %1"
 
-#: midebuggerplugin.cpp:126
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -214,18 +214,18 @@ msgstr ""
 "<b>Adjuntar a proceso</b><p>Conecta el depurador a un proceso en ejecución.</"
 "p>"
 
-#: midebuggerplugin.cpp:139
+#: midebuggerplugin.cpp:141
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:213
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Evaluar: %1"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:217
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -235,13 +235,13 @@ msgstr ""
 "<b>Evaluar expresión</b><p>Muestra el valor de la expresión que hay bajo el "
 "cursor.</p>"
 
-#: midebuggerplugin.cpp:223
+#: midebuggerplugin.cpp:225
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Observar: %1"
 
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:227
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -251,12 +251,12 @@ msgstr ""
 "<b>Observar expresión</b><p>Añade la expresión bajo el cursor a la lista de "
 "variables/observaciones.</p>"
 
-#: midebuggerplugin.cpp:238
+#: midebuggerplugin.cpp:240
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Seleccione un archivo de volcado de memoria para examinar..."
 
-#: midebuggerplugin.cpp:243 midebuggerplugin.cpp:263
+#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -265,24 +265,24 @@ msgstr ""
 "Ya se está depurando un programa. ¿Desea interrumpir la sesión de depuración "
 "actual y continuar?"
 
-#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
+#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Interrumpir la sesión actual"
 
-#: midebuggerplugin.cpp:258
+#: midebuggerplugin.cpp:260
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Seleccione un proceso al que ajuntar..."
 
-#: midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:281
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "No se adjunta al proceso %1: no se puede adjuntar el depurador a sí mismo."
 
-#: midebuggerplugin.cpp:299
+#: midebuggerplugin.cpp:301
 #, kde-format
 msgid "Debugger"
 msgstr "Depurador"

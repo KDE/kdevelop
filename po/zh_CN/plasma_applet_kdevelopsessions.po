@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -14,14 +14,14 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/kdevelop/plasma_applet_kdevelopsessions."
+"X-Crowdin-File: /kf6-trunk/messages/kdevelop/plasma_applet_kdevelopsessions."
 "pot\n"
-"X-Crowdin-File-ID: 4994\n"
+"X-Crowdin-File-ID: 54632\n"
 
-#: package/contents/ui/kdevelopsessions.qml:55
+#: package/contents/ui/main.qml:58
 msgid "KDevelop Sessions"
 msgstr "KDevelop 会话"
 
-#: package/contents/ui/kdevelopsessions.qml:75
+#: package/contents/ui/main.qml:79
 msgid "Arbitrary String Which Says Something"
 msgstr "任何有意义的字符串"

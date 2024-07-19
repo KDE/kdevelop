@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevcustommake.pot\n"
-"X-Crowdin-File-ID: 4967\n"
+"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevcustommake.pot\n"
+"X-Crowdin-File-ID: 54558\n"
 
 #: makefileresolver/makefileresolver.cpp:230
 #, kde-format

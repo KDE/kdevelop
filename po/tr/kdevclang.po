@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2024-02-24 22:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -75,7 +75,7 @@ msgctxt "@option:check"
 msgid "Forward declare assistant"
 msgstr "Önden beyan asistanı"
 
-#: clangsupport.cpp:172
+#: clangsupport.cpp:171
 #, kde-format
 msgid ""
 "The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
@@ -88,13 +88,13 @@ msgstr ""
 "ayarlamayı deneyin.\n"
 "Ayrıca bakınız: https://bugs.kde.org/show_bug.cgi?id=393779"
 
-#: clangsupport.cpp:279
+#: clangsupport.cpp:278
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "Beyanı Yeniden Adlandır"
 
-#: clangsupport.cpp:286
+#: clangsupport.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"

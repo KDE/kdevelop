@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2024-02-16 19:37+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -70,17 +70,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Poišči \"%1\" v %2 (ob času %3)"
 
-#: grepjob.cpp:144
+#: grepjob.cpp:156
 #, kde-format
 msgid "Find in Files"
 msgstr "Najdi v datotekah"
 
-#: grepjob.cpp:163
+#: grepjob.cpp:175
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Ni bilo najdenih datotek, ki bi se ujemale z vzorci nadomestnih znakov"
 
-#: grepjob.cpp:177
+#: grepjob.cpp:189
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -88,7 +88,7 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "Zajeto besedilo ni dovoljeno v vzorčnem nizu"
 
-#: grepjob.cpp:198
+#: grepjob.cpp:210
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
@@ -97,27 +97,27 @@ msgstr[1] "Iskanje za <b>%2</b> v %1 datoteki"
 msgstr[2] "Iskanje za <b>%2</b> v %1 datotekah"
 msgstr[3] "Iskanje za <b>%2</b> v %1 datotekah"
 
-#: grepjob.cpp:224
+#: grepjob.cpp:236
 #, kde-format
 msgid "Collecting files..."
 msgstr "Zbiranje datotek ..."
 
-#: grepjob.cpp:268
+#: grepjob.cpp:280
 #, kde-format
 msgid "Search aborted"
 msgstr "Iskanje prekinjeno"
 
-#: grepjob.cpp:314
+#: grepjob.cpp:326
 #, kde-format
 msgid "Failed: %1"
 msgstr "Spodletelo: %1"
 
-#: grepjob.cpp:317
+#: grepjob.cpp:329
 #, kde-format
 msgid "No results found"
 msgstr "Ni najdenih rezultatov"
 
-#: grepjob.cpp:336
+#: grepjob.cpp:348
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"
@@ -127,7 +127,7 @@ msgstr "Grep: %1"
 msgid "Line %1: "
 msgstr "Vrstica %1: "
 
-#: grepoutputmodel.cpp:377
+#: grepoutputmodel.cpp:400
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
@@ -136,7 +136,7 @@ msgstr[1] "<b>%1</b> ujemanje"
 msgstr[2] "<b>%1</b> ujemanji"
 msgstr[3] "<b>%1</b> ujemanja"
 
-#: grepoutputmodel.cpp:378
+#: grepoutputmodel.cpp:401
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
@@ -145,13 +145,13 @@ msgstr[1] "<b>%1</b> datoteka"
 msgstr[2] "<b>%1</b> datoteki"
 msgstr[3] "<b>%1</b> datoteke"
 
-#: grepoutputmodel.cpp:380
+#: grepoutputmodel.cpp:403
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
 msgstr "<b>%1 v %2</b>"
 
-#: grepoutputmodel.cpp:382
+#: grepoutputmodel.cpp:405
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
@@ -160,7 +160,7 @@ msgstr[1] "%2: %1 ujemanje"
 msgstr[2] "%2: %1 ujemanji"
 msgstr[3] "%2: %1 ujemanja"
 
-#: grepoutputmodel.cpp:452
+#: grepoutputmodel.cpp:475
 #, kde-format
 msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "

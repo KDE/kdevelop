@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcontextbrowser\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2023-04-02 22:05+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -19,85 +19,85 @@ msgstr ""
 "X-Generator: pology\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: contextbrowser.cpp:165
+#: contextbrowser.cpp:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
 msgstr "Iri reen en kunteksthistorio"
 
-#: contextbrowser.cpp:177
+#: contextbrowser.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
 msgstr "Iri antaŭen en kunteksthistorio"
 
-#: contextbrowser.cpp:193
+#: contextbrowser.cpp:190
 #, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
 msgstr "Skemo"
 
-#: contextbrowser.cpp:194
+#: contextbrowser.cpp:191
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr "Skemo"
 
-#: contextbrowser.cpp:195
+#: contextbrowser.cpp:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr "Navigi konturon de aktiva dokumento, klaku por foliumi"
 
-#: contextbrowser.cpp:236
+#: contextbrowser.cpp:233
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
 msgstr "&Fontfoliuma Reĝimo"
 
-#: contextbrowser.cpp:242
+#: contextbrowser.cpp:239
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr "&Antaŭa Vizitata Kunteksto"
 
-#: contextbrowser.cpp:248
+#: contextbrowser.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr "S&ekva Vizitata Kunteksto"
 
-#: contextbrowser.cpp:254
+#: contextbrowser.cpp:251
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr "&Antaŭa Uzo"
 
-#: contextbrowser.cpp:260
+#: contextbrowser.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "&Next Use"
 msgstr "S&ekva Uzo"
 
-#: contextbrowser.cpp:266
+#: contextbrowser.cpp:263
 #, kde-format
 msgctxt "@action"
 msgid "Context Browser"
 msgstr "Kunteksta Foliumilo"
 
-#: contextbrowser.cpp:297 contextbrowser.cpp:377 contextbrowserview.cpp:172
+#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
 #, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr "Kodfoliumilo"
 
-#: contextbrowser.cpp:313
+#: contextbrowser.cpp:310
 #, kde-format
 msgctxt "@action"
 msgid "Find Uses"
 msgstr "Trovi uzojn"
 
-#: contextbrowser.cpp:1568
+#: contextbrowser.cpp:1559
 #, kde-format
 msgid "(changed)"
 msgstr "(ŝanĝita)"

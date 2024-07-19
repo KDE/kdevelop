@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2023-04-17 16:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -192,13 +192,13 @@ msgstr "Virheenpaikannin kaatui"
 msgid "Process crashed"
 msgstr "Prossessi päättyi"
 
-#: midebuggerplugin.cpp:110
+#: midebuggerplugin.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Tutki muistivedostiedostoa ohjelmalla %1"
 
-#: midebuggerplugin.cpp:112
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -212,13 +212,13 @@ msgstr ""
 "takia. Tiedosto sisältää vedoksen ohjelman kaatumishetken muistista, mikä "
 "mahdollistaa ajonjälkeisen analyysin.</p>"
 
-#: midebuggerplugin.cpp:124
+#: midebuggerplugin.cpp:126
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Liity prosessiin ohjelmalla %1"
 
-#: midebuggerplugin.cpp:126
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -227,18 +227,18 @@ msgstr ""
 "<b>Liity prosessiin</b><p>Liittää virheenpaikantimen käynnissä olevaan "
 "prosessiin.</p>"
 
-#: midebuggerplugin.cpp:139
+#: midebuggerplugin.cpp:141
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) – %2"
 
-#: midebuggerplugin.cpp:213
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Suorita: %1"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:217
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -251,14 +251,14 @@ msgstr ""
 "<b>Määritä lausekkeen arvo</b><p>Näyttää kohdistimen kohdalla olevan "
 "lausekkeen arvon.</p>"
 
-#: midebuggerplugin.cpp:223
+#: midebuggerplugin.cpp:225
 #, fuzzy, kde-format
 #| msgid "Watch: %1"
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Vahti: %1"
 
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:227
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
@@ -271,12 +271,12 @@ msgstr ""
 "<b>Vahtilauseke</b><p>Lisää kohdistimen alla olevan lausekkeen Muuttujat-/"
 "Vahtiluetteloon.</p>"
 
-#: midebuggerplugin.cpp:238
+#: midebuggerplugin.cpp:240
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Valitse tutkittava muistivedostiedosto…"
 
-#: midebuggerplugin.cpp:243 midebuggerplugin.cpp:263
+#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
 #, fuzzy, kde-format
 #| msgid ""
 #| "A program is already being debugged. Do you want to abort the currently "
@@ -288,24 +288,24 @@ msgstr ""
 "Tämän ohjelman virheiden paikantaminen on jo meneillään. Haluatko keskeyttää "
 "nykyisen virheenpaikannusistunnon ja jatkaa käynnistämistä?"
 
-#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
+#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Keskeytä nykyinen istunto"
 
-#: midebuggerplugin.cpp:258
+#: midebuggerplugin.cpp:260
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Valitse prosessi, johon liitytään…"
 
-#: midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:281
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Ei liittynyt prosessiin %1: virheenpaikanninta ei voi liittää itseensä."
 
-#: midebuggerplugin.cpp:299
+#: midebuggerplugin.cpp:301
 #, kde-format
 msgid "Debugger"
 msgstr "Virheenpaikannin"

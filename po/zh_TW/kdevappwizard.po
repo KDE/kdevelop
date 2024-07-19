@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2024-01-10 14:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -38,19 +38,19 @@ msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "版本控制"
 
-#: appwizardplugin.cpp:70
+#: appwizardplugin.cpp:69
 #, kde-format
 msgctxt "@action"
 msgid "New from Template..."
 msgstr "由樣本建立..."
 
-#: appwizardplugin.cpp:72
+#: appwizardplugin.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "從樣本產生新的專案"
 
-#: appwizardplugin.cpp:73
+#: appwizardplugin.cpp:72
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -60,129 +60,129 @@ msgstr ""
 "啟動 KDevelop 的應用程式精靈。它能幫助您從許多樣本建立您的應用程式的基本框"
 "架。"
 
-#: appwizardplugin.cpp:107
+#: appwizardplugin.cpp:106
 #, kde-format
 msgid "Could not create project from template."
 msgstr "無法從樣本建立新專案。"
 
-#: appwizardplugin.cpp:135
+#: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
 msgstr "請見版本控制工具檢視。"
 
-#: appwizardplugin.cpp:137
+#: appwizardplugin.cpp:136
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
 msgstr "版本控制系統發生錯誤"
 
-#: appwizardplugin.cpp:153
+#: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
 msgstr "無法初始化 DVCS 版本庫"
 
-#: appwizardplugin.cpp:162
+#: appwizardplugin.cpp:161
 #, kde-format
 msgid "Could not check status of the DVCS repository"
 msgstr "無法檢查 DVCS 版本庫的狀態"
 
-#: appwizardplugin.cpp:175
+#: appwizardplugin.cpp:174
 #, kde-format
 msgid "Could not add files to the DVCS repository"
 msgstr "無法新增檔案到 DVCS 版本庫"
 
-#: appwizardplugin.cpp:183
+#: appwizardplugin.cpp:182
 #, kde-format
 msgid "Could not import project into %1."
 msgstr "無法匯入專案到 %1。"
 
-#: appwizardplugin.cpp:200
+#: appwizardplugin.cpp:199
 #, kde-format
 msgid "Could not import project"
 msgstr "無法匯入專案"
 
-#: appwizardplugin.cpp:208
+#: appwizardplugin.cpp:207
 #, kde-format
 msgid "Could not checkout imported project"
 msgstr "無法取出已匯入的專案"
 
-#: appwizardplugin.cpp:333
+#: appwizardplugin.cpp:332
 #, kde-format
 msgid "Could not create new project"
 msgstr "無法建立新專案"
 
-#: appwizardplugin.cpp:468
+#: appwizardplugin.cpp:467
 #, kde-format
 msgid "The file %1 cannot be created."
 msgstr "檔案 %1 無法被建立。"
 
-#: appwizardplugin.cpp:571
+#: appwizardplugin.cpp:568
 #, kde-format
 msgid "Project Templates"
 msgstr "專案樣本"
 
-#: projectselectionpage.cpp:58
+#: projectselectionpage.cpp:60
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr "分類"
 
-#: projectselectionpage.cpp:59
+#: projectselectionpage.cpp:61
 #, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "專案型態"
 
-#: projectselectionpage.cpp:69
+#: projectselectionpage.cpp:71
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "取得更多樣本"
 
-#: projectselectionpage.cpp:76
+#: projectselectionpage.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "從檔案載入樣本"
 
-#: projectselectionpage.cpp:172
+#: projectselectionpage.cpp:174
 #, kde-format
 msgid "Invalid location"
 msgstr "無效的位置"
 
-#: projectselectionpage.cpp:179
+#: projectselectionpage.cpp:181
 #, kde-format
 msgid "Empty project name"
 msgstr "空白專案名稱"
 
-#: projectselectionpage.cpp:199
+#: projectselectionpage.cpp:201
 #, kde-format
 msgid "Invalid project name"
 msgstr "無效的專案名稱"
 
-#: projectselectionpage.cpp:218
+#: projectselectionpage.cpp:220
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "無法建立子目錄，因為對 %1 的權限不足。"
 
-#: projectselectionpage.cpp:233
+#: projectselectionpage.cpp:235
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "無效的專案樣本，請選擇一個終端項目"
 
-#: projectselectionpage.cpp:246
+#: projectselectionpage.cpp:248
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "路徑已存在並且包含檔案。請將其打開為專案。"
 
-#: projectselectionpage.cpp:293
+#: projectselectionpage.cpp:295
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr "指定的路徑已存在，而且裡面有檔案。您確定要進行嗎？"
 
-#: projectselectionpage.cpp:309
+#: projectselectionpage.cpp:311
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"

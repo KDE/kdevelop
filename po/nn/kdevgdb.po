@@ -346,10 +346,9 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>Script to connect with remote application</p><p>For "
-"example:</p><p>\tshell sleep 5\t #wait for remote program to start</"
-"p><p>\ttarget remote ...\t#connect to the remote debugger</"
-"p><p>\tcontinue\t#[optional] run debugging to the first breakpoint.</p></"
-"body></html>"
+"example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+"\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+"\t#[optional] run debugging to the first breakpoint.</p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)

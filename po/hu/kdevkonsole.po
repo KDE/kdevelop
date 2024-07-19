@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2014-07-24 21:52+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -23,13 +23,13 @@ msgstr ""
 msgid "Terminal"
 msgstr ""
 
-#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:57
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Terminal"
 msgstr ""
 
-#: kdevkonsoleviewplugin.cpp:50
+#: kdevkonsoleviewplugin.cpp:48
 #, fuzzy, kde-format
 #| msgid "Failed to load 'konsolepart' plugin"
 msgid "Failed to load 'konsolepart' plugin: %1"

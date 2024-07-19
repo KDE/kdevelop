@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2012-02-02 07:34+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -30,35 +30,35 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "m.j.wiese@web.de, s_dibbern@web.de"
 
-#: debugger/breakpoint/breakpoint.cpp:196
+#: debugger/breakpoint/breakpoint.cpp:195
 #, fuzzy, kde-format
 #| msgid "Error"
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Fehler"
 
-#: debugger/breakpoint/breakpoint.cpp:202
+#: debugger/breakpoint/breakpoint.cpp:201
 #, fuzzy, kde-format
 #| msgid "dirty"
 msgctxt "@info:tooltip"
 msgid "Dirty"
 msgstr "Leeg"
 
-#: debugger/breakpoint/breakpoint.cpp:204
+#: debugger/breakpoint/breakpoint.cpp:203
 #, fuzzy, kde-format
 #| msgid "pending"
 msgctxt "@info:tooltip"
 msgid "Pending"
 msgstr "Utstahn"
 
-#: debugger/breakpoint/breakpoint.cpp:206
+#: debugger/breakpoint/breakpoint.cpp:205
 #, fuzzy, kde-format
 #| msgid "clean"
 msgctxt "@info:tooltip"
 msgid "Clean"
 msgstr "Goot"
 
-#: debugger/breakpoint/breakpoint.cpp:239
+#: debugger/breakpoint/breakpoint.cpp:238
 #, fuzzy, kde-format
 #| msgid "<b>%1</b> (%2)"
 msgctxt "location (address)"
@@ -132,71 +132,71 @@ msgstr ""
 "<b>Hollpunkt is leeg</b><p>De Hollpunkt wöör noch nich na den Fehlersöker "
 "övergeven</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:123
+#: debugger/breakpoint/breakpointmodel.cpp:121
 #, kde-format
 msgid "Breakpoint"
 msgstr "Hollpunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:380
+#: debugger/breakpoint/breakpointmodel.cpp:371
 #, fuzzy, kde-format
 #| msgid "Breakpoint hit: %1"
 msgid "Breakpoint not found"
 msgstr "Hollpunkt drapen: %1"
 
-#: debugger/breakpoint/breakpointmodel.cpp:380
+#: debugger/breakpoint/breakpointmodel.cpp:371
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:386
+#: debugger/breakpoint/breakpointmodel.cpp:377
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "&Breakpoint"
 msgstr "Hollpunkt"
 
-#: debugger/breakpoint/breakpointmodel.cpp:392
+#: debugger/breakpoint/breakpointmodel.cpp:383
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "Hollpunkt &utmaken"
 
-#: debugger/breakpoint/breakpointmodel.cpp:393
+#: debugger/breakpoint/breakpointmodel.cpp:384
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Hollpunkt &anmaken"
 
-#: debugger/breakpoint/breakpointmodel.cpp:396
+#: debugger/breakpoint/breakpointmodel.cpp:387
 #, kde-format
 msgid "&Bookmark"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:438
-#: debugger/variable/variablecollection.cpp:408
+#: debugger/breakpoint/breakpointmodel.cpp:429
+#: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Typ"
 
-#: debugger/breakpoint/breakpointmodel.cpp:439
+#: debugger/breakpoint/breakpointmodel.cpp:430
 #, kde-format
 msgid "Location"
 msgstr "Steed"
 
-#: debugger/breakpoint/breakpointmodel.cpp:440
+#: debugger/breakpoint/breakpointmodel.cpp:431
 #, kde-format
 msgid "Condition"
 msgstr "Beding"
 
-#: debugger/breakpoint/breakpointmodel.cpp:444
+#: debugger/breakpoint/breakpointmodel.cpp:435
 #, kde-format
 msgid "Active status"
 msgstr "Aktiev Status"
 
-#: debugger/breakpoint/breakpointmodel.cpp:445
+#: debugger/breakpoint/breakpointmodel.cpp:436
 #, kde-format
 msgid "State"
 msgstr "Status"
 
-#: debugger/breakpoint/breakpointmodel.cpp:675
+#: debugger/breakpoint/breakpointmodel.cpp:664
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
@@ -376,7 +376,7 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr ""
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:78
+#: debugger/interfaces/ibreakpointcontroller.cpp:79
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Hollpunkt drapen: %1"
@@ -401,32 +401,32 @@ msgstr "Lokaal Padd"
 msgid "Delete"
 msgstr "Wegdoon"
 
-#: debugger/variable/variablecollection.cpp:209
+#: debugger/variable/variablecollection.cpp:208
 #: language/duchain/problem.cpp:190 shell/filteredproblemstore.cpp:155
 #, kde-format
 msgid "Error"
 msgstr "Fehler"
 
-#: debugger/variable/variablecollection.cpp:233
+#: debugger/variable/variablecollection.cpp:232
 #, kde-format
 msgid "Auto"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
-#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:80
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Naam"
 
-#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Value"
 msgstr "Weert"
 
-#: debugger/variable/variablecollection.cpp:505
+#: debugger/variable/variablecollection.cpp:500
 #, fuzzy, kde-format
 #| msgid "Local Path"
 msgid "Locals"
@@ -1481,7 +1481,7 @@ msgstr "Nich begäng"
 msgid "%1 of %2 : %3"
 msgstr ""
 
-#: language/util/debuglanguageparserhelper.h:183
+#: language/util/debuglanguageparserhelper.h:179
 #, kde-format
 msgid ""
 "files or - to read from STDIN, the latter is the default if nothing is "
@@ -1490,17 +1490,17 @@ msgstr ""
 "Dateien oder - för't Lesen vun STDIN, wat Standard is, wenn anners Nix "
 "angeven is."
 
-#: language/util/debuglanguageparserhelper.h:186
+#: language/util/debuglanguageparserhelper.h:182
 #, kde-format
 msgid "print generated AST tree"
 msgstr "opstellt AST-Boom drucken"
 
-#: language/util/debuglanguageparserhelper.h:187
+#: language/util/debuglanguageparserhelper.h:183
 #, kde-format
 msgid "print generated token stream"
 msgstr "opstellt Tekenstroom drucken"
 
-#: language/util/debuglanguageparserhelper.h:188
+#: language/util/debuglanguageparserhelper.h:184
 #, kde-format
 msgid "code to parse"
 msgstr "Kode, den Du inlesen wullt"
@@ -1890,11 +1890,6 @@ msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr ""
 
-#: shell/colorschemechooser.cpp:44
-#, kde-format
-msgid "&Window Color Scheme"
-msgstr ""
-
 #: shell/configdialog.cpp:31
 #, fuzzy, kde-format
 #| msgid "Configure %1"
@@ -1932,44 +1927,44 @@ msgid ""
 "\">this article</a> for more information."
 msgstr ""
 
-#: shell/debugcontroller.cpp:115
+#: shell/debugcontroller.cpp:118
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgid "Debugger"
 msgstr "Fehlersöök"
 
-#: shell/debugcontroller.cpp:145
+#: shell/debugcontroller.cpp:148
 #, fuzzy, kde-format
 #| msgid "Frame Stack"
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Rahmenstapel"
 
-#: shell/debugcontroller.cpp:150
+#: shell/debugcontroller.cpp:153
 #, fuzzy, kde-format
 #| msgid "Breakpoints"
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Hollpünkt"
 
-#: shell/debugcontroller.cpp:155
+#: shell/debugcontroller.cpp:158
 #, fuzzy, kde-format
 #| msgid "Variables"
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Variabeln"
 
-#: shell/debugcontroller.cpp:221
+#: shell/debugcontroller.cpp:223
 #, kde-format
 msgid "&Restart"
 msgstr "&Nieg starten"
 
-#: shell/debugcontroller.cpp:222
+#: shell/debugcontroller.cpp:224
 #, kde-format
 msgid "Restart program"
 msgstr "Programm nieg starten"
 
-#: shell/debugcontroller.cpp:223
+#: shell/debugcontroller.cpp:225
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Restarts application</b><p>Restarts applications from the beginning.</"
@@ -1977,21 +1972,21 @@ msgstr "Programm nieg starten"
 msgid "Restarts applications from the beginning."
 msgstr "<b>Programm nieg starten</b><p>Start dat Programm nieg.</p>"
 
-#: shell/debugcontroller.cpp:229
+#: shell/debugcontroller.cpp:231
 #, fuzzy, kde-format
 #| msgid "Interrupt"
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Ünnerbreken"
 
-#: shell/debugcontroller.cpp:230
+#: shell/debugcontroller.cpp:232
 #, fuzzy, kde-format
 #| msgid "Interrupt application"
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Programm ünnerbreken"
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:233
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Interrupt application</b><p>Interrupts the debugged process or current "
@@ -2002,21 +1997,21 @@ msgstr ""
 "<b>Programm ünnerbreken</b><p>Den ünnersöchten Perzess oder den aktuellen "
 "Fehlersöker-Befehl ünnerbreken.</p>"
 
-#: shell/debugcontroller.cpp:235
+#: shell/debugcontroller.cpp:237
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Bet &Blinker utföhren"
 
-#: shell/debugcontroller.cpp:236
+#: shell/debugcontroller.cpp:238
 #, fuzzy, kde-format
 #| msgid "Run to cursor"
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Bet Blinker utföhren"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:239
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Run to cursor</b><p>Continues execution until the cursor position is "
@@ -2027,21 +2022,21 @@ msgstr ""
 "<b>Bet Blinker utföhren</b><p>Maakt mit dat Utföhren bet na de "
 "Blinkerpositschoon wieder.</p>"
 
-#: shell/debugcontroller.cpp:242
+#: shell/debugcontroller.cpp:244
 #, fuzzy, kde-format
 #| msgid "Set E&xecution Position to Cursor"
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "&Utföhr-Positschoon na Blinker setten"
 
-#: shell/debugcontroller.cpp:243
+#: shell/debugcontroller.cpp:245
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Na Blinker jumpen"
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:246
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Set Execution Position </b><p>Set the execution pointer to the current "
@@ -2052,21 +2047,21 @@ msgstr ""
 "<b>Utföhrpositschoon setten</b><p>Sett den Utföhr-Wieser op de aktuelle "
 "Blinkerpositschoon.</p>"
 
-#: shell/debugcontroller.cpp:248
+#: shell/debugcontroller.cpp:250
 #, fuzzy, kde-format
 #| msgid "Step &Over"
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "&Utföhren"
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:252
 #, fuzzy, kde-format
 #| msgid "Step over the next line"
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Nakamen Reeg utföhren"
 
-#: shell/debugcontroller.cpp:251
+#: shell/debugcontroller.cpp:253
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step over</b><p>Executes one line of source in the current source "
@@ -2083,21 +2078,21 @@ msgstr ""
 "Bornreeg en Funkschoon opröppt, warrt de hele Funkschoon utföhrt un dat "
 "Programm denn bi de Reeg achter den Oproop anhollen.</p>"
 
-#: shell/debugcontroller.cpp:259
+#: shell/debugcontroller.cpp:261
 #, fuzzy, kde-format
 #| msgid "Step over Ins&truction"
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "&Anwiesen utföhren"
 
-#: shell/debugcontroller.cpp:260
+#: shell/debugcontroller.cpp:262
 #, fuzzy, kde-format
 #| msgid "Step over instruction"
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Anwiesen utföhren"
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:263
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step over instruction</b><p>Steps over the next assembly instruction.</"
@@ -2106,21 +2101,21 @@ msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "<b>Anwiesen utföhren</b><p>Föhrt de nakamen Assembleranwiesen ut.</p>"
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:268
 #, fuzzy, kde-format
 #| msgid "Step &Into"
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "&Ringahn"
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:270
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Na nakamen Utdruck ringahn"
 
-#: shell/debugcontroller.cpp:269
+#: shell/debugcontroller.cpp:271
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step into</b><p>Executes exactly one line of source. If the source "
@@ -2134,21 +2129,21 @@ msgstr ""
 "<b>Ringahn</b><p>Föhrt nau een Kodereeg ut. Wenn de Bornreeg en Funkschoon "
 "opröppt, warrt dat Programm bi den Funkschoonanfang anhollen.</p>"
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:278
 #, fuzzy, kde-format
 #| msgid "Step into I&nstruction"
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Na &Anwiesen ringahn"
 
-#: shell/debugcontroller.cpp:277
+#: shell/debugcontroller.cpp:279
 #, fuzzy, kde-format
 #| msgid "Step into instruction"
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Na Anwiesen ringahn"
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:280
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step into instruction</b><p>Steps into the next assembly instruction.</"
@@ -2158,21 +2153,21 @@ msgid "Steps into the next assembly instruction."
 msgstr ""
 "<b>Na Anwiesen ringahn</b><p>Geiht na de nakamen Assembleranwiesen rin.</p>"
 
-#: shell/debugcontroller.cpp:282
+#: shell/debugcontroller.cpp:284
 #, fuzzy, kde-format
 #| msgid "Step O&ut"
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "&Rutgahn"
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:286
 #, fuzzy, kde-format
 #| msgid "Steps out of the current function"
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Aktuell Funkschoon bet Enn utföhren"
 
-#: shell/debugcontroller.cpp:285
+#: shell/debugcontroller.cpp:287
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step out</b><p>Executes the application until the currently executing "
@@ -2191,26 +2186,26 @@ msgstr ""
 "Funkschoonoproop. Wenn he den Butenrahmen utföhrt (a.B. \"main()\"), blifft "
 "disse Akschoon ahn Utwarken.</p>"
 
-#: shell/debugcontroller.cpp:293
+#: shell/debugcontroller.cpp:295
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Hollpunkt an/ut"
 
-#: shell/debugcontroller.cpp:294
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr ""
 
-#: shell/debugcontroller.cpp:295
+#: shell/debugcontroller.cpp:297
 #, fuzzy, kde-format
 #| msgid "Toggle breakpoint"
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Hollpunkt an/ut"
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:298
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in "
@@ -2221,48 +2216,48 @@ msgstr ""
 "<b>Hollpunkt an/ut</b><p>Maakt den Hollpunkt för de aktuelle Editorreeg an "
 "oder ut.</p>"
 
-#: shell/debugcontroller.cpp:300
+#: shell/debugcontroller.cpp:302
 #, fuzzy, kde-format
 #| msgid "Show Documentation"
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Dokmentatschoon wiesen"
 
-#: shell/debugcontroller.cpp:301
+#: shell/debugcontroller.cpp:303
 #, fuzzy, kde-format
 #| msgid "Steps out of the current function"
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Aktuell Funkschoon bet Enn utföhren"
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:304
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:432
+#: shell/debugcontroller.cpp:430
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Fehlersöök"
 
-#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:480 shell/runcontroller.cpp:440
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Fehlersöök för Oproop"
 
-#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:443
 #, fuzzy, kde-format
 #| msgid "Debug current Launch"
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Fehlersöök för aktuellen Oproop"
 
-#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:444
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Debug Launch</b><p>Executes the target or the program specified in "
@@ -2275,21 +2270,21 @@ msgstr ""
 "<b>Fehlersöök för Oproop</b><p>Föhrt dat Teel oder dat Programm ut de "
 "opstunns anmaakte Oproop-Instellen binnen en Fehlersöker ut.</p>"
 
-#: shell/debugcontroller.cpp:488
+#: shell/debugcontroller.cpp:486
 #, fuzzy, kde-format
 #| msgid "&Continue"
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Wiedermaken"
 
-#: shell/debugcontroller.cpp:490
+#: shell/debugcontroller.cpp:488
 #, fuzzy, kde-format
 #| msgid "Continues the application execution"
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Programm wieder utföhren"
 
-#: shell/debugcontroller.cpp:491
+#: shell/debugcontroller.cpp:489
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Continue application execution</b><p>Continues the execution of your "
@@ -2327,24 +2322,24 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Dokmentatschoon"
 
-#: shell/documentcontroller.cpp:63 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "Ahn Naam"
 
-#: shell/documentcontroller.cpp:120
+#: shell/documentcontroller.cpp:119
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Datei opmaken"
 
-#: shell/documentcontroller.cpp:121
+#: shell/documentcontroller.cpp:120
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Textdatei\n"
 
-#: shell/documentcontroller.cpp:318
+#: shell/documentcontroller.cpp:317
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2354,47 +2349,47 @@ msgstr ""
 "finnen.\n"
 "Wullt Du ehr as Eenfachtext opmaken?"
 
-#: shell/documentcontroller.cpp:321
+#: shell/documentcontroller.cpp:320
 #, fuzzy, kde-format
 #| msgid "Could Not Find Editor"
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "Editor lett sik nich finnen."
 
-#: shell/documentcontroller.cpp:322
+#: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:323
+#: shell/documentcontroller.cpp:322
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:610
 #, fuzzy, kde-format
 #| msgid "&Open..."
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Opmaken…"
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:613
 #, fuzzy, kde-format
 #| msgid "Open file"
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Datei opmaken"
 
-#: shell/documentcontroller.cpp:615
+#: shell/documentcontroller.cpp:614
 #, fuzzy, kde-format
 #| msgid "<b>Open file</b><p>Opens a file for editing.</p>"
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "<b>Datei opmaken</b><p>En Datei för't Bewerken opmaken</p>"
 
-#: shell/documentcontroller.cpp:619
+#: shell/documentcontroller.cpp:618
 #, fuzzy, kde-format
 #| msgid ""
 #| "This lists files which you have opened recently, and allows you to easily "
@@ -2406,21 +2401,21 @@ msgid ""
 msgstr ""
 "List mit de verleden opmaakten Dateien, de Du eenfach wedder opmaken kannst."
 
-#: shell/documentcontroller.cpp:624
+#: shell/documentcontroller.cpp:623
 #, fuzzy, kde-format
 #| msgid "Save Al&l"
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "A&ll sekern"
 
-#: shell/documentcontroller.cpp:626
+#: shell/documentcontroller.cpp:625
 #, fuzzy, kde-format
 #| msgid "Save all open documents"
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "All opmaakt Dokmenten sekern"
 
-#: shell/documentcontroller.cpp:627
+#: shell/documentcontroller.cpp:626
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Save all documents</b><p>Save all open documents, prompting for "
@@ -2432,21 +2427,21 @@ msgstr ""
 "<b>All Dokmenten sekern</b><p>All opmaakt Dokmenten sekern un na nödige "
 "Informatschonen fragen</p>"
 
-#: shell/documentcontroller.cpp:633
+#: shell/documentcontroller.cpp:632
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action"
 msgid "Reload All"
 msgstr "All nieg laden"
 
-#: shell/documentcontroller.cpp:635
+#: shell/documentcontroller.cpp:634
 #, fuzzy, kde-format
 #| msgid "Revert all open documents"
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "All opmaakt Dokmenten torüchdreihen"
 
-#: shell/documentcontroller.cpp:636
+#: shell/documentcontroller.cpp:635
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Revert all documents</b><p>Revert all open documents, returning to the "
@@ -2457,42 +2452,42 @@ msgstr ""
 "<b>All Dokmenten torüchdreihen</b><p>All opmaakt Dokmenten torüchdreihen, "
 "geiht na den tolest sekerten Stand torüch</p>"
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:641
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Tomaken"
 
-#: shell/documentcontroller.cpp:644
+#: shell/documentcontroller.cpp:643
 #, fuzzy, kde-format
 #| msgid "Close File"
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Datei tomaken"
 
-#: shell/documentcontroller.cpp:645
+#: shell/documentcontroller.cpp:644
 #, fuzzy, kde-format
 #| msgid "Close Document"
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Dokment tomaken"
 
-#: shell/documentcontroller.cpp:650
+#: shell/documentcontroller.cpp:649
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "&All tomaken"
 
-#: shell/documentcontroller.cpp:652
+#: shell/documentcontroller.cpp:651
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "All opmaakt Dokmenten tomaken"
 
-#: shell/documentcontroller.cpp:653
+#: shell/documentcontroller.cpp:652
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Close all documents</b><p>Close all open documents, prompting for "
@@ -2505,21 +2500,21 @@ msgstr ""
 "<b>All Dokmenten tomaken</b><p>All opmaakt Dokmenten tomaken un na nödige "
 "Informatschonen fragen.</p>"
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:658
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "All anne&r tomaken"
 
-#: shell/documentcontroller.cpp:661
+#: shell/documentcontroller.cpp:660
 #, fuzzy, kde-format
 #| msgid "Close all other documents"
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "All anner Dokmenten tomaken"
 
-#: shell/documentcontroller.cpp:662
+#: shell/documentcontroller.cpp:661
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Close all other documents</b><p>Close all open documents, with the "
@@ -2532,21 +2527,21 @@ msgstr ""
 "<b>All anner Dokmenten tomaken</b><p>All opmaakt Dokmenten tomaken, "
 "utbenahmen dat opstunns aktive</p>"
 
-#: shell/documentcontroller.cpp:667
+#: shell/documentcontroller.cpp:666
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "All opmaakt Dokmenten tomaken"
 
-#: shell/documentcontroller.cpp:668
+#: shell/documentcontroller.cpp:667
 #, fuzzy, kde-format
 #| msgid "Annotation..."
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Anmarken…"
 
-#: shell/documentcontroller.cpp:1302
+#: shell/documentcontroller.cpp:1299
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2688,52 +2683,52 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Fehlersöök"
 
-#: shell/loadedpluginsdialog.cpp:280
+#: shell/loadedpluginsdialog.cpp:279
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Laadt Modulen"
 
-#: shell/loadedpluginsdialog.cpp:286
+#: shell/loadedpluginsdialog.cpp:285
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\">Laadt Modulen för <b>%1</b></font></html>"
 
-#: shell/mainwindow.cpp:445
+#: shell/mainwindow.cpp:457
 #, kde-format
 msgid " (read only)"
 msgstr ""
 
-#: shell/mainwindow_p.cpp:221
+#: shell/mainwindow_p.cpp:223
 #, fuzzy, kde-format
 #| msgid "Configure %1"
 msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
 msgstr "%1 instellen"
 
-#: shell/mainwindow_p.cpp:222
+#: shell/mainwindow_p.cpp:224
 #, fuzzy, kde-format
 #| msgid "Lets you customize %1."
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
 msgstr "Hier kannst Du %1 instellen."
 
-#: shell/mainwindow_p.cpp:225
+#: shell/mainwindow_p.cpp:227
 #, fuzzy, kde-format
 #| msgid "Configure Notifications..."
 msgctxt "@action"
 msgid "Configure Notifications..."
 msgstr "Bescheden instellen…"
 
-#: shell/mainwindow_p.cpp:226
+#: shell/mainwindow_p.cpp:228
 #, fuzzy, kde-format
 #| msgid "Configure Notifications"
 msgctxt "@info:tooltip"
 msgid "Configure notifications"
 msgstr "Bescheden instellen"
 
-#: shell/mainwindow_p.cpp:227
+#: shell/mainwindow_p.cpp:229
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Configure Notifications</b><p>Shows a dialog that lets you configure "
@@ -2744,21 +2739,21 @@ msgstr ""
 "<b>Bescheden instellen</b><p>Wiest en Dialoog, mit den Du Bescheden "
 "instellen kannst.</p>"
 
-#: shell/mainwindow_p.cpp:231
+#: shell/mainwindow_p.cpp:233
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgctxt "@action"
 msgid "Loaded Plugins"
 msgstr "Laadt Modulen"
 
-#: shell/mainwindow_p.cpp:232
+#: shell/mainwindow_p.cpp:234
 #, fuzzy, kde-format
 #| msgid "Show a list of all loaded plugins"
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
 msgstr "All laadt Modulen oplisten"
 
-#: shell/mainwindow_p.cpp:233
+#: shell/mainwindow_p.cpp:235
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Loaded Plugins</b><p>Shows a dialog with information about all loaded "
@@ -2769,187 +2764,187 @@ msgstr ""
 "<b>Laadt Modulen</b><p>Wiest en Dialoog mit Informatschonen över all laadt "
 "Modulen.</p>"
 
-#: shell/mainwindow_p.cpp:236
+#: shell/mainwindow_p.cpp:238
 #, fuzzy, kde-format
 #| msgid "&Next Window"
 msgctxt "@action"
 msgid "&Next Window"
 msgstr "&Nakamen Finster"
 
-#: shell/mainwindow_p.cpp:239
+#: shell/mainwindow_p.cpp:241
 #, fuzzy, kde-format
 #| msgid "Next window"
 msgctxt "@info:tooltip"
 msgid "Next window"
 msgstr "Nakamen Finster"
 
-#: shell/mainwindow_p.cpp:240
+#: shell/mainwindow_p.cpp:242
 #, fuzzy, kde-format
 #| msgid "Switch the focus to the next open document."
 msgctxt "@info:whatsthis"
 msgid "Switches to the next window."
 msgstr "Na nakamen opmaakt Dokment wesseln"
 
-#: shell/mainwindow_p.cpp:244
+#: shell/mainwindow_p.cpp:246
 #, fuzzy, kde-format
 #| msgid "&Previous Window"
 msgctxt "@action"
 msgid "&Previous Window"
 msgstr "&Verleden Finster"
 
-#: shell/mainwindow_p.cpp:247
+#: shell/mainwindow_p.cpp:249
 #, fuzzy, kde-format
 #| msgid "Previous window"
 msgctxt "@info:tooltip"
 msgid "Previous window"
 msgstr "Verleden Finster"
 
-#: shell/mainwindow_p.cpp:248
+#: shell/mainwindow_p.cpp:250
 #, fuzzy, kde-format
 #| msgid "Switch the focus to the previous open document."
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous window."
 msgstr "Na verleden opmaakt Dokment wesseln"
 
-#: shell/mainwindow_p.cpp:252
+#: shell/mainwindow_p.cpp:254
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Next Outputmark"
 msgstr ""
 
-#: shell/mainwindow_p.cpp:258
+#: shell/mainwindow_p.cpp:260
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Previous Outputmark"
 msgstr ""
 
-#: shell/mainwindow_p.cpp:265
+#: shell/mainwindow_p.cpp:267
 #, fuzzy, kde-format
 #| msgid "Split View &Top/Bottom"
 msgctxt "@action"
 msgid "Split View &Top/Bottom"
 msgstr "Finster &kimmrecht delen"
 
-#: shell/mainwindow_p.cpp:268
+#: shell/mainwindow_p.cpp:270
 #, fuzzy, kde-format
 #| msgid "Split Horizontal"
 msgctxt "@info:tooltip"
 msgid "Split horizontal"
 msgstr "Kimmrecht delen"
 
-#: shell/mainwindow_p.cpp:269
+#: shell/mainwindow_p.cpp:271
 #, fuzzy, kde-format
 #| msgid "<b>Split Horizontal</b><p>Splits the current view horizontally.</p>"
 msgctxt "@info:whatsthis"
 msgid "Splits the current view horizontally."
 msgstr "<b>Kimmrecht delen</b><p>De aktuelle Ansicht kimmrecht delen</p>"
 
-#: shell/mainwindow_p.cpp:273
+#: shell/mainwindow_p.cpp:275
 #, fuzzy, kde-format
 #| msgid "Split View &Left/Right"
 msgctxt "@action"
 msgid "Split View &Left/Right"
 msgstr "Finster &pielrecht delen"
 
-#: shell/mainwindow_p.cpp:276
+#: shell/mainwindow_p.cpp:278
 #, fuzzy, kde-format
 #| msgid "Split Vertical"
 msgctxt "@info:tooltip"
 msgid "Split vertical"
 msgstr "Pielrecht delen"
 
-#: shell/mainwindow_p.cpp:277
+#: shell/mainwindow_p.cpp:279
 #, fuzzy, kde-format
 #| msgid "<b>Split Vertical</b><p>Splits the current view vertically.</p>"
 msgctxt "@info:whatsthis"
 msgid "Splits the current view vertically."
 msgstr "<b>Pielrecht delen</b><p>De aktuelle Ansicht pielrecht delen</p>"
 
-#: shell/mainwindow_p.cpp:280
+#: shell/mainwindow_p.cpp:282
 #, fuzzy, kde-format
 #| msgid "Next Tool View"
 msgctxt "@action"
 msgid "&Next Split View"
 msgstr "Nakamen Warktüüchansicht"
 
-#: shell/mainwindow_p.cpp:283
+#: shell/mainwindow_p.cpp:285
 #, fuzzy, kde-format
 #| msgid "Next Tool View"
 msgctxt "@info:tooltip"
 msgid "Next split view"
 msgstr "Nakamen Warktüüchansicht"
 
-#: shell/mainwindow_p.cpp:284
+#: shell/mainwindow_p.cpp:286
 #, fuzzy, kde-format
 #| msgid "Switch the focus to the next open document."
 msgctxt "@info:whatsthis"
 msgid "Switches to the next split view."
 msgstr "Na nakamen opmaakt Dokment wesseln"
 
-#: shell/mainwindow_p.cpp:288
+#: shell/mainwindow_p.cpp:290
 #, fuzzy, kde-format
 #| msgid "Previous Tool View"
 msgctxt "@action"
 msgid "&Previous Split View"
 msgstr "Verleden Warktüüchansicht"
 
-#: shell/mainwindow_p.cpp:291
+#: shell/mainwindow_p.cpp:293
 #, fuzzy, kde-format
 #| msgid "Previous Tool View"
 msgctxt "@info:tooltip"
 msgid "Previous split view"
 msgstr "Verleden Warktüüchansicht"
 
-#: shell/mainwindow_p.cpp:292
+#: shell/mainwindow_p.cpp:294
 #, fuzzy, kde-format
 #| msgid "Switch the focus to the previous open document."
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous split view."
 msgstr "Na verleden opmaakt Dokment wesseln"
 
-#: shell/mainwindow_p.cpp:300
+#: shell/mainwindow_p.cpp:302
 #, fuzzy, kde-format
 #| msgid "&New"
 msgctxt "@action new file"
 msgid "&New"
 msgstr "&Nieg"
 
-#: shell/mainwindow_p.cpp:301
+#: shell/mainwindow_p.cpp:303
 #, fuzzy, kde-format
 #| msgid "New"
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
 msgstr "Nieg"
 
-#: shell/mainwindow_p.cpp:303
+#: shell/mainwindow_p.cpp:305
 #, fuzzy, kde-format
 #| msgid "New File"
 msgctxt "@info:tooltip"
 msgid "New file"
 msgstr "Nieg Datei"
 
-#: shell/mainwindow_p.cpp:304
+#: shell/mainwindow_p.cpp:306
 #, fuzzy, kde-format
 #| msgid "<b>New File</b><p>Creates an empty file.</p>"
 msgctxt "@info:whatsthis"
 msgid "Creates an empty file."
 msgstr "<b>Nieg Datei</b><p>En leddig Datei opstellen</p>"
 
-#: shell/mainwindow_p.cpp:309
+#: shell/mainwindow_p.cpp:311
 #, fuzzy, kde-format
 #| msgid "&Add Tool View..."
 msgctxt "@action"
 msgid "&Add Tool View..."
 msgstr "Warktüüchansicht &tofögen…"
 
-#: shell/mainwindow_p.cpp:311
+#: shell/mainwindow_p.cpp:313
 #, fuzzy, kde-format
 #| msgid "Add Tool View"
 msgctxt "@info:tooltip"
 msgid "Add tool view"
 msgstr "Warktüüchansicht tofögen"
 
-#: shell/mainwindow_p.cpp:312
+#: shell/mainwindow_p.cpp:314
 #, fuzzy, kde-format
 #| msgid "<b>Add Tool View</b><p>Adds a new tool view to this window.</p>"
 msgctxt "@info:whatsthis"
@@ -2958,100 +2953,107 @@ msgstr ""
 "<b>Warktüüchansicht tofögen</b><p>Dit Finster en nieg Warktüüchansicht "
 "tofögen</p>"
 
-#: shell/mainwindow_p.cpp:348
+#: shell/mainwindow_p.cpp:319
+#, kde-format
+msgid "&Window Color Scheme"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:353
 #, fuzzy, kde-format
 #| msgid "Split View Top/Bottom"
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
 msgstr "Finster kimmrecht delen"
 
-#: shell/mainwindow_p.cpp:351
+#: shell/mainwindow_p.cpp:356
 #, fuzzy, kde-format
 #| msgid "Split View Left/Right"
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
 msgstr "Finster pielrecht delen"
 
-#: shell/mainwindow_p.cpp:355
+#: shell/mainwindow_p.cpp:360
 #, fuzzy, kde-format
 #| msgid "New File"
 msgctxt "@action:inmenu"
 msgid "New File"
 msgstr "Nieg Datei"
 
-#: shell/mainwindow_p.cpp:361
+#: shell/mainwindow_p.cpp:366
 #, fuzzy, kde-format
 #| msgid "Reload"
 msgctxt "@action:inmenu"
 msgid "Reload"
 msgstr "Nieg laden"
 
-#: shell/mainwindow_p.cpp:364
+#: shell/mainwindow_p.cpp:369
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action:inmenu"
 msgid "Reload All"
 msgstr "All nieg laden"
 
-#: shell/mainwindow_p.cpp:404
+#: shell/mainwindow_p.cpp:409
 #, fuzzy, kde-format
 #| msgid "Add Tool View"
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
 msgstr "Warktüüchansicht tofögen"
 
-#: shell/mainwindow_p.cpp:427
+#: shell/mainwindow_p.cpp:432
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
 msgstr ""
 
-#: shell/openprojectdialog.cpp:113
-#, kde-format
-msgid "%1|All Project Files (%1)"
-msgstr ""
+#: shell/openprojectdialog.cpp:124
+#, fuzzy, kde-format
+#| msgid "Project %1"
+msgctxt "@item:inlistbox"
+msgid "All Project Files"
+msgstr "Projekt %1"
 
-#: shell/openprojectdialog.cpp:122
+#: shell/openprojectdialog.cpp:133
 #, fuzzy, kde-format
 #| msgid "Select the source"
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "Born utsöken"
 
-#: shell/openprojectdialog.cpp:130
+#: shell/openprojectdialog.cpp:141
 #, kde-format
 msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
 "to open as a project"
 msgstr ""
 
-#: shell/openprojectdialog.cpp:137 shell/openprojectdialog.cpp:157
+#: shell/openprojectdialog.cpp:148 shell/openprojectdialog.cpp:168
 #, fuzzy, kde-format
 #| msgid "Project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Projekt"
 
-#: shell/openprojectdialog.cpp:145
+#: shell/openprojectdialog.cpp:156
 #, fuzzy, kde-format
 #| msgid "Project information"
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Projekt-Informatschonen"
 
-#: shell/openprojectdialog.cpp:208
+#: shell/openprojectdialog.cpp:219
 #, fuzzy, kde-format
 #| msgid "open %1 as project"
 msgid "Open \"%1\" as project"
 msgstr "%1 as Projekt opmaken"
 
-#: shell/openprojectdialog.cpp:212
+#: shell/openprojectdialog.cpp:223
 #, fuzzy, kde-format
 #| msgid "Selected URL is invalid."
 msgid "Selected URL is invalid"
 msgstr "Köört Nettadress is leeg."
 
-#: shell/openprojectdialog.cpp:257
+#: shell/openprojectdialog.cpp:268
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@item:inlistbox"
@@ -3086,7 +3088,7 @@ msgid ""
 "Do you want to overwrite the external changes?"
 msgstr ""
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:427
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:418
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3841,20 +3843,20 @@ msgstr ""
 "<p>De Oproop-Instellen utsöken, de bruukt warrt, wenn Du \"Opropen\" "
 "bruukst</p>"
 
-#: shell/runcontroller.cpp:588
+#: shell/runcontroller.cpp:590
 #, fuzzy, kde-format
 #| msgid "<%1> Unnamed job"
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Opgaav ahn Naam"
 
-#: shell/runcontroller.cpp:965
+#: shell/runcontroller.cpp:967
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgid "New %1 Launcher"
 msgstr "Nieg Telg"
 
-#: shell/runcontroller.cpp:1002
+#: shell/runcontroller.cpp:1004
 #, fuzzy, kde-format
 #| msgid "%1 As..."
 msgctxt "@title:menu"
@@ -4400,7 +4402,7 @@ msgctxt "@info:tooltip"
 msgid "Batch edit mode"
 msgstr ""
 
-#: shell/settings/languagepreferences.cpp:35
+#: shell/settings/languagepreferences.cpp:34
 #, fuzzy, kde-format
 #| msgid " files"
 msgctxt "@item:valuesuffix"
@@ -4409,13 +4411,13 @@ msgid_plural " files"
 msgstr[0] " Dateien"
 msgstr[1] " Dateien"
 
-#: shell/settings/languagepreferences.cpp:80
+#: shell/settings/languagepreferences.cpp:77
 #, fuzzy, kde-format
 #| msgid "Language Support"
 msgid "Language Support"
 msgstr "Spraakünnerstütten"
 
-#: shell/settings/languagepreferences.cpp:85
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr ""
@@ -5088,7 +5090,7 @@ msgstr "Vörlagen freegeven"
 msgid "Configure Templates"
 msgstr "Opropen instellen…"
 
-#: shell/settings/templatepage.cpp:28
+#: shell/settings/templatepage.cpp:30
 #, fuzzy, kde-format
 #| msgid "Get More Templates"
 msgctxt "@action:button"
@@ -5431,7 +5433,7 @@ msgid_plural "Reformatting %1 files"
 msgstr[0] "Reeg nieg formateren"
 msgstr[1] "Reeg nieg formateren"
 
-#: shell/sourceformatterselectionedit.cpp:1088
+#: shell/sourceformatterselectionedit.cpp:1077
 #, kde-format
 msgid ""
 "The style %1 is also used for the following languages:\n"
@@ -5442,13 +5444,13 @@ msgstr ""
 "%2.\n"
 "Wullt Du em redig wegdoon?"
 
-#: shell/sourceformatterselectionedit.cpp:1090
+#: shell/sourceformatterselectionedit.cpp:1079
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
 msgstr "Stil wegdoon"
 
-#: shell/sourceformatterselectionedit.cpp:1150
+#: shell/sourceformatterselectionedit.cpp:1139
 #, kde-format
 msgid "New %1"
 msgstr "Nieg %1"
@@ -5534,7 +5536,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Wegdoon"
 
-#: shell/textdocument.cpp:422
+#: shell/textdocument.cpp:413
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5545,14 +5547,14 @@ msgstr ""
 "\n"
 "Wullt Du ehr redig överschrieven? (De extern Ännern kaamt dor bi weg.)"
 
-#: shell/textdocument.cpp:426
+#: shell/textdocument.cpp:417
 #, fuzzy, kde-format
 #| msgid "Document Externally Modified"
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Dokment extern ännert"
 
-#: shell/textdocument.cpp:683
+#: shell/textdocument.cpp:674
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Reeg: %1 Str: %2 "
@@ -6213,7 +6215,7 @@ msgstr "Verscheel lett sik nich halen."
 msgid "There are no committed differences."
 msgstr "Dat gifft keen Verschelen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:285
+#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:278
 #, fuzzy, kde-format
 #| msgid "VCS support"
 msgctxt "@title:window"
@@ -6501,103 +6503,103 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Born-Revischoon"
 
-#: vcs/vcspluginhelper.cpp:84
+#: vcs/vcspluginhelper.cpp:82
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Inspelen…"
 
-#: vcs/vcspluginhelper.cpp:85
+#: vcs/vcspluginhelper.cpp:83
 #, fuzzy, kde-format
 #| msgid "Update"
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Opfrischen"
 
-#: vcs/vcspluginhelper.cpp:86
+#: vcs/vcspluginhelper.cpp:84
 #, fuzzy, kde-format
 #| msgid "Add"
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Tofögen"
 
-#: vcs/vcspluginhelper.cpp:87
+#: vcs/vcspluginhelper.cpp:85
 #, fuzzy, kde-format
 #| msgid "Show Differences..."
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "Verscheel wiesen..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:86
 #, fuzzy, kde-format
 #| msgid "Revert"
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Torüchdreihen"
 
-#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:473
+#: vcs/vcspluginhelper.cpp:87 vcs/vcspluginhelper.cpp:451
 #, fuzzy, kde-format
 #| msgid "History..."
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Vörgeschicht…"
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:88
 #, fuzzy, kde-format
 #| msgid "Annotation..."
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Anmarken…"
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:89
 #, fuzzy, kde-format
 #| msgid "Show Diff..."
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "Verscheel wiesen…"
 
-#: vcs/vcspluginhelper.cpp:92
+#: vcs/vcspluginhelper.cpp:90
 #, fuzzy, kde-format
 #| msgid "Show Diff (all files)..."
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "Verscheel wiesen (all Dateien)…"
 
-#: vcs/vcspluginhelper.cpp:93
+#: vcs/vcspluginhelper.cpp:91
 #, fuzzy, kde-format
 #| msgid "Push"
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Schuven"
 
-#: vcs/vcspluginhelper.cpp:94
+#: vcs/vcspluginhelper.cpp:92
 #, fuzzy, kde-format
 #| msgid "Pull"
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Trecken"
 
-#: vcs/vcspluginhelper.cpp:284
+#: vcs/vcspluginhelper.cpp:277
 #, kde-format
 msgid "There are no differences."
 msgstr "Dat gifft keen Verschelen."
 
-#: vcs/vcspluginhelper.cpp:291
+#: vcs/vcspluginhelper.cpp:284
 #, fuzzy, kde-format
 #| msgid "Unable to get difference."
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Verscheel lett sik nich halen."
 
-#: vcs/vcspluginhelper.cpp:359
+#: vcs/vcspluginhelper.cpp:352
 #, fuzzy, kde-format
 #| msgid "%2 History (%1)"
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2-Vörgeschicht (%1)"
 
-#: vcs/vcspluginhelper.cpp:431
+#: vcs/vcspluginhelper.cpp:415
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6606,7 +6608,7 @@ msgstr ""
 "Anmarken laat sik nich wiesen, den Editor fehlt de Koppelsteed "
 "\"KTextEditor::AnnotationInterface\"."
 
-#: vcs/vcspluginhelper.cpp:435
+#: vcs/vcspluginhelper.cpp:419
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6617,7 +6619,7 @@ msgstr ""
 "oder is keen Textdokment:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:468 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:446 vcs/widgets/vcseventwidget.cpp:46
 #, fuzzy, kde-format
 #| msgid "Copy Revision"
 msgctxt "@action:inmenu"
@@ -6631,7 +6633,7 @@ msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
 msgstr "De Archiev-Nettadress künnig maken…"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:55
+#: vcs/widgets/vcsannotationitemdelegate.cpp:53
 #, kde-format
 msgctxt "@item age"
 msgid "%1 year"
@@ -6639,7 +6641,7 @@ msgid_plural "%1 years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:65
+#: vcs/widgets/vcsannotationitemdelegate.cpp:63
 #, kde-format
 msgctxt "@item age"
 msgid "%1 month"
@@ -6647,7 +6649,7 @@ msgid_plural "%1 months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:69
+#: vcs/widgets/vcsannotationitemdelegate.cpp:67
 #, kde-format
 msgctxt "@item age"
 msgid "%1 day"
@@ -6655,13 +6657,13 @@ msgid_plural "%1 days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:71
+#: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
 msgstr ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:285
+#: vcs/widgets/vcsannotationitemdelegate.cpp:283
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -7218,11 +7220,6 @@ msgstr "Verscheel twischen Revischonen"
 
 #~ msgid "Hide"
 #~ msgstr "Versteken"
-
-#, fuzzy
-#~| msgid "Project %1"
-#~ msgid "All Project Files (%1)"
-#~ msgstr "Projekt %1"
 
 #~ msgid "Build System:"
 #~ msgstr "Buu-Systeem:"

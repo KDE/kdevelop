@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2024-02-19 05:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -142,27 +142,27 @@ msgstr "კოდი"
 msgid "KDevelop Project Files"
 msgstr "Kdevelop-ის პროექტის ფაილები"
 
-#: main.cpp:85
+#: main.cpp:84
 #, kde-format
 msgid "Could not open %1"
 msgstr "%1-ის გახსნა შეუძლებელია"
 
-#: main.cpp:219
+#: main.cpp:218
 #, kde-format
 msgid "Could not open file '%1'."
 msgstr "ფაილ %1-ის გახსნა შეუძლებელია: %1."
 
-#: main.cpp:242
+#: main.cpp:241
 #, kde-format
 msgid "Could not open project '%1': %2"
 msgstr "პროექტ %1-ის გახსნა შეუძლებელია: %2"
 
-#: main.cpp:273
+#: main.cpp:272
 #, kde-format
 msgid "Select the session to open the document in"
 msgstr "აირჩიეთ სესია, რომელშიც დოკუმენტი უნდა გაიხსნას"
 
-#: main.cpp:300
+#: main.cpp:299
 #, kde-format
 msgid ""
 "Cannot open unknown session %1. See `--list-sessions` switch for available "
@@ -171,102 +171,102 @@ msgstr ""
 "შეუძლებელია უცნობი სესიის, %1-ის გახსნა. იხილეთ '--list-sessions' პარამეტრი "
 "სესიების ჩამონათვალისთვის და '-n' ახლის შესაქმნელად."
 
-#: main.cpp:377
+#: main.cpp:370
 #, kde-format
 msgid "KDevelop"
 msgstr "Kdevelop"
 
-#: main.cpp:379
+#: main.cpp:372
 #, kde-format
 msgid "The KDevelop Integrated Development Environment"
 msgstr "The KDevelop Integrated Development Environment"
 
-#: main.cpp:380
+#: main.cpp:373
 #, kde-format
 msgid "Copyright 1999-%1, The KDevelop developers"
 msgstr "ყველა უფლება დაცულია, 1999-%1, Kdevelop-ს შემმუშავებლები"
 
-#: main.cpp:383
+#: main.cpp:376
 #, kde-format
 msgid "Kevin Funk"
 msgstr "Kevin Funk"
 
-#: main.cpp:383
+#: main.cpp:376
 #, kde-format
 msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
 msgstr ""
 "Co-maintainer, C++/Clang,QA, Windows-ის მხარდაჭერა, წარმადობა, ვებგვერდი"
 
-#: main.cpp:384
+#: main.cpp:377
 #, kde-format
 msgid "Sven Brauch"
 msgstr "Sven Brauch"
 
-#: main.cpp:384
+#: main.cpp:377
 #, kde-format
 msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
 msgstr "Co-maintainer, AppImage, Python-ის მხარდჭერა, ინტერფეისის გაუმჯობესება"
 
-#: main.cpp:385
+#: main.cpp:378
 #, kde-format
 msgid "Aleix Pol Gonzalez"
 msgstr "Aleix Pol Gonzalez"
 
-#: main.cpp:385
+#: main.cpp:378
 #, kde-format
 msgid "CMake Support, Run Support, Kross Support"
 msgstr "CMake-ის მხარდაჭერა, Run-ის მხარდაჭერა, Kross-ის მხარდაჭერა"
 
-#: main.cpp:386
+#: main.cpp:379
 #, kde-format
 msgid "Milian Wolff"
 msgstr "Milian Wolff"
 
-#: main.cpp:386
+#: main.cpp:379
 #, kde-format
 msgid ""
 "C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
 msgstr ""
 "C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, წარმადობა"
 
-#: main.cpp:387
+#: main.cpp:380
 #, kde-format
 msgid "Olivier JG"
 msgstr "Olivier JG"
 
-#: main.cpp:387
+#: main.cpp:380
 #, kde-format
 msgid "C++/Clang, DUChain, Bug Fixes"
 msgstr "C++/Clang, DUChain, Bug Fixes"
 
-#: main.cpp:388
+#: main.cpp:381
 #, kde-format
 msgid "Andreas Pakulat"
 msgstr "Andreas Pakulat"
 
-#: main.cpp:388
+#: main.cpp:381
 #, kde-format
 msgid ""
 "Architecture, VCS Support, Project Management Support, QMake Projectmanager"
 msgstr ""
 "Architecture, VCS Support, Project Management Support, QMake Projectmanager"
 
-#: main.cpp:389
+#: main.cpp:382
 #, kde-format
 msgid "Alexander Dymo"
 msgstr "Alexander Dymo"
 
-#: main.cpp:389
+#: main.cpp:382
 #, kde-format
 msgid "Architecture, Sublime UI, Ruby support"
 msgstr "Architecture, Sublime UI, Ruby support"
 
-#: main.cpp:390
+#: main.cpp:383
 #, kde-format
 msgid "David Nolden"
 msgstr "David Nolden"
 
-#: main.cpp:390
+#: main.cpp:383
 #, kde-format
 msgid ""
 "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
@@ -275,427 +275,427 @@ msgstr ""
 "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
 "Assistance, Refactoring"
 
-#: main.cpp:391
+#: main.cpp:384
 #, kde-format
 msgid "Vladimir Prus"
 msgstr "Vladimir Prus"
 
-#: main.cpp:391
+#: main.cpp:384
 #, kde-format
 msgid "GDB integration"
 msgstr "GDB integration"
 
-#: main.cpp:392
+#: main.cpp:385
 #, kde-format
 msgid "Hamish Rodda"
 msgstr "Hamish Rodda"
 
-#: main.cpp:392
+#: main.cpp:385
 #, kde-format
 msgid "Text editor integration, definition-use chain"
 msgstr "Text editor integration, definition-use chain"
 
-#: main.cpp:393
+#: main.cpp:386
 #, kde-format
 msgid "Amilcar do Carmo Lucas"
 msgstr "Amilcar do Carmo Lucas"
 
-#: main.cpp:393
+#: main.cpp:386
 #, kde-format
 msgid "Website admin, API documentation, Doxygen and autoproject patches"
 msgstr "Website admin, API documentation, Doxygen and autoproject patches"
 
-#: main.cpp:394
+#: main.cpp:387
 #, kde-format
 msgid "Niko Sams"
 msgstr "Niko Sams"
 
-#: main.cpp:394
+#: main.cpp:387
 #, kde-format
 msgid "GDB integration, Webdevelopment Plugins"
 msgstr "GDB integration, Webdevelopment Plugins"
 
-#: main.cpp:395
+#: main.cpp:388
 #, kde-format
 msgid "Friedrich W. H. Kossebau"
 msgstr "Friedrich W. H. Kossebau"
 
-#: main.cpp:397
+#: main.cpp:390
 #, kde-format
 msgid "Matt Rogers"
 msgstr "Matt Rogers"
 
-#: main.cpp:398
+#: main.cpp:391
 #, kde-format
 msgid "Cédric Pasteur"
 msgstr "Cédric Pasteur"
 
-#: main.cpp:398
+#: main.cpp:391
 #, kde-format
 msgid "astyle and indent support"
 msgstr "astyle and indent support"
 
-#: main.cpp:399
+#: main.cpp:392
 #, kde-format
 msgid "Evgeniy Ivanov"
 msgstr "Evgeniy Ivanov"
 
-#: main.cpp:399
+#: main.cpp:392
 #, kde-format
 msgid "Distributed VCS, Git, Mercurial"
 msgstr "Distributed VCS, Git, Mercurial"
 
 #. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
-#: main.cpp:402
+#: main.cpp:395
 #, kde-format
 msgid "Robert Gruber"
 msgstr "Robert Gruber"
 
-#: main.cpp:402
+#: main.cpp:395
 #, kde-format
 msgid "SnippetPart, debugger and usability patches"
 msgstr "SnippetPart, debugger and usability patches"
 
-#: main.cpp:403
+#: main.cpp:396
 #, kde-format
 msgid "Dukju Ahn"
 msgstr "Dukju Ahn"
 
-#: main.cpp:403
+#: main.cpp:396
 #, kde-format
 msgid "Subversion plugin, Custom Make Manager, Overall improvements"
 msgstr "Subversion plugin, Custom Make Manager, Overall improvements"
 
-#: main.cpp:404
+#: main.cpp:397
 #, kde-format
 msgid "Harald Fernengel"
 msgstr "Harald Fernengel"
 
-#: main.cpp:404
+#: main.cpp:397
 #, kde-format
 msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
 msgstr "Ported to Qt 3, patches, valgrind, diff and perforce support"
 
-#: main.cpp:405
+#: main.cpp:398
 #, kde-format
 msgid "Roberto Raggi"
 msgstr "Roberto Raggi"
 
-#: main.cpp:405
+#: main.cpp:398
 #, kde-format
 msgid "C++ parser"
 msgstr "C++ parser"
 
-#: main.cpp:406
+#: main.cpp:399
 #, kde-format
 msgid "The KWrite authors"
 msgstr "KWrite-ის ავტორები"
 
-#: main.cpp:406
+#: main.cpp:399
 #, kde-format
 msgid "Kate editor component"
 msgstr "Kate რედაქტორის კომპონენტი"
 
-#: main.cpp:407
+#: main.cpp:400
 #, kde-format
 msgid "Nokia Corporation/Qt Software"
 msgstr "Nokia Corporation/Qt Software"
 
-#: main.cpp:407
+#: main.cpp:400
 #, kde-format
 msgid "Designer code"
 msgstr "Designer code"
 
-#: main.cpp:409
+#: main.cpp:402
 #, kde-format
 msgid "Contributors to older versions:"
 msgstr "წარსულში მონაწილეობას ასევე იღებდნენ:"
 
-#: main.cpp:410
+#: main.cpp:403
 #, kde-format
 msgid "Bernd Gehrmann"
 msgstr "Bernd Gehrmann"
 
-#: main.cpp:410
+#: main.cpp:403
 #, kde-format
 msgid "Initial idea, basic architecture, much initial source code"
 msgstr "საწყისი იდეა, საწყისი არქიტექტურა, საწყისი კოდის ძირითადი ნაწილი"
 
-#: main.cpp:411
+#: main.cpp:404
 #, kde-format
 msgid "Caleb Tennis"
 msgstr "Caleb Tennis"
 
-#: main.cpp:411
+#: main.cpp:404
 #, kde-format
 msgid "KTabBar, bugfixes"
 msgstr "KTabBar, bugfixes"
 
-#: main.cpp:412
+#: main.cpp:405
 #, kde-format
 msgid "Richard Dale"
 msgstr "Richard Dale"
 
-#: main.cpp:412
+#: main.cpp:405
 #, kde-format
 msgid "Java & Objective C support"
 msgstr "Java & Objective C-ის მხარდაჭერა"
 
-#: main.cpp:413
+#: main.cpp:406
 #, kde-format
 msgid "John Birch"
 msgstr "John Birch"
 
-#: main.cpp:413
+#: main.cpp:406
 #, kde-format
 msgid "Debugger frontend"
 msgstr "Debugger frontend"
 
-#: main.cpp:414
+#: main.cpp:407
 #, kde-format
 msgid "Sandy Meier"
 msgstr "Sandy Meier"
 
-#: main.cpp:414
+#: main.cpp:407
 #, kde-format
 msgid "PHP support, context menu stuff"
 msgstr "PHP-ის მხარადაჭერა, კონტექსტური მენიუს მორგება"
 
-#: main.cpp:415
+#: main.cpp:408
 #, kde-format
 msgid "Kurt Granroth"
 msgstr "Kurt Granroth"
 
-#: main.cpp:415
+#: main.cpp:408
 #, kde-format
 msgid "KDE application templates"
 msgstr "KDE-ის აპლიკაციის შაბლონები"
 
-#: main.cpp:416
+#: main.cpp:409
 #, kde-format
 msgid "Ian Reinhart Geiser"
 msgstr "Ian Reinhart Geiser"
 
-#: main.cpp:416
+#: main.cpp:409
 #, kde-format
 msgid "Dist part, bash support, application templates"
 msgstr "Dist part, bash-ის მხარდაჭერა, აპლიკაციის შაბლონები"
 
-#: main.cpp:417
+#: main.cpp:410
 #, kde-format
 msgid "Matthias Hoelzer-Kluepfel"
 msgstr "Matthias Hoelzer-Kluepfel"
 
-#: main.cpp:417
+#: main.cpp:410
 #, kde-format
 msgid "Several components, htdig indexing"
 msgstr "ზოგიერთი კომპონენტი, htdig-ის ინდექსირება"
 
-#: main.cpp:418
+#: main.cpp:411
 #, kde-format
 msgid "Victor Roeder"
 msgstr "Victor Roeder"
 
-#: main.cpp:418
+#: main.cpp:411
 #, kde-format
 msgid "Help with Automake manager and persistent class store"
 msgstr ""
 "დაგვეხმარა Automake manager-თან და კლასების მუდმივ საცავთან დაკავშირებულ "
 "პრობლემებთან"
 
-#: main.cpp:419
+#: main.cpp:412
 #, kde-format
 msgid "Simon Hausmann"
 msgstr "Simon Hausmann"
 
-#: main.cpp:419
+#: main.cpp:412
 #, kde-format
 msgid "Help with KParts infrastructure"
 msgstr "დახმარება KParts ინფრასტრუქტურაში"
 
-#: main.cpp:420
+#: main.cpp:413
 #, kde-format
 msgid "Oliver Kellogg"
 msgstr "Oliver Kellogg"
 
-#: main.cpp:420
+#: main.cpp:413
 #, kde-format
 msgid "Ada support"
 msgstr "Ada-ს მხარდაჭერა"
 
-#: main.cpp:421
+#: main.cpp:414
 #, kde-format
 msgid "Jakob Simon-Gaarde"
 msgstr "Jakob Simon-Gaarde"
 
-#: main.cpp:421
+#: main.cpp:414
 #, kde-format
 msgid "QMake projectmanager"
 msgstr "QMake projectmanager"
 
-#: main.cpp:422
+#: main.cpp:415
 #, kde-format
 msgid "Falk Brettschneider"
 msgstr "Falk Brettschneider"
 
-#: main.cpp:422
+#: main.cpp:415
 #, kde-format
 msgid "MDI modes, QEditor, bugfixes"
 msgstr "MDI რეჟიმები, QEditor, შეცდომების გასწორება"
 
-#: main.cpp:423
+#: main.cpp:416
 #, kde-format
 msgid "Mario Scalas"
 msgstr "Mario Scalas"
 
-#: main.cpp:423
+#: main.cpp:416
 #, kde-format
 msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
 msgstr "PartExplorer, redesign of CvsPart, შეცდომების გასწორება"
 
-#: main.cpp:424
+#: main.cpp:417
 #, kde-format
 msgid "Jens Dagerbo"
 msgstr "Jens Dagerbo"
 
-#: main.cpp:424
+#: main.cpp:417
 #, kde-format
 msgid ""
 "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
 "patches"
 msgstr "Replace, Bookmarks, FileList and CTags2 plugins. ზოგადი წარმადობა"
 
-#: main.cpp:425
+#: main.cpp:418
 #, kde-format
 msgid "Julian Rockey"
 msgstr "Julian Rockey"
 
-#: main.cpp:425
+#: main.cpp:418
 #, kde-format
 msgid "Filecreate part and other bits and patches"
 msgstr "Filecreate ნაწილი და სხვა პაჩები და ნაწილები"
 
-#: main.cpp:426
+#: main.cpp:419
 #, kde-format
 msgid "Ajay Guleria"
 msgstr "Ajay Guleria"
 
-#: main.cpp:426
+#: main.cpp:419
 #, kde-format
 msgid "ClearCase support"
 msgstr "ClearCase-ის მხარდაჭერა"
 
-#: main.cpp:427
+#: main.cpp:420
 #, kde-format
 msgid "Marek Janukowicz"
 msgstr "მარეკ იანუკოვიჩი"
 
-#: main.cpp:427
+#: main.cpp:420
 #, kde-format
 msgid "Ruby support"
 msgstr "Ruby-ის მხარდაჭერა"
 
-#: main.cpp:428
+#: main.cpp:421
 #, kde-format
 msgid "Robert Moniot"
 msgstr "რობერტ მონიო"
 
-#: main.cpp:428
+#: main.cpp:421
 #, kde-format
 msgid "Fortran documentation"
 msgstr "ფორტრანის დოკუმენტაცია"
 
-#: main.cpp:429
+#: main.cpp:422
 #, kde-format
 msgid "Ka-Ping Yee"
 msgstr "კა-პინგ იე"
 
-#: main.cpp:429
+#: main.cpp:422
 #, kde-format
 msgid "Python documentation utility"
 msgstr "Python-ის დოკუმენტაციის ხელსაწყო"
 
-#: main.cpp:430
+#: main.cpp:423
 #, kde-format
 msgid "Dimitri van Heesch"
 msgstr "დიმიტრი ვან ჰეეში"
 
-#: main.cpp:430
+#: main.cpp:423
 #, kde-format
 msgid "Doxygen wizard"
 msgstr "Doxygen-ის მორგება"
 
-#: main.cpp:431
+#: main.cpp:424
 #, kde-format
 msgid "Hugo Varotto"
 msgstr "ჰუგო ვაროტო"
 
-#: main.cpp:431 main.cpp:432
+#: main.cpp:424 main.cpp:425
 #, kde-format
 msgid "Fileselector component"
 msgstr "კომპონენტი Fileselector"
 
-#: main.cpp:432
+#: main.cpp:425
 #, kde-format
 msgid "Matt Newell"
 msgstr "მეტ ნიუელი"
 
-#: main.cpp:433
+#: main.cpp:426
 #, kde-format
 msgid "Daniel Engelschalt"
 msgstr "დელიენ ელგენშალტი"
 
-#: main.cpp:433
+#: main.cpp:426
 #, kde-format
 msgid "C++ code completion, persistent class store"
 msgstr "C++-ის კოდის დასრულება, კლასების მუდმივი საცავი"
 
-#: main.cpp:434
+#: main.cpp:427
 #, kde-format
 msgid "Stephane Ancelot"
 msgstr "სტეფანე ანცელოტი"
 
-#: main.cpp:434 main.cpp:435 main.cpp:438
+#: main.cpp:427 main.cpp:428 main.cpp:431
 #, kde-format
 msgid "Patches"
 msgstr "პაჩები"
 
-#: main.cpp:435
+#: main.cpp:428
 #, kde-format
 msgid "Jens Zurheide"
 msgstr "იენს ცურჰადე"
 
-#: main.cpp:436
+#: main.cpp:429
 #, kde-format
 msgid "Luc Willems"
 msgstr "ლუკ ვილემსი"
 
-#: main.cpp:436
+#: main.cpp:429
 #, kde-format
 msgid "Help with Perl support"
 msgstr "დახმარება Perl-ის მხარდაჭერით"
 
-#: main.cpp:437
+#: main.cpp:430
 #, kde-format
 msgid "Marcel Turino"
 msgstr "მარსელ ტურინო"
 
-#: main.cpp:437
+#: main.cpp:430
 #, kde-format
 msgid "Documentation index view"
 msgstr "დოკუმენტაციის სარჩევის ხედი"
 
-#: main.cpp:438
+#: main.cpp:431
 #, kde-format
 msgid "Yann Hodique"
 msgstr "იან ჰოდიქი"
 
-#: main.cpp:439
+#: main.cpp:432
 #, kde-format
 msgid "Tobias Gläßer"
 msgstr "ტობიას გლესერი"
 
-#: main.cpp:439
+#: main.cpp:432
 #, kde-format
 msgid ""
 "Documentation Finder,  qmake projectmanager patches, usability improvements, "
@@ -704,43 +704,43 @@ msgstr ""
 "დოკუმენტაციაში მძებნელი,  qmake-ის პროექტების მმართვების პაჩები, შეცდომების "
 "გასწორება ... "
 
-#: main.cpp:440
+#: main.cpp:433
 #, kde-format
 msgid "Andreas Koepfle"
 msgstr "ანდრეას კოპფლე"
 
-#: main.cpp:440
+#: main.cpp:433
 #, kde-format
 msgid "QMake project manager patches"
 msgstr "Qmake-ს პროექტების მენეჯერის პაჩები"
 
-#: main.cpp:441
+#: main.cpp:434
 #, kde-format
 msgid "Sascha Cunz"
 msgstr "საშა კანზი"
 
-#: main.cpp:441
+#: main.cpp:434
 #, kde-format
 msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
 msgstr ""
 "QEditor-ის, Automake-ის და ა.შ. კოდის გასუფთავება და შეცდომების გასწორება"
 
-#: main.cpp:442
+#: main.cpp:435
 #, kde-format
 msgid "Zoran Karavla"
 msgstr "ზორან კარავლა"
 
-#: main.cpp:442
+#: main.cpp:435
 #, kde-format
 msgid "Artwork for the ruby language"
 msgstr "Ruby-თვის შეწირული ნახატები"
 
-#: main.cpp:465
+#: main.cpp:450
 #, kde-format
 msgid "Open KDevelop with a new session using the given name."
 msgstr "KDevelop-ის ახალი სესიის მითითებული სახელით გაშვება."
 
-#: main.cpp:468
+#: main.cpp:453
 #, kde-format
 msgid ""
 "Open KDevelop with the given session.\n"
@@ -749,7 +749,7 @@ msgstr ""
 "Kdevelop-ის მითითებული სესიით გახსნა.\n"
 "შეგიძლიათ გადასცეთ ჰეში ან სესიის სახელი."
 
-#: main.cpp:472
+#: main.cpp:457
 #, kde-format
 msgid ""
 "Delete the given session.\n"
@@ -758,29 +758,29 @@ msgstr ""
 "მითითებული სესიის წაშლა.\n"
 "შეგიძლიათ გადასცეთ ჰეში ან სესიის სახელი."
 
-#: main.cpp:476
+#: main.cpp:461
 #, kde-format
 msgid "Shows all available sessions and lets you select one to open."
 msgstr ""
 "გაჩვენებთ ხელმისაწვდომი სესიების სიას და საშუალებას გაძლევთ აირჩიოთ ერთერთი, "
 "გასახსნელად."
 
-#: main.cpp:478
+#: main.cpp:463
 #, kde-format
 msgid "List all available sessions on shell and lets you select one to open."
 msgstr "ხელმისაწვდომი სესიების სიის ჩვენება და არჩევის უფლების მიცემა."
 
-#: main.cpp:480
+#: main.cpp:465
 #, kde-format
 msgid "List available sessions and quit."
 msgstr "ხელმისაწვდომი სესიების სიის ჩვენება და გამოსვლა."
 
-#: main.cpp:482
+#: main.cpp:467
 #, kde-format
 msgid "Open KDevelop and fetch the project from the given <repo url>."
 msgstr "KDevelop-ის გახსნა და პროექტის მითითებული <repo url>-დან გამოთხოვნა."
 
-#: main.cpp:485
+#: main.cpp:470
 #, kde-format
 msgid ""
 "Open KDevelop and load the given project. <project> can be either a .kdev4 "
@@ -789,7 +789,7 @@ msgstr ""
 "KDevelop-ის მითითებული პროექტით გახსნა. <project>-ი შეიძლება იყოს kdev4 "
 "ფაილი ან საქაღალდის ბილიკი."
 
-#: main.cpp:488
+#: main.cpp:473
 #, kde-format
 msgid ""
 "Start debugging an application in KDevelop with the given debugger.\n"
@@ -797,105 +797,105 @@ msgid ""
 "Example: kdevelop --debug gdb myapp --foo bar"
 msgstr ""
 
-#: main.cpp:502
+#: main.cpp:487
 #, kde-format
 msgid "Files to load, or directories to load as projects"
 msgstr "ფილების ან საქაღალდის, როგორც პროექტის, ჩატვირთვა"
 
-#: main.cpp:513
+#: main.cpp:498
 #, kde-format
 msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
 msgstr ""
 "ხელმისაწვდომი სესიები (სასურველის მისათითებლად გამოიყენეთ პარამეტრები '-s "
 "HASH' ან '-s NAME'):"
 
-#: main.cpp:514
+#: main.cpp:499
 #, kde-format
 msgid "Hash"
 msgstr "ჰეში"
 
-#: main.cpp:514
+#: main.cpp:499
 #, kde-format
 msgid "Name: Opened Projects"
 msgstr "სახელი: ღია პროექტები"
 
-#: main.cpp:523
+#: main.cpp:508
 #, kde-format
 msgid "[running]"
 msgstr "[გაშვებულია]"
 
-#: main.cpp:625
+#: main.cpp:610
 #, kde-format
 msgid "Select the session you would like to use"
 msgstr "აირჩიეთ სესია, რომლის გამოყენებაც გსურთ"
 
-#: main.cpp:633
+#: main.cpp:618
 #, kde-format
 msgctxt "@info:shell"
 msgid "Specify the executable you want to debug."
 msgstr "აირჩიეთ გასამართი გამშვები ფაილი."
 
-#: main.cpp:642
+#: main.cpp:627
 #, kde-format
 msgctxt "@info:shell"
 msgid "Specified executable does not exist."
 msgstr "მითითებული გამშვები ფაილი არ არსებობს."
 
-#: main.cpp:648
+#: main.cpp:633
 #, kde-format
 msgid "Debug %1"
 msgstr "%1-ში შეცდომების პოვნა"
 
-#: main.cpp:656
+#: main.cpp:641
 #, kde-format
 msgid ""
 "A session with the name %1 exists already. Use the -s switch to open it."
 msgstr "სესია სახელით %1 უკვე არსებობს. გასახსნელად გამოიყენეთ -s."
 
-#: main.cpp:672
+#: main.cpp:657
 #, kde-format
 msgid "No session with the name %1 exists."
 msgstr "სესია სახელით %1 არ არსებობს."
 
-#: main.cpp:679
+#: main.cpp:664
 #, kde-format
 msgid "Could not lock session %1 for deletion."
 msgstr "სესიის, სახელით %1, საწაშლელად ჩაკეტვის შეცდომა."
 
-#: main.cpp:684
+#: main.cpp:669
 #, kde-format
 msgid "Session with name %1 was successfully removed."
 msgstr "სესია სახელით %1 წარმატებით წაიშალა."
 
-#: main.cpp:785
+#: main.cpp:770
 #, kde-format
 msgid "Cannot find native launch configuration type"
 msgstr "კონფიგურაციის ტიპის ლოკალური გაშვების შეცდომა"
 
-#: main.cpp:805
+#: main.cpp:790
 #, kde-format
 msgid "Cannot find launcher %1"
 msgstr "გამშვებს %1 პოვნის შეცდომა"
 
-#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+#: plasma/applet/package/contents/ui/main.qml:58
 msgid "KDevelop Sessions"
 msgstr "KDevelop-ის სესიები"
 
-#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+#: plasma/applet/package/contents/ui/main.qml:79
 msgid "Arbitrary String Which Says Something"
 msgstr "ჩვეულებრივი სტრიქონი, რომელიც რამეს ნიშნავს"
 
-#: plasma/runner/kdevelopsessions.cpp:27 plasma/runner/kdevelopsessions.cpp:31
+#: plasma/runner/kdevelopsessions.cpp:27
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "KDevelop-ის იმ სესიების ჩვენება, რომელიც შეიცავენ :q:."
 
-#: plasma/runner/kdevelopsessions.cpp:35
+#: plasma/runner/kdevelopsessions.cpp:31
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "თქვენს ანგარიშში KDevelop-ის რედაქტორის ყველა სესიის ჩვენება."
 
-#: plasma/runner/kdevelopsessions.cpp:129
+#: plasma/runner/kdevelopsessions.cpp:105
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "KDevelop-ის სესიის გახსნა"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2020-01-18 10:45+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -41,21 +41,21 @@ msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "Versioonihaldus"
 
-#: appwizardplugin.cpp:70
+#: appwizardplugin.cpp:69
 #, fuzzy, kde-format
 #| msgid "New From Template..."
 msgctxt "@action"
 msgid "New from Template..."
 msgstr "Uus malli põhjal..."
 
-#: appwizardplugin.cpp:72
+#: appwizardplugin.cpp:71
 #, fuzzy, kde-format
 #| msgid "Generate a new project from a template"
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "Uue projekti genereerimine malli põhjal"
 
-#: appwizardplugin.cpp:73
+#: appwizardplugin.cpp:72
 #, fuzzy, kde-format
 #| msgid ""
 #| "This starts KDevelop's application wizard. It helps you to generate a "
@@ -68,135 +68,135 @@ msgstr ""
 "See käivitab KDevelopi rakenduse nõustaja, mis aitab luua mallide põhjal oma "
 "rakenduse põhikavatise."
 
-#: appwizardplugin.cpp:107
+#: appwizardplugin.cpp:106
 #, kde-format
 msgid "Could not create project from template."
 msgstr "Projekti loomine malli põhjal nurjus."
 
-#: appwizardplugin.cpp:135
+#: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
 msgstr "Palun vaata versioonihalduse tööriistavaadet."
 
-#: appwizardplugin.cpp:137
+#: appwizardplugin.cpp:136
 #, fuzzy, kde-format
 #| msgid "Version Control System Error"
 msgctxt "@title:window"
 msgid "Version Control System Error"
 msgstr "Versioonihaldussüsteemi tõrge"
 
-#: appwizardplugin.cpp:153
+#: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
 msgstr "DVCS hoidla initsialiseerimine nurjus"
 
-#: appwizardplugin.cpp:162
+#: appwizardplugin.cpp:161
 #, fuzzy, kde-format
 #| msgid "Could not add files to the DVCS repository"
 msgid "Could not check status of the DVCS repository"
 msgstr "Failide lisamine DVCS hoidlasse nurjus"
 
-#: appwizardplugin.cpp:175
+#: appwizardplugin.cpp:174
 #, kde-format
 msgid "Could not add files to the DVCS repository"
 msgstr "Failide lisamine DVCS hoidlasse nurjus"
 
-#: appwizardplugin.cpp:183
+#: appwizardplugin.cpp:182
 #, kde-format
 msgid "Could not import project into %1."
 msgstr "Projekti import asukohta %1 nurjus."
 
-#: appwizardplugin.cpp:200
+#: appwizardplugin.cpp:199
 #, kde-format
 msgid "Could not import project"
 msgstr "Projekti import nurjus"
 
-#: appwizardplugin.cpp:208
+#: appwizardplugin.cpp:207
 #, kde-format
 msgid "Could not checkout imported project"
 msgstr "Imporditud projekti väljavõtmine nurjus"
 
-#: appwizardplugin.cpp:333
+#: appwizardplugin.cpp:332
 #, kde-format
 msgid "Could not create new project"
 msgstr "Uue projekti loomine nurjus"
 
-#: appwizardplugin.cpp:468
+#: appwizardplugin.cpp:467
 #, kde-format
 msgid "The file %1 cannot be created."
 msgstr "Faili %1 loomine nurjus."
 
-#: appwizardplugin.cpp:571
+#: appwizardplugin.cpp:568
 #, kde-format
 msgid "Project Templates"
 msgstr "Projekti mallid"
 
-#: projectselectionpage.cpp:58
+#: projectselectionpage.cpp:60
 #, fuzzy, kde-format
 #| msgid "Category"
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Kategooria"
 
-#: projectselectionpage.cpp:59
+#: projectselectionpage.cpp:61
 #, fuzzy, kde-format
 #| msgid "Project Type"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Projekti tüüp"
 
-#: projectselectionpage.cpp:69
+#: projectselectionpage.cpp:71
 #, fuzzy, kde-format
 #| msgid "Get More Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Uute mallide hankimine"
 
-#: projectselectionpage.cpp:76
+#: projectselectionpage.cpp:78
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Malli laadimine failist"
 
-#: projectselectionpage.cpp:172
+#: projectselectionpage.cpp:174
 #, kde-format
 msgid "Invalid location"
 msgstr "Vigane asukoht"
 
-#: projectselectionpage.cpp:179
+#: projectselectionpage.cpp:181
 #, kde-format
 msgid "Empty project name"
 msgstr "Tühi projekt nimi"
 
-#: projectselectionpage.cpp:199
+#: projectselectionpage.cpp:201
 #, kde-format
 msgid "Invalid project name"
 msgstr "Vigane projekti nimi"
 
-#: projectselectionpage.cpp:218
+#: projectselectionpage.cpp:220
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "Alamkataloogide loomne nurjus, õigused puuduvad: %1"
 
-#: projectselectionpage.cpp:233
+#: projectselectionpage.cpp:235
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Vigane projekt mall, palun vali puust element"
 
-#: projectselectionpage.cpp:246
+#: projectselectionpage.cpp:248
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "Asukoht on juba olemas ja sisaldab faile. Ava see projektina."
 
-#: projectselectionpage.cpp:293
+#: projectselectionpage.cpp:295
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr "Määratud asukoht on juba olemas ja sisaldab faile.Kas tõesti jätkata?"
 
-#: projectselectionpage.cpp:309
+#: projectselectionpage.cpp:311
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@title:window"

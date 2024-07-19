@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -40,21 +40,21 @@ msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "نەشر باشقۇرۇش"
 
-#: appwizardplugin.cpp:70
+#: appwizardplugin.cpp:69
 #, fuzzy, kde-format
 #| msgid "New From Template..."
 msgctxt "@action"
 msgid "New from Template..."
 msgstr "قېلىپتىن پايدىلىنىپ يېڭىدىن قۇرۇش"
 
-#: appwizardplugin.cpp:72
+#: appwizardplugin.cpp:71
 #, fuzzy, kde-format
 #| msgid "Generate a new project from a template"
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "قېلىپتىن يېڭى قۇرۇلۇش قۇرىدۇ"
 
-#: appwizardplugin.cpp:73
+#: appwizardplugin.cpp:72
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -62,130 +62,130 @@ msgid ""
 "skeleton for your application from a set of templates."
 msgstr ""
 
-#: appwizardplugin.cpp:107
+#: appwizardplugin.cpp:106
 #, fuzzy, kde-format
 #| msgid "Could not create project from template\n"
 msgid "Could not create project from template."
 msgstr "قېلىپتىن يېڭى قۇرۇلۇش ياسىغىلى بولمىدى\n"
 
-#: appwizardplugin.cpp:135
+#: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
 msgstr ""
 
-#: appwizardplugin.cpp:137
+#: appwizardplugin.cpp:136
 #, fuzzy, kde-format
 #| msgid "Version Control System:"
 msgctxt "@title:window"
 msgid "Version Control System Error"
 msgstr "نەشر كونترول قىلىش سىستېمىسى"
 
-#: appwizardplugin.cpp:153
+#: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
 msgstr "DVCS خەزىنىسىنى دەسلەپلەشتۈرگىلى بولمىدى"
 
-#: appwizardplugin.cpp:162
+#: appwizardplugin.cpp:161
 #, fuzzy, kde-format
 #| msgid "Could not add files to the DVCS repository"
 msgid "Could not check status of the DVCS repository"
 msgstr "ھۆججەتلەرنى  خەزىنىسىگە قوشقىلى بولمىدى"
 
-#: appwizardplugin.cpp:175
+#: appwizardplugin.cpp:174
 #, kde-format
 msgid "Could not add files to the DVCS repository"
 msgstr "ھۆججەتلەرنى  خەزىنىسىگە قوشقىلى بولمىدى"
 
-#: appwizardplugin.cpp:183
+#: appwizardplugin.cpp:182
 #, kde-format
 msgid "Could not import project into %1."
 msgstr "قۇرۇلۇشنى %1 غا ئىمپورت قىلغىلى بولمىدى."
 
-#: appwizardplugin.cpp:200
+#: appwizardplugin.cpp:199
 #, kde-format
 msgid "Could not import project"
 msgstr "قۇرۇلۇشنى ئىمپورت قىلغىلى بولمىدى."
 
-#: appwizardplugin.cpp:208
+#: appwizardplugin.cpp:207
 #, kde-format
 msgid "Could not checkout imported project"
 msgstr "ئىمپورت قىلىنغان قۇرۇلۇشنى checkout قىلغىلى بولمىدى"
 
-#: appwizardplugin.cpp:333
+#: appwizardplugin.cpp:332
 #, kde-format
 msgid "Could not create new project"
 msgstr "يېڭى قۇرۇلۇش قۇرغىلى بولمىدى"
 
-#: appwizardplugin.cpp:468
+#: appwizardplugin.cpp:467
 #, kde-format
 msgid "The file %1 cannot be created."
 msgstr "ھۆججەت %1 قۇرغىلى بولمىدى."
 
-#: appwizardplugin.cpp:571
+#: appwizardplugin.cpp:568
 #, kde-format
 msgid "Project Templates"
 msgstr "قۇرۇلۇش قېلىپلىرى"
 
-#: projectselectionpage.cpp:58
+#: projectselectionpage.cpp:60
 #, fuzzy, kde-format
 #| msgid "Category"
 msgctxt "@title:column"
 msgid "Category"
 msgstr "كاتېگورىيە"
 
-#: projectselectionpage.cpp:59
+#: projectselectionpage.cpp:61
 #, fuzzy, kde-format
 #| msgid "Project Templates"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "قۇرۇلۇش قېلىپلىرى"
 
-#: projectselectionpage.cpp:69
+#: projectselectionpage.cpp:71
 #, fuzzy, kde-format
 #| msgid "Get More Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "تېخىمۇ كۆپ قېلىپلارغا ئېرىشىش"
 
-#: projectselectionpage.cpp:76
+#: projectselectionpage.cpp:78
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "قېلىپنى ھۆججەتتىن ئوقۇش"
 
-#: projectselectionpage.cpp:172
+#: projectselectionpage.cpp:174
 #, kde-format
 msgid "Invalid location"
 msgstr "ئىناۋەتسىز ئورۇن"
 
-#: projectselectionpage.cpp:179
+#: projectselectionpage.cpp:181
 #, kde-format
 msgid "Empty project name"
 msgstr "قۇرۇلۇش ئاتى قۇرۇق"
 
-#: projectselectionpage.cpp:199
+#: projectselectionpage.cpp:201
 #, kde-format
 msgid "Invalid project name"
 msgstr "قۇرۇلۇش ئاتى ئىناۋەتسىز"
 
-#: projectselectionpage.cpp:218
+#: projectselectionpage.cpp:220
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "تارماق مۇندەرىجىلەرنى قۇرغىلى بولمىدى، ئىمتىيازلار يېتەرلىك ئەمەس: %1"
 
-#: projectselectionpage.cpp:233
+#: projectselectionpage.cpp:235
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "قۇرۇلۇش قېلىپى ئىناۋەتسىز، بىر تارماق تۈرنى تاللاڭ"
 
-#: projectselectionpage.cpp:246
+#: projectselectionpage.cpp:248
 #, fuzzy, kde-format
 #| msgid "Path already exists and contains files"
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "يول مەۋجۇت ھەم ئىچىدە ھۆججەتلەر بار"
 
-#: projectselectionpage.cpp:293
+#: projectselectionpage.cpp:295
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
@@ -193,7 +193,7 @@ msgid ""
 msgstr ""
 "كۆرسىتىلگەن يول مەۋجۇت ھەم ئىچىدە ھۆججەتلەر بار. راستلا داۋاملاشتۇرامسىز؟"
 
-#: projectselectionpage.cpp:309
+#: projectselectionpage.cpp:311
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@title:window"
