@@ -1,0 +1,7 @@
+[General]
+Name=CMake Qt6 Widgets Application
+Comment=Generate a CMake & Qt6 Widgets based application (crossplatform compatible)
+ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
+Category=Qt/Graphical
+Icon=cmake_qt6widgetsapp.png
+ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_-]+$
