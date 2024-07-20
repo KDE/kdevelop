@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2022-11-04 18:31+0100\n"
+"PO-Revision-Date: 2024-07-20 00:38+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -36,49 +36,49 @@ msgstr "პროცესზე მიბმა"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search"
-msgstr ""
+msgstr "ძებნა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
 #: dialogs/processselection.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
-msgstr ""
+msgstr "სიად ჩვენება"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
 #: dialogs/processselection.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
-msgstr ""
+msgstr "ხედ ჩვენება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:80
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
-msgstr ""
+msgstr "საკუთარი პროცესები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
-msgstr ""
+msgstr "მომხმარებლის პროცესები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:96
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
-msgstr ""
+msgstr "სისტემური პროცესები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
-msgstr ""
+msgstr "ყველა პროცესი"
 
 #: dialogs/selectcoredialog.cpp:18
 #, kde-format
@@ -118,6 +118,9 @@ msgid ""
 "reply from the debugger. Please submit a bug report. The debug session will "
 "now end to prevent potential crash"
 msgstr ""
+"<p>გამმართველის კომპონენტი შეეჩეხა შიდა შეცდომას გამმართველის პასუხის "
+"დამუშავებისას. მოგვწერეთ შეცდომის ანგარიში. გამართვის სესია ახლა დასრულდება "
+"მოსალოდნელი ავარიის თავიდან ასაცილებლად"
 
 #: midebugger.cpp:318
 #, kde-format
@@ -125,6 +128,8 @@ msgid ""
 "The exception is: %1\n"
 "The MI response is: %2"
 msgstr ""
+"გამონაკლისია: %1\n"
+"MI-ის პასუხია: %2"
 
 #: midebugger.cpp:321
 #, kde-format
@@ -143,6 +148,8 @@ msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
 "path name is specified correctly."
 msgstr ""
+"<b>გამმართველის გაშვება შეუძლებელია.</b><p>'%1' ვერ გავუშვი. დარწმუნდით, რომ "
+"ბილიკი სწორადაა მითითებული."
 
 #: midebugger.cpp:350
 #, kde-format
@@ -156,6 +163,10 @@ msgid ""
 "that the debug session has to be ended.<br>Try to reproduce the crash "
 "without KDevelop and report a bug.<br>"
 msgstr ""
+"<b>გამმართველის პროცესი ავარიულად დასრულდა.</b><p>გამმართველის პროცესი '%1' "
+"ავარიულად დასრულდა.<br>ამის გამო აუცილებელია გამმართველის სხვა პროცესების "
+"დასრულებაც.<br>სცადეთ, ეს ავარია KDevelop-ის გარეშე გამოიძახოთ და მისწერეთ "
+"ავტორს შეცდომის შესახებ.<br>"
 
 #: midebugger.cpp:360
 #, kde-format
@@ -183,6 +194,10 @@ msgid ""
 "The core file contains an image of the program memory at the time it "
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
+"<b>core ფაილის დამუშავება</b><p>ეს ჩატვირთავს core ფაილს, რომელიც, "
+"ჩვეულებრივ, აპლიკაციის ავარიულად დასრულების შემდეგ იქმნება, მაგალითად: "
+"სეგმენტაციის ჩავარდნისას. core ფაილი შეიცავს პროგრამის მეხსიერების ასლს მისი "
+"ავარიულად დასრულების დროს, გარდაცვალების-შემდგომი ანალიზისთვის.</p>"
 
 #: midebuggerplugin.cpp:126
 #, kde-format
@@ -196,6 +211,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr ""
+"<b>პროცესზე მიმაგრება</b><p>მიამაგრებს გამმართველს გაშვებულ პროცესზე.</p>"
 
 #: midebuggerplugin.cpp:141
 #, kde-format
@@ -215,6 +231,8 @@ msgid ""
 "<b>Evaluate expression</b><p>Shows the value of the expression under the "
 "cursor.</p>"
 msgstr ""
+"<b>გამოსახულების შეფასება<b><p>აჩვენებს კურსორის ქვეშ მყოფი გამოსახულების "
+"მნიშვნელობას.</p>"
 
 #: midebuggerplugin.cpp:225
 #, kde-format
@@ -229,6 +247,8 @@ msgid ""
 "<b>Watch expression</b><p>Adds the expression under the cursor to the "
 "Variables/Watch list.</p>"
 msgstr ""
+"<b>გამოსახულების თვალყურის დევნება</b><p>დაამატებს კურსორის ქვეშ მყოფ "
+"გამოსახულებას ცვლადების/თვალყურის დევნების სიას.</p>"
 
 #: midebuggerplugin.cpp:240
 #, kde-format
@@ -241,6 +261,8 @@ msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
+"პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ გააუქმოთ უკვე გაშვებული "
+"გამმართველი და გააგრძელოთ, რასაც აკეთებდით?"
 
 #: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
@@ -257,6 +279,7 @@ msgstr "აირჩიეთ მისამაგრებელი პრო�
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
+"პროცესზე %1 მიმაგრება შეუძლებელია: გამმართველს თავის თავს ვერ მიამაგრებთ."
 
 #: midebuggerplugin.cpp:301
 #, kde-format
@@ -325,6 +348,8 @@ msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr ""
+"<b>Gdb-ის ბრძანება გაიგზავნა მაშინ, როცა გამმართველი გაშვებული არ იყო.</"
+"b><br>ბრძანება იყო:<br> %1"
 
 #: midebugsession.cpp:860
 #, kde-format
@@ -363,8 +388,8 @@ msgstr[1] "რიგში %1 ბრძანებაა\n"
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "მიმდინარეობს 1 ბრძანების დაუშავება gdb-ის მიერ\n"
+msgstr[1] "მიმდინარეობს %1 ბრძანების დაუშავება gdb-ის მიერ\n"
 
 #: midebugsession.cpp:1174
 #, kde-format
@@ -378,11 +403,15 @@ msgid ""
 "Current command text: '%2'\n"
 "Current command original text: '%3'\n"
 msgstr ""
+"მიმდინარე ბრძანების კლასი: '%1'\n"
+"მიმდინარე ბრძანების ტექსტი: '%2'\n"
+"მიმდინარე ბრძანების საწყისი ტექსტი: '%3'\n"
 
 #: midebugsession.cpp:1204
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
+"<b> გამმართველის შეცდომა</b><p>გამმართველმა დააბრუნა შეცდომა:</p><tt>%1"
 
 #: miframestackmodel.cpp:69
 #, kde-format
@@ -417,7 +446,7 @@ msgstr "დაუმუშავებელი"
 #: registers/converters.cpp:17
 #, kde-format
 msgid "Unsigned"
-msgstr ""
+msgstr "უნიშნო"
 
 #: registers/registercontroller_arm.cpp:100
 #: registers/registercontroller_x86.cpp:100
@@ -434,17 +463,17 @@ msgstr "დროშები"
 #: registers/registercontroller_arm.cpp:100
 #, kde-format
 msgid "VFP single-word"
-msgstr ""
+msgstr "VFP ერთმაგი სიტყვა"
 
 #: registers/registercontroller_arm.cpp:100
 #, kde-format
 msgid "VFP double-word"
-msgstr ""
+msgstr "VFP ორმაგი სიტყვა"
 
 #: registers/registercontroller_arm.cpp:100
 #, kde-format
 msgid "VFP quad-word"
-msgstr ""
+msgstr "VFP ოთხმაგი სიტყვა"
 
 #: registers/registercontroller_x86.cpp:100
 #, kde-format
@@ -487,6 +516,11 @@ msgid ""
 "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
 "user to the tty group using \"usermod -aG tty username\"."
 msgstr ""
+"შეუძლებელია tty* ან pty* მოწყობილობების გამოყენება.\n"
+"შეამოწმეთ პარამეტრები /dev/tty*-ზე და /dev/pty*-ზე\n"
+"root-ით, შეიძლება, \"chmod ug+rw\"-ის გაშვება დაგჭირდეთ tty* და pty* "
+"მოწყობილობებზე ან/და დაამატეთ მომხმარებელი tty ჯგუფში ბრძანებით \"usermod -"
+"aG tty მომხმარებლისსახელი\"."
 
 #: stty.cpp:304
 #, kde-format
@@ -505,6 +539,8 @@ msgid ""
 "accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
 "sleep 3600;done\""
 msgstr ""
+"%1 tty/pty ვერ მივიღე. შეამოწმეთ, არის თუ არა %1 ტერმინალი და რომ ის იღებს "
+"არგუმენტებს: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
 #: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
@@ -520,6 +556,9 @@ msgid ""
 "<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
 "can also issue any other debugger command while debugging.</p>"
 msgstr ""
+"<b>გამმართველის კონსოლი</b><p>აჩვენებს ყველა გამმართველის ბრძანებას, რომელიც "
+"სრულდება. ასევე შეგიძლიათ, გამმართველის ნებისმიერი ბრძანების გაშვება "
+"გამართვისას.</p>"
 
 #: widgets/debuggerconsoleview.cpp:58
 #, kde-format
@@ -532,7 +571,7 @@ msgstr "Enter-ის დაჭერისას წინა ბრძანე
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
-msgstr ""
+msgstr "შეაჩერეთ აპის შესრულება გამმართველის ბრძანებების შესაყვანად"
 
 #: widgets/debuggerconsoleview.cpp:72
 #, kde-format
@@ -548,6 +587,9 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
+"აკონტროლებს, ნაჩვენებია თუ არა KDevelop-ის მიერ გაშვებული ბრძანებები.<br>ეს "
+"პარამეტრი გავლებას იქონიებს, მხოლოდ, მომავალში გაშვებულ ბრძანებებზე. ის არ "
+"წაშლის ან დაამატებს უკვე ჩამოთვლილ ბრძანებებს ფანჯრიდან."
 
 #: widgets/debuggerconsoleview.cpp:137
 #, kde-format
@@ -580,7 +622,7 @@ msgstr "გამეორება"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last sent command when hit <Return>"
-msgstr ""
+msgstr "Enter-ის დაჭერისას წინა ბრძანების გამეორება"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
 #: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
@@ -605,7 +647,7 @@ msgstr "კურსორზე &გადასვლა"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
-msgstr ""
+msgstr "დააყენებს გაშვების მაჩვენებელს მიმდინარე კურსორის მდებარეობაზე."
 
 #: widgets/disassemblewidget.cpp:96
 #, kde-format
@@ -617,7 +659,7 @@ msgstr "&კურსორამდე გაშვება"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
-msgstr ""
+msgstr "გააგრძელებს შესრულებას, სანამ კურსორს არ მიაღწევს."
 
 #: widgets/disassemblewidget.cpp:100
 #, kde-format
@@ -630,6 +672,7 @@ msgstr "&AT&&T"
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
+"GDB დიზასამბლერისთვის AT&T ვარიანტს გამოიყენებს (ანუ, mov 0xc(%ebp),%eax)."
 
 #: widgets/disassemblewidget.cpp:105
 #, kde-format
@@ -644,6 +687,8 @@ msgid ""
 "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
 "+0xc])."
 msgstr ""
+"GDB დისასამბლერისთვის Intel-ის ვარიანტს გამოიყენებს (ანუ: mov eax, DWORD PTR "
+"[ebp+0xc])."
 
 #: widgets/disassemblewidget.cpp:143
 #, kde-format
@@ -660,6 +705,9 @@ msgid ""
 "instruction by instruction using the debuggers toolbar buttons of \"step over"
 "\" instruction and \"step into\" instruction."
 msgstr ""
+"<b>მანქანური კოდის ჩვენება<b><p>მანქანური კოდის ხედი თქვენს გაშვებულ გამშვებ "
+"ფაილზე მიმდინარე ინსტრუქცია-გამოკვეთილი. ასევე შეგიძლიათ, გაშვება ინსტრუქცია-"
+"ინსტრუქცია განახორციელოთ \"გადაბიჯების\" და \"შებიჯების\" ფუნქციებით."
 
 #: widgets/disassemblewidget.cpp:190
 #, kde-format
@@ -683,18 +731,18 @@ msgstr "ინსტრუქცია"
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"
-msgstr ""
+msgstr "დიზასემბლირების/რეგისტრების ხედი"
 
 #. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
 #: widgets/selectaddressdialog.ui:17
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the address to disassemble around"
-msgstr ""
+msgstr "აირჩიეთ მისამართი დიზასემბლერისთვის"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/selectaddressdialog.ui:23
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
-msgstr ""
+msgstr "მისამართი დიზასემბლერისთვის:"

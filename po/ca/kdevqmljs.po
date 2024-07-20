@@ -1,16 +1,17 @@
 # Translation of kdevqmljs.po to Catalan
-# Copyright (C) 2014-2015 This_file_is_part_of_KDE
+# Copyright (C) 2014-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2015.
+# SPDX-FileCopyrightText: 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2015-08-25 19:58+0100\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2024-07-19 11:08+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
@@ -188,12 +189,12 @@ msgstr "El gos mandrós salta per sobre<br>de la ràpida guineu marró."
 #: navigation/propertywidgets/FontFamily.qml:37
 #, kde-format
 msgid "Font family"
-msgstr "Família del tipus de lletra"
+msgstr "Família de la lletra"
 
 #: navigation/propertywidgets/FontSize.qml:22
 #, kde-format
 msgid "Font size"
-msgstr "Mida del tipus de lletra"
+msgstr "Mida de la lletra"
 
 #: navigation/propertywidgets/Height.qml:25
 #, kde-format

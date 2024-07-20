@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-09-12 09:37+0200\n"
+"PO-Revision-Date: 2024-07-19 13:51+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: filtermodel.cpp:76
 #, kde-format
@@ -48,6 +48,14 @@ msgid ""
 "code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
 "thus match any item with a relative path ending on the given pattern."
 msgstr ""
+"ვაილდკარდი ნიმუში აღწერს, ფაილი ან საქაღალდე ჩაისმება პროექტში, თუ არა.<br /"
+">ნიმუში რეგისტრის გათვალისწინებით იძებნება ელემენტის შედარებით ბილიკზე "
+"პროექტის ძირითად საქაღალდეთან შედარებით. შედარებითი ბილიკი იწყება დახრილი "
+"ხაზით. საქაღალდეების ბოლოში მიწერილი დახრილი ხაზები გამოტოვებულია.<br /"
+">ნიმუშები, რომლებიც მთავრდება <code>\"/\"</code>-ით, მხოლოდ, საქაღალდეებს "
+"დაემთხვევა.<br />ნიმუშები, რომლებიც არ იწყება არც <code>\"/\"</code>-ით და "
+"არც <code>\"*\"</code>-ით, იღებენ <code>\"*/\"</code>პრეფიქსს და ემთხვევა "
+"ნებსმიერ ელემენტს, რომელიც შედარებით ბილიკზე მითითებულ ნიმუშს ემთხვევა."
 
 #: filtermodel.cpp:121
 #, kde-format
@@ -85,6 +93,12 @@ msgid ""
 "project, you could exclude all files via <code>\"*\"</code> and then apply "
 "an inclusive <code>\"*.cpp\"</code> pattern."
 msgstr ""
+"ფილტრები ნაგულისხმევად ამოიღებენ ელემენტებს პროექტიდან. ჩასმული ნიმუშები "
+"შეგიძლიათ გამოიყენოთ, რომ ჩასვათ ელემენტები, რომლებიც მანამდე ამოსაღები "
+"ნიმუშებით იქნა ამოღებული.<br />მაგ. იმისათვის, რომ პროექტში, მხოლოდ, ჩასვათ "
+"ფაილები, რომლებიც <code>\".cpp\"</code>-ით მთავრდება, გამორიცხეთ ყველა ფაილი "
+"ნიმუშით <code>\"*\"</code> და შემდეგ დაამატეთ ჩასასმელი ნიმუში <code>\"*.cpp"
+"\"</code>."
 
 #: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
 #, kde-format
@@ -104,6 +118,8 @@ msgid ""
 "A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
 "to make this explicit."
 msgstr ""
+"ფილტრი ცარიელი ნიმუშით ყველაფერს დაემთხვევა. გამოიყენეთ <code>\"*\"</code> "
+"ამის აშკარად მისათითებლად."
 
 #: projectfilterconfigpage.cpp:175
 #, kde-format

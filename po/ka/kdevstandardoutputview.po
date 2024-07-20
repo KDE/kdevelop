@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2022-12-28 09:21+0100\n"
+"PO-Revision-Date: 2024-07-19 06:02+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: outputwidget.cpp:44
 #, kde-format
@@ -72,7 +72,7 @@ msgstr "ფოკუსი ელემენტის არჩევისა�
 #, kde-format
 msgctxt "@action"
 msgid "Word Wrap"
-msgstr ""
+msgstr "სიტყვების გადატანა"
 
 #: outputwidget.cpp:119
 #, kde-format
@@ -114,7 +114,7 @@ msgstr "ძებნა..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "%1-ის გამოტანის მორგება"
 
 #: outputwidget.cpp:840
 #, kde-format
@@ -128,25 +128,25 @@ msgstr "რეგულარული გამოსახულების �
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "%1-ის გამოტანის მორგება"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "გამოტანის ხედების რაოდენობის შეზღუდვა"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "გამოტანის ყველაზე ძველი ხედების ავტომატური დახურვა"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "გამოტანს ხედების მაქსიმალური რაოდენობა"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -155,6 +155,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"უძველესი გამოტანის ხედი დაიხურება,\n"
+"როცა ხედების რაოდენობა ამ მნიშვნელობას გასცდება"
 
 #: standardoutputview.cpp:100
 #, kde-format

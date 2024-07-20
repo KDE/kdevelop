@@ -606,9 +606,7 @@ double bar ()
 <para
 ><note
 ><para
->La informació que es mostra per a l'àmbit del fitxer és la mateixa que es presenta en el mode <quote
->Esquema</quote
-> discutit a continuació en navegar pel codi font; la diferència és que el mode d'esquema només és un consell d'eina temporal.</para
+>La informació que es mostra per a l'àmbit del fitxer és la mateixa que es presenta en el mode «Esquema» discutit a continuació en navegar pel codi font; la diferència és que el mode d'esquema només és un consell d'eina temporal.</para
 ></note
 ></para>
 </sect2>
@@ -1353,9 +1351,7 @@ void foo()
 <para
 >(El mateix es pot aconseguir fent clic dret sobre seu i seleccionant <guilabel
 >Resoldre: Declara com a</guilabel
->). Permetem seleccionar <quote
->3 - unsigned int privat</quote
-> (sigui amb el ratolí o prement <keycombo
+>). Permetem seleccionar «3 - unsigned int privat» (sigui amb el ratolí o prement <keycombo
 >&Alt;<keycap
 >3</keycap
 ></keycombo
@@ -1681,9 +1677,7 @@ void foo()
 >Retalls</guilabel
 > del &kdevelop; us hi pot ajudar. Per a això, obriu la vista d'eina (vegeu <link linkend="tools-and-views"
 >Eines i vistes</link
->, si el botó corresponent no es troba ja en el perímetre de la vostra finestra). Després feu clic al botó <quote
->Afegeix un repositori</quote
-> (un terme poc apropiat -el qual permet crear una col·lecció amb nom de retalls de codi font d'un tipus en particular, &pex;, codi font en C++-) i crear un repositori buit. A continuació, feu clic a la icona <inlinemediaobject
+>, si el botó corresponent no es troba ja en el perímetre de la vostra finestra). Després feu clic al botó «Afegeix un repositori» (un terme poc apropiat -el qual permet crear una col·lecció amb nom de retalls de codi font d'un tipus en particular, &pex;, codi font en C++-) i crear un repositori buit. A continuació, feu clic a la icona <inlinemediaobject
 > <imageobject
 > <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
 > </inlinemediaobject
@@ -2142,9 +2136,7 @@ void foo()
 ></keycombo
 ></entry>
     <entry
->Elimina la línia actual (nota: això no és com a <quote
->emacs</quote
-> -elimina des d'aquí fins al final de la línia-).</entry>
+>Elimina la línia actual (nota: això no és com a «emacs» -elimina des d'aquí fins al final de la línia-).</entry>
   </row>
   </tbody>
   </tgroup>
@@ -2453,11 +2445,7 @@ void foo()
 <para
 >Per a construir qualsevol dels objectius que hi figuren, feu clic amb el &BDR; i seleccioneu <guilabel
 >Construeix</guilabel
->. Per exemple, fer-ho amb l'objectiu de <quote
->neteja</quote
-> simplement executarà <quote
->make clean</quote
->. Podreu veure què està succeint a la subfinestra que apareixerà anomenada <guilabel
+>. Per exemple, fer-ho amb l'objectiu de «neteja» simplement executarà «make clean». Podreu veure què està succeint a la subfinestra que apareixerà anomenada <guilabel
 >Construcció</guilabel
 >, mostrant l'ordre i la sortida. (Aquesta finestra es correspon amb l'eina <guilabel
 >Construeix</guilabel
@@ -2469,9 +2457,7 @@ void foo()
 ><title
 >Seleccionar un conjunt d'objectius «Makefile» per a repetir la construcció</title>
 <para
->El fet de fer clic dret sobre objectius «Makefile» individuals cada vegada que vulgueu construir alguna cosa us farà perdre un temps preciós. En comptes d'això, ens agradaria tenir objectius individuals per a un o més dels projectes en la sessió que podem construir en diverses ocasions sense gaire feina del ratolí. Aquí és on entra en joc el concepte de <quote
->Construir els objectius seleccionats</quote
->: es tracta d'una col·lecció d'objectius «Makefile» que es construeixen l'un darrere l'altre cada vegada que es prem el botó <guilabel
+>El fet de fer clic dret sobre objectius «Makefile» individuals cada vegada que vulgueu construir alguna cosa us farà perdre un temps preciós. En comptes d'això, ens agradaria tenir objectius individuals per a un o més dels projectes en la sessió que podem construir en diverses ocasions sense gaire feina del ratolí. Aquí és on entra en joc el concepte de «Construir els objectius seleccionats»: es tracta d'una col·lecció d'objectius «Makefile» que es construeixen l'un darrere l'altre cada vegada que es prem el botó <guilabel
 >Construeix la selecció</guilabel
 > a la llista de botons en la part superior, seleccioneu l'element de menú <menuchoice
 ><guimenu
@@ -2505,9 +2491,7 @@ void foo()
 ><guimenuitem
 >Obre la configuració</guimenuitem
 ></menuchoice
->. És on podreu, &pex;, seleccionar el nombre de tasques simultànies que s'hauran d'executar per a <quote
->make</quote
-> -si l'ordinador té, diguem-ne, 8 nuclis de processador, llavors introduir 8 en aquest camp seria una bona opció-. En aquest diàleg, l'<guilabel
+>. És on podreu, &pex;, seleccionar el nombre de tasques simultànies que s'hauran d'executar per a «make» -si l'ordinador té, diguem-ne, 8 nuclis de processador, llavors introduir 8 en aquest camp seria una bona opció-. En aquest diàleg, l'<guilabel
 >Objectiu de «make» per omissió</guilabel
 > és un objectiu «Makefile» emprat per a <emphasis
 >tots</emphasis
@@ -2528,11 +2512,7 @@ void foo()
 >llançador</emphasis
 > per als vostres projectes. Un <emphasis
 >llançament</emphasis
-> consisteix en el nom d'un executable, un conjunt de paràmetres per a la línia d'ordres, i un entorn d'execució (com <quote
->executa aquest programa en un intèrpret d'ordres</quote
-> o <quote
->executa aquest programa en el depurador</quote
->).</para>
+> consisteix en el nom d'un executable, un conjunt de paràmetres per a la línia d'ordres, i un entorn d'execució (com «executa aquest programa en un intèrpret d'ordres» o «executa aquest programa en el depurador»).</para>
 <sect1 id="setting-up-launches-in-kdevelop"
 ><title
 >Configurar els llançaments al &kdevelop;</title>
@@ -2748,9 +2728,7 @@ void foo()
 </screenshot
 ></para>
 <para
->Executar un programa en el depurador posarà el &kdevelop; en un mode diferent: se substituiran tots els botons d'<quote
->eina</quote
-> en el perímetre de la finestra principal per altres que siguin apropiats per a la depuració, en lloc de per als d'edició. Podeu veure en quin mode es troba observant la part superior dreta de la finestra: hi ha pestanyes anomenades <guilabel
+>Executar un programa en el depurador posarà el &kdevelop; en un mode diferent: se substituiran tots els botons d'«eina» en el perímetre de la finestra principal per altres que siguin apropiats per a la depuració, en lloc de per als d'edició. Podeu veure en quin mode es troba observant la part superior dreta de la finestra: hi ha pestanyes anomenades <guilabel
 >Revisió</guilabel
 >, <guilabel
 >Depuració</guilabel
@@ -2766,17 +2744,9 @@ void foo()
 >abort()</varname
 >), podreu inspeccionar una varietat d'informació sobre el vostre programa. Per exemple, en la imatge anterior, hem seleccionat l'eina <guilabel
 >Pila d'execució</guilabel
-> a la part inferior (més o menys equivalent a les ordres <quote
->backtrace</quote
-> i <quote
->info threads</quote
-> del <application
+> a la part inferior (més o menys equivalent a les ordres «backtrace» i «info threads» del <application
 >gdb</application
->) que mostra a l'esquerra els diversos fils que s'estan executant actualment en el vostre programa (aquí un total de 8) i com l'execució arriba al punt d'aturada actual a la dreta (aquí: <quote
->main()</quote
-> ha cridat a <quote
->run()</quote
->; la llista podria ser més llarga de no haver-se aturat a una funció anomenada <varname
+>) que mostra a l'esquerra els diversos fils que s'estan executant actualment en el vostre programa (aquí un total de 8) i com l'execució arriba al punt d'aturada actual a la dreta (aquí: «main()» ha cridat a «run()»; la llista podria ser més llarga de no haver-se aturat a una funció anomenada <varname
 >run()</varname
 >). A l'esquerra, podem inspeccionar les variables locals, inclòs l'objecte actual (l'objecte apuntat per la variable <varname
 >this</varname
@@ -2784,21 +2754,15 @@ void foo()
 <para
 >A partir d'aquí, hi ha diverses possibilitats: Podeu executar la línia actual (<keycap
 >F10</keycap
->, l'ordre <quote
->next</quote
-> del <application
+>, l'ordre «next» del <application
 >gdb</application
 >), entrar en les funcions (<keycap
 >F11</keycap
->, l'ordre <quote
->step</quote
-> del <application
+>, l'ordre «step» del <application
 >gdb</application
 >) o executar fins al final de la funció (<keycap
 >F12</keycap
->, l'ordre <quote
->finish</quote
-> del <application
+>, l'ordre «finish» del <application
 >gdb</application
 >). A cada pas, el &kdevelop; actualitza les variables que es mostren a l'esquerra als seus valors actuals. També podeu passa el ratolí sobre un símbol en el codi, &pex;, una variable, el &kdevelop; mostrarà el valor actual d'aquest símbol i oferirà aturar el programa durant l'execució la pròxima vegada que es canviï el valor d'aquesta variable. Si coneixeu el <application
 >gdb</application
@@ -2878,9 +2842,7 @@ void foo()
 >F10</keycap
 ></entry>
     <entry
->Avança sobre (l'ordre <quote
->next</quote
-> del gdb).</entry>
+>Avança sobre (l'ordre «next» del gdb).</entry>
   </row>
   <row>
     <entry
@@ -2888,9 +2850,7 @@ void foo()
 >F11</keycap
 ></entry>
     <entry
->Avança dins (l'ordre <quote
->step</quote
-> del gdb).</entry>
+>Avança dins (l'ordre «step» del gdb).</entry>
   </row>
   <row>
     <entry
@@ -2898,9 +2858,7 @@ void foo()
 >F12</keycap
 ></entry>
     <entry
->Avança fora de (l'ordre <quote
->finish</quote
-> del gdb).</entry>
+>Avança fora de (l'ordre «finish» del gdb).</entry>
   </row>
   </tbody>
   </tgroup>
@@ -2965,11 +2923,7 @@ void foo()
 >Subversion</guilabel
 > que us oferirà diferents opcions. Trieu <guilabel
 >Compara amb la base</guilabel
-> per a veure les diferències entre la versió que heu editat i la versió en el repositori que havíeu actualitzat prèviament (la <quote
->base</quote
-> de la revisió). La vista resultant mostrarà els <quote
->diffs</quote
-> per a tots els fitxers en aquest directori. </para
+> per a veure les diferències entre la versió que heu editat i la versió en el repositori que havíeu actualitzat prèviament (la «base» de la revisió). La vista resultant mostrarà els «diffs» per a tots els fitxers en aquest directori. </para
 ></listitem>
 <listitem
 ><para
@@ -3102,9 +3056,7 @@ void foo()
 ><title
 >Personalitzar les dreceres del teclat</title>
 <para
->El &kdevelop; disposa d'una llista gairebé il·limitada de dreceres de teclat (algunes d'elles s'enumeren en les <quote
->seccions per a dreceres de teclat útils</quote
-> de diversos capítols en aquest manual) que es poden canviar al vostre gust mitjançant el menú <menuchoice
+>El &kdevelop; disposa d'una llista gairebé il·limitada de dreceres de teclat (algunes d'elles s'enumeren en les «seccions per a dreceres de teclat útils» de diversos capítols en aquest manual) que es poden canviar al vostre gust mitjançant el menú <menuchoice
 ><guimenu
 >Arranjament</guimenu
 ><guimenuitem
@@ -3206,9 +3158,7 @@ void foo()
 >Compleció completa</guilabel
 > mostrarà a més el tipus de cada entrada, i en el cas de les funcions, també els arguments que prenen. A més, si esteu omplint els arguments d'una funció, la compleció completa tindrà un rètol informatiu addicional sobre el cursor que us mostrarà l'argument actual en què esteu treballant.</para>
 <para
->La compleció de codi del &kdevelop; també ha de mostrar a dalt i ressaltar en verd qualsevol element de compleció que coincideixi amb el tipus actualment esperat tant en la compleció mínima com en la completa, coneguda com a <quote
->millors coincidències</quote
->.</para>
+>La compleció de codi del &kdevelop; també ha de mostrar a dalt i ressaltar en verd qualsevol element de compleció que coincideixi amb el tipus actualment esperat tant en la compleció mínima com en la completa, coneguda com a «millors coincidències».</para>
 <para
 >Les tres opcions possibles per al nivell de compleció en el diàleg de configuració són:</para>
 <itemizedlist>
@@ -3216,17 +3166,13 @@ void foo()
 ><para
 ><guilabel
 >Sempre la compleció mínima</guilabel
->: Mai mostrarà la <quote
->Compleció completa</quote
->. </para
+>: Mai mostrarà la «Compleció completa». </para
 ></listitem>
 <listitem
 ><para
 ><guilabel
 >Compleció automàtica mínima</guilabel
->: Només mostrarà la <quote
->Compleció completa</quote
-> quan la compleció automàtica s'hagi activat manualment (&ead;, cada vegada que premeu <keycombo
+>: Només mostrarà la «Compleció completa» quan la compleció automàtica s'hagi activat manualment (&ead;, cada vegada que premeu <keycombo
 >&Ctrl;<keycap
 >Espai</keycap
 ></keycombo
@@ -3236,9 +3182,7 @@ void foo()
 ><para
 ><guilabel
 >Sempre la compleció completa</guilabel
->: Mostra sempre la <quote
->Compleció completa</quote
->. </para
+>: Mostra sempre la «Compleció completa». </para
 ></listitem>
 </itemizedlist>
 </sect1>

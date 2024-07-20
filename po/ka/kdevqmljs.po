@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-04-24 19:31+0200\n"
+"PO-Revision-Date: 2024-07-19 06:50+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
@@ -151,21 +151,24 @@ msgid ""
 "Possible type mismatch between the argument type (%1) and the value passed "
 "as argument (%2)"
 msgstr ""
+"შესაძლო ტიპების კონფლიქტი არგუმენტის ტიპსა (%1) და არგუმენტად გადაცემულ "
+"მნიშვნელობას (%2) შორის"
 
 #: duchain/declarationbuilder.cpp:1008
 #, kde-format
 msgid "Module not found, some types or properties may not be recognized"
 msgstr ""
+"მოდული ვერ ვიპოვე, ზოგიერთი ტიპი ან თვისება, შეიძლება, გამოუცნობად დარჩეს"
 
 #: duchain/declarationbuilder.cpp:1203
 #, kde-format
 msgid "Mismatch between the value type (%1) and the property type (%2)"
-msgstr ""
+msgstr "მნიშვნელობის ტიპი (%1) და თვისების ტიპი (%2) ერთმანეთს არ ემთხვევა"
 
 #: navigation/propertypreviewwidget.cpp:163
 #, kde-format
 msgid "Error loading QML file: %1"
-msgstr ""
+msgstr "QML ფაილის ჩატვირთვის შეცდომა: %1"
 
 #: navigation/propertywidgets/Duration.qml:21
 #, kde-format
@@ -177,7 +180,7 @@ msgstr "ხანგრძლივობა მილიწამში"
 #, kde-format
 msgctxt "example text to test a font"
 msgid "The lazy dog jumps over<br>the quick brown fox."
-msgstr ""
+msgstr "თეთრი თრითინა<br>თეთრ თოვლზე თრთოდა."
 
 #: navigation/propertywidgets/FontFamily.qml:37
 #, kde-format

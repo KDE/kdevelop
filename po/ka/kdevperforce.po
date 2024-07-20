@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-11-04 18:42+0100\n"
+"PO-Revision-Date: 2024-07-19 06:54+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,12 +16,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: perforceplugin.cpp:108
 #, kde-format
 msgid "The variable P4CONFIG is not set. Is perforce installed on the system?"
 msgstr ""
+"ცვლადი P4CONFIG დაყენებული არაა. დაყენებული გაქვთ perforce თქვენ სისტემაზე?"
 
 #: perforceplugin.cpp:122
 #, kde-format
@@ -31,7 +32,7 @@ msgstr "Perforce"
 #: perforceplugin.cpp:232 perforceplugin.cpp:249
 #, kde-format
 msgid "Please select only one item for this operation"
-msgstr ""
+msgstr "არჩიეთ, მხოლოდ, ერთი ელემენტი ამ ოპერაციისთვის"
 
 #: perforceplugin.cpp:282
 #, kde-format
@@ -41,12 +42,12 @@ msgstr "ფაილები ან შეტყობინებები მ
 #: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format
 msgid "Please select a file for this operation"
-msgstr ""
+msgstr "აირჩიეთ ფაილი ამ ოპერაციისთვის"
 
 #: perforceplugin.cpp:366 perforceplugin.cpp:382
 #, kde-format
 msgid "Directory not supported for this operation"
-msgstr ""
+msgstr "ამ ოპერაციისთვის საქაღალდე მხარდაჭერილი არაა"
 
 #: perforceplugin.cpp:462
 #, kde-format
@@ -65,16 +66,18 @@ msgid ""
 "Unable to find perforce executable. Is it installed on the system? Is it in "
 "your PATH?"
 msgstr ""
+"გამშვები ფაილი perforce აღმოჩენილი არაა. დაყენებული გაქვთ? არის ის თქვენს "
+"PATH-ში?"
 
 #: ui/perforceimportmetadatawidget.cpp:152
 #, kde-format
 msgid "P4 Client failed with exit code: %1"
-msgstr ""
+msgstr "P4 კლიენტი ჩავარდა გამოსვლის კოდით: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:196
 #, kde-format
 msgid "P4 Client failed with error code: %1"
-msgstr ""
+msgstr "P4 კლიენტი ჩავარდა შეცდომის კოდით: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: ui/perforceimportmetadatawidget.ui:29
@@ -106,6 +109,10 @@ msgid ""
 "running on the same host. Port numbers must be in the range 1024 through "
 "32767"
 msgstr ""
+"P4PORT-ის ფორმატი Perforce-ის აპლიკაციებისთვის არის შემდეგი: პროტოკოლი:ჰოსტი:"
+"პორტი, ან, მხოლოდ, პორტი, თუ ორივე, Perforce-ის აპლიკაცია და ვერსიის "
+"სერვისი, იგივე ჰოსტზეა გაშვებული. პორტის ნომერი 1024-32767 შუალედიდან უნდა "
+"იყოს"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4user)
 #: ui/perforceimportmetadatawidget.ui:90
@@ -121,6 +128,8 @@ msgid ""
 "Current Perforce user name. By default, the Perforce username is the same as "
 "the OS username"
 msgstr ""
+"Perforce-ის მიმდინარე მომხმარებლის სახელი. ნაგულისხმევად Perforce-ის "
+"მომხმარებლის სახელი ოპერაციული სისტემის მომხმარებლის სახელს წარმოადგენს"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4client)
 #: ui/perforceimportmetadatawidget.ui:104
@@ -133,7 +142,7 @@ msgstr "P4 კლიენტი"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Name of current client workspace on the Perforce server"
-msgstr ""
+msgstr "Perforce-ის სერვერის მიმდინარე კლიენტის სამუშაო სივრცის სახელი"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4config)
 #: ui/perforceimportmetadatawidget.ui:118
@@ -149,6 +158,8 @@ msgid ""
 "Contains a file name without a path. The specified file is used to store "
 "other Perforce environment variables "
 msgstr ""
+"შეიცავს ფაილის სახელს ბილიკის გარეშე. მითითებული ფაილი გამოიყენება perforce-"
+"ის გარემოს სხვა ცვლადების შესანახად "
 
 #. i18n: ectx: property (text), widget (QPushButton, testP4setupButton)
 #: ui/perforceimportmetadatawidget.ui:141

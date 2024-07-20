@@ -2681,11 +2681,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "锁定面板以阻止其隐藏"
 
 #: shell/openprojectdialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1|All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "%1|所有工程文件 (%1)"
+msgstr ""
 
 #: shell/openprojectdialog.cpp:133
 #, kde-format

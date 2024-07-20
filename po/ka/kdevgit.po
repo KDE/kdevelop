@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2022-10-12 09:17+0200\n"
+"PO-Revision-Date: 2024-07-20 00:42+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: committoolview.cpp:205 committoolview.cpp:206
 #, kde-format
 msgid "Filter by filename/project name"
-msgstr ""
+msgstr "გაფილტვრა ფაილის/პროექტის სახელით"
 
 #: committoolview.cpp:223
 #, kde-format
@@ -31,72 +31,72 @@ msgstr "განახლება"
 #: committoolview.cpp:224
 #, kde-format
 msgid "Stage selected"
-msgstr ""
+msgstr "მონიშნულის შუალედური შენახვა"
 
 #: committoolview.cpp:226
 #, kde-format
 msgid "Unstage selected"
-msgstr ""
+msgstr "მონიშნული ფაილების შუალედური შენახვის გაუქმება"
 
 #: committoolview.cpp:228
 #, kde-format
 msgid "Revert unstaged edits"
-msgstr ""
+msgstr "შუალედური შენახვის არმქონე ჩასწორებების დაბრუნება"
 
 #: committoolview.cpp:481
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
-msgstr ""
+msgstr "კომიტი ჩავარდა. იხილეთ ვერსიის კონტროლის ხელსაწყოს ხედი."
 
 #: diffviewsctrl.cpp:51
 #, kde-format
 msgid "Stage selected lines or hunk"
-msgstr ""
+msgstr "მონიშნული ხაზების ან ბლოკების შუალედური შენახვა"
 
 #: diffviewsctrl.cpp:53
 #, kde-format
 msgid "Unstage selected lines or hunk"
-msgstr ""
+msgstr "მონიშნული ხაზების ან ბლოკების შუალედური შენახვის გაუქმება"
 
 #: diffviewsctrl.cpp:55
 #, kde-format
 msgid "Revert selected lines or hunk"
-msgstr ""
+msgstr "მონიშნული ხაზების ან ბლოკების დაბრუნება"
 
 #: diffviewsctrl.cpp:57
 #, kde-format
 msgid "Go to line in source"
-msgstr ""
+msgstr "კოდში ხაზზე გადასვლა"
 
 #: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Unstage selected lines"
-msgstr ""
+msgstr "მონიშნული ხაზების შუალედური შენახვის გაუქმება"
 
 #: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Stage selected lines"
-msgstr ""
+msgstr "მონიშნული ხაზების შუალედური შენახვა"
 
 #: diffviewsctrl.cpp:111
 #, kde-format
 msgid "Revert selected lines"
-msgstr ""
+msgstr "მონიშნული ხაზების დაბრუნება"
 
 #: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Unstage selected hunk"
-msgstr ""
+msgstr "მონიშნული ბლოკის შუალედური შენახვის გაუქმება"
 
 #: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Stage selected hunk"
-msgstr ""
+msgstr "მონიშნული ბლოკის შუალედური შენახვა"
 
 #: diffviewsctrl.cpp:115
 #, kde-format
 msgid "Revert selected hunk"
-msgstr ""
+msgstr "მონიშნული ბლოკის დაბრუნება"
 
 #: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
@@ -111,22 +111,22 @@ msgstr "G"
 #: diffviewsctrl.cpp:178
 #, kde-format
 msgid "%1 (staged)"
-msgstr ""
+msgstr "%1 (შუალედური შენახვით)"
 
 #: diffviewsctrl.cpp:180
 #, kde-format
 msgid "Staged (%1)"
-msgstr ""
+msgstr "შუალედური შენახვით (%1)"
 
 #: diffviewsctrl.cpp:182
 #, kde-format
 msgid "Unstaged (%1)"
-msgstr ""
+msgstr "შუალედური შენახვის გარეშე (%1)"
 
 #: diffviewsctrl.cpp:184
 #, kde-format
 msgid "%1 (unstaged)"
-msgstr ""
+msgstr "%1 (შუალედური შენახვის გარეშე)"
 
 #: diffviewsctrl.cpp:339
 #, kde-format
@@ -192,7 +192,7 @@ msgstr "&ელფოსტა:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Write to global config"
-msgstr ""
+msgstr "ჩაწერა გლობალური კონფიგურაციაში"
 
 #: gitplugin.cpp:186
 #, kde-format
@@ -202,7 +202,7 @@ msgstr ""
 #: gitplugin.cpp:195
 #, kde-format
 msgid "Git Commit"
-msgstr ""
+msgstr "Git: გადაცემა"
 
 #: gitplugin.cpp:247
 #, kde-format
@@ -232,7 +232,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
-msgstr ""
+msgstr "სამალავიდან ამოღება"
 
 #: gitplugin.cpp:284
 #, kde-format
@@ -289,7 +289,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "შენახვა საკუჭნაოში"
 
 #: gitplugin.cpp:903
 #, kde-format
@@ -335,13 +335,13 @@ msgstr "გაუქმება"
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged changes"
-msgstr ""
+msgstr "რიგში მყოფი ცვლილებები"
 
 #: repostatusmodel.cpp:67
 #, kde-format
 msgctxt "Files in a vcs which have changes not yet staged for commit"
 msgid "Unstaged changes"
-msgstr ""
+msgstr "რიგიდან მოცილებული ცვლილებები"
 
 #: repostatusmodel.cpp:70
 #, kde-format
@@ -359,7 +359,7 @@ msgstr ""
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
-msgstr ""
+msgstr "შუალედური შენახვით"
 
 #: repostatusmodel.cpp:84
 #, kde-format
@@ -375,7 +375,7 @@ msgstr "შეიცვალა"
 #: repostatusmodel.cpp:91
 #, kde-format
 msgid "Files with changes"
-msgstr ""
+msgstr "ფაილები ცვლლებებით"
 
 #: repostatusmodel.cpp:96
 #, kde-format
@@ -386,13 +386,13 @@ msgstr "კონფლიქტები"
 #: repostatusmodel.cpp:98
 #, kde-format
 msgid "Files with unresolved (merge) conflicts"
-msgstr ""
+msgstr "ფაილები ამოუხსნელი (შერწყმის) კონფლიქტებით"
 
 #: repostatusmodel.cpp:103
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "მიუთვალყურებელი"
 
 #: repostatusmodel.cpp:104
 #, kde-format
@@ -517,7 +517,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item file is not under vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "მიუთვალყურებელი"
 
 #: repostatusmodel.cpp:269
 #, kde-format
@@ -564,17 +564,17 @@ msgstr "კომიტი"
 #: simplecommitform.cpp:65
 #, kde-format
 msgid "Extended commit description"
-msgstr ""
+msgstr "კომიტის გაფართოებული აღწერა"
 
 #: simplecommitform.cpp:73
 #, kde-format
 msgid "Commit summary"
-msgstr ""
+msgstr "კომიტის შეჯამება"
 
 #: simplecommitform.cpp:88 simplecommitform.cpp:172
 #, kde-format
 msgid "To commit changes, please write a commit message first"
-msgstr ""
+msgstr "ცვლილებების დასაკომიტებლად, ჯერ, კომიტის შეტყობინებად დაწერეთ"
 
 #: simplecommitform.cpp:91 simplecommitform.cpp:169
 #, kde-format
@@ -625,12 +625,12 @@ msgstr ""
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
-msgstr ""
+msgstr "%1. %2: %3"
 
 #: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
-msgstr ""
+msgstr "%1 შექმნის დრო %2"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, drop)
 #: stashmanagerdialog.ui:23

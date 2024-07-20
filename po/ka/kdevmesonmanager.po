@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-06 01:42+0000\n"
-"PO-Revision-Date: 2023-02-03 16:42+0100\n"
+"PO-Revision-Date: 2024-07-20 00:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -44,11 +44,12 @@ msgid ""
 "The directory '%1' is not empty and does not seem to be an already "
 "configured build directory"
 msgstr ""
+"საქაღალდე '%1' ცარიელი არაა და უკვე მორგებულ აგების საქაღალდესაც არ წააგავს"
 
 #: mesonbuilder.cpp:169
 #, kde-format
 msgid "The directory '%1' cannot be used as a meson build directory"
-msgstr ""
+msgstr "საქაღალდეს '%1' meson-ის აგების საქაღალდედ ვერ გამოიყენებთ"
 
 #: mesonbuilder.cpp:172 mesonjobprune.cpp:55
 #, kde-format
@@ -56,6 +57,8 @@ msgid ""
 "The current build configuration is broken, because the build directory is "
 "not specified"
 msgstr ""
+"მიმდინარე აგების კონფიგურაცია დაზიანებულია, რადგან აგების საქაღალდე "
+"მითითებული არაა"
 
 #: mesonbuilder.cpp:176
 #, kde-format
@@ -64,11 +67,14 @@ msgid ""
 "Please report a bug at https://bugs.kde.org/\n"
 "FILE: %1:%2"
 msgstr ""
+"გილოცავთ: მიაღწიეთ მიუღწეველ კოდს!\n"
+"შეავსეთ შეცდომის ანგარიში მისამართზე https://bugs.kde.org/\n"
+"ფაილი: %1:%2"
 
 #: mesonbuilder.cpp:191 mesonbuilder.cpp:221
 #, kde-format
 msgid "Internal error: The buildsystem manager is not the MesonManager"
-msgstr ""
+msgstr "შიდა შეცდომა: აგების სისტემის მმართველი MesonManager არაა"
 
 #: mesonbuilder.cpp:196 mesonbuilder.cpp:226
 #, kde-format
@@ -83,17 +89,17 @@ msgstr "Meson"
 #: mesonjobprune.cpp:43
 #, kde-format
 msgid "The directory '%1' is already pruned"
-msgstr ""
+msgstr "საქაღალდე '%1' უკვე შეკვეცილია"
 
 #: mesonjobprune.cpp:49
 #, kde-format
 msgid "The directory '%1' does not appear to be a meson build directory"
-msgstr ""
+msgstr "საქაღალდეს '%1' meson-ის აგების საქაღალდეს არ წააგავს"
 
 #: mesonjobprune.cpp:50
 #, kde-format
 msgid "Aborting prune operation"
-msgstr ""
+msgstr "შეკვეცის ოპერაციის გაუქება"
 
 #: mesonjobprune.cpp:70
 #, kde-format
@@ -124,17 +130,17 @@ msgstr "Meson-ის შეცდომა: %1"
 #: mesonmanager.cpp:276
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
-msgstr ""
+msgstr "%1-ის შემოტანა ჩავარდა, რადგან აგების საქაღალდის შექმნა შეუძლებელია."
 
 #: mintro/mesonintrospectjob.cpp:115
 #, kde-format
 msgid "Introspection file '%1' does not exist"
-msgstr ""
+msgstr "ინტროსპექციის ფაილი '%1' არ არსებობს"
 
 #: mintro/mesonintrospectjob.cpp:119
 #, kde-format
 msgid "Failed to open introspection file '%1'"
-msgstr ""
+msgstr "ჩავარდა გახსნა ინტროსპექციის ფაილითვის '%1'"
 
 #: mintro/mesonintrospectjob.cpp:125
 #, kde-format
@@ -144,7 +150,7 @@ msgstr "%1-ში :%2: %3"
 #: mintro/mesonintrospectjob.cpp:133
 #, kde-format
 msgid "The introspection file '%1' contains neither an array nor an object"
-msgstr ""
+msgstr "ინტროსპექციის ფაილი '%1' არც მასივს შეიცავს, არც ობიექტს"
 
 #: mintro/mesonintrospectjob.cpp:154 rewriter/mesonrewriterjob.cpp:59
 #, kde-format
@@ -160,7 +166,7 @@ msgstr "JSON დამმუშავებლის შეცდომა: %1"
 #, kde-format
 msgid ""
 "The introspection output of '%1' contains neither an array nor an object"
-msgstr ""
+msgstr "ინტროსპექციის გამოტანა '%1'-სთვის არც მასივს შეიცავს, არც ობიექტს"
 
 #: mintro/mesonintrospectjob.cpp:241 settings/mesonconfigpage.cpp:194
 #, kde-format
@@ -217,7 +223,7 @@ msgstr "Meson -ის გამშვები ფაილი:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Changing this will reset the build options."
-msgstr ""
+msgstr "ამის შეცვლა აგების პარამეტრებს ჩამოყრის."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_mesonExe)
 #: settings/mesonadvancedsettings.ui:93
@@ -267,6 +273,7 @@ msgstr "საქაღალდე Meson-ის აგების საქა
 #, kde-format
 msgid "Invalid build directory configuration (empty build directory string)"
 msgstr ""
+"არასწორი აგების საქაღალდის კონფიგურაცია (ცარიელი აგების საქაღალდის სტრიქონი)"
 
 #: settings/mesonconfigpage.cpp:203
 #, kde-format
@@ -389,7 +396,7 @@ msgstr "აგების უკვე არსებული საქაღ
 #: settings/mesonnewbuilddir.cpp:151
 #, kde-format
 msgid "Using a broken meson build directory (this should be fine)"
-msgstr ""
+msgstr "გამოიყენება გაფუჭებული meson-ის აგების საქაღალდე (ყველაფერი კარგადაა)"
 
 #: settings/mesonnewbuilddir.cpp:154
 #, kde-format
@@ -504,7 +511,7 @@ msgstr "პროექტის მონაცემების ჩაწე�
 #: settings/mesonrewriterpage.cpp:191
 #, kde-format
 msgid "Loading meson rewriter data failed"
-msgstr ""
+msgstr "Meson-ის გადამწერის მონაცემების ჩატვირთვა ჩავარდა"
 
 #: settings/mesonrewriterpage.cpp:406
 #, kde-format
@@ -528,7 +535,7 @@ msgstr "პროექტი"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Settings"
-msgstr ""
+msgstr "Meson-ის პროექტის პარამეტრები"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, MesonRewriterPage)
 #: settings/mesonrewriterpage.ui:14

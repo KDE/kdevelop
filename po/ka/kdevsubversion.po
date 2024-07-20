@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-13 01:44+0000\n"
-"PO-Revision-Date: 2022-11-04 18:44+0100\n"
+"PO-Revision-Date: 2024-07-19 06:47+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: kdevsvnplugin.cpp:334
 #, kde-format
@@ -33,28 +33,28 @@ msgstr "გადატანა..."
 #: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
 #, kde-format
 msgid "Please select only one item for this operation"
-msgstr ""
+msgstr "არჩიეთ, მხოლოდ, ერთი ელემენტი ამ ოპერაციისთვის"
 
 #: kdevsvnplugin.cpp:370
 #, kde-format
 msgctxt "@label"
 msgid "Destination file/directory"
-msgstr ""
+msgstr "სამიზნე ფაილი/საქაღალდე"
 
 #: kdevsvnplugin.cpp:382
 #, kde-format
 msgid "Copying only works on local files"
-msgstr ""
+msgstr "კოპირება, ამჟამად, მხოლოდ, ლოკალურ ფაილებზე მუშაობს"
 
 #: kdevsvnplugin.cpp:406
 #, kde-format
 msgid "Destination file/directory"
-msgstr ""
+msgstr "სამიზნე ფაილი/საქაღალდე"
 
 #: kdevsvnplugin.cpp:418
 #, kde-format
 msgid "Moving only works on local files/dirs"
-msgstr ""
+msgstr "გადატანა, ამჟამად, მხოლოდ, ლოკალურ ფაილებზე/საქაღალდეებზე მუშაობს"
 
 #: kdevsvnplugin.cpp:425
 #, kde-format
@@ -64,87 +64,87 @@ msgstr "ქვევერსია"
 #: svnaddjob.cpp:73
 #, kde-format
 msgid "Subversion Add"
-msgstr ""
+msgstr "Subversion: დამატება"
 
 #: svnaddjob.cpp:85
 #, kde-format
 msgid "Not enough information to add file"
-msgstr ""
+msgstr "ფაილის დასამატებლად ინფორმაცია საკმარისი არაა"
 
 #: svnblamejob.cpp:130
 #, kde-format
 msgid "Subversion Annotate"
-msgstr ""
+msgstr "Subversion: ანოტაცია"
 
 #: svnblamejob.cpp:144
 #, kde-format
 msgid "Not enough information to blame location"
-msgstr ""
+msgstr "ფაილის ანოტაციის სანახავად ინფორმაცია საკმარისი არაა"
 
 #: svncheckoutjob.cpp:84
 #, kde-format
 msgid "Subversion Checkout"
-msgstr ""
+msgstr "Subversion: წამოღება"
 
 #: svncheckoutjob.cpp:96
 #, kde-format
 msgid "Not enough information to checkout"
-msgstr ""
+msgstr "წამოღებისთვის ინფორმაცია საკმარისი არაა"
 
 #: svncommitjob.cpp:109
 #, kde-format
 msgid "Subversion Commit"
-msgstr ""
+msgstr "Subversion: კომიტი"
 
 #: svncommitjob.cpp:125
 #, kde-format
 msgid "Committing..."
-msgstr ""
+msgstr "კომიტი..."
 
 #: svncommitjob.cpp:129
 #, kde-format
 msgid "Not enough information to execute commit"
-msgstr ""
+msgstr "კომიტისთვის ინფორმაცია საკმარისი არაა"
 
 #: svncopyjob.cpp:71
 #, kde-format
 msgid "Subversion Copy"
-msgstr ""
+msgstr "Subversion: კოპირება"
 
 #: svncopyjob.cpp:83
 #, kde-format
 msgid "Not enough information to copy file"
-msgstr ""
+msgstr "ფაილის დასაკოპირებლად ინფორმაცია საკმარისი არაა"
 
 #: svndiffjob.cpp:255
 #, kde-format
 msgid "Subversion Diff"
-msgstr ""
+msgstr "Subversion: სხვაობა"
 
 #: svndiffjob.cpp:272
 #, kde-format
 msgid "Not enough information given to execute diff"
-msgstr ""
+msgstr "სხვაობების პოვნისთვის ინფორმაცია საკმარისი არაა"
 
 #: svnimportjob.cpp:86
 #, kde-format
 msgid "Subversion Import"
-msgstr ""
+msgstr "Subversion: შემოტანა"
 
 #: svnimportjob.cpp:99
 #, kde-format
 msgid "Not enough information to import"
-msgstr ""
+msgstr "შემოსატანად ინფორმაცია საკმარისი არაა"
 
 #: svninfojob.cpp:81
 #, kde-format
 msgid "Subversion Info"
-msgstr ""
+msgstr "Subversion: ინფორმაცია"
 
 #: svninfojob.cpp:113
 #, kde-format
 msgid "Not enough information to execute info job"
-msgstr ""
+msgstr "ინფორმაციის დავალების გასაშვებად ინფორმაცია საკმარისი არაა"
 
 #: svninternaljobbase.cpp:86
 #, kde-format
@@ -208,57 +208,57 @@ msgstr "ჩანაცვლება: %1."
 #: svninternaljobbase.cpp:165
 #, kde-format
 msgid "Transmitting file data "
-msgstr ""
+msgstr "ფაილის მონაცემების გადაცემა "
 
 #: svninternaljobbase.cpp:171
 #, kde-format
 msgid "Blame finished for revision %1, path %2"
-msgstr ""
+msgstr "ავტორების განსაზღვრა დასრულდა რევიზიისთვის %1, ბილიკით %2"
 
 #: svninternaljobbase.cpp:174
 #, kde-format
 msgid "Reverted working copy %1"
-msgstr ""
+msgstr "სამუშაო ასლის %1 დაბრუნება"
 
 #: svninternaljobbase.cpp:177
 #, kde-format
 msgid "Reverting failed on working copy %1"
-msgstr ""
+msgstr "დაბრუნება ჩავარდა სამუშაო ასლისთვის %1"
 
 #: svninternaljobbase.cpp:180
 #, kde-format
 msgid "Copied %1"
-msgstr ""
+msgstr "%1 დაკოპირდა"
 
 #: svninternaljobbase.cpp:235
 #, kde-format
 msgid "Certificate is not yet valid."
-msgstr ""
+msgstr "სერტიფიკატი ჯერ არასწორია."
 
 #: svninternaljobbase.cpp:239
 #, kde-format
 msgid "Certificate has expired."
-msgstr ""
+msgstr "სერტიფიკატი ვადაგასულია."
 
 #: svninternaljobbase.cpp:243
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
-msgstr ""
+msgstr "სერტიფიკაცის CN (ჰოსტის სახელი) დაშორებული ჰოსტის სახელს არ ემთხვევა."
 
 #: svninternaljobbase.cpp:247
 #, kde-format
 msgid "Certificate authority is unknown."
-msgstr ""
+msgstr "სერტიფიკატის გამომცემელი უცნობია."
 
 #: svninternaljobbase.cpp:251
 #, kde-format
 msgid "Other unknown error."
-msgstr ""
+msgstr "სხვა უცნობი შეცდომა."
 
 #: svnjobbase.cpp:74
 #, kde-format
 msgid "Enter Login for: %1"
-msgstr ""
+msgstr "შეიყვანეთ მომხმარებლის სახელი სერვერისთვის: %1"
 
 #: svnjobbase.cpp:160
 #, kde-format
@@ -271,90 +271,92 @@ msgid ""
 "Error executing Job:\n"
 "%1"
 msgstr ""
+"დავალების შესრულების შეცდოა:\n"
+"%1"
 
 #: svnlogjob.cpp:105
 #, kde-format
 msgid "Subversion Log"
-msgstr ""
+msgstr "Subversion-ის ჟურნალი"
 
 #: svnlogjob.cpp:120
 #, kde-format
 msgid "Not enough information to log location"
-msgstr ""
+msgstr "ჟურნალის მდებარეობის შესახებ ინფორმაცია საკმარისია რაა"
 
 #: svnmovejob.cpp:83
 #, kde-format
 msgid "Subversion Move"
-msgstr ""
+msgstr "Subversion: გადატანა"
 
 #: svnmovejob.cpp:95
 #, kde-format
 msgid "Not enough information to move file"
-msgstr ""
+msgstr "ფაილის გადასატანად ინფორმაცია საკმარისი არაა"
 
 #: svnremovejob.cpp:76
 #, kde-format
 msgid "Subversion Remove"
-msgstr ""
+msgstr "Subversion: წაშლა"
 
 #: svnremovejob.cpp:88
 #, kde-format
 msgid "Not enough information to execute remove job"
-msgstr ""
+msgstr "დავალების წასაშლელად ინფორმაცია საკმარისი არაა"
 
 #: svnrevertjob.cpp:74
 #, kde-format
 msgid "Subversion Revert"
-msgstr ""
+msgstr "Subversion: დაბრუნება"
 
 #: svnrevertjob.cpp:86
 #, kde-format
 msgid "Not enough information to execute revert"
-msgstr ""
+msgstr "დაბრუნების შესასრულებლად ინფორმაცია საკმარისი არაა"
 
 #: svnssldialog.cpp:28
 #, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate"
-msgstr ""
+msgstr "SSL სერვერის სერტიფიკატი"
 
 #: svnssldialog.cpp:30
 #, kde-format
 msgctxt "@action:button"
 msgid "Trust Permanently"
-msgstr ""
+msgstr "სამუდამო ნდბა"
 
 #: svnssldialog.cpp:31
 #, kde-format
 msgctxt "@action:button"
 msgid "Trust Temporarily"
-msgstr ""
+msgstr "დროებითი ნდობა"
 
 #: svnssldialog.cpp:62
 #, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate: %1"
-msgstr ""
+msgstr "SSL სერვერის სერტიფიკატი: %1"
 
 #: svnstatusjob.cpp:117
 #, kde-format
 msgid "Subversion Status"
-msgstr ""
+msgstr "Subversion: სტატუსი"
 
 #: svnstatusjob.cpp:131
 #, kde-format
 msgid "Not enough information to execute status job"
-msgstr ""
+msgstr "სტატუსის დავალების შესასრულებლად ინფორმაცია საკმარისი არაა"
 
 #: svnupdatejob.cpp:107
 #, kde-format
 msgid "Subversion Update"
-msgstr ""
+msgstr "Subversion: განახლება"
 
 #: svnupdatejob.cpp:120
 #, kde-format
 msgid "Not enough Information to execute update"
-msgstr ""
+msgstr "განახლების შესასრულებლად ინფორმაცია საკმარისი არაა"
 
 #. i18n: ectx: property (text), widget (QLabel, labelForSrc)
 #: ui/importmetadatawidget.ui:20
@@ -375,14 +377,14 @@ msgstr "რეპოზიტორია:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repository location"
-msgstr ""
+msgstr "რეპოზიტორიის მდებარეობა"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:37
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the repository into which the source directory is imported"
-msgstr ""
+msgstr "აირჩიეთ რეპოზიტორია, რომელშიც წყარო საქაღალდის შემოტანა ხდება"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/importmetadatawidget.ui:57
@@ -398,19 +400,21 @@ msgid ""
 "There were errors validating the server certificate.\n"
 "Do you want to trust this certificate?"
 msgstr ""
+"სერვერის სერტიფიკატის გადამოწმებისას აღმოჩენილია შეცდომები.\n"
+"გნებავთ, ენდოთ ამ სერტიფიკატს?"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ui/ssltrustdialog.ui:30
 #, kde-format
 msgid "Reasons why the validation failed"
-msgstr ""
+msgstr "მიზეზები, რატო ჩავარდა გადამოწმება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: ui/ssltrustdialog.ui:52
 #, kde-format
 msgctxt "@title:group"
 msgid "Certificate Information"
-msgstr ""
+msgstr "სერტიფიკატის ინფორმაცია"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/ssltrustdialog.ui:64
@@ -423,7 +427,7 @@ msgstr "ჰოსტის სახელი:"
 #: ui/ssltrustdialog.ui:77
 #, kde-format
 msgid "someserver"
-msgstr ""
+msgstr "სერვერი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/ssltrustdialog.ui:84
@@ -436,7 +440,7 @@ msgstr "გამომცემელი:"
 #: ui/ssltrustdialog.ui:97
 #, kde-format
 msgid "someissuer"
-msgstr ""
+msgstr "გამომცემელი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ui/ssltrustdialog.ui:104
@@ -449,7 +453,7 @@ msgstr "ძალაშია:"
 #: ui/ssltrustdialog.ui:117
 #, kde-format
 msgid "validfrom"
-msgstr ""
+msgstr "ვარგისიასაიდან"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: ui/ssltrustdialog.ui:124
@@ -462,7 +466,7 @@ msgstr "ვადა:"
 #: ui/ssltrustdialog.ui:137
 #, kde-format
 msgid "validuntil"
-msgstr ""
+msgstr "ვარგისიასადამდე"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ui/ssltrustdialog.ui:144
@@ -475,4 +479,4 @@ msgstr "ანაბეჭდი:"
 #: ui/ssltrustdialog.ui:157
 #, kde-format
 msgid "fingerprint"
-msgstr ""
+msgstr "ანაბეჭდი"
