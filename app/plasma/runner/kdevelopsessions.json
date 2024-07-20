@@ -3,14 +3,31 @@
         "Authors": [
             {
                 "Email": "sebas@kde.org",
-                "Name": "Sebastian Kügler"
+                "Name": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx"
             }
         ],
         "Description": "Matches KDevelop Sessions",
+        "Description[ca]": "Concorda amb sessions del KDevelop",
+        "Description[es]": "Coincide con sesiones de KDevelop",
+        "Description[nl]": "Komt overeen met KDevelop sessies",
+        "Description[sl]": "Ujemanja s sejami KDevelop",
+        "Description[sv]": "Matchar KDevelop-sessioner",
+        "Description[tr]": "K Geliştir oturumlarıyla eşleşir",
+        "Description[uk]": "Пошук відповідних сеансів KDevelop",
+        "Description[x-test]": "xxMatches KDevelop Sessionsxx",
         "EnabledByDefault": true,
         "Icon": "kdevelop",
         "License": "LGPL",
         "Name": "KDevelop Sessions",
+        "Name[ca]": "Sessions del KDevelop",
+        "Name[es]": "Sesiones de KDevelop",
+        "Name[nl]": "KDevelop-sessies",
+        "Name[sl]": "Seje KDevelop",
+        "Name[sv]": "KDevelop-sessioner",
+        "Name[tr]": "K Geliştir Oturumları",
+        "Name[uk]": "Сеанси KDevelop",
+        "Name[x-test]": "xxKDevelop Sessionsxx",
         "ServiceTypes": [
             "Plasma/Runner"
         ],

@@ -2,7 +2,7 @@
 Name=GObject with private pointer
 Name[az]=Gizli göstərici ilə GObject
 Name[bs]=GObject s privatnim pokazivačem
-Name[ca]=GObject amb apuntador privat
+Name[ca]=GObject amb punter privat
 Name[ca@valencia]=GObject amb apuntador privat
 Name[da]=GObject med privat pointer
 Name[de]=GObject mit Private-Pointer
@@ -37,7 +37,7 @@ Name[zh_TW]=GObject 含私密指標
 Comment=A GObject subclass with a private pointer
 Comment[az]=Gizli gösətrici ilə bir GObject alt sinifi
 Comment[bs]=Podklasa GObject s privatnim pokazivačem
-Comment[ca]=Una subclasse GObject amb un apuntador privat
+Comment[ca]=Una subclasse GObject amb un punter privat
 Comment[ca@valencia]=Una subclasse GObject amb un apuntador privat
 Comment[da]=En underklasse af GObject med en privat pointer
 Comment[de]=Eine GObject-Unterklasse mit einem privaten Pointer

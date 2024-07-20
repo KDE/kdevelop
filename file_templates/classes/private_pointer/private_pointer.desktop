@@ -2,7 +2,7 @@
 Name=Private Pointer
 Name[az]=Gizli göstərici
 Name[bs]=Privatni pokazivač
-Name[ca]=Apuntador privat
+Name[ca]=Punter privat
 Name[ca@valencia]=Apuntador privat
 Name[da]=Privat pointer
 Name[de]=Privater Pointer
@@ -37,7 +37,7 @@ Name[zh_TW]=私密指標
 Comment=C++ Class with a private D-pointer
 Comment[az]=Bir gizli D-göstəricisi ilə C++ Class
 Comment[bs]=C++ klasa s privatnim D-pokazivačem
-Comment[ca]=Classe C++ amb un apuntador-D privat
+Comment[ca]=Classe C++ amb un punter-D privat
 Comment[ca@valencia]=Classe C++ amb un apuntador-D privat
 Comment[da]=C++-klasse med en privat D-pointer
 Comment[de]=C++-Klasse mit einem privaten D-Pointer

@@ -4,12 +4,21 @@
         "Authors": [
             {
                 "Email": "hein@kde.org",
-                "Name": "Eike Hein"
+                "Name": "Eike Hein",
+                "Name[x-test]": "xxEike Heinxx"
             }
         ],
         "BugReportUrl": "https://bugs.kde.org/enter_bug.cgi?product=kdevelop&component=Plasma%20Sessions%20Applet",
         "Category": "Utilities",
         "Description": "List and launch KDevelop sessions",
+        "Description[ca]": "Llista i llança sessions del KDevelop",
+        "Description[es]": "Listar y lanzar sesiones de KDevelop",
+        "Description[nl]": "Maak een lijst van en start KDevelop sessies",
+        "Description[sl]": "Izdelaj seznam in zaženi seje KDevelop",
+        "Description[sv]": "Lista och starta KDevelop-sessioner",
+        "Description[tr]": "K Geliştir oturumlarını listeleyin ve başlatın",
+        "Description[uk]": "Показ списку і запуск сеансів KDevelop",
+        "Description[x-test]": "xxList and launch KDevelop sessionsxx",
         "FormFactors": [
             "desktop"
         ],
@@ -17,6 +26,14 @@
         "Id": "org.kde.kdevelopsessions",
         "License": "GPL-2.0+",
         "Name": "KDevelop Sessions",
+        "Name[ca]": "Sessions del KDevelop",
+        "Name[es]": "Sesiones de KDevelop",
+        "Name[nl]": "KDevelop-sessies",
+        "Name[sl]": "Seje KDevelop",
+        "Name[sv]": "KDevelop-sessioner",
+        "Name[tr]": "K Geliştir Oturumları",
+        "Name[uk]": "Сеанси KDevelop",
+        "Name[x-test]": "xxKDevelop Sessionsxx",
         "Version": "0.1",
         "Website": "https://www.kdevelop.org/"
     },
