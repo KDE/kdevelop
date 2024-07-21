@@ -42,6 +42,7 @@ Comment[eu]=QWidget azpliklasea Qt Designer fitxategi eta inplementazio pribatu 
 Comment[fr]=Sous-classe QWidget avec un fichier Qt Designer séparé et une implémentation privée
 Comment[gl]=Subclase de QWidget cun ficheiro de Qt Designer por separado e unha codificación privada.
 Comment[it]=Sottoclasse di QWidget con un file separato di Qt Designer e implementazione privata
+Comment[ka]=QWidget-ის ქვეკლასი ცალკე Qt Designer-ის ფაილით და პირადი განხორციელებით
 Comment[ko]=별개의 Qt Designer 파일과 비밀 구현이 있는 QWidget 하위 클래스
 Comment[nl]=QWidget subclass met een apart Qt Designer bestand en privé implementatie
 Comment[pl]=Podklasa QWidget z osobnym plikiem Projektanta Qt i prywatną implementacją

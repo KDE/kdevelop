@@ -52,6 +52,7 @@ Comment[fr]=Une sous-classe GObject avec un pointeur privé et des propriétés
 Comment[gl]=Unha subclase de GObject cun punteiro privado e propiedades
 Comment[hu]=Egy GObject alosztály privát mutatóval és tulajdonságokkal
 Comment[it]=Una sottoclasse GObject con un puntatore privato e delle proprietà
+Comment[ka]=GObject-ის ქვეკლასი პირადი მაჩვენებლითა და თვისებებით
 Comment[kk]=Көрсеткіші сырлы (private) және қасиеттері бар GObject субкласы
 Comment[ko]=비밀 포인터와 속성이 있는 GObject 하위 클래스
 Comment[nb]=En GObject subklasse med en privat peker og egenskaper

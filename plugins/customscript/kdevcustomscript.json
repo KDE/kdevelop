@@ -23,6 +23,7 @@
         "Description[fr]": "Un module pour mettre en forme des fichiers C d'après des scripts personnalisés",
         "Description[gl]": "Complemento para formatar os ficheiros en C usando guións personalizados.",
         "Description[it]": "Un'estensione per la formattazione di file in C che usa script personalizzati",
+        "Description[ka]": "დამატება C ფაილის დასაფორმატებლად მორგებული სკრიპტების გამოყენებით",
         "Description[ko]": "사용자 정의 스크립트로 C 파일의 형식을 재지정하는 플러그인",
         "Description[nl]": "Een plugin voor het formatteren van C-bestanden met eigen scripts",
         "Description[pl]": "Formatuje pliki C przy użyciu własnych skryptów",

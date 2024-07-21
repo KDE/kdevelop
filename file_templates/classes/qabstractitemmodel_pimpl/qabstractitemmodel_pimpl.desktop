@@ -42,6 +42,7 @@ Comment[eu]=QAbstractItemModel pimpl azpiklasea inplementazio pribatuarekin
 Comment[fr]=Sous-classe QAbstractItemModel avec une implémentation privée
 Comment[gl]=Subclase de QAbstractItemModel cunha codificación privada.
 Comment[it]=Una sottoclasse di QAbstractItemModel con un'implementazione privata
+Comment[ka]=QAbstractItemModel ქვეკლასი პირადი განხორციელებით
 Comment[ko]=비밀 구현이 있는 QAbstractItemModel 하위 클래스
 Comment[nl]=QAbstractItemModel subclass met privé implementatie
 Comment[pl]=Podklasa QAbstractItemModel z prywatną implementacją

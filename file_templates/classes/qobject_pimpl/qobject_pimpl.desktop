@@ -43,6 +43,7 @@ Comment[eu]=QObject azpiklasea inplementazio pribatuarekin
 Comment[fr]=Une sous-classe QObject avec une implémentation privée
 Comment[gl]=Subclase de QObject cunha codificación privada.
 Comment[it]=Una sottoclasse di QObject con un'implementazione privata
+Comment[ka]=QObject-ის ქვეკლასი პირადი განხორციელებით
 Comment[ko]=비밀 구현이 있는 QObject 하위 클래스
 Comment[nl]=Een subklasse van QObject met een private implementatie
 Comment[pl]=Podklasa GObject z prywatną implementacją

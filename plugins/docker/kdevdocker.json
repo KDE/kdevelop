@@ -24,6 +24,7 @@
         "Description[fr]": "Expose les exécutifs Docker",
         "Description[gl]": "Expón os executábeis de Docker.",
         "Description[it]": "Espone i runtime di Docker",
+        "Description[ka]": "წვდომა Docker-ის გაშვების გარემოსთან",
         "Description[ko]": "Docker 런타임 표시",
         "Description[nl]": "Toont Docker runtimes",
         "Description[pl]": "Udostępnia biblioteki uruchomieniowe Dockera",

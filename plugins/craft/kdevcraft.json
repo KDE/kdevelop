@@ -4,6 +4,7 @@
             {
                 "Email": "arrowd@FreeBSD.org",
                 "Name": "Gleb Popov",
+                "Name[ka]": "გლებ პოპოვი",
                 "Name[x-test]": "xxGleb Popovxx"
             }
         ],
@@ -41,6 +42,7 @@
         "Name[fr]": "Environnement d'exécution « Craft »",
         "Name[gl]": "Biblioteca de tempo de execución de Craft",
         "Name[it]": "Runtime Craft",
+        "Name[ka]": "გაშვების გარემო Craft",
         "Name[ko]": "Craft 런타임",
         "Name[nl]": "Runtime van Craft ",
         "Name[pl]": "Biblioteka uruchomieniowa Craft",

@@ -45,6 +45,7 @@ Comment[fi]=Yksikkötesti käyttäen CppUTest-kirjastoa
 Comment[fr]=Un test unitaire utilisant la bibliothèque CppUTest
 Comment[gl]=Unha proba unitaria que usa a biblioteca CppUTest.
 Comment[it]=Un unit test che usa la libreria CppUTest
+Comment[ka]=ერთეულის შემოწმება CppUTest ბიბლიოთეკით
 Comment[ko]=CppUTest 라이브러리를 사용하는 단위 테스트
 Comment[nl]=Een test van een eenheid met gebruik van de bibliotheek CppUTest
 Comment[pl]=Jednostkowy test wykorzystujący bibliotekę CppUTest

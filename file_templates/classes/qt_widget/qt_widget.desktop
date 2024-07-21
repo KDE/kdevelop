@@ -52,6 +52,7 @@ Comment[fr]=Sous-classe QWidget avec un fichier Qt  Designer séparé
 Comment[gl]=Subclase de QWidget cun ficheiro separado para Qt Designer
 Comment[hu]=QWidget alosztály különálló Qt tervező fájllal
 Comment[it]=Sottoclasse QWidget con un file separato di Qt Designer
+Comment[ka]=QWidget-ის ქვეკლასი ცალკე Qt Designer-ის ფაილით
 Comment[kk]=Бөлек Qt Designer файлдағы QWidget
 Comment[ko]=별개의 Qt Designer 파일이 있는 QWidget 하위 클래스
 Comment[nb]=QWidget subklasse med en separat Qt Designer-fil

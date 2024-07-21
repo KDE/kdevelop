@@ -41,6 +41,7 @@ Comment[eu]=CMake erabiliz paketatu den KDevelop fitxategi-txantiloiaren ezarpen
 Comment[fr]=Paramétrage du modèle de fichier « KDevelop », qui est empaqueté en utilisant « CMake »
 Comment[gl]=Configuración de modelo de ficheiro de KDevelop empaquetado con CMake.
 Comment[it]=Impostazioni per un modello di file KDevelop pacchettizzato tramite CMake
+Comment[ka]=დაყენება KDevelop-ის ფალის ნიმუშისთვის, რომელიც CMake-თია შეფუთული
 Comment[ko]=CMake로 패키지된 KDevelop 파일 템플릿 지원
 Comment[nl]=Opzet voor bestandssjabloon van KDevelop dat in ingepakt met gebruik van CMake
 Comment[pl]=Ustawienia dla wzorca plikowego KDevelop, który jest pakowany przy użyciu CMake

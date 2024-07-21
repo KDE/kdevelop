@@ -5,6 +5,7 @@
             {
                 "Email": "hein@kde.org",
                 "Name": "Eike Hein",
+                "Name[ka]": "აიკე ჰაინი",
                 "Name[x-test]": "xxEike Heinxx"
             }
         ],
@@ -12,8 +13,11 @@
         "Category": "Utilities",
         "Description": "List and launch KDevelop sessions",
         "Description[ca]": "Llista i llança sessions del KDevelop",
+        "Description[eo]": "Listigi kaj lanĉi KDevelop-seancojn",
         "Description[es]": "Listar y lanzar sesiones de KDevelop",
+        "Description[ka]": "KDevelop-ის სესიების ჩამონათვალი და გაშვება",
         "Description[nl]": "Maak een lijst van en start KDevelop sessies",
+        "Description[pl]": "Wypisz i rozpocznij posiedzenie KDevelop",
         "Description[sl]": "Izdelaj seznam in zaženi seje KDevelop",
         "Description[sv]": "Lista och starta KDevelop-sessioner",
         "Description[tr]": "K Geliştir oturumlarını listeleyin ve başlatın",
@@ -27,8 +31,11 @@
         "License": "GPL-2.0+",
         "Name": "KDevelop Sessions",
         "Name[ca]": "Sessions del KDevelop",
+        "Name[eo]": "KDevelop-Seancoj",
         "Name[es]": "Sesiones de KDevelop",
+        "Name[ka]": "KDevelop-ის სესიები",
         "Name[nl]": "KDevelop-sessies",
+        "Name[pl]": "Posiedzenia KDevelop",
         "Name[sl]": "Seje KDevelop",
         "Name[sv]": "KDevelop-sessioner",
         "Name[tr]": "K Geliştir Oturumları",

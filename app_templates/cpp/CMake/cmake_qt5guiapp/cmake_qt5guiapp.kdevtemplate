@@ -47,6 +47,7 @@ Comment[fi]=Qt5 CMake Gui -sovellus. Generoi CMake/Qt5-perustainen graafinen kä
 Comment[fr]=Application avec interface graphique CMake pour Qt5. Génère une application avec interface graphique utilisant CMake / Qt5 (compatible multi-plate-forme)
 Comment[gl]=Aplicación gráfica con CMake para Qt5. Xera unha aplicación con GUI baseada en CMake/Qt5 (compatíbel con multiplataforma)
 Comment[it]=Applicazione GUI CMake in Qt5. Genera un'applicazione con GUI basata su CMake/Qt5 (multipiattaforma)
+Comment[ka]=Qt5 CMake Gui აპლიკაცია. შექმენით CMake/Qt5-ზე დაფუძნებული აპლიკაცია (თავსებადია პლატფორმათაშორისობასთან)
 Comment[ko]=Qt5 CMake GUI 앱입니다. CMake/Qt5 기반 GUI 앱을 만듭니다(크로스 플랫폼 지원)
 Comment[nl]=Gui-toepassing van Qt5 CMake. Genereert een op CMake/Qt5 gebaseerd GUI-programma (crossplatform compatibel)
 Comment[pl]=Program Qt5 CMake Gui. Generuj programy oparte o CMake/Qt5 (zgodne na wielu platformach)

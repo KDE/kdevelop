@@ -44,6 +44,7 @@ Comment[eu]=Dockerfile erabiltzaile batek irudi bat mubtatzeko komando-lerroan d
 Comment[fr]=Un fichier Docker est un document texte qui contient toutes les commandes qu'un utilisateur pourrait saisir en ligne de commande pour assembler une image
 Comment[gl]=Un Dockerfile é un documento de texto que contén todas as ordes que un usuario podería chamar desde unha liña de ordes para construír unha imaxe.
 Comment[it]=Un file Dockerfile è un documento di testo che contiene tutti i comandi che un utente può chiamare da riga di comando per assemblare un'immagine
+Comment[ka]=Dockerfile ტექსტური დოკუმენტია, რომელიც შეიცავს ყველა ბრძანებას, რომელიც მომხმარებელს სურს, დისკის ასლის აგებისას იქნას გაშვებული
 Comment[ko]=Dockerfile은 명령행에서 이미지를 만들 때 필요한 명령을 모아 둔 텍스트 파일입니다
 Comment[nl]=Een Dockerbestand is een tekstdocument dat alle opdrachten bevat die een gebruiker zou kunnen aanroepen op de opdrachtregel om een image samen te stellen
 Comment[pl]=Plik dokowany jest plikiem tekstowym, który zawiera wszystkie polecenia, które użytkownik może wydać w wierszu poleceń, aby złożyć obraz

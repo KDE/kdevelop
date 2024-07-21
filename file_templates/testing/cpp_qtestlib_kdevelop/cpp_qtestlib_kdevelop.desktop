@@ -52,6 +52,7 @@ Comment[fr]=Un test unitaire utilisant la bibliothèque QTest avec des assistan
 Comment[gl]=Unha probas de unidades que usa a biblioteca QTest con axudantes de probas para KDevPlatform
 Comment[hu]=Egy egységteszt a QTest könyvtár használatával KDevPlatform tesztsegítőkkel
 Comment[it]=Un unit test che usa la libreria QTest con l'ausilio dei test di KDevPlatform
+Comment[ka]=ერთეულის შემოწმება QTest ბიბლიოთეკით KDevPlatform შემოწმების დამხმარეებით
 Comment[kk]=KDevPlatform сынақ көмекшісімен QTest жиын файлын қолданатын модуль сынақ дестесі
 Comment[ko]=QTest 라이브러리와 KDevPlatform 테스트 도우미를 사용하는 단위 테스트
 Comment[nb]=En enhetstest som bruker QTest-biblioteket med KDevPlatform testhjelpere

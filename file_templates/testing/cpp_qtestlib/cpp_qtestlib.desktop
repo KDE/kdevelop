@@ -53,6 +53,7 @@ Comment[fr]=Une suite de tests unitaires utilisant la bibliothèque QTest sans 
 Comment[gl]=Unha suite de probas de unidades que usa a biblioteca QTest sen interface gráfica de usuario
 Comment[hu]=Egy egységteszt alkalmazáscsomag a QTest könyvtár használatával grafikus felhasználói felület nélkül
 Comment[it]=Una suite di unit test che usa la libreria QTest senza un'interfaccia grafica utente
+Comment[ka]=ერთეულის შემოწმებების ნაკრები QTest ბიბლიოთეკის გამოყენებით გრაფიკული ინტერფეისის გარეშე
 Comment[kk]=Графикалық интерфейссіз QTest жиын файлын қолданатын модуль сынақ дестесі
 Comment[ko]=그래픽 사용자 인터페이스 없이 QTest 라이브러리를 사용하는 단위 테스트 스위트
 Comment[nb]=En enhetstestsuite som bruker QTest-biblioteket uten en grafisk brukerflate

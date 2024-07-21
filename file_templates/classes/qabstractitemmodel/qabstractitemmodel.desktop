@@ -42,6 +42,7 @@ Comment[eu]=QAbstractItemModel azpiklasea propietateekin
 Comment[fr]=Sous-classe QAbstractItemModel avec des propriétés
 Comment[gl]=Subclase de QAbstractItemModel con propiedades
 Comment[it]=Sottoclasse di QAbstractItemModel con delle proprietà
+Comment[ka]=QAbstractItemModel ქვეკლასი თვისებებით
 Comment[ko]=속성이 있는 QAbstractItemModel 하위 클래스
 Comment[nl]=QAbstractItemModel subclass met eigenschappen
 Comment[pl]=Podklasa QAbstractItemModel z właściwościami

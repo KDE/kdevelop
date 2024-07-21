@@ -44,6 +44,7 @@ Comment[eu]=Sortu QMake/Qt5-en oinarritutako aplikazioa (plataforma gurutzatueki
 Comment[fr]=Générer une application graphique fondée sur QMake/Qt5 (compatible multi-plate-forme)
 Comment[gl]=Xerar unha aplicación gráfica baseada en QMake e Qt5 (multiplataforma)
 Comment[it]=Genera un'applicazione basata su QMake/Qt5 con interfaccia utente grafica (compatibile multipiattaforma)
+Comment[ka]=QMake/Qt-ზე დაფუძნებული გრაფიკული აპლიკაციის შექმნა (თავსებადია პლატფორმათაშორისობასთან)
 Comment[ko]=QMake/Qt5 기반 GUI 앱을 만듭니다(크로스 플랫폼 지원)
 Comment[nl]=Op QMake/Qt5 gebaseerde GUI-toepassing genereren (crossplatform compatibel)
 Comment[pl]=Uwórz aplikację opartą na interfejsie użytkownika QMake/Qt5 (zgodne na wielu platformach)

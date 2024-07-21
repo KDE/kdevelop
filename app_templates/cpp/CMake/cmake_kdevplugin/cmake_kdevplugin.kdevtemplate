@@ -45,6 +45,7 @@ Comment[eu]=Sortu KDevelop plugin orokorra, CMake eta C++ erabiliz
 Comment[fr]=Génère un module d'extension KDevelop simple, reposant sur CMake et C++
 Comment[gl]=Xera un complemento xeral de KDevelop, usando CMake e C++.
 Comment[it]=Genera un'estensione generica per KDevelop usando CMake e C++
+Comment[ka]=ზოგადი KDevelop-ის დამატების გენერაცია CMake-ითა და C++-ით
 Comment[ko]=CMake와 C++를 사용하여 일반적인 KDevelop 플러그인 생성
 Comment[nl]=Genereer een algemene KDevelop-plug-in, met CMake en C++
 Comment[pl]=Utwórz ogólną wtyczkę KDevelop przy użyciu CMake i C++
