@@ -3,20 +3,20 @@
 # Version: $Revision$
 # KDevelop polish translation file.
 # Translation work:
-#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
-# Corrections:
-#       Waldemar Kochaniec
-#       Jacek Stolarczyk
-#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
-#
-# Krzysztof Lichota, 2004.
+# SPDX-FileCopyrightText: 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+# Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Anna Wojdeł <ania@kbs.twi.tudelft.nl>
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2003, 2004.
 # Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
 # Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2013.
 # Michał Smoczyk <msmoczyk@wp.pl>, 2008.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022.
+# Corrections:
+# Waldemar Kochaniec
+# Jacek Stolarczyk
+#
+# Krzysztof Lichota, 2004.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
@@ -31,6 +31,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: dialogs/processselection.cpp:28
 #, kde-format
