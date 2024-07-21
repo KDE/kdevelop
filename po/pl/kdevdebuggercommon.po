@@ -3,26 +3,26 @@
 # Version: $Revision$
 # KDevelop polish translation file.
 # Translation work:
-#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
-# Corrections:
-#       Waldemar Kochaniec
-#       Jacek Stolarczyk
-#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
-#
-# Krzysztof Lichota, 2004.
+# SPDX-FileCopyrightText: 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+# Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Anna Wojdeł <ania@kbs.twi.tudelft.nl>
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2003, 2004.
 # Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
 # Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2013.
 # Michał Smoczyk <msmoczyk@wp.pl>, 2008.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022.
+# Corrections:
+# Waldemar Kochaniec
+# Jacek Stolarczyk
+#
+# Krzysztof Lichota, 2004.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2022-07-29 16:34+0200\n"
+"PO-Revision-Date: 2024-07-20 09:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -31,6 +31,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -50,57 +51,49 @@ msgstr "Dołącz do procesu"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search"
-msgstr ""
+msgstr "Poszukaj"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
 #: dialogs/processselection.ui:35
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Display"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
-msgstr "Wyświetlanie"
+msgstr "Wyświetl jako listę"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
 #: dialogs/processselection.ui:57
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Display"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
-msgstr "Wyświetlanie"
+msgstr "Wyświetl jako drzewo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:80
-#, fuzzy, kde-format
-#| msgid "Attach to Process"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
-msgstr "Dołącz do procesu"
+msgstr "Własne procesy"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:88
-#, fuzzy, kde-format
-#| msgid "Attach to Process"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
-msgstr "Dołącz do procesu"
+msgstr "Procesy użytkownika"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:96
-#, fuzzy, kde-format
-#| msgid "Attach to Process"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
-msgstr "Dołącz do procesu"
+msgstr "Procesy systemowe"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:104
-#, fuzzy, kde-format
-#| msgid "Attach to Process"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
-msgstr "Dołącz do procesu"
+msgstr "Wszystkie procesy"
 
 #: dialogs/selectcoredialog.cpp:18
 #, kde-format

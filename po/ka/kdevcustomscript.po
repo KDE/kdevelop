@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-08 01:43+0000\n"
-"PO-Revision-Date: 2022-11-04 18:22+0100\n"
+"PO-Revision-Date: 2024-07-20 05:41+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: customscript_plugin.cpp:87
 #, kde-format
@@ -28,6 +28,12 @@ msgid ""
 "that formatting configurations can be easily shared by all team members, "
 "independent of their preferred IDE."
 msgstr ""
+"<b>კოდის შეწევა და და დაფორმატება.</b><br />ეს დამატება მძლავრ გარე "
+"დაფორმატების პროგრამებს იყენებს, რომლებიც ბრძანების სტრიქონიდან შეგიძლიათ, "
+"გაუშვათ.<br />მაგალითად, შეგიძლიათ გამოიყენოთ <b>uncrustify</b>, <b>astyle</"
+"b> ან <b>indent</b>. <br />ბრძანების სტრიქონის დამფორმატებლების უპირატესობა "
+"ისაა, რომ მისი კონფიგურაცია ადვილად შეგიძლიათ, გუნდის წევრებს შორის "
+"გააზიაროთ, მათ მიერ გამოყენებული IDE-ის მიუხედავად."
 
 #: customscript_plugin.cpp:99
 #, kde-format
@@ -36,6 +42,8 @@ msgid ""
 "Note: each custom script style requires a certain tool executable to be "
 "installed. Otherwise, code will not be formatted."
 msgstr ""
+"შენიშვნა: თითოეული მორგებული სკრიპტის სტილს სჭირდება თავისი გამშვები "
+"პროგრამა. წინააღმდეგ შემთხვევაში კოდი დაფორმატებული არ იქნება."
 
 #: customscript_plugin.cpp:227
 #, kde-format
@@ -65,6 +73,10 @@ msgid ""
 "<b>.clang-format</b> configuration file, usually located in the project root "
 "directory."
 msgstr ""
+"აღწერა:<br /><br /><b>clang-format</b> ავტომატური კოდის დამფორმატებელია LLVM "
+"პროექტისგან. მას სხვადასხვა დაფორმატების სტილების პარამეტრების მხარდაჭერა "
+"აქვს <b>.clang-format</b> კონფიგურაციის ფაილის მეშვეობით, რომელიც, "
+"ჩვეულებრივ პროექტის ძირითად საქაღალდეშია მოთავსებული."
 
 #: customscript_plugin.cpp:279
 #, kde-format
@@ -83,6 +95,19 @@ msgid ""
 "b> using the <b>uncrustify</b> tool with the config-file <b>uncrustify."
 "config</b>."
 msgstr ""
+"აღწერა:<br /><b>kdev_format_source</b> სკრიპტია, რომელიც KDevelop-ს მოჰყვება "
+"რომელიც საშუალებას გაძლევთ, დაფორმატების წესები დეტალურად მიუთითოთ "
+"მეტაფაილებით სახელად <b>format_sources</b> ფაილურ სისტემაში.<br /><br /"
+"><b>format_sources</b>-ის თითოეული ხაზი აღწერს ვაილდკარდების სიას, რომელსაც "
+"მოჰყვება ორიწერტილი და გამოყენებული დაფორმატების ბრძანება.<br /><br /"
+">დაფორმატების ბრძანებამ უნდა გამოიყენოს <b>$TMPFILE</b> დროებით ფაილთან "
+"წვდომისთვის.<br /><br />მაგალითად:<br /><b>*.cpp *.h : myformatter $TMPFILE</"
+"b><br />დააფორმატებს ყველა ფაილს, რომელიც სრულდება გაფართოებით <b>.cpp</b> "
+"ან <b>.h</b> მორგებული დაფორმატების სკრიპტით <b>myformatter</b>.<br /><br /"
+">მაგ: <br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config "
+"-o $TMPFILE</b> <br />გადააფორმატებს ყველა ფაილს ქვესაქაღალდეში <b>subdir</"
+"b> დამფორმატებლით <b>uncrustify</b> კონფიგურაცის ფაილით <b>uncrustify."
+"config</b>."
 
 #: customscript_plugin.cpp:539
 #, kde-format
@@ -99,6 +124,11 @@ msgid ""
 "add <b>$TMPFILE</b> into the command, then <br />a temporary file is used "
 "for transferring the code."
 msgstr ""
+"<i>აქ ნებისმიერი გარსის ბრძანება შეგიძლიათ, შეიყვანოთ.</i><br /"
+">დაუფორმატებელი კოდზე წვდომა ბრძანებას <br /> სტანდარტული შეყვანიდან აქვს და "
+"<br /> დაფორმატებული შედეგი სტანდარტულ გამოტანაზე გამოჩნდება.<br /><br />თუ "
+"ბრძანების სტრიქონს <b>$TMPFILE</b>-ს დაამატებთ, <br />a კოდის გადასატანად "
+"დროებითი ფაილი იქნება გამოყენებული."
 
 #: customscript_plugin.cpp:560
 #, kde-format
@@ -123,6 +153,13 @@ msgid ""
 "b> will be replaced by the path of <br />a currently open project whose name "
 "is &lt;project name&gt;."
 msgstr ""
+"<b>$TMPFILE</b> დროებით ფაილამდე ბილიკით ჩანაცვლდება. <br />კოდი ჩაიწერება "
+"ფაილში. <br /> დროებითი ფაილი ჩანაცვლდება ამ მდებარეობაზე და შედეგი <br /"
+">წაკითხული იქნება ამ ფაილიდან. <br /><br /><b>$FILE</b> ჩანაცვლდება ბილიკით "
+"წყარო ფაილამდე.<br />ფაილის შემცველობა არ უნდა შეიცვალოს. ცვლილებების შეტანა "
+"დაშვებულია, მხოლოდ <br /> $TMPFILE-ში<br /><br /><b>${&lt;project name&gt;}</"
+"b> ჩანაცვლდება <br />ამჟამად გახსნილი პროექტით, რომლის სახელიცაა &lt;project "
+"name&gt;."
 
 #: customscript_plugin.cpp:595
 #, kde-format

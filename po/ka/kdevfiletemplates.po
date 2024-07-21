@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-01 01:44+0000\n"
-"PO-Revision-Date: 2022-09-12 09:36+0200\n"
+"PO-Revision-Date: 2024-07-20 07:13+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: classidentifierpage.cpp:31
 #, kde-format
@@ -49,6 +49,8 @@ msgid ""
 "Allows you to create new source code files, such as classes or unit tests, "
 "using templates."
 msgstr ""
+"საშუალებას გაძლევთ, ახალი პროგრამული კოდის ფაილები შექმნათ, როგორიცაა "
+"კლასები ან ერთეულის შემოწმებები, ნიმუშების გამოყენებით."
 
 #: filetemplatesplugin.cpp:72
 #, kde-format
@@ -192,6 +194,8 @@ msgstr "აბსტრაქტული ფუნქცია"
 msgid ""
 "Choose one target to add the file or cancel if you do not want to do so."
 msgstr ""
+"აირჩიეთ ერთი სამიზნე ფაილის დასამატებლად ან გაუქმება, თუ ამის გაკეთება არ "
+"გსურთ."
 
 #: templateclassassistant.cpp:280 templateclassassistant.cpp:527
 #, kde-kuit-format
@@ -217,6 +221,7 @@ msgctxt "@title:window"
 msgid ""
 "Create Files from Template <filename>%1</filename> in <filename>%2</filename>"
 msgstr ""
+"შექმენით ფაილები ნიმუშიდან <filename>%1</filename> <filename>%2</filename>-ში"
 
 #: templateclassassistant.cpp:325
 #, kde-kuit-format
@@ -284,6 +289,7 @@ msgid ""
 "The active text document is not a <application>KDevelop</application> "
 "template"
 msgstr ""
+"აქტიური დოკუმენტი<application>KDevelop</application>-ის ნიმუშს არ წარმოადგენს"
 
 #: templatepreviewtoolview.cpp:94
 #, kde-format
@@ -355,7 +361,7 @@ msgstr "ენა"
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
-msgstr ""
+msgstr "პლატფორმა"
 
 #: templateselectionpage.cpp:207
 #, kde-format
@@ -379,7 +385,7 @@ msgstr "შაბლონის ფაილიდან წაკითხვ�
 #: ui/licensechooser.ui:29
 #, kde-format
 msgid "Choose the license under which to place the generated content."
-msgstr ""
+msgstr "აირჩიეთ ლიცენზია შექმნილი შემცველობისთვის."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/licensechooser.ui:44
@@ -393,7 +399,7 @@ msgstr "ლიცენზიის ტიპი:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable if you want to save this license for future use"
-msgstr ""
+msgstr "ჩართეთ ეს, თუ გნებავთ, ეს ლიცენზია მოგვიანებით გამოსაყენებლად შეინახოთ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, saveLicense)
 #: ui/licensechooser.ui:67
@@ -410,12 +416,15 @@ msgid ""
 "<code>&lt;day&gt;</code> and <code>&lt;copyright holder&gt;</code> as "
 "placeholders.</p>"
 msgstr ""
+"<p>ადგილმჭერებად შეგიძლიათ <code>&lt;year&gt;</code>, <code>&lt;month&gt;</"
+"code>, <code>&lt;day&gt;</code> და <code>&lt;copyright holder&gt;</code> "
+"გამოყენოთ.</p>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ui/newclass.ui:29
 #, kde-format
 msgid "Identify the class and any classes from which it is to inherit."
-msgstr ""
+msgstr "აღწერეთ კლასი ან კლასები, რომლიდანაც ის მემკვიდრეობას მიიღებს."
 
 #. i18n: ectx: property (text), widget (QLabel, identifierLabel)
 #: ui/newclass.ui:35 ui/testcases.ui:35
@@ -435,20 +444,20 @@ msgstr "&მემკვიდრეობა:"
 #: ui/outputlocation.ui:29
 #, kde-format
 msgid "Choose where to save the generated content."
-msgstr ""
+msgstr "აირჩიეთ, სად იქნება შენახული შექმნილი შემცველობა."
 
 #. i18n: ectx: property (text), widget (QCheckBox, lowerFilenameCheckBox)
 #: ui/outputlocation.ui:59
 #, kde-format
 msgctxt "@option:check"
 msgid "Lower case file names"
-msgstr ""
+msgstr "ქვედა რეგისტრის ფაილის სახელები"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ui/overridevirtuals.ui:20
 #, kde-format
 msgid "Select any methods you would like to override in the new class."
-msgstr ""
+msgstr "აირჩიეთ ნებისმიერი მეთოდი, რომელიც გნებავთ, ახალ კლასში გადაფაროთ."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
 #: ui/overridevirtuals.ui:42
@@ -489,7 +498,7 @@ msgstr "მონიშვნის &მოხსნა"
 #: ui/testcases.ui:29
 #, kde-format
 msgid "Set the test name and its test cases."
-msgstr ""
+msgstr "დააყენეთ შემოწმების და მისი შემთხვევების სახელი."
 
 #. i18n: ectx: property (text), widget (QLabel, testCasesLabel)
 #: ui/testcases.ui:48

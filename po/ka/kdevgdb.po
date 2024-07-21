@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-09-06 10:38+0200\n"
+"PO-Revision-Date: 2024-07-20 07:23+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -60,6 +60,13 @@ msgid ""
 "If custom format string is not enabled, names and values of all expressions "
 "will be printed, using \"%d\" as format specifier for all expressions."
 msgstr ""
+"<b>დაფორმატების მორგებული სტრიქონი</b>\n"
+"<p>მიუთითეთ სტრიქონი C-ის სტილის ფორმატში, რომელიც გამოყენებული იქნება "
+"არჩეული გამოსახულების დასაბეჭდად. მაგ:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt</p>\n"
+"თუ მორგებული ფორმატის სტრიქონი ჩართული არაა, დაიბეჭდება სახელები და "
+"მნიშვნელობები ყელა გამოსახულებისთვის, ფორმატის მიმთითებლად \"%d\"-ის "
+"გამოყენებით."
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
@@ -249,7 +256,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Display &demangled names:"
-msgstr ""
+msgstr "&წაკითხვადი სახელების ჩვენება:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
 #: gdbconfigpage.ui:133
@@ -266,7 +273,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "S&tart debugger with:"
-msgstr ""
+msgstr "&გამმართველის გაშვებისას გაიხსნება:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:154
@@ -388,7 +395,7 @@ msgstr "&GDB ბრძანება:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
-msgstr ""
+msgstr "შეაჩერეთ აპის შესრულება GDB-ის ბრძანებების შესაყვანად"
 
 #: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
 #, kde-format
@@ -404,6 +411,9 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
+"აკონტროლებს, ნაჩვენებია თუ არა KDevelop-ის მიერ გაშვებული ბრძანებები.<br>ეს "
+"პარამეტრი გავლებას იქონიებს, მხოლოდ, მომავალში გაშვებულ ბრძანებებზე. ის არ "
+"წაშლის ან დაამატებს უკვე ჩამოთვლილ ბრძანებებს ფანჯრიდან."
 
 #: gdboutputwidget.cpp:381
 #, kde-format

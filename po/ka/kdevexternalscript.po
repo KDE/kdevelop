@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-07-22 11:33+0200\n"
+"PO-Revision-Date: 2024-07-20 07:08+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: editexternalscript.cpp:30
 #, kde-format
@@ -51,6 +51,31 @@ msgid ""
 "<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
 "commands that could lead to data loss.</p>\n"
 msgstr ""
+"<p>აღწერსბრძანებას, რომელიც უნდა შესრულდეს, როცა სკრიპტი გაეშვება. "
+"ხელმისაწვდომია თქვენ პლატფორმის ძირითადი ფუნქციები.</p>\n"
+"<p>არსებობს რამდენიმე ადგილმჭერი, რომელიც ბრძანებაში შეგიძლიათ, გამოიყენოთ:</"
+"p>\n"
+"<dl>\n"
+"  <dt><code>%u</code></dt>\n"
+"  <dd>ჩანაცვლდება აქტიური დოკუმენტის URL-ით.</dd>\n"
+"  <dt><code>%f</code></dt>\n"
+"  <dd>ჩანაცვლდება აქტური დოკუმენტის ლოკალური ფაილის ბილიკით.</dd>\n"
+"  <dt><code>%n</code></dt>\n"
+"  <dd>ჩანაცვლდება აქტიური დოკუმენტის სახელით, გაფართოების ჩათვლით.</dd>\n"
+"  <dt><code>%b</code></dt>\n"
+"  <dd>ჩანაცვლდება აქტიური დოკუმენტის სახელით გაფართოების გარეშე.</dd>\n"
+"  <dt><code>%d</code></dt>\n"
+"  <dd>ჩანაცვლდება აქტიური დოკუმენტის საქაღალდის ბილიკით.</dd>\n"
+"  <dt><code>%p</code></dt>\n"
+"  <dd>ჩანაცვლდება აქტიური დოკუმენტის პროექტის URL-ით.</dd>\n"
+"  <dt><code>%s</code></dt>\n"
+"  <dd>ჩანაცვლდება აქტიური დოკუმენტის მონიშნული ნაწილის უსაფრთხოდ "
+"გადაწოდებული შემცველობით.</dd>\n"
+"  <dt><code>%i</code></dt>\n"
+"  <dd>ჩანაცვლდება KDevelop-ის გაშვებული პროცესისPID-ით.</dd>\n"
+"</dl>\n"
+"<p><b>შენიშვნა:</b>  ბრძანებების გაშვება, რომელიც სისტემას დააზიანებს, "
+"გაშვება თქვენი პასუხისმგებლობის ქვეშაა.</p>\n"
 
 #: editexternalscript.cpp:56
 #, kde-format
@@ -59,6 +84,8 @@ msgid ""
 "<p>Defines what the external script should get as input (via <code>STDIN</"
 "code>).</p>"
 msgstr ""
+"<p>მიუთითებს, რა უნდა მიიღოს გარე სკრიპტმა შეყვანის მონაცემების სახით "
+"(<code>STDIN</code>-ით).</p>"
 
 #: editexternalscript.cpp:62
 #, kde-format
@@ -67,6 +94,8 @@ msgid ""
 "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
 "the script.</p>"
 msgstr ""
+"<p>აღწერს, რა მოუვა სკრიპტის გამოტანილ ინფორმაციას (ანუ <code>STDOUT</code>-"
+"ს)"
 
 #: editexternalscript.cpp:68
 #, kde-format
@@ -76,12 +105,15 @@ msgid ""
 "the script.</p><p>Note: if the action is the same as that chosen for the "
 "output, the channels will be merged and handled together.</p>"
 msgstr ""
+"<p>აღწერს, რა მოუვა სკრიპტის შეცდომებს (ანუ <code>STDERR</code>-ს).</"
+"p><p>შენიშვნა: თუ ეს ქმედება იგივეა, რაც არჩეულია უბრალო გამოტანისთვის, "
+"არხები შერწყმული იქნება და ერთად დამუშავდება.</p>"
 
 #: editexternalscript.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
-msgstr ""
+msgstr "<p>აღწერს სკრიპტის სახელს. მხოლოდ, საჩვენებლად.</p>"
 
 #: editexternalscript.cpp:82
 #, kde-format
@@ -89,6 +121,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines the shortcut(s) you can use to execute this external script.</p>"
 msgstr ""
+"<p>აღწერს მალსახმობ(ებ)-ს, რომელიც ამ გარე სკრიპტის შესასრულებლად შეგიძლიათ, "
+"გამოიყენოთ.</p>"
 
 #: editexternalscript.cpp:88
 #, kde-format
@@ -97,6 +131,7 @@ msgid ""
 "<p>Defines whether documents should be saved before the script gets executed."
 "</p>"
 msgstr ""
+"<p>აღწერს, უნდა იქნეს თუ არა დოკუმენტები შენახული სკრიპტის გაშვებამდე.</p>"
 
 #: editexternalscript.cpp:94
 #, kde-format
@@ -105,6 +140,8 @@ msgid ""
 "<p>Defines whether the output of the script should be shown in a tool view.</"
 "p>"
 msgstr ""
+"<p>განსაზღვრავს, იქნება თუ არა სკრიპტის გამოტანილი ინფორმაცია ნაჩვენები "
+"ხელსაწყოს ხედში.</p>"
 
 #: editexternalscript.cpp:98
 #, kde-format
@@ -113,6 +150,8 @@ msgid ""
 "<p>Defines what type of filtering should be applied to the output. E.g. to "
 "indicate errors by red text.</p>"
 msgstr ""
+"<p>განსაზღვრავს, რომელი ტიპის ფილტრი გადატარდება გამოტანილ ინფორმაციაზე. "
+"ანუ, შეცდომების გასაწითლებლად.</p>"
 
 #: editexternalscript.cpp:106
 #, kde-format
@@ -141,6 +180,9 @@ msgid ""
 "<p>The name will also be used as the identifier during code completion.</p>\n"
 "  <p><b>Note:</b> No spaces allowed.</p>"
 msgstr ""
+"<p>სახელი ასევე შეგიძლიათ, კოდის დასრულებისას იდენტიფიკატორადაც გამოიყენოთ.</"
+"p>\n"
+"   <p><b>შენიშვნა:</b> ჰარეები დაშვებული არაა.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, commandLabel)
 #: editexternalscript.ui:37
@@ -381,6 +423,8 @@ msgid ""
 "Cannot run script '%1' since it tries to access the editor contents but no "
 "document is open."
 msgstr ""
+"სკრიპტი '%1' ვერ გავუშვი, რადგან ის ცდილობს, რედაქტორის შემცველობას "
+"მიმართოს, მაგრამ დოკუმენტები ღია არაა."
 
 #: externalscriptjob.cpp:224
 #, kde-format
@@ -481,6 +525,8 @@ msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
 "i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
 msgstr ""
+"<p>მართლა გნებავთ, წაშალოთ გარე სკრიპტის კონფიგურაცია <i>%1</i>-სთვის?</"
+"p><p><i>შენიშვნა:</i> თვითონ სკრიპტი არ წაიშლება.</p>"
 
 #: externalscriptview.cpp:149
 #, kde-format
@@ -492,7 +538,7 @@ msgstr "დაადასტურეთ გარე სკრიპტის 
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr ""
+msgstr "წაშლა"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterText)
 #: externalscriptview.ui:35

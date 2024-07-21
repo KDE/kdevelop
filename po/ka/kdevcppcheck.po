@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-04-24 19:25+0200\n"
+"PO-Revision-Date: 2024-07-20 06:43+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
 #, kde-format
@@ -99,6 +99,9 @@ msgid ""
 "are false positives with this option. Each result must be carefully "
 "investigated before you know if it is good or bad."
 msgstr ""
+"Cppcheck-ის ანგარიშების დაშვება მაშინაც კი, როცა ანალიზი საეჭვოა. ამ "
+"პარამეტრს ცრუ-დადებითი შედეგების მიღება შეუძლია. თითოეული შედეგი ფრთხილად "
+"უნდა შეამოწმოთ, სანამ არ დარწმუნდებით, ის ცუდია, თუ კარგი."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:63
@@ -129,6 +132,8 @@ msgid ""
 "Warn if there are missing includes. For detailed information use 'check-"
 "config'"
 msgstr ""
+"გაფრთხილება, თუ არსებობს ნაკლული ჩასასმელი ფაილები. დეტალური ინფორმაციისთვის "
+"გამოიყენეთ 'check-config'"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:86
@@ -162,6 +167,12 @@ msgid ""
 "that is effective.<br/><br/>Be careful with using this option - it can "
 "dramatically slow checking.</p>"
 msgstr ""
+"<p>ნაძალადევი შემოწმება ფაილებისთვის, რომლებსაც ბევრი კონფიგურაცია აქვთ. "
+"შეცდომა გამოტანილი იქნება, თუ ასეთი ფაილი აღმოჩენილია და არ არსებობს მიზეზი, "
+"რატომაც ეს ნაგულისხმევად იქნეს გამოყენებული. თუ გამოიყენება პარამეტრთან '--"
+"max-configs=' ერთად, გამოყენებული იქნება, მხოლოდ, ბოლო პარამეტრი.<br/><br/"
+">ფრთხილად იყავით ამ პარამეტრის გამოყენებისას - მას შემოწმების დროის "
+"კატასტროფული ზრდა შეუძლია, გამოიწვიოს.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:112
@@ -192,6 +203,8 @@ msgid ""
 "Enable all coding style checks. All messages with the severities 'style', "
 "'performance' and 'portability' are enabled."
 msgstr ""
+"ყველა კოდირების სტილის შემოწმების ჩართვა. ჩართულია ყველა შეტყობინება "
+"სიმძიმით 'სტილი', 'წარმადობა' და 'გადატანადობა'."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:135
@@ -208,6 +221,7 @@ msgid ""
 "Check Cppcheck configuration. The normal code analysis is disabled by this "
 "flag."
 msgstr ""
+"Cppcheck-ის კონფიგურაციის შემოწმება. ეს ალამი ნორმალური კოდის ანალიზს თიშავს."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:148
@@ -231,6 +245,9 @@ msgid ""
 "Add 'project' include directories to Cppcheck arguments. This option adds "
 "only paths related with project's root and build directories."
 msgstr ""
+"'პროექტში' ჩასმული საქაღალდეების დამატება Cppcheck-ის არგუმენტებისთვის. ეს "
+"პარამეტრი, ბილიკებს, მხოლოდ, პროექტის ძირითადი და აგების საქაღალდეებთან "
+"შედარებით ამატებს."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:167
@@ -247,6 +264,9 @@ msgid ""
 "<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
 ">Be careful with using this option - it can dramatically slow checking.</p>"
 msgstr ""
+"<p>სხვა, 'სისტემური' ჩასმის საქაღალდეების დამატება Cppcheck-ის "
+"არგუმენტებისთვის.<br/><br/>ფრთხილად იყავით ამ პარამეტრთან - მას შემოწმების "
+"დროის კატასტროფულად გაზრდა შეუძლია.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:183
@@ -281,6 +301,19 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
+"<html>\n"
+"\n"
+"<p>აღწერს წერტილმძიმით გამოყოფილ საქაღალდეების სიას გამოტოვებული ჩასასმელი "
+"საქაღალდეებისთვის.</p>\n"
+"\n"
+"<p>შეგიძლიათ, გამოიყენოთ შემდეგი ადგილმჭერები:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - ჩანაცვლდება პროექტის ძირითადი საქაღალდის URL-ით.</"
+"p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - ჩანაცვლდება პროექტის აგების საქაღალდის URL-ით.</p>\n"
+"\n"
+"</html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabExtra)
 #: config/projectconfigpage.ui:241
@@ -315,6 +348,18 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
+"<html>\n"
+"\n"
+"<p>აღწერს დამატებით პარამეტრებს cppcheck-სთვის (იხილეთ დოკუმენტაცია).</p>\n"
+"\n"
+"<p>შეგიძლიათ გამოიყენოთ შემდეგი ადგილმჭერები:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - ჩანაცვლდება პროექტის ძირითადი საქაღალდის URL-ით.</"
+"p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - ჩანაცვლდება პროექტის აგების საქაღალდის URL-ით.</p>\n"
+"\n"
+"</html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: config/projectconfigpage.ui:308
@@ -382,11 +427,18 @@ msgid ""
 "'XX' value can be found in any project's moc-generated file or in the "
 "<QtCore/qobjectdefs.h> header file."
 msgstr ""
+"როგორც ჩანს, ეს პროექტი Qt ბიბლიოთეკას იყენებს. იმისათვის, რომ cppcheck-მა "
+"სწორად იმუშაოს, Q_MOC_OUTPUT_REVISION-ის მნიშვნელობა უნდა დააყენოთ. "
+"სამწუხაროდ, დამატებამ ეს მნიშვნელობა ავტომატურად ვერ იპოვა და ის ხელით უნდა "
+"დააყენოთ. ამისათვის დამატებით პარამეტრებში ჩაამატეთ '-"
+"DQ_MOC_OUTPUT_REVISION=XX'. მნიშვნელობა 'XX' შეგიძლიათ, ნებისმიერი პროექტის "
+"moc-ით გენერირებულ ფაილში ან <QtCore/qobjectdefs.h> თავსართის ფაილში "
+"შეგიძლიათ."
 
 #: parser.cpp:220
 #, kde-format
 msgid "Cppcheck XML Parsing: error at line %1, column %2: %3"
-msgstr ""
+msgstr "Cppcheck XML დამუშავება: შეცდომა ხაზთან %1, სვეტი %2: %3"
 
 #: plugin.cpp:51
 #, kde-format

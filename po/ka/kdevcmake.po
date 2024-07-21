@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-13 01:43+0000\n"
-"PO-Revision-Date: 2023-01-23 06:35+0100\n"
+"PO-Revision-Date: 2024-07-20 05:20+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -243,6 +243,11 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
+"მორგებული პროექტი '%1' მოძველებული CMake-ის მონაცემებით. შედეგად, KDevelop-"
+"ის მიერ კოდის აღქმა, შეიძლება, არასწორი აღმოჩნდეს.\n"
+"\n"
+"ამ პრობლემის გასასწორებლად დააწკაპუნეთ თაგუნას მარჯვენა ღილაკით ელემენტზე "
+"პროექტის ხელსაწყოს ხედში და დააწკაპუნეთ 'თავიდან ჩატვირთვაზე'."
 
 #: cmakemanager.cpp:666
 #, kde-format
@@ -255,6 +260,13 @@ msgid ""
 "settings. Then right-click the project item in the projects tool view and "
 "click 'Reload'."
 msgstr ""
+"პროექტის '%1' მორგება ჩავარდა (შეცდომის შეტყობინება: %2). შედეგად, KDevelop-"
+"ი მიერ კოდის აღქმა, შეიძლება, არასწორი აღმოჩნდეს.\n"
+"\n"
+"ამ პრობლემის აღმოსაფხვრელად დარწმუნდით, რომ პროექტის CMakeLists.txt ფაილების "
+"სწორია და რომ KDevelop-ს სწორი CMake-ის ვერსია და პარამეტრები აქვს "
+"მითითებული. შემდეგ უბრალოდ დააწკაპუნეთ თაგუნას მარჯვენა ღილაკით პროექტის "
+"ელემენტზე პროექტის ხელსაწყოს ხედში და დააწკაპუნეთ 'თავიდან ჩატვირთვაზე'."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74

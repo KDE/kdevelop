@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-09-17 06:32+0200\n"
+"PO-Revision-Date: 2024-07-20 06:53+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -221,6 +221,8 @@ msgid ""
 "Indent, instead of align, continuation lines following lines that contain an "
 "opening paren '(' or an assignment '='."
 msgstr ""
+"შეწევა, გასწორების მაგიერ, გასაგრძელებელი ხაზებისა, რომლებიც მოჰყვებიან "
+"ხაზებს, რომლებიც გამხსნელ ფრჩხილს '(' ან მინიჭებას '=' შეიცავენ."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)
 #: astyle_preferences.ui:272
@@ -258,6 +260,8 @@ msgid ""
 "Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
 "from their immediately preceding closing brackets."
 msgstr ""
+"დამხურავი ფრთხილების გადატანა (მაგ: 'else', 'catch' და ა.შ.)\n"
+"თავიანთი ზუსტად წინა დამხურავი ფრჩხილებიდან."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
 #: astyle_preferences.ui:329
@@ -309,13 +313,15 @@ msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
 msgstr ""
+"ფიგურული ფრჩხილების უფრჩხილო ერთხაზიანი ოპერატორებისთვის (მაგ: 'if', 'for', "
+"'while')"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
 #, kde-format
 msgctxt "@option:check add braces to unbraced one-line conditional statements"
 msgid "Add b&races"
-msgstr ""
+msgstr "&ფიგურული ფრჩხილების დამატება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
 #: astyle_preferences.ui:386
@@ -339,6 +345,15 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
+"ცარიელი ხაზების დამატება შეუსაბამო ბლოკების, ჭდეების, კლასების გარეშემო\n"
+"ცნობილი პრობლემები:\n"
+"\n"
+"1. თუ ბრძანება ბლოკის ნაწილი არაა,\n"
+"შემდეგი ბრძანებები ორმაგი გამოტოვებებითაა.\n"
+"ბლოკში ჩასმული ბრძანებები სწორად\n"
+"დაფორმატდება.\n"
+"\n"
+"2. კომენტარები მოცილდება ბლოკიდან.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreak)
 #: astyle_preferences.ui:404
@@ -364,6 +379,17 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
+"--break-blocks-ის ნაცვლად, ოღონდ ასევე ჩასვამს ცარიელ ხაზებს\n"
+"დამხურავი თავსართების ('else', 'catch') გარშემო.\n"
+"\n"
+"ცნობილი პრობლემები:\n"
+"\n"
+"1. თუ ბრძანება ბლოკის ნაწილი არაა,\n"
+"მომყოლი ბრძანებები ორმაგი ჰარეებითაა.\n"
+"ბლოკში ჩასმული ბრძანებები სწორად\n"
+"დაფორმატდება.\n"
+"\n"
+"2. კომენტარები მოცილებული იქნება ბლოკიდან.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreakAll)
 #: astyle_preferences.ui:425
@@ -377,7 +403,7 @@ msgstr "ყველა ბლოკის დაშლა"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Break 'else if()' statements into two different lines."
-msgstr ""
+msgstr "'else if()' ბრძანების დაყოფა ორ ხაზზე."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:435
@@ -437,20 +463,23 @@ msgid ""
 "Once padded, operators stay padded.\n"
 "There is no unpad operator option."
 msgstr ""
+"ოპერატორების გარშემო ჰარეების ჩასმა.\n"
+"ჰარეების ჩასმისას ოპერატორი ასე დარჩება.\n"
+"ჰარეების მოცილების პარამეტრი არ არსებობს."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:493
 #, kde-format
 msgctxt "@option:check"
 msgid "&Add spaces around operators"
-msgstr ""
+msgstr "&ჰარეების დამატება ოპერატორების გარშემო"
 
 #. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
 #: astyle_preferences.ui:500
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pad parenthesis:"
-msgstr ""
+msgstr "გაწევა ფრჩხილებიდან:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:507
@@ -459,14 +488,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
 "'while', ...)"
-msgstr ""
+msgstr "ჰარეების ჩასმა ფრთხილებით დაწყებისას (მაგ: 'if', 'for', 'while',....)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:510
 #, kde-format
 msgctxt "@option:check"
 msgid "Add spaces after parenthesis &headers"
-msgstr ""
+msgstr "ჰარეების დამატება ფრჩხილებით &დაწყებისას"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
 #: astyle_preferences.ui:522
@@ -483,6 +512,8 @@ msgid ""
 "Do not break lines containing multiple statements into\n"
 "multiple single-statement lines."
 msgstr ""
+"ხაზები, რომლებიც ერთხზე მეტ ბრძანებას შეიცავს,\n"
+"მრავალ ერთბრძანებიან ხაზად არ დაიყოფა."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:532

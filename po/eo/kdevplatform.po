@@ -2,15 +2,15 @@
 # Copyright (C) 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
-# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+# Oliver Kellogg <olivermkellogg@gmail.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-04-23 21:12+0100\n"
-"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"PO-Revision-Date: 2024-07-20 17:03+0200\n"
+"Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "Axel Rousseau, Oliver Kellogg"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "axel@esperanto-jeunes.org, okellogg@users.sourceforge.net"
+msgstr "axel@esperanto-jeunes.org, olivermkellogg@gmail.com"
 
 #: debugger/breakpoint/breakpoint.cpp:195
 #, kde-format
@@ -2736,11 +2736,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "Ŝlosi la Panelon Nekaŝe"
 
 #: shell/openprojectdialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1|All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "%1|Ĉiuj Projektdosieroj (%1)"
+msgstr "Ĉiuj Projektdosieroj"
 
 #: shell/openprojectdialog.cpp:133
 #, kde-format
@@ -6195,21 +6194,3 @@ msgstr "Diferenco Al Antaŭa"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferenco inter Revizioj"
-
-#~ msgid "Could not find an open document"
-#~ msgstr "Ne eblis trovi malfermitan dokumenton"
-
-#~ msgid "Could not find the chain for the selected document: %1"
-#~ msgstr "Ne eblis trovi la ĉenon por la elektita dokumento: %1"
-
-#~ msgid "Error finding context for selection range"
-#~ msgstr "Eraro trovi kuntekston por elekta intervalo"
-
-#~ msgid "Error checking conditions to generate code: %1"
-#~ msgstr "Eraro kontrolante kondiĉojn por generi kodon: %1"
-
-#~ msgid "Error Gathering user information: %1"
-#~ msgstr "Eraro dum kolektado de uzantinformoj: %1"
-
-#~ msgid "Error generating code: %1"
-#~ msgstr "Eraro dum generado de kodo: %1"

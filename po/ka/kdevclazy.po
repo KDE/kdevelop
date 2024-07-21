@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-09-12 09:38+0200\n"
+"PO-Revision-Date: 2024-07-20 05:26+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -379,13 +379,17 @@ msgid ""
 "None of the built-in checks benefit from this, but can be useful for custom "
 "checks."
 msgstr ""
+"არააშკარა კოდის, როგორიცაა კომპილატორის დაგენერირებული კონსტრუქტორები, "
+"ნახვა.\n"
+"ჩაშენებული შემოწმებები ამისგან სარგებელს არ იღებენ, მაგრამ, შეიძლება, "
+"მორგებული შემოწმებებისთვის იყოს სასარგებლო."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_visitImplicitCode)
 #: config/projectconfigpage.ui:112
 #, kde-format
 msgctxt "@option:check"
 msgid "Visit implicit code"
-msgstr ""
+msgstr "არააშკარა კოდის ნახვა"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ignoreIncludedFiles)
 #: config/projectconfigpage.ui:129
@@ -396,6 +400,9 @@ msgid ""
 "includes.\n"
 "Useful for performance reasons."
 msgstr ""
+"გაფრთხილებების, მხოლოდ, ამჟამად კომპილირებადი ფაილისთვის გამოტანა. ჩასმული "
+"ფაილები გამოტოვებული იქნება.\n"
+"გამოსადეგია წარმადობის გამო."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ignoreIncludedFiles)
 #: config/projectconfigpage.ui:132
@@ -420,6 +427,10 @@ msgid ""
 "from.\n"
 "Diagnostics from the main file of each translation unit are always displayed."
 msgstr ""
+"რეგულარული გამოხატულება, რომელიც ემთხვევა სათაურების სახელებს დიაგნოსტიკის "
+"გამოსატანად.\n"
+"დიაგნოსტიკა თითოეული მთარგმნელობითი ერთეულის ძირითადი ფაილიდან ყოველთვის "
+"ნაჩვენებია."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
 #: config/projectconfigpage.ui:172
@@ -451,6 +462,10 @@ msgid ""
 "parallel checking, which can lead to multiple fix-it applying for header "
 "files."
 msgstr ""
+"დაამარქაფეთ თქვენი კოდი ჩასწორებების გადატარებამდე. უკეთესი შედეგებისთვის "
+"ასევე\n"
+"გათიშეთ პარალელური შემოწმება, რომელმაც თავსართის ფაილებში ბევრი ერთნაირი "
+"ცვლილება შეუძლია, შეინტანოს."
 
 #. i18n: ectx: attribute (title), widget (QWidget, extraTab)
 #: config/projectconfigpage.ui:209

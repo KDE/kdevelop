@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-04-24 19:26+0200\n"
+"PO-Revision-Date: 2024-07-20 05:22+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: executeplugin.cpp:68
 #, kde-format
@@ -274,6 +274,8 @@ msgid ""
 "Specifies the action to take for the dependencies before starting the "
 "executable."
 msgstr ""
+"მიუთითებს ქმედებას, რომელიც შესრულდება დამოკიდებულებებისთვის, სანამ გამშვები "
+"ფაილი შესრულდება."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:291
@@ -284,6 +286,9 @@ msgid ""
 "allows there to be parts of a project, upon which the executable does not "
 "directly depend, to be built and/or installed before running the application."
 msgstr ""
+"მონიშნული ქმედება გაეშვება შესრულებადი ფაილის გაშვებამდე.  ეს საშუალებას "
+"გაძლევთ, რომ არსებობდეს პროექტის ნაწილები, რომლებზეც გამშვები ფაილი პირდაპირ "
+"დამოკიდებული არაა, რომ აიგოს და დადგეს აპლიკაციის გაშვებამდე."
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:298
