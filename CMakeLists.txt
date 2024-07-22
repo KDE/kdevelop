@@ -120,7 +120,7 @@ if(KSysGuard_FOUND)
     set(HAVE_KSYSGUARD TRUE)
 endif()
 
-find_package(KDevelop-PG-Qt 1.90.90 CONFIG)
+find_package(KDevelop-PG-Qt 2.3)
 set_package_properties(KDevelop-PG-Qt PROPERTIES
     PURPOSE "KDevelop parser generator library. Required for the QMake Builder/Manager plugin."
     TYPE RECOMMENDED
