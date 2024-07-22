@@ -16,13 +16,16 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testhelpers.h>
-#include <vcs/interfaces/ipatchsource.h>
 
 #include <QByteArray>
 #include <QFileInfo>
+#include <QMimeDatabase>
 #include <QString>
 #include <QTest>
+#include <QtLogging>
 #include <QUrl>
+
+#include <algorithm>
 
 using namespace KDevelop;
 
@@ -58,11 +61,26 @@ void LanguageControllerTestBase::initTestCase()
     TestCore::initialize();
     m_subject = Core::self()->languageController();
 
-    m_havePatchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>() != nullptr;
-    if (!m_havePatchReview) {
-        const auto it = m_differentLanguagesUrls.cbegin() + 2;
-        QCOMPARE(it->languageName, "diff");
-        m_differentLanguagesUrls.erase(it);
+    // Remove entries for languages supported by unavailable optional plugins.
+    for (auto it = m_differentLanguagesUrls.cbegin(); it != m_differentLanguagesUrls.cend();) {
+        const auto mimeType = QMimeDatabase().mimeTypeForFile(it->url.fileName(), QMimeDatabase::MatchExtension);
+        QVERIFY(mimeType.isValid());
+        QVERIFY(!mimeType.isDefault());
+
+        const QVariantMap constraints{{"X-KDevelop-SupportedMimeTypes", mimeType.name()}};
+        const bool languagePluginLoaded =
+            !ICore::self()->pluginController()->queryExtensionPlugins("ILanguageSupport", constraints).empty();
+        if (languagePluginLoaded) {
+            ++it;
+        } else {
+            qWarning() << "expected language plugin" << it->languageName << "for MIME type" << mimeType.name()
+                       << "has not been loaded => skipping test data rows for this language";
+            it = m_differentLanguagesUrls.erase(it);
+        }
+    }
+
+    if (m_differentLanguagesUrls.empty()) {
+        QSKIP("zero language plugins => skip the entire test to prevent an assertion failure in QTest::fetchData()");
     }
 }
 
@@ -96,22 +114,22 @@ void LanguageControllerTestBase::matchingLanguagesForUrlInBackgroundThreadTestDa
     QTest::addColumn<QUrl>("url");
     QTest::addColumn<QString>("languageName");
 
-    QTest::newRow("CMakeLists") << testUrl("CMakeLists.txt") << "CMake";
-    QTest::newRow("cmakelists wrong case") << testUrl("cmakelists.TXT") << "CMake";
+    newOptionalRow("CMakeLists", testUrl("CMakeLists.txt"), "CMake");
+    newOptionalRow("cmakelists wrong case", testUrl("cmakelists.TXT"), "CMake");
 
-    QTest::newRow("lower-case") << testUrl("x.cpp") << "clang";
-    QTest::newRow("upper-case") << testUrl("Y.CPP") << "clang";
-    QTest::newRow("mixed-case") << testUrl("aBc.CpP") << "clang";
+    newOptionalRow("lower-case", testUrl("x.cpp"), "clang");
+    newOptionalRow("upper-case", testUrl("Y.CPP"), "clang");
+    newOptionalRow("mixed-case", testUrl("aBc.CpP"), "clang");
 
-    QTest::newRow(".C") << testUrl("ambiguous.C") << "clang";
-    QTest::newRow(".cl") << testUrl("Open.cl") << "clang";
+    newOptionalRow(".C", testUrl("ambiguous.C"), "clang");
+    newOptionalRow(".cl", testUrl("Open.cl"), "clang");
 
-    QTest::newRow("existent C with extension") << existentTestUrl("t.c") << "clang";
+    newOptionalRow("existent C with extension", existentTestUrl("t.c"), "clang");
 
     for (const auto& url : m_differentLanguagesUrls) {
         const auto filename = url.url.fileName();
         const auto extension = filename.mid(filename.lastIndexOf('.'));
-        QTest::newRow(extension.toUtf8().constData()) << url.url << url.languageName;
+        newOptionalRow(extension.toUtf8().constData(), url.url, url.languageName);
     }
 }
 
@@ -119,10 +137,8 @@ void LanguageControllerTestBase::matchingLanguagesForUrlTestData() const
 {
     matchingLanguagesForUrlInBackgroundThreadTestData();
 
-    QTest::newRow("existent C w/o extension") << existentTestUrl("X") << "clang";
-    if (m_havePatchReview) {
-        QTest::newRow("existent patch w/o extension") << existentTestUrl("y") << "diff";
-    }
+    newOptionalRow("existent C w/o extension", existentTestUrl("X"), "clang");
+    newOptionalRow("existent patch w/o extension", existentTestUrl("y"), "diff");
 }
 
 void LanguageControllerTestBase::nonmatchingLanguagesForUrlTestData()
@@ -134,6 +150,20 @@ void LanguageControllerTestBase::nonmatchingLanguagesForUrlTestData()
     QTest::newRow("OpenDocument Text") << testUrl("b.odt");
     QTest::newRow("existent archive with extension") << existentTestUrl("N.tar.gz");
     QTest::newRow("existent archive w/o extension") << existentTestUrl("z");
+}
+
+void LanguageControllerTestBase::newOptionalRow(const char* dataTag, const QUrl& url, const QString& languageName) const
+{
+    const bool languagePluginLoaded = std::any_of(m_differentLanguagesUrls.cbegin(), m_differentLanguagesUrls.cend(),
+                                                  [&languageName](const UrlEntry& entry) {
+                                                      return entry.languageName == languageName;
+                                                  });
+    if (languagePluginLoaded) {
+        QTest::newRow(dataTag) << url << languageName;
+    } else {
+        qWarning() << "skipping test data row because its language plugin is unavailable:" << dataTag << url.fileName()
+                   << languageName;
+    }
 }
 
 #include "moc_languagecontrollertestbase.cpp"
