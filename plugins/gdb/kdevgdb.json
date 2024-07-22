@@ -16,6 +16,7 @@
         "Description[fr]": "Ce module fournit une interface pour GDB, un débogueur niveau source pour le C, C++ et plus.",
         "Description[gl]": "Este complemento fornece unha interface para GDB, un depurador a nivel do código fonte para C, C++ e outros.",
         "Description[it]": "Questa estensione fornisce un'interfaccia per GDB, un debugger a livello sorgente per C, C++ e altro.",
+        "Description[ka]": "ეს დამატება წარმოადგენს წინაბოლოს GDB-სთვის, კოდის დონის გამმართველისთვის C/C++ და სხვა ენებისთვის.",
         "Description[ko]": "이 플러그인은 C, C++ 등 디버거인 GDB 프론트엔드를 제공합니다.",
         "Description[nl]": "Deze plugin levert een frontend voor GDB, een broncodedebugger voor C, C++ en meer.",
         "Description[pl]": "Udostępnia interfejs do GDB, programu diagnostycznego dla C, C++ i innych języków.",

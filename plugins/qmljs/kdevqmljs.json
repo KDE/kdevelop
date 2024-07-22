@@ -15,6 +15,7 @@
         "Description[fr]": "Prise en charge du langage QML / JS (utilisant le module « qmljs » de QtCreator)",
         "Description[gl]": "Compatibilidade con QML/JS (baseada en qmljs de QtCreator)",
         "Description[it]": "Supporto al linguaggio QML/JS (basato su qmljs di QtCreator)",
+        "Description[ka]": "QML/JS ენის მხარდაჭერა (დაფუძნებულია qmljs-ზე QtCreator-დან)",
         "Description[ko]": "QML/JS 언어 지원(QtCreator의 qmljs 기반)",
         "Description[nl]": "Taalondersteuning voor QML/JS (gebaseerd op qmljs uit QtCreator)",
         "Description[pl]": "Obsługa języka QML/JS (oparta na qmljs z QtCreator)",
