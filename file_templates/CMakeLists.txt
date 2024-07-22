@@ -24,6 +24,7 @@ set(filetemplate_DIRS
     testing/php_phpunit
 
     other/cmake_module
+    other/qt_qrc_file
 )
 
 kdevplatform_add_file_templates(${filetemplate_DIRS})

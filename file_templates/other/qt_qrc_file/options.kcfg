@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile arg="true"/>
+  <group name="Qt Resource Collection File">
+    <entry name="qrc_file_name" type="String">
+      <label>Collection file name</label>
+      <default>resources.qrc</default>
+    </entry>
+    <entry name="resource_prefix" type="String">
+      <label>Prefix</label>
+      <default>/</default>
+    </entry>
+    <entry name="file_name" type="String">
+      <label>File name</label>
+      <default></default>
+    </entry>
+    <entry name="alias_file_name" type="String">
+      <label>Alias file name</label>
+      <tooltip>Use empty string to not set an alias.</tooltip>
+      <default></default>
+    </entry>
+  </group>
+</kcfg>

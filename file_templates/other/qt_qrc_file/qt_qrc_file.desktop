@@ -1,0 +1,13 @@
+[General]
+Name=Qt Resource Collection File
+Comment=A simple version with one prefix and one file.
+Category=C++/Qt
+Language=C++
+Type=Other
+Files=QRC
+OptionsFile=options.kcfg
+
+[QRC]
+Name=Qt Resource Collection File
+File=output.qrc
+OutputFile={{ qrc_file_name }}
