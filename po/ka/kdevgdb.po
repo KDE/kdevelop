@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-07-20 07:23+0200\n"
+"PO-Revision-Date: 2024-07-21 05:41+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -85,6 +85,11 @@ msgid ""
 "expressions and continue execution when breakpoint is hit. You can think of "
 "it as printf debugging that does not require modifying the source.</p>"
 msgstr ""
+"<b>ტრეისინგის ჩართვა</b>\n"
+"<p>ტრეისინგი მექანიზმია, რომ ავტომატურად გამოიტანოთ არსებული გამოსახულების "
+"მნიშვნელობები და გააგრძელოთ შესრულება, როცა შეწყვეტის წერტილი მიღწეული "
+"იქნება. შეგიძლიათ ეს განიხილოთ, როგორც printf-ის გამართვა, რომელსაც კოდის "
+"შეცვლა არ სჭირდება.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:50
@@ -195,6 +200,11 @@ msgid ""
 "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
 "executable."
 msgstr ""
+"იმისათვი, რომ \"gdb\"-ის გამშვები ფაილი $PATH-დან გამოიყენოთ, ეს ველი "
+"ცარიელი დატოვეთ. იმისათვის, რომ 'gdb'-ის ბილიკი ხელით მიუთითოთ, მაგალითად, "
+"სხვა არქიტექტურისთვის, გამშვები ფაილის სახელი აქ შეიყვანეთ. 'gdb', "
+"შეგიძლიათ, $PATH-დან გაუშვათ, მაგრამ სხვა სახელით (მაგ: \"arm-gdb\") სახელის "
+"აქ აკრეფით, ან სრული ბილიკის მითითებით გამშვებ ფაილამდე 'gdb'."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:54
@@ -216,6 +226,12 @@ msgid ""
 "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
 "span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>თუ გნებავთ, gdb სპეციალურმა გარსის სკრიპტმა გაუშვას, "
+"რომელიც, მაგალითად, ბიბლიოთეკის ბილიკებს აყენებს სწორად, ის აქ ჩასვით. მაგ: /"
+"path/to/script.sh --scriptArguments</p><p>შენიშვნა: თქვენი სკრიპტი გაეშვება "
+"ასე: /path/to/script.sh --scriptArguments debugger --debuggerArguments. ეს "
+"კი ნიშნავს, რომ script.sh-მა თვითონ <span style=\" font-weight:600;\">უნდა</"
+"span> გაუშვას &quot;გამმართველის ბრძანება&quot;</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
 #: gdbconfigpage.ui:64
@@ -250,6 +266,12 @@ msgid ""
 "but if you need to debug into these values then\n"
 "check this option."
 msgstr ""
+"სტატიკური წევრების ჩვენება GDB-ს ანელებს,\n"
+"თუ მუშაობთ Qt-ზე ბაზირებულ კოდზე.\n"
+"მას შეუძლია, შეცვალოს მონაცემების \"ხელმოწერა\",\n"
+"რომელსაც QString და ძმანი მისნი იყენებენ.\n"
+"მაგრამ თუ გჭირდებათ, გამართოთ ეს მნიშვნელობები,\n"
+"მაშინ ჩართეთ ეს პარამეტრი."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gdbconfigpage.ui:121
@@ -267,6 +289,9 @@ msgid ""
 "can select to see the methods' mangled names.\n"
 "However, non-mangled names are easier to read."
 msgstr ""
+"დიზასემბლირებული კოდის ჩვენებისას, შეგიძლიათ\n"
+"აირჩიოთ, რომ მოხდეს მეთოდების სახელების დეკოდირება.\n"
+"მაგრამ, დაიმახსოვრეთ, რომ არადეკოდირებული სახელების წაკითხვა უფრო ადვილია."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gdbconfigpage.ui:143
@@ -307,6 +332,11 @@ msgid ""
 "\ttarget remote ...\tconnect to the remote debugger\n"
 "\tcontinue\t[optional] run debugging to the first breakpoint"
 msgstr ""
+"ეს სკრიპტი განკუთვნილია ნამდვილი ბრძანებებისთვის, რომელიც დაშორებულად "
+"გაშვებულ გამშვებ ფაილთან მისაერთებლადაა საჭირო.\n"
+"\tshell sleep 5\tდაშორებული პროგრამის გაშვების დალოდება\n"
+"\ttarget remote ..\tმიერთება დაშორებულ გამმართველთან\n"
+"\tcontinue \t[არასავალდებულო] გამართვის დაწყება პირველ წყვეტის წერტილამდე"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:181
@@ -329,6 +359,13 @@ msgid ""
 "contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>სკრიპტი დაშორებული აპლიკაციის გასაშვებად</p><p></"
+"p><p>ეს გარსის სკრიპტი GDb-ის მიერ თავისი კონფიგურაციის სკრპტის ჩასმის "
+"შემდეგ სკრულდება.</p><p>მისი დანიშნულებაა, რომ გაუშვას დაშორებული პროცესი.</"
+"p><p>1) იპოვოს გზა, დაშორებულად გაუშვას ბრძანება - rsh, ssh, telnet, ...</"
+"p><p>2a) გაუშვას &quot;gdbserver ... application&quot; სამიზნეზე.</p><p>ან "
+"თუ თქვენი გამშვები უკვე შეიცავს gdb-ს ნაწილს:</p><p>2b) გაუშვას &quot;"
+"აპლიკაცია&quot; სამიზნეზე.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
 #: gdbconfigpage.ui:190
@@ -363,6 +400,11 @@ msgid ""
 "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
 "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>სკრიპტი დაშორებულ აპლიკაციასთან მისაერთებლად</p><p>მაგ:"
+"</p><p>\tshell sleep 5\t #დაშორებული პროგრამის გაშვების დალოდება</p><p>"
+"\ttarget remote ...\t#მიერთება დაშორებულ გამმართველთან</p><p>\tcontinue"
+"\t#[არასავალდებულო] გამართვის გაშვება პირველ წყვეტის წერტილამდე.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:236
@@ -384,6 +426,8 @@ msgid ""
 "<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
 "issue any other GDB command while debugging.</p>"
 msgstr ""
+"<b>GDB-ის გამოტანა</b><p>აჩვენებს GDB-ის ყველა გაშვებულ ბრძანებას. GDB-ის "
+"ნებისმიერი ბრძანება ასევე შეგიძლიათ, გამართვისას შეიყვანოთ.</p>"
 
 #: gdboutputwidget.cpp:58
 #, kde-format

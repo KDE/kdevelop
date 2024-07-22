@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-07-20 09:04+0200\n"
+"PO-Revision-Date: 2024-07-21 18:47+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -131,7 +131,7 @@ msgstr "გამართვის წერტილი ვერ ვიპო
 #: debugger/breakpoint/breakpointmodel.cpp:371
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
-msgstr ""
+msgstr "ვერ ვიპოვე წყვეტის წერტილი მისამართზე %1:%2"
 
 #: debugger/breakpoint/breakpointmodel.cpp:377
 #, kde-format
@@ -186,6 +186,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"უსათაურო დოკუმენტებში გაწყვეტის წერტილს ვერ დაამატებთ. ჯერ შეინახეთ "
+"დოკუმენტი."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -1013,7 +1015,7 @@ msgstr "გადაფარვა, თუ შესაძლებელია
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
 #, kde-format
 msgid "More overriders possible, show all"
-msgstr ""
+msgstr "შესაძლოა მეტი გადაფარვა. ყველას ჩვენება"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:569
 #, kde-format
@@ -1023,12 +1025,12 @@ msgstr "მემკვიდრეობით "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:584
 #, kde-format
 msgid "Inheriters possible, show all"
-msgstr ""
+msgstr "შესაძლოა არსებობდეს მემკვიდრეობით მიღებული კლასები. ყველას ჩვენება"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:585
 #, kde-format
 msgid "More inheriters possible, show all"
-msgstr ""
+msgstr "შესაძლოა არსებობდეს მეტი მემკვიდრეობით მიღებული კლასი. ყველას ჩვენება"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:792
 #, kde-format
@@ -1071,7 +1073,7 @@ msgstr[1] "%1 ბიტი"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
 #, kde-format
 msgid "offset in parent: %1"
-msgstr ""
+msgstr "წანაცვლება მშობელში: %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
 #, kde-format
@@ -1087,7 +1089,7 @@ msgstr "ზომა: %1 ბაიტი"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
 msgid "aligned to: %1 Bytes"
-msgstr ""
+msgstr "სწორებულია: %1 ბაიტით"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
 #, kde-format
@@ -1386,12 +1388,12 @@ msgstr "დასამუშავებელი კოდი"
 #: outputview/outputexecutejob.cpp:196
 #, kde-format
 msgid "No build directory specified for a builder job."
-msgstr ""
+msgstr "აგების დავალებისვის აგების საქაღალდე მითითებული არაა."
 
 #: outputview/outputexecutejob.cpp:198
 #, kde-format
 msgid "No working directory specified for a process."
-msgstr ""
+msgstr "პროცესისთვის სამუშაო საქაღალდე მითითებული არაა."
 
 #: outputview/outputexecutejob.cpp:210
 #, kde-format
@@ -1416,17 +1418,17 @@ msgstr "სამუშაო საქაღალდე '%1' ლოკალ�
 #: outputview/outputexecutejob.cpp:240
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
-msgstr ""
+msgstr "აგების საქაღალდე '%1' არ არსებობს, ან საქაღალდე არაა"
 
 #: outputview/outputexecutejob.cpp:242
 #, kde-format
 msgid "Working directory '%1' does not exist or is not a directory"
-msgstr ""
+msgstr "სამუშაო საქაღალდე '%1' არ არსებობს, ან საქაღალდე არაა"
 
 #: outputview/outputexecutejob.cpp:303
 #, kde-format
 msgid "Failed to specify program to start: %1"
-msgstr ""
+msgstr "ჩავარდა გასაშვები პროგრამის მითითება: %1"
 
 #: outputview/outputexecutejob.cpp:304
 #, kde-format
@@ -1466,7 +1468,7 @@ msgstr "ჩაწერის შეცდომა"
 #: outputview/outputexecutejob.cpp:372
 #, kde-format
 msgid "Waiting for the process has timed out"
-msgstr ""
+msgstr "პროცესის მოლოდინის ვადა ამოიწურა"
 
 #: outputview/outputexecutejob.cpp:376
 #, kde-format
@@ -1539,7 +1541,7 @@ msgstr "შეკვეცა"
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
-msgstr ""
+msgstr "სხვადასხვა ელემენტები"
 
 #: project/helper.cpp:67
 #, kde-format
@@ -1604,7 +1606,7 @@ msgstr "%1 (%2)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
-msgstr ""
+msgstr "შეიყვანეთ ბილიკი ელემენტამდე პროექტებს ხიდან..."
 
 #: project/projectitemlineedit.cpp:158
 #, kde-format
@@ -1621,7 +1623,7 @@ msgstr "აირჩიეთ ელემენტი"
 #: project/projectitemlineedit.cpp:192
 #, kde-format
 msgid "Select the item you want to get the path from."
-msgstr ""
+msgstr "აირჩიეთ ელემენტი, რომლის ბილიკის მიღებაც გნებავთ."
 
 #. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:32
@@ -1666,26 +1668,26 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected dependencies from the list"
-msgstr ""
+msgstr "მონიშნული დამოკიდებულებების წაშლა სიიდან"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepUp)
 #: project/widgets/dependencieswidget.ui:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency up in the list"
-msgstr ""
+msgstr "მონიშნული დამოკიდებულების აწევა სიაში"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
 #: project/widgets/dependencieswidget.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
-msgstr ""
+msgstr "მონიშნული დამოკიდებულების ჩამოწევა სიაში"
 
 #: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
-msgstr ""
+msgstr "%1-ში ჩაწერა ჩავარდა. ალბათ, დისკი სავსეა"
 
 #: serialization/itemrepositoryregistry.cpp:75
 #, kde-format
@@ -1813,7 +1815,7 @@ msgstr "პროგრამის გადატვირთვა"
 #: shell/debugcontroller.cpp:225
 #, kde-format
 msgid "Restarts applications from the beginning."
-msgstr ""
+msgstr "გაუშვებს აპლიკაციებს თავიდან."
 
 #: shell/debugcontroller.cpp:231
 #, kde-format
@@ -1855,7 +1857,7 @@ msgstr "გააგრძელებს შესრულებას, სა
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
-msgstr ""
+msgstr "გაშვების მდებარეობის კურსორთან და&ყენება"
 
 #: shell/debugcontroller.cpp:245
 #, kde-format
@@ -1867,7 +1869,7 @@ msgstr "კურსორზე გადასვლა"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
-msgstr ""
+msgstr "შესრულების გაგრძელება კურსორის მიმდინარე პოზიციიდან."
 
 #: shell/debugcontroller.cpp:250
 #, kde-format
@@ -1918,7 +1920,7 @@ msgstr "&შებიჯება"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
-msgstr ""
+msgstr "შებიჯება შემდეგ გამოსახულებაში"
 
 #: shell/debugcontroller.cpp:271
 #, kde-format
@@ -1989,7 +1991,7 @@ msgstr "გამართვის წერტილის გადართ�
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
-msgstr ""
+msgstr "გამართვის წერტილის გადართვა მიმდინარე ხაზისთვის."
 
 #: shell/debugcontroller.cpp:302
 #, kde-format
@@ -2007,7 +2009,7 @@ msgstr "გაშვების მიმდინარე მიმდინ�
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
-msgstr ""
+msgstr "გადახტება შესრულების ხაზზე რედაქტორში."
 
 #: shell/debugcontroller.cpp:430
 #, kde-format
@@ -2242,7 +2244,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
-msgstr ""
+msgstr "ანოტაციის ჩვენება მიმდინარე დოკუმენტზე"
 
 #: shell/documentcontroller.cpp:667
 #, kde-format
@@ -2385,6 +2387,7 @@ msgstr "ჩატვირთული დამატებები"
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr ""
+"<html><font size=\"4\"<b>%1</b>-სთვის ჩატვირთული დამატებები</font></html>"
 
 #: shell/mainwindow.cpp:457
 #, kde-format
@@ -2401,7 +2404,7 @@ msgstr "%1-ის მორგება"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
-msgstr ""
+msgstr "საშუალებას გაძლევთ, მოირგოთ %1."
 
 #: shell/mainwindow_p.cpp:227
 #, kde-format
@@ -2419,7 +2422,7 @@ msgstr "შეტყობინებების მორგება"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
-msgstr ""
+msgstr "აჩვენებს დიალოგს, რომელიც გაფრთხილებების მორგების საშუალებას გაძლევთ."
 
 #: shell/mainwindow_p.cpp:233
 #, kde-format
@@ -2431,13 +2434,13 @@ msgstr "ჩატვირთული დამატებები"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
-msgstr ""
+msgstr "აჩენებს ყველა ჩატვირთული დამატების სიას"
 
 #: shell/mainwindow_p.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
-msgstr ""
+msgstr "აჩვენებს ინფორმაციის დიალოგს ყველა ჩატვირთული დამატებისთვის."
 
 #: shell/mainwindow_p.cpp:238
 #, kde-format
@@ -2724,7 +2727,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
-msgstr ""
+msgstr "გარე ცვლილებების თავზე გადაწერა"
 
 #: shell/problem.cpp:40
 #, kde-format
@@ -2929,7 +2932,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
-msgstr ""
+msgstr "გაუქმება და პროექტის არ-გახსნა"
 
 #: shell/projectcontroller.cpp:476
 #, kde-format
@@ -2937,17 +2940,19 @@ msgid ""
 "There already exists a project configuration file at %1.\n"
 "Do you want to override it or open the existing file?"
 msgstr ""
+"%1-ში პროექტის კონფიგურაციის ფაილი უკვე არსებობს.\n"
+"გნებავთ გადაფაროთ ის, თუ გახსნით არსებულ ფაილს?"
 
 #: shell/projectcontroller.cpp:479
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
-msgstr ""
+msgstr "არსებული პროექტის კონფიგურაციის გადაფარვა"
 
 #: shell/projectcontroller.cpp:497
 #, kde-format
 msgid "Unable to create configuration file %1"
-msgstr ""
+msgstr "ვერ შევქმენი კონფიგურაციის ფაილი %1"
 
 #: shell/projectcontroller.cpp:511
 #, kde-format
@@ -3042,7 +3047,7 @@ msgstr "ახლახანს გახსნილი პროექტი�
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
-msgstr ""
+msgstr "გახსნის ახლახან გახსნის პროექტს."
 
 #: shell/projectcontroller.cpp:616
 #, kde-format
@@ -3088,7 +3093,7 @@ msgstr "%1 სესიის გახსნა"
 #: shell/projectcontroller.cpp:924
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
-msgstr ""
+msgstr "დამატება ჩატვირთული არაა რეპოზიტორიის URL-ის მხარდაჭერისთვის: %1"
 
 #: shell/projectcontroller.cpp:1228
 #, kde-format
@@ -3222,7 +3227,7 @@ msgstr "გაშვება"
 #: shell/runcontroller.cpp:405
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
-msgstr ""
+msgstr "მიმდინარე გაშვების კონფიგურაციას '%1' რეჟიმის მხარდაჭერა არ გააჩნია."
 
 #: shell/runcontroller.cpp:425
 #, kde-format
@@ -3243,6 +3248,8 @@ msgid ""
 "Opens a dialog to setup new launch configurations, or to change the existing "
 "ones."
 msgstr ""
+"გახსნის დიალოგს ახალი გაშვების კონფიგურაციების მოსარგებად ან არსებულების "
+"შესაცვლელად."
 
 #: shell/runcontroller.cpp:432
 #, kde-format
@@ -3321,13 +3328,13 @@ msgstr "გაჩერება"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
-msgstr ""
+msgstr "მენიუ, რომელიც საშუალებას გაძლევთ, ინდივიდუალური დავალებები გააჩეროთ"
 
 #: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
-msgstr ""
+msgstr "დავალებების ჩამონათვალი, რომლებიც შეგიძლიათ, ინდივიდუალურად გააჩეროთ."
 
 #: shell/runcontroller.cpp:475
 #, kde-format
@@ -3432,6 +3439,8 @@ msgid ""
 "Active session.\n"
 "pid %1, app %2, host %3"
 msgstr ""
+"აქტიური სესია.\n"
+"pid %1, აპი %2, ჰოსტი %3"
 
 #: shell/sessionchooserdialog.cpp:97
 #, kde-format
@@ -3448,7 +3457,7 @@ msgstr "სესიის წაშლა შეუძლებელია"
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
-msgstr ""
+msgstr "<p>დაბლოკილ სესიას ვერ წაშლით."
 
 #: shell/sessionchooserdialog.cpp:196
 #, kde-format
@@ -3647,7 +3656,7 @@ msgstr "სესიის (%1) დაბლოკვის შეცდომ�
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
-msgstr ""
+msgstr "სესია %1 უკვე აქტიურია სხვა გაშვებულ ასლში."
 
 #: shell/settings/analyzerspreferences.cpp:25
 #, kde-format
@@ -3679,7 +3688,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Enable Background Parser"
-msgstr ""
+msgstr "ფონურის დამმუშავებლის ჩართვა"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
@@ -3764,7 +3773,7 @@ msgstr "გარემო"
 #: shell/settings/environmentpreferences.cpp:84
 #, kde-format
 msgid "Configure Environment Variables"
-msgstr ""
+msgstr "მოირგეთ გარემოს ცვლადები"
 
 #: shell/settings/environmentprofilelistmodel.cpp:48
 #, kde-format
@@ -3793,20 +3802,20 @@ msgstr "შეიყვანეთ ცვლადი..."
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Environment Profile"
-msgstr ""
+msgstr "შეიყვანეთ ახალი გარემოს პროფილის სახელი"
 
 #: shell/settings/environmentwidget.cpp:233
 #, kde-format
 msgctxt "@title:window"
 msgid "Batch Edit Mode"
-msgstr ""
+msgstr "მასიური ჩასწორების რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Environment profile:"
-msgstr ""
+msgstr "გარემოს პროფილი:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
 #: shell/settings/environmentwidget.ui:39
@@ -3848,7 +3857,7 @@ msgstr "ცვლადის წაშლა"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Batch edit mode"
-msgstr ""
+msgstr "მასიური ჩასწორების რეჟიმი"
 
 #: shell/settings/languagepreferences.cpp:34
 #, kde-format
@@ -3866,7 +3875,7 @@ msgstr "ენის მხარდაჭერა"
 #: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
-msgstr ""
+msgstr "კოდის დასრულებისა და სემანტიკური გამოკვეთის მორგება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/languagepreferences.ui:29
@@ -3889,7 +3898,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Enable automatic invocation:"
-msgstr ""
+msgstr "ავტომატური ჩაწოდების ჩართვა:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_7)
 #: shell/settings/languagepreferences.ui:58
@@ -3905,7 +3914,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Additional information for current item:"
-msgstr ""
+msgstr "დამატებითი ინფორმაცია მიმდინარე ელემენტისთვის:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_showMultiLineSelectionInformation)
 #: shell/settings/languagepreferences.ui:71
@@ -3931,7 +3940,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Detailed completion:"
-msgstr ""
+msgstr "დეტალური დასრულება:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:101
@@ -3945,7 +3954,7 @@ msgstr "არასდროს"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "When Invoked Manually"
-msgstr ""
+msgstr "როცა ჩაწოდებულია ხელით"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
@@ -3959,7 +3968,7 @@ msgstr "ყოველთვის"
 #, kde-format
 msgctxt "@title:group"
 msgid "Semantic Code Highlighting"
-msgstr ""
+msgstr "სემანტიკური კოდის გამოკვეთა"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, localColorizationLabel)
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_localColorization)
@@ -4042,7 +4051,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Highlight semantic problems:"
-msgstr ""
+msgstr "სემანტიკური პრობლემების გამოკვეთა:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
@@ -4059,7 +4068,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Highlight problematic lines:"
-msgstr ""
+msgstr "პრობლემის მქონე ხაზების გამოკვეთა:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:277
@@ -4074,7 +4083,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Bold font for declarations:"
-msgstr ""
+msgstr "სქელი ფონტი აღწერებისთვის:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: shell/settings/languagepreferences.ui:293
@@ -4195,14 +4204,14 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "მეხსიერება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "სესიის დროებითი საქაღალდე"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -4304,13 +4313,13 @@ msgstr ""
 #: shell/settings/projectconfig.kcfg:19
 #, kde-format
 msgid "Chooses the base directory where new projects are created."
-msgstr ""
+msgstr "აირჩიევს საბაზისო საქაღალდეს, სადაც ახალი პროექტები იქმნება."
 
 #. i18n: ectx: label, entry (saveDocuments), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:23
 #, kde-format
 msgid "Save all open documents before building anything"
-msgstr ""
+msgstr "ყველა ღია დოკუმენტის შენახვა რამის აგებამდე"
 
 #. i18n: ectx: whatsthis, entry (saveDocuments), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:24
@@ -4372,7 +4381,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Save all documents before building"
-msgstr ""
+msgstr "ყველა დოკუმენტის შენახვა აგებამდე"
 
 #: shell/settings/runtimespreferences.cpp:23
 #, kde-format
@@ -4382,7 +4391,7 @@ msgstr "გაშვების გარემოები"
 #: shell/settings/runtimespreferences.cpp:33
 #, kde-format
 msgid "Configure Runtimes"
-msgstr ""
+msgstr "გაშვების გარემოების მორგება"
 
 #: shell/settings/sourceformattersettings.cpp:75
 #: shell/sourceformattercontroller.cpp:220
@@ -4463,7 +4472,7 @@ msgstr "მეტი შაბლონის მიღება"
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template From File"
-msgstr ""
+msgstr "ნიმუშის ჩატვირთვა ფაილიდან"
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
 #: shell/settings/templatepage.ui:36
@@ -4499,7 +4508,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom left corner occupied by:"
-msgstr ""
+msgstr "ქვედა მარცხენა კუთხე დაკავებულია რით:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4515,7 +4524,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom right corner occupied by:"
-msgstr ""
+msgstr "ქვედა მარჯვენა კუთხე დაკავებულია რით:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
@@ -4558,7 +4567,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Open new tab after current"
-msgstr ""
+msgstr "ახალი ჩანართის გახსნა მიმდინარის შემდეგ"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:106
@@ -4634,25 +4643,25 @@ msgstr ""
 #: shell/settings/uipreferences.cpp:55
 #, kde-format
 msgid "Configure User Interface"
-msgstr ""
+msgstr "მომხმარებლის ინტერფეისის მორგება"
 
 #: shell/sourceformattercontroller.cpp:226
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
-msgstr ""
+msgstr "საწყისი კოდის გადაფო&რმატება"
 
 #: shell/sourceformattercontroller.cpp:230
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
-msgstr ""
+msgstr "ხაზის გადაფორმატება"
 
 #: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr ""
+msgstr "ფაილების გადაფორმატება..."
 
 #: shell/sourceformattercontroller.cpp:235
 #, kde-format
@@ -4726,12 +4735,12 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr ""
+msgstr "გადავაფორმატო ფაილები?"
 
 #: shell/sourceformattercontroller.cpp:865
 #, kde-format
 msgid "Reformat all files in the selected folder?"
-msgstr ""
+msgstr "გადავაფორმატო ყველა ფაილი არჩეულ საქაღალდეში?"
 
 #: shell/sourceformattercontroller.cpp:869
 #, kde-format
@@ -4742,19 +4751,19 @@ msgstr "გადაფორმატება"
 #: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
-msgstr ""
+msgstr "მიმდინარეობს გადაფორმატება"
 
 #: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
-msgstr ""
+msgstr "ფაილების გადაფორმატება"
 
 #: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "მიმდინარეობს 1 ფაილის გადაფორმატება"
+msgstr[1] "მიმდინარეობს %1 ფაილის გადაფორმატება"
 
 #: shell/sourceformatterselectionedit.cpp:1077
 #, kde-format
@@ -4786,7 +4795,7 @@ msgstr "ენა:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "როგორ მოირგოთ დაფორმატების სტილები"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -4811,13 +4820,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
-msgstr ""
+msgstr "დამფორმატებელი:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, formatterDescriptionButton)
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "არჩეული დამფორმატებლის აღწერა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
@@ -4988,13 +4997,13 @@ msgstr "გახსნილი დოკუმენტების დალ�
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
-msgstr ""
+msgstr "(გადასართველად დააწექით Ctrl+Tab)"
 
 #: sublime/container.cpp:798
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
-msgstr ""
+msgstr "ფაილის სახელის კოპირება"
 
 #: sublime/container.cpp:801
 #, kde-format
@@ -5018,13 +5027,13 @@ msgstr "ყველას დახურვა"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
-msgstr ""
+msgstr "'%1'-ის ხელსაწყოს ხედის გადართვა"
 
 #: sublime/idealbuttonbarwidget.cpp:99
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
-msgstr ""
+msgstr "მარჯვენა წკაპი ახალი ხელსაწყოს ხედების დასამატებლად."
 
 #: sublime/idealcontroller.cpp:94
 #, kde-format
@@ -5120,7 +5129,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Focus Editor"
-msgstr ""
+msgstr "ფოკუსის რედაქტორი"
 
 #: sublime/mainwindow_p.cpp:111
 #, kde-format
@@ -5132,34 +5141,34 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
-msgstr ""
+msgstr "შემდეგი ხელსაწყოს ხედი"
 
 #: sublime/mainwindow_p.cpp:122
 #, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
-msgstr ""
+msgstr "წინა ხელსაწყოს ხედი"
 
 #: sublime/mainwindow_p.cpp:128
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
-msgstr ""
+msgstr "ხელსაწყოს ხედები"
 
 #: sublime/mainwindow_p.cpp:134
 #, kde-format
 msgid "Left Button Bar"
-msgstr ""
+msgstr "მარცხენა ღილაკის პანელი"
 
 #: sublime/mainwindow_p.cpp:137
 #, kde-format
 msgid "Right Button Bar"
-msgstr ""
+msgstr "მარჯვენა ღილაკის პანელი"
 
 #: sublime/mainwindow_p.cpp:140
 #, kde-format
 msgid "Bottom Button Bar"
-msgstr ""
+msgstr "ქვედა ღილაკის პანელი"
 
 #: sublime/mainwindow_p.cpp:812
 #, kde-format
@@ -5201,7 +5210,7 @@ msgstr "გაფრთხილების ჩვენება"
 #: util/duchainify/main.cpp:268
 #, kde-format
 msgid "Show warnings and debug output"
-msgstr ""
+msgstr "გაფრთხილებებისა და გამართვის შეტყობინებების ჩვენება"
 
 #: util/duchainify/main.cpp:270
 #, kde-format
@@ -5262,7 +5271,7 @@ msgstr ""
 #: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
-msgstr ""
+msgstr "შეცდომების რეკურსიული დამპი შემოტანილი კონტექსტებიდან."
 
 #: util/environmentselectionmodel.cpp:40
 #, kde-format
@@ -5274,7 +5283,7 @@ msgstr "პროფილი"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default profile (currently: %1)"
-msgstr ""
+msgstr "ნაგულისხმევი პროფილის გამოყენება (ამჟამად: %1)"
 
 #: util/environmentselectionmodel.cpp:55
 #, kde-format
@@ -5303,7 +5312,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
-msgstr ""
+msgstr "ზოგიერთი ფაილი ჩაწერისგან დაცულია"
 
 #: util/shellutils.cpp:83
 #, kde-format
@@ -5320,7 +5329,7 @@ msgstr "იგნორი"
 #: util/shellutils.cpp:96
 #, kde-format
 msgid "Failed adding write permissions for some files."
-msgstr ""
+msgstr "ჩავარდა ჩაწერის წვდომის დამატება ზოგიერთი ფაილისთვის."
 
 #: util/shellutils.cpp:97
 #, kde-format
@@ -5344,16 +5353,18 @@ msgid ""
 "Process '%1' exited with status %2\n"
 "%3"
 msgstr ""
+"პროცესი '%1' დასრულდა სტატუსით %2\n"
+"%3"
 
 #: vcs/dvcs/dvcsjob.cpp:263
 #, kde-format
 msgid "Command finished with error %1."
-msgstr ""
+msgstr "ბრძანება დასრულდა შეცდომით %1."
 
 #: vcs/dvcs/dvcsjob.cpp:277
 #, kde-format
 msgid "Command exited with value %1."
-msgstr ""
+msgstr "ბრძანება გამოვიდა მნიშვნელობით %1."
 
 #: vcs/dvcs/dvcsplugin.cpp:95
 #, kde-format
@@ -5407,7 +5418,7 @@ msgstr ""
 #: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
 #, kde-format
 msgid "Already on branch \"%1\"\n"
-msgstr ""
+msgstr "უკვე ხართ ბრენჩზე \"%1\"\n"
 
 #: vcs/dvcs/ui/branchmanager.cpp:181
 #, kde-format
@@ -5462,7 +5473,7 @@ msgstr "ახალი"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The same as git branch -D"
-msgstr ""
+msgstr "იგივე, რაც git-ის ბრენჩი :-D"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:70
@@ -5485,7 +5496,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Compare to Branch"
-msgstr ""
+msgstr "შედარება ბრენჩთან"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:103
@@ -5755,19 +5766,19 @@ msgstr "მიღება"
 #: vcs/vcspluginhelper.cpp:277
 #, kde-format
 msgid "There are no differences."
-msgstr ""
+msgstr "სხვაობები აღმოჩენილი არაა."
 
 #: vcs/vcspluginhelper.cpp:284
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
-msgstr ""
+msgstr "სხვაობების მიღება შეუძლებელია"
 
 #: vcs/vcspluginhelper.cpp:352
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
-msgstr ""
+msgstr "%2 ისტორია (%1)"
 
 #: vcs/vcspluginhelper.cpp:415
 #, kde-format
@@ -5775,6 +5786,8 @@ msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
 "AnnotationInterface for the editor."
 msgstr ""
+"ანოტაციების ჩვენება შეუძლებელია. რედაქტორისთვის ინტერფეისი KTextEditor::"
+"AnnotationInteface აღმოჩენილი არაა."
 
 #: vcs/vcspluginhelper.cpp:419
 #, kde-format
@@ -5788,13 +5801,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"
-msgstr ""
+msgstr "რევიზიის ID-ის კოპირება"
 
 #: vcs/widgets/standardvcslocationwidget.cpp:23
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
-msgstr ""
+msgstr "შეიყვანეთ რეპოზიტორიის URL..."
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:53
 #, kde-format
@@ -5893,7 +5906,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "About to Commit to Repository"
-msgstr ""
+msgstr "რეპოზიტორიაში კომიტის გაუქმება"
 
 #: vcs/widgets/vcsdiffwidget.cpp:86
 #, kde-format
