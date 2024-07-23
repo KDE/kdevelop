@@ -55,18 +55,3 @@ msgstr ""
 #, kde-format
 msgid "..."
 msgstr "..."
-
-#~ msgctxt "@title:menu"
-#~ msgid "Code"
-#~ msgstr "Codi"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Manuel Tortosa Moreno"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "manutortosa@chakra-project.org"
-
-#~ msgid "Code Utils"
-#~ msgstr "Code Utils"

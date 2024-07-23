@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-04-18 18:26+0200\n"
+"PO-Revision-Date: 2024-07-22 19:16+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2746,11 +2746,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "Impedir que o panel se oculte"
 
 #: shell/openprojectdialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "Todos os ficheiros de proxecto (%1)"
+msgstr "Todos os ficheiros de proxecto"
 
 #: shell/openprojectdialog.cpp:133
 #, kde-format

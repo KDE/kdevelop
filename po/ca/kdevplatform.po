@@ -6251,25 +6251,3 @@ msgstr "Diferències amb l'anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferències entre revisions"
-
-#~ msgid "Could not find an open document"
-#~ msgstr "No s'ha pogut trobar un document obert"
-
-#~ msgid "Could not find the chain for the selected document: %1"
-#~ msgstr "No s'ha pogut trobar la cadena del document seleccionat: %1"
-
-#~ msgid "Error finding context for selection range"
-#~ msgstr "Error en cercar context per a l'interval de la selecció"
-
-#~ msgid "Error checking conditions to generate code: %1"
-#~ msgstr "Error en comprovar les condicions per a generar el codi: %1"
-
-#~ msgid "Error Gathering user information: %1"
-#~ msgstr "Error en recollir la informació de l'usuari: %1"
-
-#~ msgid "Error generating code: %1"
-#~ msgstr "Error de generació de codi: %1"
-
-#~ msgctxt "@info:progress"
-#~ msgid "Running %1"
-#~ msgstr "S'està executant %1"

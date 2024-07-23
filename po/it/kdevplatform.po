@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-04-19 16:43+0200\n"
+"PO-Revision-Date: 2024-07-20 13:37+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -2753,11 +2753,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "Evita che il pannello si nasconda"
 
 #: shell/openprojectdialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1|All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "%1|Tutti i file di progetto (%1)"
+msgstr "Tutti i file di progetto"
 
 #: shell/openprojectdialog.cpp:133
 #, kde-format

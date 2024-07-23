@@ -4,14 +4,14 @@
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-04-17 10:58+0200\n"
+"PO-Revision-Date: 2024-07-19 11:07+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -567,7 +567,7 @@ msgstr "Busca el text…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Find in text of current documentation page"
-msgstr "Busca al text de la pàgina de documentació actual"
+msgstr "Busca en el text de la pàgina de documentació actual"
 
 #: interfaces/contextmenuextension.cpp:133
 #, kde-format
@@ -2746,11 +2746,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "Bloqueja el quadro de l'ocultació"
 
 #: shell/openprojectdialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1|All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "%1|Tots els fitxers de projecte (%1)"
+msgstr "Tots els fitxers de projecte"
 
 #: shell/openprojectdialog.cpp:133
 #, kde-format
@@ -3968,7 +3967,7 @@ msgstr "Introduïu el nom del perfil entorn nou"
 #, kde-format
 msgctxt "@title:window"
 msgid "Batch Edit Mode"
-msgstr "Mode d'edició per lots"
+msgstr "Mode edició per lots"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
@@ -4017,7 +4016,7 @@ msgstr "Elimina la variable"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Batch edit mode"
-msgstr "Mode d'edició per lots"
+msgstr "Mode edició per lots"
 
 #: shell/settings/languagepreferences.cpp:34
 #, kde-format
@@ -4261,15 +4260,15 @@ msgid ""
 "<html><head/><body><p>Use bold font for declarations such as classes, "
 "functions, local variables, etc.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Utilitza negreta per a les declaracions com ara "
-"classes, funcions, variables locals, etc.</p></body></html>"
+"<html><head/><body><p>Utilitza lletra en negreta per a les declaracions com "
+"ara classes, funcions, variables locals, etc.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
 #, kde-format
 msgctxt "@label"
 msgid "Bold font for declarations:"
-msgstr "Tipus de lletra en negreta per a les declaracions:"
+msgstr "Lletra en negreta per a les declaracions:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: shell/settings/languagepreferences.ui:293
@@ -6262,24 +6261,3 @@ msgstr "Diferències amb l'anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferències entre revisions"
-
-#~ msgid "Could not find an open document"
-#~ msgstr "No s'ha pogut trobar un document obert"
-
-#~ msgid "Could not find the chain for the selected document: %1"
-#~ msgstr "No s'ha pogut trobar la cadena del document seleccionat: %1"
-
-#~ msgid "Error finding context for selection range"
-#~ msgstr ""
-#~ "S'ha produït un error en buscar context per a l'interval de la selecció"
-
-#~ msgid "Error checking conditions to generate code: %1"
-#~ msgstr ""
-#~ "S'ha produït un error en comprovar les condicions per a generar el codi: "
-#~ "%1"
-
-#~ msgid "Error Gathering user information: %1"
-#~ msgstr "S'ha produït un error en arreplegar la informació de l'usuari: %1"
-
-#~ msgid "Error generating code: %1"
-#~ msgstr "S'ha produït un error de generació de codi: %1"
