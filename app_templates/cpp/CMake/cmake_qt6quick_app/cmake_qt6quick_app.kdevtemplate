@@ -1,0 +1,7 @@
+[General]
+Name=CMake Qt6 Quick Application
+Comment=Generate a CMake & Qt6 Quick based application (crossplatform compatible)
+ShowFilesAfterGeneration=src/qml/Main.qml
+Category=Qt/Graphical
+Icon=cmake_qt6quick_app.png
+ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_-]+$

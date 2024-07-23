@@ -1,0 +1,20 @@
+CMake Qt6 Quick Template
+------------------------
+
+You need Qt6 and CMake 3.16 or higher
+
+-- Build instructions --
+
+cd %{PROJECTDIR}
+mkdir build
+cd build
+cmake ../
+make
+
+src/%{APPNAMELC}
+
+
+-- Tutorials and resources --
+
+Qt online docs
+https://doc.qt.io/
