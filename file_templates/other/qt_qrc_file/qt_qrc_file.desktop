@@ -1,6 +1,14 @@
 [General]
 Name=Qt Resource Collection File
+Name[ca]=Fitxers de col·lecció de recursos Qt
+Name[es]=Archivo de recopilación de recursos de Qt
+Name[sl]=Datoteka zbirke virov Qt
+Name[sv]=Qt-resurssamlingsfil
 Comment=A simple version with one prefix and one file.
+Comment[ca]=Una versió senzilla amb un prefix i un fitxer.
+Comment[es]=Una versión sencilla con un prefijo y un archivo.
+Comment[sl]=Preprosta različica z eno predpono in eno datoteko.
+Comment[sv]=En enkel version med ett prefix och en fil.
 Category=C++/Qt
 Language=C++
 Language[az]=C++
@@ -52,5 +60,9 @@ OptionsFile=options.kcfg
 
 [QRC]
 Name=Qt Resource Collection File
+Name[ca]=Fitxers de col·lecció de recursos Qt
+Name[es]=Archivo de recopilación de recursos de Qt
+Name[sl]=Datoteka zbirke virov Qt
+Name[sv]=Qt-resurssamlingsfil
 File=output.qrc
 OutputFile={{ qrc_file_name }}
