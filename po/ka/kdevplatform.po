@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-07-22 06:16+0200\n"
+"PO-Revision-Date: 2024-07-23 05:35+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3157,16 +3157,17 @@ msgstr "%1 : %p%"
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
 msgstr ""
+"პროექტის გამოსათხოვად, საჭიროა, მიუთითოთ სწორი, ან არარსებული საქაღალდე"
 
 #: shell/projectsourcepage.cpp:251
 #, kde-format
 msgid "You need to specify the source for your remote project"
-msgstr ""
+msgstr "გჭირდებათ, თქვენი დაშორებული პროექტისთვის წყარო მიუთითოთ"
 
 #: shell/projectsourcepage.cpp:253
 #, kde-format
 msgid "You need to specify an empty folder as your project destination"
-msgstr ""
+msgstr "თქვენი პროექტის სამიზნისთვის აუცილებელია ცარიელი საქაღალდის მითითება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectsourcepage.ui:37
