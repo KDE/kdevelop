@@ -4,32 +4,31 @@
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
 # Frank Weng (a.k.a. Franklin) <franklin@goodhorse.idv.tw>, 2009.
 # Franklin Weng <franklin@mail.everfocus.com.tw>, 2010, 2012, 2013, 2014.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2014-02-27 11:05+0800\n"
-"Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
-"Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
+"PO-Revision-Date: 2024-07-23 22:06+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: dialogs/processselection.cpp:148
-#, fuzzy, kde-format
-#| msgid "&Attach"
+#, kde-format
 msgctxt "@action:button"
 msgid "Attach"
 msgstr "附加(&A)"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ProcessSelection)
 #: dialogs/processselection.ui:14
-#, fuzzy, kde-format
-#| msgid "Attach to a process"
+#, kde-format
 msgctxt "@title:window"
 msgid "Attach to a Process"
 msgstr "附加到行程"
@@ -39,69 +38,66 @@ msgstr "附加到行程"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search"
-msgstr ""
+msgstr "搜尋"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
 #: dialogs/processselection.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
-msgstr ""
+msgstr "以列表顯示"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
 #: dialogs/processselection.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
-msgstr ""
+msgstr "以樹狀顯示"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:80
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
-msgstr ""
+msgstr "自己的行程"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
-msgstr ""
+msgstr "使用者行程"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:96
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
-msgstr ""
+msgstr "系統行程"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
-msgstr ""
+msgstr "所有行程"
 
 #: dialogs/selectcoredialog.cpp:18
-#, fuzzy, kde-format
-#| msgid "Select Core File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "選擇 Core 檔"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Executable:"
 msgstr "執行檔："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/selectcoredialog.ui:32
-#, fuzzy, kde-format
-#| msgid "Core File:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Core 檔："
@@ -117,17 +113,15 @@ msgid "<br>New value: %1"
 msgstr "<br/>新值：%1"
 
 #: midebugger.cpp:315
-#, fuzzy, kde-format
-#| msgctxt "<b>Internal debugger error</b>"
-#| msgid ""
-#| "<p>The debugger component encountered internal error while processing "
-#| "reply from gdb. Please submit a bug report."
+#, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
 "<p>The debugger component encountered an internal error while processing the "
 "reply from the debugger. Please submit a bug report. The debug session will "
 "now end to prevent potential crash"
-msgstr "<p>除錯器組件處理 gdb 的回覆時遇到內部錯誤。請回報此問題。"
+msgstr ""
+"<p>除錯器組件在處理除錯器的回覆時遇到內部錯誤。請回報此問題。除錯器工作階段現"
+"在會結束來避免崩潰"
 
 #: midebugger.cpp:318
 #, kde-format
@@ -139,8 +133,7 @@ msgstr ""
 "MI 回覆：%2"
 
 #: midebugger.cpp:321
-#, fuzzy, kde-format
-#| msgid "Internal debugger error"
+#, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "內部除錯器錯誤"
@@ -160,48 +153,37 @@ msgstr "<b>無法啟動除錯器：</b><p>無法執行 %1。請確定指定的�
 #: midebugger.cpp:350
 #, kde-format
 msgid "Process failed to start"
-msgstr ""
+msgstr "行程啟動失敗"
 
 #: midebugger.cpp:355
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
-#| "<br>Try to reproduce the crash with plain gdb and report a bug.<br>"
+#, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
 "that the debug session has to be ended.<br>Try to reproduce the crash "
 "without KDevelop and report a bug.<br>"
 msgstr ""
-"<b>Gdb 已崩潰。</b> <p>因此，此除錯階段已被中止。<br/> 請試著用命令列執行 "
-"gdb 再試著重現此問題，並回報錯誤。<br/>"
+"<b>除錯器已崩潰。</b><p>除錯器行程「%1」崩潰了。<br>除錯工作階段因此不得不結"
+"束。<br>請考慮嘗試在 KDevelop 外再現崩潰並回報錯誤。<br>"
 
 #: midebugger.cpp:360
-#, fuzzy, kde-format
-#| msgid "Debugger stopped"
+#, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
-msgstr "除錯器已停止"
+msgstr "除錯器已崩潰"
 
 #: midebugger.cpp:363
-#, fuzzy, kde-format
-#| msgid "Process exited"
+#, kde-format
 msgid "Process crashed"
-msgstr "行程已離開"
+msgstr "行程已崩潰"
 
 #: midebuggerplugin.cpp:112
-#, fuzzy, kde-format
-#| msgid "Examine Core File..."
+#, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
-msgstr "檢視 Core 檔..."
+msgstr "用 %1 檢視 Core 檔"
 
 #: midebuggerplugin.cpp:114
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Examine core file</b><p>This loads a core file, which is typically "
-#| "created after the application has crashed, e.g. with a segmentation "
-#| "fault. The core file contains an image of the program memory at the time "
-#| "it crashed, allowing you to do a post-mortem analysis.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -209,43 +191,35 @@ msgid ""
 "The core file contains an image of the program memory at the time it "
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
-"<b>檢視 core 檔</b><p>它會載入 core 檔。通常 core 檔是在應用程式當掉時產生，"
+"<b>檢視 core 檔</b><p>這會載入 core 檔。通常 core 檔是在應用程式當掉時產生，"
 "裡面包含了程式當掉時記憶體的狀態，讓您可以做分析。</p>"
 
 #: midebuggerplugin.cpp:126
-#, fuzzy, kde-format
-#| msgid "Attach to Process"
+#, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
-msgstr "附加以處理"
+msgstr "用 %1 附加到行程"
 
 #: midebuggerplugin.cpp:128
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>附加到行程</b><p>附加除錯器到執行中的行程。</p>"
 
 #: midebuggerplugin.cpp:141
-#, fuzzy, kde-format
-#| msgid "KDevelop"
+#, kde-format
 msgid "KDevelop (%1) - %2"
-msgstr "KDevelop"
+msgstr "KDevelop (%1) - %2"
 
 #: midebuggerplugin.cpp:215
-#, fuzzy, kde-format
-#| msgid "Evaluate: %1"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "計算：%1"
 
 #: midebuggerplugin.cpp:217
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#| "cursor.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -253,17 +227,13 @@ msgid ""
 msgstr "<b>計算表示式</b><p>顯示游標底下的表示式的值。</p>"
 
 #: midebuggerplugin.cpp:225
-#, fuzzy, kde-format
-#| msgid "Watch: %1"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "監看：%1"
 
 #: midebuggerplugin.cpp:227
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
-#| "Variables/Watch list.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Watch expression</b><p>Adds the expression under the cursor to the "
@@ -280,13 +250,13 @@ msgstr "請選擇要檢視的 core 檔案..."
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
-msgstr ""
+msgstr "某個應用程式正在除錯中。是否中止目前執行的除錯工作階段並繼續？"
 
 #: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "中止目前工作階段"
 
 #: midebuggerplugin.cpp:260
 #, kde-format
@@ -304,17 +274,15 @@ msgid "Debugger"
 msgstr "除錯器"
 
 #: midebugjobs.cpp:86
-#, fuzzy, kde-format
-#| msgid "%1 (uid: %2)"
+#, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
-msgstr "%1（使用者代碼：%2）"
+msgstr "%1：%2"
 
 #: midebugjobs.cpp:107
-#, fuzzy, kde-format
-#| msgid "Could not find kdesu executable"
+#, kde-format
 msgid "'%1' is not an executable"
-msgstr "找不到 kdesu 執行檔"
+msgstr "「%1」不是執行檔"
 
 #: midebugjobs.cpp:171
 #, kde-format
@@ -371,7 +339,7 @@ msgstr "<b>在除錯器未執行時送出了 GDB 指令</b><br/>指令為<br/> %
 #: midebugsession.cpp:860
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
-msgstr "<b>不合法的除錯器指令</b><br/>%1"
+msgstr "<b>無效的除錯器指令</b><br/>%1"
 
 #: midebugsession.cpp:996
 #, kde-format
@@ -386,7 +354,7 @@ msgstr "正常離開"
 #: midebugsession.cpp:1005
 #, kde-format
 msgid "Exited on signal %1"
-msgstr "因遇到信號 %1 而離開"
+msgstr "因遇到訊號 %1 而離開"
 
 #: midebugsession.cpp:1040
 #, kde-format
@@ -428,11 +396,9 @@ msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>除錯器錯誤</b><p>除錯器回報了以下的錯誤：<p><tt>%1"
 
 #: miframestackmodel.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "process status"
-#| msgid "running"
+#, kde-format
 msgid "(running)"
-msgstr "執行中"
+msgstr "(執行中)"
 
 #: registers/converters.cpp:17
 #, kde-format
@@ -507,22 +473,19 @@ msgid "Segment"
 msgstr "區段"
 
 #: registers/registersview.cpp:51
-#, fuzzy, kde-format
-#| msgid "Format"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "格式"
 
 #: registers/registersview.cpp:60
-#, fuzzy, kde-format
-#| msgid "Mode"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr "模式"
 
 #: registers/registersview.cpp:195
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "更新"
@@ -562,52 +525,42 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
 #: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
-#, fuzzy, kde-format
-#| msgid "Debugger Toolbar"
+#, kde-format
 msgctxt "@title:window"
 msgid "Debugger Console"
-msgstr "除錯器工具列"
+msgstr "除錯器主控台"
 
 #: widgets/debuggerconsoleview.cpp:49
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
-#| "issue any other gdb command while debugging.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
 "can also issue any other debugger command while debugging.</p>"
 msgstr ""
-"<b>GDB 輸出</b><p>顯示所有執行中的 gdb 指令。您也可以在除錯時產生其它的 gdb "
-"指令。</p>"
+"<b>除錯器主控台</b><p>顯示所有執行中的除錯器指令。您也可以在除錯時下其他的除"
+"錯器指令。</p>"
 
 #: widgets/debuggerconsoleview.cpp:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
-msgstr ""
+msgstr "按下 Return 時重複上一個指令"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
-#, fuzzy, kde-format
-#| msgid "Pause execution of the app to enter gdb commands"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
-msgstr "暫停執行應用程式，以輸入 gdb 指令"
+msgstr "暫停應用程式的執行，以便輸入除錯器指令"
 
 #: widgets/debuggerconsoleview.cpp:72
-#, fuzzy, kde-format
-#| msgid "Show Internal Commands"
+#, kde-format
 msgctxt "@action"
 msgid "Show Internal Commands"
 msgstr "顯示內部指令"
 
 #: widgets/debuggerconsoleview.cpp:76
-#, fuzzy, kde-format
-#| msgid ""
-#| "Controls if commands issued internally by KDevelop will be shown or not."
-#| "<br>This option will affect only future commands, it will not add or "
-#| "remove already issued commands from the view."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Controls if commands issued internally by KDevelop will be shown or not."
@@ -618,80 +571,71 @@ msgstr ""
 "不會新增或移除任何已產生的指令。"
 
 #: widgets/debuggerconsoleview.cpp:137
-#, fuzzy, kde-format
-#| msgid "Command"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Command:"
-msgstr "指令"
+msgstr "指令(&C)："
 
 #: widgets/debuggerconsoleview.cpp:159
-#, fuzzy, kde-format
-#| msgid "Command"
+#, kde-format
 msgctxt "@title:window"
 msgid "%1 Command Bar"
-msgstr "指令"
+msgstr "%1 指令列"
 
 #. i18n: ectx: property (text), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:53
-#, fuzzy, kde-format
-#| msgid "Interrupt (INT)"
+#, kde-format
 msgctxt "@action"
 msgid "Interrupt"
-msgstr "中斷（INT）"
+msgstr "中斷"
 
 #. i18n: ectx: property (text), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:70
 #, kde-format
 msgctxt "@action"
 msgid "Repeat"
-msgstr ""
+msgstr "重複"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:73
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last sent command when hit <Return>"
-msgstr ""
+msgstr "按下 <Return> 鍵時重複上次送出的指令"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
 #: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Address Selector"
+#, kde-format
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "位址選擇器"
 
 #: widgets/disassemblewidget.cpp:88
-#, fuzzy, kde-format
-#| msgid "Change &address"
+#, kde-format
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "變更位址(&A)"
 
 #: widgets/disassemblewidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "&Jump to Cursor"
+#, kde-format
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "跳到游標處(&J)"
 
 #: widgets/disassemblewidget.cpp:93
-#, fuzzy, kde-format
-#| msgid "Sets the execution pointer to the current cursor position."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
-msgstr "設定執行點到目前游標位置。"
+msgstr "將執行點設定成目前游標位置。"
 
 #: widgets/disassemblewidget.cpp:96
-#, fuzzy, kde-format
-#| msgid "&Run to Cursor"
+#, kde-format
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "執行到游標處(&R)"
 
 #: widgets/disassemblewidget.cpp:97
-#, fuzzy, kde-format
-#| msgid "Continues execution until the cursor position is reached."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "繼續執行到游標位置所在。"
@@ -700,19 +644,19 @@ msgstr "繼續執行到游標位置所在。"
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
-msgstr ""
+msgstr "&AT&&T"
 
 #: widgets/disassemblewidget.cpp:101
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
-msgstr ""
+msgstr "GDB 會使用 AT&T 反組譯語法（例如 mov 0xc(%ebp),%eax）。"
 
 #: widgets/disassemblewidget.cpp:105
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
-msgstr ""
+msgstr "&Intel"
 
 #: widgets/disassemblewidget.cpp:106
 #, kde-format
@@ -720,22 +664,16 @@ msgctxt "@info:tooltip"
 msgid ""
 "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
 "+0xc])."
-msgstr ""
+msgstr "GDB 會使用 Intel 反組譯語法（例如 mov eax, DWORD PTR [ebp+0xc]）。"
 
 #: widgets/disassemblewidget.cpp:143
-#, fuzzy, kde-format
-#| msgid "Disassemble"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
-msgstr "反組譯"
+msgstr "反組譯語法"
 
 #: widgets/disassemblewidget.cpp:174
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Machine code display</b><p>A machine code view into your running "
-#| "executable with the current instruction highlighted. You can step "
-#| "instruction by instruction using the debuggers toolbar buttons of \"step "
-#| "over\" instruction and \"step into\" instruction."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Machine code display</b><p>A machine code view into your running "
@@ -747,48 +685,42 @@ msgstr ""
 "可以用除錯器工具列上的「單步執行指令」或「單步跳入」來一個指令一個指令執行。"
 
 #: widgets/disassemblewidget.cpp:190
-#, fuzzy, kde-format
-#| msgid "Address"
+#, kde-format
 msgctxt "@title:column"
 msgid "Address"
-msgstr "地址"
+msgstr "位址"
 
 #: widgets/disassemblewidget.cpp:191
-#, fuzzy, kde-format
-#| msgid "Function"
+#, kde-format
 msgctxt "@title:column"
 msgid "Function"
 msgstr "函式"
 
 #: widgets/disassemblewidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Instruction"
+#, kde-format
 msgctxt "@title:column"
 msgid "Instruction"
-msgstr "指令"
+msgstr "指令 (Instruction)"
 
 #: widgets/disassemblewidget.cpp:212
-#, fuzzy, kde-format
-#| msgid "Disassemble/Registers View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"
 msgstr "反組譯/暫存器檢視"
 
 #. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
 #: widgets/selectaddressdialog.ui:17
-#, fuzzy, kde-format
-#| msgid "Select the address to disassemble around"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the address to disassemble around"
-msgstr "選擇位址來反組譯"
+msgstr "選擇要反組譯週邊的位址"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/selectaddressdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Select address to disassemble around"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
-msgstr "選擇位址來反組譯"
+msgstr "要反組譯週邊的位址："
 
 #~ msgid "Could not start debugger"
 #~ msgstr "無法啟動除錯器"
