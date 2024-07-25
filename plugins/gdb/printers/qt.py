@@ -383,7 +383,105 @@ class QMapPrinter:
 class QHashPrinter:
     "Print a QHash"
 
-    class _iterator(Iterator):
+    class _iterator_qt6(Iterator):
+        def __init__(self, val):
+            self.val = val
+            self.d = self.val['d']
+            self.bucket = 0
+            self.ktype = self.val.type.template_argument(0)
+            self.vtype = self.val.type.template_argument(1)
+            self.count = 0
+            self.firstNode()
+
+        def __iter__(self):
+            return self
+
+        def span(self):
+            "Python port of iterator::span()"
+            return self.bucket >> 7 # SpanConstants::SpanShift
+
+        def index(self):
+            "Python port of iterator::index()"
+            return self.bucket & 127 # SpanConstants::LocalBucketMask
+
+        def isUnused (self):
+            "Python port of iterator::isUnused()"
+            # return !d->spans[span()].hasNode(index());
+            # where hasNode is return (offsets[i] != SpanConstants::UnusedEntry);
+            return self.d['spans'][self.span()]['offsets'][self.index()] == 0xff # SpanConstants::UnusedEntry
+
+        def node (self):
+            "Return the node pointed by the iterator, python port of iterator::node()"
+            # return &d->spans[span()].at(index());
+            span_index = self.span()
+            span = self.d['spans'][span_index]
+            # where at() is return entries[offsets[i]].node();
+            offset = span['offsets'][self.index()]
+
+            if offset == 0xff: # UnusedEntry, can't happen
+                print("Offset points to an unused entry.")
+                return None
+
+            #print(f"span() = {span_index}, span = {span}, offset = {offset}")
+            entry = span['entries'][offset]
+
+            # where node() is return *reinterpret_cast<Node *>(&storage);
+            # where Node is QHashPrivate::Node<Key, T>
+            nodeType = f'QHashPrivate::Node<{self.ktype}, {self.vtype}>'
+            #print("nodeType=%s" % nodeType)
+            storage_pointer = entry['storage'].address
+            return storage_pointer.cast(gdb.lookup_type(nodeType).pointer())
+
+        def firstNode (self):
+            "Go the first node, See Data::begin()."
+            self.bucket = 0
+            #print("firstNode: if (it.isUnused())")
+            if self.isUnused():
+                #print("firstNode: ++it;")
+                self.nextNode()
+            #print("firstNode: now at bucket %s" % self.bucket)
+
+        def nextNode (self):
+            "Go to the next node, see iterator::operator++()."
+            #print("******************************** nextNode")
+            #print("nextNode: initial bucket %s" % self.bucket)
+            #print("nextNode: numBuckets %s" % self.d['numBuckets'])
+            numBuckets = self.d['numBuckets']
+            while True:
+                self.bucket += 1
+                #print("nextNode: in while; bucket %s" % self.bucket)
+                if self.bucket == numBuckets:
+                    #print("nextNode: in while; end reached")
+                    self.d = 0
+                    self.bucket = 0
+                    return
+                #print("nextNode: in while; isUnused %s" % self.isUnused())
+                if not self.isUnused():
+                    #print("not unused, done")
+                    return
+
+        def __next__(self):
+            "GDB iteration, first call returns key, second value and then jumps to the next hash node."
+            if not self.d:
+                raise StopIteration
+
+            #print("__next__")
+
+            node = self.node()
+
+            #print("got node %s" % node)
+
+            if self.count % 2 == 0:
+                item = node['key']
+            else:
+                item = node['value']
+                self.nextNode()
+
+            self.count = self.count + 1
+
+            return ('[%d]' % self.count, item)
+
+    class _iterator_qt5(Iterator):
         def __init__(self, val):
             self.val = val
             self.d = self.val['d']
@@ -477,7 +575,11 @@ class QHashPrinter:
         self.container = container
 
     def children(self):
-        return self._iterator(self.val)
+        isQt5 = has_field(self.val, 'buckets') # Qt5 has 'buckets', Qt6 doesn't
+        if isQt5:
+            return self._iterator_qt5(self.val)
+        else:
+            return self._iterator_qt6(self.val)
 
     def to_string(self):
         size = self.val['d']['size']
