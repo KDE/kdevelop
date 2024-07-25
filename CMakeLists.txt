@@ -136,6 +136,7 @@ add_definitions(
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
 )
 ecm_set_disabled_deprecation_versions(
+    DISABLE_NEWER_WARNINGS # remove again once Qt6/KF6 porting work fully done
     QT ${QT_MIN_VERSION}
     KF ${KF_MIN_VERSION}
 )
