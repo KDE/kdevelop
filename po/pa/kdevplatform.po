@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevvcscommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2008-12-17 18:58+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -155,7 +155,7 @@ msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Type"
 msgstr ""
@@ -371,14 +371,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr ""
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Value"
 msgstr ""
@@ -388,12 +388,12 @@ msgstr ""
 msgid "Locals"
 msgstr ""
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:114
 #, kde-format
 msgid "Watch This"
 msgstr ""
 
-#: debugger/variable/variabletooltip.cpp:118
+#: debugger/variable/variabletooltip.cpp:116
 #, kde-format
 msgid "Stop on Change"
 msgstr ""
@@ -5062,45 +5062,45 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr ""
 
-#: sublime/container.cpp:356
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr ""
 
-#: sublime/container.cpp:390
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr ""
 
-#: sublime/container.cpp:402
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:798
+#: sublime/container.cpp:787
 #, fuzzy, kde-format
 #| msgid "Remove"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "ਹਟਾਓ"
 
-#: sublime/container.cpp:801
+#: sublime/container.cpp:790
 #, fuzzy, kde-format
 #| msgid "Revert"
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "ਰੀਵਰਟ"
 
-#: sublime/container.cpp:803
+#: sublime/container.cpp:792
 #, fuzzy, kde-format
 #| msgid "Revert"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "ਰੀਵਰਟ"
 
-#: sublime/container.cpp:805
+#: sublime/container.cpp:794
 #, fuzzy, kde-format
 #| msgid "Revert"
 msgctxt "@action:inmenu"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2024-07-19 14:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -165,7 +165,7 @@ msgstr "&Yer imi"
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Type"
 msgstr "Tür"
@@ -384,14 +384,14 @@ msgstr "Otomatik"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Ad"
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Value"
 msgstr "Değer"
@@ -401,12 +401,12 @@ msgstr "Değer"
 msgid "Locals"
 msgstr "Yereller"
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:114
 #, kde-format
 msgid "Watch This"
 msgstr "Bunu İzle"
 
-#: debugger/variable/variabletooltip.cpp:118
+#: debugger/variable/variabletooltip.cpp:116
 #, kde-format
 msgid "Stop on Change"
 msgstr "Değişimde Durdur"
@@ -5221,42 +5221,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Yükle"
 
-#: sublime/container.cpp:356
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Satır: 00000 Sütun: 000"
 
-#: sublime/container.cpp:390
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Açık belgelerin sıralı listesini göster"
 
-#: sublime/container.cpp:402
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Değiştirmek içn Kontrol + Tab düğmelerine basın)"
 
-#: sublime/container.cpp:798
+#: sublime/container.cpp:787
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Dosya Adını Kopyala"
 
-#: sublime/container.cpp:801
+#: sublime/container.cpp:790
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Kapat"
 
-#: sublime/container.cpp:803
+#: sublime/container.cpp:792
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Diğerlerinin Tümünü Kapat"
 
-#: sublime/container.cpp:805
+#: sublime/container.cpp:794
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

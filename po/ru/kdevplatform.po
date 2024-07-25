@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2023-04-25 11:06+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -175,7 +175,7 @@ msgstr "&Закладка"
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Type"
 msgstr "Тип"
@@ -397,14 +397,14 @@ msgstr "Автообновление"
 # BUGME: split
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Имя"
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Value"
 msgstr "Значение"
@@ -414,12 +414,12 @@ msgstr "Значение"
 msgid "Locals"
 msgstr "Локальные переменные"
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:114
 #, kde-format
 msgid "Watch This"
 msgstr "Наблюдать"
 
-#: debugger/variable/variabletooltip.cpp:118
+#: debugger/variable/variabletooltip.cpp:116
 #, kde-format
 msgid "Stop on Change"
 msgstr "Останов при изменении"
@@ -5232,42 +5232,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Загрузить"
 
-#: sublime/container.cpp:356
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Стр: 00000 Столб: 000"
 
-#: sublime/container.cpp:390
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Вывести отсортированный список открытых документов"
 
-#: sublime/container.cpp:402
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Нажмите Ctrl+Tab для переключения)"
 
-#: sublime/container.cpp:798
+#: sublime/container.cpp:787
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Копировать имя файла"
 
-#: sublime/container.cpp:801
+#: sublime/container.cpp:790
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Закрыть"
 
-#: sublime/container.cpp:803
+#: sublime/container.cpp:792
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Закрыть все остальные"
 
-#: sublime/container.cpp:805
+#: sublime/container.cpp:794
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

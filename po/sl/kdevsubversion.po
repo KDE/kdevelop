@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2021-09-01 09:34+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -137,12 +137,12 @@ msgstr "Subversion: uvozi"
 msgid "Not enough information to import"
 msgstr "Ni dovolj podatkov za uvoz"
 
-#: svninfojob.cpp:81
+#: svninfojob.cpp:82
 #, kde-format
 msgid "Subversion Info"
 msgstr "Subversion: podrobnosti"
 
-#: svninfojob.cpp:113
+#: svninfojob.cpp:114
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "Ni dovolj podatkov za izpis podrobnosti"

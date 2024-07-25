@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevproblemreporter.pot\n"
-"X-Crowdin-File-ID: 54548\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevproblemreporter.pot\n"
+"X-Crowdin-File-ID: 54978\n"
 
 #: problemreporterplugin.cpp:99
 #, kde-format

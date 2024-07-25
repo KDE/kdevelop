@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2009-07-05 19:31+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -155,7 +155,7 @@ msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, fuzzy, kde-format
 msgid "Type"
 msgstr "Jenis"
@@ -366,14 +366,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #: shell/launchconfigurationdialog.ui:110
 #, fuzzy, kde-format
 msgid "Name"
 msgstr "Nama"
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, fuzzy, kde-format
 msgid "Value"
 msgstr "Nilai"
@@ -383,12 +383,12 @@ msgstr "Nilai"
 msgid "Locals"
 msgstr ""
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:114
 #, kde-format
 msgid "Watch This"
 msgstr ""
 
-#: debugger/variable/variabletooltip.cpp:118
+#: debugger/variable/variabletooltip.cpp:116
 #, fuzzy, kde-format
 msgid "Stop on Change"
 msgstr "Batal"
@@ -4973,42 +4973,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Memuat"
 
-#: sublime/container.cpp:356
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr ""
 
-#: sublime/container.cpp:390
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr ""
 
-#: sublime/container.cpp:402
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:798
+#: sublime/container.cpp:787
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Nama Fail"
 
-#: sublime/container.cpp:801
+#: sublime/container.cpp:790
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Tutup"
 
-#: sublime/container.cpp:803
+#: sublime/container.cpp:792
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Tutup S&emua"
 
-#: sublime/container.cpp:805
+#: sublime/container.cpp:794
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

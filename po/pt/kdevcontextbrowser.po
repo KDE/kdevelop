@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcontextbrowser\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2020-07-20 12:30+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -95,7 +95,7 @@ msgctxt "@action"
 msgid "Find Uses"
 msgstr "Procurar os Usos"
 
-#: contextbrowser.cpp:1559
+#: contextbrowser.cpp:1560
 #, kde-format
 msgid "(changed)"
 msgstr "(alterado)"

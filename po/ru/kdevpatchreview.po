@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2022-03-16 10:50+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -257,7 +257,7 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "Изменения"
 
-#: patchreviewtoolview.cpp:87
+#: patchreviewtoolview.cpp:83
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
@@ -267,13 +267,13 @@ msgstr[1] "%2 (%1 части)"
 msgstr[2] "%2 (%1 частей)"
 msgstr[3] "%2 (одна часть)"
 
-#: patchreviewtoolview.cpp:227
+#: patchreviewtoolview.cpp:223
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr ""
 "<qt>Созданный запрос находится по адресу:<br /><a href='%1'>%1</a> </qt>"
 
-#: patchreviewtoolview.cpp:230
+#: patchreviewtoolview.cpp:226
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
@@ -282,24 +282,24 @@ msgstr ""
 "Не удалось выполнить экспорт патча.\n"
 "%1"
 
-#: patchreviewtoolview.cpp:261
+#: patchreviewtoolview.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "Select All"
 msgstr "Выбрать все"
 
-#: patchreviewtoolview.cpp:263
+#: patchreviewtoolview.cpp:259
 #, kde-format
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "Отменить выбор"
 
-#: patchreviewtoolview.cpp:561
+#: patchreviewtoolview.cpp:557
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Выполнение тестов: %p%"
 
-#: patchreviewtoolview.cpp:589
+#: patchreviewtoolview.cpp:585
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
@@ -308,7 +308,7 @@ msgstr[1] "Пройдены все тесты (%1)"
 msgstr[2] "Пройдены все тесты (%1)"
 msgstr[3] "Тест пройден"
 
-#: patchreviewtoolview.cpp:593
+#: patchreviewtoolview.cpp:589
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Результаты тестов: пройдено %1, не пройдено %2, с ошибками %3"

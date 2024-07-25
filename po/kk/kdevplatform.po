@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Type"
 msgstr "Түрі"
@@ -396,14 +396,14 @@ msgstr "Авто"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Атауы"
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Value"
 msgstr "Мәні"
@@ -413,13 +413,13 @@ msgstr "Мәні"
 msgid "Locals"
 msgstr "Жергілікті"
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:114
 #, fuzzy, kde-format
 #| msgid "Match case"
 msgid "Watch This"
 msgstr "Үлкен-кішілігін &ескеріп"
 
-#: debugger/variable/variabletooltip.cpp:118
+#: debugger/variable/variabletooltip.cpp:116
 #, fuzzy, kde-format
 #| msgid "&Stop on change"
 msgid "Stop on Change"
@@ -5512,46 +5512,46 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Жүктеу"
 
-#: sublime/container.cpp:356
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Жол: 00000 Бағ.:  000"
 
-#: sublime/container.cpp:390
+#: sublime/container.cpp:379
 #, fuzzy, kde-format
 #| msgid "Show sorted list of opened documents"
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Ашылған құжаттар реттелген тізімін көрсету"
 
-#: sublime/container.cpp:402
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:798
+#: sublime/container.cpp:787
 #, fuzzy, kde-format
 #| msgid "Filename"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Файл атауы"
 
-#: sublime/container.cpp:801
+#: sublime/container.cpp:790
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Жабу"
 
-#: sublime/container.cpp:803
+#: sublime/container.cpp:792
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Бүкіл ба&сқаларын жабу"
 
-#: sublime/container.cpp:805
+#: sublime/container.cpp:794
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action:inmenu"

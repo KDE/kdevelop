@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-05-06 16:16+0200\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"PO-Revision-Date: 2024-07-20 16:06+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -175,7 +175,7 @@ msgstr "&Signet"
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Type"
 msgstr "Type"
@@ -396,14 +396,14 @@ msgstr "Auto"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Nom"
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Value"
 msgstr "Valeur"
@@ -413,12 +413,12 @@ msgstr "Valeur"
 msgid "Locals"
 msgstr "Locaux"
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:114
 #, kde-format
 msgid "Watch This"
 msgstr "Surveiller ceci"
 
-#: debugger/variable/variabletooltip.cpp:118
+#: debugger/variable/variabletooltip.cpp:116
 #, kde-format
 msgid "Stop on Change"
 msgstr "Arrêter lors d'un &changement"
@@ -2772,11 +2772,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "Maintenir visible le panneau "
 
 #: shell/openprojectdialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1|All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "%1|Tous les fichiers projets (%1)"
+msgstr "Tous les fichiers de projets"
 
 #: shell/openprojectdialog.cpp:133
 #, kde-format
@@ -5303,42 +5302,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Charger"
 
-#: sublime/container.cpp:356
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Ligne : 00000 Col : 000"
 
-#: sublime/container.cpp:390
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Afficher la liste triée des documents ouverts"
 
-#: sublime/container.cpp:402
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Appuyer sur Ctrl+Tab pour basculer)"
 
-#: sublime/container.cpp:798
+#: sublime/container.cpp:787
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Copier le nom de fichier"
 
-#: sublime/container.cpp:801
+#: sublime/container.cpp:790
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Fermer"
 
-#: sublime/container.cpp:803
+#: sublime/container.cpp:792
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Fermer tous les autres"
 
-#: sublime/container.cpp:805
+#: sublime/container.cpp:794
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

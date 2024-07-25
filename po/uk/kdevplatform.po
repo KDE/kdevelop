@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2024-07-19 07:33+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -166,7 +166,7 @@ msgstr "З&акладка"
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Type"
 msgstr "Тип "
@@ -389,14 +389,14 @@ msgstr "Авто"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Назва"
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Value"
 msgstr "Значення"
@@ -406,12 +406,12 @@ msgstr "Значення"
 msgid "Locals"
 msgstr "Локальні"
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:114
 #, kde-format
 msgid "Watch This"
 msgstr "Спостерігати"
 
-#: debugger/variable/variabletooltip.cpp:118
+#: debugger/variable/variabletooltip.cpp:116
 #, kde-format
 msgid "Stop on Change"
 msgstr "Зупинитися на зміні"
@@ -5252,42 +5252,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Завантажити"
 
-#: sublime/container.cpp:356
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Рядок: 00000 Кол: 000"
 
-#: sublime/container.cpp:390
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Показати впорядкований список відкритих документів"
 
-#: sublime/container.cpp:402
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Натисніть Ctrl+Tab, щоб перемкнутися)"
 
-#: sublime/container.cpp:798
+#: sublime/container.cpp:787
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Копіювати назву файла"
 
-#: sublime/container.cpp:801
+#: sublime/container.cpp:790
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Закрити"
 
-#: sublime/container.cpp:803
+#: sublime/container.cpp:792
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Закрити всі інші"
 
-#: sublime/container.cpp:805
+#: sublime/container.cpp:794
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2014-11-27 17:20+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -140,13 +140,13 @@ msgstr "Subversion-tuonti"
 msgid "Not enough information to import"
 msgstr "Ei tarpeeksi tietoa tuomiseen"
 
-#: svninfojob.cpp:81
+#: svninfojob.cpp:82
 #, kde-format
 msgid "Subversion Info"
 msgstr "Subversion-info"
 
 # Mikä ihmeen ”job”? Ei esiinny muissa ja svn info on kuitenkin komento.
-#: svninfojob.cpp:113
+#: svninfojob.cpp:114
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "Ei tarpeeksi tietoa info-toiminnon suorittamiseen"

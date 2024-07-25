@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2020-10-04 20:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -20,31 +20,31 @@ msgctxt "@title:window"
 msgid "File System"
 msgstr "파일 시스템"
 
-#: filemanager.cpp:131
+#: filemanager.cpp:127
 #, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "책갈피"
 
-#: filemanager.cpp:138
+#: filemanager.cpp:134
 #, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "현재 문서 디렉터리"
 
-#: filemanager.cpp:169
+#: filemanager.cpp:151
 #, kde-format
 msgctxt "@action"
 msgid "New File..."
 msgstr "새 파일..."
 
-#: filemanager.cpp:176
+#: filemanager.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "새 파일 만들기"
 
-#: filemanager.cpp:192
+#: filemanager.cpp:174
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "파일 '%1'을(를) 만들 수 없음"

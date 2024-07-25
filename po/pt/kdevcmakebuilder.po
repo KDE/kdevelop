@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2020-07-20 14:44+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -36,13 +36,13 @@ msgid "No build directory configured, cannot configure"
 msgstr ""
 "Não está configurada nenhuma pasta de compilação; não é possível configurar"
 
-#: cmakebuilderpreferences.cpp:48
+#: cmakebuilderpreferences.cpp:44
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: cmakebuilderpreferences.cpp:53
+#: cmakebuilderpreferences.cpp:49
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2021-08-31 09:58+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -252,7 +252,7 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "Spremembe"
 
-#: patchreviewtoolview.cpp:87
+#: patchreviewtoolview.cpp:83
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
@@ -262,12 +262,12 @@ msgstr[1] "%2 (%1 velika kosa)"
 msgstr[2] "%2 (%1 veliki kosi)"
 msgstr[3] "%2 (%1 velikih kosov)"
 
-#: patchreviewtoolview.cpp:227
+#: patchreviewtoolview.cpp:223
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr "<qt>Novo zahtevo lahko najdete na:<br /><a href='%1'>%1</a> </qt>"
 
-#: patchreviewtoolview.cpp:230
+#: patchreviewtoolview.cpp:226
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
@@ -276,24 +276,24 @@ msgstr ""
 "Popravka ni bilo mogoče izvoziti.\n"
 "%1"
 
-#: patchreviewtoolview.cpp:261
+#: patchreviewtoolview.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: patchreviewtoolview.cpp:263
+#: patchreviewtoolview.cpp:259
 #, kde-format
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "Odstrani izbiro"
 
-#: patchreviewtoolview.cpp:561
+#: patchreviewtoolview.cpp:557
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Zaganjanje preizkusov: %p %"
 
-#: patchreviewtoolview.cpp:589
+#: patchreviewtoolview.cpp:585
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
@@ -302,7 +302,7 @@ msgstr[1] "%1 preizkus je uspel"
 msgstr[2] "Oba %1 preizkusa sta uspela"
 msgstr[3] "Vsi %1 preizkusi so uspeli"
 
-#: patchreviewtoolview.cpp:593
+#: patchreviewtoolview.cpp:589
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Rezultati preizkusa: %1 uspelih, %2 spodletelih, %3 napake"

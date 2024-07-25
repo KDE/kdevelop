@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2024-07-19 06:00+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -166,7 +166,7 @@ msgstr "&Zaznamek"
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Type"
 msgstr "Vrsta"
@@ -388,14 +388,14 @@ msgstr "Samodejno"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Ime"
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Value"
 msgstr "Vrednost"
@@ -405,12 +405,12 @@ msgstr "Vrednost"
 msgid "Locals"
 msgstr "Krajevne"
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:114
 #, kde-format
 msgid "Watch This"
 msgstr "Opazuj to"
 
-#: debugger/variable/variabletooltip.cpp:118
+#: debugger/variable/variabletooltip.cpp:116
 #, kde-format
 msgid "Stop on Change"
 msgstr "Ob spremembi se zaustavi"
@@ -5231,42 +5231,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Naloži"
 
-#: sublime/container.cpp:356
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Vrstica: 00000 Stolpec: 000"
 
-#: sublime/container.cpp:390
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Prikaži razvrščen seznam odprtih dokumentov"
 
-#: sublime/container.cpp:402
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Pritisnite Ctrl+Tab za preklop)"
 
-#: sublime/container.cpp:798
+#: sublime/container.cpp:787
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Kopiraj ime datoteke"
 
-#: sublime/container.cpp:801
+#: sublime/container.cpp:790
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Zapri"
 
-#: sublime/container.cpp:803
+#: sublime/container.cpp:792
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Zapri vse druge"
 
-#: sublime/container.cpp:805
+#: sublime/container.cpp:794
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

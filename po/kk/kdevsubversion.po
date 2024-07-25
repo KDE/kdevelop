@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2013-04-24 03:16+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -139,12 +139,12 @@ msgstr "Subversion импорты"
 msgid "Not enough information to import"
 msgstr "Импорттау үшін мәлімет жеткіліксіз"
 
-#: svninfojob.cpp:81
+#: svninfojob.cpp:82
 #, kde-format
 msgid "Subversion Info"
 msgstr "Subversion ақпары"
 
-#: svninfojob.cpp:113
+#: svninfojob.cpp:114
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "Ақапарды қарау үшін мәлімет жеткіліксіз"

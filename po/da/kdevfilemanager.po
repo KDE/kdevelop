@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2013-10-26 13:48+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -26,35 +26,35 @@ msgctxt "@title:window"
 msgid "File System"
 msgstr "Filsystem"
 
-#: filemanager.cpp:131
+#: filemanager.cpp:127
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Bogmærker"
 
-#: filemanager.cpp:138
+#: filemanager.cpp:134
 #, fuzzy, kde-format
 #| msgid "Current Document Directory"
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Nuværende dokumentmappe"
 
-#: filemanager.cpp:169
+#: filemanager.cpp:151
 #, fuzzy, kde-format
 #| msgid "New File..."
 msgctxt "@action"
 msgid "New File..."
 msgstr "Ny fil..."
 
-#: filemanager.cpp:176
+#: filemanager.cpp:158
 #, fuzzy, kde-format
 #| msgid "Create New File"
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Opret ny fil"
 
-#: filemanager.cpp:192
+#: filemanager.cpp:174
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Kunne ikke oprette fil '%1'"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform/kdevplatform.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -165,7 +165,7 @@ msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Type"
 msgstr "Cineál"
@@ -392,14 +392,14 @@ msgstr "Uathoibríoch"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Ainm"
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:80
+#: debugger/variable/variabletooltip.cpp:78
 #, kde-format
 msgid "Value"
 msgstr "Luach"
@@ -409,13 +409,13 @@ msgstr "Luach"
 msgid "Locals"
 msgstr "Logánta"
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:114
 #, fuzzy, kde-format
 #| msgid "Match case"
 msgid "Watch This"
 msgstr "Comhoiriúnaigh an cás"
 
-#: debugger/variable/variabletooltip.cpp:118
+#: debugger/variable/variabletooltip.cpp:116
 #, fuzzy, kde-format
 #| msgid "Change"
 msgid "Stop on Change"
@@ -5313,46 +5313,46 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Luchtaigh"
 
-#: sublime/container.cpp:356
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Líne: 00000 Col: 000"
 
-#: sublime/container.cpp:390
+#: sublime/container.cpp:379
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Dún gach uile cháipéis oscailte"
 
-#: sublime/container.cpp:402
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:798
+#: sublime/container.cpp:787
 #, fuzzy, kde-format
 #| msgid "Filename"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Ainm Comhaid"
 
-#: sublime/container.cpp:801
+#: sublime/container.cpp:790
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Dún"
 
-#: sublime/container.cpp:803
+#: sublime/container.cpp:792
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Dún Gac&h Rud Eile"
 
-#: sublime/container.cpp:805
+#: sublime/container.cpp:794
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action:inmenu"

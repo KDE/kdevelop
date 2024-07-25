@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2011-11-21 19:43+0100\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -140,12 +140,12 @@ msgstr "Εισαγωγή subversion"
 msgid "Not enough information to import"
 msgstr "Μη επαρκείς πληροφορίες για εισαγωγή"
 
-#: svninfojob.cpp:81
+#: svninfojob.cpp:82
 #, kde-format
 msgid "Subversion Info"
 msgstr "Πληροφορίες Subversion"
 
-#: svninfojob.cpp:113
+#: svninfojob.cpp:114
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση εργασίας πληροφοριών"

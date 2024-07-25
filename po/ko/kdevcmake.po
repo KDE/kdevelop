@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2023-07-23 20:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -23,43 +23,43 @@ msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
 msgstr "빌드 디렉터리 설정 - %1"
 
-#: cmakebuilddirchooser.cpp:88
+#: cmakebuilddirchooser.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "%1의 빌드 디렉터리 설정"
 
-#: cmakebuilddirchooser.cpp:198
+#: cmakebuilddirchooser.cpp:196
 #, kde-format
 msgid "You need to specify a build directory."
 msgstr "빌드 디렉터리를 지정해야 합니다."
 
-#: cmakebuilddirchooser.cpp:205
+#: cmakebuilddirchooser.cpp:203
 #, kde-format
 msgid "Using an already created build directory."
 msgstr "이미 생성된 빌드 디렉터리를 사용합니다."
 
-#: cmakebuilddirchooser.cpp:216
+#: cmakebuilddirchooser.cpp:214
 #, kde-format
 msgid "Creating a new build directory."
 msgstr "새 빌드 디렉터리를 만듭니다."
 
-#: cmakebuilddirchooser.cpp:222
+#: cmakebuilddirchooser.cpp:220
 #, kde-format
 msgid "Build directory already configured."
 msgstr "빌드 디렉터리가 이미 설정되었습니다."
 
-#: cmakebuilddirchooser.cpp:224
+#: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr "이 빌드 디렉터리는 %1에 해당하지만, 프로젝트 디렉터리는 %2입니다."
 
-#: cmakebuilddirchooser.cpp:227
+#: cmakebuilddirchooser.cpp:225
 #, kde-format
 msgid "You may not select a relative build directory."
 msgstr "상대 경로 빌드 디렉터리를 선택할 수 없습니다."
 
-#: cmakebuilddirchooser.cpp:229
+#: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "The selected build directory is not empty."
 msgstr "선택한 빌드 디렉터리가 비어 있지 않습니다."
@@ -371,7 +371,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "문자열"
 
-#: settings/cmakepreferences.cpp:346
+#: settings/cmakepreferences.cpp:344
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -380,24 +380,24 @@ msgstr ""
 "KDevelop의 목록에서 디렉터리 %1을(를) 삭제하려고 합니다.\n"
 "파일 시스템에서도 이 디렉터리를 삭제하시겠습니까?"
 
-#: settings/cmakepreferences.cpp:350
+#: settings/cmakepreferences.cpp:348
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "삭제 안 함"
 
-#: settings/cmakepreferences.cpp:355
+#: settings/cmakepreferences.cpp:353
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "삭제할 수 없음: %1"
 
-#: settings/cmakepreferences.cpp:401
+#: settings/cmakepreferences.cpp:399
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:406
+#: settings/cmakepreferences.cpp:404
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

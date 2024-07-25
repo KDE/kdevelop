@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2023-01-24 01:48+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -24,44 +24,44 @@ msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
 msgstr "Configura una cartella di compilazione - %1"
 
-#: cmakebuilddirchooser.cpp:88
+#: cmakebuilddirchooser.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "Configura una cartella di compilazione per %1"
 
-#: cmakebuilddirchooser.cpp:198
+#: cmakebuilddirchooser.cpp:196
 #, kde-format
 msgid "You need to specify a build directory."
 msgstr "Devi specificare una cartella di compilazione."
 
-#: cmakebuilddirchooser.cpp:205
+#: cmakebuilddirchooser.cpp:203
 #, kde-format
 msgid "Using an already created build directory."
 msgstr "Stai usando una cartella di compilazione già creata."
 
-#: cmakebuilddirchooser.cpp:216
+#: cmakebuilddirchooser.cpp:214
 #, kde-format
 msgid "Creating a new build directory."
 msgstr "Stai creando una nuova cartella di compilazione."
 
-#: cmakebuilddirchooser.cpp:222
+#: cmakebuilddirchooser.cpp:220
 #, kde-format
 msgid "Build directory already configured."
 msgstr "Cartella di compilazione già configurata."
 
-#: cmakebuilddirchooser.cpp:224
+#: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr ""
 "Questa cartella di compilazione è per %1, ma la cartella del progetto è %2."
 
-#: cmakebuilddirchooser.cpp:227
+#: cmakebuilddirchooser.cpp:225
 #, kde-format
 msgid "You may not select a relative build directory."
 msgstr "Non è possibile specificare una cartella di compilazione."
 
-#: cmakebuilddirchooser.cpp:229
+#: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "The selected build directory is not empty."
 msgstr "La cartella di compilazione selezionata non è vuota."
@@ -380,7 +380,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Stringhe"
 
-#: settings/cmakepreferences.cpp:346
+#: settings/cmakepreferences.cpp:344
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -389,24 +389,24 @@ msgstr ""
 "La cartella %1 stà per essere rimossa dall'elenco di KDevelop.\n"
 "Vuoi che KDevelop la elimini anche dal file system?"
 
-#: settings/cmakepreferences.cpp:350
+#: settings/cmakepreferences.cpp:348
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Non eliminare"
 
-#: settings/cmakepreferences.cpp:355
+#: settings/cmakepreferences.cpp:353
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Impossibile rimuovere: %1"
 
-#: settings/cmakepreferences.cpp:401
+#: settings/cmakepreferences.cpp:399
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:406
+#: settings/cmakepreferences.cpp:404
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

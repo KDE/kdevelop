@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2016-01-29 01:20+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@linux.ee>\n"
@@ -25,35 +25,35 @@ msgctxt "@title:window"
 msgid "File System"
 msgstr "Failisüsteem"
 
-#: filemanager.cpp:131
+#: filemanager.cpp:127
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Järjehoidjad"
 
-#: filemanager.cpp:138
+#: filemanager.cpp:134
 #, fuzzy, kde-format
 #| msgid "Current Document Directory"
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Aktiivse dokumendi kataloog"
 
-#: filemanager.cpp:169
+#: filemanager.cpp:151
 #, fuzzy, kde-format
 #| msgid "New File..."
 msgctxt "@action"
 msgid "New File..."
 msgstr "Uus fail..."
 
-#: filemanager.cpp:176
+#: filemanager.cpp:158
 #, fuzzy, kde-format
 #| msgid "Create New File"
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Uue faili loomine"
 
-#: filemanager.cpp:192
+#: filemanager.cpp:174
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Faili \"%1\" loomine nurjus"

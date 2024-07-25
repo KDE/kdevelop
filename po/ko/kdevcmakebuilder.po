@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2020-10-04 19:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -37,13 +37,13 @@ msgstr "빌드 디렉터리가 설정되지 않아서 설치할 수 없음"
 msgid "No build directory configured, cannot configure"
 msgstr "빌드 디렉터리가 설정되지 않아서 설정할 수 없음"
 
-#: cmakebuilderpreferences.cpp:48
+#: cmakebuilderpreferences.cpp:44
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: cmakebuilderpreferences.cpp:53
+#: cmakebuilderpreferences.cpp:49
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"

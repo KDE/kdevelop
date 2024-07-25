@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2014-01-25 23:13+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -273,7 +273,7 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "Változások"
 
-#: patchreviewtoolview.cpp:87
+#: patchreviewtoolview.cpp:83
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
@@ -281,45 +281,45 @@ msgid_plural "%2 (%1 hunks)"
 msgstr[0] "%2 (1 darab)"
 msgstr[1] "%2 (%1 darab)"
 
-#: patchreviewtoolview.cpp:227
+#: patchreviewtoolview.cpp:223
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr ""
 
-#: patchreviewtoolview.cpp:230
+#: patchreviewtoolview.cpp:226
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
 "%1"
 msgstr ""
 
-#: patchreviewtoolview.cpp:261
+#: patchreviewtoolview.cpp:257
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgctxt "@action"
 msgid "Select All"
 msgstr "Összes kijelölése"
 
-#: patchreviewtoolview.cpp:263
+#: patchreviewtoolview.cpp:259
 #, fuzzy, kde-format
 #| msgid "Deselect All"
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "A kijelölés megszüntetése"
 
-#: patchreviewtoolview.cpp:561
+#: patchreviewtoolview.cpp:557
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Futó tesztek: %p%"
 
-#: patchreviewtoolview.cpp:589
+#: patchreviewtoolview.cpp:585
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "Teszt megfelelt"
 msgstr[1] "Mind a(z) %1 teszt megfelelt"
 
-#: patchreviewtoolview.cpp:593
+#: patchreviewtoolview.cpp:589
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Teszt eredmény: %1 megfelelt, %2 meghiúsult, %3 hibás"

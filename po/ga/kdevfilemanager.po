@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform/kdevfilemanager.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -24,35 +24,35 @@ msgctxt "@title:window"
 msgid "File System"
 msgstr "Córas comhad"
 
-#: filemanager.cpp:131
+#: filemanager.cpp:127
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Leabharmharcanna"
 
-#: filemanager.cpp:138
+#: filemanager.cpp:134
 #, fuzzy, kde-format
 #| msgid "Current Document Directory"
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Comhadlann na Cáipéise Reatha"
 
-#: filemanager.cpp:169
+#: filemanager.cpp:151
 #, fuzzy, kde-format
 #| msgid "New File..."
 msgctxt "@action"
 msgid "New File..."
 msgstr "Comhad Nua..."
 
-#: filemanager.cpp:176
+#: filemanager.cpp:158
 #, fuzzy, kde-format
 #| msgid "Create New File"
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Cruthaigh Comhad Nua"
 
-#: filemanager.cpp:192
+#: filemanager.cpp:174
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Ní féidir comhad '%1' a chruthú"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2023-07-23 20:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -14,81 +14,81 @@ msgstr ""
 "X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: qthelpconfig.cpp:48 qthelpconfig.cpp:50
+#: qthelpconfig.cpp:47
 #, kde-format
 msgid "Qt Compressed Help Files"
 msgstr "Qt 압축된 도움말 파일"
 
-#: qthelpconfig.cpp:54
+#: qthelpconfig.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "항목 수정"
 
-#: qthelpconfig.cpp:56
+#: qthelpconfig.cpp:52
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "새 항목 추가"
 
-#: qthelpconfig.cpp:74
+#: qthelpconfig.cpp:70
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "이름을 비워둘 수 없습니다."
 
-#: qthelpconfig.cpp:109
+#: qthelpconfig.cpp:105
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "새 문서 가져오기"
 
-#: qthelpconfig.cpp:125
+#: qthelpconfig.cpp:121
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr ""
 "\"qmake -query\" 명령에서 QtHelp 파일(QCH)의 경로를 제공하지 않았습니다."
 
-#: qthelpconfig.cpp:213
+#: qthelpconfig.cpp:209
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "GHNS에서 제공한 문서"
 
-#: qthelpconfig.cpp:239
+#: qthelpconfig.cpp:235
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Qt 압축된 도움말 파일이 잘못되었습니다."
 
-#: qthelpconfig.cpp:248
+#: qthelpconfig.cpp:244
 #, kde-format
 msgid "Documentation already imported"
 msgstr "문서를 이미 가져옴"
 
-#: qthelpconfig.cpp:300
+#: qthelpconfig.cpp:296
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Qt 도움말"
 
-#: qthelpconfig.cpp:305
+#: qthelpconfig.cpp:301
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Qt 도움말 설정"
 
-#: qthelpconfig.cpp:330
+#: qthelpconfig.cpp:326
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "수정"
 
-#: qthelpconfig.cpp:336
+#: qthelpconfig.cpp:332
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "삭제"
 
-#: qthelpconfig.cpp:342
+#: qthelpconfig.cpp:338
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."

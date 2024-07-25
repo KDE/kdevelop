@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2022-04-24 19:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -96,7 +96,7 @@ msgctxt "@action"
 msgid "Find Uses"
 msgstr "გამოყენებების მოძებნა"
 
-#: contextbrowser.cpp:1559
+#: contextbrowser.cpp:1560
 #, kde-format
 msgid "(changed)"
 msgstr "(შეცვლილია)"

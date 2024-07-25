@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2023-04-17 16:09+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -28,31 +28,31 @@ msgctxt "@title:window"
 msgid "File System"
 msgstr "Tiedostojärjestelmä"
 
-#: filemanager.cpp:131
+#: filemanager.cpp:127
 #, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
-#: filemanager.cpp:138
+#: filemanager.cpp:134
 #, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Nykyinen tiedostokansio"
 
-#: filemanager.cpp:169
+#: filemanager.cpp:151
 #, kde-format
 msgctxt "@action"
 msgid "New File..."
 msgstr "Uusi tiedosto…"
 
-#: filemanager.cpp:176
+#: filemanager.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Luo uusi tiedosto"
 
-#: filemanager.cpp:192
+#: filemanager.cpp:174
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Tiedoston ”%1” luominen epäonnistui"

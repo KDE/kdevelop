@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevbazaar.pot\n"
-"X-Crowdin-File-ID: 54604\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevbazaar.pot\n"
+"X-Crowdin-File-ID: 54834\n"
 
 #: bazaarplugin.cpp:36
 #, kde-format

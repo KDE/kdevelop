@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-07-25 02:28+0000\n"
 "PO-Revision-Date: 2024-06-24 09:38+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -20,35 +20,35 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: qthelpconfig.cpp:48 qthelpconfig.cpp:50
+#: qthelpconfig.cpp:47
 #, kde-format
 msgid "Qt Compressed Help Files"
 msgstr "Файли стиснутої довідки до Qt"
 
-#: qthelpconfig.cpp:54
+#: qthelpconfig.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "Внесення змін до запису"
 
-#: qthelpconfig.cpp:56
+#: qthelpconfig.cpp:52
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "Додавання нового запису"
 
-#: qthelpconfig.cpp:74
+#: qthelpconfig.cpp:70
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "Назва не може бути порожньою."
 
-#: qthelpconfig.cpp:109
+#: qthelpconfig.cpp:105
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Отримати нову документацію"
 
-#: qthelpconfig.cpp:125
+#: qthelpconfig.cpp:121
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
@@ -56,46 +56,46 @@ msgstr ""
 "Не вдалося отримати шлях до файла QtHelp (QCH) за допомогою команди «qmake -"
 "query»."
 
-#: qthelpconfig.cpp:213
+#: qthelpconfig.cpp:209
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Документація, що надається за допомогою GHNS"
 
-#: qthelpconfig.cpp:239
+#: qthelpconfig.cpp:235
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Некоректний файл стиснутої довідки до Qt."
 
-#: qthelpconfig.cpp:248
+#: qthelpconfig.cpp:244
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Документацію вже імпортовано"
 
-#: qthelpconfig.cpp:300
+#: qthelpconfig.cpp:296
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Довідка з Qt"
 
-#: qthelpconfig.cpp:305
+#: qthelpconfig.cpp:301
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Налаштувати параметри довідки з Qt"
 
-#: qthelpconfig.cpp:330
+#: qthelpconfig.cpp:326
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Змінити"
 
-#: qthelpconfig.cpp:336
+#: qthelpconfig.cpp:332
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "Вилучити"
 
-#: qthelpconfig.cpp:342
+#: qthelpconfig.cpp:338
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
