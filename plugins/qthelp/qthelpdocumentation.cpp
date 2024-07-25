@@ -276,6 +276,16 @@ QString QtHelpDocumentation::description() const
         return ret;
     }
 
+    // enums for some reason have a `-enum` suffix in their fragment which cannot be found with the
+    // comment markers, so let's try without that suffix as a fallback
+    const auto enumSuffix = QLatin1String("-enum");
+    if (fragment.endsWith(enumSuffix)) {
+        const auto reducedFragment = fragment.chopped(enumSuffix.size()).toUtf8();
+        if (auto ret = descriptionFromCommentMarkers(reducedFragment, utf8FileData); !ret.isEmpty()) {
+            return ret;
+        }
+    }
+
     // otherwise fallback with ugly HTML parsing using regexp magic, what could go wrong?
     const auto fileData = QString::fromUtf8(utf8FileData);
     if (auto ret = descriptionFromNewHtmlData(fragment, fileData); !ret.isEmpty()) {

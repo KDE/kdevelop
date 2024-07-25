@@ -314,6 +314,7 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
                    const auto globalColorDescription = globalColorDoc->description();
                    QVERIFY(globalColorDescription.contains("Qt::black"));
                    QVERIFY(globalColorDescription.contains("Qt::white"));
+                   QVERIFY(!globalColorDescription.contains("<!-- @@@GlobalColor -->"));
 
                    const auto blackDecl = ctx->findDeclarations(QualifiedIdentifier("Qt::GlobalColor::black")).first();
                    QVERIFY(blackDecl);
