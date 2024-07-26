@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-07-23 05:35+0200\n"
+"PO-Revision-Date: 2024-07-24 05:49+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -117,6 +117,8 @@ msgid ""
 "<b>Breakpoint is dirty</b><p>The breakpoint has not yet been passed to the "
 "debugger.</p>"
 msgstr ""
+"<b>წყვეტის წერტილი ბინძურია</b><p>წყვეტის წერტილი ჯერ გამმართველისთვის "
+"გადაცემული არაა.</p>"
 
 #: debugger/breakpoint/breakpointmodel.cpp:121
 #, kde-format
@@ -203,6 +205,9 @@ msgid ""
 "breakpoint item allows you to change the breakpoint and will take you to the "
 "source in the editor window."
 msgstr ""
+"აჩვენებ ყველა წყვეტის წერტილის სიას მათი მიმდინარე სტატუსით. წყვეტის "
+"წერტილზე დაწკაპუნება საშუალებას გაძლევთ, შეცვალოთ წვდომის წერტილი და "
+"გადაგიყვანთ კოდზე რედაქტორის ფანჯარაში."
 
 #: debugger/breakpoint/breakpointwidget.cpp:75
 #, kde-format
@@ -423,6 +428,7 @@ msgstr ""
 #, kde-format
 msgid "<b>Expression entry</b>Type in expression to watch."
 msgstr ""
+"<b>გამოსახულების ჩანაწერი</b>აკრიფეთ გამოსახულება თვალყურის სადევნებლად."
 
 #: debugger/variable/variablewidget.cpp:207
 #, kde-format
@@ -571,6 +577,8 @@ msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
 "be executed. <br />The plugin will not work until you fix this problem."
 msgstr ""
+"გამშვები ფაილი %1 აღმოჩენილი არაა. დარწმუნდით, რომ ის დაყენებულია და "
+"გაშვებადია. <br />დამატებაა არ იმუშავებს, სანამ ამ პრობლემას არ აღმოფხვრით."
 
 #: language/assistant/renameaction.cpp:69
 #, kde-format
@@ -731,6 +739,8 @@ msgid ""
 "<html><head/><body><p>&quot;Note: All overloaded functions, overloads, "
 "forward-declarations, etc. will be renamed too&quot;</p></body></html>"
 msgstr ""
+"<html><head/><body><p>&quot;შენიშვნა: სახელი გადაერქმევა ყველა გადატვირთულ "
+"ფუნქციას, გადატვირთვას, წინასწარ-აღწერას და ა.შ.&quot;</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:38
@@ -765,6 +775,8 @@ msgctxt ""
 msgid ""
 "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
 msgstr ""
+"არადამდგრადი ცვლილება %1-ში1, %2-ს შორის, %3 აღმოჩენილია (ნაპოვნია \"%4\") -"
+"> \"%5\""
 
 #: language/codegen/documentchangeset.cpp:363
 #, kde-format
@@ -778,6 +790,7 @@ msgctxt ""
 "<encountered>) -> <newText>"
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
 msgstr ""
+"არამდგრადი ცვლილება %1-ში მისამართზე %2 = \"%3\"(ნაპოვნია \"%4\") -> \"%5\""
 
 #: language/codegen/documentchangeset.cpp:539
 #, kde-format
@@ -789,6 +802,8 @@ msgid ""
 "Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
 "\"%5\"->\"%6\"@%7 "
 msgstr ""
+"არამდგრადი ცვლილების მოთხოვნა მისამართზე %1; თანაკვეთადი ცვლილებები: \"%2\"->"
+"\"%3\"@%4 & \"%5\"->\"%6\"@%7 "
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
 #: language/codegen/progressdialogs/refactoringdialog.ui:14
@@ -1154,6 +1169,8 @@ msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
 "<em>Enter</em>)"
 msgstr ""
+"(საჩვენებლად გეჭიროთ ღილაკზე <em>Alt</em>. ნავიგაცია ისრის ღილაკებით ხდება. "
+"გააქტიურებისთვის დააჭირეთ ღილაკს <em>Enter</em>)"
 
 #: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
@@ -1369,6 +1386,8 @@ msgid ""
 "files or - to read from STDIN, the latter is the default if nothing is "
 "provided"
 msgstr ""
+"ფაილები, ან -, STDIN-დან წასაკითხად. ეს უკანასკნელი ნაგულისხმევია, თუ "
+"არაფერს მიუთითებთ"
 
 #: language/util/debuglanguageparserhelper.h:182
 #, kde-format
@@ -1492,6 +1511,9 @@ msgid ""
 "KDevelop.\n"
 "The project has to be closed."
 msgstr ""
+"საბაზისო საქაღალდე პროექტისთვის <b>%1</b> წაშლილია ან გადატანილია KDevelop-"
+"ის გარეთ.\n"
+"პროექტი უნდა დაიხუროს."
 
 #: project/abstractfilemanagerplugin.cpp:328
 #, kde-format
@@ -1506,6 +1528,9 @@ msgid ""
 "hidden.\n"
 "Do you want to continue?"
 msgstr ""
+"სცადეთ სახელის გადარქმევა '%1'-დან '%2'-ზე, მაგრამ უკანასკნელი გაიფილტრა და "
+"დამალული იქნება.\n"
+"გნებავთ, გააგრძელოთ?"
 
 #: project/builderjob.cpp:76
 #, kde-format
@@ -1662,6 +1687,8 @@ msgid ""
 "depend on, but for which an action needs to be taken before running the "
 "application."
 msgstr ""
+"ეს სია უნდა შეიცავდეს სამიზნეებს, რომლებზეც აპლიკაცია პირდაპირ დამოკიდებული "
+"არაა, მაგრამ რომლებისთვისაც საჭიროა ქმედება, სანამ აპლიკაციას გაუშვებთ."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeDependency)
 #: project/widgets/dependencieswidget.ui:87
@@ -1716,6 +1743,11 @@ msgid ""
 "Press Clear if you want KDevelop to clear the cache, otherwise press "
 "Continue if you are sure the crash has another origin."
 msgstr ""
+"ავარია, შეიძლება, დაკეშილი მონაცემების დაზიანებამ გამოიწვია.\n"
+"\n"
+"დააწექით გასუფთავებას, თუ გნებავთ, KDevelop-მა კეში წაშალოს. სხვა "
+"შემთხვევაში დააწექით გაგრძელებას, თუ დარწმუნებული ბრძანდებით, რომ ავარიის "
+"მიზეზი სხვაა."
 
 #: serialization/itemrepositoryregistry.cpp:81
 #, kde-format
@@ -1778,6 +1810,10 @@ msgid ""
 "org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
 "\">this article</a> for more information."
 msgstr ""
+"<p>გაშვებისას დამატებების აღმოჩენა შეუძლებელი იყო.<br/>დარწმუნდით, რომ "
+"გარემოს ცვლადი QT_PLUGIN_PATH სწორადაა დაყენებული.</p>მეტი ინფორმაციისთვის "
+"იხილეთ <a href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
+"Build_from_source#Set_up_the_runtime_environment\">ეს სტატია</a>."
 
 #: shell/debugcontroller.cpp:118
 #, kde-format
@@ -1833,7 +1869,7 @@ msgstr "აპლიკაციის შეწყვეტა"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
-msgstr ""
+msgstr "შეწყვეტს გამმართველის პროცესს ან მიმდინარე გამმართველის ბრძანებას."
 
 #: shell/debugcontroller.cpp:237
 #, kde-format
@@ -2722,6 +2758,8 @@ msgid ""
 "process.\n"
 "Do you want to overwrite the external changes?"
 msgstr ""
+"დოკუმენტს '%1' აქვს შეუნახავი ცვლილებები და შეიცვალა გარე პროცესის მიერ.\n"
+"გნებავთ გადააწეროთ თავზე გარე ცვლილებებს?"
 
 #: shell/partdocument.cpp:115 shell/textdocument.cpp:418
 #, kde-format
@@ -2844,7 +2882,7 @@ msgstr "ჩატვირთვა: %1"
 msgid ""
 "Unable to load the project file %1.<br>The project has been removed from the "
 "session."
-msgstr ""
+msgstr "ვერ ჩავტვირთე პროექტის ფაილი %1.<br>პროექტი წაშლილია სესიიდან."
 
 #: shell/project.cpp:252
 #, kde-format
@@ -2859,7 +2897,7 @@ msgstr "პროექტის ფაილის მიღების შე
 #: shell/project.cpp:308
 #, kde-format
 msgid "Could not load %1, a project with the same name '%2' is already open."
-msgstr ""
+msgstr "%1-ის ჩატვირთვა შეუძლებელია. პროექტი იგივე სახელით '%2' უკვე ღიაა."
 
 #: shell/project.cpp:339
 #, kde-format
@@ -2874,6 +2912,8 @@ msgid ""
 "The project importing plugin (%1) does not support the IProjectFileManager "
 "interface."
 msgstr ""
+"პროექტის შემოტანილ დამატებას (%1) ინტერფეისის IProjectFileManager მხარდაჭერა "
+"არ გააჩნია."
 
 #: shell/project.cpp:402
 #, kde-format
@@ -2886,6 +2926,8 @@ msgid ""
 "Could not store developer specific project configuration.\n"
 "Attention: The project settings you changed will be lost."
 msgstr ""
+"პროგრამისტის საკუთარი პროექტის კონფიგურაციის შენახვა შეუძლებელია.\n"
+"გაფრთხილება: თქვენს მიერ შეცვლილი პროექტის პარამეტრები დაიკარგება."
 
 #: shell/projectcontroller.cpp:158
 #, kde-format
@@ -3010,6 +3052,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr ""
+"გააცილებს მომხმარებელს პროექტის გამოთხოვის პროცესში და შემდეგ შემოიტანს მას "
+"KDevelop-ში."
 
 #: shell/projectcontroller.cpp:584
 #, kde-format
@@ -3081,6 +3125,8 @@ msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
 msgstr ""
+"პროექტი, რომლის გახსნასაც ცდილობთ, უკვე ღიაა, სულ ცოტა ერთ სხვა "
+"სესიაში<br>რას იზამთ?"
 
 #: shell/projectcontroller.cpp:859
 #, kde-format
@@ -3281,6 +3327,8 @@ msgid ""
 "Executes the target or the program specified in currently active launch "
 "configuration."
 msgstr ""
+"შეასრულებს სამიზნეს ან პროგრამას, რომელიც ამჟამად აქტიური გაშვების "
+"კონფიგურაციითაა მითითებული."
 
 #: shell/runcontroller.cpp:442
 #, kde-format
@@ -3358,6 +3406,8 @@ msgstr "მიმდინარე გაშვების კონფიგ�
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
+"აირჩიეთ, რომელი გაშვების კონფიგურაცია შესრულდება, როცა გაცემული იქნება "
+"გაშვების ბრძანება."
 
 #: shell/runcontroller.cpp:590
 #, kde-format
@@ -3468,7 +3518,7 @@ msgstr "<p>დაბლოკილ სესიას ვერ წაშლი
 #, kde-format
 msgctxt "@info"
 msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
-msgstr ""
+msgstr "<p>სესია <b>%1</b> დაბლოკილია %2-ის მიერ %3-ზე (PID %4)."
 
 #: shell/sessionchooserdialog.cpp:204
 #, kde-format
@@ -3608,7 +3658,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
-msgstr ""
+msgstr "%1-ი გაშვებული ასლი (PID %2) როგორც ჩანს, დაეკიდა"
 
 #: shell/sessionlock.cpp:170
 #, kde-format
@@ -3896,7 +3946,7 @@ msgstr "კოდის დასრულება"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "If disabled, the code completion widget will never show automatically."
-msgstr ""
+msgstr "თუ გათიშულია, კოდის დასრულების ვიჯეტი ავტომატურად არასდროს გამოჩნდება."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: shell/settings/languagepreferences.ui:38
