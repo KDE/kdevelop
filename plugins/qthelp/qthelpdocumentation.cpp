@@ -61,6 +61,53 @@ QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider, const
 }
 
 namespace {
+/// remove HTML cruft to produce a clean description
+QString cleanupDescription(QString thisFragment)
+{
+    {
+        //Completely remove the first large header found, since we don't need a header
+        const auto headerRegExp = QStringLiteral("<h\\d.*>.*?</ *h\\d *>");
+        static const auto findHeader = QRegularExpression(headerRegExp);
+        const auto match = findHeader.match(thisFragment);
+        if (match.hasMatch()) {
+            thisFragment.remove(match.capturedStart(), match.capturedLength());
+        }
+    }
+
+    {
+        //Replace all gigantic header-font sizes with <big>
+        {
+            const auto sizeRegExp = QStringLiteral("<h\\d *");
+            static const auto findSize = QRegularExpression(sizeRegExp);
+            thisFragment.replace(findSize, QStringLiteral("<big "));
+        }
+        {
+            const auto sizeCloseRegExp = QStringLiteral("</ *h\\d *>");
+            static const auto closeSize = QRegularExpression(sizeCloseRegExp);
+            thisFragment.replace(closeSize, QStringLiteral("</big><br />"));
+        }
+    }
+
+    {
+        //Replace paragraphs by newlines
+        const auto begin = QStringLiteral("<p *>");
+        static const auto findBegin = QRegularExpression(begin);
+        thisFragment.replace(findBegin, {});
+
+        const auto end = QStringLiteral("</p *>");
+        static const auto findEnd = QRegularExpression(end);
+        thisFragment.replace(findEnd, QStringLiteral("<br />"));
+    }
+
+    {
+        //Remove links, because they won't work
+        const auto link = QStringLiteral("<a +href *= *(['\"]).*?\\1");
+        static const auto exp = QRegularExpression(link, QRegularExpression::CaseInsensitiveOption);
+        thisFragment.replace(exp, QStringLiteral("<a "));
+    }
+
+    return thisFragment;
+}
 
 QString descriptionFromHtmlData(const QString& fragment, const QString& dataString)
 {
@@ -129,51 +176,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         }
     }
 
-    auto thisFragment = dataString.mid(pos, endPos - pos);
-
-    {
-        //Completely remove the first large header found, since we don't need a header
-        const auto headerRegExp = QStringLiteral("<h\\d.*>.*?</ *h\\d *>");
-        static const auto findHeader = QRegularExpression(headerRegExp);
-        const auto match = findHeader.match(thisFragment);
-        if (match.hasMatch()) {
-            thisFragment.remove(match.capturedStart(), match.capturedLength());
-        }
-    }
-
-    {
-        //Replace all gigantic header-font sizes with <big>
-        {
-            const auto sizeRegExp = QStringLiteral("<h\\d *");
-            static const auto findSize = QRegularExpression(sizeRegExp);
-            thisFragment.replace(findSize, QStringLiteral("<big "));
-        }
-        {
-            const auto sizeCloseRegExp = QStringLiteral("</ *h\\d *>");
-            static const auto closeSize = QRegularExpression(sizeCloseRegExp);
-            thisFragment.replace(closeSize, QStringLiteral("</big><br />"));
-        }
-    }
-
-    {
-        //Replace paragraphs by newlines
-        const auto begin = QStringLiteral("<p *>");
-        static const auto findBegin = QRegularExpression(begin);
-        thisFragment.replace(findBegin, {});
-
-        const auto end = QStringLiteral("</p *>");
-        static const auto findEnd = QRegularExpression(end);
-        thisFragment.replace(findEnd, QStringLiteral("<br />"));
-    }
-
-    {
-        //Remove links, because they won't work
-        const auto link = QStringLiteral("<a +href *= *(['\"]).*?\\1");
-        static const auto exp = QRegularExpression(link, QRegularExpression::CaseInsensitiveOption);
-        thisFragment.replace(exp, QStringLiteral("<a "));
-    }
-
-    return thisFragment;
+    return cleanupDescription(dataString.mid(pos, endPos - pos));
 }
 
 QString descriptionFallback(const QList<QHelpLink>& info)
