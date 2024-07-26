@@ -12,7 +12,6 @@
 
 #include <QCoreApplication>
 #include <QHelpLink>
-#include <QProcess>
 #include <QRegularExpression>
 #include <QTest>
 
@@ -237,19 +236,6 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
     bool anyAvailable = false;
     const auto qmakeCandidates = QtHelpQtDoc::qmakeCandidates();
     for (const auto& qmake : qmakeCandidates) {
-        const auto qtMajorVersion = [&qmake]() {
-            auto process = QProcess();
-            process.start(qmake, {"-version"});
-            process.waitForFinished();
-            const auto output = process.readAllStandardOutput();
-            const auto needle = QByteArrayLiteral("Using Qt version ");
-            const auto index = output.indexOf(needle);
-            if (index == -1 || (index + needle.size()) == output.size())
-                return -1;
-            else
-                return output[index + needle.size()] - '0';
-        }();
-
         const auto mutableProvider =
             std::make_shared<QtHelpQtDoc>(nullptr, qmake, qmake + "_testDeclarationLookup.qhc");
         QTRY_VERIFY(mutableProvider->isInitialized());
@@ -283,8 +269,7 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
 
         QTest::addRow("QString::fromLatin1-%s", qPrintable(qmake))
             << provider << "class QString { static QString fromLatin1(const QByteArray&); };"
-            << TestDeclarationLookupCallback{[qtMajorVersion](const TopDUContext* ctx,
-                                                              const QtHelpProviderAbstract* provider) {
+            << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
                    auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("QString"))).first();
                    QVERIFY(decl);
                    auto declFromLatin1 =
@@ -294,9 +279,10 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
                    QVERIFY(doc);
                    QCOMPARE(doc->name(), QStringLiteral("QString::fromLatin1"));
                    const auto description = doc->description();
-                   if (qtMajorVersion == 6)
-                       QEXPECT_FAIL("", "Qt6 docs are not yet properly parsed", Abort);
                    QVERIFY(description.contains(QRegularExpression{"See also.*toLatin1"}));
+                   QVERIFY(!description.contains("href"));
+                   QVERIFY(!description.contains("<p"));
+                   QVERIFY(!description.contains("<h3"));
                }};
 
         QTest::addRow("operator-%s", qPrintable(qmake))

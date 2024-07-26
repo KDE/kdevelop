@@ -57,7 +57,7 @@ QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider, const
     , m_current(::findTitle(m_info, key))
     , lastView(nullptr)
 {
-    Q_ASSERT(m_current!=m_info.constEnd());
+    Q_ASSERT(m_current != m_info.constEnd());
 }
 
 namespace {
@@ -109,7 +109,59 @@ QString cleanupDescription(QString thisFragment)
     return thisFragment;
 }
 
-QString descriptionFromHtmlData(const QString& fragment, const QString& dataString)
+/// try to extract description using comment markers
+QString descriptionFromCommentMarkers(const QByteArray& utf8Fragment, const QByteArray& utf8Data)
+{
+    if (utf8Fragment.isEmpty()) {
+        return {};
+    }
+
+    // find the start marker
+    const auto fragmentStartMarker = QByteArray("<!-- $$$" + utf8Fragment);
+    const auto commentMarkerStart = utf8Data.indexOf(fragmentStartMarker);
+    if (commentMarkerStart == -1) {
+        return {};
+    }
+
+    // find the end marker
+    const auto commentMarkerEnd =
+        utf8Data.indexOf(QByteArray("<!-- @@@" + utf8Fragment), commentMarkerStart + fragmentStartMarker.size());
+    if (commentMarkerEnd == -1) {
+        return {};
+    }
+
+    // then cleanup the data inbetween these two places
+    return cleanupDescription(
+        QString::fromUtf8(utf8Data.sliced(commentMarkerStart, commentMarkerEnd - commentMarkerStart)));
+}
+
+/// try to extract description via HTML parsing using new Qt6 documentation format
+QString descriptionFromNewHtmlData(const QString& fragment, const QString& data)
+{
+    if (fragment.isEmpty()) {
+        return {};
+    }
+
+    // find the header that references the fragment
+    const auto sectionStartPattern = QRegularExpression(QLatin1String("<h(\\d)[^>]+id=\"%1\"").arg(fragment));
+    const auto matchStart = sectionStartPattern.match(data);
+    if (!matchStart.hasMatch()) {
+        return {};
+    }
+
+    // find the start of the next section by the header
+    const auto headerType = matchStart.capturedView(1);
+    const auto sectionStart = matchStart.capturedStart(0);
+    const auto sectionEndPattern = QRegularExpression(QLatin1String("<h%1[^>]+id=\"").arg(headerType));
+    const auto matchEnd = sectionEndPattern.match(data, matchStart.capturedEnd(0));
+    const auto sectionEnd = matchEnd.hasMatch() ? matchEnd.capturedStart(0) : data.size();
+
+    // then cleanup the data inbetween these two places
+    return cleanupDescription(data.sliced(sectionStart, sectionEnd - sectionStart));
+}
+
+/// extract description via HTML parsing using the old Qt5-like documentation format
+QString descriptionFromOldHtmlData(const QString& fragment, const QString& dataString)
 {
     QString::size_type pos = 0;
 
@@ -191,14 +243,28 @@ QString descriptionFallback(const QList<QHelpLink>& info)
 
 } // unnamed namespace
 
+/// Extract a short description from the html data
 QString QtHelpDocumentation::description() const
 {
     const auto url = currentUrl();
     const auto fragment = url.fragment();
 
-    // Extract a short description from the html data
-    const auto fileData = QString::fromLatin1(m_provider->engine()->fileData(url)); ///@todo encoding
-    if (auto ret = descriptionFromHtmlData(fragment, fileData); !ret.isEmpty()) {
+    // assume the data is utf8 encoded
+    // this is true for new data at least with <meta charset="utf-8">
+    const auto utf8FileData = m_provider->engine()->fileData(url);
+
+    // first, fast pass that does not require regular expression matching
+    if (auto ret = descriptionFromCommentMarkers(fragment.toUtf8(), utf8FileData); !ret.isEmpty()) {
+        return ret;
+    }
+
+    // otherwise fallback with ugly HTML parsing using regexp magic, what could go wrong?
+    const auto fileData = QString::fromUtf8(utf8FileData);
+    if (auto ret = descriptionFromNewHtmlData(fragment, fileData); !ret.isEmpty()) {
+        return ret;
+    }
+
+    if (auto ret = descriptionFromOldHtmlData(fragment, fileData); !ret.isEmpty()) {
         return ret;
     }
 
