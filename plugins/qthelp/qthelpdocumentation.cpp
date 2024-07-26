@@ -66,7 +66,7 @@ QString cleanupDescription(QString thisFragment)
 {
     {
         //Completely remove the first large header found, since we don't need a header
-        const auto headerRegExp = QStringLiteral("<h\\d[^>]*>.*?</ *h\\d *>");
+        const auto headerRegExp = QStringLiteral("<h\\d[^>]*>.*?</h\\d *>");
         static const auto findHeader = QRegularExpression(headerRegExp);
         const auto match = findHeader.match(thisFragment);
         if (match.hasMatch()) {
@@ -82,7 +82,7 @@ QString cleanupDescription(QString thisFragment)
             thisFragment.replace(findSize, QStringLiteral("<big>"));
         }
         {
-            const auto sizeCloseRegExp = QStringLiteral("</ *h\\d *>");
+            const auto sizeCloseRegExp = QStringLiteral("</h\\d *>");
             static const auto closeSize = QRegularExpression(sizeCloseRegExp);
             thisFragment.replace(closeSize, QStringLiteral("</big><br />"));
         }
@@ -196,7 +196,7 @@ QString descriptionFromOldHtmlData(const QString& fragment, const QString& dataS
 
     if (!fragment.isEmpty()) {
         const auto exp = QString(QLatin1String("<a +name *= *(['\"])") + QRegularExpression::escape(fragment)
-                                 + QLatin1String("\\1 *> *</ *a *>"));
+                                 + QLatin1String("\\1 *> *</a *>"));
 
         const auto findFragment = QRegularExpression(exp);
         QRegularExpressionMatch findFragmentMatch;
@@ -224,7 +224,7 @@ QString descriptionFromOldHtmlData(const QString& fragment, const QString& dataS
         }
     }
 
-    const auto exp = QStringLiteral("<a +name *= *(['\"])\\S*\\1 *> *</ *a *>");
+    const auto exp = QStringLiteral("<a +name *= *(['\"])\\S*\\1 *> *</a *>");
     static const auto nextFragmentExpression = QRegularExpression(exp);
     auto endPos = dataString.indexOf(nextFragmentExpression, nextFragmentSearchPos);
     if(endPos == -1) {
@@ -233,7 +233,7 @@ QString descriptionFromOldHtmlData(const QString& fragment, const QString& dataS
 
     {
         //Find the end of the last paragraph or newline, so we don't add prefixes of the following fragment
-        const auto newLineRegExp = QStringLiteral("<br */ *> *| *</ *p *>");
+        const auto newLineRegExp = QStringLiteral("<br */ *> *| *</p *>");
         static const auto lastNewLine = QRegularExpression(newLineRegExp);
         const auto newEnd = dataString.lastIndexOf(lastNewLine, endPos);
         if (newEnd > pos) {
