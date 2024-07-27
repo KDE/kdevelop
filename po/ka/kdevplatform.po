@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-07-24 05:49+0200\n"
+"PO-Revision-Date: 2024-07-26 05:41+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2198,7 +2198,7 @@ msgstr "ყველა ღია დოკუმენტის შენახ
 msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
-msgstr ""
+msgstr "ყველა ღია დოკუმენტის შენახვა. გკითხავთ, თუ რამე დაგვჭირდება."
 
 #: shell/documentcontroller.cpp:632
 #, kde-format
@@ -2216,7 +2216,7 @@ msgstr "ყველა ღია დოკუმენტის თავიდ
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
-msgstr ""
+msgstr "ყველა ღია დოკუმენტის დაბრუნება. დაბრუნება წინა შენახულ მდგომარეობაზე."
 
 #: shell/documentcontroller.cpp:641
 #, kde-format
@@ -2254,7 +2254,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Close all open documents, prompting for additional information when "
 "necessary."
-msgstr ""
+msgstr "ყველა ღია დოკუმენტის დახურვა. გკითხავთ, თუ რამე დაგვჭირდება."
 
 #: shell/documentcontroller.cpp:658
 #, kde-format
@@ -2274,7 +2274,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Close all open documents, with the exception of the currently active "
 "document."
-msgstr ""
+msgstr "ყველა ღია დოკუმენტის დახურვა, აქტიური დოკუმენტის გარდა."
 
 #: shell/documentcontroller.cpp:666
 #, kde-format
@@ -2294,6 +2294,8 @@ msgid ""
 "Could not annotate the document because it is not part of a version-"
 "controlled project."
 msgstr ""
+"დოკუმენტისთვის ანოტაციის მინიჭება შეუძლებელია, რადგან ის ვერსიის-"
+"კონტროლირებადი პროექტის ნაწილს არ წარმოადგენს."
 
 #: shell/editorconfigpage.cpp:94
 #, kde-format
@@ -2335,6 +2337,8 @@ msgstr "მონიშნული გაშვების კონფიგ�
 msgid ""
 "No launch configurations available. (Is any of the Execute plugins loaded?)"
 msgstr ""
+"გაშვების კონფიგურაციები ხელმისაწვდომი არაა (ჩატვირთულია ერთი გამშვები "
+"დამატება მაინც?)"
 
 #: shell/launchconfigurationdialog.cpp:197
 #, kde-format
@@ -2353,6 +2357,8 @@ msgstr "კონფიგურაციის წაშლა"
 msgid ""
 "Selected Launch Configuration has unsaved changes. Do you want to save it?"
 msgstr ""
+"მონიშნულ გაშვების კონფიგურაციას შეუნახავი ცვლილებები გააჩნია. გნებავთ, "
+"შეინახოთ?"
 
 #: shell/launchconfigurationdialog.cpp:254
 #, kde-format
@@ -3552,6 +3558,8 @@ msgid ""
 "The current session and all contained settings will be deleted. The projects "
 "will stay unaffected. Do you really want to continue?"
 msgstr ""
+"მიმდინარე სესია და ყველა მისი პარამეტრი წაიშლება. პროექტები ცვლილების გარეშე "
+"შენარჩუნდება. მართლა გნებავთ გაგრძელება?"
 
 #: shell/sessioncontroller.cpp:157
 #, kde-format
