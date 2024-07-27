@@ -31,6 +31,7 @@
 #include "qthelpproviderabstract.h"
 
 #include <algorithm>
+#include <array>
 #include <cctype>
 
 using namespace KDevelop;
@@ -129,10 +130,22 @@ QString cleanupDescription(QString thisFragment)
 }
 
 /// try to extract description using comment markers
-QString descriptionFromCommentMarkers(const QByteArray& utf8Fragment, const QByteArray& utf8Data)
+QString descriptionFromCommentMarkers(QByteArray utf8Fragment, const QByteArray& utf8Data)
 {
     if (utf8Fragment.isEmpty()) {
         return {};
+    }
+
+    // enum, typedef and property fragment ends with a suffix, which is absent from comment markers,
+    // so remove it here. The 'x' suffix is used to disambiguate case-insensitive HTML fragments of
+    // identifiers that differ only in case, e.g. "Iterator-typedef" and "iterator-typedefx".
+    constexpr std::array fragmentSuffixesToRemove = {QByteArrayView("-enum"), QByteArrayView("-typedef"),
+                                                     QByteArrayView("-typedefx"), QByteArrayView("-prop")};
+    for (const auto suffix : fragmentSuffixesToRemove) {
+        if (utf8Fragment.endsWith(suffix)) {
+            utf8Fragment.chop(suffix.size());
+            break;
+        }
     }
 
     // find the start marker
@@ -302,16 +315,6 @@ QString QtHelpDocumentation::description() const
     const auto& fragmentOrClassName = fragment.isEmpty() ? m_name : fragment;
     if (auto ret = descriptionFromCommentMarkers(fragmentOrClassName.toUtf8(), utf8FileData); !ret.isEmpty()) {
         return ret;
-    }
-
-    // enums for some reason have a `-enum` suffix in their fragment which cannot be found with the
-    // comment markers, so let's try without that suffix as a fallback
-    const auto enumSuffix = QLatin1String("-enum");
-    if (fragment.endsWith(enumSuffix)) {
-        const auto reducedFragment = fragment.chopped(enumSuffix.size()).toUtf8();
-        if (auto ret = descriptionFromCommentMarkers(reducedFragment, utf8FileData); !ret.isEmpty()) {
-            return ret;
-        }
     }
 
     // otherwise fallback with ugly HTML parsing using regexp magic, what could go wrong?

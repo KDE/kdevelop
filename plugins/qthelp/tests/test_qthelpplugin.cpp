@@ -327,6 +327,46 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
                    QVERIFY(!doc);
                }};
 
+        QTest::addRow("QString::iterator-%s", qPrintable(qmake))
+            << provider << "class QString { typedef QChar *iterator; };"
+            << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
+                   const auto decl = ctx->findDeclarations(QualifiedIdentifier("QString")).first();
+                   QVERIFY(decl);
+                   const auto iteratorDecl =
+                       decl->internalContext()->findDeclarations(QualifiedIdentifier("iterator")).first();
+                   QVERIFY(iteratorDecl);
+
+                   const auto doc = provider->documentationForDeclaration(iteratorDecl);
+                   QVERIFY(doc);
+                   QCOMPARE(doc->name(), "QString::iterator");
+
+                   const auto description = doc->description();
+                   // verify that we find the documentation for QString::iterator
+                   QVERIFY(description.contains(QRegularExpression{"See also.*QString::const_iterator"}));
+                   // verify that the faster comment marker search succeeds
+                   QVERIFY(!description.contains("<!-- @@@iterator -->"));
+               }};
+
+        QTest::addRow("QObject::objectName-%s", qPrintable(qmake))
+            << provider << "class QObject { QString objectName() const; };"
+            << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
+                   const auto decl = ctx->findDeclarations(QualifiedIdentifier("QObject")).first();
+                   QVERIFY(decl);
+                   const auto objectNameDecl =
+                       decl->internalContext()->findDeclarations(QualifiedIdentifier("objectName")).first();
+                   QVERIFY(objectNameDecl);
+
+                   const auto doc = provider->documentationForDeclaration(objectNameDecl);
+                   QVERIFY(doc);
+                   QCOMPARE(doc->name(), "QObject::objectName");
+
+                   const auto description = doc->description();
+                   // verify that we find the documentation for QObject::objectName
+                   QVERIFY(description.contains("This property holds the name of this object"));
+                   // verify that the faster comment marker search succeeds
+                   QVERIFY(!description.contains("<!-- @@@objectName -->"));
+               }};
+
         QTest::addRow("enum-%s", qPrintable(qmake))
             << provider << "namespace Qt { enum GlobalColor { black }; }"
             << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
