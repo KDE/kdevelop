@@ -14,6 +14,7 @@
         "Description[fr]": "Permet de basculer entre des documents amis comme l'implémentation et le fichier d'en-tête.",
         "Description[gl]": "Permite trocar entre documentos tipo buddy como implementación e ficheiro de cabeceira.",
         "Description[it]": "Consente il passaggio tra i documenti associati come implementazioni e file header.",
+        "Description[ka]": "საშუალებას გაძლევთ, გადართოთ ურთიერთდამოკიდებულ დოკუმენტებს (კოდის) და თავსართის (.h) ფაილებს შორის.",
         "Description[ko]": "구현과 헤더 파일 등 짝을 이루는 문서를 전환합니다.",
         "Description[nl]": "Biedt omschakelen tussen buddy-documenten zoals implementatie en header-bestand.",
         "Description[pl]": "Przełącza pomiędzy stowarzyszonymi dokumentami takimi jak pliki implementacji i nagłówków.",

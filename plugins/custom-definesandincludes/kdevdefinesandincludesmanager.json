@@ -16,6 +16,7 @@
         "Description[fr]": "Configurer quelles macros et dossiers / fichiers à inclure seront ajoutés pour l'analyseur pendant l'analyse du projet.",
         "Description[gl]": "Configure que macros e ficheiros ou cartafoles de inclusión se engaden ao analizador do proxecto.",
         "Description[it]": "Configura quali macro e cartelle/file di inclusione saranno aggiunti all'analizzatore durante l'analisi del progetto.",
+        "Description[ka]": "მიუთითეთ, რომელი მაკროები და ჩასასმელი საქაღალდეები/ფაილები დაემატება დამმუშავებელს პროექტის დამუშავებისას.",
         "Description[ko]": "프로젝트를 해석할 때 파서에 추가할 매크로와 인클루드 디렉터리/파일을 관리합니다.",
         "Description[nl]": "Stel in welke macro's en ingevoegde mappen/bestanden toegevoegd zullen worden aan de parser bij het ontleden van het project.",
         "Description[pl]": "Określa makra oraz pliki/katalogi dołączane uwzględniane przy przetwarzaniu projektu.",

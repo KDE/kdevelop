@@ -15,6 +15,7 @@
         "Description[fr]": "Fournit un outil d'affichage de la sortie texte pour utilisation par d'autres modules, pour afficher des choses comme des messages de compilateur.",
         "Description[gl]": "Fornece unha ferramenta de saída de texto a outros complementos, para amosar cousas como mensaxes do compilador.",
         "Description[it]": "Fornisce una vista degli strumenti testuale che può essere usata dalla estensioni per mostrare cose come i messaggi del compilatore.",
+        "Description[ka]": "მოგაწვდით ტექტის გამოტანის ხელსაწყოს ხედს სხვა დამატებებისთვის, რომ მათ გაჩვენონ ისეთი ელემენტები, როგორიცაა, ვთქვათ, კომპილატორის შეტყობინებები.",
         "Description[ko]": "컴파일러 메시지와 같은 것을 표시할 수 있도록 다른 플러그인에 텍스트 출력 보기를 제공합니다.",
         "Description[nl]": "Levert tekstuitvoer van hulpmiddelen voor andere te gebruiken plugins, om zaken te tonen zoals berichten van compilers.",
         "Description[pl]": "Udostępnia widok wyniku dla innych wtyczek, aby pokazywały np. dane z kompilatora.",

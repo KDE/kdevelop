@@ -22,6 +22,7 @@
         "Description[fr]": "Ce module permet d'exécuter des programmes sans instrumentation, c'est-à-dire de manière native sur l'hôte courant.",
         "Description[gl]": "Este complemento permite executar programas sen intérprete, i.e. de xeito nativo na máquina actual.",
         "Description[it]": "Questa estensione permette l'esecuzione dei programmi senza instrumentor, vale a dire nativamente da parte dell'host attuale.",
+        "Description[ka]": "ეს დამატება საშუალებას გაძლევთ, პროგრამები ინსტრუმენტორის გარეშე, ანუ მიმდინარე ჰოსტზე პირდაპირ გაუშვათ.",
         "Description[ko]": "이 플러그인은 프로그램을 현재 호스트에서 네이티브로(조사 도구 없이) 실행합니다.",
         "Description[nl]": "Deze plugin staat het uitvoeren van programma's toe zonder hulpprogramma, dwz. van nature op de huidige host.",
         "Description[pl]": "Uruchamia program bez instrumentora, np. macierzyście przez bieżącego gospodarza.",

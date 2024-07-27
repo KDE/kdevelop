@@ -20,6 +20,7 @@
         "Description[fr]": "Propose l'environnement « Craft » comme environnement d'exécution de KDE",
         "Description[gl]": "Expón o ambiente de KDE Craft como biblioteca de tempo de execución.",
         "Description[it]": "Espone l'ambiente KDE Craft come runtime",
+        "Description[ka]": "გამოიტანს KDE Craft-ის გარემოს გაშვების გარემოს სახით",
         "Description[ko]": "KDE Craft 환경을 런타임으로 노출",
         "Description[nl]": "Omgeving van KDE Craft blootstellen als runtime",
         "Description[pl]": "Udostępnia środowisko KDE Craft jako bibliotekę uruchomieniową",
