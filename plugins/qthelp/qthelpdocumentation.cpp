@@ -31,6 +31,7 @@
 #include "qthelpproviderabstract.h"
 
 #include <algorithm>
+#include <cctype>
 
 using namespace KDevelop;
 
@@ -135,15 +136,39 @@ QString descriptionFromCommentMarkers(const QByteArray& utf8Fragment, const QByt
     }
 
     // find the start marker
+    QByteArray::size_type commentMarkerStart = 0;
+    QByteArray::size_type searchFrom = 0;
     const auto fragmentStartMarker = QByteArray("<!-- $$$" + utf8Fragment);
-    const auto commentMarkerStart = utf8Data.indexOf(fragmentStartMarker);
-    if (commentMarkerStart == -1) {
-        return {};
+    while (true) {
+        commentMarkerStart = utf8Data.indexOf(fragmentStartMarker, searchFrom);
+        if (commentMarkerStart == -1) {
+            return {};
+        }
+
+        searchFrom = commentMarkerStart + fragmentStartMarker.size();
+        Q_ASSERT(searchFrom <= utf8Data.size());
+        if (searchFrom == utf8Data.size()) {
+            return {}; // weird: marker at string end, no description to extract
+        }
+
+        // Consider only ASCII for simplicity and because Qt does not use non-ASCII characters in identifier names.
+        const auto partOfAsciiIdentifier = [](char c) {
+            constexpr char maxAscii{127};
+            return c >= 0 && c <= maxAscii && (std::isalnum(c) || c == '_');
+        };
+        if (!partOfAsciiIdentifier(utf8Data[searchFrom])) {
+            break; // found our marker
+        }
+        // else: this must be a nonmatching marker for a longer identifier, such as
+        // $$$size_type for fragment "size" => continue search for our marker.
+        // NOTE: The code above may have to be further complicated to support substring operator identifiers
+        // (e.g. operator= and operator==, operator< and operator<=). But for now this is not needed, because
+        // operator comment markers do not match their fragments anyway, e.g. "<!-- $$$ -->" for the fragment
+        // "operator-2b" and "<!-- $$$operator<$$$operator<constchar* -->" for the fragment "operator-lt-9".
     }
 
     // find the end marker
-    const auto commentMarkerEnd =
-        utf8Data.indexOf(QByteArray("<!-- @@@" + utf8Fragment), commentMarkerStart + fragmentStartMarker.size());
+    const auto commentMarkerEnd = utf8Data.indexOf(QByteArray("<!-- @@@" + utf8Fragment), searchFrom);
     if (commentMarkerEnd == -1) {
         return {};
     }

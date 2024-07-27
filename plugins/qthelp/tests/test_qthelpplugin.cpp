@@ -296,6 +296,25 @@ void TestQtHelpPlugin::testDeclarationLookup_data()
                    QVERIFY(qtDoc->currentUrl().isValid());
                }};
 
+        QTest::addRow("QString::size-%s", qPrintable(qmake))
+            << provider << "class QString { int QString::size() const; };"
+            << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
+                   const auto decl = ctx->findDeclarations(QualifiedIdentifier("QString")).first();
+                   QVERIFY(decl);
+                   const auto sizeDecl = decl->internalContext()->findDeclarations(QualifiedIdentifier("size")).first();
+                   QVERIFY(sizeDecl);
+
+                   const auto doc = provider->documentationForDeclaration(sizeDecl);
+                   QVERIFY(doc);
+                   QCOMPARE(doc->name(), "QString::size");
+
+                   const auto description = doc->description();
+                   // verify that we find the documentation for QString::size rather than for QString::size_type
+                   QVERIFY(description.contains("number of characters"));
+                   // verify that the faster comment marker search succeeds
+                   QVERIFY(!description.contains("<!-- @@@size -->"));
+               }};
+
         QTest::addRow("operator-%s", qPrintable(qmake))
             << provider << "class C {}; bool operator<(const C& a, const C& b) { return true; }"
             << TestDeclarationLookupCallback{[](const TopDUContext* ctx, const QtHelpProviderAbstract* provider) {
