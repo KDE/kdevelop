@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-25 02:28+0000\n"
-"PO-Revision-Date: 2024-07-23 22:35+0900\n"
+"PO-Revision-Date: 2024-07-27 14:11+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -821,11 +821,9 @@ msgid "&Abort"
 msgstr "中止(&A)"
 
 #: language/duchain/aliasdeclaration.cpp:47
-#, fuzzy, kde-format
-#| msgctxt "#thread-id at function-name or address"
-#| msgid "#%1 at %2"
+#, kde-format
 msgid "Alias %1 as %2"
-msgstr "#%1 於 %2"
+msgstr "將 %2 設為 %1 的別名"
 
 #: language/duchain/aliasdeclaration.cpp:50
 #, kde-format
@@ -863,10 +861,9 @@ msgid "Import %1"
 msgstr "匯入 %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:89
-#, fuzzy, kde-format
-#| msgid "Declaration"
+#, kde-format
 msgid "lost declaration"
-msgstr "宣告"
+msgstr "缺乏宣告"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:96
 #, kde-format
@@ -894,8 +891,7 @@ msgid "enumeration %1 "
 msgstr "列舉 %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
-#, fuzzy, kde-format
-#| msgid "( resolved forward-declaration: "
+#, kde-format
 msgid "(resolved forward-declaration: "
 msgstr "（已解析的前置宣告："
 
@@ -957,7 +953,7 @@ msgstr "種類：%1"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
 #, kde-format
 msgid "Deprecated"
-msgstr ""
+msgstr "已棄用"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
 #, kde-format
@@ -998,7 +994,7 @@ msgstr "顯示文件給"
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
-msgstr ""
+msgstr "<匿名>"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:490
 #, kde-format
@@ -1080,35 +1076,34 @@ msgstr "常數"
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
-msgstr[0] ""
+msgstr[0] "%1 位元組"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
-msgstr[0] ""
+msgstr[0] "%1 位元"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
-#, fuzzy, kde-format
-#| msgid "Loading Project %1"
+#, kde-format
 msgid "offset in parent: %1"
-msgstr "載入專案 %1 中"
+msgstr "在上層中的位移：%1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1，%2"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
 #, kde-format
 msgid "size: %1 Bytes"
-msgstr ""
+msgstr "大小：%1 位元組"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
 msgid "aligned to: %1 Bytes"
-msgstr ""
+msgstr "對齊到：%1 位元組"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
 #, kde-format
@@ -1185,10 +1180,9 @@ msgid "Problem"
 msgstr "問題"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:114
-#, fuzzy, kde-format
-#| msgid "Problem in <b>%1</b>:<br/>"
+#, kde-format
 msgid "Problem in <i>%1</i>"
-msgstr "在 <b>%1</b> 內的問題：<br/>"
+msgstr "在 <i>%1</i> 內的問題"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:118
 #, kde-format
@@ -1199,7 +1193,7 @@ msgstr "位置："
 #: language/duchain/navigation/problemnavigationcontext.cpp:166
 #, kde-format
 msgid "<br>See: "
-msgstr ""
+msgstr "<br>請見："
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:159
 #, kde-format
@@ -1207,11 +1201,9 @@ msgid " in "
 msgstr " 於 "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:196
-#, fuzzy, kde-format
-#| msgctxt ""
-#| msgid "configuring"
+#, kde-format
 msgid "Solution (%1)"
-msgstr "設定"
+msgstr "解決方法 (%1)"
 
 #: language/duchain/navigation/usescollector.cpp:414
 #, kde-format
@@ -1347,7 +1339,7 @@ msgstr "語意分析"
 #: language/duchain/problem.cpp:215
 #, kde-format
 msgid "To-do"
-msgstr ""
+msgstr "待辦事項"
 
 #: language/duchain/problem.cpp:218 shell/problem.cpp:75
 #, kde-format
@@ -1813,8 +1805,7 @@ msgid "Debugger"
 msgstr "除錯器"
 
 #: shell/debugcontroller.cpp:148
-#, fuzzy, kde-format
-#| msgid "Frame Stack"
+#, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "框架堆疊"
@@ -2690,7 +2681,7 @@ msgstr "新增工具檢視"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
-msgstr ""
+msgstr "鎖定面板使其不會隱藏"
 
 #: shell/openprojectdialog.cpp:124
 #, kde-format
@@ -2743,7 +2734,7 @@ msgstr "開啟現有的檔案 %1"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
-msgstr ""
+msgstr "使用這個指令來顯示或隱藏檢視的狀態列。"
 
 #: shell/partdocument.cpp:104
 #, kde-format
@@ -2770,7 +2761,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
-msgstr ""
+msgstr "覆寫外部變更"
 
 #: shell/problem.cpp:40
 #, kde-format
@@ -2926,10 +2917,9 @@ msgid ""
 msgstr "專案匯入外掛程式（%1）不支援 IProjectFileManager 介面。"
 
 #: shell/project.cpp:402
-#, fuzzy, kde-format
-#| msgid "Could not open project"
+#, kde-format
 msgid "Could not open project."
-msgstr "無法開啟專案"
+msgstr "無法開啟專案。"
 
 #: shell/project.cpp:560
 #, kde-format
@@ -2958,8 +2948,7 @@ msgid "Already opening %1, not opening again"
 msgstr "已開啟 %1，不用再開了"
 
 #: shell/projectcontroller.cpp:468
-#, fuzzy, kde-format
-#| msgid "Override"
+#, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "覆寫"
@@ -3173,7 +3162,7 @@ msgstr "開啟工作階段 %1"
 #: shell/projectcontroller.cpp:924
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
-msgstr ""
+msgstr "沒有任何已啟用的外掛程式支援此版本庫 URL：%1"
 
 #: shell/projectcontroller.cpp:1228
 #, fuzzy, kde-format
@@ -3463,12 +3452,12 @@ msgstr "主系統"
 #: shell/runtimecontroller.cpp:86
 #, kde-format
 msgid "Allows to select a runtime"
-msgstr "允許選擇執行階段"
+msgstr "允許選擇執行環境"
 
 #: shell/runtimecontroller.cpp:90
 #, kde-format
 msgid "Runtime: %1"
-msgstr "執行階段：%1"
+msgstr "執行環境：%1"
 
 #: shell/savedialog.cpp:44
 #, kde-format
@@ -3983,11 +3972,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/languagepreferences.ui:29
-#, fuzzy, kde-format
-#| msgid "Code Completion"
+#, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
-msgstr "源碼補完"
+msgstr "程式碼自動補完"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_automaticInvocation)
@@ -4054,43 +4042,38 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/languagepreferences.ui:84
-#, fuzzy, kde-format
-#| msgid "Detailed completion:"
+#, kde-format
 msgctxt "@label"
 msgid "Detailed completion:"
-msgstr "詳細源碼補完："
+msgstr "詳細補完："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:101
-#, fuzzy, kde-format
-#| msgid "Never"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Never"
-msgstr "永遠不要"
+msgstr "永不"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:106
-#, fuzzy, kde-format
-#| msgid "When Invoked Manually"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "When Invoked Manually"
-msgstr "手動撤銷時"
+msgstr "手動觸發時"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
-#, fuzzy, kde-format
-#| msgid "Always"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
 msgstr "總是"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/languagepreferences.ui:122
-#, fuzzy, kde-format
-#| msgid "Semantic Code Highlighting"
+#, kde-format
 msgctxt "@title:group"
 msgid "Semantic Code Highlighting"
-msgstr "語意源碼突顯"
+msgstr "語意突顯"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, localColorizationLabel)
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_localColorization)
@@ -4104,11 +4087,10 @@ msgstr "<p>此設定決定本地變數的顏色密度，例如函式參數、變
 
 #. i18n: ectx: property (text), widget (QLabel, localColorizationLabel)
 #: shell/settings/languagepreferences.ui:134
-#, fuzzy, kde-format
-#| msgid "Local colorization intensity:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Local colorization intensity:"
-msgstr "本地型態顏色密度："
+msgstr "本地上色強度："
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_9)
@@ -4123,27 +4105,28 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>預設情況下，類型、函數、命名空間等等的全域顏色是自動產生的，會自動依全域上"
+"色強度適應到所選的編輯器主題。如果您希望完全控制這些顏色，可以改用編輯器主題"
+"作為顏色來源。然後您就可以使用「編輯器」→「顏色主題」→「突顯文字風格」"
+"→「KDevelop/語意顏色」中的設定來詳細調整色彩。</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
 #, kde-format
 msgid "Auto-Generated"
-msgstr ""
+msgstr "自動產生"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:175
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Focus Editor"
+#, kde-format
 msgid "From Editor Theme"
-msgstr "焦點編輯器"
+msgstr "跟隨編輯器主題"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: shell/settings/languagepreferences.ui:186
-#, fuzzy, kde-format
-#| msgid "Global colorization intensity:"
+#, kde-format
 msgid "Global colors:"
-msgstr "全域型態顏色密度："
+msgstr "全域顏色："
 
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
 #. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
@@ -4157,11 +4140,10 @@ msgstr "<p>此設定讓您變更全域型態，如類別、方法、函式等的
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
 #: shell/settings/languagepreferences.ui:221
-#, fuzzy, kde-format
-#| msgid "Global colorization intensity:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Global colorization intensity:"
-msgstr "全域型態顏色密度："
+msgstr "全域上色強度："
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightSemanticProblems)
@@ -4175,8 +4157,7 @@ msgstr "<p>突顯語意上的問題，如找不到或無法存取的宣告。</p
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/languagepreferences.ui:234
-#, fuzzy, kde-format
-#| msgid "Highlight semantic problems:"
+#, kde-format
 msgctxt "@label"
 msgid "Highlight semantic problems:"
 msgstr "突顯語意問題："
@@ -4195,51 +4176,45 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/languagepreferences.ui:257
-#, fuzzy, kde-format
-#| msgid "Highlight problematic lines:"
+#, kde-format
 msgctxt "@label"
 msgid "Highlight problematic lines:"
-msgstr "突顯有問題的行："
+msgstr "突顯有問題的行數："
 
 #. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:277
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>\"Note: All overloaded functions, overloads, "
-#| "forward-declarations, etc. will be renamed too\"</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Use bold font for declarations such as classes, "
 "functions, local variables, etc.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>「注意：所有過載函式，前置宣告等都會跟著重新命名」</"
-"p></body></html>"
+"<html><head/><body><p>為型別、函數、本地變數等等宣告使用粗體字型。</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
-#, fuzzy, kde-format
-#| msgid "( resolved forward-declaration: "
+#, kde-format
 msgctxt "@label"
 msgid "Bold font for declarations:"
-msgstr "（已解析的前置宣告："
+msgstr "宣告使用粗體字型："
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: shell/settings/languagepreferences.ui:293
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Problems shown as inline notes:"
-msgstr ""
+msgstr "要以內含式備註顯示的問題："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:304
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "None"
-msgstr ""
+msgstr "無"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:309
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Errors"
 msgstr "錯誤"
@@ -4249,14 +4224,14 @@ msgstr "錯誤"
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Warnings and Errors"
-msgstr ""
+msgstr "警告與錯誤"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:319
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Hints, Warnings and Errors"
-msgstr ""
+msgstr "提示、警告與錯誤"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:327
@@ -4269,8 +4244,7 @@ msgstr "用空白分隔的單字清單，這些單字會讓註解表達待辦項
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:330
-#, fuzzy, kde-format
-#| msgid "TODO marker words:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "TODO marker words:"
 msgstr "待辦項目標記單字："
@@ -4287,8 +4261,7 @@ msgstr "用空白分隔的單字清單，這些單字會讓註解表達待辦項
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/languagepreferences.ui:369
-#, fuzzy, kde-format
-#| msgid "Project Parsing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Parsing"
 msgstr "專案剖析"
@@ -4309,8 +4282,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/settings/languagepreferences.ui:382
-#, fuzzy, kde-format
-#| msgid "Minimum project size for simplified parsing:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
 msgstr "簡化剖析的最小專案大小："
@@ -4320,7 +4292,7 @@ msgstr "簡化剖析的最小專案大小："
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "儲存空間與記憶體使用"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
@@ -4351,14 +4323,14 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "記憶體"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "工作階段暫存目錄"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -4484,57 +4456,50 @@ msgid "Projects"
 msgstr "專案"
 
 #: shell/settings/projectpreferences.cpp:49
-#, fuzzy, kde-format
-#| msgid "Configure Project %1"
+#, kde-format
 msgid "Configure Projects"
-msgstr "設定專案 %1"
+msgstr "設定專案"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_projectsBaseDirectory)
 #: shell/settings/projectpreferences.ui:22
 #: shell/settings/projectpreferences.ui:35
-#, fuzzy, kde-format
-#| msgid "Select the base directory where new projects are to be created."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the base directory where new projects are to be created"
-msgstr "選擇新專案要建立的基底目錄。"
+msgstr "選擇建立新專案時使用的基礎目錄"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/projectpreferences.ui:25
-#, fuzzy, kde-format
-#| msgid "Projects base directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Projects base directory:"
-msgstr "專案基底目錄："
+msgstr "專案基礎目錄："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:47
-#, fuzzy, kde-format
-#| msgid "Parse all files in a project after the project has been opened."
+#, kde-format
 msgctxt "@info:tolltip"
 msgid "Parse all files in a project after the project has been opened"
-msgstr "在開啟專案後剖析專案裡所有的檔案。"
+msgstr "開啟專案後剖析專案中的所有檔案"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:50
-#, fuzzy, kde-format
-#| msgid "Schedule all project files for parsing"
+#, kde-format
 msgctxt "@option:check"
 msgid "Schedule all project files for parsing"
 msgstr "將所有專案檔案排入剖析排程"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:57
-#, fuzzy, kde-format
-#| msgid "Save all modified documents when the \"build\" action is triggered."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified documents when the \"build\" action is triggered"
-msgstr "在啟動「編譯」動作前先儲存所有已變更的文件。"
+msgstr "在啟動「編譯」動作前先儲存所有已變更的文件"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:60
-#, fuzzy, kde-format
-#| msgid "Save all documents before building"
+#, kde-format
 msgctxt "@option:check"
 msgid "Save all documents before building"
 msgstr "在編譯前先儲存所有文件"
@@ -4545,62 +4510,51 @@ msgid "Runtimes"
 msgstr "執行環境"
 
 #: shell/settings/runtimespreferences.cpp:33
-#, fuzzy, kde-format
-#| msgid "Configure Sessions"
+#, kde-format
 msgid "Configure Runtimes"
-msgstr "設定工作階段"
+msgstr "設定執行環境"
 
 #: shell/settings/sourceformattersettings.cpp:75
 #: shell/sourceformattercontroller.cpp:220
-#, fuzzy, kde-format
-#| msgid "No Source Formatter available"
+#, kde-format
 msgid "Source Formatter"
-msgstr "沒有可用的源碼格式器"
+msgstr "原始碼格式化工具"
 
 #: shell/settings/sourceformattersettings.cpp:80
-#, fuzzy, kde-format
-#| msgid "No Source Formatter available"
+#, kde-format
 msgid "Configure Source Formatter"
-msgstr "沒有可用的源碼格式器"
+msgstr "設定原始碼格式化工具"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/sourceformattersettings.ui:20
-#, fuzzy, kde-format
-#| msgid "General"
+#, kde-format
 msgctxt "@title:group"
 msgid "General"
 msgstr "一般"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:26
-#, fuzzy, kde-format
-#| msgid ""
-#| "Override the editor indentation mode according to the formatting style "
-#| "for documents without Kate modeline."
+#, kde-format
 msgctxt "@info:tolltip"
 msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without Kate modeline."
-msgstr "根據文件的格式化樣式，不考慮 Kate 的模式行來覆寫編輯器的縮排模式"
+msgstr "根據文件的格式化樣式，不考慮 Kate 的模式行來覆寫編輯器的縮排模式。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:29
-#, fuzzy, kde-format
-#| msgid "Override Kate Indentation Mode"
+#, kde-format
 msgctxt "@option:check"
 msgid "Override Kate Indentation Mode"
 msgstr "覆寫 Kate 的縮排模式"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:36
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add a Kate modeline according to the formatting style to formatted "
-#| "documents."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
-msgstr "根據文件的格式化樣式新增 Kate 編輯器的模式行"
+msgstr "根據文件的格式化樣式新增 Kate 編輯器的模式行。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:39
@@ -4654,11 +4608,10 @@ msgstr "使用者介面"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/uiconfig.ui:23
-#, fuzzy, kde-format
-#| msgid "Dock Window Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dock Window Behavior"
-msgstr "嵌入式視窗行為"
+msgstr "面板視窗行為"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
@@ -4667,15 +4620,14 @@ msgstr "嵌入式視窗行為"
 msgid ""
 "<p>Controls whether the bottom left corner is occupied by the dock at the "
 "left, or by the dock at the bottom.</p>"
-msgstr "<p>控制嵌入左方或下方時，是否要佔用左下角。</p>"
+msgstr "<p>控制左下角是由左側面板還是低端面板佔用。</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/uiconfig.ui:32
-#, fuzzy, kde-format
-#| msgid "Bottom left corner occupied by:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom left corner occupied by:"
-msgstr "佔用左下角的項目："
+msgstr "佔用左下角的面板："
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4684,40 +4636,36 @@ msgstr "佔用左下角的項目："
 msgid ""
 "<p>Controls whether the bottom right corner is occupied by the dock at the "
 "right, or by the dock at the bottom.</p>"
-msgstr "<p>控制嵌入右方或下方時，是否要佔用右下角。</p>"
+msgstr "<p>控制右下角是由右側面板還是低端面板佔用。</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/uiconfig.ui:42
-#, fuzzy, kde-format
-#| msgid "Bottom right corner occupied by:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom right corner occupied by:"
-msgstr "佔用右下角的項目："
+msgstr "佔用右下角的面板："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
-#, fuzzy, kde-format
-#| msgid "Left Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
-msgstr "左端嵌入"
+msgstr "左側面板"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:58 shell/settings/uiconfig.ui:75
-#, fuzzy, kde-format
-#| msgid "Bottom Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
-msgstr "底端嵌入"
+msgstr "底端面板"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
-#, fuzzy, kde-format
-#| msgid "Right Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
-msgstr "右端嵌入"
+msgstr "右側面板"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
@@ -4736,8 +4684,7 @@ msgstr "控制開啟新分頁時是否要開在目前作用中的分頁的隔壁
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:95
-#, fuzzy, kde-format
-#| msgid "Open new tab after current"
+#, kde-format
 msgctxt "@option:check"
 msgid "Open new tab after current"
 msgstr "在目前的分頁後開啟新分頁"
@@ -4778,8 +4725,7 @@ msgstr "開啟或關閉編輯器視窗上方的分頁列。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:119
-#, fuzzy, kde-format
-#| msgid "Show tabs"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show tabs"
 msgstr "顯示分頁"
@@ -4827,31 +4773,27 @@ msgid "Color widgets based on the project affiliation"
 msgstr "依所屬專案為元件著色"
 
 #: shell/settings/uipreferences.cpp:55
-#, fuzzy, kde-format
-#| msgid "User Interface"
+#, kde-format
 msgid "Configure User Interface"
-msgstr "使用者介面"
+msgstr "設定使用者介面"
 
 #: shell/sourceformattercontroller.cpp:226
-#, fuzzy, kde-format
-#| msgid "&Reformat Source"
+#, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
-msgstr "重新格式化源碼(&R)"
+msgstr "重新格式化原始碼(&R)"
 
 #: shell/sourceformattercontroller.cpp:230
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
-msgstr "重新格式化源碼行"
+msgstr "重新格式化行數"
 
 #: shell/sourceformattercontroller.cpp:234
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr "重新格式化源碼行"
+msgstr "重新格式化檔案…"
 
 #: shell/sourceformattercontroller.cpp:235
 #, fuzzy, kde-format
@@ -4930,11 +4872,10 @@ msgid ""
 msgstr "使用 <b>astyle</b> 函式庫來重新編排源碼。"
 
 #: shell/sourceformattercontroller.cpp:864
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr "重新格式化源碼行"
+msgstr "重新格式化檔案？"
 
 #: shell/sourceformattercontroller.cpp:865
 #, kde-format
@@ -4942,30 +4883,26 @@ msgid "Reformat all files in the selected folder?"
 msgstr ""
 
 #: shell/sourceformattercontroller.cpp:869
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
-msgstr "重新格式化源碼行"
+msgstr "重新格式化"
 
 #: shell/sourceformatterjob.cpp:36
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgid "Reformatting"
-msgstr "重新格式化源碼行"
+msgstr "正在重新格式化"
 
 #: shell/sourceformatterjob.cpp:47
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgid "Reformat Files"
-msgstr "重新格式化源碼行"
+msgstr "重新格式化檔案"
 
 #: shell/sourceformatterjob.cpp:58
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"
-msgstr[0] "重新格式化源碼行"
+msgstr[0] "重新格式化 %1 個檔案"
 
 #: shell/sourceformatterselectionedit.cpp:1077
 #, kde-format
@@ -5023,8 +4960,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
-#, fuzzy, kde-format
-#| msgid "Formatter:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
 msgstr "格式器："
@@ -5037,24 +4973,21 @@ msgstr "所選格式器的描述"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
-#, fuzzy, kde-format
-#| msgid "Style:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
 msgstr "樣式："
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: shell/sourceformatterselectionedit.ui:201
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action:button"
 msgid "New"
-msgstr "新信"
+msgstr "新增"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
 #: shell/sourceformatterselectionedit.ui:208
-#, fuzzy, kde-format
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "編輯..."
@@ -5110,8 +5043,7 @@ msgid "Review"
 msgstr "審閱"
 
 #: shell/uicontroller.cpp:460
-#, fuzzy, kde-format
-#| msgid "Select Tool View to Add"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
 msgstr "選擇要新增的工具檢視"
@@ -5134,8 +5066,7 @@ msgid "Remove this working set. The contained documents are not affected."
 msgstr "移除此工作集。裡面包含的文件不受影響。"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:120
-#, fuzzy, kde-format
-#| msgid "Documents:"
+#, kde-format
 msgctxt "@label"
 msgid "Documents:"
 msgstr "文件："
@@ -5270,64 +5201,52 @@ msgid "Tool View Position"
 msgstr "工具檢視位置"
 
 #: sublime/idealdockwidget.cpp:114
-#, fuzzy, kde-format
-#| msgctxt "tool view position"
-#| msgid "Left"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
-msgstr "左"
+msgstr "左側"
 
 #: sublime/idealdockwidget.cpp:115
-#, fuzzy, kde-format
-#| msgctxt "tool view position"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "底端"
 
 #: sublime/idealdockwidget.cpp:116
-#, fuzzy, kde-format
-#| msgctxt "tool view position"
-#| msgid "Right"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
-msgstr "右"
+msgstr "右側"
 
 #: sublime/idealdockwidget.cpp:117
-#, fuzzy, kde-format
-#| msgctxt "tool view position"
-#| msgid "Detached"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
-msgstr "脫離"
+msgstr "分離"
 
 #: sublime/idealdockwidget.cpp:135
-#, fuzzy, kde-format
-#| msgid "Assign Shortcut..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
-msgstr "指定捷徑..."
+msgstr "指定快捷鍵..."
 
 #: sublime/idealdockwidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Use this shortcut to trigger visibility of the toolview."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
-msgstr "使用此捷徑來觸發工具檢視的可見度。"
+msgstr "使用此快捷鍵來切換工具檢視是否可見。"
 
 #: sublime/idealdockwidget.cpp:139
-#, fuzzy, kde-format
-#| msgid "Remove Toolview"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "移除工具檢視"
 
 #: sublime/idealdockwidget.cpp:150
-#, fuzzy, kde-format
-#| msgid "Assign Shortcut For '%1' Tool View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
-msgstr "指定 %1 工作檢視的捷徑"
+msgstr "指定「%1」工作檢視的快捷鍵"
 
 #: sublime/mainwindow_p.cpp:78
 #, fuzzy, kde-format
@@ -5343,25 +5262,22 @@ msgid "Remove most of the controls so you can focus on what matters"
 msgstr ""
 
 #: sublime/mainwindow_p.cpp:87
-#, fuzzy, kde-format
-#| msgid "Show Left Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
-msgstr "顯示左端嵌入"
+msgstr "顯示左側面板"
 
 #: sublime/mainwindow_p.cpp:94
-#, fuzzy, kde-format
-#| msgid "Show Right Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
-msgstr "顯示右端嵌入"
+msgstr "顯示右側面板"
 
 #: sublime/mainwindow_p.cpp:100
-#, fuzzy, kde-format
-#| msgid "Show Bottom Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
-msgstr "顯示底端嵌入"
+msgstr "顯示底端面板"
 
 #: sublime/mainwindow_p.cpp:106
 #, kde-format
@@ -5370,29 +5286,25 @@ msgid "Focus Editor"
 msgstr "焦點編輯器"
 
 #: sublime/mainwindow_p.cpp:111
-#, fuzzy, kde-format
-#| msgid "Hide/Restore Docks"
+#, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
-msgstr "隱藏/回復嵌入"
+msgstr "隱藏/回復面板"
 
 #: sublime/mainwindow_p.cpp:116
-#, fuzzy, kde-format
-#| msgid "Next Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
 msgstr "下一個工具檢視"
 
 #: sublime/mainwindow_p.cpp:122
-#, fuzzy, kde-format
-#| msgid "Previous Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
-msgstr "前一個工具檢視"
+msgstr "上一個工具檢視"
 
 #: sublime/mainwindow_p.cpp:128
-#, fuzzy, kde-format
-#| msgid "Tool Views"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "工具檢視"
@@ -5508,7 +5420,7 @@ msgstr ""
 #: util/duchainify/main.cpp:294
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
-msgstr ""
+msgstr "傾印 DUChain 圖表（用 .dot 格式）"
 
 #: util/duchainify/main.cpp:296
 #, kde-format
@@ -5518,7 +5430,7 @@ msgstr "印出在分析時遇到的問題"
 #: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
-msgstr ""
+msgstr "遞迴傾印來自已匯入的內文的錯誤。"
 
 #: util/environmentselectionmodel.cpp:40
 #, kde-format
@@ -5553,7 +5465,7 @@ msgstr "已經於 %1 執行所有測試"
 msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
-msgstr ""
+msgstr "您沒有以下檔案的寫入權限；要在寫入前先為擁有者添加寫入權限嗎？"
 
 #: util/shellutils.cpp:82
 #, kde-format
