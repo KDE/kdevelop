@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-07-26 05:41+0200\n"
+"PO-Revision-Date: 2024-07-27 05:38+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2911,6 +2911,8 @@ msgid ""
 "Could not load project management plugin <b>%1</b>.<br>Check that the "
 "required programs are installed, or see console output for more information."
 msgstr ""
+"ვერ ჩავტვირთე პროექტის მართვის დამატება <b>%1</b>.<br>შეამოწმეთ, დაყენებულია "
+"თუ არა ყველა საჭირო პროგრამა, ან იხილეთ კონსოლი, მეტი ინფორმაციისთვის."
 
 #: shell/project.cpp:349
 #, kde-format
@@ -3533,6 +3535,8 @@ msgid ""
 "The session <b>%1</b> and all contained settings will be deleted. The "
 "projects will stay unaffected. Do you really want to continue?"
 msgstr ""
+"სესია <b>%1</b>და ყველა მისი პარამეტრი წაიშლება. პროექტებს ეს არ შეეხება. "
+"მართლა გნებავთ, გააგრძელოთ?"
 
 #: shell/sessionchooserdialog.cpp:205
 #, kde-format
@@ -3675,6 +3679,8 @@ msgid ""
 "The given application did not respond to a DBUS call, it may have crashed or "
 "is hanging."
 msgstr ""
+"მითითებული აპლიკაცია DBUS-ის გამოძახებას არ პასუხობს. ის, შეიძლება, "
+"ავარიულად დასრულდა, ან დაეკიდა."
 
 #: shell/sessionlock.cpp:175
 #, kde-format
