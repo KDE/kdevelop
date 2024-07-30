@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-07-20 00:42+0200\n"
+"PO-Revision-Date: 2024-07-29 05:21+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -134,6 +134,8 @@ msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
 "cannot be undone. Continue?"
 msgstr ""
+"მონიშნული ხაზები დაბრუნდება და ცვლილებები დაიკარგება. ეს ოპერაცია "
+"შეუქცევადია. გავაგრძელო?"
 
 #: diffviewsctrl.cpp:341
 #, kde-format
@@ -144,24 +146,24 @@ msgstr "დაბრუნება"
 #: gitmessagehighlighter.cpp:66
 #, kde-format
 msgid "Try to keep summary length below %1 characters."
-msgstr ""
+msgstr "სცადეთ, შეჯამების სიგრძე %1 სიმბოლოზე ნაკლებს შეიცავდეს."
 
 #: gitmessagehighlighter.cpp:82
 #, kde-format
 msgid "Separate summary from details with one empty line."
-msgstr ""
+msgstr "განაცალკევეთ შეჯამება დეტალებისგან ერთი ცარიელი ხაზით."
 
 #: gitmessagehighlighter.cpp:92
 #, kde-format
 msgid "Try to keep line length below %1 characters."
-msgstr ""
+msgstr "სცადეთ, ხაზის სიგრძე %1 სიმბოლოზე ნაკლები იყოს."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, GitNameEmailDialog)
 #: gitnameemaildialog.ui:17
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Name and Email for Git"
-msgstr ""
+msgstr "სახელის და ელფოსტის მორგება Git-სთვის"
 
 #. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
 #: gitnameemaildialog.ui:23
@@ -172,6 +174,10 @@ msgid ""
 "written to the Git configuration, either locally for the current project "
 "only, or globally for all Git projects.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Git-ის კომიტებთან ასოცირებული სახელი და ელფოსტა ჯერ "
+"მითითებული არ გაქვთ.<br/>მნიშვნელობები, რომელსაც აქ შეიყვანთ, Git-ის "
+"კონფიგურაციაში ჩაიწერება ა ლოკალურად, მხოლოდ, მიმდინარე პროექტისთვის, ან "
+"გლობალურად, ყველა Git-ის პროექტითვის.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gitnameemaildialog.ui:35
@@ -197,7 +203,7 @@ msgstr "ჩაწერა გლობალური კონფიგურ�
 #: gitplugin.cpp:186
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
-msgstr ""
+msgstr "ვერ ვიპოვე გამშვები ფაილი git. დაყენებული გაქვთ?"
 
 #: gitplugin.cpp:195
 #, kde-format
@@ -214,19 +220,19 @@ msgstr "გადატანა"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
-msgstr ""
+msgstr "Git-ის სამალავები"
 
 #: gitplugin.cpp:249
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
-msgstr ""
+msgstr "სამალავების მმართველი"
 
 #: gitplugin.cpp:250
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
-msgstr ""
+msgstr "გადატანა სამალავში"
 
 #: gitplugin.cpp:251
 #, kde-format
@@ -247,7 +253,7 @@ msgstr "ფაილების სია მითითებული არ
 #: gitplugin.cpp:456
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
-msgstr ""
+msgstr "ცვლილებების ჩამოყრა შეუძლებელია (ბილიკების ცარიელი სია)"
 
 #: gitplugin.cpp:491
 #, kde-format
@@ -259,6 +265,8 @@ msgstr "ცვლილებების დაბრუნების შე�
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
 msgstr ""
+"შემდეგ ცვლილებებს აქვთ გადაუცემელი ცვლილებები, რომლებიც დაიკარგება. "
+"გააგრძელებთ?"
 
 #: gitplugin.cpp:527
 #, kde-format
@@ -268,7 +276,7 @@ msgstr "ფაილები ან შეტყობინებები მ
 #: gitplugin.cpp:531 gitplugin.cpp:550
 #, kde-format
 msgid "Email or name for Git not specified"
-msgstr ""
+msgstr "Git-სთვის ელფოსტა ან სახელი მითითებული არაა"
 
 #: gitplugin.cpp:547
 #, kde-format
@@ -284,6 +292,7 @@ msgstr "წასაშლელელი ფაილები მითით�
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
+"აღმოჩენილია გადაუცემელი ცვლილებები. გნებავთ, ისინი ჯერ სამალავში შეინახოთ?"
 
 #: gitplugin.cpp:902
 #, kde-format
@@ -353,7 +362,7 @@ msgstr "კონფლიქტები"
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked files"
-msgstr ""
+msgstr "მიუთვალყურებელი ფაილები"
 
 #: repostatusmodel.cpp:82
 #, kde-format
@@ -364,7 +373,7 @@ msgstr "შუალედური შენახვით"
 #: repostatusmodel.cpp:84
 #, kde-format
 msgid "Files with changes staged for commit"
-msgstr ""
+msgstr "ცვლილებები მზა ცვლილებებით გადაცემისთვის"
 
 #: repostatusmodel.cpp:89
 #, kde-format
@@ -397,95 +406,95 @@ msgstr "მიუთვალყურებელი"
 #: repostatusmodel.cpp:104
 #, kde-format
 msgid "Files not tracked in VCS"
-msgstr ""
+msgstr "მიუთვალყურებელი ფაილები VCS-ში"
 
 #: repostatusmodel.cpp:222
 #, kde-format
 msgctxt "@item file has unstaged changes"
 msgid "Modified (unstaged)"
-msgstr ""
+msgstr "შეცვლილია (შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:224
 #, kde-format
 msgctxt "@item file was deleted from worktree"
 msgid "Deleted (unstaged)"
-msgstr ""
+msgstr "წაშლილია (შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:226
 #, kde-format
 msgctxt "@item file was renamed in worktree"
 msgid "Renamed (unstaged)"
-msgstr ""
+msgstr "სახელი გადარქმეულია (შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:228
 #, kde-format
 msgctxt "@item file was copied in worktree"
 msgid "Copied (unstaged)"
-msgstr ""
+msgstr "დაკოპირებულია (შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:230
 #, kde-format
 msgctxt "@item file has staged changes"
 msgid "Modified (staged)"
-msgstr ""
+msgstr "შეცვლილია (შუალედური შენახვით)"
 
 #: repostatusmodel.cpp:232
 #, kde-format
 msgctxt "@item file has both staged and unstaged changes"
 msgid "Modified (unstaged changes)"
-msgstr ""
+msgstr "შეცვლილია (ცვლილებები შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:234
 #, kde-format
 msgctxt "@item file has staged changes and was deleted in worktree"
 msgid "Modified (unstaged deletion)"
-msgstr ""
+msgstr "შეცვლილია (წაშლა შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:237
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
 msgid "Added (unstaged changes)"
-msgstr ""
+msgstr "დამატებულია (ცვლილებები შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:240
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
 msgid "Added (unstaged deletion)"
-msgstr ""
+msgstr "დამატებულია (წაშლა შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:243
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and renamed in worktree"
 msgid "Deleted (unstaged rename)"
-msgstr ""
+msgstr "წაშლილია (შუალედური სახელის გადარქმევის გარეშე)"
 
 #: repostatusmodel.cpp:246
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and copied in worktree"
 msgid "Deleted (unstaged copy)"
-msgstr ""
+msgstr "წაშლილია (ასლი შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:248
 #, kde-format
 msgctxt "@item file was renamed in versioncontrolsystem"
 msgid "Renamed (staged)"
-msgstr ""
+msgstr "სახელი გადარქმეულია (შუალედური შენახვით)"
 
 #: repostatusmodel.cpp:251
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and has unstaged changes"
 msgid "Renamed (unstaged changes)"
-msgstr ""
+msgstr "სახელი გადარქმეულია (ცვლილებები შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:254
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and was deleted in worktree"
 msgid "Renamed (unstaged deletion)"
-msgstr ""
+msgstr "სახელი გადარქმეულია (წაშლა შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:256
 #, kde-format
@@ -498,20 +507,20 @@ msgstr "კოპირებულია"
 msgctxt ""
 "@item file was copied in versioncontrolsystem and has unstaged changes"
 msgid "Copied (unstaged changes)"
-msgstr ""
+msgstr "დაკოპირებულია (ცვლილებები შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:262
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and was deleted in worktree"
 msgid "Copied (unstaged deletion)"
-msgstr ""
+msgstr "დაკოპირებულია (წაშლა შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:264
 #, kde-format
 msgctxt "@item file has unresolved merge conflicts"
 msgid "Unresolved conflicts"
-msgstr ""
+msgstr "ამოუხსნელი კონფლიქტები"
 
 #: repostatusmodel.cpp:266
 #, kde-format
@@ -528,22 +537,22 @@ msgstr "უცნობი"
 #: repostatusmodel.cpp:362
 #, kde-format
 msgid " (staged)"
-msgstr ""
+msgstr " (შუალედური შენახვით)"
 
 #: repostatusmodel.cpp:370
 #, kde-format
 msgid " (unstaged)"
-msgstr ""
+msgstr " (შუალედური შენახვის გარეშე)"
 
 #: repostatusmodel.cpp:378
 #, kde-format
 msgid " (conflicts)"
-msgstr ""
+msgstr " (კონფლიქტი)"
 
 #: repostatusmodel.cpp:386
 #, kde-format
 msgid " (untracked)"
-msgstr ""
+msgstr " (მიუთვალყურებელი)"
 
 #: repostatusmodel.cpp:580
 #, kde-format
@@ -579,28 +588,28 @@ msgstr "ცვლილებების დასაკომიტებლ�
 #: simplecommitform.cpp:91 simplecommitform.cpp:169
 #, kde-format
 msgid "Commit changes to <b>%1</b> on branch <b>%2</b>"
-msgstr ""
+msgstr "ცვლილებების გადაცემა: <b>%1</b> ბრენჩზე <b>%2</b>"
 
 #: simplecommitform.cpp:122
 #, kde-format
 msgid "To commit changes, please select a project first"
-msgstr ""
+msgstr "ცვლილებების გადასაცემად, ჯერ პროექტი აირჩიეთ"
 
 #: simplecommitform.cpp:163
 #, kde-format
 msgid "Please stage some changes before committing."
-msgstr ""
+msgstr "კომიტამდე საჭიროა ცვლილებების შუალედური შენახვა."
 
 #: stashmanagerdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
-msgstr ""
+msgstr "სამალავების მმართველი"
 
 #: stashmanagerdialog.cpp:118
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
-msgstr ""
+msgstr "დარწმუნებული ბრძანდებით, რომ გნებავთ, წაშალოთ შუალედური საცავი '%1'?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
 #: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
@@ -613,13 +622,13 @@ msgstr "გადაგდება"
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
-msgstr ""
+msgstr "Git-ის სამალავი"
 
 #: stashmanagerdialog.cpp:128
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
-msgstr ""
+msgstr "სახელი ახალი ბრენჩისთვის:"
 
 #: stashmanagerdialog.cpp:149
 #, kde-format
@@ -637,14 +646,14 @@ msgstr "%1 შექმნის დრო %2"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr ""
+msgstr "მონიშნული სამალავის წაშლა"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:36
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch and drop the stash"
-msgstr ""
+msgstr "სამალავის პაჩის გადატარება და სამალავის წაშლა"
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:39
@@ -658,7 +667,7 @@ msgstr "პოპი"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the content of the stash"
-msgstr ""
+msgstr "სამალავის შემცველობის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
 #: stashmanagerdialog.ui:52
@@ -672,7 +681,7 @@ msgstr "ჩვენება"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch"
-msgstr ""
+msgstr "სამალავის პაჩის გადატარება"
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
 #: stashmanagerdialog.ui:85
@@ -686,7 +695,7 @@ msgstr "გადატარება"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new branch and apply the stash there, then drop the stash"
-msgstr ""
+msgstr "ახალი ბრენჩის შექმნა და საცავის იქ გადატარება, შემდეგ კი საცავის წაშლა"
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:111
