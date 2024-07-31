@@ -16,7 +16,6 @@ class IDocument;
 class ProblemModel;
 }
 
-class ProblemReporterPlugin;
 class QSortFilterProxyModel;
 
 class ProblemTreeView : public QTreeView

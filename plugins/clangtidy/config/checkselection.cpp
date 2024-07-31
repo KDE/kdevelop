@@ -10,7 +10,6 @@
 #include "checklistfilterproxysearchline.h"
 #include "checklistitemproxystyle.h"
 #include "checklistmodel.h"
-#include <checkset.h>
 #include <debug.h>
 // Qt
 #include <QEvent>
