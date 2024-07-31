@@ -9,7 +9,6 @@
 // plugin
 #include "clangtidyconfig.h"
 #include "ui_clangtidypreferences.h"
-#include "checksetselectionmanager.h"
 
 using KDevelop::IPlugin;
 using KDevelop::ConfigPage;

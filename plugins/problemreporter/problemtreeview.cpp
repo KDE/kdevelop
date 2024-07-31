@@ -26,7 +26,6 @@
 #include <language/editor/documentrange.h>
 #include <util/kdevstringhandler.h>
 
-#include "problemreporterplugin.h"
 #include <shell/problemmodel.h>
 #include <shell/problem.h>
 #include <shell/problemconstants.h>
