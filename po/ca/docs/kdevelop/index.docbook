@@ -1453,7 +1453,7 @@ void foo()
 <para
 ><note
 ><para
->En l'exemple, l'acceptació d'una de les opcions de l'eina de compleció automàtica ofereix la signatura correcta, però malauradament elimina el marcador <varname
+>En l'exemple, l'acceptació d'una de les opcions de l'eina de compleció automàtica ofereix la signatura correcta, però malauradament suprimeix el marcador <varname
 >inline</varname
 > que ja s'ha escrit. Això ha estat informat com a <ulink url="https://bugs.kde.org/show_bug.cgi?id=274245"
 >error 274245 del &kdevelop;</ulink
@@ -2136,7 +2136,7 @@ void foo()
 ></keycombo
 ></entry>
     <entry
->Elimina la línia actual (nota: això no és com a «emacs» -elimina des d'aquí fins al final de la línia-).</entry>
+>Suprimeix la línia actual (nota: això no és com a «emacs» -suprimeix des d'aquí fins al final de la línia-).</entry>
   </row>
   </tbody>
   </tgroup>
