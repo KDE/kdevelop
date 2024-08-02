@@ -6039,18 +6039,3 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
-
-#~ msgid "Could not find an open document"
-#~ msgstr "Klarte ikke å finne et åpent dokument"
-
-#~ msgid "Error finding context for selection range"
-#~ msgstr "Feil ved søk etter kontekst for utvalgsområdet"
-
-#~ msgid "Error checking conditions to generate code: %1"
-#~ msgstr "Feil ved kontroll av betingelser for kodegenerering: %1"
-
-#~ msgid "Error Gathering user information: %1"
-#~ msgstr "Feil ved innsamling av brukerinformasjon: %1"
-
-#~ msgid "Error generating code: %1"
-#~ msgstr "Feil ved kodegenerering: %1"
