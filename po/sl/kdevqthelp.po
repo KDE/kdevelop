@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-02 02:33+0000\n"
 "PO-Revision-Date: 2024-06-24 08:06+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -203,17 +203,17 @@ msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
 msgstr "Izberite datoteko pomoči Qt..."
 
-#: qthelpdocumentation.cpp:211
+#: qthelpdocumentation.cpp:384
 #, kde-format
 msgid "Could not find any documentation for '%1'"
 msgstr "Ni bilo mogoče najti dokumentacije za '%1'"
 
-#: qthelpdocumentation.cpp:307
+#: qthelpdocumentation.cpp:480
 #, kde-format
 msgid "%1 Home Page"
 msgstr "Domača stran %1"
 
-#: qthelpqtdoc.cpp:148
+#: qthelpqtdoc.cpp:141
 #, kde-format
 msgid "QtHelp"
 msgstr "QtHelp"
