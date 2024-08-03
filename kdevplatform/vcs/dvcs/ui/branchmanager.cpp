@@ -65,7 +65,6 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     // Filter Model
     m_filterModel = new QSortFilterProxyModel();
     m_filterModel->setSourceModel(m_model);
-    m_filterModel->setFilterWildcard(QString());
     m_filterModel->sort(0, Qt::AscendingOrder);
 
     //Changes in filter edit trigger filtering
