@@ -20,7 +20,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     Q_OBJECT
     Q_INTERFACES( IExecuteScriptPlugin )
 
-  public:
+public:
     explicit ExecuteScriptPlugin(QObject *parent, const QVariantList & = QVariantList() );
     ~ExecuteScriptPlugin() override;
 
