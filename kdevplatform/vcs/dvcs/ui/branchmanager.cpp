@@ -22,6 +22,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <util/wildcardhelpers.h>
+
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -68,10 +70,9 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     m_filterModel->sort(0, Qt::AscendingOrder);
 
     //Changes in filter edit trigger filtering
-    connect(m_ui->branchFilterEdit,
-            &QLineEdit::textChanged,
-            m_filterModel,
-            &QSortFilterProxyModel::setFilterWildcard);
+    connect(m_ui->branchFilterEdit, &QLineEdit::textChanged, this, [this](const QString& text) {
+        WildcardHelpers::setFilterNonPathWildcard(*m_filterModel, text);
+    });
 
     m_ui->branchView->setModel(m_filterModel);
 

@@ -7,13 +7,23 @@
 #ifndef KDEVPLATFORM_WILDCARDHELPERS_H
 #define KDEVPLATFORM_WILDCARDHELPERS_H
 
+#include "utilexport.h"
+
 #include <QRegExp>
 #include <QString>
 #include <QStringList>
 
 #include <algorithm>
 
+class QSortFilterProxyModel;
+
 namespace WildcardHelpers {
+/**
+ * Equivalent to @p model.setFilterWildcard(@p pattern), except
+ * that the pattern is not interpreted as filepath globbing.
+ */
+void KDEVPLATFORMUTIL_EXPORT setFilterNonPathWildcard(QSortFilterProxyModel& model, const QString& pattern);
+
 /**
  * @note Unlike the QDir::match() overload with the same signature, this
  * function treats its first argument as a single pattern, not a filter with

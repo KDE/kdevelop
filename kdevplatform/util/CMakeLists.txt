@@ -8,6 +8,7 @@ set(KDevPlatformUtil_LIB_SRCS
     foregroundlock.cpp
     formattinghelpers.cpp
     zoomcontroller.cpp
+    wildcardhelpers.cpp
     kdevstringhandler.cpp
     focusedtreeview.cpp
     processlinemaker.cpp
