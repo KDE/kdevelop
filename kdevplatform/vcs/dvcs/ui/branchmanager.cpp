@@ -80,7 +80,7 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     // apply initial selection
     QList< QStandardItem* > items = m_model->findItems(branchName);
     if (!items.isEmpty()) {
-        m_ui->branchView->setCurrentIndex(items.first()->index());
+        m_ui->branchView->setCurrentIndex(m_filterModel->mapFromSource(items.constFirst()->index()));
     }
 
     connect(m_ui->newButton, &QPushButton::clicked, this, &BranchManager::createBranch);
