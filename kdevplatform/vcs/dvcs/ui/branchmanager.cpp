@@ -78,9 +78,14 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
 
     QString branchName = m_model->currentBranch();
     // apply initial selection
-    QList< QStandardItem* > items = m_model->findItems(branchName);
-    if (!items.isEmpty()) {
-        m_ui->branchView->setCurrentIndex(m_filterModel->mapFromSource(items.constFirst()->index()));
+    const auto currentBranchIndices =
+        m_model->match(m_model->index(0, 0), Qt::DisplayRole, branchName, -1, Qt::MatchExactly);
+    if (!currentBranchIndices.isEmpty()) {
+        if (currentBranchIndices.size() != 1) {
+            qCWarning(VCS) << "more than one branch matches the current branch, selecting the first one of"
+                           << currentBranchIndices.size();
+        }
+        m_ui->branchView->setCurrentIndex(m_filterModel->mapFromSource(currentBranchIndices.constFirst()));
     }
 
     connect(m_ui->newButton, &QPushButton::clicked, this, &BranchManager::createBranch);
