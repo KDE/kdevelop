@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-25 02:28+0000\n"
-"PO-Revision-Date: 2024-07-27 14:11+0900\n"
+"PO-Revision-Date: 2024-08-03 14:00+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -137,7 +137,7 @@ msgstr "找不到中斷點"
 #: debugger/breakpoint/breakpointmodel.cpp:371
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
-msgstr ""
+msgstr "無法於 %1 找到中斷點：%2"
 
 #: debugger/breakpoint/breakpointmodel.cpp:377
 #, kde-format
@@ -191,7 +191,7 @@ msgstr "狀態"
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
-msgstr ""
+msgstr "無法新增中斷點至未命名文件。請先儲存文件。"
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -335,7 +335,7 @@ msgstr "#%1 %2() 於 %3\n"
 #, kde-format
 msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
-msgstr ""
+msgstr "#%1 %2() 於 %3：%4\n"
 
 #: debugger/interfaces/ibreakpointcontroller.cpp:79
 #, kde-format
@@ -667,12 +667,12 @@ msgstr "所有專案類別"
 #: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
-msgstr ""
+msgstr "基底類別"
 
 #: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
-msgstr ""
+msgstr "衍生類別"
 
 #: language/classmodel/projectfolder.cpp:18
 #, kde-format
@@ -833,7 +833,7 @@ msgstr ""
 #: language/duchain/classfunctiondeclaration.cpp:94
 #, kde-format
 msgid "invalid member-function %1 type %2"
-msgstr ""
+msgstr "無效成員函式 %1 型態 %2"
 
 #: language/duchain/declarationid.cpp:204
 #, kde-format
@@ -1168,6 +1168,7 @@ msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
 "<em>Enter</em>)"
 msgstr ""
+"（按住 <em>Alt</em> 來顯示。用方向鍵來瀏覽，按下 <em>Enter</em> 來觸發）"
 
 #: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
@@ -1410,12 +1411,12 @@ msgstr "行程未指定工作目錄。"
 #: outputview/outputexecutejob.cpp:210
 #, kde-format
 msgid "Invalid build directory '%1'"
-msgstr "不合法的編譯目錄 %1"
+msgstr "無效的編譯目錄 '%1'"
 
 #: outputview/outputexecutejob.cpp:212
 #, kde-format
 msgid "Invalid working directory '%1'"
-msgstr "不合法的工作目錄 '%1'"
+msgstr "無效的工作目錄 '%1'"
 
 #: outputview/outputexecutejob.cpp:219
 #, kde-format
@@ -1911,7 +1912,8 @@ msgid ""
 "is a call to a function the whole function is executed and the app will stop "
 "at the line following the function call."
 msgstr ""
-"執行一行源碼。如果該行源碼是呼叫函式，則會把整個函式執行完畢後停在下一行。"
+"執行一行原始碼。如果該行原始碼是在呼叫函式，則會把整個函式執行完畢後停在下一"
+"行。"
 
 #: shell/debugcontroller.cpp:261
 #, kde-format
@@ -1945,15 +1947,12 @@ msgid "Step into the next statement"
 msgstr "單步跳入下一個敘述"
 
 #: shell/debugcontroller.cpp:271
-#, fuzzy, kde-format
-#| msgid ""
-#| "Executes exactly one line of source. If the source line is a call to a "
-#| "function then execution will stop after the function has been entered."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Executes exactly one line of source. If the source line is a call to a "
 "function then execution will stop after the function has been entered."
-msgstr "執行源碼中一行敘述。如果程式碼是呼叫某個函式，則會停在進入函式的點。"
+msgstr "執行僅一行原始碼。如果該行原始碼是在呼叫函式，則將會停在進入函式之後。"
 
 #: shell/debugcontroller.cpp:278
 #, kde-format
@@ -2940,7 +2939,7 @@ msgstr "設定專案 %1"
 #: shell/projectcontroller.cpp:301
 #, kde-format
 msgid "Invalid Location: %1"
-msgstr "不合法的位置：%1"
+msgstr "無效的位置：%1"
 
 #: shell/projectcontroller.cpp:311
 #, kde-format
@@ -3165,11 +3164,10 @@ msgid "No enabled plugin supports this repository URL: %1"
 msgstr "沒有任何已啟用的外掛程式支援此版本庫 URL：%1"
 
 #: shell/projectcontroller.cpp:1228
-#, fuzzy, kde-format
-#| msgid "Reopen the current project?"
+#, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
-msgstr "要重新開啟目前的專案嗎？"
+msgstr "重新剖析整個專案"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
@@ -3222,21 +3220,17 @@ msgstr "%1：%p%"
 #, kde-format
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
-msgstr "您需要指定合法的或不存在的目錄才能取出專案"
+msgstr "您需要指定有效的或不存在的目錄才能取出專案"
 
 #: shell/projectsourcepage.cpp:251
-#, fuzzy, kde-format
-#| msgid ""
-#| "You need to specify a valid or nonexistent directory to check out a "
-#| "project"
+#, kde-format
 msgid "You need to specify the source for your remote project"
-msgstr "您需要指定合法的或不存在的目錄才能取出專案"
+msgstr "您必須指定遠端專案的來源"
 
 #: shell/projectsourcepage.cpp:253
-#, fuzzy, kde-format
-#| msgid "You need to specify a valid project location"
+#, kde-format
 msgid "You need to specify an empty folder as your project destination"
-msgstr "您需要指定合法的專案位置"
+msgstr "您必須指定空白資料夾作為您的專案目的地"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectsourcepage.ui:37
@@ -3409,8 +3403,7 @@ msgid "List of jobs that can be stopped individually."
 msgstr "可以被個別停止的工作清單。"
 
 #: shell/runcontroller.cpp:475
-#, fuzzy, kde-format
-#| msgid "Current Launch Configuration"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "目前的啟動設定"
@@ -3779,9 +3772,7 @@ msgstr "啟用背景剖析器"
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:35 shell/settings/bgpreferences.ui:45
-#, fuzzy, kde-format
-#| msgid ""
-#| "The time to wait before the document is re-analyzed when you edit it."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "The time to wait before the document is re-analyzed when you edit it."
 msgstr "文件在編輯時重新分析前等待的時間。"
@@ -3803,10 +3794,7 @@ msgstr " 毫秒"
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
 #: shell/settings/bgpreferences.ui:61 shell/settings/bgpreferences.ui:71
-#, fuzzy, kde-format
-#| msgid ""
-#| "The maximum number of parallel instances the background parser uses. If "
-#| "unsure, select 1 or 2."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The maximum number of parallel instances the background parser uses. If "
@@ -3815,8 +3803,7 @@ msgstr "同時使用的背景剖析器的最大數量。如果不確定，請選
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/bgpreferences.ui:64
-#, fuzzy, kde-format
-#| msgid "Maximum number of threads:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
 msgstr "執行緒的最大數量："
@@ -3968,7 +3955,7 @@ msgstr "語言支援"
 #: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
-msgstr ""
+msgstr "設定程式碼自動補完與語法突顯"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/languagepreferences.ui:29
@@ -4235,9 +4222,7 @@ msgstr "提示、警告與錯誤"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:327
-#, fuzzy, kde-format
-#| msgid ""
-#| "Space-separated list of words that make a comment represent a TODO item"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Space-separated list of words that make a comment represent a TODO item"
 msgstr "用空白分隔的單字清單，這些單字會讓註解表達待辦項目"
@@ -4251,9 +4236,7 @@ msgstr "待辦項目標記單字："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
 #: shell/settings/languagepreferences.ui:340
-#, fuzzy, kde-format
-#| msgid ""
-#| "Space-separated list of words that make a comment represent a TODO item."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Space-separated list of words that make a comment represent a TODO item."
@@ -4299,7 +4282,7 @@ msgstr "儲存空間與記憶體使用"
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "將預先編譯的前言儲存於："
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4317,6 +4300,15 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>KDevelop 崩潰時預先編譯的前言會繼續留在暫存目錄，到同一個工作階段下次開始"
+"時才會被刪除。<br>\n"
+"當前言儲存於記憶體時，即使 KDevelop 崩潰了它們也會在 KDevelop 離開時消失。"
+"<br>\n"
+"選擇儲存於「工作階段暫存目錄」適合記憶體較為受限而暫存目錄不使用 tmpfs 的系"
+"統，因為前言檔案可能會需要數 GiB 的空間。<br>\n"
+"此選項的變更需要 KDevelop 重新啟動後才會生效。<br>\n"
+"這個選項只在 KDevelop 建置時利用 Clang 17 版或更新的時候才會有用。\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
@@ -4676,8 +4668,7 @@ msgstr "分頁瀏覽"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:92
-#, fuzzy, kde-format
-#| msgid "Controls whether to open new tabs next to the active one."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Controls whether to open new tabs next to the active one."
 msgstr "控制開啟新分頁時是否要開在目前作用中的分頁的隔壁。"
@@ -4691,37 +4682,30 @@ msgstr "在目前的分頁後開啟新分頁"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:106
-#, fuzzy, kde-format
-#| msgid ""
-#| "When enabled, plugins can group related files side by side.\n"
-#| "For example, a header file will be opened next to the implementation file."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "When enabled, plugins can group related files side by side.\n"
 "For example, a header file will be opened next to the implementation file."
 msgstr ""
-"開啟此選項的話，外掛程式可以將相關的檔案一個個群組起來放在一起。\n"
-"例如，標頭檔會放在實作檔之後。"
+"啟用時，外掛程式將能夠將相關的檔案並排組合在一起。\n"
+"舉例來說，一個標頭檔會開在實作檔旁邊。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:109
-#, fuzzy, kde-format
-#| msgid "Arrange related documents side by side"
+#, kde-format
 msgctxt "@option:check"
 msgid "Arrange related documents side by side"
-msgstr "安排相關的文件放在一起"
+msgstr "將相關文件並列排放"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:116
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enables or disables the display of the tab bar at the top of the editor "
-#| "window."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Enables or disables the display of the tab bar at the top of the editor "
 "window."
-msgstr "開啟或關閉編輯器視窗上方的分頁列。"
+msgstr "啟用或停用編輯器視窗上方的分頁列顯示。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:119
@@ -4732,15 +4716,12 @@ msgstr "顯示分頁"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:129
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enables or disables the display of the tab bar at the top of the editor "
-#| "window."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Enables or disables the display of a close button in each tab in the tab bar "
 "at the top of the editor window."
-msgstr "開啟或關閉編輯器視窗上方的分頁列。"
+msgstr "啟用或停用編輯器視窗上方分頁列中各分頁中的關閉按鈕。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:132
@@ -4796,18 +4777,16 @@ msgid "Reformat Files..."
 msgstr "重新格式化檔案…"
 
 #: shell/sourceformattercontroller.cpp:235
-#, fuzzy, kde-format
-#| msgid "Format file(s) using the current theme"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr "使用目前的主題來格式化檔案"
+msgstr "使用已設定的原始碼格式化工具來格式化檔案"
 
 #: shell/sourceformattercontroller.cpp:237
-#, fuzzy, kde-format
-#| msgid "Formatting functionality using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr "使用 <b>astyle</b> 函式庫來格式化函式。"
+msgstr "利用已設定的原始碼格式化工具提供的格式化功能。"
 
 #: shell/sourceformattercontroller.cpp:609
 #, kde-format
