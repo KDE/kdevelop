@@ -1,38 +1,37 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2016-09-22 20:30+0800\n"
-"Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
-"Language-Team: Traditional Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-08-03 14:09+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.10.0\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: controllers/framestackmodel.cpp:85
 #, kde-format
 msgid "(running)"
-msgstr ""
+msgstr "（執行中）"
 
 #: debuggerplugin.cpp:28 lldblauncher.cpp:45
 #, kde-format
 msgid "LLDB"
-msgstr ""
+msgstr "LLDB"
 
 #: debuggerplugin.cpp:93
 #, kde-format
 msgctxt "@title:window"
 msgid "LLDB Console"
-msgstr ""
+msgstr "LLDB 主控台"
 
 #: debugsession.cpp:137
 #, kde-format
@@ -42,19 +41,19 @@ msgstr ""
 #: debugsession.cpp:336
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr ""
+msgstr "<b>無法啟動除錯器：</b><br />"
 
 #: debugsession.cpp:347
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
-msgstr ""
+msgstr "<b>無法連接到遠端目標：</b><br />"
 
 #: debugsession.cpp:360
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
 "<p><tt>%1"
-msgstr ""
+msgstr "<b>無法載入核心檔案</b><p>除錯器回報了以下錯誤：<p><tt>%1"
 
 #: debugsession.cpp:391
 #, kde-format
@@ -68,7 +67,7 @@ msgstr ""
 #: debugsession.cpp:395
 #, kde-format
 msgid "LLDB Version Unsupported"
-msgstr ""
+msgstr "不支援的 LLDB 版本"
 
 #: debugsession.cpp:441
 #, kde-format
@@ -80,7 +79,7 @@ msgstr ""
 #: kdevlldbui.rc:19
 #, kde-format
 msgid "Debugger Toolbar"
-msgstr ""
+msgstr "除錯器工具列"
 
 #: lldblauncher.cpp:50
 #, kde-format
@@ -98,27 +97,27 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "中止目前工作階段"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
 msgctxt "@title:tab"
 msgid "LLDB Configuration"
-msgstr ""
+msgstr "LLDB 設定"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
 #: widgets/lldbconfigpage.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
-msgstr ""
+msgstr "除錯器"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/lldbconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger executable:"
-msgstr ""
+msgstr "除錯器執行檔："
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
 #: widgets/lldbconfigpage.ui:42
@@ -132,35 +131,35 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Additional arguments:"
-msgstr ""
+msgstr "額外參數："
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: widgets/lldbconfigpage.ui:60
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
-msgstr ""
+msgstr "環境："
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
 #: widgets/lldbconfigpage.ui:85
 #, kde-format
 msgctxt "@option:check"
 msgid "Inherit system environment"
-msgstr ""
+msgstr "繼承系統環境"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
 #: widgets/lldbconfigpage.ui:95
 #, kde-format
 msgctxt "@title:group"
 msgid "Options"
-msgstr ""
+msgstr "選項"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: widgets/lldbconfigpage.ui:101
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Config script:"
-msgstr ""
+msgstr "設定文稿："
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
 #: widgets/lldbconfigpage.ui:108
@@ -174,28 +173,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Start debugger with:"
-msgstr ""
+msgstr "除錯器開啟方式："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:123
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
-msgstr ""
+msgstr "應用程式輸出"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:128
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "LLDB Console"
-msgstr ""
+msgstr "LLDB 主控台"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:133
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
-msgstr ""
+msgstr "框架堆疊"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: widgets/lldbconfigpage.ui:141
@@ -209,28 +208,28 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Remo&te Debugging"
-msgstr ""
+msgstr "遠端除錯(&T)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: widgets/lldbconfigpage.ui:167
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote server:"
-msgstr ""
+msgstr "遠端伺服器："
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
 #: widgets/lldbconfigpage.ui:174
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "host:port"
-msgstr ""
+msgstr "主機:連接埠"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: widgets/lldbconfigpage.ui:181
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote work path:"
-msgstr ""
+msgstr "遠端工作路徑："
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
 #: widgets/lldbconfigpage.ui:188

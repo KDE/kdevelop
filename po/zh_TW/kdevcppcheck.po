@@ -1,76 +1,75 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2016-09-22 20:30+0800\n"
-"Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
-"Language-Team: Traditional Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-08-03 14:05+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.10.0\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
 #, kde-format
 msgctxt "@title:tab"
 msgid "Cppcheck"
-msgstr ""
+msgstr "Cppcheck"
 
 #: config/globalconfigpage.cpp:39
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Cppcheck Settings"
-msgstr ""
+msgstr "調整 Cppcheck 設定"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/globalconfigpage.ui:20
 #, kde-format
 msgctxt "@title:group"
 msgid "Paths"
-msgstr ""
+msgstr "路徑"
 
 #. i18n: ectx: property (text), widget (QLabel, cppcheckLabel)
 #: config/globalconfigpage.ui:26
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Cppchec&k executable:"
-msgstr ""
+msgstr "Cppchec&k 執行檔："
 
 #. i18n: ectx: property (title), widget (QGroupBox, outputGroupBox)
 #: config/globalconfigpage.ui:45
 #, kde-format
 msgctxt "@title:group"
 msgid "Output"
-msgstr ""
+msgstr "輸出"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
 #: config/globalconfigpage.ui:51
 #, kde-format
 msgctxt "@option:check"
 msgid "Hide output view during check"
-msgstr ""
+msgstr "檢查時隱藏輸出檢視"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_showXmlOutput)
 #: config/globalconfigpage.ui:58
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Cppcheck XML output in the output view"
-msgstr ""
+msgstr "在輸出檢視中顯示 Cppcheck XML 輸出"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabChecks)
 #: config/projectconfigpage.ui:39
 #, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
-msgstr ""
+msgstr "檢查"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkUnusedFunction)
 #: config/projectconfigpage.ui:47
@@ -79,14 +78,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "Check for unused functions. It is recommend to only enable this when the "
 "whole program is scanned"
-msgstr ""
+msgstr "檢查未使用的函式。建議只在掃描整個程式時才啟用此選項"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkUnusedFunction)
 #: config/projectconfigpage.ui:50
 #, kde-format
 msgctxt "@option:check"
 msgid "Unused function"
-msgstr ""
+msgstr "未使用的函式"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:60
@@ -110,14 +109,14 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable information messages"
-msgstr ""
+msgstr "啟用資訊訊息"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Information"
-msgstr ""
+msgstr "資訊"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:83
@@ -126,28 +125,28 @@ msgctxt "@info:tooltip"
 msgid ""
 "Warn if there are missing includes. For detailed information use 'check-"
 "config'"
-msgstr ""
+msgstr "有缺乏引入時警告。詳細資訊請使用 'check-config'"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:86
 #, kde-format
 msgctxt "@option:check"
 msgid "Missing include"
-msgstr ""
+msgstr "缺乏引入"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:96
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable performance messages"
-msgstr ""
+msgstr "啟用效能訊息"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:99
 #, kde-format
 msgctxt "@option:check"
 msgid "Performance"
-msgstr ""
+msgstr "效能"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:109
@@ -166,21 +165,21 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Force checking"
-msgstr ""
+msgstr "強制檢查"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable portability messages"
-msgstr ""
+msgstr "啟用可移植性訊息"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:122
 #, kde-format
 msgctxt "@option:check"
 msgid "Portability"
-msgstr ""
+msgstr "可移植性"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:132
@@ -190,13 +189,15 @@ msgid ""
 "Enable all coding style checks. All messages with the severities 'style', "
 "'performance' and 'portability' are enabled."
 msgstr ""
+"啟用所有程式碼風格檢查。會啟用所有嚴重程度為 'style'（風"
+"格）、'performance'（效能）或 'portability'（可移植性）的訊息。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:135
 #, kde-format
 msgctxt "@option:check"
 msgid "Style"
-msgstr ""
+msgstr "風格"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:145
@@ -205,21 +206,21 @@ msgctxt "@info:tooltip"
 msgid ""
 "Check Cppcheck configuration. The normal code analysis is disabled by this "
 "flag."
-msgstr ""
+msgstr "檢查 Cppcheck 的設定。普通的程式碼分析會被此旗標停用。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:148
 #, kde-format
 msgctxt "@option:check"
 msgid "Check config"
-msgstr ""
+msgstr "檢查設定"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIncludes)
 #: config/projectconfigpage.ui:158
 #, kde-format
 msgctxt "@title:tab"
 msgid "Include Directories"
-msgstr ""
+msgstr "引入目錄"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:164
@@ -258,7 +259,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Ignored includes:"
-msgstr ""
+msgstr "忽略的引入(&I)"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
 #: config/projectconfigpage.ui:218
@@ -285,14 +286,14 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Extra Parameters"
-msgstr ""
+msgstr "額外參數"
 
 #. i18n: ectx: property (text), widget (QLabel, extraLabel)
 #: config/projectconfigpage.ui:254
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Ex&tra parameters:"
-msgstr ""
+msgstr "額外參數(&T)："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraParameters)
 #: config/projectconfigpage.ui:274
@@ -319,31 +320,31 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Line"
-msgstr ""
+msgstr "命令列"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, commandLineFilter)
 #: config/projectconfigpage.ui:316
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "搜尋…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
 #: config/projectconfigpage.ui:326
 #, kde-format
 msgctxt "@option:check"
 msgid "Break lines"
-msgstr ""
+msgstr "斷開行數"
 
 #: job.cpp:42
 #, kde-format
 msgid "Cppcheck Analysis (%1)"
-msgstr ""
+msgstr "Cppcheck 分析 (%1)"
 
 #: job.cpp:111 parser.cpp:250 problemmodel.cpp:40 problemmodel.cpp:85
 #, kde-format
 msgid "Cppcheck"
-msgstr ""
+msgstr "Cppcheck"
 
 #: job.cpp:150
 #, kde-format
@@ -353,22 +354,22 @@ msgstr ""
 #: job.cpp:155
 #, kde-format
 msgid "Cppcheck crashed."
-msgstr ""
+msgstr "Cppcheck 已崩潰。"
 
 #: job.cpp:160
 #, kde-format
 msgid "Cppcheck process timed out."
-msgstr ""
+msgstr "Cppcheck 行程逾時。"
 
 #: job.cpp:164
 #, kde-format
 msgid "Write to Cppcheck process failed."
-msgstr ""
+msgstr "寫入 Cppcheck 行程失敗。"
 
 #: job.cpp:168
 #, kde-format
 msgid "Read from Cppcheck process failed."
-msgstr ""
+msgstr "從 Cppcheck 讀取失敗。"
 
 #: parameters.cpp:145
 #, kde-format
@@ -384,50 +385,50 @@ msgstr ""
 #: parser.cpp:220
 #, kde-format
 msgid "Cppcheck XML Parsing: error at line %1, column %2: %3"
-msgstr ""
+msgstr "Cppcheck XML 剖析：行數 %1 第 %2 欄有錯誤：%3"
 
 #: plugin.cpp:51
 #, kde-format
 msgctxt "@action"
 msgid "Analyze Current File with Cppcheck"
-msgstr ""
+msgstr "使用 Cppcheck 分析目前檔案"
 
 #: plugin.cpp:57 plugin.cpp:68 plugin.cpp:73
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Cppcheck"
-msgstr ""
+msgstr "Cppcheck"
 
 #: plugin.cpp:62
 #, kde-format
 msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
-msgstr ""
+msgstr "使用 Cppcheck 分析目前專案"
 
 #: plugin.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Test"
-msgstr ""
+msgstr "測試"
 
 #: problemmodel.cpp:116
 #, kde-format
 msgid "Analysis completed, no problems detected."
-msgstr ""
+msgstr "分析完成，未偵測到問題。"
 
 #: problemmodel.cpp:137
 #, kde-format
 msgid "Analysis started..."
-msgstr ""
+msgstr "開始分析…"
 
 #: problemmodel.cpp:138
 #, kde-format
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
-msgstr ""
+msgstr "重新執行上次的 Cppcheck 分析 (%1)"
 
 #: problemmodel.cpp:140
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
-msgstr ""
+msgstr "重新執行上次的 Cppcheck 分析"

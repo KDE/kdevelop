@@ -1,21 +1,21 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Chinese <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2024-08-03 14:13+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 24.04.70\n"
 
 #: astyle_plugin.cpp:249
 #, kde-format
@@ -31,28 +31,28 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Indentation"
-msgstr ""
+msgstr "縮排"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:48
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Tabs"
-msgstr ""
+msgstr "Tab 字元"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:53
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Force tabs"
-msgstr ""
+msgstr "強制使用 Tab 字元"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:58
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Spaces"
-msgstr ""
+msgstr "空格"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpNuberSpaces)
 #: astyle_preferences.ui:86
@@ -68,14 +68,14 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Convert tabs to spaces."
-msgstr ""
+msgstr "將 Tab 字元轉換成空格。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkConvertTabs)
 #: astyle_preferences.ui:107
 #, kde-format
 msgctxt "@option:check"
 msgid "Con&vert tabs into spaces"
-msgstr ""
+msgstr "將空格轉換成 Tab 字元(&V)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFillEmptyLines)
 #: astyle_preferences.ui:114
@@ -89,63 +89,63 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Fill empt&y lines"
-msgstr ""
+msgstr "填滿空白行數(&Y)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblIndentObjects)
 #: astyle_preferences.ui:139
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Indent:"
-msgstr ""
+msgstr "縮排："
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:153
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Blocks"
-msgstr ""
+msgstr "區塊"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:158
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Brackets"
-msgstr ""
+msgstr "括號"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:163
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Cases"
-msgstr ""
+msgstr "大小寫"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:168
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Class"
-msgstr ""
+msgstr "類別"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:173
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Labels"
-msgstr ""
+msgstr "標記"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:178
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Namespaces"
-msgstr ""
+msgstr "命名空間"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:183
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preprocessor directives"
-msgstr ""
+msgstr "前置處理器命令"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:188
@@ -281,7 +281,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:363
@@ -492,14 +492,14 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep o&ne-line blocks"
-msgstr ""
+msgstr "保留單行區塊(&N)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOther)
 #: astyle_preferences.ui:552
 #, kde-format
 msgctxt "@title:group"
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPointerAlign)
 #: astyle_preferences.ui:558
@@ -513,14 +513,14 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "No change"
-msgstr ""
+msgstr "不改變"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:571
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Name"
-msgstr ""
+msgstr "名稱"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:576
@@ -534,4 +534,4 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Type"
-msgstr ""
+msgstr "類型"
