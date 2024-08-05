@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-# Pretty-printers for Qt 4 and Qt 5.
+# Pretty-printers for Qt types
 
 # SPDX-FileCopyrightText: 2009 Niko Sams <niko.sams@gmail.com>
 #
