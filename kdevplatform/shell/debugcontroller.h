@@ -83,8 +83,6 @@ private:
     void updateDebuggerState(KDevelop::IDebugSession::DebuggerState state, KDevelop::IDebugSession* session);
     void setContinueStartsDebug(bool startsDebug);
 
-    static const QPixmap* executionPointPixmap();
-
     QAction* m_continueDebugger = nullptr;
     //QAction* m_restartDebugger;
     QAction* m_stopDebugger = nullptr;
