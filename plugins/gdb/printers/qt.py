@@ -772,7 +772,27 @@ class QSetPrinter:
     def __init__(self, val):
         self.val = val
 
-    class _iterator(Iterator):
+    class _iterator_qt6(Iterator):
+        def __init__(self, hashIterator):
+            self.hashIterator = hashIterator
+            self.count = 0
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if not self.hashIterator.d:
+                raise StopIteration
+
+            node = self.hashIterator.node()
+
+            item = node['key']
+            self.hashIterator.nextNode()
+
+            self.count = self.count + 1
+            return ('[%d]' % (self.count-1), item)
+
+    class _iterator_qt5(Iterator):
         def __init__(self, hashIterator):
             self.hashIterator = hashIterator
             self.count = 0
@@ -794,8 +814,13 @@ class QSetPrinter:
 
     def children(self):
         hashPrinter = QHashPrinter(self.val['q_hash'], None)
-        hashIterator = hashPrinter._iterator(self.val['q_hash'])
-        return self._iterator(hashIterator)
+        hashIterator = hashPrinter.children()
+
+        isQt5 = has_field(self.val, 'buckets') # Qt5 has 'buckets', Qt6 doesn't
+        if isQt5:
+            return self._iterator_qt5(hashIterator)
+        else:
+            return self._iterator_qt6(hashIterator)
 
     def to_string(self):
         size = self.val['q_hash']['d']['size']
