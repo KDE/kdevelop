@@ -12,6 +12,22 @@ import time
 
 from helper import *
 
+# gdb.lookup_type("QObject *") doesn't work, so implement a wrapper
+def lookup_pointer_type(type_str):
+    type_str = type_str.strip()
+
+    if type_str.endswith('*'):
+        # Look up the base type
+        base_type_str = type_str[:-1].strip()
+        base_type = gdb.lookup_type(base_type_str)
+
+        # Create the pointer type
+        pointer_type = base_type.pointer()
+        return pointer_type
+    else:
+        # If it's not a pointer type, look it up directly
+        return gdb.lookup_type(type_str)
+
 class QStringPrinter:
 
     def __init__(self, val):
@@ -824,6 +840,52 @@ class QVariantPrinter:
         if d['is_null']:
             return "QVariant(NULL)"
 
+        # Qt4/Qt5 has 'type', Qt6 has 'packedType'
+        isQt6 =  has_field(d, 'packedType')
+        if isQt6:
+            return self.to_string_qt6()
+        else:
+            return self.to_string_qt5()
+
+    def to_string_qt6(self):
+        d = self.val['d']
+
+        #inline const QtPrivate::QMetaTypeInterface *typeInterface() const
+        #{
+        #    return reinterpret_cast<const QtPrivate::QMetaTypeInterface *>(packedType << 2);
+        #}
+        data_type = d['packedType'] << 2
+        metatype_interface = data_type.cast(gdb.lookup_type("QtPrivate::QMetaTypeInterface").pointer())
+        type_str = ""
+        try:
+            typeAsCharPointer = metatype_interface['name']
+            if typeAsCharPointer:
+                type_str = typeAsCharPointer.string(encoding = 'UTF-8')
+        except Exception as e:
+            pass
+
+        data = d['data']
+        is_shared = d['is_shared']
+        value_str = ""
+        if is_shared:
+            private_shared = data['shared'].dereference()
+            value_str = "PrivateShared(%s)" % hex(private_shared['data'])
+        else:
+            type_obj = None
+            try:
+                type_obj = lookup_pointer_type(type_str)
+            except Exception as e:
+                # Looking up type_str failed... falling back to printing out data raw:
+                value_str = str(data['data'])
+
+            if type_obj:
+                value_ptr = data['data'].reinterpret_cast(type_obj.const().pointer())
+                value_str = str(value_ptr.dereference())
+
+        return "QVariant(%s, %s)" % (type_str, value_str)
+
+    def to_string_qt5(self):
+        d = self.val['d']
         data_type = d['type']
         type_str = ("type = %d" % data_type)
         try:
@@ -851,7 +913,7 @@ class QVariantPrinter:
                 if type_obj.sizeof > type_obj.pointer().sizeof:
                     value_ptr = data['ptr'].reinterpret_cast(type_obj.const().pointer())
                     value_str = str(value_ptr.dereference())
-                else: 
+                else:
                     value_ptr = data['c'].address.reinterpret_cast(type_obj.const().pointer())
                     value_str = str(value_ptr.dereference())
 
