@@ -839,6 +839,14 @@ class QCharPrinter:
     def display_hint (self):
         return 'string'
 
+class QPersistentModelIndexPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        return str(self.val['d']['index'])
+
 class QUuidPrinter:
 
     def __init__(self, val):
@@ -986,6 +994,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QChar$')] = lambda val: QCharPrinter(val)
     pretty_printers_dict[re.compile('^QUuid$')] = lambda val: QUuidPrinter(val)
     pretty_printers_dict[re.compile('^QVariant$')] = lambda val: QVariantPrinter(val)
+    pretty_printers_dict[re.compile('^QPersistentModelIndex$')] = lambda val: QPersistentModelIndexPrinter(val)
 
 
 build_dictionary ()
