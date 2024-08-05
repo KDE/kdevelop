@@ -363,19 +363,31 @@ class QMapPrinter:
         self.container = container
 
     def children(self):
-        if self.val['d']['size'] == 0:
+        isQt6 = not has_field(self.val['d'], 'size')
+        if isQt6:
+            # to_string's call to std::map will take care of everything
             return []
 
-        isQt4 = has_field(self.val, 'e') # Qt4 has 'e', Qt5 doesn't
-        if isQt4:
-            return self._iteratorQt4(self.val)
         else:
-            return self._iteratorQt5(self.val)
+            if self.val['d']['size'] == 0:
+                return []
+
+            isQt4 = has_field(self.val, 'e') # Qt4 has 'e', Qt5 doesn't
+            if isQt4:
+                return self._iteratorQt4(self.val)
+            else:
+                return self._iteratorQt5(self.val)
 
     def to_string(self):
-        size = self.val['d']['size']
 
-        return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
+        isQt6 = not has_field(self.val['d'], 'size')
+        if isQt6:
+            d_d = self.val['d']['d']
+            std_map = d_d['m']
+            return str(std_map)
+        else:
+            size = self.val['d']['size']
+            return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
 
     def display_hint (self):
         return 'map'
