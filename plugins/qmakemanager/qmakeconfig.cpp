@@ -19,7 +19,8 @@
 namespace {
 QString systemQmakeExecutable()
 {
-    for (const auto& candidate : {QStringLiteral("qmake"), QStringLiteral("qmake-qt5"), QStringLiteral("qmake-qt4")}) {
+    for (const auto& candidate : {QStringLiteral("qmake"), QStringLiteral("qmake6"), QStringLiteral("qmake-qt6"),
+                                  QStringLiteral("qmake-qt5"), QStringLiteral("qmake-qt4")}) {
         auto executable = QStandardPaths::findExecutable(candidate);
         if (!executable.isEmpty()) {
             return executable;
