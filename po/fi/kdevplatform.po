@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2019-06-02 13:10+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -6082,7 +6082,7 @@ msgstr "Komentoi päättyi virheeseen %1."
 msgid "Command exited with value %1."
 msgstr "Komento päättyi paluuarvolla %1."
 
-#: vcs/dvcs/dvcsplugin.cpp:95
+#: vcs/dvcs/dvcsplugin.cpp:96
 #, fuzzy, kde-format
 #| msgid "Branches..."
 msgctxt "@action:inmenu"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevvcscommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2008-12-17 18:58+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -5455,7 +5455,7 @@ msgstr ""
 msgid "Command exited with value %1."
 msgstr ""
 
-#: vcs/dvcs/dvcsplugin.cpp:95
+#: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Branches..."

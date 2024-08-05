@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:44+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2021-11-11 05:17+0100\n"
 "Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -166,7 +166,7 @@ msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
 msgstr "Elimina l'element actualment seleccionat del conjunt de construcció."
 
-#: projectmanagerview.cpp:75 projectmanagerviewplugin.cpp:191
+#: projectmanagerview.cpp:75 projectmanagerviewplugin.cpp:193
 #, kde-format
 msgctxt "@title:window"
 msgid "Projects"
@@ -216,109 +216,109 @@ msgctxt "@info:whatsthis"
 msgid "Build Items:"
 msgstr "Construïx elements:"
 
-#: projectmanagerviewplugin.cpp:143
+#: projectmanagerviewplugin.cpp:145
 #, kde-format
 msgctxt "@action"
 msgid "Build All Projects"
 msgstr "Construïx tots els projectes"
 
-#: projectmanagerviewplugin.cpp:148
+#: projectmanagerviewplugin.cpp:150
 #, kde-format
 msgctxt "@action"
 msgid "Build Selection"
 msgstr "Construïx la selecció"
 
-#: projectmanagerviewplugin.cpp:149
+#: projectmanagerviewplugin.cpp:151
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Build"
 msgstr "Construïx"
 
-#: projectmanagerviewplugin.cpp:155
+#: projectmanagerviewplugin.cpp:157
 #, kde-format
 msgctxt "@action"
 msgid "Install Selection"
 msgstr "Instal·la la selecció"
 
-#: projectmanagerviewplugin.cpp:156
+#: projectmanagerviewplugin.cpp:158
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Install"
 msgstr "Instal·la"
 
-#: projectmanagerviewplugin.cpp:162
+#: projectmanagerviewplugin.cpp:164
 #, kde-format
 msgctxt "@action"
 msgid "Clean Selection"
 msgstr "Neteja la selecció"
 
-#: projectmanagerviewplugin.cpp:163
+#: projectmanagerviewplugin.cpp:165
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Clean"
 msgstr "Neteja"
 
-#: projectmanagerviewplugin.cpp:168
+#: projectmanagerviewplugin.cpp:170
 #, kde-format
 msgctxt "@action"
 msgid "Configure Selection"
 msgstr "Configura la selecció"
 
-#: projectmanagerviewplugin.cpp:170
+#: projectmanagerviewplugin.cpp:172
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Configure"
 msgstr "Configura"
 
-#: projectmanagerviewplugin.cpp:175
+#: projectmanagerviewplugin.cpp:177
 #, kde-format
 msgctxt "@action"
 msgid "Prune Selection"
 msgstr "Elimina la selecció"
 
-#: projectmanagerviewplugin.cpp:176
+#: projectmanagerviewplugin.cpp:178
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Prune"
 msgstr "Elimina"
 
-#: projectmanagerviewplugin.cpp:282
+#: projectmanagerviewplugin.cpp:284
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create &File..."
 msgstr "Crea un fi&txer…"
 
-#: projectmanagerviewplugin.cpp:288
+#: projectmanagerviewplugin.cpp:290
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
 msgstr "Crea una &carpeta…"
 
-#: projectmanagerviewplugin.cpp:295
+#: projectmanagerviewplugin.cpp:297
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Build"
 msgstr "Cons&truix"
 
-#: projectmanagerviewplugin.cpp:299
+#: projectmanagerviewplugin.cpp:301
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Install"
 msgstr "I&nstal·la"
 
-#: projectmanagerviewplugin.cpp:303
+#: projectmanagerviewplugin.cpp:305
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Clean"
 msgstr "&Neteja"
 
-#: projectmanagerviewplugin.cpp:307
+#: projectmanagerviewplugin.cpp:309
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
 msgstr "Afi&g al conjunt de construcció"
 
-#: projectmanagerviewplugin.cpp:314
+#: projectmanagerviewplugin.cpp:316
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&lose Project"
@@ -326,89 +326,89 @@ msgid_plural "Close Projects"
 msgstr[0] "&Tanca el projecte"
 msgstr[1] "Tanca els projectes"
 
-#: projectmanagerviewplugin.cpp:320
+#: projectmanagerviewplugin.cpp:322
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Reload"
 msgstr "To&rna a carregar"
 
-#: projectmanagerviewplugin.cpp:351
+#: projectmanagerviewplugin.cpp:353
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remo&ve"
 msgstr "&Elimina"
 
-#: projectmanagerviewplugin.cpp:355
+#: projectmanagerviewplugin.cpp:357
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Re&name..."
 msgstr "Ca&nvia el nom…"
 
-#: projectmanagerviewplugin.cpp:361
+#: projectmanagerviewplugin.cpp:363
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from &Target"
 msgstr "Elimina de l'objec&tiu"
 
-#: projectmanagerviewplugin.cpp:548
+#: projectmanagerviewplugin.cpp:550
 #, kde-format
 msgctxt "@title:window"
 msgid "Create Folder in %1"
 msgstr "Crea una carpeta a %1"
 
-#: projectmanagerviewplugin.cpp:549
+#: projectmanagerviewplugin.cpp:551
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Folder name:"
 msgstr "Nom de la carpeta:"
 
-#: projectmanagerviewplugin.cpp:600
+#: projectmanagerviewplugin.cpp:602
 #, kde-format
 msgid "Do you really want to delete this item?"
 msgid_plural "Do you really want to delete these %1 items?"
 msgstr[0] "Segur que voleu suprimir este element?"
 msgstr[1] "Segur que voleu suprimir estos %1 elements?"
 
-#: projectmanagerviewplugin.cpp:602
+#: projectmanagerviewplugin.cpp:604
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Files"
 msgstr "Suprimix els fitxers"
 
-#: projectmanagerviewplugin.cpp:655
+#: projectmanagerviewplugin.cpp:657
 #, kde-format
 msgctxt "@window:title"
 msgid "Rename"
 msgstr "Canvia el nom"
 
-#: projectmanagerviewplugin.cpp:656
+#: projectmanagerviewplugin.cpp:658
 #, kde-format
 msgctxt "@label:textbox"
 msgid "New name for '%1':"
 msgstr "Nom nou per a «%1»:"
 
-#: projectmanagerviewplugin.cpp:668
+#: projectmanagerviewplugin.cpp:670
 #, kde-format
 msgid "There is already a file named '%1'"
 msgstr "Ja existix un fitxer anomenat «%1»"
 
-#: projectmanagerviewplugin.cpp:671
+#: projectmanagerviewplugin.cpp:673
 #, kde-format
 msgid "Could not rename '%1'"
 msgstr "No s'ha pogut canviar el nom del fitxer «%1»"
 
-#: projectmanagerviewplugin.cpp:674
+#: projectmanagerviewplugin.cpp:676
 #, kde-format
 msgid "'%1' is not a valid file name"
 msgstr "«%1» no és un nom vàlid de fitxer"
 
-#: projectmanagerviewplugin.cpp:688
+#: projectmanagerviewplugin.cpp:690
 #, kde-format
 msgctxt "@title:window"
 msgid "Create File in %1"
 msgstr "Crea fitxer en %1"
 
-#: projectmanagerviewplugin.cpp:688
+#: projectmanagerviewplugin.cpp:690
 #, kde-format
 msgctxt "@label:textbox"
 msgid "File name:"

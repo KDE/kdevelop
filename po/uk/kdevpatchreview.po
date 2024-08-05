@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2020-07-20 08:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -158,7 +158,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Огляд"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
@@ -169,13 +169,13 @@ msgstr "Рецензування латки"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr "Адреса базового каталогу для латки має бути абсолютною."
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Завершити рецензування"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"

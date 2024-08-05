@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2024-07-19 14:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -5614,7 +5614,7 @@ msgstr "Komut, %1 hatası ile bitti."
 msgid "Command exited with value %1."
 msgstr "Komuttan %1 değeri ile çıkıldı."
 
-#: vcs/dvcs/dvcsplugin.cpp:95
+#: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Branches..."

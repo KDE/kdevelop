@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2023-04-30 18:41+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -5639,7 +5639,7 @@ msgstr "Befehl mit Fehler %1 beendet."
 msgid "Command exited with value %1."
 msgstr "Befehl mit Rückgabewert %1 beendet."
 
-#: vcs/dvcs/dvcsplugin.cpp:95
+#: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Branches..."

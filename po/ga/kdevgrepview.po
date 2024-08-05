@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop/kdevgrepview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -29,7 +29,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr ""
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
@@ -272,21 +272,21 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "Ionadaigh"
 
-#: grepviewplugin.cpp:78
+#: grepviewplugin.cpp:79
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Fi&les..."
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Aimsigh/Ionadaigh i &gComhaid..."
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:82
 #, fuzzy, kde-format
 #| msgid "Search for expressions over several files"
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Déan cuardach ar shlonn i roinnt comhad"
 
-#: grepviewplugin.cpp:83
+#: grepviewplugin.cpp:84
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Find/Replace in files</b><p>Opens the 'Find/Replace in files' dialog. "
@@ -307,14 +307,14 @@ msgstr ""
 "roghnaíonn tú.  Taispeánfar na teaghráin chomhoiriúnacha, agus is féidir "
 "ceann acu a roghnú go díreach. Is féidir ionadú a dhéanamh freisin.</p>"
 
-#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
+#: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Aimsigh/Ionadaigh i gComhaid"
 
-#: grepviewplugin.cpp:142
+#: grepviewplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Fi&les..."
 msgctxt "@action:inmenu"

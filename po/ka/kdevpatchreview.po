@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2022-11-04 18:39+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -157,7 +157,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "მიმოხილვა"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
@@ -168,13 +168,13 @@ msgstr "პაჩის მიმოხილვა"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr "პაჩის საბაზისო საქაღალდე აბსოლუტური ბილიკი უნდა იყოს."
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "გადახედვის დასრულება"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"

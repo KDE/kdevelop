@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2024-03-02 17:23+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -34,7 +34,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Todos os proxectos abertos"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
@@ -254,19 +254,19 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "&Substituír"
 
-#: grepviewplugin.cpp:78
+#: grepviewplugin.cpp:79
 #, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Atopar ou substituír en fic&heiros…"
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Buscar expresións regulares en varios ficheiros"
 
-#: grepviewplugin.cpp:83
+#: grepviewplugin.cpp:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -281,13 +281,13 @@ msgstr ""
 "poderá ir a calquera delas directamente. Tamén se poden realizar "
 "substitucións."
 
-#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
+#: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Atopar ou substituír neste cartafol…"
 
-#: grepviewplugin.cpp:142
+#: grepviewplugin.cpp:143
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."

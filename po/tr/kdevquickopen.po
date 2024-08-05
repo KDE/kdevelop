@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-19 01:40+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2023-03-27 17:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -211,26 +211,26 @@ msgctxt "@action open outline quick open menu"
 msgid "Outline"
 msgstr "Ana Hat"
 
-#: quickopenplugin.cpp:498
+#: quickopenplugin.cpp:497
 #, kde-format
 msgctxt "@title:window"
 msgid "Quick Open"
 msgstr "Tez Aç"
 
-#: quickopenplugin.cpp:832
+#: quickopenplugin.cpp:831
 #, kde-format
 msgctxt "@title:window"
 msgid "Outline"
 msgstr "Ana Hat"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
-#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#: quickopenplugin.cpp:941 quickopenwidget.ui:47
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Quick Open..."
 msgstr "Tez Aç..."
 
-#: quickopenplugin.cpp:943
+#: quickopenplugin.cpp:942
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""

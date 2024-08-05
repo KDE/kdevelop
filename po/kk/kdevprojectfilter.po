@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2013-11-16 03:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -145,7 +145,7 @@ msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "Жоба сүзгісі"
 
-#: projectfilterprovider.cpp:76
+#: projectfilterprovider.cpp:77
 #, fuzzy, kde-format
 #| msgid "Exclude item from project."
 #| msgid_plural "Exclude items from project"
@@ -154,7 +154,7 @@ msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
 msgstr[0] "Жобаға кірмейтіндері"
 
-#: projectfilterprovider.cpp:115
+#: projectfilterprovider.cpp:116
 #, kde-format
 msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
@@ -164,7 +164,7 @@ msgstr[0] ""
 "Бұл аталымдарды сүзгілеуге сүзгі қосылған. Айну үшін жоба сүзгі баптауын "
 "қолданыңыз."
 
-#: projectfilterprovider.cpp:117
+#: projectfilterprovider.cpp:118
 #, fuzzy, kde-format
 #| msgid "Project Filter Added"
 msgctxt "@title:window"

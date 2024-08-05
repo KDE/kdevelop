@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2023-08-05 13:52+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -159,7 +159,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Vista xeral"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
@@ -170,13 +170,13 @@ msgstr "Revisión de parche"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr "O cartafol base da ruta debe ser absoluto."
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Rematar a revisión"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"

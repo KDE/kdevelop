@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2009-12-24 06:59-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -160,7 +160,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Foramharc"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, fuzzy, kde-format
 #| msgid "Cancel Review"
 msgctxt "@title:window"
@@ -172,14 +172,14 @@ msgstr "Cuir an tAthbhreithniú ar ceal"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr ""
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, fuzzy, kde-format
 #| msgid "Cancel Review"
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Cuir an tAthbhreithniú ar ceal"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, fuzzy, kde-format
 #| msgid "Patch"
 msgctxt "@action:inmenu"

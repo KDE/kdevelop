@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2020-07-29 11:34-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -161,7 +161,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Visão geral"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
@@ -172,13 +172,13 @@ msgstr "Revisão da correção"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr "A pasta base da correção deverá ser uma pasta absoluta."
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Concluir a revisão"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"

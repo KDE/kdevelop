@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2024-02-16 09:29+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -32,7 +32,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Всі відкриті проєкти"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
@@ -262,19 +262,19 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "&Замінити"
 
-#: grepviewplugin.cpp:78
+#: grepviewplugin.cpp:79
 #, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Знайти або замінити у &файлах…"
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Пошук виразів у декількох файлах"
 
-#: grepviewplugin.cpp:83
+#: grepviewplugin.cpp:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -288,13 +288,13 @@ msgstr ""
 "теках, які ви вкажете. Знайдені збіги буде показано, ви зможете перейти "
 "напряму до відповідної точки тексту, ви також зможете виконати заміну тексту."
 
-#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
+#: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Знайти і замінити у цій теці…"
 
-#: grepviewplugin.cpp:142
+#: grepviewplugin.cpp:143
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."

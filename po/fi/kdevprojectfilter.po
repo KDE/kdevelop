@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2023-04-17 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -142,7 +142,7 @@ msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "Projektisuodatin"
 
-#: projectfilterprovider.cpp:76
+#: projectfilterprovider.cpp:77
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
@@ -150,7 +150,7 @@ msgid_plural "Exclude Items from Project"
 msgstr[0] "Jätä kohde pois projektista"
 msgstr[1] "Jätä kohteet pois projektista"
 
-#: projectfilterprovider.cpp:115
+#: projectfilterprovider.cpp:116
 #, kde-format
 msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
@@ -163,7 +163,7 @@ msgstr[1] ""
 "Kohteille lisättiin suodatin. Kumoa muuttamalla projektisuodattimen "
 "asetuksia."
 
-#: projectfilterprovider.cpp:117
+#: projectfilterprovider.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"

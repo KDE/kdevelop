@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevvcsprojectintegration\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2022-04-17 20:46+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -22,31 +22,31 @@ msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Obnoviť"
 
-#: vcschangesviewplugin.cpp:62
+#: vcschangesviewplugin.cpp:63
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "Zmeny projektu"
 
-#: vcschangesviewplugin.cpp:65
+#: vcschangesviewplugin.cpp:66
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Lokalizovať aktuálny dokument"
 
-#: vcschangesviewplugin.cpp:67
+#: vcschangesviewplugin.cpp:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "Lokalizuje aktuálny dokument a vyberie ho"
 
-#: vcschangesviewplugin.cpp:70
+#: vcschangesviewplugin.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Obnoviť pohľad"
 
-#: vcschangesviewplugin.cpp:72
+#: vcschangesviewplugin.cpp:73
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"

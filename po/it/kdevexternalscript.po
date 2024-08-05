@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexternalscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2022-07-11 00:49+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -477,32 +477,32 @@ msgstr ""
 "*** Impossibile avviare il programma «%1». Assicurati che il percorso sia "
 "specificato correttamente ***"
 
-#: externalscriptplugin.cpp:125
+#: externalscriptplugin.cpp:126
 #, kde-format
 msgid "External Scripts"
 msgstr "Script esterni"
 
-#: externalscriptplugin.cpp:136
+#: externalscriptplugin.cpp:137
 #, kde-format
 msgid "Quick Compile"
 msgstr "Compilazione veloce"
 
-#: externalscriptplugin.cpp:142
+#: externalscriptplugin.cpp:143
 #, kde-format
 msgid "Sort Selection"
 msgstr "Ordinamento per selezione"
 
-#: externalscriptplugin.cpp:150
+#: externalscriptplugin.cpp:151
 #, kde-format
 msgid "Google Selection"
 msgstr "Cerca su google"
 
-#: externalscriptplugin.cpp:156
+#: externalscriptplugin.cpp:157
 #, kde-format
 msgid "Paste to Hastebin"
 msgstr "Incolla su Hastebin"
 
-#: externalscriptplugin.cpp:238
+#: externalscriptplugin.cpp:239
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Scripts"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2013-03-23 14:07+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -24,35 +24,35 @@ msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "ताजे करा"
 
-#: vcschangesviewplugin.cpp:62
+#: vcschangesviewplugin.cpp:63
 #, fuzzy, kde-format
 #| msgid "VCS Changes"
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "व्हीसीएस बदल"
 
-#: vcschangesviewplugin.cpp:65
+#: vcschangesviewplugin.cpp:66
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "वर्तमान दस्तऐवज शोधा"
 
-#: vcschangesviewplugin.cpp:67
+#: vcschangesviewplugin.cpp:68
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "वर्तमान दस्तऐवज शोधा"
 
-#: vcschangesviewplugin.cpp:70
+#: vcschangesviewplugin.cpp:71
 #, fuzzy, kde-format
 #| msgid "Reload View"
 msgctxt "@action"
 msgid "Reload View"
 msgstr "दृश्य पुन्हा दाखल करा"
 
-#: vcschangesviewplugin.cpp:72
+#: vcschangesviewplugin.cpp:73
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"

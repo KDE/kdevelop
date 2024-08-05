@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -441,32 +441,32 @@ msgid ""
 "correctly ***"
 msgstr "*** 无法启动程序“%1”。请确保正确指定了路径 ***"
 
-#: externalscriptplugin.cpp:125
+#: externalscriptplugin.cpp:126
 #, kde-format
 msgid "External Scripts"
 msgstr "外部脚本"
 
-#: externalscriptplugin.cpp:136
+#: externalscriptplugin.cpp:137
 #, kde-format
 msgid "Quick Compile"
 msgstr "快速编译"
 
-#: externalscriptplugin.cpp:142
+#: externalscriptplugin.cpp:143
 #, kde-format
 msgid "Sort Selection"
 msgstr "排序选中项"
 
-#: externalscriptplugin.cpp:150
+#: externalscriptplugin.cpp:151
 #, kde-format
 msgid "Google Selection"
 msgstr "Google 所选文本"
 
-#: externalscriptplugin.cpp:156
+#: externalscriptplugin.cpp:157
 #, kde-format
 msgid "Paste to Hastebin"
 msgstr "粘贴到 Hastebin"
 
-#: externalscriptplugin.cpp:238
+#: externalscriptplugin.cpp:239
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Scripts"

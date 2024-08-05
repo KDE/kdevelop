@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2014-01-26 17:34+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -168,7 +168,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Oversigt"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, fuzzy, kde-format
 #| msgid "Patch Review"
 msgctxt "@title:window"
@@ -180,14 +180,14 @@ msgstr "Gennemgang af rettelse"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr ""
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, fuzzy, kde-format
 #| msgid "Finish Review"
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Afslut gennemgang"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, fuzzy, kde-format
 #| msgid "Edit Patch"
 msgctxt "@action:inmenu"

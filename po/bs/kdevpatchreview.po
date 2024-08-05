@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2014-02-10 00:14+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -168,7 +168,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Pregled"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, fuzzy, kde-format
 #| msgid "Patch Review"
 msgctxt "@title:window"
@@ -180,14 +180,14 @@ msgstr "Pregled zakrpa"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr ""
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, fuzzy, kde-format
 #| msgid "Finish Review"
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Završi recenziju"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, fuzzy, kde-format
 #| msgid "Edit Patch"
 msgctxt "@action:inmenu"

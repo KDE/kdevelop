@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2022-12-06 19:16+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -26,31 +26,31 @@ msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Berritu"
 
-#: vcschangesviewplugin.cpp:62
+#: vcschangesviewplugin.cpp:63
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "Aldaketak proiektuan"
 
-#: vcschangesviewplugin.cpp:65
+#: vcschangesviewplugin.cpp:66
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Aurkitu uneko dokumentua"
 
-#: vcschangesviewplugin.cpp:67
+#: vcschangesviewplugin.cpp:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "Aurkitu uneko dokumentua eta hura hautatu"
 
-#: vcschangesviewplugin.cpp:70
+#: vcschangesviewplugin.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Birzamatu ikuspegia"
 
-#: vcschangesviewplugin.cpp:72
+#: vcschangesviewplugin.cpp:73
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"

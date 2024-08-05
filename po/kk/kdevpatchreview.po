@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2013-11-12 02:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -169,7 +169,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Шолу"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, fuzzy, kde-format
 #| msgid "Patch Review"
 msgctxt "@title:window"
@@ -181,14 +181,14 @@ msgstr "Жамау шолуы"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr ""
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, fuzzy, kde-format
 #| msgid "Finish Review"
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Шолуды аяқтау"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, fuzzy, kde-format
 #| msgid "Edit Patch"
 msgctxt "@action:inmenu"

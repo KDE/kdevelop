@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2020-10-04 20:17+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -152,7 +152,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "요약"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
@@ -163,13 +163,13 @@ msgstr "패치 검토"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr "패치의 기반 디렉터리는 절대 경로여야 합니다."
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "검토 끝내기"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"

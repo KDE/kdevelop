@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -6109,7 +6109,7 @@ msgstr "Η εντολή τερμάτισε με σφάλμα %1"
 msgid "Command exited with value %1."
 msgstr "Η εντολή τερμάτισε με τιμή %1."
 
-#: vcs/dvcs/dvcsplugin.cpp:95
+#: vcs/dvcs/dvcsplugin.cpp:96
 #, fuzzy, kde-format
 #| msgid "Branches..."
 msgctxt "@action:inmenu"

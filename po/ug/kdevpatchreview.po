@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -163,7 +163,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "قىسقىچە بايان"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, fuzzy, kde-format
 #| msgid "Patch Review"
 msgctxt "@title:window"
@@ -175,14 +175,14 @@ msgstr "ياماق باھالاش"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr ""
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, fuzzy, kde-format
 #| msgid "Patch Review"
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "ياماق باھالاش"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"

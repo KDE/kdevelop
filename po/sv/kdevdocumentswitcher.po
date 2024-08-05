@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevdocumentswitcher\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2020-07-24 12:20+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -18,31 +18,31 @@ msgstr ""
 "X-Generator: Lokalize 19.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: documentswitcherplugin.cpp:65
+#: documentswitcherplugin.cpp:67
 #, kde-format
 msgctxt "@action"
 msgid "Last Used Views"
 msgstr "Senast använda vyer"
 
-#: documentswitcherplugin.cpp:68
+#: documentswitcherplugin.cpp:70
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views."
 msgstr "Öppnar en lista för att gå igenom de senast använda vyerna."
 
-#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#: documentswitcherplugin.cpp:71 documentswitcherplugin.cpp:79
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Walk through the list of last used views"
 msgstr "Gå igenom listan med senast använda vyer"
 
-#: documentswitcherplugin.cpp:73
+#: documentswitcherplugin.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "Last Used Views (Reverse)"
 msgstr "Senast använda vyer (baklänges)"
 
-#: documentswitcherplugin.cpp:76
+#: documentswitcherplugin.cpp:78
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views in reverse."

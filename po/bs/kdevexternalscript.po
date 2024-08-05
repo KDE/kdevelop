@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2014-01-13 20:54+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -556,32 +556,32 @@ msgstr ""
 "*** Ne mogu pokrenuti program '%1'. Osigurajte se da je put pravilno naveden "
 "***"
 
-#: externalscriptplugin.cpp:125
+#: externalscriptplugin.cpp:126
 #, kde-format
 msgid "External Scripts"
 msgstr "Spoljnje skripte"
 
-#: externalscriptplugin.cpp:136
+#: externalscriptplugin.cpp:137
 #, kde-format
 msgid "Quick Compile"
 msgstr "Brzo prevedi"
 
-#: externalscriptplugin.cpp:142
+#: externalscriptplugin.cpp:143
 #, kde-format
 msgid "Sort Selection"
 msgstr "Izbor sortiranja"
 
-#: externalscriptplugin.cpp:150
+#: externalscriptplugin.cpp:151
 #, kde-format
 msgid "Google Selection"
 msgstr "Google izbor"
 
-#: externalscriptplugin.cpp:156
+#: externalscriptplugin.cpp:157
 #, kde-format
 msgid "Paste to Hastebin"
 msgstr ""
 
-#: externalscriptplugin.cpp:238
+#: externalscriptplugin.cpp:239
 #, fuzzy, kde-format
 #| msgid "External Scripts"
 msgctxt "@title:menu"

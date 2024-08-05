@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,31 +17,31 @@ msgstr ""
 "X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevdocumentswitcher.pot\n"
 "X-Crowdin-File-ID: 54872\n"
 
-#: documentswitcherplugin.cpp:65
+#: documentswitcherplugin.cpp:67
 #, kde-format
 msgctxt "@action"
 msgid "Last Used Views"
 msgstr "上次使用的视图"
 
-#: documentswitcherplugin.cpp:68
+#: documentswitcherplugin.cpp:70
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views."
 msgstr "打开一个列表，在之前使用的视图间切换"
 
-#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#: documentswitcherplugin.cpp:71 documentswitcherplugin.cpp:79
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Walk through the list of last used views"
 msgstr "切换浏览上次使用的视图列表"
 
-#: documentswitcherplugin.cpp:73
+#: documentswitcherplugin.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "Last Used Views (Reverse)"
 msgstr "上次使用的视图 (逆序)"
 
-#: documentswitcherplugin.cpp:76
+#: documentswitcherplugin.cpp:78
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views in reverse."

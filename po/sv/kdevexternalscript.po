@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2022-08-03 09:56+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -460,32 +460,32 @@ msgstr ""
 "*** Kunde inte starta programmet '%1'. Försäkra dig om att sökvägen är "
 "riktigt angiven ***"
 
-#: externalscriptplugin.cpp:125
+#: externalscriptplugin.cpp:126
 #, kde-format
 msgid "External Scripts"
 msgstr "Externa skript"
 
-#: externalscriptplugin.cpp:136
+#: externalscriptplugin.cpp:137
 #, kde-format
 msgid "Quick Compile"
 msgstr "Snabbkompilering"
 
-#: externalscriptplugin.cpp:142
+#: externalscriptplugin.cpp:143
 #, kde-format
 msgid "Sort Selection"
 msgstr "Sortera markering"
 
-#: externalscriptplugin.cpp:150
+#: externalscriptplugin.cpp:151
 #, kde-format
 msgid "Google Selection"
 msgstr "Sök efter markering på Google"
 
-#: externalscriptplugin.cpp:156
+#: externalscriptplugin.cpp:157
 #, kde-format
 msgid "Paste to Hastebin"
 msgstr "Klistra in på Hastebin"
 
-#: externalscriptplugin.cpp:238
+#: externalscriptplugin.cpp:239
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Scripts"

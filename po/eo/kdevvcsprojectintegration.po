@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevtestview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2023-04-01 21:46+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -23,31 +23,31 @@ msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Refreŝigi"
 
-#: vcschangesviewplugin.cpp:62
+#: vcschangesviewplugin.cpp:63
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "Projektoŝanĝoj"
 
-#: vcschangesviewplugin.cpp:65
+#: vcschangesviewplugin.cpp:66
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Lokigi Aktualan Dokumenton"
 
-#: vcschangesviewplugin.cpp:67
+#: vcschangesviewplugin.cpp:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "Lokigi la aktualan dokumenton kaj elekti ĝin"
 
-#: vcschangesviewplugin.cpp:70
+#: vcschangesviewplugin.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Reŝargi Vidon"
 
-#: vcschangesviewplugin.cpp:72
+#: vcschangesviewplugin.cpp:73
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"

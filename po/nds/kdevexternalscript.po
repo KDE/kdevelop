@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexternalscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2010-09-23 04:36+0200\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -554,35 +554,35 @@ msgstr ""
 "Programm »%1« lett sik nich opropen. Beseker bitte, de Padd is propper "
 "angeven."
 
-#: externalscriptplugin.cpp:125
+#: externalscriptplugin.cpp:126
 #, kde-format
 msgid "External Scripts"
 msgstr "Extern Skripten"
 
-#: externalscriptplugin.cpp:136
+#: externalscriptplugin.cpp:137
 #, fuzzy, kde-format
 #| msgid "quick compile"
 msgid "Quick Compile"
 msgstr "Fix kompileren"
 
-#: externalscriptplugin.cpp:142
+#: externalscriptplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "sort selection"
 msgid "Sort Selection"
 msgstr "Köör sorteren"
 
-#: externalscriptplugin.cpp:150
+#: externalscriptplugin.cpp:151
 #, fuzzy, kde-format
 #| msgid "google selection"
 msgid "Google Selection"
 msgstr "Köör bi Google söken"
 
-#: externalscriptplugin.cpp:156
+#: externalscriptplugin.cpp:157
 #, kde-format
 msgid "Paste to Hastebin"
 msgstr ""
 
-#: externalscriptplugin.cpp:238
+#: externalscriptplugin.cpp:239
 #, fuzzy, kde-format
 #| msgid "External Scripts"
 msgctxt "@title:menu"

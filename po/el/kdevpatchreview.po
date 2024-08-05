@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 02:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2016-11-02 15:52+0200\n"
 "Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-doc@kde.org>\n"
@@ -171,7 +171,7 @@ msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Επισκόπηση"
 
-#: patchreview.cpp:460 patchreview.cpp:534
+#: patchreview.cpp:460 patchreview.cpp:535
 #, fuzzy, kde-format
 #| msgid "Patch Review"
 msgctxt "@title:window"
@@ -184,14 +184,14 @@ msgstr "Επιθεώρηση διόρθωσης"
 msgid "The base directory of the patch must be an absolute directory."
 msgstr "Ο βασικός φάκελος της διόρθωσης πρέπει να έχει απόλυτη διαδρομή"
 
-#: patchreview.cpp:499 patchreview.cpp:523
+#: patchreview.cpp:499 patchreview.cpp:524
 #, fuzzy, kde-format
 #| msgid "Finish Review"
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Τέλος επιθεώρησης"
 
-#: patchreview.cpp:605
+#: patchreview.cpp:606
 #, fuzzy, kde-format
 #| msgid "Review Patch"
 msgctxt "@action:inmenu"

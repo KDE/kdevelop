@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectfilter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2023-06-06 22:02+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -139,7 +139,7 @@ msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "Projekta Filtrilo"
 
-#: projectfilterprovider.cpp:76
+#: projectfilterprovider.cpp:77
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
@@ -147,7 +147,7 @@ msgid_plural "Exclude Items from Project"
 msgstr[0] "Ekskludi eron el projekto"
 msgstr[1] "Ekskludi erojn el projekto"
 
-#: projectfilterprovider.cpp:115
+#: projectfilterprovider.cpp:116
 #, kde-format
 msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
@@ -160,7 +160,7 @@ msgstr[1] ""
 "Filtrilo por la eroj estis aldonita. Por malfari, uzu ja projektfiltrilajn "
 "agordojn."
 
-#: projectfilterprovider.cpp:117
+#: projectfilterprovider.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"

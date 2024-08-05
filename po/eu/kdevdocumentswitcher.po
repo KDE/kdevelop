@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2022-12-06 09:49+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -20,13 +20,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 22.08.3\n"
 
-#: documentswitcherplugin.cpp:65
+#: documentswitcherplugin.cpp:67
 #, kde-format
 msgctxt "@action"
 msgid "Last Used Views"
 msgstr "Erabilitako azken ikuspegiak"
 
-#: documentswitcherplugin.cpp:68
+#: documentswitcherplugin.cpp:70
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views."
@@ -34,19 +34,19 @@ msgstr ""
 "Zerrenda bat irekitzen du, erabilitako azken ikuspegien zerrendan zehar "
 "ibiltzeko."
 
-#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#: documentswitcherplugin.cpp:71 documentswitcherplugin.cpp:79
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Walk through the list of last used views"
 msgstr "Ibili erabilitako azken ikuspegien zerrendan zehar"
 
-#: documentswitcherplugin.cpp:73
+#: documentswitcherplugin.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "Last Used Views (Reverse)"
 msgstr "Erabilitako azken ikuspegiak (atzekoz aurrera)"
 
-#: documentswitcherplugin.cpp:76
+#: documentswitcherplugin.cpp:78
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views in reverse."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2013-10-06 11:13+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -25,35 +25,35 @@ msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Frissítés"
 
-#: vcschangesviewplugin.cpp:62
+#: vcschangesviewplugin.cpp:63
 #, fuzzy, kde-format
 #| msgid "VCS Changes"
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "VCS változások"
 
-#: vcschangesviewplugin.cpp:65
+#: vcschangesviewplugin.cpp:66
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "A jelenlegi dokumentum elhelyezése"
 
-#: vcschangesviewplugin.cpp:67
+#: vcschangesviewplugin.cpp:68
 #, fuzzy, kde-format
 #| msgid "Locates the current document and selects it."
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "Elhelyezi a jelenlegi dokumentumot és kiválasztja azt."
 
-#: vcschangesviewplugin.cpp:70
+#: vcschangesviewplugin.cpp:71
 #, fuzzy, kde-format
 #| msgid "Reload View"
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Nézet újratöltése"
 
-#: vcschangesviewplugin.cpp:72
+#: vcschangesviewplugin.cpp:73
 #, fuzzy, kde-format
 #| msgid "Refreshes the view for all projects, in case anything changed."
 msgctxt "@info:tooltip"

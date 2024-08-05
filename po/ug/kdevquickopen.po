@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-19 01:40+0000\n"
+"POT-Creation-Date: 2024-08-05 02:27+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -226,14 +226,14 @@ msgctxt "@action open outline quick open menu"
 msgid "Outline"
 msgstr "ئىزنا"
 
-#: quickopenplugin.cpp:498
+#: quickopenplugin.cpp:497
 #, fuzzy, kde-format
 #| msgid "Quick Open"
 msgctxt "@title:window"
 msgid "Quick Open"
 msgstr "تېز ئېچىش"
 
-#: quickopenplugin.cpp:832
+#: quickopenplugin.cpp:831
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgctxt "@title:window"
@@ -241,14 +241,14 @@ msgid "Outline"
 msgstr "ئىزنا"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
-#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#: quickopenplugin.cpp:941 quickopenwidget.ui:47
 #, fuzzy, kde-format
 #| msgid "Quick Open"
 msgctxt "@info:placeholder"
 msgid "Quick Open..."
 msgstr "تېز ئېچىش"
 
-#: quickopenplugin.cpp:943
+#: quickopenplugin.cpp:942
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
