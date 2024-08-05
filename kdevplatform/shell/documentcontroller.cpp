@@ -809,7 +809,7 @@ QList<IDocument*> DocumentController::openDocuments() const
     Q_D(const DocumentController);
 
     QList<IDocument*> opened;
-    for (IDocument* doc : qAsConst(d->documents)) {
+    for (IDocument* doc : std::as_const(d->documents)) {
         auto *sdoc = dynamic_cast<Sublime::Document*>(doc);
         if( !sdoc )
         {
@@ -1190,7 +1190,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     {
         if(urlsWithSeparators.size() > 1)
         {
-            for (const QStringList& group : qAsConst(groups)) {
+            for (const QStringList& group : std::as_const(groups)) {
                 ret &= openDocumentsWithSplitSeparators( index, group, isFirstView );
             }
         }else{

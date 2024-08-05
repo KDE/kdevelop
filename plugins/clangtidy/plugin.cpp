@@ -30,8 +30,8 @@ K_PLUGIN_FACTORY_WITH_JSON(ClangTidyFactory, "kdevclangtidy.json",
 namespace ClangTidy
 {
 
-Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
-    : IPlugin(QStringLiteral("kdevclangtidy"), parent)
+Plugin::Plugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& /*unused*/)
+    : IPlugin(QStringLiteral("kdevclangtidy"), parent, metaData)
     , m_checkSetSelectionManager(new CheckSetSelectionManager)
 {
     setXMLFile(QStringLiteral("kdevclangtidy.rc"));

@@ -39,8 +39,8 @@ private:
     KDevKonsoleViewPlugin *mplugin;
 };
 
-KDevKonsoleViewPlugin::KDevKonsoleViewPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevkonsoleview"), parent)
+KDevKonsoleViewPlugin::KDevKonsoleViewPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevkonsoleview"), parent, metaData)
 {
     const auto factory = KPluginFactory::loadFactory(KPluginMetaData{QStringLiteral("kf6/parts/konsolepart")});
     if (!factory) {

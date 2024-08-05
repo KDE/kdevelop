@@ -16,8 +16,8 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevAndroidFactory, "kdevandroid.json", registerPlugi
 
 using namespace KDevelop;
 
-AndroidPlugin::AndroidPlugin(QObject *parent, const QVariantList & /*args*/)
-    : KDevelop::IPlugin( QStringLiteral("kdevandroid"), parent )
+AndroidPlugin::AndroidPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& /*args*/)
+    : KDevelop::IPlugin(QStringLiteral("kdevandroid"), parent, metaData)
     , m_settings(new AndroidPreferencesSettings)
 {
     setXMLFile( QStringLiteral("kdevandroidplugin.rc") );

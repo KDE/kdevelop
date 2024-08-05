@@ -87,7 +87,8 @@ class ContextBrowserPlugin
     Q_INTERFACES(KDevelop::IContextBrowser)
 
 public:
-    explicit ContextBrowserPlugin(QObject* parent, const QVariantList& = QVariantList());
+    explicit ContextBrowserPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                  const QVariantList& = QVariantList());
     ~ContextBrowserPlugin() override;
 
     void unload() override;

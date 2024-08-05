@@ -19,7 +19,6 @@
 
 namespace KDevelop { class StandardDocumentationView; }
 class QModelIndex;
-class QNetworkAccessManager;
 class QtHelpProviderAbstract;
 
 class QtHelpDocumentation : public KDevelop::IDocumentation
@@ -51,13 +50,6 @@ public:
         return m_info;
     }
 
-public Q_SLOTS:
-    void viewContextMenuRequested(const QPoint& pos);
-
-private Q_SLOTS:
-    void jumpedTo(const QUrl& newUrl);
-
-private:
     const QUrl& currentUrl() const
     {
         return m_current->url;
@@ -66,6 +58,12 @@ private:
     {
         return m_current->title;
     }
+
+public Q_SLOTS:
+    void viewContextMenuRequested(const QPoint& pos);
+
+private Q_SLOTS:
+    void jumpedTo(const QUrl& newUrl);
 
 private:
     QtHelpProviderAbstract* m_provider;

@@ -155,7 +155,7 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
     Q_ASSERT(!docUrl.isEmpty());
 
     const auto docLineCount = document.lines();
-    for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
+    for (Breakpoint* breakpoint : std::as_const(d->breakpoints)) {
         if (breakpoint->kind() == Breakpoint::CodeBreakpoint && docUrl == breakpoint->url()) {
             const auto savedLine = breakpoint->savedLine();
             if (savedLine >= 0 && savedLine < docLineCount) {
@@ -554,7 +554,7 @@ void BreakpointModel::notifyHit(int row)
 }
 
 void BreakpointModel::markChanged(KTextEditor::Document* document, KTextEditor::Mark mark,
-                                  KTextEditor::Document::MarkChangeAction action)
+    KTextEditor::Document::MarkChangeAction action)
 {
     Q_D(const BreakpointModel);
 
@@ -716,7 +716,7 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
     textDocument->setEditableMarks(MarkType::Bookmark | BreakpointMark);
 
     // save breakpoints in the given document.
-    for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
+    for (Breakpoint* breakpoint : std::as_const(d->breakpoints)) {
         if (breakpoint->movingCursor()) {
             if (breakpoint->movingCursor()->document() != textDocument)
                 continue;
@@ -767,7 +767,7 @@ void BreakpointModel::save()
     KConfigGroup breakpoints = activeSession->config()->group(QStringLiteral("Breakpoints"));
     breakpoints.writeEntry("number", d->breakpoints.count());
     int i = 0;
-    for (Breakpoint* b : qAsConst(d->breakpoints)) {
+    for (Breakpoint* b : std::as_const(d->breakpoints)) {
         KConfigGroup g = breakpoints.group(QString::number(i));
         b->save(g);
         ++i;

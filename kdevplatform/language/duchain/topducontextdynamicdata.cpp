@@ -727,7 +727,7 @@ void TopDUContextDynamicData::store()
         file.resize(0);
 
         file.write(reinterpret_cast<const char*>(&topContextDataSize), sizeof(uint));
-        for (const ArrayWithPosition& pos : qAsConst(m_topContextData)) {
+        for (const ArrayWithPosition& pos : std::as_const(m_topContextData)) {
             file.write(pos.array.constData(), pos.position);
         }
 
@@ -735,7 +735,7 @@ void TopDUContextDynamicData::store()
         m_declarations.writeData(&file);
         m_problems.writeData(&file);
 
-        for (const ArrayWithPosition& pos : qAsConst(m_data)) {
+        for (const ArrayWithPosition& pos : std::as_const(m_data)) {
             file.write(pos.array.constData(), pos.position);
         }
 

@@ -23,8 +23,8 @@ class CustomMakeManager : public KDevelop::AbstractFileManagerPlugin,
     Q_OBJECT
     Q_INTERFACES( KDevelop::IBuildSystemManager )
 public:
-
-    explicit CustomMakeManager( QObject *parent = nullptr, const QVariantList& args = QVariantList()  );
+    explicit CustomMakeManager(QObject* parent, const KPluginMetaData& metaData,
+                               const QVariantList& args = QVariantList());
 
     ~CustomMakeManager() override;
 

@@ -62,8 +62,8 @@ private:
     ClassBrowserPlugin* m_plugin;
 };
 
-ClassBrowserPlugin::ClassBrowserPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevclassbrowser"), parent)
+ClassBrowserPlugin::ClassBrowserPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevclassbrowser"), parent, metaData)
     , m_factory(new ClassBrowserFactory(this))
     , m_activeClassTree(nullptr)
 {

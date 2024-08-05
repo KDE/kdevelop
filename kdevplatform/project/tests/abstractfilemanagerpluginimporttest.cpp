@@ -7,12 +7,14 @@
 #include <project/abstractfilemanagerplugin.h>
 
 #include <tests/autotestshell.h>
+#include <tests/plugintesthelpers.h>
 #include <tests/testcore.h>
 #include <tests/testproject.h>
 
 #include <util/path.h>
 
 #include <KJob>
+#include <KPluginMetaData>
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -30,7 +32,8 @@ int main(int argc, char** argv)
     AutoTestShell::init();
     auto core = TestCore::initialize(Core::NoUi);
 
-    auto plugin = new AbstractFileManagerPlugin({}, core);
+    const auto pluginMetaData = makeTestPluginMetaData("ImportTestAbstractFileManager");
+    auto plugin = new AbstractFileManagerPlugin({}, core, pluginMetaData);
     auto project = new TestProject(Path(QString::fromUtf8(argv[1])));
     auto root = plugin->import(project);
     auto import = plugin->createImportJob(root);

@@ -52,7 +52,7 @@ public:
           << "from kde import register_kde_printers"
           << "register_kde_printers (None)"
           << "end";
-        for (const QByteArray& i : qAsConst(p)) {
+        for (const QByteArray& i : std::as_const(p)) {
             write(i + "\n");
         }
         waitForPrompt();

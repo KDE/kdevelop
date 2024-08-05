@@ -224,7 +224,7 @@ void VcsPluginHelper::revert()
     VcsJob* job=d->vcs->revert(d->ctxUrls);
     connect(job, &VcsJob::finished, this, &VcsPluginHelper::revertDone);
 
-    for (const QUrl& url : qAsConst(d->ctxUrls)) {
+    for (const QUrl& url : std::as_const(d->ctxUrls)) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
 
         if(doc && doc->textDocument()) {
@@ -507,7 +507,7 @@ void VcsPluginHelper::push()
 {
     Q_D(VcsPluginHelper);
 
-    for (const QUrl& url : qAsConst(d->ctxUrls)) {
+    for (const QUrl& url : std::as_const(d->ctxUrls)) {
         VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->push(url, VcsLocation());
         ICore::self()->runController()->registerJob(job);
     }
@@ -517,7 +517,7 @@ void VcsPluginHelper::pull()
 {
     Q_D(VcsPluginHelper);
 
-    for (const QUrl& url : qAsConst(d->ctxUrls)) {
+    for (const QUrl& url : std::as_const(d->ctxUrls)) {
         VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->pull(VcsLocation(), url);
         ICore::self()->runController()->registerJob(job);
     }

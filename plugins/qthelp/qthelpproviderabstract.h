@@ -11,17 +11,16 @@
 
 #include <interfaces/idocumentationprovider.h>
 #include <QObject>
-#include <QVariantList>
 #include <QHelpEngine>
-
-class HelpNetworkAccessManager;
 
 class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationProvider
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
-    QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList & args);
+    static QString collectionFileLocation();
+
+    QtHelpProviderAbstract(QObject* parent, const QString& collectionFileName);
     ~QtHelpProviderAbstract() override;
     KDevelop::IDocumentation::Ptr documentationForDeclaration (KDevelop::Declaration*) const override;
     KDevelop::IDocumentation::Ptr documentation(const QUrl& url) const override;
@@ -35,13 +34,15 @@ public:
     bool isValid() const;
 
     QHelpEngine* engine() { return &m_engine; }
+    const QHelpEngine* engine() const
+    {
+        return &m_engine;
+    }
 
-    HelpNetworkAccessManager* networkAccess() const;
 public Q_SLOTS:
     void jumpedTo(const QUrl& newUrl);
 protected:
     QHelpEngine m_engine;
-    HelpNetworkAccessManager* const m_nam;
 };
 
 #endif // QTHELPPROVIDERABSTRACT_H

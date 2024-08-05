@@ -91,8 +91,8 @@ QString commandForScratch(const QFileInfo& file)
 }
 }
 
-Scratchpad::Scratchpad(QObject* parent, const QVariantList& args)
-    : KDevelop::IPlugin(QStringLiteral("scratchpad"), parent)
+Scratchpad::Scratchpad(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : KDevelop::IPlugin(QStringLiteral("scratchpad"), parent, metaData)
     , m_factory(new ScratchpadToolViewFactory(this))
     , m_model(new QStandardItemModel(this))
     , m_runAction(new QAction(this))

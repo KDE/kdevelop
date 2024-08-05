@@ -50,7 +50,7 @@ void ClassModelNodesController::updateChangedFiles()
 {
     // re-parse changed documents.
     // TODO: m_updatedFiles seems no longer set, check again and remove if
-    for (const IndexedString& file : qAsConst(m_updatedFiles)) {
+    for (const IndexedString& file : std::as_const(m_updatedFiles)) {
         const auto values = m_filesMap.values(file);
         for (ClassModelNodeDocumentChangedInterface* value : values) {
             value->documentChanged(file);

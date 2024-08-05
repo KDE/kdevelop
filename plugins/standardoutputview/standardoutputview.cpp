@@ -49,8 +49,8 @@ private:
     const ToolViewData *m_data;
 };
 
-StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(QStringLiteral("kdevstandardoutputview"), parent)
+StandardOutputView::StandardOutputView(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevstandardoutputview"), parent, metaData)
 {
     connect(KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::aboutToRemoveView,
             this, &StandardOutputView::removeSublimeView);
@@ -140,7 +140,7 @@ int StandardOutputView::registerToolView(const QString& configSubgroupName, cons
                                          const QList<QAction*>& actionList)
 {
     // try to reuse existing tool view
-    for (ToolViewData* d : qAsConst(m_toolViews)) {
+    for (ToolViewData* d : std::as_const(m_toolViews)) {
         if ( d->type == type && d->title == title ) {
             return d->toolViewId;
         }
@@ -186,9 +186,9 @@ int StandardOutputView::registerOutputInToolView( int toolViewId,
 
 void StandardOutputView::raiseOutput(int outputId)
 {
-    for (const auto* toolViewData : qAsConst(m_toolViews))  {
+    for (const auto* toolViewData : std::as_const(m_toolViews)) {
         if (toolViewData->outputdata.contains(outputId)) {
-            for (Sublime::View* v : qAsConst(toolViewData->views)) {
+            for (Sublime::View* v : std::as_const(toolViewData->views)) {
                 if( v->hasWidget() )
                 {
                     auto* w = qobject_cast<OutputWidget*>( v->widget() );
@@ -204,7 +204,7 @@ void StandardOutputView::raiseOutput(int outputId)
 void StandardOutputView::setModel( int outputId, QAbstractItemModel* model )
 {
     OutputData* outputData = nullptr;
-    for (const auto* toolViewData : qAsConst(m_toolViews))  {
+    for (const auto* toolViewData : std::as_const(m_toolViews)) {
         const auto& outputDataMap = toolViewData->outputdata;
         auto outputDataIt = outputDataMap.find(outputId);
         if (outputDataIt != outputDataMap.end()) {
@@ -222,7 +222,7 @@ void StandardOutputView::setModel( int outputId, QAbstractItemModel* model )
 void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* delegate )
 {
     OutputData* outputData = nullptr;
-    for (const auto* toolViewData : qAsConst(m_toolViews))  {
+    for (const auto* toolViewData : std::as_const(m_toolViews)) {
         const auto& outputDataMap = toolViewData->outputdata;
         auto outputDataIt = outputDataMap.find(outputId);
         if (outputDataIt != outputDataMap.end()) {
@@ -266,7 +266,7 @@ OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
     for (ToolViewData* td : m_toolViews) {
         if( td->outputdata.contains( outputId ) )
         {
-            for (Sublime::View* view : qAsConst(td->views)) {
+            for (Sublime::View* view : std::as_const(td->views)) {
                 if( view->hasWidget() )
                     return qobject_cast<OutputWidget*>( view->widget() );
             }
@@ -284,10 +284,10 @@ void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )
 
 void StandardOutputView::removeOutput( int outputId )
 {
-    for (ToolViewData* td : qAsConst(m_toolViews)) {
+    for (ToolViewData* td : std::as_const(m_toolViews)) {
         const auto outputIt = td->outputdata.find(outputId);
         if (outputIt != td->outputdata.end()) {
-            for (Sublime::View* view : qAsConst(td->views)) {
+            for (Sublime::View* view : std::as_const(td->views)) {
                 if( view->hasWidget() )
                     qobject_cast<OutputWidget*>( view->widget() )->removeOutput( outputId );
             }

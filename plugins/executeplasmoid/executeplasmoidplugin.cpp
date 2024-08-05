@@ -21,8 +21,8 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecutePlasmoidFactory,"kdevexecuteplasmoid.json", registerPlugin<ExecutePlasmoidPlugin>(); )
 
-ExecutePlasmoidPlugin::ExecutePlasmoidPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevexecuteplasmoid"), parent)
+ExecutePlasmoidPlugin::ExecutePlasmoidPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevexecuteplasmoid"), parent, metaData)
 {
     m_configType = new PlasmoidExecutionConfigType();
     m_configType->addLauncher( new PlasmoidLauncher( this ) );

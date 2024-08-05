@@ -336,7 +336,7 @@ void MainWindow::loadSettings()
 
     const bool tabBarHidden = !Container::configTabBarVisible();
     const bool closeButtonsOnTabs = Container::configCloseButtonsOnTabs();
-    for (Container *container : qAsConst(d->viewContainers)) {
+    for (Container* container : std::as_const(d->viewContainers)) {
         container->setTabBarHidden(tabBarHidden);
         container->setCloseButtonsOnTabs(closeButtonsOnTabs);
     }
@@ -428,7 +428,7 @@ View* MainWindow::viewForPosition(const QPoint& globalPos) const
 {
     Q_D(const MainWindow);
 
-    for (Container* container : qAsConst(d->viewContainers)) {
+    for (Container* container : std::as_const(d->viewContainers)) {
         QRect globalGeom = QRect(container->mapToGlobal(QPoint(0,0)), container->mapToGlobal(QPoint(container->width(), container->height())));
        if(globalGeom.contains(globalPos))
        {

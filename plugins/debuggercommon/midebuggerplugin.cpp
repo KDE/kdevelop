@@ -92,8 +92,10 @@ private:
     bool m_valid;
 };
 
-MIDebuggerPlugin::MIDebuggerPlugin(const QString &componentName, const QString& displayName, QObject *parent)
-    : KDevelop::IPlugin(componentName, parent), m_displayName(displayName)
+MIDebuggerPlugin::MIDebuggerPlugin(const QString& componentName, const QString& displayName, QObject* parent,
+                                   const KPluginMetaData& metaData)
+    : KDevelop::IPlugin(componentName, parent, metaData)
+    , m_displayName(displayName)
 {
     core()->debugController()->initializeUi();
 

@@ -25,7 +25,8 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
     Q_INTERFACES( ICMakeDocumentation )
     Q_INTERFACES( KDevelop::IDocumentationProvider )
     public:
-        explicit CMakeDocumentation( QObject* parent = nullptr, const QVariantList& args = QVariantList() );
+        explicit CMakeDocumentation(QObject* parent, const KPluginMetaData& metaData,
+                                    const QVariantList& args = QVariantList());
 
         KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const override;
         KDevelop::IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const override;

@@ -60,8 +60,8 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item)
 
 K_PLUGIN_FACTORY_WITH_JSON(QMakeSupportFactory, "kdevqmakemanager.json", registerPlugin<QMakeProjectManager>();)
 
-QMakeProjectManager::QMakeProjectManager(QObject* parent, const QVariantList&)
-    : AbstractFileManagerPlugin(QStringLiteral("kdevqmakemanager"), parent)
+QMakeProjectManager::QMakeProjectManager(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : AbstractFileManagerPlugin(QStringLiteral("kdevqmakemanager"), parent, metaData)
     , IBuildSystemManager()
 {
     IPlugin* i = core()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IQMakeBuilder"));

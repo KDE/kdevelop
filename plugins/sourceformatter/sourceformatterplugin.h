@@ -17,7 +17,7 @@ public:
     /**
      * Constructor with arguments as needed with KPluginFactory
      */
-    SourceFormatterPlugin(QObject* parent, const QVariantList& args);
+    SourceFormatterPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
     ~SourceFormatterPlugin() override;
 
     int perProjectConfigPages() const override;

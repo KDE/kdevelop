@@ -16,8 +16,8 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(SourceFormatterPluginFactory, "kdevsourceformatter.json", registerPlugin<SourceFormatterPlugin>();)
 
-SourceFormatterPlugin::SourceFormatterPlugin(QObject* parent, const QVariantList& args)
-    : KDevelop::IPlugin(QStringLiteral("kdevsourceformatter"), parent)
+SourceFormatterPlugin::SourceFormatterPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : KDevelop::IPlugin(QStringLiteral("kdevsourceformatter"), parent, metaData)
 {
     Q_UNUSED(args);
 

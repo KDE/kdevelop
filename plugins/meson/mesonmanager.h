@@ -32,7 +32,7 @@ class MesonManager : public KDevelop::AbstractFileManagerPlugin, public KDevelop
     Q_INTERFACES(KDevelop::IBuildSystemManager)
 
 public:
-    explicit MesonManager(QObject* parent = nullptr, const QVariantList& args = QVariantList());
+    explicit MesonManager(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args = QVariantList());
     ~MesonManager() override;
 
     // ********************

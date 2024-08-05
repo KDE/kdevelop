@@ -19,18 +19,15 @@
 
 #include <QDirIterator>
 
-QtHelpPlugin *QtHelpPlugin::s_plugin = nullptr;
-
 K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
 
-QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
-    : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent)
+QtHelpPlugin::QtHelpPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent, metaData)
     , m_qtHelpProviders()
-    , m_qtDoc(new QtHelpQtDoc(this, QVariantList()))
+    , m_qtDoc(new QtHelpQtDoc(this, QtHelpQtDoc::qmakeCandidates().value(0), QStringLiteral("qthelpcollection.qhc")))
     , m_loadSystemQtDoc(false)
 {
     Q_UNUSED(args);
-    s_plugin = this;
     connect(this, &QtHelpPlugin::changedProvidersList, KDevelop::ICore::self()->documentationController(), &KDevelop::IDocumentationController::changedDocumentationProviders);
     QMetaObject::invokeMethod(this, "readConfig", Qt::QueuedConnection);
 }
@@ -102,7 +99,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
         QString nameSpace = QHelpEngineCore::namespaceName(fileName);
         if(!nameSpace.isEmpty()){
             QtHelpProvider *provider = nullptr;
-            for (QtHelpProvider* oldProvider : qAsConst(oldList)) {
+            for (QtHelpProvider* oldProvider : std::as_const(oldList)) {
                 if(QHelpEngineCore::namespaceName(oldProvider->fileName()) == nameSpace){
                     provider = oldProvider;
                     oldList.removeAll(provider);
@@ -110,14 +107,14 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
                 }
             }
             if(!provider){
-                provider = new QtHelpProvider(this, fileName, name, iconName, QVariantList());
+                provider = new QtHelpProvider(this, fileName, name, iconName);
             }else{
                 provider->setName(name);
                 provider->setIconName(iconName);
             }
 
             bool exist = false;
-            for (QtHelpProvider* existingProvider : qAsConst(m_qtHelpProviders)) {
+            for (QtHelpProvider* existingProvider : std::as_const(m_qtHelpProviders)) {
                 if(QHelpEngineCore::namespaceName(existingProvider->fileName()) ==  nameSpace){
                     exist = true;
                     break;
@@ -138,7 +135,7 @@ QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
 {
     QList<KDevelop::IDocumentationProvider*> list;
     list.reserve(m_qtHelpProviders.size() + (m_loadSystemQtDoc?1:0));
-    for (QtHelpProvider* provider : qAsConst(m_qtHelpProviders)) {
+    for (QtHelpProvider* provider : std::as_const(m_qtHelpProviders)) {
         list.append(provider);
     }
     if(m_loadSystemQtDoc){
@@ -160,6 +157,11 @@ bool QtHelpPlugin::isQtHelpQtDocLoaded() const
 bool QtHelpPlugin::isQtHelpAvailable() const
 {
     return !m_qtDoc->qchFiles().isEmpty();
+}
+
+bool QtHelpPlugin::isInitialized() const
+{
+    return m_qtDoc->isInitialized();
 }
 
 KDevelop::ConfigPage* QtHelpPlugin::configPage(int number, QWidget* parent)

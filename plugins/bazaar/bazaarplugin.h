@@ -23,7 +23,7 @@ class BazaarPlugin : public KDevelop::IPlugin, public KDevelop::IDistributedVers
     Q_OBJECT
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
 public:
-    explicit BazaarPlugin(QObject* parent, const QVariantList& args = QVariantList());
+    explicit BazaarPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args = QVariantList());
     ~BazaarPlugin() override;
 
     QString name() const override;

@@ -112,7 +112,7 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
     }
     html += QLatin1String("</b>");
 
-    for (auto* line : qAsConst(lines)) {
+    for (auto* line : std::as_const(lines)) {
         uint currentPos = 0;
         const QString& string = line->string();
 
@@ -423,7 +423,7 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
     doc->setMarkIcon(MarkType::markType27,
                      QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize));
 
-    for (auto* const diff : qAsConst(*m_model->differences())) {
+    for (auto* const diff : std::as_const(*m_model->differences())) {
         int line, lineCount;
         KompareDiff2::DifferenceStringList lines;
 

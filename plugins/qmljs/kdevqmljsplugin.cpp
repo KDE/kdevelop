@@ -51,12 +51,12 @@ ModelManager::ModelManager(QObject* parent)
 
 ModelManager::~ModelManager() {}
 
-KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
-: IPlugin(QStringLiteral("kdevqmljssupport"), parent )
-, ILanguageSupport()
-, m_highlighting(new QmlJsHighlighting(this))
-, m_refactoring(new BasicRefactoring(this))
-, m_modelManager(new ModelManager(this))
+KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : IPlugin(QStringLiteral("kdevqmljssupport"), parent, metaData)
+    , ILanguageSupport()
+    , m_highlighting(new QmlJsHighlighting(this))
+    , m_refactoring(new BasicRefactoring(this))
+    , m_modelManager(new ModelManager(this))
 {
     QmlJS::registerDUChainItems();
 

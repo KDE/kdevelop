@@ -105,7 +105,7 @@ struct DocumentParseTarget
     }
 };
 
-inline uint qHash(const DocumentParseTarget& target)
+inline size_t qHash(const DocumentParseTarget& target)
 {
     return target.features * 7 + target.priority * 13 + target.sequentialProcessingFlags * 17
            + static_cast<uint>(reinterpret_cast<quintptr>(target.notifyWhenReady.data()));
@@ -827,7 +827,7 @@ void BackgroundParser::updateProgressData()
         d->m_maxParseJobs = 0;
     } else {
         float additionalProgress = 0;
-        for (float progress : qAsConst(d->m_jobProgress)) {
+        for (float progress : std::as_const(d->m_jobProgress)) {
             additionalProgress += progress;
         }
 

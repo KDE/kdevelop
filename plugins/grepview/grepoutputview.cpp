@@ -190,7 +190,7 @@ GrepOutputView::~GrepOutputView()
     cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));
     QStringList settingsStrings;
     settingsStrings.reserve(m_settingsHistory.size() * GrepSettingsStorageItemCount);
-    for (const GrepJobSettings& s : qAsConst(m_settingsHistory)) {
+    for (const GrepJobSettings& s : std::as_const(m_settingsHistory)) {
         settingsStrings
             << QString::number(s.projectFilesOnly ? 1 : 0)
             << QString::number(s.caseSensitive ? 1 : 0)

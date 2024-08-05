@@ -37,9 +37,10 @@ protected:
     static void nonmatchingLanguagesForUrlTestData();
 
     KDevelop::ILanguageController* m_subject = nullptr;
-    bool m_havePatchReview = false;
 
 private:
+    void newOptionalRow(const char* dataTag, const QUrl& url, const QString& languageName) const;
+
     struct UrlEntry
     {
         QUrl url;

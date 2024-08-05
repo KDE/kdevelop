@@ -60,7 +60,7 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
         if (value.isValid()) {
             decoData = decoration(opt, value);
 
-            if (value.type() == QVariant::Icon) {
+            if (value.typeId() == qMetaTypeId<QIcon>()) {
                 icon = qvariant_cast<QIcon>(value);
                 mode = IconMode(opt.state);
                 state = IconState(opt.state);

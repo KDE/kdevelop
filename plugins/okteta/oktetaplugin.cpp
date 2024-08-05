@@ -61,11 +61,10 @@ void addTool( IUiController* uiController,
     uiController->addToolView( toolViewFactory->title(), factory );
 }
 
-
-OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
-  : IPlugin( QStringLiteral("kdevokteta"), parent )
-  , mDocumentFactory( new OktetaDocumentFactory(this) )
-  , mViewProfileManager( new Kasten::ByteArrayViewProfileManager() )
+OktetaPlugin::OktetaPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : IPlugin(QStringLiteral("kdevokteta"), parent, metaData)
+    , mDocumentFactory(new OktetaDocumentFactory(this))
+    , mViewProfileManager(new Kasten::ByteArrayViewProfileManager())
 {
     Q_UNUSED(args)
 

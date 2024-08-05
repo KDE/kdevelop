@@ -15,7 +15,10 @@
 #include <QDirIterator>
 #include <QStandardPaths>
 
+#include <KPluginMetaData>
+
 #include <tests/autotestshell.h>
+#include <tests/plugintesthelpers.h>
 #include <tests/testcore.h>
 
 #include <vcs/vcsjob.h>
@@ -44,7 +47,9 @@ void PerforcePluginTest::initTestCase()
 {
     AutoTestShell::init({QStringLiteral("kdevperforce")});
     TestCore::initialize();
-    m_plugin = new PerforcePlugin(TestCore::self());
+
+    const auto pluginMetaData = makeTestPluginMetaData("TestPerforce");
+    m_plugin = new PerforcePlugin(TestCore::self(), pluginMetaData);
 
     /// During test we are setting the executable the plugin uses to our own stub
     QDirIterator it(QString::fromUtf8(P4_BINARY_DIR), QStringList() << QStringLiteral("*"),

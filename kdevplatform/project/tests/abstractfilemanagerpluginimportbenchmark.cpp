@@ -14,6 +14,7 @@
 #include <shell/projectcontroller.h>
 
 #include <tests/autotestshell.h>
+#include <tests/plugintesthelpers.h>
 #include <tests/testcore.h>
 #include <tests/testproject.h>
 #include <tests/testplugincontroller.h>
@@ -131,7 +132,9 @@ int main(int argc, char** argv)
     auto projectController = new ProjectControllerWrapper(core);
     delete core->projectController();
     core->setProjectController(projectController);
-    auto manager = new AbstractFileManagerPlugin({}, core);
+
+    const auto pluginMetaData = makeTestPluginMetaData("ImportBenchmarkAbstractFileManager");
+    auto manager = new AbstractFileManagerPlugin({}, core, pluginMetaData);
 
     const char *kdwMethod[] = {"FAM", "Inotify", "Stat", "QFSWatch"};
     qout << "KDirWatch backend: " << kdwMethod[KDirWatch().internalMethod()] << Qt::endl;
@@ -158,7 +161,7 @@ int main(int argc, char** argv)
     }
 
     runTimer.start();
-    for (auto benchmark : qAsConst(benchmarks)) {
+    for (auto benchmark : std::as_const(benchmarks)) {
         benchmark->start();
     }
 

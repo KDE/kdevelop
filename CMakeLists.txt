@@ -120,7 +120,7 @@ if(KSysGuard_FOUND)
     set(HAVE_KSYSGUARD TRUE)
 endif()
 
-find_package(KDevelop-PG-Qt 1.90.90 CONFIG)
+find_package(KDevelop-PG-Qt 2.3)
 set_package_properties(KDevelop-PG-Qt PROPERTIES
     PURPOSE "KDevelop parser generator library. Required for the QMake Builder/Manager plugin."
     TYPE RECOMMENDED
@@ -136,9 +136,9 @@ add_definitions(
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
 )
 ecm_set_disabled_deprecation_versions(
-    QT 5.15 # Note: unset for plugins/qmljs/3rdparty/qtcreator-libs
-    KF 5.91
-    KI18N 5.88 # I18N_NOOP
+    DISABLE_NEWER_WARNINGS # remove again once Qt6/KF6 porting work fully done
+    QT ${QT_MIN_VERSION}
+    KF ${KF_MIN_VERSION}
 )
 
 # Globally enable PIC since static libraries need it for Qt staticMetaObject

@@ -177,8 +177,8 @@ QDir urlDir(const QList<QUrl>& urls) { return urlDir(urls.first()); } //TODO: co
 
 }
 
-GitPlugin::GitPlugin(QObject* parent, const QVariantList&)
-    : DistributedVersionControlPlugin(parent, QStringLiteral("kdevgit"))
+GitPlugin::GitPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : DistributedVersionControlPlugin(QStringLiteral("kdevgit"), parent, metaData)
     , m_repoStatusModel(new RepoStatusModel(this))
     , m_commitToolViewFactory(new CommitToolViewFactory(m_repoStatusModel))
 {
@@ -745,7 +745,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         else if(name==QLatin1String("author-mail")) {} //TODO: do smth with the e-mail?
         else if(name==QLatin1String("author-tz")) {} //TODO: does it really matter?
         else if(name==QLatin1String("author-time"))
-            annotation->setDate(QDateTime::fromSecsSinceEpoch(value.toUInt(), Qt::LocalTime));
+            annotation->setDate(QDateTime::fromSecsSinceEpoch(value.toUInt(), QTimeZone::LocalTime));
         else if(name==QLatin1String("summary"))
             annotation->setCommitMessage(value.toString());
         else if(name.startsWith(QLatin1String("committer"))) {} //We will just store the authors
@@ -1323,7 +1323,8 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
             if (cap1 == QLatin1String("Author")) {
                 item.setAuthor(infoRegex.cap(2).trimmed());
             } else if (cap1 == QLatin1String("Date")) {
-                item.setDate(QDateTime::fromSecsSinceEpoch(infoRegex.cap(2).trimmed().split(QLatin1Char(' '))[0].toUInt(), Qt::LocalTime));
+                item.setDate(QDateTime::fromSecsSinceEpoch(
+                    infoRegex.cap(2).trimmed().split(QLatin1Char(' '))[0].toUInt(), QTimeZone::LocalTime));
             }
         } else if (modificationsRegex.exactMatch(line)) {
             VcsItemEvent::Actions a = actionsFromString(modificationsRegex.cap(1).at(0).toLatin1());

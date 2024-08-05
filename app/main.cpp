@@ -802,7 +802,7 @@ int main( int argc, char *argv[] )
     } else {
         openFiles(initialFiles);
 
-        for(const auto& urlinfo: qAsConst(initialDirectories))
+        for (const auto& urlinfo : std::as_const(initialDirectories))
             core->projectController()->openProjectForUrl(urlinfo.url);
     }
 

@@ -27,9 +27,9 @@
 
 using namespace KDevelop;
 
-BazaarPlugin::BazaarPlugin(QObject* parent, const QVariantList& args) :
-    IPlugin(QStringLiteral("kdevbazaar"), parent),
-    m_vcsPluginHelper(new KDevelop::VcsPluginHelper(this, this))
+BazaarPlugin::BazaarPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : IPlugin(QStringLiteral("kdevbazaar"), parent, metaData)
+    , m_vcsPluginHelper(new KDevelop::VcsPluginHelper(this, this))
 {
     Q_UNUSED(args); // What is this?
     if (QStandardPaths::findExecutable(QStringLiteral("bzr")).isEmpty()) {

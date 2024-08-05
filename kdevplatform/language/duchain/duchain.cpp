@@ -601,7 +601,7 @@ public:
             // Process the indices in a separate step after copying them from the array, so we don't need
             // m_environmentListInfoMutex locked, and can call loadInformation(..) safely, which else might lead to a
             // deadlock.
-            for (uint topContextIndex : qAsConst(topContextIndices)) {
+            for (uint topContextIndex : std::as_const(topContextIndices)) {
                 QExplicitlySharedDataPointer<ParsingEnvironmentFile> p =
                     ParsingEnvironmentFilePointer(loadInformation(topContextIndex));
                 if (p) {
@@ -702,14 +702,14 @@ public:
             urls += m_fileEnvironmentInformations.keys();
         }
 
-        for (const IndexedString& url : qAsConst(urls)) {
+        for (const IndexedString& url : std::as_const(urls)) {
             QList<ParsingEnvironmentFilePointer> check;
             {
                 QMutexLocker lock(&m_chainsMutex);
                 check = m_fileEnvironmentInformations.values(url);
             }
 
-            for (const ParsingEnvironmentFilePointer& file : qAsConst(check)) {
+            for (const ParsingEnvironmentFilePointer& file : std::as_const(check)) {
                 EnvironmentInformationRequest req(file.data());
 
                 LockedItemRepository::write<EnvironmentInformation>([&](EnvironmentInformationRepo& repo) {
@@ -813,13 +813,13 @@ public:
             writeLock.unlock();
 
             //Here we wait for all parsing-threads to stop their processing
-            for (const auto language : qAsConst(languages)) {
+            for (const auto language : std::as_const(languages)) {
                 if (lockFlag == TryLock) {
                     if (!language->parseLock()->tryLockForWrite()) {
                         qCDebug(LANGUAGE) << "Aborting cleanup because language plugin is still parsing:" <<
                             language->name();
                         // some language is still parsing, don't interfere with the cleanup
-                        for (auto* lock : qAsConst(locked)) {
+                        for (auto* lock : std::as_const(locked)) {
                             lock->unlock();
                         }
 
@@ -848,13 +848,13 @@ public:
             QMutexLocker l(&m_chainsMutex);
 
             workOnContexts.reserve(m_chainsByUrl.size());
-            for (TopDUContext* top : qAsConst(m_chainsByUrl)) {
+            for (TopDUContext* top : std::as_const(m_chainsByUrl)) {
                 workOnContexts << top;
                 Q_ASSERT(hasChainForIndex(top->ownIndex()));
             }
         }
 
-        for (TopDUContext* context : qAsConst(workOnContexts)) {
+        for (TopDUContext* context : std::as_const(workOnContexts)) {
             context->m_dynamicData->store();
 
             if (retries) {
@@ -1002,7 +1002,7 @@ unloadContexts:
                 m_chainsByUrl.size() << "- retries" << retries;
         }
 
-        for (QReadWriteLock* lock : qAsConst(locked)) {
+        for (QReadWriteLock* lock : std::as_const(locked)) {
             lock->unlock();
         }
 
@@ -1106,7 +1106,7 @@ unloadContexts:
             if (check.size() < checkContextsCount)
                 addContextsForRemoval(check, IndexedTopDUContext(visitor.checkContexts[a]));
 
-        for (uint topIndex : qAsConst(check)) {
+        for (uint topIndex : std::as_const(check)) {
             IndexedTopDUContext top(topIndex);
             if (top.data()) {
                 qCDebug(LANGUAGE) << "removing top-context for" << top.data()->url().str() <<
@@ -1151,7 +1151,7 @@ private:
                 }
             }
 
-            for (auto& parsingEnvFile : qAsConst(checkNext)) {
+            for (auto& parsingEnvFile : std::as_const(checkNext)) {
                 topContexts.remove(parsingEnvFile->indexedTopContext().index()); // Enable full check again
                 addContextsForRemoval(topContexts, parsingEnvFile->indexedTopContext());
             }
@@ -1565,7 +1565,7 @@ QList<QUrl> DUChain::documents() const
 
     QList<QUrl> ret;
     ret.reserve(sdDUChainPrivate->m_chainsByUrl.count());
-    for (TopDUContext* top : qAsConst(sdDUChainPrivate->m_chainsByUrl)) {
+    for (TopDUContext* top : std::as_const(sdDUChainPrivate->m_chainsByUrl)) {
         ret << top->url().toUrl();
     }
 
@@ -1578,7 +1578,7 @@ QList<IndexedString> DUChain::indexedDocuments() const
 
     QList<IndexedString> ret;
     ret.reserve(sdDUChainPrivate->m_chainsByUrl.count());
-    for (TopDUContext* top : qAsConst(sdDUChainPrivate->m_chainsByUrl)) {
+    for (TopDUContext* top : std::as_const(sdDUChainPrivate->m_chainsByUrl)) {
         ret << top->url();
     }
 

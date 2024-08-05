@@ -84,7 +84,7 @@ bool ensureWritable(const QList<QUrl>& urls)
             KGuiItem(i18nc("@action:button", "Ignore"), QStringLiteral("dialog-cancel")), KStandardGuiItem::cancel());
         if (answer == KMessageBox::PrimaryAction) {
             bool success = true;
-            for (const QString& filename : qAsConst(notWritable)) {
+            for (const QString& filename : std::as_const(notWritable)) {
                 QFile file(filename);
                 QFileDevice::Permissions permissions = file.permissions();
                 permissions |= QFileDevice::WriteOwner;

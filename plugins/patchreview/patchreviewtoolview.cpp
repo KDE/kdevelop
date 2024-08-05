@@ -43,11 +43,7 @@
 #ifdef WITH_PURPOSE
 #include <Purpose/AlternativesModel>
 #include <purpose_version.h>
-#if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 104, 0)
 #include <Purpose/Menu>
-#else
-#include <PurposeWidgets/Menu>
-#endif
 #endif
 
 using namespace KDevelop;
@@ -281,7 +277,7 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& pos)
     }
 
     QList<QAction*> vcsActions;
-    for (const ContextMenuExtension& ext : qAsConst(extensions)) {
+    for (const ContextMenuExtension& ext : std::as_const(extensions)) {
         vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
     }
 

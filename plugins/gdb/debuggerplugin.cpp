@@ -37,8 +37,8 @@ using namespace KDevMI::GDB;
 
 K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<CppDebuggerPlugin>(); )
 
-CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
-    : MIDebuggerPlugin(QStringLiteral("kdevgdb"), i18n("GDB"), parent)
+CppDebuggerPlugin::CppDebuggerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : MIDebuggerPlugin(QStringLiteral("kdevgdb"), i18n("GDB"), parent, metaData)
     , disassemblefactory(nullptr)
     , gdbfactory(nullptr)
     , memoryviewerfactory(nullptr)

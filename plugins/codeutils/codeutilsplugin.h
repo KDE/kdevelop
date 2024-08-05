@@ -16,7 +16,7 @@ class CodeUtilsPlugin : public KDevelop::IPlugin
     Q_OBJECT
 
 public:
-    explicit CodeUtilsPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    explicit CodeUtilsPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~CodeUtilsPlugin() override;
 
 private Q_SLOTS:

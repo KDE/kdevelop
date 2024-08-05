@@ -35,7 +35,8 @@ class StandardOutputView : public KDevelop::IPlugin, public KDevelop::IOutputVie
     Q_INTERFACES( KDevelop::IOutputView )
 
 public:
-    explicit StandardOutputView(QObject *parent = nullptr, const QVariantList &args = QVariantList());
+    explicit StandardOutputView(QObject* parent, const KPluginMetaData& metaData,
+                                const QVariantList& args = QVariantList());
     ~StandardOutputView() override;
 
     int standardToolView( KDevelop::IOutputView::StandardToolView view ) override;

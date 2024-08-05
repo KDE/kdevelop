@@ -100,7 +100,7 @@ public:
         //Either we use some other contexts data and have no users, or we own the data and have users that share it.
         QMutexLocker lock(&importStructureMutex);
 
-        for (const DUContext::Import& import : qAsConst(m_importedContexts)) {
+        for (const DUContext::Import& import : std::as_const(m_importedContexts)) {
             if (DUChain::self()->isInMemory(import.topContextIndex()) &&
                 dynamic_cast<TopDUContext*>(import.context(nullptr)))
                 dynamic_cast<TopDUContext*>(import.context(nullptr))->m_local->m_directImporters.remove(m_ctxt);
@@ -157,7 +157,7 @@ public:
 
         QSet<QPair<TopDUContext*, const TopDUContext*>> rebuild;
 
-        for (const DUContext::Import& import : qAsConst(m_importedContexts)) {
+        for (const DUContext::Import& import : std::as_const(m_importedContexts)) {
             auto* top = dynamic_cast<TopDUContext*>(import.context(nullptr));
             if (top) {
                 top->m_local->m_directImporters.remove(m_ctxt);
@@ -313,7 +313,7 @@ private:
         if (temporary)
             return;
 
-        for (auto* context : qAsConst(m_directImporters)) {
+        for (auto* context : std::as_const(m_directImporters)) {
             auto* top = dynamic_cast<TopDUContext*>(context);
             if (top) ///@todo also record this for local imports
                 top->m_local->addImportedContextRecursion(m_ctxt, imported, depth + 1);
@@ -476,7 +476,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported)
     if (m_ctxt == imported)
         return;
 
-    for (auto& importedContext : qAsConst(m_importedContexts)) {
+    for (auto& importedContext : std::as_const(m_importedContexts)) {
         auto* top = dynamic_cast<TopDUContext*>(importedContext.context(nullptr));
         if (top) {
 //       top->m_local->needImportStructure();
@@ -835,7 +835,7 @@ bool TopDUContext::applyAliases(const QualifiedIdentifier& previous, const Searc
                         }
                     } else {
                         // Create an identifiers where namespace-alias part is replaced with the alias target
-                        for (const SearchItem::Ptr& item : qAsConst(identifier->next)) {
+                        for (const SearchItem::Ptr& item : std::as_const(identifier->next)) {
                             if (!applyAliases(importIdentifier, item, accept, position, canBeNamespace, &info,
                                               recursionDepth + 1)) {
                                 isDone = true;
@@ -857,7 +857,7 @@ bool TopDUContext::applyAliases(const QualifiedIdentifier& previous, const Searc
             if (!accept(id)) //We're at the end of a qualified identifier, accept it
                 return false;
         } else {
-            for (const SearchItem::Ptr& next : qAsConst(identifier->next)) {
+            for (const SearchItem::Ptr& next : std::as_const(identifier->next)) {
                 if (!applyAliases(id, next, accept, position, canBeNamespace, nullptr, recursionDepth + 1))
                     return false;
             }
@@ -1082,9 +1082,7 @@ void TopDUContext::removeImportedParentContext(DUContext* context)
 void TopDUContext::addImportedParentContexts(const QVector<QPair<TopDUContext*, CursorInRevision>>& contexts,
                                              bool temporary)
 {
-    using Pair = QPair<TopDUContext*, CursorInRevision>;
-
-    for (const Pair pair : contexts) {
+    for (const auto& pair : contexts) {
         addImportedParentContext(pair.first, pair.second, false, temporary);
     }
 }

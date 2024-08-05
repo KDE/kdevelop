@@ -421,7 +421,7 @@ QUrl PatchReviewPlugin::urlForFileModel(const KompareDiff2::DiffModel* model) co
     if (destPath.size() >= (int)m_depth) {
         destPath.remove(0, m_depth);
     }
-    for (const QString& segment : qAsConst(destPath)) {
+    for (const QString& segment : std::as_const(destPath)) {
         path.addPath(segment);
     }
     path.addPath(model->destinationFile());
@@ -505,9 +505,10 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
     notifyPatchChanged();
 }
 
-PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( QStringLiteral("kdevpatchreview"), parent ),
-    m_patch( nullptr ), m_factory( new PatchReviewToolViewFactory( this ) )
+PatchReviewPlugin::PatchReviewPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevpatchreview"), parent, metaData)
+    , m_patch(nullptr)
+    , m_factory(new PatchReviewToolViewFactory(this))
 {
     setXMLFile( QStringLiteral("kdevpatchreview.rc") );
 

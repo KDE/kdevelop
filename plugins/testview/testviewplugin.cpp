@@ -51,8 +51,8 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
         TestViewPlugin *mplugin;
 };
 
-TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args)
-    : IPlugin(QStringLiteral("kdevtestview"), parent)
+TestViewPlugin::TestViewPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : IPlugin(QStringLiteral("kdevtestview"), parent, metaData)
 {
     Q_UNUSED(args)
 

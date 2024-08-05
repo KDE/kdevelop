@@ -31,8 +31,8 @@ using KDevelop::Path;
 
 K_PLUGIN_FACTORY_WITH_JSON(CustomBuildSystemFactory, "kdevcustombuildsystem.json", registerPlugin<CustomBuildSystem>(); )
 
-CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )
-    : AbstractFileManagerPlugin( QStringLiteral("kdevcustombuildsystem"), parent )
+CustomBuildSystem::CustomBuildSystem(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : AbstractFileManagerPlugin(QStringLiteral("kdevcustombuildsystem"), parent, metaData)
 {
 }
 

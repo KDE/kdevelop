@@ -173,7 +173,7 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
                                                         QStringLiteral("/kdevfiletemplates/templates/"),
                                                         QStandardPaths::LocateDirectory));
 
-    for (const QString& dir : qAsConst(d->searchLocations)) {
+    for (const QString& dir : std::as_const(d->searchLocations)) {
         const auto fileEntries = QDir(dir).entryInfoList(QDir::Files);
         for (const auto& entry : fileEntries) {
             if (entry.baseName() == templateBaseName) {

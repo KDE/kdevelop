@@ -137,8 +137,10 @@ static QList<ProjectBaseItem*> itemsFromIndexes(const QList<QPersistentModelInde
     return items;
 }
 
-ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVariantList& )
-        : IPlugin( QStringLiteral("kdevprojectmanagerview"), parent ), d(new ProjectManagerViewPluginPrivate)
+ProjectManagerViewPlugin::ProjectManagerViewPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                                   const QVariantList&)
+    : IPlugin(QStringLiteral("kdevprojectmanagerview"), parent, metaData)
+    , d(new ProjectManagerViewPluginPrivate)
 {
     d->m_buildAll = new QAction(i18nc("@action", "Build All Projects"), this);
     d->m_buildAll->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
@@ -375,7 +377,7 @@ void ProjectManagerViewPlugin::closeProjects()
 {
     QList<KDevelop::IProject*> projectsToClose;
     ProjectModel* model = ICore::self()->projectController()->projectModel();
-    for (const auto& index : qAsConst(d->ctxProjectItemList)) {
+    for (const auto& index : std::as_const(d->ctxProjectItemList)) {
         KDevelop::ProjectBaseItem* item = model->itemFromIndex(index);
         if( !projectsToClose.contains( item->project() ) )
         {
@@ -383,7 +385,7 @@ void ProjectManagerViewPlugin::closeProjects()
         }
     }
     d->ctxProjectItemList.clear();
-    for (KDevelop::IProject* proj : qAsConst(projectsToClose)) {
+    for (KDevelop::IProject* proj : std::as_const(projectsToClose)) {
         core()->projectController()->closeProject( proj );
     }
 }
@@ -533,7 +535,7 @@ void ProjectManagerViewPlugin::reloadFromContextMenu( )
             }
         }
     }
-    for (KDevelop::ProjectFolderItem* folder : qAsConst(folders)) {
+    for (KDevelop::ProjectFolderItem* folder : std::as_const(folders)) {
         folder->project()->projectFileManager()->reload(folder);
     }
 }
@@ -573,7 +575,7 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
     Path lastFolder;
     QHash< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
     QStringList itemPaths;
-    for (KDevelop::ProjectBaseItem* item : qAsConst(sortedItems)) {
+    for (KDevelop::ProjectBaseItem* item : std::as_const(sortedItems)) {
         if (item->isProjectRoot()) {
             continue;
         } else if (item->folder() || item->file()) {
@@ -733,7 +735,7 @@ static void selectItemsByPaths(ProjectManagerView* view, const Path::List& paths
     for (const Path& path : paths) {
         QList<ProjectBaseItem*> items = projectModel->itemsForPath(IndexedString(path.path()));
         newItems.append(items);
-        for (ProjectBaseItem* item : qAsConst(items)) {
+        for (ProjectBaseItem* item : std::as_const(items)) {
             view->expandItem(item->parent());
         }
     }

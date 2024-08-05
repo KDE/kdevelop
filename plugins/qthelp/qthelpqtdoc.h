@@ -15,7 +15,7 @@ class QtHelpQtDoc : public QtHelpProviderAbstract
 {
     Q_OBJECT
 public:
-    explicit QtHelpQtDoc(QObject* parent, const QVariantList& args);
+    explicit QtHelpQtDoc(QObject* parent, const QString& qmake, const QString& collectionFileName);
     ~QtHelpQtDoc();
 
     QIcon icon() const override;
@@ -29,11 +29,15 @@ public:
     /** @return true once the async initialization has finished */
     bool isInitialized() const { return m_isInitialized; }
 
+    /** @return available qmake binaries */
+    static QStringList qmakeCandidates();
+
 Q_SIGNALS:
     /** emitted when @c isInitialized() is set to true */
     void isInitializedChanged();
 
 private:
+    QString m_qmake;
     QString m_path;
     bool m_isInitialized = false;
 };

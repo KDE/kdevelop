@@ -46,9 +46,10 @@ public:
 };
 
 //class DistributedVersionControlPlugin
-DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, const QString& componentName)
-        : IPlugin(componentName, parent)
-        , d_ptr(new DistributedVersionControlPluginPrivate(this))
+DistributedVersionControlPlugin::DistributedVersionControlPlugin(const QString& componentName, QObject* parent,
+                                                                 const KPluginMetaData& metaData)
+    : IPlugin(componentName, parent, metaData)
+    , d_ptr(new DistributedVersionControlPluginPrivate(this))
 {}
 
 DistributedVersionControlPlugin::~DistributedVersionControlPlugin()

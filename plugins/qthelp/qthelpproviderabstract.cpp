@@ -20,8 +20,8 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/duchain/types/enumeratortype.h>
 
-#include "qthelpnetwork.h"
 #include "qthelpdocumentation.h"
 #include "debug.h"
 
@@ -35,18 +35,22 @@ IDocumentation::Ptr documentationPtrFromUrl(QtHelpProviderAbstract* provider, co
 }
 }
 
-QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& collectionFileName,
-                                               const QVariantList& args)
-    : QObject(parent)
-    , m_engine(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/')
-               + collectionFileName)
-    , m_nam(new HelpNetworkAccessManager(&m_engine, this))
+QString QtHelpProviderAbstract::collectionFileLocation()
 {
-    Q_UNUSED(args);
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+}
 
+QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& collectionFileName)
+    : QObject(parent)
+    , m_engine(collectionFileLocation() + QLatin1Char('/') + collectionFileName)
+{
     connect(&m_engine, &QHelpEngine::warning, this, [collectionFileName](const QString& msg) {
         qCWarning(QTHELP) << "engine warning for" << collectionFileName << msg;
     });
+
+    // we use a writable engine (see initialization above)
+    // in Qt6 we must mark the engine as writable, otherwise registering will always fail
+    m_engine.setReadOnly(false);
 
     // we assume that the setup finished synchronously, otherwise our code does not work correctly
     // the below will catch situations when Qt would change its behavior
@@ -68,9 +72,10 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject* parent, const QString& c
     disconnect(startedConnection);
     disconnect(finishedConnection);
 
+    Q_ASSERT(!m_engine.isReadOnly());
+
     m_engine.setUsesFilterEngine(true);
 }
-
 
 QtHelpProviderAbstract::~QtHelpProviderAbstract()
 {
@@ -81,19 +86,35 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declarat
     if (dec) {
         static const IndexedString qmlJs("QML/JS");
         QString id;
+        QString fallbackId;
 
         {
             DUChainReadLocker lock;
-            id = dec->qualifiedIdentifier().toString(RemoveTemplateInformation);
+            const auto qualifiedId = dec->qualifiedIdentifier();
+
+            id = qualifiedId.toString(RemoveTemplateInformation);
             if (dec->topContext()->parsingEnvironmentFile()->language() == qmlJs && !id.isEmpty())
                 id = QLatin1String("QML.") + id;
+
+            // for enumerators we might need to remove the enum, i.e. look for Qt::black instead of Qt::GlobalColor::black
+            // for enumerators in an `enum class` this removal is not appropriate, so only do that as a fallback
+            const auto qualifiedIdCount = qualifiedId.count();
+            if (qualifiedIdCount > 1 && dec->type<EnumeratorType>()) {
+                const auto enumeratorId = qualifiedId.at(qualifiedIdCount - 1).toString(RemoveTemplateInformation);
+                const auto enumId = qualifiedId.at(qualifiedIdCount - 2).toString(RemoveTemplateInformation);
+                fallbackId = id;
+                fallbackId.replace(enumId + QLatin1String("::") + enumeratorId, enumeratorId);
+            }
         }
 
-        if (!id.isEmpty()) {
-            const QList<QHelpLink> links = m_engine.documentsForIdentifier(id);
-            if(!links.isEmpty())
-                return IDocumentation::Ptr(
-                    new QtHelpDocumentation(const_cast<QtHelpProviderAbstract*>(this), id, links));
+        for (const auto& identifier : {id, fallbackId}) {
+            if (!identifier.isEmpty()) {
+                const QList<QHelpLink> links = m_engine.documentsForIdentifier(identifier);
+                if (!links.isEmpty()) {
+                    return IDocumentation::Ptr(
+                        new QtHelpDocumentation(const_cast<QtHelpProviderAbstract*>(this), id, links));
+                }
+            }
         }
     }
 
@@ -144,11 +165,6 @@ IDocumentation::Ptr QtHelpProviderAbstract::homePage() const
 bool QtHelpProviderAbstract::isValid() const
 {
     return !m_engine.registeredDocumentations().isEmpty();
-}
-
-HelpNetworkAccessManager * QtHelpProviderAbstract::networkAccess() const
-{
-    return m_nam;
 }
 
 #include "moc_qthelpproviderabstract.cpp"

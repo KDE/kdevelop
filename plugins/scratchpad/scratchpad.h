@@ -25,7 +25,7 @@ class Scratchpad
     Q_OBJECT
 
 public:
-    Scratchpad(QObject* parent, const QVariantList& args);
+    Scratchpad(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
 
     QStandardItemModel* model() const;
 

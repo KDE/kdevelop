@@ -48,7 +48,6 @@ private:
 
 private:
     Ui::ClangTidyPreferences* ui;
-    ClangTidy::CheckSetSelectionManager* const m_checkSetSelectionManager;
 };
 
 #endif

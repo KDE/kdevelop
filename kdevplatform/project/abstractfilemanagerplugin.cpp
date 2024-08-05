@@ -223,13 +223,13 @@ void AbstractFileManagerPluginPrivate::addJobItems(FileManagerListJob* job,
     }
 
     // add new rows
-    for (const Path& path : qAsConst(files)) {
+    for (const Path& path : std::as_const(files)) {
         ProjectFileItem* file = q->createFileItem( baseItem->project(), path, baseItem );
         if (file) {
             emit q->fileAdded( file );
         }
     }
-    for (const Path& path : qAsConst(folders)) {
+    for (const Path& path : std::as_const(folders)) {
         ProjectFolderItem* folder = q->createFolderItem( baseItem->project(), path, baseItem );
         if (folder) {
             emit q->folderAdded( folder );
@@ -307,7 +307,7 @@ void AbstractFileManagerPluginPrivate::deleted(const QString& path_)
         return;
     }
     // ensure that the path is not inside a stopped folder
-    for (const QString& folder : qAsConst(m_stoppedFolders)) {
+    for (const QString& folder : std::as_const(m_stoppedFolders)) {
         if (path_.startsWith(folder)) {
             return;
         }
@@ -416,12 +416,11 @@ void AbstractFileManagerPluginPrivate::continueWatcher(ProjectFolderItem* folder
 
 //BEGIN Plugin
 
-AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentName,
-                                                      QObject *parent,
-                                                      const QVariantList & /*args*/ )
-    : IProjectFileManager(),
-      IPlugin( componentName, parent ),
-      d_ptr(new AbstractFileManagerPluginPrivate(this))
+AbstractFileManagerPlugin::AbstractFileManagerPlugin(const QString& componentName, QObject* parent,
+                                                     const KPluginMetaData& metaData, const QVariantList& /*args*/)
+    : IProjectFileManager()
+    , IPlugin(componentName, parent, metaData)
+    , d_ptr(new AbstractFileManagerPluginPrivate(this))
 {
     connect(core()->projectController(), &IProjectController::projectClosing,
             this, [this] (IProject* project) { Q_D(AbstractFileManagerPlugin); d->projectClosing(project); });

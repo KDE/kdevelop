@@ -109,8 +109,6 @@ public:
         setDocumentMode(true);
         setUsesScrollButtons(true);
         setElideMode(Qt::ElideNone);
-
-        installEventFilter(this);
     }
 
     bool event(QEvent* ev) override {
@@ -144,23 +142,14 @@ public:
         QTabBar::mousePressEvent(event);
     }
 
-    bool eventFilter(QObject* obj, QEvent* event) override
+    void mouseDoubleClickEvent(QMouseEvent* event) override
     {
-        if (obj != this) {
-            return QObject::eventFilter(obj, event);
+        // block tabBarDoubleClicked signals with MMB, see https://bugs.kde.org/show_bug.cgi?id=356016
+        if (event->button() == Qt::MiddleButton) {
+            return;
         }
 
-        // TODO Qt6: Move to mouseDoubleClickEvent when fixme in qttabbar.cpp is resolved
-        // see "fixme Qt 6: move to mouseDoubleClickEvent(), here for BC reasons." in qtabbar.cpp
-        if (event->type() == QEvent::MouseButtonDblClick) {
-            // block tabBarDoubleClicked signals with RMB, see https://bugs.kde.org/show_bug.cgi?id=356016
-            auto mouseEvent = static_cast<const QMouseEvent*>(event);
-            if (mouseEvent->button() == Qt::MiddleButton) {
-                return true;
-            }
-        }
-
-        return QObject::eventFilter(obj, event);
+        QTabBar::mouseDoubleClickEvent(event);
     }
 
 Q_SIGNALS:
@@ -820,7 +809,7 @@ void Container::contextMenu( const QPoint& pos )
                 }
             }
             // finally close other tabs
-            for (QWidget* tab : qAsConst(otherTabs)) {
+            for (QWidget* tab : std::as_const(otherTabs)) {
                 emit requestClose(tab);
             }
         } else if ( triggered == closeAllTabsAction ) {

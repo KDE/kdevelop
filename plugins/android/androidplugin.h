@@ -15,7 +15,7 @@ class AndroidPlugin : public KDevelop::IPlugin
 {
 Q_OBJECT
 public:
-    AndroidPlugin(QObject *parent, const QVariantList & args);
+    AndroidPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
     ~AndroidPlugin() override;
 
     int configPages() const override;

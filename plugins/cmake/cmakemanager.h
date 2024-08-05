@@ -60,7 +60,7 @@ Q_INTERFACES( KDevelop::IProjectFileManager )
 Q_INTERFACES( KDevelop::ILanguageSupport )
 Q_INTERFACES( ICMakeManager )
 public:
-    explicit CMakeManager( QObject* parent = nullptr, const QVariantList& args = QVariantList() );
+    explicit CMakeManager(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args = QVariantList());
 
     ~CMakeManager() override;
 

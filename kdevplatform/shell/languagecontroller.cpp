@@ -272,7 +272,7 @@ QList<ILanguageSupport*> LanguageController::loadedLanguages() const
         return ret;
 
     ret.reserve(d->languages.size());
-    for (ILanguageSupport* lang : qAsConst(d->languages)) {
+    for (ILanguageSupport* lang : std::as_const(d->languages)) {
         ret << lang;
     }
     return ret;
@@ -303,7 +303,7 @@ ILanguageSupport* LanguageController::language(const QString &name) const
         constraints.insert(key, name);
         supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport(), constraints);
         if (key == keys[1]) {
-            for (auto support : qAsConst(supports)) {
+            for (auto support : std::as_const(supports)) {
                 qCWarning(SHELL) << "Plugin" << Core::self()->pluginController()->pluginInfo(support).name() << " has deprecated (since 5.1) metadata key \"X-KDevelop-Language\", needs porting to: \"X-KDevelop-Languages\": ["<<name<<"]'";
             }
         }

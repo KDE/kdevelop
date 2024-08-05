@@ -90,8 +90,8 @@ private:
     ProblemInlineNoteProvider m_inlineNoteProvider;
 };
 
-ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevproblemreporter"), parent)
+ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevproblemreporter"), parent, metaData)
     , m_factory(new ProblemReporterFactory)
     , m_model(new ProblemReporterModel(this))
 {
@@ -290,7 +290,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
             }
 
             auto* menu = new QMenu(text, parent);
-            for (QAction* action : qAsConst(actions)) {
+            for (QAction* action : std::as_const(actions)) {
                 menu->addAction(action);
             }
 

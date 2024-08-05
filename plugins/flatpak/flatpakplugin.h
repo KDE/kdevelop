@@ -18,7 +18,7 @@ class FlatpakPlugin : public KDevelop::IPlugin
 {
 Q_OBJECT
 public:
-    FlatpakPlugin(QObject *parent, const QVariantList & args);
+    FlatpakPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
     ~FlatpakPlugin() override;
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;

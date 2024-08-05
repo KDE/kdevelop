@@ -59,7 +59,7 @@ void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item, bool exec)
     }
 
     ExecutablePathsVisitor walker(exec);
-    for (ProjectFolderItem* item : qAsConst(items)) {
+    for (ProjectFolderItem* item : std::as_const(items)) {
         walker.visit(item);
     }
     walker.sort();

@@ -1,19 +1,10 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
 find_package(Qt6WebEngineWidgets CONFIG)
-if(TARGET Qt6::WebEngineWidgets)
-    set_package_properties(Qt6WebEngineWidgets PROPERTIES
-        PURPOSE "QtWebEngine, for integrated documentation"
-        URL "https://qt.io/"
-        TYPE REQUIRED)
-else()
-    find_package(Qt6WebKitWidgets CONFIG)
-    set_package_properties(Qt6WebKitWidgets PROPERTIES
-        PURPOSE "QtWebKit, for integrated documentation"
-        URL "https://qt.io/"
-        TYPE REQUIRED)
-    set(USE_QTWEBKIT 1)
-endif()
+set_package_properties(Qt6WebEngineWidgets PROPERTIES
+    PURPOSE "QtWebEngine, for integrated documentation"
+    URL "https://qt.io/"
+    TYPE REQUIRED)
 
 set(KDevPlatformDocumentation_LIB_SRCS
     standarddocumentationview.cpp
@@ -32,16 +23,10 @@ kdevplatform_add_library(KDevPlatformDocumentation SOURCES ${KDevPlatformDocumen
 target_link_libraries(KDevPlatformDocumentation
 PUBLIC
     KDev::Interfaces
+    Qt::WebEngineWidgets
 PRIVATE
     KDev::Util
 )
-
-if(USE_QTWEBKIT)
-    target_link_libraries(KDevPlatformDocumentation PRIVATE Qt::WebKitWidgets)
-    target_compile_definitions(KDevPlatformDocumentation PUBLIC -DUSE_QTWEBKIT)
-else()
-    target_link_libraries(KDevPlatformDocumentation PRIVATE Qt::WebEngineWidgets)
-endif()
 
 install(FILES
     documentationfindwidget.h

@@ -224,7 +224,7 @@ void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
 
 void MainWindow::dropEvent( QDropEvent* ev )
 {
-    Sublime::View* dropToView = viewForPosition(mapToGlobal(ev->pos()));
+    Sublime::View* dropToView = viewForPosition(mapToGlobal(ev->position().toPoint()));
     if(dropToView)
         activateView(dropToView);
 
@@ -246,7 +246,7 @@ void MainWindow::dropEvent( QDropEvent* ev )
     }
 
     if (!eventUsed) {
-        for(const auto& url : qAsConst(urls)) {
+        for (const auto& url : std::as_const(urls)) {
             Core::self()->documentController()->openDocument(url);
         }
     }

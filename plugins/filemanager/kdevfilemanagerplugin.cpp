@@ -53,8 +53,9 @@ private:
     KDevFileManagerPlugin *m_plugin;
 };
 
-KDevFileManagerPlugin::KDevFileManagerPlugin(QObject *parent, const QVariantList &/*args*/)
-    :KDevelop::IPlugin(QStringLiteral("kdevfilemanager"), parent)
+KDevFileManagerPlugin::KDevFileManagerPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                             const QVariantList& /*args*/)
+    : KDevelop::IPlugin(QStringLiteral("kdevfilemanager"), parent, metaData)
 {
     setXMLFile(QStringLiteral("kdevfilemanager.rc"));
 

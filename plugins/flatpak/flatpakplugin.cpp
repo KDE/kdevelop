@@ -37,8 +37,8 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevFlatpakFactory, "kdevflatpak.json", registerPlugi
 
 using namespace KDevelop;
 
-FlatpakPlugin::FlatpakPlugin(QObject *parent, const QVariantList & /*args*/)
-    : KDevelop::IPlugin( QStringLiteral("kdevflatpak"), parent )
+FlatpakPlugin::FlatpakPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& /*args*/)
+    : KDevelop::IPlugin(QStringLiteral("kdevflatpak"), parent, metaData)
 {
     auto ac = actionCollection();
 
@@ -169,7 +169,7 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
 
     if ( !urls.isEmpty() ) {
         KDevelop::ContextMenuExtension ext;
-        for (const QUrl& url : qAsConst(urls)) {
+        for (const QUrl& url : std::as_const(urls)) {
             const KDevelop::Path file(url);
             const auto arches = availableArches(file);
             for (const QString& arch : arches) {

@@ -1,0 +1,3 @@
+[Project]
+Manager=KDevCMakeManager
+Name=qt6_app

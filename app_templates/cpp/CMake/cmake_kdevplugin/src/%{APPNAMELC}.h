@@ -9,7 +9,7 @@ class %{APPNAMEID} : public KDevelop::IPlugin
 
 public:
     // KPluginFactory-based plugin wants constructor with this signature
-    %{APPNAMEID}(QObject* parent, const QVariantList& args);
+    %{APPNAMEID}(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
 };
 
 #endif // %{APPNAMEUC}_H

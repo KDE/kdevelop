@@ -131,7 +131,7 @@ void ExpandingWidgetModel::clearExpanding()
 {
     clearMatchQualities();
     QMap<QModelIndex, ExpandingWidgetModel::ExpandingType> oldExpandState = m_expandState;
-    for (auto& widget : qAsConst(m_expandingWidgets)) {
+    for (auto& widget : std::as_const(m_expandingWidgets)) {
         delete widget;
     }
 
@@ -190,7 +190,7 @@ void ExpandingWidgetModel::rowSelected(const QModelIndex& idx_)
         } else {
             QVariant variant = data(idx, CodeCompletionModel::ItemSelected);
 
-            if (!isExpanded(idx) && variant.type() == QVariant::String) {
+            if (!isExpanded(idx) && variant.typeId() == qMetaTypeId<QString>()) {
                 //Either expand upwards or downwards, choose in a way that
                 //the visible fields of the new selected entry are not moved.
                 if (oldIndex.isValid() && (oldIndex < idx || (!(oldIndex < idx) && oldIndex.parent() < idx.parent()))) {
@@ -396,7 +396,7 @@ int ExpandingWidgetModel::basicRowHeight(const QModelIndex& idx_) const
 
     QModelIndex idx(firstColumn(idx_));
 
-    auto* delegate = qobject_cast<ExpandingDelegate*>(treeView()->itemDelegate(idx));
+    auto* delegate = qobject_cast<ExpandingDelegate*>(treeView()->itemDelegateForIndex(idx));
     if (!delegate || !idx.isValid()) {
         qCDebug(PLUGIN_QUICKOPEN) << "ExpandingWidgetModel::basicRowHeight: Could not get delegate";
         return 15;

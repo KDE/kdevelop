@@ -69,7 +69,7 @@ public:
         return ( bool )m_index;
     }
 
-    /// \copydoc
+    /// \copydoc isValid
     operator bool() const {
         return ( bool )m_index;
     }
@@ -110,7 +110,7 @@ private:
     uint m_index;
 };
 
-inline uint qHash(const IndexedType& type)
+inline size_t qHash(const IndexedType& type)
 {
     return type.hash();
 }

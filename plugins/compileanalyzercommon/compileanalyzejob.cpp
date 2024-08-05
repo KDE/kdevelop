@@ -78,7 +78,7 @@ void CompileAnalyzeJob::generateMakefile()
     QTextStream scriptStream(&makefile);
 
     scriptStream << QStringLiteral("SOURCES =");
-    for (const auto& source : qAsConst(m_sources)) {
+    for (const auto& source : std::as_const(m_sources)) {
         scriptStream << QLatin1String(" \\\n\t") << spaceEscapedString(source);
     }
     scriptStream << QLatin1Char('\n');

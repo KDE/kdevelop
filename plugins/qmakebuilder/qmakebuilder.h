@@ -24,7 +24,7 @@ class QMakeBuilder : public KDevelop::IPlugin, public IQMakeBuilder
     Q_INTERFACES( KDevelop::IProjectBuilder )
 
 public:
-    explicit QMakeBuilder(QObject *parent = nullptr, const QVariantList &args = QVariantList());
+    explicit QMakeBuilder(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args = QVariantList());
     ~QMakeBuilder() override;
 
     KJob* build(KDevelop::ProjectBaseItem *dom) override;

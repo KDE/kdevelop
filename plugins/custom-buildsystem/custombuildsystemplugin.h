@@ -28,7 +28,8 @@ class CustomBuildSystem : public KDevelop::AbstractFileManagerPlugin, public KDe
     Q_INTERFACES( KDevelop::IProjectFileManager )
     Q_INTERFACES( KDevelop::IBuildSystemManager )
 public:
-    explicit CustomBuildSystem( QObject *parent = nullptr, const QVariantList &args = QVariantList() );
+    explicit CustomBuildSystem(QObject* parent, const KPluginMetaData& metaData,
+                               const QVariantList& args = QVariantList());
     ~CustomBuildSystem() override;
 
 // ProjectBuilder API

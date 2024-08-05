@@ -233,7 +233,7 @@ void ProjectBaseItem::removeRows(int row, int count)
     //NOTE: we unset parent, row and model manually to speed up the deletion
     if (row == 0 && count == d->children.size()) {
         // optimize if we want to delete all
-        for (ProjectBaseItem* item : qAsConst(d->children)) {
+        for (ProjectBaseItem* item : std::as_const(d->children)) {
             item->d_func()->parent = nullptr;
             item->d_func()->row = -1;
             item->setModel( nullptr );
@@ -327,7 +327,7 @@ void ProjectBaseItem::setModel( ProjectModel* model )
         model->d_func()->pathLookupTable.insert(d->m_indexedPath, this);
     }
 
-    for (ProjectBaseItem* item : qAsConst(d->children)) {
+    for (ProjectBaseItem* item : std::as_const(d->children)) {
         item->setModel( model );
     }
 }

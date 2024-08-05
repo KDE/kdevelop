@@ -8,25 +8,31 @@
 
 #include "qthelpdocumentation.h"
 
+#include <QBuffer>
 #include <QLabel>
 #include <QUrl>
 #include <QTreeView>
 #include <QHelpContentModel>
 #include <QHeaderView>
 #include <QMenu>
+#include <QMimeDatabase>
 #include <QMouseEvent>
 #include <QRegularExpression>
 #include <QActionGroup>
+#include <QThread>
+#include <QWebEngineUrlRequestJob>
+#include <QWebEngineUrlSchemeHandler>
 
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <documentation/standarddocumentationview.h>
-#include "qthelpnetwork.h"
 #include "qthelpproviderabstract.h"
 
 #include <algorithm>
+#include <array>
+#include <cctype>
 
 using namespace KDevelop;
 
@@ -57,16 +63,162 @@ QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider, const
     , m_current(::findTitle(m_info, key))
     , lastView(nullptr)
 {
-    Q_ASSERT(m_current!=m_info.constEnd());
+    Q_ASSERT(m_current != m_info.constEnd());
 }
 
 namespace {
-
-QString descriptionFromHtmlData(const QString& fragment, const QString& dataString)
+/// remove HTML cruft to produce a clean description
+QString cleanupDescription(QString thisFragment)
 {
-    const QString p = QStringLiteral("((\\\")|(\\\'))");
-    const QString optionalSpace = QStringLiteral(" *");
+    {
+        //Completely remove the first large header found, since we don't need a header
+        const auto headerRegExp = QStringLiteral("<h\\d[^>]*>.*?</h\\d *>");
+        static const auto findHeader = QRegularExpression(headerRegExp);
+        const auto match = findHeader.match(thisFragment);
+        if (match.hasMatch()) {
+            thisFragment.remove(match.capturedStart(), match.capturedLength());
+        }
+    }
 
+    {
+        //Replace all gigantic header-font sizes with <big>
+        {
+            const auto sizeRegExp = QStringLiteral("<h\\d[^>]*>");
+            static const auto findSize = QRegularExpression(sizeRegExp);
+            thisFragment.replace(findSize, QStringLiteral("<big>"));
+        }
+        {
+            const auto sizeCloseRegExp = QStringLiteral("</h\\d *>");
+            static const auto closeSize = QRegularExpression(sizeCloseRegExp);
+            thisFragment.replace(closeSize, QStringLiteral("</big><br />"));
+        }
+    }
+
+    {
+        //Replace paragraphs by newlines
+        const auto begin = QStringLiteral("<p *>");
+        static const auto findBegin = QRegularExpression(begin);
+        thisFragment.replace(findBegin, {});
+
+        const auto end = QStringLiteral("</p *>");
+        static const auto findEnd = QRegularExpression(end);
+        thisFragment.replace(findEnd, QStringLiteral("<br />"));
+    }
+
+    {
+        //Remove links, because they won't work
+        const auto link = QStringLiteral("<a[^>]+>");
+        static const auto exp = QRegularExpression(link, QRegularExpression::CaseInsensitiveOption);
+        thisFragment.replace(exp, QStringLiteral("<a>"));
+    }
+
+    {
+        //Remove the unhelpful "more..." link
+        const auto moreLink = QStringLiteral("<a>More...</a *>");
+        static const auto exp = QRegularExpression(moreLink, QRegularExpression::CaseInsensitiveOption);
+        thisFragment.remove(exp);
+    }
+
+    {
+        //Remove trailing whitespace
+        const auto trailingSpace = QStringLiteral("(?:<br */?>|\\s+)+$");
+        static const auto exp = QRegularExpression(trailingSpace, QRegularExpression::CaseInsensitiveOption);
+        thisFragment.remove(exp);
+    }
+
+    return thisFragment;
+}
+
+/// try to extract description using comment markers
+QString descriptionFromCommentMarkers(QByteArray utf8Fragment, const QByteArray& utf8Data)
+{
+    if (utf8Fragment.isEmpty()) {
+        return {};
+    }
+
+    // enum, typedef and property fragment ends with a suffix, which is absent from comment markers,
+    // so remove it here. The 'x' suffix is used to disambiguate case-insensitive HTML fragments of
+    // identifiers that differ only in case, e.g. "Iterator-typedef" and "iterator-typedefx".
+    constexpr std::array fragmentSuffixesToRemove = {QByteArrayView("-enum"), QByteArrayView("-typedef"),
+                                                     QByteArrayView("-typedefx"), QByteArrayView("-prop")};
+    for (const auto suffix : fragmentSuffixesToRemove) {
+        if (utf8Fragment.endsWith(suffix)) {
+            utf8Fragment.chop(suffix.size());
+            break;
+        }
+    }
+
+    // find the start marker
+    QByteArray::size_type commentMarkerStart = 0;
+    QByteArray::size_type searchFrom = 0;
+    const auto fragmentStartMarker = QByteArray("<!-- $$$" + utf8Fragment);
+    while (true) {
+        commentMarkerStart = utf8Data.indexOf(fragmentStartMarker, searchFrom);
+        if (commentMarkerStart == -1) {
+            return {};
+        }
+
+        searchFrom = commentMarkerStart + fragmentStartMarker.size();
+        Q_ASSERT(searchFrom <= utf8Data.size());
+        if (searchFrom == utf8Data.size()) {
+            return {}; // weird: marker at string end, no description to extract
+        }
+
+        // Consider only ASCII for simplicity and because Qt does not use non-ASCII characters in identifier names.
+        const auto partOfAsciiIdentifier = [](char c) {
+            constexpr char maxAscii{127};
+            return c >= 0 && c <= maxAscii && (std::isalnum(c) || c == '_');
+        };
+        if (!partOfAsciiIdentifier(utf8Data[searchFrom])) {
+            break; // found our marker
+        }
+        // else: this must be a nonmatching marker for a longer identifier, such as
+        // $$$size_type for fragment "size" => continue search for our marker.
+        // NOTE: The code above may have to be further complicated to support substring operator identifiers
+        // (e.g. operator= and operator==, operator< and operator<=). But for now this is not needed, because
+        // operator comment markers do not match their fragments anyway, e.g. "<!-- $$$ -->" for the fragment
+        // "operator-2b" and "<!-- $$$operator<$$$operator<constchar* -->" for the fragment "operator-lt-9".
+    }
+
+    // find the end marker
+    const auto commentMarkerEnd = utf8Data.indexOf(QByteArray("<!-- @@@" + utf8Fragment), searchFrom);
+    if (commentMarkerEnd == -1) {
+        return {};
+    }
+
+    // then cleanup the data inbetween these two places
+    return cleanupDescription(
+        QString::fromUtf8(utf8Data.sliced(commentMarkerStart, commentMarkerEnd - commentMarkerStart)));
+}
+
+/// try to extract description via HTML parsing using new Qt6 documentation format
+QString descriptionFromNewHtmlData(const QString& fragment, const QString& data)
+{
+    if (fragment.isEmpty()) {
+        return {};
+    }
+
+    // find the header that references the fragment
+    const auto sectionStartPattern = QRegularExpression(QLatin1String("<h(\\d)[^>]+id=\"%1\"").arg(fragment));
+    const auto matchStart = sectionStartPattern.match(data);
+    if (!matchStart.hasMatch()) {
+        return {};
+    }
+
+    // find the start of the next section by the header
+    const auto headerType = matchStart.capturedView(1);
+    const auto sectionStart = matchStart.capturedStart(0);
+    const auto sectionEndPattern = QRegularExpression(QLatin1String("<h%1[^>]+id=\"").arg(headerType));
+    const auto matchEnd = sectionEndPattern.match(data, matchStart.capturedEnd(0));
+    const auto sectionEnd = matchEnd.hasMatch() ? matchEnd.capturedStart(0) : data.size();
+
+    // then cleanup the data inbetween these two places
+    return cleanupDescription(data.sliced(sectionStart, sectionEnd - sectionStart));
+}
+
+/// extract description via HTML parsing using the old Qt5-like documentation format
+QString descriptionFromOldHtmlData(const QString& fragment, const QString& dataString)
+{
     QString::size_type pos = 0;
 
     {
@@ -74,9 +226,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         // In case of empty fragment (class documentation), the entire title matches the findHeader regex and
         // is removed below. This title should be removed, because it duplicates information already present
         // at the top of a navigation widget. A title example: "QString Class".
-        const auto titleRegExp =
-            QStringLiteral("< h\\d class = \"title\"[^>]*>").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression findTitle(titleRegExp);
+        const auto titleRegExp = QStringLiteral("<h\\d +class *= *\"title\"[^>]*>");
+        static const auto findTitle = QRegularExpression(titleRegExp);
         const auto titlePos = dataString.indexOf(findTitle);
         if (titlePos != -1) {
             pos = titlePos;
@@ -86,9 +237,10 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
     auto nextFragmentSearchPos = pos;
 
     if (!fragment.isEmpty()) {
-        const QString exp = QString(QLatin1String("< a name = ") + p + fragment + p + QLatin1String(" > < / a >")).replace(QLatin1Char(' '), optionalSpace);
+        const auto exp = QString(QLatin1String("<a +name *= *(['\"])") + QRegularExpression::escape(fragment)
+                                 + QLatin1String("\\1 *> *</a *>"));
 
-        const QRegularExpression findFragment(exp);
+        const auto findFragment = QRegularExpression(exp);
         QRegularExpressionMatch findFragmentMatch;
         pos = dataString.indexOf(findFragment, pos, &findFragmentMatch);
         if (pos == -1) {
@@ -100,8 +252,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         // and remove the entire title using the findHeader regex below. This title should be removed, because it
         // duplicates information already present in a structured form at the top of a navigation widget. A title
         // example: "bool QString::contains(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const".
-        const QString titleRegExp = QStringLiteral("< h\\d class = \".*?\" >").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression findTitle(titleRegExp);
+        const auto titleRegExp = QStringLiteral("<h\\d +class *= *\".*?\" *>");
+        const auto findTitle = QRegularExpression(titleRegExp);
         QRegularExpressionMatch match;
         const auto titleStart = dataString.lastIndexOf(findTitle, pos, &match);
         Q_ASSERT(titleStart < pos);
@@ -114,8 +266,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         }
     }
 
-    const QString exp = QString(QStringLiteral("< a name = ") + p + QStringLiteral("((\\S)*)") + p + QStringLiteral(" > < / a >")).replace(QLatin1Char(' '), optionalSpace);
-    const QRegularExpression nextFragmentExpression(exp);
+    const auto exp = QStringLiteral("<a +name *= *(['\"])\\S*\\1 *> *</a *>");
+    static const auto nextFragmentExpression = QRegularExpression(exp);
     auto endPos = dataString.indexOf(nextFragmentExpression, nextFragmentSearchPos);
     if(endPos == -1) {
         endPos = dataString.size();
@@ -123,8 +275,8 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
 
     {
         //Find the end of the last paragraph or newline, so we don't add prefixes of the following fragment
-        const QString newLineRegExp = QStringLiteral ("< br / > | < / p >").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression lastNewLine(newLineRegExp);
+        const auto newLineRegExp = QStringLiteral("<br */ *> *| *</p *>");
+        static const auto lastNewLine = QRegularExpression(newLineRegExp);
         const auto newEnd = dataString.lastIndexOf(lastNewLine, endPos);
         if (newEnd > pos) {
             // Also remove the trailing line break to prevent two consecutive empty lines in a navigation widget.
@@ -132,51 +284,7 @@ QString descriptionFromHtmlData(const QString& fragment, const QString& dataStri
         }
     }
 
-    QString thisFragment = dataString.mid(pos, endPos - pos);
-
-    {
-        //Completely remove the first large header found, since we don't need a header
-        const QString headerRegExp = QStringLiteral("< h\\d.*>.*?< / h\\d >").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression findHeader(headerRegExp);
-        const QRegularExpressionMatch match = findHeader.match(thisFragment);
-        if (match.hasMatch()) {
-            thisFragment.remove(match.capturedStart(), match.capturedLength());
-        }
-    }
-
-    {
-        //Replace all gigantic header-font sizes with <big>
-        {
-            const QString sizeRegExp = QStringLiteral("< h\\d ").replace(QLatin1Char(' '), optionalSpace);
-            const QRegularExpression findSize(sizeRegExp);
-            thisFragment.replace(findSize, QStringLiteral("<big "));
-        }
-        {
-            const QString sizeCloseRegExp = QStringLiteral("< / h\\d >").replace(QLatin1Char(' '), optionalSpace);
-            const QRegularExpression closeSize(sizeCloseRegExp);
-            thisFragment.replace(closeSize, QStringLiteral("</big><br />"));
-        }
-    }
-
-    {
-        //Replace paragraphs by newlines
-        const QString begin = QStringLiteral("< p >").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression findBegin(begin);
-        thisFragment.replace(findBegin, {});
-
-        const QString end = QStringLiteral("< /p >").replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression findEnd(end);
-        thisFragment.replace(findEnd, QStringLiteral("<br />"));
-    }
-
-    {
-        //Remove links, because they won't work
-        const QString link = QString(QStringLiteral("< a href = ") + p + QStringLiteral(".*?") + p).replace(QLatin1Char(' '), optionalSpace);
-        const QRegularExpression exp(link, QRegularExpression::CaseInsensitiveOption);
-        thisFragment.replace(exp, QStringLiteral("<a "));
-    }
-
-    return thisFragment;
+    return cleanupDescription(dataString.mid(pos, endPos - pos));
 }
 
 QString descriptionFallback(const QList<QHelpLink>& info)
@@ -188,22 +296,87 @@ QString descriptionFallback(const QList<QHelpLink>& info)
     }
     return titles.join(QLatin1String(", "));
 }
-
 } // unnamed namespace
 
+/// Extract a short description from the html data
 QString QtHelpDocumentation::description() const
 {
     const auto url = currentUrl();
     const auto fragment = url.fragment();
 
-    // Extract a short description from the html data
-    const auto fileData = QString::fromLatin1(m_provider->engine()->fileData(url)); ///@todo encoding
-    if (auto ret = descriptionFromHtmlData(fragment, fileData); !ret.isEmpty()) {
+    // assume the data is utf8 encoded
+    // this is true for new data at least with <meta charset="utf-8">
+    const auto utf8FileData = m_provider->engine()->fileData(url);
+
+    // first, fast pass that does not require regular expression matching
+    // For classes we get an empty fragment but m_name contains the class identifier.
+    // Use the class ID, e.g. "QString", to find the markers around the brief class description,
+    // for example, <!-- $$$QString-brief -->CLASS DESCRIPTION<!-- @@@QString -->
+    const auto& fragmentOrClassName = fragment.isEmpty() ? m_name : fragment;
+    if (auto ret = descriptionFromCommentMarkers(fragmentOrClassName.toUtf8(), utf8FileData); !ret.isEmpty()) {
+        return ret;
+    }
+
+    // otherwise fallback with ugly HTML parsing using regexp magic, what could go wrong?
+    const auto fileData = QString::fromUtf8(utf8FileData);
+    if (auto ret = descriptionFromNewHtmlData(fragment, fileData); !ret.isEmpty()) {
+        return ret;
+    }
+
+    if (auto ret = descriptionFromOldHtmlData(fragment, fileData); !ret.isEmpty()) {
         return ret;
     }
 
     return descriptionFallback(m_info);
 }
+
+namespace {
+
+class QtHelpSchemeHandler : public QWebEngineUrlSchemeHandler
+{
+    Q_OBJECT
+public:
+    explicit QtHelpSchemeHandler(QtHelpProviderAbstract* provider, QObject* parent = nullptr)
+        : QWebEngineUrlSchemeHandler(parent)
+        , m_provider(provider)
+    {
+    }
+
+    void requestStarted(QWebEngineUrlRequestJob* job) override
+    {
+        Q_ASSERT(QThread::currentThread() == m_provider->thread());
+
+        const auto url = job->requestUrl();
+
+        auto mimeType = QMimeDatabase().mimeTypeForUrl(url).name().toUtf8();
+        if (mimeType == "application/x-extension-html") {
+            // see also: https://bugs.kde.org/show_bug.cgi?id=288277
+            // firefox seems to add this bullshit mimetype above
+            // which breaks displaying of qthelp documentation :(
+            mimeType = QByteArrayLiteral("text/html");
+        }
+
+        auto data = m_provider->engine()->fileData(url);
+
+        // Fix flickering when loading, the page has the offline-simple.css stylesheet which is replaced
+        // later by offline.css  by javascript which causes flickering so we force the full stylesheet
+        // from the beginning
+        if (url.fileName().endsWith(QLatin1String(".html"))) {
+            data.replace("offline-simple.css", "offline.css");
+        }
+
+        auto* const buffer = new QBuffer(job);
+        buffer->setData(data);
+        buffer->open(QIODevice::ReadOnly);
+
+        job->reply(mimeType, buffer);
+    }
+
+private:
+    const QtHelpProviderAbstract* const m_provider;
+};
+
+} // unnamed namespace
 
 QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent)
 {
@@ -213,7 +386,7 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         auto* view = new StandardDocumentationView(findWidget, parent);
         view->initZoom(m_provider->name());
         view->setDelegateLinks(true);
-        view->setNetworkAccessManager(m_provider->networkAccess());
+        view->installUrlSchemeHandler(QByteArrayLiteral("qthelp"), new QtHelpSchemeHandler(m_provider, this));
         view->setContextMenuPolicy(Qt::CustomContextMenu);
         QObject::connect(view, &StandardDocumentationView::linkClicked, this, &QtHelpDocumentation::jumpedTo);
         connect(view, &StandardDocumentationView::customContextMenuRequested, this, &QtHelpDocumentation::viewContextMenuRequested);
@@ -321,4 +494,5 @@ bool HomeDocumentation::eventFilter(QObject* obj, QEvent* event)
     return QObject::eventFilter(obj, event);
 }
 
+#include "qthelpdocumentation.moc"
 #include "moc_qthelpdocumentation.cpp"

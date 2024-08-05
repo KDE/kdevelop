@@ -825,7 +825,7 @@ void SourceFormatterController::formatFiles()
 
     //get a list of all files in this folder recursively
     QList<KDevelop::ProjectFolderItem*> folders;
-    for (KDevelop::ProjectBaseItem* item : qAsConst(d->prjItems)) {
+    for (KDevelop::ProjectBaseItem* item : std::as_const(d->prjItems)) {
         if (!item)
             continue;
         if (item->folder())

@@ -449,8 +449,8 @@ void MainWindow::removePluginView(const QString &id)
     emit m_interface->pluginViewDeleted(id, view);
 }
 
-Plugin::Plugin(KTextEditor::Plugin *plugin, QObject *parent)
-    : IPlugin({}, parent)
+Plugin::Plugin(KTextEditor::Plugin* plugin, QObject* parent, const KPluginMetaData& metaData)
+    : IPlugin({}, parent, metaData)
     , m_plugin(plugin)
     , m_tracker(new ObjectListTracker(ObjectListTracker::CleanupWhenDone, this))
 {

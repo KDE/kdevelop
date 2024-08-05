@@ -9,6 +9,7 @@
 #include "documentationfindwidget.h"
 #include "debug.h"
 
+#include <util/kdevstringhandler.h>
 #include <util/zoomcontroller.h>
 
 #include <KConfigGroup>
@@ -19,32 +20,16 @@
 #include <QMouseEvent>
 #include <QMenu>
 #include <QUrl>
-
-#ifdef USE_QTWEBKIT
-#include <QFontDatabase>
-#include <QWebView>
-#include <QWebFrame>
-#include <QWebSettings>
-#else
-#include <util/kdevstringhandler.h>
 #include <QFile>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QPointer>
 #include <QWebEngineView>
 #include <QWebEnginePage>
-#include <QWebEngineSettings>
 #include <QWebEngineUrlScheme>
-#include <QWebEngineUrlSchemeHandler>
-#include <QWebEngineUrlRequestJob>
 #include <QWebEngineProfile>
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
-#endif
 
 using namespace KDevelop;
 
-#ifndef USE_QTWEBKIT
 namespace {
 auto qtHelpSchemeName() { return QByteArrayLiteral("qthelp"); }
 
@@ -84,14 +69,11 @@ private:
 };
 
 } // unnamed namespace
-#endif
 
 void StandardDocumentationView::registerCustomUrlSchemes()
 {
-#ifndef USE_QTWEBKIT
     QWebEngineUrlScheme scheme(qtHelpSchemeName());
     QWebEngineUrlScheme::registerScheme(scheme);
-#endif
 }
 
 class KDevelop::StandardDocumentationViewPrivate
@@ -100,13 +82,6 @@ public:
     ZoomController* m_zoomController = nullptr;
     IDocumentation::Ptr m_doc;
 
-#ifdef USE_QTWEBKIT
-    QWebView *m_view = nullptr;
-    void init(StandardDocumentationView* parent)
-    {
-        m_view = new QWebView(parent);
-        QObject::connect(m_view, &QWebView::linkClicked, parent, &StandardDocumentationView::linkClicked);
-#else
     QWebEngineView* m_view = nullptr;
     StandardDocumentationPage* m_page = nullptr;
 
@@ -125,17 +100,15 @@ public:
             qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray(chromiumFlags + " --disable-in-process-stack-traces"));
         }
         // not using the shared default profile here:
-        // prevents conflicts with qthelp scheme handler being registered onto that single default profile
-        // due to async deletion of old pages and their CustomSchemeHandler instance
+        // prevents conflicts with custom scheme handlers being registered onto that single default profile
+        // due to async deletion of old pages and their scheme handler instance
         auto* profile = new QWebEngineProfile(parent);
         m_page = new StandardDocumentationPage(profile, parent);
         m_view = new QWebEngineView(parent);
         m_view->setPage(m_page);
-#endif
         m_view->setContextMenuPolicy(Qt::NoContextMenu);
 
-        // The event filter is necessary for handling mouse events since they are swallowed by
-        // QWebView and QWebEngineView.
+        // The event filter is necessary for handling mouse events since they are swallowed by QWebEngineView.
         m_view->installEventFilter(parent);
     }
 };
@@ -157,49 +130,6 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
     connect(findWidget, &DocumentationFindWidget::searchRequested, this, &StandardDocumentationView::search);
     connect(findWidget, &DocumentationFindWidget::searchDataChanged, this, &StandardDocumentationView::searchIncremental);
     connect(findWidget, &DocumentationFindWidget::searchFinished, this, &StandardDocumentationView::finishSearch);
-
-#ifdef USE_QTWEBKIT
-    QFont sansSerifFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    QFont monospaceFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-
-    QWebSettings* s = d->m_view->settings();
-
-    s->setFontFamily(QWebSettings::StandardFont, sansSerifFont.family());
-    s->setFontFamily(QWebSettings::SerifFont, QStringLiteral("Serif"));
-    s->setFontFamily(QWebSettings::SansSerifFont, sansSerifFont.family());
-    s->setFontFamily(QWebSettings::FixedFont, monospaceFont.family());
-
-    s->setFontSize(QWebSettings::DefaultFontSize, QFontInfo(sansSerifFont).pixelSize());
-    s->setFontSize(QWebSettings::DefaultFixedFontSize, QFontInfo(monospaceFont).pixelSize());
-
-    // Fixes for correct positioning. The problem looks like the following:
-    //
-    // 1) Some page is loaded and loadFinished() signal is emitted,
-    //    after this QWebView set right position inside page.
-    //
-    // 2) After loadFinished() emitting, page JS code finishes it's work and changes
-    //    font settings (size). This leads to page contents "moving" inside view widget
-    //    and as a result we have wrong position.
-    //
-    // Such behavior occurs for example with QtHelp pages.
-    //
-    // To fix the problem, first, we disable view painter updates during load to avoid content
-    // "flickering" and also to hide font size "jumping". Secondly, we reset position inside page
-    // after loading with using standard QWebFrame method scrollToAnchor().
-
-    connect(d->m_view, &QWebView::loadStarted, d->m_view, [this]() {
-        Q_D(StandardDocumentationView);
-        d->m_view->setUpdatesEnabled(false);
-    });
-
-    connect(d->m_view, &QWebView::loadFinished, this, [this](bool) {
-        Q_D(StandardDocumentationView);
-        if (d->m_view->url().isValid()) {
-            d->m_view->page()->mainFrame()->scrollToAnchor(d->m_view->url().fragment());
-        }
-        d->m_view->setUpdatesEnabled(true);
-    });
-#endif
 }
 
 KDevelop::StandardDocumentationView::~StandardDocumentationView()
@@ -214,17 +144,12 @@ void StandardDocumentationView::search ( const QString& text, DocumentationFindW
 {
     Q_D(StandardDocumentationView);
 
-#ifdef USE_QTWEBKIT
-    using WebkitThing = QWebPage;
-#else
-    using WebkitThing = QWebEnginePage;
-#endif
-    WebkitThing::FindFlags ff = {};
+    QWebEnginePage::FindFlags ff = {};
     if(options & DocumentationFindWidget::Previous)
-        ff |= WebkitThing::FindBackward;
+        ff |= QWebEnginePage::FindBackward;
 
     if(options & DocumentationFindWidget::MatchCase)
-        ff |= WebkitThing::FindCaseSensitively;
+        ff |= QWebEnginePage::FindCaseSensitively;
 
     d->m_view->page()->findText(text, ff);
 }
@@ -233,15 +158,10 @@ void StandardDocumentationView::searchIncremental(const QString& text, Documenta
 {
     Q_D(StandardDocumentationView);
 
-#ifdef USE_QTWEBKIT
-    using WebkitThing = QWebPage;
-#else
-    using WebkitThing = QWebEnginePage;
-#endif
-    WebkitThing::FindFlags findFlags;
+    QWebEnginePage::FindFlags findFlags;
 
     if (options & DocumentationFindWidget::MatchCase)
-        findFlags |= WebkitThing::FindCaseSensitively;
+        findFlags |= QWebEnginePage::FindCaseSensitively;
 
     // calling with changed text with added or removed chars at end will result in current
     // selection kept, if also matching new text
@@ -302,11 +222,6 @@ void StandardDocumentationView::update()
 
 void KDevelop::StandardDocumentationView::setOverrideCssFile(const QString& cssFilePath)
 {
-#ifdef USE_QTWEBKIT
-    Q_D(StandardDocumentationView);
-
-    d->m_view->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFilePath));
-#else
     QFile file(cssFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qCWarning(DOCUMENTATION) << "cannot read CSS file" << cssFilePath << ':' << file.error() << file.errorString();
@@ -314,20 +229,12 @@ void KDevelop::StandardDocumentationView::setOverrideCssFile(const QString& cssF
     }
     const auto cssCode = file.readAll();
     setOverrideCssCode(cssCode);
-#endif
 }
 
 void StandardDocumentationView::setOverrideCssCode(const QByteArray& cssCode)
 {
     Q_D(StandardDocumentationView);
 
-#ifdef USE_QTWEBKIT
-    // Experiments show that Base64UrlEncoding or Base64UrlEncoding|OmitTrailingEquals flags
-    // must not be passed to the QByteArray::toBase64() call here: when the difference between
-    // these encoding variants matters and the flag(s) are passed, the CSS code is not applied.
-    const QByteArray dataUrl = "data:text/css;charset=utf-8;base64," + cssCode.toBase64();
-    d->m_view->settings()->setUserStyleSheetUrl(QUrl::fromEncoded(dataUrl));
-#else
     const auto scriptName = QStringLiteral("OverrideCss");
     auto& scripts = d->m_view->page()->scripts();
 
@@ -361,85 +268,40 @@ void StandardDocumentationView::setOverrideCssCode(const QByteArray& cssCode)
     script.setWorldId(QWebEngineScript::ApplicationWorld);
 
     scripts.insert(script);
-#endif
 }
 
 void KDevelop::StandardDocumentationView::load(const QUrl& url)
 {
     Q_D(StandardDocumentationView);
 
-#ifdef USE_QTWEBKIT
-    d->m_view->load(url);
-#else
     d->m_view->page()->load(url);
-#endif
 }
 
 void KDevelop::StandardDocumentationView::setHtml(const QString& html)
 {
     Q_D(StandardDocumentationView);
 
-#ifdef USE_QTWEBKIT
-    d->m_view->setHtml(html);
-#else
     d->m_view->page()->setHtml(html);
-#endif
 }
 
-#ifndef USE_QTWEBKIT
-class CustomSchemeHandler : public QWebEngineUrlSchemeHandler
-{
-    Q_OBJECT
-public:
-    explicit CustomSchemeHandler(QNetworkAccessManager* nam, QObject *parent = nullptr)
-        : QWebEngineUrlSchemeHandler(parent), m_nam(nam) {}
-
-    void requestStarted(QWebEngineUrlRequestJob *job) override {
-        const QUrl url = job->requestUrl();
-
-        auto* const reply = m_nam->get(QNetworkRequest(url));
-
-        // Deliberately don't use job as context in this connection: if job is destroyed
-        // before reply is finished, reply would be leaked. Using reply as context does
-        // not impact behavior, but silences Clazy checker connect-3arg-lambda (level1).
-        connect(reply, &QNetworkReply::finished, reply, [reply, job = QPointer{job}] {
-            // At this point reply is no longer written to and can be safely
-            // destroyed once job ends reading from it.
-            if (job) {
-                connect(job, &QObject::destroyed, reply, &QObject::deleteLater);
-            } else {
-                reply->deleteLater();
-            }
-        });
-
-        job->reply(reply->header(QNetworkRequest::ContentTypeHeader).toByteArray(), reply);
-    }
-
-private:
-    QNetworkAccessManager* m_nam;
-};
-#endif
-
-void KDevelop::StandardDocumentationView::setNetworkAccessManager(QNetworkAccessManager* manager)
+void KDevelop::StandardDocumentationView::installUrlSchemeHandler(const QByteArray& scheme,
+                                                                  QWebEngineUrlSchemeHandler* handler)
 {
     Q_D(StandardDocumentationView);
 
-#ifdef USE_QTWEBKIT
-    d->m_view->page()->setNetworkAccessManager(manager);
-#else
-    d->m_view->page()->profile()->installUrlSchemeHandler(qtHelpSchemeName(), new CustomSchemeHandler(manager, this));
-#endif
+    if (QWebEngineUrlScheme::schemeByName(scheme).name() != scheme) {
+        qCWarning(DOCUMENTATION).nospace() << "unknown URL scheme " << scheme
+                                           << ", custom schemes must be registered early during startup, see "
+                                              "StandardDocumentationView::registerCustomUrlSchemes()";
+    }
+    d->m_view->page()->profile()->installUrlSchemeHandler(scheme, handler);
 }
 
 void KDevelop::StandardDocumentationView::setDelegateLinks(bool delegate)
 {
     Q_D(StandardDocumentationView);
 
-#ifdef USE_QTWEBKIT
-    d->m_view->page()->setLinkDelegationPolicy(delegate ? QWebPage::DelegateAllLinks : QWebPage::DontDelegateLinks);
-#else
     d->m_page->setLinkDelegating(delegate);
-#endif
 }
 
 QMenu* StandardDocumentationView::createStandardContextMenu()
@@ -447,12 +309,7 @@ QMenu* StandardDocumentationView::createStandardContextMenu()
     Q_D(StandardDocumentationView);
 
     auto menu = new QMenu(this);
-#ifdef USE_QTWEBKIT
-    using WebkitThing = QWebPage;
-#else
-    using WebkitThing = QWebEnginePage;
-#endif
-    auto copyAction = d->m_view->pageAction(WebkitThing::Copy);
+    auto copyAction = d->m_view->pageAction(QWebEnginePage::Copy);
     if (copyAction) {
         copyAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
         menu->addAction(copyAction);
@@ -463,7 +320,7 @@ QMenu* StandardDocumentationView::createStandardContextMenu()
 bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
 {
     Q_D(StandardDocumentationView);
-#ifndef USE_QTWEBKIT
+
     if (object == d->m_view) {
         /* HACK / Workaround for QTBUG-43602
          * Need to set an eventFilter on the child of WebengineView because it swallows
@@ -481,7 +338,7 @@ bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
             }
         }
     }
-#endif
+
     if (event->type() == QEvent::Wheel) {
         auto* const wheelEvent = static_cast<QWheelEvent*>(event);
         if (d->m_zoomController && d->m_zoomController->handleWheelEvent(wheelEvent))
@@ -544,8 +401,5 @@ void StandardDocumentationView::keyReleaseEvent(QKeyEvent* event)
     QWidget::keyReleaseEvent(event);
 }
 
-#ifndef USE_QTWEBKIT
 #include "standarddocumentationview.moc"
-#endif
-
 #include "moc_standarddocumentationview.cpp"

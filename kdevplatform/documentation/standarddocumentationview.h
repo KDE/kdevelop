@@ -13,15 +13,15 @@
 #include "documentationfindwidget.h"
 #include <interfaces/idocumentation.h>
 
-class QNetworkAccessManager;
 class QMenu;
+class QWebEngineUrlSchemeHandler;
 
 namespace KDevelop
 {
 class StandardDocumentationViewPrivate;
 
 /**
- * A standard documentation view, based on QtWebKit or QtWebEngine, depending on your distribution preferences.
+ * A standard documentation view, based on QtWebEngine
  */
 class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWidget
 {
@@ -64,7 +64,13 @@ public:
 
     void load(const QUrl &url);
     void setHtml(const QString &html);
-    void setNetworkAccessManager(QNetworkAccessManager* manager);
+
+    /**
+     * Install a @p handler for the @p scheme. The scheme must be a known custom URL scheme.
+     *
+     * @sa registerCustomUrlSchemes
+     */
+    void installUrlSchemeHandler(const QByteArray& scheme, QWebEngineUrlSchemeHandler* handler);
 
     /**
      *

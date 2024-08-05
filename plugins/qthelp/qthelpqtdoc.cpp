@@ -19,42 +19,35 @@
 
 #include <algorithm>
 
-namespace {
-
-QString qmakeCandidate()
+QtHelpQtDoc::QtHelpQtDoc(QObject* parent, const QString& qmake, const QString& collectionFileName)
+    : QtHelpProviderAbstract(parent, collectionFileName)
+    , m_qmake(qmake)
 {
-    // return the first qmake executable we can find
-    const QStringList candidates {
-        QStringLiteral("qmake"),
-        QStringLiteral("qmake-qt4"),
-        QStringLiteral("qmake-qt5")
-    };
-    auto it = std::find_if(candidates.constBegin(), candidates.constEnd(), [](const QString& candidate) {
-        return !QStandardPaths::findExecutable(candidate).isEmpty();
-    });
-    return it != candidates.constEnd() ? *it : QString();
-}
-
-}
-
-QtHelpQtDoc::QtHelpQtDoc(QObject *parent, const QVariantList &args)
-    : QtHelpProviderAbstract(parent, QStringLiteral("qthelpcollection.qhc"), args)
-    , m_path(QString())
-{
-    Q_UNUSED(args);
     registerDocumentations();
 }
 
 QtHelpQtDoc::~QtHelpQtDoc() = default;
 
+QStringList QtHelpQtDoc::qmakeCandidates()
+{
+    QStringList candidates{
+        QStringLiteral("qmake6"),    QStringLiteral("qmake-qt6"), QStringLiteral("qmake"),
+        QStringLiteral("qmake-qt5"), QStringLiteral("qmake-qt4"),
+    };
+    const auto it = std::remove_if(candidates.begin(), candidates.end(), [](const QString& candidate) {
+        return QStandardPaths::findExecutable(candidate).isEmpty();
+    });
+    candidates.erase(it, candidates.end());
+    return candidates;
+}
+
 void QtHelpQtDoc::registerDocumentations()
 {
     Q_ASSERT(!m_isInitialized);
-    const QString qmake = qmakeCandidate();
-    if (!qmake.isEmpty()) {
+    if (!m_qmake.isEmpty()) {
         auto* p = new QProcess(this);
         p->setProcessChannelMode(QProcess::MergedChannels);
-        p->setProgram(qmake);
+        p->setProgram(m_qmake);
         p->setArguments({QLatin1String("-query"), QLatin1String("QT_INSTALL_DOCS")});
         connect(p, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, p](int code) {
             if (code == QProcess::NormalExit) {

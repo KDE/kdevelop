@@ -20,11 +20,11 @@
 
 #include <KActionCollection>
 #include <KMainWindow>
+#include <KPluginMetaData>
 #include <KXmlGuiWindow>
 #include <KXMLGUIFactory>
 
 #include "icore.h"
-#include "iplugincontroller.h"
 #include "iprojectcontroller.h"
 #include "iproject.h"
 #include "contextmenuextension.h"
@@ -69,7 +69,7 @@ public:
     QString m_errorDescription;
 };
 
-IPlugin::IPlugin( const QString &componentName, QObject *parent )
+IPlugin::IPlugin(const QString& componentName, QObject* parent, const KPluginMetaData& metaData)
     : QObject(parent)
     , KXMLGUIClient()
     , d_ptr(new IPluginPrivate(this))
@@ -85,7 +85,6 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
     Q_ASSERT(qobject_cast<KDevelop::ICore*>(parent));
     d->core = static_cast<KDevelop::ICore*>(parent);
 
-    auto metaData = core()->pluginController()->infoForPluginId(componentName);
     setComponentName(componentName, metaData.name());
 
     auto clientAdded = [this] (KXMLGUIClient* client) {

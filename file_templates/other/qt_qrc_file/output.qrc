@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="{{ resource_prefix }}">
+        <file{% if alias_file_name %} alias="{{ alias_file_name }}"{% endif %}>{{ file_name }}</file>
+    </qresource>
+</RCC>

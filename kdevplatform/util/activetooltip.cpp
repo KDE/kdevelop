@@ -121,7 +121,7 @@ void ActiveToolTipManager::doVisibility()
 
         QPoint offset = fullGeometry.topLeft() - oldFullGeometry.topLeft();
         if (!offset.isNull()) {
-            for (auto& toolTipData : qAsConst(registeredToolTips)) {
+            for (auto& toolTipData : std::as_const(registeredToolTips)) {
                 auto& toolTip = toolTipData.first;
                 if (toolTip) {
                     toolTip->move(toolTip->pos() + offset);
@@ -145,7 +145,7 @@ void ActiveToolTipManager::doVisibility()
     }
 
     //Final step: Show tooltips
-    for (const auto& tooltip : qAsConst(registeredToolTips)) {
+    for (const auto& tooltip : std::as_const(registeredToolTips)) {
         if (tooltip.first.data() && masterWidget(tooltip.first.data())->isActiveWindow()) {
             tooltip.first.data()->show();
         }
@@ -206,7 +206,7 @@ bool ActiveToolTip::eventFilter(QObject* object, QEvent* e)
         if (underMouse() || insideThis(object)) {
             return false;
         } else {
-            QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPos();
+            QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPosition().toPoint();
             QRect mergedRegion = d->rect_.united(d->handleRect_);
 
             if (mergedRegion.contains(globalPos)) {
@@ -322,7 +322,7 @@ void ActiveToolTip::showToolTip(ActiveToolTip* tooltip, float priority, const QS
 {
     auto& registeredToolTips = manager()->registeredToolTips;
     if (!uniqueId.isEmpty()) {
-        for (const auto& tooltip : qAsConst(registeredToolTips)) {
+        for (const auto& tooltip : std::as_const(registeredToolTips)) {
             if (tooltip.second == uniqueId) {
                 delete tooltip.first.data();
             }

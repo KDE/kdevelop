@@ -25,7 +25,7 @@ Area::WalkerMode AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
         result += printOrientation(index->orientation()) + ' ';
     else
     {
-        for (View* view : qAsConst(index->views())) {
+        for (View* view : std::as_const(index->views())) {
             result += view->objectName() + ' ';
         }
     }

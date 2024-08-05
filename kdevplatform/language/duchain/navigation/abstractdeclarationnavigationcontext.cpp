@@ -513,7 +513,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
             }
 
             uint num = 0;
-            for (Declaration* decl : qAsConst(decls)) {
+            for (Declaration* decl : std::as_const(decls)) {
                 modifyHtml() += i18n("Hides a ");
                 makeLink(i18n("function"), QStringLiteral("jump_to_hide_%1").arg(num),
                          NavigationAction(DeclarationPointer(decl),

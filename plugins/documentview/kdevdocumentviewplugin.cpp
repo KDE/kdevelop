@@ -66,9 +66,9 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
         KDevDocumentViewPlugin* m_plugin;
 };
 
-
-KDevDocumentViewPlugin::KDevDocumentViewPlugin( QObject *parent, const QVariantList& args )
-        : KDevelop::IPlugin( QStringLiteral( "kdevdocumentview" ), parent )
+KDevDocumentViewPlugin::KDevDocumentViewPlugin(QObject* parent, const KPluginMetaData& metaData,
+                                               const QVariantList& args)
+    : KDevelop::IPlugin(QStringLiteral("kdevdocumentview"), parent, metaData)
 {
     Q_UNUSED( args );
 

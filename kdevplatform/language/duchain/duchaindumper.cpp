@@ -150,7 +150,7 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
             const auto uses = dec->uses();
             for (auto it = uses.constBegin(); it != uses.constEnd(); ++it) {
                 qout << Indent((m_indent + 3) * 2) << "File:" << it.key().str() << Qt::endl;
-                for (const RangeInRevision range : qAsConst(*it)) {
+                for (const RangeInRevision range : std::as_const(*it)) {
                     qout << Indent((m_indent + 4) * 2) << "Use:" << range.castToSimpleRange() << Qt::endl;
                 }
             }

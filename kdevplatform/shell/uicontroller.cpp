@@ -359,7 +359,7 @@ void UiController::slotAreaChanged(Sublime::Area*)
     if (area) {
         // walk through shown tool views and maku sure the
         const auto shownIds = area->shownToolViews(Sublime::AllPositions);
-        for (Sublime::View* toolView : qAsConst(area->toolViews())) {
+        for (Sublime::View* toolView : std::as_const(area->toolViews())) {
             if (shownIds.contains(toolView->document()->documentSpecifier())) {
                 slotActiveToolViewChanged(toolView);
             }
@@ -563,7 +563,7 @@ void UiController::showSettingsDialog()
     auto plugins = ICore::self()->pluginController()->loadedPlugins();
     std::sort(plugins.begin(), plugins.end());
 
-    for (IPlugin* plugin : qAsConst(plugins)) {
+    for (IPlugin* plugin : std::as_const(plugins)) {
         addPluginPages(plugin);
     }
 

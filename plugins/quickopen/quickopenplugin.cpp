@@ -349,9 +349,8 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     connect(quickOpenNavigateFunctions, &QAction::triggered, this, &QuickOpenPlugin::quickOpenNavigateFunctions);
 }
 
-QuickOpenPlugin::QuickOpenPlugin(QObject* parent,
-                                 const QVariantList&)
-    : KDevelop::IPlugin(QStringLiteral("kdevquickopen"), parent)
+QuickOpenPlugin::QuickOpenPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
+    : KDevelop::IPlugin(QStringLiteral("kdevquickopen"), parent, metaData)
 {
     staticQuickOpenPlugin = this;
     m_model = new QuickOpenModel(nullptr);
@@ -757,7 +756,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
     Declaration* nearestDeclAfter = nullptr;
     int distanceAfter = INT_MAX;
 
-    for (auto& item : qAsConst(items)) {
+    for (auto& item : std::as_const(items)) {
         Declaration* decl = item.m_item.data();
 
         int distance = decl->range().start.line - cursor.line;
