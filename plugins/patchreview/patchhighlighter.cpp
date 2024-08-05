@@ -414,14 +414,11 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
     doc->setMarkIcon(MarkType::markType24, QPixmap::fromImage(tintedChange));
 
     doc->setMarkDescription(MarkType::markType25, i18nc("@item", "Insertion"));
-    doc->setMarkIcon(MarkType::markType25,
-                     QIcon::fromTheme(QStringLiteral("insert-text")).pixmap(markPixmapSize, markPixmapSize));
+    doc->setMarkIcon(MarkType::markType25, QIcon::fromTheme(QStringLiteral("insert-text")));
     doc->setMarkDescription(MarkType::markType26, i18nc("@item", "Removal"));
-    doc->setMarkIcon(MarkType::markType26,
-                     QIcon::fromTheme(QStringLiteral("edit-delete")).pixmap(markPixmapSize, markPixmapSize));
+    doc->setMarkIcon(MarkType::markType26, QIcon::fromTheme(QStringLiteral("edit-delete")));
     doc->setMarkDescription(MarkType::markType27, i18nc("@item", "Change"));
-    doc->setMarkIcon(MarkType::markType27,
-                     QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize));
+    doc->setMarkIcon(MarkType::markType27, QIcon::fromTheme(QStringLiteral("text-field")));
 
     for (auto* const diff : std::as_const(*m_model->differences())) {
         int line, lineCount;
