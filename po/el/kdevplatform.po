@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-05 02:27+0000\n"
+"POT-Creation-Date: 2024-08-06 02:30+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -6116,14 +6116,14 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Κλάδοι..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:38
+#: vcs/dvcs/ui/branchmanager.cpp:40
 #, fuzzy, kde-format
 #| msgid "Branch Manager"
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Διαχειριστής κλάδων"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
@@ -6131,21 +6131,21 @@ msgstr ""
 "Πρέπει να επιλέξετε έναν κλάδο βάσης από τη λίστα πριν να δημιουργήσετε νέο "
 "κλάδο."
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Νέος κλάδος"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, fuzzy, kde-format
 #| msgid "Name of the new branch:"
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Όνομα του νέου κλάδου:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:124
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -6154,7 +6154,7 @@ msgstr ""
 "Ο κλάδος \"%1\" υπάρχει ήδη.\n"
 "Επιλέξτε άλλο όνομα."
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:138
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -6166,18 +6166,18 @@ msgstr ""
 "Βρίσκεστε στον κλάδο \"%1\".\n"
 "Για την αφαίρεσή του, αλλάξτε σε άλλον κλάδο!"
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:145
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Είστε βέβαιοι ότι θέλετε την αμετάκλητη διαγραφή του κλάδου '%1';"
 
-#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
+#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Ήδη στον κλάδο  \"%1\"\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:181
+#: vcs/dvcs/ui/branchmanager.cpp:186
 #, fuzzy, kde-format
 #| msgid ""
 #| "Branch \"%1\" already exists.\n"
@@ -6189,7 +6189,7 @@ msgstr ""
 "Ο κλάδος \"%1\" υπάρχει ήδη.\n"
 "Επιλέξτε άλλο όνομα."
 
-#: vcs/dvcs/ui/branchmanager.cpp:189
+#: vcs/dvcs/ui/branchmanager.cpp:194
 #, fuzzy, kde-format
 #| msgid ""
 #| "You must select a base branch from the list before creating a new branch."
@@ -6198,25 +6198,25 @@ msgstr ""
 "Πρέπει να επιλέξετε έναν κλάδο βάσης από τη λίστα πριν να δημιουργήσετε νέο "
 "κλάδο."
 
-#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Αδυναμία δημιουργίας διόρθωσης για την τρέχουσα έκδοση."
 
-#: vcs/dvcs/ui/branchmanager.cpp:262
+#: vcs/dvcs/ui/branchmanager.cpp:267
 #, fuzzy, kde-format
 #| msgid "Unable to get difference."
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Αδυναμία ανάκτησης διαφορών."
 
-#: vcs/dvcs/ui/branchmanager.cpp:269
+#: vcs/dvcs/ui/branchmanager.cpp:274
 #, fuzzy, kde-format
 #| msgid "There are no differences."
 msgid "There are no committed differences."
 msgstr "Δεν υπάρχουν διαφορές."
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
 #, fuzzy, kde-format
 #| msgid "VCS support"
 msgctxt "@title:window"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-05 02:27+0000\n"
+"POT-Creation-Date: 2024-08-06 02:30+0000\n"
 "PO-Revision-Date: 2014-09-08 22:56+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -500,49 +500,49 @@ msgctxt "@title:menu"
 msgid "External Scripts"
 msgstr "Külső parancsfájlok"
 
-#: externalscriptview.cpp:31
+#: externalscriptview.cpp:32
 #, fuzzy, kde-format
 #| msgid "External Scripts"
 msgctxt "@title:window"
 msgid "External Scripts"
 msgstr "Külső parancsfájlok"
 
-#: externalscriptview.cpp:49
+#: externalscriptview.cpp:51
 #, fuzzy, kde-format
 #| msgid "Add External Script"
 msgctxt "@action"
 msgid "Add External Script"
 msgstr "Külső parancsfájl hozzáadása"
 
-#: externalscriptview.cpp:54
+#: externalscriptview.cpp:56
 #, fuzzy, kde-format
 #| msgid "Edit External Script"
 msgctxt "@action"
 msgid "Edit External Script"
 msgstr "Külső parancsfájl szerkesztése"
 
-#: externalscriptview.cpp:59
+#: externalscriptview.cpp:61
 #, fuzzy, kde-format
 #| msgid "Remove External Script"
 msgctxt "@action"
 msgid "Remove External Script"
 msgstr "Külső parancsfájl eltávolítása"
 
-#: externalscriptview.cpp:146
+#: externalscriptview.cpp:148
 #, kde-format
 msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
 "i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
 msgstr ""
 
-#: externalscriptview.cpp:149
+#: externalscriptview.cpp:151
 #, fuzzy, kde-format
 #| msgid "Confirm External Script Removal"
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
 msgstr "Külső parancsfájl eltávolításának megerősítése"
 
-#: externalscriptview.cpp:150
+#: externalscriptview.cpp:152
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 02:30+0000\n"
 "PO-Revision-Date: 2020-07-26 21:54+0200\n"
 "Last-Translator: Johnny Jazeix <jazeix@gmail.com>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -23,31 +23,31 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: testview.cpp:56 testviewplugin.cpp:70
+#: testview.cpp:57 testviewplugin.cpp:70
 #, kde-format
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "Test unitaires"
 
-#: testview.cpp:78
+#: testview.cpp:79
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "Afficher le source"
 
-#: testview.cpp:85
+#: testview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "Run Selected Tests"
 msgstr "Exécuter les tests sélectionnés"
 
-#: testview.cpp:90
+#: testview.cpp:91
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Filtre…"
 
-#: testview.cpp:292
+#: testview.cpp:293
 #, kde-format
 msgid "Run 1 test"
 msgid_plural "Run %1 tests"

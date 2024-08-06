@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexternalscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-05 02:27+0000\n"
+"POT-Creation-Date: 2024-08-06 02:30+0000\n"
 "PO-Revision-Date: 2019-08-28 10:01+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -600,35 +600,35 @@ msgctxt "@title:menu"
 msgid "External Scripts"
 msgstr "Εξωτερικά σενάρια"
 
-#: externalscriptview.cpp:31
+#: externalscriptview.cpp:32
 #, fuzzy, kde-format
 #| msgid "External Scripts"
 msgctxt "@title:window"
 msgid "External Scripts"
 msgstr "Εξωτερικά σενάρια"
 
-#: externalscriptview.cpp:49
+#: externalscriptview.cpp:51
 #, fuzzy, kde-format
 #| msgid "Add External Script"
 msgctxt "@action"
 msgid "Add External Script"
 msgstr "Προσθήκη εξωτερικού σεναρίου"
 
-#: externalscriptview.cpp:54
+#: externalscriptview.cpp:56
 #, fuzzy, kde-format
 #| msgid "Edit External Script"
 msgctxt "@action"
 msgid "Edit External Script"
 msgstr "επεξεργασία εξωτερικού σεναρίου"
 
-#: externalscriptview.cpp:59
+#: externalscriptview.cpp:61
 #, fuzzy, kde-format
 #| msgid "Remove External Script"
 msgctxt "@action"
 msgid "Remove External Script"
 msgstr "Αφαίρεση εξωτερικού σεναρίου"
 
-#: externalscriptview.cpp:146
+#: externalscriptview.cpp:148
 #, kde-format
 msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
@@ -638,14 +638,14 @@ msgstr ""
 "σεναρίου για το <i>%1</i>;</p><p><i>Σημείωση:</i> Το ίδιο το σενάριο δεν θα "
 "αφαιρεθεί.</p>"
 
-#: externalscriptview.cpp:149
+#: externalscriptview.cpp:151
 #, fuzzy, kde-format
 #| msgid "Confirm External Script Removal"
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
 msgstr "Επιβεβαιώστε την αφαίρεση του εξωτερικού σεναρίου"
 
-#: externalscriptview.cpp:150
+#: externalscriptview.cpp:152
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"

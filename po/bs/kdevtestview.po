@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevphp.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 02:30+0000\n"
 "PO-Revision-Date: 2013-10-18 22:34+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: bs <bs@kde.org>\n"
@@ -20,35 +20,35 @@ msgstr ""
 "X-Generator: Launchpad (build 17341)\n"
 "X-Launchpad-Export-Date: 2015-02-15 06:21+0000\n"
 
-#: testview.cpp:56 testviewplugin.cpp:70
+#: testview.cpp:57 testviewplugin.cpp:70
 #, fuzzy, kde-format
 #| msgid "Unit Tests"
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "Testovi jedinica"
 
-#: testview.cpp:78
+#: testview.cpp:79
 #, fuzzy, kde-format
 #| msgid "Show Source"
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "Prikaži izvorni kod"
 
-#: testview.cpp:85
+#: testview.cpp:86
 #, fuzzy, kde-format
 #| msgid "Run Selected Tests"
 msgctxt "@action"
 msgid "Run Selected Tests"
 msgstr "Pokreni odabrane testove"
 
-#: testview.cpp:90
+#: testview.cpp:91
 #, fuzzy, kde-format
 #| msgid "Filter..."
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Filter..."
 
-#: testview.cpp:292
+#: testview.cpp:293
 #, kde-format
 msgid "Run 1 test"
 msgid_plural "Run %1 tests"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-05 02:27+0000\n"
+"POT-Creation-Date: 2024-08-06 02:30+0000\n"
 "PO-Revision-Date: 2020-01-14 21:22+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -581,35 +581,35 @@ msgctxt "@title:menu"
 msgid "External Scripts"
 msgstr "Välised skriptid"
 
-#: externalscriptview.cpp:31
+#: externalscriptview.cpp:32
 #, fuzzy, kde-format
 #| msgid "External Scripts"
 msgctxt "@title:window"
 msgid "External Scripts"
 msgstr "Välised skriptid"
 
-#: externalscriptview.cpp:49
+#: externalscriptview.cpp:51
 #, fuzzy, kde-format
 #| msgid "Add External Script"
 msgctxt "@action"
 msgid "Add External Script"
 msgstr "Lisa väline skript"
 
-#: externalscriptview.cpp:54
+#: externalscriptview.cpp:56
 #, fuzzy, kde-format
 #| msgid "Edit External Script"
 msgctxt "@action"
 msgid "Edit External Script"
 msgstr "Muuda välist skripti"
 
-#: externalscriptview.cpp:59
+#: externalscriptview.cpp:61
 #, fuzzy, kde-format
 #| msgid "Remove External Script"
 msgctxt "@action"
 msgid "Remove External Script"
 msgstr "Eemalda väline skript"
 
-#: externalscriptview.cpp:146
+#: externalscriptview.cpp:148
 #, kde-format
 msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
@@ -618,14 +618,14 @@ msgstr ""
 "<p>Kas tõesti eemaldada välise skripti <i>%1</i> seadistus?</p><p><i>Märkus:"
 "</i> skripti ennast ei eemaldata.</p>"
 
-#: externalscriptview.cpp:149
+#: externalscriptview.cpp:151
 #, fuzzy, kde-format
 #| msgid "Confirm External Script Removal"
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
 msgstr "Välise skripti eemaldamise kinnitus"
 
-#: externalscriptview.cpp:150
+#: externalscriptview.cpp:152
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"

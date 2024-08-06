@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 02:30+0000\n"
 "PO-Revision-Date: 2014-06-07 16:24+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -17,35 +17,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: testview.cpp:56 testviewplugin.cpp:70
+#: testview.cpp:57 testviewplugin.cpp:70
 #, fuzzy, kde-format
 #| msgid "Unit Tests"
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "Enhedstester"
 
-#: testview.cpp:78
+#: testview.cpp:79
 #, fuzzy, kde-format
 #| msgid "Show Source"
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "Vis kildekode"
 
-#: testview.cpp:85
+#: testview.cpp:86
 #, fuzzy, kde-format
 #| msgid "Run Selected Tests"
 msgctxt "@action"
 msgid "Run Selected Tests"
 msgstr "Kør valgte tester"
 
-#: testview.cpp:90
+#: testview.cpp:91
 #, fuzzy, kde-format
 #| msgid "Filter..."
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Filter..."
 
-#: testview.cpp:292
+#: testview.cpp:293
 #, kde-format
 msgid "Run 1 test"
 msgid_plural "Run %1 tests"
