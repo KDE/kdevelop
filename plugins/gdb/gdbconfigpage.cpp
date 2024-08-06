@@ -101,6 +101,11 @@ GdbLauncher::GdbLauncher( KDevMI::GDB::CppDebuggerPlugin* p, IExecutePlugin* exe
     factoryList << new GdbConfigPageFactory();
 }
 
+GdbLauncher::~GdbLauncher()
+{
+    qDeleteAll(factoryList);
+}
+
 QList< KDevelop::LaunchConfigurationPageFactory* > GdbLauncher::configPages() const
 {
     return factoryList;

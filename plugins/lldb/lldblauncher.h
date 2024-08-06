@@ -17,6 +17,7 @@ class LldbLauncher : public KDevelop::ILauncher
 {
 public:
     LldbLauncher(LldbDebuggerPlugin *plugin, IExecutePlugin *iexec);
+    ~LldbLauncher() override;
     QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const override;
     QString description() const override;
     QString id() override;

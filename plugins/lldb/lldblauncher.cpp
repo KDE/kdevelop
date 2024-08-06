@@ -28,11 +28,16 @@ using namespace KDevelop;
 using namespace KDevMI;
 using namespace KDevMI::LLDB;
 
-KDevMI::LLDB::LldbLauncher::LldbLauncher(LldbDebuggerPlugin *plugin, IExecutePlugin *iexec)
+LldbLauncher::LldbLauncher(LldbDebuggerPlugin* plugin, IExecutePlugin* iexec)
     : m_plugin(plugin)
     , m_iexec(iexec)
 {
     m_factoryList << new LldbConfigPageFactory();
+}
+
+LldbLauncher::~LldbLauncher()
+{
+    qDeleteAll(m_factoryList);
 }
 
 QString LldbLauncher::id()

@@ -57,6 +57,7 @@ class GdbLauncher : public KDevelop::ILauncher
 {
 public:
     GdbLauncher( KDevMI::GDB::CppDebuggerPlugin* plugin, IExecutePlugin* execute );
+    ~GdbLauncher() override;
     QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
     QString description() const override;
     QString id() override;
