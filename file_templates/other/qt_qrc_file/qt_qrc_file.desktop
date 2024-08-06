@@ -1,28 +1,6 @@
 [General]
 Name=Qt Resource Collection File
-Name[ca]=Fitxers de col·lecció de recursos Qt
-Name[ca@valencia]=Fitxers de col·lecció de recursos Qt
-Name[en_GB]=Qt Resource Collection File
-Name[es]=Archivo de recopilación de recursos de Qt
-Name[it]=File di collezione di risorse Qt
-Name[ka]=Qt-ის რესურსების კოლექცის ფაილი
-Name[pl]=Plik zbiorczy zasobów Qt
-Name[sl]=Datoteka zbirke virov Qt
-Name[sv]=Qt-resurssamlingsfil
-Name[tr]=Qt Özkaynak Toplama Dosyası
-Name[uk]=Файл збірки ресурсів Qt
 Comment=A simple version with one prefix and one file.
-Comment[ca]=Una versió senzilla amb un prefix i un fitxer.
-Comment[ca@valencia]=Una versió senzilla amb un prefix i un fitxer.
-Comment[en_GB]=A simple version with one prefix and one file.
-Comment[es]=Una versión sencilla con un prefijo y un archivo.
-Comment[it]=Una semplice versione con un prefisso ed un file.
-Comment[ka]=მარტივი ვერსია ერთი პრეფიქსით და ერთი ფაილით.
-Comment[pl]=Prosta wersja z jednym przedrostkiem i jednym plikiem.
-Comment[sl]=Preprosta različica z eno predpono in eno datoteko.
-Comment[sv]=En enkel version med ett prefix och en fil.
-Comment[tr]=Bir önek ve bir dosya içeren temel bir sürüm.
-Comment[uk]=Проста версія з одним префіксом і одним файлом.
 Category=C++/Qt
 Language=C++
 Language[az]=C++
@@ -74,16 +52,5 @@ OptionsFile=options.kcfg
 
 [QRC]
 Name=Qt Resource Collection File
-Name[ca]=Fitxers de col·lecció de recursos Qt
-Name[ca@valencia]=Fitxers de col·lecció de recursos Qt
-Name[en_GB]=Qt Resource Collection File
-Name[es]=Archivo de recopilación de recursos de Qt
-Name[it]=File di collezione di risorse Qt
-Name[ka]=Qt-ის რესურსების კოლექცის ფაილი
-Name[pl]=Plik zbiorczy zasobów Qt
-Name[sl]=Datoteka zbirke virov Qt
-Name[sv]=Qt-resurssamlingsfil
-Name[tr]=Qt Özkaynak Toplama Dosyası
-Name[uk]=Файл збірки ресурсів Qt
 File=output.qrc
 OutputFile={{ qrc_file_name }}
