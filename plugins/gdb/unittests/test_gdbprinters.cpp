@@ -370,12 +370,19 @@ void QtPrintersTest::testQUrl()
 void QtPrintersTest::testQHashInt()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qhashint"));
-    gdb.execute("break qhashint.cpp:7");
+
+    gdb.execute("break qhashint.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print h");
+    QVERIFY(out.contains("QHash<int, int> (size = 0)"));
+
+    gdb.execute("break qhashint.cpp:7");
+    gdb.execute("cont");
+    out = gdb.execute("print h");
     QVERIFY(out.contains("QHash<int, int> (size = 2)"));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
+
     gdb.execute("next");
     out = gdb.execute("print h");
     QVERIFY(out.contains("QHash<int, int> (size = 3)"));
@@ -400,12 +407,19 @@ void QtPrintersTest::testQHashString()
 void QtPrintersTest::testQSetInt()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qsetint"));
-    gdb.execute("break qsetint.cpp:7");
+
+    gdb.execute("break qsetint.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print s");
+    QVERIFY(out.contains("QSet<int> (size = 0)"));
+
+    gdb.execute("break qsetint.cpp:7");
+    gdb.execute("cont");
+    out = gdb.execute("print s");
     QVERIFY(out.contains("QSet<int> (size = 2)"));
     QVERIFY(out.contains("] = 10"));
     QVERIFY(out.contains("] = 20"));
+
     gdb.execute("next");
     out = gdb.execute("print s");
     QVERIFY(out.contains("QSet<int> (size = 3)"));
