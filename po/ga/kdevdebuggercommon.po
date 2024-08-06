@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop/kdevcppdebugger.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -174,13 +174,13 @@ msgstr "Stopadh an dífhabhtóir"
 msgid "Process crashed"
 msgstr ""
 
-#: midebuggerplugin.cpp:112
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr ""
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:116
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -190,34 +190,34 @@ msgid ""
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:126
+#: midebuggerplugin.cpp:128
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Ceangail le Próiseas"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:141
+#: midebuggerplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:217
 #, fuzzy, kde-format
 #| msgid "Evaluate: %1"
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Luacháil: %1"
 
-#: midebuggerplugin.cpp:217
+#: midebuggerplugin.cpp:219
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -229,14 +229,14 @@ msgid ""
 msgstr ""
 "<b>Luacháil slonn</b><p>Taispeáin luach an tsloinn atá faoin chúrsóir.</p>"
 
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:227
 #, fuzzy, kde-format
 #| msgid "Watch: %1"
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Faire: %1"
 
-#: midebuggerplugin.cpp:227
+#: midebuggerplugin.cpp:229
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -248,35 +248,35 @@ msgid ""
 msgstr ""
 "<b>Luacháil slonn</b><p>Taispeáin luach an tsloinn atá faoin chúrsóir.</p>"
 
-#: midebuggerplugin.cpp:240
+#: midebuggerplugin.cpp:242
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr ""
 
-#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
+#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
+#: midebuggerplugin.cpp:249 midebuggerplugin.cpp:269
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:260
+#: midebuggerplugin.cpp:262
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr ""
 
-#: midebuggerplugin.cpp:281
+#: midebuggerplugin.cpp:283
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 
-#: midebuggerplugin.cpp:301
+#: midebuggerplugin.cpp:303
 #, kde-format
 msgid "Debugger"
 msgstr "Dífhabhtóir"

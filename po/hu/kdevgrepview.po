@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2014-03-19 21:24+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -31,7 +31,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Minden projekt megnyitása"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
@@ -274,21 +274,21 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "&Csere"
 
-#: grepviewplugin.cpp:78
+#: grepviewplugin.cpp:79
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Fi&les..."
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Keresés/csere fáj&lokban…"
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:82
 #, fuzzy, kde-format
 #| msgid "Search for expressions over several files"
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Kifejezések keresése több fájlban"
 
-#: grepviewplugin.cpp:83
+#: grepviewplugin.cpp:84
 #, fuzzy, kde-format
 #| msgid ""
 #| "Opens the 'Find/Replace in files' dialog. There you can enter a regular "
@@ -307,14 +307,14 @@ msgstr ""
 "könyvtárban. A találatok meg lesznek jelenítve, közvetlenül válthat a "
 "találatra. Csinálhat cserét is."
 
-#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
+#: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, fuzzy, kde-format
 #| msgid "Find/Replace in This Folder"
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Keresés/csere ebben a mappában"
 
-#: grepviewplugin.cpp:142
+#: grepviewplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Fi&les..."
 msgctxt "@action:inmenu"

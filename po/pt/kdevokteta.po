@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevokteta\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2020-07-20 12:38+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -49,7 +49,7 @@ msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Fechar o Documento"
 
-#: oktetaplugin.cpp:92
+#: oktetaplugin.cpp:91
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hex Editor"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-13 01:43+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2023-01-23 16:17+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -25,43 +25,43 @@ msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
 msgstr "Een bouwmap configureren - %1"
 
-#: cmakebuilddirchooser.cpp:88
+#: cmakebuilddirchooser.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "Een bouwmap instellen voor %1"
 
-#: cmakebuilddirchooser.cpp:198
+#: cmakebuilddirchooser.cpp:196
 #, kde-format
 msgid "You need to specify a build directory."
 msgstr "Specificeer een bouw-map."
 
-#: cmakebuilddirchooser.cpp:205
+#: cmakebuilddirchooser.cpp:203
 #, kde-format
 msgid "Using an already created build directory."
 msgstr "Een reeds aangemaakt bouw-map gebruiken."
 
-#: cmakebuilddirchooser.cpp:216
+#: cmakebuilddirchooser.cpp:214
 #, kde-format
 msgid "Creating a new build directory."
 msgstr "Een nieuwe bouw-map aan maken"
 
-#: cmakebuilddirchooser.cpp:222
+#: cmakebuilddirchooser.cpp:220
 #, kde-format
 msgid "Build directory already configured."
 msgstr "Bouw-map is al ingesteld."
 
-#: cmakebuilddirchooser.cpp:224
+#: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr "Deze bouwmap is voor %1, maar de projectmap is %2."
 
-#: cmakebuilddirchooser.cpp:227
+#: cmakebuilddirchooser.cpp:225
 #, kde-format
 msgid "You may not select a relative build directory."
 msgstr "U mag geen relatieve bouwmap selecteren."
 
-#: cmakebuilddirchooser.cpp:229
+#: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "The selected build directory is not empty."
 msgstr "De geselecteerde bouwmap is niet leeg."
@@ -378,7 +378,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Tekenreeksen"
 
-#: settings/cmakepreferences.cpp:346
+#: settings/cmakepreferences.cpp:344
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -387,24 +387,24 @@ msgstr ""
 "De map %1 staat op het punt te worden verwijderd uit de lijst van KDevelop.\n"
 "Wilt u dat KDevelop het ook in het bestandssysteem verwijderd?"
 
-#: settings/cmakepreferences.cpp:350
+#: settings/cmakepreferences.cpp:348
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Niet verwijderen"
 
-#: settings/cmakepreferences.cpp:355
+#: settings/cmakepreferences.cpp:353
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Kon niet verwijderen: %1"
 
-#: settings/cmakepreferences.cpp:401
+#: settings/cmakepreferences.cpp:399
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:406
+#: settings/cmakepreferences.cpp:404
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

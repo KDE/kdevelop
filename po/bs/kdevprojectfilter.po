@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bosnianuniversetranslation\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2014-02-10 00:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -153,7 +153,7 @@ msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "Filter projekta"
 
-#: projectfilterprovider.cpp:76
+#: projectfilterprovider.cpp:77
 #, fuzzy, kde-format
 #| msgid "Exclude Item From Project"
 #| msgid_plural "Exclude Items From Project"
@@ -164,7 +164,7 @@ msgstr[0] "Isključi stavku sa projekta."
 msgstr[1] "Isključi stavke sa projekta."
 msgstr[2] "Isključi stavke sa projekta."
 
-#: projectfilterprovider.cpp:115
+#: projectfilterprovider.cpp:116
 #, kde-format
 msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
@@ -180,7 +180,7 @@ msgstr[2] ""
 "Dodan je filter za stavke. Da biste to poništili, koristite podešavanja "
 "filtera projekta."
 
-#: projectfilterprovider.cpp:117
+#: projectfilterprovider.cpp:118
 #, fuzzy, kde-format
 #| msgid "Project Filter Added"
 msgctxt "@title:window"

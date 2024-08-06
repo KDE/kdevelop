@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2022-07-13 13:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -174,13 +174,13 @@ msgstr "디버거 충돌함"
 msgid "Process crashed"
 msgstr "프로세스 충돌함"
 
-#: midebuggerplugin.cpp:112
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "%1(으)로 코어 파일 시험"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:116
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -193,31 +193,31 @@ msgstr ""
 "코어 파일을 분석합니다. 코어 파일은 앱이 충돌했을 당시의 앱 메모리 이미지가 "
 "들어 있으며 사후 분석을 할 수 있습니다.</p>"
 
-#: midebuggerplugin.cpp:126
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "%1(으)로 프로세스에 부착"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>프로세스에 연결</b><p>디버거를 실행 중인 프로세스에 부착합니다.</p>"
 
-#: midebuggerplugin.cpp:141
+#: midebuggerplugin.cpp:143
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:217
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "점검: %1"
 
-#: midebuggerplugin.cpp:217
+#: midebuggerplugin.cpp:219
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -225,13 +225,13 @@ msgid ""
 "cursor.</p>"
 msgstr "<b>표현식 계산</b><p>커서 아래에 있는 표현식의 값을 표시합니다.</p>"
 
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:227
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "관찰: %1"
 
-#: midebuggerplugin.cpp:227
+#: midebuggerplugin.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -241,12 +241,12 @@ msgstr ""
 "<b>표현식 관찰</b><p>커서 아래에 있는 표현식을 변수/관찰 목록에 추가합니다.</"
 "p>"
 
-#: midebuggerplugin.cpp:240
+#: midebuggerplugin.cpp:242
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "시험할 코어 파일 선택..."
 
-#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
+#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -255,23 +255,23 @@ msgstr ""
 "프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계속 "
 "진행하시겠습니까?"
 
-#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
+#: midebuggerplugin.cpp:249 midebuggerplugin.cpp:269
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "현재 세션 중단"
 
-#: midebuggerplugin.cpp:260
+#: midebuggerplugin.cpp:262
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "부착할 프로세스 선택..."
 
-#: midebuggerplugin.cpp:281
+#: midebuggerplugin.cpp:283
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "프로세스 %1에 부착하지 않음: 디버거 자기 자신에게 부착할 수 없습니다."
 
-#: midebuggerplugin.cpp:301
+#: midebuggerplugin.cpp:303
 #, kde-format
 msgid "Debugger"
 msgstr "디버거"

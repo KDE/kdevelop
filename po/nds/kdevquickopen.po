@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-19 01:40+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2010-12-06 10:09+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -236,14 +236,14 @@ msgctxt "@action open outline quick open menu"
 msgid "Outline"
 msgstr "Ümreet"
 
-#: quickopenplugin.cpp:498
+#: quickopenplugin.cpp:497
 #, fuzzy, kde-format
 #| msgid "Quick Open"
 msgctxt "@title:window"
 msgid "Quick Open"
 msgstr "Gau opmaken"
 
-#: quickopenplugin.cpp:832
+#: quickopenplugin.cpp:831
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgctxt "@title:window"
@@ -251,14 +251,14 @@ msgid "Outline"
 msgstr "Ümreet"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
-#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#: quickopenplugin.cpp:941 quickopenwidget.ui:47
 #, fuzzy, kde-format
 #| msgid "Quick Open..."
 msgctxt "@info:placeholder"
 msgid "Quick Open..."
 msgstr "Fix opmaken..."
 
-#: quickopenplugin.cpp:943
+#: quickopenplugin.cpp:942
 #, fuzzy, kde-format
 #| msgid ""
 #| "Search for files, classes, functions and more, allowing you to quickly "

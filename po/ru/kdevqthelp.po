@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2022-03-15 15:30+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -26,37 +26,37 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: qthelpconfig.cpp:48 qthelpconfig.cpp:50
+#: qthelpconfig.cpp:47
 #, fuzzy, kde-format
 #| msgid "Qt Compressed Help file is not valid."
 msgid "Qt Compressed Help Files"
 msgstr "Некорректный сжатый файл QtHelp."
 
-#: qthelpconfig.cpp:54
+#: qthelpconfig.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "Изменение записи"
 
-#: qthelpconfig.cpp:56
+#: qthelpconfig.cpp:52
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "Добавление новой записи"
 
 # BUGME: Is this a file name or not? Please, add a context string. --aspotashev
-#: qthelpconfig.cpp:74
+#: qthelpconfig.cpp:70
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "Название не может быть пустым."
 
-#: qthelpconfig.cpp:109
+#: qthelpconfig.cpp:105
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Получить другую документацию"
 
-#: qthelpconfig.cpp:125
+#: qthelpconfig.cpp:121
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
@@ -64,46 +64,46 @@ msgstr ""
 "С помощью команды «qmake -query» не удалось получить путь к файлу QtHelp "
 "(QCH)."
 
-#: qthelpconfig.cpp:213
+#: qthelpconfig.cpp:209
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Документация, представленная в службе GHNS"
 
-#: qthelpconfig.cpp:239
+#: qthelpconfig.cpp:235
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Некорректный сжатый файл QtHelp."
 
-#: qthelpconfig.cpp:248
+#: qthelpconfig.cpp:244
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Документация уже была импортирована"
 
-#: qthelpconfig.cpp:300
+#: qthelpconfig.cpp:296
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Справка Qt"
 
-#: qthelpconfig.cpp:305
+#: qthelpconfig.cpp:301
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Настройка параметров справки Qt"
 
-#: qthelpconfig.cpp:330
+#: qthelpconfig.cpp:326
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Изменить"
 
-#: qthelpconfig.cpp:336
+#: qthelpconfig.cpp:332
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "Удалить"
 
-#: qthelpconfig.cpp:342
+#: qthelpconfig.cpp:338
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
@@ -214,18 +214,18 @@ msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
 msgstr "Выберите файл справки Qt..."
 
-#: qthelpdocumentation.cpp:211
+#: qthelpdocumentation.cpp:384
 #, kde-format
 msgid "Could not find any documentation for '%1'"
 msgstr "Найти документацию по запросу «%1» не удалось"
 
-#: qthelpdocumentation.cpp:307
+#: qthelpdocumentation.cpp:480
 #, fuzzy, kde-format
 #| msgid "QtHelp Home Page"
 msgid "%1 Home Page"
 msgstr "Домашняя страница документации по Qt"
 
-#: qthelpqtdoc.cpp:148
+#: qthelpqtdoc.cpp:141
 #, kde-format
 msgid "QtHelp"
 msgstr "Документация Qt"

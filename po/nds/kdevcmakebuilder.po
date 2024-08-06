@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2014-03-18 18:24+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -41,14 +41,14 @@ msgstr "Keen Buuorner instellt, installeren nich mööglich"
 msgid "No build directory configured, cannot configure"
 msgstr "Keen Buuorner instellt, utföhren vun \"configure\" nich mööglich"
 
-#: cmakebuilderpreferences.cpp:48
+#: cmakebuilderpreferences.cpp:44
 #, fuzzy, kde-format
 #| msgid "CMake"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: cmakebuilderpreferences.cpp:53
+#: cmakebuilderpreferences.cpp:49
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"

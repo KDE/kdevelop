@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2014-03-20 22:34+0200\n"
 "Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -34,7 +34,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Όλα τα ανοικτά έργα"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
@@ -273,21 +273,21 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "Α&ντικατάσταση"
 
-#: grepviewplugin.cpp:78
+#: grepviewplugin.cpp:79
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Fi&les..."
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Αναζήτηση/Αντικατάσταση σε &αρχεία..."
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:82
 #, fuzzy, kde-format
 #| msgid "Search for expressions over several files"
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Αναζήτηση εκφράσεων σε πολλαπλά αρχεία"
 
-#: grepviewplugin.cpp:83
+#: grepviewplugin.cpp:84
 #, fuzzy, kde-format
 #| msgid ""
 #| "Opens the 'Find/Replace in files' dialog. There you can enter a regular "
@@ -307,14 +307,14 @@ msgstr ""
 "μπορείτε να μεταβείτε άμεσα σε ένα αποτέλεσμα. Μπορείτε επίσης να κάνετε "
 "αντικατάσταση."
 
-#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
+#: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, fuzzy, kde-format
 #| msgid "Find/Replace in This Folder..."
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Εύρεση/αντικατάσταση σε αυτόν το φάκελο..."
 
-#: grepviewplugin.cpp:142
+#: grepviewplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "&Find/Replace in Files..."
 msgctxt "@action:inmenu"

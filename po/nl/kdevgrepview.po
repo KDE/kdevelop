@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2024-02-16 11:30+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -30,7 +30,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Alle open projecten"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
@@ -251,19 +251,19 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "Ve&rvangen"
 
-#: grepviewplugin.cpp:78
+#: grepviewplugin.cpp:79
 #, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Zoeken/vervangen in bes&tanden..."
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Zoek in meerdere bestanden tegelijk naar een expressie"
 
-#: grepviewplugin.cpp:83
+#: grepviewplugin.cpp:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -277,13 +277,13 @@ msgstr ""
 "opgegeven mappen. De overeenkomsten worden getoond, zodat u onmiddellijk "
 "naar zo'n overeenkomst kunt gaan. U kunt ook vervangingen doen."
 
-#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
+#: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Zoek/vervang in deze map..."
 
-#: grepviewplugin.cpp:142
+#: grepviewplugin.cpp:143
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."

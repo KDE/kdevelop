@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2022-11-26 11:02+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -140,7 +140,7 @@ msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "Filtr projektu"
 
-#: projectfilterprovider.cpp:76
+#: projectfilterprovider.cpp:77
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
@@ -149,7 +149,7 @@ msgstr[0] "Wyklucz rzecz z projektu"
 msgstr[1] "Wyklucz rzeczy z projektu"
 msgstr[2] "Wyklucz rzeczy z projektu"
 
-#: projectfilterprovider.cpp:115
+#: projectfilterprovider.cpp:116
 #, kde-format
 msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
@@ -164,7 +164,7 @@ msgstr[2] ""
 "Filtry dla elementów zostały dodane. Aby cofnąć, użyj ustawień filtra "
 "projektu."
 
-#: projectfilterprovider.cpp:117
+#: projectfilterprovider.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"

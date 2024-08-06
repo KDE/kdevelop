@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -193,14 +193,14 @@ msgstr "Fehlersöker anhollen"
 msgid "Process crashed"
 msgstr "Perzess verlaten"
 
-#: midebuggerplugin.cpp:112
+#: midebuggerplugin.cpp:114
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Karndatei bekieken..."
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:116
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -219,14 +219,14 @@ msgstr ""
 "Spiekertogriep-Fehler. De Karndatei bargt en Afbild vun den Programmspieker, "
 "as he bi den Afstört weer, so dat Du em later noch bekieken kannst.</p>"
 
-#: midebuggerplugin.cpp:126
+#: midebuggerplugin.cpp:128
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Perzess griepen"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:130
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -236,20 +236,20 @@ msgid ""
 msgstr ""
 "<b>Perzess griepen</b><p>Lett den Fehlersöker en lopen Perzess griepen.</p>"
 
-#: midebuggerplugin.cpp:141
+#: midebuggerplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:217
 #, fuzzy, kde-format
 #| msgid "Evaluate: %1"
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "%1 utweerten"
 
-#: midebuggerplugin.cpp:217
+#: midebuggerplugin.cpp:219
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -262,14 +262,14 @@ msgstr ""
 "<b>Utdruck utweerten</b><p>Wiest den Weert vun den Utdruck ünner den Blinker."
 "</p>"
 
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:227
 #, fuzzy, kde-format
 #| msgid "Watch: %1"
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "%1 beluern"
 
-#: midebuggerplugin.cpp:227
+#: midebuggerplugin.cpp:229
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
@@ -282,37 +282,37 @@ msgstr ""
 "<b>Utdruck beluern</b><p>Föögt den Utdruck ünner den Blinker na't "
 "Variabelnfinster ünner \"Beluern\" to.</p>"
 
-#: midebuggerplugin.cpp:240
+#: midebuggerplugin.cpp:242
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Karndatei för't Bekieken utsöken..."
 
-#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
+#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
+#: midebuggerplugin.cpp:249 midebuggerplugin.cpp:269
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:260
+#: midebuggerplugin.cpp:262
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Perzess för't Griepen utsöken..."
 
-#: midebuggerplugin.cpp:281
+#: midebuggerplugin.cpp:283
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Perzess %1 lett sik nich griepen: de Fehlersöker kann sik nich sülven "
 "griepen."
 
-#: midebuggerplugin.cpp:301
+#: midebuggerplugin.cpp:303
 #, kde-format
 msgid "Debugger"
 msgstr "Fehlersöker"

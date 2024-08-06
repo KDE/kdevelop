@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2024-07-19 13:51+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -139,7 +139,7 @@ msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "პროექტს ფილტრი"
 
-#: projectfilterprovider.cpp:76
+#: projectfilterprovider.cpp:77
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
@@ -147,7 +147,7 @@ msgid_plural "Exclude Items from Project"
 msgstr[0] "ელემენტის გამორიცხვა პროექტიდან"
 msgstr[1] "ელემენტების გამორიცხვა პროექტიდან"
 
-#: projectfilterprovider.cpp:115
+#: projectfilterprovider.cpp:116
 #, kde-format
 msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
@@ -160,7 +160,7 @@ msgstr[1] ""
 "ელემენტის ფილტრი დამატებულია. გასაუქმებლად იხილეთ პროექტის ფილტრის "
 "პარამეტრები."
 
-#: projectfilterprovider.cpp:117
+#: projectfilterprovider.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"

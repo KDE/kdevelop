@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2010-01-24 16:59+0100\n"
 "Last-Translator: Andrej Dundovic <adundovi@gmail.com>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -100,7 +100,7 @@ msgctxt "@action"
 msgid "Find Uses"
 msgstr ""
 
-#: contextbrowser.cpp:1559
+#: contextbrowser.cpp:1560
 #, kde-format
 msgid "(changed)"
 msgstr ""

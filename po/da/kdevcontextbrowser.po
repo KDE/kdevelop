@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2013-10-26 13:44+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -108,7 +108,7 @@ msgctxt "@action"
 msgid "Find Uses"
 msgstr "Find brugstilfælde"
 
-#: contextbrowser.cpp:1559
+#: contextbrowser.cpp:1560
 #, kde-format
 msgid "(changed)"
 msgstr "(ændret)"

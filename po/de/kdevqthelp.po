@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2020-11-26 06:58+0100\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -16,82 +16,82 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: qthelpconfig.cpp:48 qthelpconfig.cpp:50
+#: qthelpconfig.cpp:47
 #, fuzzy, kde-format
 #| msgid "Qt Compressed Help file is not valid."
 msgid "Qt Compressed Help Files"
 msgstr "Komprimierte Qt-Hilfedatei ist ungültig."
 
-#: qthelpconfig.cpp:54
+#: qthelpconfig.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "Eintrag ändern"
 
-#: qthelpconfig.cpp:56
+#: qthelpconfig.cpp:52
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "Neuen Eintrag hinzufügen"
 
-#: qthelpconfig.cpp:74
+#: qthelpconfig.cpp:70
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "Der Name darf nicht leer sein."
 
-#: qthelpconfig.cpp:109
+#: qthelpconfig.cpp:105
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Neue Dokumentation holen"
 
-#: qthelpconfig.cpp:125
+#: qthelpconfig.cpp:121
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr ""
 "Der Befehl „qmake -query“ bietet keinen Pfad zu einer QtHilfe-Datei (QCH)."
 
-#: qthelpconfig.cpp:213
+#: qthelpconfig.cpp:209
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Durch GHNS bereitgestellte Dokumentation"
 
-#: qthelpconfig.cpp:239
+#: qthelpconfig.cpp:235
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Komprimierte Qt-Hilfedatei ist ungültig."
 
-#: qthelpconfig.cpp:248
+#: qthelpconfig.cpp:244
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Dokumentation ist bereits importiert"
 
-#: qthelpconfig.cpp:300
+#: qthelpconfig.cpp:296
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Qt-Hilfe"
 
-#: qthelpconfig.cpp:305
+#: qthelpconfig.cpp:301
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Qt-Hilfe einrichten"
 
-#: qthelpconfig.cpp:330
+#: qthelpconfig.cpp:326
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Ändern"
 
-#: qthelpconfig.cpp:336
+#: qthelpconfig.cpp:332
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "Löschen"
 
-#: qthelpconfig.cpp:342
+#: qthelpconfig.cpp:338
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
@@ -202,18 +202,18 @@ msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
 msgstr "Qt-Hilfedatei auswählen ..."
 
-#: qthelpdocumentation.cpp:211
+#: qthelpdocumentation.cpp:384
 #, kde-format
 msgid "Could not find any documentation for '%1'"
 msgstr "Für „%1“ kann keine Dokumentation gefunden werden"
 
-#: qthelpdocumentation.cpp:307
+#: qthelpdocumentation.cpp:480
 #, fuzzy, kde-format
 #| msgid "QtHelp Home Page"
 msgid "%1 Home Page"
 msgstr "Homepage der Qt-Hilfe"
 
-#: qthelpqtdoc.cpp:148
+#: qthelpqtdoc.cpp:141
 #, kde-format
 msgid "QtHelp"
 msgstr "Qt-Hilfe"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevdocumentswitcher\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2009-03-25 23:42+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -17,35 +17,35 @@ msgstr ""
 "X-Generator: Lokalize 0.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: documentswitcherplugin.cpp:65
+#: documentswitcherplugin.cpp:67
 #, fuzzy, kde-format
 #| msgid "Last Used Views"
 msgctxt "@action"
 msgid "Last Used Views"
 msgstr "Tolest bruukt Ansichten"
 
-#: documentswitcherplugin.cpp:68
+#: documentswitcherplugin.cpp:70
 #, fuzzy, kde-format
 #| msgid "Walk through the list of last used views"
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views."
 msgstr "Dör de List mit tolest bruukt Ansichten lopen"
 
-#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#: documentswitcherplugin.cpp:71 documentswitcherplugin.cpp:79
 #, fuzzy, kde-format
 #| msgid "Walk through the list of last used views"
 msgctxt "@info:tooltip"
 msgid "Walk through the list of last used views"
 msgstr "Dör de List mit tolest bruukt Ansichten lopen"
 
-#: documentswitcherplugin.cpp:73
+#: documentswitcherplugin.cpp:75
 #, fuzzy, kde-format
 #| msgid "Last Used Views (Reverse)"
 msgctxt "@action"
 msgid "Last Used Views (Reverse)"
 msgstr "Tolest bruukt Ansichten (ümdreiht)"
 
-#: documentswitcherplugin.cpp:76
+#: documentswitcherplugin.cpp:78
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Walk through last used Views (Reverse)</b><br/>Opens a list to walk "

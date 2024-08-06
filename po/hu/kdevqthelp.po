@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2014-05-04 15:57+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -18,32 +18,32 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: qthelpconfig.cpp:48 qthelpconfig.cpp:50
+#: qthelpconfig.cpp:47
 #, fuzzy, kde-format
 #| msgid "Qt Compressed Help file is not valid."
 msgid "Qt Compressed Help Files"
 msgstr "A Qt Compressed Help fájl nem érvényes."
 
-#: qthelpconfig.cpp:54
+#: qthelpconfig.cpp:50
 #, fuzzy, kde-format
 #| msgid "Modify Entry"
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "Bejegyzés módosítása"
 
-#: qthelpconfig.cpp:56
+#: qthelpconfig.cpp:52
 #, fuzzy, kde-format
 #| msgid "Add New Entry"
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "Új bejegyzés hozzáadása"
 
-#: qthelpconfig.cpp:74
+#: qthelpconfig.cpp:70
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "A név nem lehet üres."
 
-#: qthelpconfig.cpp:109
+#: qthelpconfig.cpp:105
 #, fuzzy, kde-format
 #| msgctxt "Allow user to get some API documentation with GHNS"
 #| msgid "Get New Documentation"
@@ -51,55 +51,55 @@ msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Új dokumentáció beszerzése"
 
-#: qthelpconfig.cpp:125
+#: qthelpconfig.cpp:121
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr ""
 
-#: qthelpconfig.cpp:213
+#: qthelpconfig.cpp:209
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "A dokumentációt a GHNS biztosítja"
 
-#: qthelpconfig.cpp:239
+#: qthelpconfig.cpp:235
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "A Qt Compressed Help fájl nem érvényes."
 
-#: qthelpconfig.cpp:248
+#: qthelpconfig.cpp:244
 #, kde-format
 msgid "Documentation already imported"
 msgstr "A dokumentáció már importálva van"
 
-#: qthelpconfig.cpp:300
+#: qthelpconfig.cpp:296
 #, fuzzy, kde-format
 #| msgid "QtHelp"
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "QtHelp"
 
-#: qthelpconfig.cpp:305
+#: qthelpconfig.cpp:301
 #, fuzzy, kde-format
 #| msgid "Check Qt Help documentation"
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Qt Help dokumentáció ellenőrzése"
 
-#: qthelpconfig.cpp:330
+#: qthelpconfig.cpp:326
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Módosítás"
 
-#: qthelpconfig.cpp:336
+#: qthelpconfig.cpp:332
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr ""
 
-#: qthelpconfig.cpp:342
+#: qthelpconfig.cpp:338
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
@@ -224,18 +224,18 @@ msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
 msgstr "Válasszon egy QtHelp fájlt…"
 
-#: qthelpdocumentation.cpp:211
+#: qthelpdocumentation.cpp:384
 #, kde-format
 msgid "Could not find any documentation for '%1'"
 msgstr "Nem található dokumentáció ehhez: „%1”"
 
-#: qthelpdocumentation.cpp:307
+#: qthelpdocumentation.cpp:480
 #, fuzzy, kde-format
 #| msgid "QtHelp Home Page"
 msgid "%1 Home Page"
 msgstr "QtHelp Honlap"
 
-#: qthelpqtdoc.cpp:148
+#: qthelpqtdoc.cpp:141
 #, kde-format
 msgid "QtHelp"
 msgstr "QtHelp"

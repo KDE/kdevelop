@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2024-07-20 00:38+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -179,13 +179,13 @@ msgstr "გამმართველი ავარიულად დას�
 msgid "Process crashed"
 msgstr "პროცესი ავარიულად დასრულდა"
 
-#: midebuggerplugin.cpp:112
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Core ფაილის ანალიზი %1-ით"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:116
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -199,13 +199,13 @@ msgstr ""
 "სეგმენტაციის ჩავარდნისას. core ფაილი შეიცავს პროგრამის მეხსიერების ასლს მისი "
 "ავარიულად დასრულების დროს, გარდაცვალების-შემდგომი ანალიზისთვის.</p>"
 
-#: midebuggerplugin.cpp:126
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "პროცესზე მიბმა %1-ით"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -213,18 +213,18 @@ msgid ""
 msgstr ""
 "<b>პროცესზე მიმაგრება</b><p>მიამაგრებს გამმართველს გაშვებულ პროცესზე.</p>"
 
-#: midebuggerplugin.cpp:141
+#: midebuggerplugin.cpp:143
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:217
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "შეფასება: %1"
 
-#: midebuggerplugin.cpp:217
+#: midebuggerplugin.cpp:219
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -234,13 +234,13 @@ msgstr ""
 "<b>გამოსახულების შეფასება<b><p>აჩვენებს კურსორის ქვეშ მყოფი გამოსახულების "
 "მნიშვნელობას.</p>"
 
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:227
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "ყურება: %1"
 
-#: midebuggerplugin.cpp:227
+#: midebuggerplugin.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -250,12 +250,12 @@ msgstr ""
 "<b>გამოსახულების თვალყურის დევნება</b><p>დაამატებს კურსორის ქვეშ მყოფ "
 "გამოსახულებას ცვლადების/თვალყურის დევნების სიას.</p>"
 
-#: midebuggerplugin.cpp:240
+#: midebuggerplugin.cpp:242
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "აირჩიეთ Core ფაილის ანალიზისთვის..."
 
-#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
+#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -264,24 +264,24 @@ msgstr ""
 "პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ გააუქმოთ უკვე გაშვებული "
 "გამმართველი და გააგრძელოთ, რასაც აკეთებდით?"
 
-#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
+#: midebuggerplugin.cpp:249 midebuggerplugin.cpp:269
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "მიმდინარე სესიის გაუქმება"
 
-#: midebuggerplugin.cpp:260
+#: midebuggerplugin.cpp:262
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "აირჩიეთ მისამაგრებელი პროცესი..."
 
-#: midebuggerplugin.cpp:281
+#: midebuggerplugin.cpp:283
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "პროცესზე %1 მიმაგრება შეუძლებელია: გამმართველს თავის თავს ვერ მიამაგრებთ."
 
-#: midebuggerplugin.cpp:301
+#: midebuggerplugin.cpp:303
 #, kde-format
 msgid "Debugger"
 msgstr "გამმართველი"

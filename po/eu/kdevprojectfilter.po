@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2023-11-04 21:46+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -145,7 +145,7 @@ msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "Proiektu iragazkia"
 
-#: projectfilterprovider.cpp:76
+#: projectfilterprovider.cpp:77
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
@@ -153,7 +153,7 @@ msgid_plural "Exclude Items from Project"
 msgstr[0] "Kanporatu elementua proiektutik"
 msgstr[1] "Kanporatu elementuak proiektutik"
 
-#: projectfilterprovider.cpp:115
+#: projectfilterprovider.cpp:116
 #, kde-format
 msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
@@ -166,7 +166,7 @@ msgstr[1] ""
 "Elementuetarako iragazki bat gehitu da. Desegiteko, erabili proiektu-"
 "iragazki ezarpenak."
 
-#: projectfilterprovider.cpp:117
+#: projectfilterprovider.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"

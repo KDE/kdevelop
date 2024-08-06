@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2021-01-03 09:48+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -106,13 +106,13 @@ msgctxt "@item:inlistbox"
 msgid "%1 (default selection)"
 msgstr "%1 (domyślne zanznaczenie)"
 
-#: config/clangtidypreferences.cpp:62 config/clangtidyprojectconfigpage.cpp:55
+#: config/clangtidypreferences.cpp:61 config/clangtidyprojectconfigpage.cpp:55
 #, kde-format
 msgctxt "@title:tab"
 msgid "Clang-Tidy"
 msgstr "Clang-Tidy"
 
-#: config/clangtidypreferences.cpp:67
+#: config/clangtidypreferences.cpp:66
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clang-Tidy Settings"

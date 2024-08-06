@@ -1,16 +1,16 @@
 # Translation of kdevcustomdefinesandincludes.po to Catalan (Valencian)
-# Copyright (C) 2016-2022 This_file_is_part_of_KDE
+# Copyright (C) 2016-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2016, 2017, 2020, 2021.
-# Josep M. Ferrer <txemaq@gmail.com>, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-21 01:43+0000\n"
-"PO-Revision-Date: 2022-07-09 16:15+0200\n"
+"PO-Revision-Date: 2024-07-31 12:03+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #: compilerprovider/compilerprovider.cpp:32
 #, kde-format
@@ -138,7 +138,7 @@ msgstr "Suprimix la definició"
 #, kde-format
 msgctxt "@action"
 msgid "Delete Include Path"
-msgstr "Elimina el camí cap als «include»"
+msgstr "Suprimix el camí cap als «include»"
 
 #: kcm_widget/includeswidget.cpp:138
 #, kde-format
@@ -178,7 +178,7 @@ msgstr "Crea una entrada nova de camí cap als «include» des d'este URL"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current include path entry"
-msgstr "Elimina l'entrada de camí pels «include»"
+msgstr "Suprimix l'entrada de camí pels «include»"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, parseHeadersInPlainC)
 #: kcm_widget/parserwidget.ui:20
@@ -389,7 +389,7 @@ msgstr "Afig una entrada nova de camí cap al subprojecte."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current sub-project path entry."
-msgstr "Elimina l'entrada actual del camí cap al subprojecte."
+msgstr "Suprimix l'entrada actual del camí cap al subprojecte."
 
 #. i18n: ectx: attribute (title), widget (QWidget, includePathsPage)
 #: kcm_widget/projectpathswidget.ui:165
@@ -481,6 +481,3 @@ msgid "Failed to save custom include paths in directory: %1"
 msgstr ""
 "No s'han pogut guardar els camins «include» personalitzats en el directori: "
 "%1"
-
-#~ msgid "Bad #define directive in %1: %2"
-#~ msgstr "Directiva #define incorrecta a %1: %2"

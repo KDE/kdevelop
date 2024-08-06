@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2014-01-20 20:23+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -129,7 +129,7 @@ msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "Projektszűrő"
 
-#: projectfilterprovider.cpp:76
+#: projectfilterprovider.cpp:77
 #, fuzzy, kde-format
 #| msgid "Exclude Item From Project"
 #| msgid_plural "Exclude Items From Project"
@@ -139,7 +139,7 @@ msgid_plural "Exclude Items from Project"
 msgstr[0] "Elem kihagyása a projektből"
 msgstr[1] "Elemek kihagyása a projektből"
 
-#: projectfilterprovider.cpp:115
+#: projectfilterprovider.cpp:116
 #, kde-format
 msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
@@ -148,7 +148,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: projectfilterprovider.cpp:117
+#: projectfilterprovider.cpp:118
 #, fuzzy, kde-format
 #| msgid "Project Filter Added"
 msgctxt "@title:window"

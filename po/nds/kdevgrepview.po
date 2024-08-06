@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2012-02-02 07:37+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -34,7 +34,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "All apen Projekten"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:93
+#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
@@ -277,21 +277,21 @@ msgctxt "@action:button"
 msgid "&Replace"
 msgstr "&Utwesseln"
 
-#: grepviewplugin.cpp:78
+#: grepviewplugin.cpp:79
 #, fuzzy, kde-format
 #| msgid "Find/replace in Fi&les..."
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Söken un Utwesseln in &Dateien..."
 
-#: grepviewplugin.cpp:81
+#: grepviewplugin.cpp:82
 #, fuzzy, kde-format
 #| msgid "Search for expressions over several files"
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Na Utdrück binnen mehr Dateien söken"
 
-#: grepviewplugin.cpp:83
+#: grepviewplugin.cpp:84
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Find/Replace in files</b><p>Opens the 'Find/Replace in files' dialog. "
@@ -311,14 +311,14 @@ msgstr ""
 "den in all Dateien binnen Dien angeven Ornern söcht warrt. Övereenstimmen "
 "warrt wiest, Du kannst dor direktemang hengahn un Utwesseln maken.</p>"
 
-#: grepviewplugin.cpp:131 grepviewplugin.cpp:154
+#: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, fuzzy, kde-format
 #| msgid "Find and replace in this folder"
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Söken un Utwesseln in dissen Orner"
 
-#: grepviewplugin.cpp:142
+#: grepviewplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "Find/replace in Fi&les..."
 msgctxt "@action:inmenu"
