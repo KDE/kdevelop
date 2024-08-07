@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2024-07-28 05:34+0200\n"
+"PO-Revision-Date: 2024-08-06 06:20+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -4769,7 +4769,7 @@ msgstr "ფაილების გადაფორმატება..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr ""
+msgstr "ფაილ(ებ)-ის დაფორმატება მორგებული კოდის დამფორმატებლ(ებ)-ით"
 
 #: shell/sourceformattercontroller.cpp:237
 #, kde-format
