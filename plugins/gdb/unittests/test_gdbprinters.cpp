@@ -286,12 +286,19 @@ static QByteArray stdMapElementCountString(int elementCount)
 void QtPrintersTest::testQMapInt()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qmapint"));
-    gdb.execute("break qmapint.cpp:7");
+
+    gdb.execute("break qmapint.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
+    QVERIFY(out.contains(stdMapElementCountString(0)));
+
+    gdb.execute("break qmapint.cpp:7");
+    gdb.execute("cont");
+    out = gdb.execute("print m");
     QVERIFY(out.contains(stdMapElementCountString(2)));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
+
     gdb.execute("next");
     out = gdb.execute("print m");
     QVERIFY(out.contains(stdMapElementCountString(3)));
