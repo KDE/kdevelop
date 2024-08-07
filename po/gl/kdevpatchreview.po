@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-05 02:27+0000\n"
+"POT-Creation-Date: 2024-08-07 02:29+0000\n"
 "PO-Revision-Date: 2023-08-05 13:52+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -135,13 +135,13 @@ msgctxt "@item"
 msgid "Insertion"
 msgstr "Inserción"
 
-#: patchhighlighter.cpp:411 patchhighlighter.cpp:419
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
 #, kde-format
 msgctxt "@item"
 msgid "Removal"
 msgstr "Retirada"
 
-#: patchhighlighter.cpp:413 patchhighlighter.cpp:422
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
 #, kde-format
 msgctxt "@item"
 msgid "Change"
