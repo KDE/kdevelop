@@ -1,6 +1,24 @@
 [General]
 Name=CMake Qt6 Widgets Application
+Name[ca]=Una aplicació del CMake Qt6 QWidgets
+Name[es]=Aplicación con widgets de Qt6 y CMake
+Name[ka]=CMake Qt6 Widgets აპლიკაცია
+Name[nl]=CMake Qt6 Widgets toepassing
+Name[sl]=CMake aplikacijo Qt6 Widgets
+Name[sv]=CMake Qt6 Widgets-program
+Name[tr]=CMake Qt6 Widgets Uygulaması
+Name[uk]=Програма на основі CMake і Qt6 Widgets
+Name[x-test]=xxCMake Qt6 Widgets Applicationxx
 Comment=Generate a CMake & Qt6 Widgets based application (crossplatform compatible)
+Comment[ca]=Genera una aplicació basada en CMake i Qt6 Widgets (compatible amb multiplataforma)
+Comment[es]=Genera una aplicación basada en CMake y widgets de Qt6 (compatible multiplataforma)
+Comment[ka]=CMake-ზე და Qt6 Widgets-ზე დაფუძნებული აპლიკაციის შექმნა (თავსებადია პლატფორმათაშორისობასთან)
+Comment[nl]=Op CMake & Qt6 Widgets gebaseerde toepassing genereren (crossplatform compatibel)
+Comment[sl]=Generiraj aplikacijo, ki temelji na CMake & Qt6 Widgets (združljiva med platformami)
+Comment[sv]=Skapa ett CMake och Qt6 Widgets-baserat program (kompatibelt mellan plattformar)
+Comment[tr]=CMake ve Qt6 Widgets tabanlı bir uygulaması üret (çapraz platform uyumlu)
+Comment[uk]=Створити програму на основі CMake і Qt6 Widgets (сумісну з декількома платформами)
+Comment[x-test]=xxGenerate a CMake & Qt6 Widgets based application (crossplatform compatible)xx
 ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
 Category=Qt/Graphical
 Icon=cmake_qt6widgetsapp.png
