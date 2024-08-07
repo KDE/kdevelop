@@ -19,7 +19,7 @@ class KDevelop_Path:
         self.val = val
 
     def to_string(self):
-        iterator = qt.QVectorPrinter(self.val['m_data'], 'QVector').children()
+        iterator = qt.QListPrinter(self.val['m_data'], 'QList', 'QString').children()
         pathSegments = [str(it[1]) for it in iterator]
         return "(" + ", ".join(pathSegments) + ")" if pathSegments else None
 
