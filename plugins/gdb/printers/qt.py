@@ -589,6 +589,8 @@ class QHashPrinter:
         self.container = container
 
     def children(self):
+        if not self.val['d']:
+            return []
         isQt5 = has_field(self.val, 'buckets') # Qt5 has 'buckets', Qt6 doesn't
         if isQt5:
             return self._iterator_qt5(self.val)
@@ -596,7 +598,8 @@ class QHashPrinter:
             return self._iterator_qt6(self.val)
 
     def to_string(self):
-        size = self.val['d']['size']
+        d = self.val['d']
+        size = d['size'] if d else 0
 
         return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
 
