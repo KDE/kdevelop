@@ -379,14 +379,16 @@ class QMapPrinter:
                 return self._iteratorQt5(self.val)
 
     def to_string(self):
-
-        isQt6 = not has_field(self.val['d'], 'size')
+        d = self.val['d']
+        isQt6 = not has_field(d, 'size')
         if isQt6:
-            d_d = self.val['d']['d']
+            d_d = d['d']
+            if not d_d:
+                return "%s<%s, %s> (size = 0)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
             std_map = d_d['m']
             return str(std_map)
         else:
-            size = self.val['d']['size']
+            size = d['size']
             return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
 
     def display_hint (self):
