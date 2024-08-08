@@ -281,7 +281,8 @@ void QtPrintersTest::testQListContainer()
 [[nodiscard]] static bool verifyContainsMapElementCount(const QByteArray& out, const char* key, const char* value,
                                                         int elementCount)
 {
-    const auto pattern = QLatin1String("QMap<%1, %2> (.*\\b%3\\b.+)").arg(key, value, QString::number(elementCount));
+    const auto pattern =
+        QLatin1String("QMap<%1, %2> \\(size = (?:%3|\\?)\\)").arg(key, value, QString::number(elementCount));
     return QString::fromUtf8(out).contains(QRegularExpression(pattern));
 }
 
