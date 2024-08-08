@@ -367,11 +367,19 @@ class QMapPrinter:
     def __init__(self, val, container):
         self.val = val
         self.container = container
+        self.isQt6 = not has_field(self.val['d'], 'size')
+        self.qt6StdMapPrinter = None
+        if self.isQt6:
+            d_d = self.val['d']['d']
+            if d_d:
+                self.qt6StdMapPrinter = gdb.default_visualizer(d_d['m'])
 
     def children(self):
-        isQt6 = not has_field(self.val['d'], 'size')
-        if isQt6:
-            # to_string's call to std::map will take care of everything
+        if self.qt6StdMapPrinter:
+            return self.qt6StdMapPrinter.children()
+
+        elif self.isQt6:
+            # without the std::map printer we cannot pretty print the Qt6 QMap contents
             return []
 
         else:
@@ -385,17 +393,36 @@ class QMapPrinter:
                 return self._iteratorQt5(self.val)
 
     def to_string(self):
-        d = self.val['d']
-        isQt6 = not has_field(d, 'size')
-        if isQt6:
-            d_d = d['d']
-            if not d_d:
-                return "%s<%s, %s> (size = 0)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
-            std_map = d_d['m']
-            return "%s<%s, %s> (%s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), str(std_map) )
-        else:
-            size = d['size']
-            return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
+        num_children = self.num_children()
+        if num_children is None:
+            # qt6 without std map printer
+            return "%s<%s, %s> (size = ?)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
+        return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), num_children )
+
+    def num_children(self):
+        if self.isQt6 and not self.val['d']['d']:
+            return 0
+
+        if self.qt6StdMapPrinter:
+            if hasattr(self.qt6StdMapPrinter, 'num_children'):
+                return self.qt6StdMapPrinter.num_children()
+
+            # HACK: let's try to stringify the map and see if we can extract the size from there
+            # this is error-prone but faster than a potential O(N) iteration on `children`
+            map_str = self.qt6StdMapPrinter.to_string()
+            # the regex below supports both libstdc++ and libc++ StdMapPrinter.to_string format
+            match = re.compile(r"(?:with (\d+) elements?|is empty)$").search(map_str)
+            if match:
+                size = match.group(1)
+                if not size:
+                    return 0
+                return int(size)
+
+        if self.isQt6:
+            # our heuristics above failed or no pretty printer for std::map is available...
+            return None
+
+        return self.val['d']['size']
 
     def display_hint (self):
         return 'map'

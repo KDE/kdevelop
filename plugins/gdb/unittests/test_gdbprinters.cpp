@@ -278,12 +278,17 @@ void QtPrintersTest::testQListContainer()
     }
 }
 
+[[nodiscard]] static bool isMissingStdMapPrettyPrinter(GdbProcess& gdb)
+{
+    return !gdb.execute("print m.d.d.m").contains("std::map");
+}
+
 [[nodiscard]] static bool verifyContainsMapElementCount(const QByteArray& out, const char* key, const char* value,
                                                         int elementCount)
 {
-    const auto pattern =
-        QLatin1String("QMap<%1, %2> \\(.*\\b%3\\b.+\\)").arg(key, value, QString::number(elementCount));
-    return QString::fromUtf8(out).contains(QRegularExpression(pattern));
+    const auto pattern = QLatin1String("QMap<%1, %2> (size = %3)")
+                             .arg(key, value, elementCount == -1 ? "?" : QString::number(elementCount));
+    return out.contains(pattern.toUtf8());
 }
 
 void QtPrintersTest::testQMapInt()
@@ -297,7 +302,14 @@ void QtPrintersTest::testQMapInt()
 
     gdb.execute("break qmapint.cpp:7");
     gdb.execute("cont");
+
     out = gdb.execute("print m");
+
+    if (isMissingStdMapPrettyPrinter(gdb)) {
+        QVERIFY(verifyContainsMapElementCount(out, "int", "int", -1));
+        QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
+    }
+
     QVERIFY(verifyContainsMapElementCount(out, "int", "int", 2));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
@@ -313,7 +325,14 @@ void QtPrintersTest::testQMapString()
     GdbProcess gdb(QStringLiteral("debuggee_qmapstring"));
     gdb.execute("break qmapstring.cpp:8");
     gdb.execute("run");
+
     QByteArray out = gdb.execute("print m");
+
+    if (isMissingStdMapPrettyPrinter(gdb)) {
+        QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", -1));
+        QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
+    }
+
     QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", 2));
     QVERIFY(out.contains("[\"10\"] = \"100\""));
     QVERIFY(out.contains("[\"20\"] = \"200\""));
@@ -328,7 +347,14 @@ void QtPrintersTest::testQMapStringBool()
     GdbProcess gdb(QStringLiteral("debuggee_qmapstringbool"));
     gdb.execute("break qmapstringbool.cpp:8");
     gdb.execute("run");
+
     QByteArray out = gdb.execute("print m");
+
+    if (isMissingStdMapPrettyPrinter(gdb)) {
+        QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", -1));
+        QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
+    }
+
     QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", 2));
     QVERIFY(out.contains("[\"10\"] = true"));
     QVERIFY(out.contains("[\"20\"] = false"));
