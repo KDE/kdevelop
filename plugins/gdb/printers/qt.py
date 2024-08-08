@@ -392,7 +392,7 @@ class QMapPrinter:
             if not d_d:
                 return "%s<%s, %s> (size = 0)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
             std_map = d_d['m']
-            return str(std_map)
+            return "%s<%s, %s> (%s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), str(std_map) )
         else:
             size = d['size']
             return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )

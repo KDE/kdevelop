@@ -278,9 +278,12 @@ void QtPrintersTest::testQListContainer()
     }
 }
 
-static QByteArray stdMapElementCountString(int elementCount)
+[[nodiscard]] static bool verifyContainsMapElementCount(const QByteArray& out, const char* key, const char* value,
+                                                        int elementCount)
 {
-    return "std::map with " + QByteArray::number(elementCount) + " elements";
+    const auto pattern =
+        QLatin1String("QMap<%1, %2> \\(.*\\b%3\\b.+\\)").arg(key, value, QString::number(elementCount));
+    return QString::fromUtf8(out).contains(QRegularExpression(pattern));
 }
 
 void QtPrintersTest::testQMapInt()
@@ -290,18 +293,18 @@ void QtPrintersTest::testQMapInt()
     gdb.execute("break qmapint.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(0)));
+    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 0));
 
     gdb.execute("break qmapint.cpp:7");
     gdb.execute("cont");
     out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(2)));
+    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 2));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
 
     gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(3)));
+    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 3));
     QVERIFY(out.contains("[30] = 300"));
 }
 
@@ -311,12 +314,12 @@ void QtPrintersTest::testQMapString()
     gdb.execute("break qmapstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(2)));
+    QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", 2));
     QVERIFY(out.contains("[\"10\"] = \"100\""));
     QVERIFY(out.contains("[\"20\"] = \"200\""));
     gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(3)));
+    QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", 3));
     QVERIFY(out.contains("[\"30\"] = \"300\""));
 }
 
@@ -326,12 +329,12 @@ void QtPrintersTest::testQMapStringBool()
     gdb.execute("break qmapstringbool.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(2)));
+    QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", 2));
     QVERIFY(out.contains("[\"10\"] = true"));
     QVERIFY(out.contains("[\"20\"] = false"));
     gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(3)));
+    QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", 3));
     QVERIFY(out.contains("[\"30\"] = true"));
 }
 
