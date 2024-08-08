@@ -12,22 +12,6 @@ import time
 
 from helper import *
 
-# gdb.lookup_type("QObject *") doesn't work, so implement a wrapper
-def lookup_pointer_type(type_str):
-    type_str = type_str.strip()
-
-    if type_str.endswith('*'):
-        # Look up the base type
-        base_type_str = type_str[:-1].strip()
-        base_type = gdb.lookup_type(base_type_str)
-
-        # Create the pointer type
-        pointer_type = base_type.pointer()
-        return pointer_type
-    else:
-        # If it's not a pointer type, look it up directly
-        return gdb.lookup_type(type_str)
-
 class QStringPrinter:
 
     def __init__(self, val):
@@ -904,16 +888,20 @@ class QVariantPrinter:
             private_shared = data['shared'].dereference()
             value_str = "PrivateShared(%s)" % hex(private_shared['data'])
         else:
-            type_obj = None
-            try:
-                type_obj = lookup_pointer_type(type_str)
-            except Exception as e:
-                # Looking up type_str failed... falling back to printing out data raw:
-                value_str = str(data['data'])
-
-            if type_obj:
-                value_ptr = data['data'].reinterpret_cast(type_obj.const().pointer())
+            if type_str.endswith('*'):
+                value_ptr = data['data'].reinterpret_cast(gdb.lookup_type('void').pointer().pointer())
                 value_str = str(value_ptr.dereference())
+            else:
+                type_obj = None
+                try:
+                    type_obj = gdb.lookup_type(type_str)
+                except Exception as e:
+                    # Looking up type_str failed... falling back to printing out data raw:
+                    value_str = str(data['data'])
+
+                if type_obj:
+                    value_ptr = data['data'].reinterpret_cast(type_obj.pointer())
+                    value_str = str(value_ptr.dereference())
 
         return "QVariant(%s, %s)" % (type_str, value_str)
 
