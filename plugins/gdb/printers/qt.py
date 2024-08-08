@@ -802,6 +802,9 @@ class QSetPrinter:
             return ('[%d]' % (self.count-1), item)
 
     def children(self):
+        if not self.val['q_hash']['d']:
+            return []
+
         hashPrinter = QHashPrinter(self.val['q_hash'], None)
         hashIterator = hashPrinter.children()
 
@@ -812,7 +815,8 @@ class QSetPrinter:
             return self._iterator_qt6(hashIterator)
 
     def to_string(self):
-        size = self.val['q_hash']['d']['size']
+        d = self.val['q_hash']['d']
+        size = d['size'] if d else 0
 
         return "QSet<%s> (size = %s)" % ( self.val.type.template_argument(0), size )
 
