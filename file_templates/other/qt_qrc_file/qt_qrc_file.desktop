@@ -1,6 +1,7 @@
 [General]
 Name=Qt Resource Collection File
 Name[ca]=Fitxers de col·lecció de recursos Qt
+Name[ca@valencia]=Fitxers de col·lecció de recursos Qt
 Name[es]=Archivo de recopilación de recursos de Qt
 Name[ka]=Qt-ის რესურსების კოლექცის ფაილი
 Name[nl]=Qt hulpbronverzamelingsbestand
@@ -11,6 +12,7 @@ Name[uk]=Файл збірки ресурсів Qt
 Name[x-test]=xxQt Resource Collection Filexx
 Comment=A simple version with one prefix and one file.
 Comment[ca]=Una versió senzilla amb un prefix i un fitxer.
+Comment[ca@valencia]=Una versió senzilla amb un prefix i un fitxer.
 Comment[es]=Una versión sencilla con un prefijo y un archivo.
 Comment[ka]=მარტივი ვერსია ერთი პრეფიქსით და ერთი ფაილით.
 Comment[nl]=Een eenvoudige versie met één prefix en één bestand.
@@ -71,6 +73,7 @@ OptionsFile=options.kcfg
 [QRC]
 Name=Qt Resource Collection File
 Name[ca]=Fitxers de col·lecció de recursos Qt
+Name[ca@valencia]=Fitxers de col·lecció de recursos Qt
 Name[es]=Archivo de recopilación de recursos de Qt
 Name[ka]=Qt-ის რესურსების კოლექცის ფაილი
 Name[nl]=Qt hulpbronverzamelingsbestand

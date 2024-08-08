@@ -1,6 +1,7 @@
 [General]
 Name=CMake Qt6 Quick Application
 Name[ca]=Una aplicació del CMake Qt6 Quick
+Name[ca@valencia]=Una aplicació de CMake Qt6 Quick
 Name[es]=Aplicación Qt6 Quick y CMake
 Name[ka]=CMake Qt6 Quick-ის აპი
 Name[nl]=CMake Qt6 Quick-toepassing
@@ -11,6 +12,7 @@ Name[uk]=Програма на основі CMake і Qt6 Quick
 Name[x-test]=xxCMake Qt6 Quick Applicationxx
 Comment=Generate a CMake & Qt6 Quick based application (crossplatform compatible)
 Comment[ca]=Genera una aplicació basada en CMake i Qt6 Quick (compatible amb multiplataforma)
+Comment[ca@valencia]=Genera una aplicació basada en CMake i Qt6 Quick (compatible amb multiplataforma)
 Comment[es]=Genera una aplicación basada en CMake y Qt6 Quick (compatible multiplataforma)
 Comment[ka]=CMake-ზე და Qt6 Quick-ზე დაფუძნებული აპლიკაციის შექმნა (თავსებადია პლატფორმათაშორისობასთან)
 Comment[nl]=Op CMake & Qt6 Quick gebaseerde toepassing genereren (crossplatform compatibel)
