@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2024-08-06 06:20+0200\n"
+"PO-Revision-Date: 2024-08-08 06:03+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -802,8 +802,8 @@ msgid ""
 "Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
 "\"%5\"->\"%6\"@%7 "
 msgstr ""
-"არამდგრადი ცვლილების მოთხოვნა მისამართზე %1; თანაკვეთადი ცვლილებები: \"%2\"->"
-"\"%3\"@%4 & \"%5\"->\"%6\"@%7 "
+"არამდგრადი ცვლილების მოთხოვნა მისამართზე %1; თანაკვეთადი ცვლილებები: \"%2\"-"
+">\"%3\"@%4 & \"%5\"->\"%6\"@%7 "
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
 #: language/codegen/progressdialogs/refactoringdialog.ui:14
@@ -1807,8 +1807,9 @@ msgstr "დამატებები ნაპოვნი არაა"
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
-"org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
-"\">this article</a> for more information."
+"org/Guidelines_and_HOWTOs/"
+"Build_from_source#Set_up_the_runtime_environment\">this article</a> for more "
+"information."
 msgstr ""
 "<p>გაშვებისას დამატებების აღმოჩენა შეუძლებელი იყო.<br/>დარწმუნდით, რომ "
 "გარემოს ცვლადი QT_PLUGIN_PATH სწორადაა დაყენებული.</p>მეტი ინფორმაციისთვის "
@@ -2143,6 +2144,8 @@ msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
 "Do you want to open it as plain text?"
 msgstr ""
+"KDevelop-მა ვერ იპოვა რედაქტორი ფაილისთვის '%1' ტიპით %2.\n"
+"გნებავთ, ტექსტის სახით გავხსნა?"
 
 #: shell/documentcontroller.cpp:320
 #, kde-format
@@ -2387,6 +2390,8 @@ msgid ""
 "<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
 "button to add a new one.</i>"
 msgstr ""
+"<i>აირჩიეთ ჩასასწორებელი კონფიგურაცია მარცხენა მხარეს,<br>ან, ახლის "
+"დასამატებლად, დააწკაპუნეთ ღილაკზე \"დამატება\".</i>"
 
 #: shell/launchconfigurationdialog.cpp:438
 #, kde-format
@@ -4775,27 +4780,28 @@ msgstr "ფაილ(ებ)-ის დაფორმატება მორ�
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr ""
+msgstr "ფაილ(ებ)-ის დაფორმატება მორგებული კოდის დამფორმატებლ(ებ)-ით."
 
 #: shell/sourceformattercontroller.cpp:609
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
+"მონიშნულის ან ფაილის თავიდან დაფორმატება პროგრამით <i>%1</i> (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:612
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
-"Reformats selected text or the entire file if nothing is selected, using <i>"
-"%1</i> tool with <b>%2</b> style."
+"Reformats selected text or the entire file if nothing is selected, using "
+"<i>%1</i> tool with <b>%2</b> style."
 msgstr ""
 
 #: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "მიმდინარე ხაზის თავიდან დაფორმატება პროგრამით <i>%1</i> (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:617
 #, kde-format
@@ -5186,7 +5192,7 @@ msgstr "მალსახმობის მინიჭება..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
-msgstr ""
+msgstr "გამოიყენეთ ეს მალსახმობი ხელსაწყოს ხედის ხილვადობის გადასართავად."
 
 #: sublime/idealdockwidget.cpp:139
 #, kde-format
@@ -5985,7 +5991,7 @@ msgstr "ძველი შეტყობინებები"
 #: vcs/widgets/vcsdiffpatchsources.cpp:109
 #, kde-format
 msgid "For more detailed information please see the Version Control tool view."
-msgstr ""
+msgstr "მეტი დეტალური ინფორმაციისთვის იხილეთ ვერსიის კონტროლის ხელსაწყოს ხედი."
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, kde-format
