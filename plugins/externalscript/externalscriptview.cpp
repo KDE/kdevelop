@@ -20,6 +20,7 @@
 #include <KMessageBox_KDevCompat>
 
 #include <util/scopeddialog.h>
+#include <util/wildcardhelpers.h>
 
 ExternalScriptView::ExternalScriptView(ExternalScriptPlugin* plugin, QWidget* parent)
     : QWidget(parent)
@@ -35,8 +36,9 @@ ExternalScriptView::ExternalScriptView(ExternalScriptPlugin* plugin, QWidget* pa
     m_model->setSourceModel(m_plugin->model());
     m_model->setDynamicSortFilter(true);
     m_model->sort(0);
-    connect(filterText, &QLineEdit::textEdited,
-            m_model, &QSortFilterProxyModel::setFilterWildcard);
+    connect(filterText, &QLineEdit::textEdited, this, [this](const QString& text) {
+        WildcardHelpers::setFilterNonPathWildcard(*m_model, text);
+    });
 
     scriptTree->setModel(m_model);
     scriptTree->setContextMenuPolicy(Qt::CustomContextMenu);

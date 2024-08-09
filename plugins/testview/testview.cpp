@@ -18,6 +18,7 @@
 #include <interfaces/isession.h>
 
 #include <util/executecompositejob.h>
+#include <util/wildcardhelpers.h>
 
 #include <language/duchain/indexeddeclaration.h>
 #include <language/duchain/duchainlock.h>
@@ -145,7 +146,7 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
 
 void TestView::changeFilter(const QString &newFilter)
 {
-    m_filter->setFilterWildcard(newFilter);
+    WildcardHelpers::setFilterNonPathWildcard(*m_filter, newFilter);
     if (newFilter.isEmpty()) {
         m_tree->collapseAll();
     } else {

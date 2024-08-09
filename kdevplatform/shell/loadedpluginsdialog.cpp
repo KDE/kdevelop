@@ -115,7 +115,7 @@ public:
         : KWidgetItemDelegate(itemView, parent)
         , pushButton(new QPushButton)
     {
-        pushButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information"))); // only for getting size matters
+        pushButton->setIcon(QIcon::fromTheme(QStringLiteral("help-about-symbolic"))); // only for getting size matters
     }
 
     ~LoadedPluginsDelegate() override
@@ -189,7 +189,7 @@ public:
         Q_UNUSED(index);
 
         auto *button = new QPushButton();
-        button->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
+        button->setIcon(QIcon::fromTheme(QStringLiteral("help-about-symbolic")));
         setBlockedEventTypes(button, QList<QEvent::Type>{QEvent::MouseButtonPress, QEvent::MouseButtonRelease, QEvent::MouseButtonDblClick});
 
         connect(button, &QPushButton::clicked, this, &LoadedPluginsDelegate::info);

@@ -77,7 +77,7 @@ public:
    /**
     * Deletes the desired branch inside the specified repository
     *
-    * @param repository The repository path where the current branch will be deleted from
+    * @param repository The repository path where the specified branch will be deleted
     * @param branchName The branch name that will be deleted inside the specified repository
     */
    virtual VcsJob* deleteBranch(const QUrl &repository, const QString &branchName) = 0;
@@ -90,9 +90,9 @@ public:
    virtual VcsJob* mergeBranch(const QUrl &repository, const QString &branchName) = 0;
 
    /**
-    * Deletes the desired branch inside the specified repository
+    * Renames the desired branch inside the specified repository
     *
-    * @param repository The repository path where the current branch will be deleted from
+    * @param repository The repository path where the specified branch will be renamed
     * @param oldBranchName The branch name that will be renamed
     * @param newBranchName The new branch name
     */

@@ -22,6 +22,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <util/wildcardhelpers.h>
+
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -65,22 +67,25 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     // Filter Model
     m_filterModel = new QSortFilterProxyModel();
     m_filterModel->setSourceModel(m_model);
-    m_filterModel->setFilterWildcard(QString());
     m_filterModel->sort(0, Qt::AscendingOrder);
 
     //Changes in filter edit trigger filtering
-    connect(m_ui->branchFilterEdit,
-            &QLineEdit::textChanged,
-            m_filterModel,
-            &QSortFilterProxyModel::setFilterWildcard);
+    connect(m_ui->branchFilterEdit, &QLineEdit::textChanged, this, [this](const QString& text) {
+        WildcardHelpers::setFilterNonPathWildcard(*m_filterModel, text);
+    });
 
     m_ui->branchView->setModel(m_filterModel);
 
     QString branchName = m_model->currentBranch();
     // apply initial selection
-    QList< QStandardItem* > items = m_model->findItems(branchName);
-    if (!items.isEmpty()) {
-        m_ui->branchView->setCurrentIndex(items.first()->index());
+    const auto currentBranchIndices =
+        m_model->match(m_model->index(0, 0), Qt::DisplayRole, branchName, -1, Qt::MatchExactly);
+    if (!currentBranchIndices.isEmpty()) {
+        if (currentBranchIndices.size() != 1) {
+            qCWarning(VCS) << "more than one branch matches the current branch, selecting the first one of"
+                           << currentBranchIndices.size();
+        }
+        m_ui->branchView->setCurrentIndex(m_filterModel->mapFromSource(currentBranchIndices.constFirst()));
     }
 
     connect(m_ui->newButton, &QPushButton::clicked, this, &BranchManager::createBranch);

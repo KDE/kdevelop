@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-# Pretty-printers for Qt 4 and Qt 5.
+# Pretty-printers for Qt types
 
 # SPDX-FileCopyrightText: 2009 Niko Sams <niko.sams@gmail.com>
 #
@@ -193,9 +193,15 @@ class QVectorPrinter:
         self.itype = self.val.type.template_argument(0)
 
     def children(self):
-        isQt4 = has_field(self.val['d'], 'p') # Qt4 has 'p', Qt5 doesn't
+        isQt4 = has_field(self.val['d'], 'p') # Qt4 has 'p', Qt5/Qt6 don't
+        # QVector no longer exists in Qt6, but this printer is still used for QStack
+        isQt6 = not has_field(self.val['d'], 'alloc')
+
         if isQt4:
             return self._iterator(self.itype, self.val['p']['array'], self.val['p']['size'])
+        elif isQt6:
+            listPrinter = QListPrinter(self.val, self.container, None)
+            return listPrinter.children()
         else:
             data = self.val['d'].cast(gdb.lookup_type("char").const().pointer()) + self.val['d']['offset']
             return self._iterator(self.itype, data.cast(self.itype.pointer()), self.val['d']['size'])
@@ -363,19 +369,33 @@ class QMapPrinter:
         self.container = container
 
     def children(self):
-        if self.val['d']['size'] == 0:
+        isQt6 = not has_field(self.val['d'], 'size')
+        if isQt6:
+            # to_string's call to std::map will take care of everything
             return []
 
-        isQt4 = has_field(self.val, 'e') # Qt4 has 'e', Qt5 doesn't
-        if isQt4:
-            return self._iteratorQt4(self.val)
         else:
-            return self._iteratorQt5(self.val)
+            if self.val['d']['size'] == 0:
+                return []
+
+            isQt4 = has_field(self.val, 'e') # Qt4 has 'e', Qt5 doesn't
+            if isQt4:
+                return self._iteratorQt4(self.val)
+            else:
+                return self._iteratorQt5(self.val)
 
     def to_string(self):
-        size = self.val['d']['size']
-
-        return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
+        d = self.val['d']
+        isQt6 = not has_field(d, 'size')
+        if isQt6:
+            d_d = d['d']
+            if not d_d:
+                return "%s<%s, %s> (size = 0)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
+            std_map = d_d['m']
+            return str(std_map)
+        else:
+            size = d['size']
+            return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
 
     def display_hint (self):
         return 'map'
@@ -575,6 +595,8 @@ class QHashPrinter:
         self.container = container
 
     def children(self):
+        if not self.val['d']:
+            return []
         isQt5 = has_field(self.val, 'buckets') # Qt5 has 'buckets', Qt6 doesn't
         if isQt5:
             return self._iterator_qt5(self.val)
@@ -582,7 +604,8 @@ class QHashPrinter:
             return self._iterator_qt6(self.val)
 
     def to_string(self):
-        size = self.val['d']['size']
+        d = self.val['d']
+        size = d['size'] if d else 0
 
         return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
 
@@ -744,7 +767,27 @@ class QSetPrinter:
     def __init__(self, val):
         self.val = val
 
-    class _iterator(Iterator):
+    class _iterator_qt6(Iterator):
+        def __init__(self, hashIterator):
+            self.hashIterator = hashIterator
+            self.count = 0
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if not self.hashIterator.d:
+                raise StopIteration
+
+            node = self.hashIterator.node()
+
+            item = node['key']
+            self.hashIterator.nextNode()
+
+            self.count = self.count + 1
+            return ('[%d]' % (self.count-1), item)
+
+    class _iterator_qt5(Iterator):
         def __init__(self, hashIterator):
             self.hashIterator = hashIterator
             self.count = 0
@@ -765,12 +808,21 @@ class QSetPrinter:
             return ('[%d]' % (self.count-1), item)
 
     def children(self):
+        if not self.val['q_hash']['d']:
+            return []
+
         hashPrinter = QHashPrinter(self.val['q_hash'], None)
-        hashIterator = hashPrinter._iterator(self.val['q_hash'])
-        return self._iterator(hashIterator)
+        hashIterator = hashPrinter.children()
+
+        isQt5 = has_field(self.val, 'buckets') # Qt5 has 'buckets', Qt6 doesn't
+        if isQt5:
+            return self._iterator_qt5(hashIterator)
+        else:
+            return self._iterator_qt6(hashIterator)
 
     def to_string(self):
-        size = self.val['q_hash']['d']['size']
+        d = self.val['q_hash']['d']
+        size = d['size'] if d else 0
 
         return "QSet<%s> (size = %s)" % ( self.val.type.template_argument(0), size )
 
@@ -785,6 +837,14 @@ class QCharPrinter:
 
     def display_hint (self):
         return 'string'
+
+class QPersistentModelIndexPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        return str(self.val['d']['index'])
 
 class QUuidPrinter:
 
@@ -812,6 +872,56 @@ class QVariantPrinter:
         if d['is_null']:
             return "QVariant(NULL)"
 
+        # Qt4/Qt5 has 'type', Qt6 has 'packedType'
+        isQt6 =  has_field(d, 'packedType')
+        if isQt6:
+            return self.to_string_qt6()
+        else:
+            return self.to_string_qt5()
+
+    def to_string_qt6(self):
+        d = self.val['d']
+
+        #inline const QtPrivate::QMetaTypeInterface *typeInterface() const
+        #{
+        #    return reinterpret_cast<const QtPrivate::QMetaTypeInterface *>(packedType << 2);
+        #}
+        data_type = d['packedType'] << 2
+        metatype_interface = data_type.cast(gdb.lookup_type("QtPrivate::QMetaTypeInterface").pointer())
+        type_str = ""
+        try:
+            typeAsCharPointer = metatype_interface['name']
+            if typeAsCharPointer:
+                type_str = typeAsCharPointer.string(encoding = 'UTF-8')
+        except Exception as e:
+            pass
+
+        data = d['data']
+        is_shared = d['is_shared']
+        value_str = ""
+        if is_shared:
+            private_shared = data['shared'].dereference()
+            value_str = "PrivateShared(%s)" % hex(private_shared['data'])
+        else:
+            if type_str.endswith('*'):
+                value_ptr = data['data'].reinterpret_cast(gdb.lookup_type('void').pointer().pointer())
+                value_str = str(value_ptr.dereference())
+            else:
+                type_obj = None
+                try:
+                    type_obj = gdb.lookup_type(type_str)
+                except Exception as e:
+                    # Looking up type_str failed... falling back to printing out data raw:
+                    value_str = str(data['data'])
+
+                if type_obj:
+                    value_ptr = data['data'].reinterpret_cast(type_obj.pointer())
+                    value_str = str(value_ptr.dereference())
+
+        return "QVariant(%s, %s)" % (type_str, value_str)
+
+    def to_string_qt5(self):
+        d = self.val['d']
         data_type = d['type']
         type_str = ("type = %d" % data_type)
         try:
@@ -839,7 +949,7 @@ class QVariantPrinter:
                 if type_obj.sizeof > type_obj.pointer().sizeof:
                     value_ptr = data['ptr'].reinterpret_cast(type_obj.const().pointer())
                     value_str = str(value_ptr.dereference())
-                else: 
+                else:
                     value_ptr = data['c'].address.reinterpret_cast(type_obj.const().pointer())
                     value_str = str(value_ptr.dereference())
 
@@ -874,6 +984,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QChar$')] = lambda val: QCharPrinter(val)
     pretty_printers_dict[re.compile('^QUuid$')] = lambda val: QUuidPrinter(val)
     pretty_printers_dict[re.compile('^QVariant$')] = lambda val: QVariantPrinter(val)
+    pretty_printers_dict[re.compile('^QPersistentModelIndex$')] = lambda val: QPersistentModelIndexPrinter(val)
 
 
 build_dictionary ()

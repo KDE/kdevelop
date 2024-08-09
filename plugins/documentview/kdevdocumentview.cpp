@@ -250,7 +250,7 @@ void KDevDocumentView::updateSelectedDocs()
     m_selectedDocs.clear();
     m_unselectedDocs.clear();
 
-    const QList<QStandardItem*> allItems = m_documentModel->findItems(QStringLiteral("*"), Qt::MatchWildcard | Qt::MatchRecursive);
+    const auto allItems = m_documentModel->findItems(QString(), Qt::MatchContains | Qt::MatchRecursive);
     for (QStandardItem* item : allItems) {
         if (KDevFileItem* fileItem = static_cast<KDevDocumentItem*>(item)->fileItem()) {
             if (m_selectionModel->isSelected(m_proxy->mapFromSource(m_documentModel->indexFromItem(fileItem))))

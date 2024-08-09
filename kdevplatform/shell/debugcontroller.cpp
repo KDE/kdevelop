@@ -202,7 +202,8 @@ VariableCollection* DebugController::variableCollection()
 void DebugController::textDocumentCreated(KDevelop::IDocument* document)
 {
     Q_ASSERT(document->textDocument());
-    document->textDocument()->setMarkIcon(executionMark, *executionPointPixmap());
+    static const auto executionMarkIcon = QIcon::fromTheme(QStringLiteral("go-next"));
+    document->textDocument()->setMarkIcon(executionMark, executionMarkIcon);
 }
 
 IDebugSession* DebugController::currentSession()
@@ -609,16 +610,7 @@ void DebugController::showCurrentLine()
                                                           KTextEditor::Cursor(localLocation.second, 0),
                                                           IDocumentController::DefaultMode);
     }
-
 }
-
-const QPixmap* DebugController::executionPointPixmap()
-{
-    constexpr int markPixmapSize = 32;
-    static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("go-next")).pixmap(QSize(markPixmapSize, markPixmapSize), QIcon::Normal, QIcon::Off);
-    return &pixmap;
-}
-
 }
 
 #include "moc_debugcontroller.cpp"

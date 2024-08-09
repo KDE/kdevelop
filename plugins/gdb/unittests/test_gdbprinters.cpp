@@ -278,18 +278,30 @@ void QtPrintersTest::testQListContainer()
     }
 }
 
+static QByteArray stdMapElementCountString(int elementCount)
+{
+    return "std::map with " + QByteArray::number(elementCount) + " elements";
+}
+
 void QtPrintersTest::testQMapInt()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qmapint"));
-    gdb.execute("break qmapint.cpp:7");
+
+    gdb.execute("break qmapint.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains("QMap<int, int> (size = 2)"));
+    QVERIFY(out.contains(stdMapElementCountString(0)));
+
+    gdb.execute("break qmapint.cpp:7");
+    gdb.execute("cont");
+    out = gdb.execute("print m");
+    QVERIFY(out.contains(stdMapElementCountString(2)));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
+
     gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains("QMap<int, int> (size = 3)"));
+    QVERIFY(out.contains(stdMapElementCountString(3)));
     QVERIFY(out.contains("[30] = 300"));
 }
 
@@ -299,12 +311,12 @@ void QtPrintersTest::testQMapString()
     gdb.execute("break qmapstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains("QMap<QString, QString> (size = 2)"));
+    QVERIFY(out.contains(stdMapElementCountString(2)));
     QVERIFY(out.contains("[\"10\"] = \"100\""));
     QVERIFY(out.contains("[\"20\"] = \"200\""));
     gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains("QMap<QString, QString> (size = 3)"));
+    QVERIFY(out.contains(stdMapElementCountString(3)));
     QVERIFY(out.contains("[\"30\"] = \"300\""));
 }
 
@@ -314,12 +326,12 @@ void QtPrintersTest::testQMapStringBool()
     gdb.execute("break qmapstringbool.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains("QMap<QString, bool> (size = 2)"));
+    QVERIFY(out.contains(stdMapElementCountString(2)));
     QVERIFY(out.contains("[\"10\"] = true"));
     QVERIFY(out.contains("[\"20\"] = false"));
     gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains("QMap<QString, bool> (size = 3)"));
+    QVERIFY(out.contains(stdMapElementCountString(3)));
     QVERIFY(out.contains("[\"30\"] = true"));
 }
 
@@ -370,12 +382,19 @@ void QtPrintersTest::testQUrl()
 void QtPrintersTest::testQHashInt()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qhashint"));
-    gdb.execute("break qhashint.cpp:7");
+
+    gdb.execute("break qhashint.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print h");
+    QVERIFY(out.contains("QHash<int, int> (size = 0)"));
+
+    gdb.execute("break qhashint.cpp:7");
+    gdb.execute("cont");
+    out = gdb.execute("print h");
     QVERIFY(out.contains("QHash<int, int> (size = 2)"));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
+
     gdb.execute("next");
     out = gdb.execute("print h");
     QVERIFY(out.contains("QHash<int, int> (size = 3)"));
@@ -400,12 +419,19 @@ void QtPrintersTest::testQHashString()
 void QtPrintersTest::testQSetInt()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qsetint"));
-    gdb.execute("break qsetint.cpp:7");
+
+    gdb.execute("break qsetint.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print s");
+    QVERIFY(out.contains("QSet<int> (size = 0)"));
+
+    gdb.execute("break qsetint.cpp:7");
+    gdb.execute("cont");
+    out = gdb.execute("print s");
     QVERIFY(out.contains("QSet<int> (size = 2)"));
     QVERIFY(out.contains("] = 10"));
     QVERIFY(out.contains("] = 20"));
+
     gdb.execute("next");
     out = gdb.execute("print s");
     QVERIFY(out.contains("QSet<int> (size = 3)"));

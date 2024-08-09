@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(unittestskde)
 
-find_package(Qt5 CONFIG REQUIRED COMPONENTS Test)
+find_package(Qt6 REQUIRED COMPONENTS Test)
 
 find_package(ECM 1.7.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})

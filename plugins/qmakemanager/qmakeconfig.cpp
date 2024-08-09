@@ -16,6 +16,20 @@
 #include <util/path.h>
 #include <debug.h>
 
+namespace {
+QString systemQmakeExecutable()
+{
+    for (const auto& candidate : {QStringLiteral("qmake"), QStringLiteral("qmake6"), QStringLiteral("qmake-qt6"),
+                                  QStringLiteral("qmake-qt5"), QStringLiteral("qmake-qt4")}) {
+        auto executable = QStandardPaths::findExecutable(candidate);
+        if (!executable.isEmpty()) {
+            return executable;
+        }
+    }
+    return {};
+}
+} // unnamed namespace
+
 QString QMakeConfig::CONFIG_GROUP()
 {
     return QStringLiteral("QMake_Builder");
@@ -71,13 +85,8 @@ QString QMakeConfig::qmakeExecutable(const IProject* project)
         }
     }
     if (exe.isEmpty()) {
-        exe = QStandardPaths::findExecutable(QStringLiteral("qmake"));
-    }
-    if (exe.isEmpty()) {
-        exe = QStandardPaths::findExecutable(QStringLiteral("qmake-qt5"));
-    }
-    if (exe.isEmpty()) {
-        exe = QStandardPaths::findExecutable(QStringLiteral("qmake-qt4"));
+        static const auto fallbackQmakeExecutable = systemQmakeExecutable();
+        exe = fallbackQmakeExecutable;
     }
     Q_ASSERT(!exe.isEmpty());
     return exe;
