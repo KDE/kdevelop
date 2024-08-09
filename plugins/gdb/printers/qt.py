@@ -12,7 +12,14 @@ import time
 
 from helper import *
 
-class QStringPrinter:
+# opt-in to new ValuePrinter for collection types to allow direct querying of sizes where appropriate
+# see also: https://sourceware.org/gdb/current/onlinedocs/gdb.html/Pretty-Printing-API.html
+if hasattr(gdb, 'ValuePrinter'):
+    PrinterBaseType = gdb.ValuePrinter
+else:
+    PrinterBaseType = object
+
+class QStringPrinter(PrinterBaseType):
 
     def __init__(self, val):
         self._val = val
@@ -41,10 +48,19 @@ class QStringPrinter:
             pass
         return ret
 
+    def num_children(self):
+        # The QString object may not be initialized yet. In this case 'size' is a bogus value
+        # or in case of Qt5, 'd' is an invalid pointer and the following lines might throw memory
+        # access error. Hence the try/catch.
+        try:
+            return self._val['d']['size']
+        except:
+            return 0
+
     def display_hint (self):
         return 'string'
 
-class QByteArrayPrinter:
+class QByteArrayPrinter(PrinterBaseType):
 
     def __init__(self, val):
         self._val = val
@@ -81,6 +97,9 @@ class QByteArrayPrinter:
     def children(self):
         return self._iterator(self._stringData(), self._size)
 
+    def num_children(self):
+        return self._size
+
     def to_string(self):
         #todo: handle charset correctly
         return self._stringData().string(length = self._size)
@@ -88,7 +107,7 @@ class QByteArrayPrinter:
     def display_hint (self):
         return 'string'
 
-class QListPrinter:
+class QListPrinter(PrinterBaseType):
     "Print a QList"
 
     class _iterator(Iterator):
@@ -163,10 +182,13 @@ class QListPrinter:
     def children(self):
         return self._iterator(self._itype, self._d)
 
+    def num_children(self):
+        return self._size
+
     def to_string(self):
         return "%s<%s> (size = %s)" % ( self._container, self._itype, self._size )
 
-class QVectorPrinter:
+class QVectorPrinter(PrinterBaseType):
     "Print a QVector"
 
     class _iterator(Iterator):
@@ -206,12 +228,13 @@ class QVectorPrinter:
             data = self._val['d'].cast(gdb.lookup_type("char").const().pointer()) + self._val['d']['offset']
             return self._iterator(self._itype, data.cast(self._itype.pointer()), self._val['d']['size'])
 
+    def num_children(self):
+        return self._val['d']['size']
+
     def to_string(self):
-        size = self._val['d']['size']
+        return "%s<%s> (size = %s)" % ( self._container, self._itype, self.num_children() )
 
-        return "%s<%s> (size = %s)" % ( self._container, self._itype, size )
-
-class QLinkedListPrinter:
+class QLinkedListPrinter(PrinterBaseType):
     "Print a QLinkedList"
 
     class _iterator(Iterator):
@@ -239,12 +262,15 @@ class QLinkedListPrinter:
         self._itype = self._val.type.template_argument(0)
 
     def children(self):
-        return self._iterator(self._itype, self._val['e']['n'], self._val['d']['size'])
+        return self._iterator(self._itype, self._val['e']['n'], self.num_children())
+
+    def num_children(self):
+        return self._val['d']['size']
 
     def to_string(self):
-        return "QLinkedList<%s> (size = %s)" % ( self._itype, self._val['d']['size'] )
+        return "QLinkedList<%s> (size = %s)" % ( self._itype, self.num_children() )
 
-class QMapPrinter:
+class QMapPrinter(PrinterBaseType):
     "Print a QMap"
 
     class _iteratorQt4(Iterator):
@@ -425,7 +451,7 @@ class QMapPrinter:
     def display_hint (self):
         return 'map'
 
-class QHashPrinter:
+class QHashPrinter(PrinterBaseType):
     "Print a QHash"
 
     class _iterator_qt6(Iterator):
@@ -628,11 +654,12 @@ class QHashPrinter:
         else:
             return self._iterator_qt6(self._val)
 
-    def to_string(self):
+    def num_children(self):
         d = self._val['d']
-        size = d['size'] if d else 0
+        return d['size'] if d else 0
 
-        return "%s<%s, %s> (size = %s)" % ( self._container, self._val.type.template_argument(0), self._val.type.template_argument(1), size )
+    def to_string(self):
+        return "%s<%s, %s> (size = %s)" % ( self._container, self._val.type.template_argument(0), self._val.type.template_argument(1), self.num_children() )
 
     def display_hint (self):
         return 'map'
@@ -786,7 +813,7 @@ class QUrlPrinter:
             encodedOriginal = encodedOriginal['d']['data'].string()
             return encodedOriginal
 
-class QSetPrinter:
+class QSetPrinter(PrinterBaseType):
     "Print a QSet"
 
     def __init__(self, val):
@@ -845,11 +872,12 @@ class QSetPrinter:
         else:
             return self._iterator_qt6(hashIterator)
 
-    def to_string(self):
+    def num_children(self):
         d = self._val['q_hash']['d']
-        size = d['size'] if d else 0
+        return d['size'] if d else 0
 
-        return "QSet<%s> (size = %s)" % ( self._val.type.template_argument(0), size )
+    def to_string(self):
+        return "QSet<%s> (size = %s)" % ( self._val.type.template_argument(0), self.num_children() )
 
 
 class QCharPrinter:
