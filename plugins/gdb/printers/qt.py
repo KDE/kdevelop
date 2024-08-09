@@ -193,9 +193,15 @@ class QVectorPrinter:
         self.itype = self.val.type.template_argument(0)
 
     def children(self):
-        isQt4 = has_field(self.val['d'], 'p') # Qt4 has 'p', Qt5 doesn't
+        isQt4 = has_field(self.val['d'], 'p') # Qt4 has 'p', Qt5/Qt6 don't
+        # QVector no longer exists in Qt6, but this printer is still used for QStack
+        isQt6 = not has_field(self.val['d'], 'alloc')
+
         if isQt4:
             return self._iterator(self.itype, self.val['p']['array'], self.val['p']['size'])
+        elif isQt6:
+            listPrinter = QListPrinter(self.val, self.container, None)
+            return listPrinter.children()
         else:
             data = self.val['d'].cast(gdb.lookup_type("char").const().pointer()) + self.val['d']['offset']
             return self._iterator(self.itype, data.cast(self.itype.pointer()), self.val['d']['size'])
@@ -963,21 +969,8 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, 'QList', None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QStringList', 'QString')
     pretty_printers_dict[re.compile('^QQueue<.*>$')] = lambda val: QListPrinter(val, 'QQueue', None)
-
-    # QVector no longer exists in Qt6, from gdb's point of view
-    isQt6 = True
-    try:
-        gdb.lookup_type("QVector<QString>")
-        isQt6 = False
-    except:
-        pass
-
-    if isQt6:
-        pretty_printers_dict[re.compile('^QStack<.*>$')] = lambda val: QListPrinter(val, 'QStack', None)
-    else:
-        pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val, 'QVector')
-        pretty_printers_dict[re.compile('^QStack<.*>$')] = lambda val: QVectorPrinter(val, 'QStack')
-
+    pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val, 'QVector')
+    pretty_printers_dict[re.compile('^QStack<.*>$')] = lambda val: QVectorPrinter(val, 'QStack')
     pretty_printers_dict[re.compile('^QLinkedList<.*>$')] = lambda val: QLinkedListPrinter(val)
     pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val, 'QMap')
     pretty_printers_dict[re.compile('^QMultiMap<.*>$')] = lambda val: QMapPrinter(val, 'QMultiMap')
