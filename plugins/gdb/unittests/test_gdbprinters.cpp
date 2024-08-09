@@ -545,7 +545,18 @@ void QtPrintersTest::testQVariant()
     QVERIFY(printNext().contains("QVariant(bool, true)"));
     QVERIFY(printNext().contains("QVariant(float, 4.5)"));
     QVERIFY(printNext().contains("QVariant(double, 42.5)"));
+
     QVERIFY(printNext().contains("QVariant(QObject*, 0x"));
+    // Now verify that the pretty printer retrieves correct object address from the QVariant.
+    {
+        auto objectAddress = gdb.execute("print /a &myObj");
+        objectAddress.remove(0, objectAddress.indexOf('=') + 1);
+        objectAddress = objectAddress.trimmed();
+        QCOMPARE(objectAddress.left(2), "0x");
+        objectAddress.insert(0, "QVariant(QObject*, ");
+        QVERIFY(gdb.execute("print v").contains(objectAddress));
+    }
+
     QVERIFY(printNext().contains("QVariant(SomeCustomType, {\n  foo = 42\n})"));
 }
 
