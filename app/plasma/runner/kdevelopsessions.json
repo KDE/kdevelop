@@ -9,6 +9,7 @@
             }
         ],
         "Description": "Matches KDevelop Sessions",
+        "Description[ca@valencia]": "Coincidix amb sessions de KDevelop",
         "Description[ca]": "Concorda amb sessions del KDevelop",
         "Description[eo]": "Rekonas KDevelop-Seancojn",
         "Description[es]": "Coincide con sesiones de KDevelop",
@@ -26,6 +27,7 @@
         "Icon": "kdevelop",
         "License": "LGPL",
         "Name": "KDevelop Sessions",
+        "Name[ca@valencia]": "Sessions de KDevelop",
         "Name[ca]": "Sessions del KDevelop",
         "Name[eo]": "KDevelop-Seancoj",
         "Name[es]": "Sesiones de KDevelop",
