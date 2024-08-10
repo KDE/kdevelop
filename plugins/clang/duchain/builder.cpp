@@ -1662,7 +1662,9 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
         const auto invalidMemberRefExpr = !file && kind == CXCursor_MemberRefExpr;
         // also don't skip unexposed declarations, which may e.g. be an `extern "C"` directive
         const auto unexposedDecl = file && kind == CXCursor_UnexposedDecl;
-        if (!invalidMemberRefExpr && !unexposedDecl) {
+        // newer clang properly reports LinkageSpec instead of UnexposedDecl
+        const auto linkageSpec = file && kind == CXCursor_LinkageSpec;
+        if (!invalidMemberRefExpr && !unexposedDecl && !linkageSpec) {
             return CXChildVisit_Continue;
         }
     }
