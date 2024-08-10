@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2023-04-25 09:51+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -500,31 +500,31 @@ msgctxt "@title:menu"
 msgid "External Scripts"
 msgstr "Внешние сценарии"
 
-#: externalscriptview.cpp:31
+#: externalscriptview.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "External Scripts"
 msgstr "Внешние сценарии"
 
-#: externalscriptview.cpp:49
+#: externalscriptview.cpp:51
 #, kde-format
 msgctxt "@action"
 msgid "Add External Script"
 msgstr "Добавить внешний сценарий"
 
-#: externalscriptview.cpp:54
+#: externalscriptview.cpp:56
 #, kde-format
 msgctxt "@action"
 msgid "Edit External Script"
 msgstr "Изменить внешний сценарий"
 
-#: externalscriptview.cpp:59
+#: externalscriptview.cpp:61
 #, kde-format
 msgctxt "@action"
 msgid "Remove External Script"
 msgstr "Удалить внешний сценарий"
 
-#: externalscriptview.cpp:146
+#: externalscriptview.cpp:148
 #, kde-format
 msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
@@ -533,13 +533,13 @@ msgstr ""
 "<p>Удалить настройку внешнего сценария <i>%1</i>?</p><p><i>Примечание:</i> "
 "сам сценарий не будет удалён.</p>"
 
-#: externalscriptview.cpp:149
+#: externalscriptview.cpp:151
 #, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
 msgstr "Подтверждение удаления внешнего сценария"
 
-#: externalscriptview.cpp:150
+#: externalscriptview.cpp:152
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"

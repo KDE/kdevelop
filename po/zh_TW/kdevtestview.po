@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2024-02-15 17:29+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -19,31 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 24.01.95\n"
 
-#: testview.cpp:56 testviewplugin.cpp:70
+#: testview.cpp:57 testviewplugin.cpp:70
 #, kde-format
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "單元測試"
 
-#: testview.cpp:78
+#: testview.cpp:79
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "顯示原始碼"
 
-#: testview.cpp:85
+#: testview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "Run Selected Tests"
 msgstr "執行選取的測試"
 
-#: testview.cpp:90
+#: testview.cpp:91
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "過濾..."
 
-#: testview.cpp:292
+#: testview.cpp:293
 #, kde-format
 msgid "Run 1 test"
 msgid_plural "Run %1 tests"

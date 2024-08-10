@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2024-07-19 14:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1859,89 +1859,89 @@ msgctxt "@title:window"
 msgid "Variables"
 msgstr "Değişkenler"
 
-#: shell/debugcontroller.cpp:223
+#: shell/debugcontroller.cpp:224
 #, kde-format
 msgid "&Restart"
 msgstr "&Yeniden Başlat"
 
-#: shell/debugcontroller.cpp:224
+#: shell/debugcontroller.cpp:225
 #, kde-format
 msgid "Restart program"
 msgstr "Uygulamayı yeniden başlat"
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:226
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Uygulamaları baştan başlatır."
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Yarıda Kes"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Uygulamayı yarıda kes"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr ""
 "Hata ayıklanan süreci veya geçerli hata ayıklama komutunu yarıda keser."
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "&İmlece Kadar Çalıştır"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "İmlece kadar çalıştır"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "İmleç konumuna ulaşana kadar çalıştırmayı sürdürür."
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Yürütme &Konumunu İmlece Ayarla"
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "İmlece git"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Geçerli imleç konumundan yürütmeyi sürdür."
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:251
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Üzerinden A&tla"
 
-#: shell/debugcontroller.cpp:252
+#: shell/debugcontroller.cpp:253
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Sonraki satırın üzerinden atla"
 
-#: shell/debugcontroller.cpp:253
+#: shell/debugcontroller.cpp:254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1952,37 +1952,37 @@ msgstr ""
 "Geçerli kaynak dosyadan bir kaynak satırı yürütür. Eğer bu satır bir işlevi "
 "çağırıyorsa tüm işlev yürütülür ve uygulama işlevi izleyen satırda durur."
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:262
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Yöner&genin Üzerinden Atla"
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Yönergenin üzerinden atla"
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Sonraki Assembly yönergesinin üzerinden atla."
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:269
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Ara&ya Gir"
 
-#: shell/debugcontroller.cpp:270
+#: shell/debugcontroller.cpp:271
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Bir sonraki ifadenin arasına gir"
 
-#: shell/debugcontroller.cpp:271
+#: shell/debugcontroller.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1992,37 +1992,37 @@ msgstr ""
 "Kaynağın tam olarak yalnızca bir satırını yürütür. Kaynak satırı, işleve bir "
 "çağrıysa işleve girildikten sonra yürütme duracaktır."
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:279
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Yönergenin A&rasına Gir"
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Yönergenin arasına gir"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Sonraki Assembly yönergesinin arasına gir."
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Dışarı Çı&k"
 
-#: shell/debugcontroller.cpp:286
+#: shell/debugcontroller.cpp:287
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Geçerli işlevden dışarı çık"
 
-#: shell/debugcontroller.cpp:287
+#: shell/debugcontroller.cpp:288
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2036,66 +2036,66 @@ msgstr ""
 "görüntüleyecektir. Program yürütmesi en dış çerçevedeyse (örn. main() "
 "içinde) bu işlemin bir etkisi olmayacaktır."
 
-#: shell/debugcontroller.cpp:295
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Kesme Noktasını Aç/Kapat"
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:297
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Kontrol+Seçenek+B"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Kesme noktasını aç/kapat"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Kesme noktasını, düzenleyicideki geçerli satırda açar/kapatır."
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Geçerli Satırı Göster"
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Geçerli yürütme konumunu göster"
 
-#: shell/debugcontroller.cpp:304
+#: shell/debugcontroller.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Düzenleyicideki yürütme satırına gider."
 
-#: shell/debugcontroller.cpp:430
+#: shell/debugcontroller.cpp:431
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Hata Ayıkla"
 
-#: shell/debugcontroller.cpp:480 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Başlatma Hatalarını Ayıkla"
 
-#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Geçerli başlatma hatalarını ayıkla"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2105,19 +2105,19 @@ msgstr ""
 "Hedefi veya geçerli etkin başlangıç yapılandırmasında belirtilen programı "
 "hata ayıklayıcı içinde yürütür."
 
-#: shell/debugcontroller.cpp:486
+#: shell/debugcontroller.cpp:487
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Sürdür"
 
-#: shell/debugcontroller.cpp:488
+#: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Uygulama yürütmesini sürdür"
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:490
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5620,31 +5620,31 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Dallar…"
 
-#: vcs/dvcs/ui/branchmanager.cpp:38
+#: vcs/dvcs/ui/branchmanager.cpp:40
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Dal Yöneticisi"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "Yeni bir dal oluşturmadan önce listeden bir ana dal seçmelisiniz."
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Yeni Dal"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Yeni dalın adı:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:124
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5653,7 +5653,7 @@ msgstr ""
 "“%1” dalı halihazırda var.\n"
 "Lütfen başka bir ad seçin."
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:138
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
@@ -5662,18 +5662,18 @@ msgstr ""
 "“%1” dalında bulunuyorsunuz.\n"
 "Onu silmek için lütfen başka dala geçin."
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:145
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr ""
 "“%1” dalını geri döndürülemez biçimde silmek istediğinizden emin misiniz?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
+#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Halihazırda “%1” dalında\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:181
+#: vcs/dvcs/ui/branchmanager.cpp:186
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5682,28 +5682,28 @@ msgstr ""
 "“%1” dalı yok.\n"
 "Lütfen başka bir ad seçin."
 
-#: vcs/dvcs/ui/branchmanager.cpp:189
+#: vcs/dvcs/ui/branchmanager.cpp:194
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr "Geçerli dal ile birleştirmek için listeden bir dal seçmelisiniz."
 
-#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Geçerli sürüm için bir yama dosyası oluşturulamadı."
 
-#: vcs/dvcs/ui/branchmanager.cpp:262
+#: vcs/dvcs/ui/branchmanager.cpp:267
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Diff Alınamadı"
 
-#: vcs/dvcs/ui/branchmanager.cpp:269
+#: vcs/dvcs/ui/branchmanager.cpp:274
 #, kde-format
 msgid "There are no committed differences."
 msgstr "İşlenen fark yok."
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"

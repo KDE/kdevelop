@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2022-04-17 20:49+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "(running)"
 msgstr "(beží)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:45
+#: debuggerplugin.cpp:28 lldblauncher.cpp:50
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
@@ -86,12 +86,12 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Panel nástrojov ladenia"
 
-#: lldblauncher.cpp:50
+#: lldblauncher.cpp:55
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Ladiť natívnu aplikáciu v LLDB"
 
-#: lldblauncher.cpp:75
+#: lldblauncher.cpp:80
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -100,7 +100,7 @@ msgstr ""
 "Program sa už ladí. Chcete prerušiť aktuálne bežiace ladiace sedenie a "
 "pokračovať so spustením?"
 
-#: lldblauncher.cpp:77
+#: lldblauncher.cpp:82
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2014-02-10 00:14+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -140,14 +140,14 @@ msgctxt "@item"
 msgid "Insertion"
 msgstr "Umetanje"
 
-#: patchhighlighter.cpp:411 patchhighlighter.cpp:419
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
 #, fuzzy, kde-format
 #| msgid "Removal"
 msgctxt "@item"
 msgid "Removal"
 msgstr "Uklanjanje"
 
-#: patchhighlighter.cpp:413 patchhighlighter.cpp:422
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
 #, fuzzy, kde-format
 #| msgid "Change"
 msgctxt "@item"

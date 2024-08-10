@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,31 +17,31 @@ msgstr ""
 "X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevtestview.pot\n"
 "X-Crowdin-File-ID: 54598\n"
 
-#: testview.cpp:56 testviewplugin.cpp:70
+#: testview.cpp:57 testviewplugin.cpp:70
 #, kde-format
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "单元测试"
 
-#: testview.cpp:78
+#: testview.cpp:79
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "显示源代码"
 
-#: testview.cpp:85
+#: testview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "Run Selected Tests"
 msgstr "运行所选测试"
 
-#: testview.cpp:90
+#: testview.cpp:91
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "过滤器..."
 
-#: testview.cpp:292
+#: testview.cpp:293
 #, kde-format
 msgid "Run 1 test"
 msgid_plural "Run %1 tests"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2024-04-22 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1821,88 +1821,88 @@ msgctxt "@title:window"
 msgid "Variables"
 msgstr "变量"
 
-#: shell/debugcontroller.cpp:223
+#: shell/debugcontroller.cpp:224
 #, kde-format
 msgid "&Restart"
 msgstr "重启(&R)"
 
-#: shell/debugcontroller.cpp:224
+#: shell/debugcontroller.cpp:225
 #, kde-format
 msgid "Restart program"
 msgstr "重新启动程序"
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:226
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "从头开始重启应用程序。"
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "中断"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "中断应用程序"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "中断调试的进程或当前调试器命令。"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "运行到光标处(&C)"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "运行到光标处"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "继续执行，直到到达光标位置。"
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "设定执行位置到光标处(&X)"
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "跳转到光标处"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "从当前光标位置继续执行。"
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:251
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "单步执行(&O)"
 
-#: shell/debugcontroller.cpp:252
+#: shell/debugcontroller.cpp:253
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "单步执行下一行"
 
-#: shell/debugcontroller.cpp:253
+#: shell/debugcontroller.cpp:254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1913,37 +1913,37 @@ msgstr ""
 "在当前源文件中执行一行源代码。如果源行是对函数的调用，则执行整个函数，应用程"
 "序将在函数调用之后的行停止。"
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:262
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "单步执行指令(&T)"
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "单步执行指令"
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "跳过下一个汇编指令。"
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:269
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "单步跟进(&I)"
 
-#: shell/debugcontroller.cpp:270
+#: shell/debugcontroller.cpp:271
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "单步跟进到下一条语句"
 
-#: shell/debugcontroller.cpp:271
+#: shell/debugcontroller.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1951,37 +1951,37 @@ msgid ""
 "function then execution will stop after the function has been entered."
 msgstr "只执行一行源代码。如果源行是对函数的调用，则在输入函数后将停止执行。"
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:279
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "单步跟进指令(&N)"
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "单步跟进指令"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "进入下一个汇编指令。"
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "单步跳出(&U)"
 
-#: shell/debugcontroller.cpp:286
+#: shell/debugcontroller.cpp:287
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "单步跳出当前函数"
 
-#: shell/debugcontroller.cpp:287
+#: shell/debugcontroller.cpp:288
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -1994,66 +1994,66 @@ msgstr ""
 "之后显示该行。如果程序执行在最外层框架中 (即在 main () 中)，则此操作不起作"
 "用。"
 
-#: shell/debugcontroller.cpp:295
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "切换断点"
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:297
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "切换断点"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "在编辑器中切换当前行的断点。"
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "显示当前行"
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "显示当前执行位置"
 
-#: shell/debugcontroller.cpp:304
+#: shell/debugcontroller.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "跳转到编辑器中的执行的行。"
 
-#: shell/debugcontroller.cpp:430
+#: shell/debugcontroller.cpp:431
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "调试"
 
-#: shell/debugcontroller.cpp:480 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "调试启动"
 
-#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "调试当前启动"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2063,19 +2063,19 @@ msgstr ""
 "<b>执行程序</b><p>执行当前活动的目标或工程设置<b>运行选项</b>标签中所指定的主"
 "程序。</p>"
 
-#: shell/debugcontroller.cpp:486
+#: shell/debugcontroller.cpp:487
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "继续(&C)"
 
-#: shell/debugcontroller.cpp:488
+#: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "继续应用程序执行"
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:490
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5429,31 +5429,31 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "分支..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:38
+#: vcs/dvcs/ui/branchmanager.cpp:40
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "分支管理器"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "您必须在创建新分支前从列表中选择基准分支。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "新建分支"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "新分支名称："
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:124
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5462,24 +5462,24 @@ msgstr ""
 "分支“%1”已存在。\n"
 "请使用其他名称。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:138
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
 msgstr ""
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:145
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr ""
 
-#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
+#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "已经在分支“%1”上\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:181
+#: vcs/dvcs/ui/branchmanager.cpp:186
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5488,28 +5488,28 @@ msgstr ""
 "分支“%1”已存在。\n"
 "请使用其他名称。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:189
+#: vcs/dvcs/ui/branchmanager.cpp:194
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr "您必须在创建新分支前从列表中选择基准分支。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "无法为当前版本创建补丁。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:262
+#: vcs/dvcs/ui/branchmanager.cpp:267
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "无法获取差异"
 
-#: vcs/dvcs/ui/branchmanager.cpp:269
+#: vcs/dvcs/ui/branchmanager.cpp:274
 #, kde-format
 msgid "There are no committed differences."
 msgstr "没有提交的差异。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"

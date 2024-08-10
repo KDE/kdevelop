@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2024-05-06 09:56+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:121
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -146,7 +146,7 @@ msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB 設定"
 
-#: gdbconfigpage.cpp:134
+#: gdbconfigpage.cpp:139
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -154,13 +154,13 @@ msgid ""
 msgstr ""
 "某個應用程式正在除錯中。是否中止目前執行的除錯階段，並使用此啟動階段繼續？"
 
-#: gdbconfigpage.cpp:136
+#: gdbconfigpage.cpp:141
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "中止目前工作階段"
 
-#: gdbconfigpage.cpp:162
+#: gdbconfigpage.cpp:167
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "在 GDB 執行原生應用程式"

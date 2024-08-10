@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2020-10-04 20:17+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -128,13 +128,13 @@ msgctxt "@item"
 msgid "Insertion"
 msgstr "삽입"
 
-#: patchhighlighter.cpp:411 patchhighlighter.cpp:419
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
 #, kde-format
 msgctxt "@item"
 msgid "Removal"
 msgstr "삭제"
 
-#: patchhighlighter.cpp:413 patchhighlighter.cpp:422
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
 #, kde-format
 msgctxt "@item"
 msgid "Change"

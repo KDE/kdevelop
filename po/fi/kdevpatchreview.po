@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2016-07-11 19:33+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -141,14 +141,14 @@ msgctxt "@item"
 msgid "Insertion"
 msgstr "Lisäys"
 
-#: patchhighlighter.cpp:411 patchhighlighter.cpp:419
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
 #, fuzzy, kde-format
 #| msgid "Removal"
 msgctxt "@item"
 msgid "Removal"
 msgstr "Poisto"
 
-#: patchhighlighter.cpp:413 patchhighlighter.cpp:422
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
 #, fuzzy, kde-format
 #| msgid "Change"
 msgctxt "@item"

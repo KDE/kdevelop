@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevtestview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2023-04-01 21:46+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -17,31 +17,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: testview.cpp:56 testviewplugin.cpp:70
+#: testview.cpp:57 testviewplugin.cpp:70
 #, kde-format
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "Unuotestoj"
 
-#: testview.cpp:78
+#: testview.cpp:79
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "Montri Fontkodon"
 
-#: testview.cpp:85
+#: testview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "Run Selected Tests"
 msgstr "Lanĉi Elektitajn Testojn"
 
-#: testview.cpp:90
+#: testview.cpp:91
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Filtri..."
 
-#: testview.cpp:292
+#: testview.cpp:293
 #, kde-format
 msgid "Run 1 test"
 msgid_plural "Run %1 tests"

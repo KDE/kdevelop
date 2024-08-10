@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2020-10-04 20:07+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -14,31 +14,31 @@ msgstr ""
 "X-Generator: Lokalize 19.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: testview.cpp:56 testviewplugin.cpp:70
+#: testview.cpp:57 testviewplugin.cpp:70
 #, kde-format
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "단위 테스트"
 
-#: testview.cpp:78
+#: testview.cpp:79
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "소스 코드 보기"
 
-#: testview.cpp:85
+#: testview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "Run Selected Tests"
 msgstr "선택한 테스트 실행"
 
-#: testview.cpp:90
+#: testview.cpp:91
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "필터..."
 
-#: testview.cpp:292
+#: testview.cpp:293
 #, kde-format
 msgid "Run 1 test"
 msgid_plural "Run %1 tests"

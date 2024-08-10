@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2012-02-02 07:34+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1954,17 +1954,17 @@ msgctxt "@title:window"
 msgid "Variables"
 msgstr "Variabeln"
 
-#: shell/debugcontroller.cpp:223
+#: shell/debugcontroller.cpp:224
 #, kde-format
 msgid "&Restart"
 msgstr "&Nieg starten"
 
-#: shell/debugcontroller.cpp:224
+#: shell/debugcontroller.cpp:225
 #, kde-format
 msgid "Restart program"
 msgstr "Programm nieg starten"
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:226
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Restarts application</b><p>Restarts applications from the beginning.</"
@@ -1972,21 +1972,21 @@ msgstr "Programm nieg starten"
 msgid "Restarts applications from the beginning."
 msgstr "<b>Programm nieg starten</b><p>Start dat Programm nieg.</p>"
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:232
 #, fuzzy, kde-format
 #| msgid "Interrupt"
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Ünnerbreken"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:233
 #, fuzzy, kde-format
 #| msgid "Interrupt application"
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Programm ünnerbreken"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:234
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Interrupt application</b><p>Interrupts the debugged process or current "
@@ -1997,21 +1997,21 @@ msgstr ""
 "<b>Programm ünnerbreken</b><p>Den ünnersöchten Perzess oder den aktuellen "
 "Fehlersöker-Befehl ünnerbreken.</p>"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:238
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Bet &Blinker utföhren"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:239
 #, fuzzy, kde-format
 #| msgid "Run to cursor"
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Bet Blinker utföhren"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:240
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Run to cursor</b><p>Continues execution until the cursor position is "
@@ -2022,21 +2022,21 @@ msgstr ""
 "<b>Bet Blinker utföhren</b><p>Maakt mit dat Utföhren bet na de "
 "Blinkerpositschoon wieder.</p>"
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:245
 #, fuzzy, kde-format
 #| msgid "Set E&xecution Position to Cursor"
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "&Utföhr-Positschoon na Blinker setten"
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:246
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Na Blinker jumpen"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:247
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Set Execution Position </b><p>Set the execution pointer to the current "
@@ -2047,21 +2047,21 @@ msgstr ""
 "<b>Utföhrpositschoon setten</b><p>Sett den Utföhr-Wieser op de aktuelle "
 "Blinkerpositschoon.</p>"
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:251
 #, fuzzy, kde-format
 #| msgid "Step &Over"
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "&Utföhren"
 
-#: shell/debugcontroller.cpp:252
+#: shell/debugcontroller.cpp:253
 #, fuzzy, kde-format
 #| msgid "Step over the next line"
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Nakamen Reeg utföhren"
 
-#: shell/debugcontroller.cpp:253
+#: shell/debugcontroller.cpp:254
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step over</b><p>Executes one line of source in the current source "
@@ -2078,21 +2078,21 @@ msgstr ""
 "Bornreeg en Funkschoon opröppt, warrt de hele Funkschoon utföhrt un dat "
 "Programm denn bi de Reeg achter den Oproop anhollen.</p>"
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:262
 #, fuzzy, kde-format
 #| msgid "Step over Ins&truction"
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "&Anwiesen utföhren"
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:263
 #, fuzzy, kde-format
 #| msgid "Step over instruction"
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Anwiesen utföhren"
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:264
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step over instruction</b><p>Steps over the next assembly instruction.</"
@@ -2101,21 +2101,21 @@ msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "<b>Anwiesen utföhren</b><p>Föhrt de nakamen Assembleranwiesen ut.</p>"
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:269
 #, fuzzy, kde-format
 #| msgid "Step &Into"
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "&Ringahn"
 
-#: shell/debugcontroller.cpp:270
+#: shell/debugcontroller.cpp:271
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Na nakamen Utdruck ringahn"
 
-#: shell/debugcontroller.cpp:271
+#: shell/debugcontroller.cpp:272
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step into</b><p>Executes exactly one line of source. If the source "
@@ -2129,21 +2129,21 @@ msgstr ""
 "<b>Ringahn</b><p>Föhrt nau een Kodereeg ut. Wenn de Bornreeg en Funkschoon "
 "opröppt, warrt dat Programm bi den Funkschoonanfang anhollen.</p>"
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:279
 #, fuzzy, kde-format
 #| msgid "Step into I&nstruction"
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Na &Anwiesen ringahn"
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:280
 #, fuzzy, kde-format
 #| msgid "Step into instruction"
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Na Anwiesen ringahn"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:281
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step into instruction</b><p>Steps into the next assembly instruction.</"
@@ -2153,21 +2153,21 @@ msgid "Steps into the next assembly instruction."
 msgstr ""
 "<b>Na Anwiesen ringahn</b><p>Geiht na de nakamen Assembleranwiesen rin.</p>"
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:285
 #, fuzzy, kde-format
 #| msgid "Step O&ut"
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "&Rutgahn"
 
-#: shell/debugcontroller.cpp:286
+#: shell/debugcontroller.cpp:287
 #, fuzzy, kde-format
 #| msgid "Steps out of the current function"
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Aktuell Funkschoon bet Enn utföhren"
 
-#: shell/debugcontroller.cpp:287
+#: shell/debugcontroller.cpp:288
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Step out</b><p>Executes the application until the currently executing "
@@ -2186,26 +2186,26 @@ msgstr ""
 "Funkschoonoproop. Wenn he den Butenrahmen utföhrt (a.B. \"main()\"), blifft "
 "disse Akschoon ahn Utwarken.</p>"
 
-#: shell/debugcontroller.cpp:295
+#: shell/debugcontroller.cpp:296
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Hollpunkt an/ut"
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:297
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr ""
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:298
 #, fuzzy, kde-format
 #| msgid "Toggle breakpoint"
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Hollpunkt an/ut"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:299
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in "
@@ -2216,48 +2216,48 @@ msgstr ""
 "<b>Hollpunkt an/ut</b><p>Maakt den Hollpunkt för de aktuelle Editorreeg an "
 "oder ut.</p>"
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:303
 #, fuzzy, kde-format
 #| msgid "Show Documentation"
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Dokmentatschoon wiesen"
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:304
 #, fuzzy, kde-format
 #| msgid "Steps out of the current function"
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Aktuell Funkschoon bet Enn utföhren"
 
-#: shell/debugcontroller.cpp:304
+#: shell/debugcontroller.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:430
+#: shell/debugcontroller.cpp:431
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Fehlersöök"
 
-#: shell/debugcontroller.cpp:480 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Fehlersöök för Oproop"
 
-#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:443
 #, fuzzy, kde-format
 #| msgid "Debug current Launch"
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Fehlersöök för aktuellen Oproop"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:444
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Debug Launch</b><p>Executes the target or the program specified in "
@@ -2270,21 +2270,21 @@ msgstr ""
 "<b>Fehlersöök för Oproop</b><p>Föhrt dat Teel oder dat Programm ut de "
 "opstunns anmaakte Oproop-Instellen binnen en Fehlersöker ut.</p>"
 
-#: shell/debugcontroller.cpp:486
+#: shell/debugcontroller.cpp:487
 #, fuzzy, kde-format
 #| msgid "&Continue"
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Wiedermaken"
 
-#: shell/debugcontroller.cpp:488
+#: shell/debugcontroller.cpp:489
 #, fuzzy, kde-format
 #| msgid "Continues the application execution"
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Programm wieder utföhren"
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:490
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Continue application execution</b><p>Continues the execution of your "
@@ -6119,34 +6119,34 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Telgen…"
 
-#: vcs/dvcs/ui/branchmanager.cpp:38
+#: vcs/dvcs/ui/branchmanager.cpp:40
 #, fuzzy, kde-format
 #| msgid "Branch Manager"
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Telgpleger"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr ""
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Nieg Telg"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, fuzzy, kde-format
 #| msgid "Name of the new branch:"
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Naam vun den niegen Telg:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:124
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -6155,7 +6155,7 @@ msgstr ""
 "Telg \"%1\" gifft dat al.\n"
 "Söök bitte en anner Naam ut."
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:138
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -6167,7 +6167,7 @@ msgstr ""
 "Du büst opstunns op den Telg \"%1\".\n"
 "Wenn Du em wegmaken wullt, muttst Du na en anner Telg wesseln."
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:145
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
@@ -6175,12 +6175,12 @@ msgstr ""
 "Wullt Du Telg \"%1\" redig duerhaftig wegdoon? Dat lett sik nich "
 "torüchnehmen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
+#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Al op Telg \"%1\"\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:181
+#: vcs/dvcs/ui/branchmanager.cpp:186
 #, fuzzy, kde-format
 #| msgid ""
 #| "Branch \"%1\" already exists.\n"
@@ -6192,30 +6192,30 @@ msgstr ""
 "Telg \"%1\" gifft dat al.\n"
 "Söök bitte en anner Naam ut."
 
-#: vcs/dvcs/ui/branchmanager.cpp:189
+#: vcs/dvcs/ui/branchmanager.cpp:194
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr ""
 
-#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "För de aktuelle Verschoon lett sik keen Kodeplaster opstellen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:262
+#: vcs/dvcs/ui/branchmanager.cpp:267
 #, fuzzy, kde-format
 #| msgid "Unable to get difference."
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Verscheel lett sik nich halen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:269
+#: vcs/dvcs/ui/branchmanager.cpp:274
 #, fuzzy, kde-format
 #| msgid "There are no differences."
 msgid "There are no committed differences."
 msgstr "Dat gifft keen Verschelen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
 #, fuzzy, kde-format
 #| msgid "VCS support"
 msgctxt "@title:window"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2024-02-20 23:51+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -1833,88 +1833,88 @@ msgctxt "@title:window"
 msgid "Variables"
 msgstr "변수"
 
-#: shell/debugcontroller.cpp:223
+#: shell/debugcontroller.cpp:224
 #, kde-format
 msgid "&Restart"
 msgstr "다시 시작(&R)"
 
-#: shell/debugcontroller.cpp:224
+#: shell/debugcontroller.cpp:225
 #, kde-format
 msgid "Restart program"
 msgstr "프로그램 다시 시작"
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:226
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "앱을 처음부터 다시 시작합니다."
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "인터럽트"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "앱 인터럽트"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "디버그하고 있는 프로세스나 현재 디버거 명령을 인터럽트합니다."
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "커서까지 실행(&C)"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "커서까지 실행"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "커서 위치에 도착할 때까지 실행을 계속합니다."
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "커서로 실행 위치 설정(&X)"
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "커서 위치로 이동"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "커서 위치에 도착할 때까지 실행을 계속합니다."
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:251
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "한 단계 건너뜀(&O)"
 
-#: shell/debugcontroller.cpp:252
+#: shell/debugcontroller.cpp:253
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "다음 줄로 한 단계 이동"
 
-#: shell/debugcontroller.cpp:253
+#: shell/debugcontroller.cpp:254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1926,37 +1926,37 @@ msgstr ""
 "출한다면 해당 함수를 실행하고 함수 호출이 끝난 그 다음 줄에서 앱 실행을 정지"
 "합니다."
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:262
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "다음 명령으로(&T)"
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "다음 단계 명령으로 이동"
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "다음 어셈블리 명령으로 이동합니다."
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:269
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "다음 줄로 진입(&I)"
 
-#: shell/debugcontroller.cpp:270
+#: shell/debugcontroller.cpp:271
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "다음 구문으로 들어갑니다."
 
-#: shell/debugcontroller.cpp:271
+#: shell/debugcontroller.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1966,37 +1966,37 @@ msgstr ""
 "소스의 한 줄만 정확하게 실행합니다. 소스 줄이 함수 호출이라면 함수에 진입한 "
 "후 실행을 멈춥니다."
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:279
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "다음 명령으로 진입(&N)"
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "다음 명령으로 진입"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "다음 어셈블리 명령으로 진입합니다."
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "한 단계 밖으로(&U)"
 
-#: shell/debugcontroller.cpp:286
+#: shell/debugcontroller.cpp:287
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "현재 함수 밖으로 진출"
 
-#: shell/debugcontroller.cpp:287
+#: shell/debugcontroller.cpp:288
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2009,66 +2009,66 @@ msgstr ""
 "수 호출 바로 다음 줄을 표시합니다. 앱 실행이 가장 바깥쪽 프레임(예: main())"
 "에 있으면 이 작업은 효과가 없습니다."
 
-#: shell/debugcontroller.cpp:295
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "중단점 전환"
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:297
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "중단점 전환"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "편집기의 현재 줄에 중단점을 설정하거나 해제합니다."
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "현재 줄 표시"
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "현재 실행 중인 위치 표시"
 
-#: shell/debugcontroller.cpp:304
+#: shell/debugcontroller.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "편집기에서 실행하고 있는 줄로 이동합니다."
 
-#: shell/debugcontroller.cpp:430
+#: shell/debugcontroller.cpp:431
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "디버그"
 
-#: shell/debugcontroller.cpp:480 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "디버그 시작"
 
-#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "현재 시작 디버그"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2077,19 +2077,19 @@ msgid ""
 msgstr ""
 "현재 활성화된 시작 설정에 지정한 대상 또는 프로그램을 디버거에서 실행합니다."
 
-#: shell/debugcontroller.cpp:486
+#: shell/debugcontroller.cpp:487
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "계속(&C)"
 
-#: shell/debugcontroller.cpp:488
+#: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "앱 계속 실행"
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:490
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5524,31 +5524,31 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "브랜치..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:38
+#: vcs/dvcs/ui/branchmanager.cpp:40
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "브랜치 관리자"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "새 브랜치를 만들기 전에 목록에서 기반 브랜치를 선택해야 합니다."
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "새 브랜치"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "새 브랜치 이름:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:124
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5557,7 +5557,7 @@ msgstr ""
 "\"%1\" 브랜치가 이미 존재합니다.\n"
 "다른 이름을 지정하십시오."
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:138
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
@@ -5566,17 +5566,17 @@ msgstr ""
 "현재 \"%1\" 브랜치에 있습니다.\n"
 "브랜치를 삭제하려면 다른 브랜치로 변경하십시오."
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:145
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "\"%1\" 브랜치를 삭제하시겠습니까?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
+#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "\"%1\" 브랜치에 이미 있음\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:181
+#: vcs/dvcs/ui/branchmanager.cpp:186
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5585,28 +5585,28 @@ msgstr ""
 "브랜치 \"%1\"이(가) 없습니다.\n"
 "다른 이름을 지정하십시오."
 
-#: vcs/dvcs/ui/branchmanager.cpp:189
+#: vcs/dvcs/ui/branchmanager.cpp:194
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr "현재 브랜치로 병합할 브랜치를 목록에서 선택해야 합니다."
 
-#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "현재 버전에 대한 패치를 생성할 수 없습니다."
 
-#: vcs/dvcs/ui/branchmanager.cpp:262
+#: vcs/dvcs/ui/branchmanager.cpp:267
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "차이점을 가져올 수 없음"
 
-#: vcs/dvcs/ui/branchmanager.cpp:269
+#: vcs/dvcs/ui/branchmanager.cpp:274
 #, kde-format
 msgid "There are no committed differences."
 msgstr "커밋된 차이점이 없습니다."
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"

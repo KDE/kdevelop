@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2024-03-02 17:22+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:121
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -155,7 +155,7 @@ msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Configuración de GDB"
 
-#: gdbconfigpage.cpp:134
+#: gdbconfigpage.cpp:139
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -164,13 +164,13 @@ msgstr ""
 "Xa se está a depurar un programa. Quere interromper a sesión de depuración "
 "actual e continuar co inicio?"
 
-#: gdbconfigpage.cpp:136
+#: gdbconfigpage.cpp:141
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Interromper a sesión"
 
-#: gdbconfigpage.cpp:162
+#: gdbconfigpage.cpp:167
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "Executa unha aplicación nativa en GDB"

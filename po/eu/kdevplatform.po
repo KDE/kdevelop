@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2023-11-04 23:30+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -1862,88 +1862,88 @@ msgctxt "@title:window"
 msgid "Variables"
 msgstr "Aldagaiak"
 
-#: shell/debugcontroller.cpp:223
+#: shell/debugcontroller.cpp:224
 #, kde-format
 msgid "&Restart"
 msgstr "&Berrabiarazi"
 
-#: shell/debugcontroller.cpp:224
+#: shell/debugcontroller.cpp:225
 #, kde-format
 msgid "Restart program"
 msgstr "Berrabiarazi programa"
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:226
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Aplikazioak berrabiarazten ditu hasieratik."
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Eten"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Eten aplikazioa"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Araztutako prozesua edo uneko arazpen-komandoa eteten du."
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Korrika egin &kurtsorera"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Korrika egin kurtsorera"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Exekuzioa jarraitzen du kurtsorearen posiziora heltzen den arte."
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Ezarri e&xekuzio-posizioa kurtsorean"
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Salto egin kurtsorera"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Jarraitu exekuzioa uneko kurtsore-posiziotik."
 
-#: shell/debugcontroller.cpp:250
+#: shell/debugcontroller.cpp:251
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "&Gainetik pasa (Step Over)"
 
-#: shell/debugcontroller.cpp:252
+#: shell/debugcontroller.cpp:253
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Hurrengo lerro gainetik pasa"
 
-#: shell/debugcontroller.cpp:253
+#: shell/debugcontroller.cpp:254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1955,37 +1955,37 @@ msgstr ""
 "funtzio bati dei bat bada funtzio guztia exekutatuko da eta aplikazioa "
 "funtzio-deiaren osteko lerroan geldituko da."
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:262
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Ins&trukzio gainetik pasa"
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Instrukzio gainetik pasa"
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Hurrengo mihiztatze-instrukzio gainetik pasatzen da."
 
-#: shell/debugcontroller.cpp:268
+#: shell/debugcontroller.cpp:269
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "&Pasatu (Step Into)"
 
-#: shell/debugcontroller.cpp:270
+#: shell/debugcontroller.cpp:271
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Hurrengo instrukziora pasatu"
 
-#: shell/debugcontroller.cpp:271
+#: shell/debugcontroller.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1995,37 +1995,37 @@ msgstr ""
 "Iturri-lerro bakarra exekutatzen du. Iturri-lerroa funtzio bati deitzen "
 "badio orduan exekuzioa funtziora sartu ostean geldituko da."
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:279
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "I&nstrukziora pasatu"
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Instrukziora pasatu"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Hurrengo mihiztatze-instrukziora pasatzen da."
 
-#: shell/debugcontroller.cpp:284
+#: shell/debugcontroller.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "&Kanpora pasa (Step Out)"
 
-#: shell/debugcontroller.cpp:286
+#: shell/debugcontroller.cpp:287
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Uneko funtziotik kanpora pasa"
 
-#: shell/debugcontroller.cpp:287
+#: shell/debugcontroller.cpp:288
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2039,66 +2039,66 @@ msgstr ""
 "Programaren exekuzioa kanpoko markoan badago (adib. main()) eragiketak ez du "
 "efekturik."
 
-#: shell/debugcontroller.cpp:295
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Txandakatu eten-puntua"
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:297
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Txandakatu eten-puntua"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Eten-puntua txandakatzen du uneko lerroan editorean."
 
-#: shell/debugcontroller.cpp:302
+#: shell/debugcontroller.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Erakutsi uneko lerroa"
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Erakutsi uneko exekuzio-posizioa"
 
-#: shell/debugcontroller.cpp:304
+#: shell/debugcontroller.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Editorean exekuzio-posiziora salto egiten du."
 
-#: shell/debugcontroller.cpp:430
+#: shell/debugcontroller.cpp:431
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Araztu"
 
-#: shell/debugcontroller.cpp:480 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Araztu abiarazpena"
 
-#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Araztu uneko abiarazpena"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2108,19 +2108,19 @@ msgstr ""
 "Unean aktibo dagoen abiarazpen konfigurazioa duen helburu edo programa "
 "exekutatzen du araztailean."
 
-#: shell/debugcontroller.cpp:486
+#: shell/debugcontroller.cpp:487
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Jarraitu"
 
-#: shell/debugcontroller.cpp:488
+#: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Jarraitu aplikazioaren exekuzioa"
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:490
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5615,13 +5615,13 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Adarrak..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:38
+#: vcs/dvcs/ui/branchmanager.cpp:40
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Adar-kudeatzailea"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
@@ -5629,19 +5629,19 @@ msgstr ""
 "Oinarrizko adar bat hautatu behar duzu zerrendatik adar berri bat sortu "
 "baino lehen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Adar berria."
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:117
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Adar berriaren izena:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:124
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5650,7 +5650,7 @@ msgstr ""
 "\"%1\" adarra badago.\n"
 "Mesedez, hautatu beste izen bat."
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:138
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
@@ -5659,17 +5659,17 @@ msgstr ""
 "Unean \"%1\" adarrean.\n"
 "Hura ezabatzeko, mesedez, aldatu beste adar batera."
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:145
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Ziur zaude '%1' adarra betirako ezabatu nahi duzula?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
+#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "\"%1\" adarrean dagoeneko\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:181
+#: vcs/dvcs/ui/branchmanager.cpp:186
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5678,29 +5678,29 @@ msgstr ""
 "\"%1\" adarra ez da existitzen.\n"
 "Mesedez, hautatu beste izen bat."
 
-#: vcs/dvcs/ui/branchmanager.cpp:189
+#: vcs/dvcs/ui/branchmanager.cpp:194
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr ""
 "Zure uneko adarrarekin konbinatzeko adarra hautatu behar duzu zerrendatik."
 
-#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Ezin izan da uneko bertsiorako adabakia sortu."
 
-#: vcs/dvcs/ui/branchmanager.cpp:262
+#: vcs/dvcs/ui/branchmanager.cpp:267
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Ezin izan da Diff-a bueltatu"
 
-#: vcs/dvcs/ui/branchmanager.cpp:269
+#: vcs/dvcs/ui/branchmanager.cpp:274
 #, kde-format
 msgid "There are no committed differences."
 msgstr "Ez dago berretsitako desberdintasunik."
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"

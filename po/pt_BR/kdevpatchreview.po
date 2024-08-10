@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
 "PO-Revision-Date: 2020-07-29 11:34-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -137,13 +137,13 @@ msgctxt "@item"
 msgid "Insertion"
 msgstr "Inserção"
 
-#: patchhighlighter.cpp:411 patchhighlighter.cpp:419
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
 #, kde-format
 msgctxt "@item"
 msgid "Removal"
 msgstr "Remoção"
 
-#: patchhighlighter.cpp:413 patchhighlighter.cpp:422
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
 #, kde-format
 msgctxt "@item"
 msgid "Change"
