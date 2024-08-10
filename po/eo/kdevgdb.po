@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 02:38+0000\n"
 "PO-Revision-Date: 2023-08-03 21:39+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:121
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -148,7 +148,7 @@ msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Agordo de sencimigilo"
 
-#: gdbconfigpage.cpp:134
+#: gdbconfigpage.cpp:139
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -157,13 +157,13 @@ msgstr ""
 "Programo jam estas sencimigita. Ĉu vi volas ĉesigi la nunan funkciantan "
 "sencimigan seancon kaj daŭrigi kun la lanĉo?"
 
-#: gdbconfigpage.cpp:136
+#: gdbconfigpage.cpp:141
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Ĉesigi Nunan Seancon"
 
-#: gdbconfigpage.cpp:162
+#: gdbconfigpage.cpp:167
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "Efektivigas denaskan aplikaĵon en GDB"

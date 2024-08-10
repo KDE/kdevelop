@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 02:38+0000\n"
 "PO-Revision-Date: 2022-04-17 20:54+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:121
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -146,7 +146,7 @@ msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Nastavenie GDB"
 
-#: gdbconfigpage.cpp:134
+#: gdbconfigpage.cpp:139
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -155,13 +155,13 @@ msgstr ""
 "Program sa už ladí. Chcete prerušiť aktuálne bežiace ladiace sedenie a "
 "pokračovať so spustením?"
 
-#: gdbconfigpage.cpp:136
+#: gdbconfigpage.cpp:141
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: gdbconfigpage.cpp:162
+#: gdbconfigpage.cpp:167
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "Spustí natívnu aplikáciu v GDB"

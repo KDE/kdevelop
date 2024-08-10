@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 02:38+0000\n"
 "PO-Revision-Date: 2022-07-09 08:26+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "(running)"
 msgstr "(триває обробка)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:45
+#: debuggerplugin.cpp:28 lldblauncher.cpp:50
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
@@ -94,12 +94,12 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Пенал налагодження"
 
-#: lldblauncher.cpp:50
+#: lldblauncher.cpp:55
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Виконати діагностику програми у LLDB"
 
-#: lldblauncher.cpp:75
+#: lldblauncher.cpp:80
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -108,7 +108,7 @@ msgstr ""
 "Діагностика програми вже виконується. Хочете перервати поточний сеанс "
 "діагностики і продовжити запуск?"
 
-#: lldblauncher.cpp:77
+#: lldblauncher.cpp:82
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

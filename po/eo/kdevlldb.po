@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 02:38+0000\n"
 "PO-Revision-Date: 2024-05-30 22:41+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "(running)"
 msgstr "(rulanta)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:45
+#: debuggerplugin.cpp:28 lldblauncher.cpp:50
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
@@ -88,12 +88,12 @@ msgstr "<b>Vi bezonas lldb-mi de LLDB 3.8.1 aŭ pli alta.</b><br />Vi uzas: %1"
 msgid "Debugger Toolbar"
 msgstr "Sencimiga Ilobreto"
 
-#: lldblauncher.cpp:50
+#: lldblauncher.cpp:55
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Sencimigi denaskan aplikaĵon en LLDB"
 
-#: lldblauncher.cpp:75
+#: lldblauncher.cpp:80
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -102,7 +102,7 @@ msgstr ""
 "Sencimigo de programo jam estas survoje. Ĉu vi volas ĉesigi la aktuale "
 "rulantan sencimigseancon kaj daŭrigi kun la lanĉo?"
 
-#: lldblauncher.cpp:77
+#: lldblauncher.cpp:82
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

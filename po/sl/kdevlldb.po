@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 02:38+0000\n"
 "PO-Revision-Date: 2022-07-11 08:10+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "(running)"
 msgstr "(v teku)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:45
+#: debuggerplugin.cpp:28 lldblauncher.cpp:50
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
@@ -91,12 +91,12 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Orodna vrstica razhroščevalnika"
 
-#: lldblauncher.cpp:50
+#: lldblauncher.cpp:55
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Razhroščite domorodni program v LLDB"
 
-#: lldblauncher.cpp:75
+#: lldblauncher.cpp:80
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -105,7 +105,7 @@ msgstr ""
 "Program se že razhroščuje. Ali želite prekiniti trenutno zagnano sejo "
 "razhroščevanja in nadaljevati z zagonom?"
 
-#: lldblauncher.cpp:77
+#: lldblauncher.cpp:82
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

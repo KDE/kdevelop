@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-08-10 02:38+0000\n"
 "PO-Revision-Date: 2023-04-17 16:09+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
 "X-Generator: Lokalize 22.12.3\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:121
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -176,7 +176,7 @@ msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB-asetukset"
 
-#: gdbconfigpage.cpp:134
+#: gdbconfigpage.cpp:139
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -185,13 +185,13 @@ msgstr ""
 "Tämän ohjelman virheiden paikantaminen on jo meneillään. Haluatko keskeyttää "
 "nykyisen virheenpaikannusistunnon ja jatkaa käynnistämistä?"
 
-#: gdbconfigpage.cpp:136
+#: gdbconfigpage.cpp:141
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Keskeytä nykyinen istunto"
 
-#: gdbconfigpage.cpp:162
+#: gdbconfigpage.cpp:167
 #, fuzzy, kde-format
 #| msgid "Executes a Native application in GDB"
 msgid "Executes a native application in GDB"
