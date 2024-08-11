@@ -27,7 +27,7 @@
 #include <tests/autotestshell.h>
 #include <tests/plugintesthelpers.h>
 #include <tests/testfile.h>
-#include <tests/testhelpers.h>
+#include <tests/testhelpermacros.h>
 
 #include "testqthelpconfig.h"
 

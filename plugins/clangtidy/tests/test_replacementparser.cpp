@@ -11,7 +11,7 @@
 // KDevPlatform
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
-#include <tests/testhelpers.h>
+#include <tests/testhelpermacros.h>
 // Qt
 #include <QDir>
 #include <QFile>
