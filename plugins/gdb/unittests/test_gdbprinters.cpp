@@ -300,9 +300,7 @@ void QtPrintersTest::testQMapInt()
     QByteArray out = gdb.execute("print m");
     QVERIFY(verifyContainsMapElementCount(out, "int", "int", 0));
 
-    gdb.execute("break qmapint.cpp:7");
-    gdb.execute("cont");
-
+    gdb.execute("next");
     out = gdb.execute("print m");
 
     if (isMissingStdMapPrettyPrinter(gdb)) {
@@ -310,6 +308,11 @@ void QtPrintersTest::testQMapInt()
         QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
     }
 
+    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 1));
+    QVERIFY(out.contains("[10] = 100"));
+
+    gdb.execute("next");
+    out = gdb.execute("print m");
     QVERIFY(verifyContainsMapElementCount(out, "int", "int", 2));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
