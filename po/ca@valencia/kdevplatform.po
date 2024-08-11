@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-07 02:29+0000\n"
+"POT-Creation-Date: 2024-08-11 02:33+0000\n"
 "PO-Revision-Date: 2024-07-19 11:07+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -5462,44 +5462,44 @@ msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "Tanca el missatge"
 
-#: util/duchainify/main.cpp:255
+#: util/duchainify/main.cpp:263
 #, kde-format
 msgid "duchainify"
 msgstr "duchainify"
 
-#: util/duchainify/main.cpp:256
+#: util/duchainify/main.cpp:264
 #, kde-format
 msgid "DUChain builder application"
 msgstr "Aplicació de construcció de la cadena de definició d'usos (DUChain)"
 
-#: util/duchainify/main.cpp:257
+#: util/duchainify/main.cpp:265
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(c) 2009 David Nolden"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:271
 #, kde-format
 msgid "file or directory"
 msgstr "fitxer o directori"
 
-#: util/duchainify/main.cpp:266
+#: util/duchainify/main.cpp:274
 #, kde-format
 msgid "Show warnings"
 msgstr "Mostra els avisos"
 
-#: util/duchainify/main.cpp:268
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "Mostra els avisos i l'eixida de depuració"
 
-#: util/duchainify/main.cpp:270
+#: util/duchainify/main.cpp:278
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr ""
 "Força una actualització dels contexts superiors corresponents en els fitxers "
 "proporcionats"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:282
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
@@ -5508,12 +5508,12 @@ msgstr ""
 "Força una actualització dels contexts superiors corresponents en els fitxers "
 "proporcionats i tots els fitxers d'inclusió"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:284
 #, kde-format
 msgid "Number of threads to use"
 msgstr "Nombre de fils que s'han d'utilitzar"
 
-#: util/duchainify/main.cpp:279
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5525,21 +5525,26 @@ msgstr ""
 "totes-les-declaracions, totes-les-declaracions-i-usos, totes-les-"
 "declaracions-i-usos-i-AST"
 
-#: util/duchainify/main.cpp:283
+#: util/duchainify/main.cpp:291
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr ""
 "Imprimix a la pantalla tota la cadena de definició d'usos després de "
 "completar una anàlisi amb èxit"
 
-#: util/duchainify/main.cpp:285
+#: util/duchainify/main.cpp:293
+#, kde-format
+msgid "Print parent contexts when dumping contexts"
+msgstr ""
+
+#: util/duchainify/main.cpp:295
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
 "Imprimix a la pantalla totes les definicions per a la cadena de definició "
 "d'usos després de completar una anàlisi amb èxit"
 
-#: util/duchainify/main.cpp:288
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
@@ -5547,24 +5552,24 @@ msgstr ""
 "Imprimix a la pantalla tota la «PersistentSymbolTable» per a la cadena de "
 "definició d'usos després de completar una anàlisi amb èxit"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:301
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
 "El número definix la profunditat màxima en la qual s'imprimiran els detalls "
 "de la declaració"
 
-#: util/duchainify/main.cpp:294
+#: util/duchainify/main.cpp:304
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr "Bolca la gràfica DUChain (en format .dot)"
 
-#: util/duchainify/main.cpp:296
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "Imprimix a la pantalla els problemes trobats durant l'anàlisi"
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:308
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr "Bolca de forma recursiva els errors des dels contextos importats."

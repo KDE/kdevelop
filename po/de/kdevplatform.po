@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-07 02:29+0000\n"
+"POT-Creation-Date: 2024-08-11 02:33+0000\n"
 "PO-Revision-Date: 2023-04-30 18:41+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -5437,44 +5437,44 @@ msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "Nachricht schließen"
 
-#: util/duchainify/main.cpp:255
+#: util/duchainify/main.cpp:263
 #, kde-format
 msgid "duchainify"
 msgstr "duchainify"
 
-#: util/duchainify/main.cpp:256
+#: util/duchainify/main.cpp:264
 #, kde-format
 msgid "DUChain builder application"
 msgstr "DUChain-Builder-Anwendung"
 
-#: util/duchainify/main.cpp:257
+#: util/duchainify/main.cpp:265
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "© 2009 David Nolden"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:271
 #, kde-format
 msgid "file or directory"
 msgstr "Datei oder Ordner"
 
-#: util/duchainify/main.cpp:266
+#: util/duchainify/main.cpp:274
 #, kde-format
 msgid "Show warnings"
 msgstr "Warnungen anzeigen"
 
-#: util/duchainify/main.cpp:268
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "Warnungen und Debug-Ausgaben anzeigen"
 
-#: util/duchainify/main.cpp:270
+#: util/duchainify/main.cpp:278
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr ""
 "Eine Aktualisierung der höchsten Kontexte gemäß der angegebenen Dateien "
 "erzwingen"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:282
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
@@ -5483,12 +5483,12 @@ msgstr ""
 "Eine Aktualisierung der höchsten Kontexte gemäß der angegebenen Dateien und "
 "ihrer Include-Dateien erzwingen"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:284
 #, kde-format
 msgid "Number of threads to use"
 msgstr "Anzahl der zu verwendenden Threads"
 
-#: util/duchainify/main.cpp:279
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5499,21 +5499,26 @@ msgstr ""
 "visible-declarations (default), all-declarations, all-declarations-and-uses, "
 "all-declarations-and-uses-and-AST"
 
-#: util/duchainify/main.cpp:283
+#: util/duchainify/main.cpp:291
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr ""
 "Vollständige Definition-Use-Chain (Sprachunabhängige Strukturierung der "
 "Quelltexte) beim erfolgreichen Einlesen ausgeben"
 
-#: util/duchainify/main.cpp:285
+#: util/duchainify/main.cpp:293
+#, kde-format
+msgid "Print parent contexts when dumping contexts"
+msgstr ""
+
+#: util/duchainify/main.cpp:295
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
 "Vollständiges Definitions-Repository der DUChain beim erfolgreichen Einlesen "
 "ausgeben"
 
-#: util/duchainify/main.cpp:288
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
@@ -5521,24 +5526,24 @@ msgstr ""
 "Vollständige PersistentSymbolTable der DUChain beim erfolgreichen Einlesen "
 "ausgeben"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:301
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
 "Zahl, die die maximale Tiefe angibt, in der Deklarationsdetails ausgegeben "
 "werden"
 
-#: util/duchainify/main.cpp:294
+#: util/duchainify/main.cpp:304
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr "DUChain-Graph im „.dot“-Format ausgeben"
 
-#: util/duchainify/main.cpp:296
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "Beim Einlesen aufgetretene Probleme ausgeben"
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:308
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr "Fehler aus importierten Kontexten rekursiv ausgeben."

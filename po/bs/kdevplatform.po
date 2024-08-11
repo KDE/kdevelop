@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-07 02:29+0000\n"
+"POT-Creation-Date: 2024-08-11 02:33+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -5887,44 +5887,44 @@ msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "Poruka potvrde:"
 
-#: util/duchainify/main.cpp:255
+#: util/duchainify/main.cpp:263
 #, kde-format
 msgid "duchainify"
 msgstr "duchainify"
 
-#: util/duchainify/main.cpp:256
+#: util/duchainify/main.cpp:264
 #, fuzzy, kde-format
 #| msgid "Duchain builder application"
 msgid "DUChain builder application"
 msgstr "Graditelj alata za provjeru definicije i korištenja"
 
-#: util/duchainify/main.cpp:257
+#: util/duchainify/main.cpp:265
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(c) 2009 David Nolden"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:271
 #, fuzzy, kde-format
 #| msgid "directory"
 msgid "file or directory"
 msgstr "direktorij"
 
-#: util/duchainify/main.cpp:266
+#: util/duchainify/main.cpp:274
 #, kde-format
 msgid "Show warnings"
 msgstr "Prikaži upozorenja"
 
-#: util/duchainify/main.cpp:268
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "Prikaži upozorenja i traži greške na izlazu"
 
-#: util/duchainify/main.cpp:270
+#: util/duchainify/main.cpp:278
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr "Forsiraj ažuriranje gornjeg sadržaja koji se odnosi na ove datoteke"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:282
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
@@ -5933,12 +5933,12 @@ msgstr ""
 "Forsiraj ažuriranje gornjeg sadržaja koji se odnosi na ove datoteke i sve "
 "uključene datoteke"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:284
 #, kde-format
 msgid "Number of threads to use"
 msgstr "Broj programskih niti koji se koristi"
 
-#: util/duchainify/main.cpp:279
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5949,40 +5949,45 @@ msgstr ""
 "visible-declarations (podrazumijevano), all-declarations, all-declarations-"
 "and-uses, all-declarations-and-uses-and-AST"
 
-#: util/duchainify/main.cpp:283
+#: util/duchainify/main.cpp:291
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr "Prikaži kompletan lanac definicije upotrebe nakon uspješne analize"
 
-#: util/duchainify/main.cpp:285
+#: util/duchainify/main.cpp:293
+#, kde-format
+msgid "Print parent contexts when dumping contexts"
+msgstr ""
+
+#: util/duchainify/main.cpp:295
 #, fuzzy, kde-format
 #| msgid "Print complete Definition-Use Chain on successful parse"
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr "Prikaži kompletan lanac definicije upotrebe nakon uspješne analize"
 
-#: util/duchainify/main.cpp:288
+#: util/duchainify/main.cpp:298
 #, fuzzy, kde-format
 #| msgid "Print complete Definition-Use Chain on successful parse"
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr "Prikaži kompletan lanac definicije upotrebe nakon uspješne analize"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:301
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
 
-#: util/duchainify/main.cpp:294
+#: util/duchainify/main.cpp:304
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr ""
 
-#: util/duchainify/main.cpp:296
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "Prikaži probleme koji su se desili tokom parsiranja"
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:308
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr ""

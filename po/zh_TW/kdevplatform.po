@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-07 02:29+0000\n"
+"POT-Creation-Date: 2024-08-11 02:33+0000\n"
 "PO-Revision-Date: 2024-08-06 05:13+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -5251,54 +5251,54 @@ msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "關閉訊息"
 
-#: util/duchainify/main.cpp:255
+#: util/duchainify/main.cpp:263
 #, kde-format
 msgid "duchainify"
 msgstr "duchainify"
 
-#: util/duchainify/main.cpp:256
+#: util/duchainify/main.cpp:264
 #, kde-format
 msgid "DUChain builder application"
 msgstr "DUChain 建立器應用程式"
 
-#: util/duchainify/main.cpp:257
+#: util/duchainify/main.cpp:265
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(c) 2009 David Nolden"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:271
 #, kde-format
 msgid "file or directory"
 msgstr "檔案或目錄"
 
-#: util/duchainify/main.cpp:266
+#: util/duchainify/main.cpp:274
 #, kde-format
 msgid "Show warnings"
 msgstr "顯示警告"
 
-#: util/duchainify/main.cpp:268
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "顯示警告與除錯輸出"
 
-#: util/duchainify/main.cpp:270
+#: util/duchainify/main.cpp:278
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr "強制更新與指定檔案相關的頂端內文"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:282
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
 "all included files"
 msgstr "強制更新與指定檔案與所有引入檔相關的頂端內文"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:284
 #, kde-format
 msgid "Number of threads to use"
 msgstr "使用執行緒的數量"
 
-#: util/duchainify/main.cpp:279
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5309,40 +5309,45 @@ msgstr ""
 "declarations (預設), all-declarations, all-declarations-and-uses, all-"
 "declarations-and-uses-and-AST"
 
-#: util/duchainify/main.cpp:283
+#: util/duchainify/main.cpp:291
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr "剖析成功時印出完整的「定義-使用」鍊"
 
-#: util/duchainify/main.cpp:285
+#: util/duchainify/main.cpp:293
+#, kde-format
+msgid "Print parent contexts when dumping contexts"
+msgstr ""
+
+#: util/duchainify/main.cpp:295
 #, fuzzy, kde-format
 #| msgid "Print complete Definition-Use Chain on successful parse"
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr "剖析成功時印出完整的「定義-使用」鍊"
 
-#: util/duchainify/main.cpp:288
+#: util/duchainify/main.cpp:298
 #, fuzzy, kde-format
 #| msgid "Print complete Definition-Use Chain on successful parse"
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr "剖析成功時印出完整的「定義-使用」鍊"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:301
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr "定義印出宣告細節時的最高深度"
 
-#: util/duchainify/main.cpp:294
+#: util/duchainify/main.cpp:304
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr "傾印 DUChain 圖表（用 .dot 格式）"
 
-#: util/duchainify/main.cpp:296
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "印出在分析時遇到的問題"
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:308
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr "遞迴傾印來自已匯入的內文的錯誤。"

@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the kdevelop package.
 #
 # pan93412 <pan93412@gmail.com>, 2019.
-# SPDX-FileCopyrightText: 2023 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023, 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-11-28 18:21+0900\n"
+"PO-Revision-Date: 2024-08-09 04:01+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 24.04.70\n"
 
 #: config/projectconfigpage.cpp:44
 #, kde-format
@@ -51,7 +51,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without a Kate modeline."
-msgstr ""
+msgstr "根據文件的格式化樣式，不考慮 Kate 的模式行來覆寫編輯器的縮排模式。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_overrideKateIndentation)
 #: config/projectconfigpage.ui:45
@@ -66,7 +66,7 @@ msgstr "覆寫編輯器縮排模式"
 msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
-msgstr ""
+msgstr "根據文件的格式化樣式新增 Kate 編輯器的模式行。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_modelinesEnabled)
 #: config/projectconfigpage.ui:55

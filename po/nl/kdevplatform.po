@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-07 02:29+0000\n"
+"POT-Creation-Date: 2024-08-11 02:33+0000\n"
 "PO-Revision-Date: 2024-07-19 09:59+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -5446,44 +5446,44 @@ msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "Bericht sluiten"
 
-#: util/duchainify/main.cpp:255
+#: util/duchainify/main.cpp:263
 #, kde-format
 msgid "duchainify"
 msgstr "duchainify"
 
-#: util/duchainify/main.cpp:256
+#: util/duchainify/main.cpp:264
 #, kde-format
 msgid "DUChain builder application"
 msgstr "DUChain-bouwer toepassing"
 
-#: util/duchainify/main.cpp:257
+#: util/duchainify/main.cpp:265
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(c) 2009 David Nolden"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:271
 #, kde-format
 msgid "file or directory"
 msgstr "bestand of map"
 
-#: util/duchainify/main.cpp:266
+#: util/duchainify/main.cpp:274
 #, kde-format
 msgid "Show warnings"
 msgstr "Waarschuwingen tonen"
 
-#: util/duchainify/main.cpp:268
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "Waarschuwingen en debuguitvoer tonen"
 
-#: util/duchainify/main.cpp:270
+#: util/duchainify/main.cpp:278
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr ""
 "Forceer een bijwerken van de bovenste contexten die met de opgegeven "
 "bestanden overeenkomen"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:282
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
@@ -5492,12 +5492,12 @@ msgstr ""
 "Forceer een bijwerken van de bovenste contexten die met de opgegeven en alle "
 "ingevoegde bestanden overeenkomen"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:284
 #, kde-format
 msgid "Number of threads to use"
 msgstr "Aantal te gebruiken threads"
 
-#: util/duchainify/main.cpp:279
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5508,18 +5508,23 @@ msgstr ""
 "declaraties, zichtbare-declaraties (standaard), alle-declaraties, alle-"
 "declaraties-en-gebruiken, alle-declaraties-en-gebruiken-en-AST"
 
-#: util/duchainify/main.cpp:283
+#: util/duchainify/main.cpp:291
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr "Druk de complete definitie-gebruikersketting af bij succesvol ontleden"
 
-#: util/duchainify/main.cpp:285
+#: util/duchainify/main.cpp:293
+#, kde-format
+msgid "Print parent contexts when dumping contexts"
+msgstr ""
+
+#: util/duchainify/main.cpp:295
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
 "Druk de complete DUChain Definitions repository af bij succesvol ontleden"
 
-#: util/duchainify/main.cpp:288
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
@@ -5527,24 +5532,24 @@ msgstr ""
 "Druk de complete DUChain PersistentSymbolTable repository af bij succesvol "
 "ontleden"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:301
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
 "Getal dat dee maximum diepte definieert tot waar details van declaratie "
 "worden afgedrukt"
 
-#: util/duchainify/main.cpp:294
+#: util/duchainify/main.cpp:304
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr "Dump DUChain-graaf (in .dot formaat)"
 
-#: util/duchainify/main.cpp:296
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "Problemen tijdens het ontleden afdrukken"
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:308
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr "Dump fouten uit geïmporteerde contexts recursief."
