@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:40+0000\n"
-"PO-Revision-Date: 2024-08-03 14:09+0900\n"
+"PO-Revision-Date: 2024-08-09 04:04+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
@@ -36,7 +36,7 @@ msgstr "LLDB 主控台"
 #: debugsession.cpp:137
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr ""
+msgstr "正嘗試在不支援的 LLDB 版本上執行使用者指令"
 
 #: debugsession.cpp:336
 #, kde-format
@@ -63,6 +63,9 @@ msgid ""
 "<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
 "continue?"
 msgstr ""
+"<b>您的 lldb-mi 版本不受支援，因為它缺乏一個必要的改變。</b><br/>詳細資訊請"
+"見 https://llvm.org/bugs/show_bug.cgi?id=28026。<br/>除錯器主控台會停用來防止"
+"崩潰。<br/>您要繼續嗎？"
 
 #: debugsession.cpp:395
 #, kde-format
@@ -74,6 +77,7 @@ msgstr "不支援的 LLDB 版本"
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
 msgstr ""
+"<b>您需要來自 LLDB 3.8.1 版以上的 lldb-mi。</b><br />您目前的版本是：%1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
@@ -84,7 +88,7 @@ msgstr "除錯器工具列"
 #: lldblauncher.cpp:55
 #, kde-format
 msgid "Debug a native application in LLDB"
-msgstr ""
+msgstr "在 LLDB 除錯原生應用程式"
 
 #: lldblauncher.cpp:80
 #, kde-format
@@ -92,6 +96,7 @@ msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
+"某個應用程式正在除錯中。是否中止目前執行的除錯階段，並使用此啟動階段繼續？"
 
 #: lldblauncher.cpp:82
 #, kde-format
@@ -124,7 +129,7 @@ msgstr "除錯器執行檔："
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to lldb-mi executable..."
-msgstr ""
+msgstr "覆蓋 lldb-mi 可執行檔的路徑…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/lldbconfigpage.ui:49
@@ -201,7 +206,7 @@ msgstr "框架堆疊"
 #, kde-format
 msgctxt "@option:check"
 msgid "Break on start:"
-msgstr ""
+msgstr "開始時中斷："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
 #: widgets/lldbconfigpage.ui:158

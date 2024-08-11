@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:40+0000\n"
-"PO-Revision-Date: 2024-08-08 06:03+0200\n"
+"PO-Revision-Date: 2024-08-10 06:32+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1927,6 +1927,9 @@ msgid ""
 "is a call to a function the whole function is executed and the app will stop "
 "at the line following the function call."
 msgstr ""
+"მიმდინარე კოდის ფაილის ერთი ხაზის შესრულება. თუ კოდის ხაზი ფუნქციის "
+"გამოძახებაა, ფუნქცია მთლიანად შესრულდება და აპი ფუნქციის გამოძახების შემდეგ "
+"ხაზზე გაჩერდება."
 
 #: shell/debugcontroller.cpp:262
 #, kde-format
@@ -1965,6 +1968,8 @@ msgid ""
 "Executes exactly one line of source. If the source line is a call to a "
 "function then execution will stop after the function has been entered."
 msgstr ""
+"შეასრულებს კოდის ზუსტად ერთ ხაზს. თუ კოდის ხაზი ფუნქციის გამოძახებაა, "
+"ფუნქციაზე გადასვლის შემდეგ შესრულება შეწყდება."
 
 #: shell/debugcontroller.cpp:279
 #, kde-format
@@ -4147,6 +4152,8 @@ msgid ""
 "<p>Highlight semantic problems, such as non-existent or inaccessible "
 "declarations.</p>"
 msgstr ""
+"<p>სემანტიკური პრობლემების, მაგალითად არარსებული ან ხელმიუწვდომელი აღწერების "
+"გამოკვეთა.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/languagepreferences.ui:234
@@ -4738,13 +4745,15 @@ msgid ""
 "When enabled, tabs and other widgets are colored based on the project "
 "affiliation"
 msgstr ""
+"როცა ჩართულია, ტაბები და სხვა ვიჯეტები პროექტში მნიშვნელობის დონის მიხედვით "
+"გაფერადდება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ColorizeByProject)
 #: shell/settings/uiconfig.ui:154
 #, kde-format
 msgctxt "@option:check"
 msgid "Color widgets based on the project affiliation"
-msgstr ""
+msgstr "ვიჯეტები გაფერადება პროექტში მნიშვნელობის მიხედვით"
 
 #: shell/settings/uipreferences.cpp:55
 #, kde-format
@@ -4795,6 +4804,8 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
+"თავიდან დააფორმატებს მონიშნულ ტექსტს ან მთლიან ფაილს, თუ მონიშნული არაფერია, "
+"პროგრამით: <i>%1</i> და სტილით <b>%2</b>."
 
 #: shell/sourceformattercontroller.cpp:614
 #, kde-format
@@ -4808,13 +4819,14 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
-msgstr ""
+msgstr "კოდის ხაზის თავიდან დაფორმატება პროგრამით <i>%1</i> სტილით <b>%2</b>."
 
 #: shell/sourceformattercontroller.cpp:621
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
+"მონიშნულის ან ფაილის თავიდან დაფორმატება მორგებული კოდის დამფორმატებლით"
 
 #: shell/sourceformattercontroller.cpp:623
 #, kde-format
@@ -4823,12 +4835,14 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"თავიდან დააფორმატებს მონიშნულ ტექსტს ან მთლიან ფაილს, თუ მონიშნული არაფერია, "
+"მორგებული კოდის დამფორმატებლით."
 
 #: shell/sourceformattercontroller.cpp:625
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr ""
+msgstr "მიმდინარე ხაზის თავიდან დაფორმატება მორგებული კოდის დამფორმატებლით"
 
 #: shell/sourceformattercontroller.cpp:627
 #, kde-format
@@ -5216,6 +5230,8 @@ msgstr "კონცენტრაციის რეჟიმი"
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
 msgstr ""
+"საკონტროლო ელემენტების უმრავლესობის მოცილება მნიშვნელოვან ადგილებზე "
+"ყურადღების გასამახვილებლად"
 
 #: sublime/mainwindow_p.cpp:87
 #, kde-format
@@ -5325,7 +5341,7 @@ msgstr "გაფრთხილებებისა და გამართ�
 #: util/duchainify/main.cpp:270
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
-msgstr ""
+msgstr "მითითებული ფაილების ზედა კონტექსტების ნაძალადევი განახლება"
 
 #: util/duchainify/main.cpp:274
 #, kde-format
@@ -5350,7 +5366,7 @@ msgstr ""
 #: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
-msgstr ""
+msgstr "'აღწერა - გამოყენების' ჯაჭვის ჩვენება წარმატებული დამუშავებისას"
 
 #: util/duchainify/main.cpp:285
 #, kde-format
@@ -5367,11 +5383,12 @@ msgstr ""
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
+"რიცხვი, რომელიც აღწერს მაქსიმალურ სიღრმეს, სადაც აღწერის დეტალები დაიბეჭდება"
 
 #: util/duchainify/main.cpp:294
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
-msgstr ""
+msgstr "DUChain ფორმატის გრაფის გამონა (ფორმატში .dot)"
 
 #: util/duchainify/main.cpp:296
 #, kde-format
@@ -5492,7 +5509,7 @@ msgstr "ბრენჩების მმართველი"
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
-msgstr ""
+msgstr "სანამ ახალ ბრენჩს შექმნით, სიიდან საბაზისო ბრენჩი უნდა აირჩიოთ."
 
 #: vcs/dvcs/ui/branchmanager.cpp:117
 #, kde-format
@@ -5546,7 +5563,7 @@ msgstr ""
 #: vcs/dvcs/ui/branchmanager.cpp:194
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
-msgstr ""
+msgstr "მიმდინარესთან შერწყმისთვის ჯერ სიდან ბრენჩი უნდა აირჩიოთ."
 
 #: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
