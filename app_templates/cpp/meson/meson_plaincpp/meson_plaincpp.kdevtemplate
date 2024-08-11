@@ -25,6 +25,7 @@ Name[sv]=Meson C++
 Name[tr]=Meson C++
 Name[uk]=Meson C++
 Name[x-test]=xxMeson C++xx
+Name[zh_TW]=Meson C++
 Comment=Simple Meson-based C++ application
 Comment[ca]=Aplicació senzilla en C++ basada en el Meson
 Comment[ca@valencia]=Aplicació senzilla en C++ basada en Meson
