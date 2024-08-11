@@ -56,6 +56,7 @@ Comment[tr]=Ayrı bir Qt Designer dosyası ve özel gerçekleme ile QDialog alt 
 Comment[uk]=Підклас QDialog із окремим файлом Qt Designer і закритою (private) реалізацією
 Comment[x-test]=xxQDialog subclass with a separate Qt Designer file and private implementationxx
 Comment[zh_CN]=包含一个独立的 Qt Designer 文件和私有实现的 QDialog 子类
+Comment[zh_TW]=QDialog 子類別，含個別的 Qt 設計師檔與私人實作
 Category=C++/Qt
 Language=C++
 Language[az]=C++

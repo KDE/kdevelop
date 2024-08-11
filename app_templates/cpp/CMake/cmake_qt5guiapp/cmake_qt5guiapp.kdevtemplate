@@ -61,6 +61,7 @@ Comment[tr]=Qt5 CMake Gui uygulaması. CMake/Qt5 tabanlı bir arayüz uygulamas�
 Comment[uk]=Програма Qt5 з графічним інтерфейсом і системою збирання CMake. Створити графічну програму, засновану на CMake/Qt5 (сумісну з декількома платформами)
 Comment[x-test]=xxQt5 CMake Gui application. Generate a CMake/Qt5 based GUI application (crossplatform compatible)xx
 Comment[zh_CN]=生成基于 CMake/Qt5 的图形应用程序 (跨平台兼容)
+Comment[zh_TW]=Qt5 CMake 圖形介面應用程式。產生一個 CMake/Qt5 為基礎的圖形介面應用程式（跨平台相容）
 ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
 Category=Qt/Graphical
 Icon=cmake_qt5guiapp.png
