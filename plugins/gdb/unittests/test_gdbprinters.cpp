@@ -8,13 +8,18 @@
 
 #include "tests/debuggers-tests-config.h"
 
+#include <tests/testhelpermacros.h>
+
 #include <QCoreApplication>
 #include <QTest>
 #include <QProcess>
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QRegularExpression>
 #include <QStandardPaths>
+
+namespace {
 
 const QString BINARY_PATH(DEBUGGEE_BIN_DIR);
 
@@ -88,6 +93,17 @@ public:
         return out;
     }
 };
+
+[[nodiscard]] bool containsConsecutiveElements(const QByteArray& out, QStringList elements)
+{
+    for (auto& e : elements) {
+        e = QRegularExpression::escape(e);
+    }
+    const auto pattern = elements.join("[,\\s]+");
+    return QString::fromUtf8(out).contains(QRegularExpression{pattern});
+}
+
+} // unnamed namespace
 
 void QtPrintersTest::initTestCase()
 {
@@ -411,26 +427,40 @@ void QtPrintersTest::testQUrl()
     QVERIFY(defaultConstructed.contains("<invalid>"));
 }
 
-void QtPrintersTest::testQHashInt()
+static void commonTestQHashOrMultiHashInt(GdbProcess& gdb, const QByteArray& containerName)
 {
-    GdbProcess gdb(QStringLiteral("debuggee_qhashint"));
+    const auto containerElementCount = [&containerName](int size) -> QByteArray {
+        return containerName + "<int, int> (size = " + QByteArray::number(size) + ")";
+    };
 
-    gdb.execute("break qhashint.cpp:5");
-    gdb.execute("run");
     QByteArray out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<int, int> (size = 0)"));
+    QVERIFY(out.contains(containerElementCount(0)));
 
-    gdb.execute("break qhashint.cpp:7");
-    gdb.execute("cont");
+    gdb.execute("next");
     out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<int, int> (size = 2)"));
+    QVERIFY(out.contains(containerElementCount(1)));
+    QVERIFY(out.contains("[10] = 100"));
+
+    gdb.execute("next");
+    out = gdb.execute("print h");
+    QVERIFY(out.contains(containerElementCount(2)));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
 
     gdb.execute("next");
     out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<int, int> (size = 3)"));
+    QVERIFY(out.contains(containerElementCount(3)));
     QVERIFY(out.contains("[30] = 300"));
+}
+
+void QtPrintersTest::testQHashInt()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qhashint"));
+    gdb.execute("break qhashint.cpp:5");
+    gdb.execute("run");
+
+    commonTestQHashOrMultiHashInt(gdb, "QHash");
+    RETURN_IF_TEST_FAILED();
 }
 
 void QtPrintersTest::testQHashString()
@@ -446,6 +476,41 @@ void QtPrintersTest::testQHashString()
     out = gdb.execute("print h");
     QVERIFY(out.contains("QHash<QString, QString> (size = 3)"));
     QVERIFY(out.contains("[\"30\"] = \"300\""));
+}
+
+void QtPrintersTest::testQMultiHashInt()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qmultihashint"));
+    gdb.execute("break qmultihashint.cpp:5");
+    gdb.execute("run");
+
+    commonTestQHashOrMultiHashInt(gdb, "QMultiHash");
+    RETURN_IF_TEST_FAILED();
+
+    gdb.execute("next");
+    QByteArray out = gdb.execute("print h");
+    QVERIFY(out.contains("QMultiHash<int, int> (size = 4)"));
+    QVERIFY(out.contains("[10] = 100"));
+    QVERIFY(out.contains("[20] = 200"));
+    QVERIFY(out.contains("[30] = 300"));
+    QVERIFY(out.contains("[10] = 123"));
+
+    gdb.execute("break qmultihashint.cpp:16");
+    gdb.execute("cont");
+    out = gdb.execute("print h");
+    QVERIFY(out.contains("QMultiHash<int, int> (size = 7)"));
+    QVERIFY(out.contains("[10] = 100"));
+    QVERIFY(!out.contains("[20] = 200")); // removed
+    QVERIFY(out.contains("[30] = 300"));
+    QVERIFY(out.contains("[10] = 123"));
+    QVERIFY(out.contains("[30] = 82"));
+    QVERIFY(out.contains("[4] = 99"));
+    QVERIFY(out.contains("[10] = 0"));
+
+    // Now verify QMultiHash's guarantee: items that share the same key appear
+    // consecutively, from the most recently to the least recently inserted value.
+    QVERIFY(containsConsecutiveElements(out, {"[10] = 0", "[10] = 123", "[10] = 100"}));
+    QVERIFY(containsConsecutiveElements(out, {"[30] = 300", "[30] = 82", "[30] = 300"}));
 }
 
 void QtPrintersTest::testQSetInt()
