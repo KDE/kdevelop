@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:40+0000\n"
-"PO-Revision-Date: 2024-08-10 06:32+0200\n"
+"PO-Revision-Date: 2024-08-11 07:01+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3778,6 +3778,9 @@ msgid ""
 "enabled. Disabling the background parser will disable large parts of "
 "KDevelop's functionality.</p>"
 msgstr ""
+"<p>ჩართავს ან გამორთავს ფონურ დამმუშავებელს.<br>თუ დარწმუნებული არ "
+"ბრძანდებით, დატოვეთ ის ჩართული. ფონური დამმუშავებლის გათიშვა KDevelop-ის "
+"ფუნქციონალის ძირითად ნაწილს გათიშავს.</p>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:23
@@ -4041,6 +4044,8 @@ msgid ""
 "<p>The code completion UI has a minimal mode and a detailed mode.<br>Choose "
 "in what cases full code completion will be displayed.</p>"
 msgstr ""
+"<p>კოდის დასრულების ინტერფეისს მინიმალური და დეტალური რეჟიმები გააჩნია."
+"<br>აირჩიეთ, რა შემთხვევაში იქნება ნაჩვენები სრული კოდის დასრულება.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/languagepreferences.ui:84
@@ -4086,6 +4091,8 @@ msgid ""
 "<p>This setting decides about the intensity of colors for local variables, "
 "for example function arguments, variables and the like.</p>"
 msgstr ""
+"<p>ეს პარამეტრი ლოკალური ცვლადებისთვის ფერების ინტენსივობას განსაზღვრავს. "
+"მაგ: ფუნქციის არგუმენტები, ცვლადები და ა.შ.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, localColorizationLabel)
 #: shell/settings/languagepreferences.ui:134
@@ -4439,6 +4446,8 @@ msgid ""
 "If this option is set all open documents will be automatically saved before "
 "any build is started."
 msgstr ""
+"თუ ეს პარამეტრი ჩართულია, აგების პროცესის დაწყებამდე ყველა ღია დოკუმენტი "
+"შენახული იქნება."
 
 #: shell/settings/projectpreferences.cpp:44
 #, kde-format
@@ -4706,6 +4715,8 @@ msgid ""
 "Enables or disables the display of the tab bar at the top of the editor "
 "window."
 msgstr ""
+"ჩართავს ან გამორთავს ჩანართების ველის ჩვენებას რედაქტორის ფანჯრის ზედა "
+"ნაწილში."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:119
@@ -4722,6 +4733,8 @@ msgid ""
 "Enables or disables the display of a close button in each tab in the tab bar "
 "at the top of the editor window."
 msgstr ""
+"ჩართავს ან გამორთავს დახურვის ღილაკის ჩვენებას თითოეული ჩანართისთვის "
+"ჩანართების ზოლზე რედაქტორის ფანჯრის ზედა ნაწილში."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:132
@@ -4851,6 +4864,7 @@ msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
 msgstr ""
+"კურსორის ქვეშ მყოფი ხაზის თავიდან დაფორმატება მორგებული კოდის დამფორმატებლით."
 
 #: shell/sourceformattercontroller.cpp:864
 #, kde-format
@@ -4893,6 +4907,9 @@ msgid ""
 "%2.\n"
 "Are you sure you want to delete it?"
 msgstr ""
+"სტილი %1 ასევე გამოიყენება შემდეგი ენებისთვის:\n"
+"%2.\n"
+"მართლა გნებავთ, წაშალოთ ის?"
 
 #: shell/sourceformatterselectionedit.cpp:1079
 #, kde-format
@@ -5040,7 +5057,7 @@ msgstr "<b>სამუშაო ნაკრები</b>"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this working set. The contained documents are not affected."
-msgstr ""
+msgstr "სამუშაო სეტის წაშლა. შიგნით არსებული დოკუმენტები არ შეიცვლება."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:120
 #, kde-format
@@ -5061,6 +5078,8 @@ msgid ""
 "Add all documents that are part of this working set to the currently active "
 "working set"
 msgstr ""
+"ამ სამუშაო სეტის ნაწილი ყველა დოკუმენტის დამატება ამჟამად აქტიურ სამუშაო "
+"სეტში"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:136
 #, kde-format
@@ -5075,6 +5094,8 @@ msgid ""
 "Remove all documents that are part of this working set from the currently "
 "active working set"
 msgstr ""
+"ამ სამუშაო სეტის ნაწილი ყველა დოკუმენტის წაშლა ამჟამად აქტიური სამუშაო "
+"სეტიდან"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:170
 #, kde-format
@@ -5372,12 +5393,15 @@ msgstr "'აღწერა - გამოყენების' ჯაჭვი
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
+"სრული DUChain Definition-ის რეპოზიტორიის გამოტანა წარმატებული დამუშავებისას"
 
 #: util/duchainify/main.cpp:288
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
+"სრული DUChain PersistentSymbolTable-ის რეპოზიტორიის გამოტანა წარმატებული "
+"დამუშავებისას"
 
 #: util/duchainify/main.cpp:291
 #, kde-format
@@ -5434,6 +5458,8 @@ msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
+"არ გაქვთ ჩაწერის უფლება შემდეგი ფაილებისთვის. დავამატო ჩაწერის უფლება "
+"მფლობელისთვის ჩაწერის მცდელობამდე?"
 
 #: util/shellutils.cpp:82
 #, kde-format
@@ -5929,6 +5955,9 @@ msgid ""
 "not a text document:\n"
 "%1"
 msgstr ""
+"ანოტაციის შესრულება შეუძლებელია, რადგან დოკუმენტი აღმოჩენილი არაა, ან "
+"ტექსტურ დოკუმენტს არ წარმოადგენს:\n"
+"%1"
 
 #: vcs/vcspluginhelper.cpp:446 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
