@@ -69,6 +69,7 @@
   <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
   <summary xml:lang="x-test">xxFeatureful, plugin-extensible IDE for C/C++ and other programming languagesxx</summary>
   <summary xml:lang="zh-CN">全功能，可扩展的支持 C/C++ 和其他语言的集成开发环境。</summary>
+  <summary xml:lang="zh-TW">C/C++ 與其他程式語言用的多功能可擴充 IDE</summary>
   <description>
     <p>KDevelop is a Free and Open Source integrated development environment (IDE).</p>
     <p xml:lang="ar">«مطوّرك» هي بيئة تطوير متكاملة (IDE) حرّة ومفتوحة المصدر.</p>
@@ -98,6 +99,7 @@
     <p xml:lang="uk">KDevelop є вільним комплексним середовищем розробки (IDE) з відкритим кодом.</p>
     <p xml:lang="x-test">xxKDevelop is a Free and Open Source integrated development environment (IDE).xx</p>
     <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
+    <p xml:lang="zh-TW">KDevelop 是一個自由且開源的整合開發環境 (IDE)。</p>
     <p>It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
     <p xml:lang="ar">توفّر البرمجيّة مزايا التّحرير والتّنقّل والتّنقيح لمختلف لغات البرمجة، إلى جانب التّكامل مع مختلف أنظمة البناء وأنظمة التّحكّم بالإصدارات، وذلك عبر البنية المعتمدة على الملحقات.</p>
     <p xml:lang="ca">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
@@ -126,6 +128,7 @@
     <p xml:lang="uk">У програмі передбачено можливості з редагування, навігації та діагностики коду декількома мовами програмування, а також інтеграцію із декількома системами збирання коду та керування версіями. Використовується архітектура з додатками.</p>
     <p xml:lang="x-test">xxIt provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.xx</p>
     <p xml:lang="zh-CN">它提供了多种编程语言的编辑、导航和调试功能，以及与多种构建系统和版本控制系统的集成，使用基于插件的体系结构。</p>
+    <p xml:lang="zh-TW">它提供支援多個程式語言的編輯、瀏覽與除錯功能，並與多個建置系統與版控系統整合。KDevelop 使用基於外掛程式的架構。</p>
     <p>KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
     <p xml:lang="ar">لدى «مطوّرك» سندات تحليل للغات سي، وسي++، وجافاسكربت/QML كما وملحقات خارجيّة أخرى تدعم PHP أو بيثون.</p>
     <p xml:lang="ca">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
@@ -154,6 +157,7 @@
     <p xml:lang="uk">У KDevelop передбачено модулі обробки коду мовами C, C++ та Javascript/QML та додатки для розширення підтримки коду іншими мовами програмування, зокрема PHP і Python.</p>
     <p xml:lang="x-test">xxKDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.xx</p>
     <p xml:lang="zh-CN">KDevelop 提供了 C、C++ 和 JavaScript/QML 的解析器后端，并通过插件提供 PHP 和 Python 等语言的支持。</p>
+    <p xml:lang="zh-TW">KDevelop 有 C、C++ 與 Javascript/QML 的剖析器後端，並有其他外部外掛程式支援 PHP 或 Python 等等。</p>
   </description>
   <url type="homepage">https://kdevelop.org</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kdevelop</url>
@@ -180,6 +184,7 @@
       <caption xml:lang="tr">Kod düzenleyicisi, uçbirim tümleştirmesi ve proje dosyalarını içeren ana pencere</caption>
       <caption xml:lang="uk">Головне вікно з редактором коду, інтегрованим терміналом та файлами проєкту</caption>
       <caption xml:lang="x-test">xxMain window with code editor, terminal integration and project filesxx</caption>
+      <caption xml:lang="zh-TW">主視窗，其中顯示程式碼編輯器、終端機整合、專案檔案</caption>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
