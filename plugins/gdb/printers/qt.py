@@ -646,9 +646,10 @@ class QHashPrinter(PrinterBaseType):
         self._container = container
 
     def children(self):
-        if not self._val['d']:
+        d = self._val['d']
+        if not d:
             return []
-        isQt5 = has_field(self._val, 'buckets') # Qt5 has 'buckets', Qt6 doesn't
+        isQt5 = has_field(d, 'buckets') # Qt5 has 'buckets', Qt6 doesn't
         if isQt5:
             return self._iterator_qt5(self._val)
         else:
@@ -860,13 +861,15 @@ class QSetPrinter(PrinterBaseType):
             return ('[%d]' % (self.count-1), item)
 
     def children(self):
-        if not self._val['q_hash']['d']:
+        qhash = self._val['q_hash']
+        d = qhash['d']
+        if not d:
             return []
 
-        hashPrinter = QHashPrinter(self._val['q_hash'], None)
+        hashPrinter = QHashPrinter(qhash, None)
         hashIterator = hashPrinter.children()
 
-        isQt5 = has_field(self._val, 'buckets') # Qt5 has 'buckets', Qt6 doesn't
+        isQt5 = has_field(d, 'buckets') # Qt5 has 'buckets', Qt6 doesn't
         if isQt5:
             return self._iterator_qt5(hashIterator)
         else:
