@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-11 02:33+0000\n"
-"PO-Revision-Date: 2024-07-19 11:07+0200\n"
+"PO-Revision-Date: 2024-08-11 09:58+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -5526,7 +5526,7 @@ msgstr ""
 #: util/duchainify/main.cpp:293
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Imprimeix els contexts dels pares en bolcar els contexts"
 
 #: util/duchainify/main.cpp:295
 #, kde-format
