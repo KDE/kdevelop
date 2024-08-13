@@ -459,13 +459,19 @@ class QHashPrinter(PrinterBaseType):
         Representation Invariants:
             - self.currentNode is valid if self.d is not 0
         """
-        def __init__(self, val):
+        def __init__(self, val, container):
             self.val = val
             self.d = self.val['d']
             self.bucket = 0
-            self.ktype = self.val.type.template_argument(0)
-            self.vtype = self.val.type.template_argument(1)
             self.count = 0
+            self.isMulti = container == 'QMultiHash'
+
+            keyType = self.val.type.template_argument(0)
+            valueType = self.val.type.template_argument(1)
+            nodeStruct = 'MultiNode' if self.isMulti else 'Node'
+            self.nodeType = f'QHashPrivate::{nodeStruct}<{keyType}, {valueType}>'
+            #print("nodeType=%s" % self.nodeType)
+
             self.firstNode()
 
         def __iter__(self):
@@ -501,11 +507,9 @@ class QHashPrinter(PrinterBaseType):
             entry = span['entries'][offset]
 
             # where node() is return *reinterpret_cast<Node *>(&storage);
-            # where Node is QHashPrivate::Node<Key, T>
-            nodeType = f'QHashPrivate::Node<{self.ktype}, {self.vtype}>'
-            #print("nodeType=%s" % nodeType)
+            # where Node is QHashPrivate::(Multi|)Node<Key, T>
             storage_pointer = entry['storage'].address
-            return storage_pointer.cast(gdb.lookup_type(nodeType).pointer())
+            return storage_pointer.cast(gdb.lookup_type(self.nodeType).pointer())
 
         def updateCurrentNode (self):
             "Cache the current node to avoid computing it repeatedly"
@@ -664,7 +668,7 @@ class QHashPrinter(PrinterBaseType):
         if isQt5:
             return self._iterator_qt5(self._val)
         else:
-            return self._iterator_qt6(self._val)
+            return self._iterator_qt6(self._val, self._container)
 
     def num_children(self):
         d = self._val['d']
