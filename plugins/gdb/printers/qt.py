@@ -458,6 +458,7 @@ class QHashPrinter(PrinterBaseType):
         """
         Representation Invariants:
             - self.currentNode is valid if self.d is not 0
+            - self.chain is valid if self.currentNode is valid and self.isMulti is True
         """
         def __init__(self, val, container):
             self.val = val
@@ -512,9 +513,15 @@ class QHashPrinter(PrinterBaseType):
             return storage_pointer.cast(gdb.lookup_type(self.nodeType).pointer())
 
         def updateCurrentNode (self):
-            "Cache the current node to avoid computing it repeatedly"
+            "Compute the current node and update the QMultiHash chain"
             self.currentNode = self.computeCurrentNode()
             #print("currentNode=%s" % self.currentNode)
+            if self.isMulti:
+                # Python port of any of the following two lines in QMultiHash::iterator:
+                # e = &it.node()->value;
+                # e = i.atEnd() ? nullptr : &i.node()->value;
+                # Note that self.currentNode must be valid (not at end) here.
+                self.chain = self.currentNode['value']
 
         def firstNode (self):
             "Go the first node, See Data::begin()."
@@ -549,7 +556,7 @@ class QHashPrinter(PrinterBaseType):
                     return
 
         def __next__(self):
-            "GDB iteration, first call returns key, second value and then jumps to the next hash node."
+            "GDB iteration, first call returns key, second value and then jumps to the next chain or hash node."
             if not self.d:
                 raise StopIteration
 
@@ -560,8 +567,21 @@ class QHashPrinter(PrinterBaseType):
             if self.count % 2 == 0:
                 item = self.currentNode['key']
             else:
-                item = self.currentNode['value']
-                self.nextNode()
+                # QHash stores an element (key and value pair) in each hash node.
+                # In contrast, QMultiHash stores a key and a chain (linked list)
+                # of values in each hash node.
+                if self.isMulti:
+                    # Python port of the following line in QMultiHash::iterator:
+                    # inline T &value() const noexcept { return (*e)->value; }
+                    item = self.chain['value']
+
+                    # Python port of QMultiHash::iterator::operator++()
+                    self.chain = self.chain['next']
+                    if not self.chain:
+                        self.nextNode()
+                else:
+                    item = self.currentNode['value']
+                    self.nextNode()
 
             self.count = self.count + 1
 
