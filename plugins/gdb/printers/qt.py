@@ -455,6 +455,10 @@ class QHashPrinter(PrinterBaseType):
     "Print a QHash"
 
     class _iterator_qt6(Iterator):
+        """
+        Representation Invariants:
+            - self.currentNode is valid if self.d is not 0
+        """
         def __init__(self, val):
             self.val = val
             self.d = self.val['d']
@@ -481,7 +485,7 @@ class QHashPrinter(PrinterBaseType):
             # where hasNode is return (offsets[i] != SpanConstants::UnusedEntry);
             return self.d['spans'][self.span()]['offsets'][self.index()] == 0xff # SpanConstants::UnusedEntry
 
-        def node (self):
+        def computeCurrentNode (self):
             "Return the node pointed by the iterator, python port of iterator::node()"
             # return &d->spans[span()].at(index());
             span_index = self.span()
@@ -503,13 +507,21 @@ class QHashPrinter(PrinterBaseType):
             storage_pointer = entry['storage'].address
             return storage_pointer.cast(gdb.lookup_type(nodeType).pointer())
 
+        def updateCurrentNode (self):
+            "Cache the current node to avoid computing it repeatedly"
+            self.currentNode = self.computeCurrentNode()
+            #print("currentNode=%s" % self.currentNode)
+
         def firstNode (self):
             "Go the first node, See Data::begin()."
             self.bucket = 0
             #print("firstNode: if (it.isUnused())")
             if self.isUnused():
                 #print("firstNode: ++it;")
-                self.nextNode()
+                self.nextNode() # calls self.updateCurrentNode() if not empty
+            else:
+                self.updateCurrentNode()
+
             #print("firstNode: now at bucket %s" % self.bucket)
 
         def nextNode (self):
@@ -528,6 +540,7 @@ class QHashPrinter(PrinterBaseType):
                     return
                 #print("nextNode: in while; isUnused %s" % self.isUnused())
                 if not self.isUnused():
+                    self.updateCurrentNode()
                     #print("not unused, done")
                     return
 
@@ -538,14 +551,12 @@ class QHashPrinter(PrinterBaseType):
 
             #print("__next__")
 
-            node = self.node()
-
-            #print("got node %s" % node)
+            #print("got node %s" % self.currentNode)
 
             if self.count % 2 == 0:
-                item = node['key']
+                item = self.currentNode['key']
             else:
-                item = node['value']
+                item = self.currentNode['value']
                 self.nextNode()
 
             self.count = self.count + 1
@@ -832,9 +843,7 @@ class QSetPrinter(PrinterBaseType):
             if not self.hashIterator.d:
                 raise StopIteration
 
-            node = self.hashIterator.node()
-
-            item = node['key']
+            item = self.hashIterator.currentNode['key']
             self.hashIterator.nextNode()
 
             self.count = self.count + 1
