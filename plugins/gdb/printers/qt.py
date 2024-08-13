@@ -691,6 +691,8 @@ class QHashPrinter(PrinterBaseType):
             return self._iterator_qt6(self._val, self._container)
 
     def num_children(self):
+        if has_field(self._val, 'm_size'):
+            return self._val['m_size'] # only Qt6 QMultiHash has m_size
         d = self._val['d']
         return d['size'] if d else 0
 
