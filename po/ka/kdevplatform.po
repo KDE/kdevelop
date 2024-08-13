@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:40+0000\n"
-"PO-Revision-Date: 2024-08-11 07:01+0200\n"
+"PO-Revision-Date: 2024-08-12 05:41+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -110,6 +110,12 @@ msgid ""
 "common case is a breakpoint in a shared library: GDB will insert this "
 "breakpoint only when the library is loaded.</p>"
 msgstr ""
+"<b>წყვეტის წერტილი რიგშია</b><p>რიგში მყოფი წყვეტის წერტილები ის წყვეტის "
+"წერტილებია, რომლებიც გადაეცა GDB-ს, მაგრამ სამიზნეზე ჯერ დაყენებული არაა, "
+"რადგან GDM-მა ფუნქცია ან ფაილი, რომელსაც წყვეტის წერტილი მიმართავს, ვერ "
+"იპოვა. ყველაზე ხშირად ეს მაშინ ხდება, როცა წყვეტის წერტილი გაზიარებულ "
+"ბიბლიოთეკაშია: GDB წყვეტის წერტილს, მხოლოდ, მაშინ ჩასვამს, როცა ბიბლიოთეკა "
+"ჩაიტვირთება.</p>"
 
 #: debugger/breakpoint/breakpointdetails.cpp:155
 #, kde-format
@@ -317,6 +323,11 @@ msgid ""
 "get to this point in your program. By clicking on an item you can see the "
 "values in any of the previous calling functions."
 msgstr ""
+"<b>ჩარჩოს სტეკი</b>მას ხშირად \"გამოძახების სტეკსაც\" ეძახიან. ეს სიაა, "
+"რომელიც გაჩვენებთ, რომელი ფუნქციაა ამჟამად აქტიური და რა გამოიძახა თითოეულმა "
+"ფუნქციამ, რომ თქვენს პროგრამაში ამ წერტილამდე მოხვიდეთ. ელემენტზე "
+"დაწკაპუნებით ყველა წინა გამომძახებელი ფუნქციის მნიშვნელობები შეგიძლიათ, "
+"იხილოთ."
 
 #: debugger/framestack/framestackwidget.cpp:102
 #, kde-format
@@ -423,6 +434,16 @@ msgid ""
 "descriptive names by clicking on the name column.<br />To change the value "
 "of a variable or an expression, click on the value.<br />"
 msgstr ""
+"<b>ცვლადების ხე</b>ცვლადების ხე საშუალებას გაძლევთ, ლოკალური ცვლადებისა და "
+"შემთხვევითი გამოსახულებების მნიშვნელობები იხილოთ.<br />ლოკალური ცვლადები "
+"ავტომატურაა ნაჩვენები და ნახლდება პროგრამაში სიარულისას. თითოეული "
+"გამოსახულებისთვის, რომელსაც შეიყვანეთ, შეგიძლიათ, ცვლადები ერთხელ "
+"გამოიტანოთ, ან \"ყურადღება მიადევნოთ\" მას (მისი ავტომატურად განახლებადად "
+"გახდენა). გამოსახულებები, რომლებიც ავტომატურად არ ნახლდება, შეგიძლიათ, ხელით "
+"განაახლოთ მისი კონტექსტური მენიუდან. გამოსახულებებს, ასევე, შეგიძლიათ, "
+"სახელიც გადაარქვათ, რომ ისინი უფრო ადვილად იპოვოთ, სახელის სვეტზე "
+"დაწკაპუნებით.<br />ცვლადის ან გამოსახულების მნიშვნელობის შესაცვლელად, "
+"უბრალოდ მნიშვნელობაზე დააწკაპუნეთ.<br />"
 
 #: debugger/variable/variablewidget.cpp:130
 #, kde-format
@@ -1768,6 +1789,9 @@ msgid ""
 "configuration for a specific use case. From here you can also navigate back "
 "to the default code area."
 msgstr ""
+"შეასრულეთ ქმედებები, რომ ალაგი შეცვალოთ.<br />ალაგი ხელსაწყოს ხედის "
+"კონფიგურაციაა ამ შემთხვევისთვის. აქედან ასევე შეგიძლიათ, უკან, ნაგულისხმევი "
+"კოდის ალაგზე დაბრუნდეთ."
 
 #: shell/areadisplay.cpp:70
 #, kde-format
@@ -4114,6 +4138,12 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>ნაგულისხმევად, გლობალური ფერები ტიპებისთვის, ფუნქციებისთვის, სახელის "
+"სივრცეებისთვის და ა.შ. ავტოგენერირებულია არჩეული რედაქტორის თემასთან, "
+"გლობალური გაფერადების ინტენსივობის გათვალისწინებით. თუ გნებავთ, ფერები "
+"სრულად ხელით მართოთ, ფერების წყაროდ, შეგიძლიათ, რედაქტორის თემა გამოიყენოთ. "
+"შეგიძლიათ, ზუსტად მოირგოთ ფერები მენიუში რედაქტორი &gt; ფერის თემები &gt; "
+"ტექსტის სტილების გამოკვეთა &gt; Kdevelop/სემანტიკურ ფერები.</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
@@ -4142,6 +4172,8 @@ msgid ""
 "<p>This settings lets you change the intensity of globally accessible types, "
 "for example classes, methods, functions etc.</p>"
 msgstr ""
+"<p>ეს პარამეტრები საშუალებას გაძლევთ, გლობალურად წვდომადი ტიპების, მაგალითად "
+"კლასებისთვის, მეთოდებისთვის, ფუნქციებისთვის და ა.შ. ინტენსივობა შეცვალოთ.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
 #: shell/settings/languagepreferences.ui:221
@@ -4178,6 +4210,8 @@ msgid ""
 "<p>When enabled, lines with errors will get additionally highlighted and "
 "their positions get marked in the scrollbar.</p>"
 msgstr ""
+"<p>როცა ჩართულია, შეცდომის შემცველი ხაზები დამატებითად გამოიკვეთება და მათი "
+"მდებარეობები მონიშნულია ჩოჩიის ზოლზე.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/languagepreferences.ui:257
@@ -4193,6 +4227,8 @@ msgid ""
 "<html><head/><body><p>Use bold font for declarations such as classes, "
 "functions, local variables, etc.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>სქელი ფონტის გამოყენება კლასების, ფუნქციების, ლოკალური "
+"ცვლადების და ა.შ. აღწერისას.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
@@ -4278,6 +4314,10 @@ msgid ""
 "information. Global code navigation and quickopen capabilities will be "
 "reduced.</p>"
 msgstr ""
+"<p>როცა პროექტი შეიცავს ამ რიცხვზე მეტი რაოდენობის ფაილებს, პროექტი "
+"გამარტივებულ რეჟიმში\n"
+"დამუშავდება, ეფექტურობის ნაკლები ინფორმაციის მოგროვების ხარჯზე. გლობალური "
+"კოდის ნავიგაცია და სწრაფი გახსნის შესაძლებლობები შემცირდება.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/settings/languagepreferences.ui:382
@@ -4316,6 +4356,19 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>წინასწარ დაკომპილებულები დროებით საქაღალდეში დარჩება მას შემდეგ, რაც "
+"KDevelop ავარიულად გაითიშება და წაიშლება, მხოლოდ, როცა იგივე სესიას თავიდან "
+"გაუშვებთ.<br>\n"
+"როცა ეს ფაილები დამახსოვრებულია მეხსიერებაში, ისინი გარანტირებულად გაქრება, "
+"თუ KDevelop მუშაობას ავარიულად დაასრულებს.<br>\n"
+"სესიის დროებით საქაღალდის საცავის არჩევას აზრი მაშინ აქვს, როცა სისტემის RAM "
+"შეზღუდულია და დროებითი საქაღალდე tmpfs-ს არ იყენებს, რადგან ამ ფაილებს "
+"გიგაბაიტობით ადგილი შეიძლება, დასჭირდეს.<br>\n"
+"ამ პარამეტრის ცვლილება ძალაში, მხოლოდ, KDevelop-ის გადატვირთვის შემდეგ შევა."
+"<br>\n"
+"ამ პარამეტრს ძალა, მხოლოდ, მაშინ აქვს, თუ Kdevelop აგებულია Clang v17 ან "
+"უფრო ახლით.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
@@ -4414,6 +4467,7 @@ msgid ""
 "Schedule all project source code to be parsed by the language support in the "
 "background"
 msgstr ""
+"ყველა პროექტის კოდის დამუშავების დაგეგმვა ენის მხარდაჭერის მიერ ფონურად"
 
 #. i18n: ectx: whatsthis, entry (parseAllProjectSources), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:15
@@ -4426,6 +4480,12 @@ msgid ""
 "may\n"
 "        be slower."
 msgstr ""
+"თუ ეს პარამეტრი დაყენებულია, KDevelop დაგეგმავს ყველა კოდის,\n"
+"       რომელსაც მიმდინარე აგების სისტემაში იპოვის, დამუშავებას შესაბამისი "
+"ენის\n"
+"       მხარდაჭერის ნაწილით.  ეს ჩართავს უფრო სრულ ენის მხარდაჭერას ჩართავს, "
+"მაგრამ,\n"
+"       შეიძლება, უფრო ნელი იყოს."
 
 #. i18n: ectx: whatsthis, entry (projectsBaseDirectory), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:19
@@ -4624,6 +4684,8 @@ msgid ""
 "<p>Controls whether the bottom left corner is occupied by the dock at the "
 "left, or by the dock at the bottom.</p>"
 msgstr ""
+"<p>აკონტროლებს, დაკავებულია თუ არა ქვედა მარცხენა კუთხე მარცხენა დოკით, თუ "
+"ქვედა დოკით.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/uiconfig.ui:32
@@ -4640,6 +4702,8 @@ msgid ""
 "<p>Controls whether the bottom right corner is occupied by the dock at the "
 "right, or by the dock at the bottom.</p>"
 msgstr ""
+"<p>აკონტროლებს, დაკავებულია თუ არა ქვედა მარჯვენა კუთხე მარჯვენა დოკით, თუ "
+"ქვედა დოკით.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/uiconfig.ui:42
@@ -4699,6 +4763,8 @@ msgid ""
 "When enabled, plugins can group related files side by side.\n"
 "For example, a header file will be opened next to the implementation file."
 msgstr ""
+"როცა ჩართულია, დამატებებს შესაბამისი ფაილების გვერდიგვერდ გახსნა შეუძლიათ.\n"
+"მაგალითად, თავსართის ფაილი იმპლემენტაციის გვერდით გაიხსნება."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:109
@@ -4952,6 +5018,18 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Select languages you use one by one from the <i>Language</i> combobox "
+"below, pick the desired formatter and style for each. <i>Ctrl+Click</i> a "
+"selected style to unselect it.</p>\n"
+"<p>Configuring the right formatter and style for each used language is very "
+"important: not only explicit <i>Reformat Source</i>/<i>Line</i>/<i>Files...</"
+"i> actions are affected, but also the formatting of auto-generated, auto-"
+"refactored or auto-fixed code (for example, <i>Rename</i> context menu "
+"action).</p>\n"
+"<p>Note that KDevelop formats all <i>*.h</i> files with formatter and style "
+"configured for <i>C</i> language, even C++ headers that belong to a pure C++ "
+"project. This occurs because source formatter maps MIME types to languages.</"
+"p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5370,6 +5448,7 @@ msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
 "all included files"
 msgstr ""
+"მითითბული ფაილებისა და ყველა ჩასმული ფაილის ზედა კონტექსტის ძალით განახლება"
 
 #: util/duchainify/main.cpp:276
 #, kde-format
@@ -5383,6 +5462,9 @@ msgid ""
 "declarations (default), all-declarations, all-declarations-and-uses, all-"
 "declarations-and-uses-and-AST"
 msgstr ""
+"ასაგები ფუნქციები. შესაძლო ვარიანტები: empty, simplified-visible-"
+"declarations, visible-declarations (ნაგულისხმევი), all-declarations, all-"
+"declarations-and-uses, all-declarations-and-uses-and-AST"
 
 #: util/duchainify/main.cpp:283
 #, kde-format
@@ -5649,6 +5731,8 @@ msgid ""
 "<p>Show changes between the current branch (or staging area, if not empty) "
 "and the last commit on the selected branch.</p>"
 msgstr ""
+"<p>ცვლილება მიმდინარე ბრენჩსა (ან დროებით ალაგი, თუ ის ცარიელი არაა) და ბოლო "
+"კომიტს შორის არჩეულ ბრენჩზე.</p>"
 
 #. i18n: ectx: property (text), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:80
