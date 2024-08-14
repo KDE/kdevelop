@@ -48,15 +48,6 @@ class QStringPrinter(PrinterBaseType):
             pass
         return ret
 
-    def num_children(self):
-        # The QString object may not be initialized yet. In this case 'size' is a bogus value
-        # or in case of Qt5, 'd' is an invalid pointer and the following lines might throw memory
-        # access error. Hence the try/catch.
-        try:
-            return self._val['d']['size']
-        except:
-            return 0
-
     def display_hint (self):
         return 'string'
 
