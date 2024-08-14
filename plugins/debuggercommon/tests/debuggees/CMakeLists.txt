@@ -76,6 +76,9 @@ target_link_libraries(debuggee_qhashstring Qt::Core)
 add_debuggable_executable(debuggee_qmultihashint SRCS qmultihashint.cpp)
 target_link_libraries(debuggee_qmultihashint Qt::Core)
 
+add_debuggable_executable(debuggee_qmultihashstring SRCS qmultihashstring.cpp)
+target_link_libraries(debuggee_qmultihashstring Qt::Core)
+
 add_debuggable_executable(debuggee_qsetint SRCS qsetint.cpp)
 target_link_libraries(debuggee_qsetint Qt::Core)
 

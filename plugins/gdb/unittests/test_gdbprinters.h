@@ -28,6 +28,7 @@ private Q_SLOTS:
     void testQHashInt();
     void testQHashString();
     void testQMultiHashInt();
+    void testQMultiHashString();
     void testQSetInt();
     void testQSetString();
     void testQChar();

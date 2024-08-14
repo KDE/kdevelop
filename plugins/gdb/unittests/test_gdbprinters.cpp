@@ -453,6 +453,23 @@ static void commonTestQHashOrMultiHashInt(GdbProcess& gdb, const QByteArray& con
     QVERIFY(out.contains("[30] = 300"));
 }
 
+static void commonTestQHashOrMultiHashString(GdbProcess& gdb, const QByteArray& containerName)
+{
+    const auto containerElementCount = [&containerName](int size) -> QByteArray {
+        return containerName + "<QString, QString> (size = " + QByteArray::number(size) + ")";
+    };
+
+    QByteArray out = gdb.execute("print h");
+    QVERIFY(out.contains(containerElementCount(2)));
+    QVERIFY(out.contains("[\"10\"] = \"100\""));
+    QVERIFY(out.contains("[\"20\"] = \"200\""));
+
+    gdb.execute("next");
+    out = gdb.execute("print h");
+    QVERIFY(out.contains(containerElementCount(3)));
+    QVERIFY(out.contains("[\"30\"] = \"300\""));
+}
+
 void QtPrintersTest::testQHashInt()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qhashint"));
@@ -468,14 +485,9 @@ void QtPrintersTest::testQHashString()
     GdbProcess gdb(QStringLiteral("debuggee_qhashstring"));
     gdb.execute("break qhashstring.cpp:8");
     gdb.execute("run");
-    QByteArray out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<QString, QString> (size = 2)"));
-    QVERIFY(out.contains("[\"10\"] = \"100\""));
-    QVERIFY(out.contains("[\"20\"] = \"200\""));
-    gdb.execute("next");
-    out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<QString, QString> (size = 3)"));
-    QVERIFY(out.contains("[\"30\"] = \"300\""));
+
+    commonTestQHashOrMultiHashString(gdb, "QHash");
+    RETURN_IF_TEST_FAILED();
 }
 
 void QtPrintersTest::testQMultiHashInt()
@@ -511,6 +523,37 @@ void QtPrintersTest::testQMultiHashInt()
     // consecutively, from the most recently to the least recently inserted value.
     QVERIFY(containsConsecutiveElements(out, {"[10] = 0", "[10] = 123", "[10] = 100"}));
     QVERIFY(containsConsecutiveElements(out, {"[30] = 300", "[30] = 82", "[30] = 300"}));
+}
+
+void QtPrintersTest::testQMultiHashString()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qmultihashstring"));
+    gdb.execute("break qmultihashstring.cpp:8");
+    gdb.execute("run");
+
+    commonTestQHashOrMultiHashString(gdb, "QMultiHash");
+    RETURN_IF_TEST_FAILED();
+
+    gdb.execute("next");
+    gdb.execute("next");
+    QByteArray out = gdb.execute("print h");
+    QVERIFY(out.contains("QMultiHash<QString, QString> (size = 5)"));
+    QVERIFY(out.contains("[\"10\"] = \"100\""));
+    QVERIFY(out.contains("[\"20\"] = \"200\""));
+    QVERIFY(out.contains("[\"30\"] = \"300\""));
+    QVERIFY(out.contains("[\"20\"] = \"x\""));
+    QVERIFY(out.contains("[\"20\"] = \"11\""));
+    QVERIFY(containsConsecutiveElements(out, {"[\"20\"] = \"11\"", "[\"20\"] = \"x\"", "[\"20\"] = \"200\""}));
+
+    gdb.execute("next");
+    out = gdb.execute("print h");
+    QVERIFY(out.contains("QMultiHash<QString, QString> (size = 4)"));
+    QVERIFY(out.contains("[\"10\"] = \"100\""));
+    QVERIFY(out.contains("[\"20\"] = \"200\""));
+    QVERIFY(out.contains("[\"30\"] = \"300\""));
+    QVERIFY(!out.contains("[\"20\"] = \"x\"")); // removed
+    QVERIFY(out.contains("[\"20\"] = \"11\""));
+    QVERIFY(containsConsecutiveElements(out, {"[\"20\"] = \"11\"", "[\"20\"] = \"200\""}));
 }
 
 void QtPrintersTest::testQSetInt()
