@@ -935,7 +935,11 @@ class QPersistentModelIndexPrinter:
         self.val = val
 
     def to_string(self):
-        return str(self.val['d']['index'])
+        # Do not check d = self.val['d'] and return str(d['index']) if d, because the type of d
+        # is class QPersistentModelIndexData, which is defined in the private Qt header
+        # qabstractitemmodel_p.h, so printing d's data member requires installing QtCore debug symbols.
+        modelIndex = gdb.parse_and_eval("reinterpret_cast<const QPersistentModelIndex*>(%s)->operator QModelIndex()" % self.val.address)
+        return str(modelIndex)
 
 class QUuidPrinter:
 

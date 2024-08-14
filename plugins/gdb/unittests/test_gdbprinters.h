@@ -33,6 +33,7 @@ private Q_SLOTS:
     void testQSetString();
     void testQChar();
     void testQListPOD();
+    void testQPersistentModelIndex();
     void testQUuid();
     void testQVariant();
     void testKTextEditorTypes();

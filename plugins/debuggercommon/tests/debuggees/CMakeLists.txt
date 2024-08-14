@@ -88,6 +88,9 @@ target_link_libraries(debuggee_qsetstring Qt::Core)
 add_debuggable_executable(debuggee_qchar SRCS qchar.cpp)
 target_link_libraries(debuggee_qchar Qt::Core)
 
+add_debuggable_executable(debuggee_qpersistentmodelindex SRCS qpersistentmodelindex.cpp)
+target_link_libraries(debuggee_qpersistentmodelindex Qt::Core Qt::Gui)
+
 add_debuggable_executable(debuggee_quuid SRCS quuid.cpp)
 target_link_libraries(debuggee_quuid Qt::Core)
 

@@ -621,6 +621,47 @@ void QtPrintersTest::testQListPOD()
     QVERIFY(gdb.execute("print d").contains("50"));
 }
 
+void QtPrintersTest::testQPersistentModelIndex()
+{
+    GdbProcess gdb("debuggee_qpersistentmodelindex");
+    gdb.execute("break qpersistentmodelindex.cpp:16");
+    gdb.execute("run");
+
+    QByteArray out = gdb.execute("print i");
+    QVERIFY(out.contains("r = -1"));
+    QVERIFY(out.contains("c = -1"));
+    QVERIFY(out.contains("i = 0"));
+    QVERIFY(out.contains("m = 0x0"));
+
+    auto modelAddress = gdb.execute("print /a &model");
+    modelAddress.remove(0, modelAddress.indexOf('=') + 1);
+    modelAddress = modelAddress.trimmed();
+    QCOMPARE(modelAddress.left(2), "0x");
+    modelAddress.prepend("m = ");
+
+    gdb.execute("next");
+    out = gdb.execute("print i");
+    QVERIFY(out.contains("r = 1"));
+    QVERIFY(out.contains("c = 0"));
+    QVERIFY(out.contains("i = "));
+    QVERIFY(out.contains(modelAddress));
+
+    gdb.execute("next");
+    out = gdb.execute("print i");
+    QVERIFY(out.contains("r = 1"));
+    QVERIFY(out.contains("c = 1"));
+    QVERIFY(out.contains("i = "));
+    QVERIFY(out.contains(modelAddress));
+
+    gdb.execute("break qpersistentmodelindex.cpp:24");
+    gdb.execute("cont");
+    out = gdb.execute("print i");
+    QVERIFY(out.contains("r = 0"));
+    QVERIFY(out.contains("c = 0"));
+    QVERIFY(out.contains("i = "));
+    QVERIFY(out.contains(modelAddress));
+}
+
 void QtPrintersTest::testQUuid()
 {
     GdbProcess gdb(QStringLiteral("debuggee_quuid"));
