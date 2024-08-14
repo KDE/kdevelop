@@ -174,7 +174,6 @@ void QtPrintersTest::testQListContainer()
     { // <int>
         runToLine(34);
         QByteArray out = gdb.execute("print intList");
-        qWarning() << "FOO" << out;
         QVERIFY(out.contains(QString("%1<int> (size = 0)").arg(container).toLocal8Bit()));
         gdb.execute("next");
         out = gdb.execute("print intList");
