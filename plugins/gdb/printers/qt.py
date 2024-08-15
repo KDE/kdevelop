@@ -380,10 +380,10 @@ class QMapPrinter(PrinterBaseType):
                 self.current_typed = self.current.reinterpret_cast(self.node_p_type)
                 self.next_is_key = False
                 self.i += 1
-                return ('key' + str(self.i), self.current_typed['key'])
+                return (f'[{self.i}].key', self.current_typed['key'])
             else:
                 self.next_is_key = True
-                return ('value' + str(self.i), self.current_typed['value'])
+                return (f'[{self.i}].value', self.current_typed['value'])
 
         def next(self):
             return self.__next__()
@@ -565,8 +565,10 @@ class QHashPrinter(PrinterBaseType):
             #print("got node %s" % self.currentNode)
 
             if self.count % 2 == 0:
+                itemType = 'key'
                 item = self.currentNode['key']
             else:
+                itemType = 'value'
                 # QHash stores an element (key and value pair) in each hash node.
                 # In contrast, QMultiHash stores a key and a chain (linked list)
                 # of values in each hash node.
@@ -583,9 +585,9 @@ class QHashPrinter(PrinterBaseType):
                     item = self.currentNode['value']
                     self.nextNode()
 
+            result = (f'[{self.count // 2}].{itemType}', item)
             self.count = self.count + 1
-
-            return ('[%d]' % self.count, item)
+            return result
 
     class _iterator_qt5(Iterator):
         def __init__(self, val):
@@ -668,13 +670,16 @@ class QHashPrinter(PrinterBaseType):
             node = self.hashNode()
 
             if self.count % 2 == 0:
+                itemType = 'key'
                 item = node['key']
             else:
+                itemType = 'value'
                 item = node['value']
                 self.data_node = self.nextNode(self.data_node)
 
+            result = (f'[{self.count // 2}].{itemType}', item)
             self.count = self.count + 1
-            return ('[%d]' % self.count, item)
+            return result
 
     def __init__(self, val, container):
         self._val = val
