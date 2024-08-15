@@ -422,9 +422,10 @@ class QMapPrinter(PrinterBaseType):
         if num_children is None:
             # qt6 without std map printer
             return "%s<%s, %s> (size = ?)" % ( self._container, self._val.type.template_argument(0), self._val.type.template_argument(1) )
-        return "%s<%s, %s> (size = %s)" % ( self._container, self._val.type.template_argument(0), self._val.type.template_argument(1), num_children )
+        return "%s<%s, %s> (size = %s)" % ( self._container, self._val.type.template_argument(0), self._val.type.template_argument(1), int(num_children) // 2 )
 
     def num_children(self):
+        "Return the number of children, that is map.size * 2, because keys and values are separate children"
         if self._isQt6 and not self._val['d']['d']:
             return 0
 
@@ -441,13 +442,13 @@ class QMapPrinter(PrinterBaseType):
                 size = match.group(1)
                 if not size:
                     return 0
-                return int(size)
+                return int(size) * 2
 
         if self._isQt6:
             # our heuristics above failed or no pretty printer for std::map is available...
             return None
 
-        return self._val['d']['size']
+        return int(self._val['d']['size']) * 2
 
     def display_hint (self):
         return 'map'
@@ -697,13 +698,16 @@ class QHashPrinter(PrinterBaseType):
             return self._iterator_qt6(self._val, self._container)
 
     def num_children(self):
+        "Return the number of children, that is hash.size * 2, because keys and values are separate children"
         if has_field(self._val, 'm_size'):
-            return self._val['m_size'] # only Qt6 QMultiHash has m_size
-        d = self._val['d']
-        return d['size'] if d else 0
+            size = self._val['m_size'] # only Qt6 QMultiHash has m_size
+        else:
+            d = self._val['d']
+            size = d['size'] if d else 0
+        return int(size) * 2
 
     def to_string(self):
-        return "%s<%s, %s> (size = %s)" % ( self._container, self._val.type.template_argument(0), self._val.type.template_argument(1), self.num_children() )
+        return "%s<%s, %s> (size = %s)" % ( self._container, self._val.type.template_argument(0), self._val.type.template_argument(1), int(self.num_children()) // 2 )
 
     def display_hint (self):
         return 'map'
