@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-11 02:33+0000\n"
-"PO-Revision-Date: 2024-07-20 13:37+0200\n"
+"PO-Revision-Date: 2024-08-12 22:53+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -5531,7 +5531,7 @@ msgstr ""
 #: util/duchainify/main.cpp:293
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Stampa i contesti di livello superiore quando stampa i contesti"
 
 #: util/duchainify/main.cpp:295
 #, kde-format
