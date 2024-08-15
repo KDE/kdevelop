@@ -2,6 +2,7 @@
 Name=CMake Qt6 Quick Application
 Name[ca]=Una aplicació del CMake Qt6 Quick
 Name[ca@valencia]=Una aplicació de CMake Qt6 Quick
+Name[cs]=Aplikace QMake Qt6 Quick
 Name[es]=Aplicación Qt6 Quick y CMake
 Name[gl]=Aplicación de CMake e Qt6 Quick
 Name[it]=Applicazione Qt6 su tecnologia Qt Quick con CMake
@@ -17,6 +18,7 @@ Name[zh_TW]=CMake Qt6 Quick 應用程式
 Comment=Generate a CMake & Qt6 Quick based application (crossplatform compatible)
 Comment[ca]=Genera una aplicació basada en CMake i Qt6 Quick (compatible amb multiplataforma)
 Comment[ca@valencia]=Genera una aplicació basada en CMake i Qt6 Quick (compatible amb multiplataforma)
+Comment[cs]=Vytvořit aplikaci založenou na CMake & Qt6 Quick (multiplatformní)
 Comment[es]=Genera una aplicación basada en CMake y Qt6 Quick (compatible multiplataforma)
 Comment[gl]=Xerar unha aplicación baseada en CMake e Qt6 Quick (multiplataforma).
 Comment[it]=Genera un'applicazione basata su CMake e Qt6 su tecnologia Qt Quick (compatibile multipiattaforma)
