@@ -27,10 +27,13 @@ private Q_SLOTS:
     void testQUrl();
     void testQHashInt();
     void testQHashString();
+    void testQMultiHashInt();
+    void testQMultiHashString();
     void testQSetInt();
     void testQSetString();
     void testQChar();
     void testQListPOD();
+    void testQPersistentModelIndex();
     void testQUuid();
     void testQVariant();
     void testKTextEditorTypes();

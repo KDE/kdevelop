@@ -8,13 +8,18 @@
 
 #include "tests/debuggers-tests-config.h"
 
+#include <tests/testhelpermacros.h>
+
 #include <QCoreApplication>
 #include <QTest>
 #include <QProcess>
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QRegularExpression>
 #include <QStandardPaths>
+
+namespace {
 
 const QString BINARY_PATH(DEBUGGEE_BIN_DIR);
 
@@ -88,6 +93,17 @@ public:
         return out;
     }
 };
+
+[[nodiscard]] bool containsConsecutiveElements(const QByteArray& out, QStringList elements)
+{
+    for (auto& e : elements) {
+        e = QRegularExpression::escape(e);
+    }
+    const auto pattern = elements.join("[,\\s]+");
+    return QString::fromUtf8(out).contains(QRegularExpression{pattern});
+}
+
+} // unnamed namespace
 
 void QtPrintersTest::initTestCase()
 {
@@ -278,9 +294,17 @@ void QtPrintersTest::testQListContainer()
     }
 }
 
-static QByteArray stdMapElementCountString(int elementCount)
+[[nodiscard]] static bool isMissingStdMapPrettyPrinter(GdbProcess& gdb)
 {
-    return "std::map with " + QByteArray::number(elementCount) + " elements";
+    return !gdb.execute("print m.d.d.m").contains("std::map");
+}
+
+[[nodiscard]] static bool verifyContainsMapElementCount(const QByteArray& out, const char* key, const char* value,
+                                                        int elementCount)
+{
+    const auto pattern = QLatin1String("QMap<%1, %2> (size = %3)")
+                             .arg(key, value, elementCount == -1 ? "?" : QString::number(elementCount));
+    return out.contains(pattern.toUtf8());
 }
 
 void QtPrintersTest::testQMapInt()
@@ -290,18 +314,28 @@ void QtPrintersTest::testQMapInt()
     gdb.execute("break qmapint.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(0)));
+    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 0));
 
-    gdb.execute("break qmapint.cpp:7");
-    gdb.execute("cont");
+    gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(2)));
+
+    if (isMissingStdMapPrettyPrinter(gdb)) {
+        QVERIFY(verifyContainsMapElementCount(out, "int", "int", -1));
+        QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
+    }
+
+    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 1));
+    QVERIFY(out.contains("[10] = 100"));
+
+    gdb.execute("next");
+    out = gdb.execute("print m");
+    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 2));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
 
     gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(3)));
+    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 3));
     QVERIFY(out.contains("[30] = 300"));
 }
 
@@ -310,13 +344,20 @@ void QtPrintersTest::testQMapString()
     GdbProcess gdb(QStringLiteral("debuggee_qmapstring"));
     gdb.execute("break qmapstring.cpp:8");
     gdb.execute("run");
+
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(2)));
+
+    if (isMissingStdMapPrettyPrinter(gdb)) {
+        QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", -1));
+        QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
+    }
+
+    QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", 2));
     QVERIFY(out.contains("[\"10\"] = \"100\""));
     QVERIFY(out.contains("[\"20\"] = \"200\""));
     gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(3)));
+    QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", 3));
     QVERIFY(out.contains("[\"30\"] = \"300\""));
 }
 
@@ -325,13 +366,20 @@ void QtPrintersTest::testQMapStringBool()
     GdbProcess gdb(QStringLiteral("debuggee_qmapstringbool"));
     gdb.execute("break qmapstringbool.cpp:8");
     gdb.execute("run");
+
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(2)));
+
+    if (isMissingStdMapPrettyPrinter(gdb)) {
+        QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", -1));
+        QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
+    }
+
+    QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", 2));
     QVERIFY(out.contains("[\"10\"] = true"));
     QVERIFY(out.contains("[\"20\"] = false"));
     gdb.execute("next");
     out = gdb.execute("print m");
-    QVERIFY(out.contains(stdMapElementCountString(3)));
+    QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", 3));
     QVERIFY(out.contains("[\"30\"] = true"));
 }
 
@@ -379,26 +427,57 @@ void QtPrintersTest::testQUrl()
     QVERIFY(defaultConstructed.contains("<invalid>"));
 }
 
-void QtPrintersTest::testQHashInt()
+static void commonTestQHashOrMultiHashInt(GdbProcess& gdb, const QByteArray& containerName)
 {
-    GdbProcess gdb(QStringLiteral("debuggee_qhashint"));
+    const auto containerElementCount = [&containerName](int size) -> QByteArray {
+        return containerName + "<int, int> (size = " + QByteArray::number(size) + ")";
+    };
 
-    gdb.execute("break qhashint.cpp:5");
-    gdb.execute("run");
     QByteArray out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<int, int> (size = 0)"));
+    QVERIFY(out.contains(containerElementCount(0)));
 
-    gdb.execute("break qhashint.cpp:7");
-    gdb.execute("cont");
+    gdb.execute("next");
     out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<int, int> (size = 2)"));
+    QVERIFY(out.contains(containerElementCount(1)));
+    QVERIFY(out.contains("[10] = 100"));
+
+    gdb.execute("next");
+    out = gdb.execute("print h");
+    QVERIFY(out.contains(containerElementCount(2)));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
 
     gdb.execute("next");
     out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<int, int> (size = 3)"));
+    QVERIFY(out.contains(containerElementCount(3)));
     QVERIFY(out.contains("[30] = 300"));
+}
+
+static void commonTestQHashOrMultiHashString(GdbProcess& gdb, const QByteArray& containerName)
+{
+    const auto containerElementCount = [&containerName](int size) -> QByteArray {
+        return containerName + "<QString, QString> (size = " + QByteArray::number(size) + ")";
+    };
+
+    QByteArray out = gdb.execute("print h");
+    QVERIFY(out.contains(containerElementCount(2)));
+    QVERIFY(out.contains("[\"10\"] = \"100\""));
+    QVERIFY(out.contains("[\"20\"] = \"200\""));
+
+    gdb.execute("next");
+    out = gdb.execute("print h");
+    QVERIFY(out.contains(containerElementCount(3)));
+    QVERIFY(out.contains("[\"30\"] = \"300\""));
+}
+
+void QtPrintersTest::testQHashInt()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qhashint"));
+    gdb.execute("break qhashint.cpp:5");
+    gdb.execute("run");
+
+    commonTestQHashOrMultiHashInt(gdb, "QHash");
+    RETURN_IF_TEST_FAILED();
 }
 
 void QtPrintersTest::testQHashString()
@@ -406,14 +485,75 @@ void QtPrintersTest::testQHashString()
     GdbProcess gdb(QStringLiteral("debuggee_qhashstring"));
     gdb.execute("break qhashstring.cpp:8");
     gdb.execute("run");
+
+    commonTestQHashOrMultiHashString(gdb, "QHash");
+    RETURN_IF_TEST_FAILED();
+}
+
+void QtPrintersTest::testQMultiHashInt()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qmultihashint"));
+    gdb.execute("break qmultihashint.cpp:5");
+    gdb.execute("run");
+
+    commonTestQHashOrMultiHashInt(gdb, "QMultiHash");
+    RETURN_IF_TEST_FAILED();
+
+    gdb.execute("next");
     QByteArray out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<QString, QString> (size = 2)"));
+    QVERIFY(out.contains("QMultiHash<int, int> (size = 4)"));
+    QVERIFY(out.contains("[10] = 100"));
+    QVERIFY(out.contains("[20] = 200"));
+    QVERIFY(out.contains("[30] = 300"));
+    QVERIFY(out.contains("[10] = 123"));
+
+    gdb.execute("break qmultihashint.cpp:16");
+    gdb.execute("cont");
+    out = gdb.execute("print h");
+    QVERIFY(out.contains("QMultiHash<int, int> (size = 7)"));
+    QVERIFY(out.contains("[10] = 100"));
+    QVERIFY(!out.contains("[20] = 200")); // removed
+    QVERIFY(out.contains("[30] = 300"));
+    QVERIFY(out.contains("[10] = 123"));
+    QVERIFY(out.contains("[30] = 82"));
+    QVERIFY(out.contains("[4] = 99"));
+    QVERIFY(out.contains("[10] = 0"));
+
+    // Now verify QMultiHash's guarantee: items that share the same key appear
+    // consecutively, from the most recently to the least recently inserted value.
+    QVERIFY(containsConsecutiveElements(out, {"[10] = 0", "[10] = 123", "[10] = 100"}));
+    QVERIFY(containsConsecutiveElements(out, {"[30] = 300", "[30] = 82", "[30] = 300"}));
+}
+
+void QtPrintersTest::testQMultiHashString()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qmultihashstring"));
+    gdb.execute("break qmultihashstring.cpp:8");
+    gdb.execute("run");
+
+    commonTestQHashOrMultiHashString(gdb, "QMultiHash");
+    RETURN_IF_TEST_FAILED();
+
+    gdb.execute("next");
+    gdb.execute("next");
+    QByteArray out = gdb.execute("print h");
+    QVERIFY(out.contains("QMultiHash<QString, QString> (size = 5)"));
     QVERIFY(out.contains("[\"10\"] = \"100\""));
     QVERIFY(out.contains("[\"20\"] = \"200\""));
+    QVERIFY(out.contains("[\"30\"] = \"300\""));
+    QVERIFY(out.contains("[\"20\"] = \"x\""));
+    QVERIFY(out.contains("[\"20\"] = \"11\""));
+    QVERIFY(containsConsecutiveElements(out, {"[\"20\"] = \"11\"", "[\"20\"] = \"x\"", "[\"20\"] = \"200\""}));
+
     gdb.execute("next");
     out = gdb.execute("print h");
-    QVERIFY(out.contains("QHash<QString, QString> (size = 3)"));
+    QVERIFY(out.contains("QMultiHash<QString, QString> (size = 4)"));
+    QVERIFY(out.contains("[\"10\"] = \"100\""));
+    QVERIFY(out.contains("[\"20\"] = \"200\""));
     QVERIFY(out.contains("[\"30\"] = \"300\""));
+    QVERIFY(!out.contains("[\"20\"] = \"x\"")); // removed
+    QVERIFY(out.contains("[\"20\"] = \"11\""));
+    QVERIFY(containsConsecutiveElements(out, {"[\"20\"] = \"11\"", "[\"20\"] = \"200\""}));
 }
 
 void QtPrintersTest::testQSetInt()
@@ -481,6 +621,47 @@ void QtPrintersTest::testQListPOD()
     QVERIFY(gdb.execute("print d").contains("50"));
 }
 
+void QtPrintersTest::testQPersistentModelIndex()
+{
+    GdbProcess gdb("debuggee_qpersistentmodelindex");
+    gdb.execute("break qpersistentmodelindex.cpp:16");
+    gdb.execute("run");
+
+    QByteArray out = gdb.execute("print i");
+    QVERIFY(out.contains("r = -1"));
+    QVERIFY(out.contains("c = -1"));
+    QVERIFY(out.contains("i = 0"));
+    QVERIFY(out.contains("m = 0x0"));
+
+    auto modelAddress = gdb.execute("print /a &model");
+    modelAddress.remove(0, modelAddress.indexOf('=') + 1);
+    modelAddress = modelAddress.trimmed();
+    QCOMPARE(modelAddress.left(2), "0x");
+    modelAddress.prepend("m = ");
+
+    gdb.execute("next");
+    out = gdb.execute("print i");
+    QVERIFY(out.contains("r = 1"));
+    QVERIFY(out.contains("c = 0"));
+    QVERIFY(out.contains("i = "));
+    QVERIFY(out.contains(modelAddress));
+
+    gdb.execute("next");
+    out = gdb.execute("print i");
+    QVERIFY(out.contains("r = 1"));
+    QVERIFY(out.contains("c = 1"));
+    QVERIFY(out.contains("i = "));
+    QVERIFY(out.contains(modelAddress));
+
+    gdb.execute("break qpersistentmodelindex.cpp:24");
+    gdb.execute("cont");
+    out = gdb.execute("print i");
+    QVERIFY(out.contains("r = 0"));
+    QVERIFY(out.contains("c = 0"));
+    QVERIFY(out.contains("i = "));
+    QVERIFY(out.contains(modelAddress));
+}
+
 void QtPrintersTest::testQUuid()
 {
     GdbProcess gdb(QStringLiteral("debuggee_quuid"));
@@ -516,7 +697,18 @@ void QtPrintersTest::testQVariant()
     QVERIFY(printNext().contains("QVariant(bool, true)"));
     QVERIFY(printNext().contains("QVariant(float, 4.5)"));
     QVERIFY(printNext().contains("QVariant(double, 42.5)"));
+
     QVERIFY(printNext().contains("QVariant(QObject*, 0x"));
+    // Now verify that the pretty printer retrieves correct object address from the QVariant.
+    {
+        auto objectAddress = gdb.execute("print /a &myObj");
+        objectAddress.remove(0, objectAddress.indexOf('=') + 1);
+        objectAddress = objectAddress.trimmed();
+        QCOMPARE(objectAddress.left(2), "0x");
+        objectAddress.insert(0, "QVariant(QObject*, ");
+        QVERIFY(gdb.execute("print v").contains(objectAddress));
+    }
+
     QVERIFY(printNext().contains("QVariant(SomeCustomType, {\n  foo = 42\n})"));
 }
 

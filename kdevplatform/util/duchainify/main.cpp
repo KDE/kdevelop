@@ -199,12 +199,20 @@ void Manager::dump(const ReferencedTopDUContext& topContext)
         std::cout << qPrintable(dotOutput) << std::endl;
     }
 
-    if (m_args->isSet(QStringLiteral("dump-imported-errors"))) {
+    const auto dumpImportedErrors = m_args->isSet(QStringLiteral("dump-imported-errors"));
+    const auto dumpParentContexts = m_args->isSet(QStringLiteral("dump-parent-contexts"));
+    if (dumpImportedErrors || dumpParentContexts) {
         DUChainReadLocker lock;
         const auto imports = topContext->importedParentContexts();
         for (const auto& import : imports) {
             auto top = dynamic_cast<TopDUContext*>(import.indexedContext().context());
-            if (top && top != topContext && !top->problems().isEmpty()) {
+            if (!top || top == topContext) {
+                continue;
+            }
+
+            if (dumpParentContexts) {
+                dump(top);
+            } else if (!top->problems().isEmpty()) {
                 DUChainDumper dumpChain(DUChainDumper::DumpProblems);
                 dumpChain.dump(top, 0);
             }
@@ -281,6 +289,8 @@ int main(int argc, char** argv)
 
     parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-context")},
                                         i18n("Print complete Definition-Use Chain on successful parse")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-parent-contexts")},
+                                        i18n("Print parent contexts when dumping contexts")});
     parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-definitions")},
                                         i18n("Print complete DUChain Definitions repository on successful parse")});
     parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-symboltable")},

@@ -39,6 +39,7 @@ install(FILES
     testproject.h
     testfile.h
     testlanguagecontroller.h
+    testhelpermacros.h
     testhelpers.h
     testplugincontroller.h
     testdebugsession.h
