@@ -1,0 +1,136 @@
+# Translation for kdevwelcomepage.po to Euskara/Basque (eu).
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>.
+#
+# Translators:
+# SPDX-FileCopyrightText: 2024 Iñigo Salvador Azurmendi <xalba@ni.eus>
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
+"PO-Revision-Date: 2024-08-16 12:21+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 24.05.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Iñigo Salvador Azurmendi"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "xalba@ni.eus"
+
+#: welcomepageview.cpp:50
+#, kde-format
+msgid ""
+"<br/>\n"
+"<h3>Note for Windows users</h3>\n"
+"<p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>\n"
+"<p>You need to install either GCC via MinGW or install a recent version of "
+"the Microsoft Visual Studio IDE and make sure the environment is setup "
+"correctly <i>before</i> starting KDevelop.</p>\n"
+"<p>If you need further assistance, please check out the <a href=\"https://"
+"userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
+"instructions.</a></p>"
+msgstr ""
+"<br/>\n"
+"<h3>Windows-en erabiltzaileentzako oharra</h3>\n"
+"<p>Konvtuan izan KDevelop-ek Windows-en ez duela C/C++ konpilatzailerik "
+"hornitzen!</p>\n"
+"<p>MinGW bidez GCC instalatu behar duzu edo Microsoft Visual Studio IDEaren "
+"azken aldiko bertsio bat instalatu behar duzu eta KDevelop abiatu "
+"<i>aurretik</i> ziurtatu ingurunea ondo ezarrita dagoela.</p>\n"
+"<p>Laguntza gehiago behar baduzu, begiratu <a href=\"https://userbase.kde."
+"org/KDevelop4/Manual/WindowsSetup\">KDevelop Windows-en jarraibideak.</a></p>"
+
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, kde-format
+msgid "KDevelop"
+msgstr "KDevelop"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr "Laguntza beharrean?"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr "Jakizu gehiago KDevelop-eri buruz"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr "Elkartu KDevelop-eren taldera!"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr "Eskuliburua"
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr "Proiektu berria"
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr "Ireki proiektua"
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr "Eskuratu proiektua"
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr "Oraintsuko proiektuak"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
+msgid "Sessions"
+msgstr "Saioeak"
+
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>Ongi etorri KDevelop-era!</h3>\n"
+"<p>Proiektu batean lanean has zaitezke lehendik dagoen bat irekiz edo gineko "
+"botoiarekin berri bat sortuz.</p>\n"
+"<p>Laguntza behar baduzu, begiratu <a href=\"https://userbase.kde.org/"
+"KDevelop\">Erabiltzailearen eskuliburua</a>.</p>"
