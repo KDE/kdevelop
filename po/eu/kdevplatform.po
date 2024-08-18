@@ -1,17 +1,17 @@
 # Translation for kdevplatform.po to Euskara/Basque (eu).
-# Copyright (C) 2020-2023 This file is copyright:
+# Copyright (C) 2020-2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
+# SPDX-FileCopyrightText: 2024 KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>
 #
 # Translators:
 # Gontzal Pujana <gontzalpujana@protonmail.com>, 2020.
-# SPDX-FileCopyrightText: 2022, 2023 Iñigo Salvador Azurmendi <xalba@ni.eus>
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Iñigo Salvador Azurmendi <xalba@ni.eus>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-11 02:33+0000\n"
-"PO-Revision-Date: 2023-11-04 23:30+0100\n"
+"PO-Revision-Date: 2024-08-17 11:45+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -196,6 +196,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"Ezin da izenik gabeko dokumentu batean eten-puntu bat gehitu. Mesedez, "
+"aurrena gorde dokumentua."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -2744,11 +2746,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "Blokeatu panela ezkutatu ez dezan"
 
 #: shell/openprojectdialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1|All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "%1|Proiektuko fitxategi guztiak (%1)"
+msgstr "Proiektuko fitxategi guztiak"
 
 #: shell/openprojectdialog.cpp:133
 #, kde-format
@@ -3606,9 +3607,7 @@ msgid "Delete Session"
 msgstr "Ezabatu saioa"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "Hasi saio berria"
@@ -3652,20 +3651,16 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "Hasi KDevelop instantzia berria saio huts batekin"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Hasi saio berria"
+msgstr "Hasi izena duen saio berria..."
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Hasi KDevelop instantzia berria saio huts batekin"
+msgstr "Hasi KDevelop instantzia berri bat izena hutsik duen saio batekin"
 
 #: shell/sessioncontroller.cpp:293
 #, kde-format
@@ -4162,6 +4157,13 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>Era lehenetsian, mota, funtzio, izen-eremu eta abarrerako kolore globalak "
+"automatikoki sortzen dira eta hautatutako editorearen gaira egokituko dira "
+"koloreztatze intentsitate globalaren arabera. Koloreen kontrol osoa izan "
+"nahi baduzu, horren ordez, editorearen gaia erabil dezakezu kolore-sorburu "
+"gisa. Ondoren, koloreak doitu ditzakezu Editorea &gt; Kolore-gaiak &gt; "
+"Testu-nabarmentze estiloak &gt; KDevelop/Kolore semantikoak   barneko "
+"ezarpenetan.</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
@@ -4357,7 +4359,7 @@ msgstr "Biltegiratzea eta memoria erabilera"
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Gorde aurrez konpilatutako hitzaurreak hemen:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4375,6 +4377,18 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Aurrezkonpilatutako hitzaurrean aldi baterako direktorioan jarraitzen "
+"dute KDevelop kraxkatu ondoren eta saio bera berriz abiatu arte ez dira "
+"ezabatzen.<br>\n"
+"Hitzaurreak memorian gordetzen direnean, irtetean desagertuko direla "
+"bermatuta dago, baita KDevelop kraxkatzen bada ere.<br>\n"
+"Saioaren aldi baterako direktorioa aukeratzea zentzuzkoa da RAM mugatua "
+"duten eta aldi baterako direktorioek tmpfs erabiltzen ez duten sistemetan, "
+"hitzaurre-fitxategiek gigabyteko espazioa har baitezakete.<br>\n"
+"Aukera honen aldaketa indarrean sartuko da KDevelop berrabiatu ondoren.<br>\n"
+"Aukera honek eragina du bakarrik KDevelop, Clang-en 17. bertsioarekin edo "
+"berriagoekin eraiki bada.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
@@ -5040,6 +5054,20 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Hautatu erabiltzen dituzun lengoaiak, banaka, beheko <i>Lengoaia</i> "
+"lauki-konbinatuan, bakoitzerako nahi duzun formatu emaile eta estiloa "
+"aukeratu. <i>Ktrl+Klik</i> hautatutako estilo batean hura deshautatzeko.</"
+"p>\n"
+"<p>Erabilitako lengoaia bakoitzaren formatu emaile eta estilo egokia "
+"konfiguratzea oso garrantzitsua da: ez die <i>Birformateatu Sorburua</i>/"
+"<i>Lerroa</i>/<i>Fitxategiak...</i> ekintza esplizituei bakarrik eragiten, "
+"baizik eta baita automatikoki sortutako, automatikoki birfaktorizatutako edo "
+"automatikoki zuzendutako kodeari ere (adibidez, <i>Berrizendatu</i> "
+"testuinguru menuko ekintza).</p>\n"
+"<p>Kontuan izan KDevelop-ek <i>*.h</i> fitxategi denei formatua <i>C</i> "
+"lengoairako konfiguratutako formatu emaile eta estiloarekin ematen diela, "
+"baita C++ hutseko proiektu bati dagozkion C++ goiburuei ere. Hori gertatzen "
+"da sorburu formatu emaileak MIME motak lengoaiekin mapatzen dituelako.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5484,7 +5512,7 @@ msgstr "Inprimatu definizio-erabilpen katea analizatu ostean"
 #: util/duchainify/main.cpp:293
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Inprimatu guraso-testuinguruak testuinguruak isurtzean"
 
 #: util/duchainify/main.cpp:295
 #, kde-format

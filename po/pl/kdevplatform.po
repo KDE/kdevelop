@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-11 02:33+0000\n"
-"PO-Revision-Date: 2024-07-20 09:03+0200\n"
+"PO-Revision-Date: 2024-08-17 09:31+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -378,7 +378,7 @@ msgstr "Zdalna ścieżka"
 #: debugger/util/pathmappings.cpp:88
 #, kde-format
 msgid "Local Path"
-msgstr "Ścieżka miejscowa"
+msgstr "Ścieżka lokalna"
 
 #: debugger/util/pathmappings.cpp:217
 #, kde-format
@@ -449,13 +449,13 @@ msgid ""
 "of a variable or an expression, click on the value.<br />"
 msgstr ""
 "<b>Drzewo zmiennych</b>Drzewo zmiennych pozwala zobaczyć wartości zmiennych "
-"miejscowych i wybranych wyrażeń.<br />Zmienne miejscowe są wyświetlane "
+"lokalnych i wybranych wyrażeń.<br />Zmienne miejscowe są wyświetlane "
 "automatycznie i uaktualniane podczas działania programu. Podane wyrażenia "
 "można obliczyć raz lub \"obserwować je\" (automatycznie uaktualniać). "
 "Wyrażenia, które nie są uaktualniane automatycznie mogą być uaktualnione za "
 "pomocą opcji w menu kontekstowym. Można także zmieniać nazwy wyrażeń na "
 "bardziej opisowe po kliknięciu kolumny z nazwą.<br />Aby zmienić wartość "
-"zmiennej lub wyrażenia, kliknij tą wartość.<br />"
+"zmiennej lub wyrażenia, kliknij tę wartość.<br />"
 
 #: debugger/variable/variablewidget.cpp:130
 #, kde-format
@@ -1464,12 +1464,12 @@ msgstr "Nieprawidłowy katalog pracy '%1'"
 #: outputview/outputexecutejob.cpp:219
 #, kde-format
 msgid "Build directory '%1' is not a local path"
-msgstr "Katalog budowania '%1' nie jest ścieżką miejscową"
+msgstr "Katalog budowania '%1' nie jest ścieżką lokalną"
 
 #: outputview/outputexecutejob.cpp:221
 #, kde-format
 msgid "Working directory '%1' is not a local path"
-msgstr "Katalog pracy '%1' nie jest ścieżką miejscową"
+msgstr "Katalog pracy '%1' nie jest ścieżką lokalną"
 
 #: outputview/outputexecutejob.cpp:240
 #, kde-format
@@ -4160,7 +4160,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Local colorization intensity:"
-msgstr "Miejscowa jaskrawość zabarwiania:"
+msgstr "Lokalna jaskrawość zabarwiania:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_9)
@@ -4265,7 +4265,7 @@ msgid ""
 "functions, local variables, etc.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Używaj wytłuszczonej czcionki dla deklaracji takich "
-"jak klasy, funkcje, zmienne miejscowe, itp.</p></body></html>"
+"jak klasy, funkcje, zmienne lokalne, itp.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
@@ -5523,7 +5523,7 @@ msgstr "Drukuj całkowity definicja-łańcuch użyć przy pomyślnym przetworzen
 #: util/duchainify/main.cpp:293
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Wypisz nadrzędny kontekst przy zrzucaniu kontekstu"
 
 #: util/duchainify/main.cpp:295
 #, kde-format
