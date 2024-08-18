@@ -273,10 +273,14 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     // eventually resume the background parser once the project controller
     // has been initialized. At that point we know whether there are projects loading
     // which the background parser is handling internally to defer parse jobs
-    QObject::connect(projectController.data(), &ProjectController::initialized,
-                     m_core, [this]() {
-                         languageController->backgroundParser()->resume();
-                     });
+    QObject::connect(projectController.data(), &ProjectController::initialized, m_core, [this]() {
+        // If the signal handler is installed earlier, pressing Ctrl+C soon after KDevelop
+        // start usually either hangs KDevelop until another signal is sent to it or causes
+        // a segfault deep within the initial ProjectController::openProjects() call.
+        installSignalHandler();
+
+        languageController->backgroundParser()->resume();
+    });
 
     if (partController) {
         partController->initialize();
@@ -321,8 +325,6 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     }
     testController->initialize();
     runtimeController->initialize();
-
-    installSignalHandler();
 
     qCDebug(SHELL) << "Done initializing controllers";
 
