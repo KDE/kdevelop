@@ -1,0 +1,146 @@
+# Translation for kdevcontextbrowser.po to Euskara/Basque (eu).
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>.
+#
+# Translators:
+# SPDX-FileCopyrightText: 2024 Iñigo Salvador Azurmendi <xalba@ni.eus>
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"PO-Revision-Date: 2024-08-17 12:12+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 24.05.2\n"
+
+#: contextbrowser.cpp:162
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Joan testuinguru-historian atzera"
+
+#: contextbrowser.cpp:174
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Joan testuinguru-historian aurrera"
+
+#: contextbrowser.cpp:190
+#, kde-format
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Laburpena"
+
+#: contextbrowser.cpp:191
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Laburpena"
+
+#: contextbrowser.cpp:192
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr "Nabigatu dokumentu aktiboaren laburpena, egin klik arakatzeko"
+
+#: contextbrowser.cpp:233
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr "Sorburua a&rakatzeko modua"
+
+#: contextbrowser.cpp:239
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "Bisitatutako &aurreko testuingurua"
+
+#: contextbrowser.cpp:245
+#, kde-format
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "Bisitatutako &hurrengo testuingura"
+
+#: contextbrowser.cpp:251
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "&Aurreko erabilera"
+
+#: contextbrowser.cpp:257
+#, kde-format
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "&Hurrengo erabilera"
+
+#: contextbrowser.cpp:263
+#, kde-format
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Testuinguru arakatzailea"
+
+#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
+#, kde-format
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Kode arakatzailea"
+
+#: contextbrowser.cpp:310
+#, kde-format
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Aurkitu erabilerak"
+
+#: contextbrowser.cpp:1560
+#, kde-format
+msgid "(changed)"
+msgstr "(aldatuta)"
+
+#: contextbrowserview.cpp:178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Erakutsi deklarazio-menua"
+
+#: contextbrowserview.cpp:181
+#, kde-format
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Deklarazio-menua"
+
+#: contextbrowserview.cpp:185
+#, kde-format
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Giltzatu uneko ikuspegia"
+
+#: contextbrowserview.cpp:186
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Giltzatu uneko ikuspegia"
+
+#: contextbrowserview.cpp:187
+#, kde-format
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Giltzatik askatu uneko ikuspegia"
+
+#: contextbrowserview.cpp:189
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Giltzatik askatu uneko ikuspegia"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Kode arakatzailearen tresna-barra"

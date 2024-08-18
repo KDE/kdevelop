@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-17 00:38+0000\n"
-"PO-Revision-Date: 2024-07-20 00:25+0200\n"
+"PO-Revision-Date: 2024-08-18 00:59+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -5524,7 +5524,7 @@ msgstr "Imprimir la cadena definición-usos completa tras un análisis con éxit
 #: util/duchainify/main.cpp:293
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Mostrar contextos padres al volcar contextos"
 
 #: util/duchainify/main.cpp:295
 #, kde-format
