@@ -17,6 +17,7 @@ Comment[ca]=Genera una aplicació basada en CMake i Qt6 Quick (compatible amb mu
 Comment[ca@valencia]=Genera una aplicació basada en CMake i Qt6 Quick (compatible amb multiplataforma)
 Comment[en_GB]=Generate a CMake & Qt6 Quick based application (crossplatform compatible)
 Comment[es]=Genera una aplicación basada en CMake y Qt6 Quick (compatible multiplataforma)
+Comment[eu]=Sortu QMake eta Qt6 Quick-en oinarritutako aplikazio bat (plataforma gurutzatuekin bateragarria)
 Comment[gl]=Xerar unha aplicación baseada en CMake e Qt6 Quick (multiplataforma).
 Comment[it]=Genera un'applicazione basata su CMake e Qt6 su tecnologia Qt Quick (compatibile multipiattaforma)
 Comment[ka]=QMake/Qt-ზე დაფუძნებული გრაფიკული აპლიკაციის შექმნა (თავსებადია პლატფორმათაშორისობასთან)
