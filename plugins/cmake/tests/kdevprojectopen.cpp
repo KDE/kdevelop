@@ -27,7 +27,8 @@ KDevProjectOpen::KDevProjectOpen(QObject* parent)
     TestCore::initialize();
 
     cleanup();
-    connect(ICore::self()->projectController(), &IProjectController::projectOpened, this, &KDevProjectOpen::projectDone);
+    connect(ICore::self()->projectController(), &IProjectController::projectOpened, this, &KDevProjectOpen::projectDone,
+            Qt::QueuedConnection);
 }
 
 void KDevProjectOpen::cleanup()
