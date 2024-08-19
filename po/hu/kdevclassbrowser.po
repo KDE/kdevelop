@@ -3,45 +3,42 @@
 #
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2012.
 # Balázs Úr <urbalazs@gmail.com>, 2013.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2013-10-06 10:54+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"PO-Revision-Date: 2024-08-18 15:56+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
-#, fuzzy, kde-format
-#| msgid "Classes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Classes"
 msgstr "Osztályok"
 
 #: classbrowserplugin.cpp:73
-#, fuzzy, kde-format
-#| msgid "Find in &Class Browser"
+#, kde-format
 msgctxt "@action"
 msgid "Find in &Class Browser"
-msgstr "&Keresés az Osztályböngészőben"
+msgstr "Keresés az &Osztályböngészőben"
 
 #: classwidget.cpp:72
-#, fuzzy, kde-format
-#| msgid "S&earch:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "S&earch:"
 msgstr "&Keresés:"
 
 #: classwidget.cpp:89
-#, fuzzy, kde-format
-#| msgid "Class Browser"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Class Browser"
 msgstr "Osztályböngésző"

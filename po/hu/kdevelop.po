@@ -3,20 +3,21 @@
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2011, 2015.
 # Tamas Krutki, 2011.
 # Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: KDE 3.5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2015-09-08 10:42+0200\n"
-"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"PO-Revision-Date: 2024-08-18 15:36+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -26,7 +27,7 @@ msgstr "Kiszel Kristóf,Szántó Tamás"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "ulysses@kubuntu.org,tszanto@mol.hu"
+msgstr "ulysses@fsf.hu,tszanto@mol.hu"
 
 #. i18n: ectx: Menu (session)
 #: kdevelopui.rc:6
@@ -44,27 +45,24 @@ msgstr "&Projekt"
 
 #. i18n: ectx: Menu (run)
 #: kdevelopui.rc:29
-#, fuzzy, kde-format
-#| msgid "&Run"
+#, kde-format
 msgctxt "@title:menu"
 msgid "&Run"
 msgstr "F&uttatás"
 
 #. i18n: ectx: Menu (debug_core_menu)
 #: kdevelopui.rc:39
-#, fuzzy, kde-format
-#| msgid "Examine Core File..."
+#, kde-format
 msgctxt "@title:menu"
 msgid "Examine Core File"
-msgstr "Core fájl megvizsgálása..."
+msgstr "Core fájl megvizsgálása"
 
 #. i18n: ectx: Menu (debug_attach_menu)
 #: kdevelopui.rc:43
-#, fuzzy, kde-format
-#| msgid "Attach to Process"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Attach to Process"
-msgstr "Csatlakozás egy folyamathoz"
+msgstr "Csatlakozás folyamathoz"
 
 #. i18n: ectx: Menu (navigation)
 #: kdevelopui.rc:65
@@ -85,7 +83,7 @@ msgstr "&Fájl"
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Edit"
-msgstr "S&zerkesztés"
+msgstr "Sz&erkesztés"
 
 #. i18n: ectx: Menu (code)
 #: kdevelopui.rc:113
@@ -99,14 +97,14 @@ msgstr "Kód"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current File With"
-msgstr ""
+msgstr "Jelenlegi fájl elemzése mással"
 
 #. i18n: ectx: Menu (analyze_project)
 #: kdevelopui.rc:119
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current Project With"
-msgstr ""
+msgstr "Jelenlegi projekt elemzése mással"
 
 #. i18n: ectx: Menu (window)
 #: kdevelopui.rc:128
@@ -133,7 +131,7 @@ msgstr "Súgó"
 #: kdevelopui.rc:186
 #, kde-format
 msgid "Main Toolbar"
-msgstr "Fő eszköztár"
+msgstr "Alap eszköztár"
 
 #: kdevideextension.cpp:36
 #, kde-format
@@ -141,10 +139,9 @@ msgid "Code"
 msgstr "Kód"
 
 #: kdevideextension.cpp:47
-#, fuzzy, kde-format
-#| msgid "KDevelop4 Project Files"
+#, kde-format
 msgid "KDevelop Project Files"
-msgstr "KDevelop4 projektfájlok"
+msgstr "KDevelop projektfájlok"
 
 #: main.cpp:84
 #, kde-format
@@ -152,16 +149,14 @@ msgid "Could not open %1"
 msgstr "Nem sikerült megnyitni: %1"
 
 #: main.cpp:218
-#, fuzzy, kde-format
-#| msgid "Could not open file %1."
+#, kde-format
 msgid "Could not open file '%1'."
-msgstr "Nem sikerült megnyitni a fájlt: %1"
+msgstr "Nem sikerült megnyitni a(z) „%1” fájlt."
 
 #: main.cpp:241
-#, fuzzy, kde-format
-#| msgid "Could not read project file: %1"
+#, kde-format
 msgid "Could not open project '%1': %2"
-msgstr "Nem sikerült beolvasni a(z) %1 projektfájlt."
+msgstr "Nem sikerült megnyitni a(z) „%1” projektet: %2"
 
 #: main.cpp:272
 #, kde-format
@@ -170,17 +165,14 @@ msgstr ""
 "Válassza ki azt a munkamenetet, amelybe a dokumentumot meg szeretné nyitni"
 
 #: main.cpp:299
-#, fuzzy, kde-format
-#| msgid ""
-#| "Cannot open unknown session %1. See --sessions switch for available "
-#| "sessions or use -cs to create a new one."
+#, kde-format
 msgid ""
 "Cannot open unknown session %1. See `--list-sessions` switch for available "
 "sessions or use `-n` to create a new one."
 msgstr ""
-"Nem lehet megnyitni az ismeretlen munkamenetet: %1. Használja a --sessions "
-"kapcsolót az elérhető munkamenetek megjelenítéséhez vagy a -cs kapcsolót egy "
-"új létrehozásához."
+"Nem lehet megnyitni az ismeretlen munkamenetet: %1. Használja a `--list-"
+"sessions` kapcsolót az elérhető munkamenetek megjelenítéséhez vagy a `-n` "
+"kapcsolót egy új létrehozásához."
 
 #: main.cpp:370
 #, kde-format
@@ -193,20 +185,21 @@ msgid "The KDevelop Integrated Development Environment"
 msgstr "KDevelop integrált fejlesztőkörnyezet"
 
 #: main.cpp:373
-#, fuzzy, kde-format
-#| msgid "Copyright 1999-2014, The KDevelop developers"
+#, kde-format
 msgid "Copyright 1999-%1, The KDevelop developers"
-msgstr "© A KDevelop fejlesztői, 1999-2014."
+msgstr "© A KDevelop fejlesztői, 1999-%1."
 
 #: main.cpp:376
 #, kde-format
 msgid "Kevin Funk"
-msgstr ""
+msgstr "Kevin Funk"
 
 #: main.cpp:376
 #, kde-format
 msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
 msgstr ""
+"Társkarbantartó, C++/Clang, minőségbiztosítás, Windows támogatás, "
+"teljesítmény, weboldal"
 
 #: main.cpp:377
 #, kde-format
@@ -214,10 +207,10 @@ msgid "Sven Brauch"
 msgstr "Sven Brauch"
 
 #: main.cpp:377
-#, fuzzy, kde-format
-#| msgid "Python Support, User Interface improvements"
+#, kde-format
 msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
-msgstr "Python támogatás, felhasználói felület fejlesztése"
+msgstr ""
+"Társkarbantartó, AppImage, Python támogatás, felhasználói felület fejlesztése"
 
 #: main.cpp:378
 #, kde-format
@@ -225,11 +218,9 @@ msgid "Aleix Pol Gonzalez"
 msgstr "Aleix Pol Gonzalez"
 
 #: main.cpp:378
-#, fuzzy, kde-format
-#| msgid "Co-Maintainer, CMake Support, Run Support, Kross Support"
+#, kde-format
 msgid "CMake Support, Run Support, Kross Support"
-msgstr ""
-"Társ-karbantartó, CMake támogatás, Futtatás támogatása, Kross támogatás"
+msgstr "CMake támogatás, Futtatás támogatása, Kross támogatás"
 
 #: main.cpp:379
 #, kde-format
@@ -237,25 +228,22 @@ msgid "Milian Wolff"
 msgstr "Milian Wolff"
 
 #: main.cpp:379
-#, fuzzy, kde-format
-#| msgid ""
-#| "Co-Maintainer, Generic manager, Webdevelopment Plugins, Snippets, "
-#| "Performance"
+#, kde-format
 msgid ""
 "C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
 msgstr ""
-"Társ-karbantartó, Általános menedzser, Webfejlesztő beépülőmodulok, "
-"Snippets, Teljesítmény"
+"C++/Clang, általános menedzser, webfejlesztő bővítmények, kódrészletek, "
+"teljesítmény"
 
 #: main.cpp:380
 #, kde-format
 msgid "Olivier JG"
-msgstr ""
+msgstr "Olivier JG"
 
 #: main.cpp:380
 #, kde-format
 msgid "C++/Clang, DUChain, Bug Fixes"
-msgstr ""
+msgstr "C++/Clang, DUChain, hibajavítások"
 
 #: main.cpp:381
 #, kde-format
@@ -267,7 +255,8 @@ msgstr "Andreas Pakulat"
 msgid ""
 "Architecture, VCS Support, Project Management Support, QMake Projectmanager"
 msgstr ""
-"Architektúra, VCS támogatás, projektkezelés támogatása, QMake projektkezelő"
+"Architektúra, verziókezelők támogatása, projektkezelés támogatása, QMake "
+"projektkezelő"
 
 #: main.cpp:382
 #, kde-format
@@ -290,8 +279,8 @@ msgid ""
 "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
 "Assistance, Refactoring"
 msgstr ""
-"Definíció-használati lánc, C++ támogatás, Kód navigáció, Kódkiegészítés, "
-"Segítségnyújtás kódolásban, Átszervezés"
+"Definíció-használati lánc, C++ támogatás, kódnavigáció, kódkiegészítés, "
+"kódolási segéd, refaktorálás"
 
 #: main.cpp:384
 #, kde-format
@@ -333,12 +322,12 @@ msgstr "Niko Sams"
 #: main.cpp:387
 #, kde-format
 msgid "GDB integration, Webdevelopment Plugins"
-msgstr "GDB integráció, Webfejlesztő beépülőmodulok"
+msgstr "GDB integráció, webfejlesztő bővítmények"
 
 #: main.cpp:388
 #, kde-format
 msgid "Friedrich W. H. Kossebau"
-msgstr ""
+msgstr "Friedrich W. H. Kossebau"
 
 #: main.cpp:390
 #, kde-format
@@ -363,7 +352,7 @@ msgstr "Evgeniy Ivanov"
 #: main.cpp:392
 #, kde-format
 msgid "Distributed VCS, Git, Mercurial"
-msgstr "Elosztott VCS, Git, Mercurial"
+msgstr "Elosztott verziókezelő rendszerek, Git, Mercurial"
 
 #. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
 #: main.cpp:395
@@ -374,7 +363,7 @@ msgstr "Robert Gruber"
 #: main.cpp:395
 #, kde-format
 msgid "SnippetPart, debugger and usability patches"
-msgstr "Snippet objektum, javítások a nyomkövetőhöz és a kezelőfelülethez"
+msgstr "Snippet objektum, javítások a hibakeresőhöz és a kezelőfelülethez"
 
 #: main.cpp:396
 #, kde-format
@@ -384,7 +373,7 @@ msgstr "Dukju Ahn"
 #: main.cpp:396
 #, kde-format
 msgid "Subversion plugin, Custom Make Manager, Overall improvements"
-msgstr "Subversion beépülőmodul, Custom Make kezelő, általános fejlesztések"
+msgstr "Subversion bővítmény, Egyéni Make kezelő, általános fejlesztések"
 
 #: main.cpp:397
 #, kde-format
@@ -404,7 +393,7 @@ msgstr "Roberto Raggi"
 #: main.cpp:398
 #, kde-format
 msgid "C++ parser"
-msgstr "C++ értelmező"
+msgstr "C++ feldolgozó"
 
 #: main.cpp:399
 #, kde-format
@@ -469,7 +458,7 @@ msgstr "John Birch"
 #: main.cpp:406
 #, kde-format
 msgid "Debugger frontend"
-msgstr "Grafikus nyomkövetési felület"
+msgstr "Grafikus hibakereső felület"
 
 #: main.cpp:407
 #, kde-format
@@ -479,7 +468,7 @@ msgstr "Sandy Meier"
 #: main.cpp:407
 #, kde-format
 msgid "PHP support, context menu stuff"
-msgstr "PHP-támogatás, felbukkanó menü"
+msgstr "PHP-támogatás, helyi menüvel kapcsolatos dolgok"
 
 #: main.cpp:408
 #, kde-format
@@ -499,7 +488,7 @@ msgstr "Ian Reinhart Geiser"
 #: main.cpp:409
 #, kde-format
 msgid "Dist part, bash support, application templates"
-msgstr "'Dist' objektum, Bash-támogatás, alkalmazássablonok"
+msgstr "Dist objektum, Bash-támogatás, alkalmazássablonok"
 
 #: main.cpp:410
 #, kde-format
@@ -669,7 +658,7 @@ msgstr "Daniel Engelschalt"
 #: main.cpp:426
 #, kde-format
 msgid "C++ code completion, persistent class store"
-msgstr "Automatikus kódszöveg-kiegészítés C++-hoz, megmaradó osztálytárolás"
+msgstr "Automatikus kódkiegészítés C++-hoz, megmaradó osztálytárolás"
 
 #: main.cpp:427
 #, kde-format
@@ -722,8 +711,8 @@ msgid ""
 "Documentation Finder,  qmake projectmanager patches, usability improvements, "
 "bugfixes ... "
 msgstr ""
-"Dokumentációkereső, foltok a qmake projektkezelőhöz, a kezelhetőség "
-"javítása, hibajavítások... "
+"Dokumentációkereső, javítások a qmake projektkezelőhöz, a kezelhetőség "
+"javítása, hibajavítások… "
 
 #: main.cpp:433
 #, kde-format
@@ -771,15 +760,12 @@ msgstr ""
 "Megadhat egy ellenőrzőösszeget vagy a munkamenet nevét."
 
 #: main.cpp:457
-#, fuzzy, kde-format
-#| msgid ""
-#| "Open KDevelop with the given session.\n"
-#| "You can pass either hash or the name of the session."
+#, kde-format
 msgid ""
 "Delete the given session.\n"
 "You can pass either hash or the name of the session."
 msgstr ""
-"A KDevelop indítása az adott munkamenettel.\n"
+"Az adott munkamenet törlése.\n"
 "Megadhat egy ellenőrzőösszeget vagy a munkamenet nevét."
 
 #: main.cpp:461
@@ -793,19 +779,18 @@ msgstr ""
 #, kde-format
 msgid "List all available sessions on shell and lets you select one to open."
 msgstr ""
-"Megjeleníti a parancsértelmezőn elérhető összes munkamenetet, amelyek közül "
+"Listázza a parancsértelmezőn elérhető összes munkamenetet, amelyek közül "
 "választhat egyet megnyitásra."
 
 #: main.cpp:465
 #, kde-format
 msgid "List available sessions and quit."
-msgstr "Kilistázza az elérhető munkameneteket majd kilép."
+msgstr "Kilistázza az elérhető munkameneteket, majd kilép."
 
 #: main.cpp:467
-#, fuzzy, kde-format
-#| msgid "Open KDevelop and load the given project."
+#, kde-format
 msgid "Open KDevelop and fetch the project from the given <repo url>."
-msgstr "A KDevelop indítása és az adott projekt betöltése."
+msgstr "A KDevelop indítása és a projekt betöltése az adott <repo url>-ről."
 
 #: main.cpp:470
 #, kde-format
@@ -813,34 +798,32 @@ msgid ""
 "Open KDevelop and load the given project. <project> can be either a .kdev4 "
 "file or a directory path."
 msgstr ""
+"A KDevelop megnyitása és az adott projekt betöltése. A <project> lehet egy ."
+"kdev4 fájl, vagy egy könyvtár elérési útja."
 
 #: main.cpp:473
-#, fuzzy, kde-format
-#| msgid ""
-#| "Start debugging an application in KDevelop with the given debugger.\n"
-#| "The binary that should be debugged must follow - including arguments.\n"
-#| "Example: kdevelop --debug gdb myapp --foo bar"
+#, kde-format
 msgid ""
 "Start debugging an application in KDevelop with the given debugger.\n"
 "The executable that should be debugged must follow - including arguments.\n"
 "Example: kdevelop --debug gdb myapp --foo bar"
 msgstr ""
-"Egy alkalmazás nyomkövetésének megkezdése a KDevelopban egy adott "
-"nyomkövetővel.\n"
-"A használni kívánt binárisnak a paramétereivel eggyütt ezután kell "
+"Egy alkalmazás hibakeresésének megkezdése a KDevelopban egy adott "
+"hibakeresővel.\n"
+"A használni kívánt végrehajthatónak a paramétereivel együtt ezután kell "
 "következnie.\n"
 "Példa: kdevelop --debug gdb programneve --foo bar"
 
 #: main.cpp:487
 #, kde-format
 msgid "Files to load, or directories to load as projects"
-msgstr ""
+msgstr "Betöltendő fájlok, vagy projektekként betöltendő könyvtárak"
 
 #: main.cpp:498
 #, kde-format
 msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
 msgstr ""
-"Elérhető munkamenetek (használja az '-s ELLENŐRZŐÖSSZEG' vagy '-s NÉV' "
+"Elérhető munkamenetek (használja az „-s ELLENŐRZŐÖSSZEG” vagy „-s NÉV” "
 "paramétereket egy adott munkamenet megnyitásához):"
 
 #: main.cpp:499
@@ -864,19 +847,17 @@ msgid "Select the session you would like to use"
 msgstr "Válassza ki a használni kívánt munkamenetet"
 
 #: main.cpp:618
-#, fuzzy, kde-format
-#| msgctxt "@info:shell"
-#| msgid "Specify the binary you want to debug."
+#, kde-format
 msgctxt "@info:shell"
 msgid "Specify the executable you want to debug."
-msgstr "Adja meg azt a binárist, amelyen hibakeresést szeretne végrehajtani."
+msgstr ""
+"Adja meg azt a végrehajthatót, amelyen hibakeresést szeretne végrehajtani."
 
 #: main.cpp:627
-#, fuzzy, kde-format
-#| msgid "'%1' does not exist."
+#, kde-format
 msgctxt "@info:shell"
 msgid "Specified executable does not exist."
-msgstr "'%1' nem létezik."
+msgstr "A megadott végrehajtható nem létezik."
 
 #: main.cpp:633
 #, kde-format
@@ -892,21 +873,19 @@ msgstr ""
 "megnyitásához."
 
 #: main.cpp:657
-#, fuzzy, kde-format
-#| msgid "A file with this name already exists."
+#, kde-format
 msgid "No session with the name %1 exists."
-msgstr "Már létezik ilyen nevű fájl."
+msgstr "Nincs %1 nevű munkamenet."
 
 #: main.cpp:664
-#, fuzzy, kde-format
-#| msgid "Could not open file for writing."
+#, kde-format
 msgid "Could not lock session %1 for deletion."
-msgstr "Nem sikerült megnyitni a fájlt írásra."
+msgstr "Nem sikerült zárolni a(z) %1 munkamenetet törléshez."
 
 #: main.cpp:669
 #, kde-format
 msgid "Session with name %1 was successfully removed."
-msgstr ""
+msgstr "A(z) %1 nevű munkamenet sikeresen eltávolítva."
 
 #: main.cpp:770
 #, kde-format
