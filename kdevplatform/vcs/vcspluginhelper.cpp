@@ -368,6 +368,8 @@ static VcsAnnotationModel* vcsAnnotationModel(const QUrl& url, KTextEditor::Docu
 {
     if (auto* const abstractModel = document.annotationModel()) {
         if (auto* const model = qobject_cast<VcsAnnotationModel*>(abstractModel)) {
+            Q_ASSERT(model->referenceCount > 0);
+            ++model->referenceCount;
             return model;
         }
         qCWarning(VCS) << "replacing unsupported non-VCS annotation model" << abstractModel << "at"
@@ -378,6 +380,7 @@ static VcsAnnotationModel* vcsAnnotationModel(const QUrl& url, KTextEditor::Docu
     const auto foreground = style->foreground().color();
     const auto background = style->hasProperty(QTextFormat::BackgroundBrush) ? style->background().color() : Qt::white;
     auto* const model = new VcsAnnotationModel(url, &document, foreground, background);
+    Q_ASSERT(model->referenceCount == 1);
 
     document.setAnnotationModel(model);
     return model;
@@ -480,7 +483,17 @@ void VcsPluginHelper::handleAnnotationBorderVisibilityChanged(KTextEditor::View*
         delegate->disable();
     }
 
-    // TODO: remove the model if last user of it
+    auto* const document = view->document();
+    auto* const model = qobject_cast<VcsAnnotationModel*>(document->annotationModel());
+    Q_ASSERT(model);
+
+    --model->referenceCount;
+    Q_ASSERT(model->referenceCount >= 0);
+    if (model->referenceCount == 0) {
+        // The model is not used by another view of this document => destroy it.
+        document->setAnnotationModel(nullptr);
+        delete model;
+    }
 }
 
 void VcsPluginHelper::update()

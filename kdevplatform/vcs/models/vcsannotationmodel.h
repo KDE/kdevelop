@@ -48,6 +48,8 @@ public:
     // to access custom data, so providing a custom API instead
     VcsAnnotationLine annotationLine(int line) const;
 
+    int referenceCount = 1; ///< unused by this class, managed from outside
+
 private:
     const QScopedPointer<class VcsAnnotationModelPrivate> d_ptr;
     Q_DECLARE_PRIVATE(VcsAnnotationModel)
