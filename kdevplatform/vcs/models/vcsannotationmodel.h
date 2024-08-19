@@ -28,9 +28,17 @@ class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public KTextEditor::Annotation
 {
 Q_OBJECT
 public:
-    VcsAnnotationModel( VcsJob* job, const QUrl&, QObject*,
-                        const QColor& foreground = QColor(Qt::black), const QColor& background = QColor(Qt::white) );
+    explicit VcsAnnotationModel(const QUrl& url, QObject* parent, const QColor& foreground = Qt::black,
+                                const QColor& background = Qt::white);
     ~VcsAnnotationModel() override;
+
+    /**
+     * Remove existing annotation lines if any, associate and run a VCS annotation job.
+     * Or do nothing if @p job is already associated with this model.
+     *
+     * @param job a non-null not started VCS annotation job
+     */
+    void setAnnotationJob(VcsJob* job);
 
     VcsRevision revisionForLine(int line) const;
 

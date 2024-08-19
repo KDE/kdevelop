@@ -33,7 +33,7 @@ public:
     KDevelop::VcsAnnotation m_annotation;
     mutable QHash<KDevelop::VcsRevision, QBrush> m_brushes;
     VcsAnnotationModel* q;
-    VcsJob* job;
+    VcsJob* job = nullptr;
     QColor foreground;
     QColor background;
 
@@ -57,37 +57,53 @@ public:
 
     void addLines( KDevelop::VcsJob* job )
     {
-        if( job == this->job )
-        {
-            const auto results = job->fetchResults().toList();
-            for (const QVariant& v : results) {
-                if( v.canConvert<KDevelop::VcsAnnotationLine>() )
-                {
-                    VcsAnnotationLine l = v.value<KDevelop::VcsAnnotationLine>();
-                    m_annotation.insertLine( l.lineNumber(), l );
-                    emit q->lineChanged( l.lineNumber() );
-                }
+        if (job != this->job) {
+            return; // ignore updates from the previous superseded job
+        }
+
+        const auto results = job->fetchResults().toList();
+        for (const QVariant& v : results) {
+            if( v.canConvert<KDevelop::VcsAnnotationLine>() )
+            {
+                VcsAnnotationLine l = v.value<KDevelop::VcsAnnotationLine>();
+                m_annotation.insertLine( l.lineNumber(), l );
+                emit q->lineChanged( l.lineNumber() );
             }
         }
     }
 };
 
-VcsAnnotationModel::VcsAnnotationModel(VcsJob *job, const QUrl& url, QObject* parent,
-                                       const QColor &foreground, const QColor &background)
+VcsAnnotationModel::VcsAnnotationModel(const QUrl& url, QObject* parent, const QColor& foreground,
+                                       const QColor& background)
     : d_ptr(new VcsAnnotationModelPrivate(this))
 {
     Q_D(VcsAnnotationModel);
 
     setParent( parent );
     d->m_annotation.setLocation( url );
-    d->job = job;
     d->foreground = foreground;
     d->background = background;
-    connect( d->job, &VcsJob::resultsReady,this, [this] (VcsJob* job) { Q_D(VcsAnnotationModel); d->addLines(job); } );
-    ICore::self()->runController()->registerJob( d->job );
 }
 
 VcsAnnotationModel::~VcsAnnotationModel() = default;
+
+void VcsAnnotationModel::setAnnotationJob(VcsJob* job)
+{
+    Q_D(VcsAnnotationModel);
+
+    Q_ASSERT(job);
+
+    if (d->job == job) {
+        return; // nothing to do
+    }
+
+    d->m_annotation.clearLines();
+    d->job = job;
+    connect(d->job, &VcsJob::resultsReady, this, [d](VcsJob* job) {
+        d->addLines(job);
+    });
+    ICore::self()->runController()->registerJob(d->job);
+}
 
 static QString abbreviateLastName(const QString& author) {
     auto parts = author.split(QLatin1Char(' '));

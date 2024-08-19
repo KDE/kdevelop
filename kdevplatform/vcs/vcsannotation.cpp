@@ -146,6 +146,11 @@ void VcsAnnotation::insertLine( int lineno, const VcsAnnotationLine& line )
     d->lines.insert( lineno, line );
 }
 
+void VcsAnnotation::clearLines()
+{
+    d->lines.clear();
+}
+
 void VcsAnnotation::setLocation(const QUrl& u)
 {
     d->location = u;

@@ -364,6 +364,25 @@ void VcsPluginHelper::history(const VcsRevision& rev)
     dlg->show();
 }
 
+static VcsAnnotationModel* vcsAnnotationModel(const QUrl& url, KTextEditor::Document& document, KTextEditor::View& view)
+{
+    if (auto* const abstractModel = document.annotationModel()) {
+        if (auto* const model = qobject_cast<VcsAnnotationModel*>(abstractModel)) {
+            return model;
+        }
+        qCWarning(VCS) << "replacing unsupported non-VCS annotation model" << abstractModel << "at"
+                       << url.toString(QUrl::PreferLocalFile);
+    }
+
+    const auto style = view.defaultStyleAttribute(KSyntaxHighlighting::Theme::TextStyle::Normal);
+    const auto foreground = style->foreground().color();
+    const auto background = style->hasProperty(QTextFormat::BackgroundBrush) ? style->background().color() : Qt::white;
+    auto* const model = new VcsAnnotationModel(url, &document, foreground, background);
+
+    document.setAnnotationModel(model);
+    return model;
+}
+
 void VcsPluginHelper::annotation()
 {
     Q_D(VcsPluginHelper);
@@ -388,19 +407,9 @@ void VcsPluginHelper::annotation()
             return;
         }
 
-        QColor foreground(Qt::black);
-        QColor background(Qt::white);
         if (view) {
-            const auto style = view->defaultStyleAttribute(KSyntaxHighlighting::Theme::TextStyle::Normal);
-            foreground = style->foreground().color();
-            if (style->hasProperty(QTextFormat::BackgroundBrush)) {
-                background = style->background().color();
-            }
-
-            // TODO: only create model if there is none yet (e.g. from another view)
-            auto* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
-                                                                                   foreground, background);
-            doc->textDocument()->setAnnotationModel(model);
+            auto* const model = vcsAnnotationModel(url, *doc->textDocument(), *view);
+            model->setAnnotationJob(job);
 
             // TODO: only create delegate if there is none yet
             auto delegate = new VcsAnnotationItemDelegate(view, model, view);

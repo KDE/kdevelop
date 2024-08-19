@@ -129,6 +129,11 @@ public:
     void insertLine( int lineno, const VcsAnnotationLine& line );
 
     /**
+     * Clear the line list
+     */
+    void clearLines();
+
+    /**
      * @param location the location of the file
      */
     void setLocation( const QUrl& location );
