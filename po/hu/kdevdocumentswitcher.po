@@ -3,57 +3,53 @@
 #
 # Kiszel Kristóf <ulysses@kubuntu.org>, 2010, 2012.
 # Balázs Úr <urbalazs@gmail.com>, 2013.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-05 02:27+0000\n"
-"PO-Revision-Date: 2013-07-06 10:23+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"PO-Revision-Date: 2024-08-18 16:03+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: documentswitcherplugin.cpp:67
-#, fuzzy, kde-format
-#| msgid "Last Used Views"
+#, kde-format
 msgctxt "@action"
 msgid "Last Used Views"
-msgstr "Utoljára használt nézet"
+msgstr "Legutóbb használt nézetek"
 
 #: documentswitcherplugin.cpp:70
-#, fuzzy, kde-format
-#| msgid "Opens a list to walk through the list of last used views."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views."
 msgstr ""
 "Megnyit egy listát az utoljára használt nézetek listájának bejárásához."
 
 #: documentswitcherplugin.cpp:71 documentswitcherplugin.cpp:79
-#, fuzzy, kde-format
-#| msgid "Walk through the list of last used views"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Walk through the list of last used views"
-msgstr "Utoljára használt nézetek listájának bejárása"
+msgstr "A legutóbb használt nézetek listájának bejárása"
 
 #: documentswitcherplugin.cpp:75
-#, fuzzy, kde-format
-#| msgid "Last Used Views (Reverse)"
+#, kde-format
 msgctxt "@action"
 msgid "Last Used Views (Reverse)"
-msgstr "Utoljára használt nézetek (visszafelé)"
+msgstr "Legutóbb használt nézetek (visszafelé)"
 
 #: documentswitcherplugin.cpp:78
-#, fuzzy, kde-format
-#| msgid "Opens a list to walk through the list of last used views in reverse."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views in reverse."
 msgstr ""
-"Megnyit egy listát az utoljára használt nézetek listájának bejárásához "
+"Megnyit egy listát a legutóbb használt nézetek listájának bejárásához "
 "fordított sorrendben."
 
 #~ msgid "Document Switcher"

@@ -2,20 +2,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Balázs Úr <urbalazs@gmail.com>, 2012.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-05 02:27+0000\n"
-"PO-Revision-Date: 2012-10-30 09:12+0100\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"PO-Revision-Date: 2024-08-18 16:04+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #. i18n: ectx: Menu (permission)
 #: kdevokteta.rc:10
@@ -40,7 +41,7 @@ msgstr "Könyvjelzők"
 #: kdevokteta.rc:77
 #, kde-format
 msgid "Main Toolbar"
-msgstr ""
+msgstr "Alap eszköztár"
 
 #: oktetadocument.cpp:125
 #, kde-format
@@ -50,15 +51,13 @@ msgstr ""
 "azokat?"
 
 #: oktetadocument.cpp:126
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Dokumentum bezárása"
 
 #: oktetaplugin.cpp:91
-#, fuzzy, kde-format
-#| msgid "Hex Editor"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Hex Editor"
 msgstr "Hexadecimális szerkesztő"
@@ -67,7 +66,7 @@ msgstr "Hexadecimális szerkesztő"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Manage Byte Array View Profiles..."
-msgstr "Bájttömb nézet profil kezelése…"
+msgstr "Bájttömb nézetprofilok kezelése…"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

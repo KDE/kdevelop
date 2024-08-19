@@ -2,45 +2,42 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Balázs Úr <urbalazs@gmail.com>, 2013, 2014.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 02:30+0000\n"
-"PO-Revision-Date: 2014-06-14 15:38+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"PO-Revision-Date: 2024-08-18 15:54+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #: testview.cpp:57 testviewplugin.cpp:70
-#, fuzzy, kde-format
-#| msgid "Unit Tests"
+#, kde-format
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "Egységtesztek"
 
 #: testview.cpp:79
-#, fuzzy, kde-format
-#| msgid "Show Source"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "Forrás megjelenítése"
 
 #: testview.cpp:86
-#, fuzzy, kde-format
-#| msgid "Run Selected Tests"
+#, kde-format
 msgctxt "@action"
 msgid "Run Selected Tests"
-msgstr "A kijelölt tesztek futtatása"
+msgstr "Kijelölt tesztek futtatása"
 
 #: testview.cpp:91
-#, fuzzy, kde-format
-#| msgid "Filter..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Szűrő…"
@@ -53,15 +50,13 @@ msgstr[0] "1 teszt futtatása"
 msgstr[1] "%1 teszt futtatása"
 
 #: testviewplugin.cpp:59
-#, fuzzy, kde-format
-#| msgid "Run All Tests"
+#, kde-format
 msgctxt "@action"
 msgid "Run All Tests"
 msgstr "Minden teszt futtatása"
 
 #: testviewplugin.cpp:63
-#, fuzzy, kde-format
-#| msgid "Stop Running Tests"
+#, kde-format
 msgctxt "@action"
 msgid "Stop Running Tests"
 msgstr "Futó tesztek leállítása"
