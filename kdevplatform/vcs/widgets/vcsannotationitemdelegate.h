@@ -31,8 +31,15 @@ public:
      *
      * @warning This delegate relies on @p view staying its parent, so do not change it.
      */
-    explicit VcsAnnotationItemDelegate(KTextEditor::View* view, KTextEditor::AnnotationModel* model);
+    explicit VcsAnnotationItemDelegate(KTextEditor::View* view);
     ~VcsAnnotationItemDelegate() override;
+
+    /**
+     * Enable the delegate and associate an annotation model with it.
+     *
+     * @param model a non-null annotation model that is used by this delegate's KTextEditor::View
+     */
+    void enable(KTextEditor::AnnotationModel* model);
 
     /**
      * Disable the delegate and prevent it from using the associated annotation model.
@@ -77,7 +84,7 @@ private:
     int widthHintFromViewWidth(int viewWidth) const;
 
 private:
-    KTextEditor::AnnotationModel* m_model;
+    KTextEditor::AnnotationModel* m_model = nullptr;
 
     // TODO: make this configurable
     const int m_maxWidthViewPercent = 25;

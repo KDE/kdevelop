@@ -386,6 +386,18 @@ static VcsAnnotationModel* vcsAnnotationModel(const QUrl& url, KTextEditor::Docu
     return model;
 }
 
+static VcsAnnotationItemDelegate* vcsAnnotationItemDelegate(KTextEditor::View& view)
+{
+    if (auto* const delegate = qobject_cast<VcsAnnotationItemDelegate*>(view.annotationItemDelegate())) {
+        return delegate;
+    }
+
+    auto* const delegate = new VcsAnnotationItemDelegate(&view);
+    view.setAnnotationItemDelegate(delegate);
+    view.setAnnotationUniformItemSizes(true);
+    return delegate;
+}
+
 void VcsPluginHelper::annotation()
 {
     Q_D(VcsPluginHelper);
@@ -414,10 +426,9 @@ void VcsPluginHelper::annotation()
             auto* const model = vcsAnnotationModel(url, *doc->textDocument(), *view);
             model->setAnnotationJob(job);
 
-            // TODO: only create delegate if there is none yet
-            auto* const delegate = new VcsAnnotationItemDelegate(view, model);
-            view->setAnnotationItemDelegate(delegate);
-            view->setAnnotationUniformItemSizes(true);
+            auto* const delegate = vcsAnnotationItemDelegate(*view);
+            delegate->enable(model);
+
             view->setAnnotationBorderVisible(true);
             connect(view, &KTextEditor::View::annotationContextMenuAboutToShow, this,
                     &VcsPluginHelper::annotationContextMenuAboutToShow);

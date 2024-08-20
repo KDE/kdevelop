@@ -29,18 +29,27 @@
 
 using namespace KDevelop;
 
-VcsAnnotationItemDelegate::VcsAnnotationItemDelegate(KTextEditor::View* view, KTextEditor::AnnotationModel* model)
+VcsAnnotationItemDelegate::VcsAnnotationItemDelegate(KTextEditor::View* view)
     : KTextEditor::AbstractAnnotationItemDelegate(view)
-    , m_model(model)
 {
-    Q_ASSERT(m_model);
     // dump background brushes on schema change
     connect(view, &KTextEditor::View::configChanged, this, &VcsAnnotationItemDelegate::resetBackgrounds);
-
-    view->installEventFilter(this);
 }
 
 VcsAnnotationItemDelegate::~VcsAnnotationItemDelegate() = default;
+
+void VcsAnnotationItemDelegate::enable(KTextEditor::AnnotationModel* model)
+{
+    Q_ASSERT(model);
+
+    if (m_model) {
+        m_model = model;
+        return; // already enabled, nothing more to do
+    }
+    m_model = model;
+    Q_ASSERT(qobject_cast<KTextEditor::View*>(parent()));
+    parent()->installEventFilter(this);
+}
 
 void VcsAnnotationItemDelegate::disable()
 {
