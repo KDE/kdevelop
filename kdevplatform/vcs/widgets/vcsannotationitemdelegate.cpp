@@ -29,11 +29,11 @@
 
 using namespace KDevelop;
 
-VcsAnnotationItemDelegate::VcsAnnotationItemDelegate(KTextEditor::View* view, KTextEditor::AnnotationModel* model,
-                                                     QObject* parent)
-    : KTextEditor::AbstractAnnotationItemDelegate(parent)
+VcsAnnotationItemDelegate::VcsAnnotationItemDelegate(KTextEditor::View* view, KTextEditor::AnnotationModel* model)
+    : KTextEditor::AbstractAnnotationItemDelegate(view)
     , m_model(model)
 {
+    Q_ASSERT(m_model);
     // dump background brushes on schema change
     connect(view, &KTextEditor::View::configChanged, this, &VcsAnnotationItemDelegate::resetBackgrounds);
 
@@ -41,6 +41,16 @@ VcsAnnotationItemDelegate::VcsAnnotationItemDelegate(KTextEditor::View* view, KT
 }
 
 VcsAnnotationItemDelegate::~VcsAnnotationItemDelegate() = default;
+
+void VcsAnnotationItemDelegate::disable()
+{
+    if (!m_model) {
+        return; // already disabled, nothing to do
+    }
+    m_model = nullptr;
+    Q_ASSERT(qobject_cast<KTextEditor::View*>(parent()));
+    parent()->removeEventFilter(this);
+}
 
 static QString ageOfDate(const QDate& date)
 {

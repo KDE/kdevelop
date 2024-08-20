@@ -412,7 +412,7 @@ void VcsPluginHelper::annotation()
             model->setAnnotationJob(job);
 
             // TODO: only create delegate if there is none yet
-            auto delegate = new VcsAnnotationItemDelegate(view, model, view);
+            auto* const delegate = new VcsAnnotationItemDelegate(view, model);
             view->setAnnotationItemDelegate(delegate);
             view->setAnnotationUniformItemSizes(true);
             view->setAnnotationBorderVisible(true);
@@ -473,6 +473,12 @@ void VcsPluginHelper::handleAnnotationBorderVisibilityChanged(KTextEditor::View*
                &VcsPluginHelper::annotationContextMenuAboutToShow);
     disconnect(view, &KTextEditor::View::annotationBorderVisibilityChanged, this,
                &VcsPluginHelper::handleAnnotationBorderVisibilityChanged);
+
+    // Disable rather than destroy our delegate, because calling view->setAnnotationItemDelegate(nullptr)
+    // creates a new default delegate KateAnnotationItemDelegate and thus is less efficient.
+    if (auto* const delegate = qobject_cast<VcsAnnotationItemDelegate*>(view->annotationItemDelegate())) {
+        delegate->disable();
+    }
 
     // TODO: remove the model if last user of it
 }

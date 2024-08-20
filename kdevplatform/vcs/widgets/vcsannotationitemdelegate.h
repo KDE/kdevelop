@@ -24,8 +24,20 @@ class VcsAnnotationItemDelegate : public KTextEditor::AbstractAnnotationItemDele
     Q_OBJECT
 
 public:
-    VcsAnnotationItemDelegate(KTextEditor::View* view, KTextEditor::AnnotationModel* model, QObject* parent);
+    /**
+     * Constructor
+     *
+     * @param view the view for which this delegate is set, also used as the parent of this delegate object.
+     *
+     * @warning This delegate relies on @p view staying its parent, so do not change it.
+     */
+    explicit VcsAnnotationItemDelegate(KTextEditor::View* view, KTextEditor::AnnotationModel* model);
     ~VcsAnnotationItemDelegate() override;
+
+    /**
+     * Disable the delegate and prevent it from using the associated annotation model.
+     */
+    void disable();
 
 public: // AbstractAnnotationItemDelegate APO
     void paint(QPainter* painter, const KTextEditor::StyleOptionAnnotationItem& option,
@@ -65,7 +77,7 @@ private:
     int widthHintFromViewWidth(int viewWidth) const;
 
 private:
-    KTextEditor::AnnotationModel* const m_model;
+    KTextEditor::AnnotationModel* m_model;
 
     // TODO: make this configurable
     const int m_maxWidthViewPercent = 25;
