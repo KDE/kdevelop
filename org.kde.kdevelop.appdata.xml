@@ -53,6 +53,7 @@
   <summary xml:lang="eu">Eginbidez bete, plugin bidez hedagarria den, C/C++ eta programatzeko beste lengoaia batzuetarako IDEa</summary>
   <summary xml:lang="fr">Environnement de développement complet et extensible pour le C/C++ et d'autres langages de programmation.</summary>
   <summary xml:lang="gl">Potente ambiente de desenvolvemento integrado para C, C++ e outras linguaxes de programación. As súas funcionalidades poden estenderse mediante complementos</summary>
+  <summary xml:lang="hu">Funkciógazdag, bővítményekkel bővíthető integrált fejlesztői környezet C/C++ és más programozási nyelvekhez</summary>
   <summary xml:lang="id">Penuh fitur, IDE plugin yang dapat diekstensi C/C++ dan bahasa pemrograman lain</summary>
   <summary xml:lang="it">IDE per C/C++ e altri linguaggi di programmazione completo ed estensibile</summary>
   <summary xml:lang="ka">C/C++ და სხვა პროგრამირების ენებისთვის გაფართოებადი IDE</summary>
@@ -83,6 +84,7 @@
     <p xml:lang="eu">KDevelop garapen ingurune bateratu (IDE - «integrated development environment») bat da, askea eta sorburu irekikoa.</p>
     <p xml:lang="fr">KDevelop est un environnement de développement intégré (IDE) libre et en open source.</p>
     <p xml:lang="gl">KDevelop é un ambiente integrado de desenvolvemento (IDE) libre e de código aberto.</p>
+    <p xml:lang="hu">A KDevelop egy szabad és nyílt forráskódú integrált fejlesztői környezet (IDE).</p>
     <p xml:lang="id">KDevelop adalah sebuah IDE (integrated development environment) lingkungan pengembangan terintegrasi yang Gratis dan Bebas Terbuka.</p>
     <p xml:lang="it">KDevelop è un ambiente di sviluppo integrato (IDE) libero e open source.</p>
     <p xml:lang="ka">KDevelop არის თავისუფალი და ღია წყაროს მქონე განვითარების ინტეგრირებული გარემო (IDE).</p>
@@ -112,6 +114,7 @@
     <p xml:lang="eu">Hainbat programatzeko lengoaietarako editatzeko, nabigatzeko eta arazteko ezaugarriak ematen ditu, baita eraikitzeko eta bertsio-kontrol sistema anitzekin integrazioa ere, pluginetan oinarritutako arkitektura bat erabiliz.</p>
     <p xml:lang="fr">Il fournit des fonctionnalités d'édition, navigation et débogage pour plusieurs langages de programmation, ainsi que l'intégration de multiples systèmes de compilation et de gestion de révision, en utilisant une architecture extensible.</p>
     <p xml:lang="gl">Fornece funcionalidades de edición, navegación e depuración para varias linguaxes de programación, así como integración con varios sistemas de construción e sistemas de control de versións, usando unha arquitectura baseada en complementos.</p>
+    <p xml:lang="hu">Szerkesztési, navigációs és hibakeresési funkciókat biztosít számos programozási nyelvhez, valamint integrációt biztosít több összeállító rendszerrel és verziókezelő rendszerekkel, egy bővítmény-alapú architektúra segítségével.</p>
     <p xml:lang="id">Ini menyediakan fitur pengeditan, navigasi dan debugging untuk beberapa bahasa pemrograman, serta integrasi dengan sistem build multipel dan sistem kontrol versi, menggunakan arsitektur berbasis plugin.</p>
     <p xml:lang="it">Fornisce funzionalità di modifica, navigazione debug per vari linguaggi di programmazione, così come l'integrazione con vari sistemi di compilazione e di controllo versione, tramite l'uso di architettura basata sulle estensioni.</p>
     <p xml:lang="ka">იგი უზრუნველყოფს რედაქტირების, ნავიგაციისა და გამართვის მახასიათებლებს რამდენიმე პროგრამირების ენისთვის, ასევე მრავალ ბილდის სისტემასთან და ვერსიის კონტროლის სისტემებთან ინტეგრაციას, მოდულური არქიტექტურის გამოყენებით.</p>
@@ -141,6 +144,7 @@
     <p xml:lang="eu">KDevelopek sintaxi-azterketak egiteko bizkarraldekoak ditu C, C++ eta Javascript/QMLrako, kanpoko pluginen bidez gaitasun hau hedatu daiteke adib. PHP edo Python-era.</p>
     <p xml:lang="fr">KDevelop intègre des moteurs d'analyse pour le C, le C++ et Javascript/QML, avec, en plus, des modules externes pour prendre en charge PHP, Python, etc.</p>
     <p xml:lang="gl">KDevelop ten infraestruturas de análise para C, C++ e JavaScript/QML, con complementos externos adicionais que fornecen compatibilidade, por exemplo, con PHP e Python.</p>
+    <p xml:lang="hu">A KDevelop rendelkezik C, C++ és Javascript/QML feldolgozóval, és további külső bővítményekkel, amelyek támogatják például a PHP-t vagy a Pythont.</p>
     <p xml:lang="id">KDevelop memiliki pengurai backend untuk C, C++ dan Javascript/QML, dengan mendukung plugin eksternal lebih lanjut misal PHP atau Python.</p>
     <p xml:lang="it">KDevelop ha dei motori di analisi per C, C++ e JavaScript/QML, come ulteriori estensioni esterne che supportano, ad esempio, PHP o Python.</p>
     <p xml:lang="ka">KDevelop-ს გააჩნია დამმუშავებლები ენებისთვის C, C++, JavaScript/QML გარე დანამატების მხარდაჭერით, რომლებიც ამატებენ, მაგალითად PHP და Python-ის მხარდაჭერას.</p>
@@ -175,6 +179,7 @@
       <caption xml:lang="eu">Leiho nagusia, kode-editore, terminal bateratu eta proiektu-fitxategiekin</caption>
       <caption xml:lang="fr">Fenêtre principale avec l'éditeur de code, l'intégration du terminal et des fichiers de projet</caption>
       <caption xml:lang="gl">Xanela principal con editor de código, integración co terminal e ficheiros de proxectos.</caption>
+      <caption xml:lang="hu">A főablak a kódszerkesztővel, terminálintegrációval és projektfájlokkal</caption>
       <caption xml:lang="it">La finestra principale con editor di codice, integrazione del terminale e file di progetto</caption>
       <caption xml:lang="ka">მთავარი ფანჯარა კოდის რედაქტორის, ტერმინალის ინტეგრაციით და პროექტის ფაილებით</caption>
       <caption xml:lang="ko">코드 편집기, 터미널 통합, 프로젝트 파일이 표시된 주 창</caption>
