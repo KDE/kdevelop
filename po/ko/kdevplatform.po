@@ -4,14 +4,14 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-11 02:33+0000\n"
-"PO-Revision-Date: 2024-02-20 23:51+0100\n"
+"PO-Revision-Date: 2024-08-21 00:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -188,6 +188,7 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"제목 없는 문서에 중단점을 추가할 수 없습니다. 문서를 먼저 저장하십시오."
 
 #: debugger/breakpoint/breakpointwidget.cpp:62
 #, kde-format
@@ -2699,11 +2700,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "패널이 숨겨지지 않도록 잠금"
 
 #: shell/openprojectdialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "Project %1"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "프로젝트 %1"
+msgstr "모든 프로젝트 파일"
 
 #: shell/openprojectdialog.cpp:133
 #, kde-format
@@ -5395,7 +5395,7 @@ msgstr "해석이 성공했을 때 완전한 정의-사용 체인 출력"
 #: util/duchainify/main.cpp:293
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "콘텍스트를 출력할 때 부모 콘텍스트 출력"
 
 #: util/duchainify/main.cpp:295
 #, kde-format
