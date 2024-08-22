@@ -2,7 +2,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Joëlle Cornavin <jcorn@free.fr>, 2008, 2009, 2010, 2011, 2012, 2013.
-# Xavier Besnard <xavier.besnard@kde.org>, 2013, 2021.
+# SPDX-FileCopyrightText: 2013, 2021, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
 #
@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: kdevformatters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-08 01:43+0000\n"
-"PO-Revision-Date: 2021-12-27 22:00+0100\n"
-"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2024-08-13 18:05+0200\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 21.12.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -114,10 +114,11 @@ msgstr ""
 ">Exemple :<br /><b>*.cpp *.h : mon-formateur.sh $TMPFILE</b><br />Cette "
 "commande re-formatera tous les fichiers se terminant par <b>.cpp</b> ou <b>."
 "h</b> par le biais du script de formatage personnalisé.<b>mon-formateur.sh</"
-"b>.<br /><br />Exemple : <br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -"
-"c uncrustify. config -o $TMPFILE</b> <br />Cette commande re-formatera tous "
-"les fichiers présents dans le sous-dossier <b>subdir</b> à l'aide de l'outil "
-"<b>uncrustify</b> avec le fichier de configuration <b>uncrustify.config</b>."
+"b>.<br /><br />Exemple : <br /><b>sous-dossier/* : uncrustify -l CPP -f "
+"$TMPFILE -c uncrustify. config -o $TMPFILE</b> <br />Cette commande re-"
+"formatera tous les fichiers présents dans le sous-dossier <b>sous-dossier</"
+"b> à l'aide de l'outil <b>uncrustify</b> avec le fichier de configuration "
+"<b>uncrustify.config</b>."
 
 #: customscript_plugin.cpp:539
 #, kde-format
