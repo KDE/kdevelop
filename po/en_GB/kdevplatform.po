@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-17 00:38+0000\n"
-"PO-Revision-Date: 2024-08-03 13:13+0100\n"
+"PO-Revision-Date: 2024-08-24 12:00+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -5467,7 +5467,7 @@ msgstr "Print complete Definition-Use Chain on successful parse"
 #: util/duchainify/main.cpp:293
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Print parent contexts when dumping contexts"
 
 #: util/duchainify/main.cpp:295
 #, kde-format
