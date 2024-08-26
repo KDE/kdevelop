@@ -2649,7 +2649,6 @@ msgstr ""
 
 #: shell/openprojectdialog.cpp:124
 #, fuzzy, kde-format
-#| msgid "Projects"
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
 msgstr "Prosjekt"
