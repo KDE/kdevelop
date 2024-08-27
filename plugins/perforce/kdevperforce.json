@@ -36,6 +36,7 @@
         "Description[uk]": "Забезпечує інтеграцію з системою керування версіями Perforce",
         "Description[x-test]": "xxProvides Integration with Perforce Version Control Systemxx",
         "Description[zh_CN]": "提供与 Perforce 版本控制系统的整合",
+        "Description[zh_TW]": "提供與 Perforce 版本控制系統的整合",
         "Icon": "kdevelop",
         "License": "GPL",
         "Name": "Perforce Support",

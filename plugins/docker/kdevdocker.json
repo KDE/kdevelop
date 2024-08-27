@@ -38,6 +38,7 @@
         "Description[uk]": "Надає доступ до середовищ виконання Docker",
         "Description[x-test]": "xxExposes Docker runtimesxx",
         "Description[zh_CN]": "暴露 Docker 运行时",
+        "Description[zh_TW]": "提供 Docker 執行環境存取",
         "Icon": "kdevelop",
         "License": "GPL",
         "Name": "Docker Support",

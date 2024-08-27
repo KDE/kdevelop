@@ -37,6 +37,7 @@
         "Description[uk]": "Додаток для форматування файлів мовою C за допомогою нетипових скриптів",
         "Description[x-test]": "xxA plugin for formatting C files using custom scriptsxx",
         "Description[zh_CN]": "使用自定义脚本格式化 C 文件的插件",
+        "Description[zh_TW]": "一個利用自訂文稿來格式化 C 檔案的外掛程式",
         "Icon": "text-field",
         "License": "LGPL",
         "Name": "Custom Script Formatter Backend",

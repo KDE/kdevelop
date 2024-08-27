@@ -28,7 +28,7 @@
         "Description[uk]": "За допомогою нотатника ви можете швидко створити фрагмент коду та поекспериментувати з ним без створення повноцінного проєкту. Можливе навіть створення завдань на майбутнє.",
         "Description[x-test]": "xxScratchpad lets you quickly run and experiment with code without a full project, and even store todos.xx",
         "Description[zh_CN]": "通过刮板，您可以在没有完整项目的情况下快速运行和试验代码，甚至可以存储待办事项。",
-        "Description[zh_TW]": "塗鴉區讓您快速執行程式碼進行快速實驗，不需要建立完整專案，還讓您可以儲存待辦事項。",
+        "Description[zh_TW]": "試寫區讓您快速執行程式碼進行快速實驗，不需要建立完整專案，還讓您可以儲存待辦事項。",
         "Icon": "note",
         "Name": "Scratchpad",
         "Name[ar]": "المفكّرة",
@@ -50,7 +50,8 @@
         "Name[tr]": "Karalama Defteri",
         "Name[uk]": "Нотатник для чернеток",
         "Name[x-test]": "xxScratchpadxx",
-        "Name[zh_CN]": "刮板"
+        "Name[zh_CN]": "刮板",
+        "Name[zh_TW]": "試寫區"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"
