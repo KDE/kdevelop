@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-02 02:33+0000\n"
-"PO-Revision-Date: 2024-02-15 17:32+0900\n"
+"PO-Revision-Date: 2024-08-26 16:02+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: qthelpconfig.cpp:47
@@ -210,10 +210,9 @@ msgid "Could not find any documentation for '%1'"
 msgstr "找不到 %1 的文件"
 
 #: qthelpdocumentation.cpp:480
-#, fuzzy, kde-format
-#| msgid "QtHelp Home Page"
+#, kde-format
 msgid "%1 Home Page"
-msgstr "QtHelp 首頁"
+msgstr "%1 首頁"
 
 #: qthelpqtdoc.cpp:141
 #, kde-format
