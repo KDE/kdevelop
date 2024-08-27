@@ -30,6 +30,7 @@
         "Description[uk]": "Цей додаток надає можливість користуватися клієнтським інтерфейсом GDB, зневадника вихідного коду на C, C++ тощо.",
         "Description[x-test]": "xxThis plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.xx",
         "Description[zh_CN]": "此插件提供了 GDB 前端，GDB 是一个源码级的 C、C++ 等多语言的调试器。",
+        "Description[zh_TW]": "這個外掛程式提供 GDB 用的前端。GDB 是 C、C++ 等等語言用的原始碼層級除錯器。",
         "Icon": "kdevelop",
         "License": "GPL",
         "Name": "GDB Support",

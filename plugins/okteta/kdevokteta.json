@@ -37,6 +37,7 @@
         "Description[uk]": "Уможливлює перегляд і редагування необроблених даних у файлах (на основі Okteta)",
         "Description[x-test]": "xxEnables viewing and editing of the raw data of files (Okteta-based)xx",
         "Description[zh_CN]": "允许查看和编辑文件的原始数据 (基于 Okteta)",
+        "Description[zh_TW]": "提供檔案原始資料的檢視和編輯（基於 Okteta）",
         "Icon": "okteta",
         "License": "GPL",
         "Name": "Hex Editor",

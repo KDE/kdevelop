@@ -26,6 +26,7 @@
         "Description[tr]": "K Geliştir oturumlarıyla eşleşir",
         "Description[uk]": "Пошук відповідних сеансів KDevelop",
         "Description[x-test]": "xxMatches KDevelop Sessionsxx",
+        "Description[zh_TW]": "比對 KDevelop 工作階段",
         "EnabledByDefault": true,
         "Icon": "kdevelop",
         "License": "LGPL",
@@ -47,6 +48,7 @@
         "Name[tr]": "K Geliştir Oturumları",
         "Name[uk]": "Сеанси KDevelop",
         "Name[x-test]": "xxKDevelop Sessionsxx",
+        "Name[zh_TW]": "KDevelop 工作階段",
         "ServiceTypes": [
             "Plasma/Runner"
         ],

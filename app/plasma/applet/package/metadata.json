@@ -29,6 +29,7 @@
         "Description[tr]": "K Geliştir oturumlarını listeleyin ve başlatın",
         "Description[uk]": "Показ списку і запуск сеансів KDevelop",
         "Description[x-test]": "xxList and launch KDevelop sessionsxx",
+        "Description[zh_TW]": "列出並啟動 KDevelop 工作階段",
         "FormFactors": [
             "desktop"
         ],
@@ -53,6 +54,7 @@
         "Name[tr]": "K Geliştir Oturumları",
         "Name[uk]": "Сеанси KDevelop",
         "Name[x-test]": "xxKDevelop Sessionsxx",
+        "Name[zh_TW]": "KDevelop 工作階段",
         "Version": "0.1",
         "Website": "https://www.kdevelop.org/"
     },

@@ -59,7 +59,8 @@
         "Name[tr]": "Özel “Define”lar ve “Include”lar Yöneticisi",
         "Name[uk]": "Керування нетиповими визначеннями і включеннями",
         "Name[x-test]": "xxCustom Defines And Includes Managerxx",
-        "Name[zh_CN]": "自定义定义和包含管理器"
+        "Name[zh_CN]": "自定义定义和包含管理器",
+        "Name[zh_TW]": "自訂 define 和 include 的管理員"
     },
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IDefinesAndIncludesManager"
