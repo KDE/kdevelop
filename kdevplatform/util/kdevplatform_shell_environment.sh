@@ -316,10 +316,6 @@ function getOpenDocuments {
     $_qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPaths
 }
 
-function raise! {
-    $_qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
-}
-
 function bdir! {
     TARG=$($_qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" false)
     if [ "$TARG" ]; then
