@@ -351,8 +351,8 @@ void Area::load(const KConfigGroup& group)
         int i = s.indexOf(QLatin1Char(':'));
         if (i != -1)
         {
-            QString id = s.left(i);
-            const auto pos_i = QStringView{s}.mid(i + 1).toInt();
+            const auto id = s.first(i);
+            const auto pos_i = QStringView{s}.sliced(i + 1).toInt();
             auto pos = static_cast<Sublime::Position>(pos_i);
             if (pos != Sublime::Left && pos != Sublime::Right && pos != Sublime::Top && pos != Sublime::Bottom)
             {

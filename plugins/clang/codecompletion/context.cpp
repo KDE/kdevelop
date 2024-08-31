@@ -639,7 +639,7 @@ bool isValidCompletionIdentifier(const QualifiedIdentifier& identifier)
         return false; // is constructor
     }
     const QString idString = id.toString();
-    if (idString.startsWith(QLatin1Char('~')) && scope.toString() == QStringView{idString}.mid(1)) {
+    if (idString.startsWith(QLatin1Char('~')) && scope.toString() == QStringView{idString}.sliced(1)) {
         return false; // is destructor
     }
     return true;
@@ -1021,7 +1021,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         if (trimmedText.endsWith(QLatin1Char('.'))) {
             // TODO: This shouldn't be needed if Clang provided diagnostic.
             // But it doesn't always do it, so let's try to manually determine whether '.' is used instead of '->'
-            m_text = trimmedText.left(trimmedText.size() - 1) + QLatin1String("->");
+            m_text = trimmedText.first(trimmedText.size() - 1) + QLatin1String("->");
 
             CXUnsavedFile unsaved;
             unsaved.Filename = file.constData();

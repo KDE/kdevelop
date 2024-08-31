@@ -196,7 +196,7 @@ QMap<QString, QVariant> ISourceFormatter::stringToOptionMap(const QString &optio
                        << pair;
             continue;
         }
-        map.insert(pair.left(pos).toString(), pair.mid(pos+1).toString());
+        map.insert(pair.first(pos).toString(), pair.sliced(pos + 1).toString());
     }
     return map;
 }

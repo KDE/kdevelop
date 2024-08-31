@@ -141,7 +141,7 @@ void TestStringHandler::testFindAsciiIdentifierLength()
 
     const auto length = identifierEnd - identifierBegin;
     Q_ASSERT_X(length >= 0, Q_FUNC_INFO, "Wrong data.");
-    QCOMPARE(findAsciiIdentifierLength(QStringView{str}.mid(identifierBegin)), length);
+    QCOMPARE(findAsciiIdentifierLength(QStringView{str}.sliced(identifierBegin)), length);
 }
 
 void TestStringHandler::testFindAsciiIdentifierLength_data()
@@ -158,7 +158,7 @@ void TestStringHandler::testFindAsciiIdentifierLengthNoMatch()
     Q_ASSERT_X(unmatchedCharsBegin < unmatchedCharsEnd, Q_FUNC_INFO,
                "Nothing to test. A mistake in our data?");
     for (int i = unmatchedCharsBegin; i < unmatchedCharsEnd; ++i) {
-        QCOMPARE(findAsciiIdentifierLength(QStringView{str}.mid(i)), 0);
+        QCOMPARE(findAsciiIdentifierLength(QStringView{str}.sliced(i)), 0);
     }
 }
 
@@ -175,7 +175,7 @@ void TestStringHandler::testMatchUnbracedAsciiVariable()
 
     const auto length = identifierEnd - identifierBegin;
     Q_ASSERT_X(length >= 0, Q_FUNC_INFO, "Wrong data.");
-    const auto match = matchPossiblyBracedAsciiVariable(QStringView{str}.mid(identifierBegin));
+    const auto match = matchPossiblyBracedAsciiVariable(QStringView{str}.sliced(identifierBegin));
     QCOMPARE(match.length, length);
     QCOMPARE(match.name, str.mid(identifierBegin, length));
 }
@@ -205,7 +205,7 @@ void TestStringHandler::testUnmatchedAsciiVariable()
     Q_ASSERT_X(unmatchedCharsBegin < unmatchedCharsEnd, Q_FUNC_INFO,
                "Nothing to test. A mistake in our data?");
     for (int i = unmatchedCharsBegin; i < unmatchedCharsEnd; ++i) {
-        const auto match = matchPossiblyBracedAsciiVariable(QStringView{str}.mid(i));
+        const auto match = matchPossiblyBracedAsciiVariable(QStringView{str}.sliced(i));
         QCOMPARE(match.length, 0);
         QCOMPARE(match.name, QString{});
     }
@@ -228,7 +228,7 @@ void TestStringHandler::testMatchBracedAsciiVariable()
 
     const auto variableLength = closingBraceIndex - openingBraceIndex - 1;
     Q_ASSERT_X(variableLength > 0, Q_FUNC_INFO, "Wrong data.");
-    const auto match = matchPossiblyBracedAsciiVariable(QStringView{str}.mid(openingBraceIndex));
+    const auto match = matchPossiblyBracedAsciiVariable(QStringView{str}.sliced(openingBraceIndex));
     QCOMPARE(match.length, variableLength + 2);
     QCOMPARE(match.name, str.mid(openingBraceIndex + 1, variableLength));
 }

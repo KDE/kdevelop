@@ -91,7 +91,7 @@ bool isOperator(QStringView str, int pos)
         --pos;
     }
 
-    auto prefix = str.left(pos + 1);
+    auto prefix = str.first(pos + 1);
     if (!prefix.endsWith(op)) {
         return false;
     }
@@ -193,7 +193,7 @@ public:
 
     QStringView sourceRange(int first, int last) const
     {
-        return m_source.mid(first, last - first);
+        return m_source.sliced(first, last - first);
     }
 
     int next() const
@@ -302,7 +302,7 @@ int findOpeningBracketOrEnd(QStringView parens, QStringView str, int pos)
     Q_ASSERT(parens.size() == 2 || parens.size() == 3);
 
     Q_ASSERT(QStringView(u"<([{").contains(parens[0]));
-    Q_ASSERT(parens.left(2) == u"<>" || parens[1] == fittingClosingNonAngleBracket(parens[0]));
+    Q_ASSERT(parens.first(2) == u"<>" || parens[1] == fittingClosingNonAngleBracket(parens[0]));
 
     Q_ASSERT(parens.size() == 2 || !QStringView(u"<>()[]{}").contains(parens[2]));
 
@@ -448,7 +448,7 @@ QString formatComment(const QString& comment)
 
         for (const auto& m : startMatches) {
             if (l.startsWith(m)) {
-                l = l.mid(m.length());
+                l = l.sliced(m.length());
                 break;
             }
         }
@@ -506,7 +506,7 @@ ParamIterator::ParamIterator(QStringView parens, QStringView source, int offset)
         } // else: the paren was not closed. It might be an identifier like "operator<", so count everything as prefix.
     } // else: we have neither found an ending-character, nor an opening-paren, so take the whole input and end.
 
-    d->m_prefix = d->m_source.mid(offset);
+    d->m_prefix = d->m_source.sliced(offset);
     d->m_curEnd = d->m_end = d->m_cur = d->m_source.length();
 }
 

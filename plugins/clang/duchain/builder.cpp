@@ -1110,7 +1110,7 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
         // '(', a space, a tab or '/' (a comment) usually follows a macro identifier.
         // Compilers consider a macro function-like only if '(' immediately follows its identifier.
         decl->setFunctionLike(false);
-        setDefinition(contents.mid(posAfterMacroId));
+        setDefinition(contents.sliced(posAfterMacroId));
         return;
     }
 
@@ -1125,7 +1125,7 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
 
     const auto paramEndPosition = paramIt.position();
     if (paramEndPosition > 0 && contents[paramEndPosition - 1] == QLatin1Char{')'}) {
-        setDefinition(contents.mid(paramEndPosition));
+        setDefinition(contents.sliced(paramEndPosition));
     } else {
         // unlikely: invalid macro definition, insert the complete #define statement
         const QString definition = QLatin1String("#define ") + contents;

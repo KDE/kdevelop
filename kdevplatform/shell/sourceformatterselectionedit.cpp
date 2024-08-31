@@ -139,7 +139,7 @@ public:
     {
         int maxUserStyleIndex = 0;
         forEachUserDefinedStyle([&maxUserStyleIndex](const SourceFormatterStyle& userStyle) {
-            const int index = QStringView{userStyle.name()}.mid(userStyleNamePrefix.size()).toInt();
+            const auto index = QStringView{userStyle.name()}.sliced(userStyleNamePrefix.size()).toInt();
             // index == 0 if conversion to int fails. Ignore such invalid user-defined style names.
             maxUserStyleIndex = std::max(maxUserStyleIndex, index);
         });

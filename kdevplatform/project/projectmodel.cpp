@@ -732,7 +732,7 @@ public:
         QString extension;
         int extensionStart = fileName.lastIndexOf(QLatin1Char('.'));
         if( extensionStart != -1 && fileName.length() - extensionStart - 1 <= maximumCacheExtensionLength ) {
-            auto extRef = fileName.mid(extensionStart + 1);
+            auto extRef = fileName.sliced(extensionStart + 1);
             if( isNumeric(extRef) ) {
                 // don't cache numeric extensions
                 extRef = {};

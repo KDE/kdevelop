@@ -132,7 +132,7 @@ bool matchesAbbreviationMulti(QStringView word, const QStringList& typedFragment
             i++;
         }
         // if it's '/', ' ' or '::', split the word here and check the next sub-word.
-        const auto wordFragment = word.mid(lastSpace, i - lastSpace);
+        const auto wordFragment = word.sliced(lastSpace, i - lastSpace);
         const QString& typedFragment = typedFragments.at(matchedFragments);
         Q_ASSERT(!typedFragment.isEmpty());
         if (!wordFragment.isEmpty() && matchesAbbreviation(wordFragment, typedFragment)) {

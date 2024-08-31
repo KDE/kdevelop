@@ -190,7 +190,7 @@ bool ClassFunctionDeclaration::isDestructor() const
     DUContext* ctx = context();
     QString id = identifier().toString();
     return ctx && ctx->type() == DUContext::Class && id.startsWith(QLatin1Char('~')) &&
-           QStringView{id}.mid(1) == ctx->localScopeIdentifier().top().toString();
+           QStringView{id}.sliced(1) == ctx->localScopeIdentifier().top().toString();
 }
 
 uint ClassFunctionDeclaration::additionalIdentity() const

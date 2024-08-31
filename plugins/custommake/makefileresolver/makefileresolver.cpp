@@ -209,7 +209,7 @@ QString MakeFileResolver::mapToBuild(const QString &path) const
   if (m_outOfSource) {
     if (wd.startsWith(m_source) && !wd.startsWith(m_build)) {
         //Move the current working-directory out of source, into the build-system
-        wd = QDir::cleanPath(m_build + QLatin1Char('/') + QStringView{wd}.mid(m_source.length()));
+        wd = QDir::cleanPath(m_build + QLatin1Char('/') + QStringView{wd}.sliced(m_source.length()));
       }
   }
   return wd;
@@ -445,7 +445,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
     QRegExp makeRx(QStringLiteral("\\bmake\\s"));
     int offset = 0;
     while ((offset = makeRx.indexIn(firstLine, offset)) != -1) {
-      QString prefix = QStringView{firstLine}.left(offset).trimmed().toString();
+      auto prefix = QStringView{firstLine}.first(offset).trimmed().toString();
       if (prefix.endsWith(QLatin1String("&&")) || prefix.endsWith(QLatin1Char(';')) || prefix.isEmpty()) {
         QString newWorkingDirectory = workingDirectory;
         ///Extract the new working-directory
@@ -461,7 +461,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
           //We use the second directory. For t hat reason we search for the last index of "cd "
           int cdIndex = prefix.lastIndexOf(QLatin1String("cd "));
           if (cdIndex != -1) {
-            newWorkingDirectory = QStringView{prefix}.mid(cdIndex + 3).trimmed().toString();
+            newWorkingDirectory = QStringView{prefix}.sliced(cdIndex + 3).trimmed().toString();
             if (QFileInfo(newWorkingDirectory).isRelative())
               newWorkingDirectory = workingDirectory + QLatin1Char('/') + newWorkingDirectory;
             newWorkingDirectory = QDir::cleanPath(newWorkingDirectory);

@@ -260,7 +260,7 @@ QString descriptionFromOldHtmlData(const QString& fragment, const QString& dataS
         if(titleStart != -1) {
             const auto titleEnd = match.capturedEnd();
             Q_ASSERT(titleEnd <= pos);
-            const auto between = QStringView{dataString}.mid(titleEnd, pos - titleEnd).trimmed();
+            const auto between = QStringView{dataString}.sliced(titleEnd, pos - titleEnd).trimmed();
             if(between.isEmpty())
                 pos = titleStart;
         }

@@ -34,7 +34,7 @@ int Utils::expressionAt(QStringView text, int index)
     }
 
     QChar ch = text[ index ];
-    const auto ch2 = index > 0 ? text.mid(index - 1, 2) : QStringView{};
+    const auto ch2 = index > 0 ? text.sliced(index - 1, 2) : QStringView{};
     if ((last != T_IDE) && (ch.isLetterOrNumber() || ch == QLatin1Char('_'))) {
       while (index > 0 && (text[index].isLetterOrNumber() || text[index] == QLatin1Char('_'))) {
         --index;

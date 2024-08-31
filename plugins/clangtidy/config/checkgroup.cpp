@@ -52,7 +52,7 @@ void CheckGroup::addCheck(const QString& checkName)
 
     // 2. check if existing subgroup for prefix, if so add to that
     // include separator into subgroup name
-    const auto subGroupName = QStringView{checkName}.left(nextSplitOffset + 1);
+    const auto subGroupName = QStringView{checkName}.first(nextSplitOffset + 1);
     for (auto* subGroup : std::as_const(m_subGroups)) {
         if (subGroup->prefix() == subGroupName) {
             subGroup->addCheck(checkName);
@@ -91,7 +91,7 @@ void CheckGroup::setEnabledChecks(const QStringList& rules)
             matchStartPos = 1;
             enabledState = Disabled;
         }
-        applyEnabledRule(QStringView{rule}.mid(matchStartPos), enabledState);
+        applyEnabledRule(QStringView{rule}.sliced(matchStartPos), enabledState);
     }
 
     m_enabledChecksCountDirty = true;

@@ -43,7 +43,7 @@ public:
     QStringView styleName() const
     {
         Q_ASSERT(isValid());
-        return QStringView{m_entry}.mid(stylePos());
+        return QStringView{m_entry}.sliced(stylePos());
     }
 
     QString takeStyleName() &&

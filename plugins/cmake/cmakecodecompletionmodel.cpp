@@ -110,12 +110,12 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         const auto lastdir = toComplete.lastIndexOf(QLatin1Char{'/'});
         QString path = KIO::upUrl(QUrl(d->url())).adjusted(QUrl::StripTrailingSlash).toLocalFile()+QLatin1Char('/');
         if(lastdir>=0) {
-            const auto basePath = toComplete.left(lastdir);
+            const auto basePath = toComplete.first(lastdir);
             path += basePath;
         }
         QDir dir(path);
 
-        const auto paths = dir.entryInfoList(QStringList(toComplete.mid(lastdir + 1) + QLatin1Char{'*'}),
+        const auto paths = dir.entryInfoList(QStringList(toComplete.sliced(lastdir + 1) + QLatin1Char{'*'}),
                                              QDir::AllEntries | QDir::NoDotAndDotDot);
         m_paths.clear();
         m_paths.reserve(paths.size());

@@ -189,15 +189,15 @@ QString LldbCommand::cmdToSend()
 
             // move other switches like '-d' '-c' into miCommand part
             const QStringView commandView = command_;
-            overrideCmd = miCommand() + QLatin1Char(' ') + commandView.left(p);
-            command_ = QLatin1String("-f ") + commandView.mid(p);
+            overrideCmd = miCommand() + QLatin1Char(' ') + commandView.first(p);
+            command_ = QLatin1String("-f ") + commandView.sliced(p);
             break;
         }
         case BreakWatch:
             if (command_.startsWith(QLatin1String("-r "))) {
-                command_ = QLatin1String("-w read ") + QStringView{command_}.mid(3);
+                command_ = QLatin1String("-w read ") + QStringView{command_}.sliced(3);
             } else if (command_.startsWith(QLatin1String("-a "))) {
-                command_ = QLatin1String("-w read_write ") + QStringView{command_}.mid(3);
+                command_ = QLatin1String("-w read_write ") + QStringView{command_}.sliced(3);
             }
             break;
         case StackListArguments:

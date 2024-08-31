@@ -192,18 +192,18 @@ KDevelop::VariableMatch KDevelop::matchPossiblyBracedAsciiVariable(QStringView s
     }
 
     if (str[0].unicode() == '{') {
-        const auto nameLength = findAsciiIdentifierLength(str.mid(1));
+        const auto nameLength = findAsciiIdentifierLength(str.sliced(1));
         if (nameLength == 0) {
             return {};
         }
         const auto closingBraceIndex = 1 + nameLength;
         if (closingBraceIndex < str.size() && str[closingBraceIndex].unicode() == '}') {
-            return {nameLength + 2, str.mid(1, nameLength).toString()};
+            return {nameLength + 2, str.sliced(1, nameLength).toString()};
         }
     } else {
         const auto nameLength = findAsciiIdentifierLength(str);
         if (nameLength != 0) {
-            return {nameLength, str.left(nameLength).toString()};
+            return {nameLength, str.first(nameLength).toString()};
         }
     }
 

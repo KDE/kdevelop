@@ -57,7 +57,7 @@ void KDevelopSessions::match(KRunner::RunnerContext& context)
 
     bool listAll = false;
     if (term.startsWith(QLatin1String("kdevelop"), Qt::CaseInsensitive)) {
-        const auto trimmedStrippedTerm = QStringView{term}.mid(8).trimmed();
+        const auto trimmedStrippedTerm = QStringView{term}.sliced(8).trimmed();
         // "kdevelop" -> list all sessions
         if (trimmedStrippedTerm.isEmpty()) {
             listAll = true;

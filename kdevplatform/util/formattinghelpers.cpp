@@ -975,18 +975,18 @@ int skipRedundantWhiteSpace(QStringView context, QStringView text, int tabWidth)
     while (textWhitespaceEnd < text.size() && text[textWhitespaceEnd].isSpace())
         ++textWhitespaceEnd;
 
-    auto contextWhiteSpace = context.mid(contextPosition);
-    auto textWhiteSpace = text.left(textWhitespaceEnd);
+    auto contextWhiteSpace = context.sliced(contextPosition);
+    auto textWhiteSpace = text.first(textWhitespaceEnd);
 
     // Step 1: Remove redundant newlines
     while (contextWhiteSpace.contains(QLatin1Char('\n')) && textWhiteSpace.contains(QLatin1Char('\n'))) {
         int contextOffset = contextWhiteSpace.indexOf(QLatin1Char('\n')) + 1;
         int textOffset = textWhiteSpace.indexOf(QLatin1Char('\n')) + 1;
 
-        contextWhiteSpace = contextWhiteSpace.mid(contextOffset);
+        contextWhiteSpace = contextWhiteSpace.sliced(contextOffset);
 
         textPosition += textOffset;
-        textWhiteSpace = textWhiteSpace.mid(textOffset);
+        textWhiteSpace = textWhiteSpace.sliced(textOffset);
     }
 
     int contextOffset = 0;
@@ -1082,10 +1082,10 @@ QString KDevelop::extractFormattedTextFromContext(const QString& _formattedMerge
         auto rMatchEnd = std::make_reverse_iterator(result.matchEnd);
         skipWhitespace(rMatchEnd, formattedMergedText.crend());
         // remove the left context from formattedMergedText
-        formattedMergedText = formattedMergedText.right(rMatchEnd - formattedMergedText.crbegin());
+        formattedMergedText = formattedMergedText.last(rMatchEnd - formattedMergedText.crbegin());
 
         int skip = skipRedundantWhiteSpace(leftContext, formattedMergedText, tabWidth);
-        formattedMergedText = formattedMergedText.mid(skip);
+        formattedMergedText = formattedMergedText.sliced(skip);
     }
 
     if (!rightContext.isEmpty()) {

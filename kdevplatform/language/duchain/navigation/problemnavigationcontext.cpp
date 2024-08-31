@@ -227,7 +227,7 @@ NavigationContextPointer ProblemNavigationContext::executeKeyAction(const QStrin
 {
     const QLatin1String invokeActionPrefix("invoke_action_");
     if (key.startsWith(invokeActionPrefix)) {
-        const auto index = QStringView{key}.mid(invokeActionPrefix.size()).toInt();
+        const auto index = QStringView{key}.sliced(invokeActionPrefix.size()).toInt();
         executeAction(index);
     }
 

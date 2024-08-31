@@ -127,7 +127,7 @@ namespace
     {
         int commaPos = range.indexOf(QLatin1Char(','));
         if (commaPos > -1) {
-            return {range.left(commaPos).toInt(), range.mid(commaPos + 1).toInt()};
+            return {range.first(commaPos).toInt(), range.sliced(commaPos + 1).toInt()};
         }
         return { range.toInt(), 1 };
     }

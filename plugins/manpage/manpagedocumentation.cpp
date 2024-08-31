@@ -135,7 +135,7 @@ private:
                                                     QRegularExpression::CaseInsensitiveOption);
         int startPos = 0;
         while (true) {
-            const auto remainingPartOfThePage = QStringView{htmlPage}.mid(startPos, endPos - startPos);
+            const auto remainingPartOfThePage = QStringView{htmlPage}.sliced(startPos, endPos - startPos);
             const auto linkElementMatch = linkElement.match(remainingPartOfThePage);
             if (!linkElementMatch.hasMatch()) {
                 break; // no more links to expand

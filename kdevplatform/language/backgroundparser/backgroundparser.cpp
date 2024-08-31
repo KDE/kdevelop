@@ -68,7 +68,7 @@ QString elidedPathLeft(const QString& path, int width)
     }
     Q_ASSERT(path.size() - pos >= 0 && path.size() - pos <= width);
 
-    const auto elidedText = QStringView{path}.right(path.size() - pos);
+    const auto elidedText = QStringView{path}.last(path.size() - pos);
     return placeholder + elidedText;
 }
 

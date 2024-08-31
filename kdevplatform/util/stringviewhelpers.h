@@ -20,7 +20,7 @@ namespace KDevelop {
 constexpr QStringView slicedOrEmptyView(QStringView view, qsizetype pos)
 {
     Q_ASSERT(pos >= 0);
-    return pos < view.size() ? view.mid(pos) : QStringView{};
+    return pos < view.size() ? view.sliced(pos) : QStringView{};
 }
 
 /**
@@ -32,7 +32,7 @@ constexpr bool matchesAtOffset(QStringView view, qsizetype offset, String str)
 {
     Q_ASSERT(offset >= 0);
     const auto strSize = str.size();
-    return offset + strSize <= view.size() && view.mid(offset, strSize) == str;
+    return offset + strSize <= view.size() && view.sliced(offset, strSize) == str;
 }
 
 /**
@@ -51,7 +51,7 @@ template<typename Needle>
 QStringView leftOfNeedleOrEntireView(QStringView view, Needle needle)
 {
     const auto index = view.indexOf(needle);
-    return index == -1 ? view : view.left(index);
+    return index == -1 ? view : view.first(index);
 }
 
 /**
@@ -62,7 +62,7 @@ template<typename Needle>
 QStringView leftOfLastNeedleOrEntireView(QStringView view, Needle needle)
 {
     const auto index = view.lastIndexOf(needle);
-    return index == -1 ? view : view.left(index);
+    return index == -1 ? view : view.first(index);
 }
 
 /**
@@ -73,7 +73,7 @@ template<typename Needle>
 QStringView rightOfLastNeedleOrEntireView(QStringView view, Needle needle)
 {
     const auto index = view.lastIndexOf(needle);
-    return index == -1 ? view : view.mid(index + 1);
+    return index == -1 ? view : view.sliced(index + 1);
 }
 
 } // namespace KDevelop

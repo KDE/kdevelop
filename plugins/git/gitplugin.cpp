@@ -736,8 +736,8 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         auto name = line;
         QStringView value;
         if (const auto spaceIndex = line.indexOf(space); spaceIndex != -1) {
-            name = line.left(spaceIndex);
-            value = line.mid(spaceIndex + 1);
+            name = line.first(spaceIndex);
+            value = line.sliced(spaceIndex + 1);
         }
 
         if(name==QLatin1String("author"))
@@ -768,7 +768,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
                     << "first git-blame header line does not contain two line numbers separated with a space:" << line;
                 continue;
             }
-            value = value.mid(valueSpaceIndex + 1); // skip the line number of the line in the original file
+            value = value.sliced(valueSpaceIndex + 1); // skip the line number of the line in the original file
             value = leftOfNeedleOrEntireView(value, space);
             // value should now contain the line number of the line in the final file
             const auto lineNumber = value.toInt();
@@ -784,7 +784,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
                 // Just inserted a default-constructed annotation line => this commit has not been encountered before.
                 // The following lines will contain the commit's details (author, time, summary, filename).
                 VcsRevision rev;
-                rev.setRevisionValue(name.left(revisionValueSize).toString(), VcsRevision::GlobalNumber);
+                rev.setRevisionValue(name.first(revisionValueSize).toString(), VcsRevision::GlobalNumber);
                 annotation->setRevision(std::move(rev));
             } else {
                 // This commit's details have already been parsed and are stored in *annotation. The uninteresting to us
@@ -862,10 +862,10 @@ void GitPlugin::parseGitStashList(KDevelop::VcsJob* _job)
             const QStringView messageView = message;
             const auto colonIndex = message.indexOf(QLatin1Char{':'}, wipPrefix.size());
             if (colonIndex == -1) {
-                branch = messageView.mid(wipPrefix.size());
+                branch = messageView.sliced(wipPrefix.size());
                 qCWarning(PLUGIN_GIT) << "missing ':' in a git stash message:" << message;
             } else {
-                branch = messageView.mid(wipPrefix.size(), colonIndex - wipPrefix.size());
+                branch = messageView.sliced(wipPrefix.size(), colonIndex - wipPrefix.size());
                 parentCommitDesc = slicedOrEmptyView(messageView, colonIndex + 2);
             }
         }
@@ -1004,7 +1004,7 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
             continue;
 
         if (branch.startsWith(QLatin1Char{'*'})) {
-            branch = branch.mid(1);
+            branch = branch.sliced(1);
         }
         branchList << branch.trimmed().toString();
     }
@@ -1340,7 +1340,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
 
             item.addItem(itemEvent);
         } else if (line.startsWith(QLatin1String("    "))) {
-            message += QStringView{line}.mid(4) + QLatin1Char('\n');
+            message += QStringView{line}.sliced(4) + QLatin1Char('\n');
         }
     }
 
@@ -1389,7 +1389,7 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 
         VcsStatusInfo::State status = lsfilesToState(line[0].toLatin1());
 
-        QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(line.mid(2).toString()));
+        const auto url = QUrl::fromLocalFile(dir.absoluteFilePath(line.sliced(2).toString()));
 
         allStatus[url] = status;
     }
@@ -1425,24 +1425,24 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
             qCWarning(PLUGIN_GIT) << "a git-status --porcelain output line is shorter than expected:" << line;
             continue;
         }
-        auto curr = line.mid(3);
-        const auto state = line.left(2);
+        auto curr = line.sliced(3);
+        const auto state = line.first(2);
 
         int arrow = curr.indexOf(QLatin1String(" -> "));
         if(arrow>=0) {
             VcsStatusInfo status;
-            status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.toString().left(arrow))));
+            status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.first(arrow).toString())));
             status.setState(VcsStatusInfo::ItemDeleted);
             statuses.append(QVariant::fromValue<VcsStatusInfo>(status));
             processedFiles += status.url();
 
-            curr = curr.mid(arrow+4);
+            curr = curr.sliced(arrow + 4);
         }
 
         constexpr QLatin1Char doubleQuote{'"'};
         if (curr.size() >= 2 && curr.front() == doubleQuote && curr.back() == doubleQuote) {
             // the path is quoted => unquote
-            curr = curr.mid(1, curr.size()-2);
+            curr = curr.sliced(1, curr.size() - 2);
         }
 
         VcsStatusInfo status;
