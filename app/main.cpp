@@ -365,7 +365,7 @@ int main( int argc, char *argv[] )
     // before any event loop is entered.
     QCoreApplication::processEvents();
 
-    KLocalizedString::setApplicationDomain("kdevelop");
+    KLocalizedString::setApplicationDomain(QByteArrayLiteral("kdevelop"));
 
     KAboutData aboutData(QStringLiteral("kdevelop"), i18n("KDevelop"),
                          QStringLiteral(KDEVELOP_VERSION_STRING " (" RELEASE_SERVICE_VERSION_STRING ")"),
