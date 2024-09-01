@@ -63,9 +63,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT NavigatableWidgetList
     Q_OBJECT
 
 public:
+    /// High-priority items are displayed at the top of the widget,
+    /// then Medium-priority, and at the bottom - Low-priority ones.
+    enum class ItemPriority { High, Medium, Low };
     explicit NavigatableWidgetList(bool allowScrolling = false, uint maxHeight = 0, bool vertical = true);
     ~NavigatableWidgetList() override;
-    void addItem(QWidget* widget, int pos = -1);
+    void addItem(QWidget* widget, ItemPriority priority = ItemPriority::Medium);
     void addHeaderItem(QWidget* widget, Qt::Alignment alignment = {});
     ///Whether items were added to this list using addItem(..)
     bool hasItems() const;
@@ -81,6 +84,7 @@ protected:
 private:
     QHBoxLayout* m_headerLayout;
     bool m_allowScrolling, m_useArrows;
+    int m_mediumPriorityPosition = 0; ///< index to insert Medium-priority items at
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT ContextUsesWidget

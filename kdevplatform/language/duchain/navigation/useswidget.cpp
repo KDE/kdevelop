@@ -300,17 +300,29 @@ void NavigatableWidgetList::deleteItems()
 {
     const auto items = this->items();
     qDeleteAll(items);
+
+    Q_ASSERT(m_itemLayout->count() == 0);
+    m_mediumPriorityPosition = 0;
 }
 
-void NavigatableWidgetList::addItem(QWidget* widget, int pos)
+void NavigatableWidgetList::addItem(QWidget* widget, ItemPriority priority)
 {
-    Q_ASSERT(pos >= -1);
-    Q_ASSERT(pos <= m_itemLayout->count());
+    Q_ASSERT(m_mediumPriorityPosition >= 0);
+    Q_ASSERT(m_mediumPriorityPosition <= m_itemLayout->count());
 
-    if (pos == -1)
+    switch (priority) {
+    case ItemPriority::High:
+        m_itemLayout->insertWidget(0, widget);
+        ++m_mediumPriorityPosition;
+        break;
+    case ItemPriority::Medium:
+        m_itemLayout->insertWidget(m_mediumPriorityPosition, widget);
+        ++m_mediumPriorityPosition; // increment to insert later Medium-priority items after earlier ones
+        break;
+    case ItemPriority::Low:
         m_itemLayout->addWidget(widget);
-    else
-        m_itemLayout->insertWidget(pos, widget);
+        break;
+    }
 }
 
 QList<QWidget*> NavigatableWidgetList::items() const
@@ -731,9 +743,7 @@ void UsesWidget::UsesWidgetCollector::processUses(KDevelop::ReferencedTopDUConte
 
     widget->setExpanded(true);
 
-    // TODO: enhance addItem() and use toBack as originally intended
-    Q_UNUSED(toBack)
-    m_widget->addItem(widget, toFront ? 0 : -1);
+    m_widget->addItem(widget, toFront ? ItemPriority::High : toBack ? ItemPriority::Low : ItemPriority::Medium);
     m_widget->redrawHeaderLine();
 }
 
