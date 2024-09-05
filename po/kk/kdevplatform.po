@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-11 02:33+0000\n"
+"POT-Creation-Date: 2024-09-05 02:26+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -1287,65 +1287,65 @@ msgctxt "Refers to a line in source code"
 msgid "Line <b>%1</b>:"
 msgstr "<b>%1</b> жолы:"
 
-#: language/duchain/navigation/useswidget.cpp:397
+#: language/duchain/navigation/useswidget.cpp:400
 #, kde-format
 msgid "Unknown context"
 msgstr "Контексті беймәлім"
 
-#: language/duchain/navigation/useswidget.cpp:404
+#: language/duchain/navigation/useswidget.cpp:407
 #: shell/launchconfigurationdialog.cpp:482
 #, kde-format
 msgid "Global"
 msgstr "Глобалды"
 
-#: language/duchain/navigation/useswidget.cpp:429
+#: language/duchain/navigation/useswidget.cpp:432
 #, kde-format
 msgctxt "%1: source file"
 msgid "In %1"
 msgstr "%1 ішінде"
 
-#: language/duchain/navigation/useswidget.cpp:459
+#: language/duchain/navigation/useswidget.cpp:462
 #, kde-format
 msgid "Definition"
 msgstr "Анықтама"
 
-#: language/duchain/navigation/useswidget.cpp:459
+#: language/duchain/navigation/useswidget.cpp:462
 #, kde-format
 msgid "Declaration"
 msgstr "Мәлімдеме"
 
-#: language/duchain/navigation/useswidget.cpp:497
+#: language/duchain/navigation/useswidget.cpp:500
 #, kde-format
 msgctxt "%1: number of uses, %2: filename with uses"
 msgid "%2: 1 use"
 msgid_plural "%2: %1 uses"
 msgstr[0] "%2: %1 пайдалану"
 
-#: language/duchain/navigation/useswidget.cpp:503
-#: language/duchain/navigation/useswidget.cpp:544
+#: language/duchain/navigation/useswidget.cpp:506
+#: language/duchain/navigation/useswidget.cpp:547
 #, kde-format
 msgctxt "Refers to closing a UI element"
 msgid "Collapse"
 msgstr "Бүктеу"
 
-#: language/duchain/navigation/useswidget.cpp:540
+#: language/duchain/navigation/useswidget.cpp:543
 #, kde-format
 msgctxt "Refers to opening a UI element"
 msgid "Expand"
 msgstr "Тарқату"
 
-#: language/duchain/navigation/useswidget.cpp:625
+#: language/duchain/navigation/useswidget.cpp:628
 #, kde-format
 msgid "1 use found"
 msgid_plural "%1 uses found"
 msgstr[0] "%1 пайдалану табылды"
 
-#: language/duchain/navigation/useswidget.cpp:627
+#: language/duchain/navigation/useswidget.cpp:630
 #, kde-format
 msgid "Expand all"
 msgstr "Бүкілін тарқату"
 
-#: language/duchain/navigation/useswidget.cpp:629
+#: language/duchain/navigation/useswidget.cpp:632
 #, kde-format
 msgid "Collapse all"
 msgstr "Бүкілін бүктеу"
