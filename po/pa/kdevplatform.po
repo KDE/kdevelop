@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevvcscommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:38+0000\n"
+"POT-Creation-Date: 2024-09-05 00:38+0000\n"
 "PO-Revision-Date: 2008-12-17 18:58+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -1231,34 +1231,34 @@ msgctxt "Refers to a line in source code"
 msgid "Line <b>%1</b>:"
 msgstr ""
 
-#: language/duchain/navigation/useswidget.cpp:397
+#: language/duchain/navigation/useswidget.cpp:412
 #, kde-format
 msgid "Unknown context"
 msgstr ""
 
-#: language/duchain/navigation/useswidget.cpp:404
+#: language/duchain/navigation/useswidget.cpp:419
 #: shell/launchconfigurationdialog.cpp:482
 #, kde-format
 msgid "Global"
 msgstr ""
 
-#: language/duchain/navigation/useswidget.cpp:429
+#: language/duchain/navigation/useswidget.cpp:444
 #, kde-format
 msgctxt "%1: source file"
 msgid "In %1"
 msgstr ""
 
-#: language/duchain/navigation/useswidget.cpp:459
+#: language/duchain/navigation/useswidget.cpp:474
 #, kde-format
 msgid "Definition"
 msgstr ""
 
-#: language/duchain/navigation/useswidget.cpp:459
+#: language/duchain/navigation/useswidget.cpp:474
 #, kde-format
 msgid "Declaration"
 msgstr ""
 
-#: language/duchain/navigation/useswidget.cpp:497
+#: language/duchain/navigation/useswidget.cpp:512
 #, kde-format
 msgctxt "%1: number of uses, %2: filename with uses"
 msgid "%2: 1 use"
@@ -1266,32 +1266,32 @@ msgid_plural "%2: %1 uses"
 msgstr[0] ""
 msgstr[1] ""
 
-#: language/duchain/navigation/useswidget.cpp:503
-#: language/duchain/navigation/useswidget.cpp:544
+#: language/duchain/navigation/useswidget.cpp:518
+#: language/duchain/navigation/useswidget.cpp:559
 #, kde-format
 msgctxt "Refers to closing a UI element"
 msgid "Collapse"
 msgstr ""
 
-#: language/duchain/navigation/useswidget.cpp:540
+#: language/duchain/navigation/useswidget.cpp:555
 #, kde-format
 msgctxt "Refers to opening a UI element"
 msgid "Expand"
 msgstr ""
 
-#: language/duchain/navigation/useswidget.cpp:625
+#: language/duchain/navigation/useswidget.cpp:640
 #, kde-format
 msgid "1 use found"
 msgid_plural "%1 uses found"
 msgstr[0] ""
 msgstr[1] ""
 
-#: language/duchain/navigation/useswidget.cpp:627
+#: language/duchain/navigation/useswidget.cpp:642
 #, kde-format
 msgid "Expand all"
 msgstr ""
 
-#: language/duchain/navigation/useswidget.cpp:629
+#: language/duchain/navigation/useswidget.cpp:644
 #, kde-format
 msgid "Collapse all"
 msgstr ""
