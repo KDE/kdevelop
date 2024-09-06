@@ -203,6 +203,7 @@
     <category>IDE</category>
   </categories>
   <releases>
+    <release version="6.0.240801" date="2024-09-12"/>
     <release version="6.0.240800" date="2024-08-22"/>
     <release version="5.14.240502" date="2024-07-04"/>
     <release version="5.14.240501" date="2024-06-13"/>
