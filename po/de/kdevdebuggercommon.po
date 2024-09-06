@@ -3,7 +3,7 @@
 # Gerhard Stengel <gstengel@gmx.net>, 2010, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: kdevgdb\n"
+"Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
 "PO-Revision-Date: 2022-07-23 22:31+0200\n"

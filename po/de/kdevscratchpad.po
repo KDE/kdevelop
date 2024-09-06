@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: kdevelop\n"
+"Project-Id-Version: kdevscratchpad\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
 "PO-Revision-Date: 2023-03-17 22:49+0100\n"

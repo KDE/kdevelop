@@ -2,7 +2,7 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: kdevelopsessions\n"
+"Project-Id-Version: plasma_applet_kdevelopsessions\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
 "PO-Revision-Date: 2021-05-10 06:47+0200\n"
