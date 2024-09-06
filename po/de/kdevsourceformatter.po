@@ -5,7 +5,7 @@
 # Frederik Schwarzer <schwarzer@kde.org>, 2020.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevsourceformatter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
 "PO-Revision-Date: 2020-08-19 18:27+0200\n"

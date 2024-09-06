@@ -2,7 +2,7 @@
 # Frederik Schwarzer <schwarzer@kde.org>, 2013, 2014, 2020.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevfiletemplates\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-01 01:44+0000\n"
 "PO-Revision-Date: 2020-08-19 17:55+0200\n"

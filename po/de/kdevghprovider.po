@@ -3,7 +3,7 @@
 # Alois Spitzbart <spitz234@hotmail.com>, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevghprovider\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-21 01:43+0000\n"
 "PO-Revision-Date: 2022-11-11 12:51+0100\n"

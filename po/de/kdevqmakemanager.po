@@ -3,7 +3,7 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2014, 2015, 2017.
 msgid ""
 msgstr ""
-"Project-Id-Version: kdevqmake\n"
+"Project-Id-Version: kdevqmakemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
 "PO-Revision-Date: 2020-08-19 18:22+0200\n"
