@@ -9,6 +9,7 @@
 
 #include <interfaces/iplugin.h>
 #include <QVariant>
+#include <QMimeType>
 
 namespace Sublime
 {
@@ -42,6 +43,7 @@ public Q_SLOTS:
     void documentOpened(KDevelop::IDocument *document);
     void documentActivated(KDevelop::IDocument *document);
     void documentClosed(KDevelop::IDocument *document);
+    void documentUrlChanged(KDevelop::IDocument *document, QUrl const&);
 protected:
     bool eventFilter( QObject*, QEvent* ) override;
 private:
@@ -52,6 +54,7 @@ private:
 
     // List of opened document sorted activation.
     QList<KDevelop::IDocument *> documentLists;
+    std::map<KDevelop::IDocument*, QMimeType> cachedMimeTypes;
     DocumentSwitcherTreeView* view;
     QStandardItemModel* model;
     QAction* forwardAction;

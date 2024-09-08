@@ -8,6 +8,7 @@
 #define KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERITEM_H
 
 #include <QStandardItem>
+#include <QMimeType>
 
 namespace KDevelop
 {
@@ -20,7 +21,7 @@ namespace KDevelop
 class DocumentSwitcherItem : public QStandardItem
 {
 public:
-    explicit DocumentSwitcherItem(KDevelop::IDocument *document);
+    explicit DocumentSwitcherItem(KDevelop::IDocument *document, std::map<KDevelop::IDocument*, QMimeType>& mimeCache);
     ~DocumentSwitcherItem() override;
 };
 
