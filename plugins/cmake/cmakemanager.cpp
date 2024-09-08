@@ -657,10 +657,10 @@ void CMakeManager::showConfigureOutdatedMessage(const KDevelop::IProject& projec
         "\n"
         "To fix this issue, please right-click the project item in the projects tool view and click 'Reload'.",
         project.name());
-    showConfigureStatusMessage(project, messageText, Sublime::Message::Warning);
+    showConfigureStatusMessage(project, new Sublime::Message(messageText, Sublime::Message::Warning));
 }
 
-void CMakeManager::showConfigureErrorMessage(const IProject& project, const QString& errorMessage)
+void CMakeManager::showConfigureErrorMessage(IProject& project, const QString& errorMessage)
 {
     const QString messageText = i18n(
         "Failed to configure project '%1' (error message: %2)."
@@ -670,15 +670,21 @@ void CMakeManager::showConfigureErrorMessage(const IProject& project, const QStr
         " are correct, and KDevelop is configured to use the correct CMake version and settings."
         " Then right-click the project item in the projects tool view and click 'Reload'.",
         project.name(), errorMessage);
-    showConfigureStatusMessage(project, messageText, Sublime::Message::Error);
+    auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+    message->addAction(new QAction(tr("Close")));
+    auto* reloadAction = new QAction(tr("Reload project"));
+    QObject::connect(reloadAction, &QAction::triggered, this, [project = QPointer(&project)]() {
+        if (project)
+            project->reloadModel ();
+    });
+    message->addAction(reloadAction);
+    showConfigureStatusMessage(project, message);
 }
 
-void CMakeManager::showConfigureStatusMessage(const IProject& project, const QString& messageText,
-                                              Sublime::Message::MessageType messageType)
+void CMakeManager::showConfigureStatusMessage(const IProject& project, Sublime::Message* message)
 {
-    auto& message = m_configureStatusMessages[&project];
-    Q_ASSERT_X(!message, Q_FUNC_INFO, "The previous message must have been discarded earlier.");
-    message = new Sublime::Message(messageText, messageType);
+    Q_ASSERT_X(!m_configureStatusMessages[&project], Q_FUNC_INFO, "The previous message must have been discarded earlier.");
+    m_configureStatusMessages[&project] = message;
     ICore::self()->uiController()->postMessage(message);
 }
 

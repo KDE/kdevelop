@@ -119,9 +119,8 @@ private:
                                            const KTextEditor::Cursor& position) const;
 
     void showConfigureOutdatedMessage(const KDevelop::IProject& project);
-    void showConfigureErrorMessage(const KDevelop::IProject& project, const QString& errorMessage);
-    void showConfigureStatusMessage(const KDevelop::IProject& project, const QString& messageText,
-                                    Sublime::Message::MessageType messageType);
+    void showConfigureErrorMessage(KDevelop::IProject& project, const QString& errorMessage);
+    void showConfigureStatusMessage(const KDevelop::IProject& project, Sublime::Message* message);
 
     KJob* createImportJob(KDevelop::ProjectFolderItem* item, bool forceConfigure);
 
