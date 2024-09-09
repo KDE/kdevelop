@@ -15,70 +15,18 @@
 
 using namespace KDevelop;
 
-namespace {
-
-class KTextEditorConfigPageAdapter : public ConfigPage
+KTextEditorConfigPageAdapter::KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent)
+    : ConfigPage(nullptr, nullptr, parent), m_page(page)
 {
-    Q_OBJECT
+    page->setParent(this);
 
-public:
-    explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent = nullptr)
-        : ConfigPage(nullptr, nullptr, parent), m_page(page)
-    {
-        page->setParent(this);
+    auto* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(page);
+    setLayout(layout);
 
-        auto* layout = new QVBoxLayout(this);
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->addWidget(page);
-        setLayout(layout);
-
-        connect(page, &KTextEditor::ConfigPage::changed,
-                this, &ConfigPage::changed);
-    }
-
-    ~KTextEditorConfigPageAdapter() override {}
-
-    QString name() const override
-    {
-        return m_page->name();
-    }
-
-    QIcon icon() const override
-    {
-        return m_page->icon();
-    }
-
-    QString fullName() const override
-    {
-        return m_page->fullName();
-    }
-
-public Q_SLOTS:
-    void apply() override
-    {
-        m_page->apply();
-    }
-    void defaults() override
-    {
-        m_page->defaults();
-    }
-    void reset() override
-    {
-        m_page->reset();
-    }
-
-protected:
-    bool needsResetDuringInitialization() const override
-    {
-        // Optimization: KateThemeConfigPage::reset() is very slow (takes about 600 ms);
-        // neither KTextEditor nor Kate calls reset() after creating a KTextEditor::ConfigPage.
-        return false;
-    }
-
-private:
-    KTextEditor::ConfigPage* const m_page;
-};
-
+    connect(page, &KTextEditor::ConfigPage::changed,
+            this, &ConfigPage::changed);
 }
 
 EditorConfigPage::EditorConfigPage(QWidget* parent)
@@ -118,5 +66,4 @@ ConfigPage* EditorConfigPage::childPage(int number)
     return nullptr;
 }
 
-#include "editorconfigpage.moc"
 #include "moc_editorconfigpage.cpp"

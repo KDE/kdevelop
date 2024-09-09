@@ -27,6 +27,7 @@
 #include "core.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
+#include "editorconfigpage.h"
 #include "plugincontroller.h"
 #include "sessioncontroller.h"
 #include "mainwindow.h"
@@ -606,6 +607,16 @@ KXMLGUIClient *Plugin::createGUIForMainWindow(Sublime::MainWindow* window)
     m_tracker->append(view);
 
     return ret;
+}
+
+KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
+{
+    return new KTextEditorConfigPageAdapter(m_plugin->configPage(number, parent));
+}
+
+int Plugin::configPages() const
+{
+    return m_plugin->configPages();
 }
 
 KTextEditor::Plugin *Plugin::interface() const
