@@ -111,6 +111,9 @@ public:
 
     KTextEditor::Plugin *interface() const;
 
+    KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
+    int configPages() const override;
+
     QString pluginId() const;
 
 private:
