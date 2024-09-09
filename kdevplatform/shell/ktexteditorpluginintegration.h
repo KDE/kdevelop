@@ -109,6 +109,9 @@ public:
 
     void unload() override;
 
+    [[nodiscard]] KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
+    [[nodiscard]] int configPages() const override;
+
     KTextEditor::Plugin *interface() const;
 
     QString pluginId() const;
