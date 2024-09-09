@@ -178,7 +178,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
     auto assistant = problem->solutionAssistant();
     if (assistant && !assistant->actions().isEmpty()) {
         modifyHtml() +=
-            QStringLiteral("<table width='100%' style='border: 1px solid black; background-color: %1;'>").arg(QStringLiteral(
+            QStringLiteral("<table width='100%' style='border: none; background-color: %1;'>").arg(QStringLiteral(
                                                                                                                   "#b3d4ff"));
         modifyHtml() +=
             QStringLiteral("<tr><td valign='middle'>%1</td><td width='100%'>")
