@@ -49,16 +49,10 @@ protected Q_SLOTS:
     void onProblemsChanged() override;
 
 private Q_SLOTS:
-    void timerExpired();
     void setCurrentDocument(KDevelop::IDocument* doc) override;
 
 private:
     void rebuildProblemList();
-
-    QTimer* m_minTimer;
-    QTimer* m_maxTimer;
-    const static int MinTimeout;
-    const static int MaxTimeout;
 };
 
 #endif

@@ -30,22 +30,11 @@
 
 using namespace KDevelop;
 
-const int ProblemReporterModel::MinTimeout = 1000;
-const int ProblemReporterModel::MaxTimeout = 5000;
-
 ProblemReporterModel::ProblemReporterModel(QObject* parent)
     : ProblemModel(parent, new FilteredProblemStore())
 {
     setFeatures(CanDoFullUpdate | CanShowImports | ScopeFilter | SeverityFilter | ShowSource);
 
-    m_minTimer = new QTimer(this);
-    m_minTimer->setInterval(MinTimeout);
-    m_minTimer->setSingleShot(true);
-    connect(m_minTimer, &QTimer::timeout, this, &ProblemReporterModel::timerExpired);
-    m_maxTimer = new QTimer(this);
-    m_maxTimer->setInterval(MaxTimeout);
-    m_maxTimer->setSingleShot(true);
-    connect(m_maxTimer, &QTimer::timeout, this, &ProblemReporterModel::timerExpired);
     connect(store(), &FilteredProblemStore::changed, this, &ProblemReporterModel::onProblemsChanged);
     connect(ICore::self()->languageController()->staticAssistantsManager(), &StaticAssistantsManager::problemsChanged,
             this, &ProblemReporterModel::onProblemsChanged);
@@ -104,13 +93,6 @@ void ProblemReporterModel::onProblemsChanged()
     rebuildProblemList();
 }
 
-void ProblemReporterModel::timerExpired()
-{
-    m_minTimer->stop();
-    m_maxTimer->stop();
-    rebuildProblemList();
-}
-
 void ProblemReporterModel::setCurrentDocument(KDevelop::IDocument* doc)
 {
     Q_ASSERT(thread() == QThread::currentThread());
@@ -131,12 +113,7 @@ void ProblemReporterModel::problemsUpdated(const KDevelop::IndexedString& url)
         !(showImports() && store()->documents()->imports().contains(url)))
         return;
 
-    /// m_minTimer will expire in MinTimeout unless some other parsing job finishes in this period.
-    m_minTimer->start();
-    /// m_maxTimer will expire unconditionally in MaxTimeout
-    if (!m_maxTimer->isActive()) {
-        m_maxTimer->start();
-    }
+    rebuildProblemList();
 }
 
 void ProblemReporterModel::rebuildProblemList()
