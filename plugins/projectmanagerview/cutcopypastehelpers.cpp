@@ -218,7 +218,13 @@ QVector<TaskInfo> copyMoveItems(const Path::List& paths, ProjectBaseItem* destIt
     Path destPath = destFolder->path();
     const auto& srcProjects = cl.itemsPerProject.keys();
     for (IProject* srcProject : srcProjects) {
-        const auto& itemsList = cl.itemsPerProject[srcProject];
+        auto itemsList = cl.itemsPerProject[srcProject];
+
+        // make sure each item is only moved once
+        std::sort(itemsList.begin (), itemsList.end (), [](auto const& a, auto const& b) {
+            return a->path() < b->path();
+        });
+        itemsList.erase(std::unique(itemsList.begin(), itemsList.end(), [](auto const& a, auto const& b) { return a->path() == b->path(); }), itemsList.end());
 
         Path::List pathsList;
         pathsList.reserve(itemsList.size());
