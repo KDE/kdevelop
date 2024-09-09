@@ -51,6 +51,3 @@ ConfigPage* EditorConfigPage::childPage(int number)
     }
     return nullptr;
 }
-
-#include "editorconfigpage.moc"
-#include "moc_editorconfigpage.cpp"

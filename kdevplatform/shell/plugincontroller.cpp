@@ -60,6 +60,16 @@ inline QString KEY_Gui() { return QStringLiteral("GUI"); }
 inline QString KEY_AlwaysOn() { return QStringLiteral("AlwaysOn"); }
 inline QString KEY_UserSelectable() { return QStringLiteral("UserSelectable"); }
 
+inline QStringList DisabledLSPLanguages() {
+    return {
+        QStringLiteral("c"),
+        QStringLiteral("cpp"),
+        QStringLiteral("python"),
+        QStringLiteral("php"),
+        QStringLiteral("qmljs")
+    };
+}
+
 bool isUserSelectable( const KPluginMetaData& info )
 {
     QString loadMode = info.value(KEY_LoadMode());
@@ -601,6 +611,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     auto plugin = factory.plugin->create<IPlugin>(d->core);
     if (!plugin) {
         if (auto katePlugin = factory.plugin->create<KTextEditor::Plugin>(d->core, QVariantList() << info.pluginId())) {
+            configureKTextEditorPlugin(katePlugin);
             plugin = new KTextEditorIntegration::Plugin(katePlugin, d->core, info);
         } else {
             qCWarning(SHELL) << "Creating plugin" << pluginId << "failed.";
@@ -630,6 +641,15 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     return plugin;
 }
 
+void PluginController::configureKTextEditorPlugin(KTextEditor::Plugin* plugin)
+{
+    auto const pluginName = plugin->metaObject()->className();
+    qCDebug(SHELL) << "configuring KTextEditor plugin: " << pluginName;
+    if (QLatin1String(pluginName) == QLatin1String("LSPClientPlugin"))
+    {
+        plugin->setProperty("disabledLanguages", DisabledLSPLanguages());
+    }
+}
 
 IPlugin* PluginController::plugin(const QString& pluginId) const
 {

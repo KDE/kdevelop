@@ -16,6 +16,10 @@
 
 #include "shellexport.h"
 
+namespace KTextEditor
+{
+class Plugin;
+}
 
 namespace KDevelop
 {
@@ -158,6 +162,8 @@ private:
 
     void cleanup();
     virtual void initialize();
+
+    void configureKTextEditorPlugin(KTextEditor::Plugin* plugin);
 
 private:
     const QScopedPointer<class PluginControllerPrivate> d_ptr;
