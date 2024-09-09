@@ -747,15 +747,13 @@ void ContextBrowserPlugin::addHighlight(View* view, KDevelop::Declaration* decl)
 
     // Highlight uses
     {
-        const auto currentRevisionUses = decl->usesCurrentRevision();
-        for (auto fileIt = currentRevisionUses.constBegin(); fileIt != currentRevisionUses.constEnd(); ++fileIt) {
-            const auto& document = fileIt.key();
-            const auto& documentUses = fileIt.value();
-            for (auto& use : documentUses) {
-                highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(use, document));
-                highlights.highlights.back()->setAttribute(highlightedUseAttribute());
-                highlights.highlights.back()->setZDepth(highlightingZDepth);
-            }
+        auto* thisContext = DUChainUtils::standardContextForUrl(view->document()->url());
+        const auto& currentRevisionUses = decl->usesCurrentRevision(thisContext);
+        IndexedString document(view->document()->url());
+        for (auto& use : currentRevisionUses) {
+            highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(use, document));
+            highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+            highlights.highlights.back()->setZDepth(highlightingZDepth);
         }
     }
 

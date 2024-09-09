@@ -757,6 +757,19 @@ bool Declaration::hasUses() const
     return ret;
 }
 
+QVector<KTextEditor::Range> Declaration::usesCurrentRevision(TopDUContext* context) const
+{
+    QVector<KTextEditor::Range> ret;
+    if (!context)
+        return ret;
+
+    const auto useRanges = allUses(context, const_cast<Declaration*>(this));
+    for (const RangeInRevision range : useRanges) {
+        ret.append(topContext()->transformFromLocalRevision(range));
+    }
+    return ret;
+}
+
 QMap<IndexedString, QVector<KTextEditor::Range>> Declaration::usesCurrentRevision() const
 {
     ENSURE_CAN_READ

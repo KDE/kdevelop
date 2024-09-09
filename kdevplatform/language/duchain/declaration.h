@@ -462,6 +462,11 @@ public:
     QMap<IndexedString, QVector<KTextEditor::Range>> usesCurrentRevision() const;
 
     /**
+     * Returns a list of uses in the given top-context.
+     */
+    QVector<KTextEditor::Range> usesCurrentRevision(TopDUContext* context) const;
+
+    /**
      * This hash-value should differentiate between multiple different
      * declarations that have the same qualifiedIdentifier, but should have a different
      * identity, and thus own Definitions and own Uses assigned.
