@@ -8,6 +8,7 @@
 
 #include <debug.h>
 
+#include <QChildEvent>
 #include <QFileInfo>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -172,6 +173,31 @@ private:
     ToolViewFactory* const m_factory;
 };
 
+class ToolViewWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit ToolViewWidget(QWidget* parent = nullptr)
+        : QWidget(parent)
+    {
+    }
+
+protected:
+    // Copied from Kate's KateMDI::ToolView::childEvent() in order to fix the Diagnostics tool view layout.
+    void childEvent(QChildEvent* ev) override
+    {
+        // set the widget to be focus proxy if possible
+        if (ev->type() == QEvent::ChildAdded) {
+            if (auto* const widget = qobject_cast<QWidget*>(ev->child())) {
+                setFocusProxy(widget);
+                layout()->addWidget(widget);
+            }
+        }
+
+        QWidget::childEvent(ev);
+    }
+};
+
 class ToolViewFactory : public QObject, public KDevelop::IToolViewFactory
 {
     Q_OBJECT
@@ -181,7 +207,7 @@ public:
         : m_text(text)
         , m_icon(icon)
         , m_identifier(identifier)
-        , m_container(new QWidget)
+        , m_container(new ToolViewWidget)
         , m_pos(pos)
     {
         m_container->setLayout(new QVBoxLayout);
