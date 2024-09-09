@@ -16,7 +16,8 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 
-DocumentSwitcherItem::DocumentSwitcherItem(KDevelop::IDocument *document, std::map<KDevelop::IDocument*, QMimeType>& mimeCache)
+DocumentSwitcherItem::DocumentSwitcherItem(KDevelop::IDocument* document,
+                                           std::map<KDevelop::IDocument*, QMimeType>& mimeCache)
 {
     const QUrl &url = document->url();
 
@@ -27,9 +28,9 @@ DocumentSwitcherItem::DocumentSwitcherItem(KDevelop::IDocument *document, std::m
     {
         case KDevelop::IDocument::Clean:
         {
-            if (auto it = mimeCache.find (document); it == mimeCache.end ())
+            if (auto it = mimeCache.find(document); it == mimeCache.end())
                 mimeCache[document] = document->mimeType();
-            setIcon(QIcon::fromTheme (mimeCache[document].iconName()));
+            setIcon(QIcon::fromTheme(mimeCache[document].iconName()));
             break;
         }
         case KDevelop::IDocument::Modified:

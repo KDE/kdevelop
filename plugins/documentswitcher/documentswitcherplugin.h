@@ -43,7 +43,8 @@ public Q_SLOTS:
     void documentOpened(KDevelop::IDocument *document);
     void documentActivated(KDevelop::IDocument *document);
     void documentClosed(KDevelop::IDocument *document);
-    void documentUrlChanged(KDevelop::IDocument *document, QUrl const&);
+    void documentUrlChanged(KDevelop::IDocument* document, QUrl const&);
+
 protected:
     bool eventFilter( QObject*, QEvent* ) override;
 private:

@@ -50,7 +50,8 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject* parent, const KPluginMet
     connect(documentController, &KDevelop::IDocumentController::documentOpened, this, &DocumentSwitcherPlugin::documentOpened);
     connect(documentController, &KDevelop::IDocumentController::documentActivated, this, &DocumentSwitcherPlugin::documentActivated);
     connect(documentController, &KDevelop::IDocumentController::documentClosed, this, &DocumentSwitcherPlugin::documentClosed);
-    connect(documentController, &KDevelop::IDocumentController::documentUrlChanged, this, &DocumentSwitcherPlugin::documentUrlChanged);
+    connect(documentController, &KDevelop::IDocumentController::documentUrlChanged, this,
+            &DocumentSwitcherPlugin::documentUrlChanged);
 
 #ifdef Q_OS_MACOS
     // Qt/Mac swaps the Ctrl and Meta (Command) keys by default, so that shortcuts defined as Ctrl+X
@@ -155,7 +156,7 @@ void DocumentSwitcherPlugin::fillModel()
     model->clear();
 
     for (auto *doc : documentLists) {
-        DocumentSwitcherItem *item = new DocumentSwitcherItem(doc, cachedMimeTypes);
+        DocumentSwitcherItem* item = new DocumentSwitcherItem(doc, cachedMimeTypes);
         model->appendRow(item);
     }
 }
@@ -203,9 +204,9 @@ void DocumentSwitcherPlugin::itemActivated( const QModelIndex& idx )
     }
 }
 
-void DocumentSwitcherPlugin::documentUrlChanged(KDevelop::IDocument *document, QUrl const&)
+void DocumentSwitcherPlugin::documentUrlChanged(KDevelop::IDocument* document, QUrl const&)
 {
-    cachedMimeTypes.erase (document);
+    cachedMimeTypes.erase(document);
 }
 
 void DocumentSwitcherPlugin::documentOpened(KDevelop::IDocument *document)
@@ -224,7 +225,7 @@ void DocumentSwitcherPlugin::documentActivated(KDevelop::IDocument *document)
 void DocumentSwitcherPlugin::documentClosed(KDevelop::IDocument *document)
 {
     documentLists.removeOne(document);
-    cachedMimeTypes.erase (document);
+    cachedMimeTypes.erase(document);
 }
 
 void DocumentSwitcherPlugin::unload()
