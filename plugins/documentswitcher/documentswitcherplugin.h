@@ -10,6 +10,7 @@
 #include <interfaces/iplugin.h>
 #include <QVariant>
 #include <QMimeType>
+#include <unordered_map>
 
 namespace Sublime
 {
@@ -55,7 +56,7 @@ private:
 
     // List of opened document sorted activation.
     QList<KDevelop::IDocument *> documentLists;
-    std::map<KDevelop::IDocument*, QMimeType> cachedMimeTypes;
+    std::unordered_map<KDevelop::IDocument*, QMimeType> cachedMimeTypes;
     DocumentSwitcherTreeView* view;
     QStandardItemModel* model;
     QAction* forwardAction;
