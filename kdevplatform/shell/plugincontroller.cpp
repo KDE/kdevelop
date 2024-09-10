@@ -66,7 +66,7 @@ inline QStringList DisabledLSPLanguages() {
         QStringLiteral("cpp"),
         QStringLiteral("python"),
         QStringLiteral("php"),
-        QStringLiteral("qmljs")
+        QStringLiteral("qml")
     };
 }
 
