@@ -128,6 +128,10 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
         ret = registerToolView(QStringLiteral("VersionControl"), i18nc("@title:window", "Version Control"),
                                KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
         break;
+    case KDevelop::IOutputView::Messages:
+        ret = registerToolView(QStringLiteral("Messages"), i18nc("@title:window", "Messages"),
+                               KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
+        break;
     }
 
     Q_ASSERT(ret != -1);

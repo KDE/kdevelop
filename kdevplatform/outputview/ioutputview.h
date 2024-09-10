@@ -55,13 +55,13 @@ public:
         MultipleView = 2 /**< show multiples outputs in a tool view at the same time */
     };
 
-    enum StandardToolView
-    {
+    enum StandardToolView {
         BuildView = 0 /**< the standard outputview for building output */,
-        RunView =   1 /**< the standard outputview for running apps */,
+        RunView = 1 /**< the standard outputview for running apps */,
         DebugView = 2 /**< the standard outputview for debugging apps */,
-        TestView  = 4 /**< the standard outputview for verbose test output */,
-        VcsView   = 8 /**< the standard outputview for VCS commands */
+        TestView = 4 /**< the standard outputview for verbose test output */,
+        VcsView = 8 /**< the standard outputview for VCS commands */,
+        Messages = 16 /**< the standard output view for generic messages, e.g. from plugins */
     };
 
     virtual ~IOutputView();

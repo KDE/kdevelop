@@ -85,6 +85,8 @@ public Q_SLOTS:
     KTextEditor::View *openUrl(const QUrl &url, const QString &encoding = QString());
     bool showToolView(QWidget *widget);
 
+    void showMessage(QVariantMap);
+
 public:
     KTextEditor::MainWindow *interface() const;
 

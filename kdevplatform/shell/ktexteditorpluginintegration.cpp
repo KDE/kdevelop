@@ -20,10 +20,13 @@
 #include <sublime/container.h>
 #include <sublime/view.h>
 #include <sublime/viewbarcontainer.h>
+#include <outputview/outputjob.h>
+#include <outputview/outputmodel.h>
 
 #include <shell/editorconfigpage.h>
 
 #include "core.h"
+#include "debug.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "plugincontroller.h"
@@ -87,14 +90,17 @@ class ToolViewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ToolViewWidget(QWidget* parent = nullptr) : QWidget(parent) {}
+    ToolViewWidget(QWidget* parent = nullptr)
+        : QWidget(parent)
+    {
+    }
 
 protected:
-    void childEvent(QChildEvent *ev) override
+    void childEvent(QChildEvent* ev) override
     {
         // copied kate's behaviour
         if (ev->type() == QEvent::ChildAdded) {
-            if (QWidget *widget = qobject_cast<QWidget *>(ev->child())) {
+            if (QWidget* widget = qobject_cast<QWidget*>(ev->child())) {
                 setFocusProxy(widget);
                 layout()->addWidget(widget);
             }
@@ -108,7 +114,7 @@ class ToolViewFactory : public QObject, public KDevelop::IToolViewFactory
 {
     Q_OBJECT
 public:
-    ToolViewFactory(const QString &text, const QIcon &icon, const QString &identifier,
+    ToolViewFactory(const QString& text, const QIcon& icon, const QString& identifier,
                     KTextEditor::MainWindow::ToolViewPosition pos)
         : m_text(text)
         , m_icon(icon)
@@ -275,6 +281,53 @@ MainWindow::MainWindow(KDevelop::MainWindow *mainWindow)
 }
 
 MainWindow::~MainWindow() = default;
+
+class ShowMessagesJob : public OutputJob
+{
+public:
+    ShowMessagesJob()
+        : OutputJob()
+    {
+        setStandardToolView(IOutputView::StandardToolView::Messages);
+        setModel(new OutputModel);
+    }
+
+    void setMessages(std::vector<QVariantMap> const& messages)
+    {
+        m_messages = messages;
+        auto isImportantMessage = [](auto const& message) {
+            return message[QStringLiteral("type")].toString() != QLatin1String("Log");
+        };
+        if (std::any_of(messages.begin(), messages.end(), isImportantMessage)) {
+            setVerbosity(OutputJob::Verbose);
+        } else {
+            setVerbosity(OutputJob::Silent);
+        }
+    }
+
+    void start() override
+    {
+        auto const KeyCategory = QLatin1String("category");
+        auto const KeyText = QLatin1String("text");
+        for (auto const& message : m_messages) {
+            auto const line =
+                QLatin1String("%1: %2").arg(message[KeyCategory].toString()).arg(message[KeyText].toString());
+            static_cast<OutputModel*>(model())->appendLine(line);
+        }
+    }
+
+private:
+    std::vector<QVariantMap> m_messages;
+};
+
+void MainWindow::showMessage(QVariantMap message)
+{
+    qCInfo(SHELL) << "received message:" << message;
+    ShowMessagesJob job;
+    job.setMessages({message});
+    job.startOutput();
+    job.start();
+}
 
 QWidget *MainWindow::createToolView(KTextEditor::Plugin* plugin, const QString &identifier,
                                     KTextEditor::MainWindow::ToolViewPosition pos,
