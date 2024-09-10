@@ -23,6 +23,8 @@ class MainWindow;
 
 namespace KTextEditorIntegration {
 
+class ShowMessagesJob;
+
 /**
  * Class mimicking the KTextEditor::Application interface
  */
@@ -98,6 +100,7 @@ private:
     KTextEditor::MainWindow *m_interface;
     QHash<QString, QPointer<QObject>> m_pluginViews;
     QHash<KTextEditor::View*, QWidget*> m_viewBars;
+    std::shared_ptr<ShowMessagesJob> m_showMessagesOutputJob;
 };
 
 class Plugin : public KDevelop::IPlugin

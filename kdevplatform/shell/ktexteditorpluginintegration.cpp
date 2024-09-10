@@ -22,6 +22,7 @@
 #include <sublime/viewbarcontainer.h>
 #include <outputview/outputjob.h>
 #include <outputview/outputmodel.h>
+#include <outputview/outputdelegate.h>
 
 #include <shell/editorconfigpage.h>
 
@@ -289,31 +290,30 @@ public:
         : OutputJob()
     {
         setStandardToolView(IOutputView::StandardToolView::Messages);
-        setModel(new OutputModel);
+        setVerbosity(OutputJob::Silent);
+        if (!qobject_cast<OutputModel*>(model()))
+        {
+            setModel(new OutputModel);
+            setDelegate(new OutputDelegate);
+        }
     }
 
-    void setMessages(std::vector<QVariantMap> const& messages)
+    void postMessages(std::vector<QVariantMap> const& messages)
     {
-        m_messages = messages;
-        auto isImportantMessage = [](auto const& message) {
-            return message[QStringLiteral("type")].toString() != QLatin1String("Log");
-        };
-        if (std::any_of(messages.begin(), messages.end(), isImportantMessage)) {
-            setVerbosity(OutputJob::Verbose);
-        } else {
-            setVerbosity(OutputJob::Silent);
+        auto const KeyCategory = QLatin1String("category");
+        auto const KeyText = QLatin1String("text");
+        for (auto const& message : messages) {
+            for (auto const& messageLine: message[KeyText].toString().split(QLatin1String("\n"))) {
+                auto const line =
+                    QLatin1String("%1: %2").arg(message[KeyCategory].toString()).arg(messageLine);
+                static_cast<OutputModel*>(model())->appendLine(line);
+            }
         }
     }
 
     void start() override
     {
-        auto const KeyCategory = QLatin1String("category");
-        auto const KeyText = QLatin1String("text");
-        for (auto const& message : m_messages) {
-            auto const line =
-                QLatin1String("%1: %2").arg(message[KeyCategory].toString()).arg(message[KeyText].toString());
-            static_cast<OutputModel*>(model())->appendLine(line);
-        }
+        startOutput();
     }
 
 private:
@@ -323,10 +323,12 @@ private:
 void MainWindow::showMessage(QVariantMap message)
 {
     qCInfo(SHELL) << "received message:" << message;
-    ShowMessagesJob job;
-    job.setMessages({message});
-    job.startOutput();
-    job.start();
+    if (!m_showMessagesOutputJob)
+    {
+        m_showMessagesOutputJob = std::make_shared<ShowMessagesJob>();
+        m_showMessagesOutputJob->start();
+    }
+    m_showMessagesOutputJob->postMessages({message});
 }
 
 QWidget *MainWindow::createToolView(KTextEditor::Plugin* plugin, const QString &identifier,
