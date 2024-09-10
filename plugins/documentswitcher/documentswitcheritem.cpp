@@ -17,7 +17,7 @@
 #include <interfaces/iprojectcontroller.h>
 
 DocumentSwitcherItem::DocumentSwitcherItem(KDevelop::IDocument* document,
-                                           std::map<KDevelop::IDocument*, QMimeType>& mimeCache)
+                                           std::unordered_map<KDevelop::IDocument*, QMimeType>& mimeCache)
 {
     const QUrl &url = document->url();
 

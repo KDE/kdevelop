@@ -21,7 +21,7 @@ namespace KDevelop
 class DocumentSwitcherItem : public QStandardItem
 {
 public:
-    explicit DocumentSwitcherItem(KDevelop::IDocument* document, std::map<KDevelop::IDocument*, QMimeType>& mimeCache);
+    explicit DocumentSwitcherItem(KDevelop::IDocument* document, std::unordered_map<KDevelop::IDocument*, QMimeType>& mimeCache);
     ~DocumentSwitcherItem() override;
 };
 
