@@ -20,6 +20,9 @@
 #include <KTextEditor/Editor>
 #include <KTextEditor/Application>
 
+#include <outputview/outputdelegate.h>
+#include <outputview/outputjob.h>
+#include <outputview/outputmodel.h>
 #include <sublime/area.h>
 #include <sublime/container.h>
 #include <sublime/view.h>
@@ -396,6 +399,61 @@ MainWindow::MainWindow(KDevelop::MainWindow *mainWindow)
 }
 
 MainWindow::~MainWindow() = default;
+
+/**
+ * This output job implements KTextEditor::MainWindow::showMessage().
+ *
+ * Each main window has a single instance of ShowMessagesJob that never finishes in order to
+ * prevent creating a new output view each time a message arrives from KTextEditor.
+ */
+class ShowMessagesJob : public OutputJob
+{
+public:
+    ShowMessagesJob()
+        : OutputJob(nullptr, Silent)
+    {
+        setModel(new OutputModel);
+        setDelegate(new OutputDelegate);
+
+        // Create a custom output tool view instead of reusing a standard one,
+        // because the messages should not be hidden in a history or a tab.
+        setToolTitle(i18nc("@title:window", "Messages"));
+        // Use the same icon as the corresponding tool view "Output" in Kate.
+        setToolIcon(QIcon::fromTheme(QStringLiteral("output_win")));
+        // The tool view is not reused, so it has a single output view.
+        setViewType(IOutputView::OneView);
+        // The select and focus buttons do not make sense for messages from KTextEditor (plugins).
+        // The filtering of messages can be useful.
+        setOptions(IOutputView::AddFilterAction);
+        // Do not allow the user to close the single output view.
+        // Automatically scroll the view like most other output views do.
+        setBehaviours(IOutputView::AutoScroll);
+    }
+
+    void postMessage(const QVariantMap& message)
+    {
+        const auto category = message[QStringLiteral("category")].toString();
+        for (const auto textLine : QStringTokenizer(message[QStringLiteral("text")].toString(), QLatin1Char{'\n'})) {
+            const auto line = QLatin1String("%1: %2").arg(category, textLine);
+            static_cast<OutputModel*>(model())->appendLine(line);
+        }
+    }
+
+    void start() override
+    {
+        startOutput();
+    }
+};
+
+void MainWindow::showMessage(const QVariantMap& message)
+{
+    if (!m_showMessageOutputJob) {
+        m_showMessageOutputJob = std::make_unique<ShowMessagesJob>();
+        m_showMessageOutputJob->setAutoDelete(false);
+        m_showMessageOutputJob->start();
+    }
+    m_showMessageOutputJob->postMessage(message);
+}
 
 QWidget *MainWindow::createToolView(KTextEditor::Plugin* plugin, const QString &identifier,
                                     KTextEditor::MainWindow::ToolViewPosition pos,

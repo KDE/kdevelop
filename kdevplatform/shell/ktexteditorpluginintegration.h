@@ -16,12 +16,16 @@
 
 #include <interfaces/iplugin.h>
 
+#include <memory>
+
 namespace KDevelop {
 class ObjectListTracker;
 class MainWindow;
 }
 
 namespace KTextEditorIntegration {
+
+class ShowMessagesJob;
 
 /**
  * Class mimicking the KTextEditor::Application interface
@@ -85,6 +89,8 @@ public Q_SLOTS:
     KTextEditor::View *openUrl(const QUrl &url, const QString &encoding = QString());
     bool showToolView(QWidget *widget);
 
+    void showMessage(const QVariantMap& message);
+
 public:
     KTextEditor::MainWindow *interface() const;
 
@@ -96,6 +102,7 @@ private:
     KTextEditor::MainWindow *m_interface;
     QHash<QString, QPointer<QObject>> m_pluginViews;
     QHash<KTextEditor::View*, QWidget*> m_viewBars;
+    std::unique_ptr<ShowMessagesJob> m_showMessageOutputJob;
 };
 
 class Plugin : public KDevelop::IPlugin
