@@ -343,6 +343,8 @@ void GitInitTest::testMerge()
 
     j = m_plugin->branch(baseUrl, rev, branchNames[0]);
     VERIFYJOB(j);
+    j = m_plugin->switchBranch(baseUrl, branchNames[0]);
+    VERIFYJOB(j);
 
     qDebug() << "Adding files to the new branch";
 
@@ -380,6 +382,8 @@ void GitInitTest::testMerge()
     VERIFYJOB(j);
     rev.setRevisionValue(branchNames[0], KDevelop::VcsRevision::GlobalNumber);
     j = m_plugin->branch(baseUrl, rev, branchNames[1]);
+    VERIFYJOB(j);
+    j = m_plugin->switchBranch(baseUrl, branchNames[1]);
     VERIFYJOB(j);
     QVERIFY(writeFile(gitTest_BaseDir() + files[2], content));
     j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir() + files[2]));
