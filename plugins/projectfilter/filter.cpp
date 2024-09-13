@@ -105,6 +105,9 @@ static SerializedFilters generateDefaultFilters()
         QStringLiteral(".readthedocs.y*ml"),
         //   https://yamllint.readthedocs.io/en/stable/configuration.html#configuration
         QStringLiteral(".yamllint*"),
+
+        // KDE's standard location of the flatpak recipe
+        QStringLiteral(".flatpak-manifest.json"),
     };
     for (const QString& file : configFiles) {
         ret << SerializedFilter(file, Filter::Files, Filter::Inclusive);
