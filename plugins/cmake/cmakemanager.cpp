@@ -481,6 +481,17 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     }
 }
 
+static void populateTargetsRecursive(ProjectFolderItem* folder,
+                                     const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets)
+{
+    populateTargets(folder, targets);
+    const auto children = folder->children();
+    for (auto child : children) {
+        if (auto folder = child->folder())
+            populateTargetsRecursive(folder, targets);
+    }
+}
+
 static void cleanupTestSuites(const QVector<CTestSuite*>& testSuites, const QVector<CTestFindJob*>& testSuiteJobs)
 {
     for (auto* testSuiteJob : testSuiteJobs) {
@@ -502,6 +513,7 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
         showConfigureOutdatedMessage(*project);
     }
 
+    const bool newProject = !m_projects.contains(project);
     if (server) {
         connect(server.data(), &CMakeServer::response, project, [this, project](const QJsonObject& response) {
             if (response[QStringLiteral("type")] == QLatin1String("signal")) {
@@ -528,7 +540,7 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
                 qCDebug(CMAKE) << "unhandled response..." << project << response;
             }
         });
-    } else if (!m_projects.contains(project)) {
+    } else if (newProject) {
         auto* reloadTimer = new QTimer(project);
         reloadTimer->setSingleShot(true);
         reloadTimer->setInterval(1000);
@@ -565,7 +577,11 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
     }
 
     projectData = { data, server, std::move(testSuites), std::move(testSuiteJobs) };
-    populateTargets(project->projectItem(), data.targets);
+    if (newProject) {
+        populateTargetsRecursive(project->projectItem(), data.targets);
+    } else {
+        populateTargets(project->projectItem(), data.targets);
+    }
 }
 
 QList< KDevelop::ProjectTargetItem * > CMakeManager::targets(KDevelop::ProjectFolderItem * folder) const
@@ -772,10 +788,12 @@ ConfigPage* CMakeManager::perProjectConfigPage(int number, const ProjectConfigOp
 
 void CMakeManager::reloadProjects()
 {
-    const auto& projects = m_projects.keys();
+    const auto& projects = ICore::self()->projectController()->projects();
     for (IProject* project : projects) {
-        CMake::checkForNeedingConfigure(project);
-        reload(project->projectItem());
+        if (project->buildSystemManager() == this) {
+            CMake::checkForNeedingConfigure(project);
+            reload(project->projectItem());
+        }
     }
 }
 
