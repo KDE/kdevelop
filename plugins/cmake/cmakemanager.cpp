@@ -481,6 +481,16 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     }
 }
 
+static void populateTargetsRecursively(ProjectFolderItem* folder, const QHash<Path, QList<CMakeTarget>>& targets)
+{
+    populateTargets(folder, targets);
+    const auto children = folder->children();
+    for (auto* const child : children) {
+        if (auto* const folder = child->folder())
+            populateTargetsRecursively(folder, targets);
+    }
+}
+
 static void cleanupTestSuites(const QVector<CTestSuite*>& testSuites, const QVector<CTestFindJob*>& testSuiteJobs)
 {
     for (auto* testSuiteJob : testSuiteJobs) {
@@ -565,7 +575,7 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
     }
 
     projectData = { data, server, std::move(testSuites), std::move(testSuiteJobs) };
-    populateTargets(project->projectItem(), data.targets);
+    populateTargetsRecursively(project->projectItem(), data.targets);
 }
 
 QList< KDevelop::ProjectTargetItem * > CMakeManager::targets(KDevelop::ProjectFolderItem * folder) const
