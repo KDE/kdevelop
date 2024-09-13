@@ -11,6 +11,7 @@
 #include <interfaces/iruntime.h>
 
 class RuntimeViewFactory;
+class QActionGroup;
 class QMenu;
 
 namespace KDevelop
@@ -41,6 +42,7 @@ private:
     QVector<IRuntime*> m_runtimes;
     IRuntime* m_currentRuntime = nullptr;
     Core* const m_core;
+    QActionGroup* const m_group;
 };
 
 }

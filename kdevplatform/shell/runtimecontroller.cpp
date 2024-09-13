@@ -5,6 +5,7 @@
 */
 
 #include "runtimecontroller.h"
+#include <QActionGroup>
 #include <QProcess>
 #include <QComboBox>
 #include <KActionCollection>
@@ -57,6 +58,7 @@ private:
 
 KDevelop::RuntimeController::RuntimeController(KDevelop::Core* core)
     : m_core(core)
+    , m_group(new QActionGroup(this))
 {
     const bool haveUI = (core->setupFlags() != Core::NoUi);
     if (haveUI) {
@@ -133,6 +135,7 @@ void KDevelop::RuntimeController::addRuntimes(KDevelop::IRuntime * runtime)
 
     if (m_core->setupFlags() != Core::NoUi) {
         auto* runtimeAction = new QAction(runtime->name(), m_runtimesMenu.data());
+        m_group->addAction(runtimeAction);
         runtimeAction->setCheckable(true);
         connect(runtimeAction, &QAction::triggered, runtime, [this, runtime]() {
             setCurrentRuntime(runtime);
