@@ -371,10 +371,10 @@ void GitInitTest::testMerge()
     *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD" ;
 
     if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {
-        QStringList files = jobLs->output().split('\n');
-        qDebug() << "Files in this Branch: " << files;
-        QVERIFY(files.contains(files[0]));
-        QVERIFY(files.contains(files[1]));
+        QStringList lsFiles = jobLs->output().split('\n');
+        qDebug() << "Files in this Branch: " << lsFiles;
+        QVERIFY(lsFiles.contains(files[0]));
+        QVERIFY(lsFiles.contains(files[1]));
     }
 
     //Testing one more time.
@@ -400,9 +400,9 @@ void GitInitTest::testMerge()
     *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD" ;
 
     if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {
-        QStringList files = jobLs->output().split('\n');
-        QVERIFY(files.contains(files[2]));
-        qDebug() << "Files in this Branch: " << files;
+        QStringList lsFiles = jobLs->output().split('\n');
+        QVERIFY(lsFiles.contains(files[2]));
+        qDebug() << "Files in this Branch: " << lsFiles;
     }
 
     j = m_plugin->switchBranch(baseUrl, QStringLiteral("master"));
@@ -415,9 +415,9 @@ void GitInitTest::testMerge()
     *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD" ;
 
     if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {
-        QStringList files = jobLs->output().split('\n');
-        QVERIFY(files.contains(files[2]));
-        qDebug() << "Files in this Branch: " << files;
+        QStringList lsFiles = jobLs->output().split('\n');
+        QVERIFY(lsFiles.contains(files[2]));
+        qDebug() << "Files in this Branch: " << lsFiles;
     }
 
 }
