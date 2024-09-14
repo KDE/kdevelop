@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-05 02:26+0000\n"
-"PO-Revision-Date: 2024-08-15 06:08+0200\n"
+"PO-Revision-Date: 2024-09-13 06:30+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -5018,6 +5018,18 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Select languages you use one by one from the <i>Language</i> combobox "
+"below, pick the desired formatter and style for each. <i>Ctrl+Click</i> a "
+"selected style to unselect it.</p>\n"
+"<p>Configuring the right formatter and style for each used language is very "
+"important: not only explicit <i>Reformat Source</i>/<i>Line</i>/<i>Files...</"
+"i> actions are affected, but also the formatting of auto-generated, auto-"
+"refactored or auto-fixed code (for example, <i>Rename</i> context menu "
+"action).</p>\n"
+"<p>Note that KDevelop formats all <i>*.h</i> files with formatter and style "
+"configured for <i>C</i> language, even C++ headers that belong to a pure C++ "
+"project. This occurs because source formatter maps MIME types to languages.</"
+"p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5398,7 +5410,7 @@ msgstr "შეტყობინების დახურვა"
 #: util/duchainify/main.cpp:263
 #, kde-format
 msgid "duchainify"
-msgstr ""
+msgstr "duchainify"
 
 #: util/duchainify/main.cpp:264
 #, kde-format
@@ -5462,7 +5474,7 @@ msgstr "'აღწერა - გამოყენების' ჯაჭვი
 #: util/duchainify/main.cpp:293
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "მშობელი კონტექსტების გამოტანა კონტექსტების დამპისას"
 
 #: util/duchainify/main.cpp:295
 #, kde-format
