@@ -2,100 +2,87 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2014-03-19 21:23+0100\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"PO-Revision-Date: 2024-09-14 20:33+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #: appwizarddialog.cpp:23
-#, fuzzy, kde-format
-#| msgid "Create New Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New Project"
 msgstr "Új projekt létrehozása"
 
 #: appwizarddialog.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "Page for general configuration options"
-#| msgid "General"
+#, kde-format
 msgctxt "@title:tab Page for general configuration options"
 msgid "General"
 msgstr "Általános"
 
 #: appwizarddialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "Page for version control options"
-#| msgid "Version Control"
+#, kde-format
 msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "Verziókezelés"
 
 #: appwizardplugin.cpp:69
-#, fuzzy, kde-format
-#| msgid "New From Template..."
+#, kde-format
 msgctxt "@action"
 msgid "New from Template..."
 msgstr "Új sablon alapján…"
 
 #: appwizardplugin.cpp:71
-#, fuzzy, kde-format
-#| msgid "Generate a new project from a template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
 msgstr "Új projekt előállítása sablon alapján"
 
 #: appwizardplugin.cpp:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "This starts KDevelop's application wizard. It helps you to generate a "
-#| "skeleton for your application from a set of templates."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
 "skeleton for your application from a set of templates."
 msgstr ""
-"Ez indítja el a KDevelop alkalmazásvarázslót, amely segít önnek az "
+"Ez elindítja a KDevelop alkalmazásvarázslóját, amely segít önnek az "
 "alkalmazás vázának előállításában sablonokból."
 
 #: appwizardplugin.cpp:106
-#, fuzzy, kde-format
-#| msgid "Could not create project from template\n"
+#, kde-format
 msgid "Could not create project from template."
-msgstr "Nem hozható létre projekt a sablonból\n"
+msgstr "Nem hozható létre projekt a sablonból."
 
 #: appwizardplugin.cpp:134
-#, fuzzy, kde-format
-#| msgid "Please see the Version Control toolview"
+#, kde-format
 msgid "Please see the Version Control tool view."
-msgstr "Kérjük tekintse meg a verziókezelő eszköznézetet"
+msgstr "Kérjük, tekintse meg a Verziókezelés eszköznézetet."
 
 #: appwizardplugin.cpp:136
-#, fuzzy, kde-format
-#| msgid "Version Control System Error"
+#, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
-msgstr "Verziókezelő rendszer hiba"
+msgstr "Verziókezelő-rendszer hiba"
 
 #: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
-msgstr "Nem sikerült inicializálni a DVCS-tárolót"
+msgstr "Nem sikerült előkészíteni a DVCS-tárolót"
 
 #: appwizardplugin.cpp:161
-#, fuzzy, kde-format
-#| msgid "Could not add files to the DVCS repository"
+#, kde-format
 msgid "Could not check status of the DVCS repository"
-msgstr "Nem sikerült fájlokat hozzáadni a DVCS-tárolóhoz"
+msgstr "Nem ellenőrizni a DVCS-tároló állapotát"
 
 #: appwizardplugin.cpp:174
 #, kde-format
@@ -105,7 +92,7 @@ msgstr "Nem sikerült fájlokat hozzáadni a DVCS-tárolóhoz"
 #: appwizardplugin.cpp:182
 #, kde-format
 msgid "Could not import project into %1."
-msgstr "Nem sikerült importálni a projektet ebbe: %1"
+msgstr "Nem sikerült importálni a projektet ide: %1"
 
 #: appwizardplugin.cpp:199
 #, kde-format
@@ -115,12 +102,12 @@ msgstr "Nem sikerült importálni a projektet"
 #: appwizardplugin.cpp:207
 #, kde-format
 msgid "Could not checkout imported project"
-msgstr "Nem sikerült ellenőrizni az importált projektet"
+msgstr "Nem sikerült lekérni az importált projektet"
 
 #: appwizardplugin.cpp:332
 #, kde-format
 msgid "Could not create new project"
-msgstr "Nem sikerült az új projekt létrehozása"
+msgstr "Nem sikerült létrehozni új projektet"
 
 #: appwizardplugin.cpp:467
 #, kde-format
@@ -133,29 +120,25 @@ msgid "Project Templates"
 msgstr "Projektsablonok"
 
 #: projectselectionpage.cpp:60
-#, fuzzy, kde-format
-#| msgid "Category"
+#, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Kategória"
 
 #: projectselectionpage.cpp:61
-#, fuzzy, kde-format
-#| msgid "Project Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
-msgstr "Projekt típus"
+msgstr "Projekttípus"
 
 #: projectselectionpage.cpp:71
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "További sablonok beszerzése"
 
 #: projectselectionpage.cpp:78
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Sablon betöltése fájlból"
@@ -184,13 +167,12 @@ msgstr ""
 #: projectselectionpage.cpp:235
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
-msgstr "Érvénytelen projektsablon, kérem válasszon egy levélelemet"
+msgstr "Érvénytelen projektsablon, kérjük, válasszon egy levélelemet"
 
 #: projectselectionpage.cpp:248
-#, fuzzy, kde-format
-#| msgid "Path already exists and contains files"
+#, kde-format
 msgid "Path already exists and contains files. Open it as a project."
-msgstr "Az elérési út már létezik és fájlokat tartalmaz"
+msgstr "Az útvonal már létezik, és tartalmaz fájlokat. Nyissa meg projektként."
 
 #: projectselectionpage.cpp:295
 #, kde-format
@@ -198,52 +180,45 @@ msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr ""
-"A megadott elérési út már létezik és fájlokat tartalmaz. Biztosan folytatni "
+"A megadott útvonal már létezik és tartalmaz fájlokat. Biztosan folytatni "
 "szeretné?"
 
 #: projectselectionpage.cpp:311
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"
 msgstr "Sablon betöltése fájlból"
 
 #. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
 #: projectselectionpage.ui:38
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:group"
 msgid "Properties"
 msgstr "Tulajdonságok"
 
 #. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
 #: projectselectionpage.ui:44
-#, fuzzy, kde-format
-#| msgid "Project Type"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Project name:"
-msgstr "Projekt típus"
+msgstr "Projektnév:"
 
 #. i18n: ectx: property (text), widget (QLabel, locationLabel)
 #: projectselectionpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Location:"
 msgstr "Hely:"
 
 #: projectvcspage.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "No Version Control Support chosen"
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox No Version Control Support chosen"
 msgid "None"
 msgstr "Nincs"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectvcspage.ui:30
-#, fuzzy, kde-format
-#| msgid "Version Control System:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Version control system:"
 msgstr "Verziókezelő rendszer:"
