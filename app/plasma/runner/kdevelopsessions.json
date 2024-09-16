@@ -69,10 +69,6 @@
         "Name[tr]": "K Geliştir Oturumları",
         "Name[uk]": "Сеанси KDevelop",
         "Name[x-test]": "xxKDevelop Sessionsxx",
-        "Name[zh_TW]": "KDevelop 工作階段",
-        "ServiceTypes": [
-            "Plasma/Runner"
-        ],
-        "Version": "1.0"
+        "Name[zh_TW]": "KDevelop 工作階段"
     }
 }
