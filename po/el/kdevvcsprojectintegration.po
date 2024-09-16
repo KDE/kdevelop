@@ -20,8 +20,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: vcschangesview.cpp:84
-#, fuzzy, kde-format
-#| msgid "Refresh"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Ανανέωση"
@@ -34,8 +33,7 @@ msgid "Project Changes"
 msgstr "Αλλαγές VCS"
 
 #: vcschangesviewplugin.cpp:66
-#, fuzzy, kde-format
-#| msgid "Locate Current Document"
+#, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Βρίσκει το τρέχον έγγραφο"
@@ -48,8 +46,7 @@ msgid "Locate the current document and select it"
 msgstr "Βρίσκει το τρέχον έγγραφο και το επιλέγει."
 
 #: vcschangesviewplugin.cpp:71
-#, fuzzy, kde-format
-#| msgid "Reload View"
+#, kde-format
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Επαναφόρτωση προβολής"

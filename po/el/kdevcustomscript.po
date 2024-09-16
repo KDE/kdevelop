@@ -109,8 +109,7 @@ msgstr ""
 "αρχείο διαμόρφωσης config-file <b>uncrustify.config</b>."
 
 #: customscript_plugin.cpp:539
-#, fuzzy, kde-format
-#| msgid "Command:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Εντολή:"
@@ -131,8 +130,7 @@ msgstr ""
 "χρησιμοποιείται για τη μεταφορά του κώδικαa."
 
 #: customscript_plugin.cpp:560
-#, fuzzy, kde-format
-#| msgid "More Variables"
+#, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Περισσότερες μεταβλητές"
@@ -173,8 +171,7 @@ msgstr ""
 "έργου με το όνομα που ταιριάζει."
 
 #: customscript_plugin.cpp:595
-#, fuzzy, kde-format
-#| msgid "Variable Replacements"
+#, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"
 msgstr "Αντικαταστάσεις μεταβλητών"

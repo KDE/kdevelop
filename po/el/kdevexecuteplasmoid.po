@@ -19,8 +19,7 @@ msgstr ""
 "X-Generator: Lokalize 2.0\n"
 
 #: plasmoidexecutionconfig.cpp:117
-#, fuzzy, kde-format
-#| msgid "Configure Plasmoid Execution"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "Διαμόρφωση εκτέλεσης γραφικών συστατικών"
@@ -41,64 +40,56 @@ msgid "Could not resolve the dependency: %1"
 msgstr "Αδυναμία επίλυσης της εξάρτησης: %1"
 
 #: plasmoidexecutionconfig.cpp:297
-#, fuzzy, kde-format
-#| msgid "Plasmoids"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"
 msgstr "Plasmoids"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plasmoidexecutionconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "Plasmoid"
+#, kde-format
 msgctxt "@title:group"
 msgid "Plasmoid"
 msgstr "Plasmoid"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plasmoidexecutionconfig.ui:35
-#, fuzzy, kde-format
-#| msgid "Path or name:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Path or name:"
 msgstr "Διαδρομή ή όνομα:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plasmoidexecutionconfig.ui:67
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
 msgstr "Συμπεριφορά"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plasmoidexecutionconfig.ui:73
-#, fuzzy, kde-format
-#| msgid "Form factor:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Form factor:"
 msgstr "Συντελεστής μορφής:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plasmoidexecutionconfig.ui:107
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Theme:"
 msgstr "Θέμα:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plasmoidexecutionconfig.ui:123
-#, fuzzy, kde-format
-#| msgid "Dependencies"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "Εξαρτήσεις"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plasmoidexecutionconfig.ui:132
-#, fuzzy, kde-format
-#| msgid "&Targets:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Targets:"
 msgstr "&Προορισμοί:"

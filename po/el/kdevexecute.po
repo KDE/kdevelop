@@ -73,22 +73,19 @@ msgid "Ask If Running"
 msgstr ""
 
 #: nativeappconfig.cpp:105
-#, fuzzy, kde-format
-#| msgid "Kill All Instances"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "Τερματισμός όλων των εκτελέσεων"
 
 #: nativeappconfig.cpp:106
-#, fuzzy, kde-format
-#| msgid "Start Another"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "Εκκίνηση άλλης"
 
 #: nativeappconfig.cpp:156
-#, fuzzy, kde-format
-#| msgid "Configure Native Application"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Διαμόρφωση εγγενούς εφαρμογής"
@@ -109,32 +106,28 @@ msgid "Compiled Binary"
 msgstr "Μεταγλωττισμένο εκτελέσιμο"
 
 #: nativeappconfig.cpp:322
-#, fuzzy, kde-format
-#| msgid "Project Executables"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
 msgstr "Εκτελέσιμα έργου"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: nativeappconfig.ui:35
-#, fuzzy, kde-format
-#| msgid "Executable"
+#, kde-format
 msgctxt "@title:group"
 msgid "Executable"
 msgstr "Εκτελέσιμο"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: nativeappconfig.ui:41
-#, fuzzy, kde-format
-#| msgid "Project &target:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Project &target:"
 msgstr "Προορισμός έρ&γου:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: nativeappconfig.ui:81
-#, fuzzy, kde-format
-#| msgid "E&xecutable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "E&xecutable:"
 msgstr "Ε&κτελέσιμο:"
@@ -157,27 +150,21 @@ msgstr "Δώστε το εκτελέσιμο ή την απόλυτη διαδρ
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: nativeappconfig.ui:121
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
 msgstr "Συμπεριφορά"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: nativeappconfig.ui:127
-#, fuzzy, kde-format
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Ar&guments:"
 msgstr "Ο&ρίσματα:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: nativeappconfig.ui:137
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Enter arguments to give to the executable.<br/>You "
-#| "can pass arguments containing space characters by putting them in double-"
-#| "quotes.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
@@ -190,44 +177,35 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: nativeappconfig.ui:144
-#, fuzzy, kde-format
-#| msgid "Working &directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Working &directory:"
 msgstr "Κατάλογος εργα&σίας:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: nativeappconfig.ui:154
-#, fuzzy, kde-format
-#| msgid "Select a working directory for the executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
 msgstr "Επιλογή καταλόγου εργασίας για το εκτελέσιμο"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: nativeappconfig.ui:161
-#, fuzzy, kde-format
-#| msgid "E&nvironment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "E&nvironment:"
 msgstr "Περι&βάλλον:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: nativeappconfig.ui:179
-#, fuzzy, kde-format
-#| msgid "Select an environment to be used"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
 msgstr "Επιλογή περιβάλλοντος εργασίας"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:206
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>By default applications will be run in the background and only their "
-#| "output will be displayed in a tool view. This makes it impossible to "
-#| "interact with applications requiring user input from a terminal emulator. "
-#| "To run such applications, you should use an external terminal.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>By default applications will be run in the background and only their "
@@ -243,25 +221,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:209
-#, fuzzy, kde-format
-#| msgid "Use external terminal:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use external terminal:"
 msgstr "Χρήση εξωτερικού τερματικού:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
 #: nativeappconfig.ui:234
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "<p>Defines the command to execute the external terminal emulator. Use the "
-#| "following placeholders:</p>\n"
-#| "<dl>\n"
-#| "<dt><code>%exe</code></dt>\n"
-#| "<dd>The path to the executable selected above.</dd>\n"
-#| "<dt><code>%workdir</code></dt>\n"
-#| "<dd>The path to the working directory selected above.</dd>\n"
-#| "</dl>\n"
-#| "<p>The arguments defined above will get appended to this command.</p>"
+#, no-c-format, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines the command to execute the external terminal emulator. Use the "
@@ -293,26 +260,21 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: nativeappconfig.ui:272
-#, fuzzy, kde-format
-#| msgid "Dependencies"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "Εξαρτήσεις"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: nativeappconfig.ui:278
-#, fuzzy, kde-format
-#| msgid "Act&ion:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Act&ion:"
 msgstr "Ενέργε&ια:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:288
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specifies the action to take for the dependencies before starting the "
-#| "executable."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Specifies the action to take for the dependencies before starting the "
@@ -323,12 +285,7 @@ msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:291
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected action will be run before the executable is started.  This "
-#| "allows there to be parts of a project, upon which the executable does not "
-#| "directly depend, to be built and/or installed before running the "
-#| "application."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "The selected action will be run before the executable is started.  This "
@@ -342,34 +299,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:298
-#, fuzzy, kde-format
-#| msgid "Do Nothing"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Do Nothing"
 msgstr "Μην κάνετε τίποτα"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:303
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Build"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build"
 msgstr "Κατασκευή"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:308
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Build and Install"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build and Install"
 msgstr "Κατασκευή και εγκατάσταση"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: nativeappconfig.ui:316
-#, fuzzy, kde-format
-#| msgid "Targets:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Προορισμοί:"
@@ -385,8 +336,7 @@ msgstr ""
 "προκαθορισμένο προφίλ περιβάλλοντος."
 
 #: nativeappjob.cpp:142
-#, fuzzy, kde-format
-#| msgid "Job already running"
+#, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "Η εργασία εκτελείται ήδη"
@@ -397,15 +347,13 @@ msgid "'%1' is already being executed."
 msgstr "Η '%1' εκτελείται ήδη."
 
 #: nativeappjob.cpp:145
-#, fuzzy, kde-format
-#| msgid "Kill All Instances"
+#, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "Τερματισμός όλων των εκτελέσεων"
 
 #: nativeappjob.cpp:146
-#, fuzzy, kde-format
-#| msgid "Start Another"
+#, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "Εκκίνηση άλλης"

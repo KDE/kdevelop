@@ -1,68 +1,62 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# Stelios <sstavra@gmail.com>, 2019.
-# Petros Vidalis <pvidalis@gmail.com>, 2023.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-07-31 17:16+0300\n"
-"Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
-"Language-Team: Greek <kde-i18n-el@kde.org>\n"
-"Language: el\n"
+"PO-Revision-Date: 2024-09-15 21:07+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #: astyle_plugin.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Artistic Style</b> is a source code indenter, formatter, and "
-#| "beautifier for the C, C++, C# and Java programming languages.<br />Home "
-#| "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
-#| "sourceforge.net</a>"
+#, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
 "for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
 "white-space:pre'>Home Page: <a href=\"http://astyle.sourceforge.net/"
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
-"Το <b>Artistic Style</b> είναι ένα πρόγραμμα εσοχών, διαμόρφωσης και "
-"καλλωπισμού πηγαίου κώδικα για τις γλώσσες προγραμματισμού C, C++, C# και "
-"Java.<br />Αρχική σελίδα: <a href=\"http://astyle.sourceforge.net/\">http://"
-"astyle.sourceforge.net</a>"
+"Az <b>Artistic Style</b> egy forráskódbehúzó, -formázó és -szépítő a C, C++, "
+"C# és Java programozási nyelvekhez.<p style='margin-top:0;white-space:"
+"pre'>Honlap: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
+"sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
 #, kde-format
 msgctxt "@title:tab"
 msgid "Indentation"
-msgstr "Εσοχή"
+msgstr "Behúzás"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:48
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Tabs"
-msgstr "Καρτέλες"
+msgstr "Tabulátorok"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:53
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Force tabs"
-msgstr "Εξαναγμασμός καρτελών"
+msgstr "Kötelező tabulátorok"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:58
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Spaces"
-msgstr "Κενά"
+msgstr "Szóközök"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpNuberSpaces)
 #: astyle_preferences.ui:86
@@ -72,99 +66,99 @@ msgid ""
 "Number of spaces that will be converted to a tab.\n"
 "The number of spaces per tab is controlled by the editor."
 msgstr ""
-"Πλήθος κενών που θα μετατραπούν σε καρτέλες.\n"
-"Το πλήθος κενών ανά καρτέλα ελέγχεται από τον επεξεργαστή."
+"A tabulátorrá alakítandó szóközök száma.\n"
+"A tabulátoronkénti szóközök számát a szerkesztő határozza meg."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkConvertTabs)
 #: astyle_preferences.ui:104
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Convert tabs to spaces."
-msgstr "Μετατρέπει καρτέλες σε κενά."
+msgstr "Tabulátorok átalakítása szóközökké."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkConvertTabs)
 #: astyle_preferences.ui:107
 #, kde-format
 msgctxt "@option:check"
 msgid "Con&vert tabs into spaces"
-msgstr "Μετα&τρέπει καρτέλες σε κενά"
+msgstr "Tabulátorok átala&kítása szóközökké"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFillEmptyLines)
 #: astyle_preferences.ui:114
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fill empty lines with the white space of their previous lines."
-msgstr "Γέμισμα κενών γραμμών με το κενό των προηγούμενων."
+msgstr "Üres sorok kitöltése az előző sorok üres helyeivel."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFillEmptyLines)
 #: astyle_preferences.ui:117
 #, kde-format
 msgctxt "@option:check"
 msgid "Fill empt&y lines"
-msgstr "Γέμισμα κ&ενών γραμμών"
+msgstr "Ü&res sorok kitöltése"
 
 #. i18n: ectx: property (text), widget (QLabel, lblIndentObjects)
 #: astyle_preferences.ui:139
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Indent:"
-msgstr "Εσοχή:"
+msgstr "Behúzás:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:153
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Blocks"
-msgstr "Ενότητες"
+msgstr "Blokkok"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:158
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Brackets"
-msgstr "Αγκύλες"
+msgstr "Zárójelek"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:163
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Cases"
-msgstr "Περιπτώσεις"
+msgstr "Case-ek"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:168
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Class"
-msgstr "Κλάση"
+msgstr "Osztály"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:173
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Labels"
-msgstr "Ετικέτες"
+msgstr "Címkék"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:178
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Namespaces"
-msgstr "Χώροι ονομάτων"
+msgstr "Névterek"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:183
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preprocessor directives"
-msgstr "Κατευθύνσεις προεπεξεργαστή"
+msgstr "Előfeldolgozó direktívák"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:188
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Switches"
-msgstr "Διακόπτες"
+msgstr "Switchek"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpMaxStatement)
 #. i18n: ectx: property (toolTip), widget (QLabel, TextLabel2_2)
@@ -175,8 +169,8 @@ msgid ""
 "Indent a maximal # spaces in a continuous statement,\n"
 "relative to the previous line."
 msgstr ""
-"Δημιουργία εσοχής με μέγιστο # κενών σε μια συνεχή πρόταση,\n"
-"σχετική με την προηγούμενη γραμμή."
+"Legfeljebb # szóközzel behúzás egy folyamatos utasításban,\n"
+"az előző sorhoz képest."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, TextLabel3_2)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpMinConditional)
@@ -187,36 +181,36 @@ msgid ""
 "Indent a minimal # spaces in a continuous conditional\n"
 "belonging to a conditional header."
 msgstr ""
-"Δημιουργία εσοχής με ελάχιστο # κενών σε μια συνεχή υποθετική πρόταση\n"
-"που ανήκει σε μια κεφαλίδα υποθετικής πρότασης."
+"Legalább # szóközzel behúzás egy feltételes fejléchez\n"
+"tartozó folyamatos feltételben."
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
 #: astyle_preferences.ui:215
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum in conditional:"
-msgstr "Ελάχιστο σε υποθετική:"
+msgstr "Feltételben legalább:"
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, inpMinConditional)
 #: astyle_preferences.ui:229
 #, kde-format
 msgctxt "@item"
 msgid "Twice current"
-msgstr "Δύο φορές τρέχουσα"
+msgstr "Jelenlegi kétszerese"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2_2)
 #: astyle_preferences.ui:246
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum in statement:"
-msgstr "Μέγιστο στην πρόταση:"
+msgstr "Utasításban legfeljebb:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpContinuation)
 #: astyle_preferences.ui:256
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Number of indents"
-msgstr "Αριθμός εσοχών"
+msgstr "Behúzások száma"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAfterParens)
 #: astyle_preferences.ui:269
@@ -226,36 +220,36 @@ msgid ""
 "Indent, instead of align, continuation lines following lines that contain an "
 "opening paren '(' or an assignment '='."
 msgstr ""
-"Εσοχή αντί για στοίχιση, σε συνεχόμενες γραμμές που ακολουθούν γραμμές που "
-"περιέχουν άνοιγμα παρένθεσης '(' ή καταχώρηση '='."
+"A behúzás igazítás helyett folytatja a „(” nyitó zárójelt vagy a „=” "
+"hozzárendelést tartalmazó sorokat."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)
 #: astyle_preferences.ui:272
 #, kde-format
 msgctxt "@option:check"
 msgid "Continuation lines:"
-msgstr "Συνεχόμενες γραμμές:"
+msgstr "Folytatódó sorok:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabOther)
 #: astyle_preferences.ui:295
 #, kde-format
 msgctxt "@title:tab"
 msgid "Other"
-msgstr "Άλλο"
+msgstr "Egyéb"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBrackets)
 #: astyle_preferences.ui:301
 #, kde-format
 msgctxt "@title:group"
 msgid "Brackets"
-msgstr "Αγκύλες"
+msgstr "Zárójelek"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBrackets)
 #: astyle_preferences.ui:315
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Type:"
-msgstr "Τύπος:"
+msgstr "Típus:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBracketsCloseHeaders)
 #: astyle_preferences.ui:326
@@ -265,36 +259,36 @@ msgid ""
 "Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
 "from their immediately preceding closing brackets."
 msgstr ""
-"Αλλαγή αγκυλών πριν το κλείσιμο κεφαλίδων (π.χ. 'else', 'catch', ...)\n"
-"από το αμέσως προηγούμενο κλείσιμο αγκυλών."
+"Zárójelek törése a fejlécek (pl. „else”, „catch”, …) zárása előtt\n"
+"a közvetlenül megelőző záró zárójelekből."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
 #: astyle_preferences.ui:329
 #, kde-format
 msgctxt "@option:check"
 msgid "Brea&k closing headers"
-msgstr "Αλλαγή &κλεισίματος κεφαλίδων"
+msgstr "Záró fejlécek &törése"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:343
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "No change"
-msgstr "Χωρίς αλλαγή"
+msgstr "Nincs változtatás"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:348
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Attach"
-msgstr "Επισύναψη"
+msgstr "Csatolás"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:353
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Break"
-msgstr "Αλλαγή γραμμής"
+msgstr "Törés"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:358
@@ -308,7 +302,7 @@ msgstr "Linux"
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Run-In"
-msgstr "Χωρίς εσοχή"
+msgstr "Befutó"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:371
@@ -318,20 +312,22 @@ msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
 msgstr ""
+"Zárójelek hozzáadása a zárójel nélküli egysoros feltételes utasításokhoz "
+"(pl. „if”, „for”, „while”)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
 #, kde-format
 msgctxt "@option:check add braces to unbraced one-line conditional statements"
 msgid "Add b&races"
-msgstr ""
+msgstr "Zá&rójelek hozzáadása"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
 #: astyle_preferences.ui:386
 #, kde-format
 msgctxt "@title:group"
 msgid "Blocks"
-msgstr "Ενότητες"
+msgstr "Blokkok"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreak)
 #: astyle_preferences.ui:401
@@ -348,22 +344,23 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
-"Εισαγωγή κενών γραμμών γύρω από άσχετες ενότητες, ετικέτες, κλάσεις,...\n"
-"Γνωστά προβλήματα:\n"
+"Üres sorok beillesztése nem kapcsolódó blokkok, címkék, osztályok, stb. "
+"köré\n"
+"Ismert problémák:\n"
 "\n"
-"1. Αν μια πρόταση ΔΕΝ είναι τμήμα μιας ενότητας, \n"
-"οι ακόλουθες προτάσεις είναι όλες με διπλό κενό. \n"
-"Προτάσεις κλεισμένες σε μια ενότητα έχουν διαμορφωθεί \n"
-"σωστά.\n"
+"1. Ha egy utasítás NEM része egy blokknak, \n"
+"az egymást követő utasítások mindegyike dupla távolságra lesz egymástól. \n"
+"A blokkon belüli utasítások helyesen \n"
+"lesznek formázva. \n"
 "\n"
-"2. Τα σχόλια είναι εκτός ενότητας.\n"
+"2. A megjegyzések el vannak távolítva a blokkból.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreak)
 #: astyle_preferences.ui:404
 #, kde-format
 msgctxt "@option:check break unrelated blocks by a newline"
 msgid "&Break blocks"
-msgstr "&Αλλαγή γραμμής ενοτήτων"
+msgstr "&Blokkok törése"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreakAll)
 #: astyle_preferences.ui:422
@@ -382,80 +379,80 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
-"Όπως η --break-blocks, εκτός από εισαγωγή κενών γραμμών \n"
-"γύρω από κλείσιμο κεφαλίδων (π.χ. 'else', 'catch', ...).\n"
+"Mint a --break-blocks, kivéve, hogy üres sorokat szúr\n"
+"be a záró fejlécek köré is (pl. „else”, „catch”, …).\n"
 "\n"
-"Γνωστά προβλήματα:\n"
+"Ismert problémák:\n"
 "\n"
-"1. Αν μια πρόταση ΔΕΝ είναι τμήμα ενότητας, \n"
-"οι ακόλουθες προτάσεις είναι όλες με διπλό κενό. \n"
-"Προτάσεις κλεισμένες σε μια ενότητα έχουν διαμορφωθεί \n"
-"σωστά.\n"
+"1. Ha egy utasítás NEM része egy blokknak, \n"
+"az egymást követő utasítások mindegyike dupla távolságra lesz egymástól. \n"
+"A blokkon belüli utasítások helyesen \n"
+"lesznek formázva. \n"
 "\n"
-"2. Τα σχόλια είναι εκτός ενότητας.\n"
+"2. A megjegyzések el vannak távolítva a blokkból.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreakAll)
 #: astyle_preferences.ui:425
 #, kde-format
 msgctxt "@option:check break all blocks with a newline"
 msgid "Break all bl&ocks"
-msgstr "Αλλαγή γραμμής όλων των εν&οτήτων"
+msgstr "Minden blo&kk törése"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Break 'else if()' statements into two different lines."
-msgstr "Αλλαγή 'else if()' προτάσεων σε δύο διαφορετικές γραμμές."
+msgstr "Az „else if()” utasítások törése két különböző sorba."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:435
 #, kde-format
 msgctxt "@option:check break else if() into separate lines"
 msgid "Break i&f-else"
-msgstr "Αλλαγή γραμμής i&f-else"
+msgstr "I&f-else törése"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
 #: astyle_preferences.ui:445
 #, kde-format
 msgctxt "@title:group"
 msgid "Padding"
-msgstr "Απόσταση"
+msgstr "Kitöltés"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:460
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "No change"
-msgstr "Χωρίς αλλαγή"
+msgstr "Nincs változtatás"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:465
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Unpad"
-msgstr "Αναίρεση απόστασης"
+msgstr "Kitöltés megszüntetése"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:470
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Inside only"
-msgstr "Μέσα μόνο"
+msgstr "Csak belül"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:475
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Outside only"
-msgstr "Έξω μόνο"
+msgstr "Csak kívül"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:480
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Inside and outside"
-msgstr "Μέσα και έξω"
+msgstr "Belül és kívül"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:490
@@ -466,23 +463,23 @@ msgid ""
 "Once padded, operators stay padded.\n"
 "There is no unpad operator option."
 msgstr ""
-"Εισαγωγή απόστασης κενού γύρω από τελεστές.\n"
-"Όταν είναι σε απόσταση, οι τελεστές παραμένουν έτσι.\n"
-"Δεν υπάρχει επιλογή αναίρεσης της απόστασης."
+"Szóköz beszúrása az operátorok köré.\n"
+"Ha egyszer kitöltődött, az operátor kitöltött marad.\n"
+"Nincs beállítás operátor kitöltésének megszüntetésére."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:493
 #, kde-format
 msgctxt "@option:check"
 msgid "&Add spaces around operators"
-msgstr "&Προσθήκη κενών γύρω από τελεστές"
+msgstr "Szóközök hozzá&adása az operátorok köré"
 
 #. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
 #: astyle_preferences.ui:500
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pad parenthesis:"
-msgstr "Απόσταση σε παρένθεση:"
+msgstr "Zárójelek kitöltése:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:507
@@ -491,23 +488,21 @@ msgctxt "@info:tooltip"
 msgid ""
 "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
 "'while', ...)"
-msgstr ""
-"Εισαγωγή απόστασης κενών μετά από κεφαλίδες παρένθεσης (π.χ. 'if', 'for', "
-"'while', ...)"
+msgstr "Szóköz beszúrása a zárójel fejléce után (pl. „if”, „for”, „while”, …)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:510
 #, kde-format
 msgctxt "@option:check"
 msgid "Add spaces after parenthesis &headers"
-msgstr "Προσθήκη κενών μετά από κεφαλίδες παρένθεσ&ης"
+msgstr "Szóközök beszúrása a zárójelfejlécek után"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
 #: astyle_preferences.ui:522
 #, kde-format
 msgctxt "@title:group"
 msgid "One Liners"
-msgstr "Σε μία γραμμή"
+msgstr "Egysorosok"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:529
@@ -517,68 +512,68 @@ msgid ""
 "Do not break lines containing multiple statements into\n"
 "multiple single-statement lines."
 msgstr ""
-"Να μην αλλάζουν γραμμές που περιέχουν πολλές προτάσεις σε\n"
-"πολλές γραμμές μιας πρότασης."
+"Ne törje meg a több utasítást tartalmazó sorokat több\n"
+"egy utasítást tartalmazó sorba."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:532
 #, kde-format
 msgctxt "@option:check"
 msgid "&Keep one-line statements"
-msgstr "&Να διατηρηθούν οι προτάσεις μιας γραμμής"
+msgstr "Egysoros utasítások &megőrzése"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:539
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Do not break blocks residing completely on one line."
-msgstr "Να μην αλλάζει η γραμμή σε ενότητες μιας γραμμής."
+msgstr "Ne törje meg a blokkokat, amelyek teljesen egy sorban vannak."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:542
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep o&ne-line blocks"
-msgstr "Να διατηρηθούν οι ε&νότητες μιας γραμμής"
+msgstr "E&gysoros blokkok megőrzése"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOther)
 #: astyle_preferences.ui:552
 #, kde-format
 msgctxt "@title:group"
 msgid "Other"
-msgstr "Άλλο"
+msgstr "Egyéb"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPointerAlign)
 #: astyle_preferences.ui:558
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pointer Alignment:"
-msgstr "Στοίχιση δείκτη:"
+msgstr "Mutatóigazítás:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:566
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "No change"
-msgstr "Χωρίς αλλαγή"
+msgstr "Nincs változtatás"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:571
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Name"
-msgstr "Όνομα"
+msgstr "Név"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:576
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Middle"
-msgstr "Μεσαίο"
+msgstr "Középre"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:581
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Type"
-msgstr "Τύπος"
+msgstr "Típus"

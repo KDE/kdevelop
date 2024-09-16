@@ -19,29 +19,25 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: testview.cpp:57 testviewplugin.cpp:70
-#, fuzzy, kde-format
-#| msgid "Unit Tests"
+#, kde-format
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "Unit tests"
 
 #: testview.cpp:79
-#, fuzzy, kde-format
-#| msgid "Show Source"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "Εμφάνιση πηγής"
 
 #: testview.cpp:86
-#, fuzzy, kde-format
-#| msgid "Run Selected Tests"
+#, kde-format
 msgctxt "@action"
 msgid "Run Selected Tests"
 msgstr "Εκτέλεση επιλεγμένων δοκιμών"
 
 #: testview.cpp:91
-#, fuzzy, kde-format
-#| msgid "Filter..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Φίλτρο..."
@@ -54,8 +50,7 @@ msgstr[0] "Εκτέλεση 1 δοκιμής"
 msgstr[1] "Εκτέλεση %1 δοκιμών"
 
 #: testviewplugin.cpp:59
-#, fuzzy, kde-format
-#| msgid "Run All Tests"
+#, kde-format
 msgctxt "@action"
 msgid "Run All Tests"
 msgstr "Εκτέλεση όλων των δοκιμών"

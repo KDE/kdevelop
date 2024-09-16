@@ -25,45 +25,33 @@ msgid "GDB"
 msgstr "GDB"
 
 #: debuggerplugin.cpp:113
-#, fuzzy, kde-format
-#| msgid "Disassemble/Registers"
+#, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers"
 msgstr "Τελεστές/Καταχωρητές"
 
 #: debuggerplugin.cpp:117
-#, fuzzy, kde-format
-#| msgid "GDB"
+#, kde-format
 msgctxt "@title:window"
 msgid "GDB"
 msgstr "GDB"
 
 #: debuggerplugin.cpp:126
-#, fuzzy, kde-format
-#| msgid "Memory"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory"
 msgstr "Μνήμη"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Tracing Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Tracing Configuration"
 msgstr "Διαμόρφωση ανίχνευσης"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
 #: debuggertracingdialog.ui:26
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "<b>Custom format string</b>\n"
-#| "<p>Specify a C-style format string that will be used when printing the "
-#| "chosen expression. For example:\n"
-#| "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
-#| "If custom format string is not enabled, names and values of all "
-#| "expressions will be printed, using \"%d\" as format specifier for all "
-#| "expressions."
+#, no-c-format, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Custom format string</b>\n"
@@ -82,20 +70,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
-#, fuzzy, kde-format
-#| msgid "Expressions to print:"
+#, kde-format
 msgctxt "@label"
 msgid "Expressions to print:"
 msgstr "Εκφράσεις για εμφάνιση:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:47
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Enable tracing</b>\n"
-#| "<p>Tracing is a mechanism to automatically print values of the chosen "
-#| "expressions and continue execution when breakpoint is hit. You can think "
-#| "of it as printf debugging that does not require modifying the source.</p>"
+#, kde-format
 msgctxt "@info:whatthis"
 msgid ""
 "<b>Enable tracing</b>\n"
@@ -111,16 +93,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:50
-#, fuzzy, kde-format
-#| msgid "Enable tracing"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable tracing"
 msgstr "Ενεργοποίηση ανίχνευσης"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
 #: debuggertracingdialog.ui:60
-#, fuzzy, kde-format
-#| msgid "Custom format string"
+#, kde-format
 msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Συμβολοσειρά προσαρμοσμένης μορφής"
@@ -165,8 +145,7 @@ msgid "Could not locate the debugging shell '%1'."
 msgstr "Αδυναμία εντοπισμού του φλοιού διόρθωσης '%1'."
 
 #: gdbconfigpage.cpp:93
-#, fuzzy, kde-format
-#| msgid "GDB Configuration"
+#, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Διαμόρφωση GDB"
@@ -193,37 +172,28 @@ msgstr "Εκτελεί μια εγγενή εφαρμογή στο GDB"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: gdbconfigpage.ui:29
-#, fuzzy, kde-format
-#| msgid "Debugger"
+#, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
 msgstr "Debugger"
 
 #. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
 #: gdbconfigpage.ui:35
-#, fuzzy, kde-format
-#| msgid "Debugger e&xecutable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger e&xecutable:"
 msgstr "Ε&κτελέσιμο debugger:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:48
-#, fuzzy, kde-format
-#| msgid "Gdb executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Gdb executable"
 msgstr "Εκτελέσιμο gdb"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:51
-#, fuzzy, kde-format
-#| msgid ""
-#| "To run \"gdb\" executable from $PATH, leave this field empty. To run "
-#| "custom gdb, for example, for a different architecture, enter the "
-#| "executable name here. You can either run gdb from $PATH, but with a "
-#| "different name (say, \"arm-gdb\"), by typing the name here, or specify "
-#| "full path to the gdb executable."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "To run \"gdb\" executable from $PATH, leave this field empty. To run custom "
@@ -240,11 +210,10 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Override path to gdb executable"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to gdb executable..."
-msgstr "Αντικατάσταση διαδρομής για το εκτελέσιμο gdb"
+msgstr "Αντικατάσταση διαδρομής για το εκτελέσιμο gdb..."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
@@ -276,24 +245,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
 #: gdbconfigpage.ui:64
-#, fuzzy, kde-format
-#| msgid "She&ll script:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "She&ll script:"
 msgstr "Σενάριο κε&λύφους:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: gdbconfigpage.ui:87
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title:group"
 msgid "Options"
 msgstr "Επιλογές"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: gdbconfigpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Display static &members:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Display static &members:"
 msgstr "Εμφάνιση στατικών &μελών:"
@@ -326,19 +292,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gdbconfigpage.ui:121
-#, fuzzy, kde-format
-#| msgid "Display &demangled names:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Display &demangled names:"
 msgstr "Εμφάνιση &αποκωδικοποιημένων ονομάτων:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
 #: gdbconfigpage.ui:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "When displaying the disassembled code you\n"
-#| "can select to see the methods' mangled names.\n"
-#| "However, non-mangled names are easier to read."
+#, kde-format
 msgctxt "@info:whatthis"
 msgid ""
 "When displaying the disassembled code you\n"
@@ -351,45 +312,35 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gdbconfigpage.ui:143
-#, fuzzy, kde-format
-#| msgid "S&tart debugger with:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "S&tart debugger with:"
 msgstr "Ε&κκίνηση του αποσφαλματωτή με:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:154
-#, fuzzy, kde-format
-#| msgid "Application Output"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
 msgstr "Έξοδος εφαρμογής"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:159
-#, fuzzy, kde-format
-#| msgid "GDB Console"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "GDB Console"
 msgstr "GDB τερματικό"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:164
-#, fuzzy, kde-format
-#| msgid "Frame Stack"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
 msgstr "Πλαίσιο στοίβας"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:178
-#, fuzzy, kde-format
-#| msgid ""
-#| "This script is intended for the actual commands needed to connect to a "
-#| "remotely running executable.\n"
-#| "\tshell sleep 5\twait for remote program to start\n"
-#| "\ttarget remote ...\tconnect to the remote debugger\n"
-#| "\tcontinue\t[optional] run debugging to the first breakpoint"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This script is intended for the actual commands needed to connect to a "
@@ -407,8 +358,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:181
-#, fuzzy, kde-format
-#| msgid "Remote Debugging"
+#, kde-format
 msgctxt "@title:group"
 msgid "Remote Debugging"
 msgstr "Απομακρυσμένη αποσφαλμάτωση"
@@ -445,12 +395,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
 #: gdbconfigpage.ui:190
-#, fuzzy, kde-format
-#| msgctxt "Shell script to be executed at run time"
-#| msgid "R&un shell script:"
+#, kde-format
 msgctxt "@label:chooser Shell script to be executed at run time"
 msgid "R&un shell script:"
-msgstr "&Εκτέλεση σεναρίου κελύφους:"
+msgstr "&εκτέλεση σεναρίου κελύφους:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
@@ -467,8 +415,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
 #: gdbconfigpage.ui:213
-#, fuzzy, kde-format
-#| msgid "Gdb &config script:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Gdb &config script:"
 msgstr "Σενάριο διαμόρφωσης gdb:"
@@ -476,12 +423,7 @@ msgstr "Σενάριο διαμόρφωσης gdb:"
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
 #. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:226 gdbconfigpage.ui:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Script to connect with remote application</p><p>For "
-#| "example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
-#| "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
-#| "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>Script to connect with remote application</p><p>For "
@@ -497,16 +439,13 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:236
-#, fuzzy, kde-format
-#| msgctxt "Gdb script to be executed at run time."
-#| msgid "Run &gdb script:"
+#, kde-format
 msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Εκτέλεση σε&ναρίου gdb:"
 
 #: gdboutputwidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "GDB Output"
+#, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "Έξοδος GDB"
@@ -532,25 +471,19 @@ msgid "&GDB command:"
 msgstr "ε&ντολή GDB:"
 
 #: gdboutputwidget.cpp:63
-#, fuzzy, kde-format
-#| msgid "Pause execution of the app to enter gdb commands"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Παύση εκτέλεσης της εφαρμογής για εισαγωγή gdb εντολών"
 
 #: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
-#, fuzzy, kde-format
-#| msgid "Show Internal Commands"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Εμφάνιση εσωτερικών εντολών"
 
 #: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
-#, fuzzy, kde-format
-#| msgid ""
-#| "Controls if commands issued internally by KDevelop will be shown or not."
-#| "<br>This option will affect only future commands, it will not add or "
-#| "remove already issued commands from the view."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Controls if commands issued internally by KDevelop will be shown or not."
@@ -562,8 +495,7 @@ msgstr ""
 "εντολές, δε θα προσθέσει ή αφαιρέσει εκτελεσμένες εντολές από την προβολή."
 
 #: gdboutputwidget.cpp:381
-#, fuzzy, kde-format
-#| msgid "Copy All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
 msgstr "Αντιγραφή όλων"
@@ -575,22 +507,19 @@ msgid "Debugger Toolbar"
 msgstr "Γραμμή εργαλείων debugger"
 
 #: memviewdlg.cpp:66
-#, fuzzy, kde-format
-#| msgid "Start:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "Αρχή:"
 
 #: memviewdlg.cpp:69
-#, fuzzy, kde-format
-#| msgid "Amount:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "Ποσότητα:"
 
 #: memviewdlg.cpp:96
-#, fuzzy, kde-format
-#| msgid "Memory view"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Προβολή μνήμης"
@@ -603,106 +532,91 @@ msgstr[0] "%2 (1 byte)"
 msgstr[1] "%2 (%1 bytes)"
 
 #: memviewdlg.cpp:262
-#, fuzzy, kde-format
-#| msgid "&Reload"
+#, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "Επαναφό&ρτωση"
 
 #: memviewdlg.cpp:271
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "Μορ&φή"
 
 #: memviewdlg.cpp:274
-#, fuzzy, kde-format
-#| msgid "&Binary"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "&Δυαδικό"
 
 #: memviewdlg.cpp:279
-#, fuzzy, kde-format
-#| msgid "&Octal"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "&Οκταδικό"
 
 #: memviewdlg.cpp:284
-#, fuzzy, kde-format
-#| msgid "&Decimal"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "Δε&καδικό"
 
 #: memviewdlg.cpp:289
-#, fuzzy, kde-format
-#| msgid "&Hexadecimal"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "Δεκαε&ξαδικό"
 
 #: memviewdlg.cpp:303
-#, fuzzy, kde-format
-#| msgid "&Grouping"
+#, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr "Ο&μαδοποίηση"
 
 #: memviewdlg.cpp:306
-#, fuzzy, kde-format
-#| msgid "&0"
+#, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
 #: memviewdlg.cpp:311
-#, fuzzy, kde-format
-#| msgid "&1"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
 #: memviewdlg.cpp:316
-#, fuzzy, kde-format
-#| msgid "&2"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
 #: memviewdlg.cpp:321
-#, fuzzy, kde-format
-#| msgid "&4"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
 #: memviewdlg.cpp:326
-#, fuzzy, kde-format
-#| msgid "&8"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
 #: memviewdlg.cpp:331
-#, fuzzy, kde-format
-#| msgid "1&6"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "1&6"
 
 #: memviewdlg.cpp:344
-#, fuzzy, kde-format
-#| msgid "Write changes"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr "Εγγραφή αλλαγών"
 
 #: memviewdlg.cpp:348
-#, fuzzy, kde-format
-#| msgid "Change memory range"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "Τροποποίηση εύρους μνήμης"
@@ -715,26 +629,22 @@ msgid "Close View"
 msgstr "Κλείσιμο αυτής της προβολής"
 
 #: memviewdlg.cpp:419
-#, fuzzy, kde-format
-#| msgid "Memory viewer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "Προβολέας μνήμης"
 
 #: memviewdlg.cpp:423
-#, fuzzy, kde-format
-#| msgid "New memory viewer"
+#, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "Νέος προβολέας μνήμης"
 
 #: memviewdlg.cpp:424
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Open a new memory viewer."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
-msgstr "Άνοιγμα νέου προβολέα μνήμης."
+msgstr "Άνοιγμα νέου προβολέα μνήμης"
 
 #~ msgid "<html><head/><body><p><br/></p></body></html>"
 #~ msgstr "<html><head/><body><p><br/></p></body></html>"

@@ -20,54 +20,45 @@ msgstr ""
 "X-Generator: Lokalize 18.12.3\n"
 
 #: configwidget.cpp:25
-#, fuzzy, kde-format
-#| msgid "Build"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Build"
 msgstr "Κατασκευή"
 
 #: configwidget.cpp:26
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Configure"
 msgstr "Διαμόρφωση"
 
 #: configwidget.cpp:27
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Install"
 msgstr "Εγκατάσταση"
 
 #: configwidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Clean"
 msgstr "Καθαρισμός"
 
 #: configwidget.cpp:29
-#, fuzzy, kde-format
-#| msgid "Prune"
+#, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Prune"
 msgstr "Κλάδεμα"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: configwidget.ui:19
-#, fuzzy, kde-format
-#| msgid "Build Directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Build directory:"
 msgstr "Δημιουργία καταλόγου:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
 #: configwidget.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the directory where the tools are being executed in.\n"
-#| "If this is the same as the source directory you can leave it empty."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Select the directory where the tools are being executed in.\n"
@@ -86,42 +77,35 @@ msgstr "Ο κατάλογος από όπου εκτελούνται τα εργ
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: configwidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Build Tools"
+#, kde-format
 msgctxt "@title:group"
 msgid "Build Tools"
 msgstr "Κατασκευή εργαλείων"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: configwidget.ui:48
-#, fuzzy, kde-format
-#| msgid "Action:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Action:"
 msgstr "Ενέργεια:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: configwidget.ui:58
-#, fuzzy, kde-format
-#| msgid "Enable:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable:"
 msgstr "Ενεργοποίηση:"
 
 #. i18n: ectx: property (text), widget (QLabel, execLabel)
 #: configwidget.ui:75
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Executable:"
 msgstr "Εκτελέσιμο:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
 #: configwidget.ui:85
-#, fuzzy, kde-format
-#| msgid ""
-#| "This is the executable that should be executed when selecting the action "
-#| "from the Project menu"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "This is the executable that should be executed when selecting the action "
@@ -132,32 +116,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, argLabel)
 #: configwidget.ui:95
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
 msgstr "Ορίσματα:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
 #: configwidget.ui:105
-#, fuzzy, kde-format
-#| msgid "The arguments that the tool needs to execute properly."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "The arguments that the tool needs to execute properly."
 msgstr "Τα ορίσματα που απαιτούν τα εργαλεία για να εκτελεστούν σωστά."
 
 #. i18n: ectx: property (text), widget (QLabel, envLabel)
 #: configwidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
 msgstr "Περιβάλλον:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
 #: configwidget.ui:125
-#, fuzzy, kde-format
-#| msgid "Choose a pre-configured environment for your tool"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a pre-configured environment for your tool"
 msgstr "Επιλέξτε ένα προδιαμορφωμένο περιβάλλον για τα εργαλεία"
@@ -247,79 +227,64 @@ msgid "*** Finished ***"
 msgstr "*** Τερματισμός ***"
 
 #: custombuildsystemconfig.cpp:14
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "build"
+#, kde-format
 msgctxt "@item:intext custom 'build' tool"
 msgid "build"
 msgstr "κατασκευή"
 
 #: custombuildsystemconfig.cpp:15
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "configure"
+#, kde-format
 msgctxt "@item:intext custom 'configure' tool"
 msgid "configure"
 msgstr "διαμόρφωση"
 
 #: custombuildsystemconfig.cpp:16
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "install"
+#, kde-format
 msgctxt "@item:intext custom 'install' tool"
 msgid "install"
 msgstr "εγκατάσταση"
 
 #: custombuildsystemconfig.cpp:17
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "clean"
+#, kde-format
 msgctxt "@item:intext custom 'clean' tool"
 msgid "clean"
 msgstr "καθαρισμός"
 
 #: custombuildsystemconfig.cpp:18
-#, fuzzy, kde-format
-#| msgctxt "Custom build tool"
-#| msgid "prune"
+#, kde-format
 msgctxt "@item:intext custom 'prune' tool"
 msgid "prune"
 msgstr "κλάδεμα"
 
 #: custombuildsystemconfig.cpp:19
-#, fuzzy, kde-format
-#| msgid "unknown"
+#, kde-format
 msgctxt "@item:intext custom 'unknown' tool"
 msgid "unknown"
 msgstr "άγνωστο"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: custombuildsystemconfigwidget.ui:31
-#, fuzzy, kde-format
-#| msgid "Build configuration:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build configuration:"
 msgstr "Διαδικασία διαμόρφωσης:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: custombuildsystemconfigwidget.ui:54
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "Προσθήκη"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeConfig)
 #: custombuildsystemconfigwidget.ui:64
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Αφαίρεση"
 
 #: kcm_custombuildsystem.cpp:53
-#, fuzzy, kde-format
-#| msgid "Custom Build System"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Custom Build System"
 msgstr "Προσαρμοσμένο σύστημα κατασκευής"

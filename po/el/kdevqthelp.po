@@ -27,15 +27,13 @@ msgid "Qt Compressed Help Files"
 msgstr "Το συμπιεσμένο αρχείο βοήθειας για την Qt δεν είναι έγκυρο."
 
 #: qthelpconfig.cpp:50
-#, fuzzy, kde-format
-#| msgid "Modify Entry"
+#, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "Τροποποίηση καταχώρησης"
 
 #: qthelpconfig.cpp:52
-#, fuzzy, kde-format
-#| msgid "Add New Entry"
+#, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "Προσθήκη νέας καταχώρησης"
@@ -46,9 +44,7 @@ msgid "Name cannot be empty."
 msgstr "Το όνομα δεν μπορεί να είναι κενό"
 
 #: qthelpconfig.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "Allow user to get some API documentation with GHNS"
-#| msgid "Get New Documentation"
+#, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Λήψη νέας τεκμηρίωσης"
@@ -89,8 +85,7 @@ msgid "Configure Qt Help Settings"
 msgstr "Εξετάστε την τεκμηρίωση βοήθειας για Qt"
 
 #: qthelpconfig.cpp:326
-#, fuzzy, kde-format
-#| msgid "Modify"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Τροποποίηση"
@@ -139,48 +134,42 @@ msgstr "Διαχείριση τεκμηρίωσης QtHelp"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:104
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Όνομα"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:109
-#, fuzzy, kde-format
-#| msgid "Path"
+#, kde-format
 msgctxt "@title:column"
 msgid "Path"
 msgstr "Διαδρομή"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: qthelpconfig.ui:134
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "Προσθήκη"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qthelpconfigeditdialog.ui:17
-#, fuzzy, kde-format
-#| msgid "Icon:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Icon:"
 msgstr "Εικονίδιο:"
 
 #. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
 #: qthelpconfigeditdialog.ui:24
-#, fuzzy, kde-format
-#| msgid "Select an icon"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an icon"
 msgstr "Επιλογή εικονιδίου"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qthelpconfigeditdialog.ui:34
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Όνομα:"
@@ -195,16 +184,14 @@ msgstr "Επιλογή ονόματος"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:44
-#, fuzzy, kde-format
-#| msgid "Select a name"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
-msgstr "Επιλογή ονόματος"
+msgstr "Επιλογή ονόματος..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qthelpconfigeditdialog.ui:51
-#, fuzzy, kde-format
-#| msgid "Path:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Path:"
 msgstr "Διαδρομή:"

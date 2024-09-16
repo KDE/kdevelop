@@ -65,16 +65,14 @@ msgstr "Ενεργοποίηση προληπτικής συμπλήρωσης �
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: clangsettings/sessionsettings/sessionsettings.ui:64
-#, fuzzy, kde-format
-#| msgid "Assistants"
+#, kde-format
 msgctxt "@title:group"
 msgid "Assistants"
 msgstr "Βοηθοί"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forwardDeclare)
 #: clangsettings/sessionsettings/sessionsettings.ui:70
-#, fuzzy, kde-format
-#| msgid "Forward declare assistant"
+#, kde-format
 msgctxt "@option:check"
 msgid "Forward declare assistant"
 msgstr "Βοηθός forward declare"

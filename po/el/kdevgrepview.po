@@ -21,22 +21,19 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: grepdialog.cpp:54
-#, fuzzy, kde-format
-#| msgid "All Open Files"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "Όλα τα ανοικτά αρχεία"
 
 #: grepdialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "All Open Projects"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Όλα τα ανοικτά έργα"
 
 #: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
-#, fuzzy, kde-format
-#| msgid "Find/Replace in Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Αναζήτηση/Αντικατάσταση σε αρχεία"
@@ -48,9 +45,7 @@ msgid "Search..."
 msgstr "Αναζήτηση..."
 
 #: grepdialog.cpp:335
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select directory to search in"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Επιλέξτε κατάλογο για αναζήτηση."
@@ -63,15 +58,13 @@ msgstr[0] "%2, και %1 ππαραπάνω αντικείμενο"
 msgstr[1] "%2, και %1 παραπάνω αντικείμενα"
 
 #: grepdialog.cpp:624
-#, fuzzy, kde-format
-#| msgid "Search \"%1\" in %2"
+#, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "Αναζήτηση «%1» στο %2"
 
 #: grepdialog.cpp:629
-#, fuzzy, kde-format
-#| msgid "Search \"%1\" in %2 (at time %3)"
+#, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Αναζήτηση «%1» στο %2 (σε χρόνο %3)"
@@ -174,50 +167,43 @@ msgid "Find/Replace Output View"
 msgstr "Εύρεση/Αντικατάσταση προβολής εξόδου"
 
 #: grepoutputview.cpp:75
-#, fuzzy, kde-format
-#| msgid "&Previous Item"
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
 msgstr "&Προηγούμενο αντικείμενο"
 
 #: grepoutputview.cpp:76
-#, fuzzy, kde-format
-#| msgid "&Next Item"
+#, kde-format
 msgctxt "@action"
 msgid "&Next Item"
 msgstr "Επόμε&νο αντικείμενο"
 
 #: grepoutputview.cpp:81
-#, fuzzy, kde-format
-#| msgid "C&ollapse All"
+#, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
 msgstr "Σ&υρρίκνωση όλων"
 
 #: grepoutputview.cpp:83
-#, fuzzy, kde-format
-#| msgid "&Expand All"
+#, kde-format
 msgctxt "@action"
 msgid "&Expand All"
 msgstr "&Ανάπτυξη όλων"
 
 #: grepoutputview.cpp:87
-#, fuzzy, kde-format
-#| msgid "New &Search"
+#, kde-format
 msgctxt "@action"
 msgid "New &Search"
 msgstr "Νέα ανα&ζήτηση"
 
 #: grepoutputview.cpp:88
-#, fuzzy, kde-format
-#| msgid "Refresh"
+#, kde-format
 msgctxt "@action"
 msgid "Refresh"
 msgstr "Ανανέωση"
 
 #: grepoutputview.cpp:90
-#, fuzzy, kde-format
-#| msgid "Clear Search History"
+#, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "Καθαρισμός ιστορικού αναζητήσεων"
@@ -228,61 +214,53 @@ msgid "Do you want to replace with an empty string?"
 msgstr "Θέλετε να αντικαταστήσετε με κενή συμβολοσειρά;"
 
 #: grepoutputview.cpp:326
-#, fuzzy, kde-format
-#| msgid "Start replacement"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr "Έναρξη αντικατάστασης"
 
 #: grepoutputview.cpp:327
-#, fuzzy, kde-format
-#| msgid "&Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "Replace"
-msgstr "Α&ντικατάσταση"
+msgstr "Αντικατάσταση"
 
 #. i18n: ectx: property (text), widget (QLabel, replacementLabel)
 #: grepoutputview.ui:41
-#, fuzzy, kde-format
-#| msgid "Replacement &text:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Replacement &text:"
 msgstr "Κείμενο αν&τικατάστασης:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
 #: grepoutputview.ui:57
-#, fuzzy, kde-format
-#| msgid "Enter the replacement pattern."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement pattern"
-msgstr "Εισαγωγή σχήματος αντικατάστασης."
+msgstr "Εισαγωγή σχήματος αντικατάστασης"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
 #: grepoutputview.ui:76
-#, fuzzy, kde-format
-#| msgid "Apply replacement on selected items."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply replacement on selected items"
-msgstr "Εφαρμογή αντικατάστασης σε επιλεγμένα αντικείμενα."
+msgstr "Εφαρμογή αντικατάστασης σε επιλεγμένα αντικείμενα"
 
 #. i18n: ectx: property (text), widget (QPushButton, applyButton)
 #: grepoutputview.ui:79
-#, fuzzy, kde-format
-#| msgid "&Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Replace"
 msgstr "Α&ντικατάσταση"
 
 #: grepviewplugin.cpp:79
-#, fuzzy, kde-format
-#| msgid "Find/Replace in Fi&les..."
+#, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Αναζήτηση/Αντικατάσταση σε &αρχεία..."
 
 #: grepviewplugin.cpp:82
-#, fuzzy, kde-format
-#| msgid "Search for expressions over several files"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
 msgstr "Αναζήτηση εκφράσεων σε πολλαπλά αρχεία"
@@ -308,15 +286,13 @@ msgstr ""
 "αντικατάσταση."
 
 #: grepviewplugin.cpp:132 grepviewplugin.cpp:155
-#, fuzzy, kde-format
-#| msgid "Find/Replace in This Folder..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Εύρεση/αντικατάσταση σε αυτόν το φάκελο..."
 
 #: grepviewplugin.cpp:143
-#, fuzzy, kde-format
-#| msgid "&Find/Replace in Files..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."
 msgstr "&Αναζήτηση/Αντικατάσταση σε αρχεία..."
@@ -331,93 +307,7 @@ msgstr "Εισαγωγή κανονικής έκφρασης για αναζήτ
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
 #: grepwidget.ui:59
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the regular "
-#| "expression you want to search for here.</p>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">If you do not check "
-#| "\"Regular Expression\" below, this is considered a raw string. That "
-#| "means, all meta characters are escaped.</p>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Possible meta "
-#| "characters are:</p>\n"
-#| "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
-#| "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
-#| "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-#| "indent:0px;\"><span style=\" font-weight:600;\">.</span> - Matches any "
-#| "character</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">^</span> - Matches the beginning of a line</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">$</span> - Matches the end of a line</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">\\b</span> - Matches a word boundary</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">\\s</span> - Matches any whitespace character</li></ul>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">The following "
-#| "repetition operators exist:</p>\n"
-#| "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
-#| "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
-#| "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-#| "indent:0px;\"><span style=\" font-weight:600;\">?</span> - The preceding "
-#| "item is matched at most once</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">*</span> - The preceding item is matched zero or more "
-#| "times</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">+</span> - The preceding item is matched one or more times</"
-#| "li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
-#| "\">n</span><span style=\" font-weight:600;\">}</span> - The preceding "
-#| "item is matched exactly <span style=\" font-style:italic;\">n</span> "
-#| "times</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
-#| "\">n</span><span style=\" font-weight:600;\">,}</span> - The preceding "
-#| "item is matched <span style=\" font-style:italic;\">n</span> or more "
-#| "times</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
-#| "\">n</span><span style=\" font-weight:600;\">}</span> - The preceding "
-#| "item is matched at most <span style=\" font-style:italic;\">n</span> "
-#| "times</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
-#| "\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
-#| "weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;"
-#| "\">}</span> - The preceding item is matched at least <span style=\" font-"
-#| "style:italic;\">n</span>, but at most <span style=\" font-style:italic;"
-#| "\">m</span> times.</li></ul>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Furthermore, "
-#| "backreferences to bracketed subexpressions are available via the notation "
-#| "\\<span style=\" font-style:italic;\">n</span>.</p>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">For further reference, "
-#| "look at <a href=\"https://www.pcre.org/\"><span style=\" text-decoration: "
-#| "underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" "
-#| "font-style:italic;\">man pcresyntax.</span></p></body></html>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -591,54 +481,46 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: grepwidget.ui:69
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Template:"
 msgstr "Πρότυπο:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, templateEdit)
 #: grepwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "This is the regular expression template."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the regular expression template."
 msgstr "Αυτό είναι το πρότυπο κανονικής έκφρασης."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
 #: grepwidget.ui:85
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "This is the regular expression template. <i>%s</i> will be replaced by "
-#| "the pattern, while <i>%%</i> will be replaced by <i>%</i>."
+#, no-c-format, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This is the regular expression template. <i>%s</i> will be replaced by the "
 "pattern, while <i>%%</i> will be replaced by <i>%</i>."
 msgstr ""
-"Αυτό είναι το πρότυπο κανονικής έκφρασης. Το <i>%s</i> θα αντικατασταθεί με "
+"Αυτό είναι το πρότυπο κανονικής έκφρασης. το <i>%s</i> θα αντικατασταθεί με "
 "το πρότυπο, ενώ το <i>%%</i> θα αντικατασταθεί με το <i>%</i>."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
 #: grepwidget.ui:92
-#, fuzzy, kde-format
-#| msgid "Quickly select location from a set of directories"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Quickly select location from a set of directories"
 msgstr "Γρήγορη επιλογή τοποθεσίας από ένα σύνολο καταλόγων"
 
 #. i18n: ectx: property (text), widget (QPushButton, syncButton)
 #: grepwidget.ui:95
-#, fuzzy, kde-format
-#| msgid "Quick Select"
+#, kde-format
 msgctxt "@action:button"
 msgid "Quick Select"
 msgstr "Γρήγορη επιλογή"
 
 #. i18n: ectx: property (text), widget (QLabel, depthLabel)
 #: grepwidget.ui:102
-#, fuzzy, kde-format
-#| msgid "Depth:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Depth:"
 msgstr "Βάθος:"
@@ -661,66 +543,56 @@ msgstr ""
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:121
-#, fuzzy, kde-format
-#| msgid "Full"
+#, kde-format
 msgctxt "@item full recursion"
 msgid "Full"
 msgstr "Πλήρης"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: grepwidget.ui:134
-#, fuzzy, kde-format
-#| msgid "Pattern:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Pattern:"
 msgstr "Σχήμα:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: grepwidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Files:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
 msgstr "Αρχεία:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: grepwidget.ui:160
-#, fuzzy, kde-format
-#| msgid "Case sensitive:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Case sensitive:"
 msgstr "Διάκριση πεζών/κεφαλαίων:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
 #: grepwidget.ui:179
-#, fuzzy, kde-format
-#| msgid "Case-sensitive searching."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Case-sensitive searching."
 msgstr "Αναζήτηση με διάκριση πεζών/κεφαλαίων."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: grepwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "Location(s):"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
-msgstr "Θέση(Θέσεις):"
+msgstr "Θέση(θέσεις):"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
 #: grepwidget.ui:205
-#, fuzzy, kde-format
-#| msgid "Files filter."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Files filter"
-msgstr "Φίλτρο αρχείων."
+msgstr "Φίλτρο αρχείων"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
 #: grepwidget.ui:208
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enter the file name pattern of the files to search here. You may give "
-#| "several patterns separated by commas or spaces."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the file name pattern of the files to search here. You may give "
@@ -731,28 +603,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: grepwidget.ui:221
-#, fuzzy, kde-format
-#| msgid "Exclude:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
 msgstr "Εξαίρεση:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:234
-#, fuzzy, kde-format
-#| msgid "Files pattern to exclude"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
 msgstr "Σχήμα σύγκρισης αρχείων που αποκλείονται"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:237
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enter the file name pattern of the files to exclude from the search here. "
-#| "You may give several patterns separated by commas or spaces.<p>Every "
-#| "pattern is internally surrounded by asterisks, so that each pattern can "
-#| "match parts of the file paths.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the file name pattern of the files to exclude from the search here. "
@@ -767,50 +632,42 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: grepwidget.ui:317
-#, fuzzy, kde-format
-#| msgid "Regular expression:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Regular expression:"
 msgstr "Κανονική έκφραση:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
 #: grepwidget.ui:330
-#, fuzzy, kde-format
-#| msgid "Enable or disable regular expression."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
-msgstr "(Απ)ενεργοποίηση κανονικής έκφρασης."
+msgstr "(απ)ενεργοποίηση κανονικής έκφρασης."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
 #: grepwidget.ui:343
-#, fuzzy, kde-format
-#| msgid "Limit to project files:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
 msgstr "Περιορισμός στα αρχεία έργου:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
 #: grepwidget.ui:372
-#, fuzzy, kde-format
-#| msgid "Enter the replacement template."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
-msgstr "Δώστε το πρότυπο αντικατάστασης."
+msgstr "Δώστε το πρότυπο αντικατάστασης"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: grepwidget.ui:379
-#, fuzzy, kde-format
-#| msgid "Replacement template:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Replacement template:"
 msgstr "Πρότυπο αντικατάστασης:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
 #: grepwidget.ui:392
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the location where you want to search. It can be a directory, a "
-#| "file, or a semicolon separated (without spaces) list of directories/files."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Select the location where you want to search. It can be a directory, a file, "
@@ -822,11 +679,10 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: grepwidget.ui:417
-#, fuzzy, kde-format
-#| msgid "Select a directory to search in."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"
-msgstr "Επιλέξτε κατάλογο για αναζήτηση μέσα σε αυτόν."
+msgstr "Επιλέξτε κατάλογο για αναζήτηση μέσα σε αυτόν"
 
 #~ msgid "Find-Replace In Files"
 #~ msgstr "Αναζήτηση-Αντικατάσταση σε αρχεία"

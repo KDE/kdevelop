@@ -21,8 +21,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: makebuilderpreferences.cpp:70
-#, fuzzy, kde-format
-#| msgid "Make"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Make"
 msgstr "Make"
@@ -35,72 +34,63 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: makeconfig.ui:32
-#, fuzzy, kde-format
-#| msgid "&Abort on first error:"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Abort on first error:"
 msgstr "Εγκ&ατάλειψη στο πρώτο σφάλμα:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: makeconfig.ui:52
-#, fuzzy, kde-format
-#| msgid "&Display commands but do not execute them:"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Display commands but do not execute them:"
 msgstr "&Εμφάνιση εντολών χωρίς την εκτέλεσή τους:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_31)
 #: makeconfig.ui:72
-#, fuzzy, kde-format
-#| msgid "Install as &root:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Insta&ll as root:"
 msgstr "Εγκατάσταση ως χ&ρήστης root:"
 
 #. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
 #: makeconfig.ui:95
-#, fuzzy, kde-format
-#| msgid "Root installation &command:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Root installation &command:"
 msgstr "Ε&ντολή εγκατάστασης με δικαιώματα root:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: makeconfig.ui:133
-#, fuzzy, kde-format
-#| msgid "&Number of simultaneous jobs:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "&Number of simultaneous jobs:"
 msgstr "Αρι&θμός ταυτόχρονων εργασιών:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: makeconfig.ui:156
-#, fuzzy, kde-format
-#| msgid "&Make executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Make executable:"
 msgstr "Εκτελέσι&μο του make:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: makeconfig.ui:179
-#, fuzzy, kde-format
-#| msgid "Default make &target:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Default make &target:"
 msgstr "Προκαθορισμένος &προορισμός make:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: makeconfig.ui:199
-#, fuzzy, kde-format
-#| msgid "Additional make &options:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Additional ma&ke options:"
 msgstr "Επιπλέον παράμετρ&οι του make:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: makeconfig.ui:219
-#, fuzzy, kde-format
-#| msgid "Active environment &profile:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Active environment &profile:"
 msgstr "Προ&φίλ ενεργού περιβάλλοντος:"

@@ -20,8 +20,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: switchtobuddyplugin.cpp:114
-#, fuzzy, kde-format
-#| msgid "Switch to '%1'"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Switch to '%1'"
 msgstr "Εναλλαγή στο '%1'"

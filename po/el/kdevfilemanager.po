@@ -21,36 +21,31 @@ msgstr ""
 "X-Generator: Lokalize 18.12.3\n"
 
 #: filemanager.cpp:47 kdevfilemanagerplugin.cpp:68
-#, fuzzy, kde-format
-#| msgid "File System"
+#, kde-format
 msgctxt "@title:window"
 msgid "File System"
 msgstr "Σύστημα αρχείων"
 
 #: filemanager.cpp:127
-#, fuzzy, kde-format
-#| msgid "Bookmarks"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
 #: filemanager.cpp:134
-#, fuzzy, kde-format
-#| msgid "Current Document Directory"
+#, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Τρέχων κατάλογος εγγράφων"
 
 #: filemanager.cpp:151
-#, fuzzy, kde-format
-#| msgid "New File..."
+#, kde-format
 msgctxt "@action"
 msgid "New File..."
 msgstr "Νέο αρχείο..."
 
 #: filemanager.cpp:158
-#, fuzzy, kde-format
-#| msgid "Create New File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Δημιουργία νέου αρχείου"

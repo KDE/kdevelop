@@ -17,8 +17,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 18.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
 
 #: executescriptplugin.cpp:61
 #, kde-format
@@ -92,15 +92,13 @@ msgstr ""
 "εκκίνησης '%1', αυτό προς το παρόν δεν υποστηρίζεται. Έναρξη εγκατάλειψης."
 
 #: scriptappconfig.cpp:83
-#, fuzzy, kde-format
-#| msgid "Type or select an interpreter"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Type or select an interpreter..."
-msgstr "Πληκτρολογήστε ή επιλέξτε διερμηνέα"
+msgstr "Πληκτρολογήστε ή επιλέξτε διερμηνέα..."
 
 #: scriptappconfig.cpp:116
-#, fuzzy, kde-format
-#| msgid "Configure Script Application"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Script Application"
 msgstr "Διαμόρφωση εφαρμογής σεναρίου"
@@ -117,56 +115,49 @@ msgstr "Εφαρμογή σεναρίου"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: scriptappconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "Interpreter"
+#, kde-format
 msgctxt "@title:group"
 msgid "Interpreter"
 msgstr "Διερμηνέας"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: scriptappconfig.ui:44
-#, fuzzy, kde-format
-#| msgid "Script interpreter:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Script interpreter:"
 msgstr "Διερμηνέας σεναρίων:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: scriptappconfig.ui:95
-#, fuzzy, kde-format
-#| msgid "Script file"
+#, kde-format
 msgctxt "@title:group"
 msgid "Script file"
 msgstr "Αρχείο σεναρίου"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runCurrentFile)
 #: scriptappconfig.ui:101
-#, fuzzy, kde-format
-#| msgid "Run the file currently open in the editor"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Run the file currently open in the editor"
 msgstr "Εκτέλεση του αρχείου που είναι ανοιχτό αυτή τη στιγμή στον επεξεργαστή"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runFixedFile)
 #: scriptappconfig.ui:111
-#, fuzzy, kde-format
-#| msgid "Always run the same file"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Always run the same file"
 msgstr "Να εκτελείται πάντα το ίδιο αρχείο"
 
 #. i18n: ectx: property (text), widget (QLabel, scriptLabel)
 #: scriptappconfig.ui:123
-#, fuzzy, kde-format
-#| msgid "Script file:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Script file:"
 msgstr "Αρχείο σεναρίου:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: scriptappconfig.ui:133
-#, fuzzy, kde-format
-#| msgid "Enter the absolute path to the script to run"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the absolute path to the script to run"
 msgstr "Εισαγάγετε την πλήρη διαδρομή σε ένα σεναρίου για εκτέλεση"
@@ -180,74 +171,63 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: scriptappconfig.ui:148
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
 msgstr "Συμπεριφορά"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: scriptappconfig.ui:160
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
 msgstr "Ορίσματα:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: scriptappconfig.ui:170
-#, fuzzy, kde-format
-#| msgid "Enter arguments to give to the executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter arguments to give to the executable"
 msgstr "Εισαγάγετε ορίσματα για το εκτελέσιμο"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: scriptappconfig.ui:177
-#, fuzzy, kde-format
-#| msgid "Working directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Working directory:"
 msgstr "Κατάλογος εργασίας:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: scriptappconfig.ui:187
-#, fuzzy, kde-format
-#| msgid "Select a working directory for the executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
 msgstr "Επιλέξετε έναν κατάλογο εργασίας για το εκτελέσιμο"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: scriptappconfig.ui:194
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
 msgstr "Περιβάλλον:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: scriptappconfig.ui:212
-#, fuzzy, kde-format
-#| msgid "Select an environment to be used"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
 msgstr "Επιλέξτε ένα περιβάλλον για χρήση"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: scriptappconfig.ui:224
-#, fuzzy, kde-format
-#| msgid "Output filter:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Output filter:"
 msgstr "Φίλτρο εξόδου:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:231
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the filter to applied to the output. E.g. to mark errors with red "
-#| "text"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Select the filter to applied to the output. E.g. to mark errors with red text"
@@ -257,56 +237,49 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:235
-#, fuzzy, kde-format
-#| msgid "No Filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "No Filter"
 msgstr "χωρίς φίλτρο"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:240
-#, fuzzy, kde-format
-#| msgid "Compiler Filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Compiler Filter"
 msgstr "Φίλτρο μεταγλωττιστή"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:245
-#, fuzzy, kde-format
-#| msgid "Script Error Filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Script Error Filter"
 msgstr "Φίλτρο σφαλμάτων σεναρίου"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:250
-#, fuzzy, kde-format
-#| msgid "Static Analysis Filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Static Analysis Filter"
 msgstr "Φίλτρο στατικής ανάλυσης"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: scriptappconfig.ui:267
-#, fuzzy, kde-format
-#| msgid "Execute on Host"
+#, kde-format
 msgctxt "@title:group"
 msgid "Execute on Host"
 msgstr "Εκτέλεση στον υπολογιστή"
 
 #. i18n: ectx: property (text), widget (QCheckBox, remoteHostCheckbox)
 #: scriptappconfig.ui:273
-#, fuzzy, kde-format
-#| msgid "Execute on remote host"
+#, kde-format
 msgctxt "@option:check"
 msgid "Execute on remote host"
 msgstr "Εκτέλεση στον απομακρυσμένο υπολογιστή"
 
 #. i18n: ectx: property (text), widget (QLabel, remoteHostLabel)
 #: scriptappconfig.ui:285
-#, fuzzy, kde-format
-#| msgid "Remote host (ssh):"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Remote host (ssh):"
 msgstr "Απομακρυσμένος υπολογιστής (ssh):"

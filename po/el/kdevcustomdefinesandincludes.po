@@ -18,103 +18,89 @@ msgstr ""
 "X-Generator: Lokalize 18.12.3\n"
 
 #: compilerprovider/compilerprovider.cpp:32
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item no compiler"
 msgid "None"
 msgstr "Κανένα"
 
 #: compilerprovider/widget/compilersmodel.cpp:117
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Όνομα"
 
 #: compilerprovider/widget/compilersmodel.cpp:117
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Τύπος"
 
 #: compilerprovider/widget/compilersmodel.cpp:119
-#, fuzzy, kde-format
-#| msgid "Auto-detected"
+#, kde-format
 msgctxt "@item"
 msgid "Auto-detected"
 msgstr "Αυτόματη ανίχνευση"
 
 #: compilerprovider/widget/compilersmodel.cpp:120
-#, fuzzy, kde-format
-#| msgid "Manual"
+#, kde-format
 msgctxt "@item"
 msgid "Manual"
 msgstr "Χειροκίνητα"
 
 #: compilerprovider/widget/compilerswidget.cpp:49
-#, fuzzy, kde-format
-#| msgid "Delete compiler"
+#, kde-format
 msgctxt "@action"
 msgid "Delete Compiler"
 msgstr "Διαγραφή μεταγλωττιστή"
 
 #: compilerprovider/widget/compilerswidget.cpp:202
-#, fuzzy, kde-format
-#| msgid "C/C++ Compilers"
+#, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Compilers"
 msgstr "C/C++ μεταγλωττιστές"
 
 #: compilerprovider/widget/compilerswidget.cpp:207
-#, fuzzy, kde-format
-#| msgid "Configure C/C++ Compilers"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Compilers"
 msgstr "Διαμόρφωση C/C++ μεταγλωττιστών"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: compilerprovider/widget/compilerswidget.ui:25
-#, fuzzy, kde-format
-#| msgid "&Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Add"
 msgstr "&Προσθήκη"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeButton)
 #: compilerprovider/widget/compilerswidget.ui:35
-#, fuzzy, kde-format
-#| msgid "&Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Remove"
 msgstr "Αφαί&ρεση"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: compilerprovider/widget/compilerswidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Όνομα:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: compilerprovider/widget/compilerswidget.ui:76
-#, fuzzy, kde-format
-#| msgid "Compiler executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Compiler executable:"
 msgstr "Εκτλέσιμο μεταγλωττιστή:"
 
 #: kcm_widget/definesandincludesconfigpage.cpp:70
-#, fuzzy, kde-format
-#| msgid "Language Support"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Language Support"
 msgstr "Υποστήριξη γλώσσας"
 
 #: kcm_widget/definesandincludesconfigpage.cpp:75
-#, fuzzy, kde-format
-#| msgid "Configure Language Support"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Language Support"
 msgstr "Διαμόρφωση υποστήριξης γλώσσας"
@@ -125,29 +111,25 @@ msgid "Double-click here to insert a new define to be used for the path"
 msgstr "Διπλό κλικ εδώ για εισαγωγή νέου define για χρήση για τη διαδρομή"
 
 #: kcm_widget/definesmodel.cpp:67
-#, fuzzy, kde-format
-#| msgid "Define"
+#, kde-format
 msgctxt "@title:column"
 msgid "Define"
 msgstr "Define"
 
 #: kcm_widget/definesmodel.cpp:69
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Τιμή"
 
 #: kcm_widget/defineswidget.cpp:29
-#, fuzzy, kde-format
-#| msgid "Delete Define"
+#, kde-format
 msgctxt "@action"
 msgid "Delete Define"
 msgstr "Διαγραφή define"
 
 #: kcm_widget/includeswidget.cpp:49
-#, fuzzy, kde-format
-#| msgid "Delete Include Path"
+#, kde-format
 msgctxt "@action"
 msgid "Delete Include Path"
 msgstr "Διαγραφή include διαδρομής"
@@ -160,10 +142,7 @@ msgstr "Το %1 δεν υπάρχει"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, includePathRequester)
 #: kcm_widget/includeswidget.ui:31
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add the currently displayed URL to the list of includes if it is not in "
-#| "the list yet."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Add the currently displayed URL to the list of includes if it is not in the "
@@ -174,9 +153,7 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, includePathRequester)
 #: kcm_widget/includeswidget.ui:34
-#, fuzzy, kde-format
-#| msgid ""
-#| "A new include path/file to use for parsing files under given directory"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "A new include path/file to use for parsing files under given directory"
 msgstr ""
@@ -185,27 +162,21 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addIncludePath)
 #: kcm_widget/includeswidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Create a new include path entry from this URL."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new include path entry from this URL"
-msgstr "Δημιουργία μιας νέας εγγραφής include από αυτό το URL."
+msgstr "Δημιουργία μιας νέας εγγραφής include από αυτό το URL"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeIncludePath)
 #: kcm_widget/includeswidget.ui:60
-#, fuzzy, kde-format
-#| msgid "Delete current include path entry."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current include path entry"
-msgstr "Διαγραφή της τρέχουσας εγγραφής include διαδρομής."
+msgstr "Διαγραφή της τρέχουσας εγγραφής include διαδρομής"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, parseHeadersInPlainC)
 #: kcm_widget/parserwidget.ui:20
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Check this if you want <code>*.h</code> headers to "
-#| "be parsed in plain C mode. By default they are parsed as C++ headers.</"
-#| "p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>Check this if you want <code>*.h</code> headers to be "
@@ -218,16 +189,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, parseHeadersInPlainC)
 #: kcm_widget/parserwidget.ui:23
-#, fuzzy, kde-format
-#| msgid "Parse *.h headers in plain C"
+#, kde-format
 msgctxt "@option:check"
 msgid "Parse *.h headers in plain C"
 msgstr "Ανάλυση *.h σε απλή C"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: kcm_widget/parserwidget.ui:36
-#, fuzzy, kde-format
-#| msgid "C++ Profi&le:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "C++ profi&le:"
 msgstr "C++ προφί&λ:"
@@ -257,71 +226,62 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCuda)
 #: kcm_widget/parserwidget.ui:56 kcm_widget/parserwidget.ui:140
 #: kcm_widget/parserwidget.ui:224 kcm_widget/parserwidget.ui:293
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "@item:inlistbox language standard"
 msgid "Custom"
 msgstr "Προσαρμοσμένο"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel)
 #: kcm_widget/parserwidget.ui:94
-#, fuzzy, kde-format
-#| msgid "C++ co&mmand-line arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "C++ co&mmand-line arguments:"
 msgstr "C++ ορίσ&ματα γραμμής εντολών:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: kcm_widget/parserwidget.ui:120
-#, fuzzy, kde-format
-#| msgid "C Profi&le:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "C profi&le:"
 msgstr "Ψ προφί&λ:"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_2)
 #: kcm_widget/parserwidget.ui:178
-#, fuzzy, kde-format
-#| msgid "C co&mmand-line arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "C co&mmand-line arguments:"
 msgstr "C ορίσ&ματα γραμμής εντολών:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: kcm_widget/parserwidget.ui:204
-#, fuzzy, kde-format
-#| msgid "OpenCL C &Profile:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "OpenCL C &profile:"
 msgstr "OpenCL C &προφίλ:"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_3)
 #: kcm_widget/parserwidget.ui:247
-#, fuzzy, kde-format
-#| msgid "OpenCL C comma&nd-line arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "OpenCL C comma&nd-line arguments:"
 msgstr "OpenCL C ορίσματα γραμμής ε&ντολών:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: kcm_widget/parserwidget.ui:273
-#, fuzzy, kde-format
-#| msgid "CUDA C P&rofile:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "CUDA C P&rofile:"
 msgstr "CUDA C π&ροφίλ:"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_4)
 #: kcm_widget/parserwidget.ui:321
-#, fuzzy, kde-format
-#| msgid "CUDA C comman&d-line arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "CUDA C comman&d-line arguments:"
 msgstr "CUDA C ορίσμα&τα γραμμής εντολών:"
 
 #: kcm_widget/projectpathswidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "Select Project Path"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Project Path"
 msgstr "Επιλογή διαδρομής έργου"
@@ -340,15 +300,13 @@ msgid "Delete Path Configuration"
 msgstr ""
 
 #: kcm_widget/projectpathswidget.cpp:224
-#, fuzzy, kde-format
-#| msgid "Edit include directories/files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Include Directories/Files"
 msgstr "Επεξεργασία include καταλόγων/αρχείων"
 
 #: kcm_widget/projectpathswidget.cpp:232
-#, fuzzy, kde-format
-#| msgid "Edit defined macros"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Defined Macros"
 msgstr "Επεξεργασία προκαθορισμένων μακροεντολών"
@@ -370,9 +328,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_reparse)
 #: kcm_widget/projectpathswidget.ui:29
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check this if you want the project to be reparsed to apply the changes."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Check this if you want the project to be reparsed to apply the changes."
 msgstr ""
@@ -381,8 +337,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_reparse)
 #: kcm_widget/projectpathswidget.ui:32
-#, fuzzy, kde-format
-#| msgid "Reparse the project"
+#, kde-format
 msgctxt "@option:check"
 msgid "Reparse the project"
 msgstr "Ανάλυση ξανά του έργου"
@@ -390,10 +345,7 @@ msgstr "Ανάλυση ξανά του έργου"
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QComboBox, compiler)
 #: kcm_widget/projectpathswidget.ui:70 kcm_widget/projectpathswidget.ui:80
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Select compiler that will be used to retrieve "
-#| "standard include directories and defined macros.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>Select compiler that will be used to retrieve standard "
@@ -404,8 +356,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: kcm_widget/projectpathswidget.ui:73
-#, fuzzy, kde-format
-#| msgid "Compiler for path:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Compiler for path:"
 msgstr "Μεταγλωττιστής για διαδρομή:"
@@ -420,80 +371,68 @@ msgstr "Ταυτόχρονη επεξεργασία πολλών includes/define
 
 #. i18n: ectx: property (text), widget (QPushButton, batchEdit)
 #: kcm_widget/projectpathswidget.ui:93
-#, fuzzy, kde-format
-#| msgid "&Batch Edit..."
+#, kde-format
 msgctxt "@action:button"
 msgid "&Batch Edit..."
 msgstr "&Επεξεργασία δέσμης..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addPath)
 #: kcm_widget/projectpathswidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Add a new sub-project path entry."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new sub-project path entry."
 msgstr "Προσθήκη μιας νέας εγγραφής διαδρομής υποέργου."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removePath)
 #: kcm_widget/projectpathswidget.ui:135
-#, fuzzy, kde-format
-#| msgid "Delete current sub-project path entry."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current sub-project path entry."
 msgstr "Διαγραφή της τρέχουσας εγγραφής διαδρομής υποέργου."
 
 #. i18n: ectx: attribute (title), widget (QWidget, includePathsPage)
 #: kcm_widget/projectpathswidget.ui:165
-#, fuzzy, kde-format
-#| msgid "Includes/Imports"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Includes/Imports"
 msgstr "Includes/Imports"
 
 #. i18n: ectx: attribute (title), widget (QWidget, definesPage)
 #: kcm_widget/projectpathswidget.ui:182
-#, fuzzy, kde-format
-#| msgid "Defines"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Defines"
 msgstr "Defines"
 
 #. i18n: ectx: attribute (title), widget (QWidget, parserPage)
 #: kcm_widget/projectpathswidget.ui:199
-#, fuzzy, kde-format
-#| msgid "C/C++ Parser"
+#, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Parser"
 msgstr "C/C++ αναλυτής"
 
 #: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:24
-#, fuzzy, kde-format
-#| msgid "Setup Custom Include Paths"
+#, kde-format
 msgctxt "@title:window"
 msgid "Setup Custom Include Paths"
 msgstr "Ρύθμιση προσαρμοσμένων include διαδρομών"
 
 #: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:56
-#, fuzzy, kde-format
-#| msgid "Select directory to include"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Include"
 msgstr "Επιλογή καταλόγου για include"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:17
-#, fuzzy, kde-format
-#| msgid "Storage Directory:"
+#, kde-format
 msgctxt "@title:group"
 msgid "Storage Directory:"
 msgstr "Κατάλογος αποθήκευσης:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, storageDirectory)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:25
-#, fuzzy, kde-format
-#| msgid ""
-#| "The custom include-path will be stored in a special file called \"."
-#| "kdev_include_paths\" stored within a source directory."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The custom include-path will be stored in a special file called \"."
@@ -504,18 +443,14 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:37
-#, fuzzy, kde-format
-#| msgid "Custom include paths or #define's"
+#, kde-format
 msgctxt "@title:group"
 msgid "Custom include paths or #define's"
 msgstr "Προσαρμοσμένες include διαδρομές ή #define"
 
 #. i18n: ectx: property (toolTip), widget (QPlainTextEdit, customIncludePaths)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:45
-#, fuzzy, kde-format
-#| msgid ""
-#| "The plain list of include paths. You may also define custom macros here "
-#| "by adding \"#define NAME VALUE\" lines."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The plain list of include paths. You may also define custom macros here by "
@@ -526,16 +461,14 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:66
-#, fuzzy, kde-format
-#| msgid "Select a directory to include."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to include."
 msgstr "Επιλογή καταλόγου για include."
 
 #. i18n: ectx: property (text), widget (QPushButton, directorySelector)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:69
-#, fuzzy, kde-format
-#| msgid "..."
+#, kde-format
 msgctxt "@action:button"
 msgid "..."
 msgstr "..."

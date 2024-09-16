@@ -20,15 +20,13 @@ msgstr ""
 "X-Generator: Lokalize 18.12.3\n"
 
 #: cmakebuilddirchooser.cpp:29
-#, fuzzy, kde-format
-#| msgid "Configure a build directory - %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
 msgstr "Διαμόρφωση καταλόγου κατασκευής - %1"
 
 #: cmakebuilddirchooser.cpp:86
-#, fuzzy, kde-format
-#| msgid "Configure a build directory for %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "Διαμόρφωση καταλόγου κατασκευής για το %1"
@@ -72,42 +70,35 @@ msgstr "Ο επιλεγμένος κατάλογος κατασκευής δεν
 
 #. i18n: ectx: property (text), widget (QLabel, availableLabel)
 #: cmakebuilddirchooser.ui:32
-#, fuzzy, kde-format
-#| msgid "Available build directories:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Available build directories:"
-msgstr "διαθέσιμοι κατάλογοι κατασκευής:"
+msgstr "Διαθέσιμοι κατάλογοι κατασκευής:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
 #: cmakebuilddirchooser.ui:40
-#, fuzzy, kde-format
-#| msgid "New build directory"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "New build directory"
 msgstr "Νέος κατάλογος κατασκευής"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: cmakebuilddirchooser.ui:48
-#, fuzzy, kde-format
-#| msgid "Build &directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Build &directory:"
 msgstr "Κατάλογος &κατασκευής:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: cmakebuilddirchooser.ui:84
-#, fuzzy, kde-format
-#| msgid "&Installation prefix:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Installation prefix:"
 msgstr "&Πρόθεμα εγκατάστασης:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:109
-#, fuzzy, kde-format
-#| msgid ""
-#| "The prefix under which the project will be installed. Leaving this empty "
-#| "will let CMake use its default install prefix."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The prefix under which the project will be installed. Leaving this empty "
@@ -118,33 +109,29 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:112
-#, fuzzy, kde-format
-#| msgid "CMake's default install prefix"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "CMake's default install prefix"
 msgstr "Το προκαθορισμένο πρόθεμα εγκατάστασης του CMake"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build &type:"
-msgstr "&Τύπος κατασκευής:"
+msgstr "&τύπος κατασκευής:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
 #: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
-#, fuzzy, kde-format
-#| msgid "Extra arguments:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Extra arguments:"
 msgstr "Επιπλέον ορίσματα:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: cmakebuilddirchooser.ui:182
-#, fuzzy, kde-format
-#| msgid "CMake &executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "CMake &εκτελέσιμο:"
@@ -155,36 +142,31 @@ msgid "INVALID"
 msgstr "ΜΗ ΕΓΚΥΡΟ"
 
 #: cmakecodecompletionmodel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Command"
+#, kde-format
 msgctxt "@item"
 msgid "Command"
 msgstr "Εντολή"
 
 #: cmakecodecompletionmodel.cpp:201
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@item"
 msgid "Variable"
 msgstr "Μεταβλητή"
 
 #: cmakecodecompletionmodel.cpp:202
-#, fuzzy, kde-format
-#| msgid "Macro"
+#, kde-format
 msgctxt "@item"
 msgid "Macro"
 msgstr "Μακροεντολή"
 
 #: cmakecodecompletionmodel.cpp:203
-#, fuzzy, kde-format
-#| msgid "Path"
+#, kde-format
 msgctxt "@item"
 msgid "Path"
 msgstr "Διαδρομή"
 
 #: cmakecodecompletionmodel.cpp:204
-#, fuzzy, kde-format
-#| msgid "Target"
+#, kde-format
 msgctxt "@item"
 msgid "Target"
 msgstr "Προορισμός"
@@ -195,36 +177,31 @@ msgid "wrong"
 msgstr "λάθος"
 
 #: cmakecommandscontents.cpp:29
-#, fuzzy, kde-format
-#| msgid "Commands"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Commands"
 msgstr "Εντολές"
 
 #: cmakecommandscontents.cpp:30
-#, fuzzy, kde-format
-#| msgid "Variables"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Variables"
 msgstr "Μεταβλητές"
 
 #: cmakecommandscontents.cpp:31
-#, fuzzy, kde-format
-#| msgid "Modules"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Modules"
 msgstr "Αρθρώματα"
 
 #: cmakecommandscontents.cpp:32
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Properties"
 msgstr "Ιδιότητες"
 
 #: cmakecommandscontents.cpp:33
-#, fuzzy, kde-format
-#| msgid "Policies"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Policies"
 msgstr "Πολιτικές"
@@ -318,122 +295,106 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
-#, fuzzy, kde-format
-#| msgid "Cache Values"
+#, kde-format
 msgctxt "@title:group"
 msgid "Cache Values"
 msgstr "Τιμές λανθάνουσας μνήμης"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: settings/cmakebuildsettings.ui:89
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgctxt "@label"
 msgid "Comment:"
 msgstr "Σχόλιο:"
 
 #. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
 #: settings/cmakebuildsettings.ui:106
-#, fuzzy, kde-format
-#| msgid "Show Advanced"
+#, kde-format
 msgctxt "@action:button"
 msgid "Show Advanced"
 msgstr "Εμφάνιση προχωρημένων"
 
 #. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
 #: settings/cmakebuildsettings.ui:125
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:group"
 msgid "Advanced"
 msgstr "Για προχωρημένους"
 
 #. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
 #: settings/cmakebuildsettings.ui:134
-#, fuzzy, kde-format
-#| msgid "Installation prefix:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Installation prefix:"
-msgstr "&Πρόθεμα εγκατάστασης:"
+msgstr "&πρόθεμα εγκατάστασης:"
 
 #. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
 #: settings/cmakebuildsettings.ui:144
-#, fuzzy, kde-format
-#| msgid "Build type:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build type:"
 msgstr "Τύπος κατασκευής:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: settings/cmakebuildsettings.ui:198
-#, fuzzy, kde-format
-#| msgid "Configure environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Configure environment:"
 msgstr "Διαμόρφωση περιβάλλοντος:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: settings/cmakebuildsettings.ui:213
-#, fuzzy, kde-format
-#| msgid "Select an environment to be used"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
 msgstr "Επιλέξτε περιβάλλον για χρήση"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showInternal)
 #: settings/cmakebuildsettings.ui:225
-#, fuzzy, kde-format
-#| msgid "Show advanced values"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show advanced values"
 msgstr "Εμφάνιση προχωρημένων τιμών"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: settings/cmakebuildsettings.ui:235
-#, fuzzy, kde-format
-#| msgid "CMake executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "CMake executable:"
 msgstr "CMake εκτελέσιμο:"
 
 #: settings/cmakecachemodel.cpp:36
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Όνομα"
 
 #: settings/cmakecachemodel.cpp:37
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Τύπος"
 
 #: settings/cmakecachemodel.cpp:38
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Τιμή"
 
 #: settings/cmakecachemodel.cpp:39
-#, fuzzy, kde-format
-#| msgid "Comment"
+#, kde-format
 msgctxt "@title:column"
 msgid "Comment"
 msgstr "Σχόλιο"
 
 #: settings/cmakecachemodel.cpp:40
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:column"
 msgid "Advanced"
 msgstr "Για προχωρημένους"
 
 #: settings/cmakecachemodel.cpp:41
-#, fuzzy, kde-format
-#| msgid "Strings"
+#, kde-format
 msgctxt "@title:column"
 msgid "Strings"
 msgstr "Συμβολοσειρές"
@@ -462,8 +423,7 @@ msgid "Could not remove: %1"
 msgstr "Αδυναμία αφαίρεσης: %1"
 
 #: settings/cmakepreferences.cpp:399
-#, fuzzy, kde-format
-#| msgid "CMake"
+#, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"

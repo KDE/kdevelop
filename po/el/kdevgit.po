@@ -164,8 +164,7 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, GitNameEmailDialog)
 #: gitnameemaildialog.ui:17
-#, fuzzy, kde-format
-#| msgid "Configure Name and Email for Git"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure Name and Email for Git"
 msgstr "Διαμόρφωση ονόματος και ηλ. ταχυδρομείου για το git"
@@ -186,24 +185,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gitnameemaildialog.ui:35
-#, fuzzy, kde-format
-#| msgid "&Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Name:"
 msgstr "Ό&νομα:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gitnameemaildialog.ui:48
-#, fuzzy, kde-format
-#| msgid "Emai&l:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Emai&l:"
 msgstr "Η&λ.ταχυδρομείο:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, globalCheckBox)
 #: gitnameemaildialog.ui:78
-#, fuzzy, kde-format
-#| msgid "Write to global config"
+#, kde-format
 msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Εγγραφή στην καθολική διαμόρφωση"
@@ -225,29 +221,25 @@ msgid "Rebase"
 msgstr ""
 
 #: gitplugin.cpp:248
-#, fuzzy, kde-format
-#| msgid "Git Stashes"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Εκκρεμότητες git"
 
 #: gitplugin.cpp:249
-#, fuzzy, kde-format
-#| msgid "Stash Manager"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Διαχειριστής εκκρεμοτήτων"
 
 #: gitplugin.cpp:250
-#, fuzzy, kde-format
-#| msgid "Push Stash"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Ώθηση εκκρεμότητας"
 
 #: gitplugin.cpp:251
-#, fuzzy, kde-format
-#| msgid "Pop Stash"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Απώθηση εκκρεμότητας"
@@ -619,8 +611,7 @@ msgid "Please stage some changes before committing."
 msgstr ""
 
 #: stashmanagerdialog.cpp:31
-#, fuzzy, kde-format
-#| msgid "Stash Manager"
+#, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Διαχειριστής εκκρεμοτήτων"
@@ -632,8 +623,7 @@ msgstr "Είστε βέβαιοι ότι θέλετε να απορρίψετε 
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
 #: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
-#, fuzzy, kde-format
-#| msgid "Drop"
+#, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "Απόρριψη"
@@ -681,8 +671,7 @@ msgstr "Εφαρμογή διόρθωσης εκκρεμότητας και απ
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:39
-#, fuzzy, kde-format
-#| msgid "Pop"
+#, kde-format
 msgctxt "@action:button"
 msgid "Pop"
 msgstr "Απώθηση"
@@ -697,8 +686,7 @@ msgstr "Εμφάνιση των περιεχομένων του stash"
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
 #: stashmanagerdialog.ui:52
-#, fuzzy, kde-format
-#| msgid "Show"
+#, kde-format
 msgctxt "@action:button"
 msgid "Show"
 msgstr "Εμφάνιση"
@@ -713,8 +701,7 @@ msgstr "Εφαρμογή διόρθωσης εκκρεμότητας"
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
 #: stashmanagerdialog.ui:85
-#, fuzzy, kde-format
-#| msgid "Apply"
+#, kde-format
 msgctxt "@action:button"
 msgid "Apply"
 msgstr "Εφαρμογή"
@@ -731,8 +718,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:111
-#, fuzzy, kde-format
-#| msgid "Branch"
+#, kde-format
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Κλάδος"

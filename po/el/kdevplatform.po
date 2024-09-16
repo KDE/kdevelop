@@ -30,40 +30,31 @@ msgid "Your emails"
 msgstr "manolis@koppermind.homelinux.org,sstavra@gmail.com"
 
 #: debugger/breakpoint/breakpoint.cpp:195
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "Σφάλμα"
 
 #: debugger/breakpoint/breakpoint.cpp:201
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "dirty"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
-msgstr "βρώμικο"
+msgstr "Βρώμικο"
 
 #: debugger/breakpoint/breakpoint.cpp:203
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "pending"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
-msgstr "εκκρεμεί"
+msgstr "Εκκρεμεί"
 
 #: debugger/breakpoint/breakpoint.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "clean"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
-msgstr "καθαρό"
+msgstr "Καθαρό"
 
 #: debugger/breakpoint/breakpoint.cpp:238
-#, fuzzy, kde-format
-#| msgctxt "project name (branch name)"
-#| msgid "%1 (%2)"
+#, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
@@ -153,10 +144,9 @@ msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:377
-#, fuzzy, kde-format
-#| msgid "Breakpoint"
+#, kde-format
 msgid "&Breakpoint"
-msgstr "Σημείο προσωρινής παύσης"
+msgstr "Σημείο &προσωρινής παύσης"
 
 #: debugger/breakpoint/breakpointmodel.cpp:383
 #, kde-format
@@ -257,25 +247,19 @@ msgid "&Code"
 msgstr "&Κώδικας"
 
 #: debugger/breakpoint/breakpointwidget.cpp:129
-#, fuzzy, kde-format
-#| msgctxt "Data breakpoint"
-#| msgid "Data &write"
+#, kde-format
 msgctxt "Data breakpoint"
 msgid "Data &Write"
 msgstr "Παύση σε &εγγραφή"
 
 #: debugger/breakpoint/breakpointwidget.cpp:132
-#, fuzzy, kde-format
-#| msgctxt "Data read breakpoint"
-#| msgid "Data &read"
+#, kde-format
 msgctxt "Data read breakpoint"
 msgid "Data &Read"
 msgstr "Παύση σε &ανάγνωση"
 
 #: debugger/breakpoint/breakpointwidget.cpp:135
-#, fuzzy, kde-format
-#| msgctxt "Data access breakpoint"
-#| msgid "Data &access"
+#, kde-format
 msgctxt "Data access breakpoint"
 msgid "Data &Access"
 msgstr "Παύση σε &πρόσβαση"
@@ -286,22 +270,19 @@ msgid "&Delete"
 msgstr "&Διαγραφή"
 
 #: debugger/breakpoint/breakpointwidget.cpp:149
-#, fuzzy, kde-format
-#| msgid "Disable &all"
+#, kde-format
 msgid "Disable &All"
 msgstr "Απενεργοποίηση ό&λων"
 
 #: debugger/breakpoint/breakpointwidget.cpp:150
-#, fuzzy, kde-format
-#| msgid "&Enable all"
+#, kde-format
 msgid "&Enable All"
 msgstr "&Ενεργοποίηση όλων"
 
 #: debugger/breakpoint/breakpointwidget.cpp:151
-#, fuzzy, kde-format
-#| msgid "Remove All"
+#, kde-format
 msgid "&Remove All"
-msgstr "Αφαίρεση όλων"
+msgstr "Αφαίρεση όλ&ων"
 
 #: debugger/breakpoint/breakpointwidget.cpp:333
 #, kde-format
@@ -433,10 +414,9 @@ msgid "Watch This"
 msgstr "Ταίριασμα περίπτωσης"
 
 #: debugger/variable/variabletooltip.cpp:116
-#, fuzzy, kde-format
-#| msgid "&Stop on change"
+#, kde-format
 msgid "Stop on Change"
-msgstr "&Διακοπή σε αλλαγή"
+msgstr "Διακοπή σε αλλαγή"
 
 #: debugger/variable/variablewidget.cpp:82
 #, kde-format
@@ -517,15 +497,13 @@ msgid "&Copy Value"
 msgstr "Αντιγρα&φή τιμής"
 
 #: debugger/variable/variablewidget.cpp:259
-#, fuzzy, kde-format
-#| msgid "&Stop on change"
+#, kde-format
 msgid "&Stop on Change"
 msgstr "&Διακοπή σε αλλαγή"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Find:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Find:"
 msgstr "Εύρεση:"
@@ -559,22 +537,19 @@ msgid "Documentation"
 msgstr "Τεκμηρίωση"
 
 #: documentation/documentationview.cpp:69
-#, fuzzy, kde-format
-#| msgid "Back"
+#, kde-format
 msgctxt "@action go back"
 msgid "Back"
 msgstr "Πίσω"
 
 #: documentation/documentationview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Forward"
+#, kde-format
 msgctxt "@action go forward"
 msgid "Forward"
 msgstr "Εμπρός"
 
 #: documentation/documentationview.cpp:79
-#, fuzzy, kde-format
-#| msgid "Home"
+#, kde-format
 msgctxt "@action go to start page"
 msgid "Home"
 msgstr "Αρχική"
@@ -582,11 +557,10 @@ msgstr "Αρχική"
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
 #: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
 #: vcs/dvcs/ui/branchmanager.ui:143
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Αναζήτηση"
+msgstr "Αναζήτηση..."
 
 #: documentation/documentationview.cpp:111
 #, kde-format
@@ -602,15 +576,13 @@ msgid "Find in text of current documentation page"
 msgstr "Εμφάνιση επισήμανσης στο τρέχον έγγραφο"
 
 #: interfaces/contextmenuextension.cpp:133
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Debug"
 msgstr "Διόρθωση"
 
 #: interfaces/contextmenuextension.cpp:134
-#, fuzzy, kde-format
-#| msgid "Refactor"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Refactor"
 msgstr "Αναδόμηση"
@@ -789,8 +761,7 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: language/codegen/basicrefactoring.ui:14
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename"
 msgstr "Μετονομασία"
@@ -813,20 +784,17 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:38
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Rename"
-msgstr "Μετονομασία"
+msgstr "Μετ&ονομασία"
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: language/codegen/basicrefactoring.ui:45
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Cancel"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Cancel"
-msgstr "Ακύρωση"
+msgstr "Ακύρ&ωση"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -1265,10 +1233,9 @@ msgid "Problem in <i>%1</i>"
 msgstr "Πρόβλημα στο <b>%1</b>:<br/>"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:118
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgid "Location: "
-msgstr "Τοποθεσία"
+msgstr "Τοποθεσία: "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:156
 #: language/duchain/navigation/problemnavigationcontext.cpp:166
@@ -1311,9 +1278,7 @@ msgstr "Γραμμή <b>%1</b>:"
 
 #: language/duchain/navigation/useswidget.cpp:210
 #: language/duchain/navigation/useswidget.cpp:217
-#, fuzzy, kde-format
-#| msgctxt "refers to a line in source code"
-#| msgid "Line <b>%1</b>:"
+#, kde-format
 msgctxt "Refers to a line in source code"
 msgid "Line <b>%1</b>:"
 msgstr "Γραμμή <b>%1</b>:"
@@ -1420,8 +1385,7 @@ msgid "Definition-Use Chain"
 msgstr "Αλυσίδα χρήσεων ορισμού"
 
 #: language/duchain/problem.cpp:213 shell/problem.cpp:81
-#, fuzzy, kde-format
-#| msgid "Semantic Analysis"
+#, kde-format
 msgid "Semantic analysis"
 msgstr "Σημασιολογική ανάλυση"
 
@@ -1455,10 +1419,9 @@ msgstr ""
 
 #: language/duchain/types/containertypes.cpp:84
 #: language/duchain/types/containertypes.cpp:85
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "unknown"
-msgstr "Άγνωστο"
+msgstr "άγνωστο"
 
 #: language/duchain/types/containertypes.cpp:87
 #, kde-format
@@ -1603,8 +1566,7 @@ msgstr ""
 "Το έργο θα πρέπει να κλείσει."
 
 #: project/abstractfilemanagerplugin.cpp:328
-#, fuzzy, kde-format
-#| msgid "Project Folder Deleted"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Folder Deleted"
 msgstr "Ο φάκελος του έργου διεγράφη"
@@ -1704,8 +1666,7 @@ msgid "Path"
 msgstr "Διαδρομή"
 
 #: project/projectchangesmodel.cpp:274
-#, fuzzy, kde-format
-#| msgid "no branch"
+#, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "δεν υπάρχει κλάδος"
@@ -1717,25 +1678,22 @@ msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
 #: project/projectitemlineedit.cpp:156
-#, fuzzy, kde-format
-#| msgid "Enter the path to an item from the projects tree"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
-msgstr "Δώστε τη διαδρομή σε ένα αντικείμενο από το δένδρο των έργων"
+msgstr "Δώστε τη διαδρομή σε ένα αντικείμενο από το δένδρο των έργων..."
 
 #: project/projectitemlineedit.cpp:158
-#, fuzzy, kde-format
-#| msgid "Select..."
+#, kde-format
 msgctxt "@action"
 msgid "Select..."
 msgstr "Επιλογή..."
 
 #: project/projectitemlineedit.cpp:182
-#, fuzzy, kde-format
-#| msgid "Select an item..."
+#, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
-msgstr "Επιλογή αντικειμένου..."
+msgstr "Επιλογή αντικειμένου"
 
 #: project/projectitemlineedit.cpp:192
 #, kde-format
@@ -1824,8 +1782,7 @@ msgid "Clear cache"
 msgstr "Καθαρισμός λανθάνουσας μνήμης: [Ν/ο] "
 
 #: serialization/itemrepositoryregistry.cpp:78
-#, fuzzy, kde-format
-#| msgid "Session crashed"
+#, kde-format
 msgctxt "@title"
 msgid "Session Crashed"
 msgstr "Η συνεδρία κατέρρευσε"
@@ -1857,11 +1814,10 @@ msgid "Clear Cache"
 msgstr "Καθαρισμός λανθάνουσας μνήμης: [Ν/ο] "
 
 #: serialization/itemrepositoryregistry.cpp:82
-#, fuzzy, kde-format
-#| msgid "&Continue"
+#, kde-format
 msgctxt "@action:button"
 msgid "Continue"
-msgstr "&Συνέχεια"
+msgstr "Συνέχεια"
 
 #: shell/areadisplay.cpp:44
 #, kde-format
@@ -1878,12 +1834,10 @@ msgid "Back to Code"
 msgstr ""
 
 #: shell/configdialog.cpp:31
-#, fuzzy, kde-format
-#| msgctxt "@info:status"
-#| msgid "configure"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure"
-msgstr "διαμόρφωση"
+msgstr "Διαμόρφωση"
 
 #: shell/configdialog.cpp:85
 #, kde-format
@@ -1916,28 +1870,24 @@ msgid ""
 msgstr ""
 
 #: shell/debugcontroller.cpp:118
-#, fuzzy, kde-format
-#| msgid "Debugger:"
+#, kde-format
 msgid "Debugger"
-msgstr "Διορθωτής σφαλμάτων:"
+msgstr "Διορθωτής σφαλμάτων"
 
 #: shell/debugcontroller.cpp:148
-#, fuzzy, kde-format
-#| msgid "Frame Stack"
+#, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Frame Stack"
 
 #: shell/debugcontroller.cpp:153
-#, fuzzy, kde-format
-#| msgid "Breakpoints"
+#, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Σημεία προσωρινής παύσης"
 
 #: shell/debugcontroller.cpp:158
-#, fuzzy, kde-format
-#| msgid "Variables"
+#, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Μεταβλητές"
@@ -1958,57 +1908,49 @@ msgid "Restarts applications from the beginning."
 msgstr "Επανεκκινεί εφαρμογές από την αρχή."
 
 #: shell/debugcontroller.cpp:232
-#, fuzzy, kde-format
-#| msgid "Interrupt"
+#, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Διακοπή"
 
 #: shell/debugcontroller.cpp:233
-#, fuzzy, kde-format
-#| msgid "Interrupt application"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Διακοπή εφαρμογής"
 
 #: shell/debugcontroller.cpp:234
-#, fuzzy, kde-format
-#| msgid "Interrupts the debugged process or current debugger command."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Διακόπτει τη διαδικασία διόρθωσης ή την τρέχουσα εντολή του debugger."
 
 #: shell/debugcontroller.cpp:238
-#, fuzzy, kde-format
-#| msgid "Run to &Cursor"
+#, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Εκτέλεση μέχρι το &δρομέα"
 
 #: shell/debugcontroller.cpp:239
-#, fuzzy, kde-format
-#| msgid "Run to cursor"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Εκτέλεση μέχρι το δρομέα"
 
 #: shell/debugcontroller.cpp:240
-#, fuzzy, kde-format
-#| msgid "Continues execution until the cursor position is reached."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Συνεχίζει την εκτέλεση μέχρι το ύψος της θέσης του δρομέα."
 
 #: shell/debugcontroller.cpp:245
-#, fuzzy, kde-format
-#| msgid "Set E&xecution Position to Cursor"
+#, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Ορισμός του δρομέα ως θέση ε&κτέλεσης"
 
 #: shell/debugcontroller.cpp:246
-#, fuzzy, kde-format
-#| msgid "Jump to cursor"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Άλμα στο δρομέα"
@@ -2021,25 +1963,19 @@ msgid "Continue execution from the current cursor position."
 msgstr "Τοποθετεί το δείκτη εκτέλεσης στην τρέχουσα θέση του δρομέα."
 
 #: shell/debugcontroller.cpp:251
-#, fuzzy, kde-format
-#| msgid "Step &Over"
+#, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Πρ&οσπέραση"
 
 #: shell/debugcontroller.cpp:253
-#, fuzzy, kde-format
-#| msgid "Step over the next line"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Προσπέραση στην επόμενη γραμμή"
 
 #: shell/debugcontroller.cpp:254
-#, fuzzy, kde-format
-#| msgid ""
-#| "Executes one line of source in the current source file. If the source "
-#| "line is a call to a function the whole function is executed and the app "
-#| "will stop at the line following the function call."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Executes one line of source in the current source file. If the source line "
@@ -2051,45 +1987,37 @@ msgstr ""
 "σταματήσει στη γραμμή που ακολουθεί την κλήση της συνάρτησης."
 
 #: shell/debugcontroller.cpp:262
-#, fuzzy, kde-format
-#| msgid "Step over Ins&truction"
+#, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Προσπέραση εν&τολής"
 
 #: shell/debugcontroller.cpp:263
-#, fuzzy, kde-format
-#| msgid "Step over instruction"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Προσπέραση εντολής"
 
 #: shell/debugcontroller.cpp:264
-#, fuzzy, kde-format
-#| msgid "Steps over the next assembly instruction."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Προσπερνά την επόμενη εντολή assembly."
 
 #: shell/debugcontroller.cpp:269
-#, fuzzy, kde-format
-#| msgid "Step &Into"
+#, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Προώ&θηση"
 
 #: shell/debugcontroller.cpp:271
-#, fuzzy, kde-format
-#| msgid "Step into the next statement"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Προώθηση στην επόμενη δήλωση"
 
 #: shell/debugcontroller.cpp:272
-#, fuzzy, kde-format
-#| msgid ""
-#| "Executes exactly one line of source. If the source line is a call to a "
-#| "function then execution will stop after the function has been entered."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Executes exactly one line of source. If the source line is a call to a "
@@ -2099,47 +2027,37 @@ msgstr ""
 "η εκτέλεση θα σταματήσει αφού η συνάρτηση θα έχει εισαχθεί."
 
 #: shell/debugcontroller.cpp:279
-#, fuzzy, kde-format
-#| msgid "Step into I&nstruction"
+#, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Προώθηση στην ε&ντολή"
 
 #: shell/debugcontroller.cpp:280
-#, fuzzy, kde-format
-#| msgid "Step into instruction"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Προώθηση στην εντολή"
 
 #: shell/debugcontroller.cpp:281
-#, fuzzy, kde-format
-#| msgid "Steps into the next assembly instruction."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Προωθείται στην επόμενη εντολή assembly."
 
 #: shell/debugcontroller.cpp:285
-#, fuzzy, kde-format
-#| msgid "Step O&ut"
+#, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Απομάκρ&υνση"
 
 #: shell/debugcontroller.cpp:287
-#, fuzzy, kde-format
-#| msgid "Step out of the current function"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Απομάκρυνση από την τρέχουσα συνάρτηση"
 
 #: shell/debugcontroller.cpp:288
-#, fuzzy, kde-format
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2153,8 +2071,7 @@ msgstr ""
 "(δηλ. στη main()) τότε αυτή η λειτουργία δεν έχει αποτέλεσμα."
 
 #: shell/debugcontroller.cpp:296
-#, fuzzy, kde-format
-#| msgid "Toggle Breakpoint"
+#, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Εναλλαγή σημείου προσωρινής παύσης"
@@ -2165,15 +2082,13 @@ msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
 #: shell/debugcontroller.cpp:298
-#, fuzzy, kde-format
-#| msgid "Toggle breakpoint"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Εναλλαγή σημείου προσωρινής παύσης"
 
 #: shell/debugcontroller.cpp:299
-#, fuzzy, kde-format
-#| msgid "Toggles the breakpoint at the current line in editor."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr ""
@@ -2201,15 +2116,13 @@ msgid "Jumps to the execution line in the editor."
 msgstr ""
 
 #: shell/debugcontroller.cpp:431
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Διόρθωση"
 
 #: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
-#, fuzzy, kde-format
-#| msgid "Debug Launch"
+#, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Διόρθωση έναρξης"
@@ -2231,25 +2144,19 @@ msgstr ""
 "διαμόρφωση έναρξης μέσα στο πρόγραμμα διόρθωσης σφαλμάτων (debugger)."
 
 #: shell/debugcontroller.cpp:487
-#, fuzzy, kde-format
-#| msgid "&Continue"
+#, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Συνέχεια"
 
 #: shell/debugcontroller.cpp:489
-#, fuzzy, kde-format
-#| msgid "Continue application execution"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Συνέχεια εκτέλεσης της εφαρμογής"
 
 #: shell/debugcontroller.cpp:490
-#, fuzzy, kde-format
-#| msgid ""
-#| "Continues the execution of your application in the debugger. This only "
-#| "takes effect when the application has been halted by the debugger (i.e. a "
-#| "breakpoint has been activated or the interrupt was pressed)."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Continues the execution of your application in the debugger. This only takes "
@@ -2267,15 +2174,13 @@ msgid "Debugger Toolbar"
 msgstr "Γραμμή εργαλείων Debugger"
 
 #: shell/documentationcontroller.cpp:114
-#, fuzzy, kde-format
-#| msgid "Show Documentation"
+#, kde-format
 msgctxt "@action"
 msgid "Show Documentation"
 msgstr "Εμφάνιση τεκμηρίωσης"
 
 #: shell/documentationcontroller.cpp:121 shell/documentationcontroller.cpp:230
-#, fuzzy, kde-format
-#| msgid "Documentation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Τεκμηρίωση"
@@ -2286,8 +2191,7 @@ msgid "Untitled"
 msgstr "Χωρίς τίτλο"
 
 #: shell/documentcontroller.cpp:119
-#, fuzzy, kde-format
-#| msgid "Open File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Άνοιγμα αρχείου"
@@ -2326,31 +2230,25 @@ msgid "Do Not Open"
 msgstr ""
 
 #: shell/documentcontroller.cpp:610
-#, fuzzy, kde-format
-#| msgid "&Open..."
+#, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "Άν&οιγμα..."
 
 #: shell/documentcontroller.cpp:613
-#, fuzzy, kde-format
-#| msgid "Open file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Άνοιγμα αρχείου"
 
 #: shell/documentcontroller.cpp:614
-#, fuzzy, kde-format
-#| msgid "Opens a file for editing."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Ανοίγει ένα αρχείο για επεξεργασία."
 
 #: shell/documentcontroller.cpp:618
-#, fuzzy, kde-format
-#| msgid ""
-#| "This lists files which you have opened recently, and allows you to easily "
-#| "open them again."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This lists files which you have opened recently, and allows you to easily "
@@ -2360,24 +2258,19 @@ msgstr ""
 "ξανά με ευκολία."
 
 #: shell/documentcontroller.cpp:623
-#, fuzzy, kde-format
-#| msgid "Save Al&l"
+#, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Αποθήκευση ό&λων"
 
 #: shell/documentcontroller.cpp:625
-#, fuzzy, kde-format
-#| msgid "Save all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Αποθήκευση όλων των ανοιχτών εγγράφων"
 
 #: shell/documentcontroller.cpp:626
-#, fuzzy, kde-format
-#| msgid ""
-#| "Save all open documents, prompting for additional information when "
-#| "necessary."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
@@ -2386,22 +2279,19 @@ msgstr ""
 "είναι απαραίτητο."
 
 #: shell/documentcontroller.cpp:632
-#, fuzzy, kde-format
-#| msgid "Reload All"
+#, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Επαναφόρτωση όλων"
 
 #: shell/documentcontroller.cpp:634
-#, fuzzy, kde-format
-#| msgid "Revert all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Αποθήκευση όλων των ανοιχτών εγγράφων"
 
 #: shell/documentcontroller.cpp:635
-#, fuzzy, kde-format
-#| msgid "Revert all open documents, returning to the previously saved state."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
@@ -2409,45 +2299,37 @@ msgstr ""
 "αποθηκευμένη κατάσταση."
 
 #: shell/documentcontroller.cpp:641
-#, fuzzy, kde-format
-#| msgid "&Close"
+#, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "Κλεί&σιμο"
 
 #: shell/documentcontroller.cpp:643
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Κλείσιμο αρχείου"
 
 #: shell/documentcontroller.cpp:644
-#, fuzzy, kde-format
-#| msgid "Closes current file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Κλείσιμο τρέχοντος αρχείου."
 
 #: shell/documentcontroller.cpp:649
-#, fuzzy, kde-format
-#| msgid "Clos&e All"
+#, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Κλ&είσιμο όλων"
 
 #: shell/documentcontroller.cpp:651
-#, fuzzy, kde-format
-#| msgid "Close all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Κλείσιμο όλων των ανοιχτών εγγράφων"
 
 #: shell/documentcontroller.cpp:652
-#, fuzzy, kde-format
-#| msgid ""
-#| "Close all open documents, prompting for additional information when "
-#| "necessary."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Close all open documents, prompting for additional information when "
@@ -2457,24 +2339,19 @@ msgstr ""
 "είναι απαραίτητο."
 
 #: shell/documentcontroller.cpp:658
-#, fuzzy, kde-format
-#| msgid "Close All Ot&hers"
+#, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Κλείσιμο των υπολοίπ&ων"
 
 #: shell/documentcontroller.cpp:660
-#, fuzzy, kde-format
-#| msgid "Close all other documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Κλείσιμο των άλλων ανοιγμένων εγγράφων"
 
 #: shell/documentcontroller.cpp:661
-#, fuzzy, kde-format
-#| msgid ""
-#| "Close all open documents, with the exception of the currently active "
-#| "document."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Close all open documents, with the exception of the currently active "
@@ -2490,8 +2367,7 @@ msgid "Show Annotate on Current Document"
 msgstr "Εμφάνιση επισήμανσης στο τρέχον έγγραφο"
 
 #: shell/documentcontroller.cpp:667
-#, fuzzy, kde-format
-#| msgid "Annotate"
+#, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Επισήμανση"
@@ -2516,15 +2392,13 @@ msgid "Configure Text Editor"
 msgstr "Διαμόρφωση κειμενογράφου..."
 
 #: shell/environmentconfigurebutton.cpp:73
-#, fuzzy, kde-format
-#| msgid "Configure environment variables"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "Διαμόρφωση μεταβλητών περιβάλλοντος"
 
 #: shell/launchconfigurationdialog.cpp:48
-#, fuzzy, kde-format
-#| msgid "Launch Configurations"
+#, kde-format
 msgctxt "@title:window"
 msgid "Launch Configurations"
 msgstr "Διαμορφώσεις έναρξης"
@@ -2548,15 +2422,13 @@ msgid ""
 msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:197
-#, fuzzy, kde-format
-#| msgid "Rename configuration"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
 msgstr "Μετονομασία διαμόρφωσης"
 
 #: shell/launchconfigurationdialog.cpp:198
-#, fuzzy, kde-format
-#| msgid "Delete configuration"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
 msgstr "Διαγραφή διαμόρφωσης"
@@ -2570,8 +2442,7 @@ msgstr ""
 "την αποθήκευσή της;"
 
 #: shell/launchconfigurationdialog.cpp:254
-#, fuzzy, kde-format
-#| msgid "Unsaved Changes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Unsaved Changes"
 msgstr "Μη αποθηκευμένες αλλαγές"
@@ -2600,15 +2471,13 @@ msgid "Editing %2: <b>%1</b>"
 msgstr "Επεξεργασία %2: <b>%1</b>"
 
 #: shell/launchconfigurationdialog.cpp:711
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
 msgstr "Όνομα"
 
 #: shell/launchconfigurationdialog.cpp:714
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt ""
 "@title:column Type of the Launch Configurations (i.e. Python Application, C+"
 "+ Application)"
@@ -2617,31 +2486,27 @@ msgstr "Τύπος"
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: shell/launchconfigurationdialog.ui:29
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "Προσθήκη"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
 #: shell/launchconfigurationdialog.ui:39
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Αφαίρεση"
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
 #: shell/launchconfigurationdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Debugger:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Διορθωτής σφαλμάτων:"
 
 #: shell/loadedpluginsdialog.cpp:279
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Φορτωμένα πρόσθετα"
@@ -2657,23 +2522,19 @@ msgid " (read only)"
 msgstr ""
 
 #: shell/mainwindow_p.cpp:223
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
 msgstr "Διαμόρφωση %1"
 
 #: shell/mainwindow_p.cpp:224
-#, fuzzy, kde-format
-#| msgid "Lets you customize %1."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
 msgstr "Επιτρέπει την προσαρμογή του %1."
 
 #: shell/mainwindow_p.cpp:227
-#, fuzzy, kde-format
-#| msgid "Configure Notifications..."
+#, kde-format
 msgctxt "@action"
 msgid "Configure Notifications..."
 msgstr "Διαμόρφωση ειδοποιήσεων..."
@@ -2693,15 +2554,13 @@ msgstr ""
 "ειδοποιήσεις."
 
 #: shell/mainwindow_p.cpp:233
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgctxt "@action"
 msgid "Loaded Plugins"
 msgstr "Φορτωμένα πρόσθετα"
 
 #: shell/mainwindow_p.cpp:234
-#, fuzzy, kde-format
-#| msgid "Show a list of all loaded plugins"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
 msgstr "Εμφάνιση λίστας με όλα τα φορτωμένα πρόσθετα"
@@ -2715,8 +2574,7 @@ msgstr ""
 "πρόσθετα."
 
 #: shell/mainwindow_p.cpp:238
-#, fuzzy, kde-format
-#| msgid "&Next Window"
+#, kde-format
 msgctxt "@action"
 msgid "&Next Window"
 msgstr "Ε&πόμενο παράθυρο"
@@ -2734,8 +2592,7 @@ msgid "Switches to the next window."
 msgstr "Μετάβαση στο επόμενο παράθυρο."
 
 #: shell/mainwindow_p.cpp:246
-#, fuzzy, kde-format
-#| msgid "&Previous Window"
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Window"
 msgstr "Προη&γούμενο παράθυρο"
@@ -2765,8 +2622,7 @@ msgid "Jump to Previous Outputmark"
 msgstr ""
 
 #: shell/mainwindow_p.cpp:267
-#, fuzzy, kde-format
-#| msgid "Split View &Top/Bottom"
+#, kde-format
 msgctxt "@action"
 msgid "Split View &Top/Bottom"
 msgstr "Διαίρεση προβολής πάνω/κά&τω"
@@ -2784,8 +2640,7 @@ msgid "Splits the current view horizontally."
 msgstr "Διαίρεση της τρέχουσας προβολής οριζόντια."
 
 #: shell/mainwindow_p.cpp:275
-#, fuzzy, kde-format
-#| msgid "Split View &Left/Right"
+#, kde-format
 msgctxt "@action"
 msgid "Split View &Left/Right"
 msgstr "Διαίρεση προβολής &αριστερά/δεξιά"
@@ -2847,15 +2702,13 @@ msgid "Switches to the previous split view."
 msgstr "Κάνει εναλλαγή στο προηγούμενο παράθυρο."
 
 #: shell/mainwindow_p.cpp:302
-#, fuzzy, kde-format
-#| msgid "&New"
+#, kde-format
 msgctxt "@action new file"
 msgid "&New"
 msgstr "&Νέο"
 
 #: shell/mainwindow_p.cpp:303
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
 msgstr "Νέο"
@@ -2873,8 +2726,7 @@ msgid "Creates an empty file."
 msgstr "Δημιουργεί ένα κενό αρχείο."
 
 #: shell/mainwindow_p.cpp:311
-#, fuzzy, kde-format
-#| msgid "&Add Tool View..."
+#, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
 msgstr "Π&ροσθήκη εργαλειοπροβολής..."
@@ -2897,43 +2749,37 @@ msgid "&Window Color Scheme"
 msgstr ""
 
 #: shell/mainwindow_p.cpp:353
-#, fuzzy, kde-format
-#| msgid "Split View Top/Bottom"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
 msgstr "Διαίρεση προβολής κορυφή/βάση"
 
 #: shell/mainwindow_p.cpp:356
-#, fuzzy, kde-format
-#| msgid "Split View Left/Right"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
 msgstr "Διαίρεση προβολής αριστερά/δεξιά"
 
 #: shell/mainwindow_p.cpp:360
-#, fuzzy, kde-format
-#| msgid "New File"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "New File"
 msgstr "Νέο αρχείο"
 
 #: shell/mainwindow_p.cpp:366
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
 msgstr "Επαναφόρτωση"
 
 #: shell/mainwindow_p.cpp:369
-#, fuzzy, kde-format
-#| msgid "Reload All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload All"
 msgstr "Επαναφόρτωση όλων"
 
 #: shell/mainwindow_p.cpp:409
-#, fuzzy, kde-format
-#| msgid "Add Tool View"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
 msgstr "Προσθήκη εργαλειοπροβολής"
@@ -2975,8 +2821,7 @@ msgid "Open Project"
 msgstr "Έργο"
 
 #: shell/openprojectdialog.cpp:156
-#, fuzzy, kde-format
-#| msgid "Project information"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Πληροφορίες έργου"
@@ -2988,10 +2833,9 @@ msgid "Open \"%1\" as project"
 msgstr "Άνοιγμα %1 ως έργο"
 
 #: shell/openprojectdialog.cpp:223
-#, fuzzy, kde-format
-#| msgid "Selected URL is invalid."
+#, kde-format
 msgid "Selected URL is invalid"
-msgstr "Το επιλεγμένο URL δεν είναι έγκυρο."
+msgstr "Το επιλεγμένο URL δεν είναι έγκυρο"
 
 #: shell/openprojectdialog.cpp:268
 #, fuzzy, kde-format
@@ -3070,8 +2914,7 @@ msgid "Warning"
 msgstr "Εμφάνιση προειδοποιήσεων"
 
 #: shell/problem.cpp:169
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@item problem severity"
 msgid "Error"
 msgstr "Σφάλμα"
@@ -3084,71 +2927,61 @@ msgid "Re-parse all watched documents"
 msgstr "Κλείσιμο των άλλων ανοιγμένων εγγράφων"
 
 #: shell/problemmodel.cpp:321
-#, fuzzy, kde-format
-#| msgid "Source"
+#, kde-format
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "Πηγαίος"
 
 #: shell/problemmodel.cpp:323
-#, fuzzy, kde-format
-#| msgid "Problem"
+#, kde-format
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "Πρόβλημα"
 
 #: shell/problemmodel.cpp:325
-#, fuzzy, kde-format
-#| msgid "File"
+#, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "Αρχείο"
 
 #: shell/problemmodel.cpp:327
-#, fuzzy, kde-format
-#| msgid "Line"
+#, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr "Γραμμή"
 
 #: shell/problemmodel.cpp:329
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"
 msgstr "Στήλη"
 
 #: shell/progresswidget/progressdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Cancel this operation."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel this operation"
-msgstr "Ακύρωση αυτής της λειτουργίας."
+msgstr "Ακύρωση αυτής της λειτουργίας"
 
 #: shell/progresswidget/progressmanager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Aborting..."
+#, kde-format
 msgctxt "@info"
 msgid "Aborting..."
 msgstr "Εγκατάλειψη..."
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:99
-#, fuzzy, kde-format
-#| msgid "Open detailed progress dialog"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open detailed progress dialog"
 msgstr "Άνοιγμα παραθύρου διαλόγου λεπτομερούς προόδου"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:337
-#, fuzzy, kde-format
-#| msgid "Hide detailed progress window"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide detailed progress window"
 msgstr "Απόκρυψη παραθύρου λεπτομερούς προόδου"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:341
-#, fuzzy, kde-format
-#| msgid "Show detailed progress window"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show detailed progress window"
 msgstr "Εμφάνιση παραθύρου λεπτομερούς προόδου"
@@ -3208,10 +3041,9 @@ msgstr ""
 "IProjectFileManager."
 
 #: shell/project.cpp:402
-#, fuzzy, kde-format
-#| msgid "Could not open project"
+#, kde-format
 msgid "Could not open project."
-msgstr "Αδυναμία ανοίγματος του έργου"
+msgstr "Αδυναμία ανοίγματος του έργου."
 
 #: shell/project.cpp:560
 #, kde-format
@@ -3223,8 +3055,7 @@ msgstr ""
 "Προσοχή: οι ρυθμίσεις που τροποποιήσατε θα χαθούν."
 
 #: shell/projectcontroller.cpp:158
-#, fuzzy, kde-format
-#| msgid "Configure Project %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Διαμόρφωση έργου %1"
@@ -3240,47 +3071,35 @@ msgid "Already opening %1, not opening again"
 msgstr "Ήδη ανοίγεται το %1, δεν γίνεται άνοιγμα ξανά"
 
 #: shell/projectcontroller.cpp:468
-#, fuzzy, kde-format
-#| msgid "Override"
+#, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Αντικατάσταση"
 
 #: shell/projectcontroller.cpp:469
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Continue to open the project and use the just provided project "
-#| "configuration."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Continue to open the project and use the just provided project configuration"
-msgstr "Συνέχιση ανοίγματος του έργου με χρήση της παρεχόμενης διαμόρφωσης."
+msgstr "Συνέχιση ανοίγματος του έργου με χρήση της παρεχόμενης διαμόρφωσης"
 
 #: shell/projectcontroller.cpp:470
-#, fuzzy, kde-format
-#| msgid "Open Existing File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Άνοιγμα υπάρχοντος αρχείου"
 
 #: shell/projectcontroller.cpp:471
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Continue to open the project but use the existing project configuration."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
-msgstr ""
-"Συνέχιση ανοίγματος του έργου αλλά με χρήση της υπάρχουσας διαμόρφωσης."
+msgstr "Συνέχιση ανοίγματος του έργου αλλά με χρήση της υπάρχουσας διαμόρφωσης"
 
 #: shell/projectcontroller.cpp:473
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Cancel and do not open the project."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
-msgstr "Ακυρώστε και μην ανοίξετε το έργο."
+msgstr "Ακυρώστε και μην ανοίξετε το έργο"
 
 #: shell/projectcontroller.cpp:476
 #, kde-format
@@ -3292,8 +3111,7 @@ msgstr ""
 "Θέλετε να το παρακάμψετε ή να ανοίξετε το υπάρχον;"
 
 #: shell/projectcontroller.cpp:479
-#, fuzzy, kde-format
-#| msgid "Override existing project configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Παράκαμψη της τρέχουσας διαμόρφωσης έργου"
@@ -3387,30 +3205,25 @@ msgid "Closes all currently selected projects"
 msgstr "Κλείσιμο όλων των τρεχόντων επιλεγμένων έργων"
 
 #: shell/projectcontroller.cpp:592
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Άνοιγμα διαμόρφωσης..."
 
 #: shell/projectcontroller.cpp:598
-#, fuzzy, kde-format
-#| msgid "Commit Current Project..."
+#, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Υποβολή τρέχοντος έργου..."
 
 #: shell/projectcontroller.cpp:599
-#, fuzzy, kde-format
-#| msgid "Commit..."
+#, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Υποβολή..."
 
 #: shell/projectcontroller.cpp:610
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Open recent project"
+#, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Άνοιγμα πρόσφατου έργου"
@@ -3422,8 +3235,7 @@ msgid "Opens recently opened project."
 msgstr "Ανοίγει το πρόσφατα ανοιγμένο έργο."
 
 #: shell/projectcontroller.cpp:616
-#, fuzzy, kde-format
-#| msgid "Open Project for Current File"
+#, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Άνοιγμα έργου για το τρέχον αρχείο"
@@ -3455,15 +3267,13 @@ msgstr ""
 "συνεδρία.<br>Τι θέλετε να κάνετε;"
 
 #: shell/projectcontroller.cpp:859
-#, fuzzy, kde-format
-#| msgid "Add project to current session"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Προσθήκη έργου στην τρέχουσα συνεδρία"
 
 #: shell/projectcontroller.cpp:863
-#, fuzzy, kde-format
-#| msgid "Open session %1"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Άνοιγμα συνεδρίας %1"
@@ -3483,8 +3293,7 @@ msgstr "Άνοιγμα ξανά του τρέχοντος έργου;"
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
 #: shell/projectinfopage.ui:29 shell/projectinfopage.ui:56
-#, fuzzy, kde-format
-#| msgid "Select the Management Plugin to use for this project"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the Management Plugin to use for this project"
 msgstr "Επιλέξτε το πρόσθετο διαχείρισης γι' αυτό το έργο"
@@ -3501,16 +3310,14 @@ msgstr "Διαχείριση έργου"
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
 #: shell/projectinfopage.ui:39 shell/projectinfopage.ui:49
-#, fuzzy, kde-format
-#| msgid "Provide a name for the project"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Provide a name for the project"
 msgstr "Δώστε ένα όνομα για το έργο"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Όνομα:"
@@ -3559,69 +3366,60 @@ msgstr "Απαιτείται να υποδείξετε μια έγκυρη θέ�
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectsourcepage.ui:37
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Source:"
 msgstr "Πηγαίος:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/projectsourcepage.ui:49
-#, fuzzy, kde-format
-#| msgid "Destination"
+#, kde-format
 msgctxt "@title:group"
 msgid "Destination"
 msgstr "Προορισμός"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectsourcepage.ui:55
-#, fuzzy, kde-format
-#| msgid "directory"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Directory:"
-msgstr "κατάλογος"
+msgstr "κατάλογος:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
 #: shell/projectsourcepage.ui:62
-#, fuzzy, kde-format
-#| msgid "Select the directory to use..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
 msgstr "Επιλέξτε κατάλογο προς χρήση..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
-#, fuzzy, kde-format
-#| msgid "Source"
+#, kde-format
 msgctxt "@title:group"
 msgid "Source"
 msgstr "Πηγαίος"
 
 #. i18n: ectx: property (text), widget (QPushButton, get)
 #: shell/projectsourcepage.ui:105
-#, fuzzy, kde-format
-#| msgid "Get"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get"
 msgstr "Απόκτηση"
 
 #: shell/runcontroller.cpp:87
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "Διόρθωση"
 
 #: shell/runcontroller.cpp:96
-#, fuzzy, kde-format
-#| msgid "Profile"
+#, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "Προφίλ"
 
 #: shell/runcontroller.cpp:105
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "Εκτέλεση"
@@ -3632,8 +3430,7 @@ msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Η τρέχουσα διαμόρφωση έναρξης δεν υποστηρίζει τη λειτουργία '%1'."
 
 #: shell/runcontroller.cpp:425
-#, fuzzy, kde-format
-#| msgid "Configure Launches..."
+#, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Διαμόρφωση ενάρξεων..."
@@ -3655,15 +3452,13 @@ msgstr ""
 "την αλλαγή των υφιστάμενων."
 
 #: shell/runcontroller.cpp:432
-#, fuzzy, kde-format
-#| msgid "Execute Launch"
+#, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Εκτέλεση έναρξης"
 
 #: shell/runcontroller.cpp:433
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Εκτέλεση"
@@ -3685,8 +3480,7 @@ msgstr ""
 "διαμόρφωση έναρξης."
 
 #: shell/runcontroller.cpp:442
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
 msgstr "Διόρθωση"
@@ -3697,16 +3491,13 @@ msgstr "Διόρθωση"
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 #: shell/runcontroller.cpp:456
-#, fuzzy, kde-format
-#| msgid "Stop All Jobs"
+#, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Διακοπή όλων των εργασιών"
 
 #: shell/runcontroller.cpp:457
-#, fuzzy, kde-format
-#| msgctxt "Short text for 'Stop All Jobs' used in the toolbar"
-#| msgid "Stop All"
+#, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Διακοπή όλων"
@@ -3724,15 +3515,13 @@ msgid "Requests that all running jobs are stopped."
 msgstr "Αίτηση διακοπής όλων των εκτελούμενων εργασιών."
 
 #: shell/runcontroller.cpp:467
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Διακοπή"
 
 #: shell/runcontroller.cpp:469
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Διακοπή"
@@ -3750,8 +3539,7 @@ msgid "List of jobs that can be stopped individually."
 msgstr "Λίστα εργασιών που η κάθε μία μπορεί να διακοπεί ξεχωριστά."
 
 #: shell/runcontroller.cpp:475
-#, fuzzy, kde-format
-#| msgid "Current Launch Configuration"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Τρέχουσα διαμόρφωση έναρξης"
@@ -3771,8 +3559,7 @@ msgstr ""
 "εκτέλεσης."
 
 #: shell/runcontroller.cpp:590
-#, fuzzy, kde-format
-#| msgid "<%1> Unnamed job"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Εργασία χωρίς όνομα"
@@ -3783,8 +3570,7 @@ msgid "New %1 Launcher"
 msgstr "Νέος %1 εκτελεστής"
 
 #: shell/runcontroller.cpp:1004
-#, fuzzy, kde-format
-#| msgid "%1 As..."
+#, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1 ως..."
@@ -3805,8 +3591,7 @@ msgid "Runtime: %1"
 msgstr ""
 
 #: shell/savedialog.cpp:44
-#, fuzzy, kde-format
-#| msgid "Save Modified Files?"
+#, kde-format
 msgctxt "@title:window"
 msgid "Save Modified Files?"
 msgstr "Αποθήκευση τροποποιημένων αρχείων;"
@@ -3817,15 +3602,13 @@ msgid "The following files have been modified. Save them?"
 msgstr "Τα παρακάτω αρχεία τροποποιήθηκαν. Να αποθηκευτούν;"
 
 #: shell/savedialog.cpp:65
-#, fuzzy, kde-format
-#| msgid "Save &None"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
 msgstr "&Καμία αποθήκευση"
 
 #: shell/savedialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Discard all modifications"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
 msgstr "Απόρριψη όλων των τροποποιήσεων"
@@ -3836,32 +3619,25 @@ msgid "(no projects)"
 msgstr "(χωρίς έργα)"
 
 #: shell/sessionchooserdialog.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Delete session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
 msgstr "Διαγραφή συνεδρίας"
 
 #: shell/sessionchooserdialog.cpp:50
-#, fuzzy, kde-format
-#| msgid "Pick a Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
 msgstr "Επιλογή συνεδρίας"
 
 #: shell/sessionchooserdialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Run"
+#, kde-format
 msgctxt "@action:button"
 msgid "Run"
 msgstr "Εκτέλεση"
 
 #: shell/sessionchooserdialog.cpp:95
-#, fuzzy, kde-format
-#| msgid ""
-#| "Active session.\n"
-#| "pid %1, app %2, host %3"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Active session.\n"
@@ -3876,9 +3652,7 @@ msgid "Running"
 msgstr "Εκτελείται"
 
 #: shell/sessionchooserdialog.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Cannot Delete Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Cannot Delete Session"
 msgstr "Αδυναμία διαγραφής συνεδρίας"
@@ -3912,27 +3686,22 @@ msgstr ""
 "μείνουν ανέπαφα. Θέλετε πραγματικά να συνεχίσετε;"
 
 #: shell/sessionchooserdialog.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Delete Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
 msgstr "Διαγραφή συνεδρίας"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "Έναρξη νέας συνεδρίας"
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "New Session Name"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "New session name:"
-msgstr "Νέο όνομα συνεδρίας"
+msgstr "Νέο όνομα συνεδρίας:"
 
 #: shell/sessioncontroller.cpp:144
 #, kde-format
@@ -3944,8 +3713,7 @@ msgstr ""
 "έργα θα μείνουν ανέπαφα. Θέλετε πραγματικά να συνεχίσετε;"
 
 #: shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
 msgstr "Μετονομασία συνεδρίας"
@@ -3985,22 +3753,19 @@ msgid "Start a new KDevelop instance with an empty named session"
 msgstr "Εκκίνηση νέου KDevelop με κενή συνεδρία"
 
 #: shell/sessioncontroller.cpp:293
-#, fuzzy, kde-format
-#| msgid "Rename Current Session..."
+#, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
 msgstr "Μετονομασία τρέχουσας συνεδρίας..."
 
 #: shell/sessioncontroller.cpp:299
-#, fuzzy, kde-format
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
 msgstr "Διαγραφή τρέχουσας συνεδρίας..."
 
 #: shell/sessioncontroller.cpp:303
-#, fuzzy, kde-format
-#| msgid "Quit"
+#, kde-format
 msgctxt "@action"
 msgid "Quit"
 msgstr "Εγκατάλειψη"
@@ -4011,36 +3776,31 @@ msgid "Copy of %1"
 msgstr "Αντίγραφο του %1"
 
 #: shell/sessioncontroller.cpp:613
-#, fuzzy, kde-format
-#| msgid "Identity"
+#, kde-format
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "Ταυτότητα"
 
 #: shell/sessioncontroller.cpp:614
-#, fuzzy, kde-format
-#| msgid "Contents"
+#, kde-format
 msgctxt "@title:column"
 msgid "Contents"
 msgstr "Περιεχόμενα"
 
 #: shell/sessioncontroller.cpp:615
-#, fuzzy, kde-format
-#| msgid "State"
+#, kde-format
 msgctxt "@title:column"
 msgid "State"
 msgstr "Κατάσταση"
 
 #: shell/sessioncontroller.cpp:616
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Όνομα"
 
 #: shell/sessioncontroller.cpp:622
-#, fuzzy, kde-format
-#| msgid "Filter:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "Φίλτρο:"
@@ -4104,17 +3864,13 @@ msgstr ""
 "μιαν άλλη συνεδρία.</p>"
 
 #: shell/sessionlock.cpp:189
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Retry startup"
+#, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Επαναδοκιμή εκκίνησης"
 
 #: shell/sessionlock.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Choose another session"
+#, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Επιλέξτε άλλη συνεδρία"
@@ -4150,11 +3906,7 @@ msgstr "Ενεργοποίηση αναλυτή παρασκηνίου"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:20
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Enables or disables the background parser.<br>If unsure, leave it "
-#| "enabled. Disabling the background parser will disable large parts of "
-#| "KDevelop's functionality.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Enables or disables the background parser.<br>If unsure, leave it "
@@ -4168,8 +3920,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:23
-#, fuzzy, kde-format
-#| msgid "Enable Background Parser"
+#, kde-format
 msgctxt "@title:group"
 msgid "Enable Background Parser"
 msgstr "Ενεργοποίηση αναλυτή παρασκηνίου"
@@ -4177,25 +3928,21 @@ msgstr "Ενεργοποίηση αναλυτή παρασκηνίου"
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:35 shell/settings/bgpreferences.ui:45
-#, fuzzy, kde-format
-#| msgid ""
-#| "The time to wait before the document is re-analyzed when you edit it."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "The time to wait before the document is re-analyzed when you edit it."
 msgstr "Ο χρόνος αναμονής πριν το έγγραφο αναλυθεί ξανά όταν το επεξεργάζεστε."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/bgpreferences.ui:38
-#, fuzzy, kde-format
-#| msgid "Delay"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Delay:"
-msgstr "Καθυστέρηση"
+msgstr "Καθυστέρηση:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:48
-#, fuzzy, kde-format
-#| msgid " ms"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " ms"
 msgstr " ms"
@@ -4203,10 +3950,7 @@ msgstr " ms"
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
 #: shell/settings/bgpreferences.ui:61 shell/settings/bgpreferences.ui:71
-#, fuzzy, kde-format
-#| msgid ""
-#| "The maximum number of parallel instances the background parser uses. If "
-#| "unsure, select 1 or 2."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The maximum number of parallel instances the background parser uses. If "
@@ -4217,16 +3961,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/bgpreferences.ui:64
-#, fuzzy, kde-format
-#| msgid "Maximum Number of Threads"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
-msgstr "Μέγιστος αριθμός νημάτων"
+msgstr "Μέγιστος αριθμός νημάτων:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_threads)
 #: shell/settings/bgpreferences.ui:74
-#, fuzzy, kde-format
-#| msgid " threads"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " threads"
 msgstr " νήματα"
@@ -4258,8 +4000,7 @@ msgstr "Προεπισκόπηση"
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
 #: shell/settings/editstyledialog.ui:69
 #: shell/sourceformatterselectionedit.ui:112
-#, fuzzy, kde-format
-#| msgid "Preview:"
+#, kde-format
 msgctxt "@label"
 msgid "Preview:"
 msgstr "Προεπισκόπηση:"
@@ -4270,8 +4011,7 @@ msgid "Environment"
 msgstr "Περιβάλλον"
 
 #: shell/settings/environmentpreferences.cpp:84
-#, fuzzy, kde-format
-#| msgid "Configure environment variables"
+#, kde-format
 msgid "Configure Environment Variables"
 msgstr "Διαμόρφωση μεταβλητών περιβάλλοντος"
 
@@ -4281,15 +4021,13 @@ msgid "%1 (default profile)"
 msgstr ""
 
 #: shell/settings/environmentprofilemodel.cpp:91
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@title:column"
 msgid "Variable"
 msgstr "Μεταβλητή"
 
 #: shell/settings/environmentprofilemodel.cpp:93
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Τιμή"
@@ -4380,9 +4118,7 @@ msgstr[0] " αρχεία"
 msgstr[1] " αρχεία"
 
 #: shell/settings/languagepreferences.cpp:77
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Language Support"
+#, kde-format
 msgid "Language Support"
 msgstr "Υποστήριξη γλώσσας"
 
@@ -4393,8 +4129,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/languagepreferences.ui:29
-#, fuzzy, kde-format
-#| msgid "Code Completion"
+#, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
 msgstr "Συμπλήρωση κώδικα"
@@ -4403,9 +4138,7 @@ msgstr "Συμπλήρωση κώδικα"
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_automaticInvocation)
 #: shell/settings/languagepreferences.ui:35
 #: shell/settings/languagepreferences.ui:48
-#, fuzzy, kde-format
-#| msgid ""
-#| "If disabled, the code completion widget will never show automatically."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "If disabled, the code completion widget will never show automatically."
 msgstr ""
@@ -4414,18 +4147,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: shell/settings/languagepreferences.ui:38
-#, fuzzy, kde-format
-#| msgid "Enable Automatic Invocation"
+#, kde-format
 msgctxt "@label"
 msgid "Enable automatic invocation:"
-msgstr "Ενεργοποίηση αυτόματης κλήσης"
+msgstr "Ενεργοποίηση αυτόματης κλήσης:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_7)
 #: shell/settings/languagepreferences.ui:58
-#, fuzzy, kde-format
-#| msgid ""
-#| "Choose whether to display additional information for the currently "
-#| "selected codecompletion item."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Choose whether to display additional information for the currently selected "
@@ -4436,18 +4165,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: shell/settings/languagepreferences.ui:61
-#, fuzzy, kde-format
-#| msgid "Additional Information For Current Item"
+#, kde-format
 msgctxt "@label"
 msgid "Additional information for current item:"
-msgstr "Πρόσθετες πληροφορίες για το τρέχον αντικείμενο"
+msgstr "Πρόσθετες πληροφορίες για το τρέχον αντικείμενο:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_showMultiLineSelectionInformation)
 #: shell/settings/languagepreferences.ui:71
-#, fuzzy, kde-format
-#| msgid ""
-#| "Choose whether to display additional information for the currently "
-#| "selected code completion item."
+#, kde-format
 msgctxt "info:tooltip"
 msgid ""
 "Choose whether to display additional information for the currently selected "
@@ -4471,40 +4196,35 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/languagepreferences.ui:84
-#, fuzzy, kde-format
-#| msgid "Detailed Completion:"
+#, kde-format
 msgctxt "@label"
 msgid "Detailed completion:"
 msgstr "Λεπτομερής συμπλήρωση:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:101
-#, fuzzy, kde-format
-#| msgid "Never"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Never"
 msgstr "Ποτέ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:106
-#, fuzzy, kde-format
-#| msgid "When invoked manually"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "When Invoked Manually"
 msgstr "Όταν καλείται χειροκίνητα"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
-#, fuzzy, kde-format
-#| msgid "Always"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
 msgstr "Πάντα"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/languagepreferences.ui:122
-#, fuzzy, kde-format
-#| msgid "Semantic Code Highlighting"
+#, kde-format
 msgctxt "@title:group"
 msgid "Semantic Code Highlighting"
 msgstr "Σημασιολογικός τονισμός κώδικα"
@@ -4524,11 +4244,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, localColorizationLabel)
 #: shell/settings/languagepreferences.ui:134
-#, fuzzy, kde-format
-#| msgid "Local Colorization Intensity"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Local colorization intensity:"
-msgstr "Ένταση τοπικού χρωματισμού"
+msgstr "Ένταση τοπικού χρωματισμού:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_9)
@@ -4579,11 +4298,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
 #: shell/settings/languagepreferences.ui:221
-#, fuzzy, kde-format
-#| msgid "Global Colorization Intensity"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Global colorization intensity:"
-msgstr "Ένταση καθολικού χρωματισμού"
+msgstr "Ένταση καθολικού χρωματισμού:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightSemanticProblems)
@@ -4599,11 +4317,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/languagepreferences.ui:234
-#, fuzzy, kde-format
-#| msgid "Highlight Semantic Problems"
+#, kde-format
 msgctxt "@label"
 msgid "Highlight semantic problems:"
-msgstr "Τονισμός σημασιολογικών προβλημάτων"
+msgstr "Τονισμός σημασιολογικών προβλημάτων:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
@@ -4619,11 +4336,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/languagepreferences.ui:257
-#, fuzzy, kde-format
-#| msgid "Highlight Problematic Lines"
+#, kde-format
 msgctxt "@label"
 msgid "Highlight problematic lines:"
-msgstr "Τονισμός προβληματικών γραμμών"
+msgstr "Τονισμός προβληματικών γραμμών:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:277
@@ -4679,9 +4395,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:327
-#, fuzzy, kde-format
-#| msgid ""
-#| "Space-separated list of words that make a comment represent a TODO item"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Space-separated list of words that make a comment represent a TODO item"
 msgstr ""
@@ -4698,9 +4412,7 @@ msgstr "Λέξεις δείκτη TODO"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
 #: shell/settings/languagepreferences.ui:340
-#, fuzzy, kde-format
-#| msgid ""
-#| "Space-separated list of words that make a comment represent a TODO item."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Space-separated list of words that make a comment represent a TODO item."
@@ -4710,8 +4422,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/languagepreferences.ui:369
-#, fuzzy, kde-format
-#| msgid "Project Parsing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Parsing"
 msgstr "Συντακτική ανάλυση έργου"
@@ -4735,11 +4446,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/settings/languagepreferences.ui:382
-#, fuzzy, kde-format
-#| msgid "Minimum project size for simplified parsing"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
-msgstr "Ελάχιστο μέγεθος έργου για απλοποιημένη συντακτική ανάλυση"
+msgstr "Ελάχιστο μέγεθος έργου για απλοποιημένη συντακτική ανάλυση:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: shell/settings/languagepreferences.ui:415
@@ -4930,50 +4640,44 @@ msgstr "Διαμόρφωση έργου %1"
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_projectsBaseDirectory)
 #: shell/settings/projectpreferences.ui:22
 #: shell/settings/projectpreferences.ui:35
-#, fuzzy, kde-format
-#| msgid "Select the base directory where new projects are to be created."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the base directory where new projects are to be created"
-msgstr "Επιλέξτε το βασικό κατάλογο όπου θα δημιουργηθούν τα νέα έργα."
+msgstr "Επιλέξτε το βασικό κατάλογο όπου θα δημιουργηθούν τα νέα έργα"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/projectpreferences.ui:25
-#, fuzzy, kde-format
-#| msgid "Projects Base Directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Projects base directory:"
 msgstr "Κατάλογος βάσης έργων:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:47
-#, fuzzy, kde-format
-#| msgid "Parse all files in a project after the project has been opened."
+#, kde-format
 msgctxt "@info:tolltip"
 msgid "Parse all files in a project after the project has been opened"
-msgstr "Ανάλυση όλων των αρχείων ενός έργου όταν το έργο ανοίξει."
+msgstr "Ανάλυση όλων των αρχείων ενός έργου όταν το έργο ανοίξει"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:50
-#, fuzzy, kde-format
-#| msgid "Schedule all project files for parsing"
+#, kde-format
 msgctxt "@option:check"
 msgid "Schedule all project files for parsing"
 msgstr "Προγραμματισμός ανάλυσης όλων των αρχείων έργου"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:57
-#, fuzzy, kde-format
-#| msgid "Save all modified documents when the \"build\" action is triggered."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified documents when the \"build\" action is triggered"
 msgstr ""
 "Να γίνεται αποθήκευση όλων των τροποποιημένων εγγράφων όταν η ενέργεια "
-"«κατασκευή» ενεργοποιείται."
+"«κατασκευή» ενεργοποιείται"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:60
-#, fuzzy, kde-format
-#| msgid "Save all documents before building"
+#, kde-format
 msgctxt "@option:check"
 msgid "Save all documents before building"
 msgstr "Αποθήκευση όλων των εγγράφων πριν από την κατασκευή"
@@ -5004,18 +4708,14 @@ msgstr "Δεν υπάρχει διαθέσιμος διαμορφωτής"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/sourceformattersettings.ui:20
-#, fuzzy, kde-format
-#| msgid "General"
+#, kde-format
 msgctxt "@title:group"
 msgid "General"
 msgstr "Γενικά"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:26
-#, fuzzy, kde-format
-#| msgid ""
-#| "Override the editor indentation mode according to the formatting style "
-#| "for documents without Kate modeline."
+#, kde-format
 msgctxt "@info:tolltip"
 msgid ""
 "Override the editor indentation mode according to the formatting style for "
@@ -5026,18 +4726,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:29
-#, fuzzy, kde-format
-#| msgid "Override Kate Indentation Mode"
+#, kde-format
 msgctxt "@option:check"
 msgid "Override Kate Indentation Mode"
 msgstr "Παράκαμψη της λειτουργίας εσοχών του Kate"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:36
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add a Kate modeline according to the formatting style to formatted "
-#| "documents."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
@@ -5047,16 +4743,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:39
-#, fuzzy, kde-format
-#| msgid "Add Kate Modeline"
+#, kde-format
 msgctxt "@option:check"
 msgid "Add Kate Modeline"
 msgstr "Προσθήκη Kate Modeline"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Formatting Styles"
+#, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
 msgstr "Στιλ διαμόρφωσης"
@@ -5074,24 +4768,21 @@ msgid "Configure Templates"
 msgstr "Διαμόρφωση ενάρξεων..."
 
 #: shell/settings/templatepage.cpp:30
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Ανάκτηση περισσότερων προτύπων"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr "Φόρτωση προτύπου από αρχείο"
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
 #: shell/settings/templatepage.ui:36
-#, fuzzy, kde-format
-#| msgid "Clone Template"
+#, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"
 msgstr "Κλωνοποίηση προτύπων"
@@ -5104,8 +4795,7 @@ msgstr "Περιβάλλον χρήστη"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/uiconfig.ui:23
-#, fuzzy, kde-format
-#| msgid "Dock Window Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dock Window Behavior"
 msgstr "Συμπεριφορά παραθύρου προσάρτησης"
@@ -5123,8 +4813,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/uiconfig.ui:32
-#, fuzzy, kde-format
-#| msgid "Bottom left corner occupied by:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom left corner occupied by:"
 msgstr "Η κάτω αριστερή γωνία είναι κατειλημμένη από:"
@@ -5142,16 +4831,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/uiconfig.ui:42
-#, fuzzy, kde-format
-#| msgid "Bottom right corner occupied by:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom right corner occupied by:"
 msgstr "Η κάτω δεξιά γωνία είναι κατειλημμένη από:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
-#, fuzzy, kde-format
-#| msgid "Left Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
 msgstr "Αριστερή προσάρτηση"
@@ -5159,50 +4846,42 @@ msgstr "Αριστερή προσάρτηση"
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:58 shell/settings/uiconfig.ui:75
-#, fuzzy, kde-format
-#| msgid "Bottom Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
 msgstr "Προσάρτηση βάσης"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
-#, fuzzy, kde-format
-#| msgid "Right Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
 msgstr "Δεξιά προσάρτηση"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
-#, fuzzy, kde-format
-#| msgid "Tabbed Browsing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Tabbed Browsing"
 msgstr "Περιήγηση με καρτέλες"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:92
-#, fuzzy, kde-format
-#| msgid "Controls whether to open new tabs next to the active one."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Controls whether to open new tabs next to the active one."
 msgstr "Ελέγχει το άνοιγμα νέων καρτελών δίπλα στην ενεργή."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:95
-#, fuzzy, kde-format
-#| msgid "Open new tab after current"
+#, kde-format
 msgctxt "@option:check"
 msgid "Open new tab after current"
 msgstr "Άνοιγμα νέας καρτέλας μετά από την τρέχουσα"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:106
-#, fuzzy, kde-format
-#| msgid ""
-#| "When enabled, plugins can group related files side by side.\n"
-#| "For example, a header file will be opened next to the implementation file."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "When enabled, plugins can group related files side by side.\n"
@@ -5215,30 +4894,25 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:109
-#, fuzzy, kde-format
-#| msgid "Arrange related documents side by side"
+#, kde-format
 msgctxt "@option:check"
 msgid "Arrange related documents side by side"
 msgstr "Διευθέτηση συσχετισμένων εγγράφων σε παράθεση"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:116
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enables or disables the display of the tab bar at the top of the editor "
-#| "window."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Enables or disables the display of the tab bar at the top of the editor "
 "window."
 msgstr ""
-"(Απ)ενεργοποιεί την εμφάνιση της γραμμής καρτελών στην κορυφή του παραθύρου "
+"(απ)ενεργοποιεί την εμφάνιση της γραμμής καρτελών στην κορυφή του παραθύρου "
 "του επεξεργαστή."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:119
-#, fuzzy, kde-format
-#| msgid "Show tabs"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show tabs"
 msgstr "Εμφάνιση καρτελών"
@@ -5295,15 +4969,13 @@ msgid "Configure User Interface"
 msgstr "Περιβάλλον χρήστη"
 
 #: shell/sourceformattercontroller.cpp:226
-#, fuzzy, kde-format
-#| msgid "&Reformat Source"
+#, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "Αναδιαμόρ&φωση πηγαίου κώδικα"
 
 #: shell/sourceformattercontroller.cpp:230
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "Αναδιαμόρφωση γραμμής"
@@ -5458,8 +5130,7 @@ msgstr "Νέο %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/sourceformatterselectionedit.ui:29
-#, fuzzy, kde-format
-#| msgid "Language:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Language:"
 msgstr "Γλώσσα:"
@@ -5490,8 +5161,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
-#, fuzzy, kde-format
-#| msgid "Formatter:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
 msgstr "Διαμορφωτής:"
@@ -5504,24 +5174,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
-#, fuzzy, kde-format
-#| msgid "Style:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
 msgstr "Στιλ:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: shell/sourceformatterselectionedit.ui:201
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Νέο"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
 #: shell/sourceformatterselectionedit.ui:208
-#, fuzzy, kde-format
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "Επεξεργασία..."
@@ -5559,29 +5226,25 @@ msgid " Line: %1 Col: %2 "
 msgstr " Γραμμή: %1 Στήλη: %2 "
 
 #: shell/uicontroller.cpp:81
-#, fuzzy, kde-format
-#| msgid "Code"
+#, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "Κώδικας"
 
 #: shell/uicontroller.cpp:92
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "Διόρθωση"
 
 #: shell/uicontroller.cpp:101
-#, fuzzy, kde-format
-#| msgid "Review"
+#, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "Επιθεώρηση"
 
 #: shell/uicontroller.cpp:460
-#, fuzzy, kde-format
-#| msgid "Select Tool View to Add"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
 msgstr "Επιλογή εργαλειοπροβολής για προσθήκη"
@@ -5598,59 +5261,49 @@ msgid "<b>Working Set</b>"
 msgstr "<b>Σειρά εργασιών</b>"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:94
-#, fuzzy, kde-format
-#| msgid "Remove this working set. The contained documents are not affected."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this working set. The contained documents are not affected."
 msgstr ""
 "Αφαιρέστε αυτή τη σειρά εργασιών. Τα έγγραφα που περιέχει δεν επηρεάζονται."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:120
-#, fuzzy, kde-format
-#| msgid "Documents:"
+#, kde-format
 msgctxt "@label"
 msgid "Documents:"
 msgstr "Έγγραφα:"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:128
-#, fuzzy, kde-format
-#| msgid "Add All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add All"
 msgstr "Προσθήκη όλων"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:129
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add all documents that are part of this working set to the currently "
-#| "active working set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Add all documents that are part of this working set to the currently active "
 "working set"
 msgstr ""
 "Προσθήκη όλων των εγγράφων που είναι τμήμα αυτής της σειράς εργασιών στην "
-"τρέχουσα ενεργή σειρά εργασιών."
+"τρέχουσα ενεργή σειρά εργασιών"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Remove All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove All"
 msgstr "Αφαίρεση όλων"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:137
-#, fuzzy, kde-format
-#| msgid ""
-#| "Remove all documents that are part of this working set from the currently "
-#| "active working set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Remove all documents that are part of this working set from the currently "
 "active working set"
 msgstr ""
 "Αφαίρεση όλων των εγγράφων που είναι τμήμα αυτής της σειράς εργασιών από την "
-"τρέχουσα ενεργή σειρά εργασιών."
+"τρέχουσα ενεργή σειρά εργασιών"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:170
 #, kde-format
@@ -5659,15 +5312,13 @@ msgid "Click to open and activate this document."
 msgstr "Κάντε κλικ για άνοιγμα και ενεργοποίηση αυτού του εγγράφου."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:281
-#, fuzzy, kde-format
-#| msgid "Remove this file from the current working set"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this file from the current working set"
 msgstr "Αφαίρεση αυτού του αρχείου από την τρέχουσα σειρά εργασιών"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:286
-#, fuzzy, kde-format
-#| msgid "Add this file to the current working set"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add this file to the current working set"
 msgstr "Προσθήκη αυτού του αρχείου στην τρέχουσα σειρά εργασιών"
@@ -5679,8 +5330,7 @@ msgid "Stash"
 msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:321
-#, fuzzy, kde-format
-#| msgid "Load"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load"
 msgstr "Φόρτωση"
@@ -5691,8 +5341,7 @@ msgid "Line: 00000 Col: 000"
 msgstr " Γραμμή: 00000 Στήλη: 000"
 
 #: sublime/container.cpp:379
-#, fuzzy, kde-format
-#| msgid "Show sorted list of opened documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Εμφάνιση ταξινομημένης λίστας με τα ανοιχτά έγγραφα"
@@ -5711,8 +5360,7 @@ msgid "Copy Filename"
 msgstr "Όνομα αρχείου"
 
 #: sublime/container.cpp:790
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Κλείσιμο"
@@ -5725,18 +5373,16 @@ msgid "Close All Other"
 msgstr "Κλείσιμο των υπολοίπ&ων"
 
 #: sublime/container.cpp:794
-#, fuzzy, kde-format
-#| msgid "Clos&e All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
-msgstr "Κλ&είσιμο όλων"
+msgstr "Κλείσιμο όλων"
 
 #: sublime/idealbuttonbarwidget.cpp:37
-#, fuzzy, kde-format
-#| msgid "Toggle '%1' tool view."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
-msgstr "Εναλλαγή '%1' εργαλειοπροβολής."
+msgstr "Εναλλαγή '%1' εργαλειοπροβολής"
 
 #: sublime/idealbuttonbarwidget.cpp:99
 #, kde-format
@@ -5759,25 +5405,19 @@ msgid "Tool View Position"
 msgstr "Θέση εργαλειοπροβολής"
 
 #: sublime/idealdockwidget.cpp:114
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Left"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Αριστερά"
 
 #: sublime/idealdockwidget.cpp:115
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Βάση"
 
 #: sublime/idealdockwidget.cpp:116
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Right"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Δεξιά"
@@ -5789,8 +5429,7 @@ msgid "Detached"
 msgstr ""
 
 #: sublime/idealdockwidget.cpp:135
-#, fuzzy, kde-format
-#| msgid "Assign Shortcut..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Ορισμός συντόμευσης..."
@@ -5811,8 +5450,7 @@ msgid "Remove Tool View"
 msgstr "Αφαίρεση εργαλειοπροβολής"
 
 #: sublime/idealdockwidget.cpp:150
-#, fuzzy, kde-format
-#| msgid "Assign Shortcut For '%1' Tool View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
 msgstr "Ορισμός συντόμευσης για την '%1' εργαλειοπροβολή"
@@ -5831,22 +5469,19 @@ msgid "Remove most of the controls so you can focus on what matters"
 msgstr ""
 
 #: sublime/mainwindow_p.cpp:87
-#, fuzzy, kde-format
-#| msgid "Show Left Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
 msgstr "Εμφάνιση αριστερής προσάρτησης"
 
 #: sublime/mainwindow_p.cpp:94
-#, fuzzy, kde-format
-#| msgid "Show Right Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
 msgstr "Εμφάνιση δεξιάς προσάρτησης"
 
 #: sublime/mainwindow_p.cpp:100
-#, fuzzy, kde-format
-#| msgid "Show Bottom Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
 msgstr "Εμφάνιση κάτω προσάρτησης"
@@ -5858,29 +5493,25 @@ msgid "Focus Editor"
 msgstr "Επεξεργαστής εστίασης"
 
 #: sublime/mainwindow_p.cpp:111
-#, fuzzy, kde-format
-#| msgid "Hide/Restore Docks"
+#, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
 msgstr "Απόκρυψη/επαναφορά προσαρτήσεων"
 
 #: sublime/mainwindow_p.cpp:116
-#, fuzzy, kde-format
-#| msgid "Next Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
 msgstr "Επόμενη εργαλειοπροβολή"
 
 #: sublime/mainwindow_p.cpp:122
-#, fuzzy, kde-format
-#| msgid "Previous Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
 msgstr "Προηγούμενη εργαλειοπροβολή"
 
 #: sublime/mainwindow_p.cpp:128
-#, fuzzy, kde-format
-#| msgid "Tool Views"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Εργαλειοπροβολές"
@@ -5901,8 +5532,7 @@ msgid "Bottom Button Bar"
 msgstr "Γραμμή κουμπιού βάσης"
 
 #: sublime/mainwindow_p.cpp:812
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Κλείσιμο"
@@ -5920,8 +5550,7 @@ msgid "duchainify"
 msgstr "duchainify"
 
 #: util/duchainify/main.cpp:264
-#, fuzzy, kde-format
-#| msgid "Duchain builder application"
+#, kde-format
 msgid "DUChain builder application"
 msgstr "Εφαρμογή κατασκευής αλυσίδας Duchain"
 
@@ -6019,8 +5648,7 @@ msgid "Recursively dump errors from imported contexts."
 msgstr ""
 
 #: util/environmentselectionmodel.cpp:40
-#, fuzzy, kde-format
-#| msgid "Profile"
+#, kde-format
 msgctxt "@title:column"
 msgid "Profile"
 msgstr "Προφίλ"
@@ -6069,8 +5697,7 @@ msgid "Set Write Permissions"
 msgstr "Έναρξη νέας συνεδρίας"
 
 #: util/shellutils.cpp:84
-#, fuzzy, kde-format
-#| msgid "Ignore"
+#, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Αγνόησε"
@@ -6115,15 +5742,13 @@ msgid "Command exited with value %1."
 msgstr "Η εντολή τερμάτισε με τιμή %1."
 
 #: vcs/dvcs/dvcsplugin.cpp:96
-#, fuzzy, kde-format
-#| msgid "Branches..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Κλάδοι..."
 
 #: vcs/dvcs/ui/branchmanager.cpp:40
-#, fuzzy, kde-format
-#| msgid "Branch Manager"
+#, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Διαχειριστής κλάδων"
@@ -6137,15 +5762,13 @@ msgstr ""
 "κλάδο."
 
 #: vcs/dvcs/ui/branchmanager.cpp:117
-#, fuzzy, kde-format
-#| msgid "New branch"
+#, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Νέος κλάδος"
 
 #: vcs/dvcs/ui/branchmanager.cpp:117
-#, fuzzy, kde-format
-#| msgid "Name of the new branch:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Όνομα του νέου κλάδου:"
@@ -6230,32 +5853,28 @@ msgstr "Υποστήριξη VCS"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:31
-#, fuzzy, kde-format
-#| msgid "Creates new branch based on the selected branch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Creates new branch based on the selected branch"
 msgstr "Δημιουργία νέου κλάδου με βάση τον επιλεγμένο κλάδο"
 
 #. i18n: ectx: property (text), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:34
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action:button new branch"
 msgid "New"
 msgstr "Νέο"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, deleteButton)
 #: vcs/dvcs/ui/branchmanager.ui:41
-#, fuzzy, kde-format
-#| msgid "The same as git branch -D"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "The same as git branch -D"
 msgstr "Ίδιο με το git-branch -D"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:70
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@action:button"
 msgid "Rename"
 msgstr "Μετονομασία"
@@ -6279,16 +5898,14 @@ msgstr "Σύγκριση με τη βάση..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:103
-#, fuzzy, kde-format
-#| msgid "Checkout to the selected branch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Checkout to the selected branch"
 msgstr "Checkout στον επιλεγμένο κλάδο"
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
-#, fuzzy, kde-format
-#| msgid "Checkout"
+#, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
 msgstr "Checkout"
@@ -6302,8 +5919,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:19
-#, fuzzy, kde-format
-#| msgid "Source Directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
 msgstr "Κατάλογος πηγής:"
@@ -6311,8 +5927,7 @@ msgstr "Κατάλογος πηγής:"
 #. i18n: ectx: property (text), widget (QLabel)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
 #: vcs/widgets/vcsdiffpatchsources.cpp:49
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "Μήνυμα επικύρωσης:"
@@ -6328,240 +5943,202 @@ msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
 msgstr "Είστε βέβαιοι ότι θέλετε τη μετονομασία του \"%1\" σε \"%2\";"
 
 #: vcs/models/vcsannotationmodel.cpp:116
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgid "Author:"
-msgstr "Συγγραφέας"
+msgstr "Συγγραφέας:"
 
 #: vcs/models/vcsannotationmodel.cpp:117
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgid "Date:"
-msgstr "Ημερομηνία"
+msgstr "Ημερομηνία:"
 
 #: vcs/models/vcsannotationmodel.cpp:118
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgid "Commit message:"
 msgstr "Μήνυμα επικύρωσης:"
 
 #: vcs/models/vcseventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Revision"
 msgstr "Αναθεώρηση"
 
 #: vcs/models/vcseventmodel.cpp:90
-#, fuzzy, kde-format
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:column"
 msgid "Message"
 msgstr "Μήνυμα"
 
 #: vcs/models/vcseventmodel.cpp:92
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgctxt "@title:column"
 msgid "Author"
 msgstr "Συγγραφέας"
 
 #: vcs/models/vcseventmodel.cpp:94
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgctxt "@title:column"
 msgid "Date"
 msgstr "Ημερομηνία"
 
 #: vcs/models/vcsfilechangesmodel.cpp:32
-#, fuzzy, kde-format
-#| msgid "Added"
+#, kde-format
 msgctxt "@item file was added to versioncontrolsystem"
 msgid "Added"
 msgstr "Προστέθηκε"
 
 #: vcs/models/vcsfilechangesmodel.cpp:34
-#, fuzzy, kde-format
-#| msgid "Deleted"
+#, kde-format
 msgctxt "@item file was deleted from versioncontrolsystem"
 msgid "Deleted"
 msgstr "Διαγράφηκε"
 
 #: vcs/models/vcsfilechangesmodel.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "file is confilicting (versioncontrolsystem)"
-#| msgid "Has Conflicts"
+#, kde-format
 msgctxt "@item file is conflicting (versioncontrolsystem)"
 msgid "Has Conflicts"
 msgstr "Περιέχει συγκρούσεις"
 
 #: vcs/models/vcsfilechangesmodel.cpp:38
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgctxt "@item version controlled file was modified"
 msgid "Modified"
 msgstr "Τροποποιήθηκε"
 
 #: vcs/models/vcsfilechangesmodel.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "file is up to date in versioncontrolsystem"
-#| msgid "Up To Date"
+#, kde-format
 msgctxt "@item file is up to date in versioncontrolsystem"
 msgid "Up To Date"
 msgstr "Ενημερωμένο"
 
 #: vcs/models/vcsfilechangesmodel.cpp:43
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "@item file is not known to versioncontrolsystem"
 msgid "Unknown"
 msgstr "Άγνωστο"
 
 #: vcs/models/vcsfilechangesmodel.cpp:45
-#, fuzzy, kde-format
-#| msgctxt "Unknown VCS file status, probably a backend error"
-#| msgid "?"
+#, kde-format
 msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
 msgstr ";"
 
 #: vcs/models/vcsfilechangesmodel.cpp:131
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@title:column"
 msgid "Filename"
 msgstr "Όνομα αρχείου"
 
 #: vcs/models/vcsfilechangesmodel.cpp:132
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "Κατάσταση"
 
 #: vcs/models/vcsitemeventmodel.cpp:46
-#, fuzzy, kde-format
-#| msgid "Added"
+#, kde-format
 msgctxt "@item"
 msgid "Added"
 msgstr "Προστέθηκε"
 
 #: vcs/models/vcsitemeventmodel.cpp:48
-#, fuzzy, kde-format
-#| msgid "Deleted"
+#, kde-format
 msgctxt "@item"
 msgid "Deleted"
 msgstr "Διαγράφηκε"
 
 #: vcs/models/vcsitemeventmodel.cpp:50
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgctxt "@item"
 msgid "Modified"
 msgstr "Τροποποιήθηκε"
 
 #: vcs/models/vcsitemeventmodel.cpp:52
-#, fuzzy, kde-format
-#| msgid "Copied"
+#, kde-format
 msgctxt "@item"
 msgid "Copied"
 msgstr "Αντιγράφτηκε"
 
 #: vcs/models/vcsitemeventmodel.cpp:54
-#, fuzzy, kde-format
-#| msgid "Replaced"
+#, kde-format
 msgctxt "@item"
 msgid "Replaced"
 msgstr "Αντικαταστάθηκε"
 
 #: vcs/models/vcsitemeventmodel.cpp:61
-#, fuzzy, kde-format
-#| msgctxt "separes an action list"
-#| msgid ", "
+#, kde-format
 msgctxt "separates an action list"
 msgid ", "
 msgstr ", "
 
 #: vcs/models/vcsitemeventmodel.cpp:85
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Location"
 msgstr "Τοποθεσία"
 
 #: vcs/models/vcsitemeventmodel.cpp:86
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@title:column"
 msgid "Actions"
 msgstr "Ενέργειες"
 
 #: vcs/models/vcsitemeventmodel.cpp:87
-#, fuzzy, kde-format
-#| msgid "Source Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Location"
 msgstr "Τοποθεσία πηγαίου κώδικα"
 
 #: vcs/models/vcsitemeventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Source Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Αναθεώρηση πηγαίου κώδικα"
 
 #: vcs/vcspluginhelper.cpp:82
-#, fuzzy, kde-format
-#| msgid "Commit..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Υποβολή..."
 
 #: vcs/vcspluginhelper.cpp:83
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Ενημέρωση"
 
 #: vcs/vcspluginhelper.cpp:84
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Προσθήκη"
 
 #: vcs/vcspluginhelper.cpp:85
-#, fuzzy, kde-format
-#| msgid "Show Differences..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "Εμφάνιση διαφορών..."
 
 #: vcs/vcspluginhelper.cpp:86
-#, fuzzy, kde-format
-#| msgid "Revert"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Επαναφορά"
 
 #: vcs/vcspluginhelper.cpp:87 vcs/vcspluginhelper.cpp:451
-#, fuzzy, kde-format
-#| msgid "History..."
+#, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Ιστορικό..."
 
 #: vcs/vcspluginhelper.cpp:88
-#, fuzzy, kde-format
-#| msgid "Annotation..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Επισήμανση..."
 
 #: vcs/vcspluginhelper.cpp:89
-#, fuzzy, kde-format
-#| msgid "Show Diff..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "Εμφάνιση διαφορών..."
@@ -6574,15 +6151,13 @@ msgid "Show Diff (All Files)..."
 msgstr "Εμφάνιση διαφορών (όλα τα αρχεία)..."
 
 #: vcs/vcspluginhelper.cpp:91
-#, fuzzy, kde-format
-#| msgid "Push"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Ώθηση"
 
 #: vcs/vcspluginhelper.cpp:92
-#, fuzzy, kde-format
-#| msgid "Pull"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Έλξη"
@@ -6600,9 +6175,7 @@ msgid "Unable to Get Differences"
 msgstr "Αδυναμία ανάκτησης διαφορών."
 
 #: vcs/vcspluginhelper.cpp:352
-#, fuzzy, kde-format
-#| msgctxt "%1: path or URL, %2: name of a version control system"
-#| msgid "%2 History (%1)"
+#, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 ιστορικό (%1)"
@@ -6687,16 +6260,14 @@ msgstr "Επιλογή αρχείων για υποβολή"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Commit Files:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "Υποβολή αρχείων:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
 #: vcs/widgets/vcscommitdialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Recursive"
+#, kde-format
 msgctxt "@option:check"
 msgid "Recursive"
 msgstr "Αναδρομικά"
@@ -6744,51 +6315,44 @@ msgstr ""
 " <pre>%2</pre></qt>"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:259
-#, fuzzy, kde-format
-#| msgid "About to commit to repository"
+#, kde-format
 msgctxt "@title:window"
 msgid "About to Commit to Repository"
 msgstr "Επίκειται υποβολή στο αποθετήριο"
 
 #: vcs/widgets/vcsdiffwidget.cpp:86
-#, fuzzy, kde-format
-#| msgid "Difference between revision %1 and %2:"
+#, kde-format
 msgctxt "@label"
 msgid "Difference between revision %1 and %2:"
 msgstr "Διαφορά ανάμεσα στις αναθεωρήσεις %1 και %2:"
 
 #. i18n: ectx: property (text), widget (QLabel, revLabel)
 #: vcs/widgets/vcsdiffwidget.ui:28
-#, fuzzy, kde-format
-#| msgid "Difference between revisions"
+#, kde-format
 msgctxt "@label"
 msgid "Difference between revisions:"
-msgstr "Διαφορά μεταξύ αναθεωρήσεων"
+msgstr "Διαφορά μεταξύ αναθεωρήσεων:"
 
 #: vcs/widgets/vcseventwidget.cpp:78
-#, fuzzy, kde-format
-#| msgid "Diff to previous revision"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff to Previous Revision"
 msgstr "Διαφορά με προηγούμενη αναθεώρηση"
 
 #: vcs/widgets/vcseventwidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "Diff between revisions"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff between Revisions"
 msgstr "Διαφορά μεταξύ αναθεωρήσεων"
 
 #: vcs/widgets/vcseventwidget.cpp:138
-#, fuzzy, kde-format
-#| msgid "Difference To Previous"
+#, kde-format
 msgctxt "@title:window"
 msgid "Difference To Previous"
 msgstr "Διαφορά με προηγούμενη"
 
 #: vcs/widgets/vcseventwidget.cpp:167
-#, fuzzy, kde-format
-#| msgid "Difference between Revisions"
+#, kde-format
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Διαφορά μεταξύ αναθεωρήσεων"

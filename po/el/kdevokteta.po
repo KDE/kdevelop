@@ -50,15 +50,13 @@ msgstr ""
 "αποθηκεύσετε;"
 
 #: oktetadocument.cpp:126
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Κλείσιμο εγγράφου"
 
 #: oktetaplugin.cpp:91
-#, fuzzy, kde-format
-#| msgid "Hex Editor"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Hex Editor"
 msgstr "Επεξεργαστής δεκαεξαδικών"

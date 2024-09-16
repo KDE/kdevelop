@@ -20,37 +20,7 @@ msgstr ""
 "X-Generator: Lokalize 18.12.3\n"
 
 #: editexternalscript.cpp:30
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Defines the command that should be executed when this script is run. "
-#| "Basic shell features of your platform should be available.</p>\n"
-#| "<p>There are a few placeholders you can use in the command:</p>\n"
-#| "<dl>\n"
-#| "  <dt><code>%u</code></dt>\n"
-#| "  <dd>Gets replaced by the URL of the active document.</dd>\n"
-#| "  <dt><code>%f</code></dt>\n"
-#| "  <dd>Gets replaced by the local filepath to the active document.</dd>\n"
-#| "  <dt><code>%n</code></dt>\n"
-#| "  <dd>Gets replaced by the name of the active document, including its "
-#| "extension.</dd>\n"
-#| "  <dt><code>%b</code></dt>\n"
-#| "  <dd>Gets replaced by the name of the active document without its "
-#| "extension.</dd>\n"
-#| "  <dt><code>%d</code></dt>\n"
-#| "  <dd>Gets replaced by the path to the directory of the active document.</"
-#| "dd>\n"
-#| "  <dt><code>%p</code></dt>\n"
-#| "  <dd>Gets replaced by the URL to the project of the active document.</"
-#| "dd>\n"
-#| "  <dt><code>%s</code></dt>\n"
-#| "  <dd>Gets replaced with the shell escaped contents of the selection in "
-#| "the active document.</dd>\n"
-#| "  <dt><code>%i</code></dt>\n"
-#| "  <dd>Gets replaced with the PID of the currently running KDevelop "
-#| "process.</dd>\n"
-#| "</dl>\n"
-#| "<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
-#| "commands that could lead to data loss.</p>\n"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines the command that should be executed when this script is run. "
@@ -114,10 +84,7 @@ msgstr ""
 "επικίνδυνων εντολών που θα μπορούσαν να οδηγήσουν σε απώλεια δεδομένων.</p>\n"
 
 #: editexternalscript.cpp:56
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Defines what the external script should get as input (via <code>STDIN</"
-#| "code>).</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines what the external script should get as input (via <code>STDIN</"
@@ -127,10 +94,7 @@ msgstr ""
 "σεναρίου.</p>"
 
 #: editexternalscript.cpp:62
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) "
-#| "of the script.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
@@ -140,11 +104,7 @@ msgstr ""
 "του σεναρίου.</p>"
 
 #: editexternalscript.cpp:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) "
-#| "of the script.</p><p>Note: if the action is the same as that chosen for "
-#| "the output, the channels will be merged and handled together.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) of "
@@ -157,17 +117,13 @@ msgstr ""
 "από κοινού.</p>"
 
 #: editexternalscript.cpp:76
-#, fuzzy, kde-format
-#| msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
 msgstr "<p>Προσδιορίζει το όνομα του σεναρίου. Απλώς για λόγους εμφάνισης.</p>"
 
 #: editexternalscript.cpp:82
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Defines the shortcut(s) you can use to execute this external script.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines the shortcut(s) you can use to execute this external script.</p>"
@@ -176,10 +132,7 @@ msgstr ""
 "σεναρίου.</p>"
 
 #: editexternalscript.cpp:88
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Defines whether documents should be saved before the script gets "
-#| "executed.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines whether documents should be saved before the script gets executed."
@@ -189,10 +142,7 @@ msgstr ""
 "εκτέλεση του σεναρίου.</p>"
 
 #: editexternalscript.cpp:94
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Defines whether the output of the script should be shown in a tool "
-#| "view.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines whether the output of the script should be shown in a tool view.</"
@@ -202,10 +152,7 @@ msgstr ""
 "προβολή εργαλείων.</p>"
 
 #: editexternalscript.cpp:98
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Defines what type of filtering should be applied to the output. E.g. "
-#| "to indicate errors by red text.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines what type of filtering should be applied to the output. E.g. to "
@@ -215,34 +162,27 @@ msgstr ""
 "την ανάδειξη σφαλμάτων με κόκκινο κείμενο.</p>"
 
 #: editexternalscript.cpp:106
-#, fuzzy, kde-format
-#| msgid "Create new external script"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New External Script"
 msgstr "Δημιουργία νέου εξωτερικού σεναρίου"
 
 #: editexternalscript.cpp:108
-#, fuzzy, kde-format
-#| msgid "Edit external script '%1'"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit External Script '%1'"
 msgstr "Επεξεργασία εξωτερικού σεναρίου '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: editexternalscript.ui:19
-#, fuzzy, kde-format
-#| msgid "&Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Name:"
 msgstr "Ό&νομα:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
 #: editexternalscript.ui:30
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>The name will also be used as the identifier during code completion.</"
-#| "p>\n"
-#| "  <p><b>Note:</b> No spaces allowed.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>The name will also be used as the identifier during code completion.</p>\n"
@@ -254,27 +194,24 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, commandLabel)
 #: editexternalscript.ui:37
-#, fuzzy, kde-format
-#| msgid "&Command:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Command:"
 msgstr "Εν&τολή:"
 
 #. i18n: ectx: property (text), widget (QLabel, stdinLabel)
 #: editexternalscript.ui:51
-#, fuzzy, kde-format
-#| msgid "&Input:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Input:"
 msgstr "&Είσοδος:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:62
-#, fuzzy, kde-format
-#| msgid "nothing"
+#, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Nothing"
-msgstr "τίποτα"
+msgstr "Τίποτα"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:67
@@ -302,19 +239,17 @@ msgstr "περιεχόμενο του τρέχοντος αρχείου"
 
 #. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
 #: editexternalscript.ui:85
-#, fuzzy, kde-format
-#| msgid "&Output:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Output:"
 msgstr "Έξ&οδος:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:96
-#, fuzzy, kde-format
-#| msgid "ignore"
+#, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Ignore"
-msgstr "αγνοήστε"
+msgstr "Αγνοήστε"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:101
@@ -360,19 +295,17 @@ msgstr "δημιουργία νέου αρχείου"
 
 #. i18n: ectx: property (text), widget (QLabel, stderrLabel)
 #: editexternalscript.ui:129
-#, fuzzy, kde-format
-#| msgid "Errors:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Errors:"
 msgstr "Σφάλματα:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:140
-#, fuzzy, kde-format
-#| msgid "ignore"
+#, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Ignore"
-msgstr "αγνοήστε"
+msgstr "Αγνοήστε"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:145
@@ -426,8 +359,7 @@ msgstr "δημιουργία νέου αρχείου"
 
 #. i18n: ectx: property (text), widget (QLabel, saveLabel)
 #: editexternalscript.ui:178
-#, fuzzy, kde-format
-#| msgid "Save &mode:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Save &mode:"
 msgstr "Λειτουργία α&ποθήκευσης:"
@@ -458,16 +390,14 @@ msgstr "αποθήκευση όλων των ανοικτών εγγράφων"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: editexternalscript.ui:207
-#, fuzzy, kde-format
-#| msgid "Show out&put:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show out&put:"
 msgstr "Εμφάνιση ε&ξόδου:"
 
 #. i18n: ectx: property (text), widget (QLabel, outputFilterLabel)
 #: editexternalscript.ui:224
-#, fuzzy, kde-format
-#| msgid "Output filter:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Output filter:"
 msgstr "Φίλτρο εξόδου:"
@@ -514,8 +444,7 @@ msgstr "<p>Ορίζει τις συντομεύσεις για την εκτέλ
 
 #. i18n: ectx: property (text), widget (QLabel, shortcutLabel)
 #: editexternalscript.ui:261
-#, fuzzy, kde-format
-#| msgid "Shortcut:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Shortcut:"
 msgstr "Συντόμευση:"
@@ -594,36 +523,31 @@ msgid "Paste to Hastebin"
 msgstr "Επικόλληση στο Hastebin"
 
 #: externalscriptplugin.cpp:239
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@title:menu"
 msgid "External Scripts"
 msgstr "Εξωτερικά σενάρια"
 
 #: externalscriptview.cpp:32
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@title:window"
 msgid "External Scripts"
 msgstr "Εξωτερικά σενάρια"
 
 #: externalscriptview.cpp:51
-#, fuzzy, kde-format
-#| msgid "Add External Script"
+#, kde-format
 msgctxt "@action"
 msgid "Add External Script"
 msgstr "Προσθήκη εξωτερικού σεναρίου"
 
 #: externalscriptview.cpp:56
-#, fuzzy, kde-format
-#| msgid "Edit External Script"
+#, kde-format
 msgctxt "@action"
 msgid "Edit External Script"
 msgstr "επεξεργασία εξωτερικού σεναρίου"
 
 #: externalscriptview.cpp:61
-#, fuzzy, kde-format
-#| msgid "Remove External Script"
+#, kde-format
 msgctxt "@action"
 msgid "Remove External Script"
 msgstr "Αφαίρεση εξωτερικού σεναρίου"
@@ -639,8 +563,7 @@ msgstr ""
 "αφαιρεθεί.</p>"
 
 #: externalscriptview.cpp:151
-#, fuzzy, kde-format
-#| msgid "Confirm External Script Removal"
+#, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
 msgstr "Επιβεβαιώστε την αφαίρεση του εξωτερικού σεναρίου"
@@ -653,8 +576,7 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterText)
 #: externalscriptview.ui:35
-#, fuzzy, kde-format
-#| msgid "Filter..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Φίλτρο..."

@@ -26,29 +26,25 @@ msgid "Last Used Views"
 msgstr "Πρόσφατες προβολές"
 
 #: documentswitcherplugin.cpp:70
-#, fuzzy, kde-format
-#| msgid "Opens a list to walk through the list of last used views."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views."
 msgstr "Ανοίγει μια λίστα διάσχισης στις πρόσφατες αναγνώσεις."
 
 #: documentswitcherplugin.cpp:71 documentswitcherplugin.cpp:79
-#, fuzzy, kde-format
-#| msgid "Walk through the list of last used views"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Walk through the list of last used views"
 msgstr "Διασχίστε τη λίστα των πρόσφατων αναγνώσεων"
 
 #: documentswitcherplugin.cpp:75
-#, fuzzy, kde-format
-#| msgid "Last Used Views (Reverse)"
+#, kde-format
 msgctxt "@action"
 msgid "Last Used Views (Reverse)"
 msgstr "Πρόσφατες αναγνώσεις (αντίστροφα)"
 
 #: documentswitcherplugin.cpp:78
-#, fuzzy, kde-format
-#| msgid "Opens a list to walk through the list of last used views in reverse."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views in reverse."
 msgstr ""

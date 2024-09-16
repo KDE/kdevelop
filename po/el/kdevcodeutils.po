@@ -22,8 +22,7 @@ msgstr ""
 
 #. i18n: action name; 'Document' is a verb
 #: codeutilsplugin.cpp:49
-#, fuzzy, kde-format
-#| msgid "Document Declaration"
+#, kde-format
 msgctxt "@action"
 msgid "Document Declaration"
 msgstr "Δήλωση Τεκμηρίωσης"

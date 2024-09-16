@@ -18,47 +18,41 @@ msgstr ""
 "X-Generator: Lokalize 18.12.3\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
-#, fuzzy, kde-format
-#| msgid "Cppcheck"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Cppcheck"
 msgstr "Cppcheck"
 
 #: config/globalconfigpage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Configure Cppcheck Settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Cppcheck Settings"
 msgstr "Διαμόρφωση ρυθμίσεων cppcheck"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/globalconfigpage.ui:20
-#, fuzzy, kde-format
-#| msgid "Paths"
+#, kde-format
 msgctxt "@title:group"
 msgid "Paths"
 msgstr "Διαδρομές"
 
 #. i18n: ectx: property (text), widget (QLabel, cppcheckLabel)
 #: config/globalconfigpage.ui:26
-#, fuzzy, kde-format
-#| msgid "Cppchec&k executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Cppchec&k executable:"
 msgstr "Cppchec&k εκτελέσιμο:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, outputGroupBox)
 #: config/globalconfigpage.ui:45
-#, fuzzy, kde-format
-#| msgid "Output"
+#, kde-format
 msgctxt "@title:group"
 msgid "Output"
 msgstr "Έξοδος"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
 #: config/globalconfigpage.ui:51
-#, fuzzy, kde-format
-#| msgid "Hide output view during check"
+#, kde-format
 msgctxt "@option:check"
 msgid "Hide output view during check"
 msgstr "Απόκρυψη προβολής εξόδου στον έλεγχο"
@@ -73,18 +67,14 @@ msgstr "Εμφάνιση εξόδου cppcheck XML στην προβολή εξ�
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabChecks)
 #: config/projectconfigpage.ui:39
-#, fuzzy, kde-format
-#| msgid "Checks"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
-msgstr "έλεγχοι"
+msgstr "Έλεγχοι"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkUnusedFunction)
 #: config/projectconfigpage.ui:47
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check for unused functions. It is recommend to only enable this when the "
-#| "whole program is scanned"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Check for unused functions. It is recommend to only enable this when the "
@@ -95,19 +85,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkUnusedFunction)
 #: config/projectconfigpage.ui:50
-#, fuzzy, kde-format
-#| msgid "Unused function"
+#, kde-format
 msgctxt "@option:check"
 msgid "Unused function"
 msgstr "Αχρησιμοποίητη συνάρτηση"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:60
-#, fuzzy, kde-format
-#| msgid ""
-#| "Allow that Cppcheck reports even though the analysis is inconclusive. "
-#| "There are false positives with this option. Each result must be carefully "
-#| "investigated before you know if it is good or bad."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Allow that Cppcheck reports even though the analysis is inconclusive. There "
@@ -120,34 +105,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:63
-#, fuzzy, kde-format
-#| msgid "Inconclusive analysis"
+#, kde-format
 msgctxt "@option:check"
 msgid "Inconclusive analysis"
 msgstr "Ασαφής ανάλυση"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:70
-#, fuzzy, kde-format
-#| msgid "Enable information messages"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable information messages"
 msgstr "Ενεργοποίηση μηνυμάτων πληροφοριών"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:73
-#, fuzzy, kde-format
-#| msgid "Information"
+#, kde-format
 msgctxt "@option:check"
 msgid "Information"
 msgstr "Πληροφορίες"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:83
-#, fuzzy, kde-format
-#| msgid ""
-#| "Warn if there are missing includes. For detailed information use 'check-"
-#| "config'"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Warn if there are missing includes. For detailed information use 'check-"
@@ -158,37 +137,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:86
-#, fuzzy, kde-format
-#| msgid "Missing include"
+#, kde-format
 msgctxt "@option:check"
 msgid "Missing include"
 msgstr "Include που λείπουν"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Enable performance messages"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable performance messages"
 msgstr "Ενεργοποίηση μηνυμάτων απόδοσης"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:99
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgctxt "@option:check"
 msgid "Performance"
 msgstr "Απόδοση"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:109
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Force checking of files that have a lot of configurations. Error is "
-#| "printed if such a file is found so there is no reason to use this by "
-#| "default. If used together with '--max-configs=', the last option is the "
-#| "one that is effective.<br/><br/>Be careful with using this option - it "
-#| "can dramatically slow checking.</p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Force checking of files that have a lot of configurations. Error is "
@@ -206,34 +176,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:112
-#, fuzzy, kde-format
-#| msgid "Force checking"
+#, kde-format
 msgctxt "@option:check"
 msgid "Force checking"
 msgstr "Εξαναγκασμός ελέγχου"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:119
-#, fuzzy, kde-format
-#| msgid "Enable portability messages"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable portability messages"
 msgstr "Ενεργοποίηση μηνυμάτων συμβατότητας"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:122
-#, fuzzy, kde-format
-#| msgid "Portability"
+#, kde-format
 msgctxt "@option:check"
 msgid "Portability"
 msgstr "Συμβατότητα"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:132
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enable all coding style checks. All messages with the severities 'style', "
-#| "'performance' and 'portability' are enabled."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Enable all coding style checks. All messages with the severities 'style', "
@@ -244,18 +208,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:135
-#, fuzzy, kde-format
-#| msgid "Style"
+#, kde-format
 msgctxt "@option:check"
 msgid "Style"
 msgstr "Στιλ"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:145
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check Cppcheck configuration. The normal code analysis is disabled by "
-#| "this flag."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Check Cppcheck configuration. The normal code analysis is disabled by this "
@@ -266,16 +226,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:148
-#, fuzzy, kde-format
-#| msgid "Check config"
+#, kde-format
 msgctxt "@option:check"
 msgid "Check config"
 msgstr "Έλεγχος διαμόρφωσης"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIncludes)
 #: config/projectconfigpage.ui:158
-#, fuzzy, kde-format
-#| msgid "Include Directories"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Include Directories"
 msgstr "Κατάλογοι include"
@@ -297,8 +255,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:167
-#, fuzzy, kde-format
-#| msgid "Use 'project' include dirs"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use 'project' include dirs"
 msgstr "Χρήση include καταλόγων 'έργου'"
@@ -321,37 +278,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:183
-#, fuzzy, kde-format
-#| msgid "Use 'system' include dirs"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use 'system' include dirs"
 msgstr "Χρήση include καταλόγων 'συστήματος'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/projectconfigpage.ui:198
-#, fuzzy, kde-format
-#| msgid "&Ignored includes:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Ignored includes:"
 msgstr "&Αγνοημένα includes:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
 #: config/projectconfigpage.ui:218
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "<html>\n"
-#| "\n"
-#| "<p>Defines semicolon-separated list of ignored include directories.</p>\n"
-#| "\n"
-#| "<p>You can use the following placeholders:</p>\n"
-#| "\n"
-#| "<p><b><tt>%p</tt></b> - Gets replaced by the URL of the project's root "
-#| "directory.</p>\n"
-#| "\n"
-#| "<p><b><tt>%b</tt></b> - Gets replaced by the URL of the project's build "
-#| "directory.</p>\n"
-#| "\n"
-#| "</html>"
+#, no-c-format, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html>\n"
@@ -385,37 +326,21 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabExtra)
 #: config/projectconfigpage.ui:241
-#, fuzzy, kde-format
-#| msgid "Extra Parameters"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Extra Parameters"
 msgstr "Επιπλέον παράμετροι"
 
 #. i18n: ectx: property (text), widget (QLabel, extraLabel)
 #: config/projectconfigpage.ui:254
-#, fuzzy, kde-format
-#| msgid "Ex&tra parameters:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Ex&tra parameters:"
 msgstr "Ε&πιπλέον παράμετροι:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraParameters)
 #: config/projectconfigpage.ui:274
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "<html>\n"
-#| "\n"
-#| "<p>Defines additional parameters for cppcheck (see documentation).</p>\n"
-#| "\n"
-#| "<p>You can use the following placeholders:</p>\n"
-#| "\n"
-#| "<p><b><tt>%p</tt></b> - Gets replaced by the URL of the project's root "
-#| "directory.</p>\n"
-#| "\n"
-#| "<p><b><tt>%b</tt></b> - Gets replaced by the URL of the project's build "
-#| "directory.</p>\n"
-#| "\n"
-#| "</html>"
+#, no-c-format, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html>\n"
@@ -448,24 +373,21 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: config/projectconfigpage.ui:308
-#, fuzzy, kde-format
-#| msgid "Command Line"
+#, kde-format
 msgctxt "@title:group"
 msgid "Command Line"
 msgstr "Γραμμή εντολών"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, commandLineFilter)
 #: config/projectconfigpage.ui:316
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Αναζήτηση"
+msgstr "Αναζήτηση..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
 #: config/projectconfigpage.ui:326
-#, fuzzy, kde-format
-#| msgid "Break lines"
+#, kde-format
 msgctxt "@option:check"
 msgid "Break lines"
 msgstr "Αλλαγή γραμμών"
@@ -529,22 +451,19 @@ msgid "Cppcheck XML Parsing: error at line %1, column %2: %3"
 msgstr "Ανάλυση cppcheck XML: σφάλμα στη γραμμή %1, στήλη %2: %3"
 
 #: plugin.cpp:51
-#, fuzzy, kde-format
-#| msgid "Analyze Current File with Cppcheck"
+#, kde-format
 msgctxt "@action"
 msgid "Analyze Current File with Cppcheck"
 msgstr "Ανάλυση τρέχοντος αρχείου με το cppcheck"
 
 #: plugin.cpp:57 plugin.cpp:68 plugin.cpp:73
-#, fuzzy, kde-format
-#| msgid "Cppcheck"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Cppcheck"
 msgstr "Cppcheck"
 
 #: plugin.cpp:62
-#, fuzzy, kde-format
-#| msgid "Analyze Current Project with Cppcheck"
+#, kde-format
 msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
 msgstr "Ανάλυση τρέχοντος έργου με το cppcheck"

@@ -28,8 +28,7 @@ msgstr "Προσαρμοσμένη διόρθωση"
 
 #. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
 #: localpatchwidget.ui:29
-#, fuzzy, kde-format
-#| msgid "Patch"
+#, kde-format
 msgctxt "@title:group"
 msgid "Patch"
 msgstr "Διόρθωση"
@@ -50,8 +49,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, fileTab)
 #: localpatchwidget.ui:56
-#, fuzzy, kde-format
-#| msgid "From File"
+#, kde-format
 msgctxt "@title:tab"
 msgid "From File"
 msgstr "Από αρχείο"
@@ -65,8 +63,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, commandTab)
 #: localpatchwidget.ui:70
-#, fuzzy, kde-format
-#| msgid "From Command"
+#, kde-format
 msgctxt "@title:tab"
 msgid "From Command"
 msgstr "Από εντολή"
@@ -80,16 +77,14 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
 #: localpatchwidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Patch is already applied on local version"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Patch is already applied on local version"
 msgstr "Η διόρθωση ήδη εφαρμόστηκε στην τοπική έκδοση"
 
 #. i18n: ectx: property (text), widget (QCheckBox, applied)
 #: localpatchwidget.ui:90
-#, fuzzy, kde-format
-#| msgid "Already applied"
+#, kde-format
 msgctxt "@option:check"
 msgid "Already applied"
 msgstr "Εφαρμόστηκε ήδη"
@@ -137,143 +132,124 @@ msgstr ""
 "είναι \"%2\"."
 
 #: patchhighlighter.cpp:409 patchhighlighter.cpp:416
-#, fuzzy, kde-format
-#| msgid "Insertion"
+#, kde-format
 msgctxt "@item"
 msgid "Insertion"
 msgstr "Εισαγωγή"
 
 #: patchhighlighter.cpp:411 patchhighlighter.cpp:418
-#, fuzzy, kde-format
-#| msgid "Removal"
+#, kde-format
 msgctxt "@item"
 msgid "Removal"
 msgstr "Αφαίρεση"
 
 #: patchhighlighter.cpp:413 patchhighlighter.cpp:420
-#, fuzzy, kde-format
-#| msgid "Change"
+#, kde-format
 msgctxt "@item"
 msgid "Change"
 msgstr "Αλλαγή"
 
 #: patchreview.cpp:294 patchreview.cpp:296
-#, fuzzy, kde-format
-#| msgid "Kompare Model Update"
+#, kde-format
 msgctxt "@title:window"
 msgid "Kompare Model Update"
 msgstr "Σύγκριση ενημερωμένων υποδειγμάτων"
 
 #: patchreview.cpp:455
-#, fuzzy, kde-format
-#| msgid "Overview"
+#, kde-format
 msgctxt "@title complete patch"
 msgid "Overview"
 msgstr "Επισκόπηση"
 
 #: patchreview.cpp:460 patchreview.cpp:535
-#, fuzzy, kde-format
-#| msgid "Patch Review"
+#, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
 msgstr "Επιθεώρηση διόρθωσης"
 
 #: patchreview.cpp:467
-#, fuzzy, kde-format
-#| msgid "The base directory of the patch must be an absolute directory"
+#, kde-format
 msgid "The base directory of the patch must be an absolute directory."
-msgstr "Ο βασικός φάκελος της διόρθωσης πρέπει να έχει απόλυτη διαδρομή"
+msgstr "Ο βασικός φάκελος της διόρθωσης πρέπει να έχει απόλυτη διαδρομή."
 
 #: patchreview.cpp:499 patchreview.cpp:524
-#, fuzzy, kde-format
-#| msgid "Finish Review"
+#, kde-format
 msgctxt "@action"
 msgid "Finish Review"
 msgstr "Τέλος επιθεώρησης"
 
 #: patchreview.cpp:606
-#, fuzzy, kde-format
-#| msgid "Review Patch"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"
 msgstr "Επιθεώρηση διόρθωσης"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
 #: patchreview.ui:21
-#, fuzzy, kde-format
-#| msgid "Previous file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous file"
 msgstr "Προηγούμενο αρχείο"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
 #: patchreview.ui:31
-#, fuzzy, kde-format
-#| msgid "Previous difference"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous difference"
 msgstr "Προηγούμενη διαφορά"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
 #: patchreview.ui:41
-#, fuzzy, kde-format
-#| msgid "Next difference"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Next difference"
 msgstr "Επόμενη διαφορά"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
 #: patchreview.ui:51
-#, fuzzy, kde-format
-#| msgid "Next file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Next file"
 msgstr "Επόμενο αρχείο"
 
 #. i18n: ectx: property (text), widget (QToolButton, updateButton)
 #: patchreview.ui:74
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:button"
 msgid "Update"
 msgstr "Ενημέρωση"
 
 #. i18n: ectx: property (text), widget (QToolButton, testsButton)
 #: patchreview.ui:87
-#, fuzzy, kde-format
-#| msgid "Run Tests"
+#, kde-format
 msgctxt "@action:button"
 msgid "Run Tests"
 msgstr "Έλεγχοι εκτέλεσης"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportReview)
 #: patchreview.ui:120
-#, fuzzy, kde-format
-#| msgid "Export Diff..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
 msgstr "Εξαγωγή διαφορών..."
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
 #: patchreview.ui:136
-#, fuzzy, kde-format
-#| msgid "Cancel Review"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel Review"
 msgstr "Ακύρωση επιθεώρησης"
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
 #: patchreview.ui:149
-#, fuzzy, kde-format
-#| msgid "Finish Review"
+#, kde-format
 msgctxt "@action:button"
 msgid "Finish Review"
 msgstr "Τέλος επιθεώρησης"
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
 #: patchreview.ui:168
-#, fuzzy, kde-format
-#| msgid "Changes"
+#, kde-format
 msgctxt "@title:group"
 msgid "Changes"
 msgstr "Αλλαγές"
@@ -302,15 +278,13 @@ msgstr ""
 "%1"
 
 #: patchreviewtoolview.cpp:257
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgctxt "@action"
 msgid "Select All"
 msgstr "Επιλογή όλων"
 
 #: patchreviewtoolview.cpp:259
-#, fuzzy, kde-format
-#| msgid "Deselect All"
+#, kde-format
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "Αναίρεση επιλογής όλων"

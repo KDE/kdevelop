@@ -29,22 +29,19 @@ msgstr ""
 "Εισάγετε συμβολοσειρά υποκατάστασης για φιλτράρισμα της προβολής εξόδου"
 
 #: outputwidget.cpp:63
-#, fuzzy, kde-format
-#| msgid "Output View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Output View"
 msgstr "Προβολή εξόδου"
 
 #: outputwidget.cpp:74
-#, fuzzy, kde-format
-#| msgid "Close the currently active output view"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
 msgstr "Κλείσιμο της τρέχουσας ενεργής προβολής εξόδου"
 
 #: outputwidget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Close all other output views"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
 msgstr "Κλείσιμο όλων των άλλων προβολών εξόδου"
@@ -118,8 +115,7 @@ msgid "Clear"
 msgstr ""
 
 #: outputwidget.cpp:161
-#, fuzzy, kde-format
-#| msgid "Search..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Αναζήτηση..."

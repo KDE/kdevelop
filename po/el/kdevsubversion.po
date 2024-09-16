@@ -19,15 +19,13 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 
 #: kdevsvnplugin.cpp:334
-#, fuzzy, kde-format
-#| msgid "Copy..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy..."
 msgstr "Αντιγραφή..."
 
 #: kdevsvnplugin.cpp:341
-#, fuzzy, kde-format
-#| msgid "Move..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Move..."
 msgstr "Μετακίνηση..."
@@ -38,8 +36,7 @@ msgid "Please select only one item for this operation"
 msgstr "Παρακαλώ επιλέξτε μόνο ένα αντικείμενο για τη λειτουργία αυτή"
 
 #: kdevsvnplugin.cpp:370
-#, fuzzy, kde-format
-#| msgid "Destination file/directory"
+#, kde-format
 msgctxt "@label"
 msgid "Destination file/directory"
 msgstr "Αρχείο/κατάλογος προορισμού"
@@ -321,22 +318,19 @@ msgid "Not enough information to execute revert"
 msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση επαναφοράς"
 
 #: svnssldialog.cpp:28
-#, fuzzy, kde-format
-#| msgid "SSL Server Certificate"
+#, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate"
 msgstr "Πριστοποιητικό εξυπηρετητή SSL"
 
 #: svnssldialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Trust Permanently"
+#, kde-format
 msgctxt "@action:button"
 msgid "Trust Permanently"
 msgstr "Έμπιστο μόνιμα"
 
 #: svnssldialog.cpp:31
-#, fuzzy, kde-format
-#| msgid "Trust Temporarily"
+#, kde-format
 msgctxt "@action:button"
 msgid "Trust Temporarily"
 msgstr "Έμπιστο προσωρινά"
@@ -370,40 +364,35 @@ msgstr "Μη επαρκείς πληροφορίες για την εκτέλε�
 
 #. i18n: ectx: property (text), widget (QLabel, labelForSrc)
 #: ui/importmetadatawidget.ui:20
-#, fuzzy, kde-format
-#| msgid "Source directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
 msgstr "Κατάλογος πηγής:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/importmetadatawidget.ui:27
-#, fuzzy, kde-format
-#| msgid "Repository:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Repository:"
 msgstr "Αποθετήριο:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Repository Location"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Repository location"
 msgstr "Τοποθεσία αποθετηρίου"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Choose the repository into which the source directory is imported"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the repository into which the source directory is imported"
 msgstr "Επιλέξτε το αποθετήριο στο οποίο έχει εισαχθεί ο πηγαίος κατάλογος"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/importmetadatawidget.ui:57
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "Μήνυμα υποβολής:"
@@ -426,16 +415,14 @@ msgstr "Αιτίες αποτυχίας της επαλήθευσης"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: ui/ssltrustdialog.ui:52
-#, fuzzy, kde-format
-#| msgid "Certificate Information"
+#, kde-format
 msgctxt "@title:group"
 msgid "Certificate Information"
 msgstr "Πληροφορίες πιστοποιητικού"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/ssltrustdialog.ui:64
-#, fuzzy, kde-format
-#| msgid "Hostname:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Hostname:"
 msgstr "Όνομα υπολογιστή:"
@@ -448,8 +435,7 @@ msgstr "κάποιος εξυπηρετητής"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/ssltrustdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Issuer:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Issuer:"
 msgstr "Εκδότης:"
@@ -462,8 +448,7 @@ msgstr "κάποιος εκδότης"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ui/ssltrustdialog.ui:104
-#, fuzzy, kde-format
-#| msgid "Valid From:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Valid from:"
 msgstr "Έγκυρο από:"
@@ -476,8 +461,7 @@ msgstr "έγκυρο από"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: ui/ssltrustdialog.ui:124
-#, fuzzy, kde-format
-#| msgid "Valid Until:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Valid until:"
 msgstr "Έγκυρο έως:"
@@ -490,8 +474,7 @@ msgstr "έγκυρο έως"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ui/ssltrustdialog.ui:144
-#, fuzzy, kde-format
-#| msgid "Fingerprint:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Fingerprint:"
 msgstr "Αποτύπωμα:"
