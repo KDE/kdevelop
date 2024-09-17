@@ -40,7 +40,7 @@ msgstr "Διαδρομή:"
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:15
 #, kde-format
 msgid "&Class name:"
-msgstr "&Όνομα κλάσης:"
+msgstr "Όνομα &κλάσης:"
 
 #. i18n: ectx: property (text), widget (QLabel, baseClassLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
