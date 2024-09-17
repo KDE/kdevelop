@@ -2,6 +2,7 @@
 Name=CMake Qt6 Widgets Application
 Name[ca]=Una aplicació del CMake Qt6 QWidgets
 Name[ca@valencia]=Una aplicació de CMake Qt6 QWidgets
+Name[cs]=Aplikace widgetů QMake Qt6
 Name[en_GB]=CMake Qt6 Widgets Application
 Name[es]=Aplicación con widgets de Qt6 y CMake
 Name[eu]=CMake Qt6 Widgets aplikazioa
@@ -19,6 +20,7 @@ Name[zh_TW]=CMake Qt6 Widgets 應用程式
 Comment=Generate a CMake & Qt6 Widgets based application (crossplatform compatible)
 Comment[ca]=Genera una aplicació basada en CMake i Qt6 Widgets (compatible amb multiplataforma)
 Comment[ca@valencia]=Genera una aplicació basada en CMake i Qt6 Widgets (compatible amb multiplataforma)
+Comment[cs]=Vytvořit aplikaci založenou na CMake & Qt6 widgetech (multiplatformní)
 Comment[en_GB]=Generate a CMake & Qt6 Widgets based application (crossplatform compatible)
 Comment[es]=Genera una aplicación basada en CMake y widgets de Qt6 (compatible multiplataforma)
 Comment[eu]=Sortu CMake eta Qt6 Widgets-en oinarritutako aplikazio bat (plataforma gurutzatuekin bateragarria)
