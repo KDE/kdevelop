@@ -53,6 +53,9 @@
 #include "debug.h"
 #include "widgets/vcsdiffpatchsources.h"
 
+#include <memory>
+#include <utility>
+
 namespace KDevelop
 {
 
@@ -364,25 +367,34 @@ void VcsPluginHelper::history(const VcsRevision& rev)
     dlg->show();
 }
 
-static VcsAnnotationModel* vcsAnnotationModel(const QUrl& url, KTextEditor::Document& document, KTextEditor::View& view)
+static std::shared_ptr<VcsAnnotationModel> vcsAnnotationModel(const QUrl& url, KTextEditor::Document& document,
+                                                              KTextEditor::View& view)
 {
     if (auto* const abstractModel = document.annotationModel()) {
         if (auto* const model = qobject_cast<VcsAnnotationModel*>(abstractModel)) {
-            Q_ASSERT(model->referenceCount > 0);
-            ++model->referenceCount;
-            return model;
+            return model->shared_from_this();
         }
         qCWarning(VCS) << "replacing unsupported non-VCS annotation model" << abstractModel << "at"
                        << url.toString(QUrl::PreferLocalFile);
     }
 
+    // A shared pointer to the model is stored by each VcsAnnotationItemDelegate object while the corresponding
+    // KTextEditor::View object uses the model (i.e. while annotation is visible for the view).
+    // Unset and destroy the model when no longer used by any view of this document.
+    // All KTextEditor::View objects along with their VcsAnnotationItemDelegate objects are destroyed before
+    // the corresponding KTextEditor::Document object, so the document is not a dangling reference in the deleter.
+    const auto removeUnusedModel = [&document](const VcsAnnotationModel* model) {
+        document.setAnnotationModel(nullptr);
+        delete model;
+    };
+
     const auto style = view.defaultStyleAttribute(KSyntaxHighlighting::Theme::TextStyle::Normal);
     const auto foreground = style->foreground().color();
     const auto background = style->hasProperty(QTextFormat::BackgroundBrush) ? style->background().color() : Qt::white;
-    auto* const model = new VcsAnnotationModel(url, &document, foreground, background);
-    Q_ASSERT(model->referenceCount == 1);
+    std::shared_ptr<VcsAnnotationModel> model(new VcsAnnotationModel(url, &document, foreground, background),
+                                              removeUnusedModel);
 
-    document.setAnnotationModel(model);
+    document.setAnnotationModel(model.get());
     return model;
 }
 
@@ -423,11 +435,11 @@ void VcsPluginHelper::annotation()
         }
 
         if (view) {
-            auto* const model = vcsAnnotationModel(url, *doc->textDocument(), *view);
+            auto model = vcsAnnotationModel(url, *doc->textDocument(), *view);
             model->setAnnotationJob(job);
 
             auto* const delegate = vcsAnnotationItemDelegate(*view);
-            delegate->enable(model);
+            delegate->enable(std::move(model));
 
             view->setAnnotationBorderVisible(true);
             connect(view, &KTextEditor::View::annotationContextMenuAboutToShow, this,
@@ -492,18 +504,6 @@ void VcsPluginHelper::handleAnnotationBorderVisibilityChanged(KTextEditor::View*
     // creates a new default delegate KateAnnotationItemDelegate and thus is less efficient.
     if (auto* const delegate = qobject_cast<VcsAnnotationItemDelegate*>(view->annotationItemDelegate())) {
         delegate->disable();
-    }
-
-    auto* const document = view->document();
-    auto* const model = qobject_cast<VcsAnnotationModel*>(document->annotationModel());
-    Q_ASSERT(model);
-
-    --model->referenceCount;
-    Q_ASSERT(model->referenceCount >= 0);
-    if (model->referenceCount == 0) {
-        // The model is not used by another view of this document => destroy it.
-        document->setAnnotationModel(nullptr);
-        delete model;
     }
 }
 

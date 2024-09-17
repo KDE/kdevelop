@@ -26,6 +26,7 @@
 #include <QApplication>
 
 #include <cmath>
+#include <utility>
 
 using namespace KDevelop;
 
@@ -38,15 +39,15 @@ VcsAnnotationItemDelegate::VcsAnnotationItemDelegate(KTextEditor::View* view)
 
 VcsAnnotationItemDelegate::~VcsAnnotationItemDelegate() = default;
 
-void VcsAnnotationItemDelegate::enable(KTextEditor::AnnotationModel* model)
+void VcsAnnotationItemDelegate::enable(AnnotationModelPtr model)
 {
     Q_ASSERT(model);
 
     if (m_model) {
-        m_model = model;
+        m_model = std::move(model);
         return; // already enabled, nothing more to do
     }
-    m_model = model;
+    m_model = std::move(model);
     Q_ASSERT(qobject_cast<KTextEditor::View*>(parent()));
     parent()->installEventFilter(this);
 }
@@ -56,7 +57,7 @@ void VcsAnnotationItemDelegate::disable()
     if (!m_model) {
         return; // already disabled, nothing to do
     }
-    m_model = nullptr;
+    m_model.reset();
     Q_ASSERT(qobject_cast<KTextEditor::View*>(parent()));
     parent()->removeEventFilter(this);
 }
@@ -374,7 +375,7 @@ bool VcsAnnotationItemDelegate::eventFilter(QObject* object, QEvent* event)
         if ((viewBasedWidthHint < m_lastCharBasedWidthHint) &&
             (viewBasedWidthHint != m_lastViewBasedWidthHint)) {
             // emit for first line only, assuming uniformAnnotationItemSizes is set to true
-            emit sizeHintChanged(m_model, 0);
+            emit sizeHintChanged(m_model.get(), 0);
         }
     }
 

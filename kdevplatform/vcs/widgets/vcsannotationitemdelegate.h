@@ -15,6 +15,8 @@
 #include <QHash>
 #include <QBrush>
 
+#include <memory>
+
 namespace KDevelop
 {
 class VcsAnnotationLine;
@@ -24,6 +26,8 @@ class VcsAnnotationItemDelegate : public KTextEditor::AbstractAnnotationItemDele
     Q_OBJECT
 
 public:
+    using AnnotationModelPtr = std::shared_ptr<KTextEditor::AnnotationModel>;
+
     /**
      * Constructor
      *
@@ -39,10 +43,13 @@ public:
      *
      * @param model a non-null annotation model that is used by this delegate's KTextEditor::View
      */
-    void enable(KTextEditor::AnnotationModel* model);
+    void enable(AnnotationModelPtr model);
 
     /**
      * Disable the delegate and prevent it from using the associated annotation model.
+     *
+     * This delegate's shared pointer to the model is reset,
+     * so the model is destroyed unless used/shared by another delegate.
      */
     void disable();
 
@@ -84,7 +91,7 @@ private:
     int widthHintFromViewWidth(int viewWidth) const;
 
 private:
-    KTextEditor::AnnotationModel* m_model = nullptr;
+    AnnotationModelPtr m_model;
 
     // TODO: make this configurable
     const int m_maxWidthViewPercent = 25;

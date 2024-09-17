@@ -14,6 +14,8 @@
 
 #include <QColor>
 
+#include <memory>
+
 class QUrl;
 template<typename T> class QList;
 
@@ -24,7 +26,8 @@ class VcsJob;
 class VcsAnnotationLine;
 class VcsAnnotationModelPrivate;
 
-class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public KTextEditor::AnnotationModel
+class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public KTextEditor::AnnotationModel,
+                                                  public std::enable_shared_from_this<VcsAnnotationModel>
 {
 Q_OBJECT
 public:
@@ -47,8 +50,6 @@ public:
     // given "role" argument is of type Qt::ItemDataRole and not int, we cannot use custom roles
     // to access custom data, so providing a custom API instead
     VcsAnnotationLine annotationLine(int line) const;
-
-    int referenceCount = 1; ///< unused by this class, managed from outside
 
 private:
     const QScopedPointer<class VcsAnnotationModelPrivate> d_ptr;
