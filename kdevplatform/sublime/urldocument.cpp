@@ -6,12 +6,13 @@
 
 #include "urldocument.h"
 
-#include <QIcon>
-#include <QWidget>
-
 #include <KTextEdit>
 #include <KLocalizedString>
-#include <KIO/Global>
+
+#include <QIcon>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QWidget>
 
 namespace Sublime {
 
@@ -21,6 +22,7 @@ class UrlDocumentPrivate
 {
 public:
     QUrl url;
+    QMimeType mimeType;
 };
 
 
@@ -49,6 +51,7 @@ void UrlDocument::setUrl(const QUrl& newUrl)
 
     Q_ASSERT(newUrl.adjusted(QUrl::NormalizePathSegments) == newUrl);
     d->url = newUrl;
+    d->mimeType = QMimeDatabase().mimeTypeForUrl(d->url);
     // remote URLs might not have a file name
     Q_ASSERT(!newUrl.fileName().isEmpty() || !newUrl.isLocalFile());
     auto title = newUrl.fileName();
@@ -81,7 +84,7 @@ QIcon UrlDocument::defaultIcon() const
 {
     Q_D(const UrlDocument);
 
-    return QIcon::fromTheme(KIO::iconNameForUrl(d->url));
+    return QIcon::fromTheme(d->mimeType.iconName());
 }
 
 QString UrlDocument::title(TitleType type) const
