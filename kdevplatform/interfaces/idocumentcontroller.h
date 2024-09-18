@@ -205,6 +205,8 @@ Q_SIGNALS:
     /**
      * This is emitted when the document state(the relationship
      * between the file in the editor and the file stored on disk) changes.
+     *
+     * @note The document state affects its icon, so this signal also notifies about icon changes.
      */
     void documentStateChanged( KDevelop::IDocument* document );
 

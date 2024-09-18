@@ -12,10 +12,6 @@
 #include <QStandardItemModel>
 #include <QUrl>
 
-#include <interfaces/idocument.h>
-
-#include <QIcon>
-
 class KDevDocumentItem;
 class KDevCategoryItem;
 class KDevFileItem;
@@ -35,11 +31,6 @@ public:
         return nullptr;
     }
 
-    QIcon icon() const;
-
-    KDevelop::IDocument::DocumentState documentState() const;
-    void setDocumentState( KDevelop::IDocument::DocumentState state );
-
     const QUrl url() const;
     void setUrl(const QUrl &url);
 
@@ -49,12 +40,8 @@ public:
         UrlRole = Qt::UserRole + 1
     };
 
-protected:
-    QString m_fileIcon;
-
 private:
     QUrl m_url;
-    KDevelop::IDocument::DocumentState m_documentState;
 };
 
 class KDevCategoryItem: public KDevDocumentItem

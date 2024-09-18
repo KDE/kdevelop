@@ -6,46 +6,16 @@
 */
 
 #include "kdevdocumentmodel.h"
-#include <KFileItem>
 
-using namespace KDevelop;
+#include <QIcon>
 
 KDevDocumentItem::KDevDocumentItem( const QString &name )
     : QStandardItem(name)
-    , m_documentState(IDocument::Clean)
 {
-    setIcon( icon() );
 }
 
 KDevDocumentItem::~KDevDocumentItem()
 {}
-
-QIcon KDevDocumentItem::icon() const
-{
-    switch(m_documentState)
-    {
-    case IDocument::Clean:
-        return QIcon::fromTheme(m_fileIcon);
-    case IDocument::Modified:
-        return QIcon::fromTheme(QStringLiteral("document-save"));
-    case IDocument::Dirty:
-        return QIcon::fromTheme(QStringLiteral("document-revert"));
-    case IDocument::DirtyAndModified:
-        return QIcon::fromTheme(QStringLiteral("edit-delete"));
-    }
-    Q_UNREACHABLE();
-}
-
-IDocument::DocumentState KDevDocumentItem::documentState() const
-{
-    return m_documentState;
-}
-
-void KDevDocumentItem::setDocumentState(IDocument::DocumentState state)
-{
-    m_documentState = state;
-    setIcon(icon());
-}
 
 const QUrl KDevDocumentItem::url() const
 {
@@ -105,10 +75,6 @@ KDevFileItem::KDevFileItem( const QUrl &url )
 {
     setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     setUrl( url );
-    if (!url.isEmpty()) {
-        m_fileIcon = KFileItem(url, QString(), 0).iconName();
-    }
-    setIcon( QIcon::fromTheme( m_fileIcon ) );
 }
 
 KDevFileItem::~KDevFileItem()

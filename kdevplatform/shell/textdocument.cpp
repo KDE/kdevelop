@@ -102,8 +102,8 @@ public:
                 state = IDocument::Clean;
             }
 
-        q->notifyStateChanged();
         q->setStatusIcon(statusIcon);
+        q->notifyStateChanged();
     }
 
     inline KConfigGroup katePartSettingsGroup() const

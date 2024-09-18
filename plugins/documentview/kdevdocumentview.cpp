@@ -287,6 +287,7 @@ void KDevDocumentView::opened( KDevelop::IDocument* document )
     if ( !categoryItem->file( document->url() ) )
     {
         auto* fileItem = new KDevFileItem( document->url() );
+        fileItem->setIcon(document->icon());
         categoryItem->setChild( categoryItem->rowCount(), fileItem );
         setCurrentIndex( m_proxy->mapFromSource( m_documentModel->indexFromItem( fileItem ) ) );
         m_doc2index[ document ] = fileItem;
@@ -337,10 +338,9 @@ void KDevDocumentView::contentChanged( KDevelop::IDocument* )
 
 void KDevDocumentView::stateChanged( KDevelop::IDocument* document )
 {
-    KDevDocumentItem * documentItem = m_doc2index[ document ];
-
-    if ( documentItem && documentItem->documentState() != document->state() )
-        documentItem->setDocumentState( document->state() );
+    if (auto* const item = m_doc2index.value(document)) {
+        item->setIcon(document->icon());
+    }
 
     doItemsLayout();
 }
