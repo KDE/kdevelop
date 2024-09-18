@@ -310,8 +310,6 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
         return;
 
     qDeleteAll(m_documentModel->takeRow(m_documentModel->indexFromItem(categoryItem).row()));
-
-    doItemsLayout();
 }
 
 void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
@@ -341,8 +339,6 @@ void KDevDocumentView::stateChanged( KDevelop::IDocument* document )
     if (auto* const item = m_doc2index.value(document)) {
         item->setIcon(document->icon());
     }
-
-    doItemsLayout();
 }
 
 void KDevDocumentView::documentUrlChanged( KDevelop::IDocument* document )
