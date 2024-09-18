@@ -184,7 +184,7 @@ public:
     QHash<View*, QAction*> documentListActionForView;
 
     /**
-     * Set up @p viewAction's text and insert it into @a documentListMenu.
+     * Set up @p viewAction's text and icon, then insert the action into @a documentListMenu.
      */
     void insertIntoDocumentListMenu(View* view, QAction* viewAction)
     {
@@ -229,6 +229,8 @@ public:
         }
         viewAction->setText(std::move(viewActionText));
 
+        viewAction->setIcon(view->document()->icon());
+
         documentListMenu->insertAction(insertionPoint.next, viewAction);
 
         setAsDockMenu();
@@ -241,7 +243,6 @@ public:
 
         auto* const action = new QAction(documentListMenu);
         action->setData(QVariant::fromValue(view));
-        action->setIcon(view->document()->icon());
         ///FIXME: push this code somehow into shell, such that we can access the project model for
         ///       icons and also get a neat, short path like the document switcher.
 
@@ -566,7 +567,7 @@ void Container::documentTitleChanged(Sublime::Document* doc)
                 d->tabBar->setTabText(tabIndex, doc->title());
             }
 
-            // Update document list popup title
+            // Update document list popup title (and icon in case the extension changes and affects the MIME type)
             d->renameInDocumentListMenu(view);
             break;
         }
