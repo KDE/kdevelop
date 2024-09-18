@@ -746,7 +746,6 @@ void KDevelop::TextDocument::repositoryCheckFinished(bool canRecreate) {
     }
     // Ok, all safe, we can clean up the document. Close it if the file is gone,
     // and reload if it's still there.
-    d->setStatus(d->document, false);
     d->document->setModifiedOnDisk(KTextEditor::Document::OnDiskUnmodified);
     if ( QFile::exists(d->document->url().path()) ) {
         reload();
