@@ -770,7 +770,6 @@ void KDevelop::TextDocument::documentSaved(KTextEditor::Document* document, bool
     Q_UNUSED(document);
     Q_UNUSED(saveAs);
     notifySaved();
-    notifyStateChanged();
 }
 
 void KDevelop::TextDocument::documentUrlChanged(KTextEditor::Document* document)
