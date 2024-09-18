@@ -192,6 +192,8 @@ public:
         Q_ASSERT(viewAction);
         Q_ASSERT(viewAction->data().value<Sublime::View*>() == view);
 
+        // FIXME: push this code somehow into shell to get a neat, short path like the document switcher.
+
         const auto viewDocumentTitle = view->document()->title();
         const auto insertionPoint = findActionInsertionPoint(documentListMenu->actions(), viewDocumentTitle);
 
@@ -243,8 +245,6 @@ public:
 
         auto* const action = new QAction(documentListMenu);
         action->setData(QVariant::fromValue(view));
-        ///FIXME: push this code somehow into shell, such that we can access the project model for
-        ///       icons and also get a neat, short path like the document switcher.
 
         documentListActionForView.insert(view, action);
         insertIntoDocumentListMenu(view, action);
