@@ -69,11 +69,10 @@ msgid "Set as Default?"
 msgstr "Να οριστεί ως προκαθορισμένο;"
 
 #: openwithplugin.cpp:415
-#, fuzzy, kde-format
-#| msgid "Set as default?"
+#, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
-msgstr "Να οριστεί ως προκαθορισμένο;"
+msgstr "Να οριστεί ως προκαθορισμένο"
 
 #: openwithplugin.cpp:416
 #, kde-format

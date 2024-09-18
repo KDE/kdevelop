@@ -215,27 +215,24 @@ msgstr "Τίποτα"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:67
-#, fuzzy, kde-format
-#| msgid "selection in current file or nothing"
+#, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Selection in Current File or Nothing"
-msgstr "επιλογή στο τρέχον αρχείο ή τίποτα"
+msgstr "Επιλογή στο τρέχον αρχείο ή τίποτα"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:72
-#, fuzzy, kde-format
-#| msgid "selection in current file or whole file"
+#, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Selection in Current File or Whole File"
-msgstr "επιλογή στο τρέχον αρχείο ή σε όλο το αρχείο"
+msgstr "Επιλογή στο τρέχον αρχείο ή σε όλο το αρχείο"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:77
-#, fuzzy, kde-format
-#| msgid "contents of current file"
+#, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Contents of Current File"
-msgstr "περιεχόμενο του τρέχοντος αρχείου"
+msgstr "Περιεχόμενο του τρέχοντος αρχείου"
 
 #. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
 #: editexternalscript.ui:85
@@ -253,45 +250,40 @@ msgstr "Αγνοήστε"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:101
-#, fuzzy, kde-format
-#| msgid "insert at cursor position of current file"
+#, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Insert at Cursor Position of Current File"
-msgstr "εισαγάγετε στο τρέχον αρχείο στη θέση του δρομέα"
+msgstr "Εισαγάγετε στο τρέχον αρχείο στη θέση του δρομέα"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:106
-#, fuzzy, kde-format
-#| msgid "replace selection of current file or insert at cursor position"
+#, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Selection of Current File or Insert at Cursor Position"
 msgstr ""
-"αντικαταστήστε την επιλογή του τρέχοντος αρχείου ή εισαγάγετε στη θέση του "
+"Αντικαταστήστε την επιλογή του τρέχοντος αρχείου ή εισαγάγετε στη θέση του "
 "δρομέα"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:111
-#, fuzzy, kde-format
-#| msgid "replace selection of current file or whole file"
+#, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Selection of Current File or Whole File"
-msgstr "αντικαταστήστε την επιλογή του τρέχοντος αρχείου ή όλου του αρχείου"
+msgstr "Αντικαταστήστε την επιλογή του τρέχοντος αρχείου ή όλου του αρχείου"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:116
-#, fuzzy, kde-format
-#| msgid "replace contents of current file"
+#, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Contents of Current File"
-msgstr "αντικαταστήστε κείμενο από το τρέχον αρχείο"
+msgstr "Αντικαταστήστε κείμενο από το τρέχον αρχείο"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:121
-#, fuzzy, kde-format
-#| msgid "create new file"
+#, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Create New File"
-msgstr "δημιουργία νέου αρχείου"
+msgstr "Δημιουργία νέου αρχείου"
 
 #. i18n: ectx: property (text), widget (QLabel, stderrLabel)
 #: editexternalscript.ui:129
@@ -309,53 +301,47 @@ msgstr "Αγνοήστε"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:145
-#, fuzzy, kde-format
-#| msgid "merge with normal output"
+#, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Merge with Normal Output"
-msgstr "συγχώνευση με κανονική έξοδο"
+msgstr "Συγχώνευση με κανονική έξοδο"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:150
-#, fuzzy, kde-format
-#| msgid "insert at cursor position of current file"
+#, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Insert at Cursor Position of Current File"
-msgstr "εισαγάγετε στο τρέχον αρχείο στη θέση του δρομέα"
+msgstr "Εισαγάγετε στο τρέχον αρχείο στη θέση του δρομέα"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:155
-#, fuzzy, kde-format
-#| msgid "replace selection of current file or insert at cursor position"
+#, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Selection of Current File or Insert at Cursor Position"
 msgstr ""
-"αντικαταστήστε την επιλογή του τρέχοντος αρχείου ή εισαγάγετε στη θέση του "
+"Αντικαταστήστε την επιλογή του τρέχοντος αρχείου ή εισαγάγετε στη θέση του "
 "δρομέα"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:160
-#, fuzzy, kde-format
-#| msgid "replace selection of current file or whole file"
+#, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Selection of Current File or Whole File"
-msgstr "αντικαταστήστε την επιλογή του τρέχοντος αρχείου ή όλου του αρχείου"
+msgstr "Αντικαταστήστε την επιλογή του τρέχοντος αρχείου ή όλου του αρχείου"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:165
-#, fuzzy, kde-format
-#| msgid "replace contents of current file"
+#, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Contents of Current File"
-msgstr "αντικαταστήστε κείμενο από το τρέχον αρχείο"
+msgstr "Αντικαταστήστε κείμενο από το τρέχον αρχείο"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:170
-#, fuzzy, kde-format
-#| msgid "create new file"
+#, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Create New File"
-msgstr "δημιουργία νέου αρχείου"
+msgstr "Δημιουργία νέου αρχείου"
 
 #. i18n: ectx: property (text), widget (QLabel, saveLabel)
 #: editexternalscript.ui:178
@@ -366,27 +352,24 @@ msgstr "Λειτουργία α&ποθήκευσης:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:189
-#, fuzzy, kde-format
-#| msgid "save nothing"
+#, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save Nothing"
-msgstr "καμία αποθήκευση"
+msgstr "Καμία αποθήκευση"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:194
-#, fuzzy, kde-format
-#| msgid "save active document"
+#, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save Active Document"
-msgstr "αποθήκευση ενεργού εγγράφου"
+msgstr "Αποθήκευση ενεργού εγγράφου"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:199
-#, fuzzy, kde-format
-#| msgid "save all open documents"
+#, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save All Open Documents"
-msgstr "αποθήκευση όλων των ανοικτών εγγράφων"
+msgstr "Αποθήκευση όλων των ανοικτών εγγράφων"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: editexternalscript.ui:207
@@ -404,27 +387,24 @@ msgstr "Φίλτρο εξόδου:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:235
-#, fuzzy, kde-format
-#| msgid "no filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "No Filter"
-msgstr "χωρίς φίλτρο"
+msgstr "Χωρίς φίλτρο"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:240
-#, fuzzy, kde-format
-#| msgid "compiler filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Compiler Filter"
-msgstr "φίλτρο μεταγλωττιστή"
+msgstr "Φίλτρο μεταγλωττιστή"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:245
-#, fuzzy, kde-format
-#| msgid "script error filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Script Error Filter"
-msgstr "φίλτρο σφαλμάτων σεναρίου"
+msgstr "Φίλτρο σφαλμάτων σεναρίου"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:250

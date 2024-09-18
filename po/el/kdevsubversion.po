@@ -336,11 +336,10 @@ msgid "Trust Temporarily"
 msgstr "Έμπιστο προσωρινά"
 
 #: svnssldialog.cpp:62
-#, fuzzy, kde-format
-#| msgid "Ssl Server Certificate: %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate: %1"
-msgstr "Πιστοποιητικό εξυπηρετητή ssl: %1"
+msgstr "Πιστοποιητικό εξυπηρετητή SSL: %1"
 
 #: svnstatusjob.cpp:117
 #, kde-format

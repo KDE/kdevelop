@@ -59,11 +59,10 @@ msgstr "Απόκρυψη προβολής εξόδου στον έλεγχο"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_showXmlOutput)
 #: config/globalconfigpage.ui:58
-#, fuzzy, kde-format
-#| msgid "Show cppcheck XML output in the output view"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Cppcheck XML output in the output view"
-msgstr "Εμφάνιση εξόδου cppcheck XML στην προβολή εξόδου"
+msgstr "Εμφάνιση εξόδου Cppcheck XML στην προβολή εξόδου"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabChecks)
 #: config/projectconfigpage.ui:39
@@ -240,16 +239,13 @@ msgstr "Κατάλογοι include"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:164
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add 'project' include directories to cppcheck arguments. This option adds "
-#| "only paths related with project's root and build directories."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Add 'project' include directories to Cppcheck arguments. This option adds "
 "only paths related with project's root and build directories."
 msgstr ""
-"Προσθήκη include καταλόγων 'έργου' σε cppcheck ορίσματα. Αυτή η επιλογή "
+"Προσθήκη include καταλόγων 'έργου' σε Cppcheck ορίσματα. Αυτή η επιλογή "
 "προσθέτει μόνο διαδρομές σχετικές με τον root του έργου και τους καταλόγους "
 "κατασκευής."
 
@@ -262,17 +258,13 @@ msgstr "Χρήση include καταλόγων 'έργου'"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:180
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Add other, 'system' include directories to cppcheck arguments.<br/><br/"
-#| ">Be careful with using this option - it can dramatically slow checking.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
 ">Be careful with using this option - it can dramatically slow checking.</p>"
 msgstr ""
-"<p>Προσθήκη άλλων, include καταλόγων 'συστήματος' σε cppcheck ορίσματα.<br/"
+"<p>Προσθήκη άλλων, include καταλόγων 'συστήματος' σε Cppcheck ορίσματα.<br/"
 "><br/>Να είστε προσεκτικοί με αυτήν την επιλογή - ίσως να επιβραδύνει "
 "δραματικά τον έλεγχο</p>"
 

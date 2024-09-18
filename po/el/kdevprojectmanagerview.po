@@ -101,8 +101,7 @@ msgid "Build Set"
 msgstr "Σύνολο κατασκευής"
 
 #: projectbuildsetwidget.cpp:124
-#, fuzzy, kde-format
-#| msgid "Remove From Build Set"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from Build Set"
 msgstr "Αφαίρεση από το σύνολο κατασκευής"
@@ -220,8 +219,7 @@ msgid "Build Items:"
 msgstr "Αντικείμενα κατασκευής:"
 
 #: projectmanagerviewplugin.cpp:145
-#, fuzzy, kde-format
-#| msgid "Build all Projects"
+#, kde-format
 msgctxt "@action"
 msgid "Build All Projects"
 msgstr "Κατασκευή όλων των έργων"

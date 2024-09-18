@@ -451,17 +451,14 @@ msgid "GDB Output"
 msgstr "Έξοδος GDB"
 
 #: gdboutputwidget.cpp:48
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
-#| "issue any other gdb command while debugging.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
 "issue any other GDB command while debugging.</p>"
 msgstr ""
-"<b>Έξοδος GDB</b><p>Εμφανίζει όλες τις εντολές gdb που εκτελούνται. Μπορείτε "
-"επίσης να καλέσετε οποιαδήποτε άλλη εντολή gdb κατά την αποσφαλμάτωση.</p>"
+"<b>Έξοδος GDB</b><p>Εμφανίζει όλες τις εντολές GDB που εκτελούνται. Μπορείτε "
+"επίσης να καλέσετε οποιαδήποτε άλλη εντολή GDB κατά την αποσφαλμάτωση.</p>"
 
 #: gdboutputwidget.cpp:58
 #, fuzzy, kde-format

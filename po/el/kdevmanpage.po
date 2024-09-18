@@ -24,10 +24,9 @@ msgid "Man Content Page"
 msgstr "Σελίδα εγχειριδίου"
 
 #: manpagedocumentationwidget.cpp:32
-#, fuzzy, kde-format
-#| msgid "Loading man pages ..."
+#, kde-format
 msgid "Loading man pages..."
-msgstr "Φόρτωση σελίδων εγχειριδίου ..."
+msgstr "Φόρτωση σελίδων εγχειριδίου..."
 
 #: manpagedocumentationwidget.cpp:86
 #, kde-format

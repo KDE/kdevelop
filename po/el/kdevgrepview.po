@@ -266,12 +266,7 @@ msgid "Search for expressions over several files"
 msgstr "Αναζήτηση εκφράσεων σε πολλαπλά αρχεία"
 
 #: grepviewplugin.cpp:84
-#, fuzzy, kde-format
-#| msgid ""
-#| "Opens the 'Find/Replace in files' dialog. There you can enter a regular "
-#| "expression which is then searched for within all files in the directories "
-#| "you specify. Matches will be displayed, you can switch to a match "
-#| "directly. You can also do replacement."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Opens the 'Find/Replace in Files' dialog. There you can enter a regular "

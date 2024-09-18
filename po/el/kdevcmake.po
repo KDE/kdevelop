@@ -207,11 +207,11 @@ msgid "Policies"
 msgstr "Πολιτικές"
 
 #: cmakecommandscontents.cpp:102
-#, fuzzy, kde-format
-#| msgid "<p>For better cmake documentation rendering, install rst2html</p>"
+#, kde-format
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr ""
-"<p>Για καλύτερη αποτύπωση της cmake τεκμηρίωσης, εγκαταστήστε το rst2html</p>"
+"<p>Για καλύτερη αποτύπωση της CMake τεκμηρίωσης, εγκαταστήστε το rst2html.</"
+"p>"
 
 #: cmakedocumentation.cpp:46 cmakemanager.cpp:76
 #, kde-format
@@ -429,8 +429,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: settings/cmakepreferences.cpp:404
-#, fuzzy, kde-format
-#| msgid "Configure CMake settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"
 msgstr "Διαμόρφωση ρυθμίσεων CMake"

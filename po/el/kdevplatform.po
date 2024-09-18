@@ -933,10 +933,9 @@ msgid "enumeration %1 "
 msgstr "αρίθμηση %1 <br/>"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
-#, fuzzy, kde-format
-#| msgid "( resolved forward-declaration: "
+#, kde-format
 msgid "(resolved forward-declaration: "
-msgstr "( επιλυμένη προς τα εμπρός δήλωση: "
+msgstr "(επιλυμένη προς τα εμπρός δήλωση: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:182
 #, kde-format
@@ -2360,8 +2359,7 @@ msgstr ""
 "Κλείσιμο όλων των ανοιχτών εγγράφων, με εξαίρεση το τρέχον ενεργό έγγραφο."
 
 #: shell/documentcontroller.cpp:666
-#, fuzzy, kde-format
-#| msgid "Show Annotate on current document"
+#, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Εμφάνιση επισήμανσης στο τρέχον έγγραφο"
@@ -2827,10 +2825,9 @@ msgid "Project Information"
 msgstr "Πληροφορίες έργου"
 
 #: shell/openprojectdialog.cpp:219
-#, fuzzy, kde-format
-#| msgid "open %1 as project"
+#, kde-format
 msgid "Open \"%1\" as project"
-msgstr "Άνοιγμα %1 ως έργο"
+msgstr "Άνοιγμα \"%1\" ως έργο"
 
 #: shell/openprojectdialog.cpp:223
 #, kde-format
@@ -3819,12 +3816,10 @@ msgid ""
 msgstr ""
 
 #: shell/sessionlock.cpp:164
-#, fuzzy, kde-format
-#| msgctxt "@info:shell"
-#| msgid "running %1 instance (PID: %2) is apparently hung"
+#, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
-msgstr "η εκτελούμενη %1 διεργασία (PID %2) έχει προφανώς παραλύσει"
+msgstr "Η εκτελούμενη %1 διεργασία (PID %2) έχει προφανώς παραλύσει"
 
 #: shell/sessionlock.cpp:170
 #, kde-format
@@ -4404,8 +4399,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:330
-#, fuzzy, kde-format
-#| msgid "TODO Marker Words:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "TODO marker words:"
 msgstr "Λέξεις δείκτη TODO"
@@ -5845,8 +5839,7 @@ msgid "There are no committed differences."
 msgstr "Δεν υπάρχουν διαφορές."
 
 #: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
-#, fuzzy, kde-format
-#| msgid "VCS support"
+#, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
 msgstr "Υποστήριξη VCS"
@@ -6144,11 +6137,10 @@ msgid "Show Diff..."
 msgstr "Εμφάνιση διαφορών..."
 
 #: vcs/vcspluginhelper.cpp:90
-#, fuzzy, kde-format
-#| msgid "Show Diff (all files)..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
-msgstr "Εμφάνιση διαφορών (όλα τα αρχεία)..."
+msgstr "Εμφάνιση διαφορών (Όλα τα αρχεία)..."
 
 #: vcs/vcspluginhelper.cpp:91
 #, kde-format
@@ -6252,8 +6244,7 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
 #: vcs/widgets/vcscommitdialog.ui:17
-#, fuzzy, kde-format
-#| msgid "Select Files to commit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Files to Commit"
 msgstr "Επιλογή αρχείων για υποβολή"

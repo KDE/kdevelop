@@ -61,15 +61,13 @@ msgid "Next Output"
 msgstr "Μετάβαση στο επόμενο Outputmark"
 
 #: outputwidget.cpp:99
-#, fuzzy, kde-format
-#| msgid "Select activated Item"
+#, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
 msgstr "Επιλογή ενεργού αντικειμένου"
 
 #: outputwidget.cpp:101
-#, fuzzy, kde-format
-#| msgid "Focus when selecting Item"
+#, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "Εστίαση κατά την επιλογή αντικειμένου"
