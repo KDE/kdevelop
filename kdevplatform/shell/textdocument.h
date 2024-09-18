@@ -59,8 +59,6 @@ public:
 
     QString documentType() const override;
 
-    QIcon defaultIcon() const override;
-
     KTextEditor::View* activeTextView() const override;
 
 public Q_SLOTS:

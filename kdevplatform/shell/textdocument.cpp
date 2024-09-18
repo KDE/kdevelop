@@ -9,7 +9,6 @@
 #include <QAction>
 #include <QFile>
 #include <QMenu>
-#include <QMimeDatabase>
 #include <QPointer>
 #include <QWidget>
 
@@ -637,20 +636,6 @@ void KDevelop::TextView::writeSessionConfig(KConfigGroup& config)
 QString KDevelop::TextDocument::documentType() const
 {
     return QStringLiteral("Text");
-}
-
-QIcon KDevelop::TextDocument::defaultIcon() const
-{
-    Q_D(const TextDocument);
-
-    if (d->document) {
-        QMimeType mime = QMimeDatabase().mimeTypeForName(d->document->mimeType());
-        QIcon icon = QIcon::fromTheme(mime.iconName());
-        if (!icon.isNull()) {
-            return icon;
-        }
-    }
-    return PartDocument::defaultIcon();
 }
 
 KTextEditor::View *KDevelop::TextView::textView() const
