@@ -13,6 +13,10 @@ class TestDocument: public QObject {
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
+
+    void testUrlDocument_data();
+    void testUrlDocument();
+
     void viewDeletion();
 };
 

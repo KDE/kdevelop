@@ -13,6 +13,8 @@
 
 #include "document.h"
 
+class QMimeType;
+
 namespace Sublime {
 
 class UrlDocumentPrivate;
@@ -32,6 +34,11 @@ public:
     QString documentSpecifier() const override;
 
     QUrl url() const;
+
+    /**
+     * @return the MIME type for the document's URL cached at the time of the last URL change
+     */
+    QMimeType mimeType() const;
 
     /**
      * @return the icon for the mimetype of the document url.

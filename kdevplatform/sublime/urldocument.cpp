@@ -80,6 +80,13 @@ QString UrlDocument::documentSpecifier() const
     return d->url.url();
 }
 
+QMimeType UrlDocument::mimeType() const
+{
+    Q_D(const UrlDocument);
+
+    return d->mimeType;
+}
+
 QIcon UrlDocument::defaultIcon() const
 {
     Q_D(const UrlDocument);
