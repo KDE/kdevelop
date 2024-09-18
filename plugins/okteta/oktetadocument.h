@@ -38,6 +38,7 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
     KTextEditor::Cursor cursorPosition() const override;
     bool isActive() const override;
     QMimeType mimeType() const override;
+    QIcon icon() const override;
     KParts::Part* partForView( QWidget* widget ) const override;
     DocumentState state() const override;
     KTextEditor::Document* textDocument() const override;

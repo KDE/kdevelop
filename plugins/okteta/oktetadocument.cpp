@@ -56,6 +56,11 @@ QUrl OktetaDocument::url() const { return Sublime::UrlDocument::url(); }
 // TODO: use fromContentAndUrl(ByteArrayIODevice) if document loaded
 QMimeType OktetaDocument::mimeType() const { return QMimeDatabase().mimeTypeForUrl( url() ); }
 
+QIcon OktetaDocument::icon() const
+{
+    return Sublime::UrlDocument::icon();
+}
+
 KParts::Part* OktetaDocument::partForView( QWidget* ) const { return nullptr; }
 KTextEditor::Document* OktetaDocument::textDocument() const { return nullptr; }
 KTextEditor::Cursor OktetaDocument::cursorPosition() const { return KTextEditor::Cursor(); }

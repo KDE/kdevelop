@@ -74,6 +74,11 @@ QMimeType PartDocument::mimeType() const
     return QMimeDatabase().mimeTypeForUrl(url());
 }
 
+QIcon PartDocument::icon() const
+{
+    return Sublime::UrlDocument::icon();
+}
+
 KTextEditor::Document *PartDocument::textDocument() const
 {
     return nullptr;

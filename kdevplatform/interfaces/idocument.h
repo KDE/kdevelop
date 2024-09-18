@@ -24,6 +24,7 @@ class View;
 }
 namespace Sublime{ class View; }
 
+class QIcon;
 class QMimeType;
 class QWidget;
 
@@ -72,6 +73,12 @@ public:
      * Returns the mimetype of the document.
      */
     virtual QMimeType mimeType() const = 0;
+
+    /**
+     * @return The status icon of the document, or, if none is present, an icon
+     *         that resembles the document, i.e. based on its MIME type.
+     */
+    virtual QIcon icon() const = 0;
 
     /**
      * Returns the part for given @p view if this document is a KPart document or 0 otherwise.

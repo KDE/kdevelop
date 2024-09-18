@@ -43,6 +43,7 @@ public:
     KParts::Part *partForView(QWidget *view) const override;
 
     QMimeType mimeType() const override;
+    QIcon icon() const override;
     KTextEditor::Document* textDocument() const override;
     bool save(DocumentSaveMode mode = Default) override;
     void reload() override;
