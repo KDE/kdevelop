@@ -19,8 +19,6 @@
 #include <QRegularExpression>
 #include <QThread>
 
-#include <interfaces/idocument.h>
-#include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iplugincontroller.h>
 #include <language/assistant/staticassistantsmanager.h>
@@ -345,15 +343,7 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
     if(!languages.isEmpty() || QThread::currentThread() != thread())
         return languages;
 
-    auto mimeType = QMimeDatabase().mimeTypeForUrl(url);
-    if (mimeType.isDefault()) {
-        // ask the document controller about a more concrete mimetype
-        IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
-        if (doc) {
-            mimeType = doc->mimeType();
-        }
-    }
-
+    const auto mimeType = QMimeDatabase().mimeTypeForUrl(url);
     languages = languagesForMimetype(mimeType.name());
 
     return languages;
