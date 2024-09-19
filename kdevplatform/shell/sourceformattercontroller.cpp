@@ -281,7 +281,7 @@ void SourceFormatterController::documentLoaded(const QPointer<TextDocument>& doc
     if (!doc || !doc->textDocument()) {
         return;
     }
-    FileFormatter ff(doc->url());
+    FileFormatter ff(*doc);
     if (ff.readFormatterAndStyle(d->sourceFormatters)) {
         ff.adaptEditorIndentationMode(doc->textDocument());
     }
@@ -303,8 +303,7 @@ void SourceFormatterController::FileFormatter::projectOpened(const IProject& pro
     }
 
     OwningRawPointerContainer<QHash<QString, FileFormatter*>> fileFormatterCache;
-    const auto fileFormatterForUrl = [&fileFormatterCache, &config, &formatters](QUrl&& url) {
-        auto mimeType = QMimeDatabase().mimeTypeForUrl(url);
+    const auto fileFormatterForUrl = [&fileFormatterCache, &config, &formatters](QUrl&& url, QMimeType&& mimeType) {
         const auto mimeTypeName = mimeType.name();
 
         auto ff = fileFormatterCache->value(mimeTypeName);
@@ -331,7 +330,7 @@ void SourceFormatterController::FileFormatter::projectOpened(const IProject& pro
         if (!project.inProject(IndexedString{url})) {
             continue;
         }
-        if (const auto* const ff = fileFormatterForUrl(std::move(url))) {
+        if (const auto* const ff = fileFormatterForUrl(std::move(url), doc->mimeType())) {
             ff->adaptEditorIndentationMode(doc->textDocument());
         }
     }
@@ -433,6 +432,12 @@ auto SourceFormatterController::stylesForFormatter(const ISourceFormatter& forma
     }
 
     return styles;
+}
+
+SourceFormatterController::FileFormatter::FileFormatter(const IDocument& doc)
+    : m_url{doc.url()}
+    , m_mimeType{doc.mimeType()}
+{
 }
 
 SourceFormatterController::FileFormatter::FileFormatter(QUrl url)
@@ -594,7 +599,7 @@ void SourceFormatterController::updateFormatTextAction()
             return disabled;
         }
 
-        FileFormatter ff(doc->url());
+        FileFormatter ff(*doc);
         if (!ff.readFormatterAndStyle(d->sourceFormatters)) {
             return disabled;
         }
@@ -640,10 +645,9 @@ void SourceFormatterController::beautifySource()
         return;
     KTextEditor::Document* doc = view->document();
     // load the appropriate formatter
-    const auto url = idoc->url();
-    FileFormatter ff(url);
+    FileFormatter ff(*idoc);
     if (!ff.readFormatterAndStyle(d->sourceFormatters)) {
-        qCDebug(SHELL) << "no formatter available for" << url;
+        qCDebug(SHELL) << "no formatter available for" << idoc->url();
         return;
     }
 
@@ -690,10 +694,9 @@ void SourceFormatterController::beautifyLine()
     if (!view)
         return;
     // load the appropriate formatter
-    const auto url = doc->url();
-    FileFormatter ff(url);
+    FileFormatter ff(*doc);
     if (!ff.readFormatterAndStyle(d->sourceFormatters)) {
-        qCDebug(SHELL) << "no formatter available for" << url;
+        qCDebug(SHELL) << "no formatter available for" << doc->url();
         return;
     }
 
@@ -740,7 +743,7 @@ void SourceFormatterController::settingsChanged()
 
     const auto documents = ICore::self()->documentController()->openDocuments();
     for (KDevelop::IDocument* doc : documents) {
-        FileFormatter ff(doc->url());
+        FileFormatter ff(*doc);
         if (ff.readFormatterAndStyle(d->sourceFormatters)) {
             ff.adaptEditorIndentationMode(doc->textDocument());
         }

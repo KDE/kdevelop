@@ -105,7 +105,14 @@ private:
     {
     public:
         /**
+         * @param doc the document to be formatted
+         */
+        explicit FileFormatter(const IDocument& doc);
+
+        /**
          * @param url URL of the file to be formatted
+         *
+         * @note Prefer the more efficient IDocument constructor overload.
          */
         explicit FileFormatter(QUrl url);
 
