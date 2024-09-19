@@ -7,8 +7,6 @@
 #include "documentswitcheritem.h"
 #include "documentswitchertreeview.h"
 
-#include <KFileItem>
-
 #include <QDir>
 
 #include <interfaces/icore.h>
@@ -18,34 +16,11 @@
 
 DocumentSwitcherItem::DocumentSwitcherItem(KDevelop::IDocument *document)
 {
+    setIcon(document->icon());
+
     const QUrl &url = document->url();
 
     KDevelop::IProjectController *projectController = KDevelop::ICore::self()->projectController();
-
-    // Find file icon : file type icon or document unsaved icon.
-    switch (document->state())
-    {
-        case KDevelop::IDocument::Clean:
-        {
-            setIcon(QIcon::fromTheme(KFileItem(url, QString(), 0).iconName()));
-            break;
-        }
-        case KDevelop::IDocument::Modified:
-        {
-            setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
-            break;
-        }
-        case KDevelop::IDocument::Dirty:
-        {
-            setIcon(QIcon::fromTheme(QStringLiteral("document-revert")));
-            break;
-        }
-        case KDevelop::IDocument::DirtyAndModified:
-        {
-            setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
-            break;
-        }
-    }
 
     // Extract file name and path.
     QString text = url.fileName();
