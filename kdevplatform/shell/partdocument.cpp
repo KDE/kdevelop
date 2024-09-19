@@ -6,8 +6,6 @@
 
 #include "partdocument.h"
 
-#include <QMimeDatabase>
-
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
@@ -20,6 +18,8 @@
 #include "core.h"
 #include "uicontroller.h"
 #include "partcontroller.h"
+
+#include <QMimeType>
 
 namespace KDevelop {
 
@@ -71,7 +71,7 @@ KParts::Part *PartDocument::partForView(QWidget *view) const
 
 QMimeType PartDocument::mimeType() const
 {
-    return QMimeDatabase().mimeTypeForUrl(url());
+    return Sublime::UrlDocument::mimeType();
 }
 
 QIcon PartDocument::icon() const

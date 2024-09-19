@@ -37,8 +37,7 @@
 #include <KTextEditor/Cursor>
 // Qt
 #include <QApplication>
-#include <QMimeDatabase>
-
+#include <QMimeType>
 
 namespace KDevelop
 {
@@ -53,8 +52,10 @@ OktetaDocument::OktetaDocument( const QUrl &url , ICore* core )
 
 QUrl OktetaDocument::url() const { return Sublime::UrlDocument::url(); }
 
-// TODO: use fromContentAndUrl(ByteArrayIODevice) if document loaded
-QMimeType OktetaDocument::mimeType() const { return QMimeDatabase().mimeTypeForUrl( url() ); }
+QMimeType OktetaDocument::mimeType() const
+{
+    return Sublime::UrlDocument::mimeType();
+}
 
 QIcon OktetaDocument::icon() const
 {

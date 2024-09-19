@@ -71,6 +71,9 @@ public:
 
     /**
      * Returns the mimetype of the document.
+     *
+     * @note The returned MIME type is cached. If accuracy is paramount, consider using
+     *       KTextEditor::Document::mimeType() for a text document instead.
      */
     virtual QMimeType mimeType() const = 0;
 
