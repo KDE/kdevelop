@@ -345,14 +345,7 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
     if(!languages.isEmpty() || QThread::currentThread() != thread())
         return languages;
 
-    QMimeType mimeType;
-
-    if (url.isLocalFile()) {
-        mimeType = QMimeDatabase().mimeTypeForFile(url.toLocalFile());
-    } else {
-        // remote file, only look at the extension
-        mimeType = QMimeDatabase().mimeTypeForUrl(url);
-    }
+    auto mimeType = QMimeDatabase().mimeTypeForUrl(url);
     if (mimeType.isDefault()) {
         // ask the document controller about a more concrete mimetype
         IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
