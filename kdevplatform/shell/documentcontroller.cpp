@@ -455,7 +455,7 @@ public:
                     if(activeView)
                         activeDoc = qobject_cast<Sublime::UrlDocument *>(activeView->document());
                     if(activeDoc && Core::self()->uiControllerInternal()->arrangeBuddies()) {
-                        QString mime = QMimeDatabase().mimeTypeForUrl(activeDoc->url()).name();
+                        const auto mime = activeDoc->mimeType().name();
                         buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
                     }
 
