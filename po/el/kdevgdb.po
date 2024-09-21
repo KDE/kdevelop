@@ -4,20 +4,21 @@
 # Toussis Manolis <manolis@koppermind.homelinux.org>, 2008, 2009.
 # Stelios <sstavra@gmail.com>, 2011, 2012, 2017.
 # Dimitrios Glentadakis <dglent@gmail.com>, 2011, 2012.
+# SPDX-FileCopyrightText: 2024 Antonis Geralis <capoiosct@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:40+0000\n"
-"PO-Revision-Date: 2017-09-20 17:10+0200\n"
-"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"PO-Revision-Date: 2024-09-20 13:56+0300\n"
+"Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:121
 #, kde-format
@@ -435,7 +436,7 @@ msgstr ""
 "p><p>Για παράδειγμα:</p><p>\tshell sleep 5\tαναμονή για εκκίνηση του "
 "απομακρυσμένου προγράμματος</p><p>\ttarget remote ...\tσύνδεση στον "
 "απομακρυσμένο debugger</p><p>\tcontinue\t[προαιρετικό] εκτέλεση "
-"αποσφαλμάτωσης έως το πρώτο σημείο διακοπήςi.</p></body></html>"
+"αποσφαλμάτωσης έως το πρώτο σημείο διακοπής.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:236

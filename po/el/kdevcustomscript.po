@@ -1,21 +1,22 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
 # Stelios <sstavra@gmail.com>, 2019.
+# SPDX-FileCopyrightText: 2024 Antonis Geralis <capoiosct@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-08 01:43+0000\n"
-"PO-Revision-Date: 2019-08-27 13:13+0300\n"
-"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"PO-Revision-Date: 2024-09-20 13:51+0300\n"
+"Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #: customscript_plugin.cpp:87
 #, kde-format
@@ -127,7 +128,7 @@ msgstr ""
 "διαμορφωμένος πηγαίος κώδικας εισάγεται στην εντολή <br />με την τυπική <br /"
 ">είσοδο και το αποτέλεσμα διαβάζεται από την τυπική έξοδο..<br /><br />Αν "
 "προσθέσετε την <b>$TMPFILE</b> στην εντολή, <br />ένα προσωρινό αρχείο "
-"χρησιμοποιείται για τη μεταφορά του κώδικαa."
+"χρησιμοποιείται για τη μεταφορά του κώδικα."
 
 #: customscript_plugin.cpp:560
 #, kde-format
