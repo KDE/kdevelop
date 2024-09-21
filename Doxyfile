@@ -87,14 +87,14 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = doc/api \
-                         kdevplatform/interfaces \
-                         kdevplatform/config \
-                         kdevplatform/editor \
-                         kdevplatform/language \
-                         kdevplatform/project \
-                         kdevplatform/shell \
-                         kdevplatform/sublime
+# The directories of plugins, which contain libraries used by other plugins,
+# are somewhat documented and reusable, are included in the INPUT list.
+INPUT                  = kdevplatform \
+                         plugins/custom-definesandincludes \
+                         plugins/debuggercommon \
+                         plugins/execute \
+                         plugins/makebuilder \
+                         plugins/openwith
 FILE_PATTERNS          = *.h \
                          *.cpp \
                          *.cc \
@@ -105,17 +105,23 @@ FILE_PATTERNS          = *.h \
                          *.h++ \
                          *.hh
 RECURSIVE              = YES
-EXCLUDE                = 
+EXCLUDE                = kdevplatform/sublime/examples \
+                         kdevplatform/template \
+                         kdevplatform/util/dbus_socket_transformer \
+                         kdevplatform/util/duchainify
 EXCLUDE_SYMLINKS       = NO
+# Exclude all subdirectories named "tests", which contain unit tests,
+# but not the unit test library kdevplatform/tests.
 EXCLUDE_PATTERNS       = *.moc.* \
                          moc* \
                          *.all_cpp.* \
                          *unload.* \
                          */test/* \
-                         */tests/* \
+                         */kdevplatform/*/tests/* \
+                         */plugins/*/tests/* \
+                         */kdevplatform/util/kdevcoreaddons/*test.* \
                          *face_skel.cpp \
-                         *.ui.h \
-                         kdev*
+                         *.ui.h
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = 
 EXAMPLE_RECURSIVE      = NO
