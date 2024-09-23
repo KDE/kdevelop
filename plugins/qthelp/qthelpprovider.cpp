@@ -8,8 +8,6 @@
 
 #include "qthelpprovider.h"
 
-#include "debug.h"
-
 #include <QIcon>
 
 QtHelpProvider::QtHelpProvider(QObject* parent, const QString& fileName, const QString& name, const QString& iconName)
@@ -25,9 +23,7 @@ QtHelpProvider::QtHelpProvider(QObject* parent, const QString& fileName, const Q
         return;
     }
 
-    if (!engine()->registerDocumentation(m_fileName)) {
-        qCCritical(QTHELP) << "error >> " << fileName << engine()->error();
-    }
+    registerDocumentation(m_fileName);
 }
 
 QIcon QtHelpProvider::icon() const
