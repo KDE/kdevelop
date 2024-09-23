@@ -12,7 +12,8 @@
 #include <util/path.h>
 // Qt
 #include <QProcess>
-#include <QHash>
+
+class FlatpakRuntime;
 
 class FlatpakPlugin : public KDevelop::IPlugin
 {
@@ -31,7 +32,7 @@ private:
     void executeOnRemoteDevice();
     void createRuntime(const KDevelop::Path &file, const QString &arch);
 
-    QHash<KDevelop::Path, KDevelop::IRuntime *> m_runtimes;
+    QList<FlatpakRuntime*> m_runtimes;
 };
 
 #endif
