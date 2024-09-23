@@ -12,7 +12,6 @@
 #include <util/path.h>
 // Qt
 #include <QProcess>
-#include <QHash>
 
 class FlatpakRuntime;
 
@@ -24,7 +23,6 @@ public:
     ~FlatpakPlugin() override;
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
-    static QString flatpakId(const KDevelop::Path &path);
 
 private:
     void runtimeChanged(KDevelop::IRuntime* newRuntime);
