@@ -101,25 +101,28 @@ void FlatpakPlugin::createRuntime(const KDevelop::Path &file, const QString &arc
     const KDevelop::Path path(dir->path());
 
     auto process = FlatpakRuntime::createBuildDirectory(path, file, arch);
-    connect(process, &KJob::finished, this, [path, file, arch, dir] (KJob* job) {
+    connect(process, &KJob::finished, this, [this, path, file, arch, dir](KJob* job) {
         if (job->error() != 0) {
             delete dir;
             return;
         }
 
         auto rt = new FlatpakRuntime(path, file, arch);
-        connect(rt, &QObject::destroyed, rt, [dir]() { delete dir; });
+        m_runtimes += rt;
+        connect(rt, &QObject::destroyed, this, [this, rt, dir]() {
+            delete dir;
+            m_runtimes.removeAll(rt);
+        });
         ICore::self()->runtimeController()->addRuntimes(rt);
     });
     process->start();
 }
 
-static QStringList availableArches(const KDevelop::Path& url)
+static QStringList availableArches(const QJsonObject& doc)
 {
     QProcess supportedArchesProcess;
     QStringList ret;
 
-    const auto doc = FlatpakRuntime::config(url);
     const QString sdkName = doc[QLatin1String("sdk")].toString();
     const QString runtimeVersion = doc[QLatin1String("runtime-version")].toString();
     const QString match = sdkName + QLatin1String("/(.+)/") + runtimeVersion;
@@ -172,13 +175,29 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
         KDevelop::ContextMenuExtension ext;
         for (const QUrl& url : std::as_const(urls)) {
             const KDevelop::Path file(url);
-            const auto arches = availableArches(file);
+            const auto doc = FlatpakRuntime::config(file);
+            const auto arches = availableArches(doc);
             for (const QString& arch : arches) {
-                auto action = new QAction(i18nc("@action:inmenu", "Build Flatpak %1 for %2", file.lastPathSegment(), arch), parent);
-                connect(action, &QAction::triggered, this, [this, file, arch]() {
-                    createRuntime(file, arch);
-                });
-                ext.addAction(KDevelop::ContextMenuExtension::RunGroup, action);
+                if (const auto it = std::find_if(m_runtimes.cbegin(), m_runtimes.cend(),
+                                                 [&arch, &file](const FlatpakRuntime* runtime) {
+                                                     return runtime->arch() == arch && runtime->file() == file;
+                                                 });
+                    it != m_runtimes.cend()) {
+                    auto action =
+                        new QAction(i18nc("@action:inmenu", "Rebuild Flatpak Environment: %1", (*it)->name()), parent);
+                    connect(action, &QAction::triggered, this, [it]() {
+                        ICore::self()->runController()->registerJob((*it)->rebuild());
+                    });
+                    ext.addAction(KDevelop::ContextMenuExtension::RunGroup, action);
+                } else {
+                    auto action = new QAction(
+                        i18nc("@action:inmenu", "Build Flatpak Environment %1 for %2", doc[u"id"].toString(), arch),
+                        parent);
+                    connect(action, &QAction::triggered, this, [this, file, arch]() {
+                        createRuntime(file, arch);
+                    });
+                    ext.addAction(KDevelop::ContextMenuExtension::RunGroup, action);
+                }
             }
         }
 
