@@ -26,14 +26,14 @@ public:
     /** @return local paths to all QCH files found in QT_INSTALL_DOCS directory **/
     QStringList qchFiles() const;
 
-    /** @return true once the async initialization has finished */
+    /** @return @c true once the async initialization has finished */
     bool isInitialized() const { return m_isInitialized; }
 
     /** @return available qmake binaries */
     static QStringList qmakeCandidates();
 
 Q_SIGNALS:
-    /** emitted when @c isInitialized() is set to true */
+    /** emitted when isInitialized() is set to @c true */
     void isInitializedChanged();
 
 private:
