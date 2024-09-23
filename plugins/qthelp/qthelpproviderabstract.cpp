@@ -167,4 +167,14 @@ bool QtHelpProviderAbstract::isValid() const
     return !m_engine.registeredDocumentations().isEmpty();
 }
 
+void QtHelpProviderAbstract::registerDocumentation(const QString& documentationFileName)
+{
+    if (m_engine.registerDocumentation(documentationFileName)) {
+        qCDebug(QTHELP) << "registered documentation" << documentationFileName;
+    } else {
+        qCCritical(QTHELP) << "engine error while registering documentation" << documentationFileName << ':'
+                           << m_engine.error();
+    }
+}
+
 #include "moc_qthelpproviderabstract.cpp"

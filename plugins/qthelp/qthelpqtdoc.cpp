@@ -86,9 +86,7 @@ void QtHelpQtDoc::loadDocumentation()
     for (const QString& fileName : files) {
         QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
         if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
-            qCDebug(QTHELP) << "loading doc" << fileName << fileNamespace;
-            if(!m_engine.registerDocumentation(fileName))
-                qCCritical(QTHELP) << "error >> " << fileName << m_engine.error();
+            registerDocumentation(fileName);
         }
     }
 }

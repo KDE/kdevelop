@@ -41,7 +41,13 @@ public:
 
 public Q_SLOTS:
     void jumpedTo(const QUrl& newUrl);
+
 protected:
+    /**
+     * Calls @a m_engine.registerDocumentation(@p documentationFileName) and handles errors.
+     */
+    void registerDocumentation(const QString& documentationFileName);
+
     QHelpEngine m_engine;
 };
 
