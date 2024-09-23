@@ -52,7 +52,10 @@ static KJob* createExecuteJob(const QStringList &program, const QString &title, 
 
 KJob* FlatpakRuntime::createBuildDirectory(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
 {
-    return createExecuteJob(QStringList{QStringLiteral("flatpak-builder"), QLatin1String("--arch=")+arch, QStringLiteral("--build-only"), buildDirectory.toLocalFile(), file.toLocalFile() }, i18n("Flatpak"), file.parent().toUrl());
+    return createExecuteJob(QStringList{QStringLiteral("flatpak-builder"), QLatin1String("--arch=") + arch,
+                                        QStringLiteral("--build-only"), QStringLiteral("--force-clean"),
+                                        QStringLiteral("--ccache"), buildDirectory.toLocalFile(), file.toLocalFile()},
+                            i18n("Flatpak"), file.parent().toUrl());
 }
 
 FlatpakRuntime::FlatpakRuntime(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)

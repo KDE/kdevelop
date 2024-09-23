@@ -10,6 +10,7 @@
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
@@ -19,6 +20,8 @@
 #include <QTextStream>
 #include <QStandardPaths>
 #include <QAction>
+#include <QDir>
+#include <QDirIterator>
 #include <QProcess>
 #include <QRegularExpression>
 #include <QInputDialog>
@@ -32,6 +35,7 @@
 #include <KJob>
 #include <KSharedConfig>
 #include <KConfigGroup>
+#include <debug_flatpak.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevFlatpakFactory, "kdevflatpak.json", registerPlugin<FlatpakPlugin>();)
 
@@ -63,6 +67,23 @@ FlatpakPlugin::FlatpakPlugin(QObject* parent, const KPluginMetaData& metaData, c
 
     setXMLFile( QStringLiteral("kdevflatpakplugin.rc") );
     connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, &FlatpakPlugin::runtimeChanged);
+    connect(ICore::self()->projectController(), &IProjectController::projectOpened, this, [this](IProject* project) {
+        const auto group = project->projectConfiguration()->group(QStringLiteral("Flatpak"));
+        if (!group.hasKey("File")) {
+            return;
+        }
+        const Path file(QUrl(group.readEntry("File")));
+        if (file.isEmpty() || !file.isLocalFile()) {
+            return;
+        }
+
+        auto buildDirParentPath = project->path();
+        buildDirParentPath.addPath(QStringLiteral(".kdev4/flatpak"));
+        QDirIterator d(buildDirParentPath.toLocalFile(), QDir::AllDirs | QDir::NoDotAndDotDot);
+        while (d.hasNext()) {
+            createRuntime(file, d.nextFileInfo().fileName());
+        }
+    });
 }
 
 FlatpakPlugin::~FlatpakPlugin() = default;
@@ -95,25 +116,51 @@ void FlatpakPlugin::exportCurrent()
     }
 }
 
+static Path flatpakBuildDirPath(const IProject* project, const QString& arch)
+{
+    // TODO: Should we offer building a runtime if it's outside a project?
+    if (!project || !project->path().isLocalFile()) {
+        qCWarning(FLATPAK) << "Cannot create the flatpak-builder directory for" << project << arch;
+        return {};
+    }
+
+    auto ret = project->path();
+    ret.addPath(QStringLiteral(".kdev4"));
+    ret.addPath(QStringLiteral("flatpak"));
+    ret.addPath(arch);
+    if (!QDir().mkpath(ret.toLocalFile())) {
+        qCWarning(FLATPAK) << "Cannot create path" << ret;
+        return {};
+    }
+    return ret;
+}
+
 void FlatpakPlugin::createRuntime(const KDevelop::Path &file, const QString &arch)
 {
-    auto* dir = new QTemporaryDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1String("/kdevelop-flatpak-"));
-    const KDevelop::Path path(dir->path());
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(file.toUrl());
+    const KDevelop::Path path(flatpakBuildDirPath(project, arch));
+    if (path.isEmpty()) {
+        return;
+    }
 
     auto process = FlatpakRuntime::createBuildDirectory(path, file, arch);
-    connect(process, &KJob::finished, this, [this, path, file, arch, dir](KJob* job) {
+    connect(process, &KJob::finished, this, [this, path, file, arch](KJob* job) {
         if (job->error() != 0) {
-            delete dir;
+            QDir(path.toLocalFile()).removeRecursively();
             return;
         }
 
         auto rt = new FlatpakRuntime(path, file, arch);
         m_runtimes += rt;
-        connect(rt, &QObject::destroyed, this, [this, rt, dir]() {
-            delete dir;
+        connect(rt, &QObject::destroyed, this, [this, rt]() {
             m_runtimes.removeAll(rt);
         });
         ICore::self()->runtimeController()->addRuntimes(rt);
+        auto p = ICore::self()->projectController()->findProjectForUrl(file.toUrl());
+        if (p) {
+            auto config = p->projectConfiguration()->group(QStringLiteral("Flatpak"));
+            config.writeEntry("File", file.toUrl());
+        }
     });
     process->start();
 }
