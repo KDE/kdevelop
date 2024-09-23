@@ -155,7 +155,7 @@ QList<KJob*> FlatpakRuntime::exportBundle(const QString &path) const
 
 QString FlatpakRuntime::name() const
 {
-    return QStringLiteral("%1 - %2").arg(m_arch, m_file.lastPathSegment());
+    return QStringLiteral("%1 - %2").arg(m_arch, config()[u"id"].toString());
 }
 
 KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path) const
