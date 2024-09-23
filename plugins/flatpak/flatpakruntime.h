@@ -40,6 +40,15 @@ public:
     static QJsonObject config(const KDevelop::Path& path);
     KDevelop::Path buildPath() const override;
 
+    KDevelop::Path file() const
+    {
+        return m_file;
+    }
+    QString arch() const
+    {
+        return m_arch;
+    }
+
 private:
     void refreshJson();
     QJsonObject config() const;
