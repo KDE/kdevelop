@@ -16,14 +16,31 @@ QtHelpProvider::QtHelpProvider(QObject* parent, const QString& fileName, const Q
     , m_name(name)
     , m_iconName(iconName)
 {
-    if (!engine()->registeredDocumentations().isEmpty()) {
-        // data was already registered previously
-        Q_ASSERT(engine()->registeredDocumentations().size() == 1);
-        Q_ASSERT(engine()->documentationFileName(QHelpEngineCore::namespaceName(m_fileName)) == m_fileName);
-        return;
-    }
+    bool registerFileName = true;
+    cleanUpRegisteredDocumentations([&registerFileName, this](const QString& namespaceName) {
+        if (!registerFileName) {
+            // Unregister this namespace, because the namespace associated with m_fileName has already been found.
+            return true;
+        }
 
-    registerDocumentation(m_fileName);
+        const auto filePath = m_engine.documentationFileName(namespaceName);
+        if (filePath != m_fileName) {
+            return true; // unregister this namespace associated with an unneeded .qch file
+        }
+        if (QHelpEngineCore::namespaceName(m_fileName) != namespaceName) {
+            // Unregister this namespace, because it does not match
+            // the namespace name stored in the associated .qch file.
+            return true;
+        }
+
+        // The .qch file m_fileName is already registered and up-to-date.
+        registerFileName = false; // do not reregister it
+        return false; // keep its namespace registered with the engine
+    });
+
+    if (registerFileName) {
+        registerDocumentation(m_fileName);
+    }
 }
 
 QIcon QtHelpProvider::icon() const
