@@ -23,6 +23,12 @@ public:
     void registerDocumentations();
     void loadDocumentation();
     void unloadDocumentation();
+
+    /**
+     * @return whether any .qch files exist in the @c QT_INSTALL_DOCS directory
+     */
+    bool isQtHelpAvailable() const;
+
     /** @return local paths to all QCH files found in QT_INSTALL_DOCS directory **/
     QStringList qchFiles() const;
 
@@ -37,6 +43,18 @@ Q_SIGNALS:
     void isInitializedChanged();
 
 private:
+    /**
+     * Calls @p processQchFileInfo(QFileInfo fileInfo) for every
+     * .qch file info in each @c QT_INSTALL_DOCS (sub)directory.
+     *
+     * @param processQchFileInfo a function object that returns @c true if done,
+     *        that is, when the iteration over .qch files should be aborted.
+     * @return the return value of the last call to @p processQchFileInfo or
+     *         @c false if @p processQchFileInfo was never called.
+     */
+    template<typename ProcessQchFileInfo>
+    bool visitQchFiles(ProcessQchFileInfo processQchFileInfo) const;
+
     QString m_qmake;
     QString m_path;
     bool m_isInitialized = false;
