@@ -122,6 +122,9 @@ void QtHelpQtDoc::unloadDocumentation()
 
 bool QtHelpQtDoc::isQtHelpAvailable() const
 {
+    if (m_path.isEmpty()) {
+        return false;
+    }
     return visitQchFiles([](const QFileInfo&) {
         return true; // abort iteration and return true (i.e. "available") once the first help file is found
     });
@@ -130,16 +133,14 @@ bool QtHelpQtDoc::isQtHelpAvailable() const
 template<typename ProcessQchFileInfo>
 bool QtHelpQtDoc::visitQchFiles(ProcessQchFileInfo processQchFileInfo) const
 {
+    Q_ASSERT(!m_path.isEmpty());
+
     const QVector<QString> paths{ // test directories
         m_path,
         m_path + QLatin1String("/qch/"),
     };
 
     for (const auto& path : paths) {
-        if (path.isEmpty()) {
-            continue;
-        }
-
         QDirIterator it(path, {QStringLiteral("*.qch")}, QDir::Files);
         while (it.hasNext()) {
             if (processQchFileInfo(it.nextFileInfo())) {
