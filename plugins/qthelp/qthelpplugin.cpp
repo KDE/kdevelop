@@ -156,7 +156,7 @@ bool QtHelpPlugin::isQtHelpQtDocLoaded() const
 
 bool QtHelpPlugin::isQtHelpAvailable() const
 {
-    return !m_qtDoc->qchFiles().isEmpty();
+    return m_qtDoc->isQtHelpAvailable();
 }
 
 bool QtHelpPlugin::isInitialized() const
