@@ -1,0 +1,3267 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY kdevelop "<application
+>KDevelop</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Slovenian "INCLUDE">
+]>
+<book id="kdevelop" lang="&language;">
+<bookinfo>
+<title
+>&kdevelop; Priročnik</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Ta dokumentacija je bila pretvorjena s strani <ulink url=" https://userbase.kde.org/KDevelop4/Manual"
+>KDevelop4/Manual</ulink
+> KDE UserBase.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+>Matjaž</firstname
+><surname
+>Jeran</surname
+><affiliation
+><address
+><email
+>matjaz.jeran@amis.net</email
+></address
+></affiliation
+><contrib
+>Prevod</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-08-19</date>
+    <releaseinfo
+>&kdevelop; 4.4 (&kde; 4.9)</releaseinfo>
+<abstract>
+<para
+>&kdevelop; je integrirano razvojno okolje, ki se uporablja za široko paleto programskih nalog.</para>
+    </abstract>
+  <keywordset>
+    <keyword
+>KDE</keyword>
+    <keyword
+>KDevelop</keyword>
+    <keyword
+>IDE</keyword>
+    <keyword
+>razvoj</keyword>
+    <keyword
+>programiranje</keyword>
+  </keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2012-08-19T12:36:08Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="what-is-kdevelop"
+><title
+>Kaj je &kdevelop;?</title>
+<para
+><ulink url="https://www.kdevelop.org/"
+>&kdevelop;</ulink
+> je sodobno integrirano razvojno okolje (IDE) za C++ (in druge jezike), ki je eno od mnogih <ulink url="https ://kde.org/applications/"
+>Aplikacije KDE</ulink
+>. Kot tak deluje v sistemu &Linux; (tudi če uporabljate katero od drugih namizij, kot je GNOME), vendar je na voljo tudi za večino drugih različic &UNIX; in tudi za Windows.</para>
+<para
+>&kdevelop; ponuja vse ugodnosti sodobnih IDE. Za velike projekte in aplikacije je najpomembnejša funkcija &kdevelop; <emphasis
+>razume C++</emphasis
+>: razčleni celotno izvorno bazo in si zapomni, kateri razredi imajo katere članske funkcije, kje so definirane spremenljivke, kakšne so njihove vrste in veliko drugih stvari o vaši kodi. Na primer, recimo, da ena od datotek glave vašega projekta deklarira razred</para>
+<para
+><programlisting
+>class Car { // ... public: std::string get_color () const; };
+</programlisting>
+</para>
+<para
+>in kasneje v svojem programu imate</para>
+<para
+><programlisting
+>Avto my_ride; // ...naredi nekaj s to spremenljivko... std::string color = my_ride.ge
+</programlisting>
+</para>
+<para
+>zapomnil si bo, da je <varname
+>my_ride</varname
+> v zadnji vrstici spremenljivka tipa <varname
+>Car</varname
+> in vam ponudil, da izpolnite <varname
+>ge</varname
+> kot <varname
+>get_color() </varname
+>, ker je to edina funkcija članica razreda <varname
+>Car</varname
+>, ki se začne tako. Namesto da nadaljujete s tipkanjem, samo pritisnete &Enter; dobiti celotno besedo; to prihrani tipkanje, se izogne tipkarskim napakam in vam ni treba zapomniti natančnih imen na stotine ali tisoče funkcij in razredov, ki sestavljajo velike projekte.</para>
+<para
+>Kot drugi primer predpostavimo, da imate takšno kodo:</para>
+<para
+><programlisting
+>double foo () { double var = my_func(); vrni var * var; } dvojna vrstica () { dvojna var = my_func(); vrni var * var * var; }
+</programlisting
+></para>
+<para
+>Če z miško premaknete nad simbol <varname
+>var</varname
+> v funkcijski <varname
+>bar</varname
+>, dobite možnost, da si ogledate vse uporabe tega simbola. Če kliknete nanj, vam bodo prikazane le uporabe te spremenljivke v funkcijski <varname
+>bar</varname
+>, ker &kdevelop; razume, da spremenljivka <varname
+>var</varname
+> v funkciji <varname
+>foo</varname
+> nima nič s tem. Podobno lahko z desnim klikom na ime spremenljivke preimenujete spremenljivko; s tem se boste dotaknili samo spremenljivke v <varname
+>bar</varname
+>, ne pa tiste z istim imenom v <varname
+>foo</varname
+>.</para>
+<para
+>Toda &kdevelop; ni samo inteligentni urejevalnik kode; obstajajo še druge stvari &kdevelop; dela dobro. Očitno poudarja izvorno kodo v različnih barvah; ima prilagodljiv zamik; ima integriran vmesnik za razhroščevalnik GNU <application
+>gdb</application
+>; prikaže vam lahko dokumentacijo za funkcijo, če z miško premaknete nad uporabo te funkcije; lahko se ukvarja z različnimi vrstami gradbenih okolij in prevajalniki (&eg; s projektom, ki temelji na <guilabel
+>make</guilabel
+> in <guilabel
+>cmake</guilabel
+>), ter mnogimi drugimi lepimi stvarmi, o katerih razpravljamo v tem priročniku.</para>
+</chapter>
+<chapter id="sessions-and-projects--the-basics-of-kdevelop"
+><title
+>Seje in projekti: Osnove &kdevelop;</title>
+<para
+>V tem razdelku bomo preučili nekaj terminologije o tem, kako &kdevelop; vidi svet in kako deluje strukturirano. Predvsem predstavljamo koncept <emphasis
+>sej</emphasis
+> in <emphasis
+>projektov</emphasis
+> ter pojasnjujemo, kako lahko v &kdevelop; nastavite projekte, na katerih želite delati.</para>
+<sect1 id="terminology"
+><title
+>Terminologija</title>
+<para
+>&kdevelop; ima koncept <emphasis
+>sej</emphasis
+> in <emphasis
+>projektov</emphasis
+>. Seja vsebuje vse projekte, ki so med seboj povezani. Za primere, ki sledijo, predpostavite, da ste razvijalec knjižnice in aplikacije, ki jo uporablja. Osrednje knjižnice KDE si lahko predstavljate kot prvo in &kdevelop; kot slednji. Drug primer: Recimo, da ste &Linux; heker jedra, vendar delate tudi na gonilniku naprave za &Linux; ki še ni bil združen v drevo jedra.</para>
+<para
+>Torej, če vzamemo slednje kot primer, bi imeli sejo v &kdevelop; ki ima dva projekta: &Linux; jedro in gonilnik naprave. Želeli jih boste združiti v eno samo sejo (namesto dveh sej z enim projektom), ker bo koristno videti funkcije jedra in podatkovne strukture v &kdevelop; vsakič, ko pišete izvorno kodo za gonilnik &mdash; na primer tako, da lahko dobite funkcijo jedra in imena spremenljivk samodejno razširjene, ali da lahko vidite dokumentacijo funkcije jedra med hekanjem v gonilnik naprave.</para>
+<para
+>Zdaj pa si predstavljajte, da ste tudi razvijalec KDE. Potem bi imeli drugo sejo, ki bi vsebovala KDE kot projekt. Načeloma bi lahko imeli samo eno sejo za vse to, vendar za to ni pravega razloga: pri delu v KDE vam ni treba dostopati do funkcij jedra ali gonilnika naprave; in ne želite, da se imena razredov KDE samodejno razširijo med delom na &Linux; jedro. Končno je sestavljanje nekaterih knjižnic KDE neodvisno od ponovnega prevajanja &Linux; jedro (medtem ko bi bilo pri vsakem prevajanju gonilnika naprave dobro ponovno prevesti jedro &Linux;, če so se nekatere datoteke glave jedra spremenile).</para>
+<para
+>Nazadnje, še ena uporaba sej je, če delate tako na trenutni razvojni različici projekta kot tudi na veji: v tem primeru ne želite, da &kdevelop; zamenjati razrede, ki pripadajo glavni liniji in veji, tako da bi imeli dve seji z istim nizom projektov, vendar iz različnih imenikov (ki ustrezajo različnim razvojnim vejam).</para>
+</sect1>
+<sect1 id="setting-up-a-session-and-importing-an-existing-project"
+><title
+>Nastavitev seje in uvoz obstoječega projekta</title>
+<para
+>Ostanimo pri &Linux; primer jedra in gonilnika naprave &mdash; ta dva primera boste morda želeli nadomestiti s svojim naborom knjižnic ali projektov. Če želite ustvariti novo sejo, ki vsebuje ta dva projekta, pojdite v meni <menuchoice
+><guimenu
+>Seja</guimenu
+><guimenuitem
+>Začni novo sejo</guimenuitem
+></menuchoice
+> zgoraj levo (ali, če je to ko prvič uporabite &kdevelop;: preprosto uporabite privzeto sejo, ki jo dobite ob prvi uporabi in je prazna).</para>
+<para
+>Nato želimo to sejo zapolniti s projekti, za katere trenutno predvidevamo, da nekje že obstajajo (primer začenjanja projektov iz nič je obravnavan drugje v tem priročniku). Za to obstajata v bistvu dva načina, odvisno od tega, ali je projekt že nekje na vašem trdem disku ali pa ga je treba prenesti s strežnika.</para>
+<sect2 id="option-1--importing-a-project-from-a-version-control-system-server"
+><title
+>Možnost 1: Uvoz projekta s strežnika sistema za nadzor različic</title>
+<para
+>Najprej predpostavimo, da je projekt, ki ga želimo vzpostaviti &mdash; &Linux; jedro &mdash; se nahaja v nekem sistemu za nadzor različic na strežniku, vendar ga še niste odjavili na lokalni trdi disk. V tem primeru pojdite v meni <guilabel
+>Projekt</guilabel
+>, da ustvarite &Linux; jedro kot projekt znotraj trenutne seje in nato sledite tem korakom:</para>
+<itemizedlist>
+<listitem
+><para
+>Pojdite na <menuchoice
+><guimenu
+>Projekt</guimenu
+><guimenuitem
+>Pridobi projekt</guimenuitem
+></menuchoice
+>, da uvozite projekt </para
+></listitem>
+<listitem
+><para
+>Nato imate več možnosti, da začnete nov projekt v trenutni seji, odvisno od tega, od kod naj izvirajo izvorne datoteke: Lahko samo pokažete &kdevelop; v obstoječem imeniku (glejte možnost 2 spodaj) ali pa vprašajte &kdevelop; da pridobite vire iz repozitorija. </para
+></listitem>
+<listitem
+><para
+>Ob predpostavki, da še nimate odjavljene različice: <itemizedlist>
+<listitem
+><para
+>V pogovornem oknu pod <guilabel
+>Izberi vir</guilabel
+> izberite uporabo <guilabel
+>Iz datotečnega sistema</guilabel
+>, <guilabel
+>Subversion</guilabel
+>, <guilabel
+>Git</guilabel
+>, <guilabel 
+>GitHub</guilabel
+> ali <guilabel
+>KDE</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>Izberite delovni imenik kot cilj, v katerega naj bodo odjavljeni viri </para
+></listitem>
+<listitem
+><para
+>Izberite URL za lokacijo repozitorija, kjer je mogoče pridobiti izvorne datoteke </para
+></listitem>
+<listitem
+><para
+>Kliknite <guilabel
+>Pridobi</guilabel
+>. To lahko traja precej dolgo; odvisno od hitrosti vaše povezave in velikosti projekta. Na žalost v &kdevelop; 4.2.x vrstica napredka dejansko ne prikazuje ničesar, vendar lahko spremljate napredek tako, da občasno pogledate izhod ukaza ukazne vrstice <screen
+>du -sk <replaceable
+>/path/to/&kdevelop;/project</replaceable
+> </screen
+>, da vidite, koliko podatkov je že prenesenih. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>Težava z vrstico napredka je bila prijavljena kot <ulink url="https://bugs.kde.org/show_bug.cgi?id=256832"
+>&kdevelop; napaka 256832</ulink
+>.</para
+></note
+></para>
+<para
+><note
+><para
+>V tem procesu dobim tudi sporočilo o napaki <emphasis
+>Določiti morate veljavno lokacijo za projekt</emphasis
+>, ki ga lahko varno prezrete.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+>Od vas zahteva, da izberete &kdevelop; projektna datoteka v tem imeniku. Ker ga verjetno še nimate, preprosto pritisnite <guilabel
+>Naprej</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>Znova pritisnite <guilabel
+>Naprej</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>&kdevelop; vas bo nato prosil, da izberete vodjo projekta. Če ta projekt uporablja standardni &UNIX; make datotek, izberite upravitelja projekta makefile po meri </para
+></listitem>
+<listitem
+><para
+>&kdevelop; bo nato začel razčleniti celoten projekt. Spet bo trajalo kar nekaj časa, da pregledamo vse datoteke in indeksne razrede itd. V spodnjem desnem kotu glavnega okna je vrstica napredka, ki prikazuje, kako dolgo je ta postopek trajal. (Če imate več procesorskih jeder, lahko ta postopek pospešite tako, da odprete menijski element <menuchoice
+><guimenu
+>Nastavitve</guimenu
+><guimenuitem
+>Konfiguriraj &kdevelop;</guimenuitem
+></menuchoice
+> in nato izberete <guilabel
+> Razčlenjevalnik ozadja</guilabel
+> na levi in povečanje števila niti za razčlenjevanje v ozadju na desni.) </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="option-2--importing-a-project-that-is-already-on-your-hard-drive"
+><title
+>2. možnost: uvoz projekta, ki je že na vašem trdem disku</title>
+<para
+>Druga možnost je, da če projekt, s katerim želite delati, že obstaja na vašem trdem disku (na primer, ker ste ga prenesli kot datoteko tar s strežnika FTP, ker ste že odjavili različico projekta iz sistema za nadzor različic, ali ker gre za vaš projekt, ki obstaja <emphasis
+>samo</emphasis
+> na vašem trdem disku), potem uporabite <menuchoice
+><guimenu
+>Projekti</guimenu
+><guimenuitem
+>Odpri/uvozi projekt</guimenuitem
+></menuchoice
+> in v pogovornem oknu izberite imenik, v katerem se nahaja vaš projekt.</para>
+</sect2>
+</sect1>
+<sect1 id="setting-up-an-application-as-a-second-project"
+><title
+>Nastavitev aplikacije kot drugega projekta</title>
+<para
+>Naslednja stvar, ki jo želite narediti, je nastaviti druge projekte v isti seji. V zgornjem primeru bi želeli dodati gonilnik naprave kot drugi projekt, kar lahko storite po popolnoma enakih korakih.</para>
+<para
+>Če imate več aplikacij ali knjižnic, preprosto ponovite korake, da v svojo sejo dodate vedno več projektov.</para>
+</sect1>
+<sect1 id="creating-projects-from-scratch"
+><title
+>Ustvarjanje projektov iz nič</title>
+<para
+>Seveda obstaja tudi možnost, da želite začeti nov projekt iz nič. To lahko storite z menijsko postavko <menuchoice
+><guimenu
+>Projekti</guimenu
+><guimenuitem
+>Novo iz predloge ...</guimenuitem
+></menuchoice
+>, ki vam prikaže pogovorno okno za izbiro predloge. Nekatere projektne predloge so na voljo s &kdevelop;, še več pa jih je na voljo z namestitvijo aplikacije <application
+>KAppTemplate</application
+>. V pogovornem oknu izberite vrsto projekta in programski jezik, vnesite ime in lokacijo za svoj projekt ter kliknite <guilabel
+>Naprej</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-project-dialog.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Druga stran pogovornega okna vam omogoča nastavitev sistema za nadzor različic. Izberite sistem, ki ga želite uporabljati, in po potrebi izpolnite konfiguracijo za sistem. Če ne želite uporabljati sistema za nadzor različic ali ga želite pozneje nastaviti ročno, izberite <guilabel
+>Brez</guilabel
+>. Ko ste zadovoljni s svojo izbiro, pritisnite <guilabel
+>Dokončaj</guilabel
+>. </para>
+<para
+>Vaš projekt je zdaj ustvarjen, tako da ga lahko poskusite zgraditi ali namestiti. Nekatere predloge bodo vsebovale komentarje v kodi ali celo ločeno datoteko README, zato je priporočljivo, da jih najprej preberete. Nato lahko začnete delati na svojem projektu z dodajanjem poljubnih funkcij. </para>
+</sect1>
+</chapter>
+<chapter id="working-with-source-code"
+><title
+>Delo z izvorno kodo</title>
+<para
+>Pri razvoju programske opreme boste poleg odpravljanja napak največ časa porabili za branje in pisanje izvorne kode. V ta namen &kdevelop; vam ponuja veliko veliko različnih načinov za raziskovanje izvornih kod in za bolj produktivno pisanje. Kot je podrobneje razloženo v naslednjih razdelkih, &kdevelop; ni le urejevalnik vira &mdash; namesto tega je sistem za upravljanje izvorov, ki vam ponuja različne poglede ekstrahiranih informacij o datotekah, ki skupaj sestavljajo izvorno kodo vaše seje.</para>
+<sect1 id="tools-and-views"
+><title
+>Orodja in pogledi</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-7.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Za delo s projekti &kdevelop; ima koncept <emphasis
+>orodij</emphasis
+>. Orodje ponuja poseben pogled na vir ali dejanje, ki ga je mogoče izvesti z njim. Orodja so predstavljena z gumbi po obodu okna (v navpičnem besedilu vzdolž levega in desnega roba ali vodoravno vzdolž spodnjega roba). Če jih kliknete, se razširijo v podokno &mdash; <emphasis
+>pogled</emphasis
+> &mdash; v glavnem oknu; če ponovno kliknete gumb orodja, podokno spet izgine.</para>
+<para
+>Če želite, da podokno izgine, lahko tudi kliknete na <guilabel
+>x</guilabel
+> v zgornjem desnem kotu podokna</para>
+<!--FIXME How to add a tool-->
+<para
+>Zgornja slika prikazuje določen izbor orodij, poravnanih na levi in desni rob; na sliki je orodje <guilabel
+>Razredi</guilabel
+> odprto na levi in orodje <guilabel
+>Snippets</guilabel
+> na desni, skupaj z urejevalnikom za izvorno datoteko na sredini. V praksi boste večino časa verjetno imeli na levi odprt samo urejevalnik in morda orodje <guilabel
+>Razredi</guilabel
+> ali <guilabel
+>Brskalnik kode</guilabel
+>. Drug pogled orodja bo verjetno odprt samo začasno, ko boste uporabljali orodje, tako da bo večino časa več prostora za urejevalnik.</para>
+<para
+>Ko zaženete &kdevelop; prvič bi že morali imeti gumb orodja <guilabel
+>Projekti</guilabel
+>. Kliknite nanj: odprlo se bo podokno, ki prikazuje projekte, ki ste jih dodali v sejo na dnu, in pogled datotečnega sistema imenikov vaših projektov na vrhu.</para>
+<para
+>Obstaja veliko drugih orodij, ki jih lahko uporabljate z &kdevelop;, od katerih niso vsa na začetku prisotna kot gumbi na obodu. Če jih želite dodati, pojdite na menijski vnos <menuchoice
+><guimenu
+>Windows</guimenu
+><guimenuitem
+>Dodaj pogled orodja</guimenuitem
+></menuchoice
+>. Tukaj je nekaj, ki se vam bodo verjetno zdeli koristni:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Razredi</guilabel
+>: popoln seznam vseh razredov, ki so definirani v enem od projektov ali vaši seji, z vsemi njihovimi članskimi funkcijami in spremenljivkami. S klikom na katerega koli od članov se odpre okno urejevalnika vira na mestu elementa, ki ste ga kliknili. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Dokumenti</guilabel
+>: Navede nekatere nedavno obiskane datoteke glede na vrsto (&eg; izvorne datoteke, datoteke popravkov, dokumenti z navadnim besedilom). </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Brskalnik kode</guilabel
+>: To orodje prikaže stvari, ki so povezane, odvisno od položaja kazalca v datoteki. Na primer, če ste v vrstici <varname
+>#include</varname
+>, prikaže informacije o datoteki, ki jo vključujete, na primer, kateri razredi so deklarirani v tej datoteki; če ste v obsegu datoteke v prazni vrstici, prikaže razrede in funkcije, deklarirane in definirane v trenutni datoteki (vse kot povezave: klik nanje vas pripelje do točke v datoteki, kjer je deklaracija ali definicija dejansko); če ste v definiciji funkcije, pokaže, kje je deklaracija, in ponudi seznam mest, kjer se uporablja funkcija. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Datotečni sistem</guilabel
+>: prikaže drevesni pogled datotečnega sistema. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Dokumentacija</guilabel
+>: Omogoča vam iskanje strani z navodili in drugih dokumentov pomoči. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Izrezki</guilabel
+>: To zagotavlja zaporedja besedila, ki jih uporabite čez in jih ne želite pisati vsakič. Na primer, v projektu, iz katerega je bila ustvarjena zgornja slika, je pogosto treba napisati kodo, kot je </para
+></listitem>
+</itemizedlist>
+<para
+><programlisting
+>for (typename Triangulation&lt; dim&gt;::active_cell_iterator cell = triangulation.begin_active(); cell != triangulation.end(); ++cell)</programlisting
+>To je neroden izraz, vendar bo videti skoraj natanko tako vsakič, ko boste potrebovali takšno zanko &mdash; zaradi česar bi bil dober kandidat za delček.</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Konsole</guilabel
+>: Odpre okno ukazne vrstice znotraj glavnega okna &kdevelop; za občasen ukaz, ki ga morda želite vnesti (&eg; za zagon <varname
+>./configure</varname
+>). </para
+></listitem>
+</itemizedlist>
+<para
+>Celoten seznam orodij in pogledov je podan <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list"
+>tukaj</ulink
+>.</para>
+<para
+>Za mnoge programerje je navpični prostor na zaslonu najpomembnejši. V ta namen lahko uredite pogled orodja na levi in desni rob okna: če želite premakniti orodje, z desnim gumbom miške kliknite na njegov simbol in izberite novo mesto zanj.</para>
+</sect1>
+<sect1 id="exploring-source-code"
+><title
+>Raziskovanje izvorne kode</title>
+<sect2 id="local-information"
+><title
+>Lokalne informacije</title>
+<para
+>&kdevelop; <emphasis
+>razume</emphasis
+> izvorno kodo, zato je res dober pri zagotavljanju informacij o spremenljivkah ali funkcijah, ki se lahko pojavijo v vašem programu. Tukaj je na primer posnetek dela z delom kode in premikanja miške nad simbolom <varname
+>cell</varname
+> v vrstici 1316 (če delate s tipkovnico, lahko dosežete enak učinek tako, da držite tipko Tipka &Alt; za nekaj časa):</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-13.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>&kdevelop; pokaže namig orodja, ki vključuje vrsto spremenljivke (tukaj: <varname
+>DoFHandler&lt;dim&gt;active_cell_iterator</varname
+>), kjer je ta spremenljivka deklarirana (<emphasis
+>vsebnik</emphasis
+>, ki je tukaj obkrožajoča funkcija <varname
+>get_maximal_velocity</varname
+>, ker je lokalna spremenljivka), kaj je (spremenljivka, ne funkcija, razred ali imenski prostor) in kje je deklarirana (v vrstici 1314, le nekaj vrstic višje v kodi) .</para>
+<para
+>V trenutnem kontekstu simbol, nad katerim je lebdela miška, nima povezane dokumentacije. Če bi v tem primeru miško postavili nad simbol <varname
+>get_this_mpi_process</varname
+> v vrstici 1318, bi bil rezultat naslednji:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-14.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Tukaj &kdevelop; se je navzkrižno skliceval na deklaracijo iz popolnoma druge datoteke (<filename
+>utilities.h</filename
+>, ki je pravzaprav celo v drugem projektu iste seje) skupaj s komentarjem v slogu doxygen, ki tam spremlja deklaracijo.</para>
+<para
+>Ti namigi orodij naredijo še bolj uporabne, ker so dinamični: lahko kliknem na vsebnik, da dobim informacije o kontekstu, v katerem je deklarirana spremenljivka (tj. o imenskem prostoru <varname
+>System</varname
+>, na primer, kje je je deklariran, definiran, uporabljen ali kakšna je njegova dokumentacija) in lahko kliknem na modre povezave, ki bodo ponastavile položaj kazalca na lokacijo deklaracije simbola (&eg; v <varname
+>utilities.h</varname
+> , vrstica 289) ali mi dajte seznam mest, kjer je ta simbol uporabljen v trenutni datoteki ali v vseh projektih trenutne seje. Slednje je pogosto uporabno, če želite raziskati, kako se na primer določena funkcija uporablja v veliki osnovi kode.</para>
+<note
+><para
+>Podatki v opisu orodja so bežni &mdash; odvisno od tega, ali držite &Alt; tipko navzdol ali premikanje miške. Če želite zanjo trajnejše mesto, odprite pogled orodja <guilabel
+>Brskalnik kode</guilabel
+> v enem od podoken. Na primer, tukaj je kazalec na isti funkciji kot v zgornjem primeru, pogled orodja na levi pa predstavlja isto vrsto informacij kot v opisu orodja prej:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-15.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Premikanje kazalca na desni strani spremeni informacije, prikazane na levi. Še več, s klikom na gumb <guilabel
+>Zakleni trenutni pogled</guilabel
+> v zgornjem desnem kotu lahko zaklenete te informacije, tako da postanejo neodvisne od premikanja kazalca, medtem ko raziskujete tam predstavljene informacije.</para
+></note>
+<para
+><note
+><para
+>Tovrstne informacije o kontekstu so na voljo na mnogih drugih mestih v &kdevelop;, ne le v urejevalniku izvorne vira. Če na primer držite &Alt; tipka na seznamu za dokončanje (npr. pri hitrem odpiranju) prav tako prinese kontekstne informacije o trenutnem simbolu.</para
+></note
+></para>
+</sect2>
+<sect2 id="file-scope-information"
+><title
+>Informacije o obsegu datoteke</title>
+<para
+>Naslednja stopnja je pridobitev informacij o celotni izvorni datoteki, na kateri trenutno delate. V ta namen postavite kazalec na obseg datoteke v trenutni datoteki in poglejte, kaj prikazuje pogled orodja <guilabel
+>Brskalnik kode</guilabel
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-16.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Tukaj prikazuje seznam imenskih prostorov, razredov in funkcij, deklariranih ali definiranih v trenutni datoteki, kar vam daje pregled nad tem, kaj se dogaja v tej datoteki, in sredstvo za neposreden skok na katero koli od teh deklaracij ali definicij, ne da bi se pomikali gor in dol v datoteko ali iskanje določenega simbola.</para>
+<para
+><note
+><para
+>Informacije, prikazane za obseg datoteke, so enake, kot so predstavljene v načinu <quote
+>Oris</quote
+>, ki je obravnavan spodaj za krmarjenje po izvorni kodi; razlika je v tem, da je orisni način le začasen opis orodja.</para
+></note
+></para>
+</sect2>
+<sect2 id="project-and-session-scope-information"
+><title
+>Informacije o projektu in obsegu seje</title>
+<para
+>Obstaja veliko načinov za pridobivanje informacij o celotnem projektu (ali pravzaprav o vseh projektih v seji). Tovrstne informacije so običajno na voljo prek različnih pogledov orodij. Na primer, pogled orodja <guilabel
+>Razredi</guilabel
+> nudi drevesno strukturo vseh razredov in okoliških imenskih prostorov za vse projekte v seji, skupaj s funkcijami člani in spremenljivkami vsakega od teh razredov:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-17.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Če miškin kazalec premaknete nad vnos, ponovno pridobite informacije o simbolu, njegovi lokaciji deklaracije in definicije ter njegovi uporabi. Dvoklik na vnos v tem drevesnem pogledu odpre okno urejevalnika na mestu, kjer je simbol deklariran ali definiran.</para>
+<para
+>Obstajajo pa tudi drugi načini gledanja na globalne informacije. Orodje <guilabel
+>Dokumenti</guilabel
+> na primer nudi pogled na projekt glede na vrste datotek ali drugih dokumentov, ki jih ta projekt sestavlja:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-18.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="rainbow-color-highlighting-explained"
+><title
+>Razloženo poudarjanje mavričnih barv</title
+> 
+<para
+><application
+>KDevelop</application
+> uporablja različne barve za poudarjanje različnih predmetov v izvorni kodi. Če veste, kaj pomenijo različne barve, lahko zelo hitro izvlečete veliko informacij iz izvorne kode samo s pogledom na barve, ne da bi prebrali en sam znak. Pravila označevanja so naslednja: </para>
+<itemizedlist>
+<listitem
+><para
+>Objektom tipa Class / Struct, Enum (vrednosti in tip), (globalnim) funkcijam in članom razreda je vsak dodeljena lastna barva (razredi so zeleni, enumi so temno rdeči, člani pa temno rumeni ali vijolični, (globalno ) funkcije so vedno vijolične).</para
+></listitem>
+<listitem
+><para
+>Vse globalne spremenljivke so obarvane temno zeleno.</para
+></listitem>
+<listitem
+><para
+>Identifikatorji, ki so definicije vrste za drugo vrsto, so obarvani v modri barvi.</para
+></listitem>
+<listitem
+><para
+>Vse deklaracije in definicije objektov so v krepkem tisku.</para
+></listitem>
+<listitem
+><para
+>Če se do člana dostopa iz konteksta, kjer je definiran (osnovni ali izpeljani razred), je prikazan v rumeni barvi, sicer pa v vijolični barvi.</para
+></listitem>
+<listitem
+><para
+>Če je član zaseben ali zaščiten, se ob uporabi obarva v nekoliko temnejšo barvo.</para
+></listitem>
+<listitem
+><para
+>Za spremenljivke, lokalne za obseg telesa funkcije, so mavrične barve izbrane na podlagi zgoščene vrednosti identifikatorja. To vključuje parametre funkcije. Identifikator bo imel znotraj svojega obsega vedno isto barvo (vendar bo isti identifikator dobil drugačno barvo, če predstavlja drugačen predmet, tj. če je na novo definiran v bolj ugnezdenem obsegu) in običajno boste dobili isto barvo za isto ime identifikatorja v različnih obsegih. Torej, če imate več funkcij, ki sprejemajo parametre z istimi imeni, bodo vsi argumenti videti enako barvno. Te mavrične barve je mogoče izklopiti ločeno od globalnega barvanja v pogovornem oknu z nastavitvami.</para
+></listitem>
+<listitem
+><para
+>Identifikatorji, za katere &kdevelop; ni mogel določiti ustrezne deklaracije so obarvane belo. To je lahko včasih posledica manjkajočih direktiv <varname
+>#include</varname
+>.</para
+></listitem>
+<listitem
+><para
+>Poleg te barve bo uporabljeno običajno označevanje sintakse urejevalnika, kot je znano iz &kate;. Semantično označevanje &kdevelop; bo vedno preglasilo označevanje urejevalnika, če pride do spora.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="navigating-in-source-code"
+><title
+>Krmarjenje po izvorni kodi</title>
+<para
+>V prejšnjem razdelku smo razpravljali o raziskovanju izvorne kode, &ie; pridobivanje informacij o simbolih, datotekah in projektih. Naslednji korak je skakanje po vaši izvorni bazi, &ie; za navigacijo v njej. Spet obstajajo različne ravni, na katerih je to mogoče: lokalno, znotraj datoteke in znotraj projekta.</para>
+<para
+><note
+><para
+>Številni načini krmarjenja po kodi so dostopni iz menija <guilabel
+>Krmarjenje</guilabel
+> v programu &kdevelop; glavno okno.</para
+></note
+></para>
+<sect2 id="local-navigation"
+><title
+>Lokalna navigacija</title>
+<para
+>&kdevelop; je veliko več kot urejevalnik, vendar je <emphasis
+>tudi</emphasis
+> izvorni urejevalnik. Tako lahko seveda premikate kazalec gor, dol, levo ali desno v izvorni datoteki. Uporabite lahko tudi tipki <keycap
+>PageUp</keycap
+> in <keycap
+>PageDown</keycap
+> ter vse druge ukaze, ki jih uporabljate v katerem koli uporabnem urejevalniku.</para>
+</sect2>
+<sect2 id="file-scope-navigation-and-outline-mode"
+><title
+>Krmarjenje po obsegu datoteke in način orisa</title>
+<para
+>V obsegu datoteke &kdevelop; ponuja veliko možnih načinov za krmarjenje po izvorni kodi. Na primer:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Oris</guilabel
+>: Oris trenutne datoteke lahko dobite na vsaj tri različne načine: <itemizedlist>
+<listitem
+><para
+>Če kliknete besedilno polje <guilabel
+>Oris</guilabel
+> v zgornjem desnem kotu glavnega okna ali pritisnete <keycombo
+>&Alt;&Ctrl;<keycap
+>N</keycap
+></keycombo
+>, se odpre spustni meni s seznami vse deklaracije funkcij in razredov: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-19.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+> </phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Nato lahko samo izberete, na katero želite skočiti, ali &mdash; če jih je veliko &mdash; začnite vnašati besedilo, ki se lahko pojavi v prikazanih imenih; v tem primeru, ko nadaljujete s tipkanjem, postaja seznam vedno manjši, saj so odstranjena imena, ki se ne ujemajo z že vnesenim besedilom, dokler niste pripravljeni izbrati ene od možnosti. </para
+></listitem>
+<listitem
+><para
+>Postavitev kazalca na obseg datoteke (&ie; zunaj katere koli deklaracije ali definicije funkcije ali razreda) in odprto orodje <guilabel
+>Brskalnik kode</guilabel
+>: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-16.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> To vam nudi tudi oris tega, kar se dogaja v trenutni datoteki, in vam omogoča, da izberete, kam želite skočiti. </para
+></listitem>
+<listitem
+><para
+>Če miško premaknete nad zavihek ene od odprtih datotek, se prav tako prikaže oris datoteke na tem zavihku. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+>Izvorne datoteke so organizirane kot seznam deklaracij ali definicij funkcij. Če pritisnete <keycombo
+>&Alt;&Ctrl;<keycap
+>PgUp</keycap
+></keycombo
+> in <keycombo
+>&Alt;&Ctrl;<keycap
+>PgDown</keycap
+></keycombo
+> skočite na prejšnjo ali naslednjo definicijo funkcije v tem mapa. </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="project-and-session-scope-navigation--semantic-navigation"
+><title
+>Navigacija po obsegu projekta in seje: Semantična navigacija</title>
+<para
+>Kot je bilo omenjeno na drugih mestih, &kdevelop; običajno ne upošteva posameznih izvornih datotek, ampak raje obravnava projekte kot celoto (ali raje vse projekte, ki so del trenutne seje). Posledično ponuja veliko možnosti za navigacijo skozi celotne projekte. Nekatere od teh izhajajo iz tega, o čemer smo že razpravljali v razdelku o <link linkend="exploring-source-code"
+>Raziskovanju izvorne kode</link
+>, druge pa so resnično drugačne. Skupna tema je, da te navigacijske funkcije temeljijo na <emphasis
+>semantičnem razumevanju</emphasis
+> kode, &ie; ponujajo vam nekaj, kar zahteva razčlenjevanje celotnih projektov in povezovanje podatkov. Naslednji seznam prikazuje nekaj načinov za krmarjenje po izvorni kodi, ki je raztresena po potencialno zelo velikem številu datotek:</para>
+<itemizedlist>
+<listitem
+><para
+>Kot je razvidno iz razdelka o <link linkend="exploring-source-code"
+>Raziskovanju izvorne kode</link
+>, lahko dobite opis orodja, ki pojasnjuje posamezne imenske prostore, razrede, funkcije ali imena spremenljivk, tako da z miško premaknete nad njih ali obdržite &Alt; nekaj časa pritisnjena tipka. Tukaj je primer: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-14.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> </mediaobject
+> </screenshot
+> S klikom na povezave za deklaracijo simbola ali razširitvijo seznama uporab lahko skočite na te lokacije, po potrebi odprete ustrezno datoteko in postavite kazalec na ustrezno lokacijo. Podoben učinek je mogoče doseči z uporabo pogleda orodja <guilabel
+>Brskalnik kode</guilabel
+>, o katerem smo prav tako razpravljali prej. </para
+></listitem>
+<listitem
+><para
+>Hitrejši način, da skočite na deklaracijo simbola, ne da bi morali klikniti povezave v orodnem opisu, je, da začasno omogočite <guilabel
+>Način brskanja po izvoru</guilabel
+> tako, da držite &Alt; ali &Ctrl; ključ. V tem načinu je mogoče neposredno klikniti kateri koli simbol v urejevalniku, da skočite na njegovo deklaracijo. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Hitro odpiranje</guilabel
+>: Zelo zmogljiv način skakanja na druge datoteke ali lokacije je uporaba različnih metod <emphasis
+>hitrega odpiranja</emphasis
+> v &kdevelop;. Obstajajo štiri različice teh: <itemizedlist>
+<listitem
+><para
+><guilabel
+>Hitro odpiranje razreda</guilabel
+> (<menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Hitro odpiranje razreda</guimenuitem
+></menuchoice
+> ali <keycombo
+>&Alt;&Ctrl;<keycap
+>C</keycap
+></keycombo
+>): Dobili boste seznam vseh razredov v tej seji. Začnite tipkati (del) imena razreda in seznam se bo še naprej zmanjševal na tiste, ki se dejansko ujemajo s tem, kar ste vnesli do zdaj. Če je seznam dovolj kratek, izberite element s tipkama gor in dol ter &kdevelop; vas bo pripeljal do mesta, kjer je prijavljen razred. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Funkcija hitrega odpiranja</guilabel
+> (<menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Funkcija hitrega odpiranja</guimenuitem
+></menuchoice
+> ali <keycombo
+>&Alt;&Ctrl;<keycap
+>M</keycap
+></keycombo
+>): Dobili boste seznam vseh (članskih) funkcij, ki so del projektov v trenutni seji, in iz njega lahko izbirate na enak način kot zgoraj. Upoštevajte, da lahko ta seznam vključuje tako deklaracije funkcij kot definicije. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Hitro odpiranje datoteke</guilabel
+> (<menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Hitro odpiranje datoteke</guimenuitem
+></menuchoice
+> ali <keycombo
+>&Alt;&Ctrl;<keycap
+>O</keycap
+></keycombo
+>): Dobili boste seznam vseh datotek, ki so del projektov v trenutni seji, in med njimi lahko izbirate na enak način kot zgoraj. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Univerzalno hitro odpiranje</guilabel
+> (<menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Hitro odpiranje</guimenuitem
+></menuchoice
+> ali <keycombo
+>&Alt;&Ctrl;<keycap
+>Q</keycap 
+></keycombo
+>): Če pozabite, katera kombinacija tipk je vezana na katerega od zgornjih ukazov, je to univerzalni švicarski nož &mdash; preprosto vam predstavi kombiniran seznam vseh datotek, funkcij, razredov in drugih stvari, med katerimi lahko izbirate. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Skoči na deklaracijo/definicijo</guilabel
+>: Pri izvajanju (članske) funkcije je treba pogosto preklopiti nazaj na točko, kjer je funkcija deklarirana, na primer, da ohranimo seznam funkcijskih argumentov sinhroniziran med deklaracijo in definicijo , ali za posodobitev dokumentacije. Če želite to narediti, postavite kazalec na ime funkcije in izberite <menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Skoči na deklaracijo</guimenuitem
+></menuchoice
+> (ali pritisnite <keycombo
+>&Ctrl;<keycap
+>. </keycap
+></keycombo
+>), da pridete do mesta, kjer je deklarirana funkcija. Na prvotno mesto se lahko vrnete na več načinov: <itemizedlist>
+<listitem
+><para
+>Izbira <menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Skoči na definicijo</guimenuitem
+></menuchoice
+> (ali pritisnite <keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+>). </para
+></listitem>
+<listitem
+><para
+>Izbira <menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Prejšnji obiskani kontekst</guimenuitem
+></menuchoice
+> (ali pritisnite <keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Levo</keycap
+></keycombo
+>), kot je opisano spodaj. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>Preskok na deklaracijo simbola je nekaj, kar ne deluje le, ko postavite kazalec na ime funkcije, ki jo trenutno izvajate. Namesto tega deluje tudi za druge simbole: če kazalec postavite na (lokalno, globalno ali člansko) spremenljivko in skočite na njeno deklaracijo, vas prav tako premakne na njeno lokacijo deklaracije. Podobno lahko postavite kazalec na ime razreda, na primer v spremenljivko deklaracije funkcije, in skočite na lokacijo njegove deklaracije.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Preklapljanje med deklaracijo/definicijo</guilabel
+>: Če želite v zgornjem primeru skočiti na mesto deklaracije trenutne funkcije, morate kazalec najprej postaviti na ime funkcije. Če se želite izogniti temu koraku, lahko izberete <menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Preklopi definicijo/deklaracijo</guimenuitem
+></menuchoice
+> (ali pritisnete <keycombo
+>&Shift;&Ctrl;<keycap
+>C</keycap
+></keycombo
+>), da skočite na deklaracijo funkcije, znotraj katere je trenutno kazalec. Če drugič izberete isti vnos v meniju, se vrnete na mesto, kjer je funkcija definirana. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Prejšnja/naslednja uporaba</guilabel
+>: Postavite kazalec na ime lokalne spremenljivke in izberite <menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Naslednja uporaba</guimenuitem
+></menuchoice
+> (ali pritisnite <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>Desno</keycap
+></keycombo
+>) vas premakne do naslednje uporabe te spremenljivke v kodi. (Upoštevajte, da to ne išče samo naslednje pojavitve imena spremenljivke, ampak dejansko upošteva, da so spremenljivke z enakim imenom, vendar v različnih obsegih, različne.) Enako velja za uporabo imen funkcij. Izbira <menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Prejšnja uporaba</guimenuitem
+></menuchoice
+> (ali pritisk <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>levo</keycap
+></keycombo
+>) vas popelje do prejšnje uporabe simbola. </para
+></listitem>
+</itemizedlist>
+<para
+><note
+><para
+>Če si želite ogledati seznam vseh uporab imena, po katerem krožijo ti ukazi, postavite kazalec nanj in odprite pogled orodja <guilabel
+>Brskalnik kode</guilabel
+> ali pritisnite in držite &Alt; gumb. To je podrobneje razloženo v razdelku <link linkend="file-scope-information"
+>Raziskovanje kode</link
+>.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Seznam konteksta</guilabel
+>: spletni brskalniki imajo to funkcijo, kjer se lahko premikate nazaj in naprej po seznamu nazadnje obiskanih spletnih strani. &kdevelop; ima enake funkcije, le da namesto spletnih strani obiskujete <emphasis
+>kontekste</emphasis
+>. Kontekst je trenutna lokacija kazalca in spremenite ga tako, da se od njega odmaknete z uporabo česar koli drugega kot ukazi kazalca &mdash; na primer s klikom na lokacijo, ki jo ponuja opis orodja, v orodnem pogledu <guilabel
+>Brskalnik kode</guilabel
+>, eno od možnosti v meniju <guilabel
+>Navigacija</guilabel
+> ali kateri koli drug navigacijski ukaz. Uporaba <menuchoice
+><guimenu
+>Navigacije</guimenu
+><guimenuitem
+>Prejšnji obiskani kontekst</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Levo</keycap
+></keycombo
+>) in <menuchoice
+><guimenu
+>Navigacija</guimenu
+><guimenuitem
+>Naslednji obiskani kontekst</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Desno</keycap
+></keycombo
+>) vas popelje po tem seznamu obiskanih kontekstov, tako kot vas gumba <guilabel
+>nazaj</guilabel
+> in <guilabel
+>naprej</guilabel
+> v brskalniku popeljeta na prejšnjo ali naslednjo spletno stran na seznamu obiskanih strani. </para
+></listitem>
+<listitem
+><para
+>Končno so na voljo pogledi orodij, ki vam omogočajo krmarjenje na različna mesta v vaši kodni bazi. Na primer, orodje <guilabel
+>Razredi</guilabel
+> vam nudi seznam vseh imenskih prostorov in razredov v vseh projektih trenutne seje in vam omogoča, da ga razširite, da vidite članske funkcije in spremenljivke vsakega od teh razredov: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-17.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject 
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Dvoklik na element (ali prehod skozi kontekstni meni z desnim gumbom miške) vam omogoča, da skočite na lokacijo deklaracijo artikla. Druga orodja omogočajo podobne stvari; na primer pogled orodja <guilabel
+>Projekti</guilabel
+> nudi seznam datotek, ki so del seje: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-13 .png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Spet dvoklik na datoteko jo odpre. </para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="writing-source-code"
+><title
+>Pisanje izvorne kode</title>
+<para
+>Ker &kdevelop; razume izvorno kodo vaših projektov, lahko pomaga pri pisanju dodatne kode. V nadaljevanju so opisani nekateri načini, na katere to počne.</para>
+<sect2 id="auto-completion"
+><title
+>Samodokončanje</title>
+<para
+>Verjetno najbolj uporabna od vseh funkcij pri pisanju nove kode je samodejno dokončanje. Razmislite na primer o naslednjem delu kode:</para>
+<para
+><programlisting
+>class Car {
+  // ...
+  public:
+    std::string get_color () const;
+};
+void foo()
+{
+  Car my_ride;
+  // ...do something with this variable...
+  std::string color = my_ride.ge
+</programlisting
+></para>
+<para
+>V zadnji vrstici &kdevelop; si bo zapomnil, da je spremenljivka <varname
+>my_ride</varname
+> tipa <varname
+>Car</varname
+>, in samodejno ponudil dokončanje imena funkcije članice <varname
+>ge</varname
+> kot <varname
+>get_color </varname
+>. Pravzaprav je vse, kar morate storiti, to, da nadaljujete s tipkanjem, dokler funkcija samodokončanja ne zmanjša števila zadetkov na eno, in nato pritisnete &Enter; ključ:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Upoštevajte, da lahko kliknete namig orodja, da dobite več informacij o funkciji, razen vrste vrnitve in ali je javna:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-43.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Samodokončanje vam lahko prihrani veliko tipkanja, če vaš projekt uporablja dolga imena spremenljivk in funkcij; poleg tega se izogne napačnemu črkovanju imen (in posledičnih napak prevajalnika) in poenostavi zapomnitev natančnih imen funkcij; na primer, če se vsi vaši pridobivalniki začnejo z <varname
+>get_</varname
+>, potem vam bo funkcija samodokončanja lahko predstavila seznam možnih pridobivalnikov šele, ko vnesete prve štiri črke, kar vas bo verjetno spomnilo na proces, katera od funkcij je pravilna. Upoštevajte, da za delovanje samodejnega dokončanja ni treba niti deklaracije razreda <varname
+>Car</varname
+> niti spremenljivke <varname
+>my_ride</varname
+> v isti datoteki, v kateri trenutno pišete kodo. &kdevelop; preprosto mora vedeti, da so ti razredi in spremenljivke povezani, &ie; datoteke, v katerih so vzpostavljene te povezave, morajo biti del projekta, na katerem trenutno delate.</para>
+<para
+><note
+><para
+>&kdevelop; ne ve vedno, kdaj naj vam pomaga pri dokončanju kode. Če se namig za samodejno dokončanje ne odpre samodejno, pritisnite <keycombo
+>&Ctrl;<keycap
+>Preslednica</keycap
+></keycombo
+>, da ročno odprete seznam dokončanj. Na splošno velja, da samodokončanje deluje, &kdevelop; mora razčleniti vaše izvorne datoteke. To se zgodi v ozadju za vse datoteke, ki so del projektov trenutne seje, potem ko zaženete &kdevelop;, pa tudi po tem, ko za delček sekunde nehate tipkati (zakasnitev je mogoče konfigurirati).</para
+></note
+></para>
+<para
+><note
+><para
+>&kdevelop; razčlenjuje samo datoteke, za katere meni, da so izvorna koda, kot je določeno z vrsto MIME datoteke. Ta vrsta ni nastavljena pred prvim shranjevanjem datoteke; posledično ustvarjanje nove datoteke in začetek pisanja kode vanjo ne bo sprožilo razčlenjevanja za samodejno dokončanje, dokler ni prvič shranjena.</para
+></note
+></para>
+<para
+><note
+><para
+>Kot v prejšnji opombi, za delovanje samodokončanja morate &kdevelop; mora biti sposoben najti deklaracije v datotekah glave. Za to išče po številnih privzetih poteh. Če samodejno ne najde datoteke z glavo, bo ime datoteke z glavo podčrtano rdeče; v tem primeru z desnim klikom povejte &kdevelop; izrecno kje najti te datoteke in informacije, ki jih zagotavljajo.</para
+></note
+></para>
+<para
+><note
+><para
+>Konfiguriranje samodokončanja je obravnavano v <link linkend="customizing-code-auto-completion"
+>tem razdelku tega priročnika</link
+>.</para
+></note
+></para>
+</sect2>
+<sect2 id="adding-new-classes-and-implementing-member-functions"
+><title
+>Dodajanje novih razredov in izvajanje članskih funkcij</title>
+<para
+>&kdevelop; ima pomočnika za dodajanje novih razredov. Postopek je opisan v <link linkend="creating-a-new-class"
+>Ustvarjanje novega razreda</link
+>. Preprost razred C++ lahko ustvarite tako, da izberete predlogo Basic C++ iz kategorije <filename
+>Razred</filename
+>. V pomočniku lahko izberemo nekatere preddefinirane članske funkcije, na primer prazen konstruktor, kopirni konstruktor in destruktor. </para>
+<para
+>Po dokončanju pomočnika se nove datoteke ustvarijo in odprejo v urejevalniku. Datoteka glave že ima vključujoča varovala in novi razred ima vse članske funkcije, ki smo jih izbrali. Naslednja dva koraka bi bila dokumentiranje razreda in njegovih članskih funkcij ter njihova implementacija. Spodaj bomo obravnavali pripomočke za dokumentiranje razredov in funkcij. Za implementacijo že dodanih posebnih funkcij preprosto pojdite na zavihek <guilabel
+>bus.cpp</guilabel
+>, kjer je že na voljo okostje funkcij:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-30.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Če želite dodati nove članske funkcije, se vrnite na zavihek <guilabel
+>bus.h</guilabel
+> in dodajte ime funkcije. Na primer, dodajmo tole:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-31.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Upoštevajte, kako sem že začel z izvajanjem. Vendar v mnogih stilih kodiranja funkcija ne bi smela biti implementirana v datoteki glave, temveč v ustrezni datoteki .cpp. V ta namen poiščite kazalec na imenu funkcije in izberite <menuchoice
+><guimenu
+>Koda</guimenu
+><guimenuitem
+>Premakni v vir</guimenuitem
+></menuchoice
+> ali pritisnite <keycombo
+>&Ctrl;&Alt;<keycap
+>S</keycap
+></keycombo
+>. To odstrani kodo med zavitimi oklepaji iz datoteke glave (in jo nadomesti s podpičjem, kot je potrebno za prekinitev deklaracije funkcije) in jo premakne v izvorno datoteko:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-32.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Upoštevajte, da sem pravkar začel tipkati in da sem želel namigniti, da bi morala biti spremenljivka <varname
+>students</varname
+> verjetno članska spremenljivka razreda <varname
+>Bus</varname
+>, vendar je še nisem dodal. Upoštevajte tudi, kako &kdevelop; podčrta, da pojasni, da o spremenljivki ne ve ničesar. Toda to težavo je mogoče rešiti: s klikom na ime spremenljivke se prikaže naslednji opis orodja:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-33.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>(Enako lahko dosežete z desnim klikom nanj in izbiro <guilabel
+>Reši: Razglasi kot</guilabel
+>.) Naj izberem <quote
+>3 - private unsigned int</quote
+> (bodisi z miško ali s pritiskom <keycombo
+>&Alt;<keycap
+>3</keycap
+></keycombo
+>) in nato poglejte, kako je prikazano v datoteki glave:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-34.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Omeniti velja, da &kdevelop; izvleče tip spremenljivke, ki jo je treba deklarirati, iz izraza, uporabljenega za njeno inicializacijo. Na primer, če bi dodajanje zapisali na naslednji precej dvomljiv način, bi bilo predlagano, da spremenljivko deklariramo kot tip <varname
+>double</varname
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-35.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Kot zadnja točka: metoda, ki uporablja <menuchoice
+><guimenu
+>Kodo</guimenu
+><guimenuitem
+>Premakni v vir</guimenuitem
+></menuchoice
+>, ne vstavi vedno nove funkcije člana, kamor bi jo morda želeli. Na primer, morda želite, da je označen kot <varname
+>inline</varname
+> in ga postavite na dno datoteke glave. V takem primeru napišite deklaracijo in začnite pisati definicijo funkcije takole:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-36.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>&kdevelop; samodejno ponuja vse možne dopolnitve tega, kar bi lahko prišlo sem. Če izberete enega od dveh vnosov <varname
+>add_students</varname
+>, dobite naslednjo kodo, ki že izpolni celoten seznam argumentov:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-37.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>V primeru, če sprejmete eno od možnosti, ki jih ponuja orodje za samodokončanje, dobite pravilen podpis, vendar na žalost izbrišete že napisano oznako <varname
+>inline</varname
+>. To je bilo prijavljeno kot <ulink url="https://bugs.kde.org/show_bug.cgi?id=274245"
+>&kdevelop; Napaka 274245</ulink
+>.</para
+></note
+></para>
+</sect2>
+<sect2 id="documenting-declarations"
+><title
+>Dokumentiranje deklaracij</title>
+<para
+>Dobra koda je dobro dokumentirana, tako na ravni izvajanja algoritmov znotraj funkcij kot tudi na ravni vmesnika &mdash; &ie;, razrede, (članske in globalne) funkcije in (članske ali globalne) spremenljivke je treba dokumentirati, da se pojasni njihov namen, možne vrednosti argumentov, pred- in postpogoji itd. Kar zadeva dokumentiranje vmesnika, je <ulink url="http://www.doxygen.org"
+>doxygen</ulink
+> postal de facto standard za oblikovanje komentarjev, ki jih je nato mogoče ekstrahirati in prikazati na spletnih straneh, po katerih je mogoče iskati.</para>
+<para
+>&kdevelop; podpira ta slog komentarjev z zagotavljanjem bližnjice za ustvarjanje okvira komentarjev, ki dokumentirajo razred ali funkcijo člana. Recimo, da ste že napisali to kodo:</para>
+<para
+><programlisting
+>class Car {
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para
+>Zdaj želite dodati dokumentacijo tako razredu kot funkciji člana. V ta namen premaknite kazalec v prvo vrstico in izberite <menuchoice
+><guimenu
+>Koda</guimenu
+><guimenuitem
+>Deklaracija dokumenta</guimenuitem
+></menuchoice
+> ali pritisnite <keycombo
+>&Alt;&Shift;<keycap
+>D </keycap
+></keycombo
+>. &kdevelop; bo odgovoril z naslednjim:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-23.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Kazalec je že v sivo obarvanem območju, da lahko izpolnite kratek opis (za ključno besedo doxygen <varname
+>@brief</varname
+>) tega razreda. Nato lahko temu komentarju nadaljujete z dodajanjem dokumentacije, ki daje podrobnejši pregled tega, kaj počne razred:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-24.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Ko je urejevalnik znotraj komentarja, je besedilo komentarja označeno z zeleno (označevanje izgine, ko premaknete kazalec iz komentarja). Ko pridete do konca vrstice, pritisnite &Enter; in &kdevelop; samodejno začne novo vrstico, ki se začne z zvezdico, in postavi kazalec z zamikom enega znaka.</para>
+<para
+>Zdaj pa dokumentirajmo funkcijo člana, ponovno tako, da kazalec postavimo na vrstico deklaracije in izberemo <menuchoice
+><guimenu
+>Koda</guimenu
+><guimenuitem
+>Deklaracija dokumenta</guimenuitem
+></menuchoice
+> ali pritisnemo <keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-25.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Še enkrat, &kdevelop; samodejno ustvari okostje komentarja, vključno z dokumentacijo za samo funkcijo, kot tudi njeno vrnjeno vrsto. V trenutnem primeru je ime funkcije precej samoumevno, vendar argumenti funkcije pogosto niso in jih je treba posebej dokumentirati. Za ponazoritev si oglejmo nekoliko bolj zanimivo funkcijo in komentar &kdevelop; samodejno ustvari:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-26.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Tukaj predlagani komentar že vsebuje vsa polja Doxygen za posamezne parametre, npr.</para>
+</sect2>
+<sect2 id="renaming-variables-functions-and-classes"
+><title
+>Preimenovanje spremenljivk, funkcij in razredov</title>
+<para
+>Včasih želimo preimenovati funkcijo, razred ali spremenljivko. Na primer, recimo, da to že imamo:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-38.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Nato ugotovimo, da nismo zadovoljni z imenom <varname
+>remove_students</varname
+> in bi ga raje poimenovali, recimo, <varname
+>throw_out_students</varname
+>. Za ime bi lahko naredili iskalno zamenjavo, vendar ima to dve pomanjkljivosti:</para>
+<itemizedlist>
+<listitem
+><para
+>Funkcijo je mogoče uporabiti v več kot eni datoteki. </para
+></listitem>
+<listitem
+><para
+>Resnično želimo samo preimenovati to funkcijo in se ne dotikati funkcij, ki imajo morda isto ime, vendar so deklarirane v drugih razredih ali imenskih prostorih. </para
+></listitem>
+</itemizedlist>
+<para
+>Obe težavi je mogoče rešiti tako, da premaknete kazalec na katero koli pojavitev imena funkcije in izberete <menuchoice
+><guimenu
+>Koda</guimenu
+><guimenuitem
+>Preimenuj deklaracijo</guimenuitem
+></menuchoice
+> (ali desno klik na ime in izbiro <guilabel
+>Preimenuj Bus::remove_students</guilabel
+>). Prikaže se pogovorno okno, kjer lahko vnesete novo ime funkcije in kjer si lahko ogledate tudi vsa mesta, kjer se funkcija dejansko uporablja:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-39.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="code-snippets"
+><title
+>Delčki kode</title>
+<para
+>Večina projektov ima dele kode, ki jih je pogosto treba napisati v izvorno kodo. Primeri so: za pisce prevajalnikov, zanka čez vsa navodila; za pisce uporabniškega vmesnika preveri, ali je uporabniški vnos veljaven, in če ni, odpre polje z napako; v projektu avtorja teh vrstic bi šlo za kodo te vrste</para>
+<para
+><programlisting
+>for (typename Triangulation::active_cell_iterator
+       cell = triangulation.begin_active();
+     cell != triangulation.end(); ++cell)
+  ... do something with the cell ...
+</programlisting>
+</para>
+<para
+>Namesto vnašanja tovrstnega besedila znova in znova (z vsemi sočasnimi tipkarskimi napakami, ki jih prinaša), orodje <guilabel
+>Snippets</guilabel
+> programa &kdevelop; lahko pomaga tukaj. V ta namen odprite pogled orodja (glejte <link linkend="tools-and-views"
+>Orodja in pogledi</link
+>, če ustrezen gumb še ni na obodu vašega okna). Nato kliknite gumb <quote
+>Dodaj repozitorij</quote
+> (rahlo napačno ime &mdash; omogoča vam ustvarjanje poimenovane zbirke izrezkov za izvorne kode določene vrste, &eg; izvorne kode C++) in ustvarite prazno repozitorij. Nato kliknite <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+>, da dodate delček in dobite pogovorno okno, kot je naslednje:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-40.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>Ime delčka ne sme vsebovati presledkov ali drugih posebnih znakov, ker mora izgledati kot običajno ime funkcije ali spremenljivke (iz razlogov, ki bodo jasni v naslednjem odstavku).</para
+></note
+></para>
+<para
+>Če želite uporabiti tako definiran delček, lahko med urejanjem kode samo vnesete ime delčka, kot bi vnesli ime katere koli druge funkcije ali spremenljivke. To ime bo na voljo za samodejno dokončanje &mdash; kar pomeni, da ni nobene škode pri uporabi dolgega in opisnega imena za delček, kot je zgornji &mdash; in ko sprejmete predlog orodnega opisa za samodokončanje (na primer samo s pritiskom na &Enter;), bo že vneseni del imena izrezkov nadomeščen s celotno razširitvijo izrezka in bo pravilno zamaknjen:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-41.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Upoštevajte, da za delovanje ni treba, da je pogled orodja <guilabel
+>Izrezki</guilabel
+> odprt ali viden: pogled orodja potrebujete samo za definiranje novih izrezkov. Alternativni, če manj priročen, način za razširitev delčka je, da ga preprosto kliknete v pogledu ustreznega orodja.</para>
+<para
+><note
+><para
+>Izrezki so veliko močnejši od pravkar razloženih. Za popoln opis tega, kaj lahko počnete z njimi, glejte <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets"
+>podrobno dokumentacijo orodja Snippets</ulink
+>.</para
+></note
+></para>
+</sect2>
+</sect1>
+<sect1 id="modes-and-working-sets"
+><title
+>Načini in delovni nizi</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_noworkingset.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Če ste prišli tako daleč, si oglejte zgornji desni del &kdevelop; glavno okno: Kot je prikazano na sliki, boste videli, da obstajajo trije <guilabel
+>načini</guilabel
+> &kdevelop; lahko v: <guilabel
+>Koda</guilabel
+> (način, o katerem razpravljamo v trenutnem poglavju o delu z izvorno kodo), <guilabel
+>Odpravljanje napak</guilabel
+> (glejte <link linkend="debugging-programs-in-kdevelop"
+>Programi za odpravljanje napak</link
+>) in <guilabel
+>Pregled</guilabel
+> (glejte <link linkend="working-with-version-control-systems"
+>Delo s sistemi za nadzor različic</link
+>).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_sessionsprojectsworkingsets.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Vsak način ima svoj nabor orodij, ki so naložena po obodu, vsak način pa ima tudi <emphasis
+>delovni nabor</emphasis
+> trenutno odprtih datotek in dokumentov. Poleg tega je vsak tak delovni niz povezan s trenutno sejo, &ie; imamo zgoraj prikazano razmerje. Upoštevajte, da datoteke v delovnem nizu izvirajo iz iste seje, vendar lahko prihajajo iz različnih projektov, ki so del iste seje.</para>
+<para
+>Če odprete &kdevelop; prvič je delovni niz prazen &mdash; ni odprtih datotek. Toda ko odprete datoteke za urejanje (ali odpravljanje napak ali pregledovanje v drugih načinih), se vaš delovni nabor poveča. Dejstvo, da vaš delovni niz ni prazen, je označeno s simbolom v zavihku, kot je prikazano spodaj. Opazili boste, da vsakič, ko zaprete &kdevelop; in ga kasneje znova zaženete, se delovni niz shrani in obnovi, &ie; dobite enak nabor odprtih datotek.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-10.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Če z miško premaknete nad simbol za delovni niz, dobite opis orodja, ki vam pokaže, katere datoteke so trenutno odprte v tem delovnem nizu (tukaj: <varname
+>step-32.cc</varname
+> in <varname
+>korak -1.cc</varname
+> datoteke). S klikom na rdeči znak minus se zapre zavihek za ustrezno datoteko. Morda je še bolj pomembno, da s klikom na ustrezno imenovan gumb lahko <guilabel
+>zaprete</guilabel
+> celoten delovni niz hkrati (tj. da zaprete vse trenutno odprte datoteke). Bistvo zapiranja delovnega nabora pa je v tem, da ne zapre samo vseh datotek, ampak dejansko shrani delovni nabor in odpre novega, še vedno praznega. To lahko vidite tukaj:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-11.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Bodite pozorni na dva simbola na levi strani treh zavihkov načina (srce in neidentificirani simbol na njegovi levi). Vsak od teh dveh simbolov predstavlja shranjen delovni niz poleg trenutno odprtega delovnega niza. Če z miško premaknete nad simbol srca, boste dobili nekaj takega:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-12.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Pokaže vam, da ustrezen delovni niz vsebuje dve datoteki in njuni ustrezni imeni projektov: <varname
+>Makefile</varname
+> in <varname
+>changes.h</varname
+>. Če kliknete <guilabel
+>Naloži</guilabel
+>, se zapre in shrani trenutni delovni niz (ki ima, kot je prikazano tukaj, odprti datoteki <varname
+>tria.h</varname
+> in <varname
+>tria.cc</varname
+>) in namesto tega odprite izbrani delovni niz. Delovni niz lahko tudi trajno izbrišete, s čimer ga odstranite iz niza shranjenih delovnih nizov.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts"
+><title
+>Nekaj uporabnih bližnjic na tipkovnici</title>
+<para
+>Urejevalnik &kdevelop; sledi standardnim bližnjicam na tipkovnici za vse običajne operacije urejanja. Vendar pa podpira tudi številne naprednejše operacije pri urejanju izvorne kode, od katerih so nekatere vezane na določene kombinacije tipk. Naslednje je pogosto še posebej koristno:</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Skakanje po kodi</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>O</keycap
+></keycombo
+></entry>
+    <entry
+>Hitro odpiranje datoteke: vnesite del imena datoteke in izberite med vsemi datotekami v drevesih imenikov projektov trenutne seje, ki se ujemajo z nizom; datoteka se bo nato odprla</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>C</keycap
+></keycombo
+></entry>
+    <entry
+>Hitro odpiranje razreda: vnesite del imena razreda in izberite med vsemi imeni razredov, ki se ujemajo; kazalec bo nato skočil na deklaracijo razreda</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>M</keycap
+></keycombo
+></entry>
+    <entry
+>Funkcija hitrega odpiranja: vnesite del imena (članske) funkcije in izberite med vsemi imeni, ki se ujemajo; upoštevajte, da seznam prikazuje deklaracije in definicije, kazalec pa bo nato skočil na izbrani element</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>Q</keycap
+></keycombo
+></entry>
+    <entry
+>Univerzalno hitro odpiranje: vnesite karkoli (ime datoteke, ime razreda, ime funkcije) in pridobite seznam vsega, kar se ujema, da izberete</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>N</keycap
+></keycombo
+></entry>
+    <entry
+>Oris: Navedite seznam vseh stvari, ki se dogajajo v tej datoteki, &eg; deklaracije razredov in definicije funkcij</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+></entry>
+    <entry
+>Skoči na definicijo funkcije, če je kazalec trenutno na deklaraciji funkcije</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>.</keycap
+></keycombo
+></entry>
+    <entry
+>Skoči na deklaracijo funkcije ali spremenljivke, če je kazalec trenutno v definiciji funkcije</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>PageDown</keycap
+></keycombo
+></entry>
+    <entry
+>Skoči na naslednjo funkcijo</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>PageUp</keycap
+></keycombo
+></entry>
+    <entry
+>Skoči na prejšnjo funkcijo</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>G</keycap
+></keycombo
+></entry>
+    <entry
+>Pojdi na vrstico</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Iskanje in zamenjava</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>Najdi</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F3</keycap
+></entry>
+    <entry
+>Najdi naslednjega</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+></entry>
+    <entry
+>Zamenjaj</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>Najdi-Zamenjaj v več datotekah</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Druge stvari</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>_</keycap
+></keycombo
+></entry>
+    <entry
+>Strni eno raven: odstranite ta blok iz pogleda, če se na primer želite osredotočiti na širšo sliko znotraj funkcije</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>+</keycap
+></keycombo
+></entry>
+    <entry
+>Razširi eno raven: razveljavi strnitev</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Izkomentiraj izbrano besedilo ali trenutno vrstico</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Komentar v izbranem besedilu ali trenutni vrstici</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Dokumentirajte trenutno funkcijo. Če je kazalec na deklaraciji funkcije ali razreda, bo pritisk na to tipko ustvaril komentar v slogu doxygen, ki je vnaprej izpolnjen s seznamom vseh parametrov, vrnjenih vrednosti itd.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+></entry>
+    <entry
+>Transponiraj trenutni in prejšnji znak</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>K</keycap
+></keycombo
+></entry>
+    <entry
+>Izbriši trenutno vrstico (opomba: to ni samo emacsovo <quote
+>brisanje od tu do konca vrstice</quote
+>)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="code-generation-with-templates"
+><title
+>Generiranje kode s predlogami</title>
+<para
+>&kdevelop; uporablja predloge za generiranje datotek izvorne kode in za izogibanje pisanju ponovljive kode. </para>
+<sect1 id="creating-a-new-class"
+><title
+>Ustvarjanje novega razreda</title>
+<para
+>Najpogostejša uporaba za ustvarjanje kode je verjetno pisanje novih razredov. Če želite ustvariti nov razred v obstoječem projektu, z desno miškino tipko kliknite mapo projekta in izberite <guilabel
+>Ustvari iz predloge ...</guilabel
+>. Isto pogovorno okno lahko zaženete v meniju s klikom na <menuchoice
+><guimenu
+>Datoteka</guimenu
+><guimenuitem
+>Novo iz predloge ...</guimenuitem
+></menuchoice
+>, vendar ima uporaba projektne mape prednost nastavitve osnovni URL za izhodne datoteke. Izberite <filename
+>Razred</filename
+> v pogledu izbire kategorije ter želeni jezik in predlogo v drugih dveh pogledih. Ko izberete predlogo razreda, boste morali določiti podrobnosti novega razreda. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-selection.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Najprej morate določiti identifikator za nov razred. To je lahko preprosto ime (na primer <varname
+>Bus</varname
+>) ali popoln identifikator z imenskimi prostori (na primer <varname
+>Transportation::Bus</varname
+>). V slednjem primeru &kdevelop; bo razčlenil identifikator in pravilno ločil imenske prostore od dejanskega imena. Na isti strani lahko dodate osnovne razrede za nov razred. Morda boste opazili, da nekatere predloge same izberejo osnovni razred, lahko ga odstranite in/ali dodate druge osnove. Tukaj bi morali napisati celotno izjavo o dedovanju, ki je odvisna od jezika, na primer <varname
+>javni QObject</varname
+> za C++, <varname
+>extends SomeClass</varname
+> za PHP ali preprosto ime razreda za Python. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-inheritance.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Na naslednji strani vam je ponujen izbor virtualnih metod iz vseh podedovanih razredov, pa tudi nekaj privzetih konstruktorjev, destruktorjev in operatorjev. Če označite potrditveno polje poleg podpisa metode, boste to metodo implementirali v novem razredu. </para>
+<para
+>Če kliknete <guilabel
+>Naprej</guilabel
+>, se prikaže stran, kjer lahko dodate člane v razred. Odvisno od izbrane predloge se te lahko pojavijo v novem razredu kot spremenljivke člana ali pa lahko predloga zanje ustvari lastnosti z nastavilci in pridobitelji. V jeziku, kjer je treba tipe spremenljivk deklarirati, kot je C++, morate podati tako tip kot ime člana, kot je <varname
+>int number</varname
+> ali <varname
+>QString name</varname
+>. V drugih jezikih lahko tip izpustite, vendar je dobro, da ga vseeno vnesete, ker bi ga lahko izbrana predloga še vedno uporabljala. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-members.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Na naslednjih straneh lahko izberete licenco za svoj novi razred, nastavite vse možnosti po meri, ki jih zahteva izbrana predloga, in konfigurirate izhodne lokacije za vse ustvarjene datoteke. S klikom na <guilabel
+>Dokončaj</guilabel
+> dokončate pomočnika in ustvarite nov razred. Ustvarjene datoteke se bodo odprle v urejevalniku, tako da lahko začnete dodajati kodo takoj. </para>
+<para
+>Ko ustvarite nov razred C++, boste imeli možnost dodati razred v cilj projekta. Izberite cilj na pogovorni strani ali opustite stran in ročno dodajte datoteke cilju. </para>
+<para
+>Če ste izbrali predlogo <filename
+>Qt Object</filename
+>, preverili nekaj privzetih metod in dodali dve spremenljivki člana, bi moral biti rezultat videti kot na naslednji sliki. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-result.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Vidite lahko, da so podatkovni člani pretvorjeni v lastnosti Qt s funkcijami dostopa in makri Q_PROPERTY. Argumenti nastavitvenim funkcijam se posredujejo celo s sklicem const, kjer je primerno. Poleg tega je deklariran zasebni razred in zasebni kazalec ustvarjen s Q_DECLARE_PRIVATE. Vse to naredi predloga, izbira druge predloge v prvem koraku bi lahko popolnoma spremenila rezultat. </para>
+</sect1>
+<sect1 id="creating-a-new-unit-test"
+><title
+>Ustvarjanje novega testa enote</title>
+<para
+>Čeprav večina testnih ogrodij zahteva, da je vsak test tudi razred, &kdevelop; vključuje metodo za poenostavitev ustvarjanja testov enot. Če želite ustvariti nov preizkus, z desno miškino tipko kliknite mapo projekta in izberite <guilabel
+>Ustvari iz predloge ...</guilabel
+>. Na strani za izbiro predloge izberite <filename
+>Test</filename
+> kot kategorijo, nato izberite svoj programski jezik in predlogo ter kliknite <guilabel
+>Naprej</guilabel
+>. </para>
+<para
+>Pozvani boste k imenu testa in seznamu testnih primerov. Za testne primere morate podati le seznam imen. Nekateri okviri za testiranje enot, kot sta PyUnit in PHPUnit, zahtevajo, da se testni primeri začnejo s posebno predpono. V &kdevelop; je predloga odgovorna za dodajanje predpone, zato vam tu ni treba dodajati predpone testnim primerom. Ko kliknete <guilabel
+>Naprej</guilabel
+>, določite licenco in izhodne lokacije za ustvarjene datoteke in test bo ustvarjen. </para>
+<para
+>Preizkusi enot, ustvarjeni na ta način, ne bodo samodejno dodani nobenemu cilju. Če uporabljate CTest ali kakšno drugo ogrodje za testiranje, ne pozabite dodati novih datotek v cilj. </para>
+</sect1>
+<sect1 id="other-files"
+><title
+>Druge datoteke</title>
+<para
+>Medtem ko so razredi in testi enot deležni posebne pozornosti pri ustvarjanju kode iz predlog, lahko isto metodo uporabite za katero koli vrsto datotek izvorne kode. Lahko bi na primer uporabili predlogo za modul CMake Find ali datoteko .desktop. To lahko storite tako, da izberete <guilabel
+>Ustvari iz predloge...</guilabel
+> ter izberete želeno kategorijo in predlogo. Če izbrana kategorija ni niti <filename
+>Razred</filename
+> niti <filename
+>Test</filename
+>, boste imeli samo možnost izbire licence, morebitnih možnosti po meri, ki jih določa predloga, in lokacij izhodnih datotek. Tako kot pri predavanjih in testih bo pomočnik po dokončanju ustvaril datoteke in jih odprl v urejevalniku. </para>
+</sect1>
+<sect1 id="managing-templates"
+><title
+>Upravljanje predlog</title>
+<para
+>Iz pomočnika <menuchoice
+><guimenu
+>Datoteka</guimenu
+><guimenuitem
+>Novo iz predloge...</guimenuitem
+></menuchoice
+> lahko prenesete tudi dodatne predloge datotek, tako da kliknete <guilabel
+>Pridobi več predlog...</guilabel
+>. To odpre pogovorno okno Dobi vroče nove stvari, kjer lahko namestite dodatne predloge ter jih posodobite ali odstranite. Obstaja tudi konfiguracijski modul za predloge, do katerega lahko pridete s klikom na <menuchoice
+><guimenu
+>Nastavitve</guimenu
+><guisubmenu
+>Konfiguriraj &kdevelop;</guisubmenu
+><guimenuitem
+>Predloge</guimenuitem
+></menuchoice
+>. Od tam lahko upravljate predloge datotek (razložene zgoraj) in predloge projektov (ki se uporabljajo za ustvarjanje novih projektov). </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-manager.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Seveda, če nobena od razpoložljivih predlog ne ustreza vašemu projektu, lahko vedno ustvarite nove. Najlažji način je verjetno kopiranje in spreminjanje obstoječe predloge, medtem ko sta kratka <ulink url="https://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template"
+>vadnica</ulink
+> in daljši <ulink url="https://techbase.kde.org/Projects/KDevelop4/File_template_specification"
+>dokument s specifikacijo</ulink
+> je tam, da vam pomagata. Če želite kopirati nameščeno predlogo, odprite upravitelja predlog s klikom na <menuchoice
+><guimenu
+>Nastavitve</guimenu
+><guisubmenu
+>Konfiguriraj KDevelop...</guisubmenu
+><guimenuitem
+>Predloge</guimenuitem
+></menuchoice
+>, izberite predlogo, ki jo želite kopirati, nato kliknite gumb <guilabel
+>Izvleči predlogo</guilabel
+>. Izberite ciljno mapo, nato kliknite <guilabel
+>V redu</guilabel
+> in vsebina predloge bo ekstrahirana v izbrano mapo. Zdaj lahko uredite predlogo tako, da odprete ekstrahirane datoteke in jih spremenite. Ko končate, lahko uvozite novo predlogo v &kdevelop; tako, da odprete upravitelja predlog, aktivirate ustrezen zavihek (bodisi <guilabel
+>Predloge projektov</guilabel
+> ali <guilabel
+>Predloge datotek</guilabel
+>) in kliknete <guilabel
+>Naloži predlogo</guilabel
+>. Odprite opisno datoteko predloge, ki ima pripono <varname
+>.kdevtemplate</varname
+> ali <varname
+>.desktop</varname
+>. &kdevelop; bo stisnil datoteke v arhiv predloge in uvozil predlogo. </para>
+<para
+><note
+><para
+>Ko kopirate obstoječo predlogo, jo preimenujte, preden jo znova uvozite. V nasprotnem primeru boste staro predlogo prepisali ali pa boste imeli dve predlogi z enakima imenoma. Če želite preimenovati predlogo, preimenujte opisno datoteko v nekaj edinstvenega (vendar obdržite pripono) in spremenite vnos <filename
+>Name</filename
+> v opisni datoteki. </para
+></note>
+</para>
+<para
+>Če želite predlogo napisati iz nič, lahko začnete z vzorčno predlogo razreda C++ tako, da <link linkend="creating-projects-from-scratch"
+>ustvarite nov projekt</link
+> in izberete <filename
+>razred C++ Predloga</filename
+> projekt v kategoriji <filename
+>KDevelop</filename
+>. </para>
+</sect1>
+</chapter>
+<chapter id="building-compiling-projects-with-custom-makefiles"
+><title
+>Gradnja (prevajanje) projektov z datotekami Makefiles po meri</title>
+<para
+>Številni projekti opisujejo, kako je treba prevesti izvorne datoteke (in katere datoteke je treba znova prevesti, ko se izvorna ali glava spremeni) z uporabo datotek Makefile, ki jih interpretira program <guilabel
+>make</guilabel
+> (glejte na primer <ulink url="https://www.gnu.org/software/make/"
+>GNU make</ulink
+>). Pri preprostih projektih je pogosto ročno nastaviti takšno datoteko. Večji projekti pogosto integrirajo svoje Makefile z <guilabel
+>GNU autotools</guilabel
+> (autoconf, autoheader, automake). V tem razdelku preprosto predpostavimo, da imate Makefile za svoj projekt in želite učiti &kdevelop; kako komunicirati z njim.</para>
+<para
+><note
+><para
+>&kdevelop; 4.x v času pisanja tega razdelka ne pozna <guilabel
+>GNU autotools</guilabel
+>. Če jih vaš projekt uporablja, boste morali v ukazni vrstici ročno zagnati <varname
+>./configure</varname
+> ali katerega koli drugega sorodnega ukaza. Če želite to narediti znotraj &kdevelop;, odprite orodje <guilabel
+>Konsole</guilabel
+> (če je potrebno, ga dodajte na obrobje glavnega okna z uporabo menija <menuchoice
+><guimenu
+>Windows</guimenu
+><guimenuitem
+> Dodaj orodni pogled</guimenuitem
+></menuchoice
+>), ki vam ponuja lupinski pogled okna in zaženite <varname
+>./configure</varname
+> iz ukazne vrstice v tem pogledu.</para
+></note
+></para>
+<para
+>Prvi korak je naučiti &kdevelop; o ciljih v vaših datotekah Makefiles. To lahko storite na dva načina: z izbiro posameznih ciljev Makefile in z izbiro nabora ciljev, ki jih boste morda želeli pogosto graditi. Za oba pristopa odprite orodje <guilabel
+>Projekti</guilabel
+> s klikom na gumb <guilabel
+>Projekti</guilabel
+> na obodu glavnega okna &kdevelop; (če tega gumba nimate, glejte zgoraj, kako da tam dodate gumb za orodje). Okno orodja <guilabel
+>Projekti</guilabel
+> ima dva dela: zgornjo polovico &mdash; z naslovom <guilabel
+>Projekti</guilabel
+> &mdash; navaja vse vaše projekte in vam omogoča, da razširite osnovna drevesa imenikov. Spodnja polovica &mdash; z naslovom <guilabel
+>Izbor projekta</guilabel
+> &mdash; navaja podmnožico tistih projektov, ki bodo izdelani, če izberete element menija <menuchoice
+><guimenu
+>Projekt</guimenu
+><guimenuitem
+>Izbira gradnje</guimenuitem
+></menuchoice
+> ali pritisnete <keycap
+>F8</keycap
+>; k temu delu se bomo vrnili spodaj.</para>
+<sect1 id="building-individual-makefile-targets"
+><title
+>Gradnja posameznih ciljev Makefile</title>
+<para
+>V zgornjem delu pogleda projekta razširite poddrevo za en projekt, recimo tistega, za katerega želite zagnati določen cilj Makefile. To vam bo dalo ikone za (i) imenike v tem projektu, (ii) datoteke v imeniku najvišje ravni za ta projekt, (iii) Makefile cilja na &kdevelop; lahko identificira. Te kategorije so prikazane na desni sliki. Upoštevajte, da &kdevelop; <emphasis
+>razume</emphasis
+> sintakso datoteke Makefile do določene stopnje in vam zato lahko ponudi cilje, definirane v tej datoteki Makefile (čeprav ima to razumevanje svoje omejitve, če so cilji sestavljeni ali implicitni).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-1a.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Če želite zgraditi katerega koli od tam navedenih ciljev, kliknite nanj z desnim gumbom miške in izberite <guilabel
+>Zgradi</guilabel
+>. Na primer, če to storite s ciljem <quote
+>clean</quote
+>, boste preprosto izvedli <quote
+>make clean</quote
+>. To lahko vidite v podoknu z naslovom <guilabel
+>Build</guilabel
+>, ki se odpre in prikazuje ukaz in izhod. (To okno ustreza orodju <guilabel
+>Build</guilabel
+>, tako da lahko okno zaprete in pozneje znova odprete z gumbom orodja <guilabel
+>Build</guilabel
+> na obodu glavnega okna. Prikazano je v spodnjem desnem kotu slike.)</para>
+</sect1>
+<sect1 id="selecting-a-collection-of-makefile-targets-for-repeated-building"
+><title
+>Izbiranje zbirke ciljev Makefile za ponovljeno gradnjo</title>
+<para
+>Desni klik na posamezne cilje Makefile vsakič, ko želite nekaj zgraditi, bo hitro postaral. Namesto tega bi radi imeli posamezne cilje za enega ali več projektov v seji, ki jih lahko večkrat zgradimo brez veliko dela z miško. Tu nastopi koncept <quote
+>Izdelava ciljnih izbir</quote
+>: to je zbirka ciljev Makefile, ki so zgrajeni drug za drugim, kadar koli pritisnete gumb <guilabel
+>Izgradi izbor</guilabel
+> na seznamu gumbov na vrhu izberite element menija <menuchoice
+><guimenu
+>Projekt</guimenu
+><guimenuitem
+>Izbira gradnje</guimenuitem
+></menuchoice
+> ali pritisnite funkcijsko tipko <keycap
+>F8</keycap
+> .</para>
+<para
+>Seznam izbranih ciljev Makefile je prikazan v spodnji polovici pogleda orodja <guilabel
+>Projekti</guilabel
+>.</para>
+<para
+>Privzeto izbor vsebuje vse projekte, vendar lahko to spremenite. Na primer, če vaš seznam projektov vsebuje tri projekte (osnovno knjižnico L in dve aplikaciji A in B), vendar trenutno delate samo na projektu A, potem boste morda želeli projekt B odstraniti iz izbora tako, da ga označite v izbiro in pritisnite gumb <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-remove.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+>. Poleg tega se verjetno želite prepričati, da je knjižnica L zgrajena pred projektom A, tako da premikate vnose v izboru gor in dol z uporabo gumbov na desni strani seznama. Določen cilj Makefile lahko dodate tudi v izbor tako, da ga kliknete z desno tipko miške in izberete <guilabel
+>Dodaj v buildset</guilabel
+> ali pa ga samo označite in pritisnete <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon- list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> gumb tik nad seznamom izbranih ciljev.</para>
+<para
+>&kdevelop; vam omogoča, da konfigurirate, kaj storiti, ko sestavite izbor. V ta namen uporabite menijsko postavko <menuchoice
+><guimenu
+>Projekt</guimenu
+><guimenuitem
+>Odpri konfiguracijo</guimenuitem
+></menuchoice
+>. Tam lahko na primer izberete število sočasnih opravil, ki jih mora <quote
+>make</quote
+> izvesti &mdash; če ima vaš računalnik recimo 8 procesorskih jeder, bi bila koristna izbira, če bi v to polje vnesli 8. V tem pogovornem oknu je <guilabel
+>Privzeti cilj</guilabel
+> cilj Makefile, ki se uporablja za <emphasis
+>vse</emphasis
+> cilje v izboru.</para>
+</sect1>
+<sect1 id="what-to-do-with-error-messages"
+><title
+>Kaj storiti s sporočili o napakah</title>
+<para
+>Če prevajalnik naleti na sporočilo o napaki, preprosto kliknite vrstico s sporočilom o napaki in urejevalnik bo skočil na vrstico (in če je na voljo stolpec), kjer je bila sporočena napaka. Odvisno od sporočila o napaki, &kdevelop; vam lahko ponudi tudi več možnih dejanj za odpravo napake, na primer z razglasitvijo predhodno nedeklarirane spremenljivke, če je bil najden neznan simbol.</para>
+</sect1>
+</chapter>
+<chapter id="running-programs-in-kdevelop"
+><title
+>Izvajanje programov v &kdevelop;</title>
+<para
+>Ko sestavite program, ga boste želeli zagnati. Če želite to narediti, morate za svoje projekte konfigurirati <emphasis
+>Zagone</emphasis
+>. <emphasis
+>Zagon</emphasis
+> je sestavljen iz imena izvršljive datoteke, nabora parametrov ukazne vrstice in izvajalnega okolja (kot je <quote
+>zaženi ta program v lupini</quote
+> ali <quote
+>zaženi ta program v razhroščevalniku</quote
+>).</para>
+<sect1 id="setting-up-launches-in-kdevelop"
+><title
+>Nastavitev zagonov v &kdevelop;</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-2.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Če želite to nastaviti, pojdite na menijski element <menuchoice
+><guimenu
+>Zaženi</guimenu
+><guimenuitem
+>Konfiguriraj zagone</guimenuitem
+></menuchoice
+>, označite projekt, za katerega želite dodati zagon, in kliknite <inlinemediaobject 
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> gumb. Nato vnesite ime izvedljive datoteke in pot, kjer želite zagnati program. Če je zagon izvedljive datoteke odvisen od izdelave izvršljive datoteke in/ali drugih knjižnic, potem jih boste morda želeli dodati na seznam na dnu: v spustnem meniju izberite <guilabel
+>Build</guilabel
+>, nato pritisnite <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-folder.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> simbol na desni strani besedilnega polja in izberite cilj, ki ga želite ustvariti. V zgornjem primeru sem izbral cilj <guilabel
+>all</guilabel
+> iz projekta <replaceable
+>1.deal.II</replaceable
+> in <replaceable
+>step-32</replaceable
+> iz projekta <replaceable
+>1. step-32</replaceable
+>, da zagotovite, da sta osnovna knjižnica in aplikacijski program prevedena in posodobljena, preden se program dejansko izvede. Medtem ko ste že tam, lahko konfigurirate tudi zagon odpravljanja napak, tako da kliknete simbol <guilabel
+>Odpravljanje napak</guilabel
+> in dodate ime programa za odpravljanje napak; če je to sistemski privzeti razhroščevalnik (&eg; <application
+>gdb</application
+> v &Linux;u), vam tega koraka ni treba izvesti.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-3.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Zdaj lahko poskusite zagnati program: izberite <menuchoice
+><guimenu
+>Zaženi</guimenu
+><guimenuitem
+>Izvedi zagon</guimenuitem
+></menuchoice
+> v meniju glavnega okna &kdevelop; (ali pritisnite <keycombo
+>&Shift; <keycap
+>F9</keycap
+></keycombo
+>) in vaš program bi se moral izvajati v ločenem podoknu &kdevelop;. Zgornja slika prikazuje rezultat: novo podokno orodja <guilabel
+>Zaženi</guilabel
+> na dnu prikazuje izhod programa, ki se izvaja, v tem primeru programa <replaceable
+>step-32</replaceable
+>.</para>
+<para
+><note
+><para
+>Če ste konfigurirali več zagonov, lahko izberete, kateri naj se zažene, ko pritisnete <keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+> tako, da izberete <menuchoice
+><guimenu
+>Zaženi</guimenu
+><guimenuitem 
+>Trenutna konfiguracija zagona</guimenuitem
+></menuchoice
+>. Obstaja pa neočiten način za urejanje imena konfiguracije: v pogovornem oknu, ki se prikaže, ko izberete <menuchoice
+><guimenu
+>Zaženi</guimenu
+><guimenuitem
+>Trenutna konfiguracija zagona</guimenuitem
+></menuchoice 
+> dvokliknite ime konfiguracije v drevesnem pogledu na levi, kar vam bo omogočilo urejanje imena konfiguracije.</para
+></note
+></para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts0"
+><title
+>Nekaj uporabnih bližnjic na tipkovnici</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Izvajanje programa</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F8</keycap
+></entry>
+    <entry
+>Zgradi (izvedi klic)</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>Zaženi</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>Zaženite program v razhroščevalniku; morda boste želeli predhodno nastaviti prekinitvene točke, na primer z desnim klikom miške na določeno vrstico v izvorni kodi</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="debugging-programs-in-kdevelop"
+><title
+>Razhroščevanje programov v &kdevelop;</title>
+<sect1 id="running-a-program-in-the-debugger"
+><title
+>Zagon programa v razhroščevalniku</title>
+<para
+>Ko imate konfiguriran zagon (glejte <link linkend="running-programs-in-kdevelop"
+>Izvajanje programov</link
+>), ga lahko zaženete tudi v razhroščevalniku: izberite menijski element <menuchoice
+><guimenu
+>Zaženi </guimenu
+><guimenuitem
+>Zagon za odpravljanje napak</guimenuitem
+></menuchoice
+> ali pritisnite <keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+>. Če poznate <application
+>gdb</application
+>, je učinek enak, kot če bi zagnali <application
+>gdb</application
+> z izvršljivo datoteko, navedeno v konfiguraciji zagona, in nato rekli <varname
+>Zaženi</varname
+>. To pomeni, da če program nekje pokliče <varname
+>abort()</varname
+> (&eg; ko naletite na neuspešno trditev) ali če pride do napake segmentacije, se bo razhroščevalnik ustavil. Po drugi strani pa, če se program izvaja do konca (z ali brez pravilne stvari), potem se razhroščevalnik ne bo sam ustavil, preden se program konča. V slednjem primeru boste želeli nastaviti prekinitveno točko na vseh tistih vrsticah vaše baze kode, kjer želite, da se razhroščevalnik ustavi, preden zaženete zagon odpravljanja napak. To lahko storite tako, da premaknete kazalec na takšno vrstico in izberete menijsko postavko <menuchoice
+><guimenu
+>Zaženi</guimenu
+><guimenuitem
+>Preklopi prekinitveno točko</guimenuitem
+></menuchoice
+> ali z desnim klikom na vrstico in izbiro <guilabel
+>Preklopi prekinitveno točko</guilabel
+> v kontekstnem meniju.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-4.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Zagon programa v razhroščevalniku bo &kdevelop; v drugačnem načinu: zamenjal bo vse gumbe <quote
+>Orodja</quote
+> na obodu glavnega okna s tistimi, ki so primernejši za odpravljanje napak in ne za urejanje. Če pogledate zgornji desni del okna, lahko vidite, v katerem načinu ste: tam so zavihki z imenom <guilabel
+>Pregled</guilabel
+>, <guilabel
+>Odpravljanje napak</guilabel
+> in <guilabel
+>Koda</guilabel 
+>; s klikom na njih lahko preklapljate naprej in nazaj med tremi načini; vsak način ima svoj niz pogledov orodij, ki jih lahko konfigurirate na enak način, kot smo konfigurirali orodja <guilabel
+>Koda</guilabel
+> v razdelku <link linkend="tools-and-views"
+>Orodja in pogledi</link
+>.</para>
+<para
+>Ko se razhroščevalnik ustavi (na prelomni točki ali točki, kjer se kliče <varname
+>abort()</varname
+>), lahko pregledate različne informacije o svojem programu. Na zgornji sliki smo na primer izbrali orodje <guilabel
+>Frame Stack</guilabel
+> na dnu (približno enakovredno <quote
+>backtrace</quote
+> in <quote
+> <application
+>gdb</application
+> 
+>info threads</quote
+> ukazi), ki prikazuje različne niti, ki se trenutno izvajajo v vašem programu na levi (tukaj jih je skupaj 8) in kako je izvajanje prišlo do trenutne ustavitvene točke na desni (tukaj: <varname
+>main ()</varname
+>, ki se imenuje <varname
+>run()</varname
+>; seznam bi bil daljši, če bi se ustavili v funkciji, ki jo kliče sam <varname
+>run()</varname
+>). Na levi strani lahko pregledamo lokalne spremenljivke, vključno s trenutnim objektom (objekt, na katerega kaže spremenljivka <varname
+>this</varname
+>).</para>
+<para
+>Od tu lahko naredite različne možnosti: Izvedete lahko trenutno vrstico (<keycap
+>F10</keycap
+>, <application
+>gdb</application
+> ukaz <quote
+>next</quote
+>), stopite v funkcije (<keycap
+>F11</keycap
+>, ukaz <quote
+>step</quote
+> <application
+>gdb</application
+>) ali zaženite do konca funkcije (<keycap
+>F12</keycap
+> , ukaz <application
+>gdb</application
+> <quote
+>finish</quote
+>). Na vsaki stopnji &kdevelop; posodobi spremenljivke, prikazane na levi, na njihove trenutne vrednosti. Z miško se lahko tudi pomaknete nad simbol v kodi, npr. spremenljivka; &kdevelop; bo nato prikazal trenutno vrednost tega simbola in ponudil zaustavitev programa med izvajanjem, ko se vrednost te spremenljivke naslednjič spremeni. Če poznate <application
+>gdb</application
+>, lahko tudi kliknete na gumb orodja <guilabel
+>GDB</guilabel
+> na dnu in imate možnost vnašanja ukazov <application
+>gdb</application
+>, na primer v da spremenite vrednost spremenljivke (za kar se trenutno zdi, da ne obstaja drug način).</para>
+</sect1>
+<sect1 id="attaching-the-debugger-to-a-running-process"
+><title
+>Priključitev razhroščevalnika delujočemu procesu</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-9.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Včasih želimo odpraviti napake v programu, ki se že izvaja. En scenarij za to je odpravljanje napak v vzporednih programih z uporabo <ulink url="https://computing.llnl.gov/tutorials/mpi/"
+>MPI</ulink
+> ali za odpravljanje napak v dolgotrajnem procesu v ozadju. Če želite to narediti, pojdite na menijski vnos <menuchoice
+><guimenu
+>Zaženi</guimenu
+><guimenuitem
+>Pripni procesu</guimenuitem
+></menuchoice
+>, ki bo odprl okno, podobno zgornjemu. Izbrati boste želeli program, ki ustreza vašemu trenutno odprtemu projektu v &kdevelop; - v mojem primeru bi bil to program step-32.</para>
+<para
+>Ta seznam programov je lahko zmeden, ker je pogosto dolg, kot je prikazano tukaj. Življenje si lahko nekoliko olajšate tako, da odprete spustno polje v zgornjem desnem kotu okna. Privzeta vrednost je <guilabel
+>Uporabniški procesi</guilabel
+>, &ie; vsi programi, ki jih poganja kateri koli uporabnik, ki je trenutno prijavljen v ta računalnik (če je to vaš namizni ali prenosni računalnik, ste verjetno edini tak uporabnik, razen root in različnih servisnih računov); seznam pa ne vključuje procesov, ki jih izvaja root uporabnik. Seznam lahko omejite tako, da izberete <guilabel
+>Lastni procesi</guilabel
+>, s čimer odstranite vse programe, ki jih izvajajo drugi uporabniki. Ali še bolje: izberite <guilabel
+>Samo programi</guilabel
+>, kar odstrani veliko procesov, ki se uradno izvajajo pod vašim imenom, vendar s katerimi običajno ne komunicirate, kot so upravitelj oken, opravila v ozadju in tako naprej. niso verjetni kandidati za odpravljanje napak.</para>
+<para
+>Ko izberete proces, vas pripenjanje k njemu pripelje v način za odpravljanje napak &kdevelop;, odprete vse običajne poglede orodij za odpravljanje napak in ustavite program na mestu, kjer je bil, ko ste ga priključili. Nato boste morda želeli nastaviti prekinitvene točke, točke pogleda ali kar koli drugega, kar je potrebno, in nadaljevati izvajanje programa tako, da obiščete postavko menija <menuchoice
+><guimenu
+>Zaženi</guimenu
+><guimenuitem
+>Nadaljuj</guimenuitem
+></menuchoice
+>.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts1"
+><title
+>Nekaj uporabnih bližnjic na tipkovnici</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Odpravljanje napak</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F10</keycap
+></entry>
+    <entry
+>Stopi čez (gdb-jev <quote
+>naslednji</quote
+>)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F11</keycap
+></entry>
+    <entry
+>Stopite v (gdb-jev <quote
+>korak</quote
+>)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F12</keycap
+></entry>
+    <entry
+>Izstopite iz (gdb-jev <quote
+>finish</quote
+>)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="working-with-version-control-systems"
+><title
+>Delo s sistemi za nadzor različic</title>
+<para
+>Če delate z večjimi projekti, je verjetno, da izvorno kodo upravlja sistem za nadzor različic, kot je <ulink url="https://subversion.apache.org/"
+>subversion</ulink
+> ali <ulink url= "https://git-scm.com/"
+>git</ulink
+>. Naslednji opis je napisan s pogledom na <guilabel
+>subversion</guilabel
+>, vendar bo enako resničen, če uporabljate <guilabel
+>git</guilabel
+> ali kateri koli drug podprt sistem za nadzor različic.</para>
+<para
+>Prvič ne, če je imenik, v katerem je projekt, pod nadzorom različic, &kdevelop; bo samodejno opazil. Z drugimi besedami: Ni nujno, da &kdevelop; da preverite samo kopijo, ko nastavite svoj projekt; v redu je, da &kdevelop; v imeniku, v katerega ste predhodno odjavili kopijo iz repozitorija. Če imate tak imenik pod nadzorom različic, odprite pogled orodja <guilabel
+>Projekti</guilabel
+>. Nato lahko storite več stvari:</para>
+<itemizedlist>
+<listitem
+><para
+>Če je vaš imenik zastarel, ga lahko posodobite iz repozitorija: kliknite na ime projekta z desnim gumbom miške, pojdite v meni <guilabel
+>Subversion</guilabel
+> in izberite <guilabel
+>Posodobi</guilabel
+>. S tem bodo vse datoteke, ki pripadajo temu projektu, posodobljene glede na repozitorij. </para
+></listitem>
+<listitem
+><para
+>Če želite to dejanje omejiti na posamezne podimenike ali datoteke, razširite drevesni pogled tega projekta na želeno raven in z desno miškino tipko kliknite ime podimenika ali datoteke, nato pa storite enako kot zgoraj. </para
+></listitem>
+</itemizedlist>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-8.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<itemizedlist>
+<listitem
+><para
+>Če ste uredili eno ali več datotek, razširite pogled tega projekta na imenik, v katerem so te datoteke, in z desnim klikom na imenik. To vam daje menijsko postavko <guilabel
+>Subversion</guilabel
+>, ki vam ponuja različne izbire. Izberite <guilabel
+>Primerjaj z osnovo</guilabel
+>, da vidite razlike med različico, ki ste jo uredili, in različico v repozitoriju, ki ste jo predhodno odjavili (revizija <quote
+>osnova</quote
+>). Nastali pogled bo pokazal <quote
+>razlike</quote
+> za vse datoteke v tem imeniku. </para
+></listitem>
+<listitem
+><para
+>Če ste urejali samo eno datoteko, lahko dobite tudi meni <guilabel
+>Subversion</guilabel
+> za to datoteko tako, da enostavno z desnim klikom kliknete ustrezno ime datoteke v pogledu projekta. Še preprosteje, z desnim klikom na pogled <guilabel
+>Urejevalnik</guilabel
+>, v katerem ste odprli to datoteko, boste dobili tudi to menijsko možnost. </para
+></listitem>
+<listitem
+><para
+>Če želite preveriti eno ali več urejenih datotek, z desno miškino tipko kliknite posamezno datoteko, podimenik ali celoten projekt in izberite <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>Commit</guimenuitem
+></menuchoice
+> . S tem boste prešli v način <guilabel
+>Pregled</guilabel
+>, tretji način poleg <guilabel
+>Kode</guilabel
+> in <guilabel
+>Odpravljanja napak</guilabel
+>, kot lahko vidite v zgornjem desnem kotu okna &kdevelop; glavno okno. Slika na desni prikazuje, kako to izgleda. V načinu <guilabel
+>Pregled</guilabel
+> vam zgornji del prikazuje razlike za celoten podimenik/projekt in vsako posamezno spremenjeno datoteko z označenimi spremembami (glejte različne zavihke v tem delu okna). Privzeto so vse spremenjene datoteke v naboru sprememb, ki ga boste objavili, vendar lahko prekličete izbor nekaterih datotek, če njihove spremembe niso povezane s tem, kar želite potrditi. Na primer, v primeru na desni sem preklical izbiro <varname
+>step-32.cc</varname
+> in <varname
+>step-32.prm</varname
+>, ker spremembe v teh datotekah nimajo nobene zveze z drugimi tiste, ki sem jih naredil za ta projekt in jih še ne želim prijaviti (morda bom pozneje želel to narediti v ločeni objavi). Ko pregledate spremembe, lahko v besedilno polje vnesete sporočilo o potrditvi in pritisnete <guilabel
+>Potrdi</guilabel
+> na desni, da stvari pošljete. </para
+></listitem>
+<listitem
+><para
+>Tako kot pri ogledu razlik, če želite preveriti eno samo datoteko, lahko z desno miškino tipko kliknete okno urejevalnika, da dobite <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>Commit</guimenuitem
+></menuchoice
+> element menija. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="customizing-kdevelop"
+><title
+>Prilagajanje &kdevelop;</title>
+<para
+>Včasih želite spremeniti privzeti videz ali vedenje &kdevelop;, na primer, ker ste navajeni na drugačne bližnjice na tipkovnici ali ker vaš projekt zahteva drugačen slog zamikov za izvorno kodo. V naslednjih razdelkih na kratko obravnavamo različne načine, kako &kdevelop; lahko prilagodite tem potrebam.</para>
+<sect1 id="customizing-the-editor"
+><title
+>Prilagajanje urejevalnika</title>
+<para
+>V vgrajenem urejevalniku &kdevelop; in okoli njega lahko konfigurirate številne uporabne stvari. Bolj univerzalna uporaba je vklop oštevilčevanja vrstic z uporabo menijskega vnosa <menuchoice
+><guimenu
+>Urejevalnik</guimenu
+><guisubmenu
+>Pogled</guisubmenu
+><guimenuitem
+>Prikaži številke vrstic</guimenuitem
+></menuchoice
+>, kar omogoča lažje ujemanje sporočil o napakah prevajalnika ali sporočil o odpravljanju napak z lokacijami v kodi. V istem podmeniju boste morda želeli vklopiti tudi <emphasis
+>Obrobo ikone</emphasis
+> – stolpec na levi strani kode, v katerem &kdevelop; bo prikazal ikone, na primer, ali je v trenutni vrstici prelomna točka.</para>
+</sect1>
+<sect1 id="customizing-code-indentation"
+><title
+>Prilagajanje zamika kode</title>
+<para
+>Mnogi od nas imajo radi kodo, oblikovano na poseben način. Številni projekti prav tako uveljavljajo določen slog zamika. Nobeden se ne sme ujemati s privzetim slogom zamika &kdevelop;. Vendar pa je to mogoče prilagoditi: pojdite na menijski element <menuchoice
+><guimenu
+>Nastavitve</guimenu
+><guimenuitem
+>Prilagodi &kdevelop;</guimenuitem
+></menuchoice
+>, nato kliknite <guilabel
+>Izvorni format</guilabel
+> na levi. Izberete lahko enega od vnaprej določenih slogov zamikov, ki so pogosto v uporabi, ali pa določite svojega tako, da dodate nov slog in ga nato uredite. Morda ne obstaja način, da natančno ponovno ustvarite slog, v katerem so bili izvori vašega projekta zamaknjeni v preteklosti, vendar se lahko približate z uporabo nastavitev za nov slog; primer je prikazan na spodnjih slikah.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-5.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-6.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>Z <guilabel
+>&kdevelop; 4.2.2</guilabel
+>, lahko ustvarite nov slog za določen tip mime (&eg; za datoteke glave C++), vendar ta slog ni prikazan na seznamu možnih slogov za druge tipe mime (&eg; za izvorne datoteke C++) čeprav bi bilo seveda koristno uporabiti isti slog za obe vrsti datotek. Zato boste morali slog definirati dvakrat, enkrat za glavo in enkrat za izvorne datoteke. To je bilo prijavljeno kot <ulink url="https://bugs.kde.org/show_bug.cgi?id=272335"
+>&kdevelop; napaka 272335</ulink
+>.</para
+></note
+></para>
+</sect1>
+<sect1 id="customizing-keyboard-shortcuts"
+><title
+>Prilagajanje bližnjic na tipkovnici</title>
+<para
+>&kdevelop; ima skoraj neomejen seznam bližnjic na tipkovnici (nekatere so navedene v <quote
+>razdelkih z uporabnimi bližnjicami na tipkovnici</quote
+> več poglavij tega priročnika), ki jih lahko spremenite po svojem okusu v meniju <menuchoice
+><guimenu
+> Nastavitve</guimenu
+><guimenuitem
+>Konfiguriraj bližnjice</guimenuitem
+></menuchoice
+>. Na vrhu pogovornega okna lahko vnesete iskalno besedo in prikaže samo tiste ukaze, ki se ujemajo; nato lahko uredite, katera kombinacija tipk je vezana na ta ukaz.</para>
+<para
+>Dve, ki se ju je izkazalo za zelo koristno spremeniti, sta nastavitev <guilabel
+>Poravnaj</guilabel
+> na &Tab; tipka (mnogi ljudje običajno ne vnašajo zavihkov ročno in imajo raje, če urejevalnik izbere postavitev kode; s spremenjeno bližnjico pritisnete &Tab; naredi &kdevelop; zamik/zamik/poravnavo kode). Drugi je postavitev <guilabel
+>Preklopi prekinitveno točko</guilabel
+> na <keycombo
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>, ker je to precej pogosta operacija.</para>
+</sect1>
+<sect1 id="customizing-code-auto-completion"
+><title
+>Prilagajanje samodokončanja kode</title>
+<para
+>Dopolnjevanje kode je obravnavano v <link linkend="auto-completion"
+>razdelku tega priročnika o pisanju izvorne kode</link
+>. V &kdevelop; prihaja iz dveh virov: urejevalnika in mehanizma za razčlenjevanje. Urejevalnik (&kate;) je komponenta večjega okolja KDE in ponuja samodejno dokončanje na podlagi besed, ki jih je že videl v drugih delih istega dokumenta. Takšna samodokončanja lahko v opisu orodja prepoznate po ikoni pred njim:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-20.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Dopolnjevanje kode urejevalnika je mogoče prilagoditi prek <menuchoice
+><guimenu
+>Nastavitve</guimenu
+><guisubmenu
+>Konfiguriraj urejevalnik</guisubmenu
+><guimenuitem
+>Urejanje</guimenuitem
+><guimenuitem
+>Samodejno dokončanje</guimenuitem
+></menuchoice
+>. Zlasti lahko izberete, koliko znakov morate vnesti v besedo, preden se začne samodejno dokončanje.</para>
+<para
+>Po drugi strani pa je lastno samodejno dokončanje &kdevelop; veliko močnejše, saj upošteva semantične informacije o kontekstu. Na primer, ve, katere članske funkcije ponuditi, ko vnesete <varname
+>object.</varname
+> itd., kot je prikazano tukaj:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Te informacije o kontekstu prihajajo iz različnih vtičnikov za jezikovno podporo, ki jih je mogoče uporabiti, potem ko je bila dana datoteka shranjena (tako da lahko preveri vrsto datoteke in uporabi pravilno jezikovno podporo).</para>
+<para
+>Dokončanje &kdevelop; je nastavljeno tako, da se prikaže med tipkanjem, takoj, skoraj povsod, kjer bi lahko nekaj dokončal. To je mogoče konfigurirati v <menuchoice
+><guimenu
+>Nastavitve</guimenu
+><guisubmenu
+>Konfiguriraj &kdevelop;</guisubmenu
+><guimenuitem
+>Jezikovna podpora</guimenuitem
+></menuchoice
+>. Če še ni nastavljen (kot bi moral biti privzeto), se prepričajte, da je <guilabel
+>Omogoči samodejni priklic</guilabel
+> nastavljen.</para>
+<para
+>&kdevelop; ima dva načina za prikaz dokončanja: <guilabel
+>Minimalno samodejno dokončanje</guilabel
+> prikaže samo osnovne informacije v opisih orodij za dokončanje (&ie; imenski prostor, razred, funkcija ali ime spremenljivke). To bo videti podobno kot &kate; dokončanje (razen ikon).</para>
+<para
+>Po drugi strani bo <guilabel
+>Popolno dokončanje</guilabel
+> dodatno prikazalo vrsto za vsak vnos in v primeru funkcij tudi argumente, ki jih sprejmejo. Poleg tega, če trenutno izpolnjujete argumente za funkcijo, bo popolno dokončanje imelo dodatno informacijsko polje nad kazalcem, ki vam bo pokazalo trenutni argument, na katerem delate.</para>
+<para
+>Dokončanje kode &kdevelop; bi moralo prav tako postaviti na vrh in zeleno označiti vse elemente dokončanja, ki se ujemajo s trenutno pričakovanim tipom pri minimalnem in polnem dokončanju, znano kot <quote
+>najboljša ujemanja</quote
+>.</para>
+<para
+>Tri možne izbire za stopnjo dokončanja v konfiguracijskem pogovornem oknu so:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Vedno minimalno dokončanje</guilabel
+>: Nikoli ne prikaži <quote
+>Popolnega dokončanja</quote
+> </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Minimalno samodejno dokončanje</guilabel
+>: Prikaži samo <quote
+>Popolno dokončanje</quote
+>, ko je bilo samodejno dokončanje sproženo ročno (&ie; ko pritisnete <keycombo
+>&Ctrl;<keycap
+>Preslednica</keycap
+> </keycombo
+>) </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Vedno popolno dokončanje</guilabel
+>: Vedno prikaži <quote
+>Popolno dokončanje</quote
+> </para
+></listitem>
+</itemizedlist>
+</sect1>
+</chapter>
+<!--userbase-content-->
+<chapter id="credits">
+<title
+>Zasluge in licenca</title>
+    <para
+>Avtorske pravice za dokumentacijo si oglejte <ulink url="https://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history"
+>zgodovino strani KDevelop4/Manual</ulink
+></para>
+    <para
+>Prevod: Matjaž Jeran <email
+>matjaz.jeran@amis.net</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>
