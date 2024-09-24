@@ -29,9 +29,6 @@ public:
      */
     bool isQtHelpAvailable() const;
 
-    /** @return local paths to all QCH files found in QT_INSTALL_DOCS directory **/
-    QStringList qchFiles() const;
-
     /** @return @c true once the async initialization has finished */
     bool isInitialized() const { return m_isInitialized; }
 
