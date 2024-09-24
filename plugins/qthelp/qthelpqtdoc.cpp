@@ -115,14 +115,9 @@ void QtHelpQtDoc::loadDocumentation()
 void QtHelpQtDoc::unloadDocumentation()
 {
     Q_ASSERT(m_isInitialized);
-
-    const auto fileNames = qchFiles();
-    for (const QString& fileName : fileNames) {
-        QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
-        if(!fileName.isEmpty() && m_engine.registeredDocumentations().contains(fileNamespace)) {
-            m_engine.unregisterDocumentation(fileName);
-        }
-    }
+    cleanUpRegisteredDocumentations([](const QString&) {
+        return true; // unregister all namespaces
+    });
 }
 
 bool QtHelpQtDoc::isQtHelpAvailable() const
@@ -154,20 +149,6 @@ bool QtHelpQtDoc::visitQchFiles(ProcessQchFileInfo processQchFileInfo) const
     }
 
     return false;
-}
-
-QStringList QtHelpQtDoc::qchFiles() const
-{
-    QStringList files;
-    visitQchFiles([&files](const QFileInfo& fileInfo) {
-        files.push_back(fileInfo.absoluteFilePath());
-        return false; // continue iteration to collect all help file paths
-    });
-
-    if (files.isEmpty()) {
-        qCDebug(QTHELP) << "no QCH file found at all";
-    }
-    return files;
 }
 
 QIcon QtHelpQtDoc::icon() const
