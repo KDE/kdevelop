@@ -10,12 +10,14 @@
 #include "qthelpqtdoc.h"
 #include "debug.h"
 
-#include <QDir>
-#include <QIcon>
-#include <QStandardPaths>
-
 #include <KLocalizedString>
+
+#include <QDir>
+#include <QDirIterator>
+#include <QFileInfo>
+#include <QIcon>
 #include <QProcess>
+#include <QStandardPaths>
 
 #include <algorithm>
 
@@ -104,25 +106,45 @@ void QtHelpQtDoc::unloadDocumentation()
     }
 }
 
-QStringList QtHelpQtDoc::qchFiles() const
+bool QtHelpQtDoc::isQtHelpAvailable() const
 {
-    QStringList files;
+    return visitQchFiles([](const QFileInfo&) {
+        return true; // abort iteration and return true (i.e. "available") once the first help file is found
+    });
+}
 
+template<typename ProcessQchFileInfo>
+bool QtHelpQtDoc::visitQchFiles(ProcessQchFileInfo processQchFileInfo) const
+{
     const QVector<QString> paths{ // test directories
         m_path,
         m_path + QLatin1String("/qch/"),
     };
 
     for (const auto& path : paths) {
-        QDir d(path);
-        if(path.isEmpty() || !d.exists()) {
+        if (path.isEmpty()) {
             continue;
         }
-        const auto fileInfos = d.entryInfoList(QDir::Files);
-        for (const auto& file : fileInfos) {
-            files << file.absoluteFilePath();
+
+        QDirIterator it(path, {QStringLiteral("*.qch")}, QDir::Files);
+        while (it.hasNext()) {
+            if (processQchFileInfo(it.nextFileInfo())) {
+                return true;
+            }
         }
     }
+
+    return false;
+}
+
+QStringList QtHelpQtDoc::qchFiles() const
+{
+    QStringList files;
+    visitQchFiles([&files](const QFileInfo& fileInfo) {
+        files.push_back(fileInfo.absoluteFilePath());
+        return false; // continue iteration to collect all help file paths
+    });
+
     if (files.isEmpty()) {
         qCDebug(QTHELP) << "no QCH file found at all";
     }
