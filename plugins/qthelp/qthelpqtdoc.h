@@ -44,6 +44,7 @@ private:
      * Calls @p processQchFileInfo(QFileInfo fileInfo) for every
      * .qch file info in each @c QT_INSTALL_DOCS (sub)directory.
      *
+     * @pre @a !m_path.isEmpty()
      * @param processQchFileInfo a function object that returns @c true if done,
      *        that is, when the iteration over .qch files should be aborted.
      * @return the return value of the last call to @p processQchFileInfo or
