@@ -10,12 +10,16 @@
 
 #include <QIcon>
 
-QtHelpProvider::QtHelpProvider(QObject* parent, const QString& fileName, const QString& name, const QString& iconName)
-    : QtHelpProviderAbstract(parent, QHelpEngineCore::namespaceName(fileName) + QLatin1String(".qhc"))
+QtHelpProvider::QtHelpProvider(QObject* parent, const QString& fileName, const QString& namespaceName,
+                               const QString& name, const QString& iconName)
+    : QtHelpProviderAbstract(parent, namespaceName + QLatin1String(".qhc"))
     , m_fileName(fileName)
+    , m_namespaceName(namespaceName)
     , m_name(name)
     , m_iconName(iconName)
 {
+    Q_ASSERT(QHelpEngineCore::namespaceName(fileName) == namespaceName);
+
     bool registerFileName = true;
     cleanUpRegisteredDocumentations([&registerFileName, this](const QString& namespaceName) {
         if (!registerFileName) {
@@ -23,14 +27,12 @@ QtHelpProvider::QtHelpProvider(QObject* parent, const QString& fileName, const Q
             return true;
         }
 
+        if (namespaceName != m_namespaceName) {
+            return true; // unregister this unneeded namespace
+        }
         const auto filePath = m_engine.documentationFileName(namespaceName);
         if (filePath != m_fileName) {
             return true; // unregister this namespace associated with an unneeded .qch file
-        }
-        if (QHelpEngineCore::namespaceName(m_fileName) != namespaceName) {
-            // Unregister this namespace, because it does not match
-            // the namespace name stored in the associated .qch file.
-            return true;
         }
 
         // The .qch file m_fileName is already registered and up-to-date.
@@ -56,6 +58,11 @@ QString QtHelpProvider::name() const
 QString QtHelpProvider::fileName() const
 {
     return m_fileName;
+}
+
+QString QtHelpProvider::namespaceName() const
+{
+    return m_namespaceName;
 }
 
 QString QtHelpProvider::iconName() const
