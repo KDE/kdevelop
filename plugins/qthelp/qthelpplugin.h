@@ -52,6 +52,7 @@ private:
      * @pre @p pathList.size() == @p nameList.size() && @p pathList.size() == @p iconList.size()
      */
     void loadQtHelpProvider(const QStringList& pathList, const QStringList& nameList, const QStringList& iconList);
+    void removeUnusedHelpCollectionFiles() const;
 
     /// The list of loaded providers. This object is the parent of each provider,
     /// so they are not explicitly deleted in the destructor. But when a provider
