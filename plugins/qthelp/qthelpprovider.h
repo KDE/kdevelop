@@ -20,17 +20,21 @@ public:
      * Constructor.
      *
      * @param fileName the absolute path to a .qch documentation file
+     * @param namespaceName the namespace name for @p fileName
      */
-    QtHelpProvider(QObject* parent, const QString& fileName, const QString& name, const QString& iconName);
+    QtHelpProvider(QObject* parent, const QString& fileName, const QString& namespaceName, const QString& name,
+                   const QString& iconName);
 
     QIcon icon() const override;
     QString name() const override;
     void setName(const QString& name);
     QString fileName() const;
+    QString namespaceName() const;
     QString iconName() const;
     void setIconName(const QString& iconName);
 private:
     QString m_fileName;
+    QString m_namespaceName;
     QString m_name;
     QString m_iconName;
 };

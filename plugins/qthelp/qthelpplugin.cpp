@@ -109,34 +109,37 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
         // returns an absolute file path, and this return value is compared to fileName.
         Q_ASSERT(QFileInfo{fileName}.isAbsolute());
 
-        QString nameSpace = QHelpEngineCore::namespaceName(fileName);
-        if(!nameSpace.isEmpty()){
-            QtHelpProvider *provider = nullptr;
-            for (QtHelpProvider* oldProvider : std::as_const(oldList)) {
-                if(QHelpEngineCore::namespaceName(oldProvider->fileName()) == nameSpace){
-                    provider = oldProvider;
-                    oldList.removeAll(provider);
-                    break;
-                }
-            }
-            if(!provider){
-                provider = new QtHelpProvider(this, fileName, name, iconName);
-            }else{
-                provider->setName(name);
-                provider->setIconName(iconName);
-            }
+        const auto namespaceName = QHelpEngineCore::namespaceName(fileName);
+        if (namespaceName.isEmpty()) {
+            qCWarning(QTHELP) << "skipping documentation file with an empty namespace name:" << fileName;
+            continue;
+        }
 
-            bool exist = false;
-            for (QtHelpProvider* existingProvider : std::as_const(m_qtHelpProviders)) {
-                if(QHelpEngineCore::namespaceName(existingProvider->fileName()) ==  nameSpace){
-                    exist = true;
-                    break;
-                }
+        QtHelpProvider *provider = nullptr;
+        for (QtHelpProvider* oldProvider : std::as_const(oldList)) {
+            if (oldProvider->namespaceName() == namespaceName) {
+                provider = oldProvider;
+                oldList.removeAll(provider);
+                break;
             }
+        }
+        if(!provider){
+            provider = new QtHelpProvider(this, fileName, namespaceName, name, iconName);
+        }else{
+            provider->setName(name);
+            provider->setIconName(iconName);
+        }
 
-            if(!exist){
-                m_qtHelpProviders.append(provider);
+        bool exist = false;
+        for (QtHelpProvider* existingProvider : std::as_const(m_qtHelpProviders)) {
+            if (existingProvider->namespaceName() == namespaceName) {
+                exist = true;
+                break;
             }
+        }
+
+        if(!exist){
+            m_qtHelpProviders.append(provider);
         }
     }
 
