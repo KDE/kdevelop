@@ -7,18 +7,21 @@
 
 #include "qthelpplugin.h"
 
-#include <interfaces/icore.h>
-#include <interfaces/idocumentationcontroller.h>
 #include "qthelpprovider.h"
 #include "qthelpqtdoc.h"
 #include "qthelp_config_shared.h"
 #include "debug.h"
 #include "qthelpconfig.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/idocumentationcontroller.h>
+#include <util/owningrawpointercontainer.h>
+
 #include <KPluginFactory>
 
 #include <QDirIterator>
 #include <QFileInfo>
+#include <QHash>
 
 K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
 
@@ -97,10 +100,22 @@ void QtHelpPlugin::searchHelpDirectory(QStringList& pathList, QStringList& nameL
 
 void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QStringList& nameList, const QStringList& iconList)
 {
-    QList<QtHelpProvider*> oldList(m_qtHelpProviders);
-    m_qtHelpProviders.clear();
+    if (pathList.empty()) {
+        qDeleteAll(m_qtHelpProviders);
+        m_qtHelpProviders = {}; // shed unneeded capacity
+        return;
+    }
+
+    // Most or all new providers will likely be the same as old ones. Put the old providers in a hash table
+    // and attempt to reuse them instead of destroying and creating the same providers again, which is slow.
+    KDevelop::OwningRawPointerContainer<QHash<QString, QtHelpProvider*>> oldProviders;
+    oldProviders->reserve(m_qtHelpProviders.size());
+    for (auto* const provider : std::as_const(m_qtHelpProviders)) {
+        oldProviders->insert(provider->namespaceName(), provider);
+    }
+    m_qtHelpProviders.clear(); // keep the likely needed capacity
+
     for(int i=0; i < pathList.length(); i++) {
-        // check if provider already exist
         QString fileName = pathList.at(i);
         QString name = nameList.at(i);
         QString iconName = iconList.at(i);
@@ -116,16 +131,21 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
         }
 
         QtHelpProvider *provider = nullptr;
-        for (QtHelpProvider* oldProvider : std::as_const(oldList)) {
-            if (oldProvider->namespaceName() == namespaceName) {
-                provider = oldProvider;
-                oldList.removeAll(provider);
-                break;
+        if (const auto it = oldProviders->constFind(namespaceName); it != oldProviders->cend()) {
+            if ((*it)->fileName() == fileName) {
+                provider = *it; // reuse this matching old provider
+            } else {
+                // The namespace name determines the .qhc file name. Destroy the nonmatching old provider
+                // with the same namespace to prevent .qhc file conflict with the new provider created below.
+                delete *it;
             }
+            oldProviders->erase(it);
         }
+
         if(!provider){
             provider = new QtHelpProvider(this, fileName, namespaceName, name, iconName);
         }else{
+            // The file name and the namespace name already match. Update the name and the icon name.
             provider->setName(name);
             provider->setIconName(iconName);
         }
@@ -142,9 +162,6 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
             m_qtHelpProviders.append(provider);
         }
     }
-
-    // delete unused providers
-    qDeleteAll(oldList);
 }
 
 QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
