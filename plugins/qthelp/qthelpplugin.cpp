@@ -20,6 +20,7 @@
 #include <KPluginFactory>
 
 #include <QDirIterator>
+#include <QFile>
 #include <QFileInfo>
 #include <QHash>
 #include <QSet>
@@ -57,6 +58,8 @@ void QtHelpPlugin::readConfig()
 
     searchHelpDirectory(pathList, nameList, iconList, searchDir);
     loadQtHelpProvider(pathList, nameList, iconList);
+    removeUnusedHelpCollectionFiles();
+
     loadQtDocumentation(m_loadSystemQtDoc);
 
     emit changedProvidersList();
@@ -165,6 +168,44 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
         }
 
         m_qtHelpProviders.append(provider);
+    }
+}
+
+void QtHelpPlugin::removeUnusedHelpCollectionFiles() const
+{
+    QSet<QString> usedFileNames;
+    usedFileNames.reserve(m_qtHelpProviders.size() + 1);
+    for (const auto* const provider : std::as_const(m_qtHelpProviders)) {
+        usedFileNames.insert(provider->engine()->collectionFile());
+    }
+    usedFileNames.insert(m_qtDoc->engine()->collectionFile()); // this file is used even if m_loadSystemQtDoc is false
+
+    // Collect a list of files and then remove them all in a separate loop, because removing files
+    // while iterating over a directory might be slower in case some file system cache is invalidated.
+    QList<QString> filesToRemove;
+
+    QDirIterator it(QtHelpProviderAbstract::collectionFileLocation(), {QStringLiteral("*.qhc")},
+                    QDir::Files | QDir::Hidden);
+    while (it.hasNext()) {
+        auto filePath = it.next();
+        if (!usedFileNames.contains(filePath)) {
+            filesToRemove.push_back(std::move(filePath));
+        }
+    }
+
+    if (filesToRemove.empty()) {
+        return;
+    }
+
+    QFile file; // reuse this file object to optimize
+    for (const auto& filePath : std::as_const(filesToRemove)) {
+        file.setFileName(filePath);
+        if (file.remove(filePath)) {
+            qCDebug(QTHELP) << "removed unused file" << filePath;
+        } else {
+            qCWarning(QTHELP) << "could not remove unused file" << filePath << ':' << file.error()
+                              << file.errorString();
+        }
     }
 }
 
