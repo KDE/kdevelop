@@ -22,6 +22,7 @@
 #include <QDirIterator>
 #include <QFileInfo>
 #include <QHash>
+#include <QSet>
 
 K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
 
@@ -115,6 +116,9 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
     }
     m_qtHelpProviders.clear(); // keep the likely needed capacity
 
+    QSet<QString> registeredNamespaceNames;
+    registeredNamespaceNames.reserve(pathList.size());
+
     for(int i=0; i < pathList.length(); i++) {
         QString fileName = pathList.at(i);
         QString name = nameList.at(i);
@@ -129,6 +133,16 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
             qCWarning(QTHELP) << "skipping documentation file with an empty namespace name:" << fileName;
             continue;
         }
+
+        const auto oldSize = registeredNamespaceNames.size();
+        registeredNamespaceNames.insert(namespaceName);
+        if (registeredNamespaceNames.size() == oldSize) {
+            // this namespace is already registered
+            qCWarning(QTHELP) << "skipping documentation file with a duplicate namespace name" << namespaceName << ':'
+                              << fileName;
+            continue;
+        }
+        Q_ASSERT(registeredNamespaceNames.size() == oldSize + 1);
 
         QtHelpProvider *provider = nullptr;
         if (const auto it = oldProviders->constFind(namespaceName); it != oldProviders->cend()) {
@@ -150,17 +164,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
             provider->setIconName(iconName);
         }
 
-        bool exist = false;
-        for (QtHelpProvider* existingProvider : std::as_const(m_qtHelpProviders)) {
-            if (existingProvider->namespaceName() == namespaceName) {
-                exist = true;
-                break;
-            }
-        }
-
-        if(!exist){
-            m_qtHelpProviders.append(provider);
-        }
+        m_qtHelpProviders.append(provider);
     }
 }
 
