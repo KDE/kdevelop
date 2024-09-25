@@ -53,6 +53,13 @@ private:
      */
     void loadQtHelpProvider(const QStringList& pathList, const QStringList& nameList, const QStringList& iconList);
 
+    /// The list of loaded providers. This object is the parent of each provider,
+    /// so they are not explicitly deleted in the destructor. But when a provider
+    /// becomes obsolete and is removed from the list, it must be destroyed manually
+    /// to prevent a leak until this object is destroyed (when the plugin is unloaded).
+    ///
+    /// Invariant: no two QtHelpProvider objects have equal namespace names. The namespace
+    /// name determines the .qhc file name, so this prevents collection file conflicts.
     QList<QtHelpProvider*> m_qtHelpProviders;
     QtHelpQtDoc* m_qtDoc;
     bool m_loadSystemQtDoc;
