@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-09-26 00:38+0000\n"
 "PO-Revision-Date: 2013-04-23 02:56+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -42,12 +42,12 @@ msgstr "Бетбелгілер"
 msgid "Main Toolbar"
 msgstr ""
 
-#: oktetadocument.cpp:125
+#: oktetadocument.cpp:131
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "\"%1\" деген құжатта сақталмаған өзгерістер бар. Сақталсын ба?"
 
-#: oktetadocument.cpp:126
+#: oktetadocument.cpp:132
 #, fuzzy, kde-format
 #| msgid "Close Document"
 msgctxt "@title:window"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-09-26 00:38+0000\n"
 "PO-Revision-Date: 2021-08-31 09:49+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -44,13 +44,13 @@ msgstr "Zaznamki"
 msgid "Main Toolbar"
 msgstr "Glavna orodna vrstica"
 
-#: oktetadocument.cpp:125
+#: oktetadocument.cpp:131
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr ""
 "Dokument \"%1\" vsebuje neshranjene spremembe. Ali jih želite shraniti?"
 
-#: oktetadocument.cpp:126
+#: oktetadocument.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"

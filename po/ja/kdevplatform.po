@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 00:38+0000\n"
+"POT-Creation-Date: 2024-09-26 00:38+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -2170,7 +2170,7 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "ドキュメンテーション"
 
-#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:59
 #, kde-format
 msgid "Untitled"
 msgstr "タイトルなし"
@@ -2900,19 +2900,19 @@ msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
 msgstr ""
 
-#: shell/partdocument.cpp:104
+#: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "文書 “%1” には未保存の変更があります。保存しますか？"
 
-#: shell/partdocument.cpp:105 shell/partdocument.cpp:114
+#: shell/partdocument.cpp:110 shell/partdocument.cpp:119
 #, fuzzy, kde-format
 #| msgid "Close Document"
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "文書を閉じる"
 
-#: shell/partdocument.cpp:111
+#: shell/partdocument.cpp:116
 #, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2920,7 +2920,7 @@ msgid ""
 "Do you want to overwrite the external changes?"
 msgstr ""
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:418
+#: shell/partdocument.cpp:120 shell/textdocument.cpp:417
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -5010,13 +5010,13 @@ msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr "<b>ファイルを整形</b><p><b>astyle</b> ライブラリを使って整形。</p>"
 
-#: shell/sourceformattercontroller.cpp:609
+#: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:612
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5024,14 +5024,14 @@ msgid ""
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:614
+#: shell/sourceformattercontroller.cpp:619
 #, fuzzy, kde-format
 #| msgid "Reformat current line using AStyle"
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "AStyle を使って現在の行を整形"
 
-#: shell/sourceformattercontroller.cpp:617
+#: shell/sourceformattercontroller.cpp:622
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Reformat line</b><p>Source reformatting of line under cursor using "
@@ -5044,13 +5044,13 @@ msgstr ""
 "<b>行を整形</b><p><b>astyle</b> ライブラリを使って、カーソルのある行を整形し"
 "ます。</p>"
 
-#: shell/sourceformattercontroller.cpp:621
+#: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:623
+#: shell/sourceformattercontroller.cpp:628
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5058,14 +5058,14 @@ msgid ""
 "configured source formatter."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:625
+#: shell/sourceformattercontroller.cpp:630
 #, fuzzy, kde-format
 #| msgid "Reformat current line using AStyle"
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr "AStyle を使って現在の行を整形"
 
-#: shell/sourceformattercontroller.cpp:627
+#: shell/sourceformattercontroller.cpp:632
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Reformat line</b><p>Source reformatting of line under cursor using "
@@ -5078,19 +5078,19 @@ msgstr ""
 "<b>行を整形</b><p><b>astyle</b> ライブラリを使って、カーソルのある行を整形し"
 "ます。</p>"
 
-#: shell/sourceformattercontroller.cpp:864
+#: shell/sourceformattercontroller.cpp:867
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "行を整形"
 
-#: shell/sourceformattercontroller.cpp:865
+#: shell/sourceformattercontroller.cpp:868
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:869
+#: shell/sourceformattercontroller.cpp:872
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgctxt "@action:button"
@@ -5217,7 +5217,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "削除"
 
-#: shell/textdocument.cpp:413
+#: shell/textdocument.cpp:412
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5228,14 +5228,14 @@ msgstr ""
 "\n"
 "本当に上書きしますか？ (外部での変更は失われます)"
 
-#: shell/textdocument.cpp:417
+#: shell/textdocument.cpp:416
 #, fuzzy, kde-format
 #| msgid "Document Externally Modified"
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "文書は外部で変更されています"
 
-#: shell/textdocument.cpp:674
+#: shell/textdocument.cpp:659
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " 行: %1 列: %2"
@@ -5363,46 +5363,46 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "ロード"
 
-#: sublime/container.cpp:345
+#: sublime/container.cpp:346
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr " 行: 00000 列: 000"
 
-#: sublime/container.cpp:379
+#: sublime/container.cpp:380
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "開いているすべての文書を閉じます"
 
-#: sublime/container.cpp:391
+#: sublime/container.cpp:392
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:787
+#: sublime/container.cpp:788
 #, fuzzy, kde-format
 #| msgid "Close File"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "ファイルを閉じる"
 
-#: sublime/container.cpp:790
+#: sublime/container.cpp:791
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "閉じる"
 
-#: sublime/container.cpp:792
+#: sublime/container.cpp:793
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "他をすべて閉じる(&H)"
 
-#: sublime/container.cpp:794
+#: sublime/container.cpp:795
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action:inmenu"

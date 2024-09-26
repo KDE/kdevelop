@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 00:38+0000\n"
+"POT-Creation-Date: 2024-09-26 00:38+0000\n"
 "PO-Revision-Date: 2024-08-17 11:12+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -2153,7 +2153,7 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Documentació"
 
-#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:59
 #, kde-format
 msgid "Untitled"
 msgstr "Sense títol"
@@ -2802,18 +2802,18 @@ msgid "Use this command to show or hide the view's statusbar."
 msgstr ""
 "Utilitza esta ordre per a mostrar o ocultar la vista de la barra d'estat."
 
-#: shell/partdocument.cpp:104
+#: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "El document «%1» té canvis sense guardar. Voleu guardar-los?"
 
-#: shell/partdocument.cpp:105 shell/partdocument.cpp:114
+#: shell/partdocument.cpp:110 shell/partdocument.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Tanca el document"
 
-#: shell/partdocument.cpp:111
+#: shell/partdocument.cpp:116
 #, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2824,7 +2824,7 @@ msgstr ""
 "extern.\n"
 "Voleu sobreescriure els canvis externs?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:418
+#: shell/partdocument.cpp:120 shell/textdocument.cpp:417
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -4909,7 +4909,7 @@ msgstr ""
 "Funcionalitat de donar format que utilitza els formatadors de codi font que "
 "hi ha configurats."
 
-#: shell/sourceformattercontroller.cpp:609
+#: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
@@ -4917,7 +4917,7 @@ msgstr ""
 "Torna a donar format a la selecció o el fitxer utilitzant <i>%1</i> (<b>%2</"
 "b>)"
 
-#: shell/sourceformattercontroller.cpp:612
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4927,14 +4927,14 @@ msgstr ""
 "Torna a donar format al text seleccionat o tot el fitxer si no se selecciona "
 "res, utilitzant l'eina <i>%1</i> amb l'estil <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:614
+#: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 "Torna a donar format a la línia actual utilitzant <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:617
+#: shell/sourceformattercontroller.cpp:622
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4944,7 +4944,7 @@ msgstr ""
 "Torna a donar format al codi font de la línia baix el cursor utilitzant "
 "l'eina <i>%1</i> amb l'estil <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:621
+#: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4952,7 +4952,7 @@ msgstr ""
 "Torna a donar format a la selecció o el fitxer utilitzant el formatador de "
 "codi font configurat"
 
-#: shell/sourceformattercontroller.cpp:623
+#: shell/sourceformattercontroller.cpp:628
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4962,7 +4962,7 @@ msgstr ""
 "Torna a donar format al text seleccionat o tot el fitxer si no hi ha res "
 "seleccionat, utilitzant el formatador de codi font que hi ha configurat."
 
-#: shell/sourceformattercontroller.cpp:625
+#: shell/sourceformattercontroller.cpp:630
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
@@ -4970,7 +4970,7 @@ msgstr ""
 "Torna a donar format a la línia actual utilitzant el formatador de codi font "
 "configurat"
 
-#: shell/sourceformattercontroller.cpp:627
+#: shell/sourceformattercontroller.cpp:632
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4980,18 +4980,18 @@ msgstr ""
 "Torna a donar format al codi font de la línia baix el cursor utilitzant el "
 "formatador de codi font que hi ha configurat."
 
-#: shell/sourceformattercontroller.cpp:864
+#: shell/sourceformattercontroller.cpp:867
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Torna a donar format als fitxers"
 
-#: shell/sourceformattercontroller.cpp:865
+#: shell/sourceformattercontroller.cpp:868
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Torna a donar format a tots els fitxers de la carpeta seleccionada?"
 
-#: shell/sourceformattercontroller.cpp:869
+#: shell/sourceformattercontroller.cpp:872
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
@@ -5126,7 +5126,7 @@ msgid "Delete"
 msgstr "Suprimix"
 
 # skip-rule: punctuation-period-no
-#: shell/textdocument.cpp:413
+#: shell/textdocument.cpp:412
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5137,13 +5137,13 @@ msgstr ""
 "\n"
 "Segur que voleu sobreescriure'l? (Es perdran els canvis externs)."
 
-#: shell/textdocument.cpp:417
+#: shell/textdocument.cpp:416
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Document modificat externament"
 
-#: shell/textdocument.cpp:674
+#: shell/textdocument.cpp:659
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Línia: %1 Col.: %2 "
@@ -5258,43 +5258,43 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Carrega"
 
-#: sublime/container.cpp:345
+#: sublime/container.cpp:346
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Línia: 00000 Col: 000"
 
-#: sublime/container.cpp:379
+#: sublime/container.cpp:380
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Mostra una llista ordenada dels documents oberts"
 
 # skip-rule: kct-tab
-#: sublime/container.cpp:391
+#: sublime/container.cpp:392
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Premeu «Ctrl+Tab» per a canviar)"
 
-#: sublime/container.cpp:787
+#: sublime/container.cpp:788
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Copia el nom del fitxer"
 
-#: sublime/container.cpp:790
+#: sublime/container.cpp:791
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Tanca"
 
-#: sublime/container.cpp:792
+#: sublime/container.cpp:793
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Tanca tots els altres"
 
-#: sublime/container.cpp:794
+#: sublime/container.cpp:795
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

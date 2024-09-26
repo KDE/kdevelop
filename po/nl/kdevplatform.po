@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 00:38+0000\n"
+"POT-Creation-Date: 2024-09-26 00:38+0000\n"
 "PO-Revision-Date: 2024-08-17 11:54+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -2153,7 +2153,7 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Documentatie"
 
-#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:59
 #, kde-format
 msgid "Untitled"
 msgstr "Naamloos"
@@ -2797,20 +2797,20 @@ msgid "Use this command to show or hide the view's statusbar."
 msgstr ""
 "Dit commando gebruiken om de statusbalk van Beeld te tonen of te verbergen."
 
-#: shell/partdocument.cpp:104
+#: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr ""
 "Het document \"%1\" bevat wijzigingen die niet zijn opgeslagen. Wilt u deze "
 "opslaan?"
 
-#: shell/partdocument.cpp:105 shell/partdocument.cpp:114
+#: shell/partdocument.cpp:110 shell/partdocument.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Document sluiten"
 
-#: shell/partdocument.cpp:111
+#: shell/partdocument.cpp:116
 #, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2821,7 +2821,7 @@ msgstr ""
 "een extern proces.\n"
 "Wilt u de externe wijzigingen overschrijven?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:418
+#: shell/partdocument.cpp:120 shell/textdocument.cpp:417
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -4902,13 +4902,13 @@ msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr "Functionaliteit voor opmaken met de de geconfigureerde opmaker(s)."
 
-#: shell/sourceformattercontroller.cpp:609
+#: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr "Selectie of bestand opmaken met <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:612
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4918,13 +4918,13 @@ msgstr ""
 "Geselecteerde tekst of het gehele bestand wordt opgemaakt als er niets is "
 "geselecteerd, met hulpmiddel <i>%1</i> met stijl <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:614
+#: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Huidige regel opnieuw opmaken met <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:617
+#: shell/sourceformattercontroller.cpp:622
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4934,7 +4934,7 @@ msgstr ""
 "Broncode van regel onder de cursor opnieuw opmaken met hulpmiddel <i>%1</i> "
 "met stijl <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:621
+#: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4942,7 +4942,7 @@ msgstr ""
 "Selectie of bestand opnieuw opmaken met de geconfigureerde opmaker van "
 "broncode"
 
-#: shell/sourceformattercontroller.cpp:623
+#: shell/sourceformattercontroller.cpp:628
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4952,14 +4952,14 @@ msgstr ""
 "Geselecteerde tekst of het gehele bestand wordt opgemaakt als er niets is "
 "geselecteerd, met de geconfigureerde opmaker van broncode."
 
-#: shell/sourceformattercontroller.cpp:625
+#: shell/sourceformattercontroller.cpp:630
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr ""
 "Huidige regel opnieuw opmaken met de geconfigureerde opmaker van broncode"
 
-#: shell/sourceformattercontroller.cpp:627
+#: shell/sourceformattercontroller.cpp:632
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4969,18 +4969,18 @@ msgstr ""
 "Opnieuw opmaken van de regel onder de cursor met de geconfigureerde opmaker "
 "van broncode."
 
-#: shell/sourceformattercontroller.cpp:864
+#: shell/sourceformattercontroller.cpp:867
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Bestanden opnieuw indelen?"
 
-#: shell/sourceformattercontroller.cpp:865
+#: shell/sourceformattercontroller.cpp:868
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Alle bestanden in de geselecteerde map opnieuw indelen?"
 
-#: shell/sourceformattercontroller.cpp:869
+#: shell/sourceformattercontroller.cpp:872
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
@@ -5112,7 +5112,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: shell/textdocument.cpp:413
+#: shell/textdocument.cpp:412
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5124,13 +5124,13 @@ msgstr ""
 "Weet u zeker dat u het wilt overschrijven? (Externe wijzigingen gaan "
 "verloren.)"
 
-#: shell/textdocument.cpp:417
+#: shell/textdocument.cpp:416
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Document extern gewijzigd"
 
-#: shell/textdocument.cpp:674
+#: shell/textdocument.cpp:659
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Regel: %1, kol: %2 "
@@ -5243,42 +5243,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Laden"
 
-#: sublime/container.cpp:345
+#: sublime/container.cpp:346
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Regel: 00000 Col: 000"
 
-#: sublime/container.cpp:379
+#: sublime/container.cpp:380
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Gesorteerde lijst van geopende documenten tonen"
 
-#: sublime/container.cpp:391
+#: sublime/container.cpp:392
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Druk op Ctrl+Tab om om te schakelen)"
 
-#: sublime/container.cpp:787
+#: sublime/container.cpp:788
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Bestandsnaam kopiëren"
 
-#: sublime/container.cpp:790
+#: sublime/container.cpp:791
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Sluiten"
 
-#: sublime/container.cpp:792
+#: sublime/container.cpp:793
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Alle anderen sluiten"
 
-#: sublime/container.cpp:794
+#: sublime/container.cpp:795
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

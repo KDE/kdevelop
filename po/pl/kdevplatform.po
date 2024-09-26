@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 00:38+0000\n"
+"POT-Creation-Date: 2024-09-26 00:38+0000\n"
 "PO-Revision-Date: 2024-08-17 09:31+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -2167,7 +2167,7 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Dokumentacja"
 
-#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:59
 #, kde-format
 msgid "Untitled"
 msgstr "Bez tytułu"
@@ -2813,18 +2813,18 @@ msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
 msgstr "Służy do pokazywania i ukrywania paska stanu widoku."
 
-#: shell/partdocument.cpp:104
+#: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "Dokument \"%1\" ma niezapisane zmiany. Czy chcesz jest zapisać?"
 
-#: shell/partdocument.cpp:105 shell/partdocument.cpp:114
+#: shell/partdocument.cpp:110 shell/partdocument.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Zamknij dokument"
 
-#: shell/partdocument.cpp:111
+#: shell/partdocument.cpp:116
 #, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2835,7 +2835,7 @@ msgstr ""
 "program.\n"
 "Czy chcesz zastąpić zewnętrzne zmiany?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:418
+#: shell/partdocument.cpp:120 shell/textdocument.cpp:417
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -4910,13 +4910,13 @@ msgid "Formatting functionality using the configured source formatter(s)."
 msgstr ""
 "Funkcja formatowania, używająca dostosowanego narzędzia formatowania kodu."
 
-#: shell/sourceformattercontroller.cpp:609
+#: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr "Przeformatuj zaznaczenie lub plik, używając <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:612
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4926,13 +4926,13 @@ msgstr ""
 "Przeformatuj zaznaczony tekst lub cały plik, jeśli niczego nie zaznaczono, "
 "używając narzędzia <i>%1</i> wg wyglądu <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:614
+#: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Przeformatuj bieżący wiersz, używając <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:617
+#: shell/sourceformattercontroller.cpp:622
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4942,7 +4942,7 @@ msgstr ""
 "Przeformatuj wiersz kodu w miejscu kursora, używając narzędzia <i>%1</i> wg "
 "wyglądu <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:621
+#: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4950,7 +4950,7 @@ msgstr ""
 "Przeformatuj zaznaczenie lub plik, używając dostosowanego narzędzia "
 "formatowania kodu"
 
-#: shell/sourceformattercontroller.cpp:623
+#: shell/sourceformattercontroller.cpp:628
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4960,7 +4960,7 @@ msgstr ""
 "Przeformatowuje zaznaczony tekst lub cały plik, jeśli niczego nie "
 "zaznaczono, używając narzędzia formatowania kodu."
 
-#: shell/sourceformattercontroller.cpp:625
+#: shell/sourceformattercontroller.cpp:630
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
@@ -4968,7 +4968,7 @@ msgstr ""
 "Przeformatuj bieżący wiersz, używając dostosowanego narzędzia formatowania "
 "kodu"
 
-#: shell/sourceformattercontroller.cpp:627
+#: shell/sourceformattercontroller.cpp:632
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4978,18 +4978,18 @@ msgstr ""
 "Przeformatowanie wiersza kod w miejscu kursora przy użycia dostosowanego "
 "narzędzia formatowania kodu."
 
-#: shell/sourceformattercontroller.cpp:864
+#: shell/sourceformattercontroller.cpp:867
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Przeformatowanie plików?"
 
-#: shell/sourceformattercontroller.cpp:865
+#: shell/sourceformattercontroller.cpp:868
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Przeformatować wszystkie pliki w danym katalogu?"
 
-#: shell/sourceformattercontroller.cpp:869
+#: shell/sourceformattercontroller.cpp:872
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
@@ -5123,7 +5123,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Usuń"
 
-#: shell/textdocument.cpp:413
+#: shell/textdocument.cpp:412
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5134,13 +5134,13 @@ msgstr ""
 "\n"
 "Czy na pewno go nadpisać? (Zewnętrzne zmiany zostaną utracone.)"
 
-#: shell/textdocument.cpp:417
+#: shell/textdocument.cpp:416
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Dokument zmieniono zewnętrznie"
 
-#: shell/textdocument.cpp:674
+#: shell/textdocument.cpp:659
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Wiersz: %1 Kol: %2 "
@@ -5253,42 +5253,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Wczytaj"
 
-#: sublime/container.cpp:345
+#: sublime/container.cpp:346
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Wiersz: 00000 Kol: 000"
 
-#: sublime/container.cpp:379
+#: sublime/container.cpp:380
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Pokaż uszeregowaną listę otwartych dokumentów"
 
-#: sublime/container.cpp:391
+#: sublime/container.cpp:392
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Naciśnij Ctrl+Tab, aby przełączyć)"
 
-#: sublime/container.cpp:787
+#: sublime/container.cpp:788
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Skopiuj nazwę pliku"
 
-#: sublime/container.cpp:790
+#: sublime/container.cpp:791
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Zamknij"
 
-#: sublime/container.cpp:792
+#: sublime/container.cpp:793
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Zamknij wszystkie inne"
 
-#: sublime/container.cpp:794
+#: sublime/container.cpp:795
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

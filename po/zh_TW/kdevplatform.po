@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 00:38+0000\n"
+"POT-Creation-Date: 2024-09-26 00:38+0000\n"
 "PO-Revision-Date: 2024-08-06 05:13+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -2105,7 +2105,7 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "文件"
 
-#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:59
 #, kde-format
 msgid "Untitled"
 msgstr "未命名"
@@ -2732,18 +2732,18 @@ msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
 msgstr "使用這個指令來顯示或隱藏檢視的狀態列。"
 
-#: shell/partdocument.cpp:104
+#: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "文件 %1 有未儲存的變更。您要儲存它嗎？"
 
-#: shell/partdocument.cpp:105 shell/partdocument.cpp:114
+#: shell/partdocument.cpp:110 shell/partdocument.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "關閉文件"
 
-#: shell/partdocument.cpp:111
+#: shell/partdocument.cpp:116
 #, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2753,7 +2753,7 @@ msgstr ""
 "文件 \"%1\" 裡有未儲存的變更，同時原檔案又已被外部行程所改變。\n"
 "您要直接把外部所做的變更覆蓋掉嗎？"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:418
+#: shell/partdocument.cpp:120 shell/textdocument.cpp:417
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -4741,13 +4741,13 @@ msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr "利用已設定的原始碼格式化工具提供的格式化功能。"
 
-#: shell/sourceformattercontroller.cpp:609
+#: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:612
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4755,13 +4755,13 @@ msgid ""
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:614
+#: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "使用 <i>%1</i> (<b>%2</b>) 來重新編排目前行數"
 
-#: shell/sourceformattercontroller.cpp:617
+#: shell/sourceformattercontroller.cpp:622
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4769,13 +4769,13 @@ msgid ""
 "style."
 msgstr "使用 <i>%1</i> 工具利用 <b>%2</b> 樣式來重新編排行數。"
 
-#: shell/sourceformattercontroller.cpp:621
+#: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:623
+#: shell/sourceformattercontroller.cpp:628
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4783,13 +4783,13 @@ msgid ""
 "configured source formatter."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:625
+#: shell/sourceformattercontroller.cpp:630
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr "使用已設定的原始碼格式化工具重新格式化目前行數"
 
-#: shell/sourceformattercontroller.cpp:627
+#: shell/sourceformattercontroller.cpp:632
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4797,18 +4797,18 @@ msgid ""
 "formatter."
 msgstr "使用已設定的原始碼格式化工具來重新格式化游標所在的行。"
 
-#: shell/sourceformattercontroller.cpp:864
+#: shell/sourceformattercontroller.cpp:867
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "重新格式化檔案？"
 
-#: shell/sourceformattercontroller.cpp:865
+#: shell/sourceformattercontroller.cpp:868
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "要重新格式化所選資料夾中的所有檔案嗎？"
 
-#: shell/sourceformattercontroller.cpp:869
+#: shell/sourceformattercontroller.cpp:872
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
@@ -4927,7 +4927,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "刪除"
 
-#: shell/textdocument.cpp:413
+#: shell/textdocument.cpp:412
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -4938,13 +4938,13 @@ msgstr ""
 "\n"
 "您確定要覆寫它嗎？（別人所做的變更將會遺失）"
 
-#: shell/textdocument.cpp:417
+#: shell/textdocument.cpp:416
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "文件已被別人變更"
 
-#: shell/textdocument.cpp:674
+#: shell/textdocument.cpp:659
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " 行: %1 欄: %2 "
@@ -5053,42 +5053,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "載入"
 
-#: sublime/container.cpp:345
+#: sublime/container.cpp:346
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "行: 00000 欄: 000"
 
-#: sublime/container.cpp:379
+#: sublime/container.cpp:380
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "顯示已排序的已開啟文件列表"
 
-#: sublime/container.cpp:391
+#: sublime/container.cpp:392
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "（按 Ctrl+Tab 來切換）"
 
-#: sublime/container.cpp:787
+#: sublime/container.cpp:788
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "複製檔案名稱"
 
-#: sublime/container.cpp:790
+#: sublime/container.cpp:791
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "關閉"
 
-#: sublime/container.cpp:792
+#: sublime/container.cpp:793
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "關閉所有其他的"
 
-#: sublime/container.cpp:794
+#: sublime/container.cpp:795
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
