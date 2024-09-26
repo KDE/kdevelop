@@ -13,6 +13,8 @@
 #include <QObject>
 #include <QHelpEngine>
 
+#include <functional>
+
 class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationProvider
 {
     Q_OBJECT
@@ -47,6 +49,21 @@ protected:
      * Calls @a m_engine.registerDocumentation(@p documentationFileName) and handles errors.
      */
     void registerDocumentation(const QString& documentationFileName);
+
+    /**
+     * Calls @a m_engine.unregisterDocumentation(@p namespaceName) and handles errors.
+     */
+    void unregisterDocumentation(const QString& namespaceName);
+
+    /**
+     * A function object that returns @c true if the namespace with a given name should be unregistered.
+     */
+    using ShouldUnregisterNamespace = std::function<bool(const QString& namespaceName)>;
+
+    /**
+     * Iterates over all registered namespaces and unregisters those indicated by @p shouldUnregisterNamespace.
+     */
+    void cleanUpRegisteredDocumentations(const ShouldUnregisterNamespace& shouldUnregisterNamespace);
 
     QHelpEngine m_engine;
 };

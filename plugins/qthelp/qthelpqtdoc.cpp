@@ -17,6 +17,7 @@
 #include <QFileInfo>
 #include <QIcon>
 #include <QProcess>
+#include <QSet>
 #include <QStandardPaths>
 
 #include <algorithm>
@@ -79,17 +80,35 @@ void QtHelpQtDoc::loadDocumentation()
         return;
     }
 
-    const QStringList files = qchFiles();
-    if(files.isEmpty()) {
+    QSet<QString> qchFiles;
+    visitQchFiles([&qchFiles](const QFileInfo& fileInfo) {
+        qchFiles.insert(fileInfo.absoluteFilePath());
+        return false; // continue iteration to collect all help file paths
+    });
+    if (qchFiles.empty()) {
         qCWarning(QTHELP) << "could not find QCH file in directory" << m_path;
         return;
     }
 
-    for (const QString& fileName : files) {
-        QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
-        if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
-            registerDocumentation(fileName);
+    cleanUpRegisteredDocumentations([&qchFiles, this](const QString& namespaceName) {
+        const auto filePath = m_engine.documentationFileName(namespaceName);
+        const auto it = qchFiles.constFind(filePath);
+        if (it == qchFiles.cend()) {
+            return true; // unregister this namespace associated with an unneeded .qch file
         }
+        if (QHelpEngineCore::namespaceName(*it) != namespaceName) {
+            // Unregister this namespace, because it does not match
+            // the namespace name stored in the associated .qch file.
+            return true;
+        }
+
+        // The .qch file *it is already registered and up-to-date.
+        qchFiles.erase(it); // do not reregister it
+        return false; // keep its namespace registered with the engine
+    });
+
+    for (const auto& fileName : std::as_const(qchFiles)) {
+        registerDocumentation(fileName);
     }
 }
 
