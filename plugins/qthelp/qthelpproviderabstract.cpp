@@ -177,4 +177,24 @@ void QtHelpProviderAbstract::registerDocumentation(const QString& documentationF
     }
 }
 
+void QtHelpProviderAbstract::unregisterDocumentation(const QString& namespaceName)
+{
+    if (m_engine.unregisterDocumentation(namespaceName)) {
+        qCDebug(QTHELP) << "unregistered documentation" << namespaceName;
+    } else {
+        qCCritical(QTHELP) << "engine error while unregistering documentation" << namespaceName << ':'
+                           << m_engine.error();
+    }
+}
+
+void QtHelpProviderAbstract::cleanUpRegisteredDocumentations(const ShouldUnregisterNamespace& shouldUnregisterNamespace)
+{
+    const auto registeredNamespaces = m_engine.registeredDocumentations();
+    for (const auto& namespaceName : registeredNamespaces) {
+        if (shouldUnregisterNamespace(namespaceName)) {
+            unregisterDocumentation(namespaceName);
+        }
+    }
+}
+
 #include "moc_qthelpproviderabstract.cpp"
