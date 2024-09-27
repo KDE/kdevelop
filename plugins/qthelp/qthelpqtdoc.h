@@ -41,20 +41,20 @@ Q_SIGNALS:
 
 private:
     /**
-     * Calls @p processQchFileInfo(QFileInfo fileInfo) for every
-     * .qch file info in each @c QT_INSTALL_DOCS (sub)directory.
+     * Calls @p processQchFilePath(QString absoluteFilePath) for every
+     * .qch file in each @c QT_INSTALL_DOCS (sub)directory.
      *
      * @pre @a !m_path.isEmpty()
-     * @param processQchFileInfo a function object that returns @c true if done,
+     * @param processQchFilePath a function object that returns @c true if done,
      *        that is, when the iteration over .qch files should be aborted.
-     * @return the return value of the last call to @p processQchFileInfo or
-     *         @c false if @p processQchFileInfo was never called.
+     * @return the return value of the last call to @p processQchFilePath or
+     *         @c false if @p processQchFilePath was never called.
      */
-    template<typename ProcessQchFileInfo>
-    bool visitQchFiles(ProcessQchFileInfo processQchFileInfo) const;
+    template<typename ProcessQchFilePath>
+    bool visitQchFiles(ProcessQchFilePath processQchFilePath) const;
 
     QString m_qmake;
-    QString m_path;
+    QString m_path; ///< absolute path to the @c QT_INSTALL_DOCS directory
     bool m_isInitialized = false;
 };
 

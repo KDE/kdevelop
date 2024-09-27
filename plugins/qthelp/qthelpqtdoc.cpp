@@ -55,6 +55,7 @@ void QtHelpQtDoc::registerDocumentations()
         connect(p, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, p](int code) {
             if (code == QProcess::NormalExit) {
                 m_path = QDir::fromNativeSeparators(QString::fromLatin1(p->readAllStandardOutput().trimmed()));
+                m_path = QFileInfo{m_path}.absoluteFilePath();
                 qCDebug(QTHELP) << "Detected doc path:" << m_path;
             } else {
                 qCCritical(QTHELP) << "qmake query returned error:" << QString::fromLatin1(p->readAllStandardError());
@@ -80,9 +81,12 @@ void QtHelpQtDoc::loadDocumentation()
         return;
     }
 
+    // NOTE: the container must hold absolute .qch file paths, because QHelpEngineCore::documentationFileName()
+    // returns an absolute file path, and this return value is compared to the container's elements.
     QSet<QString> qchFiles;
-    visitQchFiles([&qchFiles](const QFileInfo& fileInfo) {
-        qchFiles.insert(fileInfo.absoluteFilePath());
+    visitQchFiles([&qchFiles](const QString& absoluteFilePath) {
+        Q_ASSERT(QFileInfo{absoluteFilePath}.isAbsolute());
+        qchFiles.insert(absoluteFilePath);
         return false; // continue iteration to collect all help file paths
     });
     if (qchFiles.empty()) {
@@ -125,13 +129,13 @@ bool QtHelpQtDoc::isQtHelpAvailable() const
     if (m_path.isEmpty()) {
         return false;
     }
-    return visitQchFiles([](const QFileInfo&) {
+    return visitQchFiles([](const QString&) {
         return true; // abort iteration and return true (i.e. "available") once the first help file is found
     });
 }
 
-template<typename ProcessQchFileInfo>
-bool QtHelpQtDoc::visitQchFiles(ProcessQchFileInfo processQchFileInfo) const
+template<typename ProcessQchFilePath>
+bool QtHelpQtDoc::visitQchFiles(ProcessQchFilePath processQchFilePath) const
 {
     Q_ASSERT(!m_path.isEmpty());
 
@@ -143,7 +147,7 @@ bool QtHelpQtDoc::visitQchFiles(ProcessQchFileInfo processQchFileInfo) const
     for (const auto& path : paths) {
         QDirIterator it(path, {QStringLiteral("*.qch")}, QDir::Files);
         while (it.hasNext()) {
-            if (processQchFileInfo(it.nextFileInfo())) {
+            if (processQchFilePath(it.next())) {
                 return true;
             }
         }
