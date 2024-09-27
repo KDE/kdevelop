@@ -42,6 +42,15 @@ private:
     void loadQtDocumentation(bool loadQtDoc);
     void searchHelpDirectory(QStringList& pathList, QStringList& nameList, QStringList& iconList,
                              const QString& searchDir);
+
+    /**
+     * Reset @a m_qtHelpProviders based on equal-size path, name and icon list arguments
+     *
+     * @param pathList a list of absolute paths to .qch files
+     * @param nameList a list of provider names
+     * @param iconList a list of provider icon names
+     * @pre @p pathList.size() == @p nameList.size() && @p pathList.size() == @p iconList.size()
+     */
     void loadQtHelpProvider(const QStringList& pathList, const QStringList& nameList, const QStringList& iconList);
 
     QList<QtHelpProvider*> m_qtHelpProviders;

@@ -16,6 +16,11 @@ class QtHelpProvider : public QtHelpProviderAbstract
     Q_OBJECT
     Q_INTERFACES(KDevelop::IDocumentationProvider)
 public:
+    /**
+     * Constructor.
+     *
+     * @param fileName the absolute path to a .qch documentation file
+     */
     QtHelpProvider(QObject* parent, const QString& fileName, const QString& name, const QString& iconName);
 
     QIcon icon() const override;
