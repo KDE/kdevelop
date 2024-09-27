@@ -18,6 +18,7 @@
 #include <KPluginFactory>
 
 #include <QDirIterator>
+#include <QFileInfo>
 
 K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
 
@@ -42,6 +43,13 @@ void QtHelpPlugin::readConfig()
     QStringList iconList, nameList, pathList, ghnsList;
     QString searchDir;
     qtHelpReadConfig(iconList, nameList, pathList, ghnsList, searchDir, m_loadSystemQtDoc);
+
+    // Make all .qch file paths read from config absolute as required by loadQtHelpProvider().
+    for (auto& path : pathList) {
+        path = QFileInfo{path}.absoluteFilePath();
+    }
+    // Pass an absolute path searchDir to searchHelpDirectory() so that it appends absolute paths to pathList.
+    searchDir = QFileInfo{searchDir}.absoluteFilePath();
 
     searchHelpDirectory(pathList, nameList, iconList, searchDir);
     loadQtHelpProvider(pathList, nameList, iconList);
@@ -96,6 +104,11 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
         QString fileName = pathList.at(i);
         QString name = nameList.at(i);
         QString iconName = iconList.at(i);
+
+        // NOTE: fileName must be an absolute file path, because QHelpEngineCore::documentationFileName()
+        // returns an absolute file path, and this return value is compared to fileName.
+        Q_ASSERT(QFileInfo{fileName}.isAbsolute());
+
         QString nameSpace = QHelpEngineCore::namespaceName(fileName);
         if(!nameSpace.isEmpty()){
             QtHelpProvider *provider = nullptr;
