@@ -86,11 +86,11 @@ void QtHelpPlugin::searchHelpDirectory(QStringList& pathList, QStringList& nameL
     const QString logo(QStringLiteral("qtlogo"));
     while(dirIt.hasNext() == true)
     {
-        dirIt.next();
-        qCDebug(QTHELP) << "qch found: " << dirIt.filePath();
-        pathList.append(dirIt.filePath());
-        nameList.append(dirIt.fileInfo().baseName());
+        const auto& fileInfo = dirIt.nextFileInfo();
+        pathList.append(fileInfo.filePath());
+        nameList.append(fileInfo.baseName());
         iconList.append(logo);
+        qCDebug(QTHELP) << "qch found:" << pathList.constLast();
     }
 }
 
