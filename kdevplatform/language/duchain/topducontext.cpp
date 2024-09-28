@@ -1082,6 +1082,12 @@ void TopDUContext::removeImportedParentContext(DUContext* context)
 void TopDUContext::addImportedParentContexts(const QVector<QPair<TopDUContext*, CursorInRevision>>& contexts,
                                              bool temporary)
 {
+    // This function is unused, trivial and at first glance appears to be pointless. However, judging by
+    // the contextbuilder.cpp diff of 2454532e21cc466bf369357446d0546d2aa1f454, the point is
+    // to partition top-contexts around their temporariness, then make two addImportedParentContexts()
+    // calls - first non-temporary, then temporary. Though two additional QList objects is an
+    // unnecessary overhead compared to an alternative use of std::partition or std::stable_partition.
+    // Either that or David Nolden forgot to actually optimize the trivial loop here in some way.
     for (const auto& pair : contexts) {
         addImportedParentContext(pair.first, pair.second, false, temporary);
     }
