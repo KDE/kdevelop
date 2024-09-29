@@ -115,11 +115,6 @@ void DocumentClassesFolder::populateNode()
     m_updateTimer->start();
 }
 
-QSet<KDevelop::IndexedString> DocumentClassesFolder::allOpenDocuments() const
-{
-    return m_openFiles;
-}
-
 ClassNode* DocumentClassesFolder::findClassNode(const IndexedQualifiedIdentifier& a_id)
 {
     // Make sure that the classes node is populated, otherwise
