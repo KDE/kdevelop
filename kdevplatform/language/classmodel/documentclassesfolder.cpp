@@ -334,8 +334,7 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
 void DocumentClassesFolder::parseDocument(const IndexedString& a_file)
 {
     // Add the document to the list of open files - this means we monitor it.
-    if (!m_openFiles.contains(a_file))
-        m_openFiles.insert(a_file);
+    m_openFiles.insert(a_file);
 
     updateDocument(a_file);
 }
