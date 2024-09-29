@@ -4,6 +4,9 @@ remove_definitions(
     -DQT_NO_CAST_FROM_BYTEARRAY
 )
 
+ecm_add_test(test_algorithm.cpp
+    LINK_LIBRARIES Qt::Test)
+
 ecm_add_test(test_embeddedfreetree.cpp
     LINK_LIBRARIES KF6::TextEditor Qt::Test KDev::Language KDev::Tests)
 
