@@ -13,7 +13,6 @@
 #include <QObject>
 #include <QPair>
 #include <QPoint>
-#include <QSet>
 
 namespace KompareDiff2 {
 class Difference;
