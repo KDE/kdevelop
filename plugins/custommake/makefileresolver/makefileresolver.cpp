@@ -632,10 +632,5 @@ Path PathInterner::internPath(const QString& path)
 
 QString StringInterner::internString(const QString& path)
 {
-    auto it = m_stringCache.constFind(path);
-    if (it != m_stringCache.constEnd()) {
-        return *it;
-    }
-    m_stringCache.insert(path);
-    return path;
+    return *m_stringCache.insert(path);
 }
