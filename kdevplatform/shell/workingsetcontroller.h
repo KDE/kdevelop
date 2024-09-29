@@ -8,7 +8,6 @@
 #define KDEVPLATFORM_WORKINGSETCONTROLLER_H
 
 #include <QObject>
-#include <QSet>
 #include <QMap>
 #include <QPointer>
 
@@ -103,7 +102,6 @@ private:
     void setupActions();
     const QString makeSetId(const QString& prefix) const;
 
-    QSet<QString> m_usedIcons;
     QMap<QString, WorkingSet*> m_workingSets;
     WorkingSet* m_emptyWorkingSet = nullptr;
     QTimer* m_hideToolTipTimer;
