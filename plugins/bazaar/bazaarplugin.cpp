@@ -12,6 +12,7 @@
 
 #include <KLocalizedString>
 
+#include <util/algorithm.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsstatusinfo.h>
@@ -281,8 +282,7 @@ void BazaarPlugin::parseBzrStatus(DVcsJob* job)
     QStringList command = job->dvcsCommand();
     for (auto it = command.constBegin() + command.indexOf(QStringLiteral("--no-classify")) + 1, itEnd = command.constEnd(); it != itEnd; ++it) {
         QString path = QFileInfo(*it).absoluteFilePath();
-        if (!filesWithStatus.contains(path)) {
-            filesWithStatus.insert(path);
+        if (Algorithm::insert(filesWithStatus, path).inserted) {
             KDevelop::VcsStatusInfo status;
             status.setState(VcsStatusInfo::ItemUpToDate);
             status.setUrl(QUrl::fromLocalFile(*it));

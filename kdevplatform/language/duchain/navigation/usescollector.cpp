@@ -24,6 +24,8 @@
 #include <interfaces/iuicontroller.h>
 #include <codegen/coderepresentation.h>
 #include <sublime/message.h>
+#include <util/algorithm.h>
+
 #include <KLocalizedString>
 
 using namespace KDevelop;
@@ -47,10 +49,9 @@ void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* curren
     if (current->isProxyContext())
         return;
 
-    if (visited.contains(current))
+    if (!Algorithm::insert(visited, current).inserted)
         return;
 
-    visited.insert(current);
     if (checker(current))
         collected.insert(current);
 
@@ -74,8 +75,7 @@ void allImportedFiles(ParsingEnvironmentFilePointer file, QSet<IndexedString>& s
             qCDebug(LANGUAGE) << "warning: missing import";
             continue;
         }
-        if (!visited.contains(import)) {
-            visited.insert(import);
+        if (Algorithm::insert(visited, import).inserted) {
             set.insert(import->url());
             allImportedFiles(import, set, visited);
         }
@@ -377,8 +377,7 @@ void UsesCollector::updateReady(const KDevelop::IndexedString& url, KDevelop::Re
         }
     }
 
-    if (m_waitForUpdate.contains(url) && !m_updateReady.contains(url)) {
-        m_updateReady << url;
+    if (m_waitForUpdate.contains(url) && Algorithm::insert(m_updateReady, url).inserted) {
         m_checked.clear();
 
         emit progressSignal(m_updateReady.size(), m_waitForUpdate.size());
@@ -431,8 +430,7 @@ void UsesCollector::updateReady(const KDevelop::IndexedString& url, KDevelop::Re
 
     if (m_declaration.data() && ((m_processDeclarations && m_declarationTopContexts.contains(indexed)) ||
                                  DUChainUtils::contextHasUse(topContext.data(), m_declaration.data()))) {
-        if (!m_processed.contains(topContext->url())) {
-            m_processed.insert(topContext->url());
+        if (Algorithm::insert(m_processed, topContext->url()).inserted) {
             lock.unlock();
             emit processUsesSignal(topContext);
             processUses(topContext);

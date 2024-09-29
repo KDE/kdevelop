@@ -36,6 +36,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>
 
+#include <util/algorithm.h>
 #include <util/path.h>
 #include <util/wildcardhelpers.h>
 
@@ -379,9 +380,9 @@ QMenu* GrepDialog::createSyncButtonMenu()
 
         while(m_plugin->core()->projectController()->findProjectForUrl(url.toUrl()))
         {
-            if(hadUrls.contains(url))
+            if (!Algorithm::insert(hadUrls, url).inserted) {
                 break;
-            hadUrls.insert(url);
+            }
             addUrlToMenu(ret, url.toUrl());
             url = url.parent();
         }

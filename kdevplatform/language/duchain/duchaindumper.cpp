@@ -20,11 +20,13 @@
 #include "identifier.h"
 #include "use.h"
 #include "problem.h"
-#include <serialization/indexedstring.h>
 #include "functiondefinition.h"
 
 #include <editor/rangeinrevision.h>
 #include <editor/documentrange.h>
+
+#include <serialization/indexedstring.h>
+#include <util/algorithm.h>
 
 namespace {
 QDebug fromTextStream(const QTextStream& out)
@@ -124,13 +126,11 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
          << (dynamic_cast<TopDUContext*>(context) ? static_cast<TopDUContext*>(context)->url().byteArray() : "")
          << Qt::endl;
 
-    if (m_visitedContexts.contains(context)) {
+    if (!Algorithm::insert(m_visitedContexts, context).inserted) {
         qout << Indent((m_indent + 2) * 2) << "(Skipping" << context->scopeIdentifier(true)
              << "because it was already printed)" << Qt::endl;
         return;
     }
-
-    m_visitedContexts.insert(context);
 
     auto top = context->topContext();
     if (allowedDepth >= 0) {

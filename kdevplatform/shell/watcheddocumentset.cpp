@@ -16,6 +16,7 @@
 #include <language/duchain/topducontext.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
+#include <util/algorithm.h>
 #include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
 #include <QFileInfo>
@@ -141,10 +142,10 @@ public:
 private:
     void getImportsFromDU(TopDUContext* context, QSet<TopDUContext*>& visitedContexts)
     {
-        if (!context || visitedContexts.contains(context))
+        if (!context || !Algorithm::insert(visitedContexts, context).inserted) {
             return;
+        }
 
-        visitedContexts.insert(context);
         const auto importedParentContexts = context->importedParentContexts();
         for (const DUContext::Import& ctx : importedParentContexts) {
             auto* topCtx = dynamic_cast<TopDUContext*>(ctx.context(nullptr));
@@ -492,9 +493,8 @@ void AllProjectSet::projectOpened(const IProject* project)
     addProjectFiles(*project);
 
     const auto* const projectFileManager = project->projectFileManager();
-    if (!m_trackedProjectFileManagers.contains(projectFileManager)) {
+    if (Algorithm::insert(m_trackedProjectFileManagers, projectFileManager).inserted) {
         trackProjectFiles(projectFileManager);
-        m_trackedProjectFileManagers.insert(projectFileManager);
     }
 
     d->updateImports();

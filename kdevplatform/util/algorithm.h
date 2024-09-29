@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <iterator>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 namespace Algorithm {
@@ -53,6 +54,27 @@ QSet<T> unite(std::vector<QSet<T>>&& sets)
 {
     return unite(std::make_move_iterator(sets.begin()),
                  std::make_move_iterator(sets.end()));
+}
+
+template<typename Iterator>
+struct InsertionResult
+{
+    Iterator iterator; ///< an iterator pointing at the inserted item or at the existing element equal to the value
+    bool inserted; ///< whether the value was inserted (in other words, whether it was absent from the set)
+};
+
+// NOTE: two separate type names are used to make @p value a forwarding reference.
+/**
+ * Same as @p set.insert(@p value) but returns more information
+ */
+template<typename ElementType, typename ValueType>
+InsertionResult<typename QSet<ElementType>::iterator> insert(QSet<ElementType>& set, ValueType&& value)
+{
+    const auto oldSize = set.size();
+    auto it = set.insert(std::forward<ValueType>(value));
+    Q_ASSERT(set.size() >= oldSize);
+    Q_ASSERT(set.size() <= oldSize + 1);
+    return {std::move(it), set.size() != oldSize};
 }
 }
 

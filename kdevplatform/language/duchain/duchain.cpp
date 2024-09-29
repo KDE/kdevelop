@@ -26,6 +26,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/isession.h>
+#include <util/algorithm.h>
 
 #include "../interfaces/ilanguagesupport.h"
 #include "../interfaces/icodehighlighting.h"
@@ -649,7 +650,7 @@ public:
         QMutexLocker l(&m_chainsMutex);
 
         if (!hasChainForIndex(index)) {
-            if (m_loading.contains(index)) {
+            if (!Algorithm::insert(m_loading, index).inserted) {
                 //It's probably being loaded by another thread. So wait until the load is ready
                 while (m_loading.contains(index)) {
                     l.unlock();
@@ -660,7 +661,6 @@ public:
                 loaded.insert(index);
                 return;
             }
-            m_loading.insert(index);
             loaded.insert(index);
 
             l.unlock();
@@ -1143,8 +1143,8 @@ private:
 
             for (auto& importer : importers) {
                 IndexedTopDUContext c = importer->indexedTopContext();
-                if (!topContexts.contains(c.index())) {
-                    topContexts.insert(c.index()); //Prevent useless recursion
+                // Prevent useless recursion
+                if (Algorithm::insert(topContexts, c.index()).inserted) {
                     checkNext.insert(importer);
                 }
             }
@@ -1191,8 +1191,7 @@ private:
                     FOREACH_FUNCTION(uint topContextIndex, item->items)
                     {
                         oldItems.insert(topContextIndex);
-                        if (!newItems.contains(topContextIndex)) {
-                            newItems.insert(topContextIndex);
+                        if (Algorithm::insert(newItems, topContextIndex).inserted) {
                             newItem.itemsList().append(topContextIndex);
                         }
                     }

@@ -15,6 +15,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
+#include <util/algorithm.h>
 #include <util/owningrawpointercontainer.h>
 
 #include <KPluginFactory>
@@ -137,15 +138,11 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
             continue;
         }
 
-        const auto oldSize = registeredNamespaceNames.size();
-        registeredNamespaceNames.insert(namespaceName);
-        if (registeredNamespaceNames.size() == oldSize) {
-            // this namespace is already registered
+        if (!Algorithm::insert(registeredNamespaceNames, namespaceName).inserted) {
             qCWarning(QTHELP) << "skipping documentation file with a duplicate namespace name" << namespaceName << ':'
                               << fileName;
             continue;
         }
-        Q_ASSERT(registeredNamespaceNames.size() == oldSize + 1);
 
         QtHelpProvider *provider = nullptr;
         if (const auto it = oldProviders->constFind(namespaceName); it != oldProviders->cend()) {

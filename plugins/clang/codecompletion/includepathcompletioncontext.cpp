@@ -11,6 +11,7 @@
 #include "duchain/clanghelpers.h"
 
 #include <language/codecompletion/abstractincludefilecompletionitem.h>
+#include <util/algorithm.h>
 #include <util/stringviewhelpers.h>
 
 #include <KTextEditor/Document>
@@ -153,10 +154,9 @@ QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const Include
 
     int pathNumber = 0;
     for (auto searchPath : std::as_const(paths)) {
-        if (handledPaths.contains(searchPath)) {
+        if (!Algorithm::insert(handledPaths, searchPath).inserted) {
             continue;
         }
-        handledPaths.insert(searchPath);
 
         if (!properties.prefixPath.isEmpty()) {
             searchPath.addPath(properties.prefixPath);
@@ -182,10 +182,8 @@ QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const Include
             }
 
             const QString fullPath = info.canonicalFilePath();
-            if (foundIncludePaths.contains(fullPath)) {
+            if (!Algorithm::insert(foundIncludePaths, fullPath).inserted) {
                 continue;
-            } else {
-                foundIncludePaths.insert(fullPath);
             }
 
             item.basePath = searchPath.toUrl();

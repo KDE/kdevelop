@@ -32,6 +32,8 @@
 #include "ducontextdynamicdata.h"
 #include <debug.h>
 
+#include <util/algorithm.h>
+
 // maximum depth for DUContext::findDeclarationsInternal searches
 const uint maxParentDepth = 20;
 
@@ -170,10 +172,9 @@ bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext*
     if (this == context->m_dynamicData)
         return true;
 
-    if (recursionGuard->contains(this)) {
+    if (!Algorithm::insert(*recursionGuard, this).inserted) {
         return false;
     }
-    recursionGuard->insert(this);
 
     FOREACH_FUNCTION(const DUContext::Import& ctx, d_func()->m_importedContexts) {
         DUContext* import = ctx.context(source);
