@@ -339,11 +339,10 @@ void WorkingSetToolTipWidget::buttonClicked(bool)
     Q_ASSERT(mainWindow);
     QSet<QString> openFiles = Core::self()->workingSetControllerInternal()->workingSet(mainWindow->area()->workingSet())->fileSet();
 
-    if(!openFiles.contains(s->objectName())) {
-        Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(s->objectName()));
-    }else{
-        openFiles.remove(s->objectName());
+    if (openFiles.remove(s->objectName())) {
         filterViews(openFiles);
+    } else {
+        Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(s->objectName()));
     }
 
     if(stillExists)
