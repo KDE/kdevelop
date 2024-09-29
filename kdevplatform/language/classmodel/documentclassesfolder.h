@@ -39,9 +39,6 @@ protected: // Documents list handling.
     /// Close and remove all the nodes related to the specified document.
     void closeDocument(const KDevelop::IndexedString& a_file);
 
-    /// Returns a list of documents we have monitored.
-    QSet<KDevelop::IndexedString> allOpenDocuments() const;
-
 protected: // Overridables
     /// Override this to filter the found classes.
     virtual bool isClassFiltered(const KDevelop::QualifiedIdentifier&) { return false; }
