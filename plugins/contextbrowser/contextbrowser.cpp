@@ -62,10 +62,9 @@
 
 #include <shell/problemmodel.h>
 #include <shell/problemmodelset.h>
-
-#include <util/texteditorhelpers.h>
-
 #include <sublime/mainwindow.h>
+#include <util/algorithm.h>
+#include <util/texteditorhelpers.h>
 
 using KTextEditor::Attribute;
 using KTextEditor::View;
@@ -921,9 +920,8 @@ void ContextBrowserPlugin::updateReady(const IndexedString& file, const Referenc
     for (QMap<View*, ViewHighlights>::iterator it = m_highlightedRanges.begin(); it != m_highlightedRanges.end();
          ++it) {
         if (it.key()->document()->url() == url) {
-            if (!m_updateViews.contains(it.key())) {
+            if (Algorithm::insert(m_updateViews, it.key()).inserted) {
                 qCDebug(PLUGIN_CONTEXTBROWSER) << "adding view for update";
-                m_updateViews << it.key();
 
                 // Don't change the highlighted declaration after finished parse-jobs
                 (*it).keep = true;

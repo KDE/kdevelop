@@ -18,6 +18,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
+#include <util/algorithm.h>
 
 #include "expressionvisitor.h"
 #include "parsesession.h"
@@ -932,8 +933,7 @@ DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(Qml
         QStringList nameAndVersion = stringliteral->value.toString().section(QLatin1Char('/'), -1, -1).split(QLatin1Char(' '));
         QString name = nameAndVersion.at(0);
 
-        if (!knownNames.contains(name)) {
-            knownNames.insert(name);
+        if (Algorithm::insert(knownNames, name).inserted) {
             res.append(qMakePair(stringliteral, name));
         }
     }

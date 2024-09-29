@@ -12,7 +12,9 @@
 #include "duchainlock.h"
 #include "topducontextdata.h"
 #include <debug.h>
+
 #include <language/backgroundparser/parsejob.h>
+#include <util/algorithm.h>
 
 #define ENSURE_READ_LOCKED   if (indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
 #define ENSURE_WRITE_LOCKED   if (indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
@@ -243,10 +245,8 @@ inline bool satisfied(TopDUContext::Features features, TopDUContext::Features re
 bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeatures,
                                            QSet<const ParsingEnvironmentFile*>& checked) const
 {
-    if (checked.contains(this))
+    if (!Algorithm::insert(checked, this).inserted)
         return true;
-
-    checked.insert(this);
 
     auto localRequired = minimumFeatures | ParseJob::staticMinimumFeatures(url());
 

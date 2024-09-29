@@ -23,6 +23,8 @@ private Q_SLOTS:
 
     void testUnite2String();
     void testUnite5Int();
+
+    void testInsert();
 };
 
 #endif // KDEVPLATFORM_TEST_ALGORITHM_H

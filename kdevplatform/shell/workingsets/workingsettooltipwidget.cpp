@@ -24,6 +24,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <util/activetooltip.h>
+#include <util/algorithm.h>
 
 #include "workingset.h"
 #include "workingsetcontroller.h"
@@ -148,11 +149,9 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 
     const auto setFiles = m_set->fileList();
     for (const QString& file : setFiles) {
-
-        if(hadFiles.contains(file))
+        if (!Algorithm::insert(hadFiles, file).inserted) {
             continue;
-
-        hadFiles.insert(file);
+        }
 
         auto* widget = new FileWidget;
         widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);

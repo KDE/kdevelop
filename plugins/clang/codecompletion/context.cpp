@@ -34,9 +34,10 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <language/codegen/documentchangeset.h>
-#include <util/foregroundlock.h>
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 #include <project/projectmodel.h>
+#include <util/algorithm.h>
+#include <util/foregroundlock.h>
 
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
@@ -697,9 +698,7 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
         if (declaration->kind() == Declaration::Instance && !declaration->isFunctionDeclaration()) {
             return PersistentSymbolTable::VisitorState::Break;
         }
-        if (!handled.contains(declaration)) {
-            handled.insert(declaration);
-
+        if (Algorithm::insert(handled, declaration).inserted) {
             ret = declaration;
             return PersistentSymbolTable::VisitorState::Break;
         }
@@ -713,8 +712,7 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
 
     const auto foundDeclarations = ctx->findDeclarations(qid, position);
     for (auto dec : foundDeclarations) {
-        if (!handled.contains(dec)) {
-            handled.insert(dec);
+        if (Algorithm::insert(handled, dec).inserted) {
             return dec;
         }
     }

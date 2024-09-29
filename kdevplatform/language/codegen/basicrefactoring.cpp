@@ -26,6 +26,7 @@
 #include <duchain/classfunctiondeclaration.h>
 #include <duchain/use.h>
 #include <sublime/message.h>
+#include <util/algorithm.h>
 
 #include "progressdialogs/refactoringdialog.h"
 #include <debug.h>
@@ -332,9 +333,10 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
         const auto declarations = collector->declarations();
         for (const IndexedDeclaration decl : declarations) {
             uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(decl.data(), false);
-            if (hadIndices.contains(usedDeclarationIndex))
+            if (!Algorithm::insert(hadIndices, usedDeclarationIndex).inserted) {
                 continue;
-            hadIndices.insert(usedDeclarationIndex);
+            }
+
             DocumentChangeSet::ChangeResult result = applyChanges(originalName, replacementName, changes,
                                                                   collected.data(), usedDeclarationIndex);
             if (!result) {

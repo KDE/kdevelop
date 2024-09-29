@@ -6,6 +6,7 @@
 
 #include "test_algorithm.h"
 
+#include "../../tests/testhelpermacros.h"
 #include "../algorithm.h"
 
 #include <QSet>
@@ -17,6 +18,29 @@
 #include <vector>
 
 QTEST_MAIN(TestAlgorithm)
+
+namespace {
+template<typename T>
+void verifyInsert(QSet<T>& set, const T& value, bool existing)
+{
+    const auto result = Algorithm::insert(set, value);
+    QCOMPARE(*result.iterator, value);
+    QCOMPARE(result.inserted, !existing);
+}
+
+#define VERIFY_INSERT_NEW(set, value)                                                                                  \
+    do {                                                                                                               \
+        verifyInsert(set, value, false);                                                                               \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
+
+#define VERIFY_INSERT_EXISTING(set, value)                                                                             \
+    do {                                                                                                               \
+        verifyInsert(set, value, true);                                                                                \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
+
+} // unnamed namespace
 
 TestAlgorithm::TestAlgorithm(QObject* parent)
     : QObject(parent)
@@ -48,6 +72,25 @@ void TestAlgorithm::testUnite5Int()
 
     const auto setUnion = Algorithm::unite(std::move(sets));
     QCOMPARE(setUnion, expected);
+}
+
+void TestAlgorithm::testInsert()
+{
+    QSet<int> set{5};
+    VERIFY_INSERT_NEW(set, 4);
+    VERIFY_INSERT_EXISTING(set, 5);
+    VERIFY_INSERT_NEW(set, 7);
+    VERIFY_INSERT_EXISTING(set, 7);
+    VERIFY_INSERT_EXISTING(set, 4);
+    set.remove(5);
+    VERIFY_INSERT_NEW(set, 5);
+    set.remove(4);
+    VERIFY_INSERT_NEW(set, 4);
+    VERIFY_INSERT_EXISTING(set, 4);
+    VERIFY_INSERT_NEW(set, 0);
+
+    const QSet expected{5, 7, 4, 0};
+    QCOMPARE(set, expected);
 }
 
 #include "moc_test_algorithm.cpp"

@@ -7,6 +7,8 @@
 #include "controlflowgraph.h"
 #include "controlflownode.h"
 
+#include <util/algorithm.h>
+
 using namespace KDevelop;
 
 class KDevelop::ControlFlowGraphPrivate
@@ -51,10 +53,9 @@ void ControlFlowGraph::addDeadNode(ControlFlowNode* n)
 
 void clearNodeRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& deleted)
 {
-    if (!node || deleted.contains(node))
+    if (!node || !Algorithm::insert(deleted, node).inserted) {
         return;
-
-    deleted += node;
+    }
 
     clearNodeRecursively(node->next(), deleted);
     clearNodeRecursively(node->alternative(), deleted);

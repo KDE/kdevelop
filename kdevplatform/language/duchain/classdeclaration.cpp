@@ -7,11 +7,14 @@
 
 #include "classdeclaration.h"
 #include "identifier.h"
+#include "types/structuretype.h"
+
+#include <debug.h>
+
 #include <language/duchain/declaration.h>
 #include <language/duchain/appendedlist.h>
 #include <language/duchain/duchainregister.h>
-#include "types/structuretype.h"
-#include <debug.h>
+#include <util/algorithm.h>
 
 namespace KDevelop {
 DEFINE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
@@ -84,9 +87,9 @@ bool isPublicBaseClassInternal(const ClassDeclaration* self, ClassDeclaration* b
                                int* baseConversionLevels, int depth, QSet<const ClassDeclaration*>* checked)
 {
     if (checked) {
-        if (checked->contains(self))
+        if (!Algorithm::insert(*checked, self).inserted) {
             return false;
-        checked->insert(self);
+        }
     } else if (depth > 3) {
         //Too much depth, to prevent endless recursion, we control the recursion using the 'checked' set
         QSet<const ClassDeclaration*> checkedSet;

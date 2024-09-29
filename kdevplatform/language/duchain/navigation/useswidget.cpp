@@ -28,6 +28,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/codegen/coderepresentation.h>
 #include <interfaces/iproject.h>
+#include <util/algorithm.h>
 #include <util/foregroundlock.h>
 
 using namespace KDevelop;
@@ -427,10 +428,9 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, const QList
 
         for (const IndexedDeclaration usedDeclaration : usedDeclarations) {
             int usedDeclarationIndex = ctx->topContext()->indexForUsedDeclaration(usedDeclaration.data(), false);
-            if (hadIndices.contains(usedDeclarationIndex))
+            if (!Algorithm::insert(hadIndices, usedDeclarationIndex).inserted) {
                 continue;
-
-            hadIndices.insert(usedDeclarationIndex);
+            }
 
             if (usedDeclarationIndex != std::numeric_limits<int>::max()) {
                 const auto useWidgets = createUseWidgets(code, usedDeclarationIndex, usedDeclaration, ctx);
