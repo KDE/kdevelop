@@ -868,7 +868,6 @@ public:
 
         //Unload all top-contexts that don't have a reference-count and that are not imported by a referenced one
 
-        QSet<IndexedString> unloadedNames;
         bool unloadedOne = true;
 
         bool unloadAllUnreferenced = !retries;
@@ -911,7 +910,6 @@ unloadContexts:
                 if (isImportedByLoaded && !unloadAllUnreferenced)
                     continue;
 
-                unloadedNames.insert(unload->url());
                 //Since we've released the write-lock in between, we've got to call store() again to be sure that none of the data is dynamic
                 //If nothing has changed, it is only a low-cost call.
                 unload->m_dynamicData->store();
