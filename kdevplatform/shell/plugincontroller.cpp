@@ -69,6 +69,18 @@ inline QStringList DisabledLSPLanguages() {
     };
 }
 
+namespace {
+void configureKTextEditorPlugin(KTextEditor::Plugin* plugin)
+{
+    const auto pluginName = plugin->metaObject()->className();
+    qCDebug(SHELL) << "configuring KTextEditor plugin: " << pluginName;
+    if (QLatin1String(pluginName) == QLatin1String("LSPClientPlugin")) {
+        if (!qEnvironmentVariableIsSet("KDEV_ALLOW_ALL_LSP_SERVERS"))
+            plugin->setProperty("disabledLanguages", DisabledLSPLanguages());
+    }
+}
+}
+
 bool isUserSelectable( const KPluginMetaData& info )
 {
     QString loadMode = info.value(KEY_LoadMode());
@@ -638,17 +650,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     emit pluginLoaded( plugin );
 
     return plugin;
-}
-
-void PluginController::configureKTextEditorPlugin(KTextEditor::Plugin* plugin)
-{
-    auto const pluginName = plugin->metaObject()->className();
-    qCDebug(SHELL) << "configuring KTextEditor plugin: " << pluginName;
-    if (QLatin1String(pluginName) == QLatin1String("LSPClientPlugin"))
-    {
-        if (!qEnvironmentVariableIsSet("KDEV_ALLOW_ALL_LSP_SERVERS"))
-            plugin->setProperty("disabledLanguages", DisabledLSPLanguages());
-    }
 }
 
 IPlugin* PluginController::plugin(const QString& pluginId) const

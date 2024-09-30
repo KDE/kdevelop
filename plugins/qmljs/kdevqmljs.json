@@ -31,7 +31,7 @@
         "Description[x-test]": "xxQML/JS language support (based on qmljs from QtCreator)xx",
         "Description[zh_CN]": "QML/JS 语言支持 (基于 QtCreator 的 qmljs)",
         "Description[zh_TW]": "QML/JS 語言支援（基於來自 QtCreator 的 qmljs）",
-        "EnabledByDefault": false,
+        "EnabledByDefault": true,
         "Icon": "text-x-qml",
         "Id": "kdevqmljs",
         "License": "GPL",

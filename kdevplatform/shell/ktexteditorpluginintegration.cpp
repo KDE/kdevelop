@@ -16,13 +16,13 @@
 #include <KTextEditor/Editor>
 #include <KTextEditor/Application>
 
+#include <outputview/outputdelegate.h>
+#include <outputview/outputjob.h>
+#include <outputview/outputmodel.h>
 #include <sublime/area.h>
 #include <sublime/container.h>
 #include <sublime/view.h>
 #include <sublime/viewbarcontainer.h>
-#include <outputview/outputjob.h>
-#include <outputview/outputmodel.h>
-#include <outputview/outputdelegate.h>
 
 #include <shell/editorconfigpage.h>
 
@@ -91,7 +91,7 @@ class ToolViewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ToolViewWidget(QWidget* parent = nullptr)
+    explicit ToolViewWidget(QWidget* parent = nullptr)
         : QWidget(parent)
     {
     }
@@ -291,44 +291,33 @@ public:
     {
         setStandardToolView(IOutputView::StandardToolView::Messages);
         setVerbosity(OutputJob::Silent);
-        if (!qobject_cast<OutputModel*>(model()))
-        {
-            setModel(new OutputModel);
-            setDelegate(new OutputDelegate);
-        }
+        setModel(new OutputModel);
+        setDelegate(new OutputDelegate);
     }
 
-    void postMessages(std::vector<QVariantMap> const& messages)
+    void postMessage(QVariantMap const& message)
     {
         auto const KeyCategory = QLatin1String("category");
         auto const KeyText = QLatin1String("text");
-        for (auto const& message : messages) {
-            for (auto const& messageLine: message[KeyText].toString().split(QLatin1String("\n"))) {
-                auto const line =
-                    QLatin1String("%1: %2").arg(message[KeyCategory].toString()).arg(messageLine);
-                static_cast<OutputModel*>(model())->appendLine(line);
-            }
+        for (auto const& messageLine: message[KeyText].toString().split(QLatin1String("\n"))) {
+            auto const line =
+                QLatin1String("%1: %2").arg(message[KeyCategory].toString()).arg(messageLine);
+            static_cast<OutputModel*>(model())->appendLine(line);
         }
+        emitResult();
     }
 
     void start() override
     {
         startOutput();
     }
-
-private:
-    std::vector<QVariantMap> m_messages;
 };
 
-void MainWindow::showMessage(QVariantMap message)
+void MainWindow::showMessage(const QVariantMap& message)
 {
-    qCInfo(SHELL) << "received message:" << message;
-    if (!m_showMessagesOutputJob)
-    {
-        m_showMessagesOutputJob = std::make_shared<ShowMessagesJob>();
-        m_showMessagesOutputJob->start();
-    }
-    m_showMessagesOutputJob->postMessages({message});
+    auto* job = new ShowMessagesJob ();
+    job->start();
+    job->postMessage({message});
 }
 
 QWidget *MainWindow::createToolView(KTextEditor::Plugin* plugin, const QString &identifier,

@@ -10,10 +10,25 @@
 #include <QVBoxLayout>
 
 #include <KLocalizedString>
+#include <QVBoxLayout>
 
 #include <KTextEditor/Editor>
 
 using namespace KDevelop;
+
+KTextEditorConfigPageAdapter::KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent)
+    : ConfigPage(nullptr, nullptr, parent)
+    , m_page(page)
+{
+    page->setParent(this);
+
+    auto* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(page);
+    setLayout(layout);
+
+    connect(page, &KTextEditor::ConfigPage::changed, this, &ConfigPage::changed);
+}
 
 EditorConfigPage::EditorConfigPage(QWidget* parent)
     : ConfigPage(nullptr, nullptr, parent)
@@ -51,3 +66,5 @@ ConfigPage* EditorConfigPage::childPage(int number)
     }
     return nullptr;
 }
+
+#include "moc_editorconfigpage.cpp"

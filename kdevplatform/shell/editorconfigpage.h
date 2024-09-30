@@ -9,8 +9,6 @@
 
 #include <interfaces/configpage.h>
 
-#include <QVBoxLayout>
-
 namespace KDevelop {
 
 /**
@@ -41,21 +39,9 @@ class KTextEditorConfigPageAdapter : public ConfigPage
     Q_OBJECT
 
 public:
-    explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent = nullptr)
-        : ConfigPage(nullptr, nullptr, parent), m_page(page)
-    {
-        page->setParent(this);
+    explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent = nullptr);
 
-        auto* layout = new QVBoxLayout(this);
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->addWidget(page);
-        setLayout(layout);
-
-        connect(page, &KTextEditor::ConfigPage::changed,
-                this, &ConfigPage::changed);
-    }
-
-    ~KTextEditorConfigPageAdapter() override {}
+    ~KTextEditorConfigPageAdapter() override = default;
 
     QString name() const override
     {

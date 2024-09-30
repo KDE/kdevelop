@@ -87,7 +87,7 @@ public Q_SLOTS:
     KTextEditor::View *openUrl(const QUrl &url, const QString &encoding = QString());
     bool showToolView(QWidget *widget);
 
-    void showMessage(QVariantMap);
+    void showMessage(const QVariantMap&);
 
 public:
     KTextEditor::MainWindow *interface() const;
@@ -100,7 +100,6 @@ private:
     KTextEditor::MainWindow *m_interface;
     QHash<QString, QPointer<QObject>> m_pluginViews;
     QHash<KTextEditor::View*, QWidget*> m_viewBars;
-    std::shared_ptr<ShowMessagesJob> m_showMessagesOutputJob;
 };
 
 class Plugin : public KDevelop::IPlugin
