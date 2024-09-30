@@ -646,7 +646,8 @@ void PluginController::configureKTextEditorPlugin(KTextEditor::Plugin* plugin)
     qCDebug(SHELL) << "configuring KTextEditor plugin: " << pluginName;
     if (QLatin1String(pluginName) == QLatin1String("LSPClientPlugin"))
     {
-        plugin->setProperty("disabledLanguages", DisabledLSPLanguages());
+        if (!qEnvironmentVariableIsSet("KDEV_ALLOW_ALL_LSP_SERVERS"))
+            plugin->setProperty("disabledLanguages", DisabledLSPLanguages());
     }
 }
 
