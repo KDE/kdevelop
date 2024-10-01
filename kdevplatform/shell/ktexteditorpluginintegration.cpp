@@ -299,12 +299,13 @@ public:
     {
         auto const KeyCategory = QLatin1String("category");
         auto const KeyText = QLatin1String("text");
-        for (auto const& messageLine: message[KeyText].toString().split(QLatin1String("\n"))) {
-            auto const line =
-                QLatin1String("%1: %2").arg(message[KeyCategory].toString()).arg(messageLine);
+
+        auto const category = message[KeyCategory].toString();
+        auto const lines = QStringTokenizer(message[KeyText].toString(), QLatin1String("\n"));
+        for (auto const& messageLine: lines) {
+            auto const line = QLatin1String("%1: %2").arg(category, messageLine);
             static_cast<OutputModel*>(model())->appendLine(line);
         }
-        emitResult();
     }
 
     void start() override
@@ -315,9 +316,12 @@ public:
 
 void MainWindow::showMessage(const QVariantMap& message)
 {
-    auto* job = new ShowMessagesJob ();
-    job->start();
-    job->postMessage({message});
+    if (!m_showMessageOutputJob)
+    {
+        m_showMessageOutputJob = std::make_unique<ShowMessagesJob> ();
+        m_showMessageOutputJob->start();
+    }
+    m_showMessageOutputJob->postMessage(message);
 }
 
 QWidget *MainWindow::createToolView(KTextEditor::Plugin* plugin, const QString &identifier,

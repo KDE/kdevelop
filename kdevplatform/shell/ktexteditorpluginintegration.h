@@ -51,6 +51,8 @@ public Q_SLOTS:
     bool quit() const;
 };
 
+class ShowMessagesJob;
+
 class MainWindow : public QObject
 {
     Q_OBJECT
@@ -100,6 +102,7 @@ private:
     KTextEditor::MainWindow *m_interface;
     QHash<QString, QPointer<QObject>> m_pluginViews;
     QHash<KTextEditor::View*, QWidget*> m_viewBars;
+    std::unique_ptr<ShowMessagesJob> m_showMessageOutputJob;
 };
 
 class Plugin : public KDevelop::IPlugin
