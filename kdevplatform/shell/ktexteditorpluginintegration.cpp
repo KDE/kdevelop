@@ -281,8 +281,6 @@ MainWindow::MainWindow(KDevelop::MainWindow *mainWindow)
     });
 }
 
-MainWindow::~MainWindow() = default;
-
 class ShowMessagesJob : public OutputJob
 {
 public:
@@ -314,12 +312,19 @@ public:
     }
 };
 
+MainWindow::~MainWindow()
+{
+    if (m_showMessageOutputJob)
+        m_showMessageOutputJob->kill();
+}
+
 void MainWindow::showMessage(const QVariantMap& message)
 {
     if (!m_showMessageOutputJob)
     {
         m_showMessageOutputJob = std::make_unique<ShowMessagesJob> ();
         m_showMessageOutputJob->start();
+        m_showMessageOutputJob->setAutoDelete (false);
     }
     m_showMessageOutputJob->postMessage(message);
 }
