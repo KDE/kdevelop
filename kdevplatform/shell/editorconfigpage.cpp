@@ -7,9 +7,9 @@
 #include "editorconfigpage.h"
 
 #include <QIcon>
+#include <QVBoxLayout>
 
 #include <KLocalizedString>
-#include <QVBoxLayout>
 
 #include <KTextEditor/Editor>
 

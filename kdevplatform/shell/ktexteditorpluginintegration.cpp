@@ -6,10 +6,10 @@
 
 #include "ktexteditorpluginintegration.h"
 
+#include <QChildEvent>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QStackedLayout>
-#include <QChildEvent>
 
 #include <KParts/MainWindow>
 #include <KTextEditor/View>
@@ -19,15 +19,13 @@
 #include <outputview/outputdelegate.h>
 #include <outputview/outputjob.h>
 #include <outputview/outputmodel.h>
+#include <shell/editorconfigpage.h>
 #include <sublime/area.h>
 #include <sublime/container.h>
 #include <sublime/view.h>
 #include <sublime/viewbarcontainer.h>
 
-#include <shell/editorconfigpage.h>
-
 #include "core.h"
-#include "debug.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "plugincontroller.h"
@@ -99,9 +97,11 @@ public:
 protected:
     void childEvent(QChildEvent* ev) override
     {
-        // copied kate's behaviour
+        // copied Kate's behaviour
+
+        // set the widget to be focus proxy if possible
         if (ev->type() == QEvent::ChildAdded) {
-            if (QWidget* widget = qobject_cast<QWidget*>(ev->child())) {
+            if (auto* const widget = qobject_cast<QWidget*>(ev->child())) {
                 setFocusProxy(widget);
                 layout()->addWidget(widget);
             }
@@ -281,6 +281,8 @@ MainWindow::MainWindow(KDevelop::MainWindow *mainWindow)
     });
 }
 
+MainWindow::~MainWindow() = default;
+
 class ShowMessagesJob : public OutputJob
 {
 public:
@@ -293,15 +295,15 @@ public:
         setDelegate(new OutputDelegate);
     }
 
-    void postMessage(QVariantMap const& message)
+    void postMessage(const QVariantMap& message)
     {
-        auto const KeyCategory = QLatin1String("category");
-        auto const KeyText = QLatin1String("text");
+        const auto KeyCategory = QStringLiteral("category");
+        const auto KeyText = QStringLiteral("text");
 
-        auto const category = message[KeyCategory].toString();
-        auto const lines = QStringTokenizer(message[KeyText].toString(), QLatin1String("\n"));
-        for (auto const& messageLine: lines) {
-            auto const line = QLatin1String("%1: %2").arg(category, messageLine);
+        const auto category = message[KeyCategory].toString();
+        const auto messageLines = QStringTokenizer(message[KeyText].toString(), QLatin1String("\n"));
+        for (const auto& messageLine : messageLines) {
+            const auto line = QLatin1String("%1: %2").arg(category, messageLine);
             static_cast<OutputModel*>(model())->appendLine(line);
         }
     }
@@ -311,12 +313,6 @@ public:
         startOutput();
     }
 };
-
-MainWindow::~MainWindow()
-{
-    if (m_showMessageOutputJob)
-        m_showMessageOutputJob->kill();
-}
 
 void MainWindow::showMessage(const QVariantMap& message)
 {

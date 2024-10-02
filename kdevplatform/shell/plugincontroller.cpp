@@ -60,7 +60,8 @@ inline QString KEY_Gui() { return QStringLiteral("GUI"); }
 inline QString KEY_AlwaysOn() { return QStringLiteral("AlwaysOn"); }
 inline QString KEY_UserSelectable() { return QStringLiteral("UserSelectable"); }
 
-inline QStringList DisabledLSPLanguages() {
+/// Dedicated DUChain-based KDevelop plugins support these languages much better than Kate's LSP Client plugin.
+inline QStringList DisabledLspLanguages() {
     return {
         QStringLiteral("c"),
         QStringLiteral("cpp"),
@@ -69,16 +70,13 @@ inline QStringList DisabledLSPLanguages() {
     };
 }
 
-namespace {
-void configureKTextEditorPlugin(KTextEditor::Plugin* plugin)
+void configureKTextEditorPlugin(const QString& pluginId, KTextEditor::Plugin* plugin)
 {
-    const auto pluginName = plugin->metaObject()->className();
-    qCDebug(SHELL) << "configuring KTextEditor plugin: " << pluginName;
-    if (QLatin1String(pluginName) == QLatin1String("LSPClientPlugin")) {
+    qCDebug(SHELL) << "configuring KTextEditor plugin:" << pluginId;
+    if (pluginId == QLatin1String("lspclientplugin")) {
         if (!qEnvironmentVariableIsSet("KDEV_ALLOW_ALL_LSP_SERVERS"))
-            plugin->setProperty("disabledLanguages", DisabledLSPLanguages());
+            plugin->setProperty("disabledLanguages", DisabledLspLanguages());
     }
-}
 }
 
 bool isUserSelectable( const KPluginMetaData& info )
@@ -622,7 +620,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     auto plugin = factory.plugin->create<IPlugin>(d->core);
     if (!plugin) {
         if (auto katePlugin = factory.plugin->create<KTextEditor::Plugin>(d->core, QVariantList() << info.pluginId())) {
-            configureKTextEditorPlugin(katePlugin);
+            configureKTextEditorPlugin(info.pluginId(), katePlugin);
             plugin = new KTextEditorIntegration::Plugin(katePlugin, d->core, info);
         } else {
             qCWarning(SHELL) << "Creating plugin" << pluginId << "failed.";
@@ -651,6 +649,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
     return plugin;
 }
+
 
 IPlugin* PluginController::plugin(const QString& pluginId) const
 {

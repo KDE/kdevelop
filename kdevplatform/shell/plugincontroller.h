@@ -16,10 +16,6 @@
 
 #include "shellexport.h"
 
-namespace KTextEditor
-{
-class Plugin;
-}
 
 namespace KDevelop
 {

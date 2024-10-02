@@ -16,6 +16,8 @@
 
 #include <interfaces/iplugin.h>
 
+#include <memory>
+
 namespace KDevelop {
 class ObjectListTracker;
 class MainWindow;
@@ -50,8 +52,6 @@ public Q_SLOTS:
 
     bool quit() const;
 };
-
-class ShowMessagesJob;
 
 class MainWindow : public QObject
 {
@@ -102,6 +102,8 @@ private:
     KTextEditor::MainWindow *m_interface;
     QHash<QString, QPointer<QObject>> m_pluginViews;
     QHash<KTextEditor::View*, QWidget*> m_viewBars;
+    /// This single, shared, never-finishing output job prevents
+    /// creating a new output each time a message arrives from KTextEditor.
     std::unique_ptr<ShowMessagesJob> m_showMessageOutputJob;
 };
 
@@ -116,10 +118,10 @@ public:
 
     void unload() override;
 
-    KTextEditor::Plugin *interface() const;
-
     KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
     int configPages() const override;
+
+    KTextEditor::Plugin *interface() const;
 
     QString pluginId() const;
 
