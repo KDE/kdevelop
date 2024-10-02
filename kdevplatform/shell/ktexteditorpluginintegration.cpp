@@ -698,7 +698,10 @@ KXMLGUIClient *Plugin::createGUIForMainWindow(Sublime::MainWindow* window)
 
 KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
 {
-    return new KTextEditorConfigPageAdapter(m_plugin->configPage(number, parent));
+    if (auto* const page = m_plugin->configPage(number, parent)) {
+        return new KTextEditorConfigPageAdapter(page, this, parent);
+    }
+    return nullptr;
 }
 
 int Plugin::configPages() const

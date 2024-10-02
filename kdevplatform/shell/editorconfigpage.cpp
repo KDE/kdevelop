@@ -15,8 +15,10 @@
 
 using namespace KDevelop;
 
-KTextEditorConfigPageAdapter::KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent)
-    : ConfigPage(nullptr, nullptr, parent), m_page(page)
+KTextEditorConfigPageAdapter::KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, IPlugin* plugin,
+                                                           QWidget* parent)
+    : ConfigPage(plugin, nullptr, parent)
+    , m_page(page)
 {
     page->setParent(this);
 
@@ -61,7 +63,7 @@ ConfigPage* EditorConfigPage::childPage(int number)
 {
     auto page = KTextEditor::Editor::instance()->configPage(number, this);
     if (page) {
-        return new KTextEditorConfigPageAdapter(page, this);
+        return new KTextEditorConfigPageAdapter(page, nullptr, this);
     }
     return nullptr;
 }
