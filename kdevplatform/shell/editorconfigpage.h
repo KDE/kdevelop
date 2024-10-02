@@ -39,7 +39,7 @@ class KTextEditorConfigPageAdapter : public ConfigPage
     Q_OBJECT
 
 public:
-    explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent = nullptr);
+    explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, IPlugin* plugin, QWidget* parent);
 
     ~KTextEditorConfigPageAdapter() override = default;
 
