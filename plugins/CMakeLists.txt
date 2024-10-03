@@ -34,7 +34,7 @@ add_subdirectory(customscript)
 # BEGIN: Languages
 ecm_optional_add_subdirectory(custom-definesandincludes)
 
-# TODO: port qmljs to Qt6 and add "qml" to the DisabledLspLanguages() list in plugincontroller.cpp.
+# TODO: port qmljs to Qt6 and add "qml" to the LspPlugin::disabledLanguages() list.
 #ecm_optional_add_subdirectory(qmljs)
 
 find_package(Clang CONFIG)
