@@ -143,7 +143,7 @@ QString MesonIntrospectJob::importMesonAPI(const BuildDir& buildDir, MesonIntros
     QString option = QStringLiteral("--") + typeStr;
     option.replace(QLatin1Char('_'), QLatin1Char('-'));
 
-    KProcess proc(this);
+    KProcess proc;
     proc.setWorkingDirectory(m_projectPath.toLocalFile());
     proc.setOutputChannelMode(KProcess::SeparateChannels);
     proc.setProgram(buildDir.mesonExecutable.toLocalFile());

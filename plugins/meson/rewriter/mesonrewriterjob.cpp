@@ -48,7 +48,7 @@ QString MesonRewriterJob::execute()
 
     Meson::BuildDir buildDir = Meson::currentBuildDir(m_project);
 
-    KProcess proc(this);
+    KProcess proc;
     proc.setWorkingDirectory(m_project->path().toLocalFile());
     proc.setOutputChannelMode(KProcess::SeparateChannels);
     proc.setProgram(buildDir.mesonExecutable.toLocalFile());
