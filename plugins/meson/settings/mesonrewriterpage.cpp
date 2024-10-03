@@ -41,7 +41,7 @@ public:
     ~JobDeleter()
     {
         for (KJob* i : m_jobs) {
-            delete i;
+            i->deleteLater();
         }
     }
 
