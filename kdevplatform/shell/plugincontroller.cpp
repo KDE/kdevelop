@@ -60,25 +60,6 @@ inline QString KEY_Gui() { return QStringLiteral("GUI"); }
 inline QString KEY_AlwaysOn() { return QStringLiteral("AlwaysOn"); }
 inline QString KEY_UserSelectable() { return QStringLiteral("UserSelectable"); }
 
-/// Dedicated DUChain-based KDevelop plugins support these languages much better than Kate's LSP Client plugin.
-inline QStringList DisabledLspLanguages() {
-    return {
-        QStringLiteral("c"),
-        QStringLiteral("cpp"),
-        QStringLiteral("python"),
-        QStringLiteral("php")
-    };
-}
-
-void configureKTextEditorPlugin(const QString& pluginId, KTextEditor::Plugin* plugin)
-{
-    qCDebug(SHELL) << "configuring KTextEditor plugin:" << pluginId;
-    if (pluginId == QLatin1String("lspclientplugin")) {
-        if (!qEnvironmentVariableIsSet("KDEV_ALLOW_ALL_LSP_SERVERS"))
-            plugin->setProperty("disabledLanguages", DisabledLspLanguages());
-    }
-}
-
 bool isUserSelectable( const KPluginMetaData& info )
 {
     QString loadMode = info.value(KEY_LoadMode());
@@ -620,7 +601,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     auto plugin = factory.plugin->create<IPlugin>(d->core);
     if (!plugin) {
         if (auto katePlugin = factory.plugin->create<KTextEditor::Plugin>(d->core, QVariantList() << info.pluginId())) {
-            configureKTextEditorPlugin(info.pluginId(), katePlugin);
             plugin = new KTextEditorIntegration::Plugin(katePlugin, d->core, info);
         } else {
             qCWarning(SHELL) << "Creating plugin" << pluginId << "failed.";
