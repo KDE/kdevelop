@@ -10,6 +10,8 @@
 
 #include <QChildEvent>
 #include <QFileInfo>
+#include <QLabel>
+#include <QtEnvironmentVariables>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -277,7 +279,76 @@ KeepAliveWidget::~KeepAliveWidget()
     }
 }
 
+namespace LspPlugin {
+/**
+ * the ID of the LSP Client plugin
+ */
+constexpr QLatin1String pluginId{"lspclientplugin"};
+
+/**
+ * @return the list of programming languages, for which the LSP Client plugin should be disabled
+ *
+ * Dedicated DUChain-based KDevelop plugins support these languages much better than Kate's LSP Client plugin.
+ */
+[[nodiscard]] const QStringList& disabledLanguages()
+{
+    static const QStringList languages{QStringLiteral("c"), QStringLiteral("cpp"), QStringLiteral("python"),
+                                       QStringLiteral("php")};
+    return languages;
 }
+
+constexpr QLatin1String allowAllEnvironmentVariableName{"KDEV_ALLOW_ALL_LSP_SERVERS"};
+
+/**
+ * @return whether disabledLanguages() should be ignored
+ */
+[[nodiscard]] bool allowAllLanguages()
+{
+    return qEnvironmentVariableIsSet(allowAllEnvironmentVariableName.data());
+}
+
+} // namespace LspPlugin
+
+void configureKTextEditorPlugin(const QString& pluginId, KTextEditor::Plugin* plugin)
+{
+    qCDebug(SHELL) << "configuring KTextEditor plugin" << pluginId;
+    Q_ASSERT(plugin);
+    if (pluginId == LspPlugin::pluginId) {
+        if (!LspPlugin::allowAllLanguages()) {
+            plugin->setProperty("disabledLanguages", LspPlugin::disabledLanguages());
+        }
+    }
+}
+
+void adjustPluginPageAdapter(const KPluginMetaData& pluginInfo, KTextEditorConfigPageAdapter& adapter)
+{
+    if (pluginInfo.pluginId() == LspPlugin::pluginId) {
+        const auto allowAll = LspPlugin::allowAllLanguages();
+        const auto noteText = i18nc(
+            "%1 - the plugin name; %2 - the list of disabled languages; %3 - the environment variable name; "
+            "%5 - whether the environment variable is currently set",
+            "The following languages are supported much better by dedicated KDevelop plugins, "
+            "and so are disabled in the %1 plugin to prevent conflicts: <var>%2</var>. "
+            "In order to compare the levels of support or work around severe bugs, "
+            "disable the dedicated KDevelop plugin(s) and set the environment variable "
+            "<var>%3</var> (<span style='color:%4'>%5</span>).",
+            // wrap in <var> to italicise the programming language names, but not the commas that separate them
+            pluginInfo.name(), LspPlugin::disabledLanguages().join(QLatin1String{"</var>, <var>"}),
+            LspPlugin::allowAllEnvironmentVariableName, allowAll ? QLatin1String{"red"} : QLatin1String{"green"},
+            allowAll ? i18nc("a certain environment variable is ...", "currently set")
+                     : i18nc("a certain environment variable is ...", "currently unset"));
+
+        auto* const noteLabel = new QLabel(noteText, &adapter);
+        // the Configure KDevelop dialog becomes much wider if the word wrap is not enabled
+        noteLabel->setWordWrap(true);
+        // separate the note visually from the base LSP Client page
+        noteLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+
+        adapter.layout()->addWidget(noteLabel);
+    }
+}
+
+} // unnamed namespace
 
 namespace KTextEditorIntegration {
 
@@ -665,6 +736,7 @@ Plugin::Plugin(KTextEditor::Plugin* plugin, QObject* parent, const KPluginMetaDa
     , m_plugin(plugin)
     , m_tracker(new ObjectListTracker(ObjectListTracker::CleanupWhenDone, this))
 {
+    configureKTextEditorPlugin(metaData.pluginId(), plugin);
 }
 
 Plugin::~Plugin() = default;
@@ -699,7 +771,9 @@ KXMLGUIClient *Plugin::createGUIForMainWindow(Sublime::MainWindow* window)
 KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
 {
     if (auto* const page = m_plugin->configPage(number, parent)) {
-        return new KTextEditorConfigPageAdapter(page, this, parent);
+        auto* const adapter = new KTextEditorConfigPageAdapter(page, this, parent);
+        adjustPluginPageAdapter(Core::self()->pluginController()->pluginInfo(this), *adapter);
+        return adapter;
     }
     return nullptr;
 }
