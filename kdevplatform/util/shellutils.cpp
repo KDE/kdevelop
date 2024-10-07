@@ -5,11 +5,7 @@
 */
 
 #include "shellutils.h"
-#include <QGuiApplication>
-#include <QTextStream>
-#include <QUrl>
-#include <QFile>
-#include <QList>
+
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 
@@ -17,6 +13,12 @@
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
 #include <KParts/MainWindow>
+
+#include <QFile>
+#include <QGuiApplication>
+#include <QList>
+#include <QTextStream>
+#include <QUrl>
 
 namespace KDevelop {
 bool askUser(const QString& mainText,
