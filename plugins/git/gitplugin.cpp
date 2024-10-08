@@ -471,12 +471,11 @@ KDevelop::VcsJob * GitPlugin::apply(const KDevelop::VcsDiff& diff, const ApplyPa
         *job << "--index";   // Applies the diff also to the index
         *job << "--cached";  // Does not touch the work tree
     }
-    auto* diffFile = new QTemporaryFile(this);
+    auto* const diffFile = new QTemporaryFile(job);
     if (diffFile->open()) {
         *job << diffFile->fileName();
         diffFile->write(diff.diff().toUtf8());
         diffFile->close();
-        connect(job, &KDevelop::VcsJob::resultsReady, [=](){delete diffFile;});
     } else {
         job->cancel();
         delete diffFile;
