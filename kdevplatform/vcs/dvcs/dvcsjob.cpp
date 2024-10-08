@@ -343,6 +343,9 @@ bool DVcsJob::doKill()
         return true;
     }
 
+    // Do not handle the process's results possibly affected by its termination below.
+    d->childproc->disconnect(this);
+
     static const int terminateKillTimeout = 1000; // ms
     d->childproc->terminate();
     bool terminated = d->childproc->waitForFinished( terminateKillTimeout );
