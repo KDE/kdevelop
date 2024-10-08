@@ -161,7 +161,10 @@ void VcsEventLogModel::fetchMore(const QModelIndex& parent)
     Q_ASSERT(!parent.isValid());
     Q_UNUSED(parent);
     VcsJob* job = d->m_iface->log(d->m_url, d->m_rev, qMax(rowCount(), 100));
-    connect(this, &VcsEventLogModel::destroyed, job, [job] { job->kill(); });
+    connect(this, &VcsEventLogModel::destroyed, job, [this, job] {
+        job->disconnect(this); // ~VcsEventLogModel() has returned => cannot invoke jobReceivedResults()
+        job->kill();
+    });
     connect(job, &VcsJob::finished, this, &VcsEventLogModel::jobReceivedResults);
     ICore::self()->runController()->registerJob( job );
 }
