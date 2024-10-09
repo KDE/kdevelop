@@ -11,12 +11,15 @@
 
 #include "plugincontroller.h"
 
+#include <kdevelop_version.h>
+
 #include <algorithm>
 
 #include <QElapsedTimer>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMap>
+#include <QVersionNumber>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -299,7 +302,18 @@ public:
                     return true;
                 }
 #endif
-                return data.value(QStringLiteral("LoadInKDevelop"), false);
+                const auto loadInKDevelop = data.value(QStringLiteral("LoadInKDevelop"), QString{});
+                if (loadInKDevelop.isEmpty()) {
+                    return false;
+                }
+                // "true" means "any version" to ensure compatibility between newer Kate versions
+                // and older KDevelop versions, which expect a boolean LoadInKDevelop value.
+                if (loadInKDevelop == QLatin1String{"true"}) {
+                    return true;
+                }
+                const auto minKDevelopVersion = QVersionNumber::fromString(loadInKDevelop);
+                return !minKDevelopVersion.isNull()
+                    && QVersionNumber(KDEVELOP_VERSION_MAJOR, KDEVELOP_VERSION_MINOR) >= minKDevelopVersion;
             });
 
         qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << pluginIds(ktePlugins);
