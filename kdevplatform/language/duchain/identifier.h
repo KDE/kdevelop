@@ -13,8 +13,6 @@
 #include <QStringList>
 #include <QStringView>
 
-#include <util/kdevvarlengtharray.h>
-
 #include <language/languageexport.h>
 #include <serialization/referencecounting.h>
 
