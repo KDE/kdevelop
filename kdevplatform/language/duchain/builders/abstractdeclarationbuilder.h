@@ -71,7 +71,7 @@ protected:
     }
 
     /**
-     * \copydoc openDeclaration
+     * \brief \copybrief openDeclaration(NameT*,T*,DeclarationFlags)
      *
      * \param id the identifier of the new declaration.
      * \param newRange the range which the identifier for the new declaration occupies.
@@ -95,7 +95,7 @@ protected:
         return openDeclaration<DeclarationT>(localId, newRange, flags);
     }
     /**
-     * \copydoc openDeclaration
+     * \brief \copybrief openDeclaration(NameT*,T*,DeclarationFlags)
      *
      * \param localId the identifier of the new declaration.
      * \param newRange the range which the identifier for the new declaration occupies.
