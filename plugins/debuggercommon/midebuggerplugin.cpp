@@ -26,7 +26,6 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KParts/MainWindow>
 #include <KStringHandler>
 

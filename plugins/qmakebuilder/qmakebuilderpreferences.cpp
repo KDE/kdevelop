@@ -12,7 +12,6 @@
 #include <KIO/DeleteJob>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KJobWidgets>
 
 #include "ui_qmakeconfig.h"

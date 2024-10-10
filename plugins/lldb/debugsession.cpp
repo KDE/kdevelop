@@ -28,7 +28,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KShell>
 
 #include <QApplication>

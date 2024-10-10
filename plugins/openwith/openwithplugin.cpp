@@ -17,7 +17,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KApplicationTrader>
 #include <KParts/MainWindow>
 #include <KParts/PartLoader>

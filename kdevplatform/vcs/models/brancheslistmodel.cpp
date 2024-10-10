@@ -20,7 +20,6 @@
 #include <QIcon>
 
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 
 using namespace std;

@@ -16,7 +16,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 

@@ -19,7 +19,6 @@
 #include <KColorScheme>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 

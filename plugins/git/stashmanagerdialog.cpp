@@ -20,7 +20,6 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KTextEditor/Document>
 
 using namespace KDevelop;
