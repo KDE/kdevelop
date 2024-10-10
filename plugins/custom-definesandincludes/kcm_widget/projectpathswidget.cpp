@@ -22,7 +22,6 @@
 #include <debug.h>
 
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 
 

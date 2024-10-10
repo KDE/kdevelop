@@ -17,7 +17,6 @@
 #include <KComboBox>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 
 #include <interfaces/launchconfigurationpage.h>
 #include <interfaces/iproject.h>

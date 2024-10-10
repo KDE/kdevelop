@@ -7,7 +7,6 @@
 #include "partdocument.h"
 
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 #include <KTextEditor/Cursor>
 

@@ -13,7 +13,6 @@
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KNSCore/Entry>
 #include <KNSWidgets/Button>
 

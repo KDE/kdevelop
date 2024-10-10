@@ -26,7 +26,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 
 using namespace KDevelop;
 namespace Config = KDevMI::GDB::Config;

@@ -27,7 +27,6 @@
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KProtocolInfo>
 #include <KRecentFilesAction>
 #include <KTextEditor/Document>

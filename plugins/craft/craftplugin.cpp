@@ -16,7 +16,6 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevCraftFactory, "kdevcraft.json", registerPlugin<CraftPlugin>();)
 

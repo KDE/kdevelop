@@ -13,7 +13,6 @@
 #include <QPointer>
 
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 
 #include <iplugin.h>

@@ -32,7 +32,6 @@
 #include <sublime/controller.h>
 // KF
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 #include <KTextEditor/Cursor>
 // Qt

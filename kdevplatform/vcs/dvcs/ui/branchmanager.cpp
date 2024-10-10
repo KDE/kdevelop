@@ -9,7 +9,6 @@
 #include <QInputDialog>
 
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 
 #include "../dvcsplugin.h"

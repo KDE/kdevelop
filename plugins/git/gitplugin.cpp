@@ -48,7 +48,6 @@
 #include <KIO/DeleteJob>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KTextEdit>
 #include <KTextEditor/Document>
 

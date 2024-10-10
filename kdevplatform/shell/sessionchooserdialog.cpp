@@ -18,7 +18,6 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 
 using namespace KDevelop;
 

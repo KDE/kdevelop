@@ -12,7 +12,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KParts/MainWindow>
 #include <KSharedConfig>
 

@@ -11,7 +11,6 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KJobWidgets>
 #include <KIO/DeleteJob>
 

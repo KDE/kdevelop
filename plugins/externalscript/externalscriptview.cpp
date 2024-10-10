@@ -17,7 +17,6 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 
 #include <util/scopeddialog.h>
 #include <util/wildcardhelpers.h>

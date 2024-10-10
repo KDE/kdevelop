@@ -20,7 +20,6 @@
 
 #include <KConfigGroup>
 #include <KMessageBox>
-#include <KMessageBox_KDevCompat>
 #include <KColorScheme>
 #include <KLocalizedString>
 
