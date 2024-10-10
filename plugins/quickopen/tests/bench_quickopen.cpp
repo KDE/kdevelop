@@ -286,8 +286,8 @@ void BenchQuickOpen::benchProjectFileFilter_files_data()
     }
 
     const FileCounts fileCounts{100, 5000, 800, 244, 5432, 0, 5, 2222};
-    QTest::addRow("%lld projects", fileCounts.size()) << fileCounts << false;
-    QTest::addRow("%lld projects and one open file", fileCounts.size()) << fileCounts << true;
+    QTest::addRow("%" PRIdQSIZETYPE " projects", fileCounts.size()) << fileCounts << false;
+    QTest::addRow("%" PRIdQSIZETYPE " projects and one open file", fileCounts.size()) << fileCounts << true;
 }
 
 void BenchQuickOpen::benchProjectFileFilter_fileRemovedFromSet_data()
