@@ -960,25 +960,6 @@ bool QualifiedIdentifier::beginsWith(const QualifiedIdentifier& other) const
     return true;
 }
 
-struct Visitor
-{
-    Visitor(KDevVarLengthArray<QualifiedIdentifier>& target, uint hash)
-        : target(target)
-        , hash(hash)
-    {
-    }
-
-    bool operator()(const ConstantQualifiedIdentifierPrivate* item, uint index) const
-    {
-        if (item->m_hash == hash)
-            target.append(QualifiedIdentifier(index));
-        return true;
-    }
-
-    KDevVarLengthArray<QualifiedIdentifier>& target;
-    const uint hash;
-};
-
 uint QualifiedIdentifier::hash() const
 {
     if (m_index)
