@@ -71,6 +71,10 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     d->breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->breakpointsView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->breakpointsView->setRootIsDecorated(false);
+    // PlaceholderItemProxyModel supports only flat models. Expanding the placeholder item
+    // triggers an assertion failure in PlaceholderItemProxyModel::rowCount(). Forbid expanding
+    // items to prevent it. None of the items has children, so expanding is useless anyway.
+    d->breakpointsView->setItemsExpandable(false);
 
     auto detailsContainer = new QGroupBox(i18n("Breakpoint Details"), this);
     auto detailsLayout = new QVBoxLayout(detailsContainer);
