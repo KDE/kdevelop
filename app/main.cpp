@@ -386,6 +386,9 @@ int main( int argc, char *argv[] )
                          i18n("Copyright 1999-%1, The KDevelop developers", QStringLiteral("2024")), QString(),
                          QStringLiteral("https://www.kdevelop.org/"));
     aboutData.setDesktopFileName(QStringLiteral("org.kde.kdevelop"));
+    aboutData.addAuthor(i18n("Igor Kushnir"),
+                        i18n("General maintenance, Bug fixing and prevention, Performance improvements"),
+                        QStringLiteral("igorkuo@gmail.com"));
     aboutData.addAuthor( i18n("Kevin Funk"), i18n( "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website" ), QStringLiteral("kfunk@kde.org") );
     aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Co-maintainer, AppImage, Python Support, User Interface improvements" ), QStringLiteral("svenbrauch@gmail.com") );
     aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "CMake Support, Run Support, Kross Support" ), QStringLiteral("aleixpol@kde.org") );
