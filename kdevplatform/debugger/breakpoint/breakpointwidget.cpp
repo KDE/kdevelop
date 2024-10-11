@@ -76,6 +76,16 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     // items to prevent it. None of the items has children, so expanding is useless anyway.
     d->breakpointsView->setItemsExpandable(false);
 
+    // Enable uniform row height tree view optimizations. The checkbox in the EnableColumn makes each
+    // non-placeholder row height noticeably greater than the placeholder row height. But the several-pixel
+    // vertical space waste for the single placeholder row is well justified by less CPU time spent on calculating
+    // row heights. The documentation for the QTreeView::uniformRowHeights property even spells out the
+    // implementation details: "The height is obtained from the first item in the view. It is updated when the data
+    // changes on that item." These documentation guarantees are perfect for breakpointsView: if there is only a
+    // single placeholder item in the tree, its row height is used as the row height; when a non-placeholder item
+    // is added, the data changes and the greater non-placeholder first row height becomes used as the row height.
+    d->breakpointsView->setUniformRowHeights(true);
+
     auto detailsContainer = new QGroupBox(i18n("Breakpoint Details"), this);
     auto detailsLayout = new QVBoxLayout(detailsContainer);
     d->details = new BreakpointDetails(detailsContainer);
