@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2024-08-18 00:59+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -2747,19 +2747,19 @@ msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
 msgstr "Impedir que se pueda ocultar el panel"
 
-#: shell/openprojectdialog.cpp:124
+#: shell/openprojectdialog.cpp:132
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
 msgstr "Todos los archivos de proyectos"
 
-#: shell/openprojectdialog.cpp:133
+#: shell/openprojectdialog.cpp:141
 #, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "Seleccione el origen"
 
-#: shell/openprojectdialog.cpp:141
+#: shell/openprojectdialog.cpp:149
 #, kde-format
 msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
@@ -2768,29 +2768,29 @@ msgstr ""
 "Seleccione un archivo de configuración de un sistema de construcción, un "
 "proyecto de KDevelop existente o cualquier carpeta para abrir como proyecto"
 
-#: shell/openprojectdialog.cpp:148 shell/openprojectdialog.cpp:168
+#: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Abrir proyecto"
 
-#: shell/openprojectdialog.cpp:156
+#: shell/openprojectdialog.cpp:165
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Información del proyecto"
 
-#: shell/openprojectdialog.cpp:219
+#: shell/openprojectdialog.cpp:228
 #, kde-format
 msgid "Open \"%1\" as project"
 msgstr "Abrir «%1» como proyecto"
 
-#: shell/openprojectdialog.cpp:223
+#: shell/openprojectdialog.cpp:232
 #, kde-format
 msgid "Selected URL is invalid"
 msgstr "El URL seleccionado no es válido"
 
-#: shell/openprojectdialog.cpp:268
+#: shell/openprojectdialog.cpp:277
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
@@ -5591,7 +5591,7 @@ msgstr "Tarea interrumpida"
 msgid "Run all tests in %1"
 msgstr "Ejecutar todas las pruebas en %1"
 
-#: util/shellutils.cpp:79
+#: util/shellutils.cpp:157
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5600,30 +5600,30 @@ msgstr ""
 "No tiene permiso de escritura para los siguientes archivos; ¿desea añadir "
 "permiso de escritura para el propietario antes de guardarlos?"
 
-#: util/shellutils.cpp:82
+#: util/shellutils.cpp:160
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Algunos archivos están protegidos contra escritura"
 
-#: util/shellutils.cpp:83
+#: util/shellutils.cpp:161
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Asignar permisos de escritura"
 
-#: util/shellutils.cpp:84
+#: util/shellutils.cpp:162
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: util/shellutils.cpp:96
+#: util/shellutils.cpp:174
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "No ha sido posible añadir permisos de escritura para algunos archivos."
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
@@ -5664,32 +5664,32 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Ramas..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:40
+#: vcs/dvcs/ui/branchmanager.cpp:41
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Gestor de ramas"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:115
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr ""
 "Debe seleccionar una rama base de la lista antes de crear una nueva rama."
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Nueva rama"
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Nombre de la nueva rama:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:124
+#: vcs/dvcs/ui/branchmanager.cpp:127
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5698,7 +5698,7 @@ msgstr ""
 "La rama «%1» ya existe.\n"
 "Elija otro nombre."
 
-#: vcs/dvcs/ui/branchmanager.cpp:138
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
@@ -5707,17 +5707,17 @@ msgstr ""
 "Está en la rama «%1».\n"
 "Para borrarla debe de cambiar a otra rama."
 
-#: vcs/dvcs/ui/branchmanager.cpp:145
+#: vcs/dvcs/ui/branchmanager.cpp:148
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "¿Seguro que quiere borrar irreversiblemente la rama «%1»?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
+#: vcs/dvcs/ui/branchmanager.cpp:168 vcs/dvcs/ui/branchmanager.cpp:247
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Ya está en la rama «%1»\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:186
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5726,28 +5726,28 @@ msgstr ""
 "La rama «%1» no existe.\n"
 "Elija otro nombre, por favor."
 
-#: vcs/dvcs/ui/branchmanager.cpp:194
+#: vcs/dvcs/ui/branchmanager.cpp:197
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr "Debe seleccionar una rama de la lista para fusionar en la actual."
 
-#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:235 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "No se puede crear un parche para la versión actual."
 
-#: vcs/dvcs/ui/branchmanager.cpp:267
+#: vcs/dvcs/ui/branchmanager.cpp:270
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "No se puede obtener la diferencia."
 
-#: vcs/dvcs/ui/branchmanager.cpp:274
+#: vcs/dvcs/ui/branchmanager.cpp:277
 #, kde-format
 msgid "There are no committed differences."
 msgstr "No hay diferencias enviadas."
 
-#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:278 vcs/vcspluginhelper.cpp:279
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
@@ -5998,90 +5998,90 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Revisión de origen"
 
-#: vcs/vcspluginhelper.cpp:82
+#: vcs/vcspluginhelper.cpp:83
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Enviar..."
 
-#: vcs/vcspluginhelper.cpp:83
+#: vcs/vcspluginhelper.cpp:84
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Actualizar"
 
-#: vcs/vcspluginhelper.cpp:84
+#: vcs/vcspluginhelper.cpp:85
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Añadir"
 
-#: vcs/vcspluginhelper.cpp:85
+#: vcs/vcspluginhelper.cpp:86
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "Mostrar diferencias..."
 
-#: vcs/vcspluginhelper.cpp:86
+#: vcs/vcspluginhelper.cpp:87
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Revertir"
 
-#: vcs/vcspluginhelper.cpp:87 vcs/vcspluginhelper.cpp:451
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Historia..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:89
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Anotación..."
 
-#: vcs/vcspluginhelper.cpp:89
+#: vcs/vcspluginhelper.cpp:90
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "Mostrar diferencias..."
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:91
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "Mostrar diferencias (todos los archivos)..."
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Incorporar"
 
-#: vcs/vcspluginhelper.cpp:92
+#: vcs/vcspluginhelper.cpp:93
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Extraer"
 
-#: vcs/vcspluginhelper.cpp:277
+#: vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgid "There are no differences."
 msgstr "No hay diferencias."
 
-#: vcs/vcspluginhelper.cpp:284
+#: vcs/vcspluginhelper.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "No se puede obtener la diferencia."
 
-#: vcs/vcspluginhelper.cpp:352
+#: vcs/vcspluginhelper.cpp:353
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "Historial de %2 (%1)"
 
-#: vcs/vcspluginhelper.cpp:415
+#: vcs/vcspluginhelper.cpp:417
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6090,7 +6090,7 @@ msgstr ""
 "No se pueden mostrar anotaciones: falta la interfaz KTextEditor::"
 "AnnotationInterface para el editor."
 
-#: vcs/vcspluginhelper.cpp:419
+#: vcs/vcspluginhelper.cpp:421
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6101,7 +6101,7 @@ msgstr ""
 "encontrado o no era un documento de texto:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:446 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

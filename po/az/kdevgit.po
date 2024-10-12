@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2021-12-27 18:39+0400\n"
 "Last-Translator: Kheyyam Gojayev <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -604,43 +604,43 @@ msgstr "Öncə dəyişiklikləri göndəriləcək layihəni seçin"
 msgid "Please stage some changes before committing."
 msgstr "Lütfən göndərmədən öncə bəzi dəyişiklikləri işarələyin."
 
-#: stashmanagerdialog.cpp:31
+#: stashmanagerdialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Reesterin idarəsi"
 
-#: stashmanagerdialog.cpp:118
+#: stashmanagerdialog.cpp:121
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "\"%1\" qeydini reesterdən silmək istədiyinizə əminsiniz?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:122 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "Ləğv edin"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Git reesteri qeydi"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "Yeni şöbə üçün ad:"
 
-#: stashmanagerdialog.cpp:149
+#: stashmanagerdialog.cpp:152
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr ""
 
-#: stashmanagerdialog.cpp:159
+#: stashmanagerdialog.cpp:162
 #, kde-format
 msgid "%1 created on %2"
 msgstr ""

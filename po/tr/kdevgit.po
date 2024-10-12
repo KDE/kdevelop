@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2024-03-22 16:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -602,43 +602,43 @@ msgstr "Değişiklikleri işlemek için önce bir proje seçin"
 msgid "Please stage some changes before committing."
 msgstr "İşlemeden önce değişiklikleri hazırlayın."
 
-#: stashmanagerdialog.cpp:31
+#: stashmanagerdialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Zula Yöneticisi"
 
-#: stashmanagerdialog.cpp:118
+#: stashmanagerdialog.cpp:121
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "'%1' zulasını bırakmak istediğinizden emin misiniz?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:122 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "Bırak"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Git Zulala"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "Yeni dal adı:"
 
-#: stashmanagerdialog.cpp:149
+#: stashmanagerdialog.cpp:152
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr "%1. %2: %3"
 
-#: stashmanagerdialog.cpp:159
+#: stashmanagerdialog.cpp:162
 #, kde-format
 msgid "%1 created on %2"
 msgstr "%1, %2 tarihinde oluşturuldu"

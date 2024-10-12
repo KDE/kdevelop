@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2023-07-23 20:37+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -597,43 +597,43 @@ msgstr "변경 사항을 커밋하려면 프로젝트를 선택하십시오"
 msgid "Please stage some changes before committing."
 msgstr "커밋하기 전에 변경 사항을 스테이지하십시오."
 
-#: stashmanagerdialog.cpp:31
+#: stashmanagerdialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "스태시 관리자"
 
-#: stashmanagerdialog.cpp:118
+#: stashmanagerdialog.cpp:121
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "스태시 '%1'을(를) 삭제하시겠습니까?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:122 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "삭제"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Git 스태시"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "새 브랜치 이름 입력:"
 
-#: stashmanagerdialog.cpp:149
+#: stashmanagerdialog.cpp:152
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr "%1. %2: %3"
 
-#: stashmanagerdialog.cpp:159
+#: stashmanagerdialog.cpp:162
 #, kde-format
 msgid "%1 created on %2"
 msgstr "%1(%2에 생성됨)"

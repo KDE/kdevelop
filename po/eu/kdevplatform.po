@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2024-08-17 11:45+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -2745,19 +2745,19 @@ msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
 msgstr "Blokeatu panela ezkutatu ez dezan"
 
-#: shell/openprojectdialog.cpp:124
+#: shell/openprojectdialog.cpp:132
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
 msgstr "Proiektuko fitxategi guztiak"
 
-#: shell/openprojectdialog.cpp:133
+#: shell/openprojectdialog.cpp:141
 #, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "Hautatu iturria"
 
-#: shell/openprojectdialog.cpp:141
+#: shell/openprojectdialog.cpp:149
 #, kde-format
 msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
@@ -2766,29 +2766,29 @@ msgstr ""
 "Hautatu eraiketa-sistemaren konfigurazio-fitxategia, existitzen den KDevelop "
 "proiektua, edo proiektu bezala irekitzeko edozein karpeta"
 
-#: shell/openprojectdialog.cpp:148 shell/openprojectdialog.cpp:168
+#: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Ireki proiektua"
 
-#: shell/openprojectdialog.cpp:156
+#: shell/openprojectdialog.cpp:165
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Proiektuaren informazioa"
 
-#: shell/openprojectdialog.cpp:219
+#: shell/openprojectdialog.cpp:228
 #, kde-format
 msgid "Open \"%1\" as project"
 msgstr "Ireki \"%1\" proiektu bezala"
 
-#: shell/openprojectdialog.cpp:223
+#: shell/openprojectdialog.cpp:232
 #, kde-format
 msgid "Selected URL is invalid"
 msgstr "Hautatutako URLa baliogabea da"
 
-#: shell/openprojectdialog.cpp:268
+#: shell/openprojectdialog.cpp:277
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
@@ -5575,7 +5575,7 @@ msgstr "Ataza bertan behera utzita"
 msgid "Run all tests in %1"
 msgstr "Exekutatu test guztiak %1(e)n"
 
-#: util/shellutils.cpp:79
+#: util/shellutils.cpp:157
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5584,30 +5584,30 @@ msgstr ""
 "Ez duzu idazteko baimenik hurrengo fitxategietan; gehitu idazteko baimenak "
 "jabearentzako gorde baino lehen?"
 
-#: util/shellutils.cpp:82
+#: util/shellutils.cpp:160
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Fitxategi batzuk idazketaren kontra babestuta daude"
 
-#: util/shellutils.cpp:83
+#: util/shellutils.cpp:161
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Ezarri idazteko baimenak"
 
-#: util/shellutils.cpp:84
+#: util/shellutils.cpp:162
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ezikusi"
 
-#: util/shellutils.cpp:96
+#: util/shellutils.cpp:174
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Fitxategi batzuetan idazteko baimenak gehitzeak huts egin du."
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
@@ -5648,13 +5648,13 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Adarrak..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:40
+#: vcs/dvcs/ui/branchmanager.cpp:41
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Adar-kudeatzailea"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:115
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
@@ -5662,19 +5662,19 @@ msgstr ""
 "Oinarrizko adar bat hautatu behar duzu zerrendatik adar berri bat sortu "
 "baino lehen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Adar berria."
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Adar berriaren izena:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:124
+#: vcs/dvcs/ui/branchmanager.cpp:127
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5683,7 +5683,7 @@ msgstr ""
 "\"%1\" adarra badago.\n"
 "Mesedez, hautatu beste izen bat."
 
-#: vcs/dvcs/ui/branchmanager.cpp:138
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
@@ -5692,17 +5692,17 @@ msgstr ""
 "Unean \"%1\" adarrean.\n"
 "Hura ezabatzeko, mesedez, aldatu beste adar batera."
 
-#: vcs/dvcs/ui/branchmanager.cpp:145
+#: vcs/dvcs/ui/branchmanager.cpp:148
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Ziur zaude '%1' adarra betirako ezabatu nahi duzula?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
+#: vcs/dvcs/ui/branchmanager.cpp:168 vcs/dvcs/ui/branchmanager.cpp:247
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "\"%1\" adarrean dagoeneko\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:186
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5711,29 +5711,29 @@ msgstr ""
 "\"%1\" adarra ez da existitzen.\n"
 "Mesedez, hautatu beste izen bat."
 
-#: vcs/dvcs/ui/branchmanager.cpp:194
+#: vcs/dvcs/ui/branchmanager.cpp:197
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr ""
 "Zure uneko adarrarekin konbinatzeko adarra hautatu behar duzu zerrendatik."
 
-#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:235 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Ezin izan da uneko bertsiorako adabakia sortu."
 
-#: vcs/dvcs/ui/branchmanager.cpp:267
+#: vcs/dvcs/ui/branchmanager.cpp:270
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Ezin izan da Diff-a bueltatu"
 
-#: vcs/dvcs/ui/branchmanager.cpp:274
+#: vcs/dvcs/ui/branchmanager.cpp:277
 #, kde-format
 msgid "There are no committed differences."
 msgstr "Ez dago berretsitako desberdintasunik."
 
-#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:278 vcs/vcspluginhelper.cpp:279
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
@@ -5984,90 +5984,90 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Iturri-berrikuspena"
 
-#: vcs/vcspluginhelper.cpp:82
+#: vcs/vcspluginhelper.cpp:83
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Berretsi..."
 
-#: vcs/vcspluginhelper.cpp:83
+#: vcs/vcspluginhelper.cpp:84
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Eguneratu"
 
-#: vcs/vcspluginhelper.cpp:84
+#: vcs/vcspluginhelper.cpp:85
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Gehitu"
 
-#: vcs/vcspluginhelper.cpp:85
+#: vcs/vcspluginhelper.cpp:86
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "Erakutsi desberdintasunak..."
 
-#: vcs/vcspluginhelper.cpp:86
+#: vcs/vcspluginhelper.cpp:87
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Leheneratu"
 
-#: vcs/vcspluginhelper.cpp:87 vcs/vcspluginhelper.cpp:451
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Historia..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:89
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Oharpena..."
 
-#: vcs/vcspluginhelper.cpp:89
+#: vcs/vcspluginhelper.cpp:90
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "Erakutsi diff..."
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:91
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "Erakutsi diff (fitxategi guztiak)..."
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Bultzatu"
 
-#: vcs/vcspluginhelper.cpp:92
+#: vcs/vcspluginhelper.cpp:93
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Tiratu"
 
-#: vcs/vcspluginhelper.cpp:277
+#: vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgid "There are no differences."
 msgstr "Ez dago desberdintasunik."
 
-#: vcs/vcspluginhelper.cpp:284
+#: vcs/vcspluginhelper.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Ezin izan dira desberdintasunak lortu"
 
-#: vcs/vcspluginhelper.cpp:352
+#: vcs/vcspluginhelper.cpp:353
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 historia (%1)"
 
-#: vcs/vcspluginhelper.cpp:415
+#: vcs/vcspluginhelper.cpp:417
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6076,7 +6076,7 @@ msgstr ""
 "Ezin dira oharpenak erakutsi, KTextEditor::AnnotationInterface interfazea "
 "falta da editorean."
 
-#: vcs/vcspluginhelper.cpp:419
+#: vcs/vcspluginhelper.cpp:421
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6087,7 +6087,7 @@ msgstr ""
 "zelako testu-dokumentu bat:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:446 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

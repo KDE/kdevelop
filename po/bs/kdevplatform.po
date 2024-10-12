@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -2932,21 +2932,21 @@ msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
 msgstr ""
 
-#: shell/openprojectdialog.cpp:124
+#: shell/openprojectdialog.cpp:132
 #, fuzzy, kde-format
 #| msgid "%1|All Project Files (%1)"
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
 msgstr "%1|Sve projektne datoteke (%1)"
 
-#: shell/openprojectdialog.cpp:133
+#: shell/openprojectdialog.cpp:141
 #, fuzzy, kde-format
 #| msgid "Select Source"
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "Izaberi izvor"
 
-#: shell/openprojectdialog.cpp:141
+#: shell/openprojectdialog.cpp:149
 #, kde-format
 msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
@@ -2955,33 +2955,33 @@ msgstr ""
 "Odaberite build sistem za instalaziju datoteke, postojeci KDevelop  projekt, "
 "ili bilo koji folder koji je otvoren ako projekt"
 
-#: shell/openprojectdialog.cpp:148 shell/openprojectdialog.cpp:168
+#: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
 #, fuzzy, kde-format
 #| msgid "Open Project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Otvori projekt"
 
-#: shell/openprojectdialog.cpp:156
+#: shell/openprojectdialog.cpp:165
 #, fuzzy, kde-format
 #| msgid "Project Information"
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Informacija o projektu"
 
-#: shell/openprojectdialog.cpp:219
+#: shell/openprojectdialog.cpp:228
 #, fuzzy, kde-format
 #| msgid "open %1 as project"
 msgid "Open \"%1\" as project"
 msgstr "otvori %1 kao projekt"
 
-#: shell/openprojectdialog.cpp:223
+#: shell/openprojectdialog.cpp:232
 #, fuzzy, kde-format
 #| msgid "Selected URL is invalid."
 msgid "Selected URL is invalid"
 msgstr "Odabrani URL je nevažeći"
 
-#: shell/openprojectdialog.cpp:268
+#: shell/openprojectdialog.cpp:277
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@item:inlistbox"
@@ -6020,20 +6020,20 @@ msgstr ""
 msgid "Run all tests in %1"
 msgstr "Pokreni sve testove u %1"
 
-#: util/shellutils.cpp:79
+#: util/shellutils.cpp:157
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
 
-#: util/shellutils.cpp:82
+#: util/shellutils.cpp:160
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr ""
 
-#: util/shellutils.cpp:83
+#: util/shellutils.cpp:161
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Start New Session"
@@ -6041,19 +6041,19 @@ msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Pokreni novu sesiju"
 
-#: util/shellutils.cpp:84
+#: util/shellutils.cpp:162
 #, fuzzy, kde-format
 #| msgid "Ignore"
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ignoriši"
 
-#: util/shellutils.cpp:96
+#: util/shellutils.cpp:174
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr ""
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
@@ -6094,34 +6094,34 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Grane..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:40
+#: vcs/dvcs/ui/branchmanager.cpp:41
 #, fuzzy, kde-format
 #| msgid "Branch Manager"
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Menadžer grana"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:115
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "Morate kreirati baznu granu iz liste prije kreiranja nove grane."
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Nova grana"
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, fuzzy, kde-format
 #| msgid "Name of the new branch:"
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Ime nove grane:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:124
+#: vcs/dvcs/ui/branchmanager.cpp:127
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -6130,7 +6130,7 @@ msgstr ""
 "Grana \"%1\" već postoji.\n"
 "Molim, odaberite drugo ime."
 
-#: vcs/dvcs/ui/branchmanager.cpp:138
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -6142,18 +6142,18 @@ msgstr ""
 "Trenutno na grani\"%1\".\n"
 "Da to uklonite, pređite na drugu grani"
 
-#: vcs/dvcs/ui/branchmanager.cpp:145
+#: vcs/dvcs/ui/branchmanager.cpp:148
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Jeste li sigurno da želite nepovratno ukloniti granu '%1'?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
+#: vcs/dvcs/ui/branchmanager.cpp:168 vcs/dvcs/ui/branchmanager.cpp:247
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Već u grani\"%1\"\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:186
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, fuzzy, kde-format
 #| msgid ""
 #| "Branch \"%1\" already exists.\n"
@@ -6165,32 +6165,32 @@ msgstr ""
 "Grana \"%1\" već postoji.\n"
 "Molim, odaberite drugo ime."
 
-#: vcs/dvcs/ui/branchmanager.cpp:194
+#: vcs/dvcs/ui/branchmanager.cpp:197
 #, fuzzy, kde-format
 #| msgid ""
 #| "You must select a base branch from the list before creating a new branch."
 msgid "You must select a branch to merge into current one from the list."
 msgstr "Morate kreirati baznu granu iz liste prije kreiranja nove grane."
 
-#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:235 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Ne mogu kreirati zakrpu za trenutnu verziju."
 
-#: vcs/dvcs/ui/branchmanager.cpp:267
+#: vcs/dvcs/ui/branchmanager.cpp:270
 #, fuzzy, kde-format
 #| msgid "Unable to get difference."
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Ne mogu dobaviti razliku"
 
-#: vcs/dvcs/ui/branchmanager.cpp:274
+#: vcs/dvcs/ui/branchmanager.cpp:277
 #, fuzzy, kde-format
 #| msgid "There are no differences."
 msgid "There are no committed differences."
 msgstr "Nema razlika"
 
-#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:278 vcs/vcspluginhelper.cpp:279
 #, fuzzy, kde-format
 #| msgid "VCS support"
 msgctxt "@title:window"
@@ -6478,96 +6478,96 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Revizija izvora"
 
-#: vcs/vcspluginhelper.cpp:82
+#: vcs/vcspluginhelper.cpp:83
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Upis..."
 
-#: vcs/vcspluginhelper.cpp:83
+#: vcs/vcspluginhelper.cpp:84
 #, fuzzy, kde-format
 #| msgid "Update"
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Ažuriraj"
 
-#: vcs/vcspluginhelper.cpp:84
+#: vcs/vcspluginhelper.cpp:85
 #, fuzzy, kde-format
 #| msgid "Add"
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Dodaj"
 
-#: vcs/vcspluginhelper.cpp:85
+#: vcs/vcspluginhelper.cpp:86
 #, fuzzy, kde-format
 #| msgid "Show Differences..."
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "Prikaži razlike..."
 
-#: vcs/vcspluginhelper.cpp:86
+#: vcs/vcspluginhelper.cpp:87
 #, fuzzy, kde-format
 #| msgid "Revert"
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Vrati"
 
-#: vcs/vcspluginhelper.cpp:87 vcs/vcspluginhelper.cpp:451
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
 #, fuzzy, kde-format
 #| msgid "History..."
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Historija..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:89
 #, fuzzy, kde-format
 #| msgid "Annotation..."
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Anotacija..."
 
-#: vcs/vcspluginhelper.cpp:89
+#: vcs/vcspluginhelper.cpp:90
 #, fuzzy, kde-format
 #| msgid "Show Diff..."
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "Prikaži razlike..."
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:91
 #, fuzzy, kde-format
 #| msgid "Show Diff (all files)..."
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "Prikaži razlike (sve datoteke)..."
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:92
 #, fuzzy, kde-format
 #| msgid "Push"
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Gurni"
 
-#: vcs/vcspluginhelper.cpp:92
+#: vcs/vcspluginhelper.cpp:93
 #, fuzzy, kde-format
 #| msgid "Pull"
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Povuci"
 
-#: vcs/vcspluginhelper.cpp:277
+#: vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgid "There are no differences."
 msgstr "Nema razlika"
 
-#: vcs/vcspluginhelper.cpp:284
+#: vcs/vcspluginhelper.cpp:285
 #, fuzzy, kde-format
 #| msgid "Unable to get difference."
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Ne mogu dobaviti razliku"
 
-#: vcs/vcspluginhelper.cpp:352
+#: vcs/vcspluginhelper.cpp:353
 #, fuzzy, kde-format
 #| msgctxt "%1: path or URL, %2: name of a version control system"
 #| msgid "%2 History (%1)"
@@ -6575,7 +6575,7 @@ msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 Historija (%1)"
 
-#: vcs/vcspluginhelper.cpp:415
+#: vcs/vcspluginhelper.cpp:417
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6584,7 +6584,7 @@ msgstr ""
 "Ne mogu prikazati pribilješke, nedostaje interfejs KTextEditor::"
 "AnnotationInterface za editor."
 
-#: vcs/vcspluginhelper.cpp:419
+#: vcs/vcspluginhelper.cpp:421
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6595,7 +6595,7 @@ msgstr ""
 "tekstualni dokument\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:446 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
 #, fuzzy, kde-format
 #| msgid "Copy Revision"
 msgctxt "@action:inmenu"

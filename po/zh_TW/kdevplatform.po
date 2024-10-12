@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2024-08-06 05:13+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -2679,48 +2679,48 @@ msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
 msgstr "鎖定面板使其不會隱藏"
 
-#: shell/openprojectdialog.cpp:124
+#: shell/openprojectdialog.cpp:132
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
 msgstr "所有專案檔案"
 
-#: shell/openprojectdialog.cpp:133
+#: shell/openprojectdialog.cpp:141
 #, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "選擇來源"
 
-#: shell/openprojectdialog.cpp:141
+#: shell/openprojectdialog.cpp:149
 #, kde-format
 msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
 "to open as a project"
 msgstr "選擇編譯系統設定檔，現有的 KDevelop 專案，或是任何資料夾來開啟成專案"
 
-#: shell/openprojectdialog.cpp:148 shell/openprojectdialog.cpp:168
+#: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "開啟專案"
 
-#: shell/openprojectdialog.cpp:156
+#: shell/openprojectdialog.cpp:165
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "專案資訊"
 
-#: shell/openprojectdialog.cpp:219
+#: shell/openprojectdialog.cpp:228
 #, kde-format
 msgid "Open \"%1\" as project"
 msgstr "將 %1 作為專案開啟"
 
-#: shell/openprojectdialog.cpp:223
+#: shell/openprojectdialog.cpp:232
 #, kde-format
 msgid "Selected URL is invalid"
 msgstr "選取的網址無效"
 
-#: shell/openprojectdialog.cpp:268
+#: shell/openprojectdialog.cpp:277
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
@@ -5382,37 +5382,37 @@ msgstr "工作已中止"
 msgid "Run all tests in %1"
 msgstr "已經於 %1 執行所有測試"
 
-#: util/shellutils.cpp:79
+#: util/shellutils.cpp:157
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr "您沒有以下檔案的寫入權限；要在寫入前先為擁有者添加寫入權限嗎？"
 
-#: util/shellutils.cpp:82
+#: util/shellutils.cpp:160
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "某些檔案的寫入受保護"
 
-#: util/shellutils.cpp:83
+#: util/shellutils.cpp:161
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "設定寫入權限"
 
-#: util/shellutils.cpp:84
+#: util/shellutils.cpp:162
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "忽略"
 
-#: util/shellutils.cpp:96
+#: util/shellutils.cpp:174
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "無法為某些檔案加入寫入權限。"
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
@@ -5453,31 +5453,31 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "分支..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:40
+#: vcs/dvcs/ui/branchmanager.cpp:41
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "分支管理員"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:115
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "您必須從清單中選擇基礎分支來建立新的分支。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "新增分支"
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "新分支名稱："
 
-#: vcs/dvcs/ui/branchmanager.cpp:124
+#: vcs/dvcs/ui/branchmanager.cpp:127
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5486,7 +5486,7 @@ msgstr ""
 "分支 %1 已存在。\n"
 "請選擇其它名稱。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:138
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
@@ -5495,17 +5495,17 @@ msgstr ""
 "您目前在分支 %1 上。\n"
 "若要刪除它，請先變更到其它的分支。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:145
+#: vcs/dvcs/ui/branchmanager.cpp:148
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "您確定要刪除此分支 '%1' 嗎？此動作無法回復。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
+#: vcs/dvcs/ui/branchmanager.cpp:168 vcs/dvcs/ui/branchmanager.cpp:247
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "已經在分支 %1 上\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:186
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5514,28 +5514,28 @@ msgstr ""
 "分支「%1」不存在。\n"
 "請選擇其它名稱。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:194
+#: vcs/dvcs/ui/branchmanager.cpp:197
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr "您必須從清單中選取一個分支來將其合併到目前分支。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:235 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "無法建立目前版本的修補。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:267
+#: vcs/dvcs/ui/branchmanager.cpp:270
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "無法取得差異"
 
-#: vcs/dvcs/ui/branchmanager.cpp:274
+#: vcs/dvcs/ui/branchmanager.cpp:277
 #, kde-format
 msgid "There are no committed differences."
 msgstr "沒有已提交的差異。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:278 vcs/vcspluginhelper.cpp:279
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
@@ -5785,90 +5785,90 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "源碼修訂版"
 
-#: vcs/vcspluginhelper.cpp:82
+#: vcs/vcspluginhelper.cpp:83
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "提交..."
 
-#: vcs/vcspluginhelper.cpp:83
+#: vcs/vcspluginhelper.cpp:84
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "更新"
 
-#: vcs/vcspluginhelper.cpp:84
+#: vcs/vcspluginhelper.cpp:85
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "新增"
 
-#: vcs/vcspluginhelper.cpp:85
+#: vcs/vcspluginhelper.cpp:86
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "顯示差異..."
 
-#: vcs/vcspluginhelper.cpp:86
+#: vcs/vcspluginhelper.cpp:87
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "還原"
 
-#: vcs/vcspluginhelper.cpp:87 vcs/vcspluginhelper.cpp:451
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "歷史..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:89
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "註記..."
 
-#: vcs/vcspluginhelper.cpp:89
+#: vcs/vcspluginhelper.cpp:90
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "顯示差異..."
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:91
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "顯示差異（所有檔案）..."
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "推送"
 
-#: vcs/vcspluginhelper.cpp:92
+#: vcs/vcspluginhelper.cpp:93
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "拉取"
 
-#: vcs/vcspluginhelper.cpp:277
+#: vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgid "There are no differences."
 msgstr "沒有差異。"
 
-#: vcs/vcspluginhelper.cpp:284
+#: vcs/vcspluginhelper.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "無法取得差異"
 
-#: vcs/vcspluginhelper.cpp:352
+#: vcs/vcspluginhelper.cpp:353
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 歷史 (%1)"
 
-#: vcs/vcspluginhelper.cpp:415
+#: vcs/vcspluginhelper.cpp:417
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -5876,7 +5876,7 @@ msgid ""
 msgstr ""
 "無法顯示最後狀態註記，因為找不到編輯器介面 KTextEditor::AnnotationInterface。"
 
-#: vcs/vcspluginhelper.cpp:419
+#: vcs/vcspluginhelper.cpp:421
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -5886,7 +5886,7 @@ msgstr ""
 "無法執行最後狀態註記的動作，因為找不到文件，或不是文字文件。\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:446 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

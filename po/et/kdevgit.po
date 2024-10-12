@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2020-01-14 21:18+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -619,47 +619,47 @@ msgstr ""
 msgid "Please stage some changes before committing."
 msgstr ""
 
-#: stashmanagerdialog.cpp:31
+#: stashmanagerdialog.cpp:32
 #, fuzzy, kde-format
 #| msgid "Stash Manager"
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Panipaikade haldur"
 
-#: stashmanagerdialog.cpp:118
+#: stashmanagerdialog.cpp:121
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "Kas tõesti hüljata panipaik \"%1\"?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:122 stashmanagerdialog.ui:26
 #, fuzzy, kde-format
 #| msgid "Drop"
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "Hülga"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, fuzzy, kde-format
 #| msgid "Git Stashes"
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Giti panipaigad"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, fuzzy, kde-format
 #| msgid "Select a name for the new branch:"
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "Uue haru nimi:"
 
-#: stashmanagerdialog.cpp:149
+#: stashmanagerdialog.cpp:152
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr ""
 
-#: stashmanagerdialog.cpp:159
+#: stashmanagerdialog.cpp:162
 #, kde-format
 msgid "%1 created on %2"
 msgstr ""

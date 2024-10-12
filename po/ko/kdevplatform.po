@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2024-08-21 00:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -2699,19 +2699,19 @@ msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
 msgstr "패널이 숨겨지지 않도록 잠금"
 
-#: shell/openprojectdialog.cpp:124
+#: shell/openprojectdialog.cpp:132
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
 msgstr "모든 프로젝트 파일"
 
-#: shell/openprojectdialog.cpp:133
+#: shell/openprojectdialog.cpp:141
 #, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "소스 선택"
 
-#: shell/openprojectdialog.cpp:141
+#: shell/openprojectdialog.cpp:149
 #, kde-format
 msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
@@ -2719,29 +2719,29 @@ msgid ""
 msgstr ""
 "빌드 시스템 설정 파일, 기존 KDevelop 프로젝트 또는 프로젝트로 열 폴더 선택"
 
-#: shell/openprojectdialog.cpp:148 shell/openprojectdialog.cpp:168
+#: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "프로젝트 열기"
 
-#: shell/openprojectdialog.cpp:156
+#: shell/openprojectdialog.cpp:165
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "프로젝트 정보"
 
-#: shell/openprojectdialog.cpp:219
+#: shell/openprojectdialog.cpp:228
 #, kde-format
 msgid "Open \"%1\" as project"
 msgstr "\"%1\"을(를) 프로젝트로 열기"
 
-#: shell/openprojectdialog.cpp:223
+#: shell/openprojectdialog.cpp:232
 #, kde-format
 msgid "Selected URL is invalid"
 msgstr "선택한 URL이 잘못됨"
 
-#: shell/openprojectdialog.cpp:268
+#: shell/openprojectdialog.cpp:277
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
@@ -5456,7 +5456,7 @@ msgstr "작업이 중단됨"
 msgid "Run all tests in %1"
 msgstr "%1에서 모든 테스트 실행"
 
-#: util/shellutils.cpp:79
+#: util/shellutils.cpp:157
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5465,30 +5465,30 @@ msgstr ""
 "다음 파일에 쓰기 권한이 없습니다. 저장하기 전에 소유자에게 쓰기 권한을 추가하"
 "시겠습니까?"
 
-#: util/shellutils.cpp:82
+#: util/shellutils.cpp:160
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "일부 파일이 쓰기 방지됨"
 
-#: util/shellutils.cpp:83
+#: util/shellutils.cpp:161
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "쓰기 권한 설정"
 
-#: util/shellutils.cpp:84
+#: util/shellutils.cpp:162
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "무시"
 
-#: util/shellutils.cpp:96
+#: util/shellutils.cpp:174
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "일부 파일에 쓰기 권한을 추가할 수 없습니다."
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
@@ -5529,31 +5529,31 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "브랜치..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:40
+#: vcs/dvcs/ui/branchmanager.cpp:41
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "브랜치 관리자"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:115
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "새 브랜치를 만들기 전에 목록에서 기반 브랜치를 선택해야 합니다."
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "새 브랜치"
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "새 브랜치 이름:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:124
+#: vcs/dvcs/ui/branchmanager.cpp:127
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5562,7 +5562,7 @@ msgstr ""
 "\"%1\" 브랜치가 이미 존재합니다.\n"
 "다른 이름을 지정하십시오."
 
-#: vcs/dvcs/ui/branchmanager.cpp:138
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
@@ -5571,17 +5571,17 @@ msgstr ""
 "현재 \"%1\" 브랜치에 있습니다.\n"
 "브랜치를 삭제하려면 다른 브랜치로 변경하십시오."
 
-#: vcs/dvcs/ui/branchmanager.cpp:145
+#: vcs/dvcs/ui/branchmanager.cpp:148
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "\"%1\" 브랜치를 삭제하시겠습니까?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
+#: vcs/dvcs/ui/branchmanager.cpp:168 vcs/dvcs/ui/branchmanager.cpp:247
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "\"%1\" 브랜치에 이미 있음\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:186
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5590,28 +5590,28 @@ msgstr ""
 "브랜치 \"%1\"이(가) 없습니다.\n"
 "다른 이름을 지정하십시오."
 
-#: vcs/dvcs/ui/branchmanager.cpp:194
+#: vcs/dvcs/ui/branchmanager.cpp:197
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr "현재 브랜치로 병합할 브랜치를 목록에서 선택해야 합니다."
 
-#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:235 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "현재 버전에 대한 패치를 생성할 수 없습니다."
 
-#: vcs/dvcs/ui/branchmanager.cpp:267
+#: vcs/dvcs/ui/branchmanager.cpp:270
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "차이점을 가져올 수 없음"
 
-#: vcs/dvcs/ui/branchmanager.cpp:274
+#: vcs/dvcs/ui/branchmanager.cpp:277
 #, kde-format
 msgid "There are no committed differences."
 msgstr "커밋된 차이점이 없습니다."
 
-#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:278 vcs/vcspluginhelper.cpp:279
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
@@ -5862,90 +5862,90 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "소스 리비전"
 
-#: vcs/vcspluginhelper.cpp:82
+#: vcs/vcspluginhelper.cpp:83
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "커밋..."
 
-#: vcs/vcspluginhelper.cpp:83
+#: vcs/vcspluginhelper.cpp:84
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "업데이트"
 
-#: vcs/vcspluginhelper.cpp:84
+#: vcs/vcspluginhelper.cpp:85
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "추가"
 
-#: vcs/vcspluginhelper.cpp:85
+#: vcs/vcspluginhelper.cpp:86
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "차이점 표시..."
 
-#: vcs/vcspluginhelper.cpp:86
+#: vcs/vcspluginhelper.cpp:87
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "되돌리기"
 
-#: vcs/vcspluginhelper.cpp:87 vcs/vcspluginhelper.cpp:451
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "과거 기록..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:89
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "작성자 보기..."
 
-#: vcs/vcspluginhelper.cpp:89
+#: vcs/vcspluginhelper.cpp:90
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "차이점 표시..."
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:91
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "차이점 보기(모든 파일)..."
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "푸시"
 
-#: vcs/vcspluginhelper.cpp:92
+#: vcs/vcspluginhelper.cpp:93
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "풀"
 
-#: vcs/vcspluginhelper.cpp:277
+#: vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgid "There are no differences."
 msgstr "차이점이 없습니다."
 
-#: vcs/vcspluginhelper.cpp:284
+#: vcs/vcspluginhelper.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "차이점을 가져올 수 없음"
 
-#: vcs/vcspluginhelper.cpp:352
+#: vcs/vcspluginhelper.cpp:353
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 과거 기록(%1)"
 
-#: vcs/vcspluginhelper.cpp:415
+#: vcs/vcspluginhelper.cpp:417
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -5954,7 +5954,7 @@ msgstr ""
 "작성자를 표시할 수 없습니다. 편집기에 KTextEditor::AnnotationInterface 인터페"
 "이스가 없습니다."
 
-#: vcs/vcspluginhelper.cpp:419
+#: vcs/vcspluginhelper.cpp:421
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -5965,7 +5965,7 @@ msgstr ""
 "수 없습니다:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:446 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

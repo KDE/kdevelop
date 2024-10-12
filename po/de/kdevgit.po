@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2023-03-27 00:35+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -606,43 +606,43 @@ msgstr ""
 "Bitte legen Sie vor dem Einspielen erst einige Änderungen in den Index "
 "(„stagen“)."
 
-#: stashmanagerdialog.cpp:31
+#: stashmanagerdialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Stash-Verwaltung"
 
-#: stashmanagerdialog.cpp:118
+#: stashmanagerdialog.cpp:121
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "Möchten Sie den Stash „%1“ wirklich verwerfen?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:122 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "Verwerfen"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Git-Stash"
 
-#: stashmanagerdialog.cpp:128
+#: stashmanagerdialog.cpp:131
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "Name für den neuen Zweig:"
 
-#: stashmanagerdialog.cpp:149
+#: stashmanagerdialog.cpp:152
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr "%1. %2: %3"
 
-#: stashmanagerdialog.cpp:159
+#: stashmanagerdialog.cpp:162
 #, kde-format
 msgid "%1 created on %2"
 msgstr "%1 erstellt am %2"

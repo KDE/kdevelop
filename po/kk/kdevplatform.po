@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:38+0000\n"
+"POT-Creation-Date: 2024-10-12 00:38+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -2848,21 +2848,21 @@ msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
 msgstr ""
 
-#: shell/openprojectdialog.cpp:124
+#: shell/openprojectdialog.cpp:132
 #, fuzzy, kde-format
 #| msgid "Project %1"
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
 msgstr "%1 жобасы"
 
-#: shell/openprojectdialog.cpp:133
+#: shell/openprojectdialog.cpp:141
 #, fuzzy, kde-format
 #| msgid "Select Source"
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "Көзін таңдау"
 
-#: shell/openprojectdialog.cpp:141
+#: shell/openprojectdialog.cpp:149
 #, kde-format
 msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
@@ -2871,7 +2871,7 @@ msgstr ""
 "Құру жүйелік баптау файлын, бар KDevelop жобасын, немесе жоба ретінде ашатын "
 "бір қапшықты таңдау"
 
-#: shell/openprojectdialog.cpp:148 shell/openprojectdialog.cpp:168
+#: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Open recent project"
@@ -2879,26 +2879,26 @@ msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Жуырдағы жобаны ашу"
 
-#: shell/openprojectdialog.cpp:156
+#: shell/openprojectdialog.cpp:165
 #, fuzzy, kde-format
 #| msgid "Project Information"
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Жоба мәліметі"
 
-#: shell/openprojectdialog.cpp:219
+#: shell/openprojectdialog.cpp:228
 #, fuzzy, kde-format
 #| msgid "open %1 as project"
 msgid "Open \"%1\" as project"
 msgstr "%1 дегенді жоба ретінде ашу"
 
-#: shell/openprojectdialog.cpp:223
+#: shell/openprojectdialog.cpp:232
 #, fuzzy, kde-format
 #| msgid "Selected URL is invalid."
 msgid "Selected URL is invalid"
 msgstr "Таңдаған ULR дұрыс емес."
 
-#: shell/openprojectdialog.cpp:268
+#: shell/openprojectdialog.cpp:277
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@item:inlistbox"
@@ -5874,20 +5874,20 @@ msgstr ""
 msgid "Run all tests in %1"
 msgstr "Бүкіл %1 сынақтарын орындау"
 
-#: util/shellutils.cpp:79
+#: util/shellutils.cpp:157
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
 
-#: util/shellutils.cpp:82
+#: util/shellutils.cpp:160
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr ""
 
-#: util/shellutils.cpp:83
+#: util/shellutils.cpp:161
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Start New Session"
@@ -5895,19 +5895,19 @@ msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Жаңа сеансты бастау"
 
-#: util/shellutils.cpp:84
+#: util/shellutils.cpp:162
 #, fuzzy, kde-format
 #| msgid "Ignore"
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Елемеу"
 
-#: util/shellutils.cpp:96
+#: util/shellutils.cpp:174
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr ""
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
@@ -5947,34 +5947,34 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Тармақтар..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:40
+#: vcs/dvcs/ui/branchmanager.cpp:41
 #, fuzzy, kde-format
 #| msgid "Branch Manager"
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Тармақ менеджері"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:115
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "Жаңа тармақты құру алдында негізгі тармағын таңдаңыз."
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Жаңа тармақ"
 
-#: vcs/dvcs/ui/branchmanager.cpp:117
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, fuzzy, kde-format
 #| msgid "Name of the new branch:"
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Жаңа тармақтың атауы:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:124
+#: vcs/dvcs/ui/branchmanager.cpp:127
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5983,7 +5983,7 @@ msgstr ""
 "\"%1\" тармағы бар екен.\n"
 "Басқаша атаңыз."
 
-#: vcs/dvcs/ui/branchmanager.cpp:138
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -5995,18 +5995,18 @@ msgstr ""
 "Қазір осы \"%1\" тармақтамыз.\n"
 "Оны өшіру үшін басқаға ауысу керек."
 
-#: vcs/dvcs/ui/branchmanager.cpp:145
+#: vcs/dvcs/ui/branchmanager.cpp:148
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "'%1' тармағын қайтарылмайтындай өшірмексіз бе?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:165 vcs/dvcs/ui/branchmanager.cpp:244
+#: vcs/dvcs/ui/branchmanager.cpp:168 vcs/dvcs/ui/branchmanager.cpp:247
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Сол \"%1\" тармағындасыз ғой\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:186
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, fuzzy, kde-format
 #| msgid ""
 #| "Branch \"%1\" already exists.\n"
@@ -6018,32 +6018,32 @@ msgstr ""
 "\"%1\" тармағы бар екен.\n"
 "Басқаша атаңыз."
 
-#: vcs/dvcs/ui/branchmanager.cpp:194
+#: vcs/dvcs/ui/branchmanager.cpp:197
 #, fuzzy, kde-format
 #| msgid ""
 #| "You must select a base branch from the list before creating a new branch."
 msgid "You must select a branch to merge into current one from the list."
 msgstr "Жаңа тармақты құру алдында негізгі тармағын таңдаңыз."
 
-#: vcs/dvcs/ui/branchmanager.cpp:232 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:235 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Назардағы нұсқа үшін жамау құрылмады."
 
-#: vcs/dvcs/ui/branchmanager.cpp:267
+#: vcs/dvcs/ui/branchmanager.cpp:270
 #, fuzzy, kde-format
 #| msgid "Unable to get difference."
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Айырмашылығы табылмады."
 
-#: vcs/dvcs/ui/branchmanager.cpp:274
+#: vcs/dvcs/ui/branchmanager.cpp:277
 #, fuzzy, kde-format
 #| msgid "There are no differences."
 msgid "There are no committed differences."
 msgstr "Айырмашылық жоқ."
 
-#: vcs/dvcs/ui/branchmanager.cpp:275 vcs/vcspluginhelper.cpp:278
+#: vcs/dvcs/ui/branchmanager.cpp:278 vcs/vcspluginhelper.cpp:279
 #, fuzzy, kde-format
 #| msgid "VCS support"
 msgctxt "@title:window"
@@ -6331,96 +6331,96 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Көзінің жетілдірімі"
 
-#: vcs/vcspluginhelper.cpp:82
+#: vcs/vcspluginhelper.cpp:83
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Тапсыру..."
 
-#: vcs/vcspluginhelper.cpp:83
+#: vcs/vcspluginhelper.cpp:84
 #, fuzzy, kde-format
 #| msgid "Update"
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Жаңарту"
 
-#: vcs/vcspluginhelper.cpp:84
+#: vcs/vcspluginhelper.cpp:85
 #, fuzzy, kde-format
 #| msgid "Add"
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Қосу"
 
-#: vcs/vcspluginhelper.cpp:85
+#: vcs/vcspluginhelper.cpp:86
 #, fuzzy, kde-format
 #| msgid "Show Differences..."
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "Айырмашылығын көрсету..."
 
-#: vcs/vcspluginhelper.cpp:86
+#: vcs/vcspluginhelper.cpp:87
 #, fuzzy, kde-format
 #| msgid "Revert"
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Қайтару"
 
-#: vcs/vcspluginhelper.cpp:87 vcs/vcspluginhelper.cpp:451
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
 #, fuzzy, kde-format
 #| msgid "History..."
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Тарихы..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:89
 #, fuzzy, kde-format
 #| msgid "Annotation..."
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Аңдатпасы..."
 
-#: vcs/vcspluginhelper.cpp:89
+#: vcs/vcspluginhelper.cpp:90
 #, fuzzy, kde-format
 #| msgid "Show Diff..."
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "Айырмашылығын көрсету..."
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:91
 #, fuzzy, kde-format
 #| msgid "Show Diff (all files)..."
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "Айырмашылығын көрсету (бүкіл файлдар)..."
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:92
 #, fuzzy, kde-format
 #| msgid "Push"
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Кіргізу"
 
-#: vcs/vcspluginhelper.cpp:92
+#: vcs/vcspluginhelper.cpp:93
 #, fuzzy, kde-format
 #| msgid "Pull"
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Суырып алу"
 
-#: vcs/vcspluginhelper.cpp:277
+#: vcs/vcspluginhelper.cpp:278
 #, kde-format
 msgid "There are no differences."
 msgstr "Айырмашылық жоқ."
 
-#: vcs/vcspluginhelper.cpp:284
+#: vcs/vcspluginhelper.cpp:285
 #, fuzzy, kde-format
 #| msgid "Unable to get difference."
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Айырмашылығы табылмады."
 
-#: vcs/vcspluginhelper.cpp:352
+#: vcs/vcspluginhelper.cpp:353
 #, fuzzy, kde-format
 #| msgctxt "%1: path or URL, %2: name of a version control system"
 #| msgid "%2 History (%1)"
@@ -6428,7 +6428,7 @@ msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 тарихы (%1)"
 
-#: vcs/vcspluginhelper.cpp:415
+#: vcs/vcspluginhelper.cpp:417
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6437,7 +6437,7 @@ msgstr ""
 "Аңдатпа көрсетілмеді, редақторында KTextEditor::AnnotationInterface "
 "интерфейсі жоқ."
 
-#: vcs/vcspluginhelper.cpp:419
+#: vcs/vcspluginhelper.cpp:421
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6448,7 +6448,7 @@ msgstr ""
 "емес:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:446 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
 #, fuzzy, kde-format
 #| msgid "Copy Revision"
 msgctxt "@action:inmenu"
