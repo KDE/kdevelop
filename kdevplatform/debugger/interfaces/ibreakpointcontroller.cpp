@@ -62,6 +62,14 @@ void IBreakpointController::updateHitCount(int row, int hitCount)
 void IBreakpointController::updateErrorText(int row, const QString& errorText)
 {
     breakpointModel()->updateErrorText(row, errorText);
+
+    if (errorText.isEmpty()) {
+        return;
+    }
+
+    auto* const errorNotification = new KNotification(QStringLiteral("BreakpointError"));
+    errorNotification->setText(errorText);
+    errorNotification->sendEvent();
 }
 
 void IBreakpointController::notifyHit(int row, const QString& msg)

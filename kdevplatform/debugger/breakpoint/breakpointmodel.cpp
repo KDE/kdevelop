@@ -542,10 +542,6 @@ void BreakpointModel::updateErrorText(int row, const QString& errorText)
         breakpoint->m_errorText = errorText;
         reportChange(breakpoint, Breakpoint::StateColumn);
     }
-
-    if (!errorText.isEmpty()) {
-        emit error(row, errorText);
-    }
 }
 
 void BreakpointModel::notifyHit(int row)

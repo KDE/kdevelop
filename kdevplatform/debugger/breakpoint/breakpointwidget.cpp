@@ -16,7 +16,6 @@
 #include <QContextMenuEvent>
 
 #include <KLocalizedString>
-#include <KNotification>
 
 #include "breakpointdetails.h"
 #include "../breakpoint/breakpoint.h"
@@ -49,8 +48,6 @@ public:
     QAction* breakpointEnableAllAction = nullptr;
     QAction* breakpointRemoveAll = nullptr;
     QAbstractProxyModel* proxyModel = nullptr;
-    QMap<QString, size_t> breakpointErrorMessages;
-    bool breakpointErrorMessageVisibile = false;
 };
 
 BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent)
@@ -112,10 +109,6 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     connect(d->debugController->breakpointModel(),
             &BreakpointModel::hit,
             this, &BreakpointWidget::breakpointHit);
-
-    connect(d->debugController->breakpointModel(),
-            &BreakpointModel::error,
-            this, &BreakpointWidget::breakpointError);
 
     setupPopupMenu();
 }
@@ -310,57 +303,6 @@ void BreakpointWidget::breakpointHit(int row)
         index,
         QItemSelectionModel::Rows
         | QItemSelectionModel::ClearAndSelect);
-}
-
-void BreakpointWidget::breakpointError(int row, const QString& msg)
-{
-    Q_UNUSED(row);
-
-    Q_D(BreakpointWidget);
-
-    // if the error popup is still visible only queue the message, to avoid spam
-    if (d->breakpointErrorMessageVisibile) {
-        d->breakpointErrorMessages[msg]++;
-        return;
-    }
-
-    showBreakpointError(msg);
-}
-
-void BreakpointWidget::breakpointErrorPopupClosed()
-{
-    Q_D(BreakpointWidget);
-
-    d->breakpointErrorMessageVisibile = false;
-
-    if (d->breakpointErrorMessages.isEmpty()) {
-        // no messages queued, do nothing
-        return;
-    }
-
-    QString errorMsg;
-
-    for (auto it = d->breakpointErrorMessages.constBegin(); it != d->breakpointErrorMessages.constEnd(); ++it) {
-        if (!errorMsg.isEmpty()) {
-            errorMsg += QLatin1Char('\n');
-        }
-        errorMsg += i18np("%2", "%2 (repeated %1 times)", it.value(), it.key());
-    }
-
-    d->breakpointErrorMessages.clear();
-
-    showBreakpointError(errorMsg);
-}
-
-void BreakpointWidget::showBreakpointError(const QString& msg)
-{
-    Q_D(BreakpointWidget);
-
-    auto * const errorPopup = new KNotification(QStringLiteral("BreakpointError"));
-    connect(errorPopup, &KNotification::closed, this, &BreakpointWidget::breakpointErrorPopupClosed);
-    errorPopup->setText(msg);
-    errorPopup->sendEvent();
-    d->breakpointErrorMessageVisibile = true;
 }
 
 void BreakpointWidget::slotOpenFile(const QModelIndex& breakpointIdx)

@@ -146,7 +146,6 @@ public:
     QList<Breakpoint*> breakpoints() const;
 
 Q_SIGNALS:
-    void error(int row, const QString& errorText);
     void hit(int row);
 
 public Q_SLOTS:

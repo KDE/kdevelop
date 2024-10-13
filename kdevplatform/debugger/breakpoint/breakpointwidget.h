@@ -35,8 +35,6 @@ private:
 
     void edit(KDevelop::Breakpoint *n);
 
-    void showBreakpointError(const QString& msg);
-
 private Q_SLOTS:
     void slotAddBlankBreakpoint();
     void slotAddBlankWatchpoint();
@@ -46,8 +44,6 @@ private Q_SLOTS:
     void slotUpdateBreakpointDetail();
     void slotDataInserted(int column, const QVariant& value);
     void slotOpenFile(const QModelIndex& breakpointIdx);
-    void breakpointError(int row, const QString& msg);
-    void breakpointErrorPopupClosed();
     void breakpointHit(int row);
     void slotDisableAllBreakpoints();
     void slotEnableAllBreakpoints();
