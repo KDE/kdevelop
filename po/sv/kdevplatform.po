@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2024-08-17 08:29+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -214,72 +214,72 @@ msgstr ""
 "Visar en lista av brytpunkter med deras nuvarande status. Att klicka på en "
 "brytpunkt låter dig ändra den, och går till källkoden i editorfönstret."
 
-#: debugger/breakpoint/breakpointwidget.cpp:75
+#: debugger/breakpoint/breakpointwidget.cpp:89
 #, kde-format
 msgid "Breakpoint Details"
 msgstr "Brytpunktsinformation"
 
-#: debugger/breakpoint/breakpointwidget.cpp:84
+#: debugger/breakpoint/breakpointwidget.cpp:98
 #, kde-format
 msgid "New code breakpoint ..."
 msgstr "Ny kodbrytpunkt..."
 
-#: debugger/breakpoint/breakpointwidget.cpp:85
+#: debugger/breakpoint/breakpointwidget.cpp:99
 #, kde-format
 msgid "Enter condition ..."
 msgstr "Ange villkor..."
 
-#: debugger/breakpoint/breakpointwidget.cpp:117
+#: debugger/breakpoint/breakpointwidget.cpp:131
 #, kde-format
 msgctxt "New breakpoint"
 msgid "&New"
 msgstr "&Ny"
 
-#: debugger/breakpoint/breakpointwidget.cpp:121
+#: debugger/breakpoint/breakpointwidget.cpp:135
 #, kde-format
 msgctxt "Code breakpoint"
 msgid "&Code"
 msgstr "&Kod"
 
-#: debugger/breakpoint/breakpointwidget.cpp:129
+#: debugger/breakpoint/breakpointwidget.cpp:143
 #, kde-format
 msgctxt "Data breakpoint"
 msgid "Data &Write"
 msgstr "Dataskri&vning"
 
-#: debugger/breakpoint/breakpointwidget.cpp:132
+#: debugger/breakpoint/breakpointwidget.cpp:146
 #, kde-format
 msgctxt "Data read breakpoint"
 msgid "Data &Read"
 msgstr "Data&läsning"
 
-#: debugger/breakpoint/breakpointwidget.cpp:135
+#: debugger/breakpoint/breakpointwidget.cpp:149
 #, kde-format
 msgctxt "Data access breakpoint"
 msgid "Data &Access"
 msgstr "D&ataåtkomst"
 
-#: debugger/breakpoint/breakpointwidget.cpp:140
+#: debugger/breakpoint/breakpointwidget.cpp:154
 #, kde-format
 msgid "&Delete"
 msgstr "&Ta bort"
 
-#: debugger/breakpoint/breakpointwidget.cpp:149
+#: debugger/breakpoint/breakpointwidget.cpp:163
 #, kde-format
 msgid "Disable &All"
 msgstr "Inaktivera &alla"
 
-#: debugger/breakpoint/breakpointwidget.cpp:150
+#: debugger/breakpoint/breakpointwidget.cpp:164
 #, kde-format
 msgid "&Enable All"
 msgstr "Aktiv&era alla"
 
-#: debugger/breakpoint/breakpointwidget.cpp:151
+#: debugger/breakpoint/breakpointwidget.cpp:165
 #, kde-format
 msgid "&Remove All"
 msgstr "&Ta bort alla"
 
-#: debugger/breakpoint/breakpointwidget.cpp:333
+#: debugger/breakpoint/breakpointwidget.cpp:347
 #, kde-format
 msgid "%2"
 msgid_plural "%2 (repeated %1 times)"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -205,79 +205,79 @@ msgid ""
 "source in the editor window."
 msgstr ""
 
-#: debugger/breakpoint/breakpointwidget.cpp:75
+#: debugger/breakpoint/breakpointwidget.cpp:89
 #, fuzzy, kde-format
 #| msgid "Breakpoints"
 msgid "Breakpoint Details"
 msgstr "توختاش نۇقتىلىرى"
 
-#: debugger/breakpoint/breakpointwidget.cpp:84
+#: debugger/breakpoint/breakpointwidget.cpp:98
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgid "New code breakpoint ..."
 msgstr "توختاش نۇقتىسىنى ئالماشتۇر"
 
-#: debugger/breakpoint/breakpointwidget.cpp:85
+#: debugger/breakpoint/breakpointwidget.cpp:99
 #, fuzzy, kde-format
 #| msgid "Open Configuration..."
 msgid "Enter condition ..."
 msgstr "ئوچۇق سەپلىمە…"
 
-#: debugger/breakpoint/breakpointwidget.cpp:117
+#: debugger/breakpoint/breakpointwidget.cpp:131
 #, kde-format
 msgctxt "New breakpoint"
 msgid "&New"
 msgstr "يېڭى(&N)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:121
+#: debugger/breakpoint/breakpointwidget.cpp:135
 #, kde-format
 msgctxt "Code breakpoint"
 msgid "&Code"
 msgstr "كود(&C)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:129
+#: debugger/breakpoint/breakpointwidget.cpp:143
 #, kde-format
 msgctxt "Data breakpoint"
 msgid "Data &Write"
 msgstr ""
 
-#: debugger/breakpoint/breakpointwidget.cpp:132
+#: debugger/breakpoint/breakpointwidget.cpp:146
 #, kde-format
 msgctxt "Data read breakpoint"
 msgid "Data &Read"
 msgstr ""
 
-#: debugger/breakpoint/breakpointwidget.cpp:135
+#: debugger/breakpoint/breakpointwidget.cpp:149
 #, fuzzy, kde-format
 #| msgid "Access"
 msgctxt "Data access breakpoint"
 msgid "Data &Access"
 msgstr "زىيارەت"
 
-#: debugger/breakpoint/breakpointwidget.cpp:140
+#: debugger/breakpoint/breakpointwidget.cpp:154
 #, kde-format
 msgid "&Delete"
 msgstr "ئۆچۈر(&D)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:149
+#: debugger/breakpoint/breakpointwidget.cpp:163
 #, fuzzy, kde-format
 #| msgid "Disable"
 msgid "Disable &All"
 msgstr "چەكلە"
 
-#: debugger/breakpoint/breakpointwidget.cpp:150
+#: debugger/breakpoint/breakpointwidget.cpp:164
 #, fuzzy, kde-format
 #| msgid "&Enable all"
 msgid "&Enable All"
 msgstr "ھەممىنى قوزغات(&E)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:151
+#: debugger/breakpoint/breakpointwidget.cpp:165
 #, fuzzy, kde-format
 #| msgid "Remove All"
 msgid "&Remove All"
 msgstr "ھەممىنى چىقىرىۋەت"
 
-#: debugger/breakpoint/breakpointwidget.cpp:333
+#: debugger/breakpoint/breakpointwidget.cpp:347
 #, kde-format
 msgid "%2"
 msgid_plural "%2 (repeated %1 times)"

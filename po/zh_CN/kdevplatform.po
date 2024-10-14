@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2024-04-22 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -204,72 +204,72 @@ msgid ""
 msgstr ""
 "显示断点列表以及它们的当前状态。点击断点可以更改并转到编辑窗口中的源代码。"
 
-#: debugger/breakpoint/breakpointwidget.cpp:75
+#: debugger/breakpoint/breakpointwidget.cpp:89
 #, kde-format
 msgid "Breakpoint Details"
 msgstr "断点详细信息"
 
-#: debugger/breakpoint/breakpointwidget.cpp:84
+#: debugger/breakpoint/breakpointwidget.cpp:98
 #, kde-format
 msgid "New code breakpoint ..."
 msgstr "新建代码断点..."
 
-#: debugger/breakpoint/breakpointwidget.cpp:85
+#: debugger/breakpoint/breakpointwidget.cpp:99
 #, kde-format
 msgid "Enter condition ..."
 msgstr "输入条件..."
 
-#: debugger/breakpoint/breakpointwidget.cpp:117
+#: debugger/breakpoint/breakpointwidget.cpp:131
 #, kde-format
 msgctxt "New breakpoint"
 msgid "&New"
 msgstr "新建(&N)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:121
+#: debugger/breakpoint/breakpointwidget.cpp:135
 #, kde-format
 msgctxt "Code breakpoint"
 msgid "&Code"
 msgstr "代码(&C)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:129
+#: debugger/breakpoint/breakpointwidget.cpp:143
 #, kde-format
 msgctxt "Data breakpoint"
 msgid "Data &Write"
 msgstr "数据写入(&W)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:132
+#: debugger/breakpoint/breakpointwidget.cpp:146
 #, kde-format
 msgctxt "Data read breakpoint"
 msgid "Data &Read"
 msgstr "数据读取(&R)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:135
+#: debugger/breakpoint/breakpointwidget.cpp:149
 #, kde-format
 msgctxt "Data access breakpoint"
 msgid "Data &Access"
 msgstr "数据访问(&A)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:140
+#: debugger/breakpoint/breakpointwidget.cpp:154
 #, kde-format
 msgid "&Delete"
 msgstr "删除(&D)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:149
+#: debugger/breakpoint/breakpointwidget.cpp:163
 #, kde-format
 msgid "Disable &All"
 msgstr "全部禁用(&A)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:150
+#: debugger/breakpoint/breakpointwidget.cpp:164
 #, kde-format
 msgid "&Enable All"
 msgstr "全部启用(&E)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:151
+#: debugger/breakpoint/breakpointwidget.cpp:165
 #, kde-format
 msgid "&Remove All"
 msgstr "全部删除(&R)"
 
-#: debugger/breakpoint/breakpointwidget.cpp:333
+#: debugger/breakpoint/breakpointwidget.cpp:347
 #, kde-format
 msgid "%2"
 msgid_plural "%2 (repeated %1 times)"
