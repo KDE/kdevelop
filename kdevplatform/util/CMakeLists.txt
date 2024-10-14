@@ -101,6 +101,7 @@ install( FILES
     projecttestjob.h
     widgetcolorizer.h
     path.h
+    scopedincrementor.h
     stack.h
     stringviewhelpers.h
     texteditorhelpers.h

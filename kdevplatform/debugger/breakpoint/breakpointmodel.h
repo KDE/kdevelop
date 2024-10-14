@@ -13,6 +13,7 @@
 #include "breakpoint.h"
 
 #include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
+#include <util/scopedincrementor.h>
 
 #include <KTextEditor/Document>
 
@@ -30,23 +31,6 @@ namespace KDevelop
 class IDocument;
 class Breakpoint;
 class BreakpointModelPrivate;
-
-class ScopedIncrementor
-{
-    int& m_value;
-
-public:
-    explicit ScopedIncrementor(int& value)
-        : m_value(value)
-    {
-        ++m_value;
-    }
-    ~ScopedIncrementor()
-    {
-        --m_value;
-    }
-    Q_DISABLE_COPY_MOVE(ScopedIncrementor)
-};
 
 class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public QAbstractTableModel
 {
@@ -197,7 +181,7 @@ private:
     /**
      * Call this function and keep the returned guard object alive while adding or removing document marks.
      */
-    ScopedIncrementor markChangeGuard();
+    ScopedIncrementor<> markChangeGuard();
 
     /**
      * Remove all breakpoint marks from @p document.
