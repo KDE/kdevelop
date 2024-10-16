@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-16 00:39+0000\n"
 "PO-Revision-Date: 2023-07-23 20:37+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -253,12 +253,12 @@ msgstr "파일 목록을 지정하지 않았음"
 msgid "Could not reset changes (empty list of paths)"
 msgstr "변경 사항을 되돌릴 수 없음(경로 목록이 비어 있음)"
 
-#: gitplugin.cpp:491
+#: gitplugin.cpp:490
 #, kde-format
 msgid "Could not revert changes"
 msgstr "변경 사항을 되돌릴 수 없음"
 
-#: gitplugin.cpp:502
+#: gitplugin.cpp:501
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -266,38 +266,38 @@ msgstr ""
 "다음 파일에 커밋하지 않은 변경 사항이 있으며 손실됩니다. 계속 진행하시겠습니"
 "까?"
 
-#: gitplugin.cpp:527
+#: gitplugin.cpp:526
 #, kde-format
 msgid "No files or message specified"
 msgstr "파일이나 메시지가 지정되지 않았음"
 
-#: gitplugin.cpp:531 gitplugin.cpp:550
+#: gitplugin.cpp:530 gitplugin.cpp:549
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Git 이름이나 이메일이 지정되지 않았음"
 
-#: gitplugin.cpp:547
+#: gitplugin.cpp:546
 #, kde-format
 msgid "No message specified"
 msgstr "메시지가 지정되지 않았음"
 
-#: gitplugin.cpp:621
+#: gitplugin.cpp:620
 #, kde-format
 msgid "No files to remove"
 msgstr "삭제할 파일 없음"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:900
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "대기 중인 변경 사항이 있습니다. 스태시에 추가하시겠습니까?"
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:901
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "스태시"
 
-#: gitplugin.cpp:903
+#: gitplugin.cpp:902
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-16 00:39+0000\n"
 "PO-Revision-Date: 2022-09-26 21:39+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -261,12 +261,12 @@ msgstr "No se ha especificado la lista de archivos"
 msgid "Could not reset changes (empty list of paths)"
 msgstr "No se pueden reiniciar los cambios (lista de rutas vacía)"
 
-#: gitplugin.cpp:491
+#: gitplugin.cpp:490
 #, kde-format
 msgid "Could not revert changes"
 msgstr "No se pueden revertir los cambios"
 
-#: gitplugin.cpp:502
+#: gitplugin.cpp:501
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -274,38 +274,38 @@ msgstr ""
 "Los siguientes archivos tienen cambios sin confirmar, que se perderán. "
 "¿Continuar?"
 
-#: gitplugin.cpp:527
+#: gitplugin.cpp:526
 #, kde-format
 msgid "No files or message specified"
 msgstr "No se ha especificado ningún archivo o un mensaje"
 
-#: gitplugin.cpp:531 gitplugin.cpp:550
+#: gitplugin.cpp:530 gitplugin.cpp:549
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "No se ha especificado el nombre o el correo electrónico para Git"
 
-#: gitplugin.cpp:547
+#: gitplugin.cpp:546
 #, kde-format
 msgid "No message specified"
 msgstr "No se ha especificado ningún mensaje"
 
-#: gitplugin.cpp:621
+#: gitplugin.cpp:620
 #, kde-format
 msgid "No files to remove"
 msgstr "No hay archivos para eliminar"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:900
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Existen cambios pendientes, ¿desea reservarlos primero?"
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:901
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Reservar"
 
-#: gitplugin.cpp:903
+#: gitplugin.cpp:902
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

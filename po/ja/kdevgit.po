@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-16 00:39+0000\n"
 "PO-Revision-Date: 2008-12-12 00:37+0900\n"
 "Last-Translator: Yukiko Bando <ybando@k6.dion.ne.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -247,49 +247,49 @@ msgstr ""
 msgid "Could not reset changes (empty list of paths)"
 msgstr ""
 
-#: gitplugin.cpp:491
+#: gitplugin.cpp:490
 #, kde-format
 msgid "Could not revert changes"
 msgstr ""
 
-#: gitplugin.cpp:502
+#: gitplugin.cpp:501
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
 msgstr ""
 
-#: gitplugin.cpp:527
+#: gitplugin.cpp:526
 #, kde-format
 msgid "No files or message specified"
 msgstr ""
 
-#: gitplugin.cpp:531 gitplugin.cpp:550
+#: gitplugin.cpp:530 gitplugin.cpp:549
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr ""
 
-#: gitplugin.cpp:547
+#: gitplugin.cpp:546
 #, kde-format
 msgid "No message specified"
 msgstr ""
 
-#: gitplugin.cpp:621
+#: gitplugin.cpp:620
 #, kde-format
 msgid "No files to remove"
 msgstr ""
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:900
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:901
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr ""
 
-#: gitplugin.cpp:903
+#: gitplugin.cpp:902
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

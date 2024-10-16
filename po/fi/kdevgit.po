@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-16 00:39+0000\n"
 "PO-Revision-Date: 2022-08-30 14:35+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -262,12 +262,12 @@ msgstr "Tiedostoja ei määritetty"
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Muutoksia ei voitu kumota"
 
-#: gitplugin.cpp:491
+#: gitplugin.cpp:490
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Muutoksia ei voitu kumota"
 
-#: gitplugin.cpp:502
+#: gitplugin.cpp:501
 #, fuzzy, kde-format
 #| msgid ""
 #| "The following files have uncommited changes, which will be lost. Continue?"
@@ -277,39 +277,39 @@ msgstr ""
 "Seuraavissa tiedostoissa on kommitoimattomia muutoksia, jotka menetetään. "
 "Jatketaanko?"
 
-#: gitplugin.cpp:527
+#: gitplugin.cpp:526
 #, kde-format
 msgid "No files or message specified"
 msgstr "Tiedostoja tai viestiä ei annettu."
 
-#: gitplugin.cpp:531 gitplugin.cpp:550
+#: gitplugin.cpp:530 gitplugin.cpp:549
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Sähköpostia tai nimeä ei ole annettu Gitille"
 
-#: gitplugin.cpp:547
+#: gitplugin.cpp:546
 #, fuzzy, kde-format
 #| msgid "No files or message specified"
 msgid "No message specified"
 msgstr "Tiedostoja tai viestiä ei annettu."
 
-#: gitplugin.cpp:621
+#: gitplugin.cpp:620
 #, kde-format
 msgid "No files to remove"
 msgstr "Ei poistettavia tiedostoja"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:900
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Muutoksia on odottamassa. Haluatko kätkeä ne ensin?"
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:901
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Kätkö"
 
-#: gitplugin.cpp:903
+#: gitplugin.cpp:902
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

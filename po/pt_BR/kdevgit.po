@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-16 00:39+0000\n"
 "PO-Revision-Date: 2022-07-14 09:51-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -263,12 +263,12 @@ msgstr "Não foi especificada a lista de arquivos"
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Não foi possível reverter as alterações"
 
-#: gitplugin.cpp:491
+#: gitplugin.cpp:490
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Não foi possível reverter as alterações"
 
-#: gitplugin.cpp:502
+#: gitplugin.cpp:501
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -276,35 +276,35 @@ msgstr ""
 "Os arquivos a seguir têm modificações a enviar que serão perdidas. Deseja "
 "continuar?"
 
-#: gitplugin.cpp:527
+#: gitplugin.cpp:526
 #, kde-format
 msgid "No files or message specified"
 msgstr "Não foram indicados arquivos ou uma mensagem"
 
-#: gitplugin.cpp:531 gitplugin.cpp:550
+#: gitplugin.cpp:530 gitplugin.cpp:549
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Não foi indicado o e-mail ou o nome para o Git"
 
-#: gitplugin.cpp:547
+#: gitplugin.cpp:546
 #, fuzzy, kde-format
 #| msgid "No files or message specified"
 msgid "No message specified"
 msgstr "Não foram indicados arquivos ou uma mensagem"
 
-#: gitplugin.cpp:621
+#: gitplugin.cpp:620
 #, kde-format
 msgid "No files to remove"
 msgstr "Não existem arquivos para remover"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:900
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Existem alterações pendentes, deseja guardar temporariamente essas "
 "modificações?"
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:901
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Pop Stash"
@@ -312,7 +312,7 @@ msgctxt "@action:button"
 msgid "Stash"
 msgstr "Repor uma modificação temporária"
 
-#: gitplugin.cpp:903
+#: gitplugin.cpp:902
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
