@@ -104,8 +104,8 @@ public:
 
 private:
     void onMesonInfoChanged(QString path, QString projectName);
+    void projectClosing(KDevelop::IProject* project);
 
-private:
     MesonBuilder* m_builder;
     QHash<KDevelop::IProject*, MesonTargetsPtr> m_projectTargets;
     QHash<KDevelop::IProject*, MesonTestSuitesPtr> m_projectTestSuites;
