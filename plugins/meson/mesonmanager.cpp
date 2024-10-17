@@ -114,6 +114,8 @@ MesonManager::MesonManager(QObject* parent, const KPluginMetaData& metaData, con
     if (m_builder->hasError()) {
         setErrorDescription(i18n("Meson builder error: %1", m_builder->errorDescription()));
     }
+    connect(ICore::self()->projectController(), &IProjectController::projectClosing, this,
+            &MesonManager::projectClosing);
 }
 
 MesonManager::~MesonManager()
@@ -165,6 +167,14 @@ bool MesonManager::reload(KDevelop::ProjectFolderItem* item)
     }
 
     return true;
+}
+
+static void cleanupTestSuites(const QHash<QString, MesonTestSuitePtr>& testSuites)
+{
+    auto* const testController = ICore::self()->testController();
+    for (const auto& suite : testSuites) {
+        testController->removeTestSuite(suite.get());
+    }
 }
 
 // ***************************
@@ -260,6 +270,15 @@ void MesonManager::onMesonInfoChanged(QString path, QString projectName)
     });
 }
 
+void MesonManager::projectClosing(IProject* project)
+{
+    const auto it = m_projectTestSuites.constFind(project);
+    if (it != m_projectTestSuites.cend()) {
+        cleanupTestSuites(it.value()->testSuites());
+        m_projectTestSuites.erase(it);
+    }
+}
+
 KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 {
     IProject* project = item->project();
@@ -309,10 +328,8 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
         }
 
         // Remove old test suites before deleting them
-        if (m_projectTestSuites[project]) {
-            for (auto i : m_projectTestSuites[project]->testSuites()) {
-                ICore::self()->testController()->removeTestSuite(i.get());
-            }
+        if (const auto& suites = m_projectTestSuites[project]) {
+            cleanupTestSuites(suites->testSuites());
         }
 
         m_projectTargets[project] = targets;
