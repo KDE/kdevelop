@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop/kdevcppdebugger.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
 "3 : 4\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:121
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -133,27 +133,27 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr ""
 
-#: gdbconfigpage.cpp:93
+#: gdbconfigpage.cpp:92
 #, fuzzy, kde-format
 #| msgid "GDB Configuration"
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Cumraíocht GDB"
 
-#: gdbconfigpage.cpp:139
+#: gdbconfigpage.cpp:138
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 
-#: gdbconfigpage.cpp:141
+#: gdbconfigpage.cpp:140
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: gdbconfigpage.cpp:167
+#: gdbconfigpage.cpp:166
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr ""

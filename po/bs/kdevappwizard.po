@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2014-01-10 10:34+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -133,66 +133,66 @@ msgstr "Datoteka %1 ne može biti stvorena."
 msgid "Project Templates"
 msgstr "Projektni šabloni"
 
-#: projectselectionpage.cpp:60
+#: projectselectionpage.cpp:59
 #, fuzzy, kde-format
 #| msgid "Category"
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Kategorija"
 
-#: projectselectionpage.cpp:61
+#: projectselectionpage.cpp:60
 #, fuzzy, kde-format
 #| msgid "Project Type"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Vrsta projekta"
 
-#: projectselectionpage.cpp:71
+#: projectselectionpage.cpp:70
 #, fuzzy, kde-format
 #| msgid "Get More Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Dobavi još predložaka"
 
-#: projectselectionpage.cpp:78
+#: projectselectionpage.cpp:77
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Učitaj predložak iz datoteke"
 
-#: projectselectionpage.cpp:174
+#: projectselectionpage.cpp:173
 #, kde-format
 msgid "Invalid location"
 msgstr "Pogrešna lokacija"
 
-#: projectselectionpage.cpp:181
+#: projectselectionpage.cpp:180
 #, kde-format
 msgid "Empty project name"
 msgstr "Prazno ime projekta"
 
-#: projectselectionpage.cpp:201
+#: projectselectionpage.cpp:200
 #, kde-format
 msgid "Invalid project name"
 msgstr "Nevažeće ime projekta"
 
-#: projectselectionpage.cpp:220
+#: projectselectionpage.cpp:219
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "Ne mogu kreirati poddirektorije, nedostaju prava na: %1"
 
-#: projectselectionpage.cpp:235
+#: projectselectionpage.cpp:234
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr ""
 "Pogrešan predložak projekta, odaberite objekt koji je na listovima stabla"
 
-#: projectselectionpage.cpp:248
+#: projectselectionpage.cpp:247
 #, fuzzy, kde-format
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "Staza već postoji i sadrži datoteke"
 
-#: projectselectionpage.cpp:295
+#: projectselectionpage.cpp:294
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
@@ -201,7 +201,7 @@ msgstr ""
 "Navedena staza već postoji i sadrži datoteke. Da li ste sigurni da želite "
 "nastaviti?"
 
-#: projectselectionpage.cpp:311
+#: projectselectionpage.cpp:310
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@title:window"

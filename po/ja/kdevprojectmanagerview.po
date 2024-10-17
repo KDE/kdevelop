@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2008-12-12 00:37+0900\n"
 "Last-Translator: Yukiko Bando <ybando@k6.dion.ne.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -69,13 +69,13 @@ msgctxt "@info:tooltip"
 msgid "Suboperation skipped to prevent data loss"
 msgstr ""
 
-#: cutcopypastehelpers.cpp:287
+#: cutcopypastehelpers.cpp:297
 #, kde-format
 msgctxt "@title:window"
 msgid "Paste Failed"
 msgstr ""
 
-#: cutcopypastehelpers.cpp:323
+#: cutcopypastehelpers.cpp:333
 #, kde-format
 msgid ""
 "Failed to paste. Below is a list of suboperations that have been attempted."
@@ -164,7 +164,7 @@ msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
 msgstr "選択したアイテムをビルドセットから削除"
 
-#: projectmanagerview.cpp:75 projectmanagerviewplugin.cpp:193
+#: projectmanagerview.cpp:75 projectmanagerviewplugin.cpp:192
 #, fuzzy, kde-format
 #| msgid "Projects"
 msgctxt "@title:window"
@@ -218,122 +218,122 @@ msgctxt "@info:whatsthis"
 msgid "Build Items:"
 msgstr "ビルドセット"
 
-#: projectmanagerviewplugin.cpp:145
+#: projectmanagerviewplugin.cpp:144
 #, fuzzy, kde-format
 #| msgid "Build all Projects"
 msgctxt "@action"
 msgid "Build All Projects"
 msgstr "すべてのプロジェクトをビルド"
 
-#: projectmanagerviewplugin.cpp:150
+#: projectmanagerviewplugin.cpp:149
 #, fuzzy, kde-format
 #| msgid "Buildset"
 msgctxt "@action"
 msgid "Build Selection"
 msgstr "ビルドセット"
 
-#: projectmanagerviewplugin.cpp:151
+#: projectmanagerviewplugin.cpp:150
 #, fuzzy, kde-format
 #| msgid "Build"
 msgctxt "@action:intoolbar"
 msgid "Build"
 msgstr "ビルド"
 
-#: projectmanagerviewplugin.cpp:157
+#: projectmanagerviewplugin.cpp:156
 #, kde-format
 msgctxt "@action"
 msgid "Install Selection"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:158
+#: projectmanagerviewplugin.cpp:157
 #, fuzzy, kde-format
 #| msgid "Install"
 msgctxt "@action:intoolbar"
 msgid "Install"
 msgstr "インストール"
 
-#: projectmanagerviewplugin.cpp:164
+#: projectmanagerviewplugin.cpp:163
 #, kde-format
 msgctxt "@action"
 msgid "Clean Selection"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:165
+#: projectmanagerviewplugin.cpp:164
 #, fuzzy, kde-format
 #| msgid "Clean"
 msgctxt "@action:intoolbar"
 msgid "Clean"
 msgstr "クリーン"
 
-#: projectmanagerviewplugin.cpp:170
+#: projectmanagerviewplugin.cpp:169
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@action"
 msgid "Configure Selection"
 msgstr "設定"
 
-#: projectmanagerviewplugin.cpp:172
+#: projectmanagerviewplugin.cpp:171
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@action:intoolbar"
 msgid "Configure"
 msgstr "設定"
 
-#: projectmanagerviewplugin.cpp:177
+#: projectmanagerviewplugin.cpp:176
 #, kde-format
 msgctxt "@action"
 msgid "Prune Selection"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:178
+#: projectmanagerviewplugin.cpp:177
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Prune"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:284
+#: projectmanagerviewplugin.cpp:283
 #, fuzzy, kde-format
 #| msgid "Create File"
 msgctxt "@action:inmenu"
 msgid "Create &File..."
 msgstr "ファイルを作成"
 
-#: projectmanagerviewplugin.cpp:290
+#: projectmanagerviewplugin.cpp:289
 #, fuzzy, kde-format
 #| msgid "Create Folder"
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
 msgstr "フォルダを作成"
 
-#: projectmanagerviewplugin.cpp:297
+#: projectmanagerviewplugin.cpp:296
 #, fuzzy, kde-format
 #| msgid "Build"
 msgctxt "@action:inmenu"
 msgid "&Build"
 msgstr "ビルド"
 
-#: projectmanagerviewplugin.cpp:301
+#: projectmanagerviewplugin.cpp:300
 #, fuzzy, kde-format
 #| msgid "Install"
 msgctxt "@action:inmenu"
 msgid "&Install"
 msgstr "インストール"
 
-#: projectmanagerviewplugin.cpp:305
+#: projectmanagerviewplugin.cpp:304
 #, fuzzy, kde-format
 #| msgid "Clean"
 msgctxt "@action:inmenu"
 msgid "&Clean"
 msgstr "クリーン"
 
-#: projectmanagerviewplugin.cpp:309
+#: projectmanagerviewplugin.cpp:308
 #, fuzzy, kde-format
 #| msgid "Add to Buildset"
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
 msgstr "ビルドセットに追加"
 
-#: projectmanagerviewplugin.cpp:316
+#: projectmanagerviewplugin.cpp:315
 #, fuzzy, kde-format
 #| msgid "Projects"
 msgctxt "@action:inmenu"
@@ -341,95 +341,95 @@ msgid "C&lose Project"
 msgid_plural "Close Projects"
 msgstr[0] "プロジェクト"
 
-#: projectmanagerviewplugin.cpp:322
+#: projectmanagerviewplugin.cpp:321
 #, fuzzy, kde-format
 #| msgid "Reload"
 msgctxt "@action:inmenu"
 msgid "&Reload"
 msgstr "再読み込み"
 
-#: projectmanagerviewplugin.cpp:353
+#: projectmanagerviewplugin.cpp:352
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remo&ve"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:357
+#: projectmanagerviewplugin.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Re&name..."
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:363
+#: projectmanagerviewplugin.cpp:362
 #, fuzzy, kde-format
 #| msgid "Remove from buildset"
 msgctxt "@action:inmenu"
 msgid "Remove from &Target"
 msgstr "ビルドセットから削除"
 
-#: projectmanagerviewplugin.cpp:550
+#: projectmanagerviewplugin.cpp:549
 #, fuzzy, kde-format
 #| msgid "Create Folder"
 msgctxt "@title:window"
 msgid "Create Folder in %1"
 msgstr "フォルダを作成"
 
-#: projectmanagerviewplugin.cpp:551
+#: projectmanagerviewplugin.cpp:550
 #, fuzzy, kde-format
 #| msgid "Folder Name"
 msgctxt "@label:textbox"
 msgid "Folder name:"
 msgstr "フォルダ名"
 
-#: projectmanagerviewplugin.cpp:602
+#: projectmanagerviewplugin.cpp:601
 #, kde-format
 msgid "Do you really want to delete this item?"
 msgid_plural "Do you really want to delete these %1 items?"
 msgstr[0] ""
 
-#: projectmanagerviewplugin.cpp:604
+#: projectmanagerviewplugin.cpp:603
 #, fuzzy, kde-format
 #| msgid "Create File"
 msgctxt "@title:window"
 msgid "Delete Files"
 msgstr "ファイルを作成"
 
-#: projectmanagerviewplugin.cpp:657
+#: projectmanagerviewplugin.cpp:656
 #, fuzzy, kde-format
 #| msgid "File Name"
 msgctxt "@window:title"
 msgid "Rename"
 msgstr "ファイル名"
 
-#: projectmanagerviewplugin.cpp:658
+#: projectmanagerviewplugin.cpp:657
 #, kde-format
 msgctxt "@label:textbox"
 msgid "New name for '%1':"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:670
+#: projectmanagerviewplugin.cpp:669
 #, kde-format
 msgid "There is already a file named '%1'"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:673
+#: projectmanagerviewplugin.cpp:672
 #, kde-format
 msgid "Could not rename '%1'"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:676
+#: projectmanagerviewplugin.cpp:675
 #, kde-format
 msgid "'%1' is not a valid file name"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:690
+#: projectmanagerviewplugin.cpp:689
 #, fuzzy, kde-format
 #| msgid "Create File"
 msgctxt "@title:window"
 msgid "Create File in %1"
 msgstr "ファイルを作成"
 
-#: projectmanagerviewplugin.cpp:690
+#: projectmanagerviewplugin.cpp:689
 #, fuzzy, kde-format
 #| msgid "File Name"
 msgctxt "@label:textbox"

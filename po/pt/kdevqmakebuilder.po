@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-09 12:56+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -18,13 +18,13 @@ msgstr ""
 "X-POFile-SpellExtra: KDevelop QMake\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: qmakebuilderpreferences.cpp:81
+#: qmakebuilderpreferences.cpp:80
 #, kde-format
 msgctxt "@title:tab"
 msgid "QMake"
 msgstr "QMake"
 
-#: qmakebuilderpreferences.cpp:140
+#: qmakebuilderpreferences.cpp:139
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -33,13 +33,13 @@ msgstr ""
 "A pasta %1 está prestes a ser removida da lista do KDevelop.\n"
 "Deseja que o KDevelop a remova também do sistema de ficheiros?"
 
-#: qmakebuilderpreferences.cpp:144
+#: qmakebuilderpreferences.cpp:143
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Não Remover"
 
-#: qmakebuilderpreferences.cpp:149
+#: qmakebuilderpreferences.cpp:148
 #, kde-format
 msgid "Could not remove: %1."
 msgstr "Não foi possível remover: %1."

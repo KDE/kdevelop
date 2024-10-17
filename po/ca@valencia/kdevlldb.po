@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-09 16:17+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "(running)"
 msgstr "(en execució)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:50
+#: debuggerplugin.cpp:28 lldblauncher.cpp:49
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
@@ -37,23 +37,23 @@ msgctxt "@title:window"
 msgid "LLDB Console"
 msgstr "Consola de LLDB"
 
-#: debugsession.cpp:137
+#: debugsession.cpp:136
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr ""
 "S'està intentant executar una ordre d'usuari en una versió no admesa de LLDB"
 
-#: debugsession.cpp:336
+#: debugsession.cpp:335
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>No s'ha pogut iniciar el depurador:</b><br />"
 
-#: debugsession.cpp:347
+#: debugsession.cpp:346
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>S'ha produït un error en connectar amb l'objectiu remot:</b><br />"
 
-#: debugsession.cpp:360
+#: debugsession.cpp:359
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -62,7 +62,7 @@ msgstr ""
 "<b>No s'ha pogut carregar el fitxer de nucli</b><p>El depurador ha informat "
 "de l'error següent:<p><tt>%1"
 
-#: debugsession.cpp:391
+#: debugsession.cpp:390
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -75,12 +75,12 @@ msgstr ""
 "més informació.<br/>La consola del depurador es desactivarà per a evitar una "
 "fallada.<br/>Voleu continuar?"
 
-#: debugsession.cpp:395
+#: debugsession.cpp:394
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "Versió no admesa de la LLDB"
 
-#: debugsession.cpp:441
+#: debugsession.cpp:440
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -94,12 +94,12 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Barra d'eines del depurador"
 
-#: lldblauncher.cpp:55
+#: lldblauncher.cpp:54
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Depura una aplicació nativa en LLDB"
 
-#: lldblauncher.cpp:80
+#: lldblauncher.cpp:79
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -108,7 +108,7 @@ msgstr ""
 "Ja s'està depurant un programa. Voleu interrompre la sessió de depuració "
 "actualment en execució i continuar amb el llançament?"
 
-#: lldblauncher.cpp:82
+#: lldblauncher.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

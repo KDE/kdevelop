@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2013-03-29 10:52+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -259,14 +259,14 @@ msgctxt "@title:menu"
 msgid "Scope: %1"
 msgstr "Megoldás: %1"
 
-#: problemtreeview.cpp:97
+#: problemtreeview.cpp:96
 #, fuzzy, kde-format
 #| msgid "Problems"
 msgctxt "@info:whatsthis"
 msgid "Problems"
 msgstr "Problémák"
 
-#: problemtreeview.cpp:252
+#: problemtreeview.cpp:251
 #, fuzzy, kde-format
 #| msgctxt "@title:column problem description"
 #| msgid "Problem"
@@ -274,13 +274,13 @@ msgctxt "@title:menu"
 msgid "Problem"
 msgstr "Probléma"
 
-#: problemtreeview.cpp:254
+#: problemtreeview.cpp:253
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Description"
 msgstr ""
 
-#: problemtreeview.cpp:273
+#: problemtreeview.cpp:272
 #, fuzzy, kde-format
 #| msgid "Solve: %1"
 msgctxt "@title:menu"

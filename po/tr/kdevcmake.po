@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2023-04-21 12:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -377,7 +377,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Diziler"
 
-#: settings/cmakepreferences.cpp:344
+#: settings/cmakepreferences.cpp:343
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -386,24 +386,24 @@ msgstr ""
 "%1 dizini, K Geliştir'in listesinden kaldırılmak üzere.\n"
 "K Geliştir'in bu dizini dosya sisteminden de silmesini istiyor musunuz?"
 
-#: settings/cmakepreferences.cpp:348
+#: settings/cmakepreferences.cpp:347
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Silme"
 
-#: settings/cmakepreferences.cpp:353
+#: settings/cmakepreferences.cpp:352
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Kaldırılamadı: %1"
 
-#: settings/cmakepreferences.cpp:399
+#: settings/cmakepreferences.cpp:398
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:404
+#: settings/cmakepreferences.cpp:403
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

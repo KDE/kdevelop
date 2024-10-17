@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexternalscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-11 00:49+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -508,31 +508,31 @@ msgctxt "@title:menu"
 msgid "External Scripts"
 msgstr "Script esterni"
 
-#: externalscriptview.cpp:32
+#: externalscriptview.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "External Scripts"
 msgstr "Script esterni"
 
-#: externalscriptview.cpp:51
+#: externalscriptview.cpp:50
 #, kde-format
 msgctxt "@action"
 msgid "Add External Script"
 msgstr "Aggiungi script esterno"
 
-#: externalscriptview.cpp:56
+#: externalscriptview.cpp:55
 #, kde-format
 msgctxt "@action"
 msgid "Edit External Script"
 msgstr "Modifica script esterno"
 
-#: externalscriptview.cpp:61
+#: externalscriptview.cpp:60
 #, kde-format
 msgctxt "@action"
 msgid "Remove External Script"
 msgstr "Rimuovi script esterno"
 
-#: externalscriptview.cpp:148
+#: externalscriptview.cpp:147
 #, kde-format
 msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
@@ -541,13 +541,13 @@ msgstr ""
 "<p>Sei sicuro di voler rimuovere la configurazione dello script esterno <i>"
 "%1</i>?</p><p><i>Nota:</i> Lo script stesso non verrà rimosso.</p>"
 
-#: externalscriptview.cpp:151
+#: externalscriptview.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
 msgstr "Conferma la rimozione dello script esterno"
 
-#: externalscriptview.cpp:152
+#: externalscriptview.cpp:151
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"

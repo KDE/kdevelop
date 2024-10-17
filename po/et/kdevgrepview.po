@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2020-01-15 14:38+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -164,74 +164,74 @@ msgctxt ""
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr "Asendamine <b>%1</b> -> <b>%2</b> nurjus failis %3:%4:%5"
 
-#: grepoutputview.cpp:72
+#: grepoutputview.cpp:71
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
 msgstr "Otsimis-asendamisväljundi vaade"
 
-#: grepoutputview.cpp:75
+#: grepoutputview.cpp:74
 #, fuzzy, kde-format
 #| msgid "&Previous Item"
 msgctxt "@action"
 msgid "&Previous Item"
 msgstr "&Eelmine element"
 
-#: grepoutputview.cpp:76
+#: grepoutputview.cpp:75
 #, fuzzy, kde-format
 #| msgid "&Next Item"
 msgctxt "@action"
 msgid "&Next Item"
 msgstr "&Järgmine element"
 
-#: grepoutputview.cpp:81
+#: grepoutputview.cpp:80
 #, fuzzy, kde-format
 #| msgid "C&ollapse All"
 msgctxt "@action"
 msgid "C&ollapse All"
 msgstr "S&ulge kõik"
 
-#: grepoutputview.cpp:83
+#: grepoutputview.cpp:82
 #, fuzzy, kde-format
 #| msgid "&Expand All"
 msgctxt "@action"
 msgid "&Expand All"
 msgstr "A&va kõik"
 
-#: grepoutputview.cpp:87
+#: grepoutputview.cpp:86
 #, fuzzy, kde-format
 #| msgid "New &Search"
 msgctxt "@action"
 msgid "New &Search"
 msgstr "&Uus otsing"
 
-#: grepoutputview.cpp:88
+#: grepoutputview.cpp:87
 #, fuzzy, kde-format
 #| msgid "Refresh"
 msgctxt "@action"
 msgid "Refresh"
 msgstr "Värskenda"
 
-#: grepoutputview.cpp:90
+#: grepoutputview.cpp:89
 #, fuzzy, kde-format
 #| msgid "Clear Search History"
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "Puhasta otsinguajalugu"
 
-#: grepoutputview.cpp:325
+#: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
 msgstr "Kas asendada tühja stringiga?"
 
-#: grepoutputview.cpp:326
+#: grepoutputview.cpp:325
 #, fuzzy, kde-format
 #| msgid "Start replacement"
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr "Alusta asendamist"
 
-#: grepoutputview.cpp:327
+#: grepoutputview.cpp:326
 #, fuzzy, kde-format
 #| msgid "&Replace"
 msgctxt "@action:button"

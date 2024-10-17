@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-16 00:39+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2021-12-27 18:39+0400\n"
 "Last-Translator: Kheyyam Gojayev <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -47,87 +47,87 @@ msgstr "İşarələnməmiş düzəlişləri ləğv edin"
 msgid "Committing failed. See Version Control tool view."
 msgstr "Göndərilə bilmədi. Versiyay nəzarət alətlər panelinə baxın."
 
-#: diffviewsctrl.cpp:51
+#: diffviewsctrl.cpp:50
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "Seçilmiş sətirlərdə və hissələrdəki dəyişiklikləri qeyd edin"
 
-#: diffviewsctrl.cpp:53
+#: diffviewsctrl.cpp:52
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "Seçilmiş sətirlərin və hissələrin seçimini ləğv edin"
 
-#: diffviewsctrl.cpp:55
+#: diffviewsctrl.cpp:54
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "Seçilmiş sətir və ya hissələrdəki dəyişiklikləri geri qaytarın"
 
-#: diffviewsctrl.cpp:57
+#: diffviewsctrl.cpp:56
 #, kde-format
 msgid "Go to line in source"
 msgstr "Qaynaqdakı sətirə keçin"
 
-#: diffviewsctrl.cpp:109
+#: diffviewsctrl.cpp:108
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Seçilmiş sətirlərin seçimini ləğv edin"
 
-#: diffviewsctrl.cpp:110
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Seçilmiş sətirləri qeyd edin"
 
-#: diffviewsctrl.cpp:111
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Seçilmiş sətirləri geri qaytarın"
 
-#: diffviewsctrl.cpp:113
+#: diffviewsctrl.cpp:112
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Seçilmiş hissələrin seçimini ləğv edin"
 
-#: diffviewsctrl.cpp:114
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Seçilmiş hissələri qeyd edin"
 
-#: diffviewsctrl.cpp:115
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Seçilmiş hissələri geri qaytarın"
 
-#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
+#: diffviewsctrl.cpp:124 diffviewsctrl.cpp:130
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:178
+#: diffviewsctrl.cpp:177
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (işarələnmiş)"
 
-#: diffviewsctrl.cpp:180
+#: diffviewsctrl.cpp:179
 #, kde-format
 msgid "Staged (%1)"
 msgstr "İşarələnmiş (%1)"
 
-#: diffviewsctrl.cpp:182
+#: diffviewsctrl.cpp:181
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "İşarələnməmiş (%1)"
 
-#: diffviewsctrl.cpp:184
+#: diffviewsctrl.cpp:183
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (işarələnmiş)"
 
-#: diffviewsctrl.cpp:339
+#: diffviewsctrl.cpp:338
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -136,7 +136,7 @@ msgstr ""
 "Seçilmiş sətirlər geri qaytarılacaq və dəyişikliklər itiriləcəkdir. Bu "
 "əməliyyat ləğv edilə bilməz. Davam edirsiniz?"
 
-#: diffviewsctrl.cpp:341
+#: diffviewsctrl.cpp:340
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
@@ -199,67 +199,67 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Ümumi tənzimləməyə yazın"
 
-#: gitplugin.cpp:186
+#: gitplugin.cpp:185
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "Git icra faylı tapıla bilmədi. O, sistemə quraşdırılıb?"
 
-#: gitplugin.cpp:195
+#: gitplugin.cpp:194
 #, kde-format
 msgid "Git Commit"
 msgstr "Git yerləşdirməsi"
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Bazanı köçürün"
 
-#: gitplugin.cpp:248
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git reesteri qeydləri"
 
-#: gitplugin.cpp:249
+#: gitplugin.cpp:248
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Reesterin idarəsi"
 
-#: gitplugin.cpp:250
+#: gitplugin.cpp:249
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Qeydi tətbiq edin"
 
-#: gitplugin.cpp:251
+#: gitplugin.cpp:250
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Reester qeydini çıxarın"
 
-#: gitplugin.cpp:284
+#: gitplugin.cpp:283
 #, kde-format
 msgid "error: %1"
 msgstr "xəta: %1"
 
-#: gitplugin.cpp:383 gitplugin.cpp:394
+#: gitplugin.cpp:382 gitplugin.cpp:393
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Siyahı və ya fayllar göstərilməyib"
 
-#: gitplugin.cpp:456
+#: gitplugin.cpp:455
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Dəyişikliklər sıfırlana bilmədi (siyahı və ya yol boşdur)"
 
-#: gitplugin.cpp:490
+#: gitplugin.cpp:489
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Dəyişikliklər geri qaytarıla bilmədi"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:500
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -267,34 +267,34 @@ msgstr ""
 "Aşağıdakı fayllar göndərilməmiş dəyişikliklərdir və bunlar itiriləcəkdir, "
 "Davam edirsiniz?"
 
-#: gitplugin.cpp:526
+#: gitplugin.cpp:525
 #, kde-format
 msgid "No files or message specified"
 msgstr "Fayllar və ismarıclar göstərilməyib"
 
-#: gitplugin.cpp:530 gitplugin.cpp:549
+#: gitplugin.cpp:529 gitplugin.cpp:548
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Git üçün e-poçt və ya ad göstərilməyib"
 
-#: gitplugin.cpp:546
+#: gitplugin.cpp:545
 #, kde-format
 msgid "No message specified"
 msgstr "İsmarıc gösətrilməyib"
 
-#: gitplugin.cpp:620
+#: gitplugin.cpp:619
 #, kde-format
 msgid "No files to remove"
 msgstr "Silinəcək fayllar yoxdur"
 
-#: gitplugin.cpp:900
+#: gitplugin.cpp:899
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Göndərilməmiş dəyişikliklər var, öncə onları ehtiyyat saxlamaq "
 "istəyirsinizmi?"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:900
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Pop Stash"
@@ -302,7 +302,7 @@ msgctxt "@action:button"
 msgid "Stash"
 msgstr "Reester qeydini çıxarın"
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:901
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -604,43 +604,43 @@ msgstr "Öncə dəyişiklikləri göndəriləcək layihəni seçin"
 msgid "Please stage some changes before committing."
 msgstr "Lütfən göndərmədən öncə bəzi dəyişiklikləri işarələyin."
 
-#: stashmanagerdialog.cpp:32
+#: stashmanagerdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Reesterin idarəsi"
 
-#: stashmanagerdialog.cpp:121
+#: stashmanagerdialog.cpp:120
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "\"%1\" qeydini reesterdən silmək istədiyinizə əminsiniz?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:122 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:121 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "Ləğv edin"
 
-#: stashmanagerdialog.cpp:131
+#: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Git reesteri qeydi"
 
-#: stashmanagerdialog.cpp:131
+#: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "Yeni şöbə üçün ad:"
 
-#: stashmanagerdialog.cpp:152
+#: stashmanagerdialog.cpp:151
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr ""
 
-#: stashmanagerdialog.cpp:162
+#: stashmanagerdialog.cpp:161
 #, kde-format
 msgid "%1 created on %2"
 msgstr ""

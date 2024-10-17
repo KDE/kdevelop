@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-16 00:39+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-11-25 21:57+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -62,87 +62,87 @@ msgstr "Wycofaj niedobrane zmiany"
 msgid "Committing failed. See Version Control tool view."
 msgstr "Nie udało się wdrożyć. Zobacz widok narzędzia do zarządzania wersjami."
 
-#: diffviewsctrl.cpp:51
+#: diffviewsctrl.cpp:50
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "Dobierz zaznaczone wiersze lub kawałek"
 
-#: diffviewsctrl.cpp:53
+#: diffviewsctrl.cpp:52
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "Odłóż zaznaczone wiersze lub kawałek"
 
-#: diffviewsctrl.cpp:55
+#: diffviewsctrl.cpp:54
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "Wycofaj zaznaczone wiersze lub kawałek"
 
-#: diffviewsctrl.cpp:57
+#: diffviewsctrl.cpp:56
 #, kde-format
 msgid "Go to line in source"
 msgstr "Przejdź do wiersza w źródle"
 
-#: diffviewsctrl.cpp:109
+#: diffviewsctrl.cpp:108
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Odłóż zaznaczone wiersze"
 
-#: diffviewsctrl.cpp:110
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Dobierz zaznaczone wiersze"
 
-#: diffviewsctrl.cpp:111
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Wycofaj zaznaczone wiersze"
 
-#: diffviewsctrl.cpp:113
+#: diffviewsctrl.cpp:112
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Odłóż zaznaczony kawałek"
 
-#: diffviewsctrl.cpp:114
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Dobierz zaznaczony kawałek"
 
-#: diffviewsctrl.cpp:115
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Wycofaj zaznaczony kawałek"
 
-#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
+#: diffviewsctrl.cpp:124 diffviewsctrl.cpp:130
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:178
+#: diffviewsctrl.cpp:177
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (dobrane)"
 
-#: diffviewsctrl.cpp:180
+#: diffviewsctrl.cpp:179
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Dobrane (%1)"
 
-#: diffviewsctrl.cpp:182
+#: diffviewsctrl.cpp:181
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Odłożone (%1)"
 
-#: diffviewsctrl.cpp:184
+#: diffviewsctrl.cpp:183
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (odłożone)"
 
-#: diffviewsctrl.cpp:339
+#: diffviewsctrl.cpp:338
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -151,7 +151,7 @@ msgstr ""
 "Zaznaczone wiersze zostaną wycofane, a zmiany utracone. Nie można będzie "
 "wycofać tego działania. Czy kontynuować?"
 
-#: diffviewsctrl.cpp:341
+#: diffviewsctrl.cpp:340
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
@@ -214,68 +214,68 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Zapisz do globalnych ustawień"
 
-#: gitplugin.cpp:186
+#: gitplugin.cpp:185
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr ""
 "Nie można znaleźć pliku wykonywalnego git. Czy został on wgrany w systemie?"
 
-#: gitplugin.cpp:195
+#: gitplugin.cpp:194
 #, kde-format
 msgid "Git Commit"
 msgstr "Wdrożenie Git"
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Zmiana podstawy"
 
-#: gitplugin.cpp:248
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Składowiska Git"
 
-#: gitplugin.cpp:249
+#: gitplugin.cpp:248
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Zarządzanie składowiskiem"
 
-#: gitplugin.cpp:250
+#: gitplugin.cpp:249
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Wrzuć na składowisko"
 
-#: gitplugin.cpp:251
+#: gitplugin.cpp:250
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Pobierz ze składowiska"
 
-#: gitplugin.cpp:284
+#: gitplugin.cpp:283
 #, kde-format
 msgid "error: %1"
 msgstr "błąd: %1"
 
-#: gitplugin.cpp:383 gitplugin.cpp:394
+#: gitplugin.cpp:382 gitplugin.cpp:393
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Nie podano listy plików"
 
-#: gitplugin.cpp:456
+#: gitplugin.cpp:455
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Nie można wyzerować zmian (pusta lista ścieżek)"
 
-#: gitplugin.cpp:490
+#: gitplugin.cpp:489
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Nie można wycofać zmian"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:500
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -283,38 +283,38 @@ msgstr ""
 "Następujące pliki mają niewdrożone zmiany, które zostaną utracone. Czy "
 "kontynuować?"
 
-#: gitplugin.cpp:526
+#: gitplugin.cpp:525
 #, kde-format
 msgid "No files or message specified"
 msgstr "Nie określono żadnych plików lub wiadomości"
 
-#: gitplugin.cpp:530 gitplugin.cpp:549
+#: gitplugin.cpp:529 gitplugin.cpp:548
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Nie podano nazwy lub adresu e-mail dla Git"
 
-#: gitplugin.cpp:546
+#: gitplugin.cpp:545
 #, kde-format
 msgid "No message specified"
 msgstr "Nie określono żadnej wiadomości"
 
-#: gitplugin.cpp:620
+#: gitplugin.cpp:619
 #, kde-format
 msgid "No files to remove"
 msgstr "Brak plików do usunięcia"
 
-#: gitplugin.cpp:900
+#: gitplugin.cpp:899
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Istnieją oczekujące zmiany, czy chcesz je najpierw zeskładować?"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:900
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Schowek"
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:901
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -614,43 +614,43 @@ msgstr "Aby wdrożyć zmiany, najpierw wybierz projekt"
 msgid "Please stage some changes before committing."
 msgstr "Dobierz jakieś zmiany przed utworzeniem wdrożenia."
 
-#: stashmanagerdialog.cpp:32
+#: stashmanagerdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Zarządzanie składowiskiem"
 
-#: stashmanagerdialog.cpp:121
+#: stashmanagerdialog.cpp:120
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "Czy na pewno chcesz obniżyć składowisko '%1'?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:122 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:121 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "Usuń"
 
-#: stashmanagerdialog.cpp:131
+#: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Składowiska Git"
 
-#: stashmanagerdialog.cpp:131
+#: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "Nazwa nowej gałęzi:"
 
-#: stashmanagerdialog.cpp:152
+#: stashmanagerdialog.cpp:151
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr "%1. %2: %3"
 
-#: stashmanagerdialog.cpp:162
+#: stashmanagerdialog.cpp:161
 #, kde-format
 msgid "%1 created on %2"
 msgstr "%1 utworzony w dniu %2"

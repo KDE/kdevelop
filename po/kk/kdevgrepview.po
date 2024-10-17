@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2013-11-12 03:57+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -162,73 +162,73 @@ msgctxt ""
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr "%3:%4:%5 дегенде <b>%1</b> -> <b>%2</b> ауыстыру жаңылысы"
 
-#: grepoutputview.cpp:72
+#: grepoutputview.cpp:71
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
 msgstr "Іздеу/Ауыстыру шығыс көрінісі"
 
-#: grepoutputview.cpp:75
+#: grepoutputview.cpp:74
 #, fuzzy, kde-format
 #| msgid "&Previous Item"
 msgctxt "@action"
 msgid "&Previous Item"
 msgstr "&Алдыңғысы"
 
-#: grepoutputview.cpp:76
+#: grepoutputview.cpp:75
 #, fuzzy, kde-format
 #| msgid "&Next Item"
 msgctxt "@action"
 msgid "&Next Item"
 msgstr "&Келесісі"
 
-#: grepoutputview.cpp:81
+#: grepoutputview.cpp:80
 #, fuzzy, kde-format
 #| msgid "C&ollapse All"
 msgctxt "@action"
 msgid "C&ollapse All"
 msgstr "Б&үкілін бүктеу"
 
-#: grepoutputview.cpp:83
+#: grepoutputview.cpp:82
 #, fuzzy, kde-format
 #| msgid "&Expand All"
 msgctxt "@action"
 msgid "&Expand All"
 msgstr "&Бүкілін тарқату"
 
-#: grepoutputview.cpp:87
+#: grepoutputview.cpp:86
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@action"
 msgid "New &Search"
 msgstr "Іздеу..."
 
-#: grepoutputview.cpp:88
+#: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
 msgstr ""
 
-#: grepoutputview.cpp:90
+#: grepoutputview.cpp:89
 #, fuzzy, kde-format
 #| msgid "Clear Search History"
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "Іздеу тарихын тазалау"
 
-#: grepoutputview.cpp:325
+#: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
 msgstr "бос мәтінмен ауыстырмақсыз ба?"
 
-#: grepoutputview.cpp:326
+#: grepoutputview.cpp:325
 #, fuzzy, kde-format
 #| msgid "Start replacement"
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr "Ауыстыруды бастау"
 
-#: grepoutputview.cpp:327
+#: grepoutputview.cpp:326
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "@action:button"

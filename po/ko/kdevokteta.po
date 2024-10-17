@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2020-10-04 20:15+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -39,12 +39,12 @@ msgstr "책갈피"
 msgid "Main Toolbar"
 msgstr "주 도구 모음"
 
-#: oktetadocument.cpp:131
+#: oktetadocument.cpp:130
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "문서 \"%1\"에 저장되지 않은 변경 사항이 있습니다. 저장하시겠습니까?"
 
-#: oktetadocument.cpp:132
+#: oktetadocument.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"

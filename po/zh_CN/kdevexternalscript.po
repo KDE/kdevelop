@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -472,31 +472,31 @@ msgctxt "@title:menu"
 msgid "External Scripts"
 msgstr "外部脚本"
 
-#: externalscriptview.cpp:32
+#: externalscriptview.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "External Scripts"
 msgstr "外部脚本"
 
-#: externalscriptview.cpp:51
+#: externalscriptview.cpp:50
 #, kde-format
 msgctxt "@action"
 msgid "Add External Script"
 msgstr "添加外部脚本"
 
-#: externalscriptview.cpp:56
+#: externalscriptview.cpp:55
 #, kde-format
 msgctxt "@action"
 msgid "Edit External Script"
 msgstr "编辑外部脚本"
 
-#: externalscriptview.cpp:61
+#: externalscriptview.cpp:60
 #, kde-format
 msgctxt "@action"
 msgid "Remove External Script"
 msgstr "删除外部脚本"
 
-#: externalscriptview.cpp:148
+#: externalscriptview.cpp:147
 #, kde-format
 msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
@@ -505,13 +505,13 @@ msgstr ""
 "<p>您确实想要删除 <i>%1</i> 的外部脚本配置吗？</p><p><i>注意：</i>脚本本身不"
 "会被删除。</p>"
 
-#: externalscriptview.cpp:151
+#: externalscriptview.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
 msgstr "确认外部脚本删除"
 
-#: externalscriptview.cpp:152
+#: externalscriptview.cpp:151
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"

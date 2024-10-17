@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2023-07-25 12:16+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -376,7 +376,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Strängar"
 
-#: settings/cmakepreferences.cpp:344
+#: settings/cmakepreferences.cpp:343
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -385,24 +385,24 @@ msgstr ""
 "Katalogen %1 kommer nu att tas bort från KDevelops lista.\n"
 "Vill du att KDevelop också ska ta bort den i filsystemet?"
 
-#: settings/cmakepreferences.cpp:348
+#: settings/cmakepreferences.cpp:347
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Ta inte bort"
 
-#: settings/cmakepreferences.cpp:353
+#: settings/cmakepreferences.cpp:352
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Kunde inte ta bort: %1"
 
-#: settings/cmakepreferences.cpp:399
+#: settings/cmakepreferences.cpp:398
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:404
+#: settings/cmakepreferences.cpp:403
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

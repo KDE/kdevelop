@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-09 08:21+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -20,13 +20,13 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 20.12.0\n"
 
-#: qmakebuilderpreferences.cpp:81
+#: qmakebuilderpreferences.cpp:80
 #, kde-format
 msgctxt "@title:tab"
 msgid "QMake"
 msgstr "QMake"
 
-#: qmakebuilderpreferences.cpp:140
+#: qmakebuilderpreferences.cpp:139
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -35,13 +35,13 @@ msgstr ""
 "Зараз зі списку KDevelop буде вилучено каталог %1.\n"
 "Чи бажаєте ви, щоб KDevelop вилучив цей каталог і з файлової системи?"
 
-#: qmakebuilderpreferences.cpp:144
+#: qmakebuilderpreferences.cpp:143
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Не вилучати"
 
-#: qmakebuilderpreferences.cpp:149
+#: qmakebuilderpreferences.cpp:148
 #, kde-format
 msgid "Could not remove: %1."
 msgstr "Не вдалося вилучити: %1."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-11 08:10+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "(running)"
 msgstr "(v teku)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:50
+#: debuggerplugin.cpp:28 lldblauncher.cpp:49
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
@@ -36,22 +36,22 @@ msgctxt "@title:window"
 msgid "LLDB Console"
 msgstr "Konzola LLDB"
 
-#: debugsession.cpp:137
+#: debugsession.cpp:136
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "Poskus izvršitve uporabniškega ukaza v nepodprti različici LLDB"
 
-#: debugsession.cpp:336
+#: debugsession.cpp:335
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Razhroščevalnika ni bilo mogoče zagnati:</b><br />"
 
-#: debugsession.cpp:347
+#: debugsession.cpp:346
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Napaka pri vzpostavljanju povezave z oddaljenim ciljem:</b><br />"
 
-#: debugsession.cpp:360
+#: debugsession.cpp:359
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -60,7 +60,7 @@ msgstr ""
 "<b>Nalaganje jedrne datoteke ni uspelo</b><p>Razhroščevalnik je poročal o "
 "naslednji napaki:<p><tt>%1"
 
-#: debugsession.cpp:391
+#: debugsession.cpp:390
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -73,12 +73,12 @@ msgstr ""
 ">Konzola za razhroščevanje bo onemogočena, da preprečimo sesutje.<br/>Ali "
 "želite nadaljevati?"
 
-#: debugsession.cpp:395
+#: debugsession.cpp:394
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "Različica LlDB ni podprta"
 
-#: debugsession.cpp:441
+#: debugsession.cpp:440
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -91,12 +91,12 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Orodna vrstica razhroščevalnika"
 
-#: lldblauncher.cpp:55
+#: lldblauncher.cpp:54
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Razhroščite domorodni program v LLDB"
 
-#: lldblauncher.cpp:80
+#: lldblauncher.cpp:79
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -105,7 +105,7 @@ msgstr ""
 "Program se že razhroščuje. Ali želite prekiniti trenutno zagnano sejo "
 "razhroščevanja in nadaljevati z zagonom?"
 
-#: lldblauncher.cpp:82
+#: lldblauncher.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

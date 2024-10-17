@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-16 00:39+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2024-03-22 16:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -51,87 +51,87 @@ msgstr "Hazırlıktan çıkarılmaş düzenlemeleri geri al"
 msgid "Committing failed. See Version Control tool view."
 msgstr "İşleme başarısız. Sürüm Denetimi araç görünümüne bakın."
 
-#: diffviewsctrl.cpp:51
+#: diffviewsctrl.cpp:50
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "Seçili satırları veya parçayı hazırla"
 
-#: diffviewsctrl.cpp:53
+#: diffviewsctrl.cpp:52
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "Seçili satırları veya parçayı hazırlıktan çıkar"
 
-#: diffviewsctrl.cpp:55
+#: diffviewsctrl.cpp:54
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "Seçili satırları veya parçayı geri al"
 
-#: diffviewsctrl.cpp:57
+#: diffviewsctrl.cpp:56
 #, kde-format
 msgid "Go to line in source"
 msgstr "Kaynakta satıra git"
 
-#: diffviewsctrl.cpp:109
+#: diffviewsctrl.cpp:108
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Seçili satırları hazırlıktan çıkar"
 
-#: diffviewsctrl.cpp:110
+#: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Seçili satırları hazırla"
 
-#: diffviewsctrl.cpp:111
+#: diffviewsctrl.cpp:110
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Seçili satırları geri al"
 
-#: diffviewsctrl.cpp:113
+#: diffviewsctrl.cpp:112
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Seçili parçayı hazırlıktan çıkar"
 
-#: diffviewsctrl.cpp:114
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Seçili parçayı hazırla"
 
-#: diffviewsctrl.cpp:115
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Seçili parçayı geri al"
 
-#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
+#: diffviewsctrl.cpp:124 diffviewsctrl.cpp:130
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:126 diffviewsctrl.cpp:132
+#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:178
+#: diffviewsctrl.cpp:177
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (hazırlandı)"
 
-#: diffviewsctrl.cpp:180
+#: diffviewsctrl.cpp:179
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Hazırlanan (%1)"
 
-#: diffviewsctrl.cpp:182
+#: diffviewsctrl.cpp:181
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Hazırlıktan Çıkarılan (%1)"
 
-#: diffviewsctrl.cpp:184
+#: diffviewsctrl.cpp:183
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (hazırlanmadı)"
 
-#: diffviewsctrl.cpp:339
+#: diffviewsctrl.cpp:338
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -140,7 +140,7 @@ msgstr ""
 "Seçili satırlar geri alınacak ve değişiklikler kaybolacak. Bu işlem geri "
 "alınamaz. Sürdürülsün mü?"
 
-#: diffviewsctrl.cpp:341
+#: diffviewsctrl.cpp:340
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
@@ -203,67 +203,67 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Global yapılandırmaya yaz"
 
-#: gitplugin.cpp:186
+#: gitplugin.cpp:185
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "Git yürütülebiliri bulunamadı. Sistemde kurulu mu?"
 
-#: gitplugin.cpp:195
+#: gitplugin.cpp:194
 #, kde-format
 msgid "Git Commit"
 msgstr "Git İşle"
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Yeniden Temellendir"
 
-#: gitplugin.cpp:248
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git Zulaları"
 
-#: gitplugin.cpp:249
+#: gitplugin.cpp:248
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Zula Yöneticisi"
 
-#: gitplugin.cpp:250
+#: gitplugin.cpp:249
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Zulayı İt"
 
-#: gitplugin.cpp:251
+#: gitplugin.cpp:250
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Zulayı Patlat"
 
-#: gitplugin.cpp:284
+#: gitplugin.cpp:283
 #, kde-format
 msgid "error: %1"
 msgstr "hata: %1"
 
-#: gitplugin.cpp:383 gitplugin.cpp:394
+#: gitplugin.cpp:382 gitplugin.cpp:393
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Dosyaların listesi belirtilmedi"
 
-#: gitplugin.cpp:456
+#: gitplugin.cpp:455
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Değişiklikler sıfırlanamadı (boş yol listesi)"
 
-#: gitplugin.cpp:490
+#: gitplugin.cpp:489
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Değişiklikler geri alınamadı"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:500
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -271,38 +271,38 @@ msgstr ""
 "Aşağıdaki dosyalarda işlenmemiş ve kaybolacak değişiklikler var. Sürdürülsün "
 "mü?"
 
-#: gitplugin.cpp:526
+#: gitplugin.cpp:525
 #, kde-format
 msgid "No files or message specified"
 msgstr "Dosya veya ileti belirtilmedi"
 
-#: gitplugin.cpp:530 gitplugin.cpp:549
+#: gitplugin.cpp:529 gitplugin.cpp:548
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Git için e-posta veya ad belirtilmemiş"
 
-#: gitplugin.cpp:546
+#: gitplugin.cpp:545
 #, kde-format
 msgid "No message specified"
 msgstr "Bir ileti belirtilmedi"
 
-#: gitplugin.cpp:620
+#: gitplugin.cpp:619
 #, kde-format
 msgid "No files to remove"
 msgstr "Kaldırılacak dosya yok"
 
-#: gitplugin.cpp:900
+#: gitplugin.cpp:899
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Bekleyen değişiklikler var, önce bunları zulalamak istiyor musunuz?"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:900
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Zulala"
 
-#: gitplugin.cpp:902
+#: gitplugin.cpp:901
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -602,43 +602,43 @@ msgstr "Değişiklikleri işlemek için önce bir proje seçin"
 msgid "Please stage some changes before committing."
 msgstr "İşlemeden önce değişiklikleri hazırlayın."
 
-#: stashmanagerdialog.cpp:32
+#: stashmanagerdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Zula Yöneticisi"
 
-#: stashmanagerdialog.cpp:121
+#: stashmanagerdialog.cpp:120
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "'%1' zulasını bırakmak istediğinizden emin misiniz?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:122 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:121 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "Bırak"
 
-#: stashmanagerdialog.cpp:131
+#: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Git Zulala"
 
-#: stashmanagerdialog.cpp:131
+#: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "Yeni dal adı:"
 
-#: stashmanagerdialog.cpp:152
+#: stashmanagerdialog.cpp:151
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr "%1. %2: %3"
 
-#: stashmanagerdialog.cpp:162
+#: stashmanagerdialog.cpp:161
 #, kde-format
 msgid "%1 created on %2"
 msgstr "%1, %2 tarihinde oluşturuldu"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-10 16:37+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19,13 +19,13 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Lokalize 22.04.1\n"
 
-#: qmakebuilderpreferences.cpp:81
+#: qmakebuilderpreferences.cpp:80
 #, kde-format
 msgctxt "@title:tab"
 msgid "QMake"
 msgstr "QMake"
 
-#: qmakebuilderpreferences.cpp:140
+#: qmakebuilderpreferences.cpp:139
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -34,13 +34,13 @@ msgstr ""
 "Mapa %1 bo pravkar odstranjena iz seznama KDevelopa.\n"
 "Ali želite, da jo KDevelop odstrani tudi iz datotečnega sistema?"
 
-#: qmakebuilderpreferences.cpp:144
+#: qmakebuilderpreferences.cpp:143
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Ne zbriši"
 
-#: qmakebuilderpreferences.cpp:149
+#: qmakebuilderpreferences.cpp:148
 #, kde-format
 msgid "Could not remove: %1."
 msgstr "Ni bilo mogoče odstraniti: %1."

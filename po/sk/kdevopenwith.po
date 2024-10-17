@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevopenwith\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-04-17 20:46+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -16,55 +16,55 @@ msgstr ""
 "X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: openwithplugin.cpp:232
+#: openwithplugin.cpp:231
 #, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
 msgstr "Iné..."
 
-#: openwithplugin.cpp:243
+#: openwithplugin.cpp:242
 #, kde-format
 msgctxt "@title:menu"
 msgid "Open With"
 msgstr "Otvoriť s"
 
-#: openwithplugin.cpp:248
+#: openwithplugin.cpp:247
 #, kde-format
 msgctxt "@title:menu"
 msgid "Embedded Editors"
 msgstr "Zabudované editory"
 
-#: openwithplugin.cpp:252
+#: openwithplugin.cpp:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
 msgstr "Externé aplikácie"
 
-#: openwithplugin.cpp:259
+#: openwithplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open"
 msgstr "Otvoriť"
 
-#: openwithplugin.cpp:293
+#: openwithplugin.cpp:292
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Default Editor"
 msgstr "Predvolený editor"
 
-#: openwithplugin.cpp:412
+#: openwithplugin.cpp:411
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
 msgstr "Chcete otvárať všetky súbory '%1' štandardne pomocou %2?"
 
-#: openwithplugin.cpp:414
+#: openwithplugin.cpp:413
 #, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
 msgstr "Nastaviť ako predvolené?"
 
-#: openwithplugin.cpp:415
+#: openwithplugin.cpp:414
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Set as Default?"
@@ -72,7 +72,7 @@ msgctxt "@action:button"
 msgid "Set as Default"
 msgstr "Nastaviť ako predvolené?"
 
-#: openwithplugin.cpp:416
+#: openwithplugin.cpp:415
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"

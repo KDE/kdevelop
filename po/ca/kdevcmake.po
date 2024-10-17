@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2023-01-23 10:46+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -384,7 +384,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Cadenes"
 
-#: settings/cmakepreferences.cpp:344
+#: settings/cmakepreferences.cpp:343
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -393,24 +393,24 @@ msgstr ""
 "El directori %1 està a punt de ser eliminat de la llista del KDevelop.\n"
 "Voleu que el KDevelop el suprimeixi també del sistema de fitxers?"
 
-#: settings/cmakepreferences.cpp:348
+#: settings/cmakepreferences.cpp:347
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "No el suprimeixis"
 
-#: settings/cmakepreferences.cpp:353
+#: settings/cmakepreferences.cpp:352
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "No s'ha pogut eliminar: %1"
 
-#: settings/cmakepreferences.cpp:399
+#: settings/cmakepreferences.cpp:398
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:404
+#: settings/cmakepreferences.cpp:403
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

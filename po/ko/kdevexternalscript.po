@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-13 13:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -481,31 +481,31 @@ msgctxt "@title:menu"
 msgid "External Scripts"
 msgstr "외부 스크립트"
 
-#: externalscriptview.cpp:32
+#: externalscriptview.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "External Scripts"
 msgstr "외부 스크립트"
 
-#: externalscriptview.cpp:51
+#: externalscriptview.cpp:50
 #, kde-format
 msgctxt "@action"
 msgid "Add External Script"
 msgstr "외부 스크립트 추가"
 
-#: externalscriptview.cpp:56
+#: externalscriptview.cpp:55
 #, kde-format
 msgctxt "@action"
 msgid "Edit External Script"
 msgstr "외부 스크립트 편집"
 
-#: externalscriptview.cpp:61
+#: externalscriptview.cpp:60
 #, kde-format
 msgctxt "@action"
 msgid "Remove External Script"
 msgstr "외부 스크립트 삭제"
 
-#: externalscriptview.cpp:148
+#: externalscriptview.cpp:147
 #, kde-format
 msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
@@ -514,13 +514,13 @@ msgstr ""
 "<p><i>%1</i>의 외부 스크립트 설정을 삭제하시겠습니까?</p><p><i>메모:</i> 스크"
 "립트 그 자체는 삭제되지 않습니다.</p>"
 
-#: externalscriptview.cpp:151
+#: externalscriptview.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
 msgstr "외부 스크립트 삭제 확인"
 
-#: externalscriptview.cpp:152
+#: externalscriptview.cpp:151
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2010-10-31 15:39-0700\n"
 "Last-Translator: Daniel E. Moctezuma <democtezuma@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -391,7 +391,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:344
+#: settings/cmakepreferences.cpp:343
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -403,25 +403,25 @@ msgstr ""
 "ビルドディレクトリ ‘%1’ は KDevelop のリストから削除されます。\n"
 "ファイルシステムからも削除しますか？"
 
-#: settings/cmakepreferences.cpp:348
+#: settings/cmakepreferences.cpp:347
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:353
+#: settings/cmakepreferences.cpp:352
 #, fuzzy, kde-format
 #| msgid "Could not remove: %1.\n"
 msgid "Could not remove: %1"
 msgstr "削除できませんでした: %1\n"
 
-#: settings/cmakepreferences.cpp:399
+#: settings/cmakepreferences.cpp:398
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:404
+#: settings/cmakepreferences.cpp:403
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

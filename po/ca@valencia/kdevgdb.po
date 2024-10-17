@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2023-07-26 07:36+0300\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Generator: Lokalize 22.12.3\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:121
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -148,13 +148,13 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "No s'ha pogut localitzar la capa de depuració «%1»."
 
-#: gdbconfigpage.cpp:93
+#: gdbconfigpage.cpp:92
 #, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Configuració de GDB"
 
-#: gdbconfigpage.cpp:139
+#: gdbconfigpage.cpp:138
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -163,13 +163,13 @@ msgstr ""
 "Ja s'està depurant un programa. Voleu interrompre la sessió de depuració "
 "actualment en execució i continuar amb el llançament?"
 
-#: gdbconfigpage.cpp:141
+#: gdbconfigpage.cpp:140
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Interromp la sessió actual"
 
-#: gdbconfigpage.cpp:167
+#: gdbconfigpage.cpp:166
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "Executa una aplicació nativa en GDB"

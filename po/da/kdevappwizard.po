@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2014-03-09 15:34+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -134,73 +134,73 @@ msgstr "Filen %1 kan ikke oprettes."
 msgid "Project Templates"
 msgstr "Projektskabeloner"
 
-#: projectselectionpage.cpp:60
+#: projectselectionpage.cpp:59
 #, fuzzy, kde-format
 #| msgid "Category"
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Kategori"
 
-#: projectselectionpage.cpp:61
+#: projectselectionpage.cpp:60
 #, fuzzy, kde-format
 #| msgid "Project Type"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Projekttype"
 
-#: projectselectionpage.cpp:71
+#: projectselectionpage.cpp:70
 #, fuzzy, kde-format
 #| msgid "Get More Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Hent flere skabeloner"
 
-#: projectselectionpage.cpp:78
+#: projectselectionpage.cpp:77
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Indlæs skabelon fra fil"
 
-#: projectselectionpage.cpp:174
+#: projectselectionpage.cpp:173
 #, kde-format
 msgid "Invalid location"
 msgstr "Ugyldig placering"
 
-#: projectselectionpage.cpp:181
+#: projectselectionpage.cpp:180
 #, kde-format
 msgid "Empty project name"
 msgstr "Tomt projektnavn"
 
-#: projectselectionpage.cpp:201
+#: projectselectionpage.cpp:200
 #, kde-format
 msgid "Invalid project name"
 msgstr "Ugyldigt projektnavn"
 
-#: projectselectionpage.cpp:220
+#: projectselectionpage.cpp:219
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "Kan ikke oprette undermapper, der mangler rettigheder på: %1"
 
-#: projectselectionpage.cpp:235
+#: projectselectionpage.cpp:234
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Ugyldig projektskabelon, vælg venligst et leaf-element"
 
-#: projectselectionpage.cpp:248
+#: projectselectionpage.cpp:247
 #, fuzzy, kde-format
 #| msgid "Path already exists and contains files"
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "Stien findes allerede og indeholder filer"
 
-#: projectselectionpage.cpp:295
+#: projectselectionpage.cpp:294
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr "Den angivne sti findes allerede og indeholder filer. Vil du forsætte?"
 
-#: projectselectionpage.cpp:311
+#: projectselectionpage.cpp:310
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@title:window"

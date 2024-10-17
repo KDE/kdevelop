@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2024-05-03 10:22+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -179,13 +179,13 @@ msgstr "Razhroščevalnik se je sesul"
 msgid "Process crashed"
 msgstr "Opravilo se je sesulo"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:113
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Preuči jedrno datoteko z %1"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:115
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -199,13 +199,13 @@ msgstr ""
 "vsebuje odtis pomnilnika programa ob času, ko se je sesul in vam omogoča "
 "preučitev po sesutju.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:127
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Pripni k opravilu z %1"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:129
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -213,18 +213,18 @@ msgid ""
 msgstr ""
 "<b>Pripni k opravilu</b><p>Pripne razhroščevalnik k zagnanemu opravilu.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:142
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:217
+#: midebuggerplugin.cpp:216
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Ovrednoti: %1"
 
-#: midebuggerplugin.cpp:219
+#: midebuggerplugin.cpp:218
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -232,13 +232,13 @@ msgid ""
 "cursor.</p>"
 msgstr "<b>Ovrednoti izraz</b><p>Prikaže vrednost izraza pod kazalko.</p>"
 
-#: midebuggerplugin.cpp:227
+#: midebuggerplugin.cpp:226
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Opazuj: %1"
 
-#: midebuggerplugin.cpp:229
+#: midebuggerplugin.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -248,12 +248,12 @@ msgstr ""
 "<b>Opazuj izraz</b><p>Doda izraz pod kazalko na seznam opazovanih "
 "spremenljivk.</p>"
 
-#: midebuggerplugin.cpp:242
+#: midebuggerplugin.cpp:241
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Izbor jedrne datoteke za preučitev..."
 
-#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
+#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -262,25 +262,25 @@ msgstr ""
 "Program se že razhroščuje. Ali želite prekiniti trenutno razhroščevalno sejo "
 "in nadaljevati?"
 
-#: midebuggerplugin.cpp:249 midebuggerplugin.cpp:269
+#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Prekini trenutno sejo"
 
-#: midebuggerplugin.cpp:262
+#: midebuggerplugin.cpp:261
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Izberite opravilo na katerega se želite pripeti..."
 
-#: midebuggerplugin.cpp:283
+#: midebuggerplugin.cpp:282
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Pripenjanje k opravilu %1 ni mogoče: ni se mogoče povezati z "
 "razhroščevalnikom samim."
 
-#: midebuggerplugin.cpp:303
+#: midebuggerplugin.cpp:302
 #, kde-format
 msgid "Debugger"
 msgstr "Razhroščevalnik"

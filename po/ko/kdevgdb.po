@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2023-08-06 20:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:121
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -136,13 +136,13 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "'%1' 디버깅 셸을 찾을 수 없습니다."
 
-#: gdbconfigpage.cpp:93
+#: gdbconfigpage.cpp:92
 #, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB 설정"
 
-#: gdbconfigpage.cpp:139
+#: gdbconfigpage.cpp:138
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -151,13 +151,13 @@ msgstr ""
 "프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계속 "
 "실행하시겠습니까?"
 
-#: gdbconfigpage.cpp:141
+#: gdbconfigpage.cpp:140
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "현재 세션 중단"
 
-#: gdbconfigpage.cpp:167
+#: gdbconfigpage.cpp:166
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "GDB에서 네이티브 앱 실행"

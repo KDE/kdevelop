@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-14 09:47-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -391,7 +391,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Textos"
 
-#: settings/cmakepreferences.cpp:344
+#: settings/cmakepreferences.cpp:343
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -400,24 +400,24 @@ msgstr ""
 "A pasta %1 será removida da lista do KDevelop.\n"
 "Deseja que o KDevelop também exclua esta pasta do sistema de arquivos?"
 
-#: settings/cmakepreferences.cpp:348
+#: settings/cmakepreferences.cpp:347
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Não excluir"
 
-#: settings/cmakepreferences.cpp:353
+#: settings/cmakepreferences.cpp:352
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Não foi possível remover: %1"
 
-#: settings/cmakepreferences.cpp:399
+#: settings/cmakepreferences.cpp:398
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:404
+#: settings/cmakepreferences.cpp:403
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

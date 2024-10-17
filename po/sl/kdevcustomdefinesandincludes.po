@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-10 16:14+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -281,42 +281,42 @@ msgctxt "@label:textbox"
 msgid "CUDA C comman&d-line arguments:"
 msgstr "Ar&gumenti ukazne vrstice CUDA C:"
 
-#: kcm_widget/projectpathswidget.cpp:169
+#: kcm_widget/projectpathswidget.cpp:168
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Project Path"
 msgstr "Izberite pot projekta"
 
-#: kcm_widget/projectpathswidget.cpp:184
+#: kcm_widget/projectpathswidget.cpp:183
 #, kde-format
 msgid "Are you sure you want to delete the configuration for the path '%1'?"
 msgstr "Ali ste prepričani, da želite zbrisati konfiguracijo za pot '%1'?"
 
-#: kcm_widget/projectpathswidget.cpp:186
+#: kcm_widget/projectpathswidget.cpp:185
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Path Configuration"
 msgstr "Zbriši konfiguracijo poti"
 
-#: kcm_widget/projectpathswidget.cpp:224
+#: kcm_widget/projectpathswidget.cpp:223
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Include Directories/Files"
 msgstr "Uredi vkljuene mape/datoteke"
 
-#: kcm_widget/projectpathswidget.cpp:232
+#: kcm_widget/projectpathswidget.cpp:231
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Defined Macros"
 msgstr "Uredi definirane makre"
 
-#: kcm_widget/projectpathswidget.cpp:288
+#: kcm_widget/projectpathswidget.cpp:287
 #, kde-format
 msgid "Configure C/C++ parser"
 msgstr "Prilagodi razčlenjevalnik C/C++"
 
 #. i18n: ectx: property (text), widget (QLabel, configureLabel)
-#: kcm_widget/projectpathswidget.cpp:292 kcm_widget/projectpathswidget.ui:20
+#: kcm_widget/projectpathswidget.cpp:291 kcm_widget/projectpathswidget.ui:20
 #, kde-format
 msgid ""
 "Configure which macros and include directories/files will be added to the "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2023-04-17 13:29+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -236,25 +236,25 @@ msgctxt "@title:menu"
 msgid "Scope: %1"
 msgstr "Ala: %1"
 
-#: problemtreeview.cpp:97
+#: problemtreeview.cpp:96
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Problems"
 msgstr "Ongelmat"
 
-#: problemtreeview.cpp:252
+#: problemtreeview.cpp:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Problem"
 msgstr "Ongelma"
 
-#: problemtreeview.cpp:254
+#: problemtreeview.cpp:253
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Description"
 msgstr "Kopioi ku&vaus"
 
-#: problemtreeview.cpp:273
+#: problemtreeview.cpp:272
 #, kde-format
 msgctxt "@title:menu"
 msgid "Solve: %1"

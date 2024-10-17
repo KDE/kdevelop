@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2024-05-03 21:50+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -179,13 +179,13 @@ msgstr "Il programma di debug è andato in crash"
 msgid "Process crashed"
 msgstr "Il processo è andato in crash"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:113
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Esamina file core con %1"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:115
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -199,13 +199,13 @@ msgstr ""
 "core contiene l'immagine della memoria associata al programma nel momento "
 "del crash, permettendo di fare un analisi postuma.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:127
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Connetti a un processo con %1"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:129
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -214,18 +214,18 @@ msgstr ""
 "<b>Connetti a un processo</b><p>Connette il debugger ad un processo in "
 "esecuzione.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:142
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:217
+#: midebuggerplugin.cpp:216
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Valuta: %1"
 
-#: midebuggerplugin.cpp:219
+#: midebuggerplugin.cpp:218
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -235,13 +235,13 @@ msgstr ""
 "<b>Valuta espressione</b><p>Visualizza il valore dell'espressione sotto il "
 "cursore.</p>"
 
-#: midebuggerplugin.cpp:227
+#: midebuggerplugin.cpp:226
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Osserva: %1"
 
-#: midebuggerplugin.cpp:229
+#: midebuggerplugin.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -251,12 +251,12 @@ msgstr ""
 "<b>Osserva espressione</b><p>Aggiunge l'espressione sotto il cursore alla "
 "lista delle variabili/espressioni osservate.</p>"
 
-#: midebuggerplugin.cpp:242
+#: midebuggerplugin.cpp:241
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Scegli un file core da esaminare..."
 
-#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
+#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -265,24 +265,24 @@ msgstr ""
 "Si sta facendo già il debug di un programma. Vuoi fermare l'esecuzione della "
 "sessione corrente di debug e continuare?"
 
-#: midebuggerplugin.cpp:249 midebuggerplugin.cpp:269
+#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Interrompi la sessione attuale"
 
-#: midebuggerplugin.cpp:262
+#: midebuggerplugin.cpp:261
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Scegli un processo a cui connettersi..."
 
-#: midebuggerplugin.cpp:283
+#: midebuggerplugin.cpp:282
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Non connesso al processo %1: impossibile connettere il debugger a sé stesso."
 
-#: midebuggerplugin.cpp:303
+#: midebuggerplugin.cpp:302
 #, kde-format
 msgid "Debugger"
 msgstr "Debugger"

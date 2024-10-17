@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevopenwith\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-07-09 08:26+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -20,61 +20,61 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: openwithplugin.cpp:232
+#: openwithplugin.cpp:231
 #, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
 msgstr "Інша…"
 
-#: openwithplugin.cpp:243
+#: openwithplugin.cpp:242
 #, kde-format
 msgctxt "@title:menu"
 msgid "Open With"
 msgstr "Відкрити за допомогою"
 
-#: openwithplugin.cpp:248
+#: openwithplugin.cpp:247
 #, kde-format
 msgctxt "@title:menu"
 msgid "Embedded Editors"
 msgstr "Вбудовані редактори"
 
-#: openwithplugin.cpp:252
+#: openwithplugin.cpp:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
 msgstr "Зовнішні програми"
 
-#: openwithplugin.cpp:259
+#: openwithplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open"
 msgstr "Відкрити"
 
-#: openwithplugin.cpp:293
+#: openwithplugin.cpp:292
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Default Editor"
 msgstr "Типовий редактор"
 
-#: openwithplugin.cpp:412
+#: openwithplugin.cpp:411
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
 msgstr "Бажаєте типово відкривати всі файли «%1» за допомогою програми %2?"
 
-#: openwithplugin.cpp:414
+#: openwithplugin.cpp:413
 #, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
 msgstr "Зробити типовою?"
 
-#: openwithplugin.cpp:415
+#: openwithplugin.cpp:414
 #, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
 msgstr "Зробити типовим"
 
-#: openwithplugin.cpp:416
+#: openwithplugin.cpp:415
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"

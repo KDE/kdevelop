@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2023-04-25 10:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -177,66 +177,66 @@ msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr ""
 "Заменить <b>%1</b> на <b>%2</b> в файле %3, строке %4, столбце %5 не удалось."
 
-#: grepoutputview.cpp:72
+#: grepoutputview.cpp:71
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
 msgstr "Панель вывода поиска/замены"
 
-#: grepoutputview.cpp:75
+#: grepoutputview.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
 msgstr "&Предыдущее вхождение"
 
-#: grepoutputview.cpp:76
+#: grepoutputview.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "&Next Item"
 msgstr "&Следующее вхождение"
 
-#: grepoutputview.cpp:81
+#: grepoutputview.cpp:80
 #, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
 msgstr "С&вернуть всё"
 
-#: grepoutputview.cpp:83
+#: grepoutputview.cpp:82
 #, kde-format
 msgctxt "@action"
 msgid "&Expand All"
 msgstr "&Развернуть всё"
 
-#: grepoutputview.cpp:87
+#: grepoutputview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "New &Search"
 msgstr "&Начать новый поиск"
 
-#: grepoutputview.cpp:88
+#: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
 msgstr "Обновить"
 
-#: grepoutputview.cpp:90
+#: grepoutputview.cpp:89
 #, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "Очистить журнал поиска"
 
-#: grepoutputview.cpp:325
+#: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
 msgstr "Заменить искомую строку пустой?"
 
-#: grepoutputview.cpp:326
+#: grepoutputview.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr "Начало замены"
 
-#: grepoutputview.cpp:327
+#: grepoutputview.cpp:326
 #, kde-format
 msgctxt "@action:button"
 msgid "Replace"

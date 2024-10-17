@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2023-03-09 12:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -123,61 +123,61 @@ msgstr "No es pot crear el fitxer %1."
 msgid "Project Templates"
 msgstr "Plantilles de projecte"
 
-#: projectselectionpage.cpp:60
+#: projectselectionpage.cpp:59
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Categoria"
 
-#: projectselectionpage.cpp:61
+#: projectselectionpage.cpp:60
 #, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Tipus de projecte"
 
-#: projectselectionpage.cpp:71
+#: projectselectionpage.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Obtín més plantilles"
 
-#: projectselectionpage.cpp:78
+#: projectselectionpage.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Carrega una plantilla des d'un fitxer"
 
-#: projectselectionpage.cpp:174
+#: projectselectionpage.cpp:173
 #, kde-format
 msgid "Invalid location"
 msgstr "Ubicació no vàlida"
 
-#: projectselectionpage.cpp:181
+#: projectselectionpage.cpp:180
 #, kde-format
 msgid "Empty project name"
 msgstr "Nom de projecte buit"
 
-#: projectselectionpage.cpp:201
+#: projectselectionpage.cpp:200
 #, kde-format
 msgid "Invalid project name"
 msgstr "Nom de projecte no vàlid"
 
-#: projectselectionpage.cpp:220
+#: projectselectionpage.cpp:219
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "No s'han pogut crear subdirectoris, falten els permisos a: %1"
 
-#: projectselectionpage.cpp:235
+#: projectselectionpage.cpp:234
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Plantilla de projecte no vàlida, trieu un element del full"
 
-#: projectselectionpage.cpp:248
+#: projectselectionpage.cpp:247
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "El camí ja existix i conté fitxers. Obriu-lo com un projecte."
 
-#: projectselectionpage.cpp:295
+#: projectselectionpage.cpp:294
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
@@ -185,7 +185,7 @@ msgid ""
 msgstr ""
 "El camí especificat ja existix i conté fitxers. Segur que voleu continuar?"
 
-#: projectselectionpage.cpp:311
+#: projectselectionpage.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"

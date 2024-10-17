@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2021-04-23 12:31+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -162,66 +162,66 @@ msgctxt ""
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr ""
 
-#: grepoutputview.cpp:72
+#: grepoutputview.cpp:71
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
 msgstr "Hledat/Nahradit výstupní pohled"
 
-#: grepoutputview.cpp:75
+#: grepoutputview.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
 msgstr "&Předchozí položka"
 
-#: grepoutputview.cpp:76
+#: grepoutputview.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "&Next Item"
 msgstr "&Následující položka"
 
-#: grepoutputview.cpp:81
+#: grepoutputview.cpp:80
 #, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
 msgstr "Svin&out vše"
 
-#: grepoutputview.cpp:83
+#: grepoutputview.cpp:82
 #, kde-format
 msgctxt "@action"
 msgid "&Expand All"
 msgstr "&Rozbalit vše"
 
-#: grepoutputview.cpp:87
+#: grepoutputview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "New &Search"
 msgstr "Nové &hledání"
 
-#: grepoutputview.cpp:88
+#: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
 msgstr "Obnovit"
 
-#: grepoutputview.cpp:90
+#: grepoutputview.cpp:89
 #, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "Vyprázdnit historii hledání"
 
-#: grepoutputview.cpp:325
+#: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
 msgstr ""
 
-#: grepoutputview.cpp:326
+#: grepoutputview.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr ""
 
-#: grepoutputview.cpp:327
+#: grepoutputview.cpp:326
 #, kde-format
 msgctxt "@action:button"
 msgid "Replace"

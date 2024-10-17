@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-04-17 20:55+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -162,7 +162,7 @@ msgstr "&Záložka"
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:78
+#: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Type"
 msgstr "Typ"
@@ -187,20 +187,20 @@ msgstr "Aktívny stav"
 msgid "State"
 msgstr "Stav"
 
-#: debugger/breakpoint/breakpointmodel.cpp:664
+#: debugger/breakpoint/breakpointmodel.cpp:660
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
 
-#: debugger/breakpoint/breakpointwidget.cpp:62
+#: debugger/breakpoint/breakpointwidget.cpp:59
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Breakpoints"
 msgstr "Body zastavenia ladiaceho programu"
 
-#: debugger/breakpoint/breakpointwidget.cpp:63
+#: debugger/breakpoint/breakpointwidget.cpp:60
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -212,78 +212,70 @@ msgstr ""
 "bodu zastavenia vám umožňuje zmeniť bod zastavenia a dostanete sa na zdroj v "
 "okne editora."
 
-#: debugger/breakpoint/breakpointwidget.cpp:89
+#: debugger/breakpoint/breakpointwidget.cpp:86
 #, kde-format
 msgid "Breakpoint Details"
 msgstr "Podrobnosti zarážiek"
 
-#: debugger/breakpoint/breakpointwidget.cpp:98
+#: debugger/breakpoint/breakpointwidget.cpp:95
 #, kde-format
 msgid "New code breakpoint ..."
 msgstr "Nový breakpoint kódu..."
 
-#: debugger/breakpoint/breakpointwidget.cpp:99
+#: debugger/breakpoint/breakpointwidget.cpp:96
 #, kde-format
 msgid "Enter condition ..."
 msgstr "Zadajte podmienku..."
 
-#: debugger/breakpoint/breakpointwidget.cpp:131
+#: debugger/breakpoint/breakpointwidget.cpp:124
 #, kde-format
 msgctxt "New breakpoint"
 msgid "&New"
 msgstr "&Nový"
 
-#: debugger/breakpoint/breakpointwidget.cpp:135
+#: debugger/breakpoint/breakpointwidget.cpp:128
 #, kde-format
 msgctxt "Code breakpoint"
 msgid "&Code"
 msgstr "&Kód"
 
-#: debugger/breakpoint/breakpointwidget.cpp:143
+#: debugger/breakpoint/breakpointwidget.cpp:136
 #, kde-format
 msgctxt "Data breakpoint"
 msgid "Data &Write"
 msgstr "Dáta zapísané"
 
-#: debugger/breakpoint/breakpointwidget.cpp:146
+#: debugger/breakpoint/breakpointwidget.cpp:139
 #, kde-format
 msgctxt "Data read breakpoint"
 msgid "Data &Read"
 msgstr "Dáta načítané"
 
-#: debugger/breakpoint/breakpointwidget.cpp:149
+#: debugger/breakpoint/breakpointwidget.cpp:142
 #, kde-format
 msgctxt "Data access breakpoint"
 msgid "Data &Access"
 msgstr "Prístup úd&ajov"
 
-#: debugger/breakpoint/breakpointwidget.cpp:154
+#: debugger/breakpoint/breakpointwidget.cpp:147
 #, kde-format
 msgid "&Delete"
 msgstr "Odstrá&niť"
 
-#: debugger/breakpoint/breakpointwidget.cpp:163
+#: debugger/breakpoint/breakpointwidget.cpp:156
 #, kde-format
 msgid "Disable &All"
 msgstr "Zakázať všetko"
 
-#: debugger/breakpoint/breakpointwidget.cpp:164
+#: debugger/breakpoint/breakpointwidget.cpp:157
 #, kde-format
 msgid "&Enable All"
 msgstr "Povoliť všetko"
 
-#: debugger/breakpoint/breakpointwidget.cpp:165
+#: debugger/breakpoint/breakpointwidget.cpp:158
 #, kde-format
 msgid "&Remove All"
 msgstr "Odstrániť všetko"
-
-#: debugger/breakpoint/breakpointwidget.cpp:347
-#, kde-format
-msgid "%2"
-msgid_plural "%2 (repeated %1 times)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: debugger/framestack/framestackmodel.cpp:179
 #, kde-format
@@ -343,12 +335,12 @@ msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
 msgstr "#%1 %2() na %3:%4\n"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:79
+#: debugger/interfaces/ibreakpointcontroller.cpp:87
 #, kde-format
 msgid "Breakpoint hit: %1"
 msgstr "Dosiahnutý breakpoint: %1"
 
-#: debugger/interfaces/ibreakpointcontroller.cpp:85
+#: debugger/interfaces/ibreakpointcontroller.cpp:93
 #, kde-format
 msgid "Watchpoint hit: %1"
 msgstr "Dosiahnutý bod sledovania: %1"
@@ -381,14 +373,14 @@ msgstr "Auto"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:78
+#: debugger/variable/variabletooltip.cpp:79
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
 msgstr "Názov"
 
 #: debugger/variable/variablecollection.cpp:407
-#: debugger/variable/variabletooltip.cpp:78
+#: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Value"
 msgstr "Hodnota"
@@ -398,12 +390,12 @@ msgstr "Hodnota"
 msgid "Locals"
 msgstr "Miestne"
 
-#: debugger/variable/variabletooltip.cpp:114
+#: debugger/variable/variabletooltip.cpp:115
 #, kde-format
 msgid "Watch This"
 msgstr "Sledovať toto"
 
-#: debugger/variable/variabletooltip.cpp:116
+#: debugger/variable/variabletooltip.cpp:117
 #, kde-format
 msgid "Stop on Change"
 msgstr "Zastaviť pri zmene"
@@ -1275,7 +1267,7 @@ msgid "Unknown context"
 msgstr "Neznámy kontext"
 
 #: language/duchain/navigation/useswidget.cpp:419
-#: shell/launchconfigurationdialog.cpp:482
+#: shell/launchconfigurationdialog.cpp:481
 #, kde-format
 msgid "Global"
 msgstr "Globálne"
@@ -1827,14 +1819,14 @@ msgctxt "@action:inmenu"
 msgid "Back to Code"
 msgstr "Späť na kód"
 
-#: shell/configdialog.cpp:31
+#: shell/configdialog.cpp:30
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Nastaviť"
 
-#: shell/configdialog.cpp:85
+#: shell/configdialog.cpp:84
 #, kde-format
 msgid ""
 "The settings of the current module have changed.\n"
@@ -1843,7 +1835,7 @@ msgstr ""
 "Nastavenie aktuálneho modulu sa zmenilo.\n"
 "Chcete zmeny použiť, alebo ich zahodiť?"
 
-#: shell/configdialog.cpp:87
+#: shell/configdialog.cpp:86
 #, fuzzy, kde-format
 #| msgid "Apply Settings"
 msgctxt "@title:window"
@@ -2229,23 +2221,23 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Dokumentácia"
 
-#: shell/documentcontroller.cpp:62 sublime/urldocument.cpp:59
+#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:59
 #, kde-format
 msgid "Untitled"
 msgstr "Nepomenovaný"
 
-#: shell/documentcontroller.cpp:119
+#: shell/documentcontroller.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Otvoriť súbor"
 
-#: shell/documentcontroller.cpp:120
+#: shell/documentcontroller.cpp:119
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Textový súbor\n"
 
-#: shell/documentcontroller.cpp:317
+#: shell/documentcontroller.cpp:316
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2254,45 +2246,45 @@ msgstr ""
 "KDevelop nemohol nájsť editor pre súbor '%1' typu %2.\n"
 "Chcete ho otvoriť ako jednoduchý text?"
 
-#: shell/documentcontroller.cpp:320
+#: shell/documentcontroller.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "Nepodarilo sa nájsť editor"
 
-#: shell/documentcontroller.cpp:321
+#: shell/documentcontroller.cpp:320
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:322
+#: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:610
+#: shell/documentcontroller.cpp:609
 #, fuzzy, kde-format
 #| msgid "&Open..."
 msgctxt "@action"
 msgid "&Open..."
 msgstr "Otvoriť"
 
-#: shell/documentcontroller.cpp:613
+#: shell/documentcontroller.cpp:612
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Otvoriť súbor"
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:613
 #, fuzzy, kde-format
 #| msgid "Opens a file for editing."
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Otvorí súbor pre úpravy."
 
-#: shell/documentcontroller.cpp:618
+#: shell/documentcontroller.cpp:617
 #, fuzzy, kde-format
 #| msgid ""
 #| "This lists files which you have opened recently, and allows you to easily "
@@ -2305,21 +2297,21 @@ msgstr ""
 "Toto je zoznam súborov, ktoré boli naposledy otvorené. Podporuje ich "
 "jednoduché znovuotvorenie."
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:622
 #, fuzzy, kde-format
 #| msgid "Save Al&l"
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Uložiť všetko"
 
-#: shell/documentcontroller.cpp:625
+#: shell/documentcontroller.cpp:624
 #, fuzzy, kde-format
 #| msgid "Save all open documents"
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Uložiť všetky otvorené dokumenty"
 
-#: shell/documentcontroller.cpp:626
+#: shell/documentcontroller.cpp:625
 #, fuzzy, kde-format
 #| msgid ""
 #| "Save all open documents, prompting for additional information when "
@@ -2331,61 +2323,61 @@ msgstr ""
 "Uložiť všetky otvorené dokumenty, opýtať sa na ďalšie informácie v prípade "
 "potreby."
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:631
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Obnoviť všetko"
 
-#: shell/documentcontroller.cpp:634
+#: shell/documentcontroller.cpp:633
 #, fuzzy, kde-format
 #| msgid "Revert all open documents"
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Vrátiť všetky otvorené dokumenty"
 
-#: shell/documentcontroller.cpp:635
+#: shell/documentcontroller.cpp:634
 #, fuzzy, kde-format
 #| msgid "Revert all open documents, returning to the previously saved state."
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr "Vrátiť všetky otvorené dokumenty, návrat do predtým uloženého stavu."
 
-#: shell/documentcontroller.cpp:641
+#: shell/documentcontroller.cpp:640
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Zavrieť"
 
-#: shell/documentcontroller.cpp:643
+#: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Zatvoriť súbor"
 
-#: shell/documentcontroller.cpp:644
+#: shell/documentcontroller.cpp:643
 #, fuzzy, kde-format
 #| msgid "Closes current file."
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Zatvorí súčasný súbor."
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:648
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Zav&rieť všetko"
 
-#: shell/documentcontroller.cpp:651
+#: shell/documentcontroller.cpp:650
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Zavrieť všetky otvorené dokumenty."
 
-#: shell/documentcontroller.cpp:652
+#: shell/documentcontroller.cpp:651
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, prompting for additional information when "
@@ -2398,20 +2390,20 @@ msgstr ""
 "Zatvoriť všetky otvorené dokumenty, opýtať sa na ďalšie informácie v prípade "
 "potreby."
 
-#: shell/documentcontroller.cpp:658
+#: shell/documentcontroller.cpp:657
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Zavrieť všetky &ostatné"
 
-#: shell/documentcontroller.cpp:660
+#: shell/documentcontroller.cpp:659
 #, fuzzy, kde-format
 #| msgid "Close all other documents"
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Zatvoriť všetky ostatné dokumenty"
 
-#: shell/documentcontroller.cpp:661
+#: shell/documentcontroller.cpp:660
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, with the exception of the currently active "
@@ -2423,21 +2415,21 @@ msgid ""
 msgstr ""
 "Zatvoriť všetky otvorené dokumenty s výnimkou práve aktívneho dokumentu."
 
-#: shell/documentcontroller.cpp:666
+#: shell/documentcontroller.cpp:665
 #, fuzzy, kde-format
 #| msgid "Show Annotate on current document"
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Ukázať poznámky v aktuálnom dokumente"
 
-#: shell/documentcontroller.cpp:667
+#: shell/documentcontroller.cpp:666
 #, fuzzy, kde-format
 #| msgid "Annotate"
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Pridanie poznámky"
 
-#: shell/documentcontroller.cpp:1299
+#: shell/documentcontroller.cpp:1298
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2464,66 +2456,66 @@ msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "Nastaviť premenné prostredia"
 
-#: shell/launchconfigurationdialog.cpp:48
+#: shell/launchconfigurationdialog.cpp:47
 #, fuzzy, kde-format
 #| msgid "Launch Configurations"
 msgctxt "@title:window"
 msgid "Launch Configurations"
 msgstr "Konfigurácie spustenia"
 
-#: shell/launchconfigurationdialog.cpp:58
+#: shell/launchconfigurationdialog.cpp:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new launch configuration."
 msgstr "Pridať novú konfiguráciu spustenia."
 
-#: shell/launchconfigurationdialog.cpp:60
+#: shell/launchconfigurationdialog.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete selected launch configuration."
 msgstr "Vymazať vybranú konfiguráciu spustenia."
 
-#: shell/launchconfigurationdialog.cpp:174
+#: shell/launchconfigurationdialog.cpp:173
 #, kde-format
 msgid ""
 "No launch configurations available. (Is any of the Execute plugins loaded?)"
 msgstr ""
 "Nie sú dostupné konfigurácie spustenia (je nečítaný nejaký plugin spustenia?)"
 
-#: shell/launchconfigurationdialog.cpp:197
+#: shell/launchconfigurationdialog.cpp:196
 #, fuzzy, kde-format
 #| msgid "Rename configuration"
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
 msgstr "Premenovať konfiguráciu"
 
-#: shell/launchconfigurationdialog.cpp:198
+#: shell/launchconfigurationdialog.cpp:197
 #, fuzzy, kde-format
 #| msgid "Delete configuration"
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
 msgstr "Zmazať nastavenia"
 
-#: shell/launchconfigurationdialog.cpp:253
+#: shell/launchconfigurationdialog.cpp:252
 #, kde-format
 msgid ""
 "Selected Launch Configuration has unsaved changes. Do you want to save it?"
 msgstr ""
 "Vybraná konfigurácia spustenia obsahuje neuložené zmeny. Chcete ju uložiť?"
 
-#: shell/launchconfigurationdialog.cpp:254
+#: shell/launchconfigurationdialog.cpp:253
 #, kde-format
 msgctxt "@title:window"
 msgid "Unsaved Changes"
 msgstr "Neuložené zmeny"
 
-#: shell/launchconfigurationdialog.cpp:326
+#: shell/launchconfigurationdialog.cpp:325
 #, kde-format
 msgctxt "%1 is a launcher name"
 msgid "No configuration is needed for '%1'"
 msgstr "Nie je potrebná žiadna konfigurácia pre '%1'"
 
-#: shell/launchconfigurationdialog.cpp:370
+#: shell/launchconfigurationdialog.cpp:369
 #, kde-format
 msgid ""
 "<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
@@ -2532,19 +2524,19 @@ msgstr ""
 "<i>Vyberte zľava konfiguráciu, ktorá sa upraví,<br>alebo pre pridanie novej "
 "kliknite na tlačidlo \"Pridať novú\".</i>"
 
-#: shell/launchconfigurationdialog.cpp:438
+#: shell/launchconfigurationdialog.cpp:437
 #, kde-format
 msgid "Editing %2: <b>%1</b>"
 msgstr "Úprava %2: <b>%1</b>"
 
-#: shell/launchconfigurationdialog.cpp:711
+#: shell/launchconfigurationdialog.cpp:710
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
 msgstr "Názov"
 
-#: shell/launchconfigurationdialog.cpp:714
+#: shell/launchconfigurationdialog.cpp:713
 #, fuzzy, kde-format
 #| msgid "Type"
 msgctxt ""
@@ -2928,18 +2920,18 @@ msgstr ""
 "Tento príkaz môžete použiť k zobrazeniu alebo skrytiu stavového riadku "
 "pohľadu"
 
-#: shell/partdocument.cpp:109
+#: shell/partdocument.cpp:108
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "Dokument \"%1\" má neuložené zmeny. Chcete ich uložiť?"
 
-#: shell/partdocument.cpp:110 shell/partdocument.cpp:119
+#: shell/partdocument.cpp:109 shell/partdocument.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Zatvoriť dokument"
 
-#: shell/partdocument.cpp:116
+#: shell/partdocument.cpp:115
 #, fuzzy, kde-format
 #| msgid ""
 #| "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2953,7 +2945,7 @@ msgstr ""
 "Dokument \"%1\" obsahuje neuložené zmeny a bol upravený externým procesom.\n"
 "Chcete prepísať externé zmeny?"
 
-#: shell/partdocument.cpp:120 shell/textdocument.cpp:417
+#: shell/partdocument.cpp:119 shell/textdocument.cpp:416
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3137,30 +3129,30 @@ msgstr ""
 "Nemožno uložiť osobitnú vývojársku konfiguráciu projektu.\n"
 "Pozor: Nastavenia projektu, ktoré ste zmenili, budú stratené."
 
-#: shell/projectcontroller.cpp:158
+#: shell/projectcontroller.cpp:157
 #, fuzzy, kde-format
 #| msgid "Configure Project %1"
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Nastaviť projekt..."
 
-#: shell/projectcontroller.cpp:301
+#: shell/projectcontroller.cpp:300
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Neplatné umiestnenie %1"
 
-#: shell/projectcontroller.cpp:311
+#: shell/projectcontroller.cpp:310
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "Práve sa otvára%1, neotvárať znovu"
 
-#: shell/projectcontroller.cpp:468
+#: shell/projectcontroller.cpp:467
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Prepísať"
 
-#: shell/projectcontroller.cpp:469
+#: shell/projectcontroller.cpp:468
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3173,14 +3165,14 @@ msgstr ""
 "Pokračovať v otváraní projektu a použiť práve poskytnutú konfiguráciu "
 "projektu."
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:469
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Otvoriť existujúci súbor"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:470
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3190,7 +3182,7 @@ msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
 "Pokračovať v otváraní projektu, ale použiť existujúcu konfiguráciu projektu."
 
-#: shell/projectcontroller.cpp:473
+#: shell/projectcontroller.cpp:472
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Cancel and do not open the project."
@@ -3198,7 +3190,7 @@ msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Zrušiť a neotvárať projekt."
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:475
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3207,42 +3199,42 @@ msgstr ""
 "Už existuje konfiguračný súbor projektu v %1.\n"
 "Chcete ho prepísať alebo otvoríť existujúci súbor?"
 
-#: shell/projectcontroller.cpp:479
+#: shell/projectcontroller.cpp:478
 #, fuzzy, kde-format
 #| msgid "Override existing project configuration"
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Prepísať existujúcu konfiguráciu projektu"
 
-#: shell/projectcontroller.cpp:497
+#: shell/projectcontroller.cpp:496
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Nie je možné vytvoriť konfiguračný súbor %1"
 
-#: shell/projectcontroller.cpp:511
+#: shell/projectcontroller.cpp:510
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Znovu otvoriť súčasný projekt?"
 
-#: shell/projectcontroller.cpp:512
+#: shell/projectcontroller.cpp:511
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:553
+#: shell/projectcontroller.cpp:552
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Otvoriť / Importovať projekt..."
 
-#: shell/projectcontroller.cpp:554
+#: shell/projectcontroller.cpp:553
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Otvoriť alebo importovať projekt"
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:554
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3265,19 +3257,19 @@ msgstr ""
 "adresára, ktorý doteraz nemá súbor projektu KDevelop4, bude tento súbor "
 "vytvorený."
 
-#: shell/projectcontroller.cpp:566
+#: shell/projectcontroller.cpp:565
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Natiahnuť projekt..."
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:567
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Natiahnuť projekt"
 
-#: shell/projectcontroller.cpp:569
+#: shell/projectcontroller.cpp:568
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3289,75 +3281,75 @@ msgid ""
 msgstr ""
 "Vedie používateľa cez načítanie projektu a potom ho importuje do KDevelop 4."
 
-#: shell/projectcontroller.cpp:584
+#: shell/projectcontroller.cpp:583
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Zatvoriť projekt(y)"
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:585
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Zatvorí všetky aktuálne vybrané projekty"
 
-#: shell/projectcontroller.cpp:592
+#: shell/projectcontroller.cpp:591
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Otvoriť nastavenie..."
 
-#: shell/projectcontroller.cpp:598
+#: shell/projectcontroller.cpp:597
 #, fuzzy, kde-format
 #| msgid "Commit Current Project..."
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Začleniť súčasný projekt..."
 
-#: shell/projectcontroller.cpp:599
+#: shell/projectcontroller.cpp:598
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Potvrdiť"
 
-#: shell/projectcontroller.cpp:610
+#: shell/projectcontroller.cpp:609
 #, fuzzy, kde-format
 #| msgid "Open Recent Project"
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Otvoriť nedávny projekt"
 
-#: shell/projectcontroller.cpp:611
+#: shell/projectcontroller.cpp:610
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Otvorí nedávno otvorený projekt"
 
-#: shell/projectcontroller.cpp:616
+#: shell/projectcontroller.cpp:615
 #, fuzzy, kde-format
 #| msgid "Open Project for Current File"
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Otvoriť projekt pre aktuálny súbor"
 
-#: shell/projectcontroller.cpp:767
+#: shell/projectcontroller.cpp:766
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Už otvorený projekt: %1"
 
-#: shell/projectcontroller.cpp:771
+#: shell/projectcontroller.cpp:770
 #, kde-format
 msgid "No active document"
 msgstr "Žiadny aktívny dokument"
 
-#: shell/projectcontroller.cpp:852
+#: shell/projectcontroller.cpp:851
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Už otvorený projekt"
 
-#: shell/projectcontroller.cpp:855
+#: shell/projectcontroller.cpp:854
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3366,26 +3358,26 @@ msgstr ""
 "Projekt, ktorý sa snažíte otvoriť, je už otvorený v najmenej jednom ďalšom "
 "sedení.<br>Čo chcete robiť?"
 
-#: shell/projectcontroller.cpp:859
+#: shell/projectcontroller.cpp:858
 #, fuzzy, kde-format
 #| msgid "Add project to current session"
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Pridať projekt do súčasného sedenia"
 
-#: shell/projectcontroller.cpp:863
+#: shell/projectcontroller.cpp:862
 #, fuzzy, kde-format
 #| msgid "Open session %1"
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Otvoriť sedenie"
 
-#: shell/projectcontroller.cpp:924
+#: shell/projectcontroller.cpp:923
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Žiadny zo zapnutých rozšírení nepodporuje túto adresu úložiska: %1"
 
-#: shell/projectcontroller.cpp:1228
+#: shell/projectcontroller.cpp:1227
 #, fuzzy, kde-format
 #| msgid "Reparse the Entire Project"
 msgctxt "@action"
@@ -3731,26 +3723,26 @@ msgstr "Zahodiť všetky zmeny"
 msgid "(no projects)"
 msgstr "(žiadne projekty)"
 
-#: shell/sessionchooserdialog.cpp:37
+#: shell/sessionchooserdialog.cpp:36
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
 msgstr "Vymazať sedenie"
 
-#: shell/sessionchooserdialog.cpp:50
+#: shell/sessionchooserdialog.cpp:49
 #, fuzzy, kde-format
 #| msgid "Pick a Session"
 msgctxt "@title:window"
 msgid "Pick a Session"
 msgstr "Vybrať sedenie"
 
-#: shell/sessionchooserdialog.cpp:63
+#: shell/sessionchooserdialog.cpp:62
 #, kde-format
 msgctxt "@action:button"
 msgid "Run"
 msgstr "Spustiť"
 
-#: shell/sessionchooserdialog.cpp:95
+#: shell/sessionchooserdialog.cpp:94
 #, fuzzy, kde-format
 #| msgid ""
 #| "Active session.\n"
@@ -3763,12 +3755,12 @@ msgstr ""
 "Aktívne sedenie.\n"
 "pid %1, app %2, host %3"
 
-#: shell/sessionchooserdialog.cpp:97
+#: shell/sessionchooserdialog.cpp:96
 #, kde-format
 msgid "Running"
 msgstr "Beží"
 
-#: shell/sessionchooserdialog.cpp:192
+#: shell/sessionchooserdialog.cpp:191
 #, fuzzy, kde-format
 #| msgctxt "@title"
 #| msgid "Cannot Delete Session"
@@ -3776,19 +3768,19 @@ msgctxt "@title:window"
 msgid "Cannot Delete Session"
 msgstr "Nemožno vymazať sedenie"
 
-#: shell/sessionchooserdialog.cpp:193
+#: shell/sessionchooserdialog.cpp:192
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
 msgstr "<p>Nemožno vymazať zamknuté sedenie."
 
-#: shell/sessionchooserdialog.cpp:196
+#: shell/sessionchooserdialog.cpp:195
 #, kde-format
 msgctxt "@info"
 msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
 msgstr "<p>Sedenie <b>%1</b> je zamknuté s %2 na %3 (PID %4)."
 
-#: shell/sessionchooserdialog.cpp:204
+#: shell/sessionchooserdialog.cpp:203
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3798,7 +3790,7 @@ msgstr ""
 "Sedenie <b>%1</b> a všetky obsiahnuté nastavenia budú vymazané. Projekty "
 "zostanú neovplyvnené. Naozaj chcete pokračovať?"
 
-#: shell/sessionchooserdialog.cpp:205
+#: shell/sessionchooserdialog.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
@@ -3931,7 +3923,7 @@ msgstr "Filter:"
 msgid "Create New Session"
 msgstr "Vytvoriť nové sedenie"
 
-#: shell/sessionlock.cpp:159
+#: shell/sessionlock.cpp:158
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3941,13 +3933,13 @@ msgstr ""
 "Bežiaca inštancia %1 (PID: %2) zistená, zviditeľňujem ju namiesto spustenia "
 "novej"
 
-#: shell/sessionlock.cpp:164
+#: shell/sessionlock.cpp:163
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "Bežiaca inštancia %1 (PID: %2) zrejme visí"
 
-#: shell/sessionlock.cpp:170
+#: shell/sessionlock.cpp:169
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3956,7 +3948,7 @@ msgid ""
 msgstr ""
 "Daná aplikácia nereagovala na volanie DBUS, je možné, že spadla alebo visí."
 
-#: shell/sessionlock.cpp:175
+#: shell/sessionlock.cpp:174
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3964,13 +3956,13 @@ msgid ""
 msgstr ""
 "Zlyhalo zamknutie sedenia <em>%1</em>, už zamknuté s %2 na %3 (PID %4)."
 
-#: shell/sessionlock.cpp:179
+#: shell/sessionlock.cpp:178
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "Zlyhalo zamknutie sedenia <em>%1</em> (súbor zámku nedostupný)."
 
-#: shell/sessionlock.cpp:183
+#: shell/sessionlock.cpp:182
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3980,7 +3972,7 @@ msgstr ""
 "<p>Prosím, zatvorte problematickú inštanciu aplikácie alebo zvoľte ďalšie "
 "sedenie pre spustenie.</p>"
 
-#: shell/sessionlock.cpp:189
+#: shell/sessionlock.cpp:188
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Retry startup"
@@ -3988,7 +3980,7 @@ msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Opakovať spustenie"
 
-#: shell/sessionlock.cpp:192
+#: shell/sessionlock.cpp:191
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Choose another session"
@@ -3996,13 +3988,13 @@ msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Zvoliť ďalšie sedenie"
 
-#: shell/sessionlock.cpp:196
+#: shell/sessionlock.cpp:195
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Zlyhalo zamknutie sedenia %1"
 
-#: shell/sessionlock.cpp:202
+#: shell/sessionlock.cpp:201
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
@@ -5376,7 +5368,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Vymazať"
 
-#: shell/textdocument.cpp:412
+#: shell/textdocument.cpp:411
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5387,13 +5379,13 @@ msgstr ""
 "\n"
 "Ste si istí, že ho chcete prepísať? (Budú stratené externé zmeny.)"
 
-#: shell/textdocument.cpp:416
+#: shell/textdocument.cpp:415
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Externe zmenený dokument"
 
-#: shell/textdocument.cpp:659
+#: shell/textdocument.cpp:658
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Riadok: %1 Stĺpec: %2 "
@@ -5886,7 +5878,7 @@ msgstr "Úloha ukončená"
 msgid "Run all tests in %1"
 msgstr "Spustiť všetky testy v %1"
 
-#: util/shellutils.cpp:157
+#: util/shellutils.cpp:156
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5895,33 +5887,33 @@ msgstr ""
 "Nemáte oprávnenia na zápis pre nasledovné súbory; pridať oprávnenia na zápis "
 "pre majiteľa pred uložením?"
 
-#: util/shellutils.cpp:160
+#: util/shellutils.cpp:159
 #, fuzzy, kde-format
 #| msgid "Some files are write-protected"
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Niektoré súbory sú čiastočne chránené"
 
-#: util/shellutils.cpp:161
+#: util/shellutils.cpp:160
 #, fuzzy, kde-format
 #| msgid "Failed setting permissions"
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Zlyhalo nastavenie oprávnení"
 
-#: util/shellutils.cpp:162
+#: util/shellutils.cpp:161
 #, fuzzy, kde-format
 #| msgid "Ignore"
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ignorovať"
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:173
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Zlyhalo pridanie oprávnenia na zápis pre niektoré súbory."
 
-#: util/shellutils.cpp:175
+#: util/shellutils.cpp:174
 #, fuzzy, kde-format
 #| msgid "Failed setting permissions"
 msgctxt "@title:window"
@@ -5964,34 +5956,34 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Vetvy"
 
-#: vcs/dvcs/ui/branchmanager.cpp:41
+#: vcs/dvcs/ui/branchmanager.cpp:40
 #, fuzzy, kde-format
 #| msgid "Branch Manager"
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Správca vetiev"
 
-#: vcs/dvcs/ui/branchmanager.cpp:115
+#: vcs/dvcs/ui/branchmanager.cpp:114
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "Pred vytvorením novej vetvy musíte vybrať základnú vetvu zo zoznamu."
 
-#: vcs/dvcs/ui/branchmanager.cpp:120
+#: vcs/dvcs/ui/branchmanager.cpp:119
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Nová vetva"
 
-#: vcs/dvcs/ui/branchmanager.cpp:120
+#: vcs/dvcs/ui/branchmanager.cpp:119
 #, fuzzy, kde-format
 #| msgid "Name of the new branch:"
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Názov novej vetvy:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:127
+#: vcs/dvcs/ui/branchmanager.cpp:126
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -6000,7 +5992,7 @@ msgstr ""
 "Vetva \"%1\" už existuje.\n"
 "Prosím, zvoľte iný názov."
 
-#: vcs/dvcs/ui/branchmanager.cpp:141
+#: vcs/dvcs/ui/branchmanager.cpp:140
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -6012,18 +6004,18 @@ msgstr ""
 "V súčasnej dobe vo vetve \"%1\".\n"
 "Ak to chcete odstrániť, prosím, zmeňte na inú vetvu."
 
-#: vcs/dvcs/ui/branchmanager.cpp:148
+#: vcs/dvcs/ui/branchmanager.cpp:147
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Naozaj chcete odstrániť nezvratne odstrániť vetvu '%1'?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:168 vcs/dvcs/ui/branchmanager.cpp:247
+#: vcs/dvcs/ui/branchmanager.cpp:167 vcs/dvcs/ui/branchmanager.cpp:246
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Už na vetve \"%1\"\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:189
+#: vcs/dvcs/ui/branchmanager.cpp:188
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -6032,29 +6024,29 @@ msgstr ""
 "Vetva \"%1\" už existuje.\n"
 "Prosím, zvoľte iný názov."
 
-#: vcs/dvcs/ui/branchmanager.cpp:197
+#: vcs/dvcs/ui/branchmanager.cpp:196
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr "Pred vytvorením novej vetvy musíte vybrať základnú vetvu zo zoznamu."
 
-#: vcs/dvcs/ui/branchmanager.cpp:235 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:234 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Nepodarilo sa vytvoriť záplatu pre aktuálnu verziu."
 
-#: vcs/dvcs/ui/branchmanager.cpp:270
+#: vcs/dvcs/ui/branchmanager.cpp:269
 #, fuzzy, kde-format
 #| msgid "Unable to retrieve diff."
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Nie je možné získať rozdiel."
 
-#: vcs/dvcs/ui/branchmanager.cpp:277
+#: vcs/dvcs/ui/branchmanager.cpp:276
 #, kde-format
 msgid "There are no committed differences."
 msgstr "Nie sú žiadne commitnuté zmeny."
 
-#: vcs/dvcs/ui/branchmanager.cpp:278 vcs/vcspluginhelper.cpp:279
+#: vcs/dvcs/ui/branchmanager.cpp:277 vcs/vcspluginhelper.cpp:279
 #, fuzzy, kde-format
 #| msgid "VCS support"
 msgctxt "@title:window"
@@ -6086,7 +6078,7 @@ msgid "The same as git branch -D"
 msgstr "Rovnaké ako vetva git -D"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
-#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:70
+#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
 #, kde-format
 msgctxt "@action:button"
 msgid "Rename"
@@ -6153,12 +6145,12 @@ msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "Správa odoslania:"
 
-#: vcs/models/brancheslistmodel.cpp:64
+#: vcs/models/brancheslistmodel.cpp:63
 #, kde-format
 msgid "Branch \"%1\" already exists."
 msgstr "Vetva \"%1\" už existuje."
 
-#: vcs/models/brancheslistmodel.cpp:69
+#: vcs/models/brancheslistmodel.cpp:68
 #, kde-format
 msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
 msgstr "Ste si istý, že chcete premenovať \"%1\" na \"%2\"?"

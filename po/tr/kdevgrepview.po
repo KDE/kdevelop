@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2024-03-01 15:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -160,66 +160,66 @@ msgctxt ""
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr "%3:%4:%5 içinde, <b>%1</b> metnini  <b>%2</b> ile değiştirme başarısız"
 
-#: grepoutputview.cpp:72
+#: grepoutputview.cpp:71
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
 msgstr "Bul ve Değiştir Çıktısı Görünümü"
 
-#: grepoutputview.cpp:75
+#: grepoutputview.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
 msgstr "&Önceki Öge"
 
-#: grepoutputview.cpp:76
+#: grepoutputview.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "&Next Item"
 msgstr "&Sonraki Öge"
 
-#: grepoutputview.cpp:81
+#: grepoutputview.cpp:80
 #, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
 msgstr "Tümünü &Daralt"
 
-#: grepoutputview.cpp:83
+#: grepoutputview.cpp:82
 #, kde-format
 msgctxt "@action"
 msgid "&Expand All"
 msgstr "Tümünü &Genişlet"
 
-#: grepoutputview.cpp:87
+#: grepoutputview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "New &Search"
 msgstr "Yeni &Arama"
 
-#: grepoutputview.cpp:88
+#: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
 msgstr "Yenile"
 
-#: grepoutputview.cpp:90
+#: grepoutputview.cpp:89
 #, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "Arama Geçmişini Temizle"
 
-#: grepoutputview.cpp:325
+#: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
 msgstr "Boş bir dizi ile değiştirmek istiyor musunuz?"
 
-#: grepoutputview.cpp:326
+#: grepoutputview.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr "Değiştirmeyi Başlat"
 
-#: grepoutputview.cpp:327
+#: grepoutputview.cpp:326
 #, kde-format
 msgctxt "@action:button"
 msgid "Replace"

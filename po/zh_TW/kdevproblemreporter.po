@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2024-03-08 04:09+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -235,25 +235,25 @@ msgctxt "@title:menu"
 msgid "Scope: %1"
 msgstr "範圍：%1"
 
-#: problemtreeview.cpp:97
+#: problemtreeview.cpp:96
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Problems"
 msgstr "問題"
 
-#: problemtreeview.cpp:252
+#: problemtreeview.cpp:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Problem"
 msgstr "問題"
 
-#: problemtreeview.cpp:254
+#: problemtreeview.cpp:253
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Description"
 msgstr "複製描述(&C)"
 
-#: problemtreeview.cpp:273
+#: problemtreeview.cpp:272
 #, kde-format
 msgctxt "@title:menu"
 msgid "Solve: %1"

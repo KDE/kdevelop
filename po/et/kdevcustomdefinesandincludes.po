@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2020-01-15 13:35+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -315,46 +315,46 @@ msgctxt "@label:textbox"
 msgid "CUDA C comman&d-line arguments:"
 msgstr "CUDA C käsureaargu&mendid:"
 
-#: kcm_widget/projectpathswidget.cpp:169
+#: kcm_widget/projectpathswidget.cpp:168
 #, fuzzy, kde-format
 #| msgid "Select Project Path"
 msgctxt "@title:window"
 msgid "Select Project Path"
 msgstr "Projekti asukoha valimine"
 
-#: kcm_widget/projectpathswidget.cpp:184
+#: kcm_widget/projectpathswidget.cpp:183
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to remove the configuration for the path '%1'?"
 msgid "Are you sure you want to delete the configuration for the path '%1'?"
 msgstr "Kas tõesti eemaldada asukoha \"%1\" seadistus?"
 
-#: kcm_widget/projectpathswidget.cpp:186
+#: kcm_widget/projectpathswidget.cpp:185
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Path Configuration"
 msgstr ""
 
-#: kcm_widget/projectpathswidget.cpp:224
+#: kcm_widget/projectpathswidget.cpp:223
 #, fuzzy, kde-format
 #| msgid "Edit include directories/files"
 msgctxt "@title:window"
 msgid "Edit Include Directories/Files"
 msgstr "Päiste kataloogide/failide muutmine"
 
-#: kcm_widget/projectpathswidget.cpp:232
+#: kcm_widget/projectpathswidget.cpp:231
 #, fuzzy, kde-format
 #| msgid "Edit defined macros"
 msgctxt "@title:window"
 msgid "Edit Defined Macros"
 msgstr "Definitsioonimakrode muutmine"
 
-#: kcm_widget/projectpathswidget.cpp:288
+#: kcm_widget/projectpathswidget.cpp:287
 #, kde-format
 msgid "Configure C/C++ parser"
 msgstr "C/C++ parseri seadistamine"
 
 #. i18n: ectx: property (text), widget (QLabel, configureLabel)
-#: kcm_widget/projectpathswidget.cpp:292 kcm_widget/projectpathswidget.ui:20
+#: kcm_widget/projectpathswidget.cpp:291 kcm_widget/projectpathswidget.ui:20
 #, kde-format
 msgid ""
 "Configure which macros and include directories/files will be added to the "

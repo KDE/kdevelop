@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2024-05-03 07:26+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -182,13 +182,13 @@ msgstr "Аварійне завершення засобу діагностик�
 msgid "Process crashed"
 msgstr "Аварійне завершення процесу"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:113
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Дослідити файл core за допомогою %1"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:115
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -202,13 +202,13 @@ msgstr ""
 "Core-файл містить образ пам’яті програми під час аварійної зупинки, що "
 "дозволяє вам виконати аналіз причин проблеми.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:127
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Приєднати до процесу за допомогою %1"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:129
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -216,18 +216,18 @@ msgid ""
 msgstr ""
 "<b>Приєднати до процесу</b><p>Приєднує зневадник до виконуваного процесу.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:142
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) — %2"
 
-#: midebuggerplugin.cpp:217
+#: midebuggerplugin.cpp:216
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Обчислити: %1"
 
-#: midebuggerplugin.cpp:219
+#: midebuggerplugin.cpp:218
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -235,13 +235,13 @@ msgid ""
 "cursor.</p>"
 msgstr "<b>Обчислити вираз</b><p>Показує значення виразу під курсором.</p>"
 
-#: midebuggerplugin.cpp:227
+#: midebuggerplugin.cpp:226
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Спостерігати: %1"
 
-#: midebuggerplugin.cpp:229
+#: midebuggerplugin.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -251,12 +251,12 @@ msgstr ""
 "<b>Спостерігати за виразом</b><p>Додає вираз під курсором у список "
 "«Спостереження і змінні».</p>"
 
-#: midebuggerplugin.cpp:242
+#: midebuggerplugin.cpp:241
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Виберіть файл core для вивчення…"
 
-#: midebuggerplugin.cpp:247 midebuggerplugin.cpp:267
+#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -265,25 +265,25 @@ msgstr ""
 "Діагностика програми вже виконується. Хочете перервати поточний сеанс "
 "діагностики і продовжити запуск?"
 
-#: midebuggerplugin.cpp:249 midebuggerplugin.cpp:269
+#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Перервати поточний сеанс"
 
-#: midebuggerplugin.cpp:262
+#: midebuggerplugin.cpp:261
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Виберіть процес для приєднання…"
 
-#: midebuggerplugin.cpp:283
+#: midebuggerplugin.cpp:282
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Не з’єднано з процесом %1: інструмент налагоджування не можна з’єднувати з "
 "самим інструментом налагоджування."
 
-#: midebuggerplugin.cpp:303
+#: midebuggerplugin.cpp:302
 #, kde-format
 msgid "Debugger"
 msgstr "Зневадник"

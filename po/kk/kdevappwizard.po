@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2013-05-05 02:20+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -126,73 +126,73 @@ msgstr "%1 файлы құрылмады."
 msgid "Project Templates"
 msgstr "Жоба үлгілері"
 
-#: projectselectionpage.cpp:60
+#: projectselectionpage.cpp:59
 #, fuzzy, kde-format
 #| msgid "Category"
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Санаты"
 
-#: projectselectionpage.cpp:61
+#: projectselectionpage.cpp:60
 #, fuzzy, kde-format
 #| msgid "Project Type"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Жоба түрі"
 
-#: projectselectionpage.cpp:71
+#: projectselectionpage.cpp:70
 #, fuzzy, kde-format
 #| msgid "Get More Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Тағы үлгілерін табу"
 
-#: projectselectionpage.cpp:78
+#: projectselectionpage.cpp:77
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Үлгіні файлдан жүктеп алу"
 
-#: projectselectionpage.cpp:174
+#: projectselectionpage.cpp:173
 #, kde-format
 msgid "Invalid location"
 msgstr "Жарамсыз орын"
 
-#: projectselectionpage.cpp:181
+#: projectselectionpage.cpp:180
 #, kde-format
 msgid "Empty project name"
 msgstr "Бос жобаның атауы"
 
-#: projectselectionpage.cpp:201
+#: projectselectionpage.cpp:200
 #, kde-format
 msgid "Invalid project name"
 msgstr "Жоба атауы жарамсыз"
 
-#: projectselectionpage.cpp:220
+#: projectselectionpage.cpp:219
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "Ішкі каталогтар құрылмады, рұқсаттары жоқ: %1"
 
-#: projectselectionpage.cpp:235
+#: projectselectionpage.cpp:234
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Жоба үлгісі жарамсыз. Дұрысын таңдаңыз."
 
-#: projectselectionpage.cpp:248
+#: projectselectionpage.cpp:247
 #, fuzzy, kde-format
 #| msgid "Path already exists and contains files"
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "Жолы бар екен, онда файлдар бар"
 
-#: projectselectionpage.cpp:295
+#: projectselectionpage.cpp:294
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr "Жолы бар екен, онда файлдар бар. Жалғастырмақсыз ба?"
 
-#: projectselectionpage.cpp:311
+#: projectselectionpage.cpp:310
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@title:window"

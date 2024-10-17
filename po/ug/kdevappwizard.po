@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -126,66 +126,66 @@ msgstr "ھۆججەت %1 قۇرغىلى بولمىدى."
 msgid "Project Templates"
 msgstr "قۇرۇلۇش قېلىپلىرى"
 
-#: projectselectionpage.cpp:60
+#: projectselectionpage.cpp:59
 #, fuzzy, kde-format
 #| msgid "Category"
 msgctxt "@title:column"
 msgid "Category"
 msgstr "كاتېگورىيە"
 
-#: projectselectionpage.cpp:61
+#: projectselectionpage.cpp:60
 #, fuzzy, kde-format
 #| msgid "Project Templates"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "قۇرۇلۇش قېلىپلىرى"
 
-#: projectselectionpage.cpp:71
+#: projectselectionpage.cpp:70
 #, fuzzy, kde-format
 #| msgid "Get More Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "تېخىمۇ كۆپ قېلىپلارغا ئېرىشىش"
 
-#: projectselectionpage.cpp:78
+#: projectselectionpage.cpp:77
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "قېلىپنى ھۆججەتتىن ئوقۇش"
 
-#: projectselectionpage.cpp:174
+#: projectselectionpage.cpp:173
 #, kde-format
 msgid "Invalid location"
 msgstr "ئىناۋەتسىز ئورۇن"
 
-#: projectselectionpage.cpp:181
+#: projectselectionpage.cpp:180
 #, kde-format
 msgid "Empty project name"
 msgstr "قۇرۇلۇش ئاتى قۇرۇق"
 
-#: projectselectionpage.cpp:201
+#: projectselectionpage.cpp:200
 #, kde-format
 msgid "Invalid project name"
 msgstr "قۇرۇلۇش ئاتى ئىناۋەتسىز"
 
-#: projectselectionpage.cpp:220
+#: projectselectionpage.cpp:219
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "تارماق مۇندەرىجىلەرنى قۇرغىلى بولمىدى، ئىمتىيازلار يېتەرلىك ئەمەس: %1"
 
-#: projectselectionpage.cpp:235
+#: projectselectionpage.cpp:234
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "قۇرۇلۇش قېلىپى ئىناۋەتسىز، بىر تارماق تۈرنى تاللاڭ"
 
-#: projectselectionpage.cpp:248
+#: projectselectionpage.cpp:247
 #, fuzzy, kde-format
 #| msgid "Path already exists and contains files"
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "يول مەۋجۇت ھەم ئىچىدە ھۆججەتلەر بار"
 
-#: projectselectionpage.cpp:295
+#: projectselectionpage.cpp:294
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
@@ -193,7 +193,7 @@ msgid ""
 msgstr ""
 "كۆرسىتىلگەن يول مەۋجۇت ھەم ئىچىدە ھۆججەتلەر بار. راستلا داۋاملاشتۇرامسىز؟"
 
-#: projectselectionpage.cpp:311
+#: projectselectionpage.cpp:310
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@title:window"

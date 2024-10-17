@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-09-23 11:14+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -248,25 +248,25 @@ msgctxt "@title:menu"
 msgid "Scope: %1"
 msgstr "Zakres: %1"
 
-#: problemtreeview.cpp:97
+#: problemtreeview.cpp:96
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Problems"
 msgstr "Problemy"
 
-#: problemtreeview.cpp:252
+#: problemtreeview.cpp:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Problem"
 msgstr "Problem"
 
-#: problemtreeview.cpp:254
+#: problemtreeview.cpp:253
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Description"
 msgstr "Skopiuj &opis"
 
-#: problemtreeview.cpp:273
+#: problemtreeview.cpp:272
 #, kde-format
 msgctxt "@title:menu"
 msgid "Solve: %1"

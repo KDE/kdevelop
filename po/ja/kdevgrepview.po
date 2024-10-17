@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2010-07-18 15:08-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -153,69 +153,69 @@ msgctxt ""
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr ""
 
-#: grepoutputview.cpp:72
+#: grepoutputview.cpp:71
 #, fuzzy, kde-format
 #| msgid "Find In Files"
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
 msgstr "ファイル内を検索"
 
-#: grepoutputview.cpp:75
+#: grepoutputview.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
 msgstr ""
 
-#: grepoutputview.cpp:76
+#: grepoutputview.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "&Next Item"
 msgstr ""
 
-#: grepoutputview.cpp:81
+#: grepoutputview.cpp:80
 #, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
 msgstr ""
 
-#: grepoutputview.cpp:83
+#: grepoutputview.cpp:82
 #, kde-format
 msgctxt "@action"
 msgid "&Expand All"
 msgstr ""
 
-#: grepoutputview.cpp:87
+#: grepoutputview.cpp:86
 #, fuzzy, kde-format
 #| msgid "Search"
 msgctxt "@action"
 msgid "New &Search"
 msgstr "検索"
 
-#: grepoutputview.cpp:88
+#: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
 msgstr ""
 
-#: grepoutputview.cpp:90
+#: grepoutputview.cpp:89
 #, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr ""
 
-#: grepoutputview.cpp:325
+#: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
 msgstr ""
 
-#: grepoutputview.cpp:326
+#: grepoutputview.cpp:325
 #, fuzzy, kde-format
 #| msgid "Template:"
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr "テンプレート:"
 
-#: grepoutputview.cpp:327
+#: grepoutputview.cpp:326
 #, fuzzy, kde-format
 #| msgid "Template:"
 msgctxt "@action:button"

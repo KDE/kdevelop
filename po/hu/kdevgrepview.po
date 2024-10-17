@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2014-03-19 21:24+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -169,73 +169,73 @@ msgctxt ""
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr "Nem sikerült <b>%1</b> cseréje ezzel: <b>%2</b> itt: %3:%4:%5"
 
-#: grepoutputview.cpp:72
+#: grepoutputview.cpp:71
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
 msgstr "Kimenet nézet keresése vagy cseréje"
 
-#: grepoutputview.cpp:75
+#: grepoutputview.cpp:74
 #, fuzzy, kde-format
 #| msgid "&Previous Item"
 msgctxt "@action"
 msgid "&Previous Item"
 msgstr "&Előző elem"
 
-#: grepoutputview.cpp:76
+#: grepoutputview.cpp:75
 #, fuzzy, kde-format
 #| msgid "&Next Item"
 msgctxt "@action"
 msgid "&Next Item"
 msgstr "&Következő elem"
 
-#: grepoutputview.cpp:81
+#: grepoutputview.cpp:80
 #, fuzzy, kde-format
 #| msgid "C&ollapse All"
 msgctxt "@action"
 msgid "C&ollapse All"
 msgstr "Ö&sszes összecsukása"
 
-#: grepoutputview.cpp:83
+#: grepoutputview.cpp:82
 #, fuzzy, kde-format
 #| msgid "&Expand All"
 msgctxt "@action"
 msgid "&Expand All"
 msgstr "Összes &kinyitása"
 
-#: grepoutputview.cpp:87
+#: grepoutputview.cpp:86
 #, fuzzy, kde-format
 #| msgid "New &Search"
 msgctxt "@action"
 msgid "New &Search"
 msgstr "Ú&j keresés…"
 
-#: grepoutputview.cpp:88
+#: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
 msgstr ""
 
-#: grepoutputview.cpp:90
+#: grepoutputview.cpp:89
 #, fuzzy, kde-format
 #| msgid "Clear Search History"
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "Keresési előzmények törlése"
 
-#: grepoutputview.cpp:325
+#: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
 msgstr "Szeretné egy üres karakterlánccal helyettesíteni?"
 
-#: grepoutputview.cpp:326
+#: grepoutputview.cpp:325
 #, fuzzy, kde-format
 #| msgid "Start replacement"
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr "Helyettesítés indítása"
 
-#: grepoutputview.cpp:327
+#: grepoutputview.cpp:326
 #, fuzzy, kde-format
 #| msgid "&Replace"
 msgctxt "@action:button"

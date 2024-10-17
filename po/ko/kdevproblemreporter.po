@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2021-11-12 00:04+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -230,25 +230,25 @@ msgctxt "@title:menu"
 msgid "Scope: %1"
 msgstr "범위: %1"
 
-#: problemtreeview.cpp:97
+#: problemtreeview.cpp:96
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Problems"
 msgstr "문제점"
 
-#: problemtreeview.cpp:252
+#: problemtreeview.cpp:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Problem"
 msgstr "문제점"
 
-#: problemtreeview.cpp:254
+#: problemtreeview.cpp:253
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Description"
 msgstr "설명 복사(&C)"
 
-#: problemtreeview.cpp:273
+#: problemtreeview.cpp:272
 #, kde-format
 msgctxt "@title:menu"
 msgid "Solve: %1"

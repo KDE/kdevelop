@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2022-11-24 17:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -237,25 +237,25 @@ msgctxt "@title:menu"
 msgid "Scope: %1"
 msgstr "Kapsam: %1"
 
-#: problemtreeview.cpp:97
+#: problemtreeview.cpp:96
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Problems"
 msgstr "Sorunlar"
 
-#: problemtreeview.cpp:252
+#: problemtreeview.cpp:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Problem"
 msgstr "Sorun"
 
-#: problemtreeview.cpp:254
+#: problemtreeview.cpp:253
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Description"
 msgstr "Açıklamayı Ko&pyala"
 
-#: problemtreeview.cpp:273
+#: problemtreeview.cpp:272
 #, kde-format
 msgctxt "@title:menu"
 msgid "Solve: %1"

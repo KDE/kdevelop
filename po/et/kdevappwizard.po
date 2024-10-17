@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2020-01-18 10:45+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -131,72 +131,72 @@ msgstr "Faili %1 loomine nurjus."
 msgid "Project Templates"
 msgstr "Projekti mallid"
 
-#: projectselectionpage.cpp:60
+#: projectselectionpage.cpp:59
 #, fuzzy, kde-format
 #| msgid "Category"
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Kategooria"
 
-#: projectselectionpage.cpp:61
+#: projectselectionpage.cpp:60
 #, fuzzy, kde-format
 #| msgid "Project Type"
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Projekti tüüp"
 
-#: projectselectionpage.cpp:71
+#: projectselectionpage.cpp:70
 #, fuzzy, kde-format
 #| msgid "Get More Templates"
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Uute mallide hankimine"
 
-#: projectselectionpage.cpp:78
+#: projectselectionpage.cpp:77
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Malli laadimine failist"
 
-#: projectselectionpage.cpp:174
+#: projectselectionpage.cpp:173
 #, kde-format
 msgid "Invalid location"
 msgstr "Vigane asukoht"
 
-#: projectselectionpage.cpp:181
+#: projectselectionpage.cpp:180
 #, kde-format
 msgid "Empty project name"
 msgstr "Tühi projekt nimi"
 
-#: projectselectionpage.cpp:201
+#: projectselectionpage.cpp:200
 #, kde-format
 msgid "Invalid project name"
 msgstr "Vigane projekti nimi"
 
-#: projectselectionpage.cpp:220
+#: projectselectionpage.cpp:219
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "Alamkataloogide loomne nurjus, õigused puuduvad: %1"
 
-#: projectselectionpage.cpp:235
+#: projectselectionpage.cpp:234
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Vigane projekt mall, palun vali puust element"
 
-#: projectselectionpage.cpp:248
+#: projectselectionpage.cpp:247
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "Asukoht on juba olemas ja sisaldab faile. Ava see projektina."
 
-#: projectselectionpage.cpp:295
+#: projectselectionpage.cpp:294
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr "Määratud asukoht on juba olemas ja sisaldab faile.Kas tõesti jätkata?"
 
-#: projectselectionpage.cpp:311
+#: projectselectionpage.cpp:310
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@title:window"

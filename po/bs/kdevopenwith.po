@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
 "PO-Revision-Date: 2014-01-14 00:50+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -20,68 +20,68 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: openwithplugin.cpp:232
+#: openwithplugin.cpp:231
 #, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
 msgstr ""
 
-#: openwithplugin.cpp:243
+#: openwithplugin.cpp:242
 #, fuzzy, kde-format
 #| msgid "Open With"
 msgctxt "@title:menu"
 msgid "Open With"
 msgstr "Otvori pomoću"
 
-#: openwithplugin.cpp:248
+#: openwithplugin.cpp:247
 #, fuzzy, kde-format
 #| msgid "Embedded Editors"
 msgctxt "@title:menu"
 msgid "Embedded Editors"
 msgstr "Ugrađeni editori"
 
-#: openwithplugin.cpp:252
+#: openwithplugin.cpp:251
 #, fuzzy, kde-format
 #| msgid "External Applications"
 msgctxt "@title:menu"
 msgid "External Applications"
 msgstr "Vanjske aplikacije"
 
-#: openwithplugin.cpp:259
+#: openwithplugin.cpp:258
 #, fuzzy, kde-format
 #| msgid "Open"
 msgctxt "@action:inmenu"
 msgid "Open"
 msgstr "Otvori"
 
-#: openwithplugin.cpp:293
+#: openwithplugin.cpp:292
 #, fuzzy, kde-format
 #| msgid "Default Editor"
 msgctxt "@item:inmenu"
 msgid "Default Editor"
 msgstr "Podrazumijevani editor"
 
-#: openwithplugin.cpp:412
+#: openwithplugin.cpp:411
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
 msgstr "Želite li otvoriti svih '%1' datoteka obično s %2?"
 
-#: openwithplugin.cpp:414
+#: openwithplugin.cpp:413
 #, fuzzy, kde-format
 #| msgid "Set as default?"
 msgctxt "@title:window"
 msgid "Set as Default?"
 msgstr "Postaviti kao uobičajeno?"
 
-#: openwithplugin.cpp:415
+#: openwithplugin.cpp:414
 #, fuzzy, kde-format
 #| msgid "Set as default?"
 msgctxt "@action:button"
 msgid "Set as Default"
 msgstr "Postaviti kao uobičajeno?"
 
-#: openwithplugin.cpp:416
+#: openwithplugin.cpp:415
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"
