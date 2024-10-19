@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2024-06-28 21:02+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -214,7 +214,7 @@ msgstr "Ne eblis trovi ajnan dokumentadon por '%1'"
 msgid "%1 Home Page"
 msgstr "Hejmpaĝo de %1"
 
-#: qthelpqtdoc.cpp:141
+#: qthelpqtdoc.cpp:166
 #, kde-format
 msgid "QtHelp"
 msgstr "QtHelp"

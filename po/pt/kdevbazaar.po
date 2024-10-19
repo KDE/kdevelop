@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevbazaar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2018-08-12 11:53+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-POFile-SpellExtra: Bazaar bzr\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: bazaarplugin.cpp:36
+#: bazaarplugin.cpp:37
 #, kde-format
 msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
 msgstr ""

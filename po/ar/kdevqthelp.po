@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2022-01-20 18:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -214,7 +214,7 @@ msgstr "تعذّر العثور على أيّ توثيق لِ‍ ’%1‘"
 msgid "%1 Home Page"
 msgstr "صفحة رئيسيّة QtHelp"
 
-#: qthelpqtdoc.cpp:141
+#: qthelpqtdoc.cpp:166
 #, kde-format
 msgid "QtHelp"
 msgstr "QtHelp"

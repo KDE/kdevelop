@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2014-02-10 00:17+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -20,42 +20,42 @@ msgstr ""
 "X-Generator: Launchpad (build 16820)\n"
 "X-Launchpad-Export-Date: 2013-10-30 05:47+0000\n"
 
-#: grepdialog.cpp:54
+#: grepdialog.cpp:55
 #, fuzzy, kde-format
 #| msgid "All Open Files"
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "Sve otvorene datoteke"
 
-#: grepdialog.cpp:55
+#: grepdialog.cpp:56
 #, fuzzy, kde-format
 #| msgid "All Open Projects"
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Svi otvoreni projekti"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
+#: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Nađi/zamijeni u datotekama"
 
-#: grepdialog.cpp:267
+#: grepdialog.cpp:268
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Traži..."
 
-#: grepdialog.cpp:335
+#: grepdialog.cpp:336
 #, fuzzy, kde-format
 #| msgid "Select a directory to search in."
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Izaberi direktorij  za pretragu."
 
-#: grepdialog.cpp:608
+#: grepdialog.cpp:609
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
@@ -63,14 +63,14 @@ msgstr[0] "%2, i još %1 podatak"
 msgstr[1] "%2, i još %1 podatka"
 msgstr[2] "%2, i još %1 podataka"
 
-#: grepdialog.cpp:624
+#: grepdialog.cpp:625
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "Traži \"%1\" u %2 (u momentu %3)"
 
-#: grepdialog.cpp:629
+#: grepdialog.cpp:630
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"

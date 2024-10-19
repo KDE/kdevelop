@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2019-03-16 14:50+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <kde-i18n-doc@kde.org>\n"
@@ -144,7 +144,7 @@ msgstr "Usar como ruta predeterminada para novos proxectos."
 msgid "Project:"
 msgstr "Proxecto:"
 
-#: duchain/declarationbuilder.cpp:359
+#: duchain/declarationbuilder.cpp:360
 #, kde-format
 msgid ""
 "Possible type mismatch between the argument type (%1) and the value passed "

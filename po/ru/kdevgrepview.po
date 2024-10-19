@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2023-04-25 10:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -25,37 +25,37 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: grepdialog.cpp:54
+#: grepdialog.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "Все открытые файлы"
 
-#: grepdialog.cpp:55
+#: grepdialog.cpp:56
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Все открытые проекты"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
+#: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Поиск и замена в файлах"
 
-#: grepdialog.cpp:267
+#: grepdialog.cpp:268
 #, kde-format
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Искать..."
 
-#: grepdialog.cpp:335
+#: grepdialog.cpp:336
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Выбор каталога, где будет выполнен поиск"
 
-#: grepdialog.cpp:608
+#: grepdialog.cpp:609
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
@@ -64,13 +64,13 @@ msgstr[1] "%2 и ещё %1 местах"
 msgstr[2] "%2 и ещё %1 местах"
 msgstr[3] "%2 и ещё %1 месте"
 
-#: grepdialog.cpp:624
+#: grepdialog.cpp:625
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "Поиск «%1» в %2"
 
-#: grepdialog.cpp:629
+#: grepdialog.cpp:630
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2023-04-30 18:41+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -602,9 +602,9 @@ msgstr "„%1“ in „%2“ umbenennen"
 
 #: language/assistant/renameaction.cpp:109
 #: language/assistant/renamefileaction.cpp:76
-#: language/codegen/basicrefactoring.cpp:341
-#: language/codegen/basicrefactoring.cpp:351
-#: language/codegen/basicrefactoring.cpp:365
+#: language/codegen/basicrefactoring.cpp:343
+#: language/codegen/basicrefactoring.cpp:353
+#: language/codegen/basicrefactoring.cpp:367
 #, kde-format
 msgid "Failed to apply changes: %1"
 msgstr "Anwenden der Änderungen ist fehlgeschlagen: %1"
@@ -696,41 +696,41 @@ msgstr "Klassen im Projekt %1"
 msgid "not implemented"
 msgstr "nicht implementiert"
 
-#: language/codegen/basicrefactoring.cpp:90
+#: language/codegen/basicrefactoring.cpp:91
 #, kde-format
 msgctxt "@action"
 msgid "Rename \"%1\"..."
 msgstr "„%1“ umbenennen ..."
 
-#: language/codegen/basicrefactoring.cpp:220
+#: language/codegen/basicrefactoring.cpp:221
 #, kde-format
 msgid "No declaration under cursor"
 msgstr "Keine Deklaration unter dem Cursor"
 
-#: language/codegen/basicrefactoring.cpp:226
+#: language/codegen/basicrefactoring.cpp:227
 #, kde-format
 msgid "Declaration is located in non-writable file %1."
 msgstr "Deklaration befindet sich in der schreibgeschützten Datei %1."
 
-#: language/codegen/basicrefactoring.cpp:295
+#: language/codegen/basicrefactoring.cpp:296
 #, kde-format
 msgctxt "@title:window Renaming some declaration"
 msgid "Rename \"%1\""
 msgstr "„%1“ umbenennen"
 
-#: language/codegen/basicrefactoring.cpp:299
+#: language/codegen/basicrefactoring.cpp:300
 #, kde-format
 msgctxt "@title:tab"
 msgid "Uses"
 msgstr "Vorkommen"
 
-#: language/codegen/basicrefactoring.cpp:301
+#: language/codegen/basicrefactoring.cpp:302
 #, kde-format
 msgctxt "@title:tab"
 msgid "Declaration Info"
 msgstr "Deklarationsinformationen"
 
-#: language/codegen/basicrefactoring.cpp:308
+#: language/codegen/basicrefactoring.cpp:309
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\""
 msgstr "„%1“ wird in „%2“ umbenannt"
@@ -1227,7 +1227,7 @@ msgstr " in "
 msgid "Solution (%1)"
 msgstr "Lösung (%1)"
 
-#: language/duchain/navigation/usescollector.cpp:414
+#: language/duchain/navigation/usescollector.cpp:413
 #, kde-format
 msgid "%1 still needs an update!"
 msgstr "%1 muss noch aktualisiert werden!"
@@ -1242,25 +1242,25 @@ msgstr "Vorkommen von "
 msgid "Uses of %1"
 msgstr "Vorkommen von %1"
 
-#: language/duchain/navigation/useswidget.cpp:129
+#: language/duchain/navigation/useswidget.cpp:130
 #, kde-format
 msgctxt "refers to a line in source code"
 msgid "Line <b>%1</b>:"
 msgstr "Zeile <b>%1</b>:"
 
-#: language/duchain/navigation/useswidget.cpp:210
-#: language/duchain/navigation/useswidget.cpp:217
+#: language/duchain/navigation/useswidget.cpp:211
+#: language/duchain/navigation/useswidget.cpp:218
 #, kde-format
 msgctxt "Refers to a line in source code"
 msgid "Line <b>%1</b>:"
 msgstr "Zeile <b>%1</b>:"
 
-#: language/duchain/navigation/useswidget.cpp:412
+#: language/duchain/navigation/useswidget.cpp:413
 #, kde-format
 msgid "Unknown context"
 msgstr "Unbekannter Kontext"
 
-#: language/duchain/navigation/useswidget.cpp:419
+#: language/duchain/navigation/useswidget.cpp:420
 #: shell/launchconfigurationdialog.cpp:481
 #, kde-format
 msgid "Global"
@@ -5085,7 +5085,7 @@ msgstr "Bearbeiten ..."
 #. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
 #. i18n: ectx: property (text), widget (QPushButton, deleteButton)
 #: shell/sourceformatterselectionedit.ui:215
-#: shell/workingsets/workingsettooltipwidget.cpp:93
+#: shell/workingsets/workingsettooltipwidget.cpp:94
 #: vcs/dvcs/ui/branchmanager.ui:44
 #, kde-format
 msgctxt "@action:button"
@@ -5139,17 +5139,17 @@ msgctxt "@title:window"
 msgid "Select Tool View to Add"
 msgstr "Wählen Sie die Werkzeugansicht, die Sie hinzufügen möchten"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:74
+#: shell/workingsets/workingsettooltipwidget.cpp:75
 #, kde-format
 msgid "<b>Active Working Set</b>"
 msgstr "<b>Aktiver Dokumentensatz</b>"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:76
+#: shell/workingsets/workingsettooltipwidget.cpp:77
 #, kde-format
 msgid "<b>Working Set</b>"
 msgstr "<b>Dokumentensatz</b>"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:94
+#: shell/workingsets/workingsettooltipwidget.cpp:95
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this working set. The contained documents are not affected."
@@ -5157,19 +5157,19 @@ msgstr ""
 "Diesen Dokumentensatz löschen. Die enthaltenen Dokumente sind nicht "
 "betroffen."
 
-#: shell/workingsets/workingsettooltipwidget.cpp:120
+#: shell/workingsets/workingsettooltipwidget.cpp:121
 #, kde-format
 msgctxt "@label"
 msgid "Documents:"
 msgstr "Dokumente:"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:128
+#: shell/workingsets/workingsettooltipwidget.cpp:129
 #, kde-format
 msgctxt "@action:button"
 msgid "Add All"
 msgstr "Alle hinzufügen"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:129
+#: shell/workingsets/workingsettooltipwidget.cpp:130
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5179,13 +5179,13 @@ msgstr ""
 "Alle Dokumente, die zu diesem Dokumentensatz gehören, zum derzeit aktiven "
 "Dokumentensatz hinzufügen"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:136
+#: shell/workingsets/workingsettooltipwidget.cpp:137
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove All"
 msgstr "Alle entfernen"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:137
+#: shell/workingsets/workingsettooltipwidget.cpp:138
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5195,31 +5195,31 @@ msgstr ""
 "Alle Dokumente, die zu diesem Dokumentensatz gehören, aus dem derzeit "
 "aktiven Dokumentensatz entfernen"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:170
+#: shell/workingsets/workingsettooltipwidget.cpp:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Click to open and activate this document."
 msgstr "Klicken Sie, um dieses Dokument zu öffnen."
 
-#: shell/workingsets/workingsettooltipwidget.cpp:281
+#: shell/workingsets/workingsettooltipwidget.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this file from the current working set"
 msgstr "Diese Datei aus dem aktiven Dokumentensatz entfernen"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:286
+#: shell/workingsets/workingsettooltipwidget.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add this file to the current working set"
 msgstr "Diese Datei zum aktiven Dokumentensatz hinzufügen"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:315
+#: shell/workingsets/workingsettooltipwidget.cpp:314
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Stash"
 
-#: shell/workingsets/workingsettooltipwidget.cpp:321
+#: shell/workingsets/workingsettooltipwidget.cpp:320
 #, kde-format
 msgctxt "@action:button"
 msgid "Load"

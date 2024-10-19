@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2024-03-08 04:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -98,47 +98,47 @@ msgctxt "@action"
 msgid "Move into Source"
 msgstr "移動到原始碼中"
 
-#: codecompletion/context.cpp:148
+#: codecompletion/context.cpp:149
 #, kde-format
 msgid "Override %1"
 msgstr "覆寫 %1"
 
-#: codecompletion/context.cpp:345
+#: codecompletion/context.cpp:346
 #, kde-format
 msgid "Implement %1"
 msgstr "實作 %1"
 
-#: codecompletion/context.cpp:1410
+#: codecompletion/context.cpp:1408
 #, kde-format
 msgid "Special"
 msgstr "特殊"
 
-#: codecompletion/context.cpp:1411
+#: codecompletion/context.cpp:1409
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "向前檢查符合項目"
 
-#: codecompletion/context.cpp:1412
+#: codecompletion/context.cpp:1410
 #, kde-format
 msgid "Builtin"
 msgstr "內建"
 
-#: codecompletion/context.cpp:1413
+#: codecompletion/context.cpp:1411
 #, kde-format
 msgid "Macros"
 msgstr "巨集"
 
-#: codecompletion/context.cpp:1456
+#: codecompletion/context.cpp:1454
 #, kde-format
 msgid "Abstract Override"
 msgstr ""
 
-#: codecompletion/context.cpp:1457
+#: codecompletion/context.cpp:1455
 #, kde-format
 msgid "Virtual Override"
 msgstr ""
 
-#: codecompletion/context.cpp:1472
+#: codecompletion/context.cpp:1470
 #, kde-format
 msgid "Implement Function"
 msgstr "實作函數"

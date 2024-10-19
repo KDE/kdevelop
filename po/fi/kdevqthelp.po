@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2022-08-19 16:30+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -218,7 +218,7 @@ msgstr "Ei löydetty mitään dokumentaatiota kohteesta ”%1”"
 msgid "%1 Home Page"
 msgstr "Qt-ohjeen aloitussivu"
 
-#: qthelpqtdoc.cpp:141
+#: qthelpqtdoc.cpp:166
 #, kde-format
 msgid "QtHelp"
 msgstr "Qt-ohje"

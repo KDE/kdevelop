@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2013-11-11 04:32+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -17,97 +17,97 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: contextbrowser.cpp:162
+#: contextbrowser.cpp:161
 #, fuzzy, kde-format
 #| msgid "Go back in context history"
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
 msgstr "Контекст тарихында шегіну"
 
-#: contextbrowser.cpp:174
+#: contextbrowser.cpp:173
 #, fuzzy, kde-format
 #| msgid "Go forward in context history"
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
 msgstr "Контекст тарихында ілгерілеу"
 
-#: contextbrowser.cpp:190
+#: contextbrowser.cpp:189
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgctxt "item quick open item type"
 msgid "Outline"
 msgstr "Сұлба"
 
-#: contextbrowser.cpp:191
+#: contextbrowser.cpp:190
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr "Сұлба"
 
-#: contextbrowser.cpp:192
+#: contextbrowser.cpp:191
 #, fuzzy, kde-format
 #| msgid "Navigate outline of active document, click to browse."
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr "Белсенді құжаттың сұлбасын ақтару үшін түртіңіз. "
 
-#: contextbrowser.cpp:233
+#: contextbrowser.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
 msgstr ""
 
-#: contextbrowser.cpp:239
+#: contextbrowser.cpp:238
 #, fuzzy, kde-format
 #| msgid "&Previous Visited Context"
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr "&Алдында жолыққан контекст  "
 
-#: contextbrowser.cpp:245
+#: contextbrowser.cpp:244
 #, fuzzy, kde-format
 #| msgid "&Next Visited Context"
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr "&Келесі жолыққан контекст  "
 
-#: contextbrowser.cpp:251
+#: contextbrowser.cpp:250
 #, fuzzy, kde-format
 #| msgid "&Previous Use"
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr "&Алдыңғы пайдалануы"
 
-#: contextbrowser.cpp:257
+#: contextbrowser.cpp:256
 #, fuzzy, kde-format
 #| msgid "&Next Use"
 msgctxt "@action"
 msgid "&Next Use"
 msgstr "&Келесі пайдалануы"
 
-#: contextbrowser.cpp:263
+#: contextbrowser.cpp:262
 #, fuzzy, kde-format
 #| msgid "Context Browser"
 msgctxt "@action"
 msgid "Context Browser"
 msgstr "Контекст шшолғышы"
 
-#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
+#: contextbrowser.cpp:293 contextbrowser.cpp:372 contextbrowserview.cpp:172
 #, fuzzy, kde-format
 #| msgid "Code Browser"
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr "Код шолғышы"
 
-#: contextbrowser.cpp:310
+#: contextbrowser.cpp:309
 #, fuzzy, kde-format
 #| msgid "Find Uses"
 msgctxt "@action"
 msgid "Find Uses"
 msgstr "Пайдалануларын табу"
 
-#: contextbrowser.cpp:1560
+#: contextbrowser.cpp:1558
 #, kde-format
 msgid "(changed)"
 msgstr "(өзгертілген)"

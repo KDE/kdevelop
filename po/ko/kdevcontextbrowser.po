@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2022-04-16 22:51+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -14,85 +14,85 @@ msgstr ""
 "X-Generator: Lokalize 21.08.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: contextbrowser.cpp:162
+#: contextbrowser.cpp:161
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
 msgstr "문맥 기록의 뒤로 이동"
 
-#: contextbrowser.cpp:174
+#: contextbrowser.cpp:173
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
 msgstr "문맥 기록의 앞으로 이동"
 
-#: contextbrowser.cpp:190
+#: contextbrowser.cpp:189
 #, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
 msgstr "요약"
 
-#: contextbrowser.cpp:191
+#: contextbrowser.cpp:190
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr "요약"
 
-#: contextbrowser.cpp:192
+#: contextbrowser.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr "활성 문서를 탐색합니다. 클릭해서 탐색하십시오"
 
-#: contextbrowser.cpp:233
+#: contextbrowser.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
 msgstr "소스 코드 탐색 모드(&B)"
 
-#: contextbrowser.cpp:239
+#: contextbrowser.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr "이전에 탐색한 문맥(&P)"
 
-#: contextbrowser.cpp:245
+#: contextbrowser.cpp:244
 #, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr "다음에 탐색한 문맥(&N)"
 
-#: contextbrowser.cpp:251
+#: contextbrowser.cpp:250
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr "이전 사용(&P)"
 
-#: contextbrowser.cpp:257
+#: contextbrowser.cpp:256
 #, kde-format
 msgctxt "@action"
 msgid "&Next Use"
 msgstr "다음 사용(&N)"
 
-#: contextbrowser.cpp:263
+#: contextbrowser.cpp:262
 #, kde-format
 msgctxt "@action"
 msgid "Context Browser"
 msgstr "문맥 탐색기"
 
-#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
+#: contextbrowser.cpp:293 contextbrowser.cpp:372 contextbrowserview.cpp:172
 #, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr "코드 탐색기"
 
-#: contextbrowser.cpp:310
+#: contextbrowser.cpp:309
 #, kde-format
 msgctxt "@action"
 msgid "Find Uses"
 msgstr "사용하는 곳 찾기"
 
-#: contextbrowser.cpp:1560
+#: contextbrowser.cpp:1558
 #, kde-format
 msgid "(changed)"
 msgstr "(변경됨)"

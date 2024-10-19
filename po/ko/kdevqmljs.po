@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2020-02-16 01:22+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -144,7 +144,7 @@ msgstr "기본 프로젝트 위치로 사용"
 msgid "Project:"
 msgstr "프로젝트:"
 
-#: duchain/declarationbuilder.cpp:359
+#: duchain/declarationbuilder.cpp:360
 #, kde-format
 msgid ""
 "Possible type mismatch between the argument type (%1) and the value passed "

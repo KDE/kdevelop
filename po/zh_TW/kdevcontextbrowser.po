@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcontextbrowser\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2023-11-28 18:26+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -20,85 +20,85 @@ msgstr ""
 "X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: contextbrowser.cpp:162
+#: contextbrowser.cpp:161
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
 msgstr "返回內文歷史上一筆"
 
-#: contextbrowser.cpp:174
+#: contextbrowser.cpp:173
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
 msgstr "跳到內文歷史下一筆"
 
-#: contextbrowser.cpp:190
+#: contextbrowser.cpp:189
 #, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
 msgstr "大綱"
 
-#: contextbrowser.cpp:191
+#: contextbrowser.cpp:190
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr "大綱"
 
-#: contextbrowser.cpp:192
+#: contextbrowser.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr "導覽目前文件的大綱，點擊以瀏覽"
 
-#: contextbrowser.cpp:233
+#: contextbrowser.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
 msgstr "原始碼瀏覽模式(&B)"
 
-#: contextbrowser.cpp:239
+#: contextbrowser.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr "前一個已參訪的內文(&P)"
 
-#: contextbrowser.cpp:245
+#: contextbrowser.cpp:244
 #, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr "下一個已參訪的內文(&N)"
 
-#: contextbrowser.cpp:251
+#: contextbrowser.cpp:250
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr "前一個使用處(&P)"
 
-#: contextbrowser.cpp:257
+#: contextbrowser.cpp:256
 #, kde-format
 msgctxt "@action"
 msgid "&Next Use"
 msgstr "下一個使用處(&N)"
 
-#: contextbrowser.cpp:263
+#: contextbrowser.cpp:262
 #, kde-format
 msgctxt "@action"
 msgid "Context Browser"
 msgstr "內文瀏覽器"
 
-#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
+#: contextbrowser.cpp:293 contextbrowser.cpp:372 contextbrowserview.cpp:172
 #, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr "程式碼瀏覽器"
 
-#: contextbrowser.cpp:310
+#: contextbrowser.cpp:309
 #, kde-format
 msgctxt "@action"
 msgid "Find Uses"
 msgstr "尋找使用處"
 
-#: contextbrowser.cpp:1560
+#: contextbrowser.cpp:1558
 #, kde-format
 msgid "(changed)"
 msgstr "（已改變）"

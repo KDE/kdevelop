@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2014-03-05 19:21+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -18,56 +18,56 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: grepdialog.cpp:54
+#: grepdialog.cpp:55
 #, fuzzy, kde-format
 #| msgid "All Open Files"
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "Alle åbne filer"
 
-#: grepdialog.cpp:55
+#: grepdialog.cpp:56
 #, fuzzy, kde-format
 #| msgid "All Open Projects"
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Alle åbne projekter"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
+#: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Find og erstat i filer"
 
-#: grepdialog.cpp:267
+#: grepdialog.cpp:268
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Søg..."
 
-#: grepdialog.cpp:335
+#: grepdialog.cpp:336
 #, fuzzy, kde-format
 #| msgid "Select a directory to search in."
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Vælg en mappe du vil søge i."
 
-#: grepdialog.cpp:608
+#: grepdialog.cpp:609
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] "%2, og yderligere %1 element"
 msgstr[1] "%2, og yderligere %1 elementer"
 
-#: grepdialog.cpp:624
+#: grepdialog.cpp:625
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "Søg efter \"%1 i %2 (ved tidspunkt %3)"
 
-#: grepdialog.cpp:629
+#: grepdialog.cpp:630
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"

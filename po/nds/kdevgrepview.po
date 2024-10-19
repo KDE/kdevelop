@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2012-02-02 07:37+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -20,55 +20,55 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: grepdialog.cpp:54
+#: grepdialog.cpp:55
 #, fuzzy, kde-format
 #| msgid "All Open Files"
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "All apen Dateien"
 
-#: grepdialog.cpp:55
+#: grepdialog.cpp:56
 #, fuzzy, kde-format
 #| msgid "All Open Projects"
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "All apen Projekten"
 
-#: grepdialog.cpp:259 grepdialog.cpp:617 grepviewplugin.cpp:94
+#: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Söken un Utwesseln in Dateien"
 
-#: grepdialog.cpp:267
+#: grepdialog.cpp:268
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Söken..."
 
-#: grepdialog.cpp:335
+#: grepdialog.cpp:336
 #, fuzzy, kde-format
 #| msgid "Select in which directory you want to search."
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Söök den Orner ut, binnen den Du söken wullt."
 
-#: grepdialog.cpp:608
+#: grepdialog.cpp:609
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: grepdialog.cpp:624
+#: grepdialog.cpp:625
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr ""
 
-#: grepdialog.cpp:629
+#: grepdialog.cpp:630
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"

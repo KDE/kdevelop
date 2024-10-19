@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2020-07-20 08:41+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -104,47 +104,47 @@ msgctxt "@action"
 msgid "Move into Source"
 msgstr "Пересунути до коду"
 
-#: codecompletion/context.cpp:148
+#: codecompletion/context.cpp:149
 #, kde-format
 msgid "Override %1"
 msgstr "Перевизначити %1"
 
-#: codecompletion/context.cpp:345
+#: codecompletion/context.cpp:346
 #, kde-format
 msgid "Implement %1"
 msgstr "Реалізувати %1"
 
-#: codecompletion/context.cpp:1410
+#: codecompletion/context.cpp:1408
 #, kde-format
 msgid "Special"
 msgstr "Особливі"
 
-#: codecompletion/context.cpp:1411
+#: codecompletion/context.cpp:1409
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Випереджувальні відповідники"
 
-#: codecompletion/context.cpp:1412
+#: codecompletion/context.cpp:1410
 #, kde-format
 msgid "Builtin"
 msgstr "Вбудований"
 
-#: codecompletion/context.cpp:1413
+#: codecompletion/context.cpp:1411
 #, kde-format
 msgid "Macros"
 msgstr "Макрос"
 
-#: codecompletion/context.cpp:1456
+#: codecompletion/context.cpp:1454
 #, kde-format
 msgid "Abstract Override"
 msgstr "Абстрактне перевизначення"
 
-#: codecompletion/context.cpp:1457
+#: codecompletion/context.cpp:1455
 #, kde-format
 msgid "Virtual Override"
 msgstr "Віртуальне перевизначення"
 
-#: codecompletion/context.cpp:1472
+#: codecompletion/context.cpp:1470
 #, kde-format
 msgid "Implement Function"
 msgstr "Реалізувати функцію"

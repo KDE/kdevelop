@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2013-10-26 13:44+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -18,97 +18,97 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: contextbrowser.cpp:162
+#: contextbrowser.cpp:161
 #, fuzzy, kde-format
 #| msgid "Go back in context history"
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
 msgstr "Gå tilbage i konteksthistorikken"
 
-#: contextbrowser.cpp:174
+#: contextbrowser.cpp:173
 #, fuzzy, kde-format
 #| msgid "Go forward in context history"
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
 msgstr "Gå frem i konteksthistorikken"
 
-#: contextbrowser.cpp:190
+#: contextbrowser.cpp:189
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgctxt "item quick open item type"
 msgid "Outline"
 msgstr "Omrids"
 
-#: contextbrowser.cpp:191
+#: contextbrowser.cpp:190
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr "Omrids"
 
-#: contextbrowser.cpp:192
+#: contextbrowser.cpp:191
 #, fuzzy, kde-format
 #| msgid "Navigate outline of active document, click to browse."
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr "Navigér omrids af det aktive dokument, klik for at gennemse."
 
-#: contextbrowser.cpp:233
+#: contextbrowser.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
 msgstr ""
 
-#: contextbrowser.cpp:239
+#: contextbrowser.cpp:238
 #, fuzzy, kde-format
 #| msgid "&Previous Visited Context"
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr "&Forrige besøgte kontekst"
 
-#: contextbrowser.cpp:245
+#: contextbrowser.cpp:244
 #, fuzzy, kde-format
 #| msgid "&Next Visited Context"
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr "&Næste besøgte kontekst"
 
-#: contextbrowser.cpp:251
+#: contextbrowser.cpp:250
 #, fuzzy, kde-format
 #| msgid "&Previous Use"
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr "Fo&rrige brugstilfælde"
 
-#: contextbrowser.cpp:257
+#: contextbrowser.cpp:256
 #, fuzzy, kde-format
 #| msgid "&Next Use"
 msgctxt "@action"
 msgid "&Next Use"
 msgstr "Næs&te brugstilfælde"
 
-#: contextbrowser.cpp:263
+#: contextbrowser.cpp:262
 #, fuzzy, kde-format
 #| msgid "Context Browser"
 msgctxt "@action"
 msgid "Context Browser"
 msgstr "Kontekstbrowser"
 
-#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
+#: contextbrowser.cpp:293 contextbrowser.cpp:372 contextbrowserview.cpp:172
 #, fuzzy, kde-format
 #| msgid "Code Browser"
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr "Kodebrowser"
 
-#: contextbrowser.cpp:310
+#: contextbrowser.cpp:309
 #, fuzzy, kde-format
 #| msgid "Find Uses"
 msgctxt "@action"
 msgid "Find Uses"
 msgstr "Find brugstilfælde"
 
-#: contextbrowser.cpp:1560
+#: contextbrowser.cpp:1558
 #, kde-format
 msgid "(changed)"
 msgstr "(ændret)"

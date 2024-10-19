@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcontextbrowser\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2014-08-16 12:52+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
@@ -23,14 +23,14 @@ msgstr ""
 "X-POT-Import-Date: 2012-12-01 22:20:28+0000\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: contextbrowser.cpp:162
+#: contextbrowser.cpp:161
 #, fuzzy, kde-format
 #| msgid "Go back in context history"
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
 msgstr "Siirry taaksepäin kontekstihistoriassa"
 
-#: contextbrowser.cpp:174
+#: contextbrowser.cpp:173
 #, fuzzy, kde-format
 #| msgid "Go forward in context history"
 msgctxt "@info:tooltip"
@@ -38,7 +38,7 @@ msgid "Go forward in context history"
 msgstr "Siirry eteenpäin kontekstihistoriassa"
 
 # Termi otettu sisällysluetteloiden jäsennyksestä. Tämä ”outline” on hieman samankaltainen siinä, että luettelee tiedostossa olevat funktiot.
-#: contextbrowser.cpp:190
+#: contextbrowser.cpp:189
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgctxt "item quick open item type"
@@ -46,76 +46,76 @@ msgid "Outline"
 msgstr "Rakenne"
 
 # Termi otettu sisällysluetteloiden jäsennyksestä. Tämä ”outline” on hieman samankaltainen siinä, että luettelee tiedostossa olevat funktiot.
-#: contextbrowser.cpp:191
+#: contextbrowser.cpp:190
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr "Rakenne"
 
-#: contextbrowser.cpp:192
+#: contextbrowser.cpp:191
 #, fuzzy, kde-format
 #| msgid "Navigate outline of active document, click to browse."
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr "Selaa aktiivisen tiedoston rakennetta napsauttamalla"
 
-#: contextbrowser.cpp:233
+#: contextbrowser.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
 msgstr ""
 
-#: contextbrowser.cpp:239
+#: contextbrowser.cpp:238
 #, fuzzy, kde-format
 #| msgid "&Previous Visited Context"
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr "E&dellinen vierailtu konteksti"
 
-#: contextbrowser.cpp:245
+#: contextbrowser.cpp:244
 #, fuzzy, kde-format
 #| msgid "&Next Visited Context"
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr "&Seuraava vierailtu konteksti"
 
-#: contextbrowser.cpp:251
+#: contextbrowser.cpp:250
 #, fuzzy, kde-format
 #| msgid "&Previous Use"
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr "Edelli&nen käyttö"
 
-#: contextbrowser.cpp:257
+#: contextbrowser.cpp:256
 #, fuzzy, kde-format
 #| msgid "&Next Use"
 msgctxt "@action"
 msgid "&Next Use"
 msgstr "Seuraa&va käyttö"
 
-#: contextbrowser.cpp:263
+#: contextbrowser.cpp:262
 #, fuzzy, kde-format
 #| msgid "Context Browser"
 msgctxt "@action"
 msgid "Context Browser"
 msgstr "Kontekstiselain"
 
-#: contextbrowser.cpp:294 contextbrowser.cpp:373 contextbrowserview.cpp:172
+#: contextbrowser.cpp:293 contextbrowser.cpp:372 contextbrowserview.cpp:172
 #, fuzzy, kde-format
 #| msgid "Code Browser"
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr "Koodiselain"
 
-#: contextbrowser.cpp:310
+#: contextbrowser.cpp:309
 #, fuzzy, kde-format
 #| msgid "Find Uses"
 msgctxt "@action"
 msgid "Find Uses"
 msgstr "Hae käytöt"
 
-#: contextbrowser.cpp:1560
+#: contextbrowser.cpp:1558
 #, kde-format
 msgid "(changed)"
 msgstr "(muuttunut)"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmljssupport\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
 "PO-Revision-Date: 2020-07-01 21:21-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -147,7 +147,7 @@ msgstr "Usar como localização padrão do projeto"
 msgid "Project:"
 msgstr "Projeto:"
 
-#: duchain/declarationbuilder.cpp:359
+#: duchain/declarationbuilder.cpp:360
 #, kde-format
 msgid ""
 "Possible type mismatch between the argument type (%1) and the value passed "
