@@ -232,7 +232,7 @@ QVector<TaskInfo> copyMoveItems(const Path::List& paths, ProjectBaseItem* destIt
 
         Path::List pathsList;
         pathsList.reserve(itemsList.size());
-        for (KDevelop::ProjectBaseItem* item : itemsList) {
+        for (const auto* const item : std::as_const(itemsList)) {
             pathsList.append(item->path());
         }
 
