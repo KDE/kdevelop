@@ -3374,7 +3374,7 @@ msgstr "Προορισμός"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Directory:"
-msgstr "κατάλογος:"
+msgstr "Κατάλογος:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
 #: shell/projectsourcepage.ui:62
@@ -4895,7 +4895,7 @@ msgid ""
 "Enables or disables the display of the tab bar at the top of the editor "
 "window."
 msgstr ""
-"(απ)ενεργοποιεί την εμφάνιση της γραμμής καρτελών στην κορυφή του παραθύρου "
+"(Απ)ενεργοποιεί την εμφάνιση της γραμμής καρτελών στην κορυφή του παραθύρου "
 "του επεξεργαστή."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)

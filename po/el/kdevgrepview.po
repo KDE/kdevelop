@@ -577,7 +577,7 @@ msgstr "Αναζήτηση με διάκριση πεζών/κεφαλαίων."
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
-msgstr "Θέση(θέσεις):"
+msgstr "Θέση(-εις):"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
 #: grepwidget.ui:205
@@ -638,7 +638,7 @@ msgstr "Κανονική έκφραση:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
-msgstr "(απ)ενεργοποίηση κανονικής έκφρασης."
+msgstr "(Απ)ενεργοποίηση κανονικής έκφρασης."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
 #: grepwidget.ui:343

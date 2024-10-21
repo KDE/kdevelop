@@ -432,7 +432,7 @@ msgstr "Αντιγραφή εδώ"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
-msgstr "&ακύρωση"
+msgstr "&Ακύρωση"
 
 #: projecttreeview.cpp:218
 #, fuzzy, kde-format

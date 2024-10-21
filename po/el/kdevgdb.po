@@ -219,14 +219,7 @@ msgstr "Αντικατάσταση διαδρομής για το εκτελέσ
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
 #: gdbconfigpage.ui:61 gdbconfigpage.ui:77
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want gdb to be executed by a special shell "
-#| "script, which for example properly sets the library path, insert it here "
-#| "e.g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
-#| "invoked like this: /path/to/script.sh --scriptArguments debugger --"
-#| "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
-#| "span> invoke \"debugger\" executable manually.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>If you want gdb to be executed by a special shell "
@@ -241,8 +234,8 @@ msgstr ""
 "εισαγάγετέ το εδώ e.g.: /path/to/script.sh --scriptArguments</p><p>Σημείωση: "
 "το σενάριό σας θα δοθεί για εκτέλεση έτσι: /path/to/script.sh --"
 "scriptArguments debugger --debuggerArguments. Έτσι το script.sh <span style="
-"\" font-weight:600;\">πρέπει</span> να ορίσει το εκτελέσιμο \"debugger\" "
-"χειροκίνητα.</p></body></html>"
+"\" font-weight:600;\">πρέπει</span> να ορίσει το εκτελέσιμο &quot;"
+"debugger&quot; χειροκίνητα.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
 #: gdbconfigpage.ui:64
@@ -267,14 +260,7 @@ msgstr "Εμφάνιση στατικών &μελών:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
 #: gdbconfigpage.ui:111
-#, fuzzy, kde-format
-#| msgid ""
-#| "Displaying static members makes GDB slower in\n"
-#| "producing data within KDE and Qt.\n"
-#| "It may change the \"signature\" of the data\n"
-#| "which QString and friends rely on,\n"
-#| "but if you need to debug into these values then\n"
-#| "check this option."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Displaying static members makes GDB slower in\n"
@@ -285,7 +271,7 @@ msgid ""
 "check this option."
 msgstr ""
 "Η εμφάνιση στατικών μελών κάνει το GDB αργότερο στην\n"
-"παραγωγή δεδομένων εντός του KDE και του Qt.\n"
+"παραγωγή δεδομένων με κώδικα βασισμένο στο Qt.\n"
 "Μπορεί να αλλάξει την \"υπογραφή\" των δεδομένων στα\n"
 "οποία το GString και οι φίλες τάξεις βασίζονται,\n"
 "αλλά αν χρειάζεστε να αποσφαλματώσετε σε αυτές τις τιμές\n"
@@ -367,15 +353,7 @@ msgstr "Απομακρυσμένη αποσφαλμάτωση"
 #. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
 #: gdbconfigpage.ui:187 gdbconfigpage.ui:203
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Script to start remote application</p><p></"
-#| "p><p>This shell script is run after the Gdb Config script has been "
-#| "sourced by gdb.</p><p>It's purpose is to actually start the remote "
-#| "process.</p><p>1) Find a way to execute a command remotely - rsh, ssh, "
-#| "telnet, ...</p><p>2a) Execute \"gdbserver ... application\" on target.</"
-#| "p><p>or if your executable contains the gdb stub:</p><p>2b) Execute "
-#| "\"application\" on target.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>Script to start remote application</p><p></p><p>This "
@@ -390,29 +368,25 @@ msgstr ""
 "p><p>Αυτό το σενάριο εκτελείται αφού το σενάριο Config gdb έχει εκτελεστεί "
 "από το gdb.</p><p>Σκοπός του είναι να εκκινήσει την απομακρυσμένη διεργασία."
 "</p><p>1) Αναζήτηση ενός τρόπου απομακρυσμένης εκτέλεσης εντολών - rsh, ssh, "
-"telnet, ...</p><p>2α) Εκτέλεση \"gdbserver ... εφαρμογή\" στον προορισμό.</"
-"p><p>ή αν το εκτελέσιμο περιέχει το ίχνος του gdb:</p><p>2β) Εκτέλεση της "
-"\"εφαρμογής\" στον προορισμό.</p></body></html>"
+"telnet, ...</p><p>2α) Εκτέλεση &quot;gdbserver ... εφαρμογή&quot; στον "
+"προορισμό.</p><p>ή αν το εκτελέσιμο περιέχει το ίχνος του gdb:</p><p>2β) "
+"Εκτέλεση της &quot;εφαρμογής&quot; στον προορισμό.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
 #: gdbconfigpage.ui:190
 #, kde-format
 msgctxt "@label:chooser Shell script to be executed at run time"
 msgid "R&un shell script:"
-msgstr "&εκτέλεση σεναρίου κελύφους:"
+msgstr "&Εκτέλεση σεναρίου κελύφους:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
 #: gdbconfigpage.ui:210 gdbconfigpage.ui:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>This script is sourced by gdb when the debugging "
-#| "starts.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "This script is sourced by gdb when the debugging starts."
 msgstr ""
-"<html><head/><body><p>Αυτό το σενάριο εκτελείται από το gdb κατά την "
-"εκκίνηση της αποσφαλμάτωσης.</p></body></html>"
+"Αυτό το σενάριο εκτελείται από το gdb κατά την εκκίνηση της αποσφαλμάτωσης."
 
 #. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
 #: gdbconfigpage.ui:213
@@ -620,11 +594,10 @@ msgid "Change Memory Range"
 msgstr "Τροποποίηση εύρους μνήμης"
 
 #: memviewdlg.cpp:352
-#, fuzzy, kde-format
-#| msgid "Close this view"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
-msgstr "Κλείσιμο αυτής της προβολής"
+msgstr "Κλείσιμο προβολής"
 
 #: memviewdlg.cpp:419
 #, kde-format

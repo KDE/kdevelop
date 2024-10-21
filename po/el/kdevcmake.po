@@ -120,7 +120,7 @@ msgstr "Το προκαθορισμένο πρόθεμα εγκατάσταση�
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Build &type:"
-msgstr "&τύπος κατασκευής:"
+msgstr "&Τύπος κατασκευής:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
@@ -327,7 +327,7 @@ msgstr "Για προχωρημένους"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Installation prefix:"
-msgstr "&πρόθεμα εγκατάστασης:"
+msgstr "&Πρόθεμα εγκατάστασης:"
 
 #. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
 #: settings/cmakebuildsettings.ui:144
