@@ -228,7 +228,7 @@ QVector<TaskInfo> copyMoveItems(const Path::List& paths, ProjectBaseItem* destIt
                                     [](auto const& a, auto const& b) {
                                         return a->path() == b->path();
                                     }),
-                        itemsList.end());
+                        itemsList.cend());
 
         Path::List pathsList;
         pathsList.reserve(itemsList.size());
