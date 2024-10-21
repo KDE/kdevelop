@@ -111,40 +111,41 @@ class QListPrinter(PrinterBaseType):
     "Print a QList"
 
     class _iterator(Iterator):
-        def __init__(self, nodetype, d):
+        def __init__(self, nodetype, d, isQt6):
             self.nodetype = nodetype
             self.d = d
             self.count = 0
+            self.isQt6 = isQt6
 
-            #from QTypeInfo::isLarge
-            isLarge = self.nodetype.sizeof > gdb.lookup_type('void').pointer().sizeof
+            if not isQt6:
+                #from QTypeInfo::isLarge
+                isLarge = self.nodetype.sizeof > gdb.lookup_type('void').pointer().sizeof
 
-            isPointer = self.nodetype.code == gdb.TYPE_CODE_PTR
+                isPointer = self.nodetype.code == gdb.TYPE_CODE_PTR
 
-            #unfortunately we can't use QTypeInfo<T>::isStatic as it's all inlined, so use
-            #this list of types that use Q_DECLARE_TYPEINFO(T, Q_MOVABLE_TYPE)
-            #(obviously it won't work for custom types)
-            movableTypes = ['QRect', 'QRectF', 'QString', 'QMargins', 'QLocale', 'QChar', 'QDate', 'QTime', 'QDateTime', 'QVector',
-               'QRegExpr', 'QPoint', 'QPointF', 'QByteArray', 'QSize', 'QSizeF', 'QBitArray', 'QLine', 'QLineF', 'QModelIndex', 'QPersitentModelIndex',
-               'QVariant', 'QFileInfo', 'QUrl', 'QXmlStreamAttribute', 'QXmlStreamNamespaceDeclaration', 'QXmlStreamNotationDeclaration',
-               'QXmlStreamEntityDeclaration', 'QPair<int, int>']
-            #this list of types that use Q_DECLARE_TYPEINFO(T, Q_PRIMITIVE_TYPE) (from qglobal.h)
-            primitiveTypes = ['bool', 'char', 'signed char', 'unsigned char', 'short', 'unsigned short', 'int', 'unsigned int', 'long', 'unsigned long', 'long long', 'unsigned long long', 'float', 'double']
+                #unfortunately we can't use QTypeInfo<T>::isStatic as it's all inlined, so use
+                #this list of types that use Q_DECLARE_TYPEINFO(T, Q_MOVABLE_TYPE)
+                #(obviously it won't work for custom types)
+                movableTypes = ['QRect', 'QRectF', 'QString', 'QMargins', 'QLocale', 'QChar', 'QDate', 'QTime', 'QDateTime', 'QVector',
+                'QRegExpr', 'QPoint', 'QPointF', 'QByteArray', 'QSize', 'QSizeF', 'QBitArray', 'QLine', 'QLineF', 'QModelIndex', 'QPersitentModelIndex',
+                'QVariant', 'QFileInfo', 'QUrl', 'QXmlStreamAttribute', 'QXmlStreamNamespaceDeclaration', 'QXmlStreamNotationDeclaration',
+                'QXmlStreamEntityDeclaration', 'QPair<int, int>']
+                #this list of types that use Q_DECLARE_TYPEINFO(T, Q_PRIMITIVE_TYPE) (from qglobal.h)
+                primitiveTypes = ['bool', 'char', 'signed char', 'unsigned char', 'short', 'unsigned short', 'int', 'unsigned int', 'long', 'unsigned long', 'long long', 'unsigned long long', 'float', 'double']
 
-            if movableTypes.count(self.nodetype.tag) or primitiveTypes.count(str(self.nodetype)):
-               isStatic = False
-            else:
-               isStatic = not isPointer
+                if movableTypes.count(self.nodetype.tag) or primitiveTypes.count(str(self.nodetype)):
+                    isStatic = False
+                else:
+                    isStatic = not isPointer
 
-            self.externalStorage = isLarge or isStatic #see QList::Node::t()
+                self.externalStorage = isLarge or isStatic #see QList::Node::t()
 
 
         def __iter__(self):
             return self
 
         def __next__(self):
-            isQt6 = has_field(self.d, 'size')
-            if isQt6:
+            if self.isQt6:
                 size = self.d['size']
             else:
                 size = self.d['end'] - self.d['begin']
@@ -153,7 +154,7 @@ class QListPrinter(PrinterBaseType):
                 raise StopIteration
             count = self.count
 
-            if isQt6:
+            if self.isQt6:
                 value = self.d['ptr'] + count
             else:
                 array = self.d['array'].address + self.d['begin'] + count
@@ -180,7 +181,7 @@ class QListPrinter(PrinterBaseType):
             self._itype = gdb.lookup_type(itype)
 
     def children(self):
-        return self._iterator(self._itype, self._d)
+        return self._iterator(self._itype, self._d, self._isQt6)
 
     def num_children(self):
         return self._size
