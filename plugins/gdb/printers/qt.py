@@ -19,6 +19,24 @@ if hasattr(gdb, 'ValuePrinter'):
 else:
     PrinterBaseType = object
 
+def get_unique_ptr_value(unique_ptr_val):
+    """
+    Extract the underlying pointer from a std::unique_ptr in gdb.
+    :param unique_ptr_val: gdb.Value representing a std::unique_ptr.
+    :return: The underlying raw pointer or an error message.
+    """
+    try:
+        unique_ptr_type = str(unique_ptr_val.type)
+        unique_ptr_address = unique_ptr_val.address
+
+        # The implementation details of std::unique_ptr vary too much,
+        # call the get() method.
+        expr = f"(({unique_ptr_type}*){unique_ptr_address})->get()"
+        raw_ptr = gdb.parse_and_eval(expr)
+        return raw_ptr
+    except gdb.error as e:
+        return f"Error accessing unique_ptr: {str(e)}"
+
 class QStringViewPrinterBase(PrinterBaseType):
 
     def __init__(self, val, encoding, bytesPerCharacter):
@@ -914,6 +932,288 @@ class QPersistentModelIndexPrinter:
         modelIndex = gdb.parse_and_eval("reinterpret_cast<const QPersistentModelIndex*>(%s)->operator QModelIndex()" % self.val.address)
         return str(modelIndex)
 
+class QCborValueHelper:
+
+    def __init__(self):
+        # Create a dictionary from the enum values of QCborValue::Type
+        self.enum_type_dict = gdb.types.make_enum_dict(gdb.lookup_type("QCborValue::Type"))
+
+    def qcbor_value_to_gdb(self, cborValue, className):
+        """Handle QCborValue"""
+        value = cborValue['n']
+        container_ptr = cborValue['container']
+        if value >= 0 and container_ptr: # see elementFromValue in qcborvalue_p.h
+            # C++ code: return value.container->elements.at(value.n);
+            element = container_ptr['elements']['d']['ptr'] + value
+            return self.qcbor_element_to_gdb(element, container_ptr, value, className)
+        value_type = int(cborValue['t'])
+        return self.qcbor_to_gdb_impl(value_type, value, container_ptr, value, container_ptr, className)
+
+    def qt5_qjsonvalue_to_gdb(self, jsonValue, className):
+        """Handle Qt5's QJsonValue (which doesn't contain a QCborValue like in Qt5)"""
+        value = jsonValue['n']
+        value_type = int(jsonValue['t'])
+        container_ptr = jsonValue['d']['d']
+        return self.qcbor_to_gdb_impl(value_type, value, container_ptr, value, container_ptr, className)
+
+    def qcbor_element_to_gdb(self, element, container_ptr, index, className):
+        """Handle QtCbor::Element"""
+        value = element['value']
+        value_type = int(element['type'])
+        child_container_ptr = element['container']
+        return self.qcbor_to_gdb_impl(value_type, value, container_ptr, index, child_container_ptr, className)
+
+    # shared code between qcbor_value_to_string and qcbor_element_to_string
+    def qcbor_to_gdb_impl(self, value_type, value, container_ptr, index, child_container_ptr, className):
+        # Compare the value_type with the enum values dynamically extracted from GDB
+        if value_type == self.enum_type_dict['QCborValue::Integer']:
+            return value.cast(gdb.lookup_type('qint64'))  # Integer case
+        elif value_type == self.enum_type_dict['QCborValue::String']:
+            return self.get_string(index, container_ptr)
+        elif value_type == self.enum_type_dict['QCborValue::Array']:
+            arrayClassName = 'QJsonArray' if 'QJson' in className else 'QCborArray'
+            return self.get_array(child_container_ptr, arrayClassName)
+        elif value_type == self.enum_type_dict['QCborValue::Map']:
+            mapClassName = 'QJsonObject' if 'QJson' in className else 'QCborMap'
+            return self.get_map(child_container_ptr, mapClassName)
+        elif value_type == self.enum_type_dict['QCborValue::ByteArray']:
+            return self.get_byte_array(child_container_ptr)
+        elif value_type == self.enum_type_dict['QCborValue::True']:
+            return True
+        elif value_type == self.enum_type_dict['QCborValue::False']:
+            return False
+        elif value_type == self.enum_type_dict['QCborValue::Null']:
+            return None
+        elif value_type == self.enum_type_dict['QCborValue::Double']:
+            return float(value) # probably incorrect, see fp_helper() in C++
+        # TODO: Add more cases for other types like DateTime, Url, Uuid, etc.
+        else:
+            return "<unknown type>"
+
+    def get_string(self, index, container_ptr):
+        """
+        Extract a string value from QCborValue::String using the container's stringAt(index) function
+        """
+        expr = "reinterpret_cast<const QCborContainerPrivate*>(%s)->stringAt(%d)" % (container_ptr, index)
+        return gdb.parse_and_eval(expr)
+
+    def get_array(self, container_ptr, className):
+        """
+        Handle QCborValue::Array, returning a QCborContainerPrivate, which will create a QCborContainerPrivatePrinter
+        """
+        if not container_ptr:
+            return "[]"
+        container_private_ptr = container_ptr.reinterpret_cast(gdb.lookup_type('QCborContainerPrivate').pointer())
+        QCborContainerPrivatePrinter.globalDict.insert(container_ptr, className)
+        return container_private_ptr.dereference()
+
+    def get_map(self, container_ptr, className):
+        """
+        Handle QCborValue::Map, returning a QCborContainerPrivate, which will create a QCborContainerPrivatePrinter
+        """
+        if not container_ptr:
+            return "{}"
+        container_private_ptr = container_ptr.reinterpret_cast(gdb.lookup_type('QCborContainerPrivate').pointer())
+        QCborContainerPrivatePrinter.globalDict.insert(container_ptr, className)
+        return container_private_ptr.dereference()
+
+    def get_byte_array(self, container_ptr):
+        """
+        Handle QCborValue::ByteArray, returning a Python bytearray
+        """
+        # TODO: Implement logic to handle byte array extraction
+        return "<bytearray>"
+
+class QCborContainerPrivateIterator:
+    def __init__(self, container_ptr, container_className):
+        self.container_ptr = container_ptr
+        self.container_className = container_className
+        self.elements = self.container_ptr['elements']
+        self.elementsPrinter = QVectorPrinter(self.elements, 'QList')
+        self.elementsIterator = self.elementsPrinter.children()
+        self.size = self.elementsPrinter.num_children()
+        self.element_ptr_type = gdb.lookup_type('QtCbor::Element').pointer()
+        self.index = 0
+        self.isArray = QCborContainerPrivateGlobalDict.isArrayClassName(self.container_className)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index >= self.size:
+            raise StopIteration
+
+        element = self.elementsIterator.__next__()[1]
+        item = QCborValueHelper().qcbor_element_to_gdb(element, self.container_ptr, self.index, self.container_className)
+
+        if not self.isArray:
+            if self.index % 2 == 0:
+                itemType = 'key'
+            else:
+                itemType = 'value'
+
+            result = (f'[{self.index // 2}].{itemType}', item)
+        else:
+            result = (f'[{self.index}]', item)
+        self.index += 1
+        return result
+
+# get_map and get_array both return a QCborContainerPrivate to inspect
+# and there's no way to find out from the application memory if that's a map or an array
+# So we have to store this information globally (what a hack)
+# We also don't know if the user visible classname is e.g. QJsonObject or QCborMap
+# so let's even store that, and deduce map-or-array from it
+class QCborContainerPrivateGlobalDict:
+    def __init__(self):
+        self.dict = dict()
+
+    def insert(self, ptr, className):
+        self.dict[int(ptr)] = className
+
+    def name(self, ptr):
+        try:
+            return self.dict[int(ptr)]
+        except KeyError:
+            return None
+
+    def isArrayClassName(className):
+        return className == 'QJsonArray' or className == 'QCborArray'
+
+    def isArray(self, ptr):
+        v = self.dict[int(ptr)]
+        if v:
+            return QCborContainerPrivateGlobalDict.isArrayClassName(v)
+        return False
+
+class QCborContainerPrivatePrinter:
+
+    globalDict = QCborContainerPrivateGlobalDict()
+
+    def __init__(self, val):
+        self.container_private = val
+        self.isArray = QCborContainerPrivatePrinter.globalDict.isArray(val.address)
+        self.container_type = 'array' if self.isArray else 'map'
+        self.size = int(self.container_private['elements']['d']['size'])
+        self.className = QCborContainerPrivatePrinter.globalDict.name(self.container_private.address)
+
+    def children(self):
+        if self.size == 0:
+            return []
+        return QCborContainerPrivateIterator(self.container_private.address, self.className)
+
+    def to_string(self):
+        if self.isArray:
+            return f"{self.className} (size = {self.size})"
+        else:
+            return f"{self.className} (size = {self.size // 2})"
+
+    def display_hint(self):
+        return self.container_type # 'map' or 'array'
+
+class QCborMapPrinter:
+
+    def __init__(self, val):
+        self.container_ptr = val['d']['d']
+        self.size = int(self.container_ptr['elements']['d']['size'])
+
+    def children(self):
+        if self.size == 0:
+            return []
+        return QCborContainerPrivateIterator(self.container_ptr, 'QCborMap')
+
+    def to_string(self):
+        return f"QCborMap (size = {self.size // 2})"
+
+    def display_hint(self):
+        return 'map'
+
+class QCborArrayPrinter:
+
+    def __init__(self, val):
+        self.container_ptr = val['d']['d']
+        self.size = int(self.container_ptr['elements']['d']['size'])
+
+    def children(self):
+        if self.size == 0:
+            return []
+        return QCborContainerPrivateIterator(self.container_ptr, 'QCborArray')
+
+    def to_string(self):
+        return f"QCborArray (size = {self.size})"
+
+    def display_hint(self):
+        return 'array'
+
+class QJsonArrayPrinter:
+
+    def __init__(self, val):
+        self.container_ptr = val['a']['d']
+        self.size = int(self.container_ptr['elements']['d']['size'])
+
+    def children(self):
+        if self.size == 0:
+            return []
+        return QCborContainerPrivateIterator(self.container_ptr, 'QJsonArray')
+
+    def to_string(self):
+        return f"QJsonArray (size = {self.size})"
+
+    def display_hint(self):
+        return 'array'
+
+class QJsonObjectPrinter:
+
+    def __init__(self, val):
+        self.container_ptr = val['o']['d']
+        self.size = int(self.container_ptr['elements']['d']['size'])
+
+    def children(self):
+        if self.size == 0:
+            return []
+        return QCborContainerPrivateIterator(self.container_ptr, 'QJsonObject')
+
+    def to_string(self):
+        return "QJsonObject (size = %d)" % (self.size//2)
+
+    def display_hint(self):
+        return 'map'
+
+class QJsonDocumentPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def children(self):
+        d_ptr = get_unique_ptr_value(self.val['d'])
+        cborValue = d_ptr['value']
+        QCborContainerPrivatePrinter.globalDict.insert(cborValue.address, 'QJsonValue')
+        return [('value', cborValue)] # single child: the QCborValue in it
+
+    def to_string(self):
+        return "QJsonDocument"
+
+class QCborValuePrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        # Check if it comes from a QJsonDocument
+        className = QCborContainerPrivatePrinter.globalDict.name(self.val.address)
+        return str(QCborValueHelper().qcbor_value_to_gdb(self.val, className if className else 'QCborValue'))
+
+class QJsonValuePrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        isQt6 =  has_field(self.val, 'value')
+        if isQt6:
+            return str(QCborValueHelper().qcbor_value_to_gdb(self.val['value'], 'QJsonValue'))
+        else: # Qt5
+            return str(QCborValueHelper().qt5_qjsonvalue_to_gdb(self.val, 'QJsonValue'))
+
 class QUuidPrinter:
 
     def __init__(self, val):
@@ -1053,6 +1353,14 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QUuid$')] = lambda val: QUuidPrinter(val)
     pretty_printers_dict[re.compile('^QVariant$')] = lambda val: QVariantPrinter(val)
     pretty_printers_dict[re.compile('^QPersistentModelIndex$')] = lambda val: QPersistentModelIndexPrinter(val)
+    pretty_printers_dict[re.compile('^QJsonObject$')] = lambda val: QJsonObjectPrinter(val)
+    pretty_printers_dict[re.compile('^QJsonDocument$')] = lambda val: QJsonDocumentPrinter(val)
+    pretty_printers_dict[re.compile('^QJsonValue$')] = lambda val: QJsonValuePrinter(val)
+    pretty_printers_dict[re.compile('^QJsonArray$')] = lambda val: QJsonArrayPrinter(val)
+    pretty_printers_dict[re.compile('^QCborContainerPrivate$')] = lambda val: QCborContainerPrivatePrinter(val)
+    pretty_printers_dict[re.compile('^QCborArray$')] = lambda val: QCborArrayPrinter(val)
+    pretty_printers_dict[re.compile('^QCborMap$')] = lambda val: QCborMapPrinter(val)
+    pretty_printers_dict[re.compile('^QCborValue$')] = lambda val: QCborValuePrinter(val)
 
 
 build_dictionary ()
