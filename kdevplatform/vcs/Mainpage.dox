@@ -1,5 +1,5 @@
 /*!
- * @mainpage editor - Interfaces and support library for Version Control Systems.
+ * @page editor - Interfaces and support library for Version Control Systems.
  *
  * vcs provides interfaces that VCS plugins need to implement to be usable
  * with KDevelop Platform based applications. It also provides some common

@@ -1,5 +1,5 @@
 /*!
- * @mainpage interfaces - Library with the basic interface for the Shell.
+ * @page interfaces - Library with the basic interface for the Shell.
  *
  * interfaces is a library that provides Interfaces to various parts of 
  * the shell, for example the plugin and project controller or the uicontroller

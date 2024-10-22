@@ -1,5 +1,5 @@
 /*!
- * @mainpage shell - The application shell.
+ * @page shell - The application shell.
  *
  * The shell provides implementation of many interfaces from the
  * <a href="../interfaces/index.html">interfaces</a> library and

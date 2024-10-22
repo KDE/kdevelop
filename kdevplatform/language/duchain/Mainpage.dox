@@ -1,5 +1,5 @@
 /*!
- * @mainpage Definition-Use Chain and Type System
+ * @page Definition-Use Chain and Type System
  *
  * Overview | \ref duchain-design "Design" | \ref Implementing "Implementing" | \ref Using "Using"
  *

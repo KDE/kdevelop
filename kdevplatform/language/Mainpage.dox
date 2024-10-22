@@ -1,5 +1,5 @@
 /*!
- * @mainpage Language library
+ * @page Language library
  *
  * The language library provides an interface to the structure of code which
  * is being edited by KDevelop, and allows such things as class browsing, code

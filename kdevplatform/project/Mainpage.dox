@@ -1,5 +1,5 @@
 /*!
- * @mainpage project - Project library and manager interfaces.
+ * @page project - Project library and manager interfaces.
  *
  * project provides the project model, base classes to create
  * project configuration dialogs and the interfaces for the

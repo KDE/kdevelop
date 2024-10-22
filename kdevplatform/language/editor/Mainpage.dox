@@ -1,5 +1,5 @@
 /*!
- * @mainpage Editor Integration
+ * @page Editor Integration
  *
  * The Editor Integration api provides easier access to the KTextEditor
  * API.

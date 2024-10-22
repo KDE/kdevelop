@@ -1,5 +1,5 @@
 /*!
- * @mainpage sublime - An user interface library.
+ * @page sublime - An user interface library.
  *
  * sublime provides a user interface that supports multiple
  * mainwindows, multiple dockwidgets, split views and area's (which are known

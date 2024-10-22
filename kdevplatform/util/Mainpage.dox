@@ -1,5 +1,5 @@
 /*!
- * @mainpage util - A library with stuff that doesn't fit elsewhere.
+ * @page util - A library with stuff that doesn't fit elsewhere.
  *
  * util contains helper classes that can be used by plugins and applications.
  *

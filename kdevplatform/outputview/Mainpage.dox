@@ -1,5 +1,5 @@
 /*!
- * @mainpage outputview - Interface and library for the outputview.
+ * @page outputview - Interface and library for the outputview.
  *
  * outputview provides an interface and a library to display program output.
  *
