@@ -627,17 +627,25 @@ void QtPrintersTest::testQPersistentModelIndex()
     gdb.execute("break qpersistentmodelindex.cpp:16");
     gdb.execute("run");
 
+    // QModelIndex's 4th data member had been `const QAbstractItemModel *m` before and
+    // is `Qt::totally_ordered_wrapper<const QAbstractItemModel *> m` since Qt 6.8.
+    // Hence the default GDB struct printer outputs "m = 0x..." given Qt version < 6.8 and
+    // m = {
+    //   ptr = 0x...
+    // }
+    // given Qt version >= 6.8. Look for " = 0x..." to pass with any supported Qt version.
+
     QByteArray out = gdb.execute("print i");
     QVERIFY(out.contains("r = -1"));
     QVERIFY(out.contains("c = -1"));
     QVERIFY(out.contains("i = 0"));
-    QVERIFY(out.contains("m = 0x0"));
+    QVERIFY(out.contains(" = 0x0"));
 
     auto modelAddress = gdb.execute("print /a &model");
     modelAddress.remove(0, modelAddress.indexOf('=') + 1);
     modelAddress = modelAddress.trimmed();
     QCOMPARE(modelAddress.left(2), "0x");
-    modelAddress.prepend("m = ");
+    modelAddress.prepend(" = ");
 
     gdb.execute("next");
     out = gdb.execute("print i");
