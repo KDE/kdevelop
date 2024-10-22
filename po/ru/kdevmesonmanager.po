@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-06 01:42+0000\n"
+"POT-Creation-Date: 2024-10-22 00:39+0000\n"
 "PO-Revision-Date: 2022-03-11 12:41+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -128,7 +128,7 @@ msgstr "Ошибка импорта проекта"
 msgid "Meson builder error: %1"
 msgstr "Ошибка сборщика Meson: %1"
 
-#: mesonmanager.cpp:276
+#: mesonmanager.cpp:295
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr "Импорт %1 не выполнен, поскольку не удалось создать каталог сборки."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-06 01:42+0000\n"
+"POT-Creation-Date: 2024-10-22 00:39+0000\n"
 "PO-Revision-Date: 2024-05-23 17:10+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -123,7 +123,7 @@ msgstr "專案匯入失敗"
 msgid "Meson builder error: %1"
 msgstr "Meson 編譯工具錯誤：%1"
 
-#: mesonmanager.cpp:276
+#: mesonmanager.cpp:295
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr "匯入 %1 失敗，因為無法建立任何編譯目錄。"

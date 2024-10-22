@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-06 01:42+0000\n"
+"POT-Creation-Date: 2024-10-22 00:39+0000\n"
 "PO-Revision-Date: 2020-01-16 18:56+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -126,7 +126,7 @@ msgstr ""
 msgid "Meson builder error: %1"
 msgstr "Mesoni ehitaja tõrge: %1"
 
-#: mesonmanager.cpp:276
+#: mesonmanager.cpp:295
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr "%1 import nurjus, sest ehitamiskataloogi loomine nurjus."

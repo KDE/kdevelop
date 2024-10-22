@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevmesonmanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-06 01:42+0000\n"
+"POT-Creation-Date: 2024-10-22 00:39+0000\n"
 "PO-Revision-Date: 2020-07-25 19:29+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -132,7 +132,7 @@ msgstr "La importación del proyecto ha fallado"
 msgid "Meson builder error: %1"
 msgstr "Error del constructor de meson: %1"
 
-#: mesonmanager.cpp:276
+#: mesonmanager.cpp:295
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr ""
