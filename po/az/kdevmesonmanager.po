@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-06 01:42+0000\n"
+"POT-Creation-Date: 2024-10-22 02:29+0000\n"
 "PO-Revision-Date: 2021-06-29 17:20+0400\n"
 "Last-Translator: Kheyyam Gojayev <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -125,7 +125,7 @@ msgstr "Layihə idxal edilə bilmədi"
 msgid "Meson builder error: %1"
 msgstr "Meson qurucusu xətası: %1"
 
-#: mesonmanager.cpp:276
+#: mesonmanager.cpp:295
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
 msgstr "%1 idxal edilə bilmədi, çünki, qurulma qovluğu yaradıla bilmədi."
