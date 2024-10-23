@@ -772,10 +772,12 @@ ConfigPage* CMakeManager::perProjectConfigPage(int number, const ProjectConfigOp
 
 void CMakeManager::reloadProjects()
 {
-    const auto& projects = m_projects.keys();
+    const auto& projects = ICore::self()->projectController()->projects();
     for (IProject* project : projects) {
-        CMake::checkForNeedingConfigure(project);
-        reload(project->projectItem());
+        if (project->buildSystemManager() == this) {
+            CMake::checkForNeedingConfigure(project);
+            reload(project->projectItem());
+        }
     }
 }
 
