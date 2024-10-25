@@ -49,11 +49,8 @@ std::unique_ptr<QtHelpPlugin> makePlugin(KDevelop::TestCore* testCore, const Wri
     writeConfigCallback();
     plugin->readConfig();
 
-    // IILE to allow QTRY_VERIFY to return void on failure
-    [&]() {
-        // ensure the qmake process is finished before we continue the test
-        QTRY_VERIFY(plugin->isInitialized());
-    }();
+    // ensure the qmake process is finished before we continue the test
+    QTRY_VERIFY_RETURN(plugin->isInitialized(), nullptr);
 
     return plugin;
 }
