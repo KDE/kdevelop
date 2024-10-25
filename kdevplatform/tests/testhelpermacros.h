@@ -27,4 +27,17 @@
         }                                                                                                              \
     } while (false)
 
+/**  @note Unlike simpler *_RETURN() macros above, this macro relies on an IILE and RETURN_IF_TEST_FAILED()
+ *         to avoid copying a lot of potentially changeable code from qtestcase.h.
+ *         Therefore, @p condition must work inside a lambda with @c & as the capture-default.
+ *         Furthermore, this macro returns @p retval not only if the QTRY_VERIFY() call fails, but also if
+ *         the current test has already failed before the macro's invocation. If the distinction matters,
+ *         check whether the current test has failed before invoking this macro.
+ */
+#define QTRY_VERIFY_RETURN(condition, retval)                                                                          \
+    [&]() { /* IILE to allow QTRY_VERIFY to return void on failure */                                                  \
+            QTRY_VERIFY(condition);                                                                                    \
+    }();                                                                                                               \
+    RETURN_IF_TEST_FAILED(retval);
+
 #endif // KDEVPLATFORM_TESTHELPERMACROS_H
