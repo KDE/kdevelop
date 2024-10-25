@@ -16,25 +16,43 @@ class QtHelpProvider : public QtHelpProviderAbstract
     Q_OBJECT
     Q_INTERFACES(KDevelop::IDocumentationProvider)
 public:
+    struct DocumentationFileInfo
+    {
+        QString filePath; ///< the absolute path to a .qch documentation file
+        QString namespaceName; ///< the namespace name for @a filePath
+    };
+
     /**
      * Constructor.
-     *
-     * @param fileName the absolute path to a .qch documentation file
-     * @param namespaceName the namespace name for @p fileName
      */
-    QtHelpProvider(QObject* parent, const QString& fileName, const QString& namespaceName, const QString& name,
-                   const QString& iconName);
+    explicit QtHelpProvider(DocumentationFileInfo documentationFileInfo, const QString& name, const QString& iconName,
+                            QObject* parent);
 
     QIcon icon() const override;
     QString name() const override;
     void setName(const QString& name);
-    QString fileName() const;
-    QString namespaceName() const;
     QString iconName() const;
     void setIconName(const QString& iconName);
+
+    /**
+     * @return the absolute file path to the source .qch documentation file
+     *
+     * @note the absolute file path to the .qhc collection file can be obtained via engine()->collectionFile().
+     */
+    [[nodiscard]] const QString& documentationFilePath() const
+    {
+        return m_documentationFileInfo.filePath;
+    }
+    /**
+     * @return the namespace name of both the .qch documention file and the .qhc collection file
+     */
+    [[nodiscard]] const QString& namespaceName() const
+    {
+        return m_documentationFileInfo.namespaceName;
+    }
+
 private:
-    QString m_fileName;
-    QString m_namespaceName;
+    const DocumentationFileInfo m_documentationFileInfo;
     QString m_name;
     QString m_iconName;
 };

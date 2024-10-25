@@ -10,38 +10,37 @@
 
 #include <QIcon>
 
-QtHelpProvider::QtHelpProvider(QObject* parent, const QString& fileName, const QString& namespaceName,
-                               const QString& name, const QString& iconName)
-    : QtHelpProviderAbstract(parent, namespaceName + QLatin1String(".qhc"))
-    , m_fileName(fileName)
-    , m_namespaceName(namespaceName)
+QtHelpProvider::QtHelpProvider(DocumentationFileInfo documentationFileInfo, const QString& name,
+                               const QString& iconName, QObject* parent)
+    : QtHelpProviderAbstract(parent, documentationFileInfo.namespaceName + QLatin1String(".qhc"))
+    , m_documentationFileInfo(std::move(documentationFileInfo))
     , m_name(name)
     , m_iconName(iconName)
 {
-    Q_ASSERT(QHelpEngineCore::namespaceName(fileName) == namespaceName);
+    Q_ASSERT(QHelpEngineCore::namespaceName(m_documentationFileInfo.filePath) == m_documentationFileInfo.namespaceName);
 
-    bool registerFileName = true;
-    cleanUpRegisteredDocumentations([&registerFileName, this](const QString& namespaceName) {
-        if (!registerFileName) {
-            // Unregister this namespace, because the namespace associated with m_fileName has already been found.
+    bool registerDocumentationFile = true;
+    cleanUpRegisteredDocumentations([&registerDocumentationFile, this](const QString& namespaceName) {
+        if (!registerDocumentationFile) {
+            // Unregister this namespace, because m_documentationFileInfo's namespace has already been found.
             return true;
         }
 
-        if (namespaceName != m_namespaceName) {
+        if (namespaceName != m_documentationFileInfo.namespaceName) {
             return true; // unregister this unneeded namespace
         }
         const auto filePath = m_engine.documentationFileName(namespaceName);
-        if (filePath != m_fileName) {
+        if (filePath != m_documentationFileInfo.filePath) {
             return true; // unregister this namespace associated with an unneeded .qch file
         }
 
-        // The .qch file m_fileName is already registered and up-to-date.
-        registerFileName = false; // do not reregister it
+        // The .qch file specified by m_documentationFileInfo is already registered and up-to-date.
+        registerDocumentationFile = false; // do not reregister it
         return false; // keep its namespace registered with the engine
     });
 
-    if (registerFileName) {
-        registerDocumentation(m_fileName);
+    if (registerDocumentationFile) {
+        registerDocumentation(m_documentationFileInfo.filePath);
     }
 }
 
@@ -53,16 +52,6 @@ QIcon QtHelpProvider::icon() const
 QString QtHelpProvider::name() const
 {
     return m_name;
-}
-
-QString QtHelpProvider::fileName() const
-{
-    return m_fileName;
-}
-
-QString QtHelpProvider::namespaceName() const
-{
-    return m_namespaceName;
 }
 
 QString QtHelpProvider::iconName() const
