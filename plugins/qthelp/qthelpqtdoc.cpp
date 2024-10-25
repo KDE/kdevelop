@@ -126,6 +126,12 @@ void QtHelpQtDoc::unloadDocumentation()
 
 bool QtHelpQtDoc::isQtHelpAvailable() const
 {
+    if (!m_isInitialized) {
+        Q_ASSERT(m_path.isEmpty());
+        qCWarning(QTHELP) << "cannot determine Qt Help availability before initialization completes.";
+        return false;
+    }
+
     if (m_path.isEmpty()) {
         return false;
     }
