@@ -42,14 +42,13 @@ const QString INVALID = QTHELP_FILES "/invalid.qch";
 template<typename WriteConfigCallback>
 std::unique_ptr<QtHelpPlugin> makePlugin(KDevelop::TestCore* testCore, const WriteConfigCallback& writeConfigCallback)
 {
+    // The callers could just as well write the config themselves. But the callback parameter ensures
+    // that it is always written and that tests do not rely on config left over from previous runs.
+    writeConfigCallback();
+
     const auto pluginMetaData = KDevelop::makeTestPluginMetaData("TestQtHelp");
     auto plugin = std::make_unique<QtHelpPlugin>(testCore, pluginMetaData, QVariantList());
 
-    // write default config and read it
-    writeConfigCallback();
-    plugin->readConfig();
-
-    // ensure the qmake process is finished before we continue the test
     QTRY_VERIFY_RETURN(plugin->isInitialized(), nullptr);
 
     return plugin;
@@ -106,7 +105,7 @@ void TestQtHelpPlugin::testDefaultValue()
     auto plugin = makePlugin(m_testCore);
     RETURN_IF_TEST_FAILED();
 
-    QCOMPARE(plugin->isQtHelpQtDocLoaded(), true);
+    QCOMPARE(plugin->loadsSystemQtDoc(), true);
     QCOMPARE(plugin->qtHelpProviderLoaded().size(), 0);
     QCOMPARE(plugin->providers().size(), 1);
 

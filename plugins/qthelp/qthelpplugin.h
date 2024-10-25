@@ -25,8 +25,18 @@ public:
 
     QList<KDevelop::IDocumentationProvider*> providers() override;
     QList<QtHelpProvider*> qtHelpProviderLoaded();
-    bool isQtHelpQtDocLoaded() const;
+
+    /**
+     * @return whether loading system Qt documentation is enabled in config
+     */
+    [[nodiscard]] bool loadsSystemQtDoc() const;
+
     bool isQtHelpAvailable() const;
+
+    /**
+     * @return @c false until all providers are fully set up
+     *         and all configured documentation is loaded, @c true afterwards
+     */
     bool isInitialized() const;
 
     int configPages() const override;
@@ -64,6 +74,12 @@ private:
     QList<QtHelpProvider*> m_qtHelpProviders;
     QtHelpQtDoc* m_qtDoc;
     bool m_loadSystemQtDoc;
+
+    enum {
+        ReadConfig = 1,
+        LoadedQtDocumentation = 2
+    };
+    signed char m_initializationDone = 0;
 };
 
 #endif // QTHELPPLUGIN_H
