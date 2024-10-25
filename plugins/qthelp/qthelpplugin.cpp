@@ -64,6 +64,8 @@ void QtHelpPlugin::readConfig()
     loadQtDocumentation(m_loadSystemQtDoc);
 
     emit changedProvidersList();
+
+    m_initializationDone |= ReadConfig;
 }
 
 void QtHelpPlugin::loadQtDocumentation(bool loadQtDoc)
@@ -81,6 +83,8 @@ void QtHelpPlugin::loadQtDocumentation(bool loadQtDoc)
     } else if(loadQtDoc) {
         m_qtDoc->loadDocumentation();
     }
+
+    m_initializationDone |= LoadedQtDocumentation;
 }
 
 void QtHelpPlugin::searchHelpDirectory(QStringList& pathList, QStringList& nameList, QStringList& iconList, const QString& searchDir)
@@ -224,9 +228,9 @@ QList<QtHelpProvider*> QtHelpPlugin::qtHelpProviderLoaded()
     return m_qtHelpProviders;
 }
 
-bool QtHelpPlugin::isQtHelpQtDocLoaded() const
+bool QtHelpPlugin::loadsSystemQtDoc() const
 {
-    return m_loadSystemQtDoc && m_qtDoc->isInitialized();
+    return m_loadSystemQtDoc;
 }
 
 bool QtHelpPlugin::isQtHelpAvailable() const
@@ -236,7 +240,7 @@ bool QtHelpPlugin::isQtHelpAvailable() const
 
 bool QtHelpPlugin::isInitialized() const
 {
-    return m_qtDoc->isInitialized();
+    return m_initializationDone == (ReadConfig | LoadedQtDocumentation);
 }
 
 KDevelop::ConfigPage* QtHelpPlugin::configPage(int number, QWidget* parent)
