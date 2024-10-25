@@ -145,7 +145,7 @@ void TestQtHelpPlugin::testAddOneValidProvider()
     RETURN_IF_TEST_FAILED();
 
     QCOMPARE(plugin->qtHelpProviderLoaded().size(), 1);
-    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->fileName(), path.at(0));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->documentationFilePath(), path.at(0));
     QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->namespaceName(), "namespace1");
     QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->name(), name.at(0));
     QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->iconName(), icon.at(0));
@@ -166,12 +166,12 @@ void TestQtHelpPlugin::testAddTwoDifferentValidProvider()
 
     QCOMPARE(plugin->qtHelpProviderLoaded().size(), 2);
     // first provider
-    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->fileName(), path.at(0));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->documentationFilePath(), path.at(0));
     QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->namespaceName(), "namespace1");
     QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->name(), name.at(0));
     QCOMPARE(plugin->qtHelpProviderLoaded().at(0)->iconName(), icon.at(0));
     // second provider
-    QCOMPARE(plugin->qtHelpProviderLoaded().at(1)->fileName(), path.at(1));
+    QCOMPARE(plugin->qtHelpProviderLoaded().at(1)->documentationFilePath(), path.at(1));
     QCOMPARE(plugin->qtHelpProviderLoaded().at(1)->namespaceName(), "namespace2");
     QCOMPARE(plugin->qtHelpProviderLoaded().at(1)->name(), name.at(1));
     QCOMPARE(plugin->qtHelpProviderLoaded().at(1)->iconName(), icon.at(1));

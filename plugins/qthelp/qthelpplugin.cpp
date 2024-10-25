@@ -146,7 +146,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
 
         QtHelpProvider *provider = nullptr;
         if (const auto it = oldProviders->constFind(namespaceName); it != oldProviders->cend()) {
-            if ((*it)->fileName() == fileName) {
+            if ((*it)->documentationFilePath() == fileName) {
                 provider = *it; // reuse this matching old provider
             } else {
                 // The namespace name determines the .qhc file name. Destroy the nonmatching old provider
@@ -157,7 +157,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
         }
 
         if(!provider){
-            provider = new QtHelpProvider(this, fileName, namespaceName, name, iconName);
+            provider = new QtHelpProvider({fileName, namespaceName}, name, iconName, this);
         }else{
             // The file name and the namespace name already match. Update the name and the icon name.
             provider->setName(name);
