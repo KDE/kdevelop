@@ -54,13 +54,6 @@ std::unique_ptr<QtHelpPlugin> makePlugin(KDevelop::TestCore* testCore, const Wri
     return plugin;
 }
 
-std::unique_ptr<QtHelpPlugin> makePlugin(KDevelop::TestCore* testCore)
-{
-    return makePlugin(testCore, []() {
-        qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), QString(), true);
-    });
-}
-
 using TestDeclarationLookupProvider = std::shared_ptr<const QtHelpQtDoc>;
 using TestDeclarationLookupCallback =
     std::function<void(const KDevelop::TopDUContext* ctx, const QtHelpProviderAbstract* provider)>;
@@ -102,7 +95,9 @@ void TestQtHelpPlugin::cleanupTestCase()
 
 void TestQtHelpPlugin::testDefaultValue()
 {
-    auto plugin = makePlugin(m_testCore);
+    const auto plugin = makePlugin(m_testCore, []() {
+        qtHelpResetConfigToDefaults();
+    });
     RETURN_IF_TEST_FAILED();
 
     QCOMPARE(plugin->loadsSystemQtDoc(), true);

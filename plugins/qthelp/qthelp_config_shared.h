@@ -23,4 +23,6 @@ void qtHelpWriteConfig(const QStringList& iconList,
                        const QString& searchDir,
                        const bool loadQtDoc);
 
+void qtHelpResetConfigToDefaults();
+
 #endif // QTHELP_CONFIG_SHARED_H
