@@ -343,12 +343,18 @@ static void cleanPath(QVector<QString>* data, const bool isRemote)
     auto it = data->begin() + startOffset;
     while (it != data->end()) {
         if (*it == QLatin1String("..")) {
+            // The path of a Path is always absolute. So we replicate standard
+            // operating system command line behaviors of the command `cd ..` below.
             if (it == (data->begin() + startOffset)) {
+                // Running `cd ..` in the root directory in Bash keeps the root directory current (no change).
                 it = data->erase(it);
             } else {
                 if (isWindowsDriveLetter(*(it - 1))) {
-                    it = data->erase(it); // keep the drive letter
+                    // Running `cd ..` in the root directory of a drive in Windows cmd
+                    // keeps the drive root directory current (no change).
+                    it = data->erase(it);
                 } else {
+                    // *it represents `cd ..` from *(it - 1) => remove both segments to simplify
                     it = data->erase(it - 1, it + 1);
                 }
             }
