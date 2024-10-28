@@ -1,16 +1,16 @@
 # Translation of kdevghprovider.po to Catalan (Valencian)
-# Copyright (C) 2013-2022 This_file_is_part_of_KDE
+# Copyright (C) 2013-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2020, 2021.
-# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2015, 2016, 2020, 2021, 2022, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-21 01:43+0000\n"
-"PO-Revision-Date: 2022-05-08 17:54+0200\n"
+"PO-Revision-Date: 2024-10-25 19:37+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: ghdialog.cpp:25
 #, kde-format
@@ -28,7 +28,7 @@ msgid ""
 "authorize KDevelop, you will be able to fetch your public/private "
 "repositories and the repositories from your organizations."
 msgstr ""
-"No heu autoritzat a KDevelop a utilitzar el vostre compte de GitHub. Si "
+"No heu autoritzat KDevelop a utilitzar el vostre compte de GitHub. Si "
 "l'autoritzeu, podreu buscar els repositoris públics/privats des de les "
 "vostres organitzacions."
 
