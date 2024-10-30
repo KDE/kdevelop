@@ -61,10 +61,16 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
 {
 }
 
+bool MainWindowPrivate::isGuiSetUp() const
+{
+    return m_isGuiSetUp;
+}
+
 void MainWindowPrivate::setupGui()
 {
     m_statusBar = new KDevelop::StatusBar(m_mainWindow);
     setupStatusBar();
+    m_isGuiSetUp = true;
 }
 
 void MainWindowPrivate::setupStatusBar()

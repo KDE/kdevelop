@@ -247,6 +247,10 @@ void IdealController::showDockWidget(IdealDockWidget* dock, bool show)
         m_mainWindow->addDockWidget(area, dock);
         dock->show();
     } else {
+        // Calling dock->hide() is necessary to make QMainWindow::saveState() store its removed state correctly.
+        // Without this call, a previously hidden dock widget can become visible on next KDevelop start, while
+        // its associated tool view action (button) correctly but inconsistently remains unchecked (see QTBUG-11909).
+        dock->hide();
         m_mainWindow->removeDockWidget(dock);
     }
 

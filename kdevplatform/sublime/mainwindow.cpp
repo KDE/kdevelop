@@ -245,8 +245,7 @@ void MainWindow::saveSettings()
     if (area())
         group += QLatin1Char('_') + area()->objectName();
     KConfigGroup cg = KSharedConfig::openConfig()->group(group);
-    // This will try to save also the window size and the enabled state of the statusbar.
-    // But it's OK, since we won't use this information when loading.
+
     saveMainWindowSettings(cg);
 
     //debugToolBar visibility is stored separately to allow a area dependent default value
@@ -276,67 +275,15 @@ void MainWindow::loadSettings()
         group += QLatin1Char('_') + area()->objectName();
     KConfigGroup cg = KSharedConfig::openConfig()->group(group);
 
-    // What follows is copy-paste from applyMainWindowSettings.  Unfortunately,
-    // we don't really want that one to try restoring window size, and we also
-    // cannot stop it from doing that in any clean way.
-    // We also do not want that one do it for the enabled state of the statusbar:
-    // KMainWindow scans the widget tree for a QStatusBar-inheriting instance and
-    // set enabled state by the config value stored by the key "StatusBar",
-    // while the QStatusBar subclass used in sublime should always be enabled.
-    auto* mb = findChild<QMenuBar *>();
-    if (mb) {
-        QString entry = cg.readEntry ("MenuBar", "Enabled");
-        if ( entry == QLatin1String("Disabled") )
-           mb->hide();
-        else
-           mb->show();
-    }
+    applyMainWindowSettings(cg);
 
-    if ( !autoSaveSettings() || cg.name() == autoSaveGroup() ) {
-        QString entry = cg.readEntry ("ToolBarsMovable", "Enabled");
-        if ( entry == QLatin1String("Disabled") )
-            KToolBar::setToolBarsLocked(true);
-        else
-            KToolBar::setToolBarsLocked(false);
-    }
-
-    // Utilise the QMainWindow::restoreState() functionality
-    // Note that we're fixing KMainWindow bug here -- the original
-    // code has this fragment above restoring toolbar properties.
-    // As result, each save/restore would move the toolbar a bit to
-    // the left.
-    if (cg.hasKey("State")) {
-        QByteArray state;
-        state = cg.readEntry("State", state);
-        state = QByteArray::fromBase64(state);
-        // One day will need to load the version number, but for now, assume 0
-        restoreState(state);
-    } else {
-        // If there's no state we use a default size of 870x650
-        // Resize only when showing "code" area. If we do that for other areas,
-        // then we'll hit bug https://bugs.kde.org/show_bug.cgi?id=207990
-        // TODO: adymo: this is more like a hack, we need a proper first-start initialization
-        if (area() && area()->objectName() == QLatin1String("code"))
-            resize(870,650);
-    }
-
-    int n = 1; // Toolbar counter. toolbars are counted from 1,
+    //debugToolBar visibility is stored separately to allow a area dependent default value
     const auto toolBars = this->toolBars();
     for (KToolBar* toolbar : toolBars) {
-        QString group(QStringLiteral("Toolbar"));
-        // Give a number to the toolbar, but prefer a name if there is one,
-        // because there's no real guarantee on the ordering of toolbars
-        group += (toolbar->objectName().isEmpty() ? QString::number(n) : QLatin1Char(' ')+toolbar->objectName());
-
-        KConfigGroup toolbarGroup(&cg, group);
-        toolbar->applySettings(toolbarGroup);
-
         if (toolbar->objectName() == QLatin1String("debugToolBar")) {
-            //debugToolBar visibility is stored separately to allow a area dependent default value
             bool visibility = cg.readEntry("debugToolBarVisibility", area()->objectName() == QLatin1String("debug"));
             toolbar->setVisible(visibility);
         }
-        n++;
     }
 
     const bool tabBarHidden = !Container::configTabBarVisible();

@@ -50,6 +50,11 @@ public:
     explicit MainWindowPrivate(MainWindow *mainWindow);
     ~MainWindowPrivate() override;
 
+    /**
+     * @return whether setupGui() has been called
+     */
+    [[nodiscard]] bool isGuiSetUp() const;
+
     QMetaObject::Connection activeDocumentReadWriteConnection;
 
     void setupActions();
@@ -126,6 +131,7 @@ private:
 
     QMap<IPlugin*, KXMLGUIClient*> m_pluginCustomClients;
 
+    bool m_isGuiSetUp = false;
     bool m_changingActiveView;
     /// the view of the tab that got it's context menu connected
     Sublime::View* m_tabView;

@@ -256,6 +256,19 @@ void MainWindow::dropEvent( QDropEvent* ev )
 
 void MainWindow::loadSettings()
 {
+    Q_D(const MainWindow);
+
+    if (!d->isGuiSetUp()) {
+        // UiController() invokes this->loadSettings() before UiController::initialize() invokes this->initialize().
+        // this->initialize() invokes KXmlGuiWindow::setupGUI(), which resizes the window to its default size.
+        // Sublime::MainWindow::loadSettings() calls KXmlGuiWindow::applyMainWindowSettings(), which applies the size
+        // stored in the main window config *once*. If the size stored in config is applied before the default resizing,
+        // the window always ends up having the default size. Prevent this by returning early if the GUI is not set up
+        // (not initialized) yet. The settings are still always loaded when UiController::loadAllAreas() is invoked
+        // after this->initialize().
+        return;
+    }
+
     qCDebug(SHELL) << "Loading Settings";
     initializeCorners();
 
@@ -339,7 +352,17 @@ void MainWindow::initialize()
     Q_D(MainWindow);
 
     KStandardAction::keyBindings(this, SLOT(configureShortcuts()), actionCollection());
-    setupGUI(ToolBar | Save);
+
+    // Do not pass the Save option to setupGUI(), because main window settings are loaded from and saved to
+    // different config groups depending on the current area. So KMainWindow::autoSaveGroup() would have to
+    // be changed accordingly each time another area is switched to. Also Sublime::MainWindow::saveSettings()
+    // and Sublime::MainWindow::loadSettings() do more than just call saveMainWindowSettings() and
+    // applyMainWindowSettings() respectively. applyMainWindowSettings() is virtual and can be overridden, but
+    // there is no way to customize behavior of the non-virtual function KMainWindow::saveMainWindowSettings().
+    // On KDevelop exit, UiController::cleanup() calls Sublime::MainWindow::saveSettings() for each main window.
+    // Therefore, auto-saving main window settings is useful only in case KDevelop crashes. Auto-saving correctly
+    // might be possible, but perhaps not worth the likely significant implementation complexity increase.
+    setupGUI(QSize{870, 650}, ToolBar);
     createGUI(nullptr);
 
     Core::self()->partController()->addManagedTopLevelWidget(this);
