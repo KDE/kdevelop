@@ -144,8 +144,6 @@ public: // FIXME?
     Reimplement in subclasses to save more and don't forget to call inherited method.*/
     virtual void saveSettings();
 
-    /**Reimplemented to save settings.*/
-    bool queryClose() override;
     /** Allow connecting to activateView without the need for a lambda for the default parameter */
     void activateViewAndFocus(Sublime::View *view) { activateView(view, true); }
 
