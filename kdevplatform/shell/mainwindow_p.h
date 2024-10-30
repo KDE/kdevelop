@@ -92,8 +92,6 @@ public Q_SLOTS:
     void gotoNextSplit();
     void gotoPreviousSplit();
 
-    void newToolbarConfig();
-
     void settingsDialog();
 
     void quitAll();
