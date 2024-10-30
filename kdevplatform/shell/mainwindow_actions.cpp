@@ -87,11 +87,6 @@ void MainWindowPrivate::selectNextItem()
     }
 }
 
-void MainWindowPrivate::newToolbarConfig()
-{
-    m_mainWindow->applyMainWindowSettings(KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("MainWindow")));
-}
-
 void MainWindowPrivate::settingsDialog()
 {
     Core::self()->uiControllerInternal()->showSettingsDialog();
