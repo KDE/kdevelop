@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2024-08-17 08:45+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -3484,17 +3484,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1 kot..."
 
-#: shell/runtimecontroller.cpp:26
+#: shell/runtimecontroller.cpp:27
 #, kde-format
 msgid "Host System"
 msgstr "Gostiteljski sistem"
 
-#: shell/runtimecontroller.cpp:86
+#: shell/runtimecontroller.cpp:88
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr "Omogoča izbor izvajalne knjižnice"
 
-#: shell/runtimecontroller.cpp:90
+#: shell/runtimecontroller.cpp:92
 #, kde-format
 msgid "Runtime: %1"
 msgstr "Izvajalna knjižnica: %1"

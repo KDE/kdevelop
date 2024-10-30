@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2024-08-06 05:13+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -3400,17 +3400,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1 為..."
 
-#: shell/runtimecontroller.cpp:26
+#: shell/runtimecontroller.cpp:27
 #, kde-format
 msgid "Host System"
 msgstr "主系統"
 
-#: shell/runtimecontroller.cpp:86
+#: shell/runtimecontroller.cpp:88
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr "允許選擇執行環境"
 
-#: shell/runtimecontroller.cpp:90
+#: shell/runtimecontroller.cpp:92
 #, kde-format
 msgid "Runtime: %1"
 msgstr "執行環境：%1"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2023-01-24 08:25+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -236,7 +236,7 @@ msgstr "neveljavna datoteka API CMake projektnih podatkov"
 msgid "CMake Content Page"
 msgstr "Stran vsebine CMake"
 
-#: cmakemanager.cpp:655
+#: cmakemanager.cpp:665
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -251,7 +251,7 @@ msgstr ""
 "Da bi odpravili to težavo, z desno tipko miške kliknite element projekta v "
 "pogledu orodja projektov in kliknite 'Ponovno naloži'."
 
-#: cmakemanager.cpp:666
+#: cmakemanager.cpp:676
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

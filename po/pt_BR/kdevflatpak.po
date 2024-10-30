@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2020-07-23 15:26-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -19,76 +19,86 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 20.04.3\n"
 
-#: flatpakplugin.cpp:45
+#: flatpakplugin.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Rebuild Environment"
 msgstr "Recompilar ambiente"
 
-#: flatpakplugin.cpp:46
+#: flatpakplugin.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Recompiles all dependencies for a fresh environment."
 msgstr "Recompila todas as dependências para um ambiente novo."
 
-#: flatpakplugin.cpp:51
+#: flatpakplugin.cpp:55
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
 msgstr "Exportar o pacote Flatpak..."
 
-#: flatpakplugin.cpp:52
+#: flatpakplugin.cpp:56
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Exports the current build into a 'bundle.flatpak' file."
 msgstr "Exporta a compilação atual para um arquivo 'bundle.flatpak'."
 
-#: flatpakplugin.cpp:57
+#: flatpakplugin.cpp:61
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
 msgstr "Enviar para o dispositivo..."
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Export %1"
 msgstr "Exportar %1..."
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, kde-format
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Pacote Flatpak (*.flatpak)"
 
-#: flatpakplugin.cpp:176
-#, kde-format
+#: flatpakplugin.cpp:234
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Rebuild Environment"
 msgctxt "@action:inmenu"
-msgid "Build Flatpak %1 for %2"
+msgid "Rebuild Flatpak Environment: %1"
+msgstr "Recompilar ambiente"
+
+#: flatpakplugin.cpp:241
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Build Flatpak %1 for %2"
+msgctxt "@action:inmenu"
+msgid "Build Flatpak Environment %1 for %2"
 msgstr "Compilar o Flatpak %1 para %2"
 
-#: flatpakplugin.cpp:198
+#: flatpakplugin.cpp:265
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Escolher o nome da marca"
 
-#: flatpakplugin.cpp:199
+#: flatpakplugin.cpp:266
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "Nome do dispositivo:"
 
-#: flatpakruntime.cpp:55
+#: flatpakruntime.cpp:58
 #, kde-format
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:146
+#: flatpakruntime.cpp:158
 #, kde-format
 msgid "Bundling"
 msgstr "Criando o pacote"
 
-#: flatpakruntime.cpp:168
+#: flatpakruntime.cpp:180
 #, kde-format
 msgid "Run on Device"
 msgstr "Executar no dispositivo"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2021-11-09 00:15+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -231,7 +231,7 @@ msgstr ""
 msgid "CMake Content Page"
 msgstr ""
 
-#: cmakemanager.cpp:655
+#: cmakemanager.cpp:665
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -241,7 +241,7 @@ msgid ""
 "view and click 'Reload'."
 msgstr ""
 
-#: cmakemanager.cpp:666
+#: cmakemanager.cpp:676
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

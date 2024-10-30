@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2020-10-04 20:09+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17,77 +17,87 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 19.12.3\n"
 
-#: flatpakplugin.cpp:45
+#: flatpakplugin.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Rebuild Environment"
 msgstr "환경 다시 빌드"
 
-#: flatpakplugin.cpp:46
+#: flatpakplugin.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Recompiles all dependencies for a fresh environment."
 msgstr "모든 의존성을 깨끗한 환경으로 다시 컴파일합니다."
 
-#: flatpakplugin.cpp:51
+#: flatpakplugin.cpp:55
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
 msgstr "Flatpak 번들 내보내기..."
 
-#: flatpakplugin.cpp:52
+#: flatpakplugin.cpp:56
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Exports the current build into a 'bundle.flatpak' file."
 msgstr "현재 빌드를 'bundle.flatpak' 파일로 내보냅니다."
 
-#: flatpakplugin.cpp:57
+#: flatpakplugin.cpp:61
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
 msgstr "장치로 보내기..."
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Export %1"
 msgstr "%1 내보내기"
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, kde-format
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak 번들 (*.flatpak)"
 
-# %1: 파일 이름, %2: 아키텍처
-#: flatpakplugin.cpp:176
-#, kde-format
+#: flatpakplugin.cpp:234
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Rebuild Environment"
 msgctxt "@action:inmenu"
-msgid "Build Flatpak %1 for %2"
+msgid "Rebuild Flatpak Environment: %1"
+msgstr "환경 다시 빌드"
+
+# %1: 파일 이름, %2: 아키텍처
+#: flatpakplugin.cpp:241
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Build Flatpak %1 for %2"
+msgctxt "@action:inmenu"
+msgid "Build Flatpak Environment %1 for %2"
 msgstr "%2용 Flatpak %1 빌드"
 
-#: flatpakplugin.cpp:198
+#: flatpakplugin.cpp:265
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "태그 이름 선택"
 
-#: flatpakplugin.cpp:199
+#: flatpakplugin.cpp:266
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "장치 호스트 이름:"
 
-#: flatpakruntime.cpp:55
+#: flatpakruntime.cpp:58
 #, kde-format
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:146
+#: flatpakruntime.cpp:158
 #, kde-format
 msgid "Bundling"
 msgstr "번들"
 
-#: flatpakruntime.cpp:168
+#: flatpakruntime.cpp:180
 #, kde-format
 msgid "Run on Device"
 msgstr "장치에서 실행"

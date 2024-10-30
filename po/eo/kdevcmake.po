@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2024-05-30 22:41+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -236,7 +236,7 @@ msgstr "nevalidaj datumoj de projekto de API de CMake-dosiero"
 msgid "CMake Content Page"
 msgstr "CMake-Enhavpaĝo"
 
-#: cmakemanager.cpp:655
+#: cmakemanager.cpp:665
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -251,7 +251,7 @@ msgstr ""
 "Por solvi ĉi tiun problemon, bonvolu dekstre alklaki la projektan objekton "
 "en la projektila ilo-vido kaj alklaku 'Reŝargi'."
 
-#: cmakemanager.cpp:666
+#: cmakemanager.cpp:676
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

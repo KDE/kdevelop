@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2023-04-21 12:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -237,7 +237,7 @@ msgstr "geçersiz CMake dosyası API'si proje verisi"
 msgid "CMake Content Page"
 msgstr "CMake İçindekiler Sayfası"
 
-#: cmakemanager.cpp:655
+#: cmakemanager.cpp:665
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -252,7 +252,7 @@ msgstr ""
 "Bu sorunu çözmek için, projeler araç görünümünde proje ögesinin üzerine sağ "
 "tıklayın ve 'Yeniden Yükle'yi seçin."
 
-#: cmakemanager.cpp:666
+#: cmakemanager.cpp:676
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

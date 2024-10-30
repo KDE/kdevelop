@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2021-10-18 20:24+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -3356,17 +3356,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr ""
 
-#: shell/runtimecontroller.cpp:26
+#: shell/runtimecontroller.cpp:27
 #, kde-format
 msgid "Host System"
 msgstr ""
 
-#: shell/runtimecontroller.cpp:86
+#: shell/runtimecontroller.cpp:88
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr ""
 
-#: shell/runtimecontroller.cpp:90
+#: shell/runtimecontroller.cpp:92
 #, kde-format
 msgid "Runtime: %1"
 msgstr ""

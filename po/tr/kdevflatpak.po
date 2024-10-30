@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevflatpak\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2022-09-03 23:13+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -17,76 +17,86 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 22.08.0\n"
 
-#: flatpakplugin.cpp:45
+#: flatpakplugin.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Rebuild Environment"
 msgstr "Ortamı Yeniden Yap"
 
-#: flatpakplugin.cpp:46
+#: flatpakplugin.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Recompiles all dependencies for a fresh environment."
 msgstr "Taze bir ortam için tüm bağımlılıkları yeniden derler."
 
-#: flatpakplugin.cpp:51
+#: flatpakplugin.cpp:55
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
 msgstr "Flatpak Demeti Dışa Aktar..."
 
-#: flatpakplugin.cpp:52
+#: flatpakplugin.cpp:56
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Exports the current build into a 'bundle.flatpak' file."
 msgstr "Geçerli yapıyı bir 'bundle.flatpak' dosyasına dışa aktarır."
 
-#: flatpakplugin.cpp:57
+#: flatpakplugin.cpp:61
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
 msgstr "Aygıta Gönder..."
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Export %1"
 msgstr "Dışa Aktar: %1"
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, kde-format
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak Demeti (*.flatpak)"
 
-#: flatpakplugin.cpp:176
-#, kde-format
+#: flatpakplugin.cpp:234
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Rebuild Environment"
 msgctxt "@action:inmenu"
-msgid "Build Flatpak %1 for %2"
+msgid "Rebuild Flatpak Environment: %1"
+msgstr "Ortamı Yeniden Yap"
+
+#: flatpakplugin.cpp:241
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Build Flatpak %1 for %2"
+msgctxt "@action:inmenu"
+msgid "Build Flatpak Environment %1 for %2"
 msgstr "%1 Flatpak'i %2 için Yap"
 
-#: flatpakplugin.cpp:198
+#: flatpakplugin.cpp:265
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Etiket Adı Seç"
 
-#: flatpakplugin.cpp:199
+#: flatpakplugin.cpp:266
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "Aygıt makine adı:"
 
-#: flatpakruntime.cpp:55
+#: flatpakruntime.cpp:58
 #, kde-format
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:146
+#: flatpakruntime.cpp:158
 #, kde-format
 msgid "Bundling"
 msgstr "Demete ekleniyor"
 
-#: flatpakruntime.cpp:168
+#: flatpakruntime.cpp:180
 #, kde-format
 msgid "Run on Device"
 msgstr "Aygıtta Çalıştır"

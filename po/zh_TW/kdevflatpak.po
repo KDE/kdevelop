@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2024-01-10 14:53+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -18,76 +18,86 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 23.08.4\n"
 
-#: flatpakplugin.cpp:45
+#: flatpakplugin.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Rebuild Environment"
 msgstr "重新建置環境"
 
-#: flatpakplugin.cpp:46
+#: flatpakplugin.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Recompiles all dependencies for a fresh environment."
 msgstr "重新為乾淨環境編譯所有依賴關係。"
 
-#: flatpakplugin.cpp:51
+#: flatpakplugin.cpp:55
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
 msgstr "匯出 Flatpak Bundle…"
 
-#: flatpakplugin.cpp:52
+#: flatpakplugin.cpp:56
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Exports the current build into a 'bundle.flatpak' file."
 msgstr "匯出目前的建置至「bundle.flatpak」檔案。"
 
-#: flatpakplugin.cpp:57
+#: flatpakplugin.cpp:61
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
 msgstr "傳送至裝置…"
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Export %1"
 msgstr "匯出 %1"
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, kde-format
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak Bundle (*.flatpak)"
 
-#: flatpakplugin.cpp:176
-#, kde-format
+#: flatpakplugin.cpp:234
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Rebuild Environment"
 msgctxt "@action:inmenu"
-msgid "Build Flatpak %1 for %2"
+msgid "Rebuild Flatpak Environment: %1"
+msgstr "重新建置環境"
+
+#: flatpakplugin.cpp:241
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Build Flatpak %1 for %2"
+msgctxt "@action:inmenu"
+msgid "Build Flatpak Environment %1 for %2"
 msgstr "編譯適用於 %2 的 flatpak %1"
 
-#: flatpakplugin.cpp:198
+#: flatpakplugin.cpp:265
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "選擇標籤名稱"
 
-#: flatpakplugin.cpp:199
+#: flatpakplugin.cpp:266
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "裝置主機名稱："
 
-#: flatpakruntime.cpp:55
+#: flatpakruntime.cpp:58
 #, kde-format
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:146
+#: flatpakruntime.cpp:158
 #, kde-format
 msgid "Bundling"
 msgstr "正在包裝成 Bundle"
 
-#: flatpakruntime.cpp:168
+#: flatpakruntime.cpp:180
 #, kde-format
 msgid "Run on Device"
 msgstr "在裝置執行"

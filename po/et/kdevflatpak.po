@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2020-03-02 14:03+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17,85 +17,92 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 19.08.1\n"
 
-#: flatpakplugin.cpp:45
+#: flatpakplugin.cpp:49
 #, fuzzy, kde-format
 #| msgid "Rebuild environment"
 msgctxt "@action"
 msgid "Rebuild Environment"
 msgstr "Ehita keskkond ümber"
 
-#: flatpakplugin.cpp:46
+#: flatpakplugin.cpp:50
 #, fuzzy, kde-format
 #| msgid "Recompiles all dependencies for a fresh environment."
 msgctxt "@info:whatsthis"
 msgid "Recompiles all dependencies for a fresh environment."
 msgstr "Kõigi sõltuvuste taaskompileerimine uue keskkonna tarbeks."
 
-#: flatpakplugin.cpp:51
+#: flatpakplugin.cpp:55
 #, fuzzy, kde-format
 #| msgid "Export flatpak bundle..."
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
 msgstr "Eksporti flatpaki kimp ..."
 
-#: flatpakplugin.cpp:52
+#: flatpakplugin.cpp:56
 #, fuzzy, kde-format
 #| msgid "Exports the current build into a 'bundle.flatpak' file."
 msgctxt "@info:whatsthis"
 msgid "Exports the current build into a 'bundle.flatpak' file."
 msgstr "Aktiivse ehitamise eksport 'bundle.flatpak'-failina."
 
-#: flatpakplugin.cpp:57
+#: flatpakplugin.cpp:61
 #, fuzzy, kde-format
 #| msgid "Send to device..."
 msgctxt "@action"
 msgid "Send to Device..."
 msgstr "Saada seadmesse ..."
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, fuzzy, kde-format
 #| msgid "Export %1 to..."
 msgctxt "@title:window"
 msgid "Export %1"
 msgstr "%1 eksport ..."
 
-#: flatpakplugin.cpp:92
+#: flatpakplugin.cpp:113
 #, kde-format
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpaki kimp (*.flatpak)"
 
-#: flatpakplugin.cpp:176
+#: flatpakplugin.cpp:234
+#, fuzzy, kde-format
+#| msgid "Rebuild environment"
+msgctxt "@action:inmenu"
+msgid "Rebuild Flatpak Environment: %1"
+msgstr "Ehita keskkond ümber"
+
+#: flatpakplugin.cpp:241
 #, fuzzy, kde-format
 #| msgid "Build flatpak %1 for %2"
 msgctxt "@action:inmenu"
-msgid "Build Flatpak %1 for %2"
+msgid "Build Flatpak Environment %1 for %2"
 msgstr "Flatpaki %1 ehitamine platvormile %2"
 
-#: flatpakplugin.cpp:198
+#: flatpakplugin.cpp:265
 #, fuzzy, kde-format
 #| msgid "Choose tag name..."
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Vali sildi nimi ..."
 
-#: flatpakplugin.cpp:199
+#: flatpakplugin.cpp:266
 #, fuzzy, kde-format
 #| msgid "Device hostname"
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "Seadme masinanimi"
 
-#: flatpakruntime.cpp:55
+#: flatpakruntime.cpp:58
 #, kde-format
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:146
+#: flatpakruntime.cpp:158
 #, kde-format
 msgid "Bundling"
 msgstr "Kimpuseadmine"
 
-#: flatpakruntime.cpp:168
+#: flatpakruntime.cpp:180
 #, kde-format
 msgid "Run on Device"
 msgstr "Käivitamine seadmes"

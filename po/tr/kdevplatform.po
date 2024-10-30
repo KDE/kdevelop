@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2024-09-23 15:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -3476,17 +3476,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1, Şu Olarak…"
 
-#: shell/runtimecontroller.cpp:26
+#: shell/runtimecontroller.cpp:27
 #, kde-format
 msgid "Host System"
 msgstr "Ana Makine Sistemi"
 
-#: shell/runtimecontroller.cpp:86
+#: shell/runtimecontroller.cpp:88
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr "Çalışma zamanı seçmeye izin verir"
 
-#: shell/runtimecontroller.cpp:90
+#: shell/runtimecontroller.cpp:92
 #, kde-format
 msgid "Runtime: %1"
 msgstr "Çalışma Zamanı: %1"

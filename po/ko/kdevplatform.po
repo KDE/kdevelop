@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2024-08-21 00:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -3432,17 +3432,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1을(를) 다음으로..."
 
-#: shell/runtimecontroller.cpp:26
+#: shell/runtimecontroller.cpp:27
 #, kde-format
 msgid "Host System"
 msgstr "호스트 시스템"
 
-#: shell/runtimecontroller.cpp:86
+#: shell/runtimecontroller.cpp:88
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr "런타임을 선택할 수 있음"
 
-#: shell/runtimecontroller.cpp:90
+#: shell/runtimecontroller.cpp:92
 #, kde-format
 msgid "Runtime: %1"
 msgstr "런타임: %1"

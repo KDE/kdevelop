@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2020-01-21 19:51+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -259,7 +259,7 @@ msgstr ""
 msgid "CMake Content Page"
 msgstr "CMake'i sisulehekülg"
 
-#: cmakemanager.cpp:655
+#: cmakemanager.cpp:665
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to configure project '%1' (error message: %2). As a result, "
@@ -284,7 +284,7 @@ msgstr ""
 "versiooni ja seadistusi. Seejärel tee projektivaates paremklõps "
 "projektikirjel ja vali \"Laadi uuesti\"."
 
-#: cmakemanager.cpp:666
+#: cmakemanager.cpp:676
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

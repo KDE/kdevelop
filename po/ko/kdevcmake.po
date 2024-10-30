@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
 "PO-Revision-Date: 2023-07-23 20:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -232,7 +232,7 @@ msgstr "잘못된 CMake 파일 API 프로젝트 데이터"
 msgid "CMake Content Page"
 msgstr "CMake 내용 페이지"
 
-#: cmakemanager.cpp:655
+#: cmakemanager.cpp:665
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -247,7 +247,7 @@ msgstr ""
 "이 문제를 고치려면 프로젝트 도구 보기의 프로젝트 항목을 오른쪽 단추로 클릭한 "
 "다음 '새로 고침'을 선택하십시오."
 
-#: cmakemanager.cpp:666
+#: cmakemanager.cpp:676
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
