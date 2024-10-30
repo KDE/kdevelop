@@ -6,6 +6,8 @@
 
 #include "shellutils.h"
 
+#include <debug.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 
@@ -130,9 +132,22 @@ bool askUser(const QString& mainText,
         okButton.setText(confirmText);
         auto rejectButton = KStandardGuiItem::cancel();
         rejectButton.setText(rejectText);
-        int userAnswer = KMessageBox::questionTwoActions(ICore::self()->uiController()->activeMainWindow(),
-                                                         mainText + QLatin1String("\n\n") + mboxAdditionalText,
-                                                         mboxTitle, okButton, rejectButton);
+
+        auto* parent = ICore::self()->uiController()->activeMainWindow();
+        if (parent && !parent->isVisible()) {
+            // On Wayland, a dialog with an invisible or null parent appears
+            // at the top-left corner of the primary screen.
+            // On X11, a dialog with an invisible parent appears close to the top-left corner of the
+            // left screen, even if the left screen is secondary. A dialog with a null parent appears
+            // at the center of the primary screen. The center of the primary screen is a much more
+            // convenient location, especially if the secondary screen is off.
+            // KMessageBox::questionTwoActions() destroys its dialog before returning in any case.
+            qCDebug(UTIL) << "the main window is invisible, so not using it as a dialog parent";
+            parent = nullptr;
+        }
+
+        const auto userAnswer = KMessageBox::questionTwoActions(
+            parent, mainText + QLatin1String("\n\n") + mboxAdditionalText, mboxTitle, okButton, rejectButton);
         return userAnswer == KMessageBox::PrimaryAction;
     }
 }
