@@ -352,15 +352,6 @@ void MainWindow::loadSettings()
     d->disableConcentrationMode();
 }
 
-bool MainWindow::queryClose()
-{
-//    saveSettings();
-    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("Main Window"));
-    config.sync();
-
-    return KParts::MainWindow::queryClose();
-}
-
 void MainWindow::postMessage(Message* message)
 {
     Q_D(MainWindow);
