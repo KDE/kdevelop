@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2022-04-24 19:27+0200\n"
+"PO-Revision-Date: 2024-10-30 04:18+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.5\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -60,20 +60,16 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak-ის შეკვრა (*.flatpack)"
 
 #: flatpakplugin.cpp:234
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "გარემოს თავიდან აშენება"
+msgstr "Flatpak-ს გარემოს თავიდან აგება: %1"
 
 #: flatpakplugin.cpp:241
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr "%1-ის flatpak-ის %2-თვის აშენება"
+msgstr "Flatpak-ის გარემო %1-ის აგება %2-სთვის"
 
 #: flatpakplugin.cpp:265
 #, kde-format

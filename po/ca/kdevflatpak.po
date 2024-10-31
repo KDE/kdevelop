@@ -1,16 +1,16 @@
 # Translation of kdevflatpak.po to Catalan
-# Copyright (C) 2017-2020 This_file_is_part_of_KDE
+# Copyright (C) 2017-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2017.
-# Josep M. Ferrer <txemaq@gmail.com>, 2018, 2020.
+# SPDX-FileCopyrightText: 2018, 2020, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2020-07-20 14:01+0100\n"
+"PO-Revision-Date: 2024-10-30 10:32+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -62,20 +62,16 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Paquet de Flatpak (*.flatpak)"
 
 #: flatpakplugin.cpp:234
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "Torna a construir l'entorn"
+msgstr "Torna a construir l'entorn Flatpak: %1"
 
 #: flatpakplugin.cpp:241
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr "Construeix el Flatpak %1 per a %2"
+msgstr "Construeix l'entorn Flatpak %1 per a %2"
 
 #: flatpakplugin.cpp:265
 #, kde-format

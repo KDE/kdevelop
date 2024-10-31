@@ -59,20 +59,16 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak 包 (*.flatpak)"
 
 #: flatpakplugin.cpp:234
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "重建环境"
+msgstr ""
 
 #: flatpakplugin.cpp:241
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr "为 %2 构建 flatpak %1"
+msgstr ""
 
 #: flatpakplugin.cpp:265
 #, kde-format

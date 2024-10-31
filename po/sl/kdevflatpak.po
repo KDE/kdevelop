@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2021-08-30 10:47+0200\n"
+"PO-Revision-Date: 2024-10-30 05:50+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
+"X-Generator: Poedit 3.5\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -60,20 +60,16 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Skupek Flatpak (*.flatpak)"
 
 #: flatpakplugin.cpp:234
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "Ponovno izgradi okolje"
+msgstr "Ponovno izgradi okolje Flatpak: %1"
 
 #: flatpakplugin.cpp:241
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr "Izgradi Flatpack %1 za %2"
+msgstr "Izgradi okolje Flatpack %1 za %2"
 
 #: flatpakplugin.cpp:265
 #, kde-format

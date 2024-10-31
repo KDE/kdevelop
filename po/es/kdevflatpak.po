@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Automatically generated, 2017.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2017, 2018, 2020.
+# SPDX-FileCopyrightText: 2017, 2018, 2020, 2024 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevflatpak\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2020-07-25 19:19+0200\n"
+"PO-Revision-Date: 2024-10-30 20:27+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.07.80\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -61,20 +61,16 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Paquete de Flatpak (*.flatpak)"
 
 #: flatpakplugin.cpp:234
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "Reconstruir entorno"
+msgstr "Reconstruir entorno de Flatpak: %1"
 
 #: flatpakplugin.cpp:241
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr "Construir Flatpak %1 para %2"
+msgstr "Construir entorno de Flatpak %1 para %2"
 
 #: flatpakplugin.cpp:265
 #, kde-format
