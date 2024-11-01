@@ -105,3 +105,9 @@ target_link_libraries(debuggee_ktexteditortypes Qt::Core KF6::TextEditor)
 
 add_debuggable_executable(debuggee_kdeveloptypes SRCS kdeveloptypes.cpp)
 target_link_libraries(debuggee_kdeveloptypes Qt::Core KF6::TextEditor KDev::Util)
+
+add_debuggable_executable(debuggee_qjson SRCS qjson.cpp)
+target_link_libraries(debuggee_qjson Qt::Core)
+
+add_debuggable_executable(debuggee_qcbor SRCS qcbor.cpp)
+target_link_libraries(debuggee_qcbor Qt::Core)
