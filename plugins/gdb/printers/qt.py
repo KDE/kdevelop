@@ -10,6 +10,7 @@ import itertools
 import re
 import time
 
+from dumper import *
 from helper import *
 
 # opt-in to new ValuePrinter for collection types to allow direct querying of sizes where appropriate
@@ -18,6 +19,8 @@ if hasattr(gdb, 'ValuePrinter'):
     PrinterBaseType = gdb.ValuePrinter
 else:
     PrinterBaseType = object
+
+d = Dumper()
 
 def get_unique_ptr_value(unique_ptr_val):
     """
@@ -932,121 +935,145 @@ class QPersistentModelIndexPrinter:
         modelIndex = gdb.parse_and_eval("reinterpret_cast<const QPersistentModelIndex*>(%s)->operator QModelIndex()" % self.val.address)
         return str(modelIndex)
 
-class QCborValueHelper:
+def qcborContainerElementCount(container_ptr):
+    data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
+    elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
+    _, elements_size = d.vectorData(elements_pos)
+    return elements_size
 
-    def __init__(self):
-        # Create a dictionary from the enum values of QCborValue::Type
-        self.enum_type_dict = gdb.types.make_enum_dict(gdb.lookup_type("QCborValue::Type"))
+def qdumpHelper_QCborArray_valueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cbor):
+    element_at_n_addr = elements_data_ptr + idx * 16 # sizeof(QtCbor::Element) == 15
+    element_value, element_type, element_flags = d.split('qII', element_at_n_addr)
+    element_container, _, _ = d.split('pII', element_at_n_addr)
+    if element_flags & 1: # QtCbor::Element::IsContainer
+        return d.createProxyValue((-1, element_container, element_type, is_cbor), 'QCborValue_proxy')
+    if element_flags & 2: # QtCbor::Element::HasByteData
+        return d.createProxyValue((idx, container_ptr, element_type, is_cbor), 'QCborValue_proxy')
+    return d.createProxyValue((element_value, 0, element_type, is_cbor), 'QCborValue_proxy')
 
-    def qcbor_value_to_gdb(self, cborValue, className):
-        """Handle QCborValue"""
-        value = cborValue['n']
-        container_ptr = cborValue['container']
-        if value >= 0 and container_ptr: # see elementFromValue in qcborvalue_p.h
-            # C++ code: return value.container->elements.at(value.n);
-            element = container_ptr['elements']['d']['ptr'] + value
-            return self.qcbor_element_to_gdb(element, container_ptr, value, className)
-        value_type = int(cborValue['t'])
-        return self.qcbor_to_gdb_impl(value_type, value, container_ptr, value, container_ptr, className)
+def make_char_pointer(string):
+    original_bytes = string.encode("UTF-8")
+    original = gdb.Value(original_bytes + b"\0", gdb.lookup_type("char").array(len(original_bytes)))
+    adjusted = original.cast(gdb.lookup_type("char").array(len(original_bytes)))
+    return adjusted
 
-    def qt5_qjsonvalue_to_gdb(self, jsonValue, className):
-        """Handle Qt5's QJsonValue (which doesn't contain a QCborValue like in Qt5)"""
-        value = jsonValue['n']
-        value_type = int(jsonValue['t'])
-        container_ptr = jsonValue['d']['d']
-        return self.qcbor_to_gdb_impl(value_type, value, container_ptr, value, container_ptr, className)
+def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
+    # d.split('i@{@QByteArray::size_type}pp', container_ptr) doesn't work with CDB,
+    # so be explicit:
+    data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
+    elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
+    elements_data_ptr, elements_size = d.vectorData(elements_pos)
+    element_at_n_addr = elements_data_ptr + element_index * 16 # sizeof(QtCbor::Element) == 16
+    element_value, _, element_flags = d.split('qII', element_at_n_addr)
+    enc = 'latin1' if is_bytes or (element_flags & 8) else 'utf16'
+    bytedata, _, _ = d.qArrayData(data_pos)
+    bytedata += element_value
+    if d.qtVersionAtLeast(0x060000):
+        bytedata_len = d.extractInt64(bytedata)
+        bytedata_data = bytedata + 8
+    else:
+        bytedata_len = d.extractInt(bytedata)
+        bytedata_data = bytedata + 4 # sizeof(QtCbor::ByteData) header part
 
-    def qcbor_element_to_gdb(self, element, container_ptr, index, className):
-        """Handle QtCbor::Element"""
-        value = element['value']
-        value_type = int(element['type'])
-        child_container_ptr = element['container']
-        return self.qcbor_to_gdb_impl(value_type, value, container_ptr, index, child_container_ptr, className)
+    #shown = d.computeLimit(bytedata_len, d.displayStringLimit)
+    res = d.readMemory(bytedata_data, bytedata_len)
+    pystr = str(res[0:bytedata_len], enc)
+    return make_char_pointer(pystr)
 
-    # shared code between qcbor_value_to_string and qcbor_element_to_string
-    def qcbor_to_gdb_impl(self, value_type, value, container_ptr, index, child_container_ptr, className):
-        # Compare the value_type with the enum values dynamically extracted from GDB
-        if value_type == self.enum_type_dict['QCborValue::Integer']:
-            return value.cast(gdb.lookup_type('qint64'))  # Integer case
-        elif value_type == self.enum_type_dict['QCborValue::String']:
-            return self.get_string(index, container_ptr)
-        elif value_type == self.enum_type_dict['QCborValue::Array']:
-            arrayClassName = 'QJsonArray' if 'QJson' in className else 'QCborArray'
-            return self.get_array(child_container_ptr, arrayClassName)
-        elif value_type == self.enum_type_dict['QCborValue::Map']:
-            mapClassName = 'QJsonObject' if 'QJson' in className else 'QCborMap'
-            return self.get_map(child_container_ptr, mapClassName)
-        elif value_type == self.enum_type_dict['QCborValue::ByteArray']:
-            return self.get_byte_array(child_container_ptr)
-        elif value_type == self.enum_type_dict['QCborValue::True']:
-            return True
-        elif value_type == self.enum_type_dict['QCborValue::False']:
-            return False
-        elif value_type == self.enum_type_dict['QCborValue::Null']:
-            return None
-        elif value_type == self.enum_type_dict['QCborValue::Double']:
-            return float(value) # probably incorrect, see fp_helper() in C++
-        # TODO: Add more cases for other types like DateTime, Url, Uuid, etc.
-        else:
-            return "<unknown type>"
+def qdump__QCborValue_proxy(value):
+    item_data, container_ptr, item_type, is_cbor = value.ldata
 
-    def get_string(self, index, container_ptr):
-        """
-        Extract a string value from QCborValue::String using the container's stringAt(index) function
-        """
-        expr = "reinterpret_cast<const QCborContainerPrivate*>(%s)->stringAt(%d)" % (container_ptr, index)
-        return gdb.parse_and_eval(expr)
+    if item_type == 0xffffffffffffffff:
+        return 'Invalid'
 
-    def get_array(self, container_ptr, className):
-        """
-        Handle QCborValue::Array, returning a QCborContainerPrivate, which will create a QCborContainerPrivatePrinter
-        """
-        if not container_ptr:
-            return "[]"
-        container_private_ptr = container_ptr.reinterpret_cast(gdb.lookup_type('QCborContainerPrivate').pointer())
-        QCborContainerPrivatePrinter.globalDict.insert(container_ptr, className)
-        return container_private_ptr.dereference()
+    elif item_type == 0x00: # int
+        return item_data
 
-    def get_map(self, container_ptr, className):
-        """
-        Handle QCborValue::Map, returning a QCborContainerPrivate, which will create a QCborContainerPrivatePrinter
-        """
-        if not container_ptr:
-            return "{}"
-        container_private_ptr = container_ptr.reinterpret_cast(gdb.lookup_type('QCborContainerPrivate').pointer())
-        QCborContainerPrivatePrinter.globalDict.insert(container_ptr, className)
-        return container_private_ptr.dereference()
+    elif item_type == 0x100 + 20:
+        return False
 
-    def get_byte_array(self, container_ptr):
-        """
-        Handle QCborValue::ByteArray, returning a Python bytearray
-        """
-        # TODO: Implement logic to handle byte array extraction
-        return "<bytearray>"
+    elif item_type == 0x100 + 21:
+        return True
+
+    elif item_type == 0x100 + 22:
+        return 'Null'
+
+    elif item_type == 0x100 + 23:
+        return 'Undefined'
+
+    elif item_type == 0x202:
+        val = struct.unpack('d', struct.pack('q', item_data))
+        return float(val)
+
+    elif item_type == 0x40:
+        return qdumpHelper_QCbor_string(d, container_ptr, item_data, True)
+
+    elif item_type == 0x60:
+        return qdumpHelper_QCbor_string(d, container_ptr, item_data, False)
+
+    elif item_type == 0x80:
+        array_type = gdb.lookup_type('QCborArray' if is_cbor else 'QJsonArray')
+        if d.qtVersionAtLeast(0x060000) or is_cbor:
+            # Create an 8-byte buffer and pack the address as a pointer
+            buffer = struct.pack("P", container_ptr)
+        else: # Qt 5.15's QJsonArray had a dead pointer first
+            buffer = struct.pack("PP", 0, container_ptr)
+        fakeArray = gdb.Value(buffer, array_type)
+        # This will trigger QCborArrayPrinter or QJsonArrayPrinter
+        return fakeArray
+
+    elif item_type == 0xa0:
+        map_type = gdb.lookup_type('QCborMap' if is_cbor else 'QJsonObject')
+        if d.qtVersionAtLeast(0x060000) or is_cbor:
+            # Create an 8-byte buffer and pack the address as a pointer
+            buffer = struct.pack("P", container_ptr)
+        else: # Qt 5.15's QJsonObject had a dead pointer first
+            buffer = struct.pack("PP", 0, container_ptr)
+        fakeMap = gdb.Value(buffer, map_type)
+        # This will trigger QCborMapPrinter or QJsonObjectPrinter
+        return fakeMap
+
+    elif item_type == 0x10000:
+        return 'TODO DateTime'
+
+    elif item_type == 0x10020:
+        return 'TODO Uri'
+
+    elif item_type == 0x10023:
+        return 'TODO RegularExpression'
+
+    elif item_type == 0x10025:
+        return 'TODO Uuid'
+
+    else:
+        return item_data
 
 class QCborContainerPrivateIterator:
     def __init__(self, container_ptr, container_className):
         self.container_ptr = container_ptr
-        self.container_className = container_className
-        self.elements = self.container_ptr['elements']
-        self.elementsPrinter = QVectorPrinter(self.elements, 'QList')
-        self.elementsIterator = self.elementsPrinter.children()
-        self.size = self.elementsPrinter.num_children()
-        self.element_ptr_type = gdb.lookup_type('QtCbor::Element').pointer()
+        self.is_cbor = 'QCbor' in container_className
+        self.is_array = 'Array' in container_className
+
+        data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
+        elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
+        self.elements_data_ptr, self.size = d.vectorData(elements_pos)
+        self.bytedata, _, _ = d.qArrayData(data_pos)
         self.index = 0
-        self.isArray = QCborContainerPrivateGlobalDict.isArrayClassName(self.container_className)
 
     def __iter__(self):
         return self
+
+    def valueAt(self, index):
+        valueProxy = qdumpHelper_QCborArray_valueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
+        return qdump__QCborValue_proxy(valueProxy)
 
     def __next__(self):
         if self.index >= self.size:
             raise StopIteration
 
-        element = self.elementsIterator.__next__()[1]
-        item = QCborValueHelper().qcbor_element_to_gdb(element, self.container_ptr, self.index, self.container_className)
+        item = self.valueAt(self.index)
 
-        if not self.isArray:
+        if not self.is_array:
             if self.index % 2 == 0:
                 itemType = 'key'
             else:
@@ -1058,63 +1085,18 @@ class QCborContainerPrivateIterator:
         self.index += 1
         return result
 
-# get_map and get_array both return a QCborContainerPrivate to inspect
-# and there's no way to find out from the application memory if that's a map or an array
-# So we have to store this information globally (what a hack)
-# We also don't know if the user visible classname is e.g. QJsonObject or QCborMap
-# so let's even store that, and deduce map-or-array from it
-class QCborContainerPrivateGlobalDict:
-    def __init__(self):
-        self.dict = dict()
-
-    def insert(self, ptr, className):
-        self.dict[int(ptr)] = className
-
-    def name(self, ptr):
-        try:
-            return self.dict[int(ptr)]
-        except KeyError:
-            return None
-
-    def isArrayClassName(className):
-        return className == 'QJsonArray' or className == 'QCborArray'
-
-    def isArray(self, ptr):
-        v = self.dict[int(ptr)]
-        if v:
-            return QCborContainerPrivateGlobalDict.isArrayClassName(v)
-        return False
-
-class QCborContainerPrivatePrinter:
-
-    globalDict = QCborContainerPrivateGlobalDict()
-
-    def __init__(self, val):
-        self.container_private = val
-        self.isArray = QCborContainerPrivatePrinter.globalDict.isArray(val.address)
-        self.container_type = 'array' if self.isArray else 'map'
-        self.size = int(self.container_private['elements']['d']['size'])
-        self.className = QCborContainerPrivatePrinter.globalDict.name(self.container_private.address)
-
-    def children(self):
-        if self.size == 0:
-            return []
-        return QCborContainerPrivateIterator(self.container_private.address, self.className)
-
-    def to_string(self):
-        if self.isArray:
-            return f"{self.className} (size = {self.size})"
-        else:
-            return f"{self.className} (size = {self.size // 2})"
-
-    def display_hint(self):
-        return self.container_type # 'map' or 'array'
-
 class QCborMapPrinter:
 
     def __init__(self, val):
-        self.container_ptr = val['d']['d']
-        self.size = int(self.container_ptr['elements']['d']['size'])
+        if val.address is None:
+            # fake QCborMap created by qdump__QCborValue_proxy
+            self.container_ptr, = struct.unpack("P", val.bytes)
+        else:
+            self.container_ptr = d.extract_pointer_at_address(int(val.address))
+        if self.container_ptr:
+            self.size = int(qcborContainerElementCount(self.container_ptr) / 2)
+        else:
+            self.size = 0
 
     def children(self):
         if self.size == 0:
@@ -1122,7 +1104,7 @@ class QCborMapPrinter:
         return QCborContainerPrivateIterator(self.container_ptr, 'QCborMap')
 
     def to_string(self):
-        return f"QCborMap (size = {self.size // 2})"
+        return f"QCborMap (size = {self.size})"
 
     def display_hint(self):
         return 'map'
@@ -1130,8 +1112,15 @@ class QCborMapPrinter:
 class QCborArrayPrinter:
 
     def __init__(self, val):
-        self.container_ptr = val['d']['d']
-        self.size = int(self.container_ptr['elements']['d']['size'])
+        if val.address is None:
+            # fake QCborArray created by qdump__QCborValue_proxy
+            self.container_ptr, = struct.unpack("P", val.bytes)
+        else:
+            self.container_ptr = d.extract_pointer_at_address(int(val.address))
+        if self.container_ptr:
+            self.size = qcborContainerElementCount(self.container_ptr)
+        else:
+            self.size = 0
 
     def children(self):
         if self.size == 0:
@@ -1147,8 +1136,22 @@ class QCborArrayPrinter:
 class QJsonArrayPrinter:
 
     def __init__(self, val):
-        self.container_ptr = val['a']['d']
-        self.size = int(self.container_ptr['elements']['d']['size'])
+        if val.address is None:
+            # fake QJsonArray created by qdump__QCborValue_proxy
+            if d.qtVersionAtLeast(0x060000):
+                self.container_ptr, = struct.unpack("P", val.bytes)
+            else:
+                _, self.container_ptr, = struct.unpack("PP", val.bytes)
+        elif d.qtVersionAtLeast(0x060000):
+            self.container_ptr = d.extractPointer(int(val.address))
+        elif d.qtVersionAtLeast(0x050f00):
+            _, self.container_ptr = d.createValue(int(val.address), '').split('pp')
+        else:
+            raise RuntimeError("Qt version too old for inspecting QJsonArray")
+        if self.container_ptr:
+            self.size = qcborContainerElementCount(self.container_ptr)
+        else:
+            self.size = 0
 
     def children(self):
         if self.size == 0:
@@ -1164,8 +1167,22 @@ class QJsonArrayPrinter:
 class QJsonObjectPrinter:
 
     def __init__(self, val):
-        self.container_ptr = val['o']['d']
-        self.size = int(self.container_ptr['elements']['d']['size'])
+        if val.address is None:
+            # fake QJsonObject created by qdump__QCborValue_proxy
+            if d.qtVersionAtLeast(0x060000):
+                self.container_ptr, = struct.unpack("P", val.bytes)
+            else:
+                _, self.container_ptr, = struct.unpack("PP", val.bytes)
+        elif d.qtVersionAtLeast(0x060000):
+            self.container_ptr = d.extract_pointer_at_address(int(val.address))
+        elif d.qtVersionAtLeast(0x050f00):
+            _, self.container_ptr = d.createValue(int(val.address), '').split('pp')
+        else:
+            raise RuntimeError("Qt version too old for inspecting QJsonObject")
+        if self.container_ptr:
+            self.size = int(qcborContainerElementCount(self.container_ptr) / 2)
+        else:
+            self.size = 0
 
     def children(self):
         if self.size == 0:
@@ -1173,24 +1190,24 @@ class QJsonObjectPrinter:
         return QCborContainerPrivateIterator(self.container_ptr, 'QJsonObject')
 
     def to_string(self):
-        return "QJsonObject (size = %d)" % (self.size//2)
+        return "QJsonObject (size = %d)" % (self.size)
 
     def display_hint(self):
         return 'map'
+
+def dumpCborValue(val_address, className):
+    item_data, container_ptr, item_type = d.createValue(val_address, '').split('qpi')
+    proxyValue = d.createProxyValue((item_data, container_ptr, item_type, 'QCbor' in className), className)
+    return qdump__QCborValue_proxy(proxyValue)
 
 class QJsonDocumentPrinter:
 
     def __init__(self, val):
         self.val = val
 
-    def children(self):
-        d_ptr = get_unique_ptr_value(self.val['d'])
-        cborValue = d_ptr['value']
-        QCborContainerPrivatePrinter.globalDict.insert(cborValue.address, 'QJsonValue')
-        return [('value', cborValue)] # single child: the QCborValue in it
-
     def to_string(self):
-        return "QJsonDocument"
+        d_ptr = get_unique_ptr_value(self.val['d'])
+        return dumpCborValue(int(d_ptr), 'QJsonDocument')
 
 class QCborValuePrinter:
 
@@ -1198,21 +1215,44 @@ class QCborValuePrinter:
         self.val = val
 
     def to_string(self):
-        # Check if it comes from a QJsonDocument
-        className = QCborContainerPrivatePrinter.globalDict.name(self.val.address)
-        return str(QCborValueHelper().qcbor_value_to_gdb(self.val, className if className else 'QCborValue'))
+        return dumpCborValue(int(self.val.address), 'QCborValue')
 
-class QJsonValuePrinter:
+class QCborValueConstRefPrinter:
 
     def __init__(self, val):
         self.val = val
 
     def to_string(self):
-        isQt6 =  has_field(self.val, 'value')
-        if isQt6:
-            return str(QCborValueHelper().qcbor_value_to_gdb(self.val['value'], 'QJsonValue'))
-        else: # Qt5
-            return str(QCborValueHelper().qt5_qjsonvalue_to_gdb(self.val, 'QJsonValue'))
+        container_ptr, item_index = d.createValue(int(self.val.address), '').split('pq')
+        it = QCborContainerPrivateIterator(container_ptr, 'QCborValueConstRef')
+        return it.valueAt(item_index)
+
+class QJsonValuePrinter:
+
+    def __init__(self, val):
+        if d.qtVersionAtLeast(0x050f00):
+            (data, dd, t) = d.createValue(int(val.address), '').split('QpI')
+            self.proxyValue = d.createProxyValue((data, dd, t, False), 'QCborValue_proxy')
+        else:
+            raise RuntimeError("Qt version too old for inspecting QJsonValue")
+
+    def to_string(self):
+        return qdump__QCborValue_proxy(self.proxyValue)
+
+class QJsonValueConstRefPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        array_or_map, is_object_and_index = d.createValue(int(self.val.address), '').split('pq')
+        is_object = is_object_and_index & 1
+        item_index = is_object_and_index >> 1
+        if is_object:
+            item_index = item_index * 2 + 1 # see QJsonPrivate::Value::indexHelper()
+        container_ptr = d.extractPointer(array_or_map)
+        it = QCborContainerPrivateIterator(container_ptr, 'QJsonObject' if is_object else 'QJsonArray')
+        return it.valueAt(item_index)
 
 class QUuidPrinter:
 
@@ -1357,10 +1397,13 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QJsonDocument$')] = lambda val: QJsonDocumentPrinter(val)
     pretty_printers_dict[re.compile('^QJsonValue$')] = lambda val: QJsonValuePrinter(val)
     pretty_printers_dict[re.compile('^QJsonArray$')] = lambda val: QJsonArrayPrinter(val)
-    pretty_printers_dict[re.compile('^QCborContainerPrivate$')] = lambda val: QCborContainerPrivatePrinter(val)
+    pretty_printers_dict[re.compile('^QJsonValueRef$')] = lambda val: QJsonValueConstRefPrinter(val)
+    pretty_printers_dict[re.compile('^QJsonValueConstRef$')] = lambda val: QJsonValueConstRefPrinter(val)
     pretty_printers_dict[re.compile('^QCborArray$')] = lambda val: QCborArrayPrinter(val)
     pretty_printers_dict[re.compile('^QCborMap$')] = lambda val: QCborMapPrinter(val)
     pretty_printers_dict[re.compile('^QCborValue$')] = lambda val: QCborValuePrinter(val)
+    pretty_printers_dict[re.compile('^QCborValueRef$')] = lambda val: QCborValueConstRefPrinter(val)
+    pretty_printers_dict[re.compile('^QCborValueConstRef$')] = lambda val: QCborValueConstRefPrinter(val)
 
 
 build_dictionary ()
