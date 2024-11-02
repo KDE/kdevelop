@@ -33,19 +33,19 @@ msgstr "Taze bir ortam için tüm bağımlılıkları yeniden derler."
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
-msgstr "Flatpak Demeti Dışa Aktar..."
+msgstr "Flatpak Demetini Dışa Aktar…"
 
 #: flatpakplugin.cpp:56
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Exports the current build into a 'bundle.flatpak' file."
-msgstr "Geçerli yapıyı bir 'bundle.flatpak' dosyasına dışa aktarır."
+msgstr "Geçerli yapıyı bir “bundle.flatpak” dosyasına dışa aktarır."
 
 #: flatpakplugin.cpp:61
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
-msgstr "Aygıta Gönder..."
+msgstr "Aygıta Gönder…"
 
 #: flatpakplugin.cpp:113
 #, kde-format
@@ -56,23 +56,19 @@ msgstr "Dışa Aktar: %1"
 #: flatpakplugin.cpp:113
 #, kde-format
 msgid "Flatpak Bundle (*.flatpak)"
-msgstr "Flatpak Demeti (*.flatpak)"
+msgstr "Flatpak demeti (*.flatpak)"
 
 #: flatpakplugin.cpp:234
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "Ortamı Yeniden Yap"
+msgstr "Flatpak Ortamını Yeniden Yap: %1"
 
 #: flatpakplugin.cpp:241
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr "%1 Flatpak'i %2 için Yap"
+msgstr "%2 için %1 Flatpak Ortamını Yeniden Yap"
 
 #: flatpakplugin.cpp:265
 #, kde-format
@@ -94,7 +90,7 @@ msgstr "Flatpak"
 #: flatpakruntime.cpp:158
 #, kde-format
 msgid "Bundling"
-msgstr "Demete ekleniyor"
+msgstr "Demete ekleniyor…"
 
 #: flatpakruntime.cpp:180
 #, kde-format
