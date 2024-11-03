@@ -23,22 +23,11 @@ else:
 d = Dumper()
 
 def get_unique_ptr_value(unique_ptr_val):
-    """
-    Extract the underlying pointer from a std::unique_ptr in gdb.
-    :param unique_ptr_val: gdb.Value representing a std::unique_ptr.
-    :return: The underlying raw pointer or an error message.
-    """
-    try:
-        unique_ptr_type = str(unique_ptr_val.type)
-        unique_ptr_address = unique_ptr_val.address
-
-        # The implementation details of std::unique_ptr vary too much,
-        # call the get() method.
-        expr = f"(({unique_ptr_type}*){unique_ptr_address})->get()"
-        raw_ptr = gdb.parse_and_eval(expr)
-        return raw_ptr
-    except gdb.error as e:
-        return f"Error accessing unique_ptr: {str(e)}"
+    if unique_ptr_val.type.sizeof == d.ptrSize():
+        p = d.extractPointer(int(unique_ptr_val.address))
+    else:
+        _, p = d.createValue(int(unique_ptr_val.address), '').split("pp") # For custom deleters.
+    return p
 
 class QStringViewPrinterBase(PrinterBaseType):
 
