@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
 
     QJsonDocument jsonDoc(jsonObj);
 
+    QJsonDocument emptyDoc;
+
     QString jsonString = jsonDoc.toJson(QJsonDocument::Indented);
 
     // Parsing JSON string back to QJsonDocument

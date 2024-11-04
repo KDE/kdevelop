@@ -752,14 +752,14 @@ void QtPrintersTest::testQJson()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qjson"));
 
-    gdb.execute("break qjson.cpp:52");
+    gdb.execute("break qjson.cpp:54");
     gdb.execute("run");
     QByteArray data;
 
     data = gdb.execute("print children");
     QCOMPARE(data, R"($1 = QJsonArray (size = 2) = {"Alice", "Bob"})");
 
-    const QByteArray expectedJsonObj = R"(= QJsonObject (size = 6) = {
+    const QByteArray expectedJsonObj = R"( = {
   ["address"] = "Some street\\nCity\\nCountry",
   ["age"] = 30,
   ["children"] = QJsonArray (size = 2) = {"Alice", "Bob"},
@@ -774,34 +774,37 @@ void QtPrintersTest::testQJson()
 })";
 
     data = gdb.execute("print jsonObj");
-    QCOMPARE(data.mid(3), expectedJsonObj);
+    QCOMPARE(data, R"($2 = QJsonObject (size = 6))" + expectedJsonObj);
     data = gdb.execute("print parsedObj");
-    QCOMPARE(data.mid(3), expectedJsonObj);
+    QCOMPARE(data, R"($3 = QJsonObject (size = 6))" + expectedJsonObj);
     data = gdb.execute("print jsonDoc");
-    QCOMPARE(data.mid(3), expectedJsonObj);
+    QCOMPARE(data, R"($4 = QJsonDocument (QJsonObject (size = 6)))" + expectedJsonObj);
     data = gdb.execute("print parsedDoc");
-    QCOMPARE(data.mid(3), expectedJsonObj);
+    QCOMPARE(data, R"($5 = QJsonDocument (QJsonObject (size = 6)))" + expectedJsonObj);
 
     data = gdb.execute("print name");
-    QCOMPARE(data.mid(3), R"(= "John Doe")");
+    QCOMPARE(data, R"($6 = QJsonValue ("John Doe"))");
     data = gdb.execute("print nameRef");
-    QCOMPARE(data.mid(3), R"(= "John Doe")");
+    QCOMPARE(data, R"($7 = QJsonValue ("John Doe"))");
 
     data = gdb.execute("print age");
-    QCOMPARE(data, "$8 = 30");
+    QCOMPARE(data, "$8 = QJsonValue (30)");
     data = gdb.execute("print ageRef");
-    QCOMPARE(data, "$9 = 30");
+    QCOMPARE(data, "$9 = QJsonValue (30)");
 
     data = gdb.execute("print married");
-    QCOMPARE(data, "$10 = false");
+    QCOMPARE(data, "$10 = QJsonValue (false)");
     data = gdb.execute("print marriedRef");
-    QCOMPARE(data, "$11 = false");
+    QCOMPARE(data, "$11 = QJsonValue (false)");
 
     data = gdb.execute("print parsedChildren");
     QCOMPARE(data, R"($12 = QJsonArray (size = 2) = {"Alice", "Bob"})");
 
     data = gdb.execute("print child");
-    QCOMPARE(data, R"($13 = "Alice")");
+    QCOMPARE(data, R"($13 = QJsonValue ("Alice"))");
+
+     data = gdb.execute("print emptyDoc");
+    QCOMPARE(data, R"($14 = QJsonDocument (empty))");
 }
 
 void QtPrintersTest::testQCbor()
@@ -835,25 +838,25 @@ void QtPrintersTest::testQCbor()
     QCOMPARE(data.mid(3), expectedCborMap);
 
     data = gdb.execute("print name");
-    QCOMPARE(data, R"($4 = "John Doe")");
+    QCOMPARE(data, R"($4 = QCborValue ("John Doe"))");
     data = gdb.execute("print nameRef");
-    QCOMPARE(data, R"($5 = "John Doe")");
+    QCOMPARE(data, R"($5 = QCborValue ("John Doe"))");
 
     data = gdb.execute("print age");
-    QCOMPARE(data, "$6 = 30");
+    QCOMPARE(data, "$6 = QCborValue (30)");
     data = gdb.execute("print ageRef");
-    QCOMPARE(data, "$7 = 30");
+    QCOMPARE(data, "$7 = QCborValue (30)");
 
     data = gdb.execute("print married");
-    QCOMPARE(data, "$8 = false");
+    QCOMPARE(data, "$8 = QCborValue (false)");
     data = gdb.execute("print marriedRef");
-    QCOMPARE(data, "$9 = false");
+    QCOMPARE(data, "$9 = QCborValue (false)");
 
     data = gdb.execute("print parsedChildren");
     QCOMPARE(data, R"($10 = QCborArray (size = 2) = {"Alice", "Bob"})");
 
     data = gdb.execute("print child");
-    QCOMPARE(data, R"($11 = "Alice")");
+    QCOMPARE(data, R"($11 = QCborValue ("Alice"))");
 }
 
 void QtPrintersTest::testKTextEditorTypes()

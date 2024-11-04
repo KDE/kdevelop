@@ -20,6 +20,44 @@ if hasattr(gdb, 'ValuePrinter'):
 else:
     PrinterBaseType = object
 
+class PrinterForwarder(PrinterBaseType):
+    def __init__(self, className):
+        self.className = className
+        self.underlyingValue = None
+        self.printer = None
+
+    def setUnderlyingValue(self, underlyingValue):
+        self.underlyingValue = underlyingValue
+        if isinstance(self.underlyingValue, gdb.Value):
+            self.printer = gdb.default_visualizer(self.underlyingValue)
+
+    def children(self):
+        if not self.printer:
+            return []
+        return self.printer.children()
+
+    def num_children(self):
+        if not self.printer:
+            return 0
+        return self.printer.num_children()
+
+    def child(self, n):
+        if not self.printer:
+            return None
+        return self.printer.child(n)
+
+    def to_string(self): # probably not generic enough
+        if self.printer:
+            return f'{self.className} ({self.printer.to_string()})'
+        if self.underlyingValue: # e.g. for an integer
+            return f'{self.className} ({self.underlyingValue})'
+        return f'{self.className} (empty)'
+
+    def display_hint(self):
+        if self.printer:
+            return self.printer.display_hint()
+        return None
+
 d = Dumper()
 
 def get_unique_ptr_value(unique_ptr_val):
@@ -979,10 +1017,10 @@ def qdump__QCborValue_proxy(value):
         return item_data
 
     elif item_type == 0x100 + 20:
-        return False
+        return 'false'
 
     elif item_type == 0x100 + 21:
-        return True
+        return 'true'
 
     elif item_type == 0x100 + 22:
         return 'Null'
@@ -1184,27 +1222,40 @@ class QJsonObjectPrinter:
     def display_hint(self):
         return 'map'
 
-def dumpCborValue(val_address, className):
-    item_data, container_ptr, item_type = d.createValue(val_address, '').split('qpi')
-    proxyValue = d.createProxyValue((item_data, container_ptr, item_type, 'QCbor' in className), className)
-    return qdump__QCborValue_proxy(proxyValue)
+class QCborValuePrinterBase(PrinterForwarder):
 
-class QJsonDocumentPrinter:
+    def initFromValueAddress(self, val_address):
+        if val_address:
+            item_data, container_ptr, item_type = d.createValue(val_address, '').split('qpi')
+            proxyValue = d.createProxyValue((item_data, container_ptr, item_type, 'QCbor' in self.className), self.className)
+            self.initFromProxyValue(proxyValue)
 
-    def __init__(self, val):
-        self.val = val
+    def initFromProxyValue(self, proxyValue):
+        self.setUnderlyingValue(qdump__QCborValue_proxy(proxyValue))
 
-    def to_string(self):
-        d_ptr = get_unique_ptr_value(self.val['d'])
-        return dumpCborValue(int(d_ptr), 'QJsonDocument')
-
-class QCborValuePrinter:
+class QJsonDocumentPrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
-        self.val = val
+        d_ptr = get_unique_ptr_value(val['d'])
+        QCborValuePrinterBase.__init__(self, 'QJsonDocument')
+        self.initFromValueAddress(int(d_ptr))
 
-    def to_string(self):
-        return dumpCborValue(int(self.val.address), 'QCborValue')
+class QCborValuePrinter(QCborValuePrinterBase):
+
+    def __init__(self, val):
+        QCborValuePrinterBase.__init__(self, 'QCborValue')
+        self.initFromValueAddress(int(val.address))
+
+class QJsonValuePrinter(QCborValuePrinterBase):
+
+    def __init__(self, val):
+        if d.qtVersionAtLeast(0x050f00):
+            (data, dd, t) = d.createValue(int(val.address), '').split('QpI')
+            proxyValue = d.createProxyValue((data, dd, t, False), 'QCborValue_proxy')
+            QCborValuePrinterBase.__init__(self, 'QJsonValue')
+            self.initFromProxyValue(proxyValue)
+        else:
+            raise RuntimeError("Qt version too old for inspecting QJsonValue")
 
 class QCborValueConstRefPrinter:
 
@@ -1214,19 +1265,8 @@ class QCborValueConstRefPrinter:
     def to_string(self):
         container_ptr, item_index = d.createValue(int(self.val.address), '').split('pq')
         it = QCborContainerPrivateIterator(container_ptr, 'QCborValueConstRef')
-        return it.valueAt(item_index)
-
-class QJsonValuePrinter:
-
-    def __init__(self, val):
-        if d.qtVersionAtLeast(0x050f00):
-            (data, dd, t) = d.createValue(int(val.address), '').split('QpI')
-            self.proxyValue = d.createProxyValue((data, dd, t, False), 'QCborValue_proxy')
-        else:
-            raise RuntimeError("Qt version too old for inspecting QJsonValue")
-
-    def to_string(self):
-        return qdump__QCborValue_proxy(self.proxyValue)
+        str = it.valueAt(item_index)
+        return f'QCborValue ({str})'
 
 class QJsonValueConstRefPrinter:
 
@@ -1241,7 +1281,8 @@ class QJsonValueConstRefPrinter:
             item_index = item_index * 2 + 1 # see QJsonPrivate::Value::indexHelper()
         container_ptr = d.extractPointer(array_or_map)
         it = QCborContainerPrivateIterator(container_ptr, 'QJsonObject' if is_object else 'QJsonArray')
-        return it.valueAt(item_index)
+        str = it.valueAt(item_index)
+        return f'QJsonValue ({str})'
 
 class QUuidPrinter:
 
