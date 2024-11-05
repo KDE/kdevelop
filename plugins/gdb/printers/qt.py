@@ -1255,6 +1255,9 @@ class QCborValuePrinterBase(PrinterForwarder):
 
     def _initFromProxyValue(self, proxyValue):
         self._setUnderlyingValue(qdump__QCborValue_proxy(proxyValue))
+        _, _, item_type, _ = proxyValue.ldata
+        if item_type == 0x40 or item_type == 0x60:
+            self.display_hint = lambda : 'string'
 
 class QJsonDocumentPrinter(QCborValuePrinterBase):
 
