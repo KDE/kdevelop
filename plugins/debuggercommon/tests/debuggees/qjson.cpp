@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     QJsonArray children;
     children.append("Alice");
-    children.append("Bob");
+    children.append("Mickaël");
     jsonObj["children"] = children;
 
     QJsonDocument jsonDoc(jsonObj);

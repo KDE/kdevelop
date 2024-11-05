@@ -757,12 +757,12 @@ void QtPrintersTest::testQJson()
     QByteArray data;
 
     data = gdb.execute("print children");
-    QCOMPARE(data, R"($1 = QJsonArray (size = 2) = {"Alice", "Bob"})");
+    QCOMPARE(data, R"($1 = QJsonArray (size = 2) = {"Alice", "Mickaël"})");
 
     const QByteArray expectedJsonObj = R"( = {
   ["address"] = "Some street\\nCity\\nCountry",
   ["age"] = 30,
-  ["children"] = QJsonArray (size = 2) = {"Alice", "Bob"},
+  ["children"] = QJsonArray (size = 2) = {"Alice", "Mickaël"},
   ["job"] = QJsonObject (size = 4) = {
     ["company"] = "KDAB",
     ["emptyArray"] = QJsonArray (size = 0),
@@ -798,7 +798,7 @@ void QtPrintersTest::testQJson()
     QCOMPARE(data, "$11 = false");
 
     data = gdb.execute("print parsedChildren");
-    QCOMPARE(data, R"($12 = QJsonArray (size = 2) = {"Alice", "Bob"})");
+    QCOMPARE(data, R"($12 = QJsonArray (size = 2) = {"Alice", "Mickaël"})");
 
     data = gdb.execute("print child");
     QCOMPARE(data, R"($13 = "Alice")");
@@ -816,7 +816,7 @@ void QtPrintersTest::testQCbor()
     QByteArray data;
 
     data = gdb.execute("print childrenArray");
-    QCOMPARE(data, R"($1 = QCborArray (size = 2) = {"Alice", "Bob"})");
+    QCOMPARE(data, R"($1 = QCborArray (size = 2) = {"Alice", "Mickaël"})");
 
     const QByteArray expectedCborMap = R"(= QCborMap (size = 6) = {
   ["name"] = "John Doe",
@@ -829,7 +829,7 @@ void QtPrintersTest::testQCbor()
     ["emptyObj"] = QCborMap (size = 0),
     ["emptyArray"] = QCborArray (size = 0)
   },
-  ["children"] = QCborArray (size = 2) = {"Alice", "Bob"}
+  ["children"] = QCborArray (size = 2) = {"Alice", "Mickaël"}
 })";
 
     data = gdb.execute("print cborMap");
@@ -853,7 +853,7 @@ void QtPrintersTest::testQCbor()
     QCOMPARE(data, "$9 = false");
 
     data = gdb.execute("print parsedChildren");
-    QCOMPARE(data, R"($10 = QCborArray (size = 2) = {"Alice", "Bob"})");
+    QCOMPARE(data, R"($10 = QCborArray (size = 2) = {"Alice", "Mickaël"})");
 
     data = gdb.execute("print child");
     QCOMPARE(data, R"($11 = "Alice")");

@@ -1009,7 +1009,11 @@ def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
     elements_data_ptr, elements_size = d.vectorData(elements_pos)
     element_at_n_addr = elements_data_ptr + element_index * 16 # sizeof(QtCbor::Element) == 16
     element_value, _, element_flags = d.split('qII', element_at_n_addr)
-    enc = 'latin1' if is_bytes or (element_flags & 8) else 'utf16'
+    enc = 'utf8'
+    if is_bytes or (element_flags & 8): # QtCbor::Element::StringIsAscii
+        enc = 'latin1'
+    elif (element_flags & 4): # QtCbor::Element::StringIsUtf16
+        enc = 'utf16'
     bytedata, _, _ = d.qArrayData(data_pos)
     bytedata += element_value
     if d.qtVersionAtLeast(0x060000):

@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
     QCborArray childrenArray;
     childrenArray.append("Alice");
-    childrenArray.append("Bob");
+    childrenArray.append("Mickaël");
     cborMap[QStringLiteral("children")] = childrenArray;
 
     QCborValue cborValue(cborMap);
