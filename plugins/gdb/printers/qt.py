@@ -46,12 +46,12 @@ class PrinterForwarder(PrinterBaseType):
             return None
         return self.printer.child(n)
 
-    def to_string(self): # probably not generic enough
+    def to_string(self):
         if self.printer:
-            return f'{self.className} ({self.printer.to_string()})'
+            return self.printer.to_string()
         if self.underlyingValue: # e.g. for an integer
-            return f'{self.className} ({self.underlyingValue})'
-        return f'{self.className} (empty)'
+            return self.underlyingValue
+        return f'(empty)'
 
     def display_hint(self):
         if self.printer:
@@ -1285,7 +1285,7 @@ class QCborValueConstRefPrinter:
         container_ptr, item_index = d.createValue(int(self.val.address), '').split('pq')
         it = QCborContainerPrivateIterator(container_ptr, 'QCborValueConstRef')
         str = it.valueAt(item_index)
-        return f'QCborValue ({str})'
+        return str
 
 class QJsonValueConstRefPrinter:
 
@@ -1301,7 +1301,7 @@ class QJsonValueConstRefPrinter:
         container_ptr = d.extractPointer(array_or_map)
         it = QCborContainerPrivateIterator(container_ptr, 'QJsonObject' if is_object else 'QJsonArray')
         str = it.valueAt(item_index)
-        return f'QJsonValue ({str})'
+        return str
 
 class QUuidPrinter:
 

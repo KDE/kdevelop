@@ -778,33 +778,33 @@ void QtPrintersTest::testQJson()
     data = gdb.execute("print parsedObj");
     QCOMPARE(data, R"($3 = QJsonObject (size = 6))" + expectedJsonObj);
     data = gdb.execute("print jsonDoc");
-    QCOMPARE(data, R"($4 = QJsonDocument (QJsonObject (size = 6)))" + expectedJsonObj);
+    QCOMPARE(data, R"($4 = QJsonObject (size = 6))" + expectedJsonObj);
     data = gdb.execute("print parsedDoc");
-    QCOMPARE(data, R"($5 = QJsonDocument (QJsonObject (size = 6)))" + expectedJsonObj);
+    QCOMPARE(data, R"($5 = QJsonObject (size = 6))" + expectedJsonObj);
 
     data = gdb.execute("print name");
-    QCOMPARE(data, R"($6 = QJsonValue ("John Doe"))");
+    QCOMPARE(data, R"($6 = "John Doe")");
     data = gdb.execute("print nameRef");
-    QCOMPARE(data, R"($7 = QJsonValue ("John Doe"))");
+    QCOMPARE(data, R"($7 = "John Doe")");
 
     data = gdb.execute("print age");
-    QCOMPARE(data, "$8 = QJsonValue (30)");
+    QCOMPARE(data, "$8 = 30");
     data = gdb.execute("print ageRef");
-    QCOMPARE(data, "$9 = QJsonValue (30)");
+    QCOMPARE(data, "$9 = 30");
 
     data = gdb.execute("print married");
-    QCOMPARE(data, "$10 = QJsonValue (false)");
+    QCOMPARE(data, "$10 = false");
     data = gdb.execute("print marriedRef");
-    QCOMPARE(data, "$11 = QJsonValue (false)");
+    QCOMPARE(data, "$11 = false");
 
     data = gdb.execute("print parsedChildren");
     QCOMPARE(data, R"($12 = QJsonArray (size = 2) = {"Alice", "Bob"})");
 
     data = gdb.execute("print child");
-    QCOMPARE(data, R"($13 = QJsonValue ("Alice"))");
+    QCOMPARE(data, R"($13 = "Alice")");
 
      data = gdb.execute("print emptyDoc");
-    QCOMPARE(data, R"($14 = QJsonDocument (empty))");
+    QCOMPARE(data, R"($14 = (empty))");
 }
 
 void QtPrintersTest::testQCbor()
@@ -838,25 +838,25 @@ void QtPrintersTest::testQCbor()
     QCOMPARE(data.mid(3), expectedCborMap);
 
     data = gdb.execute("print name");
-    QCOMPARE(data, R"($4 = QCborValue ("John Doe"))");
+    QCOMPARE(data, R"($4 = "John Doe")");
     data = gdb.execute("print nameRef");
-    QCOMPARE(data, R"($5 = QCborValue ("John Doe"))");
+    QCOMPARE(data, R"($5 = "John Doe")");
 
     data = gdb.execute("print age");
-    QCOMPARE(data, "$6 = QCborValue (30)");
+    QCOMPARE(data, "$6 = 30");
     data = gdb.execute("print ageRef");
-    QCOMPARE(data, "$7 = QCborValue (30)");
+    QCOMPARE(data, "$7 = 30");
 
     data = gdb.execute("print married");
-    QCOMPARE(data, "$8 = QCborValue (false)");
+    QCOMPARE(data, "$8 = false");
     data = gdb.execute("print marriedRef");
-    QCOMPARE(data, "$9 = QCborValue (false)");
+    QCOMPARE(data, "$9 = false");
 
     data = gdb.execute("print parsedChildren");
     QCOMPARE(data, R"($10 = QCborArray (size = 2) = {"Alice", "Bob"})");
 
     data = gdb.execute("print child");
-    QCOMPARE(data, R"($11 = QCborValue ("Alice"))");
+    QCOMPARE(data, R"($11 = "Alice")");
 }
 
 void QtPrintersTest::testKTextEditorTypes()
