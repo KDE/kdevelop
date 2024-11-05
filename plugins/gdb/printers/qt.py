@@ -58,6 +58,23 @@ class PrinterForwarder(PrinterBaseType):
             return self.printer.display_hint()
         return None
 
+# Workaround for gdb < 15
+class GdbCompat:
+
+    def __init__(self):
+        self.lastBuffer = None
+
+    def setLastBuffer(self, bytes):
+        self.lastBuffer = bytes
+
+    def valueBytes(self, val):
+        if hasattr(val, 'bytes'):
+            return val.bytes
+        else:
+            return self.lastBuffer
+
+gdbCompat = GdbCompat()
+
 d = Dumper()
 
 def get_unique_ptr_value(unique_ptr_val):
@@ -1046,6 +1063,7 @@ def qdump__QCborValue_proxy(value):
         else: # Qt 5.15's QJsonArray had a dead pointer first
             buffer = struct.pack("PP", 0, container_ptr)
         fakeArray = gdb.Value(buffer, array_type)
+        gdbCompat.setLastBuffer(buffer)
         # This will trigger QCborArrayPrinter or QJsonArrayPrinter
         return fakeArray
 
@@ -1057,6 +1075,7 @@ def qdump__QCborValue_proxy(value):
         else: # Qt 5.15's QJsonObject had a dead pointer first
             buffer = struct.pack("PP", 0, container_ptr)
         fakeMap = gdb.Value(buffer, map_type)
+        gdbCompat.setLastBuffer(buffer)
         # This will trigger QCborMapPrinter or QJsonObjectPrinter
         return fakeMap
 
@@ -1117,7 +1136,7 @@ class QCborMapPrinter:
     def __init__(self, val):
         if val.address is None:
             # fake QCborMap created by qdump__QCborValue_proxy
-            self.container_ptr, = struct.unpack("P", val.bytes)
+            self.container_ptr, = struct.unpack("P", gdbCompat.valueBytes(val))
         else:
             self.container_ptr = d.extract_pointer_at_address(int(val.address))
         if self.container_ptr:
@@ -1141,7 +1160,7 @@ class QCborArrayPrinter:
     def __init__(self, val):
         if val.address is None:
             # fake QCborArray created by qdump__QCborValue_proxy
-            self.container_ptr, = struct.unpack("P", val.bytes)
+            self.container_ptr, = struct.unpack("P", gdbCompat.valueBytes(val))
         else:
             self.container_ptr = d.extract_pointer_at_address(int(val.address))
         if self.container_ptr:
@@ -1166,9 +1185,9 @@ class QJsonArrayPrinter:
         if val.address is None:
             # fake QJsonArray created by qdump__QCborValue_proxy
             if d.qtVersionAtLeast(0x060000):
-                self.container_ptr, = struct.unpack("P", val.bytes)
+                self.container_ptr, = struct.unpack("P", gdbCompat.valueBytes(val))
             else:
-                _, self.container_ptr, = struct.unpack("PP", val.bytes)
+                _, self.container_ptr, = struct.unpack("PP", gdbCompat.valueBytes(val))
         elif d.qtVersionAtLeast(0x060000):
             self.container_ptr = d.extractPointer(int(val.address))
         elif d.qtVersionAtLeast(0x050f00):
@@ -1197,9 +1216,9 @@ class QJsonObjectPrinter:
         if val.address is None:
             # fake QJsonObject created by qdump__QCborValue_proxy
             if d.qtVersionAtLeast(0x060000):
-                self.container_ptr, = struct.unpack("P", val.bytes)
+                self.container_ptr, = struct.unpack("P", gdbCompat.valueBytes(val))
             else:
-                _, self.container_ptr, = struct.unpack("PP", val.bytes)
+                _, self.container_ptr, = struct.unpack("PP", gdbCompat.valueBytes(val))
         elif d.qtVersionAtLeast(0x060000):
             self.container_ptr = d.extract_pointer_at_address(int(val.address))
         elif d.qtVersionAtLeast(0x050f00):
