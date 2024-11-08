@@ -312,6 +312,19 @@ Qt::DockWidgetArea IdealButtonBarWidget::area() const
     return m_area;
 }
 
+static IdealController::RaiseMode takeRaiseModeFrom(ToolViewAction& action)
+{
+    constexpr const char* propertyName = "raise";
+    bool propertySet;
+    // When the property is not set, QVariant::toInt() returns 0, which is converted to the default mode HideOtherViews.
+    const auto mode = static_cast<IdealController::RaiseMode>(action.property(propertyName).toInt(&propertySet));
+    if (propertySet) {
+        // Unset the property to prevent subsequent showWidget() calls from grouping by default.
+        action.setProperty(propertyName, QVariant{});
+    }
+    return mode;
+}
+
 void IdealButtonBarWidget::showWidget(bool checked)
 {
     auto *action = qobject_cast<QAction *>(sender());
@@ -328,7 +341,9 @@ void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
     Q_ASSERT(button);
 
     if (checked) {
-        if ( !QApplication::keyboardModifiers().testFlag(Qt::ControlModifier) ) {
+        if (takeRaiseModeFrom(*widgetAction) == IdealController::HideOtherViews
+            // holding the Ctrl key forces grouping
+            && !QApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
             // Make sure only one widget is visible at any time.
             // The alternative to use a QActionCollection and setting that to "exclusive"
             // has a big drawback: QActions in a collection that is exclusive cannot
