@@ -124,6 +124,40 @@ class QStringViewPrinter(QStringViewPrinterBase):
     def __init__(self, val):
         QStringViewPrinterBase.__init__(self, val, 'UTF-16', 2)
 
+class QStringDataPrinter():
+
+    def __init__(self, val):
+        self._val = val
+
+    def to_string(self):
+        ret = ""
+
+        if self._val.bytes:
+            try:
+                d_ptr = self._val.address
+                if d.qtVersionAtLeast(0x060000):
+                    _, data, size = struct.unpack("PPq", self._val.bytes)
+                else: # Qt 5
+                    ref, size, _, _, hack, = struct.unpack("iiiiP", self._val.bytes)
+                    if ref == -1: # hack for make_QStringData
+                        data = hack
+                    else: # a real QString ends up here
+                        data = d_ptr + 1
+                if size == 0:
+                    return ret
+                buffer = d.readMemory(data, size * 2)
+                dataAsCharPointer = gdb.Value(buffer + b"\0\0", gdb.lookup_type("char").array(size * 2))
+                ret = dataAsCharPointer.string(encoding = 'UTF-16', length = size * 2)
+            except Exception:
+                # swallow the exception and return empty string
+                pass
+            return ret
+        else:
+            raise RuntimeError("gdb too old for QStringDataPrinter, upgrade to gdb 15")
+
+    def display_hint (self):
+        return 'string'
+
 class QStringPrinter(PrinterBaseType):
 
     def __init__(self, val):
@@ -158,6 +192,39 @@ class QStringPrinter(PrinterBaseType):
             return self._val['d']['size']
         except:
             return 0
+
+    def display_hint (self):
+        return 'string'
+
+class QByteArrayDataPrinter():
+
+    def __init__(self, val):
+        self._val = val
+
+    def to_string(self):
+        ret = ""
+
+        if self._val.bytes:
+            try:
+                d_ptr = self._val.address
+                if d.qtVersionAtLeast(0x060000):
+                    _, data, size = struct.unpack("PPq", self._val.bytes)
+                elif d.qtVersionAtLeast(0x050000):
+                    _, size, _, _, _, _, = struct.unpack("IIIIII", self._val.bytes)
+                    data = d_ptr + 1
+                else:
+                    _, _, size, _, data, _ = struct.unpack('IIIIPP', self._val.bytes)
+                if size == 0:
+                    return ret
+                buffer = d.readMemory(data, size)
+                dataAsCharPointer = gdb.Value(buffer + b"\0", gdb.lookup_type("char").array(size))
+                ret = dataAsCharPointer.string(encoding = 'UTF-8', length = size)
+            except Exception:
+                # swallow the exception and return empty string
+                pass
+            return ret
+        else:
+            raise RuntimeError("gdb too old for QStringDataPrinter, upgrade to gdb 15")
 
     def display_hint (self):
         return 'string'
@@ -1424,12 +1491,25 @@ def register_qt_printers (obj):
 
     obj.pretty_printers.append(FunctionLookup(gdb, pretty_printers_dict))
 
+# Note that we can't use d.qtVersionAtLeast() in this function, the Qt version isn't known before starting the app
 def build_dictionary ():
     pretty_printers_dict[re.compile('^QLatin1String$')] = lambda val: QLatin1StringPrinter(val)
     pretty_printers_dict[re.compile('^QBasicUtf8StringView<(?:true|false)>$')] = lambda val: QUtf8StringViewPrinter(val)
     pretty_printers_dict[re.compile('^QStringView$')] = lambda val: QStringViewPrinter(val)
     pretty_printers_dict[re.compile('^QString$')] = lambda val: QStringPrinter(val)
+    # Qt6's QString::DataPointer (dereferenced)
+    pretty_printers_dict[re.compile('^QArrayDataPointer<char16_t>$')] = lambda val: QStringDataPrinter(val)
+    # Qt5's QString::Data
+    pretty_printers_dict[re.compile('^QTypedArrayData<unsigned short>$')] = lambda val: QStringDataPrinter(val)
+    # Qt4's QString::Data
+    pretty_printers_dict[re.compile('^QString::Data$')] = lambda val: QStringDataPrinter(val)
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
+    # Qt6's QByteArray::DataPointer (dereferenced)
+    pretty_printers_dict[re.compile('^QArrayDataPointer<char>$')] = lambda val: QByteArrayDataPrinter(val)
+    # Qt5's QByteArray::Data
+    pretty_printers_dict[re.compile('^QTypedArrayData<char>$')] = lambda val: QByteArrayDataPrinter(val)
+    # Qt4's QByteArray::Data
+    pretty_printers_dict[re.compile('^QByteArray::Data$')] = lambda val: QByteArrayDataPrinter(val)
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, 'QList', None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QStringList', 'QString')
     pretty_printers_dict[re.compile('^QQueue<.*>$')] = lambda val: QListPrinter(val, 'QQueue', None)
