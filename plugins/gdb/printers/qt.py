@@ -209,11 +209,12 @@ class QByteArrayDataPrinter():
                 d_ptr = self._val.address
                 if d.qtVersionAtLeast(0x060000):
                     _, data, size = struct.unpack("PPq", self._val.bytes)
-                elif d.qtVersionAtLeast(0x050000):
-                    _, size, _, _, _, _, = struct.unpack("IIIIII", self._val.bytes)
-                    data = d_ptr + 1
-                else:
-                    _, _, size, _, data, _ = struct.unpack('IIIIPP', self._val.bytes)
+                else: # Qt5
+                    ref, size, _, _, hack, = struct.unpack("iiiiP", self._val.bytes)
+                    if ref == -1: # hack for make_QByteArrayData
+                        data = hack
+                    else: # a real QByteArray ends up here
+                        data = d_ptr + 1
                 if size == 0:
                     return ret
                 buffer = d.readMemory(data, size)
@@ -1062,11 +1063,42 @@ def qdumpHelper_QCborArray_valueAt(container_ptr, elements_data_ptr, idx, byteda
         return d.createProxyValue((idx, container_ptr, element_type, is_cbor), 'QCborValue_proxy')
     return d.createProxyValue((element_value, 0, element_type, is_cbor), 'QCborValue_proxy')
 
-def make_char_pointer(string):
-    original_bytes = string.encode("UTF-8")
-    original = gdb.Value(original_bytes + b"\0", gdb.lookup_type("char").array(len(original_bytes)))
-    adjusted = original.cast(gdb.lookup_type("char").array(len(original_bytes)))
-    return adjusted
+def qStringDataTypeName():
+    if d.qtVersionAtLeast(0x060000):
+        # Qt6's QString::DataPointer (dereferenced)
+        return 'QArrayDataPointer<char16_t>'
+    else:
+        # Qt5's QString::Data
+        return 'QTypedArrayData<unsigned short>'
+
+def make_QStringData(utf16data, size):
+    qstringData_type = gdb.lookup_type(qStringDataTypeName())
+    if d.qtVersionAtLeast(0x060000):
+        buffer = struct.pack("PPq", utf16data, utf16data, size)
+    else: # Qt 5
+        buffer = struct.pack("iiiiP", -1, size, 0, 0, utf16data)
+    fakeQString = gdb.Value(buffer, qstringData_type)
+    gdbCompat.setLastBuffer(buffer)
+    return fakeQString
+
+def qByteArrayDataTypeName():
+    if d.qtVersionAtLeast(0x060000):
+        # Qt6's QByteArray::DataPointer (dereferenced)
+        return 'QArrayDataPointer<char>'
+    else:
+        # Qt5's QByteArray::Data
+        return 'QTypedArrayData<char>'
+
+def make_QByteArrayData(data, size):
+    qbytearray_type = gdb.lookup_type(qByteArrayDataTypeName())
+
+    if d.qtVersionAtLeast(0x060000):
+        buffer = struct.pack("PPq", data, data, size)
+    else:
+        buffer = struct.pack("iiiiP", -1, size, 0, 0, data)
+    fakeQByteArray = gdb.Value(buffer, qbytearray_type)
+    gdbCompat.setLastBuffer(buffer)
+    return fakeQByteArray
 
 def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
     # d.split('i@{@QByteArray::size_type}pp', container_ptr) doesn't work with CDB,
@@ -1076,11 +1108,6 @@ def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
     elements_data_ptr, elements_size = d.vectorData(elements_pos)
     element_at_n_addr = elements_data_ptr + element_index * 16 # sizeof(QtCbor::Element) == 16
     element_value, _, element_flags = d.split('qII', element_at_n_addr)
-    enc = 'utf8'
-    if is_bytes or (element_flags & 8): # QtCbor::Element::StringIsAscii
-        enc = 'latin1'
-    elif (element_flags & 4): # QtCbor::Element::StringIsUtf16
-        enc = 'utf16'
     bytedata, _, _ = d.qArrayData(data_pos)
     bytedata += element_value
     if d.qtVersionAtLeast(0x060000):
@@ -1090,10 +1117,12 @@ def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
         bytedata_len = d.extractInt(bytedata)
         bytedata_data = bytedata + 4 # sizeof(QtCbor::ByteData) header part
 
-    #shown = d.computeLimit(bytedata_len, d.displayStringLimit)
-    res = d.readMemory(bytedata_data, bytedata_len)
-    pystr = str(res[0:bytedata_len], enc)
-    return make_char_pointer(pystr)
+    if is_bytes or (element_flags & 8): # QtCbor::Element::StringIsAscii
+        return make_QByteArrayData(bytedata_data, bytedata_len)
+    if (element_flags & 4): # QtCbor::Element::StringIsUtf16
+        return make_QStringData(bytedata_data, int(bytedata_len / 2))
+    # UTF-8, treat it the same as ASCII
+    return make_QByteArrayData(bytedata_data, bytedata_len)
 
 def qdump__QCborValue_proxy(value):
     item_data, container_ptr, item_type, is_cbor = value.ldata
@@ -1501,15 +1530,11 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QArrayDataPointer<char16_t>$')] = lambda val: QStringDataPrinter(val)
     # Qt5's QString::Data
     pretty_printers_dict[re.compile('^QTypedArrayData<unsigned short>$')] = lambda val: QStringDataPrinter(val)
-    # Qt4's QString::Data
-    pretty_printers_dict[re.compile('^QString::Data$')] = lambda val: QStringDataPrinter(val)
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
     # Qt6's QByteArray::DataPointer (dereferenced)
     pretty_printers_dict[re.compile('^QArrayDataPointer<char>$')] = lambda val: QByteArrayDataPrinter(val)
     # Qt5's QByteArray::Data
     pretty_printers_dict[re.compile('^QTypedArrayData<char>$')] = lambda val: QByteArrayDataPrinter(val)
-    # Qt4's QByteArray::Data
-    pretty_printers_dict[re.compile('^QByteArray::Data$')] = lambda val: QByteArrayDataPrinter(val)
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, 'QList', None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QStringList', 'QString')
     pretty_printers_dict[re.compile('^QQueue<.*>$')] = lambda val: QListPrinter(val, 'QQueue', None)
