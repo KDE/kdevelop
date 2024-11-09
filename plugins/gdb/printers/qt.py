@@ -32,17 +32,17 @@ class PrinterForwarder(PrinterBaseType):
             self._printer = gdb.default_visualizer(self._underlyingValue)
 
     def children(self):
-        if not self._printer:
+        if not self._printer or not hasattr(self._printer, "children"):
             return []
         return self._printer.children()
 
     def num_children(self):
-        if not self._printer:
+        if not self._printer or not hasattr(self._printer, "num_children"):
             return 0
         return self._printer.num_children()
 
     def child(self, n):
-        if not self._printer:
+        if not self._printer or not hasattr(self._printer, "child"):
             return None
         return self._printer.child(n)
 
