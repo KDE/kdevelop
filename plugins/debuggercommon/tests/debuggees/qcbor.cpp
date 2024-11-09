@@ -16,6 +16,11 @@ int main(int argc, char *argv[])
     cborMap[QStringLiteral("age")] = thirty;
     QCborValue notMarried(false);
     cborMap[QStringLiteral("married")] = notMarried;
+    cborMap[QStringLiteral("undefined")] = QCborValue();
+    cborMap[QStringLiteral("null")] = QCborValue(nullptr);
+    cborMap[QStringLiteral("url")] = QCborValue(QUrl("http://www.kde.org"));
+    cborMap[QStringLiteral("regexp")] = QCborValue(QRegularExpression(QStringLiteral("^kde$")));
+    cborMap[QStringLiteral("birth")] = QCborValue(QDateTime(QDate(2001, 5, 30), QTime(9, 31, 0)));
 
     QCborMap childMap;
     childMap[QStringLiteral("company")] = "KDAB";

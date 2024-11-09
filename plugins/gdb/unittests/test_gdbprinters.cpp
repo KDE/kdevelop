@@ -804,25 +804,30 @@ void QtPrintersTest::testQJson()
     QCOMPARE(data, R"($13 = "Alice")");
 
      data = gdb.execute("print emptyDoc");
-    QCOMPARE(data, R"($14 = (empty))");
+    QCOMPARE(data, R"($14 = <empty>)");
 }
 
 void QtPrintersTest::testQCbor()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
 
-    gdb.execute("break qcbor.cpp:55");
+    gdb.execute("break qcbor.cpp:60");
     gdb.execute("run");
     QByteArray data;
 
     data = gdb.execute("print childrenArray");
     QCOMPARE(data, R"($1 = QCborArray (size = 2) = {"Alice", "Mickaël"})");
 
-    const QByteArray expectedCborMap = R"(= QCborMap (size = 6) = {
+    const QByteArray expectedCborMap = R"(= QCborMap (size = 11) = {
   ["name"] = "John Doe",
   ["address"] = "Some street\nCity\nCountry",
   ["age"] = 30,
   ["married"] = false,
+  ["undefined"] = <Undefined>,
+  ["null"] = <Null>,
+  ["url"] = "http://www.kde.org",
+  ["regexp"] = "^kde$",
+  ["birth"] = "2001-05-30T09:31:00.000",
   ["job"] = QCborMap (size = 4) = {
     ["company"] = "KDAB",
     ["title"] = "Surface technician",

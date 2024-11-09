@@ -51,7 +51,7 @@ class PrinterForwarder(PrinterBaseType):
             return self._printer.to_string()
         if self._underlyingValue: # e.g. for an integer
             return self._underlyingValue
-        return f'(empty)'
+        return '<empty>'
 
     def display_hint(self):
         if self._printer:
@@ -1128,7 +1128,7 @@ def qdump__QCborValue_proxy(value):
     item_data, container_ptr, item_type, is_cbor = value.ldata
 
     if item_type == 0xffffffffffffffff:
-        return 'Invalid'
+        return '<Invalid>'
 
     elif item_type == 0x00: # int
         return item_data
@@ -1140,10 +1140,10 @@ def qdump__QCborValue_proxy(value):
         return 'true'
 
     elif item_type == 0x100 + 22:
-        return 'Null'
+        return '<Null>'
 
     elif item_type == 0x100 + 23:
-        return 'Undefined'
+        return '<Undefined>'
 
     elif item_type == 0x202:
         val = struct.unpack('d', struct.pack('q', item_data))
@@ -1179,17 +1179,17 @@ def qdump__QCborValue_proxy(value):
         # This will trigger QCborMapPrinter or QJsonObjectPrinter
         return fakeMap
 
-    elif item_type == 0x10000:
-        return 'TODO DateTime'
+    elif item_type == 0x10000: # DateTime
+        return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
 
-    elif item_type == 0x10020:
-        return 'TODO Uri'
+    elif item_type == 0x10020: # Url
+        return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
 
-    elif item_type == 0x10023:
-        return 'TODO RegularExpression'
+    elif item_type == 0x10023: # RegularExpression
+        return qdumpHelper_QCbor_string(d, container_ptr, 1, True)
 
     elif item_type == 0x10025:
-        return 'TODO Uuid'
+        return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
 
     else:
         return item_data
