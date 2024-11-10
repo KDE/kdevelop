@@ -124,8 +124,6 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     connect(dock, &IdealDockWidget::dockLocationChanged, this, &IdealController::dockLocationChanged);
 
     dock->hide();
-
-    docks.insert(dock);
 }
 
 void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
@@ -159,8 +157,6 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 
     if (IdealButtonBarWidget* bar = barForDockArea(dock->dockWidgetArea()))
         bar->removeAction(action);
-
-    docks.insert(dock);
 
     if (IdealButtonBarWidget* bar = barForDockArea(area)) {
         QAction* action = bar->addWidget(dock, m_mainWindow->area(), view);
@@ -243,15 +239,8 @@ void IdealController::raiseView(View* view, RaiseMode mode)
         focusWidget->setFocus(Qt::ShortcutFocusReason);
 }
 
-QList< IdealDockWidget* > IdealController::allDockWidgets() const
-{
-    return docks.values();
-}
-
 void IdealController::showDockWidget(IdealDockWidget* dock, bool show)
 {
-    Q_ASSERT(docks.contains(dock));
-
     Qt::DockWidgetArea area = dock->dockWidgetArea();
 
     if (show) {
