@@ -3,13 +3,13 @@
 #
 # Valeriy Voutov <valeriy.voutov@gmail.com>, 2009.
 # Yasen Pramatarov <yasen@lindeas.com>, 2009, 2010, 2011.
-# Mincho Kondarev <mkondarev@yahoo.de>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Mincho Kondarev <mkondarev@yahoo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2022-07-08 11:26+0200\n"
+"PO-Revision-Date: 2024-11-09 20:09+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.04.2\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -614,7 +614,7 @@ msgstr ""
 #: language/backgroundparser/parsejob.cpp:327
 #, kde-format
 msgid "Could not open file '%1'"
-msgstr "Грешка при отваряне на файла \"%1\""
+msgstr "Грешка при отваряне на файла „%1“"
 
 #: language/backgroundparser/parsejob.cpp:330
 #, kde-format
@@ -747,7 +747,7 @@ msgstr ""
 #: language/codegen/documentchangeset.cpp:252
 #, fuzzy, kde-format
 msgid "Could not rename '%1' to '%2'"
-msgstr "Грешка при отваряне на файла \"%1\""
+msgstr "Грешка при отваряне на файла „%1“"
 
 #: language/codegen/documentchangeset.cpp:342
 #, kde-format
@@ -1548,7 +1548,7 @@ msgstr ""
 #: project/helper.cpp:86
 #, fuzzy, kde-format
 msgid "The file <i>%1</i> already exists."
-msgstr "Клонът \"%1\" вече съществува."
+msgstr "Клонът „%1“ вече съществува."
 
 #: project/helper.cpp:96
 #, kde-format
@@ -5392,7 +5392,7 @@ msgid ""
 "Branch \"%1\" already exists.\n"
 "Please, choose another name."
 msgstr ""
-"Клонът \"%1\" вече съществува.\n"
+"Клонът „%1“ вече съществува.\n"
 "Изберете друго име."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
@@ -5405,7 +5405,7 @@ msgstr ""
 #: vcs/dvcs/ui/branchmanager.cpp:147
 #, fuzzy, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
-msgstr "Наистина ли искате да преименувате \"%1\" в \"%2\"?"
+msgstr "Наистина ли искате да преименувате „%1“ в „%2“?"
 
 #: vcs/dvcs/ui/branchmanager.cpp:167 vcs/dvcs/ui/branchmanager.cpp:246
 #, kde-format
@@ -5418,7 +5418,7 @@ msgid ""
 "Branch \"%1\" doesn't exists.\n"
 "Please, choose another name."
 msgstr ""
-"Клонът \"%1\" вече съществува.\n"
+"Клонът „%1“ вече съществува.\n"
 "Изберете друго име."
 
 #: vcs/dvcs/ui/branchmanager.cpp:196
@@ -5531,12 +5531,12 @@ msgstr "Съобщение при изпращане:"
 #: vcs/models/brancheslistmodel.cpp:63
 #, kde-format
 msgid "Branch \"%1\" already exists."
-msgstr "Клонът \"%1\" вече съществува."
+msgstr "Клонът „%1“ вече съществува."
 
 #: vcs/models/brancheslistmodel.cpp:68
 #, kde-format
 msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
-msgstr "Наистина ли искате да преименувате \"%1\" в \"%2\"?"
+msgstr "Наистина ли искате да преименувате „%1“ в „%2“?"
 
 #: vcs/models/vcsannotationmodel.cpp:116
 #, fuzzy, kde-format
