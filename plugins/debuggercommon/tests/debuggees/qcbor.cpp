@@ -5,38 +5,58 @@
 #include <QDebug>
 #include <QBuffer>
 
+class Source
+{
+public:
+    Source() {
+        QCborMap cborMap;
+        cborMap[QStringLiteral("name")] = "John Doe";
+        cborMap[QStringLiteral("address")] = "Some street\nCity\nCountry";
+        QCborValue thirty(30);
+        cborMap[QStringLiteral("age")] = thirty;
+        QCborValue notMarried(false);
+        cborMap[QStringLiteral("married")] = notMarried;
+        cborMap[QStringLiteral("undefined")] = QCborValue();
+        cborMap[QStringLiteral("null")] = QCborValue(nullptr);
+        cborMap[QStringLiteral("url")] = QCborValue(QUrl("http://www.kde.org"));
+        cborMap[QStringLiteral("regexp")] = QCborValue(QRegularExpression(QStringLiteral("^kde$")));
+        cborMap[QStringLiteral("birth")] = QCborValue(QDateTime(QDate(2001, 5, 30), QTime(9, 31, 0)));
+
+        QCborMap childMap;
+        childMap[QStringLiteral("company")] = "KDAB";
+        childMap[QStringLiteral("title")] = "Surface technician";
+        childMap[QStringLiteral("emptyObj")] = QCborMap();
+        childMap[QStringLiteral("emptyArray")] = QCborArray();
+        cborMap[QStringLiteral("job")] = childMap;
+
+        QCborArray childrenArray;
+        childrenArray.append("Alice");
+        childrenArray.append("Mickaël");
+        cborMap[QStringLiteral("children")] = childrenArray;
+
+        m_document = cborMap;
+    }
+
+    Q_NEVER_INLINE QCborValue documentValue();
+    Q_NEVER_INLINE QCborMap mainMap();
+    Q_NEVER_INLINE QCborArray childrenArray();
+
+private:
+    QCborValue m_document;
+};
+
+QCborValue Source::documentValue() { return m_document; }
+QCborMap Source::mainMap() { return m_document.toMap(); }
+QCborArray Source::childrenArray() { return m_document[QStringLiteral("children")].toArray(); }
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    QCborMap cborMap;
-    QString nameStr = QStringLiteral("name");
-    cborMap[nameStr] = "John Doe";
-    cborMap[QStringLiteral("address")] = "Some street\nCity\nCountry";
-    QCborValue thirty(30);
-    cborMap[QStringLiteral("age")] = thirty;
-    QCborValue notMarried(false);
-    cborMap[QStringLiteral("married")] = notMarried;
-    cborMap[QStringLiteral("undefined")] = QCborValue();
-    cborMap[QStringLiteral("null")] = QCborValue(nullptr);
-    cborMap[QStringLiteral("url")] = QCborValue(QUrl("http://www.kde.org"));
-    cborMap[QStringLiteral("regexp")] = QCborValue(QRegularExpression(QStringLiteral("^kde$")));
-    cborMap[QStringLiteral("birth")] = QCborValue(QDateTime(QDate(2001, 5, 30), QTime(9, 31, 0)));
-
-    QCborMap childMap;
-    childMap[QStringLiteral("company")] = "KDAB";
-    childMap[QStringLiteral("title")] = "Surface technician";
-    childMap[QStringLiteral("emptyObj")] = QCborMap();
-    childMap[QStringLiteral("emptyArray")] = QCborArray();
-    cborMap[QStringLiteral("job")] = childMap;
-
-    QCborArray childrenArray;
-    childrenArray.append("Alice");
-    childrenArray.append("Mickaël");
-    cborMap[QStringLiteral("children")] = childrenArray;
-
-    QCborValue cborValue(cborMap);
-
+    QCborValue emptyValue;
+    Source source;
+    QCborValue cborValue = source.documentValue();
+    QCborMap cborMap = source.mainMap();
     QByteArray cborData = cborValue.toCbor();
 
     // Deserialize the CBOR data back into a QCborValue
@@ -45,6 +65,7 @@ int main(int argc, char *argv[])
     if (parsedValue.isMap()) {
         QCborMap parsedMap = parsedValue.toMap();
 
+        QString nameStr = QStringLiteral("name");
         auto nameRef = parsedMap[nameStr];
         QCborValue name = nameRef;
 

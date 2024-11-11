@@ -4,32 +4,53 @@
 #include <QJsonArray>
 #include <QDebug>
 
+class Source
+{
+public:
+    Source() {
+        QJsonObject jsonObj;
+        jsonObj["name"] = "John Doe";
+        jsonObj["address"] = "Some street\\nCity\\nCountry";
+        jsonObj["age"] = 30;
+        jsonObj["married"] = false;
+
+        QJsonObject childObj;
+        childObj["company"] = "KDAB";
+        childObj["title"] = "Surface technician";
+        childObj["emptyObj"] = QJsonObject();
+        childObj["emptyArray"] = QJsonArray();
+        jsonObj["job"] = childObj;
+
+        QJsonArray children;
+        children.append("Alice");
+        children.append("Mickaël");
+        jsonObj["children"] = children;
+
+        m_jsonDoc = QJsonDocument(jsonObj);
+    }
+
+    Q_NEVER_INLINE QJsonDocument jsonDocument();
+    Q_NEVER_INLINE QJsonObject jsonObject();
+    Q_NEVER_INLINE QJsonValue jsonValue();
+    Q_NEVER_INLINE QJsonArray childrenArray();
+
+private:
+    QJsonDocument m_jsonDoc;
+};
+
+QJsonDocument Source::jsonDocument() { return m_jsonDoc; }
+QJsonObject Source::jsonObject() { return m_jsonDoc.object(); }
+QJsonValue Source::jsonValue() { return m_jsonDoc.object(); }
+QJsonArray Source::childrenArray() { return m_jsonDoc.object()["children"].toArray(); }
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    QJsonObject jsonObj;
-    QString nameStr = "name";
-    jsonObj[nameStr] = "John Doe";
-    jsonObj["address"] = "Some street\\nCity\\nCountry";
-    jsonObj["age"] = 30;
-    jsonObj["married"] = false;
-
-    QJsonObject childObj;
-    childObj["company"] = "KDAB";
-    childObj["title"] = "Surface technician";
-    childObj["emptyObj"] = QJsonObject();
-    childObj["emptyArray"] = QJsonArray();
-    jsonObj["job"] = childObj;
-
-    QJsonArray children;
-    children.append("Alice");
-    children.append("Mickaël");
-    jsonObj["children"] = children;
-
-    QJsonDocument jsonDoc(jsonObj);
-
     QJsonDocument emptyDoc;
+    Source source;
+    QJsonDocument jsonDoc = source.jsonDocument();
+    QJsonObject jsonObj = jsonDoc.object();
 
     QString jsonString = jsonDoc.toJson(QJsonDocument::Indented);
 
@@ -41,6 +62,7 @@ int main(int argc, char *argv[])
         QJsonObject parsedObj = parsedDoc.object();
 
         // Output parsed JSON object
+        QString nameStr = "name";
         const auto nameRef = parsedObj[nameStr];
         const QJsonValue name = nameRef;
         const auto ageRef = parsedObj["age"];
