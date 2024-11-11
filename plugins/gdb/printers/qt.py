@@ -169,40 +169,6 @@ class QStringPrinter(PrinterBaseType):
     def display_hint (self):
         return 'string'
 
-class QByteArrayDataPrinter():
-
-    def __init__(self, val):
-        self._val = val
-
-    def to_string(self):
-        ret = ""
-
-        if self._val.bytes:
-            try:
-                d_ptr = self._val.address
-                if d.qtVersionAtLeast(0x060000):
-                    _, data, size = struct.unpack("PPq", self._val.bytes)
-                else: # Qt5
-                    ref, size, _, _, hack, = struct.unpack("iiiiP", self._val.bytes)
-                    if ref == -1: # hack for make_QByteArrayData
-                        data = hack
-                    else: # a real QByteArray ends up here
-                        data = d_ptr + 1
-                if size == 0:
-                    return ret
-                buffer = d.readMemory(data, size)
-                dataAsCharPointer = gdb.Value(buffer + b"\0", gdb.lookup_type("char").array(size))
-                ret = dataAsCharPointer.string(encoding = 'UTF-8', length = size)
-            except Exception:
-                # swallow the exception and return empty string
-                pass
-            return ret
-        else:
-            raise RuntimeError("gdb too old for QByteArrayDataPrinter, upgrade to gdb 15")
-
-    def display_hint (self):
-        return 'string'
-
 class QByteArrayPrinter(PrinterBaseType):
 
     def __init__(self, val):
@@ -1059,16 +1025,20 @@ def make_QString(utf16data, size):
     gdbCompat.setLastBuffer(buffer)
     return fakeQString
 
-def make_QByteArrayData(data, size):
+def make_QByteArray(data, size):
     if d.qtVersionAtLeast(0x060000):
         qbytearray_type = gdb.lookup_type('QByteArray')
         buffer = struct.pack("PPq", 0, data, size)
-    else:
-        qbytearray_type = gdb.lookup_type('QTypedArrayData<char>') # QByteArray::Data
-        buffer = struct.pack("iiiiP", -1, size, 0, 0, data)
-    fakeQByteArray = gdb.Value(buffer, qbytearray_type)
-    gdbCompat.setLastBuffer(buffer)
-    return fakeQByteArray
+        fakeQByteArray = gdb.Value(buffer, qbytearray_type)
+        gdbCompat.setLastBuffer(buffer)
+        return fakeQByteArray
+    else: # Qt 5
+        # creating a QByteArray would require allocating a d pointer,
+        # and there was no QByteArrayView... so just return a python str
+        # This is sub-optimal in kdevelop, it shows children
+        memBytes = d.readMemory(data, size)
+        value = gdb.Value(memBytes, gdb.lookup_type("char").array(size - 1))
+        return value
 
 def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
     # d.split('i@{@QByteArray::size_type}pp', container_ptr) doesn't work with CDB,
@@ -1088,11 +1058,11 @@ def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
         bytedata_data = bytedata + 4 # sizeof(QtCbor::ByteData) header part
 
     if is_bytes or (element_flags & 8): # QtCbor::Element::StringIsAscii
-        return make_QByteArrayData(bytedata_data, bytedata_len)
+        return make_QByteArray(bytedata_data, bytedata_len)
     if (element_flags & 4): # QtCbor::Element::StringIsUtf16
         return make_QString(bytedata_data, int(bytedata_len / 2))
     # UTF-8, treat it the same as ASCII
-    return make_QByteArrayData(bytedata_data, bytedata_len)
+    return make_QByteArray(bytedata_data, bytedata_len)
 
 def qdump__QCborValue_proxy(value):
     item_data, container_ptr, item_type, is_cbor = value.ldata
@@ -1507,10 +1477,6 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QStringView$')] = lambda val: QStringViewPrinter(val)
     pretty_printers_dict[re.compile('^QString$')] = lambda val: QStringPrinter(val)
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
-    # Qt6's QByteArray::DataPointer (dereferenced)
-    pretty_printers_dict[re.compile('^QArrayDataPointer<char>$')] = lambda val: QByteArrayDataPrinter(val)
-    # Qt5's QByteArray::Data
-    pretty_printers_dict[re.compile('^QTypedArrayData<char>$')] = lambda val: QByteArrayDataPrinter(val)
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, 'QList', None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QStringList', 'QString')
     pretty_printers_dict[re.compile('^QQueue<.*>$')] = lambda val: QListPrinter(val, 'QQueue', None)
