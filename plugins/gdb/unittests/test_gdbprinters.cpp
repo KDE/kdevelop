@@ -752,7 +752,7 @@ void QtPrintersTest::testQJson()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qjson"));
 
-    gdb.execute("break qjson.cpp:54");
+    gdb.execute("break qjson.cpp:55");
     gdb.execute("run");
     QByteArray data;
 
@@ -803,15 +803,18 @@ void QtPrintersTest::testQJson()
     data = gdb.execute("print child");
     QCOMPARE(data, R"($13 = "Alice")");
 
-     data = gdb.execute("print emptyDoc");
+    data = gdb.execute("print emptyDoc");
     QCOMPARE(data, R"($14 = <empty>)");
+
+    data = gdb.execute("print parsedObj[nameStr]"); // QJsonValueConstRef without address
+    QCOMPARE(data, R"($15 = "John Doe")");
 }
 
 void QtPrintersTest::testQCbor()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
 
-    gdb.execute("break qcbor.cpp:60");
+    gdb.execute("break qcbor.cpp:61");
     gdb.execute("run");
     QByteArray data;
 
@@ -862,6 +865,9 @@ void QtPrintersTest::testQCbor()
 
     data = gdb.execute("print child");
     QCOMPARE(data, R"($11 = "Alice")");
+
+    data = gdb.execute("print parsedMap[nameStr]"); // QCborValueConstRef without address
+    QCOMPARE(data, R"($12 = "John Doe")");
 }
 
 void QtPrintersTest::testKTextEditorTypes()

@@ -9,7 +9,8 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QJsonObject jsonObj;
-    jsonObj["name"] = "John Doe";
+    QString nameStr = "name";
+    jsonObj[nameStr] = "John Doe";
     jsonObj["address"] = "Some street\\nCity\\nCountry";
     jsonObj["age"] = 30;
     jsonObj["married"] = false;
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])
         QJsonObject parsedObj = parsedDoc.object();
 
         // Output parsed JSON object
-        const auto nameRef = parsedObj["name"];
+        const auto nameRef = parsedObj[nameStr];
         const QJsonValue name = nameRef;
         const auto ageRef = parsedObj["age"];
         const QJsonValue age = ageRef;

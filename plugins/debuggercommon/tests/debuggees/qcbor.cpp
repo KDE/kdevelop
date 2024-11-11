@@ -10,7 +10,8 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QCborMap cborMap;
-    cborMap[QStringLiteral("name")] = "John Doe";
+    QString nameStr = QStringLiteral("name");
+    cborMap[nameStr] = "John Doe";
     cborMap[QStringLiteral("address")] = "Some street\nCity\nCountry";
     QCborValue thirty(30);
     cborMap[QStringLiteral("age")] = thirty;
@@ -44,7 +45,7 @@ int main(int argc, char *argv[])
     if (parsedValue.isMap()) {
         QCborMap parsedMap = parsedValue.toMap();
 
-        auto nameRef = parsedMap[QStringLiteral("name")];
+        auto nameRef = parsedMap[nameStr];
         QCborValue name = nameRef;
 
         auto ageRef = parsedMap[QStringLiteral("age")];

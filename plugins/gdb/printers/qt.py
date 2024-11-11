@@ -1385,7 +1385,8 @@ class QCborValueConstRefPrinter:
         self._val = val
 
     def to_string(self):
-        container_ptr, item_index = d.createValue(int(self._val.address), '').split('pq')
+        container_ptr = int(self._val['d'])
+        item_index = int(self._val['i'])
         it = QCborContainerPrivateIterator(container_ptr, 'QCborValueConstRef')
         str = it.valueAt(item_index)
         return str
@@ -1396,9 +1397,9 @@ class QJsonValueConstRefPrinter:
         self._val = val
 
     def to_string(self):
-        array_or_map, is_object_and_index = d.createValue(int(self._val.address), '').split('pq')
-        is_object = is_object_and_index & 1
-        item_index = is_object_and_index >> 1
+        array_or_map = int(self._val['d'])
+        is_object = int(self._val['is_object'])
+        item_index = int(self._val['index'])
         if is_object:
             item_index = item_index * 2 + 1 # see QJsonPrivate::Value::indexHelper()
         container_ptr = d.extractPointer(array_or_map)
