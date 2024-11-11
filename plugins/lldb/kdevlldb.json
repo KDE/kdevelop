@@ -27,7 +27,7 @@
         "Description[sk]": "Tento modul poskytuje rozhranie pre LLDB, novú generáciu vysokovýkonného debuggera C/Obj-C/C++.",
         "Description[sl]": "Ta vstavek prinaša začelje za LLDB, novo generacijo visoko zmogljivega razhroščevalnika za C/Obj-C/C++.",
         "Description[sv]": "Insticksprogrammet tillhandahåller ett gränssnitt till LLDB, nästa generations avlusare för C, Obj-C, C++ med hög prestanda.",
-        "Description[tr]": "Bu eklenti, gelecek nesil, yüksek performanslı C/Obj-C/C++ hata ayıklayıcı olan LLDB için ön uç sağlar.",
+        "Description[tr]": "Bu eklenti, gelecek kuşak, yüksek başarımlı C/Obj-C/C++ hata ayıklayıcısı olan LLDB için ön uç sağlar.",
         "Description[uk]": "Цей додаток є обгорткою до LLDB, високошвидкісного засобу діагностики коду мовами C/Obj-C/C++.",
         "Description[x-test]": "xxThis plugin provides a frontend for LLDB, a next generation, high-performance C/Obj-C/C++ debugger.xx",
         "Description[zh_CN]": "此插件提供了 LLDB 前端，LLDB 是一个下一代的、高性能的 C/Obj-C/C++ 的调试器。",
