@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:40+0000\n"
-"PO-Revision-Date: 2022-09-06 22:38+0300\n"
+"PO-Revision-Date: 2024-11-10 19:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: localpatchsource.cpp:34
 #, kde-format
@@ -73,7 +73,7 @@ msgstr "Komuttan"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter command to take output from..."
-msgstr "Çıktı alınacak komut girin..."
+msgstr "Çıktının alınacağı komutu gir…"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
 #: localpatchwidget.ui:87
@@ -127,7 +127,7 @@ msgstr "Alternatif:<br/>"
 #: patchhighlighter.cpp:199
 #, kde-format
 msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
-msgstr "Değişiklikler uygulanamadı. Metin \"%1\" olmalıydı; ancak \"%2\" idi."
+msgstr "Değişiklikler uygulanamadı. Metin “%1” olmalıydı; ancak “%2” idi."
 
 #: patchhighlighter.cpp:409 patchhighlighter.cpp:416
 #, kde-format
@@ -222,14 +222,14 @@ msgstr "Güncelle"
 #, kde-format
 msgctxt "@action:button"
 msgid "Run Tests"
-msgstr "Sınamaları Çalıştır"
+msgstr "Testleri Çalıştır"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportReview)
 #: patchreview.ui:120
 #, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
-msgstr "Diff'i Dışa Aktar..."
+msgstr "Diff’i Dışa Aktar…"
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
 #: patchreview.ui:136
@@ -290,16 +290,16 @@ msgstr "Tümünün Seçimini Kaldır"
 #: patchreviewtoolview.cpp:557
 #, kde-format
 msgid "Running tests: %p%"
-msgstr "Sınamalar çalıştırılıyor: %​%p"
+msgstr "Testler çalıştırılıyor: %​%p"
 
 #: patchreviewtoolview.cpp:585
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
-msgstr[0] "Sınamalar geçildi"
-msgstr[1] "Tüm %1 sınama geçildi"
+msgstr[0] "Test geçildi"
+msgstr[1] "Tüm %1 test geçildi"
 
 #: patchreviewtoolview.cpp:589
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
-msgstr "Sınama sonuçları: %1 geçilen, %2 başarısız, %3 hata alındı"
+msgstr "Test sonuçları: %1 geçilen, %2 başarısız, %3 hata alındı"

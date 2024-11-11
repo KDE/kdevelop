@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2024-03-22 16:18+0300\n"
+"PO-Revision-Date: 2024-11-10 19:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: committoolview.cpp:205 committoolview.cpp:206
 #, kde-format
@@ -149,17 +149,17 @@ msgstr "Geri Al"
 #: gitmessagehighlighter.cpp:66
 #, kde-format
 msgid "Try to keep summary length below %1 characters."
-msgstr "Özet uzunluğunu, %1 karakterin altında tutmaya çalış."
+msgstr "Özet uzunluğunu, %1 karakterin altında tutmaya çalışın."
 
 #: gitmessagehighlighter.cpp:82
 #, kde-format
 msgid "Separate summary from details with one empty line."
-msgstr "Özeti, ayrıntılardan bir boş satırla ayır."
+msgstr "Özeti, ayrıntılardan bir boş satırla ayırın."
 
 #: gitmessagehighlighter.cpp:92
 #, kde-format
 msgid "Try to keep line length below %1 characters."
-msgstr "Satır uzunluğunu, %1 karakterin altında tutmaya çalış."
+msgstr "Satır uzunluğunu, %1 karakterin altında tutmaya çalışın."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, GitNameEmailDialog)
 #: gitnameemaildialog.ui:17
@@ -177,7 +177,7 @@ msgid ""
 "written to the Git configuration, either locally for the current project "
 "only, or globally for all Git projects.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Git, işlemelerinizle ilişkilendirilecek ad ve e-posta "
+"<html><head/><body><p>Git işlemelerinizle ilişkilendirilecek ad ve e-posta "
 "yapılandırılmamış.<br/>Buraya girdiğiniz değerler, Git yapılandırmasına "
 "yazılır; geçerli profil için yerel olarak veya tüm Git projeleri için.</p></"
 "body></html>"
@@ -611,7 +611,7 @@ msgstr "Zula Yöneticisi"
 #: stashmanagerdialog.cpp:120
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
-msgstr "'%1' zulasını bırakmak istediğinizden emin misiniz?"
+msgstr "“%1” zulasını bırakmak istediğinizden emin misiniz?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
 #: stashmanagerdialog.cpp:121 stashmanagerdialog.ui:26

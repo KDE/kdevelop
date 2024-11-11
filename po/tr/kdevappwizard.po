@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2024-03-22 16:18+0300\n"
+"PO-Revision-Date: 2024-11-10 17:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: appwizarddialog.cpp:23
 #, kde-format
@@ -43,7 +43,7 @@ msgstr "Sürüm Denetimi"
 #, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "Şablondan Yeni..."
+msgstr "Şablondan Yeni…"
 
 #: appwizardplugin.cpp:71
 #, kde-format
@@ -58,8 +58,8 @@ msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
 "skeleton for your application from a set of templates."
 msgstr ""
-"Bu K Geliştir 'un uygulama sihirbazını başlatır. Bir şablonlar kümesi "
-"içinden uygulamanız için bir iskelet oluşturmanıza yardımcı olur."
+"Bu K Geliştir’in uygulama sihirbazını başlatır. Bir şablonlar kümesi içinden "
+"uygulamanız için bir iskelet oluşturmanıza yardımcı olur."
 
 #: appwizardplugin.cpp:106
 #, kde-format
@@ -169,12 +169,12 @@ msgstr "Alt dizinler oluşturulamadı, izniniz olmayan dizin: %1"
 #: projectselectionpage.cpp:234
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
-msgstr "Geçersiz proje şablonu, lütfen bir sayfa ögesi seçin"
+msgstr "Geçersiz proje şablonu, lütfen bir sayfa ögesi seçin."
 
 #: projectselectionpage.cpp:247
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
-msgstr "Yol halihazırda var ve dosyalar içeriyor. Bir proje aç."
+msgstr "Yol halihazırda var ve dosyalar içeriyor. Bir proje açın."
 
 #: projectselectionpage.cpp:294
 #, kde-format
@@ -182,8 +182,8 @@ msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr ""
-"Belirtilen dizin zaten var ve dosyalar içeriyor. Sürdürmek istediğinizden "
-"emin misiniz?"
+"Belirtilen dizin halihazırda var ve dosyalar içeriyor. Sürdürmek "
+"istediğinizden emin misiniz?"
 
 #: projectselectionpage.cpp:310
 #, kde-format
@@ -216,11 +216,11 @@ msgstr "Konum:"
 #, kde-format
 msgctxt "@item:inlistbox No Version Control Support chosen"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectvcspage.ui:30
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Version control system:"
-msgstr "Sürüm denetimi sistemi:"
+msgstr "Sürüm denetim sistemi:"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevcppcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-03-18 19:46+0300\n"
+"PO-Revision-Date: 2024-11-10 18:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.02.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
 #, kde-format
@@ -98,7 +98,7 @@ msgid ""
 "are false positives with this option. Each result must be carefully "
 "investigated before you know if it is good or bad."
 msgstr ""
-"Çözümleme sonuçsuz olsa dahi Cppcheck ' in raporlamasına olanak verir. Bu "
+"Çözümleme sonuçsuz olsa dahi Cppcheck’in raporlamasına olanak verir. Bu "
 "seçenek ile yanlış pozitifler olabilir. Her sonuç, siz iyi mi kötü mü "
 "olduğunu bilmeden önce dikkatlice araştırılmak zorundadır. "
 
@@ -131,7 +131,7 @@ msgid ""
 "Warn if there are missing includes. For detailed information use 'check-"
 "config'"
 msgstr ""
-"Eksik 'include' varsa uyar. Daha ayrıntılı bilgi için 'check-config' "
+"Eksik “include” varsa uyar. Daha ayrıntılı bilgi için 'check-config' "
 "kullanın."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
@@ -168,8 +168,8 @@ msgid ""
 msgstr ""
 "<p>Birçok yapılandırması olan dosyaları denetlemeye zorlar. Eğer böyle bir "
 "dosya bulunursa hata yazdırılır; bu yüzden bunu öntanımlı olarak kullanmaya "
-"gerek yoktur. Eğer '--max-configs=' ile birlikte kullanılırsa son seçenek "
-"etkili olandır.<br/><br/> Bu seçeneği kullanırken dikkat edin - denetlemeyi "
+"gerek yoktur. Eğer “--max-configs=” ile birlikte kullanılırsa son seçenek "
+"etkili olandır.<br/><br/> Bu seçeneği kullanırken dikkat edin — denetlemeyi "
 "çok fazla yavaşlatabilir.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
@@ -201,8 +201,8 @@ msgid ""
 "Enable all coding style checks. All messages with the severities 'style', "
 "'performance' and 'portability' are enabled."
 msgstr ""
-"Tüm kodlama biçemi denetimlerini etkinleştir. 'biçem', 'başarım' ve "
-"'uyumluluk' önem derecelerine sahip olan tüm iletiler etkinleştirilir."
+"Tüm kodlama biçemi denetimlerini etkinleştir. “style”, “performance” ve "
+"“portability” önem derecelerine sahip olan tüm iletiler etkinleştirilir."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:135
@@ -244,7 +244,7 @@ msgid ""
 "Add 'project' include directories to Cppcheck arguments. This option adds "
 "only paths related with project's root and build directories."
 msgstr ""
-"'proje', 'include' dizinlerini cppcheck argümanlarına ekleyin. Bu seçenek, "
+"“project” 'include” dizinlerini cppcheck argümanlarına ekleyin. Bu seçenek, "
 "projenin yalnızca kök ve yapı dizinleriyle ilgili yolları ekler."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
@@ -252,7 +252,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'project' include dirs"
-msgstr "'proje', 'include' dizinlerini kullan"
+msgstr "“project” “include” dizinlerini kullan"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:180
@@ -262,23 +262,23 @@ msgid ""
 "<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
 ">Be careful with using this option - it can dramatically slow checking.</p>"
 msgstr ""
-"<p>Diğer, 'system' 'include' dizinleri cppcheck argümanlarına ekle.<br/><br/"
-">Bu seçeneği kullanırken dikkat edin - denetlemeyi çok fazla yavaşlatabilir."
-"</p>"
+"<p>Diğer “system” “include” dizinlerini cppcheck argümanlarına ekleyin.<br/"
+"><br/>Bu seçeneği kullanırken dikkat edin — denetlemeyi çok fazla "
+"yavaşlatabilir.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:183
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'system' include dirs"
-msgstr "'system', 'include' dizinlerini kullan"
+msgstr "“system” “include” dizinlerini kullan"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/projectconfigpage.ui:198
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Ignored includes:"
-msgstr "'Yok sayılan 'include'lar:"
+msgstr "&Yok sayılan “include”lar:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
 #: config/projectconfigpage.ui:218
@@ -305,9 +305,9 @@ msgstr ""
 "\n"
 "<p>Aşağıdaki yer tutucuları kullanabilirsiniz:</p>\n"
 "\n"
-"<p><b><tt>%p</tt></b> - Projenin kök dizini URL'si ile değiştirilir.</p>\n"
+"<p><b><tt>%p</tt></b> — Projenin kök dizini URL’si ile değiştirilir.</p>\n"
 "\n"
-"<p><b><tt>%b</tt></b> - Projenin yapı dizini URL'si ile değiştirilir.</p>\n"
+"<p><b><tt>%b</tt></b> — Projenin yapı dizini URL’si ile değiştirilir.</p>\n"
 "\n"
 "</html>"
 
@@ -350,9 +350,9 @@ msgstr ""
 "\n"
 "<p>Aşağıdaki yer tutucuları kullanabilirsiniz:</p>\n"
 "\n"
-"<p><b><tt>%p</tt></b> - Projenin kök dizini URL'si ile değiştirilir.</p>\n"
+"<p><b><tt>%p</tt></b> — Projenin kök dizini URL’si ile değiştirilir.</p>\n"
 "\n"
-"<p><b><tt>%b</tt></b> - Projenin yapı dizini URL'si ile değiştirilir.</p>\n"
+"<p><b><tt>%b</tt></b> — Projenin yapı dizini URL’si ile değiştirilir.</p>\n"
 "\n"
 "</html>"
 
@@ -368,7 +368,7 @@ msgstr "Komut Satırı"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Ara..."
+msgstr "Ara…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
 #: config/projectconfigpage.ui:326
@@ -390,7 +390,7 @@ msgstr "Cppcheck"
 #: job.cpp:150
 #, kde-format
 msgid "Failed to start Cppcheck from \"%1\"."
-msgstr "Cppcheck, \"%1\" konumundan başlatılamadı."
+msgstr "Cppcheck, “%1” konumundan başlatılamadı."
 
 #: job.cpp:155
 #, kde-format
@@ -422,17 +422,17 @@ msgid ""
 "'XX' value can be found in any project's moc-generated file or in the "
 "<QtCore/qobjectdefs.h> header file."
 msgstr ""
-"Bu proje, Qt kitaplığını kullanıyor gibi görünüyor. Cppcheck ' in doğru "
+"Bu proje, Qt kitaplığını kullanıyor gibi görünüyor. Cppcheck’in doğru "
 "çalışması için Q_MOC_OUTPUT_REVISION tanım değeri ayarlanmak zorundadır. Ne "
-"yazık ki, eklenti bu değeri otomatik bulmada başarısız oldu - bu değeri ek "
-"parametrelere '-DQ_MOC_OUTPUT_REVISION=XX' ekleyerek el ile ayarlamalısınız. "
-"'XX' değeri herhangi bir projenin moc ile üretilmiş dosyasında veya <QtCore/"
-"qobjectdefs.h> başlık dosyası içinde bulunabilir."
+"yazık ki, eklenti bu değeri kendiliğinden bulmada başarısız oldu — bu değeri "
+"ek parametrelere “-DQ_MOC_OUTPUT_REVISION=XX” ekleyerek elle "
+"ayarlamalısınız. “XX” değeri herhangi bir projenin moc ile üretilmiş "
+"dosyasında veya <QtCore/qobjectdefs.h> başlık dosyası içinde bulunabilir."
 
 #: parser.cpp:220
 #, kde-format
 msgid "Cppcheck XML Parsing: error at line %1, column %2: %3"
-msgstr "Cppcheck XML Ayrıştırma: %1. satır, %2. sütunda hata: %3"
+msgstr "Cppcheck XML ayrıştırması: %1. satır, %2. sütunda hata: %3"
 
 #: plugin.cpp:51
 #, kde-format
@@ -456,7 +456,7 @@ msgstr "Geçerli Projeyi Cppcheck ile Çözümle"
 #, kde-format
 msgctxt "@title:window"
 msgid "Test"
-msgstr "Sınama"
+msgstr "Test"
 
 #: problemmodel.cpp:116
 #, kde-format
@@ -466,7 +466,7 @@ msgstr "Çözümleme tamamlandı, sorun algılanmadı."
 #: problemmodel.cpp:137
 #, kde-format
 msgid "Analysis started..."
-msgstr "Çözümleme başlatıldı..."
+msgstr "Çözümleme başlatıldı…"
 
 #: problemmodel.cpp:138
 #, kde-format

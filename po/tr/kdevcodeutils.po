@@ -5,13 +5,13 @@
 # Serdar Soytetir, 2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-06-04 01:51+0300\n"
+"PO-Revision-Date: 2024-11-10 20:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,14 +19,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #. i18n: action name; 'Document' is a verb
 #: codeutilsplugin.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Document Declaration"
-msgstr "Belge Beyanı"
+msgstr "Beyanı Belgelendir"
 
 #: codeutilsplugin.cpp:50
 #, kde-format
@@ -38,7 +38,7 @@ msgstr "Seçenek+Üst Karakter+D"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add Doxygen skeleton for declaration under cursor."
-msgstr "İmlecin altındaki bildirim için Doxygen iskeleti ekle."
+msgstr "İmlecin altındaki beyan için Doxygen iskeleti ekleyin."
 
 #: codeutilsplugin.cpp:55
 #, kde-format
@@ -47,10 +47,10 @@ msgid ""
 "Adds a basic Doxygen comment skeleton in front of the declaration under the "
 "cursor, e.g. with all the parameter of a function."
 msgstr ""
-"İmlecin altındaki beyanın önüne yalın bir Doxygen açıklama iskeleti ekler; "
-"örn. bir işlevin tüm parametreleri gibi."
+"İmlecin altındaki beyanın önüne temel bir Doxygen açıklama iskeleti ekler; "
+"örneğin, bir işlevin tüm parametreleri gibi."
 
 #: codeutilsplugin.cpp:85
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"

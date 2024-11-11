@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2014.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-13 01:44+0000\n"
-"PO-Revision-Date: 2022-09-01 13:12+0300\n"
+"PO-Revision-Date: 2024-11-10 18:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: makefileresolver/makefileresolver.cpp:230
 #, kde-format
@@ -27,32 +27,32 @@ msgid ""
 "Tried include path resolution while another resolution process was still "
 "running"
 msgstr ""
-"Başka bir çözünürlük süreci çalışırken çözünürlük yolu eklenmeye çalışıldı"
+"Başka bir çözünürlük süreci çalışırken çözünürlük yolu eklenmeye çalışıldı."
 
 #: makefileresolver/makefileresolver.cpp:276
 #, kde-format
 msgid "Makefile is missing in folder \"%1\""
-msgstr "\"%1\" klasöründe makefile yok"
+msgstr "“%1” klasöründe Makefile yok"
 
 #: makefileresolver/makefileresolver.cpp:276
 #, kde-format
 msgid "Problem while trying to resolve include paths for %1"
-msgstr "%1 için 'include' dosya yolları çözümlenirken sorun"
+msgstr "%1 için “include” dosya yolları çözümlenirken sorun"
 
 #: makefileresolver/makefileresolver.cpp:310
 #, kde-format
 msgid "Cached: %1"
-msgstr "Önbelleklendi: %1"
+msgstr "Önbelleklenen: %1"
 
 #: makefileresolver/makefileresolver.cpp:339
 #, kde-format
 msgid "Filename %1 seems to be malformed"
-msgstr "%1 dosya adı hatalı oluşturulmuş gibi görünüyor"
+msgstr "%1 dosya adı hatalı oluşturulmuş gibi görünüyor."
 
 #: makefileresolver/makefileresolver.cpp:472
 #, kde-format
 msgid "Failed to extract new working directory"
-msgstr "Yeni çalışma dizini çıkarılamadı"
+msgstr "Yeni çalışma dizini çıkarılamadı."
 
 #: makefileresolver/makefileresolver.cpp:472
 #: makefileresolver/makefileresolver.cpp:501
@@ -64,29 +64,29 @@ msgstr "Çıktı: %1"
 #: makefileresolver/makefileresolver.cpp:497
 #, kde-format
 msgid "Recursive make call failed"
-msgstr "Özyineli 'make' çağrısı başarısız oldu"
+msgstr "Özyineli “make” çağrısı başarısız oldu."
 
 #: makefileresolver/makefileresolver.cpp:494
 #, kde-format
 msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
-msgstr "\"%1\" dizisi parametresi geçerli görünmüyor. Çıktı: %2."
+msgstr "“%1” dizisi parametresi geçerli görünmüyor. Çıktı: %2."
 
 #: makefileresolver/makefileresolver.cpp:497
 #, kde-format
 msgid "The directory \"%1\" does not exist. Output was: %2."
-msgstr "\"%1\" dizini yok. Çıktı: %2."
+msgstr "“%1” dizini yok. Çıktı: %2."
 
 #: makefileresolver/makefileresolver.cpp:501
 #, kde-format
 msgid "Malformed recursive make call"
-msgstr "Hatalı oluşturulmuş özyineli 'make' çağrısı"
+msgstr "Hatalı oluşturulmuş özyineli “make” çağrısı"
 
 #: makefileresolver/makefileresolver.cpp:513
 #, kde-format
 msgid "Could not extract include paths from make output"
-msgstr "'make' çıktısından 'include' yolları çıkarılamadı"
+msgstr "“make” çıktısından “include” yolları çıkarılamadı."
 
 #: makefileresolver/makefileresolver.cpp:514
 #, kde-format
 msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
-msgstr "Klasör: \"%1\"  Komut: \"%2\"  Çıktı: \"%3\""
+msgstr "Klasör: “%1”  Komut: “%2”  Çıktı: “%3”"

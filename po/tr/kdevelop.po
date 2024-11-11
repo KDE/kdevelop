@@ -12,13 +12,13 @@
 # Uğur Çetin <jnmbk@users.sourceforge.net>, 2008.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2023-04-21 12:11+0300\n"
+"PO-Revision-Date: 2024-11-10 18:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -162,12 +162,12 @@ msgstr "%1 açılamadı"
 #: main.cpp:218
 #, kde-format
 msgid "Could not open file '%1'."
-msgstr "'%1' dosyası açılamadı."
+msgstr "“%1” dosyası açılamadı."
 
 #: main.cpp:241
 #, kde-format
 msgid "Could not open project '%1': %2"
-msgstr "'%1' projesi açılamadı: %2"
+msgstr "“%1” projesi açılamadı: %2"
 
 #: main.cpp:272
 #, kde-format
@@ -180,8 +180,8 @@ msgid ""
 "Cannot open unknown session %1. See `--list-sessions` switch for available "
 "sessions or use `-n` to create a new one."
 msgstr ""
-"Bilinmeyen oturum %1 açılamadı. Kullanılabilir oturumları görmek için `--"
-"list-sessions` anahtarına göz atın veya `-n` ile yeni bir oturum oluşturun."
+"Bilinmeyen oturum %1 açılamadı. Kullanılabilir oturumları görmek için “--"
+"list-sessions” anahtarına göz atın veya “-n” ile yeni bir oturum oluşturun."
 
 #: main.cpp:370
 #, kde-format
@@ -196,7 +196,7 @@ msgstr "K Geliştir Tümleşik Geliştirme Ortamı"
 #: main.cpp:373
 #, kde-format
 msgid "Copyright 1999-%1, The KDevelop developers"
-msgstr "Telif hakkı 1999-%1, K Geliştir geliştiricileri"
+msgstr "© 1999–%1, K Geliştir geliştiricileri"
 
 #: main.cpp:376
 #, kde-format
@@ -218,7 +218,7 @@ msgstr "Sven Brauch"
 #, kde-format
 msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
 msgstr ""
-"Eş bakımcı, AppImage, Python Desteği, Kullanıcı Arayüzü iyileştirmeleri"
+"Eş bakımcı, AppImage, Python desteği, kullanıcı arayüzü iyileştirmeleri"
 
 #: main.cpp:378
 #, kde-format
@@ -228,7 +228,7 @@ msgstr "Aleix Pol Gonzalez"
 #: main.cpp:378
 #, kde-format
 msgid "CMake Support, Run Support, Kross Support"
-msgstr "CMake Desteği, Run Desteği, Kross Desteği"
+msgstr "CMake desteği, çalıştırma desteği, Kross desteği"
 
 #: main.cpp:379
 #, kde-format
@@ -240,8 +240,8 @@ msgstr "Milian Wolff"
 msgid ""
 "C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
 msgstr ""
-"C++/Clang, Genel yönetici, Web geliştirme Eklentileri, Kod parçaları, "
-"Performans"
+"C++/Clang, genel yönetici, web geliştirme eklentileri, kod parçacıkları, "
+"başarım"
 
 #: main.cpp:380
 #, kde-format
@@ -251,7 +251,7 @@ msgstr "Olivier JG"
 #: main.cpp:380
 #, kde-format
 msgid "C++/Clang, DUChain, Bug Fixes"
-msgstr "C++/Clang, DUChain, Hata Düzeltmeleri"
+msgstr "C++/Clang, DUChain, hata düzeltmeleri"
 
 #: main.cpp:381
 #, kde-format
@@ -263,8 +263,8 @@ msgstr "Andreas Pakulat"
 msgid ""
 "Architecture, VCS Support, Project Management Support, QMake Projectmanager"
 msgstr ""
-"Mimari, Sürüm Denetimi Sistemi Desteği, Proje Yönetimi Desteği, QMake Proje "
-"Yöneticisi"
+"Mimari, sürüm denetim sistemi desteği, proje yönetimi desteği, QMake proje "
+"yöneticisi"
 
 #: main.cpp:382
 #, kde-format
@@ -274,7 +274,7 @@ msgstr "Alexander Dymo"
 #: main.cpp:382
 #, kde-format
 msgid "Architecture, Sublime UI, Ruby support"
-msgstr "Mimari, Sublime Kullanıcı Arayüzü, Ruby desteği"
+msgstr "Mimari, Sublime kullanıcı arayüzü, Ruby desteği"
 
 #: main.cpp:383
 #, kde-format
@@ -287,8 +287,8 @@ msgid ""
 "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
 "Assistance, Refactoring"
 msgstr ""
-"Tanımlama-Kullanım Zinciri, C++ Desteği, Kodlarda Gezinme, Kod Tamamlama, "
-"Kodlama Yardımı, Yeniden Yapılandırma"
+"Tanımlama ve Kullanım zinciri, C++ desteği, kodlarda dolaşma, kod tamamlama, "
+"kodlama Yyrdımı, yeniden yapılandırma"
 
 #: main.cpp:384
 #, kde-format
@@ -308,7 +308,7 @@ msgstr "Hamish Rodda"
 #: main.cpp:385
 #, kde-format
 msgid "Text editor integration, definition-use chain"
-msgstr "Metin düzenleyici tümleştirmesi, tanımlama-kullanım zinciri"
+msgstr "Metin düzenleyicisi tümleştirmesi, tanımlama ve kullanım zinciri"
 
 #: main.cpp:386
 #, kde-format
@@ -319,7 +319,8 @@ msgstr "Amilcar do Carmo Lucas"
 #, kde-format
 msgid "Website admin, API documentation, Doxygen and autoproject patches"
 msgstr ""
-"Website yöneticisi, API belgelendirmesi, Doxygen ve otomatik proje yamaları"
+"Web sitesi yöneticisi, API belgelendirmesi, Doxygen ve kendiliğinden proje "
+"yamaları"
 
 #: main.cpp:387
 #, kde-format
@@ -329,7 +330,7 @@ msgstr "Niko Sams"
 #: main.cpp:387
 #, kde-format
 msgid "GDB integration, Webdevelopment Plugins"
-msgstr "GDB tümleştirmesi, Web Geliştirme Eklentileri"
+msgstr "GDB tümleştirmesi, web geliştirme eklentileri"
 
 #: main.cpp:388
 #, kde-format
@@ -354,7 +355,7 @@ msgstr "astyle ve indent desteği"
 #: main.cpp:392
 #, kde-format
 msgid "Evgeniy Ivanov"
-msgstr "Evgeniy Ivanov"
+msgstr "Yevgeniy İvanov"
 
 #: main.cpp:392
 #, kde-format
@@ -370,7 +371,8 @@ msgstr "Robert Gruber"
 #: main.cpp:395
 #, kde-format
 msgid "SnippetPart, debugger and usability patches"
-msgstr "Kod Parçacıkları Kısmı, hata ayıklayıcı ve kullanılabilirlik yamaları"
+msgstr ""
+"Kod parçacıkları kısmı, hata ayıklayıcısı ve kullanılabilirlik yamaları"
 
 #: main.cpp:396
 #, kde-format
@@ -380,7 +382,7 @@ msgstr "Dukju Ahn"
 #: main.cpp:396
 #, kde-format
 msgid "Subversion plugin, Custom Make Manager, Overall improvements"
-msgstr "Subversion eklentisi, Özel Make Yöneticisi, genel geliştirmeler"
+msgstr "Subversion eklentisi, özel Make yöneticisi, genel geliştirmeler"
 
 #: main.cpp:397
 #, kde-format
@@ -390,7 +392,7 @@ msgstr "Harald Fernengel"
 #: main.cpp:397
 #, kde-format
 msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
-msgstr "Qt 3 geçişi, valgrind, diff ve perforce desteği"
+msgstr "Qt3 geçişi, valgrind, diff ve perforce desteği"
 
 #: main.cpp:398
 #, kde-format
@@ -400,7 +402,7 @@ msgstr "Roberto Raggi"
 #: main.cpp:398
 #, kde-format
 msgid "C++ parser"
-msgstr "C++ ayrıştırıcı"
+msgstr "C++ ayrıştırıcısı"
 
 #: main.cpp:399
 #, kde-format
@@ -425,7 +427,7 @@ msgstr "Tasarımcı kodu"
 #: main.cpp:402
 #, kde-format
 msgid "Contributors to older versions:"
-msgstr "Eski sürümlerin destekçileri:"
+msgstr "Eski sürümlere katkıda bulunanlar:"
 
 #: main.cpp:403
 #, kde-format
@@ -435,7 +437,7 @@ msgstr "Bernd Gehrmann"
 #: main.cpp:403
 #, kde-format
 msgid "Initial idea, basic architecture, much initial source code"
-msgstr "İlk fikir, basit mimari, ilk kaynak kodlar"
+msgstr "İlk fikir, temel mimari, ilk kaynak kodlar"
 
 #: main.cpp:404
 #, kde-format
@@ -465,7 +467,7 @@ msgstr "John Birch"
 #: main.cpp:406
 #, kde-format
 msgid "Debugger frontend"
-msgstr "Hata Ayıklayıcı Önucu"
+msgstr "Hata ayıklayıcısı ön ucu"
 
 #: main.cpp:407
 #, kde-format
@@ -475,7 +477,7 @@ msgstr "Sandy Meier"
 #: main.cpp:407
 #, kde-format
 msgid "PHP support, context menu stuff"
-msgstr "PHP desteği, sağ tıklama menüsü"
+msgstr "PHP desteği, bağlam menüsü"
 
 #: main.cpp:408
 #, kde-format
@@ -500,7 +502,7 @@ msgstr "Dağıtım bölümü, bash desteği, uygulama şablonları"
 #: main.cpp:410
 #, kde-format
 msgid "Matthias Hoelzer-Kluepfel"
-msgstr "Matthias Hoelzer-Kluepfel"
+msgstr "Matthias Hölzer–Kluepfel"
 
 #: main.cpp:410
 #, kde-format
@@ -540,7 +542,7 @@ msgstr "Ada desteği"
 #: main.cpp:414
 #, kde-format
 msgid "Jakob Simon-Gaarde"
-msgstr "Jakob Simon-Gaarde"
+msgstr "Jakob Simon–Gaarde"
 
 #: main.cpp:414
 #, kde-format
@@ -566,7 +568,7 @@ msgstr "Mario Scalas"
 #, kde-format
 msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
 msgstr ""
-"PartExplorer, CvsPart'ın yeniden tasarımı, yamalar, hatalar(düzeltmeler)"
+"PartExplorer, CvsPart’ın yeniden tasarımı, yamalar, hatalar (düzeltmeler)"
 
 #: main.cpp:417
 #, kde-format
@@ -579,7 +581,7 @@ msgid ""
 "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
 "patches"
 msgstr ""
-"Değiştir, Yer İmleri, Dosya Listesi ve CTags2 eklentileri, diğer tüm "
+"Değiştir, yer imleri, dosya listesi ve CTags2 eklentileri, diğer tüm "
 "geliştirmeler ve yamalar"
 
 #: main.cpp:418
@@ -625,7 +627,7 @@ msgstr "Fortran belgelendirmesi"
 #: main.cpp:422
 #, kde-format
 msgid "Ka-Ping Yee"
-msgstr "Ka-Ping Yee"
+msgstr "Ka–Ping Yee"
 
 #: main.cpp:422
 #, kde-format
@@ -650,7 +652,7 @@ msgstr "Hugo Varotto"
 #: main.cpp:424 main.cpp:425
 #, kde-format
 msgid "Fileselector component"
-msgstr "Dosya seçici bileşeni"
+msgstr "Dosya seçicisi bileşeni"
 
 #: main.cpp:425
 #, kde-format
@@ -665,7 +667,7 @@ msgstr "Daniel Engelschalt"
 #: main.cpp:426
 #, kde-format
 msgid "C++ code completion, persistent class store"
-msgstr "C++ kod tamlama, kalıcı sınıf deposu"
+msgstr "C++ kod tamamlama, kalıcı sınıf deposu"
 
 #: main.cpp:427
 #, kde-format
@@ -718,13 +720,13 @@ msgid ""
 "Documentation Finder,  qmake projectmanager patches, usability improvements, "
 "bugfixes ... "
 msgstr ""
-"Belgelendirme Bulucu,  qmake proje yöneticisi yamaları, kullanılabilirlik "
-"geliştirmeleri, hata düzeltmeleri ... "
+"Belgelendirme bulucusu, qmake proje yöneticisi yamaları, kullanılabilirlik "
+"geliştirmeleri, hata düzeltmeleri…"
 
 #: main.cpp:433
 #, kde-format
 msgid "Andreas Koepfle"
-msgstr "Andreas Koepfle"
+msgstr "Andreas Köpfle"
 
 #: main.cpp:433
 #, kde-format
@@ -755,7 +757,7 @@ msgstr "Ruby dili için sanatsal çalışmalar"
 #: main.cpp:450
 #, kde-format
 msgid "Open KDevelop with a new session using the given name."
-msgstr "Verilen adla K Geliştir'i yeni bir oturum ile başlat."
+msgstr "Verilen adla K Geliştir’i yeni bir oturum ile başlatın."
 
 #: main.cpp:453
 #, kde-format
@@ -763,7 +765,7 @@ msgid ""
 "Open KDevelop with the given session.\n"
 "You can pass either hash or the name of the session."
 msgstr ""
-"K Geliştir'i verilen oturumla başlat.\n"
+"K Geliştir’i verilen oturumla başlatın.\n"
 "Oturumu özet veya ad belirterek açabilirsiniz."
 
 #: main.cpp:457
@@ -772,7 +774,7 @@ msgid ""
 "Delete the given session.\n"
 "You can pass either hash or the name of the session."
 msgstr ""
-"Verilen oturumu sil.\n"
+"Verilen oturumu silin.\n"
 "Oturumun özetini ya da adını verebilirsiniz."
 
 #: main.cpp:461
@@ -789,12 +791,12 @@ msgstr ""
 #: main.cpp:465
 #, kde-format
 msgid "List available sessions and quit."
-msgstr "Kullanılabilir oturumları listele ve çık."
+msgstr "Kullanılabilir oturumları listeleyin ve çıkın."
 
 #: main.cpp:467
 #, kde-format
 msgid "Open KDevelop and fetch the project from the given <repo url>."
-msgstr "K Geliştir'i aç ve verilen <depo URL>'sinden projeyi getir."
+msgstr "K Geliştir’i açın ve verilen <depo URL>’sinden projeyi getirin."
 
 #: main.cpp:470
 #, kde-format
@@ -802,8 +804,8 @@ msgid ""
 "Open KDevelop and load the given project. <project> can be either a .kdev4 "
 "file or a directory path."
 msgstr ""
-"K Geliştir'i aç ve verilen projeyi yükle. <proje>, bir .kdev4 dosyası veya "
-"dizin yolu olabilir."
+"K Geliştir’i açın ve verilen projeyi yükleyin. <proje>, bir .kdev4 dosyası "
+"veya dizin yolu olabilir."
 
 #: main.cpp:473
 #, kde-format
@@ -812,8 +814,8 @@ msgid ""
 "The executable that should be debugged must follow - including arguments.\n"
 "Example: kdevelop --debug gdb myapp --foo bar"
 msgstr ""
-"Belirtilen hata ayıklayıcı ile K Geliştir içinde bir uygulamanın hatalarını "
-"ayıklamayı başlatır.\n"
+"Belirtilen hata ayıklayıcısı ile K Geliştir içinde bir uygulamanın "
+"hatalarını ayıklamayı başlatır.\n"
 "Hata ayıklaması yapılacak yürütülebilir, şu argümanları içermelidir.\n"
 "Örnek: kdevelop --debug gdb myapp --foo bar"
 
@@ -826,7 +828,7 @@ msgstr "Yüklenecek dosyalar veya proje olarak yüklenecek dizinler"
 #, kde-format
 msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
 msgstr ""
-"Kullanılabilir oturumlar (belirliyi açmak için '-s HASH' veya '-s NAME' "
+"Kullanılabilir oturumlar (belirliyi açmak için “-s HASH” veya “-s NAME” "
 "kullanın):"
 
 #: main.cpp:499
@@ -870,7 +872,7 @@ msgstr "%1 Hatalarını Ayıkla"
 #, kde-format
 msgid ""
 "A session with the name %1 exists already. Use the -s switch to open it."
-msgstr "%1 adlı bir oturum zaten var. Bu oturumu açmak için -s kullanın."
+msgstr "%1 adlı bir oturum halihazırda var. Bu oturumu açmak için -s kullanın."
 
 #: main.cpp:657
 #, kde-format
@@ -895,7 +897,7 @@ msgstr "Yerel çalıştırma yapılandırması bulunamadı"
 #: main.cpp:790
 #, kde-format
 msgid "Cannot find launcher %1"
-msgstr "%1 çalıştırıcısı bulunamadı"
+msgstr "%1 başlatıcısı bulunamadı"
 
 #: plasma/applet/package/contents/ui/main.qml:58
 msgid "KDevelop Sessions"

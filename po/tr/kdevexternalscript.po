@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2010-2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2014, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2023-03-07 20:12+0300\n"
+"PO-Revision-Date: 2024-11-10 19:03+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: editexternalscript.cpp:30
 #, kde-format
@@ -56,10 +56,10 @@ msgid ""
 msgstr ""
 "<p>Bu betik, başlatıldığında çalıştırılması gereken komutu tanımlar. "
 "Bulunduğunuz platformun temel özellikleri kullanılabilir.</p>\n"
-"<p>Bu komutla birlikte kullanabileceğiniz birkaç yer tutucu bulunuyor:</p>\n"
+"<p>Bu komutla birlikte kullanabileceğiniz birkaç yer tutucu bulunur:</p>\n"
 "<dl>\n"
 "  <dt><code>%u</code></dt>\n"
-"  <dd>Etkin belgenin URL'si ile değiştirilir.</dd>\n"
+"  <dd>Etkin belgenin URL’si ile değiştirilir.</dd>\n"
 "  <dt><code>%f</code></dt>\n"
 "  <dd>Etkin belgenin yerel dosya yolu ile değiştirilir.</dd>\n"
 "  <dt><code>%n</code></dt>\n"
@@ -69,10 +69,10 @@ msgstr ""
 "  <dt><code>%d</code></dt>\n"
 "  <dd>Etkin belgenin dizin yolu ile değiştirilir.</dd>\n"
 "  <dt><code>%p</code></dt>\n"
-"  <dd>Etkin belgenin proje URL'si ile değiştirilir.</dd>\n"
+"  <dd>Etkin belgenin proje URLsi ile değiştirilir.</dd>\n"
 "  <dt><code>%s</code></dt>\n"
-"  <dd>Etkin belge içerisindeki  kabuktan kaçan içerik seçimi ile "
-"değiştirilir.</dd>\n"
+"  <dd>Etkin belge içerisindeki kabuktan kaçan içerik seçimi ile değiştirilir."
+"</dd>\n"
 "  <dt><code>%i</code></dt>\n"
 "  <dd>Çalışmakta olan K Geliştir sürecinin kimliği ile değiştirilir .</dd>\n"
 "</dl>\n"
@@ -165,7 +165,7 @@ msgstr "Yeni Dış Betik Oluştur"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit External Script '%1'"
-msgstr "'%1' Dış Betiğini Düzenle"
+msgstr "“%1” Dış Betiğini Düzenle"
 
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: editexternalscript.ui:19
@@ -422,7 +422,7 @@ msgid ""
 "Cannot run script '%1' since it tries to access the editor contents but no "
 "document is open."
 msgstr ""
-"'%1' betiği çalıştırılamadı, betik düzenleyici içeriğine erişmek istiyor; "
+"“%1” betiği çalıştırılamıyor; betik düzenleyicisi içeriğine erişmek istiyor; "
 "ancak açık durumda bir belge yok."
 
 #: externalscriptjob.cpp:224
@@ -433,27 +433,27 @@ msgstr "Dış betik çalıştırılıyor: %1"
 #: externalscriptjob.cpp:268
 #, kde-format
 msgid "*** Killed Application ***"
-msgstr "*** Uygulama Sonlandırıldı ***"
+msgstr "*** Uygulama sonlandırıldı. ***"
 
 #: externalscriptjob.cpp:348
 #, kde-format
 msgid "*** Exited normally ***"
-msgstr "*** Normal olarak çıkıldı ***"
+msgstr "*** Normal olarak çıkıldı. ***"
 
 #: externalscriptjob.cpp:351
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
-msgstr "*** Bu kod döndürülerek çıkıldı: %1 ***"
+msgstr "*** Bu kod döndürülerek çıkıldı: %1. ***"
 
 #: externalscriptjob.cpp:354
 #, kde-format
 msgid "*** Process aborted ***"
-msgstr "*** Süreç sonlandırıldı ***"
+msgstr "*** Süreç sonlandırıldı. ***"
 
 #: externalscriptjob.cpp:356
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
-msgstr "*** Bu kod döndürülerek çöktü: %1 ***"
+msgstr "*** Bu kod döndürülerek çöktü: %1. ***"
 
 #: externalscriptjob.cpp:368
 #, kde-format
@@ -461,7 +461,7 @@ msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "
 "correctly ***"
 msgstr ""
-"*** '%1' programı başlatılamadı. Yolun doğru belirtildiğinden emin olun ***"
+"*** “%1” programı başlatılamadı. Yolun doğru belirtildiğinden emin olun. ***"
 
 #: externalscriptplugin.cpp:126
 #, kde-format
@@ -481,12 +481,12 @@ msgstr "Seçimi Sırala"
 #: externalscriptplugin.cpp:151
 #, kde-format
 msgid "Google Selection"
-msgstr "Seçimi Google'da Ara"
+msgstr "Seçimi Google’da Ara"
 
 #: externalscriptplugin.cpp:157
 #, kde-format
 msgid "Paste to Hastebin"
-msgstr "Hastebin'e Yapıştır"
+msgstr "Hastebin’e Yapıştır"
 
 #: externalscriptplugin.cpp:239
 #, kde-format

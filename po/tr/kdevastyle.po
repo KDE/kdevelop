@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-08-29 20:54+0300\n"
+"PO-Revision-Date: 2024-11-10 17:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: astyle_plugin.cpp:249
 #, kde-format
@@ -169,8 +169,8 @@ msgid ""
 "Indent a maximal # spaces in a continuous statement,\n"
 "relative to the previous line."
 msgstr ""
-"Önceki satıra göreceli olarak,\n"
-"sürdürülen bir ifadede en çok # boşluk girintile."
+"Önceki satıra göreceli olarak, sürdürülen bir\n"
+"ifadede en çok # boşluk girintileyin."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, TextLabel3_2)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpMinConditional)
@@ -182,7 +182,7 @@ msgid ""
 "belonging to a conditional header."
 msgstr ""
 "Bir koşullu üstbilgiye ait olan bir sürekli koşullu içinde\n"
-"en az # boşluk girintile."
+"en az # boşluk girintileyin."
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
 #: astyle_preferences.ui:215
@@ -220,8 +220,8 @@ msgid ""
 "Indent, instead of align, continuation lines following lines that contain an "
 "opening paren '(' or an assignment '='."
 msgstr ""
-"Bir açılış parantezi '(' veya bir atama '=' içeren satırları izleyen "
-"sürdürme satırlarını hizalamak yerine girintile."
+"Bir açılış parantezi “(” veya bir atama “=” içeren satırları izleyen "
+"sürdürme satırlarını hizalamak yerine girintileyin."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)
 #: astyle_preferences.ui:272
@@ -260,7 +260,7 @@ msgid ""
 "from their immediately preceding closing brackets."
 msgstr ""
 "Kapatma üstbilgisi öncesi ayraçları, öncesindeki kapatma\n"
-"ayraçlarından kes (örn. 'else', 'catch', ...)."
+"ayraçlarından kesin (örn. “else”, “catch”, …)."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
 #: astyle_preferences.ui:329
@@ -312,8 +312,8 @@ msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
 msgstr ""
-"Ayraç koyulmamış tek satırlık koşulsal ifadelere ayraçlar ekle (örn. 'if', "
-"'for', 'while')"
+"Ayraç koyulmamış tek satırlık koşulsal ifadelere ayraçlar ekleyin (örn. "
+"“if”, “for”, “while”)."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
@@ -378,12 +378,12 @@ msgid ""
 "2. Comments are broken from the block.\n"
 msgstr ""
 "--break-blocks gibi; yalnıza kapatma üstbilgileri\n"
-"etrafına (örn. 'else', 'catch', ...) boş satırlar ekle.\n"
+"etrafına (örn. “else”, “catch”, …) boş satırlar ekleyin.\n"
 "\n"
 "Bilinen sorunlar:\n"
 "\n"
 "1. Bir ifade, bir blokun parçası DEĞİLSE aşağıdaki\n"
-"ifadelerin tümü çift boşluk kullanır. \n"
+"ifadelerin tümü çift boşluk kullanır.\n"
 "Bir blok içine alınmış ifadeler düzgünce biçimlendirilir.\n"
 "\n"
 "2. Yorumlar, bloktan kesilir.\n"
@@ -400,14 +400,14 @@ msgstr "Tüm bl&okları kes"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Break 'else if()' statements into two different lines."
-msgstr "'else if()' ifadelerini iki ayrı satıra kes."
+msgstr "“else if()' ifadelerini iki ayrı satıra kes."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:435
 #, kde-format
 msgctxt "@option:check break else if() into separate lines"
 msgid "Break i&f-else"
-msgstr "i&f-else Kes"
+msgstr "i&f–else Kes"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
 #: astyle_preferences.ui:445
@@ -486,8 +486,8 @@ msgid ""
 "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
 "'while', ...)"
 msgstr ""
-"Parantez üstbilgisi sonrası (örn. 'if', 'for', 'while', ...) boşluk kenar "
-"dolgusu ekle"
+"Parantez üstbilgisi sonrası (örn. “if”, “for”, “while”, …) boşluk kenar "
+"dolgusu ekleyin."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:510
@@ -547,7 +547,7 @@ msgstr "Diğer"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pointer Alignment:"
-msgstr "İşaretçi Hizalaması:"
+msgstr "İşaretçi hizalaması:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:566

@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014, 2015, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2023-07-26 12:41+0300\n"
+"PO-Revision-Date: 2024-11-10 20:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
 #, kde-format
@@ -68,7 +68,7 @@ msgstr ""
 "Örneğin:\n"
 "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
 "Eğer özel biçim dizisi etkinleştirilmezse tüm ifadelerin adları ve değerleri "
-"tüm ifadeler için biçim belirleyici olarak \"%d\" ile yazdırılacaktır."
+"tüm ifadeler için biçim belirleyici olarak “%d” ile yazdırılacaktır."
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
@@ -88,7 +88,7 @@ msgid ""
 "it as printf debugging that does not require modifying the source.</p>"
 msgstr ""
 "<b>İzlemeyi etkinleştir</b>\n"
-"<p>İzleme, seçilen bir ifadenin değerlerini otomatik olarak yazan ve kesme "
+"<p>İzleme, seçilen bir ifadenin değerlerini kendiliğinden yazan ve kesme "
 "noktasına ulaşıldığında çalışmayı sürdüren bir mekanizmadır. Onu kaynak kodu "
 "düzenlemeye gerek kalmadan kullanabildiğiniz printf hata ayıklaması olarak "
 "düşünebilirsiniz.</p>"
@@ -113,8 +113,8 @@ msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
-"Hiç ortam profili belirtilmemiş, hatalı bir yapılandırma gibi görünüyor; "
-"lütfen '%1' çalıştırma yapılandırmasını denetleyin. Öntanımlı ortam profili "
+"Belirtilen çevre profili yok; hatalı bir yapılandırma gibi görünüyor; lütfen "
+"“%1” çalıştırma yapılandırmasını denetleyin. Öntanımlı çevre profili "
 "kullanılıyor."
 
 #: debugsession.cpp:272
@@ -132,7 +132,7 @@ msgstr ""
 #: debugsession.cpp:308
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Hata ayıklayıcı başlatılamadı:</b><br />"
+msgstr "<b>Hata ayıklayıcısı başlatılamadı:</b><br />"
 
 #: debugsession.cpp:322
 #, kde-format
@@ -140,13 +140,13 @@ msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
 "<p><tt>%1"
 msgstr ""
-"<b>Çekirdek dosyası yüklenemedi</b><p>Hata ayıklayıcı şu hatayı bildirdi:"
+"<b>Çekirdek dosyası yüklenemedi</b><p>Hata ayıklayıcısı şu hatayı bildirdi:"
 "<p><tt>%1"
 
 #: gdb.cpp:68
 #, kde-format
 msgid "Could not locate the debugging shell '%1'."
-msgstr "Hata ayıklama kabuğu '%1' bulunamadı."
+msgstr "Hata ayıklama kabuğu “%1” bulunamadı."
 
 #: gdbconfigpage.cpp:92
 #, kde-format
@@ -179,14 +179,14 @@ msgstr "Yerel uygulamayı GDB içerisinde yürütür"
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
-msgstr "Hata Ayıklayıcı"
+msgstr "Hata Ayıklayıcısı"
 
 #. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
 #: gdbconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger e&xecutable:"
-msgstr "Hata ayı&klayıcı yürütülebiliri:"
+msgstr "Hata ayı&klayıcısı yürütülebiliri:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:48
@@ -206,10 +206,10 @@ msgid ""
 "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
 "executable."
 msgstr ""
-"$PATH içinde bulunan \"gdb\" ikili dosyasını yürütmek için bu alanı boş "
-"bırakın. Özel bir gdb yürütmek için, örneğin başka bir mimari gibi, "
+"$PATH içinde bulunan “gdb” ikili dosyasını yürütmek için bu alanı boş "
+"bırakın. Özel bir gdb yürütmek için örneğin başka bir mimari gibi, "
 "yürütülebilir dosyanın adını buraya girin. $PATH içinde bulunan; ancak başka "
-"bir adı olan (örneğin \"arm-gdb\") bir gdb'yi çalıştırmak için adını buraya "
+"bir adı olan (örneğin “arm-gdb”) bir gdb’yi çalıştırmak için adını buraya "
 "girebilir veya gdb yürütülebilirinin tam yolunu yazabilirsiniz."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
@@ -217,7 +217,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to gdb executable..."
-msgstr "gdb yürütülebilirine olan yolun üzerine yaz..."
+msgstr "gdb yürütülebilirine olan yolun üzerine yaz…"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
@@ -232,11 +232,11 @@ msgid ""
 "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
 "span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>gdb'nin; örneğin kitaplık yolunu düzgünce ayarlayan "
+"<html><head/><body><p>gdb’nin; örneğin kitaplık yolunu düzgünce ayarlayan "
 "bir özel bir kabuk betiği tarafından yürütülmesini istiyorsanız onu buraya "
 "ekleyin; örn. : /yol/script.sh --scriptArguments.</p><p>Not: Betiğiniz şöyle "
 "çağrılacaktır: /yol/script.sh --scriptArguments debugger --"
-"debuggerArguments. Bundan dolayı, script.sh, &quot;hata ayıklayıcı&quot; "
+"debuggerArguments. Bundan dolayı script.sh, “hata ayıklayıcısı” "
 "yürütülebilirini elle <span style=\" font-weight:600;\">çağırmalıdır</span>."
 "</p></body></html>"
 
@@ -273,10 +273,10 @@ msgid ""
 "but if you need to debug into these values then\n"
 "check this option."
 msgstr ""
-"Durgun üyeleri görüntülemek, GDB'nin KDE\n"
-"ve QT içindeki veri üretimini yavaşlatır.\n"
+"Durgun üyeleri görüntülemek, GDB’nin KDE\n"
+"ve Qt içindeki veri üretimini yavaşlatır.\n"
 "QString ve arkadaşlarının güvendiği verinin\n"
-"\"imzasını\" değiştirebilir; ancak bu değerlerin\n"
+"“imzasını” değiştirebilir; ancak bu değerlerin\n"
 "hatasını ayıklamak istiyorsanız bunu imleyin."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -304,7 +304,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "S&tart debugger with:"
-msgstr "Ha&ta ayıklayıcıyı şununla başlat:"
+msgstr "Ha&ta ayıklayıcısını şununla başlat:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:154
@@ -341,7 +341,7 @@ msgstr ""
 "Bu betik uzaktan çalışan çalıştırılabilir dosyaya bağlanmak için gereksinim "
 "duyulan gerçek komutlar için tasarlanmıştır.\n"
 "\tshell sleep 5\tuzak programın çalışmasını bekle\n"
-"\ttarget remote ...\tuzak hata ayıklayıcıya bağlan\n"
+"\ttarget remote …\tuzak hata ayıklayıcısına bağlan\n"
 "\tcontinue\t[isteğe bağlı] hata ayıklamayı, ilk kesme noktasına kadar "
 "çalıştır"
 
@@ -369,9 +369,9 @@ msgstr ""
 "<html><head/><body><p>Uzak uygulamayı başlatacak betik</p><p></p><p>Bu kabuk "
 "betiği Gdb Config betiği gdb tarafından çalıştırıldıktan sonra "
 "başlatılacaktır.</p><p>Hedefi, uzak süreci başlatmaktır.</p><p>1) Komutu "
-"uzaktan çalıştırmanın bir yolunu bulun - rsh, ssh, telnet, ...</p><p>2a) "
-"Hedefte \"gdbserver ... uygulama\" komutunu çalıştırın.</p><p> veya hedefte "
-"gdb varsa:</p><p>2b) Hedefte \"uygulama\" komutunu çalıştırın.</p></body></"
+"uzaktan çalıştırmanın bir yolunu bulun — rsh, ssh, telnet, ...</p><p>2a) "
+"Hedefte “gdbserver … application” komutunu çalıştırın.</p><p> veya hedefte "
+"gdb varsa:</p><p>2b) Hedefte “application” komutunu çalıştırın.</p></body></"
 "html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
@@ -410,7 +410,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Uzak uygulama ile bağlanacak betik</p><p>Örneğin:</"
 "p><p>\tshell sleep 5\t #uzak programın çalışmasını bekle</p><p>\ttarget "
-"remote ...\t#uzak hata ayıklayıcıya bağlan</p><p>\tcontinue\t#[seçimlik] "
+"remote …\t#uzak hata ayıklayıcısına bağlan</p><p>\tcontinue\t#[seçimlik] "
 "hata ayıklamayı ilk kesme noktasında başlat.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
@@ -476,7 +476,7 @@ msgstr "Tümünü Kopyala"
 #: kdevgdbui.rc:19
 #, kde-format
 msgid "Debugger Toolbar"
-msgstr "Hata Ayıklayıcı Araç Çubuğu"
+msgstr "Hata Ayıklayıcısı Araç Çubuğu"
 
 #: memviewdlg.cpp:66
 #, kde-format

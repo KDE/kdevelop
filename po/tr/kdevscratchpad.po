@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-10-13 00:26+0300\n"
+"PO-Revision-Date: 2024-11-10 19:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: scratchpad.cpp:104 scratchpadview.cpp:87
 #, kde-format
@@ -52,12 +52,12 @@ msgstr "Karalama, yeniden adlandırılamadı: Adlar, yol ayırıcısı içermeme
 #: scratchpad.cpp:226
 #, kde-format
 msgid "Failed renaming scratch."
-msgstr "Karalama, yeniden adlandırılamadı."
+msgstr "Karalama yeniden adlandırılamadı."
 
 #: scratchpadjob.cpp:57
 #, kde-format
 msgid "Running %1..."
-msgstr "%1 çalıştırılıyor..."
+msgstr "%1 çalıştırılıyor…"
 
 #: scratchpadjob.cpp:73
 #, kde-format
@@ -84,7 +84,7 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Command to run this scratch. '$f' will expand to the scratch path."
 msgstr ""
-"Bu karalamayı çalıştırmak için komut. '$f', karalama yoluna genişleyecektir."
+"Bu karalamayı çalıştırmak için komut. “$f”, karalama yoluna genişleyecektir."
 
 #: scratchpadview.cpp:137
 #, kde-format
@@ -114,7 +114,7 @@ msgstr "Karalamayı Çalıştır"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Süz..."
+msgstr "Süz…"
 
 #: scratchpadview.cpp:204
 #, kde-format

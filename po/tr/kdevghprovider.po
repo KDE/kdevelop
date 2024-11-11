@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Volkan Gezer <volkangezer@gmail.com>, 2021.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevghprovider\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-21 01:43+0000\n"
-"PO-Revision-Date: 2023-04-21 12:11+0300\n"
+"PO-Revision-Date: 2024-11-10 19:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: ghdialog.cpp:25
 #, kde-format
@@ -25,9 +25,9 @@ msgid ""
 "authorize KDevelop, you will be able to fetch your public/private "
 "repositories and the repositories from your organizations."
 msgstr ""
-"K Geliştir'dan GitHub hesabınızı kullanmaya yetkili değilsiniz. K Geliştir'i "
-"yetkilendirirseniz, genel/özel depolarınızı ve kuruluşlarınızdaki "
-"depolarınızı çekebilirsiniz."
+"K Geliştir’dan GitHub hesabınızı kullanmaya yetkili değilsiniz. K Geliştir’i "
+"yetkilendirirseniz genel/özel depolarınızı ve kuruluşlarınızdaki "
+"depolarınızı getirebilirsiniz."
 
 #: ghdialog.cpp:34
 #, kde-format
@@ -84,9 +84,9 @@ msgid ""
 "Could not create token: \"%1\"\n"
 "%2"
 msgstr ""
-"Kimlik doğrulama başarısız oldu. Lütfen tekrar deneyiniz.\n"
+"Kimlik doğrulama başarısız oldu. Lütfen yeniden deneyin.\n"
 "\n"
-"Jeton oluşturulamadı: \"%1\"\n"
+"Jeton oluşturulamadı: “%1”\n"
 "%2"
 
 #: ghdialog.cpp:129
@@ -105,7 +105,7 @@ msgid ""
 msgstr ""
 "Kimlik doğrulama başarılı oldu.\n"
 "\n"
-"Jeton oluşturuldu: \"%1\"\n"
+"Jeton oluşturuldu: “%1”\n"
 "%2"
 
 #: ghdialog.cpp:136
@@ -140,7 +140,7 @@ msgstr "GitHub"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Ara..."
+msgstr "Ara…"
 
 #: ghproviderwidget.cpp:59
 #, kde-format

@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2014, 2015.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-09-02 22:59+0300\n"
+"PO-Revision-Date: 2024-11-10 18:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.11.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: executeplugin.cpp:68
 #, kde-format
@@ -27,8 +27,8 @@ msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
 "Aborting start."
 msgstr ""
-"'%1' başlatma yapılandırması için argümanlarda alıntılama hatası var. "
-"Başlatma iptal ediliyor."
+"“%1” başlatma yapılandırması için argümanlarda tırnak hatası var. Başlatma "
+"iptal ediliyor."
 
 #: executeplugin.cpp:72
 #, kde-format
@@ -36,7 +36,7 @@ msgid ""
 "A shell meta character was included in the arguments for the launch "
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
-"'%1' başlatma yapılandırması için argümanlar arasında desteklenmeyen bir "
+"“%1” başlatma yapılandırması için argümanlar arasında desteklenmeyen bir "
 "kabuk joker karakteri var. Başlatma iptal ediliyor."
 
 #: executeplugin.cpp:99
@@ -55,7 +55,7 @@ msgid ""
 "There is a quoting error in the executable for the launch configuration "
 "'%1'. Aborting start."
 msgstr ""
-"'%1' başlatma yapılandırmasının yürütülebilirinde bir alıntılama hatası var. "
+"“%1” başlatma yapılandırmasının yürütülebilirinde bir tırnak hatası var. "
 "Başlatma iptal ediliyor."
 
 #: executeplugin.cpp:169
@@ -64,7 +64,7 @@ msgid ""
 "A shell meta character was included in the executable for the launch "
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
-"'%1' başlatma yapılandırmasının yürütülebilirinde desteklenmeyen bir kabuk "
+"“%1” başlatma yapılandırmasının yürütülebilirinde desteklenmeyen bir kabuk "
 "joker karakteri var. Başlatma iptal ediliyor."
 
 #: nativeappconfig.cpp:104
@@ -330,7 +330,7 @@ msgid ""
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
 "Bir çevre profili belirtilmemiş, bozuk bir yapılandırma gibi görünüyor; "
-"lütfen '%1' çalıştırma yapılandırmasını denetleyin. Öntanımlı çevre grubu "
+"lütfen “%1” çalıştırma yapılandırmasını denetleyin. Öntanımlı çevre grubu "
 "kullanılıyor."
 
 #: nativeappjob.cpp:142
@@ -342,7 +342,7 @@ msgstr "İş Halihazırda Çalışıyor"
 #: nativeappjob.cpp:143
 #, kde-format
 msgid "'%1' is already being executed."
-msgstr "'%1', halihazırda yürütülüyor."
+msgstr "“%1” halihazırda yürütülüyor."
 
 #: nativeappjob.cpp:145
 #, kde-format

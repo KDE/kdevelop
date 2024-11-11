@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2024-05-03 14:35+0300\n"
+"PO-Revision-Date: 2024-11-10 20:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.07.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -87,7 +87,7 @@ msgstr "Tüm süreçler"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
-msgstr "Çekirdek Dosyayı Seç"
+msgstr "Çekirdek Dosya Seç"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -121,9 +121,9 @@ msgid ""
 "reply from the debugger. Please submit a bug report. The debug session will "
 "now end to prevent potential crash"
 msgstr ""
-"<p>Hata ayıklama bileşeni, hata ayıklayıcının yanıtını işlerken bir iç hata "
-"ile karşılaştı. Lütfen bir hata raporu girin. Potansiyel çökmeyi engellemek "
-"için hata ayıklama oturumu sonlanacak"
+"<p>Hata ayıklama bileşeni, hata ayıklayıcısının yanıtını işlerken bir iç "
+"hata ile karşılaştı. Lütfen bir hata raporu girin. Potansiyel çökmeyi "
+"engellemek için hata ayıklama oturumu sonlanacak"
 
 #: midebugger.cpp:318
 #, kde-format
@@ -138,7 +138,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
-msgstr "İç Hata Ayıklayıcı Hatası"
+msgstr "İç Hata Ayıklayıcısı Hatası"
 
 #: midebugger.cpp:333 midebugsession.cpp:423
 #, kde-format
@@ -151,7 +151,7 @@ msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
 "path name is specified correctly."
 msgstr ""
-"<b>Hata ayıklayıcı başlatılamadı.</b><p>'%1' çalıştırılamadı. Uygulama "
+"<b>Hata ayıklayıcısı başlatılamadı.</b><p>“%1” çalıştırılamadı. Uygulama "
 "yolunun doğru bir şekilde verildiğinden emin olun."
 
 #: midebugger.cpp:350
@@ -166,7 +166,7 @@ msgid ""
 "that the debug session has to be ended.<br>Try to reproduce the crash "
 "without KDevelop and report a bug.<br>"
 msgstr ""
-"<b>Hata ayıklayıcı çöktü.</b><p>Hata ayıklama süreci '%1', çöktü.<br>Bu "
+"<b>Hata ayıklayıcısı çöktü.</b><p>Hata ayıklama süreci “%1”, çöktü.<br>Bu "
 "yüzden hata ayıklama oturumu sonlandırıldı.<br>Çöküşü K Geliştir dışında "
 "yinelemeye ve bir hata raporu girmeye çalışın.<br>"
 
@@ -174,7 +174,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
-msgstr "Hata Ayıklayıcı Çöktü"
+msgstr "Hata Ayıklayıcısı Çöktü"
 
 #: midebugger.cpp:363
 #, kde-format
@@ -213,12 +213,12 @@ msgstr "Sürece %1 ile İliştir"
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
-msgstr "<b>Sürece iliştir</b><p>Hata ayıklayıcıyı bir sürece iliştirir.</p>"
+msgstr "<b>Sürece iliştir</b><p>Hata ayıklayıcısını bir sürece iliştirir.</p>"
 
 #: midebuggerplugin.cpp:142
 #, kde-format
 msgid "KDevelop (%1) - %2"
-msgstr "K Geliştir (%1) - %2"
+msgstr "K Geliştir (%1) — %2"
 
 #: midebuggerplugin.cpp:216
 #, kde-format
@@ -254,7 +254,7 @@ msgstr ""
 #: midebuggerplugin.cpp:241
 #, kde-format
 msgid "Choose a core file to examine..."
-msgstr "Gözden geçirmek için bir çekirdek dosyası seçin..."
+msgstr "İncelenecek bir çekirdek dosyası seç…"
 
 #: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
 #, kde-format
@@ -274,17 +274,17 @@ msgstr "Geçerli Oturumu İptal Et"
 #: midebuggerplugin.cpp:261
 #, kde-format
 msgid "Choose a process to attach to..."
-msgstr "Kendisine iliştirilecek bir süreç seçin..."
+msgstr "Kendisine iliştirilecek bir süreç seç…"
 
 #: midebuggerplugin.cpp:282
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
-msgstr "%1 sürecine iliştirilmiyor: Hata ayıklayıcı kendine iliştirilemez."
+msgstr "%1 sürecine iliştirilmiyor: Hata ayıklayıcısı kendine iliştirilemez."
 
 #: midebuggerplugin.cpp:302
 #, kde-format
 msgid "Debugger"
-msgstr "Hata Ayıklayıcı"
+msgstr "Hata Ayıklayıcısı"
 
 #: midebugjobs.cpp:86
 #, kde-format
@@ -295,7 +295,7 @@ msgstr "%1: %2"
 #: midebugjobs.cpp:107
 #, kde-format
 msgid "'%1' is not an executable"
-msgstr "'%1', bir yürütülebilir değil"
+msgstr "“%1” bir yürütülebilir değil"
 
 #: midebugjobs.cpp:171
 #, kde-format
@@ -320,7 +320,7 @@ msgstr "%1 sürecine iliştiriliyor"
 #: midebugsession.cpp:326
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
-msgstr "<b>Hata ayıklayıcı iliştirilemedi:</b><br />"
+msgstr "<b>Hata ayıklayıcısı iliştirilemedi:</b><br />"
 
 #: midebugsession.cpp:336
 #, kde-format
@@ -330,7 +330,7 @@ msgstr "%1 çekirdek dosyası denetleniyor"
 #: midebugsession.cpp:408
 #, kde-format
 msgid "Debugger stopped"
-msgstr "Hata ayıklayıcı durdu"
+msgstr "Hata ayıklayıcısı durdu"
 
 #: midebugsession.cpp:428
 #, kde-format
@@ -348,13 +348,13 @@ msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr ""
-"<b>Hata ayıklayıcı çalışmıyorken Gdb komutu gönderildi.</b><br>Gönderilen "
+"<b>Hata ayıklayıcısı çalışmıyorken Gdb komutu gönderildi.</b><br>Gönderilen "
 "komut:<br> %1"
 
 #: midebugsession.cpp:860
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
-msgstr "<b>Geçersiz hata ayıklayıcı komutu</b><br>%1"
+msgstr "<b>Geçersiz hata ayıklayıcısı komutu</b><br>%1"
 
 #: midebugsession.cpp:996
 #, kde-format
@@ -394,7 +394,7 @@ msgstr[1] "%1 komut gdb tarafından çalıştırılıyor\n"
 #: midebugsession.cpp:1174
 #, kde-format
 msgid "Debugger state: %1\n"
-msgstr "Hata ayıklayıcı durumu: %1\n"
+msgstr "Hata ayıklayıcısı durumu: %1\n"
 
 #: midebugsession.cpp:1177
 #, kde-format
@@ -403,15 +403,16 @@ msgid ""
 "Current command text: '%2'\n"
 "Current command original text: '%3'\n"
 msgstr ""
-"Geçerli komutun sınıfı: '%1'\n"
-"Geçerli komutun metni: '%2'\n"
-"Geçerli komutun asıl metni: '%3'\n"
+"Geçerli komutun sınıfı: “%1”'\n"
+"Geçerli komutun metni: “%2”\n"
+"Geçerli komutun özgün metni: “%3”\n"
 
 #: midebugsession.cpp:1204
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
-"<b>Hata ayıklayıcı hatası</b><p>Hata ayıklayıcı şu hatayı bildirdi:<p><tt>%1"
+"<b>Hata ayıklayıcısı hatası</b><p>Hata ayıklayıcısı şu hatayı bildirdi:"
+"<p><tt>%1"
 
 #: miframestackmodel.cpp:69
 #, kde-format
@@ -518,8 +519,8 @@ msgid ""
 msgstr ""
 "tty* ve pty* aygıtları kullanılamaz.\n"
 "/dev/tty* ve /dev/pty* üzerindeki ayarları denetleyin\n"
-"Kök dizin haklarıyla tty* ve pty* aygıtları için \"chmod ug+rw\" komutunu "
-"çalıştırmanız ve/veya kullanıcıyı tty grubuna \"usermod -aG tty username\" "
+"Kök dizin haklarıyla tty* ve pty* aygıtları için “chmod ug+rw” komutunu "
+"çalıştırmanız ve/veya kullanıcıyı tty grubuna “usermod -aG tty username” "
 "komutuyla eklemeniz gerekebilir."
 
 #: stty.cpp:304
@@ -548,7 +549,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Console"
-msgstr "Hata Ayıklayıcı Konsolu"
+msgstr "Hata Ayıklayıcısı Konsolu"
 
 #: widgets/debuggerconsoleview.cpp:49
 #, kde-format
@@ -565,14 +566,15 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
-msgstr "Giriş'e basınca son komutu yinele"
+msgstr "Dönüş’e basınca son komutu yinele"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
-msgstr "Hata ayıklayıcı komutları girmek için uygulamanın yürütmesini duraklat"
+msgstr ""
+"Hata ayıklayıcısı komutları girmek için uygulamanın yürütmesini duraklat"
 
 #: widgets/debuggerconsoleview.cpp:72
 #, kde-format
@@ -623,7 +625,7 @@ msgstr "Yinele"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last sent command when hit <Return>"
-msgstr "<Giriş>'a basınca gönderilen son komutu yinele"
+msgstr "<Dönüş>’e basınca gönderilen son komutu yinele"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
 #: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
@@ -706,8 +708,8 @@ msgid ""
 "\" instruction and \"step into\" instruction."
 msgstr ""
 "<b>Makine kodu görüntüleme</b><p>Var olan gösterilen komut ile çalışan "
-"yürütülebilir makina kodu görünümüdür. Komutları, hata ayıklayıcının \"bir "
-"ilerle\" ve \"içine gir\" gibi komutlarını kullanarak, birer komut biçiminde "
+"yürütülebilir makina kodu görünümüdür. Komutları, hata ayıklayıcısının “bir "
+"ilerle” ve “içine gir” gibi komutlarını kullanarak, birer komut biçiminde "
 "adımlayabilirsiniz."
 
 #: widgets/disassemblewidget.cpp:190

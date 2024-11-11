@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevperforce\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2022-09-06 22:30+0300\n"
+"PO-Revision-Date: 2024-11-10 19:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: perforceplugin.cpp:108
 #, kde-format
@@ -56,7 +56,7 @@ msgstr "Düzen"
 #: perforceplugin.cpp:671
 #, kde-format
 msgid "error: %1"
-msgstr "hata: %1"
+msgstr "Hata: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:124
 #, kde-format
@@ -64,7 +64,7 @@ msgid ""
 "Unable to find perforce executable. Is it installed on the system? Is it in "
 "your PATH?"
 msgstr ""
-"Perforce yürütülebiliri bulunamıyor. Sistemde kurulu mu? PATH'iniz üzerinde "
+"Perforce yürütülebiliri bulunamıyor. Sistemde kurulu mu? PATH’iniz üzerinde "
 "mi?"
 
 #: ui/perforceimportmetadatawidget.cpp:152
@@ -89,7 +89,7 @@ msgstr "Kaynak dizini:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "P4 executable:"
-msgstr "P4 Yürütülebiliri:"
+msgstr "P4 yürütülebiliri:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4port)
 #: ui/perforceimportmetadatawidget.ui:49
@@ -109,7 +109,7 @@ msgid ""
 msgstr ""
 "Perforce uygulamalarının P4PORT biçimi protokol:makine:kapı veya her iki "
 "Perforce uygulaması ve sürümlendirme hizmeti aynı makinede çalışıyorsa "
-"kapının kendisidir. Kapı numaraları 1024-32767 eriminde olmalıdır"
+"kapının kendisidir. Kapı numaraları 1024–32767 eriminde olmalıdır"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4user)
 #: ui/perforceimportmetadatawidget.ui:90
@@ -163,7 +163,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Test"
-msgstr "Sına"
+msgstr "Test Et"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonConfig)
 #: ui/perforceimportmetadatawidget.ui:197

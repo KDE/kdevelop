@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-01 01:44+0000\n"
-"PO-Revision-Date: 2023-01-23 20:11+0300\n"
+"PO-Revision-Date: 2024-11-10 19:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: classidentifierpage.cpp:31
 #, kde-format
@@ -39,7 +39,7 @@ msgstr "Değişken türü ve tanımlayıcı"
 #, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "Şablondan Yeni..."
+msgstr "Şablondan Yeni…"
 
 #: filetemplatesplugin.cpp:71
 #, kde-format
@@ -48,7 +48,7 @@ msgid ""
 "Allows you to create new source code files, such as classes or unit tests, "
 "using templates."
 msgstr ""
-"Şablonları kullanarak sınıflar veya birim sınamaları gibi yeni kaynak kodu "
+"Şablonları kullanarak sınıflar veya birim testleri gibi yeni kaynak kodu "
 "dosyaları oluşturmanıza izin verir."
 
 #: filetemplatesplugin.cpp:72
@@ -67,7 +67,7 @@ msgstr "Şablon Önizlemesi"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create from Template..."
-msgstr "Şablondan Oluştur..."
+msgstr "Şablondan Oluştur…"
 
 #: filetemplatesplugin.cpp:135
 #, kde-format
@@ -251,7 +251,7 @@ msgstr "Sınıf Üyeleri"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Test Cases"
-msgstr "Sınama Senaryoları"
+msgstr "Test Senaryoları"
 
 #: templateclassassistant.cpp:380
 #, kde-format
@@ -373,7 +373,7 @@ msgstr "Şablon"
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
-msgstr "Daha Fazla Şablonlar Al..."
+msgstr "Daha Fazla Şablon Al…"
 
 #: templateselectionpage.cpp:249
 #, kde-format
@@ -465,7 +465,7 @@ msgstr "Yeni sınıfta geçersiz kılmak istediğiniz herhangi bir yöntemi seç
 #, kde-format
 msgctxt "@title:column"
 msgid "Superclass -> Function"
-msgstr "SüperSınıf -> İşlev"
+msgstr "SüperSınıf → İşlev"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
 #: ui/overridevirtuals.ui:47
@@ -499,11 +499,11 @@ msgstr "Tümünün S&eçimini Kaldır"
 #: ui/testcases.ui:29
 #, kde-format
 msgid "Set the test name and its test cases."
-msgstr "Sınama adını ve senaryolarını ayarlayın."
+msgstr "Test adını ve senaryolarını ayarlayın."
 
 #. i18n: ectx: property (text), widget (QLabel, testCasesLabel)
 #: ui/testcases.ui:48
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Test cases:"
-msgstr "&Sınama senaryoları:"
+msgstr "&Test senaryoları:"

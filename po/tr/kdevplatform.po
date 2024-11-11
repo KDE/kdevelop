@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2024-09-23 15:20+0300\n"
+"PO-Revision-Date: 2024-11-10 20:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -125,8 +125,8 @@ msgid ""
 "<b>Breakpoint is dirty</b><p>The breakpoint has not yet been passed to the "
 "debugger.</p>"
 msgstr ""
-"<b>Kesme noktası kirli</b><p>Kesme noktası hata ayıklayıcı tarafından henüz "
-"geçilmedi.</p>"
+"<b>Kesme noktası kirli</b><p>Kesme noktası hata ayıklayıcısı tarafından "
+"henüz geçilmedi.</p>"
 
 #: debugger/breakpoint/breakpointmodel.cpp:121
 #, kde-format
@@ -202,7 +202,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Breakpoints"
-msgstr "Hata Ayıklayıcı Kesme Noktaları"
+msgstr "Hata Ayıklayıcısı Kesme Noktaları"
 
 #: debugger/breakpoint/breakpointwidget.cpp:60
 #, kde-format
@@ -317,7 +317,7 @@ msgid ""
 "get to this point in your program. By clicking on an item you can see the "
 "values in any of the previous calling functions."
 msgstr ""
-"<b>Çerçeve yığını</b> Genellikle “çağrı yığını” olarak da kullanılır, hangi "
+"<b>Çerçeve Yığını</b> Genellikle “çağrı yığını” olarak da kullanılır; hangi "
 "işlevin etkin olduğunu ve programınızdaki bu noktaya gelmek için her işlevi "
 "neyin çağırdığını gösterir. Bir ögeye tıklayarak önceki çağıran işlevlerdeki "
 "değerini görebilirsiniz."
@@ -373,7 +373,7 @@ msgstr "Hata"
 #: debugger/variable/variablecollection.cpp:232
 #, kde-format
 msgid "Auto"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:407
@@ -407,7 +407,7 @@ msgstr "Değişimde Durdur"
 #: debugger/variable/variablewidget.cpp:82
 #, kde-format
 msgid "Debugger Variables"
-msgstr "Hata Ayıklayıcı Değişkenleri"
+msgstr "Hata Ayıklayıcısı Değişkenleri"
 
 #: debugger/variable/variablewidget.cpp:100
 #, kde-format
@@ -430,7 +430,7 @@ msgstr ""
 "<b>Değişken ağacı</b> Değişken ağacı yerel değişkenlerin ve diğer ifadelerin "
 "değerlerini görmenize olanak verir.<br />Yerel değişkenler kendiliğinden "
 "görüntülenirler ve programınız ilerledikçe güncellenirler. Girdiğiniz her "
-"ifadeyi ya bir defa hesaplatabilir ya da “izleyebilirsiniz” (otomatik "
+"ifadeyi ya bir defa hesaplatabilir ya da “izleyebilirsiniz” (kendiliğinden "
 "güncellenir). Otomatik güncellenmeyen ifadeler bağlam menüsünden elle "
 "güncellenebilirler. İfadelerin adları onları daha iyi tanımlayacak şekilde "
 "ad alanına tıklanarak değiştirilebilir.<br />Bir değişken veya ifadenin "
@@ -699,12 +699,12 @@ msgstr "Yeniden Adlandır: “%1”…"
 #: language/codegen/basicrefactoring.cpp:221
 #, kde-format
 msgid "No declaration under cursor"
-msgstr "İmlecin altında bildirim yok"
+msgstr "İmlecin altında beyan yok"
 
 #: language/codegen/basicrefactoring.cpp:227
 #, kde-format
 msgid "Declaration is located in non-writable file %1."
-msgstr "Bildirim, yazılamaz %1 dosyasında bulunuyor."
+msgstr "Beyan, yazılamaz %1 dosyasında bulunuyor."
 
 #: language/codegen/basicrefactoring.cpp:296
 #, kde-format
@@ -1111,7 +1111,7 @@ msgstr "%1, %2"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
 #, kde-format
 msgid "size: %1 Bytes"
-msgstr "boyut: %1 Bayt"
+msgstr "Boyut: %1 Bayt"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
@@ -1513,7 +1513,7 @@ msgstr "*** Hata: %1 ***"
 #: outputview/outputexecutejob.cpp:407
 #, kde-format
 msgid "*** Finished ***"
-msgstr "*** Tamamlandı ***"
+msgstr "*** Bitti ***"
 
 #: project/abstractfilemanagerplugin.cpp:325
 #, kde-format
@@ -1832,7 +1832,7 @@ msgstr ""
 #: shell/debugcontroller.cpp:118
 #, kde-format
 msgid "Debugger"
-msgstr "Hata Ayıklayıcı"
+msgstr "Hata Ayıklayıcısı"
 
 #: shell/debugcontroller.cpp:148
 #, kde-format
@@ -2025,7 +2025,7 @@ msgid ""
 "main()) then this operation has no effect."
 msgstr ""
 "Şu anda yürütülen işlev tamamlanana kadar uygulamayı yürütür. Sonrasında, "
-"hata ayıklayıcı, işleve olan özgün çağrıdan sonraki satırı "
+"hata ayıklayıcısı, işleve olan özgün çağrıdan sonraki satırı "
 "görüntüleyecektir. Program yürütmesi en dış çerçevedeyse (örn. main() "
 "içinde) bu işlemin bir etkisi olmayacaktır."
 
@@ -2096,7 +2096,7 @@ msgid ""
 "configuration inside a Debugger."
 msgstr ""
 "Hedefi veya geçerli etkin başlangıç yapılandırmasında belirtilen programı "
-"hata ayıklayıcı içinde yürütür."
+"hata ayıklayıcısı içinde yürütür."
 
 #: shell/debugcontroller.cpp:487
 #, kde-format
@@ -2118,15 +2118,15 @@ msgid ""
 "effect when the application has been halted by the debugger (i.e. a "
 "breakpoint has been activated or the interrupt was pressed)."
 msgstr ""
-"Uygulamanızın yürütmesini hata ayıklayıcı içinde sürdürür. Bu, yalnızca "
-"uygulama hata ayıklayıcıda durdurulduğunda etkilidir (örn. bir kesme noktası "
-"etkin duruma geldiğinde veya yarıda kesmeye basıldığında)."
+"Uygulamanızın yürütmesini hata ayıklayıcısı içinde sürdürür. Bu, yalnızca "
+"uygulama hata ayıklayıcısında durdurulduğunda etkilidir (örn. bir kesme "
+"noktası etkin duruma geldiğinde veya yarıda kesmeye basıldığında)."
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: shell/debugger/kdevdebuggershellui.rc:25
 #, kde-format
 msgid "Debugger Toolbar"
-msgstr "Hata Ayıklayıcı Araç Çubuğu"
+msgstr "Hata Ayıklayıcısı Araç Çubuğu"
 
 #: shell/documentationcontroller.cpp:114
 #, kde-format
@@ -2449,7 +2449,7 @@ msgstr "Kaldır"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
-msgstr "Hata Ayıklayıcı:"
+msgstr "Hata ayıklayıcısı:"
 
 #: shell/loadedpluginsdialog.cpp:279
 #, kde-format
@@ -3356,7 +3356,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
-msgstr "Başlangıcı Yürüt"
+msgstr "Başlatmayı Yürüt"
 
 #: shell/runcontroller.cpp:433
 #, kde-format
@@ -3368,7 +3368,7 @@ msgstr "Yürüt"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
-msgstr "Geçerli başlangıcı yürüt"
+msgstr "Geçerli başlatmayı yürüt"
 
 #: shell/runcontroller.cpp:436
 #, kde-format
@@ -4246,7 +4246,7 @@ msgstr "Satır içi notlar olarak gösterilen sorunlar:"
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:309
@@ -4428,7 +4428,7 @@ msgstr "Hata Ayıklama"
 #, kde-format
 msgctxt "@title:group"
 msgid "Testing"
-msgstr "Sınama"
+msgstr "Test"
 
 #: shell/settings/pluginpreferences.cpp:43
 #, kde-format
@@ -4504,7 +4504,7 @@ msgid ""
 "any build is started."
 msgstr ""
 "Bu seçenek ayarlanmışsa bir yapı başlatılmadan önce bütün açık belgeler "
-"otomatik olarak kaydedilecektir."
+"kendiliğinden kaydedilecektir."
 
 #: shell/settings/projectpreferences.cpp:44
 #, kde-format
@@ -5499,8 +5499,7 @@ msgstr ""
 #: util/duchainify/main.cpp:301
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
-msgstr ""
-"Bildirim ayrıntılarının yazdırıldığı en fazla derinliği tanımlayan sayı"
+msgstr "Beyan ayrıntılarının yazdırıldığı en fazla derinliği tanımlayan sayı"
 
 #: util/duchainify/main.cpp:304
 #, kde-format
@@ -5543,7 +5542,7 @@ msgstr "Görev iptal edildi"
 #: util/projecttestjob.cpp:81
 #, kde-format
 msgid "Run all tests in %1"
-msgstr "%1 üzerinde tüm sınamaları çalıştır"
+msgstr "%1 içindeki tüm testleri çalıştır"
 
 #: util/shellutils.cpp:156
 #, kde-format
@@ -5726,7 +5725,7 @@ msgstr "Yeni"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The same as git branch -D"
-msgstr "git branch -D ile aynı"
+msgstr "“git branch -D” ile aynı"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69

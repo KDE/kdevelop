@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-09-30 21:02+0300\n"
+"PO-Revision-Date: 2024-11-10 20:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -66,7 +66,7 @@ msgid ""
 "The default level. Very similar to level 0, slightly more false-positives "
 "but very few."
 msgstr ""
-"Öntanımlı düzey. Düzey 0'a pek benzerdir; az da olsa yanlış pozitifler "
+"Öntanımlı düzey. Düzey 0’a pek benzerdir; az da olsa yanlış pozitifler "
 "çıkabilir."
 
 #: checksdb.cpp:43
@@ -99,8 +99,8 @@ msgid ""
 "Unable to load Clazy checks information from '%1'. Please check your "
 "settings."
 msgstr ""
-"\"%1\" konumundan Clazy denetimleri bilgisi yüklenemiyor. Lütfen "
-"ayarlarınızı denetleyin."
+"“%1” konumundan Clazy denetimleri bilgisi yüklenemiyor. Lütfen ayarlarınızı "
+"denetleyin."
 
 #: config/checksetmanagewidget.cpp:89
 #, kde-format
@@ -178,7 +178,7 @@ msgstr "%1 (öntanımlı seçim)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search checks..."
-msgstr "Denetimleri ara..."
+msgstr "Denetimler ara…"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #: config/checkswidget.ui:31
@@ -193,7 +193,8 @@ msgstr "Denetimleri Sıfırla"
 msgid ""
 "Since nothing is selected Clazy will use all checks from levels 0 and 1."
 msgstr ""
-"Bir şey seçilmediğinden, Clazy, düzey 0 ve 1'deki tüm denetimleri kullanacak."
+"Bir şey seçilmediğinden, Clazy, düzey 0’deki ve 1’deki tüm denetimleri "
+"kullanacak."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: config/commandlinewidget.ui:29
@@ -207,7 +208,7 @@ msgstr "Komut Satırı"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Ara..."
+msgstr "Ara…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
 #: config/commandlinewidget.ui:47
@@ -365,7 +366,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "For running clazy on Qt itself, optional, but honors specific guidelines."
 msgstr ""
-"Clazy'yi Qt üzerinde çalıştırmak için; isteğe bağlı; ancak belirli "
+"Clazy’yi Qt üzerinde çalıştırmak için; isteğe bağlı; ancak belirli "
 "kılavuzlara uyar."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
@@ -404,7 +405,7 @@ msgid ""
 "includes.\n"
 "Useful for performance reasons."
 msgstr ""
-"Yalnızca şu anda derlenen dosya için uyarılar yay ve herhangi bir 'include'u "
+"Yalnızca şu anda derlenen dosya için uyarılar yay ve herhangi bir “include”u "
 "yok say.\n"
 "Başarım nedenlerinden dolayı kullanışlıdır."
 
@@ -577,12 +578,12 @@ msgstr "clazy-standalone yolu boş."
 #: jobparameters.cpp:50
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
-msgstr "clazy-standalone yolu '%1', yok."
+msgstr "clazy-standalone yolu “%1”, yok."
 
 #: jobparameters.cpp:55
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
-msgstr "clazy-standalone yolu '%1', bir yürütülebilir değil."
+msgstr "clazy-standalone yolu “%1”, bir yürütülebilir değil."
 
 #: jobparameters.cpp:64
 #, kde-format
@@ -601,9 +602,9 @@ msgstr "Clazy belgelendirmesi yolu boş."
 #: jobparameters.cpp:75
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
-msgstr "Clazy belgelendirmesi yolu '%1', yok."
+msgstr "Clazy belgelendirmesi yolu “%1”, yok."
 
 #: jobparameters.cpp:80
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
-msgstr "Clazy belgelendirmesi yolu '%1', bir dizin değil."
+msgstr "Clazy belgelendirmesi yolu “%1”, bir dizin değil."

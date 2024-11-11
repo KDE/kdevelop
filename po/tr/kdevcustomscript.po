@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-08 01:43+0000\n"
-"PO-Revision-Date: 2023-01-23 20:11+0300\n"
+"PO-Revision-Date: 2024-11-10 20:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: customscript_plugin.cpp:87
 #, kde-format
@@ -74,9 +74,9 @@ msgid ""
 "directory."
 msgstr ""
 "Açıklama:<br /><br /><b>clang-format</b>, LLVM projesi tarafından "
-"geliştirilen otomatik bir kaynak kodu biçimlendiricisidir. Bir <b>.clang-"
-"format</b> yapılandırma dosyası ile çeşitli biçimlendirme seçeneklerini "
-"destekler. Bu dosya genelde proje kök dizinine yerleştirilir."
+"geliştirilen kendiliğinden bir kaynak kodu biçimlendiricisidir. Bir <b>."
+"clang-format</b> yapılandırma dosyası ile çeşitli biçimlendirme "
+"seçeneklerini destekler. Bu dosya genelde proje kök dizinine yerleştirilir."
 
 #: customscript_plugin.cpp:279
 #, kde-format
@@ -95,20 +95,19 @@ msgid ""
 "b> using the <b>uncrustify</b> tool with the config-file <b>uncrustify."
 "config</b>."
 msgstr ""
-"Açıklama:<br /><b>kdev_format_source</b> , dosya sistemine "
-"<b>format_sources</b> adı verilen ince ayarlanmış biçimlendirme kuralları "
-"koymaya izin veren, K Geliştir ile birlikte gelen bir betiktir.<br /><br /"
-"><b>format_sources</b> dosyalarının her bir satırı bir iki nokta ve "
-"kullanılan biçimlendirme komutunu içeren bir jokerler listesi tanımlar.<br /"
-"><br />Biçimlendirme komutu, yeniden biçimlendirilecek geçici dosyaya "
-"başvurmak için <b>$TMPFILE</b> kullanmalıdır.<br /><br />Örnek:<br /><b>*."
-"cpp *.h : benimbiçimlendiricim $TMPFILE</b><br />Bu, "
-"<b>benimbiçimlendiricim</b> betiğini kullanarak, <b>.cpp</b> veya <b>.h</b> "
-"ile biten tüm dosyaları yeniden biçimlendirir.<br /><br />Örnek: <br /"
-"><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o "
-"$TMPFILE</b> <br />Bu, <b>altdizin</b> alt dizinindeki tüm dosyaları "
-"<b>uncrustify.config</b> yapılandırmasını temel alarak <b>uncrustify</b> "
-"aracıyla yeniden biçimlendirir."
+"Açıklama:<br /><b>kdev_format_source</b>, dosya sistemine <b>format_sources</"
+"b> adı verilen ince ayarlanmış biçimlendirme kuralları koymaya izin veren, K "
+"Geliştir ile birlikte gelen bir betiktir.<br /><br /><b>format_sources</b> "
+"dosyalarının her bir satırı bir iki nokta ve kullanılan biçimlendirme "
+"komutunu içeren bir jokerler listesi tanımlar.<br /><br />Biçimlendirme "
+"komutu, yeniden biçimlendirilecek geçici dosyaya başvurmak için <b>$TMPFILE</"
+"b> kullanmalıdır.<br /><br />Örnek:<br /><b>*.cpp *.h : benimbiçimlendiricim "
+"$TMPFILE</b><br />Bu, <b>benimbiçimlendiricim</b> betiğini kullanarak, <b>."
+"cpp</b> veya <b>.h</b> ile biten tüm dosyaları yeniden biçimlendirir.<br /"
+"><br />Örnek: <br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c "
+"uncrustify.config -o $TMPFILE</b> <br />Bu, <b>alt dizin</b> alt dizinindeki "
+"tüm dosyaları <b>uncrustify.config</b> yapılandırmasını temel alarak "
+"<b>uncrustify</b> aracıyla yeniden biçimlendirir."
 
 #: customscript_plugin.cpp:539
 #, kde-format
@@ -125,10 +124,10 @@ msgid ""
 "add <b>$TMPFILE</b> into the command, then <br />a temporary file is used "
 "for transferring the code."
 msgstr ""
-"<i>İstediğiniz bir kabuk komutunu girebilirsiniz.</i><br /> "
-"Biçimlendirilmemiş kaynak kodu, komuta standart<br /> girdi üzerinden ulaşır "
-"ve biçimlendirilmiş sonuç,<br /> standart çıktı'dan okunur.<br /><br /> "
-"Komuta <b>$TMPFILE</b> eklerseniz<br /> kodu aktarmak için bir geçici dosya "
+"<i>İstediğiniz bir kabuk komutunu girebilirsiniz.</i><br /"
+">Biçimlendirilmemiş kaynak kodu, komuta standart<br /> girdi üzerinden "
+"ulaşır ve biçimlendirilmiş sonuç,<br />standart çıktı’dan okunur.<br /><br /"
+">Komuta <b>$TMPFILE</b> eklerseniz<br />kodu aktarmak için bir geçici dosya "
 "kullanılır."
 
 #: customscript_plugin.cpp:560

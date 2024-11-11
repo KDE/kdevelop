@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-08 01:43+0000\n"
-"PO-Revision-Date: 2023-06-17 21:46+0300\n"
+"PO-Revision-Date: 2024-11-10 18:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: compileanalyzeproblemmodel.cpp:84
 #, kde-format
@@ -25,7 +25,7 @@ msgstr "Çözümleme başlatıldı, sorun algılanmadı."
 #: compileanalyzeproblemmodel.cpp:107
 #, kde-format
 msgid "Analysis started..."
-msgstr "Çözümleme başlatıldı..."
+msgstr "Çözümleme başlatıldı…"
 
 #: compileanalyzeproblemmodel.cpp:110
 #, kde-format
@@ -68,7 +68,7 @@ msgid ""
 "\n"
 "%2"
 msgstr ""
-"'%1' için denetim başlatılamıyor.\n"
+"“%1” için denetim başlatılamıyor.\n"
 "\n"
 "%2"
 
@@ -76,30 +76,30 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Test"
-msgstr "Sınama"
+msgstr "Test"
 
 #: compileanalyzeutils.cpp:45
 #, kde-format
 msgid "Compilation database file not found: '%1'"
-msgstr "Derleme veritabanı bulunamadı: '%1'"
+msgstr "Derleme veritabanı bulunamadı: “%1”"
 
 #: compileanalyzeutils.cpp:51 compileanalyzeutils.cpp:110
 #, kde-format
 msgid ""
 "Nothing to check: compilation database file '%1' contains no matching items."
 msgstr ""
-"Denetlenecek bir şey yok: Derleme veritabanı dosyası '%1', eşleşen ögeler "
+"Denetlenecek bir şey yok: Derleme veritabanı dosyası “%1”, eşleşen ögeler "
 "içermiyor."
 
 #: compileanalyzeutils.cpp:57
 #, kde-format
 msgid "Could not open compilation database file for reading: '%1'"
-msgstr "Derleme veritabanı dosyası, okuma için açılamadı: '%1'"
+msgstr "Derleme veritabanı dosyası, okuma için açılamadı: “%1”"
 
 #: compileanalyzeutils.cpp:65
 #, kde-format
 msgid "JSON error during parsing compilation database file '%1': %2"
-msgstr "Derleme veritabanı dosyası '%1' ayrıştırılırken JSON hatası: %2"
+msgstr "Derleme veritabanı dosyası “%1” ayrıştırılırken JSON hatası: %2"
 
 #: compileanalyzeutils.cpp:70
 #, kde-format
@@ -107,5 +107,5 @@ msgid ""
 "JSON error during parsing compilation database file '%1': document is not an "
 "array."
 msgstr ""
-"Derleme veritabanı dosyası '%1' ayrıştırılırken JSON hatası: Belge bir "
+"Derleme veritabanı dosyası “%1” ayrıştırılırken JSON hatası: Belge bir "
 "diziliş değil."

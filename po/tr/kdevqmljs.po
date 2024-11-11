@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmljs\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2022-09-06 22:44+0300\n"
+"PO-Revision-Date: 2024-11-10 19:47+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
@@ -58,31 +58,31 @@ msgstr "&Tür bilgisi:"
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:59
 #, kde-format
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
 #, kde-format
 msgid "Inherits QObject"
-msgstr "QObject'i kalıtım alır"
+msgstr "QObject’i kalıtım alır"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
 #, kde-format
 msgid "Inherits QWidget"
-msgstr "QWidget'ı kalıtım alır"
+msgstr "QWidget’ı kalıtım alır"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
 #, kde-format
 msgid "Inherits QDeclarativeItem - Qt Quick 1"
-msgstr "QDeclarativeItem - Qt Quick 1'i kalıtım alır"
+msgstr "QDeclarativeItem — Qt Quick 1’i kalıtım alır"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
 #, kde-format
 msgid "Inherits QQuickItem - Qt Quick 2"
-msgstr "QQuickItem - Qt Quick 2'yi kalıtım alır"
+msgstr "QQuickItem — Qt Quick 2’yi kalıtım alır"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84

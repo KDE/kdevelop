@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2023-04-21 12:11+0300\n"
+"PO-Revision-Date: 2024-11-10 18:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,13 +19,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "Bir Yapı Dizini Yapılandır - %1"
+msgstr "Bir Yapı Dizini Yapılandır — %1"
 
 #: cmakebuilddirchooser.cpp:86
 #, kde-format
@@ -104,7 +104,7 @@ msgid ""
 "The prefix under which the project will be installed. Leaving this empty "
 "will let CMake use its default install prefix."
 msgstr ""
-"Projenin altına kurulacağı önek. Bunu boş bırakmak, CMake'in kendi öntanımlı "
+"Projenin altına kurulacağı önek. Bunu boş bırakmak, CMake’in kendi öntanımlı "
 "yapı önekini kullanmasına izin verir."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
@@ -112,7 +112,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "CMake's default install prefix"
-msgstr "CMake'in öntanımlı kurulum öneki"
+msgstr "CMake’in öntanımlı kurulum öneki"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119
@@ -230,7 +230,7 @@ msgstr "<br /><em>Önbellek Belgelendirmesi:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr "geçersiz CMake dosyası API'si proje verisi"
+msgstr "Geçersiz CMake dosyası API’si proje verisi"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -246,11 +246,11 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
-"'%1' projesi, eskimiş CMake verisiyle yapılandırıldı. Sonuç olarak, K "
-"Geliştir'in kod anlayışı yanlış olabilir.\n"
+"“%1” projesi, eskimiş CMake verisiyle yapılandırıldı. Sonuç olarak, K "
+"Geliştir’in kod anlayışı yanlış olabilir.\n"
 "\n"
-"Bu sorunu çözmek için, projeler araç görünümünde proje ögesinin üzerine sağ "
-"tıklayın ve 'Yeniden Yükle'yi seçin."
+"Bu sorunu çözmek için projeler araç görünümünde proje ögesinin üzerine sağ "
+"tıklayın ve “Yeniden Yükle”yi seçin."
 
 #: cmakemanager.cpp:676
 #, kde-format
@@ -263,13 +263,13 @@ msgid ""
 "settings. Then right-click the project item in the projects tool view and "
 "click 'Reload'."
 msgstr ""
-"'%1' projesi yapılandırılamadı (hata iletisi: %2). Sonuç olarak, K "
-"Geliştir'un kod anlayışı büyük olasılıkla bozuk olacak.\n"
+"“%1” projesi yapılandırılamadı (hata iletisi: %2). Sonuç olarak, K "
+"Geliştir’un kod anlayışı büyük olasılıkla bozuk olacak.\n"
 "\n"
-"Bu sorunu çözmek için, projenin 'CMakeLists.txt' dosyalarının doğru "
-"olduğundan ve K Geliştir'in doğru CMake sürümünü ve ayarlarını kullanmak "
+"Bu sorunu çözmek için, projenin “CMakeLists.txt” dosyalarının doğru "
+"olduğundan ve K Geliştir’in doğru CMake sürümünü ve ayarlarını kullanmak "
 "için yapılandırıldığından emin olun. Sonrasında, proje araç görünümünde "
-"proje ögesine sağ tıklayın ve 'Yenile'yi seçin."
+"proje ögesine sağ tıklayın ve “Yeniden Yükle”yi seçin."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -383,8 +383,8 @@ msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
 "Do you want KDevelop to delete it in the file system as well?"
 msgstr ""
-"%1 dizini, K Geliştir'in listesinden kaldırılmak üzere.\n"
-"K Geliştir'in bu dizini dosya sisteminden de silmesini istiyor musunuz?"
+"%1 dizini, K Geliştir’in listesinden kaldırılmak üzere.\n"
+"K Geliştir’in bu dizini dosya sisteminden de silmesini istiyor musunuz?"
 
 #: settings/cmakepreferences.cpp:347
 #, kde-format
@@ -412,7 +412,7 @@ msgstr "CMake Ayarlarını Yapılandır"
 #: testing/ctestfindjob.cpp:23
 #, kde-format
 msgid "Parse test suite %1"
-msgstr "%1 sınama kümesini ayrıştır"
+msgstr "%1 Test Süitini Ayrıştır"
 
 #: testing/ctestrunjob.cpp:77
 #, kde-format

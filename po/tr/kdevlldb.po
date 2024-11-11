@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2022-09-04 21:26+0300\n"
+"PO-Revision-Date: 2024-11-10 20:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: controllers/framestackmodel.cpp:85
 #, kde-format
@@ -42,7 +42,7 @@ msgstr ""
 #: debugsession.cpp:335
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Hata ayıklayıcı başlatılamadı:</b><br />"
+msgstr "<b>Hata ayıklayıcısı başlatılamadı:</b><br />"
 
 #: debugsession.cpp:346
 #, kde-format
@@ -55,7 +55,7 @@ msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
 "<p><tt>%1"
 msgstr ""
-"<b>Çekirdek dosyayı yükleme başarısız oldu</b><p>Hata ayıklayıcı aşağıdaki "
+"<b>Çekirdek dosyayı yükleme başarısız oldu</b><p>Hata ayıklayıcısı aşağıdaki "
 "hatayı raporladı:<p><tt>%1"
 
 #: debugsession.cpp:390
@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "<b>lldb-mi sürümünüz desteklenmiyor, temel bir yama da eksik.</b><br/>Daha "
 "fazla bilgi için bakınız: https://llvm.org/bugs/show_bug.cgi?id=28026.<br/"
-">Hata ayıklayıcı konsolu çökmeyi engellemek için devre dışı bırakılacaktır."
+">Hata ayıklayıcısı konsolu çökmeyi engellemek için devre dışı bırakılacaktır."
 "<br/>Sürdürmek istiyor musunuz?"
 
 #: debugsession.cpp:394
@@ -81,14 +81,14 @@ msgstr "LLDB Sürümü Desteklenmiyor"
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
 msgstr ""
-"<b>LLDB 3.8.1 veya daha yüksekten bir lldb-mi'ye gereksiniminiz var.</b><br /"
+"<b>LLDB 3.8.1 veya daha yüksekten bir lldb-mi’ye gereksiniminiz var.</b><br /"
 ">Sizin kullandığınız: %1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
 #, kde-format
 msgid "Debugger Toolbar"
-msgstr "Hata Ayıklayıcı Araç Çubuğu"
+msgstr "Hata Ayıklayıcısı Araç Çubuğu"
 
 #: lldblauncher.cpp:54
 #, kde-format
@@ -121,21 +121,21 @@ msgstr "LLDB Yapılandırması"
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
-msgstr "Hata Ayıklayıcı"
+msgstr "Hata Ayıklayıcısı"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/lldbconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger executable:"
-msgstr "Hata ayıklayıcı yürütülebiliri:"
+msgstr "Hata ayıklayıcısı yürütülebiliri:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
 #: widgets/lldbconfigpage.ui:42
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to lldb-mi executable..."
-msgstr "Yolu lldb-mi yürütülebiliri yolunu geçersiz kıl..."
+msgstr "lldb-mi yürütülebiliri yolunu geçersiz kıl…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/lldbconfigpage.ui:49
@@ -184,7 +184,7 @@ msgstr "/lldb/yapılandırma/betiği/yolu"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Start debugger with:"
-msgstr "Hata ayıklayıcıyı şununla başlat:"
+msgstr "Hata ayıklayıcısını şununla başlat:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:123

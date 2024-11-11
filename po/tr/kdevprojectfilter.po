@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2024-03-01 15:07+0300\n"
+"PO-Revision-Date: 2024-11-10 19:44+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.02.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: filtermodel.cpp:76
 #, kde-format
@@ -50,11 +50,11 @@ msgstr ""
 "Joker dizgisi, bir dosya veya klasörün bir projede içerilip içerilmeyeceğini "
 "tanımlar.<br />Dizgi, proje köküne göreceli olan ögeler için BÜYÜK/küçük "
 "harf ayrımı olmadan eşleştirilir. Göreceli yol, bir eğik çizgi ile başlar, "
-"klasör yolu sonlarındaki eğik çizgiler kaldırılır.<br /><code>\"/\"</code> "
-"ile biten dizgiler örtük olarak yalnızca klasörlerle eşleştirilir.<br /"
-">Açıkça <code>\"/\"</code> veya <code>\"*\"</code> ile başlamayan dizgilerin "
-"başına, örtük olarak <code>\"*/\"</code> getirilir ve verilen dizginin "
-"üzerindeki herhangi bir göreceli bir yol bitişi ile eşleştirilir."
+"klasör yolu sonlarındaki eğik çizgiler kaldırılır.<br /><code>“/”</code> ile "
+"biten dizgiler örtük olarak yalnızca klasörlerle eşleştirilir.<br />Açıkça "
+"<code>“/”</code> veya <code>“*”</code> ile başlamayan dizgilerin başına, "
+"örtük olarak <code>“*/”</code> getirilir ve verilen dizginin üzerindeki "
+"herhangi bir göreceli bir yol bitişi ile eşleştirilir."
 
 #: filtermodel.cpp:121
 #, kde-format
@@ -94,9 +94,9 @@ msgid ""
 msgstr ""
 "Süzgeçler, öntanımlı olarak projedeki ögeleri dışlarlar. Daha önceden "
 "dışlaıaı dizgilerle eşleşen ögeleri içermek için içeren dizgiler "
-"kullanılabilir.<br />Örneğin, projenizde yalnızca <code>\".cpp\"</code> ile "
-"biten dosyalarla eşleşmek için, tüm dosyaları <code>\"*\"</code> ile "
-"dışlayabilir ve sonrasında bir içeren <code>\"*.cpp\"</code> dizgisini "
+"kullanılabilir.<br />Örneğin, projenizde yalnızca <code>“.cpp”</code> ile "
+"biten dosyalarla eşleşmek için, tüm dosyaları <code>“*”</code> ile "
+"dışlayabilir ve sonrasında bir içeren <code>“*.cpp”</code> dizgisini "
 "uygulayabilirsiniz."
 
 #: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
@@ -118,14 +118,13 @@ msgid ""
 "to make this explicit."
 msgstr ""
 "Boş bir dizgili süzgeç, tüm ögelerle eşleşir. Bunu açıkça belirtmek için "
-"<code>\"*\"</code> kullanın."
+"<code>“*”</code> kullanın."
 
 #: projectfilterconfigpage.cpp:175
 #, kde-format
 msgid "A filter ending on <code>\"/\"</code> can never match a file."
 msgstr ""
-"<code>\"/\"</code> ile biten bir süzgeç, hiçbir zaman bir dosya ile "
-"eşleşemez."
+"<code>“/”</code> ile biten bir süzgeç, hiçbir zaman bir dosya ile eşleşemez."
 
 #: projectfilterconfigpage.cpp:198
 #, kde-format

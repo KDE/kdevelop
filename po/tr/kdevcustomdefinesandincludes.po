@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevcustomdefinesandincludes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2024-03-22 16:18+0300\n"
+"PO-Revision-Date: 2024-11-10 20:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,13 +15,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: compilerprovider/compilerprovider.cpp:32
 #, kde-format
 msgctxt "@item no compiler"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: compilerprovider/widget/compilersmodel.cpp:117
 #, kde-format
@@ -39,7 +39,7 @@ msgstr "Tür"
 #, kde-format
 msgctxt "@item"
 msgid "Auto-detected"
-msgstr "Otomatik algılanan"
+msgstr "Kendiliğinden algılanan"
 
 #: compilerprovider/widget/compilersmodel.cpp:120
 #, kde-format
@@ -132,7 +132,7 @@ msgstr "Tanımı Sil"
 #, kde-format
 msgctxt "@action"
 msgid "Delete Include Path"
-msgstr "'Include' Yolunu Sil"
+msgstr "“Include” Yolunu Sil"
 
 #: kcm_widget/includeswidget.cpp:138
 #, kde-format
@@ -148,7 +148,7 @@ msgid ""
 "Add the currently displayed URL to the list of includes if it is not in the "
 "list yet."
 msgstr ""
-"Henüz listede değilse şu anda görüntülenen URL'yi 'include'lar listesine "
+"Henüz listede değilse şu anda görüntülenen URL’yi “include”lar listesine "
 "ekle."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, includePathRequester)
@@ -158,21 +158,21 @@ msgctxt "@info:placeholder"
 msgid "A new include path/file to use for parsing files under given directory"
 msgstr ""
 "Verilen dizin altında dosyaları ayrıştırmak için kullanılacak yeni bir "
-"'include' yolu/dosyası"
+"“include” yolu/dosyası"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addIncludePath)
 #: kcm_widget/includeswidget.ui:44
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new include path entry from this URL"
-msgstr "Bu URL'den yeni bir 'include' yolu girdisi oluştur"
+msgstr "Bu URL’den yeni bir “include” yolu girdisi oluştur"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeIncludePath)
 #: kcm_widget/includeswidget.ui:60
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current include path entry"
-msgstr "Geçerli 'include' yolu girdisini sil"
+msgstr "Geçerli “include” yolu girdisini sil"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, parseHeadersInPlainC)
 #: kcm_widget/parserwidget.ui:20
@@ -275,7 +275,7 @@ msgstr "CUDA C p&rofili:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "CUDA C comman&d-line arguments:"
-msgstr "CUDA C komu&t-satırı argümanları:"
+msgstr "CUDA C komu&t satırı argümanları:"
 
 #: kcm_widget/projectpathswidget.cpp:168
 #, kde-format
@@ -286,7 +286,7 @@ msgstr "Proje Yolunu Seç"
 #: kcm_widget/projectpathswidget.cpp:183
 #, kde-format
 msgid "Are you sure you want to delete the configuration for the path '%1'?"
-msgstr "'%1' yolu için yapılandırmayı silmek istediğinizden emin misiniz?"
+msgstr "“%1” yolu için yapılandırmayı silmek istediğinizden emin misiniz?"
 
 #: kcm_widget/projectpathswidget.cpp:185
 #, kde-format
@@ -298,7 +298,7 @@ msgstr "Yol Yapılandırmasını Sil"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Include Directories/Files"
-msgstr "'Include' Dizinlerini/Dosyalarını Düzenle"
+msgstr "“Include” Dizinlerini/Dosyalarını Düzenle"
 
 #: kcm_widget/projectpathswidget.cpp:231
 #, kde-format
@@ -318,7 +318,7 @@ msgid ""
 "Configure which macros and include directories/files will be added to the "
 "parser during project parsing:"
 msgstr ""
-"Proje ayrıştırması sırasında hangi makroların ve 'include' dizinlerinin/"
+"Proje ayrıştırması sırasında hangi makroların ve “include” dizinlerinin/"
 "dosyalarının ayrıştırıcıya ekleneceğini yapılandır"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_reparse)
@@ -346,7 +346,7 @@ msgid ""
 "<html><head/><body><p>Select compiler that will be used to retrieve standard "
 "include directories and defined macros.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Standart 'include' dizinlerini ve makrolarını almak "
+"<html><head/><body><p>Standart “include” dizinlerini ve makrolarını almak "
 "için kullanılacak derleyiciyi seçin.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -361,14 +361,14 @@ msgstr "Yol için derleyici:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit multiple includes/defines at the same time."
-msgstr "Birden çok 'include'/'define'ı aynı anda düzenleyin."
+msgstr "Birden çok “include/define”ı aynı anda düzenleyin."
 
 #. i18n: ectx: property (text), widget (QPushButton, batchEdit)
 #: kcm_widget/projectpathswidget.ui:93
 #, kde-format
 msgctxt "@action:button"
 msgid "&Batch Edit..."
-msgstr "Toplu Dü&zenle..."
+msgstr "Toplu Dü&zenle…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addPath)
 #: kcm_widget/projectpathswidget.ui:119
@@ -389,14 +389,14 @@ msgstr "Geçerli alt proje yolu girdisini sil."
 #, kde-format
 msgctxt "@title:tab"
 msgid "Includes/Imports"
-msgstr "'Include'lar/İçe Aktarmalar"
+msgstr "“Include”lar/İçe Aktarmalar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, definesPage)
 #: kcm_widget/projectpathswidget.ui:182
 #, kde-format
 msgctxt "@title:tab"
 msgid "Defines"
-msgstr "'Define'lar"
+msgstr "“Define”lar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, parserPage)
 #: kcm_widget/projectpathswidget.ui:199
@@ -409,7 +409,7 @@ msgstr "C/C++ Ayrıştırıcısı"
 #, kde-format
 msgctxt "@title:window"
 msgid "Setup Custom Include Paths"
-msgstr "Özel 'Include' Yolları Ayarla"
+msgstr "Özel “Include” Yolları Ayarla"
 
 #: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:56
 #, kde-format
@@ -422,7 +422,7 @@ msgstr "İçerilecek Dizini Seçin"
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage Directory:"
-msgstr "Depolama Dizini:"
+msgstr "Depolama dizini:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, storageDirectory)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:25
@@ -432,15 +432,15 @@ msgid ""
 "The custom include-path will be stored in a special file called \"."
 "kdev_include_paths\" stored within a source directory."
 msgstr ""
-"Özelleştirilmiş 'include' yolu kaynak dizinde saklanan \".kdev_include_paths"
-"\" adlı özel bir dosya içinde saklanır."
+"Özelleştirilmiş “include” yolu, kaynak dizinde saklanan “."
+"kdev_include_paths” adlı özel bir dosya içinde saklanır."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:37
 #, kde-format
 msgctxt "@title:group"
 msgid "Custom include paths or #define's"
-msgstr "#define ifadeleri veya özelleştirilmiş 'include' yolları"
+msgstr "#define ifadeleri veya özelleştirilmiş “include” yolları"
 
 #. i18n: ectx: property (toolTip), widget (QPlainTextEdit, customIncludePaths)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:45
@@ -450,7 +450,7 @@ msgid ""
 "The plain list of include paths. You may also define custom macros here by "
 "adding \"#define NAME VALUE\" lines."
 msgstr ""
-"'include' yollarının düz metin listesi. Ek olarak, \"#define AD DEĞER\" "
+"“include” yollarının düz metin listesi. Ek olarak, “#define AD DEĞER” "
 "satırları ekleyerek burada özel makrolar tanımlayabilirsiniz."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
@@ -465,12 +465,12 @@ msgstr "İçerilecek bir dizin seçin."
 #, kde-format
 msgctxt "@action:button"
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:155
 #, kde-format
 msgid "Failed to save custom include paths in directory: %1"
-msgstr "Dizin içinde özel 'include' yolları kaydedilemedi: %1"
+msgstr "Dizin içinde özel “include” yolları kaydedilemedi: %1"
 
 #~ msgid "Bad #define directive in %1: %2"
 #~ msgstr "%1: %2 içinde yanlış #define direktifi"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2024-02-24 22:10+0300\n"
+"PO-Revision-Date: 2024-11-10 18:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:36
 #, kde-format
@@ -83,9 +83,9 @@ msgid ""
 "this.\n"
 "See also: https://bugs.kde.org/show_bug.cgi?id=393779"
 msgstr ""
-"clang ile birlikte gelen \"%1\" yolu geçersiz (cpuid.h üstbilgisi eksik).\n"
-"Bunu el ile düzeltmek için KDEV_CLANG_BUILTIN_DIR çevre değişkenini "
-"ayarlamayı deneyin.\n"
+"clang ile birlikte gelen “%1” yolu geçersiz (cpuid.h üstbilgisi eksik).\n"
+"Bunu elle düzeltmek için KDEV_CLANG_BUILTIN_DIR çevre değişkenini ayarlamayı "
+"deneyin.\n"
 "Ayrıca bakınız: https://bugs.kde.org/show_bug.cgi?id=393779"
 
 #: clangsupport.cpp:278
@@ -246,22 +246,22 @@ msgstr "Düzeltme İpuçları"
 #: duchain/clangproblem.cpp:246
 #, kde-format
 msgid "Insert \"%1\" at line: %2, column: %3"
-msgstr "%2. satır, %3. sütunda \"%1\" ekle"
+msgstr "%2. satır, %3. sütunda “%1” ekle"
 
 #: duchain/clangproblem.cpp:250
 #, kde-format
 msgid "Replace text at line: %1, column: %2 with: \"%3\""
-msgstr "%1. satır, %2. sütundaki metni \"%3\" ile değiştir"
+msgstr "%1. satır, %2. sütundaki metni “%3” ile değiştir"
 
 #: duchain/clangproblem.cpp:253
 #, kde-format
 msgid "Replace \"%1\" with: \"%2\""
-msgstr "\"%1\" ögesini, \"%2\" ile değiştir"
+msgstr "“%1” ögesini “%2” ile değiştir"
 
 #: duchain/clangproblem.cpp:256
 #, kde-format
 msgid "Replace multiple lines starting at line: %1, column: %2 with: \"%3\""
-msgstr "%1. satır, %2. sütunda başlayan birden çok satırı \"%3\" ile değiştir"
+msgstr "%1. satır, %2. sütunda başlayan birden çok satırı “%3” ile değiştir"
 
 #: duchain/headerguardassistant.cpp:45
 #, kde-format
@@ -349,17 +349,17 @@ msgstr ""
 #: duchain/unknowndeclarationproblem.cpp:374
 #, kde-format
 msgid "Insert '%1'"
-msgstr "'%1' Ekle"
+msgstr "“%1” Ekle"
 
 #: duchain/unknowndeclarationproblem.cpp:434
 #, kde-format
 msgid "Forward declare as 'class'"
-msgstr "'class' olarak önden beyan et"
+msgstr "“class” olarak önden beyan et"
 
 #: duchain/unknowndeclarationproblem.cpp:441
 #, kde-format
 msgid "Forward declare as 'struct'"
-msgstr "'struct' olarak önden beyan et"
+msgstr "“struct” olarak önden beyan et"
 
 #: util/clangutils.cpp:191
 #, kde-format
