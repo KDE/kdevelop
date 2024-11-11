@@ -227,8 +227,6 @@ void UiController::mainWindowAdded(Sublime::MainWindow* mainWindow)
     connect(mainWindow, &MainWindow::areaCleared, Core::self()->workingSetControllerInternal(), &WorkingSetController::saveArea);
 }
 
-// FIXME: currently, this always create new window. Probably,
-// should just rename it.
 void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 {
     if (switchMode == ThisWindow) {
@@ -236,9 +234,16 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
         return;
     }
 
+    // TODO: non-primary main windows probably need separate settings and state. Therefore, their
+    //       config group keys should include some main window identifier. The configGroupName()
+    //       function defined in sublime/mainwindow.cpp will have to be adapted for this purpose.
+    //       The main window identification can be similar to the existing one in UiController::saveAllAreas().
     auto *main = new MainWindow(this);
 
     addMainWindow(main);
+    // TODO: consider reordering the following two lines - showArea(areaName, main)
+    //       and main->initialize() - in order to let the new main window load settings.
+    //       See the comment about initialization in KDevelop::MainWindow::loadSettings().
     showArea(areaName, main);
     main->initialize();
 
