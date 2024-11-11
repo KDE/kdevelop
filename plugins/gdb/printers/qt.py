@@ -1242,7 +1242,7 @@ class QCborMapPrinter(PrinterBaseType):
 
     def __init__(self, val):
         if val.address is None:
-            # fake QCborMap created by qdump__QCborValue_proxy
+            # temporary object or fake QCborMap created by qdump__QCborValue_proxy
             self._container_ptr, = struct.unpack("P", gdbCompat.valueBytes(val))
         else:
             self._container_ptr = d.extract_pointer_at_address(int(val.address))
@@ -1266,7 +1266,7 @@ class QCborArrayPrinter(PrinterBaseType):
 
     def __init__(self, val):
         if val.address is None:
-            # fake QCborArray created by qdump__QCborValue_proxy
+            # temporary object or fake QCborArray created by qdump__QCborValue_proxy
             self._container_ptr, = struct.unpack("P", gdbCompat.valueBytes(val))
         else:
             self._container_ptr = d.extract_pointer_at_address(int(val.address))
@@ -1290,7 +1290,7 @@ class QJsonArrayPrinter(PrinterBaseType):
 
     def __init__(self, val):
         if val.address is None:
-            # fake QJsonArray created by qdump__QCborValue_proxy
+            # temporary object or fake QJsonArray created by qdump__QCborValue_proxy
             if d.qtVersionAtLeast(0x060000):
                 self._container_ptr, = struct.unpack("P", gdbCompat.valueBytes(val))
             else:
@@ -1321,7 +1321,7 @@ class QJsonObjectPrinter(PrinterBaseType):
 
     def __init__(self, val):
         if val.address is None:
-            # fake QJsonObject created by qdump__QCborValue_proxy
+            # temporary object or fake QJsonObject created by qdump__QCborValue_proxy
             if d.qtVersionAtLeast(0x060000):
                 self._container_ptr, = struct.unpack("P", gdbCompat.valueBytes(val))
             else:
