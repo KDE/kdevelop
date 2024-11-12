@@ -144,6 +144,9 @@ void QtPrintersTest::testQByteArray()
     gdb.execute("next");
     out = gdb.execute("print ba");
     QVERIFY(out.contains("\"\xE6\x98\xAF'\\\"\\\\u6211x\""));
+    gdb.execute("next");
+    out = gdb.execute("print nonUtf");
+    QVERIFY(out.contains(R"( = "ABCÿ\000þ")"));
 }
 
 void QtPrintersTest::testQListContainer_data()

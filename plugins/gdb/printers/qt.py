@@ -101,8 +101,15 @@ class QByteArrayPrinter(PrinterBaseType):
         return self._size
 
     def to_string(self):
-        #todo: handle charset correctly
-        return self._stringData().string(length = self._size)
+        data = self._stringData()
+        try:
+            # Attempt to decode from UTF-8, since many byte arrays are ascii/utf-8 strings
+            return data.string(length = self._size)
+        except:
+            # ... but not all of them
+            # Use latin1 to show byte data, as fallback
+            # It will show \000 for NUL etc, which is nice.
+            return data.string(length = self._size, encoding = 'latin1')
 
     def display_hint (self):
         return 'string'
