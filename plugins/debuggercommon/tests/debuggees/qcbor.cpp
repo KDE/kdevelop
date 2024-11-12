@@ -21,6 +21,7 @@ public:
         cborMap[QStringLiteral("url")] = QCborValue(QUrl("http://www.kde.org"));
         cborMap[QStringLiteral("regexp")] = QCborValue(QRegularExpression(QStringLiteral("^kde$")));
         cborMap[QStringLiteral("birth")] = QCborValue(QDateTime(QDate(2001, 5, 30), QTime(9, 31, 0)));
+        cborMap[QStringLiteral("bytes")] = QByteArray("ABC\xFF\x00\xFE", 6);
 
         QCborMap childMap;
         childMap[QStringLiteral("company")] = "KDAB";
@@ -77,6 +78,9 @@ int main(int argc, char *argv[])
 
         auto childrenValue = parsedMap[QStringLiteral("children")];
         QCborArray parsedChildren = childrenValue.toArray();
+
+        auto bytesValueRef = parsedMap[QStringLiteral("bytes")];
+        QCborValue bytesValue = bytesValueRef;
 
         for (const auto &child : parsedChildren) {
             QString childName = child.toString();

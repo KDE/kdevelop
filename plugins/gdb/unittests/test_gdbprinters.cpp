@@ -823,14 +823,14 @@ void QtPrintersTest::testQCbor()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
 
-    gdb.execute("break qcbor.cpp:82");
+    gdb.execute("break qcbor.cpp:86");
     gdb.execute("run");
     QByteArray data;
 
     data = gdb.execute("print emptyValue");
     QCOMPARE(data, "$1 = <Undefined>");
 
-    const QByteArray expectedCborMap = R"(QCborMap (size = 11) = {
+    const QByteArray expectedCborMap = R"(QCborMap (size = 12) = {
   ["name"] = "John Doe",
   ["address"] = "Some street\nCity\nCountry",
   ["age"] = 30,
@@ -840,6 +840,7 @@ void QtPrintersTest::testQCbor()
   ["url"] = "http://www.kde.org",
   ["regexp"] = "^kde$",
   ["birth"] = "2001-05-30T09:31:00.000",
+  ["bytes"] = "ABCÿ\000þ",
   ["job"] = QCborMap (size = 4) = {
     ["company"] = "KDAB",
     ["title"] = "Surface technician",
@@ -886,6 +887,9 @@ void QtPrintersTest::testQCbor()
 
     data = gdb.execute("print source.childrenArray()");
     QCOMPARE(data, R"($15 = QCborArray (size = 2) = {"Alice", "Mickaël"})");
+
+    data = gdb.execute("print bytesValue");
+    QCOMPARE(data, R"($16 = "ABCÿ\000þ")");
 }
 
 void QtPrintersTest::testKTextEditorTypes()
