@@ -61,17 +61,13 @@ class PrinterForwarder(PrinterBaseType):
 d = Dumper()
 
 def get_unique_ptr_value(unique_ptr_val):
-    if unique_ptr_val.address:
-        if unique_ptr_val.type.sizeof == d.ptrSize():
-            p = d.extractPointer(int(unique_ptr_val.address))
-        else:
+    if unique_ptr_val.type.sizeof == d.ptrSize():
+        return unique_ptr_val.cast(gdb.lookup_type('void').pointer())
+    else:
+        if unique_ptr_val.address:
             _, p = d.createValue(int(unique_ptr_val.address), '').split("pp") # For custom deleters
-    elif unique_ptr_val.bytes: # e.g. returned by a function
-        if unique_ptr_val.type.sizeof == d.ptrSize():
-            p, = struct.unpack("P", unique_ptr_val.bytes)
         else:
             _, p, = struct.unpack("PP", unique_ptr_val.bytes) # For custom deleters
-
     return p
 
 class QStringViewPrinterBase(PrinterBaseType):
