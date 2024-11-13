@@ -19,6 +19,46 @@ if hasattr(gdb, 'ValuePrinter'):
 else:
     PrinterBaseType = object
 
+class QStringViewPrinterBase(PrinterBaseType):
+
+    def __init__(self, val, encoding, bytesPerCharacter):
+        self._val = val
+        self._encoding = encoding
+        self._bytesPerCharacter = bytesPerCharacter
+
+    def to_string(self):
+        ret = ""
+
+        try:
+            size = self._val['m_size']
+            if size == 0:
+                return ret
+            dataAsCharPointer = self._val['m_data'].cast(gdb.lookup_type("char").pointer())
+            size *= self._bytesPerCharacter
+            ret = dataAsCharPointer.string(encoding = self._encoding, length = size)
+        except Exception:
+            # swallow the exception and return empty string
+            pass
+        return ret
+
+    def display_hint (self):
+        return 'string'
+
+class QLatin1StringPrinter(QStringViewPrinterBase):
+
+    def __init__(self, val):
+        QStringViewPrinterBase.__init__(self, val, 'latin1', 1)
+
+class QUtf8StringViewPrinter(QStringViewPrinterBase):
+
+    def __init__(self, val):
+        QStringViewPrinterBase.__init__(self, val, 'UTF-8', 1)
+
+class QStringViewPrinter(QStringViewPrinterBase):
+
+    def __init__(self, val):
+        QStringViewPrinterBase.__init__(self, val, 'UTF-16', 2)
+
 class QStringPrinter(PrinterBaseType):
 
     def __init__(self, val):
@@ -1076,6 +1116,9 @@ def register_qt_printers (obj):
     obj.pretty_printers.append(FunctionLookup(gdb, pretty_printers_dict))
 
 def build_dictionary ():
+    pretty_printers_dict[re.compile('^QLatin1String$')] = lambda val: QLatin1StringPrinter(val)
+    pretty_printers_dict[re.compile('^QBasicUtf8StringView<(?:true|false)>$')] = lambda val: QUtf8StringViewPrinter(val)
+    pretty_printers_dict[re.compile('^QStringView$')] = lambda val: QStringViewPrinter(val)
     pretty_printers_dict[re.compile('^QString$')] = lambda val: QStringPrinter(val)
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, 'QList', None)

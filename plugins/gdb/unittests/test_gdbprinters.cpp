@@ -103,6 +103,20 @@ public:
     return QString::fromUtf8(out).contains(QRegularExpression{pattern});
 }
 
+[[nodiscard]] QByteArray printedValue(GdbProcess& gdb, const QByteArray& expression)
+{
+    // Do not use the GDB `output` command, because we want to test the `print` command,
+    // which is more convenient for command line usage thanks to the newline character at end.
+    auto output = gdb.execute("print " + expression);
+
+    constexpr QByteArrayView separator(" = ");
+    const auto pos = output.indexOf(separator);
+    QVERIFY_RETURN(pos != -1, {});
+
+    output.remove(0, pos + separator.size());
+    return output;
+}
+
 } // unnamed namespace
 
 void QtPrintersTest::initTestCase()
@@ -119,15 +133,27 @@ void QtPrintersTest::testQString()
     GdbProcess gdb(QStringLiteral("debuggee_qstring"));
     gdb.execute("break qstring.cpp:5");
     gdb.execute("run");
-    QVERIFY(gdb.execute("print s").contains("\"test最后一个不是特殊字符'\\\"\\\\u6211\""));
-    gdb.execute("next");
-    QVERIFY(gdb.execute("print s").contains("\"test最后一个不是特殊字符'\\\"\\\\u6211x\""));
 
-    const auto isEmptyGdbString = [](const QString& str) { return str.contains("= \"\""); };
+    QCOMPARE(printedValue(gdb, "s"), "\"test最后一个不是特殊字符'\\\"\\\\u6211\"");
     gdb.execute("next");
-    QVERIFY(isEmptyGdbString(gdb.execute("print nullString")));
+    QCOMPARE(printedValue(gdb, "s"), "\"test最后一个不是特殊字符'\\\"\\\\u6211x\"");
     gdb.execute("next");
-    QVERIFY(isEmptyGdbString(gdb.execute("print emptyString")));
+    QCOMPARE(printedValue(gdb, "view"), "\"test最后一个不是特殊字符'\\\"\\\\u6211x\"");
+    gdb.execute("next");
+    QCOMPARE(printedValue(gdb, "view"), "\"test最\"");
+    gdb.execute("next");
+    QCOMPARE(printedValue(gdb, "latin1String"), "\"abcé\"");
+    gdb.execute("next");
+    QCOMPARE(printedValue(gdb, "utf8StringView"), "\"test最后\"");
+
+    gdb.execute("break qstring.cpp:16");
+    gdb.execute("continue");
+    constexpr const char* emptyString = "\"\"";
+    QCOMPARE(printedValue(gdb, "nullString"), emptyString);
+    QCOMPARE(printedValue(gdb, "emptyString"), emptyString);
+    QCOMPARE(printedValue(gdb, "emptyView"), emptyString);
+    QCOMPARE(printedValue(gdb, "emptyLatin1String"), emptyString);
+    QCOMPARE(printedValue(gdb, "emptyUtf8StringView"), emptyString);
 }
 
 void QtPrintersTest::testQByteArray()
