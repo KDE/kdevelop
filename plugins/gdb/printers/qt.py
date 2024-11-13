@@ -49,7 +49,7 @@ class PrinterForwarder(PrinterBaseType):
     def to_string(self):
         if self._printer:
             return self._printer.to_string()
-        if self._underlyingValue: # e.g. for an integer
+        if not(self._underlyingValue is None): # e.g. for an integer
             return self._underlyingValue
         return '<empty>'
 
@@ -1051,10 +1051,10 @@ def qdump__QCborValue_proxy(value):
         return item_data
 
     elif item_type == 0x100 + 20:
-        return 'false'
+        return False
 
     elif item_type == 0x100 + 21:
-        return 'true'
+        return True
 
     elif item_type == 0x100 + 22:
         return '<Null>'
