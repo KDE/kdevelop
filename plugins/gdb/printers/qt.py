@@ -1003,6 +1003,21 @@ def make_QString(utf16data, size):
     fakeQString = gdb.Value(buffer, qstring_type)
     return fakeQString
 
+def make_QLatin1String(data, size):
+    qlatin1string_type = gdb.lookup_type('QLatin1String')
+    buffer = struct.pack("qP", size, data)
+    return gdb.Value(buffer, qlatin1string_type)
+
+def make_Utf8String(data, size):
+    if d.qtVersionAtLeast(0x060000):
+        qutf8stringview_type = gdb.lookup_type('QBasicUtf8StringView<false>')
+        buffer = struct.pack("Pq", data, size)
+        fakeStringView = gdb.Value(buffer, qutf8stringview_type)
+        return fakeStringView
+    else: # Qt 5
+        # This is suboptimal, because a Qt5 UTF-8 CBOR/JSON string has children in KDevelop UI.
+        return make_QByteArray(data, size)
+
 def make_QByteArray(data, size):
     if d.qtVersionAtLeast(0x060000):
         qbytearray_type = gdb.lookup_type('QByteArray')
@@ -1012,7 +1027,6 @@ def make_QByteArray(data, size):
     else: # Qt 5
         # creating a QByteArray would require allocating a d pointer,
         # and there was no QByteArrayView... so just return a python str
-        # This is sub-optimal in kdevelop, it shows children
         memBytes = d.readMemory(data, size)
         value = gdb.Value(memBytes, gdb.lookup_type("char").array(size - 1))
         return value
@@ -1034,12 +1048,13 @@ def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
         bytedata_len = d.extractInt(bytedata)
         bytedata_data = bytedata + 4 # sizeof(QtCbor::ByteData) header part
 
-    if is_bytes or (element_flags & 8): # QtCbor::Element::StringIsAscii
+    if is_bytes:
         return make_QByteArray(bytedata_data, bytedata_len)
-    if (element_flags & 4): # QtCbor::Element::StringIsUtf16
+    if element_flags & 8: # QtCbor::Element::StringIsAscii
+        return make_QLatin1String(bytedata_data, bytedata_len)
+    if element_flags & 4: # QtCbor::Element::StringIsUtf16
         return make_QString(bytedata_data, int(bytedata_len / 2))
-    # UTF-8, treat it the same as ASCII
-    return make_QByteArray(bytedata_data, bytedata_len)
+    return make_Utf8String(bytedata_data, bytedata_len)
 
 def qdump__QCborValue_proxy(value):
     item_data, container_ptr, item_type, is_cbor = value.ldata
