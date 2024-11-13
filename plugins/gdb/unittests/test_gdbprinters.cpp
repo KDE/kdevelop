@@ -846,7 +846,7 @@ void QtPrintersTest::testQCbor()
   ["null"] = <Null>,
   ["url"] = "http://www.kde.org",
   ["regexp"] = "^kde$",
-  ["birth"] = "2001-05-30T09:31:00.000",
+  ["birth"] = Wed May 30 09:31:00 2001,
   ["bytes"] = "ABCÿ\000þ",
   ["job"] = QCborMap (size = 4) = {
     ["company"] = "KDAB",

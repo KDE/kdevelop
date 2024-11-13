@@ -9,6 +9,7 @@ import gdb
 import itertools
 import re
 import time
+from datetime import datetime
 
 from dumper import *
 from helper import *
@@ -1110,7 +1111,16 @@ def qdump__QCborValue_proxy(value):
         return fakeMap
 
     elif item_type == 0x10000: # DateTime
-        return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
+        gdbValue = qdumpHelper_QCbor_string(d, container_ptr, 1, False)
+        if d.qtVersionAtLeast(0x060000): # QUtf8StringView
+            printer = gdb.default_visualizer(gdbValue)
+            date_string = printer.to_string()
+        else: # python str
+            date_string = gdbValue.string()
+        dt = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%f")
+        # Like QDateTimePrinter does
+        time_t = int(dt.timestamp())
+        return time.ctime(time_t)
 
     elif item_type == 0x10020: # Url
         return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
