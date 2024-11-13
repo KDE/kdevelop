@@ -12,8 +12,9 @@ public:
         QCborMap cborMap;
         cborMap[QStringLiteral("name")] = "John Doe";
         cborMap[QStringLiteral("address")] = "Some street\nCity\nCountry";
-        QCborValue thirty(30);
-        cborMap[QStringLiteral("age")] = thirty;
+        cborMap[QStringLiteral("year")] = 2024;
+        QCborValue age(30.57);
+        cborMap[QStringLiteral("age")] = age;
         QCborValue notMarried(false);
         cborMap[QStringLiteral("married")] = notMarried;
         cborMap[QStringLiteral("undefined")] = QCborValue();
@@ -69,6 +70,9 @@ int main(int argc, char *argv[])
         QString nameStr = QStringLiteral("name");
         auto nameRef = parsedMap[nameStr];
         QCborValue name = nameRef;
+
+        auto yearRef = parsedMap[QStringLiteral("year")];
+        QCborValue year = yearRef;
 
         auto ageRef = parsedMap[QStringLiteral("age")];
         QCborValue age = ageRef;

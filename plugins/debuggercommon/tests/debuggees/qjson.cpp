@@ -11,7 +11,8 @@ public:
         QJsonObject jsonObj;
         jsonObj["name"] = "John Doe";
         jsonObj["address"] = "Some street\\nCity\\nCountry";
-        jsonObj["age"] = 30;
+        jsonObj["year"] = 2024;
+        jsonObj["age"] = 30.57;
         jsonObj["married"] = false;
 
         QJsonObject childObj;
@@ -65,6 +66,8 @@ int main(int argc, char *argv[])
         QString nameStr = "name";
         const auto nameRef = parsedObj[nameStr];
         const QJsonValue name = nameRef;
+        const auto yearRef = parsedObj["year"];
+        const QJsonValue year = yearRef;
         const auto ageRef = parsedObj["age"];
         const QJsonValue age = ageRef;
         const auto marriedRef = parsedObj["married"];

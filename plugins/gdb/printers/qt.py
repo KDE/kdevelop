@@ -1063,7 +1063,7 @@ def qdump__QCborValue_proxy(value):
         return '<Undefined>'
 
     elif item_type == 0x202:
-        val = struct.unpack('d', struct.pack('q', item_data))
+        val, = struct.unpack('d', struct.pack('q', item_data))
         return float(val)
 
     elif item_type == 0x40:
