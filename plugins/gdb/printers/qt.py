@@ -1057,6 +1057,28 @@ def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
         return make_QString(bytedata_data, int(bytedata_len / 2))
     return make_Utf8String(bytedata_data, bytedata_len)
 
+def createCborOrJsonArray(container_ptr, is_cbor):
+    array_type = gdb.lookup_type('QCborArray' if is_cbor else 'QJsonArray')
+    if d.qtVersionAtLeast(0x060000) or is_cbor:
+        # Create an 8-byte buffer and pack the address as a pointer
+        buffer = struct.pack("P", container_ptr)
+    else: # Qt 5.15's QJsonArray had a dead pointer first
+        buffer = struct.pack("PP", 0, container_ptr)
+    fakeArray = gdb.Value(buffer, array_type)
+    # This will trigger QCborArrayPrinter or QJsonArrayPrinter
+    return fakeArray
+
+def createCborOrJsonMap(container_ptr, is_cbor):
+    map_type = gdb.lookup_type('QCborMap' if is_cbor else 'QJsonObject')
+    if d.qtVersionAtLeast(0x060000) or is_cbor:
+        # Create an 8-byte buffer and pack the address as a pointer
+        buffer = struct.pack("P", container_ptr)
+    else: # Qt 5.15's QJsonObject had a dead pointer first
+        buffer = struct.pack("PP", 0, container_ptr)
+    fakeMap = gdb.Value(buffer, map_type)
+    # This will trigger QCborMapPrinter or QJsonObjectPrinter
+    return fakeMap
+
 def qdump__QCborValue_proxy(value):
     item_data, container_ptr, item_type, is_cbor = value.ldata
 
@@ -1089,26 +1111,10 @@ def qdump__QCborValue_proxy(value):
         return qdumpHelper_QCbor_string(d, container_ptr, item_data, False)
 
     elif item_type == 0x80:
-        array_type = gdb.lookup_type('QCborArray' if is_cbor else 'QJsonArray')
-        if d.qtVersionAtLeast(0x060000) or is_cbor:
-            # Create an 8-byte buffer and pack the address as a pointer
-            buffer = struct.pack("P", container_ptr)
-        else: # Qt 5.15's QJsonArray had a dead pointer first
-            buffer = struct.pack("PP", 0, container_ptr)
-        fakeArray = gdb.Value(buffer, array_type)
-        # This will trigger QCborArrayPrinter or QJsonArrayPrinter
-        return fakeArray
+        return createCborOrJsonArray(container_ptr, is_cbor)
 
     elif item_type == 0xa0:
-        map_type = gdb.lookup_type('QCborMap' if is_cbor else 'QJsonObject')
-        if d.qtVersionAtLeast(0x060000) or is_cbor:
-            # Create an 8-byte buffer and pack the address as a pointer
-            buffer = struct.pack("P", container_ptr)
-        else: # Qt 5.15's QJsonObject had a dead pointer first
-            buffer = struct.pack("PP", 0, container_ptr)
-        fakeMap = gdb.Value(buffer, map_type)
-        # This will trigger QCborMapPrinter or QJsonObjectPrinter
-        return fakeMap
+        return createCborOrJsonMap(container_ptr, is_cbor)
 
     elif item_type == 0x10000: # DateTime
         gdbValue = qdumpHelper_QCbor_string(d, container_ptr, 1, False)
@@ -1150,14 +1156,13 @@ class QCborContainerPrivateIterator:
         return self
 
     def valueAt(self, index):
-        valueProxy = qdumpHelper_QCborArray_valueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
-        return qdump__QCborValue_proxy(valueProxy)
+        return qdumpHelper_QCborArray_valueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
 
     def __next__(self):
         if self.index >= self.size:
             raise StopIteration
 
-        item = self.valueAt(self.index)
+        item = qdump__QCborValue_proxy(self.valueAt(self.index))
 
         if not self.is_array:
             if self.index % 2 == 0:
@@ -1304,33 +1309,29 @@ class QJsonValuePrinter(QCborValuePrinterBase):
         QCborValuePrinterBase.__init__(self, 'QJsonValue')
         self._initFromProxyValue(proxyValue)
 
-class QCborValueConstRefPrinter:
+class QCborValueConstRefPrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
-        self._val = val
-
-    def to_string(self):
-        container_ptr = int(self._val['d'])
-        item_index = int(self._val['i'])
+        container_ptr = int(val['d'])
+        item_index = int(val['i'])
         it = QCborContainerPrivateIterator(container_ptr, 'QCborValueConstRef')
-        str = it.valueAt(item_index)
-        return str
+        proxy = it.valueAt(item_index)
+        QCborValuePrinterBase.__init__(self, 'QCborValue')
+        self._initFromProxyValue(proxy)
 
-class QJsonValueConstRefPrinter:
+class QJsonValueConstRefPrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
-        self._val = val
-
-    def to_string(self):
-        array_or_map = int(self._val['d'])
-        is_object = int(self._val['is_object'])
-        item_index = int(self._val['index'])
+        array_or_map = int(val['d'])
+        is_object = int(val['is_object'])
+        item_index = int(val['index'])
         if is_object:
             item_index = item_index * 2 + 1 # see QJsonPrivate::Value::indexHelper()
         container_ptr = d.extractPointer(array_or_map)
         it = QCborContainerPrivateIterator(container_ptr, 'QJsonObject' if is_object else 'QJsonArray')
-        str = it.valueAt(item_index)
-        return str
+        proxy = it.valueAt(item_index)
+        QCborValuePrinterBase.__init__(self, 'QJsonValue')
+        self._initFromProxyValue(proxy)
 
 class QUuidPrinter:
 
