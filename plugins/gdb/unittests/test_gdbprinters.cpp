@@ -847,13 +847,30 @@ void QtPrintersTest::testQCbor()
   ["url"] = "http://www.kde.org",
   ["regexp"] = "^kde$",
   ["birth"] = Wed May 30 09:31:00 2001,
-  ["bytes"] = "ABCÿ\000þ",
+  ["bytes"] = "ABCÿ\000þ" = {
+    [0] = 65 'A',
+    [1] = 66 'B',
+    [2] = 67 'C',
+    [3] = -1 '\377',
+    [4] = 0 '\000',
+    [5] = -2 '\376'
+  },
   ["job"] = QCborMap (size = 5) = {
     ["company"] = "KDAB",
     ["title"] = "Surface technician",
     ["emptyObj"] = QCborMap (size = 0),
     ["emptyArray"] = QCborArray (size = 0),
-    ["bigNum"] = "\001\000\000\000\000\000\000\000"
+    ["bigNum"] = "\001\000\000\000\000\000\000\000" = {
+      [0] = 1 '\001',
+      [1] = 0 '\000',
+      [2] = 0 '\000',
+      [3] = 0 '\000',
+      [4] = 0 '\000',
+      [5] = 0 '\000',
+      [6] = 0 '\000',
+      [7] = 0 '\000',
+      [8] = 0 '\000'
+    }
   },
   ["children"] = QCborArray (size = 2) = {"Alice", "Mickaël"}
 })";
@@ -902,10 +919,27 @@ void QtPrintersTest::testQCbor()
     QCOMPARE(data, R"($17 = QCborArray (size = 2) = {"Alice", "Mickaël"})");
 
     data = gdb.execute("print bytesValue");
-    QCOMPARE(data, R"($18 = "ABCÿ\000þ")");
+    QCOMPARE(data, R"($18 = "ABCÿ\000þ" = {
+  [0] = 65 'A',
+  [1] = 66 'B',
+  [2] = 67 'C',
+  [3] = -1 '\377',
+  [4] = 0 '\000',
+  [5] = -2 '\376'
+})");
 
     // TODO the tag number is missing
-    const QByteArray expectedBigNum = R"("\001\000\000\000\000\000\000\000")";
+    const QByteArray expectedBigNum = R"("\001\000\000\000\000\000\000\000" = {
+  [0] = 1 '\001',
+  [1] = 0 '\000',
+  [2] = 0 '\000',
+  [3] = 0 '\000',
+  [4] = 0 '\000',
+  [5] = 0 '\000',
+  [6] = 0 '\000',
+  [7] = 0 '\000',
+  [8] = 0 '\000'
+})";
     QCOMPARE(printedValue(gdb, "bigNumValueRef"), expectedBigNum);
     QCOMPARE(printedValue(gdb, "bigNumValue"), expectedBigNum);
 }

@@ -179,20 +179,10 @@ class QByteArrayPrinter(PrinterBaseType):
         else:
             return self._val['d'].cast(gdb.lookup_type("char").const().pointer()) + self._val['d']['offset']
 
-    def _showChildren(self):
-        # fake QByteArray created by make_QByteArrayData
-        if self._isQt6 and self._val['d']['d'] == 0:
-            return False
-        return True
-
     def children(self):
-        if not self._showChildren():
-            return []
         return self._iterator(self._stringData(), self._size)
 
     def num_children(self):
-        if not self._showChildren():
-            return 0
         return self._size
 
     def to_string(self):
@@ -1132,7 +1122,7 @@ def qdump__QCborValue_proxy(value):
         return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
 
     elif item_type == 0x10023: # RegularExpression
-        return qdumpHelper_QCbor_string(d, container_ptr, 1, True)
+        return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
 
     elif item_type == 0x10025:
         return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
