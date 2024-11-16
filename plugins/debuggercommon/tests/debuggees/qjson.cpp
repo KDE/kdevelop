@@ -20,6 +20,7 @@ public:
         childObj["title"] = "Surface technician";
         childObj["emptyObj"] = QJsonObject();
         childObj["emptyArray"] = QJsonArray();
+        childObj["emptyValue"] = QJsonValue();
         jsonObj["job"] = childObj;
 
         QJsonArray children;

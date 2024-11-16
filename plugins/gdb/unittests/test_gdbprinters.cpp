@@ -752,7 +752,7 @@ void QtPrintersTest::testQJson()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qjson"));
 
-    gdb.execute("break qjson.cpp:80");
+    gdb.execute("break qjson.cpp:81");
     gdb.execute("run");
     QByteArray data;
 
@@ -763,10 +763,11 @@ void QtPrintersTest::testQJson()
   ["address"] = "Some street\\nCity\\nCountry",
   ["age"] = 30.57,
   ["children"] = QJsonArray (size = 2) = {"Alice", "Mickaël"},
-  ["job"] = QJsonObject (size = 4) = {
+  ["job"] = QJsonObject (size = 5) = {
     ["company"] = "KDAB",
     ["emptyArray"] = QJsonArray (size = 0),
     ["emptyObj"] = QJsonObject (size = 0),
+    ["emptyValue"] = <Null>,
     ["title"] = "Surface technician"
   },
   ["married"] = false,

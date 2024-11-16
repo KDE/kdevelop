@@ -1069,13 +1069,16 @@ def createCborOrJsonMap(container_ptr, is_cbor):
     # This will trigger QCborMapPrinter or QJsonObjectPrinter
     return fakeMap
 
+def createCborOrJsonValue(item_data, container_ptr, item_type, is_cbor):
+    valueType = gdb.lookup_type('QCborValue' if is_cbor else 'QJsonValue')
+    # n, container, t, padding
+    buffer = struct.pack("qPii", item_data, container_ptr, item_type, 0)
+    return gdb.Value(buffer, valueType)
+
 def qdump__QCborValue_proxy(value):
     item_data, container_ptr, item_type, is_cbor = value.ldata
 
-    if item_type == 0xffffffffffffffff:
-        return '<Invalid>'
-
-    elif item_type == 0x00: # int
+    if item_type == 0x00: # int
         return item_data
 
     elif item_type == 0x100 + 20:
@@ -1084,11 +1087,10 @@ def qdump__QCborValue_proxy(value):
     elif item_type == 0x100 + 21:
         return True
 
-    elif item_type == 0x100 + 22:
-        return '<Null>'
-
-    elif item_type == 0x100 + 23:
-        return '<Undefined>'
+    elif item_type == 0xffffffffffffffff or item_type == 0x100 + 22 or item_type == 0x100 + 23:
+        # Invalid, null or undefined, forward to QCborValuePrinterBase
+        # so that the Type column shows QCborValue or QJsonValue, not char[]
+        return createCborOrJsonValue(item_data, container_ptr, item_type, is_cbor)
 
     elif item_type == 0x202:
         val, = struct.unpack('d', struct.pack('q', item_data))
@@ -1276,10 +1278,17 @@ class QCborValuePrinterBase(PrinterForwarder):
         self._initFromProxyValue(proxyValue)
 
     def _initFromProxyValue(self, proxyValue):
-        self._setUnderlyingValue(qdump__QCborValue_proxy(proxyValue))
         _, _, item_type, _ = proxyValue.ldata
-        if item_type == 0x40 or item_type == 0x60:
-            self.display_hint = lambda : 'string'
+        if item_type == 0xffffffffffffffff:
+            self._setUnderlyingValue('<Invalid>')
+        elif item_type == 0x100 + 22:
+            self._setUnderlyingValue('<Null>')
+        elif item_type == 0x100 + 23:
+            self._setUnderlyingValue('<Undefined>')
+        else:
+            self._setUnderlyingValue(qdump__QCborValue_proxy(proxyValue))
+            if item_type == 0x40 or item_type == 0x60:
+                self.display_hint = lambda : 'string'
 
 class QJsonDocumentPrinter(QCborValuePrinterBase):
 
