@@ -1138,8 +1138,14 @@ def qdump__QCborValue_proxy(value):
             # QCborTag is just a qint64.
         return qdumpHelper_QCbor_string(d, container_ptr, 1, True)
 
+    elif item_type & 0xFF00 == 0x100: # isSimpleType()
+        # QCborSimpleType is just an enum
+        simpleType = item_type & 0xFF
+        buffer = struct.pack("B", simpleType) # ... of size 1 byte
+        return gdb.Value(buffer, gdb.lookup_type('QCborSimpleType'))
+
     else:
-        return item_data
+        return f'Unknown type (0x{item_type:x}) {item_data}'
 
 class QCborContainerPrivateIterator:
     def __init__(self, container_ptr, container_className):
@@ -1334,6 +1340,14 @@ class QJsonValueConstRefPrinter(QCborValuePrinterBase):
         QCborValuePrinterBase.__init__(self, 'QJsonValue')
         self._initFromProxyValue(proxy)
 
+class QCborSimpleTypePrinter(PrinterBaseType):
+
+    def __init__(self, val):
+        self._val = int(val) # QCborSimpleType is just an enum
+
+    def to_string(self):
+        return f'QCborSimpleType(0x{self._val:02x})'
+
 class QUuidPrinter:
 
     def __init__(self, val):
@@ -1485,6 +1499,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QCborValue$')] = lambda val: QCborValuePrinter(val)
     pretty_printers_dict[re.compile('^QCborValueRef$')] = lambda val: QCborValueConstRefPrinter(val)
     pretty_printers_dict[re.compile('^QCborValueConstRef$')] = lambda val: QCborValueConstRefPrinter(val)
+    pretty_printers_dict[re.compile('^QCborSimpleType$')] = lambda val: QCborSimpleTypePrinter(val)
 
 
 build_dictionary ()

@@ -829,14 +829,14 @@ void QtPrintersTest::testQCbor()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
 
-    gdb.execute("break qcbor.cpp:97");
+    gdb.execute("break qcbor.cpp:100");
     gdb.execute("run");
     QByteArray data;
 
     data = gdb.execute("print emptyValue");
     QCOMPARE(data, "$1 = <Undefined>");
 
-    const QByteArray expectedCborMap = R"(QCborMap (size = 13) = {
+    const QByteArray expectedCborMap = R"(QCborMap (size = 14) = {
   ["name"] = "John Doe",
   ["address"] = "Some street\nCity\nCountry",
   ["year"] = 2024,
@@ -855,6 +855,7 @@ void QtPrintersTest::testQCbor()
     [4] = 0 '\000',
     [5] = -2 '\376'
   },
+  ["otherSimpleType"] = QCborSimpleType(0x0c),
   ["job"] = QCborMap (size = 5) = {
     ["company"] = "KDAB",
     ["title"] = "Surface technician",

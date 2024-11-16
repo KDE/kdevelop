@@ -23,6 +23,8 @@ public:
         cborMap[QStringLiteral("regexp")] = QCborValue(QRegularExpression(QStringLiteral("^kde$")));
         cborMap[QStringLiteral("birth")] = QCborValue(QDateTime(QDate(2001, 5, 30), QTime(9, 31, 0)));
         cborMap[QStringLiteral("bytes")] = QByteArray("ABC\xFF\x00\xFE", 6);
+        QCborValue otherSimpleType(QCborSimpleType(12));
+        cborMap[QStringLiteral("otherSimpleType")] = otherSimpleType;
 
         QCborMap childMap;
         childMap[QStringLiteral("company")] = "KDAB";
