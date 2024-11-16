@@ -107,8 +107,6 @@ bool PartDocument::askForCloseFeedback()
             Core::self()->uiController()->activeMainWindow(),
             i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
             i18nc("@title:window", "Close Document"), KStandardGuiItem::save(), KStandardGuiItem::discard());
-
-    /// @todo Is this behavior right?
     } else if (state() == IDocument::DirtyAndModified) {
         code = KMessageBox::warningTwoActionsCancel(
             Core::self()->uiController()->activeMainWindow(),
