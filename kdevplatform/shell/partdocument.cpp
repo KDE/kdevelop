@@ -101,6 +101,7 @@ bool PartDocument::save(DocumentSaveMode /*mode*/)
 
 bool PartDocument::askForCloseFeedback()
 {
+    auto saveMode = Default;
     int code = -1;
     if (state() == IDocument::Modified) {
         code = KMessageBox::warningTwoActionsCancel(
@@ -116,11 +117,12 @@ bool PartDocument::askForCloseFeedback()
             i18nc("@title:window", "Close Document"),
             KGuiItem(i18nc("@action:button", "Overwrite External Changes"), QStringLiteral("document-save")),
             KStandardGuiItem::discard());
+        saveMode = Silent; // already asked about the external changes, do not ask again
     }
 
     if (code >= 0) {
         if (code == KMessageBox::PrimaryAction) {
-            if (!save(Default))
+            if (!save(saveMode))
                 return false;
 
         } else if (code == KMessageBox::Cancel) {
