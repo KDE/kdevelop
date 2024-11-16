@@ -787,14 +787,17 @@ void KDevelop::TextDocument::documentUrlChanged(KTextEditor::Document* document)
     // KDevelop prevents a document URL change to empty to relieve slots connected to the
     // IDocumentController::documentUrlChanged() signal from dealing with empty URLs. Furthermore,
     // an empty IDocument URL is not unique, which is likely to break code that assumes otherwise.
-
-    // TODO: prevent this in KTextEditor and assert that d->document->url() is not empty
-    // instead of the early return when building against a fixed KTextEditor version.
-
-    // This is a workaround for not yet available necessary KTextEditor changes.
     if (d->document->url().isEmpty()) {
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+        qCWarning(SHELL) << "ignoring KTextEditor::Document URL change to empty; current URL:"
+                         << url().toString(QUrl::PreferLocalFile)
+                         << "; this should never happen and ought to be prevented in KTextEditor code!";
+#else
+        // The document's URL can be empty here until KTextEditor version 6.9.0 (more specifically,
+        // until https://commits.kde.org/ktexteditor/20a58cd2f989ca0001cedb6b149393e23d76e819).
         qCDebug(SHELL) << "ignoring KTextEditor::Document URL change to empty; current URL:"
                        << url().toString(QUrl::PreferLocalFile);
+#endif
         return;
     }
 
