@@ -1068,14 +1068,8 @@ class CborOrJsonValueData:
         elif item_type == 0xa0:
             return self.createCborOrJsonMap()
 
-        elif item_type == 0x10000: # DateTime
-            gdbValue = qdumpHelper_QCbor_string(d, container_ptr, 1, False)
-            if d.qtVersionAtLeast(0x060000): # QUtf8StringView
-                printer = gdb.default_visualizer(gdbValue)
-                date_string = printer.to_string()
-            else: # python str
-                date_string = gdbValue.string()
-            return date_string
+        elif item_type == 0x10000: # DateTime (stored as string)
+            return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
 
         elif item_type == 0x10020: # Url
             return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
