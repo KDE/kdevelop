@@ -201,14 +201,6 @@ class DumperBase():
             return self.createValueFromData(datish, typish)
         raise RuntimeError('EXPECTING ADDRESS OR BYTES, GOT %s' % type(datish))
 
-    def createProxyValue(self, proxy_data, type_name):
-        #typeid = self.typeid_for_string(type_name)
-        #self.type_code_cache[typeid] = TypeCode.Struct
-        val = self.Value(self)
-        #val.typeid = typeid
-        val.ldata = proxy_data
-        return val
-
     class StructBuilder():
         def __init__(self, dumper):
             self.dumper = dumper

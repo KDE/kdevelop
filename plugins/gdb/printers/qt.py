@@ -966,21 +966,31 @@ class QPersistentModelIndexPrinter:
         modelIndex = gdb.parse_and_eval("reinterpret_cast<const QPersistentModelIndex*>(%s)->operator QModelIndex()" % self.val.address)
         return str(modelIndex)
 
+############ Cbor / Json pretty printing starts here
+
+class CborOrJsonValueData:
+
+    def __init__(self, item_data, container_ptr, item_type, is_cbor):
+        self.item_data = item_data
+        self.container_ptr = container_ptr
+        self.item_type = item_type
+        self.is_cbor = is_cbor
+
 def qcborContainerElementCount(container_ptr):
     data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
     elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
     _, elements_size = d.vectorData(elements_pos)
     return elements_size
 
-def qdumpHelper_QCborArray_valueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cbor):
+def qcborContainerValueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cbor):
     element_at_n_addr = elements_data_ptr + idx * 16 # sizeof(QtCbor::Element) == 15
     element_value, element_type, element_flags = d.split('qII', element_at_n_addr)
     element_container, _, _ = d.split('pII', element_at_n_addr)
     if element_flags & 1: # QtCbor::Element::IsContainer
-        return d.createProxyValue((-1, element_container, element_type, is_cbor), 'QCborValue_proxy')
+        return CborOrJsonValueData(-1, element_container, element_type, is_cbor)
     if element_flags & 2: # QtCbor::Element::HasByteData
-        return d.createProxyValue((idx, container_ptr, element_type, is_cbor), 'QCborValue_proxy')
-    return d.createProxyValue((element_value, 0, element_type, is_cbor), 'QCborValue_proxy')
+        return CborOrJsonValueData(idx, container_ptr, element_type, is_cbor)
+    return CborOrJsonValueData(element_value, 0, element_type, is_cbor)
 
 def make_QString(utf16data, size):
     if d.qtVersionAtLeast(0x060000):
@@ -1075,8 +1085,11 @@ def createCborOrJsonValue(item_data, container_ptr, item_type, is_cbor):
     buffer = struct.pack("qPii", item_data, container_ptr, item_type, 0)
     return gdb.Value(buffer, valueType)
 
-def qdump__QCborValue_proxy(value):
-    item_data, container_ptr, item_type, is_cbor = value.ldata
+def qdump__QCborValueData(value):
+    item_data = value.item_data
+    container_ptr = value.container_ptr
+    item_type = value.item_type
+    is_cbor = value.is_cbor
 
     if item_type == 0x00: # int
         return item_data
@@ -1165,13 +1178,13 @@ class QCborContainerPrivateIterator:
         return self
 
     def valueAt(self, index):
-        return qdumpHelper_QCborArray_valueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
+        return qcborContainerValueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
 
     def __next__(self):
         if self.index >= self.size:
             raise StopIteration
 
-        item = qdump__QCborValue_proxy(self.valueAt(self.index))
+        item = qdump__QCborValueData(self.valueAt(self.index))
 
         if not self.is_array:
             if self.index % 2 == 0:
@@ -1274,11 +1287,11 @@ class QJsonObjectPrinter(PrinterBaseType):
 class QCborValuePrinterBase(PrinterForwarder):
 
     def _initFromFields(self, item_data, container_ptr, item_type):
-        proxyValue = d.createProxyValue((item_data, container_ptr, item_type, 'QCbor' in self._className), self._className)
-        self._initFromProxyValue(proxyValue)
+        valueData = CborOrJsonValueData(item_data, container_ptr, item_type, 'QCbor' in self._className)
+        self._initFromValueData(valueData)
 
-    def _initFromProxyValue(self, proxyValue):
-        _, _, item_type, _ = proxyValue.ldata
+    def _initFromValueData(self, valueData):
+        item_type = valueData.item_type
         if item_type == 0xffffffffffffffff:
             self._setUnderlyingValue('<Invalid>')
         elif item_type == 0x100 + 22:
@@ -1286,7 +1299,7 @@ class QCborValuePrinterBase(PrinterForwarder):
         elif item_type == 0x100 + 23:
             self._setUnderlyingValue('<Undefined>')
         else:
-            self._setUnderlyingValue(qdump__QCborValue_proxy(proxyValue))
+            self._setUnderlyingValue(qdump__QCborValueData(valueData))
             if item_type == 0x40 or item_type == 0x60:
                 self.display_hint = lambda : 'string'
 
@@ -1321,9 +1334,9 @@ class QJsonValuePrinter(QCborValuePrinterBase):
             raise RuntimeError("Qt version too old for inspecting QJsonValue")
         data = int(value['n'])
         t = int(value['t'])
-        proxyValue = d.createProxyValue((data, dd, t, False), 'QCborValue_proxy')
+        valueData = CborOrJsonValueData(data, dd, t, False)
         QCborValuePrinterBase.__init__(self, 'QJsonValue')
-        self._initFromProxyValue(proxyValue)
+        self._initFromValueData(valueData)
 
 class QCborValueConstRefPrinter(QCborValuePrinterBase):
 
@@ -1331,9 +1344,9 @@ class QCborValueConstRefPrinter(QCborValuePrinterBase):
         container_ptr = int(val['d'])
         item_index = int(val['i'])
         it = QCborContainerPrivateIterator(container_ptr, 'QCborValueConstRef')
-        proxy = it.valueAt(item_index)
+        valueData = it.valueAt(item_index)
         QCborValuePrinterBase.__init__(self, 'QCborValue')
-        self._initFromProxyValue(proxy)
+        self._initFromValueData(valueData)
 
 class QJsonValueConstRefPrinter(QCborValuePrinterBase):
 
@@ -1345,9 +1358,9 @@ class QJsonValueConstRefPrinter(QCborValuePrinterBase):
             item_index = item_index * 2 + 1 # see QJsonPrivate::Value::indexHelper()
         container_ptr = d.extractPointer(array_or_map)
         it = QCborContainerPrivateIterator(container_ptr, 'QJsonObject' if is_object else 'QJsonArray')
-        proxy = it.valueAt(item_index)
+        valueData = it.valueAt(item_index)
         QCborValuePrinterBase.__init__(self, 'QJsonValue')
-        self._initFromProxyValue(proxy)
+        self._initFromValueData(valueData)
 
 class QCborSimpleTypePrinter(PrinterBaseType):
 
