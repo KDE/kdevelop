@@ -847,7 +847,7 @@ void QtPrintersTest::testQCbor()
   ["null"] = <Null>,
   ["url"] = "http://www.kde.org",
   ["regexp"] = "^kde$",
-  ["birth"] = Wed May 30 09:31:00 2001,
+  ["birth"] = 2001-05-30T09:31:00.000+01:00,
   ["bytes"] = "ABCÿ\000þ" = {
     [0] = 65 'A',
     [1] = 66 'B',

@@ -1075,10 +1075,7 @@ class CborOrJsonValueData:
                 date_string = printer.to_string()
             else: # python str
                 date_string = gdbValue.string()
-            dt = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%f")
-            # Like QDateTimePrinter does
-            time_t = int(dt.timestamp())
-            return time.ctime(time_t)
+            return date_string
 
         elif item_type == 0x10020: # Url
             return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
