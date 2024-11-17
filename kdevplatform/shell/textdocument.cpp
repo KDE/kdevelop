@@ -417,6 +417,7 @@ bool TextDocument::save(DocumentSaveMode mode)
                     KStandardGuiItem::discard());
                 if (code != KMessageBox::PrimaryAction)
                     return false;
+                mode = Silent; // prevent documentSave() from asking essentially the same question again
             }
             break;
     }
@@ -425,7 +426,16 @@ bool TextDocument::save(DocumentSaveMode mode)
         return false;
     }
 
-    return d->document->documentSave();
+    if (mode & Silent) {
+        // Set the KTextEditor equivalent to DocumentSaveMode::Silent.
+        d->document->setModifiedOnDiskWarning(false);
+    }
+    const auto saved = d->document->documentSave();
+    if (mode & Silent) {
+        // Restore the default value. Unfortunately, a getter to query the previous value is missing.
+        d->document->setModifiedOnDiskWarning(true);
+    }
+    return saved;
 }
 
 IDocument::DocumentState TextDocument::state() const
