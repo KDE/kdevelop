@@ -21,6 +21,7 @@
 #include <sublime/viewbarcontainer.h>
 
 #include "core.h"
+#include "debug.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "plugincontroller.h"
@@ -188,6 +189,8 @@ bool Application::closeDocument(KTextEditor::Document *document) const
             return doc->close();
         }
     }
+
+    qCWarning(SHELL) << "ignoring request to close a document not registered with the document controller";
     return false;
 }
 
