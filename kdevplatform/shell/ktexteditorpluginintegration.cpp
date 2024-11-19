@@ -6,6 +6,8 @@
 
 #include "ktexteditorpluginintegration.h"
 
+#include <debug.h>
+
 #include <QFileInfo>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -246,6 +248,10 @@ bool Application::closeDocument(KTextEditor::Document *document) const
             return doc->close();
         }
     }
+
+    qCWarning(SHELL) << "ignoring request to close a document not registered with the document controller" << document;
+    // If the warning is printed in some scenario, consider returning
+    // `document && document->closeUrl()` instead of `false`.
     return false;
 }
 
