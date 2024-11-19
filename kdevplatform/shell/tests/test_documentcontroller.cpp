@@ -104,8 +104,8 @@ void TestDocumentController::testSaveSomeDocuments()
     QCOMPARE(document1->state(), IDocument::Modified);
     QCOMPARE(document2->state(), IDocument::Modified);
 
-    // save one document (Silent == don't ask user)
-    m_subject->saveSomeDocuments(QList<IDocument*>() << document1, IDocument::Silent);
+    // save one document
+    m_subject->saveSomeDocuments({document1}, IDocumentController::SaveSelectionMode::DontAskUser);
     QCOMPARE(document1->state(), IDocument::Clean);
     QCOMPARE(document2->state(), IDocument::Modified);
 }
@@ -126,7 +126,7 @@ void TestDocumentController::testSaveAllDocuments()
     QCOMPARE(document2->state(), IDocument::Modified);
 
     // save documents
-    m_subject->saveAllDocuments(IDocument::Silent);
+    m_subject->saveAllDocuments(IDocumentController::SaveSelectionMode::DontAskUser);
     QCOMPARE(document1->state(), IDocument::Clean);
     QCOMPARE(document2->state(), IDocument::Clean);
 }

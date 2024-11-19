@@ -412,8 +412,10 @@ void MainWindow::setVisible( bool visible )
 
 bool MainWindow::queryClose()
 {
-    if (!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(this, IDocument::Default))
+    if (!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(
+            this, IDocumentController::SaveSelectionMode::LetUserSelect)) {
         return false;
+    }
 
     return Sublime::MainWindow::queryClose();
 }
