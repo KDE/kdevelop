@@ -125,7 +125,6 @@ public Q_SLOTS:
 
     KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefName ) override;
 
-    virtual bool closeDocument( const QUrl &url );
     void fileClose();
     void slotSaveAllDocuments();
     bool closeAllDocuments() override;
