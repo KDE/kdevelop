@@ -76,10 +76,11 @@ public:
     void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) override;
 
     /// Request the document controller to save all documents.
-    /// If the \a mode is not IDocument::Silent, ask the user which documents to save.
+    /// If the \a mode is SaveSelectionMode::LetUserSelect, ask the user which documents to save.
     /// Returns false if the user cancels the save dialog.
-    bool saveAllDocuments(IDocument::DocumentSaveMode mode) override;
-    bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false) override;
+    bool saveAllDocuments(SaveSelectionMode mode) override;
+    bool saveAllDocumentsForWindow(KParts::MainWindow* mw, SaveSelectionMode mode,
+                                   bool currentAreaOnly = false) override;
 
     void initialize();
 
@@ -158,7 +159,7 @@ private:
     QList<IDocument*> documentsExclusivelyInWindow(MainWindow* mw, bool currentAreaOnly = false) const;
     QList<IDocument*> modifiedDocuments(const QList<IDocument*>& list) const;
 
-    bool saveSomeDocuments(const QList<IDocument*>& list, IDocument::DocumentSaveMode mode) override;
+    bool saveSomeDocuments(const QList<IDocument*>& list, SaveSelectionMode mode) override;
 
     void setupActions();
 

@@ -814,17 +814,17 @@ void DocumentController::activateDocument( IDocument * document, const KTextEdit
 
 void DocumentController::slotSaveAllDocuments()
 {
-    saveAllDocuments(IDocument::Silent);
+    saveAllDocuments(SaveSelectionMode::DontAskUser);
 }
 
-bool DocumentController::saveAllDocuments(IDocument::DocumentSaveMode mode)
+bool DocumentController::saveAllDocuments(SaveSelectionMode mode)
 {
     return saveSomeDocuments(openDocuments(), mode);
 }
 
-bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > & list, IDocument::DocumentSaveMode mode)
+bool DocumentController::saveSomeDocuments(const QList<IDocument*>& list, SaveSelectionMode mode)
 {
-    if (mode & IDocument::Silent) {
+    if (mode == SaveSelectionMode::DontAskUser) {
         const auto documents = modifiedDocuments(list);
         for (IDocument* doc : documents) {
             if (!DocumentController::isEmptyDocumentUrl(doc->url()) && !doc->save()) {
@@ -910,7 +910,7 @@ QList< IDocument * > KDevelop::DocumentController::modifiedDocuments(const QList
     return ret;
 }
 
-bool DocumentController::saveAllDocumentsForWindow(KParts::MainWindow* mw, KDevelop::IDocument::DocumentSaveMode mode, bool currentAreaOnly)
+bool DocumentController::saveAllDocumentsForWindow(KParts::MainWindow* mw, SaveSelectionMode mode, bool currentAreaOnly)
 {
     QList<IDocument*> checkSave = documentsExclusivelyInWindow(qobject_cast<KDevelop::MainWindow*>(mw), currentAreaOnly);
 
@@ -922,7 +922,7 @@ void DocumentController::reloadAllDocuments()
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
         const QList<IDocument*> views = visibleDocumentsInWindow(qobject_cast<KDevelop::MainWindow*>(mw));
 
-        if (!saveSomeDocuments(views, IDocument::Default))
+        if (!saveSomeDocuments(views, SaveSelectionMode::LetUserSelect))
             // User cancelled or other error
             return;
 
@@ -938,7 +938,7 @@ bool DocumentController::closeAllDocuments()
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
         const QList<IDocument*> views = visibleDocumentsInWindow(qobject_cast<KDevelop::MainWindow*>(mw));
 
-        if (!saveSomeDocuments(views, IDocument::Default))
+        if (!saveSomeDocuments(views, SaveSelectionMode::LetUserSelect))
             // User cancelled or other error
             return false;
 
@@ -963,7 +963,7 @@ void DocumentController::closeAllOtherDocuments()
         QList<IDocument*> soloViews = documentsExclusivelyInWindow(qobject_cast<KDevelop::MainWindow*>(mw));
         soloViews.removeAll(qobject_cast<IDocument*>(activeView->document()));
 
-        if (!saveSomeDocuments(soloViews, IDocument::Default))
+        if (!saveSomeDocuments(soloViews, SaveSelectionMode::LetUserSelect))
             // User cancelled or other error
             return;
 

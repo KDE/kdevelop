@@ -23,6 +23,14 @@
 
 using namespace KDevelop;
 
+namespace {
+bool saveAllDocumentsForMainWindow()
+{
+    return Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(
+        mainWindow(), IDocumentController::SaveSelectionMode::LetUserSelect, true);
+}
+}
+
 WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set)
     : QToolButton(parent), m_set(set), m_toolTipEnabled(true)
 {
@@ -84,7 +92,7 @@ void WorkingSetToolButton::duplicateSet()
 {
     Q_ASSERT(m_set);
 
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
+    if (!saveAllDocumentsForMainWindow())
         return;
     WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(QStringLiteral("clone"));
     set->setPersistent(true);
@@ -98,7 +106,7 @@ void WorkingSetToolButton::loadSet()
 
     m_set->setPersistent(true);
 
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
+    if (!saveAllDocumentsForMainWindow())
         return;
     mainWindow()->area()->setWorkingSet(QString(m_set->id()));
 }
@@ -110,7 +118,7 @@ void WorkingSetToolButton::closeSet()
     m_set->setPersistent(true);
     m_set->saveFromArea(mainWindow()->area());
 
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
+    if (!saveAllDocumentsForMainWindow())
         return;
     mainWindow()->area()->setWorkingSet(QString());
 }
@@ -154,7 +162,7 @@ void WorkingSetToolButton::buttonTriggered()
         showTooltip(QCursor::pos());
     }else{
         //Only close the working-set if the file was saved before
-        if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
+        if (!saveAllDocumentsForMainWindow())
             return;
         m_set->setPersistent(true);
         mainWindow()->area()->setWorkingSet(m_set->id());

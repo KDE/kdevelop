@@ -62,7 +62,8 @@ void RenameFileAction::execute()
         return;
     }
 
-    if (!ICore::self()->documentController()->saveSomeDocuments(QList<IDocument*>() << doc, IDocument::Silent)) {
+    if (!ICore::self()->documentController()->saveSomeDocuments({doc},
+                                                                IDocumentController::SaveSelectionMode::DontAskUser)) {
         return;
     }
 

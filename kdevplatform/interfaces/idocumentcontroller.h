@@ -83,9 +83,15 @@ public:
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) = 0;
 
-    virtual bool saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
-    virtual bool saveSomeDocuments(const QList<IDocument*>& list, KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
-    virtual bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false) = 0;
+    enum class SaveSelectionMode {
+        LetUserSelect,
+        DontAskUser
+    };
+    virtual bool saveAllDocuments(SaveSelectionMode mode = SaveSelectionMode::LetUserSelect) = 0;
+    virtual bool saveSomeDocuments(const QList<IDocument*>& list,
+                                   SaveSelectionMode mode = SaveSelectionMode::LetUserSelect) = 0;
+    virtual bool saveAllDocumentsForWindow(KParts::MainWindow* mw, SaveSelectionMode mode,
+                                           bool currentAreaOnly = false) = 0;
 
     /// Opens a text document containing the @p data text.
     virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) = 0;

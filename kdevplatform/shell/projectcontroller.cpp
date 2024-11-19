@@ -1272,7 +1272,7 @@ void ProjectController::commitCurrentProject()
         auto* vcs=plugin->extension<IBasicVersionControl>();
 
         if(vcs) {
-            ICore::self()->documentController()->saveAllDocuments(KDevelop::IDocument::Silent);
+            ICore::self()->documentController()->saveAllDocuments(IDocumentController::SaveSelectionMode::DontAskUser);
 
             const Path basePath = project->path();
             auto* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, basePath.toUrl()));
