@@ -375,13 +375,7 @@ void TextDocument::reload()
     if (!d->document)
         return;
 
-    if(d->state ==Dirty) {
-        d->document->setModifiedOnDiskWarning(false);
-        d->document->documentReload();
-        d->document->setModifiedOnDiskWarning(true);
-    } else {
-        d->document->documentReload();
-    }
+    d->document->documentReload();
 }
 
 bool TextDocument::save(DocumentSaveMode mode)
