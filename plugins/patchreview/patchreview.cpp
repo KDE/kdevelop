@@ -362,9 +362,9 @@ void PatchReviewPlugin::closeReview()
 
         auto oldArea = ICore::self()->uiController()->activeArea();
         if (oldArea->objectName() == QLatin1String("review")) {
-            if (ICore::self()->documentController()->saveAllDocumentsForWindow(ICore::self()->uiController()->activeMainWindow(),
-                                                                               IDocument::Default, true))
-            {
+            if (ICore::self()->documentController()->saveAllDocumentsForWindow(
+                    ICore::self()->uiController()->activeMainWindow(),
+                    IDocumentController::SaveSelectionMode::LetUserSelect, true)) {
                 ICore::self()->uiController()->switchToArea(m_lastArea.isEmpty() ? QStringLiteral("code") : m_lastArea,
                                                             KDevelop::IUiController::ThisWindow);
                 if (oldArea->workingSetPersistent()) {
