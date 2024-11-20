@@ -51,6 +51,7 @@ Q_SIGNALS:
 
 private:
     void addFileToModel(const QFileInfo& fileInfo);
+    void openScratchDocument(const QString& scratchFilePath, const QString& scratchFileName);
 
     const QString m_dataDirectory;
     ScratchpadToolViewFactory* m_factory;
