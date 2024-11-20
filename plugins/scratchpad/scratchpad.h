@@ -10,13 +10,13 @@
 #include <interfaces/iplugin.h>
 
 #include <QFileIconProvider>
+#include <QString>
 
 class ScratchpadToolViewFactory;
 
 class QStandardItemModel;
 class QModelIndex;
 class QFileInfo;
-class QString;
 class QAction;
 
 class Scratchpad
@@ -30,8 +30,6 @@ public:
     QStandardItemModel* model() const;
 
     QAction* runAction() const;
-
-    static QString dataDirectory();
 
     void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
 
@@ -54,6 +52,7 @@ Q_SIGNALS:
 private:
     void addFileToModel(const QFileInfo& fileInfo);
 
+    const QString m_dataDirectory;
     ScratchpadToolViewFactory* m_factory;
     QStandardItemModel* m_model;
     QFileIconProvider m_iconProvider;
