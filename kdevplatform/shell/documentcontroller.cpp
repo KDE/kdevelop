@@ -827,8 +827,7 @@ bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > 
     if (mode & IDocument::Silent) {
         const auto documents = modifiedDocuments(list);
         for (IDocument* doc : documents) {
-            if( !DocumentController::isEmptyDocumentUrl(doc->url()) && !doc->save(mode) )
-            {
+            if (!DocumentController::isEmptyDocumentUrl(doc->url()) && !doc->save()) {
                 if( doc )
                     qCWarning(SHELL) << "!! Could not save document:" << doc->url();
                 else
