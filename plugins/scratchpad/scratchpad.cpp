@@ -223,6 +223,17 @@ void Scratchpad::renameScratch(const QModelIndex& index, const QString& previous
         return;
     }
 
+    // close the document before renaming its file
+    // FIXME is there a better way ? this feels hacky
+    auto* document = core()->documentController()->documentForUrl(QUrl::fromLocalFile(previousPath));
+    if (document) {
+        if (!document->close()) {
+            // canceled by the user => rollback
+            m_model->setData(index, previousName);
+            return;
+        }
+    }
+
     if (QFile::rename(previousPath, newPath)) {
         qCDebug(PLUGIN_SCRATCHPAD) << "renamed" << previousPath << "to" << newPath;
 
@@ -232,10 +243,8 @@ void Scratchpad::renameScratch(const QModelIndex& index, const QString& previous
         config.deleteEntry(previousName);
         config.writeEntry(newName, index.data(Scratchpad::RunCommandRole));
 
-        // close old and re-open the closed document
-        if (auto* document = core()->documentController()->documentForUrl(QUrl::fromLocalFile(previousPath))) {
-            // FIXME is there a better way ? this feels hacky
-            document->close();
+        if (document) {
+            // re-open the closed document
             document = core()->documentController()->openDocument(QUrl::fromLocalFile(newPath));
             document->setPrettyName(i18nc("prefix to distinguish scratch tabs", "scratch:%1", index.data().toString()));
         }
