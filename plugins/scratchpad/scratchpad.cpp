@@ -154,9 +154,7 @@ QStandardItemModel* Scratchpad::model() const
 
 void Scratchpad::openScratch(const QModelIndex& index)
 {
-    const QUrl scratchUrl = QUrl::fromLocalFile(index.data(FullPathRole).toString());
-    auto* const document = core()->documentController()->openDocument(scratchUrl);
-    document->setPrettyName(i18nc("prefix to distinguish scratch tabs", "scratch:%1", index.data().toString()));
+    openScratchDocument(index.data(FullPathRole).toString(), index.data().toString());
 }
 
 void Scratchpad::runScratch(const QModelIndex& index)
@@ -245,8 +243,7 @@ void Scratchpad::renameScratch(const QModelIndex& index, const QString& previous
 
         if (document) {
             // re-open the closed document
-            document = core()->documentController()->openDocument(QUrl::fromLocalFile(newPath));
-            document->setPrettyName(i18nc("prefix to distinguish scratch tabs", "scratch:%1", index.data().toString()));
+            openScratchDocument(newPath, newName);
         }
     } else {
         qCWarning(PLUGIN_SCRATCHPAD) << "failed renaming" << previousPath << "to" << newPath;
@@ -291,6 +288,15 @@ void Scratchpad::createActionsForMainWindow(Sublime::MainWindow* window, QString
     actions.addAction(QStringLiteral("run_scratch"), m_runAction);
 }
 
+void Scratchpad::openScratchDocument(const QString& scratchFilePath, const QString& scratchFileName)
+{
+    auto* const document = core()->documentController()->openDocument(QUrl::fromLocalFile(scratchFilePath));
+    if (document) {
+        document->setPrettyName(i18nc("prefix to distinguish scratch tabs", "scratch:%1", scratchFileName));
+    } else {
+        qCWarning(PLUGIN_SCRATCHPAD) << "could not open scratch document at" << scratchFilePath;
+    }
+}
 
 #include "scratchpad.moc"
 #include "moc_scratchpad.cpp"
