@@ -175,7 +175,9 @@ void Scratchpad::removeScratch(const QModelIndex& index)
 {
     const QString path = index.data(FullPathRole).toString();
     if (auto* document = core()->documentController()->documentForUrl(QUrl::fromLocalFile(path))) {
-        document->close();
+        if (!document->close()) {
+            return; // canceled by the user
+        }
     }
 
     if (QFile::remove(path)) {
