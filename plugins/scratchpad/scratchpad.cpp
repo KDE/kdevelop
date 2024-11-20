@@ -25,6 +25,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QFileIconProvider>
+#include <QFileInfo>
 #include <QHash>
 
 #include <algorithm>
@@ -89,10 +90,34 @@ QString commandForScratch(const QFileInfo& file)
 
     return defaultCommands.value(suffix);
 }
+
+[[nodiscard]] QString initializeDataDirectory()
+{
+    auto dataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+        + QLatin1String("/kdevscratchpad/scratches/");
+
+    if (const QDir dir(dataPath); !dir.exists()) {
+        if (dir.mkpath(QStringLiteral("."))) {
+            qCDebug(PLUGIN_SCRATCHPAD) << "created directory" << dataPath;
+        } else {
+            qCWarning(PLUGIN_SCRATCHPAD) << "error creating directory" << dataPath;
+        }
+    }
+
+    // A local-file URL argument to IDocumentController::documentForUrl() must have a canonical file path.
+    auto canonicalPath = QFileInfo{dataPath}.canonicalFilePath();
+    if (canonicalPath.isEmpty()) {
+        qCWarning(PLUGIN_SCRATCHPAD) << dataPath << "does not exist";
+        return dataPath;
+    }
+    canonicalPath += QLatin1Char{'/'}; // allows appending a filename without a slash
+    return canonicalPath;
 }
+} // unnamed namespace
 
 Scratchpad::Scratchpad(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
     : KDevelop::IPlugin(QStringLiteral("scratchpad"), parent, metaData)
+    , m_dataDirectory(initializeDataDirectory())
     , m_factory(new ScratchpadToolViewFactory(this))
     , m_model(new QStandardItemModel(this))
     , m_runAction(new QAction(this))
@@ -103,12 +128,7 @@ Scratchpad::Scratchpad(QObject* parent, const KPluginMetaData& metaData, const Q
 
     core()->uiController()->addToolView(i18nc("@title:window", "Scratchpad"), m_factory);
 
-    const QDir dataDir(dataDirectory());
-    if (!dataDir.exists()) {
-        qCDebug(PLUGIN_SCRATCHPAD) << "Creating directory" << dataDir;
-        dataDir.mkpath(QStringLiteral("."));
-    }
-
+    const QDir dataDir(m_dataDirectory);
     const QFileInfoList scratches = dataDir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
 
     for (const auto& fileInfo : scratches) {
@@ -130,13 +150,6 @@ void Scratchpad::unload()
 QStandardItemModel* Scratchpad::model() const
 {
     return m_model;
-}
-
-QString Scratchpad::dataDirectory()
-{
-    const static QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
-                                                              + QLatin1String("/kdevscratchpad/scratches/");
-    return dir;
 }
 
 void Scratchpad::openScratch(const QModelIndex& index)
@@ -181,7 +194,7 @@ void Scratchpad::createScratch(const QString& name)
         return;
     }
 
-    QFile file(dataDirectory() + name);
+    QFile file(m_dataDirectory + name);
     if (!file.exists() && file.open(QIODevice::WriteOnly)) { // create a new file if it doesn't exist
         file.close();
     }
@@ -202,8 +215,8 @@ void Scratchpad::renameScratch(const QModelIndex& index, const QString& previous
         return;
     }
 
-    const QString previousPath = dataDirectory() + previousName;
-    const QString newPath = dataDirectory() + index.data().toString();
+    const QString previousPath = m_dataDirectory + previousName;
+    const QString newPath = m_dataDirectory + index.data().toString();
     if (previousPath == newPath) {
         return;
     }
@@ -235,7 +248,7 @@ void Scratchpad::renameScratch(const QModelIndex& index, const QString& previous
 void Scratchpad::addFileToModel(const QFileInfo& fileInfo)
 {
     auto* const item = new QStandardItem(m_iconProvider.icon(fileInfo), fileInfo.fileName());
-    item->setData(fileInfo.absoluteFilePath(), FullPathRole);
+    item->setData(fileInfo.filePath(), FullPathRole);
     const auto command = commandForScratch(fileInfo);
     item->setData(command, RunCommandRole);
     scratchCommands().writeEntry(item->text(), item->data(RunCommandRole));
