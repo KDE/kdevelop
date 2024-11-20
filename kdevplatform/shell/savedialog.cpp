@@ -74,13 +74,21 @@ KSaveSelectDialog::~KSaveSelectDialog()
 
 void KSaveSelectDialog::save( )
 {
+    auto resultCode = DialogCode::Accepted;
+
     for (int i = 0; i < m_listWidget->count(); ++i) {
         auto* item = static_cast<DocumentItem*>(m_listWidget->item(i));
-        if (item->data(Qt::CheckStateRole).toBool())
-            item->doc()->save();
+        if (item->data(Qt::CheckStateRole).toBool()) {
+            if (!item->doc()->save()) {
+                // Reject because the user canceled saving a document.
+                // Keep saving the remaining selected documents, because the user opted
+                // to save them all, and we assume this canceled document is an exception.
+                resultCode = DialogCode::Rejected;
+            }
+        }
     }
 
-    accept();
+    done(resultCode);
 }
 
 #include "moc_savedialog.cpp"
