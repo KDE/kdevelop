@@ -598,8 +598,7 @@ bool MainWindow::closeView(KTextEditor::View *kteView)
         const auto views = area->views();
         for (auto* view : views) {
             if (toKteView(view) == kteView) {
-                area->closeView(view);
-                return true;
+                return area->closeView(view);
             }
         }
     }
