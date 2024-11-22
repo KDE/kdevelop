@@ -186,8 +186,10 @@ void ScratchpadView::runSelectedScratch()
 {
     const auto sourceIndex = proxyModel()->mapToSource(currentIndex());
     if (auto* document = KDevelop::ICore::self()->documentController()->documentForUrl(
-        QUrl::fromLocalFile(sourceIndex.data(Scratchpad::FullPathRole).toString()))) {
-            document->save();
+            QUrl::fromLocalFile(sourceIndex.data(Scratchpad::FullPathRole).toString()))) {
+        if (!document->save()) {
+            return; // canceled by the user
+        }
     }
     m_scratchpad->setCommand(sourceIndex, commandWidget->text());
     m_scratchpad->runScratch(sourceIndex);
