@@ -103,11 +103,15 @@ ExternalScriptJob::ExternalScriptJob(ExternalScriptItem* item, const QUrl& url, 
     }
 
     if (item->saveMode() == ExternalScriptItem::SaveCurrentDocument && view) {
-        view->document()->documentSave();
+        if (!view->document()->documentSave()) {
+            return; // canceled by the user
+        }
     } else if (item->saveMode() == ExternalScriptItem::SaveAllDocuments) {
         const auto documents = KDevelop::ICore::self()->documentController()->openDocuments();
         for (KDevelop::IDocument* doc : documents) {
-            doc->save();
+            if (!doc->save()) {
+                return; // canceled by the user
+            }
         }
     }
 
