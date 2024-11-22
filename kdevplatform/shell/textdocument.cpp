@@ -409,8 +409,11 @@ bool TextDocument::save(DocumentSaveMode mode)
                     i18nc("@title:window", "Document Externally Modified"),
                     KGuiItem(i18nc("@action:button", "Overwrite External Changes"), QStringLiteral("document-save")),
                     KStandardGuiItem::discard());
-                if (code != KMessageBox::PrimaryAction)
+                if (code == KMessageBox::SecondaryAction) {
+                    return true; // Discard
+                } else if (code == KMessageBox::Cancel) {
                     return false;
+                }
                 mode = Silent; // prevent documentSave() from asking essentially the same question again
             }
             break;
