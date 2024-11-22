@@ -825,17 +825,18 @@ bool DocumentController::saveAllDocuments(SaveSelectionMode mode)
 bool DocumentController::saveSomeDocuments(const QList<IDocument*>& list, SaveSelectionMode mode)
 {
     if (mode == SaveSelectionMode::DontAskUser) {
+        bool ret = true;
         const auto documents = modifiedDocuments(list);
         for (IDocument* doc : documents) {
             if (!DocumentController::isEmptyDocumentUrl(doc->url()) && !doc->save()) {
-                if( doc )
-                    qCWarning(SHELL) << "!! Could not save document:" << doc->url();
-                else
-                    qCWarning(SHELL) << "!! Could not save document as its NULL";
+                // Fail because the user canceled saving a document.
+                // Keep saving the remaining documents, because they are likely to be
+                // saved without user prompts. And our caller may not be able to
+                // (or choose not to) abort the operation that triggered the saving.
+                ret = false;
             }
-            // TODO if (!ret) showErrorDialog() ?
         }
-
+        return ret;
     } else {
         // Ask the user which documents to save
         QList<IDocument*> checkSave = modifiedDocuments(list);
@@ -844,9 +845,8 @@ bool DocumentController::saveSomeDocuments(const QList<IDocument*>& list, SaveSe
             ScopedDialog<KSaveSelectDialog> dialog(checkSave, qApp->activeWindow());
             return dialog->exec();
         }
+        return true;
     }
-
-    return true;
 }
 
 QList< IDocument * > KDevelop::DocumentController::visibleDocumentsInWindow(MainWindow * mw) const
