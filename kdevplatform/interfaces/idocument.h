@@ -108,7 +108,8 @@ public:
 
     /**
      * Saves the document.
-     * @return true if the document was saved, false otherwise
+     *
+     * @return @c true if the document was saved or discarded, @c false otherwise (canceled or error).
      */
     virtual bool save(DocumentSaveMode mode = Default) = 0;
 
