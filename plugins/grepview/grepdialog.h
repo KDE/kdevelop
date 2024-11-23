@@ -73,6 +73,14 @@ private:
     ///
     ///This is slow, so don't call it too often
     bool isPartOfChoice(const QUrl& url) const;
+
+    /**
+     * Save searched-in documents.
+     *
+     * @return whether the saving succeeded
+     */
+    bool saveSearchedDocuments() const;
+
     ///Checks what a user has entered into the dialog and saves the data in m_settings
     void updateSettings();
     /// Enables/disables limit-to-project UI depending on current search paths.

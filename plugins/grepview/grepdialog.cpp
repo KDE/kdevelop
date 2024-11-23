@@ -566,35 +566,37 @@ bool GrepDialog::isPartOfChoice(const QUrl& url) const
     return false;
 }
 
+bool GrepDialog::saveSearchedDocuments() const
+{
+    const QStringList include = GrepFindFilesThread::parseInclude(m_settings.files);
+    const QStringList exclude = GrepFindFilesThread::parseExclude(m_settings.exclude);
+
+    // search for unsaved documents
+    QList<IDocument*> unsavedFiles;
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (IDocument* doc : documents) {
+        QUrl docUrl = doc->url();
+        if (doc->state() != IDocument::Clean &&
+            isPartOfChoice(docUrl) &&
+            QDir::match(include, docUrl.fileName()) &&
+            !WildcardHelpers::match(exclude, docUrl.toLocalFile())
+        ) {
+            unsavedFiles << doc;
+        }
+    }
+
+    return ICore::self()->documentController()->saveSomeDocuments(unsavedFiles);
+}
+
 void GrepDialog::startSearch()
 {
     // if m_show is false, all settings are fixed in m_settings
     if (m_show)
         updateSettings();
 
-    if (!m_settings.fromHistory) {
-        const QStringList include = GrepFindFilesThread::parseInclude(m_settings.files);
-        const QStringList exclude = GrepFindFilesThread::parseExclude(m_settings.exclude);
-
-        // search for unsaved documents
-        QList<IDocument*> unsavedFiles;
-        const auto documents = ICore::self()->documentController()->openDocuments();
-        for (IDocument* doc : documents) {
-            QUrl docUrl = doc->url();
-            if (doc->state() != IDocument::Clean &&
-                isPartOfChoice(docUrl) &&
-                QDir::match(include, docUrl.fileName()) &&
-                !WildcardHelpers::match(exclude, docUrl.toLocalFile())
-            ) {
-                unsavedFiles << doc;
-            }
-        }
-
-        if(!ICore::self()->documentController()->saveSomeDocuments(unsavedFiles))
-        {
-            close();
-            return;
-        }
+    if (!m_settings.fromHistory && !saveSearchedDocuments()) {
+        close();
+        return;
     }
 
     const QString descriptionOrUrl(m_settings.searchPaths);
