@@ -575,12 +575,13 @@ bool GrepDialog::saveSearchedDocuments() const
     QList<IDocument*> unsavedFiles;
     const auto documents = ICore::self()->documentController()->openDocuments();
     for (IDocument* doc : documents) {
+        const auto state = doc->state();
+        if (state != IDocument::Modified && state != IDocument::DirtyAndModified) {
+            continue; // no modifications to save
+        }
         QUrl docUrl = doc->url();
-        if (doc->state() != IDocument::Clean &&
-            isPartOfChoice(docUrl) &&
-            QDir::match(include, docUrl.fileName()) &&
-            !WildcardHelpers::match(exclude, docUrl.toLocalFile())
-        ) {
+        if (isPartOfChoice(docUrl) && QDir::match(include, docUrl.fileName())
+            && !WildcardHelpers::match(exclude, docUrl.toLocalFile())) {
             unsavedFiles << doc;
         }
     }
