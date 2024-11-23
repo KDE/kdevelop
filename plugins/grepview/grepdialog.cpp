@@ -586,7 +586,7 @@ bool GrepDialog::saveSearchedDocuments() const
         }
     }
 
-    return ICore::self()->documentController()->saveSomeDocuments(unsavedFiles);
+    return unsavedFiles.empty() || ICore::self()->documentController()->saveSomeDocuments(unsavedFiles);
 }
 
 void GrepDialog::startSearch()
