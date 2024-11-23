@@ -23,6 +23,7 @@
 #include <interfaces/ilaunchmode.h>
 #include <interfaces/launchconfigurationtype.h>
 #include <outputview/outputjob.h>
+#include <project/builderjob.h>
 #include <project/projectmodel.h>
 #include <sublime/message.h>
 
@@ -704,6 +705,8 @@ void KDevelop::RunController::finished(KJob * job)
         case KJob::NoError:
         case KJob::KilledJobError:
         case OutputJob::FailedShownError:
+        // either the user canceled the saving or an error message box was displayed
+        case BuilderJob::CouldNotSaveAllDocumentsError:
             break;
 
         default:
