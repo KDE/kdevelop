@@ -37,6 +37,12 @@ public:
         Clean /**< Clean the selected items */
     };
 
+    enum {
+        // Add a "random" number to KJob::UserDefinedError and hopefully avoid
+        // clashes with OutputJob's, OutputExecuteJob's, etc. error codes.
+        CouldNotSaveAllDocumentsError = UserDefinedError + 135
+    };
+
     /**
      * Creates a Builder job
      */
