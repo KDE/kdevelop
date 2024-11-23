@@ -36,14 +36,12 @@ class BuilderJobPrivate
 public:
     explicit BuilderJobPrivate( BuilderJob* job )
         : q(job)
-        , failOnFirstError(true)
     {
     }
 
     BuilderJob* q;
 
     void addJob( BuilderJob::BuildType, ProjectBaseItem* );
-    bool failOnFirstError;
 
     QString buildTypeToString( BuilderJob::BuildType type ) const;
 
