@@ -251,7 +251,12 @@ void BuilderJob::start()
     // Also should be moved into the builder and there try to find target(s) for the given item and then just save the documents of that target -> list??
     if (ICore::self()->activeSession()->config()->group(QStringLiteral("Project Manager")).readEntry("Save All Documents Before Building", true))
     {
-        ICore::self()->documentController()->saveAllDocuments(IDocumentController::SaveSelectionMode::DontAskUser);
+        if (!ICore::self()->documentController()->saveAllDocuments(
+                IDocumentController::SaveSelectionMode::DontAskUser)) {
+            setError(CouldNotSaveAllDocumentsError);
+            emitResult();
+            return;
+        }
     }
 
     ExecuteCompositeJob::start();
