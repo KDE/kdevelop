@@ -1350,7 +1350,7 @@ class QCborValuePrinterBase(PrinterForwarder):
                 buffer = ''.join(f'\\x{byte:02x}' if byte < 32 or byte == 127 else chr(byte) for byte in buffer)
                 self._setUnderlyingValue(f'Tag({tag}) {str(buffer)}')
             else:
-                self._setUnderlyingValue('Invalid QCborTag')
+                self._setUnderlyingValue('<Invalid Tag>')
         else:
             self._setUnderlyingValue(valueData.inspect())
             if item_type == CborValueType.ByteArray.value or item_type == CborValueType.String.value:
