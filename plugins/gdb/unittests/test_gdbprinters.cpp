@@ -863,17 +863,7 @@ void QtPrintersTest::testQCbor()
     ["title"] = "Surface technician",
     ["emptyObj"] = QCborMap (size = 0),
     ["emptyArray"] = QCborArray (size = 0),
-    ["bigNum"] = "\001\000\000\000\000\000\000\000" = {
-      [0] = 1 '\001',
-      [1] = 0 '\000',
-      [2] = 0 '\000',
-      [3] = 0 '\000',
-      [4] = 0 '\000',
-      [5] = 0 '\000',
-      [6] = 0 '\000',
-      [7] = 0 '\000',
-      [8] = 0 '\000'
-    }
+    ["bigNum"] = Tag(2) \x01\x00\x00\x00\x00\x00\x00\x00\x00
   },
   ["children"] = QCborArray (size = 2) = {"Alice", "Mickaël"}
 })";
@@ -931,18 +921,7 @@ void QtPrintersTest::testQCbor()
   [5] = -2 '\376'
 })");
 
-    // TODO the tag number is missing
-    const QByteArray expectedBigNum = R"("\001\000\000\000\000\000\000\000" = {
-  [0] = 1 '\001',
-  [1] = 0 '\000',
-  [2] = 0 '\000',
-  [3] = 0 '\000',
-  [4] = 0 '\000',
-  [5] = 0 '\000',
-  [6] = 0 '\000',
-  [7] = 0 '\000',
-  [8] = 0 '\000'
-})";
+    const QByteArray expectedBigNum = R"(Tag(2) \x01\x00\x00\x00\x00\x00\x00\x00\x00)";
     QCOMPARE(printedValue(gdb, "bigNumValueRef"), expectedBigNum);
     QCOMPARE(printedValue(gdb, "bigNumValue"), expectedBigNum);
 }

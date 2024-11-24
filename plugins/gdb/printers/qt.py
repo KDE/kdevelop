@@ -1061,16 +1061,21 @@ class CborOrJsonValueData:
             return make_QString(bytedata_data, int(bytedata_len / 2))
         return make_Utf8String(bytedata_data, bytedata_len)
 
+    # A variant of qdumpHelper_QCbor_string which returns a python bytes buffer
+    def toPythonBytes(self, element_index):
+        (bytedata_data, bytedata_len, element_flags) = CborOrJsonValueData.extractByteData(d, self.container_ptr, element_index)
+        buffer = d.readMemory(bytedata_data, bytedata_len)
+        return (buffer, bytedata_len, element_flags)
+
     # A variant of qdumpHelper_QCbor_string which returns a python string instead
     def toPythonString(self, element_index):
-        (bytedata_data, bytedata_len, element_flags) = CborOrJsonValueData.extractByteData(d, self.container_ptr, element_index)
+        (buffer, bytedata_len, element_flags) = self.toPythonBytes(element_index)
         enc = 'utf8'
         if element_flags & 8: # QtCbor::Element::StringIsAscii
             enc = 'latin1'
         elif (element_flags & 4): # QtCbor::Element::StringIsUtf16
             enc = 'utf16'
-        res = d.readMemory(bytedata_data, bytedata_len)
-        return str(res[0:bytedata_len], enc)
+        return str(buffer[0:bytedata_len], enc)
 
     # originally qdump__QCborValue_proxy
     def inspect(self):
@@ -1110,7 +1115,7 @@ class CborOrJsonValueData:
         elif item_type == CborValueType.Map.value:
             return self.createCborOrJsonMap()
 
-        elif item_type in { CborValueType.DateTime.value, CborValueType.Url.value, CborValueType.RegularExpression.value}:
+        elif item_type in { CborValueType.DateTime.value, CborValueType.Url.value, CborValueType.RegularExpression.value, CborValueType.Tag.value}:
             # forward to QCborValuePrinterBase
             # so that the Type column shows QCborValue or QJsonValue, not char[]
             return self.toCborOrJsonGdbValue()
@@ -1126,17 +1131,6 @@ class CborOrJsonValueData:
             final_bytes_buffer = struct.pack('@IHH8s', data1, data2, data3, data4) # convert to native ordering for QUuid members
             value_type = gdb.lookup_type('QUuid')
             return gdb.Value(final_bytes_buffer, value_type)
-
-        elif item_type == CborValueType.Tag.value:
-            data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
-            elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
-            elements_data_ptr, elements_size = d.vectorData(elements_pos)
-            if elements_size == 2:
-                tag = d.extractInt64(elements_data_ptr)
-                # TODO what to do with the tag?
-                # We can't return both a QLatin1String and an QCborTag
-                # QCborTag is just a qint64.
-            return qdumpHelper_QCbor_string(d, container_ptr, 1, True)
 
         elif item_type & 0xFF00 == CborValueType.SimpleType.value: # isSimpleType()
             # QCborSimpleType is just an enum
@@ -1345,6 +1339,18 @@ class QCborValuePrinterBase(PrinterForwarder):
             self._setUnderlyingValue('Url(%s)' % valueData.toPythonString(1))
         elif item_type == CborValueType.RegularExpression.value:
             self._setUnderlyingValue('RegularExpression(%s)' % valueData.toPythonString(1))
+        elif item_type == CborValueType.Tag.value:
+            data_pos = valueData.container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
+            elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
+            elements_data_ptr, elements_size = d.vectorData(elements_pos)
+            if elements_size == 2:
+                tag = d.extractInt64(elements_data_ptr)
+                buffer, _, _ = valueData.toPythonBytes(1)
+                # Escape non-printable characters
+                buffer = ''.join(f'\\x{byte:02x}' if byte < 32 or byte == 127 else chr(byte) for byte in buffer)
+                self._setUnderlyingValue(f'Tag({tag}) {str(buffer)}')
+            else:
+                self._setUnderlyingValue('Invalid QCborTag')
         else:
             self._setUnderlyingValue(valueData.inspect())
             if item_type == CborValueType.ByteArray.value or item_type == CborValueType.String.value:
