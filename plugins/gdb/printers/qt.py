@@ -10,6 +10,7 @@ import itertools
 import re
 import time
 from datetime import datetime
+from enum import Enum
 
 from dumper import *
 from helper import *
@@ -968,6 +969,32 @@ class QPersistentModelIndexPrinter:
 
 ############ Cbor / Json pretty printing starts here
 
+class CborValueType(Enum):
+    # converted from qcborvalue.h
+    Integer         = 0x00
+    ByteArray       = 0x40
+    String          = 0x60
+    Array           = 0x80
+    Map             = 0xa0
+    Tag             = 0xc0
+
+    # range 0x100 - 0x1ff for Simple Types
+    SimpleType      = 0x100
+    FalseValue      = SimpleType + 20
+    TrueValue       = SimpleType + 21
+    Null            = SimpleType + 22
+    Undefined       = SimpleType + 23
+
+    Double          = 0x202
+
+    # extended (tagged) types
+    DateTime        = 0x10000
+    Url             = 0x10020
+    RegularExpression = 0x10023
+    Uuid            = 0x10025
+
+    Invalid         = -1
+
 class CborOrJsonValueData:
 
     def __init__(self, item_data, container_ptr, item_type, is_cbor):
@@ -1004,13 +1031,13 @@ class CborOrJsonValueData:
         buffer = struct.pack("qPii", self.item_data, self.container_ptr, self.item_type, 0)
         return gdb.Value(buffer, valueType)
 
-    @staticmethod    
-    def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
+    @staticmethod
+    def extractByteData(d, container_ptr, element_index):
         # d.split('i@{@QByteArray::size_type}pp', container_ptr) doesn't work with CDB,
         # so be explicit:
         data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
         elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
-        elements_data_ptr, elements_size = d.vectorData(elements_pos)
+        elements_data_ptr, _ = d.vectorData(elements_pos)
         element_at_n_addr = elements_data_ptr + element_index * 16 # sizeof(QtCbor::Element) == 16
         element_value, _, element_flags = d.split('qII', element_at_n_addr)
         bytedata, _, _ = d.qArrayData(data_pos)
@@ -1021,7 +1048,11 @@ class CborOrJsonValueData:
         else:
             bytedata_len = d.extractInt(bytedata)
             bytedata_data = bytedata + 4 # sizeof(QtCbor::ByteData) header part
+        return (bytedata_data, bytedata_len, element_flags)
 
+    @staticmethod
+    def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
+        (bytedata_data, bytedata_len, element_flags) = CborOrJsonValueData.extractByteData(d, container_ptr, element_index)
         if is_bytes:
             return make_QByteArray(bytedata_data, bytedata_len)
         if element_flags & 8: # QtCbor::Element::StringIsAscii
@@ -1029,6 +1060,17 @@ class CborOrJsonValueData:
         if element_flags & 4: # QtCbor::Element::StringIsUtf16
             return make_QString(bytedata_data, int(bytedata_len / 2))
         return make_Utf8String(bytedata_data, bytedata_len)
+
+    # A variant of qdumpHelper_QCbor_string which returns a python string instead
+    def toPythonString(self, element_index):
+        (bytedata_data, bytedata_len, element_flags) = CborOrJsonValueData.extractByteData(d, self.container_ptr, element_index)
+        enc = 'utf8'
+        if element_flags & 8: # QtCbor::Element::StringIsAscii
+            enc = 'latin1'
+        elif (element_flags & 4): # QtCbor::Element::StringIsUtf16
+            enc = 'utf16'
+        res = d.readMemory(bytedata_data, bytedata_len)
+        return str(res[0:bytedata_len], enc)
 
     # originally qdump__QCborValue_proxy
     def inspect(self):
@@ -1038,49 +1080,54 @@ class CborOrJsonValueData:
         is_cbor = self.is_cbor
         qdumpHelper_QCbor_string = CborOrJsonValueData.qdumpHelper_QCbor_string
 
-        if item_type == 0x00: # int
+        if item_type == CborValueType.Integer.value:
             return item_data
 
-        elif item_type == 0x100 + 20:
+        elif item_type == CborValueType.FalseValue.value:
             return False
 
-        elif item_type == 0x100 + 21:
+        elif item_type == CborValueType.TrueValue.value:
             return True
 
-        elif item_type == 0xffffffffffffffff or item_type == 0x100 + 22 or item_type == 0x100 + 23:
+        elif item_type in {CborValueType.Invalid.value, CborValueType.Null.value, CborValueType.Undefined.value} :
             # Invalid, null or undefined, forward to QCborValuePrinterBase
             # so that the Type column shows QCborValue or QJsonValue, not char[]
             return self.toCborOrJsonGdbValue()
 
-        elif item_type == 0x202:
+        elif item_type == CborValueType.Double.value:
             val, = struct.unpack('d', struct.pack('q', item_data))
             return float(val)
 
-        elif item_type == 0x40:
+        elif item_type == CborValueType.ByteArray.value:
             return qdumpHelper_QCbor_string(d, container_ptr, item_data, True)
 
-        elif item_type == 0x60:
+        elif item_type == CborValueType.String.value:
             return qdumpHelper_QCbor_string(d, container_ptr, item_data, False)
 
-        elif item_type == 0x80:
+        elif item_type == CborValueType.Array.value:
             return self.createCborOrJsonArray()
 
-        elif item_type == 0xa0:
+        elif item_type == CborValueType.Map.value:
             return self.createCborOrJsonMap()
 
-        elif item_type == 0x10000: # DateTime (stored as string)
-            return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
+        elif item_type in { CborValueType.DateTime.value, CborValueType.Url.value, CborValueType.RegularExpression.value}:
+            # forward to QCborValuePrinterBase
+            # so that the Type column shows QCborValue or QJsonValue, not char[]
+            return self.toCborOrJsonGdbValue()
 
-        elif item_type == 0x10020: # Url
-            return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
+        elif item_type == CborValueType.Uuid.value:
+            data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
+            elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
+            elements_data_ptr, elements_size = d.vectorData(elements_pos)
+            (bytedata_data, bytedata_len, element_flags) = CborOrJsonValueData.extractByteData(d, self.container_ptr, 1)
+            bytes_buffer = bytes(d.readMemory(bytedata_data, bytedata_len))
+            # QUuid format: uint, ushort, ushort, uchar[8] in big endian
+            data1, data2, data3, data4 = struct.unpack('!IHH8s', bytes_buffer) # cbor is in network (big-endian) byte order
+            final_bytes_buffer = struct.pack('@IHH8s', data1, data2, data3, data4) # convert to native ordering for QUuid members
+            value_type = gdb.lookup_type('QUuid')
+            return gdb.Value(final_bytes_buffer, value_type)
 
-        elif item_type == 0x10023: # RegularExpression
-            return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
-
-        elif item_type == 0x10025:
-            return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
-
-        elif item_type == 0xc0: # Tag
+        elif item_type == CborValueType.Tag.value:
             data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
             elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
             elements_data_ptr, elements_size = d.vectorData(elements_pos)
@@ -1091,7 +1138,7 @@ class CborOrJsonValueData:
                 # QCborTag is just a qint64.
             return qdumpHelper_QCbor_string(d, container_ptr, 1, True)
 
-        elif item_type & 0xFF00 == 0x100: # isSimpleType()
+        elif item_type & 0xFF00 == CborValueType.SimpleType.value: # isSimpleType()
             # QCborSimpleType is just an enum
             simpleType = item_type & 0xFF
             buffer = struct.pack("B", simpleType) # ... of size 1 byte
@@ -1286,15 +1333,21 @@ class QCborValuePrinterBase(PrinterForwarder):
 
     def _initFromValueData(self, valueData):
         item_type = valueData.item_type
-        if item_type == 0xffffffffffffffff:
+        if item_type == CborValueType.Invalid.value:
             self._setUnderlyingValue('<Invalid>')
-        elif item_type == 0x100 + 22:
+        elif item_type == CborValueType.Null.value:
             self._setUnderlyingValue('<Null>')
-        elif item_type == 0x100 + 23:
+        elif item_type == CborValueType.Undefined.value:
             self._setUnderlyingValue('<Undefined>')
+        elif item_type == CborValueType.DateTime.value: # stored as string
+            self._setUnderlyingValue(valueData.toPythonString(1))
+        elif item_type == CborValueType.Url.value:
+            self._setUnderlyingValue('Url(%s)' % valueData.toPythonString(1))
+        elif item_type == CborValueType.RegularExpression.value:
+            self._setUnderlyingValue('RegularExpression(%s)' % valueData.toPythonString(1))
         else:
             self._setUnderlyingValue(valueData.inspect())
-            if item_type == 0x40 or item_type == 0x60:
+            if item_type == CborValueType.ByteArray.value or item_type == CborValueType.String.value:
                 self.display_hint = lambda : 'string'
 
 class QJsonDocumentPrinter(QCborValuePrinterBase):

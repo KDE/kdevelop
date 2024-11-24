@@ -4,6 +4,7 @@
 #include <QCborValue>
 #include <QDebug>
 #include <QBuffer>
+#include <QUuid>
 #include <QTimeZone>
 
 class Source
@@ -20,7 +21,11 @@ public:
         cborMap[QStringLiteral("married")] = notMarried;
         cborMap[QStringLiteral("undefined")] = QCborValue();
         cborMap[QStringLiteral("null")] = QCborValue(nullptr);
-        cborMap[QStringLiteral("url")] = QCborValue(QUrl("http://www.kde.org"));
+        QCborValue urlValue(QUrl("http://www.kde.org"));
+        cborMap[QStringLiteral("url")] = urlValue;
+        QUuid uuid("{67C8770B-44F1-410A-AB9A-F9B5446F13EE}");
+        QCborValue uuidValue(uuid);
+        cborMap[QStringLiteral("uuid")] = uuidValue;
         cborMap[QStringLiteral("regexp")] = QCborValue(QRegularExpression(QStringLiteral("^kde$")));
         cborMap[QStringLiteral("birth")] = QCborValue(QDateTime(QDate(2001, 5, 30), QTime(9, 31, 0), QTimeZone(3600)));
         cborMap[QStringLiteral("bytes")] = QByteArray("ABC\xFF\x00\xFE", 6);

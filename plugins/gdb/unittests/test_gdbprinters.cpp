@@ -830,14 +830,14 @@ void QtPrintersTest::testQCbor()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
 
-    gdb.execute("break qcbor.cpp:100");
+    gdb.execute("break qcbor.cpp:105");
     gdb.execute("run");
     QByteArray data;
 
     data = gdb.execute("print emptyValue");
     QCOMPARE(data, "$1 = <Undefined>");
 
-    const QByteArray expectedCborMap = R"(QCborMap (size = 14) = {
+    const QByteArray expectedCborMap = R"(QCborMap (size = 15) = {
   ["name"] = "John Doe",
   ["address"] = "Some street\nCity\nCountry",
   ["year"] = 2024,
@@ -845,9 +845,10 @@ void QtPrintersTest::testQCbor()
   ["married"] = false,
   ["undefined"] = <Undefined>,
   ["null"] = <Null>,
-  ["url"] = "http://www.kde.org",
-  ["regexp"] = "^kde$",
-  ["birth"] = "2001-05-30T09:31:00.000+01:00",
+  ["url"] = Url(http://www.kde.org),
+  ["uuid"] = QUuid({67c8770b-44f1-410a-ab9a-f9b5446f13ee}),
+  ["regexp"] = RegularExpression(^kde$),
+  ["birth"] = 2001-05-30T09:31:00.000+01:00,
   ["bytes"] = "ABCÿ\000þ" = {
     [0] = 65 'A',
     [1] = 66 'B',
