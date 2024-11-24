@@ -36,7 +36,11 @@ public:
 
     void setPattern(const QString& pattern);
 
-    ///Rerun all grep jobs from a list of settings, called by GrepOutputView
+    /**
+     * Rerun all grep jobs from a given list of settings and close the dialog.
+     *
+     * @param settingsHistory a nonempty list of settings to re-search
+     */
     void historySearch(QVector<GrepJobSettings> &settingsHistory);
 
 public Q_SLOTS:

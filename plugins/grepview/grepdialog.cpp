@@ -480,12 +480,13 @@ void GrepDialog::setPattern(const QString& pattern)
 
 void GrepDialog::historySearch(QVector<GrepJobSettings> &settingsHistory)
 {
+    Q_ASSERT(!settingsHistory.empty());
+
     // clear the current settings history and pass it to a job list
     m_historyJobSettings.clear();
     m_historyJobSettings.swap(settingsHistory);
 
-    // check if anything is do be done and if all projects are loaded
-    if (!m_historyJobSettings.empty() && !checkProjectsOpened()) {
+    if (!checkProjectsOpened()) {
         connect(KDevelop::ICore::self()->projectController(),
                 &KDevelop::IProjectController::projectOpened,
                 this, &GrepDialog::checkProjectsOpened);
