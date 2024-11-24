@@ -1325,6 +1325,25 @@ class QCborValuePrinterBase(PrinterForwarder):
         valueData = CborOrJsonValueData(item_data, container_ptr, item_type, 'QCbor' in self._className)
         self._initFromValueData(valueData)
 
+    class _tagIterator:
+        def __init__(self, container_ptr, elements_data_ptr, data_pos, is_cbor):
+            self.container_ptr = container_ptr
+            self.elements_data_ptr = elements_data_ptr
+            self.data_pos = data_pos
+            self.is_cbor = is_cbor
+            self.atEnd = False
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.atEnd:
+                raise StopIteration
+            self.atEnd = True
+            bytedata, _, _ = d.qArrayData(self.data_pos)
+            value = qcborContainerValueAt(self.container_ptr, self.elements_data_ptr, 1, bytedata, self.is_cbor)
+            return ("value", value.inspect())
+
     def _initFromValueData(self, valueData):
         item_type = valueData.item_type
         if item_type == CborValueType.Invalid.value:
@@ -1345,10 +1364,9 @@ class QCborValuePrinterBase(PrinterForwarder):
             elements_data_ptr, elements_size = d.vectorData(elements_pos)
             if elements_size == 2:
                 tag = d.extractInt64(elements_data_ptr)
-                buffer, _, _ = valueData.toPythonBytes(1)
-                # Escape non-printable characters
-                buffer = ''.join(f'\\x{byte:02x}' if byte < 32 or byte == 127 else chr(byte) for byte in buffer)
-                self._setUnderlyingValue(f'Tag({tag}) {str(buffer)}')
+                self._setUnderlyingValue(f'Tag({tag})')
+                self.children = lambda : self._tagIterator(valueData.container_ptr, elements_data_ptr, data_pos, valueData.is_cbor)
+                self.num_children = lambda : 1
             else:
                 self._setUnderlyingValue('<Invalid Tag>')
         else:
