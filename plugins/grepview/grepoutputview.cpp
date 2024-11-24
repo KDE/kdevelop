@@ -145,7 +145,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     const QStringList s = cg.readEntry("LastSettings", QStringList());
     if (s.size() % GrepSettingsStorageItemCount != 0) {
         qCWarning(PLUGIN_GREPVIEW) << "Stored settings history has unexpected size:" << s;
-    } else {
+    } else if (!s.empty()) {
         m_settingsHistory.reserve(s.size() / GrepSettingsStorageItemCount);
         auto it = s.begin();
         while (it != s.end()) {
@@ -164,11 +164,11 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
             settings.fromHistory = true;
             m_settingsHistory << settings;
         }
-    }
 
-    // Restore the grep jobs with settings from the history without performing a search.
-    auto* const dlg = new GrepDialog(m_plugin, this, this, false);
-    dlg->historySearch(m_settingsHistory);
+        // Restore the grep jobs with settings from the history without performing a search.
+        auto* const dlg = new GrepDialog(m_plugin, this, this, false);
+        dlg->historySearch(m_settingsHistory);
+    }
 
     updateCheckable();
 }
