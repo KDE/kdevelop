@@ -829,7 +829,7 @@ void QtPrintersTest::testQCbor()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
 
-    gdb.execute("break qcbor.cpp:90");
+    gdb.execute("break qcbor.cpp:97");
     gdb.execute("run");
     QByteArray data;
 
@@ -848,11 +848,12 @@ void QtPrintersTest::testQCbor()
   ["regexp"] = "^kde$",
   ["birth"] = Wed May 30 09:31:00 2001,
   ["bytes"] = "ABCÿ\000þ",
-  ["job"] = QCborMap (size = 4) = {
+  ["job"] = QCborMap (size = 5) = {
     ["company"] = "KDAB",
     ["title"] = "Surface technician",
     ["emptyObj"] = QCborMap (size = 0),
-    ["emptyArray"] = QCborArray (size = 0)
+    ["emptyArray"] = QCborArray (size = 0),
+    ["bigNum"] = "\001\000\000\000\000\000\000\000"
   },
   ["children"] = QCborArray (size = 2) = {"Alice", "Mickaël"}
 })";
@@ -902,6 +903,11 @@ void QtPrintersTest::testQCbor()
 
     data = gdb.execute("print bytesValue");
     QCOMPARE(data, R"($18 = "ABCÿ\000þ")");
+
+    // TODO the tag number is missing
+    const QByteArray expectedBigNum = R"("\001\000\000\000\000\000\000\000")";
+    QCOMPARE(printedValue(gdb, "bigNumValueRef"), expectedBigNum);
+    QCOMPARE(printedValue(gdb, "bigNumValue"), expectedBigNum);
 }
 
 void QtPrintersTest::testKTextEditorTypes()

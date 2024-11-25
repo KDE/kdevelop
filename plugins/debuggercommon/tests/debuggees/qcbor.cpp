@@ -29,6 +29,10 @@ public:
         childMap[QStringLiteral("title")] = "Surface technician";
         childMap[QStringLiteral("emptyObj")] = QCborMap();
         childMap[QStringLiteral("emptyArray")] = QCborArray();
+        // The byte value 0x01 followed by 8 zero bytes represents the number 2^64 (example from Qt API docs)
+        QCborValue bigNum(QCborTag(QCborKnownTags::PositiveBignum), QByteArray("\x01\0\0\0\0\0\0\0\0", 9));
+        childMap[QStringLiteral("bigNum")] = bigNum;
+
         cborMap[QStringLiteral("job")] = childMap;
 
         QCborArray childrenArray;
@@ -85,6 +89,10 @@ int main(int argc, char *argv[])
 
         auto bytesValueRef = parsedMap[QStringLiteral("bytes")];
         QCborValue bytesValue = bytesValueRef;
+
+        auto childMap = parsedMap[QStringLiteral("job")].toMap();
+        auto bigNumValueRef = childMap[QStringLiteral("bigNum")];
+        QCborValue bigNumValue = bigNumValueRef;
 
         for (const auto &child : parsedChildren) {
             QString childName = child.toString();

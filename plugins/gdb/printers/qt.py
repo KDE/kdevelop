@@ -1137,6 +1137,17 @@ def qdump__QCborValue_proxy(value):
     elif item_type == 0x10025:
         return qdumpHelper_QCbor_string(d, container_ptr, 1, False)
 
+    elif item_type == 0xc0: # Tag
+        data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
+        elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
+        elements_data_ptr, elements_size = d.vectorData(elements_pos)
+        if elements_size == 2:
+            tag = d.extractInt64(elements_data_ptr)
+            # TODO what to do with the tag?
+            # We can't return both a QLatin1String and an QCborTag
+            # QCborTag is just a qint64.
+        return qdumpHelper_QCbor_string(d, container_ptr, 1, True)
+
     else:
         return item_data
 
