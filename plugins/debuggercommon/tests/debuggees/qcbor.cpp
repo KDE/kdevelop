@@ -40,6 +40,10 @@ public:
         // The byte value 0x01 followed by 8 zero bytes represents the number 2^64 (example from Qt API docs)
         QCborValue bigNum(QCborTag(QCborKnownTags::PositiveBignum), QByteArray("\x01\0\0\0\0\0\0\0\0", 9));
         childMap[QStringLiteral("bigNum")] = bigNum;
+        QCborMap taggedMap;
+        taggedMap[QStringLiteral("planet")] = QString("earth");
+        QCborValue tagWithMap(QCborTag(42), taggedMap);
+        childMap[QStringLiteral("tagWithMap")] = tagWithMap;
 
         cborMap[QStringLiteral("job")] = childMap;
 

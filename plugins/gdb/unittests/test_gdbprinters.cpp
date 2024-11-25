@@ -830,7 +830,7 @@ void QtPrintersTest::testQCbor()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
 
-    gdb.execute("break qcbor.cpp:105");
+    gdb.execute("break qcbor.cpp:110");
     gdb.execute("run");
     QByteArray data;
 
@@ -858,7 +858,7 @@ void QtPrintersTest::testQCbor()
     [5] = -2 '\376'
   },
   ["otherSimpleType"] = QCborSimpleType(0x0c),
-  ["job"] = QCborMap (size = 5) = {
+  ["job"] = QCborMap (size = 6) = {
     ["company"] = "KDAB",
     ["title"] = "Surface technician",
     ["emptyObj"] = QCborMap (size = 0),
@@ -874,6 +874,11 @@ void QtPrintersTest::testQCbor()
         [6] = 0 '\000',
         [7] = 0 '\000',
         [8] = 0 '\000'
+      }
+    },
+    ["tagWithMap"] = Tag(42) = {
+      value = QCborMap (size = 1) = {
+        ["planet"] = "earth"
       }
     }
   },
