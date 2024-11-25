@@ -41,7 +41,7 @@ public:
      *
      * @param settingsHistory a nonempty list of settings to re-search
      */
-    void historySearch(QVector<GrepJobSettings> &settingsHistory);
+    void historySearch(QList<GrepJobSettings>&& settingsHistory);
 
 public Q_SLOTS:
     ///Start a new search
