@@ -258,28 +258,26 @@ void GrepOutputView::changeModel(int index)
         return;
     }
 
-    if (model()) {
-        disconnect(model(), &GrepOutputModel::showMessage,
-                   this, &GrepOutputView::showMessage);
-        disconnect(model(), &GrepOutputModel::dataChanged,
-                   this, &GrepOutputView::updateApplyState);
+    auto* model = this->model();
+    if (model) {
+        disconnect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
+        disconnect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
     }
 
     QVariant var = modelSelector->itemData(index);
     auto *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
     resultsTreeView->setModel(resultModel);
+    model = this->model();
     resultsTreeView->expandAll();
 
-    connect(model(), &GrepOutputModel::showMessage,
-            this, &GrepOutputView::showMessage);
-    connect(model(), &GrepOutputModel::dataChanged,
-            this, &GrepOutputView::updateApplyState);
-    model()->showMessageEmit();
+    connect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
+    connect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
+    model->showMessageEmit();
 
-    updateButtonState(model()->hasResults());
+    updateButtonState(model->hasResults());
 
     updateCheckable();
-    updateApplyState(model()->index(0, 0), model()->index(0, 0));
+    updateApplyState(model->index(0, 0), model->index(0, 0));
     m_refresh->setEnabled(true);
     m_clearSearchHistory->setEnabled(true);
 
