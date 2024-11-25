@@ -105,7 +105,7 @@ public Q_SLOTS:
     void showMessageEmit();
 
 Q_SIGNALS:
-    void showMessage( KDevelop::IStatus*, const QString& message );
+    void showMessage(const QString& message);
     void showErrorMessage(const QString& message);
 
 private:    
@@ -120,7 +120,6 @@ private:
     int m_fileCount = 0;
     int m_matchCount = 0;
     QString m_savedMessage;
-    KDevelop::IStatus *m_savedIStatus;
     bool m_itemsCheckable = false;
 
 private Q_SLOTS:
