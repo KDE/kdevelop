@@ -15,11 +15,6 @@
 
 #include "ui_grepoutputview.h"
 
-namespace KDevelop
-{
-    class IStatus;
-}
-
 class QModelIndex;
 
 class GrepViewPlugin;
@@ -63,7 +58,7 @@ public:
 
 public Q_SLOTS:
     void showErrorMessage( const QString& errorMessage );
-    void showMessage( KDevelop::IStatus*, const QString& message );
+    void showMessage(const QString& message);
     void updateApplyState(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void changeModel(int index);
     void replacementTextChanged();
