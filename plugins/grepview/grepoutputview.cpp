@@ -309,7 +309,7 @@ void GrepOutputView::showErrorMessage( const QString& errorMessage )
     setMessage(errorMessage, Error);
 }
 
-void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
+void GrepOutputView::showMessage(const QString& message)
 {
     setMessage(message, Information);
 }
