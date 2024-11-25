@@ -119,6 +119,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     resultsTreeView->setHeaderHidden(true);
     resultsTreeView->setUniformRowHeights(false);
     resultsTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    resultsTreeView->header()->setStretchLastSection(true);
 
     connect(m_prev, &QAction::triggered, this, &GrepOutputView::selectPreviousItem);
     connect(m_next, &QAction::triggered, this, &GrepOutputView::selectNextItem);
@@ -136,10 +137,6 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(replacementCombo, QOverload<const QString&>::of(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
-
-    resultsTreeView->header()->setStretchLastSection(true);
-
-    resultsTreeView->header()->setStretchLastSection(true);
 
     // read Find/Replace settings history
     const QStringList s = cg.readEntry("LastSettings", QStringList());
