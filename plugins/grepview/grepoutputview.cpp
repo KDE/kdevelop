@@ -227,11 +227,6 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
 
     auto* newModel = new GrepOutputModel(resultsTreeView);
     applyButton->setEnabled(false);
-    connect(newModel, &GrepOutputModel::rowsRemoved,
-            this, &GrepOutputView::rowsRemoved);
-    connect(newModel, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
-    connect(newModel, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
-
     // appends new model to history
     modelSelector->insertItem(0, description, QVariant::fromValue<QObject*>(newModel));
     modelSelector->setCurrentIndex(0);
@@ -261,7 +256,10 @@ void GrepOutputView::changeModel(int index)
     auto* model = this->model();
     if (model) {
         disconnect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
+        disconnect(model, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
         disconnect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
+        disconnect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
+        disconnect(model, &GrepOutputModel::rowsRemoved, this, &GrepOutputView::rowsRemoved);
     }
 
     QVariant var = modelSelector->itemData(index);
@@ -271,7 +269,11 @@ void GrepOutputView::changeModel(int index)
     resultsTreeView->expandAll();
 
     connect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
+    connect(model, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
     connect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
+    connect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
+    connect(model, &GrepOutputModel::rowsRemoved, this, &GrepOutputView::rowsRemoved);
+
     model->showMessageEmit();
 
     updateButtonState(model->hasResults());
