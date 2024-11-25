@@ -100,6 +100,7 @@ public Q_SLOTS:
     void setReplacement(const QString &repl);
     //receive status message from GrepJob, and store it
     void showMessageSlot( KDevelop::IStatus*, const QString& message );
+    void showErrorMessageSlot(const QString& message);
     //emit stored message as signal 'showMessage' to GrepOutputView.
     //called when user selects a search with the combobox
     void showMessageEmit();
@@ -120,6 +121,7 @@ private:
     int m_fileCount = 0;
     int m_matchCount = 0;
     QString m_savedMessage;
+    bool m_savedMessageIsError = false;
     bool m_itemsCheckable = false;
 
 private Q_SLOTS:

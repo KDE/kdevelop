@@ -470,23 +470,37 @@ void GrepOutputModel::doReplacements()
     if(!result.m_success)
     {
         DocumentChangePointer ch = result.m_reasonChange;
-        if(ch)
-            emit showErrorMessage(i18nc("%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are its row and column",
-                                        "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5",
-                                        ch->m_oldText.toHtmlEscaped(), ch->m_newText.toHtmlEscaped(), ch->m_document.toUrl().toLocalFile(),
-                                        ch->m_range.start().line() + 1, ch->m_range.start().column() + 1));
+        if (ch) {
+            showErrorMessageSlot(
+                i18nc("%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are its row and column",
+                      "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5", ch->m_oldText.toHtmlEscaped(),
+                      ch->m_newText.toHtmlEscaped(), ch->m_document.toUrl().toLocalFile(),
+                      ch->m_range.start().line() + 1, ch->m_range.start().column() + 1));
+        }
     }
 }
 
 void GrepOutputModel::showMessageSlot(IStatus*, const QString& message)
 {
     m_savedMessage = message;
+    m_savedMessageIsError = false;
+    showMessageEmit();
+}
+
+void GrepOutputModel::showErrorMessageSlot(const QString& message)
+{
+    m_savedMessage = message;
+    m_savedMessageIsError = true;
     showMessageEmit();
 }
 
 void GrepOutputModel::showMessageEmit()
 {
-    emit showMessage(m_savedMessage);
+    if (m_savedMessageIsError) {
+        emit showErrorMessage(m_savedMessage);
+    } else {
+        emit showMessage(m_savedMessage);
+    }
 }
 
 bool GrepOutputModel::hasResults()

@@ -634,12 +634,10 @@ void GrepDialog::startSearch()
                                     QTime::currentTime().toString(QStringLiteral("hh:mm"))));
 
         GrepJob* job = m_plugin->newGrepJob();
-        connect(job, &GrepJob::showErrorMessage,
-                toolView, &GrepOutputView::showErrorMessage);
-        //the GrepOutputModel gets the 'showMessage' signal to store it and forward
-        //it to toolView
+        // outputModel stores the messages and forwards them to toolView
         connect(job, &GrepJob::showMessage,
                 outputModel, &GrepOutputModel::showMessageSlot);
+        connect(job, &GrepJob::showErrorMessage, outputModel, &GrepOutputModel::showErrorMessageSlot);
 
         connect(toolView, &GrepOutputView::outputViewIsClosed, job, [=]() {job->kill();});
 
