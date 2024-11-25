@@ -131,40 +131,6 @@ class QStringViewPrinter(QStringViewPrinterBase):
     def __init__(self, val):
         QStringViewPrinterBase.__init__(self, val, 'UTF-16', 2)
 
-class QStringDataPrinter():
-
-    def __init__(self, val):
-        self._val = val
-
-    def to_string(self):
-        ret = ""
-
-        if self._val.bytes:
-            try:
-                d_ptr = self._val.address
-                if d.qtVersionAtLeast(0x060000):
-                    _, data, size = struct.unpack("PPq", self._val.bytes)
-                else: # Qt 5
-                    ref, size, _, _, hack, = struct.unpack("iiiiP", self._val.bytes)
-                    if ref == -1: # hack for make_QStringData
-                        data = hack
-                    else: # a real QString ends up here
-                        data = d_ptr + 1
-                if size == 0:
-                    return ret
-                buffer = d.readMemory(data, size * 2)
-                dataAsCharPointer = gdb.Value(buffer + b"\0\0", gdb.lookup_type("char").array(size * 2))
-                ret = dataAsCharPointer.string(encoding = 'UTF-16', length = size * 2)
-            except Exception:
-                # swallow the exception and return empty string
-                pass
-            return ret
-        else:
-            raise RuntimeError("gdb too old for QStringDataPrinter, upgrade to gdb 15")
-
-    def display_hint (self):
-        return 'string'
-
 class QStringPrinter(PrinterBaseType):
 
     def __init__(self, val):
@@ -232,7 +198,7 @@ class QByteArrayDataPrinter():
                 pass
             return ret
         else:
-            raise RuntimeError("gdb too old for QStringDataPrinter, upgrade to gdb 15")
+            raise RuntimeError("gdb too old for QByteArrayDataPrinter, upgrade to gdb 15")
 
     def display_hint (self):
         return 'string'
@@ -267,10 +233,20 @@ class QByteArrayPrinter(PrinterBaseType):
         else:
             return self._val['d'].cast(gdb.lookup_type("char").const().pointer()) + self._val['d']['offset']
 
+    def _showChildren(self):
+        # fake QByteArray created by make_QByteArrayData
+        if self._isQt6 and self._val['d']['d'] == 0:
+            return False
+        return True
+
     def children(self):
+        if not self._showChildren():
+            return []
         return self._iterator(self._stringData(), self._size)
 
     def num_children(self):
+        if not self._showChildren():
+            return 0
         return self._size
 
     def to_string(self):
@@ -1070,38 +1046,25 @@ def qdumpHelper_QCborArray_valueAt(container_ptr, elements_data_ptr, idx, byteda
         return d.createProxyValue((idx, container_ptr, element_type, is_cbor), 'QCborValue_proxy')
     return d.createProxyValue((element_value, 0, element_type, is_cbor), 'QCborValue_proxy')
 
-def qStringDataTypeName():
+def make_QString(utf16data, size):
     if d.qtVersionAtLeast(0x060000):
-        # Qt6's QString::DataPointer (dereferenced)
-        return 'QArrayDataPointer<char16_t>'
-    else:
-        # Qt5's QString::Data
-        return 'QTypedArrayData<unsigned short>'
-
-def make_QStringData(utf16data, size):
-    qstringData_type = gdb.lookup_type(qStringDataTypeName())
-    if d.qtVersionAtLeast(0x060000):
+        qstring_type = gdb.lookup_type('QString')
         buffer = struct.pack("PPq", utf16data, utf16data, size)
     else: # Qt 5
-        buffer = struct.pack("iiiiP", -1, size, 0, 0, utf16data)
-    fakeQString = gdb.Value(buffer, qstringData_type)
+        # creating a QString would require allocating a d pointer,
+        # so use QStringView instead
+        qstring_type = gdb.lookup_type('QStringView')
+        buffer = struct.pack("qP", size, utf16data)
+    fakeQString = gdb.Value(buffer, qstring_type)
     gdbCompat.setLastBuffer(buffer)
     return fakeQString
 
-def qByteArrayDataTypeName():
-    if d.qtVersionAtLeast(0x060000):
-        # Qt6's QByteArray::DataPointer (dereferenced)
-        return 'QArrayDataPointer<char>'
-    else:
-        # Qt5's QByteArray::Data
-        return 'QTypedArrayData<char>'
-
 def make_QByteArrayData(data, size):
-    qbytearray_type = gdb.lookup_type(qByteArrayDataTypeName())
-
     if d.qtVersionAtLeast(0x060000):
-        buffer = struct.pack("PPq", data, data, size)
+        qbytearray_type = gdb.lookup_type('QByteArray')
+        buffer = struct.pack("PPq", 0, data, size)
     else:
+        qbytearray_type = gdb.lookup_type('QTypedArrayData<char>') # QByteArray::Data
         buffer = struct.pack("iiiiP", -1, size, 0, 0, data)
     fakeQByteArray = gdb.Value(buffer, qbytearray_type)
     gdbCompat.setLastBuffer(buffer)
@@ -1127,7 +1090,7 @@ def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
     if is_bytes or (element_flags & 8): # QtCbor::Element::StringIsAscii
         return make_QByteArrayData(bytedata_data, bytedata_len)
     if (element_flags & 4): # QtCbor::Element::StringIsUtf16
-        return make_QStringData(bytedata_data, int(bytedata_len / 2))
+        return make_QString(bytedata_data, int(bytedata_len / 2))
     # UTF-8, treat it the same as ASCII
     return make_QByteArrayData(bytedata_data, bytedata_len)
 
@@ -1543,10 +1506,6 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QBasicUtf8StringView<(?:true|false)>$')] = lambda val: QUtf8StringViewPrinter(val)
     pretty_printers_dict[re.compile('^QStringView$')] = lambda val: QStringViewPrinter(val)
     pretty_printers_dict[re.compile('^QString$')] = lambda val: QStringPrinter(val)
-    # Qt6's QString::DataPointer (dereferenced)
-    pretty_printers_dict[re.compile('^QArrayDataPointer<char16_t>$')] = lambda val: QStringDataPrinter(val)
-    # Qt5's QString::Data
-    pretty_printers_dict[re.compile('^QTypedArrayData<unsigned short>$')] = lambda val: QStringDataPrinter(val)
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
     # Qt6's QByteArray::DataPointer (dereferenced)
     pretty_printers_dict[re.compile('^QArrayDataPointer<char>$')] = lambda val: QByteArrayDataPrinter(val)
