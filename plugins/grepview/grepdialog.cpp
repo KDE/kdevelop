@@ -478,13 +478,10 @@ void GrepDialog::setPattern(const QString& pattern)
     m_settings.pattern = pattern;
 }
 
-void GrepDialog::historySearch(QVector<GrepJobSettings> &settingsHistory)
+void GrepDialog::historySearch(QList<GrepJobSettings>&& settingsHistory)
 {
     Q_ASSERT(!settingsHistory.empty());
-
-    // clear the current settings history and pass it to a job list
-    m_historyJobSettings.clear();
-    m_historyJobSettings.swap(settingsHistory);
+    m_historyJobSettings = std::move(settingsHistory);
 
     if (!checkProjectsOpened()) {
         connect(KDevelop::ICore::self()->projectController(),
