@@ -640,8 +640,6 @@ void GrepDialog::startSearch()
         //it to toolView
         connect(job, &GrepJob::showMessage,
                 outputModel, &GrepOutputModel::showMessageSlot);
-        connect(outputModel, &GrepOutputModel::showMessage,
-                toolView, &GrepOutputView::showMessage);
 
         connect(toolView, &GrepOutputView::outputViewIsClosed, job, [=]() {job->kill();});
 
