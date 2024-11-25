@@ -1404,12 +1404,15 @@ class QCborValueConstRefPrinter(QCborValuePrinterBase):
 class QJsonValueConstRefPrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
-        array_or_map = int(val['d'])
+        array_or_map = int(val['o'])
         is_object = int(val['is_object'])
         item_index = int(val['index'])
         if is_object:
             item_index = item_index * 2 + 1 # see QJsonPrivate::Value::indexHelper()
-        container_ptr = d.extractPointer(array_or_map)
+        if d.qtVersionAtLeast(0x060000):
+            container_ptr = d.extractPointer(array_or_map)
+        elif d.qtVersionAtLeast(0x050f00):
+            container_ptr = d.extractPointer(array_or_map + d.ptrSize())
         it = QCborContainerPrivateIterator(container_ptr, 'QJsonObject' if is_object else 'QJsonArray')
         valueData = it.valueAt(item_index)
         QCborValuePrinterBase.__init__(self, 'QJsonValue')
