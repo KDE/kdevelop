@@ -74,11 +74,8 @@ class QStringPrinter(PrinterBaseType):
             size = self._val['d']['size']
             if size == 0:
                 return ret
-            isQt4 = has_field(self._val['d'], 'data') # Qt4 has d->data, Qt5 doesn't.
             isQt6 = has_field(self._val['d'], 'ptr') # Qt6 has d->ptr, Qt5 doesn't.
-            if isQt4:
-                dataAsCharPointer = self._val['d']['data'].cast(gdb.lookup_type("char").pointer())
-            elif isQt6:
+            if isQt6:
                 dataAsCharPointer = self._val['d']['ptr'].cast(gdb.lookup_type("char").pointer())
             else:
                 dataAsCharPointer = (self._val['d'] + 1).cast(gdb.lookup_type("char").pointer())
@@ -105,8 +102,6 @@ class QByteArrayPrinter(PrinterBaseType):
     def __init__(self, val):
         self._val = val
         self._size = self._val['d']['size']
-        # Qt4 has 'data', Qt5 doesn't
-        self._isQt4 = has_field(self._val['d'], 'data')
         # Qt6 has d.ptr, Qt5 doesn't
         self._isQt6 = has_field(self._val['d'], 'ptr')
 
@@ -127,9 +122,7 @@ class QByteArrayPrinter(PrinterBaseType):
             return ('[%d]' % count, self.data[count])
 
     def _stringData(self):
-        if self._isQt4:
-            return self._val['d']['data']
-        elif self._isQt6:
+        if self._isQt6:
             return self._val['d']['ptr'].cast(gdb.lookup_type("char").pointer())
         else:
             return self._val['d'].cast(gdb.lookup_type("char").const().pointer()) + self._val['d']['offset']
@@ -263,13 +256,10 @@ class QVectorPrinter(PrinterBaseType):
         self._itype = self._val.type.template_argument(0)
 
     def children(self):
-        isQt4 = has_field(self._val['d'], 'p') # Qt4 has 'p', Qt5/Qt6 don't
         # QVector no longer exists in Qt6, but this printer is still used for QStack
         isQt6 = not has_field(self._val['d'], 'alloc')
 
-        if isQt4:
-            return self._iterator(self._itype, self._val['p']['array'], self._val['p']['size'])
-        elif isQt6:
+        if isQt6:
             listPrinter = QListPrinter(self._val, self._container, None)
             return listPrinter.children()
         else:
@@ -320,61 +310,6 @@ class QLinkedListPrinter(PrinterBaseType):
 
 class QMapPrinter(PrinterBaseType):
     "Print a QMap"
-
-    class _iteratorQt4(Iterator):
-        def __init__(self, val):
-            self.val = val
-            self.ktype = self.val.type.template_argument(0)
-            self.vtype = self.val.type.template_argument(1)
-            self.data_node = self.val['e']['forward'][0]
-            self.count = 0
-
-        def __iter__(self):
-            return self
-
-        def payload (self):
-            if gdb.parse_and_eval:
-                ret = int(gdb.parse_and_eval('QMap<%s, %s>::payload()' % (self.ktype, self.vtype)))
-                if (ret): return ret;
-
-            #if the inferior function call didn't work, let's try to calculate ourselves
-
-            #we can't use QMapPayloadNode as it's inlined
-            #as a workaround take the sum of sizeof(members)
-            ret = self.ktype.sizeof
-            ret += self.vtype.sizeof
-            ret += gdb.lookup_type('void').pointer().sizeof
-
-            #but because of data alignment the value can be higher
-            #so guess it's aliged by sizeof(void*)
-            #TODO: find a real solution for this problem
-            ret += ret % gdb.lookup_type('void').pointer().sizeof
-
-            #for some reason booleans are different
-            if str(self.vtype) == 'bool':
-                ret += 2
-
-            ret -= gdb.lookup_type('void').pointer().sizeof
-
-            return ret
-
-        def concrete (self, data_node):
-            node_type = gdb.lookup_type('QMapNode<%s, %s>' % (self.ktype, self.vtype)).pointer()
-            return (data_node.cast(gdb.lookup_type('char').pointer()) - self.payload()).cast(node_type)
-
-        def __next__(self):
-            if self.data_node == self.val['e']:
-                raise StopIteration
-            node = self.concrete(self.data_node).dereference()
-            if self.count % 2 == 0:
-                item = node['key']
-            else:
-                item = node['value']
-                self.data_node = node['forward'][0]
-
-            result = ('[%d]' % self.count, item)
-            self.count = self.count + 1
-            return result
 
     class _iteratorQt5:
         def __init__(self, val):
@@ -458,11 +393,7 @@ class QMapPrinter(PrinterBaseType):
             if self._val['d']['size'] == 0:
                 return []
 
-            isQt4 = has_field(self._val, 'e') # Qt4 has 'e', Qt5 doesn't
-            if isQt4:
-                return self._iteratorQt4(self._val)
-            else:
-                return self._iteratorQt5(self._val)
+            return self._iteratorQt5(self._val)
 
     def to_string(self):
         num_children = self.num_children()
@@ -834,7 +765,6 @@ class QUrlPrinter:
         self.val = val
 
     def to_string(self):
-        # first try to access the Qt 5 data
         try:
             int_type = gdb.lookup_type('int')
             string_type = gdb.lookup_type('QString')
@@ -892,21 +822,7 @@ class QUrlPrinter:
             return gdb.parse_and_eval("reinterpret_cast<const QUrl*>(%s)->toString((QUrl::FormattingOptions)QUrl::PrettyDecoded)" % self.val.address)
         except:
             pass
-        # if everything fails, maybe we deal with Qt 4 code
-        try:
-            return self.val['d']['encodedOriginal']
-        except RuntimeError:
-            #if no debug information is available for Qt, try guessing the correct address for encodedOriginal
-            #problem with this is that if QUrlPrivate members get changed, this fails
-            offset = gdb.lookup_type('int').sizeof
-            offset += offset % gdb.lookup_type('void').pointer().sizeof #alignment
-            offset += gdb.lookup_type('QString').sizeof * 6
-            offset += gdb.lookup_type('QByteArray').sizeof
-            encodedOriginal = self.val['d'].cast(gdb.lookup_type('char').pointer());
-            encodedOriginal += offset
-            encodedOriginal = encodedOriginal.cast(gdb.lookup_type('QByteArray').pointer()).dereference();
-            encodedOriginal = encodedOriginal['d']['data'].string()
-            return encodedOriginal
+        return "<uninitialized>"
 
 class QSetPrinter(PrinterBaseType):
     "Print a QSet"
@@ -1021,7 +937,7 @@ class QVariantPrinter:
         if d['is_null']:
             return "QVariant(NULL)"
 
-        # Qt4/Qt5 has 'type', Qt6 has 'packedType'
+        # Qt5 has 'type', Qt6 has 'packedType'
         isQt6 =  has_field(d, 'packedType')
         if isQt6:
             return self.to_string_qt6()
