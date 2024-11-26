@@ -704,8 +704,7 @@ void QtPrintersTest::testQUuid()
     GdbProcess gdb(QStringLiteral("debuggee_quuid"));
     gdb.execute("break quuid.cpp:4");
     gdb.execute("run");
-    QByteArray data = gdb.execute("print id");
-    QVERIFY(data.contains("{9ec3b70b-d105-42bf-b3b4-656e44d2e223}"));
+    QCOMPARE(printedValue(gdb, "id"), "QUuid({9ec3b70b-d105-42bf-b3b4-656e44d2e223})");
 }
 
 void QtPrintersTest::testQVariant()

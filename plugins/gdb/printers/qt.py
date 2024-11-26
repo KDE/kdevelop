@@ -1010,9 +1010,6 @@ class QUuidPrinter:
                                             int(self.val['data4'][4]), int(self.val['data4'][5]),
                                             int(self.val['data4'][6]), int(self.val['data4'][7]))
 
-    def display_hint (self):
-        return 'string'
-
 class QVariantPrinter:
 
     def __init__(self, val):
