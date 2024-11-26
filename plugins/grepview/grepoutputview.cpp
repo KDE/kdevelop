@@ -274,10 +274,7 @@ void GrepOutputView::changeModel(int index)
     connect(model(), &GrepOutputModel::dataChanged,
             this, &GrepOutputView::updateApplyState);
     model()->showMessageEmit();
-    applyButton->setEnabled(model()->hasResults() &&
-                            model()->getRootItem() &&
-                            model()->getRootItem()->checkState() != Qt::Unchecked &&
-                            !replacementCombo->currentText().isEmpty());
+
     updateButtonState(model()->hasResults());
 
     updateCheckable();
