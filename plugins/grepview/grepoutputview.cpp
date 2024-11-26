@@ -276,11 +276,7 @@ void GrepOutputView::changeModel(int index)
                                 model()->getRootItem() &&
                                 model()->getRootItem()->checkState() != Qt::Unchecked &&
                                 !replacementCombo->currentText().isEmpty());
-        if(model()->hasResults())
-            expandElements(QModelIndex());
-        else {
-            updateButtonState(false);
-        }
+        updateButtonState(model()->hasResults());
     }
 
     updateCheckable();
