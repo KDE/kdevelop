@@ -250,6 +250,13 @@ GrepOutputModel* GrepOutputView::model()
 
 void GrepOutputView::changeModel(int index)
 {
+    replacementCombo->clearEditText();
+
+    // index equals -1 after deleting the whole search history
+    if (index < 0) {
+        return;
+    }
+
     if (model()) {
         disconnect(model(), &GrepOutputModel::showMessage,
                    this, &GrepOutputView::showMessage);
@@ -257,27 +264,21 @@ void GrepOutputView::changeModel(int index)
                    this, &GrepOutputView::updateApplyState);
     }
 
-    replacementCombo->clearEditText();
+    QVariant var = modelSelector->itemData(index);
+    auto *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
+    resultsTreeView->setModel(resultModel);
+    resultsTreeView->expandAll();
 
-    //after deleting the whole search history, index is -1
-    if(index >= 0)
-    {
-        QVariant var = modelSelector->itemData(index);
-        auto *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
-        resultsTreeView->setModel(resultModel);
-        resultsTreeView->expandAll();
-
-        connect(model(), &GrepOutputModel::showMessage,
-                this, &GrepOutputView::showMessage);
-        connect(model(), &GrepOutputModel::dataChanged,
-                this, &GrepOutputView::updateApplyState);
-        model()->showMessageEmit();
-        applyButton->setEnabled(model()->hasResults() &&
-                                model()->getRootItem() &&
-                                model()->getRootItem()->checkState() != Qt::Unchecked &&
-                                !replacementCombo->currentText().isEmpty());
-        updateButtonState(model()->hasResults());
-    }
+    connect(model(), &GrepOutputModel::showMessage,
+            this, &GrepOutputView::showMessage);
+    connect(model(), &GrepOutputModel::dataChanged,
+            this, &GrepOutputView::updateApplyState);
+    model()->showMessageEmit();
+    applyButton->setEnabled(model()->hasResults() &&
+                            model()->getRootItem() &&
+                            model()->getRootItem()->checkState() != Qt::Unchecked &&
+                            !replacementCombo->currentText().isEmpty());
+    updateButtonState(model()->hasResults());
 
     updateCheckable();
     updateApplyState(model()->index(0, 0), model()->index(0, 0));
