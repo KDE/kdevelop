@@ -995,6 +995,22 @@ class CborValueType(Enum):
 
     Invalid         = -1
 
+def parseQCborContainer(container_ptr):
+    # d.split('i@{@QByteArray::size_type}pp', container_ptr) doesn't work with CDB,
+    # so be explicit:
+    data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
+    elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
+    elements_data_ptr, elements_size = d.vectorData(elements_pos)
+    return (data_pos, elements_data_ptr, elements_size)
+
+def qcborContainerElementCount(container_ptr):
+    _, _, elements_size = parseQCborContainer(container_ptr)
+    return elements_size
+
+def qcborContainerBytedata(data_pos):
+    bytedata, _, _ = d.qArrayData(data_pos)
+    return bytedata
+
 class CborOrJsonValueData:
 
     def __init__(self, item_data, container_ptr, item_type, is_cbor):
@@ -1033,14 +1049,10 @@ class CborOrJsonValueData:
 
     @staticmethod
     def extractByteData(d, container_ptr, element_index):
-        # d.split('i@{@QByteArray::size_type}pp', container_ptr) doesn't work with CDB,
-        # so be explicit:
-        data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
-        elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
-        elements_data_ptr, _ = d.vectorData(elements_pos)
+        data_pos, elements_data_ptr, _ = parseQCborContainer(container_ptr)
         element_at_n_addr = elements_data_ptr + element_index * 16 # sizeof(QtCbor::Element) == 16
         element_value, _, element_flags = d.split('qII', element_at_n_addr)
-        bytedata, _, _ = d.qArrayData(data_pos)
+        bytedata = qcborContainerBytedata(data_pos)
         bytedata += element_value
         if d.qtVersionAtLeast(0x060000):
             bytedata_len = d.extractInt64(bytedata)
@@ -1121,9 +1133,6 @@ class CborOrJsonValueData:
             return self.toCborOrJsonGdbValue()
 
         elif item_type == CborValueType.Uuid.value:
-            data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
-            elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
-            elements_data_ptr, elements_size = d.vectorData(elements_pos)
             (bytedata_data, bytedata_len, element_flags) = CborOrJsonValueData.extractByteData(d, self.container_ptr, 1)
             bytes_buffer = bytes(d.readMemory(bytedata_data, bytedata_len))
             # QUuid format: uint, ushort, ushort, uchar[8] in big endian
@@ -1140,12 +1149,6 @@ class CborOrJsonValueData:
 
         else:
             return f'<Unknown type> (0x{item_type:x}): {item_data}'
-
-def qcborContainerElementCount(container_ptr):
-    data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
-    elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
-    _, elements_size = d.vectorData(elements_pos)
-    return elements_size
 
 def qcborContainerValueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cbor):
     element_at_n_addr = elements_data_ptr + idx * 16 # sizeof(QtCbor::Element) == 15
@@ -1203,10 +1206,8 @@ class QCborContainerPrivateIterator:
         self.is_cbor = 'QCbor' in container_className
         self.is_array = 'Array' in container_className
 
-        data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
-        elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
-        self.elements_data_ptr, self.size = d.vectorData(elements_pos)
-        self.bytedata, _, _ = d.qArrayData(data_pos)
+        data_pos, self.elements_data_ptr, self.size = parseQCborContainer(container_ptr)
+        self.bytedata = qcborContainerBytedata(data_pos)
         self.index = 0
 
     def __iter__(self):
@@ -1326,10 +1327,11 @@ class QCborValuePrinterBase(PrinterForwarder):
         self._initFromValueData(valueData)
 
     class _tagIterator:
-        def __init__(self, container_ptr, elements_data_ptr, data_pos, is_cbor):
+        "Iterate over the single tagged value - the second element of the size=2 Tag container"
+        def __init__(self, container_ptr, data_pos, elements_data_ptr, is_cbor):
             self.container_ptr = container_ptr
-            self.elements_data_ptr = elements_data_ptr
             self.data_pos = data_pos
+            self.elements_data_ptr = elements_data_ptr
             self.is_cbor = is_cbor
             self.atEnd = False
 
@@ -1340,7 +1342,7 @@ class QCborValuePrinterBase(PrinterForwarder):
             if self.atEnd:
                 raise StopIteration
             self.atEnd = True
-            bytedata, _, _ = d.qArrayData(self.data_pos)
+            bytedata = qcborContainerBytedata(self.data_pos)
             value = qcborContainerValueAt(self.container_ptr, self.elements_data_ptr, 1, bytedata, self.is_cbor)
             return ("value", value.inspect())
 
@@ -1359,13 +1361,11 @@ class QCborValuePrinterBase(PrinterForwarder):
         elif item_type == CborValueType.RegularExpression.value:
             self._setUnderlyingValue('RegularExpression(%s)' % valueData.toPythonString(1))
         elif item_type == CborValueType.Tag.value:
-            data_pos = valueData.container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
-            elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
-            elements_data_ptr, elements_size = d.vectorData(elements_pos)
+            data_pos, elements_data_ptr, elements_size = parseQCborContainer(valueData.container_ptr)
             if elements_size == 2:
                 tag = d.extractInt64(elements_data_ptr)
                 self._setUnderlyingValue(f'Tag({tag})')
-                self.children = lambda : self._tagIterator(valueData.container_ptr, elements_data_ptr, data_pos, valueData.is_cbor)
+                self.children = lambda : self._tagIterator(valueData.container_ptr, data_pos, elements_data_ptr, valueData.is_cbor)
                 self.num_children = lambda : 1
             else:
                 self._setUnderlyingValue('<Invalid Tag>')
