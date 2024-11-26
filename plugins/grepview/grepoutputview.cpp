@@ -448,12 +448,12 @@ void GrepOutputView::clearSearchHistory()
         connect(runningJob, &GrepJob::finished, this, [=]() {updateButtonState(false);});
         runningJob->kill();
     }
-    while(modelSelector->count() > 0)
-    {
-        QVariant var = modelSelector->itemData(0);
+
+    for (int i = modelSelector->count() - 1; i >= 0; --i) {
+        const auto var = modelSelector->itemData(i);
         qvariant_cast<QObject*>(var)->deleteLater();
-        modelSelector->removeItem(0);
     }
+    modelSelector->clear();
 
     m_settingsHistory.clear();
 
