@@ -117,7 +117,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setRootIsDecorated(false);
     resultsTreeView->setHeaderHidden(true);
-    resultsTreeView->setUniformRowHeights(false);
+    resultsTreeView->setUniformRowHeights(true);
     resultsTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     resultsTreeView->header()->setStretchLastSection(true);
 

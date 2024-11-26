@@ -142,20 +142,6 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
             + option.fontMetrics.horizontalAdvance(i18n("Line %1: ", item->lineNumber()))
             + std::max(option.decorationSize.width(), 0);
         ret.setWidth(width);
-    }else{
-        // This is only used for titles, so not very performance critical
-        QString text;
-        if(item)
-            text = item->text();
-        else
-            text = index.data().toString();
-        
-        QTextDocument doc;
-        doc.setDocumentMargin(0);
-        doc.setHtml(text);
-        QSize newSize = doc.size().toSize();
-        if(newSize.height() > ret.height())
-            ret.setHeight(newSize.height());
     }
     return ret;
 }
