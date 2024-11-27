@@ -118,7 +118,7 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
 
         fmt.setFontWeight(QFont::Bold);
         if ( !(options.state & QStyle::State_Selected) ) {
-            QColor bgHighlight = option.palette.color(QPalette::AlternateBase);
+            const auto& bgHighlight = options.palette.color(QPalette::AlternateBase);
             fmt.setBackground(bgHighlight);
         }
         cur.insertText(formatter.textInRange(), fmt);
