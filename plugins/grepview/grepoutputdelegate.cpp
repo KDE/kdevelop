@@ -21,6 +21,47 @@
 #include <cmath>
 #include <algorithm>
 
+namespace {
+
+class GrepOutputItemFormatter
+{
+public:
+    explicit GrepOutputItemFormatter(const GrepOutputItem& item)
+        : m_item(item)
+        , m_range(item.change()->m_range)
+    {
+        Q_ASSERT(m_item.isText());
+        Q_ASSERT(m_range.isValid());
+        Q_ASSERT(m_range.start().line() == m_range.end().line());
+        Q_ASSERT(m_range.end().column() <= m_item.text().size());
+    }
+
+    [[nodiscard]] QString lineNumberPrefix() const
+    {
+        return i18n("Line %1: ", m_item.lineNumber());
+    }
+    [[nodiscard]] QString textBeforeRange() const
+    {
+        // There is no function in QString to left-trim. A call to remove this regex does the job.
+        static const QRegularExpression leftSpaces(QStringLiteral("^\\s*"));
+        return m_item.text().first(m_range.start().column()).remove(leftSpaces);
+    }
+    [[nodiscard]] QString textInRange() const
+    {
+        return m_item.text().sliced(m_range.start().column(), m_range.end().column() - m_range.start().column());
+    }
+    [[nodiscard]] QString textAfterRange() const
+    {
+        return m_item.text().sliced(m_range.end().column());
+    }
+
+private:
+    const GrepOutputItem& m_item;
+    const KTextEditor::Range m_range;
+};
+
+} // unnamed namespace
+
 GrepOutputDelegate* GrepOutputDelegate::m_self = nullptr;
 
 GrepOutputDelegate* GrepOutputDelegate::self()
@@ -43,9 +84,6 @@ GrepOutputDelegate::~GrepOutputDelegate()
 
 void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 { 
-    // there is no function in QString to left-trim. A call to remove this regexp does the job
-    static const QRegularExpression leftspaces(QStringLiteral("^\\s*"));
-
     // rich text component
     const auto* model = qobject_cast<const GrepOutputModel*>(index.model());
     const auto  *item  = dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index));
@@ -68,26 +106,26 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
     {
         // Use custom manual highlighting
 
-        const KTextEditor::Range rng = item->change()->m_range;
+        const GrepOutputItemFormatter formatter(*item);
 
         // the line number appears grayed
         fmt.setForeground(options.palette.brush(QPalette::Disabled, cr));
-        cur.insertText(i18n("Line %1: ",item->lineNumber()), fmt);
-        
+        cur.insertText(formatter.lineNumberPrefix(), fmt);
+
         // switch to normal color
         fmt.setForeground(options.palette.brush(cg, cr));
-        cur.insertText(item->text().left(rng.start().column()).remove(leftspaces), fmt);
-        
+        cur.insertText(formatter.textBeforeRange(), fmt);
+
         fmt.setFontWeight(QFont::Bold);
         if ( !(options.state & QStyle::State_Selected) ) {
             QColor bgHighlight = option.palette.color(QPalette::AlternateBase);
             fmt.setBackground(bgHighlight);
         }
-        cur.insertText(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column()), fmt);
+        cur.insertText(formatter.textInRange(), fmt);
         fmt.clearBackground();
         
         fmt.setFontWeight(QFont::Normal);
-        cur.insertText(item->text().mid(rng.end().column()), fmt);
+        cur.insertText(formatter.textAfterRange(), fmt);
     }else{
         QString text;
         if(item)
@@ -130,17 +168,20 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
     //and line numbers. These are not included in the default Qt size calculation.
     if(item && item->isText())
     {
-        QFont font = option.font;
-        QFontMetrics metrics(font);
+        QStyleOptionViewItem options = option;
+        initStyleOption(&options, index);
+
+        const auto& metrics = options.fontMetrics;
+        QFont font = options.font;
         font.setBold(true);
-        QFontMetrics bMetrics(font);
-        const KTextEditor::Range rng = item->change()->m_range;
-        int width = metrics.horizontalAdvance(item->text().left(rng.start().column()))
-            + metrics.horizontalAdvance(item->text().mid(rng.end().column()))
-            + bMetrics.horizontalAdvance(
-                item->text().mid(rng.start().column(), rng.end().column() - rng.start().column()))
-            + option.fontMetrics.horizontalAdvance(i18n("Line %1: ", item->lineNumber()))
-            + std::max(option.decorationSize.width(), 0);
+        const QFontMetrics boldMetrics(font);
+
+        const GrepOutputItemFormatter formatter(*item);
+
+        const auto width = metrics.horizontalAdvance(formatter.lineNumberPrefix())
+            + metrics.horizontalAdvance(formatter.textBeforeRange())
+            + boldMetrics.horizontalAdvance(formatter.textInRange())
+            + metrics.horizontalAdvance(formatter.textAfterRange()) + std::max(options.decorationSize.width(), 0);
         ret.setWidth(width);
     }
     return ret;
