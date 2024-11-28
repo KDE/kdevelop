@@ -281,6 +281,8 @@ void GrepOutputView::changeModel(int index)
     updateApplyState(model()->index(0, 0), model()->index(0, 0));
     m_refresh->setEnabled(true);
     m_clearSearchHistory->setEnabled(true);
+
+    updateScrollArea();
 }
 
 void GrepOutputView::setMessage(const QString& msg, MessageType type)
