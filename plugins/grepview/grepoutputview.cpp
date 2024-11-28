@@ -138,6 +138,8 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
 
+    connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepOutputView::updateScrollArea);
+
     // read Find/Replace settings history
     const QStringList s = cg.readEntry("LastSettings", QStringList());
     if (s.size() % GrepSettingsStorageItemCount != 0) {
@@ -229,7 +231,6 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
     connect(replacementCombo, &KComboBox::editTextChanged, newModel, &GrepOutputModel::setReplacement);
     connect(newModel, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
     connect(newModel, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
-    connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepOutputView::updateScrollArea);
 
     // appends new model to history
     modelSelector->insertItem(0, description, QVariant::fromValue<QObject*>(newModel));
