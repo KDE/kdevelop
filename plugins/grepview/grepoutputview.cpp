@@ -472,11 +472,12 @@ void GrepOutputView::modelSelectorContextMenu(const QPoint& pos)
 
 void GrepOutputView::updateScrollArea()
 {
-    if (!model()) {
+    const auto* const model = this->model();
+    if (!model) {
         return;
     }
 
-    for (int col = 0; col < model()->columnCount(); ++col)
+    for (int col = 0, columnCount = model->columnCount(); col < columnCount; ++col)
         resultsTreeView->resizeColumnToContents(col);
 }
 
