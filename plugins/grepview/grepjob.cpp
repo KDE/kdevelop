@@ -122,7 +122,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
                 KTextEditor::Range(lineno, start, lineno, end),
                 re.cap(0), QString()));
 
-            res << GrepOutputItem(change, data, false);
+            res->push_back(new GrepOutputItem(change, data, false));
             offset = end;
         }
         lineno++;
@@ -138,8 +138,6 @@ GrepJob::GrepJob( QObject* parent )
     , m_findThread(nullptr)
     , m_findSomething(false)
 {
-    qRegisterMetaType<GrepOutputItem::List>();
-
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
 
@@ -245,10 +243,11 @@ void GrepJob::slotWork()
                     QString file = m_fileList[m_fileIndex].toLocalFile();
                     GrepOutputItem::List items = grepFile(file, m_regExp);
 
-                    if(!items.isEmpty())
-                    {
+                    if (!items->empty()) {
                         m_findSomething = true;
-                        emit foundMatches(file, items);
+                        if (m_outputModel) {
+                            m_outputModel->appendOutputs(file, std::move(items));
+                        }
                     }
 
                     m_fileIndex++;
@@ -291,9 +290,6 @@ void GrepJob::start()
     m_workState = WorkStarting;
 
     m_outputModel->clear();
-
-    connect(this, &GrepJob::foundMatches,
-            m_outputModel, &GrepOutputModel::appendOutputs, Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }
