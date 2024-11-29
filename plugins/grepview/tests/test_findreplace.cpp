@@ -111,13 +111,16 @@ void FindReplaceTest::testFind()
 
     const auto actualMatches = grepFile(file.fileName(), search);
 
-    QCOMPARE(actualMatches.length(), matches.length());
+    QCOMPARE(actualMatches->size(), matches.size());
 
     for(int i=0; i<matches.length(); i++)
     {
-        QCOMPARE(actualMatches[i].change()->m_range.start().line(),   matches[i].line);
-        QCOMPARE(actualMatches[i].change()->m_range.start().column(), matches[i].start);
-        QCOMPARE(actualMatches[i].change()->m_range.end().column(),   matches[i].end);
+        const auto* const item = dynamic_cast<GrepOutputItem*>(actualMatches->at(i));
+        QVERIFY(item);
+        const auto range = item->change()->m_range;
+        QCOMPARE(range.start().line(), matches[i].line);
+        QCOMPARE(range.start().column(), matches[i].start);
+        QCOMPARE(range.end().column(), matches[i].end);
     }
 
     // check that file has not been altered by grepFile

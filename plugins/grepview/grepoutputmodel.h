@@ -12,6 +12,7 @@
 #define KDEVPLATFORM_PLUGIN_GREPOUTPUTMODEL_H
 
 #include <language/codegen/documentchangeset.h>
+#include <util/owningrawpointercontainer.h>
 
 #include <QList>
 #include <QRegExp>
@@ -26,7 +27,11 @@ namespace KDevelop {
 class GrepOutputItem : public QStandardItem
 {
 public:
-    using List = QList<GrepOutputItem>;
+    /**
+     * A list of GrepOutputItem pointers stored as QStandardItem pointers
+     * for compatibility with the QStandardItem::appendRows() API.
+     */
+    using List = KDevelop::OwningRawPointerContainer<QList<QStandardItem*>>;
 
     GrepOutputItem(const KDevelop::DocumentChangePointer& change, const QString& text, bool checkable);
     GrepOutputItem(const QString &filename, const QString &text, bool checkable);
@@ -43,33 +48,9 @@ public:
 
     QVariant data ( int role = Qt::UserRole + 1 ) const override;
 
-    /**
-     * @warning Do not use the default constructor. It is provided only to prevent a compilation error in
-     * operator>>(QDataStream&, QList<T>&) [with @c T = GrepOutputItem]. This specialization of
-     * @c operator>> is instantiated by the signal and the slot with a @c const GrepOutputItem::List&
-     * parameter, as well as by the declaration Q_DECLARE_METATYPE(GrepOutputItem::List).
-     */
-    [[deprecated(
-        "Do not use the default constructor. It is never called, not tested and asserts false.")]] GrepOutputItem();
-
-    /**
-     * @warning Do not read from or write to a stream. read() and write() are overridden only to detect
-     * when they are invoked and fail. The reason is: serializing @a m_change is not straightforward
-     * and not implemented until we know when and why a GrepOutputItem needs to be serialized.
-     */
-    [[deprecated("Do not read from a stream. This function is never called, not tested and asserts false.")]] void
-    read(QDataStream& in) override;
-    /**
-     * @copydoc read
-     */
-    [[deprecated("Do not write to a stream. This function is never called, not tested and asserts false.")]] void
-    write(QDataStream& out) const override;
-
 private:
     KDevelop::DocumentChangePointer m_change;
 };
-
-Q_DECLARE_METATYPE(GrepOutputItem::List)
 
 class GrepOutputModel : public QStandardItemModel
 {
@@ -85,7 +66,8 @@ public:
     QString replacementFor(const QString &text);
     void clear();  // resets file & match counts
     bool hasResults();
- 
+    void appendOutputs(const QString& filename, GrepOutputItem::List&& lines);
+
     QModelIndex previousItemIndex(const QModelIndex &currentIdx) const;
     QModelIndex nextItemIndex(const QModelIndex &currentIdx) const;
     const GrepOutputItem *getRootItem() const;
@@ -94,7 +76,6 @@ public:
     bool itemsCheckable() const;
     
 public Q_SLOTS:
-    void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
     void activate( const QModelIndex &idx );
     void doReplacements();
     void setReplacement(const QString &repl);

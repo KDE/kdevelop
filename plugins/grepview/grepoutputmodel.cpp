@@ -10,7 +10,6 @@
 
 #include "grepoutputmodel.h"
 
-#include "debug.h"
 #include "greputil.h"
 #include "grepviewplugin.h"
 
@@ -22,7 +21,6 @@
 #include <KTextEditor/Document>
 #include <KLocalizedString>
 
-#include <QDataStream>
 #include <QFontDatabase>
 #include <QModelIndex>
 
@@ -158,27 +156,6 @@ QVariant GrepOutputItem::data ( int role ) const {
 
 GrepOutputItem::~GrepOutputItem()
 {}
-
-GrepOutputItem::GrepOutputItem()
-    : GrepOutputItem(QString{}, QString{}, false)
-{
-    qCCritical(PLUGIN_GREPVIEW) << "the unsupported default GrepOutputItem constructor is invoked";
-    Q_ASSERT(false);
-}
-
-void GrepOutputItem::read(QDataStream& in)
-{
-    qCCritical(PLUGIN_GREPVIEW) << "a GrepOutputItem is read from a stream, this is not supported";
-    Q_ASSERT(false);
-    QStandardItem::read(in);
-}
-
-void GrepOutputItem::write(QDataStream& out) const
-{
-    qCCritical(PLUGIN_GREPVIEW) << "a GrepOutputItem is written to a stream, this is not supported";
-    Q_ASSERT(false);
-    QStandardItem::write(out);
-}
 
 ///////////////////////////////////////////////////////////////
 
@@ -383,9 +360,9 @@ void GrepOutputModel::makeItemsCheckable(bool checkable, GrepOutputItem* item)
         makeItemsCheckable(checkable, static_cast<GrepOutputItem*>(item->child(row, 0)));
 }
 
-void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
+void GrepOutputModel::appendOutputs(const QString& filename, GrepOutputItem::List&& items)
 {
-    if(items.isEmpty())
+    if (items->empty())
         return;
     
     if(rowCount() == 0)
@@ -395,32 +372,36 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     }
     
     m_fileCount  += 1;
-    m_matchCount += items.length();
+    m_matchCount += items->size();
 
     const QString matchText = i18np("<b>1</b> match", "<b>%1</b> matches", m_matchCount);
     const QString fileText = i18np("<b>1</b> file", "<b>%1</b> files", m_fileCount);
 
     m_rootItem->setText(i18nc("%1 is e.g. '4 matches', %2 is e.g. '1 file'", "<b>%1 in %2</b>", matchText, fileText));
-    
-    QString fnString = i18np("%2: 1 match", "%2: %1 matches",
-                             items.length(), ICore::self()->projectController()->prettyFileName(QUrl::fromLocalFile(filename)));
+
+    const auto fnString = i18np("%2: 1 match", "%2: %1 matches", items->size(),
+                                ICore::self()->projectController()->prettyFileName(QUrl::fromLocalFile(filename)));
 
     auto *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
     m_rootItem->appendRow(fileItem);
-    for (const GrepOutputItem& item : items) {
-        auto* copy = new GrepOutputItem(item);
-        copy->setCheckable(m_itemsCheckable);
+
+    for (auto* const item : std::as_const(*items)) {
+        Q_ASSERT(dynamic_cast<GrepOutputItem*>(item));
+        item->setCheckable(m_itemsCheckable);
         if(m_itemsCheckable)
         {
-            copy->setCheckState(Qt::Checked);
+            item->setCheckState(Qt::Checked);
             // Individual match items do not have children. If such an item needs children for some reason,
             // the children should probably be inserted after inserting the item into fileItem. This would
             // emit rowsInserted() for the children and let GrepOutputView expand the item (as their parent).
-            Q_ASSERT(copy->rowCount() == 0);
+            Q_ASSERT(item->rowCount() == 0);
         }
-        
-        fileItem->appendRow(copy);
     }
+
+    fileItem->appendRows(std::move(*items)); // transfer the ownership of the items to this->QStandardItemModel
+    // Clear the list in the OwningRawPointerContainer to prevent the destruction of the items.
+    // Avoid QList::clear(), which can detach and allocate.
+    *items = QList<QStandardItem*>{};
 }
 
 void GrepOutputModel::updateCheckState(QStandardItem* item)
