@@ -413,8 +413,10 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
         if(m_itemsCheckable)
         {
             copy->setCheckState(Qt::Checked);
-            if(copy->rowCount())
-                copy->setAutoTristate(true);
+            // Individual match items do not have children. If such an item needs children for some reason,
+            // the children should probably be inserted after inserting the item into fileItem. This would
+            // emit rowsInserted() for the children and let GrepOutputView expand the item (as their parent).
+            Q_ASSERT(copy->rowCount() == 0);
         }
         
         fileItem->appendRow(copy);
