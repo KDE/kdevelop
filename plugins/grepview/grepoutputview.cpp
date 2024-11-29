@@ -258,7 +258,7 @@ void GrepOutputView::changeModel(int index)
         disconnect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
         disconnect(model, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
         disconnect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
-        disconnect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
+        disconnect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::rowsInserted);
         disconnect(model, &GrepOutputModel::rowsRemoved, this, &GrepOutputView::rowsRemoved);
     }
 
@@ -271,7 +271,7 @@ void GrepOutputView::changeModel(int index)
     connect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
     connect(model, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
     connect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
-    connect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
+    connect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::rowsInserted);
     connect(model, &GrepOutputModel::rowsRemoved, this, &GrepOutputView::rowsRemoved);
 
     model->showMessageEmit();
@@ -353,11 +353,14 @@ void GrepOutputView::refresh()
     }
 }
 
-void GrepOutputView::expandElements(const QModelIndex& index)
+void GrepOutputView::rowsInserted(const QModelIndex& parent)
 {
-    updateButtonState(true);
+    if (!parent.isValid()) {
+        // The buttons need to be enabled only when the first (root) item with an invalid parent index is inserted.
+        updateButtonState(true);
+    }
 
-    resultsTreeView->expand(index);
+    resultsTreeView->expand(parent);
 }
 
 void GrepOutputView::updateButtonState(bool enable)
