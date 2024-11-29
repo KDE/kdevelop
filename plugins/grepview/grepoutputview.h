@@ -87,7 +87,7 @@ private Q_SLOTS:
     void onApply();
     void showDialog();
     void refresh();
-    void expandElements( const QModelIndex & parent );
+    void rowsInserted(const QModelIndex& parent);
     void updateButtonState(bool enable);
     void rowsRemoved();
     void clearSearchHistory();
