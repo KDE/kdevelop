@@ -92,7 +92,6 @@ Q_SIGNALS:
     void showErrorMessage(const QString& message, int timeout = 5) override;
     void hideProgress( KDevelop::IStatus* ) override;
     void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value) override;
-    void foundMatches( const QString& filename, const GrepOutputItem::List& matches);
 
 private:
     Q_INVOKABLE void slotWork();
