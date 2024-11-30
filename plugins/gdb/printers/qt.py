@@ -8,11 +8,12 @@
 import gdb
 import itertools
 import re
+import struct
 import time
 from datetime import datetime
 from enum import Enum
 
-from dumper import *
+import qtcreator_debugger
 from helper import *
 
 # opt-in to new ValuePrinter for collection types to allow direct querying of sizes where appropriate
@@ -60,7 +61,7 @@ class PrinterForwarder(PrinterBaseType):
             return self._printer.display_hint()
         return None
 
-d = Dumper()
+d = qtcreator_debugger.Dumper()
 
 def get_unique_ptr_value(unique_ptr_val):
     if unique_ptr_val.type.sizeof == d.ptrSize():

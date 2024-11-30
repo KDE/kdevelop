@@ -5,19 +5,20 @@
 # Modified by David Faure <faure@kde.org> (initially)
 # for the needs of qt.py
 
-import gdb
 import functools
 import struct
 
-# similar to qtcreator's API
 class DumperBase():
-
     @staticmethod
     def warn(message):
-        print(message)
+        print(message) # KDevelop: simplified - no replacements
 
     def __init__(self):
         self.qtversion = None
+
+    def extractQtVersion(self):
+        # can be overridden in bridges
+        pass
 
     def qtVersion(self):
         if self.qtversion:
@@ -29,13 +30,16 @@ class DumperBase():
             return self.qtversion
 
         #self.warn("EXTRACTING QT VERSION FAILED. GUESSING NOW.")
+        # KDevelop: simplified - no qtversionAtLeast6
         return 0x060602
 
     def qtVersionAtLeast(self, version):
+        # KDevelop: simplified - no qtversionAtLeast6
         return self.qtVersion() >= version
 
     def lookupType(self, typename):
-        return gdb.lookup_type(typename)
+        # KDevelop: simplified - must be overridden in bridges
+        pass
 
     def vectorData(self, value):
         if self.qtVersionAtLeast(0x060000):
@@ -49,10 +53,8 @@ class DumperBase():
             alloc = alloc & 0x7ffffff
             data = vector_data_ptr + offset
         else:
-            vector_data_ptr = self.extractPointer(value)
-            (ref, alloc, length) = self.split('III', vector_data_ptr)
-            data = vector_data_ptr + 16
-        self.check(0 <= length and length <= alloc and alloc <= 1000 * 1000 * 1000)
+            # KDevelop: removed Qt 4 support
+            warn("unsupported Qt version < 5.0")
         return data, length
 
     def qArrayData(self, value):
@@ -65,7 +67,7 @@ class DumperBase():
             return data, length, alloc
         return self.qArrayDataHelper(self.extractPointer(value))
 
-    def qArrayDataHelper(self, array_data_ptr): # Qt <= 5
+    def qArrayDataHelper(self, array_data_ptr):
         # array_data_ptr is what is e.g. stored in a QByteArray's d_ptr.
         if self.qtVersionAtLeast(0x050000):
             # QTypedArray:
@@ -80,30 +82,13 @@ class DumperBase():
                 data = data & 0xffffffff
             else:
                 data = data & 0xffffffffffffffff
-        elif self.qtVersionAtLeast(0x040000):
-            # Data:
-            # - QBasicAtomicInt ref;
-            # - int alloc, length;
-            # - [padding]
-            # - char *data;
-            if self.ptrSize() == 4:
-                (ref, alloc, length, data) = self.split('IIIp', array_data_ptr)
-            else:
-                (ref, alloc, length, pad, data) = self.split('IIIIp', array_data_ptr)
         else:
-            # Data:
-            # - QShared count;
-            # - QChar *unicode
-            # - char *ascii
-            # - uint len: 30
-            (dummy, dummy, dummy, length) = self.split('IIIp', array_data_ptr)
-            length = self.extractInt(array_data_ptr + 3 * self.ptrSize()) & 0x3ffffff
-            alloc = length  # pretend.
-            data = self.extract_pointer_at_address(array_data_ptr + self.ptrSize())
+            # KDevelop: removed Qt 4 and earlier support
+            warn("unsupported Qt version < 5.0")
         return data, length, alloc
 
-    # Unlike QtCreator, we don't hexencode in base64
     def readMemory(self, addr, size):
+        # KDevelop: unlike QtCreator, we don't hexencode in base64
         return bytes(self.readRawMemory(addr, size))
 
     def check(self, exp):
@@ -151,6 +136,7 @@ class DumperBase():
     def extractByte(self, value):
         return self.value_extract_something(value, 1)
 
+    # KDevelop: simplified - removed almost everything
     class Value():
         def __init__(self, dumper):
             # This can be helpful to track down from where a Value was created
@@ -174,8 +160,11 @@ class DumperBase():
             self.is_struct = is_struct
             self.is_base_class = is_base_class
 
+
     def ptrCode(self):
         return 'I' if self.ptrSize() == 4 else 'Q'
+
+    # KDevelop: commented out all val.typeid assignments, because we have not copied Value.typeid for simplicity
 
     def createValueFromAddress(self, address, typish):
         val = self.Value(self)
@@ -191,6 +180,7 @@ class DumperBase():
         #val.typeid = self.create_typeid(typish)
         #self.warn('CREATING %s WITH DATA %s' % (val.type.name, self.hexencode(data)))
         val.ldata = data
+        # KDevelop: commented out, because we have not copied Value.check() for simplicity
         #val.check()
         return val
 
@@ -254,6 +244,7 @@ class DumperBase():
             if readingTypeName:
                 if c == '}':
                     readingTypeName = False
+                    # TODO (KDevelop): have not copied describe_struct_member! Is this branch never taken?
                     n, field_typeid = self.describe_struct_member(typename)
 
                     field_align = self.type_alignment(field_typeid)
@@ -333,6 +324,7 @@ class DumperBase():
         raise RuntimeError('CANNOT READ %d BYTES FROM ADDRESS: %s' % (size, address))
 
     def split(self, pattern, value_or_address):
+        # TODO (KDevelop): why comment this out?
         #if isinstance(value_or_address, self.Value):
         #    return self.value_split(value_or_address, pattern)
         if isinstance(value_or_address, int):
@@ -365,46 +357,3 @@ class DumperBase():
         if len(fields) != len(parts):
             raise RuntimeError('STRUCT ERROR: %s %s' % (fields, parts))
         return tuple(map(fix_struct, fields, parts))
-
-
-# similar to qtcreator's API
-class Dumper(DumperBase): # gdb-specific
-
-    def __init__(self):
-        DumperBase.__init__(self)
-
-        self.isBigEndian = gdb.execute('show endian', to_string=True).find('big endian') > 0
-        self.packCode = '>' if self.isBigEndian else '<'
-
-    def ptrSize(self):
-        result = gdb.lookup_type('void').pointer().sizeof
-        self.ptrSize = lambda: result
-        return result
-
-    def selectedInferior(self):
-        try:
-            # gdb.Inferior is new in gdb 7.2
-            self.cachedInferior = gdb.selected_inferior()
-        except:
-            # Pre gdb 7.4. Right now we don't have more than one inferior anyway.
-            self.cachedInferior = gdb.inferiors()[0]
-
-        # Memoize result.
-        self.selectedInferior = lambda: self.cachedInferior
-        return self.cachedInferior
-
-    def readRawMemory(self, address, size):
-        #self.warn('READ: %s FROM 0x%x' % (size, address))
-        if address == 0 or size == 0:
-            return bytes()
-        res = self.selectedInferior().read_memory(address, size)
-        return res
-
-    def extractQtVersion(self):
-        try:
-            # Only available with Qt 5.3+
-            return int(str(gdb.parse_and_eval('((void**)&qtHookData)[2]')), 16)
-        except:
-            # We don't care for 5.0-5.2 so just return 4.8.x as fallback
-            (major, minor, patch) = (4, 8, 0)
-            return 0x10000 * major + 0x100 * minor + patch
