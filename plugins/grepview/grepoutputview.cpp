@@ -254,6 +254,15 @@ void GrepOutputView::changeModel(int index)
     }
 
     auto* model = this->model();
+
+    const auto dataForIndex = modelSelector->itemData(index);
+    auto* const modelForIndex = static_cast<GrepOutputModel*>(qvariant_cast<QObject*>(dataForIndex));
+    if (modelForIndex == model) {
+        // The selected model matches the active model, only its index changed -
+        // probably because renewModel() inserted a new item at front. Nothing to do.
+        return;
+    }
+
     if (model) {
         disconnect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
         disconnect(model, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
@@ -262,9 +271,7 @@ void GrepOutputView::changeModel(int index)
         disconnect(model, &GrepOutputModel::rowsRemoved, this, &GrepOutputView::rowsRemoved);
     }
 
-    QVariant var = modelSelector->itemData(index);
-    auto *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
-    resultsTreeView->setModel(resultModel);
+    resultsTreeView->setModel(modelForIndex);
     model = this->model();
     resultsTreeView->expandAll();
 
