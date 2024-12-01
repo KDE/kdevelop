@@ -175,16 +175,15 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
         auto* const dlg = new GrepDialog(m_plugin, this, this, false);
         dlg->historySearch(std::move(settingsHistory));
     }
-
-    updateCheckable();
 }
 
 void GrepOutputView::replacementTextChanged(const QString& replacementText)
 {
-    updateCheckable();
-
     if (auto* const model = this->model()) {
         model->setReplacement(replacementText);
+        if (!replacementText.isEmpty()) {
+            model->makeItemsCheckable(true);
+        }
         updateApplyState(model->index(0, 0), model->index(0, 0));
     }
 }
@@ -232,8 +231,6 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
     modelSelector->setCurrentIndex(0);
 
     m_settingsHistory.append(settings);
-
-    updateCheckable();
 
     return newModel;
 }
@@ -285,7 +282,6 @@ void GrepOutputView::changeModel(int index)
 
     updateButtonState(model->hasResults());
 
-    updateCheckable();
     updateApplyState(model->index(0, 0), model->index(0, 0));
     m_refresh->setEnabled(true);
     m_clearSearchHistory->setEnabled(true);
@@ -442,12 +438,6 @@ void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIn
     {
         applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked && model()->itemsCheckable());
     }
-}
-
-void GrepOutputView::updateCheckable()
-{
-    if(model())
-        model()->makeItemsCheckable(!replacementCombo->currentText().isEmpty() || model()->itemsCheckable());
 }
 
 void GrepOutputView::clearSearchHistory()
