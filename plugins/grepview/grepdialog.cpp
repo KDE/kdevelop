@@ -241,7 +241,36 @@ bool directoriesInProject(const QString& dir)
 
 ///Max number of items in paths combo box.
 const int pathsMaxCount = 25;
+
+/**
+ * Compose a pretty description of the specified search paths to be displayed in search history combobox.
+ *
+ * @param searchPaths selected paths in the format accepted by getDirectoryChoice()
+ * @param directoryChoice an address of a list returned by getDirectoryChoice(@p searchPaths)
+ *        if available; otherwise @c nullptr (a directory choice will be computed internally if needed)
+ */
+[[nodiscard]] QString searchDescription(const QString& searchPaths, const QList<QUrl>* directoryChoice)
+{
+    if (searchPaths != allOpenFilesString() && searchPaths != allOpenProjectsString()) {
+        auto prettyFileName = [](const QUrl& url) {
+            return ICore::self()->projectController()->prettyFileName(url, IProjectController::FormatPlain);
+        };
+
+        const auto choice = directoryChoice ? *directoryChoice : getDirectoryChoice(searchPaths);
+        switch (choice.size()) {
+        case 0:
+            break;
+        case 1:
+            return prettyFileName(choice[0]);
+        default:
+            return i18np("%2, and %1 more item", "%2, and %1 more items", choice.size() - 1, prettyFileName(choice[0]));
+        }
+    }
+
+    return searchPaths;
 }
+
+} // unnamed namespace
 
 GrepDialog::GrepDialog(GrepViewPlugin* plugin, GrepOutputView* toolView, QWidget* parent, bool show)
     : QDialog(parent)
@@ -496,10 +525,20 @@ void GrepDialog::historySearch(QList<GrepJobSettings>&& settingsHistory)
             return false;
         }
 
-        for (auto& settings : settingsHistory) {
-            m_settings = std::move(settings);
-            startSearch();
+        if (settingsHistory.empty()) {
+            // Assume that this dialog is already closed, because we assert that settingsHistory is nonempty above.
+            return false;
         }
+
+        auto& toolView = this->toolView(IUiController::Create);
+        for (const auto& settings : settingsHistory) {
+            const auto description = searchDescription(settings.searchPaths, nullptr);
+            // when restored from history, only display the parameters
+            toolView.renewModel(settings,
+                                i18nc("@item search result", "Search \"%1\" in %2", settings.pattern, description));
+        }
+
+        m_plugin->rememberSearchDirectory(settingsHistory.constLast().searchPaths);
 
         // Prevent adding models from history again in case another project is opened before this dialog is destroyed.
         settingsHistory.clear();
@@ -580,68 +619,56 @@ bool GrepDialog::saveSearchedDocuments() const
     return unsavedFiles.empty() || ICore::self()->documentController()->saveSomeDocuments(unsavedFiles);
 }
 
+GrepOutputView& GrepDialog::toolView(IUiController::FindFlags flags) const
+{
+    auto* toolView = m_toolView;
+    if (!toolView) {
+        toolView = static_cast<GrepOutputView*>(ICore::self()->uiController()->findToolView(
+            i18nc("@title:window", "Find/Replace in Files"), m_plugin->toolViewFactory(), flags));
+        Q_ASSERT_X(toolView, Q_FUNC_INFO, "This branch may be taken only after UiController::loadAllAreas() returns.");
+    }
+
+    return *toolView;
+}
+
 void GrepDialog::startSearch()
 {
     // if m_show is false, all settings are fixed in m_settings
     if (m_show)
         updateSettings();
 
-    if (!m_settings.fromHistory && !saveSearchedDocuments()) {
+    if (!saveSearchedDocuments()) {
         close();
         return;
     }
 
-    const QString descriptionOrUrl(m_settings.searchPaths);
-    QList<QUrl> choice = getDirectoryChoice(descriptionOrUrl);
-    QString description = descriptionOrUrl;
+    const auto choice = getDirectoryChoice(m_settings.searchPaths);
 
-    // Shorten the description
-    if(descriptionOrUrl != allOpenFilesString() && descriptionOrUrl != allOpenProjectsString()) {
-        auto prettyFileName = [](const QUrl& url) {
-            return ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
-        };
+    const auto description = searchDescription(m_settings.searchPaths, &choice);
+    auto& toolView = this->toolView(IUiController::CreateAndRaise);
+    GrepOutputModel* outputModel =
+        toolView.renewModel(m_settings,
+                            i18nc("@item search result", "Search \"%1\" in %2 (at time %3)", m_settings.pattern,
+                                  description, QTime::currentTime().toString(QStringLiteral("hh:mm"))));
 
-        if (choice.size() > 1) {
-            description = i18np("%2, and %1 more item", "%2, and %1 more items", choice.size() - 1, prettyFileName(choice[0]));
-        } else if (!choice.isEmpty()) {
-            description = prettyFileName(choice[0]);
-        }
-    }
+    GrepJob* job = m_plugin->newGrepJob();
+    // outputModel stores the messages and forwards them to toolView
+    connect(job, &GrepJob::showMessage,
+            outputModel, &GrepOutputModel::showMessageSlot);
+    connect(job, &GrepJob::showErrorMessage, outputModel, &GrepOutputModel::showErrorMessageSlot);
 
-    GrepOutputView* toolView = m_toolView;
-    if (!toolView) {
-        toolView = static_cast<GrepOutputView*>(ICore::self()->uiController()->findToolView(
-            i18nc("@title:window", "Find/Replace in Files"), m_plugin->toolViewFactory(),
-            m_settings.fromHistory ? IUiController::Create : IUiController::CreateAndRaise));
-        Q_ASSERT_X(toolView, Q_FUNC_INFO, "This branch may be taken only after UiController::loadAllAreas() returns.");
-    }
+    connect(&toolView, &GrepOutputView::outputViewIsClosed, job, [job]() {
+        job->kill();
+    });
 
-    if (m_settings.fromHistory) {
-        // when restored from history, only display the parameters
-        toolView->renewModel(m_settings, i18nc("@item search result", "Search \"%1\" in %2", m_settings.pattern, description));
-    } else {
-        GrepOutputModel* outputModel =
-            toolView->renewModel(m_settings,
-                                i18nc("@item search result", "Search \"%1\" in %2 (at time %3)", m_settings.pattern, description,
-                                    QTime::currentTime().toString(QStringLiteral("hh:mm"))));
+    qCDebug(PLUGIN_GREPVIEW) << "starting search with settings" << m_settings;
+    job->setOutputModel(outputModel);
+    job->setDirectoryChoice(choice);
+    job->setSettings(m_settings);
 
-        GrepJob* job = m_plugin->newGrepJob();
-        // outputModel stores the messages and forwards them to toolView
-        connect(job, &GrepJob::showMessage,
-                outputModel, &GrepOutputModel::showMessageSlot);
-        connect(job, &GrepJob::showErrorMessage, outputModel, &GrepOutputModel::showErrorMessageSlot);
+    ICore::self()->runController()->registerJob(job);
 
-        connect(toolView, &GrepOutputView::outputViewIsClosed, job, [=]() {job->kill();});
-
-        qCDebug(PLUGIN_GREPVIEW) << "starting search with settings" << m_settings;
-        job->setOutputModel(outputModel);
-        job->setDirectoryChoice(choice);
-        job->setSettings(m_settings);
-
-        ICore::self()->runController()->registerJob(job);
-    }
-
-    m_plugin->rememberSearchDirectory(descriptionOrUrl);
+    m_plugin->rememberSearchDirectory(m_settings.searchPaths);
 
     // If m_show is false, the dialog is closed somewhere else,
     // or not closed but still destroyed via deleteLater() in GrepViewPlugin::showDialog().

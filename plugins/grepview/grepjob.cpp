@@ -47,8 +47,6 @@ QDebug operator<<(QDebug debug, const GrepJobSettings& s)
     };
 
 #define p(memberName) printDataMember(#memberName, s.memberName)
-    p(fromHistory);
-
     p(projectFilesOnly);
     p(caseSensitive);
     p(regexp);

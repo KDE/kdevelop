@@ -16,6 +16,8 @@
 #include "grepjob.h"
 #include "ui_grepwidget.h"
 
+#include <interfaces/iuicontroller.h>
+
 class GrepOutputView;
 class GrepViewPlugin;
 
@@ -80,6 +82,12 @@ private:
      * @return whether the saving succeeded
      */
     bool saveSearchedDocuments() const;
+
+    /**
+     * @return @a *m_toolView if it is not null; otherwise, the GrepOutputView&
+     *         found with the specified flags in the current area
+     */
+    [[nodiscard]] GrepOutputView& toolView(KDevelop::IUiController::FindFlags flags) const;
 
     ///Checks what a user has entered into the dialog and saves the data in m_settings
     void updateSettings();
