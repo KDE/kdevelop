@@ -35,8 +35,6 @@ class QDebug;
 
 struct GrepJobSettings
 {
-    bool fromHistory = false;
-
     bool projectFilesOnly = false;
     bool caseSensitive = true;
     bool regexp = true;
