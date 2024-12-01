@@ -173,13 +173,13 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     updateCheckable();
 }
 
-void GrepOutputView::replacementTextChanged()
+void GrepOutputView::replacementTextChanged(const QString& replacementText)
 {
     updateCheckable();
 
-    if (model()) {
-        // see https://bugs.kde.org/show_bug.cgi?id=274902 - renewModel can trigger a call here without an active model
-        updateApplyState(model()->index(0, 0), model()->index(0, 0));
+    if (auto* const model = this->model()) {
+        model->setReplacement(replacementText);
+        updateApplyState(model->index(0, 0), model->index(0, 0));
     }
 }
 
@@ -219,16 +219,11 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
         m_settingsHistory.removeFirst();
     }
 
-    replacementCombo->clearEditText();
-
     auto* newModel = new GrepOutputModel(resultsTreeView);
     applyButton->setEnabled(false);
-    // text may be already present
-    newModel->setReplacement(replacementCombo->currentText());
     connect(newModel, &GrepOutputModel::rowsRemoved,
             this, &GrepOutputView::rowsRemoved);
     connect(resultsTreeView, &QTreeView::activated, newModel, &GrepOutputModel::activate);
-    connect(replacementCombo, &KComboBox::editTextChanged, newModel, &GrepOutputModel::setReplacement);
     connect(newModel, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
     connect(newModel, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
 

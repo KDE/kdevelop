@@ -61,12 +61,13 @@ public Q_SLOTS:
     void showMessage(const QString& message);
     void updateApplyState(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void changeModel(int index);
-    void replacementTextChanged();
 
 Q_SIGNALS:
     void outputViewIsClosed();
     
 private:
+    void replacementTextChanged(const QString& replacementText);
+
     static const int HISTORY_SIZE;
     QAction* m_next;
     QAction* m_prev;
