@@ -487,12 +487,29 @@ void GrepDialog::search(GrepJobSettings&& settings)
 void GrepDialog::historySearch(QList<GrepJobSettings>&& settingsHistory)
 {
     Q_ASSERT(!settingsHistory.empty());
-    m_historyJobSettings = std::move(settingsHistory);
+
+    // startSearch() calls IProjectController::prettyFileName(), which depends on currently open
+    // projects. Therefore, delay the history search until all projects are loaded on KDevelop start.
+    auto checkProjectsOpened = [this, settingsHistory = std::move(settingsHistory)]() mutable {
+        if (ICore::self()->projectController()->projects().size()
+            != ICore::self()->activeSession()->containedProjects().size()) {
+            return false;
+        }
+
+        for (auto& settings : settingsHistory) {
+            m_settings = std::move(settings);
+            startSearch();
+        }
+
+        // Prevent adding models from history again in case another project is opened before this dialog is destroyed.
+        settingsHistory.clear();
+
+        close();
+        return true;
+    };
 
     if (!checkProjectsOpened()) {
-        connect(KDevelop::ICore::self()->projectController(),
-                &KDevelop::IProjectController::projectOpened,
-                this, &GrepDialog::checkProjectsOpened);
+        connect(ICore::self()->projectController(), &IProjectController::projectOpened, this, checkProjectsOpened);
     }
 }
 
@@ -528,36 +545,6 @@ void GrepDialog::setSearchLocations(const QString& dir)
 void GrepDialog::patternComboEditTextChanged( const QString& text)
 {
     buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!text.isEmpty());
-}
-
-bool GrepDialog::checkProjectsOpened()
-{
-    // only proceed if all projects have been opened
-    if (KDevelop::ICore::self()->activeSession()->config()->group(QStringLiteral("General Options")).readEntry("Open Projects", QList<QUrl>()).count() !=
-        KDevelop::ICore::self()->projectController()->projects().count())
-        return false;
-
-    const auto projects = KDevelop::ICore::self()->projectController()->projects();
-    for (IProject* p : projects) {
-        if (!p->isReady())
-            return false;
-    }
-
-    // do the grep jobs one by one
-    connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepDialog::nextHistory);
-    QTimer::singleShot(0, this, [=]() {nextHistory(true);});
-
-    return true;
-}
-
-void GrepDialog::nextHistory(bool next)
-{
-    if (next && !m_historyJobSettings.empty()) {
-        m_settings = m_historyJobSettings.takeFirst();
-        startSearch();
-    } else {
-        close();
-    }
 }
 
 bool GrepDialog::isPartOfChoice(const QUrl& url) const
@@ -632,7 +619,6 @@ void GrepDialog::startSearch()
     if (m_settings.fromHistory) {
         // when restored from history, only display the parameters
         toolView->renewModel(m_settings, i18nc("@item search result", "Search \"%1\" in %2", m_settings.pattern, description));
-        emit m_plugin->grepJobFinished(true);
     } else {
         GrepOutputModel* outputModel =
             toolView->renewModel(m_settings,

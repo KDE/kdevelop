@@ -60,12 +60,6 @@ private Q_SLOTS:
     void addStringToMenu(QMenu* ret, const QString& string);
     void synchronizeDirActionTriggered(bool);
 
-    ///Check if all projects have been loaded
-    bool checkProjectsOpened();
-    ///Call the next element in m_jobs_history or close the dialog if all jobs are done
-    ///\param[in] next if false, skip pending jobs
-    void nextHistory(bool next);
-
     ///Opens the dialog to select a directory to search in, and inserts it into Location(s) field.
     void selectDirectoryDialog();
 
@@ -98,8 +92,6 @@ private:
     const bool m_show;
     ///Current setting
     GrepJobSettings m_settings;
-    ///List of remaining grep job settings to be done
-    QVector<GrepJobSettings> m_historyJobSettings;
 };
 
 
