@@ -225,7 +225,6 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
     }
 
     auto* newModel = new GrepOutputModel(resultsTreeView);
-    applyButton->setEnabled(false);
     // appends new model to history
     modelSelector->insertItem(0, description, QVariant::fromValue<QObject*>(newModel));
     modelSelector->setCurrentIndex(0);
