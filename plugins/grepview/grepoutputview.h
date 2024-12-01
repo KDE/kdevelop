@@ -93,7 +93,6 @@ private Q_SLOTS:
     void clearSearchHistory();
     void modelSelectorContextMenu(const QPoint& pos);
     void updateScrollArea();
-    void updateCheckable();
 };
 
 #endif // KDEVPLATFORM_PLUGIN_GREPOUTPUTVIEW_H
