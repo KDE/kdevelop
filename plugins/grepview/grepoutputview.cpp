@@ -167,7 +167,6 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
             settings.exclude = *(it++);
             settings.searchPaths = *(it++);
 
-            settings.fromHistory = true;
             settingsHistory.push_back(settings);
         }
 
@@ -346,7 +345,6 @@ void GrepOutputView::refresh()
         modelSelector->removeItem(index);
 
         auto settings = m_settingsHistory.takeAt(m_settingsHistory.count() - 1 - index);
-        settings.fromHistory = false;
 
         auto* const dlg = new GrepDialog(m_plugin, this, this, false);
         dlg->search(std::move(settings));
