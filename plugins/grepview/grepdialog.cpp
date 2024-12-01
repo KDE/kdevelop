@@ -478,6 +478,12 @@ void GrepDialog::setPattern(const QString& pattern)
     m_settings.pattern = pattern;
 }
 
+void GrepDialog::search(GrepJobSettings&& settings)
+{
+    m_settings = std::move(settings);
+    startSearch();
+}
+
 void GrepDialog::historySearch(QList<GrepJobSettings>&& settingsHistory)
 {
     Q_ASSERT(!settingsHistory.empty());

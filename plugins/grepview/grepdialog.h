@@ -36,6 +36,8 @@ public:
 
     void setPattern(const QString& pattern);
 
+    void search(GrepJobSettings&& settings);
+
     /**
      * Rerun all grep jobs from a given list of settings and close the dialog.
      *

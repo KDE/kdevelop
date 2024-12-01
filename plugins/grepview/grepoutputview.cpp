@@ -345,13 +345,12 @@ void GrepOutputView::refresh()
         qvariant_cast<QObject*>(var)->deleteLater();
         modelSelector->removeItem(index);
 
-        QVector<GrepJobSettings> refresh_history({
-            m_settingsHistory.takeAt(m_settingsHistory.count() - 1 - index)
-        });
-        refresh_history.first().fromHistory = false;
+        auto settings = m_settingsHistory.takeAt(m_settingsHistory.count() - 1 - index);
+        settings.fromHistory = false;
 
         auto* const dlg = new GrepDialog(m_plugin, this, this, false);
-        dlg->historySearch(std::move(refresh_history));
+        dlg->search(std::move(settings));
+        dlg->close();
     }
 }
 
