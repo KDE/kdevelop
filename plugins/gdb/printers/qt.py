@@ -1242,26 +1242,6 @@ class QCborContainerPrivateIterator:
         self.index += 1
         return result
 
-class QCborMapPrinter(PrinterBaseType):
-
-    def __init__(self, val):
-        self._container_ptr = int(val['d']['d'])
-        if self._container_ptr:
-            self._size = int(qcborContainerElementCount(self._container_ptr) / 2)
-        else:
-            self._size = 0
-
-    def children(self):
-        if self._size == 0:
-            return []
-        return QCborContainerPrivateIterator(self._container_ptr, 'QCborMap')
-
-    def to_string(self):
-        return f"QCborMap (size = {self._size})"
-
-    def display_hint(self):
-        return 'map'
-
 class QCborArrayPrinter(PrinterBaseType):
 
     def __init__(self, val):
@@ -1281,6 +1261,26 @@ class QCborArrayPrinter(PrinterBaseType):
 
     def display_hint(self):
         return 'array'
+
+class QCborMapPrinter(PrinterBaseType):
+
+    def __init__(self, val):
+        self._container_ptr = int(val['d']['d'])
+        if self._container_ptr:
+            self._size = int(qcborContainerElementCount(self._container_ptr) / 2)
+        else:
+            self._size = 0
+
+    def children(self):
+        if self._size == 0:
+            return []
+        return QCborContainerPrivateIterator(self._container_ptr, 'QCborMap')
+
+    def to_string(self):
+        return f"QCborMap (size = {self._size})"
+
+    def display_hint(self):
+        return 'map'
 
 class QJsonArrayPrinter(PrinterBaseType):
 
@@ -1580,17 +1580,15 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QUuid$')] = lambda val: QUuidPrinter(val)
     pretty_printers_dict[re.compile('^QVariant$')] = lambda val: QVariantPrinter(val)
     pretty_printers_dict[re.compile('^QPersistentModelIndex$')] = lambda val: QPersistentModelIndexPrinter(val)
+    pretty_printers_dict[re.compile('^QJsonArray$')] = lambda val: QJsonArrayPrinter(val)
     pretty_printers_dict[re.compile('^QJsonObject$')] = lambda val: QJsonObjectPrinter(val)
     pretty_printers_dict[re.compile('^QJsonDocument$')] = lambda val: QJsonDocumentPrinter(val)
     pretty_printers_dict[re.compile('^QJsonValue$')] = lambda val: QJsonValuePrinter(val)
-    pretty_printers_dict[re.compile('^QJsonArray$')] = lambda val: QJsonArrayPrinter(val)
-    pretty_printers_dict[re.compile('^QJsonValueRef$')] = lambda val: QJsonValueConstRefPrinter(val)
-    pretty_printers_dict[re.compile('^QJsonValueConstRef$')] = lambda val: QJsonValueConstRefPrinter(val)
+    pretty_printers_dict[re.compile('^QJsonValue(Const|)Ref$')] = lambda val: QJsonValueConstRefPrinter(val)
     pretty_printers_dict[re.compile('^QCborArray$')] = lambda val: QCborArrayPrinter(val)
     pretty_printers_dict[re.compile('^QCborMap$')] = lambda val: QCborMapPrinter(val)
     pretty_printers_dict[re.compile('^QCborValue$')] = lambda val: QCborValuePrinter(val)
-    pretty_printers_dict[re.compile('^QCborValueRef$')] = lambda val: QCborValueConstRefPrinter(val)
-    pretty_printers_dict[re.compile('^QCborValueConstRef$')] = lambda val: QCborValueConstRefPrinter(val)
+    pretty_printers_dict[re.compile('^QCborValue(Const|)Ref$')] = lambda val: QCborValueConstRefPrinter(val)
     pretty_printers_dict[re.compile('^QCborSimpleType$')] = lambda val: QCborSimpleTypePrinter(val)
 
 
