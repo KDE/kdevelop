@@ -963,6 +963,18 @@ class QPersistentModelIndexPrinter:
         modelIndex = gdb.parse_and_eval("reinterpret_cast<const QPersistentModelIndex*>(%s)->operator QModelIndex()" % self.val.address)
         return str(modelIndex)
 
+class QUuidPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        return "QUuid({%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x})" % (int(self.val['data1']), int(self.val['data2']), int(self.val['data3']),
+                                            int(self.val['data4'][0]), int(self.val['data4'][1]),
+                                            int(self.val['data4'][2]), int(self.val['data4'][3]),
+                                            int(self.val['data4'][4]), int(self.val['data4'][5]),
+                                            int(self.val['data4'][6]), int(self.val['data4'][7]))
+
 ############ Cbor / Json pretty printing starts here
 
 class CborValueType(Enum):
@@ -1439,18 +1451,6 @@ class QCborSimpleTypePrinter(PrinterBaseType):
 
     def to_string(self):
         return f'QCborSimpleType(0x{self._val:02x})'
-
-class QUuidPrinter:
-
-    def __init__(self, val):
-        self.val = val
-
-    def to_string(self):
-        return "QUuid({%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x})" % (int(self.val['data1']), int(self.val['data2']), int(self.val['data3']),
-                                            int(self.val['data4'][0]), int(self.val['data4'][1]),
-                                            int(self.val['data4'][2]), int(self.val['data4'][3]),
-                                            int(self.val['data4'][4]), int(self.val['data4'][5]),
-                                            int(self.val['data4'][6]), int(self.val['data4'][7]))
 
 class QVariantPrinter:
 
