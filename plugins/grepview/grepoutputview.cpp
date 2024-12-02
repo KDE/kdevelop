@@ -212,23 +212,23 @@ GrepOutputView::~GrepOutputView()
 
 GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, const QString& description)
 {
-    // clear oldest model
-    while(modelSelector->count() >= GrepOutputView::HISTORY_SIZE) {
-        QVariant var = modelSelector->itemData(GrepOutputView::HISTORY_SIZE - 1);
-        qvariant_cast<QObject*>(var)->deleteLater();
-        modelSelector->removeItem(GrepOutputView::HISTORY_SIZE - 1);
-    }
-
-    while(m_settingsHistory.count() >= GrepOutputView::HISTORY_SIZE) {
-        m_settingsHistory.removeFirst();
-    }
-
     auto* newModel = new GrepOutputModel(resultsTreeView);
     // appends new model to history
     modelSelector->insertItem(0, description, QVariant::fromValue<QObject*>(newModel));
     modelSelector->setCurrentIndex(0);
 
     m_settingsHistory.append(settings);
+
+    // Remove oldest model and settings from history. This loop implementation is efficient in practice,
+    // because the number of items in history cannot normally be greater than HISTORY_SIZE + 1.
+    while (modelSelector->count() > HISTORY_SIZE) {
+        const auto var = modelSelector->itemData(HISTORY_SIZE);
+        qvariant_cast<QObject*>(var)->deleteLater();
+        modelSelector->removeItem(HISTORY_SIZE);
+    }
+    while (m_settingsHistory.size() > HISTORY_SIZE) {
+        m_settingsHistory.removeFirst();
+    }
 
     return newModel;
 }
