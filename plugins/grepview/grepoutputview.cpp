@@ -210,6 +210,29 @@ GrepOutputView::~GrepOutputView()
     emit outputViewIsClosed();
 }
 
+void GrepOutputView::addModelsFromHistory(QList<GrepJobSettings>&& settingsHistory,
+                                          const QStringList& searchDescriptions)
+{
+    Q_ASSERT(settingsHistory.size() == searchDescriptions.size());
+    Q_ASSERT(!settingsHistory.empty());
+
+    // If modelSelector is currently empty (it usually *is* empty when search history is restored),
+    // the first inserted model becomes active. As the last history entry's model should be
+    // activated, insert it first to avoid temporarily activating another history entry's model.
+    const auto begin = searchDescriptions.crbegin();
+    const auto end = searchDescriptions.crend();
+    for (auto it = begin; it != end; ++it) {
+        auto* const newModel = new GrepOutputModel(resultsTreeView);
+        // Cannot just append the model to modelSelector, because it is not necessarily empty before this loop.
+        modelSelector->insertItem(it - begin, *it, QVariant::fromValue<QObject*>(newModel));
+    }
+    modelSelector->setCurrentIndex(0);
+
+    m_settingsHistory.append(std::move(settingsHistory));
+
+    removeOldestModelsIfTooMany();
+}
+
 GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, const QString& description)
 {
     auto* newModel = new GrepOutputModel(resultsTreeView);
@@ -219,7 +242,14 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
 
     m_settingsHistory.append(settings);
 
-    // Remove oldest model and settings from history. This loop implementation is efficient in practice,
+    removeOldestModelsIfTooMany();
+
+    return newModel;
+}
+
+void GrepOutputView::removeOldestModelsIfTooMany()
+{
+    // This loop implementation is efficient in practice,
     // because the number of items in history cannot normally be greater than HISTORY_SIZE + 1.
     while (modelSelector->count() > HISTORY_SIZE) {
         const auto var = modelSelector->itemData(HISTORY_SIZE);
@@ -229,10 +259,8 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
     while (m_settingsHistory.size() > HISTORY_SIZE) {
         m_settingsHistory.removeFirst();
     }
-
-    return newModel;
+    Q_ASSERT(m_settingsHistory.size() == modelSelector->count());
 }
-
 
 GrepOutputModel* GrepOutputView::model()
 {
