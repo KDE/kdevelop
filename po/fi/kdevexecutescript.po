@@ -1,6 +1,7 @@
 # Copyright © 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013.
+# SPDX-FileCopyrightText: 2024 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -10,21 +11,20 @@ msgstr ""
 "Project-Id-Version: kdevexecutescript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2013-11-12 22:13+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
-"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"PO-Revision-Date: 2024-11-17 13:45+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2012-12-01 22:20:29+0000\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: executescriptplugin.cpp:61
 #, kde-format
 msgid "No valid executable specified"
-msgstr "Kelvollista suoritettavaa tiedostoa ei ole määritetty"
+msgstr "Ei annettu kelvollista ohjelmatiedostoa"
 
 #: executescriptplugin.cpp:71
 #, kde-format
@@ -32,8 +32,8 @@ msgid ""
 "There is a quoting error in the script for the launch configuration '%1'. "
 "Aborting start."
 msgstr ""
-"Käynnistysmäärityksessä ”%1” on lainausmerkkivirhe skriptissä. "
-"Käynnistäminen keskeytetään."
+"Käynnistysmäärityksessä ”%1” on  skriptissä lainausmerkkivirhe. Käynnistys "
+"keskeytetään."
 
 #: executescriptplugin.cpp:76
 #, kde-format
@@ -41,14 +41,14 @@ msgid ""
 "A shell meta character was included in the script for the launch "
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
-"Komentotulkin metamerkki sisältyy käynnistysmäärityksen ”%1” skriptiin, tätä "
-"ei nykyisin tueta. Käynnistäminen keskeytetään."
+"Komentotulkin metamerkki sisältyy käynnistysmäärityksen ”%1” skriptiin, mitä "
+"ei toistaiseksi tueta. Käynnistys keskeytetään."
 
 #: executescriptplugin.cpp:93
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
-"Käynnistysmääritykselle ”%1” ei ole asetettu etäkonetta. Käynnistäminen "
+"Käynnistysmääritykselle ”%1” ei ole asetettu etäkonetta. Käynnistys "
 "keskeytetään."
 
 #: executescriptplugin.cpp:116
@@ -57,8 +57,8 @@ msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
 "Aborting start."
 msgstr ""
-"Käynnistysmäärityksessä ”%1” on lainausmerkkivirhe argumenteissa. "
-"Käynnistäminen keskeytetään."
+"Käynnistysmäärityksessä ”%1” on parametreissa lainausmerkkivirhe. Käynnistys "
+"keskeytetään."
 
 #: executescriptplugin.cpp:120
 #, kde-format
@@ -66,13 +66,13 @@ msgid ""
 "A shell meta character was included in the arguments for the launch "
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
-"Komentotulkin metamerkki sisältyy käynnistysmäärityksen ”%1” argumentteihin, "
-"tätä ei nykyisin tueta. Käynnistäminen keskeytetään."
+"Komentotulkin metamerkki sisältyy käynnistysmäärityksen ”%1” parametreihin, "
+"mitä ei toistaiseksi tueta. Käynnistys keskeytetään."
 
 #: executescriptplugin.cpp:173
 #, kde-format
 msgid "No valid interpreter specified"
-msgstr "Kelvollista tulkkia ei ole määritetty"
+msgstr "Ei määritetty kelvollista komentotulkkia"
 
 #: executescriptplugin.cpp:183
 #, kde-format
@@ -80,8 +80,8 @@ msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
 "'%1'. Aborting start."
 msgstr ""
-"Käynnistysmäärityksessä ”%1” on lainausmerkkivirhe tulkissa. Käynnistäminen "
-"keskeytetään."
+"Käynnistysmäärityksessä ”%1” on komentotulkissa lainausmerkkivirhe. "
+"Käynnistys keskeytetään."
 
 #: executescriptplugin.cpp:188
 #, kde-format
@@ -90,18 +90,16 @@ msgid ""
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
 "Komentotulkin metamerkki sisältyy käynnistysmäärityksen ”%1” tulkkiin, tätä "
-"ei nykyisin tueta. Käynnistäminen keskeytetään."
+"ei nykyisin tueta. Käynnistys keskeytetään."
 
 #: scriptappconfig.cpp:83
-#, fuzzy, kde-format
-#| msgid "Type or select an interpreter"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Type or select an interpreter..."
-msgstr "Kirjoita tai valitse tulkki"
+msgstr "Kirjoita tai valitse komentotulkki…"
 
 #: scriptappconfig.cpp:116
-#, fuzzy, kde-format
-#| msgid "Configure Script Application"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Script Application"
 msgstr "Skriptisovelluksen asetukset"
@@ -118,56 +116,49 @@ msgstr "Skriptisovellus"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: scriptappconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "Interpreter"
+#, kde-format
 msgctxt "@title:group"
 msgid "Interpreter"
-msgstr "Tulkki"
+msgstr "Komentotulkki"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: scriptappconfig.ui:44
-#, fuzzy, kde-format
-#| msgid "Script interpreter:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Script interpreter:"
 msgstr "Skriptitulkki:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: scriptappconfig.ui:95
-#, fuzzy, kde-format
-#| msgid "Script file"
+#, kde-format
 msgctxt "@title:group"
 msgid "Script file"
 msgstr "Skriptitiedosto"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runCurrentFile)
 #: scriptappconfig.ui:101
-#, fuzzy, kde-format
-#| msgid "Run the file currently open in the editor"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Run the file currently open in the editor"
 msgstr "Suorita muokkaimessa auki oleva tiedosto"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runFixedFile)
 #: scriptappconfig.ui:111
-#, fuzzy, kde-format
-#| msgid "Always run the same file"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Always run the same file"
 msgstr "Suorita aina sama tiedosto"
 
 #. i18n: ectx: property (text), widget (QLabel, scriptLabel)
 #: scriptappconfig.ui:123
-#, fuzzy, kde-format
-#| msgid "Script file:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Script file:"
 msgstr "Skriptitiedosto:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: scriptappconfig.ui:133
-#, fuzzy, kde-format
-#| msgid "Enter the absolute path to the script to run"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the absolute path to the script to run"
 msgstr "Kirjoita suoritettavan skriptin absoluuttinen polku"
@@ -177,137 +168,118 @@ msgstr "Kirjoita suoritettavan skriptin absoluuttinen polku"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/script"
-msgstr ""
+msgstr "/polku/skriptiin"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: scriptappconfig.ui:148
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
 msgstr "Toiminta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: scriptappconfig.ui:160
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
-msgstr "Argumentit:"
+msgstr "Parametrit:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: scriptappconfig.ui:170
-#, fuzzy, kde-format
-#| msgid "Enter arguments to give to the executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter arguments to give to the executable"
-msgstr "Kirjoita suoritettavalle tiedostolle annettavat argumentit"
+msgstr "Kirjoita ohjelmatiedostolle annettavat parametrit"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: scriptappconfig.ui:177
-#, fuzzy, kde-format
-#| msgid "Working Directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Working directory:"
-msgstr "Työhakemisto:"
+msgstr "Työkansio:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: scriptappconfig.ui:187
-#, fuzzy, kde-format
-#| msgid "Select a working directory for the executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
-msgstr "Valitse suoritettavien tiedostojen työhakemisto"
+msgstr "Valitse ohjelmatiedoston työkansio"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: scriptappconfig.ui:194
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
 msgstr "Ympäristö:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: scriptappconfig.ui:212
-#, fuzzy, kde-format
-#| msgid "Select an environment to be used"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
 msgstr "Valitse käytettävä ympäristö"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: scriptappconfig.ui:224
-#, fuzzy, kde-format
-#| msgid "Output Filter:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Output filter:"
 msgstr "Tulostesuodatin:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:231
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the filter to applied to the output. E.g. to mark errors with red "
-#| "text"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Select the filter to applied to the output. E.g. to mark errors with red text"
 msgstr ""
-"Valitse tulosteen suodatustapa. Esimerkiksi virheiden punaiseksi "
-"värittämistä varten"
+"Valitse tulosteen suodatustapa. Esim. virheiden värittämiseksi punaisiksi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:235
-#, fuzzy, kde-format
-#| msgid "No Filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "No Filter"
 msgstr "Ei suodatinta"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:240
-#, fuzzy, kde-format
-#| msgid "Compiler Filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Compiler Filter"
 msgstr "Kääntäjäsuodatin"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:245
-#, fuzzy, kde-format
-#| msgid "Script Error Filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Script Error Filter"
 msgstr "Skriptivirhesuodatin"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:250
-#, fuzzy, kde-format
-#| msgid "Static Analysis Filter"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Static Analysis Filter"
-msgstr "Staattisen analyysin virhesuodatin"
+msgstr "Staattisen analyysin suodatin"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: scriptappconfig.ui:267
-#, fuzzy, kde-format
-#| msgid "Execute on Host"
+#, kde-format
 msgctxt "@title:group"
 msgid "Execute on Host"
 msgstr "Suorita koneella"
 
 #. i18n: ectx: property (text), widget (QCheckBox, remoteHostCheckbox)
 #: scriptappconfig.ui:273
-#, fuzzy, kde-format
-#| msgid "Execute on remote host"
+#, kde-format
 msgctxt "@option:check"
 msgid "Execute on remote host"
 msgstr "Suorita etäkoneella"
 
 #. i18n: ectx: property (text), widget (QLabel, remoteHostLabel)
 #: scriptappconfig.ui:285
-#, fuzzy, kde-format
-#| msgid "Remote host (ssh):"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Remote host (ssh):"
 msgstr "Etäkone (ssh):"
@@ -317,15 +289,14 @@ msgstr "Etäkone (ssh):"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "user@host"
-msgstr ""
+msgstr "käyttäjä@kone"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, remoteHost)
 #: scriptappconfig.ui:301
-#, fuzzy, kde-format
-#| msgid "Enter a remote host (user@example.com)"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a remote host (user@host)"
-msgstr "Kirjoita etäkone (käyttäjä@esimerkki.fi)"
+msgstr "Kirjoita etäkone (käyttäjä@kone)"
 
 #: scriptappjob.cpp:76
 #, kde-format
@@ -334,16 +305,13 @@ msgstr "Ei ole käynnistettävää aktiivista tiedostoa."
 
 # Run configuration tarkoittaa tässä samaa kuin launch configuration.
 #: scriptappjob.cpp:98
-#, fuzzy, kde-format
-#| msgid ""
-#| "No environment group specified, looks like a broken configuration, please "
-#| "check run configuration '%1'. Using default environment group."
+#, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
-"Ympäristöryhmää ei ole määritetty. Näyttää rikkoutuneelta määritykseltä, "
-"tarkista käynnistysmääritys ”%1”. Käytetään oletusympäristöryhmää."
+"Ympäristöprofiilia ei ole määritetty. Määritys vaikuttaa rikkoutuneelta. "
+"Tarkista käynnistysmääritys ”%1”. Käytetään oletusympäristöprofiilia."
 
 #: scriptappjob.cpp:170
 #, kde-format

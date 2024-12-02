@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Tommi Nieminen <translator@legisign.org>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Tommi Nieminen <translator@legisign.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-06 01:47+0000\n"
-"PO-Revision-Date: 2022-08-30 14:25+0300\n"
+"PO-Revision-Date: 2024-11-15 15:31+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,17 +15,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Tommi Nieminen"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "translator@legisign.org"
 
 #: welcomepageview.cpp:50
 #, kde-format
@@ -51,10 +51,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, appNameLabel)
 #: welcomepageview.ui:55
-#, fuzzy, kde-format
-#| msgid "KDevelop.org"
+#, kde-format
 msgid "KDevelop"
-msgstr "KDevelop.org"
+msgstr "KDevelop"
 
 #. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
 #: welcomepageview.ui:82

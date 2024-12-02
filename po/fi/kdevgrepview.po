@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the kdevplatform package.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2009.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2022-08-30 21:08+0300\n"
+"PO-Revision-Date: 2024-11-15 15:46+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -21,8 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2013-01-13 20:43:13+0000\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: grepdialog.cpp:55
 #, kde-format
@@ -526,7 +525,7 @@ msgstr "Syvyys:"
 #: grepwidget.ui:115
 #, kde-format
 msgid "Maximum level of subdirectory recursion"
-msgstr ""
+msgstr "Alikansioiden rekursion enimmäissyvyys"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
@@ -536,6 +535,9 @@ msgid ""
 "Depth=0 means searching only in files directly inside selected search "
 "locations. Full Depth means no recursion limit."
 msgstr ""
+"Laskeudu kussakin hakukohteessa enintään annetun tason kansioihin. Syvyys 0 "
+"tarkoittaa hakua vain suoraan annettujen sijaintien tiedostoista. Täysi "
+"syvyys tarkoittaa, ettei rekursiota rajoiteta."
 
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)

@@ -1,7 +1,7 @@
 # Copyright © 2011 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2015.
-# Tommi Nieminen <translator@legisign.org>, 2023.
+# SPDX-FileCopyrightText: 2023, 2024 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Lliehu
@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2023-04-17 16:16+0300\n"
+"PO-Revision-Date: 2024-11-17 16:48+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -18,8 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2012-12-01 22:20:33+0000\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: actionsquickopenprovider.cpp:36
 #, kde-format
@@ -233,17 +232,14 @@ msgid "Quick Open..."
 msgstr "Pika-avaus…"
 
 #: quickopenplugin.cpp:942
-#, fuzzy, kde-format
-#| msgid ""
-#| "Search for files, classes, functions and more, allowing you to quickly "
-#| "navigate in your source code."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Search for files, classes, functions and more, allowing you to quickly "
 "navigate in your source code."
 msgstr ""
-"Hae tiedostoja, luokkia, funktioita ja muita, mahdollistaen pikaisen "
-"lähdekoodin navigoinnin"
+"Etsi tiedostoja, luokkia, funktioita ja muita; mahdollistaa nopean "
+"liikkumisen lähdekoodissa."
 
 #. i18n: ectx: property (text), widget (QLabel, searchLabel)
 #: quickopenwidget.ui:37
@@ -268,19 +264,17 @@ msgstr "Peru"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: quickopenwidget.ui:91
-#, fuzzy, kde-format
-#| msgid "&Scopes:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Scopes:"
 msgstr "&Hakualueet:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: quickopenwidget.ui:136
-#, fuzzy, kde-format
-#| msgid "&Items:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Items:"
-msgstr "&Alkiot"
+msgstr "&Kohteet:"
 
 #~ msgid "Project %1"
 #~ msgstr "Projekti: %1"

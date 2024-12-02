@@ -1,6 +1,7 @@
 # Copyright © 2011, 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2019.
+# SPDX-FileCopyrightText: 2024 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -11,16 +12,15 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2019-06-02 13:10+0300\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2024-11-15 18:23+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2013-01-13 20:43:14+0000\n"
-"X-Generator: Lokalize 19.04.1\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -145,10 +145,9 @@ msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Keskeytyskohtaa ei löytynyt kohdasta %1:%2"
 
 #: debugger/breakpoint/breakpointmodel.cpp:377
-#, fuzzy, kde-format
-#| msgid "Breakpoint"
+#, kde-format
 msgid "&Breakpoint"
-msgstr "Keskeytyskohta"
+msgstr "K&eskeytyskohta"
 
 #: debugger/breakpoint/breakpointmodel.cpp:383
 #, kde-format
@@ -163,7 +162,7 @@ msgstr "&Ota keskeytyskohta käyttöön"
 #: debugger/breakpoint/breakpointmodel.cpp:387
 #, kde-format
 msgid "&Bookmark"
-msgstr ""
+msgstr "Kirjan&merkki"
 
 #: debugger/breakpoint/breakpointmodel.cpp:429
 #: debugger/variable/variablecollection.cpp:407
@@ -395,8 +394,7 @@ msgid "Locals"
 msgstr "Paikalliset muuttujat"
 
 #: debugger/variable/variabletooltip.cpp:115
-#, fuzzy, kde-format
-#| msgid "Watch this"
+#, kde-format
 msgid "Watch This"
 msgstr "Seuraa tätä"
 
@@ -414,7 +412,7 @@ msgstr "Virheenpaikantimen muuttujat"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Muuta sarakkeiden kokoa automaattisesti napsautettaessa"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -489,32 +487,28 @@ msgstr "&Pysähdy muuttuessa"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Find:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Find:"
 msgstr "Etsi:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
 #: documentation/documentationfindwidget.ui:56
-#, fuzzy, kde-format
-#| msgid "Jump to Next Outputmark"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to next match"
-msgstr "Hyppää seuraavaan tulostemerkkiin"
+msgstr "Hyppää seuraavaan osumaan"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
 #: documentation/documentationfindwidget.ui:69
-#, fuzzy, kde-format
-#| msgid "Jump to Previous Outputmark"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to previous match"
-msgstr "Hyppää edelliseen tulostemerkkiin"
+msgstr "Hyppää edelliseen osumaan"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
 #: documentation/documentationfindwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Match case"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Match case sensitive"
 msgstr "Erota pien- ja suuraakkoset"
@@ -526,22 +520,19 @@ msgid "Documentation"
 msgstr "Dokumentaatio"
 
 #: documentation/documentationview.cpp:69
-#, fuzzy, kde-format
-#| msgid "Back"
+#, kde-format
 msgctxt "@action go back"
 msgid "Back"
-msgstr "Takaisin"
+msgstr "Taaksepäin"
 
 #: documentation/documentationview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Forward"
+#, kde-format
 msgctxt "@action go forward"
 msgid "Forward"
 msgstr "Eteenpäin"
 
 #: documentation/documentationview.cpp:79
-#, fuzzy, kde-format
-#| msgid "Home"
+#, kde-format
 msgctxt "@action go to start page"
 msgid "Home"
 msgstr "Aloitussivu"
@@ -549,52 +540,46 @@ msgstr "Aloitussivu"
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
 #: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
 #: vcs/dvcs/ui/branchmanager.ui:143
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Etsi"
+msgstr "Etsi…"
 
 #: documentation/documentationview.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Find in Text..."
-msgstr ""
+msgstr "Etsi tekstistä…"
 
 #: documentation/documentationview.cpp:112
-#, fuzzy, kde-format
-#| msgid "Show Annotate on current document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Find in text of current documentation page"
-msgstr "Näytä nykyisen tiedoston merkinnät"
+msgstr "Etsi tekstiä nykyiseltä ohjesivulta"
 
 #: interfaces/contextmenuextension.cpp:133
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Debug"
 msgstr "Virheenpaikannus"
 
 #: interfaces/contextmenuextension.cpp:134
-#, fuzzy, kde-format
-#| msgid "Refactor"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Refactor"
 msgstr "Refaktorointi"
 
 #: interfaces/contextmenuextension.cpp:136
-#, fuzzy, kde-format
-#| msgid "Commit Current Project..."
+#, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current File With"
-msgstr "Kommitoi nykyinen projekti…"
+msgstr "Analysoi nykyistä tiedostoa ohjelmalla"
 
 #: interfaces/contextmenuextension.cpp:137
-#, fuzzy, kde-format
-#| msgid "Commit Current Project..."
+#, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current Project With"
-msgstr "Kommitoi nykyinen projekti…"
+msgstr "Analysoi nykyistä projektia ohjelmalla"
 
 #: interfaces/isourceformatter.cpp:221
 #, kde-format
@@ -705,11 +690,10 @@ msgid "not implemented"
 msgstr "ei toteutettu"
 
 #: language/codegen/basicrefactoring.cpp:91
-#, fuzzy, kde-format
-#| msgid "Rename \"%1\"..."
+#, kde-format
 msgctxt "@action"
 msgid "Rename \"%1\"..."
-msgstr "Muuta ”%1” nimeä…"
+msgstr "Muuta nimeä: ”%1”…"
 
 #: language/codegen/basicrefactoring.cpp:221
 #, kde-format
@@ -717,29 +701,24 @@ msgid "No declaration under cursor"
 msgstr "Kohdistimen kohdalla ei ole esittelyä"
 
 #: language/codegen/basicrefactoring.cpp:227
-#, fuzzy, kde-format
-#| msgid "Declaration is located in non-writeable file %1."
+#, kde-format
 msgid "Declaration is located in non-writable file %1."
-msgstr "Esittely sijaitsee tiedostossa %1, johon ei voi kirjoittaa."
+msgstr "Esittely sijaitsee vain luettavassa tiedostossa %1."
 
 #: language/codegen/basicrefactoring.cpp:296
-#, fuzzy, kde-format
-#| msgctxt "Renaming some declaration"
-#| msgid "Rename \"%1\""
+#, kde-format
 msgctxt "@title:window Renaming some declaration"
 msgid "Rename \"%1\""
-msgstr "Muuta ”%1” nimeä"
+msgstr "Muuta nimeä: ”%1”"
 
 #: language/codegen/basicrefactoring.cpp:300
-#, fuzzy, kde-format
-#| msgid "Uses"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Uses"
-msgstr "Käytöt"
+msgstr "Käyttö"
 
 #: language/codegen/basicrefactoring.cpp:302
-#, fuzzy, kde-format
-#| msgid "Declaration Info"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Declaration Info"
 msgstr "Esittelyn tiedot"
@@ -751,45 +730,38 @@ msgstr "Muutetaan ”%1” nimeksi ”%2”"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: language/codegen/basicrefactoring.ui:14
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename"
 msgstr "Muuta nimeä"
 
 #. i18n: ectx: property (text), widget (QLabel, newNameLabel)
 #: language/codegen/basicrefactoring.ui:22
-#, fuzzy, kde-format
-#| msgid "&New name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&New name:"
 msgstr "&Uusi nimi:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:35
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>\"Note: All overloaded functions, overloads, "
-#| "forward-declarations, etc. will be renamed too\"</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>&quot;Note: All overloaded functions, overloads, "
 "forward-declarations, etc. will be renamed too&quot;</p></body></html>"
 msgstr ""
-"<html><head/><body><p>”Huomaa: Myös kaikkien kuormitettujen funktioiden, "
+"<html><head/><body><p>”Huom! Myös kaikkien kuormitettujen funktioiden, "
 "kuormitusten, ennakkoesittelyjen jne. nimet muutetaan”</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:38
-#, fuzzy, kde-format
-#| msgid "&Rename"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Rename"
-msgstr "&Muuta nimi"
+msgstr "&Muuta nimeä"
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: language/codegen/basicrefactoring.ui:45
-#, fuzzy, kde-format
-#| msgid "&Cancel"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "&Peru"
@@ -846,19 +818,17 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
 #: language/codegen/progressdialogs/refactoringdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Refactoring"
+#, kde-format
 msgctxt "@title:window"
 msgid "Refactoring"
 msgstr "Refaktorointi"
 
 #. i18n: ectx: property (text), widget (QPushButton, abortButton)
 #: language/codegen/progressdialogs/refactoringdialog.ui:27
-#, fuzzy, kde-format
-#| msgid "&Abort"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Abort"
-msgstr "&Keskeytä"
+msgstr "K&eskeytä"
 
 #: language/duchain/aliasdeclaration.cpp:47
 #, kde-format
@@ -901,10 +871,9 @@ msgid "Import %1"
 msgstr "Tuo %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:89
-#, fuzzy, kde-format
-#| msgid "Declaration"
+#, kde-format
 msgid "lost declaration"
-msgstr "Esittely"
+msgstr "kadonnut esittely"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:96
 #, kde-format
@@ -919,7 +888,7 @@ msgstr "enumeraattori "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:137
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[riippuu-arvosta]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
 #, kde-format
@@ -1119,15 +1088,15 @@ msgstr "vakio"
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 tavu"
+msgstr[1] "%1 tavua"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 bitti"
+msgstr[1] "%1 bittiä"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
 #, fuzzy, kde-format
@@ -1139,17 +1108,17 @@ msgstr "Luokat projektissa %1"
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
 #, kde-format
 msgid "size: %1 Bytes"
-msgstr ""
+msgstr "koko: %1 tavua"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
 msgid "aligned to: %1 Bytes"
-msgstr ""
+msgstr "tasattu: %1 tavuun"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
 #, kde-format
@@ -1214,11 +1183,13 @@ msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
 "<em>Enter</em>)"
 msgstr ""
+"(näytä painamalla <em>Alt</em>. Liiku nuolinäppäimin, aktivoi <em>Enter</"
+"em>illä)"
 
 #: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
-msgstr ""
+msgstr "(näytä työkaluvihje painamalla <em>Alt</em>)"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:85
 #, kde-format
@@ -1226,23 +1197,20 @@ msgid "Problem"
 msgstr "Ongelma"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:114
-#, fuzzy, kde-format
-#| msgid "Problem in <b>%1</b>:<br/>"
+#, kde-format
 msgid "Problem in <i>%1</i>"
-msgstr "Ongelma kohteessa <b>%1</b>:<br/>"
+msgstr "Ongelma kohteessa <i>%1</i>"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:118
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgid "Location: "
-msgstr "Sijainti"
+msgstr "Sijainti: "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:156
 #: language/duchain/navigation/problemnavigationcontext.cpp:166
-#, fuzzy, kde-format
-#| msgid "<br/>See: "
+#, kde-format
 msgid "<br>See: "
-msgstr "<br/>Katso: "
+msgstr "<br>Katso: "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:159
 #, kde-format
@@ -1250,11 +1218,9 @@ msgid " in "
 msgstr " kohteessa "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:196
-#, fuzzy, kde-format
-#| msgctxt "configuring a project: %1 tool"
-#| msgid "configuring (%1)"
+#, kde-format
 msgid "Solution (%1)"
-msgstr "tehdään asetuksia (%1)"
+msgstr "Ratkaisu (%1)"
 
 #: language/duchain/navigation/usescollector.cpp:413
 #, kde-format
@@ -1279,9 +1245,7 @@ msgstr "Rivi <b>%1</b>:"
 
 #: language/duchain/navigation/useswidget.cpp:211
 #: language/duchain/navigation/useswidget.cpp:218
-#, fuzzy, kde-format
-#| msgctxt "refers to a line in source code"
-#| msgid "Line <b>%1</b>:"
+#, kde-format
 msgctxt "Refers to a line in source code"
 msgid "Line <b>%1</b>:"
 msgstr "Rivi <b>%1</b>:"
@@ -1495,10 +1459,9 @@ msgid "Working directory '%1' does not exist or is not a directory"
 msgstr "Työhakemistoa %1 ei ole olemassa tai se ei ole hakemisto"
 
 #: outputview/outputexecutejob.cpp:303
-#, fuzzy, kde-format
-#| msgid "Failed to specify program to start"
+#, kde-format
 msgid "Failed to specify program to start: %1"
-msgstr "Käynnistettävän ohjelman määritys epäonnistui"
+msgstr "Käynnistettävän ohjelman määritys epäonnistui: %1"
 
 #: outputview/outputexecutejob.cpp:304
 #, kde-format
@@ -1567,11 +1530,10 @@ msgstr ""
 "Projekti täytyy sulkea."
 
 #: project/abstractfilemanagerplugin.cpp:328
-#, fuzzy, kde-format
-#| msgid "Project Folder Deleted"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Folder Deleted"
-msgstr "Projektikansio poistettiin"
+msgstr "Projektikansio on poistettu"
 
 #: project/abstractfilemanagerplugin.cpp:354
 #, kde-format
@@ -1668,8 +1630,7 @@ msgid "Path"
 msgstr "Polku"
 
 #: project/projectchangesmodel.cpp:274
-#, fuzzy, kde-format
-#| msgid "no branch"
+#, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "ei haaraa"
@@ -1681,25 +1642,22 @@ msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
 #: project/projectitemlineedit.cpp:156
-#, fuzzy, kde-format
-#| msgid "Enter the path to an item from the projects tree"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
-msgstr "Kirjoita polku projektipuun alkioon"
+msgstr "Kirjoita polku projektipuun kohteeseen…"
 
 #: project/projectitemlineedit.cpp:158
-#, fuzzy, kde-format
-#| msgid "Select..."
+#, kde-format
 msgctxt "@action"
 msgid "Select..."
 msgstr "Valitse…"
 
 #: project/projectitemlineedit.cpp:182
-#, fuzzy, kde-format
-#| msgid "Select an item..."
+#, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
-msgstr "Valitse alkio…"
+msgstr "Valitse kohde"
 
 #: project/projectitemlineedit.cpp:192
 #, kde-format
@@ -1708,75 +1666,65 @@ msgstr "Valitse alkio, johon haluat saada polun."
 
 #. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:32
-#, fuzzy, kde-format
-#| msgid "Enter a dependency to add to the list"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a dependency to add to the list"
 msgstr "Kirjoita luetteloon lisättävä riippuvuus"
 
 #. i18n: ectx: property (placeholderText), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:35
-#, fuzzy, kde-format
-#| msgid "Enter a dependency to add to the list"
+#, kde-format
 msgctxt "@info:placedholder"
 msgid "Enter a dependency to add to the list..."
-msgstr "Kirjoita luetteloon lisättävä riippuvuus"
+msgstr "Kirjoita luetteloon lisättävä riippuvuus…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
 #: project/widgets/dependencieswidget.ui:55
-#, fuzzy, kde-format
-#| msgid "Adds the listed target to the dependency list."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add the listed target to the dependency list"
-msgstr "Lisää luetellun kohteen riippuvuusluetteloon."
+msgstr "Lisää lueteltu kohde riippuvuusluetteloon"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:68
-#, fuzzy, kde-format
-#| msgid "List of indirect dependent targets."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "List of indirect dependent targets."
 msgstr "Epäsuorien riippuvuuskohteiden luettelo."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:71
-#, fuzzy, kde-format
-#| msgid ""
-#| "This list should contain targets that the application does not directly "
-#| "depend on, but for which an action needs to be taken before running the "
-#| "application."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This list should contain targets that the application does not directly "
 "depend on, but for which an action needs to be taken before running the "
 "application."
 msgstr ""
-"Tämä luettelo sisältää kohteet, joista sovellus ei ole suoraan riippuvainen, "
-"mutta joille täytyy tehdä toimintoja ennen sovelluksen suorittamista."
+"Luettelon tulisi sisältää kohteet, joista sovellus ei ole suoraan "
+"riippuvainen mutta jotka vaativat toimenpiteitä ennen sovelluksen "
+"suorittamista."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeDependency)
 #: project/widgets/dependencieswidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Removes the selected dependencies from the list."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected dependencies from the list"
-msgstr "Poistaa valitut riippuvuudet luettelosta."
+msgstr "Poista luettelosta valitut riippuvuudet."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepUp)
 #: project/widgets/dependencieswidget.ui:103
-#, fuzzy, kde-format
-#| msgid "Moves the selected dependency up in the list."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency up in the list"
-msgstr "Siirtää valitun riippuvuuden luettelossa ylemmäs."
+msgstr "Siirrä valittua riippuvuutta luettelossa ylemmäs"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
 #: project/widgets/dependencieswidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Moves the selected dependency down in the list."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
-msgstr "Siirtää valitun riippuvuuden luettelossa alemmas."
+msgstr "Siirrä valittua riippuvuutta luettelossa alemmas"
 
 #: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
 #, kde-format
@@ -1785,38 +1733,27 @@ msgstr ""
 "Tiedostoon %1 kirjoittaminen epäonnistui. Levy on todennäköisesti täynnä."
 
 #: serialization/itemrepositoryregistry.cpp:75
-#, fuzzy, kde-format
-#| msgid "The previous session crashed"
-#| msgid_plural "Session crashed %1 times in a row"
+#, kde-format
 msgid "The previous session crashed."
 msgid_plural "Session crashed %1 times in a row."
-msgstr[0] "Edellinen istunto kaatui"
-msgstr[1] "Istunto kaatui %1 kertaa peräkkäin"
+msgstr[0] "Edellinen istunto kaatui."
+msgstr[1] "Istunto kaatui %1 kertaa peräkkäin."
 
 # Kirjaimia y ja n ei voi suomentaa, koska ne on koodattu ohjelmaan kiinteästi, ainakin kirjoitushetkellä. On voinut muuttua.
 #: serialization/itemrepositoryregistry.cpp:77
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Clear cache"
+#, kde-format
 msgctxt "tty action"
 msgid "Clear cache"
 msgstr "Tyhjennä välimuisti"
 
 #: serialization/itemrepositoryregistry.cpp:78
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Session crashed"
+#, kde-format
 msgctxt "@title"
 msgid "Session Crashed"
 msgstr "Istunto kaatui"
 
 #: serialization/itemrepositoryregistry.cpp:79
-#, fuzzy, kde-format
-#| msgid ""
-#| "The crash may be caused by a corruption of cached data.\n"
-#| "\n"
-#| "Press OK if you want KDevelop to clear the cache, otherwise press Cancel "
-#| "if you are sure the crash has another origin."
+#, kde-format
 msgid ""
 "The crash may be caused by a corruption of cached data.\n"
 "\n"
@@ -1825,50 +1762,41 @@ msgid ""
 msgstr ""
 "Kaatuminen saattoi johtua vioittuneesta välimuistidatasta.\n"
 "\n"
-"Paina OK, jos haluat, että KDevelop tyhjentää välimuistin. Paina Peru, jos "
-"olet varma, että kaatuminen johtui jostain muusta."
+"Paina OK, jos haluat KDevelopin tyhjentävän välimuistin, tai paina Peru, jos "
+"olet varma kaatumisen johtuneen jostakin muusta."
 
 # Kirjaimia y ja n ei voi suomentaa, koska ne on koodattu ohjelmaan kiinteästi, ainakin kirjoitushetkellä. On voinut muuttua.
 #: serialization/itemrepositoryregistry.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Clear cache"
+#, kde-format
 msgctxt "@action:button"
 msgid "Clear Cache"
 msgstr "Tyhjennä välimuisti"
 
 #: serialization/itemrepositoryregistry.cpp:82
-#, fuzzy, kde-format
-#| msgid "&Continue"
+#, kde-format
 msgctxt "@action:button"
 msgid "Continue"
-msgstr "&Jatka"
+msgstr "Jatka"
 
 #: shell/areadisplay.cpp:44
-#, fuzzy, kde-format
-#| msgid ""
-#| "Execute actions to change the area.<br />An area is a toolview "
-#| "configuration for a specific use case. From here you can also navigate "
-#| "back to the default code area."
+#, kde-format
 msgid ""
 "Execute actions to change the area.<br />An area is a tool view "
 "configuration for a specific use case. From here you can also navigate back "
 "to the default code area."
 msgstr ""
-"Suorita toimintoja vaihtaaksesi aluetta.<br />Alue on tiettyyn "
-"käyttötapaukseen tarkoitettu työkalunäkymäkokoonpano. Tätä kautta voit myös "
-"palata koodialueelle."
+"Vaihda aluetta suorittamalla toimenpiteitä.<br />Alue on tiettyyn "
+"työkalunäkymäkokoonpano määräkäyttöön. Tätä kautta voi myös palata "
+"koodialueelle."
 
 #: shell/areadisplay.cpp:70
-#, fuzzy, kde-format
-#| msgid "Back to code"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Back to Code"
-msgstr "Takaisin koodiin"
+msgstr "Palaa koodiin"
 
 #: shell/configdialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Asetukset"
@@ -1883,60 +1811,49 @@ msgstr ""
 "Haluatko ottaa muutokset käyttöön vai hylätäänkö ne?"
 
 #: shell/configdialog.cpp:86
-#, fuzzy, kde-format
-#| msgid "Apply Settings"
+#, kde-format
 msgctxt "@title:window"
 msgid "Apply Settings"
-msgstr "Käytä asetuksia"
+msgstr "Hyväksy asetukset"
 
 #: shell/core.cpp:183
-#, fuzzy, kde-format
-#| msgid "Plugins"
+#, kde-format
 msgctxt "@title:window"
 msgid "No Plugins Found"
-msgstr "Liitännäiset"
+msgstr "Liitännäisiä ei löytynyt"
 
 #: shell/core.cpp:184
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Could not find any plugins during startup.<br/>Please make sure "
-#| "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community."
-#| "kde.org/Frameworks/Building#Runtime_setup\">this article</a> for more "
-#| "information."
+#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
 "org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
 "\">this article</a> for more information."
 msgstr ""
-"<p>Käynnistyksessä ei löydetty yhtään liitännäistä.<br/>Tarkista, että "
-"QT_PLUGIN_PATH on asetettu oikein.</p>Lisää tietoa on englanniksi <a href="
+"<p>Käynnistettäessä yhtään liitännäistä ei löytynyt.<br/>Tarkista, että "
+"QT_PLUGIN_PATH on asetettu oikein.</p>Lisää tietoa on (englanniksi) <a href="
 "\"https://community.kde.org/Frameworks/Building#Runtime_setup\">tässä "
 "artikkelissa</a>."
 
 #: shell/debugcontroller.cpp:118
-#, fuzzy, kde-format
-#| msgid "Debugger:"
+#, kde-format
 msgid "Debugger"
-msgstr "Virheenpaikannin:"
+msgstr "Virheenpaikannin"
 
 #: shell/debugcontroller.cpp:148
-#, fuzzy, kde-format
-#| msgid "Frame Stack"
+#, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Kutsupino"
 
 #: shell/debugcontroller.cpp:153
-#, fuzzy, kde-format
-#| msgid "Breakpoints"
+#, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Keskeytyskohdat"
 
 #: shell/debugcontroller.cpp:158
-#, fuzzy, kde-format
-#| msgid "Variables"
+#, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Muuttujat"
@@ -1957,188 +1874,155 @@ msgid "Restarts applications from the beginning."
 msgstr "Käynnistää ohjelman uudelleen alusta."
 
 #: shell/debugcontroller.cpp:232
-#, fuzzy, kde-format
-#| msgid "Interrupt"
+#, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Keskeytä"
 
 #: shell/debugcontroller.cpp:233
-#, fuzzy, kde-format
-#| msgid "Interrupt application"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Keskeytä ohjelma"
 
 #: shell/debugcontroller.cpp:234
-#, fuzzy, kde-format
-#| msgid "Interrupts the debugged process or current debugger command."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
-msgstr "Keskeyttää prosessin tai virheenpaikantimen komennon."
+msgstr "Keskeyttää paikannettavan prosessin tai virheenpaikanninkomennon."
 
 #: shell/debugcontroller.cpp:238
-#, fuzzy, kde-format
-#| msgid "Run to &Cursor"
+#, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Suorita &kohdistimeen"
 
 #: shell/debugcontroller.cpp:239
-#, fuzzy, kde-format
-#| msgid "Run to cursor"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Suorita kohdistimeen"
 
 #: shell/debugcontroller.cpp:240
-#, fuzzy, kde-format
-#| msgid "Continues execution until the cursor position is reached."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Jatkaa suoritusta kohdistimen sijaintiin saakka."
 
 #: shell/debugcontroller.cpp:245
-#, fuzzy, kde-format
-#| msgid "Set E&xecution Position to Cursor"
+#, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
-msgstr "Aseta &suorituksen sijainti kohdistimeen"
+msgstr "&Aseta kohdistin suorituksen sijainniksi"
 
 #: shell/debugcontroller.cpp:246
-#, fuzzy, kde-format
-#| msgid "Jump to cursor"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Hyppää kohdistimeen"
 
 #: shell/debugcontroller.cpp:247
-#, fuzzy, kde-format
-#| msgid "Continue execution from the current cursor position."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
-msgstr "Jatka suoritusta kohdistimen nykyisen sijainnin kohdalta."
+msgstr "Jatka suoritusta kohdistimen sijainnista."
 
 #: shell/debugcontroller.cpp:251
-#, fuzzy, kde-format
-#| msgid "Step &Over"
+#, kde-format
 msgctxt "@action"
 msgid "Step &Over"
-msgstr "Askel &yli"
+msgstr "Astu &yli"
 
 #: shell/debugcontroller.cpp:253
-#, fuzzy, kde-format
-#| msgid "Step over the next line"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
-msgstr "Askel seuraavan rivin yli"
+msgstr "Astu seuraavan rivin yli"
 
 #: shell/debugcontroller.cpp:254
-#, fuzzy, kde-format
-#| msgid ""
-#| "Executes one line of source in the current source file. If the source "
-#| "line is a call to a function the whole function is executed and the app "
-#| "will stop at the line following the function call."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Executes one line of source in the current source file. If the source line "
 "is a call to a function the whole function is executed and the app will stop "
 "at the line following the function call."
 msgstr ""
-"Suorittaa yhden rivin lähdekoodia nykyisessä tiedostossa. Jos rivi on kutsu "
-"funktioon, koko funktio suoritetaan ja ohjelma pysähtyy kutsua seuraavalle "
+"Suorittaa nykyisestä tiedostosta yhden lähdekoodirivin. Jos rivi kutsuu "
+"funktiota, koko funktio suoritetaan, ja ohjelma pysähtyy kutsua seuraavalle "
 "riville."
 
 #: shell/debugcontroller.cpp:262
-#, fuzzy, kde-format
-#| msgid "Step over Ins&truction"
+#, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
-msgstr "Askel &käskyn yli"
+msgstr "Astu &käskyn yli"
 
 #: shell/debugcontroller.cpp:263
-#, fuzzy, kde-format
-#| msgid "Step over instruction"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
-msgstr "Askel käskyn yli"
+msgstr "Astu käskyn yli"
 
 #: shell/debugcontroller.cpp:264
-#, fuzzy, kde-format
-#| msgid "Steps over the next assembly instruction."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
-msgstr "Askeltaa seuraavan konekielikäskyn yli."
+msgstr "Astuu seuraavan konekielikäskyn yli."
 
 #: shell/debugcontroller.cpp:269
-#, fuzzy, kde-format
-#| msgid "Step &Into"
+#, kde-format
 msgctxt "@action"
 msgid "Step &Into"
-msgstr "Askel &sisään"
+msgstr "A&stu sisään"
 
 #: shell/debugcontroller.cpp:271
-#, fuzzy, kde-format
-#| msgid "Step into the next statement"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
-msgstr "Askel seuraavan lauseen sisään"
+msgstr "Astu seuraavan lauseen sisään"
 
 #: shell/debugcontroller.cpp:272
-#, fuzzy, kde-format
-#| msgid ""
-#| "Executes exactly one line of source. If the source line is a call to a "
-#| "function then execution will stop after the function has been entered."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Executes exactly one line of source. If the source line is a call to a "
 "function then execution will stop after the function has been entered."
 msgstr ""
-"Suorittaa tarkalleen yhden lähdekoodirivin. Jos rivi on kutsu funktioon, "
-"niin suoritus pysähtyy kun on siirrytty funktioon."
+"Suorittaa tarkalleen yhden lähdekoodirivin. Jos rivi kutsuu funktiota, "
+"suoritus pysähtyy, kun on siirrytty funktioon."
 
 #: shell/debugcontroller.cpp:279
-#, fuzzy, kde-format
-#| msgid "Step into I&nstruction"
+#, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
-msgstr "Askel k&äskyn sisään"
+msgstr "Astu &käskyn sisään"
 
 #: shell/debugcontroller.cpp:280
-#, fuzzy, kde-format
-#| msgid "Step into instruction"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
-msgstr "Askel käskyn sisään"
+msgstr "Astu käskyn sisään"
 
 #: shell/debugcontroller.cpp:281
-#, fuzzy, kde-format
-#| msgid "Steps into the next assembly instruction."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
-msgstr "Askeltaa seuraavan konekielikäskyn sisään."
+msgstr "Astuu seuraavan konekielikäskyn sisään."
 
 #: shell/debugcontroller.cpp:285
-#, fuzzy, kde-format
-#| msgid "Step O&ut"
+#, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
-msgstr "Askel &ulos"
+msgstr "Astu &ulos"
 
 #: shell/debugcontroller.cpp:287
-#, fuzzy, kde-format
-#| msgid "Step out of the current function"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
-msgstr "Askeltaa ulos nykyisestä funktiosta"
+msgstr "Astu ulos nykyisestä funktiosta"
 
 #: shell/debugcontroller.cpp:288
-#, fuzzy, kde-format
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2146,14 +2030,13 @@ msgid ""
 "to that function. If program execution is in the outermost frame (i.e. in "
 "main()) then this operation has no effect."
 msgstr ""
-"Suorittaa ohjelmaa kunnes nykyisen funktion suoritus päättyy. "
-"Virheenpaikannin näyttää sitten alkuperäisen funktiokutsun jälkeisen rivin. "
-"Jos ohjelman suoritus on ulkoisimmassa kehyksessä (eli main()-funktiossa), "
-"ei tällä toiminnolla ole vaikutusta."
+"Suorittaa ohjelmaa nykyisen funktion suoritukseen päättymiseen, sitten "
+"virheenpaikannin näyttää alkuperäisen kutsun jälkeisen rivin. Jos ohjelman "
+"suoritus on uloimmassa kehyksessä (ts. main()-funktiossa), toiminnolla ei "
+"ole vaikutusta."
 
 #: shell/debugcontroller.cpp:296
-#, fuzzy, kde-format
-#| msgid "Toggle Breakpoint"
+#, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Aseta tai poista keskeytyskohta"
@@ -2164,42 +2047,37 @@ msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
 #: shell/debugcontroller.cpp:298
-#, fuzzy, kde-format
-#| msgid "Toggle breakpoint"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Aseta tai poista keskeytyskohta"
 
 #: shell/debugcontroller.cpp:299
-#, fuzzy, kde-format
-#| msgid "Toggles the breakpoint at the current line in editor."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
-msgstr "Asettaa tai poistaa keskeytyskohdan muokkaimen nykyisellä rivillä."
+msgstr "Asettaa tai poistaa muokkaimen nykyisellä rivillä keskeytyskohdan."
 
 #: shell/debugcontroller.cpp:303
-#, fuzzy, kde-format
-#| msgid "Show Documentation"
+#, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
-msgstr "Näytä dokumentaatio"
+msgstr "Näytä nykyinen rivi"
 
 #: shell/debugcontroller.cpp:304
-#, fuzzy, kde-format
-#| msgid "Step out of the current function"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
-msgstr "Askeltaa ulos nykyisestä funktiosta"
+msgstr "Näytä nykyinen suorituskohta"
 
 #: shell/debugcontroller.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
-msgstr ""
+msgstr "Hyppää muokkaimen suoritusriville."
 
 #: shell/debugcontroller.cpp:431
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Virheenpaikannus"
@@ -2313,13 +2191,13 @@ msgstr "Muokkainta ei löytynyt"
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
-msgstr ""
+msgstr "Avaa raakatekstinä"
 
 #: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
-msgstr ""
+msgstr "Älä avaa"
 
 #: shell/documentcontroller.cpp:609
 #, fuzzy, kde-format
@@ -2401,89 +2279,74 @@ msgid "Revert all open documents, returning to the previously saved state."
 msgstr "Palauta kaikki avoimet tiedostot niiden aiemmin tallennettuun tilaan."
 
 #: shell/documentcontroller.cpp:640
-#, fuzzy, kde-format
-#| msgid "&Close"
+#, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Sulje"
 
 #: shell/documentcontroller.cpp:642
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Sulje tiedosto"
 
 #: shell/documentcontroller.cpp:643
-#, fuzzy, kde-format
-#| msgid "Closes current file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Sulkee nykyisen tiedoston."
 
 #: shell/documentcontroller.cpp:648
-#, fuzzy, kde-format
-#| msgid "Clos&e All"
+#, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
-msgstr "S&ulje kaikki"
+msgstr "Sulje k&aikki"
 
 #: shell/documentcontroller.cpp:650
-#, fuzzy, kde-format
-#| msgid "Close all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Sulje kaikki avoimet tiedostot"
 
 #: shell/documentcontroller.cpp:651
-#, fuzzy, kde-format
-#| msgid ""
-#| "Close all open documents, prompting for additional information when "
-#| "necessary."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Close all open documents, prompting for additional information when "
 "necessary."
-msgstr "Sulje kaikki tiedostot, kysyen tarvittaessa lisätietoja."
+msgstr "Sulje kaikki tiedostot mutta pyydä tarvittaessa lisätietoa."
 
 #: shell/documentcontroller.cpp:657
-#, fuzzy, kde-format
-#| msgid "Close All Ot&hers"
+#, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Sulje kaikki &muut"
 
 #: shell/documentcontroller.cpp:659
-#, fuzzy, kde-format
-#| msgid "Close all other documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Sulje kaikki muut tiedostot"
 
 #: shell/documentcontroller.cpp:660
-#, fuzzy, kde-format
-#| msgid ""
-#| "Close all open documents, with the exception of the currently active "
-#| "document."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Close all open documents, with the exception of the currently active "
 "document."
-msgstr "Sulje kaikki tiedostot paitsi parhaillaan aktiivinen tiedosto."
+msgstr "Sulje kaikki muut paitsi aktiivinen tiedosto."
 
 #: shell/documentcontroller.cpp:665
-#, fuzzy, kde-format
-#| msgid "Show Annotate on current document"
+#, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Näytä nykyisen tiedoston merkinnät"
 
 #: shell/documentcontroller.cpp:666
-#, fuzzy, kde-format
-#| msgid "Annotate"
+#, kde-format
 msgctxt "@action"
 msgid "Annotate"
-msgstr "Merkinnät"
+msgstr "Merkitse"
 
 #: shell/documentcontroller.cpp:1298
 #, kde-format
@@ -2495,28 +2358,24 @@ msgstr ""
 "olevaan projektiin."
 
 #: shell/editorconfigpage.cpp:94
-#, fuzzy, kde-format
-#| msgid "Editor"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
 msgstr "Muokkain"
 
 #: shell/editorconfigpage.cpp:104
-#, fuzzy, kde-format
-#| msgid "Configure Text editor"
+#, kde-format
 msgid "Configure Text Editor"
 msgstr "Tekstimuokkaimen asetukset"
 
 #: shell/environmentconfigurebutton.cpp:73
-#, fuzzy, kde-format
-#| msgid "Configure environment variables"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "Ympäristömuuttujien asetukset"
 
 #: shell/launchconfigurationdialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Launch Configurations"
+#, kde-format
 msgctxt "@title:window"
 msgid "Launch Configurations"
 msgstr "Käynnistysmääritykset"
@@ -2541,15 +2400,13 @@ msgstr ""
 "Ei käynnistysmäärityksiä. (Onko yhtään suoritusliitännäisistä ladattu?)"
 
 #: shell/launchconfigurationdialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Rename configuration"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
 msgstr "Muuta määrityksen nimeä"
 
 #: shell/launchconfigurationdialog.cpp:197
-#, fuzzy, kde-format
-#| msgid "Delete configuration"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
 msgstr "Poista määritys"
@@ -2563,11 +2420,10 @@ msgstr ""
 "tallentaa sen?"
 
 #: shell/launchconfigurationdialog.cpp:253
-#, fuzzy, kde-format
-#| msgid "Unsaved Changes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Unsaved Changes"
-msgstr "Tallentamattomia muutoksia"
+msgstr "Muutoksia tallentamatta"
 
 #: shell/launchconfigurationdialog.cpp:325
 #, kde-format
@@ -2576,16 +2432,13 @@ msgid "No configuration is needed for '%1'"
 msgstr "Käynnistimelle ”%1” ei ole asetuksia"
 
 #: shell/launchconfigurationdialog.cpp:369
-#, fuzzy, kde-format
-#| msgid ""
-#| "<i>Select a configuration to edit from the left,<br>or click the \"Add New"
-#| "\" button to add a new one.</i>"
+#, kde-format
 msgid ""
 "<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
 "button to add a new one.</i>"
 msgstr ""
-"<i>Valitse muokattava määritys vasemmalta<br>tai lisää uusi napsauta Lisää "
-"uusi -painiketta."
+"<i>Valitse muokattava määritys vasemmalta<br>tai lisää uusi napsauttamalla "
+"Lisää-painiketta.</i>"
 
 #: shell/launchconfigurationdialog.cpp:437
 #, kde-format
@@ -2593,15 +2446,13 @@ msgid "Editing %2: <b>%1</b>"
 msgstr "Muokataan käynnistintä %2: <b>%1</b>"
 
 #: shell/launchconfigurationdialog.cpp:710
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
 msgstr "Nimi"
 
 #: shell/launchconfigurationdialog.cpp:713
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt ""
 "@title:column Type of the Launch Configurations (i.e. Python Application, C+"
 "+ Application)"
@@ -2610,30 +2461,27 @@ msgstr "Tyyppi"
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: shell/launchconfigurationdialog.ui:29
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "Lisää"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
 #: shell/launchconfigurationdialog.ui:39
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Poista"
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
 #: shell/launchconfigurationdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Debugger:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Virheenpaikannin:"
 
 #: shell/loadedpluginsdialog.cpp:279
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Ladatut liitännäiset"
@@ -2649,12 +2497,10 @@ msgid " (read only)"
 msgstr " (vain luku)"
 
 #: shell/mainwindow_p.cpp:223
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
-msgstr "Asetukset: %1|/|$[gen %1] asetukset"
+msgstr "Aseta %1"
 
 #: shell/mainwindow_p.cpp:224
 #, fuzzy, kde-format
@@ -2831,15 +2677,13 @@ msgid "Switches to the previous split view."
 msgstr "Vaihtaa edelliseen osanäkymään."
 
 #: shell/mainwindow_p.cpp:302
-#, fuzzy, kde-format
-#| msgid "&New"
+#, kde-format
 msgctxt "@action new file"
 msgid "&New"
 msgstr "&Uusi"
 
 #: shell/mainwindow_p.cpp:303
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
 msgstr "Uusi"
@@ -2857,11 +2701,10 @@ msgid "Creates an empty file."
 msgstr "Luo uuden tyhjän tiedoston."
 
 #: shell/mainwindow_p.cpp:311
-#, fuzzy, kde-format
-#| msgid "&Add Tool View..."
+#, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr "&Lisää työkalunäkymä…"
+msgstr "L&isää työkalunäkymä…"
 
 #: shell/mainwindow_p.cpp:313
 #, kde-format
@@ -2878,46 +2721,40 @@ msgstr "Lisää työkalunäkymän tähän ikkunaan."
 #: shell/mainwindow_p.cpp:319
 #, kde-format
 msgid "&Window Color Scheme"
-msgstr ""
+msgstr "Ikkunan &väriteema"
 
 #: shell/mainwindow_p.cpp:353
-#, fuzzy, kde-format
-#| msgid "Split View Top/Bottom"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
-msgstr "Jaa näkymä vaakasuunnassa"
+msgstr "Jaa näkymä ylä- ja alaosaan"
 
 #: shell/mainwindow_p.cpp:356
-#, fuzzy, kde-format
-#| msgid "Split View Left/Right"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
-msgstr "Jaa näkymä pystysuunnassa"
+msgstr "Jaa näkymä vasempaan ja oikeaan osaan"
 
 #: shell/mainwindow_p.cpp:360
-#, fuzzy, kde-format
-#| msgid "New File"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "New File"
 msgstr "Uusi tiedosto"
 
 #: shell/mainwindow_p.cpp:366
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
 msgstr "Lataa uudelleen"
 
 #: shell/mainwindow_p.cpp:369
-#, fuzzy, kde-format
-#| msgid "Reload All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload All"
 msgstr "Lataa kaikki uudelleen"
 
 #: shell/mainwindow_p.cpp:409
-#, fuzzy, kde-format
-#| msgid "Add Tool View"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
 msgstr "Lisää työkalunäkymä"
@@ -2926,18 +2763,16 @@ msgstr "Lisää työkalunäkymä"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
-msgstr ""
+msgstr "Lukitse paneeli piilottamiselta"
 
 #: shell/openprojectdialog.cpp:132
-#, fuzzy, kde-format
-#| msgid "All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "Kaikki projektitiedostot (%1)"
+msgstr "Kaikki projektitiedostot"
 
 #: shell/openprojectdialog.cpp:141
-#, fuzzy, kde-format
-#| msgid "Select Source"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "Valitse lähde"
@@ -2952,15 +2787,13 @@ msgstr ""
 "projekti tai kansio avattavaksi projektina"
 
 #: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
-#, fuzzy, kde-format
-#| msgid "Open Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Avaa projekti"
 
 #: shell/openprojectdialog.cpp:165
-#, fuzzy, kde-format
-#| msgid "Project Information"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Projektin tiedot"
@@ -2976,18 +2809,16 @@ msgid "Selected URL is invalid"
 msgstr "Valittu osoite on virheellinen"
 
 #: shell/openprojectdialog.cpp:277
-#, fuzzy, kde-format
-#| msgid "Open Existing File"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
-msgstr "Avaa nykyinen tiedosto"
+msgstr "Avaa olemassa oleva tiedosto ”%1”"
 
 #: shell/partcontroller.cpp:226
-#, fuzzy, kde-format
-#| msgid "Use this command to show or hide the view's statusbar"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
-msgstr "Tämä komento näyttää tai piilottaa näkymän tilarivin"
+msgstr "Näytä tai piilota näkymän tilarivi tällä komennolla."
 
 #: shell/partdocument.cpp:108
 #, kde-format
@@ -3001,25 +2832,21 @@ msgid "Close Document"
 msgstr "Sulje tiedosto"
 
 #: shell/partdocument.cpp:115
-#, fuzzy, kde-format
-#| msgid ""
-#| "The document \"%1\" has unsaved changes and was modified by an external "
-#| "process.\n"
-#| "Do you want to override the external changes?"
+#, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
 "process.\n"
 "Do you want to overwrite the external changes?"
 msgstr ""
-"Tiedostossa %1 on tallentamattomia muutoksia, ja sitä on muuttanut ulkoinen "
-"prosessi.\n"
+"Tiedostossa ”%1” on tallentamatta muutoksia, ja sitä on ulkoinen prosessi "
+"muuttanut.\n"
 "Haluatko korvata ulkoiset muutokset?"
 
 #: shell/partdocument.cpp:119 shell/textdocument.cpp:416
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
-msgstr ""
+msgstr "Korvaa ulkoiset muutokset"
 
 #: shell/problem.cpp:40
 #, kde-format
@@ -3037,32 +2864,28 @@ msgid "Todo"
 msgstr "Tehtävä"
 
 #: shell/problem.cpp:167
-#, fuzzy, kde-format
-#| msgid "Hint"
+#, kde-format
 msgctxt "@item problem severity"
 msgid "Hint"
-msgstr "Vinkki"
+msgstr "Vihje"
 
 #: shell/problem.cpp:168
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@item problem severity"
 msgid "Warning"
 msgstr "Varoitus"
 
 #: shell/problem.cpp:169
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@item problem severity"
 msgid "Error"
 msgstr "Virhe"
 
 #: shell/problemmodel.cpp:36
-#, fuzzy, kde-format
-#| msgid "Close all other documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
-msgstr "Sulje kaikki muut tiedostot"
+msgstr "Jäsennä uudelleen kaikki seuratut tiedostot"
 
 #: shell/problemmodel.cpp:321
 #, kde-format
@@ -3095,39 +2918,34 @@ msgid "Column"
 msgstr "Sarake"
 
 #: shell/progresswidget/progressdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Cancel this operation."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel this operation"
-msgstr "Keskeytä tämä toiminto."
+msgstr "Peru tämä toimenpide"
 
 #: shell/progresswidget/progressmanager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Aborting..."
+#, kde-format
 msgctxt "@info"
 msgid "Aborting..."
 msgstr "Keskeytetään…"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:99
-#, fuzzy, kde-format
-#| msgid "Open detailed progress dialog"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open detailed progress dialog"
 msgstr "Avaa yksityiskohtainen edistymisikkuna"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:337
-#, fuzzy, kde-format
-#| msgid "Hide detailed progress window"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide detailed progress window"
 msgstr "Piilota yksityiskohtainen edistymisikkuna"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:341
-#, fuzzy, kde-format
-#| msgid "Show detailed progress window"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show detailed progress window"
-msgstr "Näytä edistymisen yksityiskohtainen ikkuna"
+msgstr "Näytä yksityiskohtainen edistymisikkuna"
 
 #: shell/project.cpp:99
 #, kde-format
@@ -3172,23 +2990,21 @@ msgid ""
 "Could not load project management plugin <b>%1</b>.<br>Check that the "
 "required programs are installed, or see console output for more information."
 msgstr ""
+"Projektinhallintaliitännäistä <b>%1</b> ei voitu ladata.<br>Tarkista, että "
+"vaaditut ohjelmat on asennettu, tai katso lisätietoa konsolin tulosteesta."
 
 #: shell/project.cpp:349
-#, fuzzy, kde-format
-#| msgid ""
-#| "project importing plugin (%1) does not support the IProjectFileManager "
-#| "interface."
+#, kde-format
 msgid ""
 "The project importing plugin (%1) does not support the IProjectFileManager "
 "interface."
 msgstr ""
-"projektin tuontiliitännäinen (%1) ei tue IProjectFileManager-rajapintaa"
+"Projektin tuontiliitännäinen (%1) ei tue IProjectFileManager-rajapintaa"
 
 #: shell/project.cpp:402
-#, fuzzy, kde-format
-#| msgid "Could not open project"
+#, kde-format
 msgid "Could not open project."
-msgstr "Projektia ei voitu avata"
+msgstr "Projektia ei voitu avata."
 
 #: shell/project.cpp:560
 #, kde-format
@@ -3200,8 +3016,7 @@ msgstr ""
 "Huomio: Muuttamasi projektiasetukset menetetään."
 
 #: shell/projectcontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "Configure Project %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Projektin %1 asetukset"
@@ -3217,43 +3032,33 @@ msgid "Already opening %1, not opening again"
 msgstr "Jo avaamassa projektia %1, ei avata uudelleen"
 
 #: shell/projectcontroller.cpp:467
-#, fuzzy, kde-format
-#| msgid "Override"
+#, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Korvaa"
 
 #: shell/projectcontroller.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Continue to open the project and use the just provided project "
-#| "configuration."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr "Jatka projektin avaamista ja käytä juuri annettuja projektiasetuksia"
 
 #: shell/projectcontroller.cpp:469
-#, fuzzy, kde-format
-#| msgid "Open Existing File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
-msgstr "Avaa nykyinen tiedosto"
+msgstr "Avaa olemassa oleva tiedosto"
 
 #: shell/projectcontroller.cpp:470
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Continue to open the project but use the existing project configuration."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
-msgstr "Jatka projektin avaamista, mutta käytä nykyisiä projektiasetuksia"
+msgstr ""
+"Jatka projektin avaamista, mutta käytä olemassa olevia projektiasetuksia"
 
 #: shell/projectcontroller.cpp:472
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Cancel and do not open the project."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Peru äläkä avaa projektia"
@@ -3268,11 +3073,10 @@ msgstr ""
 "Haluatko korvata sen vai avata nykyisen tiedoston?"
 
 #: shell/projectcontroller.cpp:478
-#, fuzzy, kde-format
-#| msgid "Override existing project configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
-msgstr "Korvaa nykyiset projektiasetukset"
+msgstr "Korvaa olemassa olevat projektiasetukset"
 
 #: shell/projectcontroller.cpp:496
 #, kde-format
@@ -3288,7 +3092,7 @@ msgstr "Avaa nykyinen projekti uudelleen?"
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "Avaa uudelleen"
 
 #: shell/projectcontroller.cpp:552
 #, kde-format
@@ -3360,29 +3164,25 @@ msgid "Closes all currently selected projects"
 msgstr "Sulje kaikki valitut projektit"
 
 #: shell/projectcontroller.cpp:591
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
-msgstr "Avaa asetukset…"
+msgstr "Avaa määritys…"
 
 #: shell/projectcontroller.cpp:597
-#, fuzzy, kde-format
-#| msgid "Commit Current Project..."
+#, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
-msgstr "Kommitoi nykyinen projekti…"
+msgstr "Toimita nykyinen projekti…"
 
 #: shell/projectcontroller.cpp:598
-#, fuzzy, kde-format
-#| msgid "Commit..."
+#, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr "Kommitoi…"
+msgstr "Toimita…"
 
 #: shell/projectcontroller.cpp:609
-#, fuzzy, kde-format
-#| msgid "Open Recent Project"
+#, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Avaa viimeaikainen projekti"
@@ -3394,8 +3194,7 @@ msgid "Opens recently opened project."
 msgstr "Avaa viimeaikaisen projektin."
 
 #: shell/projectcontroller.cpp:615
-#, fuzzy, kde-format
-#| msgid "Open Project for Current File"
+#, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Avaa nykyisen tiedoston projekti"
@@ -3411,11 +3210,10 @@ msgid "No active document"
 msgstr "Ei aktiivista tiedostoa"
 
 #: shell/projectcontroller.cpp:851
-#, fuzzy, kde-format
-#| msgid "Project Already Open"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
-msgstr "Projekti on jo avoinna"
+msgstr "Projekti on jo auki"
 
 #: shell/projectcontroller.cpp:854
 #, kde-format
@@ -3427,15 +3225,13 @@ msgstr ""
 "istunnossa.<br/>Mitä haluat tehdä?"
 
 #: shell/projectcontroller.cpp:858
-#, fuzzy, kde-format
-#| msgid "Add project to current session"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Lisää projekti nykyiseen istuntoon"
 
 #: shell/projectcontroller.cpp:862
-#, fuzzy, kde-format
-#| msgid "Open session %1"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Avaa istunto %1"
@@ -3444,52 +3240,46 @@ msgstr "Avaa istunto %1"
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr ""
+"Tälle tietovarasto-osoitteelle ei ole otettu käyttöön liitännäistukea: %1"
 
 #: shell/projectcontroller.cpp:1227
-#, fuzzy, kde-format
-#| msgid "Reopen the current project?"
+#, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
-msgstr "Avaa nykyinen projekti uudelleen?"
+msgstr "Jäsennä koko projekti uudelleen"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
 #: shell/projectinfopage.ui:29 shell/projectinfopage.ui:56
-#, fuzzy, kde-format
-#| msgid "Select the Management Plugin to use for this project"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the Management Plugin to use for this project"
 msgstr "Valitse projektissa käytettävä hallintaliitännäinen"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectinfopage.ui:32
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Project Management"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Project manager:"
-msgstr "Projektinhallinta"
+msgstr "Projektinhallinta:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
 #: shell/projectinfopage.ui:39 shell/projectinfopage.ui:49
-#, fuzzy, kde-format
-#| msgid "Provide a name for the project"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Provide a name for the project"
 msgstr "Anna projektille nimi"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Nimi:"
 
 #: shell/projectsourcepage.cpp:44
-#, fuzzy, kde-format
-#| msgid "From File System"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "From File System"
 msgstr "Tiedostojärjestelmästä"
@@ -3514,86 +3304,71 @@ msgstr ""
 "noutamista varten"
 
 #: shell/projectsourcepage.cpp:251
-#, fuzzy, kde-format
-#| msgid ""
-#| "You need to specify a valid or nonexistent directory to check out a "
-#| "project"
+#, kde-format
 msgid "You need to specify the source for your remote project"
-msgstr ""
-"Sinun tulee antaa kelvollinen tai olemassaolematon kansio projektin "
-"noutamista varten"
+msgstr "Etäprojektille tulee määrittää lähde"
 
 #: shell/projectsourcepage.cpp:253
-#, fuzzy, kde-format
-#| msgid "You need to specify a valid project location"
+#, kde-format
 msgid "You need to specify an empty folder as your project destination"
-msgstr "Sinun tulee antaa kelvollinen projektisijainti"
+msgstr "Projektikansioksi tulee asettaa tyhjä kansio"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectsourcepage.ui:37
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Source:"
 msgstr "Lähde:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/projectsourcepage.ui:49
-#, fuzzy, kde-format
-#| msgid "Destination"
+#, kde-format
 msgctxt "@title:group"
 msgid "Destination"
 msgstr "Kohde"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectsourcepage.ui:55
-#, fuzzy, kde-format
-#| msgid "Directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Directory:"
 msgstr "Kansio:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
 #: shell/projectsourcepage.ui:62
-#, fuzzy, kde-format
-#| msgid "Select the directory to use..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr "Valitse käytettävä hakemisto…"
+msgstr "Valitse käytettävä kansio…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
-#, fuzzy, kde-format
-#| msgid "Source"
+#, kde-format
 msgctxt "@title:group"
 msgid "Source"
 msgstr "Lähde"
 
 #. i18n: ectx: property (text), widget (QPushButton, get)
 #: shell/projectsourcepage.ui:105
-#, fuzzy, kde-format
-#| msgid "Get"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get"
 msgstr "Nouda"
 
 #: shell/runcontroller.cpp:87
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "Virheenpaikannus"
 
 #: shell/runcontroller.cpp:96
-#, fuzzy, kde-format
-#| msgid "Profile"
+#, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "Profilointi"
 
 #: shell/runcontroller.cpp:105
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "Suoritus"
@@ -3604,8 +3379,7 @@ msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Nykyinen käynnistysmääritys ei tue tilaa ”%1”."
 
 #: shell/runcontroller.cpp:425
-#, fuzzy, kde-format
-#| msgid "Configure Launches..."
+#, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Määritä käynnistykset…"
@@ -3626,18 +3400,16 @@ msgstr ""
 "Avaa ikkunan, jossa asettaa uusia käynnistysmäärityksiä tai muuttaa nykyisiä."
 
 #: shell/runcontroller.cpp:432
-#, fuzzy, kde-format
-#| msgid "Execute Launch"
+#, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
-msgstr "Suorita ohjelma"
+msgstr "Suorita käynnistys"
 
 #: shell/runcontroller.cpp:433
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
-msgstr "Suoritus"
+msgstr "Suorita"
 
 #: shell/runcontroller.cpp:435
 #, kde-format
@@ -3656,8 +3428,7 @@ msgstr ""
 "käynnistysmäärityksessä."
 
 #: shell/runcontroller.cpp:442
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
 msgstr "Virheenpaikannus"
@@ -3668,16 +3439,13 @@ msgstr "Virheenpaikannus"
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 #: shell/runcontroller.cpp:456
-#, fuzzy, kde-format
-#| msgid "Stop All Jobs"
+#, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Pysäytä kaikki työt"
 
 #: shell/runcontroller.cpp:457
-#, fuzzy, kde-format
-#| msgctxt "Short text for 'Stop All Jobs' used in the toolbar"
-#| msgid "Stop All"
+#, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Pysäytä kaikki"
@@ -3695,15 +3463,13 @@ msgid "Requests that all running jobs are stopped."
 msgstr "Pyytää kaikkia meneillään olevia töitä pysähtymään."
 
 #: shell/runcontroller.cpp:467
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Pysäytä"
 
 #: shell/runcontroller.cpp:469
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Pysäytä"
@@ -3765,17 +3531,17 @@ msgstr "%1 nimellä…"
 #: shell/runtimecontroller.cpp:27
 #, kde-format
 msgid "Host System"
-msgstr ""
+msgstr "Isäntäjärjestelmä"
 
 #: shell/runtimecontroller.cpp:88
 #, kde-format
 msgid "Allows to select a runtime"
-msgstr ""
+msgstr "Sallii ajonaikaisympäristön valinnan"
 
 #: shell/runtimecontroller.cpp:92
 #, kde-format
 msgid "Runtime: %1"
-msgstr ""
+msgstr "Ajonaikaisympäristö: %1"
 
 #: shell/savedialog.cpp:44
 #, fuzzy, kde-format
@@ -3885,27 +3651,22 @@ msgstr ""
 "muuttumattomina. Haluatko varmasti jatkaa?"
 
 #: shell/sessionchooserdialog.cpp:204
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Delete Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
 msgstr "Poista istunto"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "Aloita uusi istunto"
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "New Session Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "New session name:"
-msgstr "Istunnon uusi nimi:"
+msgstr "Uuden istunnon nimi:"
 
 #: shell/sessioncontroller.cpp:144
 #, kde-format
@@ -3917,18 +3678,15 @@ msgstr ""
 "Projektit säilyvät muuttumattomina. Haluatko varmasti jatkaa?"
 
 #: shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
 msgstr "Muuta istunnon nimeä"
 
 #: shell/sessioncontroller.cpp:265
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Session crashed"
+#, kde-format
 msgid "Session Manager"
-msgstr "Istunto kaatui"
+msgstr "Istunnonhallinta"
 
 #: shell/sessioncontroller.cpp:277
 #, kde-format
@@ -3943,38 +3701,31 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "Aloita uusi KDevelop-ilmentymä tyhjällä istunnolla"
 
 #: shell/sessioncontroller.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Aloita uusi istunto"
+msgstr "Aloita uusi nimetty istunto…"
 
 #: shell/sessioncontroller.cpp:287
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
 msgstr "Aloita uusi KDevelop-ilmentymä tyhjällä istunnolla"
 
 #: shell/sessioncontroller.cpp:293
-#, fuzzy, kde-format
-#| msgid "Rename Current Session..."
+#, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
 msgstr "Muuta nykyisen istunnon nimeä…"
 
 #: shell/sessioncontroller.cpp:299
-#, fuzzy, kde-format
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
 msgstr "Poista nykyinen istunto…"
 
 #: shell/sessioncontroller.cpp:303
-#, fuzzy, kde-format
-#| msgid "Quit"
+#, kde-format
 msgctxt "@action"
 msgid "Quit"
 msgstr "Lopeta"
@@ -3993,29 +3744,25 @@ msgid "Identity"
 msgstr "Identiteetti"
 
 #: shell/sessioncontroller.cpp:614
-#, fuzzy, kde-format
-#| msgid "Contents"
+#, kde-format
 msgctxt "@title:column"
 msgid "Contents"
 msgstr "Sisältö"
 
 #: shell/sessioncontroller.cpp:615
-#, fuzzy, kde-format
-#| msgid "State"
+#, kde-format
 msgctxt "@title:column"
 msgid "State"
 msgstr "Tila"
 
 #: shell/sessioncontroller.cpp:616
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nimi"
 
 #: shell/sessioncontroller.cpp:622
-#, fuzzy, kde-format
-#| msgid "Filter:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "Suodatin:"
@@ -4221,6 +3968,9 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Vaihda esikatselun näkyvyyttä tälle tyylille.\n"
+"Esikatselu tulisi poistaa käytöstä tyyleiltä, joiden muotoilu riippuu "
+"tiedoston sijainnista."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
@@ -4257,101 +4007,86 @@ msgid "%1 (default profile)"
 msgstr "Käytä oletusprofiilia (nykyisellään: %1)"
 
 #: shell/settings/environmentprofilemodel.cpp:91
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@title:column"
 msgid "Variable"
 msgstr "Muuttuja"
 
 #: shell/settings/environmentprofilemodel.cpp:93
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Arvo"
 
 #: shell/settings/environmentwidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "Enter variable ..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter variable..."
-msgstr "Kirjoita muuttuja…"
+msgstr "Anna muuttuja…"
 
 #: shell/settings/environmentwidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "New Environment Variable"
+#, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Environment Profile"
-msgstr "Uusi ympäristömuuttuja"
+msgstr "Anna uuden ympäristöprofiilin nimi"
 
 #: shell/settings/environmentwidget.cpp:233
-#, fuzzy, kde-format
-#| msgid "Batch Edit Mode"
+#, kde-format
 msgctxt "@title:window"
 msgid "Batch Edit Mode"
 msgstr "Erämuokkaustila"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
-#, fuzzy, kde-format
-#| msgid "Environment group:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Environment profile:"
-msgstr "Ympäristöryhmä:"
+msgstr "Ympäristöprofiili:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
 #: shell/settings/environmentwidget.ui:39
-#, fuzzy, kde-format
-#| msgid "Add New..."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr "Lisää uusi…"
+msgstr "Lisää profiili…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone profile..."
-msgstr "Sulje tiedosto"
+msgstr "Monista profiili…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
 #: shell/settings/environmentwidget.ui:59
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove profile"
-msgstr "Poista lukitustiedosto"
+msgstr "Poista profiili"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultProfileButton)
 #: shell/settings/environmentwidget.ui:69
-#, fuzzy, kde-format
-#| msgid "Set As Default Group"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr "Aseta oletusryhmäksi"
+msgstr "Aseta oletukseksi"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
 #: shell/settings/environmentwidget.ui:114
-#, fuzzy, kde-format
-#| msgid "Remove variable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove variable"
 msgstr "Poista muuttuja"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, batchModeEditButton)
 #: shell/settings/environmentwidget.ui:130
-#, fuzzy, kde-format
-#| msgid "Batch Edit Mode"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Batch edit mode"
 msgstr "Erämuokkaustila"
 
 #: shell/settings/languagepreferences.cpp:34
-#, fuzzy, kde-format
-#| msgid " file"
-#| msgid_plural " files"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " file"
 msgid_plural " files"
@@ -4364,15 +4099,13 @@ msgid "Language Support"
 msgstr "Kielituki"
 
 #: shell/settings/languagepreferences.cpp:82
-#, fuzzy, kde-format
-#| msgid "Configure code-completion and semantic highlighting"
+#, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
-msgstr "Koodin täydennyksen ja semanttisen korostamisen asetukset"
+msgstr "Koodin täydennyksen ja semanttisen korostuksen asetukset"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/languagepreferences.ui:29
-#, fuzzy, kde-format
-#| msgid "Code Completion"
+#, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
 msgstr "Koodin täydennys"
@@ -4453,8 +4186,7 @@ msgstr "Yksityiskohtainen täydennys:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:101
-#, fuzzy, kde-format
-#| msgid "Never"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Never"
 msgstr "Ei koskaan"
@@ -4477,8 +4209,7 @@ msgstr "Aina"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/languagepreferences.ui:122
-#, fuzzy, kde-format
-#| msgid "Semantic Code Highlighting"
+#, kde-format
 msgctxt "@title:group"
 msgid "Semantic Code Highlighting"
 msgstr "Koodin semanttinen korostus"
@@ -4516,12 +4247,17 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>Oletuksena tyyppien, funktioiden, nimiavaruuksien jne. yleisvärit luodaan "
+"automaattisesti ja ne mukautuvat väri-intensiteetin perusteella valittuun "
+"muokkainteemaan. Jos haluat hallita värejä täysin itse, muokkainteemaa voi "
+"käyttää värien lähteenä, jolloin niitä voi hienosäätää asetuksista: Muokkain "
+"→ Väriteemat → Korostetut tekstityylit → KDevelopin ja semanttiset värit.</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
 #, kde-format
 msgid "Auto-Generated"
-msgstr ""
+msgstr "Luotu automaattisesti"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:175
@@ -4572,11 +4308,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/languagepreferences.ui:234
-#, fuzzy, kde-format
-#| msgid "Highlight semantic problems:"
+#, kde-format
 msgctxt "@label"
 msgid "Highlight semantic problems:"
-msgstr "Korosta semanttisia ongelmia:"
+msgstr "Korosta semanttiset ongelmat:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
@@ -4592,8 +4327,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/languagepreferences.ui:257
-#, fuzzy, kde-format
-#| msgid "Highlight problematic lines:"
+#, kde-format
 msgctxt "@label"
 msgid "Highlight problematic lines:"
 msgstr "Korosta ongelmalliset rivit:"
@@ -4632,11 +4366,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:309
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Errors"
-msgstr "Virhe"
+msgstr "Virheet"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:314
@@ -4654,42 +4387,36 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:327
-#, fuzzy, kde-format
-#| msgid ""
-#| "Space-separated list of words that make a comment represent a TODO item"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Space-separated list of words that make a comment represent a TODO item"
 msgstr ""
-"Välilyönnein eroteltu luettelo sanoja, jotka saavat kommentin merkitsemään "
-"tehtävää (TODO)."
+"Välilyönnein eroteltu luettelo sanoista, jotka osoittavat kommentin "
+"tehtäväksi (TODO)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:330
-#, fuzzy, kde-format
-#| msgid "TODO marker words:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "TODO marker words:"
 msgstr "Tehtävämerkintäsanat:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
 #: shell/settings/languagepreferences.ui:340
-#, fuzzy, kde-format
-#| msgid ""
-#| "Space-separated list of words that make a comment represent a TODO item."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Space-separated list of words that make a comment represent a TODO item."
 msgstr ""
-"Välilyönnein eroteltu luettelo sanoja, jotka saavat kommentin merkitsemään "
-"tehtävää (TODO)."
+"Välilyönnein eroteltu luettelo sanoista, jotka osoittavat kommentin "
+"tehtäväksi (TODO)."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/languagepreferences.ui:369
-#, fuzzy, kde-format
-#| msgid "Project Parsing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Parsing"
-msgstr "Projektien jäsentäminen"
+msgstr "Projektin jäsentäminen"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
@@ -4751,14 +4478,14 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Muisti"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Istunnon väliaikaiskansio"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -5008,16 +4735,14 @@ msgstr "Lisää muotoilutyylin mukainen Kate-tilarivi muotoiltuihin tiedostoihin
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:39
-#, fuzzy, kde-format
-#| msgid "Add Kate Modeline"
+#, kde-format
 msgctxt "@option:check"
 msgid "Add Kate Modeline"
 msgstr "Lisää Kate-tilarivi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Formatting Styles"
+#, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
 msgstr "Muotoilutyylit"
@@ -5033,24 +4758,21 @@ msgid "Configure Templates"
 msgstr "Mallien asetukset"
 
 #: shell/settings/templatepage.cpp:30
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Hae lisää malleja"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr "Lataa malli tiedostosta"
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
 #: shell/settings/templatepage.ui:36
-#, fuzzy, kde-format
-#| msgid "Clone Template"
+#, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"
 msgstr "Monista malli"
@@ -5109,8 +4831,7 @@ msgstr "Alaoikean kulman käyttää:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
-#, fuzzy, kde-format
-#| msgid "Left Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
 msgstr "Vasemman laidan telakka"
@@ -5118,50 +4839,42 @@ msgstr "Vasemman laidan telakka"
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:58 shell/settings/uiconfig.ui:75
-#, fuzzy, kde-format
-#| msgid "Bottom Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
 msgstr "Alalaidan telakka"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
-#, fuzzy, kde-format
-#| msgid "Right Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
 msgstr "Oikean laidan telakka"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
-#, fuzzy, kde-format
-#| msgid "Tabbed Browsing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Tabbed Browsing"
 msgstr "Välilehtiselaus"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:92
-#, fuzzy, kde-format
-#| msgid "Controls whether to open new tabs next to the active one."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Controls whether to open new tabs next to the active one."
-msgstr "Avataanko uudet välilehdet aktiivisen viereen"
+msgstr "Määrittää, avataanko uudet välilehdet aktiivisen viereen."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:95
-#, fuzzy, kde-format
-#| msgid "Open new tab after current"
+#, kde-format
 msgctxt "@option:check"
 msgid "Open new tab after current"
 msgstr "Avaa uusi välilehti nykyisen perään"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:106
-#, fuzzy, kde-format
-#| msgid ""
-#| "When enabled, plugins can group related files side by side.\n"
-#| "For example, a header file will be opened next to the implementation file."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "When enabled, plugins can group related files side by side.\n"
@@ -5169,7 +4882,7 @@ msgid ""
 msgstr ""
 "Kun käytössä, liitännäiset voivat ryhmittää yhteenkuuluvia tiedostoja "
 "rinnakkain.\n"
-"Esimerkiksi otsikkotiedosto avataan toteutustiedoston viereen."
+"Esimerkiksi otsaketiedosto avataan toteutuksen viereen."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:109
@@ -5216,7 +4929,7 @@ msgstr "Näyttää tai piilottaa välilehtipalkin muokkainnäkymän yllä"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show close buttons on tabs"
-msgstr ""
+msgstr "Näytä sulkemispainikkeet välilehdissä"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/uiconfig.ui:145
@@ -6232,7 +5945,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Compare to Branch"
-msgstr ""
+msgstr "Vertaa haaraan"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:103
@@ -6604,36 +6317,36 @@ msgstr "Kirjoita versionhallinnan osoite…"
 msgctxt "@item age"
 msgid "%1 year"
 msgid_plural "%1 years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 vuosi"
+msgstr[1] "%1 vuotta"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:63
 #, kde-format
 msgctxt "@item age"
 msgid "%1 month"
 msgid_plural "%1 months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 kuukausi"
+msgstr[1] "%1 kuukautta"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:67
 #, kde-format
 msgctxt "@item age"
 msgid "%1 day"
 msgid_plural "%1 days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 päivä"
+msgstr[1] "%1 päivää"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
-msgstr ""
+msgstr "Tänään"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:283
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
-msgstr ""
+msgstr "Tekijä: %1"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
 #: vcs/widgets/vcscommitdialog.ui:17

@@ -1,21 +1,20 @@
 # KDE Finnish translation sprint participants:
-# Tommi Nieminen <translator@legisign.org>, 2014.
+# SPDX-FileCopyrightText: 2014, 2024 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2015-08-15 17:18+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2024-11-15 15:51+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-POT-Import-Date: 2012-12-01 22:26:53+0000\n"
-"X-Generator: Lokalize 2.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -28,38 +27,32 @@ msgid "Your emails"
 msgstr "translator@legisign.org"
 
 #: qmakebuilddirchooser.cpp:124
-#, fuzzy, kde-format
-#| msgid "Please specify path to QMake binary."
+#, kde-format
 msgid "Please specify path to QMake executable."
 msgstr "Anna QMake-ohjelmatiedoston sijainti."
 
 #: qmakebuilddirchooser.cpp:129
-#, fuzzy, kde-format
-#| msgid "QMake binary \"%1\" does not exist."
+#, kde-format
 msgid "QMake executable \"%1\" does not exist."
 msgstr "QMake-ohjelmatiedostoa ”%1” ei ole olemassa."
 
 #: qmakebuilddirchooser.cpp:132
-#, fuzzy, kde-format
-#| msgid "QMake binary is not a file."
+#, kde-format
 msgid "QMake executable is not a file."
 msgstr "QMake-ohjelmatiedosto ei ole tiedosto."
 
 #: qmakebuilddirchooser.cpp:135
-#, fuzzy, kde-format
-#| msgid "QMake binary is not executable."
+#, kde-format
 msgid "QMake executable is not executable."
-msgstr "QMake-ohjelmatiedosto ei ole suoritettavissa."
+msgstr "QMake-ohjelmatiedosto ei ole suoritettava."
 
 #: qmakebuilddirchooser.cpp:140
-#, fuzzy, kde-format
-#| msgid "QMake binary cannot be queried for variables."
+#, kde-format
 msgid "QMake executable cannot be queried for variables."
 msgstr "QMake-ohjelmatiedostolta ei voi kysyä muuttujia."
 
 #: qmakebuilddirchooser.cpp:143
-#, fuzzy, kde-format
-#| msgid "No basic MkSpec file could be found for the given QMake binary."
+#, kde-format
 msgid "No basic MkSpec file could be found for the given QMake executable."
 msgstr "Annetulle QMake-ohjelmatiedostolle ei löydy MkSpec-perustiedostoa."
 
@@ -70,58 +63,51 @@ msgstr "Anna koostamiskansio."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: qmakebuilddirchooser.ui:23
-#, fuzzy, kde-format
-#| msgid "QMake binary is not executable."
+#, kde-format
 msgctxt "@label:textbox"
 msgid "QMake &executable:"
-msgstr "QMake-ohjelmatiedosto ei ole suoritettavissa."
+msgstr "&QMake-ohjelmatiedosto:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qmakebuilddirchooser.ui:46
-#, fuzzy, kde-format
-#| msgid "&Build directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Build directory:"
-msgstr "K&oostamiskansio:"
+msgstr "&Koostamiskansio:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qmakebuilddirchooser.ui:62
-#, fuzzy, kde-format
-#| msgid "&Install to (target.path):"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Install to (target.path):"
 msgstr "&Asenna kohteeseen (sijainti):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qmakebuilddirchooser.ui:85
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@labal:listbox"
 msgid "Build &type:"
-msgstr "Koostamis&tyyppi"
+msgstr "Koostamist&yyppi:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
 #: qmakebuilddirchooser.ui:115
-#, fuzzy, kde-format
-#| msgid "(Use default from .pro file)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "(Use default from .pro file)"
-msgstr "(Käytä oletusta .pro-tiedostosta)"
+msgstr "(käytä oletusta .pro-tiedostosta)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: qmakebuilddirchooser.ui:123
-#, fuzzy, kde-format
-#| msgid "Extra arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Extra arguments:"
 msgstr "Lisäparametrit:"
 
 #: qmakebuilddirchooserdialog.cpp:22
-#, fuzzy, kde-format
-#| msgid "Configure a build directory"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory"
-msgstr "Aseta käännöshakemisto"
+msgstr "Aseta koostamiskansio"
 
 #: qmakejob.cpp:33
 #, kde-format
@@ -144,8 +130,7 @@ msgid "*** Crashed with return code: %1 ***"
 msgstr "*** Kaatui paluuarvolla: %1 ***"
 
 #: qmakemanager.cpp:75
-#, fuzzy, kde-format
-#| msgid "Run QMake"
+#, kde-format
 msgctxt "@action"
 msgid "Run QMake"
 msgstr "Suorita QMake"

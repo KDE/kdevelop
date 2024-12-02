@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the extragear package.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2009, 2011.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014.
+# SPDX-FileCopyrightText: 2024 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -12,50 +13,44 @@ msgstr ""
 "Project-Id-Version: kdevcontextbrowser\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2014-08-16 12:52+0300\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
-"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"PO-Revision-Date: 2024-11-17 16:45+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2012-12-01 22:20:28+0000\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: contextbrowser.cpp:161
-#, fuzzy, kde-format
-#| msgid "Go back in context history"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
-msgstr "Siirry taaksepäin kontekstihistoriassa"
+msgstr "Siirry kontekstihistoriassa taaksepäin"
 
 #: contextbrowser.cpp:173
-#, fuzzy, kde-format
-#| msgid "Go forward in context history"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
-msgstr "Siirry eteenpäin kontekstihistoriassa"
+msgstr "Siirry kontekstihistoriassa eteenpäin"
 
 # Termi otettu sisällysluetteloiden jäsennyksestä. Tämä ”outline” on hieman samankaltainen siinä, että luettelee tiedostossa olevat funktiot.
 #: contextbrowser.cpp:189
-#, fuzzy, kde-format
-#| msgid "Outline"
+#, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
 msgstr "Rakenne"
 
 # Termi otettu sisällysluetteloiden jäsennyksestä. Tämä ”outline” on hieman samankaltainen siinä, että luettelee tiedostossa olevat funktiot.
 #: contextbrowser.cpp:190
-#, fuzzy, kde-format
-#| msgid "Outline"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
 msgstr "Rakenne"
 
 #: contextbrowser.cpp:191
-#, fuzzy, kde-format
-#| msgid "Navigate outline of active document, click to browse."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
 msgstr "Selaa aktiivisen tiedoston rakennetta napsauttamalla"
@@ -64,56 +59,49 @@ msgstr "Selaa aktiivisen tiedoston rakennetta napsauttamalla"
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
-msgstr ""
+msgstr "Lähteen &selaustila"
 
 #: contextbrowser.cpp:238
-#, fuzzy, kde-format
-#| msgid "&Previous Visited Context"
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
 msgstr "E&dellinen vierailtu konteksti"
 
 #: contextbrowser.cpp:244
-#, fuzzy, kde-format
-#| msgid "&Next Visited Context"
+#, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
 msgstr "&Seuraava vierailtu konteksti"
 
 #: contextbrowser.cpp:250
-#, fuzzy, kde-format
-#| msgid "&Previous Use"
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Use"
 msgstr "Edelli&nen käyttö"
 
 #: contextbrowser.cpp:256
-#, fuzzy, kde-format
-#| msgid "&Next Use"
+#, kde-format
 msgctxt "@action"
 msgid "&Next Use"
 msgstr "Seuraa&va käyttö"
 
 #: contextbrowser.cpp:262
-#, fuzzy, kde-format
-#| msgid "Context Browser"
+#, kde-format
 msgctxt "@action"
 msgid "Context Browser"
 msgstr "Kontekstiselain"
 
 #: contextbrowser.cpp:293 contextbrowser.cpp:372 contextbrowserview.cpp:172
-#, fuzzy, kde-format
-#| msgid "Code Browser"
+#, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
 msgstr "Koodiselain"
 
 #: contextbrowser.cpp:309
-#, fuzzy, kde-format
-#| msgid "Find Uses"
+#, kde-format
 msgctxt "@action"
 msgid "Find Uses"
-msgstr "Hae käytöt"
+msgstr "Etsi käytöt"
 
 #: contextbrowser.cpp:1558
 #, kde-format
@@ -121,46 +109,40 @@ msgid "(changed)"
 msgstr "(muuttunut)"
 
 #: contextbrowserview.cpp:178
-#, fuzzy, kde-format
-#| msgid "Declaration menu"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show declaration menu"
-msgstr "Esittelyvalikko"
+msgstr "Näytä esittelyvalikko"
 
 #: contextbrowserview.cpp:181
-#, fuzzy, kde-format
-#| msgid "Declaration menu"
+#, kde-format
 msgctxt "@action"
 msgid "Declaration Menu"
 msgstr "Esittelyvalikko"
 
 #: contextbrowserview.cpp:185
-#, fuzzy, kde-format
-#| msgid "Lock current view"
+#, kde-format
 msgctxt "@action"
 msgid "Lock Current View"
 msgstr "Lukitse nykyinen näkymä"
 
 #: contextbrowserview.cpp:186
-#, fuzzy, kde-format
-#| msgid "Lock current view"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock current view"
 msgstr "Lukitse nykyinen näkymä"
 
 #: contextbrowserview.cpp:187
-#, fuzzy, kde-format
-#| msgid "Lock current view"
+#, kde-format
 msgctxt "@action"
 msgid "Unlock Current View"
-msgstr "Lukitse nykyinen näkymä"
+msgstr "Poista nykyisen näkymän lukitus"
 
 #: contextbrowserview.cpp:189
-#, fuzzy, kde-format
-#| msgid "Lock current view"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Unlock current view"
-msgstr "Lukitse nykyinen näkymä"
+msgstr "Poista nykyisen näkymän lukitus"
 
 #. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
 #: kdevcontextbrowser.rc:25
