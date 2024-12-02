@@ -46,6 +46,8 @@
 #include "grepfindthread.h"
 #include "greputil.h"
 
+#include <algorithm>
+#include <iterator>
 #include <utility>
 
 using namespace KDevelop;
@@ -530,15 +532,18 @@ void GrepDialog::historySearch(QList<GrepJobSettings>&& settingsHistory)
             return false;
         }
 
-        auto& toolView = this->toolView(IUiController::Create);
-        for (const auto& settings : settingsHistory) {
-            const auto description = searchDescription(settings.searchPaths, nullptr);
-            // when restored from history, only display the parameters
-            toolView.renewModel(settings,
-                                i18nc("@item search result", "Search \"%1\" in %2", settings.pattern, description));
-        }
-
         m_plugin->rememberSearchDirectory(settingsHistory.constLast().searchPaths);
+
+        QStringList descriptions;
+        descriptions.reserve(settingsHistory.size());
+        std::transform(settingsHistory.cbegin(), settingsHistory.cend(), std::back_inserter(descriptions),
+                       [](const GrepJobSettings& settings) {
+                           const auto description = searchDescription(settings.searchPaths, nullptr);
+                           // when restored from history, only display the parameters
+                           return i18nc("@item search result", "Search \"%1\" in %2", settings.pattern, description);
+                       });
+        auto& toolView = this->toolView(IUiController::Create);
+        toolView.addModelsFromHistory(std::move(settingsHistory), std::move(descriptions));
 
         // Prevent adding models from history again in case another project is opened before this dialog is destroyed.
         settingsHistory.clear();

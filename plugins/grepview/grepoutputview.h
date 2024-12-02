@@ -46,7 +46,18 @@ public:
     GrepOutputView(QWidget* parent, GrepViewPlugin* plugin);
     ~GrepOutputView() override;
     GrepOutputModel* model();
-    
+
+    /**
+     * Create a model for each search settings history entry.
+     *
+     * Each search settings history entry is specified by the elements of
+     * @p settingsHistory and @p searchDescriptions at matching positions.
+     *
+     * @pre @p settingsHistory.size() == @p searchDescriptions.size()
+     * @pre @p !settingsHistory.empty()
+     */
+    void addModelsFromHistory(QList<GrepJobSettings>&& settingsHistory, const QStringList& searchDescriptions);
+
     /**
      * This causes the creation of a new model, the old one is kept in model history.
      * Oldest models are deleted if needed.
@@ -67,6 +78,11 @@ Q_SIGNALS:
     
 private:
     void replacementTextChanged(const QString& replacementText);
+
+    /**
+     * Remove oldest model and settings from history if the history size exceeds @a HISTORY_SIZE.
+     */
+    void removeOldestModelsIfTooMany();
 
     static const int HISTORY_SIZE;
     QAction* m_next;
