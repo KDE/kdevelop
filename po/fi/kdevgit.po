@@ -1,7 +1,7 @@
 # Copyright © 2011, 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2022-08-30 14:35+0300\n"
+"PO-Revision-Date: 2024-11-17 17:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -17,8 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: committoolview.cpp:205 committoolview.cpp:206
 #, kde-format
@@ -33,22 +32,22 @@ msgstr "Virkistä"
 #: committoolview.cpp:224
 #, kde-format
 msgid "Stage selected"
-msgstr ""
+msgstr "Vaiheista valitut"
 
 #: committoolview.cpp:226
 #, kde-format
 msgid "Unstage selected"
-msgstr ""
+msgstr "Kumoa valittujen vaiheistus"
 
 #: committoolview.cpp:228
 #, kde-format
 msgid "Revert unstaged edits"
-msgstr ""
+msgstr "Palauta vaiheistamattomat muokkaukset"
 
 #: committoolview.cpp:481
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
-msgstr ""
+msgstr "Toimitus epäonnistui. Katso versionhallinnan työkalunäkymää."
 
 #: diffviewsctrl.cpp:50
 #, kde-format
@@ -69,23 +68,22 @@ msgstr "Poistaa valitun haaran"
 #: diffviewsctrl.cpp:56
 #, kde-format
 msgid "Go to line in source"
-msgstr ""
+msgstr "Siirry lähteen riville"
 
 #: diffviewsctrl.cpp:108
 #, kde-format
 msgid "Unstage selected lines"
-msgstr ""
+msgstr "Kumoa valittujen rivien vaiheistus"
 
 #: diffviewsctrl.cpp:109
 #, kde-format
 msgid "Stage selected lines"
-msgstr ""
+msgstr "Vaiheista valitut rivit"
 
 #: diffviewsctrl.cpp:110
-#, fuzzy, kde-format
-#| msgid "Removes the selected branch"
+#, kde-format
 msgid "Revert selected lines"
-msgstr "Poistaa valitun haaran"
+msgstr "Palauta valitut rivit"
 
 #: diffviewsctrl.cpp:112
 #, kde-format
@@ -126,12 +124,12 @@ msgstr "Vaiheistettu (%1)"
 #: diffviewsctrl.cpp:181
 #, kde-format
 msgid "Unstaged (%1)"
-msgstr ""
+msgstr "Vaiheistus kumottu (%1)"
 
 #: diffviewsctrl.cpp:183
 #, kde-format
 msgid "%1 (unstaged)"
-msgstr ""
+msgstr "%1 (vaiheistus kumottu)"
 
 #: diffviewsctrl.cpp:338
 #, kde-format
@@ -139,6 +137,8 @@ msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
 "cannot be undone. Continue?"
 msgstr ""
+"Valitut rivit palautetaan ja muutokset menetetään. Toimenpidettä ei voi "
+"kumota. Jatketaanko?"
 
 #: diffviewsctrl.cpp:340
 #, kde-format
@@ -163,11 +163,10 @@ msgstr "Yritä pitää rivinpituus alle %1 merkissä."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, GitNameEmailDialog)
 #: gitnameemaildialog.ui:17
-#, fuzzy, kde-format
-#| msgid "Configure Name and Email for Git"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure Name and Email for Git"
-msgstr "Gitin nimi- ja sähköpostiasetukset"
+msgstr "Määritä Gitille nimi ja sähköposti"
 
 #. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
 #: gitnameemaildialog.ui:23
@@ -178,6 +177,10 @@ msgid ""
 "written to the Git configuration, either locally for the current project "
 "only, or globally for all Git projects.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Et ole vielä määrittänyt Git-toimituksissa käytettävää "
+"nimeä ja sähköpostiosoitetta.<br/>Tässä antamasi arvot kirjoitetaan Git-"
+"määritykseen joko paikallisesti vain nykyiselle projektille tai yleisesti "
+"kaikille Git-projekteille.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gitnameemaildialog.ui:35
@@ -188,24 +191,22 @@ msgstr "&Nimi:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gitnameemaildialog.ui:48
-#, fuzzy, kde-format
-#| msgid "Emai&l:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Emai&l:"
-msgstr "&Sähköposti:"
+msgstr "Sä&hköposti:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, globalCheckBox)
 #: gitnameemaildialog.ui:78
-#, fuzzy, kde-format
-#| msgid "Write to global config"
+#, kde-format
 msgctxt "@option:check"
 msgid "Write to global config"
-msgstr "Kirjoita järjestelmänlaajuisiin asetuksii"
+msgstr "Kirjoita yleisasetuksiin"
 
 #: gitplugin.cpp:185
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
-msgstr ""
+msgstr "git-ohjelmatiedostoa ei löydy. Onko se asennettu?"
 
 #: gitplugin.cpp:194
 #, kde-format
@@ -216,35 +217,31 @@ msgstr "Git-toimitus"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
-msgstr ""
+msgstr "Pohjaa uudelleen"
 
 #: gitplugin.cpp:247
-#, fuzzy, kde-format
-#| msgid "Git Stashes"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git-kätköt"
 
 #: gitplugin.cpp:248
-#, fuzzy, kde-format
-#| msgid "Stash Manager"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Kätköjen hallinta"
 
 #: gitplugin.cpp:249
-#, fuzzy, kde-format
-#| msgid "Push Stash"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
-msgstr "Laita kätköön"
+msgstr "Vie kätköön"
 
 #: gitplugin.cpp:250
-#, fuzzy, kde-format
-#| msgid "Pop Stash"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
-msgstr "Ota kätköstä"
+msgstr "Tuo kätköstä"
 
 #: gitplugin.cpp:283
 #, kde-format
@@ -257,10 +254,9 @@ msgid "Did not specify the list of files"
 msgstr "Tiedostoja ei määritetty"
 
 #: gitplugin.cpp:455
-#, fuzzy, kde-format
-#| msgid "Could not revert changes"
+#, kde-format
 msgid "Could not reset changes (empty list of paths)"
-msgstr "Muutoksia ei voitu kumota"
+msgstr "Muutoksia ei voitu kumota (tyhjä sijaintiluettelo)"
 
 #: gitplugin.cpp:489
 #, kde-format
@@ -268,13 +264,11 @@ msgid "Could not revert changes"
 msgstr "Muutoksia ei voitu kumota"
 
 #: gitplugin.cpp:500
-#, fuzzy, kde-format
-#| msgid ""
-#| "The following files have uncommited changes, which will be lost. Continue?"
+#, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
 msgstr ""
-"Seuraavissa tiedostoissa on kommitoimattomia muutoksia, jotka menetetään. "
+"Seuraavissa tiedostoissa on toimittamattomia muutoksia, jotka menetetään. "
 "Jatketaanko?"
 
 #: gitplugin.cpp:525
@@ -288,10 +282,9 @@ msgid "Email or name for Git not specified"
 msgstr "Sähköpostia tai nimeä ei ole annettu Gitille"
 
 #: gitplugin.cpp:545
-#, fuzzy, kde-format
-#| msgid "No files or message specified"
+#, kde-format
 msgid "No message specified"
-msgstr "Tiedostoja tai viestiä ei annettu."
+msgstr "Viestiä ei annettu"
 
 #: gitplugin.cpp:619
 #, kde-format
@@ -313,7 +306,7 @@ msgstr "Kätkö"
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
-msgstr ""
+msgstr "Säilytä"
 
 #: rebasedialog.cpp:25
 #, kde-format
@@ -326,22 +319,21 @@ msgstr "Haaran valinta"
 #, kde-format
 msgctxt "@title:window"
 msgid "Rebase"
-msgstr ""
+msgstr "Pohjaa uudelleen"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rebasedialog.ui:20
-#, fuzzy, kde-format
-#| msgid "Branch"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Base branch:"
-msgstr "Haara"
+msgstr "Pohjahaara:"
 
 #. i18n: ectx: property (text), widget (QPushButton, rebaseButton)
 #: rebasedialog.ui:40
 #, kde-format
 msgctxt "@action:button"
 msgid "Rebase"
-msgstr ""
+msgstr "Pohjaa uudelleen"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_2)
 #: rebasedialog.ui:60
@@ -354,13 +346,13 @@ msgstr "Peru"
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged changes"
-msgstr ""
+msgstr "Vaiheistetut muutokset"
 
 #: repostatusmodel.cpp:67
 #, kde-format
 msgctxt "Files in a vcs which have changes not yet staged for commit"
 msgid "Unstaged changes"
-msgstr ""
+msgstr "Vaiheistamattomat muutokset"
 
 #: repostatusmodel.cpp:70
 #, kde-format
@@ -422,89 +414,89 @@ msgstr "Tiedostot, joita ei jäljitetä VCS:ssä"
 #, kde-format
 msgctxt "@item file has unstaged changes"
 msgid "Modified (unstaged)"
-msgstr ""
+msgstr "Muutettu (vaiheistamatta)"
 
 #: repostatusmodel.cpp:224
 #, kde-format
 msgctxt "@item file was deleted from worktree"
 msgid "Deleted (unstaged)"
-msgstr ""
+msgstr "Poistettu (vaiheistamatta)"
 
 #: repostatusmodel.cpp:226
 #, kde-format
 msgctxt "@item file was renamed in worktree"
 msgid "Renamed (unstaged)"
-msgstr ""
+msgstr "Nimeä muutettu (vaiheistamatta)"
 
 #: repostatusmodel.cpp:228
 #, kde-format
 msgctxt "@item file was copied in worktree"
 msgid "Copied (unstaged)"
-msgstr ""
+msgstr "Kopioitu (vaiheistamatta)"
 
 #: repostatusmodel.cpp:230
 #, kde-format
 msgctxt "@item file has staged changes"
 msgid "Modified (staged)"
-msgstr ""
+msgstr "Muutettu (vaiheistettu)"
 
 #: repostatusmodel.cpp:232
 #, kde-format
 msgctxt "@item file has both staged and unstaged changes"
 msgid "Modified (unstaged changes)"
-msgstr ""
+msgstr "Muutettu (vaiheistamattomia muutoksia)"
 
 #: repostatusmodel.cpp:234
 #, kde-format
 msgctxt "@item file has staged changes and was deleted in worktree"
 msgid "Modified (unstaged deletion)"
-msgstr ""
+msgstr "Muutettu (vaiheistamaton poisto)"
 
 #: repostatusmodel.cpp:237
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
 msgid "Added (unstaged changes)"
-msgstr ""
+msgstr "Lisätty (vaiheistamattomia muutoksia)"
 
 #: repostatusmodel.cpp:240
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
 msgid "Added (unstaged deletion)"
-msgstr ""
+msgstr "Lisätty (vaiheistamaton poisto)"
 
 #: repostatusmodel.cpp:243
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and renamed in worktree"
 msgid "Deleted (unstaged rename)"
-msgstr ""
+msgstr "Poistettu (vaiheistamaton nimenmuutos)"
 
 #: repostatusmodel.cpp:246
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and copied in worktree"
 msgid "Deleted (unstaged copy)"
-msgstr ""
+msgstr "Poistettu (vaiheistamaton kopiointi)"
 
 #: repostatusmodel.cpp:248
 #, kde-format
 msgctxt "@item file was renamed in versioncontrolsystem"
 msgid "Renamed (staged)"
-msgstr ""
+msgstr "Nimeä muutettu (vaiheistettu)"
 
 #: repostatusmodel.cpp:251
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and has unstaged changes"
 msgid "Renamed (unstaged changes)"
-msgstr ""
+msgstr "Nimeä muutettu (vaiheistamattomia muutoksia)"
 
 #: repostatusmodel.cpp:254
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and was deleted in worktree"
 msgid "Renamed (unstaged deletion)"
-msgstr ""
+msgstr "Nimeä muutettu (vaiheistamaton poisto)"
 
 #: repostatusmodel.cpp:256
 #, kde-format
@@ -513,19 +505,18 @@ msgid "Copied"
 msgstr "Kopioitu"
 
 #: repostatusmodel.cpp:259
-#, fuzzy, kde-format
-#| msgid "Could not revert changes"
+#, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and has unstaged changes"
 msgid "Copied (unstaged changes)"
-msgstr "Muutoksia ei voitu kumota"
+msgstr "Kopioitu (vaiheistamattomia muutoksia)"
 
 #: repostatusmodel.cpp:262
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and was deleted in worktree"
 msgid "Copied (unstaged deletion)"
-msgstr ""
+msgstr "Kopioitu (vaiheistamaton poisto)"
 
 #: repostatusmodel.cpp:264
 #, kde-format
@@ -553,7 +544,7 @@ msgstr " (vaiheistettu)"
 #: repostatusmodel.cpp:370
 #, kde-format
 msgid " (unstaged)"
-msgstr ""
+msgstr " (vaiheistamatta)"
 
 #: repostatusmodel.cpp:378
 #, kde-format
@@ -566,10 +557,9 @@ msgid " (untracked)"
 msgstr " (ei jäljitetty)"
 
 #: repostatusmodel.cpp:580
-#, fuzzy, kde-format
-#| msgid "Branch"
+#, kde-format
 msgid "no branch"
-msgstr "Haara"
+msgstr "ei haaraa"
 
 #: repostatusmodel.cpp:581
 #, kde-format
@@ -600,21 +590,20 @@ msgstr "Muutosten toimittamiseksi kirjoita ensin toimitusviesti"
 #: simplecommitform.cpp:91 simplecommitform.cpp:169
 #, kde-format
 msgid "Commit changes to <b>%1</b> on branch <b>%2</b>"
-msgstr ""
+msgstr "Toimita muutokset kohteen <b>%1</b> haaraan <b>%2</b>"
 
 #: simplecommitform.cpp:122
 #, kde-format
 msgid "To commit changes, please select a project first"
-msgstr ""
+msgstr "Valitse ensin projekti ennen muutosten toimittamista"
 
 #: simplecommitform.cpp:163
 #, kde-format
 msgid "Please stage some changes before committing."
-msgstr ""
+msgstr "Vaiheista muutokset ennen toimittamista."
 
 #: stashmanagerdialog.cpp:31
-#, fuzzy, kde-format
-#| msgid "Stash Manager"
+#, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Kätköjen hallinta"
@@ -622,7 +611,7 @@ msgstr "Kätköjen hallinta"
 #: stashmanagerdialog.cpp:120
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
-msgstr "Haluatko varmasti pudottaa kätkön”%1”?"
+msgstr "Haluatko varmasti hylätä kätkön ”%1”?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
 #: stashmanagerdialog.cpp:121 stashmanagerdialog.ui:26
@@ -632,45 +621,41 @@ msgid "Drop"
 msgstr "Hylkää"
 
 #: stashmanagerdialog.cpp:130
-#, fuzzy, kde-format
-#| msgid "Git Stashes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
-msgstr "Git-kätköt"
+msgstr "Git-kätkö"
 
 #: stashmanagerdialog.cpp:130
-#, fuzzy, kde-format
-#| msgid "Select a name for the new branch:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
-msgstr "Valitse uuden haaran nimi:"
+msgstr "Uuden haaran nimi:"
 
 #: stashmanagerdialog.cpp:151
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
-msgstr ""
+msgstr "%1. %2: %3"
 
 #: stashmanagerdialog.cpp:161
 #, kde-format
 msgid "%1 created on %2"
-msgstr ""
+msgstr "%1 luotu %2"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, drop)
 #: stashmanagerdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Removes the selected branch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr "Poistaa valitun haaran"
+msgstr "Poista valittu haara"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:36
-#, fuzzy, kde-format
-#| msgid "Applies stash's patch and drops the stash"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch and drop the stash"
-msgstr "Tekee kätkön muutokset ja pudottaa sitten kätkön"
+msgstr "Ota kätkön muutokset käyttöön ja hylkää kätkö"
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:39
@@ -681,45 +666,38 @@ msgstr "Pop"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, show)
 #: stashmanagerdialog.ui:49
-#, fuzzy, kde-format
-#| msgid "Show the contents of the stash"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the content of the stash"
 msgstr "Näytä kätkön sisältö"
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
 #: stashmanagerdialog.ui:52
-#, fuzzy, kde-format
-#| msgid "Show"
+#, kde-format
 msgctxt "@action:button"
 msgid "Show"
 msgstr "Näytä"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, apply)
 #: stashmanagerdialog.ui:82
-#, fuzzy, kde-format
-#| msgid "Applies stash's patch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch"
-msgstr "Tekee kätkön muutokset"
+msgstr "Ota kätkön muutokset käyttöön"
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
 #: stashmanagerdialog.ui:85
-#, fuzzy, kde-format
-#| msgid "Apply"
+#, kde-format
 msgctxt "@action:button"
 msgid "Apply"
-msgstr "Tee muutokset"
+msgstr "Käytä"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:108
-#, fuzzy, kde-format
-#| msgid ""
-#| "Creates a new branch and applies the stash there, then it drops the stash."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new branch and apply the stash there, then drop the stash"
-msgstr ""
-"Luo uuden haaran, laittaen kätkön sisällön sinne ja pudottaen sen sitten."
+msgstr "Luo uuden haaran, tuo siihen kätköstä muutokset ja hylkää kätkön."
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:111

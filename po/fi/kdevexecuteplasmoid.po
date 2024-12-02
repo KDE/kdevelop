@@ -1,117 +1,108 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2015.
+# SPDX-FileCopyrightText: 2024 Tommi Nieminen <translator@legisign.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2015-10-31 15:19+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2024-11-17 16:58+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: plasmoidexecutionconfig.cpp:117
-#, fuzzy, kde-format
-#| msgid "Configure Plasmoid Execution"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
-msgstr "Plasmoidin suorituksen asetukset"
+msgstr "Sovelman suorittamisen asetukset"
 
 #: plasmoidexecutionconfig.cpp:127
 #, kde-format
 msgid "Display a plasmoid"
-msgstr "Näytä plasmoidi"
+msgstr "Näytä sovelma"
 
 #: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
 #, kde-format
 msgid "Plasmoid Launcher"
-msgstr "Plasmoidikäynnistin"
+msgstr "Sovelmakäynnistin"
 
 #: plasmoidexecutionconfig.cpp:183
-#, fuzzy, kde-format
-#| msgid "Couldn't resolve the dependency: %1"
+#, kde-format
 msgid "Could not resolve the dependency: %1"
-msgstr "Riippuvuuden %1 selvittäminen epäonnistui"
+msgstr "Ei voitu selvittää riippuvuutta: %1"
 
 #: plasmoidexecutionconfig.cpp:297
-#, fuzzy, kde-format
-#| msgid "Plasmoids"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"
-msgstr "Plasmoidit"
+msgstr "Sovelmat"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plasmoidexecutionconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "Plasmoid"
+#, kde-format
 msgctxt "@title:group"
 msgid "Plasmoid"
-msgstr "Plasmoidi"
+msgstr "Sovelma"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plasmoidexecutionconfig.ui:35
-#, fuzzy, kde-format
-#| msgid "Path or name:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Path or name:"
-msgstr "Polku tai nimi:"
+msgstr "Sijainti tai nimi:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plasmoidexecutionconfig.ui:67
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
 msgstr "Toiminta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plasmoidexecutionconfig.ui:73
-#, fuzzy, kde-format
-#| msgid "Form Factor"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Form factor:"
-msgstr "Kokoluokka"
+msgstr "Alusta:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plasmoidexecutionconfig.ui:107
-#, fuzzy, kde-format
-#| msgid "Theme"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Theme:"
-msgstr "Teema"
+msgstr "Teema:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plasmoidexecutionconfig.ui:123
-#, fuzzy, kde-format
-#| msgid "Dependencies"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "Riippuvuudet"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plasmoidexecutionconfig.ui:132
-#, fuzzy, kde-format
-#| msgid "&Targets:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Targets:"
-msgstr "&Kohteet:"
+msgstr "Ko&hteet:"
 
 #: plasmoidexecutionjob.cpp:35
 #, kde-format
 msgid "Plasmoid Viewer"
-msgstr "Plasmoidikatselin"
+msgstr "Sovelmakatselin"
 
 #: plasmoidexecutionjob.cpp:70
 #, kde-format
 msgid "** Killed **"
-msgstr "** Tapettiin **"
+msgstr "** Tapettu **"
 
 #: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
 #, kde-format
@@ -126,7 +117,7 @@ msgstr "*** Päättyi ***"
 #: plasmoidexecutionjob.cpp:94
 #, kde-format
 msgid "Plasmoid failed to execute on %1"
-msgstr "Plasmoidin suoritus epäonnistui kansiossa %1"
+msgstr "Sovelman suoritus epäonnistui: %1"
 
 #~ msgid "planar"
 #~ msgstr "taso"

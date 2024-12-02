@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Tommi Nieminen <translator@legisign.org>, 2020, 2022.
+# SPDX-FileCopyrightText: 2020, 2022, 2024 Tommi Nieminen <translator@legisign.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-22 00:39+0000\n"
-"PO-Revision-Date: 2022-08-30 14:31+0300\n"
+"PO-Revision-Date: 2024-11-15 15:47+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -25,12 +25,12 @@ msgstr "    *** MESON-VIRHE ***\n"
 #: mesonbuilder.cpp:75
 #, kde-format
 msgid "Failed to set the internally used Ninja builder"
-msgstr ""
+msgstr "Sisäisesti käytetyn Ninja-koostimen asettaminen epäonnistui"
 
 #: mesonbuilder.cpp:78
 #, kde-format
 msgid "Failed to acquire the Ninja builder plugin"
-msgstr ""
+msgstr "Ninja-koostamisliitännäisen tavoittaminen epäonnistui"
 
 #: mesonbuilder.cpp:141 mesonbuilder.cpp:265
 #, kde-format
@@ -143,7 +143,7 @@ msgstr ""
 #: mintro/mesonintrospectjob.cpp:125
 #, kde-format
 msgid "In %1:%2: %3"
-msgstr ""
+msgstr "Tiedostossa %1: %2: %3"
 
 #: mintro/mesonintrospectjob.cpp:133
 #, kde-format
@@ -416,6 +416,7 @@ msgstr "Koostamiskansiokenttä ei saa olla tyhjä"
 #, kde-format
 msgid "You have reached unreachable code. This is a bug"
 msgstr ""
+"Olet saavuttanut saavuttamattomissa olevaa koodia. Tämä on ohjelmavirhe"
 
 #. i18n: ectx: property (text), widget (QLabel, l_buildDir)
 #: settings/mesonnewbuilddir.ui:19

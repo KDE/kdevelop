@@ -1,7 +1,7 @@
 # Copyright © 2011, 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevelop package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014.
-# Tommi Nieminen <translator@legisign.org>, 2020.
+# SPDX-FileCopyrightText: 2020, 2024 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Lliehu
@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kdevformatters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-31 14:14+0300\n"
+"PO-Revision-Date: 2024-11-17 13:38+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -18,25 +18,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: astyle_plugin.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Artistic Style</b> is a source code indenter, formatter, and "
-#| "beautifier for the C, C++, C# and Java programming languages.<br />Home "
-#| "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
-#| "sourceforge.net</a>"
+#, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
 "for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
 "white-space:pre'>Home Page: <a href=\"http://astyle.sourceforge.net/"
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
-"<b>Artistic Style</b> on lähdekoodin sisentäjä, muotoilija ja kaunistaja C-, "
-"C++-, C#- ja Java-ohjelmointikielille.<br />Kotisivu: <a href=\"http://"
-"astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+"<b>Artistic Style</b> on lähdekoodin sisentäjä, muotoilija ja sieventäjä C-, "
+"C++-, C#- ja Java-ohjelmointikielille.<p style='margin-top:0;white-space:"
+"pre'>Verkkosivu: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
+"sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
@@ -156,8 +151,7 @@ msgstr "Nimiavaruudet"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:183
-#, fuzzy, kde-format
-#| msgid "Preprocessor directives"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preprocessor directives"
 msgstr "Esikäsittelijän direktiivit"
@@ -185,38 +179,32 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QLabel, TextLabel3_2)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpMinConditional)
 #: astyle_preferences.ui:212 astyle_preferences.ui:226
-#, fuzzy, kde-format
-#| msgid ""
-#| "Indent a minimal # spaces in a continuous conditional\n"
-#| "belonging to a conditional header."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Indent a minimal # spaces in a continuous conditional\n"
 "belonging to a conditional header."
 msgstr ""
-"Sisennä ehto-otsikkoon kuuluvaa jatkuvaa ehtoa\n"
+"Sisennä ehdolliseen otsakkeeseen kuuluvaa ehdon jatkoa\n"
 "vähintään # välilyöntiä."
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
 #: astyle_preferences.ui:215
-#, fuzzy, kde-format
-#| msgid "Minimum in conditional:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum in conditional:"
-msgstr "Ehdoissa vähintään:"
+msgstr "Ehdossa vähintään:"
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, inpMinConditional)
 #: astyle_preferences.ui:229
-#, fuzzy, kde-format
-#| msgid "Twice current"
+#, kde-format
 msgctxt "@item"
 msgid "Twice current"
-msgstr "2 × nykyinen"
+msgstr "Kahdesti nykyinen"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2_2)
 #: astyle_preferences.ui:246
-#, fuzzy, kde-format
-#| msgid "Maximum in statement:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum in statement:"
 msgstr "Lauseessa enintään:"
@@ -294,19 +282,17 @@ msgstr "Ei muutosta"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:348
-#, fuzzy, kde-format
-#| msgid "Attach"
+#, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Attach"
-msgstr "Liittäminen"
+msgstr "Liitä"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:353
-#, fuzzy, kde-format
-#| msgid "Break"
+#, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Break"
-msgstr "Omalla rivillä"
+msgstr "Keskeytä"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:358
@@ -331,13 +317,15 @@ msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
 msgstr ""
+"Lisää sulkeet sulkeettomaan yksiriviseen ehtolauseeseen (esim. ”if”, ”for”, "
+"”while”)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
 #, kde-format
 msgctxt "@option:check add braces to unbraced one-line conditional statements"
 msgid "Add b&races"
-msgstr ""
+msgstr "Lisää s&ulkeet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
 #: astyle_preferences.ui:386
@@ -348,17 +336,7 @@ msgstr "Lohkot"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreak)
 #: astyle_preferences.ui:401
-#, fuzzy, kde-format
-#| msgid ""
-#| "Insert empty lines around unrelated blocks, labels, classes,...\n"
-#| "Known problems:\n"
-#| "\n"
-#| "1. If a statement is NOT part of a block, \n"
-#| "the following statements are all double spaced. \n"
-#| "Statements enclosed in a block are formatted \n"
-#| "correctly.\n"
-#| "\n"
-#| "2. Comments are broken from the block.\n"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Insert empty lines around unrelated blocks, labels, classes,...\n"
@@ -371,40 +349,25 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
-"Lisää tyhjiä rivejä toisiinsa liittymättömien lohkojen, nimiöiden, luokkien, "
-"… ympärille\n"
-"Tunnetut ongelmat:\n"
+"Lisää tyhjiä rivejä toisiinsa liittymättömien lohkojen, nimiöiden,\n"
+"luokkien jne. ympärille. Tunnettuja ongelmia:\n"
 "\n"
 "1. Jos lause EI kuulu lohkoon, sitä seuraavat \n"
-"lauseet sisennettään kaksinkertaisesti. \n"
-"Lauseet lohkon sisällä muotoillaan oikein.\n"
+"lauseet sisennetään kaksinkertaisesti. \n"
+"Lohkon sisäiset lauseet muotoillaan oikein.\n"
 "\n"
-"2. Kommentit erotetaan lohkosta rivinvaihdolla.\n"
+"2. Kommentit irtoavat lohkosta.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreak)
 #: astyle_preferences.ui:404
-#, fuzzy, kde-format
-#| msgctxt "Means break unrelated blocks by a newline"
-#| msgid "&Break blocks"
+#, kde-format
 msgctxt "@option:check break unrelated blocks by a newline"
 msgid "&Break blocks"
-msgstr "&Erota lohkot"
+msgstr "&Irrota lohkot"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreakAll)
 #: astyle_preferences.ui:422
-#, fuzzy, kde-format
-#| msgid ""
-#| "Like --break-blocks, except also insert empty lines \n"
-#| "around closing headers (e.g. 'else', 'catch', ...).\n"
-#| "\n"
-#| "Known problems:\n"
-#| "\n"
-#| "1. If a statement is NOT part of a block, \n"
-#| "the following statements are all double spaced. \n"
-#| "Statements enclosed in a block are formatted \n"
-#| "correctly.\n"
-#| "\n"
-#| "2. Comments are broken from the block.\n"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Like --break-blocks, except also insert empty lines \n"
@@ -419,33 +382,30 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
-"Kuten --break-blocks paitsi että lisää tyhjiä rivejä myös päättävien "
-"otsikoiden (esim. ”else”, ”catch”, …) ympärille.\n"
+"Kuten --break-blocks paitsi että lisää tyhjiä rivejä myös\n"
+"päättävien otsakkeiden (esim. ”else”, ”catch”) ympärille.\n"
 "\n"
-"Tunnetut ongelmat:\n"
+"Tunnettuja ongelmia:\n"
 "\n"
 "1. Jos lause EI kuulu lohkoon, sitä seuraavat \n"
-"lauseet sisennettään kaksinkertaisesti. \n"
-"Lauseet lohkon sisällä muotoillaan oikein.\n"
+"lauseet sisennetään kaksinkertaisesti. \n"
+"Lohkon sisäiset lauseet muotoillaan oikein.\n"
 "\n"
-"2. Kommentit erotetaan lohkosta rivinvaihdolla.\n"
+"2. Kommentit irtoavat lohkosta.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreakAll)
 #: astyle_preferences.ui:425
-#, fuzzy, kde-format
-#| msgctxt "Means break all blocks with a newline"
-#| msgid "Break all bl&ocks"
+#, kde-format
 msgctxt "@option:check break all blocks with a newline"
 msgid "Break all bl&ocks"
-msgstr "E&rota kaikki lohkot"
+msgstr "I&rrota kaikki lohkot"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:432
-#, fuzzy, kde-format
-#| msgid "Break 'else if()' statements into two different lines."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Break 'else if()' statements into two different lines."
-msgstr "Jaa ”else if()” -lauseet kahdelle eri riville"
+msgstr "Katkaise ”else if()” -lauseet kahdelle riville"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:435
@@ -456,8 +416,7 @@ msgstr "Jaa i&f–else"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
 #: astyle_preferences.ui:445
-#, fuzzy, kde-format
-#| msgid "Padding"
+#, kde-format
 msgctxt "@title:group"
 msgid "Padding"
 msgstr "Täyte"
@@ -471,8 +430,7 @@ msgstr "Ei muutosta"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:465
-#, fuzzy, kde-format
-#| msgid "Unpad"
+#, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Unpad"
 msgstr "Poista täyte"
@@ -493,36 +451,30 @@ msgstr "Vain ulkopuolella"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:480
-#, fuzzy, kde-format
-#| msgid "Inside and outside"
+#, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Inside and outside"
-msgstr "Sisä- ja ulkopuolella"
+msgstr "Sisä- ja ulkopuolelle"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:490
-#, fuzzy, kde-format
-#| msgid ""
-#| "Insert space padding around operators.\n"
-#| "Once padded, operators stay padded.\n"
-#| "There is no unpad operator option."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Insert space padding around operators.\n"
 "Once padded, operators stay padded.\n"
 "There is no unpad operator option."
 msgstr ""
-"Lisää välilyöntitäytettä operaattorien ympärille.\n"
-"Kun täyte on lisätty, se pysyy operaattoreissa.\n"
-"Operaattoreille ei ole täytteen poistovalintaa."
+"Lisää operaattorien ympärille välilyönnein täytettä.\n"
+"Kun täyte on lisätty, se säilyy.\n"
+"Operaattoreille ei ole täytteen poistoa."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:493
-#, fuzzy, kde-format
-#| msgid "&Add spaces around operators"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Add spaces around operators"
-msgstr "&Lisää välilyöntejä operaattorien ympärille"
+msgstr "&Lisää operaattorien ympärille välilyöntejä"
 
 #. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
 #: astyle_preferences.ui:500
@@ -533,67 +485,56 @@ msgstr "Sulkeiden täyte:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:507
-#, fuzzy, kde-format
-#| msgid ""
-#| "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
-#| "'while', ...)"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
 "'while', ...)"
 msgstr ""
-"Lisää välilyöntitäyte suljeotsikoiden perään (esim. ”if”, ”for”, ”while”, …)"
+"Lisää välilyöntitäyte suljeotsakkeiden perään (esim. ”if”, ”for”, ”while”)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:510
-#, fuzzy, kde-format
-#| msgid "Add spaces after parenthesis &headers"
+#, kde-format
 msgctxt "@option:check"
 msgid "Add spaces after parenthesis &headers"
-msgstr "Lisää &välilyöntejä suljeotsikoiden perään"
+msgstr "Lisää &välilyöntejä suljeotsakkeiden perään"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
 #: astyle_preferences.ui:522
-#, fuzzy, kde-format
-#| msgid "One liners"
+#, kde-format
 msgctxt "@title:group"
 msgid "One Liners"
-msgstr "Yksiriviset ilmaisut"
+msgstr "Yksiriviset ilmaukset"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:529
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do not break lines containing multiple statements into\n"
-#| "multiple single-statement lines."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Do not break lines containing multiple statements into\n"
 "multiple single-statement lines."
 msgstr ""
-"Älä rivitä useista lauseista koostuvia rivejä useisiin\n"
-"yksilauseisiin riveihin."
+"Älä katkaise useista lauseista koostuvia rivejä useiksi\n"
+"yksilauseisiksi riveiksi."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:532
-#, fuzzy, kde-format
-#| msgid "&Keep one-line statements"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Keep one-line statements"
 msgstr "&Säilytä yksiriviset lauseet"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:539
-#, fuzzy, kde-format
-#| msgid "Do not break blocks residing completely on one line."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Do not break blocks residing completely on one line."
-msgstr "Älä rivitä kokonaan yhdellä rivillä olevia lohkoja"
+msgstr "Älä katkaise kokonaan yhdellä rivillä olevia lohkoja."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:542
-#, fuzzy, kde-format
-#| msgid "Keep o&ne-line blocks"
+#, kde-format
 msgctxt "@option:check"
 msgid "Keep o&ne-line blocks"
 msgstr "Säilytä &yksiriviset lohkot"
@@ -628,16 +569,14 @@ msgstr "Nimi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:576
-#, fuzzy, kde-format
-#| msgid "Middle"
+#, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Middle"
-msgstr "Keskellä"
+msgstr "Keskitä"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:581
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Type"
 msgstr "Tyyppi"

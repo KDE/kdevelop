@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the extragear package.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2009.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014.
-# Tommi Nieminen <translator@legisign.org>, 2021.
+# SPDX-FileCopyrightText: 2021, 2024 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 msgid ""
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevkonsole\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2021-08-27 15:41+0300\n"
+"PO-Revision-Date: 2024-11-15 15:20+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -19,8 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: kdevkonsoleview.cpp:107
 #, kde-format
@@ -34,10 +33,9 @@ msgid "Terminal"
 msgstr "Pääte"
 
 #: kdevkonsoleviewplugin.cpp:48
-#, fuzzy, kde-format
-#| msgid "Failed to load 'konsolepart' plugin"
+#, kde-format
 msgid "Failed to load 'konsolepart' plugin: %1"
-msgstr "konsolepart-liitännäisen lataaminen epäonnistui"
+msgstr "konsolepart-liitännäisen lataaminen epäonnistui: %1"
 
 #~ msgid "Konsole"
 #~ msgstr "Konsoli"
