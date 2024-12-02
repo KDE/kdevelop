@@ -12,6 +12,7 @@
         "Description[es]": "Configurar el estilo que se debe usar para formatear el código fuente de un proyecto.",
         "Description[et]": "Seadistamine, millist stiili kasutada projekti lähtekoodi vormindamisel.",
         "Description[eu]": "Konfiguratu, proiektu batean, sorburu-kodeari formatua emateko erabili beharreko estiloa.",
+        "Description[fi]": "Määrittää, mitä tyyliä projektissa tulisi käyttää lähdekoodin muotoiluun.",
         "Description[fr]": "Configurer le style de formatage du code source dans les projets.",
         "Description[gl]": "Configurar o estilo para usar para formatar o código fonte nun proxecto.",
         "Description[it]": "Configura lo stile che sarà usato per formattare il codice sorgente in un progetto.",

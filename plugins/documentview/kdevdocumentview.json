@@ -51,6 +51,7 @@
         "Description[es]": "Este complemento muestra una vista gráfica de todos los documentos actualmente cargados y los separa por su tipo MIME.",
         "Description[et]": "See plugin näitab graafiliselt kõiki laaditud dokumente ja eraldab need MIME tüübi alusel.",
         "Description[eu]": "Plugin honek unean kargatutako dokumentu guztien ikuspen grafikoa erakusten du eta mimetype-z banatzen ditu.",
+        "Description[fi]": "Tämä liitännäinen esittää graafisesti parhaillaan ladattavat tiedostot ja erottelee ne MIME-tyypeittäin.",
         "Description[fr]": "Ce module affiche une vue graphique de tous les documents actuellement chargés et les sépare par type MIME.",
         "Description[gl]": "Este complemento amosa unha vista gráfica de todos os documentos que están cargados e sepáraos segundo o seu tipo MIME.",
         "Description[it]": "Questa estensione mostra una vista grafica di tutti i documenti attualmente caricati e li separa per il tipo MIME.",

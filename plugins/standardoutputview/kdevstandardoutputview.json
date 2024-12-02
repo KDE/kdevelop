@@ -13,6 +13,7 @@
         "Description[es]": "Proporciona un visor de salida de texto para que otros complementos muestren cosas como mensajes del compilador, por ejemplo.",
         "Description[et]": "Teistele pluginatele kättesaadav tekstiväljundi tööriistavaade, mis näitab kompilaatori teateid ja muud.",
         "Description[eu]": "Beste pluginek erabiltzeko testu-irteerako tresna ikuspegi bat hornitzen du, konpilatzailearen mezuen gisako gauzak erakusteko.",
+        "Description[fi]": "Tarjoaa muille liitännäisille tekstitulostenäkymän kääntäjäviestien tapaisten asioiden näyttämiseksi.",
         "Description[fr]": "Fournit un outil d'affichage de la sortie texte pour utilisation par d'autres modules, pour afficher des choses comme des messages de compilateur.",
         "Description[gl]": "Fornece unha ferramenta de saída de texto a outros complementos, para amosar cousas como mensaxes do compilador.",
         "Description[it]": "Fornisce una vista degli strumenti testuale che può essere usata dalla estensioni per mostrare cose come i messaggi del compilatore.",
