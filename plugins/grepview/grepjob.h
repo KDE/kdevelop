@@ -69,7 +69,6 @@ public:
     ~GrepJob() override;
 
     void setSettings(const GrepJobSettings& settings);
-    GrepJobSettings settings() const;
 
     void setOutputModel(GrepOutputModel * model);
     void setDirectoryChoice(const QList<QUrl> &choice);
