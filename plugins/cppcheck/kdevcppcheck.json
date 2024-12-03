@@ -51,6 +51,7 @@
         "Description[es]": "Este complemento integra Cppcheck (herramienta de análisis sintáctico) en KDevelop",
         "Description[et]": "See plugin lõimib Cppchecki (staatilise analüüsi tööriist) KDevelopiga",
         "Description[eu]": "Plugin honek Cppcheck (analisi estatikoko tresna) KDevelopen integratzen du",
+        "Description[fi]": "Tämä liitännäinen yhdistää KDevelopiin Cppcheckin (staattisen analyysityökalun)",
         "Description[fr]": "Ce module externe intègre Cppcheck (outil d'analyse statique) à KDevelop",
         "Description[gl]": "Este complemento integra Cppcheck (unha ferramenta de análise estática) con KDevelop.",
         "Description[it]": "Questa estensione integra Cppcheck (strumento di analisi statica) in KDevelop",
