@@ -111,7 +111,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
 {
     if (pathList.empty()) {
         qDeleteAll(m_qtHelpProviders);
-        m_qtHelpProviders = {}; // shed unneeded capacity
+        m_qtHelpProviders = QList<QtHelpProvider*>{}; // shed unneeded capacity
         return;
     }
 

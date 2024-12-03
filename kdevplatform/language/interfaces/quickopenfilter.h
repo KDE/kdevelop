@@ -150,7 +150,7 @@ public:
         // "Detach" m_filtered from m_items to avoid an allocation and element
         // construction inside the callback; element destruction and deallocation
         // in clearFilter() where m_items is assigned to m_filtered.
-        m_filtered = {};
+        m_filtered = QList<Item>{};
         callback(m_items);
         clearFilter();
     }
@@ -185,7 +185,7 @@ public:
             // to clearFilter(). Assign a default-initialized value to m_filtered in order to avoid detaching
             // it and copying its items to a new buffer when m_filtered is resized below. This copying would be
             // a waste of CPU time, because new values are immediately assigned to all elements of m_filtered.
-            m_filtered = {};
+            m_filtered = QList<Item>{};
         } else if (m_oldFilterText.mid(0, m_oldFilterText.count() - 1) == text.mid(0, text.count() - 1)
                    && text.last().startsWith(m_oldFilterText.last())) {
             //Good, the prefix is the same, and the last item has been extended
