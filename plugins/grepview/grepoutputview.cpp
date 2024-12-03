@@ -469,7 +469,6 @@ void GrepOutputView::clearSearchHistory()
     GrepJob *runningJob = m_plugin->grepJob();
     if(runningJob)
     {
-        connect(runningJob, &GrepJob::finished, this, [=]() {updateButtonState(false);});
         runningJob->kill();
     }
 
