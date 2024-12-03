@@ -533,6 +533,13 @@ void GrepDialog::historySearch(QList<GrepJobSettings>&& settingsHistory)
 {
     Q_ASSERT(!settingsHistory.empty());
 
+    // Restore the last search directory from history now. This way, if a new search starts before all projects
+    // are opened, its search directory will not be replaced by the older search directory from history.
+    // This restoration of the search directory from history is useful only if m_show was false in the last search,
+    // because otherwise closeEvent() saves the search paths to dialogConfigGroup(). Once the TODO in closeEvent()
+    // about always storing search settings in config is addressed, the following line can be safely removed.
+    m_plugin->rememberSearchDirectory(settingsHistory.constLast().searchPaths);
+
     // startSearch() calls IProjectController::prettyFileName(), which depends on currently open
     // projects. Therefore, delay the history search until all projects are loaded on KDevelop start.
     auto checkProjectsOpened = [this, settingsHistory = std::move(settingsHistory)]() mutable {
@@ -545,8 +552,6 @@ void GrepDialog::historySearch(QList<GrepJobSettings>&& settingsHistory)
             // Assume that this dialog is already closed, because we assert that settingsHistory is nonempty above.
             return false;
         }
-
-        m_plugin->rememberSearchDirectory(settingsHistory.constLast().searchPaths);
 
         QStringList descriptions;
         descriptions.reserve(settingsHistory.size());
