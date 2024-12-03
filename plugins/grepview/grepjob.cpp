@@ -341,9 +341,4 @@ void GrepJob::setSettings(const GrepJobSettings& settings)
     setObjectName(i18n("Grep: %1", m_settings.pattern));
 }
 
-GrepJobSettings GrepJob::settings() const
-{
-    return m_settings;
-}
-
 #include "moc_grepjob.cpp"
