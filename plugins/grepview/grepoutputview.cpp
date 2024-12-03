@@ -216,21 +216,33 @@ void GrepOutputView::addModelsFromHistory(QList<GrepJobSettings>&& settingsHisto
     Q_ASSERT(settingsHistory.size() == searchDescriptions.size());
     Q_ASSERT(!settingsHistory.empty());
 
+    // If searches are performed before models are restored from history (which occurs once all
+    // projects in the session are opened), the models from history should not appear more recent
+    // in the UI or replace the models of the new searches. Therefore, calculate the maximum number
+    // of models to restore and display the restored models as older than the new models (if any).
+    const auto maxHistoryEntriesToRestore = HISTORY_SIZE - modelSelector->count();
+    if (settingsHistory.size() > maxHistoryEntriesToRestore) {
+        // remove the oldest history entries if too many
+        settingsHistory.remove(0, settingsHistory.size() - maxHistoryEntriesToRestore);
+    }
+
     // If modelSelector is currently empty (it usually *is* empty when search history is restored),
     // the first inserted model becomes active. As the last history entry's model should be
-    // activated, insert it first to avoid temporarily activating another history entry's model.
+    // activated in this scenario, insert it first. If modelSelector is not empty, the models
+    // restored from history are older than the already present models, and so are not activated.
     const auto begin = searchDescriptions.crbegin();
-    const auto end = searchDescriptions.crend();
+    const auto end = begin + settingsHistory.size();
     for (auto it = begin; it != end; ++it) {
         auto* const newModel = new GrepOutputModel(resultsTreeView);
-        // Cannot just append the model to modelSelector, because it is not necessarily empty before this loop.
-        modelSelector->insertItem(it - begin, *it, QVariant::fromValue<QObject*>(newModel));
+        modelSelector->addItem(*it, QVariant::fromValue<QObject*>(newModel));
     }
-    modelSelector->setCurrentIndex(0);
 
-    m_settingsHistory.append(std::move(settingsHistory));
+    // Prepend settingsHistory to m_settingsHistory (the QList::prepend(QList<T> &&) overload is missing).
+    settingsHistory.append(std::move(m_settingsHistory));
+    m_settingsHistory = std::move(settingsHistory);
 
-    removeOldestModelsIfTooMany();
+    Q_ASSERT(m_settingsHistory.size() == modelSelector->count());
+    Q_ASSERT(m_settingsHistory.size() <= HISTORY_SIZE);
 }
 
 GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, const QString& description)
