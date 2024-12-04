@@ -523,12 +523,6 @@ void GrepDialog::setPattern(const QString& pattern)
     m_settings.pattern = pattern;
 }
 
-void GrepDialog::search(GrepJobSettings&& settings)
-{
-    m_settings = std::move(settings);
-    startSearch();
-}
-
 void GrepDialog::historySearch(QList<GrepJobSettings>&& settingsHistory)
 {
     Q_ASSERT(!settingsHistory.empty());
@@ -574,6 +568,20 @@ void GrepDialog::historySearch(QList<GrepJobSettings>&& settingsHistory)
     if (!checkProjectsOpened()) {
         connect(ICore::self()->projectController(), &IProjectController::projectOpened, this, checkProjectsOpened);
     }
+}
+
+auto GrepDialog::refreshSearch(GrepOutputModel* outputModel, const GrepJobSettings& settings) -> RefreshSearchResult
+{
+    Q_ASSERT(outputModel);
+    m_settings = settings;
+
+    auto description = startSearchImpl(outputModel);
+    if (description.isEmpty()) {
+        // This dialog may be already destroyed if a KDevelop exit
+        // caused the cancelation, so do not access members here.
+        return {};
+    }
+    return {m_settings, std::move(description)};
 }
 
 void GrepDialog::setSearchLocations(const QString& dir)
@@ -657,6 +665,11 @@ GrepOutputView& GrepDialog::toolView(IUiController::FindFlags flags) const
 
 void GrepDialog::startSearch()
 {
+    startSearchImpl(nullptr);
+}
+
+QString GrepDialog::startSearchImpl(GrepOutputModel* outputModel)
+{
     // if m_show is false, all settings are fixed in m_settings
     if (m_show)
         updateSettings();
@@ -667,24 +680,22 @@ void GrepDialog::startSearch()
             if (thisGuard) {
                 close();
             } // else: already destroyed (KDevelop is probably exiting now)
-            return;
+            return QString();
         }
     }
 
     const auto choice = getDirectoryChoice(m_settings.searchPaths);
 
-    const auto description = searchDescription(m_settings.searchPaths, &choice);
+    auto description = searchDescription(m_settings.searchPaths, &choice);
+    description = i18nc("@item search result", "Search \"%1\" in %2 (at time %3)", m_settings.pattern, description,
+                        QTime::currentTime().toString(QStringLiteral("hh:mm")));
+
     auto& toolView = this->toolView(IUiController::CreateAndRaise);
-    GrepOutputModel* outputModel =
-        toolView.renewModel(m_settings,
-                            i18nc("@item search result", "Search \"%1\" in %2 (at time %3)", m_settings.pattern,
-                                  description, QTime::currentTime().toString(QStringLiteral("hh:mm"))));
+    if (!outputModel) {
+        outputModel = toolView.renewModel(m_settings, description);
+    }
 
     GrepJob* job = m_plugin->newGrepJob();
-    // outputModel stores the messages and forwards them to toolView
-    connect(job, &GrepJob::showMessage,
-            outputModel, &GrepOutputModel::showMessageSlot);
-    connect(job, &GrepJob::showErrorMessage, outputModel, &GrepOutputModel::showErrorMessageSlot);
 
     connect(&toolView, &GrepOutputView::outputViewIsClosed, job, [job]() {
         job->kill();
@@ -700,6 +711,7 @@ void GrepDialog::startSearch()
     m_plugin->rememberSearchDirectory(m_settings.searchPaths);
 
     close();
+    return description;
 }
 
 void GrepDialog::updateSettings()
