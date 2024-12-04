@@ -287,8 +287,6 @@ void GrepJob::start()
 
     m_workState = WorkStarting;
 
-    m_outputModel->clear();
-
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }
 
@@ -327,7 +325,9 @@ void GrepJob::testFinishState(KJob *job)
 
 void GrepJob::setOutputModel(GrepOutputModel* model)
 {
+    Q_ASSERT(model);
     m_outputModel = model;
+    model->setJob(*this);
 }
 
 void GrepJob::setDirectoryChoice(const QList<QUrl>& choice)
