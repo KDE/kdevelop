@@ -7,6 +7,8 @@
 #ifndef KDEVPLATFORM_OWNING_RAW_POINTER_CONTAINER_H
 #define KDEVPLATFORM_OWNING_RAW_POINTER_CONTAINER_H
 
+#include <QtClassHelperMacros>
+
 #include <utility>
 
 namespace KDevelop {
@@ -22,12 +24,11 @@ template<typename C>
 class OwningRawPointerContainer
 {
 public:
-    OwningRawPointerContainer() = default;
+    OwningRawPointerContainer() noexcept = default;
 
-    OwningRawPointerContainer(OwningRawPointerContainer&& other)
-        : m_c{std::move(other.m_c)}
+    OwningRawPointerContainer(OwningRawPointerContainer&& other) noexcept
     {
-        other.m_c = {};
+        swap(other);
     }
 
     OwningRawPointerContainer(const OwningRawPointerContainer&) = delete;
@@ -39,13 +40,14 @@ public:
         }
     }
 
-    OwningRawPointerContainer& operator=(OwningRawPointerContainer&& other)
-    {
-        m_c = std::move(other.m_c);
-        other.m_c = {};
-    }
+    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(OwningRawPointerContainer)
 
     OwningRawPointerContainer& operator=(const OwningRawPointerContainer&) = delete;
+
+    void swap(OwningRawPointerContainer& other) noexcept
+    {
+        m_c.swap(other.m_c);
+    }
 
     const C& operator*() const
     {
