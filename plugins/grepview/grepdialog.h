@@ -18,6 +18,7 @@
 
 #include <interfaces/iuicontroller.h>
 
+class GrepOutputModel;
 class GrepOutputView;
 class GrepViewPlugin;
 
@@ -38,14 +39,42 @@ public:
 
     void setPattern(const QString& pattern);
 
-    void search(GrepJobSettings&& settings);
-
     /**
      * Rerun all grep jobs from a given list of settings and close the dialog.
      *
      * @param settingsHistory a nonempty list of settings to re-search
      */
     void historySearch(QList<GrepJobSettings>&& settingsHistory);
+
+    /**
+     * The result of a refresh search contains data members that correspond
+     * to the parameters of GrepOutputView::renewModel().
+     */
+    struct RefreshSearchResult
+    {
+        bool isValid() const
+        {
+            return !description.isEmpty();
+        }
+
+        GrepJobSettings settings;
+        QString description;
+    };
+
+    /**
+     * Refresh @p outputModel's results via a new search with the specified settings.
+     *
+     * Calling this function is equivalent to startSearch() except that:
+     * 1. Search settings are set to @p settings.
+     * 2. A new output model is not created. Instead, @p outputModel is cleared
+     *    and receives the new search job's results.
+     *
+     * @pre @p outputModel != @c nullptr
+     *
+     * @return possibly modified search settings and a new description for @p outputModel,
+     *         or an invalid result if the search is canceled by the user
+     */
+    RefreshSearchResult refreshSearch(GrepOutputModel* outputModel, const GrepJobSettings& settings);
 
 public Q_SLOTS:
     /**
@@ -90,6 +119,15 @@ private:
      *         found with the specified flags in the current area
      */
     [[nodiscard]] GrepOutputView& toolView(KDevelop::IUiController::FindFlags flags) const;
+
+    /**
+     * Start a new search and close the dialog.
+     *
+     * @param outputModel the output model to use; if null, a new model is created
+     *
+     * @return a description for the output model, or an empty string if the search is canceled by the user
+     */
+    QString startSearchImpl(GrepOutputModel* outputModel);
 
     ///Checks what a user has entered into the dialog and saves the data in m_settings
     void updateSettings();

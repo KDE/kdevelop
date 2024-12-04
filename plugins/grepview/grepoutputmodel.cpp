@@ -10,6 +10,7 @@
 
 #include "grepoutputmodel.h"
 
+#include "grepjob.h"
 #include "greputil.h"
 #include "grepviewplugin.h"
 
@@ -168,6 +169,32 @@ GrepOutputModel::GrepOutputModel( QObject *parent )
 
 GrepOutputModel::~GrepOutputModel()
 {}
+
+void GrepOutputModel::setJob(GrepJob& job)
+{
+    if (auto* const oldJob = m_job.get()) {
+        // oldJob is a raw pointer cache that prevents repeated weak pointer access.
+        // GrepViewPlugin must have already killed the old job before creating the new one. Do not kill it again here.
+
+        // Do not store or forward final messages from the old job.
+        disconnect(oldJob, &GrepJob::showMessage, this, &GrepOutputModel::showMessageSlot);
+        disconnect(oldJob, &GrepJob::showErrorMessage, this, &GrepOutputModel::showErrorMessageSlot);
+    }
+
+    m_job = &job;
+
+    if (!m_savedMessage.isEmpty()) {
+        // Clear the obsolete status or error message produced by the old job.
+        showMessageSlot(nullptr, QString());
+    }
+
+    // Store the job's messages and forward them to GrepOutputView.
+    connect(&job, &GrepJob::showMessage, this, &GrepOutputModel::showMessageSlot);
+    connect(&job, &GrepJob::showErrorMessage, this, &GrepOutputModel::showErrorMessageSlot);
+
+    // Remove the obsolete search results produced by the old job.
+    clear();
+}
 
 void GrepOutputModel::clear()
 {

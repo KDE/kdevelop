@@ -15,6 +15,7 @@
 #include <util/owningrawpointercontainer.h>
 
 #include <QList>
+#include <QPointer>
 #include <QRegExp>
 #include <QStandardItemModel>
 
@@ -23,6 +24,8 @@ class QModelIndex;
 namespace KDevelop {
     class IStatus;
 }
+
+class GrepJob;
 
 class GrepOutputItem : public QStandardItem
 {
@@ -60,6 +63,10 @@ public:
     explicit GrepOutputModel( QObject *parent = nullptr );
     ~GrepOutputModel() override;
 
+    /**
+     * Associate @p job with this model and clear the model to prepare for a new search.
+     */
+    void setJob(GrepJob& job);
     void setRegExp(const QRegExp& re);
     void setReplacementTemplate(const QString &tmpl);
     /// applies replacement on given text
@@ -79,9 +86,7 @@ public Q_SLOTS:
     void activate( const QModelIndex &idx );
     void doReplacements();
     void setReplacement(const QString &repl);
-    //receive status message from GrepJob, and store it
-    void showMessageSlot( KDevelop::IStatus*, const QString& message );
-    void showErrorMessageSlot(const QString& message);
+
     //emit stored message as signal 'showMessage' to GrepOutputView.
     //called when user selects a search with the combobox
     void showMessageEmit();
@@ -92,7 +97,13 @@ Q_SIGNALS:
 
 private:    
     void makeItemsCheckable(bool checkable, GrepOutputItem* item);
-    
+
+    /**
+     * Receive a status message from GrepJob and store it.
+     */
+    void showMessageSlot(KDevelop::IStatus*, const QString& message);
+    void showErrorMessageSlot(const QString& message);
+
     QRegExp m_regExp;
     QString m_replacement;
     QString m_replacementTemplate;
@@ -104,6 +115,8 @@ private:
     QString m_savedMessage;
     bool m_savedMessageIsError = false;
     bool m_itemsCheckable = false;
+
+    QPointer<GrepJob> m_job;
 
 private Q_SLOTS:
     void updateCheckState(QStandardItem*);

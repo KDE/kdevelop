@@ -294,7 +294,7 @@ void GrepOutputView::changeModel(int index)
     auto* const modelForIndex = static_cast<GrepOutputModel*>(qvariant_cast<QObject*>(dataForIndex));
     if (modelForIndex == model) {
         // The selected model matches the active model, only its index changed -
-        // probably because renewModel() inserted a new item at front. Nothing to do.
+        // probably because a new item was inserted at front. Nothing to do.
         return;
     }
 
@@ -378,17 +378,38 @@ void GrepOutputView::showDialog()
 
 void GrepOutputView::refresh()
 {
-    int index = modelSelector->currentIndex();
-    if (index >= 0) {
-        QVariant var = modelSelector->currentData();
-        qvariant_cast<QObject*>(var)->deleteLater();
-        modelSelector->removeItem(index);
+    const auto currentIndex = modelSelector->currentIndex();
+    auto* const model = this->model();
+    // The refresh action must be disabled when search history is empty.
+    Q_ASSERT(currentIndex >= 0);
+    Q_ASSERT(model);
+    const auto currentSettingsHistoryIndex = m_settingsHistory.size() - 1 - currentIndex;
 
-        auto settings = m_settingsHistory.takeAt(m_settingsHistory.count() - 1 - index);
-
-        auto* const dlg = new GrepDialog(m_plugin, this, this, false);
-        dlg->search(std::move(settings));
+    auto* const dlg = new GrepDialog(m_plugin, this, this, false);
+    auto result = dlg->refreshSearch(model, m_settingsHistory.at(currentSettingsHistoryIndex));
+    if (!result.isValid()) {
+        return; // the search was canceled by the user
     }
+
+    Q_ASSERT_X(!model->hasResults(), Q_FUNC_INFO, "Refreshing a search must clear the model.");
+
+    // After a model is cleared, its future items can become not checkable.
+    // Clear the replacement text and make new items not checkable initially.
+    replacementCombo->clearEditText();
+    model->makeItemsCheckable(false);
+
+    applyButton->setEnabled(false);
+    updateButtonState(false);
+
+    // Insert the refreshed model and the updated description at the top of the combobox and
+    // activate the newly inserted item *before* removing the original item in order to make
+    // the changeModel() invocation return early, seeing as the model object remains the same.
+    modelSelector->insertItem(0, result.description, QVariant::fromValue<QObject*>(model));
+    modelSelector->setCurrentIndex(0);
+    modelSelector->removeItem(currentIndex + 1); // +1 because inserting an item at the top moved the original item down
+
+    m_settingsHistory.remove(currentSettingsHistoryIndex);
+    m_settingsHistory.push_back(std::move(result.settings));
 }
 
 void GrepOutputView::rowsInserted(const QModelIndex& parent)
