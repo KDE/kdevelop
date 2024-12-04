@@ -77,6 +77,15 @@ private:
     QAction* m_clearSearchHistory;
     QLabel*  m_statusLabel;
     GrepViewPlugin *m_plugin;
+
+    /**
+     * Invariants:
+     * 1. @a m_settingsHistory.size() == @a modelSelector->count()
+     * 2. @a m_settingsHistory.size() <= @a HISTORY_SIZE
+     * 3. The order of @a m_settingsHistory's elements is the reverse of the order of matching
+     *    @a modelSelector's items. Specifically, the oldest search settings are at the front of
+     *    @a m_settingsHistory and the oldest model is in the last item of @a modelSelector.
+     */
     QVector<GrepJobSettings> m_settingsHistory;
 
 private Q_SLOTS:
