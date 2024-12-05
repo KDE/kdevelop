@@ -17,6 +17,7 @@
 #include <QFileDialog>
 #include <QLineEdit>
 #include <QMenu>
+#include <QPointer>
 #include <QPushButton>
 #include <QShowEvent>
 #include <QStringList>
@@ -642,9 +643,14 @@ void GrepDialog::startSearch()
     if (m_show)
         updateSettings();
 
-    if (!saveSearchedDocuments()) {
-        close();
-        return;
+    {
+        const QPointer thisGuard(this);
+        if (!saveSearchedDocuments()) {
+            if (thisGuard) {
+                close();
+            } // else: already destroyed (KDevelop is probably exiting now)
+            return;
+        }
     }
 
     const auto choice = getDirectoryChoice(m_settings.searchPaths);
