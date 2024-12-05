@@ -262,7 +262,7 @@ void GrepOutputView::removeOldestModelsIfTooMany()
     Q_ASSERT(m_settingsHistory.size() == modelSelector->count());
 }
 
-GrepOutputModel* GrepOutputView::model()
+GrepOutputModel* GrepOutputView::model() const
 {
     return static_cast<GrepOutputModel*>(resultsTreeView->model());
 }

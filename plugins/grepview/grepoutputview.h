@@ -38,14 +38,8 @@ class GrepOutputView : public QWidget, Ui::GrepOutputView, public KDevelop::IToo
     Q_INTERFACES(KDevelop::IToolViewActionListener)
 
 public:
-    enum MessageType {
-        Information,
-        Error
-    };
-
     GrepOutputView(QWidget* parent, GrepViewPlugin* plugin);
     ~GrepOutputView() override;
-    GrepOutputModel* model();
 
     /**
      * Create a model for each search settings history entry.
@@ -64,19 +58,24 @@ public:
      * @return pointer to the new model
      */
     GrepOutputModel* renewModel(const GrepJobSettings& settings, const QString& description);
-    
+
+Q_SIGNALS:
+    void outputViewIsClosed();
+
+private:
+    [[nodiscard]] GrepOutputModel* model() const;
+
+    enum MessageType {
+        Information,
+        Error
+    };
     void setMessage(const QString& msg, MessageType type = Information);
 
-public Q_SLOTS:
     void showErrorMessage( const QString& errorMessage );
     void showMessage(const QString& message);
     void updateApplyState(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void changeModel(int index);
 
-Q_SIGNALS:
-    void outputViewIsClosed();
-    
-private:
     void replacementTextChanged(const QString& replacementText);
 
     /**
