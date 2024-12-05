@@ -171,12 +171,13 @@ GrepOutputModel::~GrepOutputModel()
 
 void GrepOutputModel::clear()
 {
-    QStandardItemModel::clear();
-    // the above clear() also destroys the root item, so invalidate the pointer
+    // QStandardItemModel::clear() destroys the root item, so invalidate the pointer.
     m_rootItem = nullptr;
 
     m_fileCount = 0;
     m_matchCount = 0;
+
+    QStandardItemModel::clear();
 }
 
 void GrepOutputModel::setRegExp(const QRegExp& re)
