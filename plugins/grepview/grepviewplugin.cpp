@@ -196,7 +196,6 @@ void GrepViewPlugin::showDialog(bool setLastUsed, const QString& pattern, bool s
         dlg->show();
     else{
         dlg->startSearch();
-        dlg->deleteLater();
     }
 }
 
