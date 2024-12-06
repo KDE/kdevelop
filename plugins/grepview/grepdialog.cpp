@@ -681,10 +681,7 @@ void GrepDialog::startSearch()
 
     m_plugin->rememberSearchDirectory(m_settings.searchPaths);
 
-    // If m_show is false, the dialog is closed somewhere else,
-    // or not closed but still destroyed via deleteLater() in GrepViewPlugin::showDialog().
-    if (m_show)
-        close();
+    close();
 }
 
 void GrepDialog::updateSettings()

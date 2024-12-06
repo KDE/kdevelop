@@ -48,7 +48,9 @@ public:
     void historySearch(QList<GrepJobSettings>&& settingsHistory);
 
 public Q_SLOTS:
-    ///Start a new search
+    /**
+     * Start a new search and close the dialog.
+     */
     void startSearch();
 
     ///Sets directory(ies)/files to search in. Also it can be semicolon separated list of directories/files or one of special strings: allOpenFilesString, allOpenProjectsString
