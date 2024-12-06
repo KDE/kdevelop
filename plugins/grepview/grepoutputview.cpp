@@ -376,7 +376,6 @@ void GrepOutputView::refresh()
 
         auto* const dlg = new GrepDialog(m_plugin, this, this, false);
         dlg->search(std::move(settings));
-        dlg->close();
     }
 }
 
