@@ -1003,6 +1003,10 @@ class CborValueType(Enum):
 
     Invalid         = -1
 
+# KDevelop: the bodies of the functions parseQCborContainer() and qcborContainerBytedata() (except for
+# the last `return` line) were copied verbatim from Qt Creator's function qdumpHelper_QCbor_string().
+# The same code is duplicated in two other Qt Creator's functions - qdumpHelper_QCbor_array() and qdumpHelper_QCbor_map().
+
 def parseQCborContainer(container_ptr):
     # d.split('i@{@QByteArray::size_type}pp', container_ptr) doesn't work with CDB,
     # so be explicit:
