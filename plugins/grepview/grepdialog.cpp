@@ -476,6 +476,19 @@ void GrepDialog::closeEvent(QCloseEvent* closeEvent)
     Q_UNUSED(closeEvent);
 
     if (!m_show) {
+        // TODO: when m_show is false (a refresh search or a dsearch! from KDevelop's Konsole Integration),
+        // the UI is not used and not initialized, hence the early return. However, the actual search settings
+        // should still be stored in config and used by the next GrepDialog or the next dsearch!
+        // Implementing this requires to:
+        // 1. Read all list entries from dialogConfigGroup().
+        // 2. For each list read from config:
+        //    * find the corresponding data member of the current search settings in the list;
+        //    * if found, remove the matching list element to prevent duplicates;
+        //    * if not found, remove the last element if the list's maximum size limit is about to be exceeded;
+        //    * prepend the corresponding data member of the current search settings to the list.
+        // 3. Save the resulting lists and all non-list settings to dialogConfigGroup(). Except for projectFilesOnly
+        //    if its value is false, because the value depends not only on whether the "Limit to project files:"
+        //    checkbox is checked but also on whether it is enabled, but the enabled state is not stored in config.
         return;
     }
 
