@@ -14,10 +14,6 @@ class Dumper(DumperBase):
     def __init__(self):
         DumperBase.__init__(self)
 
-        # KDevelop: the following two lines were copied verbatim from Qt Creator's Dumper.fetchVariables()
-        self.isBigEndian = gdb.execute('show endian', to_string=True).find('big endian') > 0
-        self.packCode = '>' if self.isBigEndian else '<'
-
     def ptrSize(self):
         result = gdb.lookup_type('void').pointer().sizeof
         self.ptrSize = lambda: result

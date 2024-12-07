@@ -340,7 +340,9 @@ class DumperBase():
         blob = self.value_data(value, size)
         address = value.laddress
 
-        parts = struct.unpack_from(self.packCode + pp, blob)
+        # KDevelop: simplified - use '@' in place of self.packCode, which is set to '<' or '>' depending
+        # on system endianness in Dumper.fetchVariables(). Hopefully the native size and alignment are OK.
+        parts = struct.unpack_from('@' + pp, blob)
 
         def fix_struct(field, part):
             #self.warn('STRUCT MEMBER: %s' % type(part))
