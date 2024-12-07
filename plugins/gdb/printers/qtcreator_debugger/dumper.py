@@ -324,9 +324,8 @@ class DumperBase():
         raise RuntimeError('CANNOT READ %d BYTES FROM ADDRESS: %s' % (size, address))
 
     def split(self, pattern, value_or_address):
-        # TODO (KDevelop): why comment this out?
-        #if isinstance(value_or_address, self.Value):
-        #    return self.value_split(value_or_address, pattern)
+        if isinstance(value_or_address, self.Value):
+            return self.value_split(value_or_address, pattern)
         if isinstance(value_or_address, int):
             val = self.Value(self)
             val.laddress = value_or_address
