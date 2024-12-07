@@ -1027,27 +1027,15 @@ class CborOrJsonValueData:
         self.item_type = item_type
         self.is_cbor = is_cbor
 
-    def createCborOrJsonArray(self):
-        array_type = gdb.lookup_type('QCborArray' if self.is_cbor else 'QJsonArray')
+    def createCborOrJsonContainer(self, containerType):
         if d.qtVersionAtLeast(0x060000) or self.is_cbor:
             # Create an 8-byte buffer and pack the address as a pointer
             buffer = struct.pack("P", self.container_ptr)
-        else: # Qt 5.15's QJsonArray had a dead pointer first
+        else: # Qt 5.15's QJsonArray and QJsonObject had a dead pointer first
             buffer = struct.pack("PP", 0, self.container_ptr)
-        fakeArray = gdb.Value(buffer, array_type)
-        # This will trigger QCborArrayPrinter or QJsonArrayPrinter
-        return fakeArray
-
-    def createCborOrJsonMap(self):
-        map_type = gdb.lookup_type('QCborMap' if self.is_cbor else 'QJsonObject')
-        if d.qtVersionAtLeast(0x060000) or self.is_cbor:
-            # Create an 8-byte buffer and pack the address as a pointer
-            buffer = struct.pack("P", self.container_ptr)
-        else: # Qt 5.15's QJsonObject had a dead pointer first
-            buffer = struct.pack("PP", 0, self.container_ptr)
-        fakeMap = gdb.Value(buffer, map_type)
-        # This will trigger QCborMapPrinter or QJsonObjectPrinter
-        return fakeMap
+        fakeContainer = gdb.Value(buffer, containerType)
+        # This will trigger {containerType}Printer
+        return fakeContainer
 
     def toCborOrJsonGdbValue(self):
         valueType = gdb.lookup_type('QCborValue' if self.is_cbor else 'QJsonValue')
@@ -1130,10 +1118,12 @@ class CborOrJsonValueData:
             return qdumpHelper_QCbor_string(d, container_ptr, item_data, False)
 
         elif item_type == CborValueType.Array.value:
-            return self.createCborOrJsonArray()
+            arrayType = gdb.lookup_type('QCborArray' if self.is_cbor else 'QJsonArray')
+            return self.createCborOrJsonContainer(arrayType)
 
         elif item_type == CborValueType.Map.value:
-            return self.createCborOrJsonMap()
+            mapType = gdb.lookup_type('QCborMap' if self.is_cbor else 'QJsonObject')
+            return self.createCborOrJsonContainer(mapType)
 
         elif item_type in { CborValueType.DateTime.value, CborValueType.Url.value, CborValueType.RegularExpression.value, CborValueType.Tag.value}:
             # forward to QCborValuePrinterBase
