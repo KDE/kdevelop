@@ -198,10 +198,8 @@ void GrepJob::slotFindFinished()
         m_regExp.setPatternSyntax(QRegExp::Wildcard);
     }
 
-    if (m_outputModel) {
-        m_outputModel->setRegExp(m_regExp);
-        m_outputModel->setReplacementTemplate(m_settings.replacementTemplate);
-    }
+    m_outputModel->setRegExp(m_regExp);
+    m_outputModel->setReplacementTemplate(m_settings.replacementTemplate);
 
     emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
                                  "Searching for <b>%2</b> in %1 files",
@@ -243,9 +241,7 @@ void GrepJob::slotWork()
 
                     if (!items->empty()) {
                         m_findSomething = true;
-                        if (m_outputModel) {
-                            m_outputModel->appendOutputs(file, std::move(items));
-                        }
+                        m_outputModel->appendOutputs(file, std::move(items));
                     }
 
                     m_fileIndex++;
@@ -286,6 +282,8 @@ void GrepJob::start()
     }
 
     m_workState = WorkStarting;
+
+    Q_ASSERT(m_outputModel);
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }
