@@ -11,7 +11,6 @@
 #define KDEVPLATFORM_PLUGIN_GREPJOB_H
 
 #include <QList>
-#include <QPointer>
 #include <QRegExp>
 #include <QString>
 #include <QUrl>
@@ -70,6 +69,10 @@ public:
 
     void setSettings(const GrepJobSettings& settings);
 
+    /**
+     * @warning A non-null output model must be set before this job starts, and
+     *          the model must remain valid until this job finishes or is killed.
+     */
     void setOutputModel(GrepOutputModel * model);
     void setDirectoryChoice(const QList<QUrl> &choice);
 
@@ -100,7 +103,7 @@ private:
 
     QRegExp m_regExp;
     QString m_regExpSimple;
-    QPointer<GrepOutputModel> m_outputModel;
+    GrepOutputModel* m_outputModel = nullptr;
 
     enum {
         WorkUnstarted,
