@@ -65,6 +65,19 @@ Q_SIGNALS:
 private:
     [[nodiscard]] GrepOutputModel* model() const;
 
+    /**
+     * @pre model != @c nullptr
+     * @return whether the given model is the currently active model displayed in @a modelSelector
+     */
+    [[nodiscard]] bool isActiveModel(const GrepOutputModel* model) const;
+
+    /**
+     * Create a new model with the appropriate parent and connect to some of its signals.
+     */
+    [[nodiscard]] GrepOutputModel* createModel();
+
+    void finishedAddingResults(const GrepOutputModel* model);
+
     enum MessageType {
         Information,
         Error

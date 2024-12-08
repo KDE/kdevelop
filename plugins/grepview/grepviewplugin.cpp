@@ -68,7 +68,6 @@ static QString patternFromSelection(const KDevelop::IDocument* doc)
 
 GrepViewPlugin::GrepViewPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevgrepview"), parent, metaData)
-    , m_currentJob(nullptr)
 {
     setXMLFile(QStringLiteral("kdevgrepview.rc"));
 
@@ -217,27 +216,19 @@ void GrepViewPlugin::rememberSearchDirectory(QString const & directory)
 
 GrepJob* GrepViewPlugin::newGrepJob()
 {
-    if(m_currentJob != nullptr)
-    {
-        m_currentJob->kill();
+    // job is a raw pointer cache that prevents repeated weak pointer access
+    auto* job = m_currentJob.get();
+    if (job) {
+        job->kill();
     }
-    m_currentJob = new GrepJob();
-    connect(m_currentJob, &GrepJob::finished, this, &GrepViewPlugin::jobFinished);
-    return m_currentJob;
+    job = new GrepJob();
+    m_currentJob = job;
+    return job;
 }
 
 GrepJob* GrepViewPlugin::grepJob()
 {
     return m_currentJob;
-}
-
-void GrepViewPlugin::jobFinished(KJob* job)
-{
-    if(job == m_currentJob)
-    {
-        m_currentJob = nullptr;
-        emit grepJobFinished(job->error() == KJob::NoError);
-    }
 }
 
 #include "moc_grepviewplugin.cpp"

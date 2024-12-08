@@ -172,13 +172,12 @@ GrepOutputModel::~GrepOutputModel()
 
 void GrepOutputModel::setJob(GrepJob& job)
 {
-    if (auto* const oldJob = m_job.get()) {
-        // oldJob is a raw pointer cache that prevents repeated weak pointer access.
+    if (m_job) {
         // GrepViewPlugin must have already killed the old job before creating the new one. Do not kill it again here.
 
         // Do not store or forward final messages from the old job.
-        disconnect(oldJob, &GrepJob::showMessage, this, &GrepOutputModel::showMessageSlot);
-        disconnect(oldJob, &GrepJob::showErrorMessage, this, &GrepOutputModel::showErrorMessageSlot);
+        disconnect(m_job, &GrepJob::showMessage, this, &GrepOutputModel::showMessageSlot);
+        disconnect(m_job, &GrepJob::showErrorMessage, this, &GrepOutputModel::showErrorMessageSlot);
     }
 
     m_job = &job;
@@ -191,6 +190,13 @@ void GrepOutputModel::setJob(GrepJob& job)
     // Store the job's messages and forward them to GrepOutputView.
     connect(&job, &GrepJob::showMessage, this, &GrepOutputModel::showMessageSlot);
     connect(&job, &GrepJob::showErrorMessage, this, &GrepOutputModel::showErrorMessageSlot);
+
+    connect(&job, &KJob::finished, this, [this](const KJob* job) {
+        if (m_job == job) {
+            m_job = nullptr;
+            emit finishedAddingResults(this);
+        }
+    });
 
     // Remove the obsolete search results produced by the old job.
     clear();

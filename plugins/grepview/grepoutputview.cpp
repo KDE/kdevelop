@@ -144,8 +144,6 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
 
-    connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepOutputView::updateScrollArea);
-
     // read Find/Replace settings history
     const QStringList s = cg.readEntry("LastSettings", QStringList());
     if (s.size() % GrepSettingsStorageItemCount != 0) {
@@ -233,7 +231,7 @@ void GrepOutputView::addModelsFromHistory(QList<GrepJobSettings>&& settingsHisto
     const auto begin = searchDescriptions.crbegin();
     const auto end = begin + settingsHistory.size();
     for (auto it = begin; it != end; ++it) {
-        auto* const newModel = new GrepOutputModel(resultsTreeView);
+        auto* const newModel = createModel();
         modelSelector->addItem(*it, QVariant::fromValue<QObject*>(newModel));
     }
 
@@ -247,7 +245,7 @@ void GrepOutputView::addModelsFromHistory(QList<GrepJobSettings>&& settingsHisto
 
 GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, const QString& description)
 {
-    auto* newModel = new GrepOutputModel(resultsTreeView);
+    auto* const newModel = createModel();
     // appends new model to history
     modelSelector->insertItem(0, description, QVariant::fromValue<QObject*>(newModel));
     modelSelector->setCurrentIndex(0);
@@ -277,6 +275,22 @@ void GrepOutputView::removeOldestModelsIfTooMany()
 GrepOutputModel* GrepOutputView::model() const
 {
     return static_cast<GrepOutputModel*>(resultsTreeView->model());
+}
+
+bool GrepOutputView::isActiveModel(const GrepOutputModel* model) const
+{
+    Q_ASSERT(model);
+    // If this->model() is not null but modelSelector->count() is 0, it means that we just cleared all
+    // models while the active model's job was still running. The job is killed, but still emits signals
+    // before destruction. The model forwards the signals to us, but we do not care about them anymore.
+    return model == this->model() && modelSelector->count() != 0;
+}
+
+GrepOutputModel* GrepOutputView::createModel()
+{
+    auto* const model = new GrepOutputModel(resultsTreeView);
+    connect(model, &GrepOutputModel::finishedAddingResults, this, &GrepOutputView::finishedAddingResults);
+    return model;
 }
 
 void GrepOutputView::changeModel(int index)
@@ -324,6 +338,16 @@ void GrepOutputView::changeModel(int index)
     m_refresh->setEnabled(true);
     m_clearSearchHistory->setEnabled(true);
 
+    updateScrollArea();
+}
+
+void GrepOutputView::finishedAddingResults(const GrepOutputModel* model)
+{
+    if (!isActiveModel(model)) {
+        return;
+    }
+    // Optimization: update the width of resultsTreeView to fit its contents once all results
+    // have been added to the active model rather than every time rows are added to it.
     updateScrollArea();
 }
 
@@ -539,10 +563,7 @@ void GrepOutputView::modelSelectorContextMenu(const QPoint& pos)
 void GrepOutputView::updateScrollArea()
 {
     const auto* const model = this->model();
-    if (!model) {
-        return;
-    }
-
+    Q_ASSERT(model);
     for (int col = 0, columnCount = model->columnCount(); col < columnCount; ++col)
         resultsTreeView->resizeColumnToContents(col);
 }

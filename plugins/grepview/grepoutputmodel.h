@@ -15,7 +15,6 @@
 #include <util/owningrawpointercontainer.h>
 
 #include <QList>
-#include <QPointer>
 #include <QRegExp>
 #include <QStandardItemModel>
 
@@ -95,6 +94,13 @@ Q_SIGNALS:
     void showMessage(const QString& message);
     void showErrorMessage(const QString& message);
 
+    /**
+     * This signal is emitted when the result-adding job associated with this model finishes.
+     *
+     * @param model the model that emitted this signal
+     */
+    void finishedAddingResults(GrepOutputModel* model);
+
 private:    
     void makeItemsCheckable(bool checkable, GrepOutputItem* item);
 
@@ -116,7 +122,7 @@ private:
     bool m_savedMessageIsError = false;
     bool m_itemsCheckable = false;
 
-    QPointer<GrepJob> m_job;
+    GrepJob* m_job = nullptr;
 
 private Q_SLOTS:
     void updateCheckState(QStandardItem*);
