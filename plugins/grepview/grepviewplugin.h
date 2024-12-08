@@ -48,16 +48,12 @@ public Q_SLOTS:
     ///            the parameters of the last search will be used.
     Q_SCRIPTABLE void startSearch(const QString& pattern, const QString& directory, bool show);
 
-Q_SIGNALS:
-    void grepJobFinished(bool success);
-
 private Q_SLOTS:
     void showDialogFromMenu();
     void showDialogFromProject();
-    void jobFinished(KJob *job);
 
 private:
-    GrepJob *m_currentJob;
+    QPointer<GrepJob> m_currentJob;
     QVector<QPointer<GrepDialog>> m_currentDialogs;
     QString m_directory;
     QString m_contextMenuDirectory;
