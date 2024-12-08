@@ -281,8 +281,6 @@ GrepOutputModel* GrepOutputView::model() const
 
 void GrepOutputView::changeModel(int index)
 {
-    replacementCombo->clearEditText();
-
     // index equals -1 after deleting the whole search history
     if (index < 0) {
         return;
@@ -297,6 +295,8 @@ void GrepOutputView::changeModel(int index)
         // probably because a new item was inserted at front. Nothing to do.
         return;
     }
+
+    replacementCombo->clearEditText();
 
     if (model) {
         disconnect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
@@ -512,6 +512,7 @@ void GrepOutputView::clearSearchHistory()
 
     m_settingsHistory.clear();
 
+    replacementCombo->clearEditText();
     applyButton->setEnabled(false);
 
     updateButtonState(false);
