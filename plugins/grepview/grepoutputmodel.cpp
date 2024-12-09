@@ -12,7 +12,6 @@
 
 #include "grepjob.h"
 #include "greputil.h"
-#include "grepviewplugin.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
