@@ -500,24 +500,20 @@ void GrepOutputModel::doReplacements()
 void GrepOutputModel::showMessageSlot(IStatus*, const QString& message)
 {
     m_savedMessage = message;
-    m_savedMessageIsError = false;
+    m_savedMessageType = MessageType::Information;
     showMessageEmit();
 }
 
 void GrepOutputModel::showErrorMessageSlot(const QString& message)
 {
     m_savedMessage = message;
-    m_savedMessageIsError = true;
+    m_savedMessageType = MessageType::Error;
     showMessageEmit();
 }
 
 void GrepOutputModel::showMessageEmit()
 {
-    if (m_savedMessageIsError) {
-        emit showErrorMessage(m_savedMessage);
-    } else {
-        emit showMessage(m_savedMessage);
-    }
+    emit showMessage(this, m_savedMessageType, m_savedMessage);
 }
 
 bool GrepOutputModel::hasResults()
