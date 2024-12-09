@@ -26,6 +26,11 @@ namespace KDevelop {
 
 class GrepJob;
 
+enum class MessageType {
+    Information,
+    Error
+};
+
 class GrepOutputItem : public QStandardItem
 {
 public:
@@ -91,8 +96,7 @@ public Q_SLOTS:
     void showMessageEmit();
 
 Q_SIGNALS:
-    void showMessage(const QString& message);
-    void showErrorMessage(const QString& message);
+    void showMessage(GrepOutputModel* model, MessageType type, const QString& message);
 
     /**
      * This signal is emitted when the result-adding job associated with this model finishes.
@@ -119,7 +123,7 @@ private:
     int m_fileCount = 0;
     int m_matchCount = 0;
     QString m_savedMessage;
-    bool m_savedMessageIsError = false;
+    MessageType m_savedMessageType = MessageType::Information;
     bool m_itemsCheckable = false;
 
     GrepJob* m_job = nullptr;

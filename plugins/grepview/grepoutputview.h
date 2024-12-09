@@ -21,6 +21,8 @@ class GrepViewPlugin;
 class GrepOutputModel;
 struct GrepJobSettings;
 
+enum class MessageType;
+
 class GrepOutputViewFactory: public KDevelop::IToolViewFactory
 {
 public:
@@ -77,15 +79,8 @@ private:
     [[nodiscard]] GrepOutputModel* createModel();
 
     void finishedAddingResults(const GrepOutputModel* model);
+    void showMessage(GrepOutputModel* model, MessageType type, const QString& message);
 
-    enum MessageType {
-        Information,
-        Error
-    };
-    void setMessage(const QString& msg, MessageType type = Information);
-
-    void showErrorMessage( const QString& errorMessage );
-    void showMessage(const QString& message);
     void updateApplyState(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void changeModel(int index);
 

@@ -290,6 +290,7 @@ GrepOutputModel* GrepOutputView::createModel()
 {
     auto* const model = new GrepOutputModel(resultsTreeView);
     connect(model, &GrepOutputModel::finishedAddingResults, this, &GrepOutputView::finishedAddingResults);
+    connect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
     return model;
 }
 
@@ -313,8 +314,6 @@ void GrepOutputView::changeModel(int index)
     replacementCombo->clearEditText();
 
     if (model) {
-        disconnect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
-        disconnect(model, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
         disconnect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
         disconnect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::rowsInserted);
         disconnect(model, &GrepOutputModel::rowsRemoved, this, &GrepOutputView::rowsRemoved);
@@ -324,8 +323,6 @@ void GrepOutputView::changeModel(int index)
     model = this->model();
     resultsTreeView->expandAll();
 
-    connect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
-    connect(model, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
     connect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
     connect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::rowsInserted);
     connect(model, &GrepOutputModel::rowsRemoved, this, &GrepOutputView::rowsRemoved);
@@ -351,33 +348,20 @@ void GrepOutputView::finishedAddingResults(const GrepOutputModel* model)
     updateScrollArea();
 }
 
-void GrepOutputView::setMessage(const QString& msg, MessageType type)
+void GrepOutputView::showMessage(GrepOutputModel* model, MessageType type, const QString& message)
 {
-    if (modelSelector->count() == 0) {
-        // Just cleared all models while the active model's job was still running. The job was killed
-        // and now emits its final search-aborted error message. The model associated with the killed job
-        // is already removed and about to be destroyed, so the message is irrelevant. Do not display it.
-        return;
+    if (!isActiveModel(model)) {
+        return; // only the active model's messages belong to the status label
     }
 
-    if (type == Error) {
+    if (type == MessageType::Error) {
         QPalette palette = m_statusLabel->palette();
         KColorScheme::adjustForeground(palette, KColorScheme::NegativeText, QPalette::WindowText);
         m_statusLabel->setPalette(palette);
     } else {
         m_statusLabel->setPalette(QPalette());
     }
-    m_statusLabel->setText(msg);
-}
-
-void GrepOutputView::showErrorMessage( const QString& errorMessage )
-{
-    setMessage(errorMessage, Error);
-}
-
-void GrepOutputView::showMessage(const QString& message)
-{
-    setMessage(message, Information);
+    m_statusLabel->setText(message);
 }
 
 void GrepOutputView::onApply()
