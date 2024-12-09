@@ -111,6 +111,15 @@ private:
      */
     QVector<GrepJobSettings> m_settingsHistory;
 
+    /**
+     * Whether search settings history stored in config has been loaded into @a m_settingsHistory.
+     *
+     * We save @a m_settingsHistory into config only if its setup has finished, i.e. @a m_restoredSettingsHistory
+     * equals @c true. The initial value of @a m_restoredSettingsHistory is @c true, but it is set
+     * to @c false in the constructor in case asynchronous loading of history from config starts.
+     */
+    bool m_restoredSettingsHistory = true;
+
 private Q_SLOTS:
     void selectPreviousItem() override;
     void selectNextItem() override;
