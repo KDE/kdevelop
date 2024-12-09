@@ -168,6 +168,13 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
             settingsHistory.push_back(settings);
         }
 
+        // m_restoredSettingsHistory is initialized to true. Thus if this branch is not taken (due to an empty or
+        // invalid search settings config entry), we assume that search settings have been restored from history.
+        // This is necessary because addModelsFromHistory() is called only if we call GrepDialog::historySearch()
+        // below. And without a call to addModelsFromHistory(), m_restoredSettingsHistory is never again
+        // set to true, which prevents our destructor from saving search settings history.
+        m_restoredSettingsHistory = false;
+
         // Restore the grep jobs with settings from the history without performing a search.
         auto* const dlg = new GrepDialog(m_plugin, this, this, false);
         dlg->historySearch(std::move(settingsHistory));
@@ -189,22 +196,25 @@ GrepOutputView::~GrepOutputView()
 {
     KConfigGroup cg = ICore::self()->activeSession()->config()->group(QStringLiteral("GrepDialog"));
     cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));
-    QStringList settingsStrings;
-    settingsStrings.reserve(m_settingsHistory.size() * GrepSettingsStorageItemCount);
-    for (const GrepJobSettings& s : std::as_const(m_settingsHistory)) {
-        settingsStrings
-            << QString::number(s.projectFilesOnly ? 1 : 0)
-            << QString::number(s.caseSensitive ? 1 : 0)
-            << QString::number(s.regexp ? 1 : 0)
-            << QString::number(s.depth)
-            << s.pattern
-            << s.searchTemplate
-            << s.replacementTemplate
-            << s.files
-            << s.exclude
-            << s.searchPaths;
+    if (m_restoredSettingsHistory) {
+        QStringList settingsStrings;
+        settingsStrings.reserve(m_settingsHistory.size() * GrepSettingsStorageItemCount);
+        for (const GrepJobSettings& s : std::as_const(m_settingsHistory)) {
+            settingsStrings
+                << QString::number(s.projectFilesOnly ? 1 : 0)
+                << QString::number(s.caseSensitive ? 1 : 0)
+                << QString::number(s.regexp ? 1 : 0)
+                << QString::number(s.depth)
+                << s.pattern
+                << s.searchTemplate
+                << s.replacementTemplate
+                << s.files
+                << s.exclude
+                << s.searchPaths;
+        }
+        cg.writeEntry("LastSettings", settingsStrings);
     }
-    cg.writeEntry("LastSettings", settingsStrings);
+
     emit outputViewIsClosed();
 }
 
@@ -213,6 +223,8 @@ void GrepOutputView::addModelsFromHistory(QList<GrepJobSettings>&& settingsHisto
 {
     Q_ASSERT(settingsHistory.size() == searchDescriptions.size());
     Q_ASSERT(!settingsHistory.empty());
+
+    Q_ASSERT(!m_restoredSettingsHistory);
 
     // If searches are performed before models are restored from history (which occurs once all
     // projects in the session are opened), the models from history should not appear more recent
@@ -241,6 +253,8 @@ void GrepOutputView::addModelsFromHistory(QList<GrepJobSettings>&& settingsHisto
 
     Q_ASSERT(m_settingsHistory.size() == modelSelector->count());
     Q_ASSERT(m_settingsHistory.size() <= HISTORY_SIZE);
+
+    m_restoredSettingsHistory = true;
 }
 
 GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, const QString& description)
