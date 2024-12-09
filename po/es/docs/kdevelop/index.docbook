@@ -1491,7 +1491,7 @@ void foo()
 >doxygen</ulink
 > se ha convertido en el estándar de facto para formatear comentarios que luego se pueden extraer y mostrar en páginas web en las que se pueden realizar búsquedas.</para>
 <para
->&kdevelop; permite usar este estilo de comentarios mediante un acceso rápido de teclado para generar la infraestructura de los comentarios que documentan una clase o una función miembro. Por ejemplo, suponiendo que ya ha escrito el siguiente código:</para>
+>&kdevelop; permite usar este estilo de comentarios mediante un atajo de teclado para generar la infraestructura de los comentarios que documentan una clase o una función miembro. Por ejemplo, suponiendo que ya ha escrito el siguiente código:</para>
 <para
 ><programlisting
 >class Car {
@@ -1909,9 +1909,9 @@ void foo()
 </sect1>
 <sect1 id="some-useful-keyboard-shortcuts"
 ><title
->Algunos accesos rápidos de teclado útiles</title>
+>Algunos atajos de teclado útiles</title>
 <para
->El editor de &kdevelop; sigue los accesos rápidos de teclado típicos para todas las operaciones normales de edición. No obstante, también permite usar cierto número de operaciones más avanzadas cuando se edita código fuente, muchas de las cuales están ligadas a ciertas combinaciones particulares de teclas. Las siguientes son particularmente interesantes en muchos casos:</para>
+>El editor de &kdevelop; sigue los atajos de teclado típicos para todas las operaciones normales de edición. No obstante, también permite usar cierto número de operaciones más avanzadas cuando se edita código fuente, muchas de las cuales están ligadas a ciertas combinaciones particulares de teclas. Las siguientes son particularmente interesantes en muchos casos:</para>
 <para>
 <informaltable>
   <tgroup cols="2">
@@ -2669,7 +2669,7 @@ void foo()
 </sect1>
 <sect1 id="some-useful-keyboard-shortcuts0"
 ><title
->Algunos accesos rápidos de teclado útiles</title>
+>Algunos atajos de teclado útiles</title>
 <para>
 <informaltable>
   <tgroup cols="2">
@@ -2883,7 +2883,7 @@ void foo()
 </sect1>
 <sect1 id="some-useful-keyboard-shortcuts1"
 ><title
->Algunos accesos rápidos de teclado útiles</title>
+>Algunos atajos de teclado útiles</title>
 <para>
 <informaltable>
   <tgroup cols="2">
@@ -3039,7 +3039,7 @@ void foo()
 ><title
 >Personalización de &kdevelop;</title>
 <para
->Existen ocasiones en las que deseará cambiar el aspecto o el comportamiento por omisión de &kdevelop; como, por ejemplo, cuando está acostumbrado a distintos accesos rápidos de teclado o cuando su proyecto necesita un estilo de sangrado distinto para el código fuente. En las siguientes secciones hablaremos brevemente sobre los diferentes modos de personalizar &kdevelop; para estos propósitos.</para>
+>Existen ocasiones en las que deseará cambiar el aspecto o el comportamiento por omisión de &kdevelop; como, por ejemplo, cuando está acostumbrado a distintos atajos de teclado o cuando su proyecto necesita un estilo de sangrado distinto para el código fuente. En las siguientes secciones hablaremos brevemente sobre los diferentes modos de personalizar &kdevelop; para estos propósitos.</para>
 <sect1 id="customizing-the-editor"
 ><title
 >Personalización del editor</title>
@@ -3120,21 +3120,21 @@ void foo()
 </sect1>
 <sect1 id="customizing-keyboard-shortcuts"
 ><title
->Personalización de los accesos rápidos de teclado</title>
+>Personalización de los atajos de teclado</title>
 <para
->&kdevelop; dispone de una lista casi ilimitada de accesos rápidos de teclado (algunos de ellos se listan en las <quote
->útiles secciones sobre accesos rápidos de teclado</quote
+>&kdevelop; dispone de una lista casi ilimitada de atajos de teclado (algunos de ellos se listan en las <quote
+>útiles secciones sobre atajos de teclado</quote
 > de diversos capítulos de este manual) que se pueden modificar de acuerdo a sus gustos usando la opción <menuchoice
 ><guimenu
 >Preferencias</guimenu
 ><guimenuitem
->Configurar los accesos rápidos</guimenuitem
+>Configurar los atajos de teclado</guimenuitem
 ></menuchoice
 > del menú. En la parte superior del diálogo puede introducir una palabra a buscar para que únicamente se muestren las órdenes que coincidan; entonces podrá editar la combinación de teclas que esté asociada con dicha orden.</para>
 <para
 >Uno que se ha encontrado muy útil para modificar es el que se usa para fijar la <guilabel
 >Alineación</guilabel
-> de la tecla &Tab; (muchas personas no suelen introducir tabuladores a mano y prefieren que el editor elija la distribución del código fuente; con el acceso rápido de teclado cambiado, al pulsar &Tab;, &kdevelop; aumenta o disminuye la alineación del código fuente). Otro de ellos es asignar <guilabel
+> de la tecla &Tab; (muchas personas no suelen introducir tabuladores a mano y prefieren que el editor elija la distribución del código fuente; con el atajo de teclado cambiado, al pulsar &Tab;, &kdevelop; aumenta o disminuye la alineación del código fuente). Otro de ellos es asignar <guilabel
 >Cambiar punto de interrupción</guilabel
 > a <keycombo
 >&Ctrl;<keycap
