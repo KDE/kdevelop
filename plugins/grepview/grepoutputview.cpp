@@ -329,6 +329,13 @@ void GrepOutputView::changeModel(int index)
 
 void GrepOutputView::setMessage(const QString& msg, MessageType type)
 {
+    if (modelSelector->count() == 0) {
+        // Just cleared all models while the active model's job was still running. The job was killed
+        // and now emits its final search-aborted error message. The model associated with the killed job
+        // is already removed and about to be destroyed, so the message is irrelevant. Do not display it.
+        return;
+    }
+
     if (type == Error) {
         QPalette palette = m_statusLabel->palette();
         KColorScheme::adjustForeground(palette, KColorScheme::NegativeText, QPalette::WindowText);
