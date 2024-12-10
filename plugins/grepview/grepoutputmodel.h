@@ -13,6 +13,7 @@
 
 #include <language/codegen/documentchangeset.h>
 #include <util/owningrawpointercontainer.h>
+#include <util/toggleonlybool.h>
 
 #include <QList>
 #include <QRegExp>
@@ -109,6 +110,11 @@ private:
     void makeItemsCheckable(bool checkable, GrepOutputItem* item);
 
     /**
+     * @return a guard object that inhibits updateCheckState() while alive
+     */
+    [[nodiscard]] QScopedValueRollback<KDevelop::ToggleOnlyBool> updateCheckStateGuard();
+
+    /**
      * Receive a status message from GrepJob and store it.
      */
     void showMessageSlot(KDevelop::IStatus*, const QString& message);
@@ -125,6 +131,10 @@ private:
     QString m_savedMessage;
     MessageType m_savedMessageType = MessageType::Information;
     bool m_itemsCheckable = false;
+    /**
+     * Set to @c true to temporarily block updateCheckState() in order to prevent wrong behavior or optimize.
+     */
+    KDevelop::ToggleOnlyBool m_inhibitUpdateCheckState{false};
 
     GrepJob* m_job = nullptr;
 

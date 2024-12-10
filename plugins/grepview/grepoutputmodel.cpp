@@ -439,19 +439,18 @@ void GrepOutputModel::appendOutputs(const QString& filename, GrepOutputItem::Lis
 
 void GrepOutputModel::updateCheckState(QStandardItem* item)
 {
-    // if we don't disconnect the SIGNAL, the setCheckState will call it in loop
-    disconnect(this, &GrepOutputModel::itemChanged, nullptr, nullptr);
-    
+    if (m_inhibitUpdateCheckState) {
+        return;
+    }
+
     // try to update checkstate on non checkable items would make a checkbox appear
     if(item->isCheckable())
     {
+        const auto guard = updateCheckStateGuard();
         auto *it = static_cast<GrepOutputItem *>(item);
         it->propagateState();
         it->refreshState();
     }
-
-    connect(this, &GrepOutputModel::itemChanged,
-            this, &GrepOutputModel::updateCheckState);
 }
 
 void GrepOutputModel::doReplacements()
@@ -494,6 +493,11 @@ void GrepOutputModel::doReplacements()
                       ch->m_range.start().line() + 1, ch->m_range.start().column() + 1));
         }
     }
+}
+
+QScopedValueRollback<ToggleOnlyBool> GrepOutputModel::updateCheckStateGuard()
+{
+    return m_inhibitUpdateCheckState.makeGuard(true);
 }
 
 void GrepOutputModel::showMessageSlot(IStatus*, const QString& message)
