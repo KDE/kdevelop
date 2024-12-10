@@ -23,6 +23,7 @@
 #include <shell/filteredproblemstore.h>
 #include <shell/problemconstants.h>
 #include <shell/watcheddocumentset.h>
+#include <util/scopedincrementor.h>
 
 namespace KDevelop
 {
@@ -57,6 +58,7 @@ public:
     QString m_placeholderSource;
     KDevelop::DocumentRange m_placeholderLocation;
     bool m_isPlaceholderShown;
+    NonNegative<signed char> m_resettingModel{}; // signed char is sufficient and does not affect the class size
 };
 
 
@@ -84,8 +86,8 @@ ProblemModel::ProblemModel(QObject * parent, ProblemStore *store)
         setCurrentDocument(ICore::self()->documentController()->activeDocument());
     }
 
-    connect(d->m_problems.data(), &ProblemStore::beginRebuild, this, &ProblemModel::onBeginRebuild);
-    connect(d->m_problems.data(), &ProblemStore::endRebuild, this, &ProblemModel::onEndRebuild);
+    connect(d->m_problems.data(), &ProblemStore::beginRebuild, this, &ProblemModel::beginResetModel);
+    connect(d->m_problems.data(), &ProblemStore::endRebuild, this, &ProblemModel::endResetModel);
 
     connect(d->m_problems.data(), &ProblemStore::problemsChanged, this, &ProblemModel::problemsChanged);
 }
@@ -368,16 +370,6 @@ void ProblemModel::documentUrlChanged(IDocument* document, const QUrl& previousU
     }
 }
 
-void ProblemModel::onBeginRebuild()
-{
-    beginResetModel();
-}
-
-void ProblemModel::onEndRebuild()
-{
-    endResetModel();
-}
-
 void ProblemModel::setShowImports(bool showImports)
 {
     Q_D(ProblemModel);
@@ -454,6 +446,27 @@ ProblemStore* ProblemModel::store() const
     return d->m_problems.data();
 }
 
+void ProblemModel::beginResetModel()
+{
+    Q_D(ProblemModel);
+
+    const bool alreadyResetting = d->m_resettingModel;
+    ++d->m_resettingModel;
+    if (!alreadyResetting) {
+        QAbstractItemModel::beginResetModel();
+    }
+}
+
+void ProblemModel::endResetModel()
+{
+    Q_D(ProblemModel);
+
+    --d->m_resettingModel;
+    const bool stillResetting = d->m_resettingModel;
+    if (!stillResetting) {
+        QAbstractItemModel::endResetModel();
+    }
+}
 }
 
 #include "moc_problemmodel.cpp"
