@@ -439,19 +439,19 @@ void GrepOutputModel::appendOutputs(const QString& filename, GrepOutputItem::Lis
 
 void GrepOutputModel::updateCheckState(QStandardItem* item)
 {
-    // if we don't disconnect the SIGNAL, the setCheckState will call it in loop
-    disconnect(this, &GrepOutputModel::itemChanged, nullptr, nullptr);
-    
+    if (m_inhibitUpdateCheckState) {
+        return;
+    }
+
     // try to update checkstate on non checkable items would make a checkbox appear
     if(item->isCheckable())
     {
+        m_inhibitUpdateCheckState = true;
         auto *it = static_cast<GrepOutputItem *>(item);
         it->propagateState();
         it->refreshState();
+        m_inhibitUpdateCheckState = false;
     }
-
-    connect(this, &GrepOutputModel::itemChanged,
-            this, &GrepOutputModel::updateCheckState);
 }
 
 void GrepOutputModel::doReplacements()
