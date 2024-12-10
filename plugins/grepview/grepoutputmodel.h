@@ -125,6 +125,10 @@ private:
     QString m_savedMessage;
     MessageType m_savedMessageType = MessageType::Information;
     bool m_itemsCheckable = false;
+    /**
+     * Set to @c true to temporarily block updateCheckState() in order to prevent wrong behavior or optimize
+     */
+    bool m_inhibitUpdateCheckState = false;
 
     GrepJob* m_job = nullptr;
 
