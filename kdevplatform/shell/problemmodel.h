@@ -201,14 +201,27 @@ private Q_SLOTS:
 
     void documentUrlChanged(IDocument* document, const QUrl& previousUrl);
 
-    /// Triggered before the problems are rebuilt
-    void onBeginRebuild();
-
-    /// Triggered once the problems have been rebuilt
-    void onEndRebuild();
-
 protected:
     ProblemStore *store() const;
+
+    /**
+     * Call QAbstractItemModel::beginResetModel() unless the model is already being reset from elsewhere.
+     *
+     * Our beginResetModel() and endResetModel() hide the base class's functions with identical signatures.
+     * Calling these functions in place of the base class's functions prevents useless repeated emission of
+     * model-resetting signals when a function (usually indirectly) invokes another function between the
+     * calls to beginResetModel() and endResetModel(), and that other function also calls beginResetModel()
+     * and endResetModel(). In other words, in case of nested resetting, which is a common occurrence for
+     * ProblemModel and derived classes. QAbstractItemModel also prints warnings in case of nested resetting
+     * since https://code.qt.io/cgit/qt/qtbase.git/commit/?id=9d8663c18e88cb0b5a65f86cfd7726f3d31e04d6
+     */
+    void beginResetModel();
+    /**
+     * Call QAbstractItemModel::endResetModel() unless the model is still being reset from elsewhere.
+     *
+     * @sa beginResetModel()
+     */
+    void endResetModel();
 
 private:
     const QScopedPointer<class ProblemModelPrivate> d_ptr;
