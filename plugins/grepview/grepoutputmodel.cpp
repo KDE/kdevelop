@@ -372,18 +372,25 @@ void GrepOutputModel::makeItemsCheckable(bool checkable)
 {
     if(m_itemsCheckable == checkable)
         return;
-    if(m_rootItem)
-        makeItemsCheckable(checkable, m_rootItem);
+
+    if (m_rootItem) {
+        {
+            const auto guard = updateCheckStateGuard();
+            makeItemsCheckable(checkable, m_rootItem);
+        }
+        if (checkable) {
+            // Check the root item. This invokes updateCheckState(m_rootItem),
+            // which propagates the checked state to all other items.
+            m_rootItem->setCheckState(Qt::Checked);
+        }
+    }
+
     m_itemsCheckable = checkable;
 }
 
 void GrepOutputModel::makeItemsCheckable(bool checkable, GrepOutputItem* item)
 {
     item->setCheckable(checkable);
-    if(checkable)
-    {
-        item->setCheckState(Qt::Checked);
-    }
     for(int row = 0; row < item->rowCount(); ++row)
         makeItemsCheckable(checkable, static_cast<GrepOutputItem*>(item->child(row, 0)));
 }
