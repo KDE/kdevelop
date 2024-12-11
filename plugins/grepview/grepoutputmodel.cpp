@@ -64,33 +64,34 @@ bool GrepOutputItem::isText() const
 
 void GrepOutputItem::propagateState()
 {
-    for(int i = 0; i < rowCount(); i++)
-    {
+    propagateCheckState(checkState());
+}
+
+void GrepOutputItem::propagateCheckState(Qt::CheckState checkState)
+{
+    for (auto i = 0, rowCount = this->rowCount(); i < rowCount; ++i) {
         auto *item = static_cast<GrepOutputItem *>(child(i));
         if(item->isEnabled())
         {
-            item->setCheckState(checkState());
-            item->propagateState();
+            item->setCheckState(checkState);
+            item->propagateCheckState(checkState);
         }
     }
 }
 
 void GrepOutputItem::refreshState()
 {
-    if(rowCount() > 0)
-    {
+    if (const auto rowCount = this->rowCount(); rowCount > 0) {
         int checked   = 0;
         int unchecked = 0;
         int enabled   = 0; //only enabled items are relevant
-        
-        for(int i = 0; i < rowCount(); i++)
-        {
+
+        for (auto i = 0; i < rowCount; ++i) {
             QStandardItem *item = child(i);
             if(item->isEnabled())
             {
                 enabled += 1;
-                switch(child(i)->checkState())
-                {
+                switch (item->checkState()) {
                     case Qt::Checked:
                         checked += 1;
                         break;

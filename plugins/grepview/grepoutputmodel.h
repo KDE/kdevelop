@@ -57,6 +57,11 @@ public:
     QVariant data ( int role = Qt::UserRole + 1 ) const override;
 
 private:
+    /**
+     * Recursively apply a given check state to children.
+     */
+    void propagateCheckState(Qt::CheckState checkState);
+
     KDevelop::DocumentChangePointer m_change;
 };
 
