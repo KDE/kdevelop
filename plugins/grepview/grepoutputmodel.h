@@ -120,8 +120,6 @@ Q_SIGNALS:
     void finishedAddingResults(GrepOutputModel* model);
 
 private:    
-    void makeItemsCheckable(bool checkable, GrepOutputItem* item);
-
     /**
      * @return a guard object that inhibits updateCheckState() while alive
      */

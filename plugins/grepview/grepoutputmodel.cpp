@@ -368,6 +368,14 @@ bool GrepOutputModel::itemsCheckable() const
     return m_itemsCheckable;
 }
 
+static void makeItemsCheckable(bool checkable, GrepOutputItem* item)
+{
+    item->setCheckable(checkable);
+    for (int row = 0, rowCount = item->rowCount(); row < rowCount; ++row) {
+        makeItemsCheckable(checkable, static_cast<GrepOutputItem*>(item->child(row, 0)));
+    }
+}
+
 void GrepOutputModel::makeItemsCheckable(bool checkable)
 {
     if(m_itemsCheckable == checkable)
@@ -376,7 +384,7 @@ void GrepOutputModel::makeItemsCheckable(bool checkable)
     if (m_rootItem) {
         {
             const auto guard = updateCheckStateGuard();
-            makeItemsCheckable(checkable, m_rootItem);
+            ::makeItemsCheckable(checkable, m_rootItem);
         }
         if (checkable) {
             // Check the root item. This invokes updateCheckState(m_rootItem),
@@ -386,13 +394,6 @@ void GrepOutputModel::makeItemsCheckable(bool checkable)
     }
 
     m_itemsCheckable = checkable;
-}
-
-void GrepOutputModel::makeItemsCheckable(bool checkable, GrepOutputItem* item)
-{
-    item->setCheckable(checkable);
-    for(int row = 0; row < item->rowCount(); ++row)
-        makeItemsCheckable(checkable, static_cast<GrepOutputItem*>(item->child(row, 0)));
 }
 
 void GrepOutputModel::appendOutputs(const QString& filename, GrepOutputItem::List&& items)
