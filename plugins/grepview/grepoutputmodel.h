@@ -51,8 +51,11 @@ public:
     bool isText() const ;
     /// Recursively apply check state to children
     void propagateState() ;
-    /// Check children to determine current state
-    void refreshState() ;
+    /**
+     * Check the parent item's children to compute its current enabled and check state,
+     * then perform the same computations for its ancestor items' states recursively.
+     */
+    void refreshParentState();
 
     QVariant data ( int role = Qt::UserRole + 1 ) const override;
 
@@ -61,6 +64,11 @@ private:
      * Recursively apply a given check state to children.
      */
     void propagateCheckState(Qt::CheckState checkState);
+    /**
+     * Check the children to compute the current enabled and check state of this item,
+     * then of ancestor items recursively.
+     */
+    void refreshState();
 
     KDevelop::DocumentChangePointer m_change;
 };
