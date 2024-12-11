@@ -121,7 +121,12 @@ void GrepOutputItem::refreshState()
             setCheckState(Qt::PartiallyChecked);
         }
     }
-    
+
+    refreshParentState();
+}
+
+void GrepOutputItem::refreshParentState()
+{
     if(auto *p = static_cast<GrepOutputItem *>(parent()))
     {
         p->refreshState();
@@ -447,7 +452,7 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
         const auto guard = updateCheckStateGuard();
         auto *it = static_cast<GrepOutputItem *>(item);
         it->propagateState();
-        it->refreshState();
+        it->refreshParentState();
     }
 }
 
