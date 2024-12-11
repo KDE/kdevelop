@@ -26,27 +26,19 @@
 
 using namespace KDevelop;
 
-GrepOutputItem::GrepOutputItem(const DocumentChangePointer& change, const QString &text, bool checkable)
-    : QStandardItem(), m_change(change)
+GrepOutputItem::GrepOutputItem(DocumentChangePointer&& change, const QString& text)
+    : QStandardItem(text)
+    , m_change(std::move(change))
 {
-    setText(text);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    
-    setCheckable(checkable);
-    if(checkable)
-        setCheckState(Qt::Checked);
 }
 
 GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, bool checkable)
-    : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), KTextEditor::Range::invalid(), QString(), QString()))
+    : GrepOutputItem(DocumentChangePointer{new DocumentChange(IndexedString(filename), KTextEditor::Range::invalid(),
+                                                              QString(), QString())},
+                     text)
 {
-    setText(text);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     setCheckable(checkable);
-    if(checkable)
-    {
-        setCheckState(Qt::Checked);
-    }
 }
 
 int GrepOutputItem::lineNumber() const 
@@ -394,44 +386,52 @@ void GrepOutputModel::appendOutputs(const QString& filename, GrepOutputItem::Lis
 {
     if (items->empty())
         return;
-    
-    if(rowCount() == 0)
+
+    GrepOutputItem* fileItem;
     {
-        m_rootItem = new GrepOutputItem(QString(), QString(), m_itemsCheckable);
-        appendRow(m_rootItem);
-    }
-    
-    m_fileCount  += 1;
-    m_matchCount += items->size();
+        const auto guard = updateCheckStateGuard();
 
-    const QString matchText = i18np("<b>1</b> match", "<b>%1</b> matches", m_matchCount);
-    const QString fileText = i18np("<b>1</b> file", "<b>%1</b> files", m_fileCount);
-
-    m_rootItem->setText(i18nc("%1 is e.g. '4 matches', %2 is e.g. '1 file'", "<b>%1 in %2</b>", matchText, fileText));
-
-    const auto fnString = i18np("%2: 1 match", "%2: %1 matches", items->size(),
-                                ICore::self()->projectController()->prettyFileName(QUrl::fromLocalFile(filename)));
-
-    auto *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
-    m_rootItem->appendRow(fileItem);
-
-    for (auto* const item : std::as_const(*items)) {
-        Q_ASSERT(dynamic_cast<GrepOutputItem*>(item));
-        item->setCheckable(m_itemsCheckable);
-        if(m_itemsCheckable)
+        if(rowCount() == 0)
         {
-            item->setCheckState(Qt::Checked);
+            m_rootItem = new GrepOutputItem(QString(), QString(), m_itemsCheckable);
+            appendRow(m_rootItem);
+        }
+
+        m_fileCount  += 1;
+        m_matchCount += items->size();
+
+        const QString matchText = i18np("<b>1</b> match", "<b>%1</b> matches", m_matchCount);
+        const QString fileText = i18np("<b>1</b> file", "<b>%1</b> files", m_fileCount);
+
+        m_rootItem->setText(i18nc("%1 is e.g. '4 matches', %2 is e.g. '1 file'", "<b>%1 in %2</b>", matchText, fileText));
+
+        const auto fnString = i18np("%2: 1 match", "%2: %1 matches", items->size(),
+                                    ICore::self()->projectController()->prettyFileName(QUrl::fromLocalFile(filename)));
+
+        fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
+        m_rootItem->appendRow(fileItem);
+
+        for (auto* const item : std::as_const(*items)) {
+            Q_ASSERT(dynamic_cast<GrepOutputItem*>(item));
+            item->setCheckable(m_itemsCheckable);
+
             // Individual match items do not have children. If such an item needs children for some reason,
             // the children should probably be inserted after inserting the item into fileItem. This would
             // emit rowsInserted() for the children and let GrepOutputView expand the item (as their parent).
             Q_ASSERT(item->rowCount() == 0);
         }
+
+        fileItem->appendRows(std::move(*items)); // transfer the ownership of the items to this->QStandardItemModel
+        // Clear the list in the OwningRawPointerContainer to prevent the destruction of the items.
+        // Avoid QList::clear(), which can detach and allocate.
+        *items = QList<QStandardItem*>{};
     }
 
-    fileItem->appendRows(std::move(*items)); // transfer the ownership of the items to this->QStandardItemModel
-    // Clear the list in the OwningRawPointerContainer to prevent the destruction of the items.
-    // Avoid QList::clear(), which can detach and allocate.
-    *items = QList<QStandardItem*>{};
+    if (m_itemsCheckable) {
+        // Check the file item. This invokes updateCheckState(fileItem), which propagates the checked state
+        // to the just-added children of the file item and refreshes the check state of the root item.
+        fileItem->setCheckState(Qt::Checked);
+    }
 }
 
 void GrepOutputModel::updateCheckState(QStandardItem* item)
