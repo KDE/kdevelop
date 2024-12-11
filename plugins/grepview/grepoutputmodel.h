@@ -119,8 +119,6 @@ Q_SIGNALS:
     void finishedAddingResults(GrepOutputModel* model);
 
 private:    
-    void makeItemsCheckable(bool checkable, GrepOutputItem* item);
-
     /**
      * Receive a status message from GrepJob and store it.
      */
