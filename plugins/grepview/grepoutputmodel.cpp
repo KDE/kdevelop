@@ -26,27 +26,19 @@
 
 using namespace KDevelop;
 
-GrepOutputItem::GrepOutputItem(const DocumentChangePointer& change, const QString &text, bool checkable)
-    : QStandardItem(), m_change(change)
+GrepOutputItem::GrepOutputItem(DocumentChangePointer&& change, const QString& text)
+    : QStandardItem(text)
+    , m_change(std::move(change))
 {
-    setText(text);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    
-    setCheckable(checkable);
-    if(checkable)
-        setCheckState(Qt::Checked);
 }
 
 GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, bool checkable)
-    : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), KTextEditor::Range::invalid(), QString(), QString()))
+    : GrepOutputItem(DocumentChangePointer{new DocumentChange(IndexedString(filename), KTextEditor::Range::invalid(),
+                                                              QString(), QString())},
+                     text)
 {
-    setText(text);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     setCheckable(checkable);
-    if(checkable)
-    {
-        setCheckState(Qt::Checked);
-    }
 }
 
 int GrepOutputItem::lineNumber() const 
@@ -394,7 +386,9 @@ void GrepOutputModel::appendOutputs(const QString& filename, GrepOutputItem::Lis
 {
     if (items->empty())
         return;
-    
+
+    m_inhibitUpdateCheckState = true;
+
     if(rowCount() == 0)
     {
         m_rootItem = new GrepOutputItem(QString(), QString(), m_itemsCheckable);
@@ -418,20 +412,25 @@ void GrepOutputModel::appendOutputs(const QString& filename, GrepOutputItem::Lis
     for (auto* const item : std::as_const(*items)) {
         Q_ASSERT(dynamic_cast<GrepOutputItem*>(item));
         item->setCheckable(m_itemsCheckable);
-        if(m_itemsCheckable)
-        {
-            item->setCheckState(Qt::Checked);
-            // Individual match items do not have children. If such an item needs children for some reason,
-            // the children should probably be inserted after inserting the item into fileItem. This would
-            // emit rowsInserted() for the children and let GrepOutputView expand the item (as their parent).
-            Q_ASSERT(item->rowCount() == 0);
-        }
+
+        // Individual match items do not have children. If such an item needs children for some reason,
+        // the children should probably be inserted after inserting the item into fileItem. This would
+        // emit rowsInserted() for the children and let GrepOutputView expand the item (as their parent).
+        Q_ASSERT(item->rowCount() == 0);
     }
 
     fileItem->appendRows(std::move(*items)); // transfer the ownership of the items to this->QStandardItemModel
     // Clear the list in the OwningRawPointerContainer to prevent the destruction of the items.
     // Avoid QList::clear(), which can detach and allocate.
     *items = QList<QStandardItem*>{};
+
+    m_inhibitUpdateCheckState = false;
+
+    if (m_itemsCheckable) {
+        // Check the file item. This invokes updateCheckState(fileItem), which propagates the checked state
+        // to the just-added children of the file item and refreshes the check state of the root item.
+        fileItem->setCheckState(Qt::Checked);
+    }
 }
 
 void GrepOutputModel::updateCheckState(QStandardItem* item)
