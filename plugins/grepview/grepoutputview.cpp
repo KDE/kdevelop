@@ -121,6 +121,12 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     resultsTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     resultsTreeView->header()->setStretchLastSection(true);
 
+    connect(resultsTreeView, &QTreeView::activated, this, [this](const QModelIndex& index) {
+        if (auto* const model = this->model()) {
+            model->activate(index);
+        }
+    });
+
     connect(m_prev, &QAction::triggered, this, &GrepOutputView::selectPreviousItem);
     connect(m_next, &QAction::triggered, this, &GrepOutputView::selectNextItem);
     connect(m_collapseAll, &QAction::triggered, this, &GrepOutputView::collapseAllItems);
@@ -223,7 +229,6 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
     applyButton->setEnabled(false);
     connect(newModel, &GrepOutputModel::rowsRemoved,
             this, &GrepOutputView::rowsRemoved);
-    connect(resultsTreeView, &QTreeView::activated, newModel, &GrepOutputModel::activate);
     connect(newModel, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
     connect(newModel, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
 
