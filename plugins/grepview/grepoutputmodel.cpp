@@ -121,15 +121,14 @@ void GrepOutputItem::refreshState()
             setCheckState(Qt::PartiallyChecked);
         }
     }
-
-    refreshParentState();
 }
 
-void GrepOutputItem::refreshParentState()
+void GrepOutputItem::refreshAncestorStates()
 {
     if(auto *p = static_cast<GrepOutputItem *>(parent()))
     {
         p->refreshState();
+        p->refreshAncestorStates();
     }
 }
 
@@ -457,7 +456,7 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
         m_inhibitUpdateCheckState = true;
         auto *it = static_cast<GrepOutputItem *>(item);
         it->propagateState();
-        it->refreshParentState();
+        it->refreshAncestorStates();
         m_inhibitUpdateCheckState = false;
     }
 }
@@ -465,15 +464,22 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
 void GrepOutputModel::doReplacements()
 {
     Q_ASSERT(m_rootItem);
+    Q_ASSERT(m_rootItem->checkState() != Qt::Unchecked);
     if (!m_rootItem)
         return; // nothing to do, abort
 
     DocumentChangeSet changeSet;
     changeSet.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
+
+    m_inhibitUpdateCheckState = true;
+
     for(int fileRow = 0; fileRow < m_rootItem->rowCount(); fileRow++)
     {
         auto *file = static_cast<GrepOutputItem *>(m_rootItem->child(fileRow));
-        
+        if (file->checkState() == Qt::Unchecked) {
+            continue; // no checked matches in this file
+        }
+
         for(int matchRow = 0; matchRow < file->rowCount(); matchRow++)
         {
             auto *match = static_cast<GrepOutputItem *>(file->child(matchRow));
@@ -488,8 +494,13 @@ void GrepOutputModel::doReplacements()
                 match->setEnabled(false);
             }
         }
+
+        file->refreshState();
     }
-    
+    m_rootItem->refreshState();
+
+    m_inhibitUpdateCheckState = false;
+
     DocumentChangeSet::ChangeResult result = changeSet.applyAllChanges();
     if(!result.m_success)
     {

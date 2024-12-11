@@ -51,10 +51,14 @@ public:
     /// Recursively apply check state to children
     void propagateState() ;
     /**
+     * Check the children to compute the current enabled and check state of this item
+     */
+    void refreshState();
+    /**
      * Check the parent item's children to compute its current enabled and check state,
      * then perform the same computations for its ancestor items' states recursively
      */
-    void refreshParentState();
+    void refreshAncestorStates();
 
     QVariant data ( int role = Qt::UserRole + 1 ) const override;
 
@@ -63,11 +67,6 @@ private:
      * Recursively apply a given check state to children
      */
     void propagateCheckState(Qt::CheckState checkState);
-    /**
-     * Check the children to compute the current enabled and check state of this item,
-     * then of ancestor items recursively
-     */
-    void refreshState();
 
     KDevelop::DocumentChangePointer m_change;
 };
@@ -101,6 +100,12 @@ public:
     
 public Q_SLOTS:
     void activate( const QModelIndex &idx );
+
+    /**
+     * Apply replacements to lines represented by checked text items
+     *
+     * @pre at least one item is checked
+     */
     void doReplacements();
     void setReplacement(const QString &repl);
 
