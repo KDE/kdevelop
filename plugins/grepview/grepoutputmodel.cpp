@@ -45,7 +45,6 @@ GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, boo
     setCheckable(checkable);
     if(checkable)
     {
-        setAutoTristate(true);
         setCheckState(Qt::Checked);
     }
 }
@@ -386,8 +385,6 @@ void GrepOutputModel::makeItemsCheckable(bool checkable, GrepOutputItem* item)
     if(checkable)
     {
         item->setCheckState(Qt::Checked);
-        if(item->rowCount() && checkable)
-            item->setAutoTristate(true);
     }
     for(int row = 0; row < item->rowCount(); ++row)
         makeItemsCheckable(checkable, static_cast<GrepOutputItem*>(item->child(row, 0)));
