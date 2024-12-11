@@ -119,7 +119,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
                 KTextEditor::Range(lineno, start, lineno, end),
                 re.cap(0), QString()));
 
-            res->push_back(new GrepOutputItem(change, data, false));
+            res->push_back(new GrepOutputItem(std::move(change), data));
             offset = end;
         }
         lineno++;

@@ -41,7 +41,7 @@ public:
      */
     using List = KDevelop::OwningRawPointerContainer<QList<QStandardItem*>>;
 
-    GrepOutputItem(const KDevelop::DocumentChangePointer& change, const QString& text, bool checkable);
+    GrepOutputItem(KDevelop::DocumentChangePointer&& change, const QString& text);
     GrepOutputItem(const QString &filename, const QString &text, bool checkable);
     ~GrepOutputItem() override;
 
