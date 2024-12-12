@@ -206,6 +206,10 @@ void GrepOutputModel::clear()
     m_matchCount = 0;
 
     QStandardItemModel::clear();
+
+    if (m_anyItemChecked) {
+        modifyAnyItemChecked(false);
+    }
 }
 
 void GrepOutputModel::setRegExp(const QRegExp& re)
@@ -374,6 +378,7 @@ void GrepOutputModel::makeItemsCheckable(bool checkable)
 {
     if(m_itemsCheckable == checkable)
         return;
+    m_itemsCheckable = checkable;
 
     if (m_rootItem) {
         m_inhibitUpdateCheckState = true;
@@ -383,10 +388,15 @@ void GrepOutputModel::makeItemsCheckable(bool checkable)
             // Check the root item. This invokes updateCheckState(m_rootItem),
             // which propagates the checked state to all other items.
             m_rootItem->setCheckState(Qt::Checked);
+        } else if (m_anyItemChecked) {
+            modifyAnyItemChecked(false);
         }
     }
+}
 
-    m_itemsCheckable = checkable;
+bool GrepOutputModel::anyItemChecked() const
+{
+    return m_anyItemChecked;
 }
 
 void GrepOutputModel::appendOutputs(const QString& filename, GrepOutputItem::List&& items)
@@ -454,6 +464,11 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
         it->propagateState();
         it->refreshAncestorStates();
         m_inhibitUpdateCheckState = false;
+
+        const bool anyItemChecked = (m_rootItem->checkState() != Qt::Unchecked);
+        if (m_anyItemChecked != anyItemChecked) {
+            modifyAnyItemChecked(anyItemChecked);
+        }
     }
 }
 
@@ -497,6 +512,10 @@ void GrepOutputModel::doReplacements()
 
     m_inhibitUpdateCheckState = false;
 
+    Q_ASSERT(m_anyItemChecked);
+    Q_ASSERT(m_rootItem->checkState() == Qt::Unchecked);
+    modifyAnyItemChecked(false);
+
     DocumentChangeSet::ChangeResult result = changeSet.applyAllChanges();
     if(!result.m_success)
     {
@@ -509,6 +528,13 @@ void GrepOutputModel::doReplacements()
                       ch->m_range.start().line() + 1, ch->m_range.start().column() + 1));
         }
     }
+}
+
+void GrepOutputModel::modifyAnyItemChecked(bool checked)
+{
+    Q_ASSERT(m_anyItemChecked != checked);
+    m_anyItemChecked = checked;
+    emit anyItemCheckedChanged(this, m_anyItemChecked);
 }
 
 void GrepOutputModel::showMessageSlot(IStatus*, const QString& message)
