@@ -97,7 +97,12 @@ public:
 
     void makeItemsCheckable(bool checkable);
     bool itemsCheckable() const;
-    
+
+    /**
+     * @return @c true if at least one item is checked, @c false otherwise
+     */
+    [[nodiscard]] bool anyItemChecked() const;
+
 public Q_SLOTS:
     void activate( const QModelIndex &idx );
 
@@ -123,11 +128,26 @@ Q_SIGNALS:
      */
     void finishedAddingResults(GrepOutputModel* model);
 
+    /**
+     * This signal is emitted when the return value of anyItemChecked() changes.
+     *
+     * @param model the model that emitted this signal
+     * @param anyItemChecked the new return value of anyItemChecked()
+     */
+    void anyItemCheckedChanged(GrepOutputModel* model, bool anyItemChecked);
+
 private:    
     /**
      * @return a guard object that inhibits updateCheckState() while alive
      */
     [[nodiscard]] QScopedValueRollback<KDevelop::ToggleOnlyBool> updateCheckStateGuard();
+
+    /**
+     * Set @a m_anyItemChecked to @p checked and emit anyItemCheckedChanged(@a m_anyItemChecked).
+     *
+     * @pre @a m_anyItemChecked != @p checked
+     */
+    void modifyAnyItemChecked(bool checked);
 
     /**
      * Receive a status message from GrepJob and store it.
@@ -150,6 +170,7 @@ private:
      * Set to @c true to temporarily block updateCheckState() in order to prevent wrong behavior or optimize.
      */
     KDevelop::ToggleOnlyBool m_inhibitUpdateCheckState{false};
+    bool m_anyItemChecked = false;
 
     GrepJob* m_job = nullptr;
 
