@@ -188,7 +188,6 @@ void GrepOutputView::replacementTextChanged(const QString& replacementText)
         if (!replacementText.isEmpty()) {
             model->makeItemsCheckable(true);
         }
-        updateApplyState(model->index(0, 0), model->index(0, 0));
     }
 }
 
@@ -305,6 +304,7 @@ GrepOutputModel* GrepOutputView::createModel()
     auto* const model = new GrepOutputModel(resultsTreeView);
     connect(model, &GrepOutputModel::finishedAddingResults, this, &GrepOutputView::finishedAddingResults);
     connect(model, &GrepOutputModel::showMessage, this, &GrepOutputView::showMessage);
+    connect(model, &GrepOutputModel::anyItemCheckedChanged, this, &GrepOutputView::anyItemCheckedChanged);
     return model;
 }
 
@@ -328,7 +328,6 @@ void GrepOutputView::changeModel(int index)
     replacementCombo->clearEditText();
 
     if (model) {
-        disconnect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
         disconnect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::rowsInserted);
         disconnect(model, &GrepOutputModel::rowsRemoved, this, &GrepOutputView::rowsRemoved);
     }
@@ -337,15 +336,13 @@ void GrepOutputView::changeModel(int index)
     model = this->model();
     resultsTreeView->expandAll();
 
-    connect(model, &GrepOutputModel::dataChanged, this, &GrepOutputView::updateApplyState);
     connect(model, &GrepOutputModel::rowsInserted, this, &GrepOutputView::rowsInserted);
     connect(model, &GrepOutputModel::rowsRemoved, this, &GrepOutputView::rowsRemoved);
 
     model->showMessageEmit();
-
+    applyButton->setEnabled(model->anyItemChecked());
     updateButtonState(model->hasResults());
 
-    updateApplyState(model->index(0, 0), model->index(0, 0));
     m_refresh->setEnabled(true);
     m_clearSearchHistory->setEnabled(true);
 
@@ -376,6 +373,14 @@ void GrepOutputView::showMessage(GrepOutputModel* model, MessageType type, const
         m_statusLabel->setPalette(QPalette());
     }
     m_statusLabel->setText(message);
+}
+
+void GrepOutputView::anyItemCheckedChanged(GrepOutputModel* model, bool anyItemChecked)
+{
+    if (!isActiveModel(model)) {
+        return;
+    }
+    applyButton->setEnabled(anyItemChecked);
 }
 
 void GrepOutputView::onApply()
@@ -427,7 +432,6 @@ void GrepOutputView::refresh()
     replacementCombo->clearEditText();
     model->makeItemsCheckable(false);
 
-    applyButton->setEnabled(false);
     updateButtonState(false);
 
     // Insert the refreshed model and the updated description at the top of the combobox and
@@ -507,22 +511,6 @@ void GrepOutputView::rowsRemoved()
     Q_ASSERT(model());
 
     updateButtonState(model()->rowCount() > 0);
-}
-
-void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIndex& bottomRight)
-{
-    Q_UNUSED(bottomRight);
-
-    if (!model() || !model()->hasResults()) {
-        applyButton->setEnabled(false);
-        return;
-    }
-
-    // we only care about the root item
-    if(!topLeft.parent().isValid())
-    {
-        applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked && model()->itemsCheckable());
-    }
 }
 
 void GrepOutputView::clearSearchHistory()
