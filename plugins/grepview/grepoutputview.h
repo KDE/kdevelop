@@ -80,8 +80,8 @@ private:
 
     void finishedAddingResults(const GrepOutputModel* model);
     void showMessage(GrepOutputModel* model, MessageType type, const QString& message);
+    void anyItemCheckedChanged(GrepOutputModel* model, bool anyItemChecked);
 
-    void updateApplyState(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void changeModel(int index);
 
     void replacementTextChanged(const QString& replacementText);
