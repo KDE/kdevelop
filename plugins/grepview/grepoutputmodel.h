@@ -93,7 +93,6 @@ public:
 
     QModelIndex previousItemIndex(const QModelIndex &currentIdx) const;
     QModelIndex nextItemIndex(const QModelIndex &currentIdx) const;
-    const GrepOutputItem *getRootItem() const;
 
     void makeItemsCheckable(bool checkable);
     bool itemsCheckable() const;
