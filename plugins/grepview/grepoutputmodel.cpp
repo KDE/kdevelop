@@ -358,10 +358,6 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
     return currentIdx;
 }
 
-const GrepOutputItem *GrepOutputModel::getRootItem() const {
-    return m_rootItem;
-}
-
 bool GrepOutputModel::itemsCheckable() const
 {
     return m_itemsCheckable;
