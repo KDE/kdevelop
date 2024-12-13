@@ -100,16 +100,16 @@ void FindReplaceTest::testFind_data()
 
 void FindReplaceTest::testFind()
 {
-    QFETCH(QString,   subject);
-    QFETCH(QRegExp,   search);
-    QFETCH(MatchList, matches);
+    QFETCH(const QString, subject);
+    QFETCH(const QRegExp, search);
+    QFETCH(const MatchList, matches);
 
     QTemporaryFile file;
     QVERIFY(file.open());
     file.write(subject.toUtf8());
     file.close();
 
-    GrepOutputItem::List actualMatches = grepFile(file.fileName(), search);
+    const auto actualMatches = grepFile(file.fileName(), search);
 
     QCOMPARE(actualMatches.length(), matches.length());
 
