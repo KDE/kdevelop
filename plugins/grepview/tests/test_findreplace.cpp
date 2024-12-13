@@ -120,6 +120,7 @@ void FindReplaceTest::testFind()
         const auto range = item->change()->m_range;
         QCOMPARE(range.start().line(), matches[i].line);
         QCOMPARE(range.start().column(), matches[i].start);
+        QCOMPARE(range.end().line(), matches[i].line);
         QCOMPARE(range.end().column(), matches[i].end);
     }
 
