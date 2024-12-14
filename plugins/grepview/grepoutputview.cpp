@@ -24,6 +24,8 @@
 #include <KLocalizedString>
 
 #include <QAction>
+#include <QCoreApplication>
+#include <QKeyEvent>
 #include <QLineEdit>
 #include <QMenu>
 #include <QValidator>
@@ -169,7 +171,6 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(m_next, &QAction::triggered, this, &GrepOutputView::selectNextItem);
     connect(m_collapseAll, &QAction::triggered, this, &GrepOutputView::collapseAllItems);
     connect(m_expandAll, &QAction::triggered, this, &GrepOutputView::expandAllItems);
-    connect(applyButton, &QPushButton::clicked,  this, &GrepOutputView::onApply);
     connect(m_refresh, &QAction::triggered, this, &GrepOutputView::refresh);
     connect(m_clearSearchHistory, &QAction::triggered, this, &GrepOutputView::clearSearchHistory);
     KConfigGroup cg = ICore::self()->activeSession()->config()->group(QStringLiteral("GrepDialog"));
@@ -187,6 +188,13 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 
         connect(replacementLineEdit, &QLineEdit::textChanged, this, &GrepOutputView::replacementTextChanged);
         connect(replacementLineEdit, &QLineEdit::returnPressed, this, &GrepOutputView::onApply);
+
+        connect(applyButton, &QPushButton::clicked, replacementLineEdit, [replacementLineEdit] {
+            // Send the Return key press event to the line edit in order to both invoke onApply() and insert
+            // an item with the current text into replacementCombo, i.e. remember the applied replacement text.
+            QKeyEvent event(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+            QCoreApplication::sendEvent(replacementLineEdit, &event);
+        });
     }
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
