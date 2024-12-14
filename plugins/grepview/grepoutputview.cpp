@@ -151,8 +151,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     modelSelector->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(modelSelector, &KComboBox::customContextMenuRequested,
             this, &GrepOutputView::modelSelectorContextMenu);
-    connect(modelSelector, QOverload<int>::of(&KComboBox::currentIndexChanged),
-            this, &GrepOutputView::changeModel);
+    connect(modelSelector, &QComboBox::currentIndexChanged, this, &GrepOutputView::changeModel);
 
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setRootIsDecorated(false);
