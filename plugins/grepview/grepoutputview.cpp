@@ -24,7 +24,9 @@
 #include <KLocalizedString>
 
 #include <QAction>
+#include <QLineEdit>
 #include <QMenu>
+#include <QValidator>
 #include <QWidgetAction>
 
 using namespace KDevelop;
@@ -53,6 +55,42 @@ const int GrepOutputView::HISTORY_SIZE = 5;
 
 namespace {
 enum { GrepSettingsStorageItemCount = 10 };
+
+/**
+ * Regardless of the input text, this validator class accepts if and only if the widget it tracks is enabled.
+ *
+ * If the tracked widget is disabled, the validation result is Intermediate to allow editing text
+ * but prevent the emission of QLineEdit::editingFinished() and QLineEdit::returnPressed().
+ */
+class WidgetEnabledValidator : public QValidator
+{
+public:
+    /**
+     * Create a validator.
+     *
+     * @param widget the widget to track and set as this validator's parent
+     *
+     * @note Setting the tracked widget as the validator's parent makes checking
+     *       the enabled state safe. The widget, on which the validator is set,
+     *       should support the destruction of the validator. For example, QLineEdit's
+     *       validator is stored in a QPointer and checked for null before access.
+     */
+    explicit WidgetEnabledValidator(QWidget& widget)
+        : QValidator(&widget)
+        , m_widget(widget)
+    {
+    }
+
+    [[nodiscard]] State validate(QString& input, int& pos) const override
+    {
+        Q_UNUSED(input)
+        Q_UNUSED(pos)
+        return m_widget.isEnabled() ? Acceptable : Intermediate;
+    }
+
+private:
+    const QWidget& m_widget;
+};
 }
 
 GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
@@ -139,8 +177,17 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
     applyButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
 
-    connect(replacementCombo, &KComboBox::editTextChanged, this, &GrepOutputView::replacementTextChanged);
-    connect(replacementCombo, QOverload<const QString&>::of(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
+    {
+        auto* const replacementLineEdit = replacementCombo->lineEdit();
+        Q_ASSERT(replacementLineEdit);
+
+        // Do not invoke onApply() and do not insert an item with the current text into replacementCombo
+        // if the apply button is disabled. The apply button is disabled while replacement is forbidden.
+        replacementLineEdit->setValidator(new WidgetEnabledValidator(*applyButton));
+
+        connect(replacementLineEdit, &QLineEdit::textChanged, this, &GrepOutputView::replacementTextChanged);
+        connect(replacementLineEdit, &QLineEdit::returnPressed, this, &GrepOutputView::onApply);
+    }
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
 
@@ -385,24 +432,24 @@ void GrepOutputView::anyItemCheckedChanged(GrepOutputModel* model, bool anyItemC
 
 void GrepOutputView::onApply()
 {
-    if(model())
-    {
-        Q_ASSERT(model()->rowCount());
-        // ask a confirmation before an empty string replacement
-        if (replacementCombo->currentText().length() == 0
-            && KMessageBox::questionTwoActions(
-                   this, i18n("Do you want to replace with an empty string?"),
-                   i18nc("@title:window", "Start Replacement"),
-                   KGuiItem(i18nc("@action:button", "Replace"), QStringLiteral("dialog-ok-apply")),
-                   KStandardGuiItem::cancel())
-                == KMessageBox::SecondaryAction) {
-            return;
-        }
+    auto* const model = this->model();
+    Q_ASSERT(model);
+    Q_ASSERT(model->anyItemChecked());
 
-        setEnabled(false);
-        model()->doReplacements();
-        setEnabled(true);
+    // ask a confirmation before an empty string replacement
+    if (replacementCombo->currentText().length() == 0
+        && KMessageBox::questionTwoActions(
+                this, i18n("Do you want to replace with an empty string?"),
+                i18nc("@title:window", "Start Replacement"),
+                KGuiItem(i18nc("@action:button", "Replace"), QStringLiteral("dialog-ok-apply")),
+                KStandardGuiItem::cancel())
+            == KMessageBox::SecondaryAction) {
+        return;
     }
+
+    setEnabled(false);
+    model->doReplacements();
+    setEnabled(true);
 }
 
 void GrepOutputView::showDialog()
