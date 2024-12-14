@@ -481,8 +481,6 @@ void GrepOutputModel::doReplacements()
 {
     Q_ASSERT(m_rootItem);
     Q_ASSERT(m_rootItem->checkState() != Qt::Unchecked);
-    if (!m_rootItem)
-        return; // nothing to do, abort
 
     DocumentChangeSet changeSet;
     changeSet.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
