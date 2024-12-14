@@ -414,6 +414,11 @@ void GrepOutputModel::appendOutputs(const QString& filename, GrepOutputItem::Lis
         {
             m_rootItem = new GrepOutputItem(QString(), QString(), m_itemsCheckable);
             appendRow(m_rootItem);
+        } else {
+            // The root item becomes disabled when the user replaces all occurrences found so far.
+            // This can happen before all results have been added.
+            // Reenable the root item, because we are about to add a new enabled child fileItem to it.
+            m_rootItem->setEnabled(true);
         }
 
         m_fileCount  += 1;
