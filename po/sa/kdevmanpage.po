@@ -1,0 +1,41 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: manpagedocumentation.cpp:261
+#, kde-format
+msgid "Man Content Page"
+msgstr "मनुष्य सामग्री पृष्ठ"
+
+#: manpagedocumentationwidget.cpp:32
+#, kde-format
+msgid "Loading man pages..."
+msgstr "Loading man पृष्ठानि..."
+
+#: manpagedocumentationwidget.cpp:86
+#, kde-format
+msgid ""
+"Error while loading man pages:\n"
+"%1"
+msgstr ""
+"man पृष्ठानि लोड् कुर्वन् त्रुटिः:\n"
+"%1"
+
+#: manpageplugin.cpp:53
+#, kde-format
+msgid "Man Page"
+msgstr "मनुष्य पृष्ठ"

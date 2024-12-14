@@ -1,0 +1,720 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>2);\n"
+
+#: dialogs/processselection.cpp:148
+#, kde-format
+msgctxt "@action:button"
+msgid "Attach"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ProcessSelection)
+#: dialogs/processselection.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Attach to a Process"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KLineEdit, filterEdit)
+#: dialogs/processselection.ui:25
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
+#: dialogs/processselection.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display as List"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
+#: dialogs/processselection.ui:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display as Tree"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:80
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Own Processes"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:88
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "User Processes"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:96
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "System Processes"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "All Processes"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:18
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Core File"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/selectcoredialog.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/selectcoredialog.ui:32
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Core file:"
+msgstr ""
+
+#: mibreakpointcontroller.cpp:795
+#, kde-format
+msgid "<br>Old value: %1"
+msgstr "<br>पुरातनं मूल्यम् : %1"
+
+#: mibreakpointcontroller.cpp:798
+#, kde-format
+msgid "<br>New value: %1"
+msgstr "<br>नवीनं मूल्यम् : %1"
+
+#: midebugger.cpp:315
+#, kde-format
+msgctxt "<b>Internal debugger error</b>"
+msgid ""
+"<p>The debugger component encountered an internal error while processing the "
+"reply from the debugger. Please submit a bug report. The debug session will "
+"now end to prevent potential crash"
+msgstr ""
+
+#: midebugger.cpp:318
+#, kde-format
+msgid ""
+"The exception is: %1\n"
+"The MI response is: %2"
+msgstr ""
+"अपवादः अस्ति : %1\n"
+"MI प्रतिक्रिया अस्ति: %2"
+
+#: midebugger.cpp:321
+#, kde-format
+msgctxt "@title:window"
+msgid "Internal Debugger Error"
+msgstr ""
+
+#: midebugger.cpp:333 midebugsession.cpp:423
+#, kde-format
+msgid "Process exited"
+msgstr "प्रक्रिया निर्गतवती"
+
+#: midebugger.cpp:342
+#, kde-format
+msgid ""
+"<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+"path name is specified correctly."
+msgstr ""
+"<b>त्रुटिनिवारणं आरभुं न शक्तवान् ।</b><p> &#39;%1&#39; चालयितुं न शक्यते । मार्गनाम "
+"सम्यक् निर्दिष्टम् इति सुनिश्चितं कुर्वन्तु ।"
+
+#: midebugger.cpp:350
+#, kde-format
+msgid "Process failed to start"
+msgstr "प्रक्रिया आरभ्यतुं असफलतां प्राप्तवती"
+
+#: midebugger.cpp:355
+#, kde-format
+msgid ""
+"<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
+"that the debug session has to be ended.<br>Try to reproduce the crash "
+"without KDevelop and report a bug.<br>"
+msgstr ""
+"<b>त्रुटिनिवारणकर्ता दुर्घटनाग्रस्तः अभवत्।</b><p> &#39;%1&#39; इति "
+"त्रुटिनिवारणप्रक्रिया दुर्घटना अभवत् ।<br> तस्मात् कारणात् त्रुटिनिवारणसत्रं समाप्तं कर्तव्यम् "
+"अस्ति ।<br> KDevelop विना दुर्घटना पुनः प्रदर्शयितुं प्रयतध्वं तथा च दोषं निवेदयन्तु ।<br>"
+
+#: midebugger.cpp:360
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Crashed"
+msgstr ""
+
+#: midebugger.cpp:363
+#, kde-format
+msgid "Process crashed"
+msgstr "प्रक्रिया दुर्घटना अभवत्"
+
+#: midebuggerplugin.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "Examine Core File with %1"
+msgstr ""
+
+#: midebuggerplugin.cpp:115
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Examine core file</b><p>This loads a core file, which is typically "
+"created after the application has crashed, e.g. with a segmentation fault. "
+"The core file contains an image of the program memory at the time it "
+"crashed, allowing you to do a post-mortem analysis.</p>"
+msgstr ""
+
+#: midebuggerplugin.cpp:127
+#, kde-format
+msgctxt "@action"
+msgid "Attach to Process with %1"
+msgstr ""
+
+#: midebuggerplugin.cpp:129
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgstr ""
+
+#: midebuggerplugin.cpp:142
+#, kde-format
+msgid "KDevelop (%1) - %2"
+msgstr "KDevelop (%1) - %2"
+
+#: midebuggerplugin.cpp:216
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Evaluate: %1"
+msgstr ""
+
+#: midebuggerplugin.cpp:218
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Evaluate expression</b><p>Shows the value of the expression under the "
+"cursor.</p>"
+msgstr ""
+
+#: midebuggerplugin.cpp:226
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Watch: %1"
+msgstr ""
+
+#: midebuggerplugin.cpp:228
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Watch expression</b><p>Adds the expression under the cursor to the "
+"Variables/Watch list.</p>"
+msgstr ""
+
+#: midebuggerplugin.cpp:241
+#, kde-format
+msgid "Choose a core file to examine..."
+msgstr "परीक्षितुं कोरसञ्चिकां चिनोतु..."
+
+#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
+"निरस्तं कृत्वा निरन्तरं कर्तुम् इच्छति?"
+
+#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: midebuggerplugin.cpp:261
+#, kde-format
+msgid "Choose a process to attach to..."
+msgstr "संलग्नं कर्तुं प्रक्रियां चिनुत..."
+
+#: midebuggerplugin.cpp:282
+#, kde-format
+msgid "Not attaching to process %1: cannot attach the debugger to itself."
+msgstr "%1 प्रक्रियायां न संलग्नम्: त्रुटिनिवारणं स्वयमेव संलग्नं कर्तुं न शक्नोति ।"
+
+#: midebuggerplugin.cpp:302
+#, kde-format
+msgid "Debugger"
+msgstr "त्रुटिनिवारकः"
+
+#: midebugjobs.cpp:86
+#, kde-format
+msgctxt "ProjectName: run configuration name"
+msgid "%1: %2"
+msgstr ""
+
+#: midebugjobs.cpp:107
+#, kde-format
+msgid "'%1' is not an executable"
+msgstr "'%1' कार्यान्वयनीयं नास्ति"
+
+#: midebugjobs.cpp:171
+#, kde-format
+msgid "Debug core file"
+msgstr "कोर सञ्चिकां त्रुटिनिवारणं कुर्वन्तु"
+
+#: midebugjobs.cpp:194
+#, kde-format
+msgid "Debug process %1"
+msgstr "त्रुटिनिवारणप्रक्रिया %1"
+
+#: midebugsession.cpp:208
+#, kde-format
+msgid "Running program"
+msgstr "कार्यक्रमं चालयति"
+
+#: midebugsession.cpp:295
+#, kde-format
+msgid "Attaching to process %1"
+msgstr "प्रक्रिया %1 सह संलग्नम्"
+
+#: midebugsession.cpp:326
+#, kde-format
+msgid "<b>Could not attach debugger:</b><br />"
+msgstr "<b>त्रुटिनिवारणं संलग्नं कर्तुं न शक्तवान्:</b><br />"
+
+#: midebugsession.cpp:336
+#, kde-format
+msgid "Examining core file %1"
+msgstr "कोर सञ्चिकायाः परीक्षणं %1"
+
+#: midebugsession.cpp:408
+#, kde-format
+msgid "Debugger stopped"
+msgstr "त्रुटिनिवारणकर्ता स्थगितवान्"
+
+#: midebugsession.cpp:428
+#, kde-format
+msgid "Application is running"
+msgstr "अनुप्रयोगः प्रचलति"
+
+#: midebugsession.cpp:433
+#, kde-format
+msgid "Application is paused"
+msgstr "अनुप्रयोगः विरामः भवति"
+
+#: midebugsession.cpp:748
+#, kde-format
+msgid ""
+"<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
+"%1"
+msgstr ""
+"<b>यदा debugger न चाल्यते तदा Gdb आदेशः प्रेषितः</b><br> आदेशः आसीत् - १.<br> %1"
+
+#: midebugsession.cpp:860
+#, kde-format
+msgid "<b>Invalid debugger command</b><br>%1"
+msgstr "<b>अमान्यः त्रुटिनिवारणनिर्देशः</b><br> %1"
+
+#: midebugsession.cpp:996
+#, kde-format
+msgid "Exited with return code: %1"
+msgstr "रिटर्न् कोड् इत्यनेन सह निर्गतम्: %1"
+
+#: midebugsession.cpp:998
+#, kde-format
+msgid "Exited normally"
+msgstr "सामान्यतया निर्गतः"
+
+#: midebugsession.cpp:1005
+#, kde-format
+msgid "Exited on signal %1"
+msgstr "%1 संकेते निर्गतम्"
+
+#: midebugsession.cpp:1040
+#, kde-format
+msgid "Program received signal %1 (%2)"
+msgstr "कार्यक्रमः संकेतं प्राप्तवान् %1 (%2) ."
+
+#: midebugsession.cpp:1172
+#, kde-format
+msgid "1 command in queue\n"
+msgid_plural "%1 commands in queue\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: midebugsession.cpp:1173
+#, kde-format
+msgctxt "Only the 0 and 1 cases need to be translated"
+msgid "1 command being processed by gdb\n"
+msgid_plural "%1 commands being processed by gdb\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: midebugsession.cpp:1174
+#, kde-format
+msgid "Debugger state: %1\n"
+msgstr "त्रुटिनिवारणस्थितिः: %1\n"
+
+#: midebugsession.cpp:1177
+#, kde-format
+msgid ""
+"Current command class: '%1'\n"
+"Current command text: '%2'\n"
+"Current command original text: '%3'\n"
+msgstr ""
+"वर्तमान आदेशवर्गः '%1'.\n"
+"वर्तमान आदेशपाठः '%2' ।\n"
+"वर्तमान आदेशः मूलपाठः: '%3'.\n"
+
+#: midebugsession.cpp:1204
+#, kde-format
+msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+msgstr ""
+"<b>त्रुटिनिवारणदोषः</b><p> Debugger इत्यनेन निम्नलिखितदोषः निवेदितः ।<p> <tt>%1</"
+"tt>"
+
+#: miframestackmodel.cpp:69
+#, kde-format
+msgid "(running)"
+msgstr "(चलति)"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Binary"
+msgstr "द्विचक्रिका"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Octal"
+msgstr "अष्टकम्"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Decimal"
+msgstr "दशमलवः"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Hexadecimal"
+msgstr "षट्दशमलवः"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Raw"
+msgstr "अपक्व"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Unsigned"
+msgstr "अहस्ताक्षरितम्"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "General"
+msgstr "सामान्य"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Flags"
+msgstr "ध्वजाः"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP single-word"
+msgstr "VFP एक-शब्द"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP double-word"
+msgstr "VFP द्विगुण-शब्द"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP quad-word"
+msgstr "VFP चतुर्-शब्द"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "FPU"
+msgstr "FPU"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "XMM"
+msgstr "XMM"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Segment"
+msgstr "खण्डः"
+
+#: registers/registersview.cpp:51
+#, kde-format
+msgctxt "@title:menu"
+msgid "Format"
+msgstr ""
+
+#: registers/registersview.cpp:60
+#, kde-format
+msgctxt "@title:menu"
+msgid "Mode"
+msgstr ""
+
+#: registers/registersview.cpp:195
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr ""
+
+#: stty.cpp:252
+#, kde-format
+msgid ""
+"Cannot use the tty* or pty* devices.\n"
+"Check the settings on /dev/tty* and /dev/pty*\n"
+"As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
+"user to the tty group using \"usermod -aG tty username\"."
+msgstr ""
+"tty* अथवा pty* उपकरणानां उपयोगं कर्तुं न शक्यते ।\n"
+"/dev/tty* तथा /dev/pty* इत्यत्र सेटिंग्स् पश्यन्तु ।\n"
+"रूटरूपेण भवन्तः \"chmod ug+rw\" tty* तथा pty* उपकरणानि तथा/वा \"usermod -aG tty "
+"username\" इत्यस्य उपयोगेन उपयोक्तारं tty समूहे योजयितुं शक्नुवन्ति ।"
+
+#: stty.cpp:304
+#, kde-format
+msgid "%1 is incorrect terminal name"
+msgstr "%1 अशुद्धं टर्मिनलनाम अस्ति"
+
+#: stty.cpp:310
+#, kde-format
+msgid "Can't create a temporary file"
+msgstr "अस्थायी सञ्चिकां निर्मातुं न शक्यते"
+
+#: stty.cpp:357
+#, kde-format
+msgid ""
+"Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
+"accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
+"sleep 3600;done\""
+msgstr ""
+"%1 tty/pty प्राप्तुं न शक्यते । %1 वस्तुतः टर्मिनल् अस्ति तथा च एतान् तर्कान् स्वीकुर्वति इति "
+"परीक्ष्यताम्: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\"."
+
+#. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
+#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Console"
+msgstr ""
+
+#: widgets/debuggerconsoleview.cpp:49
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
+"can also issue any other debugger command while debugging.</p>"
+msgstr ""
+
+#: widgets/debuggerconsoleview.cpp:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last command when hit Return"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter debugger commands"
+msgstr ""
+
+#: widgets/debuggerconsoleview.cpp:72
+#, kde-format
+msgctxt "@action"
+msgid "Show Internal Commands"
+msgstr ""
+
+#: widgets/debuggerconsoleview.cpp:76
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+
+#: widgets/debuggerconsoleview.cpp:137
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Command:"
+msgstr ""
+
+#: widgets/debuggerconsoleview.cpp:159
+#, kde-format
+msgctxt "@title:window"
+msgid "%1 Command Bar"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:53
+#, kde-format
+msgctxt "@action"
+msgid "Interrupt"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:70
+#, kde-format
+msgctxt "@action"
+msgid "Repeat"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:73
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last sent command when hit <Return>"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
+#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Address Selector"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:88
+#, kde-format
+msgctxt "@action"
+msgid "Change &Address"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:92
+#, kde-format
+msgctxt "@action"
+msgid "&Jump to Cursor"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:93
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Sets the execution pointer to the current cursor position."
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:96
+#, kde-format
+msgctxt "@action"
+msgid "&Run to Cursor"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:97
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:100
+#, kde-format
+msgctxt "@option:check"
+msgid "&AT&&T"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:101
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:105
+#, kde-format
+msgctxt "@option:check"
+msgid "&Intel"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:106
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+"+0xc])."
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:143
+#, kde-format
+msgctxt "@title:menu"
+msgid "Disassembly Flavor"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:174
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Machine code display</b><p>A machine code view into your running "
+"executable with the current instruction highlighted. You can step "
+"instruction by instruction using the debuggers toolbar buttons of \"step over"
+"\" instruction and \"step into\" instruction."
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:190
+#, kde-format
+msgctxt "@title:column"
+msgid "Address"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:191
+#, kde-format
+msgctxt "@title:column"
+msgid "Function"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:192
+#, kde-format
+msgctxt "@title:column"
+msgid "Instruction"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:212
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers View"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
+#: widgets/selectaddressdialog.ui:17
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the address to disassemble around"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/selectaddressdialog.ui:23
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Address to disassemble around:"
+msgstr ""

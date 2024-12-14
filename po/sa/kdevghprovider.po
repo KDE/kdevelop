@@ -1,0 +1,176 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-06-21 01:43+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ghdialog.cpp:25
+#, kde-format
+msgid ""
+"You have not authorized KDevelop to use your GitHub account. If you "
+"authorize KDevelop, you will be able to fetch your public/private "
+"repositories and the repositories from your organizations."
+msgstr ""
+"भवता KDevelop इत्यस्य GitHub खातेः उपयोगाय अधिकृतता न कृता । यदि भवान् KDevelop "
+"इत्यस्य अधिकृतीकरणं करोति तर्हि भवान् स्वस्य सार्वजनिक/निजीभण्डारं भण्डारं च स्वसङ्गठनात् "
+"आनेतुं शक्नोति ।"
+
+#: ghdialog.cpp:34
+#, kde-format
+msgctxt "%1 is the URL with the GitHub token settings"
+msgid "You can check the authorization for this application and others at %1"
+msgstr ""
+
+#: ghdialog.cpp:54
+#, kde-format
+msgid "You are logged in as <b>%1</b>.<br/>%2"
+msgstr "भवान् <b>%1</b> इति रूपेण प्रवेशितः अस्ति ।<br/> %2"
+
+#: ghdialog.cpp:58
+#, kde-format
+msgctxt "@action:button"
+msgid "Log Out"
+msgstr ""
+
+#: ghdialog.cpp:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Force Sync"
+msgstr ""
+
+#: ghdialog.cpp:78
+#, kde-format
+msgctxt "@action:button"
+msgid "Authorize"
+msgstr ""
+
+#: ghdialog.cpp:92
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Account"
+msgstr ""
+
+#: ghdialog.cpp:98
+#, kde-format
+msgid "Enter a login and a password"
+msgstr "एकं प्रवेशं गुप्तशब्दं च प्रविशन्तु"
+
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:45
+#, kde-format
+msgid "Waiting for response"
+msgstr "प्रतिक्रियायाः प्रतीक्षां कुर्वन्"
+
+#: ghdialog.cpp:126
+#, kde-format
+msgid ""
+"Authentication failed. Please try again.\n"
+"\n"
+"Could not create token: \"%1\"\n"
+"%2"
+msgstr ""
+"प्रमाणीकरणं विफलम् अभवत् । कृपया पुनः प्रयासं कुर्वन्तु।\n"
+"\n"
+"टोकन निर्मातुं न शक्तवान्: \"%1\" ।\n"
+"%2"
+
+#: ghdialog.cpp:129
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Authorization Failed"
+msgstr ""
+
+#: ghdialog.cpp:133
+#, kde-format
+msgid ""
+"Authentication succeeded.\n"
+"\n"
+"Created token: \"%1\"\n"
+"%2"
+msgstr ""
+"प्रमाणीकरणं सफलम् अभवत् ।\n"
+"\n"
+"निर्मितः टोकनः \"%1\" ।\n"
+"%2"
+
+#: ghdialog.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Account Authorized"
+msgstr ""
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@title:window"
+msgid "Authentication Code"
+msgstr ""
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@label:textbox"
+msgid "OTP Code:"
+msgstr ""
+
+#: ghdialog.cpp:176
+#, kde-format
+msgid "Please, write your password here."
+msgstr "कृपया, अत्र स्वस्य गुप्तशब्दं लिखन्तु।"
+
+#: ghproviderplugin.cpp:35
+#, kde-format
+msgid "GitHub"
+msgstr "गित्हब"
+
+#: ghproviderwidget.cpp:58
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr ""
+
+#: ghproviderwidget.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "You can press the Return key if you do not want to wait."
+msgstr ""
+
+#: ghproviderwidget.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure your GitHub account"
+msgstr ""
+
+#: ghproviderwidget.cpp:88
+#, kde-format
+msgid ""
+"The Git plugin could not be loaded which is required to import a GitHub "
+"project."
+msgstr "Git प्लगिन् लोड् कर्तुं न शक्यते यत् GitHub परियोजनायाः आयाताय आवश्यकम् अस्ति ।"
+
+#: ghproviderwidget.cpp:88
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Provider Error"
+msgstr ""
+
+#: ghproviderwidget.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "User"
+msgstr ""
+
+#: ghproviderwidget.cpp:107
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Organization"
+msgstr ""

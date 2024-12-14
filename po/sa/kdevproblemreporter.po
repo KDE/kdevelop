@@ -1,0 +1,257 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: problemreporterplugin.cpp:99
+#, kde-format
+msgid "Parser"
+msgstr "पार्सरः"
+
+#: problemreporterplugin.cpp:100 problemreporterplugin.cpp:246
+#: problemsview.cpp:315
+#, kde-format
+msgctxt "@title:window"
+msgid "Problems"
+msgstr ""
+
+#: problemreporterplugin.cpp:287
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Solve Problem"
+msgstr ""
+
+#: problemreporterplugin.cpp:289
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Solve: %1"
+msgstr ""
+
+#: problemsview.cpp:36
+#, kde-format
+msgctxt "@action"
+msgid "Force Full Update"
+msgstr ""
+
+#: problemsview.cpp:47
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Which files to display the problems for"
+msgstr ""
+
+#: problemsview.cpp:53
+#, kde-format
+msgctxt "@option:check"
+msgid "Current Document"
+msgstr ""
+
+#: problemsview.cpp:54
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current document"
+msgstr ""
+
+#: problemsview.cpp:57
+#, kde-format
+msgctxt "@option:check"
+msgid "Open Documents"
+msgstr ""
+
+#: problemsview.cpp:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all open documents"
+msgstr ""
+
+#: problemsview.cpp:61
+#, kde-format
+msgctxt "@option:check"
+msgid "Current Project"
+msgstr ""
+
+#: problemsview.cpp:62
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current project"
+msgstr ""
+
+#: problemsview.cpp:65
+#, kde-format
+msgctxt "@option:check"
+msgid "All Projects"
+msgstr ""
+
+#: problemsview.cpp:66
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all projects"
+msgstr ""
+
+#: problemsview.cpp:69
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Path"
+msgstr ""
+
+#: problemsview.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in a specific path"
+msgstr ""
+
+#: problemsview.cpp:73
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Current Path"
+msgstr ""
+
+#: problemsview.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in the path of the current document"
+msgstr ""
+
+#: problemsview.cpp:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Show All"
+msgstr ""
+
+#: problemsview.cpp:79
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display all problems"
+msgstr ""
+
+#: problemsview.cpp:100
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Path Filter..."
+msgstr ""
+
+#: problemsview.cpp:132
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Imports"
+msgstr ""
+
+#: problemsview.cpp:133
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in imported files"
+msgstr ""
+
+#: problemsview.cpp:143
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display errors"
+msgstr ""
+
+#: problemsview.cpp:145
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Errors"
+msgstr ""
+
+#: problemsview.cpp:148
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display warnings"
+msgstr ""
+
+#: problemsview.cpp:150
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Warnings"
+msgstr ""
+
+#: problemsview.cpp:153
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display hints"
+msgstr ""
+
+#: problemsview.cpp:155
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Hints"
+msgstr ""
+
+#: problemsview.cpp:175
+#, kde-format
+msgctxt "@title:menu"
+msgid "Grouping"
+msgstr ""
+
+#: problemsview.cpp:180
+#, kde-format
+msgctxt "@option:check"
+msgid "None"
+msgstr ""
+
+#: problemsview.cpp:181
+#, kde-format
+msgctxt "@option:check"
+msgid "Path"
+msgstr ""
+
+#: problemsview.cpp:182
+#, kde-format
+msgctxt "@option:check"
+msgid "Severity"
+msgstr ""
+
+#: problemsview.cpp:210
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr ""
+
+#: problemsview.cpp:453
+#, kde-format
+msgctxt "@title:tab %1: tab name, %2: number of problems"
+msgid "%1 (%2)"
+msgstr ""
+
+#: problemsview.cpp:491
+#, kde-format
+msgctxt "@title:menu"
+msgid "Scope: %1"
+msgstr ""
+
+#: problemtreeview.cpp:96
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Problems"
+msgstr ""
+
+#: problemtreeview.cpp:251
+#, kde-format
+msgctxt "@title:menu"
+msgid "Problem"
+msgstr ""
+
+#: problemtreeview.cpp:253
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Copy Description"
+msgstr ""
+
+#: problemtreeview.cpp:272
+#, kde-format
+msgctxt "@title:menu"
+msgid "Solve: %1"
+msgstr ""

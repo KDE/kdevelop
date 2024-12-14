@@ -1,0 +1,128 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-07-06 01:47+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: welcomepageview.cpp:50
+#, kde-format
+msgid ""
+"<br/>\n"
+"<h3>Note for Windows users</h3>\n"
+"<p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>\n"
+"<p>You need to install either GCC via MinGW or install a recent version of "
+"the Microsoft Visual Studio IDE and make sure the environment is setup "
+"correctly <i>before</i> starting KDevelop.</p>\n"
+"<p>If you need further assistance, please check out the <a href=\"https://"
+"userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
+"instructions.</a></p>"
+msgstr ""
+"<br/><h3>विण्डोज उपयोक्तृणां कृते टिप्पणी</h3><p> ध्यानं कुर्वन्तु यत् KDevelop Windows "
+"इत्यत्र C/C++ कम्पैलरं न प्रेषयति!</p><p> भवद्भिः MinGW मार्गेण GCC वा संस्थापयितुं वा "
+"Microsoft Visual Studio IDE इत्यस्य हाले संस्करणं संस्थापयितुं आवश्यकं तथा च KDevelop "
+"आरभ्यतुं <i>पूर्वं</i> वातावरणं सम्यक् सेटअप कृतम् इति सुनिश्चितं कर्तव्यम् ।</p><p> यदि भवान् "
+"अधिकसहायतायाः आवश्यकता अस्ति तर्हि कृपया <a href=\"https://userbase.kde.org/"
+"KDevelop4/Manual/WindowsSetup\">Windows निर्देशानुसारं KDevelop पश्यन्तु ।</a></p>"
+
+#. i18n: ectx: property (text), widget (QLabel, appNameLabel)
+#: welcomepageview.ui:55
+#, kde-format
+msgid "KDevelop"
+msgstr "KDevelop"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, helpSectionTitle)
+#: welcomepageview.ui:82
+#, kde-format
+msgid "Need Help?"
+msgstr "सहायतायाः आवश्यकता अस्ति ?"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, homepageLinkLabel)
+#: welcomepageview.ui:94
+#, kde-format
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, learnAboutLinkLabel)
+#: welcomepageview.ui:104
+#, kde-format
+msgid "Learn about KDevelop"
+msgstr "KDevelop विषये ज्ञातव्यम्"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
+#: welcomepageview.ui:114
+#, kde-format
+msgid "Join KDevelop's team!"
+msgstr "KDevelop इत्यस्य दलेन सह सम्मिलितं भवन्तु!"
+
+#. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
+#: welcomepageview.ui:124
+#, kde-format
+msgid "Handbook"
+msgstr "हस्तपुस्तिका"
+
+#. i18n: ectx: property (text), widget (QPushButton, newProjectButton)
+#: welcomepageview.ui:169
+#, kde-format
+msgid "New Project"
+msgstr "नवीन परियोजना"
+
+#. i18n: ectx: property (text), widget (QPushButton, openProjectButton)
+#: welcomepageview.ui:179
+#, kde-format
+msgid "Open Project"
+msgstr "Open Project इति परियोजना"
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchProjectButton)
+#: welcomepageview.ui:189
+#, kde-format
+msgid "Fetch Project"
+msgstr "परियोजना आनयतु"
+
+#. i18n: ectx: property (text), widget (QPushButton, recentProjectsButton)
+#: welcomepageview.ui:199
+#, kde-format
+msgid "Recent Projects"
+msgstr "अद्यतन परियोजनाएँ"
+
+#. i18n: ectx: property (text), widget (KTitleWidget, titleWidget)
+#: welcomepageview.ui:246
+#, kde-format
+msgid "Sessions"
+msgstr "सत्रम्"
+
+#. i18n: ectx: property (text), widget (QLabel, welcomeText)
+#: welcomepageview.ui:290
+#, kde-format
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>KDevelop इत्यत्र स्वागतम्!</h3><p> उपर्युक्तबटनद्वारा विद्यमानं उद्घाट्य नूतनं वा "
+"निर्माय भवान् परियोजनायां कार्यं आरभुं शक्नोति ।</p><p> यदि भवतः साहाय्यस्य आवश्यकता "
+"अस्ति तर्हि कृपया <a href=\"https://userbase.kde.org/KDevelop\">उपयोक्तृपुस्तिकाम् "
+"अवलोकयन्तु ।</a></p>"

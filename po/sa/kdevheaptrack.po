@@ -1,0 +1,97 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: config/globalconfigpage.cpp:29
+#, kde-format
+msgctxt "@title:tab"
+msgid "Heaptrack"
+msgstr ""
+
+#: config/globalconfigpage.cpp:34
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Heaptrack Settings"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
+#: config/globalconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Executables"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, heaptrackExecutableLabel)
+#: config/globalconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Heaptrack:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, heaptrackGuiExecutableLabel)
+#: config/globalconfigpage.ui:51
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Visualizer:"
+msgstr ""
+
+#: job.cpp:100
+#, kde-format
+msgid "Heaptrack Analysis (%1)"
+msgstr "राशी विश्लेषण (%1) 1.1."
+
+#: plugin.cpp:58
+#, kde-format
+msgctxt "@action"
+msgid "Run Heaptrack Analysis"
+msgstr ""
+
+#: plugin.cpp:67
+#, kde-format
+msgctxt "@action"
+msgid "Attach to Process with Heaptrack"
+msgstr ""
+
+#: plugin.cpp:94
+#, kde-format
+msgid "Unable to start Heaptrack analysis - \"%1\" plugin is not loaded."
+msgstr "Heaptrack विश्लेषणं आरभ्यतुं असमर्थः - \"%1\" प्लगिन् लोड् न भवति ।"
+
+#: plugin.cpp:104
+#, kde-format
+msgid "Configure a native application launch to perform Heaptrack analysis on."
+msgstr "Heaptrack विश्लेषणं कर्तुं देशी अनुप्रयोगप्रक्षेपणं विन्यस्यताम् ।"
+
+#: plugin.cpp:110
+#, kde-format
+msgid "Heaptrack analysis can be started only for native applications."
+msgstr "केवलं देशी-अनुप्रयोगानाम् कृते हीपट्रैक-विश्लेषणं आरभ्यतुं शक्यते ।"
+
+#: visualizer.cpp:33
+#, kde-format
+msgid "Failed to start Heaptrack visualizer from \"%1\"."
+msgstr "\"%1\" तः Heaptrack visualizer आरभ्यतुं असफलम् ।"
+
+#: visualizer.cpp:35
+#, kde-format
+msgid "Check your settings and install the visualizer if necessary."
+msgstr "स्वस्य सेटिङ्ग्स् पश्यन्तु, आवश्यके सति विजुअलाइजर् संस्थापयन्तु च ।"
+
+#: visualizer.cpp:37
+#, kde-format
+msgid "Error during Heaptrack visualizer execution:"
+msgstr "Heaptrack visualizer निष्पादनस्य समये त्रुटिः:"

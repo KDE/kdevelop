@@ -1,0 +1,200 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>2);\n"
+
+#: filtermodel.cpp:76
+#, kde-format
+msgctxt "@title:column"
+msgid "Pattern"
+msgstr ""
+
+#: filtermodel.cpp:78
+#, kde-format
+msgctxt "@title:column"
+msgid "Targets"
+msgstr ""
+
+#: filtermodel.cpp:80
+#, kde-format
+msgctxt "@title:column"
+msgid "Action"
+msgstr ""
+
+#: filtermodel.cpp:109
+#, kde-format
+msgid ""
+"The wildcard pattern defines whether a file or folder is included in a "
+"project or not.<br />The pattern is matched case-sensitively against the "
+"items relative path to the project root. The relative path starts with a "
+"forward slash, trailing slashes of folders are removed.<br />Patterns ending "
+"on <code>\"/\"</code> are implicitly considered to match against folders "
+"only.<br />Patterns which do not explicitly start with either <code>\"/\"</"
+"code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
+"thus match any item with a relative path ending on the given pattern."
+msgstr ""
+"वाइल्डकार्ड् प्रतिरूपं परिभाषयति यत् परियोजनायां सञ्चिका वा पुटं वा समाविष्टम् अस्ति वा न "
+"वा ।<br /> परियोजनामूलस्य सापेक्षमार्गस्य विरुद्धं प्रतिरूपं केस-संवेदनशीलरूपेण मेलनं भवति । "
+"सापेक्षमार्गः अग्रे स्लैश इत्यनेन आरभ्यते, पुटस्य पश्चात् स्लैशः निष्कासिताः भवन्ति ।<br /> "
+"<code>&quot;/&quot;</code> इत्यनेन समाप्ताः प्रतिमानाः केवलं पुटैः सह मेलनं कर्तुं "
+"अन्तर्निहितरूपेण मन्यन्ते ।<br /> ये प्रतिमानाः स्पष्टतया <code>&quot;/&quot;</code> "
+"अथवा <code>&quot;*&quot;</code> इत्यनेन सह न आरभन्ते ते अन्तर्निहितरूपेण <code>&quot;"
+"*/&quot;</code> पूर्वनिर्धारितं प्राप्नुवन्ति तथा च दत्तप्रतिरूपे समाप्तेन सापेक्षमार्गेण सह "
+"कस्यापि द्रव्यस्य मेलनं कुर्वन्ति ।"
+
+#: filtermodel.cpp:121
+#, kde-format
+msgid ""
+"The target defines what type of item the filter is matched against.<br /"
+">Filters either apply only to files, only to folders or to both."
+msgstr ""
+"लक्ष्यं परिभाषयति यत् फ़िल्टर किं प्रकारस्य द्रव्यस्य विरुद्धं मेलनं भवति ।<br /> फ़िल्टर् केवलं "
+"सञ्चिकासु, केवलं पुटेषु वा उभयत्र वा प्रवर्तन्ते ।"
+
+#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
+#, kde-format
+msgctxt "@item"
+msgid "Files and Folders"
+msgstr ""
+
+#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
+#, kde-format
+msgctxt "@item"
+msgid "Folders"
+msgstr ""
+
+#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
+#, kde-format
+msgctxt "@item"
+msgid "Files"
+msgstr ""
+
+#: filtermodel.cpp:143
+#, kde-format
+msgid ""
+"Filters by default exclude items from the project. Inclusive patterns can be "
+"used to include items which where matched by previous exclusive patterns."
+"<br />E.g. to only include files ending on <code>\".cpp\"</code> in your "
+"project, you could exclude all files via <code>\"*\"</code> and then apply "
+"an inclusive <code>\"*.cpp\"</code> pattern."
+msgstr ""
+"फ़िल्टर् पूर्वनिर्धारितरूपेण परियोजनायाः वस्तूनि बहिष्कृत्य भवन्ति । समावेशीप्रतिमानानाम् "
+"उपयोगः तान् वस्तूनि समाविष्टुं कर्तुं शक्यते ये पूर्वस्य अनन्यप्रतिमानैः सह मेलनं कुर्वन्ति स्म ।"
+"<br /> यथा केवलं स्वस्य परियोजनायां <code>&quot;.cpp&quot;</code> इत्यनेन समाप्ताः "
+"सञ्चिकाः समाविष्टुं, भवान् <code>&quot;*&quot;</code> मार्गेण सर्वाणि सञ्चिकाः "
+"बहिष्कृत्य ततः समावेशी <code>&quot;*.cpp&quot;</code> प्रतिरूपं प्रयोक्तुं शक्नोति ।"
+
+#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
+#, kde-format
+msgctxt "@item"
+msgid "Include"
+msgstr ""
+
+#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
+#, kde-format
+msgctxt "@item"
+msgid "Exclude"
+msgstr ""
+
+#: projectfilterconfigpage.cpp:172
+#, kde-format
+msgid ""
+"A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
+"to make this explicit."
+msgstr ""
+"रिक्तप्रतिमानयुक्तः फ़िल्टरः सर्वेषां वस्तूनाम् मेलनं करिष्यति । एतत् स्पष्टं कर्तुं <code>&quot;"
+"*&quot;</code> उपयोगं कुर्वन्तु ।"
+
+#: projectfilterconfigpage.cpp:175
+#, kde-format
+msgid "A filter ending on <code>\"/\"</code> can never match a file."
+msgstr ""
+"<code>&quot;/&quot;</code> इत्यत्र समाप्तः फ़िल्टरः कदापि सञ्चिकायाः मेलनं कर्तुं न "
+"शक्नोति ।"
+
+#: projectfilterconfigpage.cpp:198
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Project Filter"
+msgstr ""
+
+#: projectfilterconfigpage.cpp:208
+#, kde-format
+msgctxt "@title:tab"
+msgid "Project Filter"
+msgstr ""
+
+#: projectfilterprovider.cpp:77
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Exclude Item from Project"
+msgid_plural "Exclude Items from Project"
+msgstr[0] ""
+msgstr[1] ""
+
+#: projectfilterprovider.cpp:116
+#, kde-format
+msgid ""
+"A filter for the item was added. To undo, use the project filter settings."
+msgid_plural ""
+"A filter for the items was added. To undo, use the project filter settings."
+msgstr[0] ""
+msgstr[1] ""
+
+#: projectfilterprovider.cpp:118
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Filter Added"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectfiltersettings.ui:20
+#, kde-format
+msgid ""
+"Configure which files and folders inside the project folder should be "
+"included or excluded:"
+msgstr ""
+"परियोजनापुटस्य अन्तः काः सञ्चिकाः, पुटाः च समाविष्टाः वा बहिष्कृताः वा भवेयुः इति "
+"विन्यस्यताम्:"
+
+#. i18n: ectx: property (text), widget (QPushButton, add)
+#: projectfiltersettings.ui:34
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, remove)
+#: projectfiltersettings.ui:47
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, moveUp)
+#: projectfiltersettings.ui:57
+#, kde-format
+msgctxt "@action:button"
+msgid "Move Up"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, moveDown)
+#: projectfiltersettings.ui:67
+#, kde-format
+msgctxt "@action:button"
+msgid "Move Down"
+msgstr ""

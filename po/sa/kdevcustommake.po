@@ -1,0 +1,86 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr "अन्यः समाधानप्रक्रिया अद्यापि प्रचलति स्म तदा मार्गनिराकरणं समावेशयितुं प्रयतितम्"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "\"%1\" पुटे मेकसञ्चिका अनुपलब्धा अस्ति ।"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "समाधानं कर्तुं प्रयतमाने समस्या %1 कृते मार्गाः समाविष्टाः"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "संग्रहीतम् : %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "सञ्चिकानाम %1 विकृतं दृश्यते"
+
+#: makefileresolver/makefileresolver.cpp:472
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "नूतनं कार्यनिर्देशिकां निष्कासयितुं असफलम्"
+
+#: makefileresolver/makefileresolver.cpp:472
+#: makefileresolver/makefileresolver.cpp:501
+#, kde-format
+msgid "Output was: %1"
+msgstr "उत्पादनं आसीत् : %1"
+
+#: makefileresolver/makefileresolver.cpp:494
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "पुनरावर्तनीयं make call विफलम्"
+
+#: makefileresolver/makefileresolver.cpp:494
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr "\"%1\" इति पैरामीटर् स्ट्रिंग् वैधं न दृश्यते । उत्पादनं आसीत् : %2 ।"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "\"%1\" इति निर्देशिका नास्ति । उत्पादनं आसीत् : %2 ।"
+
+#: makefileresolver/makefileresolver.cpp:501
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "विकृत रिकर्सिव मेक कॉल"
+
+#: makefileresolver/makefileresolver.cpp:513
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "make output तः include मार्गान् निष्कासयितुं न शक्तवान्"
+
+#: makefileresolver/makefileresolver.cpp:514
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "पुटम्: \"%1\" आदेशः: \"%2\" निर्गमः: \"%3\"."

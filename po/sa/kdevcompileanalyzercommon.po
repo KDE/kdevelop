@@ -1,0 +1,107 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: compileanalyzeproblemmodel.cpp:84
+#, kde-format
+msgid "Analysis completed, no problems detected."
+msgstr "विश्लेषणं सम्पन्नम्, कोऽपि समस्या न ज्ञाता।"
+
+#: compileanalyzeproblemmodel.cpp:107
+#, kde-format
+msgid "Analysis started..."
+msgstr "विश्लेषणं आरब्धम्..."
+
+#: compileanalyzeproblemmodel.cpp:110
+#, kde-format
+msgctxt "@info:tooltip %2 is the path of the file"
+msgid "Re-run last %1 analysis (%2)"
+msgstr ""
+
+#: compileanalyzeproblemmodel.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-run last %1 analysis"
+msgstr ""
+
+#: compileanalyzer.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current File with %1"
+msgstr ""
+
+#: compileanalyzer.cpp:78
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current Project with %1"
+msgstr ""
+
+#: compileanalyzer.cpp:167
+#, kde-format
+msgid "No suitable active file, unable to deduce project."
+msgstr "कोऽपि उपयुक्तः सक्रियसञ्चिका नास्ति, परियोजनां निष्कर्षयितुं असमर्थः ।"
+
+#: compileanalyzer.cpp:179
+#, kde-format
+msgid "Active file isn't in a project."
+msgstr "सक्रियसञ्चिका परियोजनायां नास्ति ।"
+
+#: compileanalyzer.cpp:192
+#, kde-format
+msgid ""
+"Unable to start check for '%1':\n"
+"\n"
+"%2"
+msgstr ""
+"'%1' इत्यस्य जाँचम् आरभ्यतुं असमर्थः:\n"
+"\n"
+"%2"
+
+#: compileanalyzer.cpp:222
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr ""
+
+#: compileanalyzeutils.cpp:45
+#, kde-format
+msgid "Compilation database file not found: '%1'"
+msgstr "संकलनदत्तांशकोशसञ्चिका न प्राप्ता: '%1'."
+
+#: compileanalyzeutils.cpp:51 compileanalyzeutils.cpp:110
+#, kde-format
+msgid ""
+"Nothing to check: compilation database file '%1' contains no matching items."
+msgstr ""
+"किमपि परीक्षितुं नास्ति: संकलनदत्तांशकोशसञ्चिकायां '%1' इत्यत्र कोऽपि मेलवस्तूनि नास्ति ।"
+
+#: compileanalyzeutils.cpp:57
+#, kde-format
+msgid "Could not open compilation database file for reading: '%1'"
+msgstr "पठनार्थं संकलनदत्तांशकोशसञ्चिकां उद्घाटयितुं न शक्तवान्: '%1'."
+
+#: compileanalyzeutils.cpp:65
+#, kde-format
+msgid "JSON error during parsing compilation database file '%1': %2"
+msgstr "संकलनदत्तांशकोशसञ्चिकायाः विश्लेषणस्य समये JSON त्रुटिः '%1': %2"
+
+#: compileanalyzeutils.cpp:70
+#, kde-format
+msgid ""
+"JSON error during parsing compilation database file '%1': document is not an "
+"array."
+msgstr "संकलनदत्तांशकोशसञ्चिकां '%1' विश्लेषणस्य समये JSON त्रुटिः: दस्तावेजं सरणी नास्ति ।"

@@ -1,0 +1,108 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: cmakebuilder.cpp:106
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr "मेक बिल्डरं न प्राप्नोत्। स्वस्य संस्थापनं पश्यन्तु"
+
+#: cmakebuilder.cpp:133 cmakebuilder.cpp:159 cmakebuilder.cpp:186
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "%1 कृते निर्मातारं न लब्धम्"
+
+#: cmakebuilder.cpp:199
+#, kde-format
+msgid "No build directory configured, cannot install"
+msgstr "कोऽपि बिल्ड् निर्देशिका विन्यस्तः, संस्थापनं कर्तुं न शक्नोति"
+
+#: cmakebuilder.cpp:209
+#, kde-format
+msgid "No build directory configured, cannot configure"
+msgstr "कोऽपि बिल्ड् निर्देशिका विन्यस्तः, विन्यस्तुं न शक्नोति"
+
+#: cmakebuilderpreferences.cpp:44
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake इति"
+
+#: cmakebuilderpreferences.cpp:49
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr ""
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake इति"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr "आन्तरिकदोषः: विन्यस्तं कर्तुं कोऽपि परियोजना निर्दिष्टा नास्ति।"
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "%1 निर्माणनिर्देशिकां निर्मातुं असफलम् ।"
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, kde-format
+msgid "No build directory configured, cannot clear the build directory"
+msgstr "कोऽपि build directory विन्यस्तः नास्ति, build directory स्वच्छं कर्तुं न शक्नोति"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "गलत् build directory, build directory स्वच्छं कर्तुं न शक्नोति"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** छंटनी सफल ** ."
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** छंटनी विफलम्: %1 **"

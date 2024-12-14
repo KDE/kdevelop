@@ -1,0 +1,33 @@
+# Sanskrit translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-07-19 00:38+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: kdevkonsoleview.cpp:107
+#, kde-format
+msgid "Terminal"
+msgstr "टर्मिनल्"
+
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:55
+#, kde-format
+msgctxt "@title:window"
+msgid "Terminal"
+msgstr "टर्मिनल्"
+
+#: kdevkonsoleviewplugin.cpp:48
+#, kde-format
+msgid "Failed to load 'konsolepart' plugin: %1"
+msgstr "'konsolepart' प्लगिन् लोड् कर्तुं असफलम्: %1"
