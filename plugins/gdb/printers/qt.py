@@ -1191,7 +1191,7 @@ def make_Utf8String(data, size):
 def make_QByteArray(data, size):
     if d.qt6orLater():
         qbytearray_type = gdb.lookup_type('QByteArray')
-        buffer = struct.pack("PPn", 0, data, size)
+        buffer = struct.pack("PPn", data, data, size)
         fakeQByteArray = gdb.Value(buffer, qbytearray_type)
         return fakeQByteArray
     else: # Qt 5
