@@ -1161,24 +1161,27 @@ def qcborContainerValueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cb
 def make_QString(utf16data, size):
     if d.qt6orLater():
         qstring_type = gdb.lookup_type('QString')
-        buffer = struct.pack("PPq", utf16data, utf16data, size)
+        buffer = struct.pack("PPn", utf16data, utf16data, size)
     else: # Qt 5
         # creating a QString would require allocating a d pointer,
         # so use QStringView instead
         qstring_type = gdb.lookup_type('QStringView')
-        buffer = struct.pack("qP", size, utf16data)
+        buffer = struct.pack("nP", size, utf16data)
     fakeQString = gdb.Value(buffer, qstring_type)
     return fakeQString
 
 def make_QLatin1String(data, size):
     qlatin1string_type = gdb.lookup_type('QLatin1String')
-    buffer = struct.pack("qP", size, data)
+    if d.qt6orLater():
+        buffer = struct.pack("nP", size, data)
+    else: # Qt 5
+        buffer = struct.pack("iP", size, data)
     return gdb.Value(buffer, qlatin1string_type)
 
 def make_Utf8String(data, size):
     if d.qt6orLater():
         qutf8stringview_type = gdb.lookup_type('QBasicUtf8StringView<false>')
-        buffer = struct.pack("Pq", data, size)
+        buffer = struct.pack("Pn", data, size)
         fakeStringView = gdb.Value(buffer, qutf8stringview_type)
         return fakeStringView
     else: # Qt 5
@@ -1188,7 +1191,7 @@ def make_Utf8String(data, size):
 def make_QByteArray(data, size):
     if d.qt6orLater():
         qbytearray_type = gdb.lookup_type('QByteArray')
-        buffer = struct.pack("PPq", 0, data, size)
+        buffer = struct.pack("PPn", 0, data, size)
         fakeQByteArray = gdb.Value(buffer, qbytearray_type)
         return fakeQByteArray
     else: # Qt 5
