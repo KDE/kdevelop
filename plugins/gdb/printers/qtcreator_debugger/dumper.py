@@ -236,26 +236,13 @@ class DumperBase():
         ptrSize = self.ptrSize()
         builder = self.StructBuilder(self)
         n = None
-        typename = ''
-        readingTypeName = False
+        # KDevelop: removed support for the `{type}` syntax in the pattern of split()
+        # to avoid copying functions used only in the '}' branch from Qt Creator
         #self.warn("PATTERN: %s" % pattern)
         for c in pattern:
             #self.warn("PAT CODE: %s %s" % (c, str(n)))
-            if readingTypeName:
-                if c == '}':
-                    readingTypeName = False
-                    # TODO (KDevelop): have not copied describe_struct_member! Is this branch never taken?
-                    n, field_typeid = self.describe_struct_member(typename)
-
-                    field_align = self.type_alignment(field_typeid)
-                    builder.add_field(n,
-                                      field_is_struct=True,
-                                      field_typeid=field_typeid,
-                                      field_align=field_align)
-                    typename = None
-                    n = None
-                else:
-                    typename += c
+            if False:
+                pass
             elif c == 't':  # size_t
                 builder.add_field(ptrSize, self.ptrCode(), field_align=ptrSize)
             elif c == 'p':  # Pointer as int
@@ -279,9 +266,6 @@ class DumperBase():
             elif c == 's':
                 builder.add_field(int(n), field_align=1)
                 n = None
-            elif c == '{':
-                readingTypeName = True
-                typename = ''
             elif c == '@':
                 if n is None:
                     # Automatic padding depending on next item
