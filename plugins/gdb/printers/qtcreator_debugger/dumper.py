@@ -37,6 +37,10 @@ class DumperBase():
         # KDevelop: simplified - no qtversionAtLeast6
         return self.qtVersion() >= version
 
+    # KDevelop: added this convenience function
+    def qt6orLater(self):
+        return self.qtVersionAtLeast(0x060000)
+
     def lookupType(self, typename):
         # KDevelop: simplified - must be overridden in bridges
         pass

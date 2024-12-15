@@ -1028,7 +1028,7 @@ class CborOrJsonValueData:
         self.is_cbor = is_cbor
 
     def createCborOrJsonContainer(self, containerType):
-        if d.qtVersionAtLeast(0x060000) or self.is_cbor:
+        if d.qt6orLater() or self.is_cbor:
             # Create an 8-byte buffer and pack the address as a pointer
             buffer = struct.pack("P", self.container_ptr)
         else: # Qt 5.15's QJsonArray and QJsonObject had a dead pointer first
@@ -1159,7 +1159,7 @@ def qcborContainerValueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cb
     return CborOrJsonValueData(element_value, 0, element_type, is_cbor)
 
 def make_QString(utf16data, size):
-    if d.qtVersionAtLeast(0x060000):
+    if d.qt6orLater():
         qstring_type = gdb.lookup_type('QString')
         buffer = struct.pack("PPq", utf16data, utf16data, size)
     else: # Qt 5
@@ -1176,7 +1176,7 @@ def make_QLatin1String(data, size):
     return gdb.Value(buffer, qlatin1string_type)
 
 def make_Utf8String(data, size):
-    if d.qtVersionAtLeast(0x060000):
+    if d.qt6orLater():
         qutf8stringview_type = gdb.lookup_type('QBasicUtf8StringView<false>')
         buffer = struct.pack("Pq", data, size)
         fakeStringView = gdb.Value(buffer, qutf8stringview_type)
@@ -1186,7 +1186,7 @@ def make_Utf8String(data, size):
         return make_QByteArray(data, size)
 
 def make_QByteArray(data, size):
-    if d.qtVersionAtLeast(0x060000):
+    if d.qt6orLater():
         qbytearray_type = gdb.lookup_type('QByteArray')
         buffer = struct.pack("PPq", 0, data, size)
         fakeQByteArray = gdb.Value(buffer, qbytearray_type)
@@ -1393,7 +1393,7 @@ class QCborValuePrinter(QCborValuePrinterBase):
 class QJsonValuePrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
-        if d.qtVersionAtLeast(0x060000):
+        if d.qt6orLater():
             value = val['value']
             dd = int(value['container'])
         elif d.qtVersionAtLeast(0x050f00):
@@ -1425,7 +1425,7 @@ class QJsonValueConstRefPrinter(QCborValuePrinterBase):
         item_index = int(val['index'])
         if is_object:
             item_index = item_index * 2 + 1 # see QJsonPrivate::Value::indexHelper()
-        if d.qtVersionAtLeast(0x060000):
+        if d.qt6orLater():
             container_ptr = d.extractPointer(array_or_map)
         elif d.qtVersionAtLeast(0x050f00):
             container_ptr = d.extractPointer(array_or_map + d.ptrSize())
