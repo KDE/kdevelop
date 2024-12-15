@@ -1060,7 +1060,7 @@ class CborOrJsonValueData:
 
     @staticmethod
     def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
-        (bytedata_data, bytedata_len, element_flags) = CborOrJsonValueData.extractByteData(d, container_ptr, element_index)
+        bytedata_data, bytedata_len, element_flags = CborOrJsonValueData.extractByteData(d, container_ptr, element_index)
         if is_bytes:
             return make_QByteArray(bytedata_data, bytedata_len)
         if element_flags & 8: # QtCbor::Element::StringIsAscii
@@ -1071,13 +1071,13 @@ class CborOrJsonValueData:
 
     # A variant of qdumpHelper_QCbor_string which returns a python bytes buffer
     def toPythonBytes(self, element_index):
-        (bytedata_data, bytedata_len, element_flags) = CborOrJsonValueData.extractByteData(d, self.container_ptr, element_index)
+        bytedata_data, bytedata_len, element_flags = CborOrJsonValueData.extractByteData(d, self.container_ptr, element_index)
         buffer = d.readMemory(bytedata_data, bytedata_len)
         return (buffer, bytedata_len, element_flags)
 
     # A variant of qdumpHelper_QCbor_string which returns a python string instead
     def toPythonString(self, element_index):
-        (buffer, bytedata_len, element_flags) = self.toPythonBytes(element_index)
+        buffer, bytedata_len, element_flags = self.toPythonBytes(element_index)
         enc = 'utf8'
         if element_flags & 8: # QtCbor::Element::StringIsAscii
             enc = 'latin1'
@@ -1131,7 +1131,7 @@ class CborOrJsonValueData:
             return self.toCborOrJsonGdbValue()
 
         elif item_type == CborValueType.Uuid.value:
-            (bytedata_data, bytedata_len, element_flags) = CborOrJsonValueData.extractByteData(d, self.container_ptr, 1)
+            bytedata_data, bytedata_len, element_flags = CborOrJsonValueData.extractByteData(d, self.container_ptr, 1)
             bytes_buffer = bytes(d.readMemory(bytedata_data, bytedata_len))
             # QUuid format: uint, ushort, ushort, uchar[8] in big endian
             data1, data2, data3, data4 = struct.unpack('!IHH8s', bytes_buffer) # cbor is in network (big-endian) byte order
