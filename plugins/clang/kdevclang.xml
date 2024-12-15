@@ -25,6 +25,7 @@
         <comment xml:lang="pt">Código-fonte em CUDA C da NVIDIA</comment>
         <comment xml:lang="pt_BR">Código-fonte em CUDA C da NVIDIA</comment>
         <comment xml:lang="ru">Исходный код NVIDIA CUDA C</comment>
+        <comment xml:lang="sa">NVIDIA CUDA C स्रोत कोड</comment>
         <comment xml:lang="sk">Zdrojový kód NVIDIA CUDA C</comment>
         <comment xml:lang="sl">Izvorna koda NVIDIA CUDA C</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-källkod</comment>
@@ -60,6 +61,7 @@
         <comment xml:lang="pt">Ficheiro de inclusão em CUDA C da NVIDIA</comment>
         <comment xml:lang="pt_BR">Cabeçalho C da NVIDIA CUDA</comment>
         <comment xml:lang="ru">Заголовочный файл NVIDIA CUDA C</comment>
+        <comment xml:lang="sa">NVIDIA CUDA C शीर्षकम्</comment>
         <comment xml:lang="sk">Hlavička NVIDIA CUDA C</comment>
         <comment xml:lang="sl">Glava NVIDIA CUDA C</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-deklarationsfil</comment>
