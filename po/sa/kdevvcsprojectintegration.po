@@ -20,34 +20,34 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Refresh"
-msgstr ""
+msgstr "ताजगी"
 
 #: vcschangesviewplugin.cpp:63
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Changes"
-msgstr ""
+msgstr "परियोजना परिवर्तनम्"
 
 #: vcschangesviewplugin.cpp:66
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
-msgstr ""
+msgstr "वर्तमान दस्तावेजस्य स्थानं ज्ञातव्यम्"
 
 #: vcschangesviewplugin.cpp:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
-msgstr ""
+msgstr "वर्तमानदस्तावेजं ज्ञात्वा तत् चिनोतु"
 
 #: vcschangesviewplugin.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "Reload View"
-msgstr ""
+msgstr "Reload View इति"
 
 #: vcschangesviewplugin.cpp:73
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"
-msgstr ""
+msgstr "सर्वेषां परियोजनानां कृते दृश्यं ताजगीं कुर्वन्तु, यद्यपि किमपि परिवर्तनं जातम्"

@@ -20,7 +20,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
-msgstr ""
+msgstr "प्लाज्मोइड् निष्पादनं विन्यस्यताम्"
 
 #: plasmoidexecutionconfig.cpp:127
 #, kde-format
@@ -41,56 +41,56 @@ msgstr "आश्रयस्य समाधानं कर्तुं न �
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"
-msgstr ""
+msgstr "प्लाज्मोइड्स"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plasmoidexecutionconfig.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Plasmoid"
-msgstr ""
+msgstr "प्लाज्मोइड"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plasmoidexecutionconfig.ui:35
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Path or name:"
-msgstr ""
+msgstr "मार्गः नाम वा : १."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plasmoidexecutionconfig.ui:67
 #, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
-msgstr ""
+msgstr "व्यवहार"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plasmoidexecutionconfig.ui:73
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Form factor:"
-msgstr ""
+msgstr "रूपकारकः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plasmoidexecutionconfig.ui:107
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Theme:"
-msgstr ""
+msgstr "विषयवस्तु:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plasmoidexecutionconfig.ui:123
 #, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
-msgstr ""
+msgstr "आश्रयाः"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plasmoidexecutionconfig.ui:132
 #, kde-format
 msgctxt "@label:chooser"
 msgid "&Targets:"
-msgstr ""
+msgstr "&लक्ष्यम् : १."
 
 #: plasmoidexecutionjob.cpp:35
 #, kde-format

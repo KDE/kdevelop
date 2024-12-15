@@ -26,49 +26,49 @@ msgstr "Cppcheck इति"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Cppcheck Settings"
-msgstr ""
+msgstr "Cppcheck सेटिंग्स् विन्यस्तं कुर्वन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/globalconfigpage.ui:20
 #, kde-format
 msgctxt "@title:group"
 msgid "Paths"
-msgstr ""
+msgstr "पथाः"
 
 #. i18n: ectx: property (text), widget (QLabel, cppcheckLabel)
 #: config/globalconfigpage.ui:26
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Cppchec&k executable:"
-msgstr ""
+msgstr "Cppchec&k कार्यान्वयनीय: ."
 
 #. i18n: ectx: property (title), widget (QGroupBox, outputGroupBox)
 #: config/globalconfigpage.ui:45
 #, kde-format
 msgctxt "@title:group"
 msgid "Output"
-msgstr ""
+msgstr "उत्पादनम्"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
 #: config/globalconfigpage.ui:51
 #, kde-format
 msgctxt "@option:check"
 msgid "Hide output view during check"
-msgstr ""
+msgstr "चेकस्य समये आउटपुट् दृश्यं गोपयन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_showXmlOutput)
 #: config/globalconfigpage.ui:58
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Cppcheck XML output in the output view"
-msgstr ""
+msgstr "आउटपुट् दृश्ये Cppcheck XML आउटपुट् दर्शयन्तु"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabChecks)
 #: config/projectconfigpage.ui:39
 #, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
-msgstr ""
+msgstr "जाँचयति"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkUnusedFunction)
 #: config/projectconfigpage.ui:47
@@ -78,13 +78,15 @@ msgid ""
 "Check for unused functions. It is recommend to only enable this when the "
 "whole program is scanned"
 msgstr ""
+"अप्रयुक्तानि कार्याणि पश्यन्तु। यदा सम्पूर्णः कार्यक्रमः स्कैन् भवति तदा एव एतत् सक्षमं कर्तुं "
+"अनुशंसितम्"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkUnusedFunction)
 #: config/projectconfigpage.ui:50
 #, kde-format
 msgctxt "@option:check"
 msgid "Unused function"
-msgstr ""
+msgstr "अप्रयुक्तं कार्यम्"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:60
@@ -95,27 +97,30 @@ msgid ""
 "are false positives with this option. Each result must be carefully "
 "investigated before you know if it is good or bad."
 msgstr ""
+"विश्लेषणं निष्कर्षहीनं भवति चेदपि Cppcheck रिपोर्ट् करोति इति अनुमन्यताम्। एतेन विकल्पेन सह "
+"मिथ्या सकारात्मकाः सन्ति। प्रत्येकं परिणामं सम्यक् अन्वेष्टव्यं यत् भवन्तः ज्ञातुं शक्नुवन्ति यत् तत् "
+"शुभं वा दुष्टं वा।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:63
 #, kde-format
 msgctxt "@option:check"
 msgid "Inconclusive analysis"
-msgstr ""
+msgstr "अनिर्णयात्मकं विश्लेषणम्"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:70
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable information messages"
-msgstr ""
+msgstr "सूचनासन्देशान् सक्षमं कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Information"
-msgstr ""
+msgstr "सूचना"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:83
@@ -125,27 +130,29 @@ msgid ""
 "Warn if there are missing includes. For detailed information use 'check-"
 "config'"
 msgstr ""
+"यदि अन्तर्भावाः लुप्ताः सन्ति तर्हि चेतयन्तु। विस्तृतसूचनार्थं 'check-config' इत्यस्य उपयोगं "
+"कुर्वन्तु ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:86
 #, kde-format
 msgctxt "@option:check"
 msgid "Missing include"
-msgstr ""
+msgstr "लुप्ताः अन्तर्भवन्ति"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:96
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable performance messages"
-msgstr ""
+msgstr "कार्यप्रदर्शनसन्देशान् सक्षमं कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:99
 #, kde-format
 msgctxt "@option:check"
 msgid "Performance"
-msgstr ""
+msgstr "प्रदर्शनम्‌"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:109
@@ -158,27 +165,31 @@ msgid ""
 "that is effective.<br/><br/>Be careful with using this option - it can "
 "dramatically slow checking.</p>"
 msgstr ""
+"<p>येषु सञ्चिकासु बहु विन्यासाः सन्ति तेषां जाँचं बलात् । यदि एतादृशी सञ्चिका लभ्यते तर्हि "
+"त्रुटिः मुद्र्यते अतः पूर्वनिर्धारितरूपेण एतस्य उपयोगस्य कारणं नास्ति । यदि &#39;--max-"
+"configs=&#39; इत्यनेन सह उपयुज्यते तर्हि अन्तिमः विकल्पः एव प्रभावी भवति ।<br/><br/> "
+"एतस्य विकल्पस्य उपयोगेन सावधानाः भवन्तु - एतत् नाटकीयरूपेण जाँचं मन्दं कर्तुं शक्नोति ।</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:112
 #, kde-format
 msgctxt "@option:check"
 msgid "Force checking"
-msgstr ""
+msgstr "बलपरीक्षा"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable portability messages"
-msgstr ""
+msgstr "पोर्टेबिलिटी सन्देशान् सक्षमं कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:122
 #, kde-format
 msgctxt "@option:check"
 msgid "Portability"
-msgstr ""
+msgstr "पोर्टेबिलिटी"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:132
@@ -188,13 +199,15 @@ msgid ""
 "Enable all coding style checks. All messages with the severities 'style', "
 "'performance' and 'portability' are enabled."
 msgstr ""
+"सर्वाणि कोडिंग् शैल्याः जाँचं सक्षमं कुर्वन्तु । 'शैली', 'प्रदर्शनम्', 'पोर्टेबिलिटी' च इति "
+"तीव्रतायुक्ताः सर्वे सन्देशाः सक्षमाः सन्ति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:135
 #, kde-format
 msgctxt "@option:check"
 msgid "Style"
-msgstr ""
+msgstr "शैली"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:145
@@ -203,21 +216,21 @@ msgctxt "@info:tooltip"
 msgid ""
 "Check Cppcheck configuration. The normal code analysis is disabled by this "
 "flag."
-msgstr ""
+msgstr "Cppcheck विन्यासं पश्यन्तु। सामान्यसङ्केतविश्लेषणम् अस्मिन् ध्वजेन निष्क्रियं भवति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:148
 #, kde-format
 msgctxt "@option:check"
 msgid "Check config"
-msgstr ""
+msgstr "config चेकं कुर्वन्तु"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIncludes)
 #: config/projectconfigpage.ui:158
 #, kde-format
 msgctxt "@title:tab"
 msgid "Include Directories"
-msgstr ""
+msgstr "निर्देशिकाः समाविष्टाः कुर्वन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:164
@@ -227,13 +240,15 @@ msgid ""
 "Add 'project' include directories to Cppcheck arguments. This option adds "
 "only paths related with project's root and build directories."
 msgstr ""
+"Cppcheck तर्केषु 'project' include निर्देशिकाः योजयन्तु । एषः विकल्पः केवलं "
+"परियोजनायाः मूल-निर्माणनिर्देशिकाभिः सह सम्बद्धान् मार्गान् योजयति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:167
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'project' include dirs"
-msgstr ""
+msgstr "'परियोजना' इत्यस्य प्रयोगः dirs समावेशयति"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:180
@@ -243,20 +258,23 @@ msgid ""
 "<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
 ">Be careful with using this option - it can dramatically slow checking.</p>"
 msgstr ""
+"<p>अन्ये योजयन्तु, &#39;system&#39; Cppcheck तर्केषु निर्देशिकाः समाविष्टाः सन्ति ।<br/"
+"><br/> एतस्य विकल्पस्य उपयोगेन सावधानाः भवन्तु - एतत् नाटकीयरूपेण जाँचं मन्दं कर्तुं शक्नोति ।"
+"</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:183
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'system' include dirs"
-msgstr ""
+msgstr "'system' इत्यस्य उपयोगं कुर्वन्तु include dirs"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/projectconfigpage.ui:198
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Ignored includes:"
-msgstr ""
+msgstr "&Ignored इत्यत्र अन्तर्भवति : १."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
 #: config/projectconfigpage.ui:218
@@ -277,20 +295,24 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
+"<html><p>उपेक्षितानां include निर्देशिकानां अर्धविराम-विभक्तसूचीं परिभाषयति ।</p><p> "
+"भवान् निम्नलिखितस्थानधारकाणां उपयोगं कर्तुं शक्नोति ।</p><p> <b><tt>%p</tt></b> - "
+"परियोजनायाः मूलनिर्देशिकायाः URL द्वारा प्रतिस्थापितं भवति ।</p><p> <b><tt>%b</tt></"
+"b> - परियोजनायाः निर्माणनिर्देशिकायाः URL द्वारा प्रतिस्थापितं भवति ।</p></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabExtra)
 #: config/projectconfigpage.ui:241
 #, kde-format
 msgctxt "@title:tab"
 msgid "Extra Parameters"
-msgstr ""
+msgstr "अतिरिक्त पैरामीटर"
 
 #. i18n: ectx: property (text), widget (QLabel, extraLabel)
 #: config/projectconfigpage.ui:254
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Ex&tra parameters:"
-msgstr ""
+msgstr "Ex&tra पैरामीटर्स : १."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraParameters)
 #: config/projectconfigpage.ui:274
@@ -311,27 +333,31 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
+"<html><p>cppcheck कृते अतिरिक्तमापदण्डान् परिभाषयति (दस्तावेजीकरणं पश्यन्तु) ।</p><p> "
+"भवान् निम्नलिखितस्थानधारकाणां उपयोगं कर्तुं शक्नोति ।</p><p> <b><tt>%p</tt></b> - "
+"परियोजनायाः मूलनिर्देशिकायाः URL द्वारा प्रतिस्थापितं भवति ।</p><p> <b><tt>%b</tt></"
+"b> - परियोजनायाः निर्माणनिर्देशिकायाः URL द्वारा प्रतिस्थापितं भवति ।</p></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: config/projectconfigpage.ui:308
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Line"
-msgstr ""
+msgstr "आदेशपङ्क्तिः"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, commandLineFilter)
 #: config/projectconfigpage.ui:316
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "अन्वेषण..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
 #: config/projectconfigpage.ui:326
 #, kde-format
 msgctxt "@option:check"
 msgid "Break lines"
-msgstr ""
+msgstr "रेखाः भङ्गयतु"
 
 #: job.cpp:42
 #, kde-format
@@ -394,7 +420,7 @@ msgstr "Cppcheck XML Parsing: %1 पङ्क्तौ त्रुटिः, %2
 #, kde-format
 msgctxt "@action"
 msgid "Analyze Current File with Cppcheck"
-msgstr ""
+msgstr "Cppcheck इत्यनेन वर्तमानसञ्चिकायाः विश्लेषणं कुर्वन्तु"
 
 #: plugin.cpp:57 plugin.cpp:68 plugin.cpp:73
 #, kde-format
@@ -406,13 +432,13 @@ msgstr "Cppcheck इति"
 #, kde-format
 msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
-msgstr ""
+msgstr "Cppcheck इत्यनेन वर्तमान परियोजनायाः विश्लेषणं कुर्वन्तु"
 
 #: plugin.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Test"
-msgstr ""
+msgstr "परीक्षा"
 
 #: problemmodel.cpp:116
 #, kde-format
@@ -428,10 +454,10 @@ msgstr "विश्लेषणं आरब्धम्..."
 #, kde-format
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
-msgstr ""
+msgstr "अन्तिम Cppcheck विश्लेषणं पुनः चालयन्तु (%1)"
 
 #: problemmodel.cpp:140
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
-msgstr ""
+msgstr "अन्तिम Cppcheck विश्लेषणं पुनः चालयन्तु"

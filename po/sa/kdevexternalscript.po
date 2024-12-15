@@ -49,6 +49,20 @@ msgid ""
 "<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
 "commands that could lead to data loss.</p>\n"
 msgstr ""
+"<p>अस्याः स्क्रिप्ट् चालितस्य समये यः आदेशः निष्पादनीयः इति परिभाषयति । भवतः मञ्चस्य "
+"मूलभूताः शेल्-विशेषताः उपलभ्यन्ते ।</p><p> आदेशे भवन्तः कतिपयानि स्थानधारकाणि उपयोक्तुं "
+"शक्नुवन्ति ।</p><dl><dt> <code>%u</code></dt><dd> सक्रियदस्तावेजस्य URL द्वारा "
+"प्रतिस्थापितं भवति ।</dd><dt> <code>%f</code></dt><dd> सक्रियदस्तावेजं प्रति "
+"स्थानीयसञ्चिकामार्गेण प्रतिस्थापितं भवति ।</dd><dt> <code>%n</code></dt><dd> "
+"सक्रियदस्तावेजस्य नामेन प्रतिस्थापितं भवति, तस्य विस्तारसहितम् ।</dd><dt> <code>%b</"
+"code></dt><dd> सक्रियदस्तावेजस्य नाम तस्य विस्तारं विना प्रतिस्थापितं भवति ।</dd><dt> "
+"<code>%d</code></dt><dd> सक्रियदस्तावेजस्य निर्देशिकामार्गेण प्रतिस्थापितं भवति ।</"
+"dd><dt> <code>%p</code></dt><dd> सक्रियदस्तावेजस्य परियोजनायाः URL द्वारा "
+"प्रतिस्थापितं भवति ।</dd><dt> <code>%s</code></dt><dd> सक्रियदस्तावेजे चयनस्य शेल् "
+"पलायितसामग्रीभिः सह प्रतिस्थापितं भवति ।</dd><dt> <code>%i</code></dt><dd> "
+"वर्तमानकाले चालितस्य KDevelop प्रक्रियायाः PID इत्यनेन प्रतिस्थापितं भवति ।</dd></"
+"dl><p> <b>नोटः-</b> दत्तांशहानिः भवितुम् अर्हति इति खतरनाकान् आदेशान् चालयितुं "
+"निवारयितुं भवतः दायित्वम् अस्ति ।</p>\n"
 
 #: editexternalscript.cpp:56
 #, kde-format
@@ -57,6 +71,8 @@ msgid ""
 "<p>Defines what the external script should get as input (via <code>STDIN</"
 "code>).</p>"
 msgstr ""
+"<p>बाह्यस्क्रिप्ट् निवेशरूपेण किं प्राप्तव्यं इति परिभाषयति ( <code>STDIN</code> मार्गेण) ।"
+"</p>"
 
 #: editexternalscript.cpp:62
 #, kde-format
@@ -65,6 +81,8 @@ msgid ""
 "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
 "the script.</p>"
 msgstr ""
+"<p>स्क्रिप्ट् इत्यस्य आउटपुट् (अर्थात् <code>STDOUT</code> ) इत्यनेन किं कर्तव्यमिति "
+"परिभाषयति ।</p>"
 
 #: editexternalscript.cpp:68
 #, kde-format
@@ -74,12 +92,15 @@ msgid ""
 "the script.</p><p>Note: if the action is the same as that chosen for the "
 "output, the channels will be merged and handled together.</p>"
 msgstr ""
+"<p>स्क्रिप्ट् इत्यस्य दोषैः (अर्थात् <code>STDERR</code> ) किं कर्तव्यमिति परिभाषयति ।</"
+"p><p> नोट्: यदि क्रिया आउटपुट् कृते चयनितस्य समाना अस्ति तर्हि चैनल्स् विलीनाः भूत्वा एकत्र "
+"नियन्त्रिताः भविष्यन्ति ।</p>"
 
 #: editexternalscript.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
-msgstr ""
+msgstr "<p>लिप्याः नाम परिभाषयति । केवलं प्रदर्शनार्थं।</p>"
 
 #: editexternalscript.cpp:82
 #, kde-format
@@ -87,6 +108,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines the shortcut(s) you can use to execute this external script.</p>"
 msgstr ""
+"<p>एतत् बाह्यस्क्रिप्ट् निष्पादयितुं भवान् यत् शॉर्टकट्(s) उपयोक्तुं शक्नोति तत् परिभाषयति ।</"
+"p>"
 
 #: editexternalscript.cpp:88
 #, kde-format
@@ -94,7 +117,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines whether documents should be saved before the script gets executed."
 "</p>"
-msgstr ""
+msgstr "<p>स्क्रिप्ट् निष्पादनात् पूर्वं दस्तावेजाः रक्षिताः भवेयुः वा इति परिभाषयति ।</p>"
 
 #: editexternalscript.cpp:94
 #, kde-format
@@ -102,7 +125,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines whether the output of the script should be shown in a tool view.</"
 "p>"
-msgstr ""
+msgstr "<p>स्क्रिप्ट् इत्यस्य आउटपुट् टूल् व्यू इत्यत्र दर्शनीयं वा इति परिभाषयति ।</p>"
 
 #: editexternalscript.cpp:98
 #, kde-format
@@ -111,25 +134,27 @@ msgid ""
 "<p>Defines what type of filtering should be applied to the output. E.g. to "
 "indicate errors by red text.</p>"
 msgstr ""
+"<p>निर्गमस्य कृते कीदृशं फ़िल्टरिंग् प्रयोक्तव्यम् इति परिभाषयति । यथा रक्तपाठेन दोषान् सूचयितुं।"
+"</p>"
 
 #: editexternalscript.cpp:106
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New External Script"
-msgstr ""
+msgstr "नूतनं बाह्यलिपिं रचयन्तु"
 
 #: editexternalscript.cpp:108
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit External Script '%1'"
-msgstr ""
+msgstr "बाह्यस्क्रिप्ट् '%1' सम्पादयतु।"
 
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: editexternalscript.ui:19
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Name:"
-msgstr ""
+msgstr "&नामः:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
 #: editexternalscript.ui:30
@@ -139,237 +164,239 @@ msgid ""
 "<p>The name will also be used as the identifier during code completion.</p>\n"
 "  <p><b>Note:</b> No spaces allowed.</p>"
 msgstr ""
+"<p>कोडसमाप्तेः समये अपि नाम परिचयकरूपेण उपयुज्यते ।</p><p> <b>नोटः-</b> रिक्तस्थानस्य "
+"अनुमतिः नास्ति।</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, commandLabel)
 #: editexternalscript.ui:37
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Command:"
-msgstr ""
+msgstr "&आदेश:"
 
 #. i18n: ectx: property (text), widget (QLabel, stdinLabel)
 #: editexternalscript.ui:51
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Input:"
-msgstr ""
+msgstr "&इनपुटः : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:62
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Nothing"
-msgstr ""
+msgstr "किमपि न"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:67
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Selection in Current File or Nothing"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायां चयनं वा किमपि नास्ति"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:72
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Selection in Current File or Whole File"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायां अथवा सम्पूर्णसञ्चिकायां चयनम्"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:77
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Contents of Current File"
-msgstr ""
+msgstr "वर्तमान सञ्चिकायाः विषयवस्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
 #: editexternalscript.ui:85
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Output:"
-msgstr ""
+msgstr "&निर्गमः : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:96
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Ignore"
-msgstr ""
+msgstr "उपेक्षा"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:101
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Insert at Cursor Position of Current File"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायाः कर्सरस्थाने सम्मिलितं कुर्वन्तु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:106
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Selection of Current File or Insert at Cursor Position"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायाः चयनं प्रतिस्थापयन्तु अथवा कर्सरस्थाने सम्मिलितं कुर्वन्तु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:111
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Selection of Current File or Whole File"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायाः अथवा सम्पूर्णसञ्चिकायाः चयनं प्रतिस्थापयन्तु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:116
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Contents of Current File"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायाः सामग्रीं प्रतिस्थापयन्तु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:121
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Create New File"
-msgstr ""
+msgstr "नूतनं सञ्चिकां रचयन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, stderrLabel)
 #: editexternalscript.ui:129
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Errors:"
-msgstr ""
+msgstr "दोषाः : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:140
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Ignore"
-msgstr ""
+msgstr "उपेक्षा"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:145
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Merge with Normal Output"
-msgstr ""
+msgstr "Normal Output इत्यनेन सह विलयः"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:150
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Insert at Cursor Position of Current File"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायाः कर्सरस्थाने सम्मिलितं कुर्वन्तु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:155
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Selection of Current File or Insert at Cursor Position"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायाः चयनं प्रतिस्थापयन्तु अथवा कर्सरस्थाने सम्मिलितं कुर्वन्तु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:160
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Selection of Current File or Whole File"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायाः अथवा सम्पूर्णसञ्चिकायाः चयनं प्रतिस्थापयन्तु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:165
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Contents of Current File"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायाः सामग्रीं प्रतिस्थापयन्तु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:170
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Create New File"
-msgstr ""
+msgstr "नूतनं सञ्चिकां रचयन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, saveLabel)
 #: editexternalscript.ui:178
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Save &mode:"
-msgstr ""
+msgstr "&mode रक्षतु: ."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:189
 #, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save Nothing"
-msgstr ""
+msgstr "किमपि न रक्षतु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:194
 #, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save Active Document"
-msgstr ""
+msgstr "सक्रियदस्तावेजं रक्षन्तु"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:199
 #, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save All Open Documents"
-msgstr ""
+msgstr "सर्वाणि मुक्तदस्तावेजानि रक्षन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: editexternalscript.ui:207
 #, kde-format
 msgctxt "@option:check"
 msgid "Show out&put:"
-msgstr ""
+msgstr "out&put दर्शयतु:"
 
 #. i18n: ectx: property (text), widget (QLabel, outputFilterLabel)
 #: editexternalscript.ui:224
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Output filter:"
-msgstr ""
+msgstr "आउटपुट फ़िल्टर : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:235
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "No Filter"
-msgstr ""
+msgstr "No Filter इति"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:240
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Compiler Filter"
-msgstr ""
+msgstr "संकलक फ़िल्टर"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:245
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Script Error Filter"
-msgstr ""
+msgstr "स्क्रिप्ट् त्रुटि फ़िल्टर"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:250
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Static Analysis Filter"
-msgstr ""
+msgstr "स्थिर विश्लेषण फ़िल्टर"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, shortcutLabel)
 #: editexternalscript.ui:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defines shortcuts you can use to execute this script."
-msgstr ""
+msgstr "एतत् स्क्रिप्ट् निष्पादयितुं भवन्तः उपयोक्तुं शक्नुवन्ति शॉर्टकट् परिभाषयति ।"
 
 #. i18n: ectx: property (text), widget (QLabel, shortcutLabel)
 #: editexternalscript.ui:261
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Shortcut:"
-msgstr ""
+msgstr "लघुमार्गः : १."
 
 #: externalscriptjob.cpp:88
 #, kde-format
@@ -459,19 +486,19 @@ msgstr "बाह्यलिपिः"
 #, kde-format
 msgctxt "@action"
 msgid "Add External Script"
-msgstr ""
+msgstr "बाह्यलिपिं योजयतु"
 
 #: externalscriptview.cpp:55
 #, kde-format
 msgctxt "@action"
 msgid "Edit External Script"
-msgstr ""
+msgstr "बाह्यलिपिं सम्पादयतु"
 
 #: externalscriptview.cpp:60
 #, kde-format
 msgctxt "@action"
 msgid "Remove External Script"
-msgstr ""
+msgstr "बाह्यलिपिं निष्कासयन्तु"
 
 #: externalscriptview.cpp:147
 #, kde-format
@@ -486,17 +513,17 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
-msgstr ""
+msgstr "बाह्यस्क्रिप्ट् निष्कासनस्य पुष्टिं कुर्वन्तु"
 
 #: externalscriptview.cpp:151
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr ""
+msgstr "अपाकरोति"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterText)
 #: externalscriptview.ui:35
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr ""
+msgstr "फ़िल्टर..."

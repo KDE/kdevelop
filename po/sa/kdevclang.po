@@ -20,20 +20,20 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Helpers"
-msgstr ""
+msgstr "C/C++ सहायकाः"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:41
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Helpers"
-msgstr ""
+msgstr "C/C++ सहायकान् विन्यस्यताम्"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: clangsettings/sessionsettings/sessionsettings.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
-msgstr ""
+msgstr "संहिता समाप्ति"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:35
@@ -43,34 +43,36 @@ msgid ""
 "If disabled, macros will not be included in the code completion results. "
 "This can improve the responsiveness of code completion in some cases."
 msgstr ""
+"यदि अक्षमम् अस्ति तर्हि कोडसमाप्तिपरिणामेषु मैक्रोस् न समाविष्टाः भविष्यन्ति । एतेन केषुचित् "
+"सन्दर्भेषु कोडसमाप्तेः प्रतिक्रियाशीलतायां सुधारः भवितुम् अर्हति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:38
 #, kde-format
 msgctxt "@option:check"
 msgid "Add macros to code completion"
-msgstr ""
+msgstr "कोडसमाप्त्यर्थं मैक्रोस् योजयन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
 #: clangsettings/sessionsettings/sessionsettings.ui:51
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Look-ahead code completion"
-msgstr ""
+msgstr "Look-ahead कोडसमाप्तिः सक्षमं कुर्वन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: clangsettings/sessionsettings/sessionsettings.ui:64
 #, kde-format
 msgctxt "@title:group"
 msgid "Assistants"
-msgstr ""
+msgstr "सहायकाः"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forwardDeclare)
 #: clangsettings/sessionsettings/sessionsettings.ui:70
 #, kde-format
 msgctxt "@option:check"
 msgid "Forward declare assistant"
-msgstr ""
+msgstr "अग्रे सहायकं घोषयन्तु"
 
 #: clangsupport.cpp:171
 #, kde-format
@@ -88,13 +90,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
-msgstr ""
+msgstr "घोषणायाः नाम परिवर्तनं कुर्वन्तु"
 
 #: clangsupport.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"
-msgstr ""
+msgstr "स्रोते गच्छन्तु"
 
 #: codecompletion/context.cpp:149
 #, kde-format
@@ -187,7 +189,7 @@ msgstr "हस्ताक्षर अनुकूलित करें"
 #, kde-format
 msgctxt "@action"
 msgid "Rename %1"
-msgstr ""
+msgstr "%1 इत्यस्य नाम परिवर्तनं कुर्वन्तु"
 
 #: codegen/clangrefactoring.cpp:94
 #, kde-format
@@ -280,7 +282,7 @@ msgctxt ""
 "%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
 "arguments"
 msgid "%1: %2"
-msgstr ""
+msgstr "%1: %2"
 
 #: duchain/macronavigationcontext.cpp:65
 #, kde-format
@@ -296,7 +298,7 @@ msgstr "मैक्रो"
 #, kde-format
 msgctxt "%1: the link to the definition"
 msgid "Defined in: %1"
-msgstr ""
+msgstr "परिभाषितम् अस्ति: %1"
 
 #: duchain/macronavigationcontext.cpp:72
 #, kde-format

@@ -26,77 +26,77 @@ msgstr "निर्मीयताम्‌"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Make Settings"
-msgstr ""
+msgstr "Make Settings विन्यस्तं कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: makeconfig.ui:32
 #, kde-format
 msgctxt "@option:check"
 msgid "&Abort on first error:"
-msgstr ""
+msgstr "&प्रथमदोषे निरस्तं कुर्वन्तु:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: makeconfig.ui:52
 #, kde-format
 msgctxt "@option:check"
 msgid "&Display commands but do not execute them:"
-msgstr ""
+msgstr "&आदेशान् प्रदर्शयन्तु परन्तु तान् न निष्पादयन्तु:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_31)
 #: makeconfig.ui:72
 #, kde-format
 msgctxt "@option:check"
 msgid "Insta&ll as root:"
-msgstr ""
+msgstr "मूलरूपेण Insta&ll:"
 
 #. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
 #: makeconfig.ui:95
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Root installation &command:"
-msgstr ""
+msgstr "मूलस्थापनम् &command:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: makeconfig.ui:133
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "&Number of simultaneous jobs:"
-msgstr ""
+msgstr "&युगपत् कार्याणां संख्या : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: makeconfig.ui:156
 #, kde-format
 msgctxt "@label:chooser"
 msgid "&Make executable:"
-msgstr ""
+msgstr "&निष्पादनीयं कुरुत:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: makeconfig.ui:179
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Default make &target:"
-msgstr ""
+msgstr "पूर्वनिर्धारितं make &target:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: makeconfig.ui:199
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Additional ma&ke options:"
-msgstr ""
+msgstr "अतिरिक्त ma&ke विकल्पाः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: makeconfig.ui:219
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Active environment &profile:"
-msgstr ""
+msgstr "सक्रिय वातावरण & प्रोफाइल:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: makeconfig.ui:263
 #, kde-format
 msgctxt "@option:check"
 msgid "Override number of &jobs:"
-msgstr ""
+msgstr "&कार्यस्य संख्यां अधिलिखन्तु:"
 
 #: makejob.cpp:80
 #, kde-format

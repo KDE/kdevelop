@@ -20,31 +20,31 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New Project"
-msgstr ""
+msgstr "New Project रचयन्तु"
 
 #: appwizarddialog.cpp:37
 #, kde-format
 msgctxt "@title:tab Page for general configuration options"
 msgid "General"
-msgstr ""
+msgstr "सामान्य"
 
 #: appwizarddialog.cpp:39
 #, kde-format
 msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
-msgstr ""
+msgstr "संस्करणनियन्त्रणम्"
 
 #: appwizardplugin.cpp:69
 #, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr ""
+msgstr "टेम्पलेट् तः नवीनम्..."
 
 #: appwizardplugin.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
-msgstr ""
+msgstr "टेम्पलेट् तः नूतनं परियोजनां जनयन्तु"
 
 #: appwizardplugin.cpp:72
 #, kde-format
@@ -53,6 +53,8 @@ msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
 "skeleton for your application from a set of templates."
 msgstr ""
+"एतेन KDevelop इत्यस्य अनुप्रयोगविजार्डः आरभ्यते । एतत् भवन्तं टेम्पलेट्-समूहात् भवतः "
+"अनुप्रयोगाय कङ्कालं जनयितुं साहाय्यं करोति ।"
 
 #: appwizardplugin.cpp:106
 #, kde-format
@@ -68,7 +70,7 @@ msgstr "कृपया संस्करणनियन्त्रणसा�
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
-msgstr ""
+msgstr "संस्करणनियन्त्रणप्रणालीदोषः"
 
 #: appwizardplugin.cpp:152
 #, kde-format
@@ -119,25 +121,25 @@ msgstr "परियोजना टेम्पलेट्स"
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
-msgstr ""
+msgstr "कोटी"
 
 #: projectselectionpage.cpp:60
 #, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
-msgstr ""
+msgstr "परियोजना प्रकार"
 
 #: projectselectionpage.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
-msgstr ""
+msgstr "अधिक टेम्पलेट्स प्राप्त करें"
 
 #: projectselectionpage.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
-msgstr ""
+msgstr "सञ्चिकातः टेम्पलेट् लोड् कुर्वन्तु"
 
 #: projectselectionpage.cpp:173
 #, kde-format
@@ -182,38 +184,38 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"
-msgstr ""
+msgstr "सञ्चिकातः टेम्पलेट् लोड् कुर्वन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
 #: projectselectionpage.ui:38
 #, kde-format
 msgctxt "@title:group"
 msgid "Properties"
-msgstr ""
+msgstr "गुणाः"
 
 #. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
 #: projectselectionpage.ui:44
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Project name:"
-msgstr ""
+msgstr "परियोजनायाः नाम : १."
 
 #. i18n: ectx: property (text), widget (QLabel, locationLabel)
 #: projectselectionpage.ui:54
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Location:"
-msgstr ""
+msgstr "स्थानीय:"
 
 #: projectvcspage.cpp:33
 #, kde-format
 msgctxt "@item:inlistbox No Version Control Support chosen"
 msgid "None"
-msgstr ""
+msgstr "न कश्चित्"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectvcspage.ui:30
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Version control system:"
-msgstr ""
+msgstr "संस्करणनियन्त्रणप्रणाली : १."

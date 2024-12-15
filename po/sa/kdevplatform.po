@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2024-12-13 20:20+0530\n"
+"PO-Revision-Date: 2024-12-14 09:13+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "भवतः नामानि"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "भवतः ईमेलपत्राणि"
 
 #: debugger/breakpoint/breakpoint.cpp:195
 #, kde-format
@@ -39,25 +39,25 @@ msgstr "त्रुटि"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
-msgstr ""
+msgstr "मलिनम्‌"
 
 #: debugger/breakpoint/breakpoint.cpp:203
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
-msgstr ""
+msgstr "विचाराधीनः"
 
 #: debugger/breakpoint/breakpoint.cpp:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
-msgstr ""
+msgstr "स्वच्छम्‌"
 
 #: debugger/breakpoint/breakpoint.cpp:238
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2) २."
 
 #: debugger/breakpoint/breakpointdetails.cpp:48
 #: debugger/breakpoint/breakpointdetails.cpp:127
@@ -94,8 +94,8 @@ msgstr "भङ्गबिन्दुः सक्रियः अस्ति"
 #, kde-format
 msgid "Hit %1 time"
 msgid_plural "Hit %1 times"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 समयं मारयन्तु"
+msgstr[1] "%1 वारं मारयन्तु"
 
 #: debugger/breakpoint/breakpointdetails.cpp:129
 #, kde-format
@@ -197,7 +197,7 @@ msgstr "अशीर्षकदस्तावेजे ब्रेकपॉ�
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Breakpoints"
-msgstr ""
+msgstr "त्रुटिनिवारणविच्छेदबिन्दवः"
 
 #: debugger/breakpoint/breakpointwidget.cpp:60
 #, kde-format
@@ -207,6 +207,8 @@ msgid ""
 "breakpoint item allows you to change the breakpoint and will take you to the "
 "source in the editor window."
 msgstr ""
+"विच्छेदबिन्दुनां सूचीं तेषां वर्तमानस्थित्या सह प्रदर्शयति । ब्रेकपॉइण्ट्-वस्तुं नुदनेन भवन्तः "
+"ब्रेकपॉइंट् परिवर्तयितुं शक्नुवन्ति तथा च एडिटर-विण्डो मध्ये स्रोतः प्रति नेष्यन्ति ।"
 
 #: debugger/breakpoint/breakpointwidget.cpp:86
 #, kde-format
@@ -227,31 +229,31 @@ msgstr "शर्तं प्रविशतु ..."
 #, kde-format
 msgctxt "New breakpoint"
 msgid "&New"
-msgstr ""
+msgstr "&नूतनम्‌"
 
 #: debugger/breakpoint/breakpointwidget.cpp:128
 #, kde-format
 msgctxt "Code breakpoint"
 msgid "&Code"
-msgstr ""
+msgstr "&कोड"
 
 #: debugger/breakpoint/breakpointwidget.cpp:136
 #, kde-format
 msgctxt "Data breakpoint"
 msgid "Data &Write"
-msgstr ""
+msgstr "डेटा &लिखें"
 
 #: debugger/breakpoint/breakpointwidget.cpp:139
 #, kde-format
 msgctxt "Data read breakpoint"
 msgid "Data &Read"
-msgstr ""
+msgstr "Data &Read"
 
 #: debugger/breakpoint/breakpointwidget.cpp:142
 #, kde-format
 msgctxt "Data access breakpoint"
 msgid "Data &Access"
-msgstr ""
+msgstr "दत्तांश एवं अभिगम"
 
 #: debugger/breakpoint/breakpointwidget.cpp:147
 #, kde-format
@@ -277,13 +279,13 @@ msgstr "&सर्वं निष्कासयतु"
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
-msgstr ""
+msgstr "#%1 %2 इत्यत्र (दुर्घटनितम्)"
 
 #: debugger/framestack/framestackmodel.cpp:181
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
-msgstr ""
+msgstr "#%1 %2 इत्यत्र"
 
 #: debugger/framestack/framestackmodel.cpp:282
 #, kde-format
@@ -323,13 +325,13 @@ msgstr "सूत्राणि : १."
 #, kde-format
 msgctxt "#frame function() at file"
 msgid "#%1 %2() at %3\n"
-msgstr ""
+msgstr "#%1 %2() %3 इत्यत्र\n"
 
 #: debugger/framestack/framestackwidget.cpp:226
 #, kde-format
 msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
-msgstr ""
+msgstr "#%1 %2() %3:%4 इत्यत्र\n"
 
 #: debugger/interfaces/ibreakpointcontroller.cpp:87
 #, kde-format
@@ -405,7 +407,7 @@ msgstr "डिबगर चर"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "क्लिक् कृत्वा स्तम्भानां स्वतः आकारं परिवर्तयन्तु"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -482,28 +484,28 @@ msgstr "&परिवर्तनं स्थगयन्तु"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Find:"
-msgstr ""
+msgstr "अन्वेषय:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
 #: documentation/documentationfindwidget.ui:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to next match"
-msgstr ""
+msgstr "अग्रिम-क्रीडायाः कृते कूदन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
 #: documentation/documentationfindwidget.ui:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to previous match"
-msgstr ""
+msgstr "पूर्वमेलनं प्रति कूदन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
 #: documentation/documentationfindwidget.ui:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Match case sensitive"
-msgstr ""
+msgstr "केस-संवेदनशीलं मेलनं कुर्वन्तु"
 
 #: documentation/documentationview.cpp:38
 #: shell/settings/documentationpreferences.cpp:25
@@ -515,19 +517,19 @@ msgstr "दस्तावेजीकरणम्"
 #, kde-format
 msgctxt "@action go back"
 msgid "Back"
-msgstr ""
+msgstr "पृष्ठभागः"
 
 #: documentation/documentationview.cpp:74
 #, kde-format
 msgctxt "@action go forward"
 msgid "Forward"
-msgstr ""
+msgstr "अग्रतः"
 
 #: documentation/documentationview.cpp:79
 #, kde-format
 msgctxt "@action go to start page"
 msgid "Home"
-msgstr ""
+msgstr "गृहम्‌"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
 #: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
@@ -535,43 +537,43 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "अन्वेषण..."
 
 #: documentation/documentationview.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Find in Text..."
-msgstr ""
+msgstr "पाठे अन्वेष्टुम्..."
 
 #: documentation/documentationview.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Find in text of current documentation page"
-msgstr ""
+msgstr "वर्तमानदस्तावेजपृष्ठस्य पाठ्ये अन्वेष्टुम्"
 
 #: interfaces/contextmenuextension.cpp:133
 #, kde-format
 msgctxt "@title:menu"
 msgid "Debug"
-msgstr ""
+msgstr "त्रुटिनिवारणम्"
 
 #: interfaces/contextmenuextension.cpp:134
 #, kde-format
 msgctxt "@title:menu"
 msgid "Refactor"
-msgstr ""
+msgstr "पुनर्कारक"
 
 #: interfaces/contextmenuextension.cpp:136
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current File With"
-msgstr ""
+msgstr "वर्तमान सञ्चिकायाः विश्लेषणं कुर्वन्तु सह"
 
 #: interfaces/contextmenuextension.cpp:137
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current Project With"
-msgstr ""
+msgstr "वर्तमान परियोजनायाः विश्लेषणं कुर्वन्तु सह"
 
 #: interfaces/isourceformatter.cpp:221
 #, kde-format
@@ -621,13 +623,13 @@ msgstr "पृष्ठभूमि पार्सर"
 #, kde-format
 msgctxt "%1: filename"
 msgid "Skipped file that is too large: '%1'"
-msgstr ""
+msgstr "अतिबृहत् सञ्चिकां त्यक्तवती: '%1'."
 
 #: language/backgroundparser/parsejob.cpp:315
 #, kde-format
 msgctxt "%1: file size, %2: limit file size"
 msgid "The file is %1 and exceeds the limit of %2."
-msgstr ""
+msgstr "सञ्चिका %1 अस्ति तथा च %2 इत्यस्य सीमां अतिक्रमयति ।"
 
 #: language/backgroundparser/parsejob.cpp:327
 #, kde-format
@@ -653,8 +655,8 @@ msgstr "अनुमतिकारणात् सञ्चिका डिस�
 #, kde-format
 msgid "Process 1 file in %2"
 msgid_plural "Process %1 files in %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2 मध्ये 1 सञ्चिकां संसाधयन्तु"
+msgstr[1] "%2 मध्ये %1 सञ्चिकाः संसाधयन्तु"
 
 #: language/classmodel/allclassesfolder.cpp:22
 #, kde-format
@@ -685,7 +687,7 @@ msgstr "न कार्यान्वितम्"
 #, kde-format
 msgctxt "@action"
 msgid "Rename \"%1\"..."
-msgstr ""
+msgstr "\"%1\" इत्यस्य नाम परिवर्तनं कुर्वन्तु..."
 
 #: language/codegen/basicrefactoring.cpp:221
 #, kde-format
@@ -701,19 +703,19 @@ msgstr "घोषणा अलेखनीयसञ्चिकायां %1 �
 #, kde-format
 msgctxt "@title:window Renaming some declaration"
 msgid "Rename \"%1\""
-msgstr ""
+msgstr "\"%1\" इति पुनर्नाम ।"
 
 #: language/codegen/basicrefactoring.cpp:300
 #, kde-format
 msgctxt "@title:tab"
 msgid "Uses"
-msgstr ""
+msgstr "प्रयोगः"
 
 #: language/codegen/basicrefactoring.cpp:302
 #, kde-format
 msgctxt "@title:tab"
 msgid "Declaration Info"
-msgstr ""
+msgstr "घोषणा सूचना"
 
 #: language/codegen/basicrefactoring.cpp:309
 #, kde-format
@@ -732,7 +734,7 @@ msgstr "पुनर्नाम"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&New name:"
-msgstr ""
+msgstr "&नव नाम : १."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:35
@@ -749,20 +751,20 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "&Rename"
-msgstr ""
+msgstr "&नाम पुनर्नाम"
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: language/codegen/basicrefactoring.ui:45
 #, kde-format
 msgctxt "@action:button"
 msgid "&Cancel"
-msgstr ""
+msgstr "&निरसयतु"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
-msgstr ""
+msgstr "%1:%2->%3:%4"
 
 #: language/codegen/documentchangeset.cpp:252
 #, kde-format
@@ -776,7 +778,7 @@ msgctxt ""
 "(encountered <foundText>) -> <newText>"
 msgid ""
 "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
-msgstr ""
+msgstr "%2 मध्ये %1 मध्ये असङ्गतपरिवर्तनं, %3 प्राप्तम् (\"%4\" सम्मुखीकृतम्) -> \"%5\" ।"
 
 #: language/codegen/documentchangeset.cpp:363
 #, kde-format
@@ -790,6 +792,8 @@ msgctxt ""
 "<encountered>) -> <newText>"
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
 msgstr ""
+"%2 इत्यत्र %1 इत्यत्र असङ्गतः परिवर्तनः = \"%3\"(\"%4\" इत्यस्य सम्मुखीभवति) -> \"%5\" "
+"।"
 
 #: language/codegen/documentchangeset.cpp:539
 #, kde-format
@@ -801,20 +805,22 @@ msgid ""
 "Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
 "\"%5\"->\"%6\"@%7 "
 msgstr ""
+"%1 इत्यत्र असङ्गतपरिवर्तन-अनुरोधः; परिवर्तनं प्रतिच्छेदनं करोति: \"%2\"->\"%3\"@%4 & "
+"\"%5\"->\"%6\"@%7 "
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
 #: language/codegen/progressdialogs/refactoringdialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Refactoring"
-msgstr ""
+msgstr "पुनर्कारकीकरणम्"
 
 #. i18n: ectx: property (text), widget (QPushButton, abortButton)
 #: language/codegen/progressdialogs/refactoringdialog.ui:27
 #, kde-format
 msgctxt "@action:button"
 msgid "&Abort"
-msgstr ""
+msgstr "&गर्भपात"
 
 #: language/duchain/aliasdeclaration.cpp:47
 #, kde-format
@@ -990,7 +996,7 @@ msgstr "कृते दस्तावेजीकरणं दर्शयत�
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
-msgstr ""
+msgstr "<अनामिका>"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:490
 #, kde-format
@@ -1054,33 +1060,33 @@ msgstr "अज्ञात"
 #, kde-format
 msgctxt "tells if a declaration is defining the variable's value"
 msgid "definition"
-msgstr ""
+msgstr "परिभाषा"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:823
 #, kde-format
 msgctxt "as in c++ forward declaration"
 msgid "forward"
-msgstr ""
+msgstr "अग्रतः"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:828
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"
-msgstr ""
+msgstr "नियत"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:881
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "१ बाइट्"
+msgstr[1] "%1 बाइट्"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "१ बिट्"
+msgstr[1] "%1 बिट्"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
 #, kde-format
@@ -1091,7 +1097,7 @@ msgstr "मातापितृमध्ये ऑफसेट्: %1"
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
 #, kde-format
@@ -1117,13 +1123,13 @@ msgstr "अद्यापि न विश्लेषितम्"
 #, kde-format
 msgctxt "Files included into this file"
 msgid "Includes"
-msgstr ""
+msgstr "अन्तर्भवति"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:106
 #, kde-format
 msgctxt "Count of files this file was included into"
 msgid "Included by"
-msgstr ""
+msgstr "द्वारा समावेशित"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:504
 #, kde-format
@@ -1224,14 +1230,14 @@ msgstr "%1 इत्यस्य उपयोगः"
 #, kde-format
 msgctxt "refers to a line in source code"
 msgid "Line <b>%1</b>:"
-msgstr ""
+msgstr "रेखा <b>%1</b> : ."
 
 #: language/duchain/navigation/useswidget.cpp:211
 #: language/duchain/navigation/useswidget.cpp:218
 #, kde-format
 msgctxt "Refers to a line in source code"
 msgid "Line <b>%1</b>:"
-msgstr ""
+msgstr "रेखा <b>%1</b> : ."
 
 #: language/duchain/navigation/useswidget.cpp:413
 #, kde-format
@@ -1248,7 +1254,7 @@ msgstr "वैश्विक"
 #, kde-format
 msgctxt "%1: source file"
 msgid "In %1"
-msgstr ""
+msgstr "%1 इत्यत्र"
 
 #: language/duchain/navigation/useswidget.cpp:474
 #, kde-format
@@ -1265,28 +1271,28 @@ msgstr "घोषणा"
 msgctxt "%1: number of uses, %2: filename with uses"
 msgid "%2: 1 use"
 msgid_plural "%2: %1 uses"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2: 1 प्रयोगः"
+msgstr[1] "%2: %1 उपयुङ्क्ते"
 
 #: language/duchain/navigation/useswidget.cpp:518
 #: language/duchain/navigation/useswidget.cpp:559
 #, kde-format
 msgctxt "Refers to closing a UI element"
 msgid "Collapse"
-msgstr ""
+msgstr "संश्यान"
 
 #: language/duchain/navigation/useswidget.cpp:555
 #, kde-format
 msgctxt "Refers to opening a UI element"
 msgid "Expand"
-msgstr ""
+msgstr "आतन्"
 
 #: language/duchain/navigation/useswidget.cpp:640
 #, kde-format
 msgid "1 use found"
 msgid_plural "%1 uses found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "१ प्रयोगः लब्धः"
+msgstr[1] "%1 लब्धस्य उपयोगं करोति"
 
 #: language/duchain/navigation/useswidget.cpp:642
 #, kde-format
@@ -1354,7 +1360,7 @@ msgctxt ""
 "<severity>: <description> in <url>:[<range>]: <explanation> (found by "
 "<source>)"
 msgid "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
-msgstr ""
+msgstr "%1: %2 %3:[(%4,%5),(%6,%7)]: %8 (%9 द्वारा प्राप्तम्)"
 
 #: language/duchain/problem.cpp:233
 #, kde-format
@@ -1513,7 +1519,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Folder Deleted"
-msgstr ""
+msgstr "परियोजना पुटं विलोपितम्"
 
 #: project/abstractfilemanagerplugin.cpp:354
 #, kde-format
@@ -1530,37 +1536,37 @@ msgstr ""
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
-msgstr ""
+msgstr "निर्मिमीते"
 
 #: project/builderjob.cpp:78
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
-msgstr ""
+msgstr "स्वच्छम्‌"
 
 #: project/builderjob.cpp:80
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
-msgstr ""
+msgstr "विन्यस्तं कुर्वन्तु"
 
 #: project/builderjob.cpp:82
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
-msgstr ""
+msgstr "प्रतिस्था"
 
 #: project/builderjob.cpp:84
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
-msgstr ""
+msgstr "छंटनी"
 
 #: project/builderjob.cpp:234
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
-msgstr ""
+msgstr "विविधानि वस्तूनि"
 
 #: project/helper.cpp:67
 #, kde-format
@@ -1607,37 +1613,37 @@ msgstr "नामः"
 #, kde-format
 msgctxt "@title:column buildset item path"
 msgid "Path"
-msgstr ""
+msgstr "पथं"
 
 #: project/projectchangesmodel.cpp:274
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
-msgstr ""
+msgstr "न शाखा"
 
 #: project/projectchangesmodel.cpp:275
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2) २."
 
 #: project/projectitemlineedit.cpp:156
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
-msgstr ""
+msgstr "projects tree तः कस्यचित् द्रव्यस्य मार्गं प्रविशतु..."
 
 #: project/projectitemlineedit.cpp:158
 #, kde-format
 msgctxt "@action"
 msgid "Select..."
-msgstr ""
+msgstr "विचि..."
 
 #: project/projectitemlineedit.cpp:182
 #, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
-msgstr ""
+msgstr "एकं द्रव्यं चिनोतु"
 
 #: project/projectitemlineedit.cpp:192
 #, kde-format
@@ -1649,28 +1655,28 @@ msgstr "यस्मात् द्रव्यात् मार्गं प
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a dependency to add to the list"
-msgstr ""
+msgstr "सूचीयां योजयितुं आश्रयं प्रविशन्तु"
 
 #. i18n: ectx: property (placeholderText), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:35
 #, kde-format
 msgctxt "@info:placedholder"
 msgid "Enter a dependency to add to the list..."
-msgstr ""
+msgstr "सूचीयां योजयितुं निर्भरतां प्रविशन्तु..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
 #: project/widgets/dependencieswidget.ui:55
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add the listed target to the dependency list"
-msgstr ""
+msgstr "सूचीकृतं लक्ष्यं आश्रयसूचौ योजयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "List of indirect dependent targets."
-msgstr ""
+msgstr "अप्रत्यक्षनिर्भरलक्ष्याणां सूची।"
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:71
@@ -1681,27 +1687,29 @@ msgid ""
 "depend on, but for which an action needs to be taken before running the "
 "application."
 msgstr ""
+"अस्मिन् सूचौ एतादृशाः लक्ष्याः भवेयुः येषां उपरि अनुप्रयोगः प्रत्यक्षतया न आश्रितः, परन्तु येषां "
+"कृते अनुप्रयोगं चालयितुं पूर्वं कार्यं कर्तव्यम् ।"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeDependency)
 #: project/widgets/dependencieswidget.ui:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected dependencies from the list"
-msgstr ""
+msgstr "चयनितानि आश्रयाणि सूचीतः निष्कासयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepUp)
 #: project/widgets/dependencieswidget.ui:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency up in the list"
-msgstr ""
+msgstr "चयनितं आश्रयं सूचीयां उपरि चालयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
 #: project/widgets/dependencieswidget.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
-msgstr ""
+msgstr "चयनितं आश्रयं सूचीयां अधः चालयन्तु"
 
 #: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
 #, kde-format
@@ -1712,20 +1720,20 @@ msgstr "%1 प्रति लेखनं असफलम्, सम्भव�
 #, kde-format
 msgid "The previous session crashed."
 msgid_plural "Session crashed %1 times in a row."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "पूर्वसत्रं दुर्घटनाम् अभवत् ।"
+msgstr[1] "सत्रं %1 वारं पङ्क्तिबद्धरूपेण दुर्घटनाम् अभवत् ।"
 
 #: serialization/itemrepositoryregistry.cpp:77
 #, kde-format
 msgctxt "tty action"
 msgid "Clear cache"
-msgstr ""
+msgstr "सञ्चयं स्वच्छं कुर्वन्तु"
 
 #: serialization/itemrepositoryregistry.cpp:78
 #, kde-format
 msgctxt "@title"
 msgid "Session Crashed"
-msgstr ""
+msgstr "सत्रं दुर्घटनाम् अभवत्"
 
 #: serialization/itemrepositoryregistry.cpp:79
 #, kde-format
@@ -1744,13 +1752,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Cache"
-msgstr ""
+msgstr "Cache स्वच्छं कुर्वन्तु"
 
 #: serialization/itemrepositoryregistry.cpp:82
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue"
-msgstr ""
+msgstr "अनुवर्तते"
 
 #: shell/areadisplay.cpp:44
 #, kde-format
@@ -1766,13 +1774,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Back to Code"
-msgstr ""
+msgstr "संहितायां पुनः आगच्छन्तु"
 
 #: shell/configdialog.cpp:30
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
-msgstr ""
+msgstr "विन्यस्तं कुर्वन्तु"
 
 #: shell/configdialog.cpp:84
 #, kde-format
@@ -1787,13 +1795,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Apply Settings"
-msgstr ""
+msgstr "सेटिंग्स् प्रयोजयन्तु"
 
 #: shell/core.cpp:183
 #, kde-format
 msgctxt "@title:window"
 msgid "No Plugins Found"
-msgstr ""
+msgstr "प्लगिन्स् न प्राप्ताः"
 
 #: shell/core.cpp:184
 #, kde-format
@@ -1817,19 +1825,19 @@ msgstr "त्रुटिनिवारकः"
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
-msgstr ""
+msgstr "फ्रेम स्टैक"
 
 #: shell/debugcontroller.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
-msgstr ""
+msgstr "भङ्गबिन्दवः"
 
 #: shell/debugcontroller.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
-msgstr ""
+msgstr "चराः"
 
 #: shell/debugcontroller.cpp:224
 #, kde-format
@@ -1850,67 +1858,67 @@ msgstr "आरम्भादेव अनुप्रयोगाः पुन�
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
-msgstr ""
+msgstr "व्यवधान"
 
 #: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
-msgstr ""
+msgstr "अनुप्रयोगं व्यत्यययतु"
 
 #: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
-msgstr ""
+msgstr "त्रुटिनिवारणप्रक्रिया अथवा वर्तमानदोषनिवारणादेशं बाधते ।"
 
 #: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
-msgstr ""
+msgstr "&Cursor इत्यत्र चालयन्तु"
 
 #: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
-msgstr ""
+msgstr "कर्सरं प्रति चालयन्तु"
 
 #: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
-msgstr ""
+msgstr "यावत् कर्सरस्थानं न प्राप्यते तावत् निष्पादनं निरन्तरं करोति ।"
 
 #: shell/debugcontroller.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
-msgstr ""
+msgstr "E&execution Position इत्येतत् Cursor इत्यत्र सेट् कुर्वन्तु"
 
 #: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
-msgstr ""
+msgstr "कर्सरं प्रति कूदन्तु"
 
 #: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
-msgstr ""
+msgstr "वर्तमान कर्सरस्थानात् निष्पादनं निरन्तरं कुर्वन्तु ।"
 
 #: shell/debugcontroller.cpp:251
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
-msgstr ""
+msgstr "Step &Over इति"
 
 #: shell/debugcontroller.cpp:253
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
-msgstr ""
+msgstr "अग्रिमपङ्क्तौ पदानि स्थापयन्तु"
 
 #: shell/debugcontroller.cpp:254
 #, kde-format
@@ -1920,36 +1928,39 @@ msgid ""
 "is a call to a function the whole function is executed and the app will stop "
 "at the line following the function call."
 msgstr ""
+"वर्तमानस्रोतसञ्चिकायां स्रोतस्य एकां पङ्क्तिं निष्पादयति । यदि स्रोतरेखा कस्यचित् फंक्शन् "
+"इत्यस्य आह्वानं भवति तर्हि सम्पूर्णं फंक्शन् निष्पादितं भवति तथा च एप् फंक्शन् कॉल् इत्यस्य अनन्तरं "
+"रेखायां स्थगयिष्यति ।"
 
 #: shell/debugcontroller.cpp:262
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
-msgstr ""
+msgstr "Ins&truction इत्यस्य उपरि कदमः"
 
 #: shell/debugcontroller.cpp:263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
-msgstr ""
+msgstr "निर्देशस्य उपरि पदानि स्थापयन्तु"
 
 #: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
-msgstr ""
+msgstr "अग्रिमस्य विधानसभानिर्देशस्य उपरि पदानि।"
 
 #: shell/debugcontroller.cpp:269
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
-msgstr ""
+msgstr "Step &Into"
 
 #: shell/debugcontroller.cpp:271
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
-msgstr ""
+msgstr "अग्रिमे कथने पदानि स्थापयन्तु"
 
 #: shell/debugcontroller.cpp:272
 #, kde-format
@@ -1958,36 +1969,38 @@ msgid ""
 "Executes exactly one line of source. If the source line is a call to a "
 "function then execution will stop after the function has been entered."
 msgstr ""
+"स्रोतस्य एकां रेखां सम्यक् निष्पादयति । यदि स्रोतरेखा कस्यचित् कार्यस्य आह्वानं भवति तर्हि "
+"कार्यस्य प्रविष्टेः अनन्तरं निष्पादनं स्थगितम् भविष्यति ।"
 
 #: shell/debugcontroller.cpp:279
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
-msgstr ""
+msgstr "I&nstruction इत्यत्र पदानि स्थापयन्तु"
 
 #: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
-msgstr ""
+msgstr "निर्देशे पदानि स्थापयन्तु"
 
 #: shell/debugcontroller.cpp:281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
-msgstr ""
+msgstr "अग्रिमे विधानसभानिर्देशे पदानि।"
 
 #: shell/debugcontroller.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
-msgstr ""
+msgstr "Step O&ut"
 
 #: shell/debugcontroller.cpp:287
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
-msgstr ""
+msgstr "वर्तमानकार्यतः बहिः गच्छन्तु"
 
 #: shell/debugcontroller.cpp:288
 #, kde-format
@@ -1998,12 +2011,16 @@ msgid ""
 "to that function. If program execution is in the outermost frame (i.e. in "
 "main()) then this operation has no effect."
 msgstr ""
+"यावत् वर्तमानं निष्पादितं कार्यं न सम्पन्नं भवति तावत् अनुप्रयोगं निष्पादयति । ततः "
+"त्रुटिनिवारकः तस्य कार्यस्य मूल-आह्वानस्य अनन्तरं रेखां प्रदर्शयिष्यति । यदि प्रोग्राम् "
+"निष्पादनं बाह्यतम-चतुष्कोणे (अर्थात् main() मध्ये) अस्ति तर्हि एतस्य क्रियायाः कोऽपि "
+"प्रभावः नास्ति ।"
 
 #: shell/debugcontroller.cpp:296
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
-msgstr ""
+msgstr "Breakpoint toggle कुर्वन्तु"
 
 #: shell/debugcontroller.cpp:297
 #, kde-format
@@ -2014,49 +2031,49 @@ msgstr "Ctrl+Alt+B इति"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
-msgstr ""
+msgstr "ब्रेकपॉइंटं टॉगलं कुर्वन्तु"
 
 #: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
-msgstr ""
+msgstr "सम्पादके वर्तमानपङ्क्तौ विच्छेदबिन्दुं टॉग्ल् करोति ।"
 
 #: shell/debugcontroller.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
-msgstr ""
+msgstr "वर्तमान रेखां दर्शयतु"
 
 #: shell/debugcontroller.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
-msgstr ""
+msgstr "वर्तमानं निष्पादनस्थानं दर्शयतु"
 
 #: shell/debugcontroller.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
-msgstr ""
+msgstr "सम्पादके निष्पादनपङ्क्तौ कूर्दति ।"
 
 #: shell/debugcontroller.cpp:431
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
-msgstr ""
+msgstr "त्रुटिनिवारणम्"
 
 #: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
-msgstr ""
+msgstr "त्रुटिनिवारणं प्रारम्भं कुर्वन्तु"
 
 #: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
-msgstr ""
+msgstr "वर्तमान प्रक्षेपणं त्रुटिनिवारणं कुर्वन्तु"
 
 #: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:444
 #, kde-format
@@ -2065,18 +2082,20 @@ msgid ""
 "Executes the target or the program specified in currently active launch "
 "configuration inside a Debugger."
 msgstr ""
+"वर्तमान सक्रियप्रक्षेपणविन्यासे निर्दिष्टं लक्ष्यं वा कार्यक्रमं वा Debugger इत्यस्य अन्तः "
+"निष्पादयति ।"
 
 #: shell/debugcontroller.cpp:487
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
-msgstr ""
+msgstr "&अनुवर्तते"
 
 #: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
-msgstr ""
+msgstr "अनुप्रयोगनिष्पादनं निरन्तरं कुर्वन्तु"
 
 #: shell/debugcontroller.cpp:490
 #, kde-format
@@ -2086,6 +2105,9 @@ msgid ""
 "effect when the application has been halted by the debugger (i.e. a "
 "breakpoint has been activated or the interrupt was pressed)."
 msgstr ""
+"त्रुटिनिवारणे भवतः अनुप्रयोगस्य निष्पादनं निरन्तरं करोति । एतत् केवलं तदा एव प्रभावी भवति "
+"यदा अनुप्रयोगः त्रुटिनिवारकेन स्थगितः भवति (अर्थात् एकः विच्छेदबिन्दुः सक्रियः अथवा "
+"व्यत्ययः दबावितः अस्ति) ।"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: shell/debugger/kdevdebuggershellui.rc:25
@@ -2097,7 +2119,7 @@ msgstr "डिबगर टूलबार"
 #, kde-format
 msgctxt "@action"
 msgid "Show Documentation"
-msgstr ""
+msgstr "दस्तावेजीकरणं दर्शयतु"
 
 #: shell/documentationcontroller.cpp:121 shell/documentationcontroller.cpp:230
 #, kde-format
@@ -2114,7 +2136,7 @@ msgstr "अनामिका"
 #, kde-format
 msgctxt "@title:window"
 msgid "Open File"
-msgstr ""
+msgstr "सञ्चिकां उद्घाटयन्तु"
 
 #: shell/documentcontroller.cpp:119
 #, kde-format
@@ -2134,37 +2156,37 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
-msgstr ""
+msgstr "सम्पादकं न प्राप्नोत्"
 
 #: shell/documentcontroller.cpp:320
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
-msgstr ""
+msgstr "Plain Text इति रूपेण उद्घाटयन्तु"
 
 #: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
-msgstr ""
+msgstr "न उद्घाटयतु"
 
 #: shell/documentcontroller.cpp:609
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
-msgstr ""
+msgstr "&उद्घाटित..."
 
 #: shell/documentcontroller.cpp:612
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
-msgstr ""
+msgstr "सञ्चिकां उद्घाटयन्तु"
 
 #: shell/documentcontroller.cpp:613
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
-msgstr ""
+msgstr "सम्पादनार्थं सञ्चिकां उद्घाटयति ।"
 
 #: shell/documentcontroller.cpp:617
 #, kde-format
@@ -2173,73 +2195,75 @@ msgid ""
 "This lists files which you have opened recently, and allows you to easily "
 "open them again."
 msgstr ""
+"एतेन भवता अद्यतनतया उद्घाटिताः सञ्चिकाः सूचीबद्धाः सन्ति, पुनः सुलभतया उद्घाटयितुं च "
+"शक्यते ।"
 
 #: shell/documentcontroller.cpp:622
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
-msgstr ""
+msgstr "Al&l इति ज्ञातव्यम्"
 
 #: shell/documentcontroller.cpp:624
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
-msgstr ""
+msgstr "सर्वाणि मुक्तदस्तावेजानि रक्षन्तु"
 
 #: shell/documentcontroller.cpp:625
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
-msgstr ""
+msgstr "सर्वाणि मुक्तदस्तावेजानि रक्षन्तु, आवश्यकतायां अतिरिक्तसूचनाः प्रार्थयन्तु ।"
 
 #: shell/documentcontroller.cpp:631
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
-msgstr ""
+msgstr "Reload All"
 
 #: shell/documentcontroller.cpp:633
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
-msgstr ""
+msgstr "सर्वाणि मुक्तदस्तावेजानि प्रत्यागच्छतु"
 
 #: shell/documentcontroller.cpp:634
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
-msgstr ""
+msgstr "पूर्वं रक्षितस्थितौ पुनः आगत्य सर्वाणि मुक्तदस्तावेजानि प्रत्यागच्छतु ।"
 
 #: shell/documentcontroller.cpp:640
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
-msgstr ""
+msgstr "&पिधानं करोतु"
 
 #: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
-msgstr ""
+msgstr "सञ्चिकां पिधाय"
 
 #: shell/documentcontroller.cpp:643
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
-msgstr ""
+msgstr "वर्तमानसञ्चिकां बन्दं करोति ।"
 
 #: shell/documentcontroller.cpp:648
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
-msgstr ""
+msgstr "क्लोस्&ई सर्वे"
 
 #: shell/documentcontroller.cpp:650
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
-msgstr ""
+msgstr "सर्वाणि मुक्तदस्तावेजानि बन्दं कुर्वन्तु"
 
 #: shell/documentcontroller.cpp:651
 #, kde-format
@@ -2247,19 +2271,19 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Close all open documents, prompting for additional information when "
 "necessary."
-msgstr ""
+msgstr "सर्वाणि मुक्तदस्तावेजानि बन्दं कुर्वन्तु, आवश्यकतायां अतिरिक्तसूचनाः प्रार्थयन्तु ।"
 
 #: shell/documentcontroller.cpp:657
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
-msgstr ""
+msgstr "Close All Ot&hers"
 
 #: shell/documentcontroller.cpp:659
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
-msgstr ""
+msgstr "अन्ये सर्वे दस्तावेजाः पिधाय"
 
 #: shell/documentcontroller.cpp:660
 #, kde-format
@@ -2267,19 +2291,19 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Close all open documents, with the exception of the currently active "
 "document."
-msgstr ""
+msgstr "वर्तमान सक्रियदस्तावेजं विहाय सर्वाणि मुक्तदस्तावेजानि पिधाय ।"
 
 #: shell/documentcontroller.cpp:665
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
-msgstr ""
+msgstr "वर्तमानदस्तावेजे एनोटेट् दर्शयतु"
 
 #: shell/documentcontroller.cpp:666
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
-msgstr ""
+msgstr "टिप्पणीं कुरुत"
 
 #: shell/documentcontroller.cpp:1298
 #, kde-format
@@ -2292,7 +2316,7 @@ msgstr "दस्तावेजस्य टिप्पणीं कर्त�
 #, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
-msgstr ""
+msgstr "सम्पादक"
 
 #: shell/editorconfigpage.cpp:104
 #, kde-format
@@ -2303,25 +2327,25 @@ msgstr "पाठसम्पादकं विन्यस्यताम्"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
-msgstr ""
+msgstr "वातावरणचरं विन्यस्यताम्"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
 msgctxt "@title:window"
 msgid "Launch Configurations"
-msgstr ""
+msgstr "विन्यासाः प्रारम्भं कुर्वन्तु"
 
 #: shell/launchconfigurationdialog.cpp:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new launch configuration."
-msgstr ""
+msgstr "नूतनं प्रक्षेपणविन्यासं योजयन्तु ।"
 
 #: shell/launchconfigurationdialog.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete selected launch configuration."
-msgstr ""
+msgstr "चयनितं प्रक्षेपणविन्यासं विलोपयन्तु।"
 
 #: shell/launchconfigurationdialog.cpp:173
 #, kde-format
@@ -2334,13 +2358,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
-msgstr ""
+msgstr "विन्यासस्य नाम परिवर्तनं कुर्वन्तु"
 
 #: shell/launchconfigurationdialog.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
-msgstr ""
+msgstr "विन्यासं विलोपयन्तु"
 
 #: shell/launchconfigurationdialog.cpp:252
 #, kde-format
@@ -2352,13 +2376,13 @@ msgstr "चयनितप्रक्षेपणविन्यासे अ�
 #, kde-format
 msgctxt "@title:window"
 msgid "Unsaved Changes"
-msgstr ""
+msgstr "असरक्षितपरिवर्तनानि"
 
 #: shell/launchconfigurationdialog.cpp:325
 #, kde-format
 msgctxt "%1 is a launcher name"
 msgid "No configuration is needed for '%1'"
-msgstr ""
+msgstr "'%1' कृते कोऽपि विन्यासस्य आवश्यकता नास्ति ।"
 
 #: shell/launchconfigurationdialog.cpp:369
 #, kde-format
@@ -2393,27 +2417,27 @@ msgstr "प्रकारः"
 #, kde-format
 msgctxt "@action:button"
 msgid "Add"
-msgstr ""
+msgstr "संयोजयति"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
 #: shell/launchconfigurationdialog.ui:39
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr ""
+msgstr "अपाकरोति"
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
 #: shell/launchconfigurationdialog.ui:84
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
-msgstr ""
+msgstr "त्रुटिनिवारकः : १."
 
 #: shell/loadedpluginsdialog.cpp:279
 #, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
-msgstr ""
+msgstr "लोड् प्लगिन्स्"
 
 #: shell/loadedpluginsdialog.cpp:285
 #, kde-format
@@ -2429,211 +2453,211 @@ msgstr " (पठितमात्रम्) २."
 #, kde-format
 msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
-msgstr ""
+msgstr "%1 विन्यस्यताम्"
 
 #: shell/mainwindow_p.cpp:224
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
-msgstr ""
+msgstr "%1 अनुकूलितुं शक्नोति ।"
 
 #: shell/mainwindow_p.cpp:227
 #, kde-format
 msgctxt "@action"
 msgid "Configure Notifications..."
-msgstr ""
+msgstr "सूचनाः विन्यस्तं कुर्वन्तु..."
 
 #: shell/mainwindow_p.cpp:228
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure notifications"
-msgstr ""
+msgstr "सूचनाः विन्यस्यताम्"
 
 #: shell/mainwindow_p.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
-msgstr ""
+msgstr "एकं संवादं दर्शयति यत् भवन्तं सूचनानि विन्यस्तुं शक्नोति ।"
 
 #: shell/mainwindow_p.cpp:233
 #, kde-format
 msgctxt "@action"
 msgid "Loaded Plugins"
-msgstr ""
+msgstr "लोड् प्लगिन्स्"
 
 #: shell/mainwindow_p.cpp:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
-msgstr ""
+msgstr "सर्वेषां लोड् कृतानां प्लगिन्स् इत्यस्य सूचीं दर्शयतु"
 
 #: shell/mainwindow_p.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
-msgstr ""
+msgstr "सर्वेषां लोड् कृतानां प्लगिन्स् विषये सूचनायुक्तं संवादं दर्शयति ।"
 
 #: shell/mainwindow_p.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "&Next Window"
-msgstr ""
+msgstr "&अगला खिडकी"
 
 #: shell/mainwindow_p.cpp:241
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next window"
-msgstr ""
+msgstr "अग्रिमः विण्डो"
 
 #: shell/mainwindow_p.cpp:242
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next window."
-msgstr ""
+msgstr "अग्रिमविण्डो प्रति गच्छति ।"
 
 #: shell/mainwindow_p.cpp:246
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Window"
-msgstr ""
+msgstr "&पूर्वविण्डो"
 
 #: shell/mainwindow_p.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous window"
-msgstr ""
+msgstr "पूर्वविण्डो"
 
 #: shell/mainwindow_p.cpp:250
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous window."
-msgstr ""
+msgstr "पूर्वविण्डो प्रति गच्छति ।"
 
 #: shell/mainwindow_p.cpp:254
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Next Outputmark"
-msgstr ""
+msgstr "Next Outputmark इत्यत्र कूदन्तु"
 
 #: shell/mainwindow_p.cpp:260
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Previous Outputmark"
-msgstr ""
+msgstr "पूर्वनिर्गमचिह्नं प्रति कूदन्तु"
 
 #: shell/mainwindow_p.cpp:267
 #, kde-format
 msgctxt "@action"
 msgid "Split View &Top/Bottom"
-msgstr ""
+msgstr "विभक्त दृश्य &ऊर्ध्व/नीचे"
 
 #: shell/mainwindow_p.cpp:270
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split horizontal"
-msgstr ""
+msgstr "क्षैतिज विभक्त"
 
 #: shell/mainwindow_p.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view horizontally."
-msgstr ""
+msgstr "वर्तमानदृश्यं क्षैतिजरूपेण विभजति ।"
 
 #: shell/mainwindow_p.cpp:275
 #, kde-format
 msgctxt "@action"
 msgid "Split View &Left/Right"
-msgstr ""
+msgstr "विभक्त दृश्य &वाम/दक्षिण"
 
 #: shell/mainwindow_p.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split vertical"
-msgstr ""
+msgstr "ऊर्ध्वाधर विभक्त"
 
 #: shell/mainwindow_p.cpp:279
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view vertically."
-msgstr ""
+msgstr "वर्तमानदृश्यं लम्बवत् विभजति ।"
 
 #: shell/mainwindow_p.cpp:282
 #, kde-format
 msgctxt "@action"
 msgid "&Next Split View"
-msgstr ""
+msgstr "&अगला विभाजित दृश्य"
 
 #: shell/mainwindow_p.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next split view"
-msgstr ""
+msgstr "अग्रिमः विभक्तदृश्यः"
 
 #: shell/mainwindow_p.cpp:286
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next split view."
-msgstr ""
+msgstr "अग्रिमविभक्तदृश्यं प्रति गच्छति ।"
 
 #: shell/mainwindow_p.cpp:290
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Split View"
-msgstr ""
+msgstr "&पूर्व विभक्त दृश्य"
 
 #: shell/mainwindow_p.cpp:293
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous split view"
-msgstr ""
+msgstr "पूर्वविभक्तदृश्यम्"
 
 #: shell/mainwindow_p.cpp:294
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous split view."
-msgstr ""
+msgstr "पूर्वविभक्तदृश्यं प्रति गच्छति ।"
 
 #: shell/mainwindow_p.cpp:302
 #, kde-format
 msgctxt "@action new file"
 msgid "&New"
-msgstr ""
+msgstr "&नूतनम्‌"
 
 #: shell/mainwindow_p.cpp:303
 #, kde-format
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
-msgstr ""
+msgstr "नूतनम्‌"
 
 #: shell/mainwindow_p.cpp:305
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "New file"
-msgstr ""
+msgstr "नवीनं सञ्चिका"
 
 #: shell/mainwindow_p.cpp:306
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Creates an empty file."
-msgstr ""
+msgstr "रिक्तं सञ्चिकां निर्माति ।"
 
 #: shell/mainwindow_p.cpp:311
 #, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr ""
+msgstr "&उपकरणं योजयतु दृश्यम्..."
 
 #: shell/mainwindow_p.cpp:313
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add tool view"
-msgstr ""
+msgstr "साधनदृश्यं योजयन्तु"
 
 #: shell/mainwindow_p.cpp:314
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Adds a new tool view to this window."
-msgstr ""
+msgstr "अस्मिन् विण्डो मध्ये नूतनं साधनदृश्यं योजयति ।"
 
 #: shell/mainwindow_p.cpp:319
 #, kde-format
@@ -2644,55 +2668,55 @@ msgstr "&विण्डो रङ्ग योजना"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
-msgstr ""
+msgstr "विभक्तं दृश्यं उपरि/तलम्"
 
 #: shell/mainwindow_p.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
-msgstr ""
+msgstr "विभक्त दृश्य वाम/दक्षिण"
 
 #: shell/mainwindow_p.cpp:360
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New File"
-msgstr ""
+msgstr "नवीन सञ्चिका"
 
 #: shell/mainwindow_p.cpp:366
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
-msgstr ""
+msgstr "पुनः लोड करें"
 
 #: shell/mainwindow_p.cpp:369
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload All"
-msgstr ""
+msgstr "Reload All"
 
 #: shell/mainwindow_p.cpp:409
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
-msgstr ""
+msgstr "Tool View योजयतु"
 
 #: shell/mainwindow_p.cpp:432
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
-msgstr ""
+msgstr "Panel इत्येतत् Hiding इत्यस्मात् लॉक् कुर्वन्तु"
 
 #: shell/openprojectdialog.cpp:132
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr ""
+msgstr "सर्वाणि परियोजनासञ्चिकाः"
 
 #: shell/openprojectdialog.cpp:141
 #, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
-msgstr ""
+msgstr "स्रोतः चिनोतु"
 
 #: shell/openprojectdialog.cpp:149
 #, kde-format
@@ -2707,13 +2731,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
-msgstr ""
+msgstr "Open Project इति परियोजना"
 
 #: shell/openprojectdialog.cpp:165
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
-msgstr ""
+msgstr "परियोजना सूचना"
 
 #: shell/openprojectdialog.cpp:228
 #, kde-format
@@ -2729,13 +2753,13 @@ msgstr "चयनितं URL अमान्यम् अस्ति"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
-msgstr ""
+msgstr "विद्यमानं सञ्चिकां \"%1\" उद्घाटयन्तु ।"
 
 #: shell/partcontroller.cpp:226
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
-msgstr ""
+msgstr "दृश्यस्य स्थितिपट्टिकां दर्शयितुं गोपयितुं वा एतस्य आदेशस्य उपयोगं कुर्वन्तु ।"
 
 #: shell/partdocument.cpp:108
 #, kde-format
@@ -2746,7 +2770,7 @@ msgstr "\"%1\" इति दस्तावेजे अरक्षिताः
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
-msgstr ""
+msgstr "दस्तावेजं बन्दं कुर्वन्तु"
 
 #: shell/partdocument.cpp:115
 #, kde-format
@@ -2763,7 +2787,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
-msgstr ""
+msgstr "बाह्यपरिवर्तनानि अधिलेखयन्तु"
 
 #: shell/problem.cpp:40
 #, kde-format
@@ -2802,7 +2826,7 @@ msgstr "त्रुटि"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
-msgstr ""
+msgstr "सर्वाणि अवलोकितानि दस्तावेजानि पुनः विश्लेषणं कुर्वन्तु"
 
 #: shell/problemmodel.cpp:321
 #, kde-format
@@ -2820,49 +2844,49 @@ msgstr "समस्या"
 #, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
-msgstr ""
+msgstr "संचिका"
 
 #: shell/problemmodel.cpp:327
 #, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
-msgstr ""
+msgstr "पंक्ति"
 
 #: shell/problemmodel.cpp:329
 #, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"
-msgstr ""
+msgstr "स्तम्भ"
 
 #: shell/progresswidget/progressdialog.cpp:144
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel this operation"
-msgstr ""
+msgstr "एतत् कार्यं रद्दं कुर्वन्तु"
 
 #: shell/progresswidget/progressmanager.cpp:87
 #, kde-format
 msgctxt "@info"
 msgid "Aborting..."
-msgstr ""
+msgstr "गर्भपातं कुर्वन्..."
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:99
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open detailed progress dialog"
-msgstr ""
+msgstr "विस्तृत प्रगतिसंवादं उद्घाटयन्तु"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:337
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide detailed progress window"
-msgstr ""
+msgstr "विस्तृतं प्रगतिविण्डो गोपयन्तु"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:341
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show detailed progress window"
-msgstr ""
+msgstr "विस्तृतं प्रगतिविण्डो दर्शयतु"
 
 #: shell/project.cpp:99
 #, kde-format
@@ -2873,7 +2897,7 @@ msgstr "परियोजना %1 लोड् भवति"
 #, kde-format
 msgctxt "%1: Project name"
 msgid "Loading %1"
-msgstr ""
+msgstr "%1 लोड् भवति"
 
 #: shell/project.cpp:226
 #, kde-format
@@ -2931,7 +2955,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
-msgstr ""
+msgstr "परियोजना %1 विन्यस्यताम्"
 
 #: shell/projectcontroller.cpp:300
 #, kde-format
@@ -2947,32 +2971,33 @@ msgstr "पूर्वमेव %1 उद्घाटयति, पुनः �
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
-msgstr ""
+msgstr "अधिलिखित करें"
 
 #: shell/projectcontroller.cpp:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Continue to open the project and use the just provided project configuration"
-msgstr ""
+msgstr "परियोजनां उद्घाट्य अधुना एव प्रदत्तस्य परियोजनाविन्यासस्य उपयोगं कुर्वन्तु"
 
 #: shell/projectcontroller.cpp:469
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
-msgstr ""
+msgstr "विद्यमानं सञ्चिकां उद्घाटयन्तु"
 
 #: shell/projectcontroller.cpp:470
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
+"परियोजनां उद्घाटयितुं निरन्तरं कुर्वन्तु परन्तु विद्यमानस्य परियोजनाविन्यासस्य उपयोगं कुर्वन्तु"
 
 #: shell/projectcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
-msgstr ""
+msgstr "रद्दं कुर्वन्तु परियोजनां न उद्घाटयन्तु"
 
 #: shell/projectcontroller.cpp:475
 #, kde-format
@@ -2987,7 +3012,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
-msgstr ""
+msgstr "विद्यमानं परियोजनाविन्यासं अधिलिखन्तु"
 
 #: shell/projectcontroller.cpp:496
 #, kde-format
@@ -3003,19 +3028,19 @@ msgstr "वर्तमान परियोजनां पुनः उद्
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "पुनः उद्घाटयतु"
 
 #: shell/projectcontroller.cpp:552
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
-msgstr ""
+msgstr "Open / Import परियोजना..."
 
 #: shell/projectcontroller.cpp:553
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
-msgstr ""
+msgstr "परियोजनां उद्घाटयन्तु अथवा आयातयन्तु"
 
 #: shell/projectcontroller.cpp:554
 #, kde-format
@@ -3027,18 +3052,22 @@ msgid ""
 "directory that does not yet have a KDevelop project file, the file will be "
 "created."
 msgstr ""
+"विद्यमानं KDevelop परियोजनां उद्घाटयन्तु अथवा विद्यमानं परियोजनां KDevelop मध्ये "
+"आयातयन्तु । एषा प्रविष्टिः KDevelop परियोजनासञ्चिकां वा विद्यमाननिर्देशिकां वा "
+"KDevelop मध्ये उद्घाटयितुं चयनं कर्तुं शक्नोति । यदा विद्यमानं निर्देशिकां उद्घाटयति यस्मिन् "
+"अद्यापि KDevelop परियोजनासञ्चिका नास्ति, तदा सञ्चिका निर्मीयते ।"
 
 #: shell/projectcontroller.cpp:565
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
-msgstr ""
+msgstr "परियोजना आनेतु..."
 
 #: shell/projectcontroller.cpp:567
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
-msgstr ""
+msgstr "परियोजना आनयतु"
 
 #: shell/projectcontroller.cpp:568
 #, kde-format
@@ -3046,54 +3075,55 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr ""
+"परियोजना-आनयनस्य माध्यमेन उपयोक्तारं मार्गदर्शनं करोति ततः KDevelop मध्ये आयातयति ।"
 
 #: shell/projectcontroller.cpp:583
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
-msgstr ""
+msgstr "परियोजना (प्रकल्पाः) बन्दं कुर्वन्तु ."
 
 #: shell/projectcontroller.cpp:585
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
-msgstr ""
+msgstr "वर्तमानकाले चयनितानि सर्वाणि परियोजनानि बन्दं करोति"
 
 #: shell/projectcontroller.cpp:591
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
-msgstr ""
+msgstr "विन्यासः उद्घाटयतु..."
 
 #: shell/projectcontroller.cpp:597
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
-msgstr ""
+msgstr "वर्तमान परियोजना प्रतिबद्ध..."
 
 #: shell/projectcontroller.cpp:598
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr ""
+msgstr "प्रविश्..."
 
 #: shell/projectcontroller.cpp:609
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
-msgstr ""
+msgstr "Open Recent Project"
 
 #: shell/projectcontroller.cpp:610
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
-msgstr ""
+msgstr "सद्यः एव उद्घाटितं परियोजना उद्घाटयति।"
 
 #: shell/projectcontroller.cpp:615
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
-msgstr ""
+msgstr "वर्तमानसञ्चिकायाः कृते परियोजना उद्घाटयन्तु"
 
 #: shell/projectcontroller.cpp:766
 #, kde-format
@@ -3109,7 +3139,7 @@ msgstr "सक्रियदस्तावेजं नास्ति"
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
-msgstr ""
+msgstr "परियोजना पूर्वमेव उद्घाटिता अस्ति"
 
 #: shell/projectcontroller.cpp:854
 #, kde-format
@@ -3124,13 +3154,13 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
-msgstr ""
+msgstr "वर्तमानसत्रे परियोजनां योजयन्तु"
 
 #: shell/projectcontroller.cpp:862
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
-msgstr ""
+msgstr "सत्र %1 उद्घाटयन्तु"
 
 #: shell/projectcontroller.cpp:923
 #, kde-format
@@ -3141,7 +3171,7 @@ msgstr "कोऽपि सक्षमः प्लगिन् अस्य �
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
-msgstr ""
+msgstr "सम्पूर्णं परियोजनां पुनः विश्लेषणं कुर्वन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
@@ -3149,14 +3179,14 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the Management Plugin to use for this project"
-msgstr ""
+msgstr "अस्य परियोजनायाः कृते उपयोक्तुं Management Plugin इति चिनोतु"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectinfopage.ui:32
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Project manager:"
-msgstr ""
+msgstr "परियोजना प्रबन्धकः : १."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
@@ -3164,20 +3194,20 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Provide a name for the project"
-msgstr ""
+msgstr "परियोजनायाः नाम प्रदातव्यम्"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr ""
+msgstr "नामः:"
 
 #: shell/projectsourcepage.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "From File System"
-msgstr ""
+msgstr "सञ्चिकातन्त्रात्"
 
 #: shell/projectsourcepage.cpp:179
 #, kde-format
@@ -3188,7 +3218,7 @@ msgstr "निर्देशिकां निर्मातुं न शक
 #, kde-format
 msgctxt "Format of the progress bar text. progress and info"
 msgid "%1 : %p%"
-msgstr ""
+msgstr "%1 : %प% ."
 
 #: shell/projectsourcepage.cpp:249
 #, kde-format
@@ -3211,28 +3241,28 @@ msgstr "भवता स्वस्य परियोजनागन्तव�
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Source:"
-msgstr ""
+msgstr "स्रोतः:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/projectsourcepage.ui:49
 #, kde-format
 msgctxt "@title:group"
 msgid "Destination"
-msgstr ""
+msgstr "गन्तव्य"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectsourcepage.ui:55
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Directory:"
-msgstr ""
+msgstr "निर्देशिका : १."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
 #: shell/projectsourcepage.ui:62
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr ""
+msgstr "उपयोक्तुं निर्देशिकां चिनोतु..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
@@ -3246,25 +3276,25 @@ msgstr "स्रोतः"
 #, kde-format
 msgctxt "@action:button"
 msgid "Get"
-msgstr ""
+msgstr "प्राप्नोतु"
 
 #: shell/runcontroller.cpp:87
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
-msgstr ""
+msgstr "त्रुटिनिवारणम्"
 
 #: shell/runcontroller.cpp:96
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
-msgstr ""
+msgstr "रूपरेखा"
 
 #: shell/runcontroller.cpp:105
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
-msgstr ""
+msgstr "प्रभज्"
 
 #: shell/runcontroller.cpp:405
 #, kde-format
@@ -3275,13 +3305,13 @@ msgstr "वर्तमानप्रक्षेपणविन्यासः
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
-msgstr ""
+msgstr "विन्यस्तं प्रक्षेपणं..."
 
 #: shell/runcontroller.cpp:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
-msgstr ""
+msgstr "प्रक्षेपणविन्याससंवादं उद्घाटयन्तु"
 
 #: shell/runcontroller.cpp:429
 #, kde-format
@@ -3290,24 +3320,25 @@ msgid ""
 "Opens a dialog to setup new launch configurations, or to change the existing "
 "ones."
 msgstr ""
+"नूतनानि प्रक्षेपणविन्यासानि स्थापयितुं, अथवा विद्यमानानाम् परिवर्तनार्थं संवादं उद्घाटयति ।"
 
 #: shell/runcontroller.cpp:432
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
-msgstr ""
+msgstr "प्रक्षेपणं निष्पादयन्तु"
 
 #: shell/runcontroller.cpp:433
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
-msgstr ""
+msgstr "प्रभज्"
 
 #: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
-msgstr ""
+msgstr "वर्तमान प्रक्षेपणं निष्पादयन्तु"
 
 #: shell/runcontroller.cpp:436
 #, kde-format
@@ -3315,13 +3346,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Executes the target or the program specified in currently active launch "
 "configuration."
-msgstr ""
+msgstr "वर्तमान सक्रियप्रक्षेपणविन्यासे निर्दिष्टं लक्ष्यं वा कार्यक्रमं वा निष्पादयति ।"
 
 #: shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
-msgstr ""
+msgstr "त्रुटिनिवारणम्"
 
 #. i18n("Profile Launch"), this);
 #. profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
@@ -3332,73 +3363,73 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
-msgstr ""
+msgstr "सर्वाणि कार्याणि स्थगयन्तु"
 
 #: shell/runcontroller.cpp:457
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
-msgstr ""
+msgstr "सर्वं स्थगयतु"
 
 #: shell/runcontroller.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
-msgstr ""
+msgstr "वर्तमानकाले प्रचलितानि सर्वाणि कार्याणि स्थगयन्तु"
 
 #: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
-msgstr ""
+msgstr "सर्वाणि चालितानि कार्याणि स्थगितानि इति अनुरोधं करोति ।"
 
 #: shell/runcontroller.cpp:467
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
-msgstr ""
+msgstr "विरमतु"
 
 #: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
-msgstr ""
+msgstr "विरमतु"
 
 #: shell/runcontroller.cpp:470
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
-msgstr ""
+msgstr "व्यक्तिगतकार्यं स्थगयितुं अनुमतिं ददाति मेनू"
 
 #: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
-msgstr ""
+msgstr "व्यक्तिगतरूपेण स्थगितुं शक्यमाणानां कार्याणां सूची।"
 
 #: shell/runcontroller.cpp:475
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
-msgstr ""
+msgstr "वर्तमान प्रक्षेपणविन्यासः"
 
 #: shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
-msgstr ""
+msgstr "वर्तमान प्रक्षेपणविन्यासः"
 
 #: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
-msgstr ""
+msgstr "यदा run आह्वयते तदा कः प्रक्षेपणविन्यासः चालनीयः इति चिनोतु ।"
 
 #: shell/runcontroller.cpp:590
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
-msgstr ""
+msgstr "<%1> अनाम कार्यम्"
 
 #: shell/runcontroller.cpp:967
 #, kde-format
@@ -3409,7 +3440,7 @@ msgstr "नवीन %1 प्रक्षेपक"
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
-msgstr ""
+msgstr "%1 यथा..."
 
 #: shell/runtimecontroller.cpp:27
 #, kde-format
@@ -3430,7 +3461,7 @@ msgstr "रनटाइम्: %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Modified Files?"
-msgstr ""
+msgstr "परिवर्तितसञ्चिकाः रक्षन्तु?"
 
 #: shell/savedialog.cpp:47
 #, kde-format
@@ -3441,13 +3472,13 @@ msgstr "निम्नलिखितसञ्चिकाः परिवर�
 #, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
-msgstr ""
+msgstr "रक्षतु &कोऽपि नास्ति"
 
 #: shell/savedialog.cpp:66
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
-msgstr ""
+msgstr "सर्वाणि परिवर्तनानि परित्यजन्तु"
 
 #: shell/session.cpp:158 shell/session.cpp:181
 #, kde-format
@@ -3458,19 +3489,19 @@ msgstr "(प्रकल्पाः नास्ति) २."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
-msgstr ""
+msgstr "सत्रं विलोपयन्तु"
 
 #: shell/sessionchooserdialog.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
-msgstr ""
+msgstr "एकं सत्रं चिनुत"
 
 #: shell/sessionchooserdialog.cpp:62
 #, kde-format
 msgctxt "@action:button"
 msgid "Run"
-msgstr ""
+msgstr "धावनं करोतु"
 
 #: shell/sessionchooserdialog.cpp:94
 #, kde-format
@@ -3479,6 +3510,8 @@ msgid ""
 "Active session.\n"
 "pid %1, app %2, host %3"
 msgstr ""
+"सक्रिय सत्र।\n"
+"pid %1, app %2, होस्ट %3"
 
 #: shell/sessionchooserdialog.cpp:96
 #, kde-format
@@ -3489,19 +3522,19 @@ msgstr "चलति"
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Delete Session"
-msgstr ""
+msgstr "सत्रं विलोपयितुं न शक्यते"
 
 #: shell/sessionchooserdialog.cpp:192
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
-msgstr ""
+msgstr "<p>ताडितसत्रं विलोपयितुं न शक्यते।"
 
 #: shell/sessionchooserdialog.cpp:195
 #, kde-format
 msgctxt "@info"
 msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
-msgstr ""
+msgstr "<p><b>%1</b> सत्रं %3 (PID %4) इत्यत्र %2 द्वारा ताडितम् अस्ति ।"
 
 #: shell/sessionchooserdialog.cpp:203
 #, kde-format
@@ -3510,24 +3543,26 @@ msgid ""
 "The session <b>%1</b> and all contained settings will be deleted. The "
 "projects will stay unaffected. Do you really want to continue?"
 msgstr ""
+"सत्रं <b>%1</b> तथा च सर्वाणि समाविष्टानि सेटिङ्ग्स् विलोप्यन्ते । परियोजनाः अप्रभाविताः "
+"एव तिष्ठन्ति। किं भवन्तः तत्त्वतः अग्रे गन्तुं इच्छन्ति ?"
 
 #: shell/sessionchooserdialog.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
-msgstr ""
+msgstr "सत्रं विलोपयन्तु"
 
 #: shell/sessioncontroller.cpp:134
 #, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
-msgstr ""
+msgstr "नूतनं सत्रं आरभत"
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
 #, kde-format
 msgctxt "@label:textbox"
 msgid "New session name:"
-msgstr ""
+msgstr "नवीनं सत्रनाम : १."
 
 #: shell/sessioncontroller.cpp:144
 #, kde-format
@@ -3542,7 +3577,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
-msgstr ""
+msgstr "सत्रस्य नाम परिवर्तनं कुर्वन्तु"
 
 #: shell/sessioncontroller.cpp:265
 #, kde-format
@@ -3553,43 +3588,43 @@ msgstr "सत्र प्रबन्धक"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Session"
-msgstr ""
+msgstr "नूतनं सत्रं आरभत"
 
 #: shell/sessioncontroller.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
-msgstr ""
+msgstr "रिक्तसत्रेण नूतनं KDevelop उदाहरणं आरभत"
 
 #: shell/sessioncontroller.cpp:286
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr ""
+msgstr "नवीन नामकरणं सत्रं आरभत..."
 
 #: shell/sessioncontroller.cpp:287
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr ""
+msgstr "रिक्तनाम्ना सत्रेण सह नूतनं KDevelop उदाहरणं आरभत"
 
 #: shell/sessioncontroller.cpp:293
 #, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
-msgstr ""
+msgstr "वर्तमान सत्रस्य नाम परिवर्तनं कुर्वन्तु..."
 
 #: shell/sessioncontroller.cpp:299
 #, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
-msgstr ""
+msgstr "वर्तमान सत्रं विलोपयन्तु..."
 
 #: shell/sessioncontroller.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Quit"
-msgstr ""
+msgstr "परिजहातु"
 
 #: shell/sessioncontroller.cpp:523
 #, kde-format
@@ -3600,13 +3635,13 @@ msgstr "%1 इत्यस्य प्रतिलिपिः"
 #, kde-format
 msgctxt "@title:column"
 msgid "Identity"
-msgstr ""
+msgstr "चिह्नं"
 
 #: shell/sessioncontroller.cpp:614
 #, kde-format
 msgctxt "@title:column"
 msgid "Contents"
-msgstr ""
+msgstr "विषयवस्तु"
 
 #: shell/sessioncontroller.cpp:615
 #, kde-format
@@ -3624,7 +3659,7 @@ msgstr "नामः"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
-msgstr ""
+msgstr "फ़िल्टर : १."
 
 #: shell/sessioncontroller.cpp:654
 #, kde-format
@@ -3637,13 +3672,13 @@ msgctxt "@info:shell"
 msgid ""
 "Running %1 instance (PID: %2) detected, making this one visible instead of "
 "starting a new one"
-msgstr ""
+msgstr "%1 उदाहरणं चालयन् (PID: %2) ज्ञातम्, नूतनं आरभ्यतुं स्थाने एतत् दृश्यमानं कृत्वा"
 
 #: shell/sessionlock.cpp:163
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
-msgstr ""
+msgstr "%1 उदाहरणं (PID: %2) चालयन् प्रत्यक्षतया लम्बितम् अस्ति"
 
 #: shell/sessionlock.cpp:169
 #, kde-format
@@ -3652,19 +3687,21 @@ msgid ""
 "The given application did not respond to a DBUS call, it may have crashed or "
 "is hanging."
 msgstr ""
+"दत्तः अनुप्रयोगः DBUS-आह्वानस्य प्रतिक्रियां न दत्तवान्, सः दुर्घटनाग्रस्तः अथवा लम्बितः "
+"अस्ति वा ।"
 
 #: shell/sessionlock.cpp:174
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
-msgstr ""
+msgstr "<em>%1 (PID %4) इत्यत्र %2 द्वारा पूर्वमेव ताडितम् %3</em> सत्रं ताडयितुं असफलम् ।"
 
 #: shell/sessionlock.cpp:178
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
-msgstr ""
+msgstr "<em>%1</em> सत्रं ताडयितुं असफलम् (लॉक-सञ्चिका अनुपलब्धम्) ।"
 
 #: shell/sessionlock.cpp:182
 #, kde-format
@@ -3673,30 +3710,31 @@ msgid ""
 "<p>Please, close the offending application instance or choose another "
 "session to launch.</p>"
 msgstr ""
+"<p>कृपया, आक्षेपार्हं अनुप्रयोगदृष्टान्तं पिधाय अथवा प्रारम्भार्थं अन्यं सत्रं चिनोतु ।</p>"
 
 #: shell/sessionlock.cpp:188
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
-msgstr ""
+msgstr "पुनः स्टार्टअप इत्यस्य प्रयासं कुर्वन्तु"
 
 #: shell/sessionlock.cpp:191
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
-msgstr ""
+msgstr "अन्यं सत्रं चिनोतु"
 
 #: shell/sessionlock.cpp:195
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
-msgstr ""
+msgstr "सत्रं %1 ताडयितुं असफलम्"
 
 #: shell/sessionlock.cpp:201
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
-msgstr ""
+msgstr "%1 सत्रं अन्यस्मिन् चालितदृष्टान्ते पूर्वमेव सक्रियम् अस्ति ।"
 
 #: shell/settings/analyzerspreferences.cpp:25
 #, kde-format
@@ -3722,13 +3760,16 @@ msgid ""
 "enabled. Disabling the background parser will disable large parts of "
 "KDevelop's functionality.</p>"
 msgstr ""
+"<p>पृष्ठभूमिपार्सरं सक्षमं वा निष्क्रियं वा करोति ।<br> यदि अनिश्चितः अस्ति तर्हि सक्षमं "
+"त्यजन्तु । पृष्ठभूमिपार्सरं निष्क्रियं कृत्वा KDevelop इत्यस्य कार्यक्षमतायाः बृहत् भागाः "
+"अक्षमाः भविष्यन्ति ।</p>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:23
 #, kde-format
 msgctxt "@title:group"
 msgid "Enable Background Parser"
-msgstr ""
+msgstr "पृष्ठभूमिपार्सरं सक्षमं कुर्वन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
@@ -3736,21 +3777,21 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The time to wait before the document is re-analyzed when you edit it."
-msgstr ""
+msgstr "दस्तावेजस्य सम्पादने पुनः विश्लेषणं कर्तुं पूर्वं प्रतीक्षितव्यः समयः ।"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/bgpreferences.ui:38
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Delay:"
-msgstr ""
+msgstr "विलम्बः:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:48
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " ms"
-msgstr ""
+msgstr " ms"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
@@ -3761,20 +3802,22 @@ msgid ""
 "The maximum number of parallel instances the background parser uses. If "
 "unsure, select 1 or 2."
 msgstr ""
+"पृष्ठभूमिपार्सरः अधिकतमं समानान्तरदृष्टान्तानां संख्यां उपयुङ्क्ते । यदि अनिश्चितः अस्ति तर्हि 1 "
+"अथवा 2 इति चिनोतु ।"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/bgpreferences.ui:64
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
-msgstr ""
+msgstr "अधिकतमं सूत्राणां संख्या : १."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_threads)
 #: shell/settings/bgpreferences.ui:74
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " threads"
-msgstr ""
+msgstr " सूत्राणि"
 
 #: shell/settings/documentationpreferences.cpp:35
 #, kde-format
@@ -3805,7 +3848,7 @@ msgstr "पूर्वावलोकनं दर्शयतु"
 #, kde-format
 msgctxt "@label"
 msgid "Preview:"
-msgstr ""
+msgstr "पूर्वावलोकनम् : १."
 
 #: shell/settings/environmentpreferences.cpp:79
 #, kde-format
@@ -3838,76 +3881,76 @@ msgstr "मूल्यम्‌"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter variable..."
-msgstr ""
+msgstr "चरं प्रविष्टं कुर्वन्तु..."
 
 #: shell/settings/environmentwidget.cpp:169
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Environment Profile"
-msgstr ""
+msgstr "नवीनपर्यावरणप्रोफाइलस्य नाम प्रविष्टं कुर्वन्तु"
 
 #: shell/settings/environmentwidget.cpp:233
 #, kde-format
 msgctxt "@title:window"
 msgid "Batch Edit Mode"
-msgstr ""
+msgstr "बैच सम्पादन मोड"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Environment profile:"
-msgstr ""
+msgstr "पर्यावरणस्य स्वरूपम् : १."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
 #: shell/settings/environmentwidget.ui:39
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr ""
+msgstr "प्रोफाइल योजयतु..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone profile..."
-msgstr ""
+msgstr "क्लोन प्रोफाइल..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
 #: shell/settings/environmentwidget.ui:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove profile"
-msgstr ""
+msgstr "प्रोफाइलं निष्कासयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultProfileButton)
 #: shell/settings/environmentwidget.ui:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr ""
+msgstr "पूर्वनिर्धारितरूपेण सेट् कुर्वन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
 #: shell/settings/environmentwidget.ui:114
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove variable"
-msgstr ""
+msgstr "चरं निष्कासयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, batchModeEditButton)
 #: shell/settings/environmentwidget.ui:130
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Batch edit mode"
-msgstr ""
+msgstr "बैच सम्पादन मोड"
 
 #: shell/settings/languagepreferences.cpp:34
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " file"
 msgid_plural " files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " संचिका"
+msgstr[1] " सञ्चिकाः"
 
 #: shell/settings/languagepreferences.cpp:77
 #, kde-format
@@ -3924,7 +3967,7 @@ msgstr "Code-Completion तथा Semantic Highlighting विन्यस्त
 #, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
-msgstr ""
+msgstr "संहिता समाप्ति"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_automaticInvocation)
@@ -3933,14 +3976,14 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "If disabled, the code completion widget will never show automatically."
-msgstr ""
+msgstr "यदि अक्षमम् अस्ति तर्हि कोडसमाप्तिविजेट् स्वयमेव कदापि न दर्शयिष्यति ।"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: shell/settings/languagepreferences.ui:38
 #, kde-format
 msgctxt "@label"
 msgid "Enable automatic invocation:"
-msgstr ""
+msgstr "स्वचालितं आह्वानं सक्षमं कुर्वन्तु:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_7)
 #: shell/settings/languagepreferences.ui:58
@@ -3949,14 +3992,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "Choose whether to display additional information for the currently selected "
 "codecompletion item."
-msgstr ""
+msgstr "वर्तमान चयनितस्य कोडसमाप्ति-वस्तूनाम् अतिरिक्तसूचनाः प्रदर्शयितुं वा इति चिनोतु ।"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: shell/settings/languagepreferences.ui:61
 #, kde-format
 msgctxt "@label"
 msgid "Additional information for current item:"
-msgstr ""
+msgstr "वर्तमानवस्तूनाम् अतिरिक्तसूचना: १."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_showMultiLineSelectionInformation)
 #: shell/settings/languagepreferences.ui:71
@@ -3965,7 +4008,7 @@ msgctxt "info:tooltip"
 msgid ""
 "Choose whether to display additional information for the currently selected "
 "code completion item."
-msgstr ""
+msgstr "वर्तमान चयनितसङ्केतसमाप्तिवस्तूनाम् अतिरिक्तसूचनाः प्रदर्शयितुं वा इति चिनोतु ।"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_completionDetail)
@@ -3984,35 +4027,35 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Detailed completion:"
-msgstr ""
+msgstr "विस्तृतसमाप्तिः : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:101
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Never"
-msgstr ""
+msgstr "कदापि न"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:106
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "When Invoked Manually"
-msgstr ""
+msgstr "यदा हस्तचलितरूपेण आह्वानं भवति"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
-msgstr ""
+msgstr "सर्वदा"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/languagepreferences.ui:122
 #, kde-format
 msgctxt "@title:group"
 msgid "Semantic Code Highlighting"
-msgstr ""
+msgstr "शब्दार्थ कोड हाइलाइटिंग"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, localColorizationLabel)
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_localColorization)
@@ -4031,7 +4074,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Local colorization intensity:"
-msgstr ""
+msgstr "स्थानीयवर्णीकरणस्य तीव्रता : १."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_9)
@@ -4088,7 +4131,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Global colorization intensity:"
-msgstr ""
+msgstr "वैश्विकवर्णीकरणस्य तीव्रता : १."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightSemanticProblems)
@@ -4106,7 +4149,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Highlight semantic problems:"
-msgstr ""
+msgstr "शब्दार्थसमस्याः प्रकाशयन्तु : १."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
@@ -4125,7 +4168,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Highlight problematic lines:"
-msgstr ""
+msgstr "समस्याप्रदपङ्क्तयः प्रकाशयन्तु : १."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:277
@@ -4142,56 +4185,56 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Bold font for declarations:"
-msgstr ""
+msgstr "घोषणानां कृते बोल्ड् फन्ट् : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: shell/settings/languagepreferences.ui:293
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Problems shown as inline notes:"
-msgstr ""
+msgstr "इनलाइन नोट्स् इति दर्शिताः समस्याः : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:304
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "None"
-msgstr ""
+msgstr "न कश्चित्"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:309
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Errors"
-msgstr ""
+msgstr "दोषाः"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:314
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Warnings and Errors"
-msgstr ""
+msgstr "चेतावनी त्रुटयः च"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:319
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Hints, Warnings and Errors"
-msgstr ""
+msgstr "संकेताः, चेतावनीः, त्रुटयः च"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:327
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Space-separated list of words that make a comment represent a TODO item"
-msgstr ""
+msgstr "टिप्पणीं कुर्वन्तः शब्दानां स्थानविभक्ताः सूचीः TODO-वस्तुं प्रतिनिधियन्ति"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:330
 #, kde-format
 msgctxt "@label:textbox"
 msgid "TODO marker words:"
-msgstr ""
+msgstr "TODO चिह्नशब्दाः : १."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
 #: shell/settings/languagepreferences.ui:340
@@ -4199,14 +4242,14 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "Space-separated list of words that make a comment represent a TODO item."
-msgstr ""
+msgstr "टिप्पणीं कुर्वन्तः शब्दानां स्थानविभक्ताः सूचीः TODO-वस्तुं प्रतिनिधियन्ति ।"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/languagepreferences.ui:369
 #, kde-format
 msgctxt "@title:group"
 msgid "Project Parsing"
-msgstr ""
+msgstr "परियोजना पार्सिंग"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
@@ -4228,21 +4271,21 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
-msgstr ""
+msgstr "सरलीकृतपार्सिंग् कृते न्यूनतमः परियोजनायाः आकारः : १."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: shell/settings/languagepreferences.ui:415
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "भण्डारणं स्मृतिप्रयोगः च"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "पूर्वसंकलित प्रस्तावनाः अत्र संगृह्यताम् :"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4274,38 +4317,38 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "स्मृति"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "सत्र अस्थायी निर्देशिका"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
 msgctxt "@title:group"
 msgid "Core"
-msgstr ""
+msgstr "अन्तर्भाग"
 
 #: shell/settings/pluginpreferences.cpp:36
 #, kde-format
 msgctxt "@title:group"
 msgid "Project Management"
-msgstr ""
+msgstr "परियोजना प्रबन्धन"
 
 #: shell/settings/pluginpreferences.cpp:37
 #, kde-format
 msgctxt "@title:group"
 msgid "Version Control"
-msgstr ""
+msgstr "संस्करणनियन्त्रणम्"
 
 #: shell/settings/pluginpreferences.cpp:38
 #, kde-format
 msgctxt "@title:group"
 msgid "Utilities"
-msgstr ""
+msgstr "उपयोगिताएँ"
 
 #: shell/settings/pluginpreferences.cpp:39
 #, kde-format
@@ -4323,13 +4366,13 @@ msgstr "भाषा समर्थन"
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugging"
-msgstr ""
+msgstr "त्रुटिनिवारणम्"
 
 #: shell/settings/pluginpreferences.cpp:42
 #, kde-format
 msgctxt "@title:group"
 msgid "Testing"
-msgstr ""
+msgstr "परीक्षणम्"
 
 #: shell/settings/pluginpreferences.cpp:43
 #, kde-format
@@ -4347,7 +4390,7 @@ msgstr "रनटाइम्स्"
 #, kde-format
 msgctxt "@title:group"
 msgid "Other"
-msgstr ""
+msgstr "इतर"
 
 #: shell/settings/pluginpreferences.h:27
 #, kde-format
@@ -4422,42 +4465,42 @@ msgstr "परियोजनानि विन्यस्तं कुर्�
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the base directory where new projects are to be created"
-msgstr ""
+msgstr "यत्र नूतनाः परियोजनाः निर्मातव्याः सन्ति तत्र आधारनिर्देशिकां चिनोतु"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/projectpreferences.ui:25
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Projects base directory:"
-msgstr ""
+msgstr "परियोजना आधारनिर्देशिका : १."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:47
 #, kde-format
 msgctxt "@info:tolltip"
 msgid "Parse all files in a project after the project has been opened"
-msgstr ""
+msgstr "परियोजनायाः उद्घाटनानन्तरं परियोजनायां सर्वाणि सञ्चिकाः विश्लेषणं कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:50
 #, kde-format
 msgctxt "@option:check"
 msgid "Schedule all project files for parsing"
-msgstr ""
+msgstr "पार्सिंग् कृते सर्वाणि परियोजनासञ्चिकाः समयनिर्धारणं कुर्वन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified documents when the \"build\" action is triggered"
-msgstr ""
+msgstr "यदा \"build\" क्रिया प्रवर्तते तदा सर्वाणि परिवर्तितानि दस्तावेजानि रक्षन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:60
 #, kde-format
 msgctxt "@option:check"
 msgid "Save all documents before building"
-msgstr ""
+msgstr "निर्माणात् पूर्वं सर्वाणि दस्तावेजानि रक्षन्तु"
 
 #: shell/settings/runtimespreferences.cpp:23
 #, kde-format
@@ -4485,7 +4528,7 @@ msgstr "स्रोतस्वरूपं विन्यस्यताम�
 #, kde-format
 msgctxt "@title:group"
 msgid "General"
-msgstr ""
+msgstr "सामान्य"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:26
@@ -4495,13 +4538,14 @@ msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without Kate modeline."
 msgstr ""
+"Kate modeline विना दस्तावेजानां कृते प्रारूपणशैल्यानुसारं सम्पादक-इण्डेन्टेशन-विधिं अधिलिखन्तु ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Override Kate Indentation Mode"
-msgstr ""
+msgstr "केट इण्डेन्टेशन मोड ओवरराइड करें"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:36
@@ -4509,21 +4553,21 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
-msgstr ""
+msgstr "प्रारूपितदस्तावेजेषु स्वरूपणशैल्यानुसारं Kate modelline योजयन्तु ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:39
 #, kde-format
 msgctxt "@option:check"
 msgid "Add Kate Modeline"
-msgstr ""
+msgstr "केट् मॉडल् योजयन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
 #, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
-msgstr ""
+msgstr "स्वरूपणशैल्याः"
 
 #: shell/settings/templateconfig.cpp:39
 #, kde-format
@@ -4539,21 +4583,21 @@ msgstr "टेम्पलेट् विन्यस्तं कुर्व�
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
-msgstr ""
+msgstr "अधिक टेम्पलेट्स प्राप्त करें"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template From File"
-msgstr ""
+msgstr "सञ्चिकातः टेम्पलेट् लोड् कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
 #: shell/settings/templatepage.ui:36
 #, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"
-msgstr ""
+msgstr "क्लोन टेम्पलेट"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, UiConfig)
 #: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:45
@@ -4566,7 +4610,7 @@ msgstr "उपयोक्तृ-अन्तरफलकम्"
 #, kde-format
 msgctxt "@title:group"
 msgid "Dock Window Behavior"
-msgstr ""
+msgstr "गोदी खिडकी व्यवहार"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
@@ -4584,7 +4628,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom left corner occupied by:"
-msgstr ""
+msgstr "अधः वामकोणे अत्र व्याप्तः अस्ति : १."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4602,14 +4646,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom right corner occupied by:"
-msgstr ""
+msgstr "अधः दक्षिणकोणे व्याप्तः अस्ति : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
-msgstr ""
+msgstr "वामगोदी"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4617,35 +4661,35 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
-msgstr ""
+msgstr "तल गोदी"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
-msgstr ""
+msgstr "दक्षिण गोदी"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
 #, kde-format
 msgctxt "@title:group"
 msgid "Tabbed Browsing"
-msgstr ""
+msgstr "ट्याब्ड् ब्राउजिंग्"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:92
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Controls whether to open new tabs next to the active one."
-msgstr ""
+msgstr "सक्रियस्य पार्श्वे नूतनानि ट्याब्स् उद्घाटयितुं वा न वा इति नियन्त्रयति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:95
 #, kde-format
 msgctxt "@option:check"
 msgid "Open new tab after current"
-msgstr ""
+msgstr "वर्तमानस्य अनन्तरं नूतनं ट्याब् उद्घाटयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:106
@@ -4655,13 +4699,15 @@ msgid ""
 "When enabled, plugins can group related files side by side.\n"
 "For example, a header file will be opened next to the implementation file."
 msgstr ""
+"सक्षमीकरणे प्लगिन्स् सम्बद्धसञ्चिकानां पार्श्वे पार्श्वे समूहीकरणं कर्तुं शक्नुवन्ति ।\n"
+"यथा, कार्यान्वयनसञ्चिकायाः पार्श्वे एकः शीर्षकसञ्चिका उद्घाटिता भविष्यति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:109
 #, kde-format
 msgctxt "@option:check"
 msgid "Arrange related documents side by side"
-msgstr ""
+msgstr "सम्बन्धितदस्तावेजानां पार्श्वे पार्श्वे व्यवस्थापनं कुर्वन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:116
@@ -4671,13 +4717,14 @@ msgid ""
 "Enables or disables the display of the tab bar at the top of the editor "
 "window."
 msgstr ""
+"सम्पादकविण्डो इत्यस्य उपरि ट्याब् बारस्य प्रदर्शनं सक्षमं करोति अथवा निष्क्रियं करोति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:119
 #, kde-format
 msgctxt "@option:check"
 msgid "Show tabs"
-msgstr ""
+msgstr "ट्याब्स् दर्शयतु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:129
@@ -4687,20 +4734,22 @@ msgid ""
 "Enables or disables the display of a close button in each tab in the tab bar "
 "at the top of the editor window."
 msgstr ""
+"सम्पादकविण्डो इत्यस्य उपरि ट्याब् पट्टिकायां प्रत्येकस्मिन् ट्याब् मध्ये close बटनस्य प्रदर्शनं "
+"सक्षमं करोति अथवा अक्षमं करोति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:132
 #, kde-format
 msgctxt "@option:check"
 msgid "Show close buttons on tabs"
-msgstr ""
+msgstr "ट्याब्-मध्ये close बटन् दर्शयतु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/uiconfig.ui:145
 #, kde-format
 msgctxt "@title:group"
 msgid "Coloring"
-msgstr ""
+msgstr "रङ्ग"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ColorizeByProject)
 #: shell/settings/uiconfig.ui:151
@@ -4710,13 +4759,15 @@ msgid ""
 "When enabled, tabs and other widgets are colored based on the project "
 "affiliation"
 msgstr ""
+"यदा सक्षमं भवति तदा परियोजनासम्बद्धतायाः आधारेण ट्याब्स् इत्यादीनि विजेट्-आदीनि "
+"वर्णितानि भवन्ति"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ColorizeByProject)
 #: shell/settings/uiconfig.ui:154
 #, kde-format
 msgctxt "@option:check"
 msgid "Color widgets based on the project affiliation"
-msgstr ""
+msgstr "परियोजनासम्बद्धतायाः आधारेण विजेट्-रङ्गः"
 
 #: shell/settings/uipreferences.cpp:55
 #, kde-format
@@ -4727,37 +4778,37 @@ msgstr "उपयोक्तृ-अन्तरफलकं विन्यस�
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
-msgstr ""
+msgstr "&पुनर्स्वरूपण स्रोत"
 
 #: shell/sourceformattercontroller.cpp:230
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
-msgstr ""
+msgstr "रेखा पुनः स्वरूपित करें"
 
 #: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr ""
+msgstr "सञ्चिकाः पुनः स्वरूपयन्तु..."
 
 #: shell/sourceformattercontroller.cpp:235
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr ""
+msgstr "विन्यस्तस्रोतस्वरूपकस्य(s) उपयोगेन सञ्चिका(सञ्चिकाः) स्वरूपयन्तु ।"
 
 #: shell/sourceformattercontroller.cpp:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr ""
+msgstr "विन्यस्तस्रोतस्वरूपकस्य (स्वरूपकस्य) उपयोगेन कार्यक्षमतायाः स्वरूपणम् ।"
 
 #: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "<i>%1</i> ( <b>%2</b> ) इत्यस्य उपयोगेन चयनं वा सञ्चिकां वा पुनः स्वरूपयन्तु ।"
 
 #: shell/sourceformattercontroller.cpp:617
 #, kde-format
@@ -4766,12 +4817,14 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
+"चयनितं पाठं अथवा सम्पूर्णं सञ्चिकां पुनः स्वरूपयति यदि किमपि न चयनितम्, <b>%2</b> शैल्या "
+"सह <i>%1</i> साधनस्य उपयोगेन ।"
 
 #: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "<i>%1</i> ( <b>%2</b> ) इत्यस्य उपयोगेन वर्तमानपङ्क्तिं पुनः स्वरूपयन्तु ।"
 
 #: shell/sourceformattercontroller.cpp:622
 #, kde-format
@@ -4780,12 +4833,13 @@ msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
 msgstr ""
+"<b>%2</b> शैल्या सह <i>%1</i> साधनस्य उपयोगेन कर्सरस्य अधः रेखायाः स्रोतपुनर्स्वरूपीकरणं ।"
 
 #: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
-msgstr ""
+msgstr "विन्यस्तस्रोतस्वरूपकस्य उपयोगेन चयनं वा सञ्चिकां वा पुनः स्वरूपयन्तु"
 
 #: shell/sourceformattercontroller.cpp:628
 #, kde-format
@@ -4794,12 +4848,14 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"विन्यस्तस्रोतस्वरूपकस्य उपयोगेन, चयनितं पाठं अथवा सम्पूर्णं सञ्चिकां पुनः स्वरूपयति यदि किमपि "
+"न चयनितम् अस्ति ।"
 
 #: shell/sourceformattercontroller.cpp:630
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr ""
+msgstr "विन्यस्तस्रोतस्वरूपकस्य उपयोगेन वर्तमानपङ्क्तिं पुनः स्वरूपयन्तु"
 
 #: shell/sourceformattercontroller.cpp:632
 #, kde-format
@@ -4807,13 +4863,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
-msgstr ""
+msgstr "विन्यस्तस्रोतस्वरूपकस्य उपयोगेन कर्सरस्य अधः रेखायाः स्रोतपुनर्स्वरूपीकरणं ।"
 
 #: shell/sourceformattercontroller.cpp:867
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr ""
+msgstr "सञ्चिकाः पुनः स्वरूपयन्तु?"
 
 #: shell/sourceformattercontroller.cpp:868
 #, kde-format
@@ -4824,7 +4880,7 @@ msgstr "चयनितपुटे सर्वाणि सञ्चिका�
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
-msgstr ""
+msgstr "पुनः प्रारूपण करें"
 
 #: shell/sourceformatterjob.cpp:36
 #, kde-format
@@ -4840,8 +4896,8 @@ msgstr "सञ्चिकाः पुनः स्वरूपयन्तु"
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "एकां सञ्चिकां पुनः स्वरूपयति"
+msgstr[1] "%1 सञ्चिकाः पुनः स्वरूपयति"
 
 #: shell/sourceformatterselectionedit.cpp:1077
 #, kde-format
@@ -4858,7 +4914,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
-msgstr ""
+msgstr "शैलीं विलोपयति"
 
 #: shell/sourceformatterselectionedit.cpp:1139
 #, kde-format
@@ -4870,7 +4926,7 @@ msgstr "नवीन %1"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Language:"
-msgstr ""
+msgstr "भाषा:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:44
@@ -4910,7 +4966,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
-msgstr ""
+msgstr "स्वरूपकम् : १."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, formatterDescriptionButton)
 #: shell/sourceformatterselectionedit.ui:152
@@ -4923,21 +4979,21 @@ msgstr "चयनितस्य प्रारूपकस्य वर्ण�
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
-msgstr ""
+msgstr "शैली:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: shell/sourceformatterselectionedit.ui:201
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
-msgstr ""
+msgstr "नूतनम्‌"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
 #: shell/sourceformatterselectionedit.ui:208
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr ""
+msgstr "सम्पादन..."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
 #. i18n: ectx: property (text), widget (QPushButton, deleteButton)
@@ -4964,7 +5020,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
-msgstr ""
+msgstr "दस्तावेजः बाह्यरूपेण परिवर्तितः"
 
 #: shell/textdocument.cpp:658
 #, kde-format
@@ -4975,25 +5031,25 @@ msgstr " रेखा: %1 कर्नल: %2 "
 #, kde-format
 msgctxt "area"
 msgid "Code"
-msgstr ""
+msgstr "संहिता"
 
 #: shell/uicontroller.cpp:92
 #, kde-format
 msgctxt "area"
 msgid "Debug"
-msgstr ""
+msgstr "त्रुटिनिवारणम्"
 
 #: shell/uicontroller.cpp:101
 #, kde-format
 msgctxt "area"
 msgid "Review"
-msgstr ""
+msgstr "परिशीलयतु"
 
 #: shell/uicontroller.cpp:460
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
-msgstr ""
+msgstr "योजयितुं Tool View इति चिनोतु"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:75
 #, kde-format
@@ -5009,19 +5065,19 @@ msgstr "<b>कार्यरत सेट्</b>"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this working set. The contained documents are not affected."
-msgstr ""
+msgstr "एतत् कार्यसमूहं निष्कासयन्तु। समाहितदस्तावेजाः प्रभाविताः न भवन्ति।"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:121
 #, kde-format
 msgctxt "@label"
 msgid "Documents:"
-msgstr ""
+msgstr "दस्तावेजाः : १."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:129
 #, kde-format
 msgctxt "@action:button"
 msgid "Add All"
-msgstr ""
+msgstr "All योजयतु"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:130
 #, kde-format
@@ -5029,13 +5085,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "Add all documents that are part of this working set to the currently active "
 "working set"
-msgstr ""
+msgstr "अस्य कार्यसमूहस्य भागाः ये सर्वे दस्तावेजाः वर्तमानसक्रियकार्यसमूहे योजयन्तु"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:137
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove All"
-msgstr ""
+msgstr "सर्वं निष्कासयतु"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:138
 #, kde-format
@@ -5044,36 +5100,37 @@ msgid ""
 "Remove all documents that are part of this working set from the currently "
 "active working set"
 msgstr ""
+"वर्तमान सक्रियकार्यसमूहात् सर्वाणि दस्तावेजानि निष्कासयन्तु ये अस्य कार्यसमूहस्य भागाः सन्ति"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Click to open and activate this document."
-msgstr ""
+msgstr "एतत् दस्तावेजं उद्घाट्य सक्रियं कर्तुं क्लिक् कुर्वन्तु ।"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this file from the current working set"
-msgstr ""
+msgstr "वर्तमानकार्यसमूहात् एतां सञ्चिकां निष्कासयन्तु"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add this file to the current working set"
-msgstr ""
+msgstr "एतां सञ्चिकां वर्तमानकार्यसमूहे योजयन्तु"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:314
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "स्तश"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:320
 #, kde-format
 msgctxt "@action:button"
 msgid "Load"
-msgstr ""
+msgstr "भार"
 
 #: sublime/container.cpp:346
 #, kde-format
@@ -5084,169 +5141,169 @@ msgstr "रेखाः 00000 कर्नलः 000"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
-msgstr ""
+msgstr "उद्घाटितदस्तावेजानां क्रमबद्धसूचीं दर्शयतु"
 
 #: sublime/container.cpp:392
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
-msgstr ""
+msgstr "(स्विच कर्तुं Ctrl+Tab नुदन्तु)"
 
 #: sublime/container.cpp:788
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
-msgstr ""
+msgstr "सञ्चिकानाम प्रतिलिपि कुर्वन्तु"
 
 #: sublime/container.cpp:791
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
-msgstr ""
+msgstr "पिधानं करोतु"
 
 #: sublime/container.cpp:793
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
-msgstr ""
+msgstr "अन्ये सर्वे पिधाय"
 
 #: sublime/container.cpp:795
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
-msgstr ""
+msgstr "सर्वं बन्दं कुर्वन्तु"
 
 #: sublime/idealbuttonbarwidget.cpp:37
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
-msgstr ""
+msgstr "'%1' साधनदृश्यं टॉग्ल् कुर्वन्तु"
 
 #: sublime/idealbuttonbarwidget.cpp:99
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
-msgstr ""
+msgstr "नूतनानि साधनदृश्यानि योजयितुं राइट् क्लिक् कुर्वन्तु ।"
 
 #: sublime/idealcontroller.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
-msgstr ""
+msgstr "%1 साधनपट्टिका"
 
 #: sublime/idealdockwidget.cpp:110
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
-msgstr ""
+msgstr "साधनदृश्यस्थानं"
 
 #: sublime/idealdockwidget.cpp:114
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
-msgstr ""
+msgstr "वामः"
 
 #: sublime/idealdockwidget.cpp:115
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
-msgstr ""
+msgstr "अधः"
 
 #: sublime/idealdockwidget.cpp:116
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
-msgstr ""
+msgstr "दक्षिणः"
 
 #: sublime/idealdockwidget.cpp:117
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
-msgstr ""
+msgstr "विरक्तः"
 
 #: sublime/idealdockwidget.cpp:135
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
-msgstr ""
+msgstr "शॉर्टकट् नियुक्तं कुर्वन्तु..."
 
 #: sublime/idealdockwidget.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
-msgstr ""
+msgstr "साधनदृश्यस्य दृश्यतां प्रेरयितुं एतत् शॉर्टकट् उपयुज्यताम् ।"
 
 #: sublime/idealdockwidget.cpp:139
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
-msgstr ""
+msgstr "टूल् दृश्यं निष्कासयन्तु"
 
 #: sublime/idealdockwidget.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
-msgstr ""
+msgstr "'%1' साधनदृश्यस्य कृते शॉर्टकट् नियुक्तं कुर्वन्तु"
 
 #: sublime/mainwindow_p.cpp:78
 #, kde-format
 msgctxt "@option:check"
 msgid "Concentration Mode"
-msgstr ""
+msgstr "एकाग्रता मोड"
 
 #: sublime/mainwindow_p.cpp:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
-msgstr ""
+msgstr "अधिकांशं नियन्त्रणं निष्कासयन्तु येन भवान् महत्त्वपूर्णं तस्मिन् ध्यानं दातुं शक्नोति"
 
 #: sublime/mainwindow_p.cpp:87
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
-msgstr ""
+msgstr "वामगोदीं दर्शयतु"
 
 #: sublime/mainwindow_p.cpp:94
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
-msgstr ""
+msgstr "दक्षिणगोदीं दर्शयतु"
 
 #: sublime/mainwindow_p.cpp:100
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
-msgstr ""
+msgstr "तल गोदी दर्शयतु"
 
 #: sublime/mainwindow_p.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Focus Editor"
-msgstr ""
+msgstr "फोकस सम्पादक"
 
 #: sublime/mainwindow_p.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
-msgstr ""
+msgstr "गोदीं गोपयन्तु/पुनर्स्थापयन्तु"
 
 #: sublime/mainwindow_p.cpp:116
 #, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
-msgstr ""
+msgstr "अग्रिमः Tool View इति"
 
 #: sublime/mainwindow_p.cpp:122
 #, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
-msgstr ""
+msgstr "पूर्वसाधनदृश्यम्"
 
 #: sublime/mainwindow_p.cpp:128
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
-msgstr ""
+msgstr "Tool Views इति"
 
 #: sublime/mainwindow_p.cpp:134
 #, kde-format
@@ -5267,13 +5324,13 @@ msgstr "तल बटन बार"
 #, kde-format
 msgctxt "@action"
 msgid "Close"
-msgstr ""
+msgstr "पिधानं करोतु"
 
 #: sublime/mainwindow_p.cpp:813
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
-msgstr ""
+msgstr "सन्देशं बन्दं कुर्वन्तु"
 
 #: util/duchainify/main.cpp:263
 #, kde-format
@@ -5378,19 +5435,19 @@ msgstr "आयातितसन्दर्भेभ्यः पुनरा�
 #, kde-format
 msgctxt "@title:column"
 msgid "Profile"
-msgstr ""
+msgstr "रूपरेखा"
 
 #: util/environmentselectionmodel.cpp:51
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default profile (currently: %1)"
-msgstr ""
+msgstr "पूर्वनिर्धारितरूपरेखायाः उपयोगं कुर्वन्तु (सम्प्रति: %1)"
 
 #: util/environmentselectionmodel.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (does not exist)"
-msgstr ""
+msgstr "%1 (नास्ति) २."
 
 #: util/jobstatus.cpp:29
 #, kde-format
@@ -5415,13 +5472,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
-msgstr ""
+msgstr "केचन Files Write-Protected भवन्ति"
 
 #: util/shellutils.cpp:160
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr ""
+msgstr "लेखन अनुमतिः सेट् कुर्वन्तु"
 
 #: util/shellutils.cpp:161
 #, kde-format
@@ -5438,7 +5495,7 @@ msgstr "केषाञ्चन सञ्चिकानां कृते ल
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
-msgstr ""
+msgstr "अनुमतिः सेट् कर्तुं असफलम्"
 
 #: vcs/dvcs/dvcsjob.cpp:173
 #, kde-format
@@ -5473,13 +5530,13 @@ msgstr "%1 मूल्येन आदेशः निर्गतः ।"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Branches..."
-msgstr ""
+msgstr "शाखाः..."
 
 #: vcs/dvcs/ui/branchmanager.cpp:40
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
-msgstr ""
+msgstr "शाखा प्रबन्धक"
 
 #: vcs/dvcs/ui/branchmanager.cpp:114
 #, kde-format
@@ -5491,13 +5548,13 @@ msgstr "नूतनशाखां निर्मातुं पूर्व�
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
-msgstr ""
+msgstr "नवीन शाखा"
 
 #: vcs/dvcs/ui/branchmanager.cpp:119
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
-msgstr ""
+msgstr "नवीनशाखायाः नाम : १."
 
 #: vcs/dvcs/ui/branchmanager.cpp:126
 #, kde-format
@@ -5550,7 +5607,7 @@ msgstr "वर्तमानसंस्करणस्य कृते पट�
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
-msgstr ""
+msgstr "Diff पुनः प्राप्तुं असमर्थः"
 
 #: vcs/dvcs/ui/branchmanager.cpp:276
 #, kde-format
@@ -5561,28 +5618,28 @@ msgstr "प्रतिबद्धाः भेदाः न सन्ति।
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
-msgstr ""
+msgstr "VCS समर्थनम्"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:31
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Creates new branch based on the selected branch"
-msgstr ""
+msgstr "चयनितशाखायाः आधारेण नूतनशाखायाः निर्माणं करोति"
 
 #. i18n: ectx: property (text), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:34
 #, kde-format
 msgctxt "@action:button new branch"
 msgid "New"
-msgstr ""
+msgstr "नूतनम्‌"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, deleteButton)
 #: vcs/dvcs/ui/branchmanager.ui:41
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The same as git branch -D"
-msgstr ""
+msgstr "यथा गिट् शाखा -D"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
@@ -5599,41 +5656,43 @@ msgid ""
 "<p>Show changes between the current branch (or staging area, if not empty) "
 "and the last commit on the selected branch.</p>"
 msgstr ""
+"<p>वर्तमानशाखायाः (अथवा मञ्चनक्षेत्रस्य, यदि रिक्तं न भवति) चयनितशाखायां "
+"अन्तिमप्रतिबद्धतायाः च मध्ये परिवर्तनं दर्शयतु ।</p>"
 
 #. i18n: ectx: property (text), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Compare to Branch"
-msgstr ""
+msgstr "शाखायाः तुलनां कुरुत"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Checkout to the selected branch"
-msgstr ""
+msgstr "चयनितशाखां प्रति चेकआउट् कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
 #, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
-msgstr ""
+msgstr "चेकआउट"
 
 #. i18n: ectx: property (text), widget (QPushButton, mergeButton)
 #: vcs/dvcs/ui/branchmanager.ui:116
 #, kde-format
 msgctxt "@action:button merge a branch"
 msgid "Merge"
-msgstr ""
+msgstr "विलयः"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:19
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr ""
+msgstr "स्रोतनिर्देशिका : १."
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
@@ -5672,55 +5731,55 @@ msgstr "प्रतिबद्धसन्देशः : १."
 #, kde-format
 msgctxt "@title:column"
 msgid "Revision"
-msgstr ""
+msgstr "कार्यदर्शन"
 
 #: vcs/models/vcseventmodel.cpp:90
 #, kde-format
 msgctxt "@title:column"
 msgid "Message"
-msgstr ""
+msgstr "सन्देशः"
 
 #: vcs/models/vcseventmodel.cpp:92
 #, kde-format
 msgctxt "@title:column"
 msgid "Author"
-msgstr ""
+msgstr "लेखकः"
 
 #: vcs/models/vcseventmodel.cpp:94
 #, kde-format
 msgctxt "@title:column"
 msgid "Date"
-msgstr ""
+msgstr "दिनाङ्कः"
 
 #: vcs/models/vcsfilechangesmodel.cpp:32
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem"
 msgid "Added"
-msgstr ""
+msgstr "योजितम्"
 
 #: vcs/models/vcsfilechangesmodel.cpp:34
 #, kde-format
 msgctxt "@item file was deleted from versioncontrolsystem"
 msgid "Deleted"
-msgstr ""
+msgstr "विलोपितम्"
 
 #: vcs/models/vcsfilechangesmodel.cpp:36
 #, kde-format
 msgctxt "@item file is conflicting (versioncontrolsystem)"
 msgid "Has Conflicts"
-msgstr ""
+msgstr "विग्रहाः सन्ति"
 
 #: vcs/models/vcsfilechangesmodel.cpp:38
 #, kde-format
 msgctxt "@item version controlled file was modified"
 msgid "Modified"
-msgstr ""
+msgstr "परिवर्तित"
 
 #: vcs/models/vcsfilechangesmodel.cpp:40
 #, kde-format
 msgctxt "@item file is up to date in versioncontrolsystem"
 msgid "Up To Date"
-msgstr ""
+msgstr "Up To Date इति"
 
 #: vcs/models/vcsfilechangesmodel.cpp:43
 #, kde-format
@@ -5732,55 +5791,55 @@ msgstr "अज्ञात"
 #, kde-format
 msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
-msgstr ""
+msgstr "?"
 
 #: vcs/models/vcsfilechangesmodel.cpp:131
 #, kde-format
 msgctxt "@title:column"
 msgid "Filename"
-msgstr ""
+msgstr "सञ्चिकानाम"
 
 #: vcs/models/vcsfilechangesmodel.cpp:132
 #, kde-format
 msgctxt "@title:column"
 msgid "Status"
-msgstr ""
+msgstr "स्थितिः"
 
 #: vcs/models/vcsitemeventmodel.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Added"
-msgstr ""
+msgstr "योजितम्"
 
 #: vcs/models/vcsitemeventmodel.cpp:48
 #, kde-format
 msgctxt "@item"
 msgid "Deleted"
-msgstr ""
+msgstr "विलोपितम्"
 
 #: vcs/models/vcsitemeventmodel.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Modified"
-msgstr ""
+msgstr "परिवर्तित"
 
 #: vcs/models/vcsitemeventmodel.cpp:52
 #, kde-format
 msgctxt "@item"
 msgid "Copied"
-msgstr ""
+msgstr "प्रतिलिपिकृतम्"
 
 #: vcs/models/vcsitemeventmodel.cpp:54
 #, kde-format
 msgctxt "@item"
 msgid "Replaced"
-msgstr ""
+msgstr "प्रतिस्थापित"
 
 #: vcs/models/vcsitemeventmodel.cpp:61
 #, kde-format
 msgctxt "separates an action list"
 msgid ", "
-msgstr ""
+msgstr ", ९. "
 
 #: vcs/models/vcsitemeventmodel.cpp:85
 #, kde-format
@@ -5792,85 +5851,85 @@ msgstr "स्थानीय"
 #, kde-format
 msgctxt "@title:column"
 msgid "Actions"
-msgstr ""
+msgstr "कर्माणि"
 
 #: vcs/models/vcsitemeventmodel.cpp:87
 #, kde-format
 msgctxt "@title:column"
 msgid "Source Location"
-msgstr ""
+msgstr "स्रोतस्थानम्"
 
 #: vcs/models/vcsitemeventmodel.cpp:88
 #, kde-format
 msgctxt "@title:column"
 msgid "Source Revision"
-msgstr ""
+msgstr "स्रोत पुनरीक्षण"
 
 #: vcs/vcspluginhelper.cpp:83
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
-msgstr ""
+msgstr "प्रविश्..."
 
 #: vcs/vcspluginhelper.cpp:84
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
-msgstr ""
+msgstr "अद्यतन"
 
 #: vcs/vcspluginhelper.cpp:85
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
-msgstr ""
+msgstr "संयोजयति"
 
 #: vcs/vcspluginhelper.cpp:86
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
-msgstr ""
+msgstr "भेदं दर्शयतु..."
 
 #: vcs/vcspluginhelper.cpp:87
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
-msgstr ""
+msgstr "प्रत्यावर्तयतु"
 
 #: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
-msgstr ""
+msgstr "इतिहास..."
 
 #: vcs/vcspluginhelper.cpp:89
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
-msgstr ""
+msgstr "एनोटेशन..."
 
 #: vcs/vcspluginhelper.cpp:90
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
-msgstr ""
+msgstr "Show Diff..."
 
 #: vcs/vcspluginhelper.cpp:91
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
-msgstr ""
+msgstr "Show Diff (सर्वसञ्चिकाः)..."
 
 #: vcs/vcspluginhelper.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
-msgstr ""
+msgstr "नोद"
 
 #: vcs/vcspluginhelper.cpp:93
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
-msgstr ""
+msgstr "आकर्षति"
 
 #: vcs/vcspluginhelper.cpp:278
 #, kde-format
@@ -5881,13 +5940,13 @@ msgstr "न भेदाः ।"
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
-msgstr ""
+msgstr "भेदं प्राप्तुं असमर्थः"
 
 #: vcs/vcspluginhelper.cpp:353
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
-msgstr ""
+msgstr "%2 इतिहासः (%1) २."
 
 #: vcs/vcspluginhelper.cpp:417
 #, kde-format
@@ -5913,70 +5972,70 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"
-msgstr ""
+msgstr "प्रतिलिपि संशोधन Id"
 
 #: vcs/widgets/standardvcslocationwidget.cpp:23
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
-msgstr ""
+msgstr "भण्डारस्य URL प्रविष्टं कुर्वन्तु..."
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:53
 #, kde-format
 msgctxt "@item age"
 msgid "%1 year"
 msgid_plural "%1 years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 वर्ष"
+msgstr[1] "%1 वर्षाणि"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:63
 #, kde-format
 msgctxt "@item age"
 msgid "%1 month"
 msgid_plural "%1 months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 मासः"
+msgstr[1] "%1 मासाः"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:67
 #, kde-format
 msgctxt "@item age"
 msgid "%1 day"
 msgid_plural "%1 days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 दिवसः"
+msgstr[1] "%1 दिवसाः"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
-msgstr ""
+msgstr "अद्य"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:283
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
-msgstr ""
+msgstr "By: %1"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
 #: vcs/widgets/vcscommitdialog.ui:17
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Files to Commit"
-msgstr ""
+msgstr "Commit कर्तुं Files इति चिनोतु"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Commit files:"
-msgstr ""
+msgstr "सञ्चिकाः प्रतिबद्धाः कुर्वन्तु : १."
 
 #. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
 #: vcs/widgets/vcscommitdialog.ui:33
 #, kde-format
 msgctxt "@option:check"
 msgid "Recursive"
-msgstr ""
+msgstr "पुनरावर्तनीयम्"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
@@ -5997,13 +6056,13 @@ msgstr "प्रतिबद्धतां कर्तुं असमर्�
 #, kde-format
 msgctxt "@title:window"
 msgid "Commit Unsuccessful"
-msgstr ""
+msgstr "प्रतिबद्धः असफलः"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:224
 #, kde-format
 msgctxt "@action:button To make a commit"
 msgid "Commit"
-msgstr ""
+msgstr "प्रविश्"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:257
 #, kde-format
@@ -6019,41 +6078,41 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "About to Commit to Repository"
-msgstr ""
+msgstr "भण्डारं प्रति प्रतिबद्धतां कर्तुं विषये"
 
 #: vcs/widgets/vcsdiffwidget.cpp:86
 #, kde-format
 msgctxt "@label"
 msgid "Difference between revision %1 and %2:"
-msgstr ""
+msgstr "संशोधनस्य %1 तथा %2 इत्येतयोः मध्ये भेदः:"
 
 #. i18n: ectx: property (text), widget (QLabel, revLabel)
 #: vcs/widgets/vcsdiffwidget.ui:28
 #, kde-format
 msgctxt "@label"
 msgid "Difference between revisions:"
-msgstr ""
+msgstr "संशोधनयोः भेदः : १."
 
 #: vcs/widgets/vcseventwidget.cpp:78
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff to Previous Revision"
-msgstr ""
+msgstr "Diff to पूर्वसंशोधनम्"
 
 #: vcs/widgets/vcseventwidget.cpp:81
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff between Revisions"
-msgstr ""
+msgstr "संशोधनयोः मध्ये भेदः"
 
 #: vcs/widgets/vcseventwidget.cpp:138
 #, kde-format
 msgctxt "@title:window"
 msgid "Difference To Previous"
-msgstr ""
+msgstr "Difference To पूर्वम्"
 
 #: vcs/widgets/vcseventwidget.cpp:167
 #, kde-format
 msgctxt "@title:window"
 msgid "Difference between Revisions"
-msgstr ""
+msgstr "संशोधनयोः मध्ये भेदः"

@@ -34,28 +34,28 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Indentation"
-msgstr ""
+msgstr "निक्षेपः"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:48
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Tabs"
-msgstr ""
+msgstr "टब्स्"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:53
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Force tabs"
-msgstr ""
+msgstr "ट्याब्स् बलं कुर्वन्तु"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:58
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Spaces"
-msgstr ""
+msgstr "रिक्तस्थानानि"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpNuberSpaces)
 #: astyle_preferences.ui:86
@@ -65,97 +65,99 @@ msgid ""
 "Number of spaces that will be converted to a tab.\n"
 "The number of spaces per tab is controlled by the editor."
 msgstr ""
+"ट्याब् मध्ये परिवर्तितानां रिक्तस्थानानां संख्या ।\n"
+"प्रति ट्याब् रिक्तस्थानानां संख्या सम्पादकेन नियन्त्रिता भवति ।"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkConvertTabs)
 #: astyle_preferences.ui:104
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Convert tabs to spaces."
-msgstr ""
+msgstr "ट्याब्स् रिक्तस्थानेषु परिवर्तयन्तु ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkConvertTabs)
 #: astyle_preferences.ui:107
 #, kde-format
 msgctxt "@option:check"
 msgid "Con&vert tabs into spaces"
-msgstr ""
+msgstr "ट्याब्स् रिक्तस्थानेषु परिवर्तयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFillEmptyLines)
 #: astyle_preferences.ui:114
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fill empty lines with the white space of their previous lines."
-msgstr ""
+msgstr "रिक्तरेखाः तेषां पूर्वरेखायाः श्वेतस्थानेन पूरयन्तु ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFillEmptyLines)
 #: astyle_preferences.ui:117
 #, kde-format
 msgctxt "@option:check"
 msgid "Fill empt&y lines"
-msgstr ""
+msgstr "रिक्त&y रेखाः पूरयन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, lblIndentObjects)
 #: astyle_preferences.ui:139
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Indent:"
-msgstr ""
+msgstr "इन्डेण्ट् : १."
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:153
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Blocks"
-msgstr ""
+msgstr "खण्डाः"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:158
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Brackets"
-msgstr ""
+msgstr "कोष्ठकाः"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:163
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Cases"
-msgstr ""
+msgstr "प्रकरणाः"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:168
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Class"
-msgstr ""
+msgstr "श्रेणी"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:173
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Labels"
-msgstr ""
+msgstr "लेबल्स्"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:178
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Namespaces"
-msgstr ""
+msgstr "नामस्थानानि"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:183
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preprocessor directives"
-msgstr ""
+msgstr "पूर्वसंसाधकनिर्देशाः"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:188
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Switches"
-msgstr ""
+msgstr "स्विच करोति"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpMaxStatement)
 #. i18n: ectx: property (toolTip), widget (QLabel, TextLabel2_2)
@@ -166,6 +168,8 @@ msgid ""
 "Indent a maximal # spaces in a continuous statement,\n"
 "relative to the previous line."
 msgstr ""
+"निरन्तरकथने अधिकतमं # रिक्तस्थानानि इन्डेण्ट् कुर्वन्तु,\n"
+"पूर्वरेखायाः सापेक्षम् ।"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, TextLabel3_2)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpMinConditional)
@@ -176,34 +180,36 @@ msgid ""
 "Indent a minimal # spaces in a continuous conditional\n"
 "belonging to a conditional header."
 msgstr ""
+"एकस्मिन् निरन्तरशर्ते न्यूनतमं # रिक्तस्थानानि इण्डेण्ट् कुर्वन्तु\n"
+"सशर्तशीर्षकस्य सम्बन्धी ।"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
 #: astyle_preferences.ui:215
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum in conditional:"
-msgstr ""
+msgstr "सशर्तरूपेण न्यूनतमम् : १."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, inpMinConditional)
 #: astyle_preferences.ui:229
 #, kde-format
 msgctxt "@item"
 msgid "Twice current"
-msgstr ""
+msgstr "द्विगुणं वर्तमानम्"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2_2)
 #: astyle_preferences.ui:246
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum in statement:"
-msgstr ""
+msgstr "कथने अधिकतमम् : १."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpContinuation)
 #: astyle_preferences.ui:256
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Number of indents"
-msgstr ""
+msgstr "इण्डेन्टानां संख्या"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAfterParens)
 #: astyle_preferences.ui:269
@@ -213,34 +219,36 @@ msgid ""
 "Indent, instead of align, continuation lines following lines that contain an "
 "opening paren '(' or an assignment '='."
 msgstr ""
+"इण्डेण्ट्, संरेखणस्य स्थाने, पङ्क्तयः अनुसृत्य निरन्तरतारेखाः येषु उद्घाटन-पैरेन् '(' अथवा '=' "
+"असाइनमेण्ट् भवति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)
 #: astyle_preferences.ui:272
 #, kde-format
 msgctxt "@option:check"
 msgid "Continuation lines:"
-msgstr ""
+msgstr "निरन्तरतापङ्क्तयः : १."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabOther)
 #: astyle_preferences.ui:295
 #, kde-format
 msgctxt "@title:tab"
 msgid "Other"
-msgstr ""
+msgstr "इतर"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBrackets)
 #: astyle_preferences.ui:301
 #, kde-format
 msgctxt "@title:group"
 msgid "Brackets"
-msgstr ""
+msgstr "कोष्ठकाः"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBrackets)
 #: astyle_preferences.ui:315
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Type:"
-msgstr ""
+msgstr "प्रकारः:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBracketsCloseHeaders)
 #: astyle_preferences.ui:326
@@ -250,48 +258,50 @@ msgid ""
 "Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
 "from their immediately preceding closing brackets."
 msgstr ""
+"शीर्षकं बन्दं कर्तुं पूर्वं कोष्ठकान् भङ्गयन्तु (उदा. 'else', 'catch', ...)\n"
+"तेषां सद्यः पूर्वसमापनकोष्ठकात्।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
 #: astyle_preferences.ui:329
 #, kde-format
 msgctxt "@option:check"
 msgid "Brea&k closing headers"
-msgstr ""
+msgstr "Brea&k समापनशीर्षकाणि"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:343
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "No change"
-msgstr ""
+msgstr "परिवर्तनं नास्ति"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:348
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Attach"
-msgstr ""
+msgstr "आवप्"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:353
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Break"
-msgstr ""
+msgstr "भङ्गः"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:358
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Linux"
-msgstr ""
+msgstr "लिनक्स"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:363
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Run-In"
-msgstr ""
+msgstr "रन-इन्"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:371
@@ -300,21 +310,21 @@ msgctxt "@info:tooltip"
 msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
-msgstr ""
+msgstr "अब्रेस्ड् एकपङ्क्तिसशर्तकथनेषु (उदा. 'if', 'for', 'while') ब्रेसिज् योजयन्तु ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
 #, kde-format
 msgctxt "@option:check add braces to unbraced one-line conditional statements"
 msgid "Add b&races"
-msgstr ""
+msgstr "b&races योजयतु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
 #: astyle_preferences.ui:386
 #, kde-format
 msgctxt "@title:group"
 msgid "Blocks"
-msgstr ""
+msgstr "खण्डाः"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreak)
 #: astyle_preferences.ui:401
@@ -331,13 +341,22 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
+"असम्बद्धानां खण्डानां, लेबलानां, वर्गानां,...\n"
+"ज्ञाताः समस्याः : १.\n"
+"\n"
+"1. यदि कथनं खण्डस्य भागः न भवति तर्हि . \n"
+"निम्नलिखित कथनानि सर्वाणि द्विगुणस्थानानि सन्ति। \n"
+"खण्डे संलग्नाः कथनानि प्रारूपितानि भवन्ति \n"
+"सम्यक् ।\n"
+"\n"
+"2. टिप्पण्याः खण्डात् भग्नाः भवन्ति।\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreak)
 #: astyle_preferences.ui:404
 #, kde-format
 msgctxt "@option:check break unrelated blocks by a newline"
 msgid "&Break blocks"
-msgstr ""
+msgstr "&खण्डान् भङ्गयतु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreakAll)
 #: astyle_preferences.ui:422
@@ -356,69 +375,80 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
+"यथा --break-blocks, व्यतिरिक्तं रिक्तरेखाः अपि निवेशयन्तु \n"
+"समापनशीर्षकाणां परितः (उदा. 'अन्यः', 'ग्रहणम्', ...)।\n"
+"\n"
+"ज्ञाताः समस्याः : १.\n"
+"\n"
+"1. यदि कथनं खण्डस्य भागः न भवति तर्हि . \n"
+"निम्नलिखित कथनानि सर्वाणि द्विगुणस्थानानि सन्ति। \n"
+"खण्डे संलग्नाः कथनानि प्रारूपितानि भवन्ति \n"
+"सम्यक् ।\n"
+"\n"
+"2. टिप्पण्याः खण्डात् भग्नाः भवन्ति।\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreakAll)
 #: astyle_preferences.ui:425
 #, kde-format
 msgctxt "@option:check break all blocks with a newline"
 msgid "Break all bl&ocks"
-msgstr ""
+msgstr "सर्वाणि bl&ocks भङ्गयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Break 'else if()' statements into two different lines."
-msgstr ""
+msgstr "'else if()' इति कथनानि भिन्नपङ्क्तौ विभज्यताम् ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:435
 #, kde-format
 msgctxt "@option:check break else if() into separate lines"
 msgid "Break i&f-else"
-msgstr ""
+msgstr "भङ्ग इ&च-अन्यः"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
 #: astyle_preferences.ui:445
 #, kde-format
 msgctxt "@title:group"
 msgid "Padding"
-msgstr ""
+msgstr "गद्दी"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:460
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "No change"
-msgstr ""
+msgstr "परिवर्तनं नास्ति"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:465
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Unpad"
-msgstr ""
+msgstr "अनपद्"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:470
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Inside only"
-msgstr ""
+msgstr "अन्तः एव"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:475
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Outside only"
-msgstr ""
+msgstr "बहिः एव"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:480
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Inside and outside"
-msgstr ""
+msgstr "अन्तः बहिश्च"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:490
@@ -429,20 +459,23 @@ msgid ""
 "Once padded, operators stay padded.\n"
 "There is no unpad operator option."
 msgstr ""
+"संचालकानाम् परितः स्पेस पैडिंग् सम्मिलितं कुर्वन्तु।\n"
+"एकदा गद्दीकृत्य संचालकाः गद्दीकृताः एव तिष्ठन्ति ।\n"
+"अनपैड् ऑपरेटर् विकल्पः नास्ति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:493
 #, kde-format
 msgctxt "@option:check"
 msgid "&Add spaces around operators"
-msgstr ""
+msgstr "&सञ्चालकानां परितः रिक्तस्थानानि योजयन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
 #: astyle_preferences.ui:500
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pad parenthesis:"
-msgstr ""
+msgstr "पैड कोष्ठक : १."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:507
@@ -452,20 +485,21 @@ msgid ""
 "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
 "'while', ...)"
 msgstr ""
+"कोष्ठकशीर्षकाणां पश्चात् स्पेस पैडिंग् सम्मिलितं कुर्वन्तु (उदा. 'if', 'for', 'while', ...)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:510
 #, kde-format
 msgctxt "@option:check"
 msgid "Add spaces after parenthesis &headers"
-msgstr ""
+msgstr "कोष्ठकस्य &headers इत्यस्य अनन्तरं रिक्तस्थानानि योजयन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
 #: astyle_preferences.ui:522
 #, kde-format
 msgctxt "@title:group"
 msgid "One Liners"
-msgstr ""
+msgstr "एक लाइनर्स्"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:529
@@ -475,66 +509,68 @@ msgid ""
 "Do not break lines containing multiple statements into\n"
 "multiple single-statement lines."
 msgstr ""
+"बहुविधकथनयुक्तानि पङ्क्तयः न भङ्गयन्तु\n"
+"अनेकाः एककथनरेखाः ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:532
 #, kde-format
 msgctxt "@option:check"
 msgid "&Keep one-line statements"
-msgstr ""
+msgstr "&एकपङ्क्तिकथनानि स्थापयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:539
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Do not break blocks residing completely on one line."
-msgstr ""
+msgstr "एकस्मिन् रेखायां सम्पूर्णतया निवसन्तः खण्डाः न भङ्गयन्तु।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:542
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep o&ne-line blocks"
-msgstr ""
+msgstr "o&ne-line blocks रखें"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOther)
 #: astyle_preferences.ui:552
 #, kde-format
 msgctxt "@title:group"
 msgid "Other"
-msgstr ""
+msgstr "इतर"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPointerAlign)
 #: astyle_preferences.ui:558
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pointer Alignment:"
-msgstr ""
+msgstr "सूचकसंरेखणः : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:566
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "No change"
-msgstr ""
+msgstr "परिवर्तनं नास्ति"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:571
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Name"
-msgstr ""
+msgstr "नामः"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:576
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Middle"
-msgstr ""
+msgstr "मध्यं"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:581
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Type"
-msgstr ""
+msgstr "प्रकारः"

@@ -20,97 +20,97 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
-msgstr ""
+msgstr "आउटपुट् दृश्यं छानयितुं केस-असंवेदनशीलं नियमितव्यञ्जनं प्रविशन्तु"
 
 #: outputwidget.cpp:63
 #, kde-format
 msgctxt "@title:window"
 msgid "Output View"
-msgstr ""
+msgstr "आउटपुट् दृश्यम्"
 
 #: outputwidget.cpp:74
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
-msgstr ""
+msgstr "वर्तमानं सक्रियं आउटपुट् दृश्यं पिधाय"
 
 #: outputwidget.cpp:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
-msgstr ""
+msgstr "अन्ये सर्वे आउटपुट् दृश्याः पिधाय"
 
 #: outputwidget.cpp:91
 #, kde-format
 msgctxt "@action"
 msgid "Previous Output"
-msgstr ""
+msgstr "पूर्वनिर्गमः"
 
 #: outputwidget.cpp:94
 #, kde-format
 msgctxt "@action"
 msgid "Next Output"
-msgstr ""
+msgstr "अग्रिमः Output"
 
 #: outputwidget.cpp:99
 #, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
-msgstr ""
+msgstr "Activated Item इति चिनोतु"
 
 #: outputwidget.cpp:101
 #, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
-msgstr ""
+msgstr "Item चयनं कुर्वन् ध्यानं कुर्वन्तु"
 
 #: outputwidget.cpp:110
 #, kde-format
 msgctxt "@action"
 msgid "Word Wrap"
-msgstr ""
+msgstr "शब्दवेष्टनम्"
 
 #: outputwidget.cpp:119
 #, kde-format
 msgctxt "@action"
 msgid "First Item"
-msgstr ""
+msgstr "प्रथमः मदः"
 
 #: outputwidget.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Previous Item"
-msgstr ""
+msgstr "पूर्व मद"
 
 #: outputwidget.cpp:127
 #, kde-format
 msgctxt "@action"
 msgid "Next Item"
-msgstr ""
+msgstr "अग्रिमः मदः"
 
 #: outputwidget.cpp:131
 #, kde-format
 msgctxt "@action"
 msgid "Last Item"
-msgstr ""
+msgstr "अन्तिमः मदः"
 
 #: outputwidget.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
-msgstr ""
+msgstr "स्पष्टः"
 
 #: outputwidget.cpp:161
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "अन्वेषण..."
 
 #: outputwidget.cpp:197
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "%1 आउटपुट् विन्यस्यताम्"
 
 #: outputwidget.cpp:840
 #, kde-format
@@ -118,31 +118,31 @@ msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
 "error"
 msgid "Filter regular expression pattern error at offset %1: %2"
-msgstr ""
+msgstr "ऑफसेट् %1: %2 इत्यत्र नियमितव्यञ्जनप्रतिमानदोषं फ़िल्टर कुर्वन्तु"
 
 #: outputwidgetconfig.cpp:64
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "%1 आउटपुट् विन्यस्यताम्"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "आउटपुट् दृश्यानां संख्यां सीमितं कुर्वन्तु"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "प्राचीनतमं आउटपुट् दृश्यं स्वयमेव बन्दं कुर्वन्तु"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "अधिकतमं उत्पादनदृश्यगणना"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -151,33 +151,35 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"प्राचीनतमं आउटपुट् दृश्यं यदा पिहितं भवति\n"
+"दृश्यानां संख्या एतत् मूल्यं अतिक्रमति"
 
 #: standardoutputview.cpp:100
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
-msgstr ""
+msgstr "निर्मिमीते"
 
 #: standardoutputview.cpp:105
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
-msgstr ""
+msgstr "धावनं करोतु"
 
 #: standardoutputview.cpp:110
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
-msgstr ""
+msgstr "त्रुटिनिवारणम्"
 
 #: standardoutputview.cpp:124
 #, kde-format
 msgctxt "@title:window"
 msgid "Test"
-msgstr ""
+msgstr "परीक्षा"
 
 #: standardoutputview.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"
-msgstr ""
+msgstr "संस्करणनियन्त्रणम्"

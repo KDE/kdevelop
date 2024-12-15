@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-14 01:44+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
 #, kde-format
@@ -26,7 +28,7 @@ msgstr "जीडीबी"
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers"
-msgstr ""
+msgstr "विच्छेदन/पञ्जीकरण"
 
 #: debuggerplugin.cpp:117
 #, kde-format
@@ -38,14 +40,14 @@ msgstr "जीडीबी"
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory"
-msgstr ""
+msgstr "स्मृति"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Tracing Configuration"
-msgstr ""
+msgstr "अनुसन्धान विन्यास"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
 #: debuggertracingdialog.ui:26
@@ -59,13 +61,17 @@ msgid ""
 "If custom format string is not enabled, names and values of all expressions "
 "will be printed, using \"%d\" as format specifier for all expressions."
 msgstr ""
+"<b>कस्टम प्रारूप स्ट्रिंग्</b><p> C-शैल्याः प्रारूपं स्ट्रिंग् निर्दिशन्तु यत् चयनितव्यञ्जनस्य "
+"मुद्रणकाले उपयुज्यते । उदाहरणतया:<p align=\"center\"> <tt>ट्रेसपॉइंट 1: g = %d</tt></"
+"p> यदि इष्टस्वरूपतारं सक्षमं न भवति तर्हि सर्वेषां व्यञ्जनानां नामानि मूल्यानि च मुद्रितानि "
+"भविष्यन्ति, सर्वेषां व्यञ्जनानां कृते &quot;%d&quot; इत्यस्य प्रारूपनिर्देशकरूपेण उपयोगेन ।"
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
 #, kde-format
 msgctxt "@label"
 msgid "Expressions to print:"
-msgstr ""
+msgstr "मुद्रणार्थं व्यञ्जनानि : १."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:47
@@ -77,20 +83,23 @@ msgid ""
 "expressions and continue execution when breakpoint is hit. You can think of "
 "it as printf debugging that does not require modifying the source.</p>"
 msgstr ""
+"<b>अनुसन्धानं सक्षमं कुर्वन्तु</b><p> ट्रेसिंग् इति एकं तन्त्रं यत् चयनितव्यञ्जनानां मूल्यानि स्वयमेव "
+"मुद्रयितुं तथा च ब्रेकपॉइण्ट् मारिते निष्पादनं निरन्तरं कर्तुं शक्नोति । भवान् इदं printf "
+"debugging इति चिन्तयितुं शक्नोति यस्य स्रोतस्य परिवर्तनस्य आवश्यकता नास्ति ।</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:50
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable tracing"
-msgstr ""
+msgstr "अनुसन्धानं सक्षमं कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
 #: debuggertracingdialog.ui:60
 #, kde-format
 msgctxt "@option:check"
 msgid "Custom format string"
-msgstr ""
+msgstr "कस्टम् प्रारूप स्ट्रिंग्"
 
 #: debugsession.cpp:170
 #, kde-format
@@ -134,7 +143,7 @@ msgstr "'%1' त्रुटिनिवारणशैल् स्थानं
 #, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
-msgstr ""
+msgstr "GDB विन्यासः"
 
 #: gdbconfigpage.cpp:138
 #, kde-format
@@ -149,7 +158,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "वर्तमान सत्रं निरस्तं कुर्वन्तु"
 
 #: gdbconfigpage.cpp:166
 #, kde-format
@@ -161,21 +170,21 @@ msgstr "GDB मध्ये एकं देशी अनुप्रयोग�
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
-msgstr ""
+msgstr "त्रुटिनिवारणकम्"
 
 #. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
 #: gdbconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger e&xecutable:"
-msgstr ""
+msgstr "डिबगर e&executable:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Gdb executable"
-msgstr ""
+msgstr "Gdb निष्पादनीय"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:51
@@ -188,13 +197,17 @@ msgid ""
 "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
 "executable."
 msgstr ""
+"$PATH तः \"gdb\" कार्यान्वयनीयं चालयितुं, एतत् क्षेत्रं रिक्तं त्यजन्तु । कस्टम् gdb चालयितुं, "
+"उदाहरणार्थं, भिन्नस्य आर्किटेक्चरस्य कृते, अत्र कार्यान्वयनीयं नाम प्रविशन्तु । भवान् $PATH तः "
+"gdb चालयितुं शक्नोति, परन्तु भिन्ननाम्ना (कथयतु, \"arm-gdb\"), अत्र नाम टङ्कयित्वा, "
+"अथवा gdb कार्यान्वयनीयस्य पूर्णमार्गं निर्दिष्टुं शक्नोति ।"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:54
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to gdb executable..."
-msgstr ""
+msgstr "gdb कार्यान्वयनीयस्य मार्गं अधिलिखयतु..."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
@@ -209,27 +222,33 @@ msgid ""
 "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
 "span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>यदि भवान् इच्छति यत् gdb विशेषेण शेल् स्क्रिप्ट् द्वारा निष्पादितं "
+"भवतु, यत् उदाहरणार्थं पुस्तकालयमार्गं सम्यक् सेट् करोति, तर्हि अत्र सम्मिलितं कुर्वन्तु यथा: /"
+"path/to/script.sh --scriptArguments</p><p> नोट्: भवतः स्क्रिप्ट्&#39;ll एवं "
+"आह्वयते: /path/to/script.sh --scriptArguments debugger --debuggerArguments । "
+"अतः script.sh इत्यनेन &quot;debugger&quot; एक्जीक्यूटिव इत्येतत् मैन्युअल् रूपेण आह्वानं "
+"<span style=\" font-weight:600;\">कर्तव्यम्</span> ।</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
 #: gdbconfigpage.ui:64
 #, kde-format
 msgctxt "@label:chooser"
 msgid "She&ll script:"
-msgstr ""
+msgstr "She&ll स्क्रिप्ट् : १."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: gdbconfigpage.ui:87
 #, kde-format
 msgctxt "@title:group"
 msgid "Options"
-msgstr ""
+msgstr "विकल्पाः"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: gdbconfigpage.ui:96
 #, kde-format
 msgctxt "@option:check"
 msgid "Display static &members:"
-msgstr ""
+msgstr "स्थिरं प्रदर्शयन्तु &सदस्याः:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
 #: gdbconfigpage.ui:111
@@ -243,13 +262,19 @@ msgid ""
 "but if you need to debug into these values then\n"
 "check this option."
 msgstr ""
+"स्थिरसदस्यानां प्रदर्शनेन GDB मन्दतरं भवति\n"
+"Qt-आधारितसङ्केतेन सह आँकडानां उत्पादनम् ।\n"
+"दत्तांशस्य \"हस्ताक्षरं\" परिवर्तयितुं शक्नोति\n"
+"यस्य QString मित्राणि च अवलम्बन्ते,\n"
+"परन्तु यदि भवन्तः एतेषु मूल्येषु त्रुटिनिवारणं कर्तुं प्रवृत्ताः सन्ति तर्हि\n"
+"एतत् विकल्पं पश्यन्तु ।"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gdbconfigpage.ui:121
 #, kde-format
 msgctxt "@option:check"
 msgid "Display &demangled names:"
-msgstr ""
+msgstr "&demangled नाम प्रदर्शयतु:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
 #: gdbconfigpage.ui:133
@@ -260,34 +285,37 @@ msgid ""
 "can select to see the methods' mangled names.\n"
 "However, non-mangled names are easier to read."
 msgstr ""
+"विच्छिन्नसङ्केतं प्रदर्शयन्ते सति भवन्तः\n"
+"विधिनां विकृतनामानि द्रष्टुं चयनं कर्तुं शक्नोति ।\n"
+"तथापि अविक्षिप्तनामानि पठितुं सुकरानि भवन्ति ।"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gdbconfigpage.ui:143
 #, kde-format
 msgctxt "@label:listbox"
 msgid "S&tart debugger with:"
-msgstr ""
+msgstr "S&tart debugger with:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:154
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
-msgstr ""
+msgstr "अनुप्रयोग आउटपुट"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:159
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "GDB Console"
-msgstr ""
+msgstr "GDB Console इति"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:164
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
-msgstr ""
+msgstr "फ्रेम स्टैक"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:178
@@ -300,13 +328,18 @@ msgid ""
 "\ttarget remote ...\tconnect to the remote debugger\n"
 "\tcontinue\t[optional] run debugging to the first breakpoint"
 msgstr ""
+"इयं स्क्रिप्ट् दूरस्थरूपेण चालितस्य कार्यान्वयनीयस्य सम्बद्धतायै आवश्यकानां वास्तविक-आदेशानां कृते "
+"अभिप्रेता अस्ति ।\n"
+"\tshell sleep 5 दूरस्थकार्यक्रमस्य आरम्भस्य प्रतीक्षां कुर्वन्तु\n"
+"\ttarget remote ... दूरस्थं त्रुटिनिवारणकर्त्रेण सह सम्बद्धं कुर्वन्तु\n"
+"\tcontinue [optional] प्रथमविच्छेदबिन्दुपर्यन्तं त्रुटिनिवारणं चालयन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:181
 #, kde-format
 msgctxt "@title:group"
 msgid "Remote Debugging"
-msgstr ""
+msgstr "दूरस्थं त्रुटिनिवारणम्"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
@@ -322,13 +355,19 @@ msgid ""
 "contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>दूरस्थं अनुप्रयोगं आरभ्यतुं स्क्रिप्ट्</p><p></p><p> Gdb Config "
+"स्क्रिप्ट् gdb द्वारा स्रोतः प्राप्तस्य अनन्तरं एषा शेल् स्क्रिप्ट् चाल्यते ।</p><p> अस्य उद्देश्यं "
+"वास्तवतः दूरस्थप्रक्रियायाः आरम्भः एव ।</p><p> १) दूरस्थरूपेण आदेशं निष्पादयितुं मार्गं "
+"ज्ञातव्यं - rsh, ssh, telnet, ...</p><p> 2a) लक्ष्ये &quot;gdbserver ... "
+"application&quot; निष्पादयन्तु।</p><p> अथवा यदि भवतः कार्यान्वयनयोग्ये gdb स्टबः "
+"अस्ति:</p><p> 2b) लक्ष्ये &quot;अनुप्रयोग&quot; निष्पादयन्तु।</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
 #: gdbconfigpage.ui:190
 #, kde-format
 msgctxt "@label:chooser Shell script to be executed at run time"
 msgid "R&un shell script:"
-msgstr ""
+msgstr "R&un shell लिपिः : १."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
@@ -336,14 +375,14 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This script is sourced by gdb when the debugging starts."
-msgstr ""
+msgstr "इयं स्क्रिप्ट् gdb द्वारा स्रोतः भवति यदा त्रुटिनिवारणं आरभ्यते ।"
 
 #. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
 #: gdbconfigpage.ui:213
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Gdb &config script:"
-msgstr ""
+msgstr "Gdb &config स्क्रिप्ट: ."
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
 #. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
@@ -356,19 +395,23 @@ msgid ""
 "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
 "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>दूरस्थेन अनुप्रयोगेन सह सम्बद्धं कर्तुं स्क्रिप्ट्</p><p> उदाहरणतया:</"
+"p><p> shell sleep 5 #दूरस्थकार्यक्रमस्य आरम्भस्य प्रतीक्षां कुर्वन्तु</p><p> target "
+"remote ... #दूरस्थं त्रुटिनिवारणं सम्बद्धं कुर्वन्तु</p><p> continue #[optional] "
+"प्रथमविच्छेदबिन्दुपर्यन्तं त्रुटिनिवारणं चालयन्तु ।</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:236
 #, kde-format
 msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
-msgstr ""
+msgstr "&gdb स्क्रिप्ट् चालयन्तु:"
 
 #: gdboutputwidget.cpp:47
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
-msgstr ""
+msgstr "जीडीबी आउटपुट"
 
 #: gdboutputwidget.cpp:48
 #, kde-format
@@ -377,24 +420,26 @@ msgid ""
 "<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
 "issue any other GDB command while debugging.</p>"
 msgstr ""
+"<b>जीडीबी आउटपुट</b><p> सर्वाणि GDB आदेशानि निष्पादितानि दर्शयति । त्रुटिनिवारणं "
+"कुर्वन् अन्यं किमपि GDB आदेशं अपि निर्गन्तुं शक्नुवन्ति ।</p>"
 
 #: gdboutputwidget.cpp:58
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
-msgstr ""
+msgstr "&GDB आदेशः:"
 
 #: gdboutputwidget.cpp:63
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
-msgstr ""
+msgstr "GDB आदेशान् प्रविष्टुं एप्लिकेशनस्य निष्पादनं विरामयन्तु"
 
 #: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
-msgstr ""
+msgstr "आन्तरिक आदेशान् दर्शयतु"
 
 #: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
 #, kde-format
@@ -404,12 +449,15 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
+"KDevelop द्वारा आन्तरिकरूपेण निर्गताः आदेशाः दर्शिताः भविष्यन्ति वा न वा इति "
+"नियन्त्रणानि ।<br> एषः विकल्पः केवलं भविष्यत् आदेशान् प्रभावितं करिष्यति, पूर्वमेव निर्गतान् "
+"आदेशान् दृश्यात् न योजयिष्यति न निष्कासयिष्यति वा ।"
 
 #: gdboutputwidget.cpp:381
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
-msgstr ""
+msgstr "सर्वाणि प्रतिलिख्यताम्"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevgdbui.rc:19
@@ -421,137 +469,137 @@ msgstr "डिबगर टूलबार"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
-msgstr ""
+msgstr "प्रारंभः:"
 
 #: memviewdlg.cpp:69
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
-msgstr ""
+msgstr "राशिः:"
 
 #: memviewdlg.cpp:96
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
-msgstr ""
+msgstr "स्मृतिदृश्यम्"
 
 #: memviewdlg.cpp:223
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2 (१ बाइट्) २."
+msgstr[1] "%2 (%1 बाइट्) २."
 
 #: memviewdlg.cpp:262
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
-msgstr ""
+msgstr "&पुनः भार"
 
 #: memviewdlg.cpp:271
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
-msgstr ""
+msgstr "&स्वरूप"
 
 #: memviewdlg.cpp:274
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
-msgstr ""
+msgstr "&द्विचक्रीय"
 
 #: memviewdlg.cpp:279
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
-msgstr ""
+msgstr "&अष्टकम्"
 
 #: memviewdlg.cpp:284
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
-msgstr ""
+msgstr "&दशमलव"
 
 #: memviewdlg.cpp:289
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
-msgstr ""
+msgstr "&षट्दशमलव"
 
 #: memviewdlg.cpp:303
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
-msgstr ""
+msgstr "&समूहीकरणम्"
 
 #: memviewdlg.cpp:306
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
-msgstr ""
+msgstr "&0"
 
 #: memviewdlg.cpp:311
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
-msgstr ""
+msgstr "&1"
 
 #: memviewdlg.cpp:316
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
-msgstr ""
+msgstr "&2"
 
 #: memviewdlg.cpp:321
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
-msgstr ""
+msgstr "&4"
 
 #: memviewdlg.cpp:326
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
-msgstr ""
+msgstr "&8"
 
 #: memviewdlg.cpp:331
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
-msgstr ""
+msgstr "१&६"
 
 #: memviewdlg.cpp:344
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
-msgstr ""
+msgstr "परिवर्तनं लिखत"
 
 #: memviewdlg.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
-msgstr ""
+msgstr "स्मृतिपरिधिं परिवर्तयन्तु"
 
 #: memviewdlg.cpp:352
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
-msgstr ""
+msgstr "Close View इति"
 
 #: memviewdlg.cpp:419
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
-msgstr ""
+msgstr "स्मृति दर्शक"
 
 #: memviewdlg.cpp:423
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
-msgstr ""
+msgstr "नवीन स्मृति दर्शक"
 
 #: memviewdlg.cpp:424
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
-msgstr ""
+msgstr "नूतनं स्मृतिदर्शकं उद्घाटयन्तु"

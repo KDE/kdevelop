@@ -19,12 +19,12 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "भवतः नामानि"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "भवतः ईमेलपत्राणि"
 
 #: qmakebuilddirchooser.cpp:124
 #, kde-format
@@ -66,48 +66,48 @@ msgstr "कृपया निर्माणपुटं निर्दिश�
 #, kde-format
 msgctxt "@label:textbox"
 msgid "QMake &executable:"
-msgstr ""
+msgstr "Q&निष्पादनीय बनाओ:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qmakebuilddirchooser.ui:46
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Build directory:"
-msgstr ""
+msgstr "&निर्देशिकानिर्माणम् : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qmakebuilddirchooser.ui:62
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Install to (target.path):"
-msgstr ""
+msgstr "&(लक्ष्य.मार्ग) कृते संस्थापयन्तु:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qmakebuilddirchooser.ui:85
 #, kde-format
 msgctxt "@labal:listbox"
 msgid "Build &type:"
-msgstr ""
+msgstr "निर्माणं &प्रकारः : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
 #: qmakebuilddirchooser.ui:115
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "(Use default from .pro file)"
-msgstr ""
+msgstr "(.pro सञ्चिकातः पूर्वनिर्धारितं उपयोगं कुर्वन्तु)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: qmakebuilddirchooser.ui:123
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Extra arguments:"
-msgstr ""
+msgstr "अतिरिक्त तर्काः : १."
 
 #: qmakebuilddirchooserdialog.cpp:22
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory"
-msgstr ""
+msgstr "एकं Build Directory विन्यस्यताम्"
 
 #: qmakejob.cpp:33
 #, kde-format
@@ -133,4 +133,4 @@ msgstr "*** रिटर्न् कोडेन सह दुर्घटन�
 #, kde-format
 msgctxt "@action"
 msgid "Run QMake"
-msgstr ""
+msgstr "QMake चालयन्तु"

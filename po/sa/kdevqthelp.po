@@ -25,13 +25,13 @@ msgstr "Qt संपीडित सहायता सञ्चिकाः"
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
-msgstr ""
+msgstr "प्रविष्टिं परिवर्तयतु"
 
 #: qthelpconfig.cpp:52
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
-msgstr ""
+msgstr "New Entry योजयतु"
 
 #: qthelpconfig.cpp:70
 #, kde-format
@@ -42,7 +42,7 @@ msgstr "नाम शून्यं न भवितुम् अर्हत�
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
-msgstr ""
+msgstr "नवीनं दस्तावेजीकरणं प्राप्नुवन्तु"
 
 #: qthelpconfig.cpp:121
 #, kde-format
@@ -69,136 +69,136 @@ msgstr "पूर्वमेव आयातितानि दस्ताव�
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
-msgstr ""
+msgstr "Qt सहायता"
 
 #: qthelpconfig.cpp:301
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
-msgstr ""
+msgstr "Qt सहायता सेटिंग्स् विन्यस्तं कुर्वन्तु"
 
 #: qthelpconfig.cpp:326
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
-msgstr ""
+msgstr "परिवर्तनं कुर्वन्तु"
 
 #: qthelpconfig.cpp:332
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
-msgstr ""
+msgstr "लुप्"
 
 #: qthelpconfig.cpp:338
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
-msgstr ""
+msgstr "कृपया GHNS मार्गेण एतत् विस्थापयन्तु ।"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
 #: qthelpconfig.ui:23
 #, kde-format
 msgctxt "@title:group"
 msgid "Load Qt Help Documentation from System Locations"
-msgstr ""
+msgstr "सिस्टम् स्थानेभ्यः Qt सहायता दस्तावेजीकरणं लोड् कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
 #: qthelpconfig.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "&Load Qt API documentation:"
-msgstr ""
+msgstr "&Load Qt API दस्तावेजीकरणं:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
 #: qthelpconfig.ui:46
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Load Qt Help files from directory:"
-msgstr ""
+msgstr "निर्देशिकातः Qt Help सञ्चिकाः लोड् कुर्वन्तु:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
 #: qthelpconfig.ui:69
 #, kde-format
 msgctxt "@title:group"
 msgid "Install Additional Documentation Files"
-msgstr ""
+msgstr "अतिरिक्तदस्तावेजसञ्चिकाः संस्थापयन्तु"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:104
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
-msgstr ""
+msgstr "नामः"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:109
 #, kde-format
 msgctxt "@title:column"
 msgid "Path"
-msgstr ""
+msgstr "पथं"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: qthelpconfig.ui:134
 #, kde-format
 msgctxt "@action:button"
 msgid "Add"
-msgstr ""
+msgstr "संयोजयति"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qthelpconfigeditdialog.ui:17
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Icon:"
-msgstr ""
+msgstr "चिह्नम् : १."
 
 #. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
 #: qthelpconfigeditdialog.ui:24
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an icon"
-msgstr ""
+msgstr "एकं चिह्नं चिनोतु"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qthelpconfigeditdialog.ui:34
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr ""
+msgstr "नामः:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:41
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a name"
-msgstr ""
+msgstr "एकं नाम प्रविशतु"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:44
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
-msgstr ""
+msgstr "एकं नाम चिनुत..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qthelpconfigeditdialog.ui:51
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Path:"
-msgstr ""
+msgstr "पथं:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a Qt Help file..."
-msgstr ""
+msgstr "Qt Help सञ्चिकां चिनोतु..."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:67
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
-msgstr ""
+msgstr "Qt Help सञ्चिकां चिनोतु..."
 
 #: qthelpdocumentation.cpp:384
 #, kde-format

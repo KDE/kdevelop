@@ -31,16 +31,16 @@ msgstr "दस्तावेजाः"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
-msgstr ""
+msgstr "पुनः लोड करें"
 
 #: kdevdocumentview.cpp:217
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
-msgstr ""
+msgstr "पिधानं करोतु"
 
 #: kdevdocumentview.cpp:218
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
-msgstr ""
+msgstr "अन्ये सर्वे पिधाय"

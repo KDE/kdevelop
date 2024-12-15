@@ -20,58 +20,58 @@ msgstr ""
 #, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
-msgstr ""
+msgstr "इतर..."
 
 #: openwithplugin.cpp:242
 #, kde-format
 msgctxt "@title:menu"
 msgid "Open With"
-msgstr ""
+msgstr "Open With इति"
 
 #: openwithplugin.cpp:247
 #, kde-format
 msgctxt "@title:menu"
 msgid "Embedded Editors"
-msgstr ""
+msgstr "एम्बेडेड् एडिटर्स"
 
 #: openwithplugin.cpp:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
-msgstr ""
+msgstr "बाह्य अनुप्रयोग"
 
 #: openwithplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open"
-msgstr ""
+msgstr "उद्घाटित"
 
 #: openwithplugin.cpp:292
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Default Editor"
-msgstr ""
+msgstr "पूर्वनिर्धारित सम्पादक"
 
 #: openwithplugin.cpp:411
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
-msgstr ""
+msgstr "किं भवान् सर्वान् '%1' सञ्चिकाः पूर्वनिर्धारितरूपेण %2 इत्यनेन उद्घाटयितुम् इच्छति?"
 
 #: openwithplugin.cpp:413
 #, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
-msgstr ""
+msgstr "पूर्वनिर्धारितरूपेण सेट् कुर्वन्तु?"
 
 #: openwithplugin.cpp:414
 #, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
-msgstr ""
+msgstr "Default इति सेट् कुर्वन्तु"
 
 #: openwithplugin.cpp:415
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"
-msgstr ""
+msgstr "सेट् न कुर्वन्तु"

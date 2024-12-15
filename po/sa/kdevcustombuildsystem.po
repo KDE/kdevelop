@@ -20,38 +20,38 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Build"
-msgstr ""
+msgstr "निर्मिमीते"
 
 #: configwidget.cpp:26
 #, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Configure"
-msgstr ""
+msgstr "विन्यस्तं कुर्वन्तु"
 
 #: configwidget.cpp:27
 #, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Install"
-msgstr ""
+msgstr "प्रतिस्था"
 
 #: configwidget.cpp:28
 #, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Clean"
-msgstr ""
+msgstr "स्वच्छम्‌"
 
 #: configwidget.cpp:29
 #, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Prune"
-msgstr ""
+msgstr "छंटनी"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: configwidget.ui:19
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Build directory:"
-msgstr ""
+msgstr "निर्देशिकां निर्मायताम् : १."
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
 #: configwidget.ui:27
@@ -61,41 +61,43 @@ msgid ""
 "Select the directory where the tools are being executed in.\n"
 "If this is the same as the source directory you can leave it empty."
 msgstr ""
+"यत्र साधनानि निष्पादितानि सन्ति तत्र निर्देशिकां चिनोतु ।\n"
+"यदि एतत् स्रोतनिर्देशिकायाः समानं भवति तर्हि भवन्तः तत् रिक्तं त्यक्तुम् अर्हन्ति ।"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
 #: configwidget.ui:30
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "The directory where the tools are executed in"
-msgstr ""
+msgstr "यत्र साधनानि निष्पादितानि सन्ति तत् निर्देशिका"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: configwidget.ui:42
 #, kde-format
 msgctxt "@title:group"
 msgid "Build Tools"
-msgstr ""
+msgstr "बिल्ड टूल्स"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: configwidget.ui:48
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Action:"
-msgstr ""
+msgstr "नामपत्र:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: configwidget.ui:58
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable:"
-msgstr ""
+msgstr "सक्रियं करोतु:"
 
 #. i18n: ectx: property (text), widget (QLabel, execLabel)
 #: configwidget.ui:75
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Executable:"
-msgstr ""
+msgstr "निष्पादनीयः : १."
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
 #: configwidget.ui:85
@@ -104,71 +106,71 @@ msgctxt "@info:tooltip"
 msgid ""
 "This is the executable that should be executed when selecting the action "
 "from the Project menu"
-msgstr ""
+msgstr "एतत् कार्यान्वयनीयं यत् Project मेन्यूतः क्रियायाः चयनं कुर्वन् निष्पादनीयम्"
 
 #. i18n: ectx: property (text), widget (QLabel, argLabel)
 #: configwidget.ui:95
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
-msgstr ""
+msgstr "तर्काः : १."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
 #: configwidget.ui:105
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The arguments that the tool needs to execute properly."
-msgstr ""
+msgstr "ये तर्काः साधनेन सम्यक् निष्पादयितुं आवश्यकाः सन्ति ।"
 
 #. i18n: ectx: property (text), widget (QLabel, envLabel)
 #: configwidget.ui:115
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
-msgstr ""
+msgstr "पर्यावरणम्‌:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
 #: configwidget.ui:125
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a pre-configured environment for your tool"
-msgstr ""
+msgstr "स्वस्य साधनस्य कृते पूर्वविन्यस्तं वातावरणं चिनोतु"
 
 #: custombuildjob.cpp:67
 #, kde-format
 msgctxt "Building: <command> <project item name>"
 msgid "Building: %1 %2"
-msgstr ""
+msgstr "भवनम् : %1 %2"
 
 #: custombuildjob.cpp:70
 #, kde-format
 msgctxt "Cleaning: <command> <project item name>"
 msgid "Cleaning: %1 %2"
-msgstr ""
+msgstr "सफाई : %1 %2"
 
 #: custombuildjob.cpp:73
 #, kde-format
 msgctxt "Installing: <command> <project item name>"
 msgid "Installing: %1 %2"
-msgstr ""
+msgstr "संस्थापनम् : %1 %2"
 
 #: custombuildjob.cpp:74
 #, kde-format
 msgctxt "Installing: <command> <project item name> <installPrefix>"
 msgid "Installing: %1 %2 %3"
-msgstr ""
+msgstr "संस्थापनम् : %1 %2 %3"
 
 #: custombuildjob.cpp:77
 #, kde-format
 msgctxt "Configuring: <command> <project item name>"
 msgid "Configuring: %1 %2"
-msgstr ""
+msgstr "विन्यस्तं भवति: %1 %2"
 
 #: custombuildjob.cpp:80
 #, kde-format
 msgctxt "Pruning: <command> <project item name>"
 msgid "Pruning: %1 %2"
-msgstr ""
+msgstr "छंटाई : %1 %2"
 
 #: custombuildjob.cpp:95
 #, kde-format
@@ -220,64 +222,64 @@ msgstr "*** सम्पूर्ण ***"
 #, kde-format
 msgctxt "@item:intext custom 'build' tool"
 msgid "build"
-msgstr ""
+msgstr "निर्मिमीते"
 
 #: custombuildsystemconfig.cpp:15
 #, kde-format
 msgctxt "@item:intext custom 'configure' tool"
 msgid "configure"
-msgstr ""
+msgstr "विन्यस्तं कुर्वन्तु"
 
 #: custombuildsystemconfig.cpp:16
 #, kde-format
 msgctxt "@item:intext custom 'install' tool"
 msgid "install"
-msgstr ""
+msgstr "प्रतिस्था"
 
 #: custombuildsystemconfig.cpp:17
 #, kde-format
 msgctxt "@item:intext custom 'clean' tool"
 msgid "clean"
-msgstr ""
+msgstr "स्वच्छम्‌"
 
 #: custombuildsystemconfig.cpp:18
 #, kde-format
 msgctxt "@item:intext custom 'prune' tool"
 msgid "prune"
-msgstr ""
+msgstr "छंटनी"
 
 #: custombuildsystemconfig.cpp:19
 #, kde-format
 msgctxt "@item:intext custom 'unknown' tool"
 msgid "unknown"
-msgstr ""
+msgstr "अज्ञात"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: custombuildsystemconfigwidget.ui:31
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Build configuration:"
-msgstr ""
+msgstr "विन्यासस्य निर्माणम् : १."
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: custombuildsystemconfigwidget.ui:54
 #, kde-format
 msgctxt "@action:button"
 msgid "Add"
-msgstr ""
+msgstr "संयोजयति"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeConfig)
 #: custombuildsystemconfigwidget.ui:64
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr ""
+msgstr "अपाकरोति"
 
 #: kcm_custombuildsystem.cpp:53
 #, kde-format
 msgctxt "@title:tab"
 msgid "Custom Build System"
-msgstr ""
+msgstr "कस्टम बिल्ड सिस्टम"
 
 #: kcm_custombuildsystem.cpp:58
 #, kde-format

@@ -21,46 +21,46 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Android KDE extra-cmake-modules toolchain file"
-msgstr ""
+msgstr "Android KDE extra-cmake-modules toolchain सञ्चिका"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: androidpreferences.ui:32
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Android toolchain:"
-msgstr ""
+msgstr "एण्ड्रॉयड् टूल्चेन् : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: androidpreferences.ui:46
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Android NDK:"
-msgstr ""
+msgstr "एण्ड्रॉयड् एनडीके: १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: androidpreferences.ui:60
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Android SDK:"
-msgstr ""
+msgstr "एण्ड्रॉयड् एसडीके:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: androidpreferences.ui:74
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Architecture:"
-msgstr ""
+msgstr "संरचना:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: androidpreferences.ui:84
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Toolchain:"
-msgstr ""
+msgstr "साधनशृङ्खला : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: androidpreferences.ui:94
 #, kde-format
 msgctxt "@label:textbox"
 msgid "ABI:"
-msgstr ""
+msgstr "अबि : १."

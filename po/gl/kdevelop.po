@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-12-08 16:06+0100\n"
+"PO-Revision-Date: 2024-12-14 11:37+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -238,6 +238,7 @@ msgstr ""
 msgid "Milian Wolff"
 msgstr "Milian Wolff"
 
+# skip-rule: trasno-develop_reverse
 #: main.cpp:379
 #, kde-format
 msgid ""
@@ -329,6 +330,7 @@ msgstr ""
 msgid "Niko Sams"
 msgstr "Niko Sams"
 
+# skip-rule: trasno-develop_reverse
 #: main.cpp:387
 #, kde-format
 msgid "GDB integration, Webdevelopment Plugins"

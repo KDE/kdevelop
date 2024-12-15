@@ -20,37 +20,37 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Rebuild Environment"
-msgstr ""
+msgstr "पर्यावरणस्य पुनर्निर्माणम्"
 
 #: flatpakplugin.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Recompiles all dependencies for a fresh environment."
-msgstr ""
+msgstr "ताजावातावरणाय सर्वाणि आश्रयाणि पुनः संकलयति ।"
 
 #: flatpakplugin.cpp:55
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
-msgstr ""
+msgstr "निर्यात Flatpak Bundle..."
 
 #: flatpakplugin.cpp:56
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Exports the current build into a 'bundle.flatpak' file."
-msgstr ""
+msgstr "वर्तमाननिर्माणं 'bundle.flatpak' सञ्चिकायां निर्यातयति ।"
 
 #: flatpakplugin.cpp:61
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
-msgstr ""
+msgstr "उपकरणं प्रति प्रेषयन्तु..."
 
 #: flatpakplugin.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Export %1"
-msgstr ""
+msgstr "निर्यातं %1"
 
 #: flatpakplugin.cpp:113
 #, kde-format
@@ -61,25 +61,25 @@ msgstr "फ्लैटपक बंडल (*.flatpak) २."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr ""
+msgstr "Flatpak वातावरणस्य पुनर्निर्माणम्: %1"
 
 #: flatpakplugin.cpp:241
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr ""
+msgstr "%2 कृते %1 Flatpak वातावरणं निर्मायताम्"
 
 #: flatpakplugin.cpp:265
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
-msgstr ""
+msgstr "Tag Name इति चिनोतु"
 
 #: flatpakplugin.cpp:266
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
-msgstr ""
+msgstr "उपकरणस्य होस्टनाम : १."
 
 #: flatpakruntime.cpp:58
 #, kde-format

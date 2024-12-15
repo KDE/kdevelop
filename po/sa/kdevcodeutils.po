@@ -21,19 +21,19 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Document Declaration"
-msgstr ""
+msgstr "दस्तावेज घोषणा"
 
 #: codeutilsplugin.cpp:50
 #, kde-format
 msgctxt "default shortcut for \"Document Declaration\""
 msgid "Alt+Shift+d"
-msgstr ""
+msgstr "Alt+Shift+d"
 
 #: codeutilsplugin.cpp:52
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add Doxygen skeleton for declaration under cursor."
-msgstr ""
+msgstr "कर्सरस्य अधः घोषणार्थं Doxygen skeleton योजयन्तु ।"
 
 #: codeutilsplugin.cpp:55
 #, kde-format
@@ -42,6 +42,8 @@ msgid ""
 "Adds a basic Doxygen comment skeleton in front of the declaration under the "
 "cursor, e.g. with all the parameter of a function."
 msgstr ""
+"कर्सरस्य अधः घोषणायाः पुरतः मूलभूतं Doxygen comment skeleton योजयति, उदा. फंक्शन् "
+"इत्यस्य सर्वैः पैरामीटर् इत्यनेन सह ।"
 
 #: codeutilsplugin.cpp:85
 #, kde-format

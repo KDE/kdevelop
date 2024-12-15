@@ -20,34 +20,34 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Heaptrack"
-msgstr ""
+msgstr "राशः"
 
 #: config/globalconfigpage.cpp:34
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Heaptrack Settings"
-msgstr ""
+msgstr "Heaptrack सेटिंग्स् विन्यस्यताम्"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/globalconfigpage.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Executables"
-msgstr ""
+msgstr "निष्पादनीयानि"
 
 #. i18n: ectx: property (text), widget (QLabel, heaptrackExecutableLabel)
 #: config/globalconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Heaptrack:"
-msgstr ""
+msgstr "राशः पटलः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, heaptrackGuiExecutableLabel)
 #: config/globalconfigpage.ui:51
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Visualizer:"
-msgstr ""
+msgstr "दृश्यकारः : १."
 
 #: job.cpp:100
 #, kde-format
@@ -58,13 +58,13 @@ msgstr "राशी विश्लेषण (%1) 1.1."
 #, kde-format
 msgctxt "@action"
 msgid "Run Heaptrack Analysis"
-msgstr ""
+msgstr "Heaptrack Analysis चालयन्तु"
 
 #: plugin.cpp:67
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with Heaptrack"
-msgstr ""
+msgstr "Heaptrack इत्यनेन Process इत्यत्र संलग्नं कुर्वन्तु"
 
 #: plugin.cpp:94
 #, kde-format

@@ -20,16 +20,16 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Switch to '%1'"
-msgstr ""
+msgstr "'%1' इत्यत्र स्विच कुर्वन्तु।"
 
 #: switchtobuddyplugin.cpp:128
 #, kde-format
 msgctxt "@action"
 msgid "&Switch Definition/Declaration"
-msgstr ""
+msgstr "&Switch परिभाषा/घोषणा"
 
 #: switchtobuddyplugin.cpp:133
 #, kde-format
 msgctxt "@action"
 msgid "Switch Header/Source"
-msgstr ""
+msgstr "शीर्षकं/स्रोतं स्विच कुर्वन्तु"

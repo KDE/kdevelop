@@ -20,13 +20,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Scratchpad"
-msgstr ""
+msgstr "स्क्रैचपैड"
 
 #: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
 #, kde-format
 msgctxt "prefix to distinguish scratch tabs"
 msgid "scratch:%1"
-msgstr ""
+msgstr "खरोंच:%1"
 
 #: scratchpad.cpp:168
 #, kde-format
@@ -81,46 +81,46 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command to run this scratch. '$f' will expand to the scratch path."
-msgstr ""
+msgstr "एतत् स्क्रैच चालयितुं आदेशः । '$f' स्क्रैच् मार्गं प्रति विस्तारं करिष्यति ।"
 
 #: scratchpadview.cpp:137
 #, kde-format
 msgctxt "@action"
 msgid "New Scratch"
-msgstr ""
+msgstr "नवीन स्क्रैच"
 
 #: scratchpadview.cpp:141
 #, kde-format
 msgctxt "@action"
 msgid "Remove Scratch"
-msgstr ""
+msgstr "स्क्रैच निकालें"
 
 #: scratchpadview.cpp:149
 #, kde-format
 msgctxt "@action"
 msgid "Rename Scratch"
-msgstr ""
+msgstr "स्क्रैच इत्यस्य नाम परिवर्तनं कुर्वन्तु"
 
 #: scratchpadview.cpp:158
 #, kde-format
 msgctxt "@action"
 msgid "Run Scratch"
-msgstr ""
+msgstr "स्क्रैच चालयन्तु"
 
 #: scratchpadview.cpp:164
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr ""
+msgstr "फ़िल्टर..."
 
 #: scratchpadview.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New Scratch"
-msgstr ""
+msgstr "New Scratch रचयन्तु"
 
 #: scratchpadview.cpp:205
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for scratch file:"
-msgstr ""
+msgstr "स्क्रैच् सञ्चिकायाः नाम : १."

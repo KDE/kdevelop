@@ -20,28 +20,28 @@ msgstr ""
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
-msgstr ""
+msgstr "<अनामिका>"
 
 #: outlineviewplugin.cpp:49 outlinewidget.cpp:33
 #, kde-format
 msgctxt "@title:window"
 msgid "Outline"
-msgstr ""
+msgstr "रूपरेखा"
 
 #: outlinewidget.cpp:47
 #, kde-format
 msgctxt "@action"
 msgid "Sort Alphabetically"
-msgstr ""
+msgstr "वर्णमालानुसार क्रमबद्ध करें"
 
 #: outlinewidget.cpp:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Sort items alphabetically"
-msgstr ""
+msgstr "वर्णमालानुसारं वस्तूनि क्रमयन्तु"
 
 #: outlinewidget.cpp:60
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr ""
+msgstr "फ़िल्टर..."

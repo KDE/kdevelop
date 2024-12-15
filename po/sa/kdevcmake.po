@@ -21,13 +21,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr ""
+msgstr "एकं निर्माणनिर्देशिकां विन्यस्यताम् - %1"
 
 #: cmakebuilddirchooser.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
-msgstr ""
+msgstr "%1 कृते Build Directory विन्यस्यताम्"
 
 #: cmakebuilddirchooser.cpp:196
 #, kde-format
@@ -69,28 +69,28 @@ msgstr "चयनितं बिल्ड् निर्देशिका र
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Available build directories:"
-msgstr ""
+msgstr "उपलब्धानि निर्माणनिर्देशिकाः : १."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
 #: cmakebuilddirchooser.ui:40
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "New build directory"
-msgstr ""
+msgstr "नवीनं निर्माणनिर्देशिका"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: cmakebuilddirchooser.ui:48
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Build &directory:"
-msgstr ""
+msgstr "&निर्देशिकां निर्मायताम् : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: cmakebuilddirchooser.ui:84
 #, kde-format
 msgctxt "@label:chooser"
 msgid "&Installation prefix:"
-msgstr ""
+msgstr "&स्थापन उपसर्गः : १."
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:109
@@ -100,20 +100,22 @@ msgid ""
 "The prefix under which the project will be installed. Leaving this empty "
 "will let CMake use its default install prefix."
 msgstr ""
+"यस्य उपसर्गस्य अन्तर्गतं परियोजना संस्थापिता भविष्यति। एतत् रिक्तं त्यक्त्वा CMake स्वस्य "
+"पूर्वनिर्धारितं संस्थापन-उपसर्गं उपयोक्तुं शक्नोति ।"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:112
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "CMake's default install prefix"
-msgstr ""
+msgstr "CMake इत्यस्य पूर्वनिर्धारितं संस्थापन उपसर्गः"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Build &type:"
-msgstr ""
+msgstr "निर्माणं &प्रकारः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
@@ -121,14 +123,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Extra arguments:"
-msgstr ""
+msgstr "अतिरिक्त तर्काः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: cmakebuilddirchooser.ui:182
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake &executable:"
-msgstr ""
+msgstr "CMake &निष्पादनीय: ."
 
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
@@ -139,31 +141,31 @@ msgstr "अप्रतिषेध"
 #, kde-format
 msgctxt "@item"
 msgid "Command"
-msgstr ""
+msgstr "आदेश"
 
 #: cmakecodecompletionmodel.cpp:201
 #, kde-format
 msgctxt "@item"
 msgid "Variable"
-msgstr ""
+msgstr "चर"
 
 #: cmakecodecompletionmodel.cpp:202
 #, kde-format
 msgctxt "@item"
 msgid "Macro"
-msgstr ""
+msgstr "मैक्रो"
 
 #: cmakecodecompletionmodel.cpp:203
 #, kde-format
 msgctxt "@item"
 msgid "Path"
-msgstr ""
+msgstr "पथं"
 
 #: cmakecodecompletionmodel.cpp:204
 #, kde-format
 msgctxt "@item"
 msgid "Target"
-msgstr ""
+msgstr "लक्ष्य"
 
 #: cmakecodecompletionmodel.cpp:256
 #, kde-format
@@ -174,31 +176,31 @@ msgstr "दोषपूर्णः"
 #, kde-format
 msgctxt "@item cmake"
 msgid "Commands"
-msgstr ""
+msgstr "आदेशाः"
 
 #: cmakecommandscontents.cpp:30
 #, kde-format
 msgctxt "@item cmake"
 msgid "Variables"
-msgstr ""
+msgstr "चराः"
 
 #: cmakecommandscontents.cpp:31
 #, kde-format
 msgctxt "@item cmake"
 msgid "Modules"
-msgstr ""
+msgstr "मॉड्यूलाः"
 
 #: cmakecommandscontents.cpp:32
 #, kde-format
 msgctxt "@item cmake"
 msgid "Properties"
-msgstr ""
+msgstr "गुणाः"
 
 #: cmakecommandscontents.cpp:33
 #, kde-format
 msgctxt "@item cmake"
 msgid "Policies"
-msgstr ""
+msgstr "नीतयः"
 
 #: cmakecommandscontents.cpp:102
 #, kde-format
@@ -224,7 +226,7 @@ msgstr "<br /><em>संग्रहणप्रलेखनम्:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "अमान्य CMake सञ्चिका एपिआइ परियोजना आँकडा"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -270,106 +272,106 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Cache Values"
-msgstr ""
+msgstr "Cache Values इति"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: settings/cmakebuildsettings.ui:89
 #, kde-format
 msgctxt "@label"
 msgid "Comment:"
-msgstr ""
+msgstr "टिप्पणी:"
 
 #. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
 #: settings/cmakebuildsettings.ui:106
 #, kde-format
 msgctxt "@action:button"
 msgid "Show Advanced"
-msgstr ""
+msgstr "उन्नतं दर्शयतु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
 #: settings/cmakebuildsettings.ui:125
 #, kde-format
 msgctxt "@title:group"
 msgid "Advanced"
-msgstr ""
+msgstr "उन्नतं"
 
 #. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
 #: settings/cmakebuildsettings.ui:134
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Installation prefix:"
-msgstr ""
+msgstr "संस्थापन उपसर्गः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
 #: settings/cmakebuildsettings.ui:144
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Build type:"
-msgstr ""
+msgstr "निर्माणप्रकारः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: settings/cmakebuildsettings.ui:198
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Configure environment:"
-msgstr ""
+msgstr "वातावरणं विन्यस्यताम् : १."
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: settings/cmakebuildsettings.ui:213
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr ""
+msgstr "उपयोक्तुं वातावरणं चिनोतु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showInternal)
 #: settings/cmakebuildsettings.ui:225
 #, kde-format
 msgctxt "@option:check"
 msgid "Show advanced values"
-msgstr ""
+msgstr "उन्नतमूल्यानि दर्शयतु"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: settings/cmakebuildsettings.ui:235
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake executable:"
-msgstr ""
+msgstr "Cनिष्पादनीयं कुर्वन्तु : १."
 
 #: settings/cmakecachemodel.cpp:36
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
-msgstr ""
+msgstr "नामः"
 
 #: settings/cmakecachemodel.cpp:37
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
-msgstr ""
+msgstr "प्रकारः"
 
 #: settings/cmakecachemodel.cpp:38
 #, kde-format
 msgctxt "@title:column"
 msgid "Value"
-msgstr ""
+msgstr "मूल्यम्‌"
 
 #: settings/cmakecachemodel.cpp:39
 #, kde-format
 msgctxt "@title:column"
 msgid "Comment"
-msgstr ""
+msgstr "टिप्पणी"
 
 #: settings/cmakecachemodel.cpp:40
 #, kde-format
 msgctxt "@title:column"
 msgid "Advanced"
-msgstr ""
+msgstr "उन्नतं"
 
 #: settings/cmakecachemodel.cpp:41
 #, kde-format
 msgctxt "@title:column"
 msgid "Strings"
-msgstr ""
+msgstr "ताराः"
 
 #: settings/cmakepreferences.cpp:343
 #, kde-format
@@ -384,7 +386,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "न विलोपयतु"
 
 #: settings/cmakepreferences.cpp:352
 #, kde-format
@@ -395,13 +397,13 @@ msgstr "न निष्कासयितुं शक्यते: %1"
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
-msgstr ""
+msgstr "CMake इति"
 
 #: settings/cmakepreferences.cpp:403
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"
-msgstr ""
+msgstr "CMake सेटिंग्स् विन्यस्यताम्"
 
 #: testing/ctestfindjob.cpp:23
 #, kde-format
@@ -417,12 +419,12 @@ msgstr "सीटीटेस्ट"
 #, kde-format
 msgctxt "running test %1, %2 test case"
 msgid "CTest %1: %2"
-msgstr ""
+msgstr "CTest %1: %2"
 
 #: testing/ctestrunjob.cpp:121
 #, kde-format
 msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "सीटीटेस्ट %2 (%1) 1.1."
+msgstr[1] "सीटीटेस्ट %2 (%1) 1.1."

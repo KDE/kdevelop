@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:40+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-14 01:44+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: localpatchsource.cpp:34
 #, kde-format
@@ -27,63 +29,63 @@ msgstr "कस्टम पैच"
 #, kde-format
 msgctxt "@title:group"
 msgid "Patch"
-msgstr ""
+msgstr "कर्पटक"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: localpatchwidget.ui:38
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Base directory:"
-msgstr ""
+msgstr "आधारनिर्देशिका : १."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
 #: localpatchwidget.ui:45
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch/base"
-msgstr ""
+msgstr "/मार्ग/पैच/आधार"
 
 #. i18n: ectx: attribute (title), widget (QWidget, fileTab)
 #: localpatchwidget.ui:56
 #, kde-format
 msgctxt "@title:tab"
 msgid "From File"
-msgstr ""
+msgstr "सञ्चिकातः"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
 #: localpatchwidget.ui:62
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch"
-msgstr ""
+msgstr "/मार्गः/पैचम्"
 
 #. i18n: ectx: attribute (title), widget (QWidget, commandTab)
 #: localpatchwidget.ui:70
 #, kde-format
 msgctxt "@title:tab"
 msgid "From Command"
-msgstr ""
+msgstr "आदेशात्"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
 #: localpatchwidget.ui:76
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter command to take output from..."
-msgstr ""
+msgstr "तः आउटपुट् ग्रहीतुं आदेशं प्रविशन्तु..."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
 #: localpatchwidget.ui:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Patch is already applied on local version"
-msgstr ""
+msgstr "स्थानीयसंस्करणे पूर्वमेव पैच् प्रयुक्तम् अस्ति"
 
 #. i18n: ectx: property (text), widget (QCheckBox, applied)
 #: localpatchwidget.ui:90
 #, kde-format
 msgctxt "@option:check"
 msgid "Already applied"
-msgstr ""
+msgstr "पूर्वमेव प्रयुक्तम्"
 
 #: patchhighlighter.cpp:80
 #, kde-format
@@ -129,37 +131,37 @@ msgstr "परिवर्तनं प्रयोक्तुं न शक्
 #, kde-format
 msgctxt "@item"
 msgid "Insertion"
-msgstr ""
+msgstr "निवेशनम्"
 
 #: patchhighlighter.cpp:411 patchhighlighter.cpp:418
 #, kde-format
 msgctxt "@item"
 msgid "Removal"
-msgstr ""
+msgstr "निष्कासनम्"
 
 #: patchhighlighter.cpp:413 patchhighlighter.cpp:420
 #, kde-format
 msgctxt "@item"
 msgid "Change"
-msgstr ""
+msgstr "परिवर्तय"
 
 #: patchreview.cpp:294 patchreview.cpp:296
 #, kde-format
 msgctxt "@title:window"
 msgid "Kompare Model Update"
-msgstr ""
+msgstr "Model Update इत्यस्य तुलनां कुर्वन्तु"
 
 #: patchreview.cpp:455
 #, kde-format
 msgctxt "@title complete patch"
 msgid "Overview"
-msgstr ""
+msgstr "अवलोकनम्"
 
 #: patchreview.cpp:460 patchreview.cpp:535
 #, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
-msgstr ""
+msgstr "पैच समीक्षा"
 
 #: patchreview.cpp:467
 #, kde-format
@@ -170,91 +172,91 @@ msgstr "पैच् इत्यस्य आधारनिर्देशि�
 #, kde-format
 msgctxt "@action"
 msgid "Finish Review"
-msgstr ""
+msgstr "समीक्षा समाप्तं कुर्वन्तु"
 
 #: patchreview.cpp:606
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"
-msgstr ""
+msgstr "समीक्षा पैच"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
 #: patchreview.ui:21
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous file"
-msgstr ""
+msgstr "पूर्वसञ्चिका"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
 #: patchreview.ui:31
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous difference"
-msgstr ""
+msgstr "पूर्वभेदः"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
 #: patchreview.ui:41
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next difference"
-msgstr ""
+msgstr "तदनन्तरं भेदः"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
 #: patchreview.ui:51
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next file"
-msgstr ""
+msgstr "अग्रिमसञ्चिका"
 
 #. i18n: ectx: property (text), widget (QToolButton, updateButton)
 #: patchreview.ui:74
 #, kde-format
 msgctxt "@action:button"
 msgid "Update"
-msgstr ""
+msgstr "अद्यतन"
 
 #. i18n: ectx: property (text), widget (QToolButton, testsButton)
 #: patchreview.ui:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Run Tests"
-msgstr ""
+msgstr "परीक्षणं चालयन्तु"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportReview)
 #: patchreview.ui:120
 #, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
-msgstr ""
+msgstr "निर्यात Diff..."
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
 #: patchreview.ui:136
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel Review"
-msgstr ""
+msgstr "समीक्षा रद्द करें"
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
 #: patchreview.ui:149
 #, kde-format
 msgctxt "@action:button"
 msgid "Finish Review"
-msgstr ""
+msgstr "समीक्षा समाप्तं कुर्वन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
 #: patchreview.ui:168
 #, kde-format
 msgctxt "@title:group"
 msgid "Changes"
-msgstr ""
+msgstr "परिवर्तनं करोति"
 
 #: patchreviewtoolview.cpp:83
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
 msgid_plural "%2 (%1 hunks)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2 (१ हंक) २."
+msgstr[1] "%2 (%1 हंक्स्) २."
 
 #: patchreviewtoolview.cpp:223
 #, kde-format
@@ -274,13 +276,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Select All"
-msgstr ""
+msgstr "All इति चिनोतु"
 
 #: patchreviewtoolview.cpp:259
 #, kde-format
 msgctxt "@action"
 msgid "Deselect All"
-msgstr ""
+msgstr "सर्वाणि अचयनं कुर्वन्तु"
 
 #: patchreviewtoolview.cpp:557
 #, kde-format
@@ -291,8 +293,8 @@ msgstr "परीक्षणं चालयति: %p% ."
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "परीक्षा उत्तीर्णा"
+msgstr[1] "सर्वाणि %1 परीक्षानि उत्तीर्णानि"
 
 #: patchreviewtoolview.cpp:589
 #, kde-format

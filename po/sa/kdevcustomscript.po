@@ -39,6 +39,8 @@ msgid ""
 "Note: each custom script style requires a certain tool executable to be "
 "installed. Otherwise, code will not be formatted."
 msgstr ""
+"नोट्: प्रत्येकं कस्टम् स्क्रिप्ट् शैल्यां संस्थापनार्थं निश्चितं टूल् एक्जीक्यूटिव् आवश्यकम् अस्ति । "
+"अन्यथा कोडः स्वरूपितः न भविष्यति ।"
 
 #: customscript_plugin.cpp:227
 #, kde-format
@@ -107,7 +109,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
-msgstr ""
+msgstr "आदेश:"
 
 #: customscript_plugin.cpp:548
 #, kde-format
@@ -127,7 +129,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
-msgstr ""
+msgstr "अधिकानि चराः"
 
 #: customscript_plugin.cpp:570
 #, kde-format
@@ -158,4 +160,4 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"
-msgstr ""
+msgstr "चर प्रतिस्थापन"

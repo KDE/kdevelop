@@ -30,25 +30,25 @@ msgstr "विश्लेषणं आरब्धम्..."
 #, kde-format
 msgctxt "@info:tooltip %2 is the path of the file"
 msgid "Re-run last %1 analysis (%2)"
-msgstr ""
+msgstr "अन्तिम %1 विश्लेषणं पुनः चालयन्तु (%2)"
 
 #: compileanalyzeproblemmodel.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last %1 analysis"
-msgstr ""
+msgstr "अन्तिम %1 विश्लेषणं पुनः चालयन्तु"
 
 #: compileanalyzer.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "Analyze Current File with %1"
-msgstr ""
+msgstr "%1 इत्यनेन वर्तमानसञ्चिकायाः विश्लेषणं कुर्वन्तु"
 
 #: compileanalyzer.cpp:78
 #, kde-format
 msgctxt "@action"
 msgid "Analyze Current Project with %1"
-msgstr ""
+msgstr "%1 इत्यनेन वर्तमानपरियोजनायाः विश्लेषणं कुर्वन्तु"
 
 #: compileanalyzer.cpp:167
 #, kde-format
@@ -75,7 +75,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Test"
-msgstr ""
+msgstr "परीक्षा"
 
 #: compileanalyzeutils.cpp:45
 #, kde-format

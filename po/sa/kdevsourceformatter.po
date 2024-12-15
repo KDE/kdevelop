@@ -20,27 +20,27 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Source Formatter"
-msgstr ""
+msgstr "स्रोत स्वरूप"
 
 #: config/projectconfigpage.cpp:49
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Source Formatter"
-msgstr ""
+msgstr "स्रोतस्वरूपं विन्यस्यताम्"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useDefault)
 #: config/projectconfigpage.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "&Use default"
-msgstr ""
+msgstr "&पूर्वनिर्धारितं उपयोगं कुर्वन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, generalGroupBox)
 #: config/projectconfigpage.ui:36
 #, kde-format
 msgctxt "@title:group"
 msgid "General"
-msgstr ""
+msgstr "सामान्य"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_overrideKateIndentation)
 #: config/projectconfigpage.ui:42
@@ -50,13 +50,14 @@ msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without a Kate modeline."
 msgstr ""
+"केट् मॉडलिन् विना दस्तावेजानां कृते प्रारूपणशैल्यानुसारं सम्पादक-इण्डेन्टेशन-विधिं अधिलिखन्तु ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_overrideKateIndentation)
 #: config/projectconfigpage.ui:45
 #, kde-format
 msgctxt "@option:check"
 msgid "Override editor indentation mode"
-msgstr ""
+msgstr "सम्पादक-इण्डेन्टेशन-विधिं अधिलिखन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_modelinesEnabled)
 #: config/projectconfigpage.ui:52
@@ -64,18 +65,18 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
-msgstr ""
+msgstr "प्रारूपितदस्तावेजेषु स्वरूपणशैल्यानुसारं Kate modelline योजयन्तु ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_modelinesEnabled)
 #: config/projectconfigpage.ui:55
 #, kde-format
 msgctxt "@option:check"
 msgid "Add Kate modeline"
-msgstr ""
+msgstr "केट् मॉडल् इत्यत्र योजयन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, formattinStylesGroupBox)
 #: config/projectconfigpage.ui:65
 #, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
-msgstr ""
+msgstr "स्वरूपणशैल्याः"

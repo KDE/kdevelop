@@ -25,24 +25,24 @@ msgstr "docker build '%1' इति।"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
-msgstr ""
+msgstr "Tag Name इति चिनोतु"
 
 #: dockerplugin.cpp:122
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Tag name for '%1':"
-msgstr ""
+msgstr "'%1' कृते टैग् नाम:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dockerpreferences.ui:29
 #, kde-format
 msgctxt "@label:textbox"
 msgid "'docker run' arguments:"
-msgstr ""
+msgstr "'docker run' तर्काः:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dockerpreferences.ui:39
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Projects volume:"
-msgstr ""
+msgstr "परियोजनानां मात्रा : १."

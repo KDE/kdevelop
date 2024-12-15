@@ -26,31 +26,31 @@ msgstr "मृदुः"
 #, kde-format
 msgctxt "@item level of checks"
 msgid "Level 0"
-msgstr ""
+msgstr "स्तर 0"
 
 #: checksdb.cpp:29
 #, kde-format
 msgctxt "@item level of checks"
 msgid "Level 1"
-msgstr ""
+msgstr "स्तरः १"
 
 #: checksdb.cpp:30
 #, kde-format
 msgctxt "@item level of checks"
 msgid "Level 2"
-msgstr ""
+msgstr "स्तरः २"
 
 #: checksdb.cpp:31
 #, kde-format
 msgctxt "@item level of checks"
 msgid "Level 3"
-msgstr ""
+msgstr "स्तरः ३"
 
 #: checksdb.cpp:32
 #, kde-format
 msgctxt "@item level of checks"
 msgid "Manual Level"
-msgstr ""
+msgstr "मैनुअल स्तर"
 
 #: checksdb.cpp:37
 #, kde-format
@@ -103,86 +103,86 @@ msgstr "Clazy '%1' तः सूचनां जाँचयति लोड् 
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Check Set"
-msgstr ""
+msgstr "New Check Set इत्यस्य नाम प्रविष्टं कुर्वन्तु"
 
 #: config/checksetmanagewidget.cpp:95
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr ""
+msgstr "नामः:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/checksetmanagewidget.ui:31
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Check set:"
-msgstr ""
+msgstr "सेट् चेकं कुर्वन्तु:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add check set"
-msgstr ""
+msgstr "चेक सेट् योजयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone check set"
-msgstr ""
+msgstr "क्लोन चेक सेट्"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove check set"
-msgstr ""
+msgstr "चेक सेट् निष्कासयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr ""
+msgstr "पूर्वनिर्धारितरूपेण सेट् कुर्वन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
 #: config/checksetmanagewidget.ui:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit name of check set"
-msgstr ""
+msgstr "चेक सेट् इत्यस्य नाम सम्पादयन्तु"
 
 #: config/checksetselectioncombobox.cpp:26
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Custom"
-msgstr ""
+msgstr "आचारः"
 
 #: config/checksetselectioncombobox.cpp:30
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default (currently: %1)"
-msgstr ""
+msgstr "पूर्वनिर्धारितं (सम्प्रति: %1) उपयुज्यताम् ।"
 
 #: config/checksetselectionlistmodel.cpp:64
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (default selection)"
-msgstr ""
+msgstr "%1 (पूर्वनिर्धारितचयनम्)"
 
 #: config/checkswidget.cpp:37
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search checks..."
-msgstr ""
+msgstr "अन्वेषणं जाँचं..."
 
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #: config/checkswidget.ui:31
 #, kde-format
 msgctxt "@action:button"
 msgid "Reset Checks"
-msgstr ""
+msgstr "Reset Checks"
 
 #. i18n: ectx: property (text), widget (KMessageWidget, messageLabel)
 #: config/checkswidget.ui:74
@@ -196,28 +196,28 @@ msgstr "यतः किमपि चयनितं नास्ति तस�
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Line"
-msgstr ""
+msgstr "आदेशपङ्क्तिः"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, cmdFilter)
 #: config/commandlinewidget.ui:37
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "अन्वेषण..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
 #: config/commandlinewidget.ui:47
 #, kde-format
 msgctxt "@option:check"
 msgid "Break lines"
-msgstr ""
+msgstr "रेखाः भङ्गयतु"
 
 #: config/globalconfigpage.cpp:29
 #, kde-format
 msgid "1 check detected"
 msgid_plural "%1 checks detected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "१ जाँचः ज्ञातः"
+msgstr[1] "%1 जाँचः ज्ञातः"
 
 #: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
 #, kde-format
@@ -229,98 +229,98 @@ msgstr "मृदुः"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clazy Settings"
-msgstr ""
+msgstr "Clazy सेटिंग्स् विन्यस्तं कुर्वन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathBox)
 #: config/globalconfigpage.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Paths"
-msgstr ""
+msgstr "पथाः"
 
 #. i18n: ectx: property (text), widget (QLabel, executableLabel)
 #: config/globalconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "clazy-standalone:"
-msgstr ""
+msgstr "मृदु-स्वतन्त्रः : १."
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_executablePath)
 #: config/globalconfigpage.ui:42
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Path to clazy-standalone executable."
-msgstr ""
+msgstr "मृदु-स्वतन्त्र-निष्पादनीयस्य मार्गः ।"
 
 #. i18n: ectx: property (text), widget (QLabel, docsLabel)
 #: config/globalconfigpage.ui:52
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Documentation:"
-msgstr ""
+msgstr "दस्तावेजीकरणम् : १."
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_docsPath)
 #: config/globalconfigpage.ui:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Path to clazy documentation directory."
-msgstr ""
+msgstr "clazy documentation directory इत्यस्य मार्गः ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
 #: config/globalconfigpage.ui:85
 #, kde-format
 msgctxt "@option:check"
 msgid "Run analysis jobs in parallel"
-msgstr ""
+msgstr "समानान्तरेण विश्लेषणकार्यं चालयन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
 #: config/globalconfigpage.ui:94
 #, kde-format
 msgctxt "@option:check"
 msgid "Use all CPU cores"
-msgstr ""
+msgstr "सर्वाणि CPU कोर्स् उपयुज्यताम्"
 
 #. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
 #: config/globalconfigpage.ui:114
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
-msgstr ""
+msgstr "अधिकतमं सूत्राणां संख्या : १."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: config/globalconfigpage.ui:133
 #, kde-format
 msgctxt "@title:group"
 msgid "Output"
-msgstr ""
+msgstr "उत्पादनम्"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
 #: config/globalconfigpage.ui:139
 #, kde-format
 msgctxt "@option:check"
 msgid "Hide output view during check"
-msgstr ""
+msgstr "चेकस्य समये आउटपुट् दृश्यं गोपयन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_verboseOutput)
 #: config/globalconfigpage.ui:146
 #, kde-format
 msgctxt "@option:check"
 msgid "Verbose output"
-msgstr ""
+msgstr "वाचिकनिर्गमः"
 
 #. i18n: ectx: attribute (title), widget (QWidget, checksTab)
 #: config/projectconfigpage.ui:39
 #, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
-msgstr ""
+msgstr "जाँचयति"
 
 #. i18n: ectx: attribute (title), widget (QWidget, optionsTab)
 #: config/projectconfigpage.ui:66
 #, kde-format
 msgctxt "@title:tab"
 msgid "Options"
-msgstr ""
+msgstr "विकल्पाः"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_onlyQt)
 #: config/projectconfigpage.ui:78
@@ -330,27 +330,29 @@ msgid ""
 "Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB "
 "is missing."
 msgstr ""
+"अ-Qt सञ्चिकानां कृते चेतावनी न उत्सर्जयन्तु, अथवा अन्येषु शब्देषु, यदि -DQT_CORE_LIB "
+"अनुपलब्धा अस्ति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_onlyQt)
 #: config/projectconfigpage.ui:81
 #, kde-format
 msgctxt "@option:check"
 msgid "Only Qt"
-msgstr ""
+msgstr "केवलं Qt"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qt4Compat)
 #: config/projectconfigpage.ui:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disable checks not compatible with Qt 4."
-msgstr ""
+msgstr "Qt 4 इत्यनेन सह न सङ्गतानि जाँचानि अक्षमं कुर्वन्तु ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_qt4Compat)
 #: config/projectconfigpage.ui:91
 #, kde-format
 msgctxt "@option:check"
 msgid "Qt4 compatible"
-msgstr ""
+msgstr "Qt4 संगत"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qtDeveloper)
 #: config/projectconfigpage.ui:98
@@ -358,14 +360,14 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "For running clazy on Qt itself, optional, but honors specific guidelines."
-msgstr ""
+msgstr "Qt इत्यत्र एव क्लेजी चालयितुं, वैकल्पिकं, परन्तु विशिष्टमार्गदर्शिकानां सम्मानं करोति।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
 #: config/projectconfigpage.ui:101
 #, kde-format
 msgctxt "@option:check"
 msgid "Qt developer"
-msgstr ""
+msgstr "Qt विकासक"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_visitImplicitCode)
 #: config/projectconfigpage.ui:109
@@ -376,13 +378,16 @@ msgid ""
 "None of the built-in checks benefit from this, but can be useful for custom "
 "checks."
 msgstr ""
+"कम्पाइलर जनरेटेड् कन्स्ट्रक्टर् इत्यादीनां इम्प्लिट् कोड् इत्यस्य भ्रमणार्थम् ।\n"
+"अन्तर्निर्मितपरीक्षासु कस्यापि अस्मात् लाभः न भवति, परन्तु कस्टम् चेक् कृते उपयोगी भवितुम् "
+"अर्हति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_visitImplicitCode)
 #: config/projectconfigpage.ui:112
 #, kde-format
 msgctxt "@option:check"
 msgid "Visit implicit code"
-msgstr ""
+msgstr "अन्तर्निहित कोडं पश्यन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ignoreIncludedFiles)
 #: config/projectconfigpage.ui:129
@@ -393,20 +398,23 @@ msgid ""
 "includes.\n"
 "Useful for performance reasons."
 msgstr ""
+"केवलं संकलितस्य वर्तमानसञ्चिकायाः चेतावनीः उत्सर्जयन्तु तथा च कस्यापि समावेशस्य अवहेलनां "
+"कुर्वन्तु ।\n"
+"कार्यप्रदर्शनकारणानां कृते उपयोगी।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ignoreIncludedFiles)
 #: config/projectconfigpage.ui:132
 #, kde-format
 msgctxt "@option:check"
 msgid "Ignore included files"
-msgstr ""
+msgstr "समाविष्टसञ्चिकानां अवहेलनां कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
 #: config/projectconfigpage.ui:141
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Header filter:"
-msgstr ""
+msgstr "शीर्षकछिद्रकः : १."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
 #: config/projectconfigpage.ui:149
@@ -417,27 +425,29 @@ msgid ""
 "from.\n"
 "Diagnostics from the main file of each translation unit are always displayed."
 msgstr ""
+"यस्मात् निर्गमनिदानं प्रति शीर्षकाणां नाम मेलनं नियमितव्यञ्जनम् ।\n"
+"प्रत्येकस्य अनुवाद-एककस्य मुख्यसञ्चिकातः निदानं सर्वदा प्रदर्शितं भवति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
 #: config/projectconfigpage.ui:172
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable all fix-its"
-msgstr ""
+msgstr "सर्वाणि fix-its सक्षमं कुर्वन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:179
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fix-its will be applied to a separate file (for unit-test use only)."
-msgstr ""
+msgstr "Fix-its पृथक् सञ्चिकायां (केवलं unit-test उपयोगाय) प्रयुक्तं भविष्यति ।"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:182
 #, kde-format
 msgctxt "@option:check"
 msgid "No-inplace fix-its"
-msgstr ""
+msgstr "नो-इन्प्लेस् फिक्स-इट्स"
 
 #. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
 #: config/projectconfigpage.ui:192
@@ -457,49 +467,49 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Extra Parameters"
-msgstr ""
+msgstr "अतिरिक्त पैरामीटर"
 
 #. i18n: ectx: property (text), widget (QLabel, extraAppendLabel)
 #: config/projectconfigpage.ui:215
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler append:"
-msgstr ""
+msgstr "संकलक परिशिष्टः : १."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
 #: config/projectconfigpage.ui:222
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to append to the compiler command line."
-msgstr ""
+msgstr "संकलक आदेशपङ्क्तौ योजयितुं अतिरिक्ताः मापदण्डाः ।"
 
 #. i18n: ectx: property (text), widget (QLabel, extraPrependLabel)
 #: config/projectconfigpage.ui:232
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler prepend:"
-msgstr ""
+msgstr "संकलक पूर्ववर्ती : १."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
 #: config/projectconfigpage.ui:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to prepend to the compiler command line."
-msgstr ""
+msgstr "संकलक आदेशपङ्क्तौ पूर्वनिर्धारणार्थं अतिरिक्तमापदण्डाः ।"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraClazy)
 #: config/projectconfigpage.ui:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to clazy-standalone."
-msgstr ""
+msgstr "clazy-standalone इत्यस्य अतिरिक्ताः मापदण्डाः ।"
 
 #. i18n: ectx: property (text), widget (QLabel, extraClazyLabel)
 #: config/projectconfigpage.ui:259
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Extra parameters:"
-msgstr ""
+msgstr "अतिरिक्तमापदण्डाः : १."
 
 #: job.cpp:105
 #, kde-format
@@ -540,7 +550,7 @@ msgstr "Read from Clazy विश्लेषणप्रक्रिया अ�
 #, kde-format
 msgctxt "@title:window"
 msgid "Clazy Error"
-msgstr ""
+msgstr "क्लेजी त्रुटिः"
 
 #: jobparameters.cpp:39
 #, kde-format

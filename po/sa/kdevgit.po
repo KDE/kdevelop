@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2024-12-13 20:20+0530\n"
+"PO-Revision-Date: 2024-12-14 01:10+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -142,7 +142,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
-msgstr ""
+msgstr "प्रत्यावर्तयतु"
 
 #: gitmessagehighlighter.cpp:66
 #, kde-format
@@ -164,7 +164,7 @@ msgstr "रेखादीर्घतां %1 वर्णात् अधः 
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Name and Email for Git"
-msgstr ""
+msgstr "Git कृते Name तथा Email विन्यस्यताम्"
 
 #. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
 #: gitnameemaildialog.ui:23
@@ -185,21 +185,21 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Name:"
-msgstr ""
+msgstr "&नामः:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gitnameemaildialog.ui:48
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Emai&l:"
-msgstr ""
+msgstr "ई-मेलः : १."
 
 #. i18n: ectx: property (text), widget (QCheckBox, globalCheckBox)
 #: gitnameemaildialog.ui:78
 #, kde-format
 msgctxt "@option:check"
 msgid "Write to global config"
-msgstr ""
+msgstr "वैश्विकविन्यासे लिखन्तु"
 
 #: gitplugin.cpp:185
 #, kde-format
@@ -215,31 +215,31 @@ msgstr "गिट् कमिट"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
-msgstr ""
+msgstr "एकः शृगालः"
 
 #: gitplugin.cpp:247
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
-msgstr ""
+msgstr "गिट् स्टैशेस्"
 
 #: gitplugin.cpp:248
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
-msgstr ""
+msgstr "Stash Manager"
 
 #: gitplugin.cpp:249
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
-msgstr ""
+msgstr "पुश स्टैश"
 
 #: gitplugin.cpp:250
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
-msgstr ""
+msgstr "पॉप स्टैश"
 
 #: gitplugin.cpp:283
 #, kde-format
@@ -296,77 +296,77 @@ msgstr "परिवर्तनानि लम्बितानि सन्�
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "स्तशः"
 
 #: gitplugin.cpp:901
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
-msgstr ""
+msgstr "स्थापय"
 
 #: rebasedialog.cpp:25
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Selection"
-msgstr ""
+msgstr "शाखा चयन"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RebaseDialog)
 #: rebasedialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Rebase"
-msgstr ""
+msgstr "एकः शृगालः"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rebasedialog.ui:20
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Base branch:"
-msgstr ""
+msgstr "आधारशाखाः १."
 
 #. i18n: ectx: property (text), widget (QPushButton, rebaseButton)
 #: rebasedialog.ui:40
 #, kde-format
 msgctxt "@action:button"
 msgid "Rebase"
-msgstr ""
+msgstr "एकः शृगालः"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_2)
 #: rebasedialog.ui:60
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel"
-msgstr ""
+msgstr "निरसयतु"
 
 #: repostatusmodel.cpp:64
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged changes"
-msgstr ""
+msgstr "मञ्चित परिवर्तनम्"
 
 #: repostatusmodel.cpp:67
 #, kde-format
 msgctxt "Files in a vcs which have changes not yet staged for commit"
 msgid "Unstaged changes"
-msgstr ""
+msgstr "अमञ्चित परिवर्तनम्"
 
 #: repostatusmodel.cpp:70
 #, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflits"
 msgid "Conflicts"
-msgstr ""
+msgstr "विग्रहाः"
 
 #: repostatusmodel.cpp:72
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked files"
-msgstr ""
+msgstr "अनिरीक्षितसञ्चिकाः"
 
 #: repostatusmodel.cpp:82
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
-msgstr ""
+msgstr "मञ्चितः"
 
 #: repostatusmodel.cpp:84
 #, kde-format
@@ -377,7 +377,7 @@ msgstr "commit कृते मञ्चितपरिवर्तनयुक�
 #, kde-format
 msgctxt "Files in a vcs which have changes not checked in to repo"
 msgid "Modified"
-msgstr ""
+msgstr "परिवर्तित"
 
 #: repostatusmodel.cpp:91
 #, kde-format
@@ -388,7 +388,7 @@ msgstr "परिवर्तनसहिताः सञ्चिकाः"
 #, kde-format
 msgctxt "Files in git which have unresolved (merge) conflits"
 msgid "Conflicts"
-msgstr ""
+msgstr "विग्रहाः"
 
 #: repostatusmodel.cpp:98
 #, kde-format
@@ -399,7 +399,7 @@ msgstr "असमाधानं (विलयन) विग्रहयुक�
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "अनिवृत्तः"
 
 #: repostatusmodel.cpp:104
 #, kde-format
@@ -410,127 +410,127 @@ msgstr "VCS मध्ये न अनुसृताः सञ्चिका�
 #, kde-format
 msgctxt "@item file has unstaged changes"
 msgid "Modified (unstaged)"
-msgstr ""
+msgstr "परिवर्तित (अमञ्चित) ९."
 
 #: repostatusmodel.cpp:224
 #, kde-format
 msgctxt "@item file was deleted from worktree"
 msgid "Deleted (unstaged)"
-msgstr ""
+msgstr "विलोपितम् (अमञ्चितम्) २."
 
 #: repostatusmodel.cpp:226
 #, kde-format
 msgctxt "@item file was renamed in worktree"
 msgid "Renamed (unstaged)"
-msgstr ""
+msgstr "नामान्तरितम् (अमञ्चितम्) २."
 
 #: repostatusmodel.cpp:228
 #, kde-format
 msgctxt "@item file was copied in worktree"
 msgid "Copied (unstaged)"
-msgstr ""
+msgstr "प्रतिलिपितः (अमञ्चितः) २."
 
 #: repostatusmodel.cpp:230
 #, kde-format
 msgctxt "@item file has staged changes"
 msgid "Modified (staged)"
-msgstr ""
+msgstr "संशोधित (मञ्चित) ९."
 
 #: repostatusmodel.cpp:232
 #, kde-format
 msgctxt "@item file has both staged and unstaged changes"
 msgid "Modified (unstaged changes)"
-msgstr ""
+msgstr "परिवर्तितं (अमञ्चितपरिवर्तनम्) २."
 
 #: repostatusmodel.cpp:234
 #, kde-format
 msgctxt "@item file has staged changes and was deleted in worktree"
 msgid "Modified (unstaged deletion)"
-msgstr ""
+msgstr "परिवर्तितं (अमञ्चितविलोपनम्) २."
 
 #: repostatusmodel.cpp:237
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
 msgid "Added (unstaged changes)"
-msgstr ""
+msgstr "योजितम् (अमञ्चितपरिवर्तनानि) २."
 
 #: repostatusmodel.cpp:240
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
 msgid "Added (unstaged deletion)"
-msgstr ""
+msgstr "योजितम् (अमञ्चितविलोपनम्) २."
 
 #: repostatusmodel.cpp:243
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and renamed in worktree"
 msgid "Deleted (unstaged rename)"
-msgstr ""
+msgstr "विलोपितम् (अमञ्चितं नामकरणम्) २."
 
 #: repostatusmodel.cpp:246
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and copied in worktree"
 msgid "Deleted (unstaged copy)"
-msgstr ""
+msgstr "विलोपिता (अमञ्चित प्रतिलिपिः) २."
 
 #: repostatusmodel.cpp:248
 #, kde-format
 msgctxt "@item file was renamed in versioncontrolsystem"
 msgid "Renamed (staged)"
-msgstr ""
+msgstr "नामान्तरितम् (मञ्चितम्) २."
 
 #: repostatusmodel.cpp:251
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and has unstaged changes"
 msgid "Renamed (unstaged changes)"
-msgstr ""
+msgstr "पुनर्नामकरणं कृतम् (अमञ्चितपरिवर्तनानि) २."
 
 #: repostatusmodel.cpp:254
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and was deleted in worktree"
 msgid "Renamed (unstaged deletion)"
-msgstr ""
+msgstr "नामान्तरितम् (अमञ्चितविलोपनम्) २."
 
 #: repostatusmodel.cpp:256
 #, kde-format
 msgctxt "@item file was copied in versioncontrolsystem"
 msgid "Copied"
-msgstr ""
+msgstr "प्रतिलिपिकृतम्"
 
 #: repostatusmodel.cpp:259
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and has unstaged changes"
 msgid "Copied (unstaged changes)"
-msgstr ""
+msgstr "प्रतिलिपिकृतम् (अमञ्चितपरिवर्तनानि) २."
 
 #: repostatusmodel.cpp:262
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and was deleted in worktree"
 msgid "Copied (unstaged deletion)"
-msgstr ""
+msgstr "प्रतिलिपितः (अमञ्चितः लोपः) २."
 
 #: repostatusmodel.cpp:264
 #, kde-format
 msgctxt "@item file has unresolved merge conflicts"
 msgid "Unresolved conflicts"
-msgstr ""
+msgstr "अनवधानविग्रहाः"
 
 #: repostatusmodel.cpp:266
 #, kde-format
 msgctxt "@item file is not under vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "अनिवृत्तः"
 
 #: repostatusmodel.cpp:269
 #, kde-format
 msgctxt "file in unknown (invalid) state"
 msgid "Unknown"
-msgstr ""
+msgstr "अज्ञात"
 
 #: repostatusmodel.cpp:362
 #, kde-format
@@ -561,7 +561,7 @@ msgstr "न शाखा"
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2) २."
 
 #: simplecommitform.cpp:40
 #, kde-format
@@ -602,7 +602,7 @@ msgstr "कृपया प्रतिबद्धतां कर्तुं 
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
-msgstr ""
+msgstr "Stash Manager"
 
 #: stashmanagerdialog.cpp:120
 #, kde-format
@@ -614,25 +614,25 @@ msgstr "किं भवान् निश्चयेन '%1' इति स्
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
-msgstr ""
+msgstr "बिन्दुः"
 
 #: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
-msgstr ""
+msgstr "गित् स्तश"
 
 #: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
-msgstr ""
+msgstr "नूतनशाखायाः नाम : १."
 
 #: stashmanagerdialog.cpp:151
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
-msgstr ""
+msgstr "%1. %2: %3"
 
 #: stashmanagerdialog.cpp:161
 #, kde-format
@@ -644,60 +644,60 @@ msgstr "%1 %2 इत्यत्र निर्मितम्"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr ""
+msgstr "चयनितं स्तम्भं निष्कासयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:36
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch and drop the stash"
-msgstr ""
+msgstr "stash इत्यस्य patch इत्येतत् प्रयोजयित्वा stash इत्येतत् पातयन्तु"
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:39
 #, kde-format
 msgctxt "@action:button"
 msgid "Pop"
-msgstr ""
+msgstr "लोक"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, show)
 #: stashmanagerdialog.ui:49
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the content of the stash"
-msgstr ""
+msgstr "स्तम्भस्य सामग्रीं दर्शयतु"
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
 #: stashmanagerdialog.ui:52
 #, kde-format
 msgctxt "@action:button"
 msgid "Show"
-msgstr ""
+msgstr "दर्शयतु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, apply)
 #: stashmanagerdialog.ui:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch"
-msgstr ""
+msgstr "stash इत्यस्य पट्टिकां प्रयोजयन्तु"
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
 #: stashmanagerdialog.ui:85
 #, kde-format
 msgctxt "@action:button"
 msgid "Apply"
-msgstr ""
+msgstr "आचरतु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:108
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new branch and apply the stash there, then drop the stash"
-msgstr ""
+msgstr "नूतनं शाखां निर्माय तत्र स्तम्भं प्रयोजयन्तु, ततः स्तम्भं पातयन्तु"
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:111
 #, kde-format
 msgctxt "@action:button"
 msgid "Branch"
-msgstr ""
+msgstr "शाखा"

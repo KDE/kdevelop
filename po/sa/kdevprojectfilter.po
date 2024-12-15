@@ -21,19 +21,19 @@ msgstr ""
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
-msgstr ""
+msgstr "प्रतिमानम्‌"
 
 #: filtermodel.cpp:78
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
-msgstr ""
+msgstr "लक्ष्यम्"
 
 #: filtermodel.cpp:80
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
-msgstr ""
+msgstr "नामपत्र"
 
 #: filtermodel.cpp:109
 #, kde-format
@@ -69,19 +69,19 @@ msgstr ""
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
-msgstr ""
+msgstr "सञ्चिकाः पुटं च"
 
 #: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
-msgstr ""
+msgstr "पुटम्"
 
 #: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
-msgstr ""
+msgstr "सञ्चिकाः"
 
 #: filtermodel.cpp:143
 #, kde-format
@@ -102,13 +102,13 @@ msgstr ""
 #, kde-format
 msgctxt "@item"
 msgid "Include"
-msgstr ""
+msgstr "निहितः"
 
 #: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"
-msgstr ""
+msgstr "बहिष्कारं कुरुत"
 
 #: projectfilterconfigpage.cpp:172
 #, kde-format
@@ -130,21 +130,21 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Project Filter"
-msgstr ""
+msgstr "परियोजना फ़िल्टर विन्यस्तं कुर्वन्तु"
 
 #: projectfilterconfigpage.cpp:208
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project Filter"
-msgstr ""
+msgstr "परियोजना फ़िल्टर"
 
 #: projectfilterprovider.cpp:77
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "परियोजनातः मदं बहिष्कृतं कुर्वन्तु"
+msgstr[1] "परियोजनातः वस्तूनि बहिष्कृत्य स्थापयन्तु"
 
 #: projectfilterprovider.cpp:116
 #, kde-format
@@ -153,13 +153,17 @@ msgid ""
 msgid_plural ""
 "A filter for the items was added. To undo, use the project filter settings."
 msgstr[0] ""
+"द्रव्यस्य कृते एकं छानकं योजितम् आसीत् । पूर्ववत कर्तुं परियोजना-छिद्र-सेटिंग्स् इत्यस्य उपयोगं "
+"कुर्वन्तु ।"
 msgstr[1] ""
+"वस्तूनाम् एकं छानकं योजितम् आसीत् । पूर्ववत कर्तुं परियोजना-छिद्र-सेटिंग्स् इत्यस्य उपयोगं कुर्वन्तु "
+"।"
 
 #: projectfilterprovider.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"
-msgstr ""
+msgstr "परियोजना फ़िल्टर योजितम्"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectfiltersettings.ui:20
@@ -176,25 +180,25 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Add"
-msgstr ""
+msgstr "संयोजयति"
 
 #. i18n: ectx: property (text), widget (QPushButton, remove)
 #: projectfiltersettings.ui:47
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr ""
+msgstr "अपाकरोति"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveUp)
 #: projectfiltersettings.ui:57
 #, kde-format
 msgctxt "@action:button"
 msgid "Move Up"
-msgstr ""
+msgstr "उपरि गच्छतु"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveDown)
 #: projectfiltersettings.ui:67
 #, kde-format
 msgctxt "@action:button"
 msgid "Move Down"
-msgstr ""
+msgstr "अधः गच्छतु"

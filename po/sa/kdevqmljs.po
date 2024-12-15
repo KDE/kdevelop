@@ -176,7 +176,7 @@ msgstr "अवधिः मिलीसेकेण्ड् मध्ये"
 #, kde-format
 msgctxt "example text to test a font"
 msgid "The lazy dog jumps over<br>the quick brown fox."
-msgstr ""
+msgstr "आलस्यं श्वः कूर्दति<br> द्रुतं श्यामशृगालम्।"
 
 #: navigation/propertywidgets/FontFamily.qml:37
 #, kde-format

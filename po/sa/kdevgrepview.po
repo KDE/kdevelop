@@ -21,50 +21,50 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
-msgstr ""
+msgstr "सर्वाणि Open Files"
 
 #: grepdialog.cpp:56
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
-msgstr ""
+msgstr "सर्वाणि मुक्त परियोजनानि"
 
 #: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
-msgstr ""
+msgstr "सञ्चिकासु अन्वेष्टुम्/प्रतिस्थापनं कुर्वन्तु"
 
 #: grepdialog.cpp:268
 #, kde-format
 msgctxt "@action:button"
 msgid "Search..."
-msgstr ""
+msgstr "अन्वेषण..."
 
 #: grepdialog.cpp:336
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
-msgstr ""
+msgstr "अन्वेषणार्थं Directory इति चिनोतु"
 
 #: grepdialog.cpp:609
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2, तथा %1 अधिकं द्रव्यम्"
+msgstr[1] "%2, %1 च अधिकानि वस्तूनि"
 
 #: grepdialog.cpp:625
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
-msgstr ""
+msgstr "%2 मध्ये \"%1\" इति अन्वेष्टुम्"
 
 #: grepdialog.cpp:630
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
-msgstr ""
+msgstr "%2 (समये %3) मध्ये \"%1\" इति अन्वेष्टुम् ।"
 
 #: grepjob.cpp:156
 #, kde-format
@@ -82,14 +82,14 @@ msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
 "https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
 msgid "Captures are not allowed in pattern string"
-msgstr ""
+msgstr "pattern string इत्यस्मिन् captures इत्यस्य अनुमतिः नास्ति"
 
 #: grepjob.cpp:210
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "एकस्मिन् सञ्चिकायां <b>%2</b> इत्यस्य अन्वेषणम्"
+msgstr[1] "%1 सञ्चिकासु <b>%2</b> इत्यस्य अन्वेषणम्"
 
 #: grepjob.cpp:236
 #, kde-format
@@ -125,28 +125,28 @@ msgstr "रेखा %1: . "
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<b>१</b> मेलः"
+msgstr[1] "<b>%1</b> मेलति"
 
 #: grepoutputmodel.cpp:401
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<b>१</b> सञ्चिका"
+msgstr[1] "<b>%1</b> सञ्चिकाः"
 
 #: grepoutputmodel.cpp:403
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
-msgstr ""
+msgstr "<b>%2 मध्ये %1</b>"
 
 #: grepoutputmodel.cpp:405
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2: 1 मेलम्"
+msgstr[1] "%2: %1 मेलति"
 
 #: grepoutputmodel.cpp:475
 #, kde-format
@@ -155,54 +155,55 @@ msgctxt ""
 "its row and column"
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr ""
+"%3:%4:%5 इत्यस्मिन् <b>%1 इत्यस्य</b> स्थाने <b>%2</b> इत्यनेन प्रतिस्थापनं कर्तुं असफलम्"
 
 #: grepoutputview.cpp:71
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
-msgstr ""
+msgstr "आउटपुट् दृश्यं अन्वेष्टुम्/प्रतिस्थापयतु"
 
 #: grepoutputview.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
-msgstr ""
+msgstr "&पूर्व मद"
 
 #: grepoutputview.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "&Next Item"
-msgstr ""
+msgstr "&अगला मद"
 
 #: grepoutputview.cpp:80
 #, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
-msgstr ""
+msgstr "C&ollapse सर्वे"
 
 #: grepoutputview.cpp:82
 #, kde-format
 msgctxt "@action"
 msgid "&Expand All"
-msgstr ""
+msgstr "&सर्वं विस्तारयतु"
 
 #: grepoutputview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "New &Search"
-msgstr ""
+msgstr "नवीन &अन्वेषण"
 
 #: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
-msgstr ""
+msgstr "ताजगी"
 
 #: grepoutputview.cpp:89
 #, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
-msgstr ""
+msgstr "अन्वेषण इतिहासं स्वच्छं कुर्वन्तु"
 
 #: grepoutputview.cpp:324
 #, kde-format
@@ -213,53 +214,53 @@ msgstr "किं भवन्तः रिक्तं तारं प्र�
 #, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
-msgstr ""
+msgstr "प्रतिस्थापनम् आरभत"
 
 #: grepoutputview.cpp:326
 #, kde-format
 msgctxt "@action:button"
 msgid "Replace"
-msgstr ""
+msgstr "प्रत्याहृ"
 
 #. i18n: ectx: property (text), widget (QLabel, replacementLabel)
 #: grepoutputview.ui:41
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Replacement &text:"
-msgstr ""
+msgstr "प्रतिस्थापनम् &पाठः : १."
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
 #: grepoutputview.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement pattern"
-msgstr ""
+msgstr "प्रतिस्थापनप्रतिमानं प्रविशन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
 #: grepoutputview.ui:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply replacement on selected items"
-msgstr ""
+msgstr "चयनितवस्तूनाम् प्रतिस्थापनं प्रयोजयन्तु"
 
 #. i18n: ectx: property (text), widget (QPushButton, applyButton)
 #: grepoutputview.ui:79
 #, kde-format
 msgctxt "@action:button"
 msgid "&Replace"
-msgstr ""
+msgstr "&प्रत्याहृ"
 
 #: grepviewplugin.cpp:79
 #, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
-msgstr ""
+msgstr "सञ्चिकासु अन्वेष्टुम्/प्रतिस्थापनं कुर्वन्तु..."
 
 #: grepviewplugin.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
-msgstr ""
+msgstr "अनेकसञ्चिकासु व्यञ्जनानि अन्वेष्टुम्"
 
 #: grepviewplugin.cpp:84
 #, kde-format
@@ -270,25 +271,29 @@ msgid ""
 "you specify. Matches will be displayed, you can switch to a match directly. "
 "You can also do replacement."
 msgstr ""
+"'Find/Replace in Files' इति संवादं उद्घाटयति । तत्र भवान् नियमितव्यञ्जनं प्रविष्टुं "
+"शक्नोति यत् ततः भवता निर्दिष्टेषु निर्देशिकासु सर्वासु सञ्चिकासु अन्वेष्यते । मेलनानि "
+"प्रदर्शितानि भविष्यन्ति, भवान् प्रत्यक्षतया मेलनं प्रति स्विच् कर्तुं शक्नोति । भवन्तः "
+"प्रतिस्थापनमपि कर्तुं शक्नुवन्ति।"
 
 #: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
-msgstr ""
+msgstr "अस्मिन् फोल्डर् मध्ये अन्वेष्टुम्/प्रतिस्थापनं कुर्वन्तु..."
 
 #: grepviewplugin.cpp:143
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."
-msgstr ""
+msgstr "&सञ्चिकासु अन्वेष्टुम्/प्रतिस्थापनं कुर्वन्तु..."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
 #: grepwidget.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the regular expression you want to search for"
-msgstr ""
+msgstr "यत् नियमितव्यञ्जनं भवन्तः अन्वेष्टुम् इच्छन्ति तत् प्रविशन्तु"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
 #: grepwidget.ui:59
@@ -378,20 +383,92 @@ msgid ""
 "underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" font-"
 "style:italic;\">man pcresyntax.</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /"
+"><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"> अत्र यत् नियमितव्यञ्जनं अन्वेष्टुम् इच्छति तत् प्रविशतु । </p><p style=\" "
+"margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-"
+"block-indent:0; text-indent:0px;\"> यदि भवान् अधः &quot;Regular "
+"Expression&quot; इति न चिनोति तर्हि एतत् कच्चा स्ट्रिंग् इति मन्यते । सर्वे मेटावर्णाः "
+"पलायिताः इति भावः । </p><p style=\" margin-top:12px; margin-bottom:12px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> "
+"सम्भाव्यमेटावर्णाः सन्ति : १. </p><ul style=\"margin-top: 0px; margin-bottom: "
+"0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" "
+"margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-"
+"block-indent:0; text-indent:0px;\"> <span style=\" font-weight:600;\">.</"
+"span> - कस्यापि वर्णस्य मेलनं करोति </li><li style=\" margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"> <span style=\" font-weight:600;\">^</span> - रेखायाः आरम्भस्य "
+"मेलनं करोति </li><li style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> <span "
+"style=\" font-weight:600;\">$</span> - रेखायाः अन्ते मेलनं करोति </li><li style="
+"\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-"
+"block-indent:0; text-indent:0px;\"> <span style=\" font-weight:600;\">\\b</"
+"span> - शब्दसीमायाः मेलनं करोति </li><li style=\" margin-top:0px; margin-"
+"bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"> <span style=\" font-weight:600;\">\\s</span> - कस्यापि "
+"श्वेतस्थानवर्णस्य मेलनं करोति </li></ul><p style=\" margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"> निम्नलिखितपुनरावृत्तिसञ्चालकाः विद्यन्ते । </p><ul style=\"margin-"
+"top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-"
+"indent: 1;\"><li style=\" margin-top:12px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> <span "
+"style=\" font-weight:600;\">?</span> - पूर्ववर्ती द्रव्यं अधिकतया एकवारं मेलनं भवति </"
+"li><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"> <span style=\" font-"
+"weight:600;\">*</span> - पूर्ववर्ती द्रव्यं शून्यं वा अधिकवारं वा मेलनं भवति </li><li "
+"style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"> <span style=\" font-"
+"weight:600;\">+</span> - पूर्ववर्ती द्रव्यं एकवारं वा अधिकं वा मेलनं भवति </li><li "
+"style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"> <span style=\" font-"
+"weight:600;\">{</span> <span style=\" font-weight:600; font-style:italic;"
+"\">n</span> <span style=\" font-weight:600;\">}</span> - पूर्ववर्ती द्रव्यं सम्यक् "
+"<span style=\" font-style:italic;\">n</span> वारं मेलनं भवति </li><li style=\" "
+"margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-"
+"block-indent:0; text-indent:0px;\"> <span style=\" font-weight:600;\">{</"
+"span> <span style=\" font-weight:600; font-style:italic;\">n</span> <span "
+"style=\" font-weight:600;\">,}</span> - पूर्ववर्ती द्रव्यं <span style=\" font-"
+"style:italic;\">n</span> वा अधिकवारं मेलनं भवति </li><li style=\" margin-"
+"top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+"indent:0; text-indent:0px;\"> <span style=\" font-weight:600;\">{,</span> "
+"<span style=\" font-weight:600; font-style:italic;\">n</span> <span style=\" "
+"font-weight:600;\">}</span> - पूर्ववर्ती मदस्य अधिकतमं <span style=\" font-style:"
+"italic;\">n</span> वारं मेलनं भवति </li><li style=\" margin-top:0px; margin-"
+"bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"> <span style=\" font-weight:600;\">{</span> <span style=\" "
+"font-weight:600; font-style:italic;\">n</span> <span style=\" font-"
+"weight:600;\">,</span> <span style=\" font-weight:600; font-style:italic;"
+"\">m</span> <span style=\" font-weight:600;\">}</span> - पूर्ववर्ती द्रव्यं "
+"न्यूनातिन्यूनं <span style=\" font-style:italic;\">n</span> , परन्तु अधिकतमं <span "
+"style=\" font-style:italic;\">m</span> वारं मेलनं भवति । </li></ul><p style=\" "
+"margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-"
+"block-indent:0; text-indent:0px;\"> अपि च, कोष्ठकयुक्तानां उपअभिव्यक्तीनां "
+"पृष्ठसन्दर्भाः \\ <span style=\" font-style:italic;\">n</span> संकेतनस्य माध्यमेन "
+"उपलभ्यन्ते । </p><p style=\" margin-top:12px; margin-bottom:12px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> "
+"अधिकसन्दर्भार्थं <a href=\"https://www.pcre.org/\"><span style=\" text-"
+"decoration: underline; color:#0057ae;\">www.pcre.org</span></a> अथवा <span "
+"style=\" font-style:italic;\">man pcresyntax इति पश्यन्तु ।</span></p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: grepwidget.ui:69
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Template:"
-msgstr ""
+msgstr "टेम्पलेट:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, templateEdit)
 #: grepwidget.ui:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the regular expression template."
-msgstr ""
+msgstr "एषः नियमितव्यञ्जनस्य टेम्पलेट् अस्ति ।"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
 #: grepwidget.ui:85
@@ -401,27 +478,29 @@ msgid ""
 "This is the regular expression template. <i>%s</i> will be replaced by the "
 "pattern, while <i>%%</i> will be replaced by <i>%</i>."
 msgstr ""
+"एषः नियमितव्यञ्जनस्य टेम्पलेट् अस्ति । <i>%s इत्यस्य</i> स्थाने प्रतिरूपं भविष्यति, <i>%% "
+"इत्यस्य</i> स्थाने <i>%</i> स्थापनं भविष्यति ।"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
 #: grepwidget.ui:92
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Quickly select location from a set of directories"
-msgstr ""
+msgstr "निर्देशिकानां समुच्चयात् शीघ्रं स्थानं चिनोतु"
 
 #. i18n: ectx: property (text), widget (QPushButton, syncButton)
 #: grepwidget.ui:95
 #, kde-format
 msgctxt "@action:button"
 msgid "Quick Select"
-msgstr ""
+msgstr "त्वरित चयन करें"
 
 #. i18n: ectx: property (text), widget (QLabel, depthLabel)
 #: grepwidget.ui:102
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Depth:"
-msgstr ""
+msgstr "गहनता:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:115
@@ -447,49 +526,49 @@ msgstr ""
 #, kde-format
 msgctxt "@item full recursion"
 msgid "Full"
-msgstr ""
+msgstr "पूर्ण"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: grepwidget.ui:134
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pattern:"
-msgstr ""
+msgstr "प्रतिमानम्‌:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: grepwidget.ui:147
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
-msgstr ""
+msgstr "सञ्चिकाः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: grepwidget.ui:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Case sensitive:"
-msgstr ""
+msgstr "प्रकरणसंवेदनशीलः : १."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
 #: grepwidget.ui:179
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Case-sensitive searching."
-msgstr ""
+msgstr "प्रकरणसंवेदनशीलं अन्वेषणम्।"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: grepwidget.ui:192
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
-msgstr ""
+msgstr "स्थान (स्थान) : १."
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
 #: grepwidget.ui:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files filter"
-msgstr ""
+msgstr "सञ्चिकाः छानयन्ति"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
 #: grepwidget.ui:208
@@ -499,20 +578,22 @@ msgid ""
 "Enter the file name pattern of the files to search here. You may give "
 "several patterns separated by commas or spaces."
 msgstr ""
+"अत्र अन्वेष्टुं सञ्चिकानां सञ्चिकानामप्रतिमानं प्रविशन्तु । अल्पविरामेन वा रिक्तस्थानेन वा "
+"विभक्ताः अनेकाः प्रतिमानाः दातुं शक्नुवन्ति ।"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: grepwidget.ui:221
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
-msgstr ""
+msgstr "बहिष्कृत्य : १."
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
-msgstr ""
+msgstr "बहिष्कारं कर्तुं सञ्चिकानां प्रतिरूपम्"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:237
@@ -524,41 +605,45 @@ msgid ""
 "is internally surrounded by asterisks, so that each pattern can match parts "
 "of the file paths.</p>"
 msgstr ""
+"अत्र अन्वेषणात् बहिष्कृत्य सञ्चिकानां सञ्चिकानामप्रतिमानं प्रविशन्तु । अल्पविरामेन वा "
+"रिक्तस्थानेन वा विभक्ताः अनेकाः प्रतिमानाः दातुं शक्नुवन्ति ।<p> प्रत्येकं प्रतिरूपं आन्तरिकरूपेण "
+"ताराचिह्नैः परितः भवति, येन प्रत्येकं प्रतिरूपं सञ्चिकामार्गस्य भागैः सह मेलनं कर्तुं शक्नोति ।</"
+"p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: grepwidget.ui:317
 #, kde-format
 msgctxt "@option:check"
 msgid "Regular expression:"
-msgstr ""
+msgstr "नियमित अभिव्यक्तिः १."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
 #: grepwidget.ui:330
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
-msgstr ""
+msgstr "नियमितव्यञ्जनं सक्षमं निष्क्रियं वा कुर्वन्तु।"
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
 #: grepwidget.ui:343
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
-msgstr ""
+msgstr "परियोजनासञ्चिकासु सीमाः : १."
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
 #: grepwidget.ui:372
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
-msgstr ""
+msgstr "प्रतिस्थापन टेम्पलेट् प्रविष्टं कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: grepwidget.ui:379
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Replacement template:"
-msgstr ""
+msgstr "प्रतिस्थापन टेम्पलेट:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
 #: grepwidget.ui:392
@@ -568,10 +653,12 @@ msgid ""
 "Select the location where you want to search. It can be a directory, a file, "
 "or a semicolon separated (without spaces) list of directories/files."
 msgstr ""
+"यत्र अन्वेषणं कर्तुम् इच्छति तत्र स्थानं चिनोतु । इदं निर्देशिका, सञ्चिका, अथवा "
+"अर्धविरामविभक्तं (अन्तरिक्तं विना) निर्देशिकानां/सञ्चिकानां सूची भवितुम् अर्हति ।"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: grepwidget.ui:417
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"
-msgstr ""
+msgstr "अन्वेषणार्थं निर्देशिकां चिनोतु"

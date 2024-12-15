@@ -39,63 +39,63 @@ msgstr "निन्जा"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Ninja settings"
-msgstr ""
+msgstr "निन्जा सेटिंग्स् विन्यस्यताम्"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: ninjaconfig.ui:32
 #, kde-format
 msgctxt "@option:check"
 msgid "&Display commands but do not execute them:"
-msgstr ""
+msgstr "&आदेशान् प्रदर्शयन्तु परन्तु तान् न निष्पादयन्तु:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_31)
 #: ninjaconfig.ui:52
 #, kde-format
 msgctxt "@option:check"
 msgid "Install as &root:"
-msgstr ""
+msgstr "&root इति रूपेण संस्थापयन्तु:"
 
 #. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
 #: ninjaconfig.ui:75
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Root installation &command:"
-msgstr ""
+msgstr "मूलस्थापनम् &command:"
 
 #. i18n: ectx: property (text), widget (QLabel, jobOverrideLabel)
 #: ninjaconfig.ui:110
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "&Number of simultaneous jobs:"
-msgstr ""
+msgstr "&युगपत् कार्याणां संख्या : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: ninjaconfig.ui:133
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Count of &errors to be tolerated:"
-msgstr ""
+msgstr "सहनीयानां &त्रुटीनां गणना:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ninjaconfig.ui:153
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Additional ninja &options:"
-msgstr ""
+msgstr "अतिरिक्त निन्जा &विकल्प: ."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ninjaconfig.ui:173
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Active environment &profile:"
-msgstr ""
+msgstr "सक्रिय वातावरण & प्रोफाइल:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ninjaconfig.ui:208
 #, kde-format
 msgctxt "@option:check"
 msgid "O&verride number of jobs:"
-msgstr ""
+msgstr "O&verride कार्याणां संख्या: ."
 
 #: ninjajob.cpp:72
 #, kde-format

@@ -20,7 +20,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "QMake"
-msgstr ""
+msgstr "QMake"
 
 #: qmakebuilderpreferences.cpp:139
 #, kde-format
@@ -35,7 +35,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "न विलोपयतु"
 
 #: qmakebuilderpreferences.cpp:148
 #, kde-format
@@ -47,13 +47,13 @@ msgstr "न निष्कासयितुं शक्यते: %1."
 #, kde-format
 msgctxt "@title:group"
 msgid "Build Settings"
-msgstr ""
+msgstr "सेटिंग्स् निर्माणं कुर्वन्तु"
 
 #: qmakejob.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "QMake"
-msgstr ""
+msgstr "QMake"
 
 #: qmakejob.cpp:43
 #, kde-format

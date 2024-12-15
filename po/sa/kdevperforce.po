@@ -50,7 +50,7 @@ msgstr "अस्य कार्यस्य कृते निर्देश
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "Edit"
-msgstr ""
+msgstr "सम्पादन"
 
 #: perforceplugin.cpp:671
 #, kde-format
@@ -81,14 +81,14 @@ msgstr "P4 क्लायन्ट् त्रुटिसङ्केते�
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr ""
+msgstr "स्रोतनिर्देशिका : १."
 
 #. i18n: ectx: property (text), widget (QLabel, labelExec)
 #: ui/perforceimportmetadatawidget.ui:39
 #, kde-format
 msgctxt "@label:textbox"
 msgid "P4 executable:"
-msgstr ""
+msgstr "P4 निष्पादनीयः : ."
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4port)
 #: ui/perforceimportmetadatawidget.ui:49
@@ -106,6 +106,9 @@ msgid ""
 "running on the same host. Port numbers must be in the range 1024 through "
 "32767"
 msgstr ""
+"Perforce अनुप्रयोगानाम् कृते P4PORT इत्यस्य प्रारूपं protocol:host:port, अथवा स्वयमेव "
+"पोर्ट् अस्ति यदि Perforce अनुप्रयोगः संस्करणसेवा च द्वौ अपि एकस्मिन् होस्ट् मध्ये चालितौ "
+"स्तः । पोर्ट्-सङ्ख्याः १०२४ तः ३२७६७ पर्यन्तं भवितुमर्हन्ति"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4user)
 #: ui/perforceimportmetadatawidget.ui:90
@@ -121,6 +124,8 @@ msgid ""
 "Current Perforce user name. By default, the Perforce username is the same as "
 "the OS username"
 msgstr ""
+"वर्तमान Perforce उपयोक्तृनाम । पूर्वनिर्धारितरूपेण, Perforce उपयोक्तृनाम OS उपयोक्तृनाम "
+"इव भवति"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4client)
 #: ui/perforceimportmetadatawidget.ui:104
@@ -133,7 +138,7 @@ msgstr "P4 ग्राहक"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Name of current client workspace on the Perforce server"
-msgstr ""
+msgstr "Perforce सर्वरे वर्तमानक्लायन्ट् कार्यक्षेत्रस्य नाम"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4config)
 #: ui/perforceimportmetadatawidget.ui:118
@@ -149,24 +154,26 @@ msgid ""
 "Contains a file name without a path. The specified file is used to store "
 "other Perforce environment variables "
 msgstr ""
+"मार्गं विना सञ्चिकानाम समाविष्टम् अस्ति । निर्दिष्टसञ्चिका अन्येषां Perforce "
+"वातावरणचरानाम् संग्रहणार्थं उपयुज्यते "
 
 #. i18n: ectx: property (text), widget (QPushButton, testP4setupButton)
 #: ui/perforceimportmetadatawidget.ui:141
 #, kde-format
 msgctxt "@action:button"
 msgid "Test"
-msgstr ""
+msgstr "परीक्षा"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonConfig)
 #: ui/perforceimportmetadatawidget.ui:197
 #, kde-format
 msgctxt "@option:radio"
 msgid "Config File"
-msgstr ""
+msgstr "सञ्चिकां विन्यस्तं कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonVariables)
 #: ui/perforceimportmetadatawidget.ui:213
 #, kde-format
 msgctxt "@option:radio"
 msgid "User/Port Config"
-msgstr ""
+msgstr "उपयोक्ता/पोर्ट् Config"

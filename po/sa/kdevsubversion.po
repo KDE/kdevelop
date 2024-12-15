@@ -20,13 +20,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy..."
-msgstr ""
+msgstr "प्रतिलिपि..."
 
 #: kdevsvnplugin.cpp:341
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Move..."
-msgstr ""
+msgstr "चलनम्..."
 
 #: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
 #, kde-format
@@ -148,25 +148,25 @@ msgstr "info job निष्पादयितुं पर्याप्त�
 #, kde-format
 msgctxt "A file was marked to be added to svn"
 msgid "Added %1"
-msgstr ""
+msgstr "%1 योजितम्"
 
 #: svninternaljobbase.cpp:89
 #, kde-format
 msgctxt "A file was marked for deletion from svn"
 msgid "Deleted %1"
-msgstr ""
+msgstr "%1 विलोपितम्"
 
 #: svninternaljobbase.cpp:93
 #, kde-format
 msgctxt "A file was deleted during an svn update operation"
 msgid "Deleted %1"
-msgstr ""
+msgstr "%1 विलोपितम्"
 
 #: svninternaljobbase.cpp:96
 #, kde-format
 msgctxt "A file was added during an svn update operation"
 msgid "Added %1"
-msgstr ""
+msgstr "%1 योजितम्"
 
 #: svninternaljobbase.cpp:136
 #, kde-format
@@ -316,25 +316,25 @@ msgstr "revert निष्पादयितुं पर्याप्तं 
 #, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate"
-msgstr ""
+msgstr "SSL सर्वर प्रमाणपत्रम्"
 
 #: svnssldialog.cpp:30
 #, kde-format
 msgctxt "@action:button"
 msgid "Trust Permanently"
-msgstr ""
+msgstr "स्थायिरूपेण विश्वासः"
 
 #: svnssldialog.cpp:31
 #, kde-format
 msgctxt "@action:button"
 msgid "Trust Temporarily"
-msgstr ""
+msgstr "अस्थायी रूप से विश्वास"
 
 #: svnssldialog.cpp:62
 #, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate: %1"
-msgstr ""
+msgstr "SSL सर्वर प्रमाणपत्रम्: %1"
 
 #: svnstatusjob.cpp:117
 #, kde-format
@@ -361,35 +361,35 @@ msgstr "अद्यतनं निष्पादयितुं पर्य�
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr ""
+msgstr "स्रोतनिर्देशिका : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/importmetadatawidget.ui:27
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Repository:"
-msgstr ""
+msgstr "भण्डारः : १."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:34
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repository location"
-msgstr ""
+msgstr "भण्डारस्थानम्"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:37
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the repository into which the source directory is imported"
-msgstr ""
+msgstr "यस्मिन् भण्डारे स्रोतनिर्देशिका आयातिता अस्ति तत् भण्डारं चिनोतु"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/importmetadatawidget.ui:57
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
-msgstr ""
+msgstr "प्रतिबद्धसन्देशः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, msgLabel)
 #: ui/ssltrustdialog.ui:17
@@ -412,14 +412,14 @@ msgstr "प्रमाणीकरणं किमर्थं विफलं 
 #, kde-format
 msgctxt "@title:group"
 msgid "Certificate Information"
-msgstr ""
+msgstr "प्रमाणपत्र सूचना"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/ssltrustdialog.ui:64
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Hostname:"
-msgstr ""
+msgstr "होस्टनाम : १."
 
 #. i18n: ectx: property (text), widget (QLabel, hostname)
 #: ui/ssltrustdialog.ui:77
@@ -432,7 +432,7 @@ msgstr "someserver इति"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Issuer:"
-msgstr ""
+msgstr "जारीकर्ता : १."
 
 #. i18n: ectx: property (text), widget (QLabel, issuer)
 #: ui/ssltrustdialog.ui:97
@@ -445,7 +445,7 @@ msgstr "someissuer"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Valid from:"
-msgstr ""
+msgstr "तः वैधम् : १."
 
 #. i18n: ectx: property (text), widget (QLabel, validFrom)
 #: ui/ssltrustdialog.ui:117
@@ -458,7 +458,7 @@ msgstr "वैधतः"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Valid until:"
-msgstr ""
+msgstr "यावत् वैधम् : १."
 
 #. i18n: ectx: property (text), widget (QLabel, validUntil)
 #: ui/ssltrustdialog.ui:137
@@ -471,7 +471,7 @@ msgstr "यावत् वैधम्"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Fingerprint:"
-msgstr ""
+msgstr "अङ्गुलिचिह्नम् : १."
 
 #. i18n: ectx: property (text), widget (QLabel, fingerprint)
 #: ui/ssltrustdialog.ui:157

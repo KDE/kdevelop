@@ -21,7 +21,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:menu"
 msgid "Permissions"
-msgstr ""
+msgstr "अनुमतिः"
 
 #. i18n: ectx: Menu (view)
 #: kdevokteta.rc:39
@@ -50,16 +50,16 @@ msgstr "\"%1\" इति दस्तावेजे अरक्षिताः
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
-msgstr ""
+msgstr "दस्तावेजं बन्दं कुर्वन्तु"
 
 #: oktetaplugin.cpp:91
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hex Editor"
-msgstr ""
+msgstr "हेक्स सम्पादक"
 
 #: oktetawidget.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Manage Byte Array View Profiles..."
-msgstr ""
+msgstr "Byte Array प्रबन्धयन्तु प्रोफाइलं पश्यन्तु..."

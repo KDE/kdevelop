@@ -30,7 +30,7 @@ msgstr "एलएलडीबी"
 #, kde-format
 msgctxt "@title:window"
 msgid "LLDB Console"
-msgstr ""
+msgstr "LLDB Console इति"
 
 #: debugsession.cpp:136
 #, kde-format
@@ -105,143 +105,143 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "वर्तमान सत्रं निरस्तं कुर्वन्तु"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
 msgctxt "@title:tab"
 msgid "LLDB Configuration"
-msgstr ""
+msgstr "LLDB विन्यासः"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
 #: widgets/lldbconfigpage.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
-msgstr ""
+msgstr "त्रुटिनिवारणकम्"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/lldbconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger executable:"
-msgstr ""
+msgstr "त्रुटिनिवारणीयः कार्यान्वयनीयः : १."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
 #: widgets/lldbconfigpage.ui:42
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to lldb-mi executable..."
-msgstr ""
+msgstr "lldb-mi कार्यान्वयनीयस्य मार्गं अधिलिखयतु..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/lldbconfigpage.ui:49
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Additional arguments:"
-msgstr ""
+msgstr "अतिरिक्त तर्काः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: widgets/lldbconfigpage.ui:60
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
-msgstr ""
+msgstr "पर्यावरणम्‌:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
 #: widgets/lldbconfigpage.ui:85
 #, kde-format
 msgctxt "@option:check"
 msgid "Inherit system environment"
-msgstr ""
+msgstr "प्रणाली वातावरणं उत्तराधिकारं प्राप्नुवन्तु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
 #: widgets/lldbconfigpage.ui:95
 #, kde-format
 msgctxt "@title:group"
 msgid "Options"
-msgstr ""
+msgstr "विकल्पाः"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: widgets/lldbconfigpage.ui:101
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Config script:"
-msgstr ""
+msgstr "स्क्रिप्ट् विन्यस्तम् : १."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
 #: widgets/lldbconfigpage.ui:108
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/lldb/config/script"
-msgstr ""
+msgstr "/मार्ग/lldb/विन्यास/स्क्रिप्ट्"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: widgets/lldbconfigpage.ui:115
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Start debugger with:"
-msgstr ""
+msgstr "त्रुटिनिवारणं आरभत:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:123
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
-msgstr ""
+msgstr "अनुप्रयोग आउटपुट"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:128
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "LLDB Console"
-msgstr ""
+msgstr "LLDB Console इति"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:133
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
-msgstr ""
+msgstr "फ्रेम स्टैक"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: widgets/lldbconfigpage.ui:141
 #, kde-format
 msgctxt "@option:check"
 msgid "Break on start:"
-msgstr ""
+msgstr "आरम्भे विरामः : १."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
 #: widgets/lldbconfigpage.ui:158
 #, kde-format
 msgctxt "@title:group"
 msgid "Remo&te Debugging"
-msgstr ""
+msgstr "Remo&te त्रुटिनिवारणम्"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: widgets/lldbconfigpage.ui:167
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote server:"
-msgstr ""
+msgstr "दूरस्थः सर्वरः : १."
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
 #: widgets/lldbconfigpage.ui:174
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "host:port"
-msgstr ""
+msgstr "host:port"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: widgets/lldbconfigpage.ui:181
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote work path:"
-msgstr ""
+msgstr "दूरस्थः कार्यमार्गः : १."
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
 #: widgets/lldbconfigpage.ui:188
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
-msgstr ""
+msgstr "/मार्गः/एकं/यन्त्रे/लेखनीय/निर्देशिकां प्रति"

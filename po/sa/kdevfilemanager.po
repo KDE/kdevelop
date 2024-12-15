@@ -20,31 +20,31 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "File System"
-msgstr ""
+msgstr "सञ्चिकातन्त्रम्"
 
 #: filemanager.cpp:127
 #, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
-msgstr ""
+msgstr "बुकमार्क्स"
 
 #: filemanager.cpp:134
 #, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
-msgstr ""
+msgstr "वर्तमान दस्तावेज निर्देशिका"
 
 #: filemanager.cpp:151
 #, kde-format
 msgctxt "@action"
 msgid "New File..."
-msgstr ""
+msgstr "नवीनं सञ्चिका..."
 
 #: filemanager.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
-msgstr ""
+msgstr "नूतनं सञ्चिकां रचयन्तु"
 
 #: filemanager.cpp:174
 #, kde-format

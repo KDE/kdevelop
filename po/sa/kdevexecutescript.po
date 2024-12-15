@@ -83,13 +83,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Type or select an interpreter..."
-msgstr ""
+msgstr "व्याख्याकारं टङ्कयन्तु अथवा चयनं कुर्वन्तु..."
 
 #: scriptappconfig.cpp:116
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Script Application"
-msgstr ""
+msgstr "स्क्रिप्ट् अनुप्रयोगं विन्यस्तं कुर्वन्तु"
 
 #: scriptappconfig.cpp:126
 #, kde-format
@@ -106,112 +106,112 @@ msgstr "स्क्रिप्ट अनुप्रयोग"
 #, kde-format
 msgctxt "@title:group"
 msgid "Interpreter"
-msgstr ""
+msgstr "व्याख्याता"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: scriptappconfig.ui:44
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Script interpreter:"
-msgstr ""
+msgstr "लिपि व्याख्याकारः : १."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: scriptappconfig.ui:95
 #, kde-format
 msgctxt "@title:group"
 msgid "Script file"
-msgstr ""
+msgstr "स्क्रिप्ट् सञ्चिका"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runCurrentFile)
 #: scriptappconfig.ui:101
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run the file currently open in the editor"
-msgstr ""
+msgstr "सम्पादके सम्प्रति उद्घाटितां सञ्चिकां चालयन्तु"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runFixedFile)
 #: scriptappconfig.ui:111
 #, kde-format
 msgctxt "@option:radio"
 msgid "Always run the same file"
-msgstr ""
+msgstr "सर्वदा एकमेव सञ्चिकां चालयन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, scriptLabel)
 #: scriptappconfig.ui:123
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Script file:"
-msgstr ""
+msgstr "स्क्रिप्ट् सञ्चिका : १."
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: scriptappconfig.ui:133
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the absolute path to the script to run"
-msgstr ""
+msgstr "चालयितुं स्क्रिप्ट् इत्यस्य निरपेक्षमार्गं प्रविशन्तु"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
 #: scriptappconfig.ui:136
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/script"
-msgstr ""
+msgstr "/मार्गः/स्क्रिप्ट् प्रति"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: scriptappconfig.ui:148
 #, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
-msgstr ""
+msgstr "व्यवहार"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: scriptappconfig.ui:160
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
-msgstr ""
+msgstr "तर्काः : १."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: scriptappconfig.ui:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter arguments to give to the executable"
-msgstr ""
+msgstr "एक्जीक्यूटिव् इत्यस्मै दातुं आर्गुमेण्ट् प्रविशन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: scriptappconfig.ui:177
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Working directory:"
-msgstr ""
+msgstr "कार्यनिर्देशिका : १."
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: scriptappconfig.ui:187
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
-msgstr ""
+msgstr "कार्यान्वयनीयस्य कृते कार्यनिर्देशिकां चिनोतु"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: scriptappconfig.ui:194
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
-msgstr ""
+msgstr "पर्यावरणम्‌:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: scriptappconfig.ui:212
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr ""
+msgstr "उपयोक्तुं वातावरणं चिनोतु"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: scriptappconfig.ui:224
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Output filter:"
-msgstr ""
+msgstr "आउटपुट् फ़िल्टर : १."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:231
@@ -219,70 +219,70 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "Select the filter to applied to the output. E.g. to mark errors with red text"
-msgstr ""
+msgstr "आउटपुट् मध्ये प्रयोक्तुं फ़िल्टरं चिनोतु । उदा. रक्तपाठेन दोषान् चिह्नितुं"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:235
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "No Filter"
-msgstr ""
+msgstr "No Filter इति"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:240
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Compiler Filter"
-msgstr ""
+msgstr "संकलक फ़िल्टर"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:245
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Script Error Filter"
-msgstr ""
+msgstr "स्क्रिप्ट त्रुटि फ़िल्टर"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:250
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Static Analysis Filter"
-msgstr ""
+msgstr "स्थिर विश्लेषण फ़िल्टर"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: scriptappconfig.ui:267
 #, kde-format
 msgctxt "@title:group"
 msgid "Execute on Host"
-msgstr ""
+msgstr "Host इत्यत्र निष्पादयन्तु"
 
 #. i18n: ectx: property (text), widget (QCheckBox, remoteHostCheckbox)
 #: scriptappconfig.ui:273
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute on remote host"
-msgstr ""
+msgstr "दूरस्थे होस्ट् इत्यत्र निष्पादयन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, remoteHostLabel)
 #: scriptappconfig.ui:285
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote host (ssh):"
-msgstr ""
+msgstr "दूरस्थ होस्ट (ssh): ."
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, remoteHost)
 #: scriptappconfig.ui:298
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "user@host"
-msgstr ""
+msgstr "उपयोक्ता @ मेजबान"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, remoteHost)
 #: scriptappconfig.ui:301
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a remote host (user@host)"
-msgstr ""
+msgstr "दूरस्थं होस्ट् (user@host) प्रविशतु ।"
 
 #: scriptappjob.cpp:76
 #, kde-format

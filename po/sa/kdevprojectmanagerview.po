@@ -21,22 +21,22 @@ msgstr ""
 #, kde-format
 msgid "Move %1 item into %2"
 msgid_plural "Move %1 items into %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 द्रव्यं %2 मध्ये स्थानान्तरयन्तु"
+msgstr[1] "%1 वस्तूनि %2 मध्ये स्थानान्तरयन्तु"
 
 #: cutcopypastehelpers.cpp:81
 #, kde-format
 msgid "Copy %1 item into %2"
 msgid_plural "Copy %1 items into %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 मदं %2 मध्ये प्रतिलिख्यताम्"
+msgstr[1] "%1 वस्तूनि %2 मध्ये प्रतिलिख्यताम्"
 
 #: cutcopypastehelpers.cpp:84
 #, kde-format
 msgid "Delete %1 item"
 msgid_plural "Delete %1 items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 मदं विलोपयन्तु"
+msgstr[1] "%1 वस्तूनि विलोपयन्तु"
 
 #: cutcopypastehelpers.cpp:93
 #, kde-format
@@ -57,25 +57,25 @@ msgstr "%1 मदं विलोपयन्तु"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Suboperation succeeded"
-msgstr ""
+msgstr "उपसञ्चालनं सफलम् अभवत्"
 
 #: cutcopypastehelpers.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Suboperation failed"
-msgstr ""
+msgstr "उपसञ्चालनं विफलम् अभवत्"
 
 #: cutcopypastehelpers.cpp:116
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Suboperation skipped to prevent data loss"
-msgstr ""
+msgstr "दत्तांशहानिनिवारणाय उपसञ्चालनं त्यक्तम्"
 
 #: cutcopypastehelpers.cpp:297
 #, kde-format
 msgctxt "@title:window"
 msgid "Paste Failed"
-msgstr ""
+msgstr "पेस्ट् विफलम्"
 
 #: cutcopypastehelpers.cpp:333
 #, kde-format
@@ -93,290 +93,290 @@ msgstr "मुख्य साधनपट्टी"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Build Set"
-msgstr ""
+msgstr "बिल्ड सेट्"
 
 #: projectbuildsetwidget.cpp:124
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from Build Set"
-msgstr ""
+msgstr "बिल्ड सेट् तः निष्कासयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
 #: projectbuildsetwidget.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items to the top"
-msgstr ""
+msgstr "चयनितवस्तूनि उपरि स्थापयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
 #: projectbuildsetwidget.ui:67
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items up"
-msgstr ""
+msgstr "चयनितवस्तूनि उपरि चालयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
 #: projectbuildsetwidget.ui:83
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected item down"
-msgstr ""
+msgstr "चयनितं द्रव्यं अधः चालयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
 #: projectbuildsetwidget.ui:115
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items to the bottom"
-msgstr ""
+msgstr "चयनितवस्तूनि अधः स्थापयन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #: projectbuildsetwidget.ui:177
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "These items will be built in the order they are listed."
-msgstr ""
+msgstr "एतानि वस्तूनि यथा क्रमेण सूचीबद्धानि सन्ति तथा निर्मिताः भविष्यन्ति।"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectbuildsetwidget.ui:180
 #, kde-format
 msgctxt "@title"
 msgid "Build Sequence"
-msgstr ""
+msgstr "क्रमं निर्मायताम्"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
 #: projectbuildsetwidget.ui:200
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add currently selected items from project tree view to the build set."
-msgstr ""
+msgstr "परियोजनावृक्षदृश्यात् वर्तमानचयनितवस्तूनि निर्माणसमूहे योजयन्तु ।"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
 #: projectbuildsetwidget.ui:216
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
-msgstr ""
+msgstr "बिल्ड् सेट् तः वर्तमानं चयनितं द्रव्यं निष्कासयन्तु ।"
 
 #: projectmanagerview.cpp:75 projectmanagerviewplugin.cpp:192
 #, kde-format
 msgctxt "@title:window"
 msgid "Projects"
-msgstr ""
+msgstr "परियोजनाएँ"
 
 #: projectmanagerview.cpp:93
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
-msgstr ""
+msgstr "वर्तमान दस्तावेजस्य स्थानं ज्ञातव्यम्"
 
 #: projectmanagerview.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locates the current document in the project tree and selects it."
-msgstr ""
+msgstr "परियोजनावृक्षे वर्तमानदस्तावेजं ज्ञात्वा चयनं करोति ।"
 
 #: projectmanagerview.cpp:100
 #, kde-format
 msgctxt "@action"
 msgid "Auto-Select Current Document"
-msgstr ""
+msgstr "वर्तमान दस्तावेजं स्वयमेव चयनं कुर्वन्तु"
 
 #: projectmanagerview.cpp:101
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
-msgstr ""
+msgstr "परियोजनावृक्षे वर्तमानदस्तावेजं स्वयमेव चिनोतु ।"
 
 #: projectmanagerview.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Show Build Targets"
-msgstr ""
+msgstr "लक्ष्यं निर्माणं दर्शयतु"
 
 #. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
 #: projectmanagerview.ui:33
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Project Overview"
-msgstr ""
+msgstr "परियोजना अवलोकन"
 
 #. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
 #: projectmanagerview.ui:53
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Build Items:"
-msgstr ""
+msgstr "निर्माणवस्तूनि : १."
 
 #: projectmanagerviewplugin.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Build All Projects"
-msgstr ""
+msgstr "सर्वाणि परियोजनानि निर्मायताम्"
 
 #: projectmanagerviewplugin.cpp:149
 #, kde-format
 msgctxt "@action"
 msgid "Build Selection"
-msgstr ""
+msgstr "चयनं निर्मायताम्"
 
 #: projectmanagerviewplugin.cpp:150
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Build"
-msgstr ""
+msgstr "निर्मिमीते"
 
 #: projectmanagerviewplugin.cpp:156
 #, kde-format
 msgctxt "@action"
 msgid "Install Selection"
-msgstr ""
+msgstr "चयनं संस्थापयन्तु"
 
 #: projectmanagerviewplugin.cpp:157
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Install"
-msgstr ""
+msgstr "प्रतिस्था"
 
 #: projectmanagerviewplugin.cpp:163
 #, kde-format
 msgctxt "@action"
 msgid "Clean Selection"
-msgstr ""
+msgstr "स्वच्छ चयन"
 
 #: projectmanagerviewplugin.cpp:164
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Clean"
-msgstr ""
+msgstr "स्वच्छम्‌"
 
 #: projectmanagerviewplugin.cpp:169
 #, kde-format
 msgctxt "@action"
 msgid "Configure Selection"
-msgstr ""
+msgstr "चयनं विन्यस्यताम्"
 
 #: projectmanagerviewplugin.cpp:171
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Configure"
-msgstr ""
+msgstr "विन्यस्तं कुर्वन्तु"
 
 #: projectmanagerviewplugin.cpp:176
 #, kde-format
 msgctxt "@action"
 msgid "Prune Selection"
-msgstr ""
+msgstr "छंटनी चयन"
 
 #: projectmanagerviewplugin.cpp:177
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Prune"
-msgstr ""
+msgstr "छंटनी"
 
 #: projectmanagerviewplugin.cpp:283
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create &File..."
-msgstr ""
+msgstr "&File रचयन्तु..."
 
 #: projectmanagerviewplugin.cpp:289
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
-msgstr ""
+msgstr "F&older रचयन्तु..."
 
 #: projectmanagerviewplugin.cpp:296
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Build"
-msgstr ""
+msgstr "&निर्मिमीते"
 
 #: projectmanagerviewplugin.cpp:300
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Install"
-msgstr ""
+msgstr "&प्रतिस्था"
 
 #: projectmanagerviewplugin.cpp:304
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Clean"
-msgstr ""
+msgstr "&स्वच्छम्‌"
 
 #: projectmanagerviewplugin.cpp:308
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
-msgstr ""
+msgstr "&बिल्ड सेट् मध्ये योजयतु"
 
 #: projectmanagerviewplugin.cpp:315
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&lose Project"
 msgid_plural "Close Projects"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "C&lose परियोजना"
+msgstr[1] "परियोजनानि बन्दं कुर्वन्तु"
 
 #: projectmanagerviewplugin.cpp:321
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Reload"
-msgstr ""
+msgstr "&पुनः भार"
 
 #: projectmanagerviewplugin.cpp:352
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remo&ve"
-msgstr ""
+msgstr "अपाकरोति"
 
 #: projectmanagerviewplugin.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Re&name..."
-msgstr ""
+msgstr "पुनः&नाम..."
 
 #: projectmanagerviewplugin.cpp:362
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from &Target"
-msgstr ""
+msgstr "&Target इत्यस्मात् निष्कासयन्तु"
 
 #: projectmanagerviewplugin.cpp:549
 #, kde-format
 msgctxt "@title:window"
 msgid "Create Folder in %1"
-msgstr ""
+msgstr "%1 मध्ये पुटं रचयन्तु"
 
 #: projectmanagerviewplugin.cpp:550
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Folder name:"
-msgstr ""
+msgstr "पुटस्य नाम : १."
 
 #: projectmanagerviewplugin.cpp:601
 #, kde-format
 msgid "Do you really want to delete this item?"
 msgid_plural "Do you really want to delete these %1 items?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "किं भवान् वास्तवमेव एतत् द्रव्यं विलोपयितुम् इच्छति?"
+msgstr[1] "किं भवान् वास्तवमेव एतानि %1 वस्तूनि विलोपयितुम् इच्छति?"
 
 #: projectmanagerviewplugin.cpp:603
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Files"
-msgstr ""
+msgstr "सञ्चिकाः विलोपयन्तु"
 
 #: projectmanagerviewplugin.cpp:656
 #, kde-format
 msgctxt "@window:title"
 msgid "Rename"
-msgstr ""
+msgstr "पुनर्नाम"
 
 #: projectmanagerviewplugin.cpp:657
 #, kde-format
 msgctxt "@label:textbox"
 msgid "New name for '%1':"
-msgstr ""
+msgstr "'%1' इत्यस्य नूतनं नाम:"
 
 #: projectmanagerviewplugin.cpp:669
 #, kde-format
@@ -397,52 +397,52 @@ msgstr "'%1' वैधं सञ्चिकानाम नास्ति"
 #, kde-format
 msgctxt "@title:window"
 msgid "Create File in %1"
-msgstr ""
+msgstr "%1 मध्ये सञ्चिकां रचयन्तु"
 
 #: projectmanagerviewplugin.cpp:689
 #, kde-format
 msgctxt "@label:textbox"
 msgid "File name:"
-msgstr ""
+msgstr "सञ्चिकानाम : १."
 
 #: projecttreeview.cpp:151
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Move Here"
-msgstr ""
+msgstr "&अत्र गच्छतु"
 
 #: projecttreeview.cpp:157
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
-msgstr ""
+msgstr "&अत्र प्रतिलिपि कुरुत"
 
 #: projecttreeview.cpp:163 projecttreeview.cpp:224
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
-msgstr ""
+msgstr "निरसयतु"
 
 #: projecttreeview.cpp:218
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
-msgstr ""
+msgstr "&लक्ष्यस्य निर्माणे योजयतु"
 
 #: projecttreeview.cpp:348
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze with"
-msgstr ""
+msgstr "सह विश्लेषणं कुरुत"
 
 #: projecttreeview.cpp:364
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."
-msgstr ""
+msgstr "विन्यासः उद्घाटयतु..."
 
 #: vcsoverlayproxymodel.cpp:105
 #, kde-format
 msgctxt "Version control: Currently not on a branch"
 msgid "(no branch)"
-msgstr ""
+msgstr "(न शाखा) २."

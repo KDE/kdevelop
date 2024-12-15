@@ -116,7 +116,7 @@ msgstr "** छंटनी विफलम्: %1 **"
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Import Failed"
-msgstr ""
+msgstr "परियोजना आयातं विफलम्"
 
 #: mesonmanager.cpp:115
 #, kde-format
@@ -184,56 +184,56 @@ msgstr "'%1' इत्यस्य पुनर्लेखकनिर्गम
 #, kde-format
 msgctxt "@action:button"
 msgid "Show Advanced Configuration"
-msgstr ""
+msgstr "उन्नतविन्यासः दर्शयतु"
 
 #. i18n: ectx: property (title), widget (QGroupBox, container)
 #: settings/mesonadvancedsettings.ui:36
 #, kde-format
 msgctxt "@title:group"
 msgid "Advanced Configuration"
-msgstr ""
+msgstr "उन्नत विन्यास"
 
 #. i18n: ectx: property (text), widget (QLabel, l_mesonArgs)
 #: settings/mesonadvancedsettings.ui:44
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Extra Meson arguments:"
-msgstr ""
+msgstr "अतिरिक्त मेसोन् तर्काः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, l_backend)
 #: settings/mesonadvancedsettings.ui:57
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Meson backend:"
-msgstr ""
+msgstr "मेसोन् पृष्ठभागः : १."
 
 #. i18n: ectx: property (text), widget (QLabel, l_mesonExe)
 #: settings/mesonadvancedsettings.ui:70
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Meson executable:"
-msgstr ""
+msgstr "मेसोन् निष्पादनीयः : १."
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, i_mesonArgs)
 #: settings/mesonadvancedsettings.ui:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Changing this will reset the build options."
-msgstr ""
+msgstr "एतत् परिवर्तयित्वा बिल्ड् विकल्पाः पुनः सेट् करिष्यन्ति ।"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_mesonExe)
 #: settings/mesonadvancedsettings.ui:93
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/mesonexecutable"
-msgstr ""
+msgstr "/मार्ग/तः/मेसोननिष्पादनीय"
 
 #. i18n: ectx: property (text), widget (QPushButton, b_hideAdvanced)
 #: settings/mesonadvancedsettings.ui:102
 #, kde-format
 msgctxt "@action:button"
 msgid "Hide Advanced Configuration"
-msgstr ""
+msgstr "उन्नतविन्यासः गोपयन्तु"
 
 #: settings/mesonconfigpage.cpp:177 settings/mesonrewriterpage.cpp:174
 #, kde-format
@@ -284,8 +284,8 @@ msgstr "परिवर्तनं नास्ति"
 #, kde-format
 msgid "%1 option changed"
 msgid_plural "%1 options changed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 विकल्पः परिवर्तितः"
+msgstr[1] "%1 विकल्पाः परिवर्तिताः"
 
 #: settings/mesonconfigpage.cpp:332
 #, kde-format
@@ -297,7 +297,7 @@ msgstr "मेसोन्"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Configuration"
-msgstr ""
+msgstr "मेसोन परियोजना विन्यास"
 
 #. i18n: ectx: property (text), widget (QToolButton, b_addDir)
 #. i18n: ectx: property (text), widget (QToolButton, b_rmDir)
@@ -371,7 +371,7 @@ msgstr "अन्तिमः"
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr ""
+msgstr "एकं निर्माणनिर्देशिकां विन्यस्यताम् - %1"
 
 #: settings/mesonnewbuilddir.cpp:137
 #, kde-format
@@ -512,13 +512,13 @@ msgstr "meson पुनर्लेखकदत्तांशं लोड् �
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Additional Meson Option"
-msgstr ""
+msgstr "अतिरिक्तं मेसोन् विकल्पं चिनोतु"
 
 #: settings/mesonrewriterpage.cpp:407
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Meson option to add:"
-msgstr ""
+msgstr "मेसोन् विकल्पः योजयितुं : १."
 
 #: settings/mesonrewriterpage.cpp:438
 #, kde-format
@@ -530,7 +530,7 @@ msgstr "प्रकल्प"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Settings"
-msgstr ""
+msgstr "मेसोन परियोजना सेटिंग्स्"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, MesonRewriterPage)
 #: settings/mesonrewriterpage.ui:14

@@ -22,68 +22,68 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "भवतः नामानि"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "भवतः ईमेलपत्राणि"
 
 #. i18n: ectx: Menu (session)
 #: kdevelopui.rc:6
 #, kde-format
 msgctxt "@title:menu"
 msgid "Session"
-msgstr ""
+msgstr "सत्र"
 
 #. i18n: ectx: Menu (project)
 #: kdevelopui.rc:10
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Project"
-msgstr ""
+msgstr "&प्रकल्प"
 
 #. i18n: ectx: Menu (run)
 #: kdevelopui.rc:29
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Run"
-msgstr ""
+msgstr "&धावनं करोतु"
 
 #. i18n: ectx: Menu (debug_core_menu)
 #: kdevelopui.rc:39
 #, kde-format
 msgctxt "@title:menu"
 msgid "Examine Core File"
-msgstr ""
+msgstr "Core File इत्यस्य परीक्षणं कुर्वन्तु"
 
 #. i18n: ectx: Menu (debug_attach_menu)
 #: kdevelopui.rc:43
 #, kde-format
 msgctxt "@title:menu"
 msgid "Attach to Process"
-msgstr ""
+msgstr "प्रक्रियां प्रति संलग्नं कुर्वन्तु"
 
 #. i18n: ectx: Menu (navigation)
 #: kdevelopui.rc:65
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Navigation"
-msgstr ""
+msgstr "&नेविगेशन"
 
 #. i18n: ectx: Menu (file)
 #: kdevelopui.rc:89
 #, kde-format
 msgctxt "@title:menu"
 msgid "&File"
-msgstr ""
+msgstr "&संचिका"
 
 #. i18n: ectx: Menu (edit)
 #: kdevelopui.rc:100
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Edit"
-msgstr ""
+msgstr "&सम्पादन"
 
 #. i18n: ectx: Menu (code)
 #: kdevelopui.rc:113
@@ -97,35 +97,35 @@ msgstr "संहिता"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current File With"
-msgstr ""
+msgstr "वर्तमान सञ्चिकायाः विश्लेषणं कुर्वन्तु सह"
 
 #. i18n: ectx: Menu (analyze_project)
 #: kdevelopui.rc:119
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current Project With"
-msgstr ""
+msgstr "वर्तमान परियोजनायाः विश्लेषणं कुर्वन्तु सह"
 
 #. i18n: ectx: Menu (window)
 #: kdevelopui.rc:128
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Window"
-msgstr ""
+msgstr "&कोष्ठ"
 
 #. i18n: ectx: Menu (settings)
 #: kdevelopui.rc:170
 #, kde-format
 msgctxt "@title:menu"
 msgid "Settings"
-msgstr ""
+msgstr "सेटिंग्स्"
 
 #. i18n: ectx: Menu (help)
 #: kdevelopui.rc:179
 #, kde-format
 msgctxt "@title:menu"
 msgid "Help"
-msgstr ""
+msgstr "साहाय्यम्‌"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: kdevelopui.rc:186
@@ -828,13 +828,13 @@ msgstr "यत् सत्रं भवन्तः उपयोक्तुं
 #, kde-format
 msgctxt "@info:shell"
 msgid "Specify the executable you want to debug."
-msgstr ""
+msgstr "यत् कार्यान्वयनीयं भवन्तः त्रुटिनिवारणं कर्तुम् इच्छन्ति तत् निर्दिशन्तु ।"
 
 #: main.cpp:627
 #, kde-format
 msgctxt "@info:shell"
 msgid "Specified executable does not exist."
-msgstr ""
+msgstr "निर्दिष्टं कार्यान्वयनीयं नास्ति ।"
 
 #: main.cpp:633
 #, kde-format

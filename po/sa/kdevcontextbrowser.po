@@ -20,79 +20,79 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
-msgstr ""
+msgstr "सन्दर्भ इतिहासे पुनः गच्छन्तु"
 
 #: contextbrowser.cpp:173
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
-msgstr ""
+msgstr "सन्दर्भ इतिहासे अग्रे गच्छतु"
 
 #: contextbrowser.cpp:189
 #, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
-msgstr ""
+msgstr "रूपरेखा"
 
 #: contextbrowser.cpp:190
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
-msgstr ""
+msgstr "रूपरेखा"
 
 #: contextbrowser.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
-msgstr ""
+msgstr "सक्रियदस्तावेजस्य रूपरेखां नेविगेट् कुर्वन्तु, ब्राउज् कर्तुं क्लिक् कुर्वन्तु"
 
 #: contextbrowser.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
-msgstr ""
+msgstr "स्रोत &ब्राउज मोड"
 
 #: contextbrowser.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
-msgstr ""
+msgstr "&पूर्व भ्रमण सन्दर्भ"
 
 #: contextbrowser.cpp:244
 #, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
-msgstr ""
+msgstr "&अगला भ्रमणीयः सन्दर्भः"
 
 #: contextbrowser.cpp:250
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Use"
-msgstr ""
+msgstr "&पूर्वप्रयोगः"
 
 #: contextbrowser.cpp:256
 #, kde-format
 msgctxt "@action"
 msgid "&Next Use"
-msgstr ""
+msgstr "&अगला प्रयोगः"
 
 #: contextbrowser.cpp:262
 #, kde-format
 msgctxt "@action"
 msgid "Context Browser"
-msgstr ""
+msgstr "सन्दर्भ ब्राउजर"
 
 #: contextbrowser.cpp:293 contextbrowser.cpp:372 contextbrowserview.cpp:172
 #, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
-msgstr ""
+msgstr "कोड ब्राउज़र"
 
 #: contextbrowser.cpp:309
 #, kde-format
 msgctxt "@action"
 msgid "Find Uses"
-msgstr ""
+msgstr "उपयोगान् अन्वेष्टुम्"
 
 #: contextbrowser.cpp:1558
 #, kde-format
@@ -103,37 +103,37 @@ msgstr "(परिवर्तितः) २."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show declaration menu"
-msgstr ""
+msgstr "घोषणा मेनू दर्शयतु"
 
 #: contextbrowserview.cpp:181
 #, kde-format
 msgctxt "@action"
 msgid "Declaration Menu"
-msgstr ""
+msgstr "घोषणा मेनू"
 
 #: contextbrowserview.cpp:185
 #, kde-format
 msgctxt "@action"
 msgid "Lock Current View"
-msgstr ""
+msgstr "वर्तमान दृश्यं ताडयन्तु"
 
 #: contextbrowserview.cpp:186
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock current view"
-msgstr ""
+msgstr "वर्तमानदृश्यं ताडयन्तु"
 
 #: contextbrowserview.cpp:187
 #, kde-format
 msgctxt "@action"
 msgid "Unlock Current View"
-msgstr ""
+msgstr "वर्तमान दृश्यं अनलॉक कुर्वन्तु"
 
 #: contextbrowserview.cpp:189
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unlock current view"
-msgstr ""
+msgstr "वर्तमानदृश्यं अनलॉकं कुर्वन्तु"
 
 #. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
 #: kdevcontextbrowser.rc:25

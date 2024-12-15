@@ -21,48 +21,48 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Unit Tests"
-msgstr ""
+msgstr "इकाई परीक्षण"
 
 #: testview.cpp:79
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Source"
-msgstr ""
+msgstr "स्रोतः दर्शयतु"
 
 #: testview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "Run Selected Tests"
-msgstr ""
+msgstr "चयनितपरीक्षाः चालयन्तु"
 
 #: testview.cpp:91
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr ""
+msgstr "फ़िल्टर..."
 
 #: testview.cpp:293
 #, kde-format
 msgid "Run 1 test"
 msgid_plural "Run %1 tests"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "१ परीक्षणं चालयन्तु"
+msgstr[1] "%1 परीक्षणं चालयन्तु"
 
 #: testviewplugin.cpp:59
 #, kde-format
 msgctxt "@action"
 msgid "Run All Tests"
-msgstr ""
+msgstr "सर्वाणि परीक्षणानि चालयन्तु"
 
 #: testviewplugin.cpp:63
 #, kde-format
 msgctxt "@action"
 msgid "Stop Running Tests"
-msgstr ""
+msgstr "परीक्षणं चालयितुं स्थगयन्तु"
 
 #: testviewplugin.cpp:104
 #, kde-format
 msgid "Run 1 test in %2"
 msgid_plural "Run %1 tests in %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2 मध्ये 1 परीक्षणं चालयन्तु"
+msgstr[1] "%2 मध्ये %1 परीक्षणं चालयन्तु"

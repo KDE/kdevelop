@@ -31,7 +31,7 @@ msgstr ""
 #, kde-format
 msgctxt "%1 is the URL with the GitHub token settings"
 msgid "You can check the authorization for this application and others at %1"
-msgstr ""
+msgstr "अस्य अनुप्रयोगस्य अन्येषां च प्राधिकरणं %1 इत्यत्र परीक्षितुं शक्नुवन्ति"
 
 #: ghdialog.cpp:54
 #, kde-format
@@ -42,25 +42,25 @@ msgstr "भवान् <b>%1</b> इति रूपेण प्रवेश�
 #, kde-format
 msgctxt "@action:button"
 msgid "Log Out"
-msgstr ""
+msgstr "Log Out इति"
 
 #: ghdialog.cpp:64
 #, kde-format
 msgctxt "@action:button"
 msgid "Force Sync"
-msgstr ""
+msgstr "बल समन्वयन"
 
 #: ghdialog.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Authorize"
-msgstr ""
+msgstr "अधिकृत्यताम्"
 
 #: ghdialog.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "GitHub Account"
-msgstr ""
+msgstr "गिटहब खाता"
 
 #: ghdialog.cpp:98
 #, kde-format
@@ -89,7 +89,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "GitHub Authorization Failed"
-msgstr ""
+msgstr "GitHub प्राधिकरणं विफलम्"
 
 #: ghdialog.cpp:133
 #, kde-format
@@ -108,19 +108,19 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "GitHub Account Authorized"
-msgstr ""
+msgstr "GitHub खाता अधिकृत"
 
 #: ghdialog.cpp:144
 #, kde-format
 msgctxt "@title:window"
 msgid "Authentication Code"
-msgstr ""
+msgstr "प्रमाणीकरण संहिता"
 
 #: ghdialog.cpp:144
 #, kde-format
 msgctxt "@label:textbox"
 msgid "OTP Code:"
-msgstr ""
+msgstr "ओटीपी कोडः : १."
 
 #: ghdialog.cpp:176
 #, kde-format
@@ -136,19 +136,19 @@ msgstr "गित्हब"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "अन्वेषण..."
 
 #: ghproviderwidget.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
-msgstr ""
+msgstr "यदि भवान् प्रतीक्षां कर्तुम् इच्छति न तर्हि Return कीलं नुदतु ।"
 
 #: ghproviderwidget.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure your GitHub account"
-msgstr ""
+msgstr "स्वस्य GitHub खातं विन्यस्यताम्"
 
 #: ghproviderwidget.cpp:88
 #, kde-format
@@ -161,16 +161,16 @@ msgstr "Git प्लगिन् लोड् कर्तुं न शक्�
 #, kde-format
 msgctxt "@title:window"
 msgid "GitHub Provider Error"
-msgstr ""
+msgstr "GitHub प्रदाता त्रुटिः"
 
 #: ghproviderwidget.cpp:106
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User"
-msgstr ""
+msgstr "उपयोक्ता"
 
 #: ghproviderwidget.cpp:107
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Organization"
-msgstr ""
+msgstr "संघठनं"

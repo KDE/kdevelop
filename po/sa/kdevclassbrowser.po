@@ -20,22 +20,22 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Classes"
-msgstr ""
+msgstr "कक्षाः"
 
 #: classbrowserplugin.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "Find in &Class Browser"
-msgstr ""
+msgstr "&Class Browser इत्यत्र अन्वेष्टुम्"
 
 #: classwidget.cpp:72
 #, kde-format
 msgctxt "@label:textbox"
 msgid "S&earch:"
-msgstr ""
+msgstr "अन्वेषण:"
 
 #: classwidget.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Class Browser"
-msgstr ""
+msgstr "वर्ग ब्राउज़र"

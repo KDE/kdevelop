@@ -46,21 +46,21 @@ msgstr "CMake इति"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"
-msgstr ""
+msgstr "वैश्विक CMake सेटिंग्स् विन्यस्यताम्"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: cmakebuilderpreferences.ui:20
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Default CMake executable:"
-msgstr ""
+msgstr "पूर्वनिर्धारितं CMake एक्जीक्यूटिव: ."
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: cmakebuilderpreferences.ui:37
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Default generator:"
-msgstr ""
+msgstr "पूर्वनिर्धारित जनरेटर : १."
 
 #: cmakejob.cpp:38 prunejob.cpp:25
 #, kde-format
