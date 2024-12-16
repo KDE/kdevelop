@@ -1385,32 +1385,35 @@ class QJsonValuePrinter(QCborValuePrinterBase):
         super().__init__('QJsonValue')
         self._initFromFields(item_data, container_ptr, item_type)
 
-class QCborValueConstRefPrinter(QCborValuePrinterBase):
+class QCborValueConstRefPrinterBase(QCborValuePrinterBase):
+    def __init__(self, className, container_ptr, itemIndex):
+        # array or map makes no difference to QCborContainerPrivateIterator.valueAt(),
+        # so only the presence of 'QCbor' in `className` matters
+        it = QCborContainerPrivateIterator(container_ptr, className)
+        valueData = it.valueAt(itemIndex)
+        super().__init__(className)
+        self._initFromValueData(valueData)
+
+class QCborValueConstRefPrinter(QCborValueConstRefPrinterBase):
 
     def __init__(self, val):
         container_ptr = int(val['d'])
-        item_index = int(val['i'])
-        it = QCborContainerPrivateIterator(container_ptr, 'QCborValueConstRef')
-        valueData = it.valueAt(item_index)
-        super().__init__('QCborValue')
-        self._initFromValueData(valueData)
+        itemIndex = int(val['i'])
+        super().__init__('QCborValue', container_ptr, itemIndex)
 
-class QJsonValueConstRefPrinter(QCborValuePrinterBase):
+class QJsonValueConstRefPrinter(QCborValueConstRefPrinterBase):
 
     def __init__(self, val):
         array_or_map = int(val['o'])
         is_object = int(val['is_object'])
-        item_index = int(val['index'])
+        itemIndex = int(val['index'])
         if is_object:
-            item_index = item_index * 2 + 1 # see QJsonPrivate::Value::indexHelper()
+            itemIndex = itemIndex * 2 + 1 # see QJsonPrivate::Value::indexHelper()
         if d.qt6orLater():
             container_ptr = d.extractPointer(array_or_map)
         elif d.qtVersionAtLeast(0x050f00):
             container_ptr = d.extractPointer(array_or_map + d.ptrSize())
-        it = QCborContainerPrivateIterator(container_ptr, 'QJsonValueConstRef')
-        valueData = it.valueAt(item_index)
-        super().__init__('QJsonValue')
-        self._initFromValueData(valueData)
+        super().__init__('QJsonValue', container_ptr, itemIndex)
 
 class QCborSimpleTypePrinter(PrinterBaseType):
 
