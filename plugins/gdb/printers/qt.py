@@ -1031,14 +1031,14 @@ class CborOrJsonValueData:
         self.item_type = item_type
         self.is_cbor = is_cbor
 
-    def createCborOrJsonContainer(self, containerType):
+    def createCborOrJsonContainer(self, container_className):
         if d.qt6orLater() or self.is_cbor:
             # Create an 8-byte buffer and pack the address as a pointer
             buffer = struct.pack("P", self.container_ptr)
         else: # Qt 5.15's QJsonArray and QJsonObject had a dead pointer first
             buffer = struct.pack("PP", 0, self.container_ptr)
-        fakeContainer = gdb.Value(buffer, containerType)
-        # This will trigger {containerType}Printer
+        fakeContainer = gdb.Value(buffer, container_className)
+        # This will trigger {container_className}Printer
         return fakeContainer
 
     def toCborOrJsonGdbValue(self):
