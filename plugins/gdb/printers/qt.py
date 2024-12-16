@@ -1144,7 +1144,7 @@ class CborOrJsonValueData:
             bytes_buffer = struct.pack('@IHH8s', data1, data2, data3, data4) # convert to native ordering for QUuid members
             return gdb.Value(bytes_buffer, gdb.lookup_type('QUuid'))
 
-        elif item_type & 0xFF00 == CborValueType.SimpleType.value: # isSimpleType()
+        elif (int(item_type) >> 8) == (int(CborValueType.SimpleType.value) >> 8): # isSimpleType()
             # QCborSimpleType is just an enum
             simpleType = item_type & 0xFF
             buffer = struct.pack("B", simpleType) # ... of size 1 byte
