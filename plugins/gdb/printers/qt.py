@@ -1073,7 +1073,7 @@ class CborOrJsonValueData:
         if element_flags & 8: # QtCbor::Element::StringIsAscii
             return make_QLatin1String(bytedata_data, bytedata_len)
         if element_flags & 4: # QtCbor::Element::StringIsUtf16
-            return make_QString(bytedata_data, int(bytedata_len / 2))
+            return make_QString(bytedata_data, int(bytedata_len) // 2)
         return make_Utf8String(bytedata_data, bytedata_len)
 
     def toPythonBytes(self, element_index):
@@ -1268,7 +1268,7 @@ class QCborMapPrinter(PrinterBaseType):
     def __init__(self, val):
         self._container_ptr = int(val['d']['d'])
         if self._container_ptr:
-            self._size = int(qcborContainerElementCount(self._container_ptr) / 2)
+            self._size = int(qcborContainerElementCount(self._container_ptr)) // 2
         else:
             self._size = 0
 
@@ -1314,7 +1314,7 @@ class QJsonObjectPrinter(PrinterBaseType):
         else:
             raise RuntimeError("Qt version too old for inspecting QJsonObject")
         if self._container_ptr:
-            self._size = int(qcborContainerElementCount(self._container_ptr) / 2)
+            self._size = int(qcborContainerElementCount(self._container_ptr)) // 2
         else:
             self._size = 0
 
