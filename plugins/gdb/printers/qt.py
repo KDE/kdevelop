@@ -1210,19 +1210,23 @@ def make_QByteArray(data, size):
         return value
 
 class QCborContainerPrivateIterator:
-    def __init__(self, container_ptr, container_className):
+    def __init__(self, container_ptr, container_className, child_name = ''):
         self.container_ptr = container_ptr
         self.is_cbor = 'QCbor' in container_className
-        self.is_array = 'Array' in container_className
+        if not child_name:
+            self.is_array = 'Array' in container_className
+        self.child_name = child_name
 
-        data_pos, self.elements_data_ptr, self.size = parseQCborContainer(container_ptr)
-        self.bytedata = qcborContainerBytedata(data_pos)
+        self.data_pos, self.elements_data_ptr, self.size = parseQCborContainer(container_ptr)
+        self.bytedata = None
         self.index = 0
 
     def __iter__(self):
         return self
 
     def valueAt(self, index):
+        if self.bytedata is None:
+            self.bytedata = qcborContainerBytedata(self.data_pos)
         return qcborContainerValueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
 
     def __next__(self):
@@ -1231,7 +1235,9 @@ class QCborContainerPrivateIterator:
 
         item = self.valueAt(self.index).inspect()
 
-        if self.is_array:
+        if self.child_name:
+            result = (self.child_name, item)
+        elif self.is_array:
             result = (f'[{self.index}]', item)
         else:
             if self.index % 2 == 0:
@@ -1303,26 +1309,6 @@ class QCborValuePrinterBase(PrinterForwarder):
         valueData = CborOrJsonValueData(item_data, container_ptr, item_type, 'QCbor' in self._className)
         self._initFromValueData(valueData)
 
-    class _tagIterator:
-        "Iterate over the single tagged value - the second element of the size=2 Tag container"
-        def __init__(self, container_ptr, data_pos, elements_data_ptr, is_cbor):
-            self.container_ptr = container_ptr
-            self.data_pos = data_pos
-            self.elements_data_ptr = elements_data_ptr
-            self.is_cbor = is_cbor
-            self.atEnd = False
-
-        def __iter__(self):
-            return self
-
-        def __next__(self):
-            if self.atEnd:
-                raise StopIteration
-            self.atEnd = True
-            bytedata = qcborContainerBytedata(self.data_pos)
-            value = qcborContainerValueAt(self.container_ptr, self.elements_data_ptr, 1, bytedata, self.is_cbor)
-            return ("value", value.inspect())
-
     def _initFromValueData(self, valueData):
         item_type = valueData.item_type
         if item_type == CborValueType.Invalid.value:
@@ -1338,11 +1324,13 @@ class QCborValuePrinterBase(PrinterForwarder):
         elif item_type == CborValueType.RegularExpression.value:
             self._setUnderlyingValue('RegularExpression(%s)' % valueData.toPythonString(1))
         elif item_type == CborValueType.Tag.value:
-            data_pos, elements_data_ptr, elements_size = parseQCborContainer(valueData.container_ptr)
-            if elements_size == 2:
-                tag = d.extractInt64(elements_data_ptr)
+            it = QCborContainerPrivateIterator(valueData.container_ptr, self._className, "value")
+            if it.size == 2:
+                tag = d.extractInt64(it.elements_data_ptr)
                 self._setUnderlyingValue(f'Tag({tag})')
-                self.children = lambda : self._tagIterator(valueData.container_ptr, data_pos, elements_data_ptr, valueData.is_cbor)
+                # iterate over the single tagged value - the second element of the size=2 Tag container
+                it.index = 1
+                self.children = lambda : it
                 self.num_children = lambda : 1
             else:
                 self._setUnderlyingValue('<Invalid Tag>')
