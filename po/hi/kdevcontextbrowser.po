@@ -1,0 +1,142 @@
+# Hindi translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"PO-Revision-Date: 2024-12-15 15:59+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: contextbrowser.cpp:161
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr ""
+
+#: contextbrowser.cpp:173
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr ""
+
+#: contextbrowser.cpp:189
+#, kde-format
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr ""
+
+#: contextbrowser.cpp:190
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr ""
+
+#: contextbrowser.cpp:191
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr ""
+
+#: contextbrowser.cpp:232
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr ""
+
+#: contextbrowser.cpp:238
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr ""
+
+#: contextbrowser.cpp:244
+#, kde-format
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr ""
+
+#: contextbrowser.cpp:250
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr ""
+
+#: contextbrowser.cpp:256
+#, kde-format
+msgctxt "@action"
+msgid "&Next Use"
+msgstr ""
+
+#: contextbrowser.cpp:262
+#, kde-format
+msgctxt "@action"
+msgid "Context Browser"
+msgstr ""
+
+#: contextbrowser.cpp:293 contextbrowser.cpp:372 contextbrowserview.cpp:172
+#, kde-format
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr ""
+
+#: contextbrowser.cpp:309
+#, kde-format
+msgctxt "@action"
+msgid "Find Uses"
+msgstr ""
+
+#: contextbrowser.cpp:1558
+#, kde-format
+msgid "(changed)"
+msgstr ""
+
+#: contextbrowserview.cpp:178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr ""
+
+#: contextbrowserview.cpp:181
+#, kde-format
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr ""
+
+#: contextbrowserview.cpp:185
+#, kde-format
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr ""
+
+#: contextbrowserview.cpp:186
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr ""
+
+#: contextbrowserview.cpp:187
+#, kde-format
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr ""
+
+#: contextbrowserview.cpp:189
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr ""
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr ""

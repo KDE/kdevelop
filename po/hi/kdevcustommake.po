@@ -1,0 +1,86 @@
+# Hindi translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"PO-Revision-Date: 2024-12-15 15:59+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:472
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:472
+#: makefileresolver/makefileresolver.cpp:501
+#, kde-format
+msgid "Output was: %1"
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:494
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "Recursive make call failed"
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:494
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:501
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:513
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr ""
+
+#: makefileresolver/makefileresolver.cpp:514
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr ""

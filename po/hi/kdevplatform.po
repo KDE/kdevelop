@@ -1,0 +1,5924 @@
+# Hindi translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-10-30 00:38+0000\n"
+"PO-Revision-Date: 2024-12-15 15:59+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1)\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: debugger/breakpoint/breakpoint.cpp:195
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Error"
+msgstr ""
+
+#: debugger/breakpoint/breakpoint.cpp:201
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Dirty"
+msgstr ""
+
+#: debugger/breakpoint/breakpoint.cpp:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pending"
+msgstr ""
+
+#: debugger/breakpoint/breakpoint.cpp:205
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clean"
+msgstr ""
+
+#: debugger/breakpoint/breakpoint.cpp:238
+#, kde-format
+msgctxt "location (address)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:48
+#: debugger/breakpoint/breakpointdetails.cpp:127
+#, kde-format
+msgid "Not hit yet"
+msgstr ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:52
+#, kde-format
+msgid "Ignore"
+msgstr ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:60
+#, kde-format
+msgid "next hits"
+msgstr ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:112
+#, kde-format
+msgid "Breakpoint is <a href=\"pending\">pending</a>"
+msgstr ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:115
+#, kde-format
+msgid "Breakpoint is <a href=\"dirty\">dirty</a>"
+msgstr ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:118
+#, kde-format
+msgid "Breakpoint is active"
+msgstr ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:125
+#, kde-format
+msgid "Hit %1 time"
+msgid_plural "Hit %1 times"
+msgstr[0] ""
+msgstr[1] ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:129
+#, kde-format
+msgid "Breakpoint has errors"
+msgstr ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:142
+#, kde-format
+msgid ""
+"<b>Breakpoint is pending</b><p>Pending breakpoints are those that have been "
+"passed to GDB, but which are not yet installed in the target, because GDB "
+"cannot find the function or file to which the breakpoint refers. The most "
+"common case is a breakpoint in a shared library: GDB will insert this "
+"breakpoint only when the library is loaded.</p>"
+msgstr ""
+
+#: debugger/breakpoint/breakpointdetails.cpp:155
+#, kde-format
+msgid ""
+"<b>Breakpoint is dirty</b><p>The breakpoint has not yet been passed to the "
+"debugger.</p>"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:121
+#, kde-format
+msgid "Breakpoint"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:371
+#, kde-format
+msgid "Breakpoint not found"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:371
+#, kde-format
+msgid "Couldn't find breakpoint at %1:%2"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:377
+#, kde-format
+msgid "&Breakpoint"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:383
+#, kde-format
+msgid "&Disable Breakpoint"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:384
+#, kde-format
+msgid "&Enable Breakpoint"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:387
+#, kde-format
+msgid "&Bookmark"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:429
+#: debugger/variable/variablecollection.cpp:407
+#: debugger/variable/variabletooltip.cpp:79
+#, kde-format
+msgid "Type"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:430
+#, kde-format
+msgid "Location"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:431
+#, kde-format
+msgid "Condition"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:435
+#, kde-format
+msgid "Active status"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:436
+#, kde-format
+msgid "State"
+msgstr ""
+
+#: debugger/breakpoint/breakpointmodel.cpp:660
+#, kde-format
+msgid ""
+"A breakpoint cannot be added to an untitled document. Please save the "
+"document first."
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:59
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Breakpoints"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:60
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Displays a list of breakpoints with their current status. Clicking on a "
+"breakpoint item allows you to change the breakpoint and will take you to the "
+"source in the editor window."
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:86
+#, kde-format
+msgid "Breakpoint Details"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:95
+#, kde-format
+msgid "New code breakpoint ..."
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:96
+#, kde-format
+msgid "Enter condition ..."
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:124
+#, kde-format
+msgctxt "New breakpoint"
+msgid "&New"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:128
+#, kde-format
+msgctxt "Code breakpoint"
+msgid "&Code"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:136
+#, kde-format
+msgctxt "Data breakpoint"
+msgid "Data &Write"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:139
+#, kde-format
+msgctxt "Data read breakpoint"
+msgid "Data &Read"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:142
+#, kde-format
+msgctxt "Data access breakpoint"
+msgid "Data &Access"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:147
+#, kde-format
+msgid "&Delete"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:156
+#, kde-format
+msgid "Disable &All"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:157
+#, kde-format
+msgid "&Enable All"
+msgstr ""
+
+#: debugger/breakpoint/breakpointwidget.cpp:158
+#, kde-format
+msgid "&Remove All"
+msgstr ""
+
+#: debugger/framestack/framestackmodel.cpp:179
+#, kde-format
+msgctxt "#thread-id at function-name or address"
+msgid "#%1 at %2 (crashed)"
+msgstr ""
+
+#: debugger/framestack/framestackmodel.cpp:181
+#, kde-format
+msgctxt "#thread-id at function-name or address"
+msgid "#%1 at %2"
+msgstr ""
+
+#: debugger/framestack/framestackmodel.cpp:282
+#, kde-format
+msgid "Depth"
+msgstr ""
+
+#: debugger/framestack/framestackmodel.cpp:284
+#: language/duchain/navigation/abstractnavigationcontext.cpp:522
+#, kde-format
+msgid "Function"
+msgstr ""
+
+#: debugger/framestack/framestackmodel.cpp:286
+#, kde-format
+msgid "Source"
+msgstr ""
+
+#: debugger/framestack/framestackwidget.cpp:66
+#, kde-format
+msgid ""
+"<b>Frame stack</b>Often referred to as the \"call stack\", this is a list "
+"showing which function is currently active, and what called each function to "
+"get to this point in your program. By clicking on an item you can see the "
+"values in any of the previous calling functions."
+msgstr ""
+
+#: debugger/framestack/framestackwidget.cpp:102
+#, kde-format
+msgid "Threads:"
+msgstr ""
+
+#: debugger/framestack/framestackwidget.cpp:223
+#, kde-format
+msgctxt "#frame function() at file"
+msgid "#%1 %2() at %3\n"
+msgstr ""
+
+#: debugger/framestack/framestackwidget.cpp:226
+#, kde-format
+msgctxt "#frame function() at file:line"
+msgid "#%1 %2() at %3:%4\n"
+msgstr ""
+
+#: debugger/interfaces/ibreakpointcontroller.cpp:87
+#, kde-format
+msgid "Breakpoint hit: %1"
+msgstr ""
+
+#: debugger/interfaces/ibreakpointcontroller.cpp:93
+#, kde-format
+msgid "Watchpoint hit: %1"
+msgstr ""
+
+#: debugger/util/pathmappings.cpp:86
+#, kde-format
+msgid "Remote Path"
+msgstr ""
+
+#: debugger/util/pathmappings.cpp:88
+#, kde-format
+msgid "Local Path"
+msgstr ""
+
+#: debugger/util/pathmappings.cpp:217
+#, kde-format
+msgid "Delete"
+msgstr ""
+
+#: debugger/variable/variablecollection.cpp:208
+#: language/duchain/problem.cpp:190 shell/filteredproblemstore.cpp:155
+#, kde-format
+msgid "Error"
+msgstr ""
+
+#: debugger/variable/variablecollection.cpp:232
+#, kde-format
+msgid "Auto"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, configName)
+#: debugger/variable/variablecollection.cpp:407
+#: debugger/variable/variabletooltip.cpp:79
+#: shell/launchconfigurationdialog.ui:110
+#, kde-format
+msgid "Name"
+msgstr ""
+
+#: debugger/variable/variablecollection.cpp:407
+#: debugger/variable/variabletooltip.cpp:79
+#, kde-format
+msgid "Value"
+msgstr ""
+
+#: debugger/variable/variablecollection.cpp:500
+#, kde-format
+msgid "Locals"
+msgstr ""
+
+#: debugger/variable/variabletooltip.cpp:115
+#, kde-format
+msgid "Watch This"
+msgstr ""
+
+#: debugger/variable/variabletooltip.cpp:117
+#, kde-format
+msgid "Stop on Change"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:82
+#, kde-format
+msgid "Debugger Variables"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:100
+#, kde-format
+msgctxt "@option:check"
+msgid "Auto-resize columns on click"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:116
+#, kde-format
+msgid ""
+"<b>Variable tree</b>The variable tree allows you to see the values of local "
+"variables and arbitrary expressions.<br />Local variables are displayed "
+"automatically and are updated as you step through your program. For each "
+"expression you enter, you can either evaluate it once, or \"watch\" it (make "
+"it auto-updated). Expressions that are not auto-updated can be updated "
+"manually from the context menu. Expressions can be renamed to more "
+"descriptive names by clicking on the name column.<br />To change the value "
+"of a variable or an expression, click on the value.<br />"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:130
+#, kde-format
+msgid "<b>Expression entry</b>Type in expression to watch."
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:207
+#, kde-format
+msgid "&Format"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:212
+#, kde-format
+msgid "&Natural"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:217
+#, kde-format
+msgid "&Binary"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:222
+#, kde-format
+msgid "&Octal"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:227
+#, kde-format
+msgid "&Decimal"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:232
+#, kde-format
+msgid "&Hexadecimal"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:247
+#, kde-format
+msgid "Remove Watch Variable"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:254
+#, kde-format
+msgid "&Copy Value"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:259
+#, kde-format
+msgid "&Stop on Change"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: documentation/documentationfindwidget.ui:42
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Find:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
+#: documentation/documentationfindwidget.ui:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Jump to next match"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
+#: documentation/documentationfindwidget.ui:69
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Jump to previous match"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
+#: documentation/documentationfindwidget.ui:82
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Match case sensitive"
+msgstr ""
+
+#: documentation/documentationview.cpp:38
+#: shell/settings/documentationpreferences.cpp:25
+#, kde-format
+msgid "Documentation"
+msgstr ""
+
+#: documentation/documentationview.cpp:69
+#, kde-format
+msgctxt "@action go back"
+msgid "Back"
+msgstr ""
+
+#: documentation/documentationview.cpp:74
+#, kde-format
+msgctxt "@action go forward"
+msgid "Forward"
+msgstr ""
+
+#: documentation/documentationview.cpp:79
+#, kde-format
+msgctxt "@action go to start page"
+msgid "Home"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
+#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
+#: vcs/dvcs/ui/branchmanager.ui:143
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr ""
+
+#: documentation/documentationview.cpp:111
+#, kde-format
+msgctxt "@action"
+msgid "Find in Text..."
+msgstr ""
+
+#: documentation/documentationview.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Find in text of current documentation page"
+msgstr ""
+
+#: interfaces/contextmenuextension.cpp:133
+#, kde-format
+msgctxt "@title:menu"
+msgid "Debug"
+msgstr ""
+
+#: interfaces/contextmenuextension.cpp:134
+#, kde-format
+msgctxt "@title:menu"
+msgid "Refactor"
+msgstr ""
+
+#: interfaces/contextmenuextension.cpp:136
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr ""
+
+#: interfaces/contextmenuextension.cpp:137
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr ""
+
+#: interfaces/isourceformatter.cpp:221
+#, kde-format
+msgid ""
+"The executable %1 cannot be found. Please make sure it is installed and can "
+"be executed. <br />The plugin will not work until you fix this problem."
+msgstr ""
+
+#: language/assistant/renameaction.cpp:69
+#, kde-format
+msgid "Rename \"%1\" to \"%2\""
+msgstr ""
+
+#: language/assistant/renameaction.cpp:109
+#: language/assistant/renamefileaction.cpp:76
+#: language/codegen/basicrefactoring.cpp:343
+#: language/codegen/basicrefactoring.cpp:353
+#: language/codegen/basicrefactoring.cpp:367
+#, kde-format
+msgid "Failed to apply changes: %1"
+msgstr ""
+
+#: language/assistant/renameassistant.cpp:108
+#, kde-format
+msgid "Rename"
+msgstr ""
+
+#: language/assistant/renamefileaction.cpp:50
+#, kde-format
+msgid "Rename file from \"%1\" to \"%2\"."
+msgstr ""
+
+#: language/backgroundparser/backgroundparser.cpp:309
+#, kde-format
+msgid "Parsing: %1"
+msgstr ""
+
+#: language/backgroundparser/backgroundparser.cpp:615
+#: shell/settings/bgpreferences.cpp:68
+#, kde-format
+msgid "Background Parser"
+msgstr ""
+
+#: language/backgroundparser/parsejob.cpp:313
+#, kde-format
+msgctxt "%1: filename"
+msgid "Skipped file that is too large: '%1'"
+msgstr ""
+
+#: language/backgroundparser/parsejob.cpp:315
+#, kde-format
+msgctxt "%1: file size, %2: limit file size"
+msgid "The file is %1 and exceeds the limit of %2."
+msgstr ""
+
+#: language/backgroundparser/parsejob.cpp:327
+#, kde-format
+msgid "Could not open file '%1'"
+msgstr ""
+
+#: language/backgroundparser/parsejob.cpp:330
+#, kde-format
+msgid "File could not be read from disk."
+msgstr ""
+
+#: language/backgroundparser/parsejob.cpp:333
+#, kde-format
+msgid "File could not be opened."
+msgstr ""
+
+#: language/backgroundparser/parsejob.cpp:336
+#, kde-format
+msgid "File could not be read from disk due to permissions."
+msgstr ""
+
+#: language/backgroundparser/parseprojectjob.cpp:74
+#, kde-format
+msgid "Process 1 file in %2"
+msgid_plural "Process %1 files in %2"
+msgstr[0] ""
+msgstr[1] ""
+
+#: language/classmodel/allclassesfolder.cpp:22
+#, kde-format
+msgid "All projects classes"
+msgstr ""
+
+#: language/classmodel/classmodelnode.cpp:338
+#, kde-format
+msgid "Base classes"
+msgstr ""
+
+#: language/classmodel/classmodelnode.cpp:369
+#, kde-format
+msgid "Derived classes"
+msgstr ""
+
+#: language/classmodel/projectfolder.cpp:18
+#, kde-format
+msgid "Classes in project %1"
+msgstr ""
+
+#: language/codecompletion/codecompletionitem.cpp:126
+#, kde-format
+msgid "not implemented"
+msgstr ""
+
+#: language/codegen/basicrefactoring.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Rename \"%1\"..."
+msgstr ""
+
+#: language/codegen/basicrefactoring.cpp:221
+#, kde-format
+msgid "No declaration under cursor"
+msgstr ""
+
+#: language/codegen/basicrefactoring.cpp:227
+#, kde-format
+msgid "Declaration is located in non-writable file %1."
+msgstr ""
+
+#: language/codegen/basicrefactoring.cpp:296
+#, kde-format
+msgctxt "@title:window Renaming some declaration"
+msgid "Rename \"%1\""
+msgstr ""
+
+#: language/codegen/basicrefactoring.cpp:300
+#, kde-format
+msgctxt "@title:tab"
+msgid "Uses"
+msgstr ""
+
+#: language/codegen/basicrefactoring.cpp:302
+#, kde-format
+msgctxt "@title:tab"
+msgid "Declaration Info"
+msgstr ""
+
+#: language/codegen/basicrefactoring.cpp:309
+#, kde-format
+msgid "Renaming \"%1\" to \"%2\""
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
+#: language/codegen/basicrefactoring.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Rename"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, newNameLabel)
+#: language/codegen/basicrefactoring.ui:22
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&New name:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
+#: language/codegen/basicrefactoring.ui:35
+#, kde-format
+msgid ""
+"<html><head/><body><p>&quot;Note: All overloaded functions, overloads, "
+"forward-declarations, etc. will be renamed too&quot;</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, goButton)
+#: language/codegen/basicrefactoring.ui:38
+#, kde-format
+msgctxt "@action:button"
+msgid "&Rename"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: language/codegen/basicrefactoring.ui:45
+#, kde-format
+msgctxt "@action:button"
+msgid "&Cancel"
+msgstr ""
+
+#: language/codegen/documentchangeset.cpp:112
+#, kde-format
+msgctxt "text range line:column->line:column"
+msgid "%1:%2->%3:%4"
+msgstr ""
+
+#: language/codegen/documentchangeset.cpp:252
+#, kde-format
+msgid "Could not rename '%1' to '%2'"
+msgstr ""
+
+#: language/codegen/documentchangeset.cpp:342
+#, kde-format
+msgctxt ""
+"Inconsistent change in <filename> between <range>, found <oldText> "
+"(encountered <foundText>) -> <newText>"
+msgid ""
+"Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
+msgstr ""
+
+#: language/codegen/documentchangeset.cpp:363
+#, kde-format
+msgid "Could not replace text in the document: %1"
+msgstr ""
+
+#: language/codegen/documentchangeset.cpp:467
+#, kde-format
+msgctxt ""
+"Inconsistent change in <document> at <range> = <oldText> (encountered "
+"<encountered>) -> <newText>"
+msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
+msgstr ""
+
+#: language/codegen/documentchangeset.cpp:539
+#, kde-format
+msgctxt ""
+"Inconsistent change-request at <document>:intersecting changes: <previous-"
+"oldText> -> <previous-newText> @<range> & <new-oldText> -> <new-newText> "
+"@<range>"
+msgid ""
+"Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
+"\"%5\"->\"%6\"@%7 "
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
+#: language/codegen/progressdialogs/refactoringdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Refactoring"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, abortButton)
+#: language/codegen/progressdialogs/refactoringdialog.ui:27
+#, kde-format
+msgctxt "@action:button"
+msgid "&Abort"
+msgstr ""
+
+#: language/duchain/aliasdeclaration.cpp:47
+#, kde-format
+msgid "Alias %1 as %2"
+msgstr ""
+
+#: language/duchain/aliasdeclaration.cpp:50
+#, kde-format
+msgid "Lost alias %1"
+msgstr ""
+
+#: language/duchain/classfunctiondeclaration.cpp:94
+#, kde-format
+msgid "invalid member-function %1 type %2"
+msgstr ""
+
+#: language/duchain/declarationid.cpp:204
+#, kde-format
+msgid "(unknown direct declaration)"
+msgstr ""
+
+#: language/duchain/declarationid.cpp:207
+#, kde-format
+msgid "(missing)"
+msgstr ""
+
+#: language/duchain/forwarddeclaration.cpp:50
+#, kde-format
+msgid "context-free forward-declaration %1"
+msgstr ""
+
+#: language/duchain/namespacealiasdeclaration.cpp:94
+#, kde-format
+msgid "Import %1 as %2"
+msgstr ""
+
+#: language/duchain/namespacealiasdeclaration.cpp:96
+#, kde-format
+msgid "Import %1"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:89
+#, kde-format
+msgid "lost declaration"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:96
+#, kde-format
+msgid "Back to %1<br />"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:116
+#, kde-format
+msgid "enumerator "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:137
+#, kde-format
+msgid " :[value-dependent]"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
+#, kde-format
+msgid "namespace %1 "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
+#, kde-format
+msgid "enumeration %1 "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
+#, kde-format
+msgid "(resolved forward-declaration: "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:182
+#, kde-format
+msgid ") "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:184
+#, kde-format
+msgid "(unresolved forward-declaration) "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:199
+#, kde-format
+msgid "possible resolution from"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:214
+#, kde-format
+msgid "Returns: "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:216
+#, kde-format
+msgid "Type: "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:235
+#, kde-format
+msgid "Enum: "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:237
+#, kde-format
+msgid "Container: "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:245
+#, kde-format
+msgid "Scope: %1 "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:263
+#, kde-format
+msgid "Access: %1 "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:282
+#, kde-format
+msgid "Kind: %1 %2 "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:284
+#, kde-format
+msgid "Kind: %1 "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
+#, kde-format
+msgid "Deprecated"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
+#, kde-format
+msgid "Status: %1 "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:298
+#, kde-format
+msgid "Def.: "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:300
+#, kde-format
+msgid "Decl.: "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:310
+#, kde-format
+msgid " Def.: "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:320
+#, kde-format
+msgid " Decl.: "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:328
+#, kde-format
+msgid "Show uses"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:367
+#, kde-format
+msgid "Show documentation for "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:473
+#, kde-format
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:490
+#, kde-format
+msgid "Overrides a "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:518
+#, kde-format
+msgid "function"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:493
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:521
+#, kde-format
+msgid " from "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:517
+#, kde-format
+msgid "Hides a "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:541
+#, kde-format
+msgid "Overridden in "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:558
+#, kde-format
+msgid "Overriders possible, show all"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
+#, kde-format
+msgid "More overriders possible, show all"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:569
+#, kde-format
+msgid "Inherited by "
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:584
+#, kde-format
+msgid "Inheriters possible, show all"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:585
+#, kde-format
+msgid "More inheriters possible, show all"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:792
+#, kde-format
+msgctxt "A declaration that is unknown"
+msgid "Unknown"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:818
+#, kde-format
+msgctxt "tells if a declaration is defining the variable's value"
+msgid "definition"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:823
+#, kde-format
+msgctxt "as in c++ forward declaration"
+msgid "forward"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:828
+#, kde-format
+msgctxt "a variable that won't change, const"
+msgid "constant"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:881
+#, kde-format
+msgid "1 Byte"
+msgid_plural "%1 Bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
+#, kde-format
+msgid "1 Bit"
+msgid_plural "%1 Bits"
+msgstr[0] ""
+msgstr[1] ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
+#, kde-format
+msgid "offset in parent: %1"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
+#, kde-format
+msgctxt "%1: bytes, %2: bits"
+msgid "%1, %2"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
+#, kde-format
+msgid "size: %1 Bytes"
+msgstr ""
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
+#, kde-format
+msgid "aligned to: %1 Bytes"
+msgstr ""
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
+#, kde-format
+msgid "Declarations:"
+msgstr ""
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:93
+#, kde-format
+msgid "not parsed yet"
+msgstr ""
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:103
+#, kde-format
+msgctxt "Files included into this file"
+msgid "Includes"
+msgstr ""
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:106
+#, kde-format
+msgctxt "Count of files this file was included into"
+msgid "Included by"
+msgstr ""
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:504
+#, kde-format
+msgid "Typedef"
+msgstr ""
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:507
+#, kde-format
+msgid "Class"
+msgstr ""
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:509
+#, kde-format
+msgid "Variable"
+msgstr ""
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:511
+#, kde-format
+msgid "Namespace"
+msgstr ""
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:516
+#, kde-format
+msgid "Namespace import"
+msgstr ""
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:518
+#, kde-format
+msgid "Namespace alias"
+msgstr ""
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:525
+#, kde-format
+msgid "Forward Declaration"
+msgstr ""
+
+#: language/duchain/navigation/abstractnavigationwidget.cpp:190
+#, kde-format
+msgid ""
+"(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
+"<em>Enter</em>)"
+msgstr ""
+
+#: language/duchain/navigation/abstractnavigationwidget.cpp:192
+#, kde-format
+msgid "(Hold <em>Alt</em> to show this tooltip)"
+msgstr ""
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:85
+#, kde-format
+msgid "Problem"
+msgstr ""
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:114
+#, kde-format
+msgid "Problem in <i>%1</i>"
+msgstr ""
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:118
+#, kde-format
+msgid "Location: "
+msgstr ""
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:156
+#: language/duchain/navigation/problemnavigationcontext.cpp:166
+#, kde-format
+msgid "<br>See: "
+msgstr ""
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:159
+#, kde-format
+msgid " in "
+msgstr ""
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:196
+#, kde-format
+msgid "Solution (%1)"
+msgstr ""
+
+#: language/duchain/navigation/usescollector.cpp:413
+#, kde-format
+msgid "%1 still needs an update!"
+msgstr ""
+
+#: language/duchain/navigation/usesnavigationcontext.cpp:41
+#, kde-format
+msgid "Uses of "
+msgstr ""
+
+#: language/duchain/navigation/usesnavigationcontext.cpp:46
+#, kde-format
+msgid "Uses of %1"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:130
+#, kde-format
+msgctxt "refers to a line in source code"
+msgid "Line <b>%1</b>:"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:211
+#: language/duchain/navigation/useswidget.cpp:218
+#, kde-format
+msgctxt "Refers to a line in source code"
+msgid "Line <b>%1</b>:"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:413
+#, kde-format
+msgid "Unknown context"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:420
+#: shell/launchconfigurationdialog.cpp:481
+#, kde-format
+msgid "Global"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:444
+#, kde-format
+msgctxt "%1: source file"
+msgid "In %1"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:474
+#, kde-format
+msgid "Definition"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:474
+#, kde-format
+msgid "Declaration"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:512
+#, kde-format
+msgctxt "%1: number of uses, %2: filename with uses"
+msgid "%2: 1 use"
+msgid_plural "%2: %1 uses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: language/duchain/navigation/useswidget.cpp:518
+#: language/duchain/navigation/useswidget.cpp:559
+#, kde-format
+msgctxt "Refers to closing a UI element"
+msgid "Collapse"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:555
+#, kde-format
+msgctxt "Refers to opening a UI element"
+msgid "Expand"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:640
+#, kde-format
+msgid "1 use found"
+msgid_plural "%1 uses found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: language/duchain/navigation/useswidget.cpp:642
+#, kde-format
+msgid "Expand all"
+msgstr ""
+
+#: language/duchain/navigation/useswidget.cpp:644
+#, kde-format
+msgid "Collapse all"
+msgstr ""
+
+#: language/duchain/problem.cpp:192 shell/filteredproblemstore.cpp:156
+#, kde-format
+msgid "Warning"
+msgstr ""
+
+#: language/duchain/problem.cpp:194 shell/filteredproblemstore.cpp:157
+#, kde-format
+msgid "Hint"
+msgstr ""
+
+#: language/duchain/problem.cpp:203 shell/problem.cpp:76
+#, kde-format
+msgid "Disk"
+msgstr ""
+
+#: language/duchain/problem.cpp:205 shell/problem.cpp:77
+#, kde-format
+msgid "Preprocessor"
+msgstr ""
+
+#: language/duchain/problem.cpp:207 shell/problem.cpp:78
+#, kde-format
+msgid "Lexer"
+msgstr ""
+
+#: language/duchain/problem.cpp:209 shell/problem.cpp:79
+#, kde-format
+msgid "Parser"
+msgstr ""
+
+#: language/duchain/problem.cpp:211
+#, kde-format
+msgid "Definition-Use Chain"
+msgstr ""
+
+#: language/duchain/problem.cpp:213 shell/problem.cpp:81
+#, kde-format
+msgid "Semantic analysis"
+msgstr ""
+
+#: language/duchain/problem.cpp:215
+#, kde-format
+msgid "To-do"
+msgstr ""
+
+#: language/duchain/problem.cpp:218 shell/problem.cpp:75
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: language/duchain/problem.cpp:225
+#, kde-format
+msgctxt ""
+"<severity>: <description> in <url>:[<range>]: <explanation> (found by "
+"<source>)"
+msgid "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
+msgstr ""
+
+#: language/duchain/problem.cpp:233
+#, kde-format
+msgid "<no explanation>"
+msgstr ""
+
+#: language/duchain/types/containertypes.cpp:74
+#, kde-format
+msgid "%1 of %2"
+msgstr ""
+
+#: language/duchain/types/containertypes.cpp:84
+#: language/duchain/types/containertypes.cpp:85
+#, kde-format
+msgid "unknown"
+msgstr ""
+
+#: language/duchain/types/containertypes.cpp:87
+#, kde-format
+msgid "%1 of %2 : %3"
+msgstr ""
+
+#: language/util/debuglanguageparserhelper.h:179
+#, kde-format
+msgid ""
+"files or - to read from STDIN, the latter is the default if nothing is "
+"provided"
+msgstr ""
+
+#: language/util/debuglanguageparserhelper.h:182
+#, kde-format
+msgid "print generated AST tree"
+msgstr ""
+
+#: language/util/debuglanguageparserhelper.h:183
+#, kde-format
+msgid "print generated token stream"
+msgstr ""
+
+#: language/util/debuglanguageparserhelper.h:184
+#, kde-format
+msgid "code to parse"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:196
+#, kde-format
+msgid "No build directory specified for a builder job."
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:198
+#, kde-format
+msgid "No working directory specified for a process."
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:210
+#, kde-format
+msgid "Invalid build directory '%1'"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:212
+#, kde-format
+msgid "Invalid working directory '%1'"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:219
+#, kde-format
+msgid "Build directory '%1' is not a local path"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:221
+#, kde-format
+msgid "Working directory '%1' is not a local path"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:240
+#, kde-format
+msgid "Build directory '%1' does not exist or is not a directory"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:242
+#, kde-format
+msgid "Working directory '%1' does not exist or is not a directory"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:303
+#, kde-format
+msgid "Failed to specify program to start: %1"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:304
+#, kde-format
+msgid "*** %1 ***"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:330
+#, kde-format
+msgid "*** Killed process ***"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:334
+#, kde-format
+msgid "*** Warning: could not kill the process ***"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:356
+#, kde-format
+msgid "%1 has failed to start"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:360
+#, kde-format
+msgid "%1 has crashed"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:364
+#, kde-format
+msgid "Read error"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:368
+#, kde-format
+msgid "Write error"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:372
+#, kde-format
+msgid "Waiting for the process has timed out"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:376
+#, kde-format
+msgid "Exit code %1"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:389
+#, kde-format
+msgid "*** Failure: %1 ***"
+msgstr ""
+
+#: outputview/outputexecutejob.cpp:407
+#, kde-format
+msgid "*** Finished ***"
+msgstr ""
+
+#: project/abstractfilemanagerplugin.cpp:325
+#, kde-format
+msgid ""
+"The base folder of project <b>%1</b> got deleted or moved outside of "
+"KDevelop.\n"
+"The project has to be closed."
+msgstr ""
+
+#: project/abstractfilemanagerplugin.cpp:328
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Folder Deleted"
+msgstr ""
+
+#: project/abstractfilemanagerplugin.cpp:354
+#, kde-format
+msgid ""
+"You tried to rename '%1' to '%2', but the latter is filtered and will be "
+"hidden.\n"
+"Do you want to continue?"
+msgstr ""
+
+#: project/builderjob.cpp:76
+#, kde-format
+msgctxt "@info:status"
+msgid "build"
+msgstr ""
+
+#: project/builderjob.cpp:78
+#, kde-format
+msgctxt "@info:status"
+msgid "clean"
+msgstr ""
+
+#: project/builderjob.cpp:80
+#, kde-format
+msgctxt "@info:status"
+msgid "configure"
+msgstr ""
+
+#: project/builderjob.cpp:82
+#, kde-format
+msgctxt "@info:status"
+msgid "install"
+msgstr ""
+
+#: project/builderjob.cpp:84
+#, kde-format
+msgctxt "@info:status"
+msgid "prune"
+msgstr ""
+
+#: project/builderjob.cpp:234
+#, kde-format
+msgctxt "Unspecified set of build items (e. g. projects, targets)"
+msgid "Various items"
+msgstr ""
+
+#: project/helper.cpp:67
+#, kde-format
+msgid "Cannot remove folder <i>%1</i>."
+msgstr ""
+
+#: project/helper.cpp:68
+#, kde-format
+msgid "Cannot remove file <i>%1</i>."
+msgstr ""
+
+#: project/helper.cpp:86
+#, kde-format
+msgid "The file <i>%1</i> already exists."
+msgstr ""
+
+#: project/helper.cpp:96
+#, kde-format
+msgid "Cannot create file <i>%1</i>."
+msgstr ""
+
+#: project/helper.cpp:115
+#, kde-format
+msgid "Cannot create folder <i>%1</i>."
+msgstr ""
+
+#: project/importprojectjob.cpp:55
+#, kde-format
+msgid "Project Import: %1"
+msgstr ""
+
+#: project/importprojectjob.cpp:89
+#, kde-format
+msgid "Project import canceled."
+msgstr ""
+
+#: project/projectbuildsetmodel.cpp:286
+#, kde-format
+msgctxt "@title:column buildset item name"
+msgid "Name"
+msgstr ""
+
+#: project/projectbuildsetmodel.cpp:288
+#, kde-format
+msgctxt "@title:column buildset item path"
+msgid "Path"
+msgstr ""
+
+#: project/projectchangesmodel.cpp:274
+#, kde-format
+msgctxt "@item:intext"
+msgid "no branch"
+msgstr ""
+
+#: project/projectchangesmodel.cpp:275
+#, kde-format
+msgctxt "project name (branch name)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: project/projectitemlineedit.cpp:156
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter the path to an item from the projects tree..."
+msgstr ""
+
+#: project/projectitemlineedit.cpp:158
+#, kde-format
+msgctxt "@action"
+msgid "Select..."
+msgstr ""
+
+#: project/projectitemlineedit.cpp:182
+#, kde-format
+msgctxt "@title:window"
+msgid "Select an Item"
+msgstr ""
+
+#: project/projectitemlineedit.cpp:192
+#, kde-format
+msgid "Select the item you want to get the path from."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
+#: project/widgets/dependencieswidget.ui:32
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a dependency to add to the list"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (ProjectItemLineEdit, targetDependency)
+#: project/widgets/dependencieswidget.ui:35
+#, kde-format
+msgctxt "@info:placedholder"
+msgid "Enter a dependency to add to the list..."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
+#: project/widgets/dependencieswidget.ui:55
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add the listed target to the dependency list"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QListWidget, dependencies)
+#: project/widgets/dependencieswidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "List of indirect dependent targets."
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QListWidget, dependencies)
+#: project/widgets/dependencieswidget.ui:71
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This list should contain targets that the application does not directly "
+"depend on, but for which an action needs to be taken before running the "
+"application."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeDependency)
+#: project/widgets/dependencieswidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove the selected dependencies from the list"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, moveDepUp)
+#: project/widgets/dependencieswidget.ui:103
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected dependency up in the list"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
+#: project/widgets/dependencieswidget.ui:119
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected dependency down in the list"
+msgstr ""
+
+#: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
+#, kde-format
+msgid "Failed writing to %1, probably the disk is full"
+msgstr ""
+
+#: serialization/itemrepositoryregistry.cpp:75
+#, kde-format
+msgid "The previous session crashed."
+msgid_plural "Session crashed %1 times in a row."
+msgstr[0] ""
+msgstr[1] ""
+
+#: serialization/itemrepositoryregistry.cpp:77
+#, kde-format
+msgctxt "tty action"
+msgid "Clear cache"
+msgstr ""
+
+#: serialization/itemrepositoryregistry.cpp:78
+#, kde-format
+msgctxt "@title"
+msgid "Session Crashed"
+msgstr ""
+
+#: serialization/itemrepositoryregistry.cpp:79
+#, kde-format
+msgid ""
+"The crash may be caused by a corruption of cached data.\n"
+"\n"
+"Press Clear if you want KDevelop to clear the cache, otherwise press "
+"Continue if you are sure the crash has another origin."
+msgstr ""
+
+#: serialization/itemrepositoryregistry.cpp:81
+#, kde-format
+msgctxt "@action:button"
+msgid "Clear Cache"
+msgstr ""
+
+#: serialization/itemrepositoryregistry.cpp:82
+#, kde-format
+msgctxt "@action:button"
+msgid "Continue"
+msgstr ""
+
+#: shell/areadisplay.cpp:44
+#, kde-format
+msgid ""
+"Execute actions to change the area.<br />An area is a tool view "
+"configuration for a specific use case. From here you can also navigate back "
+"to the default code area."
+msgstr ""
+
+#: shell/areadisplay.cpp:70
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Back to Code"
+msgstr ""
+
+#: shell/configdialog.cpp:30
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure"
+msgstr ""
+
+#: shell/configdialog.cpp:84
+#, kde-format
+msgid ""
+"The settings of the current module have changed.\n"
+"Do you want to apply the changes or discard them?"
+msgstr ""
+
+#: shell/configdialog.cpp:86
+#, kde-format
+msgctxt "@title:window"
+msgid "Apply Settings"
+msgstr ""
+
+#: shell/core.cpp:183
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr ""
+
+#: shell/core.cpp:184
+#, kde-format
+msgid ""
+"<p>Could not find any plugins during startup.<br/>Please make sure "
+"QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
+"org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
+"\">this article</a> for more information."
+msgstr ""
+
+#: shell/debugcontroller.cpp:118
+#, kde-format
+msgid "Debugger"
+msgstr ""
+
+#: shell/debugcontroller.cpp:148
+#, kde-format
+msgctxt "@title:window"
+msgid "Frame Stack"
+msgstr ""
+
+#: shell/debugcontroller.cpp:153
+#, kde-format
+msgctxt "@title:window"
+msgid "Breakpoints"
+msgstr ""
+
+#: shell/debugcontroller.cpp:158
+#, kde-format
+msgctxt "@title:window"
+msgid "Variables"
+msgstr ""
+
+#: shell/debugcontroller.cpp:224
+#, kde-format
+msgid "&Restart"
+msgstr ""
+
+#: shell/debugcontroller.cpp:225
+#, kde-format
+msgid "Restart program"
+msgstr ""
+
+#: shell/debugcontroller.cpp:226
+#, kde-format
+msgid "Restarts applications from the beginning."
+msgstr ""
+
+#: shell/debugcontroller.cpp:232
+#, kde-format
+msgctxt "@action"
+msgid "Interrupt"
+msgstr ""
+
+#: shell/debugcontroller.cpp:233
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Interrupt application"
+msgstr ""
+
+#: shell/debugcontroller.cpp:234
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Interrupts the debugged process or current debugger command."
+msgstr ""
+
+#: shell/debugcontroller.cpp:238
+#, kde-format
+msgctxt "@action"
+msgid "Run to &Cursor"
+msgstr ""
+
+#: shell/debugcontroller.cpp:239
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Run to cursor"
+msgstr ""
+
+#: shell/debugcontroller.cpp:240
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr ""
+
+#: shell/debugcontroller.cpp:245
+#, kde-format
+msgctxt "@action"
+msgid "Set E&xecution Position to Cursor"
+msgstr ""
+
+#: shell/debugcontroller.cpp:246
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Jump to cursor"
+msgstr ""
+
+#: shell/debugcontroller.cpp:247
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continue execution from the current cursor position."
+msgstr ""
+
+#: shell/debugcontroller.cpp:251
+#, kde-format
+msgctxt "@action"
+msgid "Step &Over"
+msgstr ""
+
+#: shell/debugcontroller.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step over the next line"
+msgstr ""
+
+#: shell/debugcontroller.cpp:254
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes one line of source in the current source file. If the source line "
+"is a call to a function the whole function is executed and the app will stop "
+"at the line following the function call."
+msgstr ""
+
+#: shell/debugcontroller.cpp:262
+#, kde-format
+msgctxt "@action"
+msgid "Step over Ins&truction"
+msgstr ""
+
+#: shell/debugcontroller.cpp:263
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step over instruction"
+msgstr ""
+
+#: shell/debugcontroller.cpp:264
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Steps over the next assembly instruction."
+msgstr ""
+
+#: shell/debugcontroller.cpp:269
+#, kde-format
+msgctxt "@action"
+msgid "Step &Into"
+msgstr ""
+
+#: shell/debugcontroller.cpp:271
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step into the next statement"
+msgstr ""
+
+#: shell/debugcontroller.cpp:272
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes exactly one line of source. If the source line is a call to a "
+"function then execution will stop after the function has been entered."
+msgstr ""
+
+#: shell/debugcontroller.cpp:279
+#, kde-format
+msgctxt "@action"
+msgid "Step into I&nstruction"
+msgstr ""
+
+#: shell/debugcontroller.cpp:280
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step into instruction"
+msgstr ""
+
+#: shell/debugcontroller.cpp:281
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Steps into the next assembly instruction."
+msgstr ""
+
+#: shell/debugcontroller.cpp:285
+#, kde-format
+msgctxt "@action"
+msgid "Step O&ut"
+msgstr ""
+
+#: shell/debugcontroller.cpp:287
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step out of the current function"
+msgstr ""
+
+#: shell/debugcontroller.cpp:288
+#, kde-format
+msgctxt "@whatsthis"
+msgid ""
+"Executes the application until the currently executing function is "
+"completed. The debugger will then display the line after the original call "
+"to that function. If program execution is in the outermost frame (i.e. in "
+"main()) then this operation has no effect."
+msgstr ""
+
+#: shell/debugcontroller.cpp:296
+#, kde-format
+msgctxt "@action"
+msgid "Toggle Breakpoint"
+msgstr ""
+
+#: shell/debugcontroller.cpp:297
+#, kde-format
+msgid "Ctrl+Alt+B"
+msgstr ""
+
+#: shell/debugcontroller.cpp:298
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle breakpoint"
+msgstr ""
+
+#: shell/debugcontroller.cpp:299
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Toggles the breakpoint at the current line in editor."
+msgstr ""
+
+#: shell/debugcontroller.cpp:303
+#, kde-format
+msgctxt "@action"
+msgid "Show Current Line"
+msgstr ""
+
+#: shell/debugcontroller.cpp:304
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show the current execution position"
+msgstr ""
+
+#: shell/debugcontroller.cpp:305
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Jumps to the execution line in the editor."
+msgstr ""
+
+#: shell/debugcontroller.cpp:431
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr ""
+
+#: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
+#, kde-format
+msgctxt "@action"
+msgid "Debug Launch"
+msgstr ""
+
+#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:443
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Debug current launch"
+msgstr ""
+
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:444
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes the target or the program specified in currently active launch "
+"configuration inside a Debugger."
+msgstr ""
+
+#: shell/debugcontroller.cpp:487
+#, kde-format
+msgctxt "@action"
+msgid "&Continue"
+msgstr ""
+
+#: shell/debugcontroller.cpp:489
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Continue application execution"
+msgstr ""
+
+#: shell/debugcontroller.cpp:490
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Continues the execution of your application in the debugger. This only takes "
+"effect when the application has been halted by the debugger (i.e. a "
+"breakpoint has been activated or the interrupt was pressed)."
+msgstr ""
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: shell/debugger/kdevdebuggershellui.rc:25
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr ""
+
+#: shell/documentationcontroller.cpp:114
+#, kde-format
+msgctxt "@action"
+msgid "Show Documentation"
+msgstr ""
+
+#: shell/documentationcontroller.cpp:121 shell/documentationcontroller.cpp:230
+#, kde-format
+msgctxt "@title:window"
+msgid "Documentation"
+msgstr ""
+
+#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:59
+#, kde-format
+msgid "Untitled"
+msgstr ""
+
+#: shell/documentcontroller.cpp:118
+#, kde-format
+msgctxt "@title:window"
+msgid "Open File"
+msgstr ""
+
+#: shell/documentcontroller.cpp:119
+#, kde-format
+msgid "*|Text File\n"
+msgstr ""
+
+#: shell/documentcontroller.cpp:316
+#, kde-format
+msgid ""
+"KDevelop could not find the editor for file '%1' of type %2.\n"
+"Do you want to open it as plain text?"
+msgstr ""
+
+#: shell/documentcontroller.cpp:319
+#, kde-format
+msgctxt "@title:window"
+msgid "Could Not Find Editor"
+msgstr ""
+
+#: shell/documentcontroller.cpp:320
+#, kde-format
+msgctxt "@action:button"
+msgid "Open as Plain Text"
+msgstr ""
+
+#: shell/documentcontroller.cpp:321
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Open"
+msgstr ""
+
+#: shell/documentcontroller.cpp:609
+#, kde-format
+msgctxt "@action"
+msgid "&Open..."
+msgstr ""
+
+#: shell/documentcontroller.cpp:612
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open file"
+msgstr ""
+
+#: shell/documentcontroller.cpp:613
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens a file for editing."
+msgstr ""
+
+#: shell/documentcontroller.cpp:617
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This lists files which you have opened recently, and allows you to easily "
+"open them again."
+msgstr ""
+
+#: shell/documentcontroller.cpp:622
+#, kde-format
+msgctxt "@action"
+msgid "Save Al&l"
+msgstr ""
+
+#: shell/documentcontroller.cpp:624
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Save all open documents"
+msgstr ""
+
+#: shell/documentcontroller.cpp:625
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Save all open documents, prompting for additional information when necessary."
+msgstr ""
+
+#: shell/documentcontroller.cpp:631
+#, kde-format
+msgctxt "@action"
+msgid "Reload All"
+msgstr ""
+
+#: shell/documentcontroller.cpp:633
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Revert all open documents"
+msgstr ""
+
+#: shell/documentcontroller.cpp:634
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Revert all open documents, returning to the previously saved state."
+msgstr ""
+
+#: shell/documentcontroller.cpp:640
+#, kde-format
+msgctxt "@action"
+msgid "&Close"
+msgstr ""
+
+#: shell/documentcontroller.cpp:642
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close file"
+msgstr ""
+
+#: shell/documentcontroller.cpp:643
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Closes current file."
+msgstr ""
+
+#: shell/documentcontroller.cpp:648
+#, kde-format
+msgctxt "@action"
+msgid "Clos&e All"
+msgstr ""
+
+#: shell/documentcontroller.cpp:650
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all open documents"
+msgstr ""
+
+#: shell/documentcontroller.cpp:651
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Close all open documents, prompting for additional information when "
+"necessary."
+msgstr ""
+
+#: shell/documentcontroller.cpp:657
+#, kde-format
+msgctxt "@action"
+msgid "Close All Ot&hers"
+msgstr ""
+
+#: shell/documentcontroller.cpp:659
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other documents"
+msgstr ""
+
+#: shell/documentcontroller.cpp:660
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Close all open documents, with the exception of the currently active "
+"document."
+msgstr ""
+
+#: shell/documentcontroller.cpp:665
+#, kde-format
+msgctxt "@action"
+msgid "Show Annotate on Current Document"
+msgstr ""
+
+#: shell/documentcontroller.cpp:666
+#, kde-format
+msgctxt "@action"
+msgid "Annotate"
+msgstr ""
+
+#: shell/documentcontroller.cpp:1298
+#, kde-format
+msgid ""
+"Could not annotate the document because it is not part of a version-"
+"controlled project."
+msgstr ""
+
+#: shell/editorconfigpage.cpp:94
+#, kde-format
+msgctxt "@title:tab"
+msgid "Editor"
+msgstr ""
+
+#: shell/editorconfigpage.cpp:104
+#, kde-format
+msgid "Configure Text Editor"
+msgstr ""
+
+#: shell/environmentconfigurebutton.cpp:73
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure environment variables"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "Launch Configurations"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add a new launch configuration."
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete selected launch configuration."
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:173
+#, kde-format
+msgid ""
+"No launch configurations available. (Is any of the Execute plugins loaded?)"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:196
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rename Configuration"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:197
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Delete Configuration"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:252
+#, kde-format
+msgid ""
+"Selected Launch Configuration has unsaved changes. Do you want to save it?"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:253
+#, kde-format
+msgctxt "@title:window"
+msgid "Unsaved Changes"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:325
+#, kde-format
+msgctxt "%1 is a launcher name"
+msgid "No configuration is needed for '%1'"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:369
+#, kde-format
+msgid ""
+"<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
+"button to add a new one.</i>"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:437
+#, kde-format
+msgid "Editing %2: <b>%1</b>"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:710
+#, kde-format
+msgctxt "@title:column Name of the Launch Configurations"
+msgid "Name"
+msgstr ""
+
+#: shell/launchconfigurationdialog.cpp:713
+#, kde-format
+msgctxt ""
+"@title:column Type of the Launch Configurations (i.e. Python Application, C+"
+"+ Application)"
+msgid "Type"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: shell/launchconfigurationdialog.ui:29
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
+#: shell/launchconfigurationdialog.ui:39
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, debugLabel)
+#: shell/launchconfigurationdialog.ui:84
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Debugger:"
+msgstr ""
+
+#: shell/loadedpluginsdialog.cpp:279
+#, kde-format
+msgctxt "@title:window"
+msgid "Loaded Plugins"
+msgstr ""
+
+#: shell/loadedpluginsdialog.cpp:285
+#, kde-format
+msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
+msgstr ""
+
+#: shell/mainwindow.cpp:457
+#, kde-format
+msgid " (read only)"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:223
+#, kde-format
+msgctxt "@info:tooltip %1 = application name"
+msgid "Configure %1"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:224
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Lets you customize %1."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:227
+#, kde-format
+msgctxt "@action"
+msgid "Configure Notifications..."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:228
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure notifications"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:229
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Shows a dialog that lets you configure notifications."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:233
+#, kde-format
+msgctxt "@action"
+msgid "Loaded Plugins"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:234
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show a list of all loaded plugins"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:235
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Shows a dialog with information about all loaded plugins."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:238
+#, kde-format
+msgctxt "@action"
+msgid "&Next Window"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:241
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next window"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:242
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the next window."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:246
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Window"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous window"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:250
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the previous window."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:254
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Next Outputmark"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:260
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Previous Outputmark"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:267
+#, kde-format
+msgctxt "@action"
+msgid "Split View &Top/Bottom"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:270
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Split horizontal"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:271
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Splits the current view horizontally."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:275
+#, kde-format
+msgctxt "@action"
+msgid "Split View &Left/Right"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:278
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Split vertical"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:279
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Splits the current view vertically."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:282
+#, kde-format
+msgctxt "@action"
+msgid "&Next Split View"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:285
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next split view"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:286
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the next split view."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:290
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Split View"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:293
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous split view"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:294
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the previous split view."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:302
+#, kde-format
+msgctxt "@action new file"
+msgid "&New"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:303
+#, kde-format
+msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
+msgid "New"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:305
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "New file"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:306
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Creates an empty file."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:311
+#, kde-format
+msgctxt "@action"
+msgid "&Add Tool View..."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:313
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add tool view"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:314
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Adds a new tool view to this window."
+msgstr ""
+
+#: shell/mainwindow_p.cpp:319
+#, kde-format
+msgid "&Window Color Scheme"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:353
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Top/Bottom"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:356
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Left/Right"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:360
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "New File"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:366
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:369
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Reload All"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:409
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Add Tool View"
+msgstr ""
+
+#: shell/mainwindow_p.cpp:432
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Lock the Panel from Hiding"
+msgstr ""
+
+#: shell/openprojectdialog.cpp:132
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "All Project Files"
+msgstr ""
+
+#: shell/openprojectdialog.cpp:141
+#, kde-format
+msgctxt "@title:tab"
+msgid "Select Source"
+msgstr ""
+
+#: shell/openprojectdialog.cpp:149
+#, kde-format
+msgid ""
+"Select a build system setup file, existing KDevelop project, or any folder "
+"to open as a project"
+msgstr ""
+
+#: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
+#, kde-format
+msgctxt "@title:window"
+msgid "Open Project"
+msgstr ""
+
+#: shell/openprojectdialog.cpp:165
+#, kde-format
+msgctxt "@title:tab"
+msgid "Project Information"
+msgstr ""
+
+#: shell/openprojectdialog.cpp:228
+#, kde-format
+msgid "Open \"%1\" as project"
+msgstr ""
+
+#: shell/openprojectdialog.cpp:232
+#, kde-format
+msgid "Selected URL is invalid"
+msgstr ""
+
+#: shell/openprojectdialog.cpp:277
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Open existing file \"%1\""
+msgstr ""
+
+#: shell/partcontroller.cpp:226
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Use this command to show or hide the view's statusbar."
+msgstr ""
+
+#: shell/partdocument.cpp:108
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr ""
+
+#: shell/partdocument.cpp:109 shell/partdocument.cpp:118
+#, kde-format
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr ""
+
+#: shell/partdocument.cpp:115
+#, kde-format
+msgid ""
+"The document \"%1\" has unsaved changes and was modified by an external "
+"process.\n"
+"Do you want to overwrite the external changes?"
+msgstr ""
+
+#: shell/partdocument.cpp:119 shell/textdocument.cpp:416
+#, kde-format
+msgctxt "@action:button"
+msgid "Overwrite External Changes"
+msgstr ""
+
+#: shell/problem.cpp:40
+#, kde-format
+msgid "Plugin"
+msgstr ""
+
+#: shell/problem.cpp:80
+#, kde-format
+msgid "DuchainBuilder"
+msgstr ""
+
+#: shell/problem.cpp:82
+#, kde-format
+msgid "Todo"
+msgstr ""
+
+#: shell/problem.cpp:167
+#, kde-format
+msgctxt "@item problem severity"
+msgid "Hint"
+msgstr ""
+
+#: shell/problem.cpp:168
+#, kde-format
+msgctxt "@item problem severity"
+msgid "Warning"
+msgstr ""
+
+#: shell/problem.cpp:169
+#, kde-format
+msgctxt "@item problem severity"
+msgid "Error"
+msgstr ""
+
+#: shell/problemmodel.cpp:36
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-parse all watched documents"
+msgstr ""
+
+#: shell/problemmodel.cpp:321
+#, kde-format
+msgctxt "@title:column source of problem"
+msgid "Source"
+msgstr ""
+
+#: shell/problemmodel.cpp:323
+#, kde-format
+msgctxt "@title:column problem description"
+msgid "Problem"
+msgstr ""
+
+#: shell/problemmodel.cpp:325
+#, kde-format
+msgctxt "@title:column file where problem was found"
+msgid "File"
+msgstr ""
+
+#: shell/problemmodel.cpp:327
+#, kde-format
+msgctxt "@title:column line number with problem"
+msgid "Line"
+msgstr ""
+
+#: shell/problemmodel.cpp:329
+#, kde-format
+msgctxt "@title:column column number with problem"
+msgid "Column"
+msgstr ""
+
+#: shell/progresswidget/progressdialog.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Cancel this operation"
+msgstr ""
+
+#: shell/progresswidget/progressmanager.cpp:87
+#, kde-format
+msgctxt "@info"
+msgid "Aborting..."
+msgstr ""
+
+#: shell/progresswidget/statusbarprogresswidget.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open detailed progress dialog"
+msgstr ""
+
+#: shell/progresswidget/statusbarprogresswidget.cpp:337
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Hide detailed progress window"
+msgstr ""
+
+#: shell/progresswidget/statusbarprogresswidget.cpp:341
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show detailed progress window"
+msgstr ""
+
+#: shell/project.cpp:99
+#, kde-format
+msgid "Loading Project %1"
+msgstr ""
+
+#: shell/project.cpp:107
+#, kde-format
+msgctxt "%1: Project name"
+msgid "Loading %1"
+msgstr ""
+
+#: shell/project.cpp:226
+#, kde-format
+msgid ""
+"Unable to load the project file %1.<br>The project has been removed from the "
+"session."
+msgstr ""
+
+#: shell/project.cpp:252
+#, kde-format
+msgid "Unable to create hidden dir (%1) for developer file"
+msgstr ""
+
+#: shell/project.cpp:268
+#, kde-format
+msgid "Unable to get project file: %1"
+msgstr ""
+
+#: shell/project.cpp:308
+#, kde-format
+msgid "Could not load %1, a project with the same name '%2' is already open."
+msgstr ""
+
+#: shell/project.cpp:339
+#, kde-format
+msgid ""
+"Could not load project management plugin <b>%1</b>.<br>Check that the "
+"required programs are installed, or see console output for more information."
+msgstr ""
+
+#: shell/project.cpp:349
+#, kde-format
+msgid ""
+"The project importing plugin (%1) does not support the IProjectFileManager "
+"interface."
+msgstr ""
+
+#: shell/project.cpp:402
+#, kde-format
+msgid "Could not open project."
+msgstr ""
+
+#: shell/project.cpp:560
+#, kde-format
+msgid ""
+"Could not store developer specific project configuration.\n"
+"Attention: The project settings you changed will be lost."
+msgstr ""
+
+#: shell/projectcontroller.cpp:157
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure Project %1"
+msgstr ""
+
+#: shell/projectcontroller.cpp:300
+#, kde-format
+msgid "Invalid Location: %1"
+msgstr ""
+
+#: shell/projectcontroller.cpp:310
+#, kde-format
+msgid "Already opening %1, not opening again"
+msgstr ""
+
+#: shell/projectcontroller.cpp:467
+#, kde-format
+msgctxt "@action:button"
+msgid "Override"
+msgstr ""
+
+#: shell/projectcontroller.cpp:468
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Continue to open the project and use the just provided project configuration"
+msgstr ""
+
+#: shell/projectcontroller.cpp:469
+#, kde-format
+msgctxt "@action:button"
+msgid "Open Existing File"
+msgstr ""
+
+#: shell/projectcontroller.cpp:470
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Continue to open the project but use the existing project configuration"
+msgstr ""
+
+#: shell/projectcontroller.cpp:472
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Cancel and do not open the project"
+msgstr ""
+
+#: shell/projectcontroller.cpp:475
+#, kde-format
+msgid ""
+"There already exists a project configuration file at %1.\n"
+"Do you want to override it or open the existing file?"
+msgstr ""
+
+#: shell/projectcontroller.cpp:478
+#, kde-format
+msgctxt "@title:window"
+msgid "Override Existing Project Configuration"
+msgstr ""
+
+#: shell/projectcontroller.cpp:496
+#, kde-format
+msgid "Unable to create configuration file %1"
+msgstr ""
+
+#: shell/projectcontroller.cpp:510
+#, kde-format
+msgid "Reopen the current project?"
+msgstr ""
+
+#: shell/projectcontroller.cpp:511
+#, kde-format
+msgctxt "@action:button"
+msgid "Reopen"
+msgstr ""
+
+#: shell/projectcontroller.cpp:552
+#, kde-format
+msgctxt "@action"
+msgid "Open / Import Project..."
+msgstr ""
+
+#: shell/projectcontroller.cpp:553
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open or import project"
+msgstr ""
+
+#: shell/projectcontroller.cpp:554
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Open an existing KDevelop project or import an existing Project into "
+"KDevelop. This entry allows one to select a KDevelop project file or an "
+"existing directory to open it in KDevelop. When opening an existing "
+"directory that does not yet have a KDevelop project file, the file will be "
+"created."
+msgstr ""
+
+#: shell/projectcontroller.cpp:565
+#, kde-format
+msgctxt "@action"
+msgid "Fetch Project..."
+msgstr ""
+
+#: shell/projectcontroller.cpp:567
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fetch project"
+msgstr ""
+
+#: shell/projectcontroller.cpp:568
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Guides the user through the project fetch and then imports it into KDevelop."
+msgstr ""
+
+#: shell/projectcontroller.cpp:583
+#, kde-format
+msgctxt "@action"
+msgid "Close Project(s)"
+msgstr ""
+
+#: shell/projectcontroller.cpp:585
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Closes all currently selected projects"
+msgstr ""
+
+#: shell/projectcontroller.cpp:591
+#, kde-format
+msgctxt "@action"
+msgid "Open Configuration..."
+msgstr ""
+
+#: shell/projectcontroller.cpp:597
+#, kde-format
+msgctxt "@action"
+msgid "Commit Current Project..."
+msgstr ""
+
+#: shell/projectcontroller.cpp:598
+#, kde-format
+msgctxt "@action"
+msgid "Commit..."
+msgstr ""
+
+#: shell/projectcontroller.cpp:609
+#, kde-format
+msgctxt "@action"
+msgid "Open Recent Project"
+msgstr ""
+
+#: shell/projectcontroller.cpp:610
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens recently opened project."
+msgstr ""
+
+#: shell/projectcontroller.cpp:615
+#, kde-format
+msgctxt "@action"
+msgid "Open Project for Current File"
+msgstr ""
+
+#: shell/projectcontroller.cpp:766
+#, kde-format
+msgid "Project already open: %1"
+msgstr ""
+
+#: shell/projectcontroller.cpp:770
+#, kde-format
+msgid "No active document"
+msgstr ""
+
+#: shell/projectcontroller.cpp:851
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Already Open"
+msgstr ""
+
+#: shell/projectcontroller.cpp:854
+#, kde-format
+msgid ""
+"The project you're trying to open is already open in at least one other "
+"session.<br>What do you want to do?"
+msgstr ""
+
+#: shell/projectcontroller.cpp:858
+#, kde-format
+msgctxt "@option:radio"
+msgid "Add project to current session"
+msgstr ""
+
+#: shell/projectcontroller.cpp:862
+#, kde-format
+msgctxt "@option:radio"
+msgid "Open session %1"
+msgstr ""
+
+#: shell/projectcontroller.cpp:923
+#, kde-format
+msgid "No enabled plugin supports this repository URL: %1"
+msgstr ""
+
+#: shell/projectcontroller.cpp:1227
+#, kde-format
+msgctxt "@action"
+msgid "Reparse the Entire Project"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_2)
+#. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
+#: shell/projectinfopage.ui:29 shell/projectinfopage.ui:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the Management Plugin to use for this project"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/projectinfopage.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Project manager:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
+#: shell/projectinfopage.ui:39 shell/projectinfopage.ui:49
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Provide a name for the project"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr ""
+
+#: shell/projectsourcepage.cpp:44
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "From File System"
+msgstr ""
+
+#: shell/projectsourcepage.cpp:179
+#, kde-format
+msgid "Could not create the directory: %1"
+msgstr ""
+
+#: shell/projectsourcepage.cpp:208
+#, kde-format
+msgctxt "Format of the progress bar text. progress and info"
+msgid "%1 : %p%"
+msgstr ""
+
+#: shell/projectsourcepage.cpp:249
+#, kde-format
+msgid ""
+"You need to specify a valid or nonexistent directory to check out a project"
+msgstr ""
+
+#: shell/projectsourcepage.cpp:251
+#, kde-format
+msgid "You need to specify the source for your remote project"
+msgstr ""
+
+#: shell/projectsourcepage.cpp:253
+#, kde-format
+msgid "You need to specify an empty folder as your project destination"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/projectsourcepage.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Source:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/projectsourcepage.ui:49
+#, kde-format
+msgctxt "@title:group"
+msgid "Destination"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/projectsourcepage.ui:55
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Directory:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
+#: shell/projectsourcepage.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select the directory to use..."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
+#: shell/projectsourcepage.ui:78
+#, kde-format
+msgctxt "@title:group"
+msgid "Source"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, get)
+#: shell/projectsourcepage.ui:105
+#, kde-format
+msgctxt "@action:button"
+msgid "Get"
+msgstr ""
+
+#: shell/runcontroller.cpp:87
+#, kde-format
+msgctxt "launch mode"
+msgid "Debug"
+msgstr ""
+
+#: shell/runcontroller.cpp:96
+#, kde-format
+msgctxt "launch mode"
+msgid "Profile"
+msgstr ""
+
+#: shell/runcontroller.cpp:105
+#, kde-format
+msgctxt "launch mode"
+msgid "Execute"
+msgstr ""
+
+#: shell/runcontroller.cpp:405
+#, kde-format
+msgid "The current launch configuration does not support the '%1' mode."
+msgstr ""
+
+#: shell/runcontroller.cpp:425
+#, kde-format
+msgctxt "@action"
+msgid "Configure Launches..."
+msgstr ""
+
+#: shell/runcontroller.cpp:428
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open Launch Configuration Dialog"
+msgstr ""
+
+#: shell/runcontroller.cpp:429
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Opens a dialog to setup new launch configurations, or to change the existing "
+"ones."
+msgstr ""
+
+#: shell/runcontroller.cpp:432
+#, kde-format
+msgctxt "@action"
+msgid "Execute Launch"
+msgstr ""
+
+#: shell/runcontroller.cpp:433
+#, kde-format
+msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
+msgid "Execute"
+msgstr ""
+
+#: shell/runcontroller.cpp:435
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Execute current launch"
+msgstr ""
+
+#: shell/runcontroller.cpp:436
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes the target or the program specified in currently active launch "
+"configuration."
+msgstr ""
+
+#: shell/runcontroller.cpp:442
+#, kde-format
+msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
+msgid "Debug"
+msgstr ""
+
+#. i18n("Profile Launch"), this);
+#. profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
+#. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
+#. ac->addAction("run_profile", profileAction);
+#. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
+#: shell/runcontroller.cpp:456
+#, kde-format
+msgctxt "@action"
+msgid "Stop All Jobs"
+msgstr ""
+
+#: shell/runcontroller.cpp:457
+#, kde-format
+msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
+msgid "Stop All"
+msgstr ""
+
+#: shell/runcontroller.cpp:460
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Stop all currently running jobs"
+msgstr ""
+
+#: shell/runcontroller.cpp:461
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Requests that all running jobs are stopped."
+msgstr ""
+
+#: shell/runcontroller.cpp:467
+#, kde-format
+msgctxt "@action"
+msgid "Stop"
+msgstr ""
+
+#: shell/runcontroller.cpp:469
+#, kde-format
+msgctxt "@action Short text for 'Stop' used in the toolbar"
+msgid "Stop"
+msgstr ""
+
+#: shell/runcontroller.cpp:470
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Menu allowing to stop individual jobs"
+msgstr ""
+
+#: shell/runcontroller.cpp:471
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "List of jobs that can be stopped individually."
+msgstr ""
+
+#: shell/runcontroller.cpp:475
+#, kde-format
+msgctxt "@title:menu"
+msgid "Current Launch Configuration"
+msgstr ""
+
+#: shell/runcontroller.cpp:476
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Current launch configuration"
+msgstr ""
+
+#: shell/runcontroller.cpp:477
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Select which launch configuration to run when run is invoked."
+msgstr ""
+
+#: shell/runcontroller.cpp:590
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "<%1> Unnamed job"
+msgstr ""
+
+#: shell/runcontroller.cpp:967
+#, kde-format
+msgid "New %1 Launcher"
+msgstr ""
+
+#: shell/runcontroller.cpp:1004
+#, kde-format
+msgctxt "@title:menu"
+msgid "%1 As..."
+msgstr ""
+
+#: shell/runtimecontroller.cpp:27
+#, kde-format
+msgid "Host System"
+msgstr ""
+
+#: shell/runtimecontroller.cpp:88
+#, kde-format
+msgid "Allows to select a runtime"
+msgstr ""
+
+#: shell/runtimecontroller.cpp:92
+#, kde-format
+msgid "Runtime: %1"
+msgstr ""
+
+#: shell/savedialog.cpp:44
+#, kde-format
+msgctxt "@title:window"
+msgid "Save Modified Files?"
+msgstr ""
+
+#: shell/savedialog.cpp:47
+#, kde-format
+msgid "The following files have been modified. Save them?"
+msgstr ""
+
+#: shell/savedialog.cpp:65
+#, kde-format
+msgctxt "@action:button"
+msgid "Save &None"
+msgstr ""
+
+#: shell/savedialog.cpp:66
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Discard all modifications"
+msgstr ""
+
+#: shell/session.cpp:158 shell/session.cpp:181
+#, kde-format
+msgid "(no projects)"
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:36
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete session"
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:49
+#, kde-format
+msgctxt "@title:window"
+msgid "Pick a Session"
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:62
+#, kde-format
+msgctxt "@action:button"
+msgid "Run"
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Active session.\n"
+"pid %1, app %2, host %3"
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:96
+#, kde-format
+msgid "Running"
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "Cannot Delete Session"
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:192
+#, kde-format
+msgctxt "@info"
+msgid "<p>Cannot delete a locked session."
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:195
+#, kde-format
+msgctxt "@info"
+msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:203
+#, kde-format
+msgctxt "@info"
+msgid ""
+"The session <b>%1</b> and all contained settings will be deleted. The "
+"projects will stay unaffected. Do you really want to continue?"
+msgstr ""
+
+#: shell/sessionchooserdialog.cpp:204
+#, kde-format
+msgctxt "@title:window"
+msgid "Delete Session"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:134
+#, kde-format
+msgctxt "@title:window"
+msgid "Start New Session"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
+#, kde-format
+msgctxt "@label:textbox"
+msgid "New session name:"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:144
+#, kde-format
+msgid ""
+"The current session and all contained settings will be deleted. The projects "
+"will stay unaffected. Do you really want to continue?"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:157
+#, kde-format
+msgctxt "@title:window"
+msgid "Rename Session"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:265
+#, kde-format
+msgid "Session Manager"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:277
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Start New Session"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:278
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Start a new KDevelop instance with an empty session"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:286
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Start New Named Session..."
+msgstr ""
+
+#: shell/sessioncontroller.cpp:287
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Start a new KDevelop instance with an empty named session"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:293
+#, kde-format
+msgctxt "@action"
+msgid "Rename Current Session..."
+msgstr ""
+
+#: shell/sessioncontroller.cpp:299
+#, kde-format
+msgctxt "@action"
+msgid "Delete Current Session..."
+msgstr ""
+
+#: shell/sessioncontroller.cpp:303
+#, kde-format
+msgctxt "@action"
+msgid "Quit"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:523
+#, kde-format
+msgid "Copy of %1"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:613
+#, kde-format
+msgctxt "@title:column"
+msgid "Identity"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:614
+#, kde-format
+msgctxt "@title:column"
+msgid "Contents"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:615
+#, kde-format
+msgctxt "@title:column"
+msgid "State"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:616
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:622
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Filter:"
+msgstr ""
+
+#: shell/sessioncontroller.cpp:654
+#, kde-format
+msgid "Create New Session"
+msgstr ""
+
+#: shell/sessionlock.cpp:158
+#, kde-format
+msgctxt "@info:shell"
+msgid ""
+"Running %1 instance (PID: %2) detected, making this one visible instead of "
+"starting a new one"
+msgstr ""
+
+#: shell/sessionlock.cpp:163
+#, kde-format
+msgctxt "@info:shell"
+msgid "Running %1 instance (PID: %2) is apparently hung"
+msgstr ""
+
+#: shell/sessionlock.cpp:169
+#, kde-format
+msgctxt "@info"
+msgid ""
+"The given application did not respond to a DBUS call, it may have crashed or "
+"is hanging."
+msgstr ""
+
+#: shell/sessionlock.cpp:174
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
+msgstr ""
+
+#: shell/sessionlock.cpp:178
+#, kde-format
+msgctxt "@info"
+msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
+msgstr ""
+
+#: shell/sessionlock.cpp:182
+#, kde-format
+msgctxt "@info"
+msgid ""
+"<p>Please, close the offending application instance or choose another "
+"session to launch.</p>"
+msgstr ""
+
+#: shell/sessionlock.cpp:188
+#, kde-format
+msgctxt "@action:button"
+msgid "Retry Startup"
+msgstr ""
+
+#: shell/sessionlock.cpp:191
+#, kde-format
+msgctxt "@action:button"
+msgid "Choose Another Session"
+msgstr ""
+
+#: shell/sessionlock.cpp:195
+#, kde-format
+msgctxt "@title:window"
+msgid "Failed to Lock Session %1"
+msgstr ""
+
+#: shell/sessionlock.cpp:201
+#, kde-format
+msgctxt "@info"
+msgid "The session %1 is already active in another running instance."
+msgstr ""
+
+#: shell/settings/analyzerspreferences.cpp:25
+#, kde-format
+msgid "Analyzers"
+msgstr ""
+
+#: shell/settings/analyzerspreferences.cpp:35
+#, kde-format
+msgid "Configure Analyzers"
+msgstr ""
+
+#: shell/settings/bgpreferences.cpp:73
+#, kde-format
+msgid "Configure Background Parser"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QGroupBox, kcfg_enable)
+#: shell/settings/bgpreferences.ui:20
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Enables or disables the background parser.<br>If unsure, leave it "
+"enabled. Disabling the background parser will disable large parts of "
+"KDevelop's functionality.</p>"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
+#: shell/settings/bgpreferences.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Enable Background Parser"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
+#: shell/settings/bgpreferences.ui:35 shell/settings/bgpreferences.ui:45
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The time to wait before the document is re-analyzed when you edit it."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/settings/bgpreferences.ui:38
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Delay:"
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
+#: shell/settings/bgpreferences.ui:48
+#, kde-format
+msgctxt "@item:valuesuffix"
+msgid " ms"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_3)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
+#: shell/settings/bgpreferences.ui:61 shell/settings/bgpreferences.ui:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The maximum number of parallel instances the background parser uses. If "
+"unsure, select 1 or 2."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: shell/settings/bgpreferences.ui:64
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_threads)
+#: shell/settings/bgpreferences.ui:74
+#, kde-format
+msgctxt "@item:valuesuffix"
+msgid " threads"
+msgstr ""
+
+#: shell/settings/documentationpreferences.cpp:35
+#, kde-format
+msgid "Configure Documentation"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, showPreviewCheckBox)
+#: shell/settings/editstyledialog.ui:42
+#, kde-format
+msgid ""
+"Toggle preview visibility for this style.\n"
+"Preview should be disabled for styles whose formatting depends on the file "
+"path."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
+#: shell/settings/editstyledialog.ui:45
+#, kde-format
+msgid "Show Preview"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreview)
+#. i18n: ectx: property (text), widget (QLabel, previewLabel)
+#: shell/settings/editstyledialog.ui:69
+#: shell/sourceformatterselectionedit.ui:112
+#, kde-format
+msgctxt "@label"
+msgid "Preview:"
+msgstr ""
+
+#: shell/settings/environmentpreferences.cpp:79
+#, kde-format
+msgid "Environment"
+msgstr ""
+
+#: shell/settings/environmentpreferences.cpp:84
+#, kde-format
+msgid "Configure Environment Variables"
+msgstr ""
+
+#: shell/settings/environmentprofilelistmodel.cpp:48
+#, kde-format
+msgid "%1 (default profile)"
+msgstr ""
+
+#: shell/settings/environmentprofilemodel.cpp:91
+#, kde-format
+msgctxt "@title:column"
+msgid "Variable"
+msgstr ""
+
+#: shell/settings/environmentprofilemodel.cpp:93
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr ""
+
+#: shell/settings/environmentwidget.cpp:81
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter variable..."
+msgstr ""
+
+#: shell/settings/environmentwidget.cpp:169
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Environment Profile"
+msgstr ""
+
+#: shell/settings/environmentwidget.cpp:233
+#, kde-format
+msgctxt "@title:window"
+msgid "Batch Edit Mode"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/settings/environmentwidget.ui:22
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Environment profile:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
+#: shell/settings/environmentwidget.ui:39
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add profile..."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
+#: shell/settings/environmentwidget.ui:49
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone profile..."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
+#: shell/settings/environmentwidget.ui:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove profile"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultProfileButton)
+#: shell/settings/environmentwidget.ui:69
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
+#: shell/settings/environmentwidget.ui:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove variable"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, batchModeEditButton)
+#: shell/settings/environmentwidget.ui:130
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Batch edit mode"
+msgstr ""
+
+#: shell/settings/languagepreferences.cpp:34
+#, kde-format
+msgctxt "@item:valuesuffix"
+msgid " file"
+msgid_plural " files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: shell/settings/languagepreferences.cpp:77
+#, kde-format
+msgid "Language Support"
+msgstr ""
+
+#: shell/settings/languagepreferences.cpp:82
+#, kde-format
+msgid "Configure Code-Completion and Semantic Highlighting"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: shell/settings/languagepreferences.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Code Completion"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_6)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_automaticInvocation)
+#: shell/settings/languagepreferences.ui:35
+#: shell/settings/languagepreferences.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "If disabled, the code completion widget will never show automatically."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: shell/settings/languagepreferences.ui:38
+#, kde-format
+msgctxt "@label"
+msgid "Enable automatic invocation:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_7)
+#: shell/settings/languagepreferences.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Choose whether to display additional information for the currently selected "
+"codecompletion item."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: shell/settings/languagepreferences.ui:61
+#, kde-format
+msgctxt "@label"
+msgid "Additional information for current item:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_showMultiLineSelectionInformation)
+#: shell/settings/languagepreferences.ui:71
+#, kde-format
+msgctxt "info:tooltip"
+msgid ""
+"Choose whether to display additional information for the currently selected "
+"code completion item."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:81
+#: shell/settings/languagepreferences.ui:94
+#, kde-format
+msgid ""
+"<p>The code completion UI has a minimal mode and a detailed mode.<br>Choose "
+"in what cases full code completion will be displayed.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/settings/languagepreferences.ui:84
+#, kde-format
+msgctxt "@label"
+msgid "Detailed completion:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:101
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Never"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "When Invoked Manually"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:111
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Always"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/settings/languagepreferences.ui:122
+#, kde-format
+msgctxt "@title:group"
+msgid "Semantic Code Highlighting"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, localColorizationLabel)
+#. i18n: ectx: property (toolTip), widget (QSlider, kcfg_localColorization)
+#: shell/settings/languagepreferences.ui:131
+#: shell/settings/languagepreferences.ui:144
+#, kde-format
+msgid ""
+"<p>This setting decides about the intensity of colors for local variables, "
+"for example function arguments, variables and the like.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, localColorizationLabel)
+#: shell/settings/languagepreferences.ui:134
+#, kde-format
+msgctxt "@label:slider"
+msgid "Local colorization intensity:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
+#. i18n: ectx: property (toolTip), widget (QLabel, label_9)
+#: shell/settings/languagepreferences.ui:166
+#: shell/settings/languagepreferences.ui:183
+#, kde-format
+msgid ""
+"<p>By default, the global colors for types, functions, namespaces and so "
+"forth are auto-generated and will adapt to the selected editor theme based "
+"on the global colorization intensity. If you want to have full control over "
+"the colors, you can instead use the editor theme as color source. You can "
+"then fine tune the colors in the settings under Editor &gt; Color Themes "
+"&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
+#: shell/settings/languagepreferences.ui:170
+#, kde-format
+msgid "Auto-Generated"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
+#: shell/settings/languagepreferences.ui:175
+#, kde-format
+msgid "From Editor Theme"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: shell/settings/languagepreferences.ui:186
+#, kde-format
+msgid "Global colors:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
+#. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
+#: shell/settings/languagepreferences.ui:196
+#: shell/settings/languagepreferences.ui:218
+#, kde-format
+msgid ""
+"<p>This settings lets you change the intensity of globally accessible types, "
+"for example classes, methods, functions etc.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
+#: shell/settings/languagepreferences.ui:221
+#, kde-format
+msgctxt "@label:slider"
+msgid "Global colorization intensity:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_4)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightSemanticProblems)
+#: shell/settings/languagepreferences.ui:231
+#: shell/settings/languagepreferences.ui:244
+#, kde-format
+msgid ""
+"<p>Highlight semantic problems, such as non-existent or inaccessible "
+"declarations.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: shell/settings/languagepreferences.ui:234
+#, kde-format
+msgctxt "@label"
+msgid "Highlight semantic problems:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_5)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
+#: shell/settings/languagepreferences.ui:254
+#: shell/settings/languagepreferences.ui:267
+#, kde-format
+msgid ""
+"<p>When enabled, lines with errors will get additionally highlighted and "
+"their positions get marked in the scrollbar.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: shell/settings/languagepreferences.ui:257
+#, kde-format
+msgctxt "@label"
+msgid "Highlight problematic lines:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
+#: shell/settings/languagepreferences.ui:277
+#, kde-format
+msgid ""
+"<html><head/><body><p>Use bold font for declarations such as classes, "
+"functions, local variables, etc.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
+#: shell/settings/languagepreferences.ui:280
+#, kde-format
+msgctxt "@label"
+msgid "Bold font for declarations:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: shell/settings/languagepreferences.ui:293
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Problems shown as inline notes:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:304
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "None"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:309
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "Errors"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:314
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "Warnings and Errors"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:319
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "Hints, Warnings and Errors"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_3)
+#: shell/settings/languagepreferences.ui:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Space-separated list of words that make a comment represent a TODO item"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: shell/settings/languagepreferences.ui:330
+#, kde-format
+msgctxt "@label:textbox"
+msgid "TODO marker words:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
+#: shell/settings/languagepreferences.ui:340
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Space-separated list of words that make a comment represent a TODO item."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: shell/settings/languagepreferences.ui:369
+#, kde-format
+msgctxt "@title:group"
+msgid "Project Parsing"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_2)
+#. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
+#: shell/settings/languagepreferences.ui:379
+#: shell/settings/languagepreferences.ui:399
+#, kde-format
+msgid ""
+"<p>When a project contains more files than this number, the project will be\n"
+"parsed in simplified mode, increasing the efficiency by gathering less "
+"information. Global code navigation and quickopen capabilities will be "
+"reduced.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/settings/languagepreferences.ui:382
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Minimum project size for simplified parsing:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: shell/settings/languagepreferences.ui:415
+#, kde-format
+msgctxt "@title:group"
+msgid "Storage and Memory Use"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
+#: shell/settings/languagepreferences.ui:421
+#, kde-format
+msgctxt "@label"
+msgid "Store precompiled preambles in:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
+#: shell/settings/languagepreferences.ui:436
+#, kde-format
+msgid ""
+"<p>Precompiled preambles remain in the temporary directory after KDevelop "
+"crashes and are deleted only when the same session is started again.<br>\n"
+"When the preambles are stored in memory, they are guaranteed to disappear on "
+"exit even if KDevelop crashes.<br>\n"
+"Choosing the Session Temporary Directory storage makes sense on systems "
+"where RAM is limited and the temporary directory does not use tmpfs, because "
+"the preamble files can occupy gigabytes of space.<br>\n"
+"Changing this option takes effect after restarting KDevelop.<br>\n"
+"This option has effect only if KDevelop has been built against Clang version "
+"17 or later.\n"
+"</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
+#: shell/settings/languagepreferences.ui:440
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Memory"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
+#: shell/settings/languagepreferences.ui:445
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Session Temporary Directory"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:35
+#, kde-format
+msgctxt "@title:group"
+msgid "Core"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:36
+#, kde-format
+msgctxt "@title:group"
+msgid "Project Management"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:37
+#, kde-format
+msgctxt "@title:group"
+msgid "Version Control"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:38
+#, kde-format
+msgctxt "@title:group"
+msgid "Utilities"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:39
+#, kde-format
+msgctxt "@title:group"
+msgid "Documentation"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:40
+#, kde-format
+msgctxt "@title:group"
+msgid "Language Support"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:41
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugging"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:42
+#, kde-format
+msgctxt "@title:group"
+msgid "Testing"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:43
+#, kde-format
+msgctxt "@title:group"
+msgid "Analyzers"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:44
+#, kde-format
+msgctxt "@title:group"
+msgid "Runtimes"
+msgstr ""
+
+#: shell/settings/pluginpreferences.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Other"
+msgstr ""
+
+#: shell/settings/pluginpreferences.h:27
+#, kde-format
+msgid "Plugins"
+msgstr ""
+
+#: shell/settings/pluginpreferences.h:28
+#, kde-format
+msgid "Configure Plugins"
+msgstr ""
+
+#. i18n: ectx: label, entry (parseAllProjectSources), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:11
+#, kde-format
+msgid ""
+"Schedule all project source code to be parsed by the language support in the "
+"background"
+msgstr ""
+
+#. i18n: ectx: whatsthis, entry (parseAllProjectSources), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:15
+#, kde-format
+msgid ""
+"If this option is set, KDevelop will schedule all source code\n"
+"        found by the current build system for parsing by the appropriate "
+"language\n"
+"        support part.  This will enable more complete language support, but "
+"may\n"
+"        be slower."
+msgstr ""
+
+#. i18n: ectx: whatsthis, entry (projectsBaseDirectory), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:19
+#, kde-format
+msgid "Chooses the base directory where new projects are created."
+msgstr ""
+
+#. i18n: ectx: label, entry (saveDocuments), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:23
+#, kde-format
+msgid "Save all open documents before building anything"
+msgstr ""
+
+#. i18n: ectx: whatsthis, entry (saveDocuments), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:24
+#, kde-format
+msgid ""
+"If this option is set all open documents will be automatically saved before "
+"any build is started."
+msgstr ""
+
+#: shell/settings/projectpreferences.cpp:44
+#, kde-format
+msgid "Projects"
+msgstr ""
+
+#: shell/settings/projectpreferences.cpp:49
+#, kde-format
+msgid "Configure Projects"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_3)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_projectsBaseDirectory)
+#: shell/settings/projectpreferences.ui:22
+#: shell/settings/projectpreferences.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the base directory where new projects are to be created"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: shell/settings/projectpreferences.ui:25
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Projects base directory:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_parseAllProjectSources)
+#: shell/settings/projectpreferences.ui:47
+#, kde-format
+msgctxt "@info:tolltip"
+msgid "Parse all files in a project after the project has been opened"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parseAllProjectSources)
+#: shell/settings/projectpreferences.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Schedule all project files for parsing"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_saveDocuments)
+#: shell/settings/projectpreferences.ui:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Save all modified documents when the \"build\" action is triggered"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_saveDocuments)
+#: shell/settings/projectpreferences.ui:60
+#, kde-format
+msgctxt "@option:check"
+msgid "Save all documents before building"
+msgstr ""
+
+#: shell/settings/runtimespreferences.cpp:23
+#, kde-format
+msgid "Runtimes"
+msgstr ""
+
+#: shell/settings/runtimespreferences.cpp:33
+#, kde-format
+msgid "Configure Runtimes"
+msgstr ""
+
+#: shell/settings/sourceformattersettings.cpp:75
+#: shell/sourceformattercontroller.cpp:220
+#, kde-format
+msgid "Source Formatter"
+msgstr ""
+
+#: shell/settings/sourceformattersettings.cpp:80
+#, kde-format
+msgid "Configure Source Formatter"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/settings/sourceformattersettings.ui:20
+#, kde-format
+msgctxt "@title:group"
+msgid "General"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateOverrideIndentation)
+#: shell/settings/sourceformattersettings.ui:26
+#, kde-format
+msgctxt "@info:tolltip"
+msgid ""
+"Override the editor indentation mode according to the formatting style for "
+"documents without Kate modeline."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
+#: shell/settings/sourceformattersettings.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "Override Kate Indentation Mode"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
+#: shell/settings/sourceformattersettings.ui:36
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add a Kate modeline according to the formatting style to formatted documents."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
+#: shell/settings/sourceformattersettings.ui:39
+#, kde-format
+msgctxt "@option:check"
+msgid "Add Kate Modeline"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: shell/settings/sourceformattersettings.ui:55
+#, kde-format
+msgctxt "@title:group"
+msgid "Formatting Styles"
+msgstr ""
+
+#: shell/settings/templateconfig.cpp:39
+#, kde-format
+msgid "Templates"
+msgstr ""
+
+#: shell/settings/templateconfig.cpp:44
+#, kde-format
+msgid "Configure Templates"
+msgstr ""
+
+#: shell/settings/templatepage.cpp:30
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, loadButton)
+#: shell/settings/templatepage.ui:26
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template From File"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, extractButton)
+#: shell/settings/templatepage.ui:36
+#, kde-format
+msgctxt "@action:button"
+msgid "Clone Template"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, UiConfig)
+#: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:45
+#, kde-format
+msgid "User Interface"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: shell/settings/uiconfig.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Dock Window Behavior"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_4)
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
+#: shell/settings/uiconfig.ui:29 shell/settings/uiconfig.ui:49
+#, kde-format
+msgid ""
+"<p>Controls whether the bottom left corner is occupied by the dock at the "
+"left, or by the dock at the bottom.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: shell/settings/uiconfig.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Bottom left corner occupied by:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_5)
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomRightCornerOwner)
+#: shell/settings/uiconfig.ui:39 shell/settings/uiconfig.ui:66
+#, kde-format
+msgid ""
+"<p>Controls whether the bottom right corner is occupied by the dock at the "
+"right, or by the dock at the bottom.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: shell/settings/uiconfig.ui:42
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Bottom right corner occupied by:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
+#: shell/settings/uiconfig.ui:53
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Left Dock"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
+#: shell/settings/uiconfig.ui:58 shell/settings/uiconfig.ui:75
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Bottom Dock"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
+#: shell/settings/uiconfig.ui:70
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Right Dock"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/settings/uiconfig.ui:86
+#, kde-format
+msgctxt "@title:group"
+msgid "Tabbed Browsing"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
+#: shell/settings/uiconfig.ui:92
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Controls whether to open new tabs next to the active one."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
+#: shell/settings/uiconfig.ui:95
+#, kde-format
+msgctxt "@option:check"
+msgid "Open new tab after current"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
+#: shell/settings/uiconfig.ui:106
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"When enabled, plugins can group related files side by side.\n"
+"For example, a header file will be opened next to the implementation file."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
+#: shell/settings/uiconfig.ui:109
+#, kde-format
+msgctxt "@option:check"
+msgid "Arrange related documents side by side"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarVisibility)
+#: shell/settings/uiconfig.ui:116
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Enables or disables the display of the tab bar at the top of the editor "
+"window."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
+#: shell/settings/uiconfig.ui:119
+#, kde-format
+msgctxt "@option:check"
+msgid "Show tabs"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
+#: shell/settings/uiconfig.ui:129
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Enables or disables the display of a close button in each tab in the tab bar "
+"at the top of the editor window."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
+#: shell/settings/uiconfig.ui:132
+#, kde-format
+msgctxt "@option:check"
+msgid "Show close buttons on tabs"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: shell/settings/uiconfig.ui:145
+#, kde-format
+msgctxt "@title:group"
+msgid "Coloring"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ColorizeByProject)
+#: shell/settings/uiconfig.ui:151
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"When enabled, tabs and other widgets are colored based on the project "
+"affiliation"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ColorizeByProject)
+#: shell/settings/uiconfig.ui:154
+#, kde-format
+msgctxt "@option:check"
+msgid "Color widgets based on the project affiliation"
+msgstr ""
+
+#: shell/settings/uipreferences.cpp:55
+#, kde-format
+msgid "Configure User Interface"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:226
+#, kde-format
+msgctxt "@action"
+msgid "&Reformat Source"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:230
+#, kde-format
+msgctxt "@action"
+msgid "Reformat Line"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:234
+#, kde-format
+msgctxt "@action"
+msgid "Reformat Files..."
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:235
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Format file(s) using the configured source formatter(s)"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:237
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Formatting functionality using the configured source formatter(s)."
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:614
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:617
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Reformats selected text or the entire file if nothing is selected, using <i>"
+"%1</i> tool with <b>%2</b> style."
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:619
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:622
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
+"style."
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:626
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat selection or file using the configured source formatter"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:628
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Reformats selected text or the entire file if nothing is selected, using the "
+"configured source formatter."
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:630
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat current line using the configured source formatter"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:632
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Source reformatting of line under cursor using the configured source "
+"formatter."
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:867
+#, kde-format
+msgctxt "@title:window"
+msgid "Reformat Files?"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:868
+#, kde-format
+msgid "Reformat all files in the selected folder?"
+msgstr ""
+
+#: shell/sourceformattercontroller.cpp:872
+#, kde-format
+msgctxt "@action:button"
+msgid "Reformat"
+msgstr ""
+
+#: shell/sourceformatterjob.cpp:36
+#, kde-format
+msgid "Reformatting"
+msgstr ""
+
+#: shell/sourceformatterjob.cpp:47
+#, kde-format
+msgid "Reformat Files"
+msgstr ""
+
+#: shell/sourceformatterjob.cpp:58
+#, kde-format
+msgid "Reformatting one file"
+msgid_plural "Reformatting %1 files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: shell/sourceformatterselectionedit.cpp:1077
+#, kde-format
+msgid ""
+"The style %1 is also used for the following languages:\n"
+"%2.\n"
+"Are you sure you want to delete it?"
+msgstr ""
+
+#: shell/sourceformatterselectionedit.cpp:1079
+#, kde-format
+msgctxt "@title:window"
+msgid "Deleting Style"
+msgstr ""
+
+#: shell/sourceformatterselectionedit.cpp:1139
+#, kde-format
+msgid "New %1"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/sourceformatterselectionedit.ui:29
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Language:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, usageHelpButton)
+#: shell/sourceformatterselectionedit.ui:44
+#, kde-format
+msgid "How to configure formatting styles"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
+#: shell/sourceformatterselectionedit.ui:49
+#, kde-format
+msgid ""
+"<p>Select languages you use one by one from the <i>Language</i> combobox "
+"below, pick the desired formatter and style for each. <i>Ctrl+Click</i> a "
+"selected style to unselect it.</p>\n"
+"<p>Configuring the right formatter and style for each used language is very "
+"important: not only explicit <i>Reformat Source</i>/<i>Line</i>/<i>Files...</"
+"i> actions are affected, but also the formatting of auto-generated, auto-"
+"refactored or auto-fixed code (for example, <i>Rename</i> context menu "
+"action).</p>\n"
+"<p>Note that KDevelop formats all <i>*.h</i> files with formatter and style "
+"configured for <i>C</i> language, even C++ headers that belong to a pure C++ "
+"project. This occurs because source formatter maps MIME types to languages.</"
+"p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: shell/sourceformatterselectionedit.ui:134
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Formatter:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, formatterDescriptionButton)
+#: shell/sourceformatterselectionedit.ui:152
+#, kde-format
+msgid "Description of a selected formatter"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/sourceformatterselectionedit.ui:183
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Style:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
+#: shell/sourceformatterselectionedit.ui:201
+#, kde-format
+msgctxt "@action:button"
+msgid "New"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
+#: shell/sourceformatterselectionedit.ui:208
+#, kde-format
+msgctxt "@action:button"
+msgid "Edit..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
+#. i18n: ectx: property (text), widget (QPushButton, deleteButton)
+#: shell/sourceformatterselectionedit.ui:215
+#: shell/workingsets/workingsettooltipwidget.cpp:94
+#: vcs/dvcs/ui/branchmanager.ui:44
+#, kde-format
+msgctxt "@action:button"
+msgid "Delete"
+msgstr ""
+
+#: shell/textdocument.cpp:411
+#, kde-format
+msgid ""
+"The file \"%1\" is modified on disk.\n"
+"\n"
+"Are you sure you want to overwrite it? (External changes will be lost.)"
+msgstr ""
+
+#: shell/textdocument.cpp:415
+#, kde-format
+msgctxt "@title:window"
+msgid "Document Externally Modified"
+msgstr ""
+
+#: shell/textdocument.cpp:658
+#, kde-format
+msgid " Line: %1 Col: %2 "
+msgstr ""
+
+#: shell/uicontroller.cpp:81
+#, kde-format
+msgctxt "area"
+msgid "Code"
+msgstr ""
+
+#: shell/uicontroller.cpp:92
+#, kde-format
+msgctxt "area"
+msgid "Debug"
+msgstr ""
+
+#: shell/uicontroller.cpp:101
+#, kde-format
+msgctxt "area"
+msgid "Review"
+msgstr ""
+
+#: shell/uicontroller.cpp:460
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Tool View to Add"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:75
+#, kde-format
+msgid "<b>Active Working Set</b>"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:77
+#, kde-format
+msgid "<b>Working Set</b>"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:95
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove this working set. The contained documents are not affected."
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:121
+#, kde-format
+msgctxt "@label"
+msgid "Documents:"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:129
+#, kde-format
+msgctxt "@action:button"
+msgid "Add All"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:130
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add all documents that are part of this working set to the currently active "
+"working set"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:137
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove All"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:138
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Remove all documents that are part of this working set from the currently "
+"active working set"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:169
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Click to open and activate this document."
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:280
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove this file from the current working set"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:285
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add this file to the current working set"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:314
+#, kde-format
+msgctxt "@action:button"
+msgid "Stash"
+msgstr ""
+
+#: shell/workingsets/workingsettooltipwidget.cpp:320
+#, kde-format
+msgctxt "@action:button"
+msgid "Load"
+msgstr ""
+
+#: sublime/container.cpp:346
+#, kde-format
+msgid "Line: 00000 Col: 000"
+msgstr ""
+
+#: sublime/container.cpp:380
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show sorted list of opened documents"
+msgstr ""
+
+#: sublime/container.cpp:392
+#, kde-format
+msgctxt "@info"
+msgid "(Press Ctrl+Tab to switch)"
+msgstr ""
+
+#: sublime/container.cpp:788
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy Filename"
+msgstr ""
+
+#: sublime/container.cpp:791
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr ""
+
+#: sublime/container.cpp:793
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr ""
+
+#: sublime/container.cpp:795
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All"
+msgstr ""
+
+#: sublime/idealbuttonbarwidget.cpp:37
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle '%1' tool view"
+msgstr ""
+
+#: sublime/idealbuttonbarwidget.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Right click to add new tool views."
+msgstr ""
+
+#: sublime/idealcontroller.cpp:94
+#, kde-format
+msgctxt "@title:window"
+msgid "%1 Toolbar"
+msgstr ""
+
+#: sublime/idealdockwidget.cpp:110
+#, kde-format
+msgctxt "@title:menu"
+msgid "Tool View Position"
+msgstr ""
+
+#: sublime/idealdockwidget.cpp:114
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Left"
+msgstr ""
+
+#: sublime/idealdockwidget.cpp:115
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Bottom"
+msgstr ""
+
+#: sublime/idealdockwidget.cpp:116
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Right"
+msgstr ""
+
+#: sublime/idealdockwidget.cpp:117
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Detached"
+msgstr ""
+
+#: sublime/idealdockwidget.cpp:135
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Assign Shortcut..."
+msgstr ""
+
+#: sublime/idealdockwidget.cpp:136
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Use this shortcut to trigger visibility of the tool view."
+msgstr ""
+
+#: sublime/idealdockwidget.cpp:139
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove Tool View"
+msgstr ""
+
+#: sublime/idealdockwidget.cpp:150
+#, kde-format
+msgctxt "@title:window"
+msgid "Assign Shortcut For '%1' Tool View"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Concentration Mode"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove most of the controls so you can focus on what matters"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:87
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Left Dock"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:94
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Right Dock"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:100
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Bottom Dock"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:106
+#, kde-format
+msgctxt "@action"
+msgid "Focus Editor"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:111
+#, kde-format
+msgctxt "@action"
+msgid "Hide/Restore Docks"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:116
+#, kde-format
+msgctxt "@action"
+msgid "Next Tool View"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:122
+#, kde-format
+msgctxt "@action"
+msgid "Previous Tool View"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:128
+#, kde-format
+msgctxt "@title:menu"
+msgid "Tool Views"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:134
+#, kde-format
+msgid "Left Button Bar"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:137
+#, kde-format
+msgid "Right Button Bar"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:140
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:812
+#, kde-format
+msgctxt "@action"
+msgid "Close"
+msgstr ""
+
+#: sublime/mainwindow_p.cpp:813
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close message"
+msgstr ""
+
+#: util/duchainify/main.cpp:263
+#, kde-format
+msgid "duchainify"
+msgstr ""
+
+#: util/duchainify/main.cpp:264
+#, kde-format
+msgid "DUChain builder application"
+msgstr ""
+
+#: util/duchainify/main.cpp:265
+#, kde-format
+msgid "(c) 2009 David Nolden"
+msgstr ""
+
+#: util/duchainify/main.cpp:271
+#, kde-format
+msgid "file or directory"
+msgstr ""
+
+#: util/duchainify/main.cpp:274
+#, kde-format
+msgid "Show warnings"
+msgstr ""
+
+#: util/duchainify/main.cpp:276
+#, kde-format
+msgid "Show warnings and debug output"
+msgstr ""
+
+#: util/duchainify/main.cpp:278
+#, kde-format
+msgid "Enforce an update of the top-contexts corresponding to the given files"
+msgstr ""
+
+#: util/duchainify/main.cpp:282
+#, kde-format
+msgid ""
+"Enforce an update of the top-contexts corresponding to the given files and "
+"all included files"
+msgstr ""
+
+#: util/duchainify/main.cpp:284
+#, kde-format
+msgid "Number of threads to use"
+msgstr ""
+
+#: util/duchainify/main.cpp:287
+#, kde-format
+msgid ""
+"Features to build. Options: empty, simplified-visible-declarations, visible-"
+"declarations (default), all-declarations, all-declarations-and-uses, all-"
+"declarations-and-uses-and-AST"
+msgstr ""
+
+#: util/duchainify/main.cpp:291
+#, kde-format
+msgid "Print complete Definition-Use Chain on successful parse"
+msgstr ""
+
+#: util/duchainify/main.cpp:293
+#, kde-format
+msgid "Print parent contexts when dumping contexts"
+msgstr ""
+
+#: util/duchainify/main.cpp:295
+#, kde-format
+msgid "Print complete DUChain Definitions repository on successful parse"
+msgstr ""
+
+#: util/duchainify/main.cpp:298
+#, kde-format
+msgid ""
+"Print complete DUChain PersistentSymbolTable repository on successful parse"
+msgstr ""
+
+#: util/duchainify/main.cpp:301
+#, kde-format
+msgid "Number defining the maximum depth where declaration details are printed"
+msgstr ""
+
+#: util/duchainify/main.cpp:304
+#, kde-format
+msgid "Dump DUChain graph (in .dot format)"
+msgstr ""
+
+#: util/duchainify/main.cpp:306
+#, kde-format
+msgid "Print problems encountered during parsing"
+msgstr ""
+
+#: util/duchainify/main.cpp:308
+#, kde-format
+msgid "Recursively dump errors from imported contexts."
+msgstr ""
+
+#: util/environmentselectionmodel.cpp:40
+#, kde-format
+msgctxt "@title:column"
+msgid "Profile"
+msgstr ""
+
+#: util/environmentselectionmodel.cpp:51
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default profile (currently: %1)"
+msgstr ""
+
+#: util/environmentselectionmodel.cpp:55
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (does not exist)"
+msgstr ""
+
+#: util/jobstatus.cpp:29
+#, kde-format
+msgid "Task aborted"
+msgstr ""
+
+#: util/projecttestjob.cpp:81
+#, kde-format
+msgid "Run all tests in %1"
+msgstr ""
+
+#: util/shellutils.cpp:156
+#, kde-format
+msgid ""
+"You don't have write permissions for the following files; add write "
+"permissions for owner before saving?"
+msgstr ""
+
+#: util/shellutils.cpp:159
+#, kde-format
+msgctxt "@title:window"
+msgid "Some Files are Write-Protected"
+msgstr ""
+
+#: util/shellutils.cpp:160
+#, kde-format
+msgctxt "@action:button"
+msgid "Set Write Permissions"
+msgstr ""
+
+#: util/shellutils.cpp:161
+#, kde-format
+msgctxt "@action:button"
+msgid "Ignore"
+msgstr ""
+
+#: util/shellutils.cpp:173
+#, kde-format
+msgid "Failed adding write permissions for some files."
+msgstr ""
+
+#: util/shellutils.cpp:174
+#, kde-format
+msgctxt "@title:window"
+msgid "Failed Setting Permissions"
+msgstr ""
+
+#: vcs/dvcs/dvcsjob.cpp:173
+#, kde-format
+msgid "Working Directory does not exist: %1"
+msgstr ""
+
+#: vcs/dvcs/dvcsjob.cpp:182
+#, kde-format
+msgid "Working Directory is not absolute: %1"
+msgstr ""
+
+#: vcs/dvcs/dvcsjob.cpp:232
+#, kde-format
+msgid ""
+"Process '%1' exited with status %2\n"
+"%3"
+msgstr ""
+
+#: vcs/dvcs/dvcsjob.cpp:263
+#, kde-format
+msgid "Command finished with error %1."
+msgstr ""
+
+#: vcs/dvcs/dvcsjob.cpp:277
+#, kde-format
+msgid "Command exited with value %1."
+msgstr ""
+
+#: vcs/dvcs/dvcsplugin.cpp:96
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Branches..."
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:40
+#, kde-format
+msgctxt "@title:window"
+msgid "Branch Manager"
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:114
+#, kde-format
+msgid ""
+"You must select a base branch from the list before creating a new branch."
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:119
+#, kde-format
+msgctxt "@title:window"
+msgid "New Branch"
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:119
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name of the new branch:"
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:126
+#, kde-format
+msgid ""
+"Branch \"%1\" already exists.\n"
+"Please, choose another name."
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:140
+#, kde-format
+msgid ""
+"Currently at the branch \"%1\".\n"
+"To delete it, please change to another branch."
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:147
+#, kde-format
+msgid "Are you sure you want to irreversibly delete the branch '%1'?"
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:167 vcs/dvcs/ui/branchmanager.cpp:246
+#, kde-format
+msgid "Already on branch \"%1\"\n"
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:188
+#, kde-format
+msgid ""
+"Branch \"%1\" doesn't exists.\n"
+"Please, choose another name."
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:196
+#, kde-format
+msgid "You must select a branch to merge into current one from the list."
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:234 vcs/widgets/vcsdiffpatchsources.cpp:299
+#, kde-format
+msgid "Could not create a patch for the current version."
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:269
+#, kde-format
+msgctxt "@titlew:indow"
+msgid "Unable to Retrieve Diff"
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:276
+#, kde-format
+msgid "There are no committed differences."
+msgstr ""
+
+#: vcs/dvcs/ui/branchmanager.cpp:277 vcs/vcspluginhelper.cpp:279
+#, kde-format
+msgctxt "@title:window"
+msgid "VCS Support"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, newButton)
+#: vcs/dvcs/ui/branchmanager.ui:31
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Creates new branch based on the selected branch"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, newButton)
+#: vcs/dvcs/ui/branchmanager.ui:34
+#, kde-format
+msgctxt "@action:button new branch"
+msgid "New"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, deleteButton)
+#: vcs/dvcs/ui/branchmanager.ui:41
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The same as git branch -D"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, renameButton)
+#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
+#, kde-format
+msgctxt "@action:button"
+msgid "Rename"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, diffButton)
+#: vcs/dvcs/ui/branchmanager.ui:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Show changes between the current branch (or staging area, if not empty) "
+"and the last commit on the selected branch.</p>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, diffButton)
+#: vcs/dvcs/ui/branchmanager.ui:80
+#, kde-format
+msgctxt "@action:button"
+msgid "Compare to Branch"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
+#: vcs/dvcs/ui/branchmanager.ui:103
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Checkout to the selected branch"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
+#: vcs/dvcs/ui/branchmanager.ui:106
+#, kde-format
+msgctxt "@action:button checkout a version"
+msgid "Checkout"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, mergeButton)
+#: vcs/dvcs/ui/branchmanager.ui:116
+#, kde-format
+msgctxt "@action:button merge a branch"
+msgid "Merge"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelUrl)
+#: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:19
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
+#: vcs/widgets/vcsdiffpatchsources.cpp:49
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr ""
+
+#: vcs/models/brancheslistmodel.cpp:63
+#, kde-format
+msgid "Branch \"%1\" already exists."
+msgstr ""
+
+#: vcs/models/brancheslistmodel.cpp:68
+#, kde-format
+msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
+msgstr ""
+
+#: vcs/models/vcsannotationmodel.cpp:116
+#, kde-format
+msgid "Author:"
+msgstr ""
+
+#: vcs/models/vcsannotationmodel.cpp:117
+#, kde-format
+msgid "Date:"
+msgstr ""
+
+#: vcs/models/vcsannotationmodel.cpp:118
+#, kde-format
+msgid "Commit message:"
+msgstr ""
+
+#: vcs/models/vcseventmodel.cpp:88
+#, kde-format
+msgctxt "@title:column"
+msgid "Revision"
+msgstr ""
+
+#: vcs/models/vcseventmodel.cpp:90
+#, kde-format
+msgctxt "@title:column"
+msgid "Message"
+msgstr ""
+
+#: vcs/models/vcseventmodel.cpp:92
+#, kde-format
+msgctxt "@title:column"
+msgid "Author"
+msgstr ""
+
+#: vcs/models/vcseventmodel.cpp:94
+#, kde-format
+msgctxt "@title:column"
+msgid "Date"
+msgstr ""
+
+#: vcs/models/vcsfilechangesmodel.cpp:32
+#, kde-format
+msgctxt "@item file was added to versioncontrolsystem"
+msgid "Added"
+msgstr ""
+
+#: vcs/models/vcsfilechangesmodel.cpp:34
+#, kde-format
+msgctxt "@item file was deleted from versioncontrolsystem"
+msgid "Deleted"
+msgstr ""
+
+#: vcs/models/vcsfilechangesmodel.cpp:36
+#, kde-format
+msgctxt "@item file is conflicting (versioncontrolsystem)"
+msgid "Has Conflicts"
+msgstr ""
+
+#: vcs/models/vcsfilechangesmodel.cpp:38
+#, kde-format
+msgctxt "@item version controlled file was modified"
+msgid "Modified"
+msgstr ""
+
+#: vcs/models/vcsfilechangesmodel.cpp:40
+#, kde-format
+msgctxt "@item file is up to date in versioncontrolsystem"
+msgid "Up To Date"
+msgstr ""
+
+#: vcs/models/vcsfilechangesmodel.cpp:43
+#, kde-format
+msgctxt "@item file is not known to versioncontrolsystem"
+msgid "Unknown"
+msgstr ""
+
+#: vcs/models/vcsfilechangesmodel.cpp:45
+#, kde-format
+msgctxt "@item Unknown VCS file status, probably a backend error"
+msgid "?"
+msgstr ""
+
+#: vcs/models/vcsfilechangesmodel.cpp:131
+#, kde-format
+msgctxt "@title:column"
+msgid "Filename"
+msgstr ""
+
+#: vcs/models/vcsfilechangesmodel.cpp:132
+#, kde-format
+msgctxt "@title:column"
+msgid "Status"
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:46
+#, kde-format
+msgctxt "@item"
+msgid "Added"
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:48
+#, kde-format
+msgctxt "@item"
+msgid "Deleted"
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:50
+#, kde-format
+msgctxt "@item"
+msgid "Modified"
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:52
+#, kde-format
+msgctxt "@item"
+msgid "Copied"
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:54
+#, kde-format
+msgctxt "@item"
+msgid "Replaced"
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:61
+#, kde-format
+msgctxt "separates an action list"
+msgid ", "
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:85
+#, kde-format
+msgctxt "@title:column"
+msgid "Location"
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:86
+#, kde-format
+msgctxt "@title:column"
+msgid "Actions"
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:87
+#, kde-format
+msgctxt "@title:column"
+msgid "Source Location"
+msgstr ""
+
+#: vcs/models/vcsitemeventmodel.cpp:88
+#, kde-format
+msgctxt "@title:column"
+msgid "Source Revision"
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:83
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Commit..."
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:84
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:85
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Add"
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:86
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Differences..."
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:87
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Revert"
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
+#, kde-format
+msgctxt "@action:inmenu revision history"
+msgid "History..."
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:89
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Annotation..."
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:90
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Diff..."
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:91
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Diff (All Files)..."
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:92
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Push"
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:93
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Pull"
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:278
+#, kde-format
+msgid "There are no differences."
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:285
+#, kde-format
+msgctxt "@title:window"
+msgid "Unable to Get Differences"
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:353
+#, kde-format
+msgctxt "@title:window %1: path or URL, %2: name of a version control system"
+msgid "%2 History (%1)"
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:417
+#, kde-format
+msgid ""
+"Cannot display annotations, missing interface KTextEditor::"
+"AnnotationInterface for the editor."
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:421
+#, kde-format
+msgid ""
+"Cannot execute annotate action because the document was not found, or was "
+"not a text document:\n"
+"%1"
+msgstr ""
+
+#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy Revision Id"
+msgstr ""
+
+#: vcs/widgets/standardvcslocationwidget.cpp:23
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter the repository URL..."
+msgstr ""
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:53
+#, kde-format
+msgctxt "@item age"
+msgid "%1 year"
+msgid_plural "%1 years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:63
+#, kde-format
+msgctxt "@item age"
+msgid "%1 month"
+msgid_plural "%1 months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:67
+#, kde-format
+msgctxt "@item age"
+msgid "%1 day"
+msgid_plural "%1 days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:69
+#, kde-format
+msgctxt "@item age"
+msgid "Today"
+msgstr ""
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#, kde-format
+msgctxt "By: commit author"
+msgid "By: %1"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
+#: vcs/widgets/vcscommitdialog.ui:17
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Files to Commit"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: vcs/widgets/vcscommitdialog.ui:23
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Commit files:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
+#: vcs/widgets/vcscommitdialog.ui:33
+#, kde-format
+msgctxt "@option:check"
+msgid "Recursive"
+msgstr ""
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:53
+#, kde-format
+msgid "Old Messages"
+msgstr ""
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:109
+#, kde-format
+msgid "For more detailed information please see the Version Control tool view."
+msgstr ""
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:111
+#, kde-format
+msgid "Unable to commit"
+msgstr ""
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:111
+#, kde-format
+msgctxt "@title:window"
+msgid "Commit Unsuccessful"
+msgstr ""
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:224
+#, kde-format
+msgctxt "@action:button To make a commit"
+msgid "Commit"
+msgstr ""
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:257
+#, kde-format
+msgid ""
+"<qt>Files will be committed:\n"
+"<ul>%1</ul>\n"
+"With message:\n"
+" <pre>%2</pre></qt>"
+msgstr ""
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:259
+#, kde-format
+msgctxt "@title:window"
+msgid "About to Commit to Repository"
+msgstr ""
+
+#: vcs/widgets/vcsdiffwidget.cpp:86
+#, kde-format
+msgctxt "@label"
+msgid "Difference between revision %1 and %2:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, revLabel)
+#: vcs/widgets/vcsdiffwidget.ui:28
+#, kde-format
+msgctxt "@label"
+msgid "Difference between revisions:"
+msgstr ""
+
+#: vcs/widgets/vcseventwidget.cpp:78
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Diff to Previous Revision"
+msgstr ""
+
+#: vcs/widgets/vcseventwidget.cpp:81
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Diff between Revisions"
+msgstr ""
+
+#: vcs/widgets/vcseventwidget.cpp:138
+#, kde-format
+msgctxt "@title:window"
+msgid "Difference To Previous"
+msgstr ""
+
+#: vcs/widgets/vcseventwidget.cpp:167
+#, kde-format
+msgctxt "@title:window"
+msgid "Difference between Revisions"
+msgstr ""

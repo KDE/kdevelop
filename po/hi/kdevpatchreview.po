@@ -1,0 +1,298 @@
+# Hindi translations for kdevelop package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"PO-Revision-Date: 2024-12-15 15:59+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1)\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Patch"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, kde-format
+msgctxt "@title:tab"
+msgid "From File"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, kde-format
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr ""
+
+#: patchhighlighter.cpp:80
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:88
+#, kde-format
+msgid "Applied.<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:91 patchhighlighter.cpp:106
+#, kde-format
+msgid "Insertion<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:103
+#, kde-format
+msgid "Removal<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:95
+#, kde-format
+msgid "Previous:<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:100
+#, kde-format
+msgid "Reverted.<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:108
+#, kde-format
+msgid "Alternative:<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:199
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr ""
+
+#: patchhighlighter.cpp:409 patchhighlighter.cpp:416
+#, kde-format
+msgctxt "@item"
+msgid "Insertion"
+msgstr ""
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, kde-format
+msgctxt "@item"
+msgid "Removal"
+msgstr ""
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, kde-format
+msgctxt "@item"
+msgid "Change"
+msgstr ""
+
+#: patchreview.cpp:294 patchreview.cpp:296
+#, kde-format
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr ""
+
+#: patchreview.cpp:455
+#, kde-format
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr ""
+
+#: patchreview.cpp:460 patchreview.cpp:535
+#, kde-format
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr ""
+
+#: patchreview.cpp:467
+#, kde-format
+msgid "The base directory of the patch must be an absolute directory."
+msgstr ""
+
+#: patchreview.cpp:499 patchreview.cpp:524
+#, kde-format
+msgctxt "@action"
+msgid "Finish Review"
+msgstr ""
+
+#: patchreview.cpp:606
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:31
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:41
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:51
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Update"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:87
+#, kde-format
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:120
+#, kde-format
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:136
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:149
+#, kde-format
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:168
+#, kde-format
+msgctxt "@title:group"
+msgid "Changes"
+msgstr ""
+
+#: patchreviewtoolview.cpp:83
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: patchreviewtoolview.cpp:223
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr ""
+
+#: patchreviewtoolview.cpp:226
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+
+#: patchreviewtoolview.cpp:257
+#, kde-format
+msgctxt "@action"
+msgid "Select All"
+msgstr ""
+
+#: patchreviewtoolview.cpp:259
+#, kde-format
+msgctxt "@action"
+msgid "Deselect All"
+msgstr ""
+
+#: patchreviewtoolview.cpp:557
+#, kde-format
+msgid "Running tests: %p%"
+msgstr ""
+
+#: patchreviewtoolview.cpp:585
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: patchreviewtoolview.cpp:589
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr ""
