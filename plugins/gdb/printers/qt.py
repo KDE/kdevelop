@@ -1243,91 +1243,59 @@ class QCborContainerPrivateIterator:
         self.index += 1
         return result
 
-class QCborArrayPrinter(PrinterBaseType):
+class QCborContainerPrinterBase(PrinterBaseType):
+    def __init__(self, container_ptr, container_className):
+        self._container_ptr = container_ptr
+        self._container_className = container_className
 
-    def __init__(self, val):
-        self._container_ptr = int(val['d']['d'])
         if self._container_ptr:
-            self._size = qcborContainerElementCount(self._container_ptr)
+            self._size = int(qcborContainerElementCount(self._container_ptr))
         else:
             self._size = 0
+
+        if 'Array' in container_className:
+            self.display_hint = lambda : 'array'
+        else:
+            self._size //= 2
+            self.display_hint = lambda : 'map'
 
     def children(self):
         if self._size == 0:
             return []
-        return QCborContainerPrivateIterator(self._container_ptr, 'QCborArray')
+        return QCborContainerPrivateIterator(self._container_ptr, self._container_className)
 
     def to_string(self):
-        return f"QCborArray (size = {self._size})"
+        return f"{self._container_className} (size = {self._size})"
 
-    def display_hint(self):
-        return 'array'
-
-class QCborMapPrinter(PrinterBaseType):
+class QCborArrayPrinter(QCborContainerPrinterBase):
 
     def __init__(self, val):
-        self._container_ptr = int(val['d']['d'])
-        if self._container_ptr:
-            self._size = int(qcborContainerElementCount(self._container_ptr)) // 2
-        else:
-            self._size = 0
+        container_ptr = int(val['d']['d'])
+        super().__init__(container_ptr, 'QCborArray')
 
-    def children(self):
-        if self._size == 0:
-            return []
-        return QCborContainerPrivateIterator(self._container_ptr, 'QCborMap')
+class QCborMapPrinter(QCborContainerPrinterBase):
 
-    def to_string(self):
-        return f"QCborMap (size = {self._size})"
+    def __init__(self, val):
+        container_ptr = int(val['d']['d'])
+        super().__init__(container_ptr, 'QCborMap')
 
-    def display_hint(self):
-        return 'map'
-
-class QJsonArrayPrinter(PrinterBaseType):
+class QJsonArrayPrinter(QCborContainerPrinterBase):
 
     def __init__(self, val):
         if d.qtVersionAtLeast(0x050f00): # also works in Qt6
-            self._container_ptr = int(val['a']['d'])
+            container_ptr = int(val['a']['d'])
         else:
             raise RuntimeError("Qt version too old for inspecting QJsonArray")
-        if self._container_ptr:
-            self._size = qcborContainerElementCount(self._container_ptr)
-        else:
-            self._size = 0
+        super().__init__(container_ptr, 'QJsonArray')
 
-    def children(self):
-        if self._size == 0:
-            return []
-        return QCborContainerPrivateIterator(self._container_ptr, 'QJsonArray')
-
-    def to_string(self):
-        return f"QJsonArray (size = {self._size})"
-
-    def display_hint(self):
-        return 'array'
-
-class QJsonObjectPrinter(PrinterBaseType):
+class QJsonObjectPrinter(QCborContainerPrinterBase):
 
     def __init__(self, val):
-        if d.qtVersionAtLeast(0x050f00):
-            self._container_ptr = int(val['o']['d'])
+        if d.qtVersionAtLeast(0x050f00): # also works in Qt6
+            container_ptr = int(val['o']['d'])
         else:
             raise RuntimeError("Qt version too old for inspecting QJsonObject")
-        if self._container_ptr:
-            self._size = int(qcborContainerElementCount(self._container_ptr)) // 2
-        else:
-            self._size = 0
-
-    def children(self):
-        if self._size == 0:
-            return []
-        return QCborContainerPrivateIterator(self._container_ptr, 'QJsonObject')
-
-    def to_string(self):
-        return "QJsonObject (size = %d)" % (self._size)
-
-    def display_hint(self):
-        return 'map'
+        super().__init__(container_ptr, 'QJsonObject')
 
 class QCborValuePrinterBase(PrinterForwarder):
 
