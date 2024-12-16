@@ -1355,7 +1355,7 @@ class QJsonDocumentPrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
         d_ptr = get_unique_ptr_value(val['d'])
-        QCborValuePrinterBase.__init__(self, 'QJsonDocument')
+        super().__init__('QJsonDocument')
         if d_ptr:
             item_data, container_ptr, item_type = d.createValue(int(d_ptr), '').split('qpi')
             self._initFromFields(item_data, container_ptr, item_type)
@@ -1363,7 +1363,7 @@ class QJsonDocumentPrinter(QCborValuePrinterBase):
 class QCborValuePrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
-        QCborValuePrinterBase.__init__(self, 'QCborValue')
+        super().__init__('QCborValue')
         item_data = int(val['n'])
         container_ptr = int(val['container'])
         item_type = int(val['t'])
@@ -1383,7 +1383,7 @@ class QJsonValuePrinter(QCborValuePrinterBase):
         data = int(value['n'])
         t = int(value['t'])
         valueData = CborOrJsonValueData(data, dd, t, False)
-        QCborValuePrinterBase.__init__(self, 'QJsonValue')
+        super().__init__('QJsonValue')
         self._initFromValueData(valueData)
 
 class QCborValueConstRefPrinter(QCborValuePrinterBase):
@@ -1393,7 +1393,7 @@ class QCborValueConstRefPrinter(QCborValuePrinterBase):
         item_index = int(val['i'])
         it = QCborContainerPrivateIterator(container_ptr, 'QCborValueConstRef')
         valueData = it.valueAt(item_index)
-        QCborValuePrinterBase.__init__(self, 'QCborValue')
+        super().__init__('QCborValue')
         self._initFromValueData(valueData)
 
 class QJsonValueConstRefPrinter(QCborValuePrinterBase):
@@ -1410,7 +1410,7 @@ class QJsonValueConstRefPrinter(QCborValuePrinterBase):
             container_ptr = d.extractPointer(array_or_map + d.ptrSize())
         it = QCborContainerPrivateIterator(container_ptr, 'QJsonValueConstRef')
         valueData = it.valueAt(item_index)
-        QCborValuePrinterBase.__init__(self, 'QJsonValue')
+        super().__init__('QJsonValue')
         self._initFromValueData(valueData)
 
 class QCborSimpleTypePrinter(PrinterBaseType):
