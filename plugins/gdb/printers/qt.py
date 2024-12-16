@@ -1172,7 +1172,7 @@ def make_QString(utf16data, size):
         buffer = struct.pack("PPn", utf16data, utf16data, size)
     else: # Qt 5
         # creating a QString would require allocating a d pointer,
-        # so use QStringView instead
+        # so create a QStringView instead
         qstring_type = gdb.lookup_type('QStringView')
         buffer = struct.pack("nP", size, utf16data)
     fakeQString = gdb.Value(buffer, qstring_type)
@@ -1193,7 +1193,7 @@ def make_Utf8String(data, size):
         fakeStringView = gdb.Value(buffer, qutf8stringview_type)
         return fakeStringView
     else: # Qt 5
-        # This is suboptimal, because a Qt5 UTF-8 CBOR/JSON string has children in KDevelop UI.
+        # this is suboptimal, because a Qt5 UTF-8 string has children in KDevelop UI
         return make_QByteArray(data, size)
 
 def make_QByteArray(data, size):
@@ -1204,8 +1204,10 @@ def make_QByteArray(data, size):
         return fakeQByteArray
     else: # Qt 5
         # creating a QByteArray would require allocating a d pointer,
-        # and there was no QByteArrayView... so just return a python str
+        # and there was no QByteArrayView... so just return a char[]
         memBytes = d.readMemory(data, size)
+        # `size - 1` because the single argument for GDB's function Type.array (n1 [, n2])
+        # is the inclusive upper bound of the array (the lower bound is then zero)
         value = gdb.Value(memBytes, gdb.lookup_type("char").array(size - 1))
         return value
 
