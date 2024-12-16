@@ -1363,10 +1363,10 @@ class QJsonDocumentPrinter(QCborValuePrinterBase):
 class QCborValuePrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
-        super().__init__('QCborValue')
         item_data = int(val['n'])
         container_ptr = int(val['container'])
         item_type = int(val['t'])
+        super().__init__('QCborValue')
         self._initFromFields(item_data, container_ptr, item_type)
 
 class QJsonValuePrinter(QCborValuePrinterBase):
@@ -1374,17 +1374,16 @@ class QJsonValuePrinter(QCborValuePrinterBase):
     def __init__(self, val):
         if d.qt6orLater():
             value = val['value']
-            dd = int(value['container'])
+            container_ptr = int(value['container'])
         elif d.qtVersionAtLeast(0x050f00):
             value = val
-            dd = int(value['d']['d'])
+            container_ptr = int(value['d']['d'])
         else:
             raise RuntimeError("Qt version too old for inspecting QJsonValue")
-        data = int(value['n'])
-        t = int(value['t'])
-        valueData = CborOrJsonValueData(data, dd, t, False)
+        item_data = int(value['n'])
+        item_type = int(value['t'])
         super().__init__('QJsonValue')
-        self._initFromValueData(valueData)
+        self._initFromFields(item_data, container_ptr, item_type)
 
 class QCborValueConstRefPrinter(QCborValuePrinterBase):
 
