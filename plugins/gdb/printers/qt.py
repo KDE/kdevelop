@@ -1440,7 +1440,7 @@ class QJsonValueConstRefPrinter(QCborValuePrinterBase):
             container_ptr = d.extractPointer(array_or_map)
         elif d.qtVersionAtLeast(0x050f00):
             container_ptr = d.extractPointer(array_or_map + d.ptrSize())
-        it = QCborContainerPrivateIterator(container_ptr, 'QJsonObject' if is_object else 'QJsonArray')
+        it = QCborContainerPrivateIterator(container_ptr, 'QJsonValueConstRef')
         valueData = it.valueAt(item_index)
         QCborValuePrinterBase.__init__(self, 'QJsonValue')
         self._initFromValueData(valueData)
