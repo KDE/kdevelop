@@ -57,7 +57,7 @@ class PrinterForwarder(PrinterBaseType):
         return '<empty>'
 
     def display_hint(self):
-        if self._printer:
+        if self._printer and hasattr(self._printer, 'display_hint'):
             return self._printer.display_hint()
         return None
 
