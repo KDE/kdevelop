@@ -49,17 +49,17 @@ class PrinterForwarder(PrinterBaseType):
             return self._printer.child(n)
         return None
 
+    def display_hint(self):
+        if self._printer and hasattr(self._printer, 'display_hint'):
+            return self._printer.display_hint()
+        return None
+
     def to_string(self):
         if self._printer:
             return self._printer.to_string()
         if not(self._underlyingValue is None): # e.g. for an integer
             return self._underlyingValue
         return '<empty>'
-
-    def display_hint(self):
-        if self._printer and hasattr(self._printer, 'display_hint'):
-            return self._printer.display_hint()
-        return None
 
 d = qtcreator_debugger.Dumper()
 
