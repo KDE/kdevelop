@@ -1231,15 +1231,15 @@ class QCborContainerPrivateIterator:
 
         item = self.valueAt(self.index).inspect()
 
-        if not self.is_array:
+        if self.is_array:
+            result = (f'[{self.index}]', item)
+        else:
             if self.index % 2 == 0:
                 itemType = 'key'
             else:
                 itemType = 'value'
-
             result = (f'[{self.index // 2}].{itemType}', item)
-        else:
-            result = (f'[{self.index}]', item)
+
         self.index += 1
         return result
 
