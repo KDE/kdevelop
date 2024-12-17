@@ -1343,9 +1343,14 @@ class QCborValuePrinterBase(PrinterForwarder):
 class QJsonDocumentPrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
+        # QJsonDocument has a single data member: std::unique_ptr<QJsonDocumentPrivate> d;
         d_ptr = get_unique_ptr_value(val['d'])
         super().__init__('QJsonDocument')
         if d_ptr:
+            # the first data member of QJsonDocumentPrivate is QCborValue value;
+            # QCborValue has 3 data members of types qint64, QCborContainerPrivate*, enum Type : int;
+            # create a DumperBase.Value and unpack the QCborValue like Qt Creator's qdump__QCborValue() does:
+            # item_data, container_ptr, item_type = value.split('qpi')
             item_data, container_ptr, item_type = d.createValue(int(d_ptr), '').split('qpi')
             self._initFromFields(item_data, container_ptr, item_type)
 
