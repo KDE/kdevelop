@@ -168,7 +168,8 @@ class DumperBase():
     def ptrCode(self):
         return 'I' if self.ptrSize() == 4 else 'Q'
 
-    # KDevelop: commented out all val.typeid assignments, because we have not copied Value.typeid for simplicity
+    # KDevelop: commented out all val.typeid assignments,
+    #           because we have not copied Value.typeid for simplicity
 
     def createValueFromAddress(self, address, typish):
         val = self.Value(self)
@@ -241,7 +242,7 @@ class DumperBase():
         builder = self.StructBuilder(self)
         n = None
         # KDevelop: removed support for the `{type}` syntax in the pattern of split()
-        # to avoid copying functions used only in the '}' branch from Qt Creator
+        #           to avoid copying functions used only in the '}' branch from Qt Creator
         #self.warn("PATTERN: %s" % pattern)
         for c in pattern:
             #self.warn("PAT CODE: %s %s" % (c, str(n)))

@@ -1003,22 +1003,6 @@ class CborValueType(Enum):
 
     Invalid         = -1
 
-# KDevelop: the bodies of the functions parseQCborContainer() and qcborContainerBytedata() (except for
-# the last `return` line) were copied verbatim from Qt Creator's function qdumpHelper_QCbor_string().
-# The same code is duplicated in two other Qt Creator's functions - qdumpHelper_QCbor_array() and qdumpHelper_QCbor_map().
-
-def parseQCborContainer(container_ptr):
-    # d.split('i@{@QByteArray::size_type}pp', container_ptr) doesn't work with CDB,
-    # so be explicit:
-    data_pos = container_ptr + (2 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else 8)
-    elements_pos = data_pos + (3 * d.ptrSize() if d.qtVersionAtLeast(0x060000) else d.ptrSize())
-    elements_data_ptr, elements_size = d.vectorData(elements_pos)
-    return (data_pos, elements_data_ptr, elements_size)
-
-def qcborContainerBytedata(data_pos):
-    bytedata, _, _ = d.qArrayData(data_pos)
-    return bytedata
-
 class CborOrJsonValueData:
 
     def __init__(self, item_data, container_ptr, item_type, is_cbor):
@@ -1042,27 +1026,9 @@ class CborOrJsonValueData:
         buffer = struct.pack("qPii", self.item_data, self.container_ptr, self.item_type, 0)
         return gdb.Value(buffer, valueType)
 
-    @staticmethod
-    def extractByteData(d, container_ptr, element_index):
-        # KDevelop: the body of this function (except for the last `return` line) was copied verbatim
-        # from Qt Creator's function qdumpHelper_QCbor_string(). Then two helper functions -
-        # parseQCborContainer() and qcborContainerBytedata() - were extracted for reuse elsewhere.
-        data_pos, elements_data_ptr, _ = parseQCborContainer(container_ptr)
-        element_at_n_addr = elements_data_ptr + element_index * 16 # sizeof(QtCbor::Element) == 16
-        element_value, _, element_flags = d.split('qII', element_at_n_addr)
-        bytedata = qcborContainerBytedata(data_pos)
-        bytedata += element_value
-        if d.qtVersionAtLeast(0x060000):
-            bytedata_len = d.extractInt64(bytedata)
-            bytedata_data = bytedata + 8
-        else:
-            bytedata_len = d.extractInt(bytedata)
-            bytedata_data = bytedata + 4 # sizeof(QtCbor::ByteData) header part
-        return (bytedata_data, bytedata_len, element_flags)
-
-    @staticmethod
-    def qdumpHelper_QCbor_string(d, container_ptr, element_index, is_bytes):
-        bytedata_data, bytedata_len, element_flags = CborOrJsonValueData.extractByteData(d, container_ptr, element_index)
+    def toGdbValueString(self, element_index, is_bytes):
+        bytedata_data, bytedata_len, element_flags = qtcreator_debugger.qdumpHelper_QCbor_string(
+                                                        d, self.container_ptr, element_index)
         if is_bytes:
             return make_QByteArray(bytedata_data, bytedata_len)
         if element_flags & 8: # QtCbor::Element::StringIsAscii
@@ -1072,13 +1038,14 @@ class CborOrJsonValueData:
         return make_Utf8String(bytedata_data, bytedata_len)
 
     def toPythonBytes(self, element_index):
-        "A variant of qdumpHelper_QCbor_string(), which returns a python bytes buffer"
-        bytedata_data, bytedata_len, element_flags = CborOrJsonValueData.extractByteData(d, self.container_ptr, element_index)
+        "A variant of toGdbValueString(), which returns a Python bytes buffer"
+        bytedata_data, bytedata_len, element_flags = qtcreator_debugger.qdumpHelper_QCbor_string(
+                                                        d, self.container_ptr, element_index)
         buffer = d.readMemory(bytedata_data, bytedata_len)
         return (buffer, bytedata_len, element_flags)
 
     def toPythonString(self, element_index):
-        "A variant of qdumpHelper_QCbor_string(), which returns a python string instead"
+        "A variant of toGdbValueString(), which returns a Python string instead"
         buffer, bytedata_len, element_flags = self.toPythonBytes(element_index)
         enc = 'utf8'
         if element_flags & 8: # QtCbor::Element::StringIsAscii
@@ -1090,10 +1057,8 @@ class CborOrJsonValueData:
     def inspect(self):
         "This function corresponds to Qt Creator's qdump__QCborValue_proxy(), but the implementation has diverged significantly"
         item_data = self.item_data
-        container_ptr = self.container_ptr
         item_type = self.item_type
         is_cbor = self.is_cbor
-        qdumpHelper_QCbor_string = CborOrJsonValueData.qdumpHelper_QCbor_string
 
         if item_type == CborValueType.Integer.value:
             return item_data
@@ -1119,10 +1084,10 @@ class CborOrJsonValueData:
             return float(val)
 
         elif item_type == CborValueType.ByteArray.value:
-            return qdumpHelper_QCbor_string(d, container_ptr, item_data, True)
+            return self.toGdbValueString(item_data, True)
 
         elif item_type == CborValueType.String.value:
-            return qdumpHelper_QCbor_string(d, container_ptr, item_data, False)
+            return self.toGdbValueString(item_data, False)
 
         elif item_type == CborValueType.Array.value:
             arrayType = gdb.lookup_type('QCborArray' if is_cbor else 'QJsonArray')
@@ -1149,17 +1114,8 @@ class CborOrJsonValueData:
             return f'<Unknown type> (0x{item_type:x}): {item_data}'
 
 def qcborContainerValueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cbor):
-    # KDevelop: the body of this function was copied verbatim from Qt Creator's function
-    # qdumpHelper_QCborArray_valueAt(). Then a trivial replacement was applied:
-    # "d.createProxyValue((<values>), 'QCborValue_proxy')" => "CborOrJsonValueData(<values>)".
-    element_at_n_addr = elements_data_ptr + idx * 16 # sizeof(QtCbor::Element) == 15
-    element_value, element_type, element_flags = d.split('qII', element_at_n_addr)
-    element_container, _, _ = d.split('pII', element_at_n_addr)
-    if element_flags & 1: # QtCbor::Element::IsContainer
-        return CborOrJsonValueData(-1, element_container, element_type, is_cbor)
-    if element_flags & 2: # QtCbor::Element::HasByteData
-        return CborOrJsonValueData(idx, container_ptr, element_type, is_cbor)
-    return CborOrJsonValueData(element_value, 0, element_type, is_cbor)
+    return CborOrJsonValueData(*qtcreator_debugger.qdumpHelper_QCborArray_valueAt(
+                                    d, container_ptr, elements_data_ptr, idx, bytedata, is_cbor))
 
 def make_QString(utf16data, size):
     if d.qt6orLater():
@@ -1210,7 +1166,7 @@ class QCborContainerPrivateIterator:
             self.is_array = 'Array' in container_className
         self.child_name = child_name
 
-        self.data_pos, self.elements_data_ptr, self.size = parseQCborContainer(container_ptr)
+        self.data_pos, self.elements_data_ptr, self.size = qtcreator_debugger.parseQCborContainer(d, container_ptr)
         self.bytedata = None
         self.index = 0
 
@@ -1219,7 +1175,7 @@ class QCborContainerPrivateIterator:
 
     def valueAt(self, index):
         if self.bytedata is None:
-            self.bytedata = qcborContainerBytedata(self.data_pos)
+            self.bytedata = qtcreator_debugger.qcborContainerBytedata(d, self.data_pos)
         return qcborContainerValueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
 
     def __next__(self):
