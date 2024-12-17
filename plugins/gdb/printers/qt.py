@@ -57,7 +57,7 @@ class PrinterForwarder(PrinterBaseType):
     def to_string(self):
         if self._printer:
             return self._printer.to_string()
-        if not(self._underlyingValue is None): # e.g. for an integer
+        if self._underlyingValue is not None: # e.g. for an integer
             return self._underlyingValue
         return '<empty>'
 
@@ -1212,10 +1212,10 @@ def make_QByteArray(data, size):
         return value
 
 class QCborContainerPrivateIterator:
-    def __init__(self, container_ptr, container_className, child_name = ''):
+    def __init__(self, container_ptr, container_className, child_name = None):
         self.container_ptr = container_ptr
         self.is_cbor = 'QCbor' in container_className
-        if not child_name:
+        if child_name is None:
             self.is_array = 'Array' in container_className
         self.child_name = child_name
 
@@ -1237,7 +1237,7 @@ class QCborContainerPrivateIterator:
 
         item = self.valueAt(self.index).inspect()
 
-        if self.child_name:
+        if self.child_name is not None:
             result = (self.child_name, item)
         elif self.is_array:
             result = (f'[{self.index}]', item)
