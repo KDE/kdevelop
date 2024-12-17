@@ -61,10 +61,10 @@ class PrinterForwarder(PrinterBaseType):
             return self._underlyingValue
         return '<empty>'
 
-d = qtcreator_debugger.Dumper()
+dumper = qtcreator_debugger.Dumper()
 
 def get_unique_ptr_value(unique_ptr_val):
-    if unique_ptr_val.type.sizeof == d.ptrSize():
+    if unique_ptr_val.type.sizeof == dumper.ptrSize():
         return unique_ptr_val.cast(gdb.lookup_type('void').pointer())
     raise RuntimeError("A std::unique_ptr with a nonempty deleter is not supported")
 
@@ -1012,7 +1012,7 @@ class CborOrJsonValueData:
         self.is_cbor = is_cbor
 
     def createCborOrJsonContainer(self, container_className):
-        if d.qt6orLater() or self.is_cbor:
+        if dumper.qt6orLater() or self.is_cbor:
             # Create an 8-byte buffer and pack the address as a pointer
             buffer = struct.pack("P", self.container_ptr)
         else: # Qt 5.15's QJsonArray and QJsonObject had a dead pointer first
@@ -1028,7 +1028,7 @@ class CborOrJsonValueData:
 
     def toGdbValueString(self, element_index, is_bytes):
         bytedata_data, bytedata_len, element_flags = qtcreator_debugger.qdumpHelper_QCbor_string(
-                                                        d, self.container_ptr, element_index)
+                                                        dumper, self.container_ptr, element_index)
         if is_bytes:
             return make_QByteArray(bytedata_data, bytedata_len)
         if element_flags & 8: # QtCbor::Element::StringIsAscii
@@ -1040,8 +1040,8 @@ class CborOrJsonValueData:
     def toPythonBytes(self, element_index):
         "A variant of toGdbValueString(), which returns a Python bytes buffer"
         bytedata_data, bytedata_len, element_flags = qtcreator_debugger.qdumpHelper_QCbor_string(
-                                                        d, self.container_ptr, element_index)
-        buffer = d.readMemory(bytedata_data, bytedata_len)
+                                                        dumper, self.container_ptr, element_index)
+        buffer = dumper.readMemory(bytedata_data, bytedata_len)
         return (buffer, bytedata_len, element_flags)
 
     def toPythonString(self, element_index):
@@ -1115,10 +1115,10 @@ class CborOrJsonValueData:
 
 def qcborContainerValueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cbor):
     return CborOrJsonValueData(*qtcreator_debugger.qdumpHelper_QCborArray_valueAt(
-                                    d, container_ptr, elements_data_ptr, idx, bytedata, is_cbor))
+                                    dumper, container_ptr, elements_data_ptr, idx, bytedata, is_cbor))
 
 def make_QString(utf16data, size):
-    if d.qt6orLater():
+    if dumper.qt6orLater():
         qstring_type = gdb.lookup_type('QString')
         buffer = struct.pack("PPn", utf16data, utf16data, size)
     else: # Qt 5
@@ -1130,14 +1130,14 @@ def make_QString(utf16data, size):
 
 def make_QLatin1String(data, size):
     qlatin1string_type = gdb.lookup_type('QLatin1String')
-    if d.qt6orLater():
+    if dumper.qt6orLater():
         buffer = struct.pack("nP", size, data)
     else: # Qt 5
         buffer = struct.pack("iP", size, data)
     return gdb.Value(buffer, qlatin1string_type)
 
 def make_Utf8String(data, size):
-    if d.qt6orLater():
+    if dumper.qt6orLater():
         qutf8stringview_type = gdb.lookup_type('QBasicUtf8StringView<false>')
         buffer = struct.pack("Pn", data, size)
         return gdb.Value(buffer, qutf8stringview_type)
@@ -1146,14 +1146,14 @@ def make_Utf8String(data, size):
         return make_QByteArray(data, size)
 
 def make_QByteArray(data, size):
-    if d.qt6orLater():
+    if dumper.qt6orLater():
         qbytearray_type = gdb.lookup_type('QByteArray')
         buffer = struct.pack("PPn", data, data, size)
         return gdb.Value(buffer, qbytearray_type)
     else: # Qt 5
         # creating a QByteArray would require allocating a d pointer,
         # and there was no QByteArrayView... so just return a char[]
-        memBytes = d.readMemory(data, size)
+        memBytes = dumper.readMemory(data, size)
         # `size - 1` because the single argument for GDB's function Type.array (n1 [, n2])
         # is the inclusive upper bound of the array (the lower bound is then zero)
         return gdb.Value(memBytes, gdb.lookup_type("char").array(size - 1))
@@ -1166,7 +1166,7 @@ class QCborContainerPrivateIterator:
             self.is_array = 'Array' in container_className
         self.child_name = child_name
 
-        self.data_pos, self.elements_data_ptr, self.size = qtcreator_debugger.parseQCborContainer(d, container_ptr)
+        self.data_pos, self.elements_data_ptr, self.size = qtcreator_debugger.parseQCborContainer(dumper, container_ptr)
         self.bytedata = None
         self.index = 0
 
@@ -1175,7 +1175,7 @@ class QCborContainerPrivateIterator:
 
     def valueAt(self, index):
         if self.bytedata is None:
-            self.bytedata = qtcreator_debugger.qcborContainerBytedata(d, self.data_pos)
+            self.bytedata = qtcreator_debugger.qcborContainerBytedata(dumper, self.data_pos)
         return qcborContainerValueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
 
     def __next__(self):
@@ -1240,7 +1240,7 @@ class QCborMapPrinter(QCborContainerPrinterBase):
 class QJsonArrayPrinter(QCborContainerPrinterBase):
 
     def __init__(self, val):
-        if d.qtVersionAtLeast(0x050f00): # also works in Qt6
+        if dumper.qtVersionAtLeast(0x050f00): # also works in Qt6
             container_ptr = int(val['a']['d'])
         else:
             raise RuntimeError("Qt version too old for inspecting QJsonArray")
@@ -1249,7 +1249,7 @@ class QJsonArrayPrinter(QCborContainerPrinterBase):
 class QJsonObjectPrinter(QCborContainerPrinterBase):
 
     def __init__(self, val):
-        if d.qtVersionAtLeast(0x050f00): # also works in Qt6
+        if dumper.qtVersionAtLeast(0x050f00): # also works in Qt6
             container_ptr = int(val['o']['d'])
         else:
             raise RuntimeError("Qt version too old for inspecting QJsonObject")
@@ -1278,7 +1278,7 @@ class QCborValuePrinterBase(PrinterForwarder):
         elif item_type == CborValueType.Tag.value:
             it = QCborContainerPrivateIterator(valueData.container_ptr, self._className, "value")
             if it.size == 2:
-                tag = d.extractInt64(it.elements_data_ptr)
+                tag = dumper.extractInt64(it.elements_data_ptr)
                 self._setUnderlyingValue(f'Tag({tag})')
                 # iterate over the single tagged value - the second element of the size=2 Tag container
                 it.index = 1
@@ -1295,14 +1295,14 @@ class QJsonDocumentPrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
         # QJsonDocument has a single data member: std::unique_ptr<QJsonDocumentPrivate> d;
-        d_ptr = get_unique_ptr_value(val['d'])
+        d = get_unique_ptr_value(val['d'])
         super().__init__('QJsonDocument')
-        if d_ptr:
+        if d:
             # the first data member of QJsonDocumentPrivate is QCborValue value;
             # QCborValue has 3 data members of types qint64, QCborContainerPrivate*, enum Type : int;
             # create a DumperBase.Value and unpack the QCborValue like Qt Creator's qdump__QCborValue() does:
             # item_data, container_ptr, item_type = value.split('qpi')
-            item_data, container_ptr, item_type = d.createValue(int(d_ptr), '').split('qpi')
+            item_data, container_ptr, item_type = dumper.createValue(int(d), '').split('qpi')
             self._initFromFields(item_data, container_ptr, item_type)
 
 class QCborValuePrinter(QCborValuePrinterBase):
@@ -1317,10 +1317,10 @@ class QCborValuePrinter(QCborValuePrinterBase):
 class QJsonValuePrinter(QCborValuePrinterBase):
 
     def __init__(self, val):
-        if d.qt6orLater():
+        if dumper.qt6orLater():
             value = val['value']
             container_ptr = int(value['container'])
-        elif d.qtVersionAtLeast(0x050f00):
+        elif dumper.qtVersionAtLeast(0x050f00):
             value = val
             container_ptr = int(value['d']['d'])
         else:
@@ -1354,10 +1354,10 @@ class QJsonValueConstRefPrinter(QCborValueConstRefPrinterBase):
         itemIndex = int(val['index'])
         if is_object:
             itemIndex = itemIndex * 2 + 1 # see QJsonPrivate::Value::indexHelper()
-        if d.qt6orLater():
-            container_ptr = d.extractPointer(array_or_map)
-        elif d.qtVersionAtLeast(0x050f00):
-            container_ptr = d.extractPointer(array_or_map + d.ptrSize())
+        if dumper.qt6orLater():
+            container_ptr = dumper.extractPointer(array_or_map)
+        elif dumper.qtVersionAtLeast(0x050f00):
+            container_ptr = dumper.extractPointer(array_or_map + dumper.ptrSize())
         super().__init__('QJsonValue', container_ptr, itemIndex)
 
 class QCborSimpleTypePrinter(PrinterBaseType):
@@ -1470,7 +1470,7 @@ def register_qt_printers (obj):
 
     obj.pretty_printers.append(FunctionLookup(gdb, pretty_printers_dict))
 
-# Note that we can't use d.qtVersionAtLeast() in this function, the Qt version isn't known before starting the app
+# Note: dumper.qtVersionAtLeast() cannot be used in this function, because the Qt version isn't known before starting the app
 def build_dictionary ():
     pretty_printers_dict[re.compile('^QLatin1String$')] = lambda val: QLatin1StringPrinter(val)
     pretty_printers_dict[re.compile('^QBasicUtf8StringView<(?:true|false)>$')] = lambda val: QUtf8StringViewPrinter(val)
