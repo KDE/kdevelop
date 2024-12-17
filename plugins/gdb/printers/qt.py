@@ -1033,9 +1033,8 @@ class CborOrJsonValueData:
             buffer = struct.pack("P", self.container_ptr)
         else: # Qt 5.15's QJsonArray and QJsonObject had a dead pointer first
             buffer = struct.pack("PP", 0, self.container_ptr)
-        fakeContainer = gdb.Value(buffer, container_className)
         # This will trigger {container_className}Printer
-        return fakeContainer
+        return gdb.Value(buffer, container_className)
 
     def toCborOrJsonGdbValue(self):
         valueType = gdb.lookup_type('QCborValue' if self.is_cbor else 'QJsonValue')
@@ -1171,8 +1170,7 @@ def make_QString(utf16data, size):
         # so create a QStringView instead
         qstring_type = gdb.lookup_type('QStringView')
         buffer = struct.pack("nP", size, utf16data)
-    fakeQString = gdb.Value(buffer, qstring_type)
-    return fakeQString
+    return gdb.Value(buffer, qstring_type)
 
 def make_QLatin1String(data, size):
     qlatin1string_type = gdb.lookup_type('QLatin1String')
@@ -1186,8 +1184,7 @@ def make_Utf8String(data, size):
     if d.qt6orLater():
         qutf8stringview_type = gdb.lookup_type('QBasicUtf8StringView<false>')
         buffer = struct.pack("Pn", data, size)
-        fakeStringView = gdb.Value(buffer, qutf8stringview_type)
-        return fakeStringView
+        return gdb.Value(buffer, qutf8stringview_type)
     else: # Qt 5
         # this is suboptimal, because a Qt5 UTF-8 string has children in KDevelop UI
         return make_QByteArray(data, size)
@@ -1196,16 +1193,14 @@ def make_QByteArray(data, size):
     if d.qt6orLater():
         qbytearray_type = gdb.lookup_type('QByteArray')
         buffer = struct.pack("PPn", data, data, size)
-        fakeQByteArray = gdb.Value(buffer, qbytearray_type)
-        return fakeQByteArray
+        return gdb.Value(buffer, qbytearray_type)
     else: # Qt 5
         # creating a QByteArray would require allocating a d pointer,
         # and there was no QByteArrayView... so just return a char[]
         memBytes = d.readMemory(data, size)
         # `size - 1` because the single argument for GDB's function Type.array (n1 [, n2])
         # is the inclusive upper bound of the array (the lower bound is then zero)
-        value = gdb.Value(memBytes, gdb.lookup_type("char").array(size - 1))
-        return value
+        return gdb.Value(memBytes, gdb.lookup_type("char").array(size - 1))
 
 class QCborContainerPrivateIterator:
     def __init__(self, container_ptr, container_className, child_name = None):
