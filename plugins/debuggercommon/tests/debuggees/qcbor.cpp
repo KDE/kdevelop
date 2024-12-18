@@ -79,6 +79,9 @@ int main(int argc, char *argv[])
 
     // Deserialize the CBOR data back into a QCborValue
     QCborValue parsedValue = QCborValue::fromCbor(cborData);
+    // Clear the very long string after use to prevent overly wide Value column in
+    // KDevelop's Variables tool view, which moves the Type column far to the right.
+    cborData.clear();
 
     if (parsedValue.isMap()) {
         QCborMap parsedMap = parsedValue.toMap();

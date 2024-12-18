@@ -58,6 +58,9 @@ int main(int argc, char *argv[])
 
     // Parsing JSON string back to QJsonDocument
     QJsonDocument parsedDoc = QJsonDocument::fromJson(jsonString);
+    // Clear the very long string after use to prevent overly wide Value column in
+    // KDevelop's Variables tool view, which moves the Type column far to the right.
+    jsonString.clear();
 
     // Check if the parsing was successful
     if (!parsedDoc.isNull() && parsedDoc.isObject()) {

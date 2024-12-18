@@ -711,7 +711,7 @@ void QtPrintersTest::testQCbor()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
 
-    gdb.execute("break qcbor.cpp:110");
+    gdb.execute("break qcbor.cpp:113");
     gdb.execute("run");
 
     QCOMPARE(printedValue(gdb, "emptyValue"), "<Undefined>");
@@ -820,7 +820,7 @@ void QtPrintersTest::testQJson()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qjson"));
 
-    gdb.execute("break qjson.cpp:82");
+    gdb.execute("break qjson.cpp:85");
     gdb.execute("run");
 
     QCOMPARE(printedValue(gdb, "emptyDoc"), "<empty>");
