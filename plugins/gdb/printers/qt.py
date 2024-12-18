@@ -60,7 +60,7 @@ class PrinterForwarder(PrinterBaseType):
             return self._printer.to_string()
         if self._underlyingValue is not None: # e.g. for an integer
             return self._underlyingValue
-        return '<empty>'
+        raise RuntimeError("No underlying value has been set")
 
 dumper = qtcreator_debugger.Dumper()
 
@@ -1305,6 +1305,8 @@ class QJsonDocumentPrinter(QCborValuePrinterBase):
             # item_data, container_ptr, item_type = value.split('qpi')
             item_data, container_ptr, item_type = dumper.createValue(int(d), '').split('qpi')
             self._initFromFields(item_data, container_ptr, item_type)
+        else:
+            self._setUnderlyingValue("<empty>")
 
 class QCborValuePrinter(QCborValuePrinterBase):
 
