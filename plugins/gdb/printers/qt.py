@@ -70,38 +70,38 @@ def unique_ptr_get(unique_ptrValue):
     raise RuntimeError("A std::unique_ptr with a nonempty deleter is not supported")
 
 def makeQLatin1String(data, size):
-    qlatin1stringType = gdb.lookup_type('QLatin1String')
+    qLatin1StringType = gdb.lookup_type('QLatin1String')
     if dumper.qt6orLater():
         buffer = struct.pack("nP", size, data)
     else: # Qt 5
         buffer = struct.pack("iP", size, data)
-    return gdb.Value(buffer, qlatin1stringType)
+    return gdb.Value(buffer, qLatin1StringType)
 
 def makeUtf8String(data, size):
     if dumper.qt6orLater():
-        qutf8stringviewType = gdb.lookup_type('QBasicUtf8StringView<false>')
+        qUtf8StringViewType = gdb.lookup_type('QBasicUtf8StringView<false>')
         buffer = struct.pack("Pn", data, size)
-        return gdb.Value(buffer, qutf8stringviewType)
+        return gdb.Value(buffer, qUtf8StringViewType)
     else: # Qt 5
         # this is suboptimal, because a Qt5 UTF-8 string has children in KDevelop UI
         return makeQByteArray(data, size)
 
 def makeQString(utf16data, size):
     if dumper.qt6orLater():
-        qstringType = gdb.lookup_type('QString')
+        qStringType = gdb.lookup_type('QString')
         buffer = struct.pack("PPn", utf16data, utf16data, size)
     else: # Qt 5
         # creating a QString would require allocating a d pointer,
         # so create a QStringView instead
-        qstringType = gdb.lookup_type('QStringView')
+        qStringType = gdb.lookup_type('QStringView')
         buffer = struct.pack("nP", size, utf16data)
-    return gdb.Value(buffer, qstringType)
+    return gdb.Value(buffer, qStringType)
 
 def makeQByteArray(data, size):
     if dumper.qt6orLater():
-        qbytearrayType = gdb.lookup_type('QByteArray')
+        qByteArrayType = gdb.lookup_type('QByteArray')
         buffer = struct.pack("PPn", data, data, size)
-        return gdb.Value(buffer, qbytearrayType)
+        return gdb.Value(buffer, qByteArrayType)
     else: # Qt 5
         # creating a QByteArray would require allocating a d pointer,
         # and there was no QByteArrayView... so just return a char[]
@@ -1155,7 +1155,7 @@ class CborOrJsonValueData:
         else:
             return f'<Unknown type> (0x{item_type:x}): {item_data}'
 
-def qcborContainerValueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cbor):
+def qCborContainerValueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cbor):
     return CborOrJsonValueData(*qtcD.qdumpHelper_QCborArray_valueAt(
                                     dumper, container_ptr, elements_data_ptr, idx, bytedata, is_cbor))
 
@@ -1176,8 +1176,8 @@ class QCborContainerPrivateIterator:
 
     def valueAt(self, index):
         if self.bytedata is None:
-            self.bytedata = qtcD.qcborContainerBytedata(dumper, self.data_pos)
-        return qcborContainerValueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
+            self.bytedata = qtcD.qCborContainerBytedata(dumper, self.data_pos)
+        return qCborContainerValueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
 
     def __next__(self):
         if self.index >= self.size:

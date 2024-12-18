@@ -5,7 +5,7 @@
 # Modified by Igor Kushnir <igorkuo@gmail.com> (initially)
 # for the needs of qt.py
 
-# KDevelop: the bodies of the functions parseQCborContainer() and qcborContainerBytedata()
+# KDevelop: the bodies of the functions parseQCborContainer() and qCborContainerBytedata()
 #           (except for the last `return` line) were extracted from Qt Creator's function
 #           qdumpHelper_QCbor_string(). The same code is duplicated in two other
 #           Qt Creator's functions - qdumpHelper_QCbor_array() and qdumpHelper_QCbor_map().
@@ -18,19 +18,19 @@ def parseQCborContainer(d, container_ptr):
     elements_data_ptr, elements_size = d.vectorData(elements_pos)
     return (data_pos, elements_data_ptr, elements_size)
 
-def qcborContainerBytedata(d, data_pos):
+def qCborContainerBytedata(d, data_pos):
     bytedata, _, _ = d.qArrayData(data_pos)
     return bytedata
 
 # KDevelop: removed unneeded parameter `is_bytes`
 def qdumpHelper_QCbor_string(d, container_ptr, element_index):
     # KDevelop: extracted the helper functions parseQCborContainer()
-    #           and qcborContainerBytedata() for reuse elsewhere
+    #           and qCborContainerBytedata() for reuse elsewhere
     data_pos, elements_data_ptr, _ = parseQCborContainer(d, container_ptr)
     element_at_n_addr = elements_data_ptr + element_index * 16 # sizeof(QtCbor::Element) == 16
     element_value, _, element_flags = d.split('qII', element_at_n_addr)
     # KDevelop: removed unneeded variable `enc`
-    bytedata = qcborContainerBytedata(d, data_pos)
+    bytedata = qCborContainerBytedata(d, data_pos)
     bytedata += element_value
     if d.qtVersionAtLeast(0x060000):
         bytedata_len = d.extractInt64(bytedata)
