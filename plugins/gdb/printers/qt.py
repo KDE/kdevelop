@@ -32,30 +32,31 @@ class PrinterForwarder(PrinterBaseType):
     def _setUnderlyingValue(self, underlyingValue):
         self._underlyingValue = underlyingValue
         if isinstance(self._underlyingValue, gdb.Value):
+            # gdb.default_visualizer(value) returns None if no pretty-printer for the value exists
             self._printer = gdb.default_visualizer(self._underlyingValue)
 
     def children(self):
-        if self._printer and hasattr(self._printer, 'children'):
+        if self._printer is not None and hasattr(self._printer, 'children'):
             return self._printer.children()
         return []
 
     def num_children(self):
-        if self._printer and hasattr(self._printer, 'num_children'):
+        if self._printer is not None and hasattr(self._printer, 'num_children'):
             return self._printer.num_children()
         return 0
 
     def child(self, n):
-        if self._printer and hasattr(self._printer, 'child'):
+        if self._printer is not None and hasattr(self._printer, 'child'):
             return self._printer.child(n)
         return None
 
     def display_hint(self):
-        if self._printer and hasattr(self._printer, 'display_hint'):
+        if self._printer is not None and hasattr(self._printer, 'display_hint'):
             return self._printer.display_hint()
         return None
 
     def to_string(self):
-        if self._printer:
+        if self._printer is not None:
             return self._printer.to_string()
         if self._underlyingValue is not None: # e.g. for an integer
             return self._underlyingValue
