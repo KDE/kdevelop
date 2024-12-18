@@ -820,7 +820,7 @@ void QtPrintersTest::testQJson()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qjson"));
 
-    gdb.execute("break qjson.cpp:81");
+    gdb.execute("break qjson.cpp:82");
     gdb.execute("run");
 
     QCOMPARE(printedValue(gdb, "emptyDoc"), "<empty>");
@@ -861,6 +861,7 @@ void QtPrintersTest::testQJson()
     const QByteArray expectedChildrenArray = R"(QJsonArray (size = 2) = {"Alice", "Mickaël"})";
 
     QCOMPARE(printedValue(gdb, "parsedChildren"), expectedChildrenArray);
+    QCOMPARE(printedValue(gdb, "childrenDoc"), expectedChildrenArray);
     QCOMPARE(printedValue(gdb, "child"), R"("Alice")");
 
     QCOMPARE(printedValue(gdb, "parsedObj[nameStr]"), R"("John Doe")"); // QJsonValueConstRef without address

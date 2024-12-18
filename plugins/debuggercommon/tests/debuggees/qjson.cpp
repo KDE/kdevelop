@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
         const auto parsedChildrenRef = parsedObj["children"];
         const QJsonValue parsedChildrenValue = parsedChildrenRef;
         QJsonArray parsedChildren = parsedChildrenRef.toArray();
+        const QJsonDocument childrenDoc(parsedChildren);
         for (const auto &child : parsedChildren) {
             QString childName = child.toString();
         }
