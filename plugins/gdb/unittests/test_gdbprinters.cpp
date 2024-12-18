@@ -707,125 +707,6 @@ void QtPrintersTest::testQUuid()
     QCOMPARE(printedValue(gdb, "id"), "QUuid({9ec3b70b-d105-42bf-b3b4-656e44d2e223})");
 }
 
-void QtPrintersTest::testQVariant()
-{
-    GdbProcess gdb(QStringLiteral("debuggee_qvariant"));
-
-    auto printNext = [&]() {
-        gdb.execute("next");
-        return gdb.execute("print v");
-    };
-
-    gdb.execute("break qvariant.cpp:13");
-    gdb.execute("run");
-
-    QVERIFY(printNext().contains("QVariant(NULL)"));
-    QVERIFY(printNext().contains("QVariant(QString, \"KDevelop (QString)\")"));
-    QVERIFY(printNext().contains("QVariant(QByteArray, \"KDevelop (QByteArray)\" = {"));
-    QVERIFY(printNext().contains("QVariant(signed char, -8"));
-    QVERIFY(printNext().contains("QVariant(uchar, 8"));
-    QVERIFY(printNext().contains("QVariant(short, -16)"));
-    QVERIFY(printNext().contains("QVariant(ushort, 16)"));
-    QVERIFY(printNext().contains("QVariant(int, -32)"));
-    QVERIFY(printNext().contains("QVariant(uint, 32)"));
-    QVERIFY(printNext().contains("QVariant(qlonglong, -64)"));
-    QVERIFY(printNext().contains("QVariant(qulonglong, 64)"));
-    QVERIFY(printNext().contains("QVariant(bool, true)"));
-    QVERIFY(printNext().contains("QVariant(float, 4.5)"));
-    QVERIFY(printNext().contains("QVariant(double, 42.5)"));
-
-    QVERIFY(printNext().contains("QVariant(QObject*, 0x"));
-    // Now verify that the pretty printer retrieves correct object address from the QVariant.
-    {
-        auto objectAddress = gdb.execute("print /a &myObj");
-        objectAddress.remove(0, objectAddress.indexOf('=') + 1);
-        objectAddress = objectAddress.trimmed();
-        QCOMPARE(objectAddress.left(2), "0x");
-        objectAddress.insert(0, "QVariant(QObject*, ");
-        QVERIFY(gdb.execute("print v").contains(objectAddress));
-    }
-
-    QVERIFY(printNext().contains("QVariant(SomeCustomType, {\n  foo = 42\n})"));
-}
-
-void QtPrintersTest::testQJson()
-{
-    GdbProcess gdb(QStringLiteral("debuggee_qjson"));
-
-    gdb.execute("break qjson.cpp:81");
-    gdb.execute("run");
-    QByteArray data;
-
-    data = gdb.execute("print emptyDoc");
-    QCOMPARE(data, R"($1 = <empty>)");
-
-    const QByteArray expectedJsonObj = R"(QJsonObject (size = 7) = {
-  ["address"] = "Some street\\nCity\\nCountry",
-  ["age"] = 30.57,
-  ["children"] = QJsonArray (size = 2) = {"Alice", "Mickaël"},
-  ["job"] = QJsonObject (size = 5) = {
-    ["company"] = "KDAB",
-    ["emptyArray"] = QJsonArray (size = 0),
-    ["emptyObj"] = QJsonObject (size = 0),
-    ["emptyValue"] = <Null>,
-    ["title"] = "Surface technician"
-  },
-  ["married"] = false,
-  ["name"] = "John Doe",
-  ["year"] = 2024
-})";
-
-    data = gdb.execute("print jsonObj");
-    QCOMPARE(data, "$2 = " + expectedJsonObj);
-    data = gdb.execute("print parsedObj");
-    QCOMPARE(data, "$3 = " + expectedJsonObj);
-    data = gdb.execute("print jsonDoc");
-    QCOMPARE(data, "$4 = " + expectedJsonObj);
-    data = gdb.execute("print parsedDoc");
-    QCOMPARE(data, "$5 = " + expectedJsonObj);
-
-    data = gdb.execute("print name");
-    QCOMPARE(data, R"($6 = "John Doe")");
-    data = gdb.execute("print nameRef");
-    QCOMPARE(data, R"($7 = "John Doe")");
-
-    data = gdb.execute("print year");
-    QCOMPARE(data, "$8 = 2024");
-    data = gdb.execute("print yearRef");
-    QCOMPARE(data, "$9 = 2024");
-
-    data = gdb.execute("print age");
-    QCOMPARE(data, "$10 = 30.57");
-    data = gdb.execute("print ageRef");
-    QCOMPARE(data, "$11 = 30.57");
-
-    data = gdb.execute("print married");
-    QCOMPARE(data, "$12 = false");
-    data = gdb.execute("print marriedRef");
-    QCOMPARE(data, "$13 = false");
-
-    data = gdb.execute("print parsedChildren");
-    QCOMPARE(data, R"($14 = QJsonArray (size = 2) = {"Alice", "Mickaël"})");
-
-    data = gdb.execute("print child");
-    QCOMPARE(data, R"($15 = "Alice")");
-
-    data = gdb.execute("print parsedObj[nameStr]"); // QJsonValueConstRef without address
-    QCOMPARE(data, R"($16 = "John Doe")");
-
-    data = gdb.execute("print source.jsonDocument()");
-    QCOMPARE(data, "$17 = " + expectedJsonObj);
-
-    data = gdb.execute("print source.jsonObject()");
-    QCOMPARE(data, "$18 = " + expectedJsonObj);
-
-    data = gdb.execute("print source.jsonValue()");
-    QCOMPARE(data, "$19 = " + expectedJsonObj);
-
-    data = gdb.execute("print source.childrenArray()");
-    QCOMPARE(data, R"($20 = QJsonArray (size = 2) = {"Alice", "Mickaël"})");
-}
-
 void QtPrintersTest::testQCbor()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
@@ -953,6 +834,125 @@ void QtPrintersTest::testQCbor()
 })";
     QCOMPARE(printedValue(gdb, "bigNumValueRef"), expectedBigNum);
     QCOMPARE(printedValue(gdb, "bigNumValue"), expectedBigNum);
+}
+
+void QtPrintersTest::testQJson()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qjson"));
+
+    gdb.execute("break qjson.cpp:81");
+    gdb.execute("run");
+    QByteArray data;
+
+    data = gdb.execute("print emptyDoc");
+    QCOMPARE(data, R"($1 = <empty>)");
+
+    const QByteArray expectedJsonObj = R"(QJsonObject (size = 7) = {
+  ["address"] = "Some street\\nCity\\nCountry",
+  ["age"] = 30.57,
+  ["children"] = QJsonArray (size = 2) = {"Alice", "Mickaël"},
+  ["job"] = QJsonObject (size = 5) = {
+    ["company"] = "KDAB",
+    ["emptyArray"] = QJsonArray (size = 0),
+    ["emptyObj"] = QJsonObject (size = 0),
+    ["emptyValue"] = <Null>,
+    ["title"] = "Surface technician"
+  },
+  ["married"] = false,
+  ["name"] = "John Doe",
+  ["year"] = 2024
+})";
+
+    data = gdb.execute("print jsonObj");
+    QCOMPARE(data, "$2 = " + expectedJsonObj);
+    data = gdb.execute("print parsedObj");
+    QCOMPARE(data, "$3 = " + expectedJsonObj);
+    data = gdb.execute("print jsonDoc");
+    QCOMPARE(data, "$4 = " + expectedJsonObj);
+    data = gdb.execute("print parsedDoc");
+    QCOMPARE(data, "$5 = " + expectedJsonObj);
+
+    data = gdb.execute("print name");
+    QCOMPARE(data, R"($6 = "John Doe")");
+    data = gdb.execute("print nameRef");
+    QCOMPARE(data, R"($7 = "John Doe")");
+
+    data = gdb.execute("print year");
+    QCOMPARE(data, "$8 = 2024");
+    data = gdb.execute("print yearRef");
+    QCOMPARE(data, "$9 = 2024");
+
+    data = gdb.execute("print age");
+    QCOMPARE(data, "$10 = 30.57");
+    data = gdb.execute("print ageRef");
+    QCOMPARE(data, "$11 = 30.57");
+
+    data = gdb.execute("print married");
+    QCOMPARE(data, "$12 = false");
+    data = gdb.execute("print marriedRef");
+    QCOMPARE(data, "$13 = false");
+
+    data = gdb.execute("print parsedChildren");
+    QCOMPARE(data, R"($14 = QJsonArray (size = 2) = {"Alice", "Mickaël"})");
+
+    data = gdb.execute("print child");
+    QCOMPARE(data, R"($15 = "Alice")");
+
+    data = gdb.execute("print parsedObj[nameStr]"); // QJsonValueConstRef without address
+    QCOMPARE(data, R"($16 = "John Doe")");
+
+    data = gdb.execute("print source.jsonDocument()");
+    QCOMPARE(data, "$17 = " + expectedJsonObj);
+
+    data = gdb.execute("print source.jsonObject()");
+    QCOMPARE(data, "$18 = " + expectedJsonObj);
+
+    data = gdb.execute("print source.jsonValue()");
+    QCOMPARE(data, "$19 = " + expectedJsonObj);
+
+    data = gdb.execute("print source.childrenArray()");
+    QCOMPARE(data, R"($20 = QJsonArray (size = 2) = {"Alice", "Mickaël"})");
+}
+
+void QtPrintersTest::testQVariant()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qvariant"));
+
+    auto printNext = [&]() {
+        gdb.execute("next");
+        return gdb.execute("print v");
+    };
+
+    gdb.execute("break qvariant.cpp:13");
+    gdb.execute("run");
+
+    QVERIFY(printNext().contains("QVariant(NULL)"));
+    QVERIFY(printNext().contains("QVariant(QString, \"KDevelop (QString)\")"));
+    QVERIFY(printNext().contains("QVariant(QByteArray, \"KDevelop (QByteArray)\" = {"));
+    QVERIFY(printNext().contains("QVariant(signed char, -8"));
+    QVERIFY(printNext().contains("QVariant(uchar, 8"));
+    QVERIFY(printNext().contains("QVariant(short, -16)"));
+    QVERIFY(printNext().contains("QVariant(ushort, 16)"));
+    QVERIFY(printNext().contains("QVariant(int, -32)"));
+    QVERIFY(printNext().contains("QVariant(uint, 32)"));
+    QVERIFY(printNext().contains("QVariant(qlonglong, -64)"));
+    QVERIFY(printNext().contains("QVariant(qulonglong, 64)"));
+    QVERIFY(printNext().contains("QVariant(bool, true)"));
+    QVERIFY(printNext().contains("QVariant(float, 4.5)"));
+    QVERIFY(printNext().contains("QVariant(double, 42.5)"));
+
+    QVERIFY(printNext().contains("QVariant(QObject*, 0x"));
+    // Now verify that the pretty printer retrieves correct object address from the QVariant.
+    {
+        auto objectAddress = gdb.execute("print /a &myObj");
+        objectAddress.remove(0, objectAddress.indexOf('=') + 1);
+        objectAddress = objectAddress.trimmed();
+        QCOMPARE(objectAddress.left(2), "0x");
+        objectAddress.insert(0, "QVariant(QObject*, ");
+        QVERIFY(gdb.execute("print v").contains(objectAddress));
+    }
+
+    QVERIFY(printNext().contains("QVariant(SomeCustomType, {\n  foo = 42\n})"));
 }
 
 void QtPrintersTest::testKTextEditorTypes()

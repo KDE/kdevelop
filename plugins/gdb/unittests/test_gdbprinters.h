@@ -35,9 +35,9 @@ private Q_SLOTS:
     void testQListPOD();
     void testQPersistentModelIndex();
     void testQUuid();
-    void testQVariant();
-    void testQJson();
     void testQCbor();
+    void testQJson();
+    void testQVariant();
     void testKTextEditorTypes();
     void testKDevelopTypes();
 };
