@@ -54,10 +54,10 @@ int main(int argc, char *argv[])
     QJsonDocument jsonDoc = source.jsonDocument();
     QJsonObject jsonObj = jsonDoc.object();
 
-    QString jsonString = jsonDoc.toJson(QJsonDocument::Indented);
+    QByteArray jsonString = jsonDoc.toJson(QJsonDocument::Indented);
 
     // Parsing JSON string back to QJsonDocument
-    QJsonDocument parsedDoc = QJsonDocument::fromJson(jsonString.toUtf8());
+    QJsonDocument parsedDoc = QJsonDocument::fromJson(jsonString);
 
     // Check if the parsing was successful
     if (!parsedDoc.isNull() && parsedDoc.isObject()) {
