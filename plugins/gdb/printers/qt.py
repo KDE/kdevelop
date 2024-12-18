@@ -13,7 +13,7 @@ import time
 from datetime import datetime
 from enum import Enum
 
-import qtcreator_debugger
+import qtcreator_debugger as qtcD
 from helper import *
 
 # opt-in to new ValuePrinter for collection types to allow direct querying of sizes where appropriate
@@ -62,7 +62,7 @@ class PrinterForwarder(PrinterBaseType):
             return self._underlyingValue
         raise RuntimeError("No underlying value has been set")
 
-dumper = qtcreator_debugger.Dumper()
+dumper = qtcD.Dumper()
 
 def get_unique_ptr_value(unique_ptr_val):
     if unique_ptr_val.type.sizeof == dumper.ptrSize():
@@ -1069,7 +1069,7 @@ class CborOrJsonValueData:
         return gdb.Value(buffer, valueType)
 
     def toGdbValueString(self, element_index, is_bytes):
-        bytedata_data, bytedata_len, element_flags = qtcreator_debugger.qdumpHelper_QCbor_string(
+        bytedata_data, bytedata_len, element_flags = qtcD.qdumpHelper_QCbor_string(
                                                         dumper, self.container_ptr, element_index)
         if is_bytes:
             return make_QByteArray(bytedata_data, bytedata_len)
@@ -1081,7 +1081,7 @@ class CborOrJsonValueData:
 
     def toPythonBytes(self, element_index):
         "A variant of toGdbValueString(), which returns a Python bytes buffer"
-        bytedata_data, bytedata_len, element_flags = qtcreator_debugger.qdumpHelper_QCbor_string(
+        bytedata_data, bytedata_len, element_flags = qtcD.qdumpHelper_QCbor_string(
                                                         dumper, self.container_ptr, element_index)
         buffer = dumper.readMemory(bytedata_data, bytedata_len)
         return (buffer, bytedata_len, element_flags)
@@ -1156,7 +1156,7 @@ class CborOrJsonValueData:
             return f'<Unknown type> (0x{item_type:x}): {item_data}'
 
 def qcborContainerValueAt(container_ptr, elements_data_ptr, idx, bytedata, is_cbor):
-    return CborOrJsonValueData(*qtcreator_debugger.qdumpHelper_QCborArray_valueAt(
+    return CborOrJsonValueData(*qtcD.qdumpHelper_QCborArray_valueAt(
                                     dumper, container_ptr, elements_data_ptr, idx, bytedata, is_cbor))
 
 class QCborContainerPrivateIterator:
@@ -1167,7 +1167,7 @@ class QCborContainerPrivateIterator:
             self.is_array = 'Array' in container_className
         self.child_name = child_name
 
-        self.data_pos, self.elements_data_ptr, self.size = qtcreator_debugger.parseQCborContainer(dumper, container_ptr)
+        self.data_pos, self.elements_data_ptr, self.size = qtcD.parseQCborContainer(dumper, container_ptr)
         self.bytedata = None
         self.index = 0
 
@@ -1176,7 +1176,7 @@ class QCborContainerPrivateIterator:
 
     def valueAt(self, index):
         if self.bytedata is None:
-            self.bytedata = qtcreator_debugger.qcborContainerBytedata(dumper, self.data_pos)
+            self.bytedata = qtcD.qcborContainerBytedata(dumper, self.data_pos)
         return qcborContainerValueAt(self.container_ptr, self.elements_data_ptr, index, self.bytedata, self.is_cbor)
 
     def __next__(self):
