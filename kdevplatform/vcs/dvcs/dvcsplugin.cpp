@@ -118,8 +118,10 @@ void DistributedVersionControlPlugin::ctxBranchManager()
 
     QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());    
-    
-    ICore::self()->documentController()->saveAllDocuments();
+
+    if (!ICore::self()->documentController()->saveAllDocuments()) {
+        return; // canceled by the user
+    }
 
     ScopedDialog<BranchManager> branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()),
                                                this, core()->uiController()->activeMainWindow());
