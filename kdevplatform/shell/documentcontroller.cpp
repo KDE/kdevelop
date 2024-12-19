@@ -967,10 +967,11 @@ void DocumentController::closeAllOtherDocuments()
             // User cancelled or other error
             return;
 
+        const bool closeSilently = true; // already offered to save the documents to be closed, do not ask again
         const auto views = mw->area()->views();
         for (Sublime::View* view : views) {
             if (view != activeView)
-                mw->area()->closeView(view);
+                mw->area()->closeView(view, closeSilently);
         }
         activeView->widget()->setFocus();
     }
