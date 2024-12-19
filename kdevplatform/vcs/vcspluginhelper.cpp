@@ -334,7 +334,10 @@ void VcsPluginHelper::diffForRev(const QUrl& url)
     Q_ASSERT(action->data().canConvert<VcsRevision>());
     VcsRevision rev = action->data().value<VcsRevision>();
 
-    ICore::self()->documentController()->saveAllDocuments();
+    if (!ICore::self()->documentController()->saveAllDocuments()) {
+        return; // canceled by the user
+    }
+
     VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
     KDevelop::VcsJob* job = d->vcs->diff(url, prev, rev );
 
@@ -489,7 +492,10 @@ void VcsPluginHelper::commit()
     Q_D(VcsPluginHelper);
 
     Q_ASSERT(!d->ctxUrls.isEmpty());
-    ICore::self()->documentController()->saveAllDocuments();
+
+    if (!ICore::self()->documentController()->saveAllDocuments()) {
+        return; // canceled by the user
+    }
 
     QUrl url = d->ctxUrls.first();
 
