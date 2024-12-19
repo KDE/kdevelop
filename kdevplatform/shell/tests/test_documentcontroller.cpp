@@ -105,7 +105,7 @@ void TestDocumentController::testSaveSomeDocuments()
     QCOMPARE(document2->state(), IDocument::Modified);
 
     // save one document
-    m_subject->saveSomeDocuments({document1}, IDocumentController::SaveSelectionMode::DontAskUser);
+    QVERIFY(m_subject->saveSomeDocuments({document1}, IDocumentController::SaveSelectionMode::DontAskUser));
     QCOMPARE(document1->state(), IDocument::Clean);
     QCOMPARE(document2->state(), IDocument::Modified);
 }
@@ -126,7 +126,7 @@ void TestDocumentController::testSaveAllDocuments()
     QCOMPARE(document2->state(), IDocument::Modified);
 
     // save documents
-    m_subject->saveAllDocuments(IDocumentController::SaveSelectionMode::DontAskUser);
+    QVERIFY(m_subject->saveAllDocuments(IDocumentController::SaveSelectionMode::DontAskUser));
     QCOMPARE(document1->state(), IDocument::Clean);
     QCOMPARE(document2->state(), IDocument::Clean);
 }
