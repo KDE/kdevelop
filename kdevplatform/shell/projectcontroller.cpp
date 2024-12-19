@@ -1276,7 +1276,9 @@ void ProjectController::commitCurrentProject()
     if (!vcs)
         return;
 
-    ICore::self()->documentController()->saveAllDocuments(IDocumentController::SaveSelectionMode::DontAskUser);
+    if (!ICore::self()->documentController()->saveAllDocuments(IDocumentController::SaveSelectionMode::DontAskUser)) {
+        return; // canceled by the user
+    }
 
     const Path basePath = project->path();
     auto* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, basePath.toUrl()));
