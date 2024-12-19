@@ -1266,25 +1266,27 @@ void ProjectController::commitCurrentProject()
 
     QUrl url=doc->url();
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    if (!project)
+        return;
 
-    if(project && project->versionControlPlugin()) {
-        IPlugin* plugin = project->versionControlPlugin();
-        auto* vcs=plugin->extension<IBasicVersionControl>();
+    IPlugin* plugin = project->versionControlPlugin();
+    if (!plugin)
+        return;
+    auto* vcs = plugin->extension<IBasicVersionControl>();
+    if (!vcs)
+        return;
 
-        if(vcs) {
-            ICore::self()->documentController()->saveAllDocuments(IDocumentController::SaveSelectionMode::DontAskUser);
+    ICore::self()->documentController()->saveAllDocuments(IDocumentController::SaveSelectionMode::DontAskUser);
 
-            const Path basePath = project->path();
-            auto* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, basePath.toUrl()));
+    const Path basePath = project->path();
+    auto* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, basePath.toUrl()));
 
-            bool ret = showVcsDiff(patchSource);
+    bool ret = showVcsDiff(patchSource);
 
-            if(!ret) {
-                ScopedDialog<VcsCommitDialog> commitDialog(patchSource);
-                commitDialog->setCommitCandidates(patchSource->infos());
-                commitDialog->exec();
-            }
-        }
+    if (!ret) {
+        ScopedDialog<VcsCommitDialog> commitDialog(patchSource);
+        commitDialog->setCommitCandidates(patchSource->infos());
+        commitDialog->exec();
     }
 }
 
