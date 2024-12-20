@@ -827,8 +827,12 @@ bool DocumentController::saveSomeDocuments(const QList<IDocument*>& list, SaveSe
     if (mode == SaveSelectionMode::DontAskUser) {
         bool ret = true;
         const auto documents = modifiedDocuments(list);
+        const QPointer thisGuard(this);
         for (IDocument* doc : documents) {
             if (!DocumentController::isEmptyDocumentUrl(doc->url()) && !doc->save()) {
+                if (!thisGuard) {
+                    return false; // already destroyed (KDevelop is probably exiting now)
+                }
                 // Fail because the user canceled saving a document.
                 // Keep saving the remaining documents, because they are likely to be
                 // saved without user prompts. And our caller may not be able to
