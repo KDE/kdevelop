@@ -1017,8 +1017,6 @@ class QUuidPrinter:
                                             int(self.val['data4'][4]), int(self.val['data4'][5]),
                                             int(self.val['data4'][6]), int(self.val['data4'][7]))
 
-############ Cbor / Json pretty printing starts here
-
 class CborValueType(Enum):
     # converted from qcborvalue.h
     Integer         = 0x00
