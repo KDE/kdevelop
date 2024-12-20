@@ -27,6 +27,7 @@
 #include <QFileIconProvider>
 #include <QFileInfo>
 #include <QHash>
+#include <QPointer>
 
 #include <algorithm>
 
@@ -220,9 +221,12 @@ void Scratchpad::renameScratch(const QModelIndex& index, const QString& previous
     // FIXME is there a better way ? this feels hacky
     auto* document = core()->documentController()->documentForUrl(QUrl::fromLocalFile(previousPath));
     if (document) {
+        const QPointer thisGuard(this);
         if (!document->close()) {
             // canceled by the user => rollback
-            m_model->setData(index, previousName);
+            if (thisGuard) {
+                m_model->setData(index, previousName);
+            } // else: already destroyed (KDevelop is probably exiting now)
             return;
         }
     }
