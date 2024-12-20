@@ -25,6 +25,7 @@
 #include <QLineEdit>
 #include <QInputDialog>
 #include <QPainter>
+#include <QPointer>
 #include <QAbstractItemView>
 
 // Use a delegate because the dataChanged signal doesn't tell us the previous name
@@ -140,8 +141,11 @@ void ScratchpadView::setupActions()
 
     action = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18nc("@action", "Remove Scratch"), this);
     connect(action, &QAction::triggered, this, [this] {
+        const QPointer thisGuard(this);
         m_scratchpad->removeScratch(proxyModel()->mapToSource(currentIndex()));
-        validateItemActions();
+        if (thisGuard) {
+            validateItemActions();
+        } // else: already destroyed (KDevelop is probably exiting now)
     });
     addAction(action);
     m_itemActions.push_back(action);
