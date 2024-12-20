@@ -18,6 +18,7 @@
 
 #include <interfaces/idocument.h>
 #include <QDialogButtonBox>
+#include <QPointer>
 #include <QPushButton>
 
 using namespace KDevelop;
@@ -80,10 +81,14 @@ void KSaveSelectDialog::save( )
 {
     auto resultCode = DialogCode::Accepted;
 
+    const QPointer thisGuard(this);
     for (int i = 0, count = m_listWidget->count(); i < count; ++i) {
         auto* item = static_cast<DocumentItem*>(m_listWidget->item(i));
         if (item->data(Qt::CheckStateRole).toBool()) {
             if (!item->doc()->save()) {
+                if (!thisGuard) {
+                    return; // already destroyed (KDevelop is probably exiting now)
+                }
                 // Reject because the user canceled saving a document.
                 // Keep saving the remaining selected documents, because the user opted
                 // to save them all, and we assume this canceled document is an exception.
