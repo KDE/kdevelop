@@ -1199,11 +1199,12 @@ class QCborContainerPrivateIterator:
 
 class QCborContainerPrinterBase(PrinterBaseType):
     def __init__(self, container_ptr, containerClassName):
+        self._container_ptr = container_ptr
         self._containerClassName = containerClassName
 
         if container_ptr:
-            self._it = QCborContainerPrivateIterator(container_ptr, containerClassName)
-            self._size = int(self._it.size)
+            _, _, elements_size = qtcD.parseQCborContainer(dumper, container_ptr)
+            self._size = int(elements_size)
         else:
             self._size = 0
 
@@ -1216,10 +1217,7 @@ class QCborContainerPrinterBase(PrinterBaseType):
     def children(self):
         if self._size == 0:
             return []
-        # TODO: is this reuse of the iterator object safe? What if children() is called again
-        # after several or all iterations over the result of the previous children() call?
-        # Appears to work in practice...
-        return self._it
+        return QCborContainerPrivateIterator(self._container_ptr, self._containerClassName)
 
     def to_string(self):
         return f"{self._containerClassName} (size = {self._size})"
