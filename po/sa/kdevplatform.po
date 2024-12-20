@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2024-12-14 09:13+0530\n"
+"PO-Revision-Date: 2024-12-19 21:42+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -895,7 +895,7 @@ msgstr "गणना %1 "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
 #, kde-format
 msgid "(resolved forward-declaration: "
-msgstr "(समाधानं अग्रे-घोषणा: १. "
+msgstr "(समाधानं अग्रे-घोषणा: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:182
 #, kde-format
@@ -905,7 +905,7 @@ msgstr ") ९. "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:184
 #, kde-format
 msgid "(unresolved forward-declaration) "
-msgstr "(अनसमाधानं अग्रे-घोषणा) २. "
+msgstr "(अनसमाधानं अग्रे-घोषणा) "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:199
 #, kde-format
@@ -915,7 +915,7 @@ msgstr "संभवतः संकल्पः"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:214
 #, kde-format
 msgid "Returns: "
-msgstr "प्रत्यागच्छति : १. "
+msgstr "प्रत्यागच्छति : "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:216
 #, kde-format
@@ -925,12 +925,12 @@ msgstr "प्रकारः: "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:235
 #, kde-format
 msgid "Enum: "
-msgstr "एनुम् : १. "
+msgstr "एनुम् : "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:237
 #, kde-format
 msgid "Container: "
-msgstr "पात्रम् : १. "
+msgstr "पात्रम् : "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:245
 #, kde-format

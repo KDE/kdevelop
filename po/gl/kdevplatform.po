@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2024-12-14 11:37+0100\n"
+"PO-Revision-Date: 2024-12-19 23:08+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -783,7 +783,7 @@ msgstr "%1:%2 → %3:%4"
 #: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
-msgstr "Non foi posíbel mudar o nome de «%1» como «%2»"
+msgstr "Non foi posíbel renomear  «%1» como «%2»."
 
 #: language/codegen/documentchangeset.cpp:342
 #, kde-format
@@ -1546,8 +1546,8 @@ msgid ""
 "hidden.\n"
 "Do you want to continue?"
 msgstr ""
-"Intentou mudarlle o nome a «%1» para «%2», pero este último está filtrado e "
-"ha estar agochado.\n"
+"Intentou renomear «%1» como «%2», pero este último está filtrado e ha estar "
+"agochado.\n"
 "Quere continuar?"
 
 #: project/builderjob.cpp:76
@@ -3628,7 +3628,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
-msgstr "Mudar o nome da sesión"
+msgstr "Renomear a sesión"
 
 #: shell/sessioncontroller.cpp:265
 #, kde-format
@@ -3663,7 +3663,7 @@ msgstr "Comezar unha instancia de KDevelop cunha sesión baleira con nome"
 #, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
-msgstr "Mudar o nome da sesión…"
+msgstr "Renomear a sesión…"
 
 #: shell/sessioncontroller.cpp:299
 #, kde-format
@@ -5825,7 +5825,7 @@ msgstr "Xa existe unha rama chamada «%1»."
 #: vcs/models/brancheslistmodel.cpp:68
 #, kde-format
 msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
-msgstr "Seguro que quere mudar o nome de «%1» para «%2»?"
+msgstr "Seguro que quere renomear «%1» como «%2»?"
 
 #: vcs/models/vcsannotationmodel.cpp:116
 #, kde-format
