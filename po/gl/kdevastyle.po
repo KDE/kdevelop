@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-12-08 11:10+0100\n"
+"PO-Revision-Date: 2024-12-19 22:55+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #: astyle_plugin.cpp:249
 #, kde-format
@@ -452,6 +452,7 @@ msgctxt "@item:inlistbox parenthesis padding"
 msgid "Inside and outside"
 msgstr "Dentro e fora"
 
+# skip-rule: trasno-remove_reverse
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:490
 #, kde-format
