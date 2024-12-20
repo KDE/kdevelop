@@ -7,6 +7,8 @@
 
 #include "savedialog.h"
 
+#include <util/shellutils.h>
+
 #include <QLabel>
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -42,6 +44,8 @@ KSaveSelectDialog::KSaveSelectDialog( const QList<IDocument*>& files, QWidget * 
     : QDialog( parent )
 {
     setWindowTitle( i18nc("@title:window", "Save Modified Files?") );
+
+    KDevelop::restoreAndAutoSaveGeometry(*this, QStringLiteral("SaveSelectDialog"));
 
     auto mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(new QLabel( i18n("The following files have been modified. Save them?"), this ));
