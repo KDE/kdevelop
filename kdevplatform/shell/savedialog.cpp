@@ -80,7 +80,7 @@ void KSaveSelectDialog::save( )
 {
     auto resultCode = DialogCode::Accepted;
 
-    for (int i = 0; i < m_listWidget->count(); ++i) {
+    for (int i = 0, count = m_listWidget->count(); i < count; ++i) {
         auto* item = static_cast<DocumentItem*>(m_listWidget->item(i));
         if (item->data(Qt::CheckStateRole).toBool()) {
             if (!item->doc()->save()) {
