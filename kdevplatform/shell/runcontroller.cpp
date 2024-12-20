@@ -9,6 +9,7 @@
 
 #include <QDBusConnection>
 #include <QPalette>
+#include <QPointer>
 
 #include <KAboutData>
 #include <KActionCollection>
@@ -607,7 +608,11 @@ void KDevelop::RunController::registerJob(KJob * job)
         emit jobRegistered(job);
     }
 
+    const QPointer thisGuard(this);
     job->start();
+    if (!thisGuard) {
+        return; // already destroyed (KDevelop is probably exiting now)
+    }
 
     checkState();
 }
