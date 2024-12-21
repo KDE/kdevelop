@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: executescriptplugin.cpp:61
 #, kde-format
@@ -114,7 +116,7 @@ msgstr "व्याख्याता"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Script interpreter:"
-msgstr "लिपि व्याख्याकारः : १."
+msgstr "लिपि व्याख्याकारः :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: scriptappconfig.ui:95
@@ -142,7 +144,7 @@ msgstr "सर्वदा एकमेव सञ्चिकां चालय
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Script file:"
-msgstr "स्क्रिप्ट् सञ्चिका : १."
+msgstr "स्क्रिप्ट् सञ्चिका :"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: scriptappconfig.ui:133
@@ -170,7 +172,7 @@ msgstr "व्यवहार"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
-msgstr "तर्काः : १."
+msgstr "तर्काः :"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: scriptappconfig.ui:170
@@ -184,7 +186,7 @@ msgstr "एक्जीक्यूटिव् इत्यस्मै दा�
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Working directory:"
-msgstr "कार्यनिर्देशिका : १."
+msgstr "कार्यनिर्देशिका :"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: scriptappconfig.ui:187
@@ -212,7 +214,7 @@ msgstr "उपयोक्तुं वातावरणं चिनोतु"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Output filter:"
-msgstr "आउटपुट् फ़िल्टर : १."
+msgstr "आउटपुट् फ़िल्टर :"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:231

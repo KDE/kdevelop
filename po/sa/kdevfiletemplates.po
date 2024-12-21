@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-01 01:44+0000\n"
-"PO-Revision-Date: 2024-12-14 01:08+0530\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -130,7 +130,7 @@ msgstr[1] "विद्यमानसञ्चिकानां अन्त�
 #, kde-format
 msgctxt "@label:chooser file name arg"
 msgid "%1:"
-msgstr "%1: १."
+msgstr "%1:"
 
 #: outputpage.cpp:194
 #, kde-format
@@ -281,7 +281,7 @@ msgstr "मूलभूतम्‌"
 #, kde-format
 msgctxt "@label"
 msgid "%1:"
-msgstr "%1: १."
+msgstr "%1:"
 
 #: templatepreviewtoolview.cpp:92
 #, kde-kuit-format
@@ -321,7 +321,7 @@ msgstr "कक्षा टेम्पलेट"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Empty lines policy:"
-msgstr "&रिक्तपङ्क्तयः नीतिः : १."
+msgstr "&रिक्तपङ्क्तयः नीतिः :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
 #: templatepreviewtoolview.ui:78
@@ -391,7 +391,7 @@ msgstr "यस्य अनुज्ञापत्रस्य अन्तर�
 #, kde-format
 msgctxt "@label:listbox"
 msgid "License type:"
-msgstr "अनुज्ञापत्रप्रकारः : १."
+msgstr "अनुज्ञापत्रप्रकारः :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, saveLicense)
 #: ui/licensechooser.ui:64
@@ -430,7 +430,7 @@ msgstr "वर्गं चिन्वन्तु यस्मात् वर
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Identifier:"
-msgstr "&परिचयः : १."
+msgstr "&परिचयः :"
 
 #. i18n: ectx: property (text), widget (QLabel, inheritanceLabel)
 #: ui/newclass.ui:48
@@ -504,4 +504,4 @@ msgstr "परीक्षणनाम तस्य परीक्षणप्�
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Test cases:"
-msgstr "&परीक्षाप्रकरणाः : १."
+msgstr "&परीक्षाप्रकरणाः :"

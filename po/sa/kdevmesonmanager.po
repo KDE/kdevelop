@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-22 00:39+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -198,21 +200,21 @@ msgstr "उन्नत विन्यास"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Extra Meson arguments:"
-msgstr "अतिरिक्त मेसोन् तर्काः : १."
+msgstr "अतिरिक्त मेसोन् तर्काः :"
 
 #. i18n: ectx: property (text), widget (QLabel, l_backend)
 #: settings/mesonadvancedsettings.ui:57
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Meson backend:"
-msgstr "मेसोन् पृष्ठभागः : १."
+msgstr "मेसोन् पृष्ठभागः :"
 
 #. i18n: ectx: property (text), widget (QLabel, l_mesonExe)
 #: settings/mesonadvancedsettings.ui:70
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Meson executable:"
-msgstr "मेसोन् निष्पादनीयः : १."
+msgstr "मेसोन् निष्पादनीयः :"
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, i_mesonArgs)
 #: settings/mesonadvancedsettings.ui:80
@@ -417,7 +419,7 @@ msgstr "भवन्तः अप्राप्यसङ्केतं प्�
 #: settings/mesonnewbuilddir.ui:19
 #, kde-format
 msgid "Build directory:"
-msgstr "निर्देशिकां निर्मायताम् : १."
+msgstr "निर्देशिकां निर्मायताम् :"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_buildDir)
 #: settings/mesonnewbuilddir.ui:32
@@ -518,7 +520,7 @@ msgstr "अतिरिक्तं मेसोन् विकल्पं च
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Meson option to add:"
-msgstr "मेसोन् विकल्पः योजयितुं : १."
+msgstr "मेसोन् विकल्पः योजयितुं :"
 
 #: settings/mesonrewriterpage.cpp:438
 #, kde-format

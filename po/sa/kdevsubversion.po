@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: kdevsvnplugin.cpp:334
 #, kde-format
@@ -362,14 +364,14 @@ msgstr "अद्यतनं निष्पादयितुं पर्य�
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr "स्रोतनिर्देशिका : १."
+msgstr "स्रोतनिर्देशिका :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/importmetadatawidget.ui:27
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Repository:"
-msgstr "भण्डारः : १."
+msgstr "भण्डारः :"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:34
@@ -390,7 +392,7 @@ msgstr "यस्मिन् भण्डारे स्रोतनिर्�
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
-msgstr "प्रतिबद्धसन्देशः : १."
+msgstr "प्रतिबद्धसन्देशः :"
 
 #. i18n: ectx: property (text), widget (QLabel, msgLabel)
 #: ui/ssltrustdialog.ui:17
@@ -420,7 +422,7 @@ msgstr "प्रमाणपत्र सूचना"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Hostname:"
-msgstr "होस्टनाम : १."
+msgstr "होस्टनाम :"
 
 #. i18n: ectx: property (text), widget (QLabel, hostname)
 #: ui/ssltrustdialog.ui:77
@@ -433,7 +435,7 @@ msgstr "someserver इति"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Issuer:"
-msgstr "जारीकर्ता : १."
+msgstr "जारीकर्ता :"
 
 #. i18n: ectx: property (text), widget (QLabel, issuer)
 #: ui/ssltrustdialog.ui:97
@@ -446,7 +448,7 @@ msgstr "someissuer"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Valid from:"
-msgstr "तः वैधम् : १."
+msgstr "तः वैधम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, validFrom)
 #: ui/ssltrustdialog.ui:117
@@ -459,7 +461,7 @@ msgstr "वैधतः"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Valid until:"
-msgstr "यावत् वैधम् : १."
+msgstr "यावत् वैधम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, validUntil)
 #: ui/ssltrustdialog.ui:137
@@ -472,7 +474,7 @@ msgstr "यावत् वैधम्"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Fingerprint:"
-msgstr "अङ्गुलिचिह्नम् : १."
+msgstr "अङ्गुलिचिह्नम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, fingerprint)
 #: ui/ssltrustdialog.ui:157

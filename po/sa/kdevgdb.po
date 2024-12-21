@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2024-12-14 01:44+0530\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -71,7 +71,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Expressions to print:"
-msgstr "मुद्रणार्थं व्यञ्जनानि : १."
+msgstr "मुद्रणार्थं व्यञ्जनानि :"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:47
@@ -234,7 +234,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:chooser"
 msgid "She&ll script:"
-msgstr "She&ll स्क्रिप्ट् : १."
+msgstr "She&ll स्क्रिप्ट् :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: gdbconfigpage.ui:87
@@ -367,7 +367,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:chooser Shell script to be executed at run time"
 msgid "R&un shell script:"
-msgstr "R&un shell लिपिः : १."
+msgstr "R&un shell लिपिः :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
@@ -487,8 +487,8 @@ msgstr "स्मृतिदृश्यम्"
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
-msgstr[0] "%2 (१ बाइट्) २."
-msgstr[1] "%2 (%1 बाइट्) २."
+msgstr[0] "%2 (१ बाइट्)"
+msgstr[1] "%2 (%1 बाइट्)"
 
 #: memviewdlg.cpp:262
 #, kde-format

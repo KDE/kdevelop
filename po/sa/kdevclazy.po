@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -243,7 +245,7 @@ msgstr "पथाः"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "clazy-standalone:"
-msgstr "मृदु-स्वतन्त्रः : १."
+msgstr "मृदु-स्वतन्त्रः :"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_executablePath)
 #: config/globalconfigpage.ui:42
@@ -257,7 +259,7 @@ msgstr "मृदु-स्वतन्त्र-निष्पादनीय�
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Documentation:"
-msgstr "दस्तावेजीकरणम् : १."
+msgstr "दस्तावेजीकरणम् :"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_docsPath)
 #: config/globalconfigpage.ui:59
@@ -285,7 +287,7 @@ msgstr "सर्वाणि CPU कोर्स् उपयुज्यता
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
-msgstr "अधिकतमं सूत्राणां संख्या : १."
+msgstr "अधिकतमं सूत्राणां संख्या :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: config/globalconfigpage.ui:133
@@ -414,7 +416,7 @@ msgstr "समाविष्टसञ्चिकानां अवहेल�
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Header filter:"
-msgstr "शीर्षकछिद्रकः : १."
+msgstr "शीर्षकछिद्रकः :"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
 #: config/projectconfigpage.ui:149
@@ -474,7 +476,7 @@ msgstr "अतिरिक्त पैरामीटर"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler append:"
-msgstr "संकलक परिशिष्टः : १."
+msgstr "संकलक परिशिष्टः :"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
 #: config/projectconfigpage.ui:222
@@ -488,7 +490,7 @@ msgstr "संकलक आदेशपङ्क्तौ योजयितु�
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler prepend:"
-msgstr "संकलक पूर्ववर्ती : १."
+msgstr "संकलक पूर्ववर्ती :"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
 #: config/projectconfigpage.ui:239
@@ -509,7 +511,7 @@ msgstr "clazy-standalone इत्यस्य अतिरिक्ताः �
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Extra parameters:"
-msgstr "अतिरिक्तमापदण्डाः : १."
+msgstr "अतिरिक्तमापदण्डाः :"
 
 #: job.cpp:105
 #, kde-format

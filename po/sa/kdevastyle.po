@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: astyle_plugin.cpp:249
 #, kde-format
@@ -102,7 +104,7 @@ msgstr "रिक्त&y रेखाः पूरयन्तु"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Indent:"
-msgstr "इन्डेण्ट् : १."
+msgstr "इन्डेण्ट् :"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:153
@@ -189,7 +191,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum in conditional:"
-msgstr "सशर्तरूपेण न्यूनतमम् : १."
+msgstr "सशर्तरूपेण न्यूनतमम् :"
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, inpMinConditional)
 #: astyle_preferences.ui:229
@@ -203,7 +205,7 @@ msgstr "द्विगुणं वर्तमानम्"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum in statement:"
-msgstr "कथने अधिकतमम् : १."
+msgstr "कथने अधिकतमम् :"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpContinuation)
 #: astyle_preferences.ui:256
@@ -228,7 +230,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Continuation lines:"
-msgstr "निरन्तरतापङ्क्तयः : १."
+msgstr "निरन्तरतापङ्क्तयः :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabOther)
 #: astyle_preferences.ui:295
@@ -476,7 +478,7 @@ msgstr "&सञ्चालकानां परितः रिक्तस्
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pad parenthesis:"
-msgstr "पैड कोष्ठक : १."
+msgstr "पैड कोष्ठक :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:507
@@ -546,7 +548,7 @@ msgstr "इतर"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pointer Alignment:"
-msgstr "सूचकसंरेखणः : १."
+msgstr "सूचकसंरेखणः :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:566

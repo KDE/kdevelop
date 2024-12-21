@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: executeplugin.cpp:68
 #, kde-format
@@ -117,14 +119,14 @@ msgstr "निष्पादनीयम्"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Project &target:"
-msgstr "परियोजना &लक्ष्यम् : १."
+msgstr "परियोजना &लक्ष्यम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: nativeappconfig.ui:81
 #, kde-format
 msgctxt "@label:chooser"
 msgid "E&xecutable:"
-msgstr "ई&निष्पादनीयः : १."
+msgstr "ई&निष्पादनीयः :"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
 #: nativeappconfig.ui:106
@@ -152,7 +154,7 @@ msgstr "व्यवहार"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Ar&guments:"
-msgstr "तर्काः : १."
+msgstr "तर्काः :"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: nativeappconfig.ui:137
@@ -172,7 +174,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Working &directory:"
-msgstr "कार्य &निर्देशिका : १."
+msgstr "कार्य &निर्देशिका :"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: nativeappconfig.ui:154
@@ -215,7 +217,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Use external terminal:"
-msgstr "बाह्यटर्मिनलस्य उपयोगं कुर्वन्तु : १."
+msgstr "बाह्यटर्मिनलस्य उपयोगं कुर्वन्तु :"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
 #: nativeappconfig.ui:234
@@ -306,7 +308,7 @@ msgstr "निर्माणं संस्थापनं च"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Targets:"
-msgstr "लक्ष्याणि : १."
+msgstr "लक्ष्याणि :"
 
 #: nativeappjob.cpp:66
 #, kde-format

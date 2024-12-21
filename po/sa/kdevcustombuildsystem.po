@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: configwidget.cpp:25
 #, kde-format
@@ -52,7 +54,7 @@ msgstr "छंटनी"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Build directory:"
-msgstr "निर्देशिकां निर्मायताम् : १."
+msgstr "निर्देशिकां निर्मायताम् :"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
 #: configwidget.ui:27
@@ -98,7 +100,7 @@ msgstr "सक्रियं करोतु:"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Executable:"
-msgstr "निष्पादनीयः : १."
+msgstr "निष्पादनीयः :"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
 #: configwidget.ui:85
@@ -114,7 +116,7 @@ msgstr "एतत् कार्यान्वयनीयं यत् Projec
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
-msgstr "तर्काः : १."
+msgstr "तर्काः :"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
 #: configwidget.ui:105
@@ -260,7 +262,7 @@ msgstr "अज्ञात"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Build configuration:"
-msgstr "विन्यासस्य निर्माणम् : १."
+msgstr "विन्यासस्य निर्माणम् :"
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: custombuildsystemconfigwidget.ui:54

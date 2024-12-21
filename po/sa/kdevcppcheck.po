@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the kdevelop package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-12-13 19:10+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
 #, kde-format
@@ -275,7 +277,7 @@ msgstr "'system' इत्यस्य उपयोगं कुर्वन्�
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Ignored includes:"
-msgstr "&Ignored इत्यत्र अन्तर्भवति : १."
+msgstr "&Ignored इत्यत्र अन्तर्भवति :"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
 #: config/projectconfigpage.ui:218
@@ -313,7 +315,7 @@ msgstr "अतिरिक्त पैरामीटर"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Ex&tra parameters:"
-msgstr "Ex&tra पैरामीटर्स : १."
+msgstr "Ex&tra पैरामीटर्स :"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraParameters)
 #: config/projectconfigpage.ui:274

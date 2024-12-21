@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2024-12-19 21:41+0530\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -229,7 +229,7 @@ msgstr "प्रत्याहृ"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Replacement &text:"
-msgstr "प्रतिस्थापनम् &पाठः : १."
+msgstr "प्रतिस्थापनम् &पाठः :"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
 #: grepoutputview.ui:57
@@ -542,14 +542,14 @@ msgstr "प्रतिमानम्‌:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
-msgstr "सञ्चिकाः : १."
+msgstr "सञ्चिकाः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: grepwidget.ui:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Case sensitive:"
-msgstr "प्रकरणसंवेदनशीलः : १."
+msgstr "प्रकरणसंवेदनशीलः :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
 #: grepwidget.ui:179
@@ -563,7 +563,7 @@ msgstr "प्रकरणसंवेदनशीलं अन्वेषण�
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
-msgstr "स्थान (स्थान) : १."
+msgstr "स्थान (स्थान) :"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
 #: grepwidget.ui:205
@@ -588,7 +588,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
-msgstr "बहिष्कृत्य : १."
+msgstr "बहिष्कृत्य :"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:234
@@ -617,7 +617,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Regular expression:"
-msgstr "नियमित अभिव्यक्तिः १."
+msgstr "नियमित अभिव्यक्तिः"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
 #: grepwidget.ui:330
@@ -631,7 +631,7 @@ msgstr "नियमितव्यञ्जनं सक्षमं निष�
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
-msgstr "परियोजनासञ्चिकासु सीमाः : १."
+msgstr "परियोजनासञ्चिकासु सीमाः :"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
 #: grepwidget.ui:372
