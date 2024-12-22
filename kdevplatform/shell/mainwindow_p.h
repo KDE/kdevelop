@@ -96,8 +96,6 @@ public Q_SLOTS:
 
     void quitAll();
 
-//    void fixToolbar();
-
     ///Returns true if we're currently changing the active view through changeActiveView()
     bool changingActiveView() const ;
 
