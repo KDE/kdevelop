@@ -26,8 +26,6 @@
 #include <sublime/document.h>
 #include <sublime/tooldocument.h>
 
-#include <util/pushvalue.h>
-
 #include <interfaces/iplugin.h>
 
 #include "core.h"
@@ -56,7 +54,6 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
     , m_mainWindow(mainWindow)
     , m_statusBar(nullptr)
     , lastXMLGUIClientView(nullptr)
-    , m_changingActiveView(false)
     , m_kateWrapper(new KTextEditorIntegration::MainWindow(mainWindow))
 {
 }
@@ -165,8 +162,6 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 
 void MainWindowPrivate::mergeView(Sublime::View* view)
 {
-    PushPositiveValue<bool> block(m_changingActiveView, true);
-
     // If the previous view was KXMLGUIClient, remove its actions
     // In the case that that view was removed, lastActiveView
     // will auto-reset, and xmlguifactory will disconnect that
@@ -458,11 +453,6 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         actionToFactory[triggered],
         area
     );
-}
-
-bool MainWindowPrivate::changingActiveView() const
-{
-    return m_changingActiveView;
 }
 
 KTextEditorIntegration::MainWindow *MainWindowPrivate::kateWrapper() const

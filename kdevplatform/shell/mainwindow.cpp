@@ -77,14 +77,6 @@ QColor colorForDocument(const QUrl& url, const QPalette& palette, const QColor& 
 
 }
 
-void MainWindow::applyMainWindowSettings(const KConfigGroup& config)
-{
-    Q_D(MainWindow);
-
-    if(!d->changingActiveView())
-        KXmlGuiWindow::applyMainWindowSettings(config);
-}
-
 void MainWindow::createGUI(KParts::Part* part)
 {
     Sublime::MainWindow::setWindowTitleHandling(false);
