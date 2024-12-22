@@ -69,7 +69,6 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotDockBarContextMenuRequested(const QPoint& position);
     void dockLocationChanged(Qt::DockWidgetArea);
-    void loadSettings();
 
 private:
     [[nodiscard]] IdealButtonBarWidget* barForDockArea(Qt::DockWidgetArea area) const;

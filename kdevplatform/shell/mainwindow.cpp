@@ -83,7 +83,7 @@ void MainWindow::createGUI(KParts::Part* part)
     Sublime::MainWindow::createGUI(part);
 }
 
-void MainWindow::initializeCorners()
+void MainWindow::loadCornerSettings()
 {
     const KConfigGroup cg = KSharedConfig::openConfig()->group(QStringLiteral("UiSettings"));
     const int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
@@ -110,7 +110,6 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
         this, QDBusConnection::ExportScriptableSlots );
 
     setAcceptDrops( true );
-    initializeCorners();
 
     setObjectName( QStringLiteral("MainWindow") );
     d_ptr = new MainWindowPrivate(this);
@@ -262,11 +261,13 @@ void MainWindow::loadSettings()
     }
 
     qCDebug(SHELL) << "Loading Settings";
-    initializeCorners();
 
     updateAllTabColors();
 
     Sublime::MainWindow::loadSettings();
+    // Sublime::MainWindow::loadSettings() invokes QMainWindow::restoreState(), which restores corner
+    // settings. Override the corner settings to make sure they match KDevelop's custom corner options.
+    loadCornerSettings();
 }
 
 void MainWindow::configureShortcuts()

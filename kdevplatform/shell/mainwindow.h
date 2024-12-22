@@ -91,7 +91,7 @@ private Q_SLOTS:
     void shortcutsChanged();
 
 private:
-    void initializeCorners();
+    void loadCornerSettings();
 
 private:
     MainWindowPrivate* d_ptr;

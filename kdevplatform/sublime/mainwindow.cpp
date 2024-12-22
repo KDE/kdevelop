@@ -299,8 +299,6 @@ void MainWindow::loadSettings()
     d->idealController->bottomBarWidget->loadOrderSettings(cg);
     d->idealController->rightBarWidget->loadOrderSettings(cg);
 
-    emit settingsLoaded();
-
     d->disableConcentrationMode();
 }
 

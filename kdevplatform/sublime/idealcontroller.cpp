@@ -56,9 +56,6 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
     // the 'show top dock' action got removed (IOW, it's never created)
     // (let's keep this code around if we ever want to reintroduce the feature...
     m_showTopDock = m_mainWindow->action(QStringLiteral("show_top_dock"));
-
-    connect(m_mainWindow, &MainWindow::settingsLoaded, this, &IdealController::loadSettings);
-
 }
 
 void IdealController::addView(Qt::DockWidgetArea area, View* view)
@@ -476,23 +473,6 @@ void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)
         if (lastDock)
             m_dockwidget_to_action[lastDock]->setChecked(true);
     }
-}
-
-void IdealController::loadSettings()
-{
-    KConfigGroup cg(KSharedConfig::openConfig(), QStringLiteral("UiSettings"));
-
-    int bottomOwnsBottomLeft = cg.readEntry("BottomLeftCornerOwner", 0);
-    if (bottomOwnsBottomLeft)
-        m_mainWindow->setCorner(Qt::BottomLeftCorner, Qt::BottomDockWidgetArea);
-    else
-        m_mainWindow->setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
-
-    int bottomOwnsBottomRight = cg.readEntry("BottomRightCornerOwner", 0);
-    if (bottomOwnsBottomRight)
-        m_mainWindow->setCorner(Qt::BottomRightCorner, Qt::BottomDockWidgetArea);
-    else
-        m_mainWindow->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 }
 
 #include "moc_idealcontroller.cpp"
