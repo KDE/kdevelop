@@ -47,6 +47,8 @@ public:
     KTextEditorIntegration::MainWindow *kateWrapper() const;
     void split(Qt::Orientation orientation);
 
+    void loadUiPreferences() override;
+
 public Q_SLOTS:
     /*! Shows an error message in the status bar.
         @p message The message
@@ -59,7 +61,6 @@ public Q_SLOTS:
     }
 
     void configureShortcuts();
-    void loadSettings() override;
 
 protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
@@ -74,6 +75,8 @@ protected:
     void dragEnterEvent( QDragEnterEvent* ) override;
     void dropEvent( QDropEvent* ) override;
     void createGUI(KParts::Part* part);
+
+    void loadSettings() override;
 
 protected Q_SLOTS:
     void tabContextMenuRequested(Sublime::View* , QMenu* ) override;

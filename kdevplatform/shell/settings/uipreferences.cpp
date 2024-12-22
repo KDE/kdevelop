@@ -9,10 +9,11 @@
 #include <KLocalizedString>
 
 #include "../core.h"
-#include "../mainwindow.h"
 #include "../uicontroller.h"
 #include "ui_uiconfig.h"
 #include "uiconfig.h"
+
+#include <sublime/mainwindow.h>
 
 using namespace KDevelop;
 
@@ -35,7 +36,7 @@ void UiPreferences::apply()
     UiController *uiController = Core::self()->uiControllerInternal();
     const auto windows = uiController->mainWindows();
     for (Sublime::MainWindow* window : windows) {
-        (static_cast<KDevelop::MainWindow*>(window))->loadSettings();
+        window->loadUiPreferences();
     }
     uiController->loadSettings();
 }

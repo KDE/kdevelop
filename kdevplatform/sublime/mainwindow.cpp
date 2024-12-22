@@ -286,13 +286,6 @@ void MainWindow::loadSettings()
         }
     }
 
-    const bool tabBarHidden = !Container::configTabBarVisible();
-    const bool closeButtonsOnTabs = Container::configCloseButtonsOnTabs();
-    for (Container* container : std::as_const(d->viewContainers)) {
-        container->setTabBarHidden(tabBarHidden);
-        container->setCloseButtonsOnTabs(closeButtonsOnTabs);
-    }
-
     hu.stop();
 
     d->idealController->leftBarWidget->loadOrderSettings(cg);
@@ -328,6 +321,18 @@ ViewBarContainer *MainWindow::viewBarContainer() const
     Q_D(const MainWindow);
 
     return d->viewBarContainer;
+}
+
+void MainWindow::loadUiPreferences()
+{
+    Q_D(const MainWindow);
+
+    const auto tabBarHidden = !Container::configTabBarVisible();
+    const auto closeButtonsOnTabs = Container::configCloseButtonsOnTabs();
+    for (auto* const container : std::as_const(d->viewContainers)) {
+        container->setTabBarHidden(tabBarHidden);
+        container->setCloseButtonsOnTabs(closeButtonsOnTabs);
+    }
 }
 
 void MainWindow::tabDoubleClicked(View* view)

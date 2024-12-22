@@ -96,14 +96,16 @@ public:
     /**Returns a widget that can hold a centralized view bar*/
     ViewBarContainer *viewBarContainer() const;
 
+    /**
+     * Load from config the options displayed on the Configure User Interface page.
+     */
+    virtual void loadUiPreferences();
+
 public Q_SLOTS:
     /**Shows the @p view and makes it active, focusing it by default).*/
     void activateView(Sublime::View *view, bool focus = true);
     /** Shows the @p message in the message area */
     void postMessage(Sublime::Message* message);
-    /**Loads size/toolbar/menu/statusbar settings to the global configuration file.
-    Reimplement in subclasses to load more and don't forget to call inherited method.*/
-    virtual void loadSettings();
 
 Q_SIGNALS:
     /**Emitted before the area is cleared from this mainwindow.*/
@@ -121,6 +123,13 @@ Q_SIGNALS:
     void aboutToRemoveView(Sublime::View*);
 
 protected:
+    /**
+     * Load size/toolbar/menu/statusbar settings from the global configuration file.
+     *
+     * Override to load more but do not forget to call the base class's function.
+     */
+    virtual void loadSettings();
+
     QWidget *statusBarLocation() const;
     virtual void initializeStatusBar();
 protected Q_SLOTS:

@@ -151,6 +151,13 @@ void MainWindow::split(Qt::Orientation orientation)
     d->split(orientation);
 }
 
+void MainWindow::loadUiPreferences()
+{
+    loadCornerSettings();
+    updateAllTabColors();
+    Sublime::MainWindow::loadUiPreferences();
+}
+
 void MainWindow::ensureVisible()
 {
     if (isMinimized()) {
@@ -261,8 +268,6 @@ void MainWindow::loadSettings()
     }
 
     qCDebug(SHELL) << "Loading Settings";
-
-    updateAllTabColors();
 
     Sublime::MainWindow::loadSettings();
     // Sublime::MainWindow::loadSettings() invokes QMainWindow::restoreState(), which restores corner
