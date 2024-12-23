@@ -25,6 +25,25 @@
 #include "holdupdates.h"
 #include <debug.h>
 
+namespace {
+/**
+ * @return the main window UI config group for a given area
+ *
+ * @note Each area has its own separate main window UI config group. This allows to customize
+ *       each area independently from others. For example, each area can have unique sets
+ *       and locations of visible toolbars, enabled tool views and visible tool views.
+ */
+[[nodiscard]] QString configGroupName(const Sublime::Area* area)
+{
+    auto groupName = QStringLiteral("MainWindow");
+    if (area) {
+        groupName += QLatin1Char('_') + area->objectName();
+    }
+    return groupName;
+}
+
+} // unnamed namespace
+
 namespace Sublime {
 
 MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
@@ -241,10 +260,8 @@ void MainWindow::saveSettings()
     Q_D(MainWindow);
 
     d->disableConcentrationMode();
-    QString group = QStringLiteral("MainWindow");
-    if (area())
-        group += QLatin1Char('_') + area()->objectName();
-    KConfigGroup cg = KSharedConfig::openConfig()->group(group);
+
+    KConfigGroup cg(KSharedConfig::openConfig(), configGroupName(d->area));
 
     saveMainWindowSettings(cg);
 
@@ -270,11 +287,10 @@ void MainWindow::loadSettings()
     HoldUpdates hu(this);
 
     qCDebug(SUBLIME) << "loading settings for " << (area() ? area()->objectName() : QString());
-    QString group = QStringLiteral("MainWindow");
-    if (area())
-        group += QLatin1Char('_') + area()->objectName();
-    setStateConfigGroup(group);
-    KConfigGroup cg = KSharedConfig::openConfig()->group(group);
+
+    const auto groupName = configGroupName(d->area);
+    setStateConfigGroup(groupName);
+    const KConfigGroup cg(KSharedConfig::openConfig(), groupName);
 
     applyMainWindowSettings(cg);
 
