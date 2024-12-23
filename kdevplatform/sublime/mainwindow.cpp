@@ -273,6 +273,7 @@ void MainWindow::loadSettings()
     QString group = QStringLiteral("MainWindow");
     if (area())
         group += QLatin1Char('_') + area()->objectName();
+    setStateConfigGroup(group);
     KConfigGroup cg = KSharedConfig::openConfig()->group(group);
 
     applyMainWindowSettings(cg);
