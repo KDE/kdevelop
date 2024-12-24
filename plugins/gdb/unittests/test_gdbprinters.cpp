@@ -707,6 +707,171 @@ void QtPrintersTest::testQUuid()
     QCOMPARE(printedValue(gdb, "id"), "QUuid({9ec3b70b-d105-42bf-b3b4-656e44d2e223})");
 }
 
+void QtPrintersTest::testQCbor()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qcbor"));
+
+    gdb.execute("break qcbor.cpp:113");
+    gdb.execute("run");
+
+    QCOMPARE(printedValue(gdb, "emptyValue"), "<Undefined>");
+
+    const QByteArray expectedCborMap = R"(QCborMap (size = 15) = {
+  ["name"] = "John Doe",
+  ["address"] = "Some street\nCity\nCountry",
+  ["year"] = 2024,
+  ["age"] = 30.57,
+  ["married"] = false,
+  ["undefined"] = <Undefined>,
+  ["null"] = <Null>,
+  ["url"] = Url(http://www.kde.org),
+  ["uuid"] = QUuid({67c8770b-44f1-410a-ab9a-f9b5446f13ee}),
+  ["regexp"] = RegularExpression(^kde$),
+  ["birth"] = 2001-05-30T09:31:00.000+01:00,
+  ["bytes"] = "ABCÿ\000þ" = {
+    [0] = 65 'A',
+    [1] = 66 'B',
+    [2] = 67 'C',
+    [3] = -1 '\377',
+    [4] = 0 '\000',
+    [5] = -2 '\376'
+  },
+  ["otherSimpleType"] = QCborSimpleType(0x0c),
+  ["job"] = QCborMap (size = 6) = {
+    ["company"] = "KDAB",
+    ["title"] = "Surface technician",
+    ["emptyObj"] = QCborMap (size = 0),
+    ["emptyArray"] = QCborArray (size = 0),
+    ["bigNum"] = Tag(2) = {
+      value = "\001\000\000\000\000\000\000\000" = {
+        [0] = 1 '\001',
+        [1] = 0 '\000',
+        [2] = 0 '\000',
+        [3] = 0 '\000',
+        [4] = 0 '\000',
+        [5] = 0 '\000',
+        [6] = 0 '\000',
+        [7] = 0 '\000',
+        [8] = 0 '\000'
+      }
+    },
+    ["tagWithMap"] = Tag(42) = {
+      value = QCborMap (size = 1) = {
+        ["planet"] = "earth"
+      }
+    }
+  },
+  ["children"] = QCborArray (size = 2) = {"Alice", "Mickaël"}
+})";
+
+    QCOMPARE(printedValue(gdb, "cborMap"), expectedCborMap);
+    QCOMPARE(printedValue(gdb, "parsedMap"), expectedCborMap);
+
+    QCOMPARE(printedValue(gdb, "name"), R"("John Doe")");
+    QCOMPARE(printedValue(gdb, "nameRef"), R"("John Doe")");
+
+    QCOMPARE(printedValue(gdb, "year"), "2024");
+    QCOMPARE(printedValue(gdb, "yearRef"), "2024");
+
+    QCOMPARE(printedValue(gdb, "age"), "30.57");
+    QCOMPARE(printedValue(gdb, "ageRef"), "30.57");
+
+    QCOMPARE(printedValue(gdb, "married"), "false");
+    QCOMPARE(printedValue(gdb, "marriedRef"), "false");
+
+    const QByteArray expectedChildrenArray = R"(QCborArray (size = 2) = {"Alice", "Mickaël"})";
+
+    QCOMPARE(printedValue(gdb, "parsedChildren"), expectedChildrenArray);
+    QCOMPARE(printedValue(gdb, "child"), R"("Alice")");
+
+    QCOMPARE(printedValue(gdb, "parsedMap[nameStr]"), R"("John Doe")"); // QCborValueConstRef without address
+
+    QCOMPARE(printedValue(gdb, "source.documentValue()"), expectedCborMap);
+    QCOMPARE(printedValue(gdb, "source.mainMap()"), expectedCborMap);
+    QCOMPARE(printedValue(gdb, "source.childrenArray()"), expectedChildrenArray);
+
+    QCOMPARE(printedValue(gdb, "bytesValue"), R"("ABCÿ\000þ" = {
+  [0] = 65 'A',
+  [1] = 66 'B',
+  [2] = 67 'C',
+  [3] = -1 '\377',
+  [4] = 0 '\000',
+  [5] = -2 '\376'
+})");
+
+    const QByteArray expectedBigNum = R"(Tag(2) = {
+  value = "\001\000\000\000\000\000\000\000" = {
+    [0] = 1 '\001',
+    [1] = 0 '\000',
+    [2] = 0 '\000',
+    [3] = 0 '\000',
+    [4] = 0 '\000',
+    [5] = 0 '\000',
+    [6] = 0 '\000',
+    [7] = 0 '\000',
+    [8] = 0 '\000'
+  }
+})";
+    QCOMPARE(printedValue(gdb, "bigNumValueRef"), expectedBigNum);
+    QCOMPARE(printedValue(gdb, "bigNumValue"), expectedBigNum);
+}
+
+void QtPrintersTest::testQJson()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qjson"));
+
+    gdb.execute("break qjson.cpp:85");
+    gdb.execute("run");
+
+    QCOMPARE(printedValue(gdb, "emptyDoc"), "<empty>");
+
+    const QByteArray expectedJsonObj = R"(QJsonObject (size = 7) = {
+  ["address"] = "Some street\\nCity\\nCountry",
+  ["age"] = 30.57,
+  ["children"] = QJsonArray (size = 2) = {"Alice", "Mickaël"},
+  ["job"] = QJsonObject (size = 5) = {
+    ["company"] = "KDAB",
+    ["emptyArray"] = QJsonArray (size = 0),
+    ["emptyObj"] = QJsonObject (size = 0),
+    ["emptyValue"] = <Null>,
+    ["title"] = "Surface technician"
+  },
+  ["married"] = false,
+  ["name"] = "John Doe",
+  ["year"] = 2024
+})";
+
+    QCOMPARE(printedValue(gdb, "jsonObj"), expectedJsonObj);
+    QCOMPARE(printedValue(gdb, "parsedObj"), expectedJsonObj);
+    QCOMPARE(printedValue(gdb, "jsonDoc"), expectedJsonObj);
+    QCOMPARE(printedValue(gdb, "parsedDoc"), expectedJsonObj);
+
+    QCOMPARE(printedValue(gdb, "name"), R"("John Doe")");
+    QCOMPARE(printedValue(gdb, "nameRef"), R"("John Doe")");
+
+    QCOMPARE(printedValue(gdb, "year"), "2024");
+    QCOMPARE(printedValue(gdb, "yearRef"), "2024");
+
+    QCOMPARE(printedValue(gdb, "age"), "30.57");
+    QCOMPARE(printedValue(gdb, "ageRef"), "30.57");
+
+    QCOMPARE(printedValue(gdb, "married"), "false");
+    QCOMPARE(printedValue(gdb, "marriedRef"), "false");
+
+    const QByteArray expectedChildrenArray = R"(QJsonArray (size = 2) = {"Alice", "Mickaël"})";
+
+    QCOMPARE(printedValue(gdb, "parsedChildren"), expectedChildrenArray);
+    QCOMPARE(printedValue(gdb, "childrenDoc"), expectedChildrenArray);
+    QCOMPARE(printedValue(gdb, "child"), R"("Alice")");
+
+    QCOMPARE(printedValue(gdb, "parsedObj[nameStr]"), R"("John Doe")"); // QJsonValueConstRef without address
+
+    QCOMPARE(printedValue(gdb, "source.jsonDocument()"), expectedJsonObj);
+    QCOMPARE(printedValue(gdb, "source.jsonObject()"), expectedJsonObj);
+    QCOMPARE(printedValue(gdb, "source.jsonValue()"), expectedJsonObj);
+    QCOMPARE(printedValue(gdb, "source.childrenArray()"), expectedChildrenArray);
+}
+
 void QtPrintersTest::testQVariant()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qvariant"));

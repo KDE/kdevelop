@@ -1,0 +1,5 @@
+All files in this directory except for __init__.py and this README were
+copied from Qt Creator's source code - qt-creator/share/qtcreator/debugger/
+- and modified for the needs of KDevelop's qt.py
+
+Update from upstream from time to time and avoid unnecessary customizations.

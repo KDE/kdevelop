@@ -94,6 +94,12 @@ target_link_libraries(debuggee_qpersistentmodelindex Qt::Core Qt::Gui)
 add_debuggable_executable(debuggee_quuid SRCS quuid.cpp)
 target_link_libraries(debuggee_quuid Qt::Core)
 
+add_debuggable_executable(debuggee_qcbor SRCS qcbor.cpp)
+target_link_libraries(debuggee_qcbor Qt::Core)
+
+add_debuggable_executable(debuggee_qjson SRCS qjson.cpp)
+target_link_libraries(debuggee_qjson Qt::Core)
+
 add_debuggable_executable(debuggee_qvariant SRCS qvariant.cpp)
 target_link_libraries(debuggee_qvariant Qt::Core)
 
