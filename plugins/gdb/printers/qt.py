@@ -316,7 +316,7 @@ class QMapPrinter(PrinterBaseType):
             realtype = val.type.strip_typedefs()
             keytype = realtype.template_argument(0)
             valtype = realtype.template_argument(1)
-            node_type = gdb.lookup_type('QMapData<' + keytype.name + ',' + valtype.name + '>::Node')
+            node_type = gdb.lookup_type('QMapData<' + str(keytype) + ',' + str(valtype) + '>::Node')
             self.node_p_type = node_type.pointer()
             self.root = val['d']['header']
             self.current = None
