@@ -135,6 +135,17 @@ public:
     /**Removes the tool view from the area.*/
     View* removeToolView(View *toolView);
 
+    /**
+     * Set the position of @p toolView to @p newPosition.
+     *
+     * @note Unlike addToolView() and removeToolView(), this function does not emit any signals,
+     *       but only updates the tool view's position in this area's data structures. This function
+     *       is called when the UI of the tool view is moved to the new position by other means.
+     *
+     * @return @c true if moved successfully; @c false otherwise (no such tool view)
+     */
+    bool setToolViewPosition(View* toolView, Position newPosition);
+
     /**Moves the tool view to a different position.  */
     void moveToolView(View *toolView, Position newPosition);
 

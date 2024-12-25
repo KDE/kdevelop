@@ -172,6 +172,8 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
     // at this point the dockwidget is visible (user dragged it)
     // properly set up UI state
 
+    m_mainWindow->area()->setToolViewPosition(view, dockAreaToPosition(area));
+
     setShowDockStatus(area, true);
     emit dockShown(view, Sublime::dockAreaToPosition(area), true);
 

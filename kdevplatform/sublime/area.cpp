@@ -266,17 +266,24 @@ View* Area::removeToolView(View *view)
     return view;
 }
 
-void Area::moveToolView(View *toolView, Position newPosition)
+bool Area::setToolViewPosition(View* toolView, Position newPosition)
 {
     Q_D(Area);
 
     if (!d->toolViews.contains(toolView))
-        return;
+        return false;
 
     QString id = toolView->document()->documentSpecifier();
     d->desiredToolViews[id] = newPosition;
     d->toolViewPositions[toolView] = newPosition;
-    emit toolViewMoved(toolView, newPosition);
+    return true;
+}
+
+void Area::moveToolView(View* toolView, Position newPosition)
+{
+    if (setToolViewPosition(toolView, newPosition)) {
+        emit toolViewMoved(toolView, newPosition);
+    }
 }
 
 const QList<View*> &Area::toolViews() const
