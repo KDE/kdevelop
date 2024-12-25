@@ -108,8 +108,6 @@ public Q_SLOTS:
     void aboutToRemoveToolView(Sublime::View *toolView, Sublime::Position position);
     void toolViewMoved(Sublime::View *toolView, Sublime::Position position);
 
-    void setTabBarLeftCornerWidget(QWidget* widget);
-
 private Q_SLOTS:
     void updateAreaSwitcher(Sublime::Area *area);
     void slotDockShown(Sublime::View*, Sublime::Position, bool);
@@ -136,7 +134,6 @@ private:
     QMap<AreaIndex*, QPointer<QSplitter> > m_indexSplitters;
 
     QMap<Area*, QAction*> m_areaActions;
-    QPointer<QWidget> m_leftTabbarCornerWidget;
     QPointer<QToolBar> m_concentrateToolBar;
     IdealToolBar* m_bottomToolBar;
     IdealToolBar* m_rightToolBar;

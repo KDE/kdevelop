@@ -124,7 +124,6 @@ private:
     MainWindow* const m_mainWindow;
     StatusBar* m_statusBar;
     QWidget* lastXMLGUIClientView;
-    QPointer<QWidget> m_workingSetCornerWidget;
 
     QMap<IPlugin*, KXMLGUIClient*> m_pluginCustomClients;
 

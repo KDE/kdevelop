@@ -178,7 +178,6 @@ public:
     QLabel *shortcutHelpLabel;
     QLabel *fileStatus;
     KSqueezedTextLabel *statusCorner;
-    QPointer<QWidget> leftCornerWidget;
     QToolButton* documentListButton;
     QMenu* documentListMenu; ///< a popup menu that contains an activating action for each view in this Container
     QHash<View*, QAction*> documentListActionForView;
@@ -435,25 +434,6 @@ bool Container::configCloseButtonsOnTabs()
 {
     KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("UiSettings"));
     return group.readEntry("CloseButtonsOnTabs", 1);
-}
-
-void Container::setLeftCornerWidget(QWidget* widget)
-{
-    Q_D(Container);
-
-    if(d->leftCornerWidget.data() == widget) {
-        if(d->leftCornerWidget)
-            d->leftCornerWidget.data()->setParent(nullptr);
-    }else{
-        delete d->leftCornerWidget.data();
-        d->leftCornerWidget.clear();
-    }
-    d->leftCornerWidget = widget;
-    if(!widget)
-        return;
-    widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
-    d->layout->insertWidget(0, widget);
-    widget->show();
 }
 
 QList<View*> Container::views() const
