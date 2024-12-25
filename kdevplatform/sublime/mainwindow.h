@@ -62,10 +62,6 @@ public:
        set, to prevent saving a half-broken state.  */
     void enableAreaSettingsSave();
 
-    /** Allows setting an additional widget that will be inserted left to the document tab-bar.
-      *  The ownership goes to the target.  */
-    void setTabBarLeftCornerWidget(QWidget* widget);
-
     /**Sets the area of main window and fills it with views.
       *The contents is reconstructed, even if the area equals the currently set area. */
     void setArea(Area *area);

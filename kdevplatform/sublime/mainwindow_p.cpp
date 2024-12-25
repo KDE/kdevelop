@@ -184,9 +184,6 @@ MainWindowPrivate::~MainWindowPrivate()
     // create working copy as messages are auto-removing themselves from the hash on destruction
     const auto messages = m_messageHash.keys();
     qDeleteAll(messages);
-
-    delete m_leftTabbarCornerWidget.data();
-    m_leftTabbarCornerWidget.clear();
 }
 
 void MainWindowPrivate::disableConcentrationMode()
@@ -432,11 +429,6 @@ void MainWindowPrivate::reconstructViews(const QList<View*>& topViews)
 
 void MainWindowPrivate::reconstruct()
 {
-    if(m_leftTabbarCornerWidget) {
-        m_leftTabbarCornerWidget->hide();
-        m_leftTabbarCornerWidget->setParent(nullptr);
-    }
-
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, Sublime::AllPositions);
 
@@ -455,15 +447,10 @@ void MainWindowPrivate::reconstruct()
             }
         }
     }
-
-    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 }
 
 void MainWindowPrivate::clearArea()
 {
-    if(m_leftTabbarCornerWidget)
-        m_leftTabbarCornerWidget->setParent(nullptr);
-
     //reparent tool view widgets to nullptr to prevent their deletion together with dockwidgets
     for (View* view : std::as_const(area->toolViews())) {
         // FIXME should we really delete here??
@@ -488,8 +475,6 @@ void MainWindowPrivate::clearArea()
     m_indexSplitters.clear();
     area = nullptr;
     viewContainers.clear();
-
-    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 }
 
 void MainWindowPrivate::cleanCentralWidget()
@@ -536,11 +521,6 @@ void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
-    if(m_leftTabbarCornerWidget) {
-        m_leftTabbarCornerWidget->hide();
-        m_leftTabbarCornerWidget->setParent(nullptr);
-    }
-
     // Remove container objects in the hierarchy from the parents,
     // because they are not needed anymore, and might lead to broken splitter hierarchy and crashes.
     for(Sublime::AreaIndex* current = index; current; current = current->parent())
@@ -572,8 +552,6 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
     ViewCreator viewCreator(this);
     area->walkViews(viewCreator, index);
     emit m_mainWindow->viewAdded( view );
-
-    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 
     setBackgroundVisible(false);
 }
@@ -622,11 +600,6 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     }
     else
     {
-        if(m_leftTabbarCornerWidget) {
-            m_leftTabbarCornerWidget->hide();
-            m_leftTabbarCornerWidget->setParent(nullptr);
-        }
-
         // We've about to remove the last view of this container.  It will
         // be empty, so have to delete it, as well.
 
@@ -695,13 +668,11 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             //activate the current view there
             if (containerToActivate) {
                 m_mainWindow->setActiveView(containerToActivate->viewForWidget(containerToActivate->currentWidget()));
-                setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
                 return;
             }
         }
     }
 
-    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
     if ( wasActive ) {
         m_mainWindow->setActiveView(nullptr);
     }
@@ -764,38 +735,6 @@ void MainWindowPrivate::widgetCloseRequest(QWidget* widget)
     {
         area->closeView(view);
     }
-}
-
-
-void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
-{
-    if(widget != m_leftTabbarCornerWidget.data()) {
-        delete m_leftTabbarCornerWidget.data();
-        m_leftTabbarCornerWidget.clear();
-    }
-    m_leftTabbarCornerWidget = widget;
-
-    if(!widget || !area || viewContainers.isEmpty())
-        return;
-
-    AreaIndex* putToIndex = area->rootIndex();
-    QSplitter* splitter = m_indexSplitters[putToIndex];
-    while(putToIndex->isSplit()) {
-        putToIndex = putToIndex->first();
-        splitter = m_indexSplitters[putToIndex];
-    }
-
-//     Q_ASSERT(splitter || putToIndex == area->rootIndex());
-
-    Container* c = nullptr;
-    if(splitter) {
-        c = qobject_cast<Container*>(splitter->widget(0));
-    }else{
-        c = *viewContainers.constBegin();
-    }
-    Q_ASSERT(c);
-
-    c->setLeftCornerWidget(widget);
 }
 
 void MainWindowPrivate::postMessage(Message* message)

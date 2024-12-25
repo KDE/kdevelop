@@ -55,9 +55,6 @@ public:
     void setTabColors(const QHash<const View*, QColor>& colors);
     void resetTabColors(const QColor& color);
 
-    /** Adds a corner widget to the left of this containers tab-bar. To remove it again, just delete it.
-      * The ownership otherwise goes to the container. */
-    void setLeftCornerWidget(QWidget* widget);
     void showTooltipForTab(int tab);
 
     bool isCurrentTab(int tab) const;

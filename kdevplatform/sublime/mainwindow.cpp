@@ -380,13 +380,6 @@ ViewBarContainer *MainWindow::viewBarContainer() const
     return d->viewBarContainer;
 }
 
-void MainWindow::setTabBarLeftCornerWidget(QWidget* widget)
-{
-    Q_D(MainWindow);
-
-    d->setTabBarLeftCornerWidget(widget);
-}
-
 void MainWindow::tabDoubleClicked(View* view)
 {
     Q_UNUSED(view);
