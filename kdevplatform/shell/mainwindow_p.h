@@ -12,7 +12,6 @@
 
 #include <QObject>
 #include <QPointer>
-#include <QWidget>
 #include <QMap>
 #include <KXMLGUIClient>
 
@@ -20,6 +19,7 @@
 
 class KActionCollection;
 class QMenu;
+class QWidget;
 
 namespace Sublime {
 class View;
@@ -50,7 +50,6 @@ public:
     explicit MainWindowPrivate(MainWindow *mainWindow);
     ~MainWindowPrivate() override;
 
-    QPointer<QWidget> centralPlugin;
     QMetaObject::Connection activeDocumentReadWriteConnection;
 
     void setupActions();
