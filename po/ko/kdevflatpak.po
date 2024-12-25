@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Shinjo Park <kde@peremen.name>, 2019, 2020.
+# SPDX-FileCopyrightText: 2019, 2020, 2024 Shinjo Park <kde@peremen.name>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2020-10-04 20:09+0200\n"
+"PO-Revision-Date: 2024-12-24 16:55+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -59,21 +59,17 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak 번들 (*.flatpak)"
 
 #: flatpakplugin.cpp:234
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "환경 다시 빌드"
+msgstr "Flatpak 환경 다시 빌드: %1"
 
 # %1: 파일 이름, %2: 아키텍처
 #: flatpakplugin.cpp:241
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr "%2용 Flatpak %1 빌드"
+msgstr "%2용 Flatpak 환경 %1 빌드"
 
 #: flatpakplugin.cpp:265
 #, kde-format
