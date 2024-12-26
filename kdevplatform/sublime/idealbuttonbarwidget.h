@@ -45,8 +45,6 @@ public:
 
     Qt::DockWidgetArea area() const;
 
-    IdealDockWidget* widgetForAction(QAction* action) const;
-
     QWidget* corner() const;
 
     void showWidget(QAction *widgetAction, bool checked);
