@@ -14,6 +14,8 @@
 
 #include "sublimedefs.h"
 
+#include <utility>
+
 class KActionMenu;
 
 namespace Sublime {
@@ -71,6 +73,9 @@ private Q_SLOTS:
     void dockLocationChanged(Qt::DockWidgetArea);
 
 private:
+    using BarWidgetAction = std::pair<IdealButtonBarWidget*, QAction*>;
+    BarWidgetAction addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidget* dock, View* view);
+
     [[nodiscard]] IdealButtonBarWidget* barForDockArea(Qt::DockWidgetArea area) const;
     void focusEditor();
     void setShowDockStatus(Qt::DockWidgetArea area, bool checked);

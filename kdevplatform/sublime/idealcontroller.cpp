@@ -25,6 +25,8 @@
 #include "idealdockwidget.h"
 #include "idealbuttonbarwidget.h"
 
+#include <tuple>
+
 using namespace Sublime;
 
 IdealController::IdealController(Sublime::MainWindow* mainWindow):
@@ -110,17 +112,27 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     dock->setWindowIcon(view->widget()->windowIcon());
     dock->setFocusProxy(dock->widget());
 
-    if (IdealButtonBarWidget* bar = barForDockArea(area)) {
-        QAction* action = bar->addWidget(dock, m_mainWindow->area(), view);
-        m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
-
-        m_docks->addAction(action);
-        connect(dock, &IdealDockWidget::closeRequested, action, &QAction::toggle);
-    }
+    addBarWidgetAction(area, dock, view);
 
     connect(dock, &IdealDockWidget::dockLocationChanged, this, &IdealController::dockLocationChanged);
 
     dock->hide();
+}
+
+auto IdealController::addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidget* dock, View* view) -> BarWidgetAction
+{
+    auto* const bar = barForDockArea(area);
+    if (!bar) {
+        return {nullptr, nullptr};
+    }
+
+    QAction* action = bar->addWidget(dock, m_mainWindow->area(), view);
+    m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
+
+    m_docks->addAction(action);
+    connect(dock, &IdealDockWidget::closeRequested, action, &QAction::toggle);
+
+    return {bar, action};
 }
 
 void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
@@ -152,30 +164,31 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         return;
     }
 
-    if (IdealButtonBarWidget* bar = barForDockArea(dock->dockWidgetArea()))
+    auto* bar = barForDockArea(dock->dockWidgetArea());
+    if (bar) {
         bar->removeAction(action);
-
-    if (IdealButtonBarWidget* bar = barForDockArea(area)) {
-        QAction* action = bar->addWidget(dock, m_mainWindow->area(), view);
-        m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
-
-        // at this point the dockwidget is visible (user dragged it)
-        // properly set up UI state
-        bar->showWidget(action, true);
-
-        // the dock should now be the "last" opened in a new area, not in the old area
-        for (auto& dockWidgetPtr : lastDockWidget) {
-            if (dockWidgetPtr.data() == dock) {
-                dockWidgetPtr.clear();
-            }
-        }
-        lastDockWidget[area] = dock;
-
-        // after drag, the tool view loses focus, so focus it again
-        dock->setFocus(Qt::ShortcutFocusReason);
-
-        m_docks->addAction(action);
     }
+
+    std::tie(bar, action) = addBarWidgetAction(area, dock, view);
+    if (!bar) {
+        return;
+    }
+    Q_ASSERT(action);
+
+    // at this point the dockwidget is visible (user dragged it)
+    // properly set up UI state
+    bar->showWidget(action, true);
+
+    // the dock should now be the "last" opened in a new area, not in the old area
+    for (auto& dockWidgetPtr : lastDockWidget) {
+        if (dockWidgetPtr.data() == dock) {
+            dockWidgetPtr.clear();
+        }
+    }
+    lastDockWidget[area] = dock;
+
+    // after drag, the tool view loses focus, so focus it again
+    dock->setFocus(Qt::ShortcutFocusReason);
 }
 
 IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) const
