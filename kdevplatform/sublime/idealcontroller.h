@@ -36,10 +36,8 @@ public:
     enum RaiseMode { HideOtherViews, GroupWithOtherViews };
     void raiseView(View* view, RaiseMode mode = HideOtherViews);
     void showDockWidget(IdealDockWidget* dock, bool show);
-    void focusEditor();
     QWidget *statusBarLocation() const;
     QAction* actionForView(View* view) const;
-    void setShowDockStatus(Qt::DockWidgetArea area, bool checked);
 
     /** Remove view.  If nondestructive true, view->widget()
         is not deleted, as is left with NULL parent.
@@ -53,9 +51,6 @@ public:
     void showBottomDock(bool show);
     void toggleDocksShown();
 
-    IdealButtonBarWidget* barForDockArea(Qt::DockWidgetArea area) const;
-    QAction* actionForArea(Qt::DockWidgetArea area) const;
-
     enum Direction { NextDock, PrevDock };
     void goPrevNextDock(IdealController::Direction direction);
 
@@ -63,9 +58,7 @@ public:
     IdealButtonBarWidget *rightBarWidget;
     IdealButtonBarWidget *bottomBarWidget;
     IdealButtonBarWidget *topBarWidget;
-    QWidget *bottomStatusBarLocation;
 
-    IdealDockWidget* currentDockWidget() const;
     QMap<Qt::DockWidgetArea, QPointer<IdealDockWidget> > lastDockWidget;
 
 Q_SIGNALS:
@@ -80,11 +73,19 @@ private Q_SLOTS:
     void loadSettings();
 
 private:
+    [[nodiscard]] IdealButtonBarWidget* barForDockArea(Qt::DockWidgetArea area) const;
+    void focusEditor();
+    void setShowDockStatus(Qt::DockWidgetArea area, bool checked);
+    [[nodiscard]] QAction* actionForArea(Qt::DockWidgetArea area) const;
+
     void hideDocks(IdealButtonBarWidget *bar);
     void showDock(Qt::DockWidgetArea area, bool show);
+    [[nodiscard]] IdealDockWidget* currentDockWidget() const;
     void toggleDocksShown(IdealButtonBarWidget *bar, bool show);
 
     Sublime::MainWindow* const m_mainWindow;
+
+    QWidget* m_bottomStatusBarLocation;
 
     /** Map from View to an action that shows/hides
         the IdealDockWidget containing that view.  */

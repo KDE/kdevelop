@@ -39,7 +39,7 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
             this, &IdealController::slotDockBarContextMenuRequested);
 
     bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this, m_mainWindow);
-    bottomStatusBarLocation = bottomBarWidget->corner();
+    m_bottomStatusBarLocation = bottomBarWidget->corner();
     connect(bottomBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
             this, &IdealController::slotDockBarContextMenuRequested);
 
@@ -271,7 +271,7 @@ void IdealController::focusEditor()
 
 QWidget* IdealController::statusBarLocation() const
 {
-    return bottomStatusBarLocation;
+    return m_bottomStatusBarLocation;
 }
 
 QAction* IdealController::actionForView(View* view) const
