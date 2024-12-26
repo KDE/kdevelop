@@ -346,10 +346,5 @@ void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
     button->setChecked(checked);
 }
 
-IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *_action) const
-{
-    return static_cast<ToolViewAction*>(_action)->dockWidget();
-}
-
 #include "idealbuttonbarwidget.moc"
 #include "moc_idealbuttonbarwidget.cpp"
