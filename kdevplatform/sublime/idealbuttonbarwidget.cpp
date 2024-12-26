@@ -127,8 +127,13 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
 QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
                                          Area *area, View *view)
 {
-    if (m_area == Qt::BottomDockWidgetArea || m_area == Qt::TopDockWidgetArea)
-        dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
+    auto dockFeatures = dock->features();
+    if (m_area == Qt::BottomDockWidgetArea || m_area == Qt::TopDockWidgetArea) {
+        dockFeatures |= QDockWidget::DockWidgetVerticalTitleBar;
+    } else {
+        dockFeatures &= ~QDockWidget::DockWidgetVerticalTitleBar;
+    }
+    dock->setFeatures(dockFeatures);
 
     dock->setArea(area);
     dock->setView(view);

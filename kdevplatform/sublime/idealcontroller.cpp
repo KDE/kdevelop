@@ -176,11 +176,6 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 
         m_docks->addAction(action);
     }
-
-    if (area == Qt::BottomDockWidgetArea || area == Qt::TopDockWidgetArea)
-        dock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetVerticalTitleBar);
-    else
-        dock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable);
 }
 
 IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) const
