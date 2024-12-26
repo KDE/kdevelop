@@ -124,8 +124,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     }
 }
 
-QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
-                                         Area *area, View *view)
+QAction* IdealButtonBarWidget::addWidget(IdealDockWidget* dock, Area* area, View* view, bool initiallyVisible)
 {
     auto dockFeatures = dock->features();
     if (m_area == Qt::BottomDockWidgetArea || m_area == Qt::TopDockWidgetArea) {
@@ -140,6 +139,9 @@ QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
     dock->setDockWidgetArea(m_area);
 
     auto action = new ToolViewAction(dock, this);
+    if (initiallyVisible) {
+        action->setChecked(true);
+    }
     addAction(action);
 
     return action;
@@ -175,7 +177,7 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
 
     Q_ASSERT(action->dockWidget());
 
-    connect(action, &QAction::toggled, this, QOverload<bool>::of(&IdealButtonBarWidget::showWidget));
+    connect(action, &QAction::toggled, this, &IdealButtonBarWidget::showWidget);
     connect(button, &IdealToolButton::customContextMenuRequested,
             action->dockWidget(), &IdealDockWidget::contextMenuRequested);
 
@@ -332,18 +334,9 @@ static IdealController::RaiseMode takeRaiseModeFrom(ToolViewAction& action)
 
 void IdealButtonBarWidget::showWidget(bool checked)
 {
-    auto *action = qobject_cast<QAction *>(sender());
-    Q_ASSERT(action);
-
-    showWidget(action, checked);
-}
-
-void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
-{
-    auto widgetAction = static_cast<ToolViewAction*>(action);
-
-    IdealToolButton* button = widgetAction->button();
-    Q_ASSERT(button);
+    auto* const widgetAction = qobject_cast<ToolViewAction*>(sender());
+    Q_ASSERT(widgetAction);
+    Q_ASSERT(widgetAction->isChecked() == checked);
 
     if (checked) {
         if (takeRaiseModeFrom(*widgetAction) == IdealController::HideOtherViews
@@ -364,8 +357,6 @@ void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
     }
 
     m_controller->showDockWidget(widgetAction->dockWidget(), checked);
-    widgetAction->setChecked(checked);
-    button->setChecked(checked);
 }
 
 #include "idealbuttonbarwidget.moc"

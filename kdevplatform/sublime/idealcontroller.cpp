@@ -25,8 +25,6 @@
 #include "idealdockwidget.h"
 #include "idealbuttonbarwidget.h"
 
-#include <tuple>
-
 using namespace Sublime;
 
 IdealController::IdealController(Sublime::MainWindow* mainWindow):
@@ -119,20 +117,20 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     dock->hide();
 }
 
-auto IdealController::addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidget* dock, View* view) -> BarWidgetAction
+bool IdealController::addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidget* dock, View* view, bool checked)
 {
     auto* const bar = barForDockArea(area);
     if (!bar) {
-        return {nullptr, nullptr};
+        return false;
     }
 
-    QAction* action = bar->addWidget(dock, m_mainWindow->area(), view);
+    auto* const action = bar->addWidget(dock, m_mainWindow->area(), view, checked);
     m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
 
     m_docks->addAction(action);
     connect(dock, &IdealDockWidget::closeRequested, action, &QAction::toggle);
 
-    return {bar, action};
+    return true;
 }
 
 void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
@@ -164,20 +162,16 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         return;
     }
 
-    auto* bar = barForDockArea(dock->dockWidgetArea());
-    if (bar) {
+    if (auto* const bar = barForDockArea(dock->dockWidgetArea())) {
         bar->removeAction(action);
     }
 
-    std::tie(bar, action) = addBarWidgetAction(area, dock, view);
-    if (!bar) {
+    if (!addBarWidgetAction(area, dock, view, true)) {
         return;
     }
-    Q_ASSERT(action);
 
     // at this point the dockwidget is visible (user dragged it)
     // properly set up UI state
-    bar->showWidget(action, true);
 
     // the dock should now be the "last" opened in a new area, not in the old area
     for (auto& dockWidgetPtr : lastDockWidget) {
@@ -186,6 +180,9 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         }
     }
     lastDockWidget[area] = dock;
+
+    setShowDockStatus(area, true);
+    emit dockShown(view, Sublime::dockAreaToPosition(area), true);
 
     // after drag, the tool view loses focus, so focus it again
     dock->setFocus(Qt::ShortcutFocusReason);

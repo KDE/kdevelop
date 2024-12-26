@@ -34,8 +34,18 @@ public:
     IdealButtonBarWidget(Qt::DockWidgetArea area,
         IdealController *controller, Sublime::MainWindow *parent);
 
-    QAction* addWidget(IdealDockWidget *widget,
-                       Area* area, View *view);
+    /**
+     * Add a tool view action for a given dock widget and tool view to this widget.
+     *
+     * Also update multiple properties of the dock widget.
+     *
+     * @param area the current sublime area
+     * @param initiallyVisible whether the dock widget is currently visible, and
+     *        consequently whether the added action should be initially checked
+     *
+     * @return the added action
+     */
+    QAction* addWidget(IdealDockWidget* widget, Area* area, View* view, bool initiallyVisible);
 
     void addAction(QAction *action);
     void removeAction(QAction* action);
@@ -46,7 +56,6 @@ public:
 
     QWidget* corner() const;
 
-    void showWidget(QAction *widgetAction, bool checked);
     bool isEmpty() const;
 
     bool isShown() const;
