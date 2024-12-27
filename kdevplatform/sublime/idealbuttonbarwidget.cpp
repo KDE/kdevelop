@@ -226,15 +226,9 @@ bool IdealButtonBarWidget::lastShowState()
 
 QString IdealButtonBarWidget::id(const IdealToolButton* button) const
 {
-    const auto actions = this->actions();
-    for (QAction* a : actions) {
-        auto tva = qobject_cast<ToolViewAction*>(a);
-        if (tva && tva->button() == button) {
-            return tva->id();
-        }
-    }
-
-    return QString();
+    const auto* const action = qobject_cast<ToolViewAction*>(button->defaultAction());
+    Q_ASSERT(action);
+    return action->id();
 }
 
 IdealToolButton* IdealButtonBarWidget::button(const QString& id) const
