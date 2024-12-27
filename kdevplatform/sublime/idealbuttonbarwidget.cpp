@@ -53,13 +53,17 @@ public:
         return m_dock;
     }
 
-    IdealToolButton* button() { return m_button; }
+    [[nodiscard]] IdealToolButton* button() const
+    {
+        return m_button;
+    }
     void setButton(IdealToolButton* button) {
         m_button = button;
         refreshText();
     }
 
-    QString id() {
+    [[nodiscard]] QString id() const
+    {
         return m_dock->view()->document()->documentSpecifier();
     }
 
