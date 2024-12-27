@@ -11,6 +11,8 @@
 
 #include <QWidget>
 
+#include <memory>
+
 class IdealToolButton;
 class QAction;
 
@@ -25,6 +27,58 @@ class IdealDockWidget;
 class IdealButtonBarLayout;
 class View;
 class Area;
+
+/**
+ * This class keeps track of all checked tool view actions in an IdealButtonBarWidget. When none of the
+ * actions is checked, this class stores the list of all actions unchecked during the last uncheck operation.
+ */
+class ILastCheckedActionsTracker
+{
+public:
+    Q_DISABLE_COPY_MOVE(ILastCheckedActionsTracker)
+
+    /**
+     * @return whether at least one action is currently checked
+     */
+    [[nodiscard]] virtual bool isAnyChecked() const = 0;
+
+    /**
+     * Remember the current return value of isAnyChecked().
+     */
+    virtual void saveAnyCheckedState() = 0;
+    /**
+     * @return the return value of isAnyChecked() during the last call to saveAnyCheckedState()
+     */
+    [[nodiscard]] virtual bool lastSavedAnyCheckedState() const = 0;
+
+    /**
+     * Batch-uncheck all checked actions.
+     */
+    virtual void uncheckAll() = 0;
+
+    /**
+     * Batch-check all actions unchecked during the last uncheck operation.
+     *
+     * @return whether at least one action is checked now
+     *
+     * @note This function returns @c false only if there are no tracked actions to check.
+     */
+    virtual bool checkAllTracked() = 0;
+
+    /**
+     * If at least one action is currently checked but none of IdealDockWidget objects associated with checked actions
+     * has the keyboard input focus, give the focus to the last shown IdealDockWidget associated with a checked action.
+     *
+     * @return whether the focus was given
+     */
+    virtual bool focusLastShownDockWidget() const = 0;
+
+protected:
+    ILastCheckedActionsTracker() = default;
+    virtual ~ILastCheckedActionsTracker() = default;
+};
+
+class LastCheckedActionsTracker;
 
 class IdealButtonBarWidget: public QWidget
 {
@@ -58,14 +112,15 @@ public:
 
     bool isEmpty() const;
 
-    bool isShown() const;
-    void saveShowState();
-    bool lastShowState();
-
     void loadOrderSettings(const KConfigGroup& configGroup);
     void saveOrderSettings(KConfigGroup& configGroup);
 
+    /**
+     * @return whether this dock is locked from hiding/restoring
+     */
     bool isLocked() const;
+
+    [[nodiscard]] ILastCheckedActionsTracker& lastCheckedActionsTracker() const;
 
 Q_SIGNALS:
     void emptyChanged();
@@ -84,9 +139,9 @@ private:
     Qt::DockWidgetArea m_area;
     IdealController* m_controller;
     QWidget* m_corner;
-    bool m_showState;
     QStringList m_buttonsOrder;
     IdealButtonBarLayout* m_buttonsLayout;
+    std::unique_ptr<LastCheckedActionsTracker> m_lastCheckedActionsTracker;
 };
 
 }

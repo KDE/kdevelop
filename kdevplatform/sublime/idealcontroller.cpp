@@ -25,6 +25,9 @@
 #include "idealdockwidget.h"
 #include "idealbuttonbarwidget.h"
 
+#include <algorithm>
+#include <array>
+
 using namespace Sublime;
 
 IdealController::IdealController(Sublime::MainWindow* mainWindow):
@@ -146,7 +149,9 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
     View *view = dock->view();
     QAction* action = m_view_to_action.value(view);
 
-    if (dock->dockWidgetArea() == area) {
+    const auto previousArea = dock->dockWidgetArea();
+
+    if (previousArea == area) {
         // this event can happen even when dock changes its location within the same area
         // usecases:
         // 1) user drags to the same area
@@ -162,8 +167,9 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         return;
     }
 
-    if (auto* const bar = barForDockArea(dock->dockWidgetArea())) {
+    if (auto* const bar = barForDockArea(previousArea)) {
         bar->removeAction(action);
+        setShowDockStatus(previousArea, false);
     }
 
     if (!addBarWidgetAction(area, dock, view, true)) {
@@ -172,14 +178,6 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 
     // at this point the dockwidget is visible (user dragged it)
     // properly set up UI state
-
-    // the dock should now be the "last" opened in a new area, not in the old area
-    for (auto& dockWidgetPtr : lastDockWidget) {
-        if (dockWidgetPtr.data() == dock) {
-            dockWidgetPtr.clear();
-        }
-    }
-    lastDockWidget[area] = dock;
 
     setShowDockStatus(area, true);
     emit dockShown(view, Sublime::dockAreaToPosition(area), true);
@@ -278,6 +276,9 @@ QAction* IdealController::actionForView(View* view) const
 
 void IdealController::setShowDockStatus(Qt::DockWidgetArea area, bool checked)
 {
+    if (!checked && barForDockArea(area)->lastCheckedActionsTracker().isAnyChecked()) {
+        return; // another checked action remains => nothing to do
+    }
     QAction* action = actionForArea(area);
     if (action->isChecked() != checked) {
         QSignalBlocker blocker(action);
@@ -353,24 +354,13 @@ void IdealController::showRightDock(bool show)
     showDock(Qt::RightDockWidgetArea, show);
 }
 
-void IdealController::hideDocks(IdealButtonBarWidget *bar)
-{
-    const auto barActions = bar->actions();
-    for (QAction* action : barActions) {
-        if (action->isChecked())
-            action->setChecked(false);
-    }
-    focusEditor();
-}
-
 void IdealController::showDock(Qt::DockWidgetArea area, bool show)
 {
     IdealButtonBarWidget *bar = barForDockArea(area);
     if (!bar) return;
-    IdealDockWidget *lastDock = lastDockWidget[area].data();
+    auto& actionTracker = bar->lastCheckedActionsTracker();
 
-    if (lastDock && lastDock->isVisible() && !lastDock->hasFocus()) {
-        lastDock->setFocus(Qt::ShortcutFocusReason);
+    if (actionTracker.focusLastShownDockWidget()) {
         // re-sync action state given we may have asked for the dock to be hidden
         QAction* action = actionForArea(area);
         if (!action->isChecked()) {
@@ -381,17 +371,13 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
     }
 
     if (!show) {
-        hideDocks(bar);
-    } else {
-        // open the last opened tool view (or the first one) and focus it
-        if (lastDock) {
-            if (QAction *action = m_dockwidget_to_action.value(lastDock))
-                action->setChecked(true);
+        actionTracker.uncheckAll();
+        return;
+    }
 
-            lastDock->setFocus(Qt::ShortcutFocusReason);
-            return;
-        }
-
+    // Open last shown tool view(s) (or the first one).
+    // The last of the opened tool views ends up focused.
+    if (!actionTracker.checkAllTracked()) {
         const auto barActions = bar->actions();
         if (!barActions.isEmpty())
             barActions.first()->setChecked(true);
@@ -439,36 +425,30 @@ void IdealController::goPrevNextDock(IdealController::Direction direction)
 
 void IdealController::toggleDocksShown()
 {
-    bool anyBarShown =
-        (leftBarWidget->isShown() && !leftBarWidget->isLocked()) ||
-        (bottomBarWidget->isShown() && !bottomBarWidget->isLocked()) ||
-        (rightBarWidget->isShown() && !rightBarWidget->isLocked());
-
-    if (anyBarShown) {
-        leftBarWidget->saveShowState();
-        bottomBarWidget->saveShowState();
-        rightBarWidget->saveShowState();
+    auto anyShown = false;
+    // use "variable-length" array to prevent allocations
+    std::array<ILastCheckedActionsTracker*, 3> trackers;
+    auto end = trackers.begin();
+    for (const auto* const barWidget : {leftBarWidget, rightBarWidget, bottomBarWidget}) {
+        if (barWidget->isLocked()) {
+            continue;
+        }
+        auto& tracker = barWidget->lastCheckedActionsTracker();
+        anyShown = anyShown || tracker.isAnyChecked();
+        *end++ = &tracker;
     }
 
-    if (!leftBarWidget->isLocked())
-        toggleDocksShown(leftBarWidget, !anyBarShown && leftBarWidget->lastShowState());
-
-    if (!bottomBarWidget->isLocked())
-        toggleDocksShown(bottomBarWidget, !anyBarShown && bottomBarWidget->lastShowState());
-
-    if (!rightBarWidget->isLocked())
-        toggleDocksShown(rightBarWidget, !anyBarShown && rightBarWidget->lastShowState());
-}
-
-void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)
-{
-    if (!show) {
-        hideDocks(bar);
-    } else {
-        IdealDockWidget *lastDock = lastDockWidget[bar->area()].data();
-        if (lastDock)
-            m_dockwidget_to_action[lastDock]->setChecked(true);
-    }
+    // The range [trackers.begin(), end) contains unlocked trackers. Toggle their shared checked state.
+    // Saving and retrieving the last saved any-checked state is necessary to restore only the docks that were hidden by
+    // the previous call to this function - assuming no tool views were shown in unlocked docks between the two calls.
+    std::for_each(trackers.begin(), end, [anyShown](ILastCheckedActionsTracker* tracker) {
+        if (anyShown) {
+            tracker->saveAnyCheckedState();
+            tracker->uncheckAll();
+        } else if (tracker->lastSavedAnyCheckedState()) {
+            tracker->checkAllTracked();
+        }
+    });
 }
 
 #include "moc_idealcontroller.cpp"

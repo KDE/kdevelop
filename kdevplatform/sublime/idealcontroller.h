@@ -10,7 +10,6 @@
 #define SUBLIME_IDEALCONTROLLER_H
 
 #include <QAction>
-#include <QPointer>
 
 #include "sublimedefs.h"
 
@@ -58,8 +57,6 @@ public:
     IdealButtonBarWidget *bottomBarWidget;
     IdealButtonBarWidget *topBarWidget;
 
-    QMap<Qt::DockWidgetArea, QPointer<IdealDockWidget> > lastDockWidget;
-
 Q_SIGNALS:
         /// Emitted, when a context menu is requested on one of the dock bars.
     /// When no actions gets associated to the QMenu, it won't be shown.
@@ -85,10 +82,8 @@ private:
     void setShowDockStatus(Qt::DockWidgetArea area, bool checked);
     [[nodiscard]] QAction* actionForArea(Qt::DockWidgetArea area) const;
 
-    void hideDocks(IdealButtonBarWidget *bar);
     void showDock(Qt::DockWidgetArea area, bool show);
     [[nodiscard]] IdealDockWidget* currentDockWidget() const;
-    void toggleDocksShown(IdealButtonBarWidget *bar, bool show);
 
     Sublime::MainWindow* const m_mainWindow;
 

@@ -14,15 +14,21 @@
 #include "document.h"
 #include "view.h"
 
+#include <util/toggleonlybool.h>
+
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
 
 #include <QBoxLayout>
 #include <QApplication>
+#include <QList>
+#include <QPointer>
 #include <QScopeGuard>
 
-using namespace Sublime;
+#include <algorithm>
+
+namespace Sublime {
 
 class ToolViewAction : public QAction
 {
@@ -98,14 +104,181 @@ static ToolViewAction* knownValidToolViewAction(QObject* object)
     return static_cast<ToolViewAction*>(object);
 }
 
+class LastCheckedActionsTracker final : public ILastCheckedActionsTracker
+{
+public:
+    /**
+     * @return whether checked actions should be grouped instead of exclusive at this time
+     */
+    [[nodiscard]] bool isExclusiveCheckingInhibited() const
+    {
+        // Return true if a batch-checking is in progress. true is also returned during a batch-unchecking, but this
+        // is not a problem, because whether checking is exclusive or not makes no difference during unchecking.
+        return m_inhibitChange;
+    }
+
+    /**
+     * This function must be called right after @p action is checked.
+     */
+    void justChecked(ToolViewAction* action)
+    {
+        Q_ASSERT(action);
+        Q_ASSERT(action->isChecked());
+        if (m_inhibitChange) {
+            return;
+        }
+
+        if (m_areChecked) {
+            Q_ASSERT_X(!m_actions.contains(action), Q_FUNC_INFO, "an action cannot become checked twice in a row");
+        } else {
+            // The just-checked action became checked while all last-checked actions were unchecked,
+            // so forget the now-obsolete checked action list.
+            m_actions.clear();
+            m_areChecked = true;
+        }
+
+        m_actions.push_back(action);
+    }
+
+    /**
+     * This function must be called right after @p action is unchecked.
+     */
+    void justUnchecked(ToolViewAction* action)
+    {
+        Q_ASSERT(action);
+        Q_ASSERT(!action->isChecked());
+        if (m_inhibitChange) {
+            return;
+        }
+
+        Q_ASSERT_X(m_actions.contains(action), Q_FUNC_INFO, "a just-unchecked action must be in the last checked list");
+        Q_ASSERT(m_areChecked);
+
+        if (m_actions.size() == 1) {
+            m_areChecked = false; // the single tracked action is no longer checked
+        } else {
+            m_actions.removeOne(action); // the other tracked actions are still checked, forget the unchecked one
+        }
+    }
+
+    /**
+     * This function must be called just before @p action is destroyed.
+     */
+    void aboutToDestroy(ToolViewAction* action)
+    {
+        Q_ASSERT(action);
+        Q_ASSERT_X(!m_inhibitChange, Q_FUNC_INFO, "actions must not be destroyed during change inhibition");
+        Q_ASSERT_X(!action->isChecked() || m_actions.contains(action), Q_FUNC_INFO,
+                   "all checked actions must be in the last checked list");
+
+        if (m_actions.removeOne(action) && m_actions.empty()) {
+            m_areChecked = false; // zero tracked actions means that none is checked
+        }
+    }
+
+private:
+    // The member functions that override the base class's public functions are private to
+    // prevent IdealButtonBarWidget from accidentally using the interface meant for IdealController.
+
+    [[nodiscard]] bool isAnyChecked() const override
+    {
+        return m_areChecked;
+    }
+
+    void saveAnyCheckedState() override
+    {
+        m_lastSavedAnyCheckedState = m_areChecked;
+    }
+
+    [[nodiscard]] bool lastSavedAnyCheckedState() const override
+    {
+        return m_lastSavedAnyCheckedState;
+    }
+
+    void uncheckAll() override
+    {
+        if (!m_areChecked) {
+            return; // nothing to do
+        }
+        m_areChecked = false;
+        batchSetChecked(false);
+    }
+
+    bool checkAllTracked() override
+    {
+        if (m_actions.empty()) {
+            return false; // no tracked actions => nothing to do
+        }
+        if (m_areChecked) {
+            return true; // all tracked actions are already checked => nothing to do
+        }
+        m_areChecked = true;
+        batchSetChecked(true);
+        return true;
+    }
+
+    bool focusLastShownDockWidget() const override
+    {
+        if (!m_areChecked) {
+            return false; // no visible dock widget to focus
+        }
+
+        const bool anyFocused = std::any_of(m_actions.cbegin(), m_actions.cend(), [](const ToolViewAction* action) {
+            return action->dockWidget()->hasFocus();
+        });
+        if (anyFocused) {
+            return false; // already focused
+        }
+
+        m_actions.constLast()->dockWidget()->setFocus(Qt::ShortcutFocusReason);
+        return true;
+    }
+
+    void batchSetChecked(bool checked)
+    {
+        const auto guard = m_inhibitChange.makeGuard(true);
+        for (auto* const action : std::as_const(m_actions)) {
+            action->setChecked(checked);
+        }
+    }
+
+    /**
+     * The list of last checked actions.
+     *
+     * The order of elements is the order, in which the actions were checked.
+     * This order is relied upon by focusLastShownDockWidget() to focus the last shown IdealDockWidget.
+     */
+    QList<ToolViewAction*> m_actions;
+    /**
+     * Whether normal (un)checking handlers are inhibited (temporarily disabled).
+     *
+     * The inhibition is necessary to implement batch (un)checking correctly.
+     */
+    KDevelop::ToggleOnlyBool m_inhibitChange{false};
+    /**
+     * The common checked state of all elements of @a m_actions as known to this tracker.
+     *
+     * This value does not always equal @a !m_actions.empty() && @a m_actions.constFirst()->isChecked()
+     * For example:
+     * 1. Let @a m_actions contain a single unchecked action @c A. Therefore, @a m_areChecked == @c false.
+     * 2. @c A is toggled, becomes checked, and consequently @c this->justChecked(@c A) is called.
+     * 3. Now in justChecked(): @a m_areChecked == @c false but @a m_actions.constFirst()->isChecked() == @c true.
+     */
+    bool m_areChecked = false;
+    /**
+     * The return value of isAnyChecked() during the last call to saveAnyCheckedState().
+     */
+    bool m_lastSavedAnyCheckedState = false;
+};
+
 IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
         IdealController *controller, Sublime::MainWindow *parent)
     : QWidget(parent)
     , m_area(area)
     , m_controller(controller)
     , m_corner(nullptr)
-    , m_showState(false)
     , m_buttonsLayout(nullptr)
+    , m_lastCheckedActionsTracker(new LastCheckedActionsTracker)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setToolTip(i18nc("@info:tooltip", "Right click to add new tool views."));
@@ -149,6 +322,7 @@ QAction* IdealButtonBarWidget::addWidget(IdealDockWidget* dock, Area* area, View
     auto action = new ToolViewAction(dock, this);
     if (initiallyVisible) {
         action->setChecked(true);
+        m_lastCheckedActionsTracker->justChecked(action);
     }
     addAction(action);
 
@@ -212,6 +386,7 @@ void IdealButtonBarWidget::removeAction(QAction* widgetAction)
         return;
     }
 
+    m_lastCheckedActionsTracker->aboutToDestroy(action);
     delete action->button();
     delete action;
 }
@@ -219,23 +394,6 @@ void IdealButtonBarWidget::removeAction(QAction* widgetAction)
 bool IdealButtonBarWidget::isEmpty() const
 {
     return actions().isEmpty();
-}
-
-bool IdealButtonBarWidget::isShown() const
-{
-    const auto actions = this->actions();
-    return std::any_of(actions.cbegin(), actions.cend(),
-                       [](const QAction* action){ return action->isChecked(); });
-}
-
-void IdealButtonBarWidget::saveShowState()
-{
-    m_showState = isShown();
-}
-
-bool IdealButtonBarWidget::lastShowState()
-{
-    return m_showState;
 }
 
 QString IdealButtonBarWidget::id(const IdealToolButton* button) const
@@ -281,6 +439,11 @@ bool IdealButtonBarWidget::isLocked() const
 {
     KConfigGroup config = KSharedConfig::openConfig()->group(QStringLiteral("UI"));
     return config.readEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(m_area), false);
+}
+
+ILastCheckedActionsTracker& IdealButtonBarWidget::lastCheckedActionsTracker() const
+{
+    return *m_lastCheckedActionsTracker;
 }
 
 void IdealButtonBarWidget::applyOrderToLayout()
@@ -345,7 +508,10 @@ void IdealButtonBarWidget::showWidget(bool checked)
     Q_ASSERT(widgetAction->isChecked() == checked);
 
     if (checked) {
-        if (takeRaiseModeFrom(*widgetAction) == IdealController::HideOtherViews
+        m_lastCheckedActionsTracker->justChecked(widgetAction);
+
+        if (!m_lastCheckedActionsTracker->isExclusiveCheckingInhibited()
+            && takeRaiseModeFrom(*widgetAction) == IdealController::HideOtherViews
             // holding the Ctrl key forces grouping
             && !QApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
             // Make sure only one widget is visible at any time.
@@ -358,12 +524,14 @@ void IdealButtonBarWidget::showWidget(bool checked)
                     otherAction->setChecked(false);
             }
         }
-
-        m_controller->lastDockWidget[m_area] = widgetAction->dockWidget();
+    } else {
+        m_lastCheckedActionsTracker->justUnchecked(widgetAction);
     }
 
     m_controller->showDockWidget(widgetAction->dockWidget(), checked);
 }
+
+} // namespace Sublime
 
 #include "idealbuttonbarwidget.moc"
 #include "moc_idealbuttonbarwidget.cpp"
