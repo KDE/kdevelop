@@ -12,7 +12,6 @@
 #include <QWidget>
 
 class IdealToolButton;
-class ToolViewAction;
 class QAction;
 
 class KConfigGroup;
