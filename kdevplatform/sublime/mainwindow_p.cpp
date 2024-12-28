@@ -81,7 +81,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     m_concentrationModeAction->setCheckable(true);
     m_concentrationModeAction->setChecked(false);
     ac->setDefaultShortcut(m_concentrationModeAction, Qt::META | Qt::Key_C);
-    connect(m_concentrationModeAction, &QAction::toggled, this, &MainWindowPrivate::restoreConcentrationMode);
+    connect(m_concentrationModeAction, &QAction::toggled, this, &MainWindowPrivate::toggleConcentrationMode);
     ac->addAction(QStringLiteral("toggle_concentration_mode"), m_concentrationModeAction);
 
     auto* action = new QAction(i18nc("@option:check", "Show Left Dock"), this);
@@ -191,9 +191,8 @@ void MainWindowPrivate::disableConcentrationMode()
     m_concentrationModeAction->setChecked(false);
 }
 
-void MainWindowPrivate::restoreConcentrationMode()
+void MainWindowPrivate::toggleConcentrationMode(bool concentrationModeOn)
 {
-    const bool concentrationModeOn = m_concentrationModeAction->isChecked();
     QWidget* cornerWidget = nullptr;
     if (m_concentrateToolBar) {
         QLayout* l = m_concentrateToolBar->layout();

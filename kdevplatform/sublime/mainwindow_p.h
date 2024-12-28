@@ -123,7 +123,7 @@ private Q_SLOTS:
     void messageDestroyed(Message* message);
 
 private:
-    void restoreConcentrationMode();
+    void toggleConcentrationMode(bool concentrationModeOn);
 
     void setBackgroundVisible(bool v);
     Qt::DockWidgetArea positionToDockArea(Position position);
