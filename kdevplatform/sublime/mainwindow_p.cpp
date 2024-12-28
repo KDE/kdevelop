@@ -189,7 +189,6 @@ MainWindowPrivate::~MainWindowPrivate()
 void MainWindowPrivate::disableConcentrationMode()
 {
     m_concentrationModeAction->setChecked(false);
-    restoreConcentrationMode();
 }
 
 void MainWindowPrivate::restoreConcentrationMode()

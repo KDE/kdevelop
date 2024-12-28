@@ -357,6 +357,8 @@ void MainWindow::initialize()
     // and Sublime::MainWindow::loadSettings() do more than just call saveMainWindowSettings() and
     // applyMainWindowSettings() respectively. applyMainWindowSettings() is virtual and can be overridden, but
     // there is no way to customize behavior of the non-virtual function KMainWindow::saveMainWindowSettings().
+    // Auto-saving also requires recovering from a possible last auto-save while in Concentration Mode - perhaps
+    // force-exit Concentration Mode even if it is off at the end of Sublime::MainWindow::loadSettings().
     // On KDevelop exit, UiController::cleanup() calls Sublime::MainWindow::saveSettings() for each main window.
     // Therefore, auto-saving main window settings is useful only in case KDevelop crashes. Auto-saving correctly
     // might be possible, but perhaps not worth the likely significant implementation complexity increase.
