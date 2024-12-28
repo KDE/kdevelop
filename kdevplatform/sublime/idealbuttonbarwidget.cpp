@@ -154,14 +154,14 @@ QWidget* IdealButtonBarWidget::corner() const
 
 void IdealButtonBarWidget::addAction(QAction* qaction)
 {
+    const auto wasEmpty = isEmpty();
+
     QWidget::addAction(qaction);
 
     auto action = qobject_cast<ToolViewAction*>(qaction);
     if (!action || action->button()) {
       return;
     }
-
-    bool wasEmpty = isEmpty();
 
     auto *button = new IdealToolButton(m_area);
     //apol: here we set the usual width of a button for the vertical toolbars as the minimumWidth
