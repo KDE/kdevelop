@@ -40,14 +40,14 @@ class IdealToolBar : public QToolBar
     public:
         explicit IdealToolBar(const QString& title, bool hideWhenEmpty, Sublime::IdealButtonBarWidget* buttons, QMainWindow* parent)
             : QToolBar(title, parent)
-            , m_buttons(buttons)
+            , m_buttons(hideWhenEmpty ? buttons : nullptr)
         {
             setMovable(false);
             setFloatable(false);
             setObjectName(title);
             layout()->setContentsMargins(0, 0, 0, 0);
 
-            addWidget(m_buttons);
+            addWidget(buttons);
 
             // This code determines the initial visibility of the toolbar only if KMainWindow::applyMainWindowSettings()
             // fails to restore the main window state from config. So if the user manually hides or shows a
@@ -59,10 +59,10 @@ class IdealToolBar : public QToolBar
             }
         }
 
-    private Q_SLOTS:
         void updateVisibilty()
         {
-            setVisible(!m_buttons->isEmpty());
+            // if (!m_buttons) do not hide if empty, therefore always show
+            setVisible(!m_buttons || !m_buttons->isEmpty());
         }
 
     private:
@@ -208,9 +208,13 @@ void MainWindowPrivate::toggleConcentrationMode(bool concentrationModeOn)
     }
 
     m_mainWindow->menuBar()->setVisible(!concentrationModeOn);
-    m_bottomToolBar->setVisible(!concentrationModeOn);
-    m_leftToolBar->setVisible(!concentrationModeOn);
-    m_rightToolBar->setVisible(!concentrationModeOn);
+    for (auto* const toolBar : {m_leftToolBar, m_rightToolBar, m_bottomToolBar}) {
+        if (concentrationModeOn) {
+            toolBar->hide();
+        } else {
+            toolBar->updateVisibilty();
+        }
+    }
 
     if (concentrationModeOn) {
         m_concentrateToolBar = new QToolBar(m_mainWindow);
