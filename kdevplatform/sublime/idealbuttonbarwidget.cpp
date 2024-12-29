@@ -197,7 +197,7 @@ void IdealButtonBarWidget::removeAction(QAction* widgetAction)
     delete action->button();
     delete action;
 
-    if (m_buttonsLayout->isEmpty()) {
+    if (isEmpty()) {
         emit emptyChanged();
     }
 }
