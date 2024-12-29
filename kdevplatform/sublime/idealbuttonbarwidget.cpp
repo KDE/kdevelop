@@ -20,6 +20,7 @@
 
 #include <QBoxLayout>
 #include <QApplication>
+#include <QScopeGuard>
 
 using namespace Sublime;
 
@@ -154,7 +155,11 @@ QWidget* IdealButtonBarWidget::corner() const
 
 void IdealButtonBarWidget::addAction(QAction* qaction)
 {
-    const auto wasEmpty = isEmpty();
+    const QScopeGuard emptyChangedGuard([wasEmpty = isEmpty(), this] {
+        if (wasEmpty) {
+            emit emptyChanged();
+        }
+    });
 
     QWidget::addAction(qaction);
 
@@ -183,14 +188,16 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
 
     addButtonToOrder(button);
     applyOrderToLayout();
-
-    if (wasEmpty) {
-        emit emptyChanged();
-    }
 }
 
 void IdealButtonBarWidget::removeAction(QAction* widgetAction)
 {
+    const QScopeGuard emptyChangedGuard([this] {
+        if (isEmpty()) {
+            emit emptyChanged();
+        }
+    });
+
     QWidget::removeAction(widgetAction);
 
     auto* const action = qobject_cast<ToolViewAction*>(widgetAction);
@@ -200,10 +207,6 @@ void IdealButtonBarWidget::removeAction(QAction* widgetAction)
 
     delete action->button();
     delete action;
-
-    if (isEmpty()) {
-        emit emptyChanged();
-    }
 }
 
 bool IdealButtonBarWidget::isEmpty() const
