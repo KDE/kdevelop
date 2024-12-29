@@ -50,7 +50,11 @@ class IdealToolBar : public QToolBar
 
             addWidget(m_buttons);
 
+            // This code determines the initial visibility of the toolbar only if KMainWindow::applyMainWindowSettings()
+            // fails to restore the main window state from config. So if the user manually hides or shows a
+            // toolbar via the context menu of the main menu, it remains hidden/visible on next KDevelop start.
             if (m_hideWhenEmpty) {
+                updateVisibilty();
                 connect(m_buttons, &Sublime::IdealButtonBarWidget::emptyChanged,
                         this, &IdealToolBar::updateVisibilty);
             }
