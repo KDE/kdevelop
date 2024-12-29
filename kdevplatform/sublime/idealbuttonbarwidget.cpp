@@ -91,6 +91,13 @@ private:
     QPointer<IdealToolButton> m_button;
 };
 
+static ToolViewAction* knownValidToolViewAction(QObject* object)
+{
+    Q_ASSERT(object);
+    Q_ASSERT(qobject_cast<ToolViewAction*>(object) == object);
+    return static_cast<ToolViewAction*>(object);
+}
+
 IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
         IdealController *controller, Sublime::MainWindow *parent)
     : QWidget(parent)
@@ -233,8 +240,7 @@ bool IdealButtonBarWidget::lastShowState()
 
 QString IdealButtonBarWidget::id(const IdealToolButton* button) const
 {
-    const auto* const action = qobject_cast<ToolViewAction*>(button->defaultAction());
-    Q_ASSERT(action);
+    const auto* const action = knownValidToolViewAction(button->defaultAction());
     return action->id();
 }
 
@@ -335,8 +341,7 @@ static IdealController::RaiseMode takeRaiseModeFrom(ToolViewAction& action)
 
 void IdealButtonBarWidget::showWidget(bool checked)
 {
-    auto* const widgetAction = qobject_cast<ToolViewAction*>(sender());
-    Q_ASSERT(widgetAction);
+    auto* const widgetAction = knownValidToolViewAction(sender());
     Q_ASSERT(widgetAction->isChecked() == checked);
 
     if (checked) {
