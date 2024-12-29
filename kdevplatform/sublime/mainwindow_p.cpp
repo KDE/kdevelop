@@ -41,7 +41,6 @@ class IdealToolBar : public QToolBar
         explicit IdealToolBar(const QString& title, bool hideWhenEmpty, Sublime::IdealButtonBarWidget* buttons, QMainWindow* parent)
             : QToolBar(title, parent)
             , m_buttons(buttons)
-            , m_hideWhenEmpty(hideWhenEmpty)
         {
             setMovable(false);
             setFloatable(false);
@@ -53,7 +52,7 @@ class IdealToolBar : public QToolBar
             // This code determines the initial visibility of the toolbar only if KMainWindow::applyMainWindowSettings()
             // fails to restore the main window state from config. So if the user manually hides or shows a
             // toolbar via the context menu of the main menu, it remains hidden/visible on next KDevelop start.
-            if (m_hideWhenEmpty) {
+            if (hideWhenEmpty) {
                 updateVisibilty();
                 connect(m_buttons, &Sublime::IdealButtonBarWidget::emptyChanged,
                         this, &IdealToolBar::updateVisibilty);
@@ -68,7 +67,6 @@ class IdealToolBar : public QToolBar
 
     private:
         Sublime::IdealButtonBarWidget* const m_buttons;
-        const bool m_hideWhenEmpty;
 };
 
 namespace Sublime {
