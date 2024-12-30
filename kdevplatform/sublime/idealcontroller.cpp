@@ -303,8 +303,11 @@ QAction* IdealController::actionForArea(Qt::DockWidgetArea area) const
 
 void IdealController::removeView(View* view, bool nondestructive)
 {
-    Q_ASSERT(m_view_to_action.contains(view));
-    QAction* action = m_view_to_action.value(view);
+    const auto viewIt = m_view_to_action.constFind(view);
+    Q_ASSERT(viewIt != m_view_to_action.cend());
+
+    auto* const action = *viewIt;
+    Q_ASSERT(action);
 
     QWidget *viewParent = view->widget()->parentWidget();
     auto *dock = qobject_cast<IdealDockWidget *>(viewParent);
@@ -324,7 +327,7 @@ void IdealController::removeView(View* view, bool nondestructive)
     if (IdealButtonBarWidget* bar = barForDockArea(dock->dockWidgetArea()))
         bar->removeAction(action);
 
-    m_view_to_action.remove(view);
+    m_view_to_action.erase(viewIt);
 
     if (nondestructive)
         view->widget()->setParent(nullptr);
