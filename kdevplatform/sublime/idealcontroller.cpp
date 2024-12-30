@@ -360,12 +360,17 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
     if (!bar) return;
     auto& actionTracker = bar->lastCheckedActionsTracker();
 
+    const auto toggleShowDockActionQuietly = [area, show, this] {
+        auto* const action = actionForArea(area);
+        Q_ASSERT(action->isChecked() == show);
+        const QSignalBlocker blocker(action);
+        action->toggle();
+    };
+
     if (actionTracker.focusLastShownDockWidget()) {
-        // re-sync action state given we may have asked for the dock to be hidden
         if (!show) {
-            QAction* action = actionForArea(area);
-            QSignalBlocker blocker(action);
-            action->setChecked(true);
+            // we just focused a dock widget instead of hiding it => check the Show Dock action
+            toggleShowDockActionQuietly();
         }
         return;
     }
@@ -379,8 +384,12 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
     // The last of the opened tool views ends up focused.
     if (!actionTracker.checkAllTracked()) {
         const auto barActions = bar->actions();
-        if (!barActions.isEmpty())
+        if (barActions.empty()) {
+            // no tool view to show => uncheck the Show Dock action
+            toggleShowDockActionQuietly();
+        } else {
             barActions.first()->setChecked(true);
+        }
     }
 }
 
