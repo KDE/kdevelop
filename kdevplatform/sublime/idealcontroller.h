@@ -9,9 +9,10 @@
 #ifndef SUBLIME_IDEALCONTROLLER_H
 #define SUBLIME_IDEALCONTROLLER_H
 
-#include <QAction>
-
 #include "sublimedefs.h"
+
+#include <QAction>
+#include <QHash>
 
 class KActionMenu;
 
@@ -91,7 +92,7 @@ private:
 
     /** Map from View to an action that shows/hides
         the IdealDockWidget containing that view.  */
-    QMap<View*, QAction*> m_view_to_action;
+    QHash<View*, QAction*> m_view_to_action;
 
     KActionMenu* m_docks;
 
