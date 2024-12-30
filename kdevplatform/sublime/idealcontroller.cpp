@@ -362,8 +362,8 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
 
     if (actionTracker.focusLastShownDockWidget()) {
         // re-sync action state given we may have asked for the dock to be hidden
-        QAction* action = actionForArea(area);
-        if (!action->isChecked()) {
+        if (!show) {
+            QAction* action = actionForArea(area);
             QSignalBlocker blocker(action);
             action->setChecked(true);
         }
