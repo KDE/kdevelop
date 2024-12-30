@@ -128,7 +128,7 @@ bool IdealController::addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidge
     }
 
     auto* const action = bar->addWidget(dock, m_mainWindow->area(), view, checked);
-    m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
+    m_view_to_action[view] = action;
 
     m_docks->addAction(action);
     connect(dock, &IdealDockWidget::closeRequested, action, &QAction::toggle);
@@ -325,7 +325,6 @@ void IdealController::removeView(View* view, bool nondestructive)
         bar->removeAction(action);
 
     m_view_to_action.remove(view);
-    m_dockwidget_to_action.remove(dock);
 
     if (nondestructive)
         view->widget()->setParent(nullptr);
@@ -415,7 +414,7 @@ void IdealController::goPrevNextDock(IdealController::Direction direction)
         return;
     IdealButtonBarWidget *bar = barForDockArea(currentDock->dockWidgetArea());
 
-    int index = bar->actions().indexOf(m_dockwidget_to_action.value(currentDock));
+    auto index = bar->actions().indexOf(m_view_to_action.value(currentDock->view()));
     int step = (direction == NextDock) ? 1 : -1;
 
     if (bar->area() == Qt::BottomDockWidgetArea)

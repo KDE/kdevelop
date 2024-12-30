@@ -92,9 +92,6 @@ private:
     /** Map from View to an action that shows/hides
         the IdealDockWidget containing that view.  */
     QMap<View*, QAction*> m_view_to_action;
-    /** Map from IdealDockWidget  to an action that shows/hides
-        that IdealDockWidget.  */
-    QMap<IdealDockWidget*, QAction*> m_dockwidget_to_action;
 
     KActionMenu* m_docks;
 
