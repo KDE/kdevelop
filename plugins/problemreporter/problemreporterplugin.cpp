@@ -51,9 +51,7 @@ class ProblemReporterFactory : public KDevelop::IToolViewFactory
 public:
     QWidget* create(QWidget* parent = nullptr) override
     {
-        Q_UNUSED(parent);
-
-        auto* v = new ProblemsView();
+        auto* const v = new ProblemsView(parent);
         v->load();
         return v;
     }
