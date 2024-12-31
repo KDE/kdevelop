@@ -99,8 +99,13 @@ void MainWindow::setArea(Area *area)
 {
     Q_D(MainWindow);
 
-    if (d->area)
+    if (d->area) {
+        // Disconnect the previous area. We really do not want to mess with
+        // the main window if an area not visible now is modified. Further,
+        // if setArea() is called with the same area as is current
+        // now, we do not want to connect to the same signals twice.
         disconnect(d->area, nullptr, d, nullptr);
+    }
 
     bool differentArea = (area != d->area);
     /* All views will be removed from dock area now.  However, this does
