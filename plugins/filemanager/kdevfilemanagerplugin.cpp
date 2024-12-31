@@ -22,7 +22,6 @@ public:
     explicit KDevFileManagerViewFactory(KDevFileManagerPlugin *plugin): m_plugin(plugin) {}
     QWidget* create(QWidget *parent = nullptr) override
     {
-        Q_UNUSED(parent)
         return new FileManager(m_plugin,parent);
     }
 
