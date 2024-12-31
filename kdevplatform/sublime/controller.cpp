@@ -121,10 +121,6 @@ void Controller::showArea(Area *area, MainWindow *mainWindow)
 
 void Controller::showAreaInternal(Area* area, MainWindow *mainWindow)
 {
-    /* Disconnect the previous area.  We really don't want to mess with
-       main window if an area not visible now is modified.  Further,
-       if showAreaInternal is called with the same area as is current
-       now, we don't want to connect the same signals twice.  */
     MainWindowOperator::setArea(mainWindow, area);
 }
 
