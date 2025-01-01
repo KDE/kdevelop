@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-30 00:38+0000\n"
+"POT-Creation-Date: 2025-01-01 00:39+0000\n"
 "PO-Revision-Date: 2024-08-12 22:53+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -1224,7 +1224,7 @@ msgstr "<br>Vedi: "
 msgid " in "
 msgstr " in "
 
-#: language/duchain/navigation/problemnavigationcontext.cpp:196
+#: language/duchain/navigation/problemnavigationcontext.cpp:194
 #, kde-format
 msgid "Solution (%1)"
 msgstr "Soluzione (%1)"

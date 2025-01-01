@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-30 00:38+0000\n"
+"POT-Creation-Date: 2025-01-01 00:39+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1237,7 +1237,7 @@ msgstr "<br/>Vaata: "
 msgid " in "
 msgstr " stringis "
 
-#: language/duchain/navigation/problemnavigationcontext.cpp:196
+#: language/duchain/navigation/problemnavigationcontext.cpp:194
 #, kde-format
 msgid "Solution (%1)"
 msgstr "Lahendus (%1)"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-30 00:38+0000\n"
+"POT-Creation-Date: 2025-01-01 00:39+0000\n"
 "PO-Revision-Date: 2024-09-20 13:57+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1241,7 +1241,7 @@ msgstr ""
 msgid " in "
 msgstr ""
 
-#: language/duchain/navigation/problemnavigationcontext.cpp:196
+#: language/duchain/navigation/problemnavigationcontext.cpp:194
 #, fuzzy, kde-format
 #| msgctxt ""
 #| msgid "configuring"
