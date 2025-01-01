@@ -174,7 +174,6 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             return;
         } else if ( triggered == detach ) {
             setFloating(true);
-            m_area->raiseToolView(m_view);
             return;
         }
 
