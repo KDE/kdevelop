@@ -698,15 +698,6 @@ void MainWindowPrivate::aboutToRemoveToolView(Sublime::View *toolView, Sublime::
     docks.removeAll(toolView);
 }
 
-void MainWindowPrivate::toolViewMoved(
-    Sublime::View *toolView, Sublime::Position position)
-{
-    if (!docks.contains(toolView))
-        return;
-
-    idealController->moveView(toolView, positionToDockArea(position));
-}
-
 Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
 {
     switch (position)

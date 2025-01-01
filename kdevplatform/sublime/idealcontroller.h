@@ -43,8 +43,6 @@ public:
         Otherwise, it's deleted.  */
     void removeView(View* view, bool nondestructive = false);
 
-    void moveView(View *view, Qt::DockWidgetArea area);
-
     void showLeftDock(bool show);
     void showRightDock(bool show);
     void showBottomDock(bool show);

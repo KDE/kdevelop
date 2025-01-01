@@ -159,7 +159,6 @@ void MainWindow::setArea(Area *area)
     connect(area, &Area::aboutToRemoveView, d, &MainWindowPrivate::aboutToRemoveView);
     connect(area, &Area::toolViewAdded, d, &MainWindowPrivate::toolViewAdded);
     connect(area, &Area::aboutToRemoveToolView, d, &MainWindowPrivate::aboutToRemoveToolView);
-    connect(area, &Area::toolViewMoved, d, &MainWindowPrivate::toolViewMoved);
 }
 
 void MainWindow::initializeStatusBar()

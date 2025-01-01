@@ -125,8 +125,8 @@ void TestToolViewToolBar::verticalTool()
 
 void TestToolViewToolBar::toolViewMove()
 {
-    area->moveToolView( viewT11, Sublime::Right );
-    area->moveToolView( viewT21, Sublime::Bottom );
+    area->setToolViewPosition(viewT11, Sublime::Right);
+    area->setToolViewPosition(viewT21, Sublime::Bottom);
     QToolBar* barT1 = fetchToolBarFor(viewT11);
     QToolBar* barT2 = fetchToolBarFor(viewT21);
     assertGoodBar(barT1, actionTextT1);

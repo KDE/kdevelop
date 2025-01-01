@@ -106,7 +106,6 @@ public Q_SLOTS:
     void aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view);
     void toolViewAdded(Sublime::View *toolView, Sublime::Position position);
     void aboutToRemoveToolView(Sublime::View *toolView, Sublime::Position position);
-    void toolViewMoved(Sublime::View *toolView, Sublime::Position position);
 
 private Q_SLOTS:
     void updateAreaSwitcher(Sublime::Area *area);

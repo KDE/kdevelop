@@ -134,8 +134,6 @@ void Area::initialize()
             d->controller, &Controller::notifyToolViewAdded);
     connect(this, &Area::aboutToRemoveToolView,
             d->controller, &Controller::notifyToolViewRemoved);
-    connect(this, &Area::toolViewMoved,
-            d->controller, &Controller::toolViewMoved);
 
     /* In theory, ownership is passed to us, so should not bother detecting
     deletion outside.  */
@@ -266,24 +264,16 @@ View* Area::removeToolView(View *view)
     return view;
 }
 
-bool Area::setToolViewPosition(View* toolView, Position newPosition)
+void Area::setToolViewPosition(View* toolView, Position newPosition)
 {
     Q_D(Area);
 
     if (!d->toolViews.contains(toolView))
-        return false;
+        return;
 
     QString id = toolView->document()->documentSpecifier();
     d->desiredToolViews[id] = newPosition;
     d->toolViewPositions[toolView] = newPosition;
-    return true;
-}
-
-void Area::moveToolView(View* toolView, Position newPosition)
-{
-    if (setToolViewPosition(toolView, newPosition)) {
-        emit toolViewMoved(toolView, newPosition);
-    }
 }
 
 const QList<View*> &Area::toolViews() const

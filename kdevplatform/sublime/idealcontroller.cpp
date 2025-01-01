@@ -333,12 +333,6 @@ void IdealController::removeView(View* view, bool nondestructive)
     delete dock;
 }
 
-void IdealController::moveView(View *view, Qt::DockWidgetArea area)
-{
-    removeView(view);
-    addView(area, view);
-}
-
 void IdealController::showBottomDock(bool show)
 {
     showDock(Qt::BottomDockWidgetArea, show);

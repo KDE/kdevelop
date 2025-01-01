@@ -141,13 +141,8 @@ public:
      * @note Unlike addToolView() and removeToolView(), this function does not emit any signals,
      *       but only updates the tool view's position in this area's data structures. This function
      *       is called when the UI of the tool view is moved to the new position by other means.
-     *
-     * @return @c true if moved successfully; @c false otherwise (no such tool view)
      */
-    bool setToolViewPosition(View* toolView, Position newPosition);
-
-    /**Moves the tool view to a different position.  */
-    void moveToolView(View *toolView, Position newPosition);
+    void setToolViewPosition(View* toolView, Position newPosition);
 
     /**Raise tool view.*/
     void raiseToolView(View *toolView);
@@ -259,8 +254,6 @@ Q_SIGNALS:
     void requestToolViewRaise(Sublime::View*);
     /**Emitted when a tool view is going to be removed from the area.*/
     void aboutToRemoveToolView(Sublime::View*, Sublime::Position);
-    /**Emitted when a tool view is moved to a different position.*/
-    void toolViewMoved(Sublime::View*, Sublime::Position);
     /**Emitted before the working-set is changed.*/
     void changingWorkingSet(Sublime::Area* area, Sublime::Area* oldArea, const QString& from, const QString& to);
     /**Emitted after the working-set was changed.*/
