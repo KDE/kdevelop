@@ -48,6 +48,8 @@ set(KDEV_PLUGIN_VERSION "${KDEVELOP_SOVERSION}")
 set(QT_MIN_VERSION "6.5.0")
 set(KF_MIN_VERSION "6.0.0")
 
+option(BUILD_DOC "Whether to build the documentation" ON)
+
 # we need some parts of the ECM CMake helpers
 find_package (ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
@@ -85,7 +87,6 @@ endif()
 
 find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
   Config
-  DocTools
   IconThemes
   I18n
   ItemModels
@@ -109,6 +110,13 @@ find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
   TextTemplate
   TextWidgets
 )
+if(BUILD_DOC)
+    find_package(KF6DocTools ${KF_MIN_VERSION} REQUIRED)
+    set_package_properties(KF6DocTools PROPERTIES
+        DESCRIPTION "Tools to generate documentation"
+        TYPE REQUIRED
+    )
+endif()
 
 set(HAVE_KSYSGUARD FALSE)
 find_package(KSysGuard CONFIG QUIET)
@@ -191,8 +199,12 @@ add_subdirectory(app)
 add_subdirectory(app_templates)
 add_subdirectory(file_templates)
 add_subdirectory(shortcuts)
-add_subdirectory(doc)
 add_subdirectory(share)
+
+if(BUILD_DOC)
+    add_subdirectory(doc)
+    kdoctools_install(po)
+endif()
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevelop")
 configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevelopConfig.cmake.in"
@@ -220,6 +232,5 @@ install(FILES org.kde.kdevelop.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR
 
 # Make it possible to use the po files fetched by the fetch-translations step
 ki18n_install(po)
-kdoctools_install(po)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
