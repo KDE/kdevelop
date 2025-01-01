@@ -518,17 +518,28 @@ void IdealButtonBarWidget::showWidget(bool checked)
             // The alternative to use a QActionCollection and setting that to "exclusive"
             // has a big drawback: QActions in a collection that is exclusive cannot
             // be un-checked by the user, e.g. in the View -> Tool Views menu.
-            const auto actions = this->actions();
-            for (QAction* otherAction : actions) {
-                if ( otherAction != widgetAction && otherAction->isChecked() )
-                    otherAction->setChecked(false);
-            }
+            forEachToolViewAction([widgetAction](ToolViewAction& action) {
+                if (&action != widgetAction) {
+                    action.setChecked(false);
+                }
+            });
         }
     } else {
         m_lastCheckedActionsTracker->justUnchecked(widgetAction);
     }
 
     m_controller->showDockWidget(widgetAction->dockWidget(), checked);
+}
+
+template<typename ToolViewActionUser>
+void IdealButtonBarWidget::forEachToolViewAction(ToolViewActionUser callback) const
+{
+    const auto actions = this->actions();
+    for (auto* const action : actions) {
+        if (auto* const toolViewAction = qobject_cast<ToolViewAction*>(action)) {
+            callback(*toolViewAction);
+        }
+    }
 }
 
 } // namespace Sublime

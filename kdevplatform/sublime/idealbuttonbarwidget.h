@@ -136,6 +136,9 @@ private:
 
     void addButtonToOrder(const IdealToolButton* button);
 
+    template<typename ToolViewActionUser>
+    void forEachToolViewAction(ToolViewActionUser callback) const;
+
     Qt::DockWidgetArea m_area;
     IdealController* m_controller;
     QWidget* m_corner;
