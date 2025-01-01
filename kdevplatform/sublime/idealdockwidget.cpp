@@ -178,26 +178,42 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             return;
         }
 
+        Qt::DockWidgetArea dockingArea;
+        if (triggered == left)
+            dockingArea = Qt::LeftDockWidgetArea;
+        else if (triggered == bottom)
+            dockingArea = Qt::BottomDockWidgetArea;
+        else if (triggered == right)
+            dockingArea = Qt::RightDockWidgetArea;
+        else
+            return;
+
+        // Attach this dock widget to dockingArea without changing its visibility.
+
+        const auto isVisible = this->isVisible();
+
+        auto* const mainWindow = qobject_cast<QMainWindow*>(parentWidget());
+        Q_ASSERT(mainWindow);
+
+        // The addDockWidget() and removeDockWidget() calls in IdealController::showDockWidget() mean that an
+        // invisible dock widget is not associated with any dock widget area as far as QMainWindow is concerned.
+        // Therefore, if this dock widget is invisible, the attaching via setFloating(false) below
+        // has effect only if addDockWidget() is called first, even if dockingArea equals m_docking_area.
+
+        if (dockingArea != m_docking_area || !isVisible) {
+            // The two-argument overload of QMainWindow::addDockWidget() removes the dock widget from
+            // the main window layout if it is already there, i.e. properly moves to the new area.
+            mainWindow->addDockWidget(dockingArea, this);
+        }
+
         if (isFloating()) {
             setFloating(false);
         }
 
-        Sublime::Position pos;
-        if (triggered == left)
-            pos = Sublime::Left;
-        else if (triggered == bottom)
-            pos = Sublime::Bottom;
-        else if (triggered == right)
-            pos = Sublime::Right;
-        else
-            return;
-
-        Area *area = m_area;
-        View *view = m_view;
-        /* This call will delete *this, so we no longer
-           can access member variables. */
-        m_area->moveToolView(m_view, pos);
-        area->raiseToolView(view);
+        if (!isVisible) {
+            // Restore the invariant that an invisible dock widget is absent from the main window layout.
+            mainWindow->removeDockWidget(this);
+        }
     }
 }
 

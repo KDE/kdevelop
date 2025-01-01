@@ -160,19 +160,22 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         return;
     }
 
+    const auto isVisible = dock->isVisible();
+
     if (auto* const bar = barForDockArea(previousArea)) {
         bar->removeAction(action);
         setShowDockStatus(previousArea, false);
     }
 
-    if (!addBarWidgetAction(area, dock, view, true)) {
+    if (!addBarWidgetAction(area, dock, view, isVisible)) {
         return;
     }
 
-    // at this point the dockwidget is visible (user dragged it)
-    // properly set up UI state
-
     m_mainWindow->area()->setToolViewPosition(view, dockAreaToPosition(area));
+
+    if (!isVisible) {
+        return;
+    }
 
     setShowDockStatus(area, true);
     emit dockShown(view, Sublime::dockAreaToPosition(area), true);
