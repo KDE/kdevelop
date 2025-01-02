@@ -341,7 +341,7 @@ void Area::load(const KConfigGroup& group)
 {
     Q_D(Area);
 
-    qCDebug(SUBLIME) << "loading areas config";
+    qCDebug(SUBLIME) << this << "loading area config";
     d->desiredToolViews.clear();
     const QStringList desired = group.readEntry("desired views", QStringList());
     for (const QString& s : desired) {
