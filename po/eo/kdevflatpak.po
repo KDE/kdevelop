@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevflatpak\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2023-04-03 22:10+0100\n"
+"PO-Revision-Date: 2024-12-27 17:40+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -60,20 +60,16 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak Bundle (*.flatpak)"
 
 #: flatpakplugin.cpp:234
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "Rekonstrui Medion"
+msgstr "Rekonstrui Flatpak-Medion: %1"
 
 #: flatpakplugin.cpp:241
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr "Konstrui Flatpak %1 por %2"
+msgstr "Konstrui Flatpak-Medion %1 por %2"
 
 #: flatpakplugin.cpp:265
 #, kde-format
