@@ -50,6 +50,7 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     : KParts::MainWindow(nullptr, flags)
     , d_ptr(new MainWindowPrivate(this, controller))
 {
+    qCDebug(SUBLIME) << "creating mainwindow";
     connect(this, &MainWindow::destroyed, controller, QOverload<>::of(&Controller::areaReleased));
 
     // don't allow AllowTabbedDocks - that doesn't make sense for "ideal" UI
@@ -257,6 +258,8 @@ void Sublime::MainWindow::setActiveToolView(View *view)
 void MainWindow::saveSettings()
 {
     Q_D(MainWindow);
+
+    qCDebug(SUBLIME) << "saving settings for" << (d->area ? d->area->objectName() : QString());
 
     d->disableConcentrationMode();
 

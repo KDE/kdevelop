@@ -455,6 +455,8 @@ void MainWindowPrivate::reconstruct()
 
 void MainWindowPrivate::clearArea()
 {
+    qCDebug(SUBLIME) << "clearing area" << area;
+
     //reparent tool view widgets to nullptr to prevent their deletion together with dockwidgets
     for (View* view : std::as_const(area->toolViews())) {
         // FIXME should we really delete here??

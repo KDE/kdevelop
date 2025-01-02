@@ -237,6 +237,7 @@ void Area::addToolView(View *view, Position defaultPosition)
 
     d->toolViews.append(view);
     const QString id = view->document()->documentSpecifier();
+    qCDebug(SUBLIME) << this << "added tool view" << id;
     const Position position = d->desiredToolViews.value(id, defaultPosition);
     d->desiredToolViews[id] = position;
     d->toolViewPositions[view] = position;
