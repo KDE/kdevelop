@@ -8,6 +8,7 @@
 
 #include "idealcontroller.h"
 
+#include <QDebug>
 #include <QMainWindow>
 #include <QToolBar>
 #include <QStyle>
@@ -25,8 +26,47 @@
 #include "idealdockwidget.h"
 #include "idealbuttonbarwidget.h"
 
+#include <debug.h>
+
 #include <algorithm>
 #include <array>
+
+namespace {
+[[nodiscard]] QString dockWidgetAreaName(const Sublime::IdealDockWidget& dockWidget)
+{
+    const auto dockWidgetName = dockWidget.objectName();
+    const auto lastUnderscorePosition = dockWidgetName.lastIndexOf(QLatin1Char{'_'});
+    return lastUnderscorePosition == -1 ? QString() : dockWidgetName.sliced(lastUnderscorePosition + 1);
+}
+
+struct PrintDockWidget
+{
+    explicit PrintDockWidget(const Sublime::IdealDockWidget* dockWidget)
+        : PrintDockWidget(dockWidget, dockWidget->view())
+    {
+    }
+
+    /// Use this overload if dockWidget->view() has not been set up yet.
+    explicit PrintDockWidget(const Sublime::IdealDockWidget* dockWidget, const Sublime::View* view)
+        : dockWidget(dockWidget)
+        , view(view)
+    {
+        Q_ASSERT(dockWidget);
+        Q_ASSERT(view);
+    }
+
+    const Sublime::IdealDockWidget* const dockWidget;
+    const Sublime::View* const view;
+};
+
+QDebug operator<<(QDebug debug, PrintDockWidget p)
+{
+    const QDebugStateSaver saver(debug);
+    debug.noquote().nospace() << dockWidgetAreaName(*p.dockWidget) << ':' << p.view->document()->documentSpecifier()
+                              << (p.dockWidget->isVisible() ? " (visible)" : "");
+    return debug;
+}
+} // unnamed namespace
 
 using namespace Sublime;
 
@@ -74,6 +114,15 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
     KAcceleratorManager::setNoAccel(dock);
     QWidget *w = view->widget(dock);
+
+    // If w->parent() is null, it means that the view->widget(dock) call above returned
+    // an existing widget instead of creating a new one with dock as its parent. Either
+    // dock or a new QMainWindow toolView will become the widget's parent in the code below.
+
+    // Use the two-argument overload of PrintDockWidget(), because dock->view()
+    // will become equal to view only during the addBarWidgetAction() call below.
+    qCDebug(SUBLIME) << "creating dock widget" << PrintDockWidget(dock, view) << "in" << area
+                     << (w->parent() ? "" : "(reparenting)");
 
     QList<QAction *> toolBarActions = view->toolBarActions();
     if (toolBarActions.isEmpty()) {
@@ -131,14 +180,17 @@ bool IdealController::addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidge
 
 void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 {
+    auto* const dock = qobject_cast<IdealDockWidget*>(sender());
+    Q_ASSERT(dock);
+
     // Seems since Qt 5.13 the signal QDockWidget::dockLocationChanged is emitted also when the dock changes
     // to be floating, with area = Qt::NoDockWidgetArea. The current code is not designed for this,
     // so just ignore the signal in that case for now
     if (area == Qt::NoDockWidgetArea) {
+        qCDebug(SUBLIME) << "dock widget" << PrintDockWidget{dock} << "location changed to no area";
         return;
     }
 
-    auto *dock = qobject_cast<IdealDockWidget*>(sender());
     View *view = dock->view();
     QAction* action = m_view_to_action.value(view);
 
@@ -157,8 +209,12 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
             dock->hide();
         }
 
+        qCDebug(SUBLIME) << "dock widget" << PrintDockWidget{dock} << "remains in" << area;
         return;
     }
+
+    qCDebug(SUBLIME) << "dock widget" << PrintDockWidget{dock} << "location changed from" << previousArea << "to"
+                     << area;
 
     const auto isVisible = dock->isVisible();
 
@@ -231,6 +287,7 @@ void IdealController::raiseView(View* view, RaiseMode mode)
 void IdealController::showDockWidget(IdealDockWidget* dock, bool show)
 {
     Qt::DockWidgetArea area = dock->dockWidgetArea();
+    qCDebug(SUBLIME) << (show ? "showing" : "hiding") << "dock widget" << PrintDockWidget{dock} << "in" << area;
 
     if (show) {
         m_mainWindow->addDockWidget(area, dock);
@@ -321,6 +378,9 @@ void IdealController::removeView(View* view, bool nondestructive)
        a call to IdealMainLayout::takeAt will be made, which
        method asserts immediately.  */
     action->setChecked(false);
+
+    qCDebug(SUBLIME) << "destroying dock widget" << PrintDockWidget{dock} << "in" << dock->dockWidgetArea()
+                     << (nondestructive ? "(nondestructive)" : "");
 
     if (IdealButtonBarWidget* bar = barForDockArea(dock->dockWidgetArea()))
         bar->removeAction(action);
