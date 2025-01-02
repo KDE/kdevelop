@@ -841,14 +841,79 @@ class QTimePrinter:
         msec = ds % 1000
         return "%02d:%02d:%02d.%03d" % (hour, minute, second, msec)
 
+class TimeSpec(Enum): # enum Qt::TimeSpec
+    LocalTime = 0
+    UTC = 1
+    OffsetFromUTC = 2
+    TimeZone = 3
+
+class QTimeZonePrinter:
+
+    def timeZoneId(spec, tzoffset):
+        if spec == TimeSpec.LocalTime.value:
+            return 'Local'
+        if spec == TimeSpec.UTC.value:
+            return 'UTC'
+        if spec == TimeSpec.OffsetFromUTC.value:
+            if tzoffset == 0:
+                return 'UTC'
+            sign = '-' if tzoffset < 0 else '+'
+            return 'UTC' + sign + str(abs(tzoffset) / 3600.0)
+        return f'<error, unhandled time spec {spec}>'
+
+    def __init__(self, val):
+        self.val = val
+
+    def isShort(self) -> bool:
+        return self.val['d'].cast(gdb.lookup_type('long long')) & 3 # QTimeZone::Data::isShort
+
+    def to_string(self):
+        d = self.val['d']
+        if self.isShort():
+            mode = d['s']['mode']
+            spec = (mode + 3) & 3 # QTimeZone::ShortData::spec()
+            tzoffset = d['s']['offset']
+            return QTimeZonePrinter.timeZoneId(spec, tzoffset)
+        else:
+            priv = d['d']
+        # QByteArray to python string
+        return priv['m_id']['d']['ptr'].cast(gdb.lookup_type("char").pointer()).string()
+
 class QDateTimePrinter:
+
+    TimeSpecShift = 4
+    TimeSpecMask  = 0x30
+    def extractTimeSpec(status):
+        return (status & QDateTimePrinter.TimeSpecMask) >> QDateTimePrinter.TimeSpecShift
+
+    def timeZoneAbbreviation(spec, tzoffset, qTimeZone):
+        if spec == TimeSpec.TimeZone.value:
+            return str(QTimeZonePrinter(qTimeZone).to_string())
+        return QTimeZonePrinter.timeZoneId(spec, tzoffset)
 
     def __init__(self, val):
         self.val = val
 
     def to_string(self):
-        time_t = gdb.parse_and_eval("reinterpret_cast<const QDateTime*>(%s)->toSecsSinceEpoch()" % self.val.address)
-        return time.ctime(int(time_t))
+        d = self.val['d']
+        if d.cast(gdb.lookup_type('long long')) & 1: # QDateTime::Data::isShort
+            msecs = d['data']['msecs']
+            status = d['data']['status']
+            tzoffset = 0
+            qTimeZone = ''
+        else:
+            priv = d['d']
+            msecs = priv['m_msecs']
+            status = priv['m_status']['i']
+            tzoffset = priv['m_offsetFromUtc']
+            qTimeZone = priv['m_timeZone']
+
+        spec = QDateTimePrinter.extractTimeSpec(status)
+        if spec == TimeSpec.LocalTime.value:
+            tz = ''
+        else:
+            tz = ' ' + QDateTimePrinter.timeZoneAbbreviation(spec, tzoffset, qTimeZone)
+        return datetime.utcfromtimestamp(msecs / 1000.0).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3] + tz
 
 class QUrlPrinter:
 
@@ -1494,6 +1559,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QDate$')] = lambda val: QDatePrinter(val)
     pretty_printers_dict[re.compile('^QTime$')] = lambda val: QTimePrinter(val)
     pretty_printers_dict[re.compile('^QDateTime$')] = lambda val: QDateTimePrinter(val)
+    pretty_printers_dict[re.compile('^QTimeZone$')] = lambda val: QTimeZonePrinter(val)
     pretty_printers_dict[re.compile('^QUrl$')] = lambda val: QUrlPrinter(val)
     pretty_printers_dict[re.compile('^QSet<.*>$')] = lambda val: QSetPrinter(val)
     pretty_printers_dict[re.compile('^QChar$')] = lambda val: QCharPrinter(val)

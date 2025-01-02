@@ -24,6 +24,7 @@ private Q_SLOTS:
     void testQDate();
     void testQTime();
     void testQDateTime();
+    void testQTimeZone();
     void testQUrl();
     void testQHashInt();
     void testQHashString();
