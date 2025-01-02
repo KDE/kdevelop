@@ -257,7 +257,7 @@ View* Area::removeToolView(View *view)
 
     emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
     QString id = view->document()->documentSpecifier();
-    qCDebug(SUBLIME) << this << "removed tool view " << id;
+    qCDebug(SUBLIME) << this << "removed tool view" << id;
     d->desiredToolViews.remove(id);
     d->toolViews.removeAll(view);
     d->toolViewPositions.remove(view);
@@ -330,7 +330,7 @@ void Area::save(KConfigGroup& group) const
         desired << i.key() + QLatin1Char(':') + QString::number(static_cast<int>(i.value()));
     }
     group.writeEntry("desired views", desired);
-    qCDebug(SUBLIME) << "save " << this << "wrote" << group.readEntry("desired views", "");
+    qCDebug(SUBLIME) << "save" << this << "wrote" << group.readEntry("desired views", "");
     group.writeEntry("view on left", shownToolViews(Sublime::Left));
     group.writeEntry("view on right", shownToolViews(Sublime::Right));
     group.writeEntry("view on top", shownToolViews(Sublime::Top));

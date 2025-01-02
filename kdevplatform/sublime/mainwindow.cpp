@@ -285,7 +285,7 @@ void MainWindow::loadSettings()
 
     HoldUpdates hu(this);
 
-    qCDebug(SUBLIME) << "loading settings for " << (area() ? area()->objectName() : QString());
+    qCDebug(SUBLIME) << "loading settings for" << (area() ? area()->objectName() : QString());
 
     const auto groupName = configGroupName(d->area);
     setStateConfigGroup(groupName);
