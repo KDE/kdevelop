@@ -148,15 +148,9 @@ CppDebuggerPlugin::~CppDebuggerPlugin()
 {
 }
 
-DebugSession* CppDebuggerPlugin::createSession()
+DebugSession* CppDebuggerPlugin::createSessionObject()
 {
-    auto *session = new DebugSession(this);
-    KDevelop::ICore::self()->debugController()->addSession(session);
-    connect(session, &DebugSession::showMessage, this, &CppDebuggerPlugin::showStatusMessage);
-    connect(session, &DebugSession::reset, this, &CppDebuggerPlugin::reset);
-    connect(session, &DebugSession::raiseDebuggerConsoleViews,
-            this, &CppDebuggerPlugin::raiseDebuggerConsoleViews);
-    return session;
+    return new DebugSession(this);
 }
 
 #include "debuggerplugin.moc"

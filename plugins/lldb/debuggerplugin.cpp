@@ -115,15 +115,9 @@ LldbDebuggerPlugin::~LldbDebuggerPlugin()
 {
 }
 
-DebugSession* LldbDebuggerPlugin::createSession()
+DebugSession* LldbDebuggerPlugin::createSessionObject()
 {
-    auto *session = new DebugSession(this);
-    core()->debugController()->addSession(session);
-    connect(session, &DebugSession::showMessage, this, &LldbDebuggerPlugin::showStatusMessage);
-    connect(session, &DebugSession::reset, this, &LldbDebuggerPlugin::reset);
-    connect(session, &DebugSession::raiseDebuggerConsoleViews,
-            this, &LldbDebuggerPlugin::raiseDebuggerConsoleViews);
-    return session;
+    return new DebugSession(this);
 }
 
 #include "debuggerplugin.moc"

@@ -99,15 +99,14 @@ public:
     }
     ~TestDebuggerPlugin() {}
 
-    KDevMI::MIDebugSession *createSession() override
-    {
-        auto* session = new TestDebugSession(this);
-        KDevelop::ICore::self()->debugController()->addSession(session);
-        connect(session, &TestDebugSession::showMessage, this, &TestDebuggerPlugin::showStatusMessage);
-        return session;
-    }
     void setupToolViews() override {}
     void unloadToolViews() override {}
+
+private:
+    [[nodiscard]] TestDebugSession* createSessionObject() override
+    {
+        return new TestDebugSession(this);
+    }
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(TestDebuggerFactory, "testdebugger.json", registerPlugin<TestDebuggerPlugin>(); )

@@ -42,12 +42,13 @@ public:
 
     void unload() override;
 
-    DebugSession *createSession() override;
     void unloadToolViews() override;
     void setupToolViews() override;
 
 private:
     void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);
+
+    [[nodiscard]] DebugSession* createSessionObject() override;
 
     DebuggerToolFactory<NonInterruptDebuggerConsoleView> *m_consoleFactory;
     DebuggerToolFactory<DisassembleWidget> *m_disassembleFactory;

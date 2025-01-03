@@ -11,6 +11,7 @@
 #include "midebuggerplugin.h"
 
 #include "midebugjobs.h"
+#include "midebugsession.h"
 #include "dialogs/processselection.h"
 
 #include <interfaces/context.h>
@@ -234,6 +235,16 @@ ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QW
     }
 
     return menuExt;
+}
+
+MIDebugSession* MIDebuggerPlugin::createSession()
+{
+    auto* const session = createSessionObject();
+    core()->debugController()->addSession(session);
+    connect(session, &MIDebugSession::showMessage, this, &MIDebuggerPlugin::showStatusMessage);
+    connect(session, &MIDebugSession::raiseDebuggerConsoleViews, this, &MIDebuggerPlugin::raiseDebuggerConsoleViews);
+    connect(session, &MIDebugSession::reset, this, &MIDebuggerPlugin::reset);
+    return session;
 }
 
 void MIDebuggerPlugin::slotExamineCore()

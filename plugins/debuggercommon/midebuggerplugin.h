@@ -43,7 +43,7 @@ public:
     void unload() override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
-    virtual MIDebugSession *createSession() = 0;
+    MIDebugSession* createSession();
 
     virtual void setupToolViews() = 0;
     /**
@@ -87,6 +87,8 @@ protected:
     void showStatusMessage(const QString& msg, int timeout);
 
 private:
+    [[nodiscard]] virtual MIDebugSession* createSessionObject() = 0;
+
     QHash<QString, DBusProxy*> m_drkonqis;
     const QString m_displayName;
     QDBusServiceWatcher* m_watcher = nullptr;
