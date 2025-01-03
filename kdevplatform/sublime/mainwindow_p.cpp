@@ -585,41 +585,36 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
     emit m_mainWindow->aboutToRemoveView( view );
 
-    if (view->widget())
-        widgetToView.remove(view->widget());
     viewContainers.remove(view);
 
     const bool wasActive = m_mainWindow->activeView() == view;
-    if (container->count() > 1)
-    {
-        //container is not empty or this is a root index
-        //just remove a widget
-        if( view->widget() ) {
-            container->removeWidget(view->widget());
-            view->widget()->setParent(nullptr);
-            //activate what is visible currently in the container if the removed view was active
-            if (wasActive) {
-                m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
-                return;
-            }
+
+    if (view->hasWidget()) {
+        auto* const viewWidget = view->widget();
+        widgetToView.remove(viewWidget);
+        container->removeWidget(viewWidget);
+        viewWidget->setParent(nullptr);
+    } else {
+        qCWarning(SUBLIME) << "the view" << view->document()->documentSpecifier() << "does not have a widget";
+    }
+
+    if (container->count() > 0) {
+        // container is not empty or this is a root index, so keep the container
+
+        //activate what is visible currently in the container if the removed view was active
+        if (wasActive) {
+            m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
+            return;
         }
     }
     else
     {
-        // We've about to remove the last view of this container.  It will
-        // be empty, so have to delete it, as well.
+        // We have just removed the last view from this container. The container is now empty, so destroy it as well.
 
         // If we have a container, then it should be the only child of
         // the splitter.
         Q_ASSERT(splitter->count() == 1);
-        container->removeWidget(view->widget());
 
-        if (view->widget())
-            view->widget()->setParent(nullptr);
-        else
-            qCWarning(SUBLIME) << "View does not have a widget!";
-
-        Q_ASSERT(container->count() == 0);
         // We can be called from signal handler of container
         // (which is tab widget), so defer deleting it.
         container->deleteLater();

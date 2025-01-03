@@ -33,7 +33,9 @@ public:
 
     /**Adds the widget for given @p view to the container.*/
     void addWidget(Sublime::View* view, int position = -1);
-    /**Removes the widget from the container.*/
+    /**
+     * Remove a given non-null widget from the container.
+     */
     void removeWidget(QWidget *w);
     /** @return true if widget is placed inside this container.*/
     bool hasWidget(QWidget* w) const;

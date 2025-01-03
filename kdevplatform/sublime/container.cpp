@@ -608,30 +608,30 @@ void Container::removeWidget(QWidget *w)
 {
     Q_D(Container);
 
-    if (w) {
-        int widgetIdx = d->stack->indexOf(w);
-        d->stack->removeWidget(w);
-        d->tabBar->removeTab(widgetIdx);
-        if (d->tabBar->currentIndex() != -1 && !d->tabBar->isVisible()) {
-            // repaint icon and document title only in tabbar-less mode
-            // tabbar will do repainting for us
-            View* view = currentView();
-            if( view ) {
-                statusIconChanged( view->document() );
-                documentTitleChanged( view->document() );
-            }
-        }
-        View* view = d->viewForWidget.take(w);
-        if (view)
-        {
-            disconnect(view->document(), &Document::titleChanged, this, &Container::documentTitleChanged);
-            disconnect(view->document(), &Document::statusIconChanged, this, &Container::statusIconChanged);
-            disconnect(view, &View::statusChanged, this, &Container::statusChanged);
+    Q_ASSERT(w);
 
-            // Update document list context menu
-            Q_ASSERT(d->documentListActionForView.contains(view));
-            delete d->documentListActionForView.take(view);
+    int widgetIdx = d->stack->indexOf(w);
+    d->stack->removeWidget(w);
+    d->tabBar->removeTab(widgetIdx);
+    if (d->tabBar->currentIndex() != -1 && !d->tabBar->isVisible()) {
+        // repaint icon and document title only in tabbar-less mode
+        // tabbar will do repainting for us
+        View* view = currentView();
+        if( view ) {
+            statusIconChanged( view->document() );
+            documentTitleChanged( view->document() );
         }
+    }
+    View* view = d->viewForWidget.take(w);
+    if (view)
+    {
+        disconnect(view->document(), &Document::titleChanged, this, &Container::documentTitleChanged);
+        disconnect(view->document(), &Document::statusIconChanged, this, &Container::statusIconChanged);
+        disconnect(view, &View::statusChanged, this, &Container::statusChanged);
+
+        // Update document list context menu
+        Q_ASSERT(d->documentListActionForView.contains(view));
+        delete d->documentListActionForView.take(view);
     }
 }
 
