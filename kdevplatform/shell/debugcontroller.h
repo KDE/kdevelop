@@ -75,7 +75,6 @@ private Q_SLOTS:
     void areaChanged(Sublime::Area* newArea);
 
 Q_SIGNALS:
-    void raiseFramestackViews();
     void killAllDebuggersNow();
 
 private:

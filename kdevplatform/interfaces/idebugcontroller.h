@@ -42,6 +42,7 @@ public:
 
 Q_SIGNALS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
+    void raiseFramestackViews();
 };
 
 }

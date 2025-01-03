@@ -59,9 +59,7 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     connect(controller,
             &IDebugController::currentSessionChanged,
             this, &FramestackWidget::currentSessionChanged);
-
-    //TODO: shouldn't this signal be in IDebugController? Otherwise we are effectively depending on it being a DebugController here
-    connect(controller, SIGNAL(raiseFramestackViews()), SIGNAL(requestRaise()));
+    connect(controller, &IDebugController::raiseFramestackViews, this, &FramestackWidget::requestRaise);
 
     setWhatsThis(i18n("<b>Frame stack</b>"
                       "Often referred to as the \"call stack\", "
