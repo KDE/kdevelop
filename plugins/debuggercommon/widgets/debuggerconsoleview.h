@@ -50,7 +50,6 @@ public:
     void setShowInternalCommands(bool enable);
 
 Q_SIGNALS:
-    void requestRaise();
     /**
      * Proxy signals for DebugSession
      */

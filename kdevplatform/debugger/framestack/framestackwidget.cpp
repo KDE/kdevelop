@@ -29,6 +29,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iuicontroller.h>
+
 #include <debug.h>
 #include "framestackmodel.h"
 
@@ -59,7 +61,9 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     connect(controller,
             &IDebugController::currentSessionChanged,
             this, &FramestackWidget::currentSessionChanged);
-    connect(controller, &IDebugController::raiseFramestackViews, this, &FramestackWidget::requestRaise);
+    connect(controller, &IDebugController::raiseFramestackViews, this, [this] {
+        ICore::self()->uiController()->raiseToolView(this);
+    });
 
     setWhatsThis(i18n("<b>Frame stack</b>"
                       "Often referred to as the \"call stack\", "

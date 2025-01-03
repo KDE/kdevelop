@@ -30,7 +30,6 @@ public:
     explicit VariableWidget( IDebugController *controller, QWidget *parent=nullptr );
 
 Q_SIGNALS:
-    void requestRaise();
     void addWatchVariable(const QString& indent);
     void evaluateExpression(const QString& indent);
 

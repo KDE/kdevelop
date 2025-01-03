@@ -63,12 +63,6 @@ public:
         return m_defaultArea;
     }
 
-    void viewCreated(Sublime::View* view) override
-    {
-        if (view->widget()->metaObject()->indexOfSignal("requestRaise()") != -1)
-            QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
-    }
-
 protected:
     auto controller() const
     {

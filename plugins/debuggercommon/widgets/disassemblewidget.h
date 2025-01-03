@@ -100,9 +100,6 @@ public:
     explicit DisassembleWidget( MIDebuggerPlugin* plugin, QWidget *parent=nullptr );
     ~DisassembleWidget() override;
 
-Q_SIGNALS:
-    void requestRaise();
-
 public Q_SLOTS:
     void slotActivate(bool activate);
     void slotDeactivate();

@@ -45,10 +45,6 @@ namespace GDB
         /** Adds a new memory view. */
         void slotAddMemoryView();
 
-    Q_SIGNALS:
-        void requestRaise();
-
-
     private Q_SLOTS:
         void slotChildCaptionChanged(const QString& caption);
 

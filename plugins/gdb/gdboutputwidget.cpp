@@ -15,6 +15,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
+#include <interfaces/iuicontroller.h>
 
 #include <KColorScheme>
 #include <KHistoryComboBox>
@@ -91,7 +92,9 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
             this, &GDBOutputWidget::currentSessionChanged);
 
     connect(plugin, &CppDebuggerPlugin::reset, this, &GDBOutputWidget::clear);
-    connect(plugin, &CppDebuggerPlugin::raiseDebuggerConsoleViews, this, &GDBOutputWidget::requestRaise);
+    connect(plugin, &CppDebuggerPlugin::raiseDebuggerConsoleViews, this, [plugin, this] {
+        plugin->core()->uiController()->raiseToolView(this);
+    });
 
     currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession());
 

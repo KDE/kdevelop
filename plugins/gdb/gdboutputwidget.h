@@ -66,7 +66,6 @@ protected:
     void contextMenuEvent(QContextMenuEvent* e) override;
 
 Q_SIGNALS:
-    void requestRaise();
     void userGDBCmd(const QString &cmd);
     void breakInto();
 

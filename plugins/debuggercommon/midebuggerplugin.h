@@ -117,12 +117,6 @@ public:
         return m_defaultArea;
     }
 
-    void viewCreated(Sublime::View* view) override
-    {
-        if (view->widget()->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("requestRaise()").constData()) != -1)
-            QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
-    }
-
 private:
     Plugin * m_plugin;
     QString m_id;

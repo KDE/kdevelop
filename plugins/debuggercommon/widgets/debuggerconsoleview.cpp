@@ -15,6 +15,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
+#include <interfaces/iuicontroller.h>
 
 #include <KColorScheme>
 #include <KHistoryComboBox>
@@ -90,8 +91,9 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
             this, &DebuggerConsoleView::handleSessionChanged);
 
     connect(plugin, &MIDebuggerPlugin::reset, this, &DebuggerConsoleView::clear);
-    connect(plugin, &MIDebuggerPlugin::raiseDebuggerConsoleViews,
-            this, &DebuggerConsoleView::requestRaise);
+    connect(plugin, &MIDebuggerPlugin::raiseDebuggerConsoleViews, this, [plugin, this] {
+        plugin->core()->uiController()->raiseToolView(this);
+    });
 
     handleSessionChanged(plugin->core()->debugController()->currentSession());
 
