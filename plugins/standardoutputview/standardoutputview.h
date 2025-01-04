@@ -68,7 +68,6 @@ public Q_SLOTS:
 Q_SIGNALS:
     void activated( const QModelIndex& );
     void outputRemoved(int toolViewId, int outputId);
-    void toolViewRemoved(int toolViewId);
 
 private:
     QMap<int, ToolViewData*> m_toolViews;

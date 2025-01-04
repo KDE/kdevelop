@@ -266,7 +266,6 @@ void StandardOutputView::removeToolView(int toolViewId)
         }
         delete td;
         m_toolViews.erase(toolViewIt);
-        emit toolViewRemoved(toolViewId);
     }
 }
 

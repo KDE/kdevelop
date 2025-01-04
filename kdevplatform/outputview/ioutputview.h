@@ -132,7 +132,7 @@ public:
     virtual void setTitle( int outputId, const QString& title ) = 0;
 
     /**
-     * Remove a tool view, don't forget to emit toolViewRemoved when you implement this.
+     * Remove a tool view.
      *
      * @param toolViewId identifies the view to remove
      */
@@ -146,13 +146,6 @@ public:
     virtual void removeOutput( int outputId ) = 0;
 
 Q_SIGNALS:
-    /**
-     * Emitted after a tool view was removed.
-     *
-     * @param toolViewId identifies the removed tool view
-     */
-    void toolViewRemoved(int toolViewId);
-
     /**
      * Emitted after a tool view was removed.
      *
