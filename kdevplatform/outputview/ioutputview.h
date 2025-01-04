@@ -147,9 +147,9 @@ public:
 
 Q_SIGNALS:
     /**
-     * Emitted after a tool view was removed.
+     * Emitted after an output view is removed from a tool view.
      *
-     * @param toolViewId identifies the removed tool view
+     * @param toolViewId identifies the tool view, from which the output view is removed
      * @param outputId identifies the removed output
      */
     void outputRemoved(int toolViewId, int outputId);

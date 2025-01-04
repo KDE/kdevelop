@@ -67,6 +67,14 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void activated( const QModelIndex& );
+
+    /**
+     * @copydoc KDevelop::IOutputView::outputRemoved()
+     *
+     * @note This signal hides the base class's "signal" KDevelop::IOutputView::outputRemoved().
+     *       The hiding is necessary, because KDevelop::IOutputView does not inherit QObject,
+     *       and thus cannot declare an actually working signal.
+     */
     void outputRemoved(int toolViewId, int outputId);
 
 private:
