@@ -122,6 +122,11 @@ Scratchpad::Scratchpad(QObject* parent, const KPluginMetaData& metaData, const Q
     }
 }
 
+void Scratchpad::unload()
+{
+    core()->uiController()->removeToolView(m_factory);
+}
+
 QStandardItemModel* Scratchpad::model() const
 {
     return m_model;

@@ -208,6 +208,11 @@ GitPlugin::GitPlugin(QObject* parent, const KPluginMetaData& metaData, const QVa
 GitPlugin::~GitPlugin()
 {}
 
+void GitPlugin::unload()
+{
+    core()->uiController()->removeToolView(m_commitToolViewFactory);
+}
+
 bool emptyOutput(DVcsJob* job)
 {
     QScopedPointer<DVcsJob> _job(job);

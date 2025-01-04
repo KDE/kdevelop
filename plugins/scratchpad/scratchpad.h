@@ -27,6 +27,8 @@ class Scratchpad
 public:
     Scratchpad(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
 
+    void unload() override;
+
     QStandardItemModel* model() const;
 
     QAction* runAction() const;

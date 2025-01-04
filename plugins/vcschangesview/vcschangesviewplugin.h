@@ -10,6 +10,8 @@
 #include <interfaces/iplugin.h>
 #include <QVariant>
 
+class VCSProjectToolViewFactory;
+
 class QModelIndex;
 
 namespace KDevelop
@@ -24,12 +26,14 @@ class VcsProjectIntegrationPlugin : public KDevelop::IPlugin
     Q_OBJECT
     public:
         VcsProjectIntegrationPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
+        void unload() override;
         KDevelop::ProjectChangesModel* model();
         
     private Q_SLOTS:
         void activated(const QModelIndex& idx);
         
     private:
+        VCSProjectToolViewFactory* const m_factory;
         KDevelop::ProjectChangesModel* m_model;
 
         friend class VCSProjectToolViewFactory; // to access activated() slot

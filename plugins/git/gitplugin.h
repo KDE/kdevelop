@@ -119,6 +119,8 @@ public:
     explicit GitPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args = QVariantList());
     ~GitPlugin() override;
 
+    void unload() override;
+
     QString name() const override;
 
     bool isValidRemoteRepositoryUrl(const QUrl& remoteLocation) override;

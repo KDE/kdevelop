@@ -237,6 +237,15 @@ void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* deleg
     }
 }
 
+// TODO: only StandardOutputViewTest calls this function, so output tool views are never removed in KDevelop.
+//       Calling Sublime::Area::removeToolView() in a loop does not completely remove
+//       a tool view, so consider calling IUiController::removeToolView() instead.
+//       StandardOutputView::registerToolView() calls IUiController::addToolView() but
+//       StandardOutputView::unload() does not call IUiController::removeToolView() as all
+//       other plugins do. This does not cause a crash when the user attempts to unload
+//       the Output View plugin on the Plugins tab of the Configure KDevelop dialog, because
+//       the unloading is prevented by the absence of the "X-KDevelop-Category": "Global"
+//       entry in kdevstandardoutputview.json (see df99304843fbdb593398e3d7d912e15cbd7c56b9).
 void StandardOutputView::removeToolView(int toolViewId)
 {
     const auto toolViewIt = m_toolViews.find(toolViewId);

@@ -58,6 +58,9 @@ void addTool( IUiController* uiController,
     auto* factory =
         new OktetaToolViewFactory( toolViewFactory, toolFactory );
 
+    // TODO: OktetaPlugin::unload() must call IUiController::removeToolView() for each tool view created
+    //       here in order to prevent crashes when the user interacts with, adds or removes the tool views
+    //       after unloading the Hex Editor plugin on the Plugins tab of the Configure KDevelop dialog.
     uiController->addToolView( toolViewFactory->title(), factory );
 }
 

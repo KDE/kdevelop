@@ -58,9 +58,10 @@ private:
 VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const KPluginMetaData& metaData,
                                                          const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevvcsprojectintegration"), parent, metaData)
+    , m_factory(new VCSProjectToolViewFactory(this))
     , m_model(nullptr)
 {
-    ICore::self()->uiController()->addToolView(i18nc("@title:window", "Project Changes"), new VCSProjectToolViewFactory(this));
+    core()->uiController()->addToolView(i18nc("@title:window", "Project Changes"), m_factory);
 
     QAction* synaction = actionCollection()->addAction(QStringLiteral("locate_document"));
     synaction->setText(i18nc("@action", "Locate Current Document"));
@@ -71,6 +72,11 @@ VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const 
     reloadaction->setText(i18nc("@action", "Reload View"));
     reloadaction->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
     reloadaction->setToolTip(i18nc("@info:tooltip", "Refresh the view for all projects, in case anything changed"));
+}
+
+void VcsProjectIntegrationPlugin::unload()
+{
+    core()->uiController()->removeToolView(m_factory);
 }
 
 void VcsProjectIntegrationPlugin::activated(const QModelIndex& /*idx*/)
