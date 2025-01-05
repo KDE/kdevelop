@@ -74,21 +74,15 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
     QObject(mainWindow), m_mainWindow(mainWindow)
 {
     leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this, m_mainWindow);
-    connect(leftBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
-            this, &IdealController::slotDockBarContextMenuRequested);
-
     rightBarWidget = new IdealButtonBarWidget(Qt::RightDockWidgetArea, this, m_mainWindow);
-    connect(rightBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
-            this, &IdealController::slotDockBarContextMenuRequested);
-
     bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this, m_mainWindow);
     m_bottomStatusBarLocation = bottomBarWidget->corner();
-    connect(bottomBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
-            this, &IdealController::slotDockBarContextMenuRequested);
-
     topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea, this, m_mainWindow);
-    connect(topBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
-            this, &IdealController::slotDockBarContextMenuRequested);
+
+    forEachButtonBarWidget([this](IdealButtonBarWidget& buttonBarWidget) {
+        connect(&buttonBarWidget, &IdealButtonBarWidget::customContextMenuRequested, this,
+                &IdealController::slotDockBarContextMenuRequested);
+    });
 
     m_docks = qobject_cast<KActionMenu*>(mainWindow->action(QStringLiteral("docks_submenu")));
 
@@ -261,6 +255,14 @@ IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) c
     }
 }
 
+template<typename ButtonBarWidgetUser>
+void IdealController::forEachButtonBarWidget(ButtonBarWidgetUser callback) const
+{
+    for (auto* const barWidget : {leftBarWidget, rightBarWidget, bottomBarWidget}) {
+        callback(*barWidget);
+    }
+}
+
 void IdealController::slotDockBarContextMenuRequested(const QPoint& position)
 {
     auto* bar = qobject_cast<IdealButtonBarWidget*>(sender());
@@ -393,6 +395,20 @@ void IdealController::removeView(View* view, bool nondestructive)
     delete dock;
 }
 
+void IdealController::loadButtonOrderSettings(const KConfigGroup& configGroup)
+{
+    forEachButtonBarWidget([&configGroup](IdealButtonBarWidget& buttonBarWidget) {
+        buttonBarWidget.loadOrderSettings(configGroup);
+    });
+}
+
+void IdealController::saveButtonOrderSettings(KConfigGroup& configGroup)
+{
+    forEachButtonBarWidget([&configGroup](IdealButtonBarWidget& buttonBarWidget) {
+        buttonBarWidget.saveOrderSettings(configGroup);
+    });
+}
+
 void IdealController::showBottomDock(bool show)
 {
     showDock(Qt::BottomDockWidgetArea, show);
@@ -492,14 +508,14 @@ void IdealController::toggleDocksShown()
     // use "variable-length" array to prevent allocations
     std::array<ILastCheckedActionsTracker*, 3> trackers;
     auto end = trackers.begin();
-    for (const auto* const barWidget : {leftBarWidget, rightBarWidget, bottomBarWidget}) {
-        if (barWidget->isLocked()) {
-            continue;
+    forEachButtonBarWidget([&anyShown, &end](const IdealButtonBarWidget& buttonBarWidget) {
+        if (buttonBarWidget.isLocked()) {
+            return;
         }
-        auto& tracker = barWidget->lastCheckedActionsTracker();
+        auto& tracker = buttonBarWidget.lastCheckedActionsTracker();
         anyShown = anyShown || tracker.isAnyChecked();
         *end++ = &tracker;
-    }
+    });
 
     // The range [trackers.begin(), end) contains unlocked trackers. Toggle their shared checked state.
     // Saving and retrieving the last saved any-checked state is necessary to restore only the docks that were hidden by

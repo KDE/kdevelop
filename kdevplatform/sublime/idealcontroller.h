@@ -15,6 +15,7 @@
 #include <QHash>
 
 class KActionMenu;
+class KConfigGroup;
 
 namespace Sublime {
 
@@ -42,6 +43,9 @@ public:
         is not deleted, as is left with NULL parent.
         Otherwise, it's deleted.  */
     void removeView(View* view, bool nondestructive = false);
+
+    void loadButtonOrderSettings(const KConfigGroup& configGroup);
+    void saveButtonOrderSettings(KConfigGroup& configGroup);
 
     void showLeftDock(bool show);
     void showRightDock(bool show);
@@ -77,6 +81,10 @@ private:
     bool addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidget* dock, View* view, bool checked = false);
 
     [[nodiscard]] IdealButtonBarWidget* barForDockArea(Qt::DockWidgetArea area) const;
+
+    template<typename ButtonBarWidgetUser>
+    void forEachButtonBarWidget(ButtonBarWidgetUser callback) const;
+
     void focusEditor();
     void setShowDockStatus(Qt::DockWidgetArea area, bool checked);
     [[nodiscard]] QAction* actionForArea(Qt::DockWidgetArea area) const;

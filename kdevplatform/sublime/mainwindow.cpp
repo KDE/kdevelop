@@ -20,7 +20,6 @@
 #include "view.h"
 #include "controller.h"
 #include "container.h"
-#include "idealbuttonbarwidget.h"
 #include "idealcontroller.h"
 #include "holdupdates.h"
 #include <debug.h>
@@ -275,9 +274,7 @@ void MainWindow::saveSettings()
         }
     }
 
-    d->idealController->leftBarWidget->saveOrderSettings(cg);
-    d->idealController->bottomBarWidget->saveOrderSettings(cg);
-    d->idealController->rightBarWidget->saveOrderSettings(cg);
+    d->idealController->saveButtonOrderSettings(cg);
 
     cg.sync();
 }
@@ -307,9 +304,7 @@ void MainWindow::loadSettings()
 
     hu.stop();
 
-    d->idealController->leftBarWidget->loadOrderSettings(cg);
-    d->idealController->bottomBarWidget->loadOrderSettings(cg);
-    d->idealController->rightBarWidget->loadOrderSettings(cg);
+    d->idealController->loadButtonOrderSettings(cg);
 
     d->disableConcentrationMode();
 }
