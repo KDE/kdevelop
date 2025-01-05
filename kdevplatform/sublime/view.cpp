@@ -11,6 +11,8 @@
 #include "document.h"
 #include "tooldocument.h"
 
+#include <debug.h>
+
 namespace Sublime {
 
 class View;
@@ -69,6 +71,11 @@ QWidget *View::widget(QWidget *parent)
 
     if (!d->widget)
     {
+        if (!parent) {
+            qCWarning(SUBLIME) << "creating a widget for view" << d->doc->documentSpecifier()
+                               << "without a parent => possibly unintentionally";
+        }
+
         d->widget = createWidget(parent);
         // if we own this widget, we will also delete it and ideally would disconnect
         // the following connect before doing that. For that though we would need to store
