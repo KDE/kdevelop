@@ -20,7 +20,6 @@
 
 class QAction;
 class QSplitter;
-class IdealToolBar;
 
 namespace Sublime {
 
@@ -134,10 +133,6 @@ private:
 
     QMap<Area*, QAction*> m_areaActions;
     QPointer<QToolBar> m_concentrateToolBar;
-    IdealToolBar* m_bottomToolBar;
-    IdealToolBar* m_rightToolBar;
-    IdealToolBar* m_leftToolBar;
-
     QAction* m_concentrationModeAction;
 
     QHash<Message*, QVector<QSharedPointer<QAction>>> m_messageHash;

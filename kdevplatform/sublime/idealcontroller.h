@@ -24,6 +24,7 @@ class View;
 class MainWindow;
 class IdealButtonBarWidget;
 class IdealDockWidget;
+class IdealToolBar;
 
 class IdealController: public QObject
 {
@@ -47,6 +48,15 @@ public:
     void loadButtonOrderSettings(const KConfigGroup& configGroup);
     void saveButtonOrderSettings(KConfigGroup& configGroup);
 
+    /**
+     * Hide all ideal toolbars.
+     */
+    void hideToolBars();
+    /**
+     * Show ideal toolbars that are nonempty.
+     */
+    void updateToolBarVisibility();
+
     void showLeftDock(bool show);
     void showRightDock(bool show);
     void showBottomDock(bool show);
@@ -54,11 +64,6 @@ public:
 
     enum Direction { NextDock, PrevDock };
     void goPrevNextDock(IdealController::Direction direction);
-
-    IdealButtonBarWidget *leftBarWidget;
-    IdealButtonBarWidget *rightBarWidget;
-    IdealButtonBarWidget *bottomBarWidget;
-    IdealButtonBarWidget *topBarWidget;
 
 Q_SIGNALS:
         /// Emitted, when a context menu is requested on one of the dock bars.
@@ -84,6 +89,8 @@ private:
 
     template<typename ButtonBarWidgetUser>
     void forEachButtonBarWidget(ButtonBarWidgetUser callback) const;
+    template<typename ToolBarUser>
+    void forEachToolBar(ToolBarUser callback) const;
 
     void focusEditor();
     void setShowDockStatus(Qt::DockWidgetArea area, bool checked);
@@ -94,7 +101,16 @@ private:
 
     Sublime::MainWindow* const m_mainWindow;
 
-    QWidget* m_bottomStatusBarLocation;
+    IdealButtonBarWidget* const m_leftBarWidget;
+    IdealButtonBarWidget* const m_rightBarWidget;
+    IdealButtonBarWidget* const m_topBarWidget;
+    IdealButtonBarWidget* const m_bottomBarWidget;
+
+    IdealToolBar* const m_leftToolBar;
+    IdealToolBar* const m_rightToolBar;
+    IdealToolBar* const m_bottomToolBar;
+
+    QWidget* const m_bottomStatusBarLocation;
 
     /** Map from View to an action that shows/hides
         the IdealDockWidget containing that view.  */

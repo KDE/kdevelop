@@ -29,45 +29,9 @@
 #include "viewbarcontainer.h"
 #include "idealcontroller.h"
 #include "holdupdates.h"
-#include "idealbuttonbarwidget.h"
 #include "message.h"
 #include "messagewidget.h"
 #include <debug.h>
-
-class IdealToolBar : public QToolBar
-{
-    Q_OBJECT
-    public:
-        explicit IdealToolBar(const QString& title, bool hideWhenEmpty, Sublime::IdealButtonBarWidget* buttons, QMainWindow* parent)
-            : QToolBar(title, parent)
-            , m_buttons(hideWhenEmpty ? buttons : nullptr)
-        {
-            setMovable(false);
-            setFloatable(false);
-            setObjectName(title);
-            layout()->setContentsMargins(0, 0, 0, 0);
-
-            addWidget(buttons);
-
-            // This code determines the initial visibility of the toolbar only if KMainWindow::applyMainWindowSettings()
-            // fails to restore the main window state from config. So if the user manually hides or shows a
-            // toolbar via the context menu of the main menu, it remains hidden/visible on next KDevelop start.
-            if (hideWhenEmpty) {
-                updateVisibilty();
-                connect(m_buttons, &Sublime::IdealButtonBarWidget::emptyChanged,
-                        this, &IdealToolBar::updateVisibilty);
-            }
-        }
-
-        void updateVisibilty()
-        {
-            // if (!m_buttons) do not hide if empty, therefore always show
-            setVisible(!m_buttons || !m_buttons->isEmpty());
-        }
-
-    private:
-        Sublime::IdealButtonBarWidget* const m_buttons;
-};
 
 namespace Sublime {
 
@@ -133,18 +97,6 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     idealController = new IdealController(m_mainWindow);
 
-    m_leftToolBar = new IdealToolBar(i18n("Left Button Bar"), true, idealController->leftBarWidget, m_mainWindow);
-    m_mainWindow->addToolBar(Qt::LeftToolBarArea, m_leftToolBar);
-
-    m_rightToolBar = new IdealToolBar(i18n("Right Button Bar"), true, idealController->rightBarWidget, m_mainWindow);
-    m_mainWindow->addToolBar(Qt::RightToolBarArea, m_rightToolBar);
-
-    m_bottomToolBar = new IdealToolBar(i18n("Bottom Button Bar"), false, idealController->bottomBarWidget, m_mainWindow);
-    m_mainWindow->addToolBar(Qt::BottomToolBarArea, m_bottomToolBar);
-
-    // adymo: intentionally do not add a toolbar for top buttonbar
-    // this doesn't work well with toolbars added via xmlgui
-
     centralWidget = new QWidget;
     centralWidget->setObjectName(QStringLiteral("centralWidget"));
     auto* layout = new QVBoxLayout(centralWidget);
@@ -208,13 +160,6 @@ void MainWindowPrivate::toggleConcentrationMode(bool concentrationModeOn)
     }
 
     m_mainWindow->menuBar()->setVisible(!concentrationModeOn);
-    for (auto* const toolBar : {m_leftToolBar, m_rightToolBar, m_bottomToolBar}) {
-        if (concentrationModeOn) {
-            toolBar->hide();
-        } else {
-            toolBar->updateVisibilty();
-        }
-    }
 
     if (concentrationModeOn) {
         m_concentrateToolBar = new QToolBar(m_mainWindow);
@@ -235,8 +180,10 @@ void MainWindowPrivate::toggleConcentrationMode(bool concentrationModeOn)
     }
 
     if (concentrationModeOn) {
+        idealController->hideToolBars();
         m_mainWindow->installEventFilter(this);
     } else {
+        idealController->updateToolBarVisibility();
         m_mainWindow->removeEventFilter(this);
     }
 }
@@ -770,6 +717,5 @@ void MainWindowPrivate::messageDestroyed(Message* message)
 
 }
 
-#include "mainwindow_p.moc"
 #include "moc_mainwindow_p.cpp"
 

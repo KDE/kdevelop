@@ -68,21 +68,66 @@ QDebug operator<<(QDebug debug, PrintDockWidget p)
 }
 } // unnamed namespace
 
-using namespace Sublime;
+namespace Sublime {
 
-IdealController::IdealController(Sublime::MainWindow* mainWindow):
-    QObject(mainWindow), m_mainWindow(mainWindow)
+class IdealToolBar : public QToolBar
 {
-    leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this, m_mainWindow);
-    rightBarWidget = new IdealButtonBarWidget(Qt::RightDockWidgetArea, this, m_mainWindow);
-    bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this, m_mainWindow);
-    m_bottomStatusBarLocation = bottomBarWidget->corner();
-    topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea, this, m_mainWindow);
+    Q_OBJECT
+public:
+    explicit IdealToolBar(const QString& title, bool hideWhenEmpty, IdealButtonBarWidget* buttons, QMainWindow* parent)
+        : QToolBar(title, parent)
+        , m_buttons(hideWhenEmpty ? buttons : nullptr)
+    {
+        setMovable(false);
+        setFloatable(false);
+        setObjectName(title);
+        layout()->setContentsMargins(0, 0, 0, 0);
 
+        addWidget(buttons);
+
+        // This code determines the initial visibility of the toolbar only if KMainWindow::applyMainWindowSettings()
+        // fails to restore the main window state from config. So if the user manually hides or shows a
+        // toolbar via the context menu of the main menu, it remains hidden/visible on next KDevelop start.
+        if (hideWhenEmpty) {
+            updateVisibility();
+            connect(m_buttons, &IdealButtonBarWidget::emptyChanged, this, &IdealToolBar::updateVisibility);
+        }
+    }
+
+    void updateVisibility()
+    {
+        // if (!m_buttons) do not hide if empty, therefore always show
+        setVisible(!m_buttons || !m_buttons->isEmpty());
+    }
+
+private:
+    IdealButtonBarWidget* const m_buttons;
+};
+
+IdealController::IdealController(Sublime::MainWindow* mainWindow)
+    : QObject(mainWindow)
+    , m_mainWindow(mainWindow)
+    , m_leftBarWidget{new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this, mainWindow)}
+    , m_rightBarWidget{new IdealButtonBarWidget(Qt::RightDockWidgetArea, this, mainWindow)}
+    , m_topBarWidget{new IdealButtonBarWidget(Qt::TopDockWidgetArea, this, mainWindow)}
+    , m_bottomBarWidget{new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this, mainWindow)}
+    , m_leftToolBar{new IdealToolBar(i18n("Left Button Bar"), true, m_leftBarWidget, mainWindow)}
+    , m_rightToolBar{new IdealToolBar(i18n("Right Button Bar"), true, m_rightBarWidget, mainWindow)}
+    // adymo: intentionally do not add a toolbar for top buttonbar
+    // this doesn't work well with toolbars added via xmlgui
+    // -------------
+    // never hide the bottom toolbar, because it contains the status bar
+    , m_bottomToolBar{new IdealToolBar(i18n("Bottom Button Bar"), false, m_bottomBarWidget, mainWindow)}
+    , m_bottomStatusBarLocation{m_bottomBarWidget->corner()}
+{
     forEachButtonBarWidget([this](IdealButtonBarWidget& buttonBarWidget) {
         connect(&buttonBarWidget, &IdealButtonBarWidget::customContextMenuRequested, this,
                 &IdealController::slotDockBarContextMenuRequested);
     });
+
+    m_mainWindow->addToolBar(Qt::LeftToolBarArea, m_leftToolBar);
+    m_mainWindow->addToolBar(Qt::RightToolBarArea, m_rightToolBar);
+    m_mainWindow->addToolBar(Qt::BottomToolBarArea, m_bottomToolBar);
 
     m_docks = qobject_cast<KActionMenu*>(mainWindow->action(QStringLiteral("docks_submenu")));
 
@@ -238,17 +283,13 @@ IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) c
 {
     switch (area) {
         case Qt::LeftDockWidgetArea:
-            return leftBarWidget;
-
+            return m_leftBarWidget;
         case Qt::TopDockWidgetArea:
-            return topBarWidget;
-
+            return m_topBarWidget;
         case Qt::RightDockWidgetArea:
-            return rightBarWidget;
-
+            return m_rightBarWidget;
         case Qt::BottomDockWidgetArea:
-            return bottomBarWidget;
-
+            return m_bottomBarWidget;
         default:
             Q_ASSERT(false);
             return nullptr;
@@ -258,8 +299,16 @@ IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) c
 template<typename ButtonBarWidgetUser>
 void IdealController::forEachButtonBarWidget(ButtonBarWidgetUser callback) const
 {
-    for (auto* const barWidget : {leftBarWidget, rightBarWidget, bottomBarWidget}) {
+    for (auto* const barWidget : {m_leftBarWidget, m_rightBarWidget, m_bottomBarWidget}) {
         callback(*barWidget);
+    }
+}
+
+template<typename ToolBarUser>
+void IdealController::forEachToolBar(ToolBarUser callback) const
+{
+    for (auto* const toolBar : {m_leftToolBar, m_rightToolBar, m_bottomToolBar}) {
+        callback(*toolBar);
     }
 }
 
@@ -409,6 +458,20 @@ void IdealController::saveButtonOrderSettings(KConfigGroup& configGroup)
     });
 }
 
+void IdealController::hideToolBars()
+{
+    forEachToolBar([](IdealToolBar& toolBar) {
+        toolBar.hide();
+    });
+}
+
+void IdealController::updateToolBarVisibility()
+{
+    forEachToolBar([](IdealToolBar& toolBar) {
+        toolBar.updateVisibility();
+    });
+}
+
 void IdealController::showBottomDock(bool show)
 {
     showDock(Qt::BottomDockWidgetArea, show);
@@ -530,4 +593,7 @@ void IdealController::toggleDocksShown()
     });
 }
 
+} // namespace Sublime
+
+#include "idealcontroller.moc"
 #include "moc_idealcontroller.cpp"
