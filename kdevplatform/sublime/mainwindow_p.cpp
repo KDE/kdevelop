@@ -50,23 +50,18 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(m_concentrationModeAction, &QAction::toggled, this, &MainWindowPrivate::toggleConcentrationMode);
     ac->addAction(QStringLiteral("toggle_concentration_mode"), m_concentrationModeAction);
 
-    auto* action = new QAction(i18nc("@option:check", "Show Left Dock"), this);
-    action->setCheckable(true);
-    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Left);
-    connect(action, &QAction::toggled, this, &MainWindowPrivate::showLeftDock);
+    // IdealController makes checkable and connects to the Show Dock actions
 
+    auto* action = new QAction(i18nc("@option:check", "Show Left Dock"), this);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Left);
     ac->addAction(QStringLiteral("show_left_dock"), action);
 
     action = new QAction(i18nc("@option:check", "Show Right Dock"), this);
-    action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Right);
-    connect(action, &QAction::toggled, this, &MainWindowPrivate::showRightDock);
     ac->addAction(QStringLiteral("show_right_dock"), action);
 
     action = new QAction(i18nc("@option:check", "Show Bottom Dock"), this);
-    action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Down);
-    connect(action, &QAction::toggled, this, &MainWindowPrivate::showBottomDock);
     ac->addAction(QStringLiteral("show_bottom_dock"), action);
 
     action = new QAction(i18nc("@action", "Focus Editor"), this);
@@ -201,21 +196,6 @@ bool MainWindowPrivate::eventFilter(QObject* obj, QEvent* event)
     }
 
     return false;
-}
-
-void MainWindowPrivate::showLeftDock(bool b)
-{
-    idealController->showLeftDock(b);
-}
-
-void MainWindowPrivate::showBottomDock(bool b)
-{
-    idealController->showBottomDock(b);
-}
-
-void MainWindowPrivate::showRightDock(bool b)
-{
-    idealController->showRightDock(b);
 }
 
 void MainWindowPrivate::setBackgroundCentralWidget(QWidget* w)

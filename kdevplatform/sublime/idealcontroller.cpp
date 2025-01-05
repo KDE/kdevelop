@@ -138,6 +138,21 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow)
     // the 'show top dock' action got removed (IOW, it's never created)
     // (let's keep this code around if we ever want to reintroduce the feature...
     m_showTopDock = m_mainWindow->action(QStringLiteral("show_top_dock"));
+
+    for (auto* const action : {m_showLeftDock, m_showRightDock, m_showBottomDock}) {
+        action->setCheckable(true);
+    }
+
+    const auto connectToShowDockAction = [this](QAction* action, const IdealButtonBarWidget* buttonBarWidget) {
+        Q_ASSERT(action);
+        Q_ASSERT(buttonBarWidget);
+        connect(action, &QAction::toggled, this, [buttonBarWidget, this](bool checked) {
+            showDockActionToggled(sender(), *buttonBarWidget, checked);
+        });
+    };
+    connectToShowDockAction(m_showLeftDock, m_leftBarWidget);
+    connectToShowDockAction(m_showRightDock, m_rightBarWidget);
+    connectToShowDockAction(m_showBottomDock, m_bottomBarWidget);
 }
 
 void IdealController::addView(Qt::DockWidgetArea area, View* view)
@@ -463,28 +478,14 @@ void IdealController::updateToolBarVisibility()
     });
 }
 
-void IdealController::showBottomDock(bool show)
+void IdealController::showDockActionToggled(QObject* senderAction, const IdealButtonBarWidget& buttonBarWidget,
+                                            bool show)
 {
-    showDock(Qt::BottomDockWidgetArea, show);
-}
+    auto& actionTracker = buttonBarWidget.lastCheckedActionsTracker();
 
-void IdealController::showLeftDock(bool show)
-{
-    showDock(Qt::LeftDockWidgetArea, show);
-}
-
-void IdealController::showRightDock(bool show)
-{
-    showDock(Qt::RightDockWidgetArea, show);
-}
-
-void IdealController::showDock(Qt::DockWidgetArea area, bool show)
-{
-    IdealButtonBarWidget *bar = barForDockArea(area);
-    auto& actionTracker = bar->lastCheckedActionsTracker();
-
-    const auto toggleShowDockActionQuietly = [area, show, this] {
-        auto* const action = actionForArea(area);
+    const auto toggleShowDockActionQuietly = [senderAction, show] {
+        auto* const action = qobject_cast<QAction*>(senderAction);
+        Q_ASSERT(action);
         Q_ASSERT(action->isChecked() == show);
         const QSignalBlocker blocker(action);
         action->toggle();
@@ -506,7 +507,7 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
     // Open last shown tool view(s) (or the first one).
     // The last of the opened tool views ends up focused.
     if (!actionTracker.checkAllTracked()) {
-        const auto barActions = bar->actions();
+        const auto barActions = buttonBarWidget.actions();
         if (barActions.empty()) {
             // no tool view to show => uncheck the Show Dock action
             toggleShowDockActionQuietly();

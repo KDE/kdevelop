@@ -57,9 +57,6 @@ public:
      */
     void updateToolBarVisibility();
 
-    void showLeftDock(bool show);
-    void showRightDock(bool show);
-    void showBottomDock(bool show);
     void toggleDocksShown();
 
     enum Direction { NextDock, PrevDock };
@@ -94,7 +91,7 @@ private:
     void setShowDockStatus(Qt::DockWidgetArea area, bool checked);
     [[nodiscard]] QAction* actionForArea(Qt::DockWidgetArea area) const;
 
-    void showDock(Qt::DockWidgetArea area, bool show);
+    void showDockActionToggled(QObject* senderAction, const IdealButtonBarWidget& buttonBarWidget, bool show);
     [[nodiscard]] IdealDockWidget* currentDockWidget() const;
 
     Sublime::MainWindow* const m_mainWindow;

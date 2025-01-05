@@ -111,9 +111,6 @@ private Q_SLOTS:
     void slotDockShown(Sublime::View*, Sublime::Position, bool);
     void widgetCloseRequest(QWidget* widget);
 
-    void showLeftDock(bool b);
-    void showRightDock(bool b);
-    void showBottomDock(bool b);
     void focusEditor();
     void selectNextDock();
     void selectPreviousDock();
