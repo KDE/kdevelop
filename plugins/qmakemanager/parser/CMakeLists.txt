@@ -1,5 +1,9 @@
+if (KDevelop-PG-Qt_FOUND)
+    include_directories(
+        ${KDEVPGQT_INCLUDE_DIR}
+    )
+endif()
 include_directories(
-    ${KDEVPGQT_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/..
 )
 set(kdevqmakeparser_SRCS
@@ -12,12 +16,23 @@ set(kdevqmakeparser_SRCS
     qmakeastdefaultvisitor.cpp
     )
 
-if(NOT KDevelop-PG-Qt_VERSION VERSION_LESS "2.2.1")
-    set(_kdevpgqt_generate_extra_args ENFORCE_COMPATIBLE_ERROR_AWARE_CODE)
+if (KDevelopPGQt_FOUND)
+    kdeveloppgqt_generate(parser_GEN_SRCS
+        qmake
+        NAMESPACE QMake
+        DUMP_INFO
+        ENFORCE_COMPATIBLE_ERROR_AWARE_CODE
+        "${CMAKE_CURRENT_SOURCE_DIR}/qmake.g"
+        "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.h"
+    )
+else()
+    if(NOT KDevelop-PG-Qt_VERSION VERSION_LESS "2.2.1")
+        set(_kdevpgqt_generate_extra_args ENFORCE_COMPATIBLE_ERROR_AWARE_CODE)
+    endif()
+    kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO ${_kdevpgqt_generate_extra_args}
+        "${CMAKE_CURRENT_SOURCE_DIR}/qmake.g"
+        "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.h")
 endif()
-kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO ${_kdevpgqt_generate_extra_args}
-    "${CMAKE_CURRENT_SOURCE_DIR}/qmake.g"
-    "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.h")
 
 if(BUILD_TESTING)
     add_subdirectory(tests)
@@ -41,6 +56,11 @@ target_link_libraries(kdevqmakeparser
         Qt::Core5Compat
 )
 target_include_directories(kdevqmakeparser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+if (KDevelopPGQt_FOUND)
+    target_link_libraries(kdevqmakeparser PUBLIC
+        KDevelopPGQt::Utils
+    )
+endif()
 
 # for proper include stack reports with gcc when working on the parser:
 # remove ENFORCE_COMPATIBLE_ERROR_AWARE_CODE from kdevpgqt_generate

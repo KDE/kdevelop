@@ -128,11 +128,18 @@ if(KSysGuard_FOUND)
     set(HAVE_KSYSGUARD TRUE)
 endif()
 
-find_package(KDevelop-PG-Qt 2.3)
-set_package_properties(KDevelop-PG-Qt PROPERTIES
+find_package(KDevelopPGQt 2.4 QUIET) # TODO KDevelopPGQt-2.4-or-later-required: remove QUIET again
+set_package_properties(KDevelopPGQt PROPERTIES
     PURPOSE "KDevelop parser generator library. Required for the QMake Builder/Manager plugin."
     TYPE RECOMMENDED
 )
+if (NOT KDevelopPGQt_FOUND)
+    find_package(KDevelop-PG-Qt 2.3)
+    set_package_properties(KDevelop-PG-Qt PROPERTIES
+        PURPOSE "KDevelop parser generator library (older name & version). Required for the QMake Builder/Manager plugin."
+        TYPE RECOMMENDED
+    )
+endif()
 
 find_package(SharedMimeInfo 1.9 REQUIRED)
 
