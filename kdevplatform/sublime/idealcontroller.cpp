@@ -240,9 +240,6 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         return;
     }
 
-    View *view = dock->view();
-    QAction* action = m_view_to_action.value(view);
-
     const auto previousArea = dock->dockWidgetArea();
 
     if (previousArea == area) {
@@ -251,13 +248,6 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         // 1) user drags to the same area
         // 2) user rearranges tool views inside the same area
         // 3) state restoration shows the dock widget
-
-        // in 3rd case we need to show dock if we don't want it to be shown
-        // TODO: adymo: invent a better solution for the restoration problem
-        if (!action->isChecked() && dock->isVisible()) {
-            dock->hide();
-        }
-
         qCDebug(SUBLIME) << "dock widget" << PrintDockWidget{dock} << "remains in" << area;
         return;
     }
@@ -265,6 +255,8 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
     qCDebug(SUBLIME) << "dock widget" << PrintDockWidget{dock} << "location changed from" << previousArea << "to"
                      << area;
 
+    auto* const view = dock->view();
+    auto* const action = m_view_to_action.value(view);
     const auto isVisible = dock->isVisible();
 
     barForDockArea(previousArea)->removeAction(action);
@@ -279,7 +271,6 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
     }
 
     setShowDockStatus(area, true);
-    emit dockShown(view, Sublime::dockAreaToPosition(area), true);
 
     // after drag, the tool view loses focus, so focus it again
     dock->setFocus(Qt::ShortcutFocusReason);
@@ -326,14 +317,12 @@ void IdealController::slotDockBarContextMenuRequested(const QPoint& position)
     emit dockBarContextMenuRequested(bar->area(), bar->mapToGlobal(position));
 }
 
-void IdealController::raiseView(View* view, RaiseMode mode)
+void IdealController::raiseView(View* view)
 {
     QAction* action = m_view_to_action.value(view);
     Q_ASSERT(action);
 
     QWidget *focusWidget = m_mainWindow->focusWidget();
-
-    action->setProperty("raise", mode);
     action->setChecked(true);
     // TODO: adymo: hack: focus needs to stay inside the previously
     // focused widget (setChecked will focus the tool view)
@@ -351,14 +340,12 @@ void IdealController::showDockWidget(IdealDockWidget* dock, bool show)
         dock->show();
     } else {
         // Calling dock->hide() is necessary to make QMainWindow::saveState() store its removed state correctly.
-        // Without this call, a previously hidden dock widget can become visible on next KDevelop start, while
-        // its associated tool view action (button) correctly but inconsistently remains unchecked (see QTBUG-11909).
+        // Without this call, a previously hidden tool view can become shown on next KDevelop start (see QTBUG-11909).
         dock->hide();
         m_mainWindow->removeDockWidget(dock);
     }
 
     setShowDockStatus(area, show);
-    emit dockShown(dock->view(), Sublime::dockAreaToPosition(area), show);
 
     if (!show)
         // Put the focus back on the editor if a dock was hidden
@@ -391,6 +378,11 @@ void IdealController::setShowDockStatus(Qt::DockWidgetArea area, bool checked)
     if (!checked && barForDockArea(area)->lastCheckedActionsTracker().isAnyChecked()) {
         return; // another checked action remains => nothing to do
     }
+    forceSetShowDockStatus(area, checked);
+}
+
+void IdealController::forceSetShowDockStatus(Qt::DockWidgetArea area, bool checked)
+{
     QAction* action = actionForArea(area);
     if (action->isChecked() != checked) {
         QSignalBlocker blocker(action);
@@ -448,6 +440,25 @@ void IdealController::removeView(View* view, bool nondestructive)
         view->widget()->setParent(nullptr);
 
     delete dock;
+}
+
+QList<View*> IdealController::shownViews() const
+{
+    QList<View*> shown;
+    for (const auto [view, action] : m_view_to_action.asKeyValueRange()) {
+        if (action->isChecked()) {
+            shown.push_back(view);
+        }
+    }
+    return shown;
+}
+
+void IdealController::adaptToDockWidgetVisibilities()
+{
+    forEachButtonBarWidget([this](IdealButtonBarWidget& buttonBarWidget) {
+        buttonBarWidget.adaptToDockWidgetVisibilities();
+        forceSetShowDockStatus(buttonBarWidget.area(), buttonBarWidget.lastCheckedActionsTracker().isAnyChecked());
+    });
 }
 
 void IdealController::loadButtonOrderSettings(const KConfigGroup& configGroup)

@@ -36,8 +36,13 @@
 namespace Sublime {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
-:controller(controller), area(nullptr), activeView(nullptr), activeToolView(nullptr), bgCentralWidget(nullptr),
- ignoreDockShown(false), autoAreaSettingsSave(false), m_mainWindow(w)
+    : controller(controller)
+    , area(nullptr)
+    , activeView(nullptr)
+    , activeToolView(nullptr)
+    , bgCentralWidget(nullptr)
+    , autoAreaSettingsSave(false)
+    , m_mainWindow(w)
 {
     KActionCollection *ac = m_mainWindow->actionCollection();
 
@@ -118,11 +123,6 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     m_mainWindow->setCentralWidget(centralWidget);
 
-    connect(idealController,
-            &IdealController::dockShown,
-            this,
-            &MainWindowPrivate::slotDockShown);
-
     connect(idealController, &IdealController::dockBarContextMenuRequested,
             m_mainWindow, &MainWindow::dockBarContextMenuRequested);
 }
@@ -133,6 +133,17 @@ MainWindowPrivate::~MainWindowPrivate()
     // create working copy as messages are auto-removing themselves from the hash on destruction
     const auto messages = m_messageHash.keys();
     qDeleteAll(messages);
+}
+
+void MainWindowPrivate::adaptToDockWidgetVisibilities()
+{
+    qCDebug(SUBLIME) << "adapting to dock widget visibilities";
+
+    Q_ASSERT(m_mainWindow->isVisible());
+    waitingToAdaptToDockWidgetVisibilities = false;
+    idealController->adaptToDockWidgetVisibilities();
+
+    emit m_mainWindow->toolViewVisibilityRestored(idealController->shownViews());
 }
 
 void MainWindowPrivate::disableConcentrationMode()
@@ -360,24 +371,12 @@ void MainWindowPrivate::reconstructViews(const QList<View*>& topViews)
 
 void MainWindowPrivate::reconstruct()
 {
+    qCDebug(SUBLIME) << "reconstructing area" << area;
+
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, Sublime::AllPositions);
 
     reconstructViews();
-
-    {
-        QSignalBlocker blocker(m_mainWindow);
-        qCDebug(SUBLIME) << "RECONSTRUCT" << area << area->shownToolViews(Sublime::Left);
-        for (View* view : std::as_const(area->toolViews())) {
-            QString id = view->document()->documentSpecifier();
-            if (!id.isEmpty())
-            {
-                Sublime::Position pos = area->toolViewPosition(view);
-                if (area->shownToolViews(pos).contains(id))
-                    idealController->raiseView(view, IdealController::GroupWithOtherViews);
-            }
-        }
-    }
 }
 
 void MainWindowPrivate::clearArea()
@@ -416,33 +415,6 @@ void MainWindowPrivate::cleanCentralWidget()
         delete splitterCentralWidget->widget(0);
 
     setBackgroundVisible(true);
-}
-
-struct ShownToolViewFinder {
-    ShownToolViewFinder() {}
-    Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
-    {
-        if (v->hasWidget() && v->widget()->isVisible())
-            views << v;
-        return Area::ContinueWalker;
-    }
-    QList<View *> views;
-};
-
-void MainWindowPrivate::slotDockShown(Sublime::View* /*view*/, Sublime::Position pos, bool /*shown*/)
-{
-    if (ignoreDockShown)
-        return;
-
-    ShownToolViewFinder finder;
-    m_mainWindow->area()->walkToolViews(finder, pos);
-
-    QStringList ids;
-    ids.reserve(finder.views.size());
-    for (View* v : std::as_const(finder.views)) {
-        ids << v->document()->documentSpecifier();
-    }
-    area->setShownToolViews(pos, ids);
 }
 
 void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)

@@ -9,6 +9,8 @@
 #ifndef IDEALBUTTONBARWIDGET_H
 #define IDEALBUTTONBARWIDGET_H
 
+#include <util/toggleonlybool.h>
+
 #include <QWidget>
 
 #include <memory>
@@ -110,6 +112,11 @@ public:
 
     bool isEmpty() const;
 
+    /**
+     * Set the checked state of each tool view action to the visibility of its dock widget.
+     */
+    void adaptToDockWidgetVisibilities();
+
     void loadOrderSettings(const KConfigGroup& configGroup);
     void saveOrderSettings(KConfigGroup& configGroup);
 
@@ -137,6 +144,13 @@ private:
     template<typename ToolViewActionUser>
     void forEachToolViewAction(ToolViewActionUser callback) const;
 
+    /**
+     * Whether we are in the process of setting the checked state
+     * of each tool view action to the visibility of its dock widget.
+     *
+     * Exclusive checking and showing/hiding dock widgets in showWidget() are inhibited while this is @c true.
+     */
+    KDevelop::ToggleOnlyBool m_adaptingToDockWidgetVisibilities{false};
     Qt::DockWidgetArea m_area;
     IdealController* m_controller;
     QWidget* m_corner;

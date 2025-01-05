@@ -394,6 +394,17 @@ bool IdealButtonBarWidget::isEmpty() const
     return actions().isEmpty();
 }
 
+void IdealButtonBarWidget::adaptToDockWidgetVisibilities()
+{
+    const auto guard = m_adaptingToDockWidgetVisibilities.makeGuard(true);
+    forEachToolViewAction([](ToolViewAction& action) {
+        const auto visible = action.dockWidget()->isVisible();
+        if (action.isChecked() != visible) {
+            action.setChecked(visible);
+        }
+    });
+}
+
 QString IdealButtonBarWidget::id(const IdealToolButton* button) const
 {
     const auto* const action = knownValidToolViewAction(button->defaultAction());
@@ -487,19 +498,6 @@ Qt::DockWidgetArea IdealButtonBarWidget::area() const
     return m_area;
 }
 
-static IdealController::RaiseMode takeRaiseModeFrom(ToolViewAction& action)
-{
-    constexpr const char* propertyName = "raise";
-    bool propertySet;
-    // When the property is not set, QVariant::toInt() returns 0, which is converted to the default mode HideOtherViews.
-    const auto mode = static_cast<IdealController::RaiseMode>(action.property(propertyName).toInt(&propertySet));
-    if (propertySet) {
-        // Unset the property to prevent subsequent showWidget() calls from grouping by default.
-        action.setProperty(propertyName, QVariant{});
-    }
-    return mode;
-}
-
 void IdealButtonBarWidget::showWidget(bool checked)
 {
     auto* const widgetAction = knownValidToolViewAction(sender());
@@ -508,8 +506,8 @@ void IdealButtonBarWidget::showWidget(bool checked)
     if (checked) {
         m_lastCheckedActionsTracker->justChecked(widgetAction);
 
-        if (!m_lastCheckedActionsTracker->isExclusiveCheckingInhibited()
-            && takeRaiseModeFrom(*widgetAction) == IdealController::HideOtherViews
+        if (!m_adaptingToDockWidgetVisibilities
+            && !m_lastCheckedActionsTracker->isExclusiveCheckingInhibited()
             // holding the Ctrl key forces grouping
             && !QApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
             // Make sure only one widget is visible at any time.
@@ -526,7 +524,9 @@ void IdealButtonBarWidget::showWidget(bool checked)
         m_lastCheckedActionsTracker->justUnchecked(widgetAction);
     }
 
-    m_controller->showDockWidget(widgetAction->dockWidget(), checked);
+    if (!m_adaptingToDockWidgetVisibilities) {
+        m_controller->showDockWidget(widgetAction->dockWidget(), checked);
+    }
 }
 
 template<typename ToolViewActionUser>

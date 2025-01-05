@@ -88,8 +88,20 @@ public:
     QSplitter* splitterCentralWidget;
 
     IdealController *idealController;
-    bool ignoreDockShown;
     bool autoAreaSettingsSave;
+    /**
+     * Whether to call adaptToDockWidgetVisibilities() when the main window becomes visible.
+     *
+     * Waiting until the main window becomes visible on KDevelop start is necessary,
+     * because while it is invisible, all dock widgets are invisible as well, which
+     * prevents checking any tool view actions in adaptToDockWidgetVisibilities().
+     */
+    bool waitingToAdaptToDockWidgetVisibilities = false;
+
+    /**
+     * Adapt to dock widget visibilities and emit MainWindow::toolViewVisibilityRestored().
+     */
+    void adaptToDockWidgetVisibilities();
 
     bool eventFilter(QObject* obj, QEvent* event) override;
     void disableConcentrationMode();
@@ -108,7 +120,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void updateAreaSwitcher(Sublime::Area *area);
-    void slotDockShown(Sublime::View*, Sublime::Position, bool);
     void widgetCloseRequest(QWidget* widget);
 
     void focusEditor();

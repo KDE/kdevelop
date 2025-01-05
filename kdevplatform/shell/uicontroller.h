@@ -96,8 +96,8 @@ public Q_SLOTS:
 private Q_SLOTS:
     void addNewToolView(MainWindow* mw, QListWidgetItem* item);
 
-    void slotAreaChanged(Sublime::Area* area);
     void slotActiveToolViewChanged(Sublime::View* view);
+    void toolViewVisibilityRestored(const QList<Sublime::View*>& visibleToolViews);
 
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,

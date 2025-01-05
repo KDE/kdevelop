@@ -117,6 +117,13 @@ Q_SIGNALS:
     /**Emitted when the active tool view is changed.*/
     void activeToolViewChanged(Sublime::View*);
 
+    /**
+     * Emitted when restoring the main window state changes tool view visibility.
+     *
+     * @param visibleToolViews the new list of visible tool views
+     */
+    void toolViewVisibilityRestored(const QList<Sublime::View*>& visibleToolViews);
+
     /**Emitted when a new view is added to the mainwindow.*/
     void viewAdded(Sublime::View*);
     /**Emitted when a view is going to be removed from the mainwindow.*/
@@ -129,6 +136,8 @@ protected:
      * Override to load more but do not forget to call the base class's function.
      */
     virtual void loadSettings();
+
+    void showEvent(QShowEvent* event) override;
 
     QWidget *statusBarLocation() const;
     virtual void initializeStatusBar();

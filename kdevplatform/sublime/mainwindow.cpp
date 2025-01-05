@@ -127,11 +127,6 @@ void MainWindow::setArea(Area *area)
     }
 
     bool differentArea = (area != d->area);
-    /* All views will be removed from dock area now.  However, this does
-       not mean those are removed from area, so prevent slotDockShown
-       from recording those views as no longer shown in the area.  */
-    d->ignoreDockShown = true;
-
     if (d->autoAreaSettingsSave && differentArea)
         saveSettings();
 
@@ -148,7 +143,6 @@ void MainWindow::setArea(Area *area)
 
     initializeStatusBar();
     emit areaChanged(area);
-    d->ignoreDockShown = false;
 
     hu.stop();
 
@@ -306,7 +300,24 @@ void MainWindow::loadSettings()
 
     d->idealController->loadButtonOrderSettings(cg);
 
+    if (isVisible()) {
+        d->adaptToDockWidgetVisibilities();
+    } else {
+        d->waitingToAdaptToDockWidgetVisibilities = true;
+    }
+
     d->disableConcentrationMode();
+}
+
+void MainWindow::showEvent(QShowEvent* event)
+{
+    Q_D(MainWindow);
+
+    KParts::MainWindow::showEvent(event);
+
+    if (d->waitingToAdaptToDockWidgetVisibilities) {
+        d->adaptToDockWidgetVisibilities();
+    }
 }
 
 void MainWindow::postMessage(Message* message)

@@ -13,6 +13,7 @@
 
 #include <QAction>
 #include <QHash>
+#include <QList>
 
 class KActionMenu;
 class KConfigGroup;
@@ -34,8 +35,7 @@ public:
 
     void addView(Qt::DockWidgetArea area, View* view);
 
-    enum RaiseMode { HideOtherViews, GroupWithOtherViews };
-    void raiseView(View* view, RaiseMode mode = HideOtherViews);
+    void raiseView(View* view);
     void showDockWidget(IdealDockWidget* dock, bool show);
     QWidget *statusBarLocation() const;
     QAction* actionForView(View* view) const;
@@ -44,6 +44,23 @@ public:
         is not deleted, as is left with NULL parent.
         Otherwise, it's deleted.  */
     void removeView(View* view, bool nondestructive = false);
+
+    /**
+     * @return the list of currently shown tool views
+     *
+     * @note This function determines whether a tool view is shown by testing the checked state of its action.
+     *       So if called before adaptToDockWidgetVisibilities(), it returns the list of previously shown views.
+     */
+    [[nodiscard]] QList<View*> shownViews() const;
+
+    /**
+     * Set the checked state of each tool view action to the visibility of its dock widget
+     * and update the checked state of each Show Dock action accordingly.
+     *
+     * @note Call this function when restoring the main window state makes some dock widgets visible
+     *       without checking their tool view actions. This function ensures tool view UI consistency.
+     */
+    void adaptToDockWidgetVisibilities();
 
     void loadButtonOrderSettings(const KConfigGroup& configGroup);
     void saveButtonOrderSettings(KConfigGroup& configGroup);
@@ -66,7 +83,6 @@ Q_SIGNALS:
         /// Emitted, when a context menu is requested on one of the dock bars.
     /// When no actions gets associated to the QMenu, it won't be shown.
     void dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position);
-    void dockShown(Sublime::View*, Sublime::Position pos, bool shown);
 
 private Q_SLOTS:
     void slotDockBarContextMenuRequested(const QPoint& position);
@@ -94,6 +110,10 @@ private:
      * the checked state of a tool view action in the same area becomes @p checked.
      */
     void setShowDockStatus(Qt::DockWidgetArea area, bool checked);
+    /**
+     * Set the checked state of the Show Dock action for a given area to @p checked.
+     */
+    void forceSetShowDockStatus(Qt::DockWidgetArea area, bool checked);
 
     /**
      * @return the Show Dock action for a given area

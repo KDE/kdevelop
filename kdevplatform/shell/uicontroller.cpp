@@ -223,7 +223,7 @@ UiController::~UiController() = default;
 void UiController::mainWindowAdded(Sublime::MainWindow* mainWindow)
 {
     connect(mainWindow, &MainWindow::activeToolViewChanged, this, &UiController::slotActiveToolViewChanged);
-    connect(mainWindow, &MainWindow::areaChanged, this, &UiController::slotAreaChanged); // also check after area reconstruction
+    connect(mainWindow, &MainWindow::toolViewVisibilityRestored, this, &UiController::toolViewVisibilityRestored);
     connect(mainWindow, &MainWindow::areaCleared, Core::self()->workingSetControllerInternal(), &WorkingSetController::saveArea);
 }
 
@@ -238,6 +238,9 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     //       config group keys should include some main window identifier. The configGroupName()
     //       function defined in sublime/mainwindow.cpp will have to be adapted for this purpose.
     //       The main window identification can be similar to the existing one in UiController::saveAllAreas().
+    // TODO: move UiControllerPrivate::activeActionListener and its management into MainWindow so that each
+    //       main window tracks its own active action listener, and the actions "Jump to Next Outputmark" and
+    //       "Jump to Previous Outputmark" are applied to the active main window's active action listener.
     auto *main = new MainWindow(this);
 
     addMainWindow(main);
@@ -350,22 +353,6 @@ void KDevelop::UiController::raiseToolView(Sublime::View * view)
     slotActiveToolViewChanged(view);
 }
 
-void UiController::slotAreaChanged(Sublime::Area*)
-{
-    // this slot gets call if an area in *any* MainWindow changed
-    // so let's first get the "active area"
-    const auto area = activeSublimeWindow()->area();
-    if (area) {
-        // walk through shown tool views and maku sure the
-        const auto shownIds = area->shownToolViews(Sublime::AllPositions);
-        for (Sublime::View* toolView : std::as_const(area->toolViews())) {
-            if (shownIds.contains(toolView->document()->documentSpecifier())) {
-                slotActiveToolViewChanged(toolView);
-            }
-        }
-    }
-}
-
 void UiController::slotActiveToolViewChanged(Sublime::View* view)
 {
     Q_D(UiController);
@@ -377,6 +364,24 @@ void UiController::slotActiveToolViewChanged(Sublime::View* view)
     // record the last active tool view action listener
     if (qobject_cast<IToolViewActionListener*>(view->widget())) {
         d->activeActionListener = view->widget();
+    }
+}
+
+void UiController::toolViewVisibilityRestored(const QList<Sublime::View*>& visibleToolViews)
+{
+    Q_D(UiController);
+
+    if (sender() != activeSublimeWindow()) {
+        return; // a tool view in an inactive main window should not become the active action listener
+    }
+
+    for (auto* const view : visibleToolViews) {
+        Q_ASSERT(view);
+        auto* const widget = view->widget();
+        if (qobject_cast<IToolViewActionListener*>(widget)) {
+            d->activeActionListener = widget;
+            break; // only one action listener can be active at a time, so no need to keep looking for another one
+        }
     }
 }
 

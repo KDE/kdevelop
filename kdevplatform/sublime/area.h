@@ -156,8 +156,6 @@ public:
        added with 'addToolView', however, this method can be used
        to guess a set of tool views that make most sense to be added.  */
     bool wantToolView(const QString& id);
-    void setShownToolViews(Sublime::Position pos, const QStringList& ids);
-    QStringList shownToolViews(Sublime::Position pos) const;
     void setDesiredToolViews(
         const QMap<QString, Sublime::Position>& desiredToolViews);
 

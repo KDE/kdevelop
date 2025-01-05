@@ -38,7 +38,6 @@ public:
      , controller(p.controller)
      , toolViewPositions()
      , desiredToolViews(p.desiredToolViews)
-     , shownToolViews(p.shownToolViews)
      , iconName(p.iconName)
      , workingSet(p.workingSet)
      , workingSetPersists(p.workingSetPersists)
@@ -81,7 +80,6 @@ public:
     QList<View*> toolViews;
     QMap<View *, Sublime::Position> toolViewPositions;
     QMap<QString, Sublime::Position> desiredToolViews;
-    QMap<Sublime::Position, QStringList> shownToolViews;
     QString iconName;
     QString workingSet;
     bool workingSetPersists = true;
@@ -332,10 +330,6 @@ void Area::save(KConfigGroup& group) const
     }
     group.writeEntry("desired views", desired);
     qCDebug(SUBLIME) << "save" << this << "wrote" << group.readEntry("desired views", "");
-    group.writeEntry("view on left", shownToolViews(Sublime::Left));
-    group.writeEntry("view on right", shownToolViews(Sublime::Right));
-    group.writeEntry("view on top", shownToolViews(Sublime::Top));
-    group.writeEntry("view on bottom", shownToolViews(Sublime::Bottom));
 }
 
 void Area::load(const KConfigGroup& group)
@@ -360,12 +354,6 @@ void Area::load(const KConfigGroup& group)
             d->desiredToolViews[id] = pos;
         }
     }
-    setShownToolViews(Sublime::Left, group.readEntry("view on left", QStringList()));
-    setShownToolViews(Sublime::Right,
-                     group.readEntry("view on right", QStringList()));
-    setShownToolViews(Sublime::Top, group.readEntry("view on top", QStringList()));
-    setShownToolViews(Sublime::Bottom,
-                     group.readEntry("view on bottom", QStringList()));
 }
 
 bool Area::wantToolView(const QString& id)
@@ -373,29 +361,6 @@ bool Area::wantToolView(const QString& id)
     Q_D(Area);
 
     return (d->desiredToolViews.contains(id));
-}
-
-void Area::setShownToolViews(Sublime::Position pos, const QStringList& ids)
-{
-    Q_D(Area);
-
-    d->shownToolViews[pos] = ids;
-}
-
-QStringList Area::shownToolViews(Sublime::Position pos) const
-{
-    Q_D(const Area);
-
-    if (pos == Sublime::AllPositions) {
-        QStringList allIds;
-        allIds.reserve(d->shownToolViews.size());
-        std::for_each(d->shownToolViews.constBegin(), d->shownToolViews.constEnd(), [&](const QStringList& ids) {
-            allIds << ids;
-        });
-        return allIds;
-    }
-
-    return d->shownToolViews[pos];
 }
 
 void Area::setDesiredToolViews(
