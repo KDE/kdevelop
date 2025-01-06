@@ -201,20 +201,15 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     dock->hide();
 }
 
-bool IdealController::addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidget* dock, View* view, bool checked)
+void IdealController::addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidget* dock, View* view, bool checked)
 {
     auto* const bar = barForDockArea(area);
-    if (!bar) {
-        return false;
-    }
 
     auto* const action = bar->addWidget(dock, m_mainWindow->area(), view, checked);
     m_view_to_action[view] = action;
 
     m_docks->addAction(action);
     connect(dock, &IdealDockWidget::closeRequested, action, &QAction::toggle);
-
-    return true;
 }
 
 void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
@@ -257,14 +252,10 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 
     const auto isVisible = dock->isVisible();
 
-    if (auto* const bar = barForDockArea(previousArea)) {
-        bar->removeAction(action);
-        setShowDockStatus(previousArea, false);
-    }
+    barForDockArea(previousArea)->removeAction(action);
+    setShowDockStatus(previousArea, false);
 
-    if (!addBarWidgetAction(area, dock, view, isVisible)) {
-        return;
-    }
+    addBarWidgetAction(area, dock, view, isVisible);
 
     m_mainWindow->area()->setToolViewPosition(view, dockAreaToPosition(area));
 
@@ -435,9 +426,7 @@ void IdealController::removeView(View* view, bool nondestructive)
     qCDebug(SUBLIME) << "destroying dock widget" << PrintDockWidget{dock} << "in" << dock->dockWidgetArea()
                      << (nondestructive ? "(nondestructive)" : "");
 
-    if (IdealButtonBarWidget* bar = barForDockArea(dock->dockWidgetArea()))
-        bar->removeAction(action);
-
+    barForDockArea(dock->dockWidgetArea())->removeAction(action);
     m_view_to_action.erase(viewIt);
 
     if (nondestructive)
@@ -492,7 +481,6 @@ void IdealController::showRightDock(bool show)
 void IdealController::showDock(Qt::DockWidgetArea area, bool show)
 {
     IdealButtonBarWidget *bar = barForDockArea(area);
-    if (!bar) return;
     auto& actionTracker = bar->lastCheckedActionsTracker();
 
     const auto toggleShowDockActionQuietly = [area, show, this] {

@@ -80,10 +80,8 @@ private:
      * Add a tool view action for a given area, dock widget and tool view.
      *
      * @param checked whether the action should be initially checked
-     *
-     * @return whether the action was added successfully
      */
-    bool addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidget* dock, View* view, bool checked = false);
+    void addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidget* dock, View* view, bool checked = false);
 
     [[nodiscard]] IdealButtonBarWidget* barForDockArea(Qt::DockWidgetArea area) const;
 
