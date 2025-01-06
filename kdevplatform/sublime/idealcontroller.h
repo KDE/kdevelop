@@ -88,7 +88,16 @@ private:
     void forEachToolBar(ToolBarUser callback) const;
 
     void focusEditor();
+
+    /**
+     * Update the checked state of the Show Dock action for a given area when
+     * the checked state of a tool view action in the same area becomes @p checked.
+     */
     void setShowDockStatus(Qt::DockWidgetArea area, bool checked);
+
+    /**
+     * @return the Show Dock action for a given area
+     */
     [[nodiscard]] QAction* actionForArea(Qt::DockWidgetArea area) const;
 
     void showDockActionToggled(QObject* senderAction, const IdealButtonBarWidget& buttonBarWidget, bool show);
