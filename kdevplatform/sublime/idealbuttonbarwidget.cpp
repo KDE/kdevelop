@@ -314,8 +314,6 @@ Qt::DockWidgetArea IdealButtonBarWidget::area() const
 
 void IdealButtonBarWidget::showWidget(bool checked)
 {
-    Q_ASSERT(parentWidget() != nullptr);
-
     auto *action = qobject_cast<QAction *>(sender());
     Q_ASSERT(action);
 
