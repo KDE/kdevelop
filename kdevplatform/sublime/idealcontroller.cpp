@@ -396,7 +396,6 @@ QAction* IdealController::actionForArea(Qt::DockWidgetArea area) const
 {
     switch (area) {
         case Qt::LeftDockWidgetArea:
-        default:
             return m_showLeftDock;
         case Qt::RightDockWidgetArea:
             return m_showRightDock;
@@ -404,6 +403,9 @@ QAction* IdealController::actionForArea(Qt::DockWidgetArea area) const
             return m_showTopDock;
         case Qt::BottomDockWidgetArea:
             return m_showBottomDock;
+        default:
+            Q_ASSERT(false);
+            return nullptr;
     }
 }
 
