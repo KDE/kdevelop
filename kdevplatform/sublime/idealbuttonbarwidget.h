@@ -21,7 +21,6 @@ class KConfigGroup;
 namespace Sublime
 {
 
-class MainWindow;
 class IdealController;
 class IdealDockWidget;
 class IdealButtonBarLayout;
@@ -85,8 +84,7 @@ class IdealButtonBarWidget: public QWidget
     Q_OBJECT
 
 public:
-    IdealButtonBarWidget(Qt::DockWidgetArea area,
-        IdealController *controller, Sublime::MainWindow *parent);
+    IdealButtonBarWidget(Qt::DockWidgetArea area, IdealController* controller, QWidget* parent);
 
     /**
      * Add a tool view action for a given dock widget and tool view to this widget.

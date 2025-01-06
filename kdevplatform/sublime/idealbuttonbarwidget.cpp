@@ -7,7 +7,6 @@
 */
 
 #include "idealbuttonbarwidget.h"
-#include "mainwindow.h"
 #include "idealdockwidget.h"
 #include "ideallayout.h"
 #include "idealtoolbutton.h"
@@ -271,8 +270,7 @@ private:
     bool m_lastSavedAnyCheckedState = false;
 };
 
-IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
-        IdealController *controller, Sublime::MainWindow *parent)
+IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealController* controller, QWidget* parent)
     : QWidget(parent)
     , m_area(area)
     , m_controller(controller)
