@@ -23,7 +23,6 @@ class View;
 class MainWindow;
 class IdealButtonBarWidget;
 class IdealDockWidget;
-class View;
 
 class IdealController: public QObject
 {
