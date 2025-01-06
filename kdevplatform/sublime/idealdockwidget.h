@@ -12,13 +12,15 @@
 #include <QDockWidget>
 #include "idealcontroller.h"
 
+class QMainWindow;
+
 namespace Sublime {
 class IdealDockWidget : public QDockWidget
 {
     Q_OBJECT
 
 public:
-    IdealDockWidget(IdealController *controller, Sublime::MainWindow *parent);
+    explicit IdealDockWidget(IdealController* controller, QMainWindow* parent);
     ~IdealDockWidget() override;
 
     Area *area() const;

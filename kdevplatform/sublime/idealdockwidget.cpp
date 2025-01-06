@@ -7,7 +7,6 @@
 */
 
 #include "idealdockwidget.h"
-#include "mainwindow.h"
 #include "area.h"
 #include "document.h"
 #include "view.h"
@@ -22,13 +21,15 @@
 #include <QAbstractButton>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QMainWindow>
+#include <QMenu>
 #include <QToolBar>
 #include <QVBoxLayout>
 #include <QActionGroup>
 
 using namespace Sublime;
 
-IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindow *parent)
+IdealDockWidget::IdealDockWidget(IdealController* controller, QMainWindow* parent)
     : QDockWidget(parent),
       m_area(nullptr),
       m_view(nullptr),
