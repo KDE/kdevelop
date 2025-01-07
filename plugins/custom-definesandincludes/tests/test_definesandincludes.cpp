@@ -28,7 +28,8 @@ void TestDefinesAndIncludes::cleanupTestCase()
 
 void TestDefinesAndIncludes::initTestCase()
 {
-    AutoTestShell::init({QStringLiteral("kdevdefinesandincludesmanager"), QStringLiteral("KDevCustomBuildSystem"), QStringLiteral("KDevStandardOutputView")});
+    // used KDevDefinesAndIncludesManager has "X-KDevelop-LoadMode": "AlwaysOn", so no need to try to load explicitly
+    AutoTestShell::init({QStringLiteral("KDevCustomBuildSystem"), QStringLiteral("KDevStandardOutputView")});
     TestCore::initialize();
 }
 
