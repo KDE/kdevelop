@@ -213,11 +213,14 @@ void ProblemsView::setupActions()
                 filterTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
         auto* filterAction = new QWidgetAction(this);
+        filterAction->setText(m_filterEdit->placeholderText());
+        connect(filterAction, &QAction::triggered, this, [this] {
+            m_filterEdit->setFocus();
+        });
         filterAction->setDefaultWidget(m_filterEdit);
         addAction(filterAction);
 
         m_prevTabIdx = -1;
-        setFocusProxy(m_filterEdit);
     }
 }
 
@@ -248,8 +251,6 @@ void ProblemsView::updateActions()
     }
 
     problemModel->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
-
-    setFocus(); // set focus to default widget (filterEdit)
 }
 
 /// TODO: Move to util?
