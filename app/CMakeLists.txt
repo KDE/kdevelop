@@ -51,7 +51,9 @@ target_link_libraries(kdevelop
     KDev::Shell
     KDev::Util
 
+    KF6::ConfigWidgets
     KF6::Crash
+    KF6::IconThemes
 
     Qt::DBus
     Qt::Quick

@@ -22,6 +22,11 @@
 #include <KLocalizedString>
 #include <KAboutData>
 #include <KCrash>
+#include <KIconTheme>
+#define HAVE_STYLE_MANAGER __has_include(<KStyleManager>) // since KConfigWidgets 6.3
+#if HAVE_STYLE_MANAGER
+#include <KStyleManager>
+#endif
 
 #include <QApplication>
 #include <QElapsedTimer>
@@ -334,6 +339,10 @@ int main( int argc, char *argv[] )
     }
 #endif
 
+#if KICONTHEMES_VERSION >= QT_VERSION_CHECK(6, 3, 0)
+    KIconTheme::initTheme();
+#endif
+
     //we can't use KCmdLineArgs as it doesn't allow arguments for the debugee
     //so lookup the --debug switch and eat everything behind by decrementing argc
     //debugArgs is filled with args after --debug <debuger>
@@ -364,6 +373,10 @@ int main( int argc, char *argv[] )
     // happen during a Debug Launch of KDevelop from KDevelop, especially if a breakpoint is hit
     // before any event loop is entered.
     QCoreApplication::processEvents();
+
+#if HAVE_STYLE_MANAGER
+    KStyleManager::initStyle();
+#endif
 
     KLocalizedString::setApplicationDomain(QByteArrayLiteral("kdevelop"));
 
