@@ -10,11 +10,14 @@
 #define IDEALDOCKWIDGET_H
 
 #include <QDockWidget>
-#include "idealcontroller.h"
 
 class QMainWindow;
 
 namespace Sublime {
+class Area;
+class IdealController;
+class View;
+
 class IdealDockWidget : public QDockWidget
 {
     Q_OBJECT

@@ -9,6 +9,7 @@
 #include "idealdockwidget.h"
 #include "area.h"
 #include "document.h"
+#include "idealcontroller.h"
 #include "view.h"
 
 #include <util/scopeddialog.h>
