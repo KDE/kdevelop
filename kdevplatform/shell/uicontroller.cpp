@@ -216,15 +216,9 @@ UiController::UiController(Core *core)
 
     if (!defaultMainWindow() || (Core::self()->setupFlags() & Core::NoUi))
         return;
-
-    setupActions();
 }
 
 UiController::~UiController() = default;
-
-void UiController::setupActions()
-{
-}
 
 void UiController::mainWindowAdded(Sublime::MainWindow* mainWindow)
 {
