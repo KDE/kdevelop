@@ -105,6 +105,7 @@ install( FILES
     stack.h
     stringviewhelpers.h
     texteditorhelpers.h
+    toggleonlybool.h
     ${CMAKE_CURRENT_BINARY_DIR}/utilexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/util COMPONENT Devel)
 
