@@ -23,7 +23,6 @@ class KConfigGroup;
 namespace Sublime
 {
 
-class IdealController;
 class IdealDockWidget;
 class IdealButtonBarLayout;
 class View;
@@ -86,7 +85,7 @@ class IdealButtonBarWidget: public QWidget
     Q_OBJECT
 
 public:
-    IdealButtonBarWidget(Qt::DockWidgetArea area, IdealController* controller, QWidget* parent);
+    explicit IdealButtonBarWidget(Qt::DockWidgetArea area, QWidget* parent);
 
     /**
      * Add a tool view action for a given dock widget and tool view to this widget.
@@ -128,6 +127,10 @@ public:
     [[nodiscard]] ILastCheckedActionsTracker& lastCheckedActionsTracker() const;
 
 Q_SIGNALS:
+    /**
+     * Emitted to request changing the visibility of @p widget to @p show.
+     */
+    void showDockWidget(IdealDockWidget* widget, bool show);
     void emptyChanged();
 
 private:
@@ -152,7 +155,6 @@ private:
      */
     KDevelop::ToggleOnlyBool m_adaptingToDockWidgetVisibilities{false};
     Qt::DockWidgetArea m_area;
-    IdealController* m_controller;
     QWidget* m_corner;
     QStringList m_buttonsOrder;
     IdealButtonBarLayout* m_buttonsLayout;

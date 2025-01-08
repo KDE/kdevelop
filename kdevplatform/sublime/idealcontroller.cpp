@@ -107,10 +107,10 @@ private:
 IdealController::IdealController(Sublime::MainWindow* mainWindow)
     : QObject(mainWindow)
     , m_mainWindow(mainWindow)
-    , m_leftBarWidget{new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this, mainWindow)}
-    , m_rightBarWidget{new IdealButtonBarWidget(Qt::RightDockWidgetArea, this, mainWindow)}
-    , m_topBarWidget{new IdealButtonBarWidget(Qt::TopDockWidgetArea, this, mainWindow)}
-    , m_bottomBarWidget{new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this, mainWindow)}
+    , m_leftBarWidget{new IdealButtonBarWidget(Qt::LeftDockWidgetArea, mainWindow)}
+    , m_rightBarWidget{new IdealButtonBarWidget(Qt::RightDockWidgetArea, mainWindow)}
+    , m_topBarWidget{new IdealButtonBarWidget(Qt::TopDockWidgetArea, mainWindow)}
+    , m_bottomBarWidget{new IdealButtonBarWidget(Qt::BottomDockWidgetArea, mainWindow)}
     , m_leftToolBar{new IdealToolBar(i18n("Left Button Bar"), true, m_leftBarWidget, mainWindow)}
     , m_rightToolBar{new IdealToolBar(i18n("Right Button Bar"), true, m_rightBarWidget, mainWindow)}
     // adymo: intentionally do not add a toolbar for top buttonbar
@@ -123,6 +123,7 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow)
     forEachButtonBarWidget([this](IdealButtonBarWidget& buttonBarWidget) {
         connect(&buttonBarWidget, &IdealButtonBarWidget::customContextMenuRequested, this,
                 &IdealController::slotDockBarContextMenuRequested);
+        connect(&buttonBarWidget, &IdealButtonBarWidget::showDockWidget, this, &IdealController::showDockWidget);
     });
 
     m_mainWindow->addToolBar(Qt::LeftToolBarArea, m_leftToolBar);

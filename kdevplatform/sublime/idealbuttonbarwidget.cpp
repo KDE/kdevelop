@@ -270,10 +270,9 @@ private:
     bool m_lastSavedAnyCheckedState = false;
 };
 
-IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealController* controller, QWidget* parent)
+IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, QWidget* parent)
     : QWidget(parent)
     , m_area(area)
-    , m_controller(controller)
     , m_corner(nullptr)
     , m_buttonsLayout(nullptr)
     , m_lastCheckedActionsTracker(new LastCheckedActionsTracker)
@@ -525,7 +524,7 @@ void IdealButtonBarWidget::showWidget(bool checked)
     }
 
     if (!m_adaptingToDockWidgetVisibilities) {
-        m_controller->showDockWidget(widgetAction->dockWidget(), checked);
+        emit showDockWidget(widgetAction->dockWidget(), checked);
     }
 }
 

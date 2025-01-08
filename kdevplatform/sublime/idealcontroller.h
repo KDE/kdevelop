@@ -36,7 +36,6 @@ public:
     void addView(Qt::DockWidgetArea area, View* view);
 
     void raiseView(View* view);
-    void showDockWidget(IdealDockWidget* dock, bool show);
     QWidget *statusBarLocation() const;
     QAction* actionForView(View* view) const;
 
@@ -102,6 +101,8 @@ private:
     void forEachButtonBarWidget(ButtonBarWidgetUser callback) const;
     template<typename ToolBarUser>
     void forEachToolBar(ToolBarUser callback) const;
+
+    void showDockWidget(IdealDockWidget* dock, bool show);
 
     void focusEditor();
 
