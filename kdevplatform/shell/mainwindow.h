@@ -58,12 +58,8 @@ public Q_SLOTS:
         return Sublime::MainWindow::windowTitle();
     }
 
-    void setVisible( bool visible ) override;
     void configureShortcuts();
     void loadSettings() override;
-
-Q_SIGNALS:
-    void finishedLoading();
 
 protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!

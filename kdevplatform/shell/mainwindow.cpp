@@ -404,12 +404,6 @@ void MainWindow::cleanup()
 {
 }
 
-void MainWindow::setVisible( bool visible )
-{
-    KXmlGuiWindow::setVisible( visible );
-    emit finishedLoading();
-}
-
 bool MainWindow::queryClose()
 {
     if (!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(this, IDocument::Default))
