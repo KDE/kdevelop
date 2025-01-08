@@ -106,7 +106,6 @@ private:
     Sublime::View* addToolViewToArea(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
                            Sublime::Area* area, Sublime::Position p=Sublime::AllPositions);
-    void setupActions();
 
 private:
     const QScopedPointer<class UiControllerPrivate> d_ptr;
