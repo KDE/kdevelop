@@ -277,8 +277,6 @@ void MainWindow::loadSettings()
 {
     Q_D(MainWindow);
 
-    HoldUpdates hu(this);
-
     qCDebug(SUBLIME) << "loading settings for" << (area() ? area()->objectName() : QString());
 
     const auto groupName = configGroupName(d->area);
@@ -295,8 +293,6 @@ void MainWindow::loadSettings()
             toolbar->setVisible(visibility);
         }
     }
-
-    hu.stop();
 
     d->idealController->loadButtonOrderSettings(cg);
 
