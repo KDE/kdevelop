@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-01 00:39+0000\n"
+"POT-Creation-Date: 2025-01-09 00:39+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -3054,41 +3054,41 @@ msgctxt "@item problem severity"
 msgid "Error"
 msgstr "Greška"
 
-#: shell/problemmodel.cpp:36
+#: shell/problemmodel.cpp:37
 #, fuzzy, kde-format
 #| msgid "Close all other documents"
 msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
 msgstr "Zatvori ostale dokumente"
 
-#: shell/problemmodel.cpp:321
+#: shell/problemmodel.cpp:323
 #, fuzzy, kde-format
 #| msgid "Source"
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "Izvor"
 
-#: shell/problemmodel.cpp:323
+#: shell/problemmodel.cpp:325
 #, fuzzy, kde-format
 #| msgid "Problem"
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "Problem"
 
-#: shell/problemmodel.cpp:325
+#: shell/problemmodel.cpp:327
 #, fuzzy, kde-format
 #| msgid "New File"
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "Nova datoteka"
 
-#: shell/problemmodel.cpp:327
+#: shell/problemmodel.cpp:329
 #, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr ""
 
-#: shell/problemmodel.cpp:329
+#: shell/problemmodel.cpp:331
 #, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"

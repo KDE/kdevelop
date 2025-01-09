@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform/kdevplatform.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-01 00:39+0000\n"
+"POT-Creation-Date: 2025-01-09 00:39+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -2927,42 +2927,42 @@ msgctxt "@item problem severity"
 msgid "Error"
 msgstr "Earráid"
 
-#: shell/problemmodel.cpp:36
+#: shell/problemmodel.cpp:37
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
 msgstr "Dún gach uile cháipéis oscailte"
 
-#: shell/problemmodel.cpp:321
+#: shell/problemmodel.cpp:323
 #, fuzzy, kde-format
 #| msgid "Source"
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "Foinse"
 
-#: shell/problemmodel.cpp:323
+#: shell/problemmodel.cpp:325
 #, fuzzy, kde-format
 #| msgid "Problem"
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "Fadhb"
 
-#: shell/problemmodel.cpp:325
+#: shell/problemmodel.cpp:327
 #, fuzzy, kde-format
 #| msgid "File"
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "Comhad"
 
-#: shell/problemmodel.cpp:327
+#: shell/problemmodel.cpp:329
 #, fuzzy, kde-format
 #| msgid "Line"
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr "Líne"
 
-#: shell/problemmodel.cpp:329
+#: shell/problemmodel.cpp:331
 #, fuzzy, kde-format
 #| msgid "Column"
 msgctxt "@title:column column number with problem"

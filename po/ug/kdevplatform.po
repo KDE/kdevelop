@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-01 00:39+0000\n"
+"POT-Creation-Date: 2025-01-09 00:39+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -2864,41 +2864,41 @@ msgctxt "@item problem severity"
 msgid "Error"
 msgstr "خاتالىق"
 
-#: shell/problemmodel.cpp:36
+#: shell/problemmodel.cpp:37
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
 msgstr ""
 
-#: shell/problemmodel.cpp:321
+#: shell/problemmodel.cpp:323
 #, fuzzy, kde-format
 #| msgid "Source"
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "مەنبە"
 
-#: shell/problemmodel.cpp:323
+#: shell/problemmodel.cpp:325
 #, fuzzy, kde-format
 #| msgid "Problem"
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "مەسىلە"
 
-#: shell/problemmodel.cpp:325
+#: shell/problemmodel.cpp:327
 #, fuzzy, kde-format
 #| msgid "File"
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "ھۆججەت"
 
-#: shell/problemmodel.cpp:327
+#: shell/problemmodel.cpp:329
 #, fuzzy, kde-format
 #| msgid "Line"
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr "قۇر"
 
-#: shell/problemmodel.cpp:329
+#: shell/problemmodel.cpp:331
 #, fuzzy, kde-format
 #| msgid "Column"
 msgctxt "@title:column column number with problem"

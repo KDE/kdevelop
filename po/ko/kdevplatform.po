@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-01 00:39+0000\n"
+"POT-Creation-Date: 2025-01-09 00:39+0000\n"
 "PO-Revision-Date: 2024-08-21 00:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -2808,37 +2808,37 @@ msgctxt "@item problem severity"
 msgid "Error"
 msgstr "오류"
 
-#: shell/problemmodel.cpp:36
+#: shell/problemmodel.cpp:37
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
 msgstr "주시하는 모든 문서를 다시 해석"
 
-#: shell/problemmodel.cpp:321
+#: shell/problemmodel.cpp:323
 #, kde-format
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "소스"
 
-#: shell/problemmodel.cpp:323
+#: shell/problemmodel.cpp:325
 #, kde-format
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "문제점"
 
-#: shell/problemmodel.cpp:325
+#: shell/problemmodel.cpp:327
 #, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "파일"
 
-#: shell/problemmodel.cpp:327
+#: shell/problemmodel.cpp:329
 #, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr "줄"
 
-#: shell/problemmodel.cpp:329
+#: shell/problemmodel.cpp:331
 #, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"

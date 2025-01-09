@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-01 00:39+0000\n"
+"POT-Creation-Date: 2025-01-09 00:39+0000\n"
 "PO-Revision-Date: 2024-11-15 18:23+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -2881,37 +2881,37 @@ msgctxt "@item problem severity"
 msgid "Error"
 msgstr "Virhe"
 
-#: shell/problemmodel.cpp:36
+#: shell/problemmodel.cpp:37
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
 msgstr "Jäsennä uudelleen kaikki seuratut tiedostot"
 
-#: shell/problemmodel.cpp:321
+#: shell/problemmodel.cpp:323
 #, kde-format
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "Lähde"
 
-#: shell/problemmodel.cpp:323
+#: shell/problemmodel.cpp:325
 #, kde-format
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "Ongelma"
 
-#: shell/problemmodel.cpp:325
+#: shell/problemmodel.cpp:327
 #, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "Tiedosto"
 
-#: shell/problemmodel.cpp:327
+#: shell/problemmodel.cpp:329
 #, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr "Rivi"
 
-#: shell/problemmodel.cpp:329
+#: shell/problemmodel.cpp:331
 #, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"
