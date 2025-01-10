@@ -74,13 +74,6 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
     KAcceleratorManager::setNoAccel(dock);
     QWidget *w = view->widget(dock);
-    if (w->parent() == nullptr)
-    {
-        /* Could happen when we're moving the widget from
-           one IdealDockWidget to another.  See moveView below.
-           In this case, we need to reparent the widget. */
-        w->setParent(dock);
-    }
 
     QList<QAction *> toolBarActions = view->toolBarActions();
     if (toolBarActions.isEmpty()) {
