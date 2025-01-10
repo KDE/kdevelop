@@ -453,15 +453,35 @@ void IdealController::removeView(View* view, bool nondestructive)
     delete dock;
 }
 
+template<typename ToolViewUser>
+void IdealController::forEachShownToolView(ToolViewUser callback) const
+{
+    for (const auto [view, action] : m_view_to_action.asKeyValueRange()) {
+        if (action->isChecked()) {
+            callback(view);
+        }
+    }
+}
+
 QList<View*> IdealController::shownViews() const
 {
     QList<View*> shown;
-    for (const auto [view, action] : m_view_to_action.asKeyValueRange()) {
-        if (action->isChecked()) {
-            shown.push_back(view);
-        }
-    }
+    forEachShownToolView([&shown](View* view) {
+        shown.push_back(view);
+    });
     return shown;
+}
+
+QList<QDockWidget*> IdealController::shownButInvisibleFloatingDockWidgets() const
+{
+    QList<QDockWidget*> ret;
+    forEachShownToolView([&ret](View* view) {
+        auto* const dockWidget = existentDockWidgetForView(view);
+        if (dockWidget->isFloating() && !dockWidget->isVisible()) {
+            ret.push_back(dockWidget);
+        }
+    });
+    return ret;
 }
 
 void IdealController::adaptToDockWidgetVisibilities()

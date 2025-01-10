@@ -18,6 +18,8 @@
 class KActionMenu;
 class KConfigGroup;
 
+class QDockWidget;
+
 namespace Sublime {
 
 class Area;
@@ -51,6 +53,15 @@ public:
      *       So if called before adaptToDockWidgetVisibilities(), it returns the list of previously shown views.
      */
     [[nodiscard]] QList<View*> shownViews() const;
+
+    /**
+     * @return the list of currently shown (the tool view action is checked) yet invisible floating dock widgets
+     *
+     * @note By definition, if the returned list is nonempty, the visibility of the floating
+     *       dock widgets is out of sync with the checked state of their tool view actions.
+     *       Such a desynchronization occurs if all top-level windows are closed on KDevelop exit.
+     */
+    [[nodiscard]] QList<QDockWidget*> shownButInvisibleFloatingDockWidgets() const;
 
     /**
      * Set the checked state of each tool view action to the visibility of its dock widget
@@ -101,6 +112,9 @@ private:
     void forEachButtonBarWidget(ButtonBarWidgetUser callback) const;
     template<typename ToolBarUser>
     void forEachToolBar(ToolBarUser callback) const;
+
+    template<typename ToolViewUser>
+    void forEachShownToolView(ToolViewUser callback) const;
 
     void showDockWidget(IdealDockWidget* dock, bool show);
 

@@ -8,6 +8,7 @@
 #include "mainwindow_p.h"
 
 #include <QApplication>
+#include <QDockWidget>
 #include <QMenuBar>
 #include <QStatusBar>
 
@@ -252,13 +253,40 @@ void MainWindow::saveSettings()
 {
     Q_D(MainWindow);
 
-    qCDebug(SUBLIME) << "saving settings for" << (d->area ? d->area->objectName() : QString());
-
     d->disableConcentrationMode();
 
     KConfigGroup cg(KSharedConfig::openConfig(), configGroupName(d->area));
 
+    // When the current area changes, all shown dock widgets are visible at this point.
+    //
+    // On KDevelop exit, all non-floating dock widgets are always invisible at this point, because hiding
+    // the main window also hides its every child widget that is not a top-level widget (not a window).
+    // Such a desynchronization of visibility of non-floating dock widgets does not affect their visibility
+    // when the main window state is restored, that is, shown tool views remain shown after restarting KDevelop.
+    //
+    // Exiting KDevelop via the Quit action or via the terminating signal handler closes all
+    // top-level windows, including floating dock widgets. After the closing, all floating dock
+    // widgets also become invisible by this time. As a result, none of the floating dock widgets
+    // becomes visible (and consequently shown) when the main window state is restored. Detect this
+    // bug-producing situation here and make the shown floating dock widgets visible while calling
+    // saveMainWindowSettings(), which saves the main window state. This transient change of
+    // visibility does not cause flickering, because no event loop is entered in saveMainWindowSettings().
+
+    const auto shownButInvisibleFloatingDockWidgets = d->idealController->shownButInvisibleFloatingDockWidgets();
+
+    qCDebug(SUBLIME) << "saving settings for" << (d->area ? d->area->objectName() : QString())
+                     << (shownButInvisibleFloatingDockWidgets.empty()
+                             ? ""
+                             : qUtf8Printable(QStringLiteral("(temporarily making %1 floating dock widget(s) visible)")
+                                                  .arg(shownButInvisibleFloatingDockWidgets.size())));
+
+    for (auto* const dockWidget : shownButInvisibleFloatingDockWidgets) {
+        dockWidget->setVisible(true);
+    }
     saveMainWindowSettings(cg);
+    for (auto* const dockWidget : shownButInvisibleFloatingDockWidgets) {
+        dockWidget->setVisible(false);
+    }
 
     //debugToolBar visibility is stored separately to allow a area dependent default value
     const auto toolBars = this->toolBars();
