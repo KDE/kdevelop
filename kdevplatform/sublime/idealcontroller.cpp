@@ -66,6 +66,24 @@ QDebug operator<<(QDebug debug, PrintDockWidget p)
                               << (p.dockWidget->isVisible() ? " (visible)" : "");
     return debug;
 }
+
+[[nodiscard]] Sublime::IdealDockWidget* existentDockWidgetForView(Sublime::View* view)
+{
+    Q_ASSERT(view);
+    Q_ASSERT(view->hasWidget());
+
+    auto* const viewParent = view->widget()->parentWidget();
+    auto* dockWidget = qobject_cast<Sublime::IdealDockWidget*>(viewParent);
+    if (!dockWidget) {
+        // a tool view widget with a toolbar lives in a QMainWindow that lives in a dock widget
+        Q_ASSERT(qobject_cast<QMainWindow*>(viewParent));
+        dockWidget = qobject_cast<Sublime::IdealDockWidget*>(viewParent->parentWidget());
+    }
+
+    Q_ASSERT(dockWidget);
+    return dockWidget;
+}
+
 } // unnamed namespace
 
 namespace Sublime {
@@ -415,15 +433,7 @@ void IdealController::removeView(View* view, bool nondestructive)
 
     auto* const action = *viewIt;
     Q_ASSERT(action);
-
-    QWidget *viewParent = view->widget()->parentWidget();
-    auto *dock = qobject_cast<IdealDockWidget *>(viewParent);
-    if (!dock) { // tool views with a toolbar live in a QMainWindow which lives in a Dock
-        Q_ASSERT(qobject_cast<QMainWindow*>(viewParent));
-        viewParent = viewParent->parentWidget();
-        dock = qobject_cast<IdealDockWidget*>(viewParent);
-    }
-    Q_ASSERT(dock);
+    auto* const dock = existentDockWidgetForView(view);
 
     /* Hide the view, first.  This is a workaround -- if we
        try to remove IdealDockWidget without this, then eventually
