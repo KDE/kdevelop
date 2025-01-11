@@ -434,10 +434,23 @@ void QtPrintersTest::testQTime()
 void QtPrintersTest::testQDateTime()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qdatetime"));
-    gdb.execute("break qdatetime.cpp:5");
+    gdb.execute("break qdatetime.cpp:34");
     gdb.execute("run");
-    QByteArray out = gdb.execute("print dt");
-    QVERIFY(out.contains("Wed Jan 20 15:31:13 2010"));
+    QCOMPARE(printedValue(gdb, "dt"), "2010-01-20 15:31:13.000 Local");
+    QCOMPARE(printedValue(gdb, "utc"), "2024-02-01 16:28:07.123 UTC");
+    QCOMPARE(printedValue(gdb, "lunchInNewYork"), "2025-01-02 12:00:00.001 UTC-05:00");
+    QCOMPARE(printedValue(gdb, "lunchInHawaii"), "2025-01-02 12:00:00.000 US/Hawaii");
+}
+
+void QtPrintersTest::testQTimeZone()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qdatetime"));
+    gdb.execute("break qdatetime.cpp:34");
+    gdb.execute("run");
+    QCOMPARE(printedValue(gdb, "localTZ"), "Local");
+    QCOMPARE(printedValue(gdb, "utcTZ"), "UTC");
+    QCOMPARE(printedValue(gdb, "newYork"), "UTC-05:00");
+    QCOMPARE(printedValue(gdb, "hawaii"), "US/Hawaii");
 }
 
 void QtPrintersTest::testQUrl()
