@@ -857,13 +857,15 @@ class QTimeZonePrinter(PrinterBaseType):
         if spec == TimeSpec.UTC.value:
             return 'UTC'
         if spec == TimeSpec.OffsetFromUTC.value:
+            offsetFromUtc = int(offsetFromUtc)
             sign = '-' if offsetFromUtc < 0 else '+'
             hours = abs(offsetFromUtc) // 3600
             minutes = (abs(offsetFromUtc) % 3600) // 60
             return f"UTC{sign}{hours:02}:{minutes:02}"
         # ShortData(Qt::TimeZone) has mode == 0, in which case Data is *not* short (and Data::d is nullptr).
-        # QTimeZonePrinter.timeZoneId() is not called if Data is not short, so the final return statement
-        # below should never be reached (unless the QTimeZone object is uninitialized?).
+        # But QDateTimePrinter.to_string() may perhaps pass TimeSpec.TimeZone as the spec in an invalid case.
+        if spec == TimeSpec.TimeZone.value:
+            return QTimeZonePrinter.INVALID
         return f'<error: unhandled time spec {spec}>'
 
     def __init__(self, val):
@@ -876,7 +878,7 @@ class QTimeZonePrinter(PrinterBaseType):
             mode = d['s']['mode']
             spec = (mode + 3) & 3 # QTimeZone::ShortData::spec()
             offsetFromUtc = d['s']['offset']
-            return QTimeZonePrinter.timeZoneId(spec, int(offsetFromUtc))
+            return QTimeZonePrinter.timeZoneId(spec, offsetFromUtc)
         else:
             # QTimeZonePrivate contains:
             # - QSharedData (int) (plus 4 bytes of padding in case of a 64-bit architecture)
@@ -900,37 +902,45 @@ class QDateTimePrinter(PrinterBaseType):
     def extractTimeSpec(status):
         return (status & QDateTimePrinter.TimeSpecMask) >> QDateTimePrinter.TimeSpecShift
 
-    def timeZoneAbbreviation(spec, offsetFromUtc, qTimeZoneData):
-        if spec == TimeSpec.TimeZone.value:
-            # Create a pointer-size buffer and pack the QTimeZone::Data
-            buffer = struct.pack("P", qTimeZoneData)
-            qTimeZone = gdb.Value(buffer, gdb.lookup_type('QTimeZone'))
-            return str(QTimeZonePrinter(qTimeZone).to_string())
-        return QTimeZonePrinter.timeZoneId(spec, offsetFromUtc)
-
     def __init__(self, val):
         self._val = val
 
     def to_string(self):
         d = self._val['d'] # QDateTime::Data
-        if d.cast(gdb.lookup_type('long long')) & 1: # QDateTime::Data::isShort
+        isShort = d.cast(gdb.lookup_type('long long')) & 1 # QDateTime::Data::isShort
+        if isShort:
             msecs = d['data']['msecs']
             status = d['data']['status']
             offsetFromUtc = 0
-            qTimeZoneData = 0
         else:
-            priv = d['d'] # QDateTimePrivate
-            # QDateTimePrivate contains
+            # QDateTimePrivate contains:
             # - QSharedData (int)
             # - (int) StatusFlags m_status
             # - qint64 m_msecs
-            # - int m_offsetFromUtc (plus 4 bytes of padding)
-            # - QTimeZone m_timeZone (i.e. QTimeZone::Data object, 8 bytes union)
-            (_, status, msecs, offsetFromUtc, _, qTimeZoneData) = dumper.createValue(int(priv), '').split('iIqiiq')
+            # - int m_offsetFromUtc (plus 4 bytes of padding in case of a 64-bit architecture)
+            # - QTimeZone m_timeZone
+            intType = gdb.lookup_type('int')
+            intPointerType = intType.pointer()
+            address = d.cast(intPointerType) # address of QDateTimePrivate as int*
+            address += 1 # skip QSharedData
+            status = address.dereference()
+            address += 1 # skip m_status
+
+            int64Type = gdb.lookup_type('long long')
+            msecs = address.cast(int64Type.pointer()).dereference()
+            address += int64Type.sizeof // intType.sizeof # skip m_msecs
+            offsetFromUtc = address.dereference()
 
         spec = QDateTimePrinter.extractTimeSpec(status)
-        tz = ' ' + QDateTimePrinter.timeZoneAbbreviation(spec, offsetFromUtc, qTimeZoneData)
-        return datetime.utcfromtimestamp(int(msecs) / 1000.0).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3] + tz
+        if not isShort and spec == TimeSpec.TimeZone.value:
+            # skip m_offsetFromUtc and possible padding assuming that QTimeZone is pointer-aligned
+            address += intPointerType.sizeof // intType.sizeof
+            # print m_timeZone
+            timeZone = QTimeZonePrinter(address.cast(gdb.lookup_type('QTimeZone').pointer()).dereference()).to_string()
+        else:
+            timeZone = QTimeZonePrinter.timeZoneId(spec, offsetFromUtc)
+
+        return datetime.utcfromtimestamp(int(msecs) / 1000.0).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3] + ' ' + timeZone
 
 class QUrlPrinter:
 
