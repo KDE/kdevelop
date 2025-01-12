@@ -434,23 +434,42 @@ void QtPrintersTest::testQTime()
 void QtPrintersTest::testQDateTime()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qdatetime"));
-    gdb.execute("break qdatetime.cpp:34");
+    gdb.execute("break qdatetime.cpp:59");
     gdb.execute("run");
-    QCOMPARE(printedValue(gdb, "dt"), "2010-01-20 15:31:13.000 Local");
+    QCOMPARE(printedValue(gdb, "local"), "2010-01-20 15:31:13.000 Local");
     QCOMPARE(printedValue(gdb, "utc"), "2024-02-01 16:28:07.123 UTC");
+
     QCOMPARE(printedValue(gdb, "lunchInNewYork"), "2025-01-02 12:00:00.001 UTC-05:00");
+    QCOMPARE(printedValue(gdb, "lunchInUtc0"), "2025-01-02 12:00:00.999 UTC");
+    QCOMPARE(printedValue(gdb, "lunchInUtc20"), "2025-01-02 12:00:00.505 <invalid>");
+
     QCOMPARE(printedValue(gdb, "lunchInHawaii"), "2025-01-02 12:00:00.000 US/Hawaii");
+
+    QCOMPARE(printedValue(gdb, "dateTimeDefaultConstructedTZ"), "1010-11-23 05:06:07.089 <invalid>");
+    QCOMPARE(printedValue(gdb, "dateTimeEmptyStringTZ"), "1510-11-23 05:06:07.089 <invalid>");
+    QCOMPARE(printedValue(gdb, "dateTimeInvalidTZ"), "2025-01-02 12:00:00.001 <invalid>");
 }
 
 void QtPrintersTest::testQTimeZone()
 {
+    const QString invalidTimeZone = "<invalid>";
+
     GdbProcess gdb(QStringLiteral("debuggee_qdatetime"));
-    gdb.execute("break qdatetime.cpp:34");
+    gdb.execute("break qdatetime.cpp:59");
     gdb.execute("run");
+
     QCOMPARE(printedValue(gdb, "localTZ"), "Local");
     QCOMPARE(printedValue(gdb, "utcTZ"), "UTC");
+
     QCOMPARE(printedValue(gdb, "newYork"), "UTC-05:00");
+    QCOMPARE(printedValue(gdb, "utc0"), "UTC");
+    QCOMPARE(printedValue(gdb, "utc20"), invalidTimeZone);
+
     QCOMPARE(printedValue(gdb, "hawaii"), "US/Hawaii");
+
+    QCOMPARE(printedValue(gdb, "defaultConstructedTZ"), invalidTimeZone);
+    QCOMPARE(printedValue(gdb, "emptyStringTZ"), invalidTimeZone);
+    QCOMPARE(printedValue(gdb, "invalidTZ"), invalidTimeZone);
 }
 
 void QtPrintersTest::testQUrl()

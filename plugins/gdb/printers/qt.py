@@ -849,18 +849,21 @@ class TimeSpec(Enum): # enum Qt::TimeSpec
 
 class QTimeZonePrinter(PrinterBaseType):
 
+    INVALID = "<invalid>"
+
     def timeZoneId(spec, offsetFromUtc):
         if spec == TimeSpec.LocalTime.value:
             return 'Local'
         if spec == TimeSpec.UTC.value:
             return 'UTC'
         if spec == TimeSpec.OffsetFromUTC.value:
-            if offsetFromUtc == 0:
-                return 'UTC'
             sign = '-' if offsetFromUtc < 0 else '+'
             hours = abs(offsetFromUtc) // 3600
             minutes = (abs(offsetFromUtc) % 3600) // 60
             return f"UTC{sign}{hours:02}:{minutes:02}"
+        # ShortData(Qt::TimeZone) has mode == 0, in which case Data is *not* short (and Data::d is nullptr).
+        # QTimeZonePrinter.timeZoneId() is not called if Data is not short, so the final return statement
+        # below should never be reached (unless the QTimeZone object is uninitialized?).
         return f'<error: unhandled time spec {spec}>'
 
     def __init__(self, val):
@@ -875,26 +878,20 @@ class QTimeZonePrinter(PrinterBaseType):
             offsetFromUtc = d['s']['offset']
             return QTimeZonePrinter.timeZoneId(spec, int(offsetFromUtc))
         else:
-            priv = d['d'] # QTimeZonePrivate
-            if dumper.qt6orLater():
-                # QTimeZonePrivate contains
-                # - QSharedData (int) (plus 4 bytes of padding)
-                # - vtable for QTimeZonePrivate
-                # - QByteArray m_id {Data* d, char* ptr, size}
-                tzIdPtr = dumper.extract_pointer_at_address(int(priv) + 3 * dumper.ptrSize())
-                if tzIdPtr:
-                    # QByteArray::d::ptr to python string
-                    tzIdPtr_value = gdb.Value(tzIdPtr)
-                    return tzIdPtr_value.cast(gdb.lookup_type("char").pointer()).string()
-                else:
-                    return '<invalid>'
-            else: # Qt 5
-                # Same, but QByteArray internals are different
-                tzIdData = dumper.extract_pointer_at_address(int(priv) + 2 * dumper.ptrSize())
-                buffer = struct.pack("P", tzIdData)
-                tzId = gdb.Value(buffer, gdb.lookup_type('QByteArray'))
-                stringData = tzId['d'].cast(gdb.lookup_type("char").const().pointer()) + tzId['d']['offset']
-                return stringData.string(length = tzId['d']['size'])
+            # QTimeZonePrivate contains:
+            # - QSharedData (int) (plus 4 bytes of padding in case of a 64-bit architecture)
+            # - vtable for QTimeZonePrivate
+            # - QByteArray m_id
+            qByteArrayPointerType = gdb.lookup_type('QByteArray').pointer()
+            address = d.cast(qByteArrayPointerType.pointer()) # address of QTimeZonePrivate as QByteArray**
+            if address == 0:
+                # QTimeZone::isValid(), if not short, returns d.d && d->isValid()
+                return QTimeZonePrinter.INVALID
+            address += 2 # skip the first two hidden, pointer-sized data members
+
+            tzId = QByteArrayPrinter(address.cast(qByteArrayPointerType).dereference()).to_string()
+            # QTimeZonePrivate::isValid() returns !m_id.isEmpty()
+            return tzId if tzId else QTimeZonePrinter.INVALID
 
 class QDateTimePrinter(PrinterBaseType):
 
