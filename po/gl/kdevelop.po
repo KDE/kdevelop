@@ -8,14 +8,14 @@
 # Xabier Villar <xabier.villar@gmail.com>, 2012.
 # Adrian Chaves Fernandez <adriyetichaves@gmail.com>, 2012, 2015, 2016, 2017.
 # Xosé <xosecalvo@gmail.com>, 2013.
-# SPDX-FileCopyrightText: 2024 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2024, 2025 Adrián Chaves (Gallaecio)
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2024-12-16 22:26+0100\n"
+"PO-Revision-Date: 2025-01-12 17:17+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -267,8 +267,8 @@ msgstr "Andreas Pakulat"
 msgid ""
 "Architecture, VCS Support, Project Management Support, QMake Projectmanager"
 msgstr ""
-"Arquitectura, soporte de VCS, soporte da xestión de proxectos, xestor de "
-"proxectos con QMake"
+"Arquitectura, compatibilidade con sistemas de control de versións, "
+"funcionalidade de xestión de proxectos, xestor de proxectos de QMake."
 
 #: main.cpp:382
 #, kde-format
@@ -278,7 +278,7 @@ msgstr "Alexander Dymo"
 #: main.cpp:382
 #, kde-format
 msgid "Architecture, Sublime UI, Ruby support"
-msgstr "Arquitectura, interface de usuario Sublime, soporte de Ruby"
+msgstr "Arquitectura, interface de Sublime, compatibilidade con Ruby."
 
 #: main.cpp:383
 #, kde-format
@@ -354,7 +354,7 @@ msgstr "Cédric Pasteur"
 #: main.cpp:391
 #, kde-format
 msgid "astyle and indent support"
-msgstr "soporte de astyle e indent"
+msgstr "Compatibilidade con «astyle» e «indent»."
 
 #: main.cpp:392
 #, kde-format
@@ -396,7 +396,9 @@ msgstr "Harald Fernengel"
 #: main.cpp:397
 #, kde-format
 msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
-msgstr "Versión de Qt 3, parches, soporte de valgrind, diff e perforce"
+msgstr ""
+"Versión de Qt 3, parches, e compatibilidade con «valgrind», «diff» e "
+"«perforce»."
 
 #: main.cpp:398
 #, kde-format
@@ -462,7 +464,7 @@ msgstr "Richard Dale"
 #: main.cpp:405
 #, kde-format
 msgid "Java & Objective C support"
-msgstr "Soporte de Java e de Objective C"
+msgstr "Compatibilidade con Java e Objective C."
 
 #: main.cpp:406
 #, kde-format
@@ -482,7 +484,7 @@ msgstr "Sandy Meier"
 #: main.cpp:407
 #, kde-format
 msgid "PHP support, context menu stuff"
-msgstr "Soporte de PHP, menú contextual"
+msgstr "Compatibilidade con PHP, cousas do menú contextual."
 
 #: main.cpp:408
 #, kde-format
@@ -502,7 +504,8 @@ msgstr "Ian Reinhart Geiser"
 #: main.cpp:409
 #, kde-format
 msgid "Dist part, bash support, application templates"
-msgstr "Compoñente dist, soporte de bash, modelos de aplicacións"
+msgstr ""
+"Compoñente de distribución, compatibilidade con Bash, modelos de aplicacións."
 
 #: main.cpp:410
 #, kde-format
@@ -542,7 +545,7 @@ msgstr "Oliver Kellogg"
 #: main.cpp:413
 #, kde-format
 msgid "Ada support"
-msgstr "Soporte de Ada"
+msgstr "Compatibilidade con Ada."
 
 #: main.cpp:414
 #, kde-format
@@ -608,7 +611,7 @@ msgstr "Ajay Guleria"
 #: main.cpp:419
 #, kde-format
 msgid "ClearCase support"
-msgstr "Soporte de ClearCase"
+msgstr "Compatibilidade con ClearCase."
 
 #: main.cpp:420
 #, kde-format
@@ -618,7 +621,7 @@ msgstr "Marek Janukowicz"
 #: main.cpp:420
 #, kde-format
 msgid "Ruby support"
-msgstr "Soporte de Ruby"
+msgstr "Compatibilidade con Ruby."
 
 #: main.cpp:421
 #, kde-format
@@ -699,7 +702,7 @@ msgstr "Luc Willems"
 #: main.cpp:429
 #, kde-format
 msgid "Help with Perl support"
-msgstr "Axuda co soporte de Perl"
+msgstr "Axuda coa compatibilidade con Perl."
 
 #: main.cpp:430
 #, kde-format

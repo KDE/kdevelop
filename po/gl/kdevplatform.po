@@ -7,14 +7,14 @@
 # Xosé <xosecalvo@edu.xunta.es>, 2009, 2012, 2013.
 # Marce Villarino <mvillarino@kde-espana.es>, 2009, 2013, 2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2013, 2015, 2016, 2017.
-# SPDX-FileCopyrightText: 2023, 2024 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2023, 2024, 2025 Adrián Chaves (Gallaecio)
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-09 00:39+0000\n"
-"PO-Revision-Date: 2024-12-19 23:08+0100\n"
+"PO-Revision-Date: 2025-01-12 17:18+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -4438,7 +4438,7 @@ msgstr "Documentación"
 #, kde-format
 msgctxt "@title:group"
 msgid "Language Support"
-msgstr "Soporte de linguas"
+msgstr "Compatibilidade con linguaxes"
 
 #: shell/settings/pluginpreferences.cpp:41
 #, kde-format
@@ -4487,8 +4487,8 @@ msgid ""
 "Schedule all project source code to be parsed by the language support in the "
 "background"
 msgstr ""
-"Planificar que todo o código fonte do proxecto se analice con soporte para a "
-"linguaxe no fondo"
+"Planificar que todo o código fonte do proxecto se analice coa "
+"compatibilidade con linguaxes en segundo plano."
 
 #. i18n: ectx: whatsthis, entry (parseAllProjectSources), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:15
