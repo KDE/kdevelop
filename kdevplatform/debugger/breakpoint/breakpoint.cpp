@@ -355,14 +355,15 @@ void Breakpoint::removeMovingCursor()
     m_movingCursor = nullptr;
 }
 
-void Breakpoint::restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor)
+void Breakpoint::restartDocumentLineTrackingAt(KTextEditor::Document& document, int line)
 {
-    Q_ASSERT(cursor);
-    Q_ASSERT(cursor != m_movingCursor);
+    Q_ASSERT(m_model);
 
     stopDocumentLineTracking();
 
-    m_movingCursor = cursor;
+    Q_ASSERT(line >= 0);
+    Q_ASSERT(line < document.lines());
+    m_movingCursor = document.newMovingCursor(KTextEditor::Cursor(line, 0));
 
     // Add a breakpoint mark at the new cursor's location.
     const auto guard = m_model->markChangeGuard();
@@ -529,7 +530,7 @@ void Breakpoint::updateMovingCursor(const QUrl& url, int line)
         // Either document changed or the breakpoint has no moving cursor yet.
         const auto textDocument = document->textDocument();
         if (textDocument && line < textDocument->lines()) {
-            m_model->setupMovingCursor(this, textDocument, line);
+            restartDocumentLineTrackingAt(*textDocument, line);
             return;
         }
     }

@@ -155,7 +155,6 @@ private Q_SLOTS:
     void aboutToInvalidateMovingInterfaceContent(KTextEditor::Document* document);
     void reloaded(KTextEditor::Document* document);
     void documentSaved(KDevelop::IDocument*);
-    void aboutToDeleteMovingInterfaceContent(KTextEditor::Document *document);
 
     void markContextMenuRequested(KTextEditor::Document* document, KTextEditor::Mark mark, QPoint pos, bool& handled);
 
@@ -199,14 +198,6 @@ private:
     void detachDocumentBreakpoints(KTextEditor::Document& document) const;
 
     Breakpoint *breakpoint(const QUrl& url, int line) const;
-
-    /**
-     * Assign a new moving cursor to the breakpoint.
-     * @param breakpoint a non-null pointer to the breakpoint
-     * @param document a non-null pointer to the document, in which to create the moving cursor
-     * @param line position of the new moving cursor in the range [0, document->lines())
-     */
-    void setupMovingCursor(Breakpoint* breakpoint, KTextEditor::Document* document, int line) const;
 
 private:
     const QScopedPointer<class BreakpointModelPrivate> d_ptr;

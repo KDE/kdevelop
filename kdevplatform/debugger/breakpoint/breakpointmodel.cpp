@@ -141,6 +141,15 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
     connect(textDocument, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
             &BreakpointModel::aboutToInvalidateMovingInterfaceContent);
     connect(textDocument, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
+
+#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
+    // Since https://commits.kde.org/ktexteditor/6ca19934786fb808ab2b307d558967a74f87e4f4
+    // first included in KTextEditor version 6.9, KTextEditor::Document emits the signal
+    // aboutToInvalidateMovingInterfaceContent() instead of aboutToDeleteMovingInterfaceContent()
+    // from the destructor.
+    connect(textDocument, &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
+            &BreakpointModel::aboutToInvalidateMovingInterfaceContent);
+#endif
 }
 
 void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) const
@@ -157,7 +166,7 @@ void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) 
         if (breakpoint->kind() == Breakpoint::CodeBreakpoint && docUrl == breakpoint->url()) {
             const auto savedLine = breakpoint->savedLine();
             if (savedLine >= 0 && savedLine < docLineCount) {
-                setupMovingCursor(breakpoint, &document, savedLine);
+                breakpoint->restartDocumentLineTrackingAt(document, savedLine);
             }
         }
     }
@@ -250,8 +259,8 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
     if (d->reloadState == ReloadState::Idle) {
         // The document's text is about to be discarded. Remove all breakpoint marks and moving cursors from the
         // document to preserve currently line-tracking breakpoints and their saved line numbers.
-        qCWarning(DEBUGGER) << "deactivating all breakpoints in" << document->url().toString(QUrl::PreferLocalFile)
-                            << "due to moving interface content invalidation";
+        qCDebug(DEBUGGER) << "deactivating all breakpoints in" << document->url().toString(QUrl::PreferLocalFile)
+                          << "due to moving interface content invalidation";
         detachDocumentBreakpoints(*document);
 
         if (document->url().isEmpty()) {
@@ -724,10 +733,6 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 
     scheduleSave();
 }
-void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* document)
-{
-    detachDocumentBreakpoints(*document);
-}
 
 void BreakpointModel::load()
 {
@@ -892,21 +897,6 @@ Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) const
         return (b->url() == url && b->line() == line);
     });
     return (it != d->breakpoints.constEnd()) ? *it : nullptr;
-}
-
-// TODO: move into the Breakpoint class when/if the aboutToDeleteMovingInterfaceContent()
-//       connection is moved to textDocumentCreated().
-void BreakpointModel::setupMovingCursor(Breakpoint* breakpoint, KTextEditor::Document* document, int line) const
-{
-    Q_ASSERT(breakpoint);
-    Q_ASSERT(document);
-    Q_ASSERT(line >= 0);
-    Q_ASSERT(line < document->lines());
-
-    connect(document, &Document::aboutToDeleteMovingInterfaceContent, this,
-            &BreakpointModel::aboutToDeleteMovingInterfaceContent, Qt::UniqueConnection);
-
-    breakpoint->restartDocumentLineTrackingAt(document->newMovingCursor(KTextEditor::Cursor(line, 0)));
 }
 
 #include "moc_breakpointmodel.cpp"

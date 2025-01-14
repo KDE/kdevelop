@@ -17,6 +17,7 @@ class TestBreakpointModel;
 class QVariant;
 class KConfigGroup;
 namespace KTextEditor {
+class Document;
 class MovingCursor;
 }
 namespace KDevelop
@@ -113,7 +114,7 @@ public:
     // removed above the mark's line in the document, the mark's line number is automatically adjusted to remain
     // attached to the tracked text. A Breakpoint needs to remain associated with its document mark. For this
     // purpose, it also tracks the mark's line number via a dedicated moving cursor. restartDocumentLineTrackingAt()
-    // assigns and stopDocumentLineTracking() destroys this moving cursor. By tracking the same document text, the
+    // creates and stopDocumentLineTracking() destroys this moving cursor. By tracking the same document text, the
     // breakpoint mark and moving cursor are associated. A Breakpoint uses the associated moving cursor's line
     // number to identify and locate its mark.
     // Unfortunately, this association between the breakpoint mark and moving cursor can be broken. When the user
@@ -128,7 +129,16 @@ public:
     // breakpoint mark's line gets out of sync with its associated moving cursor's tracked line.
 
     void stopDocumentLineTracking();
-    void restartDocumentLineTrackingAt(KTextEditor::MovingCursor* cursor);
+
+    /**
+     * Stop document line tracking if active, then restart it at a new moving cursor.
+     *
+     * @param document the document in which to create the moving cursor
+     * @param line the position of the new moving cursor in the range [0, @p document.lines())
+     *
+     * @pre breakpointModel() is not null
+     */
+    void restartDocumentLineTrackingAt(KTextEditor::Document& document, int line);
 
     KTextEditor::MovingCursor *movingCursor() const;
 
