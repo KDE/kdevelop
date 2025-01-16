@@ -505,10 +505,16 @@ void IdealButtonBarWidget::showWidget(bool checked)
     if (checked) {
         m_lastCheckedActionsTracker->justChecked(widgetAction);
 
+        const auto isButtonCtrlClicked = [widgetAction] {
+            const auto* const button = widgetAction->button();
+            Q_ASSERT(button);
+            return button->isPressed() && QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
+        };
+
         if (!m_adaptingToDockWidgetVisibilities
             && !m_lastCheckedActionsTracker->isExclusiveCheckingInhibited()
-            // holding the Ctrl key forces grouping
-            && !QApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
+            // holding the Ctrl key while clicking a tool view button forces grouping with other views
+            && !isButtonCtrlClicked()) {
             // Make sure only one widget is visible at any time.
             // The alternative to use a QActionCollection and setting that to "exclusive"
             // has a big drawback: QActions in a collection that is exclusive cannot

@@ -31,6 +31,13 @@ IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
         sizePolicy.setVerticalPolicy(QSizePolicy::Maximum);
     }
     setSizePolicy(sizePolicy);
+
+    connect(this, &QAbstractButton::pressed, [this] {
+        m_isPressed = true;
+    });
+    connect(this, &QAbstractButton::released, [this] {
+        m_isPressed = false;
+    });
 }
 
 Qt::Orientation IdealToolButton::orientation() const
@@ -39,6 +46,11 @@ Qt::Orientation IdealToolButton::orientation() const
         return Qt::Vertical;
 
     return Qt::Horizontal;
+}
+
+bool IdealToolButton::isPressed() const
+{
+    return m_isPressed;
 }
 
 QSize IdealToolButton::sizeHint() const

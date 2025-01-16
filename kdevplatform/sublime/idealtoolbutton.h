@@ -20,6 +20,14 @@ public:
 
     Qt::Orientation orientation() const;
 
+    /**
+     * @return whether this button is currently pressed down
+     *
+     * @note Unlike isDown(), isPressed() returns @c true in a slot connected to the
+     *       defaultAction()->toggled() signal if the toggling is caused by a click on this button.
+     */
+    [[nodiscard]] bool isPressed() const;
+
     QSize sizeHint() const override;
 
     QSize minimumSizeHint() const override;
@@ -29,6 +37,7 @@ protected:
 
 private:
     const Qt::DockWidgetArea _area;
+    bool m_isPressed = false;
 };
 
 #endif // IDEALTOOLBUTTON_H
