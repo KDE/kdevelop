@@ -76,6 +76,17 @@ Qt::DockWidgetArea IdealDockWidget::dockWidgetArea() const
 void IdealDockWidget::setDockWidgetArea(Qt::DockWidgetArea dockingArea)
 { m_docking_area = dockingArea; }
 
+void IdealDockWidget::activate()
+{
+    // The focus can be given to a widget only if it or one of its parents is the active window.
+    // A floating dock widget is a top-level window, so activate it before focusing. If this dock widget
+    // is not floating, activate its main window in case another floating dock widget is the active window.
+    activateWindow();
+    // Also raise this dock widget to place it in front of other floating dock widgets.
+    raise();
+    setFocus(Qt::ShortcutFocusReason);
+}
+
 void IdealDockWidget::slotRemove()
 {
     m_area->removeToolView(m_view);

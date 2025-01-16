@@ -35,6 +35,11 @@ public:
     Qt::DockWidgetArea dockWidgetArea() const;
     void setDockWidgetArea(Qt::DockWidgetArea dockingArea);
 
+    /**
+     * Activate the ancestor top-level window, raise and focus this widget.
+     */
+    void activate();
+
 public Q_SLOTS:
     /// The IdealToolButton also connects to this slot to show the same context menu.
     void contextMenuRequested(const QPoint &point);

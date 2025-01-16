@@ -229,7 +229,7 @@ private:
             return false; // already focused
         }
 
-        m_actions.constLast()->dockWidget()->setFocus(Qt::ShortcutFocusReason);
+        m_actions.constLast()->dockWidget()->activate();
         return true;
     }
 
