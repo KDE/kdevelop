@@ -8,6 +8,7 @@
 
 #include "idealcontroller.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QMainWindow>
 #include <QToolBar>
@@ -562,6 +563,11 @@ void IdealController::showDockActionToggled(QObject* senderAction, const IdealBu
 // returns currently focused dock widget (if any)
 IdealDockWidget* IdealController::currentDockWidget() const
 {
+    if (auto* const activeDockWidget = qobject_cast<IdealDockWidget*>(QApplication::activeWindow())) {
+        // a floating dock widget is the active window, so return it as current
+        return activeDockWidget;
+    }
+
     QWidget *w = m_mainWindow->focusWidget();
     while (true) {
         if (!w) break;
