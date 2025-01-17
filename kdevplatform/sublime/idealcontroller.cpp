@@ -560,7 +560,6 @@ void IdealController::showDockActionToggled(QObject* senderAction, const IdealBu
     }
 }
 
-// returns currently focused dock widget (if any)
 IdealDockWidget* IdealController::currentDockWidget() const
 {
     if (auto* const activeDockWidget = qobject_cast<IdealDockWidget*>(QApplication::activeWindow())) {

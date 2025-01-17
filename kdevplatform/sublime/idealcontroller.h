@@ -136,6 +136,11 @@ private:
     [[nodiscard]] QAction* actionForArea(Qt::DockWidgetArea area) const;
 
     void showDockActionToggled(QObject* senderAction, const IdealButtonBarWidget& buttonBarWidget, bool show);
+
+    /**
+     * @return the dock widget that currently has the focus or the dock widget one of whose
+     *         descendant widgets has the focus or @c nullptr if there is no such dock widget
+     */
     [[nodiscard]] IdealDockWidget* currentDockWidget() const;
 
     Sublime::MainWindow* const m_mainWindow;
