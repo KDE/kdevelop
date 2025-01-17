@@ -67,11 +67,13 @@ public:
 
     /**
      * If at least one action is currently checked but none of IdealDockWidget objects associated with checked actions
-     * has the keyboard input focus, give the focus to the last shown IdealDockWidget associated with a checked action.
+     * is active, activate the last shown IdealDockWidget associated with a checked action.
      *
-     * @return whether the focus was given
+     * @param activeDockWidget the active dock widget or @c nullptr if none is active
+     *
+     * @return whether a dock widget was activated by this call
      */
-    virtual bool focusLastShownDockWidget() const = 0;
+    virtual bool activateLastShownDockWidget(const IdealDockWidget* activeDockWidget) const = 0;
 
 protected:
     ILastCheckedActionsTracker() = default;

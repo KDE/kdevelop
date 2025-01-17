@@ -534,16 +534,13 @@ void IdealController::showDockActionToggled(QObject* senderAction, const IdealBu
         action->toggle();
     };
 
-    if (actionTracker.focusLastShownDockWidget()) {
-        if (!show) {
+    if (!show) {
+        if (actionTracker.activateLastShownDockWidget(currentDockWidget())) {
             // we just focused a dock widget instead of hiding it => check the Show Dock action
             toggleShowDockActionQuietly();
+        } else {
+            actionTracker.uncheckAll();
         }
-        return;
-    }
-
-    if (!show) {
-        actionTracker.uncheckAll();
         return;
     }
 

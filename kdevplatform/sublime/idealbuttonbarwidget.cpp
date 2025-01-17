@@ -216,17 +216,18 @@ private:
         return true;
     }
 
-    bool focusLastShownDockWidget() const override
+    bool activateLastShownDockWidget(const IdealDockWidget* activeDockWidget) const override
     {
         if (!m_areChecked) {
-            return false; // no visible dock widget to focus
+            return false; // no visible dock widget to activate
         }
 
-        const bool anyFocused = std::any_of(m_actions.cbegin(), m_actions.cend(), [](const ToolViewAction* action) {
-            return action->dockWidget()->hasFocus();
-        });
-        if (anyFocused) {
-            return false; // already focused
+        const bool anyActive = activeDockWidget
+            && std::any_of(m_actions.cbegin(), m_actions.cend(), [activeDockWidget](const ToolViewAction* action) {
+                                   return action->dockWidget() == activeDockWidget;
+                               });
+        if (anyActive) {
+            return false; // already active
         }
 
         m_actions.constLast()->dockWidget()->activate();
@@ -245,7 +246,7 @@ private:
      * The list of last checked actions.
      *
      * The order of elements is the order, in which the actions were checked.
-     * This order is relied upon by focusLastShownDockWidget() to focus the last shown IdealDockWidget.
+     * This order is relied upon by activateLastShownDockWidget() to activate the last shown IdealDockWidget.
      */
     QList<ToolViewAction*> m_actions;
     /**
