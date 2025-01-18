@@ -133,14 +133,18 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
         positionMenu->addAction(action);
         action->setCheckable(true);
     }
+
+    QAction* currentPositionAction = nullptr;
     if (isFloating()) {
-        detach->setChecked(true);
+        currentPositionAction = detach;
     } else if (m_docking_area == Qt::BottomDockWidgetArea)
-        bottom->setChecked(true);
+        currentPositionAction = bottom;
     else if (m_docking_area == Qt::LeftDockWidgetArea)
-        left->setChecked(true);
+        currentPositionAction = left;
     else if (m_docking_area == Qt::RightDockWidgetArea)
-        right->setChecked(true);
+        currentPositionAction = right;
+    Q_ASSERT_X(currentPositionAction, Q_FUNC_INFO, "unsupported dock widget area");
+    currentPositionAction->setChecked(true);
     /// end position menu
 
     menu->addSeparator();
@@ -185,6 +189,12 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             delete dialog;
 
             return;
+        } else if (triggered == currentPositionAction) {
+            // the current position is reselected
+            if (isVisible()) {
+                activate();
+            }
+            return; // nothing more to do
         } else if ( triggered == detach ) {
             setFloating(true);
             return;
