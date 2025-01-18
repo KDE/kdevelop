@@ -1422,6 +1422,61 @@ void TestDUChain::testMacrosRanges()
     QCOMPARE(macroDefinition->uses().begin()->first(), RangeInRevision(1,0,1,11));
 }
 
+void TestDUChain::testUseInMacroParameter()
+{
+    // Tests code snippet from https://bugs.kde.org/show_bug.cgi?id=496985
+
+    TestFile file(QStringLiteral(R"(
+int asn1_ber_decoder(int i)
+{
+    return i;
+}
+#define CKINT(x) \
+    { \
+        ret = x; \
+        if (ret < 0) \
+            goto out; \
+    }
+int ff()
+{
+    int ret;
+    CKINT(asn1_ber_decoder(5));
+    return ret;
+out:
+    return -1;
+})"),
+                  QStringLiteral("cpp"));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    const auto top = file.topContext();
+    QVERIFY(top);
+    struct Visitor : DUChainVisitor
+    {
+        void visit(Declaration* declaration) override
+        {
+            if (declaration->qualifiedIdentifier() == ffOutId) {
+                ffOutDecl = declaration;
+            }
+        }
+        void visit(DUContext*) override
+        {
+        }
+        QualifiedIdentifier ffOutId{"ff::out"};
+        Declaration* ffOutDecl = nullptr;
+    };
+    Visitor visitor;
+    top->visit(visitor);
+    QCOMPARE_NE(visitor.ffOutDecl, nullptr);
+    const auto ffOutUses = visitor.ffOutDecl->usesCurrentRevision();
+    QCOMPARE_EQ(ffOutUses.size(), 1);
+    const auto ffOutUseRanges = ffOutUses.begin();
+    QCOMPARE_EQ(ffOutUseRanges->size(), 1);
+    const auto ffOutUseRange = ffOutUseRanges->value(0);
+    QCOMPARE_EQ(ffOutUseRange.start(), ffOutUseRange.end());
+}
+
 void TestDUChain::testMacroUses()
 {
     TestFile file(QStringLiteral("#define USER(x) x\n#define USED\nUSER(USED)"), QStringLiteral("cpp"));

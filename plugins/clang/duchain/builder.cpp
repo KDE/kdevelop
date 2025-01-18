@@ -405,16 +405,16 @@ struct Visitor
             range.end = range.start;
         }
 
-        // check if cursor is inside a macro expansion
+        // check if cursor is inside a macro expansion (refer to rangeInRevisionForUse)
         auto clangRange = clang_Cursor_getSpellingNameRange(cursor, 0, 0);
         unsigned int expansionLocOffset;
-        const auto spellingLocation = clang_getRangeStart(clangRange);
-        clang_getExpansionLocation(spellingLocation, nullptr, nullptr, nullptr, &expansionLocOffset);
+        const auto clangRangeStart = clang_getRangeStart(clangRange);
+        clang_getExpansionLocation(clangRangeStart, nullptr, nullptr, nullptr, &expansionLocOffset);
         if (m_macroExpansionLocations.contains(expansionLocOffset)) {
-            unsigned int spellingLocOffset;
-            clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
+            unsigned int fileLocOffset;
+            clang_getFileLocation(clangRangeStart, nullptr, nullptr, nullptr, &fileLocOffset);
             // Set empty ranges for declarations inside macro expansion
-            if (spellingLocOffset == expansionLocOffset) {
+            if (fileLocOffset == expansionLocOffset) {
                 range.end = range.start;
             }
         }
@@ -1530,18 +1530,18 @@ RangeInRevision rangeInRevisionForUse(CXCursor cursor, CXCursorKind referencedCu
         range.start.column--;
     }
 
-    // For uses inside macro expansions, create an empty use range at the spelling location
-    // the empty range is required in order to not "overlap" the macro expansion range
-    // and to allow proper navigation for the macro expansion
+    // For uses inside macro expansions, `useRange` is the whole macro use
+    // from the macro identifier up to the closing parenthesis. In order not to interfere with
+    // code navigation at the macro use location, we make it an empty range at its beginning.
     // also see JSON test 'macros.cpp'
     if (clang_getCursorKind(cursor) != CXCursor_MacroExpansion) {
         unsigned int expansionLocOffset;
-        const auto spellingLocation = clang_getRangeStart(useRange);
-        clang_getExpansionLocation(spellingLocation, nullptr, nullptr, nullptr, &expansionLocOffset);
+        const auto useRangeStart = clang_getRangeStart(useRange);
+        clang_getExpansionLocation(useRangeStart, nullptr, nullptr, nullptr, &expansionLocOffset);
         if (macroExpansionLocations.contains(expansionLocOffset)) {
-            unsigned int spellingLocOffset;
-            clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
-            if (spellingLocOffset == expansionLocOffset) {
+            unsigned int fileLocOffset;
+            clang_getFileLocation(useRangeStart, nullptr, nullptr, nullptr, &fileLocOffset);
+            if (fileLocOffset == expansionLocOffset) {
                 range.end = range.start;
             }
         }
