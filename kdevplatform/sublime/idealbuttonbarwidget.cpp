@@ -13,6 +13,8 @@
 #include "document.h"
 #include "view.h"
 
+#include <debug.h>
+
 #include <util/toggleonlybool.h>
 
 #include <KLocalizedString>
@@ -230,7 +232,22 @@ private:
             return false; // already active
         }
 
-        m_actions.constLast()->dockWidget()->activate();
+        auto* const dockWidget = m_actions.constLast()->dockWidget();
+        Q_ASSERT(dockWidget);
+
+        if (!dockWidget->isVisible()) {
+            // The visibility of this dock widget is out of sync with the checked state of its tool view action.
+            // One cause of such a desynchronization is likely to remain unaddressed for a while:
+            // closing a floating dock widget via the window manager's close window shortcut (Alt+F4).
+            // Show the dock widget before activating, because an invisible floating dock widget cannot
+            // be activated at all, and focusing an invisible non-floating dock widget looks wrong.
+            qCDebug(SUBLIME)
+                << "dock widget" << dockWidget->view()->document()->documentSpecifier()
+                << "is invisible even though its tool view action is checked, so we show it before activating";
+            dockWidget->show();
+        }
+
+        dockWidget->activate();
         return true;
     }
 
