@@ -99,6 +99,8 @@ private Q_SLOTS:
     void dockLocationChanged(Qt::DockWidgetArea);
 
 private:
+    void dockTopLevelChanged(bool topLevel);
+
     /**
      * Add a tool view action for a given area, dock widget and tool view.
      *

@@ -232,6 +232,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     addBarWidgetAction(area, dock, view);
 
     connect(dock, &IdealDockWidget::dockLocationChanged, this, &IdealController::dockLocationChanged);
+    connect(dock, &QDockWidget::topLevelChanged, this, &IdealController::dockTopLevelChanged);
 
     dock->hide();
 }
@@ -253,11 +254,10 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
     Q_ASSERT(dock);
 
     // Seems since Qt 5.13 the signal QDockWidget::dockLocationChanged is emitted also when the dock changes
-    // to be floating, with area = Qt::NoDockWidgetArea. The current code is not designed for this,
-    // so just ignore the signal in that case for now
+    // to be floating, with area = Qt::NoDockWidgetArea.
     if (area == Qt::NoDockWidgetArea) {
         qCDebug(SUBLIME) << "dock widget" << PrintDockWidget{dock} << "location changed to no area";
-        return;
+        return; // this case is handled in dockTopLevelChanged(true), so nothing to do here
     }
 
     const auto previousArea = dock->dockWidgetArea();
@@ -292,8 +292,33 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 
     setShowDockStatus(area, true);
 
-    // after drag, the tool view loses focus, so focus it again
+    // When the user moves a tool view via the Tool View Position submenu of its context menu, the dock widget
+    // never becomes floating between the two dock widget areas. In this case, dockTopLevelChanged()
+    // is not invoked and the moved tool view does not receive the focus. So focus it here.
     dock->setFocus(Qt::ShortcutFocusReason);
+}
+
+void IdealController::dockTopLevelChanged(bool topLevel)
+{
+    auto* const dockWidget = qobject_cast<IdealDockWidget*>(sender());
+    Q_ASSERT(dockWidget);
+
+    if (topLevel) {
+        // Nothing to do, because the newly-floating dock widget's IdealDockWidget::dockWidgetArea() should keep
+        // returning its previous area, and the corresponding tool view action and button should stay in the
+        // same toolbar. No need to focus the newly-floating dock widget either, because it is a top-level window
+        // that becomes active, and consequently the dock widget gets the focus, automatically (unless invisible).
+        qCDebug(SUBLIME) << "dock widget" << PrintDockWidget{dockWidget} << "became floating";
+        return;
+    }
+
+    qCDebug(SUBLIME) << "dock widget" << PrintDockWidget{dockWidget} << "is no longer floating";
+
+    if (dockWidget->isVisible()) {
+        // In this case the dock widget should acquire the focus but does not automatically get it.
+        // dockLocationChanged() does not always give it the focus either. So focus it here.
+        dockWidget->setFocus(Qt::ShortcutFocusReason);
+    }
 }
 
 IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) const
