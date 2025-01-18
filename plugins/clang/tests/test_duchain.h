@@ -61,6 +61,7 @@ private Q_SLOTS:
     void testReparseInclude();
     void testReparseChangeEnvironment();
     void testMacrosRanges();
+    void testUseInMacroParameter();
     void testMacroUses();
     void testHeaderParsingOrder1();
     void testHeaderParsingOrder2();
