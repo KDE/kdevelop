@@ -37,6 +37,11 @@ public:
 
     void addView(Qt::DockWidgetArea area, View* view);
 
+    /**
+     * Show a given tool view in the background.
+     *
+     * In other words, show but do not activate @p view.
+     */
     void raiseView(View* view);
     QWidget *statusBarLocation() const;
     QAction* actionForView(View* view) const;
