@@ -383,22 +383,19 @@ void IdealController::showDockWidget(IdealDockWidget* dock, bool show)
     if (show) {
         m_mainWindow->addDockWidget(area, dock);
         dock->show();
+
+        dock->setFocus(Qt::ShortcutFocusReason);
     } else {
         // Calling dock->hide() is necessary to make QMainWindow::saveState() store its removed state correctly.
         // Without this call, a previously hidden tool view can become shown on next KDevelop start (see QTBUG-11909).
         dock->hide();
         m_mainWindow->removeDockWidget(dock);
+
+        // Put the focus back on the editor if a dock was hidden
+        focusEditor();
     }
 
     setShowDockStatus(area, show);
-
-    if (!show)
-        // Put the focus back on the editor if a dock was hidden
-        focusEditor();
-    else {
-        // focus the dock
-        dock->setFocus(Qt::ShortcutFocusReason);
-    }
 }
 
 void IdealController::focusEditor()
