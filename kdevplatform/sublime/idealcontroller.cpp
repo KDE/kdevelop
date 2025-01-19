@@ -379,10 +379,22 @@ void IdealController::raiseView(View* view)
     Q_ASSERT_X(!m_dockWidgetToGroupWith, Q_FUNC_INFO, "Recursive raising and grouping is unsupported");
     const QScopedValueRollback<const IdealDockWidget*> guard(m_dockWidgetToGroupWith, currentDockWidget());
 
+    auto* const activeWindow = QApplication::activeWindow();
     QWidget *focusWidget = m_mainWindow->focusWidget();
+
     action->setChecked(true);
-    // TODO: adymo: hack: focus needs to stay inside the previously
-    // focused widget (setChecked will focus the tool view)
+
+    // Reactivate and raise the previously active window, and refocus the previously focused widget, because
+    // checking the action activates its tool view but the action's tool view must be shown in the background. The
+    // raising is needed if both the previously active window and the action's tool view are floating dock widgets.
+    // If the temporary window activations or the focus transfers cause bugs, they can be partially
+    // prevented by introducing a new ToggleOnlyBool data member to inhibit activating the main window,
+    // focusing the shown dock widget and the editor view in showDockWidget(). But such an inhibition
+    // cannot prevent the automatic activation of a floating dock widget that becomes visible.
+    if (activeWindow) {
+        activeWindow->activateWindow();
+        activeWindow->raise();
+    }
     if (focusWidget)
         focusWidget->setFocus(Qt::ShortcutFocusReason);
 }
@@ -396,14 +408,25 @@ void IdealController::showDockWidget(IdealDockWidget* dock, bool show)
         m_mainWindow->addDockWidget(area, dock);
         dock->show();
 
-        dock->setFocus(Qt::ShortcutFocusReason);
+        // A floating dock widget is a top-level window. When a floating dock widget becomes visible,
+        // its window is activated, and consequently the dock widget gets the focus, automatically.
+        // Do not activate or focus a floating dock widget redundantly here, because that breaks
+        // activating and raising a previously active floating dock widget in raiseView().
+        if (!dock->isFloating()) {
+            // Activate the newly shown non-floating dock widget's window (i.e. the main window) in order
+            // to transfer the focus to it in case some other floating dock widget is currently active.
+            dock->activateWindow();
+            dock->setFocus(Qt::ShortcutFocusReason);
+        }
     } else {
         // Calling dock->hide() is necessary to make QMainWindow::saveState() store its removed state correctly.
         // Without this call, a previously hidden tool view can become shown on next KDevelop start (see QTBUG-11909).
         dock->hide();
         m_mainWindow->removeDockWidget(dock);
 
-        // Put the focus back on the editor if a dock was hidden
+        // Activate the main window that contains the editor view in case some other floating
+        // dock widget is the active window, and focus the editor view after hiding a tool view.
+        m_mainWindow->activateWindow();
         focusEditor();
     }
 
