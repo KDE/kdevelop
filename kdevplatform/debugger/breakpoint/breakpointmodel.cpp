@@ -113,8 +113,6 @@ BreakpointModel::~BreakpointModel()
 
 void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 {
-    Q_D(const BreakpointModel);
-
     KTextEditor::Document* const textDocument = doc->textDocument();
     Q_ASSERT(textDocument);
 
