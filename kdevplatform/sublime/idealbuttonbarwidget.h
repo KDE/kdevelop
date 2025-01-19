@@ -87,7 +87,8 @@ class IdealButtonBarWidget: public QWidget
     Q_OBJECT
 
 public:
-    explicit IdealButtonBarWidget(Qt::DockWidgetArea area, QWidget* parent);
+    explicit IdealButtonBarWidget(Qt::DockWidgetArea area, const IdealDockWidget* const& dockWidgetToGroupWith,
+                                  QWidget* parent);
 
     /**
      * Add a tool view action for a given dock widget and tool view to this widget.
@@ -149,6 +150,11 @@ private:
     template<typename ToolViewActionUser>
     void forEachToolViewAction(ToolViewActionUser callback) const;
 
+    /**
+     * If not null, points to the dock widget, which should be
+     * grouped with rather than replaced by a newly shown tool view.
+     */
+    const IdealDockWidget* const& m_dockWidgetToGroupWith = nullptr;
     /**
      * Whether we are in the process of setting the checked state
      * of each tool view action to the visibility of its dock widget.

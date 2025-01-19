@@ -163,6 +163,12 @@ private:
 
     QWidget* const m_bottomStatusBarLocation;
 
+    /**
+     * If not null, points to the dock widget, which should be
+     * grouped with rather than replaced by a newly shown tool view.
+     */
+    const IdealDockWidget* m_dockWidgetToGroupWith = nullptr;
+
     /** Map from View to an action that shows/hides
         the IdealDockWidget containing that view.  */
     QHash<View*, QAction*> m_view_to_action;

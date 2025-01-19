@@ -11,6 +11,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QMainWindow>
+#include <QScopedValueRollback>
 #include <QToolBar>
 #include <QStyle>
 
@@ -126,10 +127,10 @@ private:
 IdealController::IdealController(Sublime::MainWindow* mainWindow)
     : QObject(mainWindow)
     , m_mainWindow(mainWindow)
-    , m_leftBarWidget{new IdealButtonBarWidget(Qt::LeftDockWidgetArea, mainWindow)}
-    , m_rightBarWidget{new IdealButtonBarWidget(Qt::RightDockWidgetArea, mainWindow)}
-    , m_topBarWidget{new IdealButtonBarWidget(Qt::TopDockWidgetArea, mainWindow)}
-    , m_bottomBarWidget{new IdealButtonBarWidget(Qt::BottomDockWidgetArea, mainWindow)}
+    , m_leftBarWidget{new IdealButtonBarWidget(Qt::LeftDockWidgetArea, m_dockWidgetToGroupWith, mainWindow)}
+    , m_rightBarWidget{new IdealButtonBarWidget(Qt::RightDockWidgetArea, m_dockWidgetToGroupWith, mainWindow)}
+    , m_topBarWidget{new IdealButtonBarWidget(Qt::TopDockWidgetArea, m_dockWidgetToGroupWith, mainWindow)}
+    , m_bottomBarWidget{new IdealButtonBarWidget(Qt::BottomDockWidgetArea, m_dockWidgetToGroupWith, mainWindow)}
     , m_leftToolBar{new IdealToolBar(i18n("Left Button Bar"), true, m_leftBarWidget, mainWindow)}
     , m_rightToolBar{new IdealToolBar(i18n("Right Button Bar"), true, m_rightBarWidget, mainWindow)}
     // adymo: intentionally do not add a toolbar for top buttonbar
@@ -366,6 +367,17 @@ void IdealController::raiseView(View* view)
 {
     QAction* action = m_view_to_action.value(view);
     Q_ASSERT(action);
+
+    // This function is invoked programmatically and shows the tool view in the background.
+    // If another tool view is currently active, a background event should not hide it,
+    // because that would contradict the notion of the "background". Furthermore, after such
+    // a hiding, the attempt to reactivate the previously active widget in the code below would
+    // either activate an invisible tool view or fail, neither of which is correct behavior.
+    // Set m_dockWidgetToGroupWith to the currently active dock widget (if any) to make
+    // the IdealButtonBarWidget of the tool view action checked below group with the active
+    // dock widget if it happens to be in the same dock widget area as the raised tool view.
+    Q_ASSERT_X(!m_dockWidgetToGroupWith, Q_FUNC_INFO, "Recursive raising and grouping is unsupported");
+    const QScopedValueRollback<const IdealDockWidget*> guard(m_dockWidgetToGroupWith, currentDockWidget());
 
     QWidget *focusWidget = m_mainWindow->focusWidget();
     action->setChecked(true);

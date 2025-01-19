@@ -288,8 +288,10 @@ private:
     bool m_lastSavedAnyCheckedState = false;
 };
 
-IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, QWidget* parent)
+IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, const IdealDockWidget* const& dockWidgetToGroupWith,
+                                           QWidget* parent)
     : QWidget(parent)
+    , m_dockWidgetToGroupWith(dockWidgetToGroupWith)
     , m_area(area)
     , m_corner(nullptr)
     , m_buttonsLayout(nullptr)
@@ -537,8 +539,8 @@ void IdealButtonBarWidget::showWidget(bool checked)
             // The alternative to use a QActionCollection and setting that to "exclusive"
             // has a big drawback: QActions in a collection that is exclusive cannot
             // be un-checked by the user, e.g. in the View -> Tool Views menu.
-            forEachToolViewAction([widgetAction](ToolViewAction& action) {
-                if (&action != widgetAction) {
+            forEachToolViewAction([widgetAction, this](ToolViewAction& action) {
+                if (&action != widgetAction && action.dockWidget() != m_dockWidgetToGroupWith) {
                     action.setChecked(false);
                 }
             });
