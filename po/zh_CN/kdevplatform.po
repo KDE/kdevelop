@@ -5296,7 +5296,7 @@ msgstr "成功解析后打印完整的定义-使用链"
 #: util/duchainify/main.cpp:293
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "在转储上下文时打印父上下文"
 
 #: util/duchainify/main.cpp:295
 #, kde-format
