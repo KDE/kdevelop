@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2025-01-12 17:18+0100\n"
+"PO-Revision-Date: 2025-01-19 13:45+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -5484,7 +5484,7 @@ msgstr ""
 msgid "Number of threads to use"
 msgstr "Número de fíos que usar"
 
-# skip-rule: normalization-ble
+# skip-rule: trasno-gl_bel, trasno-empty
 #: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
@@ -5492,8 +5492,8 @@ msgid ""
 "declarations (default), all-declarations, all-declarations-and-uses, all-"
 "declarations-and-uses-and-AST"
 msgstr ""
-"Características que construír. Opcións: baleiro, simplified-visible-"
-"declarations, visible-declarations (por omisión), all-declarations, all-"
+"Funcionalidades para construír. Opcións: empty, simplified-visible-"
+"declarations, visible-declarations (predeterminada), all-declarations, all-"
 "declarations-and-uses, all-declarations-and-uses-and-AST"
 
 #: util/duchainify/main.cpp:291
@@ -5514,7 +5514,7 @@ msgstr ""
 "Amosar o repositorio Definitions de DUChain completo tras unha análise sen "
 "problemas."
 
-# skip-rule: normalization-ble
+# skip-rule: trasno-gl_bel
 #: util/duchainify/main.cpp:298
 #, kde-format
 msgid ""
