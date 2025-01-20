@@ -6,10 +6,9 @@
 
 #include "session.h"
 
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/iplugin.h>
-#include "core.h"
 #include "sessioncontroller.h"
+
+#include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 
@@ -18,7 +17,6 @@
 
 #include <QDir>
 #include <QRegularExpression>
-#include <QUrl>
 
 namespace KDevelop
 {
@@ -34,16 +32,6 @@ public:
     SessionInfo info;
     Session* const q;
     bool isTemporary;
-
-    QUrl pluginArea( const IPlugin* plugin )
-    {
-        QString name = Core::self()->pluginController()->pluginInfo(plugin).pluginId();
-        QUrl url = QUrl::fromLocalFile(info.path + QLatin1Char('/') + name );
-        if( !QFile::exists( url.toLocalFile() ) ) {
-            QDir( info.path ).mkdir( name );
-        }
-        return url;
-    }
 
     SessionPrivate( Session* session, const QString& id )
         : info( Session::parse( id, true ) )
@@ -92,13 +80,6 @@ QString Session::description() const
     return d->info.description;
 }
 
-QUrl Session::pluginDataArea( const IPlugin* p )
-{
-    Q_D(Session);
-
-    return d->pluginArea( p );
-}
-
 KSharedConfigPtr Session::config()
 {
     Q_D(Session);
@@ -145,7 +126,7 @@ bool Session::isTemporary() const
     return d->isTemporary;
 }
 
-QString Session::path() const
+QString Session::dataDirectory() const
 {
     Q_D(const Session);
 

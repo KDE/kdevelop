@@ -18,19 +18,17 @@ class KActionCollection;
 class QAction;
 class QString;
 class QMenu;
-class KDevFileManagerPlugin;
 class BookmarkHandler;
 
 class FileManager: public QWidget {
     Q_OBJECT
 public:
-    FileManager(KDevFileManagerPlugin *plugin, QWidget* parent);
+    explicit FileManager(QWidget* parent);
     ~FileManager() override;
 
     QList<QAction*> toolBarActions() const;
     KActionCollection* actionCollection() const;
     KDirOperator* dirOperator() const;
-    KDevFileManagerPlugin* plugin() const;
 
 private Q_SLOTS:
     void fileCreated(KJob *job);
@@ -50,7 +48,6 @@ private:
     KUrlNavigator* urlnav;
     BookmarkHandler *m_bookmarkHandler;
     KActionCollection *m_actionCollection;
-    KDevFileManagerPlugin *m_plugin;
 };
 
 #endif

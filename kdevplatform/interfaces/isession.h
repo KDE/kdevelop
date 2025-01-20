@@ -20,8 +20,6 @@ class QString;
 namespace KDevelop
 {
 
-class IPlugin;
-
 /**
  * @class ISession
  */
@@ -41,7 +39,10 @@ public:
     virtual QString name() const = 0;
     virtual QList<QUrl> containedProjects() const = 0;
     virtual void setContainedProjects( const QList<QUrl>& projects ) = 0;
-    virtual QUrl pluginDataArea( const IPlugin* ) = 0;
+    /**
+     * @return the directory where persistent session data can be stored, also known as the session directory
+     */
+    [[nodiscard]] virtual QString dataDirectory() const = 0;
     virtual KSharedConfigPtr config() = 0;
     virtual QUuid id() const = 0;
 

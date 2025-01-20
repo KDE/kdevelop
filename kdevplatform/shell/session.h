@@ -40,7 +40,6 @@ public:
     explicit Session( const QString& id, QObject * parent = nullptr );
     ~Session() override;
 
-    QUrl pluginDataArea( const IPlugin* ) override;
     KSharedConfigPtr config() override;
 
     QList<QUrl> containedProjects() const override;
@@ -56,7 +55,7 @@ public:
     bool isTemporary() const override;
     void setTemporary(bool temp) override;
 
-    QString path() const;
+    [[nodiscard]] QString dataDirectory() const override;
 
     /**
      * Generates a @ref SessionInfo by a session @p id.

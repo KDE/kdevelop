@@ -19,10 +19,11 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevFileManagerFactory, "kdevfilemanager.json", regis
 
 class KDevFileManagerViewFactory: public KDevelop::IToolViewFactory{
 public:
-    explicit KDevFileManagerViewFactory(KDevFileManagerPlugin *plugin): m_plugin(plugin) {}
+    KDevFileManagerViewFactory() = default;
+
     QWidget* create(QWidget *parent = nullptr) override
     {
-        return new FileManager(m_plugin,parent);
+        return new FileManager(parent);
     }
 
     QList<QAction*> toolBarActions( QWidget* w ) const override
@@ -47,9 +48,6 @@ public:
     {
         return true;
     }
-
-private:
-    KDevFileManagerPlugin *m_plugin;
 };
 
 KDevFileManagerPlugin::KDevFileManagerPlugin(QObject* parent, const KPluginMetaData& metaData,
@@ -58,12 +56,7 @@ KDevFileManagerPlugin::KDevFileManagerPlugin(QObject* parent, const KPluginMetaD
 {
     setXMLFile(QStringLiteral("kdevfilemanager.rc"));
 
-    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
-}
-
-void KDevFileManagerPlugin::init()
-{
-    m_factory = new KDevFileManagerViewFactory(this);
+    m_factory = new KDevFileManagerViewFactory;
     core()->uiController()->addToolView(i18nc("@title:window", "File System"), m_factory);
 }
 

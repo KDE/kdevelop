@@ -20,8 +20,6 @@ public:
     ~KDevFileManagerPlugin() override;
 
     void unload() override;
-private Q_SLOTS:
-    void init();
 
 private:
     class KDevFileManagerViewFactory *m_factory;

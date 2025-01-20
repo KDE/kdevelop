@@ -10,7 +10,6 @@
 
 #include "bookmarkhandler.h"
 #include "filemanager.h"
-#include "kdevfilemanagerplugin.h"
 #include "debug.h"
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
@@ -25,11 +24,14 @@ BookmarkHandler::BookmarkHandler( FileManager *parent, QMenu* kpopupmenu )
 {
     setObjectName( QStringLiteral( "BookmarkHandler" ) );
 
-    QUrl bookmarksPath = KDevelop::ICore::self()->activeSession()->pluginDataArea(parent->plugin());
-    bookmarksPath.setPath(bookmarksPath.path() + QLatin1String("fsbookmarks.xml"));
+    // The subpath had been pluginId/"fsbookmarks.xml" with pluginId="kdevfilemanager" before
+    // 715d09e5545758af0ba85c8fea7c11ecb94eb9ad accidentally removed the slash after pluginId while
+    // porting from KUrl to QUrl. So now we are stuck with the long filename for backward compatibility.
+    const QString bookmarksPath =
+        KDevelop::ICore::self()->activeSession()->dataDirectory() + QLatin1String("/kdevfilemanagerfsbookmarks.xml");
     qCDebug(PLUGIN_FILEMANAGER) << bookmarksPath;
 
-    auto* const manager = new KBookmarkManager(bookmarksPath.toLocalFile(), this);
+    auto* const manager = new KBookmarkManager(bookmarksPath, this);
     m_bookmarkMenu = new KBookmarkMenu(manager, this, m_menu);
     const auto actions = m_menu->actions();
 

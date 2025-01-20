@@ -35,12 +35,11 @@
 
 #include "../openwith/iopenwith.h"
 
-#include "kdevfilemanagerplugin.h"
 #include "bookmarkhandler.h"
 #include "debug.h"
 
-FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
-    : QWidget(parent), m_plugin(plugin)
+FileManager::FileManager(QWidget* parent)
+    : QWidget(parent)
 {
     setObjectName(QStringLiteral("FileManager"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("folder-sync"), windowIcon()));
@@ -196,11 +195,6 @@ KActionCollection* FileManager::actionCollection() const
 KDirOperator* FileManager::dirOperator() const
 {
     return dirop;
-}
-
-KDevFileManagerPlugin* FileManager::plugin() const
-{
-    return m_plugin;
 }
 
 #include "moc_filemanager.cpp"
