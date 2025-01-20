@@ -6,15 +6,15 @@
 
 #include "session.h"
 
-#include <KConfigGroup>
-
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iplugin.h>
 #include "core.h"
 #include "sessioncontroller.h"
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
-#include <serialization/itemrepository.h>
+
+#include <KConfigGroup>
+#include <KLocalizedString>
 
 #include <QDir>
 #include <QRegularExpression>
