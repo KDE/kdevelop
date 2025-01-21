@@ -235,10 +235,11 @@ public:
 
     ISessionLock::Ptr sessionLock;
 
-    static QString sessionBaseDirectory()
+    [[nodiscard]] static const QString& sessionBaseDirectory()
     {
-        return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+        static const QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
             + QLatin1Char('/') + QCoreApplication::applicationName() + QLatin1String("/sessions/");
+        return path;
     }
 
 private Q_SLOTS:
