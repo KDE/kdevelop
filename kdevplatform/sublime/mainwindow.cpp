@@ -7,8 +7,10 @@
 #include "mainwindow.h"
 #include "mainwindow_p.h"
 
+#include <QAction>
 #include <QApplication>
 #include <QDockWidget>
+#include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
 
@@ -24,6 +26,8 @@
 #include "idealcontroller.h"
 #include "holdupdates.h"
 #include <debug.h>
+
+#include <algorithm>
 
 namespace {
 /**
@@ -389,6 +393,48 @@ void MainWindow::loadUiPreferences()
         container->setTabBarHidden(tabBarHidden);
         container->setCloseButtonsOnTabs(closeButtonsOnTabs);
     }
+}
+
+QMenu* MainWindow::createPopupMenu()
+{
+    // The menu created in this function appears as the context menu of the main menu.
+    // QMainWindow::createPopupMenu() returns a menu that contains the following actions (in order):
+    // 1) dock widget actions;
+    // 2) a separator action if there is at least one dock widget action;
+    // 3) toolbar actions.
+    //
+    // When a tool view is hidden, IdealController::showDockWidget() removes its dock widget from
+    // the main window. So dock widget actions for some tool views are absent from the popup menu.
+    // Triggering a dock widget action in the popup menu shows/closes the dock widget but does not check/uncheck
+    // the associated tool view action. This causes an inconsistency between the visibility of a dock widget
+    // and the checked state of its tool view action. Work around the incompleteness and the inconsistency
+    // by removing the dock widget actions and the no longer useful separator from the popup menu.
+    // A tool view action is a correct replacement for a dock widget action. All available
+    // tool view actions can be found in the main menu => Window => Tool Views menu.
+
+    auto* const menu = KParts::MainWindow::createPopupMenu();
+    if (!menu) {
+        return menu; // empty menu => nothing to do
+    }
+
+    const auto actions = menu->actions();
+    const auto separatorIt = std::find_if(actions.cbegin(), actions.cend(), [](const QAction* action) {
+        return action->isSeparator();
+    });
+    if (separatorIt == actions.cend()) {
+        // the absence of a separator means that there are no dock widgets => nothing to do
+        return menu;
+    }
+
+    std::for_each(actions.cbegin(), separatorIt + 1, [menu](QAction* action) {
+        // Do not delete the actions, because the dock widget actions are reused via QDockWidget::toggleViewAction(),
+        // so destroying such an action causes a segmentation fault the next time it is used. The separator action
+        // is not reused and could be deleted here, but do not bother to, because the menu is its parent and will
+        // be destroyed soon enough - when closed. Besides, the separator action might be reused too in the future.
+        menu->removeAction(action);
+    });
+
+    return menu;
 }
 
 void MainWindow::tabDoubleClicked(View* view)

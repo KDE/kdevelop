@@ -101,6 +101,8 @@ public:
      */
     virtual void loadUiPreferences();
 
+    [[nodiscard]] QMenu* createPopupMenu() override;
+
 public Q_SLOTS:
     /**Shows the @p view and makes it active, focusing it by default).*/
     void activateView(Sublime::View *view, bool focus = true);
