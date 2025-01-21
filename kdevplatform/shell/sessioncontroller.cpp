@@ -241,12 +241,6 @@ public:
             + QLatin1Char('/') + QCoreApplication::applicationName() + QLatin1String("/sessions/");
     }
 
-    QString ownSessionDirectory() const
-    {
-        Q_ASSERT(activeSession);
-        return q->sessionDirectory( activeSession->id().toString() );
-    }
-
 private Q_SLOTS:
     void sessionUpdated( KDevelop::ISession* s )
     {
@@ -514,7 +508,7 @@ QString SessionController::cloneSession( const QString& nameOrid )
 
     Session* origSession = session(nameOrid);
     QUuid id = QUuid::createUuid();
-    auto copyJob = KIO::copy(QUrl::fromLocalFile(sessionDirectory(origSession->id().toString())),
+    auto copyJob = KIO::copy(QUrl::fromLocalFile(origSession->dataDirectory()),
                              QUrl::fromLocalFile(sessionDirectory( id.toString())));
     KJobWidgets::setWindow(copyJob, Core::self()->uiController()->activeMainWindow());
     copyJob->exec();
@@ -692,7 +686,7 @@ QString SessionController::sessionDir()
 
     if( !activeSession() )
         return QString();
-    return d->ownSessionDirectory();
+    return d->activeSession->dataDirectory();
 }
 
 QString SessionController::sessionName()

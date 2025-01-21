@@ -24,11 +24,6 @@ using namespace KDevelop;
 
 //////////////////// Helper Functions ////////////////////////////////////////
 
-QString sessionDir( ISession* s )
-{
-    return SessionController::sessionDirectory(s->id().toString());
-}
-
 void verifySessionDir( const QString& sessiondir, const QString& name, bool exists )
 {
     if( exists )
@@ -47,7 +42,7 @@ void verifySessionDir( const QString& sessiondir, const QString& name, bool exis
 
 void verifySessionDir( ISession* s, bool exists = true )
 {
-    verifySessionDir(sessionDir(s), s->name(), exists);
+    verifySessionDir(s->dataDirectory(), s->name(), exists);
 }
 
 ////////////////////// Fixture ///////////////////////////////////////////////
@@ -134,7 +129,7 @@ void TestSessionController::deleteSession()
     QString sessionId = s->id().toString();
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
     verifySessionDir( s.data() );
-    const QString sessionDir = ::sessionDir(s);
+    const auto sessionDir = s->dataDirectory();
 
     QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(QString)));
     {
@@ -194,7 +189,7 @@ void TestSessionController::temporary()
     ISession* s = Core::self()->activeSession();
     s->setTemporary(true);
     const QString oldName = s->name();
-    const QString dir = sessionDir(s);
+    const auto dir = s->dataDirectory();
 
     verifySessionDir(s, true);
     Core::self()->sessionController()->cleanup();
