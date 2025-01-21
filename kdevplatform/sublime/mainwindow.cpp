@@ -324,6 +324,13 @@ void MainWindow::loadSettings()
 
     d->idealController->loadButtonOrderSettings(cg);
 
+    // applyMainWindowSettings() restores the main window state, including the visibility of ideal toolbars,
+    // from config. So the visibility of ideal toolbars may no longer match their emptiness. This can happen if
+    // the main window state is out of sync with Sublime::Area's "desired views" config or if some plugin with a
+    // tool view is loaded now but was not loaded during the previous KDevelop run (or vice versa) for some reason.
+    // Update ideal toolbar visibility to avoid showing an empty toolbar or not showing a nonempty one.
+    d->idealController->updateToolBarVisibility();
+
     if (isVisible()) {
         d->adaptToDockWidgetVisibilities();
     } else {

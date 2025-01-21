@@ -106,8 +106,7 @@ public:
         addWidget(buttons);
 
         // This code determines the initial visibility of the toolbar only if KMainWindow::applyMainWindowSettings()
-        // fails to restore the main window state from config. So if the user manually hides or shows a
-        // toolbar via the context menu of the main menu, it remains hidden/visible on next KDevelop start.
+        // fails to restore the main window state from config.
         if (hideWhenEmpty) {
             updateVisibility();
             connect(m_buttons, &IdealButtonBarWidget::emptyChanged, this, &IdealToolBar::updateVisibility);
