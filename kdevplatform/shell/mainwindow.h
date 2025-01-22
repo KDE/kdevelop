@@ -84,6 +84,8 @@ protected Q_SLOTS:
     void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&) override;
     void newTabRequested() override;
 
+    void saveNewToolbarConfig() override;
+
 private Q_SLOTS:
     void documentActivated(const QPointer<KTextEditor::Document>& textDocument);
     void updateCaption();

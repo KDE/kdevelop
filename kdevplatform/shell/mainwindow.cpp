@@ -601,4 +601,12 @@ void MainWindow::newTabRequested()
     d->fileNew();
 }
 
+void MainWindow::saveNewToolbarConfig()
+{
+    // Applying a toolbar config removes actions added via KXMLGUIClient::plugActionList().
+    Sublime::MainWindow::saveNewToolbarConfig();
+    // So plug the available_sessions actions again as the documentation for KEditToolBar recommends.
+    Core::self()->sessionController()->updateXmlGuiActionList();
+}
+
 #include "moc_mainwindow.cpp"
