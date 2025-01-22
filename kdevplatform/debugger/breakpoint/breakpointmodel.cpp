@@ -263,6 +263,9 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
                           << "due to moving interface content invalidation";
         detachDocumentBreakpoints(*document);
 
+#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
+        // Since https://commits.kde.org/ktexteditor/20a58cd2f989ca0001cedb6b149393e23d76e819
+        // first included in KTextEditor version 6.9, the document's URL cannot be empty here.
         if (document->url().isEmpty()) {
             // This happens when a document's file is deleted externally and the user presses the Close File button in
             // the prompt that appears above the editor. In this case the KTextEditor::Document's URL is temporarily
@@ -273,12 +276,9 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
             // KTextEditor::DocumentPrivate::clearMarks() removes the breakpoint mark and the assertion
             // !document->url().isEmpty() in BreakpointModel::markChanged() fails. Work the assertion failure around
             // by removing all remaining breakpoint marks from the document now.
-            // TODO: remove this workaround once we require a KTextEditor version where
-            // the temporarily empty KTextEditor::Document's URL issue is prevented
-            // as the commit message of f47916f4f655a20afade579bda61e5d5754d11dd envisions.
             removeBreakpointMarks(*document);
         }
-
+#endif
         return;
     }
     if (d->reloadState != ReloadState::StartedReloading) {
