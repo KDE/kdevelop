@@ -43,27 +43,6 @@ QTEST_MAIN(TestBreakpointModel)
 
 using namespace KDevelop;
 
-/// Expected test helper failure handling.
-/// Use QEXPECT_FAIL_ABORT() to mark the next check as an expected failure,
-/// and call RETURN_IF_TEST_ABORTED() right after RETURN_IF_TEST_FAILED()
-/// to check if the test helper aborted.
-
-static constexpr const char* testAbortPropertyName = "kdevelop.test.abort";
-
-#define QEXPECT_FAIL_ABORT(comment)                                                                                    \
-    do {                                                                                                               \
-        QTest::testObject()->setProperty(testAbortPropertyName, true);                                                 \
-        QEXPECT_FAIL("", comment, Abort);                                                                              \
-    } while (false)
-
-#define RETURN_IF_TEST_ABORTED(...)                                                                                    \
-    do {                                                                                                               \
-        if (QTest::testObject()->property(testAbortPropertyName).isValid()) {                                          \
-            qCritical("ABORTED AT: %s:%d", __FILE__, __LINE__);                                                        \
-            return __VA_ARGS__;                                                                                        \
-        }                                                                                                              \
-    } while (false)
-
 namespace {
 
 void showInstructionsForDialog(QMessageBox& instructions)
@@ -196,7 +175,7 @@ void TestBreakpointModel::printLines(int from, int count, const IDocument* doc)
 
 /// Verify that the breakpoint is set correctly at the expected line number,
 /// that the document line tracking is enabled for it, and that its mark type matches the expected value.
-/// Check success with RETURN_IF_TEST_FAILED() and RETURN_IF_TEST_ABORTED().
+/// Check success with RETURN_IF_TEST_FAILED().
 void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedLine, uint expectedMarkType,
                                            const DocumentMarks& marks)
 {
@@ -218,12 +197,11 @@ void TestBreakpointModel::verifyBreakpoint(Breakpoint* breakpoint, int expectedL
     do {                                                                                                               \
         verifyBreakpoint(breakpoint, expectedLine, expectedMarkType, marks);                                           \
         RETURN_IF_TEST_FAILED(__VA_ARGS__);                                                                            \
-        RETURN_IF_TEST_ABORTED(__VA_ARGS__);                                                                           \
     } while (false)
 
 /// Verify that the breakpoint is set correctly at the expected line number,
 /// and that the document line tracking is not enabled for it.
-/// Check success with RETURN_IF_TEST_FAILED() and RETURN_IF_TEST_ABORTED().
+/// Check success with RETURN_IF_TEST_FAILED().
 void TestBreakpointModel::verifyUntrackedBreakpoint(Breakpoint* breakpoint, int expectedLine)
 {
     QVERIFY(!breakpoint->movingCursor());
@@ -237,7 +215,6 @@ void TestBreakpointModel::verifyUntrackedBreakpoint(Breakpoint* breakpoint, int 
     do {                                                                                                               \
         verifyUntrackedBreakpoint(breakpoint, expectedLine);                                                           \
         RETURN_IF_TEST_FAILED(__VA_ARGS__);                                                                            \
-        RETURN_IF_TEST_ABORTED(__VA_ARGS__);                                                                           \
     } while (false)
 
 /// Verify that the breakpoint instances in the model are preserved.
@@ -327,7 +304,7 @@ TestBreakpointModel::DocumentAndBreakpoint TestBreakpointModel::setupPrimaryDocu
 
 /// Prologue for tests that inserts two text lines and sets up two breakpoints in the primary document.
 /// The second breakpoint is added below the first one on a moved text line.
-/// Check success with RETURN_IF_TEST_FAILED() and RETURN_IF_TEST_ABORTED().
+/// Check success with RETURN_IF_TEST_FAILED().
 TestBreakpointModel::DocumentAndTwoBreakpoints TestBreakpointModel::setupEditAndCheckPrimaryDocumentAndBreakpoints()
 {
     const auto [url, doc, b1] = setupPrimaryDocumentAndBreakpoint();
@@ -369,9 +346,6 @@ void TestBreakpointModel::initTestCase()
 
 void TestBreakpointModel::init()
 {
-    // Reset the test abort property before each test function.
-    QTest::testObject()->setProperty(testAbortPropertyName, QVariant{});
-
     Core::self()->documentControllerInternal()->initialize();
 
     // Restore the primary test file under empty temporary working dir.
@@ -460,7 +434,6 @@ void TestBreakpointModel::testDocumentEditAndSave()
 {
     const auto [url, doc, b1, b2] = setupEditAndCheckPrimaryDocumentAndBreakpoints();
     RETURN_IF_TEST_FAILED();
-    RETURN_IF_TEST_ABORTED();
 
     // save() shall make the breakpoint tracked line numbers persistent.
     // After saving, close() should have no effect on the line numbers
@@ -485,7 +458,6 @@ void TestBreakpointModel::testDocumentEditAndDiscard()
 {
     const auto [url, doc, b1, b2] = setupEditAndCheckPrimaryDocumentAndBreakpoints();
     RETURN_IF_TEST_FAILED();
-    RETURN_IF_TEST_ABORTED();
 
     // After discarding text changes b2->line() reverts to the line number 23.
     // This is where the text line tracking was started by addCodeBreakpoint() for b2.
@@ -582,7 +554,6 @@ void TestBreakpointModel::testDocumentReload()
 {
     const auto [url, doc, b1, b2] = setupEditAndCheckPrimaryDocumentAndBreakpoints();
     RETURN_IF_TEST_FAILED();
-    RETURN_IF_TEST_ABORTED();
 
     // Set some extra breakpoint data that should be preserved even after a reload.
     b1->setIgnoreHits(1);
@@ -655,7 +626,6 @@ void TestBreakpointModel::testModifiedDocumentReload()
 
     const auto [url, doc, b1, b2] = setupEditAndCheckPrimaryDocumentAndBreakpoints();
     RETURN_IF_TEST_FAILED();
-    RETURN_IF_TEST_ABORTED();
 
     // Set some extra breakpoint data that should be preserved even after a reload.
     b1->setIgnoreHits(11);
