@@ -28,7 +28,7 @@ msgstr "权限"
 #: kdevokteta.rc:39
 #, kde-format
 msgid "View"
-msgstr "查看"
+msgstr "视图"
 
 #. i18n: ectx: Menu (bookmarks)
 #: kdevokteta.rc:57
@@ -63,4 +63,4 @@ msgstr "十六进制编辑器"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Manage Byte Array View Profiles..."
-msgstr "管理字节数组查看方案..."
+msgstr "管理字节数组视图配置方案..."
