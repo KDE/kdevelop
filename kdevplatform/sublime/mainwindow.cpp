@@ -465,6 +465,23 @@ void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea , const QPoint& 
     // do nothing
 }
 
+void MainWindow::saveNewToolbarConfig()
+{
+    auto* const activeWindow = QApplication::activeWindow();
+
+    KParts::MainWindow::saveNewToolbarConfig();
+
+    // KParts::MainWindow::saveNewToolbarConfig() calls applyMainWindowSettings(), which
+    // activates and raises visible floating dock widgets. All visible floating dock widgets
+    // become stacked on top of the previously active Configure Toolbars dialog, which
+    // invoked this function, and one of them becomes the active window and acquires the focus.
+    // Revert this surprising and inconvenient UI change by activating and raising the window that was active
+    // before the applyMainWindowSettings() call messed up the Z-order. Normally, activeWindow points to the
+    // Configure Toolbars dialog, which invoked this function and which should remain the active window.
+    activeWindow->activateWindow();
+    activeWindow->raise();
+}
+
 View* MainWindow::viewForPosition(const QPoint& globalPos) const
 {
     Q_D(const MainWindow);

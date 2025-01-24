@@ -153,6 +153,8 @@ protected Q_SLOTS:
        Default implementation does nothing.**/
     virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&);
 
+    void saveNewToolbarConfig() override;
+
 public: // FIXME?
     /**Saves size/toolbar/menu/statusbar settings to the global configuration file.
     Reimplement in subclasses to save more and don't forget to call inherited method.*/
