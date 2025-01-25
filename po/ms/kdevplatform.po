@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-09 00:39+0000\n"
+"POT-Creation-Date: 2025-01-25 00:40+0000\n"
 "PO-Revision-Date: 2009-07-05 19:31+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -2377,7 +2377,7 @@ msgstr "Konfigurkan %1"
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr ""
 
-#: shell/mainwindow.cpp:457
+#: shell/mainwindow.cpp:451
 #, kde-format
 msgid " (read only)"
 msgstr ""
@@ -4880,7 +4880,7 @@ msgctxt "area"
 msgid "Review"
 msgstr "Buang"
 
-#: shell/uicontroller.cpp:460
+#: shell/uicontroller.cpp:454
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
@@ -4966,42 +4966,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Memuat"
 
-#: sublime/container.cpp:346
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr ""
 
-#: sublime/container.cpp:380
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr ""
 
-#: sublime/container.cpp:392
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:788
+#: sublime/container.cpp:768
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Nama Fail"
 
-#: sublime/container.cpp:791
+#: sublime/container.cpp:771
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Tutup"
 
-#: sublime/container.cpp:793
+#: sublime/container.cpp:773
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Tutup S&emua"
 
-#: sublime/container.cpp:795
+#: sublime/container.cpp:775
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
@@ -5013,7 +5013,7 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr ""
 
-#: sublime/idealbuttonbarwidget.cpp:99
+#: sublime/idealbuttonbarwidget.cpp:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
@@ -5154,13 +5154,13 @@ msgstr ""
 msgid "Bottom Button Bar"
 msgstr ""
 
-#: sublime/mainwindow_p.cpp:812
+#: sublime/mainwindow_p.cpp:751
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Tutup"
 
-#: sublime/mainwindow_p.cpp:813
+#: sublime/mainwindow_p.cpp:752
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"

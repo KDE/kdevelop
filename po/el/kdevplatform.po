@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-09 00:39+0000\n"
+"POT-Creation-Date: 2025-01-25 00:40+0000\n"
 "PO-Revision-Date: 2024-09-20 13:57+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2508,7 +2508,7 @@ msgstr "Φορτωμένα πρόσθετα"
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\">Φορτώθηκαν πρόσθετα για <b>%1</b></font></html>"
 
-#: shell/mainwindow.cpp:457
+#: shell/mainwindow.cpp:451
 #, kde-format
 msgid " (read only)"
 msgstr ""
@@ -5231,7 +5231,7 @@ msgctxt "area"
 msgid "Review"
 msgstr "Επιθεώρηση"
 
-#: shell/uicontroller.cpp:460
+#: shell/uicontroller.cpp:454
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
@@ -5323,44 +5323,44 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Φόρτωση"
 
-#: sublime/container.cpp:346
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr " Γραμμή: 00000 Στήλη: 000"
 
-#: sublime/container.cpp:380
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Εμφάνιση ταξινομημένης λίστας με τα ανοιχτά έγγραφα"
 
-#: sublime/container.cpp:392
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:788
+#: sublime/container.cpp:768
 #, fuzzy, kde-format
 #| msgid "Filename"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Όνομα αρχείου"
 
-#: sublime/container.cpp:791
+#: sublime/container.cpp:771
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: sublime/container.cpp:793
+#: sublime/container.cpp:773
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Κλείσιμο των υπολοίπ&ων"
 
-#: sublime/container.cpp:795
+#: sublime/container.cpp:775
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
@@ -5372,7 +5372,7 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Εναλλαγή '%1' εργαλειοπροβολής"
 
-#: sublime/idealbuttonbarwidget.cpp:99
+#: sublime/idealbuttonbarwidget.cpp:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
@@ -5519,13 +5519,13 @@ msgstr "Γραμμή δεξιού κουμπιού"
 msgid "Bottom Button Bar"
 msgstr "Γραμμή κουμπιού βάσης"
 
-#: sublime/mainwindow_p.cpp:812
+#: sublime/mainwindow_p.cpp:751
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: sublime/mainwindow_p.cpp:813
+#: sublime/mainwindow_p.cpp:752
 #, fuzzy, kde-format
 #| msgid "Commit Message:"
 msgctxt "@info:tooltip"

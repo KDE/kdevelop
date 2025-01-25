@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-09 00:39+0000\n"
+"POT-Creation-Date: 2025-01-25 00:40+0000\n"
 "PO-Revision-Date: 2023-04-30 18:41+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -2479,7 +2479,7 @@ msgstr "Geladene Module"
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\">Geladene Module für <b>%1</b></font></html>"
 
-#: shell/mainwindow.cpp:457
+#: shell/mainwindow.cpp:451
 #, kde-format
 msgid " (read only)"
 msgstr " (Nur lesen)"
@@ -5133,7 +5133,7 @@ msgctxt "area"
 msgid "Review"
 msgstr "Durchsicht"
 
-#: shell/uicontroller.cpp:460
+#: shell/uicontroller.cpp:454
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
@@ -5225,42 +5225,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Laden"
 
-#: sublime/container.cpp:346
+#: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Zeile: 00000 Spalte: 000"
 
-#: sublime/container.cpp:380
+#: sublime/container.cpp:379
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Sortierte Liste aller offenen Dokumente anzeigen"
 
-#: sublime/container.cpp:392
+#: sublime/container.cpp:391
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Drücken Sie Strg+Tabulatortaste zum Wechseln)"
 
-#: sublime/container.cpp:788
+#: sublime/container.cpp:768
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Dateinamen kopieren"
 
-#: sublime/container.cpp:791
+#: sublime/container.cpp:771
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Schließen"
 
-#: sublime/container.cpp:793
+#: sublime/container.cpp:773
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Alle anderen schließen"
 
-#: sublime/container.cpp:795
+#: sublime/container.cpp:775
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
@@ -5272,7 +5272,7 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Werkzeugansicht „%1“ umschalten"
 
-#: sublime/idealbuttonbarwidget.cpp:99
+#: sublime/idealbuttonbarwidget.cpp:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
@@ -5418,13 +5418,13 @@ msgstr "Rechter Navigationsbereich"
 msgid "Bottom Button Bar"
 msgstr "Unterer Navigationsbereich"
 
-#: sublime/mainwindow_p.cpp:812
+#: sublime/mainwindow_p.cpp:751
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Schließen"
 
-#: sublime/mainwindow_p.cpp:813
+#: sublime/mainwindow_p.cpp:752
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
