@@ -8,9 +8,18 @@
 
 #include <cstdio>
 
+#define PREFER_SPELLING_NAME_RANGE 0
+
 CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientData /*data*/)
 {
-    auto range = clang_getCursorExtent(cursor);
+    auto range = clang_getNullRange();
+#if PREFER_SPELLING_NAME_RANGE
+    range = clang_Cursor_getSpellingNameRange(cursor, 0, 0);
+#endif
+    if (clang_Range_isNull(range)) {
+        range = clang_getCursorExtent(cursor);
+    }
+
     auto start = clang_getRangeStart(range);
     auto end = clang_getRangeEnd(range);
     CXFile file;
