@@ -501,9 +501,7 @@ void CodeHighlighting::clearHighlightingForDocument(const IndexedString& documen
     if (highlightingIt != m_highlights.end()) {
         disconnect(tracker->document(), nullptr, this, nullptr);
         disconnect(tracker, &DocumentChangeTracker::destroyed, this, nullptr);
-        auto& highlighting = *highlightingIt;
-        qDeleteAll(highlighting->m_highlightedRanges);
-        delete highlighting;
+        delete *highlightingIt;
         m_highlights.erase(highlightingIt);
     }
 }
@@ -535,7 +533,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
 
     const auto highlightingIt = m_highlights.find(tracker);
     if (highlightingIt != m_highlights.end()) {
-        oldHighlightedRanges = (*highlightingIt)->m_highlightedRanges;
+        oldHighlightedRanges.swap((*highlightingIt)->m_highlightedRanges);
         delete *highlightingIt;
         *highlightingIt = highlighting;
     } else {
@@ -549,9 +547,9 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
             // Called when a document is destroyed
             VERIFY_FOREGROUND_LOCKED
             QMutexLocker lock(&m_dataMutex);
+            disconnect(tracker->document(), nullptr, this, nullptr);
             Q_ASSERT(m_highlights.contains(tracker));
-            delete m_highlights[tracker]; // No need to care about the individual ranges, as the document is being
-                                          // destroyed
+            delete m_highlights[tracker];
             m_highlights.remove(tracker);
         });
         m_highlights.insert(tracker, highlighting);
