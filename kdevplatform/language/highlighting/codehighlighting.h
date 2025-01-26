@@ -167,6 +167,11 @@ private:
         // The ranges are sorted by range start, so they can easily be matched
         QVector<HighlightedRange> m_waiting;
         QVector<KTextEditor::MovingRange*> m_highlightedRanges;
+
+        ~DocumentHighlighting()
+        {
+            qDeleteAll(m_highlightedRanges);
+        }
     };
 
     QHash<DocumentChangeTracker*, DocumentHighlighting*> m_highlights;
