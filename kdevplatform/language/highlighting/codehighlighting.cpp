@@ -499,6 +499,7 @@ void CodeHighlighting::clearHighlightingForDocument(const IndexedString& documen
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(document);
     auto highlightingIt = m_highlights.find(tracker);
     if (highlightingIt != m_highlights.end()) {
+        disconnect(tracker->document(), nullptr, this, nullptr);
         disconnect(tracker, &DocumentChangeTracker::destroyed, this, nullptr);
         auto& highlighting = *highlightingIt;
         qDeleteAll(highlighting->m_highlightedRanges);
