@@ -525,7 +525,6 @@ PatchHighlighter::PatchHighlighter(KompareDiff2::DiffModel* model, IDocument* kd
         connect(doc, &KTextEditor::Document::lineUnwrapped, this, &PatchHighlighter::newlineRemoved);
     }
     connect(doc, &KTextEditor::Document::reloaded, this, &PatchHighlighter::documentReloaded);
-    connect(doc, &KTextEditor::Document::destroyed, this, &PatchHighlighter::documentDestroyed);
 
     if ( doc->lines() == 0 )
         return;
@@ -533,10 +532,16 @@ PatchHighlighter::PatchHighlighter(KompareDiff2::DiffModel* model, IDocument* kd
     connect(doc, &KTextEditor::Document::markToolTipRequested, this, &PatchHighlighter::markToolTipRequested);
     connect(doc, &KTextEditor::Document::markClicked, this, &PatchHighlighter::markClicked);
 
+#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
+    // Since https://commits.kde.org/ktexteditor/6ca19934786fb808ab2b307d558967a74f87e4f4
+    // first included in KTextEditor version 6.9, KTextEditor::Document emits the signal
+    // aboutToInvalidateMovingInterfaceContent() instead of aboutToDeleteMovingInterfaceContent()
+    // from the destructor.
     connect(doc, &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
-            &PatchHighlighter::aboutToDeleteMovingInterfaceContent);
+            &PatchHighlighter::aboutToInvalidateMovingInterfaceContent);
+#endif
     connect(doc, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
-            &PatchHighlighter::aboutToDeleteMovingInterfaceContent);
+            &PatchHighlighter::aboutToInvalidateMovingInterfaceContent);
 
     documentReloaded(doc);
 }
@@ -647,13 +652,9 @@ PatchHighlighter::~PatchHighlighter() {
     clear();
 }
 
-void PatchHighlighter::documentDestroyed() {
-    qCDebug(PLUGIN_PATCHREVIEW) << "document destroyed";
-    m_ranges.clear();
-}
-
-void PatchHighlighter::aboutToDeleteMovingInterfaceContent( KTextEditor::Document* ) {
-    qCDebug(PLUGIN_PATCHREVIEW) << "about to delete";
+void PatchHighlighter::aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)
+{
+    qCDebug(PLUGIN_PATCHREVIEW) << "about to invalidate";
     clear();
 }
 
