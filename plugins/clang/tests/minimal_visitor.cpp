@@ -15,9 +15,9 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
     auto end = clang_getRangeEnd(range);
     CXFile file;
     unsigned startLine, startColumn;
-    clang_getSpellingLocation(start, &file, &startLine, &startColumn, nullptr);
+    clang_getFileLocation(start, &file, &startLine, &startColumn, nullptr);
     unsigned endLine, endColumn;
-    clang_getSpellingLocation(end, nullptr, &endLine, &endColumn, nullptr);
+    clang_getFileLocation(end, nullptr, &endLine, &endColumn, nullptr);
 
     auto str = clang_getCursorSpelling(cursor);
     auto fileStr = clang_getFileName(file);
