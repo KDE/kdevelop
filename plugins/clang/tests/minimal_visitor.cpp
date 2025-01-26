@@ -19,17 +19,19 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
     unsigned endLine, endColumn;
     clang_getFileLocation(end, nullptr, &endLine, &endColumn, nullptr);
 
-    auto str = clang_getCursorSpelling(cursor);
-    auto fileStr = clang_getFileName(file);
-    auto typeStr = clang_getCursorKindSpelling(cursor.kind);
-    printf("\"%s\" [(%u, %u), (%u, %u)] in %s | %s %s\n", clang_getCString(str),
-           startLine, startColumn, endLine, endColumn,
-           clang_getCString(fileStr), clang_getCString(typeStr),
-           clang_isCursorDefinition(cursor) ? "(definition)" : "");
+    // skip builtin macros
+    if (file || cursor.kind != CXCursor_MacroDefinition) {
+        auto str = clang_getCursorSpelling(cursor);
+        auto fileStr = clang_getFileName(file);
+        auto typeStr = clang_getCursorKindSpelling(cursor.kind);
 
-    clang_disposeString(str);
-    clang_disposeString(fileStr);
-    clang_disposeString(typeStr);
+        printf("%s:%u:%u: - %u:%u: \"%s\"  %s %s\n", clang_getCString(fileStr), startLine, startColumn, endLine,
+               endColumn, clang_getCString(str), clang_getCString(typeStr),
+               clang_isCursorDefinition(cursor) ? "(definition)" : "");
+        clang_disposeString(str);
+        clang_disposeString(fileStr);
+        clang_disposeString(typeStr);
+    }
     return CXChildVisit_Recurse;
 }
 
@@ -46,8 +48,12 @@ int main(int argc, char** argv)
 
     auto index = clang_createIndex(0, 0);
 
+    unsigned int flags = CXTranslationUnit_DetailedPreprocessingRecord
+#if CINDEX_VERSION_MINOR >= 34
+        | CXTranslationUnit_KeepGoing;
+#endif
     CXTranslationUnit unit;
-    clang_parseTranslationUnit2(index, argv[1], nullptr, 0, nullptr, 0, 0, &unit);
+    clang_parseTranslationUnit2(index, argv[1], nullptr, 0, nullptr, 0, flags, &unit);
 
     auto tuCursor = clang_getTranslationUnitCursor(unit);
     clang_visitChildren(tuCursor, &visitCursor, nullptr);
