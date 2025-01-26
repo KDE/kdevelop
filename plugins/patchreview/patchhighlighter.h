@@ -47,8 +47,8 @@ public:
     QList< KTextEditor::MovingRange* > ranges() const;
 private Q_SLOTS:
     void documentReloaded( KTextEditor::Document* );
-    void documentDestroyed();
-    void aboutToDeleteMovingInterfaceContent( KTextEditor::Document* );
+    void aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*);
+
 private:
     void addLineMarker(KTextEditor::MovingRange* arg1, const KompareDiff2::Difference* arg2);
     void removeLineMarker( KTextEditor::MovingRange* range );
