@@ -494,17 +494,25 @@ void CodeHighlightingInstance::highlightUses(DUContext* context)
         highlightUse(context, a, QColor(QColor::Invalid));
 }
 
+bool CodeHighlighting::removeTracker(DocumentChangeTracker* tracker)
+{
+    const auto it = m_highlights.constFind(tracker);
+    if (it == m_highlights.cend()) {
+        return false;
+    }
+    disconnect(tracker->document(), nullptr, this, nullptr);
+    delete *it;
+    m_highlights.erase(it);
+    return true;
+}
+
 void CodeHighlighting::clearHighlightingForDocument(const IndexedString& document)
 {
     VERIFY_FOREGROUND_LOCKED
     QMutexLocker lock(&m_dataMutex);
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(document);
-    auto highlightingIt = m_highlights.find(tracker);
-    if (highlightingIt != m_highlights.end()) {
-        disconnect(tracker->document(), nullptr, this, nullptr);
+    if (removeTracker(tracker)) {
         disconnect(tracker, &DocumentChangeTracker::destroyed, this, nullptr);
-        delete *highlightingIt;
-        m_highlights.erase(highlightingIt);
     }
 }
 
@@ -549,10 +557,8 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
             // Called when a document is destroyed
             VERIFY_FOREGROUND_LOCKED
             QMutexLocker lock(&m_dataMutex);
-            disconnect(tracker->document(), nullptr, this, nullptr);
-            Q_ASSERT(m_highlights.contains(tracker));
-            delete m_highlights[tracker];
-            m_highlights.remove(tracker);
+            const auto removed = removeTracker(tracker);
+            Q_ASSERT(removed);
         });
         m_highlights.insert(tracker, highlighting);
     }
