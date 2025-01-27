@@ -31,6 +31,8 @@
 
 #include <KTextEditor/Document>
 
+#include <algorithm>
+
 using namespace KTextEditor;
 
 static const float highlightingZDepth = -500;
@@ -140,7 +142,7 @@ bool CodeHighlighting::hasHighlighting(IndexedString url) const
     if (tracker) {
         QMutexLocker lock(&m_dataMutex);
         const auto highlightingIt = m_highlights.constFind(tracker);
-        return highlightingIt != m_highlights.constEnd() && !(*highlightingIt)->m_highlightedRanges.isEmpty();
+        return highlightingIt != m_highlights.cend() && !(*highlightingIt)->m_highlightedRanges.empty();
     }
     return false;
 }
@@ -529,7 +531,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
         return;
     }
 
-    QVector<MovingRange*> oldHighlightedRanges;
+    std::vector<MovingRangePtr> oldHighlightedRanges;
 
     const auto highlightingIt = m_highlights.find(tracker);
     if (highlightingIt != m_highlights.end()) {
@@ -559,7 +561,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
 
     KTextEditor::Range tempRange;
 
-    QVector<MovingRange*>::iterator movingIt = oldHighlightedRanges.begin();
+    auto movingIt = oldHighlightedRanges.begin();
     QVector<HighlightedRange>::iterator rangeIt = highlighting->m_waiting.begin();
 
     while (rangeIt != highlighting->m_waiting.end()) {
@@ -571,7 +573,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
                ((*movingIt)->start().line() < transformedRange.start().line() ||
                 ((*movingIt)->start().line() == transformedRange.start().line() &&
                  (*movingIt)->start().column() < transformedRange.start().column()))) {
-            delete *movingIt; // Skip ranges that are in front of the current matched range
+            // Skip ranges that are in front of the current matched range
             ++movingIt;
         }
 
@@ -584,7 +586,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
             transformedRange.end().column() != (*movingIt)->end().column()) {
             Q_ASSERT(rangeIt->attribute);
             // The moving range is behind or unequal, create a new range
-            highlighting->m_highlightedRanges.push_back(tracker->document()->newMovingRange(tempRange));
+            highlighting->m_highlightedRanges.push_back(MovingRangePtr{tracker->document()->newMovingRange(tempRange)});
             highlighting->m_highlightedRanges.back()->setAttribute(rangeIt->attribute);
             highlighting->m_highlightedRanges.back()->setZDepth(highlightingZDepth);
         } else
@@ -592,14 +594,11 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
             // Update the existing moving range
             (*movingIt)->setAttribute(rangeIt->attribute);
             (*movingIt)->setRange(tempRange);
-            highlighting->m_highlightedRanges.push_back(*movingIt);
+            highlighting->m_highlightedRanges.push_back(std::move(*movingIt));
             ++movingIt;
         }
         ++rangeIt;
     }
-
-    for (; movingIt != oldHighlightedRanges.end(); ++movingIt)
-        delete *movingIt; // Delete unmatched moving ranges behind
 }
 
 void CodeHighlighting::aboutToInvalidateMovingInterfaceContent(Document* doc)
@@ -621,16 +620,11 @@ void CodeHighlighting::aboutToRemoveText(const KTextEditor::Range& range)
                                      ->trackerForUrl(IndexedString(doc->url()));
     const auto highlightingIt = m_highlights.constFind(tracker);
     if (highlightingIt != m_highlights.constEnd()) {
-        QVector<MovingRange*>& ranges = (*highlightingIt)->m_highlightedRanges;
-        QVector<MovingRange*>::iterator it = ranges.begin();
-        while (it != ranges.end()) {
-            if (range.contains((*it)->toRange())) {
-                delete (*it);
-                it = ranges.erase(it);
-            } else {
-                ++it;
-            }
-        }
+        auto& ranges = (*highlightingIt)->m_highlightedRanges;
+        const auto newEnd = std::remove_if(ranges.begin(), ranges.end(), [range](const MovingRangePtr& r) {
+            return range.contains(r->toRange());
+        });
+        ranges.erase(newEnd, ranges.end());
     }
 }
 }
