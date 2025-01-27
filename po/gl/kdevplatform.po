@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2025-01-19 13:45+0100\n"
+"PO-Revision-Date: 2025-01-26 21:15+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3110,14 +3110,14 @@ msgstr "Obter un proxecto…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
-msgstr "Descargar un proxecto"
+msgstr "Obter un proxecto"
 
 #: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
-msgstr "Axuda ao usuario a descargar un proxecto e impórtao a KDevelop."
+msgstr "Axuda á persoa usuaria a obter un proxecto e impórtao en KDevelop."
 
 #: shell/projectcontroller.cpp:583
 #, kde-format
@@ -3269,8 +3269,8 @@ msgstr "%1 : %p%"
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
 msgstr ""
-"Hai que indicar un directorio válido ou non existente para descargar («check "
-"out») un proxecto."
+"Hai que indicar un cartafol válido ou non existente para abrir («check out») "
+"un proxecto."
 
 #: shell/projectsourcepage.cpp:251
 #, kde-format
@@ -5318,7 +5318,7 @@ msgstr "Dereita"
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
-msgstr "Separada"
+msgstr "Desconectada"
 
 #: sublime/idealdockwidget.cpp:135
 #, kde-format
