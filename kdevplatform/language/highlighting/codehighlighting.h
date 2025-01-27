@@ -21,6 +21,9 @@
 #include <KTextEditor/Attribute>
 #include <KTextEditor/MovingRange>
 
+#include <memory>
+#include <vector>
+
 namespace KDevelop {
 class DUContext;
 class Declaration;
@@ -158,7 +161,7 @@ protected:
     virtual CodeHighlightingInstance* createInstance() const;
 
 private:
-
+    using MovingRangePtr = std::unique_ptr<KTextEditor::MovingRange>;
     /// Highlighting of one specific document
     struct DocumentHighlighting
     {
@@ -166,12 +169,7 @@ private:
         qint64 m_waitingRevision;
         // The ranges are sorted by range start, so they can easily be matched
         QVector<HighlightedRange> m_waiting;
-        QVector<KTextEditor::MovingRange*> m_highlightedRanges;
-
-        ~DocumentHighlighting()
-        {
-            qDeleteAll(m_highlightedRanges);
-        }
+        std::vector<MovingRangePtr> m_highlightedRanges;
     };
 
     QHash<DocumentChangeTracker*, DocumentHighlighting*> m_highlights;
