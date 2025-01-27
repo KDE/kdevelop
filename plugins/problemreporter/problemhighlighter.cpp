@@ -67,9 +67,13 @@ void ProblemHighlighter::settingsChanged()
 
 ProblemHighlighter::~ProblemHighlighter()
 {
+#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
+    // KTextEditor::Document no longer participates in the ownership of its moving ranges
+    // since https://commits.kde.org/ktexteditor/3991a497c16373cbb798c22c6a84cdd85486e468
+    // first included in KTextEditor version 6.9.
     if (m_topHLRanges.isEmpty() || !m_document)
         return;
-
+#endif
     qDeleteAll(m_topHLRanges);
 }
 
