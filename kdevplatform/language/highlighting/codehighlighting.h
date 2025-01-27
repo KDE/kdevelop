@@ -161,6 +161,15 @@ protected:
     virtual CodeHighlightingInstance* createInstance() const;
 
 private:
+    /**
+     * If @a m_highlights contains @p tracker, remove the matching element, disconnect @c this
+     * from the signals of @p tracker->document() and return @c true; otherwise return @c false.
+     *
+     * @pre the foreground is locked
+     * @pre @a m_dataMutex is locked
+     */
+    bool removeTracker(DocumentChangeTracker* tracker);
+
     using MovingRangePtr = std::unique_ptr<KTextEditor::MovingRange>;
     /// Highlighting of one specific document
     struct DocumentHighlighting
