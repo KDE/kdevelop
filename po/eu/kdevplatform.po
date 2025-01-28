@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-25 00:40+0000\n"
+"POT-Creation-Date: 2025-01-28 00:40+0000\n"
 "PO-Revision-Date: 2024-08-17 11:45+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -128,69 +128,69 @@ msgstr ""
 "<b>Eten-puntua zikin dago</b><p>Eten-puntua ez zaio oraindik araztaileari "
 "pasatu.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:121
+#: debugger/breakpoint/breakpointmodel.cpp:119
 #, kde-format
 msgid "Breakpoint"
 msgstr "Eten-puntua"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Ez da eten-puntua aurkitu"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Ezin izan da eten-puntua %1:%2 aurkitu"
 
-#: debugger/breakpoint/breakpointmodel.cpp:377
+#: debugger/breakpoint/breakpointmodel.cpp:384
 #, kde-format
 msgid "&Breakpoint"
 msgstr "&Eten-puntua"
 
-#: debugger/breakpoint/breakpointmodel.cpp:383
+#: debugger/breakpoint/breakpointmodel.cpp:390
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Desgaitu eten-puntua"
 
-#: debugger/breakpoint/breakpointmodel.cpp:384
+#: debugger/breakpoint/breakpointmodel.cpp:391
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Gaitu &eten-puntua"
 
-#: debugger/breakpoint/breakpointmodel.cpp:387
+#: debugger/breakpoint/breakpointmodel.cpp:394
 #, kde-format
 msgid "&Bookmark"
 msgstr "&Laster-marka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:429
+#: debugger/breakpoint/breakpointmodel.cpp:436
 #: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Type"
 msgstr "Mota"
 
-#: debugger/breakpoint/breakpointmodel.cpp:430
+#: debugger/breakpoint/breakpointmodel.cpp:437
 #, kde-format
 msgid "Location"
 msgstr "Kokalekua"
 
-#: debugger/breakpoint/breakpointmodel.cpp:431
+#: debugger/breakpoint/breakpointmodel.cpp:438
 #, kde-format
 msgid "Condition"
 msgstr "Baldintza"
 
-#: debugger/breakpoint/breakpointmodel.cpp:435
+#: debugger/breakpoint/breakpointmodel.cpp:442
 #, kde-format
 msgid "Active status"
 msgstr "Egoera aktiboa"
 
-#: debugger/breakpoint/breakpointmodel.cpp:436
+#: debugger/breakpoint/breakpointmodel.cpp:443
 #, kde-format
 msgid "State"
 msgstr "Egoera"
 
-#: debugger/breakpoint/breakpointmodel.cpp:660
+#: debugger/breakpoint/breakpointmodel.cpp:667
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
@@ -5568,7 +5568,7 @@ msgstr "Ataza bertan behera utzita"
 msgid "Run all tests in %1"
 msgstr "Exekutatu test guztiak %1(e)n"
 
-#: util/shellutils.cpp:156
+#: util/shellutils.cpp:171
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5577,30 +5577,30 @@ msgstr ""
 "Ez duzu idazteko baimenik hurrengo fitxategietan; gehitu idazteko baimenak "
 "jabearentzako gorde baino lehen?"
 
-#: util/shellutils.cpp:159
+#: util/shellutils.cpp:174
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Fitxategi batzuk idazketaren kontra babestuta daude"
 
-#: util/shellutils.cpp:160
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Ezarri idazteko baimenak"
 
-#: util/shellutils.cpp:161
+#: util/shellutils.cpp:176
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ezikusi"
 
-#: util/shellutils.cpp:173
+#: util/shellutils.cpp:188
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Fitxategi batzuetan idazteko baimenak gehitzeak huts egin du."
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:189
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"

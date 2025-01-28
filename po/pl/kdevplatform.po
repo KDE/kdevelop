@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-25 00:40+0000\n"
+"POT-Creation-Date: 2025-01-28 00:40+0000\n"
 "PO-Revision-Date: 2024-08-17 09:31+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -141,69 +141,69 @@ msgstr ""
 "<b>Pułapka jest nieczysta</b><p>Pułapka jeszcze nie została przekazana do "
 "programu diagnostycznego.</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:121
+#: debugger/breakpoint/breakpointmodel.cpp:119
 #, kde-format
 msgid "Breakpoint"
 msgstr "Pułapka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Nie znaleziono pułapki"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Nie znaleziono pułapki w %1:%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:377
+#: debugger/breakpoint/breakpointmodel.cpp:384
 #, kde-format
 msgid "&Breakpoint"
 msgstr "&Pułapka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:383
+#: debugger/breakpoint/breakpointmodel.cpp:390
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Wyłącz pułapkę"
 
-#: debugger/breakpoint/breakpointmodel.cpp:384
+#: debugger/breakpoint/breakpointmodel.cpp:391
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Włą&cz pułapkę"
 
-#: debugger/breakpoint/breakpointmodel.cpp:387
+#: debugger/breakpoint/breakpointmodel.cpp:394
 #, kde-format
 msgid "&Bookmark"
 msgstr "&Zakładka"
 
-#: debugger/breakpoint/breakpointmodel.cpp:429
+#: debugger/breakpoint/breakpointmodel.cpp:436
 #: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Type"
 msgstr "Rodzaj"
 
-#: debugger/breakpoint/breakpointmodel.cpp:430
+#: debugger/breakpoint/breakpointmodel.cpp:437
 #, kde-format
 msgid "Location"
 msgstr "Położenie"
 
-#: debugger/breakpoint/breakpointmodel.cpp:431
+#: debugger/breakpoint/breakpointmodel.cpp:438
 #, kde-format
 msgid "Condition"
 msgstr "Warunek"
 
-#: debugger/breakpoint/breakpointmodel.cpp:435
+#: debugger/breakpoint/breakpointmodel.cpp:442
 #, kde-format
 msgid "Active status"
 msgstr "Bieżący stan"
 
-#: debugger/breakpoint/breakpointmodel.cpp:436
+#: debugger/breakpoint/breakpointmodel.cpp:443
 #, kde-format
 msgid "State"
 msgstr "Stan"
 
-#: debugger/breakpoint/breakpointmodel.cpp:660
+#: debugger/breakpoint/breakpointmodel.cpp:667
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
@@ -5581,7 +5581,7 @@ msgstr "Przerwano zadanie"
 msgid "Run all tests in %1"
 msgstr "Wykonaj wszystkie testy w %1"
 
-#: util/shellutils.cpp:156
+#: util/shellutils.cpp:171
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5590,30 +5590,30 @@ msgstr ""
 "Nie masz uprawnień do zapisu dla następujących plików; czy przyznać "
 "uprawnienia zapisu dla właściciela przed zapisaniem?"
 
-#: util/shellutils.cpp:159
+#: util/shellutils.cpp:174
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Niektóre pliki są chronione przed zapisem"
 
-#: util/shellutils.cpp:160
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Ustaw uprawnienia do zapisu"
 
-#: util/shellutils.cpp:161
+#: util/shellutils.cpp:176
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Pomiń"
 
-#: util/shellutils.cpp:173
+#: util/shellutils.cpp:188
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Nie udało się nadać uprawień zapisu na niektóre pliki."
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:189
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"

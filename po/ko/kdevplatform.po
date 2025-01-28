@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-25 00:40+0000\n"
+"POT-Creation-Date: 2025-01-28 00:40+0000\n"
 "PO-Revision-Date: 2024-08-21 00:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -120,69 +120,69 @@ msgstr ""
 "<b>중단점이 전달되지 않음</b><p>중단점이 아직 디버거로 전달되지 않았습니다.</"
 "p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:121
+#: debugger/breakpoint/breakpointmodel.cpp:119
 #, kde-format
 msgid "Breakpoint"
 msgstr "중단점"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "중단점을 찾을 수 없음"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "%1:%2에서 중단점을 찾을 수 없음"
 
-#: debugger/breakpoint/breakpointmodel.cpp:377
+#: debugger/breakpoint/breakpointmodel.cpp:384
 #, kde-format
 msgid "&Breakpoint"
 msgstr "중단점(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:383
+#: debugger/breakpoint/breakpointmodel.cpp:390
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "중단점 사용 안 함(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:384
+#: debugger/breakpoint/breakpointmodel.cpp:391
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "중단점 사용함(&E)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:387
+#: debugger/breakpoint/breakpointmodel.cpp:394
 #, kde-format
 msgid "&Bookmark"
 msgstr "책갈피(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:429
+#: debugger/breakpoint/breakpointmodel.cpp:436
 #: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Type"
 msgstr "형식"
 
-#: debugger/breakpoint/breakpointmodel.cpp:430
+#: debugger/breakpoint/breakpointmodel.cpp:437
 #, kde-format
 msgid "Location"
 msgstr "위치"
 
-#: debugger/breakpoint/breakpointmodel.cpp:431
+#: debugger/breakpoint/breakpointmodel.cpp:438
 #, kde-format
 msgid "Condition"
 msgstr "조건"
 
-#: debugger/breakpoint/breakpointmodel.cpp:435
+#: debugger/breakpoint/breakpointmodel.cpp:442
 #, kde-format
 msgid "Active status"
 msgstr "활성 상태"
 
-#: debugger/breakpoint/breakpointmodel.cpp:436
+#: debugger/breakpoint/breakpointmodel.cpp:443
 #, kde-format
 msgid "State"
 msgstr "상태"
 
-#: debugger/breakpoint/breakpointmodel.cpp:660
+#: debugger/breakpoint/breakpointmodel.cpp:667
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
@@ -5450,7 +5450,7 @@ msgstr "작업이 중단됨"
 msgid "Run all tests in %1"
 msgstr "%1에서 모든 테스트 실행"
 
-#: util/shellutils.cpp:156
+#: util/shellutils.cpp:171
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5459,30 +5459,30 @@ msgstr ""
 "다음 파일에 쓰기 권한이 없습니다. 저장하기 전에 소유자에게 쓰기 권한을 추가하"
 "시겠습니까?"
 
-#: util/shellutils.cpp:159
+#: util/shellutils.cpp:174
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "일부 파일이 쓰기 방지됨"
 
-#: util/shellutils.cpp:160
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "쓰기 권한 설정"
 
-#: util/shellutils.cpp:161
+#: util/shellutils.cpp:176
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "무시"
 
-#: util/shellutils.cpp:173
+#: util/shellutils.cpp:188
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "일부 파일에 쓰기 권한을 추가할 수 없습니다."
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:189
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"

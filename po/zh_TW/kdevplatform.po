@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-25 00:40+0000\n"
+"POT-Creation-Date: 2025-01-28 00:40+0000\n"
 "PO-Revision-Date: 2024-08-06 05:13+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -124,69 +124,69 @@ msgid ""
 "debugger.</p>"
 msgstr "<b>中斷點不準確</b><p>此中斷點尚未傳送到 GDB。</p>"
 
-#: debugger/breakpoint/breakpointmodel.cpp:121
+#: debugger/breakpoint/breakpointmodel.cpp:119
 #, kde-format
 msgid "Breakpoint"
 msgstr "中斷點"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "找不到中斷點"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "無法於 %1 找到中斷點：%2"
 
-#: debugger/breakpoint/breakpointmodel.cpp:377
+#: debugger/breakpoint/breakpointmodel.cpp:384
 #, kde-format
 msgid "&Breakpoint"
 msgstr "中斷點(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:383
+#: debugger/breakpoint/breakpointmodel.cpp:390
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "關閉中斷點(&D)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:384
+#: debugger/breakpoint/breakpointmodel.cpp:391
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "開啟中斷點(&D)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:387
+#: debugger/breakpoint/breakpointmodel.cpp:394
 #, kde-format
 msgid "&Bookmark"
 msgstr "書籤(&B)"
 
-#: debugger/breakpoint/breakpointmodel.cpp:429
+#: debugger/breakpoint/breakpointmodel.cpp:436
 #: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Type"
 msgstr "類型"
 
-#: debugger/breakpoint/breakpointmodel.cpp:430
+#: debugger/breakpoint/breakpointmodel.cpp:437
 #, kde-format
 msgid "Location"
 msgstr "位置"
 
-#: debugger/breakpoint/breakpointmodel.cpp:431
+#: debugger/breakpoint/breakpointmodel.cpp:438
 #, kde-format
 msgid "Condition"
 msgstr "條件"
 
-#: debugger/breakpoint/breakpointmodel.cpp:435
+#: debugger/breakpoint/breakpointmodel.cpp:442
 #, kde-format
 msgid "Active status"
 msgstr "啟用狀態"
 
-#: debugger/breakpoint/breakpointmodel.cpp:436
+#: debugger/breakpoint/breakpointmodel.cpp:443
 #, kde-format
 msgid "State"
 msgstr "狀態"
 
-#: debugger/breakpoint/breakpointmodel.cpp:660
+#: debugger/breakpoint/breakpointmodel.cpp:667
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
@@ -5376,37 +5376,37 @@ msgstr "工作已中止"
 msgid "Run all tests in %1"
 msgstr "已經於 %1 執行所有測試"
 
-#: util/shellutils.cpp:156
+#: util/shellutils.cpp:171
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr "您沒有以下檔案的寫入權限；要在寫入前先為擁有者添加寫入權限嗎？"
 
-#: util/shellutils.cpp:159
+#: util/shellutils.cpp:174
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "某些檔案的寫入受保護"
 
-#: util/shellutils.cpp:160
+#: util/shellutils.cpp:175
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "設定寫入權限"
 
-#: util/shellutils.cpp:161
+#: util/shellutils.cpp:176
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "忽略"
 
-#: util/shellutils.cpp:173
+#: util/shellutils.cpp:188
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "無法為某些檔案加入寫入權限。"
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:189
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"

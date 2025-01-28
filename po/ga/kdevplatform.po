@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform/kdevplatform.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-25 00:40+0000\n"
+"POT-Creation-Date: 2025-01-28 00:40+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -126,71 +126,71 @@ msgid ""
 "debugger.</p>"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:121
+#: debugger/breakpoint/breakpointmodel.cpp:119
 #, kde-format
 msgid "Breakpoint"
 msgstr "Brisphointe"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "Breakpoint not found"
 msgstr "Brisphointe"
 
-#: debugger/breakpoint/breakpointmodel.cpp:371
+#: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:377
+#: debugger/breakpoint/breakpointmodel.cpp:384
 #, fuzzy, kde-format
 #| msgid "Breakpoint"
 msgid "&Breakpoint"
 msgstr "Brisphointe"
 
-#: debugger/breakpoint/breakpointmodel.cpp:383
+#: debugger/breakpoint/breakpointmodel.cpp:390
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Díchumasaigh Brisphointe"
 
-#: debugger/breakpoint/breakpointmodel.cpp:384
+#: debugger/breakpoint/breakpointmodel.cpp:391
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "&Cumasaigh Brisphointe"
 
-#: debugger/breakpoint/breakpointmodel.cpp:387
+#: debugger/breakpoint/breakpointmodel.cpp:394
 #, kde-format
 msgid "&Bookmark"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:429
+#: debugger/breakpoint/breakpointmodel.cpp:436
 #: debugger/variable/variablecollection.cpp:407
 #: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Type"
 msgstr "Cineál"
 
-#: debugger/breakpoint/breakpointmodel.cpp:430
+#: debugger/breakpoint/breakpointmodel.cpp:437
 #, kde-format
 msgid "Location"
 msgstr "Suíomh"
 
-#: debugger/breakpoint/breakpointmodel.cpp:431
+#: debugger/breakpoint/breakpointmodel.cpp:438
 #, kde-format
 msgid "Condition"
 msgstr "Coinníoll"
 
-#: debugger/breakpoint/breakpointmodel.cpp:435
+#: debugger/breakpoint/breakpointmodel.cpp:442
 #, kde-format
 msgid "Active status"
 msgstr ""
 
-#: debugger/breakpoint/breakpointmodel.cpp:436
+#: debugger/breakpoint/breakpointmodel.cpp:443
 #, kde-format
 msgid "State"
 msgstr "Staid"
 
-#: debugger/breakpoint/breakpointmodel.cpp:660
+#: debugger/breakpoint/breakpointmodel.cpp:667
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
@@ -5657,20 +5657,20 @@ msgstr ""
 msgid "Run all tests in %1"
 msgstr ""
 
-#: util/shellutils.cpp:156
+#: util/shellutils.cpp:171
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
 
-#: util/shellutils.cpp:159
+#: util/shellutils.cpp:174
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr ""
 
-#: util/shellutils.cpp:160
+#: util/shellutils.cpp:175
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Start New Session"
@@ -5678,19 +5678,19 @@ msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Tosaigh Seisiún Nua"
 
-#: util/shellutils.cpp:161
+#: util/shellutils.cpp:176
 #, fuzzy, kde-format
 #| msgid "Ignore"
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Déan neamhaird de"
 
-#: util/shellutils.cpp:173
+#: util/shellutils.cpp:188
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr ""
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:189
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"

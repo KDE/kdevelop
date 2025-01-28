@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-01-28 00:40+0000\n"
 "PO-Revision-Date: 2014-03-20 22:11+0200\n"
 "Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -223,7 +223,7 @@ msgstr "Αδυναμία εύρεσης τεκμηρίωσης για '%1'"
 msgid "%1 Home Page"
 msgstr "QtHelp αρχική σελίδα"
 
-#: qthelpqtdoc.cpp:166
+#: qthelpqtdoc.cpp:172
 #, kde-format
 msgid "QtHelp"
 msgstr "QtHelp"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-01-28 00:40+0000\n"
 "PO-Revision-Date: 2022-03-15 15:30+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -225,7 +225,7 @@ msgstr "Найти документацию по запросу «%1» не уд
 msgid "%1 Home Page"
 msgstr "Домашняя страница документации по Qt"
 
-#: qthelpqtdoc.cpp:166
+#: qthelpqtdoc.cpp:172
 #, kde-format
 msgid "QtHelp"
 msgstr "Документация Qt"
