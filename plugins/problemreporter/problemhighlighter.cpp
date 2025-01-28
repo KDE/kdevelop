@@ -24,6 +24,8 @@
 #include <KTextEditor/View>
 #include <KColorScheme>
 
+#include <algorithm>
+
 using namespace KTextEditor;
 using namespace KDevelop;
 
@@ -71,10 +73,14 @@ ProblemHighlighter::~ProblemHighlighter()
     // KTextEditor::Document no longer participates in the ownership of its moving ranges
     // since https://commits.kde.org/ktexteditor/3991a497c16373cbb798c22c6a84cdd85486e468
     // first included in KTextEditor version 6.9.
-    if (m_topHLRanges.isEmpty() || !m_document)
-        return;
+    if (!m_document) {
+        // m_document's destructor has already destroyed its moving ranges.
+        // Therefore all elements of m_topHLRanges are dangling pointers. Release them.
+        for (auto& movingRange : m_topHLRanges) {
+            movingRange.release();
+        }
+    }
 #endif
-    qDeleteAll(m_topHLRanges);
 }
 
 void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
@@ -88,7 +94,6 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     const bool hadProblems = !m_problems.isEmpty();
     m_problems = problems;
 
-    qDeleteAll(m_topHLRanges);
     m_topHLRanges.clear();
 
     IndexedString url(m_document->url());
@@ -160,7 +165,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
         }
 
         auto* const problemRange = m_document->newMovingRange(range);
-        m_topHLRanges.append(problemRange);
+        m_topHLRanges.push_back(MovingRangePtr{problemRange});
 
         if (problem->source() != IProblem::ToDo
             && (problem->severity() != IProblem::Hint
@@ -191,15 +196,10 @@ void ProblemHighlighter::aboutToRemoveText(const KTextEditor::Range& range)
         return;
     }
 
-    QList<MovingRange*>::iterator it = m_topHLRanges.begin();
-    while (it != m_topHLRanges.end()) {
-        if (range.contains((*it)->toRange())) {
-            delete (*it);
-            it = m_topHLRanges.erase(it);
-        } else {
-            ++it;
-        }
-    }
+    const auto newEnd = std::remove_if(m_topHLRanges.begin(), m_topHLRanges.end(), [range](const MovingRangePtr& r) {
+        return range.contains(r->toRange());
+    });
+    m_topHLRanges.erase(newEnd, m_topHLRanges.end());
 }
 
 void ProblemHighlighter::clearProblems()
