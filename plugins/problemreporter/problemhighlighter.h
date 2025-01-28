@@ -15,6 +15,9 @@
 
 #include <QPointer>
 
+#include <memory>
+#include <vector>
+
 class ProblemHighlighter : public QObject
 {
     Q_OBJECT
@@ -34,8 +37,10 @@ private Q_SLOTS:
     void clearProblems();
 
 private:
+    using MovingRangePtr = std::unique_ptr<KTextEditor::MovingRange>;
+
     QPointer<KTextEditor::Document> m_document;
-    QList<KTextEditor::MovingRange*> m_topHLRanges;
+    std::vector<MovingRangePtr> m_topHLRanges;
     QVector<KDevelop::IProblem::Ptr> m_problems;
 
 public Q_SLOTS:
