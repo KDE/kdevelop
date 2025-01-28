@@ -61,8 +61,7 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
 
 void ProblemHighlighter::settingsChanged()
 {
-    // Re-highlight
-    setProblems(m_problems);
+    forceSetProblems(m_problems);
 }
 
 ProblemHighlighter::~ProblemHighlighter()
@@ -75,11 +74,17 @@ ProblemHighlighter::~ProblemHighlighter()
 
 void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
 {
-    if (!m_document)
+    if (problems == m_problems) {
         return;
+    }
+    forceSetProblems(problems);
+}
 
-    if (m_problems == problems)
+void ProblemHighlighter::forceSetProblems(const QList<IProblem::Ptr>& problems)
+{
+    if (!m_document) {
         return;
+    }
 
     const bool hadProblems = !m_problems.isEmpty();
     m_problems = problems;

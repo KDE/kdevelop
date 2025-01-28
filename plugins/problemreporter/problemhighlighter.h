@@ -27,6 +27,9 @@ public:
         return m_document;
     }
 
+    /**
+     * Store given problems and re-highlight unless the currently stored problems are equal to @p problems.
+     */
     void setProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
 private Q_SLOTS:
@@ -35,6 +38,11 @@ private Q_SLOTS:
 
 private:
     void settingsChanged();
+
+    /**
+     * Store given problems and re-highlight.
+     */
+    void forceSetProblems(const QList<KDevelop::IProblem::Ptr>& problems);
 
     QPointer<KTextEditor::Document> m_document;
     QList<KTextEditor::MovingRange*> m_topHLRanges;
