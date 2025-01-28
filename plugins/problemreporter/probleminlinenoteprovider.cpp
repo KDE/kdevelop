@@ -21,6 +21,7 @@
 
 using namespace KDevelop;
 
+namespace {
 static constexpr int marginColumns = 2;
 
 struct SeverityColors
@@ -47,8 +48,16 @@ static SeverityColors severityColors(IProblem::Severity severity)
     };
 }
 
+[[nodiscard]] ICompletionSettings::ProblemInlineNotesLevel readProblemInlineNotesLevel()
+{
+    return ICore::self()->languageController()->completionSettings()->problemInlineNotesLevel();
+}
+
+} // unnamed namespace
+
 ProblemInlineNoteProvider::ProblemInlineNoteProvider(KTextEditor::Document* document)
     : m_document{document}
+    , m_currentLevel{readProblemInlineNotesLevel()}
 {
     auto registerProvider = [this] (KTextEditor::Document*, KTextEditor::View* view) {
         view->registerInlineNoteProvider(this);
@@ -73,9 +82,11 @@ ProblemInlineNoteProvider::~ProblemInlineNoteProvider()
 
 void ProblemInlineNoteProvider::completionSettingsChanged()
 {
-    if (m_currentLevel == ICore::self()->languageController()->completionSettings()->problemInlineNotesLevel()) {
+    const auto newLevel = readProblemInlineNotesLevel();
+    if (newLevel == m_currentLevel) {
         return;
     }
+    m_currentLevel = newLevel;
     setProblems(m_problems);
 }
 
@@ -90,7 +101,7 @@ void ProblemInlineNoteProvider::setProblems(const QVector<IProblem::Ptr>& proble
         emit inlineNotesReset();
         return;
     }
-    m_currentLevel = ICore::self()->languageController()->completionSettings()->problemInlineNotesLevel() ;
+
     if (m_currentLevel == ICompletionSettings::NoProblemsInlineNotesLevel) {
         return;
     }
