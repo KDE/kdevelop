@@ -647,10 +647,6 @@ PatchHighlighter::~PatchHighlighter() {
     clear();
 }
 
-IDocument* PatchHighlighter::doc() {
-    return m_doc;
-}
-
 void PatchHighlighter::documentDestroyed() {
     qCDebug(PLUGIN_PATCHREVIEW) << "document destroyed";
     m_ranges.clear();
