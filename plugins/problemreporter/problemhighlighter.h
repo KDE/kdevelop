@@ -37,6 +37,21 @@ private Q_SLOTS:
     void clearProblems();
 
 private:
+    /**
+     * Stores the few Language Support settings that affect problem highlighting.
+     */
+    struct Settings
+    {
+        bool highlightSemanticProblems;
+        bool highlightProblematicLines;
+
+        [[nodiscard]] bool operator==(const Settings& other) const noexcept;
+    };
+    /**
+     * Read Settings from config and return them.
+     */
+    [[nodiscard]] static Settings readSettings();
+
     void settingsChanged();
 
     /**
@@ -47,6 +62,8 @@ private:
     QPointer<KTextEditor::Document> m_document;
     QList<KTextEditor::MovingRange*> m_topHLRanges;
     QVector<KDevelop::IProblem::Ptr> m_problems;
+
+    Settings m_currentSettings = readSettings();
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PROBLEMHIGHLIGHTER_H

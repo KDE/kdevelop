@@ -59,8 +59,25 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
             SLOT(aboutToRemoveText(KTextEditor::Range)));
 }
 
+bool ProblemHighlighter::Settings::operator==(const Settings& other) const noexcept
+{
+    return highlightSemanticProblems == other.highlightSemanticProblems
+        && highlightProblematicLines == other.highlightProblematicLines;
+}
+
+auto ProblemHighlighter::readSettings() -> Settings
+{
+    const auto* const completionSettings = ICore::self()->languageController()->completionSettings();
+    return {completionSettings->highlightSemanticProblems(), completionSettings->highlightProblematicLines()};
+}
+
 void ProblemHighlighter::settingsChanged()
 {
+    const auto newSettings = readSettings();
+    if (newSettings == m_currentSettings) {
+        return; // nothing of interest has changed
+    }
+    m_currentSettings = newSettings;
     forceSetProblems(m_problems);
 }
 
@@ -164,15 +181,14 @@ void ProblemHighlighter::forceSetProblems(const QList<IProblem::Ptr>& problems)
         m_topHLRanges.append(problemRange);
 
         if (problem->source() != IProblem::ToDo
-            && (problem->severity() != IProblem::Hint
-                || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())) {
+            && (problem->severity() != IProblem::Hint || m_currentSettings.highlightSemanticProblems)) {
             KTextEditor::Attribute::Ptr attribute(new KTextEditor::Attribute());
             attribute->setUnderlineStyle(QTextCharFormat::WaveUnderline);
             attribute->setUnderlineColor(colorForSeverity(problem->severity()));
             problemRange->setAttribute(attribute);
         }
 
-        if (ICore::self()->languageController()->completionSettings()->highlightProblematicLines()) {
+        if (m_currentSettings.highlightProblematicLines) {
             uint mark;
             if (problem->severity() == IProblem::Error) {
                 mark = errorMarkType;
