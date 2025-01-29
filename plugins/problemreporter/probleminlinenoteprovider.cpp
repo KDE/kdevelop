@@ -17,6 +17,7 @@
 #include <QIcon>
 #include <QPainter>
 #include <QFontMetrics>
+#include <QScopeGuard>
 #include <QStyle>
 
 using namespace KDevelop;
@@ -103,10 +104,19 @@ void ProblemInlineNoteProvider::forceSetProblems(const QList<IProblem::Ptr>& pro
     if (!m_document) {
         return;
     }
+
+    const QScopeGuard problemForLineChangedGuard([wasEmpty = m_problemForLine.empty(), this] {
+        if (wasEmpty && m_problemForLine.empty()) {
+            // m_problemForLine remains empty, so nothing of interest to KTextEditor::View has changed,
+            // because m_problems and m_currentLevel are used only to fill m_problemForLine.
+            return;
+        }
+        Q_EMIT inlineNotesReset();
+    });
+
     m_problemForLine.clear();
     m_problems = problems;
     if (problems.isEmpty()) {
-        emit inlineNotesReset();
         return;
     }
 
@@ -150,7 +160,6 @@ void ProblemInlineNoteProvider::forceSetProblems(const QList<IProblem::Ptr>& pro
              m_problemForLine[line] = problem;
         }
     }
-    emit inlineNotesReset();
 }
 
 QVector<int> ProblemInlineNoteProvider::inlineNotes(int line) const
