@@ -136,14 +136,16 @@ void ProblemHighlighter::forceSetProblems(const QList<IProblem::Ptr>& problems)
     TopDUContext* top = DUChainUtils::standardContextForUrl(m_document->url());
 
     for (const IProblem::Ptr& problem : problems) {
-        if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
+        auto problemFinalLocation = problem->finalLocation();
+
+        if (problemFinalLocation.document != url || !problemFinalLocation.isValid())
             continue;
 
         KTextEditor::Range range;
         if (top)
-            range = top->transformFromLocalRevision(RangeInRevision::castFromSimpleRange(problem->finalLocation()));
+            range = top->transformFromLocalRevision(RangeInRevision::castFromSimpleRange(problemFinalLocation));
         else
-            range = problem->finalLocation();
+            range = problemFinalLocation;
 
         // Fix problem's location range if necessary
         if (problem->finalLocationMode() != IProblem::Range && range.onSingleLine()) {
@@ -166,7 +168,8 @@ void ProblemHighlighter::forceSetProblems(const QList<IProblem::Ptr>& problems)
             range.setStart(Cursor(line, startColumn));
             range.setEnd(Cursor(line, endColumn));
 
-            problem->setFinalLocation(DocumentRange(problem->finalLocation().document, range));
+            problemFinalLocation.setRange(range);
+            problem->setFinalLocation(problemFinalLocation);
             problem->setFinalLocationMode(IProblem::Range);
         }
 
@@ -197,7 +200,7 @@ void ProblemHighlighter::forceSetProblems(const QList<IProblem::Ptr>& problems)
             } else {
                 continue;
             }
-            m_document->addMark(problem->finalLocation().start().line(), mark);
+            m_document->addMark(problemFinalLocation.start().line(), mark);
         }
     }
 }
