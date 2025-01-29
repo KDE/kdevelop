@@ -87,10 +87,18 @@ void ProblemInlineNoteProvider::completionSettingsChanged()
         return;
     }
     m_currentLevel = newLevel;
-    setProblems(m_problems);
+    forceSetProblems(m_problems);
 }
 
 void ProblemInlineNoteProvider::setProblems(const QVector<IProblem::Ptr>& problems)
+{
+    if (problems == m_problems) {
+        return;
+    }
+    forceSetProblems(problems);
+}
+
+void ProblemInlineNoteProvider::forceSetProblems(const QList<IProblem::Ptr>& problems)
 {
     if (!m_document) {
         return;

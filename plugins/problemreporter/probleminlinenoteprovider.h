@@ -27,6 +27,9 @@ public:
     explicit ProblemInlineNoteProvider(KTextEditor::Document* document);
     ~ProblemInlineNoteProvider();
 
+    /**
+     * Store given problems and recreate inline notes unless the currently stored problems are equal to @p problems.
+     */
     void setProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
     QVector<int> inlineNotes(int line) const override;
@@ -36,6 +39,11 @@ public:
 
 private:
     void completionSettingsChanged();
+
+    /**
+     * Store given problems and recreate inline notes.
+     */
+    void forceSetProblems(const QList<KDevelop::IProblem::Ptr>& problems);
 
     QPointer<KTextEditor::Document> m_document;
     QVector<KDevelop::IProblem::Ptr> m_problems;
