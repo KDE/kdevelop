@@ -123,8 +123,10 @@ void ProblemInlineNoteProvider::forceSetProblems(const QList<IProblem::Ptr>& pro
     if (m_currentLevel == ICompletionSettings::NoProblemsInlineNotesLevel) {
         return;
     }
+
+    const IndexedString url(m_document->url());
     for (const IProblem::Ptr& problem : problems) {
-        if (problem->finalLocation().document.toUrl() != m_document->url() || !problem->finalLocation().isValid()) {
+        if (problem->finalLocation().document != url || !problem->finalLocation().isValid()) {
             continue;
         }
         switch (problem->severity()) {
