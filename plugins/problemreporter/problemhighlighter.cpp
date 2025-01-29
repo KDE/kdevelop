@@ -109,8 +109,6 @@ void ProblemHighlighter::forceSetProblems(const QList<IProblem::Ptr>& problems)
     qDeleteAll(m_topHLRanges);
     m_topHLRanges.clear();
 
-    IndexedString url(m_document->url());
-
     /// TODO: create a better MarkInterface that makes it possible to add the marks to the scrollbar
     ///      but having no background.
     ///      also make it nicer together with other plugins, this would currently fail with
@@ -130,6 +128,8 @@ void ProblemHighlighter::forceSetProblems(const QList<IProblem::Ptr>& problems)
     if (problems.isEmpty()) {
         return;
     }
+
+    const IndexedString url(m_document->url());
 
     DUChainReadLocker lock;
 
