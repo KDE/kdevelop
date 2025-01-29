@@ -8,17 +8,18 @@
 #define KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
 
 #include <language/languageexport.h>
-#include <QExplicitlySharedDataPointer>
-#include <QPointer>
-#include <QPair>
 #include <language/editor/rangeinrevision.h>
 #include <serialization/indexedstring.h>
 
-#include <KTextEditor/MovingRange>
+#include <KTextEditor/MovingCursor>
+
+#include <QExplicitlySharedDataPointer>
+#include <QObject>
+#include <QPair>
+#include <QPointer>
 
 namespace KTextEditor {
 class Document;
-class MovingRange;
 }
 
 namespace KDevelop {
@@ -207,7 +208,6 @@ protected:
     bool m_needUpdate;
     QString m_currentCleanedInsertion;
     KTextEditor::Cursor m_lastInsertionPosition;
-    KTextEditor::MovingRange* m_changedRange;
 
     KTextEditor::Document* m_document;
     KDevelop::IndexedString m_url;
