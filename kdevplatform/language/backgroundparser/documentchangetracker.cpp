@@ -456,11 +456,14 @@ bool RevisionLockerAndClearer::valid() const
     return m_p->m_tracker->holdingRevision(revision());
 }
 
+#if 0
+/**
+ * Returns the revision object which locks the revision representing the on-disk state.
+ * Returns a zero object if the file is not on disk.
+ */
 RevisionReference DocumentChangeTracker::diskRevision() const
-{
     ///@todo Track which revision was last saved to disk
-    return RevisionReference();
-}
+#endif
 }
 
 #include "documentchangetracker.moc"

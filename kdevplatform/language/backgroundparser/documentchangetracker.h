@@ -163,12 +163,6 @@ public:
     KTextEditor::Document* document() const;
 
     /**
-     * Returns the revision object which locks the revision representing the on-disk state.
-     * Returns a zero object if the file is not on disk.
-     * */
-    RevisionReference diskRevision() const;
-
-    /**
      * Returns whether the given revision is being current held, so that it can be used
      * for transformations in MovingInterface
      * */
