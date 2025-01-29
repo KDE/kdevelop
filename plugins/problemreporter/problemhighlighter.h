@@ -34,12 +34,11 @@ private Q_SLOTS:
     void clearProblems();
 
 private:
+    void settingsChanged();
+
     QPointer<KTextEditor::Document> m_document;
     QList<KTextEditor::MovingRange*> m_topHLRanges;
     QVector<KDevelop::IProblem::Ptr> m_problems;
-
-public Q_SLOTS:
-    void settingsChanged();
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PROBLEMHIGHLIGHTER_H
