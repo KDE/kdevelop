@@ -126,7 +126,9 @@ void ProblemInlineNoteProvider::forceSetProblems(const QList<IProblem::Ptr>& pro
 
     const IndexedString url(m_document->url());
     for (const IProblem::Ptr& problem : problems) {
-        if (problem->finalLocation().document != url || !problem->finalLocation().isValid()) {
+        const auto problemFinalLocation = problem->finalLocation();
+
+        if (problemFinalLocation.document != url || !problemFinalLocation.isValid()) {
             continue;
         }
         switch (problem->severity()) {
@@ -144,12 +146,12 @@ void ProblemInlineNoteProvider::forceSetProblems(const QList<IProblem::Ptr>& pro
         case IProblem::Error:
             break;
         }
-        const int line = problem->finalLocation().start().line();
+        const int line = problemFinalLocation.start().line();
         // Only render the problem with the highest severity in each line.
         if (m_problemForLine.contains(line)) {
             const IProblem::Ptr currentProblem = m_problemForLine.value(line);
             if (problem->severity() == currentProblem->severity()) {
-                if (problem->finalLocation().start().column() < currentProblem->finalLocation().start().column()) {
+                if (problemFinalLocation.start().column() < currentProblem->finalLocation().start().column()) {
                     m_problemForLine[line] = problem;
                 }
             // No Severity has the lowest value
