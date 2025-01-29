@@ -7,7 +7,8 @@
 #ifndef KDEVPLATFORM_PERSISTENTMOVINGRANGEPRIVATE_H
 #define KDEVPLATFORM_PERSISTENTMOVINGRANGEPRIVATE_H
 
-#include <backgroundparser/documentchangetracker.h>
+#include <serialization/indexedstring.h>
+
 #include <KTextEditor/MovingRange>
 #include <QObject>
 #include <QCoreApplication>
@@ -29,7 +30,6 @@ public:
     IndexedString m_document;
     KTextEditor::Attribute::Ptr m_attribte;
     KTextEditor::MovingRange* m_movingRange = nullptr;
-    QPointer<DocumentChangeTracker> m_tracker;
     float m_zDepth = 0;
 
     void updateRangeFromMoving()
