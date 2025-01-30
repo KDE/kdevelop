@@ -30,7 +30,6 @@ public:
     bool m_shouldExpand = false;
     KTextEditor::Range m_range;
     IndexedString m_document;
-    KTextEditor::Attribute::Ptr m_attribte;
     std::unique_ptr<KTextEditor::MovingRange> m_movingRange;
     float m_zDepth = 0;
 
