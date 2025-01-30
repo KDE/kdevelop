@@ -26,7 +26,7 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
 
     // Create a moving range
     auto* const document = tracker->document();
-    m_movingRange = document->newMovingRange(m_range);
+    m_movingRange.reset(document->newMovingRange(m_range));
     if (m_shouldExpand)
         m_movingRange->setInsertBehaviors(KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
 
@@ -52,8 +52,7 @@ void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceCon
     m_valid = false; /// @todo More precise tracking: Why is the document being invalidated? Try
     ///            keeping the range alive. DocumentChangeTracker to the rescue.
     disconnect(m_movingRange->document(), nullptr, this, nullptr);
-    delete m_movingRange;
-    m_movingRange = nullptr;
+    m_movingRange.reset();
     m_range = KTextEditor::Range::invalid();
 }
 
