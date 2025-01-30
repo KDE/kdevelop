@@ -11,8 +11,6 @@
 #include "repostatusmodel.h"
 #include "simplecommitform.h"
 
-#include "debug.h"
-
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
@@ -20,18 +18,11 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
-#include <interfaces/iuicontroller.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
 #include <vcs/vcsjob.h>
 
-#include <KActionCollection>
-#include <KColorScheme>
 #include <KLocalizedString>
-#include <KTextEditor/Document>
-#include <KTextEditor/MovingRange>
-#include <KTextEditor/View>
-
 
 #include <QAbstractItemView>
 #include <QAction>
@@ -46,7 +37,6 @@
 #include <QStyledItemDelegate>
 #include <QTreeView>
 #include <QUrl>
-#include <QWidgetAction>
 
 using namespace KDevelop;
 

@@ -11,14 +11,11 @@
 
 #include <interfaces/iuicontroller.h>
 
-#include <KTextEditor/Attribute>
-
 #include <QWidget>
 
 class ActiveStyledDelegate;
 class DiffViewsCtrl;
 class FilterEmptyItemsProxyModel;
-class RepoStatusModel;
 class SimpleCommitForm;
 
 class QAction;
@@ -26,19 +23,11 @@ class QMenu;
 class QModelIndex;
 class QLineEdit;
 class QTreeView;
-class QAbstractProxyModel;
 class QUrl;
 
 namespace KDevelop {
     class IBasicVersionControl;
-    class IDocument;
     class IProject;
-    class VcsJob;
-}
-
-namespace KTextEditor {
-    class View;
-    class Document;
 }
 
 /**
