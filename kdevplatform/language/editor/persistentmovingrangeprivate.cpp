@@ -12,7 +12,7 @@
 
 #include <KTextEditor/Document>
 
-void KDevelop::PersistentMovingRangePrivate::connectTracker()
+void KDevelop::PersistentMovingRangePrivate::connectTracker(bool shouldExpand)
 {
     Q_ASSERT(!m_valid);
     Q_ASSERT(m_movingRange == nullptr);
@@ -27,8 +27,9 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
     // Create a moving range
     auto* const document = tracker->document();
     m_movingRange.reset(document->newMovingRange(m_range));
-    if (m_shouldExpand)
+    if (shouldExpand) {
         m_movingRange->setInsertBehaviors(KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
+    }
 
     // TODO: map the range back to the last saved revision, and use that when the document is closed, e.g.:
     //       updateRangeFromMoving();
