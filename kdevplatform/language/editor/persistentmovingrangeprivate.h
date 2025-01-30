@@ -24,10 +24,9 @@ class PersistentMovingRangePrivate
 public:
     PersistentMovingRangePrivate() { moveToThread(QCoreApplication::instance()->thread()); }
 
-    void connectTracker();
+    void connectTracker(bool shouldExpand);
 
     bool m_valid = false;
-    bool m_shouldExpand = false;
     KTextEditor::Range m_range;
     IndexedString m_document;
     std::unique_ptr<KTextEditor::MovingRange> m_movingRange;

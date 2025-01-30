@@ -19,9 +19,7 @@ KDevelop::PersistentMovingRange::PersistentMovingRange(const KTextEditor::Range&
     VERIFY_FOREGROUND_LOCKED;
     m_p->m_range = range;
     m_p->m_document = document;
-    m_p->m_shouldExpand = shouldExpand;
-
-    m_p->connectTracker();
+    m_p->connectTracker(shouldExpand);
 }
 
 KDevelop::IndexedString KDevelop::PersistentMovingRange::document() const
