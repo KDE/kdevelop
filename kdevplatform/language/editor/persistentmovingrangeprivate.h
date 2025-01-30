@@ -26,7 +26,6 @@ public:
 
     void connectTracker(bool shouldExpand);
 
-    bool m_valid = false;
     KTextEditor::Range m_range;
     IndexedString m_document;
     std::unique_ptr<KTextEditor::MovingRange> m_movingRange;
