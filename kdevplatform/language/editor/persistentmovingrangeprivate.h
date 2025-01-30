@@ -31,7 +31,6 @@ public:
     KTextEditor::Range m_range;
     IndexedString m_document;
     std::unique_ptr<KTextEditor::MovingRange> m_movingRange;
-    float m_zDepth = 0;
 
     void updateRangeFromMoving()
     {
