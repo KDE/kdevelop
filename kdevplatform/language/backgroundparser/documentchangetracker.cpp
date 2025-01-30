@@ -75,7 +75,6 @@ DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
     connect(document, &Document::lineWrapped, this, &DocumentChangeTracker::lineWrapped);
     connect(document, &Document::lineUnwrapped, this, &DocumentChangeTracker::lineUnwrapped);
     connect(document, &Document::textRemoved, this, &DocumentChangeTracker::textRemoved);
-    connect(document, &Document::destroyed, this, &DocumentChangeTracker::documentDestroyed);
     connect(document, &Document::documentSavedOrUploaded, this, &DocumentChangeTracker::documentSavedOrUploaded);
     connect(document, &Document::aboutToInvalidateMovingInterfaceContent, this,
             &DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent);
@@ -203,14 +202,8 @@ void DocumentChangeTracker::documentSavedOrUploaded(KTextEditor::Document* doc, 
     ModificationRevision::clearModificationCache(IndexedString(doc->url()));
 }
 
-void DocumentChangeTracker::documentDestroyed(QObject*)
-{
-    m_document = nullptr;
-}
-
 DocumentChangeTracker::~DocumentChangeTracker()
 {
-    Q_ASSERT(m_document);
     ModificationRevision::clearEditorRevisionForFile(KDevelop::IndexedString(m_document->url()));
 }
 
