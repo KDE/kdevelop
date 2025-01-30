@@ -13,6 +13,8 @@
 #include <QObject>
 #include <QCoreApplication>
 
+#include <memory>
+
 namespace KDevelop {
 class PersistentMovingRangePrivate
     : public QObject
@@ -29,7 +31,7 @@ public:
     KTextEditor::Range m_range;
     IndexedString m_document;
     KTextEditor::Attribute::Ptr m_attribte;
-    KTextEditor::MovingRange* m_movingRange = nullptr;
+    std::unique_ptr<KTextEditor::MovingRange> m_movingRange;
     float m_zDepth = 0;
 
     void updateRangeFromMoving()
