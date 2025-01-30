@@ -40,7 +40,6 @@ public:
     }
 
 private Q_SLOTS:
-    void aboutToDeleteMovingInterfaceContent();
     void aboutToInvalidateMovingInterfaceContent();
 };
 }
