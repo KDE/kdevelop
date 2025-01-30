@@ -41,8 +41,6 @@ void KDevelop::PersistentMovingRange::setZDepth(float depth) const
 KDevelop::PersistentMovingRange::~PersistentMovingRange()
 {
     VERIFY_FOREGROUND_LOCKED;
-    if (m_p->m_movingRange)
-        delete m_p->m_movingRange;
     delete m_p;
 }
 
