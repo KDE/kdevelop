@@ -117,6 +117,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeTracker
     Q_OBJECT
 
 public:
+    /**
+     * Construct a tracker.
+     *
+     * @param document a non-null document to be tracked that must remain valid throughout this tracker's lifetime.
+     */
     explicit DocumentChangeTracker(KTextEditor::Document* document);
     ~DocumentChangeTracker() override;
 
@@ -222,7 +227,6 @@ public Q_SLOTS:
     void lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position);
     void lineUnwrapped(KTextEditor::Document* document, int line);
 
-    void documentDestroyed(QObject*);
     void aboutToInvalidateMovingInterfaceContent (KTextEditor::Document* document);
     void documentSavedOrUploaded(KTextEditor::Document*, bool);
 
