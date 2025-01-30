@@ -41,7 +41,6 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
 #endif
     connect(document, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
             &PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent);
-    m_movingRange->setZDepth(m_zDepth);
 }
 
 void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent()
