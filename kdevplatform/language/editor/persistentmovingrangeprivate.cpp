@@ -29,8 +29,18 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
     m_movingRange = document->newMovingRange(m_range);
     if (m_shouldExpand)
         m_movingRange->setInsertBehaviors(KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
+
+    // TODO: map the range back to the last saved revision, and use that when the document is closed, e.g.:
+    //       updateRangeFromMoving();
+    //       m_range = m_tracker->diskRevision()->transformFromCurrentRevision(m_range).castToSimpleRange();
+#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
+    // Since https://commits.kde.org/ktexteditor/6ca19934786fb808ab2b307d558967a74f87e4f4
+    // first included in KTextEditor version 6.9, KTextEditor::Document emits the signal
+    // aboutToInvalidateMovingInterfaceContent() instead of aboutToDeleteMovingInterfaceContent()
+    // from the destructor.
     connect(document, &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
-            &PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent);
+            &PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent);
+#endif
     connect(document, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
             &PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent);
     m_movingRange->setAttribute(m_attribte);
@@ -39,27 +49,12 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
 
 void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent()
 {
-    if (m_movingRange) {
-        m_valid = false; /// @todo More precise tracking: Why is the document being invalidated? Try
-        ///            keeping the range alive. DocumentChangeTracker to the rescue.
-        delete m_movingRange;
-        m_movingRange = nullptr;
-        m_range = KTextEditor::Range::invalid();
-    }
-}
-
-void KDevelop::PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent()
-{
-    // The whole document is being closed.
-    // TODO: map the range back to the last saved revision, and use that, e.g.:
-    //       updateRangeFromMoving();
-    //       m_range = m_tracker->diskRevision()->transformFromCurrentRevision(m_range).castToSimpleRange();
-
-    m_valid = false;
-    m_range = KTextEditor::Range::invalid();
-    // No need to disconnect, as the document is being deleted. Simply set the references to zero.
+    m_valid = false; /// @todo More precise tracking: Why is the document being invalidated? Try
+    ///            keeping the range alive. DocumentChangeTracker to the rescue.
+    disconnect(m_movingRange->document(), nullptr, this, nullptr);
     delete m_movingRange;
     m_movingRange = nullptr;
+    m_range = KTextEditor::Range::invalid();
 }
 
 #include "moc_persistentmovingrangeprivate.cpp"
