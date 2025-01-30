@@ -14,15 +14,12 @@
 
 void KDevelop::PersistentMovingRangePrivate::connectTracker(bool shouldExpand)
 {
-    Q_ASSERT(!m_valid);
     Q_ASSERT(m_movingRange == nullptr);
 
     auto* const tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(m_document);
     if (!tracker) {
         return;
     }
-
-    m_valid = true;
 
     // Create a moving range
     auto* const document = tracker->document();
@@ -48,8 +45,8 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker(bool shouldExpand)
 
 void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent()
 {
-    m_valid = false; /// @todo More precise tracking: Why is the document being invalidated? Try
-    ///            keeping the range alive. DocumentChangeTracker to the rescue.
+    // TODO: more precise tracking. Why is the document being invalidated?
+    //       Try keeping the range alive. DocumentChangeTracker to the rescue.
     disconnect(m_movingRange->document(), nullptr, this, nullptr);
     m_movingRange.reset();
     m_range = KTextEditor::Range::invalid();
