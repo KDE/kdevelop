@@ -32,8 +32,6 @@ KDevelop::IndexedString KDevelop::PersistentMovingRange::document() const
 void KDevelop::PersistentMovingRange::setZDepth(float depth) const
 {
     VERIFY_FOREGROUND_LOCKED;
-    m_p->m_zDepth = depth;
-
     if (m_p->m_movingRange)
         m_p->m_movingRange->setZDepth(depth);
 }
