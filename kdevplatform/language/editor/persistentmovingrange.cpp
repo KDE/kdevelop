@@ -61,7 +61,7 @@ QString KDevelop::PersistentMovingRange::text() const
 bool KDevelop::PersistentMovingRange::valid() const
 {
     VERIFY_FOREGROUND_LOCKED;
-    return m_p->m_valid;
+    return m_p->m_movingRange != nullptr;
 }
 
 void KDevelop::PersistentMovingRange::setAttribute(const KTextEditor::Attribute::Ptr& attribute)
