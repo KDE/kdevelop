@@ -41,8 +41,7 @@ public:
     PersistentMovingRange(const KTextEditor::Range& range, const IndexedString& document, bool shouldExpand = false);
     ~PersistentMovingRange();
 
-    PersistentMovingRange(const PersistentMovingRange&) = delete;
-    PersistentMovingRange& operator=(const PersistentMovingRange& rhs) = delete;
+    Q_DISABLE_COPY_MOVE(PersistentMovingRange)
 
     IndexedString document() const;
 
