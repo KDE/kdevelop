@@ -1376,7 +1376,7 @@ void foo()
 </screenshot
 ></para>
 <para
->Val la pena assenyalar que el &kdevelop; extreu el tipus de la variable a declarar de l'expressió emprada per a inicialitzar-la. Per exemple, si haguéssim escrit l'addició de la següent manera bastant dubtosa, hauria suggerit declarar la variable com a tipus <varname
+>Val la pena assenyalar que el &kdevelop; extreu el tipus de la variable a declarar de l'expressió emprada per a inicialitzar-la. Per exemple, si haguéssim escrit l'addició de la manera següent bastant dubtosa, hauria suggerit declarar la variable com a tipus <varname
 >double</varname
 >:</para>
 <para>
@@ -1407,7 +1407,7 @@ void foo()
 ></menuchoice
 > no sempre insereix la funció nova de membre on probablement voleu. Per exemple, és possible que vulgueu que sigui marcada com a <varname
 >inline</varname
-> i posar-la a la part inferior del fitxer de capçalera. En un cas com aquest, escriviu la declaració i comenceu a escriure la definició de la funció de la següent manera:</para>
+> i posar-la a la part inferior del fitxer de capçalera. En un cas com aquest, escriviu la declaració i comenceu a escriure la definició de la funció de la manera següent:</para>
 <para>
 <screenshot>
 <screeninfo
