@@ -323,7 +323,7 @@ void TestPath::testPath_data()
     QTest::newRow("path") << "/tmp/foo/asdf.txt";
     QTest::newRow("path-folder") << "/tmp/foo/asdf/";
     QTest::newRow("root") << "/";
-    QTest::newRow("clean-path") << "/tmp/..///asdf/";
+    QTest::newRow("clean-path") << "/tmp/kdevelop/..///asdf/";
     QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
     QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
 #else
