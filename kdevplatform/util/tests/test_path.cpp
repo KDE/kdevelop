@@ -487,12 +487,12 @@ void TestPath::testPathAddData()
         QUrl baseUrl = QUrl::fromUserInput(base);
         if (QDir::isRelativePath(pathToAdd)) {
             baseUrl = resolvedUrl(baseUrl, QUrl(pathToAdd));
-        } else if (QDir::isRelativePath(pathToAdd) || baseUrl.path() != QLatin1String("/")) {
+        } else if (baseUrl.path() == QLatin1String("/")) {
+            baseUrl.setPath(pathToAdd);
+        } else {
             // if pathToAdd == /absolute && baseUrl == "/", below call would lead to an invalid QUrl
             // with qtbase.git/f62768d046528636789f901ac79e2cfa1843a7b7
             baseUrl.setPath(baseUrl.path() + pathToAdd);
-        } else {
-            baseUrl.setPath(pathToAdd);
         }
 
         baseUrl = baseUrl.adjusted(QUrl::NormalizePathSegments);
