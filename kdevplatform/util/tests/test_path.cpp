@@ -503,10 +503,7 @@ void TestPath::testPathAddData()
             path.replace(QLatin1String("//"), QLatin1String("/"));
             baseUrl.setPath(path);
         }
-        // QUrl::StripTrailingSlash converts file:/// to file: which is not what we want
-        if (baseUrl.path() != QLatin1String("/")) {
-            baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
-        }
+        baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
 
         Path basePath(base);
         basePath.addPath(pathToAdd);
