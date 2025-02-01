@@ -641,7 +641,7 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn()
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type , itemtype);
-    QCOMPARE(KDevelop::toUrlOrLocalFile(item1.url), file);
+    QCOMPARE(item1.url.isLocalFile() ? item1.url.toLocalFile() : item1.url.path(), file);
     QCOMPARE(item1.lineNo , lineNr);
     QCOMPARE(item1.columnNo , column);
 }
