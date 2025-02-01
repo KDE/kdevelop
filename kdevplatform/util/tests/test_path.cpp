@@ -223,7 +223,7 @@ void TestPath::testPath()
         QCOMPARE(optUrl.toUrl(), url);
     }
     QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
-    QCOMPARE(optUrl.pathOrUrl(), toUrlOrLocalFile(url, QUrl::RemovePassword));
+    QCOMPARE(optUrl.pathOrUrl(), url.toDisplayString(QUrl::PreferLocalFile));
     QCOMPARE(optUrl.isValid(), url.isValid());
     QCOMPARE(optUrl.isEmpty(), url.isEmpty());
     QCOMPARE(optUrl.lastPathSegment(), url.fileName());
@@ -510,7 +510,7 @@ void TestPath::testPathAddData()
         Path basePath(base);
         basePath.addPath(pathToAdd);
 
-        QCOMPARE(basePath.pathOrUrl(), toUrlOrLocalFile(baseUrl));
+        QCOMPARE(basePath.pathOrUrl(), baseUrl.toDisplayString(QUrl::PreferLocalFile));
         QCOMPARE(basePath.toUrl(), baseUrl);
     }
 }
@@ -608,7 +608,7 @@ void TestPath::testPathCd()
     }
     url = url.adjusted(QUrl::NormalizePathSegments);
 
-    QCOMPARE(changed.pathOrUrl(), toUrlOrLocalFile(url, QUrl::StripTrailingSlash));
+    QCOMPARE(changed.pathOrUrl(), url.toDisplayString(QUrl::PreferLocalFile | QUrl::StripTrailingSlash));
 }
 
 void TestPath::testPathCd_data()
