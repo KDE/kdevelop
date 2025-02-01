@@ -26,7 +26,7 @@ QString urlToString(const QUrl& url)
 #endif
     Q_ASSERT(url == url.adjusted(QUrl::NormalizePathSegments));
 
-    return url.isLocalFile() ? url.toLocalFile() : url.toString();
+    return url.toString(QUrl::PreferLocalFile);
 }
 
 struct IndexedStringData
