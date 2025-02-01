@@ -496,8 +496,9 @@ void TestPath::testPathAddData()
         }
 
         baseUrl = baseUrl.adjusted(QUrl::NormalizePathSegments);
-        if (baseUrl.path().contains(QLatin1String("//"))) {
-            // odd, this should have been normalized, no?
+        if (!baseUrl.isLocalFile() && baseUrl.path().contains(QLatin1String("//"))) {
+            // Unlike QUrl::NormalizePathSegments, Path does not preserve adjacent slashes in
+            // a non-local path. So remove the remaining adjacent slashes from baseUrl here.
             auto path = baseUrl.path();
             path.replace(QLatin1String("//"), QLatin1String("/"));
             baseUrl.setPath(path);

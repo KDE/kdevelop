@@ -49,6 +49,9 @@ namespace KDevelop {
  * Path foo1("/foo");
  * Path foo2("/foo");
  * @endcode
+ *
+ * @note This class automatically normalizes path segments. In contrast to QUrl::NormalizePathSegments,
+ *       redundant slashes are always removed, even from non-local paths.
  */
 class KDEVPLATFORMUTIL_EXPORT Path
 {
