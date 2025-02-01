@@ -19,14 +19,6 @@
 namespace KDevelop {
 
 /**
- * @return Return a string representation of @p url, if possible as local file
- *
- * Convenience method for working around https://bugreports.qt.io/browse/QTBUG-41729
- */
-QString KDEVPLATFORMUTIL_EXPORT toUrlOrLocalFile(const QUrl& url,
-                                                 QUrl::FormattingOptions options = QUrl::FormattingOptions( QUrl::PrettyDecoded ));
-
-/**
  * @brief Path data type optimized for memory consumption.
  *
  * This class holds data that represents a local or remote path.

@@ -45,18 +45,6 @@ inline bool isAbsolutePath(const QString& path)
 
 }
 
-QString KDevelop::toUrlOrLocalFile(const QUrl& url, QUrl::FormattingOptions options)
-{
-    const auto str = url.toString(options | QUrl::PreferLocalFile);
-#ifdef Q_OS_WIN
-    // potentially strip leading slash
-    if (url.isLocalFile() && !str.isEmpty() && str[0] == QLatin1Char('/')) {
-        return str.mid(1); // expensive copying, but we'd like toString(...) to properly format everything first
-    }
-#endif
-    return str;
-}
-
 Path::Path(const QString& pathOrUrl)
     : Path(QUrl::fromUserInput(pathOrUrl, QString(), QUrl::DefaultResolution))
 {
