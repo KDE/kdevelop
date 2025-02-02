@@ -8,21 +8,17 @@
 #include "problemhighlighter.h"
 
 #include <serialization/indexedstring.h>
-#include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
-#include <language/duchain/navigation/problemnavigationcontext.h>
 #include <language/editor/documentrange.h>
 
-#include <shell/problem.h>
-
-#include <KTextEditor/Document>
-#include <KTextEditor/View>
 #include <KColorScheme>
+#include <KTextEditor/Document>
+#include <KTextEditor/MovingRange>
 
 #include <algorithm>
 
