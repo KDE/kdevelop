@@ -8,13 +8,18 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROBLEMHIGHLIGHTER_H
 #define KDEVPLATFORM_PLUGIN_PROBLEMHIGHLIGHTER_H
 
-#include <language/duchain/problem.h>
 #include <interfaces/iproblem.h>
 
-#include <KTextEditor/MovingRange>
+#include <QObject>
 
 #include <memory>
 #include <vector>
+
+namespace KTextEditor {
+class Document;
+class MovingRange;
+class Range;
+}
 
 class ProblemHighlighter : public QObject
 {
