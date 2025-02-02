@@ -13,8 +13,6 @@
 
 #include <KTextEditor/MovingRange>
 
-#include <QPointer>
-
 #include <memory>
 #include <vector>
 
@@ -22,6 +20,12 @@ class ProblemHighlighter : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * Construct a problem highlighter.
+     *
+     * @param document a non-null document to be highlighted that must
+     *        remain valid throughout this highlighter's lifetime.
+     */
     explicit ProblemHighlighter(KTextEditor::Document* document);
     ~ProblemHighlighter() override;
 
@@ -39,7 +43,7 @@ private Q_SLOTS:
 private:
     using MovingRangePtr = std::unique_ptr<KTextEditor::MovingRange>;
 
-    QPointer<KTextEditor::Document> m_document;
+    KTextEditor::Document* const m_document;
     std::vector<MovingRangePtr> m_topHLRanges;
     QVector<KDevelop::IProblem::Ptr> m_problems;
 

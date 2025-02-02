@@ -54,7 +54,7 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
 
     connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this,
             &ProblemHighlighter::settingsChanged);
-    connect(m_document.data(), &Document::aboutToReload, this, &ProblemHighlighter::clearProblems);
+    connect(m_document, &Document::aboutToReload, this, &ProblemHighlighter::clearProblems);
     connect(m_document, &Document::aboutToInvalidateMovingInterfaceContent, this, &ProblemHighlighter::clearProblems);
     // This can't use new style connect syntax since aboutToRemoveText is only part of KTextEditor::DocumentPrivate
     connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)), this,
@@ -67,27 +67,10 @@ void ProblemHighlighter::settingsChanged()
     setProblems(m_problems);
 }
 
-ProblemHighlighter::~ProblemHighlighter()
-{
-#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
-    // KTextEditor::Document no longer participates in the ownership of its moving ranges
-    // since https://commits.kde.org/ktexteditor/3991a497c16373cbb798c22c6a84cdd85486e468
-    // first included in KTextEditor version 6.9.
-    if (!m_document) {
-        // m_document's destructor has already destroyed its moving ranges.
-        // Therefore all elements of m_topHLRanges are dangling pointers. Release them.
-        for (auto& movingRange : m_topHLRanges) {
-            movingRange.release();
-        }
-    }
-#endif
-}
+ProblemHighlighter::~ProblemHighlighter() = default;
 
 void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
 {
-    if (!m_document)
-        return;
-
     if (m_problems == problems)
         return;
 
