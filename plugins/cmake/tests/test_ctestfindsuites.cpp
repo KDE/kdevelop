@@ -27,6 +27,7 @@
 #include <project/projectmodel.h>
 
 #include <QDir>
+#include <QLoggingCategory>
 #include <QTest>
 #include <KJob>
 
@@ -40,6 +41,8 @@ void waitForSuites(IProject* project, int count, int secondsTimeout)
 
 void TestCTestFindSuites::initTestCase()
 {
+    QLoggingCategory::setFilterRules(QStringLiteral("kdevelop.plugins.cmake.testing=true"));
+
     AutoTestShell::init({"KDevCMakeManager", "KDevCMakeBuilder", "KDevMakeBuilder", "KDevStandardOutputView"});
     TestCore::initialize();
 
