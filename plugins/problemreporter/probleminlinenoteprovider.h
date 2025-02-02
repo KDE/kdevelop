@@ -13,7 +13,6 @@
 #include <KTextEditor/InlineNoteProvider>
 
 #include <QHash>
-#include <QPointer>
 #include <QVector>
 
 namespace KTextEditor {
@@ -24,6 +23,11 @@ class ProblemInlineNoteProvider : public KTextEditor::InlineNoteProvider
 {
     Q_OBJECT
 public:
+    /**
+     * Construct a problem inline note provider.
+     *
+     * @param document a non-null document to be annotated that must remain valid throughout this provider's lifetime.
+     */
     explicit ProblemInlineNoteProvider(KTextEditor::Document* document);
     ~ProblemInlineNoteProvider();
 
@@ -37,7 +41,7 @@ public:
 private:
     void completionSettingsChanged();
 
-    QPointer<KTextEditor::Document> m_document;
+    KTextEditor::Document* const m_document;
     QVector<KDevelop::IProblem::Ptr> m_problems;
     QHash<int, KDevelop::IProblem::Ptr> m_problemForLine;
     KDevelop::ICompletionSettings::ProblemInlineNotesLevel m_currentLevel;

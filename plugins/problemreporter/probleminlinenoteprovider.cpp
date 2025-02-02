@@ -50,6 +50,8 @@ static SeverityColors severityColors(IProblem::Severity severity)
 ProblemInlineNoteProvider::ProblemInlineNoteProvider(KTextEditor::Document* document)
     : m_document{document}
 {
+    Q_ASSERT(m_document);
+
     auto registerProvider = [this] (KTextEditor::Document*, KTextEditor::View* view) {
         view->registerInlineNoteProvider(this);
     };
@@ -63,9 +65,6 @@ ProblemInlineNoteProvider::ProblemInlineNoteProvider(KTextEditor::Document* docu
 
 ProblemInlineNoteProvider::~ProblemInlineNoteProvider()
 {
-    if (!m_document) {
-        return;
-    }
     for (auto* view : m_document->views()) {
         view->unregisterInlineNoteProvider(this);
     }
@@ -81,9 +80,6 @@ void ProblemInlineNoteProvider::completionSettingsChanged()
 
 void ProblemInlineNoteProvider::setProblems(const QVector<IProblem::Ptr>& problems)
 {
-    if (!m_document) {
-        return;
-    }
     m_problemForLine.clear();
     m_problems = problems;
     if (problems.isEmpty()) {
