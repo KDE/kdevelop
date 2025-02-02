@@ -67,6 +67,12 @@ public:
 class ProblemReporterPlugin::ProblemVisualizer
 {
 public:
+    /**
+     * Construct a problem visualizer.
+     *
+     * @param document a non-null document to be embellished that must
+     *        remain valid throughout this visualizer's lifetime.
+     */
     explicit ProblemVisualizer(KTextEditor::Document* document)
         : m_highlighter(document)
         , m_inlineNoteProvider(document)
