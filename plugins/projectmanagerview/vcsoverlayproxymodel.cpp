@@ -66,7 +66,8 @@ void VcsOverlayProxyModel::addProject(IProject* p)
         const QUrl url = p->path().toUrl();
         branchingExtension->registerRepositoryForCurrentBranchChanges(url);
         //can't use new signal/slot syntax here, IBranchingVersionControl is not a QObject
-        connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), SLOT(repositoryBranchChanged(QUrl)));
+        connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), SLOT(repositoryBranchChanged(QUrl)),
+                Qt::UniqueConnection);
         repositoryBranchChanged(url);
     }
 }

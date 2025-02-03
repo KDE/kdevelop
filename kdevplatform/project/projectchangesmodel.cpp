@@ -73,7 +73,8 @@ void ProjectChangesModel::addProject(IProject* p)
             const auto pathUrl = p->path().toUrl();
             branchingExtension->registerRepositoryForCurrentBranchChanges(pathUrl);
             // can't use new signal slot syntax here, IBranchingVersionControl is not a QObject
-            connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), this, SLOT(repositoryBranchChanged(QUrl)));
+            connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), this, SLOT(repositoryBranchChanged(QUrl)),
+                    Qt::UniqueConnection);
             repositoryBranchChanged(pathUrl);
         } else
             reload(QList<IProject*>() << p);

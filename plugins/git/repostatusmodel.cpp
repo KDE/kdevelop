@@ -111,8 +111,8 @@ void RepoStatusModel::addProject(const IProject* p)
 
         /* The project has the current branch appended to its name in the display,
          * we therefore need to update it whenever the branch changes */
-        // can't use new signal slot syntax here, IBranchingVersionControl is not a QObject
-        connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), this, SLOT(repositoryBranchChanged(QUrl)));
+        connect(plugin, &GitPlugin::repositoryBranchChanged, this, &RepoStatusModel::repositoryBranchChanged,
+                Qt::UniqueConnection);
         repositoryBranchChanged(pathUrl);
     }
 }
