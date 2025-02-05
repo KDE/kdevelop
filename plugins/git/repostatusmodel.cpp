@@ -57,64 +57,70 @@ RepoStatusModel::~RepoStatusModel() {}
 
 void RepoStatusModel::addProject(const IProject* p)
 {
-    if (const GitPlugin* const plugin = p->versionControlPlugin()->extension<GitPlugin>()) {
-        const auto projectIt = new QStandardItem(p->name());
-        const auto indexIt
-            = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-green")),
-                                i18nc("Files in a vcs which have changes staged for commit", "Staged changes"));
-        const auto worktreeIt = new QStandardItem(
-            QIcon::fromTheme(QStringLiteral("flag-yellow")),
-            i18nc("Files in a vcs which have changes not yet staged for commit", "Unstaged changes"));
-        const auto conflictIt
-            = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-red")),
-                                i18nc("Files in a vcs which have unresolved (merge) conflits", "Conflicts"));
-        const auto untrackedIt = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-black")),
-                                                   i18nc("Files which are not tracked by a vcs", "Untracked files"));
-        const auto pluginInfo = ICore::self()->pluginController()->pluginInfo(plugin);
-        const auto pathUrl = p->path().toUrl();
-
-        projectIt->setData(p->name(), RepoStatusModel::NameRole);
-        projectIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
-        projectIt->setData(ProjectRoot, AreaRole);
-        projectIt->setSelectable(false);
-        projectIt->setIcon(QIcon::fromTheme(pluginInfo.iconName()));
-
-        indexIt->setData(i18nc("Files in a vcs which have changes staged for commit", "Staged"),
-                         RepoStatusModel::NameRole);
-        indexIt->setToolTip(i18n("Files with changes staged for commit"));
-        indexIt->setData(IndexRoot, AreaRole);
-        indexIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
-        indexIt->setSelectable(false);
-
-        worktreeIt->setData(i18nc("Files in a vcs which have changes not checked in to repo", "Modified"),
-                            RepoStatusModel::NameRole);
-        worktreeIt->setToolTip(i18n("Files with changes"));
-        worktreeIt->setData(WorkTreeRoot, AreaRole);
-        worktreeIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
-        worktreeIt->setSelectable(false);
-
-        conflictIt->setData(i18nc("Files in git which have unresolved (merge) conflits", "Conflicts"),
-                            RepoStatusModel::NameRole);
-        conflictIt->setToolTip(i18n("Files with unresolved (merge) conflicts"));
-        conflictIt->setData(ConflictRoot, AreaRole);
-        conflictIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
-        conflictIt->setSelectable(false);
-
-        untrackedIt->setData(i18nc("Files which are not tracked by a vcs", "Untracked"), RepoStatusModel::NameRole);
-        untrackedIt->setToolTip(i18n("Files not tracked in VCS"));
-        untrackedIt->setData(UntrackedRoot, AreaRole);
-        untrackedIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
-        untrackedIt->setSelectable(false);
-
-        appendRow(projectIt);
-        projectIt->appendRows({ indexIt, worktreeIt, conflictIt, untrackedIt });
-
-        /* The project has the current branch appended to its name in the display,
-         * we therefore need to update it whenever the branch changes */
-        connect(plugin, &GitPlugin::repositoryBranchChanged, this, &RepoStatusModel::repositoryBranchChanged,
-                Qt::UniqueConnection);
-        repositoryBranchChanged(pathUrl);
+    auto* const versionControlPlugin = p->versionControlPlugin();
+    if (!versionControlPlugin) {
+        return;
     }
+    const auto* const plugin = versionControlPlugin->extension<GitPlugin>();
+    if (!plugin) {
+        return;
+    }
+
+    const auto projectIt = new QStandardItem(p->name());
+    const auto indexIt =
+        new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-green")),
+                          i18nc("Files in a vcs which have changes staged for commit", "Staged changes"));
+    const auto worktreeIt =
+        new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-yellow")),
+                          i18nc("Files in a vcs which have changes not yet staged for commit", "Unstaged changes"));
+    const auto conflictIt =
+        new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-red")),
+                          i18nc("Files in a vcs which have unresolved (merge) conflits", "Conflicts"));
+    const auto untrackedIt = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-black")),
+                                               i18nc("Files which are not tracked by a vcs", "Untracked files"));
+    const auto pluginInfo = ICore::self()->pluginController()->pluginInfo(plugin);
+    const auto pathUrl = p->path().toUrl();
+
+    projectIt->setData(p->name(), RepoStatusModel::NameRole);
+    projectIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
+    projectIt->setData(ProjectRoot, AreaRole);
+    projectIt->setSelectable(false);
+    projectIt->setIcon(QIcon::fromTheme(pluginInfo.iconName()));
+
+    indexIt->setData(i18nc("Files in a vcs which have changes staged for commit", "Staged"), RepoStatusModel::NameRole);
+    indexIt->setToolTip(i18n("Files with changes staged for commit"));
+    indexIt->setData(IndexRoot, AreaRole);
+    indexIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
+    indexIt->setSelectable(false);
+
+    worktreeIt->setData(i18nc("Files in a vcs which have changes not checked in to repo", "Modified"),
+                        RepoStatusModel::NameRole);
+    worktreeIt->setToolTip(i18n("Files with changes"));
+    worktreeIt->setData(WorkTreeRoot, AreaRole);
+    worktreeIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
+    worktreeIt->setSelectable(false);
+
+    conflictIt->setData(i18nc("Files in git which have unresolved (merge) conflits", "Conflicts"),
+                        RepoStatusModel::NameRole);
+    conflictIt->setToolTip(i18n("Files with unresolved (merge) conflicts"));
+    conflictIt->setData(ConflictRoot, AreaRole);
+    conflictIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
+    conflictIt->setSelectable(false);
+
+    untrackedIt->setData(i18nc("Files which are not tracked by a vcs", "Untracked"), RepoStatusModel::NameRole);
+    untrackedIt->setToolTip(i18n("Files not tracked in VCS"));
+    untrackedIt->setData(UntrackedRoot, AreaRole);
+    untrackedIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
+    untrackedIt->setSelectable(false);
+
+    appendRow(projectIt);
+    projectIt->appendRows({indexIt, worktreeIt, conflictIt, untrackedIt});
+
+    /* The project has the current branch appended to its name in the display,
+     * we therefore need to update it whenever the branch changes */
+    connect(plugin, &GitPlugin::repositoryBranchChanged, this, &RepoStatusModel::repositoryBranchChanged,
+            Qt::UniqueConnection);
+    repositoryBranchChanged(pathUrl);
 }
 
 void RepoStatusModel::removeProject(const IProject* p)
