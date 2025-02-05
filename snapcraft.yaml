@@ -294,6 +294,7 @@ parts:
       - bzr
       - konsole-kpart
       - libproxy1v5
+      - libduktape207
     stage-snaps:
       - konsole
     cmake-parameters:
