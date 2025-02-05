@@ -1,0 +1,341 @@
+# SPDX-FileCopyrightText: 2024,2025 Scarlett Moore <sgmoore@kde.org>
+#
+# SPDX-License-Identifier: CC0-1.0
+---
+name: kdevelop
+confinement: classic
+grade: stable
+base: core24
+adopt-info: kdevelop
+apps:
+  kdevelop:
+    common-id: org.kde.kdevelop.desktop
+    desktop: usr/share/applications/org.kde.kdevelop.desktop
+    command: usr/bin/kdevelop
+assumes:
+  - snapd2.58.3
+compression: lzo
+environment:
+  QTWEBENGINEPROCESS_PATH: "$SNAP/usr/lib/qt6/libexec/QtWebEngineProcess"
+  LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pulseaudio:$SNAP/usr/lib${LD_LIBRARY_PATH}
+  XDG_DATA_DIRS: "$XDG_DATA_DIRS:$SNAP/usr/share"
+  XDG_CONFIG_DIRS: "$XDG_CONFIG_DIRS:$SNAP/etc/xdg"
+  __EGL_VENDOR_LIBRARY_DIRS: "$SNAP/etc/glvnd/egl_vendor.d:$SNAP/usr/share/glvnd/egl_vendor.d"
+  LIBGL_DRIVERS_PATH: "$SNAP/usr/lib/${CRAFT_ARCH_TRIPLET}/dri"
+  QT_PLUGIN_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins
+  KDEV_CLANG_BUILTIN_DIR: $SNAP/usr/lib/llvm-18/lib/clang/18/include
+layout:
+  /usr/share/X11:
+    symlink: $SNAP/usr/share/X11
+  /usr/share/qt6:
+    bind: $SNAP/usr/share/qt6
+package-repositories:
+  - type: apt
+    components:
+      - main
+    suites:
+      - noble
+    key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
+    url: http://origin.archive.neon.kde.org/user
+    key-server: keyserver.ubuntu.com
+parts:
+  mesa-patchelf:
+    plugin: nil
+    stage-packages:
+      - libgl1-mesa-dri
+      - libglut3.12
+      - libglu1-mesa
+      - patchelf
+    stage:
+      - "-usr/lib/${CRAFT_ARCH_TRIPLET}/dri"
+      - -usr/share/doc
+  mesa-no-patchelf:
+    plugin: nil
+    stage-packages:
+      - libgl1-mesa-dri
+    build-attributes:
+      - no-patchelf
+    stage:
+      - usr/lib/${CRAFT_ARCH_TRIPLET}/dri
+  qtconf:
+    plugin: nil
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/bin
+      cat <<EOF > $CRAFT_PART_INSTALL/usr/bin/qt.conf
+      [Paths]
+      Prefix = ../../
+      LibraryExecutables = usr/lib/$CRAFT_ARCH_TRIPLET/qt6/libexec
+      Plugins = usr/lib/$CRAFT_ARCH_TRIPLET/qt6/plugins
+      Qml2Imports = usr/lib/$CRAFT_ARCH_TRIPLET/qt6/qml
+      Translations = usr/share/qt6/translations
+      Data = usr/share/qt6
+      EOF
+  kdevelop-pg-qt:
+    source: https://invent.kde.org/kdevelop/kdevelop-pg-qt.git
+    plugin: cmake
+    build-packages:
+      - bison
+      - cmake
+      - flex
+      - kf6-extra-cmake-modules
+      - qt6-base-dev
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DBUILD_WITH_QT6=ON
+      - -DBUILD_TESTING=OFF
+      - -DCMAKE_INSTALL_SYSCONFDIR=/etc
+      - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
+      - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
+      - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
+      - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
+      - -DCMAKE_INSTALL_RUNSTATEDIR=/run
+      - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
+      - -DCMAKE_VERBOSE_MAKEFILE=ON
+      - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      - --log-level=STATUS
+      - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+  kdev-php:
+    after:
+      - kdevelop
+    source: https://invent.kde.org/kdevelop/kdev-php.git
+    plugin: cmake
+    build-packages:
+      - cmake
+      - kf6-extra-cmake-modules
+      - kf6-karchive-dev
+      - kf6-kcmutils-dev
+      - kf6-ki18n-dev
+      - kf6-kitemmodels-dev
+      - kf6-knewstuff-dev
+      - kf6-knotifyconfig-dev
+      - kf6-ktexteditor-dev
+      - kf6-ktexttemplate-dev
+      - kf6-syntax-highlighting-dev
+      - kf6-threadweaver-dev
+      - qt6-base-dev
+      - qt6-webengine-dev
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DBUILD_WITH_QT6=ON
+      - -DBUILD_TESTING=OFF
+      - -DCMAKE_INSTALL_SYSCONFDIR=/etc
+      - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
+      - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
+      - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
+      - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
+      - -DCMAKE_INSTALL_RUNSTATEDIR=/run
+      - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
+      - -DCMAKE_VERBOSE_MAKEFILE=ON
+      - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      - --log-level=STATUS
+      - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+  kdev-python:
+    after:
+    - kdevelop
+    source: https://invent.kde.org/kdevelop/kdev-python.git
+    plugin: cmake
+    build-packages:
+      - cmake
+      - kf6-extra-cmake-modules
+      - kf6-karchive-dev
+      - kf6-kcmutils-dev
+      - kf6-ki18n-dev
+      - kf6-kitemmodels-dev
+      - kf6-knewstuff-dev
+      - kf6-knotifyconfig-dev
+      - kf6-ktexteditor-dev
+      - kf6-ktexttemplate-dev
+      - kf6-syntax-highlighting-dev
+      - kf6-threadweaver-dev
+      - qt6-base-dev
+      - qt6-webengine-dev
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DBUILD_WITH_QT6=ON
+      - -DBUILD_TESTING=OFF
+      - -DCMAKE_INSTALL_SYSCONFDIR=/etc
+      - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
+      - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
+      - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
+      - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
+      - -DCMAKE_INSTALL_RUNSTATEDIR=/run
+      - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
+      - -DCMAKE_VERBOSE_MAKEFILE=ON
+      - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      - --log-level=STATUS
+      - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+  kdevelop:
+    after:
+      - mesa-patchelf
+      - mesa-no-patchelf
+      - qtconf
+      - kdevelop-pg-qt
+    parse-info:
+      - usr/share/metainfo/org.kde.kdevelop.appdata.xml
+    plugin: cmake
+    source: .
+    source-type: local
+    build-attributes:
+      - enable-patchelf
+    build-packages:
+      - clazy
+      - cmake
+      - cppcheck
+      - heaptrack-gui
+      - kf6-extra-cmake-modules
+      - kf6-kcmutils-dev
+      - kf6-kcolorscheme-dev
+      - kf6-kconfig-dev
+      - kf6-kcrash-dev
+      - kf6-kdeclarative-dev
+      - kf6-kdoctools-dev
+      - kf6-ki18n-dev
+      - kf6-kiconthemes-dev
+      - kf6-kio-dev
+      - kf6-kitemmodels-dev
+      - kf6-kitemviews-dev
+      - kf6-kjobwidgets-dev
+      - kf6-knewstuff-dev
+      - kf6-knotifications-dev
+      - kf6-knotifyconfig-dev
+      - kf6-kparts-dev
+      - kf6-krunner-dev
+      - kf6-kservice-dev
+      - kf6-ktexteditor-dev
+      - kf6-ktexttemplate-dev
+      - kf6-kwindowsystem-dev
+      - kf6-kxmlgui-dev
+      - kf6-purpose-dev
+      - kf6-syntax-highlighting-dev
+      - kf6-threadweaver-dev
+      - libastyle-dev
+      - libplasma-dev
+      - libsvn-dev
+      - llvm-18-dev
+      - okteta-dev
+      - qt6-base-dev
+      - qt6-declarative-dev
+      - qt6-tools-dev
+      - qt6-webengine-dev
+      - shared-mime-info
+      - libclang-18-dev
+      - libcurl4-openssl-dev
+      - libedit-dev
+      - libboost-all-dev
+      - libkomparediff2-dev
+      - libksysguard-dev
+    stage-packages:
+      - clang-tidy-18
+      - clazy
+      - cppcheck
+      - heaptrack-gui
+      - meson
+      - qml6-module-qtquick
+      - qml6-module-qtquick-controls
+      - qt6-webengine
+      - kf6-kcmutils
+      - kf6-kcolorscheme
+      - kf6-kconfig
+      - kf6-kcrash
+      - kf6-kdeclarative
+      - kf6-kdoctools
+      - kf6-ki18n
+      - kf6-kiconthemes
+      - kf6-kio
+      - kf6-kitemmodels
+      - kf6-kitemviews
+      - kf6-kjobwidgets
+      - kf6-knewstuff
+      - kf6-knotifications
+      - kf6-knotifyconfig
+      - kf6-kparts
+      - kf6-krunner
+      - kf6-kservice
+      - kf6-ktexteditor
+      - kf6-ktexttemplate
+      - kf6-ktextwidgets
+      - kf6-kwindowsystem
+      - kf6-kxmlgui
+      - kf6-purpose
+      - kf6-syntax-highlighting
+      - kf6-threadweaver
+      - kf6-kpty
+      - libclang1-18
+      - qt6-5compat
+      - qt6-base
+      - g++
+      - gcc
+      - gdb
+      - kapptemplate
+      - make
+      - kf6-krunner
+      - qt6-declarative
+      - cmake
+      - heaptrack
+      - ninja-build
+      - libcurl4t64
+      - libclang-18-dev
+      - libastyle3
+      - libprocesscore10
+      - libkomparediff2-6
+      - qt6-tools
+      - libapr1t64
+      - libaprutil1t64
+      - libsvn1
+      - libksysguard
+      - libicu74
+      - git
+      - bzr
+      - konsole-kpart
+      - libproxy1v5
+      - libduktape207
+    stage-snaps:
+      - konsole
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DBUILD_WITH_QT6=ON
+      - -DBUILD_TESTING=OFF
+      - -DCMAKE_INSTALL_SYSCONFDIR=/etc
+      - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
+      - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
+      - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
+      - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
+      - -DCMAKE_INSTALL_RUNSTATEDIR=/run
+      - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
+      - -DCMAKE_VERBOSE_MAKEFILE=ON
+      - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      - --log-level=STATUS
+      - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      - -DCMAKE_PREFIX_PATH=$CRAFT_STAGE/usr/lib/llvm-18
+    prime:
+      - -usr/lib/*/cmake/*
+      - -usr/include/*
+      - -usr/share/ECM/*
+      - -usr/share/man/*
+      - -usr/bin/X11
+      - -usr/lib/gcc/$CRAFT_ARCH_TRIPLET_BUILD_FOR/6.0.0
+      - -usr/lib/aspell/*
+      - -usr/share/lintian
+    override-prime: |
+      craftctl default
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/crocus_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/d3d12_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/i915_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/iris_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/kms_swrast_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/nouveau_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/r300_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/r600_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/radeonsi_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/swrast_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/virtio_gpu_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/vmwgfx_dri.so
+      patchelf --force-rpath --set-rpath /snap/core22/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri/zink_dri.so
