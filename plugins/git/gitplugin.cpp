@@ -57,6 +57,7 @@
 #include "gitnameemaildialog.h"
 #include "debug.h"
 
+#include <algorithm>
 #include <array>
 #include <utility>
 
@@ -88,6 +89,12 @@ QDir dotGitDirectory(const QUrl& dirPath, bool silent = false)
     }
 
     return dir;
+}
+
+[[nodiscard]] QString gitHeadFile(const QUrl& dirPath)
+{
+    const auto dir = dotGitDirectory(dirPath);
+    return dir.absoluteFilePath(QStringLiteral(".git/HEAD"));
 }
 
 /**
@@ -1782,28 +1789,120 @@ KDevelop::VcsLocationWidget* GitPlugin::vcsLocation(QWidget* parent) const
     return new GitVcsLocationWidget(parent);
 }
 
-void GitPlugin::registerRepositoryForCurrentBranchChanges(const QUrl& repository)
+void GitPlugin::registerRepositoryForCurrentBranchChanges(const QUrl& repository, const QObject* listener)
 {
-    QDir dir = dotGitDirectory(repository);
-    QString headFile = dir.absoluteFilePath(QStringLiteral(".git/HEAD"));
-    m_watcher->addFile(headFile);
+    Q_ASSERT(listener); // precondition
+    const auto headFile = gitHeadFile(repository);
+    qCDebug(PLUGIN_GIT) << "registering repository" << repository.toString(QUrl::PreferLocalFile) << "and listener"
+                        << listener << "with the HEAD file" << headFile;
+
+    const auto it = findWatchedFile(headFile);
+    if (it == m_watchedFiles.end()) {
+        auto& watchedFile = m_watchedFiles.emplace_back(headFile);
+        Q_ASSERT(watchedFile.listeners.empty());
+        watchedFile.listeners.push_back(listener);
+
+        m_watcher->addFile(headFile);
+        qCDebug(PLUGIN_GIT) << "started watching the HEAD file" << headFile;
+    } else {
+        // headFile is already watched => just register another listener
+        it->listeners.push_back(listener);
+    }
+}
+
+void GitPlugin::unregisterRepositoryForCurrentBranchChanges(const QUrl& repository, const QObject* listener)
+{
+    Q_ASSERT(listener); // precondition
+    const auto headFile = gitHeadFile(repository);
+    qCDebug(PLUGIN_GIT) << "unregistering repository" << repository.toString(QUrl::PreferLocalFile) << "and listener"
+                        << listener << "with the HEAD file" << headFile;
+
+    const auto it = findWatchedFile(headFile);
+    if (it == m_watchedFiles.end()) {
+        qCDebug(PLUGIN_GIT) << "the HEAD file" << headFile << "is not watched => nothing to do";
+        return;
+    }
+
+    // unregister listener from one of possibly multiple same-URL repositories
+    it->listeners.removeOne(listener);
+    // clean up
+    if (it->listeners.empty()) {
+        m_watchedFiles.erase(it);
+        m_watcher->removeFile(headFile);
+        qCDebug(PLUGIN_GIT) << "stopped watching the HEAD file" << headFile;
+    }
 }
 
 void GitPlugin::fileChanged(const QString& file)
 {
-    Q_ASSERT(file.endsWith(QLatin1String("HEAD")));
-    //SMTH/.git/HEAD -> SMTH/
-    const QUrl fileUrl = Path(file).parent().parent().toUrl();
+    const auto it = findWatchedFile(file);
+    if (it == m_watchedFiles.end()) {
+        // KDirWatch's internal QueuedConnection can cause this if the file just became unwatched
+        qCDebug(PLUGIN_GIT) << "an unwatched file changed" << file;
+        return;
+    }
+    qCDebug(PLUGIN_GIT) << "a watched file changed" << file;
 
     //We need to delay the emitted signal, otherwise the branch hasn't change yet
     //and the repository is not functional
-    m_branchesChange.append(fileUrl);
-    QTimer::singleShot(1000, this, &GitPlugin::delayedBranchChanged);
+    it->scheduleDelayedBranchChanged(this);
 }
 
 void GitPlugin::delayedBranchChanged()
 {
-    emit repositoryBranchChanged(m_branchesChange.takeFirst());
+    const auto it = std::find_if(m_watchedFiles.cbegin(), m_watchedFiles.cend(),
+                                 [timer = sender()](const WatchedFile& watchedFile) {
+                                     return watchedFile.isOwnTimer(timer);
+                                 });
+    // The timer must be present because the connection to its timeout() signal is direct and the timer is
+    // destroyed synchronously along with its owner FileWatcher when an element is erased from m_watchedFiles.
+    Q_ASSERT(it != m_watchedFiles.cend());
+    const auto filePath = it->filePath();
+
+    Q_ASSERT(filePath.endsWith(QLatin1String("HEAD")));
+    // repository/.git/HEAD -> repository
+    const auto repository = Path{filePath}.parent().parent().toUrl();
+    qCDebug(PLUGIN_GIT).nospace() << "emitting repositoryBranchChanged(" << repository.toString(QUrl::PreferLocalFile)
+                                  << ')';
+    emit repositoryBranchChanged(repository);
+}
+
+GitPlugin::WatchedFile::WatchedFile(const QString& filePath)
+    : m_filePath(filePath)
+{
+}
+
+const QString& GitPlugin::WatchedFile::filePath() const
+{
+    return m_filePath;
+}
+
+bool GitPlugin::WatchedFile::isOwnTimer(const QObject* object) const
+{
+    Q_ASSERT(object);
+    return m_timer.get() == object;
+}
+
+void GitPlugin::WatchedFile::scheduleDelayedBranchChanged(const GitPlugin* plugin)
+{
+    Q_ASSERT(plugin);
+
+    if (!m_timer) {
+        m_timer.reset(new QTimer);
+        m_timer->setSingleShot(true);
+        m_timer->setInterval(1000);
+        m_timer->callOnTimeout(plugin, &GitPlugin::delayedBranchChanged);
+    }
+    // During a git rebase, multiple changes to the HEAD file can occur within the timer interval.
+    // Restart the timer and emit the signal once in the end to avoid freezing the KDevelop UI.
+    m_timer->start();
+}
+
+auto GitPlugin::findWatchedFile(const QString& filePath) -> std::vector<WatchedFileAndListeners>::iterator
+{
+    return std::find_if(m_watchedFiles.begin(), m_watchedFiles.end(), [&filePath](const WatchedFile& watchedFile) {
+        return watchedFile.filePath() == filePath;
+    });
 }
 
 CheckInRepositoryJob* GitPlugin::isInRepository(KTextEditor::Document* document)

@@ -16,9 +16,14 @@
 #include <vcs/vcsjob.h>
 
 #include <QDateTime>
+#include <QVarLengthArray>
+
+#include <memory>
+#include <vector>
 
 class KDirWatch;
 class QDir;
+class QTimer;
 
 class RepoStatusModel;
 class CommitToolViewFactory;
@@ -260,7 +265,8 @@ public:
     bool hasModifications(const QDir& repository);
     bool hasModifications(const QDir& repo, const QUrl& file);
 
-    void registerRepositoryForCurrentBranchChanges(const QUrl& repository) override;
+    void registerRepositoryForCurrentBranchChanges(const QUrl& repository, const QObject* listener) override;
+    void unregisterRepositoryForCurrentBranchChanges(const QUrl& repository, const QObject* listener) override;
 
     KDevelop::CheckInRepositoryJob* isInRepository(KTextEditor::Document* document) override;
 
@@ -318,6 +324,69 @@ Q_SIGNALS:
     void repositoryBranchChanged(const QUrl& repository);
 
 private:
+    class WatchedFile
+    {
+    public:
+        explicit WatchedFile(const QString& filePath);
+
+        [[nodiscard]] const QString& filePath() const;
+
+        /**
+         * @return whether a given object is the timer to invoke delayedBranchChanged() asynchronously owned by @c this
+         *
+         * @param object a non-null object
+         */
+        [[nodiscard]] bool isOwnTimer(const QObject* object) const;
+
+        /**
+         * Invoke @p plugin->delayedBranchChanged() in a little while.
+         *
+         * @param plugin a non-null plugin instance. The plugin pointer must be the same
+         *        each time because the plugin's delayedBranchChanged() slot is connected
+         *        to the timer's @c timeout() signal only during the first call to this function.
+         */
+        void scheduleDelayedBranchChanged(const GitPlugin* plugin);
+
+    private:
+        /**
+         * The path to the watched file.
+         *
+         * The file path is logically constant but is not declared as
+         * @c const to allow std::vector to move WatchedFile elements.
+         */
+        QString m_filePath;
+        /**
+         * The timer to invoke delayedBranchChanged() asynchronously.
+         *
+         * The default deleter is safe because the timer's @c timeout()
+         * signal does not trigger destruction of a WatchedFile.
+         */
+        std::unique_ptr<QTimer> m_timer;
+    };
+
+    /**
+     * This class combines two independent entities: class WatchedFile
+     * and a container of listeners for changes to the watched file.
+     */
+    class WatchedFileAndListeners : public WatchedFile
+    {
+    public:
+        using WatchedFile::WatchedFile;
+
+        /**
+         * Listeners that have registered filePath() for current branch changes.
+         *
+         * Storing the listeners mitigates the consequences of unregistering a listener for a repository without
+         * having previously registered it. This might happen if a project is opened, then a not-yet-listener
+         * object is destroyed and unregisters itself, never having received the @c projectOpened() signal.
+         *
+         * The number of listeners normally should not exceed 3, hence the value of the template argument @c Prealloc.
+         */
+        QVarLengthArray<const QObject*, 3> listeners;
+    };
+
+    [[nodiscard]] std::vector<WatchedFileAndListeners>::iterator findWatchedFile(const QString& filePath);
+
     bool ensureValidGitIdentity(const QDir& dir);
     void addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files);
 
@@ -350,7 +419,7 @@ private:
     bool m_oldVersion = false;
 
     KDirWatch* m_watcher;
-    QList<QUrl> m_branchesChange;
+    std::vector<WatchedFileAndListeners> m_watchedFiles;
     bool m_usePrefix = true;
 
     /** A tree model tracking and classifying changes into staged, unstaged and untracked */

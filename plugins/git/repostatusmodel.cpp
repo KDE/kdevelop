@@ -53,7 +53,13 @@ RepoStatusModel::RepoStatusModel(QObject* parent)
     connect(ICore::self()->runController(), &IRunController::jobUnregistered, this, &RepoStatusModel::jobUnregistered);
 }
 
-RepoStatusModel::~RepoStatusModel() {}
+RepoStatusModel::~RepoStatusModel()
+{
+    const auto projects = ICore::self()->projectController()->projects();
+    for (auto* const project : projects) {
+        removeProject(project);
+    }
+}
 
 void RepoStatusModel::addProject(const IProject* p)
 {
@@ -61,7 +67,7 @@ void RepoStatusModel::addProject(const IProject* p)
     if (!versionControlPlugin) {
         return;
     }
-    const auto* const plugin = versionControlPlugin->extension<GitPlugin>();
+    auto* const plugin = versionControlPlugin->extension<GitPlugin>();
     if (!plugin) {
         return;
     }
@@ -118,6 +124,7 @@ void RepoStatusModel::addProject(const IProject* p)
 
     /* The project has the current branch appended to its name in the display,
      * we therefore need to update it whenever the branch changes */
+    plugin->registerRepositoryForCurrentBranchChanges(pathUrl, this);
     connect(plugin, &GitPlugin::repositoryBranchChanged, this, &RepoStatusModel::repositoryBranchChanged,
             Qt::UniqueConnection);
     repositoryBranchChanged(pathUrl);
@@ -131,6 +138,13 @@ void RepoStatusModel::removeProject(const IProject* p)
     // never added
     if (auto it = findProject(p)) {
         removeRow(it->row());
+    }
+
+    if (auto* const plugin = p->versionControlPlugin()) {
+        if (auto* const gitPlugin = plugin->extension<GitPlugin>()) {
+            const auto pathUrl = p->path().toUrl();
+            gitPlugin->unregisterRepositoryForCurrentBranchChanges(pathUrl, this);
+        }
     }
 }
 

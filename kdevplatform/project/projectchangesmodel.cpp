@@ -53,7 +53,9 @@ ProjectChangesModel::ProjectChangesModel(QObject* parent)
 }
 
 ProjectChangesModel::~ProjectChangesModel()
-{}
+{
+    // TODO (once ProjectController is no longer the parent of this): remove all open projects.
+}
 
 void ProjectChangesModel::addProject(IProject* p)
 {
@@ -71,7 +73,7 @@ void ProjectChangesModel::addProject(IProject* p)
         auto* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
         if(branchingExtension) {
             const auto pathUrl = p->path().toUrl();
-            branchingExtension->registerRepositoryForCurrentBranchChanges(pathUrl);
+            branchingExtension->registerRepositoryForCurrentBranchChanges(pathUrl, this);
             // can't use new signal slot syntax here, IBranchingVersionControl is not a QObject
             connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), this, SLOT(repositoryBranchChanged(QUrl)),
                     Qt::UniqueConnection);
@@ -94,6 +96,13 @@ void ProjectChangesModel::removeProject(IProject* p)
         return;
     }
     removeRow(it->row());
+
+    if (auto* const plugin = p->versionControlPlugin()) {
+        if (auto* const branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>()) {
+            const auto pathUrl = p->path().toUrl();
+            branchingExtension->unregisterRepositoryForCurrentBranchChanges(pathUrl, this);
+        }
+    }
 }
 
 QStandardItem* findItemChild(QStandardItem* parent, const QVariant& value, int role = Qt::DisplayRole)

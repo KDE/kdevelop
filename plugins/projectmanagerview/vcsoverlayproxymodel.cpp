@@ -38,6 +38,14 @@ VcsOverlayProxyModel::VcsOverlayProxyModel(QObject* parent): QIdentityProxyModel
     }
 }
 
+VcsOverlayProxyModel::~VcsOverlayProxyModel()
+{
+    const auto projects = ICore::self()->projectController()->projects();
+    for (auto* const project : projects) {
+        removeProject(project);
+    }
+}
+
 QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) const
 {
     if(role == VcsStatusRole) {
@@ -64,7 +72,7 @@ void VcsOverlayProxyModel::addProject(IProject* p)
     auto* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
     if(branchingExtension) {
         const QUrl url = p->path().toUrl();
-        branchingExtension->registerRepositoryForCurrentBranchChanges(url);
+        branchingExtension->registerRepositoryForCurrentBranchChanges(url, this);
         //can't use new signal/slot syntax here, IBranchingVersionControl is not a QObject
         connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), SLOT(repositoryBranchChanged(QUrl)),
                 Qt::UniqueConnection);
@@ -120,6 +128,13 @@ void VcsOverlayProxyModel::branchNameReady(KDevelop::VcsJob* job)
 void VcsOverlayProxyModel::removeProject(IProject* p)
 {
     m_branchName.remove(p);
+
+    if (auto* const plugin = p->versionControlPlugin()) {
+        if (auto* const branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>()) {
+            const auto url = p->path().toUrl();
+            branchingExtension->unregisterRepositoryForCurrentBranchChanges(url, this);
+        }
+    }
 }
 
 QModelIndex VcsOverlayProxyModel::indexFromProject(QObject* project)

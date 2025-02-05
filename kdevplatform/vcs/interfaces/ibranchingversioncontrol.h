@@ -98,11 +98,16 @@ public:
     */
    virtual VcsJob* renameBranch(const QUrl &repository, const QString &oldBranchName, const QString &newBranchName) = 0;
 
-   /**
-    * Tells the implementation to report about changes in the current branch of a
-    * given @p repository.
-    */
-   virtual void registerRepositoryForCurrentBranchChanges(const QUrl& repository) = 0;
+    /**
+     * Tells the implementation to report about changes in the current branch of a
+     * given repository to a given non-null listener by emitting the signal repositoryBranchChanged().
+     */
+    virtual void registerRepositoryForCurrentBranchChanges(const QUrl& repository, const QObject* listener) = 0;
+    /**
+     * Tells the implementation that a given non-null listener is no longer
+     * interested in current branch changes to a given repository.
+     */
+    virtual void unregisterRepositoryForCurrentBranchChanges(const QUrl& repository, const QObject* listener) = 0;
 
 Q_SIGNALS:
     void repositoryBranchChanged(const QUrl& repository);
