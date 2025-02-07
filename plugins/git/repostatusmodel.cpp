@@ -511,6 +511,9 @@ void RepoStatusModel::itemsAdded(const QModelIndex& parent, int start, int end)
     if (!findProject(project))
         return;
 
+    // FIXME: this code is utterly broken. See the long comment in the slot
+    //        ProjectChangesModel::itemsAdded(), from which the code has been copied.
+
     QList<QUrl> urls;
 
     for (int i = start; i < end; i++) {

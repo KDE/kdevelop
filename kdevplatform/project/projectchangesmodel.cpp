@@ -203,7 +203,31 @@ void ProjectChangesModel::itemsAdded(const QModelIndex& parent, int start, int e
     
     if(!project)
         return;
-    
+
+    // FIXME: this code is utterly broken. When a new file is created, the signal ProjectModel::rowsInserted() is
+    //        emitted and the item has a parent. But the loop below does not process the added file, because the
+    //        `start` and `end` parameters of the signal QAbstractItemModel::rowsInserted() are inclusive indices.
+    //        If this bug is fixed by changing the loop's condition to `i <= end`, the urls list would remain empty
+    //        because ProjectBaseItem() appends the item under construction to the model while its type is still
+    //        ProjectBaseItem, so the item->type() checks below fail. Even if the checks are removed, the path
+    //        of a bare ProjectBaseItem is always empty, so the changes() call below would not work anyway.
+    //
+    //        Suppose one fixes all these bugs, what then? KDevelop would freeze when many files are added,
+    //        e.g. while switching between distant git revisions! That's because this slot, and therefore
+    //        IBasicVersionControl::status(), would be invoked separately for each added file. Each call to
+    //        GitPlugin::status() would schedule an invocation of GitPlugin::parseGitStatusOutput().
+    //        parseGitStatusOutput() calls GitPlugin::getLsFiles(), which runs a
+    //        `git ls-files` process synchronously. This implementation must be optimized before fixing
+    //        the bugs. The UI freezes have been reported at https://bugs.kde.org/show_bug.cgi?id=486949
+    //
+    //        Another related bug is that the signal QAbstractItemModel::rowsRemoved() is not connected to for cleanup.
+    //
+    //        This slot and related code have been copied almost verbatim to the class RepoStatusModel. Therefore,
+    //        RepoStatusModel suffers from all these bugs as well. The extensive code duplication causes another
+    //        performance bug: when both ProjectChangesModel and RepoStatusModel instances exist at the same time, each
+    //        of them runs the same git processes and invokes the same slow handling of process results in GitPlugin.
+    //        This work should not be duplicated and ought to be performed at most once in order to improve performance.
+
     QList<QUrl> urls;
     
     for(int i=start; i<end; i++) {
