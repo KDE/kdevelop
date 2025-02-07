@@ -6,6 +6,7 @@
 
 #include "abstractnavigationcontext.h"
 
+#include <KColorScheme>
 #include <KLocalizedString>
 
 #include "abstractdeclarationnavigationcontext.h"
@@ -22,6 +23,7 @@
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>
 
+#include <QGuiApplication>
 #include <QRegExp>
 
 namespace KDevelop {
@@ -591,30 +593,107 @@ QString AbstractNavigationContext::currentHtml() const
     return d->m_currentText;
 }
 
-QString Colorizer::operator()(const QString& str) const
+/** A helper-class for elegant colorization of html-strings .
+ *
+ * Initialize it with a html-color like "990000". and colorize strings
+ * using operator()
+ */
+struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer : public QObject
 {
-    QString ret = QLatin1String("<font color=\"#") + m_color + QLatin1String("\">") + str + QLatin1String("</font>");
+    enum FormattingFlag {
+        Nothing = 0x0,
+        Bold = 0x1,
+        Italic = 0x2,
+        Fixed = 0x4
+    };
+    Q_DECLARE_FLAGS(Formatting, FormattingFlag)
+    explicit Colorizer(KColorScheme::ForegroundRole paletteColor, Formatting formatting = Nothing)
+        : m_foreground(paletteColor)
+        , m_formatting(formatting)
+    {
+        init();
+        QCoreApplication::instance()->installEventFilter(this);
+    }
 
-    if (m_formatting & Fixed)
-        ret = QLatin1String("<tt>") + ret + QLatin1String("</tt>");
-    if (m_formatting & Bold)
-        ret = QLatin1String("<b>") + ret + QLatin1String("</b>");
-    if (m_formatting & Italic)
-        ret = QLatin1String("<i>") + ret + QLatin1String("</i>");
+    void init()
+    {
+        const auto colors = KColorScheme(QPalette::Normal, KColorScheme::View);
+        m_color = colors.foreground(m_foreground).color().name();
+    }
 
-    return ret;
+    bool eventFilter(QObject* watched, QEvent* event)
+    {
+        if (watched == QCoreApplication::instance() && event->type() == QEvent::ApplicationPaletteChange) {
+            init();
+        }
+        return false;
+    }
+    QString operator()(const QString& str) const
+    {
+        QString ret = QLatin1String("<font color=\"") + m_color + QLatin1String("\">") + str + QLatin1String("</font>");
+
+        if (m_formatting & Fixed)
+            ret = QLatin1String("<tt>") + ret + QLatin1String("</tt>");
+        if (m_formatting & Bold)
+            ret = QLatin1String("<b>") + ret + QLatin1String("</b>");
+        if (m_formatting & Italic)
+            ret = QLatin1String("<i>") + ret + QLatin1String("</i>");
+
+        return ret;
+    }
+
+private:
+    const KColorScheme::ForegroundRole m_foreground;
+    const Formatting m_formatting;
+    QString m_color;
+};
+Q_DECLARE_OPERATORS_FOR_FLAGS(Colorizer::Formatting)
+
+QString AbstractNavigationContext::typeHighlight(const QString& str)
+{
+    static const Colorizer c(KColorScheme::PositiveText);
+    return c(str);
 }
-
-const Colorizer AbstractNavigationContext::typeHighlight(QStringLiteral("006000"));
-const Colorizer AbstractNavigationContext::errorHighlight(QStringLiteral("990000"));
-const Colorizer AbstractNavigationContext::labelHighlight(QStringLiteral("000000"));
-const Colorizer AbstractNavigationContext::codeHighlight(QStringLiteral("005000"));
-const Colorizer AbstractNavigationContext::propertyHighlight(QStringLiteral("009900"));
-const Colorizer AbstractNavigationContext::navigationHighlight(QStringLiteral("000099"));
-const Colorizer AbstractNavigationContext::importantHighlight(QStringLiteral(
-        "000000"), Colorizer::Bold | Colorizer::Italic);
-const Colorizer AbstractNavigationContext::commentHighlight(QStringLiteral("303030"));
-const Colorizer AbstractNavigationContext::nameHighlight(QStringLiteral("000000"), Colorizer::Bold);
+QString AbstractNavigationContext::errorHighlight(const QString& str)
+{
+    static const Colorizer c(KColorScheme::NegativeText);
+    return c(str);
+}
+QString AbstractNavigationContext::labelHighlight(const QString& str)
+{
+    static const Colorizer c(KColorScheme::NormalText);
+    return c(str);
+}
+QString AbstractNavigationContext::codeHighlight(const QString& str)
+{
+    static const Colorizer c(KColorScheme::NeutralText);
+    return c(str);
+}
+QString AbstractNavigationContext::propertyHighlight(const QString& str)
+{
+    static const Colorizer c(KColorScheme::PositiveText);
+    return c(str);
+}
+QString AbstractNavigationContext::navigationHighlight(const QString& str)
+{
+    static const Colorizer c(KColorScheme::LinkText);
+    return c(str);
+}
+QString AbstractNavigationContext::importantHighlight(const QString& str)
+{
+    static const Colorizer c(KColorScheme::NormalText, Colorizer::Bold | Colorizer::Italic);
+    return c(str);
+}
+QString AbstractNavigationContext::commentHighlight(const QString& str)
+{
+    static const Colorizer c(KColorScheme::NormalText, Colorizer::Italic);
+    return c(str);
+}
+QString AbstractNavigationContext::nameHighlight(const QString& str)
+{
+    static const Colorizer c(KColorScheme::NormalText, Colorizer::Bold);
+    return c(str);
+}
 }
 
 #include "moc_abstractnavigationcontext.cpp"
