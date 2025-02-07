@@ -20,34 +20,6 @@
 namespace KDevelop {
 class AbstractNavigationContextPrivate;
 
-/** A helper-class for elegant colorization of html-strings .
- *
- * Initialize it with a html-color like "990000". and colorize strings
- * using operator()
- */
-struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
-{
-    enum FormattingFlag {
-        Nothing = 0x0,
-        Bold = 0x1,
-        Italic = 0x2,
-        Fixed = 0x4
-    };
-    Q_DECLARE_FLAGS(Formatting, FormattingFlag)
-    explicit Colorizer(const QString& color, Formatting formatting = Nothing)
-        : m_color(color)
-        , m_formatting(formatting)
-    {
-    }
-
-    QString operator()(const QString& str) const;
-
-    QString m_color;
-    Formatting m_formatting;
-};
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Colorizer::Formatting)
-
 class AbstractNavigationContext;
 using NavigationContextPointer = QExplicitlySharedDataPointer<AbstractNavigationContext>;
 
@@ -149,15 +121,15 @@ protected:
 
     virtual QString declarationKind(const DeclarationPointer& decl);
 
-    static const Colorizer typeHighlight;
-    static const Colorizer errorHighlight;
-    static const Colorizer labelHighlight;
-    static const Colorizer codeHighlight;
-    static const Colorizer propertyHighlight;
-    static const Colorizer navigationHighlight;
-    static const Colorizer importantHighlight;
-    static const Colorizer commentHighlight;
-    static const Colorizer nameHighlight;
+    static QString typeHighlight(const QString& str);
+    static QString errorHighlight(const QString& str);
+    static QString labelHighlight(const QString& str);
+    static QString codeHighlight(const QString& str);
+    static QString propertyHighlight(const QString& str);
+    static QString navigationHighlight(const QString& str);
+    static QString importantHighlight(const QString& str);
+    static QString commentHighlight(const QString& str);
+    static QString nameHighlight(const QString& str);
 
 private:
     const QScopedPointer<class AbstractNavigationContextPrivate> d_ptr;
