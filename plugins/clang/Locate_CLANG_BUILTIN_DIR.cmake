@@ -22,6 +22,7 @@ find_path(CLANG_BUILTIN_DIR
     PATH_SUFFIXES   "clang/${CLANG_VERSION_SUBDIR}/include"
                     "../lib/clang/${CLANG_VERSION_SUBDIR}/include"
                     "../../../clang/${CLANG_VERSION_SUBDIR}/include"
+                    "../../../lib/clang/${CLANG_VERSION_SUBDIR}/include"
     NO_DEFAULT_PATH
 )
 

@@ -439,8 +439,12 @@ QString ClangHelpers::clangBuiltinIncludePath()
         Dl_info info;
         if (dladdr(reinterpret_cast<void*>(&clang_getClangVersion), &info)) {
             // "../lib/" because libclang may be in lib64/ while includes are in lib/
-            for (auto pathTemplate :
-                 {QLatin1String{"%1/../clang/%2/include"}, QLatin1String{"%1/../../lib/clang/%2/include"}}) {
+            // "../../../lib" because libclang may be in lib64/llvmXX/lib/
+            for (const auto pathTemplate : {
+                     QLatin1String{"%1/../clang/%2/include"},
+                     QLatin1String{"%1/../../lib/clang/%2/include"},
+                     QLatin1String{"%1/../../../../lib/clang/%2/include"},
+                 }) {
                 dir = QDir::cleanPath(pathTemplate.arg(QString::fromUtf8(info.dli_fname), versionSubdir));
                 if (isValidClangBuiltingIncludePath(dir)) {
                     clangDebug() << "Using builtin dir:" << dir;
