@@ -74,8 +74,6 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
                                  const QString& identifier)
 :  ActiveToolTip(parent, position)
 {
-    setPalette( QApplication::palette() );
-
     m_model = new TreeModel(QVector<QString>{i18n("Name"), i18n("Value"), i18n("Type")}, this);
 
     auto* tr = new TooltipRoot(m_model);
