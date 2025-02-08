@@ -179,16 +179,8 @@ ActiveToolTip::ActiveToolTip(QWidget* parent, const QPoint& position)
     d->rect_.adjust(-10, -10, 10, 10);
     move(position);
 
-    QPalette p;
-
-    // adjust background color to use tooltip colors
-    p.setColor(backgroundRole(), p.color(QPalette::ToolTipBase));
-    p.setColor(QPalette::Base, p.color(QPalette::ToolTipBase));
-
-    // adjust foreground color to use tooltip colors
-    p.setColor(foregroundRole(), p.color(QPalette::ToolTipText));
-    p.setColor(QPalette::Text, p.color(QPalette::ToolTipText));
-    setPalette(p);
+    setBackgroundRole(QPalette::ToolTipBase);
+    setForegroundRole(QPalette::ToolTipText);
 
     setWindowFlags(Qt::WindowDoesNotAcceptFocus | windowFlags());
 
