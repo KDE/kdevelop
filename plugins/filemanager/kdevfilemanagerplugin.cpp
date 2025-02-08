@@ -43,11 +43,6 @@ public:
     {
         return QStringLiteral("org.kdevelop.FileManagerView");
     }
-
-    bool allowMultiple() const override
-    {
-        return true;
-    }
 };
 
 KDevFileManagerPlugin::KDevFileManagerPlugin(QObject* parent, const KPluginMetaData& metaData,

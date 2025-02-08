@@ -70,11 +70,6 @@ public:
      * @param view the new sublime view that is being shown
      */
     virtual void viewCreated(Sublime::View* view);
-
-    /**
-     * @returns if multiple tool views can by created by this factory in the same area.
-     */
-    virtual bool allowMultiple() const { return false; }
 };
 
 /**
