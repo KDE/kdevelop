@@ -50,7 +50,6 @@ public:
 AbstractNavigationWidget::AbstractNavigationWidget()
     : d_ptr(new AbstractNavigationWidgetPrivate(this))
 {
-    setPalette(QApplication::palette());
     setFocusPolicy(Qt::NoFocus);
     resize(100, 100);
 }

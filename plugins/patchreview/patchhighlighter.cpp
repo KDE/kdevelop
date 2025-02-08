@@ -133,7 +133,6 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
     }
 
     auto browser = new QTextBrowser;
-    browser->setPalette( QApplication::palette() );
     browser->setHtml( html );
 
     int maxHeight = 500;
