@@ -295,6 +295,7 @@ parts:
       - konsole-kpart
       - libproxy1v5
       - libduktape207
+      - libunistring5
     stage-snaps:
       - konsole
     cmake-parameters:
