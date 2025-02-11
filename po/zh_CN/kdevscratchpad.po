@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -23,33 +23,33 @@ msgctxt "@title:window"
 msgid "Scratchpad"
 msgstr "临时文件板"
 
-#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#: scratchpad.cpp:146 scratchpad.cpp:225 scratchpadjob.cpp:33
 #, kde-format
 msgctxt "prefix to distinguish scratch tabs"
 msgid "scratch:%1"
 msgstr "临时文件：%1"
 
-#: scratchpad.cpp:168
+#: scratchpad.cpp:173
 #, kde-format
 msgid "Failed to remove scratch: %1"
 msgstr "移除临时文件失败：%1"
 
-#: scratchpad.cpp:175
+#: scratchpad.cpp:180
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
 msgstr "创建临时文件失败：文件名已占用"
 
-#: scratchpad.cpp:187
+#: scratchpad.cpp:192
 #, kde-format
 msgid "Failed to create new scratch"
 msgstr "创建临时文件失败"
 
-#: scratchpad.cpp:196
+#: scratchpad.cpp:201
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr "重命名临时文件失败：名称不能包含路径分隔符"
 
-#: scratchpad.cpp:226
+#: scratchpad.cpp:231
 #, kde-format
 msgid "Failed renaming scratch."
 msgstr "重命名临时文件失败。"

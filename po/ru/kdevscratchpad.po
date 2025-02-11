@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2022-03-15 15:45+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -25,35 +25,35 @@ msgctxt "@title:window"
 msgid "Scratchpad"
 msgstr "Блокнот"
 
-#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#: scratchpad.cpp:146 scratchpad.cpp:225 scratchpadjob.cpp:33
 #, kde-format
 msgctxt "prefix to distinguish scratch tabs"
 msgid "scratch:%1"
 msgstr "заметка:%1"
 
-#: scratchpad.cpp:168
+#: scratchpad.cpp:173
 #, kde-format
 msgid "Failed to remove scratch: %1"
 msgstr "Не удалось удалить заметку: %1"
 
-#: scratchpad.cpp:175
+#: scratchpad.cpp:180
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
 msgstr "Не удалось создать заметку: название уже используется"
 
-#: scratchpad.cpp:187
+#: scratchpad.cpp:192
 #, kde-format
 msgid "Failed to create new scratch"
 msgstr "Не удалось создать новую заметку"
 
-#: scratchpad.cpp:196
+#: scratchpad.cpp:201
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr ""
 "Не удалось переименовать заметку: в названии не должно быть разделителя "
 "элементов пути"
 
-#: scratchpad.cpp:226
+#: scratchpad.cpp:231
 #, kde-format
 msgid "Failed renaming scratch."
 msgstr "Не удалось переименовать заметку."

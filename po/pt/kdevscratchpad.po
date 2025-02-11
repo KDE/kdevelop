@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2020-07-20 12:29+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -23,35 +23,35 @@ msgctxt "@title:window"
 msgid "Scratchpad"
 msgstr "Quadro"
 
-#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#: scratchpad.cpp:146 scratchpad.cpp:225 scratchpadjob.cpp:33
 #, kde-format
 msgctxt "prefix to distinguish scratch tabs"
 msgid "scratch:%1"
 msgstr "quadro:%1"
 
-#: scratchpad.cpp:168
+#: scratchpad.cpp:173
 #, kde-format
 msgid "Failed to remove scratch: %1"
 msgstr "Não foi possível remover o quadro: %1"
 
-#: scratchpad.cpp:175
+#: scratchpad.cpp:180
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
 msgstr "Não foi possível criar o quadro: O nome já está a ser usado"
 
-#: scratchpad.cpp:187
+#: scratchpad.cpp:192
 #, kde-format
 msgid "Failed to create new scratch"
 msgstr "Não foi possível criar um novo quadro"
 
-#: scratchpad.cpp:196
+#: scratchpad.cpp:201
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr ""
 "Não foi possível mudar o nome do quadro: Os nomes não devem incluir o "
 "separador de pastas"
 
-#: scratchpad.cpp:226
+#: scratchpad.cpp:231
 #, kde-format
 msgid "Failed renaming scratch."
 msgstr "Não foi possível mudar o nome do quadro."

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevscratchpad\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2022-04-17 20:47+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -22,33 +22,33 @@ msgctxt "@title:window"
 msgid "Scratchpad"
 msgstr "Zápisník"
 
-#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#: scratchpad.cpp:146 scratchpad.cpp:225 scratchpadjob.cpp:33
 #, kde-format
 msgctxt "prefix to distinguish scratch tabs"
 msgid "scratch:%1"
 msgstr "scratch:%1"
 
-#: scratchpad.cpp:168
+#: scratchpad.cpp:173
 #, kde-format
 msgid "Failed to remove scratch: %1"
 msgstr "Nepodarilo sa odstrániť scratch: %1"
 
-#: scratchpad.cpp:175
+#: scratchpad.cpp:180
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
 msgstr "Nepodarilo sa vytvoriť scratch: Názov sa už používa"
 
-#: scratchpad.cpp:187
+#: scratchpad.cpp:192
 #, kde-format
 msgid "Failed to create new scratch"
 msgstr "Nepodarilo sa vytvoriť nový scratch"
 
-#: scratchpad.cpp:196
+#: scratchpad.cpp:201
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr "Nepodarilo sa spustiť scratch: Názvy nemôžu obsahovať medzery"
 
-#: scratchpad.cpp:226
+#: scratchpad.cpp:231
 #, kde-format
 msgid "Failed renaming scratch."
 msgstr "Nepodarilo sa premenovať scratch."

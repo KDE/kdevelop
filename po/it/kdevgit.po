@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2022-10-12 09:42+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -213,57 +213,57 @@ msgstr "Impossibile trovare l'eseguibile git. È installato nel sistema?"
 msgid "Git Commit"
 msgstr "Git Commit"
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:251
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Rebase"
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:252
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git Stash"
 
-#: gitplugin.cpp:248
+#: gitplugin.cpp:253
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Gestore stash"
 
-#: gitplugin.cpp:249
+#: gitplugin.cpp:254
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Push Stash"
 
-#: gitplugin.cpp:250
+#: gitplugin.cpp:255
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Pop Stash"
 
-#: gitplugin.cpp:283
+#: gitplugin.cpp:288
 #, kde-format
 msgid "error: %1"
 msgstr "errore: %1"
 
-#: gitplugin.cpp:382 gitplugin.cpp:393
+#: gitplugin.cpp:387 gitplugin.cpp:398
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Non hai specificato l'elenco dei file"
 
-#: gitplugin.cpp:455
+#: gitplugin.cpp:460
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Impossibile annullare le modifiche (elenco di percorsi vuoto)"
 
-#: gitplugin.cpp:489
+#: gitplugin.cpp:494
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Impossibile annullare le modifiche"
 
-#: gitplugin.cpp:500
+#: gitplugin.cpp:505
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -271,38 +271,38 @@ msgstr ""
 "I file che seguono hanno modifiche di cui ancora non è stato fatto il "
 "commit, queste andranno perdute. Continuare?"
 
-#: gitplugin.cpp:525
+#: gitplugin.cpp:530
 #, kde-format
 msgid "No files or message specified"
 msgstr "Nessun file o messaggio specificato"
 
-#: gitplugin.cpp:529 gitplugin.cpp:548
+#: gitplugin.cpp:534 gitplugin.cpp:553
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Indirizzo di posta elettronica o nome non specificati per Git"
 
-#: gitplugin.cpp:545
+#: gitplugin.cpp:550
 #, kde-format
 msgid "No message specified"
 msgstr "Nessun messaggio specificato"
 
-#: gitplugin.cpp:619
+#: gitplugin.cpp:624
 #, kde-format
 msgid "No files to remove"
 msgstr "Nessun file da rimuovere"
 
-#: gitplugin.cpp:899
+#: gitplugin.cpp:904
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Ci sono delle modifiche in attesa, vuoi farne lo stash per primo?"
 
-#: gitplugin.cpp:900
+#: gitplugin.cpp:905
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Stash"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:906
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

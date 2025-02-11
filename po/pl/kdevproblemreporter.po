@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2022-09-23 11:14+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -32,25 +32,25 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: problemreporterplugin.cpp:99
+#: problemreporterplugin.cpp:97
 #, kde-format
 msgid "Parser"
 msgstr "Analizator składni"
 
-#: problemreporterplugin.cpp:100 problemreporterplugin.cpp:246
-#: problemsview.cpp:315
+#: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
+#: problemsview.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
 msgstr "Problemy"
 
-#: problemreporterplugin.cpp:287
+#: problemreporterplugin.cpp:285
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr "Rozwiąż problem"
 
-#: problemreporterplugin.cpp:289
+#: problemreporterplugin.cpp:287
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"
@@ -236,13 +236,13 @@ msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Poszukaj..."
 
-#: problemsview.cpp:453
+#: problemsview.cpp:454
 #, kde-format
 msgctxt "@title:tab %1: tab name, %2: number of problems"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: problemsview.cpp:491
+#: problemsview.cpp:492
 #, kde-format
 msgctxt "@title:menu"
 msgid "Scope: %1"

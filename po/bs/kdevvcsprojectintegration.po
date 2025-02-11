@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bosnianuniversetranslation\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2014-01-12 22:29+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -27,35 +27,35 @@ msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Osvježi"
 
-#: vcschangesviewplugin.cpp:63
+#: vcschangesviewplugin.cpp:64
 #, fuzzy, kde-format
 #| msgid "VCS Changes"
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "VCS promjene"
 
-#: vcschangesviewplugin.cpp:66
+#: vcschangesviewplugin.cpp:67
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Lociraj trenutni dokument"
 
-#: vcschangesviewplugin.cpp:68
+#: vcschangesviewplugin.cpp:69
 #, fuzzy, kde-format
 #| msgid "Locates the current document and selects it."
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "Traži trenutni dokument i izabira ga."
 
-#: vcschangesviewplugin.cpp:71
+#: vcschangesviewplugin.cpp:72
 #, fuzzy, kde-format
 #| msgid "Reload View"
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Ponovo učitaj pogled."
 
-#: vcschangesviewplugin.cpp:73
+#: vcschangesviewplugin.cpp:74
 #, fuzzy, kde-format
 #| msgid "Refreshes the view for all projects, in case anything changed."
 msgctxt "@info:tooltip"

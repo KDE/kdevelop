@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2023-07-26 07:36+0300\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -421,13 +421,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Executa l'script de &gdb:"
 
-#: gdboutputwidget.cpp:47
+#: gdboutputwidget.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "Sortida de GDB"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -437,25 +437,25 @@ msgstr ""
 "<b>Sortida del GDB</b><p>Mostra totes les ordres del GDB en execució. També "
 "podeu donar qualsevol altra ordre del GDB, mentre que s'està depurant.</p>"
 
-#: gdboutputwidget.cpp:58
+#: gdboutputwidget.cpp:59
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "Ordre del &GDB:"
 
-#: gdboutputwidget.cpp:63
+#: gdboutputwidget.cpp:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Fa pausa a l'execució de l'aplicació per a introduir ordres del GDB"
 
-#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Mostra les ordres internes"
 
-#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -467,7 +467,7 @@ msgstr ""
 "<br>Aquesta opció només afectarà les ordres futures, no afegirà o eliminarà "
 "les ordres ja emeses."
 
-#: gdboutputwidget.cpp:381
+#: gdboutputwidget.cpp:384
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"

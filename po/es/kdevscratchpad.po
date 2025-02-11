@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevscratchpad\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2020-07-25 19:38+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -25,35 +25,35 @@ msgctxt "@title:window"
 msgid "Scratchpad"
 msgstr "Scratchpad"
 
-#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#: scratchpad.cpp:146 scratchpad.cpp:225 scratchpadjob.cpp:33
 #, kde-format
 msgctxt "prefix to distinguish scratch tabs"
 msgid "scratch:%1"
 msgstr "scratch:%1"
 
-#: scratchpad.cpp:168
+#: scratchpad.cpp:173
 #, kde-format
 msgid "Failed to remove scratch: %1"
 msgstr "No se ha podido eliminar el scratch: %1"
 
-#: scratchpad.cpp:175
+#: scratchpad.cpp:180
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
 msgstr "No se ha podido crear el scratch: ya se está usando el nombre"
 
-#: scratchpad.cpp:187
+#: scratchpad.cpp:192
 #, kde-format
 msgid "Failed to create new scratch"
 msgstr "No se ha podido crear el nuevo scratch"
 
-#: scratchpad.cpp:196
+#: scratchpad.cpp:201
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr ""
 "No se ha podido cambiar el nombre del scratch: los nombres no deben incluir "
 "el separador de rutas"
 
-#: scratchpad.cpp:226
+#: scratchpad.cpp:231
 #, kde-format
 msgid "Failed renaming scratch."
 msgstr "No se ha podido cambiar el nombre del scratch."

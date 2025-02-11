@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2014-09-08 22:56+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -405,14 +405,14 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "&GDB parancsfájl futtatása:"
 
-#: gdboutputwidget.cpp:47
+#: gdboutputwidget.cpp:48
 #, fuzzy, kde-format
 #| msgid "GDB Output"
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB kimenet"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -425,28 +425,28 @@ msgstr ""
 "<b>GDB kimenet</b><p>Megjelenít minden végrehajtott gdb parancsot. Kiadhat "
 "bármilyen más gdb parancsot is a hibakeresés során.</p>"
 
-#: gdboutputwidget.cpp:58
+#: gdboutputwidget.cpp:59
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB parancs:"
 
-#: gdboutputwidget.cpp:63
+#: gdboutputwidget.cpp:64
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Az alkalmazás végrehajtásának szüneteltetése gdb parancsok megadásához"
 
-#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Belső parancsok megjelenítése"
 
-#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -455,7 +455,7 @@ msgid ""
 "already issued commands from the view."
 msgstr ""
 
-#: gdboutputwidget.cpp:381
+#: gdboutputwidget.cpp:384
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-01-10 14:53+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -20,37 +20,37 @@ msgstr ""
 "X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:68
+#: filemanager.cpp:46 kdevfilemanagerplugin.cpp:60
 #, kde-format
 msgctxt "@title:window"
 msgid "File System"
 msgstr "檔案系統"
 
-#: filemanager.cpp:127
+#: filemanager.cpp:126
 #, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "書籤"
 
-#: filemanager.cpp:134
+#: filemanager.cpp:133
 #, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "目前文件目錄"
 
-#: filemanager.cpp:151
+#: filemanager.cpp:150
 #, kde-format
 msgctxt "@action"
 msgid "New File..."
 msgstr "新增檔案..."
 
-#: filemanager.cpp:158
+#: filemanager.cpp:157
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "建立新檔案"
 
-#: filemanager.cpp:174
+#: filemanager.cpp:173
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "無法建立檔案 %1"

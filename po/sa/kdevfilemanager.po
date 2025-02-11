@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-12-13 19:10+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -17,37 +17,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 
-#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:68
+#: filemanager.cpp:46 kdevfilemanagerplugin.cpp:60
 #, kde-format
 msgctxt "@title:window"
 msgid "File System"
 msgstr "सञ्चिकातन्त्रम्"
 
-#: filemanager.cpp:127
+#: filemanager.cpp:126
 #, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "बुकमार्क्स"
 
-#: filemanager.cpp:134
+#: filemanager.cpp:133
 #, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "वर्तमान दस्तावेज निर्देशिका"
 
-#: filemanager.cpp:151
+#: filemanager.cpp:150
 #, kde-format
 msgctxt "@action"
 msgid "New File..."
 msgstr "नवीनं सञ्चिका..."
 
-#: filemanager.cpp:158
+#: filemanager.cpp:157
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "नूतनं सञ्चिकां रचयन्तु"
 
-#: filemanager.cpp:174
+#: filemanager.cpp:173
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "'%1' सञ्चिकां निर्मातुं असमर्थः ।"

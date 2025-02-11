@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-07-20 00:38+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -179,13 +179,13 @@ msgstr "გამმართველი ავარიულად დას�
 msgid "Process crashed"
 msgstr "პროცესი ავარიულად დასრულდა"
 
-#: midebuggerplugin.cpp:113
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Core ფაილის ანალიზი %1-ით"
 
-#: midebuggerplugin.cpp:115
+#: midebuggerplugin.cpp:116
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -199,13 +199,13 @@ msgstr ""
 "სეგმენტაციის ჩავარდნისას. core ფაილი შეიცავს პროგრამის მეხსიერების ასლს მისი "
 "ავარიულად დასრულების დროს, გარდაცვალების-შემდგომი ანალიზისთვის.</p>"
 
-#: midebuggerplugin.cpp:127
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "პროცესზე მიბმა %1-ით"
 
-#: midebuggerplugin.cpp:129
+#: midebuggerplugin.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -213,18 +213,18 @@ msgid ""
 msgstr ""
 "<b>პროცესზე მიმაგრება</b><p>მიამაგრებს გამმართველს გაშვებულ პროცესზე.</p>"
 
-#: midebuggerplugin.cpp:142
+#: midebuggerplugin.cpp:143
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:216
+#: midebuggerplugin.cpp:217
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "შეფასება: %1"
 
-#: midebuggerplugin.cpp:218
+#: midebuggerplugin.cpp:219
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -234,13 +234,13 @@ msgstr ""
 "<b>გამოსახულების შეფასება<b><p>აჩვენებს კურსორის ქვეშ მყოფი გამოსახულების "
 "მნიშვნელობას.</p>"
 
-#: midebuggerplugin.cpp:226
+#: midebuggerplugin.cpp:227
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "ყურება: %1"
 
-#: midebuggerplugin.cpp:228
+#: midebuggerplugin.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -250,12 +250,12 @@ msgstr ""
 "<b>გამოსახულების თვალყურის დევნება</b><p>დაამატებს კურსორის ქვეშ მყოფ "
 "გამოსახულებას ცვლადების/თვალყურის დევნების სიას.</p>"
 
-#: midebuggerplugin.cpp:241
+#: midebuggerplugin.cpp:252
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "აირჩიეთ Core ფაილის ანალიზისთვის..."
 
-#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
+#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -264,24 +264,24 @@ msgstr ""
 "პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ გააუქმოთ უკვე გაშვებული "
 "გამმართველი და გააგრძელოთ, რასაც აკეთებდით?"
 
-#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
+#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "მიმდინარე სესიის გაუქმება"
 
-#: midebuggerplugin.cpp:261
+#: midebuggerplugin.cpp:272
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "აირჩიეთ მისამაგრებელი პროცესი..."
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:293
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "პროცესზე %1 მიმაგრება შეუძლებელია: გამმართველს თავის თავს ვერ მიამაგრებთ."
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:313
 #, kde-format
 msgid "Debugger"
 msgstr "გამმართველი"
@@ -543,13 +543,13 @@ msgstr ""
 "არგუმენტებს: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
-#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Console"
 msgstr "გამმართველის კონსოლი"
 
-#: widgets/debuggerconsoleview.cpp:49
+#: widgets/debuggerconsoleview.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -560,26 +560,26 @@ msgstr ""
 "სრულდება. ასევე შეგიძლიათ, გამმართველის ნებისმიერი ბრძანების გაშვება "
 "გამართვისას.</p>"
 
-#: widgets/debuggerconsoleview.cpp:58
+#: widgets/debuggerconsoleview.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
 msgstr "Enter-ის დაჭერისას წინა ბრძანების გამეორება"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
-#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#: widgets/debuggerconsoleview.cpp:68 widgets/debuggerconsoleview.ui:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
 msgstr "შეაჩერეთ აპის შესრულება გამმართველის ბრძანებების შესაყვანად"
 
-#: widgets/debuggerconsoleview.cpp:72
+#: widgets/debuggerconsoleview.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "Show Internal Commands"
 msgstr "შიდა ბრძანებების ჩვენება"
 
-#: widgets/debuggerconsoleview.cpp:76
+#: widgets/debuggerconsoleview.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -591,13 +591,13 @@ msgstr ""
 "პარამეტრი გავლებას იქონიებს, მხოლოდ, მომავალში გაშვებულ ბრძანებებზე. ის არ "
 "წაშლის ან დაამატებს უკვე ჩამოთვლილ ბრძანებებს ფანჯრიდან."
 
-#: widgets/debuggerconsoleview.cpp:137
+#: widgets/debuggerconsoleview.cpp:139
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Command:"
 msgstr "&ბრძანება:"
 
-#: widgets/debuggerconsoleview.cpp:159
+#: widgets/debuggerconsoleview.cpp:161
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Command Bar"

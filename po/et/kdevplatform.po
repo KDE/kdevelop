@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 00:40+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -304,7 +304,7 @@ msgstr "Funktsioon"
 msgid "Source"
 msgstr "Allikas"
 
-#: debugger/framestack/framestackwidget.cpp:66
+#: debugger/framestack/framestackwidget.cpp:68
 #, kde-format
 msgid ""
 "<b>Frame stack</b>Often referred to as the \"call stack\", this is a list "
@@ -317,18 +317,18 @@ msgstr ""
 "kohani. Elemendil klõpsates näeb varasemate väljakutsutud funktsioonide "
 "väärtusi."
 
-#: debugger/framestack/framestackwidget.cpp:102
+#: debugger/framestack/framestackwidget.cpp:104
 #, kde-format
 msgid "Threads:"
 msgstr "Lõimed:"
 
-#: debugger/framestack/framestackwidget.cpp:223
+#: debugger/framestack/framestackwidget.cpp:225
 #, kde-format
 msgctxt "#frame function() at file"
 msgid "#%1 %2() at %3\n"
 msgstr "#%1 %2() failis %3\n"
 
-#: debugger/framestack/framestackwidget.cpp:226
+#: debugger/framestack/framestackwidget.cpp:228
 #, kde-format
 msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
@@ -541,7 +541,7 @@ msgid "Home"
 msgstr "Kodu"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
-#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
+#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:585
 #: vcs/dvcs/ui/branchmanager.ui:143
 #, kde-format
 msgctxt "@info:placeholder"
@@ -1878,125 +1878,125 @@ msgstr ""
 "\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">sellest artiklist</a>."
 
-#: shell/debugcontroller.cpp:118
+#: shell/debugcontroller.cpp:112
 #, kde-format
 msgid "Debugger"
 msgstr "Silur"
 
-#: shell/debugcontroller.cpp:148
+#: shell/debugcontroller.cpp:142
 #, fuzzy, kde-format
 #| msgid "Frame Stack"
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Väljakutsete pinu"
 
-#: shell/debugcontroller.cpp:153
+#: shell/debugcontroller.cpp:147
 #, fuzzy, kde-format
 #| msgid "Breakpoints"
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Katkestuspunktid"
 
-#: shell/debugcontroller.cpp:158
+#: shell/debugcontroller.cpp:152
 #, fuzzy, kde-format
 #| msgid "Variables"
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Muutujad"
 
-#: shell/debugcontroller.cpp:224
+#: shell/debugcontroller.cpp:218
 #, kde-format
 msgid "&Restart"
 msgstr "&Käivita uuesti"
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "Restart program"
 msgstr "Käivita programm uuesti"
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Käivitab rakenduse otsast peale."
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:226
 #, fuzzy, kde-format
 #| msgid "Interrupt"
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Katkesta"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:227
 #, fuzzy, kde-format
 #| msgid "Interrupt application"
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Katkesta rakenduse töö"
 
-#: shell/debugcontroller.cpp:234
+#: shell/debugcontroller.cpp:228
 #, fuzzy, kde-format
 #| msgid "Interrupts the debugged process or current debugger command."
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Katkestab silumisprotsessi või parajasti täidetava siluri käsu."
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:232
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Täida &kursorini"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:233
 #, fuzzy, kde-format
 #| msgid "Run to cursor"
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Täida kursorini"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:234
 #, fuzzy, kde-format
 #| msgid "Continues execution until the cursor position is reached."
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Täitmise jätkamine kuni kursori asukohani."
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:239
 #, fuzzy, kde-format
 #| msgid "Set E&xecution Position to Cursor"
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Määra täitmise asuko&haks kursor"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:240
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Hüppa kursorile"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:241
 #, fuzzy, kde-format
 #| msgid "Continue execution from the current cursor position."
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Täitmise jätkamine alates kursori aktiivsest asukohast."
 
-#: shell/debugcontroller.cpp:251
+#: shell/debugcontroller.cpp:245
 #, fuzzy, kde-format
 #| msgid "Step &Over"
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Astu ül&e"
 
-#: shell/debugcontroller.cpp:253
+#: shell/debugcontroller.cpp:247
 #, fuzzy, kde-format
 #| msgid "Step over the next line"
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Astu järgmisele reale"
 
-#: shell/debugcontroller.cpp:254
+#: shell/debugcontroller.cpp:248
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes one line of source in the current source file. If the source "
@@ -2012,42 +2012,42 @@ msgstr ""
 "väljakutse, täidetakse kogu funktsioon ning rakendus peatud funktsiooni "
 "väljakutsele järgneval real."
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:256
 #, fuzzy, kde-format
 #| msgid "Step over Ins&truction"
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "As&tu üle instruktsiooni"
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:257
 #, fuzzy, kde-format
 #| msgid "Step over instruction"
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Astu üle instruktsiooni"
 
-#: shell/debugcontroller.cpp:264
+#: shell/debugcontroller.cpp:258
 #, fuzzy, kde-format
 #| msgid "Steps over the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Astub üle järgmise assembleri instruktsiooni."
 
-#: shell/debugcontroller.cpp:269
+#: shell/debugcontroller.cpp:263
 #, fuzzy, kde-format
 #| msgid "Step &Into"
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Astu s&isse"
 
-#: shell/debugcontroller.cpp:271
+#: shell/debugcontroller.cpp:265
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Astu sisse järgmisesse lausesse"
 
-#: shell/debugcontroller.cpp:272
+#: shell/debugcontroller.cpp:266
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes exactly one line of source. If the source line is a call to a "
@@ -2060,42 +2060,42 @@ msgstr ""
 "Täidab täpselt ühe lähtekoodi rea. Kui rida on funktsiooni väljakutse, "
 "peatatakse täitmine pärast seda, kui on sisenetud funktsiooni."
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:273
 #, fuzzy, kde-format
 #| msgid "Step into I&nstruction"
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Astu i&nstruktsiooni sisse"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:274
 #, fuzzy, kde-format
 #| msgid "Step into instruction"
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Astu instruktsiooni sisse"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:275
 #, fuzzy, kde-format
 #| msgid "Steps into the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Astub järgmise assembleri instruktsiooni sisse."
 
-#: shell/debugcontroller.cpp:285
+#: shell/debugcontroller.cpp:279
 #, fuzzy, kde-format
 #| msgid "Step O&ut"
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Ast&u välja"
 
-#: shell/debugcontroller.cpp:287
+#: shell/debugcontroller.cpp:281
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Astub aktiivsest funktsioonist välja"
 
-#: shell/debugcontroller.cpp:288
+#: shell/debugcontroller.cpp:282
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes the application until the currently executing function is "
@@ -2114,74 +2114,74 @@ msgstr ""
 "täitmine käib kõige välimises kaadris (st. main()), ei ole sellel "
 "korraldusel mingit mõju."
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:290
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Lülita katkestuspunkti"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:291
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:292
 #, fuzzy, kde-format
 #| msgid "Toggle breakpoint"
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Lülita katkestuspunkti"
 
-#: shell/debugcontroller.cpp:299
+#: shell/debugcontroller.cpp:293
 #, fuzzy, kde-format
 #| msgid "Toggles the breakpoint at the current line in editor."
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Lülitab katkestuspunkti redaktori aktiivsel real."
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:297
 #, fuzzy, kde-format
 #| msgid "Show Current Line"
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Näita aktiivset rida"
 
-#: shell/debugcontroller.cpp:304
+#: shell/debugcontroller.cpp:298
 #, fuzzy, kde-format
 #| msgid "Show the current execution position"
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Täitmise aktiivse asukoha näitamine"
 
-#: shell/debugcontroller.cpp:305
+#: shell/debugcontroller.cpp:299
 #, fuzzy, kde-format
 #| msgid "Jumps to the execution line in the editor."
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Liikumine täitmisreale redaktoris."
 
-#: shell/debugcontroller.cpp:431
+#: shell/debugcontroller.cpp:425
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Silumine"
 
-#: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:440
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Silu käivitamist"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Aktiivse käivitamise silumine"
 
-#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2191,21 +2191,21 @@ msgstr ""
 "Täidab sihtmärgi või programmi, mis on määratud aktiivses "
 "käivitamisseadistuses, siluri sees."
 
-#: shell/debugcontroller.cpp:487
+#: shell/debugcontroller.cpp:481
 #, fuzzy, kde-format
 #| msgid "&Continue"
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Jätka"
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:483
 #, fuzzy, kde-format
 #| msgid "Continue application execution"
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Rakenduse täitmise jätkamine"
 
-#: shell/debugcontroller.cpp:490
+#: shell/debugcontroller.cpp:484
 #, fuzzy, kde-format
 #| msgid ""
 #| "Continues the execution of your application in the debugger. This only "
@@ -2603,12 +2603,12 @@ msgstr "Laaditud pluginad"
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\"><b>%1</b> laaditud pluginad</font></html>"
 
-#: shell/mainwindow.cpp:451
+#: shell/mainwindow.cpp:474
 #, kde-format
 msgid " (read only)"
 msgstr " (kirjutuskaitstud)"
 
-#: shell/mainwindow_p.cpp:223
+#: shell/mainwindow_p.cpp:224
 #, fuzzy, kde-format
 #| msgctxt "%1 = application name"
 #| msgid "Configure %1"
@@ -2616,274 +2616,274 @@ msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
 msgstr "%1 seadistamine"
 
-#: shell/mainwindow_p.cpp:224
+#: shell/mainwindow_p.cpp:225
 #, fuzzy, kde-format
 #| msgid "Lets you customize %1."
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
 msgstr "%1 kohandamine."
 
-#: shell/mainwindow_p.cpp:227
+#: shell/mainwindow_p.cpp:228
 #, fuzzy, kde-format
 #| msgid "Configure Notifications..."
 msgctxt "@action"
 msgid "Configure Notifications..."
 msgstr "Märguannete seadistamine..."
 
-#: shell/mainwindow_p.cpp:228
+#: shell/mainwindow_p.cpp:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure notifications"
 msgstr "Märguannete seadistamine"
 
-#: shell/mainwindow_p.cpp:229
+#: shell/mainwindow_p.cpp:230
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
 msgstr "Avab dialoogi, kus saab seadistada märguandeid."
 
-#: shell/mainwindow_p.cpp:233
+#: shell/mainwindow_p.cpp:234
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgctxt "@action"
 msgid "Loaded Plugins"
 msgstr "Laaditud pluginad"
 
-#: shell/mainwindow_p.cpp:234
+#: shell/mainwindow_p.cpp:235
 #, fuzzy, kde-format
 #| msgid "Show a list of all loaded plugins"
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
 msgstr "Kõigi laaditud pluginate nimekirja näitamine"
 
-#: shell/mainwindow_p.cpp:235
+#: shell/mainwindow_p.cpp:236
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
 msgstr "Avab dialoogi, kus näeb teavet kõigi laaditud pluginate kohta."
 
-#: shell/mainwindow_p.cpp:238
+#: shell/mainwindow_p.cpp:239
 #, fuzzy, kde-format
 #| msgid "&Next Window"
 msgctxt "@action"
 msgid "&Next Window"
 msgstr "Järgmi&ne aken"
 
-#: shell/mainwindow_p.cpp:241
+#: shell/mainwindow_p.cpp:242
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next window"
 msgstr "Järgmine aken"
 
-#: shell/mainwindow_p.cpp:242
+#: shell/mainwindow_p.cpp:243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next window."
 msgstr "Lülitub järgmisele aknale."
 
-#: shell/mainwindow_p.cpp:246
+#: shell/mainwindow_p.cpp:247
 #, fuzzy, kde-format
 #| msgid "&Previous Window"
 msgctxt "@action"
 msgid "&Previous Window"
 msgstr "&Eelmine aken"
 
-#: shell/mainwindow_p.cpp:249
+#: shell/mainwindow_p.cpp:250
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous window"
 msgstr "Eelmine aken"
 
-#: shell/mainwindow_p.cpp:250
+#: shell/mainwindow_p.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous window."
 msgstr "Lülitub eelmisele aknale."
 
-#: shell/mainwindow_p.cpp:254
+#: shell/mainwindow_p.cpp:255
 #, fuzzy, kde-format
 #| msgid "Jump to Next Outputmark"
 msgctxt "@action"
 msgid "Jump to Next Outputmark"
 msgstr "Hüppa järgmisele väljunditähisele"
 
-#: shell/mainwindow_p.cpp:260
+#: shell/mainwindow_p.cpp:261
 #, fuzzy, kde-format
 #| msgid "Jump to Previous Outputmark"
 msgctxt "@action"
 msgid "Jump to Previous Outputmark"
 msgstr "Hüppa eelmisele väljunditähisele"
 
-#: shell/mainwindow_p.cpp:267
+#: shell/mainwindow_p.cpp:268
 #, fuzzy, kde-format
 #| msgid "Split View &Top/Bottom"
 msgctxt "@action"
 msgid "Split View &Top/Bottom"
 msgstr "Poolita vaade horison&taalselt"
 
-#: shell/mainwindow_p.cpp:270
+#: shell/mainwindow_p.cpp:271
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split horizontal"
 msgstr "Poolitamine rõhtsalt"
 
-#: shell/mainwindow_p.cpp:271
+#: shell/mainwindow_p.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view horizontally."
 msgstr "Jagab aktiivse vaate ala- ja ülaosaks."
 
-#: shell/mainwindow_p.cpp:275
+#: shell/mainwindow_p.cpp:276
 #, fuzzy, kde-format
 #| msgid "Split View &Left/Right"
 msgctxt "@action"
 msgid "Split View &Left/Right"
 msgstr "Poolita vaade &vertikaalselt"
 
-#: shell/mainwindow_p.cpp:278
+#: shell/mainwindow_p.cpp:279
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split vertical"
 msgstr "Poolitamine püstiselt"
 
-#: shell/mainwindow_p.cpp:279
+#: shell/mainwindow_p.cpp:280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view vertically."
 msgstr "Jagab aktiivse vaate parem- ja vasakpoolseks osaks."
 
-#: shell/mainwindow_p.cpp:282
+#: shell/mainwindow_p.cpp:283
 #, fuzzy, kde-format
 #| msgid "&Next Split View"
 msgctxt "@action"
 msgid "&Next Split View"
 msgstr "&Järgmine poolitatud vaade"
 
-#: shell/mainwindow_p.cpp:285
+#: shell/mainwindow_p.cpp:286
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next split view"
 msgstr "Järgmine poolitatud vaade"
 
-#: shell/mainwindow_p.cpp:286
+#: shell/mainwindow_p.cpp:287
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next split view."
 msgstr "Lülitub järgmisele poolitatud vaatele."
 
-#: shell/mainwindow_p.cpp:290
+#: shell/mainwindow_p.cpp:291
 #, fuzzy, kde-format
 #| msgid "&Previous Split View"
 msgctxt "@action"
 msgid "&Previous Split View"
 msgstr "&Eelmine poolitatud vaade"
 
-#: shell/mainwindow_p.cpp:293
+#: shell/mainwindow_p.cpp:294
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous split view"
 msgstr "Eelmine poolitatud vaade"
 
-#: shell/mainwindow_p.cpp:294
+#: shell/mainwindow_p.cpp:295
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous split view."
 msgstr "Lülitub eelmisele poolitatud vaatele."
 
-#: shell/mainwindow_p.cpp:302
+#: shell/mainwindow_p.cpp:303
 #, fuzzy, kde-format
 #| msgid "&New"
 msgctxt "@action new file"
 msgid "&New"
 msgstr "&Uus"
 
-#: shell/mainwindow_p.cpp:303
+#: shell/mainwindow_p.cpp:304
 #, fuzzy, kde-format
 #| msgid "New"
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
 msgstr "Uus"
 
-#: shell/mainwindow_p.cpp:305
+#: shell/mainwindow_p.cpp:306
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "New file"
 msgstr "Uus fail"
 
-#: shell/mainwindow_p.cpp:306
+#: shell/mainwindow_p.cpp:307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Creates an empty file."
 msgstr "Loob uue tühja faili."
 
-#: shell/mainwindow_p.cpp:311
+#: shell/mainwindow_p.cpp:312
 #, fuzzy, kde-format
 #| msgid "&Add Tool View..."
 msgctxt "@action"
 msgid "&Add Tool View..."
 msgstr "Lis&a tööriistavaade..."
 
-#: shell/mainwindow_p.cpp:313
+#: shell/mainwindow_p.cpp:314
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add tool view"
 msgstr "Tööriistavaate lisamine"
 
-#: shell/mainwindow_p.cpp:314
+#: shell/mainwindow_p.cpp:315
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Adds a new tool view to this window."
 msgstr "Lisab aknasse uue tööriistavaate."
 
-#: shell/mainwindow_p.cpp:319
+#: shell/mainwindow_p.cpp:320
 #, fuzzy, kde-format
 #| msgid "&Color Scheme"
 msgid "&Window Color Scheme"
 msgstr "&Värviskeem"
 
-#: shell/mainwindow_p.cpp:353
+#: shell/mainwindow_p.cpp:354
 #, fuzzy, kde-format
 #| msgid "Split View Top/Bottom"
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
 msgstr "Poolita vaade horisontaalselt"
 
-#: shell/mainwindow_p.cpp:356
+#: shell/mainwindow_p.cpp:357
 #, fuzzy, kde-format
 #| msgid "Split View Left/Right"
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
 msgstr "Poolita vaade vertikaalselt"
 
-#: shell/mainwindow_p.cpp:360
+#: shell/mainwindow_p.cpp:361
 #, fuzzy, kde-format
 #| msgid "New File"
 msgctxt "@action:inmenu"
 msgid "New File"
 msgstr "Uus fail"
 
-#: shell/mainwindow_p.cpp:366
+#: shell/mainwindow_p.cpp:367
 #, fuzzy, kde-format
 #| msgid "Reload"
 msgctxt "@action:inmenu"
 msgid "Reload"
 msgstr "Laadi uuesti"
 
-#: shell/mainwindow_p.cpp:369
+#: shell/mainwindow_p.cpp:370
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action:inmenu"
 msgid "Reload All"
 msgstr "Laadi kõik uuesti"
 
-#: shell/mainwindow_p.cpp:409
+#: shell/mainwindow_p.cpp:410
 #, fuzzy, kde-format
 #| msgid "Add Tool View"
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
 msgstr "Lisa tööriistavaade"
 
-#: shell/mainwindow_p.cpp:432
+#: shell/mainwindow_p.cpp:433
 #, fuzzy, kde-format
 #| msgid "Lock the Panel from Hiding"
 msgctxt "@action:inmenu"
@@ -3751,7 +3751,7 @@ msgctxt "@info:tooltip"
 msgid "Discard all modifications"
 msgstr "Unustab kõik muudatused"
 
-#: shell/session.cpp:158 shell/session.cpp:181
+#: shell/session.cpp:139 shell/session.cpp:162
 #, kde-format
 msgid "(no projects)"
 msgstr "(projekt puudub)"
@@ -3865,24 +3865,24 @@ msgctxt "@title:window"
 msgid "Rename Session"
 msgstr "Seansi nime muutmine"
 
-#: shell/sessioncontroller.cpp:265
+#: shell/sessioncontroller.cpp:260
 #, kde-format
 msgid "Session Manager"
 msgstr "Seansihaldur"
 
-#: shell/sessioncontroller.cpp:277
+#: shell/sessioncontroller.cpp:272
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Session"
 msgstr "Käivita uus seanss"
 
-#: shell/sessioncontroller.cpp:278
+#: shell/sessioncontroller.cpp:273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
 msgstr "Uue KDevelopi isendi käivitamine tühja seansiga"
 
-#: shell/sessioncontroller.cpp:286
+#: shell/sessioncontroller.cpp:281
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Start New Session"
@@ -3890,7 +3890,7 @@ msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
 msgstr "Käivita uus seanss"
 
-#: shell/sessioncontroller.cpp:287
+#: shell/sessioncontroller.cpp:282
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Start a new KDevelop instance with an empty session"
@@ -3898,68 +3898,68 @@ msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
 msgstr "Uue KDevelopi isendi käivitamine tühja seansiga"
 
-#: shell/sessioncontroller.cpp:293
+#: shell/sessioncontroller.cpp:288
 #, fuzzy, kde-format
 #| msgid "Rename Current Session..."
 msgctxt "@action"
 msgid "Rename Current Session..."
 msgstr "Muuda aktiivse seansi nime..."
 
-#: shell/sessioncontroller.cpp:299
+#: shell/sessioncontroller.cpp:294
 #, fuzzy, kde-format
 #| msgid "Delete Current Session..."
 msgctxt "@action"
 msgid "Delete Current Session..."
 msgstr "Kustuta aktiivne seanss..."
 
-#: shell/sessioncontroller.cpp:303
+#: shell/sessioncontroller.cpp:298
 #, fuzzy, kde-format
 #| msgid "Quit"
 msgctxt "@action"
 msgid "Quit"
 msgstr "Välju"
 
-#: shell/sessioncontroller.cpp:523
+#: shell/sessioncontroller.cpp:518
 #, kde-format
 msgid "Copy of %1"
 msgstr "%1 koopia"
 
-#: shell/sessioncontroller.cpp:613
+#: shell/sessioncontroller.cpp:608
 #, fuzzy, kde-format
 #| msgid "Identity"
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "Identiteet"
 
-#: shell/sessioncontroller.cpp:614
+#: shell/sessioncontroller.cpp:609
 #, fuzzy, kde-format
 #| msgid "Contents"
 msgctxt "@title:column"
 msgid "Contents"
 msgstr "Sisu"
 
-#: shell/sessioncontroller.cpp:615
+#: shell/sessioncontroller.cpp:610
 #, fuzzy, kde-format
 #| msgid "State"
 msgctxt "@title:column"
 msgid "State"
 msgstr "Olek"
 
-#: shell/sessioncontroller.cpp:616
+#: shell/sessioncontroller.cpp:611
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nimi"
 
-#: shell/sessioncontroller.cpp:622
+#: shell/sessioncontroller.cpp:617
 #, fuzzy, kde-format
 #| msgid "Filter:"
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "Filter:"
 
-#: shell/sessioncontroller.cpp:654
+#: shell/sessioncontroller.cpp:649
 #, kde-format
 msgid "Create New Session"
 msgstr "Loo uus seanss"
@@ -4987,7 +4987,7 @@ msgid "Clone Template"
 msgstr "Klooni mall"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, UiConfig)
-#: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:45
+#: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:46
 #, kde-format
 msgid "User Interface"
 msgstr "Kasutajaliides"
@@ -5182,7 +5182,7 @@ msgctxt "@option:check"
 msgid "Color widgets based on the project affiliation"
 msgstr "Vidinate toonimine vastavalt projekti kuuluvusele"
 
-#: shell/settings/uipreferences.cpp:55
+#: shell/settings/uipreferences.cpp:56
 #, kde-format
 msgid "Configure User Interface"
 msgstr "Kasutajaliidese seadistamine"
@@ -5470,7 +5470,7 @@ msgctxt "area"
 msgid "Review"
 msgstr "Läbivaatus"
 
-#: shell/uicontroller.cpp:454
+#: shell/uicontroller.cpp:464
 #, fuzzy, kde-format
 #| msgid "Select Tool View to Add"
 msgctxt "@title:window"
@@ -5618,34 +5618,49 @@ msgctxt "@action:inmenu"
 msgid "Close All"
 msgstr "Sulge kõik"
 
-#: sublime/idealbuttonbarwidget.cpp:37
+#: sublime/idealbuttonbarwidget.cpp:45
 #, fuzzy, kde-format
 #| msgid "Toggle '%1' tool view."
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Lülitu \"%1\" tööriistavaatele."
 
-#: sublime/idealbuttonbarwidget.cpp:103
+#: sublime/idealbuttonbarwidget.cpp:301
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
 msgstr "Paremklõpsuga saab lisada uusi tööriistavaateid."
 
-#: sublime/idealcontroller.cpp:94
+#: sublime/idealcontroller.cpp:133
+#, kde-format
+msgid "Left Button Bar"
+msgstr "Vasak nupuriba"
+
+#: sublime/idealcontroller.cpp:134
+#, kde-format
+msgid "Right Button Bar"
+msgstr "Parem nupuriba"
+
+#: sublime/idealcontroller.cpp:139
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr "Alumine nupuriba"
+
+#: sublime/idealcontroller.cpp:210
 #, fuzzy, kde-format
 #| msgid "%1 Toolbar"
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1 tööriistariba"
 
-#: sublime/idealdockwidget.cpp:110
+#: sublime/idealdockwidget.cpp:123
 #, fuzzy, kde-format
 #| msgid "Tool View Position"
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Tööriistavaate asukoht"
 
-#: sublime/idealdockwidget.cpp:114
+#: sublime/idealdockwidget.cpp:127
 #, fuzzy, kde-format
 #| msgctxt "tool view position"
 #| msgid "Left"
@@ -5653,7 +5668,7 @@ msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Vasakul"
 
-#: sublime/idealdockwidget.cpp:115
+#: sublime/idealdockwidget.cpp:128
 #, fuzzy, kde-format
 #| msgctxt "tool view position"
 #| msgid "Bottom"
@@ -5661,7 +5676,7 @@ msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "All"
 
-#: sublime/idealdockwidget.cpp:116
+#: sublime/idealdockwidget.cpp:129
 #, fuzzy, kde-format
 #| msgctxt "tool view position"
 #| msgid "Right"
@@ -5669,7 +5684,7 @@ msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Paremal"
 
-#: sublime/idealdockwidget.cpp:117
+#: sublime/idealdockwidget.cpp:130
 #, fuzzy, kde-format
 #| msgctxt "tool view position"
 #| msgid "Detached"
@@ -5677,125 +5692,110 @@ msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Eraldiseisev"
 
-#: sublime/idealdockwidget.cpp:135
+#: sublime/idealdockwidget.cpp:152
 #, fuzzy, kde-format
 #| msgid "Assign Shortcut..."
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Omista kiirklahv..."
 
-#: sublime/idealdockwidget.cpp:136
+#: sublime/idealdockwidget.cpp:153
 #, fuzzy, kde-format
 #| msgid "Use this shortcut to trigger visibility of the tool view."
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr "Selle kiirklahvi kasutamine tööriistavaate nähtavuse lülitamiseks."
 
-#: sublime/idealdockwidget.cpp:139
+#: sublime/idealdockwidget.cpp:156
 #, fuzzy, kde-format
 #| msgid "Remove Tool View"
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Eemalda tööriistavaade"
 
-#: sublime/idealdockwidget.cpp:150
+#: sublime/idealdockwidget.cpp:167
 #, fuzzy, kde-format
 #| msgid "Assign Shortcut For '%1' Tool View"
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
 msgstr "Kiirklahvi omistamine \"%1\" tööriistavaatele"
 
-#: sublime/mainwindow_p.cpp:78
+#: sublime/mainwindow_p.cpp:49
 #, fuzzy, kde-format
 #| msgid "Concentration Mode"
 msgctxt "@option:check"
 msgid "Concentration Mode"
 msgstr "Keskendumisrežiim"
 
-#: sublime/mainwindow_p.cpp:80
+#: sublime/mainwindow_p.cpp:51
 #, fuzzy, kde-format
 #| msgid "Removes most of the controls so you can focus on what matters."
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
 msgstr "Enamiku juhtelementide kõrvaldamine, et saaks keskenduda olulisele."
 
-#: sublime/mainwindow_p.cpp:87
+#: sublime/mainwindow_p.cpp:60
 #, fuzzy, kde-format
 #| msgid "Show Left Dock"
 msgctxt "@option:check"
 msgid "Show Left Dock"
 msgstr "Näita vasakdokki"
 
-#: sublime/mainwindow_p.cpp:94
+#: sublime/mainwindow_p.cpp:64
 #, fuzzy, kde-format
 #| msgid "Show Right Dock"
 msgctxt "@option:check"
 msgid "Show Right Dock"
 msgstr "Näita paremdokki"
 
-#: sublime/mainwindow_p.cpp:100
+#: sublime/mainwindow_p.cpp:68
 #, fuzzy, kde-format
 #| msgid "Show Bottom Dock"
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
 msgstr "Näita aladokki"
 
-#: sublime/mainwindow_p.cpp:106
+#: sublime/mainwindow_p.cpp:72
 #, kde-format
 msgctxt "@action"
 msgid "Focus Editor"
 msgstr "Fookus redaktorile"
 
-#: sublime/mainwindow_p.cpp:111
+#: sublime/mainwindow_p.cpp:77
 #, fuzzy, kde-format
 #| msgid "Hide/Restore Docks"
 msgctxt "@action"
 msgid "Hide/Restore Docks"
 msgstr "Peida/taasta dokid"
 
-#: sublime/mainwindow_p.cpp:116
+#: sublime/mainwindow_p.cpp:82
 #, fuzzy, kde-format
 #| msgid "Next Tool View"
 msgctxt "@action"
 msgid "Next Tool View"
 msgstr "Järgmine tööriistavaade"
 
-#: sublime/mainwindow_p.cpp:122
+#: sublime/mainwindow_p.cpp:88
 #, fuzzy, kde-format
 #| msgid "Previous Tool View"
 msgctxt "@action"
 msgid "Previous Tool View"
 msgstr "Eelmine tööriistavaade"
 
-#: sublime/mainwindow_p.cpp:128
+#: sublime/mainwindow_p.cpp:94
 #, fuzzy, kde-format
 #| msgid "Tool Views"
 msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Tööriistavaated"
 
-#: sublime/mainwindow_p.cpp:134
-#, kde-format
-msgid "Left Button Bar"
-msgstr "Vasak nupuriba"
-
-#: sublime/mainwindow_p.cpp:137
-#, kde-format
-msgid "Right Button Bar"
-msgstr "Parem nupuriba"
-
-#: sublime/mainwindow_p.cpp:140
-#, kde-format
-msgid "Bottom Button Bar"
-msgstr "Alumine nupuriba"
-
-#: sublime/mainwindow_p.cpp:751
+#: sublime/mainwindow_p.cpp:642
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Sulge"
 
-#: sublime/mainwindow_p.cpp:752
+#: sublime/mainwindow_p.cpp:643
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-11-10 20:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -420,13 +420,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Gdb &betiğini çalıştır:"
 
-#: gdboutputwidget.cpp:47
+#: gdboutputwidget.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB Çıktısı"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -436,25 +436,25 @@ msgstr ""
 "<b>GDB çıktısı</b><p>Çalıştırılan bütün GDB komutlarını gösterir. Hata "
 "ayıklarken başka bir GDB komutu da çalıştırabilirsiniz.</p>"
 
-#: gdboutputwidget.cpp:58
+#: gdboutputwidget.cpp:59
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB komutu:"
 
-#: gdboutputwidget.cpp:63
+#: gdboutputwidget.cpp:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Uygulamayı çalıştırmayı duraklat ve GDB komutları gir"
 
-#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "İç Komutları Göster"
 
-#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -466,7 +466,7 @@ msgstr ""
 "seçenek, yalnızca ilerideki komutları etkileyecektir; zaten çalıştırılmış "
 "olan komutların çıktı görüntüsünü değiştirmeyecektir."
 
-#: gdboutputwidget.cpp:381
+#: gdboutputwidget.cpp:384
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"

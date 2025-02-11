@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -393,13 +393,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "运行 gdb 脚本(&G)："
 
-#: gdboutputwidget.cpp:47
+#: gdboutputwidget.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB 输出"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -409,25 +409,25 @@ msgstr ""
 "<b>GDB 输出</b><p>显示所有已执行过的 GDB 命令。您也可以在调试时分派任何其他 "
 "GDB 命令。</p>"
 
-#: gdboutputwidget.cpp:58
+#: gdboutputwidget.cpp:59
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB 命令："
 
-#: gdboutputwidget.cpp:63
+#: gdboutputwidget.cpp:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "暂停执行中的程序以输入 GDB 命令"
 
-#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "显示内部命令"
 
-#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -438,7 +438,7 @@ msgstr ""
 "控制是否显示 KDevelop 内部执行的命令。<br>此命令仅会影响以后的命令，而不会将"
 "已经执行的命令从视图中添加或移除。"
 
-#: gdboutputwidget.cpp:381
+#: gdboutputwidget.cpp:384
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"

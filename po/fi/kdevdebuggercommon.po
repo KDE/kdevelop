@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2023-04-17 16:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -190,13 +190,13 @@ msgstr "Virheenpaikannin kaatui"
 msgid "Process crashed"
 msgstr "Prossessi päättyi"
 
-#: midebuggerplugin.cpp:113
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Tutki muistivedostiedostoa ohjelmalla %1"
 
-#: midebuggerplugin.cpp:115
+#: midebuggerplugin.cpp:116
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -210,13 +210,13 @@ msgstr ""
 "takia. Tiedosto sisältää vedoksen ohjelman kaatumishetken muistista, mikä "
 "mahdollistaa ajonjälkeisen analyysin.</p>"
 
-#: midebuggerplugin.cpp:127
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Liity prosessiin ohjelmalla %1"
 
-#: midebuggerplugin.cpp:129
+#: midebuggerplugin.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -225,18 +225,18 @@ msgstr ""
 "<b>Liity prosessiin</b><p>Liittää virheenpaikantimen käynnissä olevaan "
 "prosessiin.</p>"
 
-#: midebuggerplugin.cpp:142
+#: midebuggerplugin.cpp:143
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) – %2"
 
-#: midebuggerplugin.cpp:216
+#: midebuggerplugin.cpp:217
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Suorita: %1"
 
-#: midebuggerplugin.cpp:218
+#: midebuggerplugin.cpp:219
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -249,14 +249,14 @@ msgstr ""
 "<b>Määritä lausekkeen arvo</b><p>Näyttää kohdistimen kohdalla olevan "
 "lausekkeen arvon.</p>"
 
-#: midebuggerplugin.cpp:226
+#: midebuggerplugin.cpp:227
 #, fuzzy, kde-format
 #| msgid "Watch: %1"
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Vahti: %1"
 
-#: midebuggerplugin.cpp:228
+#: midebuggerplugin.cpp:229
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
@@ -269,12 +269,12 @@ msgstr ""
 "<b>Vahtilauseke</b><p>Lisää kohdistimen alla olevan lausekkeen Muuttujat-/"
 "Vahtiluetteloon.</p>"
 
-#: midebuggerplugin.cpp:241
+#: midebuggerplugin.cpp:252
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Valitse tutkittava muistivedostiedosto…"
 
-#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
+#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
 #, fuzzy, kde-format
 #| msgid ""
 #| "A program is already being debugged. Do you want to abort the currently "
@@ -286,24 +286,24 @@ msgstr ""
 "Tämän ohjelman virheiden paikantaminen on jo meneillään. Haluatko keskeyttää "
 "nykyisen virheenpaikannusistunnon ja jatkaa käynnistämistä?"
 
-#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
+#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Keskeytä nykyinen istunto"
 
-#: midebuggerplugin.cpp:261
+#: midebuggerplugin.cpp:272
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Valitse prosessi, johon liitytään…"
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:293
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Ei liittynyt prosessiin %1: virheenpaikanninta ei voi liittää itseensä."
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:313
 #, kde-format
 msgid "Debugger"
 msgstr "Virheenpaikannin"
@@ -567,13 +567,13 @@ msgstr ""
 "exec>&-;while :;do sleep 3600;done\""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
-#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Console"
 msgstr "Virheenpaikannuskonsoli"
 
-#: widgets/debuggerconsoleview.cpp:49
+#: widgets/debuggerconsoleview.cpp:50
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -586,27 +586,27 @@ msgstr ""
 "<b>GDB-tuloste</b><p>Näyttää kaikki suoritettavat gdb-komennot. Voit myös "
 "julkaista kaikkia muita gdb-komentoja virheenpaikannuksen aikana.</p>"
 
-#: widgets/debuggerconsoleview.cpp:58
+#: widgets/debuggerconsoleview.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
 msgstr "Toista viimeisin komento Enterin painalluksella"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
-#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#: widgets/debuggerconsoleview.cpp:68 widgets/debuggerconsoleview.ui:56
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
 msgstr "Tauota sovelluksen suorittaminen gdb-komentojen kirjoittamiseksi"
 
-#: widgets/debuggerconsoleview.cpp:72
+#: widgets/debuggerconsoleview.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "Show Internal Commands"
 msgstr "Näytä sisäiset komennot"
 
-#: widgets/debuggerconsoleview.cpp:76
+#: widgets/debuggerconsoleview.cpp:77
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -622,13 +622,13 @@ msgstr ""
 "ei.<br />Tämä valitsin vaikuttaa vain tuleviin käskyihin, se ei lisää tai "
 "poista jo julkaistuja komentoja näkymästä."
 
-#: widgets/debuggerconsoleview.cpp:137
+#: widgets/debuggerconsoleview.cpp:139
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Command:"
 msgstr "&Komento:"
 
-#: widgets/debuggerconsoleview.cpp:159
+#: widgets/debuggerconsoleview.cpp:161
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Command Bar"

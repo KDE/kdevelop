@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-03-08 04:09+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -19,25 +19,25 @@ msgstr ""
 "X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: problemreporterplugin.cpp:99
+#: problemreporterplugin.cpp:97
 #, kde-format
 msgid "Parser"
 msgstr "剖析器"
 
-#: problemreporterplugin.cpp:100 problemreporterplugin.cpp:246
-#: problemsview.cpp:315
+#: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
+#: problemsview.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
 msgstr "問題"
 
-#: problemreporterplugin.cpp:287
+#: problemreporterplugin.cpp:285
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr "解決問題"
 
-#: problemreporterplugin.cpp:289
+#: problemreporterplugin.cpp:287
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"
@@ -223,13 +223,13 @@ msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "搜尋..."
 
-#: problemsview.cpp:453
+#: problemsview.cpp:454
 #, kde-format
 msgctxt "@title:tab %1: tab name, %2: number of problems"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: problemsview.cpp:491
+#: problemsview.cpp:492
 #, kde-format
 msgctxt "@title:menu"
 msgid "Scope: %1"

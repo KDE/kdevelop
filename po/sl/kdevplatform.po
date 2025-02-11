@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 00:40+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-08-17 08:45+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -311,7 +311,7 @@ msgstr "Funkcija"
 msgid "Source"
 msgstr "Vir"
 
-#: debugger/framestack/framestackwidget.cpp:66
+#: debugger/framestack/framestackwidget.cpp:68
 #, kde-format
 msgid ""
 "<b>Frame stack</b>Often referred to as the \"call stack\", this is a list "
@@ -324,18 +324,18 @@ msgstr ""
 "je program prišel do trenutne točke v izvajanju. S klikom na predmet lahko "
 "vidite vrednosti v katerikoli izmed predhodno kličočih funkcij."
 
-#: debugger/framestack/framestackwidget.cpp:102
+#: debugger/framestack/framestackwidget.cpp:104
 #, kde-format
 msgid "Threads:"
 msgstr "Niti:"
 
-#: debugger/framestack/framestackwidget.cpp:223
+#: debugger/framestack/framestackwidget.cpp:225
 #, kde-format
 msgctxt "#frame function() at file"
 msgid "#%1 %2() at %3\n"
 msgstr "#%1 %2() v/na %3\n"
 
-#: debugger/framestack/framestackwidget.cpp:226
+#: debugger/framestack/framestackwidget.cpp:228
 #, kde-format
 msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
@@ -541,7 +541,7 @@ msgid "Home"
 msgstr "Domov"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
-#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:590
+#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:585
 #: vcs/dvcs/ui/branchmanager.ui:143
 #, kde-format
 msgctxt "@info:placeholder"
@@ -1842,111 +1842,111 @@ msgstr ""
 "si oglejte <a href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">ta članek</a>."
 
-#: shell/debugcontroller.cpp:118
+#: shell/debugcontroller.cpp:112
 #, kde-format
 msgid "Debugger"
 msgstr "Razhroščevalnik"
 
-#: shell/debugcontroller.cpp:148
+#: shell/debugcontroller.cpp:142
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Sklad okvirov"
 
-#: shell/debugcontroller.cpp:153
+#: shell/debugcontroller.cpp:147
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Prekinitvene točke"
 
-#: shell/debugcontroller.cpp:158
+#: shell/debugcontroller.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Spremenljivke"
 
-#: shell/debugcontroller.cpp:224
+#: shell/debugcontroller.cpp:218
 #, kde-format
 msgid "&Restart"
 msgstr "&Znova zaženi"
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "Restart program"
 msgstr "Znova zažene program"
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Znova zažene program od začetka."
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:226
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Prekini"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Prekini program"
 
-#: shell/debugcontroller.cpp:234
+#: shell/debugcontroller.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Prekini razhroščevano opravilo ali trenutni ukaz razhroščevalnika."
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Zaženi do kazalke"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Zaženi do kazalke"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Nadaljuj izvajanje dokler ne doseže položaja kazalke."
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Nastavi položaj izvajanja na kazalko"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Pojdi do kazalke"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:241
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Nadaljuj izvajanje od trenutnega položaja kazalke."
 
-#: shell/debugcontroller.cpp:251
+#: shell/debugcontroller.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Prest&opi"
 
-#: shell/debugcontroller.cpp:253
+#: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Prestopi čez naslednjo vrstico"
 
-#: shell/debugcontroller.cpp:254
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1958,37 +1958,37 @@ msgstr ""
 "funkcije, se izvede celotna funkcija, program pa se zaustavi v vrstici, ki "
 "sledi klicu funkcije."
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:256
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Prestopi čez ukaz"
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Prestopi čez ukaz"
 
-#: shell/debugcontroller.cpp:264
+#: shell/debugcontroller.cpp:258
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Prestopi čez naslednji ukaz v zbirniku."
 
-#: shell/debugcontroller.cpp:269
+#: shell/debugcontroller.cpp:263
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Vstop&i v"
 
-#: shell/debugcontroller.cpp:271
+#: shell/debugcontroller.cpp:265
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Vstopi v naslednjo izjavo"
 
-#: shell/debugcontroller.cpp:272
+#: shell/debugcontroller.cpp:266
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1998,37 +1998,37 @@ msgstr ""
 "Izvede točno eno vrstico izvorne kode. Če je vrstica klic funkcije, se bo "
 "izvajanje ustavilo po vstopu v funkcijo."
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:273
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Vstopi v navodilo"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Vstopi v navodilo"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:275
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Vstopi v naslednje navodilo v zbirniku."
 
-#: shell/debugcontroller.cpp:285
+#: shell/debugcontroller.cpp:279
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Izstopi"
 
-#: shell/debugcontroller.cpp:287
+#: shell/debugcontroller.cpp:281
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Izstopi iz trenutne funkcije"
 
-#: shell/debugcontroller.cpp:288
+#: shell/debugcontroller.cpp:282
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2042,66 +2042,66 @@ msgstr ""
 "izvajanje programa v povsem zunanjem okviru (npr. v main()), to dejanje nima "
 "učinka."
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:290
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Preklopi prekinitveno točko"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:291
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:292
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Preklopi prekinitveno točko"
 
-#: shell/debugcontroller.cpp:299
+#: shell/debugcontroller.cpp:293
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Preklopi prekinitveno točko v trenutni vrstici urejevalnika."
 
-#: shell/debugcontroller.cpp:303
+#: shell/debugcontroller.cpp:297
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Prikaži trenutno vrstico"
 
-#: shell/debugcontroller.cpp:304
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Prikaži trenutno pozicijo izvajanja"
 
-#: shell/debugcontroller.cpp:305
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Pojdi na izvajano vrstico v urejevalniku."
 
-#: shell/debugcontroller.cpp:431
+#: shell/debugcontroller.cpp:425
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Razhrošči"
 
-#: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Zagon razhroščevanja"
 
-#: shell/debugcontroller.cpp:483 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Razhrošči trenutni zagon"
 
-#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2111,19 +2111,19 @@ msgstr ""
 "Izvede cilj ali program, ki je določen v trenutno dejavni nastavitvi zagona, "
 "znotraj razhroščevalnika."
 
-#: shell/debugcontroller.cpp:487
+#: shell/debugcontroller.cpp:481
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "Nadaljuj"
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:483
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Nadaljuje izvajanje programa"
 
-#: shell/debugcontroller.cpp:490
+#: shell/debugcontroller.cpp:484
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2480,263 +2480,263 @@ msgstr "Naloženi vstavki"
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\">Vstavki naloženi za <b>%1</b></font></html>"
 
-#: shell/mainwindow.cpp:451
+#: shell/mainwindow.cpp:474
 #, kde-format
 msgid " (read only)"
 msgstr " (samo za branje)"
 
-#: shell/mainwindow_p.cpp:223
+#: shell/mainwindow_p.cpp:224
 #, kde-format
 msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
 msgstr "Nastavi %1"
 
-#: shell/mainwindow_p.cpp:224
+#: shell/mainwindow_p.cpp:225
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
 msgstr "Vam omogoča prilagoditi %1."
 
-#: shell/mainwindow_p.cpp:227
+#: shell/mainwindow_p.cpp:228
 #, kde-format
 msgctxt "@action"
 msgid "Configure Notifications..."
 msgstr "Nastavi obvestila..."
 
-#: shell/mainwindow_p.cpp:228
+#: shell/mainwindow_p.cpp:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure notifications"
 msgstr "Nastavi obvestila"
 
-#: shell/mainwindow_p.cpp:229
+#: shell/mainwindow_p.cpp:230
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
 msgstr "Prikaže pogovorno okno, ki vam omogoča nastaviti obvestila."
 
-#: shell/mainwindow_p.cpp:233
+#: shell/mainwindow_p.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "Loaded Plugins"
 msgstr "Naloženi vtičniki"
 
-#: shell/mainwindow_p.cpp:234
+#: shell/mainwindow_p.cpp:235
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
 msgstr "Prikaži seznam naloženih vtičnikov"
 
-#: shell/mainwindow_p.cpp:235
+#: shell/mainwindow_p.cpp:236
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
 msgstr "Prikaže pogovorno okno s podrobnostmi o vseh naloženih vtičnikih."
 
-#: shell/mainwindow_p.cpp:238
+#: shell/mainwindow_p.cpp:239
 #, kde-format
 msgctxt "@action"
 msgid "&Next Window"
 msgstr "&Naslednje okno"
 
-#: shell/mainwindow_p.cpp:241
+#: shell/mainwindow_p.cpp:242
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next window"
 msgstr "Naslednje okno"
 
-#: shell/mainwindow_p.cpp:242
+#: shell/mainwindow_p.cpp:243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next window."
 msgstr "Preklopi v naslednje okno."
 
-#: shell/mainwindow_p.cpp:246
+#: shell/mainwindow_p.cpp:247
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Window"
 msgstr "&Predhodno okno"
 
-#: shell/mainwindow_p.cpp:249
+#: shell/mainwindow_p.cpp:250
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous window"
 msgstr "Predhodno okno"
 
-#: shell/mainwindow_p.cpp:250
+#: shell/mainwindow_p.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous window."
 msgstr "Preklopi v predhodno okno."
 
-#: shell/mainwindow_p.cpp:254
+#: shell/mainwindow_p.cpp:255
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Next Outputmark"
 msgstr "Pojdi na naslednji izhodni označevalnik"
 
-#: shell/mainwindow_p.cpp:260
+#: shell/mainwindow_p.cpp:261
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Previous Outputmark"
 msgstr "Pojdi na predhodni izhodni označevalnik"
 
-#: shell/mainwindow_p.cpp:267
+#: shell/mainwindow_p.cpp:268
 #, kde-format
 msgctxt "@action"
 msgid "Split View &Top/Bottom"
 msgstr "Razdeli prikaz vrh/dno"
 
-#: shell/mainwindow_p.cpp:270
+#: shell/mainwindow_p.cpp:271
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split horizontal"
 msgstr "Razdeli vodoravno"
 
-#: shell/mainwindow_p.cpp:271
+#: shell/mainwindow_p.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view horizontally."
 msgstr "Razdeli trenuten prikaz vodoravno."
 
-#: shell/mainwindow_p.cpp:275
+#: shell/mainwindow_p.cpp:276
 #, kde-format
 msgctxt "@action"
 msgid "Split View &Left/Right"
 msgstr "Razdeli prikaz &levo/desno"
 
-#: shell/mainwindow_p.cpp:278
+#: shell/mainwindow_p.cpp:279
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split vertical"
 msgstr "Razdeli navpično"
 
-#: shell/mainwindow_p.cpp:279
+#: shell/mainwindow_p.cpp:280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view vertically."
 msgstr "Razdeli trenutni prikaz navpično."
 
-#: shell/mainwindow_p.cpp:282
+#: shell/mainwindow_p.cpp:283
 #, kde-format
 msgctxt "@action"
 msgid "&Next Split View"
 msgstr "&Naslednji razdeljen pogled"
 
-#: shell/mainwindow_p.cpp:285
+#: shell/mainwindow_p.cpp:286
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next split view"
 msgstr "Naslednji razdeljen pogled"
 
-#: shell/mainwindow_p.cpp:286
+#: shell/mainwindow_p.cpp:287
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next split view."
 msgstr "Preklopi v naslednji razdeljeni pogled."
 
-#: shell/mainwindow_p.cpp:290
+#: shell/mainwindow_p.cpp:291
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Split View"
 msgstr "&Predhodni razdeljen pogled"
 
-#: shell/mainwindow_p.cpp:293
+#: shell/mainwindow_p.cpp:294
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous split view"
 msgstr "Predhodni razdeljen pogled"
 
-#: shell/mainwindow_p.cpp:294
+#: shell/mainwindow_p.cpp:295
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous split view."
 msgstr "Preklopi v predhodni razdeljeni pogled."
 
-#: shell/mainwindow_p.cpp:302
+#: shell/mainwindow_p.cpp:303
 #, kde-format
 msgctxt "@action new file"
 msgid "&New"
 msgstr "&Nova"
 
-#: shell/mainwindow_p.cpp:303
+#: shell/mainwindow_p.cpp:304
 #, kde-format
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
 msgstr "Nova"
 
-#: shell/mainwindow_p.cpp:305
+#: shell/mainwindow_p.cpp:306
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "New file"
 msgstr "Nova datoteka"
 
-#: shell/mainwindow_p.cpp:306
+#: shell/mainwindow_p.cpp:307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Creates an empty file."
 msgstr "Ustvari prazno datoteko."
 
-#: shell/mainwindow_p.cpp:311
+#: shell/mainwindow_p.cpp:312
 #, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
 msgstr "&Dodaj prikaz orodja..."
 
-#: shell/mainwindow_p.cpp:313
+#: shell/mainwindow_p.cpp:314
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add tool view"
 msgstr "Dodaj prikaz orodja"
 
-#: shell/mainwindow_p.cpp:314
+#: shell/mainwindow_p.cpp:315
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Adds a new tool view to this window."
 msgstr "Temu oknu doda nov prikaz orodja."
 
-#: shell/mainwindow_p.cpp:319
+#: shell/mainwindow_p.cpp:320
 #, kde-format
 msgid "&Window Color Scheme"
 msgstr "Barvna shema okna"
 
-#: shell/mainwindow_p.cpp:353
+#: shell/mainwindow_p.cpp:354
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
 msgstr "Razdeli prikaz vrh/dno"
 
-#: shell/mainwindow_p.cpp:356
+#: shell/mainwindow_p.cpp:357
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
 msgstr "Razdeli prikaz levo/desno"
 
-#: shell/mainwindow_p.cpp:360
+#: shell/mainwindow_p.cpp:361
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New File"
 msgstr "Nova datoteka"
 
-#: shell/mainwindow_p.cpp:366
+#: shell/mainwindow_p.cpp:367
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
 msgstr "Znova naloži"
 
-#: shell/mainwindow_p.cpp:369
+#: shell/mainwindow_p.cpp:370
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload All"
 msgstr "Znova naloži vse"
 
-#: shell/mainwindow_p.cpp:409
+#: shell/mainwindow_p.cpp:410
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
 msgstr "Dodaj prikaz orodja"
 
-#: shell/mainwindow_p.cpp:432
+#: shell/mainwindow_p.cpp:433
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
@@ -3522,7 +3522,7 @@ msgctxt "@info:tooltip"
 msgid "Discard all modifications"
 msgstr "Zavrzi vse spremembe"
 
-#: shell/session.cpp:158 shell/session.cpp:181
+#: shell/session.cpp:139 shell/session.cpp:162
 #, kde-format
 msgid "(no projects)"
 msgstr "(brez projektov)"
@@ -3621,89 +3621,89 @@ msgctxt "@title:window"
 msgid "Rename Session"
 msgstr "Preimenuj sejo"
 
-#: shell/sessioncontroller.cpp:265
+#: shell/sessioncontroller.cpp:260
 #, kde-format
 msgid "Session Manager"
 msgstr "Upravljalnik sej"
 
-#: shell/sessioncontroller.cpp:277
+#: shell/sessioncontroller.cpp:272
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Session"
 msgstr "Začni novo sejo"
 
-#: shell/sessioncontroller.cpp:278
+#: shell/sessioncontroller.cpp:273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
 msgstr "Zaženi nov primerek KDevelop s prazno sejo"
 
-#: shell/sessioncontroller.cpp:286
+#: shell/sessioncontroller.cpp:281
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
 msgstr "Začni novo poimenovano sejo..."
 
-#: shell/sessioncontroller.cpp:287
+#: shell/sessioncontroller.cpp:282
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
 msgstr "Zaženi nov pojavek KDevelop s prazno poimenovano sejo"
 
-#: shell/sessioncontroller.cpp:293
+#: shell/sessioncontroller.cpp:288
 #, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
 msgstr "Preimenuj trenutno sejo..."
 
-#: shell/sessioncontroller.cpp:299
+#: shell/sessioncontroller.cpp:294
 #, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
 msgstr "Izbriši trenutno sejo..."
 
-#: shell/sessioncontroller.cpp:303
+#: shell/sessioncontroller.cpp:298
 #, kde-format
 msgctxt "@action"
 msgid "Quit"
 msgstr "Končaj"
 
-#: shell/sessioncontroller.cpp:523
+#: shell/sessioncontroller.cpp:518
 #, kde-format
 msgid "Copy of %1"
 msgstr "Kopija od %1"
 
-#: shell/sessioncontroller.cpp:613
+#: shell/sessioncontroller.cpp:608
 #, kde-format
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "Istovetnost"
 
-#: shell/sessioncontroller.cpp:614
+#: shell/sessioncontroller.cpp:609
 #, kde-format
 msgctxt "@title:column"
 msgid "Contents"
 msgstr "Vsebina"
 
-#: shell/sessioncontroller.cpp:615
+#: shell/sessioncontroller.cpp:610
 #, kde-format
 msgctxt "@title:column"
 msgid "State"
 msgstr "Stanje"
 
-#: shell/sessioncontroller.cpp:616
+#: shell/sessioncontroller.cpp:611
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Ime"
 
-#: shell/sessioncontroller.cpp:622
+#: shell/sessioncontroller.cpp:617
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "Filter:"
 
-#: shell/sessioncontroller.cpp:654
+#: shell/sessioncontroller.cpp:649
 #, kde-format
 msgid "Create New Session"
 msgstr "Ustvari novo sejo"
@@ -4674,7 +4674,7 @@ msgid "Clone Template"
 msgstr "Podvoji predlogo"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, UiConfig)
-#: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:45
+#: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:46
 #, kde-format
 msgid "User Interface"
 msgstr "Uporabniški vmesnik"
@@ -4842,7 +4842,7 @@ msgctxt "@option:check"
 msgid "Color widgets based on the project affiliation"
 msgstr "Obarvaj gradnike glede na projekt, v katerega spadajo"
 
-#: shell/settings/uipreferences.cpp:55
+#: shell/settings/uipreferences.cpp:56
 #, kde-format
 msgid "Configure User Interface"
 msgstr "Nastavi uporabniški vmesnik"
@@ -5132,7 +5132,7 @@ msgctxt "area"
 msgid "Review"
 msgstr "Pregled"
 
-#: shell/uicontroller.cpp:454
+#: shell/uicontroller.cpp:464
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
@@ -5263,161 +5263,161 @@ msgctxt "@action:inmenu"
 msgid "Close All"
 msgstr "Zapri vse"
 
-#: sublime/idealbuttonbarwidget.cpp:37
+#: sublime/idealbuttonbarwidget.cpp:45
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Preklopi prikaz orodja '%1'"
 
-#: sublime/idealbuttonbarwidget.cpp:103
+#: sublime/idealbuttonbarwidget.cpp:301
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
 msgstr "Kliknite z desno, da dodate nove prikaze orodij."
 
-#: sublime/idealcontroller.cpp:94
+#: sublime/idealcontroller.cpp:133
+#, kde-format
+msgid "Left Button Bar"
+msgstr "Leva vrstica z gumbi"
+
+#: sublime/idealcontroller.cpp:134
+#, kde-format
+msgid "Right Button Bar"
+msgstr "Desna vrstica z gumbi"
+
+#: sublime/idealcontroller.cpp:139
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr "Spodnja vrstica z gumbi"
+
+#: sublime/idealcontroller.cpp:210
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "Orodna vrstica %1"
 
-#: sublime/idealdockwidget.cpp:110
+#: sublime/idealdockwidget.cpp:123
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Položaj prikaza orodja"
 
-#: sublime/idealdockwidget.cpp:114
+#: sublime/idealdockwidget.cpp:127
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Levo"
 
-#: sublime/idealdockwidget.cpp:115
+#: sublime/idealdockwidget.cpp:128
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Na dnu"
 
-#: sublime/idealdockwidget.cpp:116
+#: sublime/idealdockwidget.cpp:129
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Desno"
 
-#: sublime/idealdockwidget.cpp:117
+#: sublime/idealdockwidget.cpp:130
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Odpeto"
 
-#: sublime/idealdockwidget.cpp:135
+#: sublime/idealdockwidget.cpp:152
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Dodeli bližnjico..."
 
-#: sublime/idealdockwidget.cpp:136
+#: sublime/idealdockwidget.cpp:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr "Uporabite to bližnjico, da preklopite vidnost prikaza orodja."
 
-#: sublime/idealdockwidget.cpp:139
+#: sublime/idealdockwidget.cpp:156
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Odstrani prikaz orodja"
 
-#: sublime/idealdockwidget.cpp:150
+#: sublime/idealdockwidget.cpp:167
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
 msgstr "Dodeli bližnjico prikazu orodja '%1'"
 
-#: sublime/mainwindow_p.cpp:78
+#: sublime/mainwindow_p.cpp:49
 #, kde-format
 msgctxt "@option:check"
 msgid "Concentration Mode"
 msgstr "Način za koncentracijo"
 
-#: sublime/mainwindow_p.cpp:80
+#: sublime/mainwindow_p.cpp:51
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
 msgstr ""
 "Odstrani večino nadzornikov, da se lahko osredotočite na pomembne stvari"
 
-#: sublime/mainwindow_p.cpp:87
+#: sublime/mainwindow_p.cpp:60
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
 msgstr "Prikaži levo sidrišče"
 
-#: sublime/mainwindow_p.cpp:94
+#: sublime/mainwindow_p.cpp:64
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
 msgstr "Prikaži desno sidrišče"
 
-#: sublime/mainwindow_p.cpp:100
+#: sublime/mainwindow_p.cpp:68
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
 msgstr "Prikaži spodnje sidrišče"
 
-#: sublime/mainwindow_p.cpp:106
+#: sublime/mainwindow_p.cpp:72
 #, kde-format
 msgctxt "@action"
 msgid "Focus Editor"
 msgstr "Urejevalnik v žarišče"
 
-#: sublime/mainwindow_p.cpp:111
+#: sublime/mainwindow_p.cpp:77
 #, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
 msgstr "Skrij/obnovi sidrišča"
 
-#: sublime/mainwindow_p.cpp:116
+#: sublime/mainwindow_p.cpp:82
 #, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
 msgstr "Naslednji prikaz orodja"
 
-#: sublime/mainwindow_p.cpp:122
+#: sublime/mainwindow_p.cpp:88
 #, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
 msgstr "Predhodni prikaz orodja"
 
-#: sublime/mainwindow_p.cpp:128
+#: sublime/mainwindow_p.cpp:94
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Prikazi orodij"
 
-#: sublime/mainwindow_p.cpp:134
-#, kde-format
-msgid "Left Button Bar"
-msgstr "Leva vrstica z gumbi"
-
-#: sublime/mainwindow_p.cpp:137
-#, kde-format
-msgid "Right Button Bar"
-msgstr "Desna vrstica z gumbi"
-
-#: sublime/mainwindow_p.cpp:140
-#, kde-format
-msgid "Bottom Button Bar"
-msgstr "Spodnja vrstica z gumbi"
-
-#: sublime/mainwindow_p.cpp:751
+#: sublime/mainwindow_p.cpp:642
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Zapri"
 
-#: sublime/mainwindow_p.cpp:752
+#: sublime/mainwindow_p.cpp:643
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"

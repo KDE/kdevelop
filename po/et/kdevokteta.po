@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2020-02-12 23:00+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -54,7 +54,7 @@ msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Dokumendi sulgemine"
 
-#: oktetaplugin.cpp:91
+#: oktetaplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Hex Editor"
 msgctxt "@item:inmenu"

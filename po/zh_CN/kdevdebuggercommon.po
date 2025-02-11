@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -174,13 +174,13 @@ msgstr "调试器已崩溃"
 msgid "Process crashed"
 msgstr "进程已崩溃"
 
-#: midebuggerplugin.cpp:113
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "使用 %1 检验核心文件"
 
-#: midebuggerplugin.cpp:115
+#: midebuggerplugin.cpp:116
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -192,31 +192,31 @@ msgstr ""
 "<b>检查溃核文件</b><p>加载 core 溃核文件。它通常在程序崩溃后产生，比如段错误"
 "等。溃核文件包含程序崩溃时的内存镜像，能让您进行后期崩溃分析。</p>"
 
-#: midebuggerplugin.cpp:127
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "将 %1 附加到进程"
 
-#: midebuggerplugin.cpp:129
+#: midebuggerplugin.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>附加到进程</b><p>将调试器附加到正在运行的进程。</p>"
 
-#: midebuggerplugin.cpp:142
+#: midebuggerplugin.cpp:143
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:216
+#: midebuggerplugin.cpp:217
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "计算：%1"
 
-#: midebuggerplugin.cpp:218
+#: midebuggerplugin.cpp:219
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -224,13 +224,13 @@ msgid ""
 "cursor.</p>"
 msgstr "<b>计算表达式</b><p>显示光标下表达式的值。</p>"
 
-#: midebuggerplugin.cpp:226
+#: midebuggerplugin.cpp:227
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "监视：%1"
 
-#: midebuggerplugin.cpp:228
+#: midebuggerplugin.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -238,35 +238,35 @@ msgid ""
 "Variables/Watch list.</p>"
 msgstr "<b>观察表达式</b><p>将光标下的表达式添加到变量/观察列表。</p>"
 
-#: midebuggerplugin.cpp:241
+#: midebuggerplugin.cpp:252
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "选择要剖析的核心文件..."
 
-#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
+#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr "一个程序正在被调试。你想终止正在运行的调试会话并继续吗？"
 
-#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
+#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:261
+#: midebuggerplugin.cpp:272
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "选择要附加到的进程..."
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:293
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "未附加到进程 %1：无法将调试器附加到其自身。"
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:313
 #, kde-format
 msgid "Debugger"
 msgstr "调试器"
@@ -523,13 +523,13 @@ msgstr ""
 "\"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
-#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Console"
 msgstr "调试器控制台"
 
-#: widgets/debuggerconsoleview.cpp:49
+#: widgets/debuggerconsoleview.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -539,26 +539,26 @@ msgstr ""
 "<b>GDB 输出</b><p>显示所有已执行过的 gdb 命令。您也可以在调试时分派任意其他 "
 "gdb 命令。</p>"
 
-#: widgets/debuggerconsoleview.cpp:58
+#: widgets/debuggerconsoleview.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
 msgstr "点击回车时重复最后一个命令"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
-#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#: widgets/debuggerconsoleview.cpp:68 widgets/debuggerconsoleview.ui:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
 msgstr "暂停执行中的程序以输入调试器命令"
 
-#: widgets/debuggerconsoleview.cpp:72
+#: widgets/debuggerconsoleview.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "Show Internal Commands"
 msgstr "显示内部命令"
 
-#: widgets/debuggerconsoleview.cpp:76
+#: widgets/debuggerconsoleview.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -569,13 +569,13 @@ msgstr ""
 "控制是否显示 KDevelop 内部执行的命令。<br>此命令仅会影响以后的命令，而不会将"
 "已经执行的命令从视图中添加或移除。"
 
-#: widgets/debuggerconsoleview.cpp:137
+#: widgets/debuggerconsoleview.cpp:139
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Command:"
 msgstr "命令(&C)："
 
-#: widgets/debuggerconsoleview.cpp:159
+#: widgets/debuggerconsoleview.cpp:161
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Command Bar"

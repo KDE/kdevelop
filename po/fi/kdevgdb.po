@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-11-17 17:09+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -503,13 +503,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Suorita &gdb-skripti:"
 
-#: gdboutputwidget.cpp:47
+#: gdboutputwidget.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB-tuloste"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -522,27 +522,27 @@ msgstr ""
 "<b>GDB-tuloste</b><p>Näyttää kaikki suoritettavat gdb-komennot. Voit myös "
 "julkaista kaikkia muita gdb-komentoja virheenpaikannuksen aikana.</p>"
 
-#: gdboutputwidget.cpp:58
+#: gdboutputwidget.cpp:59
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB-komento:"
 
-#: gdboutputwidget.cpp:63
+#: gdboutputwidget.cpp:64
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Tauota sovelluksen suorittaminen gdb-komentojen kirjoittamiseksi"
 
-#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Näytä sisäiset komennot"
 
-#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -558,7 +558,7 @@ msgstr ""
 "ei.<br />Tämä valitsin vaikuttaa vain tuleviin käskyihin, se ei lisää tai "
 "poista jo julkaistuja komentoja näkymästä."
 
-#: gdboutputwidget.cpp:381
+#: gdboutputwidget.cpp:384
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevvcsprojectintegration\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2023-04-17 13:30+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -24,31 +24,31 @@ msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Virkistä"
 
-#: vcschangesviewplugin.cpp:63
+#: vcschangesviewplugin.cpp:64
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "Projektin muutokset"
 
-#: vcschangesviewplugin.cpp:66
+#: vcschangesviewplugin.cpp:67
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Paikanna nykyinen tiedosto"
 
-#: vcschangesviewplugin.cpp:68
+#: vcschangesviewplugin.cpp:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "Paikanna ja valitse nykyinen tiedosto"
 
-#: vcschangesviewplugin.cpp:71
+#: vcschangesviewplugin.cpp:72
 #, kde-format
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Virkistä näkymä"
 
-#: vcschangesviewplugin.cpp:73
+#: vcschangesviewplugin.cpp:74
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"

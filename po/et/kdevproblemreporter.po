@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2020-01-15 14:46+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -18,27 +18,27 @@ msgstr ""
 "X-Generator: Lokalize 19.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: problemreporterplugin.cpp:99
+#: problemreporterplugin.cpp:97
 #, kde-format
 msgid "Parser"
 msgstr "Parser"
 
-#: problemreporterplugin.cpp:100 problemreporterplugin.cpp:246
-#: problemsview.cpp:315
+#: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
+#: problemsview.cpp:316
 #, fuzzy, kde-format
 #| msgid "Problems"
 msgctxt "@title:window"
 msgid "Problems"
 msgstr "Probleemid"
 
-#: problemreporterplugin.cpp:287
+#: problemreporterplugin.cpp:285
 #, fuzzy, kde-format
 #| msgid "Solve Problem"
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr "Lahenda probleem"
 
-#: problemreporterplugin.cpp:289
+#: problemreporterplugin.cpp:287
 #, fuzzy, kde-format
 #| msgid "Solve: %1"
 msgctxt "@action:inmenu"
@@ -246,7 +246,7 @@ msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Otsing ..."
 
-#: problemsview.cpp:453
+#: problemsview.cpp:454
 #, fuzzy, kde-format
 #| msgctxt "%1: tab name, %2: number of problems"
 #| msgid "%1 (%2)"
@@ -254,7 +254,7 @@ msgctxt "@title:tab %1: tab name, %2: number of problems"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: problemsview.cpp:491
+#: problemsview.cpp:492
 #, fuzzy, kde-format
 #| msgid "Scope: %1"
 msgctxt "@title:menu"

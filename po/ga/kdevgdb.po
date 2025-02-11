@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop/kdevcppdebugger.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -384,14 +384,14 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Rith script &gdb:"
 
-#: gdboutputwidget.cpp:47
+#: gdboutputwidget.cpp:48
 #, fuzzy, kde-format
 #| msgid "GDB Output"
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "Aschur GDB"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -399,26 +399,26 @@ msgid ""
 "issue any other GDB command while debugging.</p>"
 msgstr ""
 
-#: gdboutputwidget.cpp:58
+#: gdboutputwidget.cpp:59
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "Ordú &GDB:"
 
-#: gdboutputwidget.cpp:63
+#: gdboutputwidget.cpp:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr ""
 
-#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr ""
 
-#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -427,7 +427,7 @@ msgid ""
 "already issued commands from the view."
 msgstr ""
 
-#: gdboutputwidget.cpp:381
+#: gdboutputwidget.cpp:384
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"

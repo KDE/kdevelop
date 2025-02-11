@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-05-29 11:27+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -168,13 +168,13 @@ msgstr "Ladicí program zhavaroval"
 msgid "Process crashed"
 msgstr "Proces zhavaroval"
 
-#: midebuggerplugin.cpp:113
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Procházet hlavní soubor s %1"
 
-#: midebuggerplugin.cpp:115
+#: midebuggerplugin.cpp:116
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -184,13 +184,13 @@ msgid ""
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:127
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Připojit k procesu s %1"
 
-#: midebuggerplugin.cpp:129
+#: midebuggerplugin.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -198,18 +198,18 @@ msgid ""
 msgstr ""
 "<b>Připojit k procesu</b><p>Připojí ladicí program k běžícímu procesu.</p>"
 
-#: midebuggerplugin.cpp:142
+#: midebuggerplugin.cpp:143
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:216
+#: midebuggerplugin.cpp:217
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Vyhodnotit: %1"
 
-#: midebuggerplugin.cpp:218
+#: midebuggerplugin.cpp:219
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -217,13 +217,13 @@ msgid ""
 "cursor.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:226
+#: midebuggerplugin.cpp:227
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Sledovat: %1"
 
-#: midebuggerplugin.cpp:228
+#: midebuggerplugin.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -231,35 +231,35 @@ msgid ""
 "Variables/Watch list.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:241
+#: midebuggerplugin.cpp:252
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr ""
 
-#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
+#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
+#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Zrušit aktuální sezení"
 
-#: midebuggerplugin.cpp:261
+#: midebuggerplugin.cpp:272
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr ""
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:293
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:313
 #, kde-format
 msgid "Debugger"
 msgstr "Ladicí program"
@@ -510,13 +510,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
-#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Console"
 msgstr "Konzole ladiče"
 
-#: widgets/debuggerconsoleview.cpp:49
+#: widgets/debuggerconsoleview.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -524,26 +524,26 @@ msgid ""
 "can also issue any other debugger command while debugging.</p>"
 msgstr ""
 
-#: widgets/debuggerconsoleview.cpp:58
+#: widgets/debuggerconsoleview.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
-#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#: widgets/debuggerconsoleview.cpp:68 widgets/debuggerconsoleview.ui:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
 msgstr ""
 
-#: widgets/debuggerconsoleview.cpp:72
+#: widgets/debuggerconsoleview.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "Show Internal Commands"
 msgstr ""
 
-#: widgets/debuggerconsoleview.cpp:76
+#: widgets/debuggerconsoleview.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -552,13 +552,13 @@ msgid ""
 "already issued commands from the view."
 msgstr ""
 
-#: widgets/debuggerconsoleview.cpp:137
+#: widgets/debuggerconsoleview.cpp:139
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Command:"
 msgstr "&Příkaz:"
 
-#: widgets/debuggerconsoleview.cpp:159
+#: widgets/debuggerconsoleview.cpp:161
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Command Bar"

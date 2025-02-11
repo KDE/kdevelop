@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2023-04-25 10:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -221,57 +221,57 @@ msgstr "Исполняемый файл git не найден. Проверьт�
 msgid "Git Commit"
 msgstr "Фиксация Git"
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:251
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Перебазировать"
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:252
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Запасники Git"
 
-#: gitplugin.cpp:248
+#: gitplugin.cpp:253
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Управление запасниками"
 
-#: gitplugin.cpp:249
+#: gitplugin.cpp:254
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Отправить в запасник"
 
-#: gitplugin.cpp:250
+#: gitplugin.cpp:255
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Использовать запасник"
 
-#: gitplugin.cpp:283
+#: gitplugin.cpp:288
 #, kde-format
 msgid "error: %1"
 msgstr "ошибка: %1"
 
-#: gitplugin.cpp:382 gitplugin.cpp:393
+#: gitplugin.cpp:387 gitplugin.cpp:398
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Не указан список файлов"
 
-#: gitplugin.cpp:455
+#: gitplugin.cpp:460
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Не удалось сбросить изменения (пустой список путей)"
 
-#: gitplugin.cpp:489
+#: gitplugin.cpp:494
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Не удалось отменить изменения"
 
-#: gitplugin.cpp:500
+#: gitplugin.cpp:505
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -279,39 +279,39 @@ msgstr ""
 "В следующих файлах имеются незафиксированные изменения, которые будут "
 "потеряны. Продолжить?"
 
-#: gitplugin.cpp:525
+#: gitplugin.cpp:530
 #, kde-format
 msgid "No files or message specified"
 msgstr "Нет файлов или сообщения"
 
-#: gitplugin.cpp:529 gitplugin.cpp:548
+#: gitplugin.cpp:534 gitplugin.cpp:553
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Нет адреса электронной почты или имени для Git"
 
-#: gitplugin.cpp:545
+#: gitplugin.cpp:550
 #, kde-format
 msgid "No message specified"
 msgstr "Нет сообщения"
 
-#: gitplugin.cpp:619
+#: gitplugin.cpp:624
 #, kde-format
 msgid "No files to remove"
 msgstr "Нет файлов для удаления"
 
-#: gitplugin.cpp:899
+#: gitplugin.cpp:904
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Обнаружены незафиксированные изменения, хотите сначала убрать их в запасник?"
 
-#: gitplugin.cpp:900
+#: gitplugin.cpp:905
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Поместить в запасник"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:906
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

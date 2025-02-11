@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2013-11-12 03:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -17,42 +17,42 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:68
+#: filemanager.cpp:46 kdevfilemanagerplugin.cpp:60
 #, fuzzy, kde-format
 #| msgid "Filesystem"
 msgctxt "@title:window"
 msgid "File System"
 msgstr "Файлдық жүйе"
 
-#: filemanager.cpp:127
+#: filemanager.cpp:126
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Бетбелгілер"
 
-#: filemanager.cpp:134
+#: filemanager.cpp:133
 #, fuzzy, kde-format
 #| msgid "Current Document Directory"
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Назардағы құжат каталогы"
 
-#: filemanager.cpp:151
+#: filemanager.cpp:150
 #, fuzzy, kde-format
 #| msgid "New File..."
 msgctxt "@action"
 msgid "New File..."
 msgstr "Жаңа файл..."
 
-#: filemanager.cpp:158
+#: filemanager.cpp:157
 #, fuzzy, kde-format
 #| msgid "Create New File"
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Жаңа файлды құру"
 
-#: filemanager.cpp:174
+#: filemanager.cpp:173
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "'%1' файлы құрылмады"

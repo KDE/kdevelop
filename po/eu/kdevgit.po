@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2022-12-06 20:29+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -208,57 +208,57 @@ msgstr "Ez da «git» exekutagarria aurkitzeko gai. Sisteman instalatuta dago?"
 msgid "Git Commit"
 msgstr "Git baliozkotzea"
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:251
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr ""
 
-#: gitplugin.cpp:247
+#: gitplugin.cpp:252
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr ""
 
-#: gitplugin.cpp:248
+#: gitplugin.cpp:253
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr ""
 
-#: gitplugin.cpp:249
+#: gitplugin.cpp:254
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr ""
 
-#: gitplugin.cpp:250
+#: gitplugin.cpp:255
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "«Pop» gordelekua"
 
-#: gitplugin.cpp:283
+#: gitplugin.cpp:288
 #, kde-format
 msgid "error: %1"
 msgstr "errorea: %1"
 
-#: gitplugin.cpp:382 gitplugin.cpp:393
+#: gitplugin.cpp:387 gitplugin.cpp:398
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Ez da zehaztu fitxategien zerrenda"
 
-#: gitplugin.cpp:455
+#: gitplugin.cpp:460
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Aldaketak ezin izan ditu berrezarri (bide-izenen zerrenda hutsik)"
 
-#: gitplugin.cpp:489
+#: gitplugin.cpp:494
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Aldaketak ezin izan ditu lehengoratu"
 
-#: gitplugin.cpp:500
+#: gitplugin.cpp:505
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -266,38 +266,38 @@ msgstr ""
 "Ondoko fitxategiek baliozkotu gabeko aldaketak dituzte, eta galdu egingo "
 "dira. Jarraitu?"
 
-#: gitplugin.cpp:525
+#: gitplugin.cpp:530
 #, kde-format
 msgid "No files or message specified"
 msgstr "Ez da fitxategirik edo mezurik zehaztu"
 
-#: gitplugin.cpp:529 gitplugin.cpp:548
+#: gitplugin.cpp:534 gitplugin.cpp:553
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr ""
 
-#: gitplugin.cpp:545
+#: gitplugin.cpp:550
 #, kde-format
 msgid "No message specified"
 msgstr "Ez da mezurik zehaztu"
 
-#: gitplugin.cpp:619
+#: gitplugin.cpp:624
 #, kde-format
 msgid "No files to remove"
 msgstr "Ez dago kendu beharreko fitxategirik"
 
-#: gitplugin.cpp:899
+#: gitplugin.cpp:904
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 
-#: gitplugin.cpp:900
+#: gitplugin.cpp:905
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Gorde"
 
-#: gitplugin.cpp:901
+#: gitplugin.cpp:906
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

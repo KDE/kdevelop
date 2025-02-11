@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2014-08-24 21:48+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -195,14 +195,14 @@ msgstr "Fejlsøger stoppet"
 msgid "Process crashed"
 msgstr "Processen endte"
 
-#: midebuggerplugin.cpp:113
+#: midebuggerplugin.cpp:114
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Undersøg kernefil..."
 
-#: midebuggerplugin.cpp:115
+#: midebuggerplugin.cpp:116
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -221,14 +221,14 @@ msgstr ""
 "Kernefilen indeholder et billede af applikationens hukommelse for det "
 "tidspunkt den gik ned, hvilket lader dig foretage en efter-døds analyse.</p>"
 
-#: midebuggerplugin.cpp:127
+#: midebuggerplugin.cpp:128
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Knyt til proces"
 
-#: midebuggerplugin.cpp:129
+#: midebuggerplugin.cpp:130
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -238,20 +238,20 @@ msgid ""
 msgstr ""
 "<b>Knyt til proces</b><p>Knytter fejlsøgeren til en kørende proces.</p>"
 
-#: midebuggerplugin.cpp:142
+#: midebuggerplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:216
+#: midebuggerplugin.cpp:217
 #, fuzzy, kde-format
 #| msgid "Evaluate: %1"
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Evaluér: %1"
 
-#: midebuggerplugin.cpp:218
+#: midebuggerplugin.cpp:219
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
@@ -262,14 +262,14 @@ msgid ""
 "cursor.</p>"
 msgstr "<b>Evaluér udtryk</b><p>Viser værdien af udtrykket under markøren.</p>"
 
-#: midebuggerplugin.cpp:226
+#: midebuggerplugin.cpp:227
 #, fuzzy, kde-format
 #| msgid "Watch: %1"
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Overvåg: %1"
 
-#: midebuggerplugin.cpp:228
+#: midebuggerplugin.cpp:229
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
@@ -282,35 +282,35 @@ msgstr ""
 "<b>Overvåg udtryk</b><p>Tilføjer et udtryk under markøren til variable-/"
 "overvågningslisten.</p>"
 
-#: midebuggerplugin.cpp:241
+#: midebuggerplugin.cpp:252
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Vælg en kernefil der skal undersøges..."
 
-#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
+#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
+#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:261
+#: midebuggerplugin.cpp:272
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Vælg til proces til at knytte til..."
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:293
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "Knytter ikke til proces %1: kan ikke knytte fejlsøgeren til sig selv."
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:313
 #, kde-format
 msgid "Debugger"
 msgstr "Fejlsøger"
@@ -576,14 +576,14 @@ msgstr ""
 "sleep 3600;done\""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
-#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
 #, fuzzy, kde-format
 #| msgid "Debugger Toolbar"
 msgctxt "@title:window"
 msgid "Debugger Console"
 msgstr "Fejlsøgerværktøjslinje"
 
-#: widgets/debuggerconsoleview.cpp:49
+#: widgets/debuggerconsoleview.cpp:50
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -596,28 +596,28 @@ msgstr ""
 "<b>GDB-output</b><p>Viser alle GDB-kommandoer der eksekveres. Du kan også "
 "give andre GDB-kommandoer under fejlsøgningen.</p>"
 
-#: widgets/debuggerconsoleview.cpp:58
+#: widgets/debuggerconsoleview.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
-#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#: widgets/debuggerconsoleview.cpp:68 widgets/debuggerconsoleview.ui:56
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
 msgstr "Stop applikationen for at indtaste GDB-kommandoer"
 
-#: widgets/debuggerconsoleview.cpp:72
+#: widgets/debuggerconsoleview.cpp:73
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action"
 msgid "Show Internal Commands"
 msgstr "Vis interne kommandoer"
 
-#: widgets/debuggerconsoleview.cpp:76
+#: widgets/debuggerconsoleview.cpp:77
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -633,13 +633,13 @@ msgstr ""
 "indstilling vil kun påvirke fremtidige kommandoer, den vil ikke tilføje "
 "eller fjerne kommandoer er udført fra visningen."
 
-#: widgets/debuggerconsoleview.cpp:137
+#: widgets/debuggerconsoleview.cpp:139
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Command:"
 msgstr ""
 
-#: widgets/debuggerconsoleview.cpp:159
+#: widgets/debuggerconsoleview.cpp:161
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Command Bar"

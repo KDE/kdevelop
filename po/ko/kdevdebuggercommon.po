@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2024-08-21 00:34+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -174,13 +174,13 @@ msgstr "디버거 충돌함"
 msgid "Process crashed"
 msgstr "프로세스 충돌함"
 
-#: midebuggerplugin.cpp:113
+#: midebuggerplugin.cpp:114
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "%1(으)로 코어 파일 시험"
 
-#: midebuggerplugin.cpp:115
+#: midebuggerplugin.cpp:116
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -193,31 +193,31 @@ msgstr ""
 "코어 파일을 분석합니다. 코어 파일은 앱이 충돌했을 당시의 앱 메모리 이미지가 "
 "들어 있으며 사후 분석을 할 수 있습니다.</p>"
 
-#: midebuggerplugin.cpp:127
+#: midebuggerplugin.cpp:128
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "%1(으)로 프로세스에 부착"
 
-#: midebuggerplugin.cpp:129
+#: midebuggerplugin.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>프로세스에 연결</b><p>디버거를 실행 중인 프로세스에 부착합니다.</p>"
 
-#: midebuggerplugin.cpp:142
+#: midebuggerplugin.cpp:143
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:216
+#: midebuggerplugin.cpp:217
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "점검: %1"
 
-#: midebuggerplugin.cpp:218
+#: midebuggerplugin.cpp:219
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -225,13 +225,13 @@ msgid ""
 "cursor.</p>"
 msgstr "<b>표현식 계산</b><p>커서 아래에 있는 표현식의 값을 표시합니다.</p>"
 
-#: midebuggerplugin.cpp:226
+#: midebuggerplugin.cpp:227
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "관찰: %1"
 
-#: midebuggerplugin.cpp:228
+#: midebuggerplugin.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -241,12 +241,12 @@ msgstr ""
 "<b>표현식 관찰</b><p>커서 아래에 있는 표현식을 변수/관찰 목록에 추가합니다.</"
 "p>"
 
-#: midebuggerplugin.cpp:241
+#: midebuggerplugin.cpp:252
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "시험할 코어 파일 선택..."
 
-#: midebuggerplugin.cpp:246 midebuggerplugin.cpp:266
+#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -255,23 +255,23 @@ msgstr ""
 "프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계속 "
 "진행하시겠습니까?"
 
-#: midebuggerplugin.cpp:248 midebuggerplugin.cpp:268
+#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "현재 세션 중단"
 
-#: midebuggerplugin.cpp:261
+#: midebuggerplugin.cpp:272
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "부착할 프로세스 선택..."
 
-#: midebuggerplugin.cpp:282
+#: midebuggerplugin.cpp:293
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "프로세스 %1에 부착하지 않음: 디버거 자기 자신에게 부착할 수 없습니다."
 
-#: midebuggerplugin.cpp:302
+#: midebuggerplugin.cpp:313
 #, kde-format
 msgid "Debugger"
 msgstr "디버거"
@@ -528,13 +528,13 @@ msgstr ""
 "3600;done\""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
-#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Console"
 msgstr "디버거 콘솔"
 
-#: widgets/debuggerconsoleview.cpp:49
+#: widgets/debuggerconsoleview.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -544,26 +544,26 @@ msgstr ""
 "<b>디버거 콘솔</b><p>실행 중인 모든 디버거 명령을 표시합니다. 디버깅 중에 다"
 "른 디버그 명령을 내릴 수도 있습니다.</p>"
 
-#: widgets/debuggerconsoleview.cpp:58
+#: widgets/debuggerconsoleview.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
 msgstr "Return 키를 눌렀을 때 마지막 명령 반복"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
-#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#: widgets/debuggerconsoleview.cpp:68 widgets/debuggerconsoleview.ui:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
 msgstr "앱의 실행을 일시 정지하여 GDB 명령 입력"
 
-#: widgets/debuggerconsoleview.cpp:72
+#: widgets/debuggerconsoleview.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "Show Internal Commands"
 msgstr "내부 명령 표시"
 
-#: widgets/debuggerconsoleview.cpp:76
+#: widgets/debuggerconsoleview.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -575,13 +575,13 @@ msgstr ""
 "후의 명령에만 적용되며, 보기에 이미 있는 명령을 추가하거나 삭제하지는 않습니"
 "다."
 
-#: widgets/debuggerconsoleview.cpp:137
+#: widgets/debuggerconsoleview.cpp:139
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Command:"
 msgstr "명령(&C):"
 
-#: widgets/debuggerconsoleview.cpp:159
+#: widgets/debuggerconsoleview.cpp:161
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Command Bar"

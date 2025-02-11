@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-02-11 00:40+0000\n"
 "PO-Revision-Date: 2013-11-15 06:17+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -489,14 +489,14 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "&gdb скриптін жегу:"
 
-#: gdboutputwidget.cpp:47
+#: gdboutputwidget.cpp:48
 #, fuzzy, kde-format
 #| msgid "GDB Output"
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB шығысы"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -509,28 +509,28 @@ msgstr ""
 "<b>GDB шығысы.</b><p>Бүкіл орындалмақ gdb командаларды көрсету. Жөндеу "
 "кезінде басқа да gdb командаларын беруге болады.</p>"
 
-#: gdboutputwidget.cpp:58
+#: gdboutputwidget.cpp:59
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB командасы:"
 
-#: gdboutputwidget.cpp:63
+#: gdboutputwidget.cpp:64
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "gdb командаларын енгізу үшін бағдарлама орындауын аялдату"
 
-#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Ішкі командалары көрсетілсін"
 
-#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -545,7 +545,7 @@ msgstr ""
 "KDevelop берген ішкі командаларын көрсету-көрсетпеуін басқару.<br>Бұл "
 "параметр тек болашақ командаларға әсер етеді, өткен командаларға қатысуы жоқ."
 
-#: gdboutputwidget.cpp:381
+#: gdboutputwidget.cpp:384
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"
