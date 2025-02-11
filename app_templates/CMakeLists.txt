@@ -1,9 +1,7 @@
 kdevplatform_add_app_templates(
     cpp/CMake/cmake_plaincpp
-    cpp/CMake/cmake_qt5guiapp
     cpp/CMake/cmake_qt6widgetsapp
     cpp/CMake/cmake_kdevplugin
-    cpp/CMake/cmake_qt5-qml2
     cpp/CMake/cmake_qt6quick_app
     cpp/meson/meson_plaincpp
     cpp/QMake/qmake_qt5guiapp
