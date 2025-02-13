@@ -2678,7 +2678,7 @@ msgstr "锁定面板以阻止其隐藏"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr ""
+msgstr "所有工程文件"
 
 #: shell/openprojectdialog.cpp:141
 #, kde-format

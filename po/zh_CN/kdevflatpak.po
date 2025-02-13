@@ -62,13 +62,13 @@ msgstr "Flatpak 包 (*.flatpak)"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr ""
+msgstr "重建 Flatpak 环境：%1"
 
 #: flatpakplugin.cpp:241
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr ""
+msgstr "为 %2 建造 Flatpak 环境 %1"
 
 #: flatpakplugin.cpp:265
 #, kde-format
