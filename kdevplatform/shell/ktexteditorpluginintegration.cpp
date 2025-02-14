@@ -215,7 +215,7 @@ KTextEditor::Document *Application::openUrl(const QUrl &url, const QString &enco
 
     auto documentController = Core::self()->documentControllerInternal();
     auto doc = url.isEmpty() ? documentController->openDocumentFromText(QString()) : documentController->openDocument(url);
-    return doc->textDocument();
+    return doc ? doc->textDocument() : nullptr;
 }
 
 KTextEditor::Document *Application::findUrl(const QUrl &url) const
