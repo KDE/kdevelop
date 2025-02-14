@@ -49,6 +49,7 @@ protected:
     void setToolTitle(const QString& title);
     void setToolIcon(const QIcon& icon);
     void setViewType(IOutputView::ViewType type);
+    void setOptions(IOutputView::Options options);
     void setBehaviours(IOutputView::Behaviours behaviours);
     void setKillJobOnOutputClose(bool killJobOnOutputClose);
 

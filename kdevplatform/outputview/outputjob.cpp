@@ -27,6 +27,7 @@ public:
     QString toolTitle;
     QIcon toolIcon;
     IOutputView::ViewType type = IOutputView::OneView;
+    IOutputView::Options options = IOutputView::ShowItemsButton;
     IOutputView::Behaviours behaviours = IOutputView::AllowUserClose;
     bool killJobOnOutputClose = true;
     OutputJob::OutputJobVerbosity verbosity;
@@ -57,7 +58,7 @@ void OutputJob::startOutput()
             if (d->standardToolView != -1) {
                 tvid = view->standardToolView(static_cast<IOutputView::StandardToolView>(d->standardToolView));
             } else {
-                tvid = view->registerToolView({}, d->toolTitle, d->type, d->toolIcon);
+                tvid = view->registerToolView({}, d->toolTitle, d->type, d->toolIcon, d->options);
             }
 
             if (d->title.isEmpty())
@@ -128,6 +129,13 @@ void KDevelop::OutputJob::setViewType(IOutputView::ViewType type)
     Q_D(OutputJob);
 
     d->type = type;
+}
+
+void OutputJob::setOptions(IOutputView::Options options)
+{
+    Q_D(OutputJob);
+
+    d->options = options;
 }
 
 void KDevelop::OutputJob::setBehaviours(IOutputView::Behaviours behaviours)
