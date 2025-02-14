@@ -68,7 +68,7 @@ public Q_SLOTS:
     QList<KTextEditor::View *> views() const;
 
     KTextEditor::View *activeView() const;
-    KTextEditor::View *activateView(KTextEditor::Document *doc);
+    KTextEditor::View* activateView(KTextEditor::Document* document);
 
     QObject *pluginView(const QString &id) const;
     void splitView(Qt::Orientation orientation);
