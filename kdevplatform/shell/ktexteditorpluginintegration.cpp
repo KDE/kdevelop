@@ -15,7 +15,6 @@
 
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
-#include <KTextEditor/View>
 #include <KTextEditor/Editor>
 #include <KTextEditor/Application>
 
@@ -412,22 +411,15 @@ KTextEditor::View *MainWindow::activeView() const
     return toKteView(m_mainWindow->activeView());
 }
 
-KTextEditor::View *MainWindow::activateView(KTextEditor::Document *doc)
+KTextEditor::View* MainWindow::activateView(KTextEditor::Document* document)
 {
-    const auto areas = m_mainWindow->areas();
-    for (auto* area : areas) {
-        const auto views = area->views();
-        for (auto* view : views) {
-            if (auto kteView = toKteView(view)) {
-                if (kteView->document() == doc) {
-                    m_mainWindow->activateView(view);
-                    return kteView;
-                }
-            }
-        }
+    if (auto* const iDocument = iDocumentFromKteDocument(document)) {
+        Core::self()->documentControllerInternal()->activateDocument(iDocument);
+        return activeView();
     }
-
-    return activeView();
+    qCWarning(SHELL) << "ignoring request to activate a document not registered with the document controller"
+                     << document;
+    return nullptr;
 }
 
 bool MainWindow::closeView(KTextEditor::View *kteView)
