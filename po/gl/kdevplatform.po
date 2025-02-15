@@ -33,7 +33,7 @@ msgstr "Xosé Calvo, Marce Villarino, Adrian Chaves (Gallaecio)"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"mvillarino@users.sourceforge.net, proxecto@trasno.net, adrian@chaves.io"
+"mvillarino@users.sourceforge.net, proxecto@trasno.net, adrian@chaves.gal"
 
 #: debugger/breakpoint/breakpoint.cpp:195
 #, kde-format
