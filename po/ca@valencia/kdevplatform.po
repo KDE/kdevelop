@@ -1498,7 +1498,7 @@ msgstr "S'ha produït un error de lectura"
 #: outputview/outputexecutejob.cpp:368
 #, kde-format
 msgid "Write error"
-msgstr "S'ha produït un error d'escriptura"
+msgstr "S'ha produït un error mentre s'escrivia"
 
 #: outputview/outputexecutejob.cpp:372
 #, kde-format
@@ -6259,8 +6259,3 @@ msgstr "Diferències amb l'anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferències entre revisions"
-
-#~ msgid "%2"
-#~ msgid_plural "%2 (repeated %1 times)"
-#~ msgstr[0] "%2"
-#~ msgstr[1] "%2 (repetit %1 vegades)"

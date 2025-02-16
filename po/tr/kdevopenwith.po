@@ -5,13 +5,13 @@
 # Serdar Soytetir, 2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2014, 2015, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2022-09-06 22:40+0300\n"
+"PO-Revision-Date: 2025-02-15 21:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,13 +19,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #: openwithplugin.cpp:231
 #, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
-msgstr "Diğer..."
+msgstr "Diğer…"
 
 #: openwithplugin.cpp:242
 #, kde-format
@@ -62,7 +62,7 @@ msgstr "Öntanımlı Düzenleyici"
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
 msgstr ""
-"'%1' dosyalarının tümünü öntanımlı olarak %2 ile açmak istiyor musunuz?"
+"“%1” dosyalarının tümünü öntanımlı olarak %2 ile açmak istiyor musunuz?"
 
 #: openwithplugin.cpp:413
 #, kde-format
