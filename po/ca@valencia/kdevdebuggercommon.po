@@ -570,7 +570,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last command when hit Return"
-msgstr "Repetix l'última ordre quan es prema la tecla Retorn"
+msgstr "Repetix l'última ordre quan es prema la tecla «Retorn»"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.cpp:68 widgets/debuggerconsoleview.ui:56

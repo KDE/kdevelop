@@ -342,7 +342,7 @@ msgstr "Crea un fitxer nou"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Save &mode:"
-msgstr "&Mode del guardada:"
+msgstr "&Mode de la guardada:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:189

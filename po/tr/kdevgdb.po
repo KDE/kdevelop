@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014, 2015, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2024-11-10 20:22+0300\n"
+"PO-Revision-Date: 2025-02-15 21:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
 #, kde-format
@@ -369,7 +369,7 @@ msgstr ""
 "<html><head/><body><p>Uzak uygulamayı başlatacak betik</p><p></p><p>Bu kabuk "
 "betiği Gdb Config betiği gdb tarafından çalıştırıldıktan sonra "
 "başlatılacaktır.</p><p>Hedefi, uzak süreci başlatmaktır.</p><p>1) Komutu "
-"uzaktan çalıştırmanın bir yolunu bulun — rsh, ssh, telnet, ...</p><p>2a) "
+"uzaktan çalıştırmanın bir yolunu bulun — rsh, ssh, telnet, …</p><p>2a) "
 "Hedefte “gdbserver … application” komutunu çalıştırın.</p><p> veya hedefte "
 "gdb varsa:</p><p>2b) Hedefte “application” komutunu çalıştırın.</p></body></"
 "html>"
