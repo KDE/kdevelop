@@ -14,6 +14,7 @@
 #include <QStackedLayout>
 
 #include <KParts/MainWindow>
+#include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/Editor>
 #include <KTextEditor/Application>
@@ -110,6 +111,36 @@ KTextEditor::View *toKteView(Sublime::View *view)
     } else {
         return nullptr;
     }
+}
+
+/**
+ * @return an IDocument that wraps a given KTextEditor::Document or @c nullptr if no matching IDocument
+ */
+[[nodiscard]] IDocument* iDocumentFromKteDocument(KTextEditor::Document* document)
+{
+    if (!document) {
+        return nullptr;
+    }
+
+    if (const auto url = document->url(); !url.isEmpty()) {
+        // IDocument and its wrapped KTextEditor::Document have equal nonempty URLs
+        auto* const iDocument = Core::self()->documentControllerInternal()->documentForUrl(url);
+        if (iDocument->textDocument() == document) {
+            return iDocument;
+        }
+        qCWarning(SHELL) << "a different document" << iDocument->textDocument()
+                         << "is registered with the document controller under the URL"
+                         << url.toString(QUrl::PreferLocalFile) << "of a given document" << document;
+        return nullptr;
+    }
+
+    // Perform a linear search across all open documents. Cannot just look a document
+    // up by an empty URL, because each IDocument has a unique nonempty URL.
+    const auto documents = Core::self()->documentControllerInternal()->openDocuments();
+    const auto it = std::find_if(documents.cbegin(), documents.cend(), [document](IDocument* iDocument) {
+        return iDocument->textDocument() == document;
+    });
+    return it == documents.cend() ? nullptr : *it;
 }
 
 class ToolViewFactory;
@@ -242,11 +273,8 @@ QList<KTextEditor::MainWindow *> Application::mainWindows() const
 
 bool Application::closeDocument(KTextEditor::Document *document) const
 {
-    const auto& openDocuments = Core::self()->documentControllerInternal()->openDocuments();
-    for (auto doc : openDocuments) {
-        if (doc->textDocument() == document) {
-            return doc->close();
-        }
+    if (auto* const iDocument = iDocumentFromKteDocument(document)) {
+        return iDocument->close();
     }
 
     qCWarning(SHELL) << "ignoring request to close a document not registered with the document controller" << document;
