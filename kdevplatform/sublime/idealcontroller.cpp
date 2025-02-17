@@ -170,13 +170,13 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     const auto documentTitle = view->document()->title();
     dock->setWindowTitle(documentTitle);
 
-    // dock object name is used to store tool view settings
-    // support different configuration for same docks opened in different areas
+    // QMainWindow::saveState() and QMainWindow::restoreState() use the objectName property to
+    // identify a QDockWidget. Make the name of the dock widget's sublime area part of the object name
+    // in order to support differing locations and visibilities of dock widgets in different areas.
     auto* const sublimeArea = m_mainWindow->area();
     Q_ASSERT(sublimeArea);
     dock->setArea(sublimeArea);
-    const QString dockObjectName = documentTitle + QLatin1Char('_') + sublimeArea->objectName();
-    dock->setObjectName(dockObjectName);
+    dock->setObjectName(documentTitle + QLatin1Char('_') + sublimeArea->objectName());
 
     KAcceleratorManager::setNoAccel(dock);
     QWidget *w = view->widget(dock);
@@ -207,14 +207,16 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
       dock->setWidget(toolView);
 
       static const auto configGroupName = QStringLiteral("UiSettings/Docks/ToolbarEnabled");
+      const auto& configEntryKey = documentTitle;
 
       const KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
-      toolBar->setVisible(cg.readEntry(dockObjectName, true));
-      connect(toolBar->toggleViewAction(), &QAction::toggled,
-            this, [toolBar, dockObjectName](){
-                KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
-                cg.writeEntry(dockObjectName, toolBar->toggleViewAction()->isChecked());
-            });
+      toolBar->setVisible(cg.readEntry(configEntryKey, true));
+
+      const auto* const toggleViewAction = toolBar->toggleViewAction();
+      connect(toggleViewAction, &QAction::toggled, toggleViewAction, [toggleViewAction, configEntryKey] {
+          KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
+          cg.writeEntry(configEntryKey, toggleViewAction->isChecked());
+      });
     }
 
     dock->setWindowIcon(view->widget()->windowIcon());
