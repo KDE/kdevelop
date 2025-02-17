@@ -6,6 +6,7 @@
 
 #include "ktexteditorpluginintegration.h"
 
+#include <QFileInfo>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -30,9 +31,66 @@
 
 #include <util/objectlist.h>
 
+#include <algorithm>
+
 using namespace KDevelop;
 
 namespace {
+/**
+ * If a given URL is relative, return a version of the URL resolved
+ * to the local file scheme; otherwise return a copy of the URL.
+ *
+ * KTextEditor (plugins) can look up or open a document by a relative URL.
+ * DocumentController asserts that a URL passed to it is not relative. This function
+ * assumes that a relative URL points to a local file and works around the assertion failures.
+ *
+ * @pre @p !url.isEmpty() because an empty URL is special and should be handled separately by the callers
+ */
+[[nodiscard]] QUrl resolvedToLocalFile(QUrl url)
+{
+    Q_ASSERT(!url.isEmpty());
+    if (url.isRelative()) {
+        url.setScheme(QStringLiteral("file"));
+    }
+    return url;
+}
+
+/**
+ * @return whether a given URL can possibly point to a file
+ *
+ * KTextEditor (plugins) might look up or open a document by a local-file URL with an empty file name.
+ * DocumentController asserts that a URL passed to it has a nonempty file name or is not a local file. This
+ * function helps slots that implement KTextEditor API to properly fail instead of triggering the assertion failures.
+ *
+ * @pre @p !url.isEmpty() because an empty URL is special and should be handled separately by the callers
+ * @pre @p !url.isRelative() because a relative URL is never a local file, and so must be resolved before the check
+ */
+[[nodiscard]] bool canPointToFile(const QUrl& url)
+{
+    Q_ASSERT(!url.isEmpty());
+    Q_ASSERT(!url.isRelative());
+    return !url.fileName().isEmpty() || !url.isLocalFile();
+}
+
+/**
+ * If a given URL is a local file, return a version of the URL
+ * with canonicalized path; otherwise return a copy of the URL.
+ *
+ * @pre @p !url.isEmpty() because an empty URL is special and should be handled separately by the callers
+ * @pre @p !url.isRelative() because a relative URL is never a local file, and so must be resolved before the check
+ */
+[[nodiscard]] QUrl urlWithCanonicalizedPathIfLocalFile(const QUrl& url)
+{
+    Q_ASSERT(!url.isEmpty());
+    Q_ASSERT(!url.isRelative());
+    if (url.isLocalFile()) {
+        const auto canonicalPath = QFileInfo{url.toLocalFile()}.canonicalFilePath();
+        if (!canonicalPath.isEmpty()) {
+            return QUrl::fromLocalFile(canonicalPath);
+        }
+    }
+    return url;
+}
 
 KTextEditor::MainWindow *toKteWrapper(KParts::MainWindow *window)
 {
@@ -213,14 +271,40 @@ KTextEditor::Document *Application::openUrl(const QUrl &url, const QString &enco
 {
     Q_UNUSED(encoding);
 
-    auto documentController = Core::self()->documentControllerInternal();
-    auto doc = url.isEmpty() ? documentController->openDocumentFromText(QString()) : documentController->openDocument(url);
+    const IDocument* doc;
+    if (url.isEmpty()) {
+        doc = Core::self()->documentControllerInternal()->openDocumentFromText(QString());
+    } else {
+        const auto resolvedUrl = resolvedToLocalFile(url);
+        if (!canPointToFile(resolvedUrl)) {
+            return nullptr; // cannot create a document for a non-file URL
+        }
+        doc = Core::self()->documentControllerInternal()->openDocument(resolvedUrl);
+    }
     return doc ? doc->textDocument() : nullptr;
 }
 
 KTextEditor::Document *Application::findUrl(const QUrl &url) const
 {
-    auto doc = Core::self()->documentControllerInternal()->documentForUrl(url);
+    if (url.isEmpty()) {
+        // Return the first found document with an empty URL.
+        // Perform a linear search across all open documents. Cannot just look a document
+        // up by an empty URL, because each IDocument has a unique nonempty URL.
+        const auto documents = Core::self()->documentControllerInternal()->openDocuments();
+        const auto it = std::find_if(documents.cbegin(), documents.cend(), [](const IDocument* document) {
+            return DocumentController::isEmptyDocumentUrl(document->url());
+        });
+        return it == documents.cend() ? nullptr : (*it)->textDocument();
+    }
+
+    const auto resolvedUrl = resolvedToLocalFile(url);
+    if (!canPointToFile(resolvedUrl)) {
+        return nullptr; // a document cannot have a non-file URL
+    }
+
+    // ensure that a local-file URL has canonical path so that DocumentController::documentForUrl() finds the document
+    const auto* const doc =
+        Core::self()->documentControllerInternal()->documentForUrl(urlWithCanonicalizedPathIfLocalFile(resolvedUrl));
     return doc ? doc->textDocument() : nullptr;
 }
 
