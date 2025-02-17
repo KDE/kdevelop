@@ -25,8 +25,6 @@ namespace Sublime
 
 class IdealDockWidget;
 class IdealButtonBarLayout;
-class View;
-class Area;
 
 /**
  * This class keeps track of all checked tool view actions in an IdealButtonBarWidget. When none of the
@@ -91,17 +89,16 @@ public:
                                   QWidget* parent);
 
     /**
-     * Add a tool view action for a given dock widget and tool view to this widget.
+     * Add a tool view action for a given dock widget to this widget.
      *
-     * Also update multiple properties of the dock widget.
+     * Also update the properties of the dock widget that depend on the dock widget area.
      *
-     * @param area the current sublime area
      * @param initiallyVisible whether the dock widget is currently visible, and
      *        consequently whether the added action should be initially checked
      *
      * @return the added action
      */
-    QAction* addWidget(IdealDockWidget* widget, Area* area, View* view, bool initiallyVisible);
+    QAction* addWidget(IdealDockWidget* widget, bool initiallyVisible);
 
     void addAction(QAction *action);
     void removeAction(QAction* action);

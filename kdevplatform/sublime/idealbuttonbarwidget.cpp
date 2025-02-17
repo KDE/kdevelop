@@ -50,7 +50,6 @@ public:
         QStringList shortcutStrings = config.readEntry(QStringLiteral("Shortcut for %1").arg(title), QStringList());
         setShortcuts({ QKeySequence::fromString(shortcutStrings.value(0)), QKeySequence::fromString(shortcutStrings.value(1)) });
 
-        dock->setWindowTitle(title);
         dock->view()->widget()->installEventFilter(this);
         refreshText();
     }
@@ -322,7 +321,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, const IdealD
     }
 }
 
-QAction* IdealButtonBarWidget::addWidget(IdealDockWidget* dock, Area* area, View* view, bool initiallyVisible)
+QAction* IdealButtonBarWidget::addWidget(IdealDockWidget* dock, bool initiallyVisible)
 {
     auto dockFeatures = dock->features();
     if (m_area == Qt::BottomDockWidgetArea || m_area == Qt::TopDockWidgetArea) {
@@ -331,9 +330,6 @@ QAction* IdealButtonBarWidget::addWidget(IdealDockWidget* dock, Area* area, View
         dockFeatures &= ~QDockWidget::DockWidgetVerticalTitleBar;
     }
     dock->setFeatures(dockFeatures);
-
-    dock->setArea(area);
-    dock->setView(view);
     dock->setDockWidgetArea(m_area);
 
     auto action = new ToolViewAction(dock, this);

@@ -43,28 +43,15 @@ namespace {
 
 struct PrintDockWidget
 {
-    explicit PrintDockWidget(const Sublime::IdealDockWidget* dockWidget)
-        : PrintDockWidget(dockWidget, dockWidget->view())
-    {
-    }
-
-    /// Use this overload if dockWidget->view() has not been set up yet.
-    explicit PrintDockWidget(const Sublime::IdealDockWidget* dockWidget, const Sublime::View* view)
-        : dockWidget(dockWidget)
-        , view(view)
-    {
-        Q_ASSERT(dockWidget);
-        Q_ASSERT(view);
-    }
-
     const Sublime::IdealDockWidget* const dockWidget;
-    const Sublime::View* const view;
 };
 
 QDebug operator<<(QDebug debug, PrintDockWidget p)
 {
     const QDebugStateSaver saver(debug);
-    debug.noquote().nospace() << dockWidgetAreaName(*p.dockWidget) << ':' << p.view->document()->documentSpecifier()
+    Q_ASSERT(p.dockWidget);
+    debug.noquote().nospace() << dockWidgetAreaName(*p.dockWidget) << ':'
+                              << p.dockWidget->view()->document()->documentSpecifier()
                               << (p.dockWidget->isVisible() ? " (visible)" : "");
     return debug;
 }
@@ -178,12 +165,17 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow)
 void IdealController::addView(Qt::DockWidgetArea area, View* view)
 {
     auto *dock = new IdealDockWidget(this, m_mainWindow);
-    // dock object name is used to store tool view settings
-    QString dockObjectName = view->document()->title();
-    // support different configuration for same docks opened in different areas
-    if (m_mainWindow->area())
-        dockObjectName += QLatin1Char('_') + m_mainWindow->area()->objectName();
+    dock->setView(view);
 
+    const auto documentTitle = view->document()->title();
+    dock->setWindowTitle(documentTitle);
+
+    // dock object name is used to store tool view settings
+    // support different configuration for same docks opened in different areas
+    auto* const sublimeArea = m_mainWindow->area();
+    Q_ASSERT(sublimeArea);
+    dock->setArea(sublimeArea);
+    const QString dockObjectName = documentTitle + QLatin1Char('_') + sublimeArea->objectName();
     dock->setObjectName(dockObjectName);
 
     KAcceleratorManager::setNoAccel(dock);
@@ -193,9 +185,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     // an existing widget instead of creating a new one with dock as its parent. Either
     // dock or a new QMainWindow toolView will become the widget's parent in the code below.
 
-    // Use the two-argument overload of PrintDockWidget(), because dock->view()
-    // will become equal to view only during the addBarWidgetAction() call below.
-    qCDebug(SUBLIME) << "creating dock widget" << PrintDockWidget(dock, view) << "in" << area
+    qCDebug(SUBLIME) << "creating dock widget" << PrintDockWidget{dock} << "in" << area
                      << (w->parent() ? "" : "(reparenting)");
 
     QList<QAction *> toolBarActions = view->toolBarActions();
@@ -240,7 +230,7 @@ void IdealController::addBarWidgetAction(Qt::DockWidgetArea area, IdealDockWidge
 {
     auto* const bar = barForDockArea(area);
 
-    auto* const action = bar->addWidget(dock, m_mainWindow->area(), view, checked);
+    auto* const action = bar->addWidget(dock, checked);
     m_view_to_action[view] = action;
 
     m_docks->addAction(action);
