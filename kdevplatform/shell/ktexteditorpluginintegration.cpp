@@ -503,7 +503,14 @@ void MainWindow::addWidgetToViewBar(KTextEditor::View *view, QWidget *widget)
 
 KTextEditor::View *MainWindow::openUrl(const QUrl &url, const QString &encoding)
 {
-    return activateView(KTextEditor::Editor::instance()->application()->openUrl(url, encoding));
+    if (auto* const document = KTextEditor::Editor::instance()->application()->openUrl(url, encoding)) {
+        // Application::openUrl() activates a view of the opened document, so just return the active view.
+        auto* const view = activeView();
+        Q_ASSERT(view);
+        Q_ASSERT(view->document() == document);
+        return view;
+    }
+    return nullptr;
 }
 
 bool MainWindow::showToolView(QWidget *widget)
