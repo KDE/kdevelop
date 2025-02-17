@@ -450,6 +450,9 @@ void MainWindow::showMessage(const QVariantMap& message)
     if (!m_showMessageOutputJob) {
         m_showMessageOutputJob = std::make_unique<ShowMessagesJob>();
         m_showMessageOutputJob->setAutoDelete(false);
+        // If this function is called during KDevelop startup, the Messages tool view is not
+        // added to the "code" sublime area, otherwise it is. This is a general issue: when a
+        // tool view is added too late, its presence in sublime areas is not restored properly.
         m_showMessageOutputJob->start();
     }
     m_showMessageOutputJob->postMessage(message);
