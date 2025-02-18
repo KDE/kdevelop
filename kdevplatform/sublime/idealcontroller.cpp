@@ -206,11 +206,13 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
       toolView->addToolBar(toolBar);
       dock->setWidget(toolView);
 
-      KConfigGroup cg(KSharedConfig::openConfig(), QStringLiteral("UiSettings/Docks/ToolbarEnabled"));
+      static const auto configGroupName = QStringLiteral("UiSettings/Docks/ToolbarEnabled");
+
+      const KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
       toolBar->setVisible(cg.readEntry(dockObjectName, true));
       connect(toolBar->toggleViewAction(), &QAction::toggled,
             this, [toolBar, dockObjectName](){
-                KConfigGroup cg(KSharedConfig::openConfig(), QStringLiteral("UiSettings/Docks/ToolbarEnabled"));
+                KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
                 cg.writeEntry(dockObjectName, toolBar->toggleViewAction()->isChecked());
             });
     }
