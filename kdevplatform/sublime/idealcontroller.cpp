@@ -225,7 +225,6 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
             });
     }
 
-    dock->setWindowTitle(view->widget()->windowTitle());
     dock->setWindowIcon(view->widget()->windowIcon());
     dock->setFocusProxy(dock->widget());
 
