@@ -388,9 +388,6 @@ void MainWindowPrivate::clearArea()
         // FIXME should we really delete here??
         bool nonDestructive = true;
         idealController->removeView(view, nonDestructive);
-
-        if (view->hasWidget())
-            view->widget()->setParent(nullptr);
     }
 
     docks.clear();
