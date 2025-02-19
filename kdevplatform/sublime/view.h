@@ -37,10 +37,6 @@ provide a custom widget for your view.
 class KDEVPLATFORMSUBLIME_EXPORT View: public QObject {
     Q_OBJECT
 public:
-    enum WidgetOwnership {
-        TakeOwnership,
-        DoNotTakeOwnerShip
-    };
     ~View() override;
 
     /**@return the toolbar actions for this view, this needs to be called _after_ the first call to widget() */
@@ -88,7 +84,12 @@ public Q_SLOTS:
     void requestRaise();
 
 protected:
-    explicit View(Document *doc, WidgetOwnership ws = DoNotTakeOwnerShip );
+    enum WidgetOwnership {
+        TakeOwnership,
+        DoNotTakeOwnership
+    };
+
+    explicit View(Document* doc, WidgetOwnership ws = DoNotTakeOwnership);
     /**
      * override this function to create a custom widget in your View subclass
      * @param parent the parent widget
