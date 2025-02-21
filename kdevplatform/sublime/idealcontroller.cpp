@@ -419,17 +419,10 @@ void IdealController::showDockWidget(IdealDockWidget* dock, bool show)
         // Activate the main window that contains the editor view in case some other floating
         // dock widget is the active window, and focus the editor view after hiding a tool view.
         m_mainWindow->activateWindow();
-        focusEditor();
+        m_mainWindow->focusEditor();
     }
 
     setShowDockStatus(area, show);
-}
-
-void IdealController::focusEditor()
-{
-    if (View* view = m_mainWindow->activeView())
-        if (view->hasWidget())
-            view->widget()->setFocus(Qt::ShortcutFocusReason);
 }
 
 QWidget* IdealController::statusBarLocation() const
