@@ -19,20 +19,23 @@
 #include "mainwindow.h"
 #include <debug.h>
 
+#include <algorithm>
+
 namespace Sublime {
 
 struct WidgetFinder {
     explicit WidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
-        for (View* v : std::as_const(index->views())) {
-            if (v->hasWidget() && (v->widget() == w))
-            {
-                view = v;
-                return Area::StopWalker;
-            }
+        const auto& views = index->views();
+        const auto it = std::find_if(views.cbegin(), views.cend(), [this](View* v) {
+            return v->hasWidget() && v->widget() == w;
+        });
+        if (it == views.cend()) {
+            return Area::ContinueWalker;
         }
-        return Area::ContinueWalker;
+        view = *it;
+        return Area::StopWalker;
     }
 
     QWidget* const w;
