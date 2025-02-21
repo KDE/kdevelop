@@ -103,7 +103,7 @@ void PartController::setShowTextEditorStatusBar(bool show)
     const auto areas = Core::self()->uiControllerInternal()->allAreas();
     for (Sublime::Area* area : areas) {
         const auto views = area->views();
-        for (Sublime::View* view : views) {
+        for (const auto* const view : views) {
             auto* const widget = view->widget();
             if (!widget) {
                 continue;

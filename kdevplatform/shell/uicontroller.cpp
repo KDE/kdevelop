@@ -292,7 +292,7 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
             d->factoryDocuments.insert(factory, doc);
         }
 
-        Sublime::View* view = addToolViewToArea(factory, doc, activeArea());
+        const auto* const view = addToolViewToArea(factory, doc, activeArea());
         if (view) {
             ret = view->widget();
             Q_ASSERT(ret);
@@ -313,7 +313,7 @@ void UiController::raiseToolView(QWidget* toolViewWidget)
         return;
 
     const QList<Sublime::View*> views = activeArea()->toolViews();
-    const auto it = std::find_if(views.cbegin(), views.cend(), [toolViewWidget](Sublime::View* view) {
+    const auto it = std::find_if(views.cbegin(), views.cend(), [toolViewWidget](const Sublime::View* view) {
         const auto* const widget = view->widget();
         Q_ASSERT(widget);
         return widget == toolViewWidget;
@@ -379,7 +379,7 @@ void UiController::toolViewVisibilityRestored(const QList<Sublime::View*>& visib
         return; // a tool view in an inactive main window should not become the active action listener
     }
 
-    for (auto* const view : visibleToolViews) {
+    for (const auto* const view : visibleToolViews) {
         Q_ASSERT(view);
         auto* const widget = view->widget();
         Q_ASSERT(widget);

@@ -46,7 +46,7 @@ namespace {
     return groupName;
 }
 
-void optionallyFocusViewWidget(Sublime::View* view, bool focus)
+void optionallyFocusViewWidget(const Sublime::View* view, bool focus)
 {
     if (!focus || !view) {
         return; // nothing to do
