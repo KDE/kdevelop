@@ -338,7 +338,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             {
                 if(!container->hasWidget(widget))
                 {
-                    container->addWidget(view, position);
+                    container->addWidget(view, widget, position);
                     d->viewContainers[view] = container;
                     d->widgetToView[widget] = view;
                 }

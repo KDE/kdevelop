@@ -461,21 +461,25 @@ void Container::widgetActivated(int idx)
     }
 }
 
-void Container::addWidget(View *view, int position)
+void Container::addWidget(View* view, QWidget* widget, int position)
 {
     Q_D(Container);
 
-    QWidget *w = view->widget(this);
+    Q_ASSERT(view);
+    Q_ASSERT(widget);
+    Q_ASSERT(widget == view->widget());
+    Q_ASSERT(!hasWidget(widget));
+
     int idx = 0;
     if (position != -1)
     {
-        idx = d->stack->insertWidget(position, w);
+        idx = d->stack->insertWidget(position, widget);
     }
     else
-        idx = d->stack->addWidget(w);
+        idx = d->stack->addWidget(widget);
     d->tabBar->insertTab(idx, view->document()->statusIcon(), view->document()->title());
     Q_ASSERT(view);
-    d->viewForWidget[w] = view;
+    d->viewForWidget[widget] = view;
 
     // Update document list context menu. This has to be called before
     // setCurrentWidget, because we call the status icon and title update slots
