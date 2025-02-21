@@ -71,7 +71,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     action = new QAction(i18nc("@action", "Focus Editor"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_E);
-    connect(action, &QAction::triggered, this, &MainWindowPrivate::focusEditor);
+    connect(action, &QAction::triggered, m_mainWindow, &MainWindow::focusEditor);
     ac->addAction(QStringLiteral("focus_editor"), action);
 
     action = new QAction(i18nc("@action", "Hide/Restore Docks"), this);
@@ -229,13 +229,6 @@ void MainWindowPrivate::setBackgroundVisible(bool v)
 
     bgCentralWidget->setVisible(v);
     splitterCentralWidget->setVisible(!v);
-}
-
-void MainWindowPrivate::focusEditor()
-{
-    if (View* view = m_mainWindow->activeView())
-        if (view->hasWidget())
-            view->widget()->setFocus(Qt::ShortcutFocusReason);
 }
 
 void MainWindowPrivate::toggleDocksShown()

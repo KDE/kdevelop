@@ -160,6 +160,18 @@ void MainWindow::setArea(Area *area)
     connect(area, &Area::aboutToRemoveToolView, d, &MainWindowPrivate::aboutToRemoveToolView);
 }
 
+void MainWindow::focusEditor()
+{
+    Q_D(const MainWindow);
+
+    if (!d->activeView) {
+        return;
+    }
+    if (d->activeView->hasWidget()) {
+        d->activeView->widget()->setFocus(Qt::ShortcutFocusReason);
+    }
+}
+
 void MainWindow::initializeStatusBar()
 {
     //nothing here, reimplement in the subclasses if you want to have status bar
