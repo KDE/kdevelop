@@ -46,6 +46,17 @@ namespace {
     return groupName;
 }
 
+void optionallyFocusViewWidget(Sublime::View* view, bool focus)
+{
+    if (!focus || !view) {
+        return; // nothing to do
+    }
+    auto* const widget = view->widget();
+    if (!widget->hasFocus()) {
+        widget->setFocus();
+    }
+}
+
 } // unnamed namespace
 
 namespace Sublime {
@@ -231,8 +242,7 @@ void MainWindow::activateView(Sublime::View* view, bool focus)
 
     if (d->activeView == view)
     {
-        if (focus && view && !view->widget()->hasFocus())
-            view->widget()->setFocus();
+        optionallyFocusViewWidget(view, focus);
         return;
     }
 
@@ -249,9 +259,7 @@ void MainWindow::setActiveView(View *view, bool focus)
     View* oldActiveView = d->activeView;
 
     d->activeView = view;
-
-    if (focus && view && !view->widget()->hasFocus())
-        view->widget()->setFocus();
+    optionallyFocusViewWidget(view, focus);
 
     if(d->activeView != oldActiveView)
         emit activeViewChanged(view);
