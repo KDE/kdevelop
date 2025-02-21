@@ -56,7 +56,7 @@ QDebug operator<<(QDebug debug, PrintDockWidget p)
     return debug;
 }
 
-[[nodiscard]] Sublime::IdealDockWidget* existentDockWidgetForView(Sublime::View* view)
+[[nodiscard]] Sublime::IdealDockWidget* existentDockWidgetForView(const Sublime::View* view)
 {
     Q_ASSERT(view);
     const auto* const viewWidget = view->widget();

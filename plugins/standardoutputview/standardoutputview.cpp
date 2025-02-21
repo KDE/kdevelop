@@ -272,7 +272,7 @@ OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
     for (ToolViewData* td : m_toolViews) {
         if( td->outputdata.contains( outputId ) )
         {
-            for (Sublime::View* view : std::as_const(td->views)) {
+            for (const auto* const view : std::as_const(td->views)) {
                 if (auto* const widget = view->widget()) {
                     return qobject_cast<OutputWidget*>(widget);
                 }
@@ -287,7 +287,7 @@ void StandardOutputView::removeOutput( int outputId )
     for (ToolViewData* td : std::as_const(m_toolViews)) {
         const auto outputIt = td->outputdata.find(outputId);
         if (outputIt != td->outputdata.end()) {
-            for (Sublime::View* view : std::as_const(td->views)) {
+            for (const auto* const view : std::as_const(td->views)) {
                 if (auto* const widget = view->widget()) {
                     qobject_cast<OutputWidget*>(widget)->removeOutput(outputId);
                 }

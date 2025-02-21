@@ -33,7 +33,7 @@ struct WidgetFinder {
     Area::WalkerMode operator()(AreaIndex *index)
     {
         const auto& views = index->views();
-        const auto it = std::find_if(views.cbegin(), views.cend(), [this](View* v) {
+        const auto it = std::find_if(views.cbegin(), views.cend(), [this](const View* v) {
             return v->widget() == w;
         });
         if (it == views.cend()) {
