@@ -24,12 +24,17 @@
 namespace Sublime {
 
 struct WidgetFinder {
-    explicit WidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
+    explicit WidgetFinder(QWidget* _w)
+        : w(_w)
+        , view(nullptr)
+    {
+        Q_ASSERT(w);
+    }
     Area::WalkerMode operator()(AreaIndex *index)
     {
         const auto& views = index->views();
         const auto it = std::find_if(views.cbegin(), views.cend(), [this](View* v) {
-            return v->hasWidget() && v->widget() == w;
+            return v->widget() == w;
         });
         if (it == views.cend()) {
             return Area::ContinueWalker;
@@ -43,11 +48,15 @@ struct WidgetFinder {
 };
 
 struct ToolWidgetFinder {
-    explicit ToolWidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
+    explicit ToolWidgetFinder(QWidget* _w)
+        : w(_w)
+        , view(nullptr)
+    {
+        Q_ASSERT(w);
+    }
     Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
     {
-        if (v->hasWidget() && (v->widget() == w))
-        {
+        if (v->widget() == w) {
             view = v;
             return Area::StopWalker;
         }

@@ -79,8 +79,12 @@ private:
     {
         // an event may arrive when m_dock->view()->widget() is already destroyed
         // so check for event type first.
-        if (event->type() == QEvent::EnabledChange && watched == m_dock->view()->widget()) {
-            refreshText();
+        if (event->type() == QEvent::EnabledChange) {
+            const auto* const widget = m_dock->view()->widget();
+            Q_ASSERT(widget);
+            if (watched == widget) {
+                refreshText();
+            }
         }
 
         return QAction::eventFilter(watched, event);

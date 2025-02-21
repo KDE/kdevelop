@@ -67,6 +67,7 @@ void TestShellDocumentOperation::testClosing()
         QCOMPARE(area->views().count(), 1);
         QPointer<Sublime::View> the_view = area->views().at(0);
         QPointer<QWidget> the_widget = the_view->widget();
+        QVERIFY(the_widget);
         documentController->openDocuments().at(0)->close(IDocument::Discard);
         QCOMPARE(the_view.data(), (Sublime::View*)nullptr);
         QCOMPARE(the_widget.data(), (QWidget*)nullptr);
@@ -87,6 +88,7 @@ void TestShellDocumentOperation::testClosing()
         qDebug() << this << "see views " << area->views().at(0)
                      << " " << area->views().at(1);
         QPointer<QWidget> the_widget = the_view->widget();
+        QVERIFY(the_widget);
         doc2->close(IDocument::Discard);
         QCOMPARE(the_view.data(), (Sublime::View*)nullptr);
         QCOMPARE(the_widget.data(), (QWidget*)nullptr);

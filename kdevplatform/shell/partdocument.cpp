@@ -176,7 +176,10 @@ IDocument::DocumentState PartDocument::state() const
 void PartDocument::activate(Sublime::View *activeView, KParts::MainWindow *mainWindow)
 {
     Q_UNUSED(mainWindow);
-    KParts::Part *part = partForView(activeView->widget());
+
+    auto* const widget = activeView->widget();
+    Q_ASSERT(widget);
+    auto* const part = partForView(widget);
     if (Core::self()->partController()->activePart() != part)
         Core::self()->partController()->setActivePart(part);
     notifyActivated();
