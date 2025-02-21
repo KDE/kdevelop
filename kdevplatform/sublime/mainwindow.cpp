@@ -109,9 +109,7 @@ QList<View*> MainWindow::topViews() const
     QList<View*> topViews;
     const auto views = d->area->views();
     for (View* view : views) {
-        if(view->hasWidget())
-        {
-            QWidget* widget = view->widget();
+        if (const auto* const widget = view->widget()) {
             if(widget->parent() && widget->parent()->parent())
             {
                 auto* container = qobject_cast<Container*>(widget->parent()->parent());
@@ -178,8 +176,8 @@ void MainWindow::focusEditor()
     if (!d->activeView) {
         return;
     }
-    if (d->activeView->hasWidget()) {
-        d->activeView->widget()->setFocus(Qt::ShortcutFocusReason);
+    if (auto* const widget = d->activeView->widget()) {
+        widget->setFocus(Qt::ShortcutFocusReason);
     }
 }
 
@@ -246,7 +244,9 @@ void MainWindow::activateView(Sublime::View* view, bool focus)
         return;
     }
 
-    (*containerIt)->setCurrentWidget(view->widget());
+    auto* const widget = view->widget();
+    Q_ASSERT(widget);
+    (*containerIt)->setCurrentWidget(widget);
 
     setActiveView(view, focus);
     d->area->setActiveView(view);

@@ -205,8 +205,7 @@ void TestAreaOperation::checkArea1(MainWindow *mw)
     //check that all docks have their widgets
     const auto toolDocks = mw->toolDocks();
     for (View* dock : toolDocks) {
-        //QVERIFY(dock->widget() != 0);
-        QVERIFY(dock->hasWidget());
+        QVERIFY(dock->widget());
     }
     QCOMPARE(toolDocks.count(), area->toolViews().count());
 
@@ -235,8 +234,7 @@ void TestAreaOperation::checkArea2(MainWindow *mw)
     //check that all docks have their widgets
     const auto toolDocks = mw->toolDocks();
     for (View* dock : toolDocks) {
-        //QVERIFY(dock->widget() != 0);
-        QVERIFY(dock->hasWidget());
+        QVERIFY(dock->widget());
     }
     QCOMPARE(toolDocks.count(), area->toolViews().count());
 
@@ -305,14 +303,13 @@ void TestAreaOperation::areaCloning()
 }
 
 /*! Functor used by areaSwitchingInSameMainWindow()
-    Walks all Views and checks if they got a widget.
-    hasWidget will be set to false if any View lacks a widget.*/
+    Walks all Views and checks if they got a widget.*/
 struct AreaWidgetChecker {
     AreaWidgetChecker() = default;
     Area::WalkerMode operator()(AreaIndex *index)
     {
         for (View* view : std::as_const(index->views())) {
-            if (!view->hasWidget()) {
+            if (!view->widget()) {
                 failureMessage += view->objectName() + " has no widget\n";
                 foundViewWithoutWidget = true;
             }
@@ -321,7 +318,7 @@ struct AreaWidgetChecker {
     }
     Area::WalkerMode operator()(View *view, Sublime::Position)
     {
-        if (!view->hasWidget()) {
+        if (!view->widget()) {
             foundViewWithoutWidget = true;
             failureMessage += view->objectName() + " has no widget\n";
         }
@@ -583,6 +580,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QVERIFY(pContainer);
 
     // verify that the current active widget in the container is the one in activeview (m_pView111)
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
 
     // activate the second tab of the area (view212)
@@ -592,6 +590,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QCOMPARE(mw.activeView(), m_pView121);
 
     // check if the container's current widget was updated to the active view's
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
 
     // now, create a split view of the active view (m_pView121)
@@ -634,6 +633,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QVERIFY(pSecondContainer->hasWidget(m_pView131->widget()));
 
     // the active widget should be the current widget of the second container
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pSecondContainer->currentWidget(), mw.activeView()->widget());
 
     ////////////////////////////////////////////////////////////////////////////
@@ -644,9 +644,11 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QCOMPARE(mw.activeView(), pNewView);
 
     // the active widget should be the current widget of the new container
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pFirstContainer->currentWidget(), mw.activeView()->widget());
 
     // the current widget of the old container should have remained view121's
+    QVERIFY(m_pView121->widget());
     QCOMPARE(pSecondContainer->currentWidget(), m_pView121->widget());
 
     ////////////////////////////////////////////////////////////////////////////
@@ -668,6 +670,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QCOMPARE(mw.activeView(), m_pView121);
 
     // check also the container current widget
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
 }
 

@@ -332,7 +332,10 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         Sublime::View* activeView = d->activeView;
 
         for (View* view : std::as_const(index->views())) {
-            QWidget *widget = view->widget(container);
+            auto* widget = view->widget();
+            if (!widget) {
+                widget = view->initializeWidget(container);
+            }
 
             if (widget)
             {
@@ -389,8 +392,9 @@ void MainWindowPrivate::clearArea()
     //widget. this reparenting is necessary when switching areas inside the same mainwindow
     const auto views = area->views();
     for (View* view : views) {
-        if (view->hasWidget())
-            view->widget()->setParent(nullptr);
+        if (auto* const widget = view->widget()) {
+            widget->setParent(nullptr);
+        }
     }
     cleanCentralWidget();
     m_mainWindow->setActiveView(nullptr);
@@ -478,8 +482,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
     const bool wasActive = m_mainWindow->activeView() == view;
 
-    if (view->hasWidget()) {
-        auto* const viewWidget = view->widget();
+    if (auto* const viewWidget = view->widget()) {
         widgetToView.remove(viewWidget);
         container->removeWidget(viewWidget);
         viewWidget->setParent(nullptr);

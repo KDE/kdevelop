@@ -9,8 +9,6 @@
 #include "document.h"
 #include "tooldocument.h"
 
-#include <debug.h>
-
 #include <QWidget>
 
 namespace Sublime {
@@ -62,26 +60,28 @@ Document *View::document() const
     return d->doc;
 }
 
-QWidget *View::widget(QWidget *parent)
+QWidget* View::widget() const
+{
+    Q_D(const View);
+
+    return d->widget;
+}
+
+QWidget* View::initializeWidget(QWidget* parent)
 {
     Q_D(View);
 
-    if (!d->widget)
-    {
-        if (!parent) {
-            qCWarning(SUBLIME) << "creating a widget for view" << d->doc->documentSpecifier()
-                               << "without a parent => possibly unintentionally";
-        }
+    Q_ASSERT(!d->widget);
+    d->widget = createWidget(parent);
 
-        d->widget = createWidget(parent);
-        // if we own this widget, we will also delete it and ideally would disconnect
-        // the following connect before doing that. For that though we would need to store
-        // a reference to the connection.
-        // As the d object still exists in the destructor when we delete the widget
-        // this lambda method though can be still safely executed, so we spare ourselves such disconnect.
-        connect(d->widget, &QWidget::destroyed,
-                this, [this] { Q_D(View); d->unsetWidget(); });
-    }
+    // if we own this widget, we will also delete it and ideally would disconnect
+    // the following connect before doing that. For that though we would need to store
+    // a reference to the connection.
+    // As the d object still exists in the destructor when we delete the widget
+    // this lambda method though can be still safely executed, so we spare ourselves such disconnect.
+    connect(d->widget, &QWidget::destroyed,
+            this, [this] { Q_D(View); d->unsetWidget(); });
+
     return d->widget;
 }
 
@@ -90,13 +90,6 @@ QWidget *View::createWidget(QWidget *parent)
     Q_D(View);
 
     return d->doc->createViewWidget(parent);
-}
-
-bool View::hasWidget() const
-{
-    Q_D(const View);
-
-    return d->widget != nullptr;
 }
 
 void View::requestRaise()

@@ -863,7 +863,8 @@ QList< IDocument * > KDevelop::DocumentController::visibleDocumentsInWindow(Main
         if (auto* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
             const auto views = sdoc->views();
             auto hasViewInWindow = std::any_of(views.begin(), views.end(), [&](Sublime::View* view) {
-                return (view->hasWidget() && view->widget()->window() == mw);
+                const auto* const widget = view->widget();
+                return widget && widget->window() == mw;
             });
             if (hasViewInWindow) {
                 list.append(doc);

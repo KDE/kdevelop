@@ -273,10 +273,12 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
     const QList<Sublime::View*> views = activeArea()->toolViews();
     for (Sublime::View* view : views) {
         auto* doc = qobject_cast<Sublime::ToolDocument*>(view->document());
-        if(doc && doc->title() == name && view->widget()) {
+        if (doc && doc->title() == name) {
+            auto* const widget = view->widget();
+            Q_ASSERT(widget);
             if(flags & Raise)
                 view->requestRaise();
-            return view->widget();
+            return widget;
         }
     }
 
@@ -291,8 +293,10 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
         }
 
         Sublime::View* view = addToolViewToArea(factory, doc, activeArea());
-        if(view)
+        if (view) {
             ret = view->widget();
+            Q_ASSERT(ret);
+        }
 
         if(flags & Raise)
             findToolView(name, factory, Raise);
@@ -310,7 +314,9 @@ void UiController::raiseToolView(QWidget* toolViewWidget)
 
     const QList<Sublime::View*> views = activeArea()->toolViews();
     const auto it = std::find_if(views.cbegin(), views.cend(), [toolViewWidget](Sublime::View* view) {
-        return view->widget() == toolViewWidget;
+        const auto* const widget = view->widget();
+        Q_ASSERT(widget);
+        return widget == toolViewWidget;
     });
     if (it != views.cend()) {
         (*it)->requestRaise();
@@ -358,8 +364,10 @@ void UiController::slotActiveToolViewChanged(Sublime::View* view)
     }
 
     // record the last active tool view action listener
-    if (qobject_cast<IToolViewActionListener*>(view->widget())) {
-        d->activeActionListener = view->widget();
+    auto* const widget = view->widget();
+    Q_ASSERT(widget);
+    if (qobject_cast<IToolViewActionListener*>(widget)) {
+        d->activeActionListener = widget;
     }
 }
 
@@ -374,6 +382,7 @@ void UiController::toolViewVisibilityRestored(const QList<Sublime::View*>& visib
     for (auto* const view : visibleToolViews) {
         Q_ASSERT(view);
         auto* const widget = view->widget();
+        Q_ASSERT(widget);
         if (qobject_cast<IToolViewActionListener*>(widget)) {
             d->activeActionListener = widget;
             break; // only one action listener can be active at a time, so no need to keep looking for another one

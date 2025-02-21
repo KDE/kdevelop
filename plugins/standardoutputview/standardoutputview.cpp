@@ -189,9 +189,8 @@ void StandardOutputView::raiseOutput(int outputId)
     for (const auto* toolViewData : std::as_const(m_toolViews)) {
         if (toolViewData->outputdata.contains(outputId)) {
             for (Sublime::View* v : std::as_const(toolViewData->views)) {
-                if( v->hasWidget() )
-                {
-                    auto* w = qobject_cast<OutputWidget*>( v->widget() );
+                if (auto* const widget = v->widget()) {
+                    auto* const w = qobject_cast<OutputWidget*>(widget);
                     w->raiseOutput( outputId );
                     v->requestRaise();
                 }
@@ -253,9 +252,8 @@ void StandardOutputView::removeToolView(int toolViewId)
         ToolViewData* td = *toolViewIt;
         const auto views = td->views;
         for (Sublime::View* view : views) {
-            if( view->hasWidget() )
-            {
-                auto* outputWidget = qobject_cast<OutputWidget*>( view->widget() );
+            if (auto* const widget = view->widget()) {
+                auto* const outputWidget = qobject_cast<OutputWidget*>(widget);
                 for (auto it = td->outputdata.keyBegin(), end = td->outputdata.keyEnd(); it != end; ++it) {
                     outputWidget->removeOutput(*it);
                 }
@@ -275,8 +273,9 @@ OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
         if( td->outputdata.contains( outputId ) )
         {
             for (Sublime::View* view : std::as_const(td->views)) {
-                if( view->hasWidget() )
-                    return qobject_cast<OutputWidget*>( view->widget() );
+                if (auto* const widget = view->widget()) {
+                    return qobject_cast<OutputWidget*>(widget);
+                }
             }
         }
     }
@@ -289,8 +288,9 @@ void StandardOutputView::removeOutput( int outputId )
         const auto outputIt = td->outputdata.find(outputId);
         if (outputIt != td->outputdata.end()) {
             for (Sublime::View* view : std::as_const(td->views)) {
-                if( view->hasWidget() )
-                    qobject_cast<OutputWidget*>( view->widget() )->removeOutput( outputId );
+                if (auto* const widget = view->widget()) {
+                    qobject_cast<OutputWidget*>(widget)->removeOutput(outputId);
+                }
             }
             td->outputdata.erase(outputIt);
         }

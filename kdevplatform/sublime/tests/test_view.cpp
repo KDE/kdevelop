@@ -23,13 +23,14 @@ void TestView::widgetDeletion()
 
     View *view = doc->createView();
     //create the widget
-    view->widget();
-    QVERIFY(view->hasWidget());
+    const auto* const widget = view->initializeWidget(nullptr);
+    QVERIFY(widget);
+    QCOMPARE(view->widget(), widget);
     QCOMPARE(view->widget()->metaObject()->className(), "QTextEdit");
 
     //delete the widget and check that view knows about that
     delete view->widget();
-    QVERIFY(!view->hasWidget());
+    QVERIFY(!view->widget());
 }
 
 class Test: public View {
