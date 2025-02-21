@@ -122,7 +122,6 @@ private Q_SLOTS:
     void updateAreaSwitcher(Sublime::Area *area);
     void widgetCloseRequest(QWidget* widget);
 
-    void focusEditor();
     void selectNextDock();
     void selectPreviousDock();
 

@@ -125,8 +125,6 @@ private:
 
     void showDockWidget(IdealDockWidget* dock, bool show);
 
-    void focusEditor();
-
     /**
      * Update the checked state of the Show Dock action for a given area when
      * the checked state of a tool view action in the same area becomes @p checked.
