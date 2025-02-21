@@ -219,7 +219,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
       });
     }
 
-    dock->setWindowIcon(view->widget()->windowIcon());
+    dock->setWindowIcon(w->windowIcon());
     dock->setFocusProxy(dock->widget());
 
     addBarWidgetAction(area, dock, view);
