@@ -391,7 +391,7 @@ void MainWindowPrivate::clearArea()
     //reparent all view widgets to 0 to prevent their deletion together with central
     //widget. this reparenting is necessary when switching areas inside the same mainwindow
     const auto views = area->views();
-    for (View* view : views) {
+    for (const auto* const view : views) {
         if (auto* const widget = view->widget()) {
             widget->setParent(nullptr);
         }

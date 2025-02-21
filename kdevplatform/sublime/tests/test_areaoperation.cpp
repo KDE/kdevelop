@@ -203,7 +203,7 @@ void TestAreaOperation::checkArea1(MainWindow *mw)
     Area *area = mw->area();
     //check that all docks have their widgets
     const auto toolDocks = mw->toolDocks();
-    for (View* dock : toolDocks) {
+    for (const auto* const dock : toolDocks) {
         QVERIFY(dock->widget());
     }
     QCOMPARE(toolDocks.count(), area->toolViews().count());
@@ -232,7 +232,7 @@ void TestAreaOperation::checkArea2(MainWindow *mw)
     Area *area = mw->area();
     //check that all docks have their widgets
     const auto toolDocks = mw->toolDocks();
-    for (View* dock : toolDocks) {
+    for (const auto* const dock : toolDocks) {
         QVERIFY(dock->widget());
     }
     QCOMPARE(toolDocks.count(), area->toolViews().count());
@@ -307,7 +307,7 @@ struct AreaWidgetChecker {
     AreaWidgetChecker() = default;
     Area::WalkerMode operator()(AreaIndex *index)
     {
-        for (View* view : std::as_const(index->views())) {
+        for (const auto* const view : std::as_const(index->views())) {
             if (!view->widget()) {
                 failureMessage += view->objectName() + " has no widget\n";
                 foundViewWithoutWidget = true;
@@ -315,7 +315,7 @@ struct AreaWidgetChecker {
         }
         return Area::ContinueWalker;
     }
-    Area::WalkerMode operator()(View *view, Sublime::Position)
+    Area::WalkerMode operator()(const View* view, Sublime::Position)
     {
         if (!view->widget()) {
             foundViewWithoutWidget = true;
@@ -512,7 +512,7 @@ toolview1.4.1 [ right ]\n\
     //check that mainwindow has newly added tool view
     {
     const auto toolDocks = mw.toolDocks();
-    for (View* dock : toolDocks) {
+    for (const auto* const dock : toolDocks) {
         QVERIFY(dock->widget() != nullptr);
     }
     QCOMPARE(toolDocks.count(), m_area1->toolViews().count());
@@ -533,7 +533,7 @@ toolview1.2.2 [ bottom ]\n\
     //check that mainwindow has newly added tool view
     {
     const auto toolDocks = mw.toolDocks();
-    for (View* dock : toolDocks) {
+    for (const auto* const dock : toolDocks) {
         QVERIFY(dock->widget() != nullptr);
     }
     QCOMPARE(toolDocks.count(), m_area1->toolViews().count());
