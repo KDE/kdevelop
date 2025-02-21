@@ -49,6 +49,8 @@
 #include "settings/documentationpreferences.h"
 #include "settings/runtimespreferences.h"
 
+#include <algorithm>
+
 namespace KDevelop {
 
 class UiControllerPrivate {
@@ -307,11 +309,11 @@ void UiController::raiseToolView(QWidget* toolViewWidget)
         return;
 
     const QList<Sublime::View*> views = activeArea()->toolViews();
-    for (Sublime::View* view : views) {
-        if(view->widget() == toolViewWidget) {
-            view->requestRaise();
-            return;
-        }
+    const auto it = std::find_if(views.cbegin(), views.cend(), [toolViewWidget](Sublime::View* view) {
+        return view->widget() == toolViewWidget;
+    });
+    if (it != views.cend()) {
+        (*it)->requestRaise();
     }
 }
 
