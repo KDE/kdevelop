@@ -136,17 +136,20 @@ void TestViewActivation::viewActivation()
     QFocusEvent focusEvent(QEvent::FocusIn);
     //now post events to the widgets and see if mainwindow has the right active views
     //activate view
+    QVERIFY(view212->widget());
     qApp->sendEvent(view212->widget(), &focusEvent);
     QString failMsg = QStringLiteral("\nWas expecting %1 to be active but got %2").
                       arg(view212->objectName(), mw->activeView()->objectName());
     QVERIFY2(mw->activeView() == view212, failMsg.toLatin1().data());
 
     //activate tool view and check that both view and tool view are active
+    QVERIFY(viewT31->widget());
     qApp->sendEvent(viewT31->widget(), &focusEvent);
     QCOMPARE(mw->activeView(), view212);
     QCOMPARE(mw->activeToolView(), viewT31);
 
     //active another view
+    QVERIFY(view241->widget());
     qApp->sendEvent(view241->widget(), &focusEvent);
     QCOMPARE(mw->activeView(), view241);
     QCOMPARE(mw->activeToolView(), viewT31);

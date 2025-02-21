@@ -105,7 +105,7 @@ void TestDocument::viewDeletion()
     Document *doc = new ToolDocument(QStringLiteral("tool"), &controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool")));
 
     View *view = doc->createView();
-    view->widget();
+    QVERIFY(view->initializeWidget(nullptr));
     QCOMPARE(doc->views().count(), 1);
 
     delete view;

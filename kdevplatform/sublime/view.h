@@ -25,8 +25,8 @@ class ViewPrivate;
 @short View - the wrapper to the widget that knows about its document
 
 Views are the convenient way to manage a widget. It is specifically designed to be
-light and fast. Use @ref Document::createView() to get the new view for the document
-and call @ref View::widget() to create and get the actual widget.
+light and fast. Use Document::createView() to get a new view for a document. Call View::initializeWidget()
+to create an actual widget and View::widget() to retrieve the widget created earlier.
 
 It is not possible to create a view by hand. You need either subclass it or use a Document.
 
@@ -39,18 +39,34 @@ class KDEVPLATFORMSUBLIME_EXPORT View: public QObject {
 public:
     ~View() override;
 
-    /**@return the toolbar actions for this view, this needs to be called _after_ the first call to widget() */
+    /**
+     * @return the toolbar actions for this view
+     *
+     * @pre widget() is not null
+     */
     QList<QAction*> toolBarActions() const;
-
-    /**@return the toolbar actions for this view, this needs to be called _after_ the first call to widget() */
+    /**
+     * @return the context menu actions for this view
+     *
+     * @pre widget() is not null
+     */
     QList<QAction*> contextMenuActions() const;
 
     /**@return the document for this view.*/
     Document *document() const;
-    /**@return widget for this view (creates it if it's not yet created).*/
-    QWidget *widget(QWidget *parent = nullptr);
-    /**@return true if this view has an initialized widget.*/
-    bool hasWidget() const;
+
+    /**
+     * @return the widget for this view or @c nullptr if the widget has not been initialized
+     */
+    [[nodiscard]] QWidget* widget() const;
+
+    /**
+     * Create a widget for this view with a given parent and return it.
+     *
+     * @pre !widget()
+     * @post widget() equals the pointer returned by this function
+     */
+    QWidget* initializeWidget(QWidget* parent);
 
     /// Retrieve information to be placed in the status bar.
     virtual QString viewStatus() const;

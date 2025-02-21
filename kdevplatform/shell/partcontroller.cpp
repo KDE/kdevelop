@@ -104,10 +104,12 @@ void PartController::setShowTextEditorStatusBar(bool show)
     for (Sublime::Area* area : areas) {
         const auto views = area->views();
         for (Sublime::View* view : views) {
-            if (!view->hasWidget())
+            auto* const widget = view->widget();
+            if (!widget) {
                 continue;
+            }
 
-            auto textView = qobject_cast<KTextEditor::View*>(view->widget());
+            auto* const textView = qobject_cast<KTextEditor::View*>(widget);
             if (textView) {
                 textView->setStatusBarEnabled(show);
             }

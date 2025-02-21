@@ -59,9 +59,10 @@ QDebug operator<<(QDebug debug, PrintDockWidget p)
 [[nodiscard]] Sublime::IdealDockWidget* existentDockWidgetForView(Sublime::View* view)
 {
     Q_ASSERT(view);
-    Q_ASSERT(view->hasWidget());
+    const auto* const viewWidget = view->widget();
+    Q_ASSERT(viewWidget);
 
-    auto* const viewParent = view->widget()->parentWidget();
+    auto* const viewParent = viewWidget->parentWidget();
     auto* dockWidget = qobject_cast<Sublime::IdealDockWidget*>(viewParent);
     if (!dockWidget) {
         // a tool view widget with a toolbar lives in a QMainWindow that lives in a dock widget
@@ -179,10 +180,14 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     dock->setObjectName(documentTitle + QLatin1Char('_') + sublimeArea->objectName());
 
     KAcceleratorManager::setNoAccel(dock);
-    QWidget *w = view->widget(dock);
 
-    // If w->parent() is null, it means that the view->widget(dock) call above returned
-    // an existing widget instead of creating a new one with dock as its parent. Either
+    auto* w = view->widget();
+    if (!w) {
+        w = view->initializeWidget(dock);
+    }
+
+    // If w->parent() is null, it means that the view->widget() call above returned
+    // an existing widget. Either
     // dock or a new QMainWindow toolView will become the widget's parent in the code below.
 
     qCDebug(SUBLIME) << "creating dock widget" << PrintDockWidget{dock} << "in" << area
