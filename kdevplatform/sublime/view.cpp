@@ -6,17 +6,14 @@
 
 #include "view.h"
 
-#include <QWidget>
-
 #include "document.h"
 #include "tooldocument.h"
 
 #include <debug.h>
 
-namespace Sublime {
+#include <QWidget>
 
-class View;
-class Document;
+namespace Sublime {
 
 class ViewPrivate
 {
