@@ -124,15 +124,6 @@ void Area::initialize()
 {
     Q_D(Area);
 
-    connect(this, &Area::viewAdded,
-            d->controller, &Controller::notifyViewAdded);
-    connect(this, &Area::aboutToRemoveView,
-            d->controller, &Controller::notifyViewRemoved);
-    connect(this, &Area::toolViewAdded,
-            d->controller, &Controller::notifyToolViewAdded);
-    connect(this, &Area::aboutToRemoveToolView,
-            d->controller, &Controller::notifyToolViewRemoved);
-
     /* In theory, ownership is passed to us, so should not bother detecting
     deletion outside.  */
     // Functor will be called after destructor has run -> capture controller pointer by value

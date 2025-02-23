@@ -14,6 +14,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iassistant.h>
 #include <sublime/controller.h>
+#include <sublime/sublimedefs.h>
 
 class QListWidgetItem;
 
