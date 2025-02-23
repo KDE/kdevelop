@@ -62,9 +62,6 @@ public:
     void scrollOutputTo( int outputId, const QModelIndex& idx ) override;
     void setTitle(int outputId, const QString& title) override;
 
-public Q_SLOTS:
-    void removeSublimeView( Sublime::View* );
-
 Q_SIGNALS:
     void activated( const QModelIndex& );
 
