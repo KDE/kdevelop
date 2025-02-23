@@ -68,6 +68,19 @@ public:
      */
     QWidget* initializeWidget(QWidget* parent);
 
+    /**
+     * Set the widget for this view to @p widget.
+     *
+     * Use this function to reuse a single widget for multiple views.
+     *
+     * @param widget a non-null widget created by another view that has the same document()
+     *
+     * @pre this view does not take ownership of its widget (DoNotTakeOwnership)
+     * @pre !widget()
+     * @post widget() equals @p widget
+     */
+    void setSharedWidget(QWidget* widget);
+
     /// Retrieve information to be placed in the status bar.
     virtual QString viewStatus() const;
 

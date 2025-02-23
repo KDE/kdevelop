@@ -32,6 +32,7 @@
 
 #include <algorithm>
 #include <array>
+#include <utility>
 
 namespace {
 [[nodiscard]] QString dockWidgetAreaName(const Sublime::IdealDockWidget& dockWidget)
@@ -119,6 +120,170 @@ QDebug operator<<(QDebug debug, PrintDockWidget p)
 
 namespace Sublime {
 
+/**
+ * A cache of tool view widgets reused for all sublime areas.
+ *
+ * This class keeps track of tool view widget use counts in order to reuse a single tool view widget
+ * for all sublime areas rather than create a new one for each area. This reuse is possible
+ * because the previous area disowns all tool view widgets before the next area adopts them.
+ *
+ * @todo (if/when IdealController starts supporting multiple view widgets per tool document):
+ *       remove the enableMultipleToolViewWidgets workarounds from TestAreaOperation and TestViewActivation.
+ */
+class ToolViewWidgetCache
+{
+public:
+    /**
+     * Make sure that the widget for a given view is initialized.
+     *
+     * If the widget for @p view is uninitialized, either set it to the cached widget for @p view.document() and add one
+     * more cache use or, if the cache has no such widget, initialize with a given parent and insert it into the cache.
+     *
+     * @return {non-null @p view.widget(), \<whether the widget was just created\>}
+     */
+    std::pair<QWidget*, bool> prepareViewWidget(View& view, QWidget* parent);
+
+    /**
+     * Remove one cache use of the widget for a given view.
+     *
+     * @pre @p view.widget() is not null and is present in the cache
+     *
+     * @return whether the widget is now unused and should be destroyed by the caller
+     */
+    [[nodiscard]] bool disuse(const View& view);
+
+    /**
+     * Remove the cache entry for a given document if present.
+     *
+     * @param document a non-null tool document
+     *
+     * @return the widget of the removed cache entry that should be destroyed
+     *         by the caller or @c nullptr if no such cache entry
+     */
+    [[nodiscard]] QWidget* remove(const Document* document);
+
+private:
+    class ToolViewWidget
+    {
+    public:
+        [[nodiscard]] QWidget* widget() const
+        {
+            assertConsistent();
+            return m_widget;
+        }
+        [[nodiscard]] int useCount() const
+        {
+            assertConsistent();
+            return m_useCount;
+        }
+
+        void initializeWidget(QWidget* widget)
+        {
+            Q_ASSERT(m_useCount == 0);
+            Q_ASSERT(!m_widget);
+            Q_ASSERT(widget);
+            m_widget = widget;
+            m_useCount = 1;
+        }
+
+        void addUse()
+        {
+            assertHasWidget();
+            ++m_useCount;
+        }
+        void removeUse()
+        {
+            --m_useCount;
+            assertHasWidget();
+        }
+
+    private:
+        void assertConsistent() const
+        {
+            Q_ASSERT(m_useCount >= 0);
+            Q_ASSERT((m_widget == nullptr) == (m_useCount == 0));
+        }
+        void assertHasWidget() const
+        {
+            Q_ASSERT(m_useCount > 0);
+            Q_ASSERT(m_widget);
+        }
+
+        QWidget* m_widget = nullptr;
+        int m_useCount = 0;
+    };
+
+    QHash<const Document*, ToolViewWidget> m_widgets;
+};
+
+std::pair<QWidget*, bool> ToolViewWidgetCache::prepareViewWidget(View& view, QWidget* parent)
+{
+    const auto* const document = view.document();
+    Q_ASSERT(document);
+
+    if (auto* const widget = view.widget()) {
+        Q_ASSERT(m_widgets.value(document).widget() == widget);
+        qCDebug(SUBLIME) << "the view already has a tool view widget" << document->documentSpecifier();
+        return {widget, false};
+    }
+
+    auto& cachedWidget = m_widgets[document];
+
+    if (auto* const widget = cachedWidget.widget()) {
+        cachedWidget.addUse();
+        view.setSharedWidget(widget);
+        qCDebug(SUBLIME).nospace() << "reusing an existing tool view widget " << document->documentSpecifier()
+                                   << ", use count: " << cachedWidget.useCount();
+        return {widget, false};
+    }
+
+    auto* const widget = view.initializeWidget(parent);
+    Q_ASSERT(widget);
+    cachedWidget.initializeWidget(widget);
+    qCDebug(SUBLIME) << "created a new tool view widget" << document->documentSpecifier();
+    return {widget, true};
+}
+
+bool ToolViewWidgetCache::disuse(const View& view)
+{
+    Q_ASSERT(view.widget());
+    const auto* const document = view.document();
+    Q_ASSERT(document);
+
+    const auto it = m_widgets.find(document);
+    Q_ASSERT(it != m_widgets.end());
+    Q_ASSERT(it->widget() == view.widget());
+
+    if (it->useCount() == 1) {
+        m_widgets.erase(it);
+        qCDebug(SUBLIME) << "destroying a no longer used tool view widget" << document->documentSpecifier();
+        return true;
+    }
+
+    it->removeUse();
+    qCDebug(SUBLIME).nospace() << "keeping a still used tool view widget " << document->documentSpecifier()
+                               << ", use count: " << it->useCount();
+    return false;
+}
+
+QWidget* ToolViewWidgetCache::remove(const Document* document)
+{
+    Q_ASSERT(document);
+
+    const auto it = m_widgets.constFind(document);
+    if (it == m_widgets.cend()) {
+        qCDebug(SUBLIME) << "no tool view widget to destroy for the removed tool view" << document->documentSpecifier();
+        return nullptr;
+    }
+    qCDebug(SUBLIME).nospace() << "destroying the tool view widget for the removed tool view "
+                               << document->documentSpecifier() << ", use count: " << it->useCount();
+
+    auto* const widget = it->widget();
+    Q_ASSERT(widget);
+    m_widgets.erase(it);
+    return widget;
+}
+
 class IdealToolBar : public QToolBar
 {
     Q_OBJECT
@@ -167,6 +332,7 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow)
     // never hide the bottom toolbar, because it contains the status bar
     , m_bottomToolBar{new IdealToolBar(i18n("Bottom Button Bar"), false, m_bottomBarWidget, mainWindow)}
     , m_bottomStatusBarLocation{m_bottomBarWidget->corner()}
+    , m_toolViewWidgetCache(new ToolViewWidgetCache)
 {
     forEachButtonBarWidget([this](IdealButtonBarWidget& buttonBarWidget) {
         connect(&buttonBarWidget, &IdealButtonBarWidget::customContextMenuRequested, this,
@@ -220,19 +386,17 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     dock->setArea(sublimeArea);
     dock->setObjectName(documentTitle + QLatin1Char('_') + sublimeArea->objectName());
 
+    qCDebug(SUBLIME) << "creating dock widget" << PrintDockWidget{dock} << "in" << area;
+
     KAcceleratorManager::setNoAccel(dock);
 
-    auto* viewWidget = view->widget();
-    if (!viewWidget) {
-        viewWidget = view->initializeWidget(dock);
-    }
+    const auto [viewWidget, justCreatedWidget] = m_toolViewWidgetCache->prepareViewWidget(*view, dock);
 
-    // If viewWidget->parent() is null, it means that the view->widget() call above returned
-    // an existing widget. Either
-    // dock or a new QMainWindow toolView will become the widget's parent in the code below.
-
-    qCDebug(SUBLIME) << "creating dock widget" << PrintDockWidget{dock} << "in" << area
-                     << (viewWidget->parent() ? "" : "(reparenting)");
+    // Either dock or a new QMainWindow toolView will become the view widget's parent in the code below.
+    // Unless the view widget was just created, its previous dock widget (grand)parent must have been destroyed
+    // by now and the view widget itself must have been disowned by setting its parent to nullptr.
+    // If not, the existing (grand)parent dock widget and dock will conflict over the widget.
+    Q_ASSERT(justCreatedWidget || !viewWidget->parent());
 
     dock->setWidget(widgetForDockWidget(*m_mainWindow, *view, viewWidget, documentTitle));
     dock->setWindowIcon(viewWidget->windowIcon());
@@ -506,10 +670,27 @@ void IdealController::removeView(View* view, bool nondestructive)
     barForDockArea(dock->dockWidgetArea())->removeAction(action);
     m_view_to_action.erase(viewIt);
 
-    if (nondestructive)
+    if (nondestructive || !m_toolViewWidgetCache->disuse(*view)) {
+        // prevent destroying view->widget() along with its (grand)parent dock widget
         view->widget()->setParent(nullptr);
+    }
 
     delete dock;
+}
+
+void IdealController::toolViewRemoved(const Document* document)
+{
+    // Removing a tool view from all areas (e.g. when a plugin is unloaded possibly on KDevelop exit)
+    // normally destroys the tool view widget, but not if it is marked as used by a non-current sublime area
+    // because its cache use count stays positive in this case. The tool document is about to be destroyed, so
+    // remove the no longer usable cache entry and destroy the tool view widget in order to avoid leaking them.
+
+    const auto* const widget = m_toolViewWidgetCache->remove(document);
+    // The previous dock widget (grand)parent of the view widget must have been destroyed by now, and the
+    // view widget itself must have been destroyed or disowned by setting its parent to nullptr.
+    // If not, destroying the view widget here steals from its current (grand)parent dock widget.
+    Q_ASSERT(!widget || !widget->parent());
+    delete widget;
 }
 
 template<typename ToolViewUser>

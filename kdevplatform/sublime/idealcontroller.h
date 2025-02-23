@@ -15,6 +15,8 @@
 #include <QHash>
 #include <QList>
 
+#include <memory>
+
 class KActionMenu;
 class KConfigGroup;
 
@@ -23,11 +25,13 @@ class QDockWidget;
 namespace Sublime {
 
 class Area;
+class Document;
 class View;
 class MainWindow;
 class IdealButtonBarWidget;
 class IdealDockWidget;
 class IdealToolBar;
+class ToolViewWidgetCache;
 
 class IdealController: public QObject
 {
@@ -50,6 +54,11 @@ public:
         is not deleted, as is left with NULL parent.
         Otherwise, it's deleted.  */
     void removeView(View* view, bool nondestructive = false);
+
+    /**
+     * This function should be invoked when @p document's tool view is removed.
+     */
+    void toolViewRemoved(const Document* document);
 
     /**
      * @return the list of currently shown tool views
@@ -170,6 +179,8 @@ private:
     /** Map from View to an action that shows/hides
         the IdealDockWidget containing that view.  */
     QHash<View*, QAction*> m_view_to_action;
+
+    const std::unique_ptr<ToolViewWidgetCache> m_toolViewWidgetCache;
 
     KActionMenu* m_docks;
 

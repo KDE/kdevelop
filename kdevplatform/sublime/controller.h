@@ -18,6 +18,7 @@ namespace Sublime {
 
 class Area;
 class AreaIndex;
+class Document;
 class MainWindow;
 class ControllerPrivate;
 
@@ -147,6 +148,12 @@ protected:
 Q_SIGNALS:
     void mainWindowAdded(Sublime::MainWindow*);
     void areaCreated(Sublime::Area* area);
+
+    /**
+     * Derived classes must emit this signal after removing a tool view
+     * from all areas but before destroying the tool document @p document.
+     */
+    void toolViewRemoved(Sublime::Document* document);
 
 private:
     void init();

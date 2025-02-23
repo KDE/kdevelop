@@ -97,6 +97,8 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     idealController = new IdealController(m_mainWindow);
 
+    connect(controller, &Controller::toolViewRemoved, idealController, &IdealController::toolViewRemoved);
+
     centralWidget = new QWidget;
     centralWidget->setObjectName(QStringLiteral("centralWidget"));
     auto* layout = new QVBoxLayout(centralWidget);
