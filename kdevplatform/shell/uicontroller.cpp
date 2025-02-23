@@ -401,12 +401,10 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
     //delete the tooldocument
     Sublime::ToolDocument *doc = d->factoryDocuments.value(factory);
 
-    ///@todo adymo: on document deletion all its views shall be also deleted
     for (Sublime::View* view : doc->views()) {
         const auto areas = allAreas();
         for (Sublime::Area *area : areas) {
-            if (area->removeToolView(view))
-                view->deleteLater();
+            area->removeToolView(view);
         }
     }
 
