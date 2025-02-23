@@ -16,7 +16,6 @@
 
 #include "area.h"
 #include "view.h"
-#include "document.h"
 #include "mainwindow.h"
 #include <debug.h>
 
@@ -66,7 +65,6 @@ public:
     {
     }
 
-    QList<Document*> documents;
     QList<Area*> areas;
     QList<Area*> allAreas;
     QMap<QString, Area*> namedAreas;
@@ -130,13 +128,6 @@ void Controller::removeArea(Area *obj)
     Q_D(Controller);
 
     d->areas.removeAll(obj);
-}
-
-void Controller::removeDocument(Document *obj)
-{
-    Q_D(Controller);
-
-    d->documents.removeAll(obj);
 }
 
 void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
@@ -219,13 +210,6 @@ const QList<Area*> &Controller::allAreas() const
     return d->allAreas;
 }
 
-const QList<Document*> &Controller::documents() const
-{
-    Q_D(const Controller);
-
-    return d->documents;
-}
-
 void Controller::addDefaultArea(Area *area)
 {
     Q_D(Controller);
@@ -260,13 +244,6 @@ void Controller::addMainWindow(MainWindow* mainWindow)
     }
     showAreaInternal(d->mainWindowAreas[index][0], mainWindow);
     emit mainWindowAdded( mainWindow );
-}
-
-void Controller::addDocument(Document *document)
-{
-    Q_D(Controller);
-
-    d->documents.append(document);
 }
 
 void Controller::areaReleased()

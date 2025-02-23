@@ -27,9 +27,7 @@ void TestController::documentDeletion()
 {
     Controller controller;
     Document *doc = new ToolDocument(QStringLiteral("tool"), &controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool")));
-    QCOMPARE(controller.documents().count(), 1);
     delete doc;
-    QCOMPARE(controller.documents().count(), 0);
 }
 
 void TestController::areaDeletion()
