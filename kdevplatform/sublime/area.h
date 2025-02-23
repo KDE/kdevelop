@@ -133,7 +133,7 @@ public:
     void addToolView(View *toolView, Position defaultPosition);
 
     /**Removes the tool view from the area.*/
-    View* removeToolView(View *toolView);
+    void removeToolView(View* toolView);
 
     /**
      * Set the position of @p toolView to @p newPosition.
