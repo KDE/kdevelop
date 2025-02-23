@@ -52,34 +52,6 @@ private:
 StandardOutputView::StandardOutputView(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevstandardoutputview"), parent, metaData)
 {
-    connect(KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::aboutToRemoveView,
-            this, &StandardOutputView::removeSublimeView);
-
-}
-
-void StandardOutputView::removeSublimeView( Sublime::View* v )
-{
-    auto it = m_toolViews.begin();
-    while (it != m_toolViews.end()) {
-        ToolViewData* d = it.value();
-        bool isErased = false;
-        if( d->views.contains(v) )
-        {
-            if( d->views.count() == 1 )
-            {
-                isErased = true;
-                it = m_toolViews.erase(it);
-                m_ids.removeAll( d->toolViewId );
-                delete d;
-            } else
-            {
-                d->views.removeAll(v);
-            }
-        }
-        if (!isErased) {
-            ++it;
-        }
-    }
 }
 
 StandardOutputView::~StandardOutputView()
