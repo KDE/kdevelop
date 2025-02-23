@@ -74,6 +74,16 @@ QWidget* View::initializeWidget(QWidget* parent)
     return widget;
 }
 
+void View::setSharedWidget(QWidget* widget)
+{
+    Q_D(View);
+
+    Q_ASSERT(d->ws == DoNotTakeOwnership);
+    Q_ASSERT(!d->widget);
+    Q_ASSERT(widget);
+    d->widget = widget;
+}
+
 QWidget *View::createWidget(QWidget *parent)
 {
     Q_D(View);

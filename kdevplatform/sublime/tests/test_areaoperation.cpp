@@ -27,6 +27,9 @@
 
 #include "areaprinter.h"
 
+/// TODO (if/when IdealController starts supporting multiple view widgets per tool document): remove this workaround
+static constexpr auto enableMultipleToolViewWidgets = false;
+
 using namespace Sublime;
 
 struct ViewCounter {
@@ -80,9 +83,11 @@ void TestAreaOperation::init()
     view = tool2->createView();
     view->setObjectName(QStringLiteral("toolview1.2.1"));
     m_area1->addToolView(view, Sublime::Bottom);
-    view = tool2->createView();
-    view->setObjectName(QStringLiteral("toolview1.2.2"));
-    m_area1->addToolView(view, Sublime::Bottom);
+    if constexpr (enableMultipleToolViewWidgets) {
+        view = tool2->createView();
+        view->setObjectName(QStringLiteral("toolview1.2.2"));
+        m_area1->addToolView(view, Sublime::Bottom);
+    }
 
     m_area2 = new Area(m_controller, QStringLiteral("Area 2"));
     View *view211 = doc1->createView();
@@ -109,9 +114,11 @@ void TestAreaOperation::init()
     view = tool3->createView();
     view->setObjectName(QStringLiteral("toolview2.3.1"));
     m_area2->addToolView(view, Sublime::Top);
-    view = tool3->createView();
-    view->setObjectName(QStringLiteral("toolview2.3.2"));
-    m_area2->addToolView(view, Sublime::Top);
+    if constexpr (enableMultipleToolViewWidgets) {
+        view = tool3->createView();
+        view->setObjectName(QStringLiteral("toolview2.3.2"));
+        m_area2->addToolView(view, Sublime::Top);
+    }
 
     m_area3 = new Area(m_controller, QStringLiteral("Area 3"));
     View *view0 = doc1->createView();
@@ -157,11 +164,18 @@ void TestAreaOperation::areaConstruction()
 "));
     AreaToolViewsPrinter toolViewsPrinter1;
     m_area1->walkToolViews(toolViewsPrinter1, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
+    if constexpr (enableMultipleToolViewWidgets) {
+        QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
 toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
 "));
+    } else {
+        QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
+toolview1.1.1 [ left ]\n\
+toolview1.2.1 [ bottom ]\n\
+"));
+    }
 
     //check that area2 contents is properly initialised
     AreaViewsPrinter viewsPrinter2;
@@ -177,12 +191,20 @@ toolview1.2.2 [ bottom ]\n\
 "));
     AreaToolViewsPrinter toolViewsPrinter2;
     m_area2->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
+    if constexpr (enableMultipleToolViewWidgets) {
+        QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
 toolview2.1.1 [ bottom ]\n\
 toolview2.2.1 [ right ]\n\
 toolview2.3.1 [ top ]\n\
 toolview2.3.2 [ top ]\n\
 "));
+    } else {
+        QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
+toolview2.1.1 [ bottom ]\n\
+toolview2.2.1 [ right ]\n\
+toolview2.3.1 [ top ]\n\
+"));
+    }
 }
 
 void TestAreaOperation::mainWindowConstruction()
@@ -503,12 +525,20 @@ void TestAreaOperation::toolViewAdditionAndDeletion()
     //check that area is in valid state
     AreaToolViewsPrinter toolViewsPrinter1;
     m_area1->walkToolViews(toolViewsPrinter1, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
+    if constexpr (enableMultipleToolViewWidgets) {
+        QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
 toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
 toolview1.4.1 [ right ]\n\
 "));
+    } else {
+        QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
+toolview1.1.1 [ left ]\n\
+toolview1.2.1 [ bottom ]\n\
+toolview1.4.1 [ right ]\n\
+"));
+    }
 
     //check that mainwindow has newly added tool view
     {
@@ -525,11 +555,18 @@ toolview1.4.1 [ right ]\n\
     AreaToolViewsPrinter toolViewsPrinter2;
     //check that area doesn't have it anymore
     m_area1->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
+    if constexpr (enableMultipleToolViewWidgets) {
+        QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
 toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
 "));
+    } else {
+        QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
+toolview1.1.1 [ left ]\n\
+toolview1.2.1 [ bottom ]\n\
+"));
+    }
 
     //check that mainwindow has newly added tool view
     {

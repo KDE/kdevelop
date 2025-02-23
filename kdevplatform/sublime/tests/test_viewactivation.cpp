@@ -22,6 +22,9 @@
 #include <sublime/tooldocument.h>
 #include <tests/corelesshelpers.h>
 
+/// TODO (if/when IdealController starts supporting multiple view widgets per tool document): remove this workaround
+static constexpr auto enableMultipleToolViewWidgets = false;
+
 using namespace Sublime;
 
 template <class Widget>
@@ -62,7 +65,12 @@ void TestViewActivation::init()
     view211 = doc1->createView();
     view211->setObjectName(QStringLiteral("view211"));
     area->addView(view211);
-    view212 = doc1->createView();
+    if constexpr (enableMultipleToolViewWidgets) {
+        view212 = doc1->createView();
+    } else {
+        auto* const doc1_2 = new ToolDocument("doc1.2", controller, new SimpleToolWidgetFactory<QListView>("doc1.2"));
+        view212 = doc1_2->createView();
+    }
     view212->setObjectName(QStringLiteral("view212"));
     area->addView(view212);
     view221 = doc2->createView();
@@ -77,8 +85,10 @@ void TestViewActivation::init()
     area->addToolView(viewT21, Sublime::Right);
     viewT31 = tool3->createView();
     area->addToolView(viewT31, Sublime::Top);
-    viewT32 = tool3->createView();
-    area->addToolView(viewT32, Sublime::Top);
+    if constexpr (enableMultipleToolViewWidgets) {
+        viewT32 = tool3->createView();
+        area->addToolView(viewT32, Sublime::Top);
+    }
 }
 
 void TestViewActivation::cleanup()
