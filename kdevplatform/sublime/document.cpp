@@ -56,13 +56,6 @@ Document::Document(const QString &title, Controller *controller)
 
 Document::~Document() = default;
 
-Controller *Document::controller() const
-{
-    Q_D(const Document);
-
-    return d->controller;
-}
-
 View *Document::createView()
 {
     Q_D(Document);
@@ -134,7 +127,9 @@ QIcon Document::statusIcon() const
 
 void Document::closeViews()
 {
-    for (Sublime::Area* area : controller()->allAreas()) {
+    Q_D(const Document);
+
+    for (auto* const area : d->controller->allAreas()) {
         const QList<Sublime::View*> areaViews = area->views();
         for (Sublime::View* view : areaViews) {
             if (views().contains(view)) {
