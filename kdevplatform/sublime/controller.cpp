@@ -17,6 +17,8 @@
 #include "area.h"
 #include "view.h"
 #include "mainwindow.h"
+#include "sublimedefs.h"
+
 #include <debug.h>
 
 #include <algorithm>
@@ -383,27 +385,6 @@ const QList< MainWindow * > & Controller::mainWindows() const
     Q_D(const Controller);
 
     return d->controlledWindows;
-}
-
-
-void Controller::notifyToolViewRemoved(Sublime::View *view, Sublime::Position)
-{
-    emit aboutToRemoveToolView(view);
-}
-
-void Controller::notifyToolViewAdded(Sublime::View *view, Sublime::Position)
-{
-    emit toolViewAdded(view);
-}
-
-void Controller::notifyViewRemoved(Sublime::AreaIndex*, Sublime::View *view)
-{
-    emit aboutToRemoveView(view);
-}
-
-void Controller::notifyViewAdded(Sublime::AreaIndex*, Sublime::View *view)
-{
-    emit viewAdded(view);
 }
 
 void Controller::loadSettings()

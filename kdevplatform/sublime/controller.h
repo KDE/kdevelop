@@ -9,7 +9,6 @@
 
 #include <QObject>
 
-#include "sublimedefs.h"
 #include "sublimeexport.h"
 
 #include "mainwindowoperator.h"
@@ -145,17 +144,7 @@ protected:
     bool eventFilter(QObject *obj, QEvent *ev) override;
     void showAreaInternal(Area* area, MainWindow *mainWindow);
 
-private Q_SLOTS:
-    void notifyToolViewRemoved(Sublime::View *view, Sublime::Position);
-    void notifyToolViewAdded(Sublime::View *view, Sublime::Position);
-    void notifyViewRemoved(Sublime::AreaIndex*, Sublime::View *view);
-    void notifyViewAdded(Sublime::AreaIndex*, Sublime::View *view);
-
 Q_SIGNALS:
-    void aboutToRemoveToolView(Sublime::View*);
-    void toolViewAdded(Sublime::View*);
-    void aboutToRemoveView(Sublime::View*);
-    void viewAdded(Sublime::View*);
     void mainWindowAdded(Sublime::MainWindow*);
     void areaCreated(Sublime::Area* area);
 
