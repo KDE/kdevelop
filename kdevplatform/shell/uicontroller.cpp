@@ -407,6 +407,8 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
         }
     }
 
+    emit toolViewRemoved(doc);
+
     qCDebug(SHELL) << "UiController removed tool view" << doc->documentSpecifier();
 
     d->factoryDocuments.remove(factory);
