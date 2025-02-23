@@ -43,9 +43,6 @@ public:
     /**@return the list of all views in all areas for this document.*/
     const QList<View*> &views() const;
 
-    /**@return the controller for this document.*/
-    Controller *controller() const;
-
     enum TitleType { Normal, Extended};
     /**@return the document title.*/
     virtual QString title(TitleType type = Normal) const;
