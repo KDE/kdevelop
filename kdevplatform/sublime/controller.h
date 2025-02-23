@@ -19,7 +19,6 @@ namespace Sublime {
 
 class Area;
 class AreaIndex;
-class Document;
 class MainWindow;
 class ControllerPrivate;
 
@@ -131,9 +130,6 @@ public:
         area private to each main window.  */
     const QList<Area*> &allAreas() const;
 
-    /**@return the list of documents created in this controller.*/
-    const QList<Document*> &documents() const;
-
     bool openAfterCurrent() const;
     bool arrangeBuddies() const;
 
@@ -167,18 +163,12 @@ private:
     void init();
 
     void removeArea(Sublime::Area*); // called by Sublime::Area
-    void removeDocument(Sublime::Document*); // called by Sublime::Document
-
-    /**Adds the document to the controller, used by Document class.
-    @todo adymo: refactor*/
-    void addDocument(Document *document);
 
 private:
     const QScopedPointer<class ControllerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(Controller)
 
     friend class Area;
-    friend class Document;
 };
 
 }
