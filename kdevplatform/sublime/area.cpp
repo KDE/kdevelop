@@ -238,12 +238,12 @@ void Sublime::Area::raiseToolView(View * toolView)
     emit requestToolViewRaise(toolView);
 }
 
-View* Area::removeToolView(View *view)
+void Area::removeToolView(View* view)
 {
     Q_D(Area);
 
     if (!d->toolViews.contains(view))
-        return nullptr;
+        return;
 
     emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
     QString id = view->document()->documentSpecifier();
@@ -251,7 +251,6 @@ View* Area::removeToolView(View *view)
     d->desiredToolViews.remove(id);
     d->toolViews.removeAll(view);
     d->toolViewPositions.remove(view);
-    return view;
 }
 
 void Area::setToolViewPosition(View* toolView, Position newPosition)
