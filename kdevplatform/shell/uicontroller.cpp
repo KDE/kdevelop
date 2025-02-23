@@ -330,9 +330,10 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory, 
     if (!factory)
         return;
 
-    qCDebug(SHELL) ;
     auto *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
+
+    qCDebug(SHELL) << "UiController added tool view" << doc->documentSpecifier();
 
     /* Until areas are restored, we don't know which views should be really
        added, and which not, so we just record view availability.  */
@@ -397,8 +398,6 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
     if (!factory)
         return;
 
-    qCDebug(SHELL) ;
-    //delete the tooldocument
     Sublime::ToolDocument *doc = d->factoryDocuments.value(factory);
 
     for (Sublime::View* view : doc->views()) {
@@ -407,6 +406,8 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
             area->removeToolView(view);
         }
     }
+
+    qCDebug(SHELL) << "UiController removed tool view" << doc->documentSpecifier();
 
     d->factoryDocuments.remove(factory);
     delete doc;
