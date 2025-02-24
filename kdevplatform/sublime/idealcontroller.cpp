@@ -56,6 +56,47 @@ QDebug operator<<(QDebug debug, PrintDockWidget p)
     return debug;
 }
 
+[[nodiscard]] QWidget* widgetForDockWidget(const Sublime::MainWindow& mainWindow, const Sublime::View& view,
+                                           QWidget* viewWidget, const QString& toolViewTitle)
+{
+    Q_ASSERT(viewWidget);
+    Q_ASSERT(view.widget() == viewWidget);
+
+    const auto toolBarActions = view.toolBarActions();
+    if (toolBarActions.empty()) {
+        return viewWidget;
+    }
+
+    auto* const toolView = new QMainWindow();
+    auto* const toolBar = new QToolBar(toolView);
+
+    const auto iconSize = mainWindow.style()->pixelMetric(QStyle::PM_SmallIconSize);
+    toolBar->setIconSize(QSize(iconSize, iconSize));
+    toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    toolBar->setWindowTitle(i18nc("@title:window", "%1 Toolbar", toolViewTitle));
+    toolBar->setFloatable(false);
+    toolBar->setMovable(false);
+    toolBar->addActions(toolBarActions);
+
+    toolView->setCentralWidget(viewWidget);
+    toolView->setFocusProxy(viewWidget);
+    toolView->addToolBar(toolBar);
+
+    static const auto configGroupName = QStringLiteral("UiSettings/Docks/ToolbarEnabled");
+    const auto& configEntryKey = toolViewTitle;
+
+    const KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
+    toolBar->setVisible(cg.readEntry(configEntryKey, true));
+
+    const auto* const toggleViewAction = toolBar->toggleViewAction();
+    QObject::connect(toggleViewAction, &QAction::toggled, toggleViewAction, [toggleViewAction, configEntryKey] {
+        KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
+        cg.writeEntry(configEntryKey, toggleViewAction->isChecked());
+    });
+
+    return toolView;
+}
+
 [[nodiscard]] Sublime::IdealDockWidget* existentDockWidgetForView(const Sublime::View* view)
 {
     Q_ASSERT(view);
@@ -193,37 +234,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     qCDebug(SUBLIME) << "creating dock widget" << PrintDockWidget{dock} << "in" << area
                      << (w->parent() ? "" : "(reparenting)");
 
-    QList<QAction *> toolBarActions = view->toolBarActions();
-    if (toolBarActions.isEmpty()) {
-      dock->setWidget(w);
-    } else {
-      auto* toolView = new QMainWindow();
-      auto *toolBar = new QToolBar(toolView);
-      int iconSize = m_mainWindow->style()->pixelMetric(QStyle::PM_SmallIconSize);
-      toolBar->setIconSize(QSize(iconSize, iconSize));
-      toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-      toolBar->setWindowTitle(i18nc("@title:window", "%1 Toolbar", documentTitle));
-      toolBar->setFloatable(false);
-      toolBar->setMovable(false);
-      toolBar->addActions(toolBarActions);
-      toolView->setCentralWidget(w);
-      toolView->setFocusProxy(w);
-      toolView->addToolBar(toolBar);
-      dock->setWidget(toolView);
-
-      static const auto configGroupName = QStringLiteral("UiSettings/Docks/ToolbarEnabled");
-      const auto& configEntryKey = documentTitle;
-
-      const KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
-      toolBar->setVisible(cg.readEntry(configEntryKey, true));
-
-      const auto* const toggleViewAction = toolBar->toggleViewAction();
-      connect(toggleViewAction, &QAction::toggled, toggleViewAction, [toggleViewAction, configEntryKey] {
-          KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
-          cg.writeEntry(configEntryKey, toggleViewAction->isChecked());
-      });
-    }
-
+    dock->setWidget(widgetForDockWidget(*m_mainWindow, *view, w, documentTitle));
     dock->setWindowIcon(w->windowIcon());
     dock->setFocusProxy(dock->widget());
 
