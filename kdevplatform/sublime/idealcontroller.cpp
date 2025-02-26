@@ -394,9 +394,9 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
     // Either dock or a new QMainWindow toolView will become the view widget's parent in the code below.
     // Unless the view widget was just created, its previous dock widget (grand)parent must have been destroyed
-    // by now and the view widget itself must have been disowned by setting its parent to nullptr.
+    // by now and the view widget itself must have been saved from destruction by setting its parent to m_mainWindow.
     // If not, the existing (grand)parent dock widget and dock will conflict over the widget.
-    Q_ASSERT(justCreatedWidget || !viewWidget->parent());
+    Q_ASSERT(justCreatedWidget || viewWidget->parent() == m_mainWindow);
 
     dock->setWidget(widgetForDockWidget(*m_mainWindow, *view, viewWidget, documentTitle));
     dock->setWindowIcon(viewWidget->windowIcon());
@@ -671,8 +671,9 @@ void IdealController::removeView(View* view, bool nondestructive)
     m_view_to_action.erase(viewIt);
 
     if (nondestructive || !m_toolViewWidgetCache->disuse(*view)) {
-        // prevent destroying view->widget() along with its (grand)parent dock widget
-        view->widget()->setParent(nullptr);
+        // Prevent destroying view->widget() along with its (grand)parent dock widget and
+        // make sure that the widget is destroyed on KDevelop exit along with its new parent m_mainWindow.
+        view->widget()->setParent(m_mainWindow);
     }
 
     delete dock;
@@ -687,9 +688,9 @@ void IdealController::toolViewRemoved(const Document* document)
 
     const auto* const widget = m_toolViewWidgetCache->remove(document);
     // The previous dock widget (grand)parent of the view widget must have been destroyed by now, and the
-    // view widget itself must have been destroyed or disowned by setting its parent to nullptr.
+    // view widget itself must have been destroyed or saved from destruction by setting its parent to m_mainWindow.
     // If not, destroying the view widget here steals from its current (grand)parent dock widget.
-    Q_ASSERT(!widget || !widget->parent());
+    Q_ASSERT(!widget || widget->parent() == m_mainWindow);
     delete widget;
 }
 
