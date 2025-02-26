@@ -50,9 +50,12 @@ public:
     QWidget *statusBarLocation() const;
     QAction* actionForView(View* view) const;
 
-    /** Remove view.  If nondestructive true, view->widget()
-        is not deleted, as is left with NULL parent.
-        Otherwise, it's deleted.  */
+    /**
+     * Remove a given tool view.
+     *
+     * @param nondestructive whether the current sublime area may have to use
+     *        @p view->widget() again and therefore wants to prevent its destruction
+     */
     void removeView(View* view, bool nondestructive = false);
 
     /**
