@@ -57,8 +57,19 @@ QDebug operator<<(QDebug debug, PrintDockWidget p)
     return debug;
 }
 
-[[nodiscard]] QWidget* widgetForDockWidget(const Sublime::MainWindow& mainWindow, const Sublime::View& view,
-                                           QWidget* viewWidget, const QString& toolViewTitle)
+/**
+ * If a given tool view has toolbar actions, create a new QMainWindow with a
+ * toolbar that displays the actions and with @p viewWidget as the central widget.
+ *
+ * @param mainWindow the main window ancestor of @p viewWidget
+ * @param view the tool view, for which a dock widget is being set up
+ * @param viewWidget just-created non-null @p view->widget()
+ * @param toolViewTitle the title of the tool view
+ *
+ * @return a widget that should become the dock widget's widget (@p viewWidget itself or its new QMainWindow parent)
+ */
+[[nodiscard]] QWidget* setUpWidgetForDockWidget(const Sublime::MainWindow& mainWindow, const Sublime::View& view,
+                                                QWidget* viewWidget, const QString& toolViewTitle)
 {
     Q_ASSERT(viewWidget);
     Q_ASSERT(view.widget() == viewWidget);
@@ -98,22 +109,65 @@ QDebug operator<<(QDebug debug, PrintDockWidget p)
     return toolView;
 }
 
-[[nodiscard]] Sublime::IdealDockWidget* existentDockWidgetForView(const Sublime::View* view)
+/**
+ * Return a widget that used to be and can again become a dock widget's widget
+ * (@p viewWidget itself or its QMainWindow parent).
+ *
+ * @param mainWindow the main window ancestor of @p viewWidget
+ * @param viewWidget non-null disowned tool view widget
+ */
+[[nodiscard]] QWidget* existentWidgetForDockWidget(const Sublime::MainWindow& mainWindow, QWidget* viewWidget)
+{
+    Q_ASSERT(viewWidget);
+
+    // The previous dock widget (grand)parent of the disowned view widget must have been destroyed by now, and
+    // the view widget itself must have been saved from destruction by setting its (grand)parent to the main window.
+    // If not, the caller of this function would be stealing the view widget from its current (grand)parent dock widget.
+
+    auto* const viewParent = viewWidget->parentWidget();
+    Q_ASSERT(viewParent);
+    if (viewParent == &mainWindow) {
+        return viewWidget;
+    }
+
+    // a tool view widget with a toolbar lives in a QMainWindow that lives in a dock widget
+    Q_ASSERT(qobject_cast<QMainWindow*>(viewParent));
+    Q_ASSERT(viewParent->parentWidget() == &mainWindow);
+    return viewParent;
+}
+
+struct DockWidgetInfo
+{
+    Sublime::IdealDockWidget* dockWidget;
+    QMainWindow* toolView;
+    QWidget* viewWidget;
+};
+
+/**
+ * @return the dock widget (grand)parent of @p view->widget(), the QMainWindow parent
+ *         of @p view->widget() if it has a toolbar, and @p view->widget() itself
+ *
+ * @pre @p view->widget() belongs to a dock widget
+ */
+[[nodiscard]] DockWidgetInfo existentDockWidgetForView(const Sublime::View* view)
 {
     Q_ASSERT(view);
-    const auto* const viewWidget = view->widget();
+    auto* const viewWidget = view->widget();
     Q_ASSERT(viewWidget);
 
     auto* const viewParent = viewWidget->parentWidget();
+    Q_ASSERT(viewParent);
     auto* dockWidget = qobject_cast<Sublime::IdealDockWidget*>(viewParent);
-    if (!dockWidget) {
-        // a tool view widget with a toolbar lives in a QMainWindow that lives in a dock widget
-        Q_ASSERT(qobject_cast<QMainWindow*>(viewParent));
-        dockWidget = qobject_cast<Sublime::IdealDockWidget*>(viewParent->parentWidget());
+    if (dockWidget) {
+        return {dockWidget, nullptr, viewWidget};
     }
 
+    // a tool view widget with a toolbar lives in a QMainWindow that lives in a dock widget
+    Q_ASSERT(qobject_cast<QMainWindow*>(viewParent) == viewParent);
+    auto* const toolView = static_cast<QMainWindow*>(viewParent);
+    dockWidget = qobject_cast<Sublime::IdealDockWidget*>(toolView->parentWidget());
     Q_ASSERT(dockWidget);
-    return dockWidget;
+    return {dockWidget, toolView, viewWidget};
 }
 
 } // unnamed namespace
@@ -391,14 +445,11 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     KAcceleratorManager::setNoAccel(dock);
 
     const auto [viewWidget, justCreatedWidget] = m_toolViewWidgetCache->prepareViewWidget(*view, dock);
+    auto* const widgetForDockWidget = justCreatedWidget
+        ? setUpWidgetForDockWidget(*m_mainWindow, *view, viewWidget, documentTitle)
+        : existentWidgetForDockWidget(*m_mainWindow, viewWidget);
 
-    // Either dock or a new QMainWindow toolView will become the view widget's parent in the code below.
-    // Unless the view widget was just created, its previous dock widget (grand)parent must have been destroyed
-    // by now and the view widget itself must have been saved from destruction by setting its parent to m_mainWindow.
-    // If not, the existing (grand)parent dock widget and dock will conflict over the widget.
-    Q_ASSERT(justCreatedWidget || viewWidget->parent() == m_mainWindow);
-
-    dock->setWidget(widgetForDockWidget(*m_mainWindow, *view, viewWidget, documentTitle));
+    dock->setWidget(widgetForDockWidget);
     dock->setWindowIcon(viewWidget->windowIcon());
     dock->setFocusProxy(dock->widget());
 
@@ -656,7 +707,7 @@ void IdealController::removeView(View* view, bool nondestructive)
 
     auto* const action = *viewIt;
     Q_ASSERT(action);
-    auto* const dock = existentDockWidgetForView(view);
+    const auto [dock, toolView, viewWidget] = existentDockWidgetForView(view);
 
     /* Hide the view, first.  This is a workaround -- if we
        try to remove IdealDockWidget without this, then eventually
@@ -671,9 +722,10 @@ void IdealController::removeView(View* view, bool nondestructive)
     m_view_to_action.erase(viewIt);
 
     if (nondestructive || !m_toolViewWidgetCache->disuse(*view)) {
-        // Prevent destroying view->widget() along with its (grand)parent dock widget and
-        // make sure that the widget is destroyed on KDevelop exit along with its new parent m_mainWindow.
-        view->widget()->setParent(m_mainWindow);
+        auto* const widgetToSave = toolView ? static_cast<QWidget*>(toolView) : viewWidget;
+        // Prevent destroying viewWidget and toolView along with their (grand)parent dock widget, and
+        // make sure that they are destroyed on KDevelop exit along with their new (grand)parent m_mainWindow.
+        widgetToSave->setParent(m_mainWindow);
     }
 
     delete dock;
@@ -685,13 +737,13 @@ void IdealController::toolViewRemoved(const Document* document)
     // normally destroys the tool view widget, but not if it is marked as used by a non-current sublime area
     // because its cache use count stays positive in this case. The tool document is about to be destroyed, so
     // remove the no longer usable cache entry and destroy the tool view widget in order to avoid leaking them.
+    // NOTE: the QMainWindow parent of a tool view widget with a toolbar is always created,
+    //       reused, and destroyed along with the tool view widget itself, including here.
 
-    const auto* const widget = m_toolViewWidgetCache->remove(document);
-    // The previous dock widget (grand)parent of the view widget must have been destroyed by now, and the
-    // view widget itself must have been destroyed or saved from destruction by setting its parent to m_mainWindow.
-    // If not, destroying the view widget here steals from its current (grand)parent dock widget.
-    Q_ASSERT(!widget || widget->parent() == m_mainWindow);
-    delete widget;
+    auto* const viewWidget = m_toolViewWidgetCache->remove(document);
+    if (viewWidget) {
+        delete existentWidgetForDockWidget(*m_mainWindow, viewWidget);
+    }
 }
 
 template<typename ToolViewUser>
@@ -717,7 +769,7 @@ QList<QDockWidget*> IdealController::shownButInvisibleFloatingDockWidgets() cons
 {
     QList<QDockWidget*> ret;
     forEachShownToolView([&ret](View* view) {
-        auto* const dockWidget = existentDockWidgetForView(view);
+        auto* const dockWidget = existentDockWidgetForView(view).dockWidget;
         if (dockWidget->isFloating() && !dockWidget->isVisible()) {
             ret.push_back(dockWidget);
         }
