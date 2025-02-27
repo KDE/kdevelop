@@ -222,20 +222,20 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
     KAcceleratorManager::setNoAccel(dock);
 
-    auto* w = view->widget();
-    if (!w) {
-        w = view->initializeWidget(dock);
+    auto* viewWidget = view->widget();
+    if (!viewWidget) {
+        viewWidget = view->initializeWidget(dock);
     }
 
-    // If w->parent() is null, it means that the view->widget() call above returned
+    // If viewWidget->parent() is null, it means that the view->widget() call above returned
     // an existing widget. Either
     // dock or a new QMainWindow toolView will become the widget's parent in the code below.
 
     qCDebug(SUBLIME) << "creating dock widget" << PrintDockWidget{dock} << "in" << area
-                     << (w->parent() ? "" : "(reparenting)");
+                     << (viewWidget->parent() ? "" : "(reparenting)");
 
-    dock->setWidget(widgetForDockWidget(*m_mainWindow, *view, w, documentTitle));
-    dock->setWindowIcon(w->windowIcon());
+    dock->setWidget(widgetForDockWidget(*m_mainWindow, *view, viewWidget, documentTitle));
+    dock->setWindowIcon(viewWidget->windowIcon());
     dock->setFocusProxy(dock->widget());
 
     addBarWidgetAction(area, dock, view);
