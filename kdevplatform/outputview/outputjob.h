@@ -48,8 +48,21 @@ public:
     void setTitle(const QString& title);
 
 protected:
-    /// NOTE: if a standard tool view is not set, a new unshared and unconfigurable tool view is created for the job.
+    /**
+     * Place the job's output into a given standard output tool view.
+     *
+     * If this function is called, calling setToolViewId(), setToolTitle(), setToolIcon(), setViewType(),
+     * and setOptions() is pointless because the standard tool view defines these values.
+     */
     void setStandardToolView(IOutputView::StandardToolView standard);
+    /**
+     * Set the tool view ID of a nonstandard tool view to a given value.
+     *
+     * This function must be called if and only if setStandardToolView() is not called.
+     *
+     * @param toolViewId a nonempty ID that identifies and allows to share a nonstandard tool view
+     */
+    void setToolViewId(const QString& toolViewId);
     void setToolTitle(const QString& title);
     void setToolIcon(const QIcon& icon);
     void setViewType(IOutputView::ViewType type);
@@ -80,7 +93,7 @@ protected:
     int outputId() const;
 
 private Q_SLOTS:
-    void outputViewRemoved(int , int id);
+    void outputViewRemoved(int id);
 
 private:
     const QScopedPointer<class OutputJobPrivate> d_ptr;

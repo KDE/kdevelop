@@ -24,6 +24,7 @@ public:
 
     int standardToolView = -1;
     QString title;
+    QString toolViewId;
     QString toolTitle;
     QIcon toolIcon;
     IOutputView::ViewType type = IOutputView::OneView;
@@ -54,17 +55,16 @@ void OutputJob::startOutput()
         auto* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
-            int tvid;
             if (d->standardToolView != -1) {
-                tvid = view->standardToolView(static_cast<IOutputView::StandardToolView>(d->standardToolView));
+                d->toolViewId = view->standardToolView(static_cast<IOutputView::StandardToolView>(d->standardToolView));
             } else {
-                tvid = view->registerToolView({}, d->toolTitle, d->type, d->toolIcon, d->options);
+                view->registerToolView(d->toolViewId, d->toolTitle, d->type, d->toolIcon, d->options);
             }
 
             if (d->title.isEmpty())
                 d->title = objectName();
 
-            d->outputId = view->registerOutputInToolView(tvid, d->title, d->behaviours);
+            d->outputId = view->registerOutputInToolView(d->toolViewId, d->title, d->behaviours);
 
             if (!d->outputModel) {
                 d->outputModel = new QStandardItemModel(nullptr);
@@ -81,7 +81,7 @@ void OutputJob::startOutput()
 
             if (d->killJobOnOutputClose) {
                 // can't use qt5 signal slot syntax here, IOutputView is no a QObject
-                connect(i, SIGNAL(outputRemoved(int,int)), this, SLOT(outputViewRemoved(int,int)));
+                connect(i, SIGNAL(outputRemoved(int)), this, SLOT(outputViewRemoved(int)));
             }
 
             if (d->verbosity == OutputJob::Verbose)
@@ -90,11 +90,10 @@ void OutputJob::startOutput()
     }
 }
 
-void OutputJob::outputViewRemoved(int toolViewId, int id)
+void OutputJob::outputViewRemoved(int id)
 {
     Q_D(OutputJob);
 
-    Q_UNUSED(toolViewId);
     if (id == d->outputId && d->killJobOnOutputClose) {
         // Make sure that the job emits result signal as the job
         // might be used in composite jobs and that one depends
@@ -193,6 +192,14 @@ void KDevelop::OutputJob::setStandardToolView(IOutputView::StandardToolView stan
     Q_D(OutputJob);
 
     d->standardToolView = standard;
+}
+
+void OutputJob::setToolViewId(const QString& toolViewId)
+{
+    Q_D(OutputJob);
+
+    Q_ASSERT(!toolViewId.isEmpty());
+    d->toolViewId = toolViewId;
 }
 
 void OutputJob::setToolTitle(const QString& title)

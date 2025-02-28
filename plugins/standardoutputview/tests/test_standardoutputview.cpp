@@ -28,7 +28,7 @@
 #include "../toolviewdata.h"
 
 namespace {
-QString toolViewConfigSubgroup()
+[[nodiscard]] QString toolViewId()
 {
     return QStringLiteral("test_toolview");
 }
@@ -83,38 +83,34 @@ OutputWidget* StandardOutputViewTest::toolViewPointer(const QString& toolViewTit
 
 void StandardOutputViewTest::testRegisterAndRemoveToolView()
 {
-    toolViewId = m_stdOutputView->registerToolView(toolViewConfigSubgroup(), toolViewTitle(),
-                                                   KDevelop::IOutputView::HistoryView);
+    m_stdOutputView->registerToolView(toolViewId(), toolViewTitle(), KDevelop::IOutputView::HistoryView);
     QVERIFY(toolViewPointer(toolViewTitle()));
 
-    // re-registering should return the same tool view instead of creating a new one
-    QCOMPARE(toolViewId,
-             m_stdOutputView->registerToolView(toolViewConfigSubgroup(), toolViewTitle(),
-                                               KDevelop::IOutputView::HistoryView));
+    // re-registering should reuse the same tool view instead of creating a new one
+    m_stdOutputView->registerToolView(toolViewId(), toolViewTitle(), KDevelop::IOutputView::HistoryView);
 
-    m_stdOutputView->removeToolView(toolViewId);
+    m_stdOutputView->removeToolView(toolViewId());
     QVERIFY(!toolViewPointer(toolViewTitle()));
 }
 
 void StandardOutputViewTest::testActions()
 {
-    toolViewId = m_stdOutputView->registerToolView(toolViewConfigSubgroup(), toolViewTitle(),
-                                                   KDevelop::IOutputView::MultipleView, QIcon());
+    m_stdOutputView->registerToolView(toolViewId(), toolViewTitle(), KDevelop::IOutputView::MultipleView, QIcon());
     OutputWidget* outputWidget = toolViewPointer(toolViewTitle());
     QVERIFY(outputWidget);
 
     QList<QAction*> actions = outputWidget->actions();
     QCOMPARE(actions.size(), 13);
 
-    m_stdOutputView->removeToolView(toolViewId);
+    m_stdOutputView->removeToolView(toolViewId());
     QVERIFY(!toolViewPointer(toolViewTitle()));
 
     QList<QAction*> addedActions;
     addedActions.append(new QAction(QStringLiteral("Action1"), this));
     addedActions.append(new QAction(QStringLiteral("Action2"), this));
-    toolViewId = m_stdOutputView->registerToolView(
-        toolViewConfigSubgroup(), toolViewTitle(), KDevelop::IOutputView::HistoryView, QIcon(),
-        KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction, addedActions);
+    m_stdOutputView->registerToolView(toolViewId(), toolViewTitle(), KDevelop::IOutputView::HistoryView, QIcon(),
+                                      KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction,
+                                      addedActions);
     outputWidget = toolViewPointer(toolViewTitle());
     QVERIFY(outputWidget);
 
@@ -123,20 +119,19 @@ void StandardOutputViewTest::testActions()
     QCOMPARE(actions[actions.size()-2]->text(), addedActions[0]->text());
     QCOMPARE(actions[actions.size()-1]->text(), addedActions[1]->text());
 
-    m_stdOutputView->removeToolView(toolViewId);
+    m_stdOutputView->removeToolView(toolViewId());
     QVERIFY(!toolViewPointer(toolViewTitle()));
 }
 
 void StandardOutputViewTest::testRegisterAndRemoveOutput()
 {
-    toolViewId = m_stdOutputView->registerToolView(toolViewConfigSubgroup(), toolViewTitle(),
-                                                   KDevelop::IOutputView::MultipleView, QIcon());
+    m_stdOutputView->registerToolView(toolViewId(), toolViewTitle(), KDevelop::IOutputView::MultipleView, QIcon());
     OutputWidget* outputWidget = toolViewPointer(toolViewTitle());
     QVERIFY(outputWidget);
 
     for(int i = 0; i < 5; i++)
     {
-        outputId[i] = m_stdOutputView->registerOutputInToolView(toolViewId, QStringLiteral("output%1").arg(i));
+        outputId[i] = m_stdOutputView->registerOutputInToolView(toolViewId(), QStringLiteral("output%1").arg(i));
     }
     for(int i = 0; i < 5; i++)
     {
@@ -149,18 +144,17 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
     }
     QCOMPARE(outputWidget->m_tabwidget->count(), 0);
 
-    m_stdOutputView->removeToolView(toolViewId);
+    m_stdOutputView->removeToolView(toolViewId());
     QVERIFY(!toolViewPointer(toolViewTitle()));
 
-    toolViewId = m_stdOutputView->registerToolView(
-        toolViewConfigSubgroup(), toolViewTitle(), KDevelop::IOutputView::HistoryView, QIcon(),
-        KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction);
+    m_stdOutputView->registerToolView(toolViewId(), toolViewTitle(), KDevelop::IOutputView::HistoryView, QIcon(),
+                                      KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction);
     outputWidget = toolViewPointer(toolViewTitle());
     QVERIFY(outputWidget);
 
     for(int i = 0; i < 5; i++)
     {
-        outputId[i] = m_stdOutputView->registerOutputInToolView(toolViewId, QStringLiteral("output%1").arg(i));
+        outputId[i] = m_stdOutputView->registerOutputInToolView(toolViewId(), QStringLiteral("output%1").arg(i));
     }
     for(int i = 0; i < 5; i++)
     {
@@ -172,14 +166,13 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
     }
     QCOMPARE(outputWidget->m_stackwidget->count(), 0);
 
-    m_stdOutputView->removeToolView(toolViewId);
+    m_stdOutputView->removeToolView(toolViewId());
     QVERIFY(!toolViewPointer(toolViewTitle()));
 }
 
 void StandardOutputViewTest::testSetModelAndDelegate()
 {
-    toolViewId = m_stdOutputView->registerToolView(toolViewConfigSubgroup(), toolViewTitle(),
-                                                   KDevelop::IOutputView::MultipleView, QIcon());
+    m_stdOutputView->registerToolView(toolViewId(), toolViewTitle(), KDevelop::IOutputView::MultipleView, QIcon());
     OutputWidget* outputWidget = toolViewPointer(toolViewTitle());
     QVERIFY(outputWidget);
 
@@ -188,7 +181,7 @@ void StandardOutputViewTest::testSetModelAndDelegate()
     QAbstractItemDelegate* delegate = new QItemDelegate;
     QPointer<QAbstractItemDelegate> checkDelegate(delegate);
 
-    outputId[0] = m_stdOutputView->registerOutputInToolView(toolViewId, QStringLiteral("output"));
+    outputId[0] = m_stdOutputView->registerOutputInToolView(toolViewId(), QStringLiteral("output"));
     m_stdOutputView->setModel(outputId[0], model);
     m_stdOutputView->setDelegate(outputId[0], delegate);
 
@@ -198,7 +191,7 @@ void StandardOutputViewTest::testSetModelAndDelegate()
     QVERIFY(model->parent()); // they have a parent (the outputdata), so parent() != 0x0
     QVERIFY(delegate->parent());
 
-    m_stdOutputView->removeToolView(toolViewId);
+    m_stdOutputView->removeToolView(toolViewId());
     QVERIFY(!toolViewPointer(toolViewTitle()));
 
     // view deleted, hence model + delegate deleted
@@ -209,8 +202,8 @@ void StandardOutputViewTest::testSetModelAndDelegate()
 void StandardOutputViewTest::testStandardToolViews()
 {
     QFETCH(KDevelop::IOutputView::StandardToolView, view);
-    int id = m_stdOutputView->standardToolView(view);
-    QVERIFY(id);
+    const auto id = m_stdOutputView->standardToolView(view);
+    QVERIFY(!id.isEmpty());
     QCOMPARE(id, m_stdOutputView->standardToolView(view));
 }
 

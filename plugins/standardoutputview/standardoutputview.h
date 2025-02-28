@@ -10,6 +10,8 @@
 
 #include <outputview/ioutputview.h>
 #include <interfaces/iplugin.h>
+
+#include <QHash>
 #include <QVariantList>
 
 template <typename T> class QList;
@@ -39,15 +41,15 @@ public:
                                 const QVariantList& args = QVariantList());
     ~StandardOutputView() override;
 
-    int standardToolView( KDevelop::IOutputView::StandardToolView view ) override;
-    int registerToolView(const QString& configSubgroupName, const QString& title,
-                         KDevelop::IOutputView::ViewType type = KDevelop::IOutputView::OneView,
-                         const QIcon& icon = QIcon(), KDevelop::IOutputView::Options option = ShowItemsButton,
-                         const QList<QAction*>& actionList = QList<QAction*>()) override;
+    QString standardToolView(StandardToolView view) override;
 
-    int registerOutputInToolView( int toolViewId, const QString& title,
-                                  KDevelop::IOutputView::Behaviours behaviour
-                                    = KDevelop::IOutputView::AllowUserClose ) override;
+    void registerToolView(const QString& toolViewId, const QString& title,
+                          KDevelop::IOutputView::ViewType type = KDevelop::IOutputView::OneView,
+                          const QIcon& icon = QIcon(), KDevelop::IOutputView::Options option = ShowItemsButton,
+                          const QList<QAction*>& actionList = QList<QAction*>()) override;
+
+    [[nodiscard]] int registerOutputInToolView(const QString& toolViewId, const QString& title,
+                                               Behaviours behaviour = AllowUserClose) override;
 
     void raiseOutput( int id ) override;
 
@@ -56,7 +58,7 @@ public:
 
     OutputWidget* outputWidgetForId( int outputId ) const;
 
-    void removeToolView(int toolViewId) override;
+    void removeToolView(const QString& toolViewId) override;
     void removeOutput( int outputId ) override;
 
     void setTitle(int outputId, const QString& title) override;
@@ -71,12 +73,14 @@ Q_SIGNALS:
      *       The hiding is necessary, because KDevelop::IOutputView does not inherit QObject,
      *       and thus cannot declare an actually working signal.
      */
-    void outputRemoved(int toolViewId, int outputId);
+    void outputRemoved(int outputId);
 
 private:
-    QMap<int, ToolViewData*> m_toolViews;
-    QMap<KDevelop::IOutputView::StandardToolView, int> m_standardViews;
-    int m_lastId = -1;
+    [[nodiscard]] ToolViewData* addToolView(const QString& toolViewId, const QString& title, ViewType type,
+                                            const QIcon& icon, Options option, const QList<QAction*>& actionList = {});
+
+    QHash<QString, ToolViewData*> m_toolViews;
+    int m_lastId = 0;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_STANDARDOUTPUTVIEW_H
