@@ -55,11 +55,13 @@ public:
 
     enum StandardToolView
     {
-        BuildView = 0 /**< the standard outputview for building output */,
-        RunView =   1 /**< the standard outputview for running apps */,
-        DebugView = 2 /**< the standard outputview for debugging apps */,
-        TestView  = 4 /**< the standard outputview for verbose test output */,
-        VcsView   = 8 /**< the standard outputview for VCS commands */
+        // clang-format off: keep the alignment of the documentation lines that share a prefix
+        BuildView       /**< the standard tool view for build output */,
+        RunView         /**< the standard tool view for program run output */,
+        DebugView       /**< the standard tool view for program debugging output */,
+        TestView        /**< the standard tool view for verbose test output */,
+        VcsView         /**< the standard tool view for VCS command output */,
+        // clang-format on
     };
 
     virtual ~IOutputView();
