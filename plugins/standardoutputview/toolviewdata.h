@@ -50,11 +50,10 @@ public:
     mutable QList<Sublime::View*> views;
     StandardOutputView* plugin;
     QMap<int, OutputData*> outputdata;
-    KDevelop::IOutputView::ViewType type;
-    QString configSubgroupName;
+    QString id;
     QString title;
     QIcon icon;
-    int toolViewId;
+    KDevelop::IOutputView::ViewType type;
     KDevelop::IOutputView::Options option;
     QList<QAction*> actionList;
 Q_SIGNALS:

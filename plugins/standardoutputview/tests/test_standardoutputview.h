@@ -33,7 +33,6 @@ private:
     KDevelop::TestCore* m_testCore;
     KDevelop::IOutputView* m_stdOutputView;
     KDevelop::UiController* m_controller;
-    int toolViewId;
     int outputId[5];
 
 private Q_SLOTS:
