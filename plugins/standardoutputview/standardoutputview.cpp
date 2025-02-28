@@ -193,7 +193,7 @@ void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* deleg
         }
     }
     if (!outputData) {
-        qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Trying to set model on unknown view-id:" << outputId;
+        qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Trying to set delegate on unknown view-id:" << outputId;
     } else {
         outputData->setDelegate(delegate);
     }
