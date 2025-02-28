@@ -119,7 +119,7 @@ int StandardOutputView::registerToolView(const QString& configSubgroupName, cons
     }
 
     // register new tool view
-    const int newid = m_ids.isEmpty() ? 0 : (m_ids.last() + 1);
+    const auto newid = ++m_lastId;
     qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Registering view" << title << "with type:" << type << "id:" << newid;
     auto* tvdata = new ToolViewData( this );
     tvdata->toolViewId = newid;
@@ -131,7 +131,6 @@ int StandardOutputView::registerToolView(const QString& configSubgroupName, cons
     tvdata->option = option;
     tvdata->actionList = actionList;
     core()->uiController()->addToolView( title, new OutputViewFactory( tvdata ) );
-    m_ids << newid;
     m_toolViews[newid] = tvdata;
     return newid;
 }
@@ -143,15 +142,7 @@ int StandardOutputView::registerOutputInToolView( int toolViewId,
     const auto toolViewIt = m_toolViews.constFind(toolViewId);
     if (toolViewIt == m_toolViews.constEnd())
         return -1;
-    int newid;
-    if( m_ids.isEmpty() )
-    {
-        newid = 0;
-    } else
-    {
-        newid = m_ids.last()+1;
-    }
-    m_ids << newid;
+    const auto newid = ++m_lastId;
     (*toolViewIt)->addOutput(newid, title, behaviour);
     return newid;
 }
