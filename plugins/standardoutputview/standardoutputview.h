@@ -75,8 +75,8 @@ Q_SIGNALS:
 
 private:
     QMap<int, ToolViewData*> m_toolViews;
-    QList<int> m_ids;
     QMap<KDevelop::IOutputView::StandardToolView, int> m_standardViews;
+    int m_lastId = -1;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_STANDARDOUTPUTVIEW_H
