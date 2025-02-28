@@ -57,6 +57,7 @@ public:
             // Create a custom output tool view instead of reusing the standard Build tool view
             // because there are many separate low-level Flatpak build jobs that run one after another
             // and would bury likely more interesting build outputs in the long output history.
+            setToolViewId(QStringLiteral("Flatpak"));
             setToolTitle(i18nc("@title:window", "Flatpak"));
             // TODO: set a Flatpak icon as the tool icon
             setViewType(IOutputView::HistoryView);
