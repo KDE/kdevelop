@@ -18,7 +18,6 @@
 
 class QString;
 class QAbstractItemModel;
-class QModelIndex;
 class QAbstractItemDelegate;
 class QAction;
 
@@ -106,8 +105,6 @@ public:
      * Raise a given view
      */
     virtual void raiseOutput( int outputId ) = 0;
-
-    virtual void scrollOutputTo( int outputId, const QModelIndex& ) = 0;
 
     /**
      * Sets the model of the registered output identified by @p outputId to @p model.

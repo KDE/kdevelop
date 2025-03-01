@@ -684,15 +684,6 @@ void OutputWidget::enableActions()
     }
 }
 
-void OutputWidget::scrollToIndex( const QModelIndex& idx )
-{
-    QWidget* w = currentWidget();
-    if( !w )
-        return;
-    auto *view = static_cast<QAbstractItemView*>(w);
-    view->scrollTo( idx );
-}
-
 void OutputWidget::copySelection()
 {
     QWidget* widget = currentWidget();

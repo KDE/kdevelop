@@ -57,7 +57,6 @@ public Q_SLOTS:
     void selectPreviousItem() override;
     void selectLastItem();
     void activate(const QModelIndex&);
-    void scrollToIndex( const QModelIndex& );
     void setTitle(int outputId, const QString& title);
 
 Q_SIGNALS:

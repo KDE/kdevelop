@@ -283,13 +283,6 @@ OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
     return nullptr;
 }
 
-void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )
-{
-    OutputWidget* widget = outputWidgetForId( outputId );
-    if( widget )
-        widget->scrollToIndex( idx );
-}
-
 void StandardOutputView::removeOutput( int outputId )
 {
     for (ToolViewData* td : std::as_const(m_toolViews)) {

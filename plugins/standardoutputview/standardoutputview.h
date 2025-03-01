@@ -59,7 +59,6 @@ public:
     void removeToolView(int toolViewId) override;
     void removeOutput( int outputId ) override;
 
-    void scrollOutputTo( int outputId, const QModelIndex& idx ) override;
     void setTitle(int outputId, const QString& title) override;
 
 public Q_SLOTS:
