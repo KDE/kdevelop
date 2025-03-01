@@ -25,3 +25,4 @@ Dependencies:
 
 Options:
   per-test-timeout: 200 # the 60-second default is not enough for test_gdb
+  require-passing-tests-on: ['@all']
