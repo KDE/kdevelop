@@ -561,7 +561,7 @@ msgstr "Trovi en teksto de nuna dokumentarpaĝo"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Debug"
-msgstr "Sencimigi"
+msgstr "Sencimigo"
 
 #: interfaces/contextmenuextension.cpp:134
 #, kde-format
@@ -1318,7 +1318,7 @@ msgstr "Averto"
 #: language/duchain/problem.cpp:194 shell/filteredproblemstore.cpp:157
 #, kde-format
 msgid "Hint"
-msgstr "Sugesto"
+msgstr "Helpeto"
 
 #: language/duchain/problem.cpp:203 shell/problem.cpp:76
 #, kde-format
@@ -2072,7 +2072,7 @@ msgstr "Saltas al la plenumata linio en la redaktilo."
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
-msgstr "Sencimigi"
+msgstr "Sencimigo"
 
 #: shell/debugcontroller.cpp:481 shell/runcontroller.cpp:440
 #, kde-format
@@ -3314,19 +3314,19 @@ msgstr "Venigi"
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
-msgstr "Sencimigi"
+msgstr "Sencimigo"
 
 #: shell/runcontroller.cpp:96
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
-msgstr "Profili"
+msgstr "Profilo"
 
 #: shell/runcontroller.cpp:105
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
-msgstr "Lanĉi"
+msgstr "Ruligi"
 
 #: shell/runcontroller.cpp:405
 #, kde-format
@@ -3387,7 +3387,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
-msgstr "Sencimigi"
+msgstr "Sencimigo"
 
 #. i18n("Profile Launch"), this);
 #. profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
@@ -4437,7 +4437,7 @@ msgstr "Analiziloj"
 #, kde-format
 msgctxt "@title:group"
 msgid "Runtimes"
-msgstr "Rultempaĵoj"
+msgstr "Rultempoj"
 
 #: shell/settings/pluginpreferences.cpp:45
 #, kde-format
@@ -6192,8 +6192,3 @@ msgstr "Diferenco Al Antaŭa"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferenco inter Revizioj"
-
-#~ msgid "%2"
-#~ msgid_plural "%2 (repeated %1 times)"
-#~ msgstr[0] "%2"
-#~ msgstr[1] "%2 (ripetita %1 fojojn)"
