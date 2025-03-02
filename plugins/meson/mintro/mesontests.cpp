@@ -14,8 +14,26 @@
 #include <outputview/outputexecutejob.h>
 #include <util/executecompositejob.h>
 
+#include <KLocalizedString>
+
 using namespace std;
 using namespace KDevelop;
+
+namespace {
+class MesonTestJob : public OutputExecuteJob
+{
+public:
+    explicit MesonTestJob(QObject* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Verbose)
+        : OutputExecuteJob(parent, verbosity)
+    {
+        setCapabilities(Killable);
+        setStandardToolView(IOutputView::RunView);
+        setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll);
+        setFilteringStrategy(OutputModel::NativeAppErrorFilter);
+        setProperties(DisplayStdout | DisplayStderr);
+    }
+};
+} // unnamed namespace
 
 // Class MesonTest
 
@@ -54,12 +72,12 @@ KJob* MesonTest::job(ITestSuite::TestJobVerbosity verbosity)
         Q_UNREACHABLE();
     }();
 
-    auto* job = new OutputExecuteJob(m_project, convVerbosity);
+    auto* const job = new MesonTestJob(m_project, convVerbosity);
     *job << m_command;
     if (!m_workDir.isEmpty()) {
         job->setWorkingDirectory(m_workDir.toUrl());
     }
-    job->setJobName(m_name);
+    job->setJobName(i18nc("%1 - test case name", "Meson Test \"%1\"", m_name));
     for (auto i = begin(m_env); i != end(m_env); ++i) {
         job->addEnvironmentOverride(i.key(), i.value());
     }
