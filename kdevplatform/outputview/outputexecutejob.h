@@ -41,15 +41,16 @@ public:
 
     enum JobProperty
     {
-        AppendProcessString   = 0x001, /**< Whether to append a process string to the user-specified job name */
-        NeedWorkingDirectory  = 0x002, /**< Whether to require a non-empty working directory to be provided */
-        CheckWorkingDirectory = 0x004, /**< Whether to check that the working directory actually exists (and not to create it if needed) */
-        PortableMessages      = 0x008, /**< Whether to set LC_MESSAGES=C in the process' environment */
-        DisplayStdout         = 0x010, /**< Whether to pass process' stdout to the output model */
-        DisplayStderr         = 0x020, /**< Whether to pass process' stderr to the output model */
-        NoSilentOutput        = 0x040, /**< Whether to call \ref startOutput() only if verbosity is \ref OutputJob::Verbose */
-        PostProcessOutput     = 0x080, /**< Whether to connect line maker's signals to \ref postProcessStdout() and \ref postProcessStderr() */
-        IsBuilderHint         = 0x100, /**< Whether to use builder-specific messages to talk to user (e. g. "build directory" instead of "working directory" */
+        // clang-format off: keep the alignment of the values and the documentation lines that share a prefix
+        NeedWorkingDirectory  = 0x001, /**< Whether to require a non-empty working directory to be provided */
+        PortableMessages      = 0x002, /**< Whether to set LC_MESSAGES=C in the process' environment */
+        DisplayStdout         = 0x004, /**< Whether to pass process' stdout to the output model */
+        DisplayStderr         = 0x008, /**< Whether to pass process' stderr to the output model */
+        PostProcessOutput     = 0x010, /**< Whether to connect line maker's signals to
+                                            postProcessStdout() and postProcessStderr() */
+        IsBuilderHint         = 0x020, /**< Whether to use builder-specific messages to talk to user
+                                            (e.g. "build directory" instead of "working directory") */
+        // clang-format on
     };
     Q_FLAGS(JobProperty JobProperties)
     Q_DECLARE_FLAGS(JobProperties, JobProperty)
