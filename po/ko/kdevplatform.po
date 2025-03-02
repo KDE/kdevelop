@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-02 00:39+0000\n"
 "PO-Revision-Date: 2024-08-21 00:35+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -2299,13 +2299,13 @@ msgstr ""
 "이 문서가 버전 관리되는 프로젝트에 속해 있지 않기 때문에 문서의 작성자를 표시"
 "할 수 없습니다."
 
-#: shell/editorconfigpage.cpp:94
+#: shell/editorconfigpage.cpp:44
 #, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
 msgstr "편집기"
 
-#: shell/editorconfigpage.cpp:104
+#: shell/editorconfigpage.cpp:54
 #, kde-format
 msgid "Configure Text Editor"
 msgstr "텍스트 편집기 설정"
@@ -2315,6 +2315,40 @@ msgstr "텍스트 편집기 설정"
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "환경 변수 설정"
+
+#: shell/ktexteditorpluginintegration.cpp:330
+#, kde-format
+msgctxt ""
+"%1 - the plugin name; %2 - the list of disabled languages; %3 - the "
+"environment variable name; %5 - whether the environment variable is "
+"currently set"
+msgid ""
+"The following languages are supported much better by dedicated KDevelop "
+"plugins, and so are disabled in the %1 plugin to prevent conflicts: <var>%2</"
+"var>. In order to compare the levels of support or work around severe bugs, "
+"disable the dedicated KDevelop plugin(s) and set the environment variable "
+"<var>%3</var> (<span style='color:%4'>%5</span>)."
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:338
+#, kde-format
+msgctxt "a certain environment variable is ..."
+msgid "currently set"
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:339
+#, kde-format
+msgctxt "a certain environment variable is ..."
+msgid "currently unset"
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:491
+#, fuzzy, kde-format
+#| msgctxt "@title:column"
+#| msgid "Message"
+msgctxt "@title:window"
+msgid "Messages"
+msgstr "메시지"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format

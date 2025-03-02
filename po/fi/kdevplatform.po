@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-02 00:39+0000\n"
 "PO-Revision-Date: 2024-11-15 18:23+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -2357,13 +2357,13 @@ msgstr ""
 "Tiedoston merkitseminen epäonnistui, koska se ei kuulu versionhallinnassa "
 "olevaan projektiin."
 
-#: shell/editorconfigpage.cpp:94
+#: shell/editorconfigpage.cpp:44
 #, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
 msgstr "Muokkain"
 
-#: shell/editorconfigpage.cpp:104
+#: shell/editorconfigpage.cpp:54
 #, kde-format
 msgid "Configure Text Editor"
 msgstr "Tekstimuokkaimen asetukset"
@@ -2373,6 +2373,39 @@ msgstr "Tekstimuokkaimen asetukset"
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "Ympäristömuuttujien asetukset"
+
+#: shell/ktexteditorpluginintegration.cpp:330
+#, kde-format
+msgctxt ""
+"%1 - the plugin name; %2 - the list of disabled languages; %3 - the "
+"environment variable name; %5 - whether the environment variable is "
+"currently set"
+msgid ""
+"The following languages are supported much better by dedicated KDevelop "
+"plugins, and so are disabled in the %1 plugin to prevent conflicts: <var>%2</"
+"var>. In order to compare the levels of support or work around severe bugs, "
+"disable the dedicated KDevelop plugin(s) and set the environment variable "
+"<var>%3</var> (<span style='color:%4'>%5</span>)."
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:338
+#, kde-format
+msgctxt "a certain environment variable is ..."
+msgid "currently set"
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:339
+#, kde-format
+msgctxt "a certain environment variable is ..."
+msgid "currently unset"
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:491
+#, fuzzy, kde-format
+#| msgid "Message"
+msgctxt "@title:window"
+msgid "Messages"
+msgstr "Viesti"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format

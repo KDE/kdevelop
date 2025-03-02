@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-02 00:39+0000\n"
 "PO-Revision-Date: 2024-08-24 12:00+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -2329,13 +2329,13 @@ msgstr ""
 "Could not annotate the document because it is not part of a version-"
 "controlled project."
 
-#: shell/editorconfigpage.cpp:94
+#: shell/editorconfigpage.cpp:44
 #, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
 msgstr "Editor"
 
-#: shell/editorconfigpage.cpp:104
+#: shell/editorconfigpage.cpp:54
 #, kde-format
 msgid "Configure Text Editor"
 msgstr "Configure Text Editor"
@@ -2345,6 +2345,41 @@ msgstr "Configure Text Editor"
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "Configure environment variables"
+
+#: shell/ktexteditorpluginintegration.cpp:330
+#, kde-format
+msgctxt ""
+"%1 - the plugin name; %2 - the list of disabled languages; %3 - the "
+"environment variable name; %5 - whether the environment variable is "
+"currently set"
+msgid ""
+"The following languages are supported much better by dedicated KDevelop "
+"plugins, and so are disabled in the %1 plugin to prevent conflicts: <var>%2</"
+"var>. In order to compare the levels of support or work around severe bugs, "
+"disable the dedicated KDevelop plugin(s) and set the environment variable "
+"<var>%3</var> (<span style='color:%4'>%5</span>)."
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:338
+#, kde-format
+msgctxt "a certain environment variable is ..."
+msgid "currently set"
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:339
+#, fuzzy, kde-format
+#| msgid "Current Run Target"
+msgctxt "a certain environment variable is ..."
+msgid "currently unset"
+msgstr "Current Run Target"
+
+#: shell/ktexteditorpluginintegration.cpp:491
+#, fuzzy, kde-format
+#| msgctxt "@title:column"
+#| msgid "Message"
+msgctxt "@title:window"
+msgid "Messages"
+msgstr "Message"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
@@ -7944,9 +7979,6 @@ msgstr "Difference between Revisions"
 
 #~ msgid "Execute program"
 #~ msgstr "Execute program"
-
-#~ msgid "Current Run Target"
-#~ msgstr "Current Run Target"
 
 #~ msgid "Target '%1' is not executable."
 #~ msgstr "Target '%1' is not executable."

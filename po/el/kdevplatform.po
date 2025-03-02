@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-02 00:39+0000\n"
 "PO-Revision-Date: 2024-09-20 13:57+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2371,13 +2371,13 @@ msgid ""
 "controlled project."
 msgstr ""
 
-#: shell/editorconfigpage.cpp:94
+#: shell/editorconfigpage.cpp:44
 #, fuzzy, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
 msgstr "Έ&ξοδος"
 
-#: shell/editorconfigpage.cpp:104
+#: shell/editorconfigpage.cpp:54
 #, fuzzy, kde-format
 #| msgid "Configure Editor..."
 msgid "Configure Text Editor"
@@ -2388,6 +2388,41 @@ msgstr "Διαμόρφωση κειμενογράφου..."
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "Διαμόρφωση μεταβλητών περιβάλλοντος"
+
+#: shell/ktexteditorpluginintegration.cpp:330
+#, kde-format
+msgctxt ""
+"%1 - the plugin name; %2 - the list of disabled languages; %3 - the "
+"environment variable name; %5 - whether the environment variable is "
+"currently set"
+msgid ""
+"The following languages are supported much better by dedicated KDevelop "
+"plugins, and so are disabled in the %1 plugin to prevent conflicts: <var>%2</"
+"var>. In order to compare the levels of support or work around severe bugs, "
+"disable the dedicated KDevelop plugin(s) and set the environment variable "
+"<var>%3</var> (<span style='color:%4'>%5</span>)."
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:338
+#, kde-format
+msgctxt "a certain environment variable is ..."
+msgid "currently set"
+msgstr ""
+
+#: shell/ktexteditorpluginintegration.cpp:339
+#, fuzzy, kde-format
+#| msgid "Current Run Target"
+msgctxt "a certain environment variable is ..."
+msgid "currently unset"
+msgstr "Τρέχων προορισμός εκτέλεσης"
+
+#: shell/ktexteditorpluginintegration.cpp:491
+#, fuzzy, kde-format
+#| msgctxt "@title:column"
+#| msgid "Message"
+msgctxt "@title:window"
+msgid "Messages"
+msgstr "Μήνυμα"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
@@ -8017,9 +8052,6 @@ msgstr "Διαφορά μεταξύ αναθεωρήσεων"
 
 #~ msgid "Execute program"
 #~ msgstr "Εκτέλεση προγράμματος"
-
-#~ msgid "Current Run Target"
-#~ msgstr "Τρέχων προορισμός εκτέλεσης"
 
 #~ msgid "Target '%1' is not executable."
 #~ msgstr "Ο προορισμός '%1' δεν είναι εκτελέσιμος."
