@@ -32,6 +32,20 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevDockerFactory, "kdevdocker.json", registerPlugin<
 
 using namespace KDevelop;
 
+namespace {
+class DockerBuildJob : public OutputExecuteJob
+{
+public:
+    explicit DockerBuildJob(QObject* parent = nullptr)
+        : OutputExecuteJob(parent)
+    {
+        setStandardToolView(IOutputView::BuildView);
+        setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll);
+        setProperties(DisplayStdout | DisplayStderr);
+    }
+};
+} // unnamed namespace
+
 DockerPlugin::DockerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& /*args*/)
     : KDevelop::IPlugin(QStringLiteral("kdevdocker"), parent, metaData)
     , m_settings(new DockerPreferencesSettings)
@@ -123,11 +137,8 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
                     QLineEdit::Normal, dir.lastPathSegment()
                 );
 
-                auto process = new OutputExecuteJob;
+                auto* const process = new DockerBuildJob(this);
                 process->setExecuteOnHost(true);
-                process->setProperties(OutputExecuteJob::DisplayStdout | OutputExecuteJob::DisplayStderr);
-                // TODO: call process->setStandardToolView(IOutputView::?); to prevent creating a new tool view for each
-                // job in OutputJob::startOutput(). Such nonstandard and unshared tool views are also not configurable.
                 *process << QStringList{QStringLiteral("docker"), QStringLiteral("build"), QStringLiteral("--tag"), name, dir.toLocalFile()};
                 connect(process, &KJob::finished, this, [name] (KJob* job) {
                     if (job->error() != 0)
