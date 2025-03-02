@@ -9,6 +9,7 @@
 #include "dockerpreferences.h"
 #include "dockerpreferencessettings.h"
 #include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/context.h>
@@ -39,6 +40,7 @@ public:
     explicit DockerBuildJob(QObject* parent = nullptr)
         : OutputExecuteJob(parent)
     {
+        setCapabilities(Killable);
         setStandardToolView(IOutputView::BuildView);
         setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll);
         setProperties(DisplayStdout | DisplayStderr);
@@ -140,13 +142,14 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
                 auto* const process = new DockerBuildJob(this);
                 process->setExecuteOnHost(true);
                 *process << QStringList{QStringLiteral("docker"), QStringLiteral("build"), QStringLiteral("--tag"), name, dir.toLocalFile()};
+                process->setJobName(i18nc("%1 - Docker tag name", "Docker Build \"%1\"", name));
                 connect(process, &KJob::finished, this, [name] (KJob* job) {
                     if (job->error() != 0)
                         return;
 
                     ICore::self()->runtimeController()->addRuntimes(new DockerRuntime(name));
                 });
-                process->start();
+                ICore::self()->runController()->registerJob(process);
             });
             ext.addAction(KDevelop::ContextMenuExtension::RunGroup, action);
         }
