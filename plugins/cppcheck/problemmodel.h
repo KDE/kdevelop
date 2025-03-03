@@ -29,7 +29,7 @@ public:
 
     void addProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
-    void setProblems();
+    void setProblems(bool jobSucceeded);
 
     void reset();
     void reset(KDevelop::IProject* project, const QString& path);

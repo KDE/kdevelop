@@ -111,9 +111,15 @@ void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
     }
 }
 
-void ProblemModel::setProblems()
+void ProblemModel::setProblems(bool jobSucceeded)
 {
-    setMessage(i18n("Analysis completed, no problems detected."));
+    if (jobSucceeded) {
+        setMessage(i18n("Analysis completed, no problems detected."));
+    } else {
+        // canceled or an error => show nothing rather than a wrong message
+        // TODO: show an error message in case of an error?
+        setMessage(QString{});
+    }
     setProblems(m_problems);
 }
 
