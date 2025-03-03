@@ -90,6 +90,8 @@ void Job::setup(const QString& targetName)
     setCapabilities(Killable);
     setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
+    // Heaptrack analysis runs a native program and prints its output along with the output of Heaptrack itself
+    setFilteringStrategy(KDevelop::OutputModel::NativeAppErrorFilter);
 
     KDevelop::ICore::self()->uiController()->registerStatus(this);
     connect(this, &Job::finished, this, [this]() {
