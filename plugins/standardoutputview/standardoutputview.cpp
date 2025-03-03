@@ -90,7 +90,8 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
         break;
     case KDevelop::IOutputView::VcsView:
         ret = registerToolView(QStringLiteral("VersionControl"), i18nc("@title:window", "Version Control"),
-                               KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
+                               KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")),
+                               KDevelop::IOutputView::AddFilterAction);
         break;
     }
 
