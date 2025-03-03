@@ -219,7 +219,7 @@ void CompileAnalyzer::raiseProblemsToolView()
 void CompileAnalyzer::raiseOutputToolView()
 {
     core()->uiController()->findToolView(
-        i18ndc("kdevstandardoutputview", "@title:window", "Test"),
+        i18ndc("kdevstandardoutputview", "@title:window", "Analyze"),
         nullptr,
         KDevelop::IUiController::FindFlags::Raise);
 }
