@@ -81,7 +81,7 @@ void Job::setup()
 
     setCapabilities(Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
-    setBehaviours(KDevelop::IOutputView::AutoScroll);
+    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
     KDevelop::ICore::self()->uiController()->registerStatus(this);
     connect(this, &Job::finished, this, [this]() {
