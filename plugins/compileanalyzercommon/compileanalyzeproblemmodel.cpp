@@ -78,10 +78,16 @@ void CompileAnalyzeProblemModel::addProblems(const QVector<KDevelop::IProblem::P
     }
 }
 
-void CompileAnalyzeProblemModel::finishAddProblems()
+void CompileAnalyzeProblemModel::finishAddProblems(bool jobSucceeded)
 {
     if (m_problems.isEmpty()) {
-        setMessage(i18n("Analysis completed, no problems detected."));
+        if (jobSucceeded) {
+            setMessage(i18n("Analysis completed, no problems detected."));
+        } else {
+            // canceled or an error => show nothing rather than a wrong message
+            // TODO: show an error message in case of an error?
+            setMessage(QString{});
+        }
     } else {
         setProblems(m_problems);
     }
