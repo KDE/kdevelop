@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-02 00:39+0000\n"
-"PO-Revision-Date: 2024-08-17 04:04+0200\n"
+"PO-Revision-Date: 2025-03-02 04:34+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2360,26 +2360,29 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"შემდეგი ენები მხარდაჭერილია უკეთესად გამოყოფილი KDevelop-ის დამატებების მიედ "
+"და ამიტომ გამორთულია %1 დამატებაში კონფლიქტების თავიდან ასაცილებლად: <var>"
+"%2</var>. იმისათვის, რომ შეადაროთ მხარდაჭერის დონე, ან გვერდი აუაროთ "
+"შეცდომებს, გათიშეთ გამოყოფილი KDevelop-ის დამატებები, ან დააყენეთ გარემოს "
+"ცვლადი <var>%3</var> (<span style='color:%4'>%5</span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "ამჟამად დაყენებულია"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "ამჟამად დაყენებული არაა"
 
 #: shell/ktexteditorpluginintegration.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "შეტყობინება"
+msgstr "შეტყობინებები"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format

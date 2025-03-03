@@ -1,22 +1,21 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Translation of kdevplatform.po to Spanish
+# Copyright (C) 2008-2025 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
-# Javier Viñal <fjvinal@gmail.com>, 2013.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-02 00:39+0000\n"
-"PO-Revision-Date: 2024-12-09 01:01+0100\n"
+"PO-Revision-Date: 2025-03-02 17:50+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -224,12 +223,12 @@ msgstr "Detalles del punto de interrupción"
 #: debugger/breakpoint/breakpointwidget.cpp:95
 #, kde-format
 msgid "New code breakpoint ..."
-msgstr "Nuevo punto de interrupción del código..."
+msgstr "Nuevo punto de interrupción del código…"
 
 #: debugger/breakpoint/breakpointwidget.cpp:96
 #, kde-format
 msgid "Enter condition ..."
-msgstr "Introduzca la condición..."
+msgstr "Introduzca la condición…"
 
 #: debugger/breakpoint/breakpointwidget.cpp:124
 #, kde-format
@@ -546,13 +545,13 @@ msgstr "Inicio"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Buscar..."
+msgstr "Buscar…"
 
 #: documentation/documentationview.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Find in Text..."
-msgstr "Buscar en el texto..."
+msgstr "Buscar en el texto…"
 
 #: documentation/documentationview.cpp:112
 #, kde-format
@@ -697,7 +696,7 @@ msgstr "no implementado"
 #, kde-format
 msgctxt "@action"
 msgid "Rename \"%1\"..."
-msgstr "Cambiar el nombre de «%1»..."
+msgstr "Cambiar el nombre de «%1»…"
 
 #: language/codegen/basicrefactoring.cpp:221
 #, kde-format
@@ -1646,13 +1645,13 @@ msgstr "%1 (%2)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
-msgstr "Introduzca la ruta a un elemento del árbol del proyecto..."
+msgstr "Introduzca la ruta a un elemento del árbol del proyecto…"
 
 #: project/projectitemlineedit.cpp:158
 #, kde-format
 msgctxt "@action"
 msgid "Select..."
-msgstr "Seleccionar..."
+msgstr "Seleccionar…"
 
 #: project/projectitemlineedit.cpp:182
 #, kde-format
@@ -1677,7 +1676,7 @@ msgstr "Introduzca una dependencia para añadir a la lista"
 #, kde-format
 msgctxt "@info:placedholder"
 msgid "Enter a dependency to add to the list..."
-msgstr "Introduzca una dependencia para añadir a la lista..."
+msgstr "Introduzca una dependencia para añadir a la lista…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
 #: project/widgets/dependencieswidget.ui:55
@@ -2195,7 +2194,7 @@ msgstr "No abrir"
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
-msgstr "&Abrir..."
+msgstr "&Abrir…"
 
 #: shell/documentcontroller.cpp:612
 #, kde-format
@@ -2371,26 +2370,30 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"Los siguientes lenguajes están mejor implementados en los complementos "
+"dedicados de KDevelop, por lo que están desactivados en el complemento %1 "
+"para prevenir conflictos: <var>%2</var>. Para comparar los niveles de "
+"compatibilidad o evitar fallos severos, desactive los complementos dedicados "
+"de KDevelop y ajuste la variable de entorno <var>%3</var> (<span "
+"style='color:%4'>%5</span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "definida"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "no definida"
 
 #: shell/ktexteditorpluginintegration.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "Mensaje"
+msgstr "Mensajes"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
@@ -2532,7 +2535,7 @@ msgstr "Le permite personalizar %1."
 #, kde-format
 msgctxt "@action"
 msgid "Configure Notifications..."
-msgstr "Configurar notificaciones..."
+msgstr "Configurar notificaciones…"
 
 #: shell/mainwindow_p.cpp:229
 #, kde-format
@@ -2713,7 +2716,7 @@ msgstr "Crea un archivo vacío."
 #, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr "&Añadir vista de herramientas..."
+msgstr "&Añadir vista de herramientas…"
 
 #: shell/mainwindow_p.cpp:314
 #, kde-format
@@ -2936,7 +2939,7 @@ msgstr "Cancelar esta operación"
 #, kde-format
 msgctxt "@info"
 msgid "Aborting..."
-msgstr "Interrumpiendo..."
+msgstr "Interrumpiendo…"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:99
 #, kde-format
@@ -3112,7 +3115,7 @@ msgstr "Volver a abrir"
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
-msgstr "Abrir/importar proyecto..."
+msgstr "Abrir/importar proyecto…"
 
 #: shell/projectcontroller.cpp:553
 #, kde-format
@@ -3140,7 +3143,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
-msgstr "Obtener proyecto..."
+msgstr "Obtener proyecto…"
 
 #: shell/projectcontroller.cpp:567
 #, kde-format
@@ -3173,19 +3176,19 @@ msgstr "Cerrar todos los proyectos actualmente seleccionados"
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
-msgstr "Abrir configuración..."
+msgstr "Abrir configuración…"
 
 #: shell/projectcontroller.cpp:597
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
-msgstr "Enviar el proyecto actual..."
+msgstr "Enviar el proyecto actual…"
 
 #: shell/projectcontroller.cpp:598
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr "Enviar..."
+msgstr "Enviar…"
 
 #: shell/projectcontroller.cpp:609
 #, kde-format
@@ -3344,7 +3347,7 @@ msgstr "Directorio:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr "Seleccione el directorio a usar..."
+msgstr "Seleccione el directorio a usar…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
@@ -3387,7 +3390,7 @@ msgstr "La configuración de lanzamiento actual no permite el modo «%1»."
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
-msgstr "Configurar lanzamientos..."
+msgstr "Configurar lanzamientos…"
 
 #: shell/runcontroller.cpp:428
 #, kde-format
@@ -3527,7 +3530,7 @@ msgstr "Nuevo lanzador de %1"
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
-msgstr "%1 como..."
+msgstr "%1 como…"
 
 #: shell/runtimecontroller.cpp:27
 #, kde-format
@@ -3687,7 +3690,7 @@ msgstr "Iniciar una nueva ejecución de KDevelop con una sesión vacía"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Iniciar nueva sesión con nombre..."
+msgstr "Iniciar nueva sesión con nombre…"
 
 #: shell/sessioncontroller.cpp:282
 #, kde-format
@@ -3700,13 +3703,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
-msgstr "Cambiar nombre de la sesión actual..."
+msgstr "Cambiar nombre de la sesión actual…"
 
 #: shell/sessioncontroller.cpp:294
 #, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
-msgstr "Borrar la sesión actual..."
+msgstr "Borrar la sesión actual…"
 
 #: shell/sessioncontroller.cpp:298
 #, kde-format
@@ -3979,7 +3982,7 @@ msgstr "Valor"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter variable..."
-msgstr "Introduzca variable..."
+msgstr "Introduzca variable…"
 
 #: shell/settings/environmentwidget.cpp:169
 #, kde-format
@@ -4005,14 +4008,14 @@ msgstr "Perfil de entorno:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr "Añadir perfil..."
+msgstr "Añadir perfil…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone profile..."
-msgstr "Clonar perfil..."
+msgstr "Clonar perfil…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
 #: shell/settings/environmentwidget.ui:59
@@ -4919,7 +4922,7 @@ msgstr "Reformatear línea"
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr "Reformatear archivos..."
+msgstr "Reformatear archivos…"
 
 #: shell/sourceformattercontroller.cpp:235
 #, kde-format
@@ -5092,7 +5095,7 @@ msgstr ""
 "seleccionado para deseleccionarlo.</p>\n"
 "<p>La configuración correcta del formateador y del estilo correcto para cada "
 "lenguaje que use es muy importante: no solo afecta explícitamente a las "
-"acciones <i>Reformatear el código</i>/<i>Línea</i>/<i>Archivos...</i>, sino "
+"acciones <i>Reformatear el código</i>/<i>Línea</i>/<i>Archivos…</i>, sino "
 "también al formateo del código generado automáticamente, refactorizado y "
 "corregido automáticamente (por ejemplo, a la acción <i>Cambiar nombre</i> "
 "del menú de contexto).</p>\n"
@@ -5133,7 +5136,7 @@ msgstr "Nueva"
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "Editar..."
+msgstr "Editar…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
 #. i18n: ectx: property (text), widget (QPushButton, deleteButton)
@@ -5385,7 +5388,7 @@ msgstr "Separada"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
-msgstr "Asignar atajo de teclado..."
+msgstr "Asignar atajo de teclado…"
 
 #: sublime/idealdockwidget.cpp:153
 #, kde-format
@@ -5689,7 +5692,7 @@ msgstr "Orden terminada con el valor %1."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Branches..."
-msgstr "Ramas..."
+msgstr "Ramas…"
 
 #: vcs/dvcs/ui/branchmanager.cpp:40
 #, kde-format
@@ -6029,7 +6032,7 @@ msgstr "Revisión de origen"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
-msgstr "Enviar..."
+msgstr "Enviar…"
 
 #: vcs/vcspluginhelper.cpp:84
 #, kde-format
@@ -6047,7 +6050,7 @@ msgstr "Añadir"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
-msgstr "Mostrar diferencias..."
+msgstr "Mostrar diferencias…"
 
 #: vcs/vcspluginhelper.cpp:87
 #, kde-format
@@ -6059,25 +6062,25 @@ msgstr "Revertir"
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
-msgstr "Historia..."
+msgstr "Historia…"
 
 #: vcs/vcspluginhelper.cpp:89
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
-msgstr "Anotación..."
+msgstr "Anotación…"
 
 #: vcs/vcspluginhelper.cpp:90
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
-msgstr "Mostrar diferencias..."
+msgstr "Mostrar diferencias…"
 
 #: vcs/vcspluginhelper.cpp:91
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
-msgstr "Mostrar diferencias (todos los archivos)..."
+msgstr "Mostrar diferencias (todos los archivos)…"
 
 #: vcs/vcspluginhelper.cpp:92
 #, kde-format
@@ -6138,7 +6141,7 @@ msgstr "Copiar identificador de revisión"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
-msgstr "Introduzca el URL del repositorio..."
+msgstr "Introduzca el URL del repositorio…"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:53
 #, kde-format

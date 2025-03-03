@@ -4794,7 +4794,7 @@ msgstr "Acoplar á dereita"
 #, kde-format
 msgctxt "@title:group"
 msgid "Tabbed Browsing"
-msgstr "Navegación con lapelas"
+msgstr "Navegación con separadores"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:92
