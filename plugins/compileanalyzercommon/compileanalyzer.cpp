@@ -262,10 +262,10 @@ void CompileAnalyzer::result(KJob* job)
     if (!core()->projectController()->projects().contains(m_model->project())) {
         m_model->reset();
     } else {
-        m_model->finishAddProblems();
+        const auto status = m_job->status();
+        m_model->finishAddProblems(status == OutputExecuteJob::JobStatus::JobSucceeded);
 
-        if (m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
-            m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled) {
+        if (status == OutputExecuteJob::JobStatus::JobSucceeded || status == OutputExecuteJob::JobStatus::JobCanceled) {
             raiseProblemsToolView();
         } else {
             raiseOutputToolView();
