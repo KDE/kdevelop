@@ -83,8 +83,8 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
                                KDevelop::IOutputView::MultipleView, QIcon::fromTheme(QStringLiteral("debug-step-into")),
                                KDevelop::IOutputView::AddFilterAction);
         break;
-    case KDevelop::IOutputView::TestView:
-        ret = registerToolView(QStringLiteral("Test"), i18nc("@title:window", "Test"),
+    case KDevelop::IOutputView::AnalyzeView:
+        ret = registerToolView(QStringLiteral("Analyze"), i18nc("@title:window", "Analyze"),
                                KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
         break;
     case KDevelop::IOutputView::VcsView:

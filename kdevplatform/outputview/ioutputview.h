@@ -59,7 +59,7 @@ public:
         BuildView       /**< the standard tool view for build output */,
         RunView         /**< the standard tool view for program run output */,
         DebugView       /**< the standard tool view for program debugging output */,
-        TestView        /**< the standard tool view for verbose test output */,
+        AnalyzeView     /**< the standard tool view for static code analysis output */,
         VcsView         /**< the standard tool view for VCS command output */,
         // clang-format on
     };

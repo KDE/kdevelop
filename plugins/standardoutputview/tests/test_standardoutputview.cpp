@@ -221,7 +221,7 @@ void StandardOutputViewTest::testStandardToolViews_data()
     QTest::newRow("build") << KDevelop::IOutputView::BuildView;
     QTest::newRow("run") << KDevelop::IOutputView::RunView;
     QTest::newRow("debug") << KDevelop::IOutputView::DebugView;
-    QTest::newRow("test") << KDevelop::IOutputView::TestView;
+    QTest::newRow("analyze") << KDevelop::IOutputView::AnalyzeView;
     QTest::newRow("vcs") << KDevelop::IOutputView::VcsView;
 }
 
