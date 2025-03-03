@@ -84,17 +84,8 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
                                KDevelop::IOutputView::AddFilterAction);
         break;
     case KDevelop::IOutputView::TestView:
-        // TODO: pass QByteArrayLiteral("Test") instead of QByteArray() and make the settings work.
-        // The settings are disabled for the Test output tool view, because all Test output views are currently
-        // unclosable and there is only one output tool view option right now: output view number limit, which
-        // automatically closes its views and has no effect if the views are not closable.
-        // AllowUserClose output view behavior is enabled by default, but 3 output jobs - CompileAnalyzeJob,
-        // cppcheck::Job and Heaptrack::Job - disable it by calling `setBehaviours(KDevelop::IOutputView::AutoScroll);`.
-        // 1cd05dd39bb67cbec7ce39a0237b64fb42e5fc95 introduced the first unclosable view in the cppcheck plugin with
-        // no surviving explanation. Other Test output views followed the example later. Ideally all output views should
-        // become closable, if there is no good reason to prevent closing and destroying them.
-        ret = registerToolView(QString(), i18nc("@title:window", "Test"), KDevelop::IOutputView::HistoryView,
-                               QIcon::fromTheme(QStringLiteral("system-run")));
+        ret = registerToolView(QStringLiteral("Test"), i18nc("@title:window", "Test"),
+                               KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
         break;
     case KDevelop::IOutputView::VcsView:
         ret = registerToolView(QStringLiteral("VersionControl"), i18nc("@title:window", "Version Control"),

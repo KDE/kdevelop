@@ -43,7 +43,7 @@ Job::Job(const Parameters& params, QObject* parent)
 
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
-    setBehaviours(KDevelop::IOutputView::AutoScroll);
+    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
     setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStdout);
     setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStderr);
