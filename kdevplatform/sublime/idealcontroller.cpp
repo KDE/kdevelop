@@ -429,7 +429,8 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     auto *dock = new IdealDockWidget(this, m_mainWindow);
     dock->setView(view);
 
-    const auto documentTitle = view->document()->title();
+    const auto* const document = view->document();
+    const auto documentTitle = document->title();
     dock->setWindowTitle(documentTitle);
 
     // QMainWindow::saveState() and QMainWindow::restoreState() use the objectName property to
@@ -438,7 +439,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     auto* const sublimeArea = m_mainWindow->area();
     Q_ASSERT(sublimeArea);
     dock->setArea(sublimeArea);
-    dock->setObjectName(documentTitle + QLatin1Char('_') + sublimeArea->objectName());
+    dock->setObjectName(document->documentSpecifier() + QLatin1Char('_') + sublimeArea->objectName());
 
     qCDebug(SUBLIME) << "creating dock widget" << PrintDockWidget{dock} << "in" << area;
 
