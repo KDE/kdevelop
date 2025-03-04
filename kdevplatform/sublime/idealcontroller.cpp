@@ -95,7 +95,7 @@ QDebug operator<<(QDebug debug, PrintDockWidget p)
     toolView->addToolBar(toolBar);
 
     static const auto configGroupName = QStringLiteral("UiSettings/Docks/ToolbarEnabled");
-    const auto& configEntryKey = toolViewTitle;
+    const auto configEntryKey = view.document()->documentSpecifier();
 
     const KConfigGroup cg(KSharedConfig::openConfig(), configGroupName);
     toolBar->setVisible(cg.readEntry(configEntryKey, true));
