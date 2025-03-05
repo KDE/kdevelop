@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomdefinesandincludes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2024-11-10 20:10+0300\n"
+"PO-Revision-Date: 2025-03-04 12:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #: compilerprovider/compilerprovider.cpp:32
 #, kde-format
@@ -213,9 +213,8 @@ msgid ""
 "<html><head/><body><p>Choose language profile. </p><p>Use &quot;Custom&quot; "
 "profile to modify parser command-line arguments</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Dil profilini seçin. </p><p>Ayrıştırıcı komut satırı "
-"argümanlarını değiştirmek için &quot;Özel&quot; profili kullanın</p></body></"
-"html>"
+"<html><head/><body><p>Dil profilini seçin.</p><p>Ayrıştırıcı komut satırı "
+"argümanlarını değiştirmek için “Özel” profili kullanın</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCpp)
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsC)

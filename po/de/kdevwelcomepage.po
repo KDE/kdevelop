@@ -22,12 +22,12 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Deutsches KDE-Übersetzungsteam"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "kde-i18n-de@kde.org"
 
 #: welcomepageview.cpp:50
 #, kde-format

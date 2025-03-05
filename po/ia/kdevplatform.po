@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2024 giovanni <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2024, 2025 giovanni <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-02 00:39+0000\n"
-"PO-Revision-Date: 2024-09-11 10:52+0200\n"
+"PO-Revision-Date: 2025-03-04 15:02+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -2293,12 +2293,10 @@ msgid "currently unset"
 msgstr ""
 
 #: shell/ktexteditorpluginintegration.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "Message"
+msgstr "Messages"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format

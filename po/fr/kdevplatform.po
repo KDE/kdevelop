@@ -8,7 +8,7 @@
 # Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2017.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
-# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
 # Xavier Besnard <xavier.besnard@kde.org>, 2023.
 #
 msgid ""
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-02 00:39+0000\n"
-"PO-Revision-Date: 2024-08-12 09:20+0200\n"
+"PO-Revision-Date: 2025-03-03 09:44+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.2\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -2393,26 +2393,31 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"Les langues suivantes sont beaucoup mieux prises en charge par les modules "
+"externes dédiés de KDevelop. Elles sont donc désactivées dans le module "
+"externe %1 pour éviter les conflits : <var>%2</var>. Afin de comparer les "
+"niveaux de prise en charge ou les contournements de bogues importants, "
+"veuillez désactiver le ou les modules externes dédiés de KDevelop(s) et "
+"définir la variable d'environnement <var>%3</var> (<span style='color:%4'>"
+"%5</span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "actuellement défini"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "actuellement non défini"
 
 #: shell/ktexteditorpluginintegration.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "Message"
+msgstr "Messages"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
