@@ -24,16 +24,12 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
-"Martin Piskernig, Ralf Funken, Stefan Winter, Stephan Johach, Frederik "
-"Schwarzer, Arndt Braun, Gerhard Stengel"
+msgstr "Deutsches KDE-Übersetzungsteam"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
-",,kickdown@online.de, hunsum@gmx.de, schwarzer@kde.org, "
-"arndtbraun@googlemail.com, gstengel@gmx.net"
+msgstr "kde-i18n-de@kde.org"
 
 #. i18n: ectx: Menu (session)
 #: kdevelopui.rc:6
