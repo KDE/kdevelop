@@ -126,6 +126,11 @@ NativeAppJob* findNativeJob(KJob* j)
 
 void NativeAppJob::start()
 {
+    if (error() != NoError) {
+        emitResult();
+        return;
+    }
+
     QVector<QPointer<NativeAppJob> > currentJobs;
     // collect running instances of the same type
     const auto& allCurrentJobs = ICore::self()->runController()->currentJobs();
