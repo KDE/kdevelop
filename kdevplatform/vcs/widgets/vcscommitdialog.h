@@ -27,8 +27,6 @@ public:
     ~VcsCommitDialog() override;
     ///Sets the commit candidates
     void setCommitCandidates( const QList<KDevelop::VcsStatusInfo>& statuses );
-    void setRecursive( bool );
-    bool recursive() const;
 
 public Q_SLOTS:
     void accept() override;

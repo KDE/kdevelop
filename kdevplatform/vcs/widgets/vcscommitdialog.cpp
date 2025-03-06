@@ -43,7 +43,7 @@ VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
     QWidget *customWidget = patchSource->customWidget();
     if( customWidget )
     {
-        d->ui.gridLayout->addWidget( customWidget, 0, 0, 1, 2 );
+        d->ui.verticalLayout->insertWidget(0, customWidget);
     }
 
     auto okButton = d->ui.buttonBox->button(QDialogButtonBox::Ok);
@@ -59,13 +59,6 @@ VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
 
 VcsCommitDialog::~VcsCommitDialog() = default;
 
-void VcsCommitDialog::setRecursive( bool recursive )
-{
-    Q_D(VcsCommitDialog);
-
-    d->ui.recursiveChk->setChecked( recursive );
-}
-
 void VcsCommitDialog::setCommitCandidates( const QList<KDevelop::VcsStatusInfo>& statuses )
 {
     Q_D(VcsCommitDialog);
@@ -73,13 +66,6 @@ void VcsCommitDialog::setCommitCandidates( const QList<KDevelop::VcsStatusInfo>&
     for (const VcsStatusInfo& info : statuses) {
         d->m_model->updateState( info );
     }
-}
-
-bool VcsCommitDialog::recursive() const
-{
-    Q_D(const VcsCommitDialog);
-
-    return d->ui.recursiveChk->isChecked();
 }
 
 void VcsCommitDialog::accept()
