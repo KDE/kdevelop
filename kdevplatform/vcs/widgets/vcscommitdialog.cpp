@@ -37,8 +37,7 @@ VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
 {
     Q_D(VcsCommitDialog);
 
-    auto mainWidget = new QWidget(this);
-    d->ui.setupUi(mainWidget);
+    d->ui.setupUi(this);
 
     QWidget *customWidget = patchSource->customWidget();
     if( customWidget )
