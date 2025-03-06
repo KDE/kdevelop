@@ -123,6 +123,12 @@ public:
     bool allowSelection;
 };
 
+QModelIndex VcsFileChangesModel::statusIndexForUrl(const QAbstractItemModel& model, const QModelIndex& parent,
+                                                   const QUrl& url)
+{
+    return model.match(model.index(0, StatusColumn, parent), UrlRole, url, 1, Qt::MatchExactly).value(0);
+}
+
 VcsFileChangesModel::VcsFileChangesModel(QObject *parent, bool allowSelection)
     : QStandardItemModel(parent)
     , d_ptr(new VcsFileChangesModelPrivate{allowSelection})
@@ -140,8 +146,8 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
 {
      Q_D(VcsFileChangesModel);
 
-   if(status.state()==VcsStatusInfo::ItemUnknown || status.state()==VcsStatusInfo::ItemUpToDate) {
-        removeUrl(status.url());
+    if(status.state()==VcsStatusInfo::ItemUnknown || status.state()==VcsStatusInfo::ItemUpToDate) {
+        removeUrl(parent->index(), status.url());
         return -1;
     } else {
         QStandardItem* item = fileItemForUrl(parent, status.url());
@@ -284,14 +290,10 @@ bool VcsFileChangesModel::isCheckable() const
     return d->allowSelection;
 }
 
-bool VcsFileChangesModel::removeUrl(const QUrl& url)
+bool VcsFileChangesModel::removeUrl(const QModelIndex& parent, const QUrl& url)
 {
-    const auto matches = match(index(0, 0), UrlRole, url, 1, Qt::MatchExactly);
-    if (matches.isEmpty())
-        return false;
-
-    const auto& idx = matches.first();
-    return removeRow(idx.row(), idx.parent());
+    const auto index = statusIndexForUrl(*this, parent, url);
+    return index.isValid() ? removeRow(index.row(), index.parent()) : false;
 }
 
 }

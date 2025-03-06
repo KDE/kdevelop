@@ -116,9 +116,9 @@ QStandardItem* findItemChild(QStandardItem* parent, const QVariant& value, int r
     return nullptr;
 }
 
-QStandardItem* ProjectChangesModel::projectItem(IProject* p) const
+QStandardItem* ProjectChangesModel::projectItem(const IProject* project) const
 {
-    return findItemChild(invisibleRootItem(), p->name(), ProjectChangesModel::ProjectNameRole);
+    return findItemChild(invisibleRootItem(), project->name(), ProjectChangesModel::ProjectNameRole);
 }
 
 void ProjectChangesModel::updateState(IProject* p, const KDevelop::VcsStatusInfo& status)
@@ -179,7 +179,7 @@ void ProjectChangesModel::statusReady(KJob* job)
                 if((mode == IBasicVersionControl::NonRecursive && currentUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash) == url.adjusted(QUrl::StripTrailingSlash))
                     || (mode == IBasicVersionControl::Recursive && url.isParentOf(currentUrl))
                 ) {
-                    removeUrl(currentUrl);
+                    removeUrl(itProject->index(), currentUrl);
                 }
             }
         }

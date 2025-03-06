@@ -49,17 +49,21 @@ VcsOverlayProxyModel::~VcsOverlayProxyModel()
 QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) const
 {
     if(role == VcsStatusRole) {
+        auto* const project = qobject_cast<IProject*>(proxyIndex.data(ProjectModel::ProjectRole).value<QObject*>());
         if (!proxyIndex.parent().isValid()) {
-            auto* p = qobject_cast<IProject*>(proxyIndex.data(ProjectModel::ProjectRole).value<QObject*>());
-            return m_branchName.value(p);
-        } else {
-            ProjectChangesModel* model = ICore::self()->projectController()->changesModel();
-            const QUrl url = proxyIndex.data(ProjectModel::UrlRole).toUrl();
-            const auto idx = model->match(model->index(0, 0), ProjectChangesModel::UrlRole, url, 1, Qt::MatchExactly).value(0);
-            return idx.sibling(idx.row(), 1).data(Qt::DisplayRole);
+            return m_branchName.value(project);
         }
-    } else
-        return QIdentityProxyModel::data(proxyIndex, role);
+
+        ProjectChangesModel* model = ICore::self()->projectController()->changesModel();
+        if (const auto* const projectItem = model->projectItem(project)) {
+            const QUrl url = proxyIndex.data(ProjectModel::UrlRole).toUrl();
+            return ProjectChangesModel::statusIndexForUrl(*model, projectItem->index(), url).data(Qt::DisplayRole);
+        }
+
+        return {};
+    }
+
+    return QIdentityProxyModel::data(proxyIndex, role);
 }
 
 void VcsOverlayProxyModel::addProject(IProject* p)
