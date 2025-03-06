@@ -23,7 +23,6 @@ class KTextEdit;
 class KComboBox;
 class KJob;
 namespace KDevelop {
-class VcsCommitDialog;
 class IBasicVersionControl;
 class VcsDiff;
 }
