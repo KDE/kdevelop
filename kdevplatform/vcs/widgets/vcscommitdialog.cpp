@@ -82,21 +82,22 @@ bool VcsCommitDialog::recursive() const
     return d->ui.recursiveChk->isChecked();
 }
 
-void VcsCommitDialog::ok()
+void VcsCommitDialog::accept()
 {
     Q_D(VcsCommitDialog);
 
     if( d->m_patchSource->finishReview( d->m_model->checkedUrls() ) )
     {
-        deleteLater();
-    }
+        QDialog::accept();
+    } // else: do nothing to allow the user to make changes in this dialog and commit again
 }
 
-void VcsCommitDialog::cancel()
+void VcsCommitDialog::reject()
 {
     Q_D(VcsCommitDialog);
 
     d->m_patchSource->cancelReview();
+    QDialog::reject();
 }
 
 }

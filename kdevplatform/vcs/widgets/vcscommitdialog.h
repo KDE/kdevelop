@@ -30,9 +30,9 @@ public:
     void setRecursive( bool );
     bool recursive() const;
 
-private Q_SLOTS:
-    void ok();
-    void cancel();
+public Q_SLOTS:
+    void accept() override;
+    void reject() override;
 
 private:
     const QScopedPointer<class VcsCommitDialogPrivate> d_ptr;
