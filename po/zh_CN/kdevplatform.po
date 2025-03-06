@@ -2327,12 +2327,10 @@ msgid "currently unset"
 msgstr ""
 
 #: shell/ktexteditorpluginintegration.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "消息"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
