@@ -75,6 +75,7 @@ public:
         desired[QStringLiteral("org.kdevelop.OutputView")] = Sublime::Bottom;
         desired[QStringLiteral("org.kdevelop.ContextBrowser")] = Sublime::Bottom;
         desired[QStringLiteral("org.kdevelop.KonsoleView")] = Sublime::Bottom;
+        desired[QStringLiteral("org.kdevelop.BookmarkView")] = Sublime::Right;
         desired[QStringLiteral("org.kdevelop.SnippetView")] = Sublime::Right;
         desired[QStringLiteral("org.kdevelop.ExternalScriptView")] = Sublime::Right;
         desired[QStringLiteral("org.kdevelop.ScratchpadView")] = Sublime::Left;

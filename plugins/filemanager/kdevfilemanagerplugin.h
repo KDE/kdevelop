@@ -23,7 +23,7 @@ public:
 
 private:
     class KDevFileManagerViewFactory *m_factory;
-
+    class BookmarksToolViewFactory* m_bookmarkfactory;
 };
 
 #endif

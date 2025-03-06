@@ -4,6 +4,8 @@ set(kdevfilemanager_PART_SRCS
     kdevfilemanagerplugin.cpp
     filemanager.cpp
     bookmarkhandler.cpp
+    bookmarksview.cpp
+    bookmarkmodel.cpp
 )
 declare_qt_logging_category(kdevfilemanager_PART_SRCS
     TYPE PLUGIN
