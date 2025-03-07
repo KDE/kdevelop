@@ -15,6 +15,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/ipatchsource.h>
+#include <util/shellutils.h>
 
 #include "../vcsstatusinfo.h"
 #include "../models/vcsfilechangesmodel.h"
@@ -39,6 +40,8 @@ VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
     Q_D(VcsCommitDialog);
 
     d->ui.setupUi(this);
+
+    KDevelop::restoreAndAutoSaveGeometry(*this, QStringLiteral("VCS"), QStringLiteral("CommitDialog"));
 
     QWidget *customWidget = patchSource->customWidget();
     if( customWidget )
