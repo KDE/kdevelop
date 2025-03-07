@@ -9,6 +9,7 @@
 #include "vcscommitdialog.h"
 
 #include <QDialogButtonBox>
+#include <QMetaObject>
 #include <QPushButton>
 
 #include <interfaces/iproject.h>
@@ -54,6 +55,16 @@ VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
     d->m_patchSource = patchSource;
     d->m_model = new VcsFileChangesModel( this, true );
     d->ui.files->setModel( d->m_model );
+
+    // Resize columns asynchronously because the contents is not ready yet.
+    QMetaObject::invokeMethod(
+        this,
+        [d] {
+            for (auto c = 0, columnCount = d->m_model->columnCount(); c != columnCount; ++c) {
+                d->ui.files->resizeColumnToContents(c);
+            }
+        },
+        Qt::QueuedConnection);
 }
 
 VcsCommitDialog::~VcsCommitDialog() = default;
