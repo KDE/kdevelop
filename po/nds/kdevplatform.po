@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-02 00:39+0000\n"
+"POT-Creation-Date: 2025-03-07 00:41+0000\n"
 "PO-Revision-Date: 2012-02-02 07:34+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1720,14 +1720,14 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Padd"
 
-#: project/projectchangesmodel.cpp:274
+#: project/projectchangesmodel.cpp:275
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "Nieg Telg"
 
-#: project/projectchangesmodel.cpp:275
+#: project/projectchangesmodel.cpp:276
 #, fuzzy, kde-format
 #| msgid "<b>%1</b> (%2)"
 msgctxt "project name (branch name)"

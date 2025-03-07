@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-02 00:39+0000\n"
+"POT-Creation-Date: 2025-03-07 00:41+0000\n"
 "PO-Revision-Date: 2024-08-17 11:45+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -1630,13 +1630,13 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Bide-izena"
 
-#: project/projectchangesmodel.cpp:274
+#: project/projectchangesmodel.cpp:275
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "adarrik ez"
 
-#: project/projectchangesmodel.cpp:275
+#: project/projectchangesmodel.cpp:276
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"

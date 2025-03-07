@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-02 00:39+0000\n"
+"POT-Creation-Date: 2025-03-07 00:41+0000\n"
 "PO-Revision-Date: 2014-08-24 21:50+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -1667,14 +1667,14 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Sti"
 
-#: project/projectchangesmodel.cpp:274
+#: project/projectchangesmodel.cpp:275
 #, fuzzy, kde-format
 #| msgid "no branch"
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "Ingen branch"
 
-#: project/projectchangesmodel.cpp:275
+#: project/projectchangesmodel.cpp:276
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"

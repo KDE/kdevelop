@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-02 00:39+0000\n"
+"POT-Creation-Date: 2025-03-07 00:41+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -1688,14 +1688,14 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Putanja"
 
-#: project/projectchangesmodel.cpp:274
+#: project/projectchangesmodel.cpp:275
 #, fuzzy, kde-format
 #| msgid "no branch"
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "ne grana"
 
-#: project/projectchangesmodel.cpp:275
+#: project/projectchangesmodel.cpp:276
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
