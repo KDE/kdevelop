@@ -513,7 +513,9 @@ void PatchReviewToolView::kompareModelChanged() {
     else
         m_resetCheckedUrls = false;
 
-    m_editPatch.filesList->resizeColumnToContents( 0 );
+    for (auto c = 0, columnCount = m_fileSortProxyModel->columnCount(); c != columnCount; ++c) {
+        m_editPatch.filesList->resizeColumnToContents(c);
+    }
 
     // Eventually select the active document
     documentActivated( ICore::self()->documentController()->activeDocument() );
