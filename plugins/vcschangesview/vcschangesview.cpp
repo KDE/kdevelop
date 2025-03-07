@@ -35,6 +35,7 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionMode(ContiguousSelection);
     setContextMenuPolicy(Qt::CustomContextMenu);
+    setUniformRowHeights(true);
     setTextElideMode(Qt::ElideLeft);
     setWindowIcon(QIcon::fromTheme(QStringLiteral("exchange-positions"), windowIcon()));
     
