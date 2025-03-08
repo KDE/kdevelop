@@ -36,7 +36,6 @@ public:
                          m_plugin->model(), QOverload<const QList<KDevelop::IProject*>&>::of(&ProjectChangesModel::reload));
         QObject::connect(modif, QOverload<const QList<QUrl>&>::of(&VcsChangesView::reload), m_plugin->model(),
                          QOverload<const QList<QUrl>&>::of(&ProjectChangesModel::reload));
-        QObject::connect(modif, &VcsChangesView::activated, m_plugin, &VcsProjectIntegrationPlugin::activated);
         return modif;
     }
 
@@ -76,11 +75,6 @@ VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const 
 void VcsProjectIntegrationPlugin::unload()
 {
     core()->uiController()->removeToolView(m_factory);
-}
-
-void VcsProjectIntegrationPlugin::activated(const QModelIndex& /*idx*/)
-{
-
 }
 
 ProjectChangesModel* VcsProjectIntegrationPlugin::model()
