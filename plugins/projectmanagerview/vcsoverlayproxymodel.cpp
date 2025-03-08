@@ -54,10 +54,14 @@ QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) con
             return m_branchName.value(project);
         }
 
-        ProjectChangesModel* model = ICore::self()->projectController()->changesModel();
-        if (const auto* const projectItem = model->projectItem(project)) {
-            const QUrl url = proxyIndex.data(ProjectModel::UrlRole).toUrl();
-            return ProjectChangesModel::statusIndexForUrl(*model, projectItem->index(), url).data(Qt::DisplayRole);
+        // Display the VCS status of the item only if the changes model already exists. The VCS status
+        // is not essential, not worth the overhead and possible UI freezes due to the inefficient
+        // tracking of VCS statuses by ProjectChangesModel. See https://bugs.kde.org/show_bug.cgi?id=486949
+        if (const auto model = ICore::self()->projectController()->changesModel()) {
+            if (const auto* const projectItem = model->projectItem(project)) {
+                const QUrl url = proxyIndex.data(ProjectModel::UrlRole).toUrl();
+                return ProjectChangesModel::statusIndexForUrl(*model, projectItem->index(), url).data(Qt::DisplayRole);
+            }
         }
 
         return {};

@@ -48,6 +48,8 @@ private Q_SLOTS:
     void prettyFileName_data();
     void prettyFileName();
 
+    void changesModel();
+
 private:
     KDevelop::Path writeProjectConfig(const QString& name);
 

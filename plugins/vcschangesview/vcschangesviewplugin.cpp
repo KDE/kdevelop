@@ -14,7 +14,6 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
-#include <interfaces/iproject.h>
 #include <interfaces/iuicontroller.h>
 #include <project/projectchangesmodel.h>
 #include "vcschangesview.h"
@@ -30,13 +29,7 @@ public:
 
     QWidget* create(QWidget *parent = nullptr) override
     {
-        auto* modif = new VcsChangesView(m_plugin, parent);
-        modif->setModel(m_plugin->model());
-        QObject::connect(modif, QOverload<const QList<KDevelop::IProject*>&>::of(&VcsChangesView::reload),
-                         m_plugin->model(), QOverload<const QList<KDevelop::IProject*>&>::of(&ProjectChangesModel::reload));
-        QObject::connect(modif, QOverload<const QList<QUrl>&>::of(&VcsChangesView::reload), m_plugin->model(),
-                         QOverload<const QList<QUrl>&>::of(&ProjectChangesModel::reload));
-        return modif;
+        return new VcsChangesView(m_plugin, parent);
     }
 
     Qt::DockWidgetArea defaultPosition() const override
@@ -57,7 +50,6 @@ VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const 
                                                          const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevvcsprojectintegration"), parent, metaData)
     , m_factory(new VCSProjectToolViewFactory(this))
-    , m_model(nullptr)
 {
     core()->uiController()->addToolView(i18nc("@title:window", "Project Changes"), m_factory);
 
@@ -70,21 +62,16 @@ VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const 
     reloadaction->setText(i18nc("@action", "Reload View"));
     reloadaction->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
     reloadaction->setToolTip(i18nc("@info:tooltip", "Refresh the view for all projects, in case anything changed"));
+    connect(reloadaction, &QAction::triggered, this, [this] {
+        if (const auto model = core()->projectController()->changesModel()) {
+            model->reloadAll();
+        }
+    });
 }
 
 void VcsProjectIntegrationPlugin::unload()
 {
     core()->uiController()->removeToolView(m_factory);
-}
-
-ProjectChangesModel* VcsProjectIntegrationPlugin::model()
-{
-    if(!m_model) {
-        m_model = ICore::self()->projectController()->changesModel();
-        connect(actionCollection()->action(QStringLiteral("reload_view")), &QAction::triggered, m_model, &ProjectChangesModel::reloadAll);
-    }
-
-    return m_model;
 }
 
 #include "vcschangesviewplugin.moc"

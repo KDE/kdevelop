@@ -55,7 +55,10 @@ ProjectChangesModel::ProjectChangesModel(QObject* parent)
 
 ProjectChangesModel::~ProjectChangesModel()
 {
-    // TODO (once ProjectController is no longer the parent of this): remove all open projects.
+    const auto projects = ICore::self()->projectController()->projects();
+    for (auto* const project : projects) {
+        removeProject(project);
+    }
 }
 
 void ProjectChangesModel::addProject(IProject* p)

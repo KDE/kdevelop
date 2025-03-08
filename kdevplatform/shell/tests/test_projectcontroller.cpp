@@ -485,6 +485,20 @@ void TestProjectController::prettyFileName()
     QCOMPARE(m_projCtrl->prettyFileName(filePath.toUrl(), ProjectController::FormattingOptions::FormatPlain), QString(m_projName + ':' + relativeFilePath));
 }
 
+void TestProjectController::changesModel()
+{
+    QCOMPARE_EQ(m_projCtrl->changesModel(), nullptr); // the changes model is created only on demand
+    QCOMPARE_EQ(m_projCtrl->changesModel(), nullptr); // calling changesModel() does not create the model
+
+    auto model = m_projCtrl->makeChangesModel();
+    QVERIFY(model); // makeChangesModel() creates and returns the model
+    QCOMPARE_EQ(m_projCtrl->makeChangesModel(), model); // makeChangesModel() returns the existent model if possible
+    QCOMPARE_EQ(m_projCtrl->changesModel(), model); // changesModel() returns the existent model if available
+
+    model.reset();
+    QCOMPARE_EQ(m_projCtrl->changesModel(), nullptr); // resetting the shared pointer destroys the model
+}
+
 ////////////////////// Helpers ///////////////////////////////////////////////
 
 Path TestProjectController::writeProjectConfig(const QString& name)

@@ -8,28 +8,28 @@
 #define KDEVPLATFORM_PLUGIN_VCSCHANGESVIEW_H
 
 #include <QTreeView>
-#include <QList>
-#include <QUrl>
+
+#include <memory>
 
 class VcsProjectIntegrationPlugin;
-namespace KDevelop { class IProject; }
+
+namespace KDevelop {
+class ProjectChangesModel;
+}
 
 class VcsChangesView : public QTreeView
 {
     Q_OBJECT
     public:
         explicit VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* parent = nullptr);
-        
-        void setModel(QAbstractItemModel* model) override;
-        
+
     public Q_SLOTS:
         void popupContextMenu( const QPoint &pos );
         void selectCurrentDocument();
         void openSelected(const QModelIndex& idx);
-        
-    Q_SIGNALS:
-        void reload(const QList<KDevelop::IProject*>& p);
-        void reload(const QList<QUrl>& p);
+
+private:
+    const std::shared_ptr<KDevelop::ProjectChangesModel> m_model;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_VCSCHANGESVIEW_H
