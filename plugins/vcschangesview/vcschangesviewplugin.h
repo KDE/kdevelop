@@ -8,7 +8,6 @@
 #define KDEVPLATFORM_PLUGIN_VCSCHANGESVIEWPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <QVariant>
 
 class VCSProjectToolViewFactory;
 
@@ -16,8 +15,6 @@ class QModelIndex;
 
 namespace KDevelop
 {
-    class IProject;
-    class IDocument;
     class ProjectChangesModel;
 }
 
