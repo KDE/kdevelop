@@ -180,7 +180,7 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
 
 QVariant VcsFileChangesModel::data(const QModelIndex &index, int role) const
 {
-    if (role >= VcsStatusInfoRole && index.column()==0) {
+    if (role >= VcsStatusInfoRole && role < LastItemRole && index.column() == 0) {
         return QStandardItemModel::data(index.sibling(index.row(), 1), role);
     }
     return QStandardItemModel::data(index, role);
