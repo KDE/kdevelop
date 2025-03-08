@@ -34,8 +34,8 @@ public:
         modif->setModel(m_plugin->model());
         QObject::connect(modif, QOverload<const QList<KDevelop::IProject*>&>::of(&VcsChangesView::reload),
                          m_plugin->model(), QOverload<const QList<KDevelop::IProject*>&>::of(&ProjectChangesModel::reload));
-        QObject::connect(modif, QOverload<const QList<KDevelop::IProject*>&>::of(&VcsChangesView::reload),
-                         m_plugin->model(), QOverload<const QList<KDevelop::IProject*>&>::of(&ProjectChangesModel::reload));
+        QObject::connect(modif, QOverload<const QList<QUrl>&>::of(&VcsChangesView::reload), m_plugin->model(),
+                         QOverload<const QList<QUrl>&>::of(&ProjectChangesModel::reload));
         QObject::connect(modif, &VcsChangesView::activated, m_plugin, &VcsProjectIntegrationPlugin::activated);
         return modif;
     }
