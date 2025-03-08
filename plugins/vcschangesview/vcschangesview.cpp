@@ -33,7 +33,7 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
 {
     setRootIsDecorated(false);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
-    setSelectionMode(ContiguousSelection);
+    setSelectionMode(ExtendedSelection);
     setContextMenuPolicy(Qt::CustomContextMenu);
     setUniformRowHeights(true);
     setTextElideMode(Qt::ElideLeft);
