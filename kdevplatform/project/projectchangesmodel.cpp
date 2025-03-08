@@ -25,6 +25,7 @@
 #include <util/path.h>
 
 #include <QDir>
+#include <QHash>
 #include <QIcon>
 
 #include <array>
@@ -251,13 +252,18 @@ void ProjectChangesModel::reload(const QList<IProject*>& projects)
 
 void ProjectChangesModel::reload(const QList<QUrl>& urls)
 {
+    QHash<IProject*, QList<QUrl>> groupedUrls;
+
     for (const QUrl& url : urls) {
         IProject* project=ICore::self()->projectController()->findProjectForUrl(url);
         
         if (project) {
-            // FIXME: merge multiple urls of the same project
-            changes(project, {url}, KDevelop::IBasicVersionControl::NonRecursive);
+            groupedUrls[project].push_back(url);
         }
+    }
+
+    for (const auto& [project, urls] : std::as_const(groupedUrls).asKeyValueRange()) {
+        changes(project, urls, IBasicVersionControl::NonRecursive);
     }
 }
 
