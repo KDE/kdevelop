@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexternalscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-03-09 02:30+0000\n"
 "PO-Revision-Date: 2019-08-28 10:01+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -438,37 +438,37 @@ msgstr ""
 "Το σενάριο '%1' δεν εκτελείται επειδή προσπαθεί να αποκτήσει πρόσβαση στο "
 "περιεχόμενο του κειμενογράφου, αλλά δεν υπάρχει ανοικτό έγγραφο."
 
-#: externalscriptjob.cpp:224
+#: externalscriptjob.cpp:228
 #, kde-format
 msgid "Running external script: %1"
 msgstr "Εκτέλεση εξωτερικού σεναρίου: %1"
 
-#: externalscriptjob.cpp:268
+#: externalscriptjob.cpp:272
 #, kde-format
 msgid "*** Killed Application ***"
 msgstr "*** Τερματισμός εφαρμογής ***"
 
-#: externalscriptjob.cpp:348
+#: externalscriptjob.cpp:352
 #, kde-format
 msgid "*** Exited normally ***"
 msgstr "*** Τερματίστηκε κανονικά ***"
 
-#: externalscriptjob.cpp:351
+#: externalscriptjob.cpp:355
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
 msgstr "*** Τερματίστηκε με κωδικό: %1 ***"
 
-#: externalscriptjob.cpp:354
+#: externalscriptjob.cpp:358
 #, kde-format
 msgid "*** Process aborted ***"
 msgstr "*** Η διεργασία εγκαταλείφθηκε ***"
 
-#: externalscriptjob.cpp:356
+#: externalscriptjob.cpp:360
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
 msgstr "*** Κατάρρευση με κωδικό: %1 ***"
 
-#: externalscriptjob.cpp:368
+#: externalscriptjob.cpp:372
 #, kde-format
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "

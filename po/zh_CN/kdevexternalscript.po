@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-03-09 02:30+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -404,37 +404,37 @@ msgid ""
 "document is open."
 msgstr "无法运行脚本“%1”因为它试图访问编辑器内容而没有打开的文档。"
 
-#: externalscriptjob.cpp:224
+#: externalscriptjob.cpp:228
 #, kde-format
 msgid "Running external script: %1"
 msgstr "运行外部脚本：%1"
 
-#: externalscriptjob.cpp:268
+#: externalscriptjob.cpp:272
 #, kde-format
 msgid "*** Killed Application ***"
 msgstr "*** 应用程序已杀死 ***"
 
-#: externalscriptjob.cpp:348
+#: externalscriptjob.cpp:352
 #, kde-format
 msgid "*** Exited normally ***"
 msgstr "*** 正常退出 ***"
 
-#: externalscriptjob.cpp:351
+#: externalscriptjob.cpp:355
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
 msgstr "*** 退出，返回值：%1 ***"
 
-#: externalscriptjob.cpp:354
+#: externalscriptjob.cpp:358
 #, kde-format
 msgid "*** Process aborted ***"
 msgstr "*** 进程已中止 ***"
 
-#: externalscriptjob.cpp:356
+#: externalscriptjob.cpp:360
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
 msgstr "*** 崩溃，返回值：%1 ***"
 
-#: externalscriptjob.cpp:368
+#: externalscriptjob.cpp:372
 #, kde-format
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "

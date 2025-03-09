@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 00:41+0000\n"
+"POT-Creation-Date: 2025-03-09 02:30+0000\n"
 "PO-Revision-Date: 2024-08-17 08:29+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -598,7 +598,7 @@ msgid "Rename \"%1\" to \"%2\""
 msgstr "Byter namn på \"%1\" till \"%2\""
 
 #: language/assistant/renameaction.cpp:109
-#: language/assistant/renamefileaction.cpp:76
+#: language/assistant/renamefileaction.cpp:77
 #: language/codegen/basicrefactoring.cpp:343
 #: language/codegen/basicrefactoring.cpp:353
 #: language/codegen/basicrefactoring.cpp:367
@@ -1544,37 +1544,37 @@ msgstr ""
 "kommer att döljas.\n"
 "Vill du fortsätta?"
 
-#: project/builderjob.cpp:76
+#: project/builderjob.cpp:74
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
 msgstr "bygg"
 
-#: project/builderjob.cpp:78
+#: project/builderjob.cpp:76
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
 msgstr "rensa"
 
-#: project/builderjob.cpp:80
+#: project/builderjob.cpp:78
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
 msgstr "konfigurera"
 
-#: project/builderjob.cpp:82
+#: project/builderjob.cpp:80
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
 msgstr "installera"
 
-#: project/builderjob.cpp:84
+#: project/builderjob.cpp:82
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
 msgstr "borttagning"
 
-#: project/builderjob.cpp:234
+#: project/builderjob.cpp:232
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
@@ -2076,19 +2076,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Avlusa"
 
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Avlusa start"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Avlusa nuvarande start"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2326,7 +2326,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "Notera"
 
-#: shell/documentcontroller.cpp:1298
+#: shell/documentcontroller.cpp:1287
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2504,7 +2504,7 @@ msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr ""
 "<html><font size=\"4\">Insticksprogram laddade för <b>%1</b></font></html>"
 
-#: shell/mainwindow.cpp:474
+#: shell/mainwindow.cpp:476
 #, kde-format
 msgid " (read only)"
 msgstr " (skrivskyddad)"
@@ -2821,18 +2821,18 @@ msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
 msgstr "Använd kommandot för att visa eller dölja vyns statusrad."
 
-#: shell/partdocument.cpp:108
+#: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "Dokumentet \"%1\" har ändringar som inte sparats. Vill du spara dem?"
 
-#: shell/partdocument.cpp:109 shell/partdocument.cpp:118
+#: shell/partdocument.cpp:110 shell/partdocument.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Stäng dokument"
 
-#: shell/partdocument.cpp:115
+#: shell/partdocument.cpp:114
 #, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2843,7 +2843,7 @@ msgstr ""
 "process.\n"
 "Vill du skriva över de externa ändringarna?"
 
-#: shell/partdocument.cpp:119 shell/textdocument.cpp:416
+#: shell/partdocument.cpp:118 shell/textdocument.cpp:410
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3347,42 +3347,42 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "Hämta"
 
-#: shell/runcontroller.cpp:87
+#: shell/runcontroller.cpp:89
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "Avlusa"
 
-#: shell/runcontroller.cpp:96
+#: shell/runcontroller.cpp:98
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "Profilera"
 
-#: shell/runcontroller.cpp:105
+#: shell/runcontroller.cpp:107
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "Kör"
 
-#: shell/runcontroller.cpp:405
+#: shell/runcontroller.cpp:407
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Aktuell startinställning stöder inte läget '%1'."
 
-#: shell/runcontroller.cpp:425
+#: shell/runcontroller.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Anpassa starter..."
 
-#: shell/runcontroller.cpp:428
+#: shell/runcontroller.cpp:430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Öppna startinställningsdialogruta"
 
-#: shell/runcontroller.cpp:429
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3392,25 +3392,25 @@ msgstr ""
 "Visar en dialogruta för att ställa in en ny startinställning eller ändra de "
 "befintliga."
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Kör start"
 
-#: shell/runcontroller.cpp:433
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Kör"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:437
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Kör nuvarande start"
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3420,7 +3420,7 @@ msgstr ""
 "Kör målet eller programmet som är angivet i startinställningen som för "
 "närvarande är aktiv."
 
-#: shell/runcontroller.cpp:442
+#: shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3431,84 +3431,84 @@ msgstr "Avlusa"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:456
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Stoppa alla jobb"
 
-#: shell/runcontroller.cpp:457
+#: shell/runcontroller.cpp:459
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Stoppa alla"
 
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Stoppar alla jobb som för närvarande kör"
 
-#: shell/runcontroller.cpp:461
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Begär att alla jobb som kör ska stoppas."
 
-#: shell/runcontroller.cpp:467
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Stoppa"
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Stoppa"
 
-#: shell/runcontroller.cpp:470
+#: shell/runcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Meny som gör det möjligt att stoppa individuella jobb"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "Lista över jobb som kan stoppas individuellt."
 
-#: shell/runcontroller.cpp:475
+#: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Nuvarande startinställning"
 
-#: shell/runcontroller.cpp:476
+#: shell/runcontroller.cpp:478
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Nuvarande startinställning"
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "Välj vilken startinställning som ska köras när körning begärs."
 
-#: shell/runcontroller.cpp:590
+#: shell/runcontroller.cpp:592
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Namnlöst jobb"
 
-#: shell/runcontroller.cpp:967
+#: shell/runcontroller.cpp:975
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Nytt startprogram %1"
 
-#: shell/runcontroller.cpp:1004
+#: shell/runcontroller.cpp:1012
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -3529,24 +3529,24 @@ msgstr "Gör det möjligt att välja ett körtidsprogram"
 msgid "Runtime: %1"
 msgstr "Körtidsprogram: %1"
 
-#: shell/savedialog.cpp:44
+#: shell/savedialog.cpp:47
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Modified Files?"
 msgstr "Spara ändrade filer?"
 
-#: shell/savedialog.cpp:47
+#: shell/savedialog.cpp:52
 #, kde-format
 msgid "The following files have been modified. Save them?"
 msgstr "Följande filer har ändrats. Spara dem?"
 
-#: shell/savedialog.cpp:65
+#: shell/savedialog.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
 msgstr "Spara i&nga"
 
-#: shell/savedialog.cpp:66
+#: shell/savedialog.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
@@ -5108,7 +5108,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Ta bort"
 
-#: shell/textdocument.cpp:411
+#: shell/textdocument.cpp:405
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5120,13 +5120,13 @@ msgstr ""
 "Är du säker på att du vill skriva över den? (Externa ändringar går "
 "förlorade.)"
 
-#: shell/textdocument.cpp:415
+#: shell/textdocument.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Dokument har ändrats externt"
 
-#: shell/textdocument.cpp:658
+#: shell/textdocument.cpp:665
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Rad: %1 Kol: %2 "
@@ -6011,7 +6011,7 @@ msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Återställ"
 
-#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:456
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
@@ -6058,13 +6058,13 @@ msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Kunde inte hämta skillnader"
 
-#: vcs/vcspluginhelper.cpp:353
+#: vcs/vcspluginhelper.cpp:356
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 historik (%1)"
 
-#: vcs/vcspluginhelper.cpp:417
+#: vcs/vcspluginhelper.cpp:420
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6073,7 +6073,7 @@ msgstr ""
 "Kan inte visa noteringar. Saknar gränssnittet KTextEditor::"
 "AnnotationInterface i editorn."
 
-#: vcs/vcspluginhelper.cpp:421
+#: vcs/vcspluginhelper.cpp:424
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6084,7 +6084,7 @@ msgstr ""
 "inte var ett textdokument:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:451 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

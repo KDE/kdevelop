@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-03-09 02:30+0000\n"
 "PO-Revision-Date: 2022-08-03 09:56+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -421,37 +421,37 @@ msgstr ""
 "Kan inte köra skriptet '%1', eftersom det försöker komma åt editorns "
 "innehåll, men inget dokument är öppet."
 
-#: externalscriptjob.cpp:224
+#: externalscriptjob.cpp:228
 #, kde-format
 msgid "Running external script: %1"
 msgstr "Kör externt skript: %1"
 
-#: externalscriptjob.cpp:268
+#: externalscriptjob.cpp:272
 #, kde-format
 msgid "*** Killed Application ***"
 msgstr "*** Dödade program ***"
 
-#: externalscriptjob.cpp:348
+#: externalscriptjob.cpp:352
 #, kde-format
 msgid "*** Exited normally ***"
 msgstr "*** Avslutades normalt ***"
 
-#: externalscriptjob.cpp:351
+#: externalscriptjob.cpp:355
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
 msgstr "*** Avslutades med returkoden: %1 ***"
 
-#: externalscriptjob.cpp:354
+#: externalscriptjob.cpp:358
 #, kde-format
 msgid "*** Process aborted ***"
 msgstr "*** Processen avbröts ***"
 
-#: externalscriptjob.cpp:356
+#: externalscriptjob.cpp:360
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
 msgstr "*** Kraschade med returkoden: %1 ***"
 
-#: externalscriptjob.cpp:368
+#: externalscriptjob.cpp:372
 #, kde-format
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "

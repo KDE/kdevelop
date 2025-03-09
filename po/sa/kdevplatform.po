@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 00:41+0000\n"
+"POT-Creation-Date: 2025-03-09 02:30+0000\n"
 "PO-Revision-Date: 2024-12-25 19:37+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -590,7 +590,7 @@ msgid "Rename \"%1\" to \"%2\""
 msgstr "\"%1\" इत्यस्य नाम \"%2\" इति परिवर्तयन्तु ।"
 
 #: language/assistant/renameaction.cpp:109
-#: language/assistant/renamefileaction.cpp:76
+#: language/assistant/renamefileaction.cpp:77
 #: language/codegen/basicrefactoring.cpp:343
 #: language/codegen/basicrefactoring.cpp:353
 #: language/codegen/basicrefactoring.cpp:367
@@ -1532,37 +1532,37 @@ msgstr ""
 "गोपनीयं च भविष्यति ।\n"
 "किं त्वं निरन्तरं कर्तुम् इच्छसि ?"
 
-#: project/builderjob.cpp:76
+#: project/builderjob.cpp:74
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
 msgstr "निर्मिमीते"
 
-#: project/builderjob.cpp:78
+#: project/builderjob.cpp:76
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
 msgstr "स्वच्छम्‌"
 
-#: project/builderjob.cpp:80
+#: project/builderjob.cpp:78
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
 msgstr "विन्यस्तं कुर्वन्तु"
 
-#: project/builderjob.cpp:82
+#: project/builderjob.cpp:80
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
 msgstr "प्रतिस्था"
 
-#: project/builderjob.cpp:84
+#: project/builderjob.cpp:82
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
 msgstr "छंटनी"
 
-#: project/builderjob.cpp:234
+#: project/builderjob.cpp:232
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
@@ -2063,19 +2063,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "त्रुटिनिवारणम्"
 
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "त्रुटिनिवारणं प्रारम्भं कुर्वन्तु"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "वर्तमान प्रक्षेपणं त्रुटिनिवारणं कुर्वन्तु"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2305,7 +2305,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "टिप्पणीं कुरुत"
 
-#: shell/documentcontroller.cpp:1298
+#: shell/documentcontroller.cpp:1287
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2478,7 +2478,7 @@ msgstr "लोड् प्लगिन्स्"
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\"><b>%1</b> कृते प्लगिन् लोड् कृतम्</font></html>"
 
-#: shell/mainwindow.cpp:474
+#: shell/mainwindow.cpp:476
 #, kde-format
 msgid " (read only)"
 msgstr " (पठितमात्रम्)"
@@ -2795,18 +2795,18 @@ msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
 msgstr "दृश्यस्य स्थितिपट्टिकां दर्शयितुं गोपयितुं वा एतस्य आदेशस्य उपयोगं कुर्वन्तु ।"
 
-#: shell/partdocument.cpp:108
+#: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "\"%1\" इति दस्तावेजे अरक्षिताः परिवर्तनाः सन्ति । किं त्वं तान् तारयितुम् इच्छसि ?"
 
-#: shell/partdocument.cpp:109 shell/partdocument.cpp:118
+#: shell/partdocument.cpp:110 shell/partdocument.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "दस्तावेजं बन्दं कुर्वन्तु"
 
-#: shell/partdocument.cpp:115
+#: shell/partdocument.cpp:114
 #, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2817,7 +2817,7 @@ msgstr ""
 "।\n"
 "बाह्यपरिवर्तनानि अधिलेखयितुम् इच्छति वा ?"
 
-#: shell/partdocument.cpp:119 shell/textdocument.cpp:416
+#: shell/partdocument.cpp:118 shell/textdocument.cpp:410
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3312,42 +3312,42 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "प्राप्नोतु"
 
-#: shell/runcontroller.cpp:87
+#: shell/runcontroller.cpp:89
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "त्रुटिनिवारणम्"
 
-#: shell/runcontroller.cpp:96
+#: shell/runcontroller.cpp:98
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "रूपरेखा"
 
-#: shell/runcontroller.cpp:105
+#: shell/runcontroller.cpp:107
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "प्रभज्"
 
-#: shell/runcontroller.cpp:405
+#: shell/runcontroller.cpp:407
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "वर्तमानप्रक्षेपणविन्यासः '%1' मोडं न समर्थयति ।"
 
-#: shell/runcontroller.cpp:425
+#: shell/runcontroller.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "विन्यस्तं प्रक्षेपणं..."
 
-#: shell/runcontroller.cpp:428
+#: shell/runcontroller.cpp:430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "प्रक्षेपणविन्याससंवादं उद्घाटयन्तु"
 
-#: shell/runcontroller.cpp:429
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3356,25 +3356,25 @@ msgid ""
 msgstr ""
 "नूतनानि प्रक्षेपणविन्यासानि स्थापयितुं, अथवा विद्यमानानाम् परिवर्तनार्थं संवादं उद्घाटयति ।"
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "प्रक्षेपणं निष्पादयन्तु"
 
-#: shell/runcontroller.cpp:433
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "प्रभज्"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:437
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "वर्तमान प्रक्षेपणं निष्पादयन्तु"
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3382,7 +3382,7 @@ msgid ""
 "configuration."
 msgstr "वर्तमान सक्रियप्रक्षेपणविन्यासे निर्दिष्टं लक्ष्यं वा कार्यक्रमं वा निष्पादयति ।"
 
-#: shell/runcontroller.cpp:442
+#: shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3393,84 +3393,84 @@ msgstr "त्रुटिनिवारणम्"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:456
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "सर्वाणि कार्याणि स्थगयन्तु"
 
-#: shell/runcontroller.cpp:457
+#: shell/runcontroller.cpp:459
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "सर्वं स्थगयतु"
 
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "वर्तमानकाले प्रचलितानि सर्वाणि कार्याणि स्थगयन्तु"
 
-#: shell/runcontroller.cpp:461
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "सर्वाणि चालितानि कार्याणि स्थगितानि इति अनुरोधं करोति ।"
 
-#: shell/runcontroller.cpp:467
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "विरमतु"
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "विरमतु"
 
-#: shell/runcontroller.cpp:470
+#: shell/runcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "व्यक्तिगतकार्यं स्थगयितुं अनुमतिं ददाति मेनू"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "व्यक्तिगतरूपेण स्थगितुं शक्यमाणानां कार्याणां सूची।"
 
-#: shell/runcontroller.cpp:475
+#: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "वर्तमान प्रक्षेपणविन्यासः"
 
-#: shell/runcontroller.cpp:476
+#: shell/runcontroller.cpp:478
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "वर्तमान प्रक्षेपणविन्यासः"
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "यदा run आह्वयते तदा कः प्रक्षेपणविन्यासः चालनीयः इति चिनोतु ।"
 
-#: shell/runcontroller.cpp:590
+#: shell/runcontroller.cpp:592
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> अनाम कार्यम्"
 
-#: shell/runcontroller.cpp:967
+#: shell/runcontroller.cpp:975
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "नवीन %1 प्रक्षेपक"
 
-#: shell/runcontroller.cpp:1004
+#: shell/runcontroller.cpp:1012
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -3491,24 +3491,24 @@ msgstr "एकं रनटाइम् चयनं कर्तुं शक�
 msgid "Runtime: %1"
 msgstr "रनटाइम्: %1"
 
-#: shell/savedialog.cpp:44
+#: shell/savedialog.cpp:47
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Modified Files?"
 msgstr "परिवर्तितसञ्चिकाः रक्षन्तु?"
 
-#: shell/savedialog.cpp:47
+#: shell/savedialog.cpp:52
 #, kde-format
 msgid "The following files have been modified. Save them?"
 msgstr "निम्नलिखितसञ्चिकाः परिवर्तिताः सन्ति । तान् रक्षतु ?"
 
-#: shell/savedialog.cpp:65
+#: shell/savedialog.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
 msgstr "रक्षतु &कोऽपि नास्ति"
 
-#: shell/savedialog.cpp:66
+#: shell/savedialog.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
@@ -5039,7 +5039,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "लुप्"
 
-#: shell/textdocument.cpp:411
+#: shell/textdocument.cpp:405
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5050,13 +5050,13 @@ msgstr ""
 "\n"
 "किं भवन्तः निश्चयेन तस्य अधिलेखनं कर्तुम् इच्छन्ति? (बाह्यपरिवर्तनानि नष्टानि भविष्यन्ति।)"
 
-#: shell/textdocument.cpp:415
+#: shell/textdocument.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "दस्तावेजः बाह्यरूपेण परिवर्तितः"
 
-#: shell/textdocument.cpp:658
+#: shell/textdocument.cpp:665
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " रेखा: %1 कर्नल: %2 "
@@ -5929,7 +5929,7 @@ msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "प्रत्यावर्तयतु"
 
-#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:456
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
@@ -5976,13 +5976,13 @@ msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "भेदं प्राप्तुं असमर्थः"
 
-#: vcs/vcspluginhelper.cpp:353
+#: vcs/vcspluginhelper.cpp:356
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 इतिहासः (%1)"
 
-#: vcs/vcspluginhelper.cpp:417
+#: vcs/vcspluginhelper.cpp:420
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -5991,7 +5991,7 @@ msgstr ""
 "एनोटेशन्स् प्रदर्शयितुं न शक्यते, सम्पादकस्य कृते अन्तरफलकं KTextEditor::"
 "AnnotationInterface अनुपलब्धम् ।"
 
-#: vcs/vcspluginhelper.cpp:421
+#: vcs/vcspluginhelper.cpp:424
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6002,7 +6002,7 @@ msgstr ""
 "शक्यते:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:451 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

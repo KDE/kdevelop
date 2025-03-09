@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-09 02:30+0000\n"
 "PO-Revision-Date: 2020-07-20 12:29+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -17,44 +17,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: scratchpad.cpp:104 scratchpadview.cpp:87
+#: scratchpad.cpp:130 scratchpadview.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "Scratchpad"
 msgstr "Quadro"
 
-#: scratchpad.cpp:146 scratchpad.cpp:225 scratchpadjob.cpp:33
-#, kde-format
-msgctxt "prefix to distinguish scratch tabs"
-msgid "scratch:%1"
-msgstr "quadro:%1"
-
-#: scratchpad.cpp:173
+#: scratchpad.cpp:187
 #, kde-format
 msgid "Failed to remove scratch: %1"
 msgstr "Não foi possível remover o quadro: %1"
 
-#: scratchpad.cpp:180
+#: scratchpad.cpp:194
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
 msgstr "Não foi possível criar o quadro: O nome já está a ser usado"
 
-#: scratchpad.cpp:192
+#: scratchpad.cpp:206
 #, kde-format
 msgid "Failed to create new scratch"
 msgstr "Não foi possível criar um novo quadro"
 
-#: scratchpad.cpp:201
+#: scratchpad.cpp:215
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr ""
 "Não foi possível mudar o nome do quadro: Os nomes não devem incluir o "
 "separador de pastas"
 
-#: scratchpad.cpp:231
+#: scratchpad.cpp:256
 #, kde-format
 msgid "Failed renaming scratch."
 msgstr "Não foi possível mudar o nome do quadro."
+
+#: scratchpad.cpp:299 scratchpadjob.cpp:33
+#, kde-format
+msgctxt "prefix to distinguish scratch tabs"
+msgid "scratch:%1"
+msgstr "quadro:%1"
 
 #: scratchpadjob.cpp:57
 #, kde-format
@@ -71,7 +71,7 @@ msgstr "O processo terminou com o código de saída %1."
 msgid "Failed to run scratch: %1"
 msgstr "Não foi possível executar o quadro: %1"
 
-#: scratchpadview.cpp:100
+#: scratchpadview.cpp:101
 #, kde-format
 msgid ""
 "Scratchpad lets you quickly run and experiment with code without a full "
@@ -80,7 +80,7 @@ msgstr ""
 "O Quadro permite-lhe executar e experimentar código rapidamente sem ter um "
 "projecto completo ou ainda gravar tarefas. Crie um novo quadro para começar."
 
-#: scratchpadview.cpp:114
+#: scratchpadview.cpp:115
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command to run this scratch. '$f' will expand to the scratch path."
@@ -88,43 +88,43 @@ msgstr ""
 "Comando para executar este quadro. O '$f' será expandido para a localização "
 "do quadro."
 
-#: scratchpadview.cpp:137
+#: scratchpadview.cpp:138
 #, kde-format
 msgctxt "@action"
 msgid "New Scratch"
 msgstr "Novo Quadro"
 
-#: scratchpadview.cpp:141
+#: scratchpadview.cpp:142
 #, kde-format
 msgctxt "@action"
 msgid "Remove Scratch"
 msgstr "Remover o Quadro"
 
-#: scratchpadview.cpp:149
+#: scratchpadview.cpp:153
 #, kde-format
 msgctxt "@action"
 msgid "Rename Scratch"
 msgstr "Mudar o Nome do Quadro"
 
-#: scratchpadview.cpp:158
+#: scratchpadview.cpp:162
 #, kde-format
 msgctxt "@action"
 msgid "Run Scratch"
 msgstr "Executar o Quadro"
 
-#: scratchpadview.cpp:164
+#: scratchpadview.cpp:168
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Filtro..."
 
-#: scratchpadview.cpp:204
+#: scratchpadview.cpp:210
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New Scratch"
 msgstr "Criar um Novo Quadro"
 
-#: scratchpadview.cpp:205
+#: scratchpadview.cpp:211
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for scratch file:"

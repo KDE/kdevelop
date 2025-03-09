@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-03-09 02:30+0000\n"
 "PO-Revision-Date: 2025-02-15 21:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -425,37 +425,37 @@ msgstr ""
 "“%1” betiği çalıştırılamıyor; betik düzenleyicisi içeriğine erişmek istiyor; "
 "ancak açık durumda bir belge yok."
 
-#: externalscriptjob.cpp:224
+#: externalscriptjob.cpp:228
 #, kde-format
 msgid "Running external script: %1"
 msgstr "Dış betik çalıştırılıyor: %1"
 
-#: externalscriptjob.cpp:268
+#: externalscriptjob.cpp:272
 #, kde-format
 msgid "*** Killed Application ***"
 msgstr "*** Uygulama sonlandırıldı. ***"
 
-#: externalscriptjob.cpp:348
+#: externalscriptjob.cpp:352
 #, kde-format
 msgid "*** Exited normally ***"
 msgstr "*** Normal olarak çıkıldı. ***"
 
-#: externalscriptjob.cpp:351
+#: externalscriptjob.cpp:355
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
 msgstr "*** Bu kod döndürülerek çıkıldı: %1. ***"
 
-#: externalscriptjob.cpp:354
+#: externalscriptjob.cpp:358
 #, kde-format
 msgid "*** Process aborted ***"
 msgstr "*** Süreç sonlandırıldı. ***"
 
-#: externalscriptjob.cpp:356
+#: externalscriptjob.cpp:360
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
 msgstr "*** Bu kod döndürülerek çöktü: %1. ***"
 
-#: externalscriptjob.cpp:368
+#: externalscriptjob.cpp:372
 #, kde-format
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "
