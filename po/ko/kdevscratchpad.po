@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-09 00:40+0000\n"
 "PO-Revision-Date: 2020-10-04 20:08+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17,42 +17,42 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 19.12.3\n"
 
-#: scratchpad.cpp:104 scratchpadview.cpp:87
+#: scratchpad.cpp:130 scratchpadview.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "Scratchpad"
 msgstr "스크래치패드"
 
-#: scratchpad.cpp:146 scratchpad.cpp:225 scratchpadjob.cpp:33
-#, kde-format
-msgctxt "prefix to distinguish scratch tabs"
-msgid "scratch:%1"
-msgstr "스크래치:%1"
-
-#: scratchpad.cpp:173
+#: scratchpad.cpp:187
 #, kde-format
 msgid "Failed to remove scratch: %1"
 msgstr "스크래치를 삭제할 수 없음: %1"
 
-#: scratchpad.cpp:180
+#: scratchpad.cpp:194
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
 msgstr "스크래치를 만들 수 없음: 같은 이름이 이미 있음"
 
-#: scratchpad.cpp:192
+#: scratchpad.cpp:206
 #, kde-format
 msgid "Failed to create new scratch"
 msgstr "새 스크래치를 만들 수 없음"
 
-#: scratchpad.cpp:201
+#: scratchpad.cpp:215
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr "스크래치의 이름을 바꿀 수 없음: 경로 구분자가 들어가면 안 됨"
 
-#: scratchpad.cpp:231
+#: scratchpad.cpp:256
 #, kde-format
 msgid "Failed renaming scratch."
 msgstr "스크래치의 이름을 바꿀 수 없습니다."
+
+#: scratchpad.cpp:299 scratchpadjob.cpp:33
+#, kde-format
+msgctxt "prefix to distinguish scratch tabs"
+msgid "scratch:%1"
+msgstr "스크래치:%1"
 
 #: scratchpadjob.cpp:57
 #, kde-format
@@ -69,7 +69,7 @@ msgstr "프로세스가 실행 후 종료 코드 %1을(를) 반환했습니다."
 msgid "Failed to run scratch: %1"
 msgstr "스크래치를 실행할 수 없음: %1"
 
-#: scratchpadview.cpp:100
+#: scratchpadview.cpp:101
 #, kde-format
 msgid ""
 "Scratchpad lets you quickly run and experiment with code without a full "
@@ -79,49 +79,49 @@ msgstr ""
 "해 볼 수 있으며, 할 일 목록을 저장할 수도 있습니다. 시작하려면 새 스크래치를 "
 "만드십시오."
 
-#: scratchpadview.cpp:114
+#: scratchpadview.cpp:115
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command to run this scratch. '$f' will expand to the scratch path."
 msgstr "이 스크래치를 실행할 명령입니다. '$f'는 스크래치 경로로 대체됩니다"
 
-#: scratchpadview.cpp:137
+#: scratchpadview.cpp:138
 #, kde-format
 msgctxt "@action"
 msgid "New Scratch"
 msgstr "새 스크래치"
 
-#: scratchpadview.cpp:141
+#: scratchpadview.cpp:142
 #, kde-format
 msgctxt "@action"
 msgid "Remove Scratch"
 msgstr "스크래치 삭제"
 
-#: scratchpadview.cpp:149
+#: scratchpadview.cpp:153
 #, kde-format
 msgctxt "@action"
 msgid "Rename Scratch"
 msgstr "스크래치 이름 바꾸기"
 
-#: scratchpadview.cpp:158
+#: scratchpadview.cpp:162
 #, kde-format
 msgctxt "@action"
 msgid "Run Scratch"
 msgstr "스크래치 실행"
 
-#: scratchpadview.cpp:164
+#: scratchpadview.cpp:168
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "필터..."
 
-#: scratchpadview.cpp:204
+#: scratchpadview.cpp:210
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New Scratch"
 msgstr "새 스크래치 만들기"
 
-#: scratchpadview.cpp:205
+#: scratchpadview.cpp:211
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for scratch file:"

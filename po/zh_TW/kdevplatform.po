@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 00:41+0000\n"
+"POT-Creation-Date: 2025-03-09 00:40+0000\n"
 "PO-Revision-Date: 2024-08-06 05:13+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -586,7 +586,7 @@ msgid "Rename \"%1\" to \"%2\""
 msgstr "將 %1 重新命名為 %2"
 
 #: language/assistant/renameaction.cpp:109
-#: language/assistant/renamefileaction.cpp:76
+#: language/assistant/renamefileaction.cpp:77
 #: language/codegen/basicrefactoring.cpp:343
 #: language/codegen/basicrefactoring.cpp:353
 #: language/codegen/basicrefactoring.cpp:367
@@ -1517,37 +1517,37 @@ msgstr ""
 "您試著將 %1 重新命名為 %2，但是後者被過濾，因此會被隱藏起來。\n"
 "您確定要繼續嗎？"
 
-#: project/builderjob.cpp:76
+#: project/builderjob.cpp:74
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
 msgstr "編譯"
 
-#: project/builderjob.cpp:78
+#: project/builderjob.cpp:76
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
 msgstr "清除"
 
-#: project/builderjob.cpp:80
+#: project/builderjob.cpp:78
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
 msgstr "設定"
 
-#: project/builderjob.cpp:82
+#: project/builderjob.cpp:80
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
 msgstr "安裝"
 
-#: project/builderjob.cpp:84
+#: project/builderjob.cpp:82
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
 msgstr "徹底移除"
 
-#: project/builderjob.cpp:234
+#: project/builderjob.cpp:232
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
@@ -2038,19 +2038,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "除錯"
 
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "除錯啟動"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "除錯目前的啟動"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2275,7 +2275,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "註記"
 
-#: shell/documentcontroller.cpp:1298
+#: shell/documentcontroller.cpp:1287
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2445,7 +2445,7 @@ msgstr "已載入的外掛程式"
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\"><b>%1</b> 的外掛程式已載入</font></html>"
 
-#: shell/mainwindow.cpp:474
+#: shell/mainwindow.cpp:476
 #, kde-format
 msgid " (read only)"
 msgstr " (唯讀)"
@@ -2760,18 +2760,18 @@ msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
 msgstr "使用這個指令來顯示或隱藏檢視的狀態列。"
 
-#: shell/partdocument.cpp:108
+#: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "文件 %1 有未儲存的變更。您要儲存它嗎？"
 
-#: shell/partdocument.cpp:109 shell/partdocument.cpp:118
+#: shell/partdocument.cpp:110 shell/partdocument.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "關閉文件"
 
-#: shell/partdocument.cpp:115
+#: shell/partdocument.cpp:114
 #, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2781,7 +2781,7 @@ msgstr ""
 "文件 \"%1\" 裡有未儲存的變更，同時原檔案又已被外部行程所改變。\n"
 "您要直接把外部所做的變更覆蓋掉嗎？"
 
-#: shell/partdocument.cpp:119 shell/textdocument.cpp:416
+#: shell/partdocument.cpp:118 shell/textdocument.cpp:410
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3271,42 +3271,42 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "抓取"
 
-#: shell/runcontroller.cpp:87
+#: shell/runcontroller.cpp:89
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "除錯"
 
-#: shell/runcontroller.cpp:96
+#: shell/runcontroller.cpp:98
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "設定檔"
 
-#: shell/runcontroller.cpp:105
+#: shell/runcontroller.cpp:107
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "執行"
 
-#: shell/runcontroller.cpp:405
+#: shell/runcontroller.cpp:407
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "目前的啟動設定不支援 %1 模式。"
 
-#: shell/runcontroller.cpp:425
+#: shell/runcontroller.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "設定啟動器..."
 
-#: shell/runcontroller.cpp:428
+#: shell/runcontroller.cpp:430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "開啟啟動設定對話框"
 
-#: shell/runcontroller.cpp:429
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3314,25 +3314,25 @@ msgid ""
 "ones."
 msgstr "開啟對話框以設定新的啟動設定，或是變更目前的啟動設定。"
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "執行啟動"
 
-#: shell/runcontroller.cpp:433
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "執行"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:437
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "執行目前的啟動"
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3340,7 +3340,7 @@ msgid ""
 "configuration."
 msgstr "執行目前作用中的目標，或是目前啟動設定裡指定的程式。"
 
-#: shell/runcontroller.cpp:442
+#: shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3351,84 +3351,84 @@ msgstr "除錯"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:456
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "停止所有的工作"
 
-#: shell/runcontroller.cpp:457
+#: shell/runcontroller.cpp:459
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "全部停止"
 
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "停止所有執行中的工作"
 
-#: shell/runcontroller.cpp:461
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "要求所有執行中的工作停止。"
 
-#: shell/runcontroller.cpp:467
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "停止"
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "停止"
 
-#: shell/runcontroller.cpp:470
+#: shell/runcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "允許停止個別工作的選單"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "可以被個別停止的工作清單。"
 
-#: shell/runcontroller.cpp:475
+#: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "目前的啟動設定"
 
-#: shell/runcontroller.cpp:476
+#: shell/runcontroller.cpp:478
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "目前的啟動設定"
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "請選擇執行被撤銷時要執行哪個啟動設定。"
 
-#: shell/runcontroller.cpp:590
+#: shell/runcontroller.cpp:592
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> 未命名工作"
 
-#: shell/runcontroller.cpp:967
+#: shell/runcontroller.cpp:975
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "新增 %1 啟動器"
 
-#: shell/runcontroller.cpp:1004
+#: shell/runcontroller.cpp:1012
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -3449,24 +3449,24 @@ msgstr "允許選擇執行環境"
 msgid "Runtime: %1"
 msgstr "執行環境：%1"
 
-#: shell/savedialog.cpp:44
+#: shell/savedialog.cpp:47
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Modified Files?"
 msgstr "要儲存已變更的檔案嗎？"
 
-#: shell/savedialog.cpp:47
+#: shell/savedialog.cpp:52
 #, kde-format
 msgid "The following files have been modified. Save them?"
 msgstr "以下的檔案已變更。要儲存嗎？"
 
-#: shell/savedialog.cpp:65
+#: shell/savedialog.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
 msgstr "不儲存(&N)"
 
-#: shell/savedialog.cpp:66
+#: shell/savedialog.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
@@ -4955,7 +4955,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "刪除"
 
-#: shell/textdocument.cpp:411
+#: shell/textdocument.cpp:405
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -4966,13 +4966,13 @@ msgstr ""
 "\n"
 "您確定要覆寫它嗎？（別人所做的變更將會遺失）"
 
-#: shell/textdocument.cpp:415
+#: shell/textdocument.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "文件已被別人變更"
 
-#: shell/textdocument.cpp:658
+#: shell/textdocument.cpp:665
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " 行: %1 欄: %2 "
@@ -5843,7 +5843,7 @@ msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "還原"
 
-#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:456
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
@@ -5890,13 +5890,13 @@ msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "無法取得差異"
 
-#: vcs/vcspluginhelper.cpp:353
+#: vcs/vcspluginhelper.cpp:356
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 歷史 (%1)"
 
-#: vcs/vcspluginhelper.cpp:417
+#: vcs/vcspluginhelper.cpp:420
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -5904,7 +5904,7 @@ msgid ""
 msgstr ""
 "無法顯示最後狀態註記，因為找不到編輯器介面 KTextEditor::AnnotationInterface。"
 
-#: vcs/vcspluginhelper.cpp:421
+#: vcs/vcspluginhelper.cpp:424
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -5914,7 +5914,7 @@ msgstr ""
 "無法執行最後狀態註記的動作，因為找不到文件，或不是文字文件。\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:451 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

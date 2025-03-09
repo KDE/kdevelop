@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevscratchpad\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-09 00:40+0000\n"
 "PO-Revision-Date: 2020-07-20 08:38+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -20,44 +20,44 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 20.07.70\n"
 
-#: scratchpad.cpp:104 scratchpadview.cpp:87
+#: scratchpad.cpp:130 scratchpadview.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "Scratchpad"
 msgstr "Нотатник для чернеток"
 
-#: scratchpad.cpp:146 scratchpad.cpp:225 scratchpadjob.cpp:33
-#, kde-format
-msgctxt "prefix to distinguish scratch tabs"
-msgid "scratch:%1"
-msgstr "чернетка:%1"
-
-#: scratchpad.cpp:173
+#: scratchpad.cpp:187
 #, kde-format
 msgid "Failed to remove scratch: %1"
 msgstr "Не вдалося вилучити чернетку: %1"
 
-#: scratchpad.cpp:180
+#: scratchpad.cpp:194
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
 msgstr "Не вдалося створити чернетку: назву вже використано"
 
-#: scratchpad.cpp:192
+#: scratchpad.cpp:206
 #, kde-format
 msgid "Failed to create new scratch"
 msgstr "Не вдалося створити чернетку"
 
-#: scratchpad.cpp:201
+#: scratchpad.cpp:215
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr ""
 "Не вдалося перейменувати чернетку: у назві має бути роздільник елементів "
 "шляху"
 
-#: scratchpad.cpp:231
+#: scratchpad.cpp:256
 #, kde-format
 msgid "Failed renaming scratch."
 msgstr "Не вдалося перейменувати чернетку."
+
+#: scratchpad.cpp:299 scratchpadjob.cpp:33
+#, kde-format
+msgctxt "prefix to distinguish scratch tabs"
+msgid "scratch:%1"
+msgstr "чернетка:%1"
 
 #: scratchpadjob.cpp:57
 #, kde-format
@@ -74,7 +74,7 @@ msgstr "Процес завершив роботу із кодом виходу 
 msgid "Failed to run scratch: %1"
 msgstr "Не вдалося запустити чернетку: %1"
 
-#: scratchpadview.cpp:100
+#: scratchpadview.cpp:101
 #, kde-format
 msgid ""
 "Scratchpad lets you quickly run and experiment with code without a full "
@@ -85,50 +85,50 @@ msgstr ""
 "створення завдань на майбутнє. Створіть нову чернетку, щоб почати роботу з "
 "нотатником."
 
-#: scratchpadview.cpp:114
+#: scratchpadview.cpp:115
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command to run this scratch. '$f' will expand to the scratch path."
 msgstr ""
 "Команда для запуску цієї чернетки. «$f» буде розгорнуто до шляху до чернетки."
 
-#: scratchpadview.cpp:137
+#: scratchpadview.cpp:138
 #, kde-format
 msgctxt "@action"
 msgid "New Scratch"
 msgstr "Нова чернетка"
 
-#: scratchpadview.cpp:141
+#: scratchpadview.cpp:142
 #, kde-format
 msgctxt "@action"
 msgid "Remove Scratch"
 msgstr "Вилучити чернетку"
 
-#: scratchpadview.cpp:149
+#: scratchpadview.cpp:153
 #, kde-format
 msgctxt "@action"
 msgid "Rename Scratch"
 msgstr "Перейменувати чернетку"
 
-#: scratchpadview.cpp:158
+#: scratchpadview.cpp:162
 #, kde-format
 msgctxt "@action"
 msgid "Run Scratch"
 msgstr "Запустити чернетку"
 
-#: scratchpadview.cpp:164
+#: scratchpadview.cpp:168
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Фільтрувати…"
 
-#: scratchpadview.cpp:204
+#: scratchpadview.cpp:210
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New Scratch"
 msgstr "Створити чернетку"
 
-#: scratchpadview.cpp:205
+#: scratchpadview.cpp:211
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for scratch file:"

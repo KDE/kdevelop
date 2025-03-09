@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 00:41+0000\n"
+"POT-Creation-Date: 2025-03-09 00:40+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -592,7 +592,7 @@ msgid "Rename \"%1\" to \"%2\""
 msgstr "\"%1\" adını \"%2\" kimi dəyişin"
 
 #: language/assistant/renameaction.cpp:109
-#: language/assistant/renamefileaction.cpp:76
+#: language/assistant/renamefileaction.cpp:77
 #: language/codegen/basicrefactoring.cpp:343
 #: language/codegen/basicrefactoring.cpp:353
 #: language/codegen/basicrefactoring.cpp:367
@@ -1540,37 +1540,37 @@ msgstr ""
 "gizlənəcəkdir.\n"
 "Davam etmək istəyirsiniz?"
 
-#: project/builderjob.cpp:76
+#: project/builderjob.cpp:74
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
 msgstr "yığmaq"
 
-#: project/builderjob.cpp:78
+#: project/builderjob.cpp:76
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
 msgstr "təmizləyin"
 
-#: project/builderjob.cpp:80
+#: project/builderjob.cpp:78
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
 msgstr "ayarlayın"
 
-#: project/builderjob.cpp:82
+#: project/builderjob.cpp:80
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
 msgstr "quraşdırın"
 
-#: project/builderjob.cpp:84
+#: project/builderjob.cpp:82
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
 msgstr "qısaldın"
 
-#: project/builderjob.cpp:234
+#: project/builderjob.cpp:232
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
@@ -2073,19 +2073,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Xəta Sazlama"
 
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Başlatmanın xətalarını düzəldin"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Cari başlatmanın xətalarını düzəldin"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2319,7 +2319,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "Qısa izahatı"
 
-#: shell/documentcontroller.cpp:1298
+#: shell/documentcontroller.cpp:1287
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2497,7 +2497,7 @@ msgstr "Yüklənmiş qoşmalar"
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\">Qoşmalar <b>%1</b>üçün yükləndi</font></html>"
 
-#: shell/mainwindow.cpp:474
+#: shell/mainwindow.cpp:476
 #, kde-format
 msgid " (read only)"
 msgstr " (yalnız oxu)"
@@ -2818,20 +2818,20 @@ msgstr ""
 "Görünüş sahəsinin vəziyyət çubuğunu göstərmək və ya gizlətmək üçün bu əmrdən "
 "istifadə edin."
 
-#: shell/partdocument.cpp:108
+#: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr ""
 "\"%1\" sənədində saxlanılmamış dəyişikliklər var. Onları saxlamaq "
 "istəyirsiniz?"
 
-#: shell/partdocument.cpp:109 shell/partdocument.cpp:118
+#: shell/partdocument.cpp:110 shell/partdocument.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Sənədi Bağlayın"
 
-#: shell/partdocument.cpp:115
+#: shell/partdocument.cpp:114
 #, fuzzy, kde-format
 #| msgid ""
 #| "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2846,7 +2846,7 @@ msgstr ""
 "tərəfindən dəyişdirilib.\n"
 "Siz xarici dəyişikliklərin üzərinə yazmaq istəyirsiniz?"
 
-#: shell/partdocument.cpp:119 shell/textdocument.cpp:416
+#: shell/partdocument.cpp:118 shell/textdocument.cpp:410
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3349,42 +3349,42 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "Alın"
 
-#: shell/runcontroller.cpp:87
+#: shell/runcontroller.cpp:89
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "Xəta sazlama"
 
-#: shell/runcontroller.cpp:96
+#: shell/runcontroller.cpp:98
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "Profil"
 
-#: shell/runcontroller.cpp:105
+#: shell/runcontroller.cpp:107
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "İcra edin"
 
-#: shell/runcontroller.cpp:405
+#: shell/runcontroller.cpp:407
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Cari başlatma tənzimləməsi \"%1\" rejimini dəstəkləmir."
 
-#: shell/runcontroller.cpp:425
+#: shell/runcontroller.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Başlatmanı tənzimləyin..."
 
-#: shell/runcontroller.cpp:428
+#: shell/runcontroller.cpp:430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Başlatmanı tənzimləmə dialoqunu açın"
 
-#: shell/runcontroller.cpp:429
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3394,25 +3394,25 @@ msgstr ""
 "Yeni başlatma tənzimləməsini quracaq və ya mövcud olanı dəyişəcək dialoqu "
 "açır."
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Başlatmanı icra edin"
 
-#: shell/runcontroller.cpp:433
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "İcra edin"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:437
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Cari başlatmanı icra edin"
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3421,7 +3421,7 @@ msgid ""
 msgstr ""
 "Verilmiş cari aktiv başlatma tənzimləməsində hədəfi və ya proqramı icra edir."
 
-#: shell/runcontroller.cpp:442
+#: shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3432,84 +3432,84 @@ msgstr "Xəta sazlama"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:456
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Bütün işləri dayandırın"
 
-#: shell/runcontroller.cpp:457
+#: shell/runcontroller.cpp:459
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Hamısını dayandırın"
 
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Bütün hazırda işlək tapşırıqları dayandırın"
 
-#: shell/runcontroller.cpp:461
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Bütün işlək tapşırıqların dayanmasını tələb edir."
 
-#: shell/runcontroller.cpp:467
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Dayandırın"
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Dayandırın"
 
-#: shell/runcontroller.cpp:470
+#: shell/runcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Fərdi tapşırıqları dayandırmağa imkan verən menyu"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "Fərdi olaraq dayandırıla bilən tapşırıqların siyahısı."
 
-#: shell/runcontroller.cpp:475
+#: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Cari başlatma tənzimləməsi"
 
-#: shell/runcontroller.cpp:476
+#: shell/runcontroller.cpp:478
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Cari başlatma tənzimləməsi"
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "İlkin olaraq başladılacaq başlatma tənzimləməsini seçin."
 
-#: shell/runcontroller.cpp:590
+#: shell/runcontroller.cpp:592
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1>Adsız tapşırıq"
 
-#: shell/runcontroller.cpp:967
+#: shell/runcontroller.cpp:975
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Yeni %1 başladıcı"
 
-#: shell/runcontroller.cpp:1004
+#: shell/runcontroller.cpp:1012
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -3530,24 +3530,24 @@ msgstr "İcra olunma vaxtını seçməyə icazə verir"
 msgid "Runtime: %1"
 msgstr "İcra vaxtı: %1"
 
-#: shell/savedialog.cpp:44
+#: shell/savedialog.cpp:47
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Modified Files?"
 msgstr "Dəyişdirilmiş fayllar saxlanılsın?"
 
-#: shell/savedialog.cpp:47
+#: shell/savedialog.cpp:52
 #, kde-format
 msgid "The following files have been modified. Save them?"
 msgstr "Aşağıdakı fayllar dəyişsirildi. Onlar saxlanılsın?"
 
-#: shell/savedialog.cpp:65
+#: shell/savedialog.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
 msgstr "Heç biri&ni saxlamamaq"
 
-#: shell/savedialog.cpp:66
+#: shell/savedialog.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
@@ -5106,7 +5106,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Silin"
 
-#: shell/textdocument.cpp:411
+#: shell/textdocument.cpp:405
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5118,13 +5118,13 @@ msgstr ""
 "Onun üzərinə yazmaq istəyirsinizə əminsiniz? (Xarici dəyişikliklər "
 "itiriləcəkdir)."
 
-#: shell/textdocument.cpp:415
+#: shell/textdocument.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Sənəd xarici proqramla dəyişdirilib"
 
-#: shell/textdocument.cpp:658
+#: shell/textdocument.cpp:665
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Sətir: %1 Süt: %2 "
@@ -6018,7 +6018,7 @@ msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Geri qaytarın"
 
-#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:453
+#: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:456
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
@@ -6065,13 +6065,13 @@ msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Fərqləri almaq mümkün olmadı"
 
-#: vcs/vcspluginhelper.cpp:353
+#: vcs/vcspluginhelper.cpp:356
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 tarixçə (%1)"
 
-#: vcs/vcspluginhelper.cpp:417
+#: vcs/vcspluginhelper.cpp:420
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6080,7 +6080,7 @@ msgstr ""
 "Şərhlər göstərilə bilmədi, KTextEditor interfeysi çatışmır::Redaktor üçün "
 "AnnotationInterface."
 
-#: vcs/vcspluginhelper.cpp:421
+#: vcs/vcspluginhelper.cpp:424
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6091,7 +6091,7 @@ msgstr ""
 "tapılmadı:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:448 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:451 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"
