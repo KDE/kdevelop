@@ -13,6 +13,8 @@
 
 #include <QWidget>
 
+#include <memory>
+
 class ActiveStyledDelegate;
 class DiffViewsCtrl;
 class FilterEmptyItemsProxyModel;
@@ -68,11 +70,9 @@ public:
     enum ShowDiffParams { Activate, NoActivate };
 
     /**
-     * @note: m_statusmodel remains the property of the caller whose
-     * responsibility is to delete it (and care must be taken not
-     * to delete it before the CommitToolView is deleted)
+     * @param statusModel non-null VCS status model
      */
-    CommitToolView(QWidget* parent, RepoStatusModel* m_statusmodel);
+    explicit CommitToolView(std::shared_ptr<RepoStatusModel> statusModel, QWidget* parent);
     ~CommitToolView() override;
 
     /**
@@ -223,7 +223,7 @@ private:
      * The model which lists the projects and staged/modified/... files
      * which are shown in the treeview.
      */
-    RepoStatusModel* m_statusmodel;
+    const std::shared_ptr<RepoStatusModel> m_statusmodel;
 
     /**
      * The filtered repostatus model
@@ -265,14 +265,14 @@ private:
 class CommitToolViewFactory : public KDevelop::IToolViewFactory
 {
 public:
-    explicit CommitToolViewFactory(RepoStatusModel* statusModel);
+    explicit CommitToolViewFactory();
     ~CommitToolViewFactory();
     QWidget* create(QWidget* parent = nullptr) override;
     Qt::DockWidgetArea defaultPosition() const override;
     QString id() const override;
 
 private:
-    RepoStatusModel* m_statusmodel;
+    std::weak_ptr<RepoStatusModel> m_statusModel;
     DiffViewsCtrl* m_diffViewsCtrl;
 };
 

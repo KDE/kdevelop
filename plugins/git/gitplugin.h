@@ -25,7 +25,6 @@ class KDirWatch;
 class QDir;
 class QTimer;
 
-class RepoStatusModel;
 class CommitToolViewFactory;
 
 namespace KDevelop
@@ -420,9 +419,6 @@ private:
     KDirWatch* m_watcher;
     std::vector<WatchedFileAndListeners> m_watchedFiles;
     bool m_usePrefix = true;
-
-    /** A tree model tracking and classifying changes into staged, unstaged and untracked */
-    RepoStatusModel* m_repoStatusModel;
 
     /** A factory for constructing the tool view for preparing commits */
     CommitToolViewFactory* m_commitToolViewFactory;
