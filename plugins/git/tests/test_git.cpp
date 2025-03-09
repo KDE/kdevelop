@@ -66,8 +66,8 @@ bool writeFile(const QString &path, const QString& content, QIODevice::OpenModeF
 
 void GitInitTest::initTestCase()
 {
-    AutoTestShell::init({QStringLiteral("kdevgit")});
-    TestCore::initialize();
+    AutoTestShell::init({{}}); // load no plugins at all
+    TestCore::initialize(Core::NoUi);
 
     const auto pluginMetaData = makeTestPluginMetaData("TestGit");
     m_plugin = new GitPlugin(TestCore::self(), pluginMetaData);
