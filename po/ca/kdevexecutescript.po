@@ -353,15 +353,3 @@ msgid ""
 msgstr ""
 "*** No s'ha pogut iniciar el programa «%1». Assegureu-vos que teniu el camí "
 "definit correctament ***"
-
-#~ msgid "python"
-#~ msgstr "python"
-
-#~ msgid "ruby"
-#~ msgstr "ruby"
-
-#~ msgid "bash"
-#~ msgstr "bash"
-
-#~ msgid "php"
-#~ msgstr "php"

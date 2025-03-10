@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevgdb.pot\n"
-"X-Crowdin-File-ID: 54542\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevgdb.pot\n"
+"X-Crowdin-File-ID: 54790\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
 #, kde-format

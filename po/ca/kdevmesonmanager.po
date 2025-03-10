@@ -577,24 +577,3 @@ msgstr "Opcions predeterminades del projecte"
 #, kde-format
 msgid "New Option"
 msgstr "Opció nova"
-
-#~ msgid "Importing project failed"
-#~ msgstr "Ha fallat la importació del projecte"
-
-#~ msgid "Form"
-#~ msgstr "Formulari"
-
-#~ msgid "Basic configuration"
-#~ msgstr "Configuració bàsica"
-
-#~ msgid "Build type:"
-#~ msgstr "Tipus de construcció:"
-
-#~ msgid "Full path to the installation prefix"
-#~ msgstr "Camí complet amb el prefix d'instal·lació"
-
-#~ msgid "Installation prefix:"
-#~ msgstr "Prefix d'instal·lació:"
-
-#~ msgid "Build configuration"
-#~ msgstr "Configuració de la construcció"
