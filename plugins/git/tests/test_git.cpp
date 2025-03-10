@@ -15,15 +15,23 @@
 #include <tests/autotestshell.h>
 #include <tests/plugintesthelpers.h>
 #include <tests/testcore.h>
+#include <tests/testhelpermacros.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
+#include <vcs/vcsevent.h>
 
 #include <KPluginMetaData>
 
 #include <QDebug>
 #include <QRegularExpression>
+#include <QSignalSpy>
 #include <QTest>
 #include <QUrl>
+
+#include <algorithm>
+#include <array>
+#include <iterator>
+#include <vector>
 
 #define VERIFYJOB(j) \
 do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)
@@ -678,6 +686,126 @@ void GitInitTest::testStash()
     items = j->fetchResults().value<QList<GitPlugin::StashItem>>();
     QVERIFY(items.length() == 1);
 
+}
+
+void GitInitTest::testRegisterRepositoryForCurrentBranchChanges()
+{
+    repoInit();
+    addFiles();
+    commitFiles();
+
+    // Remove the trailing slash so that the QCOMPARE(X, baseUrl) calls below succeed.
+    const auto baseUrl = QUrl::fromLocalFile(gitTest_BaseDir().chopped(1));
+
+    QSignalSpy branchChangedSpy(m_plugin, &GitPlugin::repositoryBranchChanged);
+
+    const auto events = runSynchronously(m_plugin->log(baseUrl, VcsRevision::createSpecialRevision(VcsRevision::Base),
+                                                       VcsRevision::createSpecialRevision(VcsRevision::Start)))
+                            .toList();
+    QCOMPARE(events.size(), 2); // commitFiles() creates two commits
+    std::vector<VcsRevision> revisions;
+    revisions.reserve(events.size());
+    std::transform(events.cbegin(), events.cend(), std::back_inserter(revisions), [](const QVariant& event) {
+        return event.value<VcsEvent>().revision();
+    });
+
+    const auto master = QStringLiteral("master");
+    const auto branch1 = QStringLiteral("branch1");
+    const auto branch2 = QStringLiteral("branch2");
+    // The master branch already exists, create two more branches.
+    for (const auto* const branch : {&branch1, &branch2}) {
+        const auto& revision = branch == &branch1 ? revisions.front() : revisions.back();
+        auto* const job = m_plugin->branch(baseUrl, revision, *branch);
+        VERIFYJOB(job);
+    }
+
+#define SWITCH_BRANCH(branchName)                                                                                      \
+    do {                                                                                                               \
+        auto* const job = m_plugin->switchBranch(baseUrl, branchName);                                                 \
+        VERIFYJOB(job);                                                                                                \
+    } while (false)
+
+    // The signal GitPlugin::repositoryBranchChanged() is emitted
+    // after a delay of one second. Wait two seconds to be safe.
+    constexpr auto signalWaitInterval = 2000;
+
+    const auto verifyZeroSignalsEvenAfterWait = [&branchChangedSpy] {
+        QCOMPARE(branchChangedSpy.count(), 0);
+        QTest::qWait(signalWaitInterval);
+        QCOMPARE(branchChangedSpy.count(), 0);
+    };
+
+    const auto verifyAndRemoveSingleSignalAfterWait = [&branchChangedSpy, &baseUrl] {
+        QCOMPARE(branchChangedSpy.count(), 0); // the signal is emitted after a delay
+        QTest::qWait(signalWaitInterval);
+        QCOMPARE(branchChangedSpy.count(), 1);
+        QCOMPARE(branchChangedSpy.takeFirst().constFirst().toUrl(), baseUrl); // verify and remove the signal
+        QCOMPARE(branchChangedSpy.count(), 0);
+    };
+
+#define VERIFY_ZERO_SIGNALS_EVEN_AFTER_WAIT()                                                                          \
+    do {                                                                                                               \
+        verifyZeroSignalsEvenAfterWait();                                                                              \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
+
+#define VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT()                                                                   \
+    do {                                                                                                               \
+        verifyAndRemoveSingleSignalAfterWait();                                                                        \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
+
+    std::array<QObject, 3> listeners;
+
+    // No listeners have been registered => no signal.
+    SWITCH_BRANCH(branch1);
+    VERIFY_ZERO_SIGNALS_EVEN_AFTER_WAIT();
+
+    m_plugin->registerRepositoryForCurrentBranchChanges(baseUrl, &listeners[0]);
+
+    // Registered a listener => signal.
+    SWITCH_BRANCH(master);
+    VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT();
+
+    // A single signal is emitted for multiple close-by current branch changes due to an optimizing compression.
+    for (auto i = 0; i < 5; ++i) {
+        for (const auto* const branch : {&branch1, &branch2, &master}) {
+            SWITCH_BRANCH(*branch);
+        }
+    }
+    VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT();
+
+    m_plugin->registerRepositoryForCurrentBranchChanges(baseUrl, &listeners[1]);
+
+    // A single signal is emitted for any number of listeners.
+    SWITCH_BRANCH(branch2);
+    VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT();
+
+    m_plugin->unregisterRepositoryForCurrentBranchChanges(baseUrl, &listeners[0]);
+
+    // The signal is emitted because one listener still remains.
+    SWITCH_BRANCH(revisions.front().prettyValue()); // test checking out a revision instead of a branch
+    VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT();
+
+    m_plugin->unregisterRepositoryForCurrentBranchChanges(baseUrl, &listeners[0]);
+
+    // The signal is emitted because unregistering a listener, even redundantly, never affects other listeners.
+    runCommand("git", {"checkout", master}); // test checking out externally, bypassing GitPlugin
+    VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT();
+
+    m_plugin->unregisterRepositoryForCurrentBranchChanges(baseUrl, &listeners[1]);
+
+    // Unregistered all listeners => no signal anymore.
+    SWITCH_BRANCH(branch2);
+    VERIFY_ZERO_SIGNALS_EVEN_AFTER_WAIT();
+
+    m_plugin->registerRepositoryForCurrentBranchChanges(baseUrl, &listeners[2]);
+
+    // Registered a listener again => the signal is emitted.
+    SWITCH_BRANCH(branch1);
+    VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT();
+
+    m_plugin->unregisterRepositoryForCurrentBranchChanges(baseUrl, &listeners[2]);
 }
 
 QTEST_MAIN(GitInitTest)

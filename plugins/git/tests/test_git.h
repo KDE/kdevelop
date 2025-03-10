@@ -50,6 +50,7 @@ private Q_SLOTS:
     void testRemoveFolderContainingUnversionedFiles();
     void testDiff();
     void testStash();
+    void testRegisterRepositoryForCurrentBranchChanges();
 
 private:
     GitPlugin* m_plugin;
