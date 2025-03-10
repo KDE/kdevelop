@@ -62,6 +62,8 @@ void GitInitTest::initTestCase()
 
     const auto pluginMetaData = makeTestPluginMetaData("TestGit");
     m_plugin = new GitPlugin(TestCore::self(), pluginMetaData);
+
+    removeTempDirs(); // in case the previous test run crashed and left a git repository behind
 }
 
 void GitInitTest::cleanupTestCase()
