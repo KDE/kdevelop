@@ -1,19 +1,19 @@
 # translation of kdevplatform.po to Italian
 #
+# SPDX-FileCopyrightText: 2007, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 # Matteo Merli <merlim@libero.it>, 2001.
 # Daniele Medri <madrid@linuxmeeting.net>, 2003.
 # Giovanni Venturi <jumpyj@libero.it>, 2003, 2004.
 # Luciano Montanaro <mikelima@cirulla.net>, 2003.
 # Giovanni Venturi <jumpyj@tiscali.it>, 2003, 2004, 2005, 2006, 2007, 2008.
 # Nicola Ruggero <nicola@nxnt.org>, 2007.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2007, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Simone Solinas <ksolsim@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-09 00:40+0000\n"
-"PO-Revision-Date: 2024-08-12 22:53+0200\n"
+"PO-Revision-Date: 2025-03-02 15:22+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2375,26 +2375,30 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"I seguenti linguaggi sono meglio supportati dalle estensioni di KDevelop ad "
+"essi dedicate, e sono quindi disabilitate nell'estensione %1 per prevenire "
+"conflitti: <var>%2</var>. Per poter confrontare i livelli di supporto o per "
+"aggirare dei bug gravi, disabilita la/le estensione/i dedicata/e di KDevelop "
+"e imposta la variabile d'ambiente <var>%3</var> (<span style='color:%4'>%5</"
+"span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "attualmente impostata"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "attualmente non impostata"
 
 #: shell/ktexteditorpluginintegration.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "Messaggio"
+msgstr "Messaggi"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
