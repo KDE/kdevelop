@@ -33,6 +33,19 @@ static constexpr auto enableMultipleToolViewWidgets = false;
 
 using namespace Sublime;
 
+namespace {
+
+void checkToolViews(const Area* area)
+{
+    QVERIFY(area);
+    const auto& toolViews = area->toolViews();
+    for (const auto* const view : toolViews) {
+        QVERIFY(view);
+        QVERIFY(view->document());
+        QVERIFY(view->widget());
+    }
+}
+
 struct ViewCounter {
     ViewCounter() {}
     Area::WalkerMode operator()(AreaIndex *index)
@@ -42,6 +55,8 @@ struct ViewCounter {
     }
     int count = 0;
 };
+
+} // unnamed namespace
 
 void TestAreaOperation::initTestCase()
 {
@@ -226,6 +241,8 @@ static QWidget* checkAreaCommon(MainWindow* mw)
 {
     QVERIFY_RETURN(mw, {});
     Area *area = mw->area();
+    checkToolViews(area);
+    RETURN_IF_TEST_FAILED({});
 
     //check that all docks have their widgets
     const auto toolDocks = mw->toolDocks();
