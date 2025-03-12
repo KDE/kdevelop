@@ -63,6 +63,42 @@ void checkToolViews(const Area* area)
     }
 }
 
+enum class MainWindowAffinity {
+    SameWindow,
+    DifferentWindows
+};
+
+void compareDifferentViewsOfOneDocument(const View* viewA, const View* viewB, MainWindowAffinity affinity)
+{
+    QCOMPARE_NE(viewA, viewB);
+    QCOMPARE_EQ(viewA->document(), viewB->document());
+
+    if (affinity == MainWindowAffinity::SameWindow) {
+        // a single tool view widget is shared by all sublime areas in one main window
+        QCOMPARE_EQ(viewA->widget(), viewB->widget());
+    } else {
+        // each main window has its own separate tool view widget
+        QCOMPARE_NE(viewA->widget(), viewB->widget());
+    }
+}
+
+void compareAreas1and2(const Area* area1, const Area* area2, MainWindowAffinity affinity)
+{
+    QVERIFY(area1);
+    QVERIFY(area2);
+
+    const auto& toolViews1 = area1->toolViews();
+    const auto& toolViews2 = area2->toolViews();
+    for (const auto* const view1 : toolViews1) {
+        const auto name2 = view1->objectName().replace("view1", "view2");
+        // for each tool view in area1 (except for the disabled toolview1.2.2)
+        // there is a counterpart view of the same document in area2
+        const auto* const view2 = findNamedView(toolViews2, name2);
+        RETURN_IF_TEST_FAILED();
+        compareDifferentViewsOfOneDocument(view1, view2, affinity);
+    }
+}
+
 struct ViewCounter {
     ViewCounter() {}
     Area::WalkerMode operator()(AreaIndex *index)
@@ -245,13 +281,17 @@ void TestAreaOperation::mainWindowConstruction()
     //====== check for m_area1 ======
     MainWindow mw1(m_controller);
     m_controller->showArea(m_area1, &mw1);
+    QCOMPARE_EQ(mw1.area(), m_area1);
     checkArea1(&mw1);
 
 /////////////
  //====== check for m_area2 ======
     MainWindow mw2(m_controller);
     m_controller->showArea(m_area2, &mw2);
+    QCOMPARE_EQ(mw2.area(), m_area2);
     checkArea2(&mw2);
+
+    compareAreas1and2(m_area1, m_area2, MainWindowAffinity::DifferentWindows);
 }
 
 static QWidget* checkAreaCommon(MainWindow* mw)
@@ -355,6 +395,15 @@ void TestAreaOperation::areaCloning()
     //check mainwindow layouts - original and copy
     checkArea1(&mw1);
     checkArea1(&mw2);
+
+    const auto& toolViews1 = mw1.area()->toolViews();
+    const auto& toolViews2 = mw2.area()->toolViews();
+    // m_area1 is shown in one main window and its clone - in another.
+    // The number and order of tool views must be the same.
+    QCOMPARE_EQ(toolViews1.size(), toolViews2.size());
+    for (auto i = qsizetype{0}, size = toolViews1.size(); i < size; ++i) {
+        compareDifferentViewsOfOneDocument(toolViews1[i], toolViews2[i], MainWindowAffinity::DifferentWindows);
+    }
 }
 
 /*! Functor used by areaSwitchingInSameMainWindow()
@@ -388,9 +437,11 @@ void TestAreaOperation::areaSwitchingInSameMainwindow()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
+    QCOMPARE_EQ(mw.area(), m_area1);
     checkArea1(&mw);
 
     m_controller->showArea(m_area2, &mw);
+    QCOMPARE_EQ(mw.area(), m_area2);
     checkArea2(&mw);
 
     //check what happened to area1 widgets, they should be intact
@@ -398,6 +449,8 @@ void TestAreaOperation::areaSwitchingInSameMainwindow()
     m_area1->walkViews(checker, m_area1->rootIndex());
     m_area1->walkToolViews(checker, Sublime::AllPositions);
     QVERIFY2(!checker.foundViewWithoutWidget, checker.failureMessage.toLatin1().data());
+
+    compareAreas1and2(m_area1, m_area2, MainWindowAffinity::SameWindow);
 }
 
 void TestAreaOperation::simpleViewAdditionAndDeletion()
