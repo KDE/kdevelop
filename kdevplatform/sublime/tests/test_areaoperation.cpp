@@ -24,6 +24,7 @@
 #include <sublime/mainwindow.h>
 #include <sublime/container.h>
 #include <tests/corelesshelpers.h>
+#include <tests/testhelpermacros.h>
 
 #include "areaprinter.h"
 
@@ -221,24 +222,35 @@ void TestAreaOperation::mainWindowConstruction()
     checkArea2(&mw2);
 }
 
-void TestAreaOperation::checkArea1(MainWindow *mw)
+static QWidget* checkAreaCommon(MainWindow* mw)
 {
+    QVERIFY_RETURN(mw, {});
     Area *area = mw->area();
+
     //check that all docks have their widgets
     const auto toolDocks = mw->toolDocks();
     for (const auto* const dock : toolDocks) {
-        QVERIFY(dock->widget());
+        QVERIFY_RETURN(dock->widget(), {});
     }
-    QCOMPARE(toolDocks.count(), area->toolViews().count());
+    QCOMPARE_RETURN(toolDocks.count(), area->toolViews().count(), {});
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
-    QVERIFY(central != nullptr);
-    QVERIFY(central->inherits("QWidget"));
+    QVERIFY_RETURN(central, {});
+    QVERIFY_RETURN(central->inherits("QWidget"), {});
 
     QWidget *splitter = central->findChild<QSplitter*>();
-    QVERIFY(splitter);
-    QVERIFY(splitter->inherits("QSplitter"));
+    QVERIFY_RETURN(splitter, {});
+    QVERIFY_RETURN(splitter->inherits("QSplitter"), {});
+
+    return splitter;
+}
+
+void TestAreaOperation::checkArea1(MainWindow* mw)
+{
+    const auto* const splitter = checkAreaCommon(mw);
+    RETURN_IF_TEST_FAILED();
+    auto* const area = mw->area();
 
     //check that we have a container and 4 views inside
     auto *container = splitter->findChild<Sublime::Container*>();
@@ -252,22 +264,9 @@ void TestAreaOperation::checkArea1(MainWindow *mw)
 
 void TestAreaOperation::checkArea2(MainWindow *mw)
 {
+    auto* const splitter = checkAreaCommon(mw);
+    RETURN_IF_TEST_FAILED();
     Area *area = mw->area();
-    //check that all docks have their widgets
-    const auto toolDocks = mw->toolDocks();
-    for (const auto* const dock : toolDocks) {
-        QVERIFY(dock->widget());
-    }
-    QCOMPARE(toolDocks.count(), area->toolViews().count());
-
-    //check that mainwindow have all splitters and widgets in splitters inside centralWidget
-    QWidget *central = mw->centralWidget();
-    QVERIFY(central != nullptr);
-    QVERIFY(central->inherits("QWidget"));
-
-    QWidget *splitter = central->findChild<QSplitter*>();
-    QVERIFY(splitter);
-    QVERIFY(splitter->inherits("QSplitter"));
 
     //check that we have 4 properly initialized containers
     const QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
