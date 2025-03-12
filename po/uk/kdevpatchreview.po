@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:41+0000\n"
 "PO-Revision-Date: 2020-07-20 08:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -287,12 +287,12 @@ msgctxt "@action"
 msgid "Deselect All"
 msgstr "Зняти позначення з усього"
 
-#: patchreviewtoolview.cpp:557
+#: patchreviewtoolview.cpp:559
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Виконання перевірки: %p%"
 
-#: patchreviewtoolview.cpp:585
+#: patchreviewtoolview.cpp:587
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
@@ -301,7 +301,7 @@ msgstr[1] "Пройдено %1 перевірки"
 msgstr[2] "Пройдено %1 перевірок"
 msgstr[3] "Перевірку пройдено"
 
-#: patchreviewtoolview.cpp:589
+#: patchreviewtoolview.cpp:591
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr ""

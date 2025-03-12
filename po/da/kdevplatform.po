@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2014-08-24 21:50+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -6673,14 +6673,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "Commit filer:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Recursive"
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "Rekursivt"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6774,6 +6766,12 @@ msgstr "Forskelle til før"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Forskel mellem revisioner"
+
+#, fuzzy
+#~| msgid "Recursive"
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "Rekursivt"
 
 #~ msgid "%1|All Project Files (%1)"
 #~ msgstr "%1|Alle projektfiler (%1)"

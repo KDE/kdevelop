@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:41+0000\n"
 "PO-Revision-Date: 2020-07-29 11:34-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -289,19 +289,19 @@ msgctxt "@action"
 msgid "Deselect All"
 msgstr "Desmarcar tudo"
 
-#: patchreviewtoolview.cpp:557
+#: patchreviewtoolview.cpp:559
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Executando testes: %p%"
 
-#: patchreviewtoolview.cpp:585
+#: patchreviewtoolview.cpp:587
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "Passou no teste"
 msgstr[1] "Todos os %1 testes passaram"
 
-#: patchreviewtoolview.cpp:589
+#: patchreviewtoolview.cpp:591
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Resultados dos testes: %1 passaram, %2 falharam e %3 tiveram erros"

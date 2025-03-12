@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2024-08-06 05:13+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -5973,13 +5973,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "提交檔案："
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, kde-format
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "遞迴"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6062,6 +6055,10 @@ msgstr "與前一個版本的差異"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修訂版之間的差異"
+
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "遞迴"
 
 #~ msgid "%2"
 #~ msgid_plural "%2 (repeated %1 times)"

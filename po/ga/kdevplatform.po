@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform/kdevplatform.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -6325,14 +6325,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "Athfhormáidigh Líne"
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Recursive"
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "Athchúrsach"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6412,6 +6404,12 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Recursive"
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "Athchúrsach"
 
 #, fuzzy
 #~| msgid "Running"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 22:10+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -284,19 +284,19 @@ msgctxt "@action"
 msgid "Deselect All"
 msgstr "सर्वाणि अचयनं कुर्वन्तु"
 
-#: patchreviewtoolview.cpp:557
+#: patchreviewtoolview.cpp:559
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "परीक्षणं चालयति: %p%"
 
-#: patchreviewtoolview.cpp:585
+#: patchreviewtoolview.cpp:587
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "परीक्षा उत्तीर्णा"
 msgstr[1] "सर्वाणि %1 परीक्षानि उत्तीर्णानि"
 
-#: patchreviewtoolview.cpp:589
+#: patchreviewtoolview.cpp:591
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "परीक्षणपरिणामाः : %1 उत्तीर्णः, %2 विफलः, %3 त्रुटयः"

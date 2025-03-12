@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -6153,13 +6153,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "Göndəriş faylları:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, kde-format
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "Rekursiv"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6243,6 +6236,10 @@ msgstr "Əvvəlki ilə fərqi"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Buraxılışlar arasındakı fərq"
+
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "Rekursiv"
 
 #~ msgid "%2"
 #~ msgid_plural "%2 (repeated %1 times)"

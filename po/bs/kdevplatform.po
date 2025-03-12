@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -6689,14 +6689,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "Upiši datoteke:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Recursive"
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "Rekurzivno"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6787,6 +6779,12 @@ msgstr "Razlika u odnosu na prethodnu"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Razlika između revizija"
+
+#, fuzzy
+#~| msgid "Recursive"
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "Rekurzivno"
 
 #~ msgid "%1|All Project Files (%1)"
 #~ msgstr "%1|Sve projektne datoteke (%1)"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -6354,14 +6354,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "コミットするファイル:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Recursive:"
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "再帰的:"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6448,6 +6440,12 @@ msgstr "前のリビジョンとの差分"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "リビジョン間の差分"
+
+#, fuzzy
+#~| msgid "Recursive:"
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "再帰的:"
 
 #~ msgid "Could not find an open document"
 #~ msgstr "開いている文書がありません"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2024-09-20 13:57+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -6285,13 +6285,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "Υποβολή αρχείων:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, kde-format
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "Αναδρομικά"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6376,6 +6369,10 @@ msgstr "Διαφορά με προηγούμενη"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Διαφορά μεταξύ αναθεωρήσεων"
+
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "Αναδρομικά"
 
 #~ msgid "Could not find an open document"
 #~ msgstr "Αδυναμία εύρεσης ανοιχτών εγγράφων"

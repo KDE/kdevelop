@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevvcscommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2008-12-17 18:58+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -6004,14 +6004,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "ਕਮਿਟ..."
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Remove"
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "ਹਟਾਓ"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6092,6 +6084,12 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "ਹਟਾਓ"
 
 #, fuzzy
 #~| msgid "Revert"

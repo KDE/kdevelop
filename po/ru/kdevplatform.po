@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2023-04-25 11:06+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -6180,13 +6180,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "Фиксировать файлы:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, kde-format
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "Рекурсивно"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6271,6 +6264,10 @@ msgstr "Отличие от предыдущей"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Различия между ревизиями"
+
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "Рекурсивно"
 
 #~ msgid "%2"
 #~ msgid_plural "%2 (repeated %1 times)"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:40+0000\n"
+"POT-Creation-Date: 2025-03-12 00:40+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -6538,14 +6538,6 @@ msgctxt "@label:listbox"
 msgid "Commit files:"
 msgstr "Тапсыратын файлдар:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
-#: vcs/widgets/vcscommitdialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Recursive"
-msgctxt "@option:check"
-msgid "Recursive"
-msgstr "Рекурсивті"
-
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
 msgid "Old Messages"
@@ -6636,6 +6628,12 @@ msgstr "Алдыңғысымен айырмашылық"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Жетілдірім арасындағы айырмашылық"
+
+#, fuzzy
+#~| msgid "Recursive"
+#~ msgctxt "@option:check"
+#~ msgid "Recursive"
+#~ msgstr "Рекурсивті"
 
 #~ msgid "Could not find an open document"
 #~ msgstr "Ашылған құжат табылмады"
