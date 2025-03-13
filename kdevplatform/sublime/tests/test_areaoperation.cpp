@@ -8,6 +8,7 @@
 
 #include <QTest>
 #include <QListView>
+#include <QPointer>
 #include <QTextEdit>
 #include <QSplitter>
 #include <QUrl>
@@ -602,12 +603,17 @@ void TestAreaOperation::toolViewAdditionAndDeletion()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
+    QCOMPARE_EQ(mw.area(), m_area1);
     checkArea1(&mw);
 
     Document *tool4 = new ToolDocument(QStringLiteral("tool4"), m_controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool4")));
     View *view = tool4->createView();
     view->setObjectName(QStringLiteral("toolview1.4.1"));
     m_area1->addToolView(view, Sublime::Right);
+
+    const QPointer viewWidget = view->widget();
+    QVERIFY(viewWidget);
+    checkArea1(&mw); // verify that nothing has been broken
 
     //check that area is in valid state
     AreaToolViewsPrinter toolViewsPrinter1;
@@ -638,6 +644,9 @@ toolview1.4.1 [ right ]\n\
 
     //now remove tool view
     m_area1->removeToolView(view);
+
+    QCOMPARE_EQ(viewWidget, nullptr); // the view widget is not reused, and thus should be destroyed
+    checkArea1(&mw); // verify that nothing has been broken
 
     AreaToolViewsPrinter toolViewsPrinter2;
     //check that area doesn't have it anymore
