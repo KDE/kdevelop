@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-12 00:40+0000\n"
+"POT-Creation-Date: 2025-03-13 00:40+0000\n"
 "PO-Revision-Date: 2024-07-22 16:56+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -1588,13 +1588,13 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Cesta"
 
-#: project/projectchangesmodel.cpp:275
+#: project/projectchangesmodel.cpp:308
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "žádná větev"
 
-#: project/projectchangesmodel.cpp:276
+#: project/projectchangesmodel.cpp:309
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"

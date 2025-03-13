@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-13 00:40+0000\n"
 "PO-Revision-Date: 2024-09-20 13:56+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -205,68 +205,68 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Εγγραφή στην καθολική διαμόρφωση"
 
-#: gitplugin.cpp:185
+#: gitplugin.cpp:192
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "Αδυναμία εύρεσης του εκτελέσιμου git. Έχει εγκατασταθεί στο σύστημα;"
 
-#: gitplugin.cpp:194
+#: gitplugin.cpp:201
 #, kde-format
 msgid "Git Commit"
 msgstr ""
 
-#: gitplugin.cpp:251
+#: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr ""
 
-#: gitplugin.cpp:252
+#: gitplugin.cpp:259
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Εκκρεμότητες git"
 
-#: gitplugin.cpp:253
+#: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Διαχειριστής εκκρεμοτήτων"
 
-#: gitplugin.cpp:254
+#: gitplugin.cpp:261
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Ώθηση εκκρεμότητας"
 
-#: gitplugin.cpp:255
+#: gitplugin.cpp:262
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Απώθηση εκκρεμότητας"
 
-#: gitplugin.cpp:288
+#: gitplugin.cpp:295
 #, kde-format
 msgid "error: %1"
 msgstr "σφάλμα: %1"
 
-#: gitplugin.cpp:387 gitplugin.cpp:398
+#: gitplugin.cpp:394 gitplugin.cpp:405
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Δε καθορίστηκε η λίστα των αρχείων"
 
-#: gitplugin.cpp:460
+#: gitplugin.cpp:467
 #, fuzzy, kde-format
 #| msgid "Could not revert changes"
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Αδυναμία επαναφοράς από αλλαγές"
 
-#: gitplugin.cpp:494
+#: gitplugin.cpp:501
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Αδυναμία επαναφοράς από αλλαγές"
 
-#: gitplugin.cpp:505
+#: gitplugin.cpp:512
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -274,41 +274,41 @@ msgstr ""
 "Τα ακόλουθα αρχεία περιέχουν αλλαγές που δεν έχουν υποβληθεί και θα χαθούν. "
 "Θα συνεχίσετε;"
 
-#: gitplugin.cpp:530
+#: gitplugin.cpp:537
 #, kde-format
 msgid "No files or message specified"
 msgstr "Δεν ορίσθηκαν αρχεία ή μήνυμα"
 
-#: gitplugin.cpp:534 gitplugin.cpp:553
+#: gitplugin.cpp:541 gitplugin.cpp:560
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Δεν ορίσθηκε διεύθυνση αλληλογραφίας ή όνομα για το git"
 
-#: gitplugin.cpp:550
+#: gitplugin.cpp:557
 #, fuzzy, kde-format
 #| msgid "No files or message specified"
 msgid "No message specified"
 msgstr "Δεν ορίσθηκαν αρχεία ή μήνυμα"
 
-#: gitplugin.cpp:624
+#: gitplugin.cpp:631
 #, kde-format
 msgid "No files to remove"
 msgstr "Δεν υπάρχουν αρχεία για αφαίρεση"
 
-#: gitplugin.cpp:904
+#: gitplugin.cpp:911
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Υπάρχουν αλλαγές σε εξέλιξη, θέλετε να τις θέσετε σε εκκρεμότητα πρώτα;"
 
-#: gitplugin.cpp:905
+#: gitplugin.cpp:912
 #, fuzzy, kde-format
 #| msgid "Pop Stash"
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Απώθηση εκκρεμότητας"
 
-#: gitplugin.cpp:906
+#: gitplugin.cpp:913
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -349,169 +349,169 @@ msgctxt "@action:button"
 msgid "Cancel"
 msgstr ""
 
-#: repostatusmodel.cpp:64
+#: repostatusmodel.cpp:78
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged changes"
 msgstr ""
 
-#: repostatusmodel.cpp:67
+#: repostatusmodel.cpp:81
 #, kde-format
 msgctxt "Files in a vcs which have changes not yet staged for commit"
 msgid "Unstaged changes"
 msgstr ""
 
-#: repostatusmodel.cpp:70
+#: repostatusmodel.cpp:84
 #, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflits"
 msgid "Conflicts"
 msgstr ""
 
-#: repostatusmodel.cpp:72
+#: repostatusmodel.cpp:86
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked files"
 msgstr ""
 
-#: repostatusmodel.cpp:82
+#: repostatusmodel.cpp:96
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
 msgstr ""
 
-#: repostatusmodel.cpp:84
+#: repostatusmodel.cpp:97
 #, kde-format
 msgid "Files with changes staged for commit"
 msgstr ""
 
-#: repostatusmodel.cpp:89
+#: repostatusmodel.cpp:102
 #, kde-format
 msgctxt "Files in a vcs which have changes not checked in to repo"
 msgid "Modified"
 msgstr ""
 
-#: repostatusmodel.cpp:91
+#: repostatusmodel.cpp:104
 #, kde-format
 msgid "Files with changes"
 msgstr ""
 
-#: repostatusmodel.cpp:96
+#: repostatusmodel.cpp:109
 #, kde-format
 msgctxt "Files in git which have unresolved (merge) conflits"
 msgid "Conflicts"
 msgstr ""
 
-#: repostatusmodel.cpp:98
+#: repostatusmodel.cpp:111
 #, kde-format
 msgid "Files with unresolved (merge) conflicts"
 msgstr ""
 
-#: repostatusmodel.cpp:103
+#: repostatusmodel.cpp:116
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked"
 msgstr ""
 
-#: repostatusmodel.cpp:104
+#: repostatusmodel.cpp:117
 #, kde-format
 msgid "Files not tracked in VCS"
 msgstr ""
 
-#: repostatusmodel.cpp:222
+#: repostatusmodel.cpp:242
 #, kde-format
 msgctxt "@item file has unstaged changes"
 msgid "Modified (unstaged)"
 msgstr ""
 
-#: repostatusmodel.cpp:224
+#: repostatusmodel.cpp:244
 #, kde-format
 msgctxt "@item file was deleted from worktree"
 msgid "Deleted (unstaged)"
 msgstr ""
 
-#: repostatusmodel.cpp:226
+#: repostatusmodel.cpp:246
 #, kde-format
 msgctxt "@item file was renamed in worktree"
 msgid "Renamed (unstaged)"
 msgstr ""
 
-#: repostatusmodel.cpp:228
+#: repostatusmodel.cpp:248
 #, kde-format
 msgctxt "@item file was copied in worktree"
 msgid "Copied (unstaged)"
 msgstr ""
 
-#: repostatusmodel.cpp:230
+#: repostatusmodel.cpp:250
 #, kde-format
 msgctxt "@item file has staged changes"
 msgid "Modified (staged)"
 msgstr ""
 
-#: repostatusmodel.cpp:232
+#: repostatusmodel.cpp:252
 #, kde-format
 msgctxt "@item file has both staged and unstaged changes"
 msgid "Modified (unstaged changes)"
 msgstr ""
 
-#: repostatusmodel.cpp:234
+#: repostatusmodel.cpp:254
 #, kde-format
 msgctxt "@item file has staged changes and was deleted in worktree"
 msgid "Modified (unstaged deletion)"
 msgstr ""
 
-#: repostatusmodel.cpp:237
+#: repostatusmodel.cpp:257
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
 msgid "Added (unstaged changes)"
 msgstr ""
 
-#: repostatusmodel.cpp:240
+#: repostatusmodel.cpp:260
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
 msgid "Added (unstaged deletion)"
 msgstr ""
 
-#: repostatusmodel.cpp:243
+#: repostatusmodel.cpp:263
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and renamed in worktree"
 msgid "Deleted (unstaged rename)"
 msgstr ""
 
-#: repostatusmodel.cpp:246
+#: repostatusmodel.cpp:266
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and copied in worktree"
 msgid "Deleted (unstaged copy)"
 msgstr ""
 
-#: repostatusmodel.cpp:248
+#: repostatusmodel.cpp:268
 #, kde-format
 msgctxt "@item file was renamed in versioncontrolsystem"
 msgid "Renamed (staged)"
 msgstr ""
 
-#: repostatusmodel.cpp:251
+#: repostatusmodel.cpp:271
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and has unstaged changes"
 msgid "Renamed (unstaged changes)"
 msgstr ""
 
-#: repostatusmodel.cpp:254
+#: repostatusmodel.cpp:274
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and was deleted in worktree"
 msgid "Renamed (unstaged deletion)"
 msgstr ""
 
-#: repostatusmodel.cpp:256
+#: repostatusmodel.cpp:276
 #, kde-format
 msgctxt "@item file was copied in versioncontrolsystem"
 msgid "Copied"
 msgstr ""
 
-#: repostatusmodel.cpp:259
+#: repostatusmodel.cpp:279
 #, fuzzy, kde-format
 #| msgid "Could not revert changes"
 msgctxt ""
@@ -519,58 +519,58 @@ msgctxt ""
 msgid "Copied (unstaged changes)"
 msgstr "Αδυναμία επαναφοράς από αλλαγές"
 
-#: repostatusmodel.cpp:262
+#: repostatusmodel.cpp:282
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and was deleted in worktree"
 msgid "Copied (unstaged deletion)"
 msgstr ""
 
-#: repostatusmodel.cpp:264
+#: repostatusmodel.cpp:284
 #, kde-format
 msgctxt "@item file has unresolved merge conflicts"
 msgid "Unresolved conflicts"
 msgstr ""
 
-#: repostatusmodel.cpp:266
+#: repostatusmodel.cpp:286
 #, kde-format
 msgctxt "@item file is not under vcs"
 msgid "Untracked"
 msgstr ""
 
-#: repostatusmodel.cpp:269
+#: repostatusmodel.cpp:289
 #, kde-format
 msgctxt "file in unknown (invalid) state"
 msgid "Unknown"
 msgstr ""
 
-#: repostatusmodel.cpp:362
+#: repostatusmodel.cpp:382
 #, kde-format
 msgid " (staged)"
 msgstr ""
 
-#: repostatusmodel.cpp:370
+#: repostatusmodel.cpp:390
 #, kde-format
 msgid " (unstaged)"
 msgstr ""
 
-#: repostatusmodel.cpp:378
+#: repostatusmodel.cpp:398
 #, kde-format
 msgid " (conflicts)"
 msgstr ""
 
-#: repostatusmodel.cpp:386
+#: repostatusmodel.cpp:406
 #, kde-format
 msgid " (untracked)"
 msgstr ""
 
-#: repostatusmodel.cpp:580
+#: repostatusmodel.cpp:603
 #, fuzzy, kde-format
 #| msgid "Branch"
 msgid "no branch"
 msgstr "Κλάδος"
 
-#: repostatusmodel.cpp:581
+#: repostatusmodel.cpp:604
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"

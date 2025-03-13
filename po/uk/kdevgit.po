@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-13 00:40+0000\n"
 "PO-Revision-Date: 2022-09-26 08:38+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -202,68 +202,68 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Записати до загальних налаштувань"
 
-#: gitplugin.cpp:185
+#: gitplugin.cpp:192
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr ""
 "Не вдалося виявити виконуваний файл git. Чи встановлено його у вашій системі?"
 
-#: gitplugin.cpp:194
+#: gitplugin.cpp:201
 #, kde-format
 msgid "Git Commit"
 msgstr "Внесок до git"
 
-#: gitplugin.cpp:251
+#: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Перенести основу"
 
-#: gitplugin.cpp:252
+#: gitplugin.cpp:259
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Записи реєстру Git"
 
-#: gitplugin.cpp:253
+#: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Керування реєстром"
 
-#: gitplugin.cpp:254
+#: gitplugin.cpp:261
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Застосувати запис"
 
-#: gitplugin.cpp:255
+#: gitplugin.cpp:262
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Виштовхнути запис реєстру"
 
-#: gitplugin.cpp:288
+#: gitplugin.cpp:295
 #, kde-format
 msgid "error: %1"
 msgstr "помилка: %1"
 
-#: gitplugin.cpp:387 gitplugin.cpp:398
+#: gitplugin.cpp:394 gitplugin.cpp:405
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Не вказано список файлів"
 
-#: gitplugin.cpp:460
+#: gitplugin.cpp:467
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Не вдалося скинути зміни (порожній список шляхів)"
 
-#: gitplugin.cpp:494
+#: gitplugin.cpp:501
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Не вдалося скасувати зміни"
 
-#: gitplugin.cpp:505
+#: gitplugin.cpp:512
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -271,38 +271,38 @@ msgstr ""
 "До вказаних нижче файлів було внесено зміни, які не зареєстровано у сховищі. "
 "Ці зміни буде втрачено. Виконати дію попри це?"
 
-#: gitplugin.cpp:530
+#: gitplugin.cpp:537
 #, kde-format
 msgid "No files or message specified"
 msgstr "Не вказано файлів або повідомлення"
 
-#: gitplugin.cpp:534 gitplugin.cpp:553
+#: gitplugin.cpp:541 gitplugin.cpp:560
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Не вказано адреси електронної пошти або імені для Git"
 
-#: gitplugin.cpp:550
+#: gitplugin.cpp:557
 #, kde-format
 msgid "No message specified"
 msgstr "Повідомлення не вказано"
 
-#: gitplugin.cpp:624
+#: gitplugin.cpp:631
 #, kde-format
 msgid "No files to remove"
 msgstr "Немає файлів для вилучення"
 
-#: gitplugin.cpp:904
+#: gitplugin.cpp:911
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "У черзі є внесені зміни. Бажаєте спочатку зареєструвати їх?"
 
-#: gitplugin.cpp:905
+#: gitplugin.cpp:912
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Накопичити"
 
-#: gitplugin.cpp:906
+#: gitplugin.cpp:913
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -342,226 +342,226 @@ msgctxt "@action:button"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: repostatusmodel.cpp:64
+#: repostatusmodel.cpp:78
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged changes"
 msgstr "Позначені зміни"
 
-#: repostatusmodel.cpp:67
+#: repostatusmodel.cpp:81
 #, kde-format
 msgctxt "Files in a vcs which have changes not yet staged for commit"
 msgid "Unstaged changes"
 msgstr "Несформовані зміни"
 
-#: repostatusmodel.cpp:70
+#: repostatusmodel.cpp:84
 #, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflits"
 msgid "Conflicts"
 msgstr "Конфлікти"
 
-#: repostatusmodel.cpp:72
+#: repostatusmodel.cpp:86
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked files"
 msgstr "Невраховані файли"
 
-#: repostatusmodel.cpp:82
+#: repostatusmodel.cpp:96
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
 msgstr "Позначено"
 
-#: repostatusmodel.cpp:84
+#: repostatusmodel.cpp:97
 #, kde-format
 msgid "Files with changes staged for commit"
 msgstr "Файли, зміни у яких позначено до внеску"
 
-#: repostatusmodel.cpp:89
+#: repostatusmodel.cpp:102
 #, kde-format
 msgctxt "Files in a vcs which have changes not checked in to repo"
 msgid "Modified"
 msgstr "Змінено"
 
-#: repostatusmodel.cpp:91
+#: repostatusmodel.cpp:104
 #, kde-format
 msgid "Files with changes"
 msgstr "Файли зі змінами"
 
-#: repostatusmodel.cpp:96
+#: repostatusmodel.cpp:109
 #, kde-format
 msgctxt "Files in git which have unresolved (merge) conflits"
 msgid "Conflicts"
 msgstr "Конфлікти"
 
-#: repostatusmodel.cpp:98
+#: repostatusmodel.cpp:111
 #, kde-format
 msgid "Files with unresolved (merge) conflicts"
 msgstr "Файли із нерозв'язаними конфліктами об'єднання"
 
-#: repostatusmodel.cpp:103
+#: repostatusmodel.cpp:116
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked"
 msgstr "Не враховано"
 
-#: repostatusmodel.cpp:104
+#: repostatusmodel.cpp:117
 #, kde-format
 msgid "Files not tracked in VCS"
 msgstr "Файли, які перебувають поза стеженням СКВ"
 
-#: repostatusmodel.cpp:222
+#: repostatusmodel.cpp:242
 #, kde-format
 msgctxt "@item file has unstaged changes"
 msgid "Modified (unstaged)"
 msgstr "Змінено (не позначено)"
 
-#: repostatusmodel.cpp:224
+#: repostatusmodel.cpp:244
 #, kde-format
 msgctxt "@item file was deleted from worktree"
 msgid "Deleted (unstaged)"
 msgstr "Вилучено (не позначено)"
 
-#: repostatusmodel.cpp:226
+#: repostatusmodel.cpp:246
 #, kde-format
 msgctxt "@item file was renamed in worktree"
 msgid "Renamed (unstaged)"
 msgstr "Перейменовано (не позначено)"
 
-#: repostatusmodel.cpp:228
+#: repostatusmodel.cpp:248
 #, kde-format
 msgctxt "@item file was copied in worktree"
 msgid "Copied (unstaged)"
 msgstr "Скопійовано (не позначено)"
 
-#: repostatusmodel.cpp:230
+#: repostatusmodel.cpp:250
 #, kde-format
 msgctxt "@item file has staged changes"
 msgid "Modified (staged)"
 msgstr "Змінено (позначено)"
 
-#: repostatusmodel.cpp:232
+#: repostatusmodel.cpp:252
 #, kde-format
 msgctxt "@item file has both staged and unstaged changes"
 msgid "Modified (unstaged changes)"
 msgstr "Змінено (непозначені зміни)"
 
-#: repostatusmodel.cpp:234
+#: repostatusmodel.cpp:254
 #, kde-format
 msgctxt "@item file has staged changes and was deleted in worktree"
 msgid "Modified (unstaged deletion)"
 msgstr "Змінено (непозначене вилучення)"
 
-#: repostatusmodel.cpp:237
+#: repostatusmodel.cpp:257
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
 msgid "Added (unstaged changes)"
 msgstr "Додано (непозначені зміни)"
 
-#: repostatusmodel.cpp:240
+#: repostatusmodel.cpp:260
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
 msgid "Added (unstaged deletion)"
 msgstr "Додано (непозначене вилучення)"
 
-#: repostatusmodel.cpp:243
+#: repostatusmodel.cpp:263
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and renamed in worktree"
 msgid "Deleted (unstaged rename)"
 msgstr "Вилучено (непозначене перейменування)"
 
-#: repostatusmodel.cpp:246
+#: repostatusmodel.cpp:266
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and copied in worktree"
 msgid "Deleted (unstaged copy)"
 msgstr "Вилучено (непозначена копія)"
 
-#: repostatusmodel.cpp:248
+#: repostatusmodel.cpp:268
 #, kde-format
 msgctxt "@item file was renamed in versioncontrolsystem"
 msgid "Renamed (staged)"
 msgstr "Перейменовано (позначено)"
 
-#: repostatusmodel.cpp:251
+#: repostatusmodel.cpp:271
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and has unstaged changes"
 msgid "Renamed (unstaged changes)"
 msgstr "Перейменовано (непозначені зміни)"
 
-#: repostatusmodel.cpp:254
+#: repostatusmodel.cpp:274
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and was deleted in worktree"
 msgid "Renamed (unstaged deletion)"
 msgstr "Перейменовано (непозначене вилучення)"
 
-#: repostatusmodel.cpp:256
+#: repostatusmodel.cpp:276
 #, kde-format
 msgctxt "@item file was copied in versioncontrolsystem"
 msgid "Copied"
 msgstr "Скопійовано"
 
-#: repostatusmodel.cpp:259
+#: repostatusmodel.cpp:279
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and has unstaged changes"
 msgid "Copied (unstaged changes)"
 msgstr "Скопійовано (непозначені зміни)"
 
-#: repostatusmodel.cpp:262
+#: repostatusmodel.cpp:282
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and was deleted in worktree"
 msgid "Copied (unstaged deletion)"
 msgstr "Скопійовано (непозначене вилучення)"
 
-#: repostatusmodel.cpp:264
+#: repostatusmodel.cpp:284
 #, kde-format
 msgctxt "@item file has unresolved merge conflicts"
 msgid "Unresolved conflicts"
 msgstr "Нерозв'язані конфлікти"
 
-#: repostatusmodel.cpp:266
+#: repostatusmodel.cpp:286
 #, kde-format
 msgctxt "@item file is not under vcs"
 msgid "Untracked"
 msgstr "Не враховано"
 
-#: repostatusmodel.cpp:269
+#: repostatusmodel.cpp:289
 #, kde-format
 msgctxt "file in unknown (invalid) state"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: repostatusmodel.cpp:362
+#: repostatusmodel.cpp:382
 #, kde-format
 msgid " (staged)"
 msgstr " (позначено)"
 
-#: repostatusmodel.cpp:370
+#: repostatusmodel.cpp:390
 #, kde-format
 msgid " (unstaged)"
 msgstr " (не позначено)"
 
-#: repostatusmodel.cpp:378
+#: repostatusmodel.cpp:398
 #, kde-format
 msgid " (conflicts)"
 msgstr " (конфлікти)"
 
-#: repostatusmodel.cpp:386
+#: repostatusmodel.cpp:406
 #, kde-format
 msgid " (untracked)"
 msgstr " (не враховано)"
 
-#: repostatusmodel.cpp:580
+#: repostatusmodel.cpp:603
 #, kde-format
 msgid "no branch"
 msgstr "немає гілки"
 
-#: repostatusmodel.cpp:581
+#: repostatusmodel.cpp:604
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"

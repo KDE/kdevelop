@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-13 00:40+0000\n"
 "PO-Revision-Date: 2023-03-08 15:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -205,68 +205,68 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Escriu a la configuració global"
 
-#: gitplugin.cpp:185
+#: gitplugin.cpp:192
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr ""
 "No s'ha pogut trobar l'executable del «git». Està instal·lat en el sistema?"
 
-#: gitplugin.cpp:194
+#: gitplugin.cpp:201
 #, kde-format
 msgid "Git Commit"
 msgstr "Comissió del Git («commit»)"
 
-#: gitplugin.cpp:251
+#: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Rebase"
 
-#: gitplugin.cpp:252
+#: gitplugin.cpp:259
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Modificacions temporals del Git («stashes»)"
 
-#: gitplugin.cpp:253
+#: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Gestor de modificacions temporals"
 
-#: gitplugin.cpp:254
+#: gitplugin.cpp:261
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Publica («push») la modificació temporal"
 
-#: gitplugin.cpp:255
+#: gitplugin.cpp:262
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Aplica («pop») una modificació temporal"
 
-#: gitplugin.cpp:288
+#: gitplugin.cpp:295
 #, kde-format
 msgid "error: %1"
 msgstr "error: %1"
 
-#: gitplugin.cpp:387 gitplugin.cpp:398
+#: gitplugin.cpp:394 gitplugin.cpp:405
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "No heu indicat cap llista de fitxers"
 
-#: gitplugin.cpp:460
+#: gitplugin.cpp:467
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "No s'han pogut restablir els canvis (la llista de camins està buida)"
 
-#: gitplugin.cpp:494
+#: gitplugin.cpp:501
 #, kde-format
 msgid "Could not revert changes"
 msgstr "No es poden revertir els canvis"
 
-#: gitplugin.cpp:505
+#: gitplugin.cpp:512
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -274,39 +274,39 @@ msgstr ""
 "Els següents fitxers tenen canvis sense cometre que es perdran. Voleu "
 "continuar?"
 
-#: gitplugin.cpp:530
+#: gitplugin.cpp:537
 #, kde-format
 msgid "No files or message specified"
 msgstr "No s'ha especificat cap fitxer o missatge"
 
-#: gitplugin.cpp:534 gitplugin.cpp:553
+#: gitplugin.cpp:541 gitplugin.cpp:560
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "No s'ha especificat el correu o nom per al Git"
 
-#: gitplugin.cpp:550
+#: gitplugin.cpp:557
 #, kde-format
 msgid "No message specified"
 msgstr "No s'ha especificat cap missatge"
 
-#: gitplugin.cpp:624
+#: gitplugin.cpp:631
 #, kde-format
 msgid "No files to remove"
 msgstr "No hi ha fitxers a eliminar"
 
-#: gitplugin.cpp:904
+#: gitplugin.cpp:911
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Hi ha canvis pendents, voleu fer primer una modificació temporal («stash»)?"
 
-#: gitplugin.cpp:905
+#: gitplugin.cpp:912
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Modificació temporal («stash»)"
 
-#: gitplugin.cpp:906
+#: gitplugin.cpp:913
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -346,226 +346,226 @@ msgctxt "@action:button"
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: repostatusmodel.cpp:64
+#: repostatusmodel.cpp:78
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged changes"
 msgstr "Canvis marcats"
 
-#: repostatusmodel.cpp:67
+#: repostatusmodel.cpp:81
 #, kde-format
 msgctxt "Files in a vcs which have changes not yet staged for commit"
 msgid "Unstaged changes"
 msgstr "Canvis sense marcar"
 
-#: repostatusmodel.cpp:70
+#: repostatusmodel.cpp:84
 #, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflits"
 msgid "Conflicts"
 msgstr "Conflictes"
 
-#: repostatusmodel.cpp:72
+#: repostatusmodel.cpp:86
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked files"
 msgstr "Fitxers sense seguir"
 
-#: repostatusmodel.cpp:82
+#: repostatusmodel.cpp:96
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
 msgstr "Marcat"
 
-#: repostatusmodel.cpp:84
+#: repostatusmodel.cpp:97
 #, kde-format
 msgid "Files with changes staged for commit"
 msgstr "Fitxers amb canvis marcats per a cometre"
 
-#: repostatusmodel.cpp:89
+#: repostatusmodel.cpp:102
 #, kde-format
 msgctxt "Files in a vcs which have changes not checked in to repo"
 msgid "Modified"
 msgstr "Modificat"
 
-#: repostatusmodel.cpp:91
+#: repostatusmodel.cpp:104
 #, kde-format
 msgid "Files with changes"
 msgstr "Fitxers amb canvis"
 
-#: repostatusmodel.cpp:96
+#: repostatusmodel.cpp:109
 #, kde-format
 msgctxt "Files in git which have unresolved (merge) conflits"
 msgid "Conflicts"
 msgstr "Conflictes"
 
-#: repostatusmodel.cpp:98
+#: repostatusmodel.cpp:111
 #, kde-format
 msgid "Files with unresolved (merge) conflicts"
 msgstr "Fitxers amb conflictes sense resoldre (fusió)"
 
-#: repostatusmodel.cpp:103
+#: repostatusmodel.cpp:116
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked"
 msgstr "Sense seguiment"
 
-#: repostatusmodel.cpp:104
+#: repostatusmodel.cpp:117
 #, kde-format
 msgid "Files not tracked in VCS"
 msgstr "Fitxers no seguits en el VCS"
 
-#: repostatusmodel.cpp:222
+#: repostatusmodel.cpp:242
 #, kde-format
 msgctxt "@item file has unstaged changes"
 msgid "Modified (unstaged)"
 msgstr "Modificat (sense marcar)"
 
-#: repostatusmodel.cpp:224
+#: repostatusmodel.cpp:244
 #, kde-format
 msgctxt "@item file was deleted from worktree"
 msgid "Deleted (unstaged)"
 msgstr "Suprimit (sense marcar)"
 
-#: repostatusmodel.cpp:226
+#: repostatusmodel.cpp:246
 #, kde-format
 msgctxt "@item file was renamed in worktree"
 msgid "Renamed (unstaged)"
 msgstr "Reanomenat (sense marcar)"
 
-#: repostatusmodel.cpp:228
+#: repostatusmodel.cpp:248
 #, kde-format
 msgctxt "@item file was copied in worktree"
 msgid "Copied (unstaged)"
 msgstr "Copiat (sense marcar)"
 
-#: repostatusmodel.cpp:230
+#: repostatusmodel.cpp:250
 #, kde-format
 msgctxt "@item file has staged changes"
 msgid "Modified (staged)"
 msgstr "Modificat (marcat)"
 
-#: repostatusmodel.cpp:232
+#: repostatusmodel.cpp:252
 #, kde-format
 msgctxt "@item file has both staged and unstaged changes"
 msgid "Modified (unstaged changes)"
 msgstr "Modificat (canvis sense marcar)"
 
-#: repostatusmodel.cpp:234
+#: repostatusmodel.cpp:254
 #, kde-format
 msgctxt "@item file has staged changes and was deleted in worktree"
 msgid "Modified (unstaged deletion)"
 msgstr "Modificat (supressió sense marcar)"
 
-#: repostatusmodel.cpp:237
+#: repostatusmodel.cpp:257
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
 msgid "Added (unstaged changes)"
 msgstr "Afegit (canvis sense marcar)"
 
-#: repostatusmodel.cpp:240
+#: repostatusmodel.cpp:260
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
 msgid "Added (unstaged deletion)"
 msgstr "Afegit (supressió sense marcar)"
 
-#: repostatusmodel.cpp:243
+#: repostatusmodel.cpp:263
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and renamed in worktree"
 msgid "Deleted (unstaged rename)"
 msgstr "Suprimit (reanomenat sense marcar)"
 
-#: repostatusmodel.cpp:246
+#: repostatusmodel.cpp:266
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and copied in worktree"
 msgid "Deleted (unstaged copy)"
 msgstr "Suprimit (còpia sense marcar)"
 
-#: repostatusmodel.cpp:248
+#: repostatusmodel.cpp:268
 #, kde-format
 msgctxt "@item file was renamed in versioncontrolsystem"
 msgid "Renamed (staged)"
 msgstr "Reanomenat (marcat)"
 
-#: repostatusmodel.cpp:251
+#: repostatusmodel.cpp:271
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and has unstaged changes"
 msgid "Renamed (unstaged changes)"
 msgstr "Reanomenat (canvis sense marcar)"
 
-#: repostatusmodel.cpp:254
+#: repostatusmodel.cpp:274
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and was deleted in worktree"
 msgid "Renamed (unstaged deletion)"
 msgstr "Reanomenat (supressió sense marcar)"
 
-#: repostatusmodel.cpp:256
+#: repostatusmodel.cpp:276
 #, kde-format
 msgctxt "@item file was copied in versioncontrolsystem"
 msgid "Copied"
 msgstr "Copiat"
 
-#: repostatusmodel.cpp:259
+#: repostatusmodel.cpp:279
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and has unstaged changes"
 msgid "Copied (unstaged changes)"
 msgstr "Copiat (canvis sense marcar)"
 
-#: repostatusmodel.cpp:262
+#: repostatusmodel.cpp:282
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and was deleted in worktree"
 msgid "Copied (unstaged deletion)"
 msgstr "Copiat (supressió sense marcar)"
 
-#: repostatusmodel.cpp:264
+#: repostatusmodel.cpp:284
 #, kde-format
 msgctxt "@item file has unresolved merge conflicts"
 msgid "Unresolved conflicts"
 msgstr "Conflictes sense resoldre"
 
-#: repostatusmodel.cpp:266
+#: repostatusmodel.cpp:286
 #, kde-format
 msgctxt "@item file is not under vcs"
 msgid "Untracked"
 msgstr "Sense seguiment"
 
-#: repostatusmodel.cpp:269
+#: repostatusmodel.cpp:289
 #, kde-format
 msgctxt "file in unknown (invalid) state"
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: repostatusmodel.cpp:362
+#: repostatusmodel.cpp:382
 #, kde-format
 msgid " (staged)"
 msgstr " (marcat)"
 
-#: repostatusmodel.cpp:370
+#: repostatusmodel.cpp:390
 #, kde-format
 msgid " (unstaged)"
 msgstr " (sense marcar)"
 
-#: repostatusmodel.cpp:378
+#: repostatusmodel.cpp:398
 #, kde-format
 msgid " (conflicts)"
 msgstr " (conflictes)"
 
-#: repostatusmodel.cpp:386
+#: repostatusmodel.cpp:406
 #, kde-format
 msgid " (untracked)"
 msgstr " (sense seguiment)"
 
-#: repostatusmodel.cpp:580
+#: repostatusmodel.cpp:603
 #, kde-format
 msgid "no branch"
 msgstr "sense branca"
 
-#: repostatusmodel.cpp:581
+#: repostatusmodel.cpp:604
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
