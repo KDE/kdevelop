@@ -30,6 +30,9 @@ private Q_SLOTS:
     void simpleViewAdditionAndDeletion();
     void complexViewAdditionAndDeletion();
     void toolViewAdditionAndDeletion();
+    void sharedToolViewRemoval();
+    void toolViewWidgetReuseAndDestruction();
+    void toolDocumentRemoval();
     void testAddingViewAfter();
     void splitViewActiveTabsTest();
 

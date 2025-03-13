@@ -30,6 +30,7 @@
 #include "areaprinter.h"
 
 #include <algorithm>
+#include <memory>
 
 /// TODO (if/when IdealController starts supporting multiple view widgets per tool document): remove this workaround
 static constexpr auto enableMultipleToolViewWidgets = false;
@@ -674,7 +675,91 @@ toolview1.2.1 [ bottom ]\n\
     }
 }
 
+void TestAreaOperation::sharedToolViewRemoval()
+{
+    MainWindow mw(m_controller);
+    m_controller->showArea(m_area1, &mw);
+    QCOMPARE_EQ(mw.area(), m_area1);
+    checkArea1(&mw);
 
+    auto* const toolView12 = findNamedView(m_area1->toolViews(), "toolview1.2.1");
+    auto* const toolView22 = findNamedView(m_area2->toolViews(), "toolview2.2.1");
+    RETURN_IF_TEST_FAILED();
+    QCOMPARE_EQ(toolView12->document(), toolView22->document());
+
+    QPointer viewWidget = toolView12->widget();
+    QVERIFY(viewWidget);
+    QCOMPARE_EQ(toolView22->widget(), nullptr);
+
+    // m_area2 contains another view of toolView12's document, but m_area2 has never
+    // been shown, so its widget is null and it does not reuse viewWidget. Therefore,
+    // viewWidget should be destroyed upon removal of the single view that uses it.
+    m_area1->removeToolView(toolView12);
+    QCOMPARE_EQ(viewWidget, nullptr);
+    QCOMPARE_EQ(toolView22->widget(), nullptr);
+
+    m_controller->showArea(m_area2, &mw);
+    QCOMPARE_EQ(mw.area(), m_area2);
+    checkArea2(&mw);
+
+    // Deliberately do not check the removed toolView12. Ideally it should be destroyed rather than leaked.
+    viewWidget = toolView22->widget();
+    QVERIFY(viewWidget);
+
+    m_area2->removeToolView(toolView22);
+    QCOMPARE_EQ(viewWidget, nullptr);
+}
+
+void TestAreaOperation::toolViewWidgetReuseAndDestruction()
+{
+    auto mw = std::make_unique<MainWindow>(m_controller);
+    m_controller->showArea(m_area1, mw.get());
+    m_controller->showArea(m_area2, mw.get());
+    compareAreas1and2(m_area1, m_area2, MainWindowAffinity::SameWindow);
+
+    auto* const toolView21 = findNamedView(m_area2->toolViews(), "toolview2.1.1");
+    RETURN_IF_TEST_FAILED();
+    const QPointer widget1 = toolView21->widget();
+    m_area2->removeToolView(toolView21);
+    QVERIFY(widget1); // the widget is still used in m_area1, and therefore not destroyed
+
+    auto* const toolView12 = findNamedView(m_area1->toolViews(), "toolview1.2.1");
+    RETURN_IF_TEST_FAILED();
+    const QPointer widget2 = toolView12->widget();
+    QVERIFY(widget2);
+
+    mw.reset();
+    // both tool view widgets must be destroyed along with their main window ancestor
+    QCOMPARE_EQ(widget1, nullptr);
+    QCOMPARE_EQ(widget2, nullptr);
+}
+
+void TestAreaOperation::toolDocumentRemoval()
+{
+    MainWindow mw(m_controller);
+    m_controller->showArea(m_area1, &mw);
+    m_controller->showArea(m_area2, &mw);
+    compareAreas1and2(m_area1, m_area2, MainWindowAffinity::SameWindow);
+
+    auto* const toolView = findNamedView(m_area1->toolViews(), "toolview1.2.1");
+    RETURN_IF_TEST_FAILED();
+    const QPointer viewWidget = toolView->widget();
+    QVERIFY(viewWidget);
+
+    // Adapted from KDevelop::UiController::removeToolView():
+    auto* const document = toolView->document();
+    for (auto* const view : document->views()) {
+        for (auto* const area : m_controller->allAreas()) {
+            area->removeToolView(view);
+        }
+    }
+    emit m_controller->toolViewRemoved(document);
+
+    // the tool view widget must be destroyed when its tool view is completely removed
+    QCOMPARE_EQ(viewWidget, nullptr);
+
+    delete document;
+}
 
 void TestAreaOperation::testAddingViewAfter()
 {
