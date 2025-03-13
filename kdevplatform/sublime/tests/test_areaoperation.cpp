@@ -28,12 +28,29 @@
 
 #include "areaprinter.h"
 
+#include <algorithm>
+
 /// TODO (if/when IdealController starts supporting multiple view widgets per tool document): remove this workaround
 static constexpr auto enableMultipleToolViewWidgets = false;
 
 using namespace Sublime;
 
 namespace {
+
+View* findNamedView(const QList<View*>& views, const QString& name)
+{
+    const auto it = std::find_if(views.cbegin(), views.cend(), [&name](const View* view) {
+        return view->objectName() == name;
+    });
+    QCOMPARE_NE_RETURN(it, views.cend(), {});
+    return *it;
+}
+
+View* findNamedView(Area* area, const QString& name)
+{
+    QVERIFY_RETURN(area, {});
+    return findNamedView(area->views(), name);
+}
 
 void checkToolViews(const Area* area)
 {
@@ -457,7 +474,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
     view->setObjectName(QStringLiteral("view2.5.1"));
 
     View *view221 = findNamedView(area, QStringLiteral("view2.2.1"));
-    QVERIFY(view221);
+    RETURN_IF_TEST_FAILED();
     area->addView(view, view221, Qt::Vertical);
 
     checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
@@ -487,6 +504,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
 
     //remove one more view, this time the one inside non-empty container
     View *view211 = findNamedView(area, QStringLiteral("view2.1.1"));
+    RETURN_IF_TEST_FAILED();
     delete m_area2->removeView(view211);
 
     checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
@@ -768,16 +786,6 @@ void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     QList<QSplitter*> splitters = splitter->findChildren<QSplitter*>();
     splitters.append(qobject_cast<QSplitter*>(splitter));
     QCOMPARE(splitters.count(), splitterCount);
-}
-
-View *TestAreaOperation::findNamedView(Area *area, const QString &name)
-{
-    const auto views = area->views();
-    for (View* view : views) {
-        if (view->objectName() == name)
-            return view;
-    }
-    return nullptr;
 }
 
 ///////////
