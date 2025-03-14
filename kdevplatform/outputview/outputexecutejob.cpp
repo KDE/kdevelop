@@ -152,7 +152,6 @@ void OutputExecuteJob::setJobName( const QString& name )
 {
     setObjectName(name);
     setTitle(name);
-    setToolTitle(name);
 }
 
 QUrl OutputExecuteJob::workingDirectory() const
