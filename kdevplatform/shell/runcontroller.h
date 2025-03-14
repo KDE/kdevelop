@@ -125,7 +125,6 @@ private Q_SLOTS:
     void slotProjectClosing(KDevelop::IProject* project);
     void slotKillJob();
     void launchChanged(LaunchConfiguration*);
-    void jobDestroyed(QObject* job);
     void jobPercentChanged();
 
 private:
