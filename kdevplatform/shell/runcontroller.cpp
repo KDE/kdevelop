@@ -600,7 +600,6 @@ void KDevelop::RunController::registerJob(KJob * job)
         d->jobs.insert(job, stopJobAction);
 
         connect( job, &KJob::finished, this, &RunController::finished );
-        connect( job, &KJob::destroyed, this, &RunController::jobDestroyed );
         connect(job, &KJob::percentChanged, this, &RunController::jobPercentChanged);
 
         IRunController::registerJob(job);
@@ -719,17 +718,6 @@ void KDevelop::RunController::finished(KJob * job)
             auto* message = new Sublime::Message(job->errorString(), Sublime::Message::Error);
             Core::self()->uiController()->postMessage(message);
         }
-    }
-}
-
-void RunController::jobDestroyed(QObject* job)
-{
-    Q_D(RunController);
-
-    KJob* kjob = static_cast<KJob*>(job);
-    if (d->jobs.contains(kjob)) {
-        qCWarning(SHELL) << "job destroyed without emitting finished signal!";
-        unregisterJob(kjob);
     }
 }
 
