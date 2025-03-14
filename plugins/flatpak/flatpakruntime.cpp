@@ -5,7 +5,6 @@
 */
 
 #include "flatpakruntime.h"
-#include "flatpakplugin.h"
 #include "debug_flatpak.h"
 
 #include <util/executecompositejob.h>
