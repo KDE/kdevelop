@@ -112,7 +112,10 @@ void FlatpakPlugin::exportCurrent()
 
     const QString path = QFileDialog::getSaveFileName(ICore::self()->uiController()->activeMainWindow(), i18nc("@title:window", "Export %1", runtime->name()), {}, i18n("Flatpak Bundle (*.flatpak)"));
     if (!path.isEmpty()) {
-        ICore::self()->runController()->registerJob(new ExecuteCompositeJob(runtime, runtime->exportBundle(path)));
+        const auto exportBundle = runtime->exportBundle(path);
+        auto* const job = new ExecuteCompositeJob(runtime, exportBundle.jobs);
+        job->setObjectName(i18nc("%1 - application ID", "Flatpak Export Bundle %1", exportBundle.applicationId));
+        ICore::self()->runController()->registerJob(job);
     }
 }
 
