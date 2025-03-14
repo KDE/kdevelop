@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-11-10 18:17+0300\n"
+"PO-Revision-Date: 2025-03-13 23:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
 #, kde-format
@@ -244,7 +244,7 @@ msgid ""
 "Add 'project' include directories to Cppcheck arguments. This option adds "
 "only paths related with project's root and build directories."
 msgstr ""
-"“project” 'include” dizinlerini cppcheck argümanlarına ekleyin. Bu seçenek, "
+"“project” “include” dizinlerini cppcheck argümanlarına ekleyin. Bu seçenek, "
 "projenin yalnızca kök ve yapı dizinleriyle ilgili yolları ekler."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)

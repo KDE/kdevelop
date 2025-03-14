@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2024-11-10 18:04+0300\n"
+"PO-Revision-Date: 2025-03-13 15:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -266,7 +266,7 @@ msgstr ""
 "“%1” projesi yapılandırılamadı (hata iletisi: %2). Sonuç olarak, K "
 "Geliştir’un kod anlayışı büyük olasılıkla bozuk olacak.\n"
 "\n"
-"Bu sorunu çözmek için, projenin “CMakeLists.txt” dosyalarının doğru "
+"Bu sorunu çözmek için projenin “CMakeLists.txt” dosyalarının doğru "
 "olduğundan ve K Geliştir’in doğru CMake sürümünü ve ayarlarını kullanmak "
 "için yapılandırıldığından emin olun. Sonrasında, proje araç görünümünde "
 "proje ögesine sağ tıklayın ve “Yeniden Yükle”yi seçin."

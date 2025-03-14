@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-12 00:40+0000\n"
+"POT-Creation-Date: 2025-03-13 00:40+0000\n"
 "PO-Revision-Date: 2024-04-22 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1594,13 +1594,13 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "路径"
 
-#: project/projectchangesmodel.cpp:275
+#: project/projectchangesmodel.cpp:308
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "无分支"
 
-#: project/projectchangesmodel.cpp:276
+#: project/projectchangesmodel.cpp:309
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
@@ -6031,7 +6031,3 @@ msgstr "与上个修订版的差异"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修订版之间的差异"
-
-#~ msgctxt "@option:check"
-#~ msgid "Recursive"
-#~ msgstr "递归"
