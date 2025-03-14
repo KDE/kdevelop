@@ -22,7 +22,7 @@
         "Description[nl]": "Deze plugin levert een frontend voor LLDB, een volgende generatie met hoge prestaties voor debuggen van C/Obj-C/C++.",
         "Description[pl]": "Udostępnia interfejs do LLDB, wysokiej wydajności programu diagnostycznego następnej generacji dla C/Obj-C/C++.",
         "Description[pt]": "Este 'plugin' oferece uma interface para o LLDB, um depurador de código para C/Obj-C/C++ de nova geração, com alta performance.",
-        "Description[pt_BR]": "Este plugin oferece uma interface para o LLDB, um depurador de código com alta performance para C/Obj-C/C++ de nova geração.",
+        "Description[pt_BR]": "Este plugin oferece uma interface para o LLDB, um depurador de código com alto desempenho para C/Obj-C/C++ de nova geração.",
         "Description[ru]": "Это расширение предоставляет интерфейс к LLDB, высокопроизводительному отладчику C/Obj-C/C++ следующего поколения",
         "Description[sa]": "इदं प्लगिन् LLDB कृते अग्रभागं प्रदाति, अग्रिमपीढीयाः, उच्च-प्रदर्शनस्य C/Obj-C/C++ डिबगरस्य कृते ।",
         "Description[sk]": "Tento modul poskytuje rozhranie pre LLDB, novú generáciu vysokovýkonného debuggera C/Obj-C/C++.",
