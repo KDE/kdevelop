@@ -25,6 +25,8 @@
 
 using namespace KDevelop;
 
+namespace {
+
 template <typename T, typename Q, typename W>
 static T kTransform(const Q& list, W func)
 {
@@ -35,19 +37,42 @@ static T kTransform(const Q& list, W func)
     return ret;
 }
 
+class FlatpakJob : public OutputExecuteJob
+{
+public:
+    explicit FlatpakJob(QObject* parent = nullptr)
+        : OutputExecuteJob(parent)
+    {
+        setCapabilities(Killable);
+
+        // Create a custom output tool view instead of reusing the standard Build tool view
+        // because there are many separate low-level Flatpak jobs that run one after another
+        // and would bury likely more interesting build outputs in the long output history.
+        setToolTitle(i18nc("@title:window", "Flatpak"));
+        // TODO: set a Flatpak icon as the tool icon
+        setViewType(IOutputView::HistoryView);
+        // The select and focus buttons are useless because the job has no output filtering strategy.
+        // The manual filtering of messages can be useful.
+        setOptions(IOutputView::AddFilterAction);
+        // Automatically scroll the view like most other output views do.
+        setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll);
+
+        setProperties(DisplayStdout | DisplayStderr);
+    }
+};
+
 static KJob* createExecuteJob(const QStringList &program, const QString &title, const QUrl &wd = {}, bool checkExitCode = true)
 {
-    auto* process = new OutputExecuteJob;
-    process->setProperties(OutputExecuteJob::DisplayStdout | OutputExecuteJob::DisplayStderr);
+    auto* const process = new FlatpakJob;
     process->setExecuteOnHost(true);
     process->setJobName(title);
     process->setWorkingDirectory(wd);
     process->setCheckExitCode(checkExitCode);
-    // TODO: call process->setStandardToolView(IOutputView::?); to prevent creating a new tool view for each
-    // job in OutputJob::startOutput(). Such nonstandard and unshared tool views are also not configurable.
     *process << program;
     return process;
 }
+
+} // unnamed namespace
 
 KJob* FlatpakRuntime::createBuildDirectory(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
 {
