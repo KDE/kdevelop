@@ -210,8 +210,7 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
 
     const QRegularExpression nameRx(QStringLiteral(".*\\..*\\..*\\.json$"));
     for(auto it = urls.begin(); it != urls.end(); ) {
-        if (it->isLocalFile()
-            && (it->path().contains(nameRx) || it->fileName() == QLatin1String(".flatpak-manifest.json"))) {
+        if (it->isLocalFile() && (it->path().contains(nameRx) || it->fileName() == kdeFlatpakManifestFileName)) {
             ++it;
         } else {
             it = urls.erase(it);
