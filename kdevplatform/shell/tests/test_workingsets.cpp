@@ -36,7 +36,6 @@ using namespace KDevelop;
 const QString setName = QStringLiteral("TestSet");
 const QString setName2 = QStringLiteral("TestSet2");
 const QString setName3 = QStringLiteral("TestSet3");
-const QString text = QStringLiteral("Test");
 
 void TestWorkingSetController::initTestCase()
 {
