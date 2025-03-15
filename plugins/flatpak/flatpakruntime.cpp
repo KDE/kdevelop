@@ -40,34 +40,50 @@ static T kTransform(const Q& list, W func)
 class FlatpakJob : public OutputExecuteJob
 {
 public:
-    explicit FlatpakJob(QObject* parent = nullptr)
+    /**
+     * Create a Flatpak output job.
+     *
+     * @param jobName the name of the job
+     * @param runOutputTabTitle the title of the job's output tab in the standard Run output tool view;
+     *        if empty, the job uses the nonstandard "Flatpak" output tool view and the job title equals the job name
+     * @param parent the job's parent
+     */
+    explicit FlatpakJob(const QString& jobName, const QString& runOutputTabTitle = {}, QObject* parent = nullptr)
         : OutputExecuteJob(parent)
     {
         setCapabilities(Killable);
 
-        // Create a custom output tool view instead of reusing the standard Build tool view
-        // because there are many separate low-level Flatpak jobs that run one after another
-        // and would bury likely more interesting build outputs in the long output history.
-        setToolTitle(i18nc("@title:window", "Flatpak"));
-        // TODO: set a Flatpak icon as the tool icon
-        setViewType(IOutputView::HistoryView);
-        // The select and focus buttons are useless because the job has no output filtering strategy.
-        // The manual filtering of messages can be useful.
-        setOptions(IOutputView::AddFilterAction);
+        if (runOutputTabTitle.isEmpty()) {
+            // Create a custom output tool view instead of reusing the standard Build tool view
+            // because there are many separate low-level Flatpak build jobs that run one after another
+            // and would bury likely more interesting build outputs in the long output history.
+            setToolTitle(i18nc("@title:window", "Flatpak"));
+            // TODO: set a Flatpak icon as the tool icon
+            setViewType(IOutputView::HistoryView);
+            // The select and focus buttons are useless because the job has no output filtering strategy.
+            // The manual filtering of messages can be useful.
+            setOptions(IOutputView::AddFilterAction);
+
+            setJobName(jobName);
+        } else {
+            setStandardToolView(IOutputView::RunView);
+            setFilteringStrategy(OutputModel::NativeAppErrorFilter);
+
+            setObjectName(jobName);
+            setTitle(runOutputTabTitle);
+        }
+
         // Automatically scroll the view like most other output views do.
         setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll);
-
         setProperties(DisplayStdout | DisplayStderr);
     }
 };
 
-static KJob* createExecuteJob(const QStringList &program, const QString &title, const QUrl &wd = {}, bool checkExitCode = true)
+OutputExecuteJob* createExecuteJob(const QStringList& program, const QString& jobName,
+                                   const QString& runOutputTabTitle = {})
 {
-    auto* const process = new FlatpakJob;
+    auto* const process = new FlatpakJob(jobName, runOutputTabTitle);
     process->setExecuteOnHost(true);
-    process->setJobName(title);
-    process->setWorkingDirectory(wd);
-    process->setCheckExitCode(checkExitCode);
     *process << program;
     return process;
 }
@@ -90,11 +106,12 @@ KJob* FlatpakRuntime::createBuildDirectory(const KDevelop::Path &buildDirectory,
         }
     }
 
-    return createExecuteJob(QStringList{QStringLiteral("flatpak-builder"), QLatin1String("--arch=") + arch,
+    auto* const job = createExecuteJob({QStringLiteral("flatpak-builder"), QLatin1String("--arch=") + arch,
                                         QStringLiteral("--build-only"), QStringLiteral("--force-clean"),
                                         QStringLiteral("--ccache"), buildDirectory.toLocalFile(), file.toLocalFile()},
-                            i18nc("%1 - application ID or name", "Flatpak Create %1", identifyingName),
-                            sourceDirectory.toUrl());
+                                       i18nc("%1 - application ID or name", "Flatpak Create %1", identifyingName));
+    job->setWorkingDirectory(sourceDirectory.toUrl());
+    return job;
 }
 
 FlatpakRuntime::FlatpakRuntime(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
@@ -194,17 +211,18 @@ auto FlatpakRuntime::exportBundle(const QString& path) const -> ExportBundle
     if (doc.contains(QLatin1String("command")))
         args << QLatin1String("--command=")+doc[QLatin1String("command")].toString();
 
-    QList<KJob*> jobs{
-        createExecuteJob(
-            QStringList{QStringLiteral("flatpak"), QStringLiteral("build-finish"), m_buildDirectory.toLocalFile()}
-                << args,
-            i18nc("%1 - application ID", "Flatpak Finalize %1", name), {}, false),
-        createExecuteJob({QStringLiteral("flatpak"), QStringLiteral("build-export"), QLatin1String("--arch=") + m_arch,
-                          dir->path(), m_buildDirectory.toLocalFile()},
-                         i18nc("%1 - application ID", "Flatpak Export %1", name)),
-        createExecuteJob({QStringLiteral("flatpak"), QStringLiteral("build-bundle"), QLatin1String("--arch=") + m_arch,
-                          dir->path(), path, name},
-                         i18nc("%1 - application ID", "Flatpak Bundle %1", name))};
+    auto* const buildFinishJob = createExecuteJob(
+        QStringList{QStringLiteral("flatpak"), QStringLiteral("build-finish"), m_buildDirectory.toLocalFile()} << args,
+        i18nc("%1 - application ID", "Flatpak Finalize %1", name));
+    buildFinishJob->setCheckExitCode(false);
+
+    QList<KJob*> jobs{buildFinishJob,
+                      createExecuteJob({QStringLiteral("flatpak"), QStringLiteral("build-export"),
+                                        QLatin1String("--arch=") + m_arch, dir->path(), m_buildDirectory.toLocalFile()},
+                                       i18nc("%1 - application ID", "Flatpak Export %1", name)),
+                      createExecuteJob({QStringLiteral("flatpak"), QStringLiteral("build-bundle"),
+                                        QLatin1String("--arch=") + m_arch, dir->path(), path, name},
+                                       i18nc("%1 - application ID", "Flatpak Bundle %1", name))};
     connect(jobs.last(), &QObject::destroyed, jobs.last(), [dir]() { delete dir; });
 
     return {std::move(jobs), std::move(name)};
@@ -235,7 +253,7 @@ KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path)
                    i18nc("%1 - application ID, %2 - device host name", "Flatpak Install %1 to %2", name, host)),
                createExecuteJob({QStringLiteral("ssh"), host, QStringLiteral("bash"), replicatePath,
                                  QStringLiteral("plasmashell"), QStringLiteral("flatpak"), QStringLiteral("run"), name},
-                                runJobName)};
+                                runJobName, name)};
 
     auto* const compositeJob = new ExecuteCompositeJob(parent(), jobs);
     compositeJob->setObjectName(runJobName);
