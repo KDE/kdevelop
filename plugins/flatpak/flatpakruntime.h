@@ -13,6 +13,8 @@
 class KJob;
 class FlatpakPlugin;
 
+inline constexpr QLatin1String kdeFlatpakManifestFileName(".flatpak-manifest.json");
+
 class FlatpakRuntime : public KDevelop::IRuntime
 {
     Q_OBJECT

@@ -76,10 +76,25 @@ static KJob* createExecuteJob(const QStringList &program, const QString &title, 
 
 KJob* FlatpakRuntime::createBuildDirectory(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
 {
+    const auto sourceDirectory = file.parent();
+
+    auto identifyingName = file.lastPathSegment();
+    if (identifyingName == kdeFlatpakManifestFileName) {
+        // The file name is a standard name that does not identify the application.
+        // Display the hopefully more useful name of the containing directory.
+        identifyingName = sourceDirectory.lastPathSegment();
+    } else {
+        constexpr QLatin1String standardExtension(".json");
+        if (identifyingName.endsWith(standardExtension)) {
+            identifyingName.chop(standardExtension.size());
+        }
+    }
+
     return createExecuteJob(QStringList{QStringLiteral("flatpak-builder"), QLatin1String("--arch=") + arch,
                                         QStringLiteral("--build-only"), QStringLiteral("--force-clean"),
                                         QStringLiteral("--ccache"), buildDirectory.toLocalFile(), file.toLocalFile()},
-                            i18n("Flatpak"), file.parent().toUrl());
+                            i18nc("%1 - application ID or name", "Flatpak Create %1", identifyingName),
+                            sourceDirectory.toUrl());
 }
 
 FlatpakRuntime::FlatpakRuntime(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
@@ -179,12 +194,17 @@ QList<KJob*> FlatpakRuntime::exportBundle(const QString &path) const
     if (doc.contains(QLatin1String("command")))
         args << QLatin1String("--command=")+doc[QLatin1String("command")].toString();
 
-    const QString title = i18n("Bundling");
     const QList<KJob*> jobs = {
-        createExecuteJob(QStringList{QStringLiteral("flatpak"), QStringLiteral("build-finish"), m_buildDirectory.toLocalFile()} << args, title, {}, false),
-        createExecuteJob(QStringList{QStringLiteral("flatpak"), QStringLiteral("build-export"), QLatin1String("--arch=")+m_arch, dir->path(), m_buildDirectory.toLocalFile()}, title),
-        createExecuteJob(QStringList{QStringLiteral("flatpak"), QStringLiteral("build-bundle"), QLatin1String("--arch=")+m_arch, dir->path(), path, name }, title)
-    };
+        createExecuteJob(
+            QStringList{QStringLiteral("flatpak"), QStringLiteral("build-finish"), m_buildDirectory.toLocalFile()}
+                << args,
+            i18nc("%1 - application ID", "Flatpak Finalize %1", name), {}, false),
+        createExecuteJob({QStringLiteral("flatpak"), QStringLiteral("build-export"), QLatin1String("--arch=") + m_arch,
+                          dir->path(), m_buildDirectory.toLocalFile()},
+                         i18nc("%1 - application ID", "Flatpak Export %1", name)),
+        createExecuteJob({QStringLiteral("flatpak"), QStringLiteral("build-bundle"), QLatin1String("--arch=") + m_arch,
+                          dir->path(), path, name},
+                         i18nc("%1 - application ID", "Flatpak Bundle %1", name))};
     connect(jobs.last(), &QObject::destroyed, jobs.last(), [dir]() { delete dir; });
     return jobs;
 }
@@ -200,14 +220,21 @@ KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path)
     const QString destPath = QStringLiteral("/tmp/kdevelop-test-app.flatpak");
     const QString replicatePath = QStringLiteral("/tmp/replicate.sh");
     const QString localReplicatePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("kdevflatpak/replicate.sh"));
+    const auto runJobName = i18nc("%1 - application ID, %2 - device host name", "Flatpak Run %1 on %2", name, host);
 
-    const QString title = i18n("Run on Device");
-    const QList<KJob*> jobs = exportBundle(path) << QList<KJob*> {
-        createExecuteJob({QStringLiteral("scp"), path, host+QLatin1Char(':')+destPath}, title),
-        createExecuteJob({QStringLiteral("scp"), localReplicatePath, host+QLatin1Char(':')+replicatePath}, title),
-        createExecuteJob({QStringLiteral("ssh"), host, QStringLiteral("flatpak"), QStringLiteral("install"), QStringLiteral("--user"), QStringLiteral("--bundle"), QStringLiteral("-y"), destPath}, title),
-        createExecuteJob({QStringLiteral("ssh"), host, QStringLiteral("bash"), replicatePath, QStringLiteral("plasmashell"), QStringLiteral("flatpak"), QStringLiteral("run"), name }, title),
-    };
+    const QList<KJob*> jobs = exportBundle(path)
+        << QList<KJob*>{
+               createExecuteJob({QStringLiteral("scp"), path, host + QLatin1Char(':') + destPath},
+                                i18nc("%1 - device host name", "Transfer .flatpak to %1", host)),
+               createExecuteJob({QStringLiteral("scp"), localReplicatePath, host + QLatin1Char(':') + replicatePath},
+                                i18nc("%1 - device host name", "Transfer replicate.sh to %1", host)),
+               createExecuteJob(
+                   {QStringLiteral("ssh"), host, QStringLiteral("flatpak"), QStringLiteral("install"),
+                    QStringLiteral("--user"), QStringLiteral("--bundle"), QStringLiteral("-y"), destPath},
+                   i18nc("%1 - application ID, %2 - device host name", "Flatpak Install %1 to %2", name, host)),
+               createExecuteJob({QStringLiteral("ssh"), host, QStringLiteral("bash"), replicatePath,
+                                 QStringLiteral("plasmashell"), QStringLiteral("flatpak"), QStringLiteral("run"), name},
+                                runJobName)};
     return new KDevelop::ExecuteCompositeJob( parent(), jobs );
 }
 
