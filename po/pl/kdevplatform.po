@@ -3,26 +3,26 @@
 # Version: $Revision$
 # KDevelop polish translation file.
 # Translation work:
-#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
-# Corrections:
-#       Waldemar Kochaniec
-#       Jacek Stolarczyk
-#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
-#
-# Krzysztof Lichota, 2004.
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+# Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Anna Wojdeł <ania@kbs.twi.tudelft.nl>
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2003, 2004.
 # Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
 # Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010, 2013.
 # Michał Smoczyk <msmoczyk@wp.pl>, 2008.
-# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+# Corrections:
+# Waldemar Kochaniec
+# Jacek Stolarczyk
+#
+# Krzysztof Lichota, 2004.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-09 02:30+0000\n"
-"PO-Revision-Date: 2024-08-17 09:31+0200\n"
+"PO-Revision-Date: 2025-03-15 10:37+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2382,26 +2382,29 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"Następujące języki są dużo lepiej obsługiwane przez dedykowane wtyczki "
+"KDevelop, więc zostały wyłączone we wtyczce %1, aby uniknąć kłopotów: <var>"
+"%2</var>. Aby porównać poziomy wsparcia lub ominąć poważne błędy, wyłącz "
+"dedykowane wtyczki KDevelopa i ustaw zmienną środowiskową <var>%3</var> "
+"(<span style='color:%4'>%5</span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "obecnie ustawiona"
 
 #: shell/ktexteditorpluginintegration.cpp:339
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr "Bieżące środowisko"
+msgstr "obecnie nieustawiona"
 
 #: shell/ktexteditorpluginintegration.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "Wiadomość"
+msgstr "Wiadomości"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
