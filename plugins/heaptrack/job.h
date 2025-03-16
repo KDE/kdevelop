@@ -37,12 +37,10 @@ Q_SIGNALS:
     void showMessage(KDevelop::IStatus*, const QString& message, int timeout = 0) override;
     void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value) override;
 
-protected:
-    void setup();
+private:
+    void setup(const QString& targetName);
     void postProcessStdout(const QStringList& lines) override;
 
-    long int m_pid;
-    QString m_analyzedExecutable;
     QString m_resultsFile;
 };
 
