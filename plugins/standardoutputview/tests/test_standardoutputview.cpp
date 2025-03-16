@@ -53,8 +53,6 @@ void StandardOutputViewTest::initTestCase()
 
     m_controller = m_testCore->uiControllerInternal();
 
-    QTest::qWait(500); // makes sure that everything is loaded (don't know if it's required)
-
     m_stdOutputView = nullptr;
     KDevelop::IPluginController* plugin_controller = m_testCore->pluginController();
 
