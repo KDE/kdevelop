@@ -121,7 +121,7 @@ void Plugin::launchHeaptrack()
     jobList += heaptrackJob;
 
     auto ecJob = new KDevelop::ExecuteCompositeJob(runController, jobList);
-    ecJob->setObjectName(heaptrackJob->statusName());
+    ecJob->setObjectName(heaptrackJob->objectName());
     runController->registerJob(ecJob);
 
     m_launchAction->setEnabled(false);
@@ -137,8 +137,6 @@ void Plugin::attachHeaptrack()
 
     auto heaptrackJob = new Job(pid);
     connect(heaptrackJob, &Job::finished, this, &Plugin::jobFinished);
-
-    heaptrackJob->setObjectName(heaptrackJob->statusName());
     core()->runController()->registerJob(heaptrackJob);
 
     m_launchAction->setEnabled(false);

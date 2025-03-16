@@ -25,7 +25,6 @@ namespace Heaptrack
 {
 
 Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePlugin)
-    : m_pid(-1)
 {
     Q_ASSERT(launchConfig);
     Q_ASSERT(executePlugin);
@@ -38,7 +37,7 @@ Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePl
 
     QString errorString;
 
-    m_analyzedExecutable = executePlugin->executable(launchConfig, errorString).toLocalFile();
+    const auto analyzedExecutable = executePlugin->executable(launchConfig, errorString).toLocalFile();
     if (!errorString.isEmpty()) {
         setError(-1);
         setErrorText(errorString);
@@ -50,31 +49,38 @@ Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePl
         setErrorText(errorString);
     }
 
+    const QFileInfo analyzedExecutableInfo(analyzedExecutable);
+
     QUrl workDir = executePlugin->workingDirectory(launchConfig);
     if (workDir.isEmpty() || !workDir.isValid()) {
-        workDir = QUrl::fromLocalFile(QFileInfo(m_analyzedExecutable).absolutePath());
+        workDir = QUrl::fromLocalFile(analyzedExecutableInfo.absolutePath());
     }
     setWorkingDirectory(workDir);
 
     *this << KDevelop::Path(GlobalSettings::heaptrackExecutable()).toLocalFile();
-    *this << m_analyzedExecutable;
+    *this << analyzedExecutable;
     *this << analyzedExecutableArguments;
 
-    setup();
+    setup(analyzedExecutableInfo.fileName());
 }
 
 Job::Job(long int pid)
-    : m_pid(pid)
 {
+    const auto pidString = QString::number(pid);
+
     *this << KDevelop::Path(GlobalSettings::heaptrackExecutable()).toLocalFile();
     *this << QStringLiteral("-p");
-    *this << QString::number(m_pid);
+    *this << pidString;
 
-    setup();
+    // pass a QString as %1 to prevent treatment of the PID as amount and
+    // inappropriate formatting according to locale rules (thousands separation)
+    setup(i18nc("%1 - process ID", "PID: %1", pidString));
 }
 
-void Job::setup()
+void Job::setup(const QString& targetName)
 {
+    setObjectName(i18n("Heaptrack Analysis (%1)", targetName));
+
     setProperties(DisplayStdout);
     setProperties(DisplayStderr);
     setProperties(PostProcessOutput);
@@ -95,9 +101,7 @@ Job::~Job()
 
 QString Job::statusName() const
 {
-    QString target = m_pid < 0 ? QFileInfo(m_analyzedExecutable).fileName()
-                               : QStringLiteral("PID: %1").arg(m_pid);
-    return i18n("Heaptrack Analysis (%1)", target);
+    return objectName();
 }
 
 QString Job::resultsFile() const
