@@ -80,13 +80,15 @@ Job::Job(long int pid)
 void Job::setup(const QString& targetName)
 {
     setObjectName(i18n("Heaptrack Analysis (%1)", targetName));
+    // shorten the output tab title to show more tabs without scrolling
+    setTitle(i18nc("%1 - the name of the target of a Heaptrack analysis", "Heaptrack (%1)", targetName));
 
     setProperties(DisplayStdout);
     setProperties(DisplayStderr);
     setProperties(PostProcessOutput);
 
     setCapabilities(Killable);
-    setStandardToolView(KDevelop::IOutputView::TestView);
+    setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
     KDevelop::ICore::self()->uiController()->registerStatus(this);
