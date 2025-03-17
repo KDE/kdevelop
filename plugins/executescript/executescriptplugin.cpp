@@ -155,41 +155,50 @@ bool ExecuteScriptPlugin::runCurrentFile(ILaunchConfiguration* cfg) const
     return cfg->config().readEntry( ExecuteScriptPlugin::runCurrentFileEntry, true );
 }
 
-QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, QString& err ) const
+QStringList ExecuteScriptPlugin::interpreter(KDevelop::ILaunchConfiguration* cfg, QString& err) const
 {
-    QString interpreter;
     if( !cfg )
     {
-        return interpreter;
+        return {};
     }
     KConfigGroup grp = cfg->config();
 
-    interpreter = grp.readEntry( ExecuteScriptPlugin::interpreterEntry, QString() );
-
-    if( interpreter.isEmpty() )
-    {
+    auto interpreterString = grp.readEntry(ExecuteScriptPlugin::interpreterEntry, QString{});
+    if (interpreterString.isEmpty()) {
         err = i18n("No valid interpreter specified");
         qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "no valid interpreter set";
-    } else
-    {
-        KShell::Errors err_;
-        if( KShell::splitArgs( interpreter, KShell::TildeExpand | KShell::AbortOnMeta, &err_ ).isEmpty() || err_ != KShell::NoError )
-        {
-            interpreter.clear();
-            if( err_ == KShell::BadQuoting )
-            {
-                err = i18n("There is a quoting error in the interpreter "
-                "for the launch configuration '%1'. "
-                "Aborting start.", cfg->name() );
-            } else
-            {
-                err = i18n("A shell meta character was included in the "
-                "interpreter for the launch configuration '%1', "
-                "this is not supported currently. Aborting start.", cfg->name() );
-            }
-            qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "interpreter has meta characters";
-        }
+        return {};
     }
+
+    KShell::Errors err_;
+    auto interpreter =
+        KShell::splitArgs(std::move(interpreterString), KShell::TildeExpand | KShell::AbortOnMeta, &err_);
+
+    if (err_ != KShell::NoError) {
+        if( err_ == KShell::BadQuoting )
+        {
+            err = i18n("There is a quoting error in the interpreter "
+            "for the launch configuration '%1'. "
+            "Aborting start.", cfg->name() );
+        } else
+        {
+            err = i18n("A shell meta character was included in the "
+            "interpreter for the launch configuration '%1', "
+            "this is not supported currently. Aborting start.", cfg->name() );
+        }
+        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "interpreter has meta characters";
+        return {};
+    }
+
+    if (interpreter.empty()) {
+        err = i18n(
+            "Splitting the interpreter command for the launch configuration '%1' yields an empty list. Aborting start.",
+            cfg->name());
+        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name()
+                                        << "the interpreter command is empty after splitting";
+        return {};
+    }
+
     return interpreter;
 }
 
