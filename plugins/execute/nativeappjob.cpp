@@ -31,14 +31,31 @@
 
 using namespace KDevelop;
 
+namespace {
+[[nodiscard]] QString validEnvironmentProfileName(const QString& launchConfigurationName,
+                                                  QString environmentProfileName)
+{
+    if (environmentProfileName.isEmpty()) {
+        qCWarning(PLUGIN_EXECUTE).noquote() << i18n(
+            "No environment profile specified, looks like a broken configuration, please check run configuration '%1'. "
+            "Using default environment profile.",
+            launchConfigurationName);
+        environmentProfileName = EnvironmentProfileList(KSharedConfig::openConfig()).defaultProfileName();
+    }
+    return environmentProfileName;
+}
+} // unnamed namespace
+
 NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     : KDevelop::OutputExecuteJob( parent )
     , m_name(cfg->name())
 {
+    const auto launchConfigurationName = m_name;
     {
         auto cfgGroup = cfg->config();
         if (cfgGroup.readEntry(ExecutePlugin::isExecutableEntry, false)) {
-            m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, cfg->name()).section(QLatin1Char('/'), -1);
+            m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, launchConfigurationName)
+                         .section(QLatin1Char('/'), -1);
         }
         if (!cfgGroup.readEntry<bool>(ExecutePlugin::configuredByCTest, false)) {
             m_killBeforeExecutingAgain = cfgGroup.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, askIfRunning);
@@ -49,9 +66,6 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     auto* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
     Q_ASSERT(iface);
 
-    const KDevelop::EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
-    QString envProfileName = iface->environmentProfileName(cfg);
-
     QString err;
     QUrl executable = iface->executable( cfg, err );
 
@@ -61,14 +75,6 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         setErrorText( err );
         return;
     }
-
-    if (envProfileName.isEmpty()) {
-        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << i18n("No environment profile specified, looks like a broken "
-                       "configuration, please check run configuration '%1'. "
-                       "Using default environment profile.", cfg->name() );
-        envProfileName = environmentProfiles.defaultProfileName();
-    }
-    setEnvironmentProfile(envProfileName);
 
     QStringList arguments = iface->arguments( cfg, err );
     if( !err.isEmpty() )
@@ -82,6 +88,8 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
         return;
     }
+
+    setEnvironmentProfile(validEnvironmentProfileName(launchConfigurationName, iface->environmentProfileName(cfg)));
 
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
