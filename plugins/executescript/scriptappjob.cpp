@@ -61,16 +61,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     Q_ASSERT(iface);
 
     QString err;
-    QString interpreterString = iface->interpreter( cfg, err );
-    // check for errors happens in the executescript plugin already
-    KShell::Errors err_;
-    QStringList interpreter = KShell::splitArgs( interpreterString, KShell::TildeExpand | KShell::AbortOnMeta, &err_ );
-    if ( interpreter.isEmpty() ) {
-        // This should not happen, because of the checks done in the executescript plugin
-        qCWarning(PLUGIN_EXECUTESCRIPT) << "no interpreter specified";
-        return;
-    }
-
+    const auto interpreter = iface->interpreter(cfg, err);
     if( !err.isEmpty() )
     {
         setError( -1 );

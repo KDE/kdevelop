@@ -28,7 +28,14 @@ class IExecuteScriptPlugin
 public:
     virtual ~IExecuteScriptPlugin() {}
 
-    virtual QString interpreter( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
+    /**
+     * @return the interpreter command split into a string list
+     *
+     * The first element of the returned list is the interpreter program.
+     * The remaining elements, if any, are the interpreter command line arguments.
+     */
+    [[nodiscard]] virtual QStringList interpreter(KDevelop::ILaunchConfiguration*, QString& error) const = 0;
+
     virtual QUrl script( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
     virtual QString remoteHost( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
     virtual QStringList arguments( KDevelop::ILaunchConfiguration*, QString& ) const = 0;

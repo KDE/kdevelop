@@ -37,8 +37,8 @@ public:
     static constexpr const char* remoteHostEntry = "Remote Host";
 
     void unload() override;
-    
-    QString interpreter( KDevelop::ILaunchConfiguration*, QString& err ) const override;
+
+    [[nodiscard]] QStringList interpreter(KDevelop::ILaunchConfiguration*, QString& err) const override;
     QUrl script( KDevelop::ILaunchConfiguration*, QString& err ) const override;
     QString remoteHost(KDevelop::ILaunchConfiguration* , QString& err) const override;
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const override;
