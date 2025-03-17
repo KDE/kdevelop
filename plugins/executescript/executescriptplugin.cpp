@@ -15,6 +15,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <util/shellutils.h>
+
 #include "scriptappconfig.h"
 #include "debug.h"
 
@@ -75,7 +77,7 @@ QUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
                 "script for the launch configuration '%1', "
                 "this is not supported currently. Aborting start.", cfg->name() );
             }
-            qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "script has meta characters";
+            warnAboutSplitArgsError(*cfg, err, "script path");
         }
     }
     return script;
@@ -119,8 +121,8 @@ QStringList ExecuteScriptPlugin::arguments( KDevelop::ILaunchConfiguration* cfg,
             "arguments for the launch configuration '%1', "
             "this is not supported currently. Aborting start.", cfg->name() );
         }
+        warnAboutSplitArgsError(*cfg, err, "arguments");
         args = QStringList();
-        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
     }
     return args;
 }
@@ -186,7 +188,7 @@ QStringList ExecuteScriptPlugin::interpreter(KDevelop::ILaunchConfiguration* cfg
             "interpreter for the launch configuration '%1', "
             "this is not supported currently. Aborting start.", cfg->name() );
         }
-        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "interpreter has meta characters";
+        warnAboutSplitArgsError(*cfg, err_, "interpreter command");
         return {};
     }
 

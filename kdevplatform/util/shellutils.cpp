@@ -9,6 +9,7 @@
 #include <debug.h>
 
 #include <interfaces/icore.h>
+#include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iuicontroller.h>
 
 #include <KConfigGroup>
@@ -200,6 +201,27 @@ bool restoreAndAutoSaveGeometry(QWidget& widget, const QString& configGroupName,
     const auto* const saver = new WidgetGeometrySaver(widget, configGroupName, configSubgroupName);
     return saver->restoreWidgetGeometry();
 }
+
+void warnAboutSplitArgsError(const ILaunchConfiguration& launchConfiguration, KShell::Errors errorCode,
+                             const char* nameOfSplitString)
+{
+// the macro is used to deduplicate and to avoid evaluating arguments if the warnings are disabled
+#define p qCWarning(UTIL) << "Launch Configuration:" << launchConfiguration.name()
+    switch (errorCode) {
+    case KShell::NoError:
+        p << "no error reported for the" << nameOfSplitString << "=> inadequate error handling?";
+        return;
+    case KShell::BadQuoting:
+        p << "quoting error in the" << nameOfSplitString;
+        return;
+    case KShell::FoundMeta:
+        p << "meta characters in the" << nameOfSplitString;
+        return;
+    }
+    p << "unknown error code" << errorCode << "reported for the" << nameOfSplitString;
+#undef p
 }
+
+} // namespace KDevelop
 
 #include "shellutils.moc"

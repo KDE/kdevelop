@@ -8,6 +8,9 @@
 #define SHELLUTILS_H
 
 #include "utilexport.h"
+
+#include <KShell>
+
 #include <QList>
 #include <QString>
 
@@ -15,6 +18,7 @@ class QUrl;
 class QWidget;
 
 namespace KDevelop {
+class ILaunchConfiguration;
 
 /**
 * Asks user of an arbitrary question by using either a \ref KMessageBox or stdin/stderr.
@@ -49,6 +53,17 @@ bool KDEVPLATFORMUTIL_EXPORT ensureWritable(const QList<QUrl>& urls);
  */
 bool KDEVPLATFORMUTIL_EXPORT restoreAndAutoSaveGeometry(QWidget& widget, const QString& configGroupName,
                                                         const QString& configSubgroupName = QString{});
+
+/**
+ * Print a warning that describes an error code reported by KShell::splitArgs().
+ *
+ * @param launchConfiguration the launch configuration from whose config the split string has been read
+ * @param errorCode the error code reported by the call to KShell::splitArgs()
+ * @param nameOfSplitString the non-null name of the string passed
+ *        as the command argument to the KShell::splitArgs() call
+ */
+void KDEVPLATFORMUTIL_EXPORT warnAboutSplitArgsError(const ILaunchConfiguration& launchConfiguration,
+                                                     KShell::Errors errorCode, const char* nameOfSplitString);
 }
 
 #endif // SHELLUTILS_H
