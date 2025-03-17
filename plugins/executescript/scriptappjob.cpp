@@ -61,11 +61,17 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     Q_ASSERT(iface);
 
     QString err;
+    const auto detectError = [&err, this](int errorCode) {
+        if (err.isEmpty()) {
+            return false;
+        }
+        setError(errorCode);
+        setErrorText(err);
+        return true;
+    };
+
     const auto interpreter = iface->interpreter(cfg, err);
-    if( !err.isEmpty() )
-    {
-        setError( -1 );
-        setErrorText( err );
+    if (detectError(-2)) {
         return;
     }
 
@@ -73,6 +79,9 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     if( !iface->runCurrentFile( cfg ) )
     {
         script = iface->script( cfg, err );
+        if (detectError(-3)) {
+            return;
+        }
     } else {
         KDevelop::IDocument* document = KDevelop::ICore::self()->documentController()->activeDocument();
         if( !document )
@@ -84,31 +93,13 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         script = ICore::self()->runtimeController()->currentRuntime()->pathInRuntime(KDevelop::Path(document->url())).toUrl();
     }
 
-    if( !err.isEmpty() )
-    {
-        setError( -3 );
-        setErrorText( err );
-        return;
-    }
-
     QString remoteHost = iface->remoteHost( cfg, err );
-    if( !err.isEmpty() )
-    {
-        setError( -4 );
-        setErrorText( err );
+    if (detectError(-4)) {
         return;
     }
 
     QStringList arguments = iface->arguments( cfg, err );
-    if( !err.isEmpty() )
-    {
-        setError( -2 );
-        setErrorText( err );
-    }
-
-    if( error() != 0 )
-    {
-        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
+    if (detectError(-5)) {
         return;
     }
 

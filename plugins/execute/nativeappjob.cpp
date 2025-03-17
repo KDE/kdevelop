@@ -67,25 +67,21 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     Q_ASSERT(iface);
 
     QString err;
-    QUrl executable = iface->executable( cfg, err );
+    const auto detectError = [&err, this](int errorCode) {
+        if (err.isEmpty()) {
+            return false;
+        }
+        setError(errorCode);
+        setErrorText(err);
+        return true;
+    };
 
-    if( !err.isEmpty() )
-    {
-        setError( -1 );
-        setErrorText( err );
+    QUrl executable = iface->executable( cfg, err );
+    if (detectError(-1)) {
         return;
     }
-
     QStringList arguments = iface->arguments( cfg, err );
-    if( !err.isEmpty() )
-    {
-        setError( -2 );
-        setErrorText( err );
-    }
-
-    if( error() != 0 )
-    {
-        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
+    if (detectError(-2)) {
         return;
     }
 
