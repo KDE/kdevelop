@@ -26,6 +26,8 @@ namespace Heaptrack
 
 Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePlugin)
 {
+    setCapabilities(Killable);
+
     Q_ASSERT(launchConfig);
     Q_ASSERT(executePlugin);
 
@@ -41,12 +43,14 @@ Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePl
     if (!errorString.isEmpty()) {
         setError(-1);
         setErrorText(errorString);
+        return;
     }
 
     QStringList analyzedExecutableArguments = executePlugin->arguments(launchConfig, errorString);
     if (!errorString.isEmpty()) {
         setError(-1);
         setErrorText(errorString);
+        return;
     }
 
     const QFileInfo analyzedExecutableInfo(analyzedExecutable);
@@ -66,6 +70,8 @@ Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePl
 
 Job::Job(long int pid)
 {
+    setCapabilities(Killable);
+
     const auto pidString = QString::number(pid);
 
     *this << KDevelop::Path(GlobalSettings::heaptrackExecutable()).toLocalFile();
@@ -87,7 +93,6 @@ void Job::setup(const QString& targetName)
     setProperties(DisplayStderr);
     setProperties(PostProcessOutput);
 
-    setCapabilities(Killable);
     setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     // Heaptrack analysis runs a native program and prints its output along with the output of Heaptrack itself
@@ -115,6 +120,11 @@ QString Job::resultsFile() const
 
 void Job::start()
 {
+    if (error() != NoError) {
+        emitResult();
+        return;
+    }
+
     emit showProgress(this, 0, 0, 0);
     OutputExecuteJob::start();
 }
