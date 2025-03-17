@@ -34,6 +34,21 @@
 
 using namespace KDevelop;
 
+namespace {
+void setProcessEnvironment(const QString& launchConfigurationName, QProcess& process, QString environmentProfileName)
+{
+    const EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
+    if (environmentProfileName.isEmpty()) {
+        qCWarning(PLUGIN_EXECUTESCRIPT).noquote() << i18n(
+            "No environment profile specified, looks like a broken configuration, please check run configuration '%1'. "
+            "Using default environment profile.",
+            launchConfigurationName);
+        environmentProfileName = environmentProfiles.defaultProfileName();
+    }
+    process.setEnvironment(environmentProfiles.createEnvironment(environmentProfileName, process.systemEnvironment()));
+}
+} // unnamed namespace
+
 ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg)
     : OutputJob(parent)
     , proc(nullptr)
@@ -44,9 +59,6 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
 
     auto* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecuteScriptPlugin"))->extension<IExecuteScriptPlugin>();
     Q_ASSERT(iface);
-
-    const KDevelop::EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
-    QString envProfileName = iface->environmentProfileName(cfg);
 
     QString err;
     QString interpreterString = iface->interpreter( cfg, err );
@@ -96,13 +108,6 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         return;
     }
 
-    if (envProfileName.isEmpty()) {
-        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << i18n("No environment profile specified, looks like a broken "
-                       "configuration, please check run configuration '%1'. "
-                       "Using default environment profile.", cfg->name() );
-        envProfileName = environmentProfiles.defaultProfileName();
-    }
-
     QStringList arguments = iface->arguments( cfg, err );
     if( !err.isEmpty() )
     {
@@ -134,7 +139,9 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
 
     // Now setup the process parameters
 
-    proc->setEnvironment(environmentProfiles.createEnvironment(envProfileName, proc->systemEnvironment()));
+    const auto launchConfigurationName = cfg->name();
+    setProcessEnvironment(launchConfigurationName, *proc, iface->environmentProfileName(cfg));
+
     QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() )
     {
@@ -162,7 +169,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
 
     proc->setProgram( program );
 
-    setTitle(cfg->name());
+    setTitle(launchConfigurationName);
 }
 
 
