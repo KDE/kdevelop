@@ -42,18 +42,21 @@ Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePl
     Q_ASSERT(executePlugin);
 
     QString errorString;
+    const auto detectError = [&errorString, this](int errorCode) {
+        if (errorString.isEmpty()) {
+            return false;
+        }
+        setError(errorCode);
+        setErrorText(errorString);
+        return true;
+    };
 
     const auto analyzedExecutable = executePlugin->executable(launchConfig, errorString).toLocalFile();
-    if (!errorString.isEmpty()) {
-        setError(-1);
-        setErrorText(errorString);
+    if (detectError(-1)) {
         return;
     }
-
     QStringList analyzedExecutableArguments = executePlugin->arguments(launchConfig, errorString);
-    if (!errorString.isEmpty()) {
-        setError(-1);
-        setErrorText(errorString);
+    if (detectError(-2)) {
         return;
     }
 
