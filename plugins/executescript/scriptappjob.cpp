@@ -168,13 +168,14 @@ void ScriptAppJob::start()
     qCDebug(PLUGIN_EXECUTESCRIPT) << "launching?" << proc;
     if( proc )
     {
+        Q_ASSERT(error() == NoError);
         startOutput();
         appendLine( i18n("Starting: %1", proc->program().join(QLatin1Char( ' ' ) ) ) );
         ICore::self()->runtimeController()->currentRuntime()->startProcess(proc);
     } else
     {
-        qCWarning(PLUGIN_EXECUTESCRIPT) << "No process, something went wrong when creating the job";
         // No process means we've returned early on from the constructor, some bad error happened
+        Q_ASSERT(error() != NoError);
         emitResult();
     }
 }
