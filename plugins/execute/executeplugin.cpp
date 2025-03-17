@@ -23,6 +23,7 @@
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
 #include <util/kdevstringhandler.h>
+#include <util/shellutils.h>
 
 using namespace KDevelop;
 
@@ -71,8 +72,8 @@ QStringList ExecutePlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QStri
             "arguments for the launch configuration '%1', "
             "this is not supported currently. Aborting start.", cfg->name() );
         }
+        warnAboutSplitArgsError(*cfg, err, "arguments");
         args = QStringList();
-        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
     }
     return args;
 }
@@ -168,7 +169,7 @@ QUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
                 "executable for the launch configuration '%1', "
                 "this is not supported currently. Aborting start.", cfg->name() );
             }
-            qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "executable has meta characters";
+            warnAboutSplitArgsError(*cfg, err_, "executable path");
         }
     }
     return executable;
