@@ -21,6 +21,16 @@
 #include <QFileInfo>
 #include <QRegularExpression>
 
+namespace {
+[[nodiscard]] QString validEnvironmentProfileName(QString environmentProfileName)
+{
+    if (environmentProfileName.isEmpty()) {
+        environmentProfileName = KDevelop::EnvironmentProfileList(KSharedConfig::openConfig()).defaultProfileName();
+    }
+    return environmentProfileName;
+}
+} // unnamed namespace
+
 namespace Heaptrack
 {
 
@@ -30,12 +40,6 @@ Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePl
 
     Q_ASSERT(launchConfig);
     Q_ASSERT(executePlugin);
-
-    QString envProfile = executePlugin->environmentProfileName(launchConfig);
-    if (envProfile.isEmpty()) {
-        envProfile = KDevelop::EnvironmentProfileList(KSharedConfig::openConfig()).defaultProfileName();
-    }
-    setEnvironmentProfile(envProfile);
 
     QString errorString;
 
@@ -52,6 +56,8 @@ Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePl
         setErrorText(errorString);
         return;
     }
+
+    setEnvironmentProfile(validEnvironmentProfileName(executePlugin->environmentProfileName(launchConfig)));
 
     const QFileInfo analyzedExecutableInfo(analyzedExecutable);
 
