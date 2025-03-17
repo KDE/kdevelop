@@ -147,12 +147,13 @@ void Plugin::jobFinished(KJob* kjob)
 {
     auto job = static_cast<Job*>(kjob);
     Q_ASSERT(job);
+    const auto resultsFile = job->resultsFile();
 
     if (job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded) {
-        auto visualizer = new Visualizer(job->resultsFile(), this);
+        auto* const visualizer = new Visualizer(resultsFile, this);
         visualizer->start();
-    } else {
-        QFile::remove(job->resultsFile());
+    } else if (!resultsFile.isEmpty()) {
+        QFile::remove(resultsFile);
     }
 
     m_launchAction->setEnabled(true);
