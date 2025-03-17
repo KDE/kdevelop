@@ -148,7 +148,6 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         wc = QUrl::fromLocalFile( QFileInfo( script.toLocalFile() ).absolutePath() );
     }
     proc->setWorkingDirectory( ICore::self()->runtimeController()->currentRuntime()->pathInRuntime(KDevelop::Path(wc)).toLocalFile() );
-    proc->setProperty( "executable", interpreter.first() );
 
     QStringList program;
     if (!remoteHost.isEmpty()) {
