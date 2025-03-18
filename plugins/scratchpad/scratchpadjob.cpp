@@ -30,7 +30,7 @@ ScratchpadJob::ScratchpadJob(const QString& command, const QString& title, QObje
         m_process->setShellCommand(command);
 
         setStandardToolView(KDevelop::IOutputView::RunView);
-        setTitle(i18nc("prefix to distinguish scratch tabs", "scratch:%1", title));
+        setObjectName(i18nc("prefix to distinguish scratch tabs", "scratch:%1", title));
 
         auto* model = new KDevelop::OutputModel(this);
         setModel(model);
