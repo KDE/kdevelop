@@ -11,8 +11,6 @@
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iproject.h>
-#include <util/executecompositejob.h>
-#include <execute/iexecuteplugin.h>
 
 #include "dbgglobal.h"
 #include "debuggerplugin.h"
@@ -20,7 +18,9 @@
 #include "midebugjobs.h"
 
 #include "ui_gdbconfigpage.h"
-#include <interfaces/iruncontroller.h>
+
+#include <execute/iexecutepluginhelpers.h>
+
 #include <interfaces/icore.h>
 
 #include <KConfigGroup>
@@ -143,14 +143,8 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
                 return nullptr;
         }
 
-        QList<KJob*> l;
-        KJob* depjob = m_execute->dependencyJob(cfg);
-        if( depjob )
-        {
-            l << depjob;
-        }
-        l << new KDevMI::MIDebugJob( m_plugin, cfg, m_execute );
-        return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
+        auto* const debugJob = new KDevMI::MIDebugJob(m_plugin, cfg, m_execute);
+        return makeJobWithDependency(debugJob, *m_execute, cfg);
     }
     qCWarning(DEBUGGERGDB) << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
     return nullptr;

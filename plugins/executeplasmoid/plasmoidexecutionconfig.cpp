@@ -5,9 +5,12 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "executeplasmoidplugin.h"
 #include "plasmoidexecutionconfig.h"
 #include "plasmoidexecutionjob.h"
 #include "debug.h"
+
+#include <execute/iexecutepluginhelpers.h>
 
 #include <KLocalizedString>
 #include <interfaces/ilaunchconfiguration.h>
@@ -20,7 +23,6 @@
 #include <project/builderjob.h>
 #include <serialization/indexedstring.h>
 #include <util/kdevstringhandler.h>
-#include <util/executecompositejob.h>
 #include <util/path.h>
 
 #include <KMessageBox>
@@ -139,6 +141,7 @@ QString PlasmoidLauncher::name() const
 PlasmoidLauncher::PlasmoidLauncher(ExecutePlasmoidPlugin* plugin)
     : m_plugin(plugin)
 {
+    Q_ASSERT(m_plugin);
 }
 
 KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg)
@@ -151,13 +154,8 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
 
     if( launchMode == QLatin1String("execute") )
     {
-        QList<KJob*> jobs;
-        if (auto* const depsJob = calculateDependencies(cfg)) {
-            jobs << depsJob;
-        }
-        jobs << new PlasmoidExecutionJob(m_plugin, cfg);
-
-        return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), jobs );
+        auto* const executionJob = new PlasmoidExecutionJob(m_plugin, cfg);
+        return makeJobWithDependency(executionJob, *m_plugin, cfg);
     }
     qCWarning(EXECUTEPLASMOID) << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return nullptr;

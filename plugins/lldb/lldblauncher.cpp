@@ -11,12 +11,11 @@
 #include "midebugjobs.h"
 #include "widgets/lldbconfigpage.h"
 
-#include <execute/iexecuteplugin.h>
+#include <execute/iexecutepluginhelpers.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/iruncontroller.h>
-#include <util/executecompositejob.h>
 
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -84,12 +83,8 @@ KJob *LldbLauncher::start(const QString &launchMode, KDevelop::ILaunchConfigurat
                 return nullptr;
         }
 
-        QList<KJob*> l;
-        auto depJob = m_iexec->dependencyJob(cfg);
-        if (depJob)
-            l << depJob;
-        l << new MIDebugJob(m_plugin, cfg, m_iexec);
-        return new ExecuteCompositeJob(ICore::self()->runController(), l);
+        auto* const debugJob = new MIDebugJob(m_plugin, cfg, m_iexec);
+        return makeJobWithDependency(debugJob, *m_iexec, cfg);
     }
 
     qCWarning(DEBUGGERLLDB) << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
