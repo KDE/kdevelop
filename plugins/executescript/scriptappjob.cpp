@@ -151,7 +151,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
 
     proc->setProgram( program );
 
-    setTitle(launchConfigurationName);
+    setObjectName(launchConfigurationName);
 }
 
 
