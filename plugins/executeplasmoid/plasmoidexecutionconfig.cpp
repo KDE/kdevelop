@@ -151,10 +151,10 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
 
     if( launchMode == QLatin1String("execute") )
     {
-        KJob* depsJob = dependencies(cfg);
         QList<KJob*> jobs;
-        if(depsJob)
+        if (auto* const depsJob = calculateDependencies(cfg)) {
             jobs << depsJob;
+        }
         jobs << new PlasmoidExecutionJob(m_plugin, cfg);
 
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), jobs );
@@ -189,12 +189,6 @@ KJob* PlasmoidLauncher::calculateDependencies(KDevelop::ILaunchConfiguration* cf
     }
     return nullptr;
 }
-
-KJob* PlasmoidLauncher::dependencies(KDevelop::ILaunchConfiguration* cfg)
-{
-    return calculateDependencies(cfg);
-}
-
 
 QStringList PlasmoidLauncher::supportedModes() const
 {
