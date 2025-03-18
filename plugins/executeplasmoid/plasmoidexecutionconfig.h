@@ -37,7 +37,6 @@ public:
     QString id() override;
     QString name() const override;
     KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
-    virtual KJob* dependencies(KDevelop::ILaunchConfiguration* cfg);
     QStringList supportedModes() const override;
     
     static KJob* calculateDependencies(KDevelop::ILaunchConfiguration* cfg);
