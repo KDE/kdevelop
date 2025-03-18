@@ -19,6 +19,8 @@
 #endif
 
 #include <execute/iexecuteplugin.h>
+#include <execute/iexecutepluginhelpers.h>
+
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/launchconfigurationtype.h>
@@ -26,7 +28,6 @@
 #include <shell/launchconfiguration.h>
 #include <shell/runcontroller.h>
 #include <sublime/message.h>
-#include <util/executecompositejob.h>
 // KF
 #include <KActionCollection>
 #include <KPluginFactory>
@@ -113,16 +114,7 @@ void Plugin::launchHeaptrack()
 
     auto heaptrackJob = new Job(defaultLaunch, executePlugin);
     connect(heaptrackJob, &Job::finished, this, &Plugin::jobFinished);
-
-    QList<KJob*> jobList;
-    if (KJob* depJob = executePlugin->dependencyJob(defaultLaunch)) {
-        jobList += depJob;
-    }
-    jobList += heaptrackJob;
-
-    auto ecJob = new KDevelop::ExecuteCompositeJob(runController, jobList);
-    ecJob->setObjectName(heaptrackJob->objectName());
-    runController->registerJob(ecJob);
+    runController->registerJob(makeJobWithDependency(heaptrackJob, *executePlugin, defaultLaunch));
 
     m_launchAction->setEnabled(false);
 }
