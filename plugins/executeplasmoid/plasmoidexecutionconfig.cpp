@@ -28,7 +28,6 @@
 #include <KConfigGroup>
 #include <QMenu>
 #include <QLineEdit>
-class la;
 
 QIcon PlasmoidExecutionConfig::icon() const
 {
