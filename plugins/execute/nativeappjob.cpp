@@ -65,7 +65,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         return true;
     };
 
-    QUrl executable = iface->executable( cfg, err );
+    const auto executable = iface->executable(cfg, err).toLocalFile();
     if (detectError(-1)) {
         return;
     }
@@ -97,7 +97,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
 
     QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() ) {
-        wc = QUrl::fromLocalFile( QFileInfo( executable.toLocalFile() ).absolutePath() );
+        wc = QUrl::fromLocalFile(QFileInfo{executable}.absolutePath());
     }
     setWorkingDirectory( wc );
 
@@ -105,13 +105,13 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
 
     if (iface->useTerminal(cfg)) {
         QString terminalCommand = iface->terminal(cfg);
-        terminalCommand.replace(QLatin1String("%exe"), KShell::quoteArg( executable.toLocalFile()) );
+        terminalCommand.replace(QLatin1String("%exe"), KShell::quoteArg(executable));
         terminalCommand.replace(QLatin1String("%workdir"), KShell::quoteArg( wc.toLocalFile()) );
         QStringList args = KShell::splitArgs(terminalCommand);
         args.append( arguments );
         *this << args;
     } else {
-        *this << executable.toLocalFile();
+        *this << executable;
         *this << arguments;
     }
 
