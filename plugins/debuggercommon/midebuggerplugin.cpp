@@ -13,6 +13,7 @@
 #include "midebugjobs.h"
 #include "midebugsession.h"
 #include "dialogs/processselection.h"
+#include "dialogs/selectcoredialog.h"
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
@@ -23,6 +24,7 @@
 #include <language/interfaces/editorcontext.h>
 #include <sublime/message.h>
 #include <isession.h>
+#include <util/scopeddialog.h>
 
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -251,9 +253,11 @@ void MIDebuggerPlugin::slotExamineCore()
 {
     showStatusMessage(i18n("Choose a core file to examine..."), 1000);
 
+    auto* const dialogParent = core()->uiController()->activeMainWindow();
+
     if (core()->debugController()->currentSession() != nullptr) {
         KMessageBox::ButtonCode answer = KMessageBox::warningTwoActions(
-            core()->uiController()->activeMainWindow(),
+            dialogParent,
             i18n("A program is already being debugged. Do you want to abort the "
                  "currently running debug session and continue?"),
             {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
@@ -261,8 +265,16 @@ void MIDebuggerPlugin::slotExamineCore()
         if (answer == KMessageBox::SecondaryAction)
             return;
     }
-    auto *job = new MIExamineCoreJob(this, core()->runController());
-    core()->runController()->registerJob(job);
+
+    const ScopedDialog<SelectCoreDialog> dialog(dialogParent);
+    if (dialog->exec() == QDialog::Rejected) {
+        return;
+    }
+
+    auto* const runController = core()->runController();
+    MIExamineCoreJob::CoreInfo coreInfo{dialog->executableFile(), dialog->core()};
+    auto* const job = new MIExamineCoreJob(this, std::move(coreInfo), runController);
+    runController->registerJob(job);
     // job->start() is called in registerJob
 }
 

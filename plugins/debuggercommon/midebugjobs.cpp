@@ -10,21 +10,16 @@
 #include "midebugjobs.h"
 
 #include "debuglog.h"
-#include "dialogs/selectcoredialog.h"
 #include "midebugsession.h"
 #include "midebuggerplugin.h"
 
 #include <execute/iexecuteplugin.h>
-#include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/iuicontroller.h>
 #include <outputview/outputmodel.h>
-#include <util/scopeddialog.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KParts/MainWindow>
 
 #include <QFileInfo>
 
@@ -181,26 +176,19 @@ void MIDebugJob::initializeStartupInfo(IExecutePlugin* execute, ILaunchConfigura
         new InferiorStartupInfo{execute, launchConfiguration, std::move(executable), std::move(arguments)});
 }
 
-MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent)
+MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin* plugin, CoreInfo coreInfo, QObject* parent)
     : MIDebugJobBase(plugin, parent)
+    , m_coreInfo{std::move(coreInfo)}
 {
     setObjectName(i18n("Debug core file"));
 }
 
 void MIExamineCoreJob::start()
 {
-    ScopedDialog<SelectCoreDialog> dlg(ICore::self()->uiController()->activeMainWindow());
-    if (dlg->exec() == QDialog::Rejected) {
-        qCDebug(DEBUGGERCOMMON) << "Select Core File dialog rejected, finishing" << this << "and stopping debugger of"
-                                << m_session;
-        m_session->stopDebugger();
-        done();
-        return;
-    }
-
-    if (!m_session->examineCoreFile(dlg->executableFile(), dlg->core())) {
+    if (!m_session->examineCoreFile(std::move(m_coreInfo.executableFile), std::move(m_coreInfo.coreFile))) {
         done();
     }
+    m_coreInfo = {}; // no more use for the info, so release the memory
 }
 
 MIAttachProcessJob::MIAttachProcessJob(MIDebuggerPlugin *plugin, int pid, QObject *parent)
