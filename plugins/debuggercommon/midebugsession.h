@@ -20,6 +20,7 @@
 
 #include <QMap>
 #include <QPointer>
+#include <QStringList>
 
 #include <memory>
 
@@ -39,6 +40,15 @@ class MIDebugger;
 class MIDebuggerPlugin;
 class MIVariable;
 class STTY;
+
+struct InferiorStartupInfo
+{
+    IExecutePlugin* execute = nullptr;
+    KDevelop::ILaunchConfiguration* launchConfiguration = nullptr;
+    QString executablePath;
+    QStringList arguments;
+};
+
 class MIDebugSession : public KDevelop::IDebugSession
 {
     Q_OBJECT
@@ -97,6 +107,13 @@ Q_SIGNALS:
     void reset();
 
 public:
+    /**
+     * Start the debugger and execute the inferior program specified by @p startupInfo.
+     *
+     * @return whether debugging started successfully
+     */
+    bool startDebugging(const InferiorStartupInfo& startupInfo);
+
     bool debuggerStateIsOn(DBGStateFlags state) const;
     DBGStateFlags debuggerState() const;
 
@@ -148,6 +165,12 @@ public Q_SLOTS:
 
     /**
      * Start the debugger, and execute the inferior program specified by \a cfg.
+     *
+     * Call the other overload of this function if more information is available.
+     *
+     * @warning This overload is called only from unit tests, and therefore does not report errors in the UI.
+     *
+     * @return whether debugging started successfully
      */
     bool startDebugging(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *iexec);
 

@@ -14,6 +14,8 @@
 
 #include <QPointer>
 
+#include <memory>
+
 class IExecutePlugin;
 namespace KDevelop
 {
@@ -23,6 +25,7 @@ class ILaunchConfiguration;
 
 namespace KDevMI {
 
+struct InferiorStartupInfo;
 class MIDebuggerPlugin;
 class MIDebugSession;
 
@@ -60,11 +63,10 @@ private Q_SLOTS:
     void stderrReceived(const QStringList&);
 
 private:
-    void finishWithError(int errorCode, const QString& errorText);
     KDevelop::OutputModel* model();
+    void initializeStartupInfo(IExecutePlugin* execute, KDevelop::ILaunchConfiguration* launchConfiguration);
 
-    KDevelop::ILaunchConfiguration* m_launchcfg;
-    IExecutePlugin* m_execute;
+    std::unique_ptr<InferiorStartupInfo> m_startupInfo;
 };
 
 class MIExamineCoreJob : public MIDebugJobBase<KJob>

@@ -76,9 +76,17 @@ bool MIDebugJobBase<JobBase>::doKill()
 MIDebugJob::MIDebugJob(MIDebuggerPlugin* p, ILaunchConfiguration* launchcfg,
                    IExecutePlugin* execute, QObject* parent)
     : MIDebugJobBase(p, parent)
-    , m_launchcfg(launchcfg)
-    , m_execute(execute)
 {
+    Q_ASSERT(launchcfg);
+    Q_ASSERT(execute);
+
+    initializeStartupInfo(execute, launchcfg);
+    if (!m_startupInfo) {
+        qCDebug(DEBUGGERCOMMON) << "failing" << this << "and stopping debugger of" << m_session;
+        m_session->stopDebugger();
+        return;
+    }
+
     connect(m_session, &MIDebugSession::inferiorStdoutLines, this, &MIDebugJob::stdoutReceived);
     connect(m_session, &MIDebugSession::inferiorStderrLines, this, &MIDebugJob::stderrReceived);
 
@@ -92,27 +100,12 @@ MIDebugJob::MIDebugJob(MIDebuggerPlugin* p, ILaunchConfiguration* launchcfg,
 
 void MIDebugJob::start()
 {
-    Q_ASSERT(m_execute);
-
-    QString err;
-
-    // check if the config is valid
-    QString executable = m_execute->executable(m_launchcfg, err).toLocalFile();
-    if (!err.isEmpty()) {
-        finishWithError(InvalidExecutable, err);
+    if (!m_startupInfo) {
+        Q_ASSERT(error() != NoError);
+        emitResult();
         return;
     }
-
-    if (!QFileInfo(executable).isExecutable()) {
-        finishWithError(ExecutableIsNotExecutable, i18n("'%1' is not an executable", executable));
-        return;
-    }
-
-    QStringList arguments = m_execute->arguments(m_launchcfg, err);
-    if (!err.isEmpty()) {
-        finishWithError(InvalidArguments, err);
-        return;
-    }
+    Q_ASSERT(error() == NoError);
 
     setStandardToolView(IOutputView::DebugView);
     setBehaviours(IOutputView::Behaviours(IOutputView::AllowUserClose) | KDevelop::IOutputView::AutoScroll);
@@ -120,9 +113,9 @@ void MIDebugJob::start()
     auto model = new KDevelop::OutputModel;
     model->setFilteringStrategy(OutputModel::NativeAppErrorFilter);
     setModel(model);
-    setTitle(m_launchcfg->name());
+    setTitle(m_startupInfo->launchConfiguration->name());
 
-    KConfigGroup grp = m_launchcfg->config();
+    const auto grp = m_startupInfo->launchConfiguration->config();
     QString startWith = grp.readEntry(Config::StartWithEntry, QStringLiteral("ApplicationOutput"));
     if (startWith == QLatin1String("ApplicationOutput")) {
         setVerbosity(Verbose);
@@ -132,9 +125,10 @@ void MIDebugJob::start()
 
     startOutput();
 
-    if (!m_session->startDebugging(m_launchcfg, m_execute)) {
+    if (!m_session->startDebugging(std::move(*m_startupInfo))) {
         done();
     }
+    m_startupInfo.reset(); // no more use for the info, so release the memory
 }
 
 void MIDebugJob::stderrReceived(const QStringList& l)
@@ -151,18 +145,40 @@ void MIDebugJob::stdoutReceived(const QStringList& l)
     }
 }
 
-void MIDebugJob::finishWithError(int errorCode, const QString& errorText)
-{
-    qCDebug(DEBUGGERCOMMON) << "failing" << this << "and stopping debugger of" << m_session;
-    m_session->stopDebugger();
-    setError(errorCode);
-    setErrorText(errorText);
-    emitResult();
-}
-
 OutputModel* MIDebugJob::model()
 {
     return qobject_cast<OutputModel*>(OutputJob::model());
+}
+
+void MIDebugJob::initializeStartupInfo(IExecutePlugin* execute, ILaunchConfiguration* launchConfiguration)
+{
+    QString errorString;
+    const auto detectError = [&errorString, this](int errorCode) {
+        if (errorString.isEmpty()) {
+            return false;
+        }
+        setError(errorCode);
+        setErrorText(errorString);
+        return true;
+    };
+
+    auto executable = execute->executable(launchConfiguration, errorString).toLocalFile();
+    if (detectError(InvalidExecutable)) {
+        return;
+    }
+    if (!QFileInfo{executable}.isExecutable()) {
+        setError(ExecutableIsNotExecutable);
+        setErrorText(i18n("'%1' is not an executable", executable));
+        return;
+    }
+
+    auto arguments = execute->arguments(launchConfiguration, errorString);
+    if (detectError(InvalidArguments)) {
+        return;
+    }
+
+    m_startupInfo.reset(
+        new InferiorStartupInfo{execute, launchConfiguration, std::move(executable), std::move(arguments)});
 }
 
 MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent)
