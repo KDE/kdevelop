@@ -13,6 +13,7 @@
 #include <outputview/outputjob.h>
 
 #include <QPointer>
+#include <QUrl>
 
 #include <memory>
 
@@ -73,9 +74,18 @@ class MIExamineCoreJob : public MIDebugJobBase<KJob>
 {
     Q_OBJECT
 public:
-    explicit MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent = nullptr);
+    struct CoreInfo
+    {
+        QUrl executableFile;
+        QUrl coreFile;
+    };
+
+    explicit MIExamineCoreJob(MIDebuggerPlugin* plugin, CoreInfo coreInfo, QObject* parent = nullptr);
 
     void start() override;
+
+private:
+    CoreInfo m_coreInfo;
 };
 
 class MIAttachProcessJob : public MIDebugJobBase<KJob>
