@@ -12,6 +12,7 @@ set(debuggercommon_SRCS
     midebugsession.cpp
     midebuggerplugin.cpp
     midebugjobs.cpp
+    midebuglauncher.cpp
     # controllers
     mibreakpointcontroller.cpp
     miframestackmodel.cpp

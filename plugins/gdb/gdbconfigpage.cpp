@@ -8,26 +8,13 @@
 
 #include "gdbconfigpage.h"
 
-#include <interfaces/idebugcontroller.h>
-#include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/iproject.h>
-
 #include "dbgglobal.h"
-#include "debuggerplugin.h"
-#include "debuglog.h"
-#include "midebugjobs.h"
 
 #include "ui_gdbconfigpage.h"
 
-#include <execute/iexecutepluginhelpers.h>
-
-#include <interfaces/icore.h>
-
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageBox>
 
-using namespace KDevelop;
 namespace Config = KDevMI::GDB::Config;
 
 GdbConfigPage::GdbConfigPage( QWidget* parent )
@@ -92,22 +79,9 @@ QString GdbConfigPage::title() const
     return i18nc("@title:tab", "GDB Configuration");
 }
 
-
-GdbLauncher::GdbLauncher( KDevMI::GDB::CppDebuggerPlugin* p, IExecutePlugin* execute )
-    : m_plugin( p )
-    , m_execute( execute )
+GdbLauncher::GdbLauncher(KDevMI::MIDebuggerPlugin* plugin, IExecutePlugin* execute)
+    : KDevMI::MIDebugLauncher(plugin, execute, std::make_unique<GdbConfigPageFactory>())
 {
-    factoryList << new GdbConfigPageFactory();
-}
-
-GdbLauncher::~GdbLauncher()
-{
-    qDeleteAll(factoryList);
-}
-
-QList< KDevelop::LaunchConfigurationPageFactory* > GdbLauncher::configPages() const
-{
-    return factoryList;
 }
 
 QString GdbLauncher::id()
@@ -118,41 +92,6 @@ QString GdbLauncher::id()
 QString GdbLauncher::name() const
 {
     return i18n("GDB");
-}
-
-KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg)
-{
-    Q_ASSERT(cfg);
-    if( !cfg )
-    {
-        return nullptr;
-    }
-    if( launchMode == QLatin1String("debug") )
-    {
-        Q_ASSERT(m_execute);
-        Q_ASSERT(m_plugin);
-
-        if (KDevelop::ICore::self()->debugController()->currentSession() != nullptr) {
-            KMessageBox::ButtonCode answer = KMessageBox::warningTwoActions(
-                nullptr,
-                i18n("A program is already being debugged. Do you want to abort the "
-                     "currently running debug session and continue with the launch?"),
-                {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
-                KStandardGuiItem::cancel());
-            if (answer == KMessageBox::SecondaryAction)
-                return nullptr;
-        }
-
-        auto* const debugJob = new KDevMI::MIDebugJob(m_plugin, cfg, m_execute);
-        return makeJobWithDependency(debugJob, *m_execute, cfg);
-    }
-    qCWarning(DEBUGGERGDB) << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
-    return nullptr;
-}
-
-QStringList GdbLauncher::supportedModes() const
-{
-    return QStringList() << QStringLiteral("debug");
 }
 
 QString GdbLauncher::description() const
