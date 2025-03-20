@@ -17,8 +17,6 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include "scriptappconfig.h"
 #include "debug.h"
-#include <project/projectmodel.h>
-#include <util/kdevstringhandler.h>
 
 using namespace KDevelop;
 
