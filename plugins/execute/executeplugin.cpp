@@ -7,9 +7,7 @@
 #include "executeplugin.h"
 
 #include <KConfigGroup>
-#include <KJob>
 #include <KLocalizedString>
-#include <KParts/MainWindow>
 #include <KPluginFactory>
 #include <KShell>
 
