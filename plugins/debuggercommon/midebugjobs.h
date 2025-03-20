@@ -38,6 +38,11 @@ public:
     ~MIDebugJobBase() override;
 
 protected:
+    /**
+     * Finish this job without stopping the debug session.
+     *
+     * Call this function when the debug session finishes or fails to start.
+     */
     void done();
     bool doKill() override;
 
