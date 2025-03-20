@@ -9,28 +9,13 @@
 #ifndef GDBCONFIGPAGE_H
 #define GDBCONFIGPAGE_H
 
-#include <interfaces/ilauncher.h>
+#include "midebuglauncher.h"
+
 #include <interfaces/launchconfigurationpage.h>
 
-#include <QPointer>
-
-class IExecutePlugin;
 namespace Ui
 {
 class GdbConfigPage;
-}
-namespace KDevelop
-{
-class ILaunchConfiguration;
-class IProject;
-}
-
-namespace KDevMI
-{
-namespace GDB
-{
-class CppDebuggerPlugin;
-}
 }
 
 class GdbConfigPageFactory : public KDevelop::LaunchConfigurationPageFactory
@@ -53,21 +38,13 @@ private:
     Ui::GdbConfigPage* ui;
 };
 
-class GdbLauncher : public KDevelop::ILauncher
+class GdbLauncher : public KDevMI::MIDebugLauncher
 {
 public:
-    GdbLauncher( KDevMI::GDB::CppDebuggerPlugin* plugin, IExecutePlugin* execute );
-    ~GdbLauncher() override;
-    QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
+    explicit GdbLauncher(KDevMI::MIDebuggerPlugin* plugin, IExecutePlugin* execute);
     QString description() const override;
     QString id() override;
     QString name() const override;
-    KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
-    QStringList supportedModes() const override;
-private:
-    QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
-    QPointer<KDevMI::GDB::CppDebuggerPlugin> m_plugin;
-    IExecutePlugin* m_execute;
 };
 
 #endif
