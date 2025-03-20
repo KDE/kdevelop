@@ -19,12 +19,9 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/launchconfigurationpage.h>
 
 #include <KLocalizedString>
-#include <KMessageBox>
-#include <KParts/MainWindow>
 
 using namespace KDevMI;
 
@@ -60,16 +57,11 @@ KJob* MIDebugLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigu
     }
     qCDebug(DEBUGGERCOMMON) << "MIDebugLauncher: starting debugging";
 
-    if (KDevelop::ICore::self()->debugController()->currentSession()) {
-        const auto answer = KMessageBox::warningTwoActions(
-            KDevelop::ICore::self()->uiController()->activeMainWindow(),
-            i18n("A program is already being debugged. Do you want to abort the "
-                 "currently running debug session and continue with the launch?"),
-            {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
-            KStandardGuiItem::cancel());
-        if (answer == KMessageBox::SecondaryAction) {
-            return nullptr;
-        }
+    static const auto replaceSessionQuestionText = i18n(
+        "A program is already being debugged. Do you want to abort the "
+        "currently running debug session and continue with the launch?");
+    if (!KDevelop::ICore::self()->debugController()->canAddSession(replaceSessionQuestionText)) {
+        return nullptr;
     }
 
     auto* const debugJob = new MIDebugJob(m_plugin, cfg, m_execute);

@@ -25,7 +25,6 @@
 
 #include <KActionCollection>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KParts/MainWindow>
 
 #include <QAction>
@@ -37,6 +36,15 @@
 
 using namespace KDevelop;
 using namespace KDevMI;
+
+namespace {
+[[nodiscard]] const QString& replaceSessionQuestionText()
+{
+    static const QString text = i18n(
+        "A program is already being debugged. Do you want to abort the currently running debug session and continue?");
+    return text;
+}
+}
 
 class KDevMI::DBusProxy : public QObject
 {
@@ -206,20 +214,11 @@ void MIDebuggerPlugin::slotExamineCore()
 {
     showStatusMessage(i18n("Choose a core file to examine..."), 1000);
 
-    auto* const dialogParent = core()->uiController()->activeMainWindow();
-
-    if (core()->debugController()->currentSession() != nullptr) {
-        KMessageBox::ButtonCode answer = KMessageBox::warningTwoActions(
-            dialogParent,
-            i18n("A program is already being debugged. Do you want to abort the "
-                 "currently running debug session and continue?"),
-            {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
-            KStandardGuiItem::cancel());
-        if (answer == KMessageBox::SecondaryAction)
-            return;
+    if (!core()->debugController()->canAddSession(replaceSessionQuestionText())) {
+        return;
     }
 
-    const ScopedDialog<SelectCoreDialog> dialog(dialogParent);
+    const ScopedDialog<SelectCoreDialog> dialog(core()->uiController()->activeMainWindow());
     if (dialog->exec() == QDialog::Rejected) {
         return;
     }
@@ -236,15 +235,8 @@ void MIDebuggerPlugin::slotAttachProcess()
 {
     showStatusMessage(i18n("Choose a process to attach to..."), 1000);
 
-    if (core()->debugController()->currentSession() != nullptr) {
-        KMessageBox::ButtonCode answer = KMessageBox::warningTwoActions(
-            core()->uiController()->activeMainWindow(),
-            i18n("A program is already being debugged. Do you want to abort the "
-                 "currently running debug session and continue?"),
-            {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
-            KStandardGuiItem::cancel());
-        if (answer == KMessageBox::SecondaryAction)
-            return;
+    if (!core()->debugController()->canAddSession(replaceSessionQuestionText())) {
+        return;
     }
 
     const auto pid = askUserForProcessId(core()->uiController()->activeMainWindow());

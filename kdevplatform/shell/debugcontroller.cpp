@@ -14,6 +14,8 @@
 
 #include <KActionCollection>
 #include <KLocalizedString>
+#include <KMessageBox>
+#include <KParts/MainWindow>
 #include <KTextEditor/Document>
 #include <KXMLGUIFactory>
 
@@ -298,6 +300,19 @@ void DebugController::setupActions()
     action->setWhatsThis(i18nc("@info:whatsthis", "Jumps to the execution line in the editor."));
     connect(action, &QAction::triggered, this, &DebugController::showCurrentLine);
     ac->addAction(QStringLiteral("debug_showcurrentline"), action);
+}
+
+bool DebugController::canAddSession(const QString& replaceSessionQuestionText) const
+{
+    if (!m_currentSession) {
+        return true;
+    }
+
+    const auto answer = KMessageBox::warningTwoActions(
+        ICore::self()->uiController()->activeMainWindow(), replaceSessionQuestionText, {},
+        KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
+        KStandardGuiItem::cancel());
+    return answer == KMessageBox::PrimaryAction;
 }
 
 void DebugController::addSession(IDebugSession* session)
