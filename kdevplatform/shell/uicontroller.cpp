@@ -267,10 +267,15 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
 {
     Q_D(UiController);
 
-    if(!d->areasRestored || !activeArea())
+    if (!d->areasRestored) {
         return nullptr;
+    }
+    auto* const area = activeArea();
+    if (!area) {
+        return nullptr;
+    }
 
-    const QList<Sublime::View*> views = activeArea()->toolViews();
+    const auto& views = area->toolViews();
     for (Sublime::View* view : views) {
         auto* doc = qobject_cast<Sublime::ToolDocument*>(view->document());
         if (doc && doc->title() == name) {
@@ -292,7 +297,7 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
             d->factoryDocuments.insert(factory, doc);
         }
 
-        const auto* const view = addToolViewToArea(factory, doc, activeArea());
+        const auto* const view = addToolViewToArea(factory, doc, area);
         if (view) {
             ret = view->widget();
             Q_ASSERT(ret);
