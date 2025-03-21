@@ -126,6 +126,22 @@ public:
         }
     }
 
+    /**
+     * Record the last active tool view action listener.
+     *
+     * @param toolViewWidget a non-null tool view widget that just became active
+     * @return whether @p toolViewWidget is a tool view action listener
+     */
+    bool setActiveActionListener(QWidget* toolViewWidget)
+    {
+        Q_ASSERT(toolViewWidget);
+        if (qobject_cast<IToolViewActionListener*>(toolViewWidget)) {
+            activeActionListener = toolViewWidget;
+            return true;
+        }
+        return false;
+    }
+
     Core* const core;
     QPointer<MainWindow> defaultMainWindow;
 
@@ -365,15 +381,8 @@ void UiController::slotActiveToolViewChanged(Sublime::View* view)
 {
     Q_D(UiController);
 
-    if (!view) {
-        return;
-    }
-
-    // record the last active tool view action listener
-    auto* const widget = view->widget();
-    Q_ASSERT(widget);
-    if (qobject_cast<IToolViewActionListener*>(widget)) {
-        d->activeActionListener = widget;
+    if (view) {
+        d->setActiveActionListener(view->widget());
     }
 }
 
@@ -387,10 +396,7 @@ void UiController::toolViewVisibilityRestored(const QList<Sublime::View*>& visib
 
     for (const auto* const view : visibleToolViews) {
         Q_ASSERT(view);
-        auto* const widget = view->widget();
-        Q_ASSERT(widget);
-        if (qobject_cast<IToolViewActionListener*>(widget)) {
-            d->activeActionListener = widget;
+        if (d->setActiveActionListener(view->widget())) {
             break; // only one action listener can be active at a time, so no need to keep looking for another one
         }
     }
