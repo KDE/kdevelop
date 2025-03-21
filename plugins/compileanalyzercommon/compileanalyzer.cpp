@@ -218,10 +218,7 @@ void CompileAnalyzer::raiseProblemsToolView()
 
 void CompileAnalyzer::raiseOutputToolView()
 {
-    core()->uiController()->findToolView(
-        i18ndc("kdevstandardoutputview", "@title:window", "Analyze"),
-        nullptr,
-        KDevelop::IUiController::FindFlags::Raise);
+    core()->uiController()->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Analyze"));
 }
 
 bool CompileAnalyzer::isRunning() const

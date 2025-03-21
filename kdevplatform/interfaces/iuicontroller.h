@@ -102,6 +102,12 @@ public:
     virtual QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags = CreateAndRaise) = 0;
 
     /**
+     * Make sure that the tool view for the document with a given specifier -
+     * Sublime::Document::documentSpecifier() - is visible to the user.
+     */
+    virtual void raiseToolView(const QString& documentSpecifier) = 0;
+
+    /**
      * Makes sure that the tool view that contains the widget @p toolViewWidget is visible to the user.
      */
     virtual void raiseToolView(QWidget* toolViewWidget) = 0;
