@@ -357,9 +357,10 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         //find this widget in views
         WidgetFinder widgetFinder(w);
         area->walkViews(widgetFinder, area->rootIndex());
-        if (widgetFinder.view && widgetFinder.view != mw->activeView())
-        {
-            setActiveView(mw, widgetFinder.view);
+        if (widgetFinder.view) {
+            if (widgetFinder.view != mw->activeView()) {
+                setActiveView(mw, widgetFinder.view);
+            }
             ///@todo adymo: shall we filter out the event?
             return false;
         }
@@ -367,9 +368,10 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         //find this widget in tool views
         ToolWidgetFinder toolFinder(w);
         area->walkToolViews(toolFinder, Sublime::AllPositions);
-        if (toolFinder.view && toolFinder.view != mw->activeToolView())
-        {
-            setActiveToolView(mw, toolFinder.view);
+        if (toolFinder.view) {
+            if (toolFinder.view != mw->activeToolView()) {
+                setActiveToolView(mw, toolFinder.view);
+            }
             ///@todo adymo: shall we filter out the event?
             return false;
         }
