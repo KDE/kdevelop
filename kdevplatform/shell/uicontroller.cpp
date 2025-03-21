@@ -293,8 +293,7 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
 
     const auto& views = area->toolViews();
     for (Sublime::View* view : views) {
-        auto* doc = qobject_cast<Sublime::ToolDocument*>(view->document());
-        if (doc && doc->title() == name) {
+        if (view->document()->title() == name) {
             auto* const widget = view->widget();
             Q_ASSERT(widget);
             if(flags & Raise)
