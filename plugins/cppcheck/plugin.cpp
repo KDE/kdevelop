@@ -109,10 +109,7 @@ void Plugin::raiseProblemsView()
 
 void Plugin::raiseOutputView()
 {
-    core()->uiController()->findToolView(
-        i18nc("@title:window", "Analyze"),
-        nullptr,
-        KDevelop::IUiController::FindFlags::Raise);
+    core()->uiController()->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Analyze"));
 }
 
 void Plugin::updateActions()
