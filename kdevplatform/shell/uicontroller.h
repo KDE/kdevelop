@@ -54,6 +54,7 @@ public:
     void removeToolView(IToolViewFactory *factory) override;
 
     QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags) override;
+    void raiseToolView(const QString& documentSpecifier) override;
     void raiseToolView(QWidget* toolViewWidget) override;
 
     void selectNewToolViewToAdd(MainWindow *mw);
@@ -101,6 +102,17 @@ private Q_SLOTS:
     void toolViewVisibilityRestored(const QList<Sublime::View*>& visibleToolViews);
 
 private:
+    /**
+     * @return activeArea() if the areas have been restored, @c nullptr otherwise
+     */
+    [[nodiscard]] Sublime::Area* restoredActiveArea();
+
+    /**
+     * Find at most one tool view in the active area, for which @p isToolViewToRaise returns @c true, and raise it.
+     */
+    template<typename ToolViewPredicate>
+    void raiseToolView(ToolViewPredicate isToolViewToRaise);
+
     void addToolViewIfWanted(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
                            Sublime::Area* area);

@@ -278,15 +278,18 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     main->show();
 }
 
+Sublime::Area* UiController::restoredActiveArea()
+{
+    Q_D(const UiController);
+
+    return d->areasRestored ? activeArea() : nullptr;
+}
 
 QWidget* UiController::findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags)
 {
     Q_D(UiController);
 
-    if (!d->areasRestored) {
-        return nullptr;
-    }
-    auto* const area = activeArea();
+    auto* const area = restoredActiveArea();
     if (!area) {
         return nullptr;
     }
@@ -327,21 +330,32 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
     return ret;
 }
 
+void UiController::raiseToolView(const QString& documentSpecifier)
+{
+    raiseToolView([&documentSpecifier](const Sublime::View* view) {
+        return view->document()->documentSpecifier() == documentSpecifier;
+    });
+}
+
 void UiController::raiseToolView(QWidget* toolViewWidget)
 {
-    Q_D(UiController);
-
-    if(!d->areasRestored)
-        return;
-
-    auto* const area = activeArea();
-
-    const auto& views = area->toolViews();
-    const auto it = std::find_if(views.cbegin(), views.cend(), [toolViewWidget](const Sublime::View* view) {
+    raiseToolView([toolViewWidget](const Sublime::View* view) {
         const auto* const widget = view->widget();
         Q_ASSERT(widget);
         return widget == toolViewWidget;
     });
+}
+
+template<typename ToolViewPredicate>
+void UiController::raiseToolView(ToolViewPredicate isToolViewToRaise)
+{
+    auto* const area = restoredActiveArea();
+    if (!area) {
+        return;
+    }
+
+    const auto& views = area->toolViews();
+    const auto it = std::find_if(views.cbegin(), views.cend(), std::move(isToolViewToRaise));
     if (it != views.cend()) {
         area->raiseToolView(*it);
     }
@@ -768,7 +782,7 @@ Sublime::View* UiController::addToolViewToArea(IToolViewFactory* factory,
         p == Sublime::AllPositions ? Sublime::dockAreaToPosition(factory->defaultPosition()) : p);
 
     connect(view, &Sublime::View::raise,
-            this, QOverload<Sublime::View*>::of(&UiController::raiseToolView));
+            this, static_cast<void (UiController::*)(Sublime::View*)>(&UiController::raiseToolView));
 
     factory->viewCreated(view);
     return view;

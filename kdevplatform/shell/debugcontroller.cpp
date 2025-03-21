@@ -422,7 +422,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
                     ICore::self()->uiController()->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
                     mainWindow->area()->setWorkingSet(workingSet, oldArea->workingSetPersistent(), oldArea);
                 }
-                ICore::self()->uiController()->findToolView(i18nc("@title:window", "Debug"), nullptr, IUiController::Raise);
+                ICore::self()->uiController()->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Debug"));
             }
         }
         session->deleteLater();
