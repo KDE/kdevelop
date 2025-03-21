@@ -298,7 +298,7 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
             auto* const widget = view->widget();
             Q_ASSERT(widget);
             if(flags & Raise)
-                view->requestRaise();
+                area->raiseToolView(view);
             return widget;
         }
     }
@@ -333,14 +333,16 @@ void UiController::raiseToolView(QWidget* toolViewWidget)
     if(!d->areasRestored)
         return;
 
-    const QList<Sublime::View*> views = activeArea()->toolViews();
+    auto* const area = activeArea();
+
+    const auto& views = area->toolViews();
     const auto it = std::find_if(views.cbegin(), views.cend(), [toolViewWidget](const Sublime::View* view) {
         const auto* const widget = view->widget();
         Q_ASSERT(widget);
         return widget == toolViewWidget;
     });
     if (it != views.cend()) {
-        (*it)->requestRaise();
+        area->raiseToolView(*it);
     }
 }
 
@@ -369,9 +371,11 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory, 
 void KDevelop::UiController::raiseToolView(Sublime::View * view)
 {
     const auto areas = allAreas();
-    for (Sublime::Area* area : areas) {
-        if( area->toolViews().contains( view ) )
-            area->raiseToolView( view );
+    const auto it = std::find_if(areas.cbegin(), areas.cend(), [view](const Sublime::Area* area) {
+        return area->toolViews().contains(view);
+    });
+    if (it != areas.cend()) {
+        (*it)->raiseToolView(view);
     }
 }
 
