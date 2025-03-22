@@ -293,11 +293,13 @@ void ItemViewWalker::selectIndex(Direction direction)
 
     const QModelIndexList list = m_selectionModel->selectedRows();
 
+    constexpr auto selectionCommand = QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
+
     const QModelIndex currentIndex = list.value(0);
     if (!currentIndex.isValid()) {
         /// no selection yet, just select the first
         const QModelIndex firstIndex = m_selectionModel->model()->index(0, 0);
-        m_selectionModel->setCurrentIndex(firstIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+        m_selectionModel->setCurrentIndex(firstIndex, selectionCommand);
         return;
     }
 
@@ -307,7 +309,7 @@ void ItemViewWalker::selectIndex(Direction direction)
         return; /// never invalidate the selection
     }
 
-    m_selectionModel->setCurrentIndex(nextIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+    m_selectionModel->setCurrentIndex(nextIndex, selectionCommand);
 }
 
 ProblemsView::ProblemsView(QWidget* parent)
