@@ -369,9 +369,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         ToolWidgetFinder toolFinder(w);
         area->walkToolViews(toolFinder, Sublime::AllPositions);
         if (toolFinder.view) {
-            if (toolFinder.view != mw->activeToolView()) {
-                setActiveToolView(mw, toolFinder.view);
-            }
+            setActiveToolView(mw, toolFinder.view);
             ///@todo adymo: shall we filter out the event?
             return false;
         }
