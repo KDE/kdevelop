@@ -292,14 +292,16 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
     }
 
     const auto& views = area->toolViews();
-    for (Sublime::View* view : views) {
-        if (view->document()->title() == name) {
-            auto* const widget = view->widget();
-            Q_ASSERT(widget);
-            if(flags & Raise)
-                area->raiseToolView(view);
-            return widget;
-        }
+    const auto it = std::find_if(views.cbegin(), views.cend(), [&name](const Sublime::View* view) {
+        return view->document()->title() == name;
+    });
+    if (it != views.cend()) {
+        auto* const view = *it;
+        auto* const widget = view->widget();
+        Q_ASSERT(widget);
+        if(flags & Raise)
+            area->raiseToolView(view);
+        return widget;
     }
 
     QWidget* ret = nullptr;
