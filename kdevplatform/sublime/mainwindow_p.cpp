@@ -460,6 +460,13 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
 void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
 {
     idealController->raiseView(view);
+    // Raising a tool view shows it in the background and avoids giving it the focus.
+    // Treat raising as activation and update the active tool view accordingly.
+    // FIXME: Unfortunately, this manual activation produces inconsistent results (that depend on which particular
+    // tool view is raised) when another tool view has focus. In this scenario, raising an output tool view (such
+    // as Build) makes it the active tool view; but raising the Find/Replace in Files tool view first makes it
+    // the active tool view, then transfers the focus back and thus activates the previously focused tool view.
+    m_mainWindow->setActiveToolView(view);
 }
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)

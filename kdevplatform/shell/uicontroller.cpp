@@ -373,8 +373,6 @@ void KDevelop::UiController::raiseToolView(Sublime::View * view)
         if( area->toolViews().contains( view ) )
             area->raiseToolView( view );
     }
-
-    slotActiveToolViewChanged(view);
 }
 
 void UiController::slotActiveToolViewChanged(Sublime::View* view)
@@ -394,9 +392,11 @@ void UiController::toolViewVisibilityRestored(const QList<Sublime::View*>& visib
         return; // a tool view in an inactive main window should not become the active action listener
     }
 
-    for (const auto* const view : visibleToolViews) {
+    for (auto* const view : visibleToolViews) {
         Q_ASSERT(view);
         if (d->setActiveActionListener(view->widget())) {
+            // set the same active tool view for the main window in order to prevent bugs due to desynchronization
+            setActiveToolView(activeSublimeWindow(), view);
             break; // only one action listener can be active at a time, so no need to keep looking for another one
         }
     }
