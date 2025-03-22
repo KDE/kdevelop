@@ -269,6 +269,9 @@ void Sublime::MainWindow::setActiveToolView(View *view)
 {
     Q_D(MainWindow);
 
+    if (d->activeToolView == view) {
+        return;
+    }
     d->activeToolView = view;
     emit activeToolViewChanged(view);
 }
