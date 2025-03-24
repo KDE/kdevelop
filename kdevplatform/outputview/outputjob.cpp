@@ -106,6 +106,13 @@ void OutputJob::outputViewRemoved(int toolViewId, int id)
     }
 }
 
+QString OutputJob::title() const
+{
+    Q_D(const OutputJob);
+
+    return d->title;
+}
+
 void KDevelop::OutputJob::setTitle(const QString & title)
 {
     Q_D(OutputJob);
