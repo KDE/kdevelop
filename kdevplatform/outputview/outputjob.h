@@ -40,6 +40,10 @@ public:
 
     QAbstractItemModel* model() const;
 
+    /**
+     * @return the title for this job's output tab
+     */
+    [[nodiscard]] QString title() const;
     /// Set the \a title for this job's output tab.  If not set, will default to the job's objectName().
     void setTitle(const QString& title);
 
