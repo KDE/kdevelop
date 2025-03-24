@@ -61,7 +61,10 @@ Q_SIGNALS:
 class KDEVPLATFORMINTERFACES_EXPORT LaunchConfigurationPageFactory
 {
 public:
+    LaunchConfigurationPageFactory() = default;
     virtual ~LaunchConfigurationPageFactory() {}
+    Q_DISABLE_COPY_MOVE(LaunchConfigurationPageFactory)
+
     /**
      * create a new launch config page widget using the given @p parent
      * @param parent the parent widget to be used

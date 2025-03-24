@@ -28,7 +28,9 @@ class LaunchConfigurationPageFactory;
 class KDEVPLATFORMINTERFACES_EXPORT ILauncher
 {
 public:
+    ILauncher() = default;
     virtual ~ILauncher();
+    Q_DISABLE_COPY_MOVE(ILauncher)
 
     /**
      * Returns a unique identifier for the launcher,

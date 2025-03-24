@@ -30,7 +30,10 @@ class IAssistant;
 
 class KDEVPLATFORMINTERFACES_EXPORT IToolViewFactory {
 public:
+    IToolViewFactory() = default;
     virtual ~IToolViewFactory() {}
+    Q_DISABLE_COPY_MOVE(IToolViewFactory)
+
     /**
      * called to create a new widget for this tool view
      * @param parent the parent to use as parent for the widget
