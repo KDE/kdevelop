@@ -122,8 +122,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
 
     // Now setup the process parameters
 
-    const auto launchConfigurationName = cfg->name();
-    setProcessEnvironment(launchConfigurationName, *proc, iface->environmentProfileName(cfg));
+    setProcessEnvironment(cfg->name(), *proc, iface->environmentProfileName(cfg));
 
     QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() )
@@ -151,7 +150,8 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
 
     proc->setProgram( program );
 
-    setObjectName(launchConfigurationName);
+    const auto scriptFileName = scriptPath.sliced(scriptPath.lastIndexOf(QLatin1Char{'/'}) + 1);
+    setObjectName(scriptFileName);
 }
 
 
