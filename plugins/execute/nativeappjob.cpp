@@ -50,17 +50,6 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     : KDevelop::OutputExecuteJob( parent )
     , m_name(cfg->name())
 {
-    const auto launchConfigurationName = m_name;
-    {
-        auto cfgGroup = cfg->config();
-        if (cfgGroup.readEntry(ExecutePlugin::isExecutableEntry, false)) {
-            m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, launchConfigurationName)
-                         .section(QLatin1Char('/'), -1);
-        }
-        if (!cfgGroup.readEntry<bool>(ExecutePlugin::configuredByCTest, false)) {
-            m_killBeforeExecutingAgain = cfgGroup.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, askIfRunning);
-        }
-    }
     setCapabilities(Killable);
 
     auto* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
@@ -83,6 +72,18 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     QStringList arguments = iface->arguments( cfg, err );
     if (detectError(-2)) {
         return;
+    }
+
+    const auto launchConfigurationName = m_name;
+    {
+        const auto cfgGroup = cfg->config();
+        if (cfgGroup.readEntry(ExecutePlugin::isExecutableEntry, false)) {
+            m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, launchConfigurationName)
+                         .section(QLatin1Char('/'), -1);
+        }
+        if (!cfgGroup.readEntry(ExecutePlugin::configuredByCTest, false)) {
+            m_killBeforeExecutingAgain = cfgGroup.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, askIfRunning);
+        }
     }
 
     setEnvironmentProfile(validEnvironmentProfileName(launchConfigurationName, iface->environmentProfileName(cfg)));
