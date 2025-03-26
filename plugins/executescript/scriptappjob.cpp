@@ -92,6 +92,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         }
         script = ICore::self()->runtimeController()->currentRuntime()->pathInRuntime(KDevelop::Path(document->url())).toUrl();
     }
+    const auto scriptPath = script.toLocalFile();
 
     QString remoteHost = iface->remoteHost( cfg, err );
     if (detectError(-4)) {
@@ -127,7 +128,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() )
     {
-        wc = QUrl::fromLocalFile( QFileInfo( script.toLocalFile() ).absolutePath() );
+        wc = QUrl::fromLocalFile(QFileInfo{scriptPath}.absolutePath());
     }
     proc->setWorkingDirectory( ICore::self()->runtimeController()->currentRuntime()->pathInRuntime(KDevelop::Path(wc)).toLocalFile() );
 
@@ -141,7 +142,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         }
     }
     program << interpreter;
-    program << script.toLocalFile();
+    program << scriptPath;
     program << arguments;
 
     qCDebug(PLUGIN_EXECUTESCRIPT) << "setting app:" << program;
