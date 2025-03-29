@@ -55,6 +55,11 @@ IDebugSession::~IDebugSession()
 {
 }
 
+auto IDebugSession::toolViewToRaiseAtEnd() const -> ToolView
+{
+    return ToolView::Debug;
+}
+
 bool IDebugSession::isRunning() const
 {
     DebuggerState s = state();
