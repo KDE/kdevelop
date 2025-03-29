@@ -437,7 +437,17 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
                     uiController->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
                     mainWindow->area()->setWorkingSet(workingSet, oldArea->workingSetPersistent(), oldArea);
                 }
-                uiController->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Debug"));
+
+                switch (session->toolViewToRaiseAtEnd()) {
+                case IDebugSession::ToolView::None:
+                    break;
+                case IDebugSession::ToolView::Build:
+                    uiController->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Build"));
+                    break;
+                case IDebugSession::ToolView::Debug:
+                    uiController->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Debug"));
+                    break;
+                }
             }
         }
         session->deleteLater();

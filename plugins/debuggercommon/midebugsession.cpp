@@ -117,6 +117,16 @@ bool MIDebugSession::restartAvaliable() const
     }
 }
 
+void MIDebugSession::setToolViewToRaiseAtEnd(ToolView toolView)
+{
+    m_toolViewToRaiseAtEnd = toolView;
+}
+
+auto MIDebugSession::toolViewToRaiseAtEnd() const -> ToolView
+{
+    return m_toolViewToRaiseAtEnd;
+}
+
 bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
 {
     qCDebug(DEBUGGERCOMMON) << "Starting new debugger instance";

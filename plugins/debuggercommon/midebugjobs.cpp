@@ -79,8 +79,14 @@ MIDebugJob::MIDebugJob(MIDebuggerPlugin* p, ILaunchConfiguration* launchcfg,
     if (!m_startupInfo) {
         qCDebug(DEBUGGERCOMMON) << "failing" << this << "and stopping debugger of" << m_session;
         m_session->stopDebugger();
+        // The dependency job, if any, will not be created, and an output view
+        // for this job will never be added, so do not raise any tool view.
         return;
     }
+
+    // This job may have a dependency builder job. If the dependency job fails, this debug job is destroyed
+    // instead of being started. Raise the Build output tool view to show build error(s) in this scenario.
+    m_session->setToolViewToRaiseAtEnd(IDebugSession::ToolView::Build);
 
     connect(m_session, &MIDebugSession::inferiorStdoutLines, this, &MIDebugJob::stdoutReceived);
     connect(m_session, &MIDebugSession::inferiorStderrLines, this, &MIDebugJob::stderrReceived);
@@ -119,6 +125,10 @@ void MIDebugJob::start()
     }
 
     startOutput();
+
+    // An output view for this job was just added to the Debug tool view. Raise the
+    // Debug tool view in the end to show the output of the debuggee in the Code area.
+    m_session->setToolViewToRaiseAtEnd(IDebugSession::ToolView::Debug);
 
     if (!m_session->startDebugging(std::move(*m_startupInfo))) {
         done();
@@ -180,6 +190,7 @@ MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin* plugin, CoreInfo coreInfo, 
     : MIDebugJobBase(plugin, parent)
     , m_coreInfo{std::move(coreInfo)}
 {
+    // This job has no dependency job and does not show output, so do not raise any tool view.
     setObjectName(i18n("Debug core file"));
 }
 
@@ -195,6 +206,7 @@ MIAttachProcessJob::MIAttachProcessJob(MIDebuggerPlugin *plugin, int pid, QObjec
     : MIDebugJobBase(plugin, parent)
     , m_pid(pid)
 {
+    // This job has no dependency job and does not show output, so do not raise any tool view.
     setObjectName(i18n("Debug process %1", pid));
 }
 
