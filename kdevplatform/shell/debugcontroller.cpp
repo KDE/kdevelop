@@ -429,14 +429,15 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
             m_currentSession.clear();
             emit currentSessionChanged(nullptr);
             if (!Core::self()->shuttingDown()) {
-                Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
+                auto* const uiController = Core::self()->uiControllerInternal();
+                auto* const mainWindow = uiController->activeSublimeWindow();
                 if (mainWindow && mainWindow->area()->objectName() != QLatin1String("code")) {
                     auto oldArea = mainWindow->area();
                     QString workingSet = oldArea->workingSet();
-                    ICore::self()->uiController()->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
+                    uiController->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
                     mainWindow->area()->setWorkingSet(workingSet, oldArea->workingSetPersistent(), oldArea);
                 }
-                ICore::self()->uiController()->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Debug"));
+                uiController->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Debug"));
             }
         }
         session->deleteLater();
