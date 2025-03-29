@@ -61,6 +61,21 @@ public:
     };
 
 public:
+    enum class ToolView : signed char {
+        None, ///< no tool view
+        Build, ///< Build output tool view
+        Debug ///< Debug output tool view
+    };
+
+    /**
+     * @return the ID of a tool view that should be raised in the Code area when this debug session ends
+     *
+     * The default implementation returns ToolView::Debug in order to show the output of the debuggee.
+     * A derived class may want to override and return ToolView::None if the debug
+     * session produces no output, or ToolView::Build if building the debuggee fails.
+     */
+    [[nodiscard]] virtual ToolView toolViewToRaiseAtEnd() const;
+
     /**
      * Current state of the debug session
      */

@@ -119,8 +119,23 @@ public:
 
     bool hasCrashed() const;
 
+    /**
+     * Specify which tool view to raise in the Code area when this debug session ends.
+     *
+     * By default no output view is raised (ToolView::None).
+     *
+     * @sa IDebugSession::toolViewToRaiseAtEnd()
+     */
+    void setToolViewToRaiseAtEnd(ToolView toolView);
+
 // BEGIN IDebugSession overrides
 public:
+    /**
+     * @return the ID of a tool view that should be raised in the Code area when this debug session ends
+     *
+     * @sa setToolViewToRaiseAtEnd()
+     */
+    [[nodiscard]] ToolView toolViewToRaiseAtEnd() const override;
     DebuggerState state() const override;
     bool restartAvaliable() const override;
 
@@ -345,6 +360,8 @@ protected:
 
     bool m_hasCrashed = false;
     bool m_sourceInitFile = true;
+
+    ToolView m_toolViewToRaiseAtEnd = ToolView::None;
 
     std::unique_ptr<STTY> m_tty;
 
