@@ -13,7 +13,6 @@
 #include <QPushButton>
 #include <QMap>
 #include <QPointer>
-#include <QTimer>
 #include <QVBoxLayout>
 
 #include <KLocalizedString>
@@ -22,7 +21,6 @@
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/tooldocument.h>
-#include <sublime/holdupdates.h>
 
 #include <interfaces/itoolviewactionlistener.h>
 #include <sublime/message.h>
@@ -113,9 +111,6 @@ public:
         {
             activeSublimeWindow = defaultMainWindow = nullptr;
         }
-
-        m_assistantTimer.setSingleShot(true);
-        m_assistantTimer.setInterval(100);
     }
 
     void widgetChanged(QWidget*, QWidget* now)
@@ -139,7 +134,6 @@ public:
 
     /// QWidget implementing IToolViewActionListener interface, or null
     QPointer<QWidget> activeActionListener;
-    QTimer m_assistantTimer;
 
 private:
     UiController *m_controller;
