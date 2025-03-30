@@ -17,7 +17,6 @@
 
 #include <interfaces/idocumentation.h>
 
-namespace KDevelop { class StandardDocumentationView; }
 class QModelIndex;
 class QtHelpProviderAbstract;
 
@@ -70,8 +69,6 @@ private:
     const QString m_name;
     const QList<QHelpLink> m_info;
     const QList<QHelpLink>::const_iterator m_current;
-
-    KDevelop::StandardDocumentationView* lastView;
 };
 
 class HomeDocumentation : public KDevelop::IDocumentation

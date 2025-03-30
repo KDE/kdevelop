@@ -42,7 +42,6 @@ QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider, const
     , m_name(name)
     , m_info(info)
     , m_current(info.constBegin())
-    , lastView(nullptr)
 {
 }
 
@@ -61,7 +60,6 @@ QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider, const
     , m_name(name)
     , m_info(info)
     , m_current(::findTitle(m_info, key))
-    , lastView(nullptr)
 {
     Q_ASSERT(m_current != m_info.constEnd());
 }
@@ -392,7 +390,6 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         connect(view, &StandardDocumentationView::customContextMenuRequested, this, &QtHelpDocumentation::viewContextMenuRequested);
 
         view->load(currentUrl());
-        lastView = view;
         return view;
     }
 }
@@ -427,7 +424,6 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
 
 void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
 {
-    Q_ASSERT(lastView);
     m_provider->jumpedTo(newUrl);
 }
 
