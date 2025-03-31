@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-03-31 00:40+0000\n"
 "PO-Revision-Date: 2024-11-10 19:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -27,7 +27,7 @@ msgid "Parser"
 msgstr "Ayrıştırıcı"
 
 #: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
-#: problemsview.cpp:316
+#: problemsview.cpp:318
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
@@ -225,13 +225,13 @@ msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Ara…"
 
-#: problemsview.cpp:454
+#: problemsview.cpp:456
 #, kde-format
 msgctxt "@title:tab %1: tab name, %2: number of problems"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: problemsview.cpp:492
+#: problemsview.cpp:494
 #, kde-format
 msgctxt "@title:menu"
 msgid "Scope: %1"
