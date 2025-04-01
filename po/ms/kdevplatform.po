@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2009-07-05 19:31+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -4894,25 +4894,25 @@ msgstr ""
 msgid " Line: %1 Col: %2 "
 msgstr " Baris: %1 Kol: %2 "
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, fuzzy, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "Kod"
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, fuzzy, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "Nyahpepijat"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, fuzzy, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "Buang"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2024-09-20 13:57+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -5248,25 +5248,25 @@ msgstr "Το αρχείο τροποποιήθηκε εξωτερικά"
 msgid " Line: %1 Col: %2 "
 msgstr " Γραμμή: %1 Στήλη: %2 "
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "Κώδικας"
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "Διόρθωση"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "Επιθεώρηση"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"

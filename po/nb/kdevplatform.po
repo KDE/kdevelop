@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2013-04-01 11:18+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -4986,25 +4986,25 @@ msgstr "Dokumentet er endret eksternt"
 msgid " Line: %1 Col: %2 "
 msgstr " Linje: %1 Kolonne: %2"
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr ""
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr ""
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr ""
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"

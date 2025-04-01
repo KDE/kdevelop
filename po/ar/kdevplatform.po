@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2022-01-20 19:01+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -4953,7 +4953,7 @@ msgstr ""
 msgid " Line: %1 Col: %2 "
 msgstr " السّطر: %1 العمود: %2 "
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, fuzzy, kde-format
 #| msgctxt "Code breakpoint"
 #| msgid "&Code"
@@ -4961,19 +4961,19 @@ msgctxt "area"
 msgid "Code"
 msgstr "كود"
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, fuzzy, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "التنقيح"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, fuzzy, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "مراجعة"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"

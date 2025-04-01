@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2013-03-28 14:37+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -5000,27 +5000,27 @@ msgstr ""
 msgid " Line: %1 Col: %2 "
 msgstr " ओळ : %1 स्तंभ : %2 "
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr ""
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "area"
 msgid "Debug"
 msgstr "डिबग"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, fuzzy, kde-format
 #| msgid "Review"
 msgctxt "area"
 msgid "Review"
 msgstr "समीक्षा"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"

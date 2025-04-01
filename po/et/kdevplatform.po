@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -5483,28 +5483,28 @@ msgstr "Dokumenti on väliselt muudetud"
 msgid " Line: %1 Col: %2 "
 msgstr " Rida: %1 Veerg: %2 "
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, fuzzy, kde-format
 #| msgid "Code"
 msgctxt "area"
 msgid "Code"
 msgstr "Kood"
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "area"
 msgid "Debug"
 msgstr "Silumine"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, fuzzy, kde-format
 #| msgid "Review"
 msgctxt "area"
 msgid "Review"
 msgstr "Läbivaatus"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, fuzzy, kde-format
 #| msgid "Select Tool View to Add"
 msgctxt "@title:window"

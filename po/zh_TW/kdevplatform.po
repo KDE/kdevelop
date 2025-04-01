@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2024-08-06 05:13+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -4977,25 +4977,25 @@ msgstr "文件已被別人變更"
 msgid " Line: %1 Col: %2 "
 msgstr " 行: %1 欄: %2 "
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "程式碼"
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "除錯"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "審閱"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"

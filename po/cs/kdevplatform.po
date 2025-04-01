@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2024-07-22 16:56+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -4903,25 +4903,25 @@ msgstr ""
 msgid " Line: %1 Col: %2 "
 msgstr " Řádek: %1 Sloupec: %2 "
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "Kód"
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "Ladění"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "Kontrola"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"

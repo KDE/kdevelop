@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2013-10-21 21:03+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -17,30 +17,30 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: plasmoidexecutionconfig.cpp:117
+#: plasmoidexecutionconfig.cpp:116
 #, fuzzy, kde-format
 #| msgid "Configure Plasmoid Execution"
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "Indstil kørsel af plasmoids"
 
-#: plasmoidexecutionconfig.cpp:127
+#: plasmoidexecutionconfig.cpp:126
 #, kde-format
 msgid "Display a plasmoid"
 msgstr "Vis en plasmoid"
 
-#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Plasmoid-starter"
 
-#: plasmoidexecutionconfig.cpp:183
+#: plasmoidexecutionconfig.cpp:182
 #, fuzzy, kde-format
 #| msgid "Couldn't resolve the dependency: %1"
 msgid "Could not resolve the dependency: %1"
 msgstr "Kunne ikke løse afhængigheden: %1"
 
-#: plasmoidexecutionconfig.cpp:297
+#: plasmoidexecutionconfig.cpp:296
 #, fuzzy, kde-format
 #| msgid "Plasmoids"
 msgctxt "@title:menu"

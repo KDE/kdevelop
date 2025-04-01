@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -5267,28 +5267,28 @@ msgstr "文書は外部で変更されています"
 msgid " Line: %1 Col: %2 "
 msgstr " 行: %1 列: %2"
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, fuzzy, kde-format
 #| msgid "Code"
 msgctxt "area"
 msgid "Code"
 msgstr "コード"
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "area"
 msgid "Debug"
 msgstr "デバッグ"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, fuzzy, kde-format
 #| msgid "Review"
 msgctxt "area"
 msgid "Review"
 msgstr "レビュー"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, fuzzy, kde-format
 #| msgid "Select Tool View to Add"
 msgctxt "@title:window"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2023-06-23 09:28+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -17,28 +17,28 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Lokalize 23.04.2\n"
 
-#: plasmoidexecutionconfig.cpp:117
+#: plasmoidexecutionconfig.cpp:116
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "Potvrďte spuštění plasmoidu"
 
-#: plasmoidexecutionconfig.cpp:127
+#: plasmoidexecutionconfig.cpp:126
 #, kde-format
 msgid "Display a plasmoid"
 msgstr "Zobrazit plasmoid"
 
-#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Spouštěč plasmoidů"
 
-#: plasmoidexecutionconfig.cpp:183
+#: plasmoidexecutionconfig.cpp:182
 #, kde-format
 msgid "Could not resolve the dependency: %1"
 msgstr "Nelze rozhodnout závislost: %1"
 
-#: plasmoidexecutionconfig.cpp:297
+#: plasmoidexecutionconfig.cpp:296
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

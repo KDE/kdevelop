@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -19,28 +19,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: plasmoidexecutionconfig.cpp:117
+#: plasmoidexecutionconfig.cpp:116
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "प्लाज्मोइड् निष्पादनं विन्यस्यताम्"
 
-#: plasmoidexecutionconfig.cpp:127
+#: plasmoidexecutionconfig.cpp:126
 #, kde-format
 msgid "Display a plasmoid"
 msgstr "एकं प्लाज्मोइडं प्रदर्शयन्तु"
 
-#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "प्लाज्मोइड प्रक्षेपक"
 
-#: plasmoidexecutionconfig.cpp:183
+#: plasmoidexecutionconfig.cpp:182
 #, kde-format
 msgid "Could not resolve the dependency: %1"
 msgstr "आश्रयस्य समाधानं कर्तुं न शक्तवान्: %1"
 
-#: plasmoidexecutionconfig.cpp:297
+#: plasmoidexecutionconfig.cpp:296
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

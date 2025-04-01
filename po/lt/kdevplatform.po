@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2011-10-28 20:53+0300\n"
 "Last-Translator: Remigijus\n"
 "Language-Team: Lithuanian <kde-i18n-doc@kde.org>\n"
@@ -5126,14 +5126,14 @@ msgstr ""
 msgid " Line: %1 Col: %2 "
 msgstr ""
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgctxt "area"
 msgid "Code"
 msgstr "&Užverti"
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, fuzzy, kde-format
 #| msgctxt "Short text for 'Debug Launch' used in the toolbar"
 #| msgid "Debug"
@@ -5141,14 +5141,14 @@ msgctxt "area"
 msgid "Debug"
 msgstr "Derinti"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgctxt "area"
 msgid "Review"
 msgstr "Peržiūra"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, fuzzy, kde-format
 #| msgid "&Remove"
 msgctxt "@title:window"

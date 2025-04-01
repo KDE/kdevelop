@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,28 +17,28 @@ msgstr ""
 "X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevexecuteplasmoid.pot\n"
 "X-Crowdin-File-ID: 54520\n"
 
-#: plasmoidexecutionconfig.cpp:117
+#: plasmoidexecutionconfig.cpp:116
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "配置 Plasma 小程序执行方式"
 
-#: plasmoidexecutionconfig.cpp:127
+#: plasmoidexecutionconfig.cpp:126
 #, kde-format
 msgid "Display a plasmoid"
 msgstr "显示 Plasma 小程序"
 
-#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr " Plasma 小程序启动器"
 
-#: plasmoidexecutionconfig.cpp:183
+#: plasmoidexecutionconfig.cpp:182
 #, kde-format
 msgid "Could not resolve the dependency: %1"
 msgstr "无法解决依赖关系：%1"
 
-#: plasmoidexecutionconfig.cpp:297
+#: plasmoidexecutionconfig.cpp:296
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

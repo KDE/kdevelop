@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-01 00:40+0000\n"
 "PO-Revision-Date: 2022-07-14 09:50-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -5135,25 +5135,25 @@ msgstr "O documento foi modificado externamente"
 msgid " Line: %1 Col: %2 "
 msgstr " Linha: %1 Coluna: %2 "
 
-#: shell/uicontroller.cpp:81
+#: shell/uicontroller.cpp:79
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "Código"
 
-#: shell/uicontroller.cpp:92
+#: shell/uicontroller.cpp:90
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "Depurar"
 
-#: shell/uicontroller.cpp:101
+#: shell/uicontroller.cpp:99
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "Revisão"
 
-#: shell/uicontroller.cpp:464
+#: shell/uicontroller.cpp:458
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
