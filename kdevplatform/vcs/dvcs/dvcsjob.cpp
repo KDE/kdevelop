@@ -25,19 +25,14 @@
 #include <interfaces/iplugin.h>
 #include <outputview/outputmodel.h>
 
+#include <memory>
+
 using namespace KDevelop;
 
 class KDevelop::DVcsJobPrivate
 {
 public:
-    DVcsJobPrivate() : childproc(new KProcess)
-    {}
-
-    ~DVcsJobPrivate() {
-        delete childproc;
-    }
-
-    KProcess*   childproc;
+    const std::unique_ptr<KProcess> childproc{new KProcess};
     VcsJob::JobStatus status;
     QByteArray  output;
     QByteArray  errorOutput;
@@ -63,14 +58,9 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     setModel(d->model);
     setCapabilities(Killable);
 
-    connect(d->childproc, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
-            this, &DVcsJob::slotProcessExited);
-    connect(d->childproc, &QProcess::errorOccurred,
-            this, &DVcsJob::slotProcessError);
-
-    connect(d->childproc, &KProcess::readyReadStandardOutput,
-                this, &DVcsJob::slotReceivedStdout);
-
+    connect(d->childproc.get(), &QProcess::finished, this, &DVcsJob::slotProcessExited);
+    connect(d->childproc.get(), &QProcess::errorOccurred, this, &DVcsJob::slotProcessError);
+    connect(d->childproc.get(), &QProcess::readyReadStandardOutput, this, &DVcsJob::slotReceivedStdout);
 }
 
 DVcsJob::~DVcsJob() = default;
@@ -366,7 +356,7 @@ KProcess* DVcsJob::process() const
 {
     Q_D(const DVcsJob);
 
-    return d->childproc;
+    return d->childproc.get();
 }
 
 #include "moc_dvcsjob.cpp"
