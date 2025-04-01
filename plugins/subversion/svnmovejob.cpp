@@ -91,8 +91,7 @@ QVariant SvnMoveJob::fetchResults()
 void SvnMoveJob::start()
 {
     if ( m_job->sourceLocation().isEmpty() || m_job->destinationLocation().isEmpty() ) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to move file" ) );
+        failToStart(i18n("Not enough information to move file"));
     } else {
         qCDebug(PLUGIN_SVN) << "moving url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
         startInternalJob();

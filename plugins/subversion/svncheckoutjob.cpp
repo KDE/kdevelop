@@ -92,8 +92,7 @@ QVariant SvnCheckoutJob::fetchResults()
 void SvnCheckoutJob::start()
 {
     if (!m_job->isValid() ) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to checkout" ) );
+        failToStart(i18n("Not enough information to checkout"));
     } else {
         qCDebug(PLUGIN_SVN) << "checking out: " << m_job->source().repositoryServer();
         startInternalJob();

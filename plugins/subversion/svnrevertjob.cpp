@@ -82,8 +82,7 @@ QVariant SvnRevertJob::fetchResults()
 void SvnRevertJob::start()
 {
     if (m_job->locations().isEmpty()) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to execute revert" ) );
+        failToStart(i18n("Not enough information to execute revert"));
     } else {
         startInternalJob();
     }

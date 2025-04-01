@@ -116,8 +116,7 @@ void SvnUpdateJob::start()
 {
     if( m_job->locations().isEmpty() )
     {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough Information to execute update" ) );
+        failToStart(i18n("Not enough Information to execute update"));
     }else
     {
         qCDebug(PLUGIN_SVN) << "updating urls:" << m_job->locations();

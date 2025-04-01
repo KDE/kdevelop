@@ -12,7 +12,6 @@
 
 #include <ThreadWeaver/ThreadWeaver>
 #include <ThreadWeaver/Weaver>
-#include <QStandardItemModel>
 #include <KLocalizedString>
 
 #include <vector>
@@ -118,18 +117,11 @@ void SvnCommitJob::start()
 {
     setTitle(QStringLiteral("commit"));
     setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-    startOutput();
-
-    auto *m = qobject_cast<QStandardItemModel*>(model());
-    m->setColumnCount(1);
-    m->appendRow(new QStandardItem(i18n("Committing...")));
 
     if( m_job->urls().isEmpty() ) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to execute commit" ) );
-        m->appendRow(new QStandardItem(errorText()));
+        failToStart(i18n("Not enough information to execute commit"));
     } else {
-        startInternalJob();
+        startInternalJob(i18n("Committing..."));
     }
 }
 

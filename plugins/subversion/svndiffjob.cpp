@@ -268,8 +268,7 @@ void SvnDiffJob::start()
                  || m_job->dstRevision().revisionType() == KDevelop::VcsRevision::Invalid ) )
       )
     {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information given to execute diff" ) );
+        failToStart(i18n("Not enough information given to execute diff"));
     } else {
         startInternalJob();
     }

@@ -95,8 +95,7 @@ void SvnImportJob::start()
 {
     if( !m_job->isValid() )
     {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to import" ) );
+        failToStart(i18n("Not enough information to import"));
     }else
     {
         qCDebug(PLUGIN_SVN) << "importing:" << m_job->source();

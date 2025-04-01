@@ -79,8 +79,7 @@ QVariant SvnCopyJob::fetchResults()
 void SvnCopyJob::start()
 {
     if ( m_job->sourceLocation().isEmpty() || m_job->destinationLocation().isEmpty() ) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to copy file" ) );
+        failToStart(i18n("Not enough information to copy file"));
     } else {
         qCDebug(PLUGIN_SVN) << "copying url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
         startInternalJob();

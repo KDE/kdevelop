@@ -110,8 +110,7 @@ QVariant SvnInfoJob::fetchResults()
 void SvnInfoJob::start()
 {
     if (!m_job->location().isValid()) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to execute info job" ) );
+        failToStart(i18n("Not enough information to execute info job"));
     } else {
         startInternalJob();
     }

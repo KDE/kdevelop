@@ -84,8 +84,7 @@ QVariant SvnRemoveJob::fetchResults()
 void SvnRemoveJob::start()
 {
     if( m_job->locations().isEmpty() ) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to execute remove job" ) );
+        failToStart(i18n("Not enough information to execute remove job"));
     } else {
         qCDebug(PLUGIN_SVN) << "removing urls:" << m_job->locations();
         startInternalJob();

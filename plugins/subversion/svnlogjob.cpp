@@ -116,8 +116,7 @@ void SvnLogJob::start()
 {
     if( !m_job->location().isValid() )
     {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to log location" ) );
+        failToStart(i18n("Not enough information to log location"));
     }else
     {
         qCDebug(PLUGIN_SVN) << "logging url:" << m_job->location();

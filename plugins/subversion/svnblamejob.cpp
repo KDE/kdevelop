@@ -140,8 +140,7 @@ QVariant SvnBlameJob::fetchResults()
 void SvnBlameJob::start()
 {
     if ( !m_job->location().isValid() ) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to blame location" ) );
+        failToStart(i18n("Not enough information to blame location"));
     } else {
         qCDebug(PLUGIN_SVN) << "blaming url:" << m_job->location();
         startInternalJob();

@@ -81,8 +81,7 @@ QVariant SvnAddJob::fetchResults()
 void SvnAddJob::start()
 {
     if ( m_job->locations().isEmpty() ) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to add file" ) );
+        failToStart(i18n("Not enough information to add file"));
     } else {
         qCDebug(PLUGIN_SVN) << "adding urls:" << m_job->locations();
         startInternalJob();

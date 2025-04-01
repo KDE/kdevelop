@@ -23,9 +23,14 @@
 #include <algorithm>
 
 SvnJobBase::SvnJobBase( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
-    : VcsJob( parent, verbosity ), m_part( parent ),
-      m_status( KDevelop::VcsJob::JobNotStarted )
+    // Pass Silent to VcsJob() in order to prevent it from invoking startOutput()
+    // asynchronously. this->startInternalJob() calls startOutput() for a Verbose
+    // job synchronously so as to be able to produce output immediately.
+    : VcsJob(parent, OutputJob::Silent)
+    , m_part(parent)
 {
+    // Now manually set verbosity to the requested value.
+    setVerbosity(verbosity);
     setCapabilities( KJob::Killable );
     setTitle( QStringLiteral("Subversion") );
 }
@@ -34,8 +39,25 @@ SvnJobBase::~SvnJobBase()
 {
 }
 
-void SvnJobBase::startInternalJob()
+void SvnJobBase::failToStart(const QString& errorMessage)
 {
+    qCDebug(PLUGIN_SVN) << "job failed to start" << this;
+    Q_ASSERT(!errorMessage.isEmpty());
+
+    setError(FailedToStart);
+    setErrorText(errorMessage);
+    failJob();
+}
+
+void SvnJobBase::startInternalJob(const QString& introductoryOutputMessage)
+{
+    if (verbosity() == OutputJob::Verbose) {
+        startOutput();
+        if (!introductoryOutputMessage.isEmpty()) {
+            outputMessage(introductoryOutputMessage);
+        }
+    }
+
     auto job = internalJob();
     connect( job.data(), &SvnInternalJobBase::failed,
              this, &SvnJobBase::internalJobFailed, Qt::QueuedConnection );
@@ -169,17 +191,20 @@ void SvnJobBase::internalJobFailed()
 {
     qCDebug(PLUGIN_SVN) << "job failed" << this;
 
-    setError( 255 );
+    setError(InternalJobFailed);
     QString msg = internalJob()->errorMessage();
     if( !msg.isEmpty() )
         setErrorText( i18n( "Error executing Job:\n%1", msg ) );
     outputMessage(errorText());
+    failJob();
+}
 
+void SvnJobBase::failJob()
+{
     if( m_status != VcsJob::JobCanceled )
     {
         m_status = KDevelop::VcsJob::JobFailed;
     }
-
     emitResult();
 }
 
@@ -190,7 +215,6 @@ KDevelop::IPlugin* SvnJobBase::vcsPlugin() const
 
 void SvnJobBase::outputMessage(const QString& message)
 {
-    if (!model()) return;
     if (verbosity() == KDevelop::OutputJob::Silent) return;
 
     static constexpr QLatin1Char dot{'.'};
@@ -201,6 +225,7 @@ void SvnJobBase::outputMessage(const QString& message)
     };
 
     auto *m = qobject_cast<QStandardItemModel*>(model());
+    Q_ASSERT(m);
     // Be smart when showing the svn output. When it says "." on committing each file,
     // append it to the "." on the previous line (just like svn command does).
     QStandardItem *previous = m->item(m->rowCount()-1);

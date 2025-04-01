@@ -127,8 +127,7 @@ QVariant SvnStatusJob::fetchResults()
 void SvnStatusJob::start()
 {
     if( m_job->locations().isEmpty() ) {
-        internalJobFailed();
-        setErrorText( i18n( "Not enough information to execute status job" ) );
+        failToStart(i18n("Not enough information to execute status job"));
     } else {
         qCDebug(PLUGIN_SVN) << "Starting status job";
         startInternalJob();

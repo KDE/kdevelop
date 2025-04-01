@@ -35,6 +35,13 @@ class SvnJobBase : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
+    enum {
+        // Add a "random" number to KJob::UserDefinedError and hopefully avoid
+        // clashes with OutputJob's, OutputExecuteJob's, etc. error codes.
+        FailedToStart = UserDefinedError + 151,
+        InternalJobFailed,
+    };
+
     explicit SvnJobBase( KDevSvnPlugin*, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
     ~SvnJobBase() override;
     virtual SvnInternalJobBasePtr internalJob() const = 0;
@@ -51,18 +58,40 @@ public Q_SLOTS:
     void askForSslClientCert( const QString& );
     void askForSslClientCertPassword( const QString& );
 
-protected Q_SLOTS:
+protected:
+    /**
+     * Call this function instead of startInternalJob() if an error is detected in start().
+     *
+     * @param errorMessage a nonempty translatable error message that tells the user why the job has failed
+     */
+    void failToStart(const QString& errorMessage);
+    /**
+     * Call this function from start() in order to run the internal job.
+     *
+     * If verbosity() is Verbose, this function calls startOutput() before starting the internal job.
+     *
+     * @param introductoryOutputMessage a message to output if it is not empty and verbosity() is Verbose
+     */
+    void startInternalJob(const QString& introductoryOutputMessage = {});
+
+    bool doKill() override;
+
+private:
     void internalJobStarted();
     void internalJobDone();
     void internalJobFailed();
 
-protected:
-    void startInternalJob();
-    bool doKill() override;
-    KDevSvnPlugin* m_part;
-private:
+    /**
+     * Update the status of this job and emit result.
+     *
+     * @pre the properties error and errorText inherited from KJob have already been set
+     */
+    void failJob();
+
     void outputMessage(const QString &message);
-    KDevelop::VcsJob::JobStatus m_status;
+
+    KDevSvnPlugin* const m_part;
+    VcsJob::JobStatus m_status = VcsJob::JobNotStarted;
 };
 
 template<typename InternalJobClass>
