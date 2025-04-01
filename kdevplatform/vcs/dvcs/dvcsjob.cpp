@@ -32,27 +32,31 @@ using namespace KDevelop;
 class KDevelop::DVcsJobPrivate
 {
 public:
+    explicit DVcsJobPrivate(IPlugin* plugin)
+        : vcsplugin{plugin}
+    {
+    }
+
+    IPlugin* const vcsplugin;
     const std::unique_ptr<KProcess> childproc{new KProcess};
-    VcsJob::JobStatus status;
+
     QByteArray  output;
     QByteArray  errorOutput;
-    IPlugin* vcsplugin = nullptr;
 
     QVariant results;
     OutputModel* model;
 
+    VcsJob::JobStatus status = VcsJob::JobNotStarted;
     bool ignoreError = false;
 };
 
 DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVerbosity verbosity)
     : VcsJob(parent, verbosity)
-    , d_ptr(new DVcsJobPrivate)
+    , d_ptr{new DVcsJobPrivate(parent)}
 {
     Q_D(DVcsJob);
 
     Q_ASSERT(workingDir.exists());
-    d->status = JobNotStarted;
-    d->vcsplugin = parent;
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
     d->model = new OutputModel;
     setModel(d->model);
