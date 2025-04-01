@@ -20,6 +20,8 @@
 #include "svninternaljobbase.h"
 #include "svnssldialog.h"
 
+#include <algorithm>
+
 SvnJobBase::SvnJobBase( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
     : VcsJob( parent, verbosity ), m_part( parent ),
       m_status( KDevelop::VcsJob::JobNotStarted )
@@ -191,23 +193,23 @@ void SvnJobBase::outputMessage(const QString& message)
     if (!model()) return;
     if (verbosity() == KDevelop::OutputJob::Silent) return;
 
+    static constexpr QLatin1Char dot{'.'};
+    const auto consistsOfDots = [](const QString& text) {
+        return std::all_of(text.cbegin(), text.cend(), [](QChar c) {
+            return c == dot;
+        });
+    };
+
     auto *m = qobject_cast<QStandardItemModel*>(model());
+    // Be smart when showing the svn output. When it says "." on committing each file,
+    // append it to the "." on the previous line (just like svn command does).
     QStandardItem *previous = m->item(m->rowCount()-1);
-    // TODO: 564123a06239a0fa68ef95e693d7f40c72039585 introduced the check below, originally as
-    // (message == "." && previous && previous->text().contains(QRegExp("\\.+"))), and explained it:
-    // > Be smart when showing the svn output. When it says "." on committing each file,
-    // > append it to the "." on the previous line (just like svn command does).
-    // The original regex condition actually checks whether a dot character is present in previous->text()
-    // and is equivalent to the current check previous->text().contains(dot). A possible original intention
-    // was to check whether previous->text() consists entirely of dots (anchored regex), which can be implemented
-    // more efficiently via std::all_of(), optionally combined with a string emptiness check. Or perhaps
-    // the intention was to check whether previous->text() ends with dots, i.e. previous->text().endsWith(dot).
-    // This code needs to be tested in action and the check probably should be fixed.
-    constexpr QLatin1Char dot{'.'};
-    if (message == dot && previous && previous->text().contains(dot))
-        previous->setText(previous->text() + message);
-    else
+    if (QString previousText; message == dot && previous && consistsOfDots(previousText = previous->text())) {
+        previous->setText(previousText += dot);
+    } else {
         m->appendRow(new QStandardItem(message));
+    }
+
     KDevelop::IPlugin* i = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
     if( i )
     {
