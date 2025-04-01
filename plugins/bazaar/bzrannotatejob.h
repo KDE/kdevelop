@@ -26,8 +26,8 @@ class BzrAnnotateJob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
-
-    explicit BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const QUrl& localLocation, KDevelop::IPlugin* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Verbose);
+    explicit BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const QUrl& localLocation,
+                            KDevelop::IPlugin* parent = nullptr);
 
     QVariant fetchResults() override;
     void start() override;

@@ -25,6 +25,13 @@ class DiffJob : public KDevelop::VcsJob
     Q_OBJECT
 
 public:
+    /**
+     * Create a diff job.
+     *
+     * @param verbosity the verbosity of the internal output job instance that performs the actual work, not of this job
+     *
+     * @note DiffJob does not output anything itself and therefore is always Silent.
+     */
     DiffJob(const QDir& workingDir, const QString& revisionSpecRange, const QUrl& fileOrDirectory, BazaarPlugin* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Silent);
 
     KDevelop::IPlugin* vcsPlugin() const override;

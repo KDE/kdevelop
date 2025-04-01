@@ -18,8 +18,9 @@ using namespace KDevelop;
 DiffJob::DiffJob(const QDir& workingDir, const QString& revisionSpecRange,
                  const QUrl& fileOrDirectory, BazaarPlugin* parent,
                  KDevelop::OutputJob::OutputJobVerbosity verbosity)
-    : VcsJob(parent, verbosity), m_plugin(parent),
-      m_status(KDevelop::VcsJob::JobNotStarted)
+    : VcsJob(parent, OutputJob::Silent)
+    , m_plugin(parent)
+    , m_status(VcsJob::JobNotStarted)
 {
     setType(KDevelop::VcsJob::Diff);
     setCapabilities(Killable);

@@ -20,8 +20,15 @@
 
 using namespace KDevelop;
 
-BzrAnnotateJob::BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const QUrl& localLocation, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
-    : VcsJob(parent, verbosity), m_workingDir(workingDir), m_revisionSpec(revisionSpec), m_localLocation(localLocation), m_vcsPlugin(parent), m_status(KDevelop::VcsJob::JobNotStarted)
+BzrAnnotateJob::BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const QUrl& localLocation,
+                               IPlugin* parent)
+    // this job does not output anything itself, so pass Silent to VcsJob()
+    : VcsJob(parent, OutputJob::Silent)
+    , m_workingDir(workingDir)
+    , m_revisionSpec(revisionSpec)
+    , m_localLocation(localLocation)
+    , m_vcsPlugin(parent)
+    , m_status(VcsJob::JobNotStarted)
 {
     setType(JobType::Annotate);
     setCapabilities(Killable);

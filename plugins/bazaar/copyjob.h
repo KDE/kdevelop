@@ -26,7 +26,7 @@ class CopyJob : public KDevelop::VcsJob
     Q_OBJECT
 
 public:
-    CopyJob(const QUrl& localLocationSrc, const QUrl& localLocationDstn, BazaarPlugin* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Verbose);
+    explicit CopyJob(const QUrl& localLocationSrc, const QUrl& localLocationDstn, BazaarPlugin* parent = nullptr);
 
     KDevelop::IPlugin* vcsPlugin() const override;
     KDevelop::VcsJob::JobStatus status() const override;

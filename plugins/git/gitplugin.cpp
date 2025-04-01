@@ -1644,10 +1644,9 @@ KDevelop::VcsStatusInfo::State GitPlugin::extendedStateToBasic(const GitPlugin::
     return VcsStatusInfo::ItemUnknown;
 }
 
-
-StandardJob::StandardJob(IPlugin* parent, KJob* job,
-                                 OutputJob::OutputJobVerbosity verbosity)
-    : VcsJob(parent, verbosity)
+StandardJob::StandardJob(IPlugin* parent, KJob* job)
+    // this job does not output anything itself, so pass Silent to VcsJob()
+    : VcsJob(parent, OutputJob::Silent)
     , m_job(job)
     , m_plugin(parent)
     , m_status(JobNotStarted)
@@ -1675,7 +1674,7 @@ void StandardJob::result(KJob* job)
 VcsJob* GitPlugin::copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn)
 {
     //TODO: Probably we should "git add" after
-    return new StandardJob(this, KIO::copy(localLocationSrc, localLocationDstn), KDevelop::OutputJob::Silent);
+    return new StandardJob(this, KIO::copy(localLocationSrc, localLocationDstn));
 }
 
 VcsJob* GitPlugin::move(const QUrl& source, const QUrl& destination)
@@ -1687,7 +1686,7 @@ VcsJob* GitPlugin::move(const QUrl& source, const QUrl& destination)
         if (isEmptyDirStructure(QDir(source.toLocalFile()))) {
             //move empty folder, git doesn't do that
             qCDebug(PLUGIN_GIT) << "empty folder" << source;
-            return new StandardJob(this, KIO::move(source, destination), KDevelop::OutputJob::Silent);
+            return new StandardJob(this, KIO::move(source, destination));
         }
     }
 
@@ -1697,7 +1696,7 @@ VcsJob* GitPlugin::move(const QUrl& source, const QUrl& destination)
         *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
         return job;
     } else {
-        return new StandardJob(this, KIO::move(source, destination), KDevelop::OutputJob::Silent);
+        return new StandardJob(this, KIO::move(source, destination));
     }
 }
 

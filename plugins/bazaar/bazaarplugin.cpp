@@ -74,8 +74,8 @@ VcsJob* BazaarPlugin::add(const QList<QUrl>& localLocations, IBasicVersionContro
 
 VcsJob* BazaarPlugin::annotate(const QUrl& localLocation, const VcsRevision& rev)
 {
-    VcsJob* job = new BzrAnnotateJob(BazaarUtils::workingCopy(localLocation), BazaarUtils::getRevisionSpec(rev), localLocation, this, KDevelop::OutputJob::Silent);
-    return job;
+    return new BzrAnnotateJob(BazaarUtils::workingCopy(localLocation), BazaarUtils::getRevisionSpec(rev), localLocation,
+                              this);
 }
 
 VcsJob* BazaarPlugin::commit(const QString& message, const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)

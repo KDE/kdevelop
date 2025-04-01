@@ -38,7 +38,7 @@ class StandardJob : public KDevelop::VcsJob
 {
     Q_OBJECT
     public:
-        StandardJob(KDevelop::IPlugin* parent, KJob* job, OutputJobVerbosity verbosity);
+        explicit StandardJob(KDevelop::IPlugin* parent, KJob* job);
 
         QVariant fetchResults() override { return QVariant(); }
         void start() override;

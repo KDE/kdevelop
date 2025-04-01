@@ -16,9 +16,13 @@
 
 using namespace KDevelop;
 
-CopyJob::CopyJob(const QUrl& localLocationSrc, const QUrl& localLocationDstn, BazaarPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
-    : VcsJob(parent, verbosity), m_plugin(parent), m_source(localLocationSrc),
-      m_destination(localLocationDstn), m_status(KDevelop::VcsJob::JobNotStarted)
+CopyJob::CopyJob(const QUrl& localLocationSrc, const QUrl& localLocationDstn, BazaarPlugin* parent)
+    // this job does not output anything itself, so pass Silent to VcsJob()
+    : VcsJob(parent, OutputJob::Silent)
+    , m_plugin(parent)
+    , m_source(localLocationSrc)
+    , m_destination(localLocationDstn)
+    , m_status(VcsJob::JobNotStarted)
 {
     setType(JobType::Copy);
     setCapabilities(Killable);
