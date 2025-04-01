@@ -60,7 +60,6 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->vcsplugin = parent;
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
     d->model = new OutputModel;
-    d->ignoreError = false;
     setModel(d->model);
     setCapabilities(Killable);
 
