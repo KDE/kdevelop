@@ -270,9 +270,11 @@ void VcsAnnotationItemDelegate::paint(QPainter* painter, const KTextEditor::Styl
             ageText = ageOfDate(date.date());
             ageRect = QRect(QPoint(0, 0), QSize(option.fontMetrics.horizontalAdvance(ageText), option.rect.height()));
         }
+
         const auto messageText = annotationLine.commitMessage();
-        auto messageRect =
-            QRect(QPoint(0, 0), QSize(option.fontMetrics.horizontalAdvance(messageText), option.rect.height()));
+        // messageRect must be valid, so its width must be positive
+        const auto messageRectWidth = messageText.isEmpty() ? 1 : option.fontMetrics.horizontalAdvance(messageText);
+        auto messageRect = QRect(QPoint(0, 0), QSize{messageRectWidth, option.rect.height()});
 
         doMessageLineLayout(option, &messageRect, &ageRect);
 
