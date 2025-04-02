@@ -10,8 +10,6 @@
 
 #include <outputview/outputexecutejob.h>
 
-#include <QProcess>
-
 namespace KDevelop{
     class CommandExecutor;
     class IProject;
@@ -30,7 +28,6 @@ public:
 
     enum ErrorTypes {
         NoProjectError = UserDefinedError,
-        ConfigureError
     };
 
     void setProject(KDevelop::IProject* project);
@@ -43,10 +40,6 @@ public:
 protected:
     bool doKill() override;
 
-private Q_SLOTS:
-    void slotFailed(QProcess::ProcessError);
-    void slotCompleted(int);
-    
 private:
     KDevelop::IProject* m_project = nullptr;
     KDevelop::CommandExecutor* m_cmd = nullptr;

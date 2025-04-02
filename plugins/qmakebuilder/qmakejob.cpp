@@ -82,26 +82,6 @@ void QMakeJob::setProject(KDevelop::IProject* project)
         setObjectName(i18n("QMake: %1", m_project->name()));
 }
 
-void QMakeJob::slotFailed(QProcess::ProcessError error)
-{
-    qCDebug(KDEV_QMAKEBUILDER) << error;
-
-    if (!m_killed) {
-        setError(ConfigureError);
-        // FIXME need more detail i guess
-        setErrorText(i18n("Configure error"));
-    }
-    emitResult();
-}
-
-void QMakeJob::slotCompleted(int code)
-{
-    if (code != 0) {
-        setError(FailedShownError);
-    }
-    emitResult();
-}
-
 bool QMakeJob::doKill()
 {
     m_killed = true;
