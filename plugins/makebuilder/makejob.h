@@ -40,8 +40,6 @@ public:
     {
         IncorrectItemError = UserDefinedError,
         ItemNoLongerValidError,
-        BuildCommandError,
-        FailedError = FailedShownError
     };
 
     MakeJob( QObject* parent, KDevelop::ProjectBaseItem* item,
