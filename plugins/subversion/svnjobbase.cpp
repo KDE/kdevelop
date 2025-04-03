@@ -80,8 +80,7 @@ void SvnJobBase::startInternalJob(const QString& introductoryOutputMessage)
     auto job = internalJob();
     connect( job.data(), &SvnInternalJobBase::failed,
              this, &SvnJobBase::internalJobFailed, Qt::QueuedConnection );
-    connect( job.data(), &SvnInternalJobBase::done,
-             this, &SvnJobBase::internalJobDone, Qt::QueuedConnection );
+    connect(job.data(), &SvnInternalJobBase::succeeded, this, &SvnJobBase::internalJobSucceeded, Qt::QueuedConnection);
     connect( job.data(), &SvnInternalJobBase::started,
              this, &SvnJobBase::internalJobStarted, Qt::QueuedConnection );
     // add as shared pointer
@@ -182,21 +181,9 @@ void SvnJobBase::internalJobStarted()
     m_status = KDevelop::VcsJob::JobRunning;
 }
 
-void SvnJobBase::internalJobDone()
+void SvnJobBase::internalJobSucceeded()
 {
-    qCDebug(PLUGIN_SVN) << "job done" << this;
-    if ( m_status == VcsJob::JobFailed ) {
-        // see: https://bugs.kde.org/show_bug.cgi?id=273759
-        // this gets also called when the internal job failed
-        // then the emit result in internalJobFailed might trigger
-        // a nested event loop (i.e. error dialog)
-        // during that the internalJobDone gets called and triggers
-        // deleteLater and eventually deletes this job
-        // => havoc
-        //
-        // catching this state here works but I don't like it personally...
-        return;
-    }
+    qCDebug(PLUGIN_SVN) << "job succeeded" << this;
 
     outputMessage(i18n("Completed"));
     if( m_status != VcsJob::JobCanceled ) {

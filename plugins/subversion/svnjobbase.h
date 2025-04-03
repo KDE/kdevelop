@@ -78,7 +78,7 @@ protected:
 
 private:
     void internalJobStarted();
-    void internalJobDone();
+    void internalJobSucceeded();
     void internalJobFailed();
 
     /**

@@ -88,8 +88,10 @@ Q_SIGNALS:
 
     /** This signal is emitted when this job is being processed by a thread. */
     void started();
-    /** This signal is emitted when the job has been finished (no matter if it succeeded or not). */
-    void done();
+    /**
+     * This signal is emitted when the job finishes successfully (success() returns @c true).
+     */
+    void succeeded();
     /** This job has failed.
      *
      * This signal is emitted when success() returns false after the job is executed. */

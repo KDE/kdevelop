@@ -51,10 +51,11 @@ void SvnInternalJobBase::defaultBegin(const ThreadWeaver::JobPointer& self, Thre
 void SvnInternalJobBase::defaultEnd(const ThreadWeaver::JobPointer& self, ThreadWeaver::Thread *thread)
 {
     ThreadWeaver::Job::defaultEnd(self, thread);
-    if (!self->success()) {
+    if (self->success()) {
+        emit succeeded();
+    } else {
         emit failed();
     }
-    emit done();
     // at this ppint this object cannot yet be deleted (e.g. as part of the parent job destruction,
     // ThreadWeaver logic still holds and uses a reference to finish the execution logic
 }
