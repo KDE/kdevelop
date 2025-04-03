@@ -22,6 +22,25 @@
 
 #include <algorithm>
 
+namespace {
+void outputNewMessage(QStandardItemModel& model, const QString& message)
+{
+    // An output tree view has uniform row heights by default. Create a QStandardItem
+    // per message line so that a multiline message is always visible in its entirety.
+    QList<QStandardItem*> newItems;
+    for (const auto line : QStringTokenizer(message, QLatin1Char{'\n'})) {
+        if (line.size() == message.size()) {
+            // a single-line message => optimize for this most common case
+            model.appendRow(new QStandardItem{message});
+            return;
+        }
+        newItems.push_back(new QStandardItem{line.toString()});
+    }
+    model.invisibleRootItem()->appendRows(newItems);
+}
+
+} // unnamed namespace
+
 SvnJobBase::SvnJobBase( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
     // Pass Silent to VcsJob() in order to prevent it from invoking startOutput()
     // asynchronously. this->startInternalJob() calls startOutput() for a Verbose
@@ -232,7 +251,7 @@ void SvnJobBase::outputMessage(const QString& message)
     if (QString previousText; message == dot && previous && consistsOfDots(previousText = previous->text())) {
         previous->setText(previousText += dot);
     } else {
-        m->appendRow(new QStandardItem(message));
+        outputNewMessage(*m, message);
     }
 
     KDevelop::IPlugin* i = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
