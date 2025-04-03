@@ -12,8 +12,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include <ThreadWeaver/QObjectDecorator>
-
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iplugin.h>

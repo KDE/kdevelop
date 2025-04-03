@@ -15,12 +15,6 @@
 #include <language/interfaces/ilanguagesupport.h>
 #include "parsejob.h"
 
-namespace ThreadWeaver {
-class Job;
-class QObjectDecorator;
-class Weaver;
-}
-
 namespace KDevelop {
 class DocumentChangeTracker;
 

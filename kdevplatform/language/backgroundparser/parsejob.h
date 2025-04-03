@@ -17,10 +17,6 @@
 
 #include <QPointer>
 
-namespace ThreadWeaver {
-class QObjectDecorator;
-}
-
 namespace KDevelop {
 class ParsingEnvironment;
 class ControlFlowGraph;
