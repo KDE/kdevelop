@@ -51,7 +51,6 @@ SvnJobBase::SvnJobBase( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVer
     // Now manually set verbosity to the requested value.
     setVerbosity(verbosity);
     setCapabilities( KJob::Killable );
-    setTitle( QStringLiteral("Subversion") );
 }
 
 SvnJobBase::~SvnJobBase()
