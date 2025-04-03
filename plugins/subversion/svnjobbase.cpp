@@ -70,6 +70,7 @@ void SvnJobBase::failToStart(const QString& errorMessage)
 void SvnJobBase::startInternalJob(const QString& introductoryOutputMessage)
 {
     if (verbosity() == OutputJob::Verbose) {
+        setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
         startOutput();
         if (!introductoryOutputMessage.isEmpty()) {
             outputMessage(introductoryOutputMessage);

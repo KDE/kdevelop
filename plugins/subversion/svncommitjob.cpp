@@ -115,8 +115,6 @@ QVariant SvnCommitJob::fetchResults()
 
 void SvnCommitJob::start()
 {
-    setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-
     if( m_job->urls().isEmpty() ) {
         failToStart(i18n("Not enough information to execute commit"));
     } else {
