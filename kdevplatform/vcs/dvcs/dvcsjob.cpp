@@ -363,4 +363,12 @@ KProcess* DVcsJob::process() const
     return d->childproc.get();
 }
 
+DVcsJob* KDevelop::makeVcsErrorJob(const QString& errorMessage, KDevelop::IPlugin* parent,
+                                   OutputJob::OutputJobVerbosity verbosity)
+{
+    auto* const job = new DVcsJob(QDir::temp(), parent, verbosity);
+    *job << "echo" << "-n" << i18n("error: %1", errorMessage);
+    return job;
+}
+
 #include "moc_dvcsjob.cpp"

@@ -215,6 +215,17 @@ private:
     Q_DECLARE_PRIVATE(DVcsJob)
 };
 
+/**
+ * @return a VCS job that outputs a given error message and finishes
+ *
+ * @todo The returned job finishes without errors, so higher-level code mistakenly believes that
+ *       the operation has succeeded. Replace this function with a special-purpose class VcsErrorJob
+ *       that inherits VcsJob, outputs a specified error message (or does not output anything,
+ *       relies on the RunController to report its error instead) and finishes with an error.
+ */
+[[nodiscard]] KDEVPLATFORMVCS_EXPORT DVcsJob*
+makeVcsErrorJob(const QString& errorMessage, IPlugin* parent,
+                OutputJob::OutputJobVerbosity verbosity = OutputJob::Verbose);
 }
 
 #endif

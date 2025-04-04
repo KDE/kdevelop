@@ -289,13 +289,6 @@ void GitPlugin::ctxStashManager()
     delete d;
 }
 
-DVcsJob* GitPlugin::errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity=OutputJob::Verbose)
-{
-    auto* j = new GitJob(QDir::temp(), this, verbosity);
-    *j << "echo" << "-n" << i18n("error: %1", error);
-    return j;
-}
-
 QString GitPlugin::name() const
 {
     return QStringLiteral("Git");
@@ -391,7 +384,7 @@ VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & source, const
 VcsJob* GitPlugin::add(const QList<QUrl>& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     if (localLocations.empty())
-        return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
+        return makeVcsErrorJob(i18n("Did not specify the list of files"), this, OutputJob::Verbose);
 
     DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
     job->setType(VcsJob::Add);
@@ -402,7 +395,7 @@ VcsJob* GitPlugin::add(const QList<QUrl>& localLocations, KDevelop::IBasicVersio
 KDevelop::VcsJob* GitPlugin::status(const QList<QUrl>& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     if (localLocations.empty())
-        return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
+        return makeVcsErrorJob(i18n("Did not specify the list of files"), this, OutputJob::Verbose);
 
     DVcsJob* job = new GitJob(urlDir(localLocations), this, OutputJob::Silent);
     job->setType(VcsJob::Status);
@@ -464,7 +457,7 @@ KDevelop::VcsJob * GitPlugin::diff(const QUrl& repoPath, const KDevelop::VcsRevi
 KDevelop::VcsJob * GitPlugin::reset ( const QList<QUrl>& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion )
 {
     if(localLocations.isEmpty() )
-        return errorsFound(i18n("Could not reset changes (empty list of paths)"), OutputJob::Verbose);
+        return makeVcsErrorJob(i18n("Could not reset changes (empty list of paths)"), this, OutputJob::Verbose);
 
     DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
     job->setType(VcsJob::Reset);
@@ -498,7 +491,7 @@ KDevelop::VcsJob * GitPlugin::apply(const KDevelop::VcsDiff& diff, const ApplyPa
 VcsJob* GitPlugin::revert(const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
     if(localLocations.isEmpty() )
-        return errorsFound(i18n("Could not revert changes"), OutputJob::Verbose);
+        return makeVcsErrorJob(i18n("Could not revert changes"), this, OutputJob::Verbose);
 
     QDir repo = urlDir(repositoryRoot(localLocations.first()));
     QString modified;
@@ -514,7 +507,7 @@ VcsJob* GitPlugin::revert(const QList<QUrl>& localLocations, IBasicVersionContro
                                                        + QLatin1String("<br/><br/>") + modified,
                                                    {}, KStandardGuiItem::discard(), KStandardGuiItem::cancel());
         if (res != KMessageBox::PrimaryAction) {
-            return errorsFound(QString(), OutputJob::Silent);
+            return makeVcsErrorJob(QString(), this, OutputJob::Silent);
         }
     }
 
@@ -534,11 +527,11 @@ VcsJob* GitPlugin::commit(const QString& message,
                              KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     if (localLocations.empty() || message.isEmpty())
-        return errorsFound(i18n("No files or message specified"));
+        return makeVcsErrorJob(i18n("No files or message specified"), this);
 
     const QDir dir = dotGitDirectory(localLocations.front());
     if (!ensureValidGitIdentity(dir)) {
-        return errorsFound(i18n("Email or name for Git not specified"));
+        return makeVcsErrorJob(i18n("Email or name for Git not specified"), this);
     }
 
     auto* job = new GitJob(dir, this);
@@ -554,10 +547,10 @@ VcsJob* GitPlugin::commit(const QString& message,
 KDevelop::VcsJob * GitPlugin::commitStaged(const QString& message, const QUrl& repoUrl)
 {
     if (message.isEmpty())
-        return errorsFound(i18n("No message specified"));
+        return makeVcsErrorJob(i18n("No message specified"), this);
     const QDir dir = dotGitDirectory(repoUrl);
     if (!ensureValidGitIdentity(dir)) {
-        return errorsFound(i18n("Email or name for Git not specified"));
+        return makeVcsErrorJob(i18n("Email or name for Git not specified"), this);
     }
     auto* job = new GitJob(dir, this);
     job->setType(VcsJob::Commit);
@@ -628,7 +621,7 @@ bool isEmptyDirStructure(const QDir &dir)
 VcsJob* GitPlugin::remove(const QList<QUrl>& files)
 {
     if (files.isEmpty())
-        return errorsFound(i18n("No files to remove"));
+        return makeVcsErrorJob(i18n("No files to remove"), this);
     QDir dotGitDir = dotGitDirectory(files.front());
 
 

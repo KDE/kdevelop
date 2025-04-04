@@ -393,7 +393,6 @@ private:
     //commit dialog "main" helper
     QStringList getLsFiles(const QDir &directory, const QStringList &args,
         KDevelop::OutputJob::OutputJobVerbosity verbosity);
-    KDevelop::DVcsJob* errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity);
 
     void initBranchHash(const QString &repo);
 

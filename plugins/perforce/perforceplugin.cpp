@@ -279,8 +279,7 @@ KDevelop::VcsJob* PerforcePlugin::update(const QList<QUrl>& localLocations, cons
 KDevelop::VcsJob* PerforcePlugin::commit(const QString& message, const QList<QUrl>& localLocations, KDevelop::IBasicVersionControl::RecursionMode /*recursion*/)
 {
     if (localLocations.empty() || message.isEmpty())
-        return errorsFound(i18n("No files or message specified"));
-
+        return makeVcsErrorJob(i18n("No files or message specified"), this);
 
     QFileInfo curFile(localLocations.front().toLocalFile());
 
@@ -363,7 +362,7 @@ KDevelop::VcsJob* PerforcePlugin::log(const QUrl& localLocation, const KDevelop:
     QFileInfo curFile(localLocation.toLocalFile());
     if (curFile.isDir()) {
         KMessageBox::error(nullptr, i18n("Please select a file for this operation"));
-        return errorsFound(i18n("Directory not supported for this operation"));
+        return makeVcsErrorJob(i18n("Directory not supported for this operation"), this);
     }
 
     auto* job = new DVcsJob(curFile.dir(), this, KDevelop::OutputJob::Verbose);
@@ -379,7 +378,7 @@ KDevelop::VcsJob* PerforcePlugin::annotate(const QUrl& localLocation, const KDev
     QFileInfo curFile(localLocation.toLocalFile());
     if (curFile.isDir()) {
         KMessageBox::error(nullptr, i18n("Please select a file for this operation"));
-        return errorsFound(i18n("Directory not supported for this operation"));
+        return makeVcsErrorJob(i18n("Directory not supported for this operation"), this);
     }
 
     auto* job = new DVcsJob(curFile.dir(), this, KDevelop::OutputJob::Verbose);
@@ -662,14 +661,6 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
     }
     
     job->setResults(results);
-}
-
-
-KDevelop::VcsJob* PerforcePlugin::errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity)
-{
-    auto* j = new DVcsJob(QDir::temp(), this, verbosity);
-    *j << "echo" << "-n" << i18n("error: %1", error);
-    return j;
 }
 
 #include "moc_perforceplugin.cpp"
