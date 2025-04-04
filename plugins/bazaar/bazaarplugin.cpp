@@ -80,6 +80,10 @@ VcsJob* BazaarPlugin::annotate(const QUrl& localLocation, const VcsRevision& rev
 
 VcsJob* BazaarPlugin::commit(const QString& message, const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
+    if (localLocations.empty()) {
+        return makeVcsErrorJob(i18n("No files selected to commit"), this);
+    }
+
     QDir dir = BazaarUtils::workingCopy(localLocations[0]);
     auto* job = new DVcsJob(dir, this);
     job->setType(VcsJob::Commit);
