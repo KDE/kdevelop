@@ -668,7 +668,7 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
 KDevelop::VcsJob* PerforcePlugin::errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
     auto* j = new DVcsJob(QDir::temp(), this, verbosity);
-    *j << "echo" << i18n("error: %1", error) << "-n";
+    *j << "echo" << "-n" << i18n("error: %1", error);
     return j;
 }
 

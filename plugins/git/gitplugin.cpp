@@ -292,7 +292,7 @@ void GitPlugin::ctxStashManager()
 DVcsJob* GitPlugin::errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity=OutputJob::Verbose)
 {
     auto* j = new GitJob(QDir::temp(), this, verbosity);
-    *j << "echo" << i18n("error: %1", error) << "-n";
+    *j << "echo" << "-n" << i18n("error: %1", error);
     return j;
 }
 
