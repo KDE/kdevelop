@@ -2313,24 +2313,27 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"以下语言使用专用的 KDevelop 插件以获得更好的支持。 %1 插件已禁用以防止冲突： "
+"<var>%2</var>。若需要进行功能支持度对比或规避严重错误，请禁用这些专用插件后，"
+"再设置环境变量<var>%3</var> (<span style='color:%4'>%5</span>)。"
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "当前设置"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "当前未设置"
 
 #: shell/ktexteditorpluginintegration.cpp:491
 #, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr ""
+msgstr "消息"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format

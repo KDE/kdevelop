@@ -2330,7 +2330,6 @@ msgstr ""
 
 #: shell/ktexteditorpluginintegration.cpp:491
 #, fuzzy, kde-format
-#| msgid "Old Messages"
 msgctxt "@title:window"
 msgid "Messages"
 msgstr "Gamle meldinger"
