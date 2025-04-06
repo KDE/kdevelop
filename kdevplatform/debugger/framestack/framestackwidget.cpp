@@ -128,22 +128,20 @@ void FramestackWidget::currentSessionChanged(IDebugSession* session, IDebugSessi
     }
     m_session = session;
 
-    m_threadsListView->setModel(session ? session->frameStackModel() : nullptr);
-    m_framesTreeView->setModel(session ? session->frameStackModel() : nullptr);
+    auto* const frameStackModel = session ? session->frameStackModel() : nullptr;
+    m_threadsListView->setModel(frameStackModel);
+    m_framesTreeView->setModel(frameStackModel);
 
     if (!session) {
         setEnabled(false);
         return;
     }
 
-    connect(session->frameStackModel(), &IFrameStackModel::dataChanged,
-            this, &FramestackWidget::checkFetchMoreFrames);
-    connect(session->frameStackModel(), &IFrameStackModel::currentThreadChanged,
-            this, &FramestackWidget::currentThreadChanged);
-    currentThreadChanged(session->frameStackModel()->currentThread());
-    connect(session->frameStackModel(), &IFrameStackModel::currentFrameChanged,
-            this, &FramestackWidget::currentFrameChanged);
-    currentFrameChanged(session->frameStackModel()->currentFrame());
+    connect(frameStackModel, &IFrameStackModel::dataChanged, this, &FramestackWidget::checkFetchMoreFrames);
+    connect(frameStackModel, &IFrameStackModel::currentThreadChanged, this, &FramestackWidget::currentThreadChanged);
+    currentThreadChanged(frameStackModel->currentThread());
+    connect(frameStackModel, &IFrameStackModel::currentFrameChanged, this, &FramestackWidget::currentFrameChanged);
+    currentFrameChanged(frameStackModel->currentFrame());
     connect(session, &IDebugSession::stateChanged,
             this, &FramestackWidget::sessionStateChanged);
 
