@@ -1,10 +1,10 @@
-# SPDX-FileCopyrightText: 2014, 2015, 2020, 2021, 2022, 2023, 2024 Shinjo Park <kde@peremen.name>
+# SPDX-FileCopyrightText: 2014, 2015, 2020, 2021, 2022, 2023, 2024, 2025 Shinjo Park <kde@peremen.name>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-09 02:30+0000\n"
-"PO-Revision-Date: 2024-08-21 00:35+0200\n"
+"PO-Revision-Date: 2025-04-06 23:05+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -2329,23 +2329,25 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"다음 언어는 개별적 KDevelop 플러그인에서 더 잘 지원되므로, 충돌을 방지하기 위"
+"해서 %1 플러그인에서 비활성화되었습니다: <var>%2</var>. 지원 수준을 비교하거"
+"나 중요한 버그를 우회하기 위해서 개별적 KDevelop 플러그인을 비활성화하려면 "
+"<var>%3</var> 환경 변수를 설정하십시오(<span style='color:%4'>%5</span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "현재 설정됨"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "현재 설정되지 않음"
 
 #: shell/ktexteditorpluginintegration.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
 msgstr "메시지"
