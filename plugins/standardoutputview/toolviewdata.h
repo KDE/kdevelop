@@ -28,7 +28,6 @@ public:
     explicit OutputData( ToolViewData* tv );
     QAbstractItemDelegate* delegate;
     QAbstractItemModel* model;
-    ToolViewData* toolView;
     KDevelop::IOutputView::Behaviours behaviour;
     QString title;
     int id;

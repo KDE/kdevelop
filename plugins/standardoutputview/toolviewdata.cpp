@@ -14,7 +14,6 @@ OutputData::OutputData( ToolViewData* tv )
 : QObject( tv )
 , delegate(nullptr)
 , model(nullptr)
-, toolView(tv)
 , id(-1)
 {
 }
@@ -57,7 +56,6 @@ OutputData* ToolViewData::addOutput( int id, const QString& title,
     d->id = id;
     d->title = title;
     d->behaviour = behave;
-    d->toolView = this;
     outputdata.insert( id, d );
     emit outputAdded( id );
     return d;
