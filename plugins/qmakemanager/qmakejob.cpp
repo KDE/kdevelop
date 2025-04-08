@@ -103,8 +103,8 @@ void QMakeJob::start()
 
     connect(lineMaker, &ProcessLineMaker::receivedStdoutLines, m_model, &OutputModel::appendLines);
     connect(lineMaker, &ProcessLineMaker::receivedStderrLines, m_model, &OutputModel::appendLines);
-    connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)));
-    connect(m_process, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(processFinished(int,QProcess::ExitStatus)));
+    connect(m_process, &QProcess::errorOccurred, this, &QMakeJob::processError);
+    connect(m_process, &QProcess::finished, this, &QMakeJob::processFinished);
 
     m_process->start();
 }
