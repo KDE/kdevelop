@@ -27,7 +27,7 @@ QMakeJob::QMakeJob(QString srcDir, QString buildDir, QObject* parent)
 
 {
     setCapabilities(Killable);
-    setStandardToolView(IOutputView::RunView);
+    setStandardToolView(IOutputView::BuildView);
     setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll);
 
     setObjectName(i18n("Run QMake in %1", m_buildDir));
