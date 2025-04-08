@@ -20,7 +20,6 @@
 class IExecutePlugin;
 namespace KDevelop
 {
-class OutputModel;
 class ILaunchConfiguration;
 }
 
@@ -64,12 +63,7 @@ public:
              QObject* parent = nullptr);
     void start() override;
 
-private Q_SLOTS:
-    void stdoutReceived(const QStringList&);
-    void stderrReceived(const QStringList&);
-
 private:
-    KDevelop::OutputModel* model();
     void initializeStartupInfo(IExecutePlugin* execute, KDevelop::ILaunchConfiguration* launchConfiguration);
 
     std::unique_ptr<InferiorStartupInfo> m_startupInfo;

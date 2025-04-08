@@ -88,9 +88,6 @@ MIDebugJob::MIDebugJob(MIDebuggerPlugin* p, ILaunchConfiguration* launchcfg,
     // instead of being started. Raise the Build output tool view to show build error(s) in this scenario.
     m_session->setToolViewToRaiseAtEnd(IDebugSession::ToolView::Build);
 
-    connect(m_session, &MIDebugSession::inferiorStdoutLines, this, &MIDebugJob::stdoutReceived);
-    connect(m_session, &MIDebugSession::inferiorStderrLines, this, &MIDebugJob::stderrReceived);
-
     if (launchcfg->project()) {
         setObjectName(i18nc("ProjectName: run configuration name", "%1: %2",
                             launchcfg->project()->name(), launchcfg->name()));
@@ -114,6 +111,10 @@ void MIDebugJob::start()
     auto model = new KDevelop::OutputModel;
     model->setFilteringStrategy(OutputModel::NativeAppErrorFilter);
     setModel(model);
+
+    connect(m_session, &MIDebugSession::inferiorStdoutLines, model, &OutputModel::appendLines);
+    connect(m_session, &MIDebugSession::inferiorStderrLines, model, &OutputModel::appendLines);
+
     setTitle(m_startupInfo->launchConfiguration->name());
 
     const auto grp = m_startupInfo->launchConfiguration->config();
@@ -134,25 +135,6 @@ void MIDebugJob::start()
         done();
     }
     m_startupInfo.reset(); // no more use for the info, so release the memory
-}
-
-void MIDebugJob::stderrReceived(const QStringList& l)
-{
-    if (OutputModel* m = model()) {
-        m->appendLines(l);
-    }
-}
-
-void MIDebugJob::stdoutReceived(const QStringList& l)
-{
-    if (OutputModel* m = model()) {
-        m->appendLines(l);
-    }
-}
-
-OutputModel* MIDebugJob::model()
-{
-    return qobject_cast<OutputModel*>(OutputJob::model());
 }
 
 void MIDebugJob::initializeStartupInfo(IExecutePlugin* execute, ILaunchConfiguration* launchConfiguration)
