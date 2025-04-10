@@ -13,8 +13,6 @@
 #include <QWidget>
 
 #include <interfaces/itoolviewactionlistener.h>
-#include <outputview/ioutputviewmodel.h>
-#include <outputview/ioutputview.h>
 
 class KExpandableLineEdit;
 class KToggleAction;
@@ -32,6 +30,10 @@ class QTreeView;
 class QWidgetAction;
 class ToolViewData;
 class OutputWidgetConfig;
+
+namespace KDevelop {
+class IOutputViewModel;
+}
 
 class OutputWidget : public QWidget, public KDevelop::IToolViewActionListener
 {
