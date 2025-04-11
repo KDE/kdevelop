@@ -92,7 +92,6 @@ private:
     QAbstractItemView* outputView() const;
     void activateIndex(const QModelIndex& index, QAbstractItemView* view, KDevelop::IOutputViewModel* iface);
     void eventuallyDoFocus();
-    int currentOutputIndex();
 
     /**
      * Closes @p view and destroys all associated objects

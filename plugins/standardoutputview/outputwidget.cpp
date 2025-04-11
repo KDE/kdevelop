@@ -709,19 +709,6 @@ void OutputWidget::selectAll()
         view->selectAll();
 }
 
-int OutputWidget::currentOutputIndex()
-{
-    int index = 0;
-    if( data->type & KDevelop::IOutputView::MultipleView )
-    {
-        index = m_tabwidget->currentIndex();
-    } else if( data->type & KDevelop::IOutputView::HistoryView )
-    {
-        index = m_stackwidget->currentIndex();
-    }
-    return index;
-}
-
 void OutputWidget::outputFilter(const QString& filter)
 {
     auto *view = qobject_cast<QAbstractItemView*>(currentWidget());
