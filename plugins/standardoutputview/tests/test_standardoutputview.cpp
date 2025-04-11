@@ -38,11 +38,6 @@ QString toolViewTitle()
 }
 }
 
-namespace KDevelop
-{
-    class IUiController;
-}
-
 QTEST_MAIN(StandardOutputViewTest)
 
 void StandardOutputViewTest::initTestCase()
