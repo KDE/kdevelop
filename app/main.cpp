@@ -323,8 +323,6 @@ int main( int argc, char *argv[] )
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
     }
 
-    QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
-
 #ifdef Q_OS_MAC
     CFBundleRef mainBundle = CFBundleGetMainBundle();
     if (mainBundle) {
