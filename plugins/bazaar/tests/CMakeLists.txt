@@ -4,7 +4,6 @@ remove_definitions(
     -DQT_NO_CAST_FROM_BYTEARRAY
 )
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 set(bazaartest_SRCS
     test_bazaar.cpp
     ../diffjob.cpp
