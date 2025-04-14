@@ -29,6 +29,7 @@
 #include <vcs/vcsannotation.h>
 #include "../bazaarplugin.h"
 
+#include <QStandardPaths>
 #include <QTest>
 
 #define VERIFYJOB(j) \
@@ -54,6 +55,11 @@ void TestBazaar::initTestCase()
 
     const auto pluginMetaData = makeTestPluginMetaData("TestBazaar");
     m_plugin = new BazaarPlugin(TestCore::self(), pluginMetaData);
+
+    const auto bzrExecutable = QStandardPaths::findExecutable(QStringLiteral("bzr"));
+    if (bzrExecutable.isEmpty()) {
+        QSKIP("Skipping because `bzr` executable is not available");
+    }
 }
 
 void TestBazaar::cleanupTestCase()

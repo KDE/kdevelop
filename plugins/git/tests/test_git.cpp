@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QRegularExpression>
 #include <QSignalSpy>
+#include <QStandardPaths>
 #include <QTest>
 #include <QUrl>
 
@@ -72,6 +73,11 @@ void GitInitTest::initTestCase()
     m_plugin = new GitPlugin(TestCore::self(), pluginMetaData);
 
     removeTempDirs(); // in case the previous test run crashed and left a git repository behind
+
+    const auto gitExecutable = QStandardPaths::findExecutable(QStringLiteral("git"));
+    if (gitExecutable.isEmpty()) {
+        QSKIP("Skipping because `git` executable is not available");
+    }
 }
 
 void GitInitTest::cleanupTestCase()
