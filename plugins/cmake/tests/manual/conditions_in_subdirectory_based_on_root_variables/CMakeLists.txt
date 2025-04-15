@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+project(conditions_in_subdirectory_based_on_root_variables)
+
 set(ROOT_VARIABLE TRUE)
 
 find_package(Qt6Core REQUIRED)

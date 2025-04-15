@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+project(kf6_app)
+
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
