@@ -212,9 +212,10 @@ void TestCMakeManager::testDefines()
         QCOMPARE(defines.value("BV", QStringLiteral("not found")), QStringLiteral("1"));
         QCOMPARE(defines.value("BV2", QStringLiteral("not found")), QStringLiteral("2"));
 
-//         QCOMPARE(defines.value("BAR", QStringLiteral("not found")), QStringLiteral("foo"));
-//         QCOMPARE(defines.value("FOO", QStringLiteral("not found")), QStringLiteral("bar"));
-//         QCOMPARE(defines.value("BLA", QStringLiteral("not found")), QStringLiteral("blub"));
+        QCOMPARE(defines.value("BAR", QStringLiteral("not found")), QStringLiteral("foo"));
+        QCOMPARE(defines.value("FOO", QStringLiteral("not found")), QStringLiteral("bar"));
+        QCOMPARE(defines.value("BLA", QStringLiteral("not found")), QStringLiteral("blub"));
+
         QCOMPARE(defines.value("ASDF", QStringLiteral("not found")), QStringLiteral("asdf"));
         QCOMPARE(defines.value("XYZ", QStringLiteral("not found")), QString());
         QCOMPARE(defines.value("A", QStringLiteral("not found")), QString());
@@ -223,7 +224,8 @@ void TestCMakeManager::testDefines()
         QCOMPARE(defines.value("C", QStringLiteral("not found")), QString());
         QCOMPARE(defines.value("CV", QStringLiteral("not found")), QStringLiteral("1"));
         QCOMPARE(defines.value("CV2", QStringLiteral("not found")), QStringLiteral("2"));
-        QCOMPARE(defines.size(), 13);
+
+        QCOMPARE(defines.size(), 14);
         foundInTarget = true;
     }
     QVERIFY(foundInTarget);
