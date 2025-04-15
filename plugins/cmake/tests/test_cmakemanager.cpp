@@ -204,7 +204,6 @@ void TestCMakeManager::testDefines()
     const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
-    bool foundInTarget = false;
     for (ProjectBaseItem* mainCppItem : items) {
         QHash<QString, QString> defines = project->buildSystemManager()->defines(mainCppItem);
 
@@ -226,9 +225,7 @@ void TestCMakeManager::testDefines()
         QCOMPARE(defines.value("CV2", QStringLiteral("not found")), QStringLiteral("2"));
 
         QCOMPARE(defines.size(), 14);
-        foundInTarget = true;
     }
-    QVERIFY(foundInTarget);
 }
 
 void TestCMakeManager::testCustomTargetSources()
