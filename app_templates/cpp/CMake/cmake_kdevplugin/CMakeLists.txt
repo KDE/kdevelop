@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 project(%{APPNAME})
 
-find_package(ECM "5.68.0" REQUIRED NO_MODULE)
+set(KF_MIN_VERSION "6.0.0")
+
+find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
@@ -11,7 +13,11 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMQtDeclareLoggingCategory)
 include(FeatureSummary)
 
-find_package(KDevPlatform 5.2.40 REQUIRED)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
+    I18n
+)
+
+find_package(KDevPlatform 6.0 REQUIRED)
 
 add_subdirectory(src)
 
