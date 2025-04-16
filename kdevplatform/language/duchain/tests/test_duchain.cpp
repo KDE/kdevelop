@@ -14,6 +14,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
+#include <language/duchain/definitions.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/persistentsymboltable.h>
@@ -374,6 +375,34 @@ void TestDUChain::testStringSets()
     }
 }
 #endif
+
+void TestDUChain::testDefinitions()
+{
+    DUChainReadLocker lock;
+    auto* const definitions = DUChain::definitions();
+    const DeclarationId id(QualifiedIdentifier{u"foo"});
+
+    QByteArray output;
+    const QTextStream stream(&output);
+
+    QCOMPARE(definitions->definitions(id), {});
+    definitions->dump(stream);
+    QCOMPARE(output, {});
+
+    const IndexedDeclaration indexed;
+    definitions->addDefinition(id, indexed);
+
+    QCOMPARE(definitions->definitions(id), {indexed});
+    definitions->dump(stream);
+    QCOMPARE(output, "Definitions for \"foo\" \n");
+    output.clear();
+
+    definitions->removeDefinition(id, indexed);
+
+    QCOMPARE(definitions->definitions(id), {});
+    definitions->dump(stream);
+    QCOMPARE(output, {});
+}
 
 void TestDUChain::testSymbolTableValid()
 {
