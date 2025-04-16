@@ -24,6 +24,7 @@ private Q_SLOTS:
     // Causes stack overflow on Windows (MSVC2015)
     void testStringSets();
 #endif
+    void testDefinitions();
     void testSymbolTableValid();
     void testIndexedStrings();
     void testImportStructure();

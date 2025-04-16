@@ -14,6 +14,8 @@
 #include <serialization/indexedstring.h>
 #include "serialization/itemrepository.h"
 
+#include <type_traits>
+
 namespace KDevelop {
 DEFINE_LIST_MEMBER_HASH(DefinitionsItem, definitions, IndexedDeclaration)
 
@@ -105,20 +107,73 @@ public:
     const DefinitionsItem& m_item;
 };
 
+/// Maps declaration-ids to definitions
+using DefinitionsRepo = ItemRepository<DefinitionsItem, DefinitionsRequestItem>;
+
+template<>
+class ItemRepositoryFor<Definitions>
+{
+    friend struct LockedItemRepository;
+    static DefinitionsRepo& repo()
+    {
+        static QMutex mutex;
+        static DefinitionsRepo repo{QStringLiteral("Definition Map"), &mutex};
+        return repo;
+    }
+};
+
+namespace {
+template<typename Repo>
+[[nodiscard]] KDevVarLengthArray<IndexedDeclaration> definitionsInRepo(const DeclarationId& id, const Repo& repo)
+{
+    KDevVarLengthArray<IndexedDeclaration> ret;
+
+    DefinitionsItem item;
+    item.declaration = id;
+    const auto collectDefinitions = [&item, &ret](const DefinitionsRepo& repo) {
+        if (const auto index = repo.findIndex(item)) {
+            const auto* const repositoryItem = repo.itemFromIndex(index);
+            FOREACH_FUNCTION (const IndexedDeclaration& decl, repositoryItem->definitions)
+                ret.append(decl);
+        }
+    };
+
+    if constexpr (std::is_same_v<Repo, std::nullptr_t>) {
+        LockedItemRepository::read<Definitions>(collectDefinitions);
+    } else {
+        static_assert(std::is_same_v<Repo, DefinitionsRepo>);
+        collectDefinitions(repo);
+    }
+
+    return ret;
+}
+
+} // unnamed namespace
+
 class DefinitionsVisitor
 {
 public:
-    DefinitionsVisitor(Definitions* _definitions, const QTextStream& _out)
-        : definitions(_definitions)
-        , out(_out)
+    explicit DefinitionsVisitor(const QTextStream& _out)
+        : out(_out)
     {
+    }
+
+    void setRepo(const DefinitionsRepo& repo)
+    {
+        Q_ASSERT(!m_repo);
+        m_repo = &repo;
     }
 
     bool operator()(const DefinitionsItem* item)
     {
+        Q_ASSERT(m_repo);
+
         QDebug qout(out.device());
         auto id = item->declaration;
-        const auto allDefinitions = definitions->definitions(id);
+
+        // DefinitionsRepo is locked during the visiting. The mutex of DefinitionsRepo is nonrecursive.
+        // Pass the already locked repository to definitionsInRepo() in order to prevent a deadlock.
+        const auto allDefinitions = definitionsInRepo(id, *m_repo);
 
         qout << "Definitions for" << id.qualifiedIdentifier() << Qt::endl;
         for (const IndexedDeclaration& decl : allDefinitions) {
@@ -132,23 +187,8 @@ public:
     }
 
 private:
-    const Definitions* definitions;
     const QTextStream& out;
-};
-
-// Maps declaration-ids to definitions
-using DefinitionsRepo = ItemRepository<DefinitionsItem, DefinitionsRequestItem>;
-
-template<>
-class ItemRepositoryFor<Definitions>
-{
-    friend struct LockedItemRepository;
-    static DefinitionsRepo& repo()
-    {
-        static QMutex mutex;
-        static DefinitionsRepo repo { QStringLiteral("Definition Map"), &mutex };
-        return repo;
-    }
+    const DefinitionsRepo* m_repo = nullptr;
 };
 
 Definitions::Definitions()
@@ -211,28 +251,14 @@ void Definitions::removeDefinition(const DeclarationId& id, const IndexedDeclara
 
 KDevVarLengthArray<IndexedDeclaration> Definitions::definitions(const DeclarationId& id) const
 {
-    KDevVarLengthArray<IndexedDeclaration> ret;
-
-    DefinitionsItem item;
-    item.declaration = id;
-
-    LockedItemRepository::read<Definitions>([&](const DefinitionsRepo& repo) {
-        uint index = repo.findIndex(item);
-
-        if (index) {
-            const DefinitionsItem* repositoryItem = repo.itemFromIndex(index);
-            FOREACH_FUNCTION(const IndexedDeclaration& decl, repositoryItem->definitions)
-            ret.append(decl);
-        }
-    });
-
-    return ret;
+    return definitionsInRepo(id, nullptr);
 }
 
 void Definitions::dump(const QTextStream& out)
 {
-    DefinitionsVisitor v(this, out);
+    DefinitionsVisitor v(out);
     LockedItemRepository::read<Definitions>([&](const DefinitionsRepo& repo) {
+        v.setRepo(repo);
         repo.visitAllItems(v);
     });
 }
