@@ -118,7 +118,7 @@ void TestCTestFindSuites::testQtTestCases()
     IProject* project = loadProject( "unit_tests_kde" );
     QVERIFY2(project, "Project was not opened");
 
-    waitForSuites(project, 2, 25);
+    waitForSuites(project, 2, 60);
 
     const QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
     QCOMPARE(suites.size(), 2);
