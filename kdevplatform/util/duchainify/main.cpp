@@ -117,12 +117,8 @@ void Manager::init()
     // when everything is done and when bgparser is suspended
     // later doesn't happen in duchain, so just rely on hideProgress()
     // and quit when it's emitted
-    connect(
-        ICore::self()->languageController()->backgroundParser(), &BackgroundParser::hideProgress, this,
-        [this]() {
-            if (ICore::self()->languageController()->backgroundParser()->isIdle())
-                QTimer::singleShot(0, this, &Manager::finish);
-        });
+    connect(ICore::self()->languageController()->backgroundParser(), &BackgroundParser::hideProgress, this,
+            &Manager::finishIfDone);
 
     const auto files = m_args->positionalArguments();
     for (const auto& file : files) {
@@ -147,10 +143,11 @@ void Manager::updateReady(const IndexedString& url, const ReferencedTopDUContext
 {
     qDebug() << "finished" << url.toUrl().toLocalFile() << "success: " << ( bool )topContext;
 
-    m_waiting.remove(url.toUrl());
-
-    std::cerr << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << "\n";
+    std::cerr << "processed " << m_total - (m_waiting.size() - 1) << " out of " << m_total << "\n";
     dump(topContext);
+
+    m_waiting.remove(url.toUrl());
+    finishIfDone();
 }
 
 void Manager::dump(const ReferencedTopDUContext& topContext)
@@ -248,9 +245,17 @@ QSet<QUrl> Manager::waiting()
     return m_waiting;
 }
 
-void Manager::finish()
+void Manager::finishIfDone()
 {
+    if (m_exited) {
+        return; // no need to exit again
+    }
+    if (!m_waiting.empty() || !ICore::self()->languageController()->backgroundParser()->isIdle()) {
+        return; // not ready to exit yet
+    }
+
     std::cerr << "ready" << std::endl;
+    m_exited = true;
     QCoreApplication::quit();
 }
 
