@@ -28,6 +28,7 @@ public:
 private:
     QSet<QUrl> m_waiting;
     uint m_total;
+    bool m_exited = false;
     QCommandLineParser* m_args;
     QAtomicInt m_allFilesAdded;
 
@@ -35,7 +36,7 @@ public Q_SLOTS:
     // delay init into event loop so the DUChain can always shutdown gracefully
     void init();
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
-    void finish();
+    void finishIfDone();
     void dump(const KDevelop::ReferencedTopDUContext& topContext);
 };
 
