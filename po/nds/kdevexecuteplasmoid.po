@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2014-03-17 20:10+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Display a plasmoid"
 msgstr "En Plasma-Lüttprogramm wiesen"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Oproper för Plasma-Lüttprogrammen"
@@ -38,7 +38,7 @@ msgstr "Oproper för Plasma-Lüttprogrammen"
 msgid "Could not resolve the dependency: %1"
 msgstr ""
 
-#: plasmoidexecutionconfig.cpp:296
+#: plasmoidexecutionconfig.cpp:290
 #, fuzzy, kde-format
 #| msgid "Plasmoids"
 msgctxt "@title:menu"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2020-01-14 21:13+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -69,7 +69,7 @@ msgstr "Subversion"
 msgid "Subversion Add"
 msgstr "Subversioni lisamine"
 
-#: svnaddjob.cpp:85
+#: svnaddjob.cpp:84
 #, kde-format
 msgid "Not enough information to add file"
 msgstr "Faili lisamiseks napib teavet"
@@ -79,7 +79,7 @@ msgstr "Faili lisamiseks napib teavet"
 msgid "Subversion Annotate"
 msgstr "Subversioni annoteerimine"
 
-#: svnblamejob.cpp:144
+#: svnblamejob.cpp:143
 #, kde-format
 msgid "Not enough information to blame location"
 msgstr "Autorsuse näitamiseks napib teavet"
@@ -89,32 +89,32 @@ msgstr "Autorsuse näitamiseks napib teavet"
 msgid "Subversion Checkout"
 msgstr "Subversioni väljavõte"
 
-#: svncheckoutjob.cpp:96
+#: svncheckoutjob.cpp:95
 #, kde-format
 msgid "Not enough information to checkout"
 msgstr "Väljavõtteks napib teavet"
 
-#: svncommitjob.cpp:109
+#: svncommitjob.cpp:108
 #, kde-format
 msgid "Subversion Commit"
 msgstr "Subversioni sissekanne"
 
-#: svncommitjob.cpp:125
-#, kde-format
-msgid "Committing..."
-msgstr "Sissekandmine..."
-
-#: svncommitjob.cpp:129
+#: svncommitjob.cpp:119
 #, kde-format
 msgid "Not enough information to execute commit"
 msgstr "Sissekandmise täitmiseks napib teavet"
+
+#: svncommitjob.cpp:121
+#, kde-format
+msgid "Committing..."
+msgstr "Sissekandmine..."
 
 #: svncopyjob.cpp:71
 #, kde-format
 msgid "Subversion Copy"
 msgstr "Subversioni kopeerimine"
 
-#: svncopyjob.cpp:83
+#: svncopyjob.cpp:82
 #, kde-format
 msgid "Not enough information to copy file"
 msgstr "Faili kopeerimiseks napib teavet"
@@ -124,7 +124,7 @@ msgstr "Faili kopeerimiseks napib teavet"
 msgid "Subversion Diff"
 msgstr "Subversioni võrdlus"
 
-#: svndiffjob.cpp:272
+#: svndiffjob.cpp:271
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "Võrdlemise teostamiseks napib teavet"
@@ -134,7 +134,7 @@ msgstr "Võrdlemise teostamiseks napib teavet"
 msgid "Subversion Import"
 msgstr "Subversioni import"
 
-#: svnimportjob.cpp:99
+#: svnimportjob.cpp:98
 #, kde-format
 msgid "Not enough information to import"
 msgstr "Importimiseks napib teavet"
@@ -144,131 +144,131 @@ msgstr "Importimiseks napib teavet"
 msgid "Subversion Info"
 msgstr "Subversioni teave"
 
-#: svninfojob.cpp:114
+#: svninfojob.cpp:113
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "Teabetöö täitmiseks napib teavet"
 
-#: svninternaljobbase.cpp:86
+#: svninternaljobbase.cpp:87
 #, kde-format
 msgctxt "A file was marked to be added to svn"
 msgid "Added %1"
 msgstr "Lisati %1"
 
-#: svninternaljobbase.cpp:89
+#: svninternaljobbase.cpp:90
 #, kde-format
 msgctxt "A file was marked for deletion from svn"
 msgid "Deleted %1"
 msgstr "Kustutati %1"
 
-#: svninternaljobbase.cpp:93
+#: svninternaljobbase.cpp:94
 #, kde-format
 msgctxt "A file was deleted during an svn update operation"
 msgid "Deleted %1"
 msgstr "Kustutati %1"
 
-#: svninternaljobbase.cpp:96
+#: svninternaljobbase.cpp:97
 #, kde-format
 msgctxt "A file was added during an svn update operation"
 msgid "Added %1"
 msgstr "Lisati %1"
 
-#: svninternaljobbase.cpp:136
+#: svninternaljobbase.cpp:137
 #, kde-format
 msgid "Revision %1"
 msgstr "Versioon %1"
 
-#: svninternaljobbase.cpp:139
+#: svninternaljobbase.cpp:140
 #, kde-format
 msgid "Updating externals: %1"
 msgstr "Väliste uuendamine: %1"
 
-#: svninternaljobbase.cpp:147
+#: svninternaljobbase.cpp:148
 #, kde-format
 msgid "Sending %1"
 msgstr "Saadetakse %1"
 
-#: svninternaljobbase.cpp:151
+#: svninternaljobbase.cpp:152
 #, kde-format
 msgid "Adding %1 using mimetype %2."
 msgstr "Lisatakse %1 MIME tüübiga %2."
 
-#: svninternaljobbase.cpp:153
+#: svninternaljobbase.cpp:154
 #, kde-format
 msgid "Adding %1."
 msgstr "Lisatakse %1."
 
-#: svninternaljobbase.cpp:157
+#: svninternaljobbase.cpp:158
 #, kde-format
 msgid "Deleting %1."
 msgstr "Kustutatakse %1."
 
-#: svninternaljobbase.cpp:160
+#: svninternaljobbase.cpp:161
 #, kde-format
 msgid "Replacing %1."
 msgstr "Asendatakse %1."
 
-#: svninternaljobbase.cpp:165
+#: svninternaljobbase.cpp:166
 #, kde-format
 msgid "Transmitting file data "
 msgstr "Failiandmete ülekanne "
 
-#: svninternaljobbase.cpp:171
+#: svninternaljobbase.cpp:172
 #, kde-format
 msgid "Blame finished for revision %1, path %2"
 msgstr "Autorsus määratud versioonile %1, asukoht %2"
 
-#: svninternaljobbase.cpp:174
+#: svninternaljobbase.cpp:175
 #, kde-format
 msgid "Reverted working copy %1"
 msgstr "Lähtestati töökoopia %1"
 
-#: svninternaljobbase.cpp:177
+#: svninternaljobbase.cpp:178
 #, kde-format
 msgid "Reverting failed on working copy %1"
 msgstr "Töökoopia %1 lähtestamine nurjus"
 
-#: svninternaljobbase.cpp:180
+#: svninternaljobbase.cpp:181
 #, kde-format
 msgid "Copied %1"
 msgstr "Kopeeriti %1"
 
-#: svninternaljobbase.cpp:235
+#: svninternaljobbase.cpp:236
 #, kde-format
 msgid "Certificate is not yet valid."
 msgstr "Sertifikaat ei ole veel kehtiv."
 
-#: svninternaljobbase.cpp:239
+#: svninternaljobbase.cpp:240
 #, kde-format
 msgid "Certificate has expired."
 msgstr "Sertifikaat on aegunud."
 
-#: svninternaljobbase.cpp:243
+#: svninternaljobbase.cpp:244
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
 msgstr "Sertifikaadi CN (masinanimi) ei vasta võrgumasina nimele."
 
-#: svninternaljobbase.cpp:247
+#: svninternaljobbase.cpp:248
 #, kde-format
 msgid "Certificate authority is unknown."
 msgstr "Sertifitseerimiskeskus on tundmatu."
 
-#: svninternaljobbase.cpp:251
+#: svninternaljobbase.cpp:252
 #, kde-format
 msgid "Other unknown error."
 msgstr "Muu tundmatu viga."
 
-#: svnjobbase.cpp:74
+#: svnjobbase.cpp:114
 #, kde-format
 msgid "Enter Login for: %1"
 msgstr "%1 kasutajatunnus"
 
-#: svnjobbase.cpp:160
+#: svnjobbase.cpp:188
 #, kde-format
 msgid "Completed"
 msgstr "Valmis"
 
-#: svnjobbase.cpp:175
+#: svnjobbase.cpp:203
 #, kde-format
 msgid ""
 "Error executing Job:\n"
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Subversion Log"
 msgstr "Subversioni logi"
 
-#: svnlogjob.cpp:120
+#: svnlogjob.cpp:119
 #, kde-format
 msgid "Not enough information to log location"
 msgstr "Logi määramiseks napib teavet"
@@ -292,7 +292,7 @@ msgstr "Logi määramiseks napib teavet"
 msgid "Subversion Move"
 msgstr "Subversioni liigutamine"
 
-#: svnmovejob.cpp:95
+#: svnmovejob.cpp:94
 #, kde-format
 msgid "Not enough information to move file"
 msgstr "Faili liigutamiseks napib teavet"
@@ -302,7 +302,7 @@ msgstr "Faili liigutamiseks napib teavet"
 msgid "Subversion Remove"
 msgstr "Subversioni eemaldamine"
 
-#: svnremovejob.cpp:88
+#: svnremovejob.cpp:87
 #, kde-format
 msgid "Not enough information to execute remove job"
 msgstr "Eemaldamise teostamiseks napib teavet"
@@ -312,7 +312,7 @@ msgstr "Eemaldamise teostamiseks napib teavet"
 msgid "Subversion Revert"
 msgstr "Subversioni lähtestamine"
 
-#: svnrevertjob.cpp:86
+#: svnrevertjob.cpp:85
 #, kde-format
 msgid "Not enough information to execute revert"
 msgstr "Lähtestamise teostamiseks napib teavet"
@@ -350,7 +350,7 @@ msgstr "SSL serveri sertifikaat: %1"
 msgid "Subversion Status"
 msgstr "Subversioni staatus"
 
-#: svnstatusjob.cpp:131
+#: svnstatusjob.cpp:130
 #, kde-format
 msgid "Not enough information to execute status job"
 msgstr "Staatusetöö täitmiseks napib teavet"
@@ -360,7 +360,7 @@ msgstr "Staatusetöö täitmiseks napib teavet"
 msgid "Subversion Update"
 msgstr "Subversioni uuendamine"
 
-#: svnupdatejob.cpp:120
+#: svnupdatejob.cpp:119
 #, kde-format
 msgid "Not enough Information to execute update"
 msgstr "Uuendamise teostamiseks napib teavet"

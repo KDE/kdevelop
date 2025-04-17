@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2020-07-24 13:58+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Lokalize 19.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: executeplugin.cpp:68
+#: executeplugin.cpp:66
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
@@ -28,7 +28,7 @@ msgstr ""
 "Det finns ett citationsfel i argumenten för startinställningen '%1'. "
 "Avbryter start."
 
-#: executeplugin.cpp:72
+#: executeplugin.cpp:70
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -37,17 +37,17 @@ msgstr ""
 "Ett metatecken för skalet inkluderades i argumenten för startinställningen "
 "'%1', vilket för närvarande inte stöds. Avbryter start."
 
-#: executeplugin.cpp:99
+#: executeplugin.cpp:97
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "Kunde inte lösa upp beroendet: %1"
 
-#: executeplugin.cpp:154
+#: executeplugin.cpp:152
 #, kde-format
 msgid "No valid executable specified"
 msgstr "Inget giltigt körbart program angivet"
 
-#: executeplugin.cpp:164
+#: executeplugin.cpp:162
 #, kde-format
 msgid ""
 "There is a quoting error in the executable for the launch configuration "
@@ -56,7 +56,7 @@ msgstr ""
 "Det finns ett citationsfel i det körbara programmet för startinställningen "
 "'%1'. Avbryter start."
 
-#: executeplugin.cpp:169
+#: executeplugin.cpp:167
 #, kde-format
 msgid ""
 "A shell meta character was included in the executable for the launch "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2021-11-09 00:15+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Display a plasmoid"
 msgstr ""
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr ""
@@ -38,7 +38,7 @@ msgstr ""
 msgid "Could not resolve the dependency: %1"
 msgstr ""
 
-#: plasmoidexecutionconfig.cpp:296
+#: plasmoidexecutionconfig.cpp:290
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

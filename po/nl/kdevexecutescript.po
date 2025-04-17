@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2020-07-21 11:59+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "X-Generator: Lokalize 20.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: executescriptplugin.cpp:61
+#: executescriptplugin.cpp:59
 #, kde-format
 msgid "No valid executable specified"
 msgstr "Geen geldig programma gespecificeerd"
 
-#: executescriptplugin.cpp:71
+#: executescriptplugin.cpp:69
 #, kde-format
 msgid ""
 "There is a quoting error in the script for the launch configuration '%1'. "
@@ -31,7 +31,7 @@ msgstr ""
 "Er is een fout met quotes in het script voor de opstartconfiguratie '%1'. "
 "Afbreken is gestart."
 
-#: executescriptplugin.cpp:76
+#: executescriptplugin.cpp:74
 #, kde-format
 msgid ""
 "A shell meta character was included in the script for the launch "
@@ -40,14 +40,14 @@ msgstr ""
 "Er is een shell-meta-teken ingevoegd in het script voor de "
 "opstartconfiguratie '%1', dit wordt nu niet ondersteund. Afbreken is gestart."
 
-#: executescriptplugin.cpp:93
+#: executescriptplugin.cpp:91
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "Er is geen host ingesteld voor de opstartconfiguratie '%1'. Afbreken is "
 "gestart."
 
-#: executescriptplugin.cpp:116
+#: executescriptplugin.cpp:114
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
@@ -56,7 +56,7 @@ msgstr ""
 "Er is een fout met quotes in de argumenten voor de opstartconfiguratie '%1'. "
 "Afbreken is gestart."
 
-#: executescriptplugin.cpp:120
+#: executescriptplugin.cpp:118
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -65,12 +65,12 @@ msgstr ""
 "Er is een shell-meta-teken ingevoegd in de argumenten voor de "
 "opstartconfiguratie '%1', dit wordt nu niet ondersteund. Afbreken is gestart."
 
-#: executescriptplugin.cpp:173
+#: executescriptplugin.cpp:171
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "Geen geldig interpretator opgegeven"
 
-#: executescriptplugin.cpp:183
+#: executescriptplugin.cpp:181
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
@@ -79,7 +79,7 @@ msgstr ""
 "Er is een fout met quotes in de interpretator voor de opstartconfiguratie "
 "'%1'. Afbreken is gestart."
 
-#: executescriptplugin.cpp:188
+#: executescriptplugin.cpp:186
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "

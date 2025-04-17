@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2025-03-15 10:37+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -5656,17 +5656,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Nie udało się ustawić uprawnień"
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "Katalog pracy nie istnieje: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "Katalog pracy nie jest bezwzględny: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -5675,15 +5675,22 @@ msgstr ""
 "Proces '%1' zakończył ze stanem %2\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Polecenie zakończyło z błędem %1"
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Zakończono polecenie z wartością %1."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "error"
+msgid "error: %1"
+msgstr "błąd"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6173,7 +6180,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "Dzisiaj"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -7068,10 +7075,6 @@ msgstr "Różnica pomiędzy wydaniami"
 #~ "Nie można wykonać działania przypisu, ponieważ nie znaleziono dokumentu, "
 #~ "nie miał wersji lub nie był to dokument tekstowy:\n"
 #~ "%1"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "błąd"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Kliknij dwukrotnie aby dodać nową pułapkę"

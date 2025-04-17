@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-27 00:39+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2012-01-05 10:23+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -180,59 +180,70 @@ msgstr ""
 "Nich begäng Törn \"%1\" lett sik nich opmaken. Kiek mit \"--sessions\" na "
 "verföögbor Törns, oder stell mit \"-cs\" en niegen Törn op."
 
-#: main.cpp:383
+#: main.cpp:381
 #, kde-format
 msgid "KDevelop"
 msgstr "KDevelop"
 
-#: main.cpp:385
+#: main.cpp:383
 #, kde-format
 msgid "The KDevelop Integrated Development Environment"
 msgstr "De Programmsmeed KDevelop"
 
-#: main.cpp:386
+#: main.cpp:384
 #, fuzzy, kde-format
 #| msgid "Copyright 1999-2011, The KDevelop developers"
 msgid "Copyright 1999-%1, The KDevelop developers"
 msgstr "Copyright 1999-2011, de Schrieverslüüd vun KDevelop"
 
-#: main.cpp:389
+#: main.cpp:387
+#, kde-format
+msgid "Igor Kushnir"
+msgstr ""
+
+#: main.cpp:388
+#, kde-format
+msgid ""
+"General maintenance, Bug fixing and prevention, Performance improvements"
+msgstr ""
+
+#: main.cpp:390
 #, kde-format
 msgid "Kevin Funk"
 msgstr ""
 
-#: main.cpp:389
+#: main.cpp:390
 #, kde-format
 msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
 msgstr ""
 
-#: main.cpp:390
+#: main.cpp:391
 #, kde-format
 msgid "Sven Brauch"
 msgstr ""
 
-#: main.cpp:390
+#: main.cpp:391
 #, kde-format
 msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
 msgstr ""
 
-#: main.cpp:391
+#: main.cpp:392
 #, kde-format
 msgid "Aleix Pol Gonzalez"
 msgstr "Aleix Pol Gonzalez"
 
-#: main.cpp:391
+#: main.cpp:392
 #, fuzzy, kde-format
 #| msgid "Co-Maintainer, CMake Support, Run Support, Kross Support"
 msgid "CMake Support, Run Support, Kross Support"
 msgstr "Mit-Pleger,  CMake-, Utföhr- un Kross-Ünnerstütten"
 
-#: main.cpp:392
+#: main.cpp:393
 #, kde-format
 msgid "Milian Wolff"
 msgstr "Milian Wolff"
 
-#: main.cpp:392
+#: main.cpp:393
 #, fuzzy, kde-format
 #| msgid ""
 #| "Co-Maintainer, Generic manager, Webdevelopment Plugins, Snippets, "
@@ -243,44 +254,44 @@ msgstr ""
 "Mit-Pleger, allgemeen Pleger, Nettutwickeln-Modulen, Snippels, "
 "Programmleisten"
 
-#: main.cpp:393
+#: main.cpp:394
 #, kde-format
 msgid "Olivier JG"
 msgstr ""
 
-#: main.cpp:393
+#: main.cpp:394
 #, kde-format
 msgid "C++/Clang, DUChain, Bug Fixes"
 msgstr ""
 
-#: main.cpp:394
+#: main.cpp:395
 #, kde-format
 msgid "Andreas Pakulat"
 msgstr "Andreas Pakulat"
 
-#: main.cpp:394
+#: main.cpp:395
 #, kde-format
 msgid ""
 "Architecture, VCS Support, Project Management Support, QMake Projectmanager"
 msgstr ""
 "Opbuu, VKS-Ünnerstütten, Projektpleeg-Ünnerstütten, QMake-Projektpleger"
 
-#: main.cpp:395
+#: main.cpp:396
 #, kde-format
 msgid "Alexander Dymo"
 msgstr "Alexander Dymo"
 
-#: main.cpp:395
+#: main.cpp:396
 #, kde-format
 msgid "Architecture, Sublime UI, Ruby support"
 msgstr "Opbuu, Sublime-Böversiet, Ruby-Ünnerstütten"
 
-#: main.cpp:396
+#: main.cpp:397
 #, kde-format
 msgid "David Nolden"
 msgstr "David Nolden"
 
-#: main.cpp:396
+#: main.cpp:397
 #, kde-format
 msgid ""
 "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
@@ -289,293 +300,293 @@ msgstr ""
 "Definitschoonbruuk-Keed, C++-Ünnerstütten, Kodenavigeren, Kodekompletteren, "
 "Hülp bi't Programmeren, Renoveren"
 
-#: main.cpp:397
+#: main.cpp:398
 #, kde-format
 msgid "Vladimir Prus"
 msgstr "Vladimir Prus"
 
-#: main.cpp:397
+#: main.cpp:398
 #, kde-format
 msgid "GDB integration"
 msgstr "GDB-Inbetten"
 
-#: main.cpp:398
+#: main.cpp:399
 #, kde-format
 msgid "Hamish Rodda"
 msgstr "Hamish Rodda"
 
-#: main.cpp:398
+#: main.cpp:399
 #, kde-format
 msgid "Text editor integration, definition-use chain"
 msgstr "Texteditor-Inbetten, Definitschoonbruuk-Keed"
 
-#: main.cpp:399
+#: main.cpp:400
 #, kde-format
 msgid "Amilcar do Carmo Lucas"
 msgstr "Amilcar do Carmo Lucas"
 
-#: main.cpp:399
+#: main.cpp:400
 #, kde-format
 msgid "Website admin, API documentation, Doxygen and autoproject patches"
 msgstr ""
 "Nettsiedenpleger, API-Dokmentatschoon, Doxygen un Autoprojekt-Kodeplasters"
 
-#: main.cpp:400
+#: main.cpp:401
 #, kde-format
 msgid "Niko Sams"
 msgstr "Niko Sams"
 
-#: main.cpp:400
+#: main.cpp:401
 #, kde-format
 msgid "GDB integration, Webdevelopment Plugins"
 msgstr "GDB-Inbetten, Nettutwickeln-Modulen"
 
-#: main.cpp:401
+#: main.cpp:402
 #, kde-format
 msgid "Friedrich W. H. Kossebau"
 msgstr ""
 
-#: main.cpp:403
+#: main.cpp:404
 #, kde-format
 msgid "Matt Rogers"
 msgstr "Matt Rogers"
 
-#: main.cpp:404
+#: main.cpp:405
 #, kde-format
 msgid "Cédric Pasteur"
 msgstr "Cédric Pasteur"
 
-#: main.cpp:404
+#: main.cpp:405
 #, kde-format
 msgid "astyle and indent support"
 msgstr "Ünnerstütten för \"astyle\" un \"indent\""
 
-#: main.cpp:405
+#: main.cpp:406
 #, kde-format
 msgid "Evgeniy Ivanov"
 msgstr "Jewgenij Iwanow"
 
-#: main.cpp:405
+#: main.cpp:406
 #, kde-format
 msgid "Distributed VCS, Git, Mercurial"
 msgstr "Verdeelt VKS, Git, Mercurial"
 
 #. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
-#: main.cpp:408
+#: main.cpp:409
 #, kde-format
 msgid "Robert Gruber"
 msgstr "Robert Gruber"
 
-#: main.cpp:408
+#: main.cpp:409
 #, kde-format
 msgid "SnippetPart, debugger and usability patches"
 msgstr "Snippel-Komponent, Fehlersöker un Kodeplasters för de Bruukborkeit"
 
-#: main.cpp:409
+#: main.cpp:410
 #, kde-format
 msgid "Dukju Ahn"
 msgstr "Dukju Ahn"
 
-#: main.cpp:409
+#: main.cpp:410
 #, kde-format
 msgid "Subversion plugin, Custom Make Manager, Overall improvements"
 msgstr "Subversion-Moduul, Egen-Make-Pleger, Allmeen Verbetern"
 
-#: main.cpp:410
+#: main.cpp:411
 #, kde-format
 msgid "Harald Fernengel"
 msgstr "Harald Fernengel"
 
-#: main.cpp:410
+#: main.cpp:411
 #, kde-format
 msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
 msgstr ""
 "Porteren na Qt3, Kodeplasters, Valgrind, Ünnerstütten för \"diff\" un "
 "\"perforce\""
 
-#: main.cpp:411
+#: main.cpp:412
 #, kde-format
 msgid "Roberto Raggi"
 msgstr "Roberto Raggi"
 
-#: main.cpp:411
+#: main.cpp:412
 #, kde-format
 msgid "C++ parser"
 msgstr "C++-Inleser"
 
-#: main.cpp:412
+#: main.cpp:413
 #, kde-format
 msgid "The KWrite authors"
 msgstr "De Schrievers vun KWrite"
 
-#: main.cpp:412
+#: main.cpp:413
 #, kde-format
 msgid "Kate editor component"
 msgstr "\"Kate\"- Editorkomponent"
 
-#: main.cpp:413
+#: main.cpp:414
 #, kde-format
 msgid "Nokia Corporation/Qt Software"
 msgstr "Nokia Corporation/Qt Software"
 
-#: main.cpp:413
+#: main.cpp:414
 #, kde-format
 msgid "Designer code"
 msgstr "Maker-Kode"
 
-#: main.cpp:415
+#: main.cpp:416
 #, kde-format
 msgid "Contributors to older versions:"
 msgstr "Bidregers to öller Verschonen:"
 
-#: main.cpp:416
+#: main.cpp:417
 #, kde-format
 msgid "Bernd Gehrmann"
 msgstr "Bernd Gehrmann"
 
-#: main.cpp:416
+#: main.cpp:417
 #, kde-format
 msgid "Initial idea, basic architecture, much initial source code"
 msgstr "Orginaalidee, Grundopbuu, veel vun den eersten Bornkode"
 
-#: main.cpp:417
+#: main.cpp:418
 #, kde-format
 msgid "Caleb Tennis"
 msgstr "Caleb Tennis"
 
-#: main.cpp:417
+#: main.cpp:418
 #, kde-format
 msgid "KTabBar, bugfixes"
 msgstr "KTabBar, Fehlerrichten"
 
-#: main.cpp:418
+#: main.cpp:419
 #, kde-format
 msgid "Richard Dale"
 msgstr "Richard Dale"
 
-#: main.cpp:418
+#: main.cpp:419
 #, kde-format
 msgid "Java & Objective C support"
 msgstr "Ünnerstütten för Java un Objective-C"
 
-#: main.cpp:419
+#: main.cpp:420
 #, kde-format
 msgid "John Birch"
 msgstr "John Birch"
 
-#: main.cpp:419
+#: main.cpp:420
 #, kde-format
 msgid "Debugger frontend"
 msgstr "Fehlersöker-Böversiet"
 
-#: main.cpp:420
+#: main.cpp:421
 #, kde-format
 msgid "Sandy Meier"
 msgstr "Sandy Meier"
 
-#: main.cpp:420
+#: main.cpp:421
 #, kde-format
 msgid "PHP support, context menu stuff"
 msgstr "PHP-Ünnerstütten, Rechtsklickmenü-Kraams"
 
-#: main.cpp:421
+#: main.cpp:422
 #, kde-format
 msgid "Kurt Granroth"
 msgstr "Kurt Granroth"
 
-#: main.cpp:421
+#: main.cpp:422
 #, kde-format
 msgid "KDE application templates"
 msgstr "KDE-Programmvörlagen"
 
-#: main.cpp:422
+#: main.cpp:423
 #, kde-format
 msgid "Ian Reinhart Geiser"
 msgstr "Ian Reinhart Geiser"
 
-#: main.cpp:422
+#: main.cpp:423
 #, kde-format
 msgid "Dist part, bash support, application templates"
 msgstr "Dist-Komponent, bash-Ünnerstütten, Programmvörlagen"
 
-#: main.cpp:423
+#: main.cpp:424
 #, kde-format
 msgid "Matthias Hoelzer-Kluepfel"
 msgstr "Matthias Hoelzer-Kluepfel"
 
-#: main.cpp:423
+#: main.cpp:424
 #, kde-format
 msgid "Several components, htdig indexing"
 msgstr "Verscheden Komponenten, \"htdig\"-Indizeren"
 
-#: main.cpp:424
+#: main.cpp:425
 #, kde-format
 msgid "Victor Roeder"
 msgstr "Victor Roeder"
 
-#: main.cpp:424
+#: main.cpp:425
 #, kde-format
 msgid "Help with Automake manager and persistent class store"
 msgstr "Hülp mit den Automake-Pleger un duerhaftig Klassenspieker"
 
-#: main.cpp:425
+#: main.cpp:426
 #, kde-format
 msgid "Simon Hausmann"
 msgstr "Simon Hausmann"
 
-#: main.cpp:425
+#: main.cpp:426
 #, kde-format
 msgid "Help with KParts infrastructure"
 msgstr "Hülp mit de KParts-Infrastruktuur"
 
-#: main.cpp:426
+#: main.cpp:427
 #, kde-format
 msgid "Oliver Kellogg"
 msgstr "Oliver Kellogg"
 
-#: main.cpp:426
+#: main.cpp:427
 #, kde-format
 msgid "Ada support"
 msgstr "Ada-Ünnerstütten"
 
-#: main.cpp:427
+#: main.cpp:428
 #, kde-format
 msgid "Jakob Simon-Gaarde"
 msgstr "Jakob Simon-Gaarde"
 
-#: main.cpp:427
+#: main.cpp:428
 #, kde-format
 msgid "QMake projectmanager"
 msgstr "QMake-Projektpleger"
 
-#: main.cpp:428
+#: main.cpp:429
 #, kde-format
 msgid "Falk Brettschneider"
 msgstr "Falk Brettschneider"
 
-#: main.cpp:428
+#: main.cpp:429
 #, kde-format
 msgid "MDI modes, QEditor, bugfixes"
 msgstr "Mehrdokmenten-Bedrief, QEditor, Fehlerrichten"
 
-#: main.cpp:429
+#: main.cpp:430
 #, kde-format
 msgid "Mario Scalas"
 msgstr "Mario Scalas"
 
-#: main.cpp:429
+#: main.cpp:430
 #, kde-format
 msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
 msgstr ""
 "\"PartExplorer\", Niegopbuu vun \"CvsPart\", Kodeplasters, Fehlers un "
 "Fehlerrichten"
 
-#: main.cpp:430
+#: main.cpp:431
 #, kde-format
 msgid "Jens Dagerbo"
 msgstr "Jens Dagerbo"
 
-#: main.cpp:430
+#: main.cpp:431
 #, kde-format
 msgid ""
 "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
@@ -584,137 +595,137 @@ msgstr ""
 "Utwesseln, Leestekens, \"FileList\"- un \"CTags2\"-Modulen. Allgemeen "
 "Verbetern un Kodeplasters"
 
-#: main.cpp:431
+#: main.cpp:432
 #, kde-format
 msgid "Julian Rockey"
 msgstr "Julian Rockey"
 
-#: main.cpp:431
+#: main.cpp:432
 #, kde-format
 msgid "Filecreate part and other bits and patches"
 msgstr "Komponent \"Filecreate\", anner Kraam un Kodeplasters"
 
-#: main.cpp:432
+#: main.cpp:433
 #, kde-format
 msgid "Ajay Guleria"
 msgstr "Ajay Guleria"
 
-#: main.cpp:432
+#: main.cpp:433
 #, kde-format
 msgid "ClearCase support"
 msgstr "Ünnerstütten för \"ClearCase\""
 
-#: main.cpp:433
+#: main.cpp:434
 #, kde-format
 msgid "Marek Janukowicz"
 msgstr "Marek Janukowicz"
 
-#: main.cpp:433
+#: main.cpp:434
 #, kde-format
 msgid "Ruby support"
 msgstr "Ünnerstütten för \"Ruby\""
 
-#: main.cpp:434
+#: main.cpp:435
 #, kde-format
 msgid "Robert Moniot"
 msgstr "Robert Moniot"
 
-#: main.cpp:434
+#: main.cpp:435
 #, kde-format
 msgid "Fortran documentation"
 msgstr "Fortran-Dokmentatschoon"
 
-#: main.cpp:435
+#: main.cpp:436
 #, kde-format
 msgid "Ka-Ping Yee"
 msgstr "Ka-Ping Yee"
 
-#: main.cpp:435
+#: main.cpp:436
 #, kde-format
 msgid "Python documentation utility"
 msgstr "Hülpprogramm för Python-Dokmentatschoon"
 
-#: main.cpp:436
+#: main.cpp:437
 #, kde-format
 msgid "Dimitri van Heesch"
 msgstr "Dimitri van Heesch"
 
-#: main.cpp:436
+#: main.cpp:437
 #, kde-format
 msgid "Doxygen wizard"
 msgstr "Doxygen-Hölper"
 
-#: main.cpp:437
+#: main.cpp:438
 #, kde-format
 msgid "Hugo Varotto"
 msgstr "Hugo Varotto"
 
-#: main.cpp:437 main.cpp:438
+#: main.cpp:438 main.cpp:439
 #, kde-format
 msgid "Fileselector component"
 msgstr "Dateiutsöök-Komponent"
 
-#: main.cpp:438
+#: main.cpp:439
 #, kde-format
 msgid "Matt Newell"
 msgstr "Matt Newell"
 
-#: main.cpp:439
+#: main.cpp:440
 #, kde-format
 msgid "Daniel Engelschalt"
 msgstr "Daniel Engelschalt"
 
-#: main.cpp:439
+#: main.cpp:440
 #, kde-format
 msgid "C++ code completion, persistent class store"
 msgstr "C++-Kodekompletteren, duerhaftig Klassenspieker"
 
-#: main.cpp:440
+#: main.cpp:441
 #, kde-format
 msgid "Stephane Ancelot"
 msgstr "Stephane Ancelot"
 
-#: main.cpp:440 main.cpp:441 main.cpp:444
+#: main.cpp:441 main.cpp:442 main.cpp:445
 #, kde-format
 msgid "Patches"
 msgstr "Kodeplasters"
 
-#: main.cpp:441
+#: main.cpp:442
 #, kde-format
 msgid "Jens Zurheide"
 msgstr "Jens Zurheide"
 
-#: main.cpp:442
+#: main.cpp:443
 #, kde-format
 msgid "Luc Willems"
 msgstr "Luc Willems"
 
-#: main.cpp:442
+#: main.cpp:443
 #, kde-format
 msgid "Help with Perl support"
 msgstr "Hülp bi de Perl-Ünnerstütten"
 
-#: main.cpp:443
+#: main.cpp:444
 #, kde-format
 msgid "Marcel Turino"
 msgstr "Marcel Turino"
 
-#: main.cpp:443
+#: main.cpp:444
 #, kde-format
 msgid "Documentation index view"
 msgstr "Index-Ansicht för de Dokmentatschoon"
 
-#: main.cpp:444
+#: main.cpp:445
 #, kde-format
 msgid "Yann Hodique"
 msgstr "Yann Hodique"
 
-#: main.cpp:445
+#: main.cpp:446
 #, kde-format
 msgid "Tobias Gläßer"
 msgstr "Tobias Gläßer"
 
-#: main.cpp:445
+#: main.cpp:446
 #, kde-format
 msgid ""
 "Documentation Finder,  qmake projectmanager patches, usability improvements, "
@@ -723,42 +734,42 @@ msgstr ""
 "Söökzentrum, Kodeplasters för den QMake-Projektpleger, Verbetern vun de "
 "Bruukborkeit, Fehlerrichten... "
 
-#: main.cpp:446
+#: main.cpp:447
 #, kde-format
 msgid "Andreas Koepfle"
 msgstr "Andreas Koepfle"
 
-#: main.cpp:446
+#: main.cpp:447
 #, kde-format
 msgid "QMake project manager patches"
 msgstr "Kodeplasters för den QMake-Projektpleger"
 
-#: main.cpp:447
+#: main.cpp:448
 #, kde-format
 msgid "Sascha Cunz"
 msgstr "Sascha Cunz"
 
-#: main.cpp:447
+#: main.cpp:448
 #, kde-format
 msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
 msgstr "Oprümen un Fehlerrichten för qEditor, AutoMake un veel anner Saken"
 
-#: main.cpp:448
+#: main.cpp:449
 #, kde-format
 msgid "Zoran Karavla"
 msgstr "Zoran Karavla"
 
-#: main.cpp:448
+#: main.cpp:449
 #, kde-format
 msgid "Artwork for the ruby language"
 msgstr "Billerwark för Ruby"
 
-#: main.cpp:463
+#: main.cpp:464
 #, kde-format
 msgid "Open KDevelop with a new session using the given name."
 msgstr "KDevelop as nieg Törn mit angeven Naam opmaken."
 
-#: main.cpp:466
+#: main.cpp:467
 #, kde-format
 msgid ""
 "Open KDevelop with the given session.\n"
@@ -767,7 +778,7 @@ msgstr ""
 "KDevelop mit den angeven Törn opmaken\n"
 "Bitte Pröövsumm oder Törnnaam ingeven."
 
-#: main.cpp:470
+#: main.cpp:471
 #, fuzzy, kde-format
 #| msgid ""
 #| "Open KDevelop with the given session.\n"
@@ -779,36 +790,36 @@ msgstr ""
 "KDevelop mit den angeven Törn opmaken\n"
 "Bitte Pröövsumm oder Törnnaam ingeven."
 
-#: main.cpp:474
+#: main.cpp:475
 #, kde-format
 msgid "Shows all available sessions and lets you select one to open."
 msgstr "Wiest all verföögbor Törns un lett Di dor een vun opmaken."
 
-#: main.cpp:476
+#: main.cpp:477
 #, fuzzy, kde-format
 #| msgid "Shows all available sessions and lets you select one to open."
 msgid "List all available sessions on shell and lets you select one to open."
 msgstr "Wiest all verföögbor Törns un lett Di dor een vun opmaken."
 
-#: main.cpp:478
+#: main.cpp:479
 #, kde-format
 msgid "List available sessions and quit."
 msgstr "Verföögbor Törns oplisten un Programm utmaken."
 
-#: main.cpp:480
+#: main.cpp:481
 #, fuzzy, kde-format
 #| msgid "Open KDevelop and load the given project."
 msgid "Open KDevelop and fetch the project from the given <repo url>."
 msgstr "KDevelop opmaken un angeven Projekt laden"
 
-#: main.cpp:483
+#: main.cpp:484
 #, kde-format
 msgid ""
 "Open KDevelop and load the given project. <project> can be either a .kdev4 "
 "file or a directory path."
 msgstr ""
 
-#: main.cpp:486
+#: main.cpp:487
 #, fuzzy, kde-format
 #| msgid ""
 #| "Start debugging an application in KDevelop with the given debugger.\n"
@@ -823,59 +834,59 @@ msgstr ""
 "Dat Programm, dat Du ünnersöken wullt, mutt (mit Argumenten) dorna stahn.\n"
 "Bispill: kdevelop --debug gdb mienprog --bla blubb"
 
-#: main.cpp:500
+#: main.cpp:501
 #, kde-format
 msgid "Files to load, or directories to load as projects"
 msgstr ""
 
-#: main.cpp:511
+#: main.cpp:512
 #, kde-format
 msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
 msgstr ""
 "Verföögbor Törns (bruuk \"-s PRÖÖVSUMM\" oder \"-s NAAM'', wenn Du en "
 "besünner opmaken wullt):"
 
-#: main.cpp:512
+#: main.cpp:513
 #, kde-format
 msgid "Hash"
 msgstr "Pröövsumm"
 
-#: main.cpp:512
+#: main.cpp:513
 #, kde-format
 msgid "Name: Opened Projects"
 msgstr "Naam: Opmaakt Projekten"
 
-#: main.cpp:521
+#: main.cpp:522
 #, kde-format
 msgid "[running]"
 msgstr "[an't Lopen]"
 
-#: main.cpp:623
+#: main.cpp:624
 #, kde-format
 msgid "Select the session you would like to use"
 msgstr ""
 
-#: main.cpp:631
+#: main.cpp:632
 #, fuzzy, kde-format
 #| msgid "Specify the binary you want to debug."
 msgctxt "@info:shell"
 msgid "Specify the executable you want to debug."
 msgstr "Giff de utföhrbor Datei för de Fehlersöök an."
 
-#: main.cpp:640
+#: main.cpp:641
 #, fuzzy, kde-format
 #| msgid "Application does not exist"
 msgctxt "@info:shell"
 msgid "Specified executable does not exist."
 msgstr "Dat gifft dat Programm nich"
 
-#: main.cpp:646
+#: main.cpp:647
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgid "Debug %1"
 msgstr "Fehlersöök"
 
-#: main.cpp:654
+#: main.cpp:655
 #, kde-format
 msgid ""
 "A session with the name %1 exists already. Use the -s switch to open it."
@@ -883,29 +894,29 @@ msgstr ""
 "Dat gifft al en Törn mit den Naam \"%1\". Bruuk \"-s\", wenn Du em opmaken "
 "wullt."
 
-#: main.cpp:670
+#: main.cpp:671
 #, fuzzy, kde-format
 #| msgid "A file with this name already exists."
 msgid "No session with the name %1 exists."
 msgstr "Dat gifft al en Datei mit dissen Naam."
 
-#: main.cpp:677
+#: main.cpp:678
 #, fuzzy, kde-format
 #| msgid "Could not open file for writing."
 msgid "Could not lock session %1 for deletion."
 msgstr "Datei lett sik nich för't Schrieven opmaken."
 
-#: main.cpp:682
+#: main.cpp:683
 #, kde-format
 msgid "Session with name %1 was successfully removed."
 msgstr ""
 
-#: main.cpp:783
+#: main.cpp:784
 #, kde-format
 msgid "Cannot find native launch configuration type"
 msgstr "Normaal Instellen-Typ för Programmstart lett sik nich finnen."
 
-#: main.cpp:803
+#: main.cpp:804
 #, kde-format
 msgid "Cannot find launcher %1"
 msgstr "Programmstarter \"%1\" lett sik nich finnen."

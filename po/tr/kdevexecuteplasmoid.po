@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecuteplasmoid\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-11-10 18:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -28,7 +28,7 @@ msgstr "Plasmoid Yürütmesini Yapılandır"
 msgid "Display a plasmoid"
 msgstr "Bir Plasmoid görüntüle"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Plasmoid Başlatıcısı"
@@ -38,7 +38,7 @@ msgstr "Plasmoid Başlatıcısı"
 msgid "Could not resolve the dependency: %1"
 msgstr "Bağımlılık çözümlenemedi: %1"
 
-#: plasmoidexecutionconfig.cpp:296
+#: plasmoidexecutionconfig.cpp:290
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

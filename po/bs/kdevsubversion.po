@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2013-10-18 20:27+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -71,7 +71,7 @@ msgstr "Subversion"
 msgid "Subversion Add"
 msgstr "Subversion dodavanje"
 
-#: svnaddjob.cpp:85
+#: svnaddjob.cpp:84
 #, kde-format
 msgid "Not enough information to add file"
 msgstr "Nedovoljno informacija da se doda datoteka"
@@ -81,7 +81,7 @@ msgstr "Nedovoljno informacija da se doda datoteka"
 msgid "Subversion Annotate"
 msgstr "Subversion anotavija"
 
-#: svnblamejob.cpp:144
+#: svnblamejob.cpp:143
 #, kde-format
 msgid "Not enough information to blame location"
 msgstr "Nedovoljno informacija da se okrivi lokacija"
@@ -91,32 +91,32 @@ msgstr "Nedovoljno informacija da se okrivi lokacija"
 msgid "Subversion Checkout"
 msgstr "Subversion izdvajanje datoteke"
 
-#: svncheckoutjob.cpp:96
+#: svncheckoutjob.cpp:95
 #, kde-format
 msgid "Not enough information to checkout"
 msgstr "Nedovoljno informacija da se izvrši izdvajanje datoteke"
 
-#: svncommitjob.cpp:109
+#: svncommitjob.cpp:108
 #, fuzzy, kde-format
 msgid "Subversion Commit"
 msgstr "Subversion spajanje"
 
-#: svncommitjob.cpp:125
-#, kde-format
-msgid "Committing..."
-msgstr "Upisujem..."
-
-#: svncommitjob.cpp:129
+#: svncommitjob.cpp:119
 #, kde-format
 msgid "Not enough information to execute commit"
 msgstr "Nedovoljno informacija da se izvrši upisivanje"
+
+#: svncommitjob.cpp:121
+#, kde-format
+msgid "Committing..."
+msgstr "Upisujem..."
 
 #: svncopyjob.cpp:71
 #, kde-format
 msgid "Subversion Copy"
 msgstr "Subversion kopija"
 
-#: svncopyjob.cpp:83
+#: svncopyjob.cpp:82
 #, kde-format
 msgid "Not enough information to copy file"
 msgstr "Nedovoljno informacija da se izvrši kopiranje datoteke"
@@ -126,7 +126,7 @@ msgstr "Nedovoljno informacija da se izvrši kopiranje datoteke"
 msgid "Subversion Diff"
 msgstr "Subversion Diff"
 
-#: svndiffjob.cpp:272
+#: svndiffjob.cpp:271
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "Nedovoljno informacija da se izvrši diff"
@@ -136,7 +136,7 @@ msgstr "Nedovoljno informacija da se izvrši diff"
 msgid "Subversion Import"
 msgstr "Subversion uvoz"
 
-#: svnimportjob.cpp:99
+#: svnimportjob.cpp:98
 #, kde-format
 msgid "Not enough information to import"
 msgstr "Nedovoljno informacija da se izvrši uvoz"
@@ -146,131 +146,131 @@ msgstr "Nedovoljno informacija da se izvrši uvoz"
 msgid "Subversion Info"
 msgstr "Subversion Info"
 
-#: svninfojob.cpp:114
+#: svninfojob.cpp:113
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "Nedovoljno informacija da se izvrši info posao"
 
-#: svninternaljobbase.cpp:86
+#: svninternaljobbase.cpp:87
 #, kde-format
 msgctxt "A file was marked to be added to svn"
 msgid "Added %1"
 msgstr "Dodano %1"
 
-#: svninternaljobbase.cpp:89
+#: svninternaljobbase.cpp:90
 #, kde-format
 msgctxt "A file was marked for deletion from svn"
 msgid "Deleted %1"
 msgstr "Obrisano %1"
 
-#: svninternaljobbase.cpp:93
+#: svninternaljobbase.cpp:94
 #, kde-format
 msgctxt "A file was deleted during an svn update operation"
 msgid "Deleted %1"
 msgstr "Obrisano %1"
 
-#: svninternaljobbase.cpp:96
+#: svninternaljobbase.cpp:97
 #, kde-format
 msgctxt "A file was added during an svn update operation"
 msgid "Added %1"
 msgstr "Dodano %1"
 
-#: svninternaljobbase.cpp:136
+#: svninternaljobbase.cpp:137
 #, kde-format
 msgid "Revision %1"
 msgstr "Revizija %1"
 
-#: svninternaljobbase.cpp:139
+#: svninternaljobbase.cpp:140
 #, kde-format
 msgid "Updating externals: %1"
 msgstr "Ažuriram spoljnje: %1"
 
-#: svninternaljobbase.cpp:147
+#: svninternaljobbase.cpp:148
 #, kde-format
 msgid "Sending %1"
 msgstr "Šaljem %1"
 
-#: svninternaljobbase.cpp:151
+#: svninternaljobbase.cpp:152
 #, kde-format
 msgid "Adding %1 using mimetype %2."
 msgstr "Dodavanje %1 koristeći mime tip %2."
 
-#: svninternaljobbase.cpp:153
+#: svninternaljobbase.cpp:154
 #, kde-format
 msgid "Adding %1."
 msgstr "Dodajem %1."
 
-#: svninternaljobbase.cpp:157
+#: svninternaljobbase.cpp:158
 #, kde-format
 msgid "Deleting %1."
 msgstr "Brišem %1."
 
-#: svninternaljobbase.cpp:160
+#: svninternaljobbase.cpp:161
 #, kde-format
 msgid "Replacing %1."
 msgstr "Zamjenjujem %1."
 
-#: svninternaljobbase.cpp:165
+#: svninternaljobbase.cpp:166
 #, kde-format
 msgid "Transmitting file data "
 msgstr "Prenosim podatke datoteka "
 
-#: svninternaljobbase.cpp:171
+#: svninternaljobbase.cpp:172
 #, kde-format
 msgid "Blame finished for revision %1, path %2"
 msgstr "Okrivljivanje završeno za revizuju %1, staza %2"
 
-#: svninternaljobbase.cpp:174
+#: svninternaljobbase.cpp:175
 #, kde-format
 msgid "Reverted working copy %1"
 msgstr "Vraćena radna kopija %1"
 
-#: svninternaljobbase.cpp:177
+#: svninternaljobbase.cpp:178
 #, kde-format
 msgid "Reverting failed on working copy %1"
 msgstr "Vraćanje neuspjelo na radnoj kopiji %1"
 
-#: svninternaljobbase.cpp:180
+#: svninternaljobbase.cpp:181
 #, kde-format
 msgid "Copied %1"
 msgstr "Kopiran %1"
 
-#: svninternaljobbase.cpp:235
+#: svninternaljobbase.cpp:236
 #, kde-format
 msgid "Certificate is not yet valid."
 msgstr "Certifikate još nije važeći."
 
-#: svninternaljobbase.cpp:239
+#: svninternaljobbase.cpp:240
 #, kde-format
 msgid "Certificate has expired."
 msgstr "Certifikat je istekao."
 
-#: svninternaljobbase.cpp:243
+#: svninternaljobbase.cpp:244
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
 msgstr "Certifikatsko CN (ime hosta) se ne slaže s udaljenim imenom."
 
-#: svninternaljobbase.cpp:247
+#: svninternaljobbase.cpp:248
 #, kde-format
 msgid "Certificate authority is unknown."
 msgstr "Certifikatski autoritet je nepoznat."
 
-#: svninternaljobbase.cpp:251
+#: svninternaljobbase.cpp:252
 #, kde-format
 msgid "Other unknown error."
 msgstr "Ostale nepoznate greške."
 
-#: svnjobbase.cpp:74
+#: svnjobbase.cpp:114
 #, kde-format
 msgid "Enter Login for: %1"
 msgstr "Unesite prijavu za: %1"
 
-#: svnjobbase.cpp:160
+#: svnjobbase.cpp:188
 #, kde-format
 msgid "Completed"
 msgstr "Završeno"
 
-#: svnjobbase.cpp:175
+#: svnjobbase.cpp:203
 #, kde-format
 msgid ""
 "Error executing Job:\n"
@@ -284,7 +284,7 @@ msgstr ""
 msgid "Subversion Log"
 msgstr "Subversion dnevnik"
 
-#: svnlogjob.cpp:120
+#: svnlogjob.cpp:119
 #, kde-format
 msgid "Not enough information to log location"
 msgstr "Nema dovoljno informacija za lokaciju dnevnika"
@@ -294,7 +294,7 @@ msgstr "Nema dovoljno informacija za lokaciju dnevnika"
 msgid "Subversion Move"
 msgstr "Subversion premještanje"
 
-#: svnmovejob.cpp:95
+#: svnmovejob.cpp:94
 #, kde-format
 msgid "Not enough information to move file"
 msgstr "Nedovoljno informacija da se premjesti datoteka"
@@ -304,7 +304,7 @@ msgstr "Nedovoljno informacija da se premjesti datoteka"
 msgid "Subversion Remove"
 msgstr "Subversion brisanje"
 
-#: svnremovejob.cpp:88
+#: svnremovejob.cpp:87
 #, kde-format
 msgid "Not enough information to execute remove job"
 msgstr "Nedovoljno informacija da se izvrši brisanje posla"
@@ -314,7 +314,7 @@ msgstr "Nedovoljno informacija da se izvrši brisanje posla"
 msgid "Subversion Revert"
 msgstr "Subversion vraćanje"
 
-#: svnrevertjob.cpp:86
+#: svnrevertjob.cpp:85
 #, kde-format
 msgid "Not enough information to execute revert"
 msgstr "Nedovoljno informacija da se izvrši vraćanje"
@@ -352,7 +352,7 @@ msgstr "Ssl Server certifikat: %1"
 msgid "Subversion Status"
 msgstr "Subversion status"
 
-#: svnstatusjob.cpp:131
+#: svnstatusjob.cpp:130
 #, kde-format
 msgid "Not enough information to execute status job"
 msgstr "Nedovoljno informacija za izvršennje statusnog posla"
@@ -362,7 +362,7 @@ msgstr "Nedovoljno informacija za izvršennje statusnog posla"
 msgid "Subversion Update"
 msgstr "Subversion ažuriranje"
 
-#: svnupdatejob.cpp:120
+#: svnupdatejob.cpp:119
 #, kde-format
 msgid "Not enough Information to execute update"
 msgstr "Nedovoljno informacija da se izvrši ažuriranje"

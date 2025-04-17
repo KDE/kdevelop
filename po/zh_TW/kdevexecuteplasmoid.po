@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-01-10 14:42+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -30,7 +30,7 @@ msgstr "設定 Plasmoid 執行"
 msgid "Display a plasmoid"
 msgstr "顯示 plasmoid"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Plasmoid 啟動器"
@@ -40,7 +40,7 @@ msgstr "Plasmoid 啟動器"
 msgid "Could not resolve the dependency: %1"
 msgstr "無法解決此相依性問題：%1"
 
-#: plasmoidexecutionconfig.cpp:296
+#: plasmoidexecutionconfig.cpp:290
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -37,26 +37,21 @@ msgstr "请仅为此操作选择一个项目"
 msgid "No files or message specified"
 msgstr "未指定文件或消息"
 
-#: perforceplugin.cpp:365 perforceplugin.cpp:381
+#: perforceplugin.cpp:364 perforceplugin.cpp:380
 #, kde-format
 msgid "Please select a file for this operation"
 msgstr "请仅为此操作选择一个文件"
 
-#: perforceplugin.cpp:366 perforceplugin.cpp:382
+#: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format
 msgid "Directory not supported for this operation"
 msgstr "目录不支持此操作"
 
-#: perforceplugin.cpp:462
+#: perforceplugin.cpp:461
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "Edit"
 msgstr "编辑"
-
-#: perforceplugin.cpp:671
-#, kde-format
-msgid "error: %1"
-msgstr "错误：%1"
 
 #: ui/perforceimportmetadatawidget.cpp:124
 #, kde-format
@@ -171,3 +166,6 @@ msgstr "配置文件"
 msgctxt "@option:radio"
 msgid "User/Port Config"
 msgstr "用户/端口配置"
+
+#~ msgid "error: %1"
+#~ msgstr "错误：%1"

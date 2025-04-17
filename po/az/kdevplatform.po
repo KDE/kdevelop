@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -5616,17 +5616,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Uğursuz ayar icazələri"
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "İş kataloqu mövcud deyil: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "İş kataloqu mütləq deyil: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -5635,15 +5635,20 @@ msgstr ""
 "'%1' prosesi %2 statusu ilə çıxdı\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Əmr, %1 xətası ilə sonlandı."
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Əmr, %1 dəyəri ilə başa çatdı."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, kde-format
+msgid "error: %1"
+msgstr ""
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6133,7 +6138,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "Bugün"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"

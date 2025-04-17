@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2019-05-19 23:31+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -21,3 +21,8 @@ msgstr ""
 #, kde-format
 msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
 msgstr "Bazaar(bzr) 실행 파일을 찾을 수 없습니다. 시스템에 설치되어 있습니까?"
+
+#: bazaarplugin.cpp:84
+#, kde-format
+msgid "No files selected to commit"
+msgstr ""

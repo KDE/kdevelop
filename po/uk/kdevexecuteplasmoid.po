@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecuteplasmoid\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2020-07-20 08:31+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -31,7 +31,7 @@ msgstr "Налаштування виконання плазмоїдів"
 msgid "Display a plasmoid"
 msgstr "Показати плазмоїд"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Засіб запуску плазмоїдів"
@@ -41,7 +41,7 @@ msgstr "Засіб запуску плазмоїдів"
 msgid "Could not resolve the dependency: %1"
 msgstr "Не вдалося розв’язати залежності: %1"
 
-#: plasmoidexecutionconfig.cpp:296
+#: plasmoidexecutionconfig.cpp:290
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

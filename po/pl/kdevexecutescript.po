@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2021-01-03 09:50+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: executescriptplugin.cpp:61
+#: executescriptplugin.cpp:59
 #, kde-format
 msgid "No valid executable specified"
 msgstr "Nie określono poprawnego pliku wykonywalnego"
 
-#: executescriptplugin.cpp:71
+#: executescriptplugin.cpp:69
 #, kde-format
 msgid ""
 "There is a quoting error in the script for the launch configuration '%1'. "
@@ -31,7 +31,7 @@ msgstr ""
 "Wystąpił błąd cytowania w skrypcie dla ustawień uruchamiania '%1'. "
 "Przerywanie rozpoczęcia."
 
-#: executescriptplugin.cpp:76
+#: executescriptplugin.cpp:74
 #, kde-format
 msgid ""
 "A shell meta character was included in the script for the launch "
@@ -40,14 +40,14 @@ msgstr ""
 "Meta znak powłoki został dołączony w skrypcie dla ustawień uruchamiania "
 "'%1', nie jest to obecnie obsługiwane. Przerywanie rozpoczęcia."
 
-#: executescriptplugin.cpp:93
+#: executescriptplugin.cpp:91
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "Nie ustawiono zdalnego gospodarza dla ustawień uruchomienia  '%1'. "
 "Przerywanie rozpoczęcia."
 
-#: executescriptplugin.cpp:116
+#: executescriptplugin.cpp:114
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
@@ -56,7 +56,7 @@ msgstr ""
 "Wystąpił błąd cytowania w argumentach dla ustawień uruchomienia '%1'. "
 "Przerywanie rozpoczęcia."
 
-#: executescriptplugin.cpp:120
+#: executescriptplugin.cpp:118
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -65,12 +65,12 @@ msgstr ""
 "Meta znak powłoki został dołączony w argumentach dla ustawień uruchamiania "
 "'%1', nie jest to obecnie obsługiwane. Przerywanie rozpoczęcia."
 
-#: executescriptplugin.cpp:173
+#: executescriptplugin.cpp:171
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "Nie określono poprawnego interpretera"
 
-#: executescriptplugin.cpp:183
+#: executescriptplugin.cpp:181
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
@@ -79,7 +79,7 @@ msgstr ""
 "Wystąpił błąd cytowania w interpreterze dla ustawień uruchamiania '%1'. "
 "Przerywanie rozpoczęcia."
 
-#: executescriptplugin.cpp:188
+#: executescriptplugin.cpp:186
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "

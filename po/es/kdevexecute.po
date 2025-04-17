@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2020-07-25 19:11+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Lokalize 20.07.80\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: executeplugin.cpp:68
+#: executeplugin.cpp:66
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
@@ -27,7 +27,7 @@ msgstr ""
 "Existe un error de comillas en los argumentos para la configuración de "
 "lanzamiento «%1». Cancelando el inicio."
 
-#: executeplugin.cpp:72
+#: executeplugin.cpp:70
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -37,17 +37,17 @@ msgstr ""
 "configuración de lanzamiento «%1»; esto es algo que no está permitido en la "
 "actualidad. Cancelando el inicio."
 
-#: executeplugin.cpp:99
+#: executeplugin.cpp:97
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "No se puede resolver la dependencia: %1"
 
-#: executeplugin.cpp:154
+#: executeplugin.cpp:152
 #, kde-format
 msgid "No valid executable specified"
 msgstr "No se ha especificado un ejecutable válido"
 
-#: executeplugin.cpp:164
+#: executeplugin.cpp:162
 #, kde-format
 msgid ""
 "There is a quoting error in the executable for the launch configuration "
@@ -56,7 +56,7 @@ msgstr ""
 "Existe un error de comillas en el ejecutable para la configuración de "
 "lanzamiento «%1». Cancelando el inicio."
 
-#: executeplugin.cpp:169
+#: executeplugin.cpp:167
 #, kde-format
 msgid ""
 "A shell meta character was included in the executable for the launch "

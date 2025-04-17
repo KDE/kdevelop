@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2013-11-11 04:48+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: executeplugin.cpp:68
+#: executeplugin.cpp:66
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
@@ -26,7 +26,7 @@ msgstr ""
 "'%1' жегу баптауында, аргументінде тырнақша қолдану қатесі тап болды. Жегу "
 "доғарылды."
 
-#: executeplugin.cpp:72
+#: executeplugin.cpp:70
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -35,17 +35,17 @@ msgstr ""
 "'%1' жегу баптауында, аргументінде мета символ тап болды. Әзірше ондайдың "
 "қолдауы жоқ. Жегу доғарылды."
 
-#: executeplugin.cpp:99
+#: executeplugin.cpp:97
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "Тәуелдігі шешілмеді: %1"
 
-#: executeplugin.cpp:154
+#: executeplugin.cpp:152
 #, kde-format
 msgid "No valid executable specified"
 msgstr "Дұрыс орындайтын файл келтірілмеген"
 
-#: executeplugin.cpp:164
+#: executeplugin.cpp:162
 #, kde-format
 msgid ""
 "There is a quoting error in the executable for the launch configuration "
@@ -54,7 +54,7 @@ msgstr ""
 "'%1' жегу баптауында, орындалатын файлда тырнақша қолдану қатесі тап болды. "
 "Жегу доғарылды."
 
-#: executeplugin.cpp:169
+#: executeplugin.cpp:167
 #, kde-format
 msgid ""
 "A shell meta character was included in the executable for the launch "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2020-01-15 22:55+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -38,27 +38,22 @@ msgstr "Palun vali ainult üks element"
 msgid "No files or message specified"
 msgstr "Faile või teadet pole antud"
 
-#: perforceplugin.cpp:365 perforceplugin.cpp:381
+#: perforceplugin.cpp:364 perforceplugin.cpp:380
 #, kde-format
 msgid "Please select a file for this operation"
 msgstr "Palun vali fail"
 
-#: perforceplugin.cpp:366 perforceplugin.cpp:382
+#: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format
 msgid "Directory not supported for this operation"
 msgstr "Kataloog ei ole selleks toiminguks toetatud"
 
-#: perforceplugin.cpp:462
+#: perforceplugin.cpp:461
 #, fuzzy, kde-format
 #| msgid "Edit"
 msgctxt "@action::inmenu"
 msgid "Edit"
 msgstr "Muuda"
-
-#: perforceplugin.cpp:671
-#, kde-format
-msgid "error: %1"
-msgstr "tõrge: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:124
 #, kde-format
@@ -195,6 +190,9 @@ msgstr "Seadistusfail"
 msgctxt "@option:radio"
 msgid "User/Port Config"
 msgstr "Kasutaja/pordi seadistus"
+
+#~ msgid "error: %1"
+#~ msgstr "tõrge: %1"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

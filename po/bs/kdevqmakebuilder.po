@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kde 49i410\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2014-10-20 19:32+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian\n"
@@ -73,10 +73,8 @@ msgstr "Nema navedenog projekta."
 msgid "QMake: %1"
 msgstr "QMake: %1"
 
-#: qmakejob.cpp:92
-#, kde-format
-msgid "Configure error"
-msgstr "Konfiguracijska greška"
+#~ msgid "Configure error"
+#~ msgstr "Konfiguracijska greška"
 
 #~ msgid "Add"
 #~ msgstr "Dodaj"

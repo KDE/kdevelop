@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -19,14 +19,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: executeplugin.cpp:68
+#: executeplugin.cpp:66
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
 "Aborting start."
 msgstr "'%1' इत्यस्य प्रक्षेपणविन्यासस्य तर्कयोः उद्धरणदोषः अस्ति । गर्भपातस्य आरम्भः।"
 
-#: executeplugin.cpp:72
+#: executeplugin.cpp:70
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -35,17 +35,17 @@ msgstr ""
 "'%1' इत्यस्य प्रक्षेपणविन्यासस्य तर्कयोः एकः शेल् मेटा वर्णः समाविष्टः आसीत्, एतत् सम्प्रति "
 "समर्थितं नास्ति । गर्भपातस्य आरम्भः।"
 
-#: executeplugin.cpp:99
+#: executeplugin.cpp:97
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "आश्रयस्य समाधानं कर्तुं न शक्तवान्: %1"
 
-#: executeplugin.cpp:154
+#: executeplugin.cpp:152
 #, kde-format
 msgid "No valid executable specified"
 msgstr "वैधः कार्यान्वयनीयः निर्दिष्टः नास्ति"
 
-#: executeplugin.cpp:164
+#: executeplugin.cpp:162
 #, kde-format
 msgid ""
 "There is a quoting error in the executable for the launch configuration "
@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "'%1' इत्यस्य प्रक्षेपणविन्यासस्य कार्यान्वयनयोग्ये उद्धरणदोषः अस्ति । गर्भपातस्य आरम्भः।"
 
-#: executeplugin.cpp:169
+#: executeplugin.cpp:167
 #, kde-format
 msgid ""
 "A shell meta character was included in the executable for the launch "

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2021-09-13 15:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -22,12 +22,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
-#: executescriptplugin.cpp:61
+#: executescriptplugin.cpp:59
 #, kde-format
 msgid "No valid executable specified"
 msgstr "No s'ha especificat un executable vàlid"
 
-#: executescriptplugin.cpp:71
+#: executescriptplugin.cpp:69
 #, kde-format
 msgid ""
 "There is a quoting error in the script for the launch configuration '%1'. "
@@ -36,7 +36,7 @@ msgstr ""
 "S'ha produït un error de citació en l'script de la configuració del "
 "llançament «%1». S'interromp."
 
-#: executescriptplugin.cpp:76
+#: executescriptplugin.cpp:74
 #, kde-format
 msgid ""
 "A shell meta character was included in the script for the launch "
@@ -45,14 +45,14 @@ msgstr ""
 "S'ha inclòs un metacaràcter en l'script de la configuració de llançament "
 "«%1», actualment açò no està admés. S'interromp."
 
-#: executescriptplugin.cpp:93
+#: executescriptplugin.cpp:91
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "No s'ha establit l'amfitrió remot per a iniciar la configuració «%1». "
 "S'interromp."
 
-#: executescriptplugin.cpp:116
+#: executescriptplugin.cpp:114
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
@@ -61,7 +61,7 @@ msgstr ""
 "S'ha produït un error de citació en els arguments de la configuració del "
 "llançament «%1». S'interromp."
 
-#: executescriptplugin.cpp:120
+#: executescriptplugin.cpp:118
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -70,12 +70,12 @@ msgstr ""
 "S'ha inclòs un metacaràcter en els arguments de la configuració de "
 "llançament «%1», actualment açò no està admés. S'interromp."
 
-#: executescriptplugin.cpp:173
+#: executescriptplugin.cpp:171
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "No s'ha especificat un intèrpret vàlid"
 
-#: executescriptplugin.cpp:183
+#: executescriptplugin.cpp:181
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
@@ -84,7 +84,7 @@ msgstr ""
 "S'ha produït un error de citació en l'intèrpret de la configuració del "
 "llançament «%1». S'interromp."
 
-#: executescriptplugin.cpp:188
+#: executescriptplugin.cpp:186
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "

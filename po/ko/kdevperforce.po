@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2023-07-23 20:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -39,26 +39,21 @@ msgstr "이 작업에 사용할 항목을 하나만 선택하십시오"
 msgid "No files or message specified"
 msgstr "파일이나 메시지를 지정하지 않았음"
 
-#: perforceplugin.cpp:365 perforceplugin.cpp:381
+#: perforceplugin.cpp:364 perforceplugin.cpp:380
 #, kde-format
 msgid "Please select a file for this operation"
 msgstr "이 작업에 사용할 파일을 선택하십시오"
 
-#: perforceplugin.cpp:366 perforceplugin.cpp:382
+#: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format
 msgid "Directory not supported for this operation"
 msgstr "이 작업은 디렉터리를 지원하지 않습니다"
 
-#: perforceplugin.cpp:462
+#: perforceplugin.cpp:461
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "Edit"
 msgstr "편집"
-
-#: perforceplugin.cpp:671
-#, kde-format
-msgid "error: %1"
-msgstr "오류: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:124
 #, kde-format
@@ -179,6 +174,9 @@ msgstr "설정 파일"
 msgctxt "@option:radio"
 msgid "User/Port Config"
 msgstr "사용자/포트 설정"
+
+#~ msgid "error: %1"
+#~ msgstr "오류: %1"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

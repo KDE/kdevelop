@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2023-07-23 20:37+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17,32 +17,32 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 22.12.3\n"
 
-#: committoolview.cpp:205 committoolview.cpp:206
+#: committoolview.cpp:195 committoolview.cpp:196
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "파일/프로젝트 이름으로 필터"
 
-#: committoolview.cpp:223
+#: committoolview.cpp:213
 #, kde-format
 msgid "Refresh"
 msgstr "새로 고침"
 
-#: committoolview.cpp:224
+#: committoolview.cpp:214
 #, kde-format
 msgid "Stage selected"
 msgstr "선택 항목 스테이지"
 
-#: committoolview.cpp:226
+#: committoolview.cpp:216
 #, kde-format
 msgid "Unstage selected"
 msgstr "선택 항목 스테이지 해제"
 
-#: committoolview.cpp:228
+#: committoolview.cpp:218
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "스테이지하지 않은 편집 되돌리기"
 
-#: committoolview.cpp:481
+#: committoolview.cpp:471
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr "커밋이 실패했습니다. 버전 관리 도구 보기를 참조하십시오."
@@ -238,27 +238,22 @@ msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "스태시 팝"
 
-#: gitplugin.cpp:295
-#, kde-format
-msgid "error: %1"
-msgstr "오류: %1"
-
-#: gitplugin.cpp:394 gitplugin.cpp:405
+#: gitplugin.cpp:387 gitplugin.cpp:398
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "파일 목록을 지정하지 않았음"
 
-#: gitplugin.cpp:467
+#: gitplugin.cpp:460
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "변경 사항을 되돌릴 수 없음(경로 목록이 비어 있음)"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:494
 #, kde-format
 msgid "Could not revert changes"
 msgstr "변경 사항을 되돌릴 수 없음"
 
-#: gitplugin.cpp:512
+#: gitplugin.cpp:505
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -266,38 +261,38 @@ msgstr ""
 "다음 파일에 커밋하지 않은 변경 사항이 있으며 손실됩니다. 계속 진행하시겠습니"
 "까?"
 
-#: gitplugin.cpp:537
+#: gitplugin.cpp:530
 #, kde-format
 msgid "No files or message specified"
 msgstr "파일이나 메시지가 지정되지 않았음"
 
-#: gitplugin.cpp:541 gitplugin.cpp:560
+#: gitplugin.cpp:534 gitplugin.cpp:553
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Git 이름이나 이메일이 지정되지 않았음"
 
-#: gitplugin.cpp:557
+#: gitplugin.cpp:550
 #, kde-format
 msgid "No message specified"
 msgstr "메시지가 지정되지 않았음"
 
-#: gitplugin.cpp:631
+#: gitplugin.cpp:624
 #, kde-format
 msgid "No files to remove"
 msgstr "삭제할 파일 없음"
 
-#: gitplugin.cpp:911
+#: gitplugin.cpp:904
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "대기 중인 변경 사항이 있습니다. 스태시에 추가하시겠습니까?"
 
-#: gitplugin.cpp:912
+#: gitplugin.cpp:905
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "스태시"
 
-#: gitplugin.cpp:913
+#: gitplugin.cpp:906
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -700,6 +695,9 @@ msgstr "새 브랜치를 만들고 스태시를 적용한 다음 스태시 삭�
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "브랜치"
+
+#~ msgid "error: %1"
+#~ msgstr "오류: %1"
 
 #~ msgid "KDevelop - Git Stash"
 #~ msgstr "KDevelop - Git 스태시"

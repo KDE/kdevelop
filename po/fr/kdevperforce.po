@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevperforce\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2022-08-30 07:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -47,26 +47,21 @@ msgstr "Veuillez sélectionner seulement un élément pour cette opération"
 msgid "No files or message specified"
 msgstr "Aucun fichier ou message spécifié"
 
-#: perforceplugin.cpp:365 perforceplugin.cpp:381
+#: perforceplugin.cpp:364 perforceplugin.cpp:380
 #, kde-format
 msgid "Please select a file for this operation"
 msgstr "Veuillez sélectionner un fichier pour cette opération"
 
-#: perforceplugin.cpp:366 perforceplugin.cpp:382
+#: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format
 msgid "Directory not supported for this operation"
 msgstr "Dossier non pris en charge pour cette opération"
 
-#: perforceplugin.cpp:462
+#: perforceplugin.cpp:461
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "Edit"
 msgstr "Modifier"
-
-#: perforceplugin.cpp:671
-#, kde-format
-msgid "error: %1"
-msgstr "erreur : %1"
 
 #: ui/perforceimportmetadatawidget.cpp:124
 #, kde-format
@@ -189,6 +184,9 @@ msgstr "Fichier de configuration"
 msgctxt "@option:radio"
 msgid "User/Port Config"
 msgstr "Configuration de l'utilisateur et du port"
+
+#~ msgid "error: %1"
+#~ msgstr "erreur : %1"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

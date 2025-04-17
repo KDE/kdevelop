@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -39,26 +39,21 @@ msgstr "कृपया अस्य कार्यस्य कृते क�
 msgid "No files or message specified"
 msgstr "न सञ्चिकाः सन्देशः वा निर्दिष्टः"
 
-#: perforceplugin.cpp:365 perforceplugin.cpp:381
+#: perforceplugin.cpp:364 perforceplugin.cpp:380
 #, kde-format
 msgid "Please select a file for this operation"
 msgstr "कृपया अस्य कार्यस्य कृते सञ्चिकां चिनोतु"
 
-#: perforceplugin.cpp:366 perforceplugin.cpp:382
+#: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format
 msgid "Directory not supported for this operation"
 msgstr "अस्य कार्यस्य कृते निर्देशिका समर्थिता नास्ति"
 
-#: perforceplugin.cpp:462
+#: perforceplugin.cpp:461
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "Edit"
 msgstr "सम्पादन"
-
-#: perforceplugin.cpp:671
-#, kde-format
-msgid "error: %1"
-msgstr "त्रुटिः %1"
 
 #: ui/perforceimportmetadatawidget.cpp:124
 #, kde-format
@@ -180,3 +175,6 @@ msgstr "सञ्चिकां विन्यस्तं कुर्वन�
 msgctxt "@option:radio"
 msgid "User/Port Config"
 msgstr "उपयोक्ता/पोर्ट् Config"
+
+#~ msgid "error: %1"
+#~ msgstr "त्रुटिः %1"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2022-09-26 20:20+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -18,32 +18,32 @@ msgstr ""
 "X-Generator: Lokalize 20.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: committoolview.cpp:205 committoolview.cpp:206
+#: committoolview.cpp:195 committoolview.cpp:196
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Filtrera enligt filnamn eller projektnamn"
 
-#: committoolview.cpp:223
+#: committoolview.cpp:213
 #, kde-format
 msgid "Refresh"
 msgstr "Uppdatera"
 
-#: committoolview.cpp:224
+#: committoolview.cpp:214
 #, kde-format
 msgid "Stage selected"
 msgstr "Förbered markerade"
 
-#: committoolview.cpp:226
+#: committoolview.cpp:216
 #, kde-format
 msgid "Unstage selected"
 msgstr "Avlägsna förberedning av markerade"
 
-#: committoolview.cpp:228
+#: committoolview.cpp:218
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "Ångra oförberedda redigeringar"
 
-#: committoolview.cpp:481
+#: committoolview.cpp:471
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr "Arkivering misslyckades. See verktygsvyn Versionskontroll."
@@ -240,27 +240,22 @@ msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Plocka bort gömsle"
 
-#: gitplugin.cpp:295
-#, kde-format
-msgid "error: %1"
-msgstr "fel: %1"
-
-#: gitplugin.cpp:394 gitplugin.cpp:405
+#: gitplugin.cpp:387 gitplugin.cpp:398
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Angav inte listan med filer"
 
-#: gitplugin.cpp:467
+#: gitplugin.cpp:460
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Kunde inte återställa ändringar (tom lista över sökvägar)"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:494
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Kunde inte ångra ändringarna"
 
-#: gitplugin.cpp:512
+#: gitplugin.cpp:505
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -268,38 +263,38 @@ msgstr ""
 "Följande filer har oarkiverade ändringar, som kommer att gå förlorade. "
 "Fortsätt?"
 
-#: gitplugin.cpp:537
+#: gitplugin.cpp:530
 #, kde-format
 msgid "No files or message specified"
 msgstr "Inga filer eller meddelande specificerade"
 
-#: gitplugin.cpp:541 gitplugin.cpp:560
+#: gitplugin.cpp:534 gitplugin.cpp:553
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "E-post eller namn för Git ej angivet"
 
-#: gitplugin.cpp:557
+#: gitplugin.cpp:550
 #, kde-format
 msgid "No message specified"
 msgstr "Inget meddelande angivet"
 
-#: gitplugin.cpp:631
+#: gitplugin.cpp:624
 #, kde-format
 msgid "No files to remove"
 msgstr "Inga filer att ta bort"
 
-#: gitplugin.cpp:911
+#: gitplugin.cpp:904
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Det finns osparade ändringar. Vill du lägga dem i ett gömsle först?"
 
-#: gitplugin.cpp:912
+#: gitplugin.cpp:905
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Göm undan"
 
-#: gitplugin.cpp:913
+#: gitplugin.cpp:906
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -703,6 +698,9 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Gren"
+
+#~ msgid "error: %1"
+#~ msgstr "fel: %1"
 
 #~ msgid "KDevelop - Git Stash"
 #~ msgstr "KDevelop - Git gömslen"

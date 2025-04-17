@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 00:41+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2023-11-21 15:05+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -116,7 +116,7 @@ msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
 msgstr "Nastavit výstup '%1'"
 
-#: outputwidget.cpp:840
+#: outputwidget.cpp:818
 #, kde-format
 msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2009-02-22 07:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -68,10 +68,8 @@ msgstr "Keen Projekt angeven"
 msgid "QMake: %1"
 msgstr "QMake: %1"
 
-#: qmakejob.cpp:92
-#, kde-format
-msgid "Configure error"
-msgstr "Fehler binnen \"configure\""
+#~ msgid "Configure error"
+#~ msgstr "Fehler binnen \"configure\""
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

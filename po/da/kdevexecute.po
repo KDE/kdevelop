@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2013-11-25 21:10+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: executeplugin.cpp:68
+#: executeplugin.cpp:66
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
@@ -27,7 +27,7 @@ msgstr ""
 "Der er en citationsfejl i argumenterne for kørselsopsætningen \"%1\". "
 "Afbryder start."
 
-#: executeplugin.cpp:72
+#: executeplugin.cpp:70
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -36,17 +36,17 @@ msgstr ""
 "Et skal meta-tegn var i argumenterne for kørselsopsætningen \"%1\", dette er "
 "ikke understøttet på nuværende tidspunkt. Afbryder start."
 
-#: executeplugin.cpp:99
+#: executeplugin.cpp:97
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "Kunne ikke løse afhængigheden: %1"
 
-#: executeplugin.cpp:154
+#: executeplugin.cpp:152
 #, kde-format
 msgid "No valid executable specified"
 msgstr "Ingen gyldig eksekverbar angivet"
 
-#: executeplugin.cpp:164
+#: executeplugin.cpp:162
 #, kde-format
 msgid ""
 "There is a quoting error in the executable for the launch configuration "
@@ -55,7 +55,7 @@ msgstr ""
 "Der er en citationsfejl i den kørbare fil for kørselsopsætningen \"%1\". "
 "Afbryder start."
 
-#: executeplugin.cpp:169
+#: executeplugin.cpp:167
 #, kde-format
 msgid ""
 "A shell meta character was included in the executable for the launch "

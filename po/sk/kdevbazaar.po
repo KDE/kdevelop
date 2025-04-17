@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevbazaar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2018-08-17 09:28+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -19,6 +19,11 @@ msgstr ""
 #, kde-format
 msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
 msgstr "Nemôžem nájsť program Bazaar (bzr). Je nainštalovaný vo vašom systéme?"
+
+#: bazaarplugin.cpp:84
+#, kde-format
+msgid "No files selected to commit"
+msgstr ""
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

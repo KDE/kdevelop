@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -6009,17 +6009,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Õiguse määramine nurjus"
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "Töökataloog puudub: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "Töökataloog pole absoluutse asukohaga: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -6028,15 +6028,22 @@ msgstr ""
 "Protsess \"%1\" lõpetas staatusega %2\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Käsk lõpetas veaga %1."
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Käsk lõpetas väärtusega %1."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "error"
+msgid "error: %1"
+msgstr "viga"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6526,7 +6533,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "Täna"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -7423,10 +7430,6 @@ msgstr "Versioonide erinevus"
 #~ "Annoteerimist ei saa ette võtta, sest dokumenti ei leitud või ei olnud "
 #~ "see tekstidokument:\n"
 #~ "%1"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "viga"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Topeltklõpsuga saab luua uue koodi katkestuspunkti"

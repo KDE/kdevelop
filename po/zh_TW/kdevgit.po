@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-05-09 06:30+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -21,32 +21,32 @@ msgstr ""
 "X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: committoolview.cpp:205 committoolview.cpp:206
+#: committoolview.cpp:195 committoolview.cpp:196
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "依檔案/專案名稱過濾"
 
-#: committoolview.cpp:223
+#: committoolview.cpp:213
 #, kde-format
 msgid "Refresh"
 msgstr "重新整理"
 
-#: committoolview.cpp:224
+#: committoolview.cpp:214
 #, kde-format
 msgid "Stage selected"
 msgstr "暫存已選的"
 
-#: committoolview.cpp:226
+#: committoolview.cpp:216
 #, kde-format
 msgid "Unstage selected"
 msgstr "取消暫存已選的"
 
-#: committoolview.cpp:228
+#: committoolview.cpp:218
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "回復未暫存的編輯"
 
-#: committoolview.cpp:481
+#: committoolview.cpp:471
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr "提交失敗。請見版本控制工具檢視。"
@@ -240,64 +240,59 @@ msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "彈出貯存"
 
-#: gitplugin.cpp:295
-#, kde-format
-msgid "error: %1"
-msgstr "錯誤：%1"
-
-#: gitplugin.cpp:394 gitplugin.cpp:405
+#: gitplugin.cpp:387 gitplugin.cpp:398
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "未指定檔案列表"
 
-#: gitplugin.cpp:467
+#: gitplugin.cpp:460
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "無法重設變更（路徑清單空白）"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:494
 #, kde-format
 msgid "Could not revert changes"
 msgstr "無法回復變更"
 
-#: gitplugin.cpp:512
+#: gitplugin.cpp:505
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
 msgstr "以下檔案有未提交的變更，將會遺失這些變更。繼續？"
 
-#: gitplugin.cpp:537
+#: gitplugin.cpp:530
 #, kde-format
 msgid "No files or message specified"
 msgstr "沒有指定檔案或訊息"
 
-#: gitplugin.cpp:541 gitplugin.cpp:560
+#: gitplugin.cpp:534 gitplugin.cpp:553
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "未指定用於 Git 的名稱或電子信箱"
 
-#: gitplugin.cpp:557
+#: gitplugin.cpp:550
 #, kde-format
 msgid "No message specified"
 msgstr "沒有指定訊息"
 
-#: gitplugin.cpp:631
+#: gitplugin.cpp:624
 #, kde-format
 msgid "No files to remove"
 msgstr "沒有可移除的檔案"
 
-#: gitplugin.cpp:911
+#: gitplugin.cpp:904
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "有進行中的變更。您要先貯存嗎？"
 
-#: gitplugin.cpp:912
+#: gitplugin.cpp:905
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "貯存"
 
-#: gitplugin.cpp:913
+#: gitplugin.cpp:906
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -700,6 +695,9 @@ msgstr "建立新的分支並套用貯存在該分支，然後丟棄該貯存"
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "分支"
+
+#~ msgid "error: %1"
+#~ msgstr "錯誤：%1"
 
 #~ msgid "KDevelop - Git Stash"
 #~ msgstr "KDevelop - Git Stash"

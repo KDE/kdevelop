@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2025-03-02 08:22+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -5628,17 +5628,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Nastavljanje dovoljenj ni uspelo"
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "Delovni direktorij ne obstaja: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "Delovni direktorij ni absolutni: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -5647,15 +5647,22 @@ msgstr ""
 "Opravilo '%1' se je končalo s stanjem %2\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Ukaz se je končal z napako %1."
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Ukaz se je končal z vrednostjo %1."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "error"
+msgid "error: %1"
+msgstr "napaka"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6147,7 +6154,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "Danes"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -7038,10 +7045,6 @@ msgstr "Razlike med predelavama"
 #~ "Ni mogoče izvesti dejanja zabeležke, ker dokumenta ni bilo mogoče najti. "
 #~ "Nima različice ali pa ni dokument z besedilom:\n"
 #~ "%1"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "napaka"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Dvokliknite, da ustvarite novo prekinitveno točko v kodi"

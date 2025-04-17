@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-11-17 17:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -19,32 +19,32 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: committoolview.cpp:205 committoolview.cpp:206
+#: committoolview.cpp:195 committoolview.cpp:196
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Suodata tiedoston tai projektin nimellä"
 
-#: committoolview.cpp:223
+#: committoolview.cpp:213
 #, kde-format
 msgid "Refresh"
 msgstr "Virkistä"
 
-#: committoolview.cpp:224
+#: committoolview.cpp:214
 #, kde-format
 msgid "Stage selected"
 msgstr "Vaiheista valitut"
 
-#: committoolview.cpp:226
+#: committoolview.cpp:216
 #, kde-format
 msgid "Unstage selected"
 msgstr "Kumoa valittujen vaiheistus"
 
-#: committoolview.cpp:228
+#: committoolview.cpp:218
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "Palauta vaiheistamattomat muokkaukset"
 
-#: committoolview.cpp:481
+#: committoolview.cpp:471
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr "Toimitus epäonnistui. Katso versionhallinnan työkalunäkymää."
@@ -243,27 +243,22 @@ msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Tuo kätköstä"
 
-#: gitplugin.cpp:295
-#, kde-format
-msgid "error: %1"
-msgstr "virhe: %1"
-
-#: gitplugin.cpp:394 gitplugin.cpp:405
+#: gitplugin.cpp:387 gitplugin.cpp:398
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Tiedostoja ei määritetty"
 
-#: gitplugin.cpp:467
+#: gitplugin.cpp:460
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Muutoksia ei voitu kumota (tyhjä sijaintiluettelo)"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:494
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Muutoksia ei voitu kumota"
 
-#: gitplugin.cpp:512
+#: gitplugin.cpp:505
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -271,38 +266,38 @@ msgstr ""
 "Seuraavissa tiedostoissa on toimittamattomia muutoksia, jotka menetetään. "
 "Jatketaanko?"
 
-#: gitplugin.cpp:537
+#: gitplugin.cpp:530
 #, kde-format
 msgid "No files or message specified"
 msgstr "Tiedostoja tai viestiä ei annettu."
 
-#: gitplugin.cpp:541 gitplugin.cpp:560
+#: gitplugin.cpp:534 gitplugin.cpp:553
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Sähköpostia tai nimeä ei ole annettu Gitille"
 
-#: gitplugin.cpp:557
+#: gitplugin.cpp:550
 #, kde-format
 msgid "No message specified"
 msgstr "Viestiä ei annettu"
 
-#: gitplugin.cpp:631
+#: gitplugin.cpp:624
 #, kde-format
 msgid "No files to remove"
 msgstr "Ei poistettavia tiedostoja"
 
-#: gitplugin.cpp:911
+#: gitplugin.cpp:904
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Muutoksia on odottamassa. Haluatko kätkeä ne ensin?"
 
-#: gitplugin.cpp:912
+#: gitplugin.cpp:905
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Kätkö"
 
-#: gitplugin.cpp:913
+#: gitplugin.cpp:906
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -706,6 +701,9 @@ msgstr "Luo uuden haaran, tuo siihen kätköstä muutokset ja hylkää kätkön.
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Haara"
+
+#~ msgid "error: %1"
+#~ msgstr "virhe: %1"
 
 #~ msgid "KDevelop - Git Stash"
 #~ msgstr "KDevelop–Git-kätkö"

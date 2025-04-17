@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-08-24 12:00+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -5596,17 +5596,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Failed Setting Permissions"
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "Working Directory does not exist: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "Working Directory is not absolute: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -5615,15 +5615,21 @@ msgstr ""
 "Process '%1' exited with status %2\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Command finished with error %1."
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Command exited with value %1."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgid "error"
+msgid "error: %1"
+msgstr "error"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6110,7 +6116,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "Today"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -6995,12 +7001,6 @@ msgstr "Difference between Revisions"
 #~ "Cannot execute annotate action because the document was not found, or was "
 #~ "not a text document:\n"
 #~ "%1"
-
-#, fuzzy
-#~| msgid "error"
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "error"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Double-click to create new code breakpoint"

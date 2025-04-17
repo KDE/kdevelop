@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2020-07-20 08:21+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -68,7 +68,7 @@ msgstr "Subversion"
 msgid "Subversion Add"
 msgstr "Додавання Subversion"
 
-#: svnaddjob.cpp:85
+#: svnaddjob.cpp:84
 #, kde-format
 msgid "Not enough information to add file"
 msgstr "Недостатньо відомостей для виконання завдання з додавання файла"
@@ -78,7 +78,7 @@ msgstr "Недостатньо відомостей для виконання з
 msgid "Subversion Annotate"
 msgstr "Анотація Subversion"
 
-#: svnblamejob.cpp:144
+#: svnblamejob.cpp:143
 #, kde-format
 msgid "Not enough information to blame location"
 msgstr "Недостатньо відомостей для засудження адреси"
@@ -88,32 +88,32 @@ msgstr "Недостатньо відомостей для засудження 
 msgid "Subversion Checkout"
 msgstr "Отримання Subversion"
 
-#: svncheckoutjob.cpp:96
+#: svncheckoutjob.cpp:95
 #, kde-format
 msgid "Not enough information to checkout"
 msgstr "Недостатньо відомостей для отримання"
 
-#: svncommitjob.cpp:109
+#: svncommitjob.cpp:108
 #, kde-format
 msgid "Subversion Commit"
 msgstr "Внесок до Subversion"
 
-#: svncommitjob.cpp:125
-#, kde-format
-msgid "Committing..."
-msgstr "Надсилання…"
-
-#: svncommitjob.cpp:129
+#: svncommitjob.cpp:119
 #, kde-format
 msgid "Not enough information to execute commit"
 msgstr "Недостатньо відомостей для виконання процедури внеску"
+
+#: svncommitjob.cpp:121
+#, kde-format
+msgid "Committing..."
+msgstr "Надсилання…"
 
 #: svncopyjob.cpp:71
 #, kde-format
 msgid "Subversion Copy"
 msgstr "Копіювання Subversion"
 
-#: svncopyjob.cpp:83
+#: svncopyjob.cpp:82
 #, kde-format
 msgid "Not enough information to copy file"
 msgstr "Недостатньо відомостей для копіювання файла"
@@ -123,7 +123,7 @@ msgstr "Недостатньо відомостей для копіювання 
 msgid "Subversion Diff"
 msgstr "Diff Subversion"
 
-#: svndiffjob.cpp:272
+#: svndiffjob.cpp:271
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "Надано недостатньо відомостей для виконання команди diff"
@@ -133,7 +133,7 @@ msgstr "Надано недостатньо відомостей для вико
 msgid "Subversion Import"
 msgstr "Імпорт Subversion"
 
-#: svnimportjob.cpp:99
+#: svnimportjob.cpp:98
 #, kde-format
 msgid "Not enough information to import"
 msgstr "Недостатньо відомостей для імпортування"
@@ -143,131 +143,131 @@ msgstr "Недостатньо відомостей для імпортуван�
 msgid "Subversion Info"
 msgstr "Info Subversion"
 
-#: svninfojob.cpp:114
+#: svninfojob.cpp:113
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "Недостатньо відомостей для виконання завдання з інформування"
 
-#: svninternaljobbase.cpp:86
+#: svninternaljobbase.cpp:87
 #, kde-format
 msgctxt "A file was marked to be added to svn"
 msgid "Added %1"
 msgstr "Додано %1"
 
-#: svninternaljobbase.cpp:89
+#: svninternaljobbase.cpp:90
 #, kde-format
 msgctxt "A file was marked for deletion from svn"
 msgid "Deleted %1"
 msgstr "Вилучено %1"
 
-#: svninternaljobbase.cpp:93
+#: svninternaljobbase.cpp:94
 #, kde-format
 msgctxt "A file was deleted during an svn update operation"
 msgid "Deleted %1"
 msgstr "Вилучено %1"
 
-#: svninternaljobbase.cpp:96
+#: svninternaljobbase.cpp:97
 #, kde-format
 msgctxt "A file was added during an svn update operation"
 msgid "Added %1"
 msgstr "Додано %1"
 
-#: svninternaljobbase.cpp:136
+#: svninternaljobbase.cpp:137
 #, kde-format
 msgid "Revision %1"
 msgstr "Модифікація %1"
 
-#: svninternaljobbase.cpp:139
+#: svninternaljobbase.cpp:140
 #, kde-format
 msgid "Updating externals: %1"
 msgstr "Оновлення зовнішніх записів: %1"
 
-#: svninternaljobbase.cpp:147
+#: svninternaljobbase.cpp:148
 #, kde-format
 msgid "Sending %1"
 msgstr "Надсилання %1"
 
-#: svninternaljobbase.cpp:151
+#: svninternaljobbase.cpp:152
 #, kde-format
 msgid "Adding %1 using mimetype %2."
 msgstr "Додавання %1 на основі типу MIME %2."
 
-#: svninternaljobbase.cpp:153
+#: svninternaljobbase.cpp:154
 #, kde-format
 msgid "Adding %1."
 msgstr "Додавання %1."
 
-#: svninternaljobbase.cpp:157
+#: svninternaljobbase.cpp:158
 #, kde-format
 msgid "Deleting %1."
 msgstr "Вилучення %1."
 
-#: svninternaljobbase.cpp:160
+#: svninternaljobbase.cpp:161
 #, kde-format
 msgid "Replacing %1."
 msgstr "Заміна %1."
 
-#: svninternaljobbase.cpp:165
+#: svninternaljobbase.cpp:166
 #, kde-format
 msgid "Transmitting file data "
 msgstr "Перенесення даних файлів "
 
-#: svninternaljobbase.cpp:171
+#: svninternaljobbase.cpp:172
 #, kde-format
 msgid "Blame finished for revision %1, path %2"
 msgstr "Завершено засудження для модифікації %1, шлях %2"
 
-#: svninternaljobbase.cpp:174
+#: svninternaljobbase.cpp:175
 #, kde-format
 msgid "Reverted working copy %1"
 msgstr "Повернення робочої копії %1"
 
-#: svninternaljobbase.cpp:177
+#: svninternaljobbase.cpp:178
 #, kde-format
 msgid "Reverting failed on working copy %1"
 msgstr "Спроба повернення робочої копії %1 зазнала невдачі"
 
-#: svninternaljobbase.cpp:180
+#: svninternaljobbase.cpp:181
 #, kde-format
 msgid "Copied %1"
 msgstr "Скопійовано %1"
 
-#: svninternaljobbase.cpp:235
+#: svninternaljobbase.cpp:236
 #, kde-format
 msgid "Certificate is not yet valid."
 msgstr "Сертифікат ще не набув чинності."
 
-#: svninternaljobbase.cpp:239
+#: svninternaljobbase.cpp:240
 #, kde-format
 msgid "Certificate has expired."
 msgstr "Строк дії сертифіката завершився."
 
-#: svninternaljobbase.cpp:243
+#: svninternaljobbase.cpp:244
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
 msgstr "CN сертифіката (назва вузла) не збігається з назвою віддаленого вузла."
 
-#: svninternaljobbase.cpp:247
+#: svninternaljobbase.cpp:248
 #, kde-format
 msgid "Certificate authority is unknown."
 msgstr "Невідомий видавець сертифіката."
 
-#: svninternaljobbase.cpp:251
+#: svninternaljobbase.cpp:252
 #, kde-format
 msgid "Other unknown error."
 msgstr "Інша невідома помилка."
 
-#: svnjobbase.cpp:74
+#: svnjobbase.cpp:114
 #, kde-format
 msgid "Enter Login for: %1"
 msgstr "Введіть користувача для: %1"
 
-#: svnjobbase.cpp:160
+#: svnjobbase.cpp:188
 #, kde-format
 msgid "Completed"
 msgstr "Виконано"
 
-#: svnjobbase.cpp:175
+#: svnjobbase.cpp:203
 #, kde-format
 msgid ""
 "Error executing Job:\n"
@@ -281,7 +281,7 @@ msgstr ""
 msgid "Subversion Log"
 msgstr "Журнал Subversion"
 
-#: svnlogjob.cpp:120
+#: svnlogjob.cpp:119
 #, kde-format
 msgid "Not enough information to log location"
 msgstr "Недостатньо відомостей для визначення адреси журналу"
@@ -291,7 +291,7 @@ msgstr "Недостатньо відомостей для визначення 
 msgid "Subversion Move"
 msgstr "Пересування Subversion"
 
-#: svnmovejob.cpp:95
+#: svnmovejob.cpp:94
 #, kde-format
 msgid "Not enough information to move file"
 msgstr "Недостатньо відомостей для пересування файла"
@@ -301,7 +301,7 @@ msgstr "Недостатньо відомостей для пересуванн�
 msgid "Subversion Remove"
 msgstr "Вилучення Subversion"
 
-#: svnremovejob.cpp:88
+#: svnremovejob.cpp:87
 #, kde-format
 msgid "Not enough information to execute remove job"
 msgstr "Недостатньо відомостей для виконання завдання з вилучення"
@@ -311,7 +311,7 @@ msgstr "Недостатньо відомостей для виконання з
 msgid "Subversion Revert"
 msgstr "Повернути Subversion"
 
-#: svnrevertjob.cpp:86
+#: svnrevertjob.cpp:85
 #, kde-format
 msgid "Not enough information to execute revert"
 msgstr "Недостатньо відомостей для виконання повернення"
@@ -345,7 +345,7 @@ msgstr "SSL-сертифікат сервера: %1"
 msgid "Subversion Status"
 msgstr "Стан Subversion"
 
-#: svnstatusjob.cpp:131
+#: svnstatusjob.cpp:130
 #, kde-format
 msgid "Not enough information to execute status job"
 msgstr "Недостатньо відомостей для виконання завдання зі встановлення стану"
@@ -355,7 +355,7 @@ msgstr "Недостатньо відомостей для виконання з
 msgid "Subversion Update"
 msgstr "Оновлення Subversion"
 
-#: svnupdatejob.cpp:120
+#: svnupdatejob.cpp:119
 #, kde-format
 msgid "Not enough Information to execute update"
 msgstr "Недостатньо відомостей для виконання оновлення"

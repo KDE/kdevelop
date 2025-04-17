@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-08-13 18:07+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -25,32 +25,32 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: committoolview.cpp:205 committoolview.cpp:206
+#: committoolview.cpp:195 committoolview.cpp:196
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Filtrer par nom de fichier / nom de projet"
 
-#: committoolview.cpp:223
+#: committoolview.cpp:213
 #, kde-format
 msgid "Refresh"
 msgstr "Rafraîchir"
 
-#: committoolview.cpp:224
+#: committoolview.cpp:214
 #, kde-format
 msgid "Stage selected"
 msgstr "« Stage » sélectionné"
 
-#: committoolview.cpp:226
+#: committoolview.cpp:216
 #, kde-format
 msgid "Unstage selected"
 msgstr "Commande « Unstage » sélectionnée"
 
-#: committoolview.cpp:228
+#: committoolview.cpp:218
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "Revenir à des modifications non référencées"
 
-#: committoolview.cpp:481
+#: committoolview.cpp:471
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr ""
@@ -254,27 +254,22 @@ msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Supprimer du cache"
 
-#: gitplugin.cpp:295
-#, kde-format
-msgid "error: %1"
-msgstr "erreur : %1"
-
-#: gitplugin.cpp:394 gitplugin.cpp:405
+#: gitplugin.cpp:387 gitplugin.cpp:398
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "N'a pas spécifié la liste de fichiers"
 
-#: gitplugin.cpp:467
+#: gitplugin.cpp:460
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Impossible d'annuler les modifications (liste vide d'emplacements)"
 
-#: gitplugin.cpp:501
+#: gitplugin.cpp:494
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Il est impossible d'annuler les modifications"
 
-#: gitplugin.cpp:512
+#: gitplugin.cpp:505
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -282,40 +277,40 @@ msgstr ""
 "Les fichiers suivants ont des modifications non validées, les changements "
 "seront perdus. Voulez-vous continuer ?"
 
-#: gitplugin.cpp:537
+#: gitplugin.cpp:530
 #, kde-format
 msgid "No files or message specified"
 msgstr "Aucun fichier ou message spécifié"
 
-#: gitplugin.cpp:541 gitplugin.cpp:560
+#: gitplugin.cpp:534 gitplugin.cpp:553
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Aucun nom ou adresse électronique spécifié pour Git"
 
-#: gitplugin.cpp:557
+#: gitplugin.cpp:550
 #, kde-format
 msgid "No message specified"
 msgstr "Aucun message spécifié"
 
-#: gitplugin.cpp:631
+#: gitplugin.cpp:624
 #, kde-format
 msgid "No files to remove"
 msgstr "Aucun fichier à supprimer"
 
-#: gitplugin.cpp:911
+#: gitplugin.cpp:904
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Il existe des modifications en attente. Voulez-vous les mettre dans le cache "
 "d'abord ?"
 
-#: gitplugin.cpp:912
+#: gitplugin.cpp:905
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Mettre en réserve"
 
-#: gitplugin.cpp:913
+#: gitplugin.cpp:906
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -721,6 +716,9 @@ msgstr "Créer une nouvelle branche et y appliquer le cache, puis le supprimer"
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Branche"
+
+#~ msgid "error: %1"
+#~ msgstr "erreur : %1"
 
 #~ msgid "KDevelop - Git Stash"
 #~ msgstr "KDevelop - Cache Git"

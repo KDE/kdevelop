@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2025-03-02 15:22+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -5667,17 +5667,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Impostazione dei permessi non riuscita"
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "La cartella di lavoro non esiste: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "La cartella di lavoro non è assoluta: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -5686,15 +5686,22 @@ msgstr ""
 "Processo «%1» terminato con stato %2\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Comando concluso con errore %1."
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Comando terminato con valore %1."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "error"
+msgid "error: %1"
+msgstr "errore"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6180,7 +6187,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "Oggi"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -7077,10 +7084,6 @@ msgstr "Differenza tra revisioni"
 #~ "Impossibile eseguire l'azione di annotazione perché il documento non è "
 #~ "stato trovato, non aveva una versione o non era un documento di testo:\n"
 #~ "%1"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "errore"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Doppio clic per creare un nuovo breakpoint nel codice"

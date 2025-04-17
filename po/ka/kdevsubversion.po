@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-07-19 06:47+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -66,7 +66,7 @@ msgstr "ქვევერსია"
 msgid "Subversion Add"
 msgstr "Subversion: დამატება"
 
-#: svnaddjob.cpp:85
+#: svnaddjob.cpp:84
 #, kde-format
 msgid "Not enough information to add file"
 msgstr "ფაილის დასამატებლად ინფორმაცია საკმარისი არაა"
@@ -76,7 +76,7 @@ msgstr "ფაილის დასამატებლად ინფორ�
 msgid "Subversion Annotate"
 msgstr "Subversion: ანოტაცია"
 
-#: svnblamejob.cpp:144
+#: svnblamejob.cpp:143
 #, kde-format
 msgid "Not enough information to blame location"
 msgstr "ფაილის ანოტაციის სანახავად ინფორმაცია საკმარისი არაა"
@@ -86,32 +86,32 @@ msgstr "ფაილის ანოტაციის სანახავა�
 msgid "Subversion Checkout"
 msgstr "Subversion: წამოღება"
 
-#: svncheckoutjob.cpp:96
+#: svncheckoutjob.cpp:95
 #, kde-format
 msgid "Not enough information to checkout"
 msgstr "წამოღებისთვის ინფორმაცია საკმარისი არაა"
 
-#: svncommitjob.cpp:109
+#: svncommitjob.cpp:108
 #, kde-format
 msgid "Subversion Commit"
 msgstr "Subversion: კომიტი"
 
-#: svncommitjob.cpp:125
-#, kde-format
-msgid "Committing..."
-msgstr "კომიტი..."
-
-#: svncommitjob.cpp:129
+#: svncommitjob.cpp:119
 #, kde-format
 msgid "Not enough information to execute commit"
 msgstr "კომიტისთვის ინფორმაცია საკმარისი არაა"
+
+#: svncommitjob.cpp:121
+#, kde-format
+msgid "Committing..."
+msgstr "კომიტი..."
 
 #: svncopyjob.cpp:71
 #, kde-format
 msgid "Subversion Copy"
 msgstr "Subversion: კოპირება"
 
-#: svncopyjob.cpp:83
+#: svncopyjob.cpp:82
 #, kde-format
 msgid "Not enough information to copy file"
 msgstr "ფაილის დასაკოპირებლად ინფორმაცია საკმარისი არაა"
@@ -121,7 +121,7 @@ msgstr "ფაილის დასაკოპირებლად ინფ�
 msgid "Subversion Diff"
 msgstr "Subversion: სხვაობა"
 
-#: svndiffjob.cpp:272
+#: svndiffjob.cpp:271
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "სხვაობების პოვნისთვის ინფორმაცია საკმარისი არაა"
@@ -131,7 +131,7 @@ msgstr "სხვაობების პოვნისთვის ინფ�
 msgid "Subversion Import"
 msgstr "Subversion: შემოტანა"
 
-#: svnimportjob.cpp:99
+#: svnimportjob.cpp:98
 #, kde-format
 msgid "Not enough information to import"
 msgstr "შემოსატანად ინფორმაცია საკმარისი არაა"
@@ -141,131 +141,131 @@ msgstr "შემოსატანად ინფორმაცია სა�
 msgid "Subversion Info"
 msgstr "Subversion: ინფორმაცია"
 
-#: svninfojob.cpp:114
+#: svninfojob.cpp:113
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "ინფორმაციის დავალების გასაშვებად ინფორმაცია საკმარისი არაა"
 
-#: svninternaljobbase.cpp:86
+#: svninternaljobbase.cpp:87
 #, kde-format
 msgctxt "A file was marked to be added to svn"
 msgid "Added %1"
 msgstr "დამატებულია %1"
 
-#: svninternaljobbase.cpp:89
+#: svninternaljobbase.cpp:90
 #, kde-format
 msgctxt "A file was marked for deletion from svn"
 msgid "Deleted %1"
 msgstr "%1 წაშლილია"
 
-#: svninternaljobbase.cpp:93
+#: svninternaljobbase.cpp:94
 #, kde-format
 msgctxt "A file was deleted during an svn update operation"
 msgid "Deleted %1"
 msgstr "%1 წაშლილია"
 
-#: svninternaljobbase.cpp:96
+#: svninternaljobbase.cpp:97
 #, kde-format
 msgctxt "A file was added during an svn update operation"
 msgid "Added %1"
 msgstr "დამატებულია %1"
 
-#: svninternaljobbase.cpp:136
+#: svninternaljobbase.cpp:137
 #, kde-format
 msgid "Revision %1"
 msgstr "რევიზია %1"
 
-#: svninternaljobbase.cpp:139
+#: svninternaljobbase.cpp:140
 #, kde-format
 msgid "Updating externals: %1"
 msgstr "გარეების განახლება: %1"
 
-#: svninternaljobbase.cpp:147
+#: svninternaljobbase.cpp:148
 #, kde-format
 msgid "Sending %1"
 msgstr "გაგზავნა: %1"
 
-#: svninternaljobbase.cpp:151
+#: svninternaljobbase.cpp:152
 #, kde-format
 msgid "Adding %1 using mimetype %2."
 msgstr "დამატება: %1 mimetype-ის გამოყენებით: %2."
 
-#: svninternaljobbase.cpp:153
+#: svninternaljobbase.cpp:154
 #, kde-format
 msgid "Adding %1."
 msgstr "დამატება: %1."
 
-#: svninternaljobbase.cpp:157
+#: svninternaljobbase.cpp:158
 #, kde-format
 msgid "Deleting %1."
 msgstr "წაშლა: %1."
 
-#: svninternaljobbase.cpp:160
+#: svninternaljobbase.cpp:161
 #, kde-format
 msgid "Replacing %1."
 msgstr "ჩანაცვლება: %1."
 
-#: svninternaljobbase.cpp:165
+#: svninternaljobbase.cpp:166
 #, kde-format
 msgid "Transmitting file data "
 msgstr "ფაილის მონაცემების გადაცემა "
 
-#: svninternaljobbase.cpp:171
+#: svninternaljobbase.cpp:172
 #, kde-format
 msgid "Blame finished for revision %1, path %2"
 msgstr "ავტორების განსაზღვრა დასრულდა რევიზიისთვის %1, ბილიკით %2"
 
-#: svninternaljobbase.cpp:174
+#: svninternaljobbase.cpp:175
 #, kde-format
 msgid "Reverted working copy %1"
 msgstr "სამუშაო ასლის %1 დაბრუნება"
 
-#: svninternaljobbase.cpp:177
+#: svninternaljobbase.cpp:178
 #, kde-format
 msgid "Reverting failed on working copy %1"
 msgstr "დაბრუნება ჩავარდა სამუშაო ასლისთვის %1"
 
-#: svninternaljobbase.cpp:180
+#: svninternaljobbase.cpp:181
 #, kde-format
 msgid "Copied %1"
 msgstr "%1 დაკოპირდა"
 
-#: svninternaljobbase.cpp:235
+#: svninternaljobbase.cpp:236
 #, kde-format
 msgid "Certificate is not yet valid."
 msgstr "სერტიფიკატი ჯერ არასწორია."
 
-#: svninternaljobbase.cpp:239
+#: svninternaljobbase.cpp:240
 #, kde-format
 msgid "Certificate has expired."
 msgstr "სერტიფიკატი ვადაგასულია."
 
-#: svninternaljobbase.cpp:243
+#: svninternaljobbase.cpp:244
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
 msgstr "სერტიფიკაცის CN (ჰოსტის სახელი) დაშორებული ჰოსტის სახელს არ ემთხვევა."
 
-#: svninternaljobbase.cpp:247
+#: svninternaljobbase.cpp:248
 #, kde-format
 msgid "Certificate authority is unknown."
 msgstr "სერტიფიკატის გამომცემელი უცნობია."
 
-#: svninternaljobbase.cpp:251
+#: svninternaljobbase.cpp:252
 #, kde-format
 msgid "Other unknown error."
 msgstr "სხვა უცნობი შეცდომა."
 
-#: svnjobbase.cpp:74
+#: svnjobbase.cpp:114
 #, kde-format
 msgid "Enter Login for: %1"
 msgstr "შეიყვანეთ მომხმარებლის სახელი სერვერისთვის: %1"
 
-#: svnjobbase.cpp:160
+#: svnjobbase.cpp:188
 #, kde-format
 msgid "Completed"
 msgstr "დასრულებულია"
 
-#: svnjobbase.cpp:175
+#: svnjobbase.cpp:203
 #, kde-format
 msgid ""
 "Error executing Job:\n"
@@ -279,7 +279,7 @@ msgstr ""
 msgid "Subversion Log"
 msgstr "Subversion-ის ჟურნალი"
 
-#: svnlogjob.cpp:120
+#: svnlogjob.cpp:119
 #, kde-format
 msgid "Not enough information to log location"
 msgstr "ჟურნალის მდებარეობის შესახებ ინფორმაცია საკმარისია რაა"
@@ -289,7 +289,7 @@ msgstr "ჟურნალის მდებარეობის შესა�
 msgid "Subversion Move"
 msgstr "Subversion: გადატანა"
 
-#: svnmovejob.cpp:95
+#: svnmovejob.cpp:94
 #, kde-format
 msgid "Not enough information to move file"
 msgstr "ფაილის გადასატანად ინფორმაცია საკმარისი არაა"
@@ -299,7 +299,7 @@ msgstr "ფაილის გადასატანად ინფორმ�
 msgid "Subversion Remove"
 msgstr "Subversion: წაშლა"
 
-#: svnremovejob.cpp:88
+#: svnremovejob.cpp:87
 #, kde-format
 msgid "Not enough information to execute remove job"
 msgstr "დავალების წასაშლელად ინფორმაცია საკმარისი არაა"
@@ -309,7 +309,7 @@ msgstr "დავალების წასაშლელად ინფო�
 msgid "Subversion Revert"
 msgstr "Subversion: დაბრუნება"
 
-#: svnrevertjob.cpp:86
+#: svnrevertjob.cpp:85
 #, kde-format
 msgid "Not enough information to execute revert"
 msgstr "დაბრუნების შესასრულებლად ინფორმაცია საკმარისი არაა"
@@ -343,7 +343,7 @@ msgstr "SSL სერვერის სერტიფიკატი: %1"
 msgid "Subversion Status"
 msgstr "Subversion: სტატუსი"
 
-#: svnstatusjob.cpp:131
+#: svnstatusjob.cpp:130
 #, kde-format
 msgid "Not enough information to execute status job"
 msgstr "სტატუსის დავალების შესასრულებლად ინფორმაცია საკმარისი არაა"
@@ -353,7 +353,7 @@ msgstr "სტატუსის დავალების შესასრ�
 msgid "Subversion Update"
 msgstr "Subversion: განახლება"
 
-#: svnupdatejob.cpp:120
+#: svnupdatejob.cpp:119
 #, kde-format
 msgid "Not enough Information to execute update"
 msgstr "განახლების შესასრულებლად ინფორმაცია საკმარისი არაა"

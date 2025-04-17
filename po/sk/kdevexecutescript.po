@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecutescript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2022-04-17 20:50+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -16,12 +16,12 @@ msgstr ""
 "X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: executescriptplugin.cpp:61
+#: executescriptplugin.cpp:59
 #, kde-format
 msgid "No valid executable specified"
 msgstr "Neuvedený platný spustiteľný súbor"
 
-#: executescriptplugin.cpp:71
+#: executescriptplugin.cpp:69
 #, kde-format
 msgid ""
 "There is a quoting error in the script for the launch configuration '%1'. "
@@ -30,7 +30,7 @@ msgstr ""
 "V skripte pre spustenie konfigurácie '%1' je citovaná chyba. Spustenie "
 "prerušené."
 
-#: executescriptplugin.cpp:76
+#: executescriptplugin.cpp:74
 #, kde-format
 msgid ""
 "A shell meta character was included in the script for the launch "
@@ -39,14 +39,14 @@ msgstr ""
 "Shell meta znak bol vložený do skriptu pre spustenie konfigurácie '%1'. Toto "
 "nie je v súčasnosti podporované. Spustenie prerušené."
 
-#: executescriptplugin.cpp:93
+#: executescriptplugin.cpp:91
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "Nie je nastavený vzdialený hostiteľ pre spustenie konfigurácie '%1'. "
 "Spustenie prerušené."
 
-#: executescriptplugin.cpp:116
+#: executescriptplugin.cpp:114
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
@@ -55,7 +55,7 @@ msgstr ""
 "V argumentoch pre spustenie konfigurácie '%1' je citovaná chyba. Spustenie "
 "prerušené."
 
-#: executescriptplugin.cpp:120
+#: executescriptplugin.cpp:118
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -64,12 +64,12 @@ msgstr ""
 "Shell meta znak bol vložený do argumentov pre spustenie konfigurácie '%1'. "
 "Toto nie je v súčasnosti podporované. Spustenie prerušené."
 
-#: executescriptplugin.cpp:173
+#: executescriptplugin.cpp:171
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "Neuvedený platný interpreter"
 
-#: executescriptplugin.cpp:183
+#: executescriptplugin.cpp:181
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
@@ -78,7 +78,7 @@ msgstr ""
 "V interpreteri pre spustenie konfigurácie '%1' je citovaná chyba. Spustenie "
 "prerušené."
 
-#: executescriptplugin.cpp:188
+#: executescriptplugin.cpp:186
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "

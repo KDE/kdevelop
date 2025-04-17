@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2021-08-31 08:44+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -30,7 +30,7 @@ msgstr "Nastavi izvajanje Plasmoidov"
 msgid "Display a plasmoid"
 msgstr "Prikaži plasmoid"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Zaganjalnik plasmoidov"
@@ -40,7 +40,7 @@ msgstr "Zaganjalnik plasmoidov"
 msgid "Could not resolve the dependency: %1"
 msgstr "Ni bilo mogoče razrešiti odvisnosti: %1"
 
-#: plasmoidexecutionconfig.cpp:296
+#: plasmoidexecutionconfig.cpp:290
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

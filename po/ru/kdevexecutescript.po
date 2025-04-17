@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2022-03-10 11:12+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -19,12 +19,12 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 21.12.1\n"
 
-#: executescriptplugin.cpp:61
+#: executescriptplugin.cpp:59
 #, kde-format
 msgid "No valid executable specified"
 msgstr "Запускаемый файл задан неверно"
 
-#: executescriptplugin.cpp:71
+#: executescriptplugin.cpp:69
 #, kde-format
 msgid ""
 "There is a quoting error in the script for the launch configuration '%1'. "
@@ -33,7 +33,7 @@ msgstr ""
 "В параметрах сценария в конфигурации запуска «%1» обнаружены непарные "
 "кавычки. Запуск отменён."
 
-#: executescriptplugin.cpp:76
+#: executescriptplugin.cpp:74
 #, kde-format
 msgid ""
 "A shell meta character was included in the script for the launch "
@@ -42,14 +42,14 @@ msgstr ""
 "В параметрах сценария в конфигурации запуска «%1» обнаружен метасимвол "
 "командной оболочки. В настоящее время они не поддерживаются. Запуск отменён."
 
-#: executescriptplugin.cpp:93
+#: executescriptplugin.cpp:91
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "В конфигурации запуска «%1» не определена строка подключения к удалённому "
 "компьютеру. Запуск отменён."
 
-#: executescriptplugin.cpp:116
+#: executescriptplugin.cpp:114
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
@@ -58,7 +58,7 @@ msgstr ""
 "В параметрах запуска в конфигурации «%1» обнаружены непарные кавычки. Запуск "
 "отменён."
 
-#: executescriptplugin.cpp:120
+#: executescriptplugin.cpp:118
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -67,12 +67,12 @@ msgstr ""
 "В параметрах запуска в конфигурации «%1» обнаружен метасимвол командной "
 "оболочки. В настоящее время они не поддерживаются. Запуск отменён."
 
-#: executescriptplugin.cpp:173
+#: executescriptplugin.cpp:171
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "Интерпретатор не определён"
 
-#: executescriptplugin.cpp:183
+#: executescriptplugin.cpp:181
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
@@ -81,7 +81,7 @@ msgstr ""
 "В параметрах интерпретатора в конфигурации запуска «%1» обнаружены непарные "
 "кавычки. Запуск отменён."
 
-#: executescriptplugin.cpp:188
+#: executescriptplugin.cpp:186
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "

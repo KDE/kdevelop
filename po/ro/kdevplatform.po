@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2021-05-15 15:28+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -5745,19 +5745,19 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, fuzzy, kde-format
 #| msgid "&Working Directory:"
 msgid "Working Directory does not exist: %1"
 msgstr "Director de lu&cru:"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, fuzzy, kde-format
 #| msgid "&Working Directory:"
 msgid "Working Directory is not absolute: %1"
 msgstr "Director de lu&cru:"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, fuzzy, kde-format
 #| msgid "Process 1 file in %2"
 #| msgid_plural "Process %1 files in %2"
@@ -5766,15 +5766,22 @@ msgid ""
 "%3"
 msgstr "Procesează 1 fișier în %2"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr ""
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "error"
+msgid "error: %1"
+msgstr "eroare"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, fuzzy, kde-format
@@ -6293,7 +6300,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -6916,10 +6923,6 @@ msgstr ""
 
 #~ msgid "(c) 2008, The KDevelop developers"
 #~ msgstr "(c) 2008, Dezvoltatorii KDevelop"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "eroare"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Dublu-clic pentru a crea un punct de oprire nou"

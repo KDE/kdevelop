@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-07-19 06:54+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -39,26 +39,21 @@ msgstr "არჩიეთ, მხოლოდ, ერთი ელემენ�
 msgid "No files or message specified"
 msgstr "ფაილები ან შეტყობინებები მითითებული არაა"
 
-#: perforceplugin.cpp:365 perforceplugin.cpp:381
+#: perforceplugin.cpp:364 perforceplugin.cpp:380
 #, kde-format
 msgid "Please select a file for this operation"
 msgstr "აირჩიეთ ფაილი ამ ოპერაციისთვის"
 
-#: perforceplugin.cpp:366 perforceplugin.cpp:382
+#: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format
 msgid "Directory not supported for this operation"
 msgstr "ამ ოპერაციისთვის საქაღალდე მხარდაჭერილი არაა"
 
-#: perforceplugin.cpp:462
+#: perforceplugin.cpp:461
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "Edit"
 msgstr "ჩასწორება"
-
-#: perforceplugin.cpp:671
-#, kde-format
-msgid "error: %1"
-msgstr "შეცდომა: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:124
 #, kde-format
@@ -181,3 +176,6 @@ msgstr "კონფიგურაციის ფაილი"
 msgctxt "@option:radio"
 msgid "User/Port Config"
 msgstr "მომხმარებლის/პორტის კონფიგურაცია"
+
+#~ msgid "error: %1"
+#~ msgstr "შეცდომა: %1"

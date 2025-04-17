@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -19,19 +19,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: executescriptplugin.cpp:61
+#: executescriptplugin.cpp:59
 #, kde-format
 msgid "No valid executable specified"
 msgstr "वैधः कार्यान्वयनीयः निर्दिष्टः नास्ति"
 
-#: executescriptplugin.cpp:71
+#: executescriptplugin.cpp:69
 #, kde-format
 msgid ""
 "There is a quoting error in the script for the launch configuration '%1'. "
 "Aborting start."
 msgstr "'%1' इत्यस्य प्रक्षेपणविन्यासस्य स्क्रिप्ट् मध्ये उद्धरणदोषः अस्ति । गर्भपातस्य आरम्भः।"
 
-#: executescriptplugin.cpp:76
+#: executescriptplugin.cpp:74
 #, kde-format
 msgid ""
 "A shell meta character was included in the script for the launch "
@@ -40,19 +40,19 @@ msgstr ""
 "'%1' इत्यस्य प्रक्षेपणविन्यासस्य स्क्रिप्ट् मध्ये एकः शेल् मेटा वर्णः समाविष्टः आसीत्, एतत् "
 "सम्प्रति समर्थितं नास्ति । गर्भपातस्य आरम्भः।"
 
-#: executescriptplugin.cpp:93
+#: executescriptplugin.cpp:91
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr "'%1' इत्यस्य प्रारम्भविन्यासस्य कृते दूरस्थः होस्ट् सेट् नास्ति । गर्भपातस्य आरम्भः।"
 
-#: executescriptplugin.cpp:116
+#: executescriptplugin.cpp:114
 #, kde-format
 msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
 "Aborting start."
 msgstr "'%1' इत्यस्य प्रक्षेपणविन्यासस्य तर्कयोः उद्धरणदोषः अस्ति । गर्भपातस्य आरम्भः।"
 
-#: executescriptplugin.cpp:120
+#: executescriptplugin.cpp:118
 #, kde-format
 msgid ""
 "A shell meta character was included in the arguments for the launch "
@@ -61,19 +61,19 @@ msgstr ""
 "'%1' इत्यस्य प्रक्षेपणविन्यासस्य तर्केषु शेल् मेटा वर्णः समाविष्टः आसीत्, एतत् सम्प्रति समर्थितं "
 "नास्ति । गर्भपातस्य आरम्भः।"
 
-#: executescriptplugin.cpp:173
+#: executescriptplugin.cpp:171
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "वैधः व्याख्याकारः निर्दिष्टः नास्ति"
 
-#: executescriptplugin.cpp:183
+#: executescriptplugin.cpp:181
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
 "'%1'. Aborting start."
 msgstr "'%1' इत्यस्य प्रक्षेपणविन्यासस्य व्याख्याकारे उद्धरणदोषः अस्ति । गर्भपातस्य आरम्भः।"
 
-#: executescriptplugin.cpp:188
+#: executescriptplugin.cpp:186
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2020-07-26 21:46+0200\n"
 "Last-Translator: Johnny Jazeix <jazeix@gmail.com>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -34,7 +34,7 @@ msgstr "Configurer l'exécution des composants graphiques"
 msgid "Display a plasmoid"
 msgstr "Afficher un composant graphique"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:225
+#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Lanceur de composants graphiques"
@@ -44,7 +44,7 @@ msgstr "Lanceur de composants graphiques"
 msgid "Could not resolve the dependency: %1"
 msgstr "Impossible de résoudre la dépendance : %1"
 
-#: plasmoidexecutionconfig.cpp:296
+#: plasmoidexecutionconfig.cpp:290
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

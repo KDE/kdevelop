@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2023-04-30 18:41+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -5642,17 +5642,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Fehler beim Setzen der Zugriffsrechte"
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "Arbeitsordner existiert nicht: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "Pfad zum Arbeitsordner ist nicht absolut: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -5661,15 +5661,22 @@ msgstr ""
 "Der Prozess „%1“ wurde mit Status %2 beendet\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Befehl mit Fehler %1 beendet."
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Befehl mit Rückgabewert %1 beendet."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "error"
+msgid "error: %1"
+msgstr "Fehler"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6159,7 +6166,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "Heute"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -7055,10 +7062,6 @@ msgstr "Unterschied zwischen Revisionen"
 #~ "Kann die Aktion Kommentieren nicht ausführen, weil das Dokument nicht "
 #~ "gefunden wurde, nicht versioniert ist oder kein Textdokument ist:\n"
 #~ "%1"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "Fehler"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Doppelklicken, um neuen Haltepunkt anzulegen"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-30 00:38+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-11-04 23:10+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -82,17 +82,17 @@ msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "Nome host del dispositivo:"
 
-#: flatpakruntime.cpp:58
+#: flatpakruntime.cpp:57
 #, kde-format
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:158
+#: flatpakruntime.cpp:157
 #, kde-format
 msgid "Bundling"
 msgstr "Impacchettamento"
 
-#: flatpakruntime.cpp:180
+#: flatpakruntime.cpp:179
 #, kde-format
 msgid "Run on Device"
 msgstr "Esegui sul dispositivo"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2013-04-24 03:16+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -68,7 +68,7 @@ msgstr "Subversion"
 msgid "Subversion Add"
 msgstr "Subversion қосуы"
 
-#: svnaddjob.cpp:85
+#: svnaddjob.cpp:84
 #, kde-format
 msgid "Not enough information to add file"
 msgstr "Файлды қосу үшін мәлімет жеткіліксіз"
@@ -78,7 +78,7 @@ msgstr "Файлды қосу үшін мәлімет жеткіліксіз"
 msgid "Subversion Annotate"
 msgstr "Subversion аңдатпасы"
 
-#: svnblamejob.cpp:144
+#: svnblamejob.cpp:143
 #, kde-format
 msgid "Not enough information to blame location"
 msgstr "Жауыптыны қору үшін мәлімет жеткіліксіз"
@@ -88,33 +88,33 @@ msgstr "Жауыптыны қору үшін мәлімет жеткіліксі
 msgid "Subversion Checkout"
 msgstr "Subversion қоймадан көшіріп алуы"
 
-#: svncheckoutjob.cpp:96
+#: svncheckoutjob.cpp:95
 #, kde-format
 msgid "Not enough information to checkout"
 msgstr "Қоймадан көшіріп алу үшін мәлімет жеткіліксіз"
 
-#: svncommitjob.cpp:109
+#: svncommitjob.cpp:108
 #, fuzzy, kde-format
 #| msgid "Subversion Cat"
 msgid "Subversion Commit"
 msgstr "Subversion файл мазмұнын қарау"
 
-#: svncommitjob.cpp:125
-#, kde-format
-msgid "Committing..."
-msgstr "Тапсыру..."
-
-#: svncommitjob.cpp:129
+#: svncommitjob.cpp:119
 #, kde-format
 msgid "Not enough information to execute commit"
 msgstr "Тапсыруды орындау үшін мәлімет жеткіліксіз"
+
+#: svncommitjob.cpp:121
+#, kde-format
+msgid "Committing..."
+msgstr "Тапсыру..."
 
 #: svncopyjob.cpp:71
 #, kde-format
 msgid "Subversion Copy"
 msgstr "Subversion көшірмелеу"
 
-#: svncopyjob.cpp:83
+#: svncopyjob.cpp:82
 #, kde-format
 msgid "Not enough information to copy file"
 msgstr "Файлды көшірмелеу үшін мәлімет жеткіліксіз"
@@ -124,7 +124,7 @@ msgstr "Файлды көшірмелеу үшін мәлімет жеткілі
 msgid "Subversion Diff"
 msgstr "Subversion айырмашылығы"
 
-#: svndiffjob.cpp:272
+#: svndiffjob.cpp:271
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "Айырмашылығын қарау үшін мәлімет жеткіліксіз"
@@ -134,7 +134,7 @@ msgstr "Айырмашылығын қарау үшін мәлімет жеткі
 msgid "Subversion Import"
 msgstr "Subversion импорты"
 
-#: svnimportjob.cpp:99
+#: svnimportjob.cpp:98
 #, kde-format
 msgid "Not enough information to import"
 msgstr "Импорттау үшін мәлімет жеткіліксіз"
@@ -144,131 +144,131 @@ msgstr "Импорттау үшін мәлімет жеткіліксіз"
 msgid "Subversion Info"
 msgstr "Subversion ақпары"
 
-#: svninfojob.cpp:114
+#: svninfojob.cpp:113
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "Ақапарды қарау үшін мәлімет жеткіліксіз"
 
-#: svninternaljobbase.cpp:86
+#: svninternaljobbase.cpp:87
 #, kde-format
 msgctxt "A file was marked to be added to svn"
 msgid "Added %1"
 msgstr "Қосылмақ: %1"
 
-#: svninternaljobbase.cpp:89
+#: svninternaljobbase.cpp:90
 #, kde-format
 msgctxt "A file was marked for deletion from svn"
 msgid "Deleted %1"
 msgstr "Өшірілмек: %1"
 
-#: svninternaljobbase.cpp:93
+#: svninternaljobbase.cpp:94
 #, kde-format
 msgctxt "A file was deleted during an svn update operation"
 msgid "Deleted %1"
 msgstr "Өшірілген: %1"
 
-#: svninternaljobbase.cpp:96
+#: svninternaljobbase.cpp:97
 #, kde-format
 msgctxt "A file was added during an svn update operation"
 msgid "Added %1"
 msgstr "Қосылған: %1"
 
-#: svninternaljobbase.cpp:136
+#: svninternaljobbase.cpp:137
 #, kde-format
 msgid "Revision %1"
 msgstr "Жетілдірімі: %1"
 
-#: svninternaljobbase.cpp:139
+#: svninternaljobbase.cpp:140
 #, kde-format
 msgid "Updating externals: %1"
 msgstr "Сыртқы жазуларды жаңарту: %1"
 
-#: svninternaljobbase.cpp:147
+#: svninternaljobbase.cpp:148
 #, kde-format
 msgid "Sending %1"
 msgstr "%1 жіберуі"
 
-#: svninternaljobbase.cpp:151
+#: svninternaljobbase.cpp:152
 #, kde-format
 msgid "Adding %1 using mimetype %2."
 msgstr "%2 MIME түрімен %1 дегенді жіберу"
 
-#: svninternaljobbase.cpp:153
+#: svninternaljobbase.cpp:154
 #, kde-format
 msgid "Adding %1."
 msgstr "%1 қосуы"
 
-#: svninternaljobbase.cpp:157
+#: svninternaljobbase.cpp:158
 #, kde-format
 msgid "Deleting %1."
 msgstr "%1 өшіруі"
 
-#: svninternaljobbase.cpp:160
+#: svninternaljobbase.cpp:161
 #, kde-format
 msgid "Replacing %1."
 msgstr "%1 алмастыруы"
 
-#: svninternaljobbase.cpp:165
+#: svninternaljobbase.cpp:166
 #, kde-format
 msgid "Transmitting file data "
 msgstr "Файл дерегін тасымалдау"
 
-#: svninternaljobbase.cpp:171
+#: svninternaljobbase.cpp:172
 #, kde-format
 msgid "Blame finished for revision %1, path %2"
 msgstr "%1 (%2 жолындағы) жетілдірім жауыптысын білу аяқталды"
 
-#: svninternaljobbase.cpp:174
+#: svninternaljobbase.cpp:175
 #, kde-format
 msgid "Reverted working copy %1"
 msgstr "%1 жұмыс көшірмесі қайтарылды"
 
-#: svninternaljobbase.cpp:177
+#: svninternaljobbase.cpp:178
 #, kde-format
 msgid "Reverting failed on working copy %1"
 msgstr "%1 жұмыс көшірмесін қайтару жаңылысы"
 
-#: svninternaljobbase.cpp:180
+#: svninternaljobbase.cpp:181
 #, kde-format
 msgid "Copied %1"
 msgstr "%1 көшірмеленді"
 
-#: svninternaljobbase.cpp:235
+#: svninternaljobbase.cpp:236
 #, kde-format
 msgid "Certificate is not yet valid."
 msgstr "Куәлік әзірше жарамсыз."
 
-#: svninternaljobbase.cpp:239
+#: svninternaljobbase.cpp:240
 #, kde-format
 msgid "Certificate has expired."
 msgstr "Куәлігі ескірген."
 
-#: svninternaljobbase.cpp:243
+#: svninternaljobbase.cpp:244
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
 msgstr "Куәлік CN-ні (хост атауы) қашық хост атауымен сәйкес келмейді."
 
-#: svninternaljobbase.cpp:247
+#: svninternaljobbase.cpp:248
 #, kde-format
 msgid "Certificate authority is unknown."
 msgstr "Куәландыру орталығы беймәлім."
 
-#: svninternaljobbase.cpp:251
+#: svninternaljobbase.cpp:252
 #, kde-format
 msgid "Other unknown error."
 msgstr "Басқа беймәлім қате."
 
-#: svnjobbase.cpp:74
+#: svnjobbase.cpp:114
 #, kde-format
 msgid "Enter Login for: %1"
 msgstr "%1 кіру мәліметін келтіру"
 
-#: svnjobbase.cpp:160
+#: svnjobbase.cpp:188
 #, kde-format
 msgid "Completed"
 msgstr "Бітті"
 
-#: svnjobbase.cpp:175
+#: svnjobbase.cpp:203
 #, kde-format
 msgid ""
 "Error executing Job:\n"
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Subversion Log"
 msgstr "Subversion журналы"
 
-#: svnlogjob.cpp:120
+#: svnlogjob.cpp:119
 #, kde-format
 msgid "Not enough information to log location"
 msgstr "Журналын табу үшін мәлімет жеткіліксіз"
@@ -292,7 +292,7 @@ msgstr "Журналын табу үшін мәлімет жеткіліксіз
 msgid "Subversion Move"
 msgstr "Subversion жылжытуы"
 
-#: svnmovejob.cpp:95
+#: svnmovejob.cpp:94
 #, kde-format
 msgid "Not enough information to move file"
 msgstr "Файлды жылжыту үшін мәлімет жеткіліксіз"
@@ -302,7 +302,7 @@ msgstr "Файлды жылжыту үшін мәлімет жеткіліксі
 msgid "Subversion Remove"
 msgstr "Subversion өшіруі"
 
-#: svnremovejob.cpp:88
+#: svnremovejob.cpp:87
 #, kde-format
 msgid "Not enough information to execute remove job"
 msgstr "Өшіруді орындау үшін мәлімет жеткіліксіз"
@@ -312,7 +312,7 @@ msgstr "Өшіруді орындау үшін мәлімет жеткілікс
 msgid "Subversion Revert"
 msgstr "Subversion қайтаруы"
 
-#: svnrevertjob.cpp:86
+#: svnrevertjob.cpp:85
 #, kde-format
 msgid "Not enough information to execute revert"
 msgstr "Қайтаруды орындау үшін мәлімет жеткіліксіз"
@@ -350,7 +350,7 @@ msgstr "Сервердің SSL куәлігі: %1"
 msgid "Subversion Status"
 msgstr "Subversion күй-жайы"
 
-#: svnstatusjob.cpp:131
+#: svnstatusjob.cpp:130
 #, kde-format
 msgid "Not enough information to execute status job"
 msgstr "Күй-жайды білуді орындау үшін мәлімет жеткіліксіз"
@@ -360,7 +360,7 @@ msgstr "Күй-жайды білуді орындау үшін мәлімет ж
 msgid "Subversion Update"
 msgstr "Subversion жаңартуы"
 
-#: svnupdatejob.cpp:120
+#: svnupdatejob.cpp:119
 #, kde-format
 msgid "Not enough Information to execute update"
 msgstr "Жаңартуды орындау үшін мәлімет жеткіліксіз"

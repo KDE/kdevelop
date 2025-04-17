@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2025-03-03 09:44+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -5712,17 +5712,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Échec lors du réglage des permissions"
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "Le dossier de travail n'existe pas : %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "Le dossier de travail n'est pas absolu : %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -5731,15 +5731,22 @@ msgstr ""
 "Le processus « %1 » s'est terminé avec l'état %2\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Commande terminée avec l'erreur %1."
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Commande terminée avec la valeur %1."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "error"
+msgid "error: %1"
+msgstr "erreur"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6230,7 +6237,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "Aujourd'hui"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -7169,10 +7176,6 @@ msgstr "Différences entre les révisions"
 #~ "Il est impossible d'effectuer une action d'annotation car le document est "
 #~ "introuvable, n'est pas versionné ou n'est pas un document texte :\n"
 #~ "%1"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "erreur"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Double-cliquez pour créer un nouveau point d'arrêt de code"

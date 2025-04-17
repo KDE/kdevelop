@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-11-15 18:23+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -5797,17 +5797,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "Työhakemistoa ei ole olemassa: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "Työhakemisto ei ole absoluuttinen: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -5816,15 +5816,22 @@ msgstr ""
 "Prosessi ”%1” päättyi paluuarvolla %2\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Komentoi päättyi virheeseen %1."
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Komento päättyi paluuarvolla %1."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "error"
+msgid "error: %1"
+msgstr "virhe"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, fuzzy, kde-format
@@ -6375,7 +6382,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "Tänään"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -7279,10 +7286,6 @@ msgstr "Erot versioiden välillä"
 #~ "Merkintätoimintoa ei voitu suorittaa, koska joko tiedostoa ei löydy, se "
 #~ "ei ole versionhallinnassa tai se ei ole tekstitiedosto:\n"
 #~ "%1"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "virhe"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Luo uusi koodikeskeytyskohta kaksoisnapsauttamalla"

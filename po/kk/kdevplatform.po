@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -5940,32 +5940,39 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "Жұмыс қапшығы жоқ: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "Жұмыс қапшығы абсолютті емес: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
 "%3"
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "Команда мына қатемен аяқталды: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "Команда аяқталды. Аяқтау мән-жайы: %1."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "error"
+msgid "error: %1"
+msgstr "қате"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, fuzzy, kde-format
@@ -6516,7 +6523,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -7382,10 +7389,6 @@ msgstr "Жетілдірім арасындағы айырмашылық"
 
 #~ msgid "Verbose output"
 #~ msgstr "Егжей-тегжейлі шығыс"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "қате"
 
 #~ msgid "Double-click to create new code breakpoint"
 #~ msgstr "Жаңа аялдау нүкте құру үшін қос түртім жасаңыз"

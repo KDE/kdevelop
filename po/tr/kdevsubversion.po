@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-11-10 19:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -69,7 +69,7 @@ msgstr "Subversion"
 msgid "Subversion Add"
 msgstr "Subversion Ekle"
 
-#: svnaddjob.cpp:85
+#: svnaddjob.cpp:84
 #, kde-format
 msgid "Not enough information to add file"
 msgstr "Dosya eklemek için yeterli bilgi yok"
@@ -79,7 +79,7 @@ msgstr "Dosya eklemek için yeterli bilgi yok"
 msgid "Subversion Annotate"
 msgstr "Subversion Bilgi Notu"
 
-#: svnblamejob.cpp:144
+#: svnblamejob.cpp:143
 #, kde-format
 msgid "Not enough information to blame location"
 msgstr "Konumu suçlamak için yeterli bilgi yok"
@@ -89,32 +89,32 @@ msgstr "Konumu suçlamak için yeterli bilgi yok"
 msgid "Subversion Checkout"
 msgstr "Subversion Çıkış"
 
-#: svncheckoutjob.cpp:96
+#: svncheckoutjob.cpp:95
 #, kde-format
 msgid "Not enough information to checkout"
 msgstr "Çıkış yapmak için yeterli bilgi yok"
 
-#: svncommitjob.cpp:109
+#: svncommitjob.cpp:108
 #, kde-format
 msgid "Subversion Commit"
 msgstr "Subversion İşle"
 
-#: svncommitjob.cpp:125
-#, kde-format
-msgid "Committing..."
-msgstr "İşleniyor…"
-
-#: svncommitjob.cpp:129
+#: svncommitjob.cpp:119
 #, kde-format
 msgid "Not enough information to execute commit"
 msgstr "İşlemek için yeterli bilgi yok"
+
+#: svncommitjob.cpp:121
+#, kde-format
+msgid "Committing..."
+msgstr "İşleniyor…"
 
 #: svncopyjob.cpp:71
 #, kde-format
 msgid "Subversion Copy"
 msgstr "Subversion Kopyala"
 
-#: svncopyjob.cpp:83
+#: svncopyjob.cpp:82
 #, kde-format
 msgid "Not enough information to copy file"
 msgstr "Dosyayı kopyalamak için yeterli bilgi yok"
@@ -124,7 +124,7 @@ msgstr "Dosyayı kopyalamak için yeterli bilgi yok"
 msgid "Subversion Diff"
 msgstr "Subversion Diff"
 
-#: svndiffjob.cpp:272
+#: svndiffjob.cpp:271
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "Diff yürütmek için yeterli bilgi yok"
@@ -134,7 +134,7 @@ msgstr "Diff yürütmek için yeterli bilgi yok"
 msgid "Subversion Import"
 msgstr "Subversion İçe Aktar"
 
-#: svnimportjob.cpp:99
+#: svnimportjob.cpp:98
 #, kde-format
 msgid "Not enough information to import"
 msgstr "İçe aktarmak için yeterli bilgi yok"
@@ -144,131 +144,131 @@ msgstr "İçe aktarmak için yeterli bilgi yok"
 msgid "Subversion Info"
 msgstr "Subversion Bilgi"
 
-#: svninfojob.cpp:114
+#: svninfojob.cpp:113
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "İş bilgisi yürütebilmek için yeterli bilgi yok"
 
-#: svninternaljobbase.cpp:86
+#: svninternaljobbase.cpp:87
 #, kde-format
 msgctxt "A file was marked to be added to svn"
 msgid "Added %1"
 msgstr "%1 eklendi"
 
-#: svninternaljobbase.cpp:89
+#: svninternaljobbase.cpp:90
 #, kde-format
 msgctxt "A file was marked for deletion from svn"
 msgid "Deleted %1"
 msgstr "%1 silindi"
 
-#: svninternaljobbase.cpp:93
+#: svninternaljobbase.cpp:94
 #, kde-format
 msgctxt "A file was deleted during an svn update operation"
 msgid "Deleted %1"
 msgstr "%1 silindi"
 
-#: svninternaljobbase.cpp:96
+#: svninternaljobbase.cpp:97
 #, kde-format
 msgctxt "A file was added during an svn update operation"
 msgid "Added %1"
 msgstr "%1 eklendi"
 
-#: svninternaljobbase.cpp:136
+#: svninternaljobbase.cpp:137
 #, kde-format
 msgid "Revision %1"
 msgstr "Revizyon %1"
 
-#: svninternaljobbase.cpp:139
+#: svninternaljobbase.cpp:140
 #, kde-format
 msgid "Updating externals: %1"
 msgstr "Dış ögeler güncelleniyor: %1"
 
-#: svninternaljobbase.cpp:147
+#: svninternaljobbase.cpp:148
 #, kde-format
 msgid "Sending %1"
 msgstr "%1 gönderiliyor"
 
-#: svninternaljobbase.cpp:151
+#: svninternaljobbase.cpp:152
 #, kde-format
 msgid "Adding %1 using mimetype %2."
 msgstr "%2 MIME türü kullanılarak %1 ekleniyor."
 
-#: svninternaljobbase.cpp:153
+#: svninternaljobbase.cpp:154
 #, kde-format
 msgid "Adding %1."
 msgstr "%1 ekleniyor."
 
-#: svninternaljobbase.cpp:157
+#: svninternaljobbase.cpp:158
 #, kde-format
 msgid "Deleting %1."
 msgstr "%1 siliniyor."
 
-#: svninternaljobbase.cpp:160
+#: svninternaljobbase.cpp:161
 #, kde-format
 msgid "Replacing %1."
 msgstr "%1 değiştiriliyor."
 
-#: svninternaljobbase.cpp:165
+#: svninternaljobbase.cpp:166
 #, kde-format
 msgid "Transmitting file data "
 msgstr "Dosya verisi iletiliyor "
 
-#: svninternaljobbase.cpp:171
+#: svninternaljobbase.cpp:172
 #, kde-format
 msgid "Blame finished for revision %1, path %2"
 msgstr "%1 revizyonu, %2 yolu için suçlama tamamlandı"
 
-#: svninternaljobbase.cpp:174
+#: svninternaljobbase.cpp:175
 #, kde-format
 msgid "Reverted working copy %1"
 msgstr "%1 çalışma kopyası geri alındı"
 
-#: svninternaljobbase.cpp:177
+#: svninternaljobbase.cpp:178
 #, kde-format
 msgid "Reverting failed on working copy %1"
 msgstr "%1 çalışma kopyası geri alınamadı"
 
-#: svninternaljobbase.cpp:180
+#: svninternaljobbase.cpp:181
 #, kde-format
 msgid "Copied %1"
 msgstr "%1 kopyalandı"
 
-#: svninternaljobbase.cpp:235
+#: svninternaljobbase.cpp:236
 #, kde-format
 msgid "Certificate is not yet valid."
 msgstr "Sertifika henüz geçerli değil."
 
-#: svninternaljobbase.cpp:239
+#: svninternaljobbase.cpp:240
 #, kde-format
 msgid "Certificate has expired."
 msgstr "Sertifikanın tarihi geçmiş."
 
-#: svninternaljobbase.cpp:243
+#: svninternaljobbase.cpp:244
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
 msgstr "Sertifikanın CN (makine adı) bilgisi uzak makine adıyla eşleşmiyor."
 
-#: svninternaljobbase.cpp:247
+#: svninternaljobbase.cpp:248
 #, kde-format
 msgid "Certificate authority is unknown."
 msgstr "Sertifika yetkilendiricisi bilinmiyor."
 
-#: svninternaljobbase.cpp:251
+#: svninternaljobbase.cpp:252
 #, kde-format
 msgid "Other unknown error."
 msgstr "Diğer bilinmeyen hata."
 
-#: svnjobbase.cpp:74
+#: svnjobbase.cpp:114
 #, kde-format
 msgid "Enter Login for: %1"
 msgstr "Oturum açma bilgilerini girin: %1"
 
-#: svnjobbase.cpp:160
+#: svnjobbase.cpp:188
 #, kde-format
 msgid "Completed"
 msgstr "Tamamlandı"
 
-#: svnjobbase.cpp:175
+#: svnjobbase.cpp:203
 #, kde-format
 msgid ""
 "Error executing Job:\n"
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Subversion Log"
 msgstr "Subversion Günlük"
 
-#: svnlogjob.cpp:120
+#: svnlogjob.cpp:119
 #, kde-format
 msgid "Not enough information to log location"
 msgstr "Konumu günlüklemek için yeterli bilgi yok"
@@ -292,7 +292,7 @@ msgstr "Konumu günlüklemek için yeterli bilgi yok"
 msgid "Subversion Move"
 msgstr "Subversion Taşı"
 
-#: svnmovejob.cpp:95
+#: svnmovejob.cpp:94
 #, kde-format
 msgid "Not enough information to move file"
 msgstr "Dosyayı taşımak için yeterli bilgi yok"
@@ -302,7 +302,7 @@ msgstr "Dosyayı taşımak için yeterli bilgi yok"
 msgid "Subversion Remove"
 msgstr "Subversion Sil"
 
-#: svnremovejob.cpp:88
+#: svnremovejob.cpp:87
 #, kde-format
 msgid "Not enough information to execute remove job"
 msgstr "Silmek için yeterli bilgi yok"
@@ -312,7 +312,7 @@ msgstr "Silmek için yeterli bilgi yok"
 msgid "Subversion Revert"
 msgstr "Subversion Geri Al"
 
-#: svnrevertjob.cpp:86
+#: svnrevertjob.cpp:85
 #, kde-format
 msgid "Not enough information to execute revert"
 msgstr "Geri alma yürütmek için yeterli bilgi yok"
@@ -346,7 +346,7 @@ msgstr "SSL Sunucu Sertifikası: %1"
 msgid "Subversion Status"
 msgstr "Subversion Durum"
 
-#: svnstatusjob.cpp:131
+#: svnstatusjob.cpp:130
 #, kde-format
 msgid "Not enough information to execute status job"
 msgstr "Durumlamayı yürütmek için yeterli bilgi yok"
@@ -356,7 +356,7 @@ msgstr "Durumlamayı yürütmek için yeterli bilgi yok"
 msgid "Subversion Update"
 msgstr "Subversion Güncelle"
 
-#: svnupdatejob.cpp:120
+#: svnupdatejob.cpp:119
 #, kde-format
 msgid "Not enough Information to execute update"
 msgstr "Güncelleme yapmak için yeterli bilgi yok"

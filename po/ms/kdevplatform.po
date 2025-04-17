@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2009-07-05 19:31+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -5358,32 +5358,37 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
 "%3"
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr ""
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr ""
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, fuzzy, kde-format
+msgid "error: %1"
+msgstr "ralat"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -5856,7 +5861,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
@@ -6213,11 +6218,6 @@ msgstr ""
 #~ msgctxt "toolview position"
 #~ msgid "Top"
 #~ msgstr "Atas"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip"
-#~ msgid "error"
-#~ msgstr "ralat"
 
 #, fuzzy
 #~ msgid "&Remove all"

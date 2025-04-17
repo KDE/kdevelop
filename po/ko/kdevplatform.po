@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2025-04-06 23:05+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -5524,17 +5524,17 @@ msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "권한 설정 실패"
 
-#: vcs/dvcs/dvcsjob.cpp:173
+#: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
 msgstr "작업 디렉터리가 없음: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:182
+#: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
 msgstr "작업 디렉터리가 절대 경로가 아님: %1"
 
-#: vcs/dvcs/dvcsjob.cpp:232
+#: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
 msgid ""
 "Process '%1' exited with status %2\n"
@@ -5543,15 +5543,20 @@ msgstr ""
 "'%1' 프로세스가 상태 %2(으)로 종료됨\n"
 "%3"
 
-#: vcs/dvcs/dvcsjob.cpp:263
+#: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
 msgstr "명령이 종료되었고 오류 코드 %1을(를) 반환했습니다."
 
-#: vcs/dvcs/dvcsjob.cpp:277
+#: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
 msgstr "명령이 종료되었고 값 %1을(를) 반환했습니다."
+
+#: vcs/dvcs/dvcsjob.cpp:370
+#, kde-format
+msgid "error: %1"
+msgstr ""
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6034,7 +6039,7 @@ msgctxt "@item age"
 msgid "Today"
 msgstr "오늘"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:283
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2022-07-09 18:35+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -66,10 +66,8 @@ msgstr "No se ha especificado ningún proyecto."
 msgid "QMake: %1"
 msgstr "QMake: %1"
 
-#: qmakejob.cpp:92
-#, kde-format
-msgid "Configure error"
-msgstr "Error de «configure»"
+#~ msgid "Configure error"
+#~ msgstr "Error de «configure»"
 
 #~ msgid "Add"
 #~ msgstr "Añadir"

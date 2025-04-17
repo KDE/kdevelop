@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2023-04-01 21:46+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -68,7 +68,5 @@ msgstr "Neniu projekto specifita."
 msgid "QMake: %1"
 msgstr "QMake: %1"
 
-#: qmakejob.cpp:92
-#, kde-format
-msgid "Configure error"
-msgstr "Agorda eraro"
+#~ msgid "Configure error"
+#~ msgstr "Agorda eraro"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 00:38+0000\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -67,7 +67,7 @@ msgstr "विध्वंसनम्"
 msgid "Subversion Add"
 msgstr "विध्वंस Add"
 
-#: svnaddjob.cpp:85
+#: svnaddjob.cpp:84
 #, kde-format
 msgid "Not enough information to add file"
 msgstr "सञ्चिकां योजयितुं पर्याप्तं सूचना नास्ति"
@@ -77,7 +77,7 @@ msgstr "सञ्चिकां योजयितुं पर्याप्�
 msgid "Subversion Annotate"
 msgstr "विध्वंस एनोटेशन"
 
-#: svnblamejob.cpp:144
+#: svnblamejob.cpp:143
 #, kde-format
 msgid "Not enough information to blame location"
 msgstr "स्थानस्य दोषं दातुं पर्याप्तं सूचना नास्ति"
@@ -87,32 +87,32 @@ msgstr "स्थानस्य दोषं दातुं पर्याप
 msgid "Subversion Checkout"
 msgstr "विध्वंस चेकआउट"
 
-#: svncheckoutjob.cpp:96
+#: svncheckoutjob.cpp:95
 #, kde-format
 msgid "Not enough information to checkout"
 msgstr "चेकआउट् कर्तुं पर्याप्तं सूचना नास्ति"
 
-#: svncommitjob.cpp:109
+#: svncommitjob.cpp:108
 #, kde-format
 msgid "Subversion Commit"
 msgstr "विध्वंस समिति"
 
-#: svncommitjob.cpp:125
-#, kde-format
-msgid "Committing..."
-msgstr "प्रतिबद्ध..."
-
-#: svncommitjob.cpp:129
+#: svncommitjob.cpp:119
 #, kde-format
 msgid "Not enough information to execute commit"
 msgstr "प्रतिबद्धतां निष्पादयितुं पर्याप्तं सूचना नास्ति"
+
+#: svncommitjob.cpp:121
+#, kde-format
+msgid "Committing..."
+msgstr "प्रतिबद्ध..."
 
 #: svncopyjob.cpp:71
 #, kde-format
 msgid "Subversion Copy"
 msgstr "विध्वंस प्रतिलिपि"
 
-#: svncopyjob.cpp:83
+#: svncopyjob.cpp:82
 #, kde-format
 msgid "Not enough information to copy file"
 msgstr "सञ्चिकायाः प्रतिलिपिं कर्तुं पर्याप्तं सूचना नास्ति"
@@ -122,7 +122,7 @@ msgstr "सञ्चिकायाः प्रतिलिपिं कर्�
 msgid "Subversion Diff"
 msgstr "विध्वंस Diff"
 
-#: svndiffjob.cpp:272
+#: svndiffjob.cpp:271
 #, kde-format
 msgid "Not enough information given to execute diff"
 msgstr "diff निष्पादयितुं पर्याप्तं सूचना न दत्ता"
@@ -132,7 +132,7 @@ msgstr "diff निष्पादयितुं पर्याप्तं �
 msgid "Subversion Import"
 msgstr "विध्वंस आयात"
 
-#: svnimportjob.cpp:99
+#: svnimportjob.cpp:98
 #, kde-format
 msgid "Not enough information to import"
 msgstr "आयातार्थं पर्याप्तं सूचना नास्ति"
@@ -142,131 +142,131 @@ msgstr "आयातार्थं पर्याप्तं सूचना 
 msgid "Subversion Info"
 msgstr "विध्वंस सूचना"
 
-#: svninfojob.cpp:114
+#: svninfojob.cpp:113
 #, kde-format
 msgid "Not enough information to execute info job"
 msgstr "info job निष्पादयितुं पर्याप्तं सूचना नास्ति"
 
-#: svninternaljobbase.cpp:86
+#: svninternaljobbase.cpp:87
 #, kde-format
 msgctxt "A file was marked to be added to svn"
 msgid "Added %1"
 msgstr "%1 योजितम्"
 
-#: svninternaljobbase.cpp:89
+#: svninternaljobbase.cpp:90
 #, kde-format
 msgctxt "A file was marked for deletion from svn"
 msgid "Deleted %1"
 msgstr "%1 विलोपितम्"
 
-#: svninternaljobbase.cpp:93
+#: svninternaljobbase.cpp:94
 #, kde-format
 msgctxt "A file was deleted during an svn update operation"
 msgid "Deleted %1"
 msgstr "%1 विलोपितम्"
 
-#: svninternaljobbase.cpp:96
+#: svninternaljobbase.cpp:97
 #, kde-format
 msgctxt "A file was added during an svn update operation"
 msgid "Added %1"
 msgstr "%1 योजितम्"
 
-#: svninternaljobbase.cpp:136
+#: svninternaljobbase.cpp:137
 #, kde-format
 msgid "Revision %1"
 msgstr "संशोधन %1"
 
-#: svninternaljobbase.cpp:139
+#: svninternaljobbase.cpp:140
 #, kde-format
 msgid "Updating externals: %1"
 msgstr "बाह्यानि अद्यतनीकरोति: %1"
 
-#: svninternaljobbase.cpp:147
+#: svninternaljobbase.cpp:148
 #, kde-format
 msgid "Sending %1"
 msgstr "%1 प्रेषयन्"
 
-#: svninternaljobbase.cpp:151
+#: svninternaljobbase.cpp:152
 #, kde-format
 msgid "Adding %1 using mimetype %2."
 msgstr "%2 mimetype इत्यस्य उपयोगेन %1 योजयन् ।"
 
-#: svninternaljobbase.cpp:153
+#: svninternaljobbase.cpp:154
 #, kde-format
 msgid "Adding %1."
 msgstr "%1 योजयित्वा ।"
 
-#: svninternaljobbase.cpp:157
+#: svninternaljobbase.cpp:158
 #, kde-format
 msgid "Deleting %1."
 msgstr "%1 विलोपनम् ।"
 
-#: svninternaljobbase.cpp:160
+#: svninternaljobbase.cpp:161
 #, kde-format
 msgid "Replacing %1."
 msgstr "%1 इत्यस्य स्थाने ।"
 
-#: svninternaljobbase.cpp:165
+#: svninternaljobbase.cpp:166
 #, kde-format
 msgid "Transmitting file data "
 msgstr "सञ्चिकादत्तांशं प्रसारयन् "
 
-#: svninternaljobbase.cpp:171
+#: svninternaljobbase.cpp:172
 #, kde-format
 msgid "Blame finished for revision %1, path %2"
 msgstr "%1 पुनरीक्षणस्य दोषः समाप्तः, मार्गः %2"
 
-#: svninternaljobbase.cpp:174
+#: svninternaljobbase.cpp:175
 #, kde-format
 msgid "Reverted working copy %1"
 msgstr "%1 कार्यरतप्रतिलिपिः प्रत्यावर्तिता"
 
-#: svninternaljobbase.cpp:177
+#: svninternaljobbase.cpp:178
 #, kde-format
 msgid "Reverting failed on working copy %1"
 msgstr "कार्यरतप्रति %1 इत्यत्र पुनरागमनं विफलम्"
 
-#: svninternaljobbase.cpp:180
+#: svninternaljobbase.cpp:181
 #, kde-format
 msgid "Copied %1"
 msgstr "प्रतिलिपितः %1"
 
-#: svninternaljobbase.cpp:235
+#: svninternaljobbase.cpp:236
 #, kde-format
 msgid "Certificate is not yet valid."
 msgstr "प्रमाणपत्रम् अद्यापि वैधं नास्ति।"
 
-#: svninternaljobbase.cpp:239
+#: svninternaljobbase.cpp:240
 #, kde-format
 msgid "Certificate has expired."
 msgstr "प्रमाणपत्रस्य अवधिः समाप्तः अस्ति।"
 
-#: svninternaljobbase.cpp:243
+#: svninternaljobbase.cpp:244
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
 msgstr "प्रमाणपत्रस्य CN (होस्टनाम) दूरस्थं होस्ट्नाम सह न मेलति ।"
 
-#: svninternaljobbase.cpp:247
+#: svninternaljobbase.cpp:248
 #, kde-format
 msgid "Certificate authority is unknown."
 msgstr "प्रमाणपत्रस्य अधिकारः अज्ञातः अस्ति।"
 
-#: svninternaljobbase.cpp:251
+#: svninternaljobbase.cpp:252
 #, kde-format
 msgid "Other unknown error."
 msgstr "अन्यः अज्ञातदोषः ।"
 
-#: svnjobbase.cpp:74
+#: svnjobbase.cpp:114
 #, kde-format
 msgid "Enter Login for: %1"
 msgstr "Login इति प्रविष्टं कुर्वन्तु: %1"
 
-#: svnjobbase.cpp:160
+#: svnjobbase.cpp:188
 #, kde-format
 msgid "Completed"
 msgstr "सम्पन्न"
 
-#: svnjobbase.cpp:175
+#: svnjobbase.cpp:203
 #, kde-format
 msgid ""
 "Error executing Job:\n"
@@ -280,7 +280,7 @@ msgstr ""
 msgid "Subversion Log"
 msgstr "विध्वंस लॉग"
 
-#: svnlogjob.cpp:120
+#: svnlogjob.cpp:119
 #, kde-format
 msgid "Not enough information to log location"
 msgstr "स्थानं लॉग् कर्तुं पर्याप्तं सूचना नास्ति"
@@ -290,7 +290,7 @@ msgstr "स्थानं लॉग् कर्तुं पर्याप्
 msgid "Subversion Move"
 msgstr "विध्वंस चाल"
 
-#: svnmovejob.cpp:95
+#: svnmovejob.cpp:94
 #, kde-format
 msgid "Not enough information to move file"
 msgstr "सञ्चिकां स्थानान्तरयितुं पर्याप्तं सूचना नास्ति"
@@ -300,7 +300,7 @@ msgstr "सञ्चिकां स्थानान्तरयितुं �
 msgid "Subversion Remove"
 msgstr "विध्वंस निष्कासित करें"
 
-#: svnremovejob.cpp:88
+#: svnremovejob.cpp:87
 #, kde-format
 msgid "Not enough information to execute remove job"
 msgstr "remove job निष्पादयितुं पर्याप्तं सूचना नास्ति"
@@ -310,7 +310,7 @@ msgstr "remove job निष्पादयितुं पर्याप्त
 msgid "Subversion Revert"
 msgstr "विध्वंस Revert"
 
-#: svnrevertjob.cpp:86
+#: svnrevertjob.cpp:85
 #, kde-format
 msgid "Not enough information to execute revert"
 msgstr "revert निष्पादयितुं पर्याप्तं सूचना नास्ति"
@@ -344,7 +344,7 @@ msgstr "SSL सर्वर प्रमाणपत्रम्: %1"
 msgid "Subversion Status"
 msgstr "विध्वंस स्थिति"
 
-#: svnstatusjob.cpp:131
+#: svnstatusjob.cpp:130
 #, kde-format
 msgid "Not enough information to execute status job"
 msgstr "स्थितिकार्यं निष्पादयितुं पर्याप्तं सूचना नास्ति"
@@ -354,7 +354,7 @@ msgstr "स्थितिकार्यं निष्पादयितु�
 msgid "Subversion Update"
 msgstr "विध्वंस अद्यतन"
 
-#: svnupdatejob.cpp:120
+#: svnupdatejob.cpp:119
 #, kde-format
 msgid "Not enough Information to execute update"
 msgstr "अद्यतनं निष्पादयितुं पर्याप्तं सूचना नास्ति"
