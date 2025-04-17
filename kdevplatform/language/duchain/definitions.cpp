@@ -215,7 +215,6 @@ KDevVarLengthArray<IndexedDeclaration> Definitions::definitions(const Declaratio
 
     DefinitionsItem item;
     item.declaration = id;
-    DefinitionsRequestItem request(item);
 
     LockedItemRepository::read<Definitions>([&](const DefinitionsRepo& repo) {
         uint index = repo.findIndex(item);
