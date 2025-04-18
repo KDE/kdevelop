@@ -1,20 +1,21 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevbazaar.po package.
+# Copyright (C) 2008-2025 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2018.
+# SPDX-FileCopyrightText: 2008, 2009, 2018, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevbazaar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2018-08-16 12:38+0100\n"
+"PO-Revision-Date: 2025-04-17 11:38+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 24.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: bazaarplugin.cpp:37
@@ -27,28 +28,4 @@ msgstr ""
 #: bazaarplugin.cpp:84
 #, kde-format
 msgid "No files selected to commit"
-msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Bazaar Plugin"
-#~ msgstr "Complemento Bazaar"
-
-#~ msgid "Bazaar version control system support"
-#~ msgstr "Implementación del sistema de control de versiones Bazaar"
-
-#~ msgid "Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>"
-#~ msgstr "Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>"
-
-#~ msgid "Bazaar"
-#~ msgstr "Bazaar"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Bazaar"
-#~ msgstr "Bazaar"
+msgstr "No se han seleccionado archivos para confirmar"

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2025-03-02 09:33+0200\n"
+"PO-Revision-Date: 2025-04-17 13:22+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -5691,7 +5691,7 @@ msgstr "Виконання команди завершено зі значенн
 #: vcs/dvcs/dvcsjob.cpp:370
 #, kde-format
 msgid "error: %1"
-msgstr ""
+msgstr "помилка: %1"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format

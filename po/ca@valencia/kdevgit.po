@@ -707,6 +707,3 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Branca"
-
-#~ msgid "error: %1"
-#~ msgstr "s'ha produït un error: %1"

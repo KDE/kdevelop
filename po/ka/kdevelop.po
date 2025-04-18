@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2024-07-20 05:16+0200\n"
+"PO-Revision-Date: 2025-04-17 03:46+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -189,13 +189,14 @@ msgstr "ყველა უფლება დაცულია, 1999-%1, Kdeve
 #: main.cpp:387
 #, kde-format
 msgid "Igor Kushnir"
-msgstr ""
+msgstr "იგორ კუშნირი"
 
 #: main.cpp:388
 #, kde-format
 msgid ""
 "General maintenance, Bug fixing and prevention, Performance improvements"
 msgstr ""
+"ზოგადი მოვლა, შეცდომების გამოსწორება და პრევენცია, წარმადობის გაუმჯობესება"
 
 #: main.cpp:390
 #, kde-format

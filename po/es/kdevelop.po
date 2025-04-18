@@ -1,25 +1,23 @@
-# translation of kdevelop.po to Spanish
-# Spanish .po file for KDevelop
-# Copyright (C) 1999,2002,2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
-# David Martínez Moreno <ender@debian.org> 2005.
-# David Martínez Moreno <ender@debian.org> 2005.
+# Spanish translations for kdevelop.po package.
+# Copyright (C) 2001-2025 Free Software Foundation, Inc.
 #
-# Salvador Gimeno <salgiza@jazzfree.com>, 2001.
-# Juan Manuel García Molina <salgiza@jazzfree.com>, 2001-2002.
-# Miguel Revilla Rodríguez <yo@miguelrevilla.com>, 2002, 2003, 2004.
-# Pedro Jurado Maqueda <pjmelenas@biwemail.com>, 2003.
-# Juan Manuel Garcia Molina <juanma@superiodico.net>, 2005.
-# Isaac Clerencia <isaac@warp.es>, 2005.
-# Jaime Robles <jaime@kde.org>, 2005, 2008.
-# Pablo de Vicente <p.devicente@wanadoo.es>, 2005.
-# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2023 Eloy Cuadra <ecuadra@eloihr.net>
-# Rocio Gallego <traducciones@rociogallego.com>, 2016.
+# SPDX-FileCopyrightText: 2001 Salvador Gimeno <salgiza@jazzfree.com>
+# SPDX-FileCopyrightText: 2001-2002 Juan Manuel García Molina <salgiza@jazzfree.com>
+# SPDX-FileCopyrightText: 2002, 2003, 2004 Miguel Revilla Rodríguez <yo@miguelrevilla.com>
+# SPDX-FileCopyrightText: 2003 Pedro Jurado Maqueda <pjmelenas@biwemail.com>
+# SPDX-FileCopyrightText: 2005 Juan Manuel Garcia Molina <juanma@superiodico.net>
+# SPDX-FileCopyrightText: 2005 David Martínez Moreno <ender@debian.org>
+# SPDX-FileCopyrightText: 2005 Isaac Clerencia <isaac@warp.es>
+# SPDX-FileCopyrightText: 2005, 2008 Jaime Robles <jaime@kde.org>
+# SPDX-FileCopyrightText: 2005 Pablo de Vicente <p.devicente@wanadoo.es>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2023, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016 Rocio Gallego <traducciones@rociogallego.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2023-09-03 21:51+0200\n"
+"PO-Revision-Date: 2025-04-17 11:39+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -27,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Jaime Robles <jaime@kde.org>\n"
-"X-Generator: Lokalize 23.08.0\n"
+"X-Generator: Lokalize 24.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -201,13 +199,15 @@ msgstr "Copyright 1999-%1, los desarrolladores de KDevelop"
 #: main.cpp:387
 #, kde-format
 msgid "Igor Kushnir"
-msgstr ""
+msgstr "Igor Kushnir"
 
 #: main.cpp:388
 #, kde-format
 msgid ""
 "General maintenance, Bug fixing and prevention, Performance improvements"
 msgstr ""
+"Mantenimiento general, corrección de errores y prevención, mejoras de "
+"rendimiento"
 
 #: main.cpp:390
 #, kde-format
@@ -732,7 +732,7 @@ msgid ""
 "bugfixes ... "
 msgstr ""
 "Buscador de documentación, parches para el gestor de proyectos QMake, "
-"mejoras en la usabilidad, corrección de fallos... "
+"mejoras en la usabilidad, corrección de fallos… "
 
 #: main.cpp:447
 #, kde-format
@@ -937,162 +937,3 @@ msgstr "Lista todas las sesiones del editor de KDevelop de su cuenta."
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Abrir sesión de KDevelop"
-
-#~ msgid "Files to load"
-#~ msgstr "Archivos a cargar"
-
-#~ msgid "Analy&ze"
-#~ msgstr "Anali&zar"
-
-#~ msgid "&File"
-#~ msgstr "&Archivo"
-
-#~ msgid "&Edit"
-#~ msgstr "&Editar"
-
-#~ msgid "&Advanced"
-#~ msgstr "Avan&zado"
-
-#~ msgid "&View"
-#~ msgstr "&Ver"
-
-#~ msgid "&Code Folding"
-#~ msgstr "&Plegado de código"
-
-#~ msgid "&Tools"
-#~ msgstr "&Herramientas"
-
-#~ msgid "Word Completion"
-#~ msgstr "Terminación de palabras"
-
-#~ msgid "&Settings"
-#~ msgstr "&Preferencias"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Editor"
-#~ msgstr "Editor"
-
-#~ msgid "Deprecated options:"
-#~ msgstr "Opciones desaconsejadas:"
-
-#~ msgid "Same as -l / --list-sessions"
-#~ msgstr "Igual que -l / --list-sessions"
-
-#~ msgid "Same as -n / --new-session"
-#~ msgstr "Igual que -n / --new-session"
-
-#~ msgid "The KHTML authors"
-#~ msgstr "Los autores de KHTML"
-
-#~ msgid "HTML documentation component"
-#~ msgstr "Componente de documentación HTML"
-
-#~ msgid "Develop"
-#~ msgstr "Desarrollo"
-
-#~ msgid "Getting Started"
-#~ msgstr "Cómo comenzar"
-
-#~ msgid "Back to code"
-#~ msgstr "De vuelta al código"
-
-#~ msgid "Configure a new Launcher"
-#~ msgstr "Configurar un nuevo lanzador"
-
-#~ msgid "Debug your program"
-#~ msgstr "Depurar sus programas"
-
-#~ msgid "Debug Area"
-#~ msgstr "Área de depuración"
-
-#~ msgid ""
-#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
-#~ "program works on execution. On the <em>Run</em> menu you will find all "
-#~ "the possible options.<br/><br/>As you can see, here you can just execute "
-#~ "your application or debug it if you need further runtime information. You "
-#~ "can select what is going to be run by configuring the launches and "
-#~ "selecting the one you want to use in the <em>Current Launch "
-#~ "Configuration</em> sub-menu."
-#~ msgstr ""
-#~ "En el área <em>Depuración</em> podrá ver y analizar cómo funciona su "
-#~ "programa cuando se ejecuta. En el menú <em>Ejecutar</em> encontrará todas "
-#~ "las opciones posibles.<br/><br/>Como puede ver, aquí solo puede ejecutar "
-#~ "su aplicación o depurarla si necesita más información en tiempo de "
-#~ "ejecución. Puede seleccionar lo que se va a ejecutar configurando los "
-#~ "lanzadores y eligiendo el que quiera usar en el submenú <em>Configuración "
-#~ "del lanzador actual</em>."
-
-#~ msgid "Review a Patch"
-#~ msgstr "Revisar un parche"
-
-#~ msgid "Review Area"
-#~ msgstr "Área de revisión"
-
-#~ msgid ""
-#~ "On the <em>Review</em> area you will be able to find the tools you need "
-#~ "to review changes in your projects, either the ones you made or some "
-#~ "external patch.<br/> Also it will help you send the changes to the "
-#~ "community you're contributing to, either by committing the changes, "
-#~ "sending them by e-mail or putting them on a ReviewBoard service."
-#~ msgstr ""
-#~ "En el área <em>Revisar</em> podrá encontrar las herramientas que necesita "
-#~ "para revisar cambios en sus proyectos, tanto los que ha hecho usted como "
-#~ "parches externos.<br/>También le ayudará a enviar los cambios a la "
-#~ "comunidad con la que está colaborando, ya sea enviando los cambios a un "
-#~ "repositorio, enviándolos por correo electrónico o colocándolos en un "
-#~ "servicio ReviewBoard."
-
-#~ msgid "New Project"
-#~ msgstr "Nuevo proyecto"
-
-#~ msgid "Open project"
-#~ msgstr "Abrir proyecto"
-
-#~ msgid "Fetch project"
-#~ msgstr "Extraer proyecto"
-
-#~ msgid "Recent Projects"
-#~ msgstr "Proyectos recientes"
-
-#~ msgid "%1: %2"
-#~ msgstr "%1: %2"
-
-#~ msgid "Sessions"
-#~ msgstr "Sesiones"
-
-#~ msgid "Official Website"
-#~ msgstr "Página web oficial"
-
-#~ msgid "Userbase"
-#~ msgstr "Userbase"
-
-#~ msgid "Techbase"
-#~ msgstr "Techbase"
-
-#~ msgid "Handbook"
-#~ msgstr "Manual"
-
-#~ msgid "Go!"
-#~ msgstr "Ir"
-
-#~ msgid "Documentation for KDevelop users"
-#~ msgstr "Documentación para los usuarios de KDevelop"
-
-#~ msgid "Keep up with KDevelop's development"
-#~ msgstr "Manténgase al día del desarrollo de KDevelop"
-
-#~ msgid "Help us improve KDevelop"
-#~ msgstr "Ayúdenos a mejorar KDevelop"
-
-#~ msgctxt "name: content"
-#~ msgid "%1: %2"
-#~ msgstr "%1: %2"
-
-#~ msgid "Some of the requested files could not be opened."
-#~ msgstr "Algunos de los archivos solicitados no se pueden abrir."
-
-#~ msgid "Starting"
-#~ msgstr "Iniciación"
-
-#~ msgid "Learn KDevelop!"
-#~ msgstr "¡Aprenda a usar KDevelop!"

@@ -691,6 +691,3 @@ msgstr "创建新分支并在新分支上应用暂存，然后删除暂存"
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "分支"
-
-#~ msgid "error: %1"
-#~ msgstr "错误：%1"

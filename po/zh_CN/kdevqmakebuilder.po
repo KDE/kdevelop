@@ -63,6 +63,3 @@ msgstr "未指定工程文件。"
 #, kde-format
 msgid "QMake: %1"
 msgstr "QMake：%1"
-
-#~ msgid "Configure error"
-#~ msgstr "配置错误"

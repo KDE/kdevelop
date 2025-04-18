@@ -166,6 +166,3 @@ msgstr "配置文件"
 msgctxt "@option:radio"
 msgid "User/Port Config"
 msgstr "用户/端口配置"
-
-#~ msgid "error: %1"
-#~ msgstr "错误：%1"
