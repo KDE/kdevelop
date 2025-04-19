@@ -35,7 +35,7 @@ void CustomBuildSystemKCModule::reset()
 
 void CustomBuildSystemKCModule::apply()
 {
-    configWidget->saveTo(CustomBuildSystemSettings::self()->config(), project());
+    configWidget->saveTo(CustomBuildSystemSettings::self()->config());
     ProjectConfigPage::apply();
     if (KDevelop::IProjectController::parseAllProjectSources()) {
         KDevelop::ICore::self()->projectController()->reparseProject(project());
