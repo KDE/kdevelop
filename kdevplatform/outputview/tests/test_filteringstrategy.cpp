@@ -12,6 +12,7 @@
 #include <outputview/filtereditem.h>
 #include <util/path.h>
 
+#include <QElapsedTimer>
 #include <QStandardPaths>
 
 using namespace KDevelop;
