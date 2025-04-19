@@ -111,6 +111,7 @@ int main(int argc, char **argv)
     QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel);
     buttonBox.button(QDialogButtonBox::Apply)->setEnabled(false);
     buttonBox.button(QDialogButtonBox::Ok)->setEnabled(false);
+    mainLayout.addWidget(&buttonBox);
 
     const State state(&buttonBox, &widget, &projkcfg);
 
