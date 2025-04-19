@@ -13,11 +13,6 @@
 class KConfig;
 class KConfigGroup;
 
-namespace KDevelop
-{
-class IProject;
-}
-
 namespace Ui
 {
 class CustomBuildSystemConfigWidget;
@@ -29,7 +24,7 @@ Q_OBJECT
 public:
     explicit CustomBuildSystemConfigWidget( QWidget* parent );
     void loadFrom( KConfig* );
-    void saveTo( KConfig*, KDevelop::IProject* project );
+    void saveTo(KConfig* cfg);
     void loadDefaults();
 Q_SIGNALS:
     void changed();

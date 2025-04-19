@@ -13,7 +13,6 @@
 #include <QPushButton>
 #include <QStandardPaths>
 
-#include <tests/testproject.h>
 #include <QApplication>
 #include <KAboutData>
 #include <QCommandLineParser>
@@ -28,8 +27,10 @@ class State : public QObject
 {
 Q_OBJECT
 public:
-    State( QDialogButtonBox* buttonBox, CustomBuildSystemConfigWidget* cfgWidget, KConfig* config, KDevelop::IProject* proj )
-        : buttonBox(buttonBox), configWidget(cfgWidget), cfg(config), project(proj)
+    explicit State(QDialogButtonBox* buttonBox, CustomBuildSystemConfigWidget* cfgWidget, KConfig* config)
+        : buttonBox(buttonBox)
+        , configWidget(cfgWidget)
+        , cfg(config)
     {
         connect(buttonBox, &QDialogButtonBox::clicked, this, &State::buttonClicked);
         connect(configWidget, &CustomBuildSystemConfigWidget::changed, this, &State::configChanged);
@@ -47,7 +48,7 @@ public Q_SLOTS:
     }
 
     void apply() {
-        configWidget->saveTo(cfg, project);
+        configWidget->saveTo(cfg);
         buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
         buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     }
@@ -63,7 +64,6 @@ private:
     QDialogButtonBox* buttonBox;
     CustomBuildSystemConfigWidget* configWidget;
     KConfig* cfg;
-    KDevelop::IProject* project;
 };
 
 int main(int argc, char **argv)
@@ -102,9 +102,6 @@ int main(int argc, char **argv)
     QVBoxLayout mainLayout;
     dlg.setLayout(&mainLayout);
 
-    KDevelop::TestProject proj;
-    proj.setPath( KDevelop::Path(projkcfg.name()));
-
     CustomBuildSystemConfigWidget widget(nullptr);
     widget.loadFrom(&projkcfg);
     mainLayout.addWidget(&widget);
@@ -115,7 +112,7 @@ int main(int argc, char **argv)
     buttonBox.button(QDialogButtonBox::Apply)->setEnabled(false);
     buttonBox.button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    State state(&buttonBox, &widget, &projkcfg, &proj );
+    const State state(&buttonBox, &widget, &projkcfg);
 
     dlg.resize(800, 600);
 
