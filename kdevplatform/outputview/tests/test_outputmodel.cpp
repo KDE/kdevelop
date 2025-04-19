@@ -11,6 +11,7 @@
 
 #include <QTest>
 #include <QStandardPaths>
+#include <QElapsedTimer>
 
 QTEST_MAIN(KDevelop::TestOutputModel)
 
