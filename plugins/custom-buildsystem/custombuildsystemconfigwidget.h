@@ -9,7 +9,6 @@
 
 #include <QWidget>
 #include "custombuildsystemconfig.h"
-#include "custombuildjob.h"
 
 class KConfig;
 class KConfigGroup;
