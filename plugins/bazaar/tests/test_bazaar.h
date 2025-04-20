@@ -19,11 +19,6 @@
 
 class BazaarPlugin;
 
-namespace KDevelop
-{
-    class TestCore;
-}
-
 class TestBazaar: public QObject
 {
     Q_OBJECT

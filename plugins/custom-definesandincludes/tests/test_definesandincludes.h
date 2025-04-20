@@ -11,7 +11,6 @@
 
 namespace KDevelop
 {
-class TestCore;
 class IProject;
 }
 

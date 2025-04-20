@@ -12,9 +12,6 @@
 
 class IExecutePlugin;
 
-namespace KDevelop {
-class TestCore;
-}
 namespace KDevMI {
 namespace GDB {
 

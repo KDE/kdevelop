@@ -18,7 +18,6 @@ struct GrepJobSettings;
 
 namespace KDevelop
 {
-class TestCore;
 class TestProjectController;
 }
 class GrepViewPlugin;

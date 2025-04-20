@@ -15,11 +15,6 @@
 
 class GitPlugin;
 
-namespace KDevelop
-{
-    class TestCore;
-}
-
 class GitInitTest: public QObject
 {
     Q_OBJECT
