@@ -34,6 +34,7 @@ PRIVATE
 
 install(FILES
     autotestshell.h
+    corelesshelpers.h
     kdevsignalspy.h
     plugintesthelpers.h
     projectsgenerator.h

@@ -13,7 +13,6 @@
 #include <QTextEdit>
 #include <QDockWidget>
 #include <QFocusEvent>
-#include <QStandardPaths>
 
 #include <sublime/view.h>
 #include <sublime/area.h>
@@ -21,6 +20,7 @@
 #include <sublime/mainwindow.h>
 #include <sublime/container.h>
 #include <sublime/tooldocument.h>
+#include <tests/corelesshelpers.h>
 
 using namespace Sublime;
 
@@ -40,7 +40,7 @@ public:
 
 void TestViewActivation::initTestCase()
 {
-    QStandardPaths::setTestModeEnabled(true);
+    KDevelop::initCorelessTestCase();
     qRegisterMetaType<View*>("View*");
 }
 

@@ -23,6 +23,7 @@
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
 #include <sublime/container.h>
+#include <tests/corelesshelpers.h>
 
 #include "areaprinter.h"
 
@@ -40,7 +41,7 @@ struct ViewCounter {
 
 void TestAreaOperation::initTestCase()
 {
-    QStandardPaths::setTestModeEnabled(true);
+    KDevelop::initCorelessTestCase();
 }
 
 void TestAreaOperation::init()
