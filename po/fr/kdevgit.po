@@ -4,7 +4,7 @@
 # Joëlle Cornavin <jcorn@free.fr>, 2009, 2010, 2011, 2012, 2013.
 # Vincent PINON <vpinon@kde.org>, 2014.
 # Simon Depiets <sdepiets@gmail.com>, 2018.
-# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
 #
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2024-08-13 18:07+0200\n"
+"PO-Revision-Date: 2025-04-18 18:15+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.3\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -43,7 +43,7 @@ msgstr "« Stage » sélectionné"
 #: committoolview.cpp:226
 #, kde-format
 msgid "Unstage selected"
-msgstr "Commande « Unstage » sélectionnée"
+msgstr "Commande « unstage » sélectionnée"
 
 #: committoolview.cpp:228
 #, kde-format
@@ -228,7 +228,7 @@ msgstr "Git Commit"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
-msgstr "Rebaser"
+msgstr "rebase"
 
 #: gitplugin.cpp:252
 #, kde-format
@@ -332,7 +332,7 @@ msgstr "Sélection de branche"
 #, kde-format
 msgctxt "@title:window"
 msgid "Rebase"
-msgstr "Rebaser"
+msgstr "rebase"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rebasedialog.ui:20
@@ -346,7 +346,7 @@ msgstr "Branche de base :"
 #, kde-format
 msgctxt "@action:button"
 msgid "Rebase"
-msgstr "Rebase"
+msgstr "rebase"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_2)
 #: rebasedialog.ui:60
