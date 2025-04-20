@@ -6,7 +6,11 @@
 
 #include "autotestshell.h"
 
+#include <QCoreApplication>
+#include <QDir>
+#include <QFile>
 #include <QStandardPaths>
+#include <QTest>
 
 using namespace KDevelop;
 
@@ -22,4 +26,25 @@ void AutoTestShell::init(const QStringList& plugins)
     static auto instance = AutoTestShell();
     instance.m_plugins = plugins;
     s_instance = &instance;
+}
+
+void AutoTestShell::initializeNotifications()
+{
+    // Guard against installing to a non-test location.
+    QVERIFY2(QStandardPaths::isTestModeEnabled(),
+             "AutoTestShell::initializeNotifications() may be called only after AutoTestShell::init()");
+
+    const auto source = QFINDTESTDATA("../../app/kdevelop.notifyrc");
+    QVERIFY(!source.isEmpty());
+
+    const QString destination = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+        + QLatin1String{"/knotifications6/"} + QCoreApplication::applicationName() + QLatin1String{".notifyrc"};
+
+    const auto destinationDirectory = destination.first(destination.lastIndexOf(QLatin1Char{'/'}));
+    QVERIFY(QDir().mkpath(destinationDirectory));
+
+    // Remove the destination first because QFile::copy() does not overwrite
+    // and would keep a possibly obsolete version of the file.
+    QFile::remove(destination);
+    QVERIFY(QFile::copy(source, destination));
 }

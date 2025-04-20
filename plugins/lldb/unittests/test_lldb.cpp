@@ -139,6 +139,7 @@ QModelIndex LldbTest::localVariableIndexAt(int i, int col)
 void LldbTest::initTestCase()
 {
     AutoTestShell::init();
+    AutoTestShell::initializeNotifications();
     m_core = TestCore::initialize(Core::NoUi);
 
     m_iface = m_core->pluginController()

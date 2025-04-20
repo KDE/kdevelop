@@ -58,6 +58,17 @@ public:
      */
     static void init(const QStringList& plugins = QStringList());
 
+    /**
+     * Install a @em .notifyrc file for a unit test.
+     *
+     * Call this function from the @c initTestCase() slot of a unit test class that may trigger
+     * sending of a KDevelop notification - in order to prevent @em kf.notifications warnings.
+     *
+     * @warning This function may be called only from a test function that is
+     *          invoked by the Qt Test framework and only after AutoTestShell::init().
+     */
+    static void initializeNotifications();
+
 private:
     AutoTestShell() = default;
     QStringList m_plugins;

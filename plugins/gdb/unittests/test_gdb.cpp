@@ -59,6 +59,7 @@ void GdbTest::initTestCase()
           "breaking the Windows CI builder");
 #endif
     AutoTestShell::init();
+    AutoTestShell::initializeNotifications();
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
     m_iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
