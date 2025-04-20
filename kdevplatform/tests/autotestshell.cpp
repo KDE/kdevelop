@@ -6,6 +6,8 @@
 
 #include "autotestshell.h"
 
+#include <sourcefilepaths.h>
+
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
@@ -15,6 +17,11 @@
 using namespace KDevelop;
 
 AutoTestShell::~AutoTestShell() = default;
+
+QString AutoTestShell::xmlFile()
+{
+    return QStringLiteral(KDEVELOP_APP_DIR "/kdevelopui.rc");
+}
 
 void AutoTestShell::init(const QStringList& plugins)
 {
@@ -34,9 +41,6 @@ void AutoTestShell::initializeNotifications()
     QVERIFY2(QStandardPaths::isTestModeEnabled(),
              "AutoTestShell::initializeNotifications() may be called only after AutoTestShell::init()");
 
-    const auto source = QFINDTESTDATA("../../app/kdevelop.notifyrc");
-    QVERIFY(!source.isEmpty());
-
     const QString destination = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
         + QLatin1String{"/knotifications6/"} + QCoreApplication::applicationName() + QLatin1String{".notifyrc"};
 
@@ -46,5 +50,7 @@ void AutoTestShell::initializeNotifications()
     // Remove the destination first because QFile::copy() does not overwrite
     // and would keep a possibly obsolete version of the file.
     QFile::remove(destination);
+
+    const auto source = QStringLiteral(KDEVELOP_APP_DIR "/kdevelop.notifyrc");
     QVERIFY(QFile::copy(source, destination));
 }

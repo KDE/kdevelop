@@ -1,3 +1,5 @@
+configure_file("sourcefilepaths.h.cmake" "sourcefilepaths.h" ESCAPE_QUOTES)
+
 set(kdevtests_LIB_SRCS
     autotestshell.cpp
     kdevsignalspy.cpp

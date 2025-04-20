@@ -36,7 +36,7 @@ class KDEVPLATFORMTESTS_EXPORT AutoTestShell
 public:
     ~AutoTestShell();
 
-    QString xmlFile() override { return QString(); }
+    [[nodiscard]] QString xmlFile() override;
     QString executableFilePath() override { return QString(); };
     QString defaultProfile() { return QStringLiteral("kdevtest"); }
     KDevelop::AreaParams defaultArea() override
