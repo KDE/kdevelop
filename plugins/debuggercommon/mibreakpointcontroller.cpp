@@ -699,6 +699,8 @@ void MIBreakpointController::sendMaybe(KDevelop::Breakpoint*)
 
 void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, BreakpointModel::ColumnFlags lockedColumns)
 {
+    qCDebug(DEBUGGERCOMMON).nospace() << "updating breakpoint #" << row << " from debugger with " << miBkpt;
+
     IgnoreChanges ignoreChanges(*this);
     BreakpointDataPtr breakpoint = m_breakpoints[row];
     Breakpoint* modelBreakpoint = breakpointModel()->breakpoint(row);
