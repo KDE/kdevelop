@@ -709,6 +709,14 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
     // so do not update the corresponding data
     lockedColumns |= breakpoint->sent | breakpoint->dirty;
 
+    const auto setExpressionToFieldValue = [&miBkpt, modelBreakpoint](const QString& fieldName) {
+        if (miBkpt.hasField(fieldName)) {
+            modelBreakpoint->setExpression(miBkpt[fieldName].literal());
+            return true;
+        }
+        return false;
+    };
+
     // TODO:
     // Gdb has a notion of "original-location", which is the "expression" or "location" used
     // to set the breakpoint, and notions of the actual location of the breakpoint (function name,
@@ -720,8 +728,12 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
     } else if (miBkpt.hasField(QStringLiteral("original-location"))) {
         QString location = miBkpt[QStringLiteral("original-location")].literal();
         modelBreakpoint->setData(Breakpoint::LocationColumn, Utils::unquoteExpression(location));
-    } else if (miBkpt.hasField(QStringLiteral("what"))) {
-        modelBreakpoint->setExpression(miBkpt[QStringLiteral("what")].literal());
+    } else if (setExpressionToFieldValue(QStringLiteral("what")) || setExpressionToFieldValue(QStringLiteral("exp"))) {
+        // The value of the "what" field can contain "exception throw",
+        // which should be assigned to the breakpoint's expression.
+        // The usual GDB/MI reply to a watchpoint-adding command is "done,wpt={number=\"<id>\",exp=\"<expression>\"}".
+        // The value of either the "what" or the "exp" field is assigned
+        // to modelBreakpoint's expression above. Nothing more to do here.
     } else {
         qCWarning(DEBUGGERCOMMON) << "Breakpoint doesn't contain required location/expression data";
     }
