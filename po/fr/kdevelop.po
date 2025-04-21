@@ -13,7 +13,7 @@
 # Vincent PINON <vpinon@kde.org>, 2014.
 # Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2015, 2017, 2018, 2020.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
-# SPDX-FileCopyrightText: 2021, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2021, 2023, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
 #
 #
 msgid ""
@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2024-08-13 18:12+0200\n"
+"PO-Revision-Date: 2025-04-19 09:20+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -29,9 +29,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 24.12.3\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -210,13 +210,15 @@ msgstr "Copyright ©1999-%1, Les développeurs de KDevelop"
 #: main.cpp:387
 #, kde-format
 msgid "Igor Kushnir"
-msgstr ""
+msgstr "Igor Kushnir"
 
 #: main.cpp:388
 #, kde-format
 msgid ""
 "General maintenance, Bug fixing and prevention, Performance improvements"
 msgstr ""
+"Maintenance générale, correction et prévention des bogues, amélioration des "
+"performances"
 
 #: main.cpp:390
 #, kde-format
