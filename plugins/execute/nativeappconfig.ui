@@ -236,7 +236,7 @@
         </property>
         <item>
          <property name="text">
-          <string notr="true">konsole --noclose -e %exe</string>
+          <string notr="true">konsole --hold -e %exe</string>
          </property>
         </item>
         <item>
