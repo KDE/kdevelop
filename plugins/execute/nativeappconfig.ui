@@ -246,6 +246,11 @@
         </item>
         <item>
          <property name="text">
+          <string notr="true">xfce4-terminal --disable-server --hold -x %exe</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string notr="true">gnome-terminal --wait -- %exe</string>
          </property>
         </item>
