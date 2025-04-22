@@ -228,8 +228,6 @@
 &lt;dl&gt;
 &lt;dt&gt;&lt;code&gt;%exe&lt;/code&gt;&lt;/dt&gt;
 &lt;dd&gt;The path to the executable selected above.&lt;/dd&gt;
-&lt;dt&gt;&lt;code&gt;%workdir&lt;/code&gt;&lt;/dt&gt;
-&lt;dd&gt;The path to the working directory selected above.&lt;/dd&gt;
 &lt;/dl&gt;
 &lt;p&gt;The arguments defined above will get appended to this command.&lt;/p&gt;</string>
         </property>
@@ -238,7 +236,7 @@
         </property>
         <item>
          <property name="text">
-          <string notr="true">konsole --noclose --workdir %workdir -e %exe</string>
+          <string notr="true">konsole --noclose -e %exe</string>
          </property>
         </item>
         <item>

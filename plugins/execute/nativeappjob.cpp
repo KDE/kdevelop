@@ -105,8 +105,11 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
 
     if (iface->useTerminal(cfg)) {
         QString terminalCommand = iface->terminal(cfg);
+        // Remove obsolete --workdir arguments to konsole in order to keep the old default
+        // external terminal config working and (mostly) preserve backward compatibility.
+        terminalCommand.remove(QLatin1String("--workdir %workdir"));
+
         terminalCommand.replace(QLatin1String("%exe"), KShell::quoteArg(executable));
-        terminalCommand.replace(QLatin1String("%workdir"), KShell::quoteArg( wc.toLocalFile()) );
         QStringList args = KShell::splitArgs(terminalCommand);
         args.append( arguments );
         *this << args;
