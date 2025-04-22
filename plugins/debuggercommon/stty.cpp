@@ -319,10 +319,6 @@ bool STTY::findExternalTTY(const QString& termApp)
             QStringLiteral("sh"),
             QStringLiteral("-c"),
             QLatin1String("tty>") + file.fileName() + QLatin1String(";exec<&-;exec>&-;while :;do sleep 3600;done")});
-    } else if (appName == QLatin1String("xfce4-terminal")) {
-        m_externalTerminal->start(appName, QStringList{
-            QStringLiteral("-e"),
-            QLatin1String("sh -c \"tty>") + file.fileName() + QLatin1String(";\"\"<&\\-\"\">&\\-;\"\"while :;\"\"do sleep 3600;\"\"done\"")});
     } else {
         m_externalTerminal->start(appName, QStringList{
             QStringLiteral("-e"),
