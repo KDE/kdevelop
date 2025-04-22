@@ -246,7 +246,7 @@
         </item>
         <item>
          <property name="text">
-          <string notr="true">gnome-terminal -e %exe</string>
+          <string notr="true">gnome-terminal -- %exe</string>
          </property>
         </item>
        </widget>
