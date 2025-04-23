@@ -59,6 +59,7 @@
 #include <QTemporaryFile>
 
 #include <KLocalizedString>
+#include <KShell>
 
 #include <QCoreApplication>
 #include <QStandardPaths>
@@ -70,6 +71,8 @@
 #define BASE_CHOWN "konsole_grantpty"
 
 using namespace KDevMI;
+
+namespace {
 
 static int chownpty(int fd, int grant)
 // param fd: the fd of a master pty.
@@ -113,6 +116,19 @@ static int chownpty(int fd, int grant)
 #endif
     return 0; //dummy.
 }
+
+[[nodiscard]] QString executeCommandLineOption(QStringView externalTerminalAppName)
+{
+    if (externalTerminalAppName == QLatin1String{"xfce4-terminal"}) {
+        return QStringLiteral("-x");
+    }
+    if (externalTerminalAppName == QLatin1String{"gnome-terminal"}) {
+        return QStringLiteral("--");
+    }
+    return QStringLiteral("-e");
+}
+
+} // unnamed namespace
 
 // **************************************************************************
 
@@ -313,17 +329,11 @@ bool STTY::findExternalTTY(const QString& termApp)
 
     m_externalTerminal.reset(new QProcess(this));
 
-    if (appName == QLatin1String("konsole")) {
-        m_externalTerminal->start(appName, QStringList{
-            QStringLiteral("-e"),
-            QStringLiteral("sh"),
-            QStringLiteral("-c"),
-            QLatin1String("tty>") + file.fileName() + QLatin1String(";exec<&-;exec>&-;while :;do sleep 3600;done")});
-    } else {
-        m_externalTerminal->start(appName, QStringList{
-            QStringLiteral("-e"),
-            QLatin1String("sh -c \"tty>") + file.fileName() + QLatin1String(";exec<&-;exec>&-;while :;do sleep 3600;done\"")});
-    }
+    const QStringList arguments{executeCommandLineOption(appName), QStringLiteral("sh"), QStringLiteral("-c"),
+                                QLatin1String("tty>") + file.fileName()
+                                    + QLatin1String(";exec<&-;exec>&-;while :;do sleep 3600;done")};
+
+    m_externalTerminal->start(appName, arguments);
 
     if (!m_externalTerminal->waitForStarted(500)) {
         m_lastError = QLatin1String("Can't run terminal: ") + appName;
@@ -350,7 +360,9 @@ bool STTY::findExternalTTY(const QString& termApp)
     file.close();
 
     if (ttySlave.isEmpty()) {
-        m_lastError = i18n("Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\"", appName, file.fileName());
+        m_lastError = i18n(
+            "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it accepts these arguments: %2",
+            appName, KShell::joinArgs(arguments));
     }
 #endif
     return true;
