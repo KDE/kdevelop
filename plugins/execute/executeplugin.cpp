@@ -186,15 +186,75 @@ bool ExecutePlugin::useTerminal( KDevelop::ILaunchConfiguration* cfg ) const
     return cfg->config().readEntry( ExecutePlugin::useTerminalEntry, false );
 }
 
-
-QString ExecutePlugin::terminal( KDevelop::ILaunchConfiguration* cfg ) const
+QStringList ExecutePlugin::terminal(KDevelop::ILaunchConfiguration* cfg, QString& error) const
 {
     if( !cfg )
     {
-        return QString();
+        return {};
     }
 
-    return cfg->config().readEntry( ExecutePlugin::terminalEntry, QString() );
+    auto terminalCommand = cfg->config().readEntry(ExecutePlugin::terminalEntry, QString{});
+    if (terminalCommand.isEmpty()) {
+        error = i18n("No valid external terminal specified");
+        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "no valid external terminal set";
+        return {};
+    }
+
+    // Keep old external terminal config working and (mostly) preserve backward compatibility:
+    {
+        // 1) remove an obsolete placeholder %exe from the end of the command
+        constexpr QLatin1String exePlaceholder("%exe");
+        if (terminalCommand.endsWith(exePlaceholder)) {
+            terminalCommand.chop(exePlaceholder.size());
+            qCWarning(PLUGIN_EXECUTE).nospace()
+                << "the external terminal command for the launch configuration " << cfg->name()
+                << " ends with an obsolete placeholder " << exePlaceholder << ", please remove it";
+        }
+
+        // 2) remove obsolete --workdir arguments to konsole
+        constexpr QLatin1String workdirArguments("--workdir %workdir");
+        const auto previousSize = terminalCommand.size();
+        terminalCommand.remove(workdirArguments);
+        if (terminalCommand.size() != previousSize) {
+            Q_ASSERT(terminalCommand.size() + workdirArguments.size() <= previousSize);
+            qCWarning(PLUGIN_EXECUTE).nospace()
+                << "the external terminal command for the launch configuration " << cfg->name()
+                << " contains obsolete arguments " << workdirArguments << ", please remove them";
+        }
+    }
+
+    KShell::Errors err;
+    auto terminal = KShell::splitArgs(std::move(terminalCommand), KShell::TildeExpand | KShell::AbortOnMeta, &err);
+
+    if (err != KShell::NoError) {
+        if (err == KShell::BadQuoting) {
+            error = i18n(
+                "There is a quoting error in the external terminal command "
+                "for the launch configuration '%1'. "
+                "Aborting start.",
+                cfg->name());
+        } else {
+            error = i18n(
+                "A shell meta character was included in the "
+                "external terminal command for the launch configuration '%1', "
+                "this is not supported currently. Aborting start.",
+                cfg->name());
+        }
+        warnAboutSplitArgsError(*cfg, err, "external terminal command");
+        return {};
+    }
+
+    if (terminal.empty()) {
+        error = i18n(
+            "Splitting the external terminal command for the launch configuration "
+            "'%1' yields an empty list. Aborting start.",
+            cfg->name());
+        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name()
+                                  << "the external terminal command is empty after splitting";
+        return {};
+    }
+
+    return terminal;
 }
 
 
@@ -208,6 +268,13 @@ QUrl ExecutePlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) cons
     return cfg->config().readEntry( ExecutePlugin::workingDirEntry, QUrl() );
 }
 
+QStringList ExecutePlugin::defaultExternalTerminalCommands() const
+{
+    static const QStringList commands{QStringLiteral("konsole --hold -e"), QStringLiteral("xterm -hold -e"),
+                                      QStringLiteral("xfce4-terminal --disable-server --hold -x"),
+                                      QStringLiteral("gnome-terminal --wait --")};
+    return commands;
+}
 
 QString ExecutePlugin::nativeAppConfigTypeId() const
 {

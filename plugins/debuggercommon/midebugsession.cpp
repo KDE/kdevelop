@@ -220,7 +220,15 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
         return false;
     }
 
-    return startDebugging({iexec, cfg, std::move(executablePath), std::move(arguments)});
+    QStringList terminal;
+    if (iexec->useTerminal(cfg)) {
+        terminal = iexec->terminal(cfg, errorString);
+        if (!errorString.isEmpty()) {
+            return false;
+        }
+    }
+
+    return startDebugging({iexec, cfg, std::move(executablePath), std::move(arguments), std::move(terminal)});
 }
 
 bool MIDebugSession::startDebugging(const InferiorStartupInfo& startupInfo)
@@ -249,17 +257,7 @@ bool MIDebugSession::startDebugging(const InferiorStartupInfo& startupInfo)
     configInferior(cfg, iexec, startupInfo.executablePath);
 
     // Set up the tty for the inferior
-    bool config_useExternalTerminal = iexec->useTerminal(cfg);
-    QString config_ternimalName = iexec->terminal(cfg);
-    if (!config_ternimalName.isEmpty()) {
-        // the external terminal cmd contains additional arguments, just get the terminal name
-        config_ternimalName = KShell::splitArgs(config_ternimalName).first();
-    }
-
-    m_tty.reset(new STTY(config_useExternalTerminal, config_ternimalName));
-    if (!config_useExternalTerminal) {
-        connect(m_tty.get(), &STTY::OutOutput, m_procLineMaker, &ProcessLineMaker::slotReceivedStdout);
-    }
+    m_tty.reset(new STTY(startupInfo.terminal));
     QString tty(m_tty->getSlave());
 #ifndef Q_OS_WIN
     if (tty.isEmpty()) {
@@ -280,6 +278,7 @@ bool MIDebugSession::startDebugging(const InferiorStartupInfo& startupInfo)
         return false;
     }
 #endif
+    connect(m_tty.get(), &STTY::OutOutput, m_procLineMaker, &ProcessLineMaker::slotReceivedStdout);
     addCommand(InferiorTtySet, tty);
 
     // Change the working directory to the correct one

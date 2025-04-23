@@ -176,8 +176,16 @@ void MIDebugJob::initializeStartupInfo(IExecutePlugin* execute, ILaunchConfigura
         return;
     }
 
-    m_startupInfo.reset(
-        new InferiorStartupInfo{execute, launchConfiguration, std::move(executable), std::move(arguments)});
+    QStringList terminal;
+    if (execute->useTerminal(launchConfiguration)) {
+        terminal = execute->terminal(launchConfiguration, errorString);
+        if (detectError(InvalidExternalTerminal)) {
+            return;
+        }
+    }
+
+    m_startupInfo.reset(new InferiorStartupInfo{execute, launchConfiguration, std::move(executable),
+                                                std::move(arguments), std::move(terminal)});
 }
 
 MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin* plugin, CoreInfo coreInfo, QObject* parent)

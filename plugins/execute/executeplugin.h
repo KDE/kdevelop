@@ -40,7 +40,9 @@ public:
     KJob* dependencyJob( KDevelop::ILaunchConfiguration* ) const override;
     QString environmentProfileName(KDevelop::ILaunchConfiguration*) const override;
     bool useTerminal( KDevelop::ILaunchConfiguration* ) const override;
-    QString terminal( KDevelop::ILaunchConfiguration* ) const override;
+    QStringList terminal(KDevelop::ILaunchConfiguration* config, QString& error) const override;
+
+    [[nodiscard]] QStringList defaultExternalTerminalCommands() const override;
     QString nativeAppConfigTypeId() const override;
 
 private:

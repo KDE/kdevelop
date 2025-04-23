@@ -26,6 +26,7 @@
 
 #include <KConfigGroup>
 #include <KSharedConfig>
+#include <KShell>
 
 #include <QDebug>
 #include <QMetaObject>
@@ -602,15 +603,28 @@ void DebuggerTestBase::testVariablesStopDebugger()
 void DebuggerTestBase::testDebugInExternalTerminal_data()
 {
     QTest::addColumn<QString>("terminalExecutable");
+    QTest::addColumn<QString>("terminalCommand");
 
-    for (const auto* const terminalExecutable : {"konsole", "xterm", "xfce4-terminal", "gnome-terminal"}) {
-        QTest::newRow(terminalExecutable) << terminalExecutable;
+    const auto externalTerminalCommands = executePlugin()->defaultExternalTerminalCommands();
+    for (const auto& terminalCommand : externalTerminalCommands) {
+        // Do the same as ExecutePlugin::terminal(), but without backward
+        // compatibility support and with stricter error handling.
+        QVERIFY(!terminalCommand.isEmpty());
+
+        KShell::Errors err;
+        const auto splitCommand = KShell::splitArgs(terminalCommand, KShell::TildeExpand | KShell::AbortOnMeta, &err);
+        QCOMPARE(err, KShell::NoError);
+        QVERIFY(!splitCommand.empty());
+
+        const auto terminalExecutable = splitCommand.constFirst();
+        QTest::newRow(qPrintable(terminalExecutable)) << terminalExecutable << terminalCommand;
     }
 }
 
 void DebuggerTestBase::testDebugInExternalTerminal()
 {
     QFETCH(const QString, terminalExecutable);
+    QFETCH(const QString, terminalCommand);
 
     if (QStandardPaths::findExecutable(terminalExecutable).isEmpty()) {
         QSKIP(qPrintable(QLatin1String{"Skipping because `%1` executable is not available"}.arg(terminalExecutable)));
@@ -620,7 +634,7 @@ void DebuggerTestBase::testDebugInExternalTerminal()
     TestLaunchConfiguration cfg;
 
     cfg.config().writeEntry(IExecutePlugin::useTerminalEntry, true);
-    cfg.config().writeEntry(IExecutePlugin::terminalEntry, terminalExecutable);
+    cfg.config().writeEntry(IExecutePlugin::terminalEntry, terminalCommand);
 
     const auto* const breakpoint = addDebugeeBreakpoint(29);
     ActiveStateSessionSpy sessionSpy(session);

@@ -224,36 +224,12 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string comment="@info:tooltip">&lt;p&gt;Defines the command to execute the external terminal emulator. Use the following placeholders:&lt;/p&gt;
-&lt;dl&gt;
-&lt;dt&gt;&lt;code&gt;%exe&lt;/code&gt;&lt;/dt&gt;
-&lt;dd&gt;The path to the executable selected above.&lt;/dd&gt;
-&lt;/dl&gt;
-&lt;p&gt;The arguments defined above will get appended to this command.&lt;/p&gt;</string>
+         <string comment="@info:tooltip">Define the command to execute the external terminal emulator.&lt;br&gt;
+The path to the executable and its arguments will be appended to this command.</string>
         </property>
         <property name="editable">
          <bool>true</bool>
         </property>
-        <item>
-         <property name="text">
-          <string notr="true">konsole --hold -e %exe</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">xterm -hold -e %exe</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">xfce4-terminal --disable-server --hold -x %exe</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">gnome-terminal --wait -- %exe</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="4" column="0">

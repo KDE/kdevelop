@@ -64,7 +64,8 @@ public:
         // Add a "random" number to KJob::UserDefinedError and hopefully avoid clashes with OutputJob's error codes.
         InvalidExecutable = UserDefinedError + 231,
         ExecutableIsNotExecutable,
-        InvalidArguments
+        InvalidArguments,
+        InvalidExternalTerminal,
     };
 
     MIDebugJob(MIDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* plugin,

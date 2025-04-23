@@ -52,9 +52,12 @@
 #include <bsdtty.h>
 #endif
 
+#include <interfaces/icore.h>
+
 #include <QSocketNotifier>
 #include <QString>
 #include <QFile>
+#include <QPointer>
 #include <QProcess>
 #include <QTemporaryFile>
 
@@ -67,12 +70,22 @@
 #include "stty.h"
 #include "debuglog.h"
 
+#include <memory>
+
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
 
 using namespace KDevMI;
 
 namespace {
+
+struct LaterDeleter
+{
+    void operator()(QObject* object) const
+    {
+        object->deleteLater();
+    }
+};
 
 static int chownpty(int fd, int grant)
 // param fd: the fd of a master pty.
@@ -117,44 +130,32 @@ static int chownpty(int fd, int grant)
     return 0; //dummy.
 }
 
-[[nodiscard]] QString executeCommandLineOption(QStringView externalTerminalAppName)
-{
-    if (externalTerminalAppName == QLatin1String{"xfce4-terminal"}) {
-        return QStringLiteral("-x");
-    }
-    if (externalTerminalAppName == QLatin1String{"gnome-terminal"}) {
-        return QStringLiteral("--");
-    }
-    return QStringLiteral("-e");
-}
-
 } // unnamed namespace
 
 // **************************************************************************
 
-STTY::STTY(bool ext, const QString &termAppName)
-    : QObject(),
-      m_externalTerminal(nullptr),
-      external_(ext)
+STTY::STTY(const QStringList& externalTerminal)
+    : external_{!externalTerminal.empty()}
 {
-    if (ext) {
-        findExternalTTY(termAppName);
-    } else {
-        fout = findTTY();
-        if (fout >= 0) {
-            ttySlave = QString::fromLatin1(tty_slave);
-            out = new QSocketNotifier(fout, QSocketNotifier::Read, this);
+    if (external_) {
+        findExternalTTY(externalTerminal);
+        return;
+    }
+
+    fout = findTTY();
+    if (fout >= 0) {
+        ttySlave = QString::fromLatin1(tty_slave);
+        out = new QSocketNotifier(fout, QSocketNotifier::Read, this);
 #ifndef Q_OS_WIN
-            // This connection does not compile on Windows and produces the following error since Qt 6:
-            // error C2338: static_assert failed: 'Signal and slot arguments are not compatible (narrowing)'
-            // That's because the first argument of QSocketNotifier::activated() is QSocketDescriptor,
-            // which is implicitly convertible to int on non-Windows platforms, to Qt::HANDLE and
-            // qintptr on Windows; and STTY::OutReceived() takes an int argument.
-            // The entire definition of OutReceived() is disabled on Windows,
-            // so just disable the connection on this platform too.
-            connect( out, &QSocketNotifier::activated, this, &STTY::OutReceived );
+        // This connection does not compile on Windows and produces the following error since Qt 6:
+        // error C2338: static_assert failed: 'Signal and slot arguments are not compatible (narrowing)'
+        // That's because the first argument of QSocketNotifier::activated() is QSocketDescriptor,
+        // which is implicitly convertible to int on non-Windows platforms, to Qt::HANDLE and
+        // qintptr on Windows; and STTY::OutReceived() takes an int argument.
+        // The entire definition of OutReceived() is disabled on Windows,
+        // so just disable the connection on this platform too.
+        connect(out, &QSocketNotifier::activated, this, &STTY::OutReceived);
 #endif
-        }
     }
 }
 
@@ -311,39 +312,40 @@ void STTY::readRemaining()
         OutReceived(fout);
 }
 
-bool STTY::findExternalTTY(const QString& termApp)
+void STTY::findExternalTTY(QStringList terminalCommandLine)
 {
 #ifndef Q_OS_WIN
-    QString appName(termApp.isEmpty() ? QStringLiteral("xterm") : termApp);
+    Q_ASSERT(!terminalCommandLine.empty());
+    const auto appName = terminalCommandLine.takeFirst();
 
     if (QStandardPaths::findExecutable(appName).isEmpty()) {
-        m_lastError = i18n("%1 is incorrect terminal name", termApp);
-        return false;
+        m_lastError = i18n("%1 is incorrect terminal name", appName);
+        return;
     }
 
     QTemporaryFile file;
     if (!file.open()) {
         m_lastError = i18n("Can't create a temporary file");
-        return false;
+        return;
     }
 
-    m_externalTerminal.reset(new QProcess(this));
+    std::unique_ptr<QProcess, LaterDeleter> externalTerminal(new QProcess);
 
-    const QStringList arguments{executeCommandLineOption(appName), QStringLiteral("sh"), QStringLiteral("-c"),
-                                QLatin1String("tty>") + file.fileName()
-                                    + QLatin1String(";exec<&-;exec>&-;while :;do sleep 3600;done")};
+    terminalCommandLine << QStringLiteral("sh") << QStringLiteral("-c")
+                        << QLatin1String("tty>") + file.fileName()
+            + QLatin1String(";exec<&-;exec>&-;while :;do sleep 3600;done");
 
-    m_externalTerminal->start(appName, arguments);
+    externalTerminal->start(appName, terminalCommandLine);
 
-    if (!m_externalTerminal->waitForStarted(500)) {
+    if (!externalTerminal->waitForStarted(500)) {
         m_lastError = QLatin1String("Can't run terminal: ") + appName;
-        m_externalTerminal->terminate();
-        return false;
+        externalTerminal->terminate();
+        return;
     }
 
     for (int i = 0; i < 800; i++) {
         if (!file.bytesAvailable()) {
-            if (m_externalTerminal->state() == QProcess::NotRunning && m_externalTerminal->exitCode()) {
+            if (externalTerminal->state() == QProcess::NotRunning && externalTerminal->exitCode()) {
                 break;
             }
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
@@ -362,10 +364,39 @@ bool STTY::findExternalTTY(const QString& termApp)
     if (ttySlave.isEmpty()) {
         m_lastError = i18n(
             "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it accepts these arguments: %2",
-            appName, KShell::joinArgs(arguments));
+            appName, KShell::joinArgs(terminalCommandLine));
+        return;
     }
+
+    if (externalTerminal->state() == QProcess::NotRunning) {
+        // This branch may be taken in case of inadequate external terminal command configuration.
+        // For example, it is sometimes (though not always) taken in case of a disadvantageous modification
+        // of a standard external terminal command, such as `xfce4-terminal --hold -x` or `gnome-terminal --`.
+        // Do not warn about this, because such a behavior is not necessarily problematic for every use case.
+        qCDebug(DEBUGGERCOMMON) << "the external terminal process finished unexpectedly early";
+        // Let the destruction of externalTerminal invoke deleteLater() on the no longer needed QProcess object.
+        return;
+    }
+
+    // The external terminal process is running properly. Destroy the QProcess object only when its process exits.
+    auto* const terminalProcess = externalTerminal.release();
+    connect(terminalProcess, &QProcess::finished, terminalProcess, &QObject::deleteLater);
+
+    // Set the Core as the parent of the QProcess object in order to destroy it on KDevelop exit and prevent a leak.
+    auto* const core = KDevelop::ICore::self();
+    terminalProcess->setParent(core);
+    // Terminate the external terminal process when KDevelop exit is imminent. Usually the process terminates
+    // gracefully in time, though occasionally ~QProcess() prints a warning and kills it when the Core is destroyed.
+    connect(core, &KDevelop::ICore::aboutToShutdown, terminalProcess, [sttyGuard = QPointer{this}, terminalProcess] {
+        // Terminate the external terminal process only after its STTY creator is
+        // destroyed, and consequently the associated debug session no longer uses it.
+        if (const auto* const stty = sttyGuard.get()) {
+            connect(stty, &QObject::destroyed, terminalProcess, &QProcess::terminate);
+        } else {
+            terminalProcess->terminate();
+        }
+    });
 #endif
-    return true;
 }
 // **************************************************************************
 

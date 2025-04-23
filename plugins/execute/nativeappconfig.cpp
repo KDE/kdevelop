@@ -37,6 +37,28 @@
 
 using namespace KDevelop;
 
+namespace {
+/**
+ * @return the instance of the execute plugin
+ * @pre the execute plugin is loaded
+ *
+ * @note Unloading the execute plugin removes the associated launch configuration type from the
+ *       RunController, so the execute plugin is guaranteed to be available (loaded) while an
+ *       associated config page is being created and while an associated launcher is being started.
+ */
+[[nodiscard]] const IExecutePlugin& executePlugin()
+{
+    const auto* const execute =
+        ICore::self()
+            ->pluginController()
+            ->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))
+            ->extension<IExecutePlugin>();
+    Q_ASSERT(execute);
+    return *execute;
+}
+
+} // unnamed namespace
+
 QIcon NativeAppConfigPage::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("system-run"));
@@ -103,6 +125,11 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Ask If Running"), NativeAppJob::askIfRunning);
     killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Kill All Instances"), NativeAppJob::killAllInstances);
     killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Start Another"), NativeAppJob::startAnother);
+
+    terminal->addItems(executePlugin().defaultExternalTerminalCommands());
+    terminal->setToolTip(
+        terminal->toolTip()
+        + i18n("<p>Note: <code>gnome-terminal</code> is only partially supported due to its limitations.</p>"));
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -188,16 +215,13 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     }
     if( launchMode == QLatin1String("execute") )
     {
-        auto* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
-        Q_ASSERT(iface);
-
         auto nativeAppJob = new NativeAppJob( KDevelop::ICore::self()->runController(), cfg );
         QObject::connect(nativeAppJob, &NativeAppJob::killBeforeExecutingAgainChanged, KDevelop::ICore::self()->runController(), [cfg] (int newValue) {
             auto cfgGroup = cfg->config();
             cfgGroup.writeEntry(ExecutePlugin::killBeforeExecutingAgain, newValue);
         });
 
-        return makeJobWithDependency(nativeAppJob, *iface, cfg);
+        return makeJobWithDependency(nativeAppJob, executePlugin(), cfg);
     }
     qCWarning(PLUGIN_EXECUTE) << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return nullptr;

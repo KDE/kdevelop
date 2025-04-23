@@ -31,9 +31,12 @@ class ExecutePlasmoidPlugin : public KDevelop::IPlugin, public IExecutePlugin
         KJob* dependencyJob(KDevelop::ILaunchConfiguration* config) const override;
         QString environmentProfileName(KDevelop::ILaunchConfiguration* config) const override;
         QString nativeAppConfigTypeId() const override;
-        QString terminal(KDevelop::ILaunchConfiguration* config) const override;
+
         bool useTerminal(KDevelop::ILaunchConfiguration* config) const override;
+        QStringList terminal(KDevelop::ILaunchConfiguration* config, QString& error) const override;
         QUrl workingDirectory(KDevelop::ILaunchConfiguration* config) const override;
+
+        [[nodiscard]] QStringList defaultExternalTerminalCommands() const override;
 
     private:
         PlasmoidExecutionConfigType* m_configType;

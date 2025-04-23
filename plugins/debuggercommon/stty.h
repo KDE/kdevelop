@@ -16,11 +16,9 @@
 #define _STTY_H_
 
 class QSocketNotifier;
-class QProcess;
 
 #include <QObject>
-#include <QString>
-#include <QScopedPointer>
+#include <QStringList>
 
 namespace KDevMI {
 
@@ -29,7 +27,14 @@ class STTY : public QObject
     Q_OBJECT
 
 public:
-    explicit STTY(bool ext=false, const QString &termAppName=QString());
+    /**
+     * Create an STTY.
+     *
+     * @param externalTerminal a list that consists of an external terminal command and its arguments,
+     *                         to which a program to execute and the program's arguments are to be appended;
+     *                         if empty, @c pty and @c tty devices are managed internally, without an external terminal
+     */
+    explicit STTY(const QStringList& externalTerminal);
     ~STTY() override;
 
     ///Call it if getSlave returns an empty string.
@@ -45,14 +50,19 @@ Q_SIGNALS:
 
 private:
     int findTTY();
-    bool findExternalTTY(const QString &termApp);
+    /**
+     * Run @c tty in the specified external terminal.
+     *
+     * @param terminalCommandLine a nonempty list that consists of an external terminal command and its arguments,
+     *                            to which a program to execute and the program's arguments are to be appended
+     */
+    void findExternalTTY(QStringList terminalCommandLine);
 
 private:
     int fout;
     QSocketNotifier *out = nullptr;
     QString ttySlave;
     QString m_lastError;
-    QScopedPointer<QProcess> m_externalTerminal;
     bool external_;
 
     char pty_master[50];  // "/dev/ptyxx" | "/dev/ptmx"

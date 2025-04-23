@@ -42,7 +42,15 @@ public:
     virtual KJob* dependencyJob( KDevelop::ILaunchConfiguration* config) const = 0;
     virtual QString environmentProfileName(KDevelop::ILaunchConfiguration* config) const = 0;
     virtual bool useTerminal( KDevelop::ILaunchConfiguration* config) const = 0;
-    virtual QString terminal( KDevelop::ILaunchConfiguration* config) const = 0;
+    virtual QStringList terminal(KDevelop::ILaunchConfiguration* config, QString& error) const = 0;
+
+    /**
+     * @return the list of supported external terminal command lines
+     *
+     * A program to execute and the program's arguments are to be appended to each external terminal command line.
+     */
+    [[nodiscard]] virtual QStringList defaultExternalTerminalCommands() const = 0;
+
     virtual QString nativeAppConfigTypeId() const = 0;
 };
 

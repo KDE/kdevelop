@@ -47,6 +47,7 @@ struct InferiorStartupInfo
     KDevelop::ILaunchConfiguration* launchConfiguration = nullptr;
     QString executablePath;
     QStringList arguments;
+    QStringList terminal; ///< external terminal command; if empty, external terminal will not be used
 };
 
 class MIDebugSession : public KDevelop::IDebugSession

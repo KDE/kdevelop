@@ -75,9 +75,16 @@ bool ExecutePlasmoidPlugin::useTerminal(ILaunchConfiguration* /*config*/) const
     return false;
 }
 
-QString ExecutePlasmoidPlugin::terminal(ILaunchConfiguration* /*config*/) const
+QStringList ExecutePlasmoidPlugin::terminal(KDevelop::ILaunchConfiguration* config, QString& error) const
 {
-    return QString();
+    Q_UNUSED(config)
+    Q_UNUSED(error)
+    return {};
+}
+
+QStringList ExecutePlasmoidPlugin::defaultExternalTerminalCommands() const
+{
+    return {};
 }
 
 #include "executeplasmoidplugin.moc"
