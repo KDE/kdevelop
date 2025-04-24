@@ -5399,7 +5399,7 @@ msgstr ""
 #: vcs/dvcs/dvcsjob.cpp:370
 #, kde-format
 msgid "error: %1"
-msgstr ""
+msgstr "chyba: %1"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
