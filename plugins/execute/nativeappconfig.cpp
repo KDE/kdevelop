@@ -99,7 +99,6 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     dependencyAction->setItemData(0, QStringLiteral("Nothing"));
     dependencyAction->setItemData(1, QStringLiteral("Build"));
     dependencyAction->setItemData(2, QStringLiteral("Install"));
-    dependencyAction->setItemData(3, QStringLiteral("SudoInstall"));
 
     killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Ask If Running"), NativeAppJob::askIfRunning);
     killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Kill All Instances"), NativeAppJob::killAllInstances);
