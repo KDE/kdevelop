@@ -48,6 +48,7 @@ public:
     int outputFilterModeId( KDevelop::ILaunchConfiguration* ) const override;
     bool runCurrentFile(KDevelop::ILaunchConfiguration*) const override;
 
+private:
     ScriptAppConfigType* m_configType;
 };
 
