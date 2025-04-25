@@ -690,6 +690,3 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr ""
-
-#~ msgid "error: %1"
-#~ msgstr "feil: %1"
