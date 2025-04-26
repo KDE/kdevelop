@@ -1,10 +1,10 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
-find_package(Qt6WebEngineWidgets CONFIG)
-set_package_properties(Qt6WebEngineWidgets PROPERTIES
-    PURPOSE "QtWebEngine, for integrated documentation"
-    URL "https://qt.io/"
-    TYPE REQUIRED)
+# find_package(Qt6WebEngineWidgets CONFIG) # webengine disabled
+# set_package_properties(Qt6WebEngineWidgets PROPERTIES
+#    PURPOSE "QtWebEngine, for integrated documentation"
+#    URL "https://qt.io/"
+#    TYPE REQUIRED)
 
 set(KDevPlatformDocumentation_LIB_SRCS
     standarddocumentationview.cpp
@@ -23,7 +23,7 @@ kdevplatform_add_library(KDevPlatformDocumentation SOURCES ${KDevPlatformDocumen
 target_link_libraries(KDevPlatformDocumentation
 PUBLIC
     KDev::Interfaces
-    Qt::WebEngineWidgets
+    # Qt::WebEngineWidgets # webengine disabled
 PRIVATE
     KDev::Util
 )

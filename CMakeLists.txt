@@ -208,10 +208,10 @@ add_subdirectory(file_templates)
 add_subdirectory(shortcuts)
 add_subdirectory(share)
 
-if(BUILD_DOC)
-    add_subdirectory(doc)
-    kdoctools_install(po)
-endif()
+# if(BUILD_DOC) # webengine disabled
+#    add_subdirectory(doc)
+#    kdoctools_install(po)
+# endif()
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevelop")
 configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevelopConfig.cmake.in"
