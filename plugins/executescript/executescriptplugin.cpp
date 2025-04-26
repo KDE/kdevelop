@@ -10,7 +10,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KShell>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -45,7 +44,7 @@ void ExecuteScriptPlugin::unload()
     m_configType = nullptr;
 }
 
-QUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const
+QUrl ExecuteScriptPlugin::script(ILaunchConfiguration* cfg, QString& err) const
 {
     QUrl script;
 
@@ -54,33 +53,19 @@ QUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
         return script;
     }
     KConfigGroup grp = cfg->config();
-
     script = grp.readEntry( ExecuteScriptPlugin::executableEntry, QUrl() );
-    if( !script.isLocalFile() || script.isEmpty() )
-    {
-        err_ = i18n("No valid executable specified");
-        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "no valid script set";
-    } else
-    {
-        KShell::Errors err;
-        if( KShell::splitArgs( script.toLocalFile(), KShell::TildeExpand | KShell::AbortOnMeta, &err ).isEmpty() || err != KShell::NoError )
-        {
-            script = QUrl();
-            if( err == KShell::BadQuoting )
-            {
-                err_ = i18n("There is a quoting error in the script "
-                "for the launch configuration '%1'. "
-                "Aborting start.", cfg->name() );
-            } else
-            {
-                err_ = i18n("A shell meta character was included in the "
-                "script for the launch configuration '%1', "
-                "this is not supported currently. Aborting start.", cfg->name() );
-            }
-            warnAboutSplitArgsError(*cfg, err, "script path");
-        }
+
+    // Do not pass err to splitLocalFileLaunchConfigurationEntry(), because it may be nonempty from the beginning.
+    QString initiallyEmptyErrorMessage;
+    splitLocalFileLaunchConfigurationEntry(
+        *cfg, script, LaunchConfigurationEntryName{"script path", i18nc("path to a script", "script path")},
+        initiallyEmptyErrorMessage);
+    if (initiallyEmptyErrorMessage.isEmpty()) {
+        return script;
     }
-    return script;
+
+    err = std::move(initiallyEmptyErrorMessage);
+    return {};
 }
 
 QString ExecuteScriptPlugin::remoteHost(ILaunchConfiguration* cfg, QString& err) const
@@ -99,32 +84,17 @@ QString ExecuteScriptPlugin::remoteHost(ILaunchConfiguration* cfg, QString& err)
     return QString();
 }
 
-QStringList ExecuteScriptPlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const
+QStringList ExecuteScriptPlugin::arguments(ILaunchConfiguration* cfg, QString& err) const
 {
     if( !cfg )
     {
         return QStringList();
     }
+    const auto arguments = cfg->config().readEntry(ExecuteScriptPlugin::argumentsEntry, QString{});
 
-    KShell::Errors err;
-    QStringList args = KShell::splitArgs( cfg->config().readEntry( ExecuteScriptPlugin::argumentsEntry, "" ), KShell::TildeExpand | KShell::AbortOnMeta, &err );
-    if( err != KShell::NoError )
-    {
-
-        if( err == KShell::BadQuoting )
-        {
-            err_ = i18n("There is a quoting error in the arguments for "
-            "the launch configuration '%1'. Aborting start.", cfg->name() );
-        } else
-        {
-            err_ = i18n("A shell meta character was included in the "
-            "arguments for the launch configuration '%1', "
-            "this is not supported currently. Aborting start.", cfg->name() );
-        }
-        warnAboutSplitArgsError(*cfg, err, "arguments");
-        args = QStringList();
-    }
-    return args;
+    return splitLaunchConfigurationEntry(
+        *cfg, arguments,
+        LaunchConfigurationEntryName{"arguments", i18nc("command line arguments to a script", "arguments")}, err);
 }
 
 QString ExecuteScriptPlugin::environmentProfileName(KDevelop::ILaunchConfiguration* cfg) const
@@ -164,44 +134,10 @@ QStringList ExecuteScriptPlugin::interpreter(KDevelop::ILaunchConfiguration* cfg
         return {};
     }
     KConfigGroup grp = cfg->config();
-
     auto interpreterString = grp.readEntry(ExecuteScriptPlugin::interpreterEntry, QString{});
-    if (interpreterString.isEmpty()) {
-        err = i18n("No valid interpreter specified");
-        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "no valid interpreter set";
-        return {};
-    }
 
-    KShell::Errors err_;
-    auto interpreter =
-        KShell::splitArgs(std::move(interpreterString), KShell::TildeExpand | KShell::AbortOnMeta, &err_);
-
-    if (err_ != KShell::NoError) {
-        if( err_ == KShell::BadQuoting )
-        {
-            err = i18n("There is a quoting error in the interpreter "
-            "for the launch configuration '%1'. "
-            "Aborting start.", cfg->name() );
-        } else
-        {
-            err = i18n("A shell meta character was included in the "
-            "interpreter for the launch configuration '%1', "
-            "this is not supported currently. Aborting start.", cfg->name() );
-        }
-        warnAboutSplitArgsError(*cfg, err_, "interpreter command");
-        return {};
-    }
-
-    if (interpreter.empty()) {
-        err = i18n(
-            "Splitting the interpreter command for the launch configuration '%1' yields an empty list. Aborting start.",
-            cfg->name());
-        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name()
-                                        << "the interpreter command is empty after splitting";
-        return {};
-    }
-
-    return interpreter;
+    return splitNonemptyLaunchConfigurationEntry(
+        *cfg, interpreterString, LaunchConfigurationEntryName{"interpreter command", i18n("interpreter command")}, err);
 }
 
 QUrl ExecuteScriptPlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) const

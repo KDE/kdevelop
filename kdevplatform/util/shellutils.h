@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2012 Ivan Shapovalov <intelfx100@gmail.com>
+    SPDX-FileCopyrightText: 2024, 2025 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -9,10 +10,8 @@
 
 #include "utilexport.h"
 
-#include <KShell>
-
 #include <QList>
-#include <QString>
+#include <QStringList>
 
 class QUrl;
 class QWidget;
@@ -54,16 +53,52 @@ bool KDEVPLATFORMUTIL_EXPORT ensureWritable(const QList<QUrl>& urls);
 bool KDEVPLATFORMUTIL_EXPORT restoreAndAutoSaveGeometry(QWidget& widget, const QString& configGroupName,
                                                         const QString& configSubgroupName = QString{});
 
+struct KDEVPLATFORMUTIL_EXPORT LaunchConfigurationEntryName
+{
+    const char* untranslatable = nullptr; ///< the entry name to be printed via qCDebug/qCWarning
+    QString translatable; ///< the entry name to be displayed as part of an error message in the UI
+};
+
 /**
- * Print a warning that describes an error code reported by KShell::splitArgs().
+ * Split a given text of a launch configuration entry according to system shell word splitting and quoting rules.
  *
- * @param launchConfiguration the launch configuration from whose config the split string has been read
- * @param errorCode the error code reported by the call to KShell::splitArgs()
- * @param nameOfSplitString the non-null name of the string passed
- *        as the command argument to the KShell::splitArgs() call
+ * @param launchConfiguration the launch configuration from whose config the entry text has been read
+ * @param entryText the text of the launch configuration entry to be split
+ * @param entryName the name of the launch configuration entry to be split
+ * @param[out] errorMessage if the splitting fails, an explaining error message text is assigned
+ *                          to this parameter; otherwise the parameter remains untouched
+ * @return the list, to which the entry text has been split, or an empty list in case of an error
  */
-void KDEVPLATFORMUTIL_EXPORT warnAboutSplitArgsError(const ILaunchConfiguration& launchConfiguration,
-                                                     KShell::Errors errorCode, const char* nameOfSplitString);
-}
+QStringList KDEVPLATFORMUTIL_EXPORT splitLaunchConfigurationEntry(const ILaunchConfiguration& launchConfiguration,
+                                                                  const QString& entryText,
+                                                                  const LaunchConfigurationEntryName& entryName,
+                                                                  QString& errorMessage);
+
+/**
+ * Split a given text of a launch configuration entry according to system shell word splitting and quoting rules.
+ *
+ * Unlike splitLaunchConfigurationEntry(), this function treats and reports
+ * as errors an empty entry text and an empty list result of the splitting.
+ *
+ * @sa splitLaunchConfigurationEntry()
+ */
+QStringList KDEVPLATFORMUTIL_EXPORT
+splitNonemptyLaunchConfigurationEntry(const ILaunchConfiguration& launchConfiguration, const QString& entryText,
+                                      const LaunchConfigurationEntryName& entryName, QString& errorMessage);
+
+/**
+ * Split the local file path of a given launch configuration URL
+ * entry according to system shell word splitting and quoting rules.
+ *
+ * This function treats and reports as errors an empty URL, an URL that does
+ * not point to a local file path, and an empty list result of the splitting.
+ *
+ * @sa splitLaunchConfigurationEntry()
+ */
+QStringList KDEVPLATFORMUTIL_EXPORT
+splitLocalFileLaunchConfigurationEntry(const ILaunchConfiguration& launchConfiguration, const QUrl& entryUrl,
+                                       const LaunchConfigurationEntryName& entryName, QString& errorMessage);
+
+} // namespace KDevelop
 
 #endif // SHELLUTILS_H

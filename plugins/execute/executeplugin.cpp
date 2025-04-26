@@ -9,7 +9,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KShell>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -49,33 +48,18 @@ void ExecutePlugin::unload()
     m_configType = nullptr;
 }
 
-QStringList ExecutePlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const
+QStringList ExecutePlugin::arguments(ILaunchConfiguration* cfg, QString& err) const
 {
 
     if( !cfg )
     {
         return QStringList();
     }
+    const auto arguments = cfg->config().readEntry(ExecutePlugin::argumentsEntry, QString{});
 
-    KShell::Errors err;
-    QStringList args = KShell::splitArgs( cfg->config().readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::TildeExpand | KShell::AbortOnMeta, &err );
-    if( err != KShell::NoError )
-    {
-
-        if( err == KShell::BadQuoting )
-        {
-            err_ = i18n("There is a quoting error in the arguments for "
-            "the launch configuration '%1'. Aborting start.", cfg->name() );
-        } else
-        {
-            err_ = i18n("A shell meta character was included in the "
-            "arguments for the launch configuration '%1', "
-            "this is not supported currently. Aborting start.", cfg->name() );
-        }
-        warnAboutSplitArgsError(*cfg, err, "arguments");
-        args = QStringList();
-    }
-    return args;
+    return splitLaunchConfigurationEntry(
+        *cfg, arguments,
+        LaunchConfigurationEntryName{"arguments", i18nc("command line arguments to an executable", "arguments")}, err);
 }
 
 
@@ -148,31 +132,19 @@ QUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
             executable = item->executable()->builtUrl();
         }
     }
-    if( executable.isEmpty() )
-    {
-        err = i18n("No valid executable specified");
-        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "no valid executable set";
-    } else
-    {
-        KShell::Errors err_;
-        if( KShell::splitArgs( executable.toLocalFile(), KShell::TildeExpand | KShell::AbortOnMeta, &err_ ).isEmpty() || err_ != KShell::NoError )
-        {
-            executable = QUrl();
-            if( err_ == KShell::BadQuoting )
-            {
-                err = i18n("There is a quoting error in the executable "
-                "for the launch configuration '%1'. "
-                "Aborting start.", cfg->name() );
-            } else
-            {
-                err = i18n("A shell meta character was included in the "
-                "executable for the launch configuration '%1', "
-                "this is not supported currently. Aborting start.", cfg->name() );
-            }
-            warnAboutSplitArgsError(*cfg, err_, "executable path");
-        }
+
+    // Do not pass err to splitLocalFileLaunchConfigurationEntry(), because it may be nonempty from the beginning.
+    QString initiallyEmptyErrorMessage;
+    splitLocalFileLaunchConfigurationEntry(
+        *cfg, executable,
+        LaunchConfigurationEntryName{"executable path", i18nc("path to an executable", "executable path")},
+        initiallyEmptyErrorMessage);
+    if (initiallyEmptyErrorMessage.isEmpty()) {
+        return executable;
     }
-    return executable;
+
+    err = std::move(initiallyEmptyErrorMessage);
+    return {};
 }
 
 
@@ -192,13 +164,7 @@ QStringList ExecutePlugin::terminal(KDevelop::ILaunchConfiguration* cfg, QString
     {
         return {};
     }
-
     auto terminalCommand = cfg->config().readEntry(ExecutePlugin::terminalEntry, QString{});
-    if (terminalCommand.isEmpty()) {
-        error = i18n("No valid external terminal specified");
-        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "no valid external terminal set";
-        return {};
-    }
 
     // Keep old external terminal config working and (mostly) preserve backward compatibility:
     {
@@ -223,38 +189,9 @@ QStringList ExecutePlugin::terminal(KDevelop::ILaunchConfiguration* cfg, QString
         }
     }
 
-    KShell::Errors err;
-    auto terminal = KShell::splitArgs(std::move(terminalCommand), KShell::TildeExpand | KShell::AbortOnMeta, &err);
-
-    if (err != KShell::NoError) {
-        if (err == KShell::BadQuoting) {
-            error = i18n(
-                "There is a quoting error in the external terminal command "
-                "for the launch configuration '%1'. "
-                "Aborting start.",
-                cfg->name());
-        } else {
-            error = i18n(
-                "A shell meta character was included in the "
-                "external terminal command for the launch configuration '%1', "
-                "this is not supported currently. Aborting start.",
-                cfg->name());
-        }
-        warnAboutSplitArgsError(*cfg, err, "external terminal command");
-        return {};
-    }
-
-    if (terminal.empty()) {
-        error = i18n(
-            "Splitting the external terminal command for the launch configuration "
-            "'%1' yields an empty list. Aborting start.",
-            cfg->name());
-        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name()
-                                  << "the external terminal command is empty after splitting";
-        return {};
-    }
-
-    return terminal;
+    return splitNonemptyLaunchConfigurationEntry(
+        *cfg, terminalCommand,
+        LaunchConfigurationEntryName{"external terminal command", i18n("external terminal command")}, error);
 }
 
 
