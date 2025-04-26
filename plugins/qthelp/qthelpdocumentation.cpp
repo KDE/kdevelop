@@ -8,7 +8,6 @@
 
 // stubbed implementations as part of disabling webengine support
 
-// ---------- QtHelpDocumentation ----------
 
 QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider,
                                          const QString& name,
@@ -17,7 +16,7 @@ QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider,
       m_name(name),
       m_info(info),
       m_current(info.constBegin()),
-      lastView(nullptr){ }
+
 
 QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider,
                                          const QString& name,
@@ -27,7 +26,7 @@ QtHelpDocumentation::QtHelpDocumentation(QtHelpProviderAbstract* provider,
       m_name(name),
       m_info(info),
       m_current(info.constBegin()),
-      lastView(nullptr)
+ 
 {
     Q_UNUSED(key);
 }
@@ -40,9 +39,8 @@ QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWid
 void QtHelpDocumentation::viewContextMenuRequested(const QPoint& /*pos*/){ }
 void QtHelpDocumentation::jumpedTo(const QUrl& /*newUrl*/){ }
 
-KDevelop::IDocumentationProvider* QtHelpDocumentation::provider() const{ }
+KDevelop::IDocumentationProvider* QtHelpDocumentation::provider() const{return nullptr; }
 
-// ---------- QtHelpAlternativeLink ----------
 
 QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name,
                                                const QtHelpDocumentation* doc,
@@ -53,7 +51,6 @@ QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name,
 
 void QtHelpAlternativeLink::showUrl(){}
 
-// ---------- HomeDocumentation ----------
 
 HomeDocumentation::HomeDocumentation(QtHelpProviderAbstract* provider)
     : m_provider(provider){ }
