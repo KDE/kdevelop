@@ -1,1 +1,1 @@
-kdevevelop with qtwebengine dependencies removed 
+kdevelop with qtwebengine dependencies removed 
