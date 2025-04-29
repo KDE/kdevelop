@@ -937,7 +937,7 @@ void LldbTest::testChangeBreakpointWhileRunning()
     qDebug() << "Disabling breakpoint";
     b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
     //to make one loop
-    WAIT_FOR_A_WHILE(session, 2500);
+    WAIT_FOR_A_WHILE(session, 2000);
     qDebug() << "Waiting for active";
     WAIT_FOR_STATE(session, DebugSession::ActiveState);
     qDebug() << "Enabling breakpoint";
