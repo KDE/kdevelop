@@ -329,8 +329,7 @@ void testUnsupportedUrlExpressionBreakpoints(MIDebugSession* session, IExecutePl
     RETURN_IF_TEST_FAILED();
 }
 
-void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin,
-                                bool debuggerMovesBreakpointFromLicenseNotice)
+void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin)
 {
     TestLaunchConfiguration cfg;
 
@@ -340,26 +339,30 @@ void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* execute
 
     QVERIFY(session->startDebugging(&cfg, executePlugin));
 
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    const auto debuggerMovesBreakpointFromLicenseNotice = currentMiLine(session) == 20;
+
     if (debuggerMovesBreakpointFromLicenseNotice) {
-        // The lines 9-19 consist of no-op code, so GDB moves the breakpoint from line 9 to line 20. The contents
+        // The lines 9-19 consist of no-op code, so GDB versions older than 16
+        // move the breakpoint from line 9 to line 20. The contents
         // of the line 20 is "void noop() {}", so GDB stops at it 4 times (4 is the number of calls to noop()).
         for (int noopCall = 0; noopCall < 4; ++noopCall) {
-            WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
             QCOMPARE(currentMiLine(session), 20);
             session->run();
+            WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
         }
     }
 
     // The lines 34 and 35 consist of no-op code, so a debugger moves
     // the breakpoint from line 34 to line 36 and stops at it.
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     QCOMPARE(currentMiLine(session), 36);
 
     if (debuggerMovesBreakpointFromLicenseNotice) {
         QCOMPARE(breakpointMiLine(licenseBreakpoint), 20);
         QCOMPARE(licenseBreakpoint->state(), KDevelop::Breakpoint::CleanState);
     } else {
-        // LLDB does not move the breakpoint from the no-op line 9 and permanently keeps it in the pending state.
+        // GDB since version 16 and LLDB do not move the breakpoint from
+        // the no-op line 9 and permanently keep it in the pending state.
         QCOMPARE(breakpointMiLine(licenseBreakpoint), 9);
         QCOMPARE(licenseBreakpoint->state(), Breakpoint::PendingState);
     }

@@ -128,8 +128,7 @@ void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
 void testUnsupportedUrlExpressionBreakpoints(MIDebugSession* session, IExecutePlugin* executePlugin,
                                              bool debuggerSupportsNonAsciiExpressions);
 
-void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin,
-                                bool debuggerMovesBreakpointFromLicenseNotice);
+void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin);
 
 void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin, bool debuggerStopsOnInvalidCondition);
 

@@ -380,7 +380,7 @@ void LldbTest::testPendingBreakpoint()
 
 void LldbTest::testBreakpointsOnNoOpLines()
 {
-    KDevMI::Testing::testBreakpointsOnNoOpLines(new TestDebugSession, m_iface, false);
+    KDevMI::Testing::testBreakpointsOnNoOpLines(new TestDebugSession, m_iface);
 }
 
 void LldbTest::testUpdateBreakpoint()

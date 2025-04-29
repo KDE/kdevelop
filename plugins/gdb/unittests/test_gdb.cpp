@@ -315,7 +315,7 @@ void GdbTest::testPendingBreakpoint()
 
 void GdbTest::testBreakpointsOnNoOpLines()
 {
-    KDevMI::Testing::testBreakpointsOnNoOpLines(new TestDebugSession, m_iface, true);
+    KDevMI::Testing::testBreakpointsOnNoOpLines(new TestDebugSession, m_iface);
 }
 
 void GdbTest::testUpdateBreakpoint()
