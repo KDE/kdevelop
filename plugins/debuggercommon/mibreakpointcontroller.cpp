@@ -806,10 +806,10 @@ void MIBreakpointController::programStopped(const AsyncRecord& r)
     QString msg;
     if (r.hasField(QStringLiteral("value"))) {
         if (r[QStringLiteral("value")].hasField(QStringLiteral("old"))) {
-            msg += i18n("<br>Old value: %1", r[QStringLiteral("value")][QStringLiteral("old")].literal());
+            msg += i18n("\nOld value: %1", r[QStringLiteral("value")][QStringLiteral("old")].literal());
         }
         if (r[QStringLiteral("value")].hasField(QStringLiteral("new"))) {
-            msg += i18n("<br>New value: %1", r[QStringLiteral("value")][QStringLiteral("new")].literal());
+            msg += i18n("\nNew value: %1", r[QStringLiteral("value")][QStringLiteral("new")].literal());
         }
     }
 
