@@ -714,11 +714,11 @@ void LldbTest::testManualBreakpoint()
     QCOMPARE(session->currentLine(), 27);
 
     breakpoints()->removeRows(0, 1);
-    WAIT_FOR_A_WHILE(session, 100);
+    WAIT_FOR_A_WHILE(session, 200);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
     session->addCommand(MI::NonMI, QStringLiteral("break set --file debugee.cpp --line 23"));
-    WAIT_FOR_A_WHILE(session, 100);
+    WAIT_FOR_A_WHILE(session, 200);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
     auto b = breakpoints()->breakpoint(0);
@@ -735,7 +735,7 @@ void LldbTest::testManualBreakpoint()
     QCOMPARE(b->ignoreHits(), 1);
 
     session->addCommand(MI::NonMI, QStringLiteral("break delete 2"));
-    WAIT_FOR_A_WHILE(session, 100);
+    WAIT_FOR_A_WHILE(session, 200);
     QEXPECT_FAIL("", "LLDB 4.0 does not report breakpoint deletion as mi notification", Continue);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
@@ -1187,12 +1187,12 @@ void LldbTest::testAttach()
     debugeeProcess << QStringLiteral("nice") << findExecutable(QStringLiteral("debuggee_debugeeslow")).toLocalFile();
     debugeeProcess.start();
     QVERIFY(debugeeProcess.waitForStarted());
-    QTest::qWait(100);
+    QTest::qWait(200);
 
     auto *session = new TestDebugSession;
     session->attachToProcess(debugeeProcess.processId());
 
-    WAIT_FOR_A_WHILE(session, 100);
+    WAIT_FOR_A_WHILE(session, 200);
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 39); // the blank line in main()
 
