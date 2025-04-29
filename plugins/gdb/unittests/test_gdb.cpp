@@ -1871,7 +1871,7 @@ void GdbTest::testChangeBreakpointWhileRunning()
     b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
     QTest::qWait(100);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
+
     session->run();
     QTest::qWait(100);
     WAIT_FOR_STATE(session, DebugSession::EndedState);

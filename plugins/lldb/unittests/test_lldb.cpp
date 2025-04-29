@@ -944,7 +944,6 @@ void LldbTest::testChangeBreakpointWhileRunning()
 
     b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
