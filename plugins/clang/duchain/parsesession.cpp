@@ -302,15 +302,18 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     }
 
     if (hasQtIncludes(includes.system)) {
-        const auto wrappedQtHeaders = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                             QStringLiteral("kdevclangsupport/wrappedQtHeaders"),
-                                                             QStandardPaths::LocateDirectory).toUtf8();
+        auto wrappedQtHeaders =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   QStringLiteral("kdevclangsupport/wrappedQtHeaders/QtCore/qobjectdefs.h"))
+                .toUtf8();
         if (!wrappedQtHeaders.isEmpty()) {
-            smartArgs << wrappedQtHeaders;
-            clangArguments << "-isystem" << wrappedQtHeaders.constData();
-            const QByteArray qtCore = wrappedQtHeaders + "/QtCore";
-            smartArgs << qtCore;
-            clangArguments << "-isystem" << qtCore.constData();
+            // add /path/to/wrappedQtHeaders/QtCore and /path/to/wrappedQtHeaders to the SYSTEM include search path
+            for (auto counter = 0; counter < 2; ++counter) {
+                // remove "/qobjectdefs.h" during the first iteration and "/QtCore" during the second one
+                wrappedQtHeaders.truncate(wrappedQtHeaders.lastIndexOf('/'));
+                smartArgs << wrappedQtHeaders;
+                clangArguments << "-isystem" << wrappedQtHeaders.constData();
+            }
         }
     }
 
