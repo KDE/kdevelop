@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-04-30 00:41+0000\n"
 "PO-Revision-Date: 2014-09-13 10:52+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -64,48 +64,48 @@ msgstr ""
 "Egy héj meta karaktert tartalmaz a végrehajtható az indítási beállításhoz: "
 "„%1”. Jelenleg ezt nem támogatott. Indítás megszakítása."
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:103
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr ""
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr ""
 
-#: nativeappconfig.cpp:106
+#: nativeappconfig.cpp:105
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappconfig.cpp:156
+#: nativeappconfig.cpp:155
 #, fuzzy, kde-format
 #| msgid "Configure Native Application"
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Natív alkalmazás beállítása"
 
-#: nativeappconfig.cpp:166
+#: nativeappconfig.cpp:165
 #, fuzzy, kde-format
 #| msgid "Native Application"
 msgid "Executes Native Applications"
 msgstr "Natív alkalmazás"
 
-#: nativeappconfig.cpp:176
+#: nativeappconfig.cpp:175
 #, kde-format
 msgid "Native Application"
 msgstr "Natív alkalmazás"
 
-#: nativeappconfig.cpp:241
+#: nativeappconfig.cpp:240
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Lefordított bináris"
 
-#: nativeappconfig.cpp:322
+#: nativeappconfig.cpp:321
 #, fuzzy, kde-format
 #| msgid "Project Executables"
 msgctxt "@title:menu"

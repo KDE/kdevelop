@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-04-30 00:41+0000\n"
 "PO-Revision-Date: 2020-01-15 14:27+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -64,49 +64,49 @@ msgstr ""
 "Seadistuse \"%1\" käivitamise täitmisfaili oli kaasatud shelli metamärk, mis "
 "ei ole praegu toetatud. Käivitamisest loobutakse."
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:103
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr ""
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:104
 #, fuzzy, kde-format
 #| msgid "Kill All Instances"
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "Tapa kõik isendid"
 
-#: nativeappconfig.cpp:106
+#: nativeappconfig.cpp:105
 #, fuzzy, kde-format
 #| msgid "Start Another"
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "Käivita uus"
 
-#: nativeappconfig.cpp:156
+#: nativeappconfig.cpp:155
 #, fuzzy, kde-format
 #| msgid "Configure Native Application"
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Omarakenduse seadistamine"
 
-#: nativeappconfig.cpp:166
+#: nativeappconfig.cpp:165
 #, kde-format
 msgid "Executes Native Applications"
 msgstr "Omarakenduse käivitamine"
 
-#: nativeappconfig.cpp:176
+#: nativeappconfig.cpp:175
 #, kde-format
 msgid "Native Application"
 msgstr "Omarakendus"
 
-#: nativeappconfig.cpp:241
+#: nativeappconfig.cpp:240
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Kompileeritud binaarfail"
 
-#: nativeappconfig.cpp:322
+#: nativeappconfig.cpp:321
 #, fuzzy, kde-format
 #| msgid "Project Executables"
 msgctxt "@title:menu"

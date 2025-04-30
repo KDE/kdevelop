@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-04-30 00:41+0000\n"
 "PO-Revision-Date: 2024-07-20 09:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -153,7 +153,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Błąd wewnętrzny programu diagnostycznego"
 
-#: midebugger.cpp:333 midebugsession.cpp:423
+#: midebugger.cpp:333 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Proces wyszedł"
@@ -323,42 +323,42 @@ msgstr "Diagnozuj plik jądra"
 msgid "Debug process %1"
 msgstr "Diagnozowanie procesu %1"
 
-#: midebugsession.cpp:208
+#: midebugsession.cpp:202
 #, kde-format
 msgid "Running program"
 msgstr "Uruchamianie programu"
 
-#: midebugsession.cpp:295
+#: midebugsession.cpp:288
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Dołączanie do procesu %1"
 
-#: midebugsession.cpp:326
+#: midebugsession.cpp:319
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Nie można dołączyć programu diagnostycznego:</b><br />"
 
-#: midebugsession.cpp:336
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Badanie pliku jądra %1 "
 
-#: midebugsession.cpp:408
+#: midebugsession.cpp:401
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Zatrzymano diagnozowanie"
 
-#: midebugsession.cpp:428
+#: midebugsession.cpp:421
 #, kde-format
 msgid "Application is running"
 msgstr "Program jest uruchomiony"
 
-#: midebugsession.cpp:433
+#: midebugsession.cpp:426
 #, kde-format
 msgid "Application is paused"
 msgstr "Program jest wstrzymany"
 
-#: midebugsession.cpp:748
+#: midebugsession.cpp:741
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -367,32 +367,32 @@ msgstr ""
 "<b>Zostało wysłane polecenie gdb, kiedy ten program nie był uruchomiony</"
 "b><br>Poleceniem było:<br> %1"
 
-#: midebugsession.cpp:860
+#: midebugsession.cpp:853
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Nieprawidłowe polecenie programu diagnostycznego</b><br>%1"
 
-#: midebugsession.cpp:996
+#: midebugsession.cpp:989
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Wyszedł z kodem zwrotnym: %1"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:991
 #, kde-format
 msgid "Exited normally"
 msgstr "Wyszedł normalnie"
 
-#: midebugsession.cpp:1005
+#: midebugsession.cpp:998
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Wyjście po sygnale %1"
 
-#: midebugsession.cpp:1040
+#: midebugsession.cpp:1033
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Program otrzymał sygnał %1 (%2)"
 
-#: midebugsession.cpp:1172
+#: midebugsession.cpp:1165
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -400,7 +400,7 @@ msgstr[0] "1 polecenie w kolejce\n"
 msgstr[1] "%1 polecenia w kolejce\n"
 msgstr[2] "%1 poleceń w kolejce\n"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1166
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -409,12 +409,12 @@ msgstr[0] "1 polecenie jest przetwarzane przez gdb\n"
 msgstr[1] "%1 polecenia są przetwarzane przez gdb\n"
 msgstr[2] "%1 poleceń jest przetwarzanych przez gdb\n"
 
-#: midebugsession.cpp:1174
+#: midebugsession.cpp:1167
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Stan programu diagnostycznego: %1\n"
 
-#: midebugsession.cpp:1177
+#: midebugsession.cpp:1170
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -425,7 +425,7 @@ msgstr ""
 "Bieżący tekst polecenia: '%2'\n"
 "Bieżący oryginalny tekst polecenia: '%3'\n"
 
-#: midebugsession.cpp:1204
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
