@@ -16,6 +16,8 @@
 #include <QDir>
 #include <QStandardPaths>
 
+#include <optional>
+
 using namespace KDevelop;
 
 namespace Clazy
@@ -91,6 +93,12 @@ QUrl JobGlobalParameters::defaultExecutablePath()
 
 QUrl JobGlobalParameters::defaultDocsPath()
 {
+    const auto urlOfDir = [](const QDir& dir) {
+        return QUrl::fromLocalFile(dir.canonicalPath());
+    };
+
+    std::optional<QDir> firstDocsDir;
+
     const QString subPathsCandidates[2]{
         // since clazy 1.4
         QStringLiteral("doc/clazy"),
@@ -98,13 +106,32 @@ QUrl JobGlobalParameters::defaultDocsPath()
         QStringLiteral("clazy/doc"),
     };
     for (auto subPath : subPathsCandidates) {
-        const auto docsPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath, QStandardPaths::LocateDirectory);
+        const auto docsPaths =
+            QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, subPath, QStandardPaths::LocateDirectory);
+        for (const auto& path : docsPaths) {
+            static const auto readmeFileName = QStringLiteral("README.md");
+            static const auto checksFileName = QStringLiteral("checks.json");
 
-        if (!docsPath.isEmpty()) {
-            return QUrl::fromLocalFile(QDir(docsPath).canonicalPath());
+            QDir dir(path);
+            // These two files are usually present in the installed directory doc/clazy. If not, the directory
+            // might be a leftover from an uninstalled clazy version, so check other possible candidates.
+            if (dir.exists(readmeFileName) || dir.exists(checksFileName)) {
+                qCDebug(KDEV_CLAZY) << "detected documentation path:" << path;
+                return urlOfDir(dir);
+            }
+            qCDebug(KDEV_CLAZY) << "candidate documentation path" << path << "does not contain indicator files"
+                                << readmeFileName << "and" << checksFileName;
+            if (!firstDocsDir) {
+                firstDocsDir = std::move(dir);
+            }
         }
     }
 
+    if (firstDocsDir) {
+        qCWarning(KDEV_CLAZY) << "falling back to the first candidate documentation path" << firstDocsDir->path()
+                              << "even though it does not contain indicator files";
+        return urlOfDir(*firstDocsDir);
+    }
     return {};
 }
 
