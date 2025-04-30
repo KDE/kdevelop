@@ -197,7 +197,6 @@ void addFrameworkDirectories(QVector<const char*>* args, QVector<QByteArray>* ot
         }
         QByteArray path = url.toLocalFile().toUtf8();
 
-        otherArgs->append(cliSwitch);
         otherArgs->append(path);
         args->append(cliSwitch);
         args->append(path.constData());
