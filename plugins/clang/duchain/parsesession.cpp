@@ -254,6 +254,10 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
               |  CXTranslationUnit_PrecompiledPreamble;
     }
 
+    const auto totalSize = [](const auto& paths) {
+        return paths.system.size() + paths.project.size();
+    };
+
     const auto tuUrl = environment.translationUnitUrl();
     Q_ASSERT(!tuUrl.isEmpty());
 
@@ -261,13 +265,18 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     QVector<const char*> clangArguments;
 
     const auto& includes = environment.includes();
+    const auto& frameworkDirectories = environment.frameworkDirectories();
     const auto& pchInclude = environment.pchInclude();
+
+    static const auto extraArgs = ::extraArgs();
 
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> smartArgs;
-    smartArgs.reserve(includes.system.size() + includes.project.size()
-                      + pchInclude.isValid() + arguments.size() + 1);
-    clangArguments.reserve(smartArgs.size());
+
+    /// the number of arguments, for which one element is appended to smartArgs and two elements - to clangArguments
+    const auto argumentCountToDouble = totalSize(frameworkDirectories) + pchInclude.isValid() + 6;
+    smartArgs.reserve(totalSize(includes) + argumentCountToDouble);
+    clangArguments.reserve(arguments.size() + smartArgs.capacity() + argumentCountToDouble + extraArgs.size());
 
     std::transform(arguments.constBegin(), arguments.constEnd(),
                    std::back_inserter(clangArguments),
@@ -307,8 +316,6 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
 
     addIncludes(&clangArguments, &smartArgs, includes.system, "-isystem");
     addIncludes(&clangArguments, &smartArgs, includes.project, "-I");
-
-    const auto& frameworkDirectories = environment.frameworkDirectories();
     addFrameworkDirectories(&clangArguments, &smartArgs, frameworkDirectories.system, "-iframework");
     addFrameworkDirectories(&clangArguments, &smartArgs, frameworkDirectories.project, "-F");
 
@@ -329,7 +336,6 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     }
 
     // append extra args from environment variable
-    static const auto extraArgs = ::extraArgs();
     for (const QByteArray& arg : extraArgs) {
         clangArguments << arg.constData();
     }
