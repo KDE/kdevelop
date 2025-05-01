@@ -714,11 +714,11 @@ void LldbTest::testManualBreakpoint()
     QCOMPARE(session->currentLine(), 27);
 
     breakpoints()->removeRows(0, 1);
-    WAIT_FOR_A_WHILE(session, 100);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
     session->addCommand(MI::NonMI, QStringLiteral("break set --file debugee.cpp --line 23"));
-    WAIT_FOR_A_WHILE(session, 100);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
     auto b = breakpoints()->breakpoint(0);
@@ -727,7 +727,7 @@ void LldbTest::testManualBreakpoint()
     session->addCommand(MI::NonMI, QStringLiteral("break disable 2"));
     session->addCommand(MI::NonMI, QStringLiteral("break modify -c 'i == 1' 2"));
     session->addCommand(MI::NonMI, QStringLiteral("break modify -i 1 2"));
-    WAIT_FOR_A_WHILE(session, 1000);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(b->enabled(), false);
     QEXPECT_FAIL("", "LLDB 4.0 does not report condition in mi response", Continue);
     QCOMPARE(b->condition(), QString("i == 1"));
@@ -735,7 +735,7 @@ void LldbTest::testManualBreakpoint()
     QCOMPARE(b->ignoreHits(), 1);
 
     session->addCommand(MI::NonMI, QStringLiteral("break delete 2"));
-    WAIT_FOR_A_WHILE(session, 100);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QEXPECT_FAIL("", "LLDB 4.0 does not report breakpoint deletion as mi notification", Continue);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
