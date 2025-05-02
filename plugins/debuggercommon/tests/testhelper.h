@@ -10,6 +10,7 @@
 
 #include <debugger/interfaces/idebugsession.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <tests/testhelpermacros.h>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -53,6 +54,12 @@ class QModelIndex;
         if (KDevMI::Testing::isAttachForbidden(__FILE__, __LINE__)) \
             return; \
     } while(0)
+
+#define START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, launchConfiguration, executePlugin)                         \
+    do {                                                                                                               \
+        KDevMI::Testing::startDebuggingAndWaitForPausedState((session), (launchConfiguration), (executePlugin));       \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
 
 namespace KDevMI {
 
@@ -127,6 +134,27 @@ private:
     KConfigGroup cfg;
     KSharedConfigPtr c;
 };
+
+/**
+ * Start debugging in a given session with given launch configuration and execute plugin,
+ * then wait for the session to reach the paused state and for the debugger to become idle.
+ *
+ * @param session a non-null debug session
+ *
+ * @note This function should be called in place of the following two lines of code
+ * @code{.cpp}
+ * QVERIFY(session->startDebugging(launchConfiguration, executePlugin));
+ * WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+ * @endcode
+ * in order to prevent LLDB-MI test flakiness on FreeBSD.
+ *
+ * Call RETURN_IF_TEST_FAILED() after this function or use the
+ * wrapper macro START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE() instead.
+ *
+ * @warning The calling function must ensure that the paused state is reached, e.g. by setting a breakpoint.
+ */
+void startDebuggingAndWaitForPausedState(MIDebugSession* session, TestLaunchConfiguration* launchConfiguration,
+                                         IExecutePlugin* executePlugin);
 
 void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
                         IExecutePlugin* executePlugin);
