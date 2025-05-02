@@ -30,6 +30,7 @@
 #include <KSharedConfig>
 
 #include <QDebug>
+#include <QLoggingCategory>
 #include <QMetaObject>
 #include <QSignalBlocker>
 #include <QSignalSpy>
@@ -173,6 +174,8 @@ void DebuggerTestBase::initTestCase()
 {
     startInitTestCase();
 
+    QLoggingCategory::setFilterRules("default=true\nkdevelop.plugins.debuggercommon=true\nkdevelop.plugins.gdb=true\nkdevelop.plugins.lldb=true");
+
     AutoTestShell::init();
     AutoTestShell::initializeNotifications();
     m_core = TestCore::initialize(Core::NoUi);
@@ -186,6 +189,8 @@ void DebuggerTestBase::initTestCase()
 
     m_debugeeFilePath = findSourceFile("debugee.cpp");
     m_debugeeUrl = QUrl::fromLocalFile(debugeeFilePath());
+
+    qSetMessagePattern("[%{time mm:ss.zzz}][%{function}:%{line}][%{category}] %{message}");
 }
 
 void DebuggerTestBase::cleanupTestCase()
