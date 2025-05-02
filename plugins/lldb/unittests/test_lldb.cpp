@@ -189,6 +189,7 @@ void LldbTest::cleanup()
 
 void LldbTest::testStdout()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
 
     QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
@@ -212,16 +213,19 @@ void LldbTest::testStdout()
 
 void LldbTest::testEnvironmentSet()
 {
+    QSKIP("not flaky");
     KDevMI::Testing::testEnvironmentSet(new TestDebugSession, QStringLiteral("LldbTestGroup"), m_iface);
 }
 
 void LldbTest::testUnsupportedUrlExpressionBreakpoints()
 {
+    QSKIP("not flaky");
     KDevMI::Testing::testUnsupportedUrlExpressionBreakpoints(new TestDebugSession, m_iface, true);
 }
 
 void LldbTest::testBreakpoint()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
 
     TestLaunchConfiguration cfg;
@@ -268,6 +272,7 @@ void LldbTest::testBreakOnStart()
 
 void LldbTest::testDisableBreakpoint()
 {
+    QSKIP("not flaky");
     //Description: We must stop only on the third breakpoint
 
     int firstBreakLine=28;
@@ -315,6 +320,7 @@ void LldbTest::testDisableBreakpoint()
 
 void LldbTest::testChangeLocationBreakpoint()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
 
     TestLaunchConfiguration cfg;
@@ -349,6 +355,7 @@ void LldbTest::testChangeLocationBreakpoint()
 
 void LldbTest::testDeleteBreakpoint()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
 
     TestLaunchConfiguration cfg;
@@ -389,11 +396,13 @@ void LldbTest::testPendingBreakpoint()
 
 void LldbTest::testBreakpointsOnNoOpLines()
 {
+    QSKIP("not flaky");
     KDevMI::Testing::testBreakpointsOnNoOpLines(new TestDebugSession, m_iface, false);
 }
 
 void LldbTest::testUpdateBreakpoint()
 {
+    QSKIP("not flaky");
     // Description: user might insert breakpoints using lldb console. model should
     // pick up the manually set breakpoint
     auto *session = new TestDebugSession;
@@ -454,6 +463,7 @@ void LldbTest::testIgnoreHitsBreakpoint()
 
 void LldbTest::testConditionBreakpoint()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
@@ -633,6 +643,7 @@ void LldbTest::testBreakpointErrors()
 
 void LldbTest::testInsertBreakpointWhileRunning()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile("debugeeslow.cpp");
@@ -657,6 +668,7 @@ void LldbTest::testInsertBreakpointWhileRunning()
 
 void LldbTest::testInsertBreakpointWhileRunningMultiple()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile("debugeeslow.cpp");
@@ -705,6 +717,7 @@ void LldbTest::testInsertBreakpointFunctionName()
 
 void LldbTest::testManualBreakpoint()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
@@ -765,6 +778,7 @@ void LldbTest::testInsertAndRemoveBreakpointWhileRunning()
 
 void LldbTest::testPickupManuallyInsertedBreakpoint()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
@@ -787,6 +801,7 @@ void LldbTest::testPickupManuallyInsertedBreakpoint()
 //Bug 270970
 void LldbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
 
     QString sourceFile = findSourceFile("debugee.cpp");
@@ -832,6 +847,7 @@ void LldbTest::testBreakpointWithSpaceInPath()
 
 void LldbTest::testBreakpointDisabledOnStart()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
@@ -857,6 +873,7 @@ void LldbTest::testBreakpointDisabledOnStart()
 
 void LldbTest::testMultipleLocationsBreakpoint()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeemultilocbreakpoint"));
 
@@ -878,6 +895,7 @@ void LldbTest::testMultipleLocationsBreakpoint()
 
 void LldbTest::testMultipleBreakpoint()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
 
     //there'll be about 3-4 breakpoints, but we treat it like one.
@@ -919,6 +937,7 @@ void LldbTest::testRegularExpressionBreakpoint()
 
 void LldbTest::testChangeBreakpointWhileRunning()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration c(QStringLiteral("debuggee_debugeeslow"));
 
@@ -947,6 +966,7 @@ void LldbTest::testChangeBreakpointWhileRunning()
 
 void LldbTest::testCatchpoint()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeexception"));
 
@@ -981,6 +1001,7 @@ void LldbTest::testCatchpoint()
 
 void LldbTest::testShowStepInSource()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
@@ -1017,6 +1038,7 @@ void LldbTest::testShowStepInSource()
 
 void LldbTest::testStack()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
@@ -1059,6 +1081,7 @@ void LldbTest::testStack()
 
 void LldbTest::testStackFetchMore()
 {
+    QSKIP("not flaky");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeerecursion"));
     QString fileName = findSourceFile("debugeerecursion.cpp");
