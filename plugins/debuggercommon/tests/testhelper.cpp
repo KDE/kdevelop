@@ -233,6 +233,20 @@ TestLaunchConfiguration::TestLaunchConfiguration(const QUrl& executable, const Q
     cfg.writeEntry(IExecutePlugin::workingDirEntry, workingDirectory);
 }
 
+void startDebuggingAndWaitForPausedState(MIDebugSession* session, TestLaunchConfiguration* launchConfiguration,
+                                         IExecutePlugin* executePlugin)
+{
+    QCOMPARE_NE(session, nullptr);
+    QVERIFY(session->startDebugging(launchConfiguration, executePlugin));
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    if (session->currentLine() == -1) {
+        qDebug() << "caught a temporary paused state, so wait again for the nontransient pause on start";
+        WAIT_FOR_A_WHILE(session, 100);
+        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    }
+    QCOMPARE_NE(session->currentLine(), -1);
+}
+
 namespace {
 class WritableEnvironmentProfileList : public KDevelop::EnvironmentProfileList
 {
@@ -337,9 +351,7 @@ void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* execute
     const auto* const blankLineBreakpoint = addDebugeeBreakpoint(34);
     const auto* const lastLineBreakpoint = addDebugeeBreakpoint(42);
 
-    QVERIFY(session->startDebugging(&cfg, executePlugin));
-
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, &cfg, executePlugin);
     const auto debuggerMovesBreakpointFromLicenseNotice = currentMiLine(session) == 20;
 
     if (debuggerMovesBreakpointFromLicenseNotice) {
@@ -419,15 +431,14 @@ void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin
 
     addDebugeeBreakpoint(30);
 
-    QVERIFY(session->startDebugging(&cfg, executePlugin));
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, &cfg, executePlugin);
 
     if (debuggerStopsOnInvalidCondition) {
-        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
         QCOMPARE(currentMiLine(session), 29);
         session->run();
+        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     }
 
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     QCOMPARE(currentMiLine(session), 30);
     session->run();
 
@@ -442,8 +453,7 @@ void testChangeBreakpointWhileRunning(MIDebugSession* session, IExecutePlugin* e
     TestLaunchConfiguration cfg("debuggee_debugeeslow");
     auto* const breakpoint = breakpoints()->addCodeBreakpoint("debugeeslow.cpp:30"); // ++i;
 
-    QVERIFY(session->startDebugging(&cfg, executePlugin));
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, &cfg, executePlugin);
     QCOMPARE(currentMiLine(session), 30);
 
     session->run();
