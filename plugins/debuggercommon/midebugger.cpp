@@ -113,6 +113,7 @@ void MIDebugger::kill()
 
 void MIDebugger::readyReadStandardOutput()
 {
+    qCritical() << "{" << this;
     auto* const core = KDevelop::ICore::self();
     if (!core || !core->debugController()) {
         const auto nullObject = core ? QLatin1String("the debug controller")
@@ -138,6 +139,7 @@ void MIDebugger::readyReadStandardOutput()
 
         processLine(reply);
     }
+    qCritical() << "}" << this;
 }
 
 void MIDebugger::readyReadStandardError()
