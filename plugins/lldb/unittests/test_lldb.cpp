@@ -254,6 +254,11 @@ void LldbTest::testBreakOnStart()
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    if (session->currentLine() == -1) {
+        qDebug() << "caught a temporary paused state, so wait again for the tested pause on main()";
+        WAIT_FOR_A_WHILE(session, 200);
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+    }
     // line 28 is the start of main function in debugee.cpp
     QCOMPARE(session->currentLine(), 27); // currentLine is zero-based
 
