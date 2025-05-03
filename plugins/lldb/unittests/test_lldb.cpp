@@ -731,6 +731,13 @@ void LldbTest::testInsertAndRemoveBreakpointWhileRunning()
     KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
     breakpoints()->removeBreakpoint(b);
 
+    QCOMPARE(session->state(), DebugSession::ActiveState);
+#ifdef Q_OS_FREEBSD
+    QEXPECT_FAIL("",
+                 "LLDB-MI always manages to stop at the breakpoint soon after it is added and before "
+                 "it is removed, no matter how long this test function waits before adding the breakpoint",
+                 Abort);
+#endif
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 

@@ -1336,6 +1336,8 @@ void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
     qDebug() << "adding breakpoint";
     KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
     breakpoints()->removeBreakpoint(b);
+
+    QCOMPARE(session->state(), DebugSession::ActiveState);
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
