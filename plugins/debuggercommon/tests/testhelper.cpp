@@ -233,6 +233,20 @@ TestLaunchConfiguration::TestLaunchConfiguration(const QUrl& executable, const Q
     cfg.writeEntry(IExecutePlugin::workingDirEntry, workingDirectory);
 }
 
+void startDebuggingAndWaitForPausedState(KDevMI::MIDebugSession* session, TestLaunchConfiguration* launchConfiguration,
+                                         IExecutePlugin* executePlugin)
+{
+    QCOMPARE_NE(session, nullptr);
+    QVERIFY(session->startDebugging(launchConfiguration, executePlugin));
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    if (session->currentLine() == -1) {
+        qDebug() << "caught a temporary paused state, so wait again for the nontransient pause on start";
+        WAIT_FOR_A_WHILE(session, 100);
+        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    }
+    QCOMPARE_NE(session->currentLine(), -1);
+}
+
 namespace {
 class WritableEnvironmentProfileList : public KDevelop::EnvironmentProfileList
 {
@@ -338,21 +352,20 @@ void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* execute
     const auto* const blankLineBreakpoint = addDebugeeBreakpoint(34);
     const auto* const lastLineBreakpoint = addDebugeeBreakpoint(42);
 
-    QVERIFY(session->startDebugging(&cfg, executePlugin));
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, &cfg, executePlugin);
 
     if (debuggerMovesBreakpointFromLicenseNotice) {
         // The lines 9-19 consist of no-op code, so GDB moves the breakpoint from line 9 to line 20. The contents
         // of the line 20 is "void noop() {}", so GDB stops at it 4 times (4 is the number of calls to noop()).
         for (int noopCall = 0; noopCall < 4; ++noopCall) {
-            WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
             QCOMPARE(currentMiLine(session), 20);
             session->run();
+            WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
         }
     }
 
     // The lines 34 and 35 consist of no-op code, so a debugger moves
     // the breakpoint from line 34 to line 36 and stops at it.
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     QCOMPARE(currentMiLine(session), 36);
 
     if (debuggerMovesBreakpointFromLicenseNotice) {
@@ -416,15 +429,14 @@ void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin
 
     addDebugeeBreakpoint(30);
 
-    QVERIFY(session->startDebugging(&cfg, executePlugin));
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, &cfg, executePlugin);
 
     if (debuggerStopsOnInvalidCondition) {
-        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
         QCOMPARE(currentMiLine(session), 29);
         session->run();
+        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     }
 
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     QCOMPARE(currentMiLine(session), 30);
     session->run();
 

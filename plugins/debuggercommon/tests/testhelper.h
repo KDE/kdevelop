@@ -10,6 +10,7 @@
 
 #include <debugger/interfaces/idebugsession.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <tests/testhelpermacros.h>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -33,6 +34,12 @@ class QModelIndex;
 #define WAIT_FOR_STATE_AND_IDLE(session, state) \
     do { if (!KDevMI::Testing::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
 
+#define WAIT_FOR_A_WHILE(session, ms)                                                                                  \
+    do {                                                                                                               \
+        if (!KDevMI::Testing::waitForAWhile((session), (ms), __FILE__, __LINE__))                                      \
+            return;                                                                                                    \
+    } while (false)
+
 #define WAIT_FOR(session, condition) \
     do { \
         KDevMI::Testing::TestWaiter w((session), #condition, __FILE__, __LINE__); \
@@ -47,6 +54,12 @@ class QModelIndex;
         if (KDevMI::Testing::isAttachForbidden(__FILE__, __LINE__)) \
             return; \
     } while(0)
+
+#define START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, launchConfiguration, executePlugin)                         \
+    do {                                                                                                               \
+        KDevMI::Testing::startDebuggingAndWaitForPausedState((session), (launchConfiguration), (executePlugin));       \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
 
 namespace KDevMI {
 
@@ -121,6 +134,17 @@ private:
     KConfigGroup cfg;
     KSharedConfigPtr c;
 };
+
+/**
+ * Start debugging of a given session with given launch configuration and execute plugin,
+ * then wait for the session to reach the paused state and for the debugger to become idle.
+ *
+ * @param session a non-null debug session
+ *
+ * The calling function must ensure that the paused state is reached, e.g. by setting a breakpoint.
+ */
+void startDebuggingAndWaitForPausedState(KDevMI::MIDebugSession* session, TestLaunchConfiguration* launchConfiguration,
+                                         IExecutePlugin* executePlugin);
 
 void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
                         IExecutePlugin* executePlugin);
