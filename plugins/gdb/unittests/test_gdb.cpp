@@ -850,6 +850,9 @@ void GdbTest::testAttach()
     QCOMPARE(session->line(), 40); // return 0; (GDB automatically moves the breakpoint from its no-op line)
 
     session->run();
+#ifdef Q_OS_FREEBSD
+    QSKIP("The test freezes while waiting for the ended state, so skip it");
+#endif
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
@@ -874,6 +877,9 @@ void GdbTest::testManualAttach()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     session->run();
+#ifdef Q_OS_FREEBSD
+    QSKIP("The test freezes while waiting for the ended state, so skip it");
+#endif
     QTest::qWait(2000); // give the slow inferior some extra time to run
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
