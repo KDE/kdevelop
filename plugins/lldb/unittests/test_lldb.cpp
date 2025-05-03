@@ -1159,7 +1159,7 @@ void LldbTest::testAttach()
     QString fileName = findSourceFile("debugeeslow.cpp");
 
     KProcess debugeeProcess;
-    debugeeProcess << QStringLiteral("nice") << findExecutable(QStringLiteral("debuggee_debugeeslow")).toLocalFile();
+    debugeeProcess.setProgram(findExecutable(QStringLiteral("debuggee_debugeeslow")).toLocalFile());
     debugeeProcess.start();
     QVERIFY(debugeeProcess.waitForStarted());
     QTest::qWait(100);
