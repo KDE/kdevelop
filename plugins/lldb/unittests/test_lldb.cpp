@@ -742,7 +742,7 @@ void LldbTest::testInsertAndRemoveBreakpointWhileRunning()
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE(session, DebugSession::ActiveState);
-    WAIT_FOR_A_WHILE(session, 2000);
+    WAIT_FOR_A_WHILE(session, 2500);
     qDebug() << "adding breakpoint";
 
     KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
