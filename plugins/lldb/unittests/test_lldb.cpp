@@ -27,6 +27,7 @@
 #include <KSharedConfig>
 
 #include <QFileInfo>
+#include <QLoggingCategory>
 #include <QSignalSpy>
 #include <QString>
 #include <QStringList>
@@ -136,6 +137,8 @@ QModelIndex LldbTest::localVariableIndexAt(int i, int col)
 // Called before the first testfunction is executed
 void LldbTest::initTestCase()
 {
+    QLoggingCategory::setFilterRules("default=true\nkdevelop.plugins.debuggercommon=true\nkdevelop.plugins.lldb=true");
+
     AutoTestShell::init();
     AutoTestShell::initializeNotifications();
     m_core = TestCore::initialize(Core::NoUi);
@@ -151,6 +154,7 @@ void LldbTest::initTestCase()
     if (lldbMiExecutable.isEmpty()) {
         QSKIP("Skipping, lldb-mi not available");
     }
+    qSetMessagePattern("[%{time mm:ss.zzz}][%{function}:%{line}][%{category}] %{message}");
 }
 
 // Called after the last testfunction was executed
