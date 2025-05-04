@@ -840,16 +840,15 @@ void GdbTest::testAttach()
     debugeeProcess.setProgram(findExecutable(QStringLiteral("debuggee_debugeeslow")).toLocalFile());
     debugeeProcess.start();
     QVERIFY(debugeeProcess.waitForStarted());
-    QTest::qWait(100);
+    QTest::qWait(300);
 
     auto *session = new TestDebugSession;
     session->attachToProcess(debugeeProcess.processId());
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 39); // the blank line in main()
-    QTest::qWait(100);
     session->run();
-    QTest::qWait(2000);
+    QTest::qWait(200);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 40); // return 0; (GDB automatically moves the breakpoint from its no-op line)
 
@@ -862,7 +861,7 @@ void GdbTest::testManualAttach()
     SKIP_IF_ATTACH_FORBIDDEN();
 
     KProcess debugeeProcess;
-    debugeeProcess << QStringLiteral("nice") << findExecutable(QStringLiteral("debuggee_debugeeslow")).toLocalFile();
+    debugeeProcess.setProgram(findExecutable(QStringLiteral("debuggee_debugeeslow")).toLocalFile());
     debugeeProcess.start();
     QVERIFY(debugeeProcess.waitForStarted());
 
