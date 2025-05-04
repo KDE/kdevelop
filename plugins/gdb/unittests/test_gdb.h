@@ -24,7 +24,6 @@ private Q_SLOTS:
     void cleanupTestCase();
     void init();
 
-private:
     void testStdOut();
     void testEnvironmentSet();
 
@@ -52,7 +51,6 @@ private:
     void testStack();
     void testStackFetchMore();
     void testStackSwitchThread();
-private Q_SLOTS:
     void testAttach();
     void testManualAttach();
     void testCoreFile();
