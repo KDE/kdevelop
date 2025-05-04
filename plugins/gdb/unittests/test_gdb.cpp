@@ -37,6 +37,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
+#include <QLoggingCategory>
 #include <QStandardPaths>
 #include <QSignalSpy>
 #include <QTest>
@@ -58,12 +59,15 @@ void GdbTest::initTestCase()
     QSKIP("apparently this test is killing processes, but is leaving kdeinit5, dbus-daemon and klauncher running, "
           "breaking the Windows CI builder");
 #endif
+    QLoggingCategory::setFilterRules("default=true\nkdevelop.plugins.debuggercommon=true\nkdevelop.plugins.gdb=true");
+
     AutoTestShell::init();
     AutoTestShell::initializeNotifications();
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
     m_iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
     Q_ASSERT(m_iface);
+    qSetMessagePattern("[%{time mm:ss.zzz}][%{function}:%{line}][%{category}] %{message}");
 }
 
 void GdbTest::cleanupTestCase()
