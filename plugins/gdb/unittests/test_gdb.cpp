@@ -1845,28 +1845,7 @@ void GdbTest::testRegularExpressionBreakpoint()
 
 void GdbTest::testChangeBreakpointWhileRunning()
 {
-    auto *session = new TestDebugSession;
-
-    TestLaunchConfiguration c(QStringLiteral("debuggee_debugeeslow"));
-    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:30")); // ++i;
-    session->startDebugging(&c, m_iface);
-
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QCOMPARE(session->currentLine(), 29); // ++i;
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::ActiveState);
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
-    //to make one loop
-    QTest::qWait(2000);
-    WAIT_FOR_STATE(session, DebugSession::ActiveState);
-
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
-    QTest::qWait(100);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    session->run();
-    QTest::qWait(100);
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
+    KDevMI::Testing::testChangeBreakpointWhileRunning(new TestDebugSession, m_iface);
 }
 
 void GdbTest::testDebugInExternalTerminal()

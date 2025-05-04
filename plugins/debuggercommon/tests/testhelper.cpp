@@ -434,4 +434,35 @@ void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
+void testChangeBreakpointWhileRunning(MIDebugSession* session, IExecutePlugin* executePlugin)
+{
+    QVERIFY(session);
+    QVERIFY(executePlugin);
+
+    TestLaunchConfiguration cfg("debuggee_debugeeslow");
+    auto* const breakpoint = breakpoints()->addCodeBreakpoint("debugeeslow.cpp:30"); // ++i;
+
+    QVERIFY(session->startDebugging(&cfg, executePlugin));
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    QCOMPARE(currentMiLine(session), 30);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::ActiveState);
+
+    qDebug() << "Disabling breakpoint";
+    breakpoint->setData(Breakpoint::EnableColumn, Qt::Unchecked);
+    // to make one loop
+    WAIT_FOR_A_WHILE(session, 2000);
+
+    qDebug() << "Waiting for active";
+    WAIT_FOR_STATE(session, IDebugSession::ActiveState);
+
+    qDebug() << "Enabling breakpoint";
+    breakpoint->setData(Breakpoint::EnableColumn, Qt::Checked);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 } // end of namespace KDevMI::Testing

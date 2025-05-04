@@ -33,6 +33,12 @@ class QModelIndex;
 #define WAIT_FOR_STATE_AND_IDLE(session, state) \
     do { if (!KDevMI::Testing::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
 
+#define WAIT_FOR_A_WHILE(session, ms)                                                                                  \
+    do {                                                                                                               \
+        if (!KDevMI::Testing::waitForAWhile((session), (ms), __FILE__, __LINE__))                                      \
+            return;                                                                                                    \
+    } while (false)
+
 #define WAIT_FOR(session, condition) \
     do { \
         KDevMI::Testing::TestWaiter w((session), #condition, __FILE__, __LINE__); \
@@ -131,6 +137,8 @@ void testUnsupportedUrlExpressionBreakpoints(MIDebugSession* session, IExecutePl
 void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin);
 
 void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin, bool debuggerStopsOnInvalidCondition);
+
+void testChangeBreakpointWhileRunning(MIDebugSession* session, IExecutePlugin* executePlugin);
 
 } // namespace Testing
 

@@ -35,9 +35,6 @@
 #include <QUrl>
 #include <QDir>
 
-#define WAIT_FOR_A_WHILE(session, ms) \
-    do { if (!KDevMI::Testing::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; } while (0)
-
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
 using KDevMI::Testing::breakpoints;
@@ -911,30 +908,7 @@ void LldbTest::testRegularExpressionBreakpoint()
 
 void LldbTest::testChangeBreakpointWhileRunning()
 {
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration c(QStringLiteral("debuggee_debugeeslow"));
-
-    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:30")); // ++i;
-    QVERIFY(session->startDebugging(&c, m_iface));
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    QCOMPARE(session->currentLine(), 29); // ++i;
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::ActiveState);
-    qDebug() << "Disabling breakpoint";
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
-    //to make one loop
-    WAIT_FOR_A_WHILE(session, 2000);
-    qDebug() << "Waiting for active";
-    WAIT_FOR_STATE(session, DebugSession::ActiveState);
-    qDebug() << "Enabling breakpoint";
-
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
+    KDevMI::Testing::testChangeBreakpointWhileRunning(new TestDebugSession, m_iface);
 }
 
 void LldbTest::testCatchpoint()
