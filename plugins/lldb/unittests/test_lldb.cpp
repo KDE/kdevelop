@@ -248,7 +248,6 @@ void LldbTest::testBreakpoint()
 
 void LldbTest::testBreakOnStart()
 {
-    QSKIP("temporarily skip");
     auto *session = new TestDebugSession;
 
     TestLaunchConfiguration cfg;
@@ -367,7 +366,6 @@ void LldbTest::testDeleteBreakpoint()
 
 void LldbTest::testPendingBreakpoint()
 {
-    QSKIP("temporarily skip");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
@@ -617,7 +615,6 @@ void LldbTest::testBreakOnAccessBreakpoint()
 
 void LldbTest::testBreakpointErrors()
 {
-    QSKIP("temporarily skip");
     KDevMI::Testing::testBreakpointErrors(new TestDebugSession, m_iface, true);
 }
 
@@ -682,7 +679,6 @@ void LldbTest::testInsertBreakpointWhileRunningMultiple()
 
 void LldbTest::testInsertBreakpointFunctionName()
 {
-    QSKIP("temporarily skip");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
@@ -812,7 +808,6 @@ void LldbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
 
 void LldbTest::testBreakpointWithSpaceInPath()
 {
-    QSKIP("temporarily skip");
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeespace"));
 
