@@ -28,7 +28,7 @@ private Q_SLOTS:
 
     void init();
     void cleanup();
-
+private:
     void testStdout();
     void testEnvironmentSet();
 
@@ -70,7 +70,7 @@ private Q_SLOTS:
     void testStack();
     void testStackFetchMore();
     void testStackSwitchThread();
-
+private Q_SLOTS:
     void testAttach();
     void testRemoteDebugging();
 
