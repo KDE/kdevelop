@@ -38,6 +38,7 @@
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
 using KDevMI::Testing::breakpoints;
+using KDevMI::Testing::currentMiLine;
 using KDevMI::Testing::findExecutable;
 using KDevMI::Testing::findFile;
 using KDevMI::Testing::findSourceFile;
@@ -393,7 +394,8 @@ void LldbTest::testUpdateBreakpoint()
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop at line 29
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(currentMiLine(session), 29);
 
     session->stepInto();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop after step
