@@ -1322,23 +1322,9 @@ void GdbTest::testSwitchFrameGdbConsole()
 
 }
 
-//Bug 201771
 void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
 {
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
-    QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
-
-    session->startDebugging(&cfg, m_iface);
-
-    WAIT_FOR_STATE(session, DebugSession::ActiveState);
-    QTest::qWait(2000);
-    qDebug() << "adding breakpoint";
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
-    breakpoints()->removeBreakpoint(b);
-
-    QCOMPARE(session->state(), DebugSession::ActiveState);
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
+    KDevMI::Testing::testInsertAndRemoveBreakpointWhileRunning(new TestDebugSession, m_iface, false);
 }
 
 //Bug 274390

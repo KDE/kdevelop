@@ -445,6 +445,37 @@ void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
+// Bug 201771
+void testInsertAndRemoveBreakpointWhileRunning(MIDebugSession* session, IExecutePlugin* executePlugin,
+                                               [[maybe_unused]] bool expectFailureOnFreeBsd)
+{
+    QVERIFY(session);
+    QVERIFY(executePlugin);
+
+    TestLaunchConfiguration cfg("debuggee_debugeeslow");
+    const auto fileName = findSourceFile("debugeeslow.cpp");
+
+    QVERIFY(session->startDebugging(&cfg, executePlugin));
+    WAIT_FOR_STATE(session, IDebugSession::ActiveState);
+    WAIT_FOR_A_WHILE(session, 2000);
+
+    qDebug() << "adding breakpoint";
+    auto* const breakpoint =
+        breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
+    breakpoints()->removeBreakpoint(breakpoint);
+
+    QCOMPARE(session->state(), IDebugSession::ActiveState);
+#ifdef Q_OS_FREEBSD
+    if (expectFailureOnFreeBsd) {
+        QEXPECT_FAIL("",
+                     "LLDB-MI always manages to stop at the breakpoint soon after it is added and before "
+                     "it is removed, no matter how long this test function waits before adding the breakpoint",
+                     Abort);
+    }
+#endif
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 void testChangeBreakpointWhileRunning(MIDebugSession* session, IExecutePlugin* executePlugin)
 {
     QVERIFY(session);

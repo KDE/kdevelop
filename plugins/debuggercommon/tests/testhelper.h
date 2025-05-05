@@ -166,6 +166,9 @@ void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* execute
 
 void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin, bool debuggerStopsOnInvalidCondition);
 
+void testInsertAndRemoveBreakpointWhileRunning(MIDebugSession* session, IExecutePlugin* executePlugin,
+                                               bool expectFailureOnFreeBsd);
+
 void testChangeBreakpointWhileRunning(MIDebugSession* session, IExecutePlugin* executePlugin);
 
 } // namespace Testing

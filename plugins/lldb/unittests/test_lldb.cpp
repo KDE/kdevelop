@@ -715,30 +715,9 @@ void LldbTest::testManualBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-//Bug 201771
 void LldbTest::testInsertAndRemoveBreakpointWhileRunning()
 {
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
-
-    QString fileName = findSourceFile("debugeeslow.cpp");
-
-    QVERIFY(session->startDebugging(&cfg, m_iface));
-    WAIT_FOR_STATE(session, DebugSession::ActiveState);
-    WAIT_FOR_A_WHILE(session, 2000);
-
-    qDebug() << "adding breakpoint";
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
-    breakpoints()->removeBreakpoint(b);
-
-    QCOMPARE(session->state(), DebugSession::ActiveState);
-#ifdef Q_OS_FREEBSD
-    QEXPECT_FAIL("",
-                 "LLDB-MI always manages to stop at the breakpoint soon after it is added and before "
-                 "it is removed, no matter how long this test function waits before adding the breakpoint",
-                 Abort);
-#endif
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
+    KDevMI::Testing::testInsertAndRemoveBreakpointWhileRunning(new TestDebugSession, m_iface, true);
 }
 
 void LldbTest::testPickupManuallyInsertedBreakpoint()
