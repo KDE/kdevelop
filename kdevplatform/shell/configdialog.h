@@ -73,6 +73,7 @@ private:
     QVector<QPointer<KPageWidgetItem>> m_pages;
     bool m_currentPageHasChanges = false;
     bool m_currentlyApplyingChanges = false;
+    const ConfigPage* m_pageBeingReset = nullptr; ///< the config page, on which reset() is being called
 };
 
 }
