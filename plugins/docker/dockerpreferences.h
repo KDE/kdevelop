@@ -21,6 +21,13 @@ public:
 
     KDevelop::ConfigPage::ConfigPageType configPageType() const override;
     QString name() const override;
+
+protected:
+    bool needsResetDuringInitialization() const override
+    {
+        return false;
+    }
+
 private:
     QScopedPointer<Ui::DockerPreferences> m_prefsUi;
 };
