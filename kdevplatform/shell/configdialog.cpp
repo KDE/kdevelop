@@ -9,6 +9,7 @@
 #include "debug.h"
 
 #include <QCloseEvent>
+#include <QMetaObject>
 #include <QPushButton>
 #include <QPointer>
 
@@ -86,7 +87,20 @@ int ConfigDialog::checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetIt
                                              i18nc("@title:window", "Apply Settings"), KStandardGuiItem::apply(),
                                              KStandardGuiItem::discard(), KStandardGuiItem::cancel());
     if (dialogResult == KMessageBox::SecondaryAction) {
+        m_pageBeingReset = oldPage;
         oldPage->reset();
+        // KDevelop::ConfigPage::reset() calls KConfigDialogManager::updateWidgets(), which may call
+        // QTimer::singleShot(0, this, &KConfigDialogManager::widgetModified). ConfigDialog::onPageChanged() checks
+        // m_pageBeingReset and is connected to the signal ConfigPage::changed(), which in turn is connected to the
+        // signal KConfigDialogManager::widgetModified(). Unset m_pageBeingReset asynchronously after the reset()
+        // call so that it is still set during the expected invocation(s) of ConfigDialog::onPageChanged().
+        QMetaObject::invokeMethod(
+            this,
+            [this] {
+                m_pageBeingReset = nullptr;
+            },
+            Qt::QueuedConnection);
+
         m_currentPageHasChanges = false;
         button(QDialogButtonBox::Apply)->setEnabled(false);
     } else if (dialogResult == KMessageBox::PrimaryAction) {
@@ -174,7 +188,15 @@ void ConfigDialog::onPageChanged()
 {
     QObject* from = sender();
     if (from && from != currentPage()->widget()) {
-        qCWarning(SHELL) << "Settings in config page" << from << "changed, while" << currentPage()->widget() << "is currently selected. This case is not implemented yet.";
+        if (from == m_pageBeingReset) {
+            qCDebug(SHELL) << "Settings changed in config page" << from << "that is being reset, while"
+                           << currentPage()->widget() << "is currently selected.";
+            // This is normal and expected. Nothing to do because calling
+            // ConfigPage::reset() reverts all changes in the page.
+        } else {
+            qCWarning(SHELL) << "Settings in config page" << from << "changed, while" << currentPage()->widget()
+                             << "is currently selected. This case is not implemented yet.";
+        }
         return;
         // TODO: add a QHash<ConfigPage*, bool> as a member to make sure the apply button is always correct
 
