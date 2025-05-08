@@ -43,6 +43,12 @@ public: // KDevelop::ConfigPage API
     void defaults() override;
     void reset() override;
 
+protected:
+    bool needsResetDuringInitialization() const override
+    {
+        return false;
+    }
+
 private:
     void updateJobCountEnabledState();
 

@@ -26,6 +26,12 @@ public:
     QString name() const override;
     QString fullName() const override;
     QIcon icon() const override;
+
+protected:
+    bool needsResetDuringInitialization() const override
+    {
+        return false;
+    }
 };
 
 }

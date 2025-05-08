@@ -40,6 +40,12 @@ public:
     void defaults() override;
     void reset() override;
 
+protected:
+    bool needsResetDuringInitialization() const override
+    {
+        return false;
+    }
+
 private:
     Ui::GlobalConfigPage* ui;
     CheckSetSelectionManager* const m_checkSetSelectionManager;
