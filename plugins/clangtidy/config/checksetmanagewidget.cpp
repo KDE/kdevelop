@@ -287,6 +287,7 @@ void CheckSetManageWidget::onSelectedCheckSetSelectionChanged(int selectedCheckS
 
     m_ui.cloneCheckSetSelectionButton->setEnabled(isCheckSetSelectionSelected);
     m_ui.removeCheckSetSelectionButton->setEnabled(isCheckSetSelectionSelected);
+    m_ui.editCheckSetSelectionNameButton->setEnabled(isCheckSetSelectionSelected);
     m_ui.setAsDefaultCheckSetSelectionButton->setEnabled(!isDefaultCheckSetSelection);
 
     m_ui.enabledChecks->blockSignals(true);
