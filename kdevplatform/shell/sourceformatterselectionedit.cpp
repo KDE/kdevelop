@@ -1140,22 +1140,25 @@ void SourceFormatterSelectionEdit::newStyle()
 
     d->currentLanguage().setSelectedStyle(&newStyle);
 
-    // Don't insert the new item into the correct ordered position, because the user will probably enter a
-    // different caption (which affects ordering) right away. Note that when the user renames a style, it is
-    // not immediately moved into its new ordered position to avoid the "jumping" of the renamed style.
-    // Always keeping style items in their correct UI order positions is not trivial to implement, which is
-    // another reason not to do it.
-    // User-defined styles are displayed on top of predefined styles, so the eventual ordered position of
-    // the new item is most likely closer to the top than to the bottom => place it at the top of the list.
-    auto& newStyleItem = d->addStyleItem(newStyle, StyleCategory::UserDefined, NewItemPosition::Top);
     {
         const QSignalBlocker blocker(d->ui.styleList);
+
+        // Don't insert the new item into the correct ordered position, because the user will probably enter a
+        // different caption (which affects ordering) right away. Note that when the user renames a style, it is
+        // not immediately moved into its new ordered position to avoid the "jumping" of the renamed style.
+        // Always keeping style items in their correct UI order positions is not trivial to implement, which is
+        // another reason not to do it.
+        // User-defined styles are displayed on top of predefined styles, so the eventual ordered position of
+        // the new item is most likely closer to the top than to the bottom => place it at the top of the list.
+        auto& newStyleItem = d->addStyleItem(newStyle, StyleCategory::UserDefined, NewItemPosition::Top);
+
         // An edited item is not automatically selected, which results in weird UI behavior:
         // the source style (currentStyle) remains selected after the editing finishes.
         // Select the new style here to prevent this confusion.
         d->ui.styleList->setCurrentItem(&newStyleItem);
+
+        d->ui.styleList->editItem(&newStyleItem);
     }
-    d->ui.styleList->editItem(&newStyleItem);
 
     d->updateUiForCurrentStyle();
     emit changed();
