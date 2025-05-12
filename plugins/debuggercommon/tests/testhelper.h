@@ -22,7 +22,6 @@
 
 namespace KDevelop {
 class Breakpoint;
-class BreakpointModel;
 }
 
 class IExecutePlugin;
@@ -71,18 +70,6 @@ QUrl findExecutable(const QString& name);
 QString findSourceFile(const QString& name);
 QString findFile(const char* dir, const QString& name);
 bool isAttachForbidden(const char* file, int line);
-
-/// @return the path to the test file debugee.cpp
-QString debugeeFilePath();
-/// @return the URL of the test file debugee.cpp
-QUrl debugeeUrl();
-/// @return the location of the test file debugee.cpp at a given one-based MI line number, e.g. /path/to/debugee.cpp:30
-[[nodiscard]] QString debugeeLocationAt(int miLine);
-
-KDevelop::BreakpointModel* breakpoints();
-
-/// Add a code breakpoint to debugee.cpp at a given one-based MI line.
-KDevelop::Breakpoint* addDebugeeBreakpoint(int miLine);
 
 /// @return one-based MI line of a given breakpoint
 int breakpointMiLine(const KDevelop::Breakpoint* breakpoint);
@@ -157,21 +144,6 @@ private:
  */
 void startDebuggingAndWaitForPausedState(MIDebugSession* session, TestLaunchConfiguration* launchConfiguration,
                                          IExecutePlugin* executePlugin);
-
-void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
-                        IExecutePlugin* executePlugin);
-
-void testUnsupportedUrlExpressionBreakpoints(MIDebugSession* session, IExecutePlugin* executePlugin,
-                                             bool debuggerSupportsNonAsciiExpressions);
-
-void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin);
-
-void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin, bool debuggerStopsOnInvalidCondition);
-
-void testInsertAndRemoveBreakpointWhileRunning(MIDebugSession* session, IExecutePlugin* executePlugin,
-                                               bool expectFailureOnFreeBsd);
-
-void testChangeBreakpointWhileRunning(MIDebugSession* session, IExecutePlugin* executePlugin);
 
 } // namespace Testing
 
