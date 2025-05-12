@@ -38,6 +38,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QSignalBlocker>
 #include <QSignalSpy>
 #include <QTest>
 #include <QTemporaryFile>
@@ -212,14 +213,16 @@ void GdbTest::testDisableBreakpoint()
 
 
     //this is needed to emulate debug from GUI. If we are in edit mode, the debugSession doesn't exist.
-    KDevelop::ICore::self()->debugController()->breakpointModel()->blockSignals(true);
-    b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), secondBreakLine);
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
-    //all disabled breakpoints were added
+    KDevelop::Breakpoint* thirdBreak;
+    {
+        QSignalBlocker signalBlocker(breakpoints());
 
-    KDevelop::Breakpoint * thirdBreak = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), thirdBreakLine);
-    KDevelop::ICore::self()->debugController()->breakpointModel()->blockSignals(false);
+        b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), secondBreakLine);
+        b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
+        //all disabled breakpoints were added
 
+        thirdBreak = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), thirdBreakLine);
+    }
 
     session->startDebugging(&cfg, m_iface);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);

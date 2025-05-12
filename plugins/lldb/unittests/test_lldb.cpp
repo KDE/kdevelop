@@ -27,6 +27,7 @@
 #include <KSharedConfig>
 
 #include <QFileInfo>
+#include <QSignalBlocker>
 #include <QSignalSpy>
 #include <QString>
 #include <QStringList>
@@ -273,14 +274,16 @@ void LldbTest::testDisableBreakpoint()
 
 
     //this is needed to emulate debug from GUI. If we are in edit mode, the debugSession doesn't exist.
-    m_core->debugController()->breakpointModel()->blockSignals(true);
-    b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), secondBreakLine);
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
-    //all disabled breakpoints were added
+    Breakpoint* thirdBreak;
+    {
+        QSignalBlocker signalBlocker(breakpoints());
 
-    auto *thirdBreak = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName),
-                                                        thirdBreakLine);
-    m_core->debugController()->breakpointModel()->blockSignals(false);
+        b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), secondBreakLine);
+        b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
+        //all disabled breakpoints were added
+
+        thirdBreak = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), thirdBreakLine);
+    }
 
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, &cfg, m_iface);
     QCOMPARE(session->currentLine(), thirdBreak->line());
