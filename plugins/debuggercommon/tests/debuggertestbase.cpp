@@ -96,6 +96,16 @@ Breakpoint* DebuggerTestBase::addDebugeeBreakpoint(int miLine)
     return breakpoints()->addCodeBreakpoint(debugeeUrl(), miLine - 1);
 }
 
+void DebuggerTestBase::expandVariableCollection(const QModelIndex& index)
+{
+    auto* const collection = variableCollection();
+    QSignalSpy childrenReadySpy(collection, &TreeModel::itemChildrenReady);
+    collection->expanded(index);
+    if (childrenReadySpy.empty()) {
+        QVERIFY(childrenReadySpy.wait(2'000));
+    }
+}
+
 void DebuggerTestBase::initTestCase()
 {
     startInitTestCase();
@@ -445,8 +455,8 @@ void DebuggerTestBase::testVariablesLocalsStruct()
     COMPARE_DATA(variableCollection()->index(structIndex, 1, i), "{...}");
     const auto ts = variableCollection()->index(structIndex, 0, i);
     COMPARE_DATA(variableCollection()->index(0, 0, ts), "...");
-    variableCollection()->expanded(ts);
-    WAIT_FOR_A_WHILE(session, 100);
+
+    EXPAND_VARIABLE_COLLECTION(ts);
     COMPARE_DATA(variableCollection()->index(0, 0, ts), "a");
     COMPARE_DATA(variableCollection()->index(0, 1, ts), "0");
     COMPARE_DATA(variableCollection()->index(1, 0, ts), "b");
@@ -484,8 +494,8 @@ void DebuggerTestBase::testVariablesWatches()
     COMPARE_DATA(variableCollection()->index(0, 1, i), "{...}");
     const auto ts = variableCollection()->index(0, 0, i);
     COMPARE_DATA(variableCollection()->index(0, 0, ts), "...");
-    variableCollection()->expanded(ts);
-    WAIT_FOR_A_WHILE(session, 100);
+
+    EXPAND_VARIABLE_COLLECTION(ts);
     COMPARE_DATA(variableCollection()->index(0, 0, ts), "a");
     COMPARE_DATA(variableCollection()->index(0, 1, ts), "0");
     COMPARE_DATA(variableCollection()->index(1, 0, ts), "b");
