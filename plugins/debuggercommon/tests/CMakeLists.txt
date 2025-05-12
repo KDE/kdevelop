@@ -10,7 +10,7 @@ configure_file(debuggers-tests-config.h.in debuggers-tests-config.h)
 
 add_subdirectory(debuggees)
 
-add_library(kdevdbg_testhelper STATIC testhelper.cpp)
+add_library(kdevdbg_testhelper STATIC debuggertestbase.cpp testhelper.cpp)
 target_link_libraries(kdevdbg_testhelper
     PUBLIC
     kdevdebuggercommon
