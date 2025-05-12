@@ -1145,8 +1145,8 @@ void LldbTest::testVariablesWatchesQuotes()
 
     QModelIndex testStr = variableCollection()->index(0, 0, i);
     COMPARE_DATA(variableCollection()->index(0, 0, testStr), "...");
-    variableCollection()->expanded(testStr);
-    WAIT_FOR_A_WHILE(session, 100);
+
+    EXPAND_VARIABLE_COLLECTION(testStr);
     int len = testString.length();
     for (int ind = 0; ind < len; ind++)
     {
@@ -1176,8 +1176,8 @@ void LldbTest::testVariablesWatchesTwoSessions()
     WAIT_FOR_A_WHILE(session, 300);
 
     QModelIndex ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
-    variableCollection()->expanded(ts);
-    WAIT_FOR_A_WHILE(session, 100);
+    EXPAND_VARIABLE_COLLECTION(ts);
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 

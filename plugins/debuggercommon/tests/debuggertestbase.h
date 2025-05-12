@@ -7,11 +7,14 @@
 #ifndef DEBUGGER_TEST_BASE_H
 #define DEBUGGER_TEST_BASE_H
 
+#include <tests/testhelpermacros.h>
+
 #include <QObject>
 #include <QUrl>
 #include <QString>
 
 class IExecutePlugin;
+class QModelIndex;
 
 namespace KDevelop {
 class Breakpoint;
@@ -34,6 +37,12 @@ class MIDebugSession;
  */
 #define START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, launchConfiguration)                                      \
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, &launchConfiguration, executePlugin())
+
+#define EXPAND_VARIABLE_COLLECTION(index)                                                                              \
+    do {                                                                                                               \
+        expandVariableCollection(index);                                                                               \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
 
 class DebuggerTestBase : public QObject
 {
@@ -62,6 +71,13 @@ protected:
      * Add a code breakpoint to debugee.cpp at a given one-based MI line.
      */
     KDevelop::Breakpoint* addDebugeeBreakpoint(int miLine);
+
+    /**
+     * Start expanding a given index of the variable collection and wait until it has expanded.
+     *
+     * Call RETURN_IF_TEST_FAILED() after this function or use the wrapper macro EXPAND_VARIABLE_COLLECTION() instead.
+     */
+    void expandVariableCollection(const QModelIndex& index);
 
     [[nodiscard]] virtual MIDebugSession* createTestDebugSession() = 0;
 

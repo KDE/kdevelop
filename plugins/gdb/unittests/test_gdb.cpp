@@ -904,8 +904,8 @@ void GdbTest::testVariablesWatchesQuotes()
 
     QModelIndex testStr = variableCollection()->index(0, 0, i);
     COMPARE_DATA(variableCollection()->index(0, 0, testStr), "...");
-    variableCollection()->expanded(testStr);
-    QTest::qWait(100);
+
+    EXPAND_VARIABLE_COLLECTION(testStr);
     int len = testString.length();
     for (int ind = 0; ind < len; ind++)
     {
@@ -943,8 +943,8 @@ void GdbTest::testVariablesWatchesTwoSessions()
     QTest::qWait(300);
 
     QModelIndex ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
-    variableCollection()->expanded(ts);
-    QTest::qWait(100);
+    EXPAND_VARIABLE_COLLECTION(ts);
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 
