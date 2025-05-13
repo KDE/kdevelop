@@ -690,6 +690,3 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Větev"
-
-#~ msgid "error: %1"
-#~ msgstr "chyba: %1"

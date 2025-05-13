@@ -63,6 +63,3 @@ msgstr "Nebyl zadán projekt."
 #, kde-format
 msgid "QMake: %1"
 msgstr "QMake: %1"
-
-#~ msgid "Configure error"
-#~ msgstr "Chyba nastavení"
