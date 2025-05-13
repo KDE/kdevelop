@@ -110,8 +110,6 @@ private:
 private:
     KDevelop::TestCore *m_core;
     IExecutePlugin *m_iface;
-
-    QString m_debugeeFileName;
 };
 
 } // end of namespace LLDB

@@ -76,6 +76,8 @@ bool isAttachForbidden(const char* file, int line);
 QString debugeeFilePath();
 /// @return the URL of the test file debugee.cpp
 QUrl debugeeUrl();
+/// @return the location of the test file debugee.cpp at a given one-based MI line number, e.g. /path/to/debugee.cpp:30
+[[nodiscard]] QString debugeeLocationAt(int miLine);
 
 KDevelop::BreakpointModel* breakpoints();
 
