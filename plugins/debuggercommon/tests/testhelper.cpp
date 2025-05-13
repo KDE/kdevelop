@@ -90,6 +90,11 @@ QUrl debugeeUrl()
     return ret;
 }
 
+QString debugeeLocationAt(int miLine)
+{
+    return debugeeFilePath() + ':' + QString::number(miLine);
+}
+
 BreakpointModel* breakpoints()
 {
     return ICore::self()->debugController()->breakpointModel();
