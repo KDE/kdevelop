@@ -504,31 +504,38 @@ void DebuggerTestBase::testVariablesWatches()
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
+void DebuggerTestBase::testDebugInExternalTerminal_data()
+{
+    QTest::addColumn<QString>("terminalExecutable");
+
+    for (const auto* const terminalExecutable : {"konsole", "xterm", "xfce4-terminal", "gnome-terminal"}) {
+        QTest::newRow(terminalExecutable) << terminalExecutable;
+    }
+}
+
 void DebuggerTestBase::testDebugInExternalTerminal()
 {
+    QFETCH(const QString, terminalExecutable);
+
+    if (QStandardPaths::findExecutable(terminalExecutable).isEmpty()) {
+        QSKIP(qPrintable(QLatin1String{"Skipping because `%1` executable is not available"}.arg(terminalExecutable)));
+    }
+
+    auto* const session = createTestDebugSession();
     TestLaunchConfiguration cfg;
 
-    const QStringList consoles{"konsole", "xterm", "xfce4-terminal", "gnome-terminal"};
-    for (const auto& console : consoles) {
-        if (QStandardPaths::findExecutable(console).isEmpty()) {
-            continue;
-        }
+    cfg.config().writeEntry(IExecutePlugin::useTerminalEntry, true);
+    cfg.config().writeEntry(IExecutePlugin::terminalEntry, terminalExecutable);
 
-        auto* const session = createTestDebugSession();
+    const auto* const breakpoint = addDebugeeBreakpoint(29);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    QCOMPARE(breakpoint->state(), Breakpoint::CleanState);
 
-        cfg.config().writeEntry(IExecutePlugin::useTerminalEntry, true);
-        cfg.config().writeEntry(IExecutePlugin::terminalEntry, console);
+    session->stepInto();
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
 
-        const auto* const breakpoint = addDebugeeBreakpoint(29);
-        START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
-        QCOMPARE(breakpoint->state(), Breakpoint::CleanState);
-
-        session->stepInto();
-        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-
-        session->run();
-        WAIT_FOR_STATE(session, IDebugSession::EndedState);
-    }
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
 #include "moc_debuggertestbase.cpp"
