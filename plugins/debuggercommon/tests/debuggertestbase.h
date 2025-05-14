@@ -72,10 +72,14 @@ private Q_SLOTS:
 
     void testEnvironmentSet();
     void testUnsupportedUrlExpressionBreakpoints();
+    void testDisableBreakpoint();
     void testBreakpointsOnNoOpLines();
     void testBreakpointErrors();
     void testInsertAndRemoveBreakpointWhileRunning();
     void testChangeBreakpointWhileRunning();
+    void testVariablesLocalsStruct();
+    void testVariablesWatches();
+    void testDebugInExternalTerminal();
 
 private:
     [[nodiscard]] virtual bool isLldb() const = 0;

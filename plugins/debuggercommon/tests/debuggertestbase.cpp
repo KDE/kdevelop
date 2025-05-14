@@ -14,6 +14,8 @@
 
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>
+#include <debugger/interfaces/ivariablecontroller.h>
+#include <debugger/variable/variablecollection.h>
 #include <execute/iexecuteplugin.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/iplugincontroller.h>
@@ -26,7 +28,9 @@
 #include <KSharedConfig>
 
 #include <QDebug>
+#include <QSignalBlocker>
 #include <QSignalSpy>
+#include <QStandardPaths>
 #include <QStringList>
 #include <QTest>
 #include <QVariant>
@@ -215,6 +219,50 @@ void DebuggerTestBase::testUnsupportedUrlExpressionBreakpoints()
     RETURN_IF_TEST_FAILED();
 }
 
+void DebuggerTestBase::testDisableBreakpoint()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    // Description: we must stop only on the third breakpoint.
+    const auto firstBreakLine = 29;
+    const auto secondBreakLine = 24;
+    const auto thirdBreakLine = 25;
+    const auto fourthBreakLine = 32;
+
+    Breakpoint* breakpoint;
+
+    breakpoint = addDebugeeBreakpoint(firstBreakLine);
+    breakpoint->setData(Breakpoint::EnableColumn, Qt::Unchecked);
+
+    // This is needed to emulate debug from GUI. If we are in edit mode, the debugSession doesn't exist.
+    Breakpoint* thirdBreak;
+    {
+        QSignalBlocker signalBlocker(breakpoints());
+
+        breakpoint = addDebugeeBreakpoint(secondBreakLine);
+        breakpoint->setData(Breakpoint::EnableColumn, Qt::Unchecked);
+        // all disabled breakpoints were added
+
+        thirdBreak = addDebugeeBreakpoint(thirdBreakLine);
+    }
+
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    QCOMPARE(session->currentLine(), thirdBreak->line());
+
+    // disable existing breakpoint
+    thirdBreak->setData(Breakpoint::EnableColumn, Qt::Unchecked);
+
+    // add another disabled breakpoint
+    breakpoint = addDebugeeBreakpoint(fourthBreakLine);
+    WAIT_FOR_A_WHILE(session, 300);
+    breakpoint->setData(Breakpoint::EnableColumn, Qt::Unchecked);
+
+    WAIT_FOR_A_WHILE(session, 300);
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 void DebuggerTestBase::testBreakpointsOnNoOpLines()
 {
     auto* const session = createTestDebugSession();
@@ -371,6 +419,116 @@ void DebuggerTestBase::testChangeBreakpointWhileRunning()
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testVariablesLocalsStruct()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+    session->variableController()->setAutoUpdate(IVariableController::UpdateLocals);
+
+    addDebugeeBreakpoint(39);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    WAIT_FOR_A_WHILE(session, 1000);
+
+    const auto i = variableCollection()->index(1, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 4);
+
+    auto structIndex = 0;
+    for (auto j = 0; j < 3; ++j) {
+        if (variableCollection()->index(j, 0, i).data().toString() == QLatin1String("ts")) {
+            structIndex = j;
+        }
+    }
+
+    COMPARE_DATA(variableCollection()->index(structIndex, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(structIndex, 1, i), "{...}");
+    const auto ts = variableCollection()->index(structIndex, 0, i);
+    COMPARE_DATA(variableCollection()->index(0, 0, ts), "...");
+    variableCollection()->expanded(ts);
+    WAIT_FOR_A_WHILE(session, 100);
+    COMPARE_DATA(variableCollection()->index(0, 0, ts), "a");
+    COMPARE_DATA(variableCollection()->index(0, 1, ts), "0");
+    COMPARE_DATA(variableCollection()->index(1, 0, ts), "b");
+    COMPARE_DATA(variableCollection()->index(1, 1, ts), "1");
+    COMPARE_DATA(variableCollection()->index(2, 0, ts), "c");
+    COMPARE_DATA(variableCollection()->index(2, 1, ts), "2");
+
+    session->stepInto();
+    WAIT_FOR_STATE(session, IDebugSession::PausedState);
+    WAIT_FOR_A_WHILE(session, 1000);
+    COMPARE_DATA(variableCollection()->index(structIndex, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(structIndex, 1, i), "{...}");
+    COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testVariablesWatches()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    variableCollection()->variableWidgetShown();
+
+    addDebugeeBreakpoint(39);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+
+    variableCollection()->watches()->add("ts");
+    WAIT_FOR_A_WHILE(session, 300);
+
+    const auto i = variableCollection()->index(0, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "{...}");
+    const auto ts = variableCollection()->index(0, 0, i);
+    COMPARE_DATA(variableCollection()->index(0, 0, ts), "...");
+    variableCollection()->expanded(ts);
+    WAIT_FOR_A_WHILE(session, 100);
+    COMPARE_DATA(variableCollection()->index(0, 0, ts), "a");
+    COMPARE_DATA(variableCollection()->index(0, 1, ts), "0");
+    COMPARE_DATA(variableCollection()->index(1, 0, ts), "b");
+    COMPARE_DATA(variableCollection()->index(1, 1, ts), "1");
+    COMPARE_DATA(variableCollection()->index(2, 0, ts), "c");
+    COMPARE_DATA(variableCollection()->index(2, 1, ts), "2");
+
+    session->stepInto();
+    WAIT_FOR_STATE(session, IDebugSession::PausedState);
+    WAIT_FOR_A_WHILE(session, 100);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "{...}");
+    COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testDebugInExternalTerminal()
+{
+    TestLaunchConfiguration cfg;
+
+    const QStringList consoles{"konsole", "xterm", "xfce4-terminal", "gnome-terminal"};
+    for (const auto& console : consoles) {
+        if (QStandardPaths::findExecutable(console).isEmpty()) {
+            continue;
+        }
+
+        auto* const session = createTestDebugSession();
+
+        cfg.config().writeEntry(IExecutePlugin::useTerminalEntry, true);
+        cfg.config().writeEntry(IExecutePlugin::terminalEntry, console);
+
+        const auto* const breakpoint = addDebugeeBreakpoint(29);
+        START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+        QCOMPARE(breakpoint->state(), Breakpoint::CleanState);
+
+        session->stepInto();
+        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+
+        session->run();
+        WAIT_FOR_STATE(session, IDebugSession::EndedState);
+    }
 }
 
 #include "moc_debuggertestbase.cpp"
