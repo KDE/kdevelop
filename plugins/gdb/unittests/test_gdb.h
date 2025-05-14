@@ -23,7 +23,6 @@ private Q_SLOTS:
     void testStdOut();
 
     void testBreakpoint();
-    void testDisableBreakpoint();
     void testChangeLocationBreakpoint();
     void testDeleteBreakpoint();
     void testPendingBreakpoint();
@@ -47,8 +46,6 @@ private Q_SLOTS:
     void testManualAttach();
     void testCoreFile();
     void testVariablesLocals();
-    void testVariablesLocalsStruct();
-    void testVariablesWatches();
     void testVariablesWatchesQuotes();
     void testVariablesWatchesTwoSessions();
     void testVariablesStopDebugger();
@@ -74,7 +71,6 @@ private Q_SLOTS:
     void testBug301287();
     void testMultipleBreakpoint();
     void testRegularExpressionBreakpoint();
-    void testDebugInExternalTerminal();
     void testPathWithSpace();
 
 private:

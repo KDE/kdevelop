@@ -24,7 +24,6 @@
 #include <KIO/Global>
 
 #include <QFileInfo>
-#include <QSignalBlocker>
 #include <QSignalSpy>
 #include <QString>
 #include <QStringList>
@@ -210,53 +209,6 @@ void LldbTest::testBreakOnStart()
     // line 28 is the start of main function in debugee.cpp
     QCOMPARE(session->currentLine(), 27); // currentLine is zero-based
 
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
-void LldbTest::testDisableBreakpoint()
-{
-    //Description: We must stop only on the third breakpoint
-
-    int firstBreakLine=28;
-    int secondBreakLine=23;
-    int thirdBreakLine=24;
-    int fourthBreakLine=31;
-
-    auto *session = new TestDebugSession;
-
-    TestLaunchConfiguration cfg;
-
-    KDevelop::Breakpoint *b;
-
-    b = breakpoints()->addCodeBreakpoint(debugeeUrl(), firstBreakLine);
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
-
-
-    //this is needed to emulate debug from GUI. If we are in edit mode, the debugSession doesn't exist.
-    Breakpoint* thirdBreak;
-    {
-        QSignalBlocker signalBlocker(breakpoints());
-
-        b = breakpoints()->addCodeBreakpoint(debugeeUrl(), secondBreakLine);
-        b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
-        //all disabled breakpoints were added
-
-        thirdBreak = breakpoints()->addCodeBreakpoint(debugeeUrl(), thirdBreakLine);
-    }
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
-    QCOMPARE(session->currentLine(), thirdBreak->line());
-
-    //disable existing breakpoint
-    thirdBreak->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
-
-    //add another disabled breakpoint
-    b = breakpoints()->addCodeBreakpoint(debugeeUrl(), fourthBreakLine);
-    WAIT_FOR_A_WHILE(session, 300);
-    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
-
-    WAIT_FOR_A_WHILE(session, 300);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -1167,90 +1119,6 @@ void LldbTest::testVariablesLocals()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-void LldbTest::testVariablesLocalsStruct()
-{
-    auto *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-
-    TestLaunchConfiguration cfg;
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
-    WAIT_FOR_A_WHILE(session, 1000);
-
-    QModelIndex i = variableCollection()->index(1, 0);
-    QCOMPARE(variableCollection()->rowCount(i), 4);
-
-    int structIndex = 0;
-    for(int j=0; j<3; ++j) {
-        if (variableCollection()->index(j, 0, i).data().toString() == QLatin1String("ts")) {
-            structIndex = j;
-        }
-    }
-
-    COMPARE_DATA(variableCollection()->index(structIndex, 0, i), "ts");
-    COMPARE_DATA(variableCollection()->index(structIndex, 1, i), "{...}");
-    QModelIndex ts = variableCollection()->index(structIndex, 0, i);
-    COMPARE_DATA(variableCollection()->index(0, 0, ts), "...");
-    variableCollection()->expanded(ts);
-    WAIT_FOR_A_WHILE(session, 100);
-    COMPARE_DATA(variableCollection()->index(0, 0, ts), "a");
-    COMPARE_DATA(variableCollection()->index(0, 1, ts), "0");
-    COMPARE_DATA(variableCollection()->index(1, 0, ts), "b");
-    COMPARE_DATA(variableCollection()->index(1, 1, ts), "1");
-    COMPARE_DATA(variableCollection()->index(2, 0, ts), "c");
-    COMPARE_DATA(variableCollection()->index(2, 1, ts), "2");
-
-    session->stepInto();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    WAIT_FOR_A_WHILE(session, 1000);
-    COMPARE_DATA(variableCollection()->index(structIndex, 0, i), "ts");
-    COMPARE_DATA(variableCollection()->index(structIndex, 1, i), "{...}");
-    COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
-void LldbTest::testVariablesWatches()
-{
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg;
-
-    variableCollection()->variableWidgetShown();
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
-
-    variableCollection()->watches()->add(QStringLiteral("ts"));
-    WAIT_FOR_A_WHILE(session, 300);
-
-    QModelIndex i = variableCollection()->index(0, 0);
-    QCOMPARE(variableCollection()->rowCount(i), 1);
-    COMPARE_DATA(variableCollection()->index(0, 0, i), "ts");
-    COMPARE_DATA(variableCollection()->index(0, 1, i), "{...}");
-    QModelIndex ts = variableCollection()->index(0, 0, i);
-    COMPARE_DATA(variableCollection()->index(0, 0, ts), "...");
-    variableCollection()->expanded(ts);
-    WAIT_FOR_A_WHILE(session, 100);
-    COMPARE_DATA(variableCollection()->index(0, 0, ts), "a");
-    COMPARE_DATA(variableCollection()->index(0, 1, ts), "0");
-    COMPARE_DATA(variableCollection()->index(1, 0, ts), "b");
-    COMPARE_DATA(variableCollection()->index(1, 1, ts), "1");
-    COMPARE_DATA(variableCollection()->index(2, 0, ts), "c");
-    COMPARE_DATA(variableCollection()->index(2, 1, ts), "2");
-
-    session->stepInto();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    WAIT_FOR_A_WHILE(session, 100);
-    COMPARE_DATA(variableCollection()->index(0, 0, i), "ts");
-    COMPARE_DATA(variableCollection()->index(0, 1, i), "{...}");
-    COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
 void LldbTest::testVariablesWatchesQuotes()
 {
     auto *session = new TestDebugSession;
@@ -1573,35 +1441,6 @@ void LldbTest::testBug301287()
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
-void LldbTest::testDebugInExternalTerminal()
-{
-    TestLaunchConfiguration cfg;
-
-    const QStringList consoles { "konsole", "xterm", "xfce4-terminal", "gnome-terminal" };
-    for (const QString& console : consoles) {
-
-        if (QStandardPaths::findExecutable(console).isEmpty()) {
-            continue;
-        }
-
-        auto* session = new TestDebugSession();
-
-        cfg.config().writeEntry(IExecutePlugin::useTerminalEntry, true);
-        cfg.config().writeEntry(IExecutePlugin::terminalEntry, console);
-
-        auto* const b = breakpoints()->addCodeBreakpoint(debugeeUrl(), 28);
-
-        START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
-        QCOMPARE(b->state(), KDevelop::Breakpoint::CleanState);
-
-        session->stepInto();
-        WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-        session->run();
-        WAIT_FOR_STATE(session, DebugSession::EndedState);
-    }
 }
 
 void LldbTest::testSpecialPath()
