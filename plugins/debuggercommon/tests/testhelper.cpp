@@ -110,6 +110,37 @@ void validateColumnCountsThreadCountAndStackFrameNumbers(const QModelIndex& thre
     }
 }
 
+ActiveStateSessionSpy::ActiveStateSessionSpy(const IDebugSession* session)
+{
+    QVERIFY(session);
+    connect(session, &IDebugSession::stateChanged, this, &ActiveStateSessionSpy::sessionStateChanged);
+}
+
+bool ActiveStateSessionSpy::hasEnteredActiveState() const
+{
+    return m_hasEnteredActiveState;
+}
+
+void ActiveStateSessionSpy::reset()
+{
+    m_hasEnteredActiveState = false;
+}
+
+void ActiveStateSessionSpy::sessionStateChanged(IDebugSession::DebuggerState state)
+{
+    if (state == IDebugSession::ActiveState) {
+        m_hasEnteredActiveState = true;
+    }
+}
+
+void resetAndRun(ActiveStateSessionSpy& spy, IDebugSession* session)
+{
+    QVERIFY(session);
+    QVERIFY(spy.hasEnteredActiveState());
+    spy.reset();
+    session->run();
+}
+
 bool waitForAWhile(MIDebugSession *session, int ms, const char *file, int line)
 {
     QPointer<MIDebugSession> s(session); //session can get deleted in DebugController
@@ -121,8 +152,8 @@ bool waitForAWhile(MIDebugSession *session, int ms, const char *file, int line)
     return true;
 }
 
-bool waitForState(MIDebugSession *session, KDevelop::IDebugSession::DebuggerState state,
-                  const char *file, int line, bool waitForIdle)
+bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerState state, const char* file, int line,
+                  bool waitForIdle, const ActiveStateSessionSpy* sessionSpy)
 {
     QPointer<MIDebugSession> s(session); //session can get deleted in DebugController
     QElapsedTimer stopWatch;
@@ -132,10 +163,14 @@ bool waitForState(MIDebugSession *session, KDevelop::IDebugSession::DebuggerStat
     // but which were written before waitForIdle was added
     waitForIdle = waitForIdle || state != MIDebugSession::EndedState;
 
+    const auto areWaitConditionsSatisfied = [session, state, sessionSpy, waitForIdle] {
+        return session->state() == state && !(waitForIdle && session->debuggerStateIsOn(s_dbgBusy))
+            && (!sessionSpy || sessionSpy->hasEnteredActiveState());
+    };
+
     const auto timeout = waitForIdle ? 50'000 : 10'000;
 
-    while (s && (s->state() != state
-                || (waitForIdle && s->debuggerStateIsOn(s_dbgBusy)))) {
+    while (s && !areWaitConditionsSatisfied()) {
         if (stopWatch.elapsed() > timeout) {
             qWarning() << "current state" << s->state() << "waiting for" << state;
             QTest::qFail(qPrintable(QString("Timeout before reaching state %0").arg(state)),
@@ -203,18 +238,6 @@ TestLaunchConfiguration::TestLaunchConfiguration(const QUrl& executable, const Q
     cfg.writeEntry(IExecutePlugin::workingDirEntry, workingDirectory);
 }
 
-void startDebuggingAndWaitForPausedState(MIDebugSession* session, TestLaunchConfiguration* launchConfiguration,
-                                         IExecutePlugin* executePlugin)
-{
-    QCOMPARE_NE(session, nullptr);
-    QVERIFY(session->startDebugging(launchConfiguration, executePlugin));
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-    if (session->currentLine() == -1) {
-        qDebug() << "caught a temporary paused state, so wait again for the nontransient pause on start";
-        WAIT_FOR_A_WHILE(session, 100);
-        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-    }
-    QCOMPARE_NE(session->currentLine(), -1);
-}
-
 } // end of namespace KDevMI::Testing
+
+#include "moc_testhelper.cpp"

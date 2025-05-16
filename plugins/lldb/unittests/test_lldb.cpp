@@ -34,6 +34,7 @@
 
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
+using KDevMI::Testing::ActiveStateSessionSpy;
 using KDevMI::Testing::currentMiLine;
 using KDevMI::Testing::findExecutable;
 using KDevMI::Testing::findFile;
@@ -183,7 +184,9 @@ void LldbTest::testBreakpoint()
     auto* const b = breakpoints()->addCodeBreakpoint(debugeeUrl(), 29);
     QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
     QCOMPARE(b->state(), KDevelop::Breakpoint::CleanState);
     QCOMPARE(session->currentLine(), 29);
 
@@ -205,7 +208,9 @@ void LldbTest::testBreakOnStart()
     TestLaunchConfiguration cfg;
     cfg.config().writeEntry(KDevMI::Config::BreakOnStartEntry, true);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
     // line 28 is the start of main function in debugee.cpp
     QCOMPARE(session->currentLine(), 27); // currentLine is zero-based
 
@@ -220,29 +225,27 @@ void LldbTest::testChangeLocationBreakpoint()
     TestLaunchConfiguration cfg;
 
     auto* const b = breakpoints()->addCodeBreakpoint(debugeeUrl(), 27);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 27);
 
     WAIT_FOR_A_WHILE(session, 100);
     b->setLine(28);
     WAIT_FOR_A_WHILE(session, 100);
-    session->run();
 
-    WAIT_FOR_A_WHILE(session, 100);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 28);
+
     WAIT_FOR_A_WHILE(session, 500);
     breakpoints()->setData(breakpoints()->index(0, KDevelop::Breakpoint::LocationColumn), debugeeLocationAt(30));
     QCOMPARE(b->line(), 29);
     WAIT_FOR_A_WHILE(session, 100);
     QCOMPARE(b->line(), 29);
-    session->run();
-    WAIT_FOR_A_WHILE(session, 100);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->currentLine(), 29);
-    session->run();
 
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(session->currentLine(), 29);
+
+    session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
@@ -260,8 +263,9 @@ void LldbTest::testDeleteBreakpoint()
     QCOMPARE(breakpoints()->rowCount(), 0);
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 22);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
     QVERIFY(breakpoints()->removeRow(0));
     session->run();
 
@@ -278,7 +282,9 @@ void LldbTest::testPendingBreakpoint()
     auto* const b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("debugeeqt.cpp")), 10);
     QCOMPARE(b->state(), Breakpoint::NotStartedState);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
     QCOMPARE(b->state(), Breakpoint::PendingState);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -295,7 +301,8 @@ void LldbTest::testUpdateBreakpoint()
     auto* b = breakpoints()->addCodeBreakpoint(debugeeUrl(), 28);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(currentMiLine(session), 29);
 
     session->stepInto();
@@ -311,9 +318,7 @@ void LldbTest::testUpdateBreakpoint()
     QCOMPARE(b->url(), debugeeUrl());
     QCOMPARE(b->line(), 33-1);
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 33-1);
 
     session->run();
@@ -332,13 +337,13 @@ void LldbTest::testIgnoreHitsBreakpoint()
     auto* const b2 = breakpoints()->addCodeBreakpoint(debugeeUrl(), 22);
 
     START_DEBUGGING_E(session, cfg);
-
-    //WAIT_FOR_STATE(session, DebugSession::PausedState);
     WAIT_FOR(session, session->state() == DebugSession::PausedState && b2->hitCount() == 1);
+
     b2->setIgnoreHits(1);
+
     session->run();
-    //WAIT_FOR_STATE(session, DebugSession::PausedState);
     WAIT_FOR(session, session->state() == DebugSession::PausedState && b1->hitCount() == 1);
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -355,20 +360,17 @@ void LldbTest::testConditionBreakpoint()
     b->setCondition(QStringLiteral("i==2"));
 
     b = breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
 
     b->setCondition(QStringLiteral("i == 0"));
     WAIT_FOR_A_WHILE(session, 100);
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 23);
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 39);
 
     session->run();
@@ -382,19 +384,19 @@ void LldbTest::testBreakOnWriteBreakpoint()
     TestLaunchConfiguration cfg;
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
 
     breakpoints()->addWatchpoint(QStringLiteral("i"));
     WAIT_FOR_A_WHILE(session, 100);
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 22); // line 23: ++i; int j = i;
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -406,20 +408,20 @@ void LldbTest::testBreakOnWriteWithConditionBreakpoint()
     TestLaunchConfiguration cfg;
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
 
     KDevelop::Breakpoint *b = breakpoints()->addWatchpoint(QStringLiteral("i"));
     b->setCondition(QStringLiteral("i==2"));
     QTest::qWait(100);
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 22); // line 23: ++i; int j = i;
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -432,18 +434,18 @@ void LldbTest::testBreakOnReadBreakpoint()
 
     breakpoints()->addReadWatchpoint(QStringLiteral("foo::i"));
 
+    ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_E(session, cfg);
 
     for (int fooCall = 0; fooCall < 2; ++fooCall) {
-        WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+        WAIT_FOR_PAUSED_STATE(session, sessionSpy);
         QCOMPARE(session->currentLine(), 22); // ++i;
-        session->run();
 
-        WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+        CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
         QCOMPARE(session->currentLine(), 22); // int j = i;
+
         session->run();
     }
-
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
@@ -454,22 +456,19 @@ void LldbTest::testBreakOnReadBreakpoint2()
     TestLaunchConfiguration cfg;
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
 
     breakpoints()->addReadWatchpoint(QStringLiteral("i"));
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 22); // ++i
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 22); // int j = i
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
 
     session->run();
@@ -483,26 +482,22 @@ void LldbTest::testBreakOnAccessBreakpoint()
     TestLaunchConfiguration cfg;
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
 
     breakpoints()->addAccessWatchpoint(QStringLiteral("i"));
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 22); // line 23: ++i (read)
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 22); // line 23: ++i (write)
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 22); // line 23: int j = i (read)
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
 
     session->run();
@@ -554,8 +549,9 @@ void LldbTest::testInsertBreakpointWhileRunningMultiple()
     WAIT_FOR_A_WHILE(session, 500);
     QCOMPARE(session->currentLine(), 29);
 
+    ActiveStateSessionSpy sessionSpy(session);
     session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
     WAIT_FOR_A_WHILE(session, 500);
     QCOMPARE(session->currentLine(), 30);
@@ -572,8 +568,8 @@ void LldbTest::testInsertBreakpointFunctionName()
     TestLaunchConfiguration cfg;
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 27);
 
     session->run();
@@ -586,8 +582,8 @@ void LldbTest::testManualBreakpoint()
     TestLaunchConfiguration cfg;
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 27);
 
     breakpoints()->removeRows(0, 1);
@@ -626,8 +622,8 @@ void LldbTest::testPickupManuallyInsertedBreakpoint()
     TestLaunchConfiguration cfg;
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     session->addCommand(MI::NonMI, QStringLiteral("break set --file debugee.cpp --line 32"));
     session->stepInto();
@@ -657,7 +653,8 @@ void LldbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 31);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     QCOMPARE(breakpoints()->breakpoints().count(), 1);
 
@@ -676,9 +673,10 @@ void LldbTest::testBreakpointWithSpaceInPath()
     KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 20);
     QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
-
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 20);
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -694,13 +692,13 @@ void LldbTest::testBreakpointDisabledOnStart()
     b = breakpoints()->addCodeBreakpoint(debugeeUrl(), 34); // testStruct ts;
     b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     QCOMPARE(session->currentLine(), 29);
     b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 35); // ts.a = 0; (LLDB automatically moves the breakpoint from its no-op line)
 
     session->run();
@@ -716,11 +714,11 @@ void LldbTest::testMultipleLocationsBreakpoint()
 
     //TODO check if the additional location breakpoint is added
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 19);
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 23);
 
     session->run();
@@ -735,7 +733,8 @@ void LldbTest::testMultipleBreakpoint()
     TestLaunchConfiguration c(QStringLiteral("debuggee_debugeemultiplebreakpoint"));
     auto b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeemultiplebreakpoint.cpp:52"));
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, c);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, c, sessionSpy);
     QCOMPARE(breakpoints()->breakpoints().count(), 1);
 
     b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
@@ -751,12 +750,12 @@ void LldbTest::testRegularExpressionBreakpoint()
     TestLaunchConfiguration c(QStringLiteral("debuggee_debugeemultilocbreakpoint"));
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, c);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, c, sessionSpy);
 
     session->addCommand(MI::NonMI, QStringLiteral("break set --func-regex .*aPl.*B"));
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
     QCOMPARE(breakpoints()->breakpoints().count(), 3);
 
@@ -775,14 +774,15 @@ void LldbTest::testCatchpoint()
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("debugeeexception.cpp")), 29);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     QCOMPARE(fsModel->currentFrame(), 0);
     QCOMPARE(session->currentLine(), 29);
 
     session->addCommand(MI::NonMI, QStringLiteral("break set -E c++"));
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
     const auto frames = fsModel->frames(fsModel->currentThread());
     QVERIFY(frames.size() >= 2);
@@ -806,8 +806,8 @@ void LldbTest::testShowStepInSource()
     QSignalSpy showStepInSourceSpy(session, &TestDebugSession::showStepInSource);
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 29);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     session->stepInto();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -841,8 +841,8 @@ void LldbTest::testStack()
     TestFrameStackModel *stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 21);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     QModelIndex tIdx = stackModel->index(0,0);
 
@@ -867,8 +867,7 @@ void LldbTest::testStack()
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), debugeeLocationAt(30));
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -883,8 +882,9 @@ void LldbTest::testStackFetchMore()
     TestFrameStackModel *stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 25);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
     QCOMPARE(session->frameStackModel()->fetchFramesCalled, 1);
 
     QModelIndex tIdx = stackModel->index(0,0);
@@ -953,7 +953,8 @@ void LldbTest::testStackSwitchThread()
     TestFrameStackModel *stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     QModelIndex tIdx = stackModel->index(0,0);
 
@@ -1033,8 +1034,8 @@ void LldbTest::testRemoteDebugging()
     cfg.config().writeEntry(Config::LldbRemotePathEntry, "/tmp");
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 34);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -1098,8 +1099,8 @@ void LldbTest::testVariablesLocals()
     session->variableController()->setAutoUpdate(IVariableController::UpdateLocals);
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     QCOMPARE(variableCollection()->rowCount(), 2);
     QModelIndex i = variableCollection()->index(1, 0);
@@ -1109,8 +1110,7 @@ void LldbTest::testVariablesLocals()
     COMPARE_DATA(variableCollection()->index(0, 0, i), "j");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
 
-    session->run();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
     COMPARE_DATA(variableCollection()->index(0, 0, i), "j");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "2");
@@ -1133,7 +1133,8 @@ void LldbTest::testVariablesWatchesQuotes()
     const QString quotedTestString(QStringLiteral(R"("t\\\"t")"));
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     variableCollection()->watches()->add(quotedTestString); //just a constant string
     WAIT_FOR_A_WHILE(session, 3000);
@@ -1170,7 +1171,8 @@ void LldbTest::testVariablesWatchesTwoSessions()
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     variableCollection()->watches()->add(QStringLiteral("ts"));
     WAIT_FOR_A_WHILE(session, 300);
@@ -1193,7 +1195,9 @@ void LldbTest::testVariablesWatchesTwoSessions()
     //start a second debug session
     session = new TestDebugSession;
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+
+    const ActiveStateSessionSpy sessionSpy2(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy2);
 
     QCOMPARE(variableCollection()->watches()->childCount(), 1);
     ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
@@ -1222,7 +1226,8 @@ void LldbTest::testVariablesStopDebugger()
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     session->stopDebugger();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -1236,13 +1241,15 @@ void LldbTest::testVariablesStartSecondSession()
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     session = new TestDebugSession;
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    const ActiveStateSessionSpy sessionSpy2(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy2);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -1258,7 +1265,8 @@ void LldbTest::testVariablesSwitchFrame()
     TestFrameStackModel *stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     QModelIndex i = variableCollection()->index(1, 0);
     COMPARE_DATA(i, "Locals");
@@ -1291,7 +1299,8 @@ void LldbTest::testVariablesQuicklySwitchFrame()
     TestFrameStackModel *stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     QModelIndex i = variableCollection()->index(1, 0);
     COMPARE_DATA(i, "Locals");
@@ -1333,7 +1342,8 @@ void LldbTest::testSwitchFrameLldbConsole()
     TestFrameStackModel *stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     QCOMPARE(stackModel->currentFrame(), 0);
     stackModel->setCurrentFrame(1);
@@ -1357,11 +1367,11 @@ void LldbTest::testSegfaultDebugee()
     QString fileName = findSourceFile("debugeecrash.cpp");
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 23);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 23);
-    session->run();
 
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 24);
 
     session->stopDebugger();
@@ -1375,11 +1385,15 @@ void LldbTest::testCommandOrderFastStepping()
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeqt"));
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
+    ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_E(session, cfg);
+
     for(int i=0; i<20; i++) {
         session->stepInto();
     }
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+
+    WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -1398,8 +1412,8 @@ void LldbTest::testRunLldbScript()
     KConfigGroup grp = cfg.config();
     grp.writeEntry(Config::LldbConfigScriptEntry, QUrl::fromLocalFile(runScript.fileName()));
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
-
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 35);
 
     session->run();
@@ -1414,8 +1428,8 @@ void LldbTest::testBug301287()
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 28);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     variableCollection()->watches()->add(QStringLiteral("argc"));
     WAIT_FOR_A_WHILE(session, 300);
@@ -1432,7 +1446,8 @@ void LldbTest::testBug301287()
     session = new TestDebugSession;
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    const ActiveStateSessionSpy sessionSpy2(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy2);
 
     i = variableCollection()->index(0, 0);
     QCOMPARE(variableCollection()->rowCount(i), 1);
@@ -1452,7 +1467,8 @@ void LldbTest::testSpecialPath()
     KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("spacedebugee.cpp:30"));
     QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, c);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, c, sessionSpy);
     QCOMPARE(b->state(), KDevelop::Breakpoint::CleanState);
 
     session->run();

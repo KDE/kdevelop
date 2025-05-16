@@ -35,8 +35,8 @@ class MIDebugSession;
 /**
  * A convenience macro for use in member functions of DebuggerTestBase and derived classes.
  */
-#define START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, launchConfiguration)                                      \
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, &launchConfiguration, executePlugin())
+#define START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, launchConfiguration, sessionSpy)                          \
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, launchConfiguration, executePlugin(), sessionSpy)
 
 #define EXPAND_VARIABLE_COLLECTION(index)                                                                              \
     do {                                                                                                               \

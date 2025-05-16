@@ -40,6 +40,7 @@
 
 using namespace KDevelop;
 using namespace KDevMI;
+using KDevMI::Testing::ActiveStateSessionSpy;
 using KDevMI::Testing::breakpointMiLine;
 using KDevMI::Testing::currentMiLine;
 using KDevMI::Testing::findSourceFile;
@@ -257,7 +258,8 @@ void DebuggerTestBase::testDisableBreakpoint()
         thirdBreak = addDebugeeBreakpoint(thirdBreakLine);
     }
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), thirdBreak->line());
 
     // disable existing breakpoint
@@ -282,7 +284,9 @@ void DebuggerTestBase::testBreakpointsOnNoOpLines()
     const auto* const blankLineBreakpoint = addDebugeeBreakpoint(34);
     const auto* const lastLineBreakpoint = addDebugeeBreakpoint(42);
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
     const auto debuggerMovesBreakpointFromLicenseNotice = currentMiLine(session) == 20;
 
     if (debuggerMovesBreakpointFromLicenseNotice) {
@@ -291,8 +295,7 @@ void DebuggerTestBase::testBreakpointsOnNoOpLines()
         // of the line 20 is "void noop() {}", so GDB stops at it 4 times (4 is the number of calls to noop()).
         for (int noopCall = 0; noopCall < 4; ++noopCall) {
             QCOMPARE(currentMiLine(session), 20);
-            session->run();
-            WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+            CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
         }
     }
 
@@ -359,14 +362,13 @@ void DebuggerTestBase::testBreakpointErrors()
     }
 
     addDebugeeBreakpoint(30);
-
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     const auto debuggerStopsOnInvalidCondition = isLldb();
     if (debuggerStopsOnInvalidCondition) {
         QCOMPARE(currentMiLine(session), 29);
-        session->run();
-        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+        CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     }
 
     QCOMPARE(currentMiLine(session), 30);
@@ -409,7 +411,8 @@ void DebuggerTestBase::testChangeBreakpointWhileRunning()
     TestLaunchConfiguration cfg("debuggee_debugeeslow");
     auto* const breakpoint = breakpoints()->addCodeBreakpoint("debugeeslow.cpp:30"); // ++i;
 
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(currentMiLine(session), 30);
 
     session->run();
@@ -438,7 +441,9 @@ void DebuggerTestBase::testVariablesLocalsStruct()
     session->variableController()->setAutoUpdate(IVariableController::UpdateLocals);
 
     addDebugeeBreakpoint(39);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
     WAIT_FOR_A_WHILE(session, 1000);
 
     const auto i = variableCollection()->index(1, 0);
@@ -483,7 +488,8 @@ void DebuggerTestBase::testVariablesWatches()
     variableCollection()->variableWidgetShown();
 
     addDebugeeBreakpoint(39);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     variableCollection()->watches()->add("ts");
     WAIT_FOR_A_WHILE(session, 300);
@@ -538,7 +544,8 @@ void DebuggerTestBase::testDebugInExternalTerminal()
     cfg.config().writeEntry(IExecutePlugin::terminalEntry, terminalExecutable);
 
     const auto* const breakpoint = addDebugeeBreakpoint(29);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(breakpoint->state(), Breakpoint::CleanState);
 
     session->stepInto();
