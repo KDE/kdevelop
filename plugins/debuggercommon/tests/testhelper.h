@@ -15,6 +15,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
+#include <QObject>
 #include <QPointer>
 #include <QString>
 #include <QElapsedTimer>
@@ -32,6 +33,33 @@ class QModelIndex;
 
 #define WAIT_FOR_STATE_AND_IDLE(session, state) \
     do { if (!KDevMI::Testing::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
+
+/**
+ * Wait for a given debug session to first enter the active state
+ * then reach the paused state, and for the debugger to become idle.
+ *
+ * @warning The calling function must ensure that the paused state is reached, e.g. by setting a breakpoint.
+ */
+#define WAIT_FOR_PAUSED_STATE(session, sessionSpy)                                                                     \
+    do {                                                                                                               \
+        if (!KDevMI::Testing::waitForState(session, KDevelop::IDebugSession::PausedState, __FILE__, __LINE__, true,    \
+                                           &sessionSpy)) {                                                             \
+            return;                                                                                                    \
+        }                                                                                                              \
+    } while (false)
+
+#define START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, launchConfiguration, executePlugin, sessionSpy)             \
+    do {                                                                                                               \
+        QVERIFY(session->startDebugging(&launchConfiguration, executePlugin));                                         \
+        WAIT_FOR_PAUSED_STATE(session, sessionSpy);                                                                    \
+    } while (false)
+
+#define CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy)                                                        \
+    do {                                                                                                               \
+        KDevMI::Testing::resetAndRun(sessionSpy, session);                                                             \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+        WAIT_FOR_PAUSED_STATE(session, sessionSpy);                                                                    \
+    } while (false)
 
 #define WAIT_FOR_A_WHILE(session, ms)                                                                                  \
     do {                                                                                                               \
@@ -53,12 +81,6 @@ class QModelIndex;
         if (KDevMI::Testing::isAttachForbidden(__FILE__, __LINE__)) \
             return; \
     } while(0)
-
-#define START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE(session, launchConfiguration, executePlugin)                         \
-    do {                                                                                                               \
-        KDevMI::Testing::startDebuggingAndWaitForPausedState((session), (launchConfiguration), (executePlugin));       \
-        RETURN_IF_TEST_FAILED();                                                                                       \
-    } while (false)
 
 namespace KDevMI {
 
@@ -83,8 +105,53 @@ bool compareData(const QModelIndex& index, const QString& expected, const char* 
 /// Check success with RETURN_IF_TEST_FAILED().
 void validateColumnCountsThreadCountAndStackFrameNumbers(const QModelIndex& threadIndex, int expectedThreadCount);
 
+/**
+ * This class tracks and remembers when a debug session enters the active state.
+ *
+ * Using this class allows to prevent LLDB-MI test flakiness on FreeBSD.
+ */
+class ActiveStateSessionSpy : public QObject
+{
+    Q_OBJECT
+public:
+    /**
+     * Create a debug session spy.
+     *
+     * @param session a non-null debug session to track
+     */
+    explicit ActiveStateSessionSpy(const KDevelop::IDebugSession* session);
+    /**
+     * @return whether the tracked debug session has entered the active state since the last call to
+     *         reset(), or since the construction of this spy if reset() has never been called on it
+     */
+    bool hasEnteredActiveState() const;
+    /**
+     * Forget about all previously entered active states.
+     */
+    void reset();
+
+private:
+    void sessionStateChanged(KDevelop::IDebugSession::DebuggerState state);
+
+    bool m_hasEnteredActiveState = false;
+};
+
+/**
+ * Reset a given debug session spy and run (continue) a given debug session.
+ *
+ * @param session a non-null debug session
+ *
+ * @pre @p spy.hasEnteredActiveState() returns @c true
+ */
+void resetAndRun(ActiveStateSessionSpy& spy, KDevelop::IDebugSession* session);
+
+/**
+ * Wait until a given debug session enters a given state and (optionally) becomes idle.
+ *
+ * @param sessionSpy if not null, this function also waits until @p sessionSpy->hasEnteredActiveState() returns @c true
+ */
 bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerState state, const char* file, int line,
-                  bool waitForIdle = false);
+                  bool waitForIdle = false, const ActiveStateSessionSpy* sessionSpy = nullptr);
 
 bool waitForAWhile(MIDebugSession* session, int ms, const char* file, int line);
 
@@ -123,27 +190,6 @@ private:
     KConfigGroup cfg;
     KSharedConfigPtr c;
 };
-
-/**
- * Start debugging in a given session with given launch configuration and execute plugin,
- * then wait for the session to reach the paused state and for the debugger to become idle.
- *
- * @param session a non-null debug session
- *
- * @note This function should be called in place of the following two lines of code
- * @code{.cpp}
- * QVERIFY(session->startDebugging(launchConfiguration, executePlugin));
- * WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
- * @endcode
- * in order to prevent LLDB-MI test flakiness on FreeBSD.
- *
- * Call RETURN_IF_TEST_FAILED() after this function or use the
- * wrapper macro START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE() instead.
- *
- * @warning The calling function must ensure that the paused state is reached, e.g. by setting a breakpoint.
- */
-void startDebuggingAndWaitForPausedState(MIDebugSession* session, TestLaunchConfiguration* launchConfiguration,
-                                         IExecutePlugin* executePlugin);
 
 } // namespace Testing
 
