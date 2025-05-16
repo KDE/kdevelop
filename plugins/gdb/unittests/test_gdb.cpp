@@ -304,7 +304,9 @@ void GdbTest::testConditionBreakpoint()
 
     START_DEBUGGING_E(session, cfg);
 
-    WAIT_FOR(session, session->state() == DebugSession::PausedState && session->line() == 24);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 24);
+
     b->setCondition(QStringLiteral("i == 0"));
     QTest::qWait(100);
     session->run();
