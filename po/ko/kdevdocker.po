@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-10-04 20:04+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17,22 +17,29 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 19.12.3\n"
 
-#: dockerplugin.cpp:117
+#: dockerplugin.cpp:133
 #, kde-format
 msgid "docker build '%1'"
 msgstr "Docker 빌드 '%1'"
 
-#: dockerplugin.cpp:121
+#: dockerplugin.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "태그 이름 선택"
 
-#: dockerplugin.cpp:122
+#: dockerplugin.cpp:138
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Tag name for '%1':"
 msgstr "'%1'의 태그 이름:"
+
+#: dockerplugin.cpp:145
+#, fuzzy, kde-format
+#| msgid "docker build '%1'"
+msgctxt "%1 - Docker tag name"
+msgid "Docker Build \"%1\""
+msgstr "Docker 빌드 '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dockerpreferences.ui:29

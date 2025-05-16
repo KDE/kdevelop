@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-01-18 10:46+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -55,36 +55,49 @@ msgctxt "@label:chooser"
 msgid "Visualizer:"
 msgstr "Visualiseerija:"
 
-#: job.cpp:100
+#: job.cpp:92
+#, kde-format
+msgctxt "%1 - process ID"
+msgid "PID: %1"
+msgstr ""
+
+#: job.cpp:97
 #, kde-format
 msgid "Heaptrack Analysis (%1)"
 msgstr "Heaptracki analüüs (%1)"
 
-#: plugin.cpp:58
+#: job.cpp:99
+#, fuzzy, kde-format
+#| msgid "Heaptrack"
+msgctxt "%1 - the name of the target of a Heaptrack analysis"
+msgid "Heaptrack (%1)"
+msgstr "Heaptrack"
+
+#: plugin.cpp:59
 #, fuzzy, kde-format
 #| msgid "Run Heaptrack Analysis"
 msgctxt "@action"
 msgid "Run Heaptrack Analysis"
 msgstr "Käivita Heaptracki analüüs"
 
-#: plugin.cpp:67
+#: plugin.cpp:68
 #, fuzzy, kde-format
 #| msgid "Attach to Process with Heaptrack"
 msgctxt "@action"
 msgid "Attach to Process with Heaptrack"
 msgstr "Seosta protsessiga Heaptracki abil"
 
-#: plugin.cpp:94
+#: plugin.cpp:95
 #, kde-format
 msgid "Unable to start Heaptrack analysis - \"%1\" plugin is not loaded."
 msgstr "Heaptracki analüüsi ei saa alustada - \"%1\" plugin ei ole laaditud."
 
-#: plugin.cpp:104
+#: plugin.cpp:105
 #, kde-format
 msgid "Configure a native application launch to perform Heaptrack analysis on."
 msgstr ""
 
-#: plugin.cpp:110
+#: plugin.cpp:111
 #, kde-format
 msgid "Heaptrack analysis can be started only for native applications."
 msgstr "Heaptracki analüüsi saab sooritada ainult omarakendustega."

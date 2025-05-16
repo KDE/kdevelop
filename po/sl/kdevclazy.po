@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2022-01-03 01:24+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -561,7 +561,7 @@ msgctxt "@title:window"
 msgid "Clazy Error"
 msgstr "Napaka Clazy"
 
-#: jobparameters.cpp:39
+#: jobparameters.cpp:41
 #, kde-format
 msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
@@ -570,22 +570,22 @@ msgstr ""
 "Poti clazy-standalone ni mogoče zaznati. Pot nastavite ročno, če je Clazy že "
 "nameščen."
 
-#: jobparameters.cpp:42
+#: jobparameters.cpp:44
 #, kde-format
 msgid "clazy-standalone path is empty."
 msgstr "Pot clazy-standalone je prazna."
 
-#: jobparameters.cpp:50
+#: jobparameters.cpp:52
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
 msgstr "Pot clazy-standalone »%1« ne obstaja."
 
-#: jobparameters.cpp:55
+#: jobparameters.cpp:57
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
 msgstr "Pot clazy-standalone »%1« ni izvršitvena datoteka."
 
-#: jobparameters.cpp:64
+#: jobparameters.cpp:66
 #, kde-format
 msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
@@ -594,17 +594,17 @@ msgstr ""
 "Pot dokumentacije Clazy ni mogoče zaznati. Pot nastavite ročno, če je Clazy "
 "že nameščen."
 
-#: jobparameters.cpp:67
+#: jobparameters.cpp:69
 #, kde-format
 msgid "Clazy documentation path is empty."
 msgstr "Pot dokumentacije Clazy je prazna."
 
-#: jobparameters.cpp:75
+#: jobparameters.cpp:77
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
 msgstr "Pot dokumentacije Clazy »%1« ne obstaja."
 
-#: jobparameters.cpp:80
+#: jobparameters.cpp:82
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
 msgstr "Pot dokumentacije Clazy »%1« ni mapa."

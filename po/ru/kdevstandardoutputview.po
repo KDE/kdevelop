@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
 "PO-Revision-Date: 2023-04-25 11:20+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -164,39 +164,43 @@ msgid ""
 msgstr ""
 
 # название панели (то, что называется Tool View)
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
 msgstr "Сборка"
 
 # название панели (то, что называется Tool View)
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
 msgstr "Выполнение"
 
 # название панели (то, что называется Tool View)
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Отладка"
 
-# название панели (то, что называется Tool View)
-#: standardoutputview.cpp:124
+#: standardoutputview.cpp:89
 #, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "Тестирование"
+msgid "Analyze"
+msgstr ""
 
 # название панели (то, что называется Tool View)
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "Управление версиями"
+
+# название панели (то, что называется Tool View)
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Тестирование"
 
 #~ msgctxt "@title:menu"
 #~ msgid "Navigation"

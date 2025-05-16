@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-07-20 05:26+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -557,7 +557,7 @@ msgctxt "@title:window"
 msgid "Clazy Error"
 msgstr "Clazy-ის შეცდომა"
 
-#: jobparameters.cpp:39
+#: jobparameters.cpp:41
 #, kde-format
 msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
@@ -566,22 +566,22 @@ msgstr ""
 "clazy-standalone-ის ბილიკი ვერ ვიპოვე. თუ clazy უკვე დაყენებულია, ხელით "
 "შეიყვანეთ მისი ბილიკი."
 
-#: jobparameters.cpp:42
+#: jobparameters.cpp:44
 #, kde-format
 msgid "clazy-standalone path is empty."
 msgstr "clazy-standalone-ის ბილიკი ცარიელია."
 
-#: jobparameters.cpp:50
+#: jobparameters.cpp:52
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
 msgstr "clazy-standalone-ის ბილიკი %1 არ არსებობს."
 
-#: jobparameters.cpp:55
+#: jobparameters.cpp:57
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
 msgstr "clazy-standalone-ის ბილიკი %1 გამშვები ფაილი არაა."
 
-#: jobparameters.cpp:64
+#: jobparameters.cpp:66
 #, kde-format
 msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
@@ -590,17 +590,17 @@ msgstr ""
 "Clazy-ის დოკუმენტაციის ბილიკი ნაპოვნი არაა. დააყენეთ ის ხელით, თუ Clazy უკვე "
 "დაყენებულია."
 
-#: jobparameters.cpp:67
+#: jobparameters.cpp:69
 #, kde-format
 msgid "Clazy documentation path is empty."
 msgstr "Clazy-ის დოკუმენტაციის ბილიკი ცარიელია."
 
-#: jobparameters.cpp:75
+#: jobparameters.cpp:77
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
 msgstr "Clazy-ის დოკუმენტაციის ბილიკი არ არსებობს: %1."
 
-#: jobparameters.cpp:80
+#: jobparameters.cpp:82
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
 msgstr "Clazy-ის დოკუმენტაციის ბილიკი საქაღალდე არაა: %1."

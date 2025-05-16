@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-07-23 15:28-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -326,22 +326,22 @@ msgstr "Adicionar caminho de inclusão personalizado"
 msgid "Open Project"
 msgstr "Abrir projeto"
 
-#: duchain/parsesession.cpp:560
+#: duchain/parsesession.cpp:568
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Solicitado aqui: %1"
 
-#: duchain/parsesession.cpp:601
+#: duchain/parsesession.cpp:609
 #, kde-format
 msgid "In included file: %1"
 msgstr "No arquivo incluído: %1"
 
-#: duchain/parsesession.cpp:624
+#: duchain/parsesession.cpp:632
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "O cabeçalho não é protegido contra múltiplas inclusões"
 
-#: duchain/parsesession.cpp:625
+#: duchain/parsesession.cpp:633
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

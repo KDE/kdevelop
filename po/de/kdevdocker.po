@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevdocker\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2023-03-17 22:29+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -18,22 +18,29 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 22.12.3\n"
 
-#: dockerplugin.cpp:117
+#: dockerplugin.cpp:133
 #, kde-format
 msgid "docker build '%1'"
 msgstr "docker build „%1“"
 
-#: dockerplugin.cpp:121
+#: dockerplugin.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Tag-Namen auswählen"
 
-#: dockerplugin.cpp:122
+#: dockerplugin.cpp:138
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Tag name for '%1':"
 msgstr "Tag-Name für „%1“:"
+
+#: dockerplugin.cpp:145
+#, fuzzy, kde-format
+#| msgid "docker build '%1'"
+msgctxt "%1 - Docker tag name"
+msgid "Docker Build \"%1\""
+msgstr "docker build „%1“"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dockerpreferences.ui:29

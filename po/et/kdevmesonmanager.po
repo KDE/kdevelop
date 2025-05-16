@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-22 00:39+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-01-16 18:56+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -171,6 +171,12 @@ msgstr "\"%1\" introspektsiooniväljund ei sisalda massiivi ega objekti"
 #, kde-format
 msgid "The current build directory is invalid"
 msgstr "Aktiivne ehitamiskataloog on vigane"
+
+#: mintro/mesontests.cpp:80
+#, kde-format
+msgctxt "%1 - test case name"
+msgid "Meson Test \"%1\""
+msgstr ""
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format

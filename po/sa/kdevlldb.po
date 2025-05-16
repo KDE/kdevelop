@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "(running)"
 msgstr "(चलति)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:49
+#: debuggerplugin.cpp:28 lldblauncher.cpp:48
 #, kde-format
 msgid "LLDB"
 msgstr "एलएलडीबी"
@@ -90,12 +90,12 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "डिबगर टूलबार"
 
-#: lldblauncher.cpp:54
+#: lldblauncher.cpp:53
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "LLDB मध्ये एकं देशीयं अनुप्रयोगं त्रुटिनिवारणं कुर्वन्तु"
 
-#: lldblauncher.cpp:79
+#: lldblauncher.cpp:78
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -104,7 +104,7 @@ msgstr ""
 "पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
 "निरस्तं कृत्वा प्रक्षेपणं निरन्तरं कर्तुम् इच्छति?"
 
-#: lldblauncher.cpp:81
+#: lldblauncher.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

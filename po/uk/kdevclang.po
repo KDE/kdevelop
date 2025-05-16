@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-07-20 08:41+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -327,22 +327,22 @@ msgstr "Додати нетиповий шлях включення"
 msgid "Open Project"
 msgstr "Відкрити проєкт"
 
-#: duchain/parsesession.cpp:560
+#: duchain/parsesession.cpp:568
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Потрібно тут: %1"
 
-#: duchain/parsesession.cpp:601
+#: duchain/parsesession.cpp:609
 #, kde-format
 msgid "In included file: %1"
 msgstr "У включеному файлі: %1"
 
-#: duchain/parsesession.cpp:624
+#: duchain/parsesession.cpp:632
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "Заголовок не захищено від кратних включень"
 
-#: duchain/parsesession.cpp:625
+#: duchain/parsesession.cpp:633
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

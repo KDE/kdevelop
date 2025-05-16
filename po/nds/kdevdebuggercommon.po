@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-04 00:41+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -113,13 +113,19 @@ msgid "Core file:"
 msgstr "Karndatei:"
 
 #: mibreakpointcontroller.cpp:809
-#, kde-format
-msgid "<br>Old value: %1"
+#, fuzzy, kde-format
+#| msgid "<br>Old value: %1"
+msgid ""
+"\n"
+"Old value: %1"
 msgstr "<br>Oolt Weert: %1"
 
 #: mibreakpointcontroller.cpp:812
-#, kde-format
-msgid "<br>New value: %1"
+#, fuzzy, kde-format
+#| msgid "<br>New value: %1"
+msgid ""
+"\n"
+"New value: %1"
 msgstr "<br>Nieg Weert: %1"
 
 #: midebugger.cpp:315

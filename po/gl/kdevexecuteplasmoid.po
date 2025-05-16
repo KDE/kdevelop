@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2023-06-18 19:42+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -19,28 +19,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 23.04.2\n"
 
-#: plasmoidexecutionconfig.cpp:116
+#: plasmoidexecutionconfig.cpp:118
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "Configurar a execución do trebello"
 
-#: plasmoidexecutionconfig.cpp:126
+#: plasmoidexecutionconfig.cpp:128
 #, kde-format
 msgid "Display a plasmoid"
 msgstr "Amosar un trebello"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
+#: plasmoidexecutionconfig.cpp:138 plasmoidexecutionconfig.cpp:217
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Iniciador de trebellos"
 
-#: plasmoidexecutionconfig.cpp:182
+#: plasmoidexecutionconfig.cpp:180
 #, kde-format
 msgid "Could not resolve the dependency: %1"
 msgstr "Non foi posíbel satisfacer a dependencia: %1"
 
-#: plasmoidexecutionconfig.cpp:290
+#: plasmoidexecutionconfig.cpp:288
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

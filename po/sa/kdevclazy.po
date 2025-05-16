@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -554,7 +554,7 @@ msgctxt "@title:window"
 msgid "Clazy Error"
 msgstr "क्लेजी त्रुटिः"
 
-#: jobparameters.cpp:39
+#: jobparameters.cpp:41
 #, kde-format
 msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
@@ -563,22 +563,22 @@ msgstr ""
 "clazy-standalone मार्गः ज्ञातुं न शक्यते। यदि Clazy पूर्वमेव संस्थापितम् अस्ति तर्हि मार्गं "
 "मैन्युअल् रूपेण सेट् कुर्वन्तु ।"
 
-#: jobparameters.cpp:42
+#: jobparameters.cpp:44
 #, kde-format
 msgid "clazy-standalone path is empty."
 msgstr "clazy-standalone मार्गः शून्यः अस्ति।"
 
-#: jobparameters.cpp:50
+#: jobparameters.cpp:52
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
 msgstr "clazy-standalone path '%1' नास्ति ।"
 
-#: jobparameters.cpp:55
+#: jobparameters.cpp:57
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
 msgstr "clazy-standalone मार्गः '%1' कार्यान्वयनीयः नास्ति ।"
 
-#: jobparameters.cpp:64
+#: jobparameters.cpp:66
 #, kde-format
 msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
@@ -587,17 +587,17 @@ msgstr ""
 "मलिनदस्तावेजमार्गः ज्ञातुं न शक्यते । यदि Clazy पूर्वमेव संस्थापितम् अस्ति तर्हि मार्गं मैन्युअल् "
 "रूपेण सेट् कुर्वन्तु ।"
 
-#: jobparameters.cpp:67
+#: jobparameters.cpp:69
 #, kde-format
 msgid "Clazy documentation path is empty."
 msgstr "क्लेजी दस्तावेजीकरणमार्गः रिक्तः अस्ति ।"
 
-#: jobparameters.cpp:75
+#: jobparameters.cpp:77
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
 msgstr "क्लेजी दस्तावेजीकरणमार्गः '%1' नास्ति ।"
 
-#: jobparameters.cpp:80
+#: jobparameters.cpp:82
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
 msgstr "क्लेजी दस्तावेजीकरणमार्गः '%1' निर्देशिका नास्ति ।"

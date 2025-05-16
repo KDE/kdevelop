@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2022-04-17 20:51+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -449,33 +449,31 @@ msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
 msgstr "Analyzovať aktuálny pojekt s Cppcheck"
 
-#: plugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "Test"
-
-#: problemmodel.cpp:116
+#: problemmodel.cpp:117
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "Analýza dokončená, neboli zistené žiadne problémy."
 
-#: problemmodel.cpp:137
+#: problemmodel.cpp:143
 #, kde-format
 msgid "Analysis started..."
 msgstr "Analýza sa začala ..."
 
-#: problemmodel.cpp:138
+#: problemmodel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
 msgstr "Znovu spustiť poslednú analýzu Cppcheck (%1)"
 
-#: problemmodel.cpp:140
+#: problemmodel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
 msgstr "Znovu spustiť poslednú analýzu Cppcheck"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Test"
 
 #~ msgid "Cppcheck Error"
 #~ msgstr "Chyba cppcheck"

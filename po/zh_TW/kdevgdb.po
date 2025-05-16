@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-05-06 09:56+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -160,7 +160,7 @@ msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "中止目前工作階段"
 
-#: gdbconfigpage.cpp:166
+#: gdbconfigpage.cpp:160
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "在 GDB 執行原生應用程式"

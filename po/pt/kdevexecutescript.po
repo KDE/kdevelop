@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecutescript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-07-20 12:27+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -67,12 +67,12 @@ msgstr ""
 "configuração de lançamento '%1'; esta não é suportada de momento. A "
 "interromper o início."
 
-#: executescriptplugin.cpp:171
+#: executescriptplugin.cpp:168
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "Não foi indicado nenhum interpretador válido"
 
-#: executescriptplugin.cpp:181
+#: executescriptplugin.cpp:180
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
@@ -81,7 +81,7 @@ msgstr ""
 "Existe um erro de aspas no interpretador para a configuração de lançamento "
 "'%1'. A interromper o início."
 
-#: executescriptplugin.cpp:186
+#: executescriptplugin.cpp:185
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "
@@ -90,6 +90,18 @@ msgstr ""
 "Foi incluído um meta-carácter da linha de comandos no interpretador para a "
 "configuração de lançamento '%1'; esta não é suportada de momento. A "
 "interromper o início."
+
+#: executescriptplugin.cpp:195
+#, fuzzy, kde-format
+#| msgid ""
+#| "There is a quoting error in the interpreter for the launch configuration "
+#| "'%1'. Aborting start."
+msgid ""
+"Splitting the interpreter command for the launch configuration '%1' yields "
+"an empty list. Aborting start."
+msgstr ""
+"Existe um erro de aspas no interpretador para a configuração de lançamento "
+"'%1'. A interromper o início."
 
 #: scriptappconfig.cpp:83
 #, kde-format
@@ -298,12 +310,7 @@ msgctxt "@info:tooltip"
 msgid "Enter a remote host (user@host)"
 msgstr "Indique uma máquina remota (utilizador@máquina)"
 
-#: scriptappjob.cpp:76
-#, kde-format
-msgid "There is no active document to launch."
-msgstr "Não existe nenhum documento activo para lançar."
-
-#: scriptappjob.cpp:98
+#: scriptappjob.cpp:43
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -313,37 +320,42 @@ msgstr ""
 "inválida; verifique por favor a configuração de execução '%1'. A usar o "
 "perfil de ambientes por omissão."
 
-#: scriptappjob.cpp:170
+#: scriptappjob.cpp:90
+#, kde-format
+msgid "There is no active document to launch."
+msgstr "Não existe nenhum documento activo para lançar."
+
+#: scriptappjob.cpp:165
 #, kde-format
 msgid "Starting: %1"
 msgstr "A iniciar: %1"
 
-#: scriptappjob.cpp:184
+#: scriptappjob.cpp:179
 #, kde-format
 msgid "*** Killed Application ***"
 msgstr "*** Matou-se a aplicação ***"
 
-#: scriptappjob.cpp:195
+#: scriptappjob.cpp:190
 #, kde-format
 msgid "*** Exited normally ***"
 msgstr "*** Terminou normalmente ***"
 
-#: scriptappjob.cpp:197
+#: scriptappjob.cpp:192
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
 msgstr "*** Saiu com o código de saída: %1 ***"
 
-#: scriptappjob.cpp:200
+#: scriptappjob.cpp:195
 #, kde-format
 msgid "*** Process aborted ***"
 msgstr "*** Processo interrompido ***"
 
-#: scriptappjob.cpp:203
+#: scriptappjob.cpp:198
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
 msgstr "*** Estoirou com o código de saída: %1 ***"
 
-#: scriptappjob.cpp:218
+#: scriptappjob.cpp:213
 #, kde-format
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "

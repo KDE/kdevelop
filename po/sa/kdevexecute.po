@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-30 00:41+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -96,12 +96,12 @@ msgstr "देशी अनुप्रयोगाः निष्पादय�
 msgid "Native Application"
 msgstr "देशी अनुप्रयोग"
 
-#: nativeappconfig.cpp:240
+#: nativeappconfig.cpp:233
 #, kde-format
 msgid "Compiled Binary"
 msgstr "संकलित द्विचक्री"
 
-#: nativeappconfig.cpp:321
+#: nativeappconfig.cpp:314
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -310,7 +310,7 @@ msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "लक्ष्याणि :"
 
-#: nativeappjob.cpp:66
+#: nativeappjob.cpp:40
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -319,30 +319,30 @@ msgstr ""
 "कोऽपि वातावरणरूपरेखा निर्दिष्टा, भग्नविन्यासः इव दृश्यते, कृपया '%1' चालनविन्यासं "
 "परीक्ष्यताम् । पूर्वनिर्धारितपर्यावरणरूपरेखायाः उपयोगेन।"
 
-#: nativeappjob.cpp:142
+#: nativeappjob.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "Job Already Running इति कार्यम्"
 
-#: nativeappjob.cpp:143
+#: nativeappjob.cpp:153
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "'%1' पूर्वमेव निष्पाद्यते ।"
 
-#: nativeappjob.cpp:145
+#: nativeappjob.cpp:155
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "सर्वाणि उदाहरणानि मारयतु"
 
-#: nativeappjob.cpp:146
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "अन्यत् आरभत"
 
-#: nativeappjob.cpp:149
+#: nativeappjob.cpp:159
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"

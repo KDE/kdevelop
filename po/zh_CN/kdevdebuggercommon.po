@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-04 00:41+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -100,13 +100,19 @@ msgid "Core file:"
 msgstr "核心文件："
 
 #: mibreakpointcontroller.cpp:809
-#, kde-format
-msgid "<br>Old value: %1"
+#, fuzzy, kde-format
+#| msgid "<br>Old value: %1"
+msgid ""
+"\n"
+"Old value: %1"
 msgstr "<br>旧值：%1"
 
 #: mibreakpointcontroller.cpp:812
-#, kde-format
-msgid "<br>New value: %1"
+#, fuzzy, kde-format
+#| msgid "<br>New value: %1"
+msgid ""
+"\n"
+"New value: %1"
 msgstr "<br>新值：%1"
 
 #: midebugger.cpp:315

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -60,41 +60,101 @@ msgstr "निर्यातं %1"
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "फ्लैटपक बंडल (*.flatpak)"
 
-#: flatpakplugin.cpp:234
+#: flatpakplugin.cpp:117
+#, fuzzy, kde-format
+#| msgid "Flatpak Bundle (*.flatpak)"
+msgctxt "%1 - application ID"
+msgid "Flatpak Export Bundle %1"
+msgstr "फ्लैटपक बंडल (*.flatpak)"
+
+#: flatpakplugin.cpp:236
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
 msgstr "Flatpak वातावरणस्य पुनर्निर्माणम्: %1"
 
-#: flatpakplugin.cpp:241
+#: flatpakplugin.cpp:243
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
 msgstr "%2 कृते %1 Flatpak वातावरणं निर्मायताम्"
 
-#: flatpakplugin.cpp:265
+#: flatpakplugin.cpp:267
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Tag Name इति चिनोतु"
 
-#: flatpakplugin.cpp:266
+#: flatpakplugin.cpp:268
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "उपकरणस्य होस्टनाम :"
 
-#: flatpakruntime.cpp:57
-#, kde-format
+#: flatpakruntime.cpp:61
+#, fuzzy, kde-format
+#| msgid "Flatpak"
+msgctxt "@title:window"
 msgid "Flatpak"
 msgstr "फ्लैटपकः"
 
-#: flatpakruntime.cpp:157
+#: flatpakruntime.cpp:113
 #, kde-format
-msgid "Bundling"
-msgstr "बण्डलिंग्"
+msgctxt "%1 - application ID or name"
+msgid "Flatpak Create %1"
+msgstr ""
 
-#: flatpakruntime.cpp:179
+#: flatpakruntime.cpp:217
 #, kde-format
-msgid "Run on Device"
-msgstr "Device इत्यत्र चालयन्तु"
+msgctxt "%1 - application ID"
+msgid "Flatpak Finalize %1"
+msgstr ""
+
+#: flatpakruntime.cpp:223
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Export %1"
+msgctxt "%1 - application ID"
+msgid "Flatpak Export %1"
+msgstr "निर्यातं %1"
+
+#: flatpakruntime.cpp:226
+#, fuzzy, kde-format
+#| msgid "Flatpak Bundle (*.flatpak)"
+msgctxt "%1 - application ID"
+msgid "Flatpak Bundle %1"
+msgstr "फ्लैटपक बंडल (*.flatpak)"
+
+#: flatpakruntime.cpp:243
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Build Flatpak Environment %1 for %2"
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Run %1 on %2"
+msgstr "%2 कृते %1 Flatpak वातावरणं निर्मायताम्"
+
+#: flatpakruntime.cpp:248
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer .flatpak to %1"
+msgstr ""
+
+#: flatpakruntime.cpp:250
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer replicate.sh to %1"
+msgstr ""
+
+#: flatpakruntime.cpp:254
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Build Flatpak Environment %1 for %2"
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Install %1 to %2"
+msgstr "%2 कृते %1 Flatpak वातावरणं निर्मायताम्"
+
+#~ msgid "Bundling"
+#~ msgstr "बण्डलिंग्"
+
+#~ msgid "Run on Device"
+#~ msgstr "Device इत्यत्र चालयन्तु"

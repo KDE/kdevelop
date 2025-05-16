@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-09-20 13:57+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1445,104 +1445,104 @@ msgstr "προβολή παραγόμενης ροής αντικειμένων"
 msgid "code to parse"
 msgstr "κώδικας για συντακτική ανάλυση"
 
-#: outputview/outputexecutejob.cpp:196
+#: outputview/outputexecutejob.cpp:186
 #, kde-format
 msgid "No build directory specified for a builder job."
 msgstr "Δεν ορίστηκε κατάλογος κατασκευής για μια κατασκευαστική εργασία."
 
-#: outputview/outputexecutejob.cpp:198
+#: outputview/outputexecutejob.cpp:188
 #, kde-format
 msgid "No working directory specified for a process."
 msgstr "Δεν ορίστηκε κατάλογος εργασίας για μια διεργασία."
 
-#: outputview/outputexecutejob.cpp:210
+#: outputview/outputexecutejob.cpp:200
 #, kde-format
 msgid "Invalid build directory '%1'"
 msgstr "Μη έγκυρος κατάλογος κατασκευής '%1'"
 
-#: outputview/outputexecutejob.cpp:212
+#: outputview/outputexecutejob.cpp:202
 #, kde-format
 msgid "Invalid working directory '%1'"
 msgstr "Μη έγκυρος κατάλογος εργασίας '%1'"
 
-#: outputview/outputexecutejob.cpp:219
+#: outputview/outputexecutejob.cpp:209
 #, kde-format
 msgid "Build directory '%1' is not a local path"
 msgstr "Ο κατάλογος κατασκευής '%1' δεν είναι σε τοπική διαδρομή"
 
-#: outputview/outputexecutejob.cpp:221
+#: outputview/outputexecutejob.cpp:211
 #, kde-format
 msgid "Working directory '%1' is not a local path"
 msgstr "Ο κατάλογος εργασίας '%1' δεν είναι σε τοπική διαδρομή"
 
-#: outputview/outputexecutejob.cpp:240
+#: outputview/outputexecutejob.cpp:222
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
 msgstr "Ο κατάλογος κατασκευής '%1' δεν υπάρχει ή δεν είναι κατάλογος"
 
-#: outputview/outputexecutejob.cpp:242
+#: outputview/outputexecutejob.cpp:224
 #, kde-format
 msgid "Working directory '%1' does not exist or is not a directory"
 msgstr "Ο κατάλογος εργασίας '%1' δεν υπάρχει ή δεν είναι κατάλογος"
 
-#: outputview/outputexecutejob.cpp:303
+#: outputview/outputexecutejob.cpp:282
 #, kde-format
 msgid "Failed to specify program to start: %1"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:304
+#: outputview/outputexecutejob.cpp:283
 #, fuzzy, kde-format
 #| msgid "*** Failure: %1 ***"
 msgid "*** %1 ***"
 msgstr "*** Αποτυχία: %1 ***"
 
-#: outputview/outputexecutejob.cpp:330
+#: outputview/outputexecutejob.cpp:309
 #, fuzzy, kde-format
 #| msgid "*** Warning: could not kill the process ***"
 msgid "*** Killed process ***"
 msgstr "*** Προειδοποίηση: αδυναμία τερματισμού της διεργασίας ***"
 
-#: outputview/outputexecutejob.cpp:334
+#: outputview/outputexecutejob.cpp:313
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
 msgstr "*** Προειδοποίηση: αδυναμία τερματισμού της διεργασίας ***"
 
-#: outputview/outputexecutejob.cpp:356
+#: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
 msgstr "Η %1 απέτυχε να ξεκινήσει"
 
-#: outputview/outputexecutejob.cpp:360
+#: outputview/outputexecutejob.cpp:339
 #, kde-format
 msgid "%1 has crashed"
 msgstr "Η %1 έχει καταρρεύσει"
 
-#: outputview/outputexecutejob.cpp:364
+#: outputview/outputexecutejob.cpp:343
 #, kde-format
 msgid "Read error"
 msgstr "Σφάλμα ανάγνωσης"
 
-#: outputview/outputexecutejob.cpp:368
+#: outputview/outputexecutejob.cpp:347
 #, kde-format
 msgid "Write error"
 msgstr "Σφάλμα εγγραφής"
 
-#: outputview/outputexecutejob.cpp:372
+#: outputview/outputexecutejob.cpp:351
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr "Ο χρόνος αναμονής για τη διεργασία έχει εκπνεύσει"
 
-#: outputview/outputexecutejob.cpp:376
+#: outputview/outputexecutejob.cpp:355
 #, kde-format
 msgid "Exit code %1"
 msgstr "Κώδικας εξόδου %1"
 
-#: outputview/outputexecutejob.cpp:389
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** Αποτυχία: %1 ***"
 
-#: outputview/outputexecutejob.cpp:407
+#: outputview/outputexecutejob.cpp:380
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** Τερματίστηκε ***"
@@ -2108,12 +2108,6 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:425
-#, kde-format
-msgctxt "@title:window"
-msgid "Debug"
-msgstr "Διόρθωση"
-
 #: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
@@ -2364,7 +2358,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "Επισήμανση"
 
-#: shell/documentcontroller.cpp:1287
+#: shell/documentcontroller.cpp:1288
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2416,7 +2410,7 @@ msgctxt "a certain environment variable is ..."
 msgid "currently unset"
 msgstr "Τρέχων προορισμός εκτέλεσης"
 
-#: shell/ktexteditorpluginintegration.cpp:491
+#: shell/ktexteditorpluginintegration.cpp:492
 #, fuzzy, kde-format
 #| msgctxt "@title:column"
 #| msgid "Message"
@@ -2870,7 +2864,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "Άνοιγμα υπάρχοντος αρχείου"
 
-#: shell/partcontroller.cpp:226
+#: shell/partcontroller.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
@@ -3590,12 +3584,12 @@ msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Εργασία χωρίς όνομα"
 
-#: shell/runcontroller.cpp:975
+#: shell/runcontroller.cpp:963
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Νέος %1 εκτελεστής"
 
-#: shell/runcontroller.cpp:1012
+#: shell/runcontroller.cpp:1000
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -5248,25 +5242,25 @@ msgstr "Το αρχείο τροποποιήθηκε εξωτερικά"
 msgid " Line: %1 Col: %2 "
 msgstr " Γραμμή: %1 Στήλη: %2 "
 
-#: shell/uicontroller.cpp:79
+#: shell/uicontroller.cpp:81
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "Κώδικας"
 
-#: shell/uicontroller.cpp:90
+#: shell/uicontroller.cpp:92
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "Διόρθωση"
 
-#: shell/uicontroller.cpp:99
+#: shell/uicontroller.cpp:101
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "Επιθεώρηση"
 
-#: shell/uicontroller.cpp:458
+#: shell/uicontroller.cpp:500
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
@@ -5375,27 +5369,27 @@ msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:768
+#: sublime/container.cpp:772
 #, fuzzy, kde-format
 #| msgid "Filename"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Όνομα αρχείου"
 
-#: sublime/container.cpp:771
+#: sublime/container.cpp:775
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: sublime/container.cpp:773
+#: sublime/container.cpp:777
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Κλείσιμο των υπολοίπ&ων"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
@@ -5407,33 +5401,33 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Εναλλαγή '%1' εργαλειοπροβολής"
 
-#: sublime/idealbuttonbarwidget.cpp:301
+#: sublime/idealbuttonbarwidget.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
 msgstr "Δεξί κλικ για προσθήκη νέων εργαλειοπροβολών."
 
-#: sublime/idealcontroller.cpp:133
-#, kde-format
-msgid "Left Button Bar"
-msgstr "Γραμμή αριστερού κουμπιού"
-
-#: sublime/idealcontroller.cpp:134
-#, kde-format
-msgid "Right Button Bar"
-msgstr "Γραμμή δεξιού κουμπιού"
-
-#: sublime/idealcontroller.cpp:139
-#, kde-format
-msgid "Bottom Button Bar"
-msgstr "Γραμμή κουμπιού βάσης"
-
-#: sublime/idealcontroller.cpp:210
+#: sublime/idealcontroller.cpp:88
 #, fuzzy, kde-format
 #| msgid "%1 Tool Bar"
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "Γραμμή εργαλείου %1"
+
+#: sublime/idealcontroller.cpp:381
+#, kde-format
+msgid "Left Button Bar"
+msgstr "Γραμμή αριστερού κουμπιού"
+
+#: sublime/idealcontroller.cpp:382
+#, kde-format
+msgid "Right Button Bar"
+msgstr "Γραμμή δεξιού κουμπιού"
+
+#: sublime/idealcontroller.cpp:387
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr "Γραμμή κουμπιού βάσης"
 
 #: sublime/idealdockwidget.cpp:123
 #, fuzzy, kde-format
@@ -5554,57 +5548,57 @@ msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Εργαλειοπροβολές"
 
-#: sublime/mainwindow_p.cpp:642
+#: sublime/mainwindow_p.cpp:644
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: sublime/mainwindow_p.cpp:643
+#: sublime/mainwindow_p.cpp:645
 #, fuzzy, kde-format
 #| msgid "Commit Message:"
 msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "Μήνυμα επικύρωσης:"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:268
 #, kde-format
 msgid "duchainify"
 msgstr "duchainify"
 
-#: util/duchainify/main.cpp:264
+#: util/duchainify/main.cpp:269
 #, kde-format
 msgid "DUChain builder application"
 msgstr "Εφαρμογή κατασκευής αλυσίδας Duchain"
 
-#: util/duchainify/main.cpp:265
+#: util/duchainify/main.cpp:270
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(c) 2009 David Nolden"
 
-#: util/duchainify/main.cpp:271
+#: util/duchainify/main.cpp:276
 #, fuzzy, kde-format
 #| msgid "directory"
 msgid "file or directory"
 msgstr "κατάλογος"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:279
 #, kde-format
 msgid "Show warnings"
 msgstr "Εμφάνιση προειδοποιήσεων"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:281
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "Εμφάνιση προειδοποιήσεων και αποτελεσμάτων διόρθωσης"
 
-#: util/duchainify/main.cpp:278
+#: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr ""
 "Επιβολή ενημέρωσης για τα πλαίσια κορυφής που αντιστοιχούν στα δοσμένα αρχεία"
 
-#: util/duchainify/main.cpp:282
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
@@ -5613,12 +5607,12 @@ msgstr ""
 "Επιβολή ενημέρωσης για τα πλαίσια κορυφής που αντιστοιχούν στα δοσμένα "
 "αρχεία και σε όλα τα αρχεία συμπερίληψης"
 
-#: util/duchainify/main.cpp:284
+#: util/duchainify/main.cpp:289
 #, kde-format
 msgid "Number of threads to use"
 msgstr "Αριθμός νημάτων προς χρήση"
 
-#: util/duchainify/main.cpp:287
+#: util/duchainify/main.cpp:292
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5629,43 +5623,43 @@ msgstr ""
 "visible-declarations (προκαθορισμένο), all-declarations, all-declarations-"
 "and-uses, all-declarations-and-uses-and-AST"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr ""
 
-#: util/duchainify/main.cpp:293
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
 msgstr ""
 
-#: util/duchainify/main.cpp:295
+#: util/duchainify/main.cpp:300
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:303
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
 
-#: util/duchainify/main.cpp:301
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
 
-#: util/duchainify/main.cpp:304
+#: util/duchainify/main.cpp:309
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr ""
 
-#: util/duchainify/main.cpp:306
+#: util/duchainify/main.cpp:311
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "Παρουσίαση προβλημάτων που εμφανίστηκαν κατά την ανάλυση"
 
-#: util/duchainify/main.cpp:308
+#: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr ""
@@ -6376,6 +6370,10 @@ msgstr "Διαφορά με προηγούμενη"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Διαφορά μεταξύ αναθεωρήσεων"
+
+#~ msgctxt "@title:window"
+#~ msgid "Debug"
+#~ msgstr "Διόρθωση"
 
 #~ msgctxt "@option:check"
 #~ msgid "Recursive"

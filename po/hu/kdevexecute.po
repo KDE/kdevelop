@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-30 00:41+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2014-09-13 10:52+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -100,12 +100,12 @@ msgstr "Natív alkalmazás"
 msgid "Native Application"
 msgstr "Natív alkalmazás"
 
-#: nativeappconfig.cpp:240
+#: nativeappconfig.cpp:233
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Lefordított bináris"
 
-#: nativeappconfig.cpp:321
+#: nativeappconfig.cpp:314
 #, fuzzy, kde-format
 #| msgid "Project Executables"
 msgctxt "@title:menu"
@@ -373,7 +373,7 @@ msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Célok:"
 
-#: nativeappjob.cpp:66
+#: nativeappjob.cpp:40
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -386,30 +386,30 @@ msgstr ""
 "ellenőrizze a futási beállítást: „%1”. Az alapértelmezett környezetcsoport "
 "használata."
 
-#: nativeappjob.cpp:142
+#: nativeappjob.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr ""
 
-#: nativeappjob.cpp:143
+#: nativeappjob.cpp:153
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr ""
 
-#: nativeappjob.cpp:145
+#: nativeappjob.cpp:155
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr ""
 
-#: nativeappjob.cpp:146
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappjob.cpp:149
+#: nativeappjob.cpp:159
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2022-07-10 17:00+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -324,22 +324,22 @@ msgstr "Dodaj własną ścieżkę plików dołączanych"
 msgid "Open Project"
 msgstr "Otwórz projekt"
 
-#: duchain/parsesession.cpp:560
+#: duchain/parsesession.cpp:568
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Żądano tutaj: %1"
 
-#: duchain/parsesession.cpp:601
+#: duchain/parsesession.cpp:609
 #, kde-format
 msgid "In included file: %1"
 msgstr "W dołączonym pliku: %1"
 
-#: duchain/parsesession.cpp:624
+#: duchain/parsesession.cpp:632
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "Nagłówek nie jest chroniony przed wieloma dodaniami"
 
-#: duchain/parsesession.cpp:625
+#: duchain/parsesession.cpp:633
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

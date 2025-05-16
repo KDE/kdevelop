@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-12-25 19:37+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -1405,102 +1405,102 @@ msgstr "मुद्रणजनितं टोकनधारा"
 msgid "code to parse"
 msgstr "कोडं विश्लेषणं कर्तुं"
 
-#: outputview/outputexecutejob.cpp:196
+#: outputview/outputexecutejob.cpp:186
 #, kde-format
 msgid "No build directory specified for a builder job."
 msgstr "निर्मातृकार्यस्य कृते कोऽपि निर्माणनिर्देशिका निर्दिष्टा नास्ति ।"
 
-#: outputview/outputexecutejob.cpp:198
+#: outputview/outputexecutejob.cpp:188
 #, kde-format
 msgid "No working directory specified for a process."
 msgstr "प्रक्रियायाः कृते निर्दिष्टा कार्यनिर्देशिका नास्ति ।"
 
-#: outputview/outputexecutejob.cpp:210
+#: outputview/outputexecutejob.cpp:200
 #, kde-format
 msgid "Invalid build directory '%1'"
 msgstr "अमान्यनिर्माणनिर्देशिका '%1'."
 
-#: outputview/outputexecutejob.cpp:212
+#: outputview/outputexecutejob.cpp:202
 #, kde-format
 msgid "Invalid working directory '%1'"
 msgstr "अमान्यकार्यनिर्देशिका '%1'."
 
-#: outputview/outputexecutejob.cpp:219
+#: outputview/outputexecutejob.cpp:209
 #, kde-format
 msgid "Build directory '%1' is not a local path"
 msgstr "निर्माणनिर्देशिका '%1' स्थानीयमार्गः नास्ति"
 
-#: outputview/outputexecutejob.cpp:221
+#: outputview/outputexecutejob.cpp:211
 #, kde-format
 msgid "Working directory '%1' is not a local path"
 msgstr "कार्यनिर्देशिका '%1' स्थानीयमार्गः नास्ति"
 
-#: outputview/outputexecutejob.cpp:240
+#: outputview/outputexecutejob.cpp:222
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
 msgstr "'%1' निर्देशिका निर्माणं नास्ति अथवा निर्देशिका नास्ति"
 
-#: outputview/outputexecutejob.cpp:242
+#: outputview/outputexecutejob.cpp:224
 #, kde-format
 msgid "Working directory '%1' does not exist or is not a directory"
 msgstr "कार्यनिर्देशिका '%1' नास्ति अथवा निर्देशिका नास्ति"
 
-#: outputview/outputexecutejob.cpp:303
+#: outputview/outputexecutejob.cpp:282
 #, kde-format
 msgid "Failed to specify program to start: %1"
 msgstr "आरम्भार्थं कार्यक्रमं निर्दिष्टुं असफलम्: %1"
 
-#: outputview/outputexecutejob.cpp:304
+#: outputview/outputexecutejob.cpp:283
 #, kde-format
 msgid "*** %1 ***"
 msgstr "*** %1 ***"
 
-#: outputview/outputexecutejob.cpp:330
+#: outputview/outputexecutejob.cpp:309
 #, kde-format
 msgid "*** Killed process ***"
 msgstr "*** हता प्रक्रिया *** ."
 
-#: outputview/outputexecutejob.cpp:334
+#: outputview/outputexecutejob.cpp:313
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
 msgstr "*** चेतावनी: प्रक्रियां मारयितुं न शक्तवती ***"
 
-#: outputview/outputexecutejob.cpp:356
+#: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
 msgstr "%1 आरम्भे असफलः अभवत्"
 
-#: outputview/outputexecutejob.cpp:360
+#: outputview/outputexecutejob.cpp:339
 #, kde-format
 msgid "%1 has crashed"
 msgstr "%1 दुर्घटनाम् अभवत्"
 
-#: outputview/outputexecutejob.cpp:364
+#: outputview/outputexecutejob.cpp:343
 #, kde-format
 msgid "Read error"
 msgstr "पठनदोषः"
 
-#: outputview/outputexecutejob.cpp:368
+#: outputview/outputexecutejob.cpp:347
 #, kde-format
 msgid "Write error"
 msgstr "लेखनदोषः"
 
-#: outputview/outputexecutejob.cpp:372
+#: outputview/outputexecutejob.cpp:351
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr "प्रक्रियायाः प्रतीक्षायाः समयः समाप्तः अस्ति"
 
-#: outputview/outputexecutejob.cpp:376
+#: outputview/outputexecutejob.cpp:355
 #, kde-format
 msgid "Exit code %1"
 msgstr "%1 इति कोडं निर्गच्छतु"
 
-#: outputview/outputexecutejob.cpp:389
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** असफलता: %1 *** ."
 
-#: outputview/outputexecutejob.cpp:407
+#: outputview/outputexecutejob.cpp:380
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** सम्पूर्ण ***"
@@ -2057,12 +2057,6 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "सम्पादके निष्पादनपङ्क्तौ कूर्दति ।"
 
-#: shell/debugcontroller.cpp:425
-#, kde-format
-msgctxt "@title:window"
-msgid "Debug"
-msgstr "त्रुटिनिवारणम्"
-
 #: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
@@ -2305,7 +2299,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "टिप्पणीं कुरुत"
 
-#: shell/documentcontroller.cpp:1287
+#: shell/documentcontroller.cpp:1288
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2355,7 +2349,7 @@ msgctxt "a certain environment variable is ..."
 msgid "currently unset"
 msgstr ""
 
-#: shell/ktexteditorpluginintegration.cpp:491
+#: shell/ktexteditorpluginintegration.cpp:492
 #, fuzzy, kde-format
 #| msgctxt "@title:column"
 #| msgid "Message"
@@ -2789,7 +2783,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "विद्यमानं सञ्चिकां \"%1\" उद्घाटयन्तु ।"
 
-#: shell/partcontroller.cpp:226
+#: shell/partcontroller.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
@@ -3465,12 +3459,12 @@ msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> अनाम कार्यम्"
 
-#: shell/runcontroller.cpp:975
+#: shell/runcontroller.cpp:963
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "नवीन %1 प्रक्षेपक"
 
-#: shell/runcontroller.cpp:1012
+#: shell/runcontroller.cpp:1000
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -5061,25 +5055,25 @@ msgstr "दस्तावेजः बाह्यरूपेण परिव�
 msgid " Line: %1 Col: %2 "
 msgstr " रेखा: %1 कर्नल: %2 "
 
-#: shell/uicontroller.cpp:79
+#: shell/uicontroller.cpp:81
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "संहिता"
 
-#: shell/uicontroller.cpp:90
+#: shell/uicontroller.cpp:92
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "त्रुटिनिवारणम्"
 
-#: shell/uicontroller.cpp:99
+#: shell/uicontroller.cpp:101
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "परिशीलयतु"
 
-#: shell/uicontroller.cpp:458
+#: shell/uicontroller.cpp:500
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
@@ -5183,25 +5177,25 @@ msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(स्विच कर्तुं Ctrl+Tab नुदन्तु)"
 
-#: sublime/container.cpp:768
+#: sublime/container.cpp:772
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "सञ्चिकानाम प्रतिलिपि कुर्वन्तु"
 
-#: sublime/container.cpp:771
+#: sublime/container.cpp:775
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "पिधानं करोतु"
 
-#: sublime/container.cpp:773
+#: sublime/container.cpp:777
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "अन्ये सर्वे पिधाय"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
@@ -5213,32 +5207,32 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "'%1' साधनदृश्यं टॉग्ल् कुर्वन्तु"
 
-#: sublime/idealbuttonbarwidget.cpp:301
+#: sublime/idealbuttonbarwidget.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
 msgstr "नूतनानि साधनदृश्यानि योजयितुं राइट् क्लिक् कुर्वन्तु ।"
 
-#: sublime/idealcontroller.cpp:133
-#, kde-format
-msgid "Left Button Bar"
-msgstr "वाम बटन पट्टी"
-
-#: sublime/idealcontroller.cpp:134
-#, kde-format
-msgid "Right Button Bar"
-msgstr "दक्षिण बटन बार"
-
-#: sublime/idealcontroller.cpp:139
-#, kde-format
-msgid "Bottom Button Bar"
-msgstr "तल बटन बार"
-
-#: sublime/idealcontroller.cpp:210
+#: sublime/idealcontroller.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1 साधनपट्टिका"
+
+#: sublime/idealcontroller.cpp:381
+#, kde-format
+msgid "Left Button Bar"
+msgstr "वाम बटन पट्टी"
+
+#: sublime/idealcontroller.cpp:382
+#, kde-format
+msgid "Right Button Bar"
+msgstr "दक्षिण बटन बार"
+
+#: sublime/idealcontroller.cpp:387
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr "तल बटन बार"
 
 #: sublime/idealdockwidget.cpp:123
 #, kde-format
@@ -5354,54 +5348,54 @@ msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Tool Views इति"
 
-#: sublime/mainwindow_p.cpp:642
+#: sublime/mainwindow_p.cpp:644
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "पिधानं करोतु"
 
-#: sublime/mainwindow_p.cpp:643
+#: sublime/mainwindow_p.cpp:645
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "सन्देशं बन्दं कुर्वन्तु"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:268
 #, kde-format
 msgid "duchainify"
 msgstr "दुचैनिफिक इति"
 
-#: util/duchainify/main.cpp:264
+#: util/duchainify/main.cpp:269
 #, kde-format
 msgid "DUChain builder application"
 msgstr "DUChain निर्माता अनुप्रयोग"
 
-#: util/duchainify/main.cpp:265
+#: util/duchainify/main.cpp:270
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(ग) २००९ डेविड नोल्डेन्"
 
-#: util/duchainify/main.cpp:271
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "file or directory"
 msgstr "सञ्चिका वा निर्देशिका वा"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:279
 #, kde-format
 msgid "Show warnings"
 msgstr "चेतावनी दर्शयतु"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:281
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "चेतावनीः दर्शयन्तु तथा च निर्गमं त्रुटिनिवारणं कुर्वन्तु"
 
-#: util/duchainify/main.cpp:278
+#: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr "दत्तसञ्चिकानां अनुरूपं शीर्ष-सन्दर्भाणां अद्यतनं प्रवर्तयन्तु"
 
-#: util/duchainify/main.cpp:282
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
@@ -5409,12 +5403,12 @@ msgid ""
 msgstr ""
 "दत्तसञ्चिकानां सर्वेषां च समाविष्टानां सञ्चिकानां अनुरूपं शीर्ष-सन्दर्भाणां अद्यतनं प्रवर्तयन्तु"
 
-#: util/duchainify/main.cpp:284
+#: util/duchainify/main.cpp:289
 #, kde-format
 msgid "Number of threads to use"
 msgstr "उपयोक्तुं सूत्राणां संख्या"
 
-#: util/duchainify/main.cpp:287
+#: util/duchainify/main.cpp:292
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5424,43 +5418,43 @@ msgstr ""
 "निर्माणार्थं विशेषताः। विकल्पाः : रिक्तं, सरलीकृत-दृश्य-घोषणा, दृश्य-घोषणा "
 "(पूर्वनिर्धारित), सर्व-घोषणा, सर्व-घोषणा-उपयोग-, सर्व-घोषणा-उपयोग-तथा-AST"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr "सफलपार्स् इत्यत्र Definition-Use Chain इति सम्पूर्णं मुद्रयन्तु"
 
-#: util/duchainify/main.cpp:293
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
 msgstr "सन्दर्भान् डम्पं कुर्वन् मातापितृसन्दर्भान् मुद्रयन्तु"
 
-#: util/duchainify/main.cpp:295
+#: util/duchainify/main.cpp:300
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr "सफलपार्स् इत्यत्र सम्पूर्णं DUChain Definitions भण्डारं मुद्रयन्तु"
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:303
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr "सफलपार्स् इत्यत्र सम्पूर्णं DUChain PersistentSymbolTable भण्डारं मुद्रयन्तु"
 
-#: util/duchainify/main.cpp:301
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr "यत्र घोषणाविवरणं मुद्रितं भवति तत्र अधिकतमगहनतां परिभाषयति सङ्ख्या"
 
-#: util/duchainify/main.cpp:304
+#: util/duchainify/main.cpp:309
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr "DUChain आलेखं डम्पं कुर्वन्तु (.dot प्रारूपेण)"
 
-#: util/duchainify/main.cpp:306
+#: util/duchainify/main.cpp:311
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "पार्सिंग्-काले सम्मुखीकृताः मुद्रणसमस्याः"
 
-#: util/duchainify/main.cpp:308
+#: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr "आयातितसन्दर्भेभ्यः पुनरावर्तनीयरूपेण त्रुटयः डम्पं कुर्वन्तु ।"
@@ -6148,6 +6142,10 @@ msgstr "Difference To पूर्वम्"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "संशोधनयोः मध्ये भेदः"
+
+#~ msgctxt "@title:window"
+#~ msgid "Debug"
+#~ msgstr "त्रुटिनिवारणम्"
 
 #~ msgctxt "@option:check"
 #~ msgid "Recursive"

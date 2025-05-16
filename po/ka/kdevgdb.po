@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-07-21 05:41+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -163,7 +163,7 @@ msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "მიმდინარე სესიის გაუქმება"
 
-#: gdbconfigpage.cpp:166
+#: gdbconfigpage.cpp:160
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "უშვებს ადგილობრივ აპლიკაციას GDB-ში"

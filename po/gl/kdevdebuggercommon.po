@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-04 00:41+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-05-04 10:44+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -107,13 +107,19 @@ msgid "Core file:"
 msgstr "Ficheiro core:"
 
 #: mibreakpointcontroller.cpp:809
-#, kde-format
-msgid "<br>Old value: %1"
+#, fuzzy, kde-format
+#| msgid "<br>Old value: %1"
+msgid ""
+"\n"
+"Old value: %1"
 msgstr "<br>Valor antigo: %1"
 
 #: mibreakpointcontroller.cpp:812
-#, kde-format
-msgid "<br>New value: %1"
+#, fuzzy, kde-format
+#| msgid "<br>New value: %1"
+msgid ""
+"\n"
+"New value: %1"
 msgstr "<br>Valor novo: %1"
 
 #: midebugger.cpp:315

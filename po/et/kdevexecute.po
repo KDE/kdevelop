@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-30 00:41+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-01-15 14:27+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -101,12 +101,12 @@ msgstr "Omarakenduse käivitamine"
 msgid "Native Application"
 msgstr "Omarakendus"
 
-#: nativeappconfig.cpp:240
+#: nativeappconfig.cpp:233
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Kompileeritud binaarfail"
 
-#: nativeappconfig.cpp:321
+#: nativeappconfig.cpp:314
 #, fuzzy, kde-format
 #| msgid "Project Executables"
 msgctxt "@title:menu"
@@ -368,7 +368,7 @@ msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Sihtmärgid:"
 
-#: nativeappjob.cpp:66
+#: nativeappjob.cpp:40
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -378,33 +378,33 @@ msgstr ""
 "seadistusega. Palun käivita kontrolliks '%1' konfigureerimine. Kasutatakse "
 "vaikimisi keskkonnaprofiili."
 
-#: nativeappjob.cpp:142
+#: nativeappjob.cpp:152
 #, fuzzy, kde-format
 #| msgid "Job already running"
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "Töö juba käib"
 
-#: nativeappjob.cpp:143
+#: nativeappjob.cpp:153
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "\"%1\" on juba täitmisel."
 
-#: nativeappjob.cpp:145
+#: nativeappjob.cpp:155
 #, fuzzy, kde-format
 #| msgid "Kill All Instances"
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "Tapa kõik isendid"
 
-#: nativeappjob.cpp:146
+#: nativeappjob.cpp:156
 #, fuzzy, kde-format
 #| msgid "Start Another"
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "Käivita uus"
 
-#: nativeappjob.cpp:149
+#: nativeappjob.cpp:159
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"

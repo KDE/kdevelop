@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
 "PO-Revision-Date: 2008-12-12 00:37+0900\n"
 "Last-Translator: Yukiko Bando <ybando@k6.dion.ne.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -161,36 +161,41 @@ msgid ""
 "the number of views exceeds this value"
 msgstr ""
 
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, fuzzy, kde-format
 #| msgid "Build"
 msgctxt "@title:window"
 msgid "Build"
 msgstr "ビルド"
 
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, fuzzy, kde-format
 #| msgid "Run"
 msgctxt "@title:window"
 msgid "Run"
 msgstr "実行"
 
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "デバッグ"
 
-#: standardoutputview.cpp:124
-#, fuzzy, kde-format
-#| msgid "Test"
+#: standardoutputview.cpp:89
+#, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "テスト"
+msgid "Analyze"
+msgstr ""
 
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Test"
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "テスト"

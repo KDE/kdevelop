@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-22 00:39+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2022-01-03 01:10+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -173,6 +173,12 @@ msgstr "Izhod samoopazovanja »%1« ne vsebuje niti matrike niti predmeta"
 #, kde-format
 msgid "The current build directory is invalid"
 msgstr "Trenutna graditvena mapa ni veljavna"
+
+#: mintro/mesontests.cpp:80
+#, kde-format
+msgctxt "%1 - test case name"
+msgid "Meson Test \"%1\""
+msgstr ""
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2012-02-02 07:34+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1498,108 +1498,108 @@ msgstr "opstellt Tekenstroom drucken"
 msgid "code to parse"
 msgstr "Kode, den Du inlesen wullt"
 
-#: outputview/outputexecutejob.cpp:196
+#: outputview/outputexecutejob.cpp:186
 #, kde-format
 msgid "No build directory specified for a builder job."
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:198
+#: outputview/outputexecutejob.cpp:188
 #, kde-format
 msgid "No working directory specified for a process."
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:210
+#: outputview/outputexecutejob.cpp:200
 #, kde-format
 msgid "Invalid build directory '%1'"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:212
+#: outputview/outputexecutejob.cpp:202
 #, fuzzy, kde-format
 #| msgid "Working Directory"
 msgid "Invalid working directory '%1'"
 msgstr "Arbeitorner"
 
-#: outputview/outputexecutejob.cpp:219
+#: outputview/outputexecutejob.cpp:209
 #, kde-format
 msgid "Build directory '%1' is not a local path"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:221
+#: outputview/outputexecutejob.cpp:211
 #, fuzzy, kde-format
 #| msgid "Working Directory is not absolute: %1"
 msgid "Working directory '%1' is not a local path"
 msgstr "Arbeitorner \"%1\" is nich afsoluut."
 
-#: outputview/outputexecutejob.cpp:240
+#: outputview/outputexecutejob.cpp:222
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:242
+#: outputview/outputexecutejob.cpp:224
 #, fuzzy, kde-format
 #| msgid "Working Directory does not exist: %1"
 msgid "Working directory '%1' does not exist or is not a directory"
 msgstr "Den Arbeitorner \"%1\" gifft dat nich."
 
-#: outputview/outputexecutejob.cpp:303
+#: outputview/outputexecutejob.cpp:282
 #, kde-format
 msgid "Failed to specify program to start: %1"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:304
+#: outputview/outputexecutejob.cpp:283
 #, kde-format
 msgid "*** %1 ***"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:330
+#: outputview/outputexecutejob.cpp:309
 #, kde-format
 msgid "*** Killed process ***"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:334
+#: outputview/outputexecutejob.cpp:313
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:356
+#: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:360
+#: outputview/outputexecutejob.cpp:339
 #, fuzzy, kde-format
 #| msgid "Session crashed"
 msgid "%1 has crashed"
 msgstr "Törn afstört"
 
-#: outputview/outputexecutejob.cpp:364
+#: outputview/outputexecutejob.cpp:343
 #, fuzzy, kde-format
 #| msgid "error"
 msgid "Read error"
 msgstr "Fehler"
 
-#: outputview/outputexecutejob.cpp:368
+#: outputview/outputexecutejob.cpp:347
 #, fuzzy, kde-format
 #| msgid "error"
 msgid "Write error"
 msgstr "Fehler"
 
-#: outputview/outputexecutejob.cpp:372
+#: outputview/outputexecutejob.cpp:351
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:376
+#: outputview/outputexecutejob.cpp:355
 #, kde-format
 msgid "Exit code %1"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:389
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:407
+#: outputview/outputexecutejob.cpp:380
 #, kde-format
 msgid "*** Finished ***"
 msgstr ""
@@ -2229,13 +2229,6 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:425
-#, fuzzy, kde-format
-#| msgid "Debug"
-msgctxt "@title:window"
-msgid "Debug"
-msgstr "Fehlersöök"
-
 #: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
@@ -2534,7 +2527,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "Anmarken…"
 
-#: shell/documentcontroller.cpp:1287
+#: shell/documentcontroller.cpp:1288
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2588,7 +2581,7 @@ msgctxt "a certain environment variable is ..."
 msgid "currently unset"
 msgstr "Aktuell Utföhr-Teel"
 
-#: shell/ktexteditorpluginintegration.cpp:491
+#: shell/ktexteditorpluginintegration.cpp:492
 #, fuzzy, kde-format
 #| msgid "Message"
 msgctxt "@title:window"
@@ -3087,7 +3080,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "Vörhannen Datei opmaken"
 
-#: shell/partcontroller.cpp:226
+#: shell/partcontroller.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
@@ -3877,13 +3870,13 @@ msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Opgaav ahn Naam"
 
-#: shell/runcontroller.cpp:975
+#: shell/runcontroller.cpp:963
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgid "New %1 Launcher"
 msgstr "Nieg Telg"
 
-#: shell/runcontroller.cpp:1012
+#: shell/runcontroller.cpp:1000
 #, fuzzy, kde-format
 #| msgid "%1 As..."
 msgctxt "@title:menu"
@@ -5586,28 +5579,28 @@ msgstr "Dokment extern ännert"
 msgid " Line: %1 Col: %2 "
 msgstr " Reeg: %1 Str: %2 "
 
-#: shell/uicontroller.cpp:79
+#: shell/uicontroller.cpp:81
 #, fuzzy, kde-format
 #| msgid "Code"
 msgctxt "area"
 msgid "Code"
 msgstr "Kode"
 
-#: shell/uicontroller.cpp:90
+#: shell/uicontroller.cpp:92
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "area"
 msgid "Debug"
 msgstr "Fehlersöök"
 
-#: shell/uicontroller.cpp:99
+#: shell/uicontroller.cpp:101
 #, fuzzy, kde-format
 #| msgid "Review"
 msgctxt "area"
 msgid "Review"
 msgstr "Bekieken"
 
-#: shell/uicontroller.cpp:458
+#: shell/uicontroller.cpp:500
 #, fuzzy, kde-format
 #| msgid "Select Tool View to Add"
 msgctxt "@title:window"
@@ -5731,28 +5724,28 @@ msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:768
+#: sublime/container.cpp:772
 #, fuzzy, kde-format
 #| msgid "Filename"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Dateinaam"
 
-#: sublime/container.cpp:771
+#: sublime/container.cpp:775
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Tomaken"
 
-#: sublime/container.cpp:773
+#: sublime/container.cpp:777
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "All anne&r tomaken"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action:inmenu"
@@ -5766,34 +5759,34 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "%1-Warktüüchansicht an- oder utmaken"
 
-#: sublime/idealbuttonbarwidget.cpp:301
+#: sublime/idealbuttonbarwidget.cpp:304
 #, fuzzy, kde-format
 #| msgid "Right click to add new tool views."
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
 msgstr "Klick rechts, wenn Du niege Warktüüchansichten tofögen wullt."
 
-#: sublime/idealcontroller.cpp:133
-#, kde-format
-msgid "Left Button Bar"
-msgstr ""
-
-#: sublime/idealcontroller.cpp:134
-#, kde-format
-msgid "Right Button Bar"
-msgstr ""
-
-#: sublime/idealcontroller.cpp:139
-#, kde-format
-msgid "Bottom Button Bar"
-msgstr ""
-
-#: sublime/idealcontroller.cpp:210
+#: sublime/idealcontroller.cpp:88
 #, fuzzy, kde-format
 #| msgid "%1 Tool Bar"
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1-Warktüüchbalken"
+
+#: sublime/idealcontroller.cpp:381
+#, kde-format
+msgid "Left Button Bar"
+msgstr ""
+
+#: sublime/idealcontroller.cpp:382
+#, kde-format
+msgid "Right Button Bar"
+msgstr ""
+
+#: sublime/idealcontroller.cpp:387
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr ""
 
 #: sublime/idealdockwidget.cpp:123
 #, fuzzy, kde-format
@@ -5928,59 +5921,59 @@ msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Warktüüchansichten"
 
-#: sublime/mainwindow_p.cpp:642
+#: sublime/mainwindow_p.cpp:644
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "@action"
 msgid "Close"
 msgstr "Tomaken"
 
-#: sublime/mainwindow_p.cpp:643
+#: sublime/mainwindow_p.cpp:645
 #, fuzzy, kde-format
 #| msgid "Commit Message:"
 msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "Inspeel-Naricht:"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:268
 #, kde-format
 msgid "duchainify"
 msgstr "Verklorenbruuk-Keed"
 
-#: util/duchainify/main.cpp:264
+#: util/duchainify/main.cpp:269
 #, fuzzy, kde-format
 #| msgid "Duchain builder application"
 msgid "DUChain builder application"
 msgstr "Programm för't Opstellen vun de Verklorenbruuk-Keed"
 
-#: util/duchainify/main.cpp:265
+#: util/duchainify/main.cpp:270
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "© 2009: David Nolden"
 
-#: util/duchainify/main.cpp:271
+#: util/duchainify/main.cpp:276
 #, fuzzy, kde-format
 #| msgid "directory"
 msgid "file or directory"
 msgstr "Orner"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:279
 #, kde-format
 msgid "Show warnings"
 msgstr "Wohrschoen wiesen"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:281
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "Wohrschoen un Fehlersöökutgaav wiesen"
 
-#: util/duchainify/main.cpp:278
+#: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr ""
 "Opfrischen vun tohören böverst Kontext för de angeven Dateien verdwingen"
 
-#: util/duchainify/main.cpp:282
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
@@ -5989,12 +5982,12 @@ msgstr ""
 "Opfrischen vun tohören böverst Kontext för de angeven Dateien un all "
 "inslaten Dateien verdwingen"
 
-#: util/duchainify/main.cpp:284
+#: util/duchainify/main.cpp:289
 #, kde-format
 msgid "Number of threads to use"
 msgstr "Hööchsttall vun bruukt Utföhrsträng"
 
-#: util/duchainify/main.cpp:287
+#: util/duchainify/main.cpp:292
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -6005,43 +5998,43 @@ msgstr ""
 "sichtbor Verkloren (Standard), all Verkloren, all Verkloren un Bruuk, all "
 "Verkloren un Bruuk un AST"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr ""
 
-#: util/duchainify/main.cpp:293
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
 msgstr ""
 
-#: util/duchainify/main.cpp:295
+#: util/duchainify/main.cpp:300
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:303
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
 
-#: util/duchainify/main.cpp:301
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
 
-#: util/duchainify/main.cpp:304
+#: util/duchainify/main.cpp:309
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr ""
 
-#: util/duchainify/main.cpp:306
+#: util/duchainify/main.cpp:311
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "Problemen bi't Inlesen wiesen"
 
-#: util/duchainify/main.cpp:308
+#: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr ""
@@ -6811,6 +6804,12 @@ msgstr "Verscheel günt Verleden"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Verscheel twischen Revischonen"
+
+#, fuzzy
+#~| msgid "Debug"
+#~ msgctxt "@title:window"
+#~ msgid "Debug"
+#~ msgstr "Fehlersöök"
 
 #, fuzzy
 #~| msgid "Recursive"
