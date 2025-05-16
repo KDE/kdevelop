@@ -356,9 +356,9 @@ void LldbTest::testConditionBreakpoint()
 
     b = breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
 
-    START_DEBUGGING_E(session, cfg);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg);
+    QCOMPARE(session->currentLine(), 24);
 
-    WAIT_FOR(session, session->state() == DebugSession::PausedState && session->currentLine() == 24);
     b->setCondition(QStringLiteral("i == 0"));
     WAIT_FOR_A_WHILE(session, 100);
     session->run();
