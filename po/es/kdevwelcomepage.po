@@ -1,15 +1,15 @@
 # Spanish translations for kdevwelcomepage.po package.
-# Copyright (C) 2016 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2016-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2016.
-# SPDX-FileCopyrightText: 2016, 2017, 2020, 2024 Eloy Cuadra <ecuadra@eloihr.net>
+#
+# SPDX-FileCopyrightText: 2016, 2017, 2020, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevwelcomepage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-06 01:47+0000\n"
-"PO-Revision-Date: 2024-07-07 00:58+0200\n"
+"PO-Revision-Date: 2025-05-17 01:50+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -134,103 +134,3 @@ msgstr ""
 "uno nuevo con los botones superiores.</p>\n"
 "<p>Si necesita ayuda, consulte el <a href=\"https://userbase.kde.org/KDevelop"
 "\">manual del usuario.</a></p>"
-
-#~ msgid "Back to code"
-#~ msgstr "Volver al código"
-
-#~ msgid "Configure a new Launcher"
-#~ msgstr "Configurar un nuevo lanzador"
-
-#~ msgid "Attach to Process"
-#~ msgstr "Añadir al proceso"
-
-#~ msgid "Debug your program"
-#~ msgstr "Depurar un programa"
-
-#~ msgid "Debug Area"
-#~ msgstr "Área de depuración"
-
-#~ msgid ""
-#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
-#~ "program works on execution. On the <em>Run</em> menu you will find all "
-#~ "the possible options."
-#~ msgstr ""
-#~ "En el área de <em>Depuración</em> podrá ver y analizar cómo funciona su "
-#~ "programa cuando se ejecuta. En el menú <em>Ejecutar</em> encontrará todas "
-#~ "las opciones disponibles."
-
-#~ msgid ""
-#~ "As you can see, here you can just execute your application or debug it if "
-#~ "you need further runtime information. You can select what is going to be "
-#~ "run by configuring the launches and selecting the one you want to use in "
-#~ "the <em>Current Launch Configuration</em> sub-menu."
-#~ msgstr ""
-#~ "Como puede ver, aquí puede ejecutar su aplicación o depurarla si necesita "
-#~ "más información en tiempo de ejecución. Puede seleccionar lo que se va a "
-#~ "ejecutar configurando los lanzadores y seleccionando el que quiera usar "
-#~ "en el submenú <em>Configuración del lanzador actual</em>."
-
-#~ msgid "Review a Patch"
-#~ msgstr "Revisar un parche"
-
-#~ msgid "Review Area"
-#~ msgstr "Área de revisión"
-
-#~ msgid ""
-#~ "On the <em>Review</em> area you will be able to find the tools you need "
-#~ "to review changes in your projects, either the ones you made or some "
-#~ "external patch."
-#~ msgstr ""
-#~ "En el área de <em>Revisión</em> podrá encontrar las herramientas "
-#~ "necesarias para revisar los cambios realizados en sus proyectos, tanto "
-#~ "los que ha hecho usted como los de algún parche externo."
-
-#~ msgid ""
-#~ "Also it will help you send the changes to the community you're "
-#~ "contributing to, either by committing the changes, sending them by e-mail "
-#~ "or putting them on a ReviewBoard service."
-#~ msgstr ""
-#~ "Además, le será de ayuda para enviar los cambios a la comunidad con la "
-#~ "que esté colaborando, ya sea enviando los cambios al repositorio, "
-#~ "enviándolos por correo electrónico o situándolos en un servicio "
-#~ "ReviewBoard."
-
-#~ msgid "%1: %2"
-#~ msgstr "%1: %2"
-
-#~ msgid "Go!"
-#~ msgstr "Adelante"
-
-#~ msgid "Documentation for KDevelop users"
-#~ msgstr "Documentación para los usuarios de KDevelop"
-
-#~ msgid "Keep up with KDevelop's development"
-#~ msgstr "Esté al día con el desarrollo de KDevelop"
-
-#~ msgid "Help us improve KDevelop"
-#~ msgstr "Ayúdenos a mejorar KDevelop"
-
-#~ msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
-#~ msgid "%1 (new)"
-#~ msgstr "%1 (nuevo)"
-
-#~ msgid "Fetching feeds..."
-#~ msgstr "Obteniendo fuentes de datos..."
-
-#~ msgid "No recent news"
-#~ msgstr "Sin noticias recientes"
-
-#~ msgid "Branches"
-#~ msgstr "Ramas"
-
-#~ msgid "Projects"
-#~ msgstr "Proyectos"
-
-#~ msgid "News"
-#~ msgstr "Novedades"
-
-#~ msgid "<h3>Welcome to KDevelop!</h3>"
-#~ msgstr "<h3>¡Bienvenido a KDevelop!</h3>"
-
-#~ msgid "<br/>"
-#~ msgstr "<br/>"

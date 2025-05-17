@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevbazaar.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2018.
+# SPDX-FileCopyrightText: 2008, 2009, 2018, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevbazaar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2018-08-16 12:38+0100\n"
+"PO-Revision-Date: 2025-05-17 01:28+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -23,27 +24,3 @@ msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
 msgstr ""
 "No ha sido posible encontrar el ejecutable de Bazaar (bzr). ¿Está instalado "
 "en el sistema?"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Bazaar Plugin"
-#~ msgstr "Complemento Bazaar"
-
-#~ msgid "Bazaar version control system support"
-#~ msgstr "Implementación del sistema de control de versiones Bazaar"
-
-#~ msgid "Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>"
-#~ msgstr "Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>"
-
-#~ msgid "Bazaar"
-#~ msgstr "Bazaar"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Bazaar"
-#~ msgstr "Bazaar"

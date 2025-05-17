@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevvcsprojectintegration.po package.
+# Copyright (C) 2011-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2011, 2013, 2015, 2020.
+# SPDX-FileCopyrightText: 2011, 2013, 2015, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevvcsprojectintegration\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2020-07-25 19:41+0200\n"
+"PO-Revision-Date: 2025-05-17 01:50+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -53,24 +54,3 @@ msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"
 msgstr ""
 "Refrescar la vista de todos los proyectos en caso de que haya cambiado algo"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "VCS Project Integration"
-#~ msgstr "Integración VCS del proyecto"
-
-#~ msgid ""
-#~ "This plugin provides integration between the projects and their VCS "
-#~ "infrastructure"
-#~ msgstr ""
-#~ "Este complemento proporciona integración entre los proyectos y sus "
-#~ "infraestructuras de VCS."
-
-#~ msgid "Integrates VCS with Projects"
-#~ msgstr "Integra VCS en los proyectos"

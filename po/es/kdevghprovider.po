@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevghprovider.po package.
+# Copyright (C) 2013-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2013, 2014, 2015, 2016, 2017, 2020.
+# SPDX-FileCopyrightText: 2013, 2014, 2015, 2016, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevghprovider\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-21 01:43+0000\n"
-"PO-Revision-Date: 2020-07-25 19:23+0200\n"
+"PO-Revision-Date: 2025-05-17 01:41+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -138,7 +139,7 @@ msgstr "GitHub"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Buscar..."
+msgstr "Buscar…"
 
 #: ghproviderwidget.cpp:59
 #, kde-format
@@ -178,20 +179,3 @@ msgstr "Usuario"
 msgctxt "@item:inlistbox"
 msgid "Organization"
 msgstr "Organización"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Github"
-#~ msgstr "Github"
-
-#~ msgid "Github Provider"
-#~ msgstr "Proveedor de Github"
-
-#~ msgid "Import projects from Github"
-#~ msgstr "Importar proyectos de Github"

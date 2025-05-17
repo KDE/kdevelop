@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevappwizard.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2020.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2020-10-18 21:02+0200\n"
+"PO-Revision-Date: 2025-05-17 01:28+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -39,7 +40,7 @@ msgstr "Control de versiones"
 #, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "Nuevo desde plantilla..."
+msgstr "Nuevo desde plantilla…"
 
 #: appwizardplugin.cpp:71
 #, kde-format
@@ -221,32 +222,3 @@ msgstr "Ninguno"
 msgctxt "@label:listbox"
 msgid "Version control system:"
 msgstr "Sistema de control de versiones:"
-
-#~ msgid "Failed to create project"
-#~ msgstr "Fallo al crear el proyecto"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Project"
-#~ msgstr "Proyecto"
-
-#, fuzzy
-#~| msgid "Application Name:"
-#~ msgid "Application Wizard"
-#~ msgstr "Nombre de la aplicación:"
-
-#~ msgid "KSqueezedTextLabel"
-#~ msgstr "KSqueezedTextLabel"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Project Wizard"
-#~ msgstr "Asistente de proyectos"
-
-#~ msgid "Support for creating and importing projects"
-#~ msgstr "Creación e importación de proyectos"

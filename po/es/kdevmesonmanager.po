@@ -1,15 +1,15 @@
 # Spanish translations for kdevmesonmanager.po package.
-# Copyright (C) 2019 This file is copyright:
+# Copyright (C) 2019-2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
 # Automatically generated, 2019.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2019, 2020.
+#
+# SPDX-FileCopyrightText: 2019, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevmesonmanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-22 00:39+0000\n"
-"PO-Revision-Date: 2020-07-25 19:29+0200\n"
+"PO-Revision-Date: 2025-05-17 01:43+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -319,7 +319,7 @@ msgstr "Configuración de proyecto de meson"
 #: settings/mesonconfigpage.ui:41 settings/mesonconfigpage.ui:51
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, l_status)
 #. i18n: ectx: property (text), widget (QLabel, l_statusMessage)
@@ -327,7 +327,7 @@ msgstr "..."
 #: settings/mesonrewriterpage.ui:187
 #, kde-format
 msgid "Status message..."
-msgstr "Mensaje de estado..."
+msgstr "Mensaje de estado…"
 
 #. i18n: ectx: property (text), widget (QLabel, l_changed)
 #: settings/mesonconfigpage.ui:78 settings/mesonrewriterpage.ui:194
@@ -512,12 +512,12 @@ msgstr "Inicializando interfaz gráfica"
 #: settings/mesonrewriterpage.cpp:182
 #, kde-format
 msgid "Loading project data..."
-msgstr "Cargando datos del proyecto..."
+msgstr "Cargando datos del proyecto…"
 
 #: settings/mesonrewriterpage.cpp:185
 #, kde-format
 msgid "Writing project data..."
-msgstr "Escribiendo datos del proyecto..."
+msgstr "Escribiendo datos del proyecto…"
 
 #: settings/mesonrewriterpage.cpp:191
 #, kde-format
@@ -577,29 +577,3 @@ msgstr "Opciones predeterminadas del proyecto"
 #, kde-format
 msgid "New Option"
 msgstr "Nueva opción"
-
-#~ msgid "Importing project failed"
-#~ msgstr "La importación del proyecto ha fallado"
-
-#~ msgid "Extra meson configuration arguments"
-#~ msgstr "Argumentos adicionales de configuración de meson"
-
-#~ msgid "Basic configuration"
-#~ msgstr "Configuración básica"
-
-#~ msgid "Build type:"
-#~ msgstr "Tipo de construcción:"
-
-#~ msgid "Full path to the installation prefix"
-#~ msgstr "Ruta completa al prefijo de instalación"
-
-#~ msgid "Installation prefix:"
-#~ msgstr "Prefijo de instalación:"
-
-#~ msgid "Build configuration"
-#~ msgstr "Configuración de construcción"
-
-#~ msgid "TODO -- Implement in separate UI file"
-#~ msgstr ""
-#~ "POR HACER -- Implementar en un archivo de interfaz de usuario "
-#~ "independiente"

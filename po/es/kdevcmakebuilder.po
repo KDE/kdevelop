@@ -1,14 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevcmakebuilder.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2020-07-20 17:12+0200\n"
+"PO-Revision-Date: 2025-05-17 01:31+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -115,37 +115,3 @@ msgstr "** Reducción exitosa **"
 #, kde-format
 msgid "** Prune failed: %1 **"
 msgstr "** Reducción fallida: %1 **"
-
-#~ msgid "Aborting"
-#~ msgstr "Interrumpiendo"
-
-#~ msgid "Aborting configure"
-#~ msgstr "Interrumpiendo la configuración"
-
-#~ msgid "No Build Directory configured, cannot build"
-#~ msgstr ""
-#~ "No se ha configurado una carpeta de construcción; no se puede construir"
-
-#~ msgid "No Build Directory configured, cannot clean"
-#~ msgstr ""
-#~ "No se ha configurado una carpeta de construcción; no se puede limpiar"
-
-#~ msgid "Aborting clean"
-#~ msgstr "Interrumpiendo la limpieza"
-
-#~ msgid "Aborting install"
-#~ msgstr "Interrumpiendo la instalación"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "CMake Builder"
-#~ msgstr "Constructor de CMake"
-
-#~ msgid "Support for building CMake projects"
-#~ msgstr "Construcción de proyectos CMake"

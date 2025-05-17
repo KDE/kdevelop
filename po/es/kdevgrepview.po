@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevgrepview.po package.
+# Copyright (C) 2009-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2020, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2020, 2022, 2023, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2024-02-16 12:22+0100\n"
+"PO-Revision-Date: 2025-05-17 01:41+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -39,7 +40,7 @@ msgstr "Buscar/sustituir en archivos"
 #, kde-format
 msgctxt "@action:button"
 msgid "Search..."
-msgstr "Buscar..."
+msgstr "Buscar…"
 
 #: grepdialog.cpp:336
 #, kde-format
@@ -94,7 +95,7 @@ msgstr[1] "Buscando <b>%2</b> en %1 archivos"
 #: grepjob.cpp:236
 #, kde-format
 msgid "Collecting files..."
-msgstr "Recopilando archivos..."
+msgstr "Recopilando archivos…"
 
 #: grepjob.cpp:280
 #, kde-format
@@ -253,7 +254,7 @@ msgstr "&Sustituir"
 #, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
-msgstr "B&uscar/sustituir en archivos..."
+msgstr "B&uscar/sustituir en archivos…"
 
 #: grepviewplugin.cpp:82
 #, kde-format
@@ -279,13 +280,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
-msgstr "Buscar o sustituir en esta carpeta..."
+msgstr "Buscar o sustituir en esta carpeta…"
 
 #: grepviewplugin.cpp:143
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."
-msgstr "B&uscar/sustituir en archivos..."
+msgstr "B&uscar/sustituir en archivos…"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
 #: grepwidget.ui:35
@@ -676,53 +677,3 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"
 msgstr "Seleccione un directorio donde buscar"
-
-#~ msgid "Find-Replace In Files"
-#~ msgstr "Buscar/sustituir en archivos"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Edit"
-#~ msgstr "Editar"
-
-#~ msgid "<big>%2 <i>(one match)</i></big>"
-#~ msgid_plural "<big>%2 <i>(%1 matches)</i></big>"
-#~ msgstr[0] "<big>%2 <i>(1 coincidencia)</i></big>"
-#~ msgstr[1] "<big>%2 <i>(%1 coincidencias)</i></big>"
-
-#, fuzzy
-#~| msgid "Find/Replace in Files"
-#~ msgid "Find/Replace"
-#~ msgstr "Buscar/sustituir en archivos"
-
-#~ msgid "&Find/Replace in Files"
-#~ msgstr "&Buscar/sustituir en archivos"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid ""
-#~ "Allows fast searching of multiple files using patterns or regular "
-#~ "expressions. And allow to replace it too."
-#~ msgstr ""
-#~ "Permite búsqueda rápida en múltiples archivos usando patrones o "
-#~ "expresiones regulares. También permite realizar sustituciones."
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Ctrl+Alt+f"
-#~ msgstr "Ctrl+Alt+f"
-
-#~ msgid "Synchronize with current document directory."
-#~ msgstr "Sincronizar con el directorio del documento actual."
-
-#~ msgid "&Change Search Settings"
-#~ msgstr "&Cambiar las preferencias de la búsqueda"
-
-#~ msgid "Support for running grep over a list of files"
-#~ msgstr "Ejecución de grep sobre una lista de archivos"

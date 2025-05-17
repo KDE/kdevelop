@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for plasma_runner_kdevelopsessions.po package.
+# Copyright (C) 2011-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2011, 2013.
+# SPDX-FileCopyrightText: 2011, 2013, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: plasma_runner_kdevelopsessions\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2013-02-15 13:02+0100\n"
+"PO-Revision-Date: 2025-05-17 01:51+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -31,7 +32,3 @@ msgstr "Lista todas las sesiones del editor de KDevelop de su cuenta."
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Abrir sesión de KDevelop"
-
-#~ msgctxt "name: content"
-#~ msgid "%1: %2"
-#~ msgstr "%1: %2"

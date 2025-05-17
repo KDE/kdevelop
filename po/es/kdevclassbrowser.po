@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevclassbrowser.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2011, 2013, 2020.
+# SPDX-FileCopyrightText: 2008, 2009, 2011, 2013, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevclassbrowser\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-20 17:09+0200\n"
+"PO-Revision-Date: 2025-05-17 01:30+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -40,33 +41,3 @@ msgstr "B&uscar:"
 msgctxt "@info:whatsthis"
 msgid "Class Browser"
 msgstr "Navegador de clases"
-
-#~ msgid "All projects classes"
-#~ msgstr "Clases de todos los proyectos"
-
-#~ msgid "Base classes"
-#~ msgstr "Clases base"
-
-#~ msgid "Derived classes"
-#~ msgstr "Clases derivadas"
-
-#~ msgid "Classes in project %1"
-#~ msgstr "Clases del proyecto %1"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid ""
-#~ "This plugin provides a browsable model of the currently parsed classes "
-#~ "and other items."
-#~ msgstr ""
-#~ "Este complemento proporciona un modelo navegable de las clases y otros "
-#~ "elementos analizados en la actualidad."
-
-#~ msgid "Browser for all known classes"
-#~ msgstr "Navegador de todas las clases conocidas"

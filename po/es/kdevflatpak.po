@@ -1,15 +1,15 @@
 # Spanish translations for kdevflatpak.po package.
-# Copyright (C) 2017 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2017-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2017.
-# SPDX-FileCopyrightText: 2017, 2018, 2020, 2024 Eloy Cuadra <ecuadra@eloihr.net>
+#
+# SPDX-FileCopyrightText: 2017, 2018, 2020, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevflatpak\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2024-10-30 20:27+0100\n"
+"PO-Revision-Date: 2025-05-17 01:40+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -35,7 +35,7 @@ msgstr "Recompila todas las dependencias para tener un entorno actualizado."
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
-msgstr "Exportar paquete de Flatpak..."
+msgstr "Exportar paquete de Flatpak…"
 
 #: flatpakplugin.cpp:56
 #, kde-format
@@ -47,7 +47,7 @@ msgstr "Exporta la compilación actual a un archivo «bundle.flatpak»."
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
-msgstr "Enviar a dispositivo..."
+msgstr "Enviar a dispositivo…"
 
 #: flatpakplugin.cpp:113
 #, kde-format
@@ -98,21 +98,3 @@ msgstr "Empaquetado"
 #, kde-format
 msgid "Run on Device"
 msgstr "Ejecutar en dispositivo"
-
-#~ msgid "Export %1 to..."
-#~ msgstr "Exportar %1 a..."
-
-#~ msgid "Creating Flatpak %1"
-#~ msgstr "Creando Flatpak %1"
-
-#~ msgid "Transferring flatpak to %1"
-#~ msgstr "Transfiriendo flatpak a %1"
-
-#~ msgid "Transferring replicate.sh to %1"
-#~ msgstr "Transfiriendo «replicate.sh» a %1"
-
-#~ msgid "Installing %1 to %2"
-#~ msgstr "Instalando %1 en %2"
-
-#~ msgid "Running %1 on %2"
-#~ msgstr "Ejecutando %1 en %2"

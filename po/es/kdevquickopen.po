@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevquickopen.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2012, 2013, 2015, 2020.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2012, 2013, 2015, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2020-07-25 19:36+0200\n"
+"PO-Revision-Date: 2025-05-17 01:48+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -224,7 +225,7 @@ msgstr "Esquema"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Quick Open..."
-msgstr "Apertura rápida..."
+msgstr "Apertura rápida…"
 
 #: quickopenplugin.cpp:942
 #, kde-format
@@ -270,27 +271,3 @@ msgstr "Alcance&s:"
 msgctxt "@label:listbox"
 msgid "&Items:"
 msgstr "E&lementos:"
-
-#~ msgid "Project %1"
-#~ msgstr "Proyecto %1"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid ""
-#~ "This plugin allows quick access to project files and language-items like "
-#~ "classes/functions."
-#~ msgstr ""
-#~ "Este complemento permite acceso rápido a los archivos del proyecto y a "
-#~ "los elementos del lenguaje, como las clases y las funciones."
-
-#~ msgid "Navigate"
-#~ msgstr "Navegar"
-
-#~ msgid "Quickly open resources such as files, classes and methods."
-#~ msgstr "Abre rápidamente recursos, como archivos, clases y métodos."

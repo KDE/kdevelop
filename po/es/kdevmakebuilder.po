@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevmakebuilder.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2020.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-25 19:27+0200\n"
+"PO-Revision-Date: 2025-05-17 01:43+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -123,32 +124,3 @@ msgstr "Construir elemento ya no está disponible"
 #, kde-format
 msgid "Internal error: cannot build a file item"
 msgstr "Error interno: no se puede construir un elemento de archivo"
-
-#~ msgid "kdesu"
-#~ msgstr "kdesu"
-
-#~ msgid "kdesudo"
-#~ msgstr "kdesudo"
-
-#~ msgid "gksu"
-#~ msgstr "gksu"
-
-#~ msgid "sudo"
-#~ msgstr "sudo"
-
-#~ msgid "View"
-#~ msgstr "Ver"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Make Builder"
-#~ msgstr "Constructor de Make"
-
-#~ msgid "Support for building Make projects"
-#~ msgstr "Construcción de proyectos Make"

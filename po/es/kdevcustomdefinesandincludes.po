@@ -1,15 +1,15 @@
 # Spanish translations for kdevcustomdefinesandincludes.po package.
-# Copyright (C) 2016 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2016-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2016.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+#
+# SPDX-FileCopyrightText: 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomdefinesandincludes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2022-07-09 18:26+0200\n"
+"PO-Revision-Date: 2025-05-17 01:33+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -371,7 +371,7 @@ msgstr "Editar múltiples inclusiones/definiciones al mismo tiempo."
 #, kde-format
 msgctxt "@action:button"
 msgid "&Batch Edit..."
-msgstr "E&dición por lotes..."
+msgstr "E&dición por lotes…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addPath)
 #: kcm_widget/projectpathswidget.ui:119
@@ -468,71 +468,9 @@ msgstr "Seleccione un directorio a incluir."
 #, kde-format
 msgctxt "@action:button"
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:155
 #, kde-format
 msgid "Failed to save custom include paths in directory: %1"
 msgstr "No ha sido posible guardar las rutas de inclusión en el directorio: %1"
-
-#~ msgid "Bad #define directive in %1: %2"
-#~ msgstr "Directiva #define incorrecta en %1: %2"
-
-#~ msgid "c++98"
-#~ msgstr "c++98"
-
-#~ msgid "c++03"
-#~ msgstr "c++03"
-
-#~ msgid "c++11"
-#~ msgstr "c++11"
-
-#~ msgid "c++14"
-#~ msgstr "c++14"
-
-#~ msgid "c++17"
-#~ msgstr "c++17"
-
-#~ msgid "c++2a"
-#~ msgstr "c++2a"
-
-#~ msgid "c89"
-#~ msgstr "c89"
-
-#~ msgid "gnu89"
-#~ msgstr "gnu89"
-
-#~ msgid "c99"
-#~ msgstr "c99"
-
-#~ msgid "gnu99"
-#~ msgstr "gnu99"
-
-#~ msgid "c11"
-#~ msgstr "c11"
-
-#~ msgid "gnu11"
-#~ msgstr "gnu11"
-
-#~ msgid "CL1.1"
-#~ msgstr "CL1.1"
-
-#~ msgid "CL1.2"
-#~ msgstr "CL1.2"
-
-#~ msgid "CL2.0"
-#~ msgstr "CL2.0"
-
-#~ msgid "c++1z"
-#~ msgstr "c++1z"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Form"
-#~ msgstr "Formulario"

@@ -1,15 +1,15 @@
 # Spanish translations for kdevcustomscript.po package.
-# Copyright (C) 2017 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2017-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2017.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2017, 2019, 2020, 2021.
+#
+# SPDX-FileCopyrightText: 2017, 2019, 2020, 2021, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-08 01:43+0000\n"
-"PO-Revision-Date: 2021-11-11 11:47+0100\n"
+"PO-Revision-Date: 2025-05-17 01:33+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"

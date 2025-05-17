@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevswitchtobuddy.po package.
+# Copyright (C) 2012-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2012, 2013, 2014, 2016, 2020.
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2016, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevswitchtobuddy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-25 19:40+0200\n"
+"PO-Revision-Date: 2025-05-17 01:49+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -34,39 +35,3 @@ msgstr "Ca&mbiar a definición/declaración"
 msgctxt "@action"
 msgid "Switch Header/Source"
 msgstr "Cambiar cabecera/código fuente"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#, fuzzy
-#~| msgid "Switch to '%1'"
-#~ msgid "Switch To"
-#~ msgstr "Cambiar a «%1»"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Navigation"
-#~ msgstr "Navegación"
-
-#~ msgid "Switch to Buddy"
-#~ msgstr "Cambiar a relacionado"
-
-#~ msgid ""
-#~ "Allows switching between buddy documents like implementation and header "
-#~ "file."
-#~ msgstr ""
-#~ "Permite cambiar entre documentos complementarios, como los archivos de "
-#~ "cabecera y de implementación."
-
-#~ msgid "André Stein"
-#~ msgstr "André Stein"
-
-#~ msgid "Author"
-#~ msgstr "Autor"
-
-#~ msgid "Switch to buddy document in code editor."
-#~ msgstr "Cambiar a documento relacionado en el editor de código."

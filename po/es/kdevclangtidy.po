@@ -1,15 +1,15 @@
 # Spanish translations for kdevclangtidy.po package.
-# Copyright (C) 2017 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2017-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2017.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2017, 2018, 2020.
+#
+# SPDX-FileCopyrightText: 2017, 2018, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevclangtidy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2020-07-20 17:09+0200\n"
+"PO-Revision-Date: 2025-05-17 02:25+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -28,7 +28,7 @@ msgstr "Clang-Tidy"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Buscar..."
+msgstr "Buscar…"
 
 #: config/checklistmodel.cpp:65
 #, kde-format
@@ -261,92 +261,3 @@ msgstr "Ha fallado la escritura en el proceso de Clang-Tidy."
 #, kde-format
 msgid "Read from Clang-Tidy process failed."
 msgstr "Ha fallado la lectura del proceso de Clang-Tidy."
-
-#~ msgid "Clang-tidy Error"
-#~ msgstr "Error de Clang-tidy"
-
-#~ msgid "Analyze Current File with Clang-Tidy"
-#~ msgstr "Analizar el archivo actual con Clang-Tidy"
-
-#~ msgid "Analyze Current Project with Clang-Tidy"
-#~ msgstr "Analizar el proyecto actual con Clang-Tidy"
-
-#~ msgid "Error starting clang-tidy"
-#~ msgstr "Error durante el inicio de clang-tidy"
-
-#~ msgid "No suitable active file, unable to deduce project."
-#~ msgstr ""
-#~ "Ningún archivo activo adecuado. No se ha podido deducir el proyecto."
-
-#~ msgid "Active file isn't in a project"
-#~ msgstr "El archivo activo no pertenece a un proyecto"
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "Prueba"
-
-#~ msgid "Analysis started..."
-#~ msgstr "Análisis iniciado..."
-
-#~ msgctxt "@info:tooltip %1 is the path of the file"
-#~ msgid "Re-run last Clang-Tidy analysis (%1)"
-#~ msgstr "Volver a ejecutar el último análisis de Clang-Tidy (%1)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Re-run last Clang-Tidy analysis"
-#~ msgstr "Volver a ejecutar el último análisis de Clang-Tidy"
-
-#~ msgid "Analysis completed, no problems detected."
-#~ msgstr "Análisis terminado: no se han detectado problemas."
-
-#~ msgid "Compilation database file not found: '%1'"
-#~ msgstr "Archivo de base de datos de la compilación no encontrado: «%1»"
-
-#~ msgid "Could not open compilation database file for reading: '%1'"
-#~ msgstr ""
-#~ "No se ha podido abrir el archivo de base de datos de la compilación para "
-#~ "su lectura: «%1»"
-
-#~ msgid "JSON error during parsing compilation database file '%1': %2"
-#~ msgstr ""
-#~ "Error JSON durante el análisis del archivo de base de datos de la "
-#~ "compilación «%1»: %2"
-
-#~ msgid ""
-#~ "JSON error during parsing compilation database file '%1': document is not "
-#~ "an array."
-#~ msgstr ""
-#~ "Error JSON durante el análisis del archivo de base de datos de la "
-#~ "compilación «%1»: el documento no es un array."
-
-#~ msgid "General"
-#~ msgstr "General"
-
-#~ msgid "Failed to find clang-tidy binary."
-#~ msgstr "No se ha podido encontrar el binario de clang-tidy."
-
-#~ msgid "Clang-tidy output"
-#~ msgstr "Salida de clang-tidy"
-
-#~ msgid "Enable additional checks"
-#~ msgstr "Activar comprobaciones adicionales"
-
-#~ msgid "Dump active configuration to .clang-tidy file"
-#~ msgstr "Volcar la configuración activa a un archivo .clang-tidy"
-
-#~ msgid "Can't load parameters. They must be set in the project settings."
-#~ msgstr ""
-#~ "No ha sido posible cargar los parámetros. Se deben ajustar en las "
-#~ "preferencias del proyecto."
-
-#~ msgid "Problems"
-#~ msgstr "Problemas"
-
-#~ msgid "Clang-Tidy Settings"
-#~ msgstr "Preferencias de Clang-Tidy"
-
-#~ msgid "Launches clang-tidy for current file"
-#~ msgstr "Lanza clang-tidy para el archivo actual"
-
-#~ msgid "Clang-Tidy (Current File)"
-#~ msgstr "Clang-Tidy (archivo actual)"

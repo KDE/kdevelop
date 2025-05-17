@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevqmakebuilder.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2011, 2014, 2020, 2022.
+# SPDX-FileCopyrightText: 2008, 2009, 2011, 2014, 2020, 2022, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2022-07-09 18:35+0200\n"
+"PO-Revision-Date: 2025-05-17 01:47+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -70,26 +71,3 @@ msgstr "QMake: %1"
 #, kde-format
 msgid "Configure error"
 msgstr "Error de «configure»"
-
-#~ msgid "Add"
-#~ msgstr "Añadir"
-
-#~ msgid "Remove"
-#~ msgstr "Eliminar"
-
-#~ msgid "Current changes will be lost. Would you want to save them?"
-#~ msgstr "Los cambios actuales se perderán. ¿Desea guardarlos?"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "QMake Builder"
-#~ msgstr "Constructor de QMake"
-
-#~ msgid "Support for building QMake projects"
-#~ msgstr "Construcción de proyectos QMake"

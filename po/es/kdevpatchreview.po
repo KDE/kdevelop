@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevpatchreview.po package.
+# Copyright (C) 2009-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2020.
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:40+0000\n"
-"PO-Revision-Date: 2020-07-25 19:32+0200\n"
+"PO-Revision-Date: 2025-05-17 01:45+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -69,7 +70,7 @@ msgstr "Desde la orden"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter command to take output from..."
-msgstr "Introduzca la orden de la que obtener la salida..."
+msgstr "Introduzca la orden de la que obtener la salida…"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
 #: localpatchwidget.ui:87
@@ -225,7 +226,7 @@ msgstr "Ejecutar pruebas"
 #, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
-msgstr "Exportar diferencias..."
+msgstr "Exportar diferencias…"
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
 #: patchreview.ui:136
@@ -299,108 +300,3 @@ msgstr[1] "%1 pruebas pasadas"
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Resultado de las pruebas: %1 pasadas, %2 fallidas, %3 errores"
-
-#~ msgid "Base:"
-#~ msgstr "Base:"
-
-#~ msgid "Patch base..."
-#~ msgstr "Parchear base..."
-
-#~ msgid "Patch location..."
-#~ msgstr "Parchear ubicación..."
-
-#~ msgid "Command's output..."
-#~ msgstr "Salida de la orden..."
-
-#~ msgid "Error exporting"
-#~ msgstr "Error al exportar"
-
-#~ msgid "Edit Patch"
-#~ msgstr "Editar parche"
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Save As..."
-#~ msgstr "Guardar como..."
-
-#~ msgid "Send..."
-#~ msgstr "Enviar..."
-
-#~ msgid "Send to contact..."
-#~ msgstr "Enviar a contacto..."
-
-#~ msgid "Side view (Kompare)..."
-#~ msgstr "Vista lateral (Kompare)..."
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid ""
-#~ "<qt>No models or no differences, this file: <b>%1</b>, is not a valid "
-#~ "diff file.</qt>"
-#~ msgstr ""
-#~ "<qt>Sin modelos ni diferencias; este archivo, <b>%1</b>, no es un archivo "
-#~ "diff válido.</qt>"
-
-#~ msgid ""
-#~ "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>."
-#~ "</qt>"
-#~ msgstr ""
-#~ "<qt>Hubo problemas al aplicar el archivo diff <b>%1</b> al archivo <b>%2</"
-#~ "b>.</qt>"
-
-#~ msgid ""
-#~ "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</"
-#~ "b>.</qt>"
-#~ msgstr ""
-#~ "<qt>Hubo problemas al aplicar el archivo diff <b>%1</b> a la carpeta <b>"
-#~ "%2</b>.</qt>"
-
-#~ msgid "Could not open a temporary file."
-#~ msgstr "No se puede abrir un archivo temporal."
-
-#~ msgid ""
-#~ "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
-#~ msgstr ""
-#~ "<qt>No se puede escribir en el archivo temporal <b>%1</b>; borrándolo.</"
-#~ "qt>"
-
-#~ msgid ""
-#~ "<qt>Could not create destination directory <b>%1</b>.\n"
-#~ "The file has not been saved.</qt>"
-#~ msgstr ""
-#~ "<qt>No se puede crear el directorio de destino <b>%1</b>.\n"
-#~ "El archivo no ha sido guardado.</qt>"
-
-#~ msgid ""
-#~ "<qt>Could not upload the temporary file to the destination location <b>"
-#~ "%1</b>. The temporary file is still available under: <b>%2</b>. You can "
-#~ "manually copy it to the right place.</qt>"
-#~ msgstr ""
-#~ "<qt>No se puede enviar el archivo temporal a la ubicación de destino <b>"
-#~ "%1</b>. El archivo temporal sigue estando disponible en: <b>%2</b>. Puede "
-#~ "copiarlo manualmente al lugar correcto.</qt>"
-
-#~ msgid "Could not parse diff output."
-#~ msgstr "No se puede analizar la salida de diff."
-
-#~ msgid "The files are identical."
-#~ msgstr "Los archivos son idénticos."
-
-#~ msgid "Could not write to the temporary file."
-#~ msgstr "No se puede escribir en el archivo temporal."
-
-#~ msgid "Highlights code affected by a patch"
-#~ msgstr "Resalta el código afectado por un parche"
-
-#~ msgid "Form"
-#~ msgstr "Formulario"
-
-#~ msgid "Show"
-#~ msgstr "Mostrar"

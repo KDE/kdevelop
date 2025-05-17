@@ -1,14 +1,14 @@
-# translation of kdevqthelp.po to Spanish
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevqthelp.po package.
+# Copyright (C) 2009-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2023, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-28 00:40+0000\n"
-"PO-Revision-Date: 2024-06-25 17:46+0200\n"
+"PO-Revision-Date: 2025-05-17 01:47+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -181,7 +181,7 @@ msgstr "Introduzca un nombre"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
-msgstr "Seleccione un nombre..."
+msgstr "Seleccione un nombre…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qthelpconfigeditdialog.ui:51
@@ -195,14 +195,14 @@ msgstr "Ruta:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a Qt Help file..."
-msgstr "Seleccione un archivo de ayuda de Qt..."
+msgstr "Seleccione un archivo de ayuda de Qt…"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:67
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
-msgstr "Seleccione un archivo de ayuda de Qt..."
+msgstr "Seleccione un archivo de ayuda de Qt…"
 
 #: qthelpdocumentation.cpp:384
 #, kde-format
@@ -218,50 +218,3 @@ msgstr "Página de inicio de %1"
 #, kde-format
 msgid "QtHelp"
 msgstr "QtHelp"
-
-#~ msgid "Dialog"
-#~ msgstr "Diálogo"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "QtHelp Documentation"
-#~ msgstr "Documentación de QtHelp"
-
-#~ msgid "Identifier to search:"
-#~ msgstr "Identificador a buscar:"
-
-#~ msgid "Help page:"
-#~ msgstr "Página de ayuda:"
-
-#~ msgid "about:blank"
-#~ msgstr "about:blank"
-
-#~ msgid "Debug info:"
-#~ msgstr "Información de depuración:"
-
-#~ msgid "Search QtHelp files in this directory..."
-#~ msgstr "Buscar archivos de QtHelp en este directorio..."
-
-#~ msgid "Remove"
-#~ msgstr "Eliminar"
-
-#~ msgid "Move Up"
-#~ msgstr "Subir"
-
-#~ msgid "Move Down"
-#~ msgstr "Bajar"
-
-#~ msgid "Choose dir"
-#~ msgstr "Elija directorio"
-
-#~ msgid "Manage QtHelp Documentation"
-#~ msgstr "Gestionar la documentación de la ayuda Qt"
-
-#~ msgid "Ghns"
-#~ msgstr "Ghns"

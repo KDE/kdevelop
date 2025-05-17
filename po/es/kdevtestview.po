@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevtestview.po package.
+# Copyright (C) 2013-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2013, 2014, 2020.
+# SPDX-FileCopyrightText: 2013, 2014, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevtestview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:40+0000\n"
-"PO-Revision-Date: 2020-07-25 19:40+0200\n"
+"PO-Revision-Date: 2025-05-17 01:50+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -39,7 +40,7 @@ msgstr "Ejecutar las pruebas seleccionadas"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Filtrar..."
+msgstr "Filtrar…"
 
 #: testview.cpp:293
 #, kde-format
@@ -66,28 +67,3 @@ msgid "Run 1 test in %2"
 msgid_plural "Run %1 tests in %2"
 msgstr[0] "Ejecutar 1 prueba en %2"
 msgstr[1] "Ejecutar %1 pruebas en %2"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Ejecutar"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid ""
-#~ "Insert wildcard patterns to filter the test view for matching test suites "
-#~ "and cases."
-#~ msgstr ""
-#~ "Insertar patrones de comodines para filtrar la vista de pruebas y "
-#~ "encontrar pruebas y casos."
-
-#~ msgid "Unit Test View"
-#~ msgstr "Vista de la prueba unitaria"
-
-#~ msgid "Lets you see and run unit tests"
-#~ msgstr "Le permite ver y ejecutar pruebas unitarias"

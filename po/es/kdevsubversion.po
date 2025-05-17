@@ -1,14 +1,15 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevsubversion.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2011, 2014, 2016, 2017, 2020.
-# Javier Viñal <fjvinal@gmail.com>, 2013.
+# SPDX-FileCopyrightText: 2008, 2009, 2011, 2014, 2016, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2013 Javier Viñal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2020-07-25 19:40+0200\n"
+"PO-Revision-Date: 2025-05-17 01:49+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -22,13 +23,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy..."
-msgstr "Copiar..."
+msgstr "Copiar…"
 
 #: kdevsvnplugin.cpp:341
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Move..."
-msgstr "Mover..."
+msgstr "Mover…"
 
 #: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
 #, kde-format
@@ -100,7 +101,7 @@ msgstr "Envío de subversion"
 #: svncommitjob.cpp:125
 #, kde-format
 msgid "Committing..."
-msgstr "Enviando..."
+msgstr "Enviando…"
 
 #: svncommitjob.cpp:129
 #, kde-format
@@ -484,154 +485,3 @@ msgstr "Huella digital:"
 #, kde-format
 msgid "fingerprint"
 msgstr "huella digital"
-
-#~ msgid "Ssl Server Certificate"
-#~ msgstr "Certificado SSL del servidor"
-
-#~ msgid "Repository Location to import into"
-#~ msgstr "Ubicación del repositorio en la que importar"
-
-#~ msgid "Import into Subversion repository"
-#~ msgstr "Importar al repositorio de Subversion"
-
-#~ msgid "Checkout from Subversion repository"
-#~ msgstr "Descargar del repositorio de Subversion"
-
-#~ msgid "Subversion Cat"
-#~ msgstr "Cat de subversion"
-
-#~ msgid "Not enough information to execute cat"
-#~ msgstr "No hay información suficiente para ejecutar cat"
-
-#~ msgid "Start Revision"
-#~ msgstr "Iniciar revisión"
-
-#~ msgid "End Revision"
-#~ msgstr "Finalizar revisión"
-
-#~ msgid "Checkout"
-#~ msgstr "Descargar"
-
-#~ msgid "Repository Url:"
-#~ msgstr "URL del repositorio:"
-
-#~ msgid "Destination Path:"
-#~ msgstr "Ruta de destino:"
-
-#~ msgid "Recursive:"
-#~ msgstr "Recursivo:"
-
-#~ msgid "Requested local path:"
-#~ msgstr "Ruta local solicitada:"
-
-#~ msgid "Source"
-#~ msgstr "Origen"
-
-#~ msgid "Specify by repository URL"
-#~ msgstr "Especificar por URL del repositorio"
-
-#~ msgid "Specify by local working copy"
-#~ msgstr "Especificar por copia de trabajo local"
-
-#~ msgid "Source revision"
-#~ msgstr "Revisión de origen"
-
-#~ msgid "Destination"
-#~ msgstr "Destino"
-
-#~ msgid "Specify either the full repository URL or local working path"
-#~ msgstr ""
-#~ "Especificar el URL completo del repositorio o la ruta de trabajo local"
-
-#~ msgid "Target Url"
-#~ msgstr "URL de destino"
-
-#~ msgid "Non Recursive"
-#~ msgstr "No recursivo"
-
-#~ msgid "No diff deleted"
-#~ msgstr "Ninguna diferencia borrada"
-
-#~ msgid "Ignore contents type"
-#~ msgstr "Ignorar tipo de contenido"
-
-#~ msgid "Subversion Log View Options"
-#~ msgstr "Opciones de la vista del registro de Subversion"
-
-#~ msgid "Maximum number of logs to be displayed"
-#~ msgstr "Número máximo de registros a mostrar"
-
-#~ msgid "Do not show logs before branching point"
-#~ msgstr "No mostrar registros antes del punto de ramificación"
-
-#~ msgid "Forcefully delete locally modified and/or unversioned items"
-#~ msgstr ""
-#~ "Borrar a la fuerza los elementos modificados localmente o sin versión"
-
-#~ msgid "Select working copies to be reverted:"
-#~ msgstr "Seleccionar las copias de trabajo a revertir:"
-
-#~ msgid "Select"
-#~ msgstr "Seleccionar"
-
-#~ msgid "Text Status"
-#~ msgstr "Estado del texto"
-
-#~ msgid "Prop Status"
-#~ msgstr "Estado de la propiedad"
-
-#~ msgid "Working Copy"
-#~ msgstr "Copia de trabajo"
-
-#~ msgid "Recursive"
-#~ msgstr "Recursivo"
-
-#~ msgid "Specify as number:"
-#~ msgstr "Especificar como número:"
-
-#~ msgid "Specify as keyword:"
-#~ msgstr "Especificar como palabra clave:"
-
-#~ msgid "Specify as date:"
-#~ msgstr "Especificar como fecha:"
-
-#~ msgid "Status Requested for:"
-#~ msgstr "Estado solicitado para:"
-
-#~ msgid "Specify revision"
-#~ msgstr "Especificar revisión"
-
-#~ msgid "Non recursive"
-#~ msgstr "No recursivo"
-
-#~ msgid "Retrieve only \"interesting\" entries (such as local modifications)"
-#~ msgstr "Obtener solo entradas «interesantes» (como modificaciones locales)"
-
-#~ msgid "Contact repository and augment with repository information"
-#~ msgstr "Contactar repositorio y añadir con la información del repositorio"
-
-#~ msgid "Do not ignore svn:ignore"
-#~ msgstr "No ignorar svn:ignore"
-
-#~ msgid "Ignore external items"
-#~ msgstr "Ignorar elementos externos"
-
-#~ msgid "Update immediate children only (non-recursive)"
-#~ msgstr "Actualizar solo hijos inmediatos (no recursivo)"
-
-#~ msgid "Ignore external entries"
-#~ msgstr "Ignorar entradas externas"
-
-#~ msgid "Select Revision"
-#~ msgstr "Seleccionar revisión"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Support for Subversion version control systems"
-#~ msgstr "Implementación del sistema de control de versiones Subversion"
