@@ -1,15 +1,15 @@
 # Spanish translations for kdevdocker.po package.
-# Copyright (C) 2017 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2017-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2017.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2017, 2020.
+#
+# SPDX-FileCopyrightText: 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevdocker\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2020-07-25 19:09+0200\n"
+"PO-Revision-Date: 2025-05-17 01:57+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.07.80\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #: dockerplugin.cpp:133
 #, kde-format
@@ -37,8 +37,7 @@ msgid "Tag name for '%1':"
 msgstr "Nombre de etiqueta para «%1»:"
 
 #: dockerplugin.cpp:145
-#, fuzzy, kde-format
-#| msgid "docker build '%1'"
+#, kde-format
 msgctxt "%1 - Docker tag name"
 msgid "Docker Build \"%1\""
 msgstr "Compilación de docker «%1»"

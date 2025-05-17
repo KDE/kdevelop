@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2024-07-20 00:38+0200\n"
+"PO-Revision-Date: 2025-05-16 03:38+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -101,20 +101,22 @@ msgid "Core file:"
 msgstr "Core ფაილი:"
 
 #: mibreakpointcontroller.cpp:809
-#, fuzzy, kde-format
-#| msgid "<br>Old value: %1"
+#, kde-format
 msgid ""
 "\n"
 "Old value: %1"
-msgstr "<br>ძველი მნიშვნელობა: %1"
+msgstr ""
+"\n"
+"ძველი მნიშვნელობა: %1"
 
 #: mibreakpointcontroller.cpp:812
-#, fuzzy, kde-format
-#| msgid "<br>New value: %1"
+#, kde-format
 msgid ""
 "\n"
 "New value: %1"
-msgstr "<br>ახალი მნიშვნელობა: %1"
+msgstr ""
+"\n"
+"ახალი მნიშვნელობა: %1"
 
 #: midebugger.cpp:315
 #, kde-format

@@ -182,7 +182,3 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "版本控制"
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "测试"

@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevperforce.po package.
+# Copyright (C) 2011-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2011, 2013, 2016, 2018, 2020, 2022.
+# SPDX-FileCopyrightText: 2011, 2013, 2016, 2018, 2020, 2022, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevperforce\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2022-08-30 04:33+0200\n"
+"PO-Revision-Date: 2025-05-17 02:20+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -177,21 +178,3 @@ msgstr "Archivo de configuración"
 msgctxt "@option:radio"
 msgid "User/Port Config"
 msgstr "Configuración del usuario/puerto"
-
-#~ msgid "error: %1"
-#~ msgstr "error: %1"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Edit"
-#~ msgstr "Editar"
-
-#~ msgid "Support for Perforce Version Control System"
-#~ msgstr "Implementación del sistema de control de versiones Perforce"

@@ -462,7 +462,3 @@ msgstr "重新运行上次的 Cppcheck 分析 (%1)"
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
 msgstr "重新运行上次的 Cppcheck 分析"
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "测试"

@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevdocumentview.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2013, 2017, 2020.
+# SPDX-FileCopyrightText: 2008, 2009, 2013, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevdocumentview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-25 19:09+0200\n"
+"PO-Revision-Date: 2025-05-17 01:58+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -45,38 +46,3 @@ msgstr "Cerrar"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Cerrar los demás"
-
-#~ msgid "Display document categories (mimetypes) in the view"
-#~ msgstr "Mostrar categorías de documentos (tipos MIME) en la vista"
-
-#~ msgid ""
-#~ "If this option is set, the Document View will organize documents\n"
-#~ "        by their mimetype."
-#~ msgstr ""
-#~ "Si esta opción está activada, la vista de documentos organizará los\n"
-#~ "         documentos por su tipo MIME."
-
-#~ msgctxt "@option:check"
-#~ msgid "Display document &categories"
-#~ msgstr "Mostrar &categorías de documentos"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Document View"
-#~ msgstr "Vista del documento"
-
-#~ msgid ""
-#~ "This plugin displays a graphical view of all documents currently loaded "
-#~ "and separates them by mimetype."
-#~ msgstr ""
-#~ "Este complemento muestra una vista gráfica de todos los documentos "
-#~ "actualmente cargados y los separa por tipos MIME."
-
-#~ msgid "A list of opened documents"
-#~ msgstr "Una lista de documentos abiertos"

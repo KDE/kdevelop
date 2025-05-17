@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevcppcheck.po package.
+# Copyright (C) 2014-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2014, 2015, 2016, 2017, 2018, 2020.
+# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevcppcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2020-07-20 17:13+0200\n"
+"PO-Revision-Date: 2025-05-17 01:56+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -376,7 +377,7 @@ msgstr "Línea de órdenes"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Buscar..."
+msgstr "Buscar…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
 #: config/projectconfigpage.ui:326
@@ -469,7 +470,7 @@ msgstr "Análisis completado: no se han detectado problemas."
 #: problemmodel.cpp:143
 #, kde-format
 msgid "Analysis started..."
-msgstr "Análisis iniciado..."
+msgstr "Análisis iniciado…"
 
 #: problemmodel.cpp:144
 #, kde-format
@@ -482,165 +483,3 @@ msgstr "Volver a ejecutar el último análisis de Cppcheck (%1)"
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
 msgstr "Volver a ejecutar el último análisis de Cppcheck"
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "Prueba"
-
-#~ msgid "Cppcheck Error"
-#~ msgstr "Error de Cppcheck"
-
-#~ msgid "Cppcheck (Current File)"
-#~ msgstr "Cppcheck (archivo actual)"
-
-#~ msgid "Cppcheck (Current Project)"
-#~ msgstr "Cppcheck (proyecto actual)"
-
-#, fuzzy
-#~| msgid "Cppcheck Analysis (%1)"
-#~ msgid "Cppcheck Analyzer"
-#~ msgstr "Análisis Cppcheck (%1)"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Analyze"
-#~ msgstr "Analizar"
-
-#~ msgid "Cppcheck Settings"
-#~ msgstr "Preferencias de CppCheck"
-
-#~ msgid "<html><head/><body><p>Enable information messages</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Activar mensajes informativos</p></body></html>"
-
-#~ msgid "<html><head/><body><p>Enable performance messages</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Activar mensajes de rendimiento</p></body></html>"
-
-#~ msgid "<html><head/><body><p>Enable portability messages</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Activar mensajes de portabilidad</p></body></html>"
-
-#~ msgid "Error starting Cppcheck"
-#~ msgstr "Ha fallado el inicio de CppCheck"
-
-#~ msgid "No active file, unable to deduce project."
-#~ msgstr "Ningún archivo activo; no se puede deducir el proyecto."
-
-#~ msgid "Active file isn't in a project"
-#~ msgstr "El archivo activo no pertenece a ningún proyecto"
-
-#~ msgid "Enable additional checks"
-#~ msgstr "Activar comprobaciones adicionales"
-
-#~ msgid "Additional checks "
-#~ msgstr "Comprobaciones adicionales "
-
-#~ msgid "Check for unused functions"
-#~ msgstr "Buscar funciones no usadas"
-
-#~ msgid "Warn if there are missing includes"
-#~ msgstr "Advertir si faltan includes"
-
-#~ msgid "Cppcheck output"
-#~ msgstr "Salida de Cppcheck"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Ejecutar"
-
-#~ msgid "Can't load parameters. They must be set in the project settings."
-#~ msgstr ""
-#~ "No ha sido posible cargar los parámetros. Se deben indicar en las "
-#~ "preferencias del proyecto."
-
-#~ msgid "Launches Cppcheck for current file"
-#~ msgstr "Lanza Cppcheck para el archivo actual"
-
-#~ msgid "Launches Cppcheck for all files"
-#~ msgstr "Lanza Cppcheck para todos los archivos"
-
-#~ msgid "Cppcheck (all Files)"
-#~ msgstr "Cppcheck (todos los archivos)"
-
-#~ msgid "Problems"
-#~ msgstr "Problemas"
-
-#~ msgid "Failed to start Cppcheck"
-#~ msgstr "Ha fallado el inicio de Cppcheck"
-
-#~ msgid "Unknown Cppcheck process error."
-#~ msgstr "Error desconocido del proceso Cppcheck."
-
-#~ msgid "Cppcheck finished (pid=%1,exit=%2)"
-#~ msgstr "Cppcheck finalizado (pid=%1, salida=%2)"
-
-#~ msgid "job failed"
-#~ msgstr "trabajo fallido"
-
-#~ msgid "File"
-#~ msgstr "Archivo"
-
-#~ msgid "Line"
-#~ msgstr "Línea"
-
-#~ msgid "Message"
-#~ msgstr "Mensaje"
-
-#~ msgid "Project path"
-#~ msgstr "Ruta del proyecto"
-
-#~ msgid "Message detailed"
-#~ msgstr "Mensaje detallado"
-
-#~ msgid "Flat list"
-#~ msgstr "Lista plana"
-
-#~ msgid "Grouped by file"
-#~ msgstr "Agrupados por archivo"
-
-#~ msgid "Grouped by severity"
-#~ msgstr "Agrupados por importancia"
-
-#~ msgid "Output view mode"
-#~ msgstr "Modo de visualización de la salida"
-
-#~ msgid "job running (pid=%1)"
-#~ msgstr "trabajo en ejecución (pid=%1)"
-
-#~ msgid "unknown"
-#~ msgstr "desconocido"
-
-#~ msgid "Global scope"
-#~ msgstr "Alcance global"
-
-#~ msgid "File / Line"
-#~ msgstr "Archivo / Línea"
-
-#~ msgid "Severity / File"
-#~ msgstr "Importancia / Archivo"
-
-#~ msgid "Cppcheck Output"
-#~ msgstr "Salida de Cppcheck"
-
-#~ msgid "<b>Cppcheck</b><p>Shows the output of cppcheck.</p>"
-#~ msgstr "<b>Cppcheck</b><p>Muestra la salida de cppcheck.</p>"
-
-#~ msgid "Job scheduled"
-#~ msgstr "Trabajo planificado"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Global Settings"
-#~ msgstr "Preferencias globales"
-
-#~ msgid "save"
-#~ msgstr "guardar"
-
-#~ msgid "Support for running Cppcheck"
-#~ msgstr "Implementación de la ejecución de Cppcheck"

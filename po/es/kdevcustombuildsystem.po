@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevcustombuildsystem.po package.
+# Copyright (C) 2011-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2011, 2012, 2014, 2015, 2017, 2020.
+# SPDX-FileCopyrightText: 2011, 2012, 2014, 2015, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevcustombuildsystem\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-20 17:14+0200\n"
+"PO-Revision-Date: 2025-05-17 01:56+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -298,92 +299,3 @@ msgid ""
 msgstr ""
 "Configurar la herramienta de compilación personalizada de un proyecto y las "
 "inclusiones y definiciones para la implementación del lenguaje."
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "No command given"
-#~ msgstr "No se ha dado una orden"
-
-#~ msgid "This command is disabled"
-#~ msgstr "Esta orden está desactivada"
-
-#~ msgid "Support for building and managing custom build systems"
-#~ msgstr ""
-#~ "Implementación de la construcción y gestión de sistemas de construcción "
-#~ "personalizados"
-
-#~ msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
-#~ msgstr "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
-
-#~ msgid "Path-specific language parameters"
-#~ msgstr "Parámetros del lenguaje relativos a rutas"
-
-#~ msgid "Double-click here to insert a new define to be used for the path"
-#~ msgstr ""
-#~ "Haga doble clic aquí para insertar una nueva definición a usar para la "
-#~ "ruta"
-
-#~ msgid "Define"
-#~ msgstr "Definición"
-
-#~ msgid "Value"
-#~ msgstr "Valor"
-
-#~ msgid "Delete Define"
-#~ msgstr "Borrar definición"
-
-#~ msgid "Delete Include Path"
-#~ msgstr "Borrar la ruta de inclusión"
-
-#~ msgid "Are you sure you want to remove the selected include path '%1'?"
-#~ msgstr "¿Seguro que quiere eliminar la ruta de inclusión seleccionada «%1»?"
-
-#~ msgid ""
-#~ "Add the currently displayed URL to the list of includes if it is not in "
-#~ "the list yet."
-#~ msgstr ""
-#~ "Añade la URL mostrada actualmente a la lista de inclusiones si aún no "
-#~ "está en ella."
-
-#~ msgid "A new include path to use for parsing files under given directory"
-#~ msgstr ""
-#~ "Una nueva ruta de inclusión a usar para analizar archivos bajo el "
-#~ "directorio indicado"
-
-#~ msgid "Create a new include path entry from this URL."
-#~ msgstr "Crear una nueva entrada de ruta de inclusión usando esta URL."
-
-#~ msgid "Delete current include path entry."
-#~ msgstr "Borrar la entrada de ruta de inclusión actual."
-
-#~ msgid "Are you sure you want to remove the configuration for the path '%1'?"
-#~ msgstr "¿Seguro que quiere eliminar la configuración para la ruta «%1»?"
-
-#~ msgid "Add a new sub-project path entry."
-#~ msgstr "Añadir una nueva entrada de ruta de subproyecto."
-
-#~ msgid ""
-#~ "Replace the currently selected path with a new value keeping the includes "
-#~ "and defines currently set for the selected path."
-#~ msgstr ""
-#~ "Sustituir la ruta actualmente seleccionada con un nuevo valor manteniendo "
-#~ "las inclusiones y definiciones actualmente establecidas para la ruta "
-#~ "seleccionada."
-
-#~ msgid "Replace"
-#~ msgstr "Sustituir"
-
-#~ msgid "Delete current sub-project path entry."
-#~ msgstr "Borrar la entrada de ruta de subproyecto actual."
-
-#~ msgid "Includes/Imports"
-#~ msgstr "Inclusiones/importaciones"
-
-#~ msgid "Defines"
-#~ msgstr "Definiciones"

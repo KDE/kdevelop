@@ -6033,7 +6033,3 @@ msgstr "与上个修订版的差异"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修订版之间的差异"
-
-#~ msgctxt "@title:window"
-#~ msgid "Debug"
-#~ msgstr "调试"

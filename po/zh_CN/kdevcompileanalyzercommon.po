@@ -99,7 +99,3 @@ msgid ""
 "JSON error during parsing compilation database file '%1': document is not an "
 "array."
 msgstr "解析编译数据库文件“%1”遇到 JSON 错误：文档不是数组。"
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "测试"

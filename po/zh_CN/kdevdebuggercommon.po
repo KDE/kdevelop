@@ -100,20 +100,18 @@ msgid "Core file:"
 msgstr "核心文件："
 
 #: mibreakpointcontroller.cpp:809
-#, fuzzy, kde-format
-#| msgid "<br>Old value: %1"
+#, kde-format
 msgid ""
 "\n"
 "Old value: %1"
-msgstr "<br>旧值：%1"
+msgstr ""
 
 #: mibreakpointcontroller.cpp:812
-#, fuzzy, kde-format
-#| msgid "<br>New value: %1"
+#, kde-format
 msgid ""
 "\n"
 "New value: %1"
-msgstr "<br>新值：%1"
+msgstr ""
 
 #: midebugger.cpp:315
 #, kde-format

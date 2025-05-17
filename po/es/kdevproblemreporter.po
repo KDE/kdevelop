@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevproblemreporter.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2020, 2021.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2020, 2021, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-31 00:40+0000\n"
-"PO-Revision-Date: 2021-11-10 12:44+0100\n"
+"PO-Revision-Date: 2025-05-17 02:20+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -142,7 +143,7 @@ msgstr "Mostrar todos los problemas"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Path Filter..."
-msgstr "Filtro de ruta..."
+msgstr "Filtro de ruta…"
 
 #: problemsview.cpp:132
 #, kde-format
@@ -220,7 +221,7 @@ msgstr "Severidad"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Buscar..."
+msgstr "Buscar…"
 
 #: problemsview.cpp:456
 #, kde-format
@@ -257,64 +258,3 @@ msgstr "&Copiar descripción"
 msgctxt "@title:menu"
 msgid "Solve: %1"
 msgstr "Resolver: %1"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Re-parse all watched documents"
-#~ msgstr "Volver a analizar todos los documentos vigilados"
-
-#~ msgid "Solve"
-#~ msgstr "Resolver"
-
-#~ msgid "Problem in <b>%1</b>:<br/>"
-#~ msgstr "Problema en <b>%1</b>:<br/>"
-
-#~ msgid " in "
-#~ msgstr " en "
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Display errors, warnings and hints"
-#~ msgstr "Mostrar errores, advertencias y sugerencias"
-
-#~ msgid "Scope"
-#~ msgstr "Alcance"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Select the lowest level of problem severity to be displayed"
-#~ msgstr ""
-#~ "Seleccione el nivel más bajo de la severidad de los problemas a mostrar"
-
-#~ msgid "Hint"
-#~ msgstr "Sugerencia"
-
-#~ msgctxt "@title:column source of problem"
-#~ msgid "Source"
-#~ msgstr "Origen"
-
-#~ msgctxt "@title:column file where problem was found"
-#~ msgid "File"
-#~ msgstr "Archivo"
-
-#~ msgctxt "@title:column line number with problem"
-#~ msgid "Line"
-#~ msgstr "Línea"
-
-#~ msgctxt "@title:column column number with problem"
-#~ msgid "Column"
-#~ msgstr "Columna"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Problem Reporter"
-#~ msgstr "Informador de problemas"
-
-#~ msgid "Shows errors in source code"
-#~ msgstr "Muestra los errores del código fuente"
-
-#~ msgid "In file included from:"
-#~ msgstr "En el archivo incluido en:"

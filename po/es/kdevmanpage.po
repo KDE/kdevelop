@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevmanpage.po package.
+# Copyright (C) 2011-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2011, 2016.
+# SPDX-FileCopyrightText: 2011, 2016, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevmanpage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2016-11-20 00:10+0100\n"
+"PO-Revision-Date: 2025-05-17 02:17+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -25,7 +26,7 @@ msgstr "Página de contenido man"
 #: manpagedocumentationwidget.cpp:32
 #, kde-format
 msgid "Loading man pages..."
-msgstr "Cargando páginas man..."
+msgstr "Cargando páginas man…"
 
 #: manpagedocumentationwidget.cpp:86
 #, kde-format
@@ -40,23 +41,3 @@ msgstr ""
 #, kde-format
 msgid "Man Page"
 msgstr "Página man"
-
-#~ msgid "Man pages loading error"
-#~ msgstr "Ha ocurrido un error al cargar páginas man"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Could not find any documentation for '%1'"
-#~ msgstr "No se puede encontrar ninguna documentación para «%1»"
-
-#~ msgid "ManPage"
-#~ msgstr "ManPage"
-
-#~ msgid "Check Man Page documentation"
-#~ msgstr "Comprobar la documentación de páginas man"

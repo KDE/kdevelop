@@ -1,15 +1,15 @@
 # Spanish translations for kdevcompileanalyzercommon.po package.
-# Copyright (C) 2020 This file is copyright:
+# Copyright (C) 2020-2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
 # Automatically generated, 2020.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2020.
+#
+# SPDX-FileCopyrightText: 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcompileanalyzercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2020-01-15 20:31+0100\n"
+"PO-Revision-Date: 2025-05-17 01:55+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -27,7 +27,7 @@ msgstr "Análisis completado: no se han detectado problemas."
 #: compileanalyzeproblemmodel.cpp:113
 #, kde-format
 msgid "Analysis started..."
-msgstr "Análisis iniciado..."
+msgstr "Análisis iniciado…"
 
 #: compileanalyzeproblemmodel.cpp:116
 #, kde-format
@@ -109,7 +109,3 @@ msgid ""
 msgstr ""
 "Error de JSON durante el análisis del archivo de base de datos de la "
 "compilación «%1»: el documento no es un «array»."
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "Comprobar"

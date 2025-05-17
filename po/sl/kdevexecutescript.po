@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2021-08-31 08:49+0200\n"
+"PO-Revision-Date: 2025-05-16 11:58+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 20.12.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: executescriptplugin.cpp:59
 #, kde-format
@@ -91,16 +91,13 @@ msgstr ""
 "podprt. Prekinjanje zagona."
 
 #: executescriptplugin.cpp:195
-#, fuzzy, kde-format
-#| msgid ""
-#| "There is a quoting error in the interpreter for the launch configuration "
-#| "'%1'. Aborting start."
+#, kde-format
 msgid ""
 "Splitting the interpreter command for the launch configuration '%1' yields "
 "an empty list. Aborting start."
 msgstr ""
-"V tolmaču za nastavitve zagona '%1' obstaja napaka navajanja. Prekinjanje "
-"zagona."
+"Razdelitev ukaza tolmača za konfiguracijo zagona '%1' vrne prazen seznam. "
+"Začetek se prekinja."
 
 #: scriptappconfig.cpp:83
 #, kde-format
