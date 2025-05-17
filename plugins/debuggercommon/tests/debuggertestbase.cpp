@@ -28,6 +28,7 @@
 #include <KSharedConfig>
 
 #include <QDebug>
+#include <QMetaObject>
 #include <QSignalBlocker>
 #include <QSignalSpy>
 #include <QStandardPaths>
@@ -388,20 +389,45 @@ void DebuggerTestBase::testInsertAndRemoveBreakpointWhileRunning()
     WAIT_FOR_STATE(session, IDebugSession::ActiveState);
     WAIT_FOR_A_WHILE(session, 2000);
 
+    // The idea of this test function is to add and quickly remove a breakpoint while the debugee is running.
+    // The Bug 201771 that inspired this test function reported a segfault in GDBDebugger.
     qDebug() << "adding breakpoint";
     auto* const breakpoint =
         breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
     breakpoints()->removeBreakpoint(breakpoint);
 
     QCOMPARE(session->state(), IDebugSession::ActiveState);
-#ifdef Q_OS_FREEBSD
+
+    QObject testFunctionScopedObject;
     if (isLldb()) {
-        QEXPECT_FAIL("",
-                     "LLDB-MI always manages to stop at the breakpoint soon after it is added and before "
-                     "it is removed, no matter how long this test function waits before adding the breakpoint",
-                     Abort);
+        // The paused state is entered only rarely (about 1% of test_lldb runs) on GNU/Linux.
+        // On FreeBSD, however, LLDB-MI always manages to stop at the breakpoint soon after it is added
+        // and before it is removed, no matter how long this test function waits before adding the breakpoint.
+        // Entering the paused state should not cause a test failure, so detect it and continue debugging.
+
+        // Set a function-scoped object as the context to break the connection when this
+        // test function returns, and so avoid interfering with the next test function.
+        connect(
+            session, &IDebugSession::stateChanged, &testFunctionScopedObject,
+            [session, pauseCount = 0](IDebugSession::DebuggerState state) mutable {
+                if (state != IDebugSession::PausedState) {
+                    return; // nothing to do
+                }
+                // Calling session->run() directly happens to work too. But synchronously
+                // continuing debugging in a function directly connected to the stateChanged()
+                // signal is not reasonable and does not need to be supported.
+                QMetaObject::invokeMethod(session, &IDebugSession::run, Qt::QueuedConnection);
+
+                if (++pauseCount == 1) {
+                    qWarning()
+                        << "debug session reached paused state because LLDB-MI stopped at the transitory breakpoint";
+                } else {
+                    QFAIL("debug session reached paused state more than once, did removing the breakpoint fail?");
+                }
+            });
     }
-#endif
+
+    WAIT_FOR_A_WHILE(session, 2000); // give the slow debugee extra time to run
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 

@@ -309,6 +309,8 @@ void MIDebugger::processLine(const QByteArray& line)
     }
     catch(const std::exception& e)
     {
+        qCCritical(DEBUGGERCOMMON) << "Internal debugger error! The exception:" << e.what()
+                                   << "; the MI response:" << line;
         KMessageBox::detailedError(
             qApp->activeWindow(),
             i18nc("<b>Internal debugger error</b>",
