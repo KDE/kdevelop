@@ -62,6 +62,18 @@ void LldbFrameStackModel::handleThreadInfo(const ResultRecord& r)
 {
     const Value& threads = r[QStringLiteral("threads")];
 
+    if (threads.kind == Value::StringLiteral && threads.literal() == QLatin1String{"[]"}) {
+        // LLDB-MI replies with `threads="[]"` if the session state is not paused.
+        // This occurs if the exec-continue command is queued and sent just before the thread-info command.
+        // The quotes around [] must be a LLDB-MI bug because the type
+        // of `threads` must be `list`, not `const` (aka string literal).
+        qCDebug(DEBUGGERLLDB)
+            << "debugger replied with `threads=\"[]\"`, setting zero threads and -1 as the current thread";
+        setThreads({});
+        setCurrentThread(-1);
+        return;
+    }
+
     QVector<FrameStackModel::ThreadItem> threadsList;
     threadsList.reserve(threads.size());
     for (int gidx = 0; gidx != threads.size(); ++gidx) {
