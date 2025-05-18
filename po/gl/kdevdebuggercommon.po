@@ -8,7 +8,7 @@
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
 # SPDX-FileCopyrightText: 2023 Adrian Chaves (Gallaecio)
 #
-# SPDX-FileCopyrightText: 2023, 2024 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2023, 2024, 2025 Adrián Chaves (Gallaecio)
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
