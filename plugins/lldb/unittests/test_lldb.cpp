@@ -414,7 +414,7 @@ void LldbTest::testBreakOnWriteWithConditionBreakpoint()
 
     KDevelop::Breakpoint *b = breakpoints()->addWatchpoint(QStringLiteral("i"));
     b->setCondition(QStringLiteral("i==2"));
-    QTest::qWait(100);
+    WAIT_FOR_A_WHILE(session, 100);
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 22); // line 23: ++i; int j = i;
