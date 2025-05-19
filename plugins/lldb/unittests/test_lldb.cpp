@@ -1218,21 +1218,6 @@ void LldbTest::testVariablesWatchesTwoSessions()
     QVERIFY(!qobject_cast<KDevelop::Variable*>(v->child(0))->inScope());
 }
 
-void LldbTest::testVariablesStopDebugger()
-{
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg;
-
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    ActiveStateSessionSpy sessionSpy(session);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
-
-    session->stopDebugger();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
 void LldbTest::testVariablesStartSecondSession()
 {
     auto *session = new TestDebugSession;

@@ -986,22 +986,6 @@ void GdbTest::testVariablesWatchesTwoSessions()
     QVERIFY(!dynamic_cast<KDevelop::Variable*>(v->child(0))->inScope());
 }
 
-void GdbTest::testVariablesStopDebugger()
-{
-    auto *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-
-    TestLaunchConfiguration cfg;
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    session->stopDebugger();
-    QTest::qWait(300);
-}
-
-
 void GdbTest::testVariablesStartSecondSession()
 {
     QPointer<TestDebugSession> session = new TestDebugSession;

@@ -546,6 +546,21 @@ void DebuggerTestBase::testVariablesWatches()
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
+void DebuggerTestBase::testVariablesStopDebugger()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    session->variableController()->setAutoUpdate(IVariableController::UpdateLocals);
+
+    addDebugeeBreakpoint(39);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    session->stopDebugger();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 void DebuggerTestBase::testDebugInExternalTerminal_data()
 {
     QTest::addColumn<QString>("terminalExecutable");

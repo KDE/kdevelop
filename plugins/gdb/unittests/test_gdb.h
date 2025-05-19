@@ -48,7 +48,6 @@ private Q_SLOTS:
     void testVariablesLocals();
     void testVariablesWatchesQuotes();
     void testVariablesWatchesTwoSessions();
-    void testVariablesStopDebugger();
     void testVariablesStartSecondSession();
     void testVariablesSwitchFrame();
     void testVariablesQuicklySwitchFrame();

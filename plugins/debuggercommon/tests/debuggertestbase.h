@@ -95,6 +95,7 @@ private Q_SLOTS:
     void testChangeBreakpointWhileRunning();
     void testVariablesLocalsStruct();
     void testVariablesWatches();
+    void testVariablesStopDebugger();
 
     void testDebugInExternalTerminal_data();
     void testDebugInExternalTerminal();
