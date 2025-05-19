@@ -1010,11 +1010,6 @@ void LldbTest::testAttach()
 
     QCOMPARE(session->currentLine(), 40); // return 0; (LLDB automatically moves the breakpoint from its no-op line)
 
-#ifdef Q_OS_FREEBSD
-    QSKIP(
-        "The test freezes while waiting for the ended state; skipping after session->run() "
-        "makes the next test function testRemoteDebugging() freeze, so skip now");
-#endif
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
