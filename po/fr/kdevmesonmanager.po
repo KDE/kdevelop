@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2020, 2021, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2020, 2021, 2023, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
 msgid ""
 msgstr ""
@@ -13,9 +13,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 25.04.1\n"
 "X-Text-Markup: kde4\n"
 
 #: mesonbuilder.cpp:48
