@@ -85,13 +85,15 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void init();
-
+private:
     void testEnvironmentSet();
     void testUnsupportedUrlExpressionBreakpoints();
     void testDisableBreakpoint();
     void testBreakpointsOnNoOpLines();
     void testBreakpointErrors();
+private Q_SLOTS:
     void testInsertAndRemoveBreakpointWhileRunning();
+private:
     void testChangeBreakpointWhileRunning();
     void testVariablesLocalsStruct();
     void testVariablesWatches();

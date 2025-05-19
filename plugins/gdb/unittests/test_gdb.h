@@ -19,7 +19,7 @@ class GdbTest : public DebuggerTestBase
 protected:
     [[nodiscard]] MIDebugSession* createTestDebugSession() override;
 
-private Q_SLOTS:
+private:
     void testStdOut();
 
     void testBreakpoint();
@@ -42,6 +42,7 @@ private Q_SLOTS:
     void testStack();
     void testStackFetchMore();
     void testStackSwitchThread();
+private Q_SLOTS:
     void testAttach();
     void testManualAttach();
     void testCoreFile();
