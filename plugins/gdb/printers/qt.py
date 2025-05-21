@@ -69,6 +69,14 @@ def unique_ptr_get(unique_ptrValue):
         return unique_ptrValue.cast(gdb.lookup_type('void').pointer())
     raise RuntimeError("A std::unique_ptr with a nonempty deleter is not supported")
 
+# The data member of QExplicitlySharedDataPointer<T> and QExplicitlySharedDataPointerV2<T>
+# changed from `T *d` to `Qt::totally_ordered_wrapper<T *> d` in Qt 6.9.0.
+# The data member of Qt::totally_ordered_wrapper<P> is `P ptr`.
+def pointer_from_possible_totally_ordered_wrapper(pointerOrWrapper):
+    if has_field(pointerOrWrapper, 'ptr'):
+        return pointerOrWrapper['ptr']
+    return pointerOrWrapper
+
 def makeQLatin1String(data, size):
     qLatin1StringType = gdb.lookup_type('QLatin1String')
     if dumper.qt6orLater():
@@ -468,9 +476,11 @@ class QMapPrinter(PrinterBaseType):
         self._isQt6 = not has_field(self._val['d'], 'size')
         self._qt6StdMapPrinter = None
         if self._isQt6:
-            d_d = self._val['d']['d']
-            if d_d:
-                self._qt6StdMapPrinter = gdb.default_visualizer(d_d['m'])
+            self._isNullQt6Map = True
+            ptr = pointer_from_possible_totally_ordered_wrapper(self._val['d']['d'])
+            if ptr:
+                self._isNullQt6Map = False
+                self._qt6StdMapPrinter = gdb.default_visualizer(ptr['m'])
 
     def children(self):
         if self._qt6StdMapPrinter:
@@ -495,7 +505,10 @@ class QMapPrinter(PrinterBaseType):
 
     def num_children(self):
         "Return the number of children, that is map.size * 2, because keys and values are separate children"
-        if self._isQt6 and not self._val['d']['d']:
+        if not self._isQt6:
+            return int(self._val['d']['size']) * 2
+
+        if self._isNullQt6Map:
             return 0
 
         if self._qt6StdMapPrinter:
@@ -513,11 +526,8 @@ class QMapPrinter(PrinterBaseType):
                     return 0
                 return int(size) * 2
 
-        if self._isQt6:
-            # our heuristics above failed or no pretty printer for std::map is available...
-            return None
-
-        return int(self._val['d']['size']) * 2
+        # our heuristics above failed or no pretty printer for std::map is available...
+        return None
 
     def display_hint (self):
         return 'map'
@@ -1317,20 +1327,20 @@ class QCborContainerPrinterBase(PrinterBaseType):
 class QCborArrayPrinter(QCborContainerPrinterBase):
 
     def __init__(self, val):
-        container_ptr = int(val['d']['d'])
+        container_ptr = int(pointer_from_possible_totally_ordered_wrapper(val['d']['d']))
         super().__init__(container_ptr, 'QCborArray')
 
 class QCborMapPrinter(QCborContainerPrinterBase):
 
     def __init__(self, val):
-        container_ptr = int(val['d']['d'])
+        container_ptr = int(pointer_from_possible_totally_ordered_wrapper(val['d']['d']))
         super().__init__(container_ptr, 'QCborMap')
 
 class QJsonArrayPrinter(QCborContainerPrinterBase):
 
     def __init__(self, val):
         if dumper.qtVersionAtLeast(0x050f00): # also works in Qt6
-            container_ptr = int(val['a']['d'])
+            container_ptr = int(pointer_from_possible_totally_ordered_wrapper(val['a']['d']))
         else:
             raise RuntimeError("Qt version too old for inspecting QJsonArray")
         super().__init__(container_ptr, 'QJsonArray')
@@ -1339,7 +1349,7 @@ class QJsonObjectPrinter(QCborContainerPrinterBase):
 
     def __init__(self, val):
         if dumper.qtVersionAtLeast(0x050f00): # also works in Qt6
-            container_ptr = int(val['o']['d'])
+            container_ptr = int(pointer_from_possible_totally_ordered_wrapper(val['o']['d']))
         else:
             raise RuntimeError("Qt version too old for inspecting QJsonObject")
         super().__init__(container_ptr, 'QJsonObject')
