@@ -19,6 +19,8 @@
 #include <QRegularExpression>
 #include <QStandardPaths>
 
+#include <algorithm>
+
 namespace {
 
 const QString BINARY_PATH(DEBUGGEE_BIN_DIR);
@@ -325,7 +327,17 @@ void QtPrintersTest::testQListContainer()
 
 [[nodiscard]] static bool isMissingStdMapPrettyPrinter(GdbProcess& gdb)
 {
-    return !gdb.execute("print m.d.d.m").contains("std::map");
+    // The name of the local QMap variable in debuggees is `m`.
+    // The data member of QMap is `QtPrivate::QExplicitlySharedDataPointerV2<MapData> d`.
+    // The data member of QExplicitlySharedDataPointerV2<T> changed
+    // from `T *d` to `Qt::totally_ordered_wrapper<T *> d` in Qt 6.9.0.
+    // The data member of Qt::totally_ordered_wrapper<P> is `P ptr`.
+    // The data member of QMapData<Map> is `Map m`.
+    constexpr const char* possibleStdMapVariables[] = {"m.d.d.m", "m.d.d.ptr.m"};
+    return std::none_of(std::begin(possibleStdMapVariables), std::end(possibleStdMapVariables),
+                        [&gdb](const QByteArray& stdMapVariable) {
+                            return gdb.execute("print " + stdMapVariable).contains("std::map");
+                        });
 }
 
 [[nodiscard]] static bool verifyContainsMapElementCount(const QByteArray& out, const char* key, const char* value,
