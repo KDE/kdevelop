@@ -21,6 +21,9 @@ private Q_SLOTS:
     void testQMapInt();
     void testQMapString();
     void testQMapStringBool();
+    void testQMultiMapInt();
+    void testQMultiMapString();
+    void testQMultiMapStringBool();
     void testQDate();
     void testQTime();
     void testQDateTime();

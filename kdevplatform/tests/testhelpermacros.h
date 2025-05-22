@@ -72,6 +72,15 @@
         }                                                                                                              \
     } while (false)
 
+#define RETURN_IF_TEST_RESOLVED(...)                                                                                   \
+    do {                                                                                                               \
+        RETURN_IF_TEST_FAILED(__VA_ARGS__);                                                                            \
+        if (QTest::currentTestResolved()) {                                                                            \
+            qWarning("SKIPPED AT: %s:%d", __FILE__, __LINE__);                                                         \
+            return __VA_ARGS__;                                                                                        \
+        }                                                                                                              \
+    } while (false)
+
 /**  @note Unlike simpler *_RETURN() macros above, this macro relies on an IILE and RETURN_IF_TEST_FAILED()
  *         to avoid copying a lot of potentially changeable code from qtestcase.h.
  *         Therefore, @p condition must work inside a lambda with @c & as the capture-default.
