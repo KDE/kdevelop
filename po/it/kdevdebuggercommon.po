@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the kdevgdb package.
 # Marco Poletti <poletti.marco@gmail.com>, 2009, 2010, 2011.
 # Simone Solinas <ksolsim@gmail.com>, 2012, 2013, 2014, 2015.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2018, 2020, 2022, 2024.
+# SPDX-FileCopyrightText: 2016, 2017, 2018, 2020, 2022, 2024, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 #
 msgid ""
 msgstr ""
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format

@@ -1,6 +1,6 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevdocker package.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2017, 2020.
+# SPDX-FileCopyrightText: 2017, 2020, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 #
 msgid ""
 msgstr ""
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.1\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: dockerplugin.cpp:117
 #, kde-format

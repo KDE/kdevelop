@@ -1,6 +1,6 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2019, 2020.
+# SPDX-FileCopyrightText: 2019, 2020, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 #
 msgid ""
 msgstr ""
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.1\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
