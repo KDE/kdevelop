@@ -96,13 +96,17 @@ public:
     }
 };
 
-[[nodiscard]] bool containsConsecutiveElements(const QByteArray& out, QStringList elements)
+[[nodiscard]] QString consecutiveElementsRegexPattern(QStringList elements)
 {
     for (auto& e : elements) {
         e = QRegularExpression::escape(e);
     }
-    const auto pattern = elements.join("[,\\s]+");
-    return QString::fromUtf8(out).contains(QRegularExpression{pattern});
+    return elements.join("[,\\s]+");
+}
+
+[[nodiscard]] bool containsConsecutiveElements(const QByteArray& out, const QStringList& elements)
+{
+    return QString::fromUtf8(out).contains(QRegularExpression{consecutiveElementsRegexPattern(elements)});
 }
 
 [[nodiscard]] QByteArray printedValue(GdbProcess& gdb, const QByteArray& expression)
@@ -325,105 +329,230 @@ void QtPrintersTest::testQListContainer()
     }
 }
 
-[[nodiscard]] static bool isMissingStdMapPrettyPrinter(GdbProcess& gdb)
+namespace {
+class MapTester
 {
-    // The name of the local QMap variable in debuggees is `m`.
-    // The data member of QMap is `QtPrivate::QExplicitlySharedDataPointerV2<MapData> d`.
-    // The data member of QExplicitlySharedDataPointerV2<T> changed
-    // from `T *d` to `Qt::totally_ordered_wrapper<T *> d` in Qt 6.9.0.
-    // The data member of Qt::totally_ordered_wrapper<P> is `P ptr`.
-    // The data member of QMapData<Map> is `Map m`.
-    constexpr const char* possibleStdMapVariables[] = {"m.d.d.m", "m.d.d.ptr.m"};
-    return std::none_of(std::begin(possibleStdMapVariables), std::end(possibleStdMapVariables),
-                        [&gdb](const QByteArray& stdMapVariable) {
-                            return gdb.execute("print " + stdMapVariable).contains("std::map");
-                        });
+    Q_DISABLE_COPY_MOVE(MapTester)
+public:
+    enum class MapType {
+        Unique,
+        Multi
+    };
+
+    explicit MapTester(GdbProcess& gdb, MapType mapType)
+        : m_gdb{gdb}
+        , m_containerName{mapType == MapType::Unique ? "QMap" : "QMultiMap"}
+        , m_stdContainerName{mapType == MapType::Unique ? "std::map" : "std::multimap"}
+    {
+    }
+
+    void initializeKeyAndValueTypes(const QString& keyType, const QString& valueType)
+    {
+        QCOMPARE(m_keyType, "");
+        QCOMPARE(m_valueType, "");
+        m_keyType = keyType;
+        m_valueType = valueType;
+    }
+
+    void gdbRun()
+    {
+        m_gdb.execute("run");
+    }
+
+    void gdbNext()
+    {
+        m_gdb.execute("next");
+    }
+
+    void compareMapTo(const QStringList& elements)
+    {
+        const auto actualMap = printedMap();
+        if (elements.empty()) {
+            QCOMPARE(actualMap, expectedMapPrefix(0));
+            return;
+        }
+
+        const QString prefixPattern = QRegularExpression::escape(expectedMapPrefix(elements.size())) + " = \\{\\s*";
+        const auto suffixPattern = "\\s*\\}";
+        const QString expectedMapPattern = prefixPattern + consecutiveElementsRegexPattern(elements) + suffixPattern;
+
+        if (!actualMap.contains(QRegularExpression{QRegularExpression::anchoredPattern(expectedMapPattern)})) {
+            qCritical() << "actual map      :" << actualMap;
+            qCritical() << "expected pattern:" << expectedMapPattern;
+            QFAIL("The actual map does not match the expected pattern");
+        }
+    }
+
+    void skipIfMissingStdPrettyPrinter()
+    {
+        if (isMissingStdPrettyPrinter()) {
+            QCOMPARE(printedMap(), expectedMapPrefix(-1));
+            QSKIP(qPrintable(QLatin1String{"%1 pretty printing relies on availability of the %2 pretty printer"}.arg(
+                m_containerName, m_stdContainerName)));
+        }
+    }
+
+private:
+    [[nodiscard]] QString printedMap()
+    {
+        return QString::fromUtf8(printedValue(m_gdb, "m"));
+    }
+
+    [[nodiscard]] QString expectedMapPrefix(int size) const
+    {
+        return QLatin1String("%1<%2, %3> (size = %4)")
+            .arg(m_containerName, m_keyType, m_valueType, size == -1 ? "?" : QString::number(size));
+    }
+
+    [[nodiscard]] bool isMissingStdPrettyPrinter()
+    {
+        // The name of the local QMap and QMultiMap variable in debuggees is `m`.
+        // The data member of QMap and QMultiMap is `QtPrivate::QExplicitlySharedDataPointerV2<MapData> d`.
+        // The data member of QExplicitlySharedDataPointerV2<T> changed
+        // from `T *d` to `Qt::totally_ordered_wrapper<T *> d` in Qt 6.9.0.
+        // The data member of Qt::totally_ordered_wrapper<P> is `P ptr`.
+        // The data member of QMapData<Map> is `Map m`.
+        constexpr const char* possibleStdMapVariables[] = {"m.d.d.m", "m.d.d.ptr.m"};
+        return std::none_of(std::begin(possibleStdMapVariables), std::end(possibleStdMapVariables),
+                            [this](QByteArrayView stdContainerVariable) {
+                                return m_gdb.execute("print " + stdContainerVariable).contains(m_stdContainerName);
+                            });
+    }
+
+    GdbProcess& m_gdb;
+    const char* const m_containerName;
+    const char* const m_stdContainerName;
+    QString m_keyType;
+    QString m_valueType;
+};
+
+#define COMPARE_MAP_TO(tester, expectedElements)                                                                       \
+    do {                                                                                                               \
+        tester.compareMapTo(expectedElements);                                                                         \
+        RETURN_IF_TEST_RESOLVED();                                                                                     \
+    } while (false)
+
+void commonTestQMapOrMultiMap(MapTester& tester, const QStringList& expectedElements)
+{
+    tester.gdbRun();
+    COMPARE_MAP_TO(tester, {});
+
+    tester.gdbNext();
+    tester.skipIfMissingStdPrettyPrinter();
+    RETURN_IF_TEST_RESOLVED();
+    COMPARE_MAP_TO(tester, expectedElements.first(1));
+
+    tester.gdbNext();
+    COMPARE_MAP_TO(tester, expectedElements.first(2));
+
+    tester.gdbNext();
+    COMPARE_MAP_TO(tester, expectedElements);
 }
 
-[[nodiscard]] static bool verifyContainsMapElementCount(const QByteArray& out, const char* key, const char* value,
-                                                        int elementCount)
+void commonTestQMapOrMultiMapInt(MapTester& tester)
 {
-    const auto pattern = QLatin1String("QMap<%1, %2> (size = %3)")
-                             .arg(key, value, elementCount == -1 ? "?" : QString::number(elementCount));
-    return out.contains(pattern.toUtf8());
+    tester.initializeKeyAndValueTypes("int", "int");
+    RETURN_IF_TEST_RESOLVED();
+    const QStringList expectedElements{"[10] = 100", "[20] = 200", "[30] = 300"};
+    commonTestQMapOrMultiMap(tester, expectedElements);
+    RETURN_IF_TEST_RESOLVED();
 }
+
+void commonTestQMapOrMultiMapString(MapTester& tester)
+{
+    tester.initializeKeyAndValueTypes("QString", "QString");
+    RETURN_IF_TEST_RESOLVED();
+    const QStringList expectedElements{"[\"10\"] = \"100\"", "[\"20\"] = \"200\"", "[\"30\"] = \"300\""};
+    commonTestQMapOrMultiMap(tester, expectedElements);
+    RETURN_IF_TEST_RESOLVED();
+}
+
+void commonTestQMapOrMultiMapStringBool(MapTester& tester)
+{
+    tester.initializeKeyAndValueTypes("QString", "bool");
+    RETURN_IF_TEST_RESOLVED();
+    const QStringList expectedElements{"[\"10\"] = true", "[\"20\"] = false", "[\"30\"] = true"};
+    commonTestQMapOrMultiMap(tester, expectedElements);
+    RETURN_IF_TEST_RESOLVED();
+}
+
+} // unnamed namespace
 
 void QtPrintersTest::testQMapInt()
 {
-    GdbProcess gdb(QStringLiteral("debuggee_qmapint"));
-
+    GdbProcess gdb("debuggee_qmapint");
     gdb.execute("break qmapint.cpp:5");
-    gdb.execute("run");
-    QByteArray out = gdb.execute("print m");
-    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 0));
-
-    gdb.execute("next");
-    out = gdb.execute("print m");
-
-    if (isMissingStdMapPrettyPrinter(gdb)) {
-        QVERIFY(verifyContainsMapElementCount(out, "int", "int", -1));
-        QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
-    }
-
-    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 1));
-    QVERIFY(out.contains("[10] = 100"));
-
-    gdb.execute("next");
-    out = gdb.execute("print m");
-    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 2));
-    QVERIFY(out.contains("[10] = 100"));
-    QVERIFY(out.contains("[20] = 200"));
-
-    gdb.execute("next");
-    out = gdb.execute("print m");
-    QVERIFY(verifyContainsMapElementCount(out, "int", "int", 3));
-    QVERIFY(out.contains("[30] = 300"));
+    MapTester tester(gdb, MapTester::MapType::Unique);
+    commonTestQMapOrMultiMapInt(tester);
+    RETURN_IF_TEST_RESOLVED();
 }
 
 void QtPrintersTest::testQMapString()
 {
-    GdbProcess gdb(QStringLiteral("debuggee_qmapstring"));
-    gdb.execute("break qmapstring.cpp:8");
-    gdb.execute("run");
-
-    QByteArray out = gdb.execute("print m");
-
-    if (isMissingStdMapPrettyPrinter(gdb)) {
-        QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", -1));
-        QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
-    }
-
-    QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", 2));
-    QVERIFY(out.contains("[\"10\"] = \"100\""));
-    QVERIFY(out.contains("[\"20\"] = \"200\""));
-    gdb.execute("next");
-    out = gdb.execute("print m");
-    QVERIFY(verifyContainsMapElementCount(out, "QString", "QString", 3));
-    QVERIFY(out.contains("[\"30\"] = \"300\""));
+    GdbProcess gdb("debuggee_qmapstring");
+    gdb.execute("break qmapstring.cpp:6");
+    MapTester tester(gdb, MapTester::MapType::Unique);
+    commonTestQMapOrMultiMapString(tester);
+    RETURN_IF_TEST_RESOLVED();
 }
 
 void QtPrintersTest::testQMapStringBool()
 {
-    GdbProcess gdb(QStringLiteral("debuggee_qmapstringbool"));
-    gdb.execute("break qmapstringbool.cpp:8");
-    gdb.execute("run");
-
-    QByteArray out = gdb.execute("print m");
-
-    if (isMissingStdMapPrettyPrinter(gdb)) {
-        QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", -1));
-        QSKIP("QMap pretty printing relies on availability of the std::map pretty printer");
-    }
-
-    QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", 2));
-    QVERIFY(out.contains("[\"10\"] = true"));
-    QVERIFY(out.contains("[\"20\"] = false"));
-    gdb.execute("next");
-    out = gdb.execute("print m");
-    QVERIFY(verifyContainsMapElementCount(out, "QString", "bool", 3));
-    QVERIFY(out.contains("[\"30\"] = true"));
+    GdbProcess gdb("debuggee_qmapstringbool");
+    gdb.execute("break qmapstringbool.cpp:6");
+    MapTester tester(gdb, MapTester::MapType::Unique);
+    commonTestQMapOrMultiMapStringBool(tester);
+    RETURN_IF_TEST_RESOLVED();
 }
 
+// NOTE: the QMultiMap test functions below rely on the following guarantee in the QMultiMap documentation:
+// the items that share the same key are available from most recently to least recently inserted.
+
+void QtPrintersTest::testQMultiMapInt()
+{
+    GdbProcess gdb("debuggee_qmultimapint");
+    gdb.execute("break qmultimapint.cpp:5");
+    MapTester tester(gdb, MapTester::MapType::Multi);
+    commonTestQMapOrMultiMapInt(tester);
+    RETURN_IF_TEST_RESOLVED();
+
+    tester.gdbNext();
+    QStringList expectedElements{"[10] = 123", "[10] = 100", "[20] = 200", "[30] = 300"};
+    COMPARE_MAP_TO(tester, expectedElements);
+
+    gdb.execute("break qmultimapint.cpp:16");
+    gdb.execute("cont");
+    expectedElements = {"[4] = 99", "[10] = 0", "[10] = 123", "[10] = 100", "[30] = 300", "[30] = 82", "[30] = 300"};
+    COMPARE_MAP_TO(tester, expectedElements);
+}
+
+void QtPrintersTest::testQMultiMapString()
+{
+    GdbProcess gdb("debuggee_qmultimapstring");
+    gdb.execute("break qmultimapstring.cpp:6");
+    MapTester tester(gdb, MapTester::MapType::Multi);
+    commonTestQMapOrMultiMapString(tester);
+    RETURN_IF_TEST_RESOLVED();
+
+    tester.gdbNext();
+    tester.gdbNext();
+    QStringList expectedElements{"[\"10\"] = \"100\"", "[\"20\"] = \"11\"", "[\"20\"] = \"x\"", "[\"20\"] = \"200\"",
+                                 "[\"30\"] = \"300\""};
+    COMPARE_MAP_TO(tester, expectedElements);
+
+    tester.gdbNext();
+    QCOMPARE(expectedElements.removeAll("[\"20\"] = \"x\""), 1);
+    COMPARE_MAP_TO(tester, expectedElements);
+}
+
+void QtPrintersTest::testQMultiMapStringBool()
+{
+    GdbProcess gdb("debuggee_qmultimapstringbool");
+    gdb.execute("break qmultimapstringbool.cpp:6");
+    MapTester tester(gdb, MapTester::MapType::Multi);
+    commonTestQMapOrMultiMapStringBool(tester);
+    RETURN_IF_TEST_RESOLVED();
+}
 
 void QtPrintersTest::testQDate()
 {

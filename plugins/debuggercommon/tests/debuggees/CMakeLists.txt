@@ -55,6 +55,15 @@ target_link_libraries(debuggee_qmapstring Qt::Core)
 add_debuggable_executable(debuggee_qmapstringbool SRCS qmapstringbool.cpp)
 target_link_libraries(debuggee_qmapstringbool Qt::Core)
 
+add_debuggable_executable(debuggee_qmultimapint SRCS qmultimapint.cpp)
+target_link_libraries(debuggee_qmultimapint Qt::Core)
+
+add_debuggable_executable(debuggee_qmultimapstring SRCS qmultimapstring.cpp)
+target_link_libraries(debuggee_qmultimapstring Qt::Core)
+
+add_debuggable_executable(debuggee_qmultimapstringbool SRCS qmultimapstringbool.cpp)
+target_link_libraries(debuggee_qmultimapstringbool Qt::Core)
+
 add_debuggable_executable(debuggee_qdate SRCS qdate.cpp)
 target_link_libraries(debuggee_qdate Qt::Core)
 
