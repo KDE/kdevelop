@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevstandardoutputview package.
 # Solinas Simone <ksolsim@gmail.com>, 2009, 2010, 2012, 2013, 2014, 2015.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2020, 2022, 2023.
+# SPDX-FileCopyrightText: 2016, 2017, 2020, 2022, 2023, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:41+0000\n"
-"PO-Revision-Date: 2023-11-17 20:21+0100\n"
+"PO-Revision-Date: 2025-05-19 15:04+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: outputwidget.cpp:44
 #, kde-format
@@ -181,7 +181,7 @@ msgstr "Debug"
 #, kde-format
 msgctxt "@title:window"
 msgid "Analyze"
-msgstr ""
+msgstr "Analizza"
 
 #: standardoutputview.cpp:92
 #, kde-format

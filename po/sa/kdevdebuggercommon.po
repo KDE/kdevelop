@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -117,7 +117,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>नवीनं मूल्यम् : %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -128,7 +128,7 @@ msgstr ""
 "<p>त्रुटिनिवारकघटकेन त्रुटिनिवारणकर्तृणां उत्तरं संसाधयन् आन्तरिकदोषः अभवत् । कृपया "
 "दोषप्रतिवेदनं प्रस्तूयताम्। सम्भाव्यं दुर्घटनां निवारयितुं इदानीं त्रुटिनिवारणसत्रं समाप्तं भविष्यति"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -137,18 +137,18 @@ msgstr ""
 "अपवादः अस्ति : %1\n"
 "MI प्रतिक्रिया अस्ति: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "आन्तरिकं त्रुटिनिवारणदोषः"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "प्रक्रिया निर्गतवती"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -157,12 +157,12 @@ msgstr ""
 "<b>त्रुटिनिवारणं आरभुं न शक्तवान् ।</b><p> &#39;%1&#39; चालयितुं न शक्यते । मार्गनाम "
 "सम्यक् निर्दिष्टम् इति सुनिश्चितं कुर्वन्तु ।"
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "प्रक्रिया आरभ्यतुं असफलतां प्राप्तवती"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -173,13 +173,13 @@ msgstr ""
 "त्रुटिनिवारणप्रक्रिया दुर्घटना अभवत् ।<br> तस्मात् कारणात् त्रुटिनिवारणसत्रं समाप्तं कर्तव्यम् "
 "अस्ति ।<br> KDevelop विना दुर्घटना पुनः प्रदर्शयितुं प्रयतध्वं तथा च दोषं निवेदयन्तु ।<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "त्रुटिनिवारणकर्ता दुर्घटनाग्रस्तः अभवत्"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "प्रक्रिया दुर्घटना अभवत्"
@@ -414,7 +414,7 @@ msgstr ""
 "<b>त्रुटिनिवारणदोषः</b><p> Debugger इत्यनेन निम्नलिखितदोषः निवेदितः ।<p> <tt>%1</"
 "tt>"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(चलति)"

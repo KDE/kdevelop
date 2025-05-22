@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2024-08-21 00:34+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -112,7 +112,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>새 값: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -124,7 +124,7 @@ msgstr ""
 "다. 버그를 보고해 주십시오. 더 이상의 충돌을 막으려고 디버그 세션을 종료합니"
 "다."
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -133,18 +133,18 @@ msgstr ""
 "예외: %1\n"
 "MI 응답: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "디버거 내부 오류"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "프로세스 종료됨"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -153,12 +153,12 @@ msgstr ""
 "<b>디버거를 시작할 수 없습니다.</b><p>'%1'을(를) 실행할 수 없습니다. 경로가 "
 "올바른지 확인하십시오."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "프로세스를 시작할 수 없음"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -169,13 +169,13 @@ msgstr ""
 "따라서 디버그 세션이 종료되었습니다.<br>KDevelop 밖에서도 충돌하는지 확인한 "
 "다음 버그를 보고해 주십시오.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "디버거 충돌함"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "프로세스 충돌함"
@@ -404,7 +404,7 @@ msgstr ""
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>디버거 오류</b><p>디버거에서 다음 오류를 보고했습니다:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(실행 중)"

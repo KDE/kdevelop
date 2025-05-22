@@ -1,17 +1,17 @@
 # Translation of kdevdebuggercommon.po to Catalan (Valencian)
-# Copyright (C) 2009-2024 This_file_is_part_of_KDE
+# Copyright (C) 2009-2025 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
-# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2021.
+# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2024-10-25 19:33+0200\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"PO-Revision-Date: 2025-05-16 09:32+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -105,22 +105,24 @@ msgid "Core file:"
 msgstr "Fitxer de nucli:"
 
 #: mibreakpointcontroller.cpp:809
-#, fuzzy, kde-format
-#| msgid "<br>Old value: %1"
+#, kde-format
 msgid ""
 "\n"
 "Old value: %1"
-msgstr "<b>Valor antic: %1"
+msgstr ""
+"\n"
+"Valor antic: %1"
 
 #: mibreakpointcontroller.cpp:812
-#, fuzzy, kde-format
-#| msgid "<br>New value: %1"
+#, kde-format
 msgid ""
 "\n"
 "New value: %1"
-msgstr "<br>Valor anterior: %1"
+msgstr ""
+"\n"
+"Valor nou: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -132,7 +134,7 @@ msgstr ""
 "de la resposta del depurador. Envieu un informe d'error. La sessió de "
 "depuració finalitzarà ara per a evitar una fallada potencial"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -141,18 +143,18 @@ msgstr ""
 "L'excepció és: %1\n"
 "La resposta MI és: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "S'ha produït un error intern en el depurador"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "S'ha eixit del procés"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -161,12 +163,12 @@ msgstr ""
 "<b>No s'ha pogut iniciar el depurador.</b><p>No s'ha pogut executar «%1»."
 "Assegureu-vos que el nom de camí s'ha especificat correctament."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "El procés ha fallat en iniciar"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -177,13 +179,13 @@ msgstr ""
 "<br>Per este motiu, cal finalitzar la sessió de depuració.<br>Intenteu "
 "reproduir la fallada sense KDevelop i informeu de l'error.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "El depurador ha fallat"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "El procés ha fallat"
@@ -423,7 +425,7 @@ msgstr ""
 "<b>S'ha produït un error del depurador</b><p>El depurador ha informat de "
 "l'error següent:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(en execució)"

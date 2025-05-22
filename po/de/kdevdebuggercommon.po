@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2022-07-23 22:31+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -118,7 +118,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>Neuer Wert: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -130,7 +130,7 @@ msgstr ""
 "Debugger-Komponente aufgetreten. Bitte erstellen Sie einen Fehlerbericht. "
 "Die Sitzung wird jetzt beendet, um einen möglichen Absturz zu verhindern."
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -139,18 +139,18 @@ msgstr ""
 "Der Ausnahme-Code ist: %1\n"
 "Die MI-Antwort ist: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Interner Debugger-Fehler"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Prozess beendet"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -159,12 +159,12 @@ msgstr ""
 "<b>Debugger kann nicht gestartet werden.</b><p>„%1“ kann nicht ausgeführt "
 "werden. Stellen Sie sicher, dass der Pfad richtig angegeben ist."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "Der Prozess kann nicht gestartet werden"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -176,13 +176,13 @@ msgstr ""
 "Absturz ohne KDevelop zu reproduzieren und erstellen Sie einen Fehlerbericht."
 "<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Debugger abgestürzt"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "Prozess abgestürzt"
@@ -424,7 +424,7 @@ msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
 "<b>Debugger-Fehler</b><p>Der Debugger hat folgenden Fehler gemeldet:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(Wird ausgeführt)"

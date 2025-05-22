@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2010-07-18 15:54-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -123,7 +123,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>新しい値: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -132,26 +132,26 @@ msgid ""
 "now end to prevent potential crash"
 msgstr ""
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
 "The MI response is: %2"
 msgstr ""
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "デバッガの内部エラー"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "プロセスは終了しました"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -160,12 +160,12 @@ msgstr ""
 "<b>デバッガを開始できませんでした。</b><p><tt>%1</tt> を実行できませんでし"
 "た。パス名が正しく指定されているか確認してください。"
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -173,14 +173,14 @@ msgid ""
 "without KDevelop and report a bug.<br>"
 msgstr ""
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "デバッガ停止"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"
@@ -420,7 +420,7 @@ msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
 "<b>デバッガのエラー</b><p>デバッガが以下のエラーを報告しました:</p><p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "(running)"

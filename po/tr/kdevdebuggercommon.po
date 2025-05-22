@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2025-05-16 19:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -121,7 +121,7 @@ msgstr ""
 "\n"
 "Yeni değer: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -133,7 +133,7 @@ msgstr ""
 "hata ile karşılaştı. Lütfen bir hata raporu girin. Potansiyel çökmeyi "
 "engellemek için hata ayıklama oturumu sonlanacak"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -142,18 +142,18 @@ msgstr ""
 "Oluşan istisna: %1\n"
 "MI yanıtı: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "İç Hata Ayıklayıcısı Hatası"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Süreç çıktı"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -162,12 +162,12 @@ msgstr ""
 "<b>Hata ayıklayıcısı başlatılamadı.</b><p>“%1” çalıştırılamadı. Uygulama "
 "yolunun doğru bir şekilde verildiğinden emin olun."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "Süreç başlatılamadı"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -178,13 +178,13 @@ msgstr ""
 "yüzden hata ayıklama oturumu sonlandırıldı.<br>Çöküşü K Geliştir dışında "
 "yinelemeye ve bir hata raporu girmeye çalışın.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Hata Ayıklayıcısı Çöktü"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "Süreç çöktü"
@@ -422,7 +422,7 @@ msgstr ""
 "<b>Hata ayıklayıcısı hatası</b><p>Hata ayıklayıcısı şu hatayı bildirdi:"
 "<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(çalışıyor)"

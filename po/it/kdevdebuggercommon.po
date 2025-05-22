@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the kdevgdb package.
 # Marco Poletti <poletti.marco@gmail.com>, 2009, 2010, 2011.
 # Simone Solinas <ksolsim@gmail.com>, 2012, 2013, 2014, 2015.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2018, 2020, 2022, 2024.
+# SPDX-FileCopyrightText: 2016, 2017, 2018, 2020, 2022, 2024, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2024-05-03 21:50+0200\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"PO-Revision-Date: 2025-05-19 15:02+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -102,22 +102,24 @@ msgid "Core file:"
 msgstr "File core:"
 
 #: mibreakpointcontroller.cpp:809
-#, fuzzy, kde-format
-#| msgid "<br>Old value: %1"
+#, kde-format
 msgid ""
 "\n"
 "Old value: %1"
-msgstr "<br>Valore precedente: %1"
+msgstr ""
+"\n"
+"Valore precedente: %1"
 
 #: mibreakpointcontroller.cpp:812
-#, fuzzy, kde-format
-#| msgid "<br>New value: %1"
+#, kde-format
 msgid ""
 "\n"
 "New value: %1"
-msgstr "<br>Nuovo valore: %1"
+msgstr ""
+"\n"
+"Nuovo valore: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -129,7 +131,7 @@ msgstr ""
 "processava la risposta del debugger. Si prega di segnalare un bug. La "
 "sessione di debug adesso terminerà per prevenire potenziali crash"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -138,18 +140,18 @@ msgstr ""
 "Eccezione: %1\n"
 "Risposta MI: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Errore interno di debug"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Il processo è terminato"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -158,12 +160,12 @@ msgstr ""
 "<b>Impossibile avviare il debug.</b><p>Impossibile eseguire «%1». Assicurati "
 "che il percorso sia specificato in modo corretto."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "Avvio del processo non riuscito"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -174,13 +176,13 @@ msgstr ""
 "causa di ciò la sessione di debug deve essere conclusa.<br> Prova a "
 "riprodurre il crash in KDevelop e segnala un bug.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Il programma di debug è andato in crash"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "Il processo è andato in crash"
@@ -420,7 +422,7 @@ msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
 "<b>Errore di debug</b><p>C'è stato il seguente errore di debug:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(in esecuzione)"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -128,7 +128,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>Nieg Weert: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "<b>Internal debugger error</b>"
 #| msgid ""
@@ -143,7 +143,7 @@ msgstr ""
 "<p>Binnen de Fehlersöker-Komponent hett dat en Fehler geven, bides se en "
 "Antwoort vun \"gdb\" afarbeidt hett. Bericht dissen Fehler bitte."
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -152,19 +152,19 @@ msgstr ""
 "De Utnahm is: %1\n"
 "De MI-Antwoort is: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Intern Fehlersöök-Fehler"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Perzess verlaten"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -173,12 +173,12 @@ msgstr ""
 "<b>De Fehlersöker lett sik nich starten.</b><p>\"%1\" lett sik nich starten. "
 "Kiek, wat de Paddnaam richtig angeven is."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -186,14 +186,14 @@ msgid ""
 "without KDevelop and report a bug.<br>"
 msgstr ""
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Fehlersöker anhollen"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"
@@ -450,7 +450,7 @@ msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
 "<b>Fehlersöök-Fehler</b><p>De Fehlersöker hett dissen Fehler meldt:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "(running)"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2013-12-15 19:17+0000\n"
 "Last-Translator: Nermina Ahmić <nahmic1@etf.unsa.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -126,7 +126,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>Nova vrijednost: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "<b>Internal debugger error</b>"
 #| msgid ""
@@ -141,7 +141,7 @@ msgstr ""
 "<p>Debager komponenta je naišlana internu grešku prilikom obrade odgovora od "
 "GDB. Molimo Vas da pošaljete izveštaj o grešci."
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -150,19 +150,19 @@ msgstr ""
 "Izuzetak je: %1\n"
 "MI odgovor je: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Interna debagerska greška"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Proces izašao"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -171,12 +171,12 @@ msgstr ""
 "<b>Ne mogu pokrenuti debager.</b><p>Ne mogu pokrenuti '%1'. Uvjerite se da "
 "je ime staze ispravno navedeno."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
@@ -189,14 +189,14 @@ msgstr ""
 "<b>Gdb pao.</b><p>Zbog toga je sesija traženja grešaka prekinuta."
 "<br>Pokušajte reprodukovati pad običnm gdb i prijavite grešku.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Debager zaustavljen"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"
@@ -449,7 +449,7 @@ msgstr ""
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>Debagerska greška</b><p>Debager je javio sljedeću grešku:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "(running)"

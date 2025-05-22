@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2013-11-15 06:17+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -123,7 +123,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>Жаңа мәні: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "<b>Internal debugger error</b>"
 #| msgid ""
@@ -138,7 +138,7 @@ msgstr ""
 "<p>gdb-ден келген жауапты талдау кезде жөндегіш компоненті бір ішкі қатеге "
 "тап болды. Қате туралы хабарлаңыз."
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -147,19 +147,19 @@ msgstr ""
 "Ерекшелігі: %1\n"
 "MI жауабы: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Жөндегіштің ішкі қатесі"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Процестен шықты"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -168,12 +168,12 @@ msgstr ""
 "<b>Жөндеу басталмады.</b><p>'%1' жегілмеді. Жолы дұрыс келтірілгенін "
 "тексеріңіз."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
@@ -186,14 +186,14 @@ msgstr ""
 "<b>Gdb қирады.</b><p>Сондықтан жөндеу сеансы аяқталып қалды.<br>Жәй gdb "
 "көмегімен қайталап көріңіз де, қате туралы хабарлаңыз.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Жөндегіш тоқтады"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"
@@ -444,7 +444,7 @@ msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
 "<b>Жөндегіш қатесі</b><p>Жөндегіш келесі қате туралы хабарлады:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "(running)"

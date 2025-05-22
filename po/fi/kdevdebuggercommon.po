@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2023-04-17 16:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -123,7 +123,7 @@ msgid ""
 "New value: %1"
 msgstr "<br />Uusi arvo: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "<b>Internal debugger error</b>"
 #| msgid ""
@@ -138,7 +138,7 @@ msgstr ""
 "<p>Virheenpaikanninkomponentti kohtasi sisäisen virheen käsitellessään gdb-"
 "vastausta. Lähetä tästä vikailmoitus."
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -147,19 +147,19 @@ msgstr ""
 "Poikkeus on: %1\n"
 "MI-vastaus on: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Sisäinen virheenpaikanninvirhe"
 
-#: midebugger.cpp:333 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Prossessi päättyi"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -168,12 +168,12 @@ msgstr ""
 "<b>Virheenpaikantimen käynnistäminen epäonnistui.</b><p>Kohteen ”%1” "
 "suorittaminen epäonnistui. Varmista, että määritetty polku on oikein."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "Prosessin käynnistys epäonnistui"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -184,13 +184,13 @@ msgstr ""
 "<br>Virheenpaikannusistunto täytyy siksi päättää.<br>Yritä toistaa "
 "kaatuminen ilman KDevelopia ja ilmoita ohjelmavirheestä.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Virheenpaikannin kaatui"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"
@@ -442,7 +442,7 @@ msgstr ""
 "<b>Virheenpaikanninvirhe</b><p>Virheenpaikannin ilmoitti seuraavasta "
 "virheestä:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(käynnissä)"
