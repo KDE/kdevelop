@@ -19,7 +19,10 @@
 #include <QFileInfo>
 #include <QModelIndex>
 #include <QRegularExpression>
+#include <QSignalSpy>
+#include <QStringList>
 #include <QTest>
+#include <QVariant>
 
 using namespace KDevelop;
 
@@ -236,6 +239,34 @@ TestLaunchConfiguration::TestLaunchConfiguration(const QUrl& executable, const Q
     cfg.writeEntry(IExecutePlugin::isExecutableEntry, true);
     cfg.writeEntry(IExecutePlugin::executableEntry, executable);
     cfg.writeEntry(IExecutePlugin::workingDirEntry, workingDirectory);
+}
+
+DebugeeslowOutputProcessor::DebugeeslowOutputProcessor(QSignalSpy& outputSpy)
+    : m_outputSpy{outputSpy}
+{
+    QVERIFY(m_outputSpy.isValid());
+}
+
+void DebugeeslowOutputProcessor::processOutput()
+{
+    for (const auto& parameters : std::as_const(m_outputSpy)) {
+        QCOMPARE_EQ(parameters.size(), 1); // MIDebugSession::inferiorStdoutLines() has one parameter
+        const auto outputLines = parameters.constFirst().toStringList();
+        qDebug() << "Debuggee output:" << outputLines.join('\n');
+        QCOMPARE_GT(outputLines.size(), 0); // why emit the signal if there is no output?
+
+        for (const auto& line : outputLines) {
+            ++m_processedLineCount;
+            // debugeeslow outputs consecutive integers starting from 1
+            QCOMPARE(line, QString::number(m_processedLineCount));
+        }
+    }
+    m_outputSpy.clear();
+}
+
+int DebugeeslowOutputProcessor::processedLineCount() const
+{
+    return m_processedLineCount;
 }
 
 } // end of namespace KDevMI::Testing

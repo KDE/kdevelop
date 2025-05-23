@@ -27,6 +27,7 @@ class Breakpoint;
 
 class IExecutePlugin;
 class QModelIndex;
+class QSignalSpy;
 
 #define WAIT_FOR_STATE(session, state) \
     do { if (!KDevMI::Testing::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
@@ -189,6 +190,41 @@ public:
 private:
     KConfigGroup cfg;
     KSharedConfigPtr c;
+};
+
+/**
+ * This class processes and verifies output of @c debugeeslow inferior.
+ */
+class DebugeeslowOutputProcessor
+{
+    Q_DISABLE_COPY_MOVE(DebugeeslowOutputProcessor)
+public:
+    /**
+     * Create a processor of @c debugeeslow output.
+     *
+     * @param outputSpy a spy that listens to the signal MIDebugSession::inferiorStdoutLines()
+     *                  of a debug session that runs @c debugeeslow as the inferior
+     *
+     * The caller must ensure that @p outputSpy is created early enough to not miss any output of @c debugeeslow.
+     * @p outputSpy must remain valid throughout the lifetime of this processor object.
+     */
+    explicit DebugeeslowOutputProcessor(QSignalSpy& outputSpy);
+
+    /**
+     * Verify output and clear the processed output spy.
+     *
+     * Call RETURN_IF_TEST_FAILED() after this function.
+     */
+    void processOutput();
+
+    /**
+     * @return the number of already processed output lines of @c debugeeslow
+     */
+    int processedLineCount() const;
+
+private:
+    QSignalSpy& m_outputSpy;
+    int m_processedLineCount = 0;
 };
 
 } // namespace Testing
