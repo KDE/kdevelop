@@ -101,7 +101,7 @@ public:
     for (auto& e : elements) {
         e = QRegularExpression::escape(e);
     }
-    return elements.join("[,\\s]+");
+    return elements.join("[\\s]*,[\\s]*");
 }
 
 [[nodiscard]] bool containsConsecutiveElements(const QByteArray& out, const QStringList& elements)
