@@ -25,7 +25,7 @@ msgstr ""
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
 #, kde-format
 msgid "Choose the Location"
-msgstr "Escolliu la ubicació"
+msgstr "Trieu la ubicació"
 
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20

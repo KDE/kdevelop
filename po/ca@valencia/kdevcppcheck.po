@@ -487,7 +487,3 @@ msgstr "Torna a executar l'última anàlisi de Cppcheck (%1)"
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
 msgstr "Torna a executar l'última anàlisi de Cppcheck"
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "Prova"
