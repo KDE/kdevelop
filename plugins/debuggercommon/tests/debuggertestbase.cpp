@@ -44,6 +44,7 @@ using namespace KDevMI;
 using KDevMI::Testing::ActiveStateSessionSpy;
 using KDevMI::Testing::breakpointMiLine;
 using KDevMI::Testing::currentMiLine;
+using KDevMI::Testing::DebugeeslowOutputProcessor;
 using KDevMI::Testing::findSourceFile;
 using KDevMI::Testing::TestLaunchConfiguration;
 
@@ -441,13 +442,31 @@ void DebuggerTestBase::testChangeBreakpointWhileRunning()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(currentMiLine(session), 30);
 
+    QSignalSpy outputSpy(session, &MIDebugSession::inferiorStdoutLines);
+    DebugeeslowOutputProcessor outputProcessor(outputSpy);
+
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::ActiveState);
 
     qDebug() << "Disabling breakpoint";
     breakpoint->setData(Breakpoint::EnableColumn, Qt::Unchecked);
-    // to make one loop
-    WAIT_FOR_A_WHILE(session, 2000);
+
+    // Wait for two lines of output "1" and "2" to verify that the debugger does not stop at the disabled breakpoint.
+    while (true) {
+        outputProcessor.processOutput();
+        RETURN_IF_TEST_FAILED();
+        if (outputProcessor.processedLineCount() >= 2) {
+            break;
+        }
+
+        qDebug() << "Waiting for debuggee output...";
+        QVERIFY(outputSpy.wait(5'000));
+        QCOMPARE_GT(outputSpy.size(), 0);
+    }
+
+    // If the debuggee has already produced all 3 lines of output,
+    // the paused state waited for below will never be reached!
+    QCOMPARE_EQ(outputProcessor.processedLineCount(), 2);
 
     qDebug() << "Waiting for active";
     WAIT_FOR_STATE(session, IDebugSession::ActiveState);
@@ -458,6 +477,10 @@ void DebuggerTestBase::testChangeBreakpointWhileRunning()
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
+
+    outputProcessor.processOutput();
+    RETURN_IF_TEST_FAILED();
+    QCOMPARE_EQ(outputProcessor.processedLineCount(), 3);
 }
 
 void DebuggerTestBase::testVariablesLocalsStruct()
