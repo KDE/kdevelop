@@ -116,7 +116,7 @@ public:
      * @see parse()
      */
     bool parseAndWait(TopDUContext::Features features = TopDUContext::AllDeclarationsContextsAndUses,
-                      int priority = 1, int timeout = 5000);
+                      int priority = 1, int timeout = 10'000);
 
     /**
      * Blocks current thread and waits until the file has been parsed.
@@ -127,7 +127,7 @@ public:
      * Otherwise true is returned, indicating parsing finished
      * within the timeout interval.
      */
-    bool waitForParsed(int timeout = 5000);
+    bool waitForParsed(int timeout = 10'000);
 
     /**
      * Check whether the file has been processed after the last call to @c parse().
