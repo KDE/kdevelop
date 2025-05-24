@@ -18,6 +18,7 @@
 #include "util/clangutils.h"
 #include "headerguardassistant.h"
 
+#include <interfaces/icore.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/codegen/coderepresentation.h>
@@ -226,12 +227,18 @@ bool hasQtIncludes(const Path::List& includePaths)
     }) != includePaths.end();
 }
 
+const QString& definesFileTemplateName()
+{
+    static const QString ret = ICore::self()->sessionTemporaryDirectoryPath() + QLatin1String("/defines.XXXXXX");
+    return ret;
+}
 }
 
 ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, ClangIndex* index,
                                    const ClangParsingEnvironment& environment, Options options)
     : m_file(nullptr)
     , m_unit(nullptr)
+    , m_definesFile(definesFileTemplateName())
 {
     unsigned int flags = CXTranslationUnit_DetailedPreprocessingRecord
 #if CINDEX_VERSION_MINOR >= 34
