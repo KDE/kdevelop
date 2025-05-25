@@ -30,7 +30,7 @@ msgstr "Construcció del docker «%1»"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
-msgstr "Escolliu el nom de l'etiqueta"
+msgstr "Trieu el nom de l'etiqueta"
 
 #: dockerplugin.cpp:122
 #, kde-format

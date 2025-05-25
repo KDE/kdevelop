@@ -77,7 +77,7 @@ msgstr "Construïx l'entorn Flatpak %1 per a %2"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
-msgstr "Escolliu el nom de l'etiqueta"
+msgstr "Trieu el nom de l'etiqueta"
 
 #: flatpakplugin.cpp:266
 #, kde-format

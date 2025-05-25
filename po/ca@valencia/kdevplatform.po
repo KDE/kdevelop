@@ -216,8 +216,8 @@ msgid ""
 "source in the editor window."
 msgstr ""
 "Mostra una llista dels punts d'interrupció amb el seu estat actual. Clicant "
-"en un punt d'interrupció podreu modificar-lo i anar fins al seu codi font en "
-"la finestra de l'editor."
+"damunt d'un punt d'interrupció podreu modificar-lo i anar fins al seu codi "
+"font en la finestra de l'editor."
 
 #: debugger/breakpoint/breakpointwidget.cpp:86
 #, kde-format
@@ -322,7 +322,7 @@ msgid ""
 msgstr ""
 "<b>Pila d'execució</b> Sovint anomenada «pila de crides», és una llista que "
 "mostra la funció activa actual i qui ha cridat cada funció per a arribar "
-"fins este punt del programa. Clicant sobre un element podreu veure els "
+"fins este punt del programa. Clicant damunt d'un element podreu veure els "
 "valors de qualsevol de les anteriors funcions cridades."
 
 #: debugger/framestack/framestackwidget.cpp:104
@@ -416,7 +416,7 @@ msgstr "Variables del depurador"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr "Redimensiona automàticament les columnes en fer clic"
+msgstr "Redimensiona automàticament les columnes quan es clique"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -437,8 +437,8 @@ msgstr ""
 "o «observar-les» (fer que s'actualitzen automàticament). Les expressions que "
 "no s'actualitzen automàticament es poden actualitzar manualment des del menú "
 "contextual. Les expressions poden ser canviades de nom a un nom més "
-"descriptiu clicant en el nom de la columna.<br />Per a canviar el valor "
-"d'una variable o una expressió, cliqueu en el valor.<br />"
+"descriptiu clicant damunt del nom de la columna.<br />Per a canviar el valor "
+"d'una variable o una expressió, cliqueu damunt del valor.<br />"
 
 #: debugger/variable/variablewidget.cpp:130
 #, kde-format
@@ -2460,7 +2460,7 @@ msgid ""
 "button to add a new one.</i>"
 msgstr ""
 "<i>Seleccioneu una configuració de l'esquerra per a editar-la,<br>o cliqueu "
-"en el botó «Afig» per a afegir-ne una de nova.</i>"
+"damunt del botó «Afig» per a afegir-ne una de nova.</i>"
 
 #: shell/launchconfigurationdialog.cpp:437
 #, kde-format
@@ -5099,7 +5099,7 @@ msgid ""
 msgstr ""
 "<p>Seleccioneu els llenguatges que utilitzeu un a un des del quadro combinat "
 "<i>Llenguatge</i> de davall, trieu el formatador i l'estil desitjats per a "
-"cadascuna. Feu <i>Ctrl+Clic</i> en un estil seleccionat per a desseleccionar-"
+"cadascuna. Feu <i>Ctrl+clic</i> en un estil seleccionat per a desseleccionar-"
 "lo.</p>\n"
 "<p>És molt important configurar el formatador correcte i l'estil per a cada "
 "llenguatge utilitzat: no només es veuen afectades les accions <i>Torna a "
@@ -5263,7 +5263,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Click to open and activate this document."
-msgstr "Feu clic per a obrir i activar este document."
+msgstr "Cliqueu per a obrir i activar este document."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:280
 #, kde-format

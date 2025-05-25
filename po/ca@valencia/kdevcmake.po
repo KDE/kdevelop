@@ -255,8 +255,8 @@ msgstr ""
 "Projecte «%1» configurat amb dades obsoletes de CMake. Com a resultat, és "
 "probable que es trenqui la comprensió del codi de KDevelop.\n"
 "\n"
-"Per a solucionar este problema feu clic dret en l'element del projecte en la "
-"vista d'eina projectes i feu clic en «Torna a carregar»."
+"Per a solucionar este problema feu clic dret damunt de l'element del "
+"projecte en la vista d'eina projectes i cliqueu damunt «Torna a carregar»."
 
 #: cmakemanager.cpp:676
 #, kde-format
@@ -276,8 +276,8 @@ msgstr ""
 "Per a solucionar este problema, assegureu-vos que els fitxers CMakeLists.txt "
 "del projecte siguen correctes i que KDevelop estiga configurat per a "
 "utilitzar la versió i la configuració correcta de CMake. Després feu clic "
-"dret en l'element del projecte en la vista d'eina Projectes i feu clic en "
-"«Torna a carregar»."
+"dret damunt de l'element del projecte en la vista d'eina Projectes i cliqueu "
+"damunt «Torna a carregar»."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
