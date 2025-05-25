@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the kdevelop package.
 #
 # pan93412 <pan93412@gmail.com>, 2019.
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2024-01-10 15:23+0900\n"
+"PO-Revision-Date: 2025-05-24 21:36+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #: dockerplugin.cpp:133
 #, kde-format
@@ -36,11 +36,10 @@ msgid "Tag name for '%1':"
 msgstr "「%1」的標籤名稱："
 
 #: dockerplugin.cpp:145
-#, fuzzy, kde-format
-#| msgid "docker build '%1'"
+#, kde-format
 msgctxt "%1 - Docker tag name"
 msgid "Docker Build \"%1\""
-msgstr "docker build '%1'"
+msgstr "Docker Build \"%1\""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dockerpreferences.ui:29
