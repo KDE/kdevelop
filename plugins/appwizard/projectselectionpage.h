@@ -14,10 +14,7 @@ class ProjectSelectionPage;
 }
 
 class ProjectTemplatesModel;
-
-namespace KNSCore {
-class Entry;
-}
+class ProjectTemplatesViewHelper;
 
 class QModelIndex;
 class QStandardItem;
@@ -49,12 +46,18 @@ private Q_SLOTS:
     void templateChanged(int);
 
     void loadFileClicked();
-    void handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries);
 
 private:
     inline QByteArray encodedProjectName();
+    [[nodiscard]] ProjectTemplatesViewHelper viewHelper();
     inline QStandardItem* currentItem() const;
-    void setCurrentTemplate(const QString& fileName);
+
+    /**
+     * Select the first template in @a ui->listView.
+     *
+     * This function is used as a fallback when selecting a more relevant template fails.
+     */
+    void makeFirstTemplateCurrent();
 
     Ui::ProjectSelectionPage *ui;
     ProjectTemplatesModel *m_templatesModel;

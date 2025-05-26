@@ -15,12 +15,12 @@
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KNSCore/Entry>
 #include <KNSWidgets/Button>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <language/codegen/templatepreviewicon.h>
+#include <language/codegen/templatesviewhelper.h>
 
 #include <util/scopeddialog.h>
 
@@ -33,6 +33,40 @@
 #include <QRegularExpressionValidator>
 
 using namespace KDevelop;
+
+namespace {
+constexpr auto categoryViewLevelCount = 2;
+constexpr auto lastCategoryViewLevel = categoryViewLevelCount - 1;
+constexpr auto templateTypeViewLevel = categoryViewLevelCount;
+} // unnamed namespace
+
+class ProjectTemplatesViewHelper final : public TemplatesViewHelper
+{
+public:
+    explicit ProjectTemplatesViewHelper(TemplatesModel& model, MultiLevelListView& categoryView,
+                                        QComboBox& templateTypeView)
+        : TemplatesViewHelper(model)
+        , m_categoryView{categoryView}
+        , m_templateTypeView{templateTypeView}
+    {
+    }
+
+private:
+    bool setCurrentTemplate(const QList<QModelIndex>& indexes) override
+    {
+        if (indexes.size() <= lastCategoryViewLevel) {
+            return false;
+        }
+        m_categoryView.setCurrentIndex(indexes.at(lastCategoryViewLevel));
+        if (indexes.size() > templateTypeViewLevel) {
+            m_templateTypeView.setCurrentIndex(indexes.at(templateTypeViewLevel).row());
+        }
+        return true;
+    }
+
+    MultiLevelListView& m_categoryView;
+    QComboBox& m_templateTypeView;
+};
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, AppWizardDialog *wizardDialog)
     : AppWizardPageWidget(wizardDialog), m_templatesModel(templatesModel)
@@ -56,7 +90,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->projectNameEdit, &QLineEdit::textEdited,
              this, &ProjectSelectionPage::nameChanged );
 
-    ui->listView->setLevels(2);
+    ui->listView->setLevels(categoryViewLevelCount);
     ui->listView->setHeaderLabels(QStringList{
         i18nc("@title:column", "Category"),
         i18nc("@title:column", "Project Type")
@@ -72,7 +106,11 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"),
                                                  QStringLiteral("kdevappwizard.knsrc"), ui->listView);
     connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this,
-            &ProjectSelectionPage::handleNewStuffDialogFinished);
+            [this](const QList<KNSCore::Entry>& changedEntries) {
+                if (!viewHelper().handleNewStuffDialogFinished(changedEntries)) {
+                    makeFirstTemplateCurrent();
+                }
+            });
     ui->listView->addWidget(0, getMoreButton);
 
     auto* loadButton = new QPushButton(ui->listView);
@@ -272,6 +310,11 @@ QByteArray ProjectSelectionPage::encodedProjectName()
     return tEncodedName;
 }
 
+ProjectTemplatesViewHelper ProjectSelectionPage::viewHelper()
+{
+    return ProjectTemplatesViewHelper(*m_templatesModel, *ui->listView, *ui->templateType);
+}
+
 QStandardItem* ProjectSelectionPage::currentItem() const
 {
     QStandardItem* item = m_templatesModel->itemFromIndex( ui->listView->currentIndex() );
@@ -284,6 +327,14 @@ QStandardItem* ProjectSelectionPage::currentItem() const
     return item;
 }
 
+void ProjectSelectionPage::makeFirstTemplateCurrent()
+{
+    // Set an invalid index as current to select the very first template because something should always be selected.
+    // Furthermore, MultiLevelListView is not a real item view and requires manual setting of its current index after
+    // the model is refreshed in order to prevent a crash in QAbstractProxyModelPrivate::emitHeaderDataChanged().
+    Q_ASSERT(!ui->listView->currentIndex().isValid());
+    ui->listView->setCurrentIndex({});
+}
 
 bool ProjectSelectionPage::shouldContinue()
 {
@@ -326,43 +377,6 @@ void ProjectSelectionPage::loadFileClicked()
             ui->listView->setCurrentIndex(indexes.at(1));
             ui->templateType->setCurrentIndex(indexes.at(2).row());
         }
-    }
-}
-
-void ProjectSelectionPage::handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries)
-{
-    if (changedEntries.isEmpty()) {
-        return;
-    }
-
-    m_templatesModel->refresh();
-    bool updated = false;
-
-    for (const auto& entry : changedEntries) {
-        if (!entry.installedFiles().isEmpty())
-        {
-            updated = true;
-            setCurrentTemplate(entry.installedFiles().at(0));
-            break;
-        }
-    }
-
-    if (!updated)
-    {
-        ui->listView->setCurrentIndex(QModelIndex());
-    }
-}
-
-void ProjectSelectionPage::setCurrentTemplate (const QString& fileName)
-{
-    QModelIndexList indexes = m_templatesModel->templateIndexes(fileName);
-    if (indexes.size() > 1)
-    {
-        ui->listView->setCurrentIndex(indexes.at(1));
-    }
-    if (indexes.size() > 2)
-    {
-        ui->templateType->setCurrentIndex(indexes.at(2).row());
     }
 }
 

@@ -13,6 +13,7 @@
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/templaterenderer.h>
+#include <language/codegen/templatesviewhelper.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -33,11 +34,44 @@
 
 using namespace KDevelop;
 
+namespace {
+
 static const char LastUsedTemplateEntry[] = "LastUsedTemplate";
 static inline QString FileTemplatesGroup()
 {
     return QStringLiteral("SourceFileTemplates");
 }
+
+constexpr auto viewLevelCount = 3;
+constexpr auto lastViewLevel = viewLevelCount - 1;
+
+class FileTemplatesViewHelper final : public TemplatesViewHelper
+{
+public:
+    explicit FileTemplatesViewHelper(TemplatesModel& model, MultiLevelListView& view)
+        : TemplatesViewHelper(model)
+        , m_view{view}
+    {
+    }
+
+private:
+    bool setCurrentTemplate(const QList<QModelIndex>& indexes) override
+    {
+        if (indexes.size() <= lastViewLevel) {
+            // If indexes.empty(), the template is probably absent from the model (and the file system).
+            // If the number of indexes is greater than zero but less than viewLevelCount, the template is invalid
+            // or unsupported. Whether or not we set such a template as current in the view, if this function returns
+            // true for it, a segmentation fault in QAbstractProxyModelPrivate::emitHeaderDataChanged() ensues.
+            return false;
+        }
+        m_view.setCurrentIndex(indexes.constLast());
+        return true;
+    }
+
+    MultiLevelListView& m_view;
+};
+
+} // unnamed namespace
 
 class KDevelop::TemplateSelectionPagePrivate
 {
@@ -52,11 +86,31 @@ public:
     TemplateClassAssistant* assistant;
     TemplatesModel* model;
 
+    [[nodiscard]] FileTemplatesViewHelper viewHelper()
+    {
+        return FileTemplatesViewHelper(*model, *ui->view);
+    }
+
+    /**
+     * Select the first template in @a ui->view.
+     *
+     * This function is used as a fallback when selecting a more relevant template fails.
+     */
+    void makeFirstTemplateCurrent();
+
     void currentTemplateChanged(const QModelIndex& index);
-    void handleNewStuffDialogFinished();
     void loadFileClicked();
     void previewTemplate(const QString& templateFile);
 };
+
+void TemplateSelectionPagePrivate::makeFirstTemplateCurrent()
+{
+    // Set an invalid index as current to select the very first template because something should always be selected.
+    // Furthermore, MultiLevelListView is not a real item view and requires manual setting of its current index after
+    // the model is refreshed in order to prevent a crash in QAbstractProxyModelPrivate::emitHeaderDataChanged().
+    Q_ASSERT(!ui->view->currentIndex().isValid());
+    ui->view->setCurrentIndex({});
+}
 
 void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& index)
 {
@@ -138,11 +192,6 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     return;
 }
 
-void TemplateSelectionPagePrivate::handleNewStuffDialogFinished()
-{
-    model->refresh();
-}
-
 void TemplateSelectionPagePrivate::loadFileClicked()
 {
     const QStringList filters{
@@ -200,7 +249,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
     d->model = new TemplatesModel(QStringLiteral("kdevfiletemplates"), this);
     d->model->refresh();
 
-    d->ui->view->setLevels(3);
+    d->ui->view->setLevels(viewLevelCount);
     d->ui->view->setHeaderLabels(QStringList{
         i18nc("@title:column", "Language"),
         i18nc("@title:column", "Framework"),
@@ -241,9 +290,12 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
 
     auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates..."),
                                                  QStringLiteral("kdevfiletemplates.knsrc"), d->ui->view);
-    connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this, [&]() {
-        d->handleNewStuffDialogFinished();
-    });
+    connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this,
+            [this](const QList<KNSCore::Entry>& changedEntries) {
+                if (!d->viewHelper().handleNewStuffDialogFinished(changedEntries)) {
+                    d->makeFirstTemplateCurrent();
+                }
+            });
     d->ui->view->addWidget(0, getMoreButton);
 
     auto* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18nc("@action:button", "Load Template from File"), d->ui->view);

@@ -164,6 +164,7 @@ set(KDevPlatformLanguage_LIB_SRCS
     codegen/templaterenderer.cpp
     codegen/templateengine.cpp
     codegen/archivetemplateloader.cpp
+    codegen/templatesviewhelper.cpp
 )
 
 declare_qt_logging_category(KDevPlatformLanguage_LIB_SRCS
@@ -190,6 +191,7 @@ PRIVATE
     KF6::TextEditor
     KF6::Parts
     KF6::Archive
+    KF6::NewStuffCore
     KF6::TextTemplate
 )
 
@@ -356,6 +358,7 @@ install(FILES
     codegen/templateclassgenerator.h
     codegen/codedescription.h
     codegen/basicrefactoring.h
+    codegen/templatesviewhelper.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
