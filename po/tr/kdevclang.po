@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-27 00:40+0000\n"
 "PO-Revision-Date: 2024-11-10 18:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -322,22 +322,22 @@ msgstr "Özel İçerme Yolu Ekle"
 msgid "Open Project"
 msgstr "Proje Aç"
 
-#: duchain/parsesession.cpp:568
+#: duchain/parsesession.cpp:575
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Burada istendi: %1"
 
-#: duchain/parsesession.cpp:609
+#: duchain/parsesession.cpp:616
 #, kde-format
 msgid "In included file: %1"
 msgstr "İçerilen dosya: %1"
 
-#: duchain/parsesession.cpp:632
+#: duchain/parsesession.cpp:639
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "Üstbilgi, birden çok içermeye karşı korunmuyor"
 
-#: duchain/parsesession.cpp:633
+#: duchain/parsesession.cpp:640
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

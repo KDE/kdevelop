@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-27 00:40+0000\n"
 "PO-Revision-Date: 2022-06-18 00:43+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -310,22 +310,22 @@ msgstr ""
 msgid "Open Project"
 msgstr ""
 
-#: duchain/parsesession.cpp:568
+#: duchain/parsesession.cpp:575
 #, kde-format
 msgid "Requested here: %1"
 msgstr ""
 
-#: duchain/parsesession.cpp:609
+#: duchain/parsesession.cpp:616
 #, kde-format
 msgid "In included file: %1"
 msgstr ""
 
-#: duchain/parsesession.cpp:632
+#: duchain/parsesession.cpp:639
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr ""
 
-#: duchain/parsesession.cpp:633
+#: duchain/parsesession.cpp:640
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

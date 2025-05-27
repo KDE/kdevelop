@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-05-27 00:40+0000\n"
 "PO-Revision-Date: 2023-04-02 22:05+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -324,22 +324,22 @@ msgstr "Aldoni Propran Inklud-Vojon"
 msgid "Open Project"
 msgstr "Malfermi Projekton"
 
-#: duchain/parsesession.cpp:568
+#: duchain/parsesession.cpp:575
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Petita ĉi tie: %1"
 
-#: duchain/parsesession.cpp:609
+#: duchain/parsesession.cpp:616
 #, kde-format
 msgid "In included file: %1"
 msgstr "En inkluzivita dosiero: %1"
 
-#: duchain/parsesession.cpp:632
+#: duchain/parsesession.cpp:639
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "Kapo ne estas protektita kontraŭ multoblaj inkludoj"
 
-#: duchain/parsesession.cpp:633
+#: duchain/parsesession.cpp:640
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "
