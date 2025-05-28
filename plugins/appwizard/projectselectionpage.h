@@ -8,7 +8,6 @@
 #define _PROJECTSELECTIONPAGE_H_
 
 #include "appwizardpagewidget.h"
-#include "appwizarddialog.h"
 
 namespace Ui {
 class ProjectSelectionPage;
@@ -23,6 +22,8 @@ class Entry;
 class QModelIndex;
 class QStandardItem;
 class QUrl;
+
+class AppWizardDialog;
 
 class ProjectSelectionPage : public AppWizardPageWidget {
 Q_OBJECT

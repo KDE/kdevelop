@@ -6,6 +6,8 @@
 */
 
 #include "projectselectionpage.h"
+
+#include "appwizarddialog.h"
 #include "debug.h"
 
 #include <KConfig>
