@@ -33,7 +33,7 @@ msgstr "Documenta la declaració"
 #, kde-format
 msgctxt "default shortcut for \"Document Declaration\""
 msgid "Alt+Shift+d"
-msgstr "Alt+Majús+d"
+msgstr "Alt+Majús+D"
 
 #: codeutilsplugin.cpp:52
 #, kde-format
