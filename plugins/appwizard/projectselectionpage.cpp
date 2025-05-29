@@ -22,13 +22,10 @@
 #include <language/codegen/templatepreviewicon.h>
 #include <language/codegen/templatesviewhelper.h>
 
-#include <util/scopeddialog.h>
-
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
 
 #include <QDir>
-#include <QFileDialog>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 
@@ -116,7 +113,11 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     auto* loadButton = new QPushButton(ui->listView);
     loadButton->setText(i18nc("@action:button", "Load Template from File"));
     loadButton->setIcon(QIcon::fromTheme(QStringLiteral("application-x-archive")));
-    connect (loadButton, &QPushButton::clicked, this, &ProjectSelectionPage::loadFileClicked);
+    connect(loadButton, &QPushButton::clicked, this, [this] {
+        if (!viewHelper().loadTemplatesFromFiles(this)) {
+            makeFirstTemplateCurrent();
+        }
+    });
     ui->listView->addWidget(0, loadButton);
 
     m_wizardDialog = wizardDialog;
@@ -351,33 +352,6 @@ bool ProjectSelectionPage::shouldContinue()
         }
     }
     return true;
-}
-
-void ProjectSelectionPage::loadFileClicked()
-{
-    const QStringList supportedMimeTypes {
-        QStringLiteral("application/x-desktop"),
-        QStringLiteral("application/x-bzip-compressed-tar"),
-        QStringLiteral("application/zip")
-    };
-    ScopedDialog<QFileDialog> fileDialog(this, i18nc("@title:window", "Load Template from File"));
-    fileDialog->setMimeTypeFilters(supportedMimeTypes);
-    fileDialog->setFileMode(QFileDialog::ExistingFiles);
-
-    if (!fileDialog->exec()) {
-        return;
-    }
-
-    const auto& fileNames = fileDialog->selectedFiles();
-    for (const auto& fileName : fileNames) {
-        QString destination = m_templatesModel->loadTemplateFile(fileName);
-        QModelIndexList indexes = m_templatesModel->templateIndexes(destination);
-        if (indexes.size() > 2)
-        {
-            ui->listView->setCurrentIndex(indexes.at(1));
-            ui->templateType->setCurrentIndex(indexes.at(2).row());
-        }
-    }
 }
 
 #include "moc_projectselectionpage.cpp"

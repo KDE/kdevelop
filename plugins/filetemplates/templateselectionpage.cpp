@@ -19,11 +19,9 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>
-#include <util/scopeddialog.h>
 
 #include "ui_templateselection.h"
 
-#include <QFileDialog>
 #include <QPushButton>
 #include <QTemporaryDir>
 
@@ -99,7 +97,6 @@ public:
     void makeFirstTemplateCurrent();
 
     void currentTemplateChanged(const QModelIndex& index);
-    void loadFileClicked();
     void previewTemplate(const QString& templateFile);
 };
 
@@ -192,34 +189,6 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     return;
 }
 
-void TemplateSelectionPagePrivate::loadFileClicked()
-{
-    const QStringList filters{
-        QStringLiteral("application/x-desktop"),
-        QStringLiteral("application/x-bzip-compressed-tar"),
-        QStringLiteral("application/zip")
-    };
-    ScopedDialog<QFileDialog> dlg(page);
-    dlg->setMimeTypeFilters(filters);
-    dlg->setFileMode(QFileDialog::ExistingFiles);
-
-    if (!dlg->exec())
-    {
-        return;
-    }
-
-    const auto selectedFiles = dlg->selectedFiles();
-    for (const QString& fileName : selectedFiles) {
-        QString destination = model->loadTemplateFile(fileName);
-        QModelIndexList indexes = model->templateIndexes(destination);
-        int n = indexes.size();
-        if (n > 1)
-        {
-            ui->view->setCurrentIndex(indexes[1]);
-        }
-    }
-}
-
 void TemplateSelectionPage::saveConfig()
 {
     KSharedConfigPtr config;
@@ -299,7 +268,11 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
     d->ui->view->addWidget(0, getMoreButton);
 
     auto* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18nc("@action:button", "Load Template from File"), d->ui->view);
-    connect (loadButton, &QPushButton::clicked, this, [&] { d->loadFileClicked(); });
+    connect(loadButton, &QPushButton::clicked, this, [this] {
+        if (!d->viewHelper().loadTemplatesFromFiles(this)) {
+            d->makeFirstTemplateCurrent();
+        }
+    });
     d->ui->view->addWidget(0, loadButton);
 
     d->ui->view->setContentsMargins(0, 0, 0, 0);

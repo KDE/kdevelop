@@ -45,8 +45,6 @@ private Q_SLOTS:
     void typeChanged(const QModelIndex& idx);
     void templateChanged(int);
 
-    void loadFileClicked();
-
 private:
     inline QByteArray encodedProjectName();
     [[nodiscard]] ProjectTemplatesViewHelper viewHelper();

@@ -14,6 +14,7 @@
 
 class QModelIndex;
 class QString;
+class QWidget;
 
 namespace KNSCore {
 class Entry;
@@ -47,6 +48,15 @@ public:
      *         @c false otherwise - if the model was refreshed but no template was selected in the UI
      */
     bool handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries);
+
+    /**
+     * Show a file dialog with a given parent, load templates from existing files
+     * selected by the user and try to select a newly loaded template in the UI.
+     *
+     * @return @c true if the user canceled loading or if a template was successfully selected in the UI;
+     *         @c false otherwise - if the model was refreshed but no template was selected in the UI
+     */
+    bool loadTemplatesFromFiles(QWidget* dialogParent);
 
 protected:
     ~TemplatesViewHelper() = default;

@@ -392,8 +392,6 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
         QFile::copy(fileName, saveLocation + info.fileName());
     }
 
-    refresh();
-
     return destination;
 }
 
