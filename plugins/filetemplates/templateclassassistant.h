@@ -12,6 +12,7 @@
 
 namespace KDevelop
 {
+class ITemplateProvider;
 
 /**
  * @brief An assistant for creating new source code files using KTextTemplate templates.
@@ -33,19 +34,16 @@ public:
     /**
      * Creates a new assistant
      *
-     * @param parent parent widget
+     * @param templateProvider a template provider for the template selection page
      * @param baseUrl the directory where the new class should be created
+     * @param parent the parent widget
      **/
-    explicit TemplateClassAssistant(QWidget* parent, const QUrl& baseUrl = QUrl());
+    explicit TemplateClassAssistant(ITemplateProvider& templateProvider, const QUrl& baseUrl = QUrl(),
+                                    QWidget* parent = nullptr);
     /**
      * Destroys the assistant
      **/
     ~TemplateClassAssistant() override;
-
-    /**
-     * Sets up the template selection page
-     */
-    void setup();
 
     /**
      * @return The url from where the assistant was started.
@@ -78,6 +76,11 @@ public Q_SLOTS:
     void setCurrentPageValid(bool valid);
 
 private:
+    /**
+     * Set up the template selection page.
+     */
+    void setup(ITemplateProvider& templateProvider);
+
     class TemplateClassAssistantPrivate* const d;
 };
 

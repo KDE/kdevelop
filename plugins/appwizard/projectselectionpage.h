@@ -9,23 +9,29 @@
 
 #include "appwizardpagewidget.h"
 
+#include <memory>
+
 namespace Ui {
 class ProjectSelectionPage;
 }
 
-class ProjectTemplatesModel;
 class ProjectTemplatesViewHelper;
 
 class QModelIndex;
 class QStandardItem;
 class QUrl;
 
+namespace KDevelop {
+class ITemplateProvider;
+class TemplatesModel;
+}
+
 class AppWizardDialog;
 
 class ProjectSelectionPage : public AppWizardPageWidget {
 Q_OBJECT
 public:
-    explicit ProjectSelectionPage(ProjectTemplatesModel *templatesModel, AppWizardDialog *wizardDialog);
+    explicit ProjectSelectionPage(KDevelop::ITemplateProvider& templateProvider, AppWizardDialog* wizardDialog);
     ~ProjectSelectionPage() override;
 
     bool shouldContinue() override;
@@ -57,8 +63,8 @@ private:
      */
     void makeFirstTemplateCurrent();
 
+    const std::unique_ptr<KDevelop::TemplatesModel> m_templatesModel;
     Ui::ProjectSelectionPage *ui;
-    ProjectTemplatesModel *m_templatesModel;
     AppWizardDialog *m_wizardDialog;
 };
 

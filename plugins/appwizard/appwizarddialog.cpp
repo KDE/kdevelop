@@ -13,11 +13,11 @@
 #include <interfaces/iplugincontroller.h>
 #include <vcs/vcslocation.h>
 
-#include "projecttemplatesmodel.h"
 #include "projectselectionpage.h"
 #include "projectvcspage.h"
 
-AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, ProjectTemplatesModel* templatesModel, QWidget *parent)
+AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController,
+                                 KDevelop::ITemplateProvider& templateProvider, QWidget* parent)
     : KAssistantDialog(parent)
 {
     setWindowTitle(i18nc("@title:window", "Create New Project"));
@@ -29,7 +29,7 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
         delete helpButton;
     }
 
-    m_selectionPage = new ProjectSelectionPage(templatesModel, this);
+    m_selectionPage = new ProjectSelectionPage(templateProvider, this);
     m_vcsPage = new ProjectVcsPage( pluginController, this );
     m_vcsPage->setSourceLocation( m_selectionPage->location() );
     connect( m_selectionPage, &ProjectSelectionPage::locationChanged,

@@ -9,10 +9,13 @@
 
 #include <QWidget>
 
+#include <memory>
+
 class QModelIndex;
 namespace KDevelop
 {
 class ITemplateProvider;
+class TemplatesModel;
 }
 
 namespace Ui
@@ -20,9 +23,7 @@ namespace Ui
     class TemplatePage;
 }
 
-namespace KNSCore {
-class Entry;
-}
+class TreeViewTemplatesViewHelper;
 
 class TemplatePage : public QWidget
 {
@@ -32,13 +33,13 @@ public:
     ~TemplatePage() override;
 
 private Q_SLOTS:
-    void loadFromFile();
-    void handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries);
     void currentIndexChanged(const QModelIndex& index);
     void extractTemplate();
 
 private:
-    KDevelop::ITemplateProvider* m_provider;
+    [[nodiscard]] TreeViewTemplatesViewHelper viewHelper();
+
+    const std::unique_ptr<KDevelop::TemplatesModel> m_model;
     Ui::TemplatePage* ui;
 };
 

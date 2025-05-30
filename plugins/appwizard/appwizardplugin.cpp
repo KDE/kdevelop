@@ -43,6 +43,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <language/codegen/templatesmodel.h>
 #include <util/scopeddialog.h>
 #include <sublime/message.h>
 #include <vcs/vcsjob.h>
@@ -52,7 +53,6 @@
 #include "appwizarddialog.h"
 #include "projectselectionpage.h"
 #include "projectvcspage.h"
-#include "projecttemplatesmodel.h"
 #include "debug.h"
 
 using namespace KDevelop;
@@ -80,9 +80,7 @@ AppWizardPlugin::~AppWizardPlugin()
 
 void AppWizardPlugin::slotNewProject()
 {
-    model()->refresh();
-
-    ScopedDialog<AppWizardDialog> dlg(core()->pluginController(), m_templatesModel);
+    ScopedDialog<AppWizardDialog> dlg(core()->pluginController(), *this);
 
     if (dlg->exec() == QDialog::Accepted)
     {
@@ -529,33 +527,14 @@ KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::C
     return ext;
 }
 
-ProjectTemplatesModel* AppWizardPlugin::model() const
+std::unique_ptr<KDevelop::TemplatesModel> AppWizardPlugin::createTemplatesModel() const
 {
-    if(!m_templatesModel) {
-        auto* self = const_cast<AppWizardPlugin*>(this);
-        m_templatesModel = new ProjectTemplatesModel(self);
-    }
-    return m_templatesModel;
-}
-
-QAbstractItemModel* AppWizardPlugin::templatesModel() const
-{
-    return model();
+    return std::make_unique<KDevelop::TemplatesModel>(QStringLiteral("kdevappwizard"));
 }
 
 QString AppWizardPlugin::knsConfigurationFile() const
 {
     return QStringLiteral("kdevappwizard.knsrc");
-}
-
-QStringList AppWizardPlugin::supportedMimeTypes() const
-{
-    const QStringList types{
-        QStringLiteral("application/x-desktop"),
-        QStringLiteral("application/x-bzip-compressed-tar"),
-        QStringLiteral("application/zip"),
-    };
-    return types;
 }
 
 QIcon AppWizardPlugin::icon() const
@@ -567,17 +546,6 @@ QString AppWizardPlugin::name() const
 {
     return i18n("Project Templates");
 }
-
-void AppWizardPlugin::loadTemplate(const QString& fileName)
-{
-    model()->loadTemplateFile(fileName);
-}
-
-void AppWizardPlugin::reload()
-{
-    model()->refresh();
-}
-
 
 #include "appwizardplugin.moc"
 #include "moc_appwizardplugin.cpp"

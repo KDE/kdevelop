@@ -19,11 +19,12 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/itemplateprovider.h>
 #include <language/codegen/templatepreviewicon.h>
+#include <language/codegen/templatesmodel.h>
 #include <language/codegen/templatesviewhelper.h>
 
 #include "ui_projectselectionpage.h"
-#include "projecttemplatesmodel.h"
 
 #include <QDir>
 #include <QRegularExpression>
@@ -65,9 +66,12 @@ private:
     QComboBox& m_templateTypeView;
 };
 
-ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, AppWizardDialog *wizardDialog)
-    : AppWizardPageWidget(wizardDialog), m_templatesModel(templatesModel)
+ProjectSelectionPage::ProjectSelectionPage(ITemplateProvider& templateProvider, AppWizardDialog* wizardDialog)
+    : AppWizardPageWidget(wizardDialog)
+    , m_templatesModel{templateProvider.createTemplatesModel()}
 {
+    m_templatesModel->refresh();
+
     ui = new Ui::ProjectSelectionPage();
     ui->setupUi(this);
     ui->descriptionContent->setBackgroundRole(QPalette::Base);
@@ -92,7 +96,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
         i18nc("@title:column", "Category"),
         i18nc("@title:column", "Project Type")
     });
-    ui->listView->setModel(templatesModel);
+    ui->listView->setModel(m_templatesModel.get());
     ui->listView->setLastLevelViewMode(MultiLevelListView::DirectChildren);
     connect (ui->listView, &MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
     typeChanged(ui->listView->currentIndex());
@@ -101,7 +105,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, &ProjectSelectionPage::templateChanged );
 
     auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"),
-                                                 QStringLiteral("kdevappwizard.knsrc"), ui->listView);
+                                                 templateProvider.knsConfigurationFile(), ui->listView);
     connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this,
             [this](const QList<KNSCore::Entry>& changedEntries) {
                 if (!viewHelper().handleNewStuffDialogFinished(changedEntries)) {
@@ -146,7 +150,7 @@ void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
     ui->templateType->setVisible(children);
     ui->templateType->setEnabled(children > 1);
     if (children) {
-        ui->templateType->setModel(m_templatesModel);
+        ui->templateType->setModel(m_templatesModel.get());
         ui->templateType->setRootModelIndex(idx);
         ui->templateType->setCurrentIndex(0);
         itemChanged(idx.model()->index(0, 0, idx));

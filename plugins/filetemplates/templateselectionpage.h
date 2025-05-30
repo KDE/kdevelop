@@ -11,7 +11,7 @@
 
 namespace KDevelop
 {
-
+class ITemplateProvider;
 class TemplateClassAssistant;
 
 /**
@@ -23,7 +23,7 @@ class TemplateSelectionPage : public QWidget
     Q_PROPERTY(QString selectedTemplate READ selectedTemplate)
 
 public:
-    explicit TemplateSelectionPage (TemplateClassAssistant* parent);
+    explicit TemplateSelectionPage(ITemplateProvider& templateProvider, TemplateClassAssistant* parent);
     ~TemplateSelectionPage() override;
 
     /**

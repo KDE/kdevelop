@@ -252,9 +252,10 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
 
 }
 
-TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const QUrl& baseUrl)
-: KAssistantDialog(parent)
-, d(new TemplateClassAssistantPrivate(baseUrl))
+TemplateClassAssistant::TemplateClassAssistant(ITemplateProvider& templateProvider, const QUrl& baseUrl,
+                                               QWidget* parent)
+    : KAssistantDialog(parent)
+    , d(new TemplateClassAssistantPrivate(baseUrl))
 {
     ZERO_PAGE(templateSelection)
     ZERO_PAGE(templateOptions)
@@ -265,7 +266,7 @@ TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const QUrl& base
     ZERO_PAGE(output)
     ZERO_PAGE(testCases)
 
-    setup();
+    setup(templateProvider);
 }
 
 TemplateClassAssistant::~TemplateClassAssistant()
@@ -273,7 +274,7 @@ TemplateClassAssistant::~TemplateClassAssistant()
     delete d;
 }
 
-void TemplateClassAssistant::setup()
+void TemplateClassAssistant::setup(ITemplateProvider& templateProvider)
 {
     if (d->baseUrl.isValid())
     {
@@ -284,7 +285,7 @@ void TemplateClassAssistant::setup()
         setWindowTitle(i18nc("@title:window", "Create Files from Template"));
     }
 
-    d->templateSelectionPageWidget = new TemplateSelectionPage(this);
+    d->templateSelectionPageWidget = new TemplateSelectionPage(templateProvider, this);
     connect(this, &TemplateClassAssistant::accepted, d->templateSelectionPageWidget, &TemplateSelectionPage::saveConfig);
     d->templateSelectionPage = addPage(d->templateSelectionPageWidget, i18nc("@title:tab", "Language and Template"));
     d->templateSelectionPage->setIcon(QIcon::fromTheme(QStringLiteral("project-development-new-template")));

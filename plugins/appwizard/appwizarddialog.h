@@ -17,11 +17,11 @@
 class KPageWidgetItem;
 class ProjectSelectionPage;
 class ProjectVcsPage;
-class ProjectTemplatesModel;
 
 namespace KDevelop
 {
 class IPluginController;
+class ITemplateProvider;
 }
 
 class ApplicationInfo
@@ -39,8 +39,8 @@ public:
 class AppWizardDialog: public KAssistantDialog {
 Q_OBJECT
 public:
-    AppWizardDialog( KDevelop::IPluginController*, ProjectTemplatesModel*,
-                     QWidget *parent = nullptr);
+    explicit AppWizardDialog(KDevelop::IPluginController* pluginController,
+                             KDevelop::ITemplateProvider& templateProvider, QWidget* parent = nullptr);
 
     ApplicationInfo appInfo() const;
 

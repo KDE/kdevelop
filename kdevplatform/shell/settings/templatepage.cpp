@@ -7,43 +7,70 @@
 #include "templatepage.h"
 #include "ui_templatepage.h"
 
-#include <QFileDialog>
-
 #include <interfaces/itemplateprovider.h>
 #include <language/codegen/templatesmodel.h>
+#include <language/codegen/templatesviewhelper.h>
 
 #include <KArchive>
-#include <KNSCore/Entry>
 #include <KNSWidgets/Button>
 #include <KZip>
 #include <KTar>
 
-#include <util/scopeddialog.h>
+#include <QFileDialog>
+#include <QList>
 
-TemplatePage::TemplatePage (KDevelop::ITemplateProvider* provider, QWidget* parent) : QWidget (parent),
-m_provider(provider)
+using namespace KDevelop;
+
+class TreeViewTemplatesViewHelper final : public TemplatesViewHelper
 {
+public:
+    explicit TreeViewTemplatesViewHelper(TemplatesModel& model, QTreeView& view)
+        : TemplatesViewHelper(model)
+        , m_view{view}
+    {
+    }
+
+private:
+    bool setCurrentTemplate(const QList<QModelIndex>& indexes) override
+    {
+        if (indexes.empty()) {
+            return false;
+        }
+        m_view.setCurrentIndex(indexes.constLast());
+        return true;
+    }
+
+    QTreeView& m_view;
+};
+
+TemplatePage::TemplatePage(ITemplateProvider* provider, QWidget* parent)
+    : QWidget(parent)
+    , m_model{provider->createTemplatesModel()}
+{
+    m_model->refresh();
+
     ui = new Ui::TemplatePage;
     ui->setupUi(this);
 
-    if (!m_provider->knsConfigurationFile().isEmpty()) {
-        auto* getNewButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"),
-                                                    m_provider->knsConfigurationFile(), this);
-        connect(getNewButton, &KNSWidgets::Button::dialogFinished, this, &TemplatePage::handleNewStuffDialogFinished);
+    if (const auto knsConfigurationFile = provider->knsConfigurationFile(); !knsConfigurationFile.isEmpty()) {
+        auto* const getNewButton =
+            new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"), knsConfigurationFile, this);
+        connect(getNewButton, &KNSWidgets::Button::dialogFinished, this,
+                [this](const QList<KNSCore::Entry>& changedEntries) {
+                    viewHelper().handleNewStuffDialogFinished(changedEntries);
+                });
         ui->buttonLayout->insertWidget(1, getNewButton);
     }
 
-    ui->loadButton->setVisible(!m_provider->supportedMimeTypes().isEmpty());
-    connect(ui->loadButton, &QPushButton::clicked,
-            this, &TemplatePage::loadFromFile);
+    connect(ui->loadButton, &QPushButton::clicked, this, [this] {
+        viewHelper().loadTemplatesFromFiles(this);
+    });
 
     ui->extractButton->setEnabled(false);
     connect(ui->extractButton, &QPushButton::clicked,
             this, &TemplatePage::extractTemplate);
 
-    provider->reload();
-
-    ui->treeView->setModel(provider->templatesModel());
+    ui->treeView->setModel(m_model.get());
     ui->treeView->expandAll();
     connect(ui->treeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &TemplatePage::currentIndexChanged);
 }
@@ -51,30 +78,6 @@ m_provider(provider)
 TemplatePage::~TemplatePage()
 {
     delete ui;
-}
-
-void TemplatePage::loadFromFile()
-{
-    KDevelop::ScopedDialog<QFileDialog> fileDialog(this);
-    fileDialog->setMimeTypeFilters(m_provider->supportedMimeTypes());
-    fileDialog->setFileMode(QFileDialog::ExistingFiles);
-    if (!fileDialog->exec()) {
-        return;
-    }
-
-    const auto& selectedFiles = fileDialog->selectedFiles();
-    for (const auto& file : selectedFiles) {
-        m_provider->loadTemplate(file);
-    }
-
-    m_provider->reload();
-}
-
-void TemplatePage::handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries)
-{
-    if (!changedEntries.isEmpty()) {
-        m_provider->reload();
-    }
 }
 
 void TemplatePage::currentIndexChanged(const QModelIndex& index)
@@ -109,6 +112,11 @@ void TemplatePage::extractTemplate()
 
     const QString destination = QFileDialog::getExistingDirectory() + QLatin1Char('/') + info.baseName();
     archive->directory()->copyTo(destination);
+}
+
+TreeViewTemplatesViewHelper TemplatePage::viewHelper()
+{
+    return TreeViewTemplatesViewHelper(*m_model, *ui->treeView);
 }
 
 #include "moc_templatepage.cpp"

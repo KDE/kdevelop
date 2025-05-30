@@ -15,7 +15,6 @@
 #include <QHash>
 #include <QVariant>
 
-class ProjectTemplatesModel;
 class ApplicationInfo;
 class KArchiveDirectory;
 
@@ -29,26 +28,19 @@ public:
     ~AppWizardPlugin() override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
-    QAbstractItemModel* templatesModel() const override;
+    [[nodiscard]] std::unique_ptr<KDevelop::TemplatesModel> createTemplatesModel() const override;
     QString knsConfigurationFile() const override;
-    QStringList supportedMimeTypes() const override;
     QString name() const override;
     QIcon icon() const override;
-    void loadTemplate(const QString& fileName) override;
-    void reload() override;
 
 private Q_SLOTS:
     void slotNewProject();
 
 private:
-    ProjectTemplatesModel* model() const;
-
     QString createProject(const ApplicationInfo& );
     bool unpackArchive(const KArchiveDirectory* dir, const QString& dest, const QStringList& skipList = {});
     bool copyFileAndExpandMacros(const QString &source, const QString &dest);
 
-    // created lazily
-    mutable ProjectTemplatesModel* m_templatesModel = nullptr;
     QAction* m_newFromTemplate;
     QHash<QString, QString> m_variables;
 };

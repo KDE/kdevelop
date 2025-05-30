@@ -7,7 +7,6 @@ set(kdevappwizard_PART_SRCS
     appwizarddialog.cpp
     appwizardpagewidget.cpp
     projectselectionpage.cpp
-    projecttemplatesmodel.cpp
     projectvcspage.cpp
 )
 

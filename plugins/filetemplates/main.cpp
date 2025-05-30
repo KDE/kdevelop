@@ -1,7 +1,12 @@
+#include "filetemplateprovider.h"
+#include "templateclassassistant.h"
+
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
-#include "templateclassassistant.h"
+
 #include <QApplication>
+#include <QUrl>
+
 using namespace KDevelop;
 
 int main(int argc, char** argv)
@@ -10,7 +15,9 @@ int main(int argc, char** argv)
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 
-    auto* assistant = new TemplateClassAssistant(QApplication::activeWindow(), QUrl::fromLocalFile(QStringLiteral("/tmp/")));
+    FileTemplateProvider templateProvider;
+    auto* const assistant = new TemplateClassAssistant(templateProvider, QUrl::fromLocalFile(QStringLiteral("/tmp/")),
+                                                       QApplication::activeWindow());
     assistant->setAttribute(Qt::WA_DeleteOnClose);
     assistant->show();
     return app.exec();

@@ -15,10 +15,12 @@
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/templatesviewhelper.h>
 #include <language/interfaces/ilanguagesupport.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>
+#include <interfaces/itemplateprovider.h>
 
 #include "ui_templateselection.h"
 
@@ -74,15 +76,18 @@ private:
 class KDevelop::TemplateSelectionPagePrivate
 {
 public:
-    explicit TemplateSelectionPagePrivate(TemplateSelectionPage* page_)
-    : page(page_)
-    {}
+    explicit TemplateSelectionPagePrivate(TemplateSelectionPage* page_, ITemplateProvider& templateProvider)
+        : page(page_)
+        , model{templateProvider.createTemplatesModel()}
+    {
+        model->refresh();
+    }
 
     TemplateSelectionPage* page;
+    const std::unique_ptr<TemplatesModel> model;
     Ui::TemplateSelection* ui;
     QString selectedTemplate;
     TemplateClassAssistant* assistant;
-    TemplatesModel* model;
 
     [[nodiscard]] FileTemplatesViewHelper viewHelper()
     {
@@ -206,17 +211,14 @@ void TemplateSelectionPage::saveConfig()
     group.sync();
 }
 
-TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
-: QWidget(parent)
-, d(new TemplateSelectionPagePrivate(this))
+TemplateSelectionPage::TemplateSelectionPage(ITemplateProvider& templateProvider, TemplateClassAssistant* parent)
+    : QWidget(parent)
+    , d{new TemplateSelectionPagePrivate(this, templateProvider)}
 {
     d->assistant = parent;
 
     d->ui = new Ui::TemplateSelection;
     d->ui->setupUi(this);
-
-    d->model = new TemplatesModel(QStringLiteral("kdevfiletemplates"), this);
-    d->model->refresh();
 
     d->ui->view->setLevels(viewLevelCount);
     d->ui->view->setHeaderLabels(QStringList{
@@ -224,7 +226,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
         i18nc("@title:column", "Framework"),
         i18nc("@title:column", "Template")
     });
-    d->ui->view->setModel(d->model);
+    d->ui->view->setModel(d->model.get());
 
     connect(d->ui->view, &MultiLevelListView::currentIndexChanged,
             this, [&] (const QModelIndex& index) { d->currentTemplateChanged(index); });
@@ -258,7 +260,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
     d->ui->view->setCurrentIndex(templateIndex);
 
     auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates..."),
-                                                 QStringLiteral("kdevfiletemplates.knsrc"), d->ui->view);
+                                                 templateProvider.knsConfigurationFile(), d->ui->view);
     connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this,
             [this](const QList<KNSCore::Entry>& changedEntries) {
                 if (!d->viewHelper().handleNewStuffDialogFinished(changedEntries)) {

@@ -3,7 +3,6 @@
 #include "templatepreviewtoolview.h"
 #include "debug.h"
 
-#include <language/codegen/templatesmodel.h>
 #include <language/interfaces/editorcontext.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -142,52 +141,6 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension(Context* context,
     return ext;
 }
 
-QString FileTemplatesPlugin::name() const
-{
-    return i18n("File Templates");
-}
-
-QIcon FileTemplatesPlugin::icon() const
-{
-    return QIcon::fromTheme(QStringLiteral("code-class"));
-}
-
-QAbstractItemModel* FileTemplatesPlugin::templatesModel() const
-{
-    if(!m_model) {
-        auto* self = const_cast<FileTemplatesPlugin*>(this);
-        m_model = new TemplatesModel(QStringLiteral("kdevfiletemplates"), self);
-    }
-    return m_model;
-}
-
-QString FileTemplatesPlugin::knsConfigurationFile() const
-{
-    return QStringLiteral("kdevfiletemplates.knsrc");
-}
-
-QStringList FileTemplatesPlugin::supportedMimeTypes() const
-{
-    const QStringList types{
-        QStringLiteral("application/x-desktop"),
-        QStringLiteral("application/x-bzip-compressed-tar"),
-        QStringLiteral("application/zip"),
-    };
-    return types;
-}
-
-void FileTemplatesPlugin::reload()
-{
-    templatesModel();
-    m_model->refresh();
-}
-
-void FileTemplatesPlugin::loadTemplate(const QString& fileName)
-{
-    templatesModel();
-    m_model->loadTemplateFile(fileName);
-}
-
 void FileTemplatesPlugin::createFromTemplate()
 {
     QUrl baseUrl;
@@ -228,7 +181,7 @@ void FileTemplatesPlugin::createFromTemplate()
         // last resort
         baseUrl = ICore::self()->projectController()->projectsBaseDirectory();
     }
-    auto* assistant = new TemplateClassAssistant(QApplication::activeWindow(), baseUrl);
+    auto* const assistant = new TemplateClassAssistant(*this, baseUrl, QApplication::activeWindow());
     assistant->setAttribute(Qt::WA_DeleteOnClose);
     assistant->show();
 }

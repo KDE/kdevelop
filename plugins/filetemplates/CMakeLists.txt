@@ -2,6 +2,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevfiletemplates\")
 set(kdevfiletemplates_PART_SRCS
     templatepreview.cpp
     templatepreviewtoolview.cpp
+    filetemplateprovider.cpp
     filetemplatesplugin.cpp
 
     ipagefocus.cpp
@@ -78,6 +79,7 @@ main.cpp
     classidentifierpage.cpp
     classmemberspage.cpp
     defaultcreateclasshelper.cpp
+    filetemplateprovider.cpp
     licensepage.cpp
     outputpage.cpp
     overridespage.cpp
