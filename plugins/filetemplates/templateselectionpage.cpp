@@ -245,8 +245,8 @@ TemplateSelectionPage::TemplateSelectionPage(ITemplateProvider& templateProvider
     QString lastTemplate = group.readEntry(LastUsedTemplateEntry);
 
     QModelIndex templateIndex;
-    QModelIndexList indexes = d->model->match(d->model->index(0, 0), TemplatesModel::DescriptionFileRole, lastTemplate, 1, Qt::MatchRecursive);
-
+    const auto indexes = d->model->match(d->model->index(0, 0), TemplatesModel::DescriptionFileRole, lastTemplate, 1,
+                                         Qt::MatchRecursive);
     if (!indexes.isEmpty())
     {
         templateIndex = indexes.first();
