@@ -8,7 +8,6 @@
 #include "projectselectionpage.h"
 
 #include "appwizarddialog.h"
-#include "debug.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -99,7 +98,9 @@ ProjectSelectionPage::ProjectSelectionPage(ITemplateProvider& templateProvider, 
     ui->listView->setModel(m_templatesModel.get());
     ui->listView->setLastLevelViewMode(MultiLevelListView::DirectChildren);
     connect (ui->listView, &MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
-    typeChanged(ui->listView->currentIndex());
+    if (const auto index = ui->listView->currentIndex(); index.isValid()) {
+        typeChanged(index);
+    }
 
     connect( ui->templateType, QOverload<int>::of(&QComboBox::currentIndexChanged),
              this, &ProjectSelectionPage::templateChanged );
@@ -141,11 +142,8 @@ ProjectSelectionPage::~ProjectSelectionPage()
 
 void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
 {
-    if (!idx.model())
-    {
-        qCDebug(PLUGIN_APPWIZARD) << "Index with no model";
-        return;
-    }
+    Q_ASSERT_X(idx.isValid(), Q_FUNC_INFO, "MultiLevelListView::currentIndexChanged() emitted an invalid index");
+
     int children = idx.model()->rowCount(idx);
     ui->templateType->setVisible(children);
     ui->templateType->setEnabled(children > 1);

@@ -101,12 +101,18 @@ public:
      */
     void makeFirstTemplateCurrent();
 
+    /**
+     * Call this function when refreshing the model invalidates the current template.
+     */
+    void currentTemplateInvalidated();
+
     void currentTemplateChanged(const QModelIndex& index);
     void previewTemplate(const QString& templateFile);
 };
 
 void TemplateSelectionPagePrivate::makeFirstTemplateCurrent()
 {
+    currentTemplateInvalidated(); // in case the model is empty or selecting the first template fails
     // Set an invalid index as current to select the very first template because something should always be selected.
     // Furthermore, MultiLevelListView is not a real item view and requires manual setting of its current index after
     // the model is refreshed in order to prevent a crash in QAbstractProxyModelPrivate::emitHeaderDataChanged().
@@ -114,24 +120,26 @@ void TemplateSelectionPagePrivate::makeFirstTemplateCurrent()
     ui->view->setCurrentIndex({});
 }
 
+void TemplateSelectionPagePrivate::currentTemplateInvalidated()
+{
+    assistant->setValid(assistant->currentPage(), false);
+    ui->previewLabel->setVisible(false);
+    ui->tabWidget->setVisible(false);
+}
+
 void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& index)
 {
-    // delete preview tabs
-    if (!index.isValid() || index.model()->hasChildren(index))
-    {
-        // invalid or has child
-        assistant->setValid(assistant->currentPage(), false);
-        ui->previewLabel->setVisible(false);
-        ui->tabWidget->setVisible(false);
-    } else {
-        selectedTemplate = model->data(index, TemplatesModel::DescriptionFileRole).toString();
-        assistant->setValid(assistant->currentPage(), true);
-        previewTemplate(selectedTemplate);
-        ui->previewLabel->setVisible(true);
-        ui->tabWidget->setVisible(true);
-        ui->previewLabel->setText(i18nc("%1: template comment", "<b>Preview:</b> %1",
-                                        index.data(TemplatesModel::CommentRole).toString()));
-    }
+    Q_ASSERT_X(index.isValid(), Q_FUNC_INFO, "MultiLevelListView::currentIndexChanged() emitted an invalid index");
+    Q_ASSERT_X(!index.model()->hasChildren(index), Q_FUNC_INFO,
+               "Only leaf items are selectable in MultiLevelListView with the default level view mode SubTrees");
+
+    selectedTemplate = model->data(index, TemplatesModel::DescriptionFileRole).toString();
+    assistant->setValid(assistant->currentPage(), true);
+    previewTemplate(selectedTemplate);
+    ui->previewLabel->setVisible(true);
+    ui->tabWidget->setVisible(true);
+    ui->previewLabel->setText(i18nc("%1: template comment", "<b>Preview:</b> %1",
+                                    index.data(TemplatesModel::CommentRole).toString()));
 }
 
 void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
@@ -230,6 +238,8 @@ TemplateSelectionPage::TemplateSelectionPage(ITemplateProvider& templateProvider
 
     connect(d->ui->view, &MultiLevelListView::currentIndexChanged,
             this, [&] (const QModelIndex& index) { d->currentTemplateChanged(index); });
+
+    d->currentTemplateInvalidated(); // in case the model is empty or selecting the last used or first template fails
 
     KSharedConfigPtr config;
     if (IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl()))

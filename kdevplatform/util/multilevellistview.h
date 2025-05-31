@@ -114,6 +114,9 @@ Q_SIGNALS:
      * @param current the new current index
      * @param previous the previous index
      *
+     * @note This signal is *not* emitted when the current index becomes
+     *       invalid, which can happen if the model becomes empty.
+     *
      * @sa currentIndex(), QItemSelectionModel::currentChanged()
      */
     void currentIndexChanged(const QModelIndex& current, const QModelIndex& previous);

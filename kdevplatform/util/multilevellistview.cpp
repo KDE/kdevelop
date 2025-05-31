@@ -402,10 +402,6 @@ void MultiLevelListView::setCurrentIndex(const QModelIndex& index)
     // incoming index is for the original model
     Q_ASSERT(!index.isValid() || index.model() == d->model);
 
-    // Notify about the change to a possibly invalid index in case the code below fails to select
-    // a valid index in the rightmost view and consequently does not emit currentIndexChanged().
-    emit currentIndexChanged(index, currentIndex());
-
     QModelIndex idx(index);
     QVector<QModelIndex> indexes;
 
