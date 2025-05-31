@@ -334,6 +334,7 @@ QStandardItem* ProjectSelectionPage::currentItem() const
 
 void ProjectSelectionPage::makeFirstTemplateCurrent()
 {
+    itemChanged({}); // in case the model is empty or selecting the first template fails
     // Set an invalid index as current to select the very first template because something should always be selected.
     // Furthermore, MultiLevelListView is not a real item view and requires manual setting of its current index after
     // the model is refreshed in order to prevent a crash in QAbstractProxyModelPrivate::emitHeaderDataChanged().
