@@ -584,8 +584,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     // when we depend on e.g. A and B, but B cannot be found, then we
     // do not want to load A first and then fail on B and leave A loaded.
     // this would happen if we'd skip this step here and directly loadDependencies.
-    QStringList missingInterfaces;
-    if ( !hasUnresolvedDependencies( info, missingInterfaces ) ) {
+    if (const auto missingInterfaces = unresolvedDependencies(info); !missingInterfaces.empty()) {
         qCWarning(SHELL) << "Can't load plugin" << pluginId
                    << "some of its required dependencies could not be fulfilled:"
                    << missingInterfaces.join(QLatin1Char(','));
@@ -656,7 +655,7 @@ IPlugin* PluginController::plugin(const QString& pluginId) const
     return d->loadedPlugins.value( info );
 }
 
-bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, QStringList& missing ) const
+QStringList PluginController::unresolvedDependencies(const KPluginMetaData& info) const
 {
     Q_D(const PluginController);
 
@@ -673,11 +672,7 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
         });
     }
     // if we found all dependencies required should be empty now
-    if (!required.isEmpty()) {
-        missing = required.values();
-        return false;
-    }
-    return true;
+    return required.values();
 }
 
 void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
