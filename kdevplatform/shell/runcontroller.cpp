@@ -778,10 +778,12 @@ void RunController::addConfigurationType( LaunchConfigurationType* type )
 {
     Q_D(RunController);
 
-    if( !d->launchConfigurationTypes.contains( type->id() ) )
-    {
-        d->launchConfigurationTypes.insert( type->id(), type );
+    const auto typeId = type->id();
+    if (d->launchConfigurationTypes.contains(typeId)) {
+        qCWarning(SHELL) << "cannot add configuration type with an already registered ID" << typeId;
+        return;
     }
+    d->launchConfigurationTypes.insert(typeId, type);
 }
 
 void RunController::removeConfigurationType( LaunchConfigurationType* type )
