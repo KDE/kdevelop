@@ -260,6 +260,12 @@ public:
         QAction* action = currentTargetAction->addAction(launchActionText( l ));
         action->setData(QVariant::fromValue<void*>(l));
     }
+
+    void readProjectLaunchConfigurations(IProject* project)
+    {
+        readLaunchConfigs(project->projectConfiguration(), project);
+    }
+
     void readLaunchConfigs( const KSharedConfigPtr& cfg, IProject* prj )
     {
         KConfigGroup group(cfg, Strings::LaunchConfigurationsGroup());
@@ -366,7 +372,7 @@ void RunController::initialize()
 
     const auto projects = Core::self()->projectController()->projects();
     for (IProject* project : projects) {
-        slotProjectOpened(project);
+        d->readProjectLaunchConfigurations(project);
     }
     connect(Core::self()->projectController(), &IProjectController::projectOpened,
             this, &RunController::slotProjectOpened);
@@ -490,7 +496,7 @@ void KDevelop::RunController::slotProjectOpened(KDevelop::IProject * project)
 {
     Q_D(RunController);
 
-    d->readLaunchConfigs( project->projectConfiguration(), project );
+    d->readProjectLaunchConfigurations(project);
     d->updateCurrentLaunchAction();
 }
 
