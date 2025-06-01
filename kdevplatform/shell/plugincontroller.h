@@ -145,13 +145,12 @@ private:
      *
      * Assume a plugin depends on the interfaces Foo and Bar. Then, all available enabled
      * plugins are queried to check whether any fulfills the interfaces. If any of the
-     * interfaces is not found, then it is inserted into @p missing and this method returns
-     * true. Otherwise, @p missing is empty and this method returns true, indicating that all
-     * dependencies can be fulfilled.
+     * interfaces is not found, then it is inserted into the returned list. Otherwise,
+     * the returned list is empty, which indicates that all dependencies can be fulfilled.
      *
-     * @return true when there are unresolved dependencies, false otherwise.
+     * @return the list of unresolved dependencies
      */
-    bool hasUnresolvedDependencies( const KPluginMetaData& info, QStringList& missing ) const;
+    [[nodiscard]] QStringList unresolvedDependencies(const KPluginMetaData& info) const;
 
     bool loadDependencies(const KPluginMetaData&, QString& failedPlugin);
     void loadOptionalDependencies(const KPluginMetaData& info);
