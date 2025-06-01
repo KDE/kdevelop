@@ -373,11 +373,7 @@ void RunController::initialize()
     connect(Core::self()->projectController(), &IProjectController::projectClosing,
             this, &RunController::slotProjectClosing);
 
-    if( (Core::self()->setupFlags() & Core::NoUi) == 0 )
-    {
-        // Only do this in GUI mode
-        d->updateCurrentLaunchAction();
-    }
+    d->updateCurrentLaunchAction();
 }
 
 KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launch)
