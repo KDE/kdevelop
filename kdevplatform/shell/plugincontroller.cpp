@@ -187,7 +187,7 @@ public:
             const KPluginMetaData& info = it.key();
             if (info.pluginId() != plugin.pluginId()) {
                 const auto dependencies =
-                    plugin.value(KEY_Required(), QStringList()) + plugin.value(KEY_Optional(), QStringList());
+                    info.value(KEY_Required(), QStringList()) + info.value(KEY_Optional(), QStringList());
                 for (const QString& dep : dependencies) {
                     Dependency dependency(dep);
                     if (!dependency.pluginName.isEmpty() && dependency.pluginName != plugin.pluginId()) {
