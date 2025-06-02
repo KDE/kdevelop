@@ -183,6 +183,12 @@ public:
         }
         const auto interfaces = plugin.value(KEY_Interfaces(), QStringList());
         qCDebug(SHELL) << "checking dependencies:" << interfaces;
+        if (interfaces.empty()) {
+            // The loop below does not check dependencies on the plugin name
+            // alone without an interface, so return now to optimize.
+            return true;
+        }
+
         for (auto it = loadedPlugins.constBegin(), end = loadedPlugins.constEnd(); it != end; ++it) {
             const KPluginMetaData& info = it.key();
             if (info.pluginId() != plugin.pluginId()) {
