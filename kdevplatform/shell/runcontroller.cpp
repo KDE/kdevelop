@@ -261,21 +261,54 @@ public:
         action->setData(QVariant::fromValue<void*>(l));
     }
 
-    void readProjectLaunchConfigurations(IProject* project)
+    /**
+     * Read launch configurations from the session config, all open project configs,
+     * and add them to the list of all available launch configurations.
+     *
+     * @param launchConfigurationTypeId a registered configuration type ID to add only launch configurations of
+     *        this type, or an empty string to add launch configurations of all registered configuration types
+     */
+    void readAllLaunchConfigurations(const QString& launchConfigurationTypeId = {})
     {
-        readLaunchConfigs(project->projectConfiguration(), project);
+        readLaunchConfigurations(Core::self()->activeSession()->config(), nullptr, launchConfigurationTypeId);
+        const auto projects = Core::self()->projectController()->projects();
+        for (auto* const project : projects) {
+            readProjectLaunchConfigurations(project, launchConfigurationTypeId);
+        }
     }
-
-    void readLaunchConfigs( const KSharedConfigPtr& cfg, IProject* prj )
+    /**
+     * Read launch configurations from the config of a given project
+     * and add them to the list of all available launch configurations.
+     *
+     * @copydetails readAllLaunchConfigurations()
+     */
+    void readProjectLaunchConfigurations(IProject* project, const QString& launchConfigurationTypeId = {})
     {
+        readLaunchConfigurations(project->projectConfiguration(), project, launchConfigurationTypeId);
+    }
+    /**
+     * Read launch configurations from a given config and add them to the list of all available launch configurations.
+     *
+     * @param cfg a config to read launch configurations from
+     * @param project the project of @p cfg or @c nullptr if @p cfg is a global (session) config
+     * @copydetails readAllLaunchConfigurations()
+     */
+    void readLaunchConfigurations(const KSharedConfigPtr& cfg, IProject* project,
+                                  const QString& launchConfigurationTypeId = {})
+    {
+        Q_ASSERT(launchConfigurationTypeId.isEmpty() || launchConfigurationTypes.contains(launchConfigurationTypeId));
+        const auto shouldAddLaunchConfiguration = [&launchConfigurationTypeId, this](const QString& typeId) {
+            return launchConfigurationTypeId.isEmpty() ? (launchConfigurationTypeForId(typeId) != nullptr)
+                                                       : (typeId == launchConfigurationTypeId);
+        };
+
         KConfigGroup group(cfg, Strings::LaunchConfigurationsGroup());
         const QStringList configs = group.readEntry(Strings::LaunchConfigurationsListEntry(), QStringList());
 
         for (const QString& cfg : configs) {
             KConfigGroup grp = group.group( cfg );
-            if( launchConfigurationTypeForId( grp.readEntry( LaunchConfiguration::LaunchConfigurationTypeEntry(), "" ) ) )
-            {
-                q->addLaunchConfiguration( new LaunchConfiguration( grp, prj ) );
+            if (shouldAddLaunchConfiguration(grp.readEntry(LaunchConfiguration::LaunchConfigurationTypeEntry(), ""))) {
+                q->addLaunchConfiguration(new LaunchConfiguration(grp, project));
             }
         }
     }
@@ -368,17 +401,13 @@ void RunController::initialize()
     addLaunchMode( d->profileMode );
     d->debugMode = new DebugMode;
     addLaunchMode( d->debugMode );
-    d->readLaunchConfigs( Core::self()->activeSession()->config(), nullptr );
 
-    const auto projects = Core::self()->projectController()->projects();
-    for (IProject* project : projects) {
-        d->readProjectLaunchConfigurations(project);
-    }
     connect(Core::self()->projectController(), &IProjectController::projectOpened,
             this, &RunController::slotProjectOpened);
     connect(Core::self()->projectController(), &IProjectController::projectClosing,
             this, &RunController::slotProjectClosing);
 
+    d->readAllLaunchConfigurations();
     d->updateCurrentLaunchAction();
 }
 
@@ -784,6 +813,16 @@ void RunController::addConfigurationType( LaunchConfigurationType* type )
         return;
     }
     d->launchConfigurationTypes.insert(typeId, type);
+
+    if (!d->executeMode) {
+        qCDebug(SHELL) << "added configuration type" << typeId
+                       << "before initialization or after cleanup of the RunController, "
+                          "so will not read launch configurations now";
+        return;
+    }
+    qCDebug(SHELL).nospace() << "added configuration type " << typeId << ", reading launch configurations of this type";
+    d->readAllLaunchConfigurations(typeId);
+    d->updateCurrentLaunchAction();
 }
 
 void RunController::removeConfigurationType( LaunchConfigurationType* type )
