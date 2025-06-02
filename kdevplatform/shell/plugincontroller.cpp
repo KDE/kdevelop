@@ -192,6 +192,7 @@ public:
         for (auto it = loadedPlugins.constBegin(), end = loadedPlugins.constEnd(); it != end; ++it) {
             const KPluginMetaData& info = it.key();
             if (info.pluginId() != plugin.pluginId()) {
+                // TODO: cannot an optional dependency of a loaded plugin be safely unloaded?
                 const auto dependencies =
                     info.value(KEY_Required(), QStringList()) + info.value(KEY_Optional(), QStringList());
                 for (const QString& dep : dependencies) {
@@ -199,6 +200,13 @@ public:
                     if (!dependency.pluginName.isEmpty() && dependency.pluginName != plugin.pluginId()) {
                         continue;
                     }
+                    // TODO: if multiple loaded plugins implement an interface, cannot one of them be safely unloaded?
+                    // FIXME: canUnload(info) checks whether a dependent plugin can be unloaded. Either
+                    //        unloadPlugin() should unload the dependent plugins before unloading the plugin
+                    //        they depend on. Or the canUnload(info) check below should be removed to prevent
+                    //        unloading the plugin even if all plugins that depend on it can be unloaded. Either fix
+                    //        would ensure that whenever a plugin is loaded all its dependencies are loaded as well,
+                    //        and thus would address the TODO comment in Heaptrack::Plugin::launchHeaptrack().
                     if (interfaces.contains(dependency.interface) && !canUnload(info)) {
                         return false;
                     }
