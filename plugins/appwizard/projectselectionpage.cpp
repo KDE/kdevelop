@@ -267,20 +267,14 @@ void ProjectSelectionPage::validateData()
         }
     }
 
-    QStandardItem* item = currentItem();
-    if( item && !item->hasChildren() )
-    {
-        ui->locationValidWidget->animatedHide();
-        emit valid();
-    } else
-    {
+    if (const auto* const item = currentItem(); !item || item->hasChildren()) {
         ui->locationValidWidget->setText( i18n("Invalid project template, please choose a leaf item") );
         ui->locationValidWidget->animatedShow();
         emit invalid();
         return;
     }
 
-    // Check for non-empty target directory. Not an error, but need to display a warning.
+    // Check for non-empty target directory.
     url.setPath(url.path() + QLatin1Char('/') + QString::fromUtf8(encodedProjectName()));
     QFileInfo fi( url.toLocalFile() );
     if( fi.exists() && fi.isDir() )
@@ -293,6 +287,9 @@ void ProjectSelectionPage::validateData()
             return;
         }
     }
+
+    ui->locationValidWidget->animatedHide();
+    emit valid();
 }
 
 QByteArray ProjectSelectionPage::encodedProjectName()
