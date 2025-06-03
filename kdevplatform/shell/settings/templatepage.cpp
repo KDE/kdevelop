@@ -82,8 +82,12 @@ TemplatePage::~TemplatePage()
 
 void TemplatePage::currentIndexChanged(const QModelIndex& index)
 {
-    QString archive = ui->treeView->model()->data(index, KDevelop::TemplatesModel::ArchiveFileRole).toString();
-    ui->extractButton->setEnabled(QFileInfo::exists(archive));
+    auto canExtractArchive = false;
+    if (index.isValid()) {
+        QString archive = ui->treeView->model()->data(index, KDevelop::TemplatesModel::ArchiveFileRole).toString();
+        canExtractArchive = QFileInfo::exists(archive);
+    }
+    ui->extractButton->setEnabled(canExtractArchive);
 }
 
 void TemplatePage::extractTemplate()
