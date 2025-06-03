@@ -26,7 +26,7 @@ bool TemplatesViewHelper::handleNewStuffDialogFinished(const QList<KNSCore::Entr
         return true; // nothing has changed, so nothing to do
     }
 
-    m_model.refresh();
+    refreshModel();
 
     // Try to select one of the newly installed templates in the UI.
     for (const auto& entry : changedEntries) {
@@ -67,7 +67,7 @@ bool TemplatesViewHelper::loadTemplatesFromFiles(QWidget* dialogParent)
         templateFileNames.push_back(m_model.loadTemplateFile(selectedFile));
     }
 
-    m_model.refresh();
+    refreshModel();
 
     // Try to select one of the newly loaded templates in the UI.
     for (const auto& templateFileName : std::as_const(templateFileNames)) {
@@ -76,6 +76,11 @@ bool TemplatesViewHelper::loadTemplatesFromFiles(QWidget* dialogParent)
         }
     }
     return false; // nothing is selected after the refreshing
+}
+
+void TemplatesViewHelper::refreshModel()
+{
+    m_model.refresh();
 }
 
 bool TemplatesViewHelper::setCurrentTemplate(const QString& fileName)

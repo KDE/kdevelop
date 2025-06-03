@@ -30,6 +30,13 @@ public:
     {
     }
 
+protected:
+    void refreshModel() override
+    {
+        TemplatesViewHelper::refreshModel();
+        m_view.expandAll();
+    }
+
 private:
     bool setCurrentTemplate(const QList<QModelIndex>& indexes) override
     {

@@ -59,6 +59,13 @@ public:
     bool loadTemplatesFromFiles(QWidget* dialogParent);
 
 protected:
+    /**
+     * Refresh the managed TemplatesModel after its template files change.
+     *
+     * The default implementation calls @a m_model.refresh().
+     */
+    virtual void refreshModel();
+
     ~TemplatesViewHelper() = default;
 
     TemplatesModel& m_model;
