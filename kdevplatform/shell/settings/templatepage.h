@@ -39,6 +39,11 @@ private Q_SLOTS:
 private:
     [[nodiscard]] TreeViewTemplatesViewHelper viewHelper();
 
+    /**
+     * Call this function when refreshing the model invalidates the current index.
+     */
+    void currentIndexInvalidated();
+
     const std::unique_ptr<KDevelop::TemplatesModel> m_model;
     Ui::TemplatePage* ui;
 };

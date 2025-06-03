@@ -57,13 +57,17 @@ TemplatePage::TemplatePage(ITemplateProvider* provider, QWidget* parent)
             new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"), knsConfigurationFile, this);
         connect(getNewButton, &KNSWidgets::Button::dialogFinished, this,
                 [this](const QList<KNSCore::Entry>& changedEntries) {
-                    viewHelper().handleNewStuffDialogFinished(changedEntries);
+                    if (!viewHelper().handleNewStuffDialogFinished(changedEntries)) {
+                        currentIndexInvalidated();
+                    }
                 });
         ui->buttonLayout->insertWidget(1, getNewButton);
     }
 
     connect(ui->loadButton, &QPushButton::clicked, this, [this] {
-        viewHelper().loadTemplatesFromFiles(this);
+        if (!viewHelper().loadTemplatesFromFiles(this)) {
+            currentIndexInvalidated();
+        }
     });
 
     ui->extractButton->setEnabled(false);
@@ -121,6 +125,12 @@ void TemplatePage::extractTemplate()
 TreeViewTemplatesViewHelper TemplatePage::viewHelper()
 {
     return TreeViewTemplatesViewHelper(*m_model, *ui->treeView);
+}
+
+void TemplatePage::currentIndexInvalidated()
+{
+    Q_ASSERT(!ui->treeView->currentIndex().isValid());
+    currentIndexChanged({});
 }
 
 #include "moc_templatepage.cpp"
