@@ -21,6 +21,13 @@
 
 using namespace KDevelop;
 
+namespace {
+[[nodiscard]] QString templateArchiveFileName(const QModelIndex& index)
+{
+    return index.data(TemplatesModel::ArchiveFileRole).toString();
+}
+} // unnamed namespace
+
 class TreeViewTemplatesViewHelper final : public TemplatesViewHelper
 {
 public:
@@ -93,19 +100,13 @@ TemplatePage::~TemplatePage()
 
 void TemplatePage::currentIndexChanged(const QModelIndex& index)
 {
-    auto canExtractArchive = false;
-    if (index.isValid()) {
-        QString archive = ui->treeView->model()->data(index, KDevelop::TemplatesModel::ArchiveFileRole).toString();
-        canExtractArchive = QFileInfo::exists(archive);
-    }
+    const auto canExtractArchive = index.isValid() && QFileInfo::exists(templateArchiveFileName(index));
     ui->extractButton->setEnabled(canExtractArchive);
 }
 
 void TemplatePage::extractTemplate()
 {
-    QModelIndex index = ui->treeView->currentIndex();
-    QString archiveName= ui->treeView->model()->data(index, KDevelop::TemplatesModel::ArchiveFileRole).toString();
-
+    const auto archiveName = templateArchiveFileName(ui->treeView->currentIndex());
     QFileInfo info(archiveName);
     if (!info.exists())
     {
