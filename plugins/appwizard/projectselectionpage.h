@@ -54,7 +54,7 @@ private Q_SLOTS:
 private:
     inline QByteArray encodedProjectName();
     [[nodiscard]] ProjectTemplatesViewHelper viewHelper();
-    inline QStandardItem* currentItem() const;
+    [[nodiscard]] const QStandardItem* currentItem() const;
 
     /**
      * Select the first template in @a ui->listView.

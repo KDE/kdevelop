@@ -183,7 +183,7 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 
 QString ProjectSelectionPage::selectedTemplate()
 {
-    QStandardItem *item = currentItem();
+    const auto* const item = currentItem();
     if (item)
         return item->data().toString();
     else
@@ -315,9 +315,9 @@ ProjectTemplatesViewHelper ProjectSelectionPage::viewHelper()
     return ProjectTemplatesViewHelper(*m_templatesModel, *ui->listView, *ui->templateType);
 }
 
-QStandardItem* ProjectSelectionPage::currentItem() const
+const QStandardItem* ProjectSelectionPage::currentItem() const
 {
-    QStandardItem* item = m_templatesModel->itemFromIndex( ui->listView->currentIndex() );
+    const auto* item = m_templatesModel->itemFromIndex(ui->listView->currentIndex());
     if ( item && item->hasChildren() )
     {
         const int current = ui->templateType->currentIndex();
