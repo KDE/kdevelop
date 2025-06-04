@@ -44,7 +44,6 @@ target_link_libraries(kdevfiletemplates
     KDev::Language
     KDev::Project
     KDev::Util
-    KF6::NewStuffWidgets
     KF6::TextEditor
     KF6::Service
     KF6::KIOWidgets
@@ -101,7 +100,6 @@ if(BUILD_TESTING)
         KDev::Tests
         KF6::KIOWidgets
         KF6::TextWidgets
-        KF6::NewStuffWidgets
     )
 
     add_subdirectory(tests)

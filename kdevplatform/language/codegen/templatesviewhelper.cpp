@@ -10,20 +10,58 @@
 
 #include <debug.h>
 
+#include <interfaces/itemplateprovider.h>
 #include <util/scopeddialog.h>
 
 #include <KLocalizedString>
 #include <KNSCore/Entry>
+#include <KNSWidgets/Button>
 
 #include <QFileDialog>
+#include <QIcon>
+#include <QPushButton>
 #include <QStringList>
 
 using namespace KDevelop;
 
-bool TemplatesViewHelper::handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries)
+TemplatesViewHelper::TemplatesViewHelper(ITemplateProvider& templateProvider)
+    : m_model{templateProvider.createTemplatesModel()}
+{
+    Q_ASSERT(m_model);
+    model().refresh();
+}
+
+QWidget* TemplatesViewHelper::createGetMoreTemplatesButton(ITemplateProvider& templateProvider, QWidget* buttonParent)
+{
+    const auto knsConfigurationFile = templateProvider.knsConfigurationFile();
+    if (knsConfigurationFile.isEmpty()) {
+        return nullptr;
+    }
+
+    auto* const button =
+        new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"), knsConfigurationFile, buttonParent);
+    QObject::connect(button, &KNSWidgets::Button::dialogFinished, button,
+                     [this](const QList<KNSCore::Entry>& changedEntries) {
+                         handleNewStuffDialogFinished(changedEntries);
+                     });
+    return button;
+}
+
+QWidget* TemplatesViewHelper::createLoadTemplateFromFileButton(QWidget* buttonParent)
+{
+    auto* const button = new QPushButton(buttonParent);
+    button->setText(i18nc("@action:button", "Load Template From File"));
+    button->setIcon(QIcon::fromTheme(QStringLiteral("application-x-archive")));
+    QObject::connect(button, &QPushButton::clicked, button, [this] {
+        loadTemplatesFromFiles();
+    });
+    return button;
+}
+
+void TemplatesViewHelper::handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries)
 {
     if (changedEntries.empty()) {
-        return true; // nothing has changed, so nothing to do
+        return; // nothing has changed, so nothing to do
     }
 
     const auto selectNewlyInstalledTemplateInUi = [&changedEntries, this] {
@@ -42,20 +80,20 @@ bool TemplatesViewHelper::handleNewStuffDialogFinished(const QList<KNSCore::Entr
         }
         return false;
     };
-    return refreshModelAndSelectTemplate(selectNewlyInstalledTemplateInUi);
+    refreshModelAndSelectTemplate(selectNewlyInstalledTemplateInUi);
 }
 
-bool TemplatesViewHelper::loadTemplatesFromFiles(QWidget* dialogParent)
+void TemplatesViewHelper::loadTemplatesFromFiles()
 {
     static const QStringList supportedMimeTypes{QStringLiteral("application/x-desktop"),
                                                 QStringLiteral("application/x-bzip-compressed-tar"),
                                                 QStringLiteral("application/zip")};
-    ScopedDialog<QFileDialog> fileDialog(dialogParent, i18nc("@title:window", "Load Template from File"));
+    ScopedDialog<QFileDialog> fileDialog(dialogParent(), i18nc("@title:window", "Load Template from File"));
     fileDialog->setMimeTypeFilters(supportedMimeTypes);
     fileDialog->setFileMode(QFileDialog::ExistingFiles);
 
     if (!fileDialog->exec()) {
-        return true; // canceled by the user, so nothing to do
+        return; // canceled by the user, so nothing to do
     }
 
     // Load templates from the files selected by the user.
@@ -63,7 +101,7 @@ bool TemplatesViewHelper::loadTemplatesFromFiles(QWidget* dialogParent)
     QStringList templateFileNames;
     templateFileNames.reserve(selectedFiles.size());
     for (const auto& selectedFile : selectedFiles) {
-        templateFileNames.push_back(m_model.loadTemplateFile(selectedFile));
+        templateFileNames.push_back(model().loadTemplateFile(selectedFile));
     }
 
     const auto selectNewlyLoadedTemplateInUi = [&templateFileNames, this] {
@@ -74,33 +112,34 @@ bool TemplatesViewHelper::loadTemplatesFromFiles(QWidget* dialogParent)
         }
         return false;
     };
-    return refreshModelAndSelectTemplate(selectNewlyLoadedTemplateInUi);
+    refreshModelAndSelectTemplate(selectNewlyLoadedTemplateInUi);
 }
 
 void TemplatesViewHelper::refreshModel()
 {
-    m_model.refresh();
+    model().refresh();
 }
 
 bool TemplatesViewHelper::setCurrentTemplate(const QString& fileName)
 {
-    return setCurrentTemplate(m_model.templateIndexes(fileName));
+    return setCurrentTemplate(model().templateIndexes(fileName));
 }
 
 template<typename SelectNewTemplateInUi>
-bool TemplatesViewHelper::refreshModelAndSelectTemplate(SelectNewTemplateInUi selectNewTemplateInUi)
+void TemplatesViewHelper::refreshModelAndSelectTemplate(SelectNewTemplateInUi selectNewTemplateInUi)
 {
     // Retrieve the currently selected template before refreshing the model and invalidating the selection.
     const auto lastSelectedFileName = currentTemplateFileName();
     refreshModel();
 
     if (selectNewTemplateInUi()) {
-        return true;
+        return;
     }
 
     // Reselect the previously selected template as a fallback.
     if (!lastSelectedFileName.isEmpty() && setCurrentTemplate(lastSelectedFileName)) {
-        return true;
+        return;
     }
-    return false;
+
+    handleNoTemplateSelectedAfterRefreshingModel();
 }

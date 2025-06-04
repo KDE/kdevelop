@@ -175,7 +175,6 @@ PRIVATE
     KF6::WindowSystem
     KF6::TextWidgets
     KF6::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
-    KF6::NewStuffWidgets # template config page
     KF6::Archive # template config page
     kdevworkingsets
     Qt::DBus

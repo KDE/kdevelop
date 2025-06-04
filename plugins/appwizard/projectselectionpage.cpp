@@ -14,11 +14,9 @@
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KNSWidgets/Button>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
-#include <interfaces/itemplateprovider.h>
 #include <language/codegen/templatepreviewicon.h>
 #include <language/codegen/templatesmodel.h>
 #include <language/codegen/templatesviewhelper.h>
@@ -36,65 +34,18 @@ constexpr auto categoryViewLevelCount = 2;
 constexpr auto lastCategoryViewLevel = categoryViewLevelCount - 1;
 constexpr auto templateTypeViewLevel = categoryViewLevelCount;
 
-class ProjectTemplatesViewHelper final : public TemplatesViewHelper
-{
-public:
-    explicit ProjectTemplatesViewHelper(TemplatesModel& model, MultiLevelListView& categoryView,
-                                        QComboBox& templateTypeView)
-        : TemplatesViewHelper(model)
-        , m_categoryView{categoryView}
-        , m_templateTypeView{templateTypeView}
-    {
-    }
-
-    [[nodiscard]] const QStandardItem* currentItem() const
-    {
-        const auto* const categoryItem = m_model.itemFromIndex(m_categoryView.currentIndex());
-        if (!categoryItem || !categoryItem->hasChildren()) {
-            return categoryItem;
-        }
-
-        const auto typeRow = m_templateTypeView.currentIndex();
-        const auto typeIndex = m_model.index(typeRow, 0, m_templateTypeView.rootModelIndex());
-        return m_model.itemFromIndex(typeIndex);
-    }
-
-private:
-    [[nodiscard]] QString currentTemplateFileName() const override
-    {
-        const auto* const item = currentItem();
-        return item ? item->data(TemplatesModel::ArchiveFileRole).toString() : QString{};
-    }
-
-    bool setCurrentTemplate(const QList<QModelIndex>& indexes) override
-    {
-        if (indexes.size() <= lastCategoryViewLevel) {
-            return false;
-        }
-        m_categoryView.setCurrentIndex(indexes.at(lastCategoryViewLevel));
-        if (indexes.size() > templateTypeViewLevel) {
-            m_templateTypeView.setCurrentIndex(indexes.at(templateTypeViewLevel).row());
-        }
-        return true;
-    }
-
-    MultiLevelListView& m_categoryView;
-    QComboBox& m_templateTypeView;
-};
-
 } // unnamed namespace
 
-class ProjectSelectionPagePrivate
+class ProjectSelectionPagePrivate final : public TemplatesViewHelper
 {
 public:
     explicit ProjectSelectionPagePrivate(ProjectSelectionPage* q, ITemplateProvider& templateProvider,
                                          const AppWizardDialog* wizardDialog)
-        : templatesModel{templateProvider.createTemplatesModel()}
+        : TemplatesViewHelper(templateProvider)
         , wizardDialog{(Q_ASSERT(wizardDialog), *wizardDialog)}
         , q_ptr{q}
     {
         Q_ASSERT(q);
-        templatesModel->refresh();
     }
 
     void projectTypeChanged(const QModelIndex& current);
@@ -104,21 +55,27 @@ public:
     void validateData();
 
     [[nodiscard]] QByteArray encodedProjectName() const;
-    [[nodiscard]] ProjectTemplatesViewHelper viewHelper();
     [[nodiscard]] const QStandardItem* currentItem() const;
 
-    /**
-     * Select the first template in @a ui.listView.
-     *
-     * This function is used as a fallback when selecting a more relevant template fails.
-     */
-    void makeFirstTemplateCurrent();
-
-    const std::unique_ptr<TemplatesModel> templatesModel;
     const AppWizardDialog& wizardDialog;
     Ui::ProjectSelectionPage ui;
 
 private:
+    [[nodiscard]] QWidget* dialogParent() override
+    {
+        Q_Q(ProjectSelectionPage);
+        return q;
+    }
+
+    [[nodiscard]] QString currentTemplateFileName() const override
+    {
+        const auto* const item = currentItem();
+        return item ? item->data(TemplatesModel::ArchiveFileRole).toString() : QString{};
+    }
+
+    bool setCurrentTemplate(const QList<QModelIndex>& indexes) override;
+    void handleNoTemplateSelectedAfterRefreshingModel() override;
+
     ProjectSelectionPage* const q_ptr;
     Q_DECLARE_PUBLIC(ProjectSelectionPage)
 };
@@ -151,7 +108,7 @@ ProjectSelectionPage::ProjectSelectionPage(ITemplateProvider& templateProvider, 
     d->ui.listView->setLevels(categoryViewLevelCount);
     d->ui.listView->setHeaderLabels(
         QStringList{i18nc("@title:column", "Category"), i18nc("@title:column", "Project Type")});
-    d->ui.listView->setModel(d->templatesModel.get());
+    d->ui.listView->setModel(&d->model());
     d->ui.listView->setLastLevelViewMode(MultiLevelListView::DirectChildren);
     connect(d->ui.listView, &MultiLevelListView::currentIndexChanged, this, [d](const QModelIndex& current) {
         d->projectTypeChanged(current);
@@ -164,24 +121,10 @@ ProjectSelectionPage::ProjectSelectionPage(ITemplateProvider& templateProvider, 
         d->templateTypeChanged(index);
     });
 
-    auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"),
-                                                 templateProvider.knsConfigurationFile(), d->ui.listView);
-    connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this, [d](const QList<KNSCore::Entry>& changedEntries) {
-        if (!d->viewHelper().handleNewStuffDialogFinished(changedEntries)) {
-            d->makeFirstTemplateCurrent();
-        }
-    });
+    auto* const getMoreButton = d->createGetMoreTemplatesButton(templateProvider, d->ui.listView);
+    Q_ASSERT_X(getMoreButton, Q_FUNC_INFO, "An Application Templates configuration file for Get Hot New Stuff exists");
     d->ui.listView->addWidget(0, getMoreButton);
-
-    auto* const loadButton = new QPushButton(d->ui.listView);
-    loadButton->setText(i18nc("@action:button", "Load Template from File"));
-    loadButton->setIcon(QIcon::fromTheme(QStringLiteral("application-x-archive")));
-    connect(loadButton, &QPushButton::clicked, this, [this] {
-        Q_D(ProjectSelectionPage);
-        if (!d->viewHelper().loadTemplatesFromFiles(this)) {
-            d->makeFirstTemplateCurrent();
-        }
-    });
+    auto* const loadButton = d->createLoadTemplateFromFileButton(d->ui.listView);
     d->ui.listView->addWidget(0, loadButton);
 }
 
@@ -195,7 +138,7 @@ void ProjectSelectionPagePrivate::projectTypeChanged(const QModelIndex& current)
     ui.templateType->setVisible(childCount > 0);
     ui.templateType->setEnabled(childCount > 1);
     if (childCount > 0) {
-        ui.templateType->setModel(templatesModel.get());
+        ui.templateType->setModel(&model());
         ui.templateType->setRootModelIndex(current);
         ui.templateType->setCurrentIndex(0);
         currentItemChanged(current.model()->index(0, 0, current));
@@ -206,7 +149,7 @@ void ProjectSelectionPagePrivate::projectTypeChanged(const QModelIndex& current)
 
 void ProjectSelectionPagePrivate::templateTypeChanged(int current)
 {
-    const auto index = templatesModel->index(current, 0, ui.templateType->rootModelIndex());
+    const auto index = model().index(current, 0, ui.templateType->rootModelIndex());
     currentItemChanged(index);
 }
 
@@ -361,18 +304,31 @@ QByteArray ProjectSelectionPagePrivate::encodedProjectName() const
     return tEncodedName;
 }
 
-ProjectTemplatesViewHelper ProjectSelectionPagePrivate::viewHelper()
-{
-    return ProjectTemplatesViewHelper(*templatesModel, *ui.listView, *ui.templateType);
-}
-
 const QStandardItem* ProjectSelectionPagePrivate::currentItem() const
 {
-    // ProjectTemplatesViewHelper::currentItem() is const-qualified, which justifies the const_cast
-    return const_cast<ProjectSelectionPagePrivate*>(this)->viewHelper().currentItem();
+    const auto* const categoryItem = model().itemFromIndex(ui.listView->currentIndex());
+    if (!categoryItem || !categoryItem->hasChildren()) {
+        return categoryItem;
+    }
+
+    const auto typeRow = ui.templateType->currentIndex();
+    const auto typeIndex = model().index(typeRow, 0, ui.templateType->rootModelIndex());
+    return model().itemFromIndex(typeIndex);
 }
 
-void ProjectSelectionPagePrivate::makeFirstTemplateCurrent()
+bool ProjectSelectionPagePrivate::setCurrentTemplate(const QList<QModelIndex>& indexes)
+{
+    if (indexes.size() <= lastCategoryViewLevel) {
+        return false;
+    }
+    ui.listView->setCurrentIndex(indexes.at(lastCategoryViewLevel));
+    if (indexes.size() > templateTypeViewLevel) {
+        ui.templateType->setCurrentIndex(indexes.at(templateTypeViewLevel).row());
+    }
+    return true;
+}
+
+void ProjectSelectionPagePrivate::handleNoTemplateSelectedAfterRefreshingModel()
 {
     currentItemChanged({}); // in case the model is empty or selecting the first template fails
     // Set an invalid index as current to select the very first template because something should always be selected.

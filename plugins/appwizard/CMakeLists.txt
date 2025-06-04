@@ -34,7 +34,6 @@ target_link_libraries(kdevappwizard
     KDev::Sublime
     KDev::Util
     KF6::KIOWidgets
-    KF6::NewStuffWidgets
     KF6::Archive
     Qt::Core5Compat
 )

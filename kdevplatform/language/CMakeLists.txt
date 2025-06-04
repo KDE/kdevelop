@@ -191,7 +191,7 @@ PRIVATE
     KF6::TextEditor
     KF6::Parts
     KF6::Archive
-    KF6::NewStuffCore
+    KF6::NewStuffWidgets
     KF6::TextTemplate
 )
 

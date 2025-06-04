@@ -21,16 +21,6 @@
    <item>
     <layout class="QVBoxLayout" name="buttonLayout">
      <item>
-      <widget class="QPushButton" name="loadButton">
-       <property name="text">
-        <string comment="@action:button">Load Template From File</string>
-       </property>
-       <property name="icon">
-        <iconset theme="application-x-archive"/>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="extractButton">
        <property name="text">
         <string comment="@action:button">Clone Template</string>
