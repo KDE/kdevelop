@@ -138,7 +138,7 @@ void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& ind
     Q_ASSERT_X(!index.model()->hasChildren(index), Q_FUNC_INFO,
                "Only leaf items are selectable in MultiLevelListView with the default level view mode SubTrees");
 
-    selectedTemplate = model->data(index, TemplatesModel::DescriptionFileRole).toString();
+    selectedTemplate = index.data(TemplatesModel::DescriptionFileRole).toString();
     assistant->setValid(assistant->currentPage(), true);
     previewTemplate(selectedTemplate);
     ui->previewLabel->setVisible(true);
