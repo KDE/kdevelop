@@ -55,6 +55,11 @@ public:
     }
 
 private:
+    [[nodiscard]] QString currentTemplateFileName() const override
+    {
+        return m_view.currentIndex().data(TemplatesModel::ArchiveFileRole).toString();
+    }
+
     bool setCurrentTemplate(const QList<QModelIndex>& indexes) override
     {
         if (indexes.size() <= lastViewLevel) {

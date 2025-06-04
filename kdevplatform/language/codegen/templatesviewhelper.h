@@ -72,6 +72,12 @@ protected:
 
 private:
     /**
+     * @return the file name of the template that is currently selected in the UI
+     *         or an empty string if no template is selected
+     */
+    [[nodiscard]] virtual QString currentTemplateFileName() const = 0;
+
+    /**
      * Select in the UI the template that corresponds to given template indexes.
      *
      * @return whether the specified template was found and selected successfully
@@ -85,6 +91,17 @@ private:
      * @return whether the specified template was found and selected successfully
      */
     bool setCurrentTemplate(const QString& fileName);
+
+    /**
+     * Refresh the managed TemplatesModel instance and try to select a new template,
+     * or failing that the previously selected template, in the UI.
+     *
+     * @param selectNewTemplateInUi a callback that attempts to select a new template in the UI,
+     *        returns @c true on success and @c false if selecting a new template fails
+     * @return whether a template was successfully selected in the UI
+     */
+    template<typename SelectNewTemplateInUi>
+    bool refreshModelAndSelectTemplate(SelectNewTemplateInUi selectNewTemplateInUi);
 };
 
 } // namespace KDevelop

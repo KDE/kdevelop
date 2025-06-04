@@ -26,24 +26,23 @@ bool TemplatesViewHelper::handleNewStuffDialogFinished(const QList<KNSCore::Entr
         return true; // nothing has changed, so nothing to do
     }
 
-    refreshModel();
-
-    // Try to select one of the newly installed templates in the UI.
-    for (const auto& entry : changedEntries) {
-        const auto installedFiles = entry.installedFiles();
-        if (installedFiles.empty()) {
-            continue; // this template was uninstalled, keep looking for an installed one
+    const auto selectNewlyInstalledTemplateInUi = [&changedEntries, this] {
+        for (const auto& entry : changedEntries) {
+            const auto installedFiles = entry.installedFiles();
+            if (installedFiles.empty()) {
+                continue; // this template was uninstalled, keep looking for an installed one
+            }
+            if (installedFiles.size() > 1) {
+                qCWarning(LANGUAGE) << "template archives are never uncompressed, so why more than one,"
+                                    << installedFiles.size() << "files are installed?";
+            }
+            if (setCurrentTemplate(installedFiles.constFirst())) {
+                return true; // selected one, nothing more to do
+            }
         }
-        if (installedFiles.size() > 1) {
-            qCWarning(LANGUAGE) << "template archives are never uncompressed, so why more than one,"
-                                << installedFiles.size() << "files are installed?";
-        }
-        if (setCurrentTemplate(installedFiles.constFirst())) {
-            return true; // selected one, nothing more to do
-        }
-    }
-
-    return false; // nothing is selected after the refreshing
+        return false;
+    };
+    return refreshModelAndSelectTemplate(selectNewlyInstalledTemplateInUi);
 }
 
 bool TemplatesViewHelper::loadTemplatesFromFiles(QWidget* dialogParent)
@@ -67,15 +66,15 @@ bool TemplatesViewHelper::loadTemplatesFromFiles(QWidget* dialogParent)
         templateFileNames.push_back(m_model.loadTemplateFile(selectedFile));
     }
 
-    refreshModel();
-
-    // Try to select one of the newly loaded templates in the UI.
-    for (const auto& templateFileName : std::as_const(templateFileNames)) {
-        if (setCurrentTemplate(templateFileName)) {
-            return true; // selected one, nothing more to do
+    const auto selectNewlyLoadedTemplateInUi = [&templateFileNames, this] {
+        for (const auto& templateFileName : std::as_const(templateFileNames)) {
+            if (setCurrentTemplate(templateFileName)) {
+                return true; // selected one, nothing more to do
+            }
         }
-    }
-    return false; // nothing is selected after the refreshing
+        return false;
+    };
+    return refreshModelAndSelectTemplate(selectNewlyLoadedTemplateInUi);
 }
 
 void TemplatesViewHelper::refreshModel()
@@ -86,4 +85,22 @@ void TemplatesViewHelper::refreshModel()
 bool TemplatesViewHelper::setCurrentTemplate(const QString& fileName)
 {
     return setCurrentTemplate(m_model.templateIndexes(fileName));
+}
+
+template<typename SelectNewTemplateInUi>
+bool TemplatesViewHelper::refreshModelAndSelectTemplate(SelectNewTemplateInUi selectNewTemplateInUi)
+{
+    // Retrieve the currently selected template before refreshing the model and invalidating the selection.
+    const auto lastSelectedFileName = currentTemplateFileName();
+    refreshModel();
+
+    if (selectNewTemplateInUi()) {
+        return true;
+    }
+
+    // Reselect the previously selected template as a fallback.
+    if (!lastSelectedFileName.isEmpty() && setCurrentTemplate(lastSelectedFileName)) {
+        return true;
+    }
+    return false;
 }

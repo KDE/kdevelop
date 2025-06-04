@@ -45,6 +45,11 @@ protected:
     }
 
 private:
+    [[nodiscard]] QString currentTemplateFileName() const override
+    {
+        return templateArchiveFileName(m_view.currentIndex());
+    }
+
     bool setCurrentTemplate(const QList<QModelIndex>& indexes) override
     {
         if (indexes.empty()) {

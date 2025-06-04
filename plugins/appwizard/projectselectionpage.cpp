@@ -48,7 +48,25 @@ public:
     {
     }
 
+    [[nodiscard]] const QStandardItem* currentItem() const
+    {
+        const auto* const categoryItem = m_model.itemFromIndex(m_categoryView.currentIndex());
+        if (!categoryItem || !categoryItem->hasChildren()) {
+            return categoryItem;
+        }
+
+        const auto typeRow = m_templateTypeView.currentIndex();
+        const auto typeIndex = m_model.index(typeRow, 0, m_templateTypeView.rootModelIndex());
+        return m_model.itemFromIndex(typeIndex);
+    }
+
 private:
+    [[nodiscard]] QString currentTemplateFileName() const override
+    {
+        const auto* const item = currentItem();
+        return item ? item->data(TemplatesModel::ArchiveFileRole).toString() : QString{};
+    }
+
     bool setCurrentTemplate(const QList<QModelIndex>& indexes) override
     {
         if (indexes.size() <= lastCategoryViewLevel) {
@@ -317,14 +335,8 @@ ProjectTemplatesViewHelper ProjectSelectionPage::viewHelper()
 
 const QStandardItem* ProjectSelectionPage::currentItem() const
 {
-    const auto* item = m_templatesModel->itemFromIndex(ui->listView->currentIndex());
-    if ( item && item->hasChildren() )
-    {
-        const int current = ui->templateType->currentIndex();
-        const QModelIndex idx = m_templatesModel->index( current, 0, ui->templateType->rootModelIndex() );
-        item = m_templatesModel->itemFromIndex(idx);
-    }
-    return item;
+    // ProjectTemplatesViewHelper::currentItem() is const-qualified, which justifies the const_cast
+    return const_cast<ProjectSelectionPage*>(this)->viewHelper().currentItem();
 }
 
 void ProjectSelectionPage::makeFirstTemplateCurrent()
