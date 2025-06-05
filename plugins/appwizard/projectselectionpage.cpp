@@ -237,17 +237,16 @@ void ProjectSelectionPage::validateData()
         return;
     }
 
-    if (projectName().isEmpty()) {
-        ui->locationValidWidget->setText( i18n("Empty project name") );
-        ui->locationValidWidget->animatedShow();
-        emit invalid();
-        return;
-    }
+    {
+        auto projectName = this->projectName();
+        if (projectName.isEmpty()) {
+            ui->locationValidWidget->setText( i18n("Empty project name") );
+            ui->locationValidWidget->animatedShow();
+            emit invalid();
+            return;
+        }
 
-    if (!projectName().isEmpty()) {
-        QString projectName = this->projectName();
         QString templatefile = m_wizardDialog->appInfo().appTemplate;
-
         // Read template file
         KConfig config(templatefile);
         KConfigGroup configgroup(&config, QStringLiteral("General"));
