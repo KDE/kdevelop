@@ -9,10 +9,14 @@
 
 #include <QWidget>
 
+#include <memory>
+
 namespace KDevelop
 {
 class ITemplateProvider;
 class TemplateClassAssistant;
+
+class TemplateSelectionPagePrivate;
 
 /**
  * An assistant page for selecting a class template
@@ -45,7 +49,8 @@ public Q_SLOTS:
     void saveConfig();
 
 private:
-    class TemplateSelectionPagePrivate* const d;
+    const std::unique_ptr<TemplateSelectionPagePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TemplateSelectionPage)
 };
 
 }

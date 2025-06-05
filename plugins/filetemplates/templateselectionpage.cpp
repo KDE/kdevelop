@@ -81,18 +81,22 @@ private:
 class KDevelop::TemplateSelectionPagePrivate
 {
 public:
-    explicit TemplateSelectionPagePrivate(TemplateSelectionPage* page_, ITemplateProvider& templateProvider)
-        : page(page_)
-        , model{templateProvider.createTemplatesModel()}
+    explicit TemplateSelectionPagePrivate(TemplateSelectionPage* q, ITemplateProvider& templateProvider,
+                                          TemplateClassAssistant* assistant)
+        : model{templateProvider.createTemplatesModel()}
+        , assistant{assistant}
+        , q_ptr{q}
     {
+        Q_ASSERT(q);
+        Q_ASSERT(assistant);
         model->refresh();
     }
 
-    TemplateSelectionPage* page;
     const std::unique_ptr<TemplatesModel> model;
+    TemplateClassAssistant* const assistant;
     Ui::TemplateSelection* ui;
+
     QString selectedTemplate;
-    TemplateClassAssistant* assistant;
 
     [[nodiscard]] FileTemplatesViewHelper viewHelper()
     {
@@ -113,6 +117,10 @@ public:
 
     void currentTemplateChanged(const QModelIndex& index);
     void previewTemplate(const QString& templateFile);
+
+private:
+    TemplateSelectionPage* const q_ptr;
+    Q_DECLARE_PUBLIC(TemplateSelectionPage)
 };
 
 void TemplateSelectionPagePrivate::makeFirstTemplateCurrent()
@@ -149,6 +157,8 @@ void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& ind
 
 void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
 {
+    Q_Q(TemplateSelectionPage);
+
     SourceFileTemplate fileTemplate(file);
     if (!fileTemplate.isValid() || fileTemplate.outputFiles().isEmpty()) {
         return;
@@ -194,7 +204,7 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
             Q_ASSERT(preview);
         } else {
             // create new tabs on demand
-            preview = new TemplatePreview(page);
+            preview = new TemplatePreview(q);
             ui->tabWidget->addTab(preview, out.label);
         }
         preview->document()->openUrl(fileUrls.value(out.identifier));
@@ -209,6 +219,8 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
 
 void TemplateSelectionPage::saveConfig()
 {
+    Q_D(TemplateSelectionPage);
+
     KSharedConfigPtr config;
     if (IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl()))
     {
@@ -226,9 +238,9 @@ void TemplateSelectionPage::saveConfig()
 
 TemplateSelectionPage::TemplateSelectionPage(ITemplateProvider& templateProvider, TemplateClassAssistant* parent)
     : QWidget(parent)
-    , d{new TemplateSelectionPagePrivate(this, templateProvider)}
+    , d_ptr{std::make_unique<TemplateSelectionPagePrivate>(this, templateProvider, parent)}
 {
-    d->assistant = parent;
+    Q_D(TemplateSelectionPage);
 
     d->ui = new Ui::TemplateSelection;
     d->ui->setupUi(this);
@@ -241,8 +253,9 @@ TemplateSelectionPage::TemplateSelectionPage(ITemplateProvider& templateProvider
     });
     d->ui->view->setModel(d->model.get());
 
-    connect(d->ui->view, &MultiLevelListView::currentIndexChanged,
-            this, [&] (const QModelIndex& index) { d->currentTemplateChanged(index); });
+    connect(d->ui->view, &MultiLevelListView::currentIndexChanged, this, [d](const QModelIndex& current) {
+        d->currentTemplateChanged(current);
+    });
 
     d->currentTemplateInvalidated(); // in case the model is empty or selecting the last used or first template fails
 
@@ -271,16 +284,16 @@ TemplateSelectionPage::TemplateSelectionPage(ITemplateProvider& templateProvider
 
     auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates..."),
                                                  templateProvider.knsConfigurationFile(), d->ui->view);
-    connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this,
-            [this](const QList<KNSCore::Entry>& changedEntries) {
-                if (!d->viewHelper().handleNewStuffDialogFinished(changedEntries)) {
-                    d->makeFirstTemplateCurrent();
-                }
-            });
+    connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this, [d](const QList<KNSCore::Entry>& changedEntries) {
+        if (!d->viewHelper().handleNewStuffDialogFinished(changedEntries)) {
+            d->makeFirstTemplateCurrent();
+        }
+    });
     d->ui->view->addWidget(0, getMoreButton);
 
     auto* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18nc("@action:button", "Load Template from File"), d->ui->view);
     connect(loadButton, &QPushButton::clicked, this, [this] {
+        Q_D(TemplateSelectionPage);
         if (!d->viewHelper().loadTemplatesFromFiles(this)) {
             d->makeFirstTemplateCurrent();
         }
@@ -292,8 +305,9 @@ TemplateSelectionPage::TemplateSelectionPage(ITemplateProvider& templateProvider
 
 TemplateSelectionPage::~TemplateSelectionPage()
 {
+    Q_D(TemplateSelectionPage);
+
     delete d->ui;
-    delete d;
 }
 
 QSize TemplateSelectionPage::minimumSizeHint() const
@@ -303,6 +317,8 @@ QSize TemplateSelectionPage::minimumSizeHint() const
 
 QString TemplateSelectionPage::selectedTemplate() const
 {
+    Q_D(const TemplateSelectionPage);
+
     return d->selectedTemplate;
 }
 
