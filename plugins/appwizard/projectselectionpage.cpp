@@ -220,21 +220,23 @@ void ProjectSelectionPage::projectNameOrLocationChanged()
 
 void ProjectSelectionPage::validateData()
 {
+    const auto reportError = [this](const QString& errorMessage) {
+        ui->locationValidWidget->setText(errorMessage);
+        ui->locationValidWidget->animatedShow();
+        emit invalid();
+    };
+
     QUrl url = ui->locationUrl->url();
     if( !url.isLocalFile() || url.isEmpty() )
     {
-        ui->locationValidWidget->setText( i18n("Invalid location") );
-        ui->locationValidWidget->animatedShow();
-        emit invalid();
+        reportError(i18n("Invalid location"));
         return;
     }
 
     {
         auto projectName = this->projectName();
         if (projectName.isEmpty()) {
-            ui->locationValidWidget->setText( i18n("Empty project name") );
-            ui->locationValidWidget->animatedShow();
-            emit invalid();
+            reportError(i18n("Empty project name"));
             return;
         }
 
@@ -249,9 +251,7 @@ void ProjectSelectionPage::validateData()
         const QRegularExpressionValidator validator(QRegularExpression{pattern});
         if( validator.validate(projectName, pos) == QValidator::Invalid )
         {
-            ui->locationValidWidget->setText( i18n("Invalid project name") );
-            ui->locationValidWidget->animatedShow();
-            emit invalid();
+            reportError(i18n("Invalid project name"));
             return;
         }
     }
@@ -268,18 +268,13 @@ void ProjectSelectionPage::validateData()
         QFileInfo tFileInfo(tDir.absolutePath());
         if (!tFileInfo.isWritable() || !tFileInfo.isExecutable())
         {
-            ui->locationValidWidget->setText( i18n("Unable to create subdirectories, "
-                                                  "missing permissions on: %1", tDir.absolutePath()) );
-            ui->locationValidWidget->animatedShow();
-            emit invalid();
+            reportError(i18n("Unable to create subdirectories, missing permissions on: %1", tDir.absolutePath()));
             return;
         }
     }
 
     if (const auto* const item = currentItem(); !item || item->hasChildren()) {
-        ui->locationValidWidget->setText( i18n("Invalid project template, please choose a leaf item") );
-        ui->locationValidWidget->animatedShow();
-        emit invalid();
+        reportError(i18n("Invalid project template, please choose a leaf item"));
         return;
     }
 
@@ -290,9 +285,7 @@ void ProjectSelectionPage::validateData()
     {
         if( !QDir( fi.absoluteFilePath()).entryList( QDir::NoDotAndDotDot | QDir::AllEntries ).isEmpty() )
         {
-            ui->locationValidWidget->setText( i18n("Path already exists and contains files. Open it as a project.") );
-            ui->locationValidWidget->animatedShow();
-            emit invalid();
+            reportError(i18n("Path already exists and contains files. Open it as a project."));
             return;
         }
     }
