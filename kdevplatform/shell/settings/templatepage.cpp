@@ -26,7 +26,6 @@ namespace {
 {
     return index.data(TemplatesModel::ArchiveFileRole).toString();
 }
-} // unnamed namespace
 
 class TreeViewTemplatesViewHelper final : public TemplatesViewHelper
 {
@@ -62,60 +61,86 @@ private:
     QTreeView& m_view;
 };
 
+} // unnamed namespace
+
+class TemplatePagePrivate
+{
+public:
+    explicit TemplatePagePrivate(ITemplateProvider& templateProvider)
+        : model{templateProvider.createTemplatesModel()}
+    {
+        model->refresh();
+    }
+
+    void currentIndexChanged(const QModelIndex& index);
+    void extractTemplate();
+
+    [[nodiscard]] TreeViewTemplatesViewHelper viewHelper();
+
+    /**
+     * Call this function when refreshing the model invalidates the current index.
+     */
+    void currentIndexInvalidated();
+
+    const std::unique_ptr<TemplatesModel> model;
+    Ui::TemplatePage ui;
+};
+
 TemplatePage::TemplatePage(ITemplateProvider& templateProvider, QWidget* parent)
     : QWidget(parent)
-    , m_model{templateProvider.createTemplatesModel()}
+    , d_ptr{std::make_unique<TemplatePagePrivate>(templateProvider)}
 {
-    m_model->refresh();
+    Q_D(TemplatePage);
 
-    ui = new Ui::TemplatePage;
-    ui->setupUi(this);
+    d->ui.setupUi(this);
 
     if (const auto knsConfigurationFile = templateProvider.knsConfigurationFile(); !knsConfigurationFile.isEmpty()) {
         auto* const getNewButton =
             new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"), knsConfigurationFile, this);
         connect(getNewButton, &KNSWidgets::Button::dialogFinished, this,
-                [this](const QList<KNSCore::Entry>& changedEntries) {
-                    if (!viewHelper().handleNewStuffDialogFinished(changedEntries)) {
-                        currentIndexInvalidated();
+                [d](const QList<KNSCore::Entry>& changedEntries) {
+                    if (!d->viewHelper().handleNewStuffDialogFinished(changedEntries)) {
+                        d->currentIndexInvalidated();
                     }
                 });
-        ui->buttonLayout->insertWidget(1, getNewButton);
+        d->ui.buttonLayout->insertWidget(1, getNewButton);
     }
 
-    connect(ui->loadButton, &QPushButton::clicked, this, [this] {
-        if (!viewHelper().loadTemplatesFromFiles(this)) {
-            currentIndexInvalidated();
+    connect(d->ui.loadButton, &QPushButton::clicked, this, [this] {
+        Q_D(TemplatePage);
+        if (!d->viewHelper().loadTemplatesFromFiles(this)) {
+            d->currentIndexInvalidated();
         }
     });
 
-    ui->extractButton->setEnabled(false);
-    connect(ui->extractButton, &QPushButton::clicked,
-            this, &TemplatePage::extractTemplate);
+    d->ui.extractButton->setEnabled(false);
+    connect(d->ui.extractButton, &QPushButton::clicked, this, [d] {
+        d->extractTemplate();
+    });
 
-    ui->treeView->setModel(m_model.get());
-    ui->treeView->expandAll();
-    connect(ui->treeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &TemplatePage::currentIndexChanged);
+    d->ui.treeView->setModel(d->model.get());
+    d->ui.treeView->expandAll();
+    connect(d->ui.treeView->selectionModel(), &QItemSelectionModel::currentChanged, this,
+            [d](const QModelIndex& current) {
+                d->currentIndexChanged(current);
+            });
 }
 
-TemplatePage::~TemplatePage()
-{
-    delete ui;
-}
+TemplatePage::~TemplatePage() = default;
 
-void TemplatePage::currentIndexChanged(const QModelIndex& index)
+void TemplatePagePrivate::currentIndexChanged(const QModelIndex& index)
 {
     const auto canExtractArchive = index.isValid() && QFileInfo::exists(templateArchiveFileName(index));
-    ui->extractButton->setEnabled(canExtractArchive);
+    ui.extractButton->setEnabled(canExtractArchive);
 }
 
-void TemplatePage::extractTemplate()
+void TemplatePagePrivate::extractTemplate()
 {
-    const auto archiveName = templateArchiveFileName(ui->treeView->currentIndex());
+    const auto archiveName = templateArchiveFileName(ui.treeView->currentIndex());
     QFileInfo info(archiveName);
     if (!info.exists())
     {
-        ui->extractButton->setEnabled(false);
+        ui.extractButton->setEnabled(false);
         return;
     }
 
@@ -135,14 +160,14 @@ void TemplatePage::extractTemplate()
     archive->directory()->copyTo(destination);
 }
 
-TreeViewTemplatesViewHelper TemplatePage::viewHelper()
+TreeViewTemplatesViewHelper TemplatePagePrivate::viewHelper()
 {
-    return TreeViewTemplatesViewHelper(*m_model, *ui->treeView);
+    return TreeViewTemplatesViewHelper(*model, *ui.treeView);
 }
 
-void TemplatePage::currentIndexInvalidated()
+void TemplatePagePrivate::currentIndexInvalidated()
 {
-    Q_ASSERT(!ui->treeView->currentIndex().isValid());
+    Q_ASSERT(!ui.treeView->currentIndex().isValid());
     currentIndexChanged({});
 }
 

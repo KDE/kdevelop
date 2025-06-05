@@ -11,19 +11,12 @@
 
 #include <memory>
 
-class QModelIndex;
 namespace KDevelop
 {
 class ITemplateProvider;
-class TemplatesModel;
 }
 
-namespace Ui
-{
-    class TemplatePage;
-}
-
-class TreeViewTemplatesViewHelper;
+class TemplatePagePrivate;
 
 class TemplatePage : public QWidget
 {
@@ -32,20 +25,9 @@ public:
     explicit TemplatePage(KDevelop::ITemplateProvider& templateProvider, QWidget* parent = nullptr);
     ~TemplatePage() override;
 
-private Q_SLOTS:
-    void currentIndexChanged(const QModelIndex& index);
-    void extractTemplate();
-
 private:
-    [[nodiscard]] TreeViewTemplatesViewHelper viewHelper();
-
-    /**
-     * Call this function when refreshing the model invalidates the current index.
-     */
-    void currentIndexInvalidated();
-
-    const std::unique_ptr<KDevelop::TemplatesModel> m_model;
-    Ui::TemplatePage* ui;
+    const std::unique_ptr<TemplatePagePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TemplatePage)
 };
 
 #endif // KDEVPLATFORM_TEMPLATEPAGE_H
