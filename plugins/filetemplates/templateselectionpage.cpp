@@ -94,17 +94,17 @@ public:
 
     const std::unique_ptr<TemplatesModel> model;
     TemplateClassAssistant* const assistant;
-    Ui::TemplateSelection* ui;
+    Ui::TemplateSelection ui;
 
     QString selectedTemplate;
 
     [[nodiscard]] FileTemplatesViewHelper viewHelper()
     {
-        return FileTemplatesViewHelper(*model, *ui->view);
+        return FileTemplatesViewHelper(*model, *ui.view);
     }
 
     /**
-     * Select the first template in @a ui->view.
+     * Select the first template in @a ui.view.
      *
      * This function is used as a fallback when selecting a more relevant template fails.
      */
@@ -129,15 +129,15 @@ void TemplateSelectionPagePrivate::makeFirstTemplateCurrent()
     // Set an invalid index as current to select the very first template because something should always be selected.
     // Furthermore, MultiLevelListView is not a real item view and requires manual setting of its current index after
     // the model is refreshed in order to prevent a crash in QAbstractProxyModelPrivate::emitHeaderDataChanged().
-    Q_ASSERT(!ui->view->currentIndex().isValid());
-    ui->view->setCurrentIndex({});
+    Q_ASSERT(!ui.view->currentIndex().isValid());
+    ui.view->setCurrentIndex({});
 }
 
 void TemplateSelectionPagePrivate::currentTemplateInvalidated()
 {
     assistant->setValid(assistant->currentPage(), false);
-    ui->previewLabel->setVisible(false);
-    ui->tabWidget->setVisible(false);
+    ui.previewLabel->setVisible(false);
+    ui.tabWidget->setVisible(false);
 }
 
 void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& index)
@@ -149,10 +149,10 @@ void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& ind
     selectedTemplate = index.data(TemplatesModel::DescriptionFileRole).toString();
     assistant->setValid(assistant->currentPage(), true);
     previewTemplate(selectedTemplate);
-    ui->previewLabel->setVisible(true);
-    ui->tabWidget->setVisible(true);
-    ui->previewLabel->setText(i18nc("%1: template comment", "<b>Preview:</b> %1",
-                                    index.data(TemplatesModel::CommentRole).toString()));
+    ui.previewLabel->setVisible(true);
+    ui.tabWidget->setVisible(true);
+    ui.previewLabel->setText(
+        i18nc("%1: template comment", "<b>Preview:</b> %1", index.data(TemplatesModel::CommentRole).toString()));
 }
 
 void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
@@ -197,22 +197,22 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     int idx = 0;
     for (const SourceFileTemplate::OutputFile& out : outputFiles) {
         TemplatePreview* preview = nullptr;
-        if (ui->tabWidget->count() > idx) {
+        if (ui.tabWidget->count() > idx) {
             // reuse existing tab
-            preview = qobject_cast<TemplatePreview*>(ui->tabWidget->widget(idx));
-            ui->tabWidget->setTabText(idx, out.label);
+            preview = qobject_cast<TemplatePreview*>(ui.tabWidget->widget(idx));
+            ui.tabWidget->setTabText(idx, out.label);
             Q_ASSERT(preview);
         } else {
             // create new tabs on demand
             preview = new TemplatePreview(q);
-            ui->tabWidget->addTab(preview, out.label);
+            ui.tabWidget->addTab(preview, out.label);
         }
         preview->document()->openUrl(fileUrls.value(out.identifier));
         ++idx;
     }
     // remove superfluous tabs from last time
-    while (ui->tabWidget->count() > fileUrls.size()) {
-        delete ui->tabWidget->widget(fileUrls.size());
+    while (ui.tabWidget->count() > fileUrls.size()) {
+        delete ui.tabWidget->widget(fileUrls.size());
     }
     return;
 }
@@ -242,18 +242,14 @@ TemplateSelectionPage::TemplateSelectionPage(ITemplateProvider& templateProvider
 {
     Q_D(TemplateSelectionPage);
 
-    d->ui = new Ui::TemplateSelection;
-    d->ui->setupUi(this);
+    d->ui.setupUi(this);
 
-    d->ui->view->setLevels(viewLevelCount);
-    d->ui->view->setHeaderLabels(QStringList{
-        i18nc("@title:column", "Language"),
-        i18nc("@title:column", "Framework"),
-        i18nc("@title:column", "Template")
-    });
-    d->ui->view->setModel(d->model.get());
+    d->ui.view->setLevels(viewLevelCount);
+    d->ui.view->setHeaderLabels(QStringList{i18nc("@title:column", "Language"), i18nc("@title:column", "Framework"),
+                                            i18nc("@title:column", "Template")});
+    d->ui.view->setModel(d->model.get());
 
-    connect(d->ui->view, &MultiLevelListView::currentIndexChanged, this, [d](const QModelIndex& current) {
+    connect(d->ui.view, &MultiLevelListView::currentIndexChanged, this, [d](const QModelIndex& current) {
         d->currentTemplateChanged(current);
     });
 
@@ -280,35 +276,31 @@ TemplateSelectionPage::TemplateSelectionPage(ITemplateProvider& templateProvider
         templateIndex = indexes.first();
     }
 
-    d->ui->view->setCurrentIndex(templateIndex);
+    d->ui.view->setCurrentIndex(templateIndex);
 
     auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates..."),
-                                                 templateProvider.knsConfigurationFile(), d->ui->view);
+                                                 templateProvider.knsConfigurationFile(), d->ui.view);
     connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this, [d](const QList<KNSCore::Entry>& changedEntries) {
         if (!d->viewHelper().handleNewStuffDialogFinished(changedEntries)) {
             d->makeFirstTemplateCurrent();
         }
     });
-    d->ui->view->addWidget(0, getMoreButton);
+    d->ui.view->addWidget(0, getMoreButton);
 
-    auto* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18nc("@action:button", "Load Template from File"), d->ui->view);
+    auto* const loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")),
+                                             i18nc("@action:button", "Load Template from File"), d->ui.view);
     connect(loadButton, &QPushButton::clicked, this, [this] {
         Q_D(TemplateSelectionPage);
         if (!d->viewHelper().loadTemplatesFromFiles(this)) {
             d->makeFirstTemplateCurrent();
         }
     });
-    d->ui->view->addWidget(0, loadButton);
+    d->ui.view->addWidget(0, loadButton);
 
-    d->ui->view->setContentsMargins(0, 0, 0, 0);
+    d->ui.view->setContentsMargins(0, 0, 0, 0);
 }
 
-TemplateSelectionPage::~TemplateSelectionPage()
-{
-    Q_D(TemplateSelectionPage);
-
-    delete d->ui;
-}
+TemplateSelectionPage::~TemplateSelectionPage() = default;
 
 QSize TemplateSelectionPage::minimumSizeHint() const
 {
