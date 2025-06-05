@@ -36,9 +36,10 @@ public:
 
     bool shouldContinue() override;
 
-    QString selectedTemplate();
-    QString projectName();
-    QUrl location();
+    [[nodiscard]] QString selectedTemplate() const;
+    [[nodiscard]] QString projectName() const;
+    [[nodiscard]] QUrl location() const;
+
 Q_SIGNALS:
     void locationChanged( const QUrl& );
     void valid();
@@ -52,7 +53,7 @@ private Q_SLOTS:
     void templateChanged(int);
 
 private:
-    inline QByteArray encodedProjectName();
+    [[nodiscard]] QByteArray encodedProjectName() const;
     [[nodiscard]] ProjectTemplatesViewHelper viewHelper();
     [[nodiscard]] const QStandardItem* currentItem() const;
 

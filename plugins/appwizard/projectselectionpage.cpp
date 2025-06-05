@@ -199,7 +199,7 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
     ui->propertiesBox->setEnabled(true);
 }
 
-QString ProjectSelectionPage::selectedTemplate()
+QString ProjectSelectionPage::selectedTemplate() const
 {
     const auto* const item = currentItem();
     if (item)
@@ -208,14 +208,14 @@ QString ProjectSelectionPage::selectedTemplate()
         return QString();
 }
 
-QUrl ProjectSelectionPage::location()
+QUrl ProjectSelectionPage::location() const
 {
     QUrl url = ui->locationUrl->url().adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + QLatin1Char('/') + QString::fromUtf8(encodedProjectName()));
     return url;
 }
 
-QString ProjectSelectionPage::projectName()
+QString ProjectSelectionPage::projectName() const
 {
     return ui->projectNameEdit->text();
 }
@@ -309,7 +309,7 @@ void ProjectSelectionPage::validateData()
     emit valid();
 }
 
-QByteArray ProjectSelectionPage::encodedProjectName()
+QByteArray ProjectSelectionPage::encodedProjectName() const
 {
     // : < > * ? / \ | " are invalid on windows
     QByteArray tEncodedName = projectName().toUtf8();
