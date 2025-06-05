@@ -35,7 +35,6 @@ namespace {
 constexpr auto categoryViewLevelCount = 2;
 constexpr auto lastCategoryViewLevel = categoryViewLevelCount - 1;
 constexpr auto templateTypeViewLevel = categoryViewLevelCount;
-} // unnamed namespace
 
 class ProjectTemplatesViewHelper final : public TemplatesViewHelper
 {
@@ -83,116 +82,155 @@ private:
     QComboBox& m_templateTypeView;
 };
 
-ProjectSelectionPage::ProjectSelectionPage(ITemplateProvider& templateProvider, AppWizardDialog* wizardDialog)
-    : AppWizardPageWidget(wizardDialog)
-    , m_templatesModel{templateProvider.createTemplatesModel()}
+} // unnamed namespace
+
+class ProjectSelectionPagePrivate
 {
-    m_templatesModel->refresh();
-
-    ui = new Ui::ProjectSelectionPage();
-    ui->setupUi(this);
-    ui->descriptionContent->setBackgroundRole(QPalette::Base);
-    ui->descriptionContent->setForegroundRole(QPalette::Text);
-
-    ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-    ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
-
-    ui->locationValidWidget->hide();
-    ui->locationValidWidget->setMessageType(KMessageWidget::Error);
-    ui->locationValidWidget->setCloseButtonVisible(false);
-
-    connect(ui->locationUrl->lineEdit(), &KLineEdit::textEdited, this,
-            &ProjectSelectionPage::projectNameOrLocationChanged);
-    connect(ui->locationUrl, &KUrlRequester::urlSelected, this, &ProjectSelectionPage::projectNameOrLocationChanged);
-    connect(ui->projectNameEdit, &QLineEdit::textEdited, this, &ProjectSelectionPage::projectNameOrLocationChanged);
-
-    ui->listView->setLevels(categoryViewLevelCount);
-    ui->listView->setHeaderLabels(QStringList{
-        i18nc("@title:column", "Category"),
-        i18nc("@title:column", "Project Type")
-    });
-    ui->listView->setModel(m_templatesModel.get());
-    ui->listView->setLastLevelViewMode(MultiLevelListView::DirectChildren);
-    connect (ui->listView, &MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
-    if (const auto index = ui->listView->currentIndex(); index.isValid()) {
-        typeChanged(index);
+public:
+    explicit ProjectSelectionPagePrivate(ProjectSelectionPage* q, ITemplateProvider& templateProvider,
+                                         const AppWizardDialog* wizardDialog)
+        : templatesModel{templateProvider.createTemplatesModel()}
+        , wizardDialog{(Q_ASSERT(wizardDialog), *wizardDialog)}
+        , q_ptr{q}
+    {
+        Q_ASSERT(q);
+        templatesModel->refresh();
     }
 
-    connect( ui->templateType, QOverload<int>::of(&QComboBox::currentIndexChanged),
-             this, &ProjectSelectionPage::templateChanged );
+    void projectTypeChanged(const QModelIndex& current);
+    void templateTypeChanged(int current);
+    void currentItemChanged(const QModelIndex& current);
+    void projectNameOrLocationChanged();
+    void validateData();
+
+    [[nodiscard]] QByteArray encodedProjectName() const;
+    [[nodiscard]] ProjectTemplatesViewHelper viewHelper();
+    [[nodiscard]] const QStandardItem* currentItem() const;
+
+    /**
+     * Select the first template in @a ui.listView.
+     *
+     * This function is used as a fallback when selecting a more relevant template fails.
+     */
+    void makeFirstTemplateCurrent();
+
+    const std::unique_ptr<TemplatesModel> templatesModel;
+    const AppWizardDialog& wizardDialog;
+    Ui::ProjectSelectionPage ui;
+
+private:
+    ProjectSelectionPage* const q_ptr;
+    Q_DECLARE_PUBLIC(ProjectSelectionPage)
+};
+
+ProjectSelectionPage::ProjectSelectionPage(ITemplateProvider& templateProvider, AppWizardDialog* wizardDialog)
+    : AppWizardPageWidget(wizardDialog)
+    , d_ptr{std::make_unique<ProjectSelectionPagePrivate>(this, templateProvider, wizardDialog)}
+{
+    Q_D(ProjectSelectionPage);
+
+    d->ui.setupUi(this);
+
+    d->ui.descriptionContent->setBackgroundRole(QPalette::Base);
+    d->ui.descriptionContent->setForegroundRole(QPalette::Text);
+
+    d->ui.locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
+    d->ui.locationUrl->setUrl(ICore::self()->projectController()->projectsBaseDirectory());
+
+    d->ui.locationValidWidget->hide();
+    d->ui.locationValidWidget->setMessageType(KMessageWidget::Error);
+    d->ui.locationValidWidget->setCloseButtonVisible(false);
+
+    const auto projectNameOrLocationChanged = [d] {
+        d->projectNameOrLocationChanged();
+    };
+    connect(d->ui.locationUrl->lineEdit(), &KLineEdit::textEdited, this, projectNameOrLocationChanged);
+    connect(d->ui.locationUrl, &KUrlRequester::urlSelected, this, projectNameOrLocationChanged);
+    connect(d->ui.projectNameEdit, &QLineEdit::textEdited, this, projectNameOrLocationChanged);
+
+    d->ui.listView->setLevels(categoryViewLevelCount);
+    d->ui.listView->setHeaderLabels(
+        QStringList{i18nc("@title:column", "Category"), i18nc("@title:column", "Project Type")});
+    d->ui.listView->setModel(d->templatesModel.get());
+    d->ui.listView->setLastLevelViewMode(MultiLevelListView::DirectChildren);
+    connect(d->ui.listView, &MultiLevelListView::currentIndexChanged, this, [d](const QModelIndex& current) {
+        d->projectTypeChanged(current);
+    });
+    if (const auto index = d->ui.listView->currentIndex(); index.isValid()) {
+        d->projectTypeChanged(index);
+    }
+
+    connect(d->ui.templateType, &QComboBox::currentIndexChanged, this, [d](int index) {
+        d->templateTypeChanged(index);
+    });
 
     auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"),
-                                                 templateProvider.knsConfigurationFile(), ui->listView);
-    connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this,
-            [this](const QList<KNSCore::Entry>& changedEntries) {
-                if (!viewHelper().handleNewStuffDialogFinished(changedEntries)) {
-                    makeFirstTemplateCurrent();
-                }
-            });
-    ui->listView->addWidget(0, getMoreButton);
+                                                 templateProvider.knsConfigurationFile(), d->ui.listView);
+    connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this, [d](const QList<KNSCore::Entry>& changedEntries) {
+        if (!d->viewHelper().handleNewStuffDialogFinished(changedEntries)) {
+            d->makeFirstTemplateCurrent();
+        }
+    });
+    d->ui.listView->addWidget(0, getMoreButton);
 
-    auto* loadButton = new QPushButton(ui->listView);
+    auto* const loadButton = new QPushButton(d->ui.listView);
     loadButton->setText(i18nc("@action:button", "Load Template from File"));
     loadButton->setIcon(QIcon::fromTheme(QStringLiteral("application-x-archive")));
     connect(loadButton, &QPushButton::clicked, this, [this] {
-        if (!viewHelper().loadTemplatesFromFiles(this)) {
-            makeFirstTemplateCurrent();
+        Q_D(ProjectSelectionPage);
+        if (!d->viewHelper().loadTemplatesFromFiles(this)) {
+            d->makeFirstTemplateCurrent();
         }
     });
-    ui->listView->addWidget(0, loadButton);
-
-    m_wizardDialog = wizardDialog;
+    d->ui.listView->addWidget(0, loadButton);
 }
 
-ProjectSelectionPage::~ProjectSelectionPage()
-{
-    delete ui;
-}
+ProjectSelectionPage::~ProjectSelectionPage() = default;
 
-void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
+void ProjectSelectionPagePrivate::projectTypeChanged(const QModelIndex& current)
 {
-    Q_ASSERT_X(idx.isValid(), Q_FUNC_INFO, "MultiLevelListView::currentIndexChanged() emitted an invalid index");
+    Q_ASSERT_X(current.isValid(), Q_FUNC_INFO, "MultiLevelListView::currentIndexChanged() emitted an invalid index");
 
-    int children = idx.model()->rowCount(idx);
-    ui->templateType->setVisible(children);
-    ui->templateType->setEnabled(children > 1);
-    if (children) {
-        ui->templateType->setModel(m_templatesModel.get());
-        ui->templateType->setRootModelIndex(idx);
-        ui->templateType->setCurrentIndex(0);
-        itemChanged(idx.model()->index(0, 0, idx));
+    const auto childCount = current.model()->rowCount(current);
+    ui.templateType->setVisible(childCount > 0);
+    ui.templateType->setEnabled(childCount > 1);
+    if (childCount > 0) {
+        ui.templateType->setModel(templatesModel.get());
+        ui.templateType->setRootModelIndex(current);
+        ui.templateType->setCurrentIndex(0);
+        currentItemChanged(current.model()->index(0, 0, current));
     } else {
-        itemChanged(idx);
+        currentItemChanged(current);
     }
 }
 
-void ProjectSelectionPage::templateChanged(int current)
+void ProjectSelectionPagePrivate::templateTypeChanged(int current)
 {
-    QModelIndex idx=m_templatesModel->index(current, 0, ui->templateType->rootModelIndex());
-    itemChanged(idx);
+    const auto index = templatesModel->index(current, 0, ui.templateType->rootModelIndex());
+    currentItemChanged(index);
 }
 
-void ProjectSelectionPage::itemChanged( const QModelIndex& current)
+void ProjectSelectionPagePrivate::currentItemChanged(const QModelIndex& current)
 {
     TemplatePreviewIcon icon = current.data(KDevelop::TemplatesModel::PreviewIconRole).value<TemplatePreviewIcon>();
 
     QPixmap pixmap = icon.pixmap();
-    ui->icon->setPixmap(pixmap);
-    ui->icon->setFixedHeight(pixmap.height());
+    ui.icon->setPixmap(pixmap);
+    ui.icon->setFixedHeight(pixmap.height());
     // header name is either from this index directly or the parents if we show the combo box
-    const QVariant headerData = ui->templateType->isVisible()
-                                    ? current.parent().data()
-                                    : current.data();
-    ui->header->setText(QStringLiteral("<h1>%1</h1>").arg(headerData.toString().trimmed()));
-    ui->description->setText(current.data(KDevelop::TemplatesModel::CommentRole).toString());
+    const auto headerData = ui.templateType->isVisible() ? current.parent().data() : current.data();
+    ui.header->setText(QLatin1String("<h1>%1</h1>").arg(headerData.toString().trimmed()));
+    ui.description->setText(current.data(TemplatesModel::CommentRole).toString());
     validateData();
 
-    ui->propertiesBox->setEnabled(true);
+    ui.propertiesBox->setEnabled(true);
 }
 
 QString ProjectSelectionPage::selectedTemplate() const
 {
-    const auto* const item = currentItem();
+    Q_D(const ProjectSelectionPage);
+
+    const auto* const item = d->currentItem();
     if (item)
         return item->data().toString();
     else
@@ -201,32 +239,41 @@ QString ProjectSelectionPage::selectedTemplate() const
 
 QUrl ProjectSelectionPage::location() const
 {
-    QUrl url = ui->locationUrl->url().adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + QLatin1Char('/') + QString::fromUtf8(encodedProjectName()));
+    Q_D(const ProjectSelectionPage);
+
+    auto url = d->ui.locationUrl->url().adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + QLatin1Char('/') + QString::fromUtf8(d->encodedProjectName()));
     return url;
 }
 
 QString ProjectSelectionPage::projectName() const
 {
-    return ui->projectNameEdit->text();
+    Q_D(const ProjectSelectionPage);
+
+    return d->ui.projectNameEdit->text();
 }
 
-void ProjectSelectionPage::projectNameOrLocationChanged()
+void ProjectSelectionPagePrivate::projectNameOrLocationChanged()
 {
+    Q_Q(ProjectSelectionPage);
+
     validateData();
     // location() depends both on the project name and on its location
-    emit locationChanged( location() );
+    Q_EMIT q->locationChanged(q->location());
 }
 
-void ProjectSelectionPage::validateData()
+void ProjectSelectionPagePrivate::validateData()
 {
+    Q_Q(ProjectSelectionPage);
+
     const auto reportError = [this](const QString& errorMessage) {
-        ui->locationValidWidget->setText(errorMessage);
-        ui->locationValidWidget->animatedShow();
-        emit invalid();
+        Q_Q(ProjectSelectionPage);
+        ui.locationValidWidget->setText(errorMessage);
+        ui.locationValidWidget->animatedShow();
+        Q_EMIT q->invalid();
     };
 
-    QUrl url = ui->locationUrl->url();
+    auto url = ui.locationUrl->url();
     if( !url.isLocalFile() || url.isEmpty() )
     {
         reportError(i18n("Invalid location"));
@@ -234,13 +281,13 @@ void ProjectSelectionPage::validateData()
     }
 
     {
-        auto projectName = this->projectName();
+        auto projectName = q->projectName();
         if (projectName.isEmpty()) {
             reportError(i18n("Empty project name"));
             return;
         }
 
-        QString templatefile = m_wizardDialog->appInfo().appTemplate;
+        const auto templatefile = wizardDialog.appInfo().appTemplate;
         // Read template file
         KConfig config(templatefile);
         KConfigGroup configgroup(&config, QStringLiteral("General"));
@@ -290,14 +337,16 @@ void ProjectSelectionPage::validateData()
         }
     }
 
-    ui->locationValidWidget->animatedHide();
-    emit valid();
+    ui.locationValidWidget->animatedHide();
+    Q_EMIT q->valid();
 }
 
-QByteArray ProjectSelectionPage::encodedProjectName() const
+QByteArray ProjectSelectionPagePrivate::encodedProjectName() const
 {
+    Q_Q(const ProjectSelectionPage);
+
     // : < > * ? / \ | " are invalid on windows
-    QByteArray tEncodedName = projectName().toUtf8();
+    auto tEncodedName = q->projectName().toUtf8();
     for (int i = 0; i < tEncodedName.size(); ++i)
     {
         QChar tChar(QLatin1Char(tEncodedName.at(i)));
@@ -312,25 +361,25 @@ QByteArray ProjectSelectionPage::encodedProjectName() const
     return tEncodedName;
 }
 
-ProjectTemplatesViewHelper ProjectSelectionPage::viewHelper()
+ProjectTemplatesViewHelper ProjectSelectionPagePrivate::viewHelper()
 {
-    return ProjectTemplatesViewHelper(*m_templatesModel, *ui->listView, *ui->templateType);
+    return ProjectTemplatesViewHelper(*templatesModel, *ui.listView, *ui.templateType);
 }
 
-const QStandardItem* ProjectSelectionPage::currentItem() const
+const QStandardItem* ProjectSelectionPagePrivate::currentItem() const
 {
     // ProjectTemplatesViewHelper::currentItem() is const-qualified, which justifies the const_cast
-    return const_cast<ProjectSelectionPage*>(this)->viewHelper().currentItem();
+    return const_cast<ProjectSelectionPagePrivate*>(this)->viewHelper().currentItem();
 }
 
-void ProjectSelectionPage::makeFirstTemplateCurrent()
+void ProjectSelectionPagePrivate::makeFirstTemplateCurrent()
 {
-    itemChanged({}); // in case the model is empty or selecting the first template fails
+    currentItemChanged({}); // in case the model is empty or selecting the first template fails
     // Set an invalid index as current to select the very first template because something should always be selected.
     // Furthermore, MultiLevelListView is not a real item view and requires manual setting of its current index after
     // the model is refreshed in order to prevent a crash in QAbstractProxyModelPrivate::emitHeaderDataChanged().
-    Q_ASSERT(!ui->listView->currentIndex().isValid());
-    ui->listView->setCurrentIndex({});
+    Q_ASSERT(!ui.listView->currentIndex().isValid());
+    ui.listView->setCurrentIndex({});
 }
 
 bool ProjectSelectionPage::shouldContinue()

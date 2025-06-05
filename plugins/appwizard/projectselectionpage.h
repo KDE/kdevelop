@@ -11,22 +11,15 @@
 
 #include <memory>
 
-namespace Ui {
-class ProjectSelectionPage;
-}
-
-class ProjectTemplatesViewHelper;
-
-class QModelIndex;
-class QStandardItem;
 class QUrl;
 
 namespace KDevelop {
 class ITemplateProvider;
-class TemplatesModel;
 }
 
 class AppWizardDialog;
+
+class ProjectSelectionPagePrivate;
 
 class ProjectSelectionPage : public AppWizardPageWidget {
 Q_OBJECT
@@ -44,28 +37,10 @@ Q_SIGNALS:
     void locationChanged( const QUrl& );
     void valid();
     void invalid();
-private Q_SLOTS:
-    void itemChanged( const QModelIndex& current );
-    void projectNameOrLocationChanged();
-    void validateData();
-    void typeChanged(const QModelIndex& idx);
-    void templateChanged(int);
 
 private:
-    [[nodiscard]] QByteArray encodedProjectName() const;
-    [[nodiscard]] ProjectTemplatesViewHelper viewHelper();
-    [[nodiscard]] const QStandardItem* currentItem() const;
-
-    /**
-     * Select the first template in @a ui->listView.
-     *
-     * This function is used as a fallback when selecting a more relevant template fails.
-     */
-    void makeFirstTemplateCurrent();
-
-    const std::unique_ptr<KDevelop::TemplatesModel> m_templatesModel;
-    Ui::ProjectSelectionPage *ui;
-    AppWizardDialog *m_wizardDialog;
+    const std::unique_ptr<ProjectSelectionPagePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ProjectSelectionPage)
 };
 
 #endif
