@@ -101,12 +101,10 @@ ProjectSelectionPage::ProjectSelectionPage(ITemplateProvider& templateProvider, 
     ui->locationValidWidget->setMessageType(KMessageWidget::Error);
     ui->locationValidWidget->setCloseButtonVisible(false);
 
-    connect( ui->locationUrl->lineEdit(), &KLineEdit::textEdited,
-             this, &ProjectSelectionPage::urlEdited);
-    connect( ui->locationUrl, &KUrlRequester::urlSelected,
-             this, &ProjectSelectionPage::urlEdited);
-    connect( ui->projectNameEdit, &QLineEdit::textEdited,
-             this, &ProjectSelectionPage::nameChanged );
+    connect(ui->locationUrl->lineEdit(), &KLineEdit::textEdited, this,
+            &ProjectSelectionPage::projectNameOrLocationChanged);
+    connect(ui->locationUrl, &KUrlRequester::urlSelected, this, &ProjectSelectionPage::projectNameOrLocationChanged);
+    connect(ui->projectNameEdit, &QLineEdit::textEdited, this, &ProjectSelectionPage::projectNameOrLocationChanged);
 
     ui->listView->setLevels(categoryViewLevelCount);
     ui->listView->setHeaderLabels(QStringList{
@@ -145,13 +143,6 @@ ProjectSelectionPage::ProjectSelectionPage(ITemplateProvider& templateProvider, 
 
     m_wizardDialog = wizardDialog;
 }
-
-void ProjectSelectionPage::nameChanged()
-{
-    validateData();
-    emit locationChanged( location() );
-}
-
 
 ProjectSelectionPage::~ProjectSelectionPage()
 {
@@ -220,9 +211,10 @@ QString ProjectSelectionPage::projectName() const
     return ui->projectNameEdit->text();
 }
 
-void ProjectSelectionPage::urlEdited()
+void ProjectSelectionPage::projectNameOrLocationChanged()
 {
     validateData();
+    // location() depends both on the project name and on its location
     emit locationChanged( location() );
 }
 

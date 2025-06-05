@@ -46,9 +46,8 @@ Q_SIGNALS:
     void invalid();
 private Q_SLOTS:
     void itemChanged( const QModelIndex& current );
-    void urlEdited();
+    void projectNameOrLocationChanged();
     void validateData();
-    void nameChanged();
     void typeChanged(const QModelIndex& idx);
     void templateChanged(int);
 
