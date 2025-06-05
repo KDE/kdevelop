@@ -62,16 +62,16 @@ private:
     QTreeView& m_view;
 };
 
-TemplatePage::TemplatePage(ITemplateProvider* provider, QWidget* parent)
+TemplatePage::TemplatePage(ITemplateProvider& templateProvider, QWidget* parent)
     : QWidget(parent)
-    , m_model{provider->createTemplatesModel()}
+    , m_model{templateProvider.createTemplatesModel()}
 {
     m_model->refresh();
 
     ui = new Ui::TemplatePage;
     ui->setupUi(this);
 
-    if (const auto knsConfigurationFile = provider->knsConfigurationFile(); !knsConfigurationFile.isEmpty()) {
+    if (const auto knsConfigurationFile = templateProvider.knsConfigurationFile(); !knsConfigurationFile.isEmpty()) {
         auto* const getNewButton =
             new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"), knsConfigurationFile, this);
         connect(getNewButton, &KNSWidgets::Button::dialogFinished, this,

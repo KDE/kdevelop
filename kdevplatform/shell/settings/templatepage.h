@@ -29,7 +29,7 @@ class TemplatePage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TemplatePage(KDevelop::ITemplateProvider* provider, QWidget* parent = nullptr);
+    explicit TemplatePage(KDevelop::ITemplateProvider& templateProvider, QWidget* parent = nullptr);
     ~TemplatePage() override;
 
 private Q_SLOTS:
