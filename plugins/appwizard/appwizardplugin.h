@@ -28,7 +28,7 @@ public:
     ~AppWizardPlugin() override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
-    [[nodiscard]] std::unique_ptr<KDevelop::TemplatesModel> createTemplatesModel() const override;
+    [[nodiscard]] QString modelTypePrefix() const override;
     QString knsConfigurationFile() const override;
     QString name() const override;
     QIcon icon() const override;

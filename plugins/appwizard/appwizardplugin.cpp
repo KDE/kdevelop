@@ -43,7 +43,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
-#include <language/codegen/templatesmodel.h>
 #include <util/scopeddialog.h>
 #include <sublime/message.h>
 #include <vcs/vcsjob.h>
@@ -527,9 +526,9 @@ KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::C
     return ext;
 }
 
-std::unique_ptr<KDevelop::TemplatesModel> AppWizardPlugin::createTemplatesModel() const
+QString AppWizardPlugin::modelTypePrefix() const
 {
-    return std::make_unique<KDevelop::TemplatesModel>(QStringLiteral("kdevappwizard"));
+    return QStringLiteral("kdevappwizard");
 }
 
 QString AppWizardPlugin::knsConfigurationFile() const

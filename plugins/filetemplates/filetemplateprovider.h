@@ -14,7 +14,7 @@ class FileTemplateProvider : public KDevelop::ITemplateProvider
 public:
     [[nodiscard]] QString name() const override;
     [[nodiscard]] QIcon icon() const override;
-    [[nodiscard]] std::unique_ptr<KDevelop::TemplatesModel> createTemplatesModel() const override;
+    [[nodiscard]] QString modelTypePrefix() const override;
     [[nodiscard]] QString knsConfigurationFile() const override;
 };
 

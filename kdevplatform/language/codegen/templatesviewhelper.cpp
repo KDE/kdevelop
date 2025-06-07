@@ -6,8 +6,6 @@
 
 #include "templatesviewhelper.h"
 
-#include "templatesmodel.h"
-
 #include <debug.h>
 
 #include <interfaces/itemplateprovider.h>
@@ -25,9 +23,8 @@
 using namespace KDevelop;
 
 TemplatesViewHelper::TemplatesViewHelper(ITemplateProvider& templateProvider)
-    : m_model{templateProvider.createTemplatesModel()}
+    : m_model(templateProvider.modelTypePrefix())
 {
-    Q_ASSERT(m_model);
     model().refresh();
 }
 

@@ -11,20 +11,16 @@
 
 #include <QObject>
 
-#include <memory>
-
 class QIcon;
 class QString;
 
 namespace KDevelop
 {
-class TemplatesModel;
-
 /**
  * @brief A provider of templates
  *
- * A template provider loads any kind of source code templates and presents them in a model
- * via the tempatesModel() function. This model will usually, but not necessarily, be connected
+ * A template provider specifies from where to load source code templates into
+ * a TemplatesModel. This model will usually, but not necessarily, be connected
  * to a tree view, so a tree structure is recommended.
  *
  * The provider can also support downloading and uploading additional templates with
@@ -51,9 +47,9 @@ public:
     virtual QIcon icon() const = 0;
 
     /**
-     * @return A model containing all available templates.
+     * @return the type prefix to initialize a TemplatesModel with
      **/
-    [[nodiscard]] virtual std::unique_ptr<TemplatesModel> createTemplatesModel() const = 0;
+    [[nodiscard]] virtual QString modelTypePrefix() const = 0;
 
     /**
      * @return The configuration file for Get Hot New Stuff.

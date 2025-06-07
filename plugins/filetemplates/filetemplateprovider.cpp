@@ -6,8 +6,6 @@
 
 #include "filetemplateprovider.h"
 
-#include <language/codegen/templatesmodel.h>
-
 #include <KLocalizedString>
 
 #include <QIcon>
@@ -24,9 +22,9 @@ QIcon FileTemplateProvider::icon() const
     return QIcon::fromTheme(QStringLiteral("code-class"));
 }
 
-std::unique_ptr<KDevelop::TemplatesModel> FileTemplateProvider::createTemplatesModel() const
+QString FileTemplateProvider::modelTypePrefix() const
 {
-    return std::make_unique<KDevelop::TemplatesModel>(QStringLiteral("kdevfiletemplates"));
+    return QStringLiteral("kdevfiletemplates");
 }
 
 QString FileTemplateProvider::knsConfigurationFile() const

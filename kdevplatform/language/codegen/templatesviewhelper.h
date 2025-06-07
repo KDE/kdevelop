@@ -7,6 +7,8 @@
 #ifndef KDEVPLATFORM_TEMPLATES_VIEW_HELPER_H
 #define KDEVPLATFORM_TEMPLATES_VIEW_HELPER_H
 
+#include "templatesmodel.h"
+
 #include <language/languageexport.h>
 
 #include <QList>
@@ -24,7 +26,6 @@ class Entry;
 
 namespace KDevelop {
 class ITemplateProvider;
-class TemplatesModel;
 
 /**
  * This class contains helper functions useful to classes that manage views of TemplatesModel.
@@ -42,14 +43,14 @@ public:
      */
     [[nodiscard]] const TemplatesModel& model() const
     {
-        return *m_model;
+        return m_model;
     }
     /**
      * @return the managed TemplatesModel instance
      */
     [[nodiscard]] TemplatesModel& model()
     {
-        return *m_model;
+        return m_model;
     }
 
     /**
@@ -142,7 +143,7 @@ private:
     template<typename SelectNewTemplateInUi>
     void refreshModelAndSelectTemplate(SelectNewTemplateInUi selectNewTemplateInUi);
 
-    const std::unique_ptr<TemplatesModel> m_model;
+    TemplatesModel m_model;
 };
 
 } // namespace KDevelop
