@@ -17,6 +17,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <QHash>
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QFileInfo>
@@ -70,7 +71,7 @@ public:
 
     QStringList searchPaths;
 
-    QMap<QString, QStandardItem*> templateItems;
+    QHash<QString, QStandardItem*> templateItems;
 
     /**
      * Extracts description files from all available template archives and saves them to a location
