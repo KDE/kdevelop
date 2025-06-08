@@ -26,6 +26,33 @@
 
 using namespace KDevelop;
 
+namespace {
+/**
+ * Invoke a given callback for each path segment and the cumulative path that ends with it of a given path.
+ *
+ * @param path a path to iterate over
+ * @param callback a function (object) that takes two arguments:
+ *        QStringView @c segment, @c const QString& @c cumulativePath
+ */
+template<typename SegmentAndCumulativePathUser>
+void forEachPathSegment(const QString& path, SegmentAndCumulativePathUser callback)
+{
+    constexpr QLatin1Char pathSeparator{'/'};
+    QString cumulativePath;
+    cumulativePath.reserve(path.size());
+
+    for (const auto segment : QStringTokenizer(path, pathSeparator)) {
+        if (!cumulativePath.isEmpty()) {
+            cumulativePath += pathSeparator;
+        }
+        cumulativePath += segment;
+        callback(segment, std::as_const(cumulativePath));
+    }
+    Q_ASSERT(cumulativePath == path);
+}
+
+} // unnamed namespace
+
 class KDevelop::TemplatesModelPrivate
 {
 public:
@@ -154,22 +181,17 @@ void TemplatesModel::refresh()
 
 QStandardItem* TemplatesModelPrivate::createItem(const QString& name, const QString& category, QStandardItem* parent)
 {
-    const QStringList path = category.split(QLatin1Char('/'));
-
-    QStringList currentPath;
-    currentPath.reserve(path.size());
-    for (const QString& entry : path) {
-        currentPath << entry;
-        if (!templateItems.contains(currentPath.join(QLatin1Char('/')))) {
-            auto* item = new QStandardItem(entry);
+    forEachPathSegment(category, [&parent, this](QStringView segment, const QString& cumulativePath) {
+        auto it = templateItems.constFind(cumulativePath);
+        if (it == templateItems.cend()) {
+            auto* const item = new QStandardItem(segment.toString());
             item->setEditable(false);
             parent->appendRow(item);
-            templateItems[currentPath.join(QLatin1Char('/'))] = item;
-            parent = item;
-        } else {
-            parent = templateItems[currentPath.join(QLatin1Char('/'))];
+            // clazy:exclude-next-line=strict-iterators
+            it = templateItems.insert(cumulativePath, item);
         }
-    }
+        parent = *it;
+    });
 
     auto* templateItem = new QStandardItem(name);
     templateItem->setEditable(false);
@@ -306,18 +328,16 @@ QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
     if (!description.isEmpty()) {
         KConfig templateConfig(description);
         KConfigGroup general(&templateConfig, QStringLiteral("General"));
-        const QStringList categories = general.readEntry("Category").split(QLatin1Char('/'));
+        const auto category = general.readEntry("Category");
 
-        QStringList levels;
-        levels.reserve(categories.size());
-        for (const QString& category : categories) {
-            levels << category;
-            indexes << d->templateItems[levels.join(QLatin1Char('/'))]->index();
-        }
+        forEachPathSegment(category,
+                           [&indexes, d]([[maybe_unused]] QStringView segment, const QString& cumulativePath) {
+                               indexes << d->templateItems[cumulativePath]->index();
+                           });
 
         if (!indexes.isEmpty()) {
             QString name = general.readEntry("Name");
-            QStandardItem* categoryItem = d->templateItems[levels.join(QLatin1Char('/'))];
+            const auto* const categoryItem = d->templateItems[category];
             for (int i = 0; i < categoryItem->rowCount(); ++i) {
                 QStandardItem* templateItem = categoryItem->child(i);
                 if (templateItem->text() == name) {
