@@ -51,6 +51,14 @@ void forEachPathSegment(const QString& path, SegmentAndCumulativePathUser callba
     Q_ASSERT(cumulativePath == path);
 }
 
+[[nodiscard]] QStandardItem* createTemplateItem(const QString& name, QStandardItem* parent)
+{
+    auto* const templateItem = new QStandardItem(name);
+    templateItem->setEditable(false);
+    parent->appendRow(templateItem);
+    return templateItem;
+}
+
 } // unnamed namespace
 
 class KDevelop::TemplatesModelPrivate
@@ -184,19 +192,13 @@ QStandardItem* TemplatesModelPrivate::createItem(const QString& name, const QStr
     forEachPathSegment(category, [&parent, this](QStringView segment, const QString& cumulativePath) {
         auto it = templateItems.constFind(cumulativePath);
         if (it == templateItems.cend()) {
-            auto* const item = new QStandardItem(segment.toString());
-            item->setEditable(false);
-            parent->appendRow(item);
             // clazy:exclude-next-line=strict-iterators
-            it = templateItems.insert(cumulativePath, item);
+            it = templateItems.insert(cumulativePath, createTemplateItem(segment.toString(), parent));
         }
         parent = *it;
     });
 
-    auto* templateItem = new QStandardItem(name);
-    templateItem->setEditable(false);
-    parent->appendRow(templateItem);
-    return templateItem;
+    return createTemplateItem(name, parent);
 }
 
 void TemplatesModelPrivate::extractTemplateDescriptions()
