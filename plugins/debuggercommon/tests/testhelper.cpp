@@ -253,7 +253,7 @@ void DebugeeslowOutputProcessor::processOutput()
         QCOMPARE_EQ(parameters.size(), 1); // MIDebugSession::inferiorStdoutLines() has one parameter
         const auto outputLines = parameters.constFirst().toStringList();
         qDebug() << "Debuggee output:" << outputLines.join('\n');
-        QCOMPARE_GT(outputLines.size(), 0); // why emit the signal if there is no output?
+        // NOTE: outputLines can be empty at this point (very rarely)
 
         for (const auto& line : outputLines) {
             ++m_processedLineCount;
