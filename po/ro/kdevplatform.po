@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-06-10 00:41+0000\n"
 "PO-Revision-Date: 2021-05-15 15:28+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -2111,19 +2111,19 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Depanează lansarea"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Depanează lansarea actuală"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3476,26 +3476,26 @@ msgctxt "launch mode"
 msgid "Execute"
 msgstr "Execută"
 
-#: shell/runcontroller.cpp:407
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr ""
 
-#: shell/runcontroller.cpp:427
+#: shell/runcontroller.cpp:458
 #, fuzzy, kde-format
 #| msgid "Configure Launches..."
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Configurare lansări..."
 
-#: shell/runcontroller.cpp:430
+#: shell/runcontroller.cpp:461
 #, fuzzy, kde-format
 #| msgid "Configure Sessions..."
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Configurare sesiuni..."
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3503,28 +3503,28 @@ msgid ""
 "ones."
 msgstr ""
 
-#: shell/runcontroller.cpp:434
+#: shell/runcontroller.cpp:465
 #, fuzzy, kde-format
 #| msgid "Execute Launch"
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Execută lansarea"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:466
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Execută"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:468
 #, fuzzy, kde-format
 #| msgid "Execute Launch"
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Execută lansarea"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3532,7 +3532,7 @@ msgid ""
 "configuration."
 msgstr ""
 
-#: shell/runcontroller.cpp:444
+#: shell/runcontroller.cpp:475
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
@@ -3544,14 +3544,14 @@ msgstr "Depanare"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:458
+#: shell/runcontroller.cpp:489
 #, fuzzy, kde-format
 #| msgid "Stop Jobs"
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Oprește sarcinile"
 
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:490
 #, fuzzy, kde-format
 #| msgctxt "Short text for 'Stop Jobs' used in the toolbar"
 #| msgid "Stop"
@@ -3559,20 +3559,20 @@ msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Oprește"
 
-#: shell/runcontroller.cpp:462
+#: shell/runcontroller.cpp:493
 #, fuzzy, kde-format
 #| msgid "Close all currently open projects"
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Închide toate proiectele deschise în prezent"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:494
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr ""
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:500
 #, fuzzy, kde-format
 #| msgctxt "Short text for 'Stop Jobs' used in the toolbar"
 #| msgid "Stop"
@@ -3580,7 +3580,7 @@ msgctxt "@action"
 msgid "Stop"
 msgstr "Oprește"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:502
 #, fuzzy, kde-format
 #| msgctxt "Short text for 'Stop Jobs' used in the toolbar"
 #| msgid "Stop"
@@ -3588,51 +3588,51 @@ msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Oprește"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:503
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr ""
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:504
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr ""
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:508
 #, fuzzy, kde-format
 #| msgid "Configure Sessions..."
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Configurare sesiuni..."
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:509
 #, fuzzy, kde-format
 #| msgid "Configure Sessions..."
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Configurare sesiuni..."
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:510
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
 
-#: shell/runcontroller.cpp:592
+#: shell/runcontroller.cpp:623
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr ""
 
-#: shell/runcontroller.cpp:963
+#: shell/runcontroller.cpp:1006
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgid "New %1 Launcher"
 msgstr "Ramură nouă"
 
-#: shell/runcontroller.cpp:1000
+#: shell/runcontroller.cpp:1043
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
