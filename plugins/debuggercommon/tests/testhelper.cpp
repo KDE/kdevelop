@@ -136,12 +136,23 @@ void ActiveStateSessionSpy::sessionStateChanged(IDebugSession::DebuggerState sta
     }
 }
 
-void resetAndRun(ActiveStateSessionSpy& spy, IDebugSession* session)
+void resetAndRun(ActiveStateSessionSpy& spy, IDebugSession* session, RunMode runMode)
 {
     QVERIFY(session);
     QVERIFY(spy.hasEnteredActiveState());
     spy.reset();
-    session->run();
+
+    switch (runMode) {
+    case RunMode::Continue:
+        session->run();
+        break;
+    case RunMode::StepInto:
+        session->stepInto();
+        break;
+    case RunMode::StepOut:
+        session->stepOut();
+        break;
+    }
 }
 
 bool waitForAWhile(MIDebugSession *session, int ms, const char *file, int line)

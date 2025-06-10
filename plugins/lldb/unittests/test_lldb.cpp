@@ -190,11 +190,8 @@ void LldbTest::testBreakpoint()
     QCOMPARE(b->state(), KDevelop::Breakpoint::CleanState);
     QCOMPARE(session->currentLine(), 29);
 
-    session->stepInto();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    session->stepInto();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -305,9 +302,7 @@ void LldbTest::testUpdateBreakpoint()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(currentMiLine(session), 29);
 
-    session->stepInto();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop after step
-
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(session->currentLine(), 23-1); // at the beginning of foo():23: ++i;
 
     session->addUserCommand(QStringLiteral("break set --file %1 --line %2").arg(debugeeFilePath()).arg(33));
@@ -626,8 +621,7 @@ void LldbTest::testPickupManuallyInsertedBreakpoint()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     session->addCommand(MI::NonMI, QStringLiteral("break set --file debugee.cpp --line 32"));
-    session->stepInto();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(breakpoints()->breakpoints().count(), 2);
     QCOMPARE(breakpoints()->rowCount(), 2);
     KDevelop::Breakpoint *b = breakpoints()->breakpoint(1);
@@ -809,11 +803,9 @@ void LldbTest::testShowStepInSource()
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
-    session->stepInto();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
-    session->stepInto();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 
@@ -856,8 +848,7 @@ void LldbTest::testStack()
     COMPARE_DATA(stackModel->index(1, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(1, 2, tIdx), debugeeLocationAt(29));
 
-    session->stepOut();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
