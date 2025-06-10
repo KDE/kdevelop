@@ -592,7 +592,7 @@ void LldbTest::testManualBreakpoint()
 
     session->addCommand(MI::NonMI, QStringLiteral("break set --file debugee.cpp --line 23"));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QCOMPARE(breakpoints()->rowCount(), 1);
+    QTRY_COMPARE(breakpoints()->rowCount(), 1);
 
     auto b = breakpoints()->breakpoint(0);
     QCOMPARE(b->line(), 22);
