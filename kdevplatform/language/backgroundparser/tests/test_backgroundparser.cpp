@@ -275,7 +275,7 @@ void TestBackgroundparser::testParseOrdering_simple()
                                       ParseJob::IgnoresSequentialProcessing));
     }
 
-    m_jobPlan.runJobs(1000);
+    m_jobPlan.runJobs(3000);
 }
 
 void TestBackgroundparser::benchmark()
