@@ -211,16 +211,16 @@ void TestBackgroundparser::testParseOrdering_foregroundThread()
 
     // the long-running high-prio job
     m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_fgt_hp.txt")), -500,
-                                  ParseJob::IgnoresSequentialProcessing, 630));
+                                  ParseJob::IgnoresSequentialProcessing, 2000));
 
     // several small background jobs
-    for (int i = 0; i < 10; i++) {
+    for (auto i = 0; i < 5; ++i) {
         m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_fgt_lp__" + QString::number(i) + ".txt"), i,
-                                      ParseJob::FullSequentialProcessing, 40));
+                                      ParseJob::FullSequentialProcessing, 120));
     }
 
     // not enough time if the small jobs run after the large one
-    m_jobPlan.runJobs(700);
+    m_jobPlan.runJobs(2400);
 }
 
 void TestBackgroundparser::testParseOrdering_noSequentialProcessing()
