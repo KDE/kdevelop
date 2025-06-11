@@ -8,7 +8,6 @@
 #include "test_backgroundparser.h"
 
 #include <QTest>
-#include <QElapsedTimer>
 #include <QTemporaryFile>
 #include <QApplication>
 #include <QSemaphore>
@@ -77,32 +76,22 @@ void JobPlan::addJobsToParser()
     }
 }
 
-bool JobPlan::runJobs(int timeoutMS)
+void JobPlan::runJobs(int timeoutMS)
 {
     addJobsToParser();
 
     ICore::self()->languageController()->backgroundParser()->parseDocuments();
 
-    QElapsedTimer t;
-    t.start();
-
-    while (!t.hasExpired(timeoutMS) && m_jobs.size() != m_finishedJobs.size()) {
-        QTest::qWait(50);
-    }
-
-    QVERIFY_RETURN(m_jobs.size() == m_createdJobs.size(), false);
-
-    QVERIFY_RETURN(m_finishedJobs.size() == m_jobs.size(), false);
+    QTRY_COMPARE_WITH_TIMEOUT(m_finishedJobs.size(), m_jobs.size(), timeoutMS);
+    QCOMPARE(m_createdJobs.size(), m_jobs.size());
 
     // verify they're started in the right order
     int currentBestPriority = BackgroundParser::BestPriority;
     for (const IndexedString& url : std::as_const(m_createdJobs)) {
         const JobPrototype p = jobForUrl(url);
-        QVERIFY_RETURN(p.m_priority >= currentBestPriority, false);
+        QCOMPARE_GE(p.m_priority, currentBestPriority);
         currentBestPriority = p.m_priority;
     }
-
-    return true;
 }
 
 JobPrototype JobPlan::jobForUrl(const IndexedString& url) const
@@ -231,7 +220,7 @@ void TestBackgroundparser::testParseOrdering_foregroundThread()
     }
 
     // not enough time if the small jobs run after the large one
-    QVERIFY(m_jobPlan.runJobs(700));
+    m_jobPlan.runJobs(700);
 }
 
 void TestBackgroundparser::testParseOrdering_noSequentialProcessing()
@@ -249,7 +238,7 @@ void TestBackgroundparser::testParseOrdering_noSequentialProcessing()
                                       ParseJob::IgnoresSequentialProcessing, i));
     }
 
-    QVERIFY(m_jobPlan.runJobs(1000));
+    m_jobPlan.runJobs(1000);
 }
 
 void TestBackgroundparser::testParseOrdering_lockup()
@@ -265,7 +254,7 @@ void TestBackgroundparser::testParseOrdering_lockup()
     m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_hp.txt")), -200,
                                   ParseJob::FullSequentialProcessing, 200));
     // verify that the low-priority nonsequential jobs are run simultaneously with the other one.
-    QVERIFY(m_jobPlan.runJobs(700));
+    m_jobPlan.runJobs(700);
 }
 
 void TestBackgroundparser::testParseOrdering_simple()
@@ -286,7 +275,7 @@ void TestBackgroundparser::testParseOrdering_simple()
                                       ParseJob::IgnoresSequentialProcessing));
     }
 
-    QVERIFY(m_jobPlan.runJobs(1000));
+    m_jobPlan.runJobs(1000);
 }
 
 void TestBackgroundparser::benchmark()
@@ -401,7 +390,7 @@ void TestBackgroundparser::testNoDeadlockInJobCreation()
     }, Qt::DirectConnection);
 
     // should be able to run quickly, if no deadlock occurs
-    QVERIFY(m_jobPlan.runJobs(500));
+    m_jobPlan.runJobs(500);
 }
 
 void TestBackgroundparser::testSuspendResume()
@@ -426,7 +415,8 @@ void TestBackgroundparser::testSuspendResume()
     QCOMPARE(m_jobPlan.numFinishedJobs(), 0);
 
     parser->resume();
-    QVERIFY(m_jobPlan.runJobs(100));
+    m_jobPlan.runJobs(100);
+    RETURN_IF_TEST_FAILED();
 
     // run once again, this time suspend and resume quickly after another
     m_jobPlan.clear();
@@ -434,7 +424,8 @@ void TestBackgroundparser::testSuspendResume()
 
     parser->suspend();
     parser->resume();
-    QVERIFY(m_jobPlan.runJobs(100));
+    m_jobPlan.runJobs(100);
+    RETURN_IF_TEST_FAILED();
 }
 
 #include "moc_test_backgroundparser.cpp"
