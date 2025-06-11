@@ -428,7 +428,6 @@ void DebuggerTestBase::testInsertAndRemoveBreakpointWhileRunning()
             });
     }
 
-    WAIT_FOR_A_WHILE(session, 2000); // give the slow debugee extra time to run
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 

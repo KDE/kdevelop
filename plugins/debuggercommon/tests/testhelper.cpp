@@ -182,7 +182,7 @@ bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerStat
             && (!sessionSpy || sessionSpy->hasEnteredActiveState());
     };
 
-    const auto timeout = waitForIdle ? 50'000 : 10'000;
+    const auto timeout = waitForIdle ? 50'000 : 20'000;
 
     while (s && !areWaitConditionsSatisfied()) {
         if (stopWatch.elapsed() > timeout) {
