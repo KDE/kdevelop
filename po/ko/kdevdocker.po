@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Shinjo Park <kde@peremen.name>, 2019, 2020.
+# SPDX-FileCopyrightText: 2019, 2020, 2025 Shinjo Park <kde@peremen.name>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2020-10-04 20:04+0200\n"
+"PO-Revision-Date: 2025-06-10 23:26+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #: dockerplugin.cpp:133
 #, kde-format
@@ -35,11 +35,10 @@ msgid "Tag name for '%1':"
 msgstr "'%1'의 태그 이름:"
 
 #: dockerplugin.cpp:145
-#, fuzzy, kde-format
-#| msgid "docker build '%1'"
+#, kde-format
 msgctxt "%1 - Docker tag name"
 msgid "Docker Build \"%1\""
-msgstr "Docker 빌드 '%1'"
+msgstr "\"%1\" Docker 빌드"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dockerpreferences.ui:29

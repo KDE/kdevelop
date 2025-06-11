@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Shinjo Park <kde@peremen.name>, 2019, 2020, 2023.
+# SPDX-FileCopyrightText: 2019, 2020, 2023, 2025 Shinjo Park <kde@peremen.name>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2023-07-23 20:37+0200\n"
+"PO-Revision-Date: 2025-06-10 23:27+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #: config/globalconfigpage.cpp:29
 #, kde-format
@@ -54,7 +54,7 @@ msgstr "시각화 도구:"
 #, kde-format
 msgctxt "%1 - process ID"
 msgid "PID: %1"
-msgstr ""
+msgstr "PID: %1"
 
 #: job.cpp:97
 #, kde-format
@@ -62,12 +62,10 @@ msgid "Heaptrack Analysis (%1)"
 msgstr "힙 추적 분석(%1)"
 
 #: job.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Heaptrack"
+#, kde-format
 msgctxt "%1 - the name of the target of a Heaptrack analysis"
 msgid "Heaptrack (%1)"
-msgstr "힙 추적"
+msgstr "힙 추적(%1)"
 
 #: plugin.cpp:59
 #, kde-format

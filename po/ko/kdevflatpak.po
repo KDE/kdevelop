@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# SPDX-FileCopyrightText: 2019, 2020, 2024 Shinjo Park <kde@peremen.name>
+# SPDX-FileCopyrightText: 2019, 2020, 2024, 2025 Shinjo Park <kde@peremen.name>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2024-12-24 16:55+0100\n"
+"PO-Revision-Date: 2025-06-10 23:27+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -59,11 +59,10 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak 번들 (*.flatpak)"
 
 #: flatpakplugin.cpp:117
-#, fuzzy, kde-format
-#| msgid "Flatpak Bundle (*.flatpak)"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export Bundle %1"
-msgstr "Flatpak 번들 (*.flatpak)"
+msgstr "%1 Flatpak 번들 내보내기"
 
 #: flatpakplugin.cpp:236
 #, kde-format
@@ -91,8 +90,7 @@ msgid "Device hostname:"
 msgstr "장치 호스트 이름:"
 
 #: flatpakruntime.cpp:61
-#, fuzzy, kde-format
-#| msgid "Flatpak"
+#, kde-format
 msgctxt "@title:window"
 msgid "Flatpak"
 msgstr "Flatpak"
@@ -101,58 +99,49 @@ msgstr "Flatpak"
 #, kde-format
 msgctxt "%1 - application ID or name"
 msgid "Flatpak Create %1"
-msgstr ""
+msgstr "%1 Flatpak 생성"
 
 #: flatpakruntime.cpp:217
 #, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Finalize %1"
-msgstr ""
+msgstr "%1 Flatpak 마무리"
 
 #: flatpakruntime.cpp:223
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export %1"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export %1"
-msgstr "%1 내보내기"
+msgstr "%1 Flatpak 내보내기"
 
 #: flatpakruntime.cpp:226
-#, fuzzy, kde-format
-#| msgid "Flatpak Bundle (*.flatpak)"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Bundle %1"
-msgstr "Flatpak 번들 (*.flatpak)"
+msgstr "%1 Flatpak 번들"
 
-# %1: 파일 이름, %2: 아키텍처
 #: flatpakruntime.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak Environment %1 for %2"
+#, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Run %1 on %2"
-msgstr "%2용 Flatpak 환경 %1 빌드"
+msgstr "%2에서 %1 Flatpak 실행"
 
 #: flatpakruntime.cpp:248
 #, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer .flatpak to %1"
-msgstr ""
+msgstr "%1(으)로 .flatpak 전송"
 
 #: flatpakruntime.cpp:250
 #, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer replicate.sh to %1"
-msgstr ""
+msgstr "%1(으)로 replicate.sh 전송"
 
-# %1: 파일 이름, %2: 아키텍처
 #: flatpakruntime.cpp:254
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak Environment %1 for %2"
+#, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Install %1 to %2"
-msgstr "%2용 Flatpak 환경 %1 빌드"
+msgstr "%2에 %1 Flatpak 설치"
 
 #~ msgid "Bundling"
 #~ msgstr "번들"
