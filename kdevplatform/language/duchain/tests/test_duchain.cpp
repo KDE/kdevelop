@@ -717,20 +717,20 @@ class ThreadList
     : public QVector<QSharedPointer<QThread>>
 {
 public:
-    bool join(int timeout)
+    void join()
     {
-        for (const QSharedPointer<QThread>& thread : std::as_const(*this)) {
-            // quit event loop
-            Q_ASSERT(thread->isRunning());
+        // quit all event loops
+        for (const auto& thread : std::as_const(*this)) {
+            QVERIFY(thread->isRunning());
             thread->quit();
-            // wait for finish
-            if (!thread->wait(timeout)) {
-                return false;
-            }
-            Q_ASSERT(thread->isFinished());
         }
 
-        return true;
+        // join all threads
+        constexpr auto timeout = 3'000L;
+        for (const auto& thread : std::as_const(*this)) {
+            QVERIFY(thread->wait(timeout));
+            QVERIFY(thread->isFinished());
+        }
     }
     void start()
     {
@@ -756,7 +756,7 @@ void TestDUChain::testLockForWrite()
             DUChainReadLocker lock;
         }
     }
-    QVERIFY(threads.join(1000));
+    threads.join();
 }
 
 void TestDUChain::testLockForRead()
@@ -770,7 +770,7 @@ void TestDUChain::testLockForRead()
     QBENCHMARK {
         DUChainReadLocker lock;
     }
-    QVERIFY(threads.join(1000));
+    threads.join();
 }
 
 void TestDUChain::testLockForReadWrite()
@@ -784,7 +784,7 @@ void TestDUChain::testLockForReadWrite()
     QBENCHMARK {
         DUChainWriteLocker lock;
     }
-    QVERIFY(threads.join(1000));
+    threads.join();
 }
 
 void TestDUChain::testProblemSerialization()
