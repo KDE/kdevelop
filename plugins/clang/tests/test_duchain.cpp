@@ -2270,6 +2270,7 @@ void TestDUChain::testGccCompatibility_data()
         )");
     QTest::newRow("sized-dealloc") << QStringLiteral("-Wall -std=c++14") << QStringLiteral(R"(
             #include <memory>
+            #include <stdint.h>
 
             int main() {
                 auto test = std::make_shared<uint32_t>();
