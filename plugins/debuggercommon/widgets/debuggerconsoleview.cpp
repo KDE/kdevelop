@@ -87,15 +87,18 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
     m_updateTimer.setInterval(100);
     connect(&m_updateTimer, &QTimer::timeout, this, &DebuggerConsoleView::flushPending);
 
-    connect(plugin->core()->debugController(), &KDevelop::IDebugController::currentSessionChanged,
-            this, &DebuggerConsoleView::handleSessionChanged);
+    auto* const debugController = KDevelop::ICore::self()->debugController();
+    connect(debugController, &KDevelop::IDebugController::currentSessionChanged, this,
+            &DebuggerConsoleView::handleSessionChanged);
 
-    connect(plugin, &MIDebuggerPlugin::reset, this, &DebuggerConsoleView::clear);
-    connect(plugin, &MIDebuggerPlugin::raiseDebuggerConsoleViews, this, [plugin, this] {
-        plugin->core()->uiController()->raiseToolView(this);
-    });
+    if (plugin) {
+        connect(plugin, &MIDebuggerPlugin::reset, this, &DebuggerConsoleView::clear);
+        connect(plugin, &MIDebuggerPlugin::raiseDebuggerConsoleViews, this, [plugin, this] {
+            plugin->core()->uiController()->raiseToolView(this);
+        });
+    }
 
-    handleSessionChanged(plugin->core()->debugController()->currentSession());
+    handleSessionChanged(debugController->currentSession());
 
     updateColors();
 }

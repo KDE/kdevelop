@@ -17,6 +17,7 @@
 #include <interfaces/iuicontroller.h>
 
 #include <QHash>
+#include <QPointer>
 
 class QDBusServiceWatcher;
 
@@ -109,7 +110,7 @@ public:
     }
 
 private:
-    Plugin * m_plugin;
+    const QPointer<Plugin> m_plugin;
     QString m_id;
     Qt::DockWidgetArea m_defaultArea;
 };

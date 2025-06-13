@@ -96,10 +96,12 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     connect(KDevelop::ICore::self()->debugController(), &KDevelop::IDebugController::currentSessionChanged,
             this, &GDBOutputWidget::currentSessionChanged);
 
-    connect(plugin, &CppDebuggerPlugin::reset, this, &GDBOutputWidget::clear);
-    connect(plugin, &CppDebuggerPlugin::raiseDebuggerConsoleViews, this, [plugin, this] {
-        plugin->core()->uiController()->raiseToolView(this);
-    });
+    if (plugin) {
+        connect(plugin, &CppDebuggerPlugin::reset, this, &GDBOutputWidget::clear);
+        connect(plugin, &CppDebuggerPlugin::raiseDebuggerConsoleViews, this, [plugin, this] {
+            plugin->core()->uiController()->raiseToolView(this);
+        });
+    }
 
     currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession());
 

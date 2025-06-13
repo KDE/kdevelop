@@ -180,9 +180,10 @@ void MIDebuggerPlugin::setupDBus()
 
 void MIDebuggerPlugin::unload()
 {
+    // FIXME: this function is not invoked when the GDB plugin or the LLDB plugin
+    //        is unloaded, because the overriding functions do not call it.
     qDeleteAll(m_drkonqis.values());
     m_drkonqis.clear();
-    unloadToolViews();
 }
 
 MIDebuggerPlugin::~MIDebuggerPlugin() { }

@@ -218,7 +218,9 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
             &KDevelop::IDebugController::currentSessionChanged,
             this, &DisassembleWidget::currentSessionChanged);
 
-    connect(plugin, &MIDebuggerPlugin::reset, this, &DisassembleWidget::slotDeactivate);
+    if (plugin) {
+        connect(plugin, &MIDebuggerPlugin::reset, this, &DisassembleWidget::slotDeactivate);
+    }
 
     m_dlg = new SelectAddressDialog(this);
 
