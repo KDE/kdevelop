@@ -102,6 +102,7 @@ install( FILES
     widgetcolorizer.h
     path.h
     scopedincrementor.h
+    simpletoolviewfactory.h
     stack.h
     stringviewhelpers.h
     texteditorhelpers.h

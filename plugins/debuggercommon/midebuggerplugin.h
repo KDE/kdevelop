@@ -14,10 +14,9 @@
 
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
-#include <interfaces/iuicontroller.h>
+#include <util/simpletoolviewfactory.h>
 
 #include <QHash>
-#include <QPointer>
 
 class QDBusServiceWatcher;
 
@@ -87,33 +86,7 @@ private:
 };
 
 template<class T, class Plugin = MIDebuggerPlugin>
-class DebuggerToolFactory : public KDevelop::IToolViewFactory
-{
-public:
-    DebuggerToolFactory(Plugin * plugin, const QString &id, Qt::DockWidgetArea defaultArea)
-    : m_plugin(plugin), m_id(id), m_defaultArea(defaultArea)
-    {}
-
-    QWidget* create(QWidget *parent = nullptr) override
-    {
-        return new T(m_plugin, parent);
-    }
-
-    QString id() const override
-    {
-        return m_id;
-    }
-
-    Qt::DockWidgetArea defaultPosition() const override
-    {
-        return m_defaultArea;
-    }
-
-private:
-    const QPointer<Plugin> m_plugin;
-    QString m_id;
-    Qt::DockWidgetArea m_defaultArea;
-};
+using DebuggerToolFactory = KDevelop::SimpleGuardedDataToolViewFactory<T, Plugin>;
 
 } // end of namespace KDevMI
 

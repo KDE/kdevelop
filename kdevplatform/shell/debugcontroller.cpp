@@ -38,55 +38,16 @@
 #include "uicontroller.h"
 #include "iruncontroller.h"
 
+#include <util/simpletoolviewfactory.h>
+
 namespace {
 constexpr auto executionMark = KTextEditor::Document::MarkTypes::Execution;
 }
 
 namespace KDevelop {
 
-class DebuggerToolFactoryBase : public KDevelop::IToolViewFactory
-{
-public:
-    DebuggerToolFactoryBase(DebugController* controller, const QString& id, Qt::DockWidgetArea defaultArea)
-        : m_controller(controller)
-        , m_id(id)
-        , m_defaultArea(defaultArea)
-    {
-    }
-
-    QString id() const override
-    {
-        return m_id;
-    }
-
-    Qt::DockWidgetArea defaultPosition() const override
-    {
-        return m_defaultArea;
-    }
-
-protected:
-    auto controller() const
-    {
-        return m_controller;
-    }
-
-private:
-    DebugController* const m_controller;
-    const QString m_id;
-    const Qt::DockWidgetArea m_defaultArea;
-};
-
-template<class T>
-class DebuggerToolFactory : public DebuggerToolFactoryBase
-{
-public:
-    using DebuggerToolFactoryBase::DebuggerToolFactoryBase;
-
-    QWidget* create(QWidget* parent = nullptr) override
-    {
-        return new T(controller(), parent);
-    }
-};
+template<class Widget>
+using DebuggerToolFactory = SimpleDataToolViewFactory<Widget, DebugController>;
 
 template<class T>
 class DebuggerToolWithoutToolbarFactory : public DebuggerToolFactory<T>
