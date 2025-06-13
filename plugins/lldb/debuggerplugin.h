@@ -10,7 +10,6 @@
 #include "midebuggerplugin.h"
 
 #include "widgets/debuggerconsoleview.h"
-#include "widgets/disassemblewidget.h"
 
 #include <QHash>
 #include <QVariantList>
@@ -50,7 +49,6 @@ private:
     [[nodiscard]] MIDebugSession* createSessionObject() override;
 
     DebuggerToolFactory<NonInterruptDebuggerConsoleView> *m_consoleFactory;
-    DebuggerToolFactory<DisassembleWidget> *m_disassembleFactory;
     QHash<KDevelop::IPlugin*, LldbLauncher*> m_launchers;
 };
 
