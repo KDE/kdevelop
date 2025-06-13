@@ -306,9 +306,8 @@ void LldbTest::testUpdateBreakpoint()
     QCOMPARE(session->currentLine(), 23-1); // at the beginning of foo():23: ++i;
 
     session->addUserCommand(QStringLiteral("break set --file %1 --line %2").arg(debugeeFilePath()).arg(33));
-    WAIT_FOR_A_WHILE(session, 20);
+    QTRY_COMPARE(breakpoints()->rowCount(), 2);
 
-    QCOMPARE(breakpoints()->rowCount(), 2);
     b = breakpoints()->breakpoint(1);
     QCOMPARE(b->url(), debugeeUrl());
     QCOMPARE(b->line(), 33-1);
