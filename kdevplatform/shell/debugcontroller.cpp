@@ -23,7 +23,6 @@
 #include "../interfaces/contextmenuextension.h"
 #include "../interfaces/context.h"
 #include "../language/interfaces/editorcontext.h"
-#include "../sublime/view.h"
 #include "../sublime/mainwindow.h"
 #include "../sublime/area.h"
 #include "../debugger/breakpoint/breakpointmodel.h"

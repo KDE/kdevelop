@@ -15,7 +15,6 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
 #include <interfaces/iuicontroller.h>
-#include <sublime/view.h>
 
 #include <QHash>
 
