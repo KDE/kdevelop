@@ -36,8 +36,6 @@
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
 #include <QDBusServiceWatcher>
-#include <QPointer>
-#include <QTimer>
 
 using namespace KDevelop;
 using namespace KDevMI;

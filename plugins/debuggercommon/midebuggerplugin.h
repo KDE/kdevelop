@@ -20,7 +20,6 @@
 #include <QHash>
 
 class QDBusServiceWatcher;
-class QUrl;
 
 namespace KDevelop {
 class Context;
