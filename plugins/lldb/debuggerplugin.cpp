@@ -16,6 +16,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/launchconfigurationtype.h>
 
+#include <KLocalizedString>
 #include <KPluginFactory>
 
 using namespace KDevMI::LLDB;

@@ -7,17 +7,11 @@
 #ifndef GDBDEBUGGERPLUGIN_H
 #define GDBDEBUGGERPLUGIN_H
 
-#include <config-kdevelop.h>
-
-#include <QVariantList>
-
-#include <KConfigGroup>
-
-#include <interfaces/iplugin.h>
-#include <interfaces/istatus.h>
-
 #include "midebuggerplugin.h"
 #include "debugsession.h"
+
+#include <QHash>
+#include <QVariantList>
 
 class GdbLauncher;
 

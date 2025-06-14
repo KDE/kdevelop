@@ -13,6 +13,9 @@
 #include "widgets/debuggerconsoleview.h"
 #include "widgets/disassemblewidget.h"
 
+#include <QHash>
+#include <QVariantList>
+
 namespace KDevMI { namespace LLDB {
 
 class LldbLauncher;
