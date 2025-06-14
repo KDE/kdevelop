@@ -21,10 +21,6 @@
 
 class QDBusServiceWatcher;
 
-namespace KDevelop {
-class Context;
-}
-
 namespace KDevMI {
 class MIAttachProcessJob;
 class MIDebugSession;
@@ -40,7 +36,6 @@ public:
     ~MIDebuggerPlugin() override;
 
     void unload() override;
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     MIDebugSession* createSession();
 
@@ -65,8 +60,6 @@ Q_SIGNALS:
 
 Q_SIGNALS:
     void reset();
-    void addWatchVariable(const QString& var);
-    void evaluateExpression(const QString& expr);
     void raiseDebuggerConsoleViews();
 
 protected Q_SLOTS:

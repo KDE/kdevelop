@@ -8,8 +8,6 @@
 
 #include "debuglog.h"
 
-#include <language/duchain/stringhelpers.h>
-
 #include <QChar>
 #include <QString>
 

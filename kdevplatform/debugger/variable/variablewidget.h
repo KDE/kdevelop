@@ -29,10 +29,6 @@ class KDEVPLATFORMDEBUGGER_EXPORT VariableWidget : public QWidget
 public:
     explicit VariableWidget( IDebugController *controller, QWidget *parent=nullptr );
 
-Q_SIGNALS:
-    void addWatchVariable(const QString& indent);
-    void evaluateExpression(const QString& indent);
-
 public Q_SLOTS:
     void slotAddWatch(const QString &ident);
 

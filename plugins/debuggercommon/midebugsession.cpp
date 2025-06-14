@@ -68,10 +68,6 @@ MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
     // FIXME: see if this still works
     //connect(statusBarIndicator, SIGNAL(doubleClicked()),
     //        controller, SLOT(explainDebuggerStatus()));
-
-    // FIXME: reimplement / re-enable
-    //connect(this, SIGNAL(addWatchVariable(QString)), controller->variables(), SLOT(slotAddWatchVariable(QString)));
-    //connect(this, SIGNAL(evaluateExpression(QString)), controller->variables(), SLOT(slotEvaluateExpression(QString)));
 }
 
 MIDebugSession::~MIDebugSession()

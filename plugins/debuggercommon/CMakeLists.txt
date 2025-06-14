@@ -64,7 +64,6 @@ target_link_libraries(kdevdebuggercommon
     Qt::Gui
     Qt::Widgets
     KDev::Util
-    KDev::Language
     KDev::IExecute
     KF6::KIOWidgets
 )

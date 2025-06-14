@@ -14,13 +14,10 @@
 #include "midebugsession.h"
 #include "dialogs/processselection.h"
 
-#include <interfaces/context.h>
-#include <interfaces/contextmenuextension.h>
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <language/interfaces/editorcontext.h>
 #include <sublime/message.h>
 #include <isession.h>
 
@@ -28,7 +25,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KParts/MainWindow>
-#include <KStringHandler>
 
 #include <QAction>
 #include <QApplication>
@@ -192,47 +188,6 @@ void MIDebuggerPlugin::slotDebugExternalProcess(DBusProxy* proxy)
     if (auto* mainWindow = core()->uiController()->activeMainWindow()) {
         mainWindow->raise();
     }
-}
-
-ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QWidget* parent)
-{
-    ContextMenuExtension menuExt = IPlugin::contextMenuExtension(context, parent);
-
-    if (context->type() != KDevelop::Context::EditorContext)
-        return menuExt;
-
-    auto *econtext = dynamic_cast<EditorContext*>(context);
-    if (!econtext)
-        return menuExt;
-
-    QString contextIdent = econtext->currentWord();
-
-    if (!contextIdent.isEmpty())
-    {
-        QString squeezed = KStringHandler::csqueeze(contextIdent, 30);
-
-        auto* action = new QAction(parent);
-        action->setText(i18nc("@action:inmenu", "Evaluate: %1", squeezed));
-        action->setWhatsThis(i18nc("@info:whatsthis",
-                                  "<b>Evaluate expression</b>"
-                                  "<p>Shows the value of the expression under the cursor.</p>"));
-        connect(action, &QAction::triggered, this, [this, contextIdent](){
-            emit addWatchVariable(contextIdent);
-        });
-        menuExt.addAction(ContextMenuExtension::DebugGroup, action);
-
-        action = new QAction(parent);
-        action->setText(i18nc("@action:inmenu", "Watch: %1", squeezed));
-        action->setWhatsThis(i18nc("@info:whatsthis",
-                                  "<b>Watch expression</b>"
-                                  "<p>Adds the expression under the cursor to the Variables/Watch list.</p>"));
-        connect(action, &QAction::triggered, this, [this, contextIdent](){
-            emit evaluateExpression(contextIdent);
-        });
-        menuExt.addAction(ContextMenuExtension::DebugGroup, action);
-    }
-
-    return menuExt;
 }
 
 MIDebugSession* MIDebuggerPlugin::createSession()
