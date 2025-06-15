@@ -10,14 +10,16 @@
 
 #include "debugsession.h"
 
-#include "debuglog.h"
 #include "debuggerplugin.h"
 #include "gdb.h"
 #include "gdbbreakpointcontroller.h"
 #include "gdbframestackmodel.h"
+#include "variablecontroller.h"
+
+#include <debuglog.h>
+
 #include "mi/micommand.h"
 #include "stty.h"
-#include "variablecontroller.h"
 
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>

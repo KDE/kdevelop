@@ -7,13 +7,15 @@
 #include "debugsession.h"
 
 #include "controllers/variable.h"
-#include "dbgglobal.h"
 #include "debuggerplugin.h"
-#include "debuglog.h"
 #include "lldbcommand.h"
+
+#include <debuglog.h>
+
+#include "dbgglobal.h"
 #include "mi/micommand.h"
-#include "stty.h"
 #include "stringhelpers.h"
+#include "stty.h"
 
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>
