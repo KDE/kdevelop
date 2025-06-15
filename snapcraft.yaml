@@ -23,7 +23,7 @@ environment:
   __EGL_VENDOR_LIBRARY_DIRS: "$SNAP/etc/glvnd/egl_vendor.d:$SNAP/usr/share/glvnd/egl_vendor.d"
   LIBGL_DRIVERS_PATH: "$SNAP/usr/lib/${CRAFT_ARCH_TRIPLET}/dri"
   QT_PLUGIN_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins
-  KDEV_CLANG_BUILTIN_DIR: $SNAP/usr/lib/llvm-18/lib/clang/18/include
+  KDEV_CLANG_BUILTIN_DIR: $SNAP/usr/lib/llvm-19/lib/clang/19/include
 layout:
   /usr/share/X11:
     symlink: $SNAP/usr/share/X11
@@ -217,21 +217,21 @@ parts:
       - libastyle-dev
       - libplasma-dev
       - libsvn-dev
-      - llvm-18-dev
+      - llvm-19-dev
       - okteta-dev
       - qt6-base-dev
       - qt6-declarative-dev
       - qt6-tools-dev
       - qt6-webengine-dev
       - shared-mime-info
-      - libclang-18-dev
+      - libclang-19-dev
       - libcurl4-openssl-dev
       - libedit-dev
       - libboost-all-dev
       - libkomparediff2-dev
       - libksysguard-dev
     stage-packages:
-      - clang-tidy-18
+      - clang-tidy-19
       - clazy
       - cppcheck
       - heaptrack-gui
@@ -266,7 +266,7 @@ parts:
       - kf6-syntax-highlighting
       - kf6-threadweaver
       - kf6-kpty
-      - libclang1-18
+      - libclang1-19
       - qt6-5compat
       - qt6-base
       - g++
@@ -280,7 +280,7 @@ parts:
       - heaptrack
       - ninja-build
       - libcurl4t64
-      - libclang-18-dev
+      - libclang-19-dev
       - libastyle3
       - libprocesscore10
       - libkomparediff2-6
@@ -315,7 +315,7 @@ parts:
       - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
       - --log-level=STATUS
       - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-      - -DCMAKE_PREFIX_PATH=$CRAFT_STAGE/usr/lib/llvm-18
+      - -DCMAKE_PREFIX_PATH=$CRAFT_STAGE/usr/lib/llvm-19
     prime:
       - -usr/lib/*/cmake/*
       - -usr/include/*
