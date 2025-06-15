@@ -18,6 +18,7 @@
 #include <interfaces/iuicontroller.h>
 
 #include <KColorScheme>
+#include <KConfigGroup>
 #include <KHistoryComboBox>
 #include <KLocalizedString>
 

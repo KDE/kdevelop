@@ -19,8 +19,6 @@
 #include "variablecontroller.h"
 #include "mi/mi.h"
 
-#include <KConfigGroup>
-
 class IExecutePlugin;
 
 namespace KDevelop {

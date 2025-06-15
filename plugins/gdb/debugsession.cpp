@@ -29,6 +29,7 @@
 #include <sublime/message.h>
 #include <util/environmentprofilelist.h>
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KShell>
 
