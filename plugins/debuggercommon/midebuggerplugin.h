@@ -14,16 +14,23 @@
 
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
-#include <util/simpletoolviewfactory.h>
 
 #include <QHash>
 
+#include <memory>
+
 class QDBusServiceWatcher;
 
+namespace KDevelop {
+class IDebugSession;
+}
+
 namespace KDevMI {
+class IToolViewFactoryHolder;
 class MIAttachProcessJob;
 class MIDebugSession;
 class DBusProxy;
+
 class MIDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IStatus
 {
     Q_OBJECT
@@ -37,13 +44,6 @@ public:
     void unload() override;
 
     MIDebugSession* createSession();
-
-    virtual void setupToolViews() = 0;
-    /**
-     * The implementation should be sure it's safe to call
-     * even when tool views are already unloaded.
-     */
-    virtual void unloadToolViews() = 0;
 
 //BEGIN IStatus
 public:
@@ -71,6 +71,8 @@ protected Q_SLOTS:
 #endif
 
 protected:
+    using ToolViewFactoryHolderPtr = std::unique_ptr<IToolViewFactoryHolder>;
+
     void setupActions();
     void setupDBus();
 
@@ -79,14 +81,14 @@ protected:
 
 private:
     [[nodiscard]] virtual MIDebugSession* createSessionObject() = 0;
+    [[nodiscard]] virtual ToolViewFactoryHolderPtr createToolViewFactoryHolder() = 0;
+
+    [[nodiscard]] ToolViewFactoryHolderPtr reuseOrCreateToolViewFactoryHolder(KDevelop::IDebugSession* previousSession);
 
     QHash<QString, DBusProxy*> m_drkonqis;
     const QString m_displayName;
     QDBusServiceWatcher* m_watcher = nullptr;
 };
-
-template<class T, class Plugin = MIDebuggerPlugin>
-using DebuggerToolFactory = KDevelop::SimpleGuardedDataToolViewFactory<T, Plugin>;
 
 } // end of namespace KDevMI
 

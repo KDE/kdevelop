@@ -9,27 +9,12 @@
 
 #include "midebuggerplugin.h"
 
-#include "widgets/debuggerconsoleview.h"
-
 #include <QHash>
 #include <QVariantList>
 
 namespace KDevMI { namespace LLDB {
 
 class LldbLauncher;
-
-class NonInterruptDebuggerConsoleView : public DebuggerConsoleView
-{
-    Q_OBJECT
-
-public:
-    explicit NonInterruptDebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *parent = nullptr)
-        : DebuggerConsoleView(plugin, parent)
-    {
-        setShowInterrupt(false);
-        setReplacePrompt(QStringLiteral("(lldb)"));
-    }
-};
 
 class LldbDebuggerPlugin : public MIDebuggerPlugin
 {
@@ -40,15 +25,12 @@ public:
 
     void unload() override;
 
-    void unloadToolViews() override;
-    void setupToolViews() override;
-
 private:
     void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);
 
     [[nodiscard]] MIDebugSession* createSessionObject() override;
+    [[nodiscard]] ToolViewFactoryHolderPtr createToolViewFactoryHolder() override;
 
-    DebuggerToolFactory<NonInterruptDebuggerConsoleView> *m_consoleFactory;
     QHash<KDevelop::IPlugin*, LldbLauncher*> m_launchers;
 };
 

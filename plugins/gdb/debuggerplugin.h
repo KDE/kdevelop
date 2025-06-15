@@ -15,11 +15,7 @@
 class GdbLauncher;
 
 namespace KDevMI {
-class DisassembleWidget;
-
 namespace GDB {
-class GDBOutputWidget;
-class MemoryViewerWidget;
 
 class CppDebuggerPlugin : public MIDebuggerPlugin
 {
@@ -30,17 +26,12 @@ public:
 
     void unload() override;
 
-    void unloadToolViews() override;
-    void setupToolViews() override;
-
 private:
     void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);
 
     [[nodiscard]] MIDebugSession* createSessionObject() override;
+    [[nodiscard]] ToolViewFactoryHolderPtr createToolViewFactoryHolder() override;
 
-    DebuggerToolFactory<DisassembleWidget>* disassemblefactory;
-    DebuggerToolFactory<GDBOutputWidget, CppDebuggerPlugin>* gdbfactory;
-    DebuggerToolFactory<MemoryViewerWidget, CppDebuggerPlugin>* memoryviewerfactory;
     QHash<KDevelop::IPlugin*, GdbLauncher*> m_launchers;
 };
 

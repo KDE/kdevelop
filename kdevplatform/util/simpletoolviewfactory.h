@@ -50,7 +50,6 @@ public:
     {
     }
 
-protected:
     [[nodiscard]] Data* data() const
     {
         return m_data;

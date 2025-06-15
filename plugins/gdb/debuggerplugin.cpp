@@ -9,20 +9,14 @@
 
 #include "debuggerplugin.h"
 
-#include "config-gdb-plugin.h"
-
-#include "widgets/disassemblewidget.h"
-#include "memviewdlg.h"
-#include "gdboutputwidget.h"
-
 #include "gdbconfigpage.h"
 #include "debugsession.h"
+#include "toolviewfactoryholder.h"
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/launchconfigurationtype.h>
 
 #include <KLocalizedString>
@@ -39,9 +33,6 @@ K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<Cp
 
 CppDebuggerPlugin::CppDebuggerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
     : MIDebuggerPlugin(QStringLiteral("kdevgdb"), i18n("GDB"), parent, metaData)
-    , disassemblefactory(nullptr)
-    , gdbfactory(nullptr)
-    , memoryviewerfactory(nullptr)
 {
     initMyResource();
 
@@ -101,56 +92,16 @@ void CppDebuggerPlugin::setupExecutePlugin(KDevelop::IPlugin* plugin, bool load)
     }
 }
 
-void CppDebuggerPlugin::setupToolViews()
-{
-    disassemblefactory = new DebuggerToolFactory<DisassembleWidget>(
-    this, QStringLiteral("org.kdevelop.debugger.DisassemblerView"), Qt::BottomDockWidgetArea);
-
-    gdbfactory = new DebuggerToolFactory<GDBOutputWidget, CppDebuggerPlugin>(
-    this, QStringLiteral("org.kdevelop.debugger.ConsoleView"),Qt::BottomDockWidgetArea);
-
-    core()->uiController()->addToolView(
-        i18nc("@title:window", "Disassemble/Registers"),
-        disassemblefactory);
-
-    core()->uiController()->addToolView(
-        i18nc("@title:window", "GDB"),
-        gdbfactory);
-
-#ifndef KDEV_WITH_MEMVIEW
-    memoryviewerfactory = nullptr;
-#else
-    memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget, CppDebuggerPlugin>(
-    this, QStringLiteral("org.kdevelop.debugger.MemoryView"), Qt::BottomDockWidgetArea);
-    core()->uiController()->addToolView(
-        i18nc("@title:window", "Memory"),
-        memoryviewerfactory);
-#endif
-}
-
-void CppDebuggerPlugin::unloadToolViews()
-{
-    if (disassemblefactory) {
-        core()->uiController()->removeToolView(disassemblefactory);
-        disassemblefactory = nullptr;
-    }
-    if (gdbfactory) {
-        core()->uiController()->removeToolView(gdbfactory);
-        gdbfactory = nullptr;
-    }
-    if (memoryviewerfactory) {
-        core()->uiController()->removeToolView(memoryviewerfactory);
-        memoryviewerfactory = nullptr;
-    }
-}
-
-CppDebuggerPlugin::~CppDebuggerPlugin()
-{
-}
+CppDebuggerPlugin::~CppDebuggerPlugin() = default;
 
 KDevMI::MIDebugSession* CppDebuggerPlugin::createSessionObject()
 {
-    return new DebugSession(this);
+    return new DebugSession();
+}
+
+auto CppDebuggerPlugin::createToolViewFactoryHolder() -> ToolViewFactoryHolderPtr
+{
+    return ToolViewFactoryHolderPtr(new ToolViewFactoryHolder(this));
 }
 
 #include "debuggerplugin.moc"

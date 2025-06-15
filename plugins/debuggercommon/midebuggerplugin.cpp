@@ -10,10 +10,13 @@
 
 #include "midebuggerplugin.h"
 
+#include "itoolviewfactoryholder.h"
 #include "midebugjobs.h"
 #include "midebugsession.h"
 #include "dialogs/processselection.h"
 #include "dialogs/selectcoredialog.h"
+
+#include <debuglog.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
@@ -203,8 +206,23 @@ void MIDebuggerPlugin::slotDebugExternalProcess(DBusProxy* proxy)
 
 MIDebugSession* MIDebuggerPlugin::createSession()
 {
+    auto* const debugController = core()->debugController();
     auto* const session = createSessionObject();
-    core()->debugController()->addSession(session);
+
+    // Our tool views are registered only while a debug session created by this plugin is the current session of
+    // DebugController. This way, for example, only LLDB (and not GDB) tool views are present during an LLDB session.
+
+    auto toolViewFactoryHolder = reuseOrCreateToolViewFactoryHolder(debugController->currentSession());
+
+    // Register the tool views *before* adding the new session to the DebugController. Otherwise,
+    // the tool views are registered after the Debug sublime area becomes active, which usually
+    // resets custom tool view positions to the default ones and never restores tool view visibility.
+    // Once these tool view issues are fixed in Sublime, consider reordering the next
+    // two statements to optimize (the tool view widgets would not have to set up the UI
+    // for a null current session before adapting it for the just created session).
+    session->initializeToolViewFactoryHolder(std::move(toolViewFactoryHolder));
+    debugController->addSession(session);
+
     connect(session, &MIDebugSession::showMessage, this, &MIDebuggerPlugin::showStatusMessage);
     connect(session, &MIDebugSession::raiseDebuggerConsoleViews, this, &MIDebuggerPlugin::raiseDebuggerConsoleViews);
     connect(session, &MIDebugSession::reset, this, &MIDebuggerPlugin::reset);
@@ -274,6 +292,45 @@ QString MIDebuggerPlugin::statusName() const
 void MIDebuggerPlugin::showStatusMessage(const QString& msg, int timeout)
 {
     emit showMessage(this, msg, timeout);
+}
+
+auto MIDebuggerPlugin::reuseOrCreateToolViewFactoryHolder(IDebugSession* previousSession) -> ToolViewFactoryHolderPtr
+{
+    if (!previousSession) {
+        qCDebug(DEBUGGERCOMMON) << "no current session to reuse tool views of";
+        return createToolViewFactoryHolder();
+    }
+
+    // WARNING: kdevdebuggercommon is a static library, so when the GDB plugin casts an LLDB
+    //          session to MIDebugSession* or vice versa, nullptr is the result. This does
+    //          not cause issues only as long as both of the following statements are true:
+    //          1) the holders of different plugins are incompatible, i.e.
+    //             the GDB plugin cannot reuse an LLDB holder and vice versa;
+    //          2) the tool view button IDs (tool document specifiers) used by these plugins are nonoverlapping.
+    auto* const previousMiSession = qobject_cast<MIDebugSession*>(previousSession);
+    if (!previousMiSession) {
+        qCDebug(DEBUGGERCOMMON) << "not reusing the tool views of the current non-MI session" << previousSession
+                                << "for" << this;
+        return createToolViewFactoryHolder();
+    }
+
+    if (auto previousHolder = previousMiSession->takeToolViewFactoryHolder()) {
+        const auto* const previousPlugin = previousHolder->plugin();
+        if (previousPlugin == this) {
+            qCDebug(DEBUGGERCOMMON) << "reusing the tool views of the current session of the same plugin" << this;
+            return previousHolder;
+        }
+        // The previous holder is associated with another or already destroyed (null) plugin. Make sure to
+        // destroy it at the end of this scope and consequently unregister the old tool views before a new
+        // holder is created and registers new tool views. Otherwise, the old tool view buttons with matching
+        // IDs (tool document specifiers) would prevent the new buttons from showing up on the button bar.
+        qCDebug(DEBUGGERCOMMON) << "not reusing the tool views of the current session, because its plugin"
+                                << previousPlugin << "does not match" << this;
+    } else {
+        qCDebug(DEBUGGERCOMMON) << "the current session does not have tool views to reuse for" << this;
+    }
+
+    return createToolViewFactoryHolder();
 }
 
 #include "midebuggerplugin.moc"

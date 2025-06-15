@@ -26,12 +26,11 @@ struct ResultRecord;
 
 namespace LLDB {
 
-class LldbDebuggerPlugin;
 class DebugSession : public MIDebugSession
 {
     Q_OBJECT
 public:
-    explicit DebugSession(LldbDebuggerPlugin *plugin = nullptr);
+    explicit DebugSession();
     ~DebugSession() override;
 
     BreakpointController * breakpointController() const override;

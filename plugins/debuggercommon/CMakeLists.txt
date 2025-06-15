@@ -8,6 +8,7 @@ set(debuggercommon_SRCS
     dbgglobal.cpp
     dialogs/selectcoredialog.cpp
     # debug session & debugger
+    itoolviewfactoryholder.cpp
     midebugger.cpp
     midebugsession.cpp
     midebuggerplugin.cpp
@@ -53,6 +54,19 @@ ki18n_wrap_ui(debuggercommon_SRCS
     registers/registersview.ui
 )
 
+# FIXME: apart from the usual (dis)advantages of a static compared to a dynamic library,
+#        kdevdebuggercommon being static has other implications. One of them is documented
+#        in a WARNING comment within MIDebuggerPlugin::reuseOrCreateToolViewFactoryHolder():
+#        when the GDB plugin casts an LLDB session to MIDebugSession* or vice versa, nullptr
+#        is the result, which prevents manipulating a tool view holder of another plugin.
+#        Another implication is that debuggercommon tool views, such as DebuggerConsoleView
+#        and DisassembleWidget, cannot be reused between the GDB and the LLDB plugins.
+#        Note that if kdevdebuggercommon becomes a shared library before the
+#        Disassemble/Registers tool view gains LLDB support, DisassembleWidget would
+#        start interacting with LLDB sessions (when an LLDB session is replaced with
+#        a GDB session or vice versa), which could cause bugs. So in this case
+#        DisassembleWidget would have to somehow require a GDB session and ignore
+#        LLDB sessions until they are properly supported.
 add_library(kdevdebuggercommon STATIC ${debuggercommon_SRCS})
 target_link_libraries(kdevdebuggercommon
     PUBLIC

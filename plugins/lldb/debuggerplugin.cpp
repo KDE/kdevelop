@@ -6,10 +6,9 @@
 
 #include "debuggerplugin.h"
 
-#include "debuglog.h"
 #include "debugsession.h"
 #include "lldblauncher.h"
-#include "widgets/debuggerconsoleview.h"
+#include "toolviewfactoryholder.h"
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
@@ -28,7 +27,6 @@ K_PLUGIN_FACTORY_WITH_JSON(LldbDebuggerFactory, "kdevlldb.json", registerPlugin<
 
 LldbDebuggerPlugin::LldbDebuggerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
     : MIDebuggerPlugin(QStringLiteral("kdevlldb"), i18n("LLDB"), parent, metaData)
-    , m_consoleFactory(nullptr)
 {
     initMyResource();
 
@@ -87,29 +85,16 @@ void LldbDebuggerPlugin::setupExecutePlugin(KDevelop::IPlugin* plugin, bool load
     }
 }
 
-void LldbDebuggerPlugin::setupToolViews()
-{
-    m_consoleFactory = new DebuggerToolFactory<NonInterruptDebuggerConsoleView>(this,
-                            QStringLiteral("org.kdevelop.debugger.LldbConsole"), Qt::BottomDockWidgetArea);
-    core()->uiController()->addToolView(i18nc("@title:window", "LLDB Console"), m_consoleFactory);
-}
-
-void LldbDebuggerPlugin::unloadToolViews()
-{
-    if (m_consoleFactory) {
-        qCDebug(DEBUGGERLLDB) << "Removing tool view";
-        core()->uiController()->removeToolView(m_consoleFactory);
-        m_consoleFactory = nullptr;
-    }
-}
-
-LldbDebuggerPlugin::~LldbDebuggerPlugin()
-{
-}
+LldbDebuggerPlugin::~LldbDebuggerPlugin() = default;
 
 KDevMI::MIDebugSession* LldbDebuggerPlugin::createSessionObject()
 {
-    return new DebugSession(this);
+    return new DebugSession();
+}
+
+auto LldbDebuggerPlugin::createToolViewFactoryHolder() -> ToolViewFactoryHolderPtr
+{
+    return ToolViewFactoryHolderPtr(new ToolViewFactoryHolder(this));
 }
 
 #include "debuggerplugin.moc"

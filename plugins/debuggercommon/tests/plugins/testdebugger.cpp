@@ -10,6 +10,7 @@
 
 #include <KPluginFactory>
 
+#include "../itoolviewfactoryholder.h"
 #include "../mibreakpointcontroller.h"
 #include "../midebugger.h"
 #include "../midebuggerplugin.h"
@@ -49,9 +50,8 @@ class TestDebugSession : public KDevMI::MIDebugSession
 {
     Q_OBJECT
 public:
-    explicit TestDebugSession(KDevMI::MIDebuggerPlugin* plugin = nullptr)
-        : KDevMI::MIDebugSession(plugin)
-        , m_breakpointController{new TestMIBreakpointController(this)}
+    explicit TestDebugSession()
+        : m_breakpointController{new TestMIBreakpointController(this)}
         , m_variableController{new KDevelop::TestVariableController(this)}
         , m_frameStackModel{new KDevelop::TestFrameStackModel(this)}
     {
@@ -104,13 +104,15 @@ public:
     }
     ~TestDebuggerPlugin() {}
 
-    void setupToolViews() override {}
-    void unloadToolViews() override {}
-
 private:
     [[nodiscard]] TestDebugSession* createSessionObject() override
     {
-        return new TestDebugSession(this);
+        return new TestDebugSession();
+    }
+
+    [[nodiscard]] ToolViewFactoryHolderPtr createToolViewFactoryHolder() override
+    {
+        return nullptr;
     }
 };
 

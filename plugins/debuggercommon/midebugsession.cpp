@@ -12,8 +12,8 @@
 #include "midebugsession.h"
 
 #include "debuglog.h"
+#include "itoolviewfactoryholder.h"
 #include "midebugger.h"
-#include "midebuggerplugin.h"
 #include "mivariable.h"
 #include "mi/mi.h"
 #include "mi/micommand.h"
@@ -23,6 +23,7 @@
 #include <debugger/interfaces/iframestackmodel.h>
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
@@ -50,12 +51,11 @@ namespace {
 constexpr DBGStateFlags notStartedDebuggerFlags{s_dbgNotStarted | s_appNotStarted};
 }
 
-MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
+MIDebugSession::MIDebugSession()
     : m_procLineMaker(new ProcessLineMaker(this))
     , m_commandQueue(new CommandQueue)
     , m_debuggerState{notStartedDebuggerFlags}
     , m_tty(nullptr)
-    , m_plugin(plugin)
 {
     qCDebug(DEBUGGERCOMMON) << "Creating" << this;
 
@@ -64,6 +64,9 @@ MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
             this, &MIDebugSession::inferiorStdoutLines);
     connect(m_procLineMaker, &ProcessLineMaker::receivedStderrLines,
             this, &MIDebugSession::inferiorStderrLines);
+
+    connect(ICore::self()->debugController(), &IDebugController::currentSessionChanged, this,
+            &MIDebugSession::currentSessionChanged);
 
     // FIXME: see if this still works
     //connect(statusBarIndicator, SIGNAL(doubleClicked()),
@@ -375,6 +378,17 @@ bool MIDebugSession::examineCoreFile(const QUrl &debugee, const QUrl &coreFile)
     return true;
 }
 
+void MIDebugSession::initializeToolViewFactoryHolder(ToolViewFactoryHolderPtr&& holder)
+{
+    Q_ASSERT(!m_toolViewFactoryHolder);
+    m_toolViewFactoryHolder = std::move(holder);
+}
+
+auto MIDebugSession::takeToolViewFactoryHolder() -> ToolViewFactoryHolderPtr
+{
+    return std::move(m_toolViewFactoryHolder);
+}
+
 #define ENUM_NAME(o,e,v) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).valueToKey((v)))
 void MIDebugSession::setSessionState(DebuggerState state)
 {
@@ -384,6 +398,11 @@ void MIDebugSession::setSessionState(DebuggerState state)
     if (state != m_sessionState) {
         m_sessionState = state;
         emit stateChanged(state);
+        if (state == EndedState) {
+            // This session is no longer current. DebugController either has already switched
+            // away from the Debug sublime area or is not going to switch any time soon.
+            stopBeingCurrentSession();
+        }
     }
 }
 
@@ -1248,6 +1267,26 @@ void MIDebugSession::defaultErrorHandler(const MI::ResultRecord& result)
 void MIDebugSession::setSourceInitFile(bool enable)
 {
     m_sourceInitFile = enable;
+}
+
+void MIDebugSession::currentSessionChanged(IDebugSession* session)
+{
+    if (session && session != this) {
+        // another debug session became current
+        stopBeingCurrentSession();
+    }
+    // else one of the following statements is true:
+    // * this session just became current => nothing to do;
+    // * (unlikely) some other current session just ended =>
+    //   this session must have already stopped being current earlier;
+    // * this session just ended and DebugController is about to switch away from
+    //   the Debug sublime area => setSessionState() will stop being current a bit later.
+}
+
+void MIDebugSession::stopBeingCurrentSession()
+{
+    // maintain the invariant that a non-current session does not hold tool view factories
+    m_toolViewFactoryHolder.reset();
 }
 
 #include "moc_midebugsession.cpp"

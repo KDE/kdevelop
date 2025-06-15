@@ -19,7 +19,6 @@
 #include "mi/micommand.h"
 
 #include <QMap>
-#include <QPointer>
 #include <QStringList>
 
 #include <memory>
@@ -32,12 +31,13 @@ class ProcessLineMaker;
 
 namespace KDevMI {
 
+class IToolViewFactoryHolder;
+
 namespace MI {
 class CommandQueue;
 }
 
 class MIDebugger;
-class MIDebuggerPlugin;
 class MIVariable;
 class STTY;
 
@@ -54,7 +54,7 @@ class MIDebugSession : public KDevelop::IDebugSession
 {
     Q_OBJECT
 public:
-    explicit MIDebugSession(MIDebuggerPlugin *plugin = nullptr);
+    explicit MIDebugSession();
     ~MIDebugSession() override;
 
 Q_SIGNALS:
@@ -201,6 +201,21 @@ public Q_SLOTS:
     bool attachToProcess(int pid);
 
 public:
+    using ToolViewFactoryHolderPtr = std::unique_ptr<IToolViewFactoryHolder>;
+
+    /**
+     * Initialize the tool view factory holder of this session to a given value.
+     *
+     * The holder will be destroyed once this session stops being the current session
+     * of DebugController (unless it is taken away from this session earlier).
+     */
+    void initializeToolViewFactoryHolder(ToolViewFactoryHolderPtr&& holder);
+
+    /**
+     * Take away the tool view factory holder from this session for possible transfer to another session.
+     */
+    ToolViewFactoryHolderPtr takeToolViewFactoryHolder();
+
     virtual std::unique_ptr<MI::MICommand> createCommand(MI::CommandType type, const QString& arguments,
                                                          MI::CommandFlags flags = {}) const;
     virtual std::unique_ptr<MI::MICommand> createUserCommand(const QString& cmd) const;
@@ -369,11 +384,20 @@ protected:
     // Map from GDB varobj name to MIVariable.
     QMap<QString, MIVariable*> m_allVariables;
 
-    QPointer<MIDebuggerPlugin> m_plugin;
-
 private:
     void addGdbExitCommand();
     void killDebuggerImpl();
+    void currentSessionChanged(IDebugSession* session);
+
+    /**
+     * Call when this session is no longer the current session of DebugController.
+     *
+     * This function may unregister tool views, and therefore should ideally be called when the Debug
+     * sublime area is no longer current in order to save the positions and states of the tool views.
+     */
+    void stopBeingCurrentSession();
+
+    ToolViewFactoryHolderPtr m_toolViewFactoryHolder;
 };
 
 template<class Handler>

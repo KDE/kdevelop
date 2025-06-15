@@ -10,7 +10,6 @@
 
 #include "debugsession.h"
 
-#include "debuggerplugin.h"
 #include "gdb.h"
 #include "gdbbreakpointcontroller.h"
 #include "gdbframestackmodel.h"
@@ -47,20 +46,14 @@ using namespace KDevMI::GDB;
 using namespace KDevMI::MI;
 using namespace KDevelop;
 
-DebugSession::DebugSession(CppDebuggerPlugin *plugin)
-    : MIDebugSession(plugin)
+DebugSession::DebugSession()
 {
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);
     m_frameStackModel = new GdbFrameStackModel(this);
-
-    if (m_plugin) m_plugin->setupToolViews();
 }
 
-DebugSession::~DebugSession()
-{
-    if (m_plugin) m_plugin->unloadToolViews();
-}
+DebugSession::~DebugSession() = default;
 
 void DebugSession::setAutoDisableASLR(bool enable)
 {

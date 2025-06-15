@@ -7,7 +7,6 @@
 #include "debugsession.h"
 
 #include "controllers/variable.h"
-#include "debuggerplugin.h"
 #include "lldbcommand.h"
 
 #include <debuglog.h>
@@ -86,23 +85,16 @@ struct ExecRunHandler : public MICommandHandler
     int m_activeCommands;
 };
 
-DebugSession::DebugSession(LldbDebuggerPlugin *plugin)
-    : MIDebugSession(plugin)
-    , m_formatterPath()
+DebugSession::DebugSession()
 {
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);
     m_frameStackModel = new LldbFrameStackModel(this);
 
-    if (m_plugin) m_plugin->setupToolViews();
-
     connect(this, &DebugSession::stateChanged, this, &DebugSession::handleSessionStateChange);
 }
 
-DebugSession::~DebugSession()
-{
-    if (m_plugin) m_plugin->unloadToolViews();
-}
+DebugSession::~DebugSession() = default;
 
 BreakpointController *DebugSession::breakpointController() const
 {

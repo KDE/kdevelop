@@ -63,6 +63,7 @@ endif()
 set(kdevgdbplugin_SRCS
     debuggerplugin.cpp
     gdbconfigpage.cpp
+    toolviewfactoryholder.cpp
 )
 set(kdevgdbplugin_UI
     gdbconfigpage.ui

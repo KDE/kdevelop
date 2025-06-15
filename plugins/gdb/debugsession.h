@@ -28,12 +28,11 @@ class ILaunchConfiguration;
 namespace KDevMI {
 namespace GDB {
 
-class CppDebuggerPlugin;
 class DebugSession : public MIDebugSession
 {
     Q_OBJECT
 public:
-    explicit DebugSession(CppDebuggerPlugin *plugin = nullptr);
+    explicit DebugSession();
     ~DebugSession() override;
 
     BreakpointController * breakpointController() const override;
