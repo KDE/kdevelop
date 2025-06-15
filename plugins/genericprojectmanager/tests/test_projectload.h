@@ -9,11 +9,6 @@
 
 #include <QObject>
 
-namespace KDevelop
-{
-class TestCore;
-}
-
 class TestProjectLoad : public QObject
 {
 Q_OBJECT

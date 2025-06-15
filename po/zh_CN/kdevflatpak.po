@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -58,41 +58,86 @@ msgstr "导出 %1"
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak 包 (*.flatpak)"
 
-#: flatpakplugin.cpp:234
+#: flatpakplugin.cpp:117
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export Bundle %1"
+msgstr ""
+
+#: flatpakplugin.cpp:236
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
 msgstr "重建 Flatpak 环境：%1"
 
-#: flatpakplugin.cpp:241
+#: flatpakplugin.cpp:243
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
 msgstr "为 %2 建造 Flatpak 环境 %1"
 
-#: flatpakplugin.cpp:265
+#: flatpakplugin.cpp:267
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "选择标签名称"
 
-#: flatpakplugin.cpp:266
+#: flatpakplugin.cpp:268
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "设备主机名："
 
-#: flatpakruntime.cpp:57
+#: flatpakruntime.cpp:61
 #, kde-format
+msgctxt "@title:window"
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:157
+#: flatpakruntime.cpp:113
 #, kde-format
-msgid "Bundling"
-msgstr "打包"
+msgctxt "%1 - application ID or name"
+msgid "Flatpak Create %1"
+msgstr ""
 
-#: flatpakruntime.cpp:179
+#: flatpakruntime.cpp:217
 #, kde-format
-msgid "Run on Device"
-msgstr "在设备上运行"
+msgctxt "%1 - application ID"
+msgid "Flatpak Finalize %1"
+msgstr ""
+
+#: flatpakruntime.cpp:223
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export %1"
+msgstr ""
+
+#: flatpakruntime.cpp:226
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Bundle %1"
+msgstr ""
+
+#: flatpakruntime.cpp:243
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Run %1 on %2"
+msgstr ""
+
+#: flatpakruntime.cpp:248
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer .flatpak to %1"
+msgstr ""
+
+#: flatpakruntime.cpp:250
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer replicate.sh to %1"
+msgstr ""
+
+#: flatpakruntime.cpp:254
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Install %1 to %2"
+msgstr ""

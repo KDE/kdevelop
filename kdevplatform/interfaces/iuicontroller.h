@@ -70,11 +70,6 @@ public:
      * @param view the new sublime view that is being shown
      */
     virtual void viewCreated(Sublime::View* view);
-
-    /**
-     * @returns if multiple tool views can by created by this factory in the same area.
-     */
-    virtual bool allowMultiple() const { return false; }
 };
 
 /**
@@ -105,6 +100,12 @@ public:
     /**  Makes sure that this tool-view exists in the current area, raises it, and returns the contained widget
        * Returns zero on failure */
     virtual QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags = CreateAndRaise) = 0;
+
+    /**
+     * Make sure that the tool view for the document with a given specifier -
+     * Sublime::Document::documentSpecifier() - is visible to the user.
+     */
+    virtual void raiseToolView(const QString& documentSpecifier) = 0;
 
     /**
      * Makes sure that the tool view that contains the widget @p toolViewWidget is visible to the user.

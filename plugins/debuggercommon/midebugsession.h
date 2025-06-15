@@ -77,16 +77,6 @@ Q_SIGNALS:
     void debuggerInternalOutput(const QString& output) const;
 
     /**
-     * Emits when received standard output from inferior's tty
-     */
-    void inferiorTtyStdout(const QByteArray& output);
-
-    /**
-     * Emits when received standard output from inferior's tty
-     */
-    void inferiorTtyStderr(const QByteArray& output);
-
-    /**
      * Emits when the debugger instance state changes
      */
     void debuggerStateChanged(DBGStateFlags oldState, DBGStateFlags newState);

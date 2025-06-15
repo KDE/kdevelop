@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-07-20 15:26+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -458,30 +458,28 @@ msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
 msgstr "Analisar o Projecto Actual com o Cppcheck"
 
-#: plugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "Testar"
-
-#: problemmodel.cpp:116
+#: problemmodel.cpp:117
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "A análise terminou, sem problemas detectados."
 
-#: problemmodel.cpp:137
+#: problemmodel.cpp:143
 #, kde-format
 msgid "Analysis started..."
 msgstr "A análise foi iniciada..."
 
-#: problemmodel.cpp:138
+#: problemmodel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
 msgstr "Executar de Novo a Última Análise do Cppcheck (%1)"
 
-#: problemmodel.cpp:140
+#: problemmodel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
 msgstr "Executar de novo a última análise do Cppcheck"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Testar"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2021-08-31 08:38+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -65,46 +65,46 @@ msgstr ""
 "V izvedljivi datoteki za nastavitve zagona '%1' obstaja meta znak lupine, ki "
 "trenutno ni podprt. Prekinjanje zagona."
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:103
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr "Vprašaj, če je v teku"
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "Uniči vse pojavke"
 
-#: nativeappconfig.cpp:106
+#: nativeappconfig.cpp:105
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "Zaženi še enega"
 
-#: nativeappconfig.cpp:156
+#: nativeappconfig.cpp:155
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Nastavi lastni program"
 
-#: nativeappconfig.cpp:166
+#: nativeappconfig.cpp:165
 #, kde-format
 msgid "Executes Native Applications"
 msgstr "Izvede lastne programe"
 
-#: nativeappconfig.cpp:176
+#: nativeappconfig.cpp:175
 #, kde-format
 msgid "Native Application"
 msgstr "Lastni program"
 
-#: nativeappconfig.cpp:241
+#: nativeappconfig.cpp:233
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Izgrajena izvedljiva datoteka"
 
-#: nativeappconfig.cpp:322
+#: nativeappconfig.cpp:314
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -321,7 +321,7 @@ msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Cilji:"
 
-#: nativeappjob.cpp:66
+#: nativeappjob.cpp:40
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -330,30 +330,30 @@ msgstr ""
 "Ni bilo podanega profila okolja, kar namiguje na pokvarjene nastavitve. "
 "Preverite zagonske nastavitve '%1'. Uporabljen bo privzeti profil okolja."
 
-#: nativeappjob.cpp:142
+#: nativeappjob.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "Posel že teče"
 
-#: nativeappjob.cpp:143
+#: nativeappjob.cpp:153
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "'%1' se že izvaja."
 
-#: nativeappjob.cpp:145
+#: nativeappjob.cpp:155
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "Uniči vse pojavke"
 
-#: nativeappjob.cpp:146
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "Zaženi še enega"
 
-#: nativeappjob.cpp:149
+#: nativeappjob.cpp:159
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"

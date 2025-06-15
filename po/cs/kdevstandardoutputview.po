@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
 "PO-Revision-Date: 2023-11-21 15:05+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -156,32 +156,36 @@ msgid ""
 "the number of views exceeds this value"
 msgstr ""
 
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
 msgstr "Sestavení"
 
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
 msgstr "Spustit"
 
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Ladění"
 
-#: standardoutputview.cpp:124
+#: standardoutputview.cpp:89
 #, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "Test"
+msgid "Analyze"
+msgstr ""
 
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "Správa verzí"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Test"

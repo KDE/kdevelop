@@ -30,6 +30,9 @@ private Q_SLOTS:
     void simpleViewAdditionAndDeletion();
     void complexViewAdditionAndDeletion();
     void toolViewAdditionAndDeletion();
+    void sharedToolViewRemoval();
+    void toolViewWidgetReuseAndDestruction();
+    void toolDocumentRemoval();
     void testAddingViewAfter();
     void splitViewActiveTabsTest();
 
@@ -39,8 +42,6 @@ private:
     /*! @param location short descriptive message printed on failure. */
     void checkAreaViewsDisplay(Sublime::MainWindow *mw, Sublime::Area *area,
         const QString &areas, int containers, int splitters, const QString& location=QString());
-
-    Sublime::View *findNamedView(Sublime::Area *area, const QString &name);
 
     Sublime::Controller *m_controller;
 

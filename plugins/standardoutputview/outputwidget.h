@@ -62,7 +62,7 @@ public Q_SLOTS:
     void setTitle(int outputId, const QString& title);
 
 Q_SIGNALS:
-    void outputRemoved( int, int );
+    void outputRemoved(int id);
 
 private Q_SLOTS:
     void nextOutput();

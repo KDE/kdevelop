@@ -42,4 +42,8 @@ install(TARGETS KDevPlatformIExecute EXPORT KDevPlatformTargets ${KDE_INSTALL_TA
 
 ########### install files ###############
 
-install(FILES iexecuteplugin.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/execute COMPONENT Devel)
+install(FILES
+    iexecuteplugin.h
+    iexecutepluginhelpers.h
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/execute COMPONENT Devel
+)

@@ -12,7 +12,6 @@
 class QTemporaryDir;
 namespace KDevelop
 {
-class TestCore;
 class ICentralizedVersionControl;
 }
 

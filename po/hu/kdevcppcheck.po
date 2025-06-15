@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2015-09-08 09:58+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -425,30 +425,24 @@ msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
 msgstr ""
 
-#: plugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr ""
-
-#: problemmodel.cpp:116
+#: problemmodel.cpp:117
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr ""
 
-#: problemmodel.cpp:137
+#: problemmodel.cpp:143
 #, kde-format
 msgid "Analysis started..."
 msgstr ""
 
-#: problemmodel.cpp:138
+#: problemmodel.cpp:144
 #, fuzzy, kde-format
 #| msgid "Cppcheck"
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
 msgstr "Cppcheck"
 
-#: problemmodel.cpp:140
+#: problemmodel.cpp:146
 #, fuzzy, kde-format
 #| msgid "Cppcheck"
 msgctxt "@info:tooltip"

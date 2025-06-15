@@ -9,8 +9,7 @@
 #include "document.h"
 #include "tooldocument.h"
 
-#include <debug.h>
-
+#include <QPointer>
 #include <QWidget>
 
 namespace Sublime {
@@ -20,9 +19,7 @@ class ViewPrivate
 public:
     ViewPrivate(Document* doc, View::WidgetOwnership ws);
 
-    void unsetWidget();
-
-    QWidget* widget = nullptr;
+    QPointer<QWidget> widget;
     Document* const doc;
     const View::WidgetOwnership ws;
 };
@@ -31,11 +28,6 @@ ViewPrivate::ViewPrivate(Document* doc, View::WidgetOwnership ws)
     : doc(doc)
     , ws(ws)
 {
-}
-
-void ViewPrivate::unsetWidget()
-{
-    widget = nullptr;
 }
 
 View::View(Document *doc, WidgetOwnership ws )
@@ -48,10 +40,12 @@ View::~View()
 {
     Q_D(View);
 
-    if (d->widget && d->ws == View::TakeOwnership ) {
-        d->widget->hide();
-        d->widget->setParent(nullptr);
-        delete d->widget;
+    // widget is a raw pointer cache that prevents repeated weak pointer access
+    auto* const widget = d->widget.get();
+    if (widget && d->ws == View::TakeOwnership) {
+        widget->hide();
+        widget->setParent(nullptr);
+        delete widget;
     }
 }
 
@@ -62,27 +56,32 @@ Document *View::document() const
     return d->doc;
 }
 
-QWidget *View::widget(QWidget *parent)
+QWidget* View::widget() const
+{
+    Q_D(const View);
+
+    return d->widget;
+}
+
+QWidget* View::initializeWidget(QWidget* parent)
 {
     Q_D(View);
 
-    if (!d->widget)
-    {
-        if (!parent) {
-            qCWarning(SUBLIME) << "creating a widget for view" << d->doc->documentSpecifier()
-                               << "without a parent => possibly unintentionally";
-        }
+    Q_ASSERT(!d->widget);
+    // widget is a raw pointer cache that prevents repeated weak pointer access
+    auto* const widget = createWidget(parent);
+    d->widget = widget;
+    return widget;
+}
 
-        d->widget = createWidget(parent);
-        // if we own this widget, we will also delete it and ideally would disconnect
-        // the following connect before doing that. For that though we would need to store
-        // a reference to the connection.
-        // As the d object still exists in the destructor when we delete the widget
-        // this lambda method though can be still safely executed, so we spare ourselves such disconnect.
-        connect(d->widget, &QWidget::destroyed,
-                this, [this] { Q_D(View); d->unsetWidget(); });
-    }
-    return d->widget;
+void View::setSharedWidget(QWidget* widget)
+{
+    Q_D(View);
+
+    Q_ASSERT(d->ws == DoNotTakeOwnership);
+    Q_ASSERT(!d->widget);
+    Q_ASSERT(widget);
+    d->widget = widget;
 }
 
 QWidget *View::createWidget(QWidget *parent)
@@ -90,13 +89,6 @@ QWidget *View::createWidget(QWidget *parent)
     Q_D(View);
 
     return d->doc->createViewWidget(parent);
-}
-
-bool View::hasWidget() const
-{
-    Q_D(const View);
-
-    return d->widget != nullptr;
 }
 
 void View::requestRaise()

@@ -31,8 +31,15 @@ public:
     explicit Container(QWidget *parent = nullptr);
     ~Container() override;
 
-    /**Adds the widget for given @p view to the container.*/
-    void addWidget(Sublime::View* view, int position = -1);
+    /**
+     * Add a given widget for a given view to the container at a given position.
+     *
+     * @param widget non-null widget equal to @p view->widget()
+     * @param position an index at which to insert the widget, or -1 to append it
+     *
+     * @pre !hasWidget(@p widget)
+     */
+    void addWidget(Sublime::View* view, QWidget* widget, int position = -1);
     /**
      * Remove a given non-null widget from the container.
      */

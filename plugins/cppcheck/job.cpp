@@ -42,8 +42,8 @@ Job::Job(const Parameters& params, QObject* parent)
     setJobName(i18n("Cppcheck Analysis (%1)", prettyPathName(params.checkPath)));
 
     setCapabilities(KJob::Killable);
-    setStandardToolView(KDevelop::IOutputView::TestView);
-    setBehaviours(KDevelop::IOutputView::AutoScroll);
+    setStandardToolView(KDevelop::IOutputView::AnalyzeView);
+    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
     setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStdout);
     setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStderr);

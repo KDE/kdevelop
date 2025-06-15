@@ -6,34 +6,40 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2021-08-31 08:25+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-16 11:57+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
+"X-Generator: Poedit 3.6\n"
 
-#: dockerplugin.cpp:117
+#: dockerplugin.cpp:133
 #, kde-format
 msgid "docker build '%1'"
 msgstr "izgradnja docker '%1'"
 
-#: dockerplugin.cpp:121
+#: dockerplugin.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Izberi ime značke"
 
-#: dockerplugin.cpp:122
+#: dockerplugin.cpp:138
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Tag name for '%1':"
 msgstr "Ime značke za '%1':"
+
+#: dockerplugin.cpp:145
+#, kde-format
+msgctxt "%1 - Docker tag name"
+msgid "Docker Build \"%1\""
+msgstr "Docker izgradnja \"%1\""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dockerpreferences.ui:29

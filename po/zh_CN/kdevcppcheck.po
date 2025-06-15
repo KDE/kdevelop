@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -441,29 +441,23 @@ msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
 msgstr "用 Cppcheck 分析当前工程"
 
-#: plugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "测试"
-
-#: problemmodel.cpp:116
+#: problemmodel.cpp:117
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "分析已完成，未检测到任何问题。"
 
-#: problemmodel.cpp:137
+#: problemmodel.cpp:143
 #, kde-format
 msgid "Analysis started..."
 msgstr "分析已开始..."
 
-#: problemmodel.cpp:138
+#: problemmodel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
 msgstr "重新运行上次的 Cppcheck 分析 (%1)"
 
-#: problemmodel.cpp:140
+#: problemmodel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"

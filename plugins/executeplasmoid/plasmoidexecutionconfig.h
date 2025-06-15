@@ -31,6 +31,11 @@ public:
 class PlasmoidLauncher : public KDevelop::ILauncher
 {
 public:
+    /**
+     * Create a plasmoid launcher.
+     *
+     * @param plugin non-null plugin instance
+     */
     explicit PlasmoidLauncher( ExecutePlasmoidPlugin* plugin );
     QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
     QString description() const override;

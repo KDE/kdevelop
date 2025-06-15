@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-05-27 00:40+0000\n"
 "PO-Revision-Date: 2022-04-17 20:47+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -322,22 +322,22 @@ msgstr "Pridať vlastnú cestu vloženia"
 msgid "Open Project"
 msgstr "Otvoriť projekt"
 
-#: duchain/parsesession.cpp:560
+#: duchain/parsesession.cpp:575
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Požadované tu: %1"
 
-#: duchain/parsesession.cpp:601
+#: duchain/parsesession.cpp:616
 #, kde-format
 msgid "In included file: %1"
 msgstr "V zahrnutom súbore: %1"
 
-#: duchain/parsesession.cpp:624
+#: duchain/parsesession.cpp:639
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "Hlavička nie je chránená proti viacnásobnému vloženiu"
 
-#: duchain/parsesession.cpp:625
+#: duchain/parsesession.cpp:640
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

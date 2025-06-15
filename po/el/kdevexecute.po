@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2019-08-28 09:43+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -66,46 +66,46 @@ msgstr ""
 "Ένας μεταχαρακτήρας φλοιού συμπεριελήφθη στο εκτελέσιμο για τη διαμόρφωση "
 "εκκίνησης '%1', αυτό δεν υποστηρίζεται προς το παρόν. Εγκατάλειψη έναρξης."
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:103
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr ""
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "Τερματισμός όλων των εκτελέσεων"
 
-#: nativeappconfig.cpp:106
+#: nativeappconfig.cpp:105
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "Εκκίνηση άλλης"
 
-#: nativeappconfig.cpp:156
+#: nativeappconfig.cpp:155
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Διαμόρφωση εγγενούς εφαρμογής"
 
-#: nativeappconfig.cpp:166
+#: nativeappconfig.cpp:165
 #, kde-format
 msgid "Executes Native Applications"
 msgstr "Εκτελεί εγγενείς εφαρμογές"
 
-#: nativeappconfig.cpp:176
+#: nativeappconfig.cpp:175
 #, kde-format
 msgid "Native Application"
 msgstr "Εγγενής εφαρμογή"
 
-#: nativeappconfig.cpp:241
+#: nativeappconfig.cpp:233
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Μεταγλωττισμένο εκτελέσιμο"
 
-#: nativeappconfig.cpp:322
+#: nativeappconfig.cpp:314
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -325,7 +325,7 @@ msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Προορισμοί:"
 
-#: nativeappjob.cpp:66
+#: nativeappjob.cpp:40
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -335,30 +335,30 @@ msgstr ""
 "παρακαλώ ελέγξτε τη διαμόρφωση εκτέλεσης '%1'. Χρησιμοποιήστε το "
 "προκαθορισμένο προφίλ περιβάλλοντος."
 
-#: nativeappjob.cpp:142
+#: nativeappjob.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "Η εργασία εκτελείται ήδη"
 
-#: nativeappjob.cpp:143
+#: nativeappjob.cpp:153
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "Η '%1' εκτελείται ήδη."
 
-#: nativeappjob.cpp:145
+#: nativeappjob.cpp:155
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "Τερματισμός όλων των εκτελέσεων"
 
-#: nativeappjob.cpp:146
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "Εκκίνηση άλλης"
 
-#: nativeappjob.cpp:149
+#: nativeappjob.cpp:159
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"

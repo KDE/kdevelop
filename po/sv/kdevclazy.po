@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-07-24 14:13+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -560,7 +560,7 @@ msgctxt "@title:window"
 msgid "Clazy Error"
 msgstr "Clazy-fel"
 
-#: jobparameters.cpp:39
+#: jobparameters.cpp:41
 #, kde-format
 msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
@@ -569,22 +569,22 @@ msgstr ""
 "Sökvägen till clazy-standalone kan inte detekteras. Ställ in sökvägen "
 "manuellt om Clazy redan är installerat."
 
-#: jobparameters.cpp:42
+#: jobparameters.cpp:44
 #, kde-format
 msgid "clazy-standalone path is empty."
 msgstr "Sökvägen till clazy-standalone är tom."
 
-#: jobparameters.cpp:50
+#: jobparameters.cpp:52
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
 msgstr "Sökvägen till clazy-standalone '%1' finns inte."
 
-#: jobparameters.cpp:55
+#: jobparameters.cpp:57
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
 msgstr "Sökvägen till clazy-standalone '%1' är inte en körbar fil."
 
-#: jobparameters.cpp:64
+#: jobparameters.cpp:66
 #, kde-format
 msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
@@ -593,17 +593,17 @@ msgstr ""
 "Sökvägen till Clazy dokumentation kan inte detekteras. Ställ in sökvägen "
 "manuellt om Clazy redan är installerat."
 
-#: jobparameters.cpp:67
+#: jobparameters.cpp:69
 #, kde-format
 msgid "Clazy documentation path is empty."
 msgstr "Sökvägen till Clazy dokumentation är tom."
 
-#: jobparameters.cpp:75
+#: jobparameters.cpp:77
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
 msgstr "Sökvägen till Clazy dokumentation '%1' finns inte."
 
-#: jobparameters.cpp:80
+#: jobparameters.cpp:82
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
 msgstr "Sökvägen till Clazy dokumentation '%1' är inte en katalog."

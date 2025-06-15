@@ -1,15 +1,15 @@
 # Spanish translations for kdevflatpak.po package.
-# Copyright (C) 2017 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2017-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2017.
-# SPDX-FileCopyrightText: 2017, 2018, 2020, 2024 Eloy Cuadra <ecuadra@eloihr.net>
+#
+# SPDX-FileCopyrightText: 2017, 2018, 2020, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevflatpak\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2024-10-30 20:27+0100\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 02:02+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -35,7 +35,7 @@ msgstr "Recompila todas las dependencias para tener un entorno actualizado."
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
-msgstr "Exportar paquete de Flatpak..."
+msgstr "Exportar paquete de Flatpak…"
 
 #: flatpakplugin.cpp:56
 #, kde-format
@@ -47,7 +47,7 @@ msgstr "Exporta la compilación actual a un archivo «bundle.flatpak»."
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
-msgstr "Enviar a dispositivo..."
+msgstr "Enviar a dispositivo…"
 
 #: flatpakplugin.cpp:113
 #, kde-format
@@ -60,59 +60,86 @@ msgstr "Exportar %1"
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Paquete de Flatpak (*.flatpak)"
 
-#: flatpakplugin.cpp:234
+#: flatpakplugin.cpp:117
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export Bundle %1"
+msgstr "Flatpak: Exportar paquete %1"
+
+#: flatpakplugin.cpp:236
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
 msgstr "Reconstruir entorno de Flatpak: %1"
 
-#: flatpakplugin.cpp:241
+#: flatpakplugin.cpp:243
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
 msgstr "Construir entorno de Flatpak %1 para %2"
 
-#: flatpakplugin.cpp:265
+#: flatpakplugin.cpp:267
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Escoger nombre de etiqueta"
 
-#: flatpakplugin.cpp:266
+#: flatpakplugin.cpp:268
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "Nombre de máquina del dispositivo:"
 
-#: flatpakruntime.cpp:57
+#: flatpakruntime.cpp:61
 #, kde-format
+msgctxt "@title:window"
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:157
+#: flatpakruntime.cpp:113
 #, kde-format
-msgid "Bundling"
-msgstr "Empaquetado"
+msgctxt "%1 - application ID or name"
+msgid "Flatpak Create %1"
+msgstr "Flatpak: Crear %1"
 
-#: flatpakruntime.cpp:179
+#: flatpakruntime.cpp:217
 #, kde-format
-msgid "Run on Device"
-msgstr "Ejecutar en dispositivo"
+msgctxt "%1 - application ID"
+msgid "Flatpak Finalize %1"
+msgstr "Flatpak: Finalizar %1"
 
-#~ msgid "Export %1 to..."
-#~ msgstr "Exportar %1 a..."
+#: flatpakruntime.cpp:223
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export %1"
+msgstr "Flatpak: Exportar %1"
 
-#~ msgid "Creating Flatpak %1"
-#~ msgstr "Creando Flatpak %1"
+#: flatpakruntime.cpp:226
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Bundle %1"
+msgstr "Flatpak: Empaquetar %1"
 
-#~ msgid "Transferring flatpak to %1"
-#~ msgstr "Transfiriendo flatpak a %1"
+#: flatpakruntime.cpp:243
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Run %1 on %2"
+msgstr "Flatpak: Ejecutar %1 en %2"
 
-#~ msgid "Transferring replicate.sh to %1"
-#~ msgstr "Transfiriendo «replicate.sh» a %1"
+#: flatpakruntime.cpp:248
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer .flatpak to %1"
+msgstr "Transferir «.flatpak» a %1"
 
-#~ msgid "Installing %1 to %2"
-#~ msgstr "Instalando %1 en %2"
+#: flatpakruntime.cpp:250
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer replicate.sh to %1"
+msgstr "Transferir «replicate.sh» a %1"
 
-#~ msgid "Running %1 on %2"
-#~ msgstr "Ejecutando %1 en %2"
+#: flatpakruntime.cpp:254
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Install %1 to %2"
+msgstr "Flatpak: Instalar %1 en %2"

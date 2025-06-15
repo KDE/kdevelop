@@ -171,9 +171,9 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
                 this, &OutputWidget::outputFilter );
     }
 
-    if (!data->configSubgroupName.isEmpty()
+    if (!data->id.isEmpty()
         && (data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView)) {
-        m_outputWidgetConfig = new OutputWidgetConfig(data->configSubgroupName, data->title, this);
+        m_outputWidgetConfig = new OutputWidgetConfig(data->id, data->title, this);
         connect(m_outputWidgetConfig, &OutputWidgetConfig::settingsChanged, this, [this]() {
             const auto maxViewCount = m_outputWidgetConfig->maxViewCount();
             // don't close views when view limit is not enabled
@@ -319,7 +319,7 @@ void OutputWidget::removeOutput( int id )
         // remove our view with proxy model which is view's child (see outputFilter() method).
         delete view;
 
-        emit outputRemoved( data->toolViewId, id );
+        emit outputRemoved(id);
     }
     enableActions();
 }

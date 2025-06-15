@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-01-17 16:31+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Lokalize 19.12.1\n"
 
-#: compileanalyzeproblemmodel.cpp:84
+#: compileanalyzeproblemmodel.cpp:85
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "Analýza byla dokončena bez problémů."
 
-#: compileanalyzeproblemmodel.cpp:107
+#: compileanalyzeproblemmodel.cpp:113
 #, kde-format
 msgid "Analysis started..."
 msgstr "Analýza byla spuštěna..."
 
-#: compileanalyzeproblemmodel.cpp:110
+#: compileanalyzeproblemmodel.cpp:116
 #, kde-format
 msgctxt "@info:tooltip %2 is the path of the file"
 msgid "Re-run last %1 analysis (%2)"
 msgstr ""
 
-#: compileanalyzeproblemmodel.cpp:112
+#: compileanalyzeproblemmodel.cpp:118
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last %1 analysis"
@@ -69,12 +69,6 @@ msgid ""
 "%2"
 msgstr ""
 
-#: compileanalyzer.cpp:222
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "Test"
-
 #: compileanalyzeutils.cpp:45
 #, kde-format
 msgid "Compilation database file not found: '%1'"
@@ -102,3 +96,7 @@ msgid ""
 "JSON error during parsing compilation database file '%1': document is not an "
 "array."
 msgstr ""
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Test"

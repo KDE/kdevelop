@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevdocker package.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2017, 2020.
+# SPDX-FileCopyrightText: 2017, 2020, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-25 16:22+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-19 15:05+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -15,24 +15,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.1\n"
+"X-Generator: Lokalize 25.04.0\n"
 
-#: dockerplugin.cpp:117
+#: dockerplugin.cpp:133
 #, kde-format
 msgid "docker build '%1'"
 msgstr "docker build '%1'"
 
-#: dockerplugin.cpp:121
+#: dockerplugin.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Scegli il nome del tag..."
 
-#: dockerplugin.cpp:122
+#: dockerplugin.cpp:138
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Tag name for '%1':"
 msgstr "Nome tag per «%1»"
+
+#: dockerplugin.cpp:145
+#, kde-format
+msgctxt "%1 - Docker tag name"
+msgid "Docker Build \"%1\""
+msgstr "Generazione Docker «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dockerpreferences.ui:29

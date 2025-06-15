@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
 "PO-Revision-Date: 2010-02-05 06:35+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -167,40 +167,45 @@ msgid ""
 "the number of views exceeds this value"
 msgstr ""
 
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, fuzzy, kde-format
 #| msgid "Build"
 msgctxt "@title:window"
 msgid "Build"
 msgstr "Buen"
 
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, fuzzy, kde-format
 #| msgid "Run"
 msgctxt "@title:window"
 msgid "Run"
 msgstr "Utföhren"
 
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Fehlersöök"
 
-#: standardoutputview.cpp:124
-#, fuzzy, kde-format
-#| msgid "Test"
+#: standardoutputview.cpp:89
+#, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "Test"
+msgid "Analyze"
+msgstr ""
 
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, fuzzy, kde-format
 #| msgid "Version Control"
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "Verschoonkuntrull"
+
+#, fuzzy
+#~| msgid "Test"
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Test"
 
 #~ msgctxt "@title:menu"
 #~ msgid "Navigation"

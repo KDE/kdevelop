@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-10 00:41+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1438,102 +1438,102 @@ msgstr "genereeritud märgivoo näitamine"
 msgid "code to parse"
 msgstr "parsitav kood"
 
-#: outputview/outputexecutejob.cpp:196
+#: outputview/outputexecutejob.cpp:186
 #, kde-format
 msgid "No build directory specified for a builder job."
 msgstr "Ehitamistööle pole ehitamiskataloogi määratud."
 
-#: outputview/outputexecutejob.cpp:198
+#: outputview/outputexecutejob.cpp:188
 #, kde-format
 msgid "No working directory specified for a process."
 msgstr "Protsessile pole töökataloogi määratud."
 
-#: outputview/outputexecutejob.cpp:210
+#: outputview/outputexecutejob.cpp:200
 #, kde-format
 msgid "Invalid build directory '%1'"
 msgstr "Vigane ehituskataloog \"%1\""
 
-#: outputview/outputexecutejob.cpp:212
+#: outputview/outputexecutejob.cpp:202
 #, kde-format
 msgid "Invalid working directory '%1'"
 msgstr "Vigane töökataloog \"%1\""
 
-#: outputview/outputexecutejob.cpp:219
+#: outputview/outputexecutejob.cpp:209
 #, kde-format
 msgid "Build directory '%1' is not a local path"
 msgstr "Ehituskataloog \"%1\" ei ole kohalik asukoht"
 
-#: outputview/outputexecutejob.cpp:221
+#: outputview/outputexecutejob.cpp:211
 #, kde-format
 msgid "Working directory '%1' is not a local path"
 msgstr "Töökataloog \"%1\" ei ole kohalik asukoht"
 
-#: outputview/outputexecutejob.cpp:240
+#: outputview/outputexecutejob.cpp:222
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
 msgstr "Ehituskataloogi \"%1\" ei ole olemas või see ei ole kataloog"
 
-#: outputview/outputexecutejob.cpp:242
+#: outputview/outputexecutejob.cpp:224
 #, kde-format
 msgid "Working directory '%1' does not exist or is not a directory"
 msgstr "Töökataloogi \"%1\" ei ole olemas või see ei ole kataloog"
 
-#: outputview/outputexecutejob.cpp:303
+#: outputview/outputexecutejob.cpp:282
 #, kde-format
 msgid "Failed to specify program to start: %1"
 msgstr "Käivitatava programmi kindlaksmääramine nurjus: %1"
 
-#: outputview/outputexecutejob.cpp:304
+#: outputview/outputexecutejob.cpp:283
 #, kde-format
 msgid "*** %1 ***"
 msgstr "*** %1 ***"
 
-#: outputview/outputexecutejob.cpp:330
+#: outputview/outputexecutejob.cpp:309
 #, kde-format
 msgid "*** Killed process ***"
 msgstr "*** Protsess tapeti ***"
 
-#: outputview/outputexecutejob.cpp:334
+#: outputview/outputexecutejob.cpp:313
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
 msgstr "*** Hoiatus: protsessi tapmine nurjus ***"
 
-#: outputview/outputexecutejob.cpp:356
+#: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
 msgstr "%1 käivitamine nurjus"
 
-#: outputview/outputexecutejob.cpp:360
+#: outputview/outputexecutejob.cpp:339
 #, kde-format
 msgid "%1 has crashed"
 msgstr "%1 lõpetas krahhiga"
 
-#: outputview/outputexecutejob.cpp:364
+#: outputview/outputexecutejob.cpp:343
 #, kde-format
 msgid "Read error"
 msgstr "Lugemise viga"
 
-#: outputview/outputexecutejob.cpp:368
+#: outputview/outputexecutejob.cpp:347
 #, kde-format
 msgid "Write error"
 msgstr "Kirjutamise viga"
 
-#: outputview/outputexecutejob.cpp:372
+#: outputview/outputexecutejob.cpp:351
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr "Protsessi aegumise ootel"
 
-#: outputview/outputexecutejob.cpp:376
+#: outputview/outputexecutejob.cpp:355
 #, kde-format
 msgid "Exit code %1"
 msgstr "Väljumiskood %1"
 
-#: outputview/outputexecutejob.cpp:389
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** Nurjumine: %1 ***"
 
-#: outputview/outputexecutejob.cpp:407
+#: outputview/outputexecutejob.cpp:380
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** Lõpetatud ***"
@@ -2161,27 +2161,20 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Liikumine täitmisreale redaktoris."
 
-#: shell/debugcontroller.cpp:425
-#, fuzzy, kde-format
-#| msgid "Debug"
-msgctxt "@title:window"
-msgid "Debug"
-msgstr "Silumine"
-
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Silu käivitamist"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Aktiivse käivitamise silumine"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2449,7 +2442,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "Annoteeri"
 
-#: shell/documentcontroller.cpp:1287
+#: shell/documentcontroller.cpp:1288
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2502,7 +2495,7 @@ msgctxt "a certain environment variable is ..."
 msgid "currently unset"
 msgstr ""
 
-#: shell/ktexteditorpluginintegration.cpp:491
+#: shell/ktexteditorpluginintegration.cpp:492
 #, fuzzy, kde-format
 #| msgctxt "@title:column"
 #| msgid "Message"
@@ -2978,7 +2971,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "Ava olemasolev fail \"%1\""
 
-#: shell/partcontroller.cpp:226
+#: shell/partcontroller.cpp:228
 #, fuzzy, kde-format
 #| msgid "Use this command to show or hide the view's statusbar"
 msgctxt "@info:whatsthis"
@@ -3582,25 +3575,25 @@ msgctxt "launch mode"
 msgid "Execute"
 msgstr "Täitmine"
 
-#: shell/runcontroller.cpp:407
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Aktiivne käivitamisseadistus ei toeta \"%1\" režiimi."
 
-#: shell/runcontroller.cpp:427
+#: shell/runcontroller.cpp:458
 #, fuzzy, kde-format
 #| msgid "Configure Launches..."
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Seadista käivitamist..."
 
-#: shell/runcontroller.cpp:430
+#: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Käivitamise seadistustedialoogi avamine"
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3610,27 +3603,27 @@ msgstr ""
 "Avab dialoogi uute käivitamisseadistuste loomiseks või olemasolevate "
 "muutmiseks."
 
-#: shell/runcontroller.cpp:434
+#: shell/runcontroller.cpp:465
 #, fuzzy, kde-format
 #| msgid "Execute Launch"
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Täida käivitamine"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:466
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Täitmine"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Aktiivse käivitamise täitmine"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3640,7 +3633,7 @@ msgstr ""
 "Täidab sihtmärgi või programmi, mis on määratud aktiivses "
 "käivitamisseadistuses."
 
-#: shell/runcontroller.cpp:444
+#: shell/runcontroller.cpp:475
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
@@ -3652,14 +3645,14 @@ msgstr "Silumine"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:458
+#: shell/runcontroller.cpp:489
 #, fuzzy, kde-format
 #| msgid "Stop All Jobs"
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Peata kõik tööd"
 
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:490
 #, fuzzy, kde-format
 #| msgctxt "Short text for 'Stop All Jobs' used in the toolbar"
 #| msgid "Stop All"
@@ -3667,77 +3660,77 @@ msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Peata kõik"
 
-#: shell/runcontroller.cpp:462
+#: shell/runcontroller.cpp:493
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Kõigi aktiivsete tööde peatamine"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:494
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Kõik käimas tööd pannakse seisma."
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:500
 #, fuzzy, kde-format
 #| msgid "Stop"
 msgctxt "@action"
 msgid "Stop"
 msgstr "Peata"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:502
 #, fuzzy, kde-format
 #| msgid "Stop"
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Peata"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:503
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Konkreetseid töid peatada võimaldav menüü"
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:504
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "Tööde loend, mida saab eraldi peatada."
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:508
 #, fuzzy, kde-format
 #| msgid "Current Launch Configuration"
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Aktiivne käivitamisseadistus"
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:509
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Aktiivne käivitamisseadistus"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:510
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
 "Vali, milline käivitamisseadistus tööle panna, kui programm käivitatakse."
 
-#: shell/runcontroller.cpp:592
+#: shell/runcontroller.cpp:623
 #, fuzzy, kde-format
 #| msgid "<%1> Unnamed job"
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Nimetu töö"
 
-#: shell/runcontroller.cpp:975
+#: shell/runcontroller.cpp:1006
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Uus %1 käivitaja"
 
-#: shell/runcontroller.cpp:1012
+#: shell/runcontroller.cpp:1043
 #, fuzzy, kde-format
 #| msgid "%1 As..."
 msgctxt "@title:menu"
@@ -5483,28 +5476,28 @@ msgstr "Dokumenti on väliselt muudetud"
 msgid " Line: %1 Col: %2 "
 msgstr " Rida: %1 Veerg: %2 "
 
-#: shell/uicontroller.cpp:79
+#: shell/uicontroller.cpp:81
 #, fuzzy, kde-format
 #| msgid "Code"
 msgctxt "area"
 msgid "Code"
 msgstr "Kood"
 
-#: shell/uicontroller.cpp:90
+#: shell/uicontroller.cpp:92
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "area"
 msgid "Debug"
 msgstr "Silumine"
 
-#: shell/uicontroller.cpp:99
+#: shell/uicontroller.cpp:101
 #, fuzzy, kde-format
 #| msgid "Review"
 msgctxt "area"
 msgid "Review"
 msgstr "Läbivaatus"
 
-#: shell/uicontroller.cpp:458
+#: shell/uicontroller.cpp:500
 #, fuzzy, kde-format
 #| msgid "Select Tool View to Add"
 msgctxt "@title:window"
@@ -5624,28 +5617,28 @@ msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Lülitamiseks vajuta Ctrl+Tab)"
 
-#: sublime/container.cpp:768
+#: sublime/container.cpp:772
 #, fuzzy, kde-format
 #| msgid "Copy Filename"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Kopeeri failinimi"
 
-#: sublime/container.cpp:771
+#: sublime/container.cpp:775
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Sulge"
 
-#: sublime/container.cpp:773
+#: sublime/container.cpp:777
 #, fuzzy, kde-format
 #| msgid "Close All Other"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Sulge kõik teised"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, fuzzy, kde-format
 #| msgid "Close All"
 msgctxt "@action:inmenu"
@@ -5659,33 +5652,33 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Lülitu \"%1\" tööriistavaatele."
 
-#: sublime/idealbuttonbarwidget.cpp:301
+#: sublime/idealbuttonbarwidget.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
 msgstr "Paremklõpsuga saab lisada uusi tööriistavaateid."
 
-#: sublime/idealcontroller.cpp:133
-#, kde-format
-msgid "Left Button Bar"
-msgstr "Vasak nupuriba"
-
-#: sublime/idealcontroller.cpp:134
-#, kde-format
-msgid "Right Button Bar"
-msgstr "Parem nupuriba"
-
-#: sublime/idealcontroller.cpp:139
-#, kde-format
-msgid "Bottom Button Bar"
-msgstr "Alumine nupuriba"
-
-#: sublime/idealcontroller.cpp:210
+#: sublime/idealcontroller.cpp:88
 #, fuzzy, kde-format
 #| msgid "%1 Toolbar"
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1 tööriistariba"
+
+#: sublime/idealcontroller.cpp:381
+#, kde-format
+msgid "Left Button Bar"
+msgstr "Vasak nupuriba"
+
+#: sublime/idealcontroller.cpp:382
+#, kde-format
+msgid "Right Button Bar"
+msgstr "Parem nupuriba"
+
+#: sublime/idealcontroller.cpp:387
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr "Alumine nupuriba"
 
 #: sublime/idealdockwidget.cpp:123
 #, fuzzy, kde-format
@@ -5823,54 +5816,54 @@ msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Tööriistavaated"
 
-#: sublime/mainwindow_p.cpp:642
+#: sublime/mainwindow_p.cpp:644
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Sulge"
 
-#: sublime/mainwindow_p.cpp:643
+#: sublime/mainwindow_p.cpp:645
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "Teate sulgemine"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:268
 #, kde-format
 msgid "duchainify"
 msgstr "duchainify"
 
-#: util/duchainify/main.cpp:264
+#: util/duchainify/main.cpp:269
 #, kde-format
 msgid "DUChain builder application"
 msgstr "DU-ahela ehitamise rakendus"
 
-#: util/duchainify/main.cpp:265
+#: util/duchainify/main.cpp:270
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(c) 2009: David Nolden"
 
-#: util/duchainify/main.cpp:271
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "file or directory"
 msgstr "fail või kataloog"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:279
 #, kde-format
 msgid "Show warnings"
 msgstr "Hoiatuste näitamine"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:281
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "Hoiatuste ja silumise väljundi näitamine"
 
-#: util/duchainify/main.cpp:278
+#: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr "Antud failidele vastava tippkonteksti uuendamine jõuga"
 
-#: util/duchainify/main.cpp:282
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
@@ -5879,12 +5872,12 @@ msgstr ""
 "Antud failidele ja kõigile päisefailidele vastava tippkonteksti uuendamine "
 "jõuga"
 
-#: util/duchainify/main.cpp:284
+#: util/duchainify/main.cpp:289
 #, kde-format
 msgid "Number of threads to use"
 msgstr "Kasutatavate lõimede arv"
 
-#: util/duchainify/main.cpp:287
+#: util/duchainify/main.cpp:292
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5895,22 +5888,22 @@ msgstr ""
 "visible-declarations (vaikimisi), all-declarations, all-declarations-and-"
 "uses, all-declarations-and-uses-and-AST"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr "Täieliku definitsiooni-kasutuse ahela näitamine eduka parsimise korral"
 
-#: util/duchainify/main.cpp:293
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
 msgstr ""
 
-#: util/duchainify/main.cpp:295
+#: util/duchainify/main.cpp:300
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr "Täieliku definitsiooni-kasutuse ahela näitamine eduka parsimise korral"
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:303
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
@@ -5918,23 +5911,23 @@ msgstr ""
 "Täieliku definitsiooni-kasutuse püsisümbolitabeli näitamine eduka parsimise "
 "korral"
 
-#: util/duchainify/main.cpp:301
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
 "Maksimusügavust määratlev arv, mille deklaratsiooni üksikasju näidatakse"
 
-#: util/duchainify/main.cpp:304
+#: util/duchainify/main.cpp:309
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr "Definitsiooni-kasutuse ahela graafi salvestamine (.dot-vormingus)"
 
-#: util/duchainify/main.cpp:306
+#: util/duchainify/main.cpp:311
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "Parsimisel tekkinud probleemide näitamine"
 
-#: util/duchainify/main.cpp:308
+#: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr "Vigade rekursiivne salvestamine imporditud kontekstidest."
@@ -6635,6 +6628,12 @@ msgstr "Erinevus eelmisest"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Versioonide erinevus"
+
+#, fuzzy
+#~| msgid "Debug"
+#~ msgctxt "@title:window"
+#~ msgid "Debug"
+#~ msgstr "Silumine"
 
 #~ msgctxt "@option:check"
 #~ msgid "Recursive"

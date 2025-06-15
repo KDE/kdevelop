@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2024-10-30 05:50+0100\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-16 12:04+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -59,41 +59,92 @@ msgstr "Izvozi %1"
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Skupek Flatpak (*.flatpak)"
 
-#: flatpakplugin.cpp:234
+#: flatpakplugin.cpp:117
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export Bundle %1"
+msgstr "Flatpak Izvozni skupek %1"
+
+#: flatpakplugin.cpp:236
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
 msgstr "Ponovno izgradi okolje Flatpak: %1"
 
-#: flatpakplugin.cpp:241
+#: flatpakplugin.cpp:243
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
 msgstr "Izgradi okolje Flatpack %1 za %2"
 
-#: flatpakplugin.cpp:265
+#: flatpakplugin.cpp:267
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Izberi ime značke"
 
-#: flatpakplugin.cpp:266
+#: flatpakplugin.cpp:268
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "Gostiteljevo ime naprave:"
 
-#: flatpakruntime.cpp:57
+#: flatpakruntime.cpp:61
 #, kde-format
+msgctxt "@title:window"
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:157
+#: flatpakruntime.cpp:113
 #, kde-format
-msgid "Bundling"
-msgstr "Sestavljanje"
+msgctxt "%1 - application ID or name"
+msgid "Flatpak Create %1"
+msgstr "Flatpak Ustvari %1"
 
-#: flatpakruntime.cpp:179
+#: flatpakruntime.cpp:217
 #, kde-format
-msgid "Run on Device"
-msgstr "Poženi na napravi"
+msgctxt "%1 - application ID"
+msgid "Flatpak Finalize %1"
+msgstr "Flatpak Finaliziraj %1"
+
+#: flatpakruntime.cpp:223
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export %1"
+msgstr "Flatpak izvoz %1"
+
+#: flatpakruntime.cpp:226
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Bundle %1"
+msgstr "Flatpak skupek %1"
+
+#: flatpakruntime.cpp:243
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Run %1 on %2"
+msgstr "Flatpak zagon %1 na %2"
+
+#: flatpakruntime.cpp:248
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer .flatpak to %1"
+msgstr "Prenos .flatpak na %1"
+
+#: flatpakruntime.cpp:250
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer replicate.sh to %1"
+msgstr "Prenesi replicate.sh v %1"
+
+#: flatpakruntime.cpp:254
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Install %1 to %2"
+msgstr "Namesti Flatpak %1 na %2"
+
+#~ msgid "Bundling"
+#~ msgstr "Sestavljanje"
+
+#~ msgid "Run on Device"
+#~ msgstr "Poženi na napravi"

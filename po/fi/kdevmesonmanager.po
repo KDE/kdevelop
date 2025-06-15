@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-22 00:39+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-11-15 15:47+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -170,6 +170,12 @@ msgstr ""
 #, kde-format
 msgid "The current build directory is invalid"
 msgstr "Nykyinen koostamiskansio on kelvoton"
+
+#: mintro/mesontests.cpp:80
+#, kde-format
+msgctxt "%1 - test case name"
+msgid "Meson Test \"%1\""
+msgstr ""
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format

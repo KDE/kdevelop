@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2019, 2020.
+# SPDX-FileCopyrightText: 2019, 2020, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-22 00:39+0000\n"
-"PO-Revision-Date: 2020-07-25 16:35+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-19 15:04+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.1\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -178,6 +178,12 @@ msgstr ""
 #, kde-format
 msgid "The current build directory is invalid"
 msgstr "La cartella attuale di compilazione non è valida"
+
+#: mintro/mesontests.cpp:80
+#, kde-format
+msgctxt "%1 - test case name"
+msgid "Meson Test \"%1\""
+msgstr "Test di Meson «%1»"
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format

@@ -25,8 +25,9 @@ CompileAnalyzeJob::CompileAnalyzeJob(QObject* parent)
     : OutputExecuteJob(parent)
 {
     setCapabilities(KJob::Killable);
-    setStandardToolView(IOutputView::TestView);
-    setBehaviours(IOutputView::AutoScroll);
+    setStandardToolView(IOutputView::AnalyzeView);
+    setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll);
+    setFilteringStrategy(OutputModel::CompilerFilter);
     setProperties(JobProperties(DisplayStdout | DisplayStderr | PostProcessOutput));
 }
 

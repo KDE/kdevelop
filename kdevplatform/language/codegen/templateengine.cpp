@@ -42,9 +42,7 @@ TemplateEngine::TemplateEngine()
 
     if (!templateDirectories.isEmpty()) {
         qCDebug(LANGUAGE) << "Found template directories:" << templateDirectories;
-        addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                         QStringLiteral("kdevcodegen/templates"),
-                                                         QStandardPaths::LocateDirectory));
+        addTemplateDirectories(templateDirectories);
     } else {
         qCWarning(LANGUAGE) << "No template directories found -- templating engine will not work!";
     }

@@ -1,20 +1,20 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomdefinesandincludes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2024-04-17 07:06+0900\n"
+"PO-Revision-Date: 2025-05-07 09:56+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: compilerprovider/compilerprovider.cpp:32
@@ -147,14 +147,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "Add the currently displayed URL to the list of includes if it is not in the "
 "list yet."
-msgstr ""
+msgstr "將目前顯示的 URL 加入引入列表（如果它還不在裡面的話）。"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, includePathRequester)
 #: kcm_widget/includeswidget.ui:34
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "A new include path/file to use for parsing files under given directory"
-msgstr ""
+msgstr "剖析指定目錄中的檔案所使用的新引入路徑/檔案"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addIncludePath)
 #: kcm_widget/includeswidget.ui:44
@@ -179,6 +179,8 @@ msgid ""
 "parsed in plain C mode. By default they are parsed as C++ headers.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>如果您希望 <code>*.h</code> 檔案以純 C 模式剖析，請勾選"
+"此選項。預設它們是剖析成 C++ 標頭檔。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, parseHeadersInPlainC)
 #: kcm_widget/parserwidget.ui:23
@@ -309,14 +311,14 @@ msgstr "設定 C/C++ 剖析器"
 msgid ""
 "Configure which macros and include directories/files will be added to the "
 "parser during project parsing:"
-msgstr ""
+msgstr "設定專案剖析時哪些巨集和包含目錄/檔案要加到剖析器中："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_reparse)
 #: kcm_widget/projectpathswidget.ui:29
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Check this if you want the project to be reparsed to apply the changes."
-msgstr ""
+msgstr "如果您希望專案重新剖析來套用變更的話，請勾選此選項。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_reparse)
 #: kcm_widget/projectpathswidget.ui:32
@@ -334,6 +336,8 @@ msgid ""
 "<html><head/><body><p>Select compiler that will be used to retrieve standard "
 "include directories and defined macros.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>選擇用來取得標準引入目錄和已定義巨集的編譯器。</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: kcm_widget/projectpathswidget.ui:73
@@ -347,7 +351,7 @@ msgstr "路徑的編譯器："
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit multiple includes/defines at the same time."
-msgstr ""
+msgstr "同時編輯多個引入/定義"
 
 #. i18n: ectx: property (text), widget (QPushButton, batchEdit)
 #: kcm_widget/projectpathswidget.ui:93
@@ -418,13 +422,14 @@ msgid ""
 "The custom include-path will be stored in a special file called \"."
 "kdev_include_paths\" stored within a source directory."
 msgstr ""
+"自訂引入路徑會儲存在原始碼目錄中叫做 \".kdev_include_paths\" 的特殊檔案裡。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:37
 #, kde-format
 msgctxt "@title:group"
 msgid "Custom include paths or #define's"
-msgstr ""
+msgstr "自訂引入路徑或 #define 定義"
 
 #. i18n: ectx: property (toolTip), widget (QPlainTextEdit, customIncludePaths)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:45
@@ -434,6 +439,8 @@ msgid ""
 "The plain list of include paths. You may also define custom macros here by "
 "adding \"#define NAME VALUE\" lines."
 msgstr ""
+"引入路徑的純列表。您也可以加入 \"#define 名稱 數值\" 的行數來在這裡定義自訂的"
+"巨集。"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:66
@@ -452,7 +459,7 @@ msgstr "..."
 #: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:155
 #, kde-format
 msgid "Failed to save custom include paths in directory: %1"
-msgstr ""
+msgstr "儲存自訂引入路徑到此目錄時失敗：%1"
 
 #~ msgid "Bad #define directive in %1: %2"
 #~ msgstr "%1 中有錯誤的 #define 宣告：%2"

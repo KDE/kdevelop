@@ -8,6 +8,7 @@
 
 #include <QTest>
 #include <QListView>
+#include <QPointer>
 #include <QTextEdit>
 #include <QSplitter>
 #include <QUrl>
@@ -23,10 +24,82 @@
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
 #include <sublime/container.h>
+#include <tests/corelesshelpers.h>
+#include <tests/testhelpermacros.h>
 
 #include "areaprinter.h"
 
+#include <algorithm>
+#include <memory>
+
+/// TODO (if/when IdealController starts supporting multiple view widgets per tool document): remove this workaround
+static constexpr auto enableMultipleToolViewWidgets = false;
+
 using namespace Sublime;
+
+namespace {
+
+View* findNamedView(const QList<View*>& views, const QString& name)
+{
+    const auto it = std::find_if(views.cbegin(), views.cend(), [&name](const View* view) {
+        return view->objectName() == name;
+    });
+    QCOMPARE_NE_RETURN(it, views.cend(), {});
+    return *it;
+}
+
+View* findNamedView(Area* area, const QString& name)
+{
+    QVERIFY_RETURN(area, {});
+    return findNamedView(area->views(), name);
+}
+
+void checkToolViews(const Area* area)
+{
+    QVERIFY(area);
+    const auto& toolViews = area->toolViews();
+    for (const auto* const view : toolViews) {
+        QVERIFY(view);
+        QVERIFY(view->document());
+        QVERIFY(view->widget());
+    }
+}
+
+enum class MainWindowAffinity {
+    SameWindow,
+    DifferentWindows
+};
+
+void compareDifferentViewsOfOneDocument(const View* viewA, const View* viewB, MainWindowAffinity affinity)
+{
+    QCOMPARE_NE(viewA, viewB);
+    QCOMPARE_EQ(viewA->document(), viewB->document());
+
+    if (affinity == MainWindowAffinity::SameWindow) {
+        // a single tool view widget is shared by all sublime areas in one main window
+        QCOMPARE_EQ(viewA->widget(), viewB->widget());
+    } else {
+        // each main window has its own separate tool view widget
+        QCOMPARE_NE(viewA->widget(), viewB->widget());
+    }
+}
+
+void compareAreas1and2(const Area* area1, const Area* area2, MainWindowAffinity affinity)
+{
+    QVERIFY(area1);
+    QVERIFY(area2);
+
+    const auto& toolViews1 = area1->toolViews();
+    const auto& toolViews2 = area2->toolViews();
+    for (const auto* const view1 : toolViews1) {
+        const auto name2 = view1->objectName().replace("view1", "view2");
+        // for each tool view in area1 (except for the disabled toolview1.2.2)
+        // there is a counterpart view of the same document in area2
+        const auto* const view2 = findNamedView(toolViews2, name2);
+        RETURN_IF_TEST_FAILED();
+        compareDifferentViewsOfOneDocument(view1, view2, affinity);
+    }
+}
 
 struct ViewCounter {
     ViewCounter() {}
@@ -38,9 +111,11 @@ struct ViewCounter {
     int count = 0;
 };
 
+} // unnamed namespace
+
 void TestAreaOperation::initTestCase()
 {
-    QStandardPaths::setTestModeEnabled(true);
+    KDevelop::initCorelessTestCase();
 }
 
 void TestAreaOperation::init()
@@ -79,9 +154,11 @@ void TestAreaOperation::init()
     view = tool2->createView();
     view->setObjectName(QStringLiteral("toolview1.2.1"));
     m_area1->addToolView(view, Sublime::Bottom);
-    view = tool2->createView();
-    view->setObjectName(QStringLiteral("toolview1.2.2"));
-    m_area1->addToolView(view, Sublime::Bottom);
+    if constexpr (enableMultipleToolViewWidgets) {
+        view = tool2->createView();
+        view->setObjectName(QStringLiteral("toolview1.2.2"));
+        m_area1->addToolView(view, Sublime::Bottom);
+    }
 
     m_area2 = new Area(m_controller, QStringLiteral("Area 2"));
     View *view211 = doc1->createView();
@@ -108,9 +185,11 @@ void TestAreaOperation::init()
     view = tool3->createView();
     view->setObjectName(QStringLiteral("toolview2.3.1"));
     m_area2->addToolView(view, Sublime::Top);
-    view = tool3->createView();
-    view->setObjectName(QStringLiteral("toolview2.3.2"));
-    m_area2->addToolView(view, Sublime::Top);
+    if constexpr (enableMultipleToolViewWidgets) {
+        view = tool3->createView();
+        view->setObjectName(QStringLiteral("toolview2.3.2"));
+        m_area2->addToolView(view, Sublime::Top);
+    }
 
     m_area3 = new Area(m_controller, QStringLiteral("Area 3"));
     View *view0 = doc1->createView();
@@ -156,11 +235,18 @@ void TestAreaOperation::areaConstruction()
 "));
     AreaToolViewsPrinter toolViewsPrinter1;
     m_area1->walkToolViews(toolViewsPrinter1, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
+    if constexpr (enableMultipleToolViewWidgets) {
+        QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
 toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
 "));
+    } else {
+        QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
+toolview1.1.1 [ left ]\n\
+toolview1.2.1 [ bottom ]\n\
+"));
+    }
 
     //check that area2 contents is properly initialised
     AreaViewsPrinter viewsPrinter2;
@@ -176,12 +262,20 @@ toolview1.2.2 [ bottom ]\n\
 "));
     AreaToolViewsPrinter toolViewsPrinter2;
     m_area2->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
+    if constexpr (enableMultipleToolViewWidgets) {
+        QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
 toolview2.1.1 [ bottom ]\n\
 toolview2.2.1 [ right ]\n\
 toolview2.3.1 [ top ]\n\
 toolview2.3.2 [ top ]\n\
 "));
+    } else {
+        QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
+toolview2.1.1 [ bottom ]\n\
+toolview2.2.1 [ right ]\n\
+toolview2.3.1 [ top ]\n\
+"));
+    }
 }
 
 void TestAreaOperation::mainWindowConstruction()
@@ -189,34 +283,50 @@ void TestAreaOperation::mainWindowConstruction()
     //====== check for m_area1 ======
     MainWindow mw1(m_controller);
     m_controller->showArea(m_area1, &mw1);
+    QCOMPARE_EQ(mw1.area(), m_area1);
     checkArea1(&mw1);
 
 /////////////
  //====== check for m_area2 ======
     MainWindow mw2(m_controller);
     m_controller->showArea(m_area2, &mw2);
+    QCOMPARE_EQ(mw2.area(), m_area2);
     checkArea2(&mw2);
+
+    compareAreas1and2(m_area1, m_area2, MainWindowAffinity::DifferentWindows);
 }
 
-void TestAreaOperation::checkArea1(MainWindow *mw)
+static QWidget* checkAreaCommon(MainWindow* mw)
 {
+    QVERIFY_RETURN(mw, {});
     Area *area = mw->area();
+    checkToolViews(area);
+    RETURN_IF_TEST_FAILED({});
+
     //check that all docks have their widgets
     const auto toolDocks = mw->toolDocks();
-    for (View* dock : toolDocks) {
-        //QVERIFY(dock->widget() != 0);
-        QVERIFY(dock->hasWidget());
+    for (const auto* const dock : toolDocks) {
+        QVERIFY_RETURN(dock->widget(), {});
     }
-    QCOMPARE(toolDocks.count(), area->toolViews().count());
+    QCOMPARE_RETURN(toolDocks.count(), area->toolViews().count(), {});
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
-    QVERIFY(central != nullptr);
-    QVERIFY(central->inherits("QWidget"));
+    QVERIFY_RETURN(central, {});
+    QVERIFY_RETURN(central->inherits("QWidget"), {});
 
     QWidget *splitter = central->findChild<QSplitter*>();
-    QVERIFY(splitter);
-    QVERIFY(splitter->inherits("QSplitter"));
+    QVERIFY_RETURN(splitter, {});
+    QVERIFY_RETURN(splitter->inherits("QSplitter"), {});
+
+    return splitter;
+}
+
+void TestAreaOperation::checkArea1(MainWindow* mw)
+{
+    const auto* const splitter = checkAreaCommon(mw);
+    RETURN_IF_TEST_FAILED();
+    auto* const area = mw->area();
 
     //check that we have a container and 4 views inside
     auto *container = splitter->findChild<Sublime::Container*>();
@@ -230,23 +340,9 @@ void TestAreaOperation::checkArea1(MainWindow *mw)
 
 void TestAreaOperation::checkArea2(MainWindow *mw)
 {
+    auto* const splitter = checkAreaCommon(mw);
+    RETURN_IF_TEST_FAILED();
     Area *area = mw->area();
-    //check that all docks have their widgets
-    const auto toolDocks = mw->toolDocks();
-    for (View* dock : toolDocks) {
-        //QVERIFY(dock->widget() != 0);
-        QVERIFY(dock->hasWidget());
-    }
-    QCOMPARE(toolDocks.count(), area->toolViews().count());
-
-    //check that mainwindow have all splitters and widgets in splitters inside centralWidget
-    QWidget *central = mw->centralWidget();
-    QVERIFY(central != nullptr);
-    QVERIFY(central->inherits("QWidget"));
-
-    QWidget *splitter = central->findChild<QSplitter*>();
-    QVERIFY(splitter);
-    QVERIFY(splitter->inherits("QSplitter"));
 
     //check that we have 4 properly initialized containers
     const QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
@@ -301,26 +397,34 @@ void TestAreaOperation::areaCloning()
     //check mainwindow layouts - original and copy
     checkArea1(&mw1);
     checkArea1(&mw2);
+
+    const auto& toolViews1 = mw1.area()->toolViews();
+    const auto& toolViews2 = mw2.area()->toolViews();
+    // m_area1 is shown in one main window and its clone - in another.
+    // The number and order of tool views must be the same.
+    QCOMPARE_EQ(toolViews1.size(), toolViews2.size());
+    for (auto i = qsizetype{0}, size = toolViews1.size(); i < size; ++i) {
+        compareDifferentViewsOfOneDocument(toolViews1[i], toolViews2[i], MainWindowAffinity::DifferentWindows);
+    }
 }
 
 /*! Functor used by areaSwitchingInSameMainWindow()
-    Walks all Views and checks if they got a widget.
-    hasWidget will be set to false if any View lacks a widget.*/
+    Walks all Views and checks if they got a widget.*/
 struct AreaWidgetChecker {
     AreaWidgetChecker() = default;
     Area::WalkerMode operator()(AreaIndex *index)
     {
-        for (View* view : std::as_const(index->views())) {
-            if (!view->hasWidget()) {
+        for (const auto* const view : std::as_const(index->views())) {
+            if (!view->widget()) {
                 failureMessage += view->objectName() + " has no widget\n";
                 foundViewWithoutWidget = true;
             }
         }
         return Area::ContinueWalker;
     }
-    Area::WalkerMode operator()(View *view, Sublime::Position)
+    Area::WalkerMode operator()(const View* view, Sublime::Position)
     {
-        if (!view->hasWidget()) {
+        if (!view->widget()) {
             foundViewWithoutWidget = true;
             failureMessage += view->objectName() + " has no widget\n";
         }
@@ -335,9 +439,11 @@ void TestAreaOperation::areaSwitchingInSameMainwindow()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
+    QCOMPARE_EQ(mw.area(), m_area1);
     checkArea1(&mw);
 
     m_controller->showArea(m_area2, &mw);
+    QCOMPARE_EQ(mw.area(), m_area2);
     checkArea2(&mw);
 
     //check what happened to area1 widgets, they should be intact
@@ -345,6 +451,8 @@ void TestAreaOperation::areaSwitchingInSameMainwindow()
     m_area1->walkViews(checker, m_area1->rootIndex());
     m_area1->walkToolViews(checker, Sublime::AllPositions);
     QVERIFY2(!checker.foundViewWithoutWidget, checker.failureMessage.toLatin1().data());
+
+    compareAreas1and2(m_area1, m_area2, MainWindowAffinity::SameWindow);
 }
 
 void TestAreaOperation::simpleViewAdditionAndDeletion()
@@ -421,7 +529,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
     view->setObjectName(QStringLiteral("view2.5.1"));
 
     View *view221 = findNamedView(area, QStringLiteral("view2.2.1"));
-    QVERIFY(view221);
+    RETURN_IF_TEST_FAILED();
     area->addView(view, view221, Qt::Vertical);
 
     checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
@@ -451,6 +559,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
 
     //remove one more view, this time the one inside non-empty container
     View *view211 = findNamedView(area, QStringLiteral("view2.1.1"));
+    RETURN_IF_TEST_FAILED();
     delete m_area2->removeView(view211);
 
     checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
@@ -495,6 +604,7 @@ void TestAreaOperation::toolViewAdditionAndDeletion()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
+    QCOMPARE_EQ(mw.area(), m_area1);
     checkArea1(&mw);
 
     Document *tool4 = new ToolDocument(QStringLiteral("tool4"), m_controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool4")));
@@ -502,20 +612,32 @@ void TestAreaOperation::toolViewAdditionAndDeletion()
     view->setObjectName(QStringLiteral("toolview1.4.1"));
     m_area1->addToolView(view, Sublime::Right);
 
+    const QPointer viewWidget = view->widget();
+    QVERIFY(viewWidget);
+    checkArea1(&mw); // verify that nothing has been broken
+
     //check that area is in valid state
     AreaToolViewsPrinter toolViewsPrinter1;
     m_area1->walkToolViews(toolViewsPrinter1, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
+    if constexpr (enableMultipleToolViewWidgets) {
+        QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
 toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
 toolview1.4.1 [ right ]\n\
 "));
+    } else {
+        QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
+toolview1.1.1 [ left ]\n\
+toolview1.2.1 [ bottom ]\n\
+toolview1.4.1 [ right ]\n\
+"));
+    }
 
     //check that mainwindow has newly added tool view
     {
     const auto toolDocks = mw.toolDocks();
-    for (View* dock : toolDocks) {
+    for (const auto* const dock : toolDocks) {
         QVERIFY(dock->widget() != nullptr);
     }
     QCOMPARE(toolDocks.count(), m_area1->toolViews().count());
@@ -524,26 +646,120 @@ toolview1.4.1 [ right ]\n\
     //now remove tool view
     m_area1->removeToolView(view);
 
+    QCOMPARE_EQ(viewWidget, nullptr); // the view widget is not reused, and thus should be destroyed
+    checkArea1(&mw); // verify that nothing has been broken
+
     AreaToolViewsPrinter toolViewsPrinter2;
     //check that area doesn't have it anymore
     m_area1->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
+    if constexpr (enableMultipleToolViewWidgets) {
+        QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
 toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
 "));
+    } else {
+        QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
+toolview1.1.1 [ left ]\n\
+toolview1.2.1 [ bottom ]\n\
+"));
+    }
 
     //check that mainwindow has newly added tool view
     {
     const auto toolDocks = mw.toolDocks();
-    for (View* dock : toolDocks) {
+    for (const auto* const dock : toolDocks) {
         QVERIFY(dock->widget() != nullptr);
     }
     QCOMPARE(toolDocks.count(), m_area1->toolViews().count());
     }
 }
 
+void TestAreaOperation::sharedToolViewRemoval()
+{
+    MainWindow mw(m_controller);
+    m_controller->showArea(m_area1, &mw);
+    QCOMPARE_EQ(mw.area(), m_area1);
+    checkArea1(&mw);
 
+    auto* const toolView12 = findNamedView(m_area1->toolViews(), "toolview1.2.1");
+    auto* const toolView22 = findNamedView(m_area2->toolViews(), "toolview2.2.1");
+    RETURN_IF_TEST_FAILED();
+    QCOMPARE_EQ(toolView12->document(), toolView22->document());
+
+    QPointer viewWidget = toolView12->widget();
+    QVERIFY(viewWidget);
+    QCOMPARE_EQ(toolView22->widget(), nullptr);
+
+    // m_area2 contains another view of toolView12's document, but m_area2 has never
+    // been shown, so its widget is null and it does not reuse viewWidget. Therefore,
+    // viewWidget should be destroyed upon removal of the single view that uses it.
+    m_area1->removeToolView(toolView12);
+    QCOMPARE_EQ(viewWidget, nullptr);
+    QCOMPARE_EQ(toolView22->widget(), nullptr);
+
+    m_controller->showArea(m_area2, &mw);
+    QCOMPARE_EQ(mw.area(), m_area2);
+    checkArea2(&mw);
+
+    // Deliberately do not check the removed toolView12. Ideally it should be destroyed rather than leaked.
+    viewWidget = toolView22->widget();
+    QVERIFY(viewWidget);
+
+    m_area2->removeToolView(toolView22);
+    QCOMPARE_EQ(viewWidget, nullptr);
+}
+
+void TestAreaOperation::toolViewWidgetReuseAndDestruction()
+{
+    auto mw = std::make_unique<MainWindow>(m_controller);
+    m_controller->showArea(m_area1, mw.get());
+    m_controller->showArea(m_area2, mw.get());
+    compareAreas1and2(m_area1, m_area2, MainWindowAffinity::SameWindow);
+
+    auto* const toolView21 = findNamedView(m_area2->toolViews(), "toolview2.1.1");
+    RETURN_IF_TEST_FAILED();
+    const QPointer widget1 = toolView21->widget();
+    m_area2->removeToolView(toolView21);
+    QVERIFY(widget1); // the widget is still used in m_area1, and therefore not destroyed
+
+    auto* const toolView12 = findNamedView(m_area1->toolViews(), "toolview1.2.1");
+    RETURN_IF_TEST_FAILED();
+    const QPointer widget2 = toolView12->widget();
+    QVERIFY(widget2);
+
+    mw.reset();
+    // both tool view widgets must be destroyed along with their main window ancestor
+    QCOMPARE_EQ(widget1, nullptr);
+    QCOMPARE_EQ(widget2, nullptr);
+}
+
+void TestAreaOperation::toolDocumentRemoval()
+{
+    MainWindow mw(m_controller);
+    m_controller->showArea(m_area1, &mw);
+    m_controller->showArea(m_area2, &mw);
+    compareAreas1and2(m_area1, m_area2, MainWindowAffinity::SameWindow);
+
+    auto* const toolView = findNamedView(m_area1->toolViews(), "toolview1.2.1");
+    RETURN_IF_TEST_FAILED();
+    const QPointer viewWidget = toolView->widget();
+    QVERIFY(viewWidget);
+
+    // Adapted from KDevelop::UiController::removeToolView():
+    auto* const document = toolView->document();
+    for (auto* const view : document->views()) {
+        for (auto* const area : m_controller->allAreas()) {
+            area->removeToolView(view);
+        }
+    }
+    emit m_controller->toolViewRemoved(document);
+
+    // the tool view widget must be destroyed when its tool view is completely removed
+    QCOMPARE_EQ(viewWidget, nullptr);
+
+    delete document;
+}
 
 void TestAreaOperation::testAddingViewAfter()
 {
@@ -582,6 +798,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QVERIFY(pContainer);
 
     // verify that the current active widget in the container is the one in activeview (m_pView111)
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
 
     // activate the second tab of the area (view212)
@@ -591,6 +808,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QCOMPARE(mw.activeView(), m_pView121);
 
     // check if the container's current widget was updated to the active view's
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
 
     // now, create a split view of the active view (m_pView121)
@@ -633,6 +851,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QVERIFY(pSecondContainer->hasWidget(m_pView131->widget()));
 
     // the active widget should be the current widget of the second container
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pSecondContainer->currentWidget(), mw.activeView()->widget());
 
     ////////////////////////////////////////////////////////////////////////////
@@ -643,9 +862,11 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QCOMPARE(mw.activeView(), pNewView);
 
     // the active widget should be the current widget of the new container
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pFirstContainer->currentWidget(), mw.activeView()->widget());
 
     // the current widget of the old container should have remained view121's
+    QVERIFY(m_pView121->widget());
     QCOMPARE(pSecondContainer->currentWidget(), m_pView121->widget());
 
     ////////////////////////////////////////////////////////////////////////////
@@ -667,6 +888,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QCOMPARE(mw.activeView(), m_pView121);
 
     // check also the container current widget
+    QVERIFY(mw.activeView()->widget());
     QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
 }
 
@@ -711,16 +933,6 @@ void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     QList<QSplitter*> splitters = splitter->findChildren<QSplitter*>();
     splitters.append(qobject_cast<QSplitter*>(splitter));
     QCOMPARE(splitters.count(), splitterCount);
-}
-
-View *TestAreaOperation::findNamedView(Area *area, const QString &name)
-{
-    const auto views = area->views();
-    for (View* view : views) {
-        if (view->objectName() == name)
-            return view;
-    }
-    return nullptr;
 }
 
 ///////////

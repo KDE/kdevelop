@@ -142,6 +142,10 @@ void CheckSetManageWidget::setCheckSetSelectionManager(CheckSetSelectionManager*
     m_checkSetSelectionListModel = new CheckSetSelectionListModel(checkSetSelectionManager, this);
     m_ui.checkSetSelect->setModel(m_checkSetSelectionListModel);
 
+    const auto defaultIndex = m_checkSetSelectionListModel->defaultCheckSetSelectionRow();
+    m_ui.checkSetSelect->setCurrentIndex(defaultIndex);
+    onSelectedCheckSetSelectionChanged(defaultIndex);
+
     connect(m_ui.cloneCheckSetSelectionButton, &QPushButton::clicked,
             this, &CheckSetManageWidget::cloneSelectedCheckSetSelection);
     connect(m_ui.addCheckSetSelectionButton, &QPushButton::clicked,
@@ -169,9 +173,6 @@ void CheckSetManageWidget::setCheckSetSelectionManager(CheckSetSelectionManager*
 
     connect(m_ui.enabledChecks, &CheckSelection::checksChanged,
             this, &CheckSetManageWidget::onEnabledChecksChanged);
-
-    const int defaultIndex = m_checkSetSelectionListModel->defaultCheckSetSelectionRow();
-    m_ui.checkSetSelect->setCurrentIndex(defaultIndex);
 }
 
 void CheckSetManageWidget::setSelectedCheckSetSelectionAsDefault()
@@ -242,6 +243,7 @@ void CheckSetManageWidget::addCheckSetSelection()
 void CheckSetManageWidget::cloneSelectedCheckSetSelection()
 {
     const int currentIndex = m_ui.checkSetSelect->currentIndex();
+    Q_ASSERT(currentIndex >= 0);
     const auto currentCheckSetSelectionName = m_checkSetSelectionListModel->checkSetSelectionName(currentIndex);
     // pass original name as starting name, as the user might want to enter a variant of it
     const auto checkSetSelectionName = askNewCheckSetSelectionName(currentCheckSetSelectionName);
@@ -285,6 +287,7 @@ void CheckSetManageWidget::onSelectedCheckSetSelectionChanged(int selectedCheckS
 
     m_ui.cloneCheckSetSelectionButton->setEnabled(isCheckSetSelectionSelected);
     m_ui.removeCheckSetSelectionButton->setEnabled(isCheckSetSelectionSelected);
+    m_ui.editCheckSetSelectionNameButton->setEnabled(isCheckSetSelectionSelected);
     m_ui.setAsDefaultCheckSetSelectionButton->setEnabled(!isDefaultCheckSetSelection);
 
     m_ui.enabledChecks->blockSignals(true);

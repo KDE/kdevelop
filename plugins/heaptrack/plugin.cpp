@@ -19,6 +19,8 @@
 #endif
 
 #include <execute/iexecuteplugin.h>
+#include <execute/iexecutepluginhelpers.h>
+
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/launchconfigurationtype.h>
@@ -26,7 +28,6 @@
 #include <shell/launchconfiguration.h>
 #include <shell/runcontroller.h>
 #include <sublime/message.h>
-#include <util/executecompositejob.h>
 // KF
 #include <KActionCollection>
 #include <KPluginFactory>
@@ -113,16 +114,7 @@ void Plugin::launchHeaptrack()
 
     auto heaptrackJob = new Job(defaultLaunch, executePlugin);
     connect(heaptrackJob, &Job::finished, this, &Plugin::jobFinished);
-
-    QList<KJob*> jobList;
-    if (KJob* depJob = executePlugin->dependencyJob(defaultLaunch)) {
-        jobList += depJob;
-    }
-    jobList += heaptrackJob;
-
-    auto ecJob = new KDevelop::ExecuteCompositeJob(runController, jobList);
-    ecJob->setObjectName(heaptrackJob->statusName());
-    runController->registerJob(ecJob);
+    runController->registerJob(makeJobWithDependency(heaptrackJob, *executePlugin, defaultLaunch));
 
     m_launchAction->setEnabled(false);
 }
@@ -137,8 +129,6 @@ void Plugin::attachHeaptrack()
 
     auto heaptrackJob = new Job(pid);
     connect(heaptrackJob, &Job::finished, this, &Plugin::jobFinished);
-
-    heaptrackJob->setObjectName(heaptrackJob->statusName());
     core()->runController()->registerJob(heaptrackJob);
 
     m_launchAction->setEnabled(false);
@@ -149,12 +139,13 @@ void Plugin::jobFinished(KJob* kjob)
 {
     auto job = static_cast<Job*>(kjob);
     Q_ASSERT(job);
+    const auto resultsFile = job->resultsFile();
 
     if (job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded) {
-        auto visualizer = new Visualizer(job->resultsFile(), this);
+        auto* const visualizer = new Visualizer(resultsFile, this);
         visualizer->start();
-    } else {
-        QFile::remove(job->resultsFile());
+    } else if (!resultsFile.isEmpty()) {
+        QFile::remove(resultsFile);
     }
 
     m_launchAction->setEnabled(true);

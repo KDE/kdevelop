@@ -1,15 +1,15 @@
 # Spanish translations for kdevcompileanalyzercommon.po package.
-# Copyright (C) 2020 This file is copyright:
+# Copyright (C) 2020-2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
 # Automatically generated, 2020.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2020.
+#
+# SPDX-FileCopyrightText: 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcompileanalyzercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
-"PO-Revision-Date: 2020-01-15 20:31+0100\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 01:55+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19,23 +19,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 19.12.1\n"
 
-#: compileanalyzeproblemmodel.cpp:84
+#: compileanalyzeproblemmodel.cpp:85
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "Análisis completado: no se han detectado problemas."
 
-#: compileanalyzeproblemmodel.cpp:107
+#: compileanalyzeproblemmodel.cpp:113
 #, kde-format
 msgid "Analysis started..."
-msgstr "Análisis iniciado..."
+msgstr "Análisis iniciado…"
 
-#: compileanalyzeproblemmodel.cpp:110
+#: compileanalyzeproblemmodel.cpp:116
 #, kde-format
 msgctxt "@info:tooltip %2 is the path of the file"
 msgid "Re-run last %1 analysis (%2)"
 msgstr "Volver a ejecutar el último análisis de %1 (%2)"
 
-#: compileanalyzeproblemmodel.cpp:112
+#: compileanalyzeproblemmodel.cpp:118
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last %1 analysis"
@@ -73,12 +73,6 @@ msgstr ""
 "No se ha podido iniciar la comprobación de «%1»:\n"
 "\n"
 "%2"
-
-#: compileanalyzer.cpp:222
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "Comprobar"
 
 #: compileanalyzeutils.cpp:45
 #, kde-format

@@ -82,7 +82,7 @@
 <para
 ><programlisting
 >class Car {
-  // ...
+  // …
   public:
     std::string get_color () const;
 };
@@ -93,7 +93,7 @@
 <para
 ><programlisting
 >Car my_ride;
-// ...hacer algo con esta variable...
+// …hacer algo con esta variable…
 std::string color = my_ride.ge
 </programlisting>
 </para>
@@ -329,7 +329,7 @@ double bar ()
 ><guimenu
 >Proyecto</guimenu
 ><guimenuitem
->Nuevo desde plantilla...</guimenuitem
+>Nuevo desde plantilla…</guimenuitem
 ></menuchoice
 >, que le mostrará un diálogo para seleccionar una plantilla. Algunas de estas plantillas de proyecto se proporcionan con &kdevelop;, pero dispondrá de más si instala la aplicación <application
 >KAppTemplate</application
@@ -1157,14 +1157,14 @@ double bar ()
 <para
 ><programlisting
 >class Car {
-  // ...
+  // …
   public:
     std::string get_color () const;
 };
 void foo()
 {
   Car my_ride;
-  // ... hacer algo en esta variable...
+  // … hacer algo en esta variable…
   std::string color = my_ride.ge
 </programlisting
 ></para>
@@ -1691,7 +1691,7 @@ void foo()
 >for (typename Triangulation::active_cell_iterator
        cell = triangulation.begin_active();
      cell != triangulation.end(); ++cell)
-  ... hacer algo con la celda...
+  … hacer algo con la celda…
 </programlisting>
 </para>
 <para
@@ -2182,12 +2182,12 @@ void foo()
 >Creación de una nueva clase</title>
 <para
 >El uso más común para la generación de código es probablemente la escritura de nuevas clases. Para crear una nueva clase en un proyecto existente, pulse con el botón derecho del ratón en una carpeta del proyecto y elija <guilabel
->Crear desde plantilla...</guilabel
+>Crear desde plantilla…</guilabel
 >. El mismo diálogo se puede iniciar desde el menú pulsando <menuchoice
 ><guimenu
 >Archivo</guimenu
 ><guimenuitem
->Nuevo desde plantilla...</guimenuitem
+>Nuevo desde plantilla…</guimenuitem
 ></menuchoice
 >, aunque si usa una carpeta del proyecto se ahorrará tener que fijar una URL base para los archivos de salida. Elija <filename
 >Clase</filename
@@ -2290,7 +2290,7 @@ void foo()
 >Creación de una nueva prueba unitaria</title>
 <para
 >A pesar de que la mayoría de las infraestructuras de pruebas necesitan que cada prueba también sea una clase, &kdevelop; incluye un método para simplificar la creación de pruebas unitarias. Para crear una nueva prueba, haga clic con el botón derecho del ratón en la carpeta de un proyecto y elija <guilabel
->Crear desde plantilla...</guilabel
+>Crear desde plantilla…</guilabel
 >. En la página de selección de plantillas, escoja <filename
 >Prueba</filename
 > como categoría, y a continuación seleccione el lenguaje de programación y la plantilla, y luego pulse <guilabel
@@ -2308,7 +2308,7 @@ void foo()
 >Otros archivos</title>
 <para
 >A pesar de que las clases y las pruebas unitarias reciben una atención especial cuando generan código a partir de plantillas, se puede usar el mismo método para cualquier tipo de archivos de código fuente. Por ejemplo, es posible usar una plantilla para el módulo Find de CMake o para un archivo «.deskop». Para ello, elija <guilabel
->Crear desde plantilla...</guilabel
+>Crear desde plantilla…</guilabel
 > y seleccione la categoría y la plantilla deseadas. Si la categoría seleccionada no es <filename
 >Clase</filename
 > ni <filename
@@ -2323,10 +2323,10 @@ void foo()
 ><guimenu
 >Archivo</guimenu
 ><guimenuitem
->Nuevo desde plantilla...</guimenuitem
+>Nuevo desde plantilla…</guimenuitem
 ></menuchoice
 > también puede descargar plantillas de archivo adicionales pulsando el botón <guilabel
->Obtener nuevas plantillas...</guilabel
+>Obtener nuevas plantillas…</guilabel
 >. Esto abre el diálogo «Obtener novedades», desde donde podrá instalar plantillas adicionales, así como actualizar o eliminar las existentes. También dispone de un módulo de configuración para las plantillas, al que puede llegar seleccionando <menuchoice
 ><guimenu
 >Preferencias</guimenu
@@ -2360,7 +2360,7 @@ void foo()
 ><guimenu
 >Preferencias</guimenu
 ><guisubmenu
->Configurar KDevelop;...</guisubmenu
+>Configurar KDevelop;…</guisubmenu
 ><guimenuitem
 >Plantillas</guimenuitem
 ></menuchoice

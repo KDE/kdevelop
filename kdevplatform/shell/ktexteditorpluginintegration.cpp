@@ -488,6 +488,7 @@ public:
 
         // Create a custom output tool view instead of reusing a standard one,
         // because the messages should not be hidden in a history or a tab.
+        setToolViewId(QStringLiteral("Messages"));
         setToolTitle(i18nc("@title:window", "Messages"));
         // Use the same icon as the corresponding tool view "Output" in Kate.
         setToolIcon(QIcon::fromTheme(QStringLiteral("output_win")));

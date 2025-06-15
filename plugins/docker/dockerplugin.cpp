@@ -9,6 +9,7 @@
 #include "dockerpreferences.h"
 #include "dockerpreferencessettings.h"
 #include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/context.h>
@@ -31,6 +32,21 @@
 K_PLUGIN_FACTORY_WITH_JSON(KDevDockerFactory, "kdevdocker.json", registerPlugin<DockerPlugin>();)
 
 using namespace KDevelop;
+
+namespace {
+class DockerBuildJob : public OutputExecuteJob
+{
+public:
+    explicit DockerBuildJob(QObject* parent = nullptr)
+        : OutputExecuteJob(parent)
+    {
+        setCapabilities(Killable);
+        setStandardToolView(IOutputView::BuildView);
+        setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll);
+        setProperties(DisplayStdout | DisplayStderr);
+    }
+};
+} // unnamed namespace
 
 DockerPlugin::DockerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& /*args*/)
     : KDevelop::IPlugin(QStringLiteral("kdevdocker"), parent, metaData)
@@ -123,19 +139,17 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
                     QLineEdit::Normal, dir.lastPathSegment()
                 );
 
-                auto process = new OutputExecuteJob;
+                auto* const process = new DockerBuildJob(this);
                 process->setExecuteOnHost(true);
-                process->setProperties(OutputExecuteJob::DisplayStdout | OutputExecuteJob::DisplayStderr);
-                // TODO: call process->setStandardToolView(IOutputView::?); to prevent creating a new tool view for each
-                // job in OutputJob::startOutput(). Such nonstandard and unshared tool views are also not configurable.
                 *process << QStringList{QStringLiteral("docker"), QStringLiteral("build"), QStringLiteral("--tag"), name, dir.toLocalFile()};
+                process->setJobName(i18nc("%1 - Docker tag name", "Docker Build \"%1\"", name));
                 connect(process, &KJob::finished, this, [name] (KJob* job) {
                     if (job->error() != 0)
                         return;
 
                     ICore::self()->runtimeController()->addRuntimes(new DockerRuntime(name));
                 });
-                process->start();
+                ICore::self()->runController()->registerJob(process);
             });
             ext.addAction(KDevelop::ContextMenuExtension::RunGroup, action);
         }

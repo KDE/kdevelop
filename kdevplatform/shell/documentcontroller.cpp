@@ -862,8 +862,9 @@ QList< IDocument * > KDevelop::DocumentController::visibleDocumentsInWindow(Main
     for (IDocument* doc : documents) {
         if (auto* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
             const auto views = sdoc->views();
-            auto hasViewInWindow = std::any_of(views.begin(), views.end(), [&](Sublime::View* view) {
-                return (view->hasWidget() && view->widget()->window() == mw);
+            const auto hasViewInWindow = std::any_of(views.cbegin(), views.cend(), [mw](const Sublime::View* view) {
+                const auto* const widget = view->widget();
+                return widget && widget->window() == mw;
             });
             if (hasViewInWindow) {
                 list.append(doc);
@@ -956,7 +957,7 @@ bool DocumentController::closeAllDocuments()
 void DocumentController::closeAllOtherDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        Sublime::View* activeView = mw->activeView();
+        const auto* const activeView = mw->activeView();
 
         if (!activeView) {
             qCWarning(SHELL) << "Shouldn't there always be an active view when this function is called?";

@@ -11,12 +11,7 @@
 #include "midebugsession.h"
 
 #include <debugger/breakpoint/breakpoint.h>
-#include <debugger/breakpoint/breakpointmodel.h>
 #include <execute/iexecuteplugin.h>
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
-#include <tests/testhelpers.h>
-#include <util/environmentprofilelist.h>
 
 #include <QAbstractItemModel>
 #include <QDebug>
@@ -28,9 +23,6 @@
 #include <QStringList>
 #include <QTest>
 #include <QVariant>
-
-#include <algorithm>
-#include <array>
 
 using namespace KDevelop;
 
@@ -79,27 +71,6 @@ bool isAttachForbidden(const char *file, int line)
     return false;
 }
 
-QString debugeeFilePath()
-{
-    static const QString ret = findSourceFile(QStringLiteral("debugee.cpp"));
-    return ret;
-}
-QUrl debugeeUrl()
-{
-    static const QUrl ret = QUrl::fromLocalFile(debugeeFilePath());
-    return ret;
-}
-
-BreakpointModel* breakpoints()
-{
-    return ICore::self()->debugController()->breakpointModel();
-}
-
-Breakpoint* addDebugeeBreakpoint(int miLine)
-{
-    return breakpoints()->addCodeBreakpoint(debugeeUrl(), miLine - 1);
-}
-
 int breakpointMiLine(const Breakpoint* breakpoint)
 {
     QVERIFY_RETURN(breakpoint, -12345);
@@ -142,6 +113,37 @@ void validateColumnCountsThreadCountAndStackFrameNumbers(const QModelIndex& thre
     }
 }
 
+ActiveStateSessionSpy::ActiveStateSessionSpy(const IDebugSession* session)
+{
+    QVERIFY(session);
+    connect(session, &IDebugSession::stateChanged, this, &ActiveStateSessionSpy::sessionStateChanged);
+}
+
+bool ActiveStateSessionSpy::hasEnteredActiveState() const
+{
+    return m_hasEnteredActiveState;
+}
+
+void ActiveStateSessionSpy::reset()
+{
+    m_hasEnteredActiveState = false;
+}
+
+void ActiveStateSessionSpy::sessionStateChanged(IDebugSession::DebuggerState state)
+{
+    if (state == IDebugSession::ActiveState) {
+        m_hasEnteredActiveState = true;
+    }
+}
+
+void resetAndRun(ActiveStateSessionSpy& spy, IDebugSession* session)
+{
+    QVERIFY(session);
+    QVERIFY(spy.hasEnteredActiveState());
+    spy.reset();
+    session->run();
+}
+
 bool waitForAWhile(MIDebugSession *session, int ms, const char *file, int line)
 {
     QPointer<MIDebugSession> s(session); //session can get deleted in DebugController
@@ -153,8 +155,8 @@ bool waitForAWhile(MIDebugSession *session, int ms, const char *file, int line)
     return true;
 }
 
-bool waitForState(MIDebugSession *session, KDevelop::IDebugSession::DebuggerState state,
-                  const char *file, int line, bool waitForIdle)
+bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerState state, const char* file, int line,
+                  bool waitForIdle, const ActiveStateSessionSpy* sessionSpy)
 {
     QPointer<MIDebugSession> s(session); //session can get deleted in DebugController
     QElapsedTimer stopWatch;
@@ -164,9 +166,15 @@ bool waitForState(MIDebugSession *session, KDevelop::IDebugSession::DebuggerStat
     // but which were written before waitForIdle was added
     waitForIdle = waitForIdle || state != MIDebugSession::EndedState;
 
-    while (s && (s->state() != state
-                || (waitForIdle && s->debuggerStateIsOn(s_dbgBusy)))) {
-        if (stopWatch.elapsed() > 50000) {
+    const auto areWaitConditionsSatisfied = [session, state, sessionSpy, waitForIdle] {
+        return session->state() == state && !(waitForIdle && session->debuggerStateIsOn(s_dbgBusy))
+            && (!sessionSpy || sessionSpy->hasEnteredActiveState());
+    };
+
+    const auto timeout = waitForIdle ? 50'000 : 10'000;
+
+    while (s && !areWaitConditionsSatisfied()) {
+        if (stopWatch.elapsed() > timeout) {
             qWarning() << "current state" << s->state() << "waiting for" << state;
             QTest::qFail(qPrintable(QString("Timeout before reaching state %0").arg(state)),
                          file, line);
@@ -233,202 +241,34 @@ TestLaunchConfiguration::TestLaunchConfiguration(const QUrl& executable, const Q
     cfg.writeEntry(IExecutePlugin::workingDirEntry, workingDirectory);
 }
 
-namespace {
-class WritableEnvironmentProfileList : public KDevelop::EnvironmentProfileList
+DebugeeslowOutputProcessor::DebugeeslowOutputProcessor(QSignalSpy& outputSpy)
+    : m_outputSpy{outputSpy}
 {
-public:
-    explicit WritableEnvironmentProfileList(KConfig* config) : EnvironmentProfileList(config) {}
-
-    using EnvironmentProfileList::variables;
-    using EnvironmentProfileList::saveSettings;
-    using EnvironmentProfileList::removeProfile;
-};
-} // end of namespace
-
-void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
-                        IExecutePlugin* executePlugin)
-{
-    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeechoenv"));
-
-    cfg.config().writeEntry(IExecutePlugin::environmentProfileEntry, profileName);
-
-    WritableEnvironmentProfileList envProfiles(cfg.rootConfig());
-    envProfiles.removeProfile(profileName);
-    auto& envs = envProfiles.variables(profileName);
-    envs[QStringLiteral("VariableA")] = QStringLiteral("-A' \" complex --value");
-    envs[QStringLiteral("VariableB")] = QStringLiteral("-B' \" complex --value");
-    envProfiles.saveSettings(cfg.rootConfig());
-
-    QSignalSpy outputSpy(session, &MIDebugSession::inferiorStdoutLines);
-
-    QVERIFY(session->startDebugging(&cfg, executePlugin));
-    WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);
-
-    QVERIFY(outputSpy.count() > 0);
-
-    QStringList outputLines;
-    while (outputSpy.count() > 0) {
-        const QList<QVariant> arguments = outputSpy.takeFirst();
-        for (const auto& item : arguments) {
-            outputLines.append(item.toStringList());
-        }
-    }
-    QCOMPARE(outputLines, QStringList() << "-A' \" complex --value"
-                                        << "-B' \" complex --value");
+    QVERIFY(m_outputSpy.isValid());
 }
 
-void testUnsupportedUrlExpressionBreakpoints(MIDebugSession* session, IExecutePlugin* executePlugin,
-                                             bool debuggerSupportsNonAsciiExpressions)
+void DebugeeslowOutputProcessor::processOutput()
 {
-    QVERIFY(session);
-    QVERIFY(executePlugin);
+    for (const auto& parameters : std::as_const(m_outputSpy)) {
+        QCOMPARE_EQ(parameters.size(), 1); // MIDebugSession::inferiorStdoutLines() has one parameter
+        const auto outputLines = parameters.constFirst().toStringList();
+        qDebug() << "Debuggee output:" << outputLines.join('\n');
+        QCOMPARE_GT(outputLines.size(), 0); // why emit the signal if there is no output?
 
-    TestLaunchConfiguration cfg;
-
-    // Verify that the following tricky breakpoint expressions are not converted
-    // into (URL, line) pairs during a debug session.
-
-    // clang-format off
-    constexpr std::array expressions = {
-        "simple expression",
-        "non-ASCII: øü¶¥¤¿жіЬ®施ą",
-        "https://example.com/abc.txt:2",
-        "//:1",
-        "noprefix:1",
-        "./dotslash:1",
-        "../dotdotslash:1",
-        "/Untitled:3",
-        "/Untitled (123):75",
-    };
-    // clang-format on
-
-    std::array<Breakpoint*, expressions.size()> bpoints;
-    std::transform(expressions.cbegin(), expressions.cend(), bpoints.begin(), [](const char* expression) {
-        return breakpoints()->addCodeBreakpoint(QString::fromUtf8(expression));
-    });
-
-    const auto verifyBreakpoints = [&expressions, &bpoints](bool nonAsciiExpressionsSupported) {
-        for (std::size_t i = 0; i < expressions.size(); ++i) {
-            QCOMPARE(bpoints[i]->url(), {});
-            QCOMPARE(bpoints[i]->line(), -1);
-
-            if (i == 1 && !nonAsciiExpressionsSupported) {
-                QEXPECT_FAIL("", "Non-ASCII breakpoint expressions are unsupported", Continue);
-            }
-            QCOMPARE(bpoints[i]->expression(), expressions[i]);
-        }
-    };
-
-    verifyBreakpoints(true); // the debugger did not have a chance to break the non-ASCII expression yet
-    RETURN_IF_TEST_FAILED();
-
-    QVERIFY(session->startDebugging(&cfg, executePlugin));
-    WAIT_FOR_STATE(session, IDebugSession::EndedState);
-
-    verifyBreakpoints(debuggerSupportsNonAsciiExpressions);
-    RETURN_IF_TEST_FAILED();
-}
-
-void testBreakpointsOnNoOpLines(MIDebugSession* session, IExecutePlugin* executePlugin,
-                                bool debuggerMovesBreakpointFromLicenseNotice)
-{
-    TestLaunchConfiguration cfg;
-
-    const auto* const licenseBreakpoint = addDebugeeBreakpoint(9);
-    const auto* const blankLineBreakpoint = addDebugeeBreakpoint(34);
-    const auto* const lastLineBreakpoint = addDebugeeBreakpoint(42);
-
-    QVERIFY(session->startDebugging(&cfg, executePlugin));
-
-    if (debuggerMovesBreakpointFromLicenseNotice) {
-        // The lines 9-19 consist of no-op code, so GDB moves the breakpoint from line 9 to line 20. The contents
-        // of the line 20 is "void noop() {}", so GDB stops at it 4 times (4 is the number of calls to noop()).
-        for (int noopCall = 0; noopCall < 4; ++noopCall) {
-            WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-            QCOMPARE(currentMiLine(session), 20);
-            session->run();
+        for (const auto& line : outputLines) {
+            ++m_processedLineCount;
+            // debugeeslow outputs consecutive integers starting from 1
+            QCOMPARE(line, QString::number(m_processedLineCount));
         }
     }
-
-    // The lines 34 and 35 consist of no-op code, so a debugger moves
-    // the breakpoint from line 34 to line 36 and stops at it.
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-    QCOMPARE(currentMiLine(session), 36);
-
-    if (debuggerMovesBreakpointFromLicenseNotice) {
-        QCOMPARE(breakpointMiLine(licenseBreakpoint), 20);
-        QCOMPARE(licenseBreakpoint->state(), KDevelop::Breakpoint::CleanState);
-    } else {
-        // LLDB does not move the breakpoint from the no-op line 9 and permanently keeps it in the pending state.
-        QCOMPARE(breakpointMiLine(licenseBreakpoint), 9);
-        QCOMPARE(licenseBreakpoint->state(), Breakpoint::PendingState);
-    }
-
-    QCOMPARE(breakpointMiLine(blankLineBreakpoint), 36);
-    QCOMPARE(blankLineBreakpoint->state(), Breakpoint::CleanState);
-
-    // A debugger does not move the breakpoint from the last no-op line 42
-    // and permanently keeps it in the pending state.
-    QCOMPARE(breakpointMiLine(lastLineBreakpoint), 42);
-    QCOMPARE(lastLineBreakpoint->state(), Breakpoint::PendingState);
-
-    session->run();
-    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+    m_outputSpy.clear();
 }
 
-void testBreakpointErrors(MIDebugSession* session, IExecutePlugin* executePlugin, bool debuggerStopsOnInvalidCondition)
+int DebugeeslowOutputProcessor::processedLineCount() const
 {
-    QVERIFY(session);
-    QVERIFY(executePlugin);
-
-    TestLaunchConfiguration cfg;
-
-    // The following breakpoint data makes GDB/MI (but not lldb-mi) report breakpoint errors.
-    // Verify that a debug session works correctly despite such uncommon error reports.
-
-    // clang-format off
-    constexpr std::array expressions = {
-        ":resourcepath",
-        ":resourcepath:1",
-        ":/colonslash:1",
-        ":./colondotslash",
-    };
-    constexpr std::array urls = {
-        "file::resourcepath",
-        "file::/colonslash",
-        "file::../colondotdotslash",
-    };
-    constexpr std::array conditions = {
-        "not_exist_var > 3",
-    };
-    // clang-format on
-
-    for (const auto expression : expressions) {
-        breakpoints()->addCodeBreakpoint(QString::fromUtf8(expression));
-    }
-    for (const auto url : urls) {
-        breakpoints()->addCodeBreakpoint(QUrl{QString::fromUtf8(url)}, 1);
-    }
-    for (const auto condition : conditions) {
-        auto* const breakpoint = addDebugeeBreakpoint(29);
-        breakpoint->setCondition(QString::fromUtf8(condition));
-    }
-
-    addDebugeeBreakpoint(30);
-
-    QVERIFY(session->startDebugging(&cfg, executePlugin));
-
-    if (debuggerStopsOnInvalidCondition) {
-        WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-        QCOMPARE(currentMiLine(session), 29);
-        session->run();
-    }
-
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-    QCOMPARE(currentMiLine(session), 30);
-    session->run();
-
-    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+    return m_processedLineCount;
 }
 
 } // end of namespace KDevMI::Testing
+
+#include "moc_testhelper.cpp"

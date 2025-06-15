@@ -109,10 +109,7 @@ void Plugin::raiseProblemsView()
 
 void Plugin::raiseOutputView()
 {
-    core()->uiController()->findToolView(
-        i18nc("@title:window", "Test"),
-        nullptr,
-        KDevelop::IUiController::FindFlags::Raise);
+    core()->uiController()->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Analyze"));
 }
 
 void Plugin::updateActions()
@@ -193,10 +190,11 @@ void Plugin::result(KJob*)
     if (!core()->projectController()->projects().contains(m_model->project())) {
         m_model->reset();
     } else {
-        m_model->setProblems();
+        const auto status = m_job->status();
+        m_model->setProblems(status == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded);
 
-        if (m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
-            m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled) {
+        if (status == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded
+            || status == KDevelop::OutputExecuteJob::JobStatus::JobCanceled) {
             raiseProblemsView();
         } else {
             raiseOutputView();

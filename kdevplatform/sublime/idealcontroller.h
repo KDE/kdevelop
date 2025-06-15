@@ -15,6 +15,8 @@
 #include <QHash>
 #include <QList>
 
+#include <memory>
+
 class KActionMenu;
 class KConfigGroup;
 
@@ -23,11 +25,13 @@ class QDockWidget;
 namespace Sublime {
 
 class Area;
+class Document;
 class View;
 class MainWindow;
 class IdealButtonBarWidget;
 class IdealDockWidget;
 class IdealToolBar;
+class ToolViewWidgetCache;
 
 class IdealController: public QObject
 {
@@ -46,10 +50,18 @@ public:
     QWidget *statusBarLocation() const;
     QAction* actionForView(View* view) const;
 
-    /** Remove view.  If nondestructive true, view->widget()
-        is not deleted, as is left with NULL parent.
-        Otherwise, it's deleted.  */
+    /**
+     * Remove a given tool view.
+     *
+     * @param nondestructive whether the current sublime area may have to use
+     *        @p view->widget() again and therefore wants to prevent its destruction
+     */
     void removeView(View* view, bool nondestructive = false);
+
+    /**
+     * This function should be invoked when @p document's tool view is removed.
+     */
+    void toolViewRemoved(const Document* document);
 
     /**
      * @return the list of currently shown tool views
@@ -125,8 +137,6 @@ private:
 
     void showDockWidget(IdealDockWidget* dock, bool show);
 
-    void focusEditor();
-
     /**
      * Update the checked state of the Show Dock action for a given area when
      * the checked state of a tool view action in the same area becomes @p checked.
@@ -172,6 +182,8 @@ private:
     /** Map from View to an action that shows/hides
         the IdealDockWidget containing that view.  */
     QHash<View*, QAction*> m_view_to_action;
+
+    const std::unique_ptr<ToolViewWidgetCache> m_toolViewWidgetCache;
 
     KActionMenu* m_docks;
 

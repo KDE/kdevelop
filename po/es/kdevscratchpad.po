@@ -1,15 +1,15 @@
 # Spanish translations for kdevscratchpad.po package.
-# Copyright (C) 2019 This file is copyright:
+# Copyright (C) 2019-2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
 # Automatically generated, 2019.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2019, 2020.
+#
+# SPDX-FileCopyrightText: 2019, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevscratchpad\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-09 00:40+0000\n"
-"PO-Revision-Date: 2020-07-25 19:38+0200\n"
+"PO-Revision-Date: 2025-05-17 02:22+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -61,7 +61,7 @@ msgstr "scratch:%1"
 #: scratchpadjob.cpp:57
 #, kde-format
 msgid "Running %1..."
-msgstr "Ejecutando %1..."
+msgstr "Ejecutando %1…"
 
 #: scratchpadjob.cpp:73
 #, kde-format
@@ -118,7 +118,7 @@ msgstr "Ejecutar scratch"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Filtro..."
+msgstr "Filtro…"
 
 #: scratchpadview.cpp:210
 #, kde-format

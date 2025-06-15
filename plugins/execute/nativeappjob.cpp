@@ -31,57 +31,62 @@
 
 using namespace KDevelop;
 
+namespace {
+[[nodiscard]] QString validEnvironmentProfileName(const QString& launchConfigurationName,
+                                                  QString environmentProfileName)
+{
+    if (environmentProfileName.isEmpty()) {
+        qCWarning(PLUGIN_EXECUTE).noquote() << i18n(
+            "No environment profile specified, looks like a broken configuration, please check run configuration '%1'. "
+            "Using default environment profile.",
+            launchConfigurationName);
+        environmentProfileName = EnvironmentProfileList(KSharedConfig::openConfig()).defaultProfileName();
+    }
+    return environmentProfileName;
+}
+} // unnamed namespace
+
 NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     : KDevelop::OutputExecuteJob( parent )
     , m_name(cfg->name())
 {
-    {
-        auto cfgGroup = cfg->config();
-        if (cfgGroup.readEntry(ExecutePlugin::isExecutableEntry, false)) {
-            m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, cfg->name()).section(QLatin1Char('/'), -1);
-        }
-        if (!cfgGroup.readEntry<bool>(ExecutePlugin::configuredByCTest, false)) {
-            m_killBeforeExecutingAgain = cfgGroup.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, askIfRunning);
-        }
-    }
     setCapabilities(Killable);
 
     auto* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
     Q_ASSERT(iface);
 
-    const KDevelop::EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
-    QString envProfileName = iface->environmentProfileName(cfg);
-
     QString err;
-    QUrl executable = iface->executable( cfg, err );
+    const auto detectError = [&err, this](int errorCode) {
+        if (err.isEmpty()) {
+            return false;
+        }
+        setError(errorCode);
+        setErrorText(err);
+        return true;
+    };
 
-    if( !err.isEmpty() )
-    {
-        setError( -1 );
-        setErrorText( err );
+    const auto executable = iface->executable(cfg, err).toLocalFile();
+    if (detectError(-1)) {
         return;
     }
-
-    if (envProfileName.isEmpty()) {
-        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << i18n("No environment profile specified, looks like a broken "
-                       "configuration, please check run configuration '%1'. "
-                       "Using default environment profile.", cfg->name() );
-        envProfileName = environmentProfiles.defaultProfileName();
-    }
-    setEnvironmentProfile(envProfileName);
-
     QStringList arguments = iface->arguments( cfg, err );
-    if( !err.isEmpty() )
-    {
-        setError( -2 );
-        setErrorText( err );
-    }
-
-    if( error() != 0 )
-    {
-        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
+    if (detectError(-2)) {
         return;
     }
+
+    const auto launchConfigurationName = m_name;
+    {
+        const auto cfgGroup = cfg->config();
+        if (cfgGroup.readEntry(ExecutePlugin::isExecutableEntry, false)) {
+            m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, launchConfigurationName)
+                         .section(QLatin1Char('/'), -1);
+        }
+        if (!cfgGroup.readEntry(ExecutePlugin::configuredByCTest, false)) {
+            m_killBeforeExecutingAgain = cfgGroup.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, askIfRunning);
+        }
+    }
+
+    setEnvironmentProfile(validEnvironmentProfileName(launchConfigurationName, iface->environmentProfileName(cfg)));
 
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
@@ -92,7 +97,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
 
     QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() ) {
-        wc = QUrl::fromLocalFile( QFileInfo( executable.toLocalFile() ).absolutePath() );
+        wc = QUrl::fromLocalFile(QFileInfo{executable}.absolutePath());
     }
     setWorkingDirectory( wc );
 
@@ -100,13 +105,13 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
 
     if (iface->useTerminal(cfg)) {
         QString terminalCommand = iface->terminal(cfg);
-        terminalCommand.replace(QLatin1String("%exe"), KShell::quoteArg( executable.toLocalFile()) );
+        terminalCommand.replace(QLatin1String("%exe"), KShell::quoteArg(executable));
         terminalCommand.replace(QLatin1String("%workdir"), KShell::quoteArg( wc.toLocalFile()) );
         QStringList args = KShell::splitArgs(terminalCommand);
         args.append( arguments );
         *this << args;
     } else {
-        *this << executable.toLocalFile();
+        *this << executable;
         *this << arguments;
     }
 
@@ -126,6 +131,11 @@ NativeAppJob* findNativeJob(KJob* j)
 
 void NativeAppJob::start()
 {
+    if (error() != NoError) {
+        emitResult();
+        return;
+    }
+
     QVector<QPointer<NativeAppJob> > currentJobs;
     // collect running instances of the same type
     const auto& allCurrentJobs = ICore::self()->runController()->currentJobs();

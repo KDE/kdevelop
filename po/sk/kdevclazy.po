@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclazy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2022-04-17 20:53+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -556,7 +556,7 @@ msgctxt "@title:window"
 msgid "Clazy Error"
 msgstr "Chyba Clazy"
 
-#: jobparameters.cpp:39
+#: jobparameters.cpp:41
 #, kde-format
 msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
@@ -565,22 +565,22 @@ msgstr ""
 "Nezistila sa cesta clazy-standalone. Nastavte cestu ručne, ak je už "
 "nainštalované Clazy."
 
-#: jobparameters.cpp:42
+#: jobparameters.cpp:44
 #, kde-format
 msgid "clazy-standalone path is empty."
 msgstr "Cesta clazy-standalone je prázdna."
 
-#: jobparameters.cpp:50
+#: jobparameters.cpp:52
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
 msgstr "Cesta clazy-standalone '%1' neexistuje."
 
-#: jobparameters.cpp:55
+#: jobparameters.cpp:57
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
 msgstr "Cesta clazy-standalone '%1' nie je spustiteľná."
 
-#: jobparameters.cpp:64
+#: jobparameters.cpp:66
 #, kde-format
 msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
@@ -589,17 +589,17 @@ msgstr ""
 "Cesta dokumentácie Clazy nebola nájdená. Nastavte cestu manuálne, ak je "
 "Clazy už nainštalované."
 
-#: jobparameters.cpp:67
+#: jobparameters.cpp:69
 #, kde-format
 msgid "Clazy documentation path is empty."
 msgstr "Cesta dokumentácie Clazy je prázdna."
 
-#: jobparameters.cpp:75
+#: jobparameters.cpp:77
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
 msgstr "Clazy documentation path '%1' does not exists."
 
-#: jobparameters.cpp:80
+#: jobparameters.cpp:82
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
 msgstr "Cesta dokumentácie Clazy '%1' nie je adresár."

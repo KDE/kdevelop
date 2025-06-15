@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevfiletemplates.po package.
+# Copyright (C) 2013-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2013, 2015, 2017, 2020.
+# SPDX-FileCopyrightText: 2013, 2015, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevfiletemplates\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-01 01:44+0000\n"
-"PO-Revision-Date: 2020-07-25 19:18+0200\n"
+"PO-Revision-Date: 2025-05-17 02:02+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -39,7 +40,7 @@ msgstr "Tipo de variable e identificador"
 #, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "Nuevo desde plantilla..."
+msgstr "Nuevo desde plantilla…"
 
 #: filetemplatesplugin.cpp:71
 #, kde-format
@@ -67,7 +68,7 @@ msgstr "Vista previa de la plantilla"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create from Template..."
-msgstr "Crear desde plantilla..."
+msgstr "Crear desde plantilla…"
 
 #: filetemplatesplugin.cpp:135
 #, kde-format
@@ -376,7 +377,7 @@ msgstr "Plantilla"
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
-msgstr "Obtener más plantillas..."
+msgstr "Obtener más plantillas…"
 
 #: templateselectionpage.cpp:249
 #, kde-format
@@ -509,78 +510,3 @@ msgstr "Indicar el nombre de la prueba y sus casos de prueba."
 msgctxt "@label:listbox"
 msgid "&Test cases:"
 msgstr "&Casos de pruebas:"
-
-#~ msgid "There was an error writing the file."
-#~ msgstr "Ha ocurrido un error escribiendo el archivo."
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "File Templates Configuration"
-#~ msgstr "Configuración de las plantillas de archivos"
-
-#~ msgid "Manages templates for source files"
-#~ msgstr "Gestiona plantillas de archivos de código fuente"
-
-#~ msgid "Add currently selected items from project tree view to buildset."
-#~ msgstr ""
-#~ "Añadir los elementos actualmente seleccionados en la vista en árbol del "
-#~ "proyecto al conjunto de construcción."
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Remove currently selected item from buildset."
-#~ msgstr ""
-#~ "Eliminar el elemento actualmente seleccionado del conjunto de "
-#~ "construcción."
-
-#~ msgid "Move the selected items to the top"
-#~ msgstr "Mover los elementos seleccionados al principio"
-
-#~ msgid "Move the selected items up"
-#~ msgstr "Subir el elemento seleccionado"
-
-#~ msgid "Move the selected item down"
-#~ msgstr "Bajar el elemento seleccionado"
-
-#~ msgid "Move the selected items to the bottom"
-#~ msgstr "Mover los elementos seleccionados al final"
-
-#~ msgid "Type"
-#~ msgstr "Tipo"
-
-#~ msgid "Identifier"
-#~ msgstr "Identificador"
-
-#~ msgid "Class Options"
-#~ msgstr "Opciones de la clase"
-
-#~ msgid "Abstract class (allow pure virtuals)"
-#~ msgstr "Clase abstracta (permitir virtuales puros)"
-
-#~ msgid "Disable copy"
-#~ msgstr "Desactivar copia"
-
-#~ msgid "Implicit Sharing"
-#~ msgstr "Compartir implícitamente"
-
-#~ msgid "D-Pointer"
-#~ msgstr "Puntero D"
-
-#~ msgid "Qt-style shared d-pointer"
-#~ msgstr "Puntero D compartido al estilo de Qt"
-
-#~ msgid "Virtual Hook"
-#~ msgstr "Hook virtual"
-
-#~ msgid "Group by access specifier (public / private etc)"
-#~ msgstr "Agrupar por el indicador de acceso (público, privado, etc.)"
-
-#~ msgid "Support for managing file templates"
-#~ msgstr "Implementación para la gestión de plantillas de archivos"

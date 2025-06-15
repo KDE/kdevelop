@@ -4,13 +4,13 @@
 # pan93412 <pan93412@gmail.com>, 2018.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2024-03-07 20:26+0900\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
+"PO-Revision-Date: 2025-05-24 21:31+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "dot tw>\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: outputwidget.cpp:44
@@ -160,32 +160,36 @@ msgstr ""
 "最舊的輸出檢視會在輸出檢視數量\n"
 "超過此數值時被關閉"
 
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
 msgstr "編譯"
 
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
 msgstr "執行"
 
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "除錯"
 
-#: standardoutputview.cpp:124
+#: standardoutputview.cpp:89
 #, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "測試"
+msgid "Analyze"
+msgstr "分析"
 
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "版本控制"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "測試"

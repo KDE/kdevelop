@@ -188,13 +188,13 @@ msgstr "Copyright 1999-%1, The KDevelop developers"
 #: main.cpp:387
 #, kde-format
 msgid "Igor Kushnir"
-msgstr ""
+msgstr "Igor Kushnir"
 
 #: main.cpp:388
 #, kde-format
 msgid ""
 "General maintenance, Bug fixing and prevention, Performance improvements"
-msgstr ""
+msgstr "一般维护、错误修复与预防、性能改进"
 
 #: main.cpp:390
 #, kde-format

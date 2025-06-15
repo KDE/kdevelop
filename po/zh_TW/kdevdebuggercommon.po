@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2024-07-23 22:06+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -102,17 +102,23 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Core 檔："
 
-#: mibreakpointcontroller.cpp:795
-#, kde-format
-msgid "<br>Old value: %1"
+#: mibreakpointcontroller.cpp:809
+#, fuzzy, kde-format
+#| msgid "<br>Old value: %1"
+msgid ""
+"\n"
+"Old value: %1"
 msgstr "<br/>舊值：%1"
 
-#: mibreakpointcontroller.cpp:798
-#, kde-format
-msgid "<br>New value: %1"
+#: mibreakpointcontroller.cpp:812
+#, fuzzy, kde-format
+#| msgid "<br>New value: %1"
+msgid ""
+"\n"
+"New value: %1"
 msgstr "<br/>新值：%1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -123,7 +129,7 @@ msgstr ""
 "<p>除錯器組件在處理除錯器的回覆時遇到內部錯誤。請回報此問題。除錯器工作階段現"
 "在會結束來避免崩潰"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -132,30 +138,30 @@ msgstr ""
 "例外：%1\n"
 "MI 回覆：%2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "內部除錯器錯誤"
 
-#: midebugger.cpp:333 midebugsession.cpp:423
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "行程已離開"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
 "path name is specified correctly."
 msgstr "<b>無法啟動除錯器：</b><p>無法執行 %1。請確定指定的路徑是否正確。"
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "行程啟動失敗"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -165,13 +171,13 @@ msgstr ""
 "<b>除錯器已崩潰。</b><p>除錯器行程「%1」崩潰了。<br>除錯工作階段因此不得不結"
 "束。<br>請考慮嘗試在 KDevelop 外再現崩潰並回報錯誤。<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "除錯器已崩潰"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "行程已崩潰"
@@ -294,92 +300,92 @@ msgstr "除錯 Core 檔"
 msgid "Debug process %1"
 msgstr "除錯行程 %1"
 
-#: midebugsession.cpp:208
+#: midebugsession.cpp:202
 #, kde-format
 msgid "Running program"
 msgstr "執行程式中"
 
-#: midebugsession.cpp:295
+#: midebugsession.cpp:288
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "附加到行程 %1 中"
 
-#: midebugsession.cpp:326
+#: midebugsession.cpp:319
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>無法附加除錯器：</b><br />"
 
-#: midebugsession.cpp:336
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Examining core file %1"
 msgstr "檢視 core 檔 %1 中"
 
-#: midebugsession.cpp:408
+#: midebugsession.cpp:401
 #, kde-format
 msgid "Debugger stopped"
 msgstr "除錯器已停止"
 
-#: midebugsession.cpp:428
+#: midebugsession.cpp:421
 #, kde-format
 msgid "Application is running"
 msgstr "應用程式執行中"
 
-#: midebugsession.cpp:433
+#: midebugsession.cpp:426
 #, kde-format
 msgid "Application is paused"
 msgstr "應用程式已暫停"
 
-#: midebugsession.cpp:748
+#: midebugsession.cpp:741
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr "<b>在除錯器未執行時送出了 GDB 指令</b><br/>指令為<br/> %1"
 
-#: midebugsession.cpp:860
+#: midebugsession.cpp:853
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>無效的除錯器指令</b><br/>%1"
 
-#: midebugsession.cpp:996
+#: midebugsession.cpp:989
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "不正常結束，離開狀態為：%1"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:991
 #, kde-format
 msgid "Exited normally"
 msgstr "正常離開"
 
-#: midebugsession.cpp:1005
+#: midebugsession.cpp:998
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "因遇到訊號 %1 而離開"
 
-#: midebugsession.cpp:1040
+#: midebugsession.cpp:1033
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "程式接收到信號 %1（%2）"
 
-#: midebugsession.cpp:1172
+#: midebugsession.cpp:1165
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "佇列中有 %1 個指令\n"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1166
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "gdb 已處理 %1 個指令\n"
 
-#: midebugsession.cpp:1174
+#: midebugsession.cpp:1167
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "除錯器狀態：%1\n"
 
-#: midebugsession.cpp:1177
+#: midebugsession.cpp:1170
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -390,12 +396,12 @@ msgstr ""
 "目前的指令文字：%2\n"
 "目前的指令原始文字：%3\n"
 
-#: midebugsession.cpp:1204
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>除錯器錯誤</b><p>除錯器回報了以下的錯誤：<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(執行中)"

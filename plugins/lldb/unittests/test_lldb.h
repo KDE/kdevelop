@@ -7,39 +7,28 @@
 #ifndef LLDBTEST_H
 #define LLDBTEST_H
 
-#include <QObject>
-
-class IExecutePlugin;
+#include "tests/debuggertestbase.h"
 
 namespace KDevelop {
-class TestCore;
 class Variable;
-class VariableCollection;
 }
 
 namespace KDevMI { namespace LLDB {
 
-class LldbTest : public QObject
+class LldbTest : public DebuggerTestBase
 {
     Q_OBJECT
+protected:
+    [[nodiscard]] MIDebugSession* createTestDebugSession() override;
+
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
-    void init();
-    void cleanup();
-
     void testStdout();
-    void testEnvironmentSet();
 
-    void testUnsupportedUrlExpressionBreakpoints();
     void testBreakpoint();
     void testBreakOnStart();
-    void testDisableBreakpoint();
     void testChangeLocationBreakpoint();
     void testDeleteBreakpoint();
     void testPendingBreakpoint();
-    void testBreakpointsOnNoOpLines();
     void testUpdateBreakpoint();
     void testIgnoreHitsBreakpoint();
     void testConditionBreakpoint();
@@ -48,12 +37,10 @@ private Q_SLOTS:
     void testBreakOnReadBreakpoint();
     void testBreakOnReadBreakpoint2();
     void testBreakOnAccessBreakpoint();
-    void testBreakpointErrors();
     void testInsertBreakpointWhileRunning();
     void testInsertBreakpointWhileRunningMultiple();
     void testInsertBreakpointFunctionName();
     void testManualBreakpoint();
-    void testInsertAndRemoveBreakpointWhileRunning();
     void testPickupManuallyInsertedBreakpoint();
     void testPickupManuallyInsertedBreakpointOnlyOnce();
     void testBreakpointWithSpaceInPath();
@@ -61,7 +48,6 @@ private Q_SLOTS:
     void testMultipleLocationsBreakpoint();
     void testMultipleBreakpoint();
     void testRegularExpressionBreakpoint();
-    void testChangeBreakpointWhileRunning();
 
     void testCatchpoint();
 
@@ -77,11 +63,8 @@ private Q_SLOTS:
     void testCoreFile();
 
     void testVariablesLocals();
-    void testVariablesLocalsStruct();
-    void testVariablesWatches();
     void testVariablesWatchesQuotes();
     void testVariablesWatchesTwoSessions();
-    void testVariablesStopDebugger();
     void testVariablesStartSecondSession();
     void testVariablesSwitchFrame();
     void testVariablesQuicklySwitchFrame();
@@ -95,23 +78,18 @@ private Q_SLOTS:
 
     void testBug301287();
 
-    void testDebugInExternalTerminal();
-
     void testSpecialPath();
 
     void testEnvironmentCd();
 
 private:
     // convenient access methods
-    KDevelop::VariableCollection *variableCollection();
     KDevelop::Variable *watchVariableAt(int i);
     QModelIndex localVariableIndexAt(int i, int col = 0);
 
-private:
-    KDevelop::TestCore *m_core;
-    IExecutePlugin *m_iface;
-
-    QString m_debugeeFileName;
+    [[nodiscard]] bool isLldb() const override;
+    void startInitTestCase() override;
+    void finishInit() override;
 };
 
 } // end of namespace LLDB

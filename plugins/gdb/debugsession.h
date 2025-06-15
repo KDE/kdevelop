@@ -28,9 +28,6 @@ class ILaunchConfiguration;
 }
 
 namespace KDevMI {
-
-class STTY;
-
 namespace GDB {
 
 class CppDebuggerPlugin;

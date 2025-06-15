@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2016, 2017, 2018, 2020, 2022, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2016, 2017, 2018, 2020, 2022, 2024, 2025 Freek de Kruijf <freekdekruijf@kde.nl>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2024-05-03 11:33+0200\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"PO-Revision-Date: 2025-05-16 12:32+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -99,17 +99,25 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Core-bestand:"
 
-#: mibreakpointcontroller.cpp:795
+#: mibreakpointcontroller.cpp:809
 #, kde-format
-msgid "<br>Old value: %1"
-msgstr "<br>Oude waarde: %1"
+msgid ""
+"\n"
+"Old value: %1"
+msgstr ""
+"\n"
+"Oude waarde: %1"
 
-#: mibreakpointcontroller.cpp:798
+#: mibreakpointcontroller.cpp:812
 #, kde-format
-msgid "<br>New value: %1"
-msgstr "<br>Nieuwe waarde: %1"
+msgid ""
+"\n"
+"New value: %1"
+msgstr ""
+"\n"
+"Nieuwe waarde: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -121,7 +129,7 @@ msgstr ""
 "van het antwoord van een debugger. Gaarne een bug-report indienen. De "
 "debugsessie zal nu eindigen om een potentiële crash te voorkomen"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -130,18 +138,18 @@ msgstr ""
 "De uitzondering is: %1\n"
 "Het antwoord van MI is: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Interne debuggerfout"
 
-#: midebugger.cpp:333 midebugsession.cpp:423
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Proces is geëindigd"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -150,12 +158,12 @@ msgstr ""
 "<b>Kon debugger niet uitvoeren.</b><p>Kon '%1' niet uitvoeren. Controleer of "
 "het pad correct is opgegeven."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "Proces kon niet worden opgestart"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -166,13 +174,13 @@ msgstr ""
 "moest de debugsessie worden beëindigd.<br>Probeer de crash te reproduceren "
 "zonder KDevelop en rapporteer een bug.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Debugger is gecrasht"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "Proces beëindigd"
@@ -304,42 +312,42 @@ msgstr "Core-bestand debuggen"
 msgid "Debug process %1"
 msgstr "Proces %1 debuggen"
 
-#: midebugsession.cpp:208
+#: midebugsession.cpp:202
 #, kde-format
 msgid "Running program"
 msgstr "Programma aan het uitvoeren"
 
-#: midebugsession.cpp:295
+#: midebugsession.cpp:288
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Aan proces %1 hechten"
 
-#: midebugsession.cpp:326
+#: midebugsession.cpp:319
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Kon debugger niet aanhechten:</b><br />"
 
-#: midebugsession.cpp:336
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Code-bestand %1 wordt onderzocht"
 
-#: midebugsession.cpp:408
+#: midebugsession.cpp:401
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Debugger is gestopt"
 
-#: midebugsession.cpp:428
+#: midebugsession.cpp:421
 #, kde-format
 msgid "Application is running"
 msgstr "De toepassing is actief"
 
-#: midebugsession.cpp:433
+#: midebugsession.cpp:426
 #, kde-format
 msgid "Application is paused"
 msgstr "De toepassing is gepauzeerd"
 
-#: midebugsession.cpp:748
+#: midebugsession.cpp:741
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -348,39 +356,39 @@ msgstr ""
 "<b>Gdb-commando gegeven terwijl de debugger niet loopt</b><br> Het commando "
 "was:<br> %1"
 
-#: midebugsession.cpp:860
+#: midebugsession.cpp:853
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Ongeldige debugger-commando</b><br>%1"
 
-#: midebugsession.cpp:996
+#: midebugsession.cpp:989
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Beëindigd met returncode: %1"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:991
 #, kde-format
 msgid "Exited normally"
 msgstr "Normaal beëindigd"
 
-#: midebugsession.cpp:1005
+#: midebugsession.cpp:998
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Beëindigd met signaal %1"
 
-#: midebugsession.cpp:1040
+#: midebugsession.cpp:1033
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Het programma heeft het signaal %1 (%2) ontvangen"
 
-#: midebugsession.cpp:1172
+#: midebugsession.cpp:1165
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 commando in wachtrij\n"
 msgstr[1] "%1 commando's in wachtrij\n"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1166
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -388,12 +396,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 commando dat uitgevoerd wordt door gdb\n"
 msgstr[1] "%1 commando's die uitgevoerd worden door gdb\n"
 
-#: midebugsession.cpp:1174
+#: midebugsession.cpp:1167
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Debuggerstatus: %1\n"
 
-#: midebugsession.cpp:1177
+#: midebugsession.cpp:1170
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -404,12 +412,12 @@ msgstr ""
 "Huidige commando-tekst: '%2'\n"
 "Huidige commando originele tekst: '%3'\n"
 
-#: midebugsession.cpp:1204
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>Debuggerfout</b><p>De debugger melde de volgende fout:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(actief)"

@@ -1,15 +1,15 @@
 # Spanish translations for kdevclazy.po package.
-# Copyright (C) 2018 This file is copyright:
+# Copyright (C) 2018-2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
 # Automatically generated, 2018.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2018, 2020.
+#
+# SPDX-FileCopyrightText: 2018, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevclazy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-20 17:10+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 01:54+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -180,7 +180,7 @@ msgstr "%1 (selección predeterminada)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search checks..."
-msgstr "Buscar comprobaciones..."
+msgstr "Buscar comprobaciones…"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #: config/checkswidget.ui:31
@@ -210,7 +210,7 @@ msgstr "Línea de órdenes"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Buscar..."
+msgstr "Buscar…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
 #: config/commandlinewidget.ui:47
@@ -568,7 +568,7 @@ msgctxt "@title:window"
 msgid "Clazy Error"
 msgstr "Error de Clazy"
 
-#: jobparameters.cpp:39
+#: jobparameters.cpp:41
 #, kde-format
 msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
@@ -577,22 +577,22 @@ msgstr ""
 "No se puede detectar la ruta de clazy-standalone. Ajuste su ruta de forma "
 "manual si Clazy ya está instalado."
 
-#: jobparameters.cpp:42
+#: jobparameters.cpp:44
 #, kde-format
 msgid "clazy-standalone path is empty."
 msgstr "La ruta de clazy-standalone está vacía."
 
-#: jobparameters.cpp:50
+#: jobparameters.cpp:52
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
 msgstr "La ruta de clazy-standalone «%1» no existe."
 
-#: jobparameters.cpp:55
+#: jobparameters.cpp:57
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
 msgstr "La ruta de clazy-standalone «%1» no es un ejecutable."
 
-#: jobparameters.cpp:64
+#: jobparameters.cpp:66
 #, kde-format
 msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
@@ -601,76 +601,17 @@ msgstr ""
 "No se ha podido detectar la ruta de la documentación de Clazy. Ajuste su "
 "ruta de forma manual si Clazy ya está instalado."
 
-#: jobparameters.cpp:67
+#: jobparameters.cpp:69
 #, kde-format
 msgid "Clazy documentation path is empty."
 msgstr "La ruta de la documentación de Clazy está vacía."
 
-#: jobparameters.cpp:75
+#: jobparameters.cpp:77
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
 msgstr "La ruta de la documentación de Clazy «%1» no existe."
 
-#: jobparameters.cpp:80
+#: jobparameters.cpp:82
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
 msgstr "La ruta de la documentación de Clazy «%1» no es un directorio."
-
-#~ msgid "Compile commands file '%1' does not exist."
-#~ msgstr "El archivo de órdenes de compilación «%1» no existe."
-
-#~ msgid ""
-#~ "Nothing to check: compile commands file '%1' contains no matching items."
-#~ msgstr ""
-#~ "Nada que comprobar: el archivo de órdenes de compilación «%1» no contiene "
-#~ "elementos coincidentes."
-
-#~ msgid "Analyze Current File with Clazy"
-#~ msgstr "Analizar el archivo actual con Clazy"
-
-#~ msgid "Analyze Current Project with Clazy"
-#~ msgstr "Analizar el proyecto actual con Clazy"
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "Prueba"
-
-#~ msgid ""
-#~ "Unable to start Clazy check for '%1':\n"
-#~ "\n"
-#~ "%2"
-#~ msgstr ""
-#~ "No se ha podido iniciar la comprobación de Clazy para «%1»:\n"
-#~ "\n"
-#~ "%2"
-
-#~ msgid "Analysis completed, no problems detected."
-#~ msgstr "Análisis completado: no se han detectado problemas."
-
-#~ msgid "Analysis started..."
-#~ msgstr "Análisis iniciado..."
-
-#~ msgctxt "@info:tooltip %1 is the path of the file"
-#~ msgid "Re-run last Clazy analysis (%1)"
-#~ msgstr "Volver a ejecutar el último análisis de Clazy (%1)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Re-run last Clazy analysis"
-#~ msgstr "Volver a ejecutar el último análisis de Clazy"
-
-#~ msgid "Unable to open compile commands file '%1' for reading"
-#~ msgstr ""
-#~ "No se ha podido abrir el archivo de órdenes de compilación «%1» en modo "
-#~ "lectura."
-
-#~ msgid "JSON error during parsing compile commands file '%1': %2"
-#~ msgstr ""
-#~ "Ha ocurrido un error de JSON durante el análisis del archivo de órdenes "
-#~ "de compilación «%1»: %2"
-
-#~ msgid ""
-#~ "JSON error during parsing compile commands file '%1': document is not an "
-#~ "array"
-#~ msgstr ""
-#~ "Ha ocurrido un error JSON durante el análisis del archivo de órdenes de "
-#~ "compilación «%1»: el documento no es un array."

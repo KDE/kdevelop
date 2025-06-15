@@ -13,7 +13,6 @@
 #include <QTextEdit>
 #include <QDockWidget>
 #include <QFocusEvent>
-#include <QStandardPaths>
 
 #include <sublime/view.h>
 #include <sublime/area.h>
@@ -21,6 +20,10 @@
 #include <sublime/mainwindow.h>
 #include <sublime/container.h>
 #include <sublime/tooldocument.h>
+#include <tests/corelesshelpers.h>
+
+/// TODO (if/when IdealController starts supporting multiple view widgets per tool document): remove this workaround
+static constexpr auto enableMultipleToolViewWidgets = false;
 
 using namespace Sublime;
 
@@ -40,7 +43,7 @@ public:
 
 void TestViewActivation::initTestCase()
 {
-    QStandardPaths::setTestModeEnabled(true);
+    KDevelop::initCorelessTestCase();
     qRegisterMetaType<View*>("View*");
 }
 
@@ -62,7 +65,12 @@ void TestViewActivation::init()
     view211 = doc1->createView();
     view211->setObjectName(QStringLiteral("view211"));
     area->addView(view211);
-    view212 = doc1->createView();
+    if constexpr (enableMultipleToolViewWidgets) {
+        view212 = doc1->createView();
+    } else {
+        auto* const doc1_2 = new ToolDocument("doc1.2", controller, new SimpleToolWidgetFactory<QListView>("doc1.2"));
+        view212 = doc1_2->createView();
+    }
     view212->setObjectName(QStringLiteral("view212"));
     area->addView(view212);
     view221 = doc2->createView();
@@ -77,8 +85,10 @@ void TestViewActivation::init()
     area->addToolView(viewT21, Sublime::Right);
     viewT31 = tool3->createView();
     area->addToolView(viewT31, Sublime::Top);
-    viewT32 = tool3->createView();
-    area->addToolView(viewT32, Sublime::Top);
+    if constexpr (enableMultipleToolViewWidgets) {
+        viewT32 = tool3->createView();
+        area->addToolView(viewT32, Sublime::Top);
+    }
 }
 
 void TestViewActivation::cleanup()
@@ -92,21 +102,21 @@ void TestViewActivation::signalsOnViewCreationAndDeletion()
     auto* doc1 = new ToolDocument(QStringLiteral("doc1"), controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("doc1")));
     Area *area = new Area(controller, QStringLiteral("Area"));
 
-    QSignalSpy spy(controller, SIGNAL(viewAdded(Sublime::View*)));
+    const QSignalSpy spy(area, &Area::viewAdded);
     View *v = doc1->createView();
     area->addView(v);
     QCOMPARE(spy.count(), 1);
 
-    QSignalSpy spy2(controller, SIGNAL(aboutToRemoveView(Sublime::View*)));
+    const QSignalSpy spy2(area, &Area::aboutToRemoveView);
     area->removeView(v);
     QCOMPARE(spy2.count(), 1);
 
-    QSignalSpy spy3(controller, SIGNAL(toolViewAdded(Sublime::View*)));
+    const QSignalSpy spy3(area, &Area::toolViewAdded);
     v = doc1->createView();
     area->addToolView(v, Sublime::Bottom);
     QCOMPARE(spy3.count(), 1);
 
-    QSignalSpy spy4(controller, SIGNAL(aboutToRemoveToolView(Sublime::View*)));
+    const QSignalSpy spy4(area, &Area::aboutToRemoveToolView);
     area->removeToolView(v);
     QCOMPARE(spy4.count(), 1);
 
@@ -136,17 +146,20 @@ void TestViewActivation::viewActivation()
     QFocusEvent focusEvent(QEvent::FocusIn);
     //now post events to the widgets and see if mainwindow has the right active views
     //activate view
+    QVERIFY(view212->widget());
     qApp->sendEvent(view212->widget(), &focusEvent);
     QString failMsg = QStringLiteral("\nWas expecting %1 to be active but got %2").
                       arg(view212->objectName(), mw->activeView()->objectName());
     QVERIFY2(mw->activeView() == view212, failMsg.toLatin1().data());
 
     //activate tool view and check that both view and tool view are active
+    QVERIFY(viewT31->widget());
     qApp->sendEvent(viewT31->widget(), &focusEvent);
     QCOMPARE(mw->activeView(), view212);
     QCOMPARE(mw->activeToolView(), viewT31);
 
     //active another view
+    QVERIFY(view241->widget());
     qApp->sendEvent(view241->widget(), &focusEvent);
     QCOMPARE(mw->activeView(), view241);
     QCOMPARE(mw->activeToolView(), viewT31);

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -57,46 +57,46 @@ msgid ""
 msgstr ""
 "在启动配置“%1”的可执行文件中包含了一个 shell 元字符，现在尚未支持，停止启动。"
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:103
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr "如果正在运行则询问"
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "终止所有实例"
 
-#: nativeappconfig.cpp:106
+#: nativeappconfig.cpp:105
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "启动另一个"
 
-#: nativeappconfig.cpp:156
+#: nativeappconfig.cpp:155
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "配置原生应用程序"
 
-#: nativeappconfig.cpp:166
+#: nativeappconfig.cpp:165
 #, kde-format
 msgid "Executes Native Applications"
 msgstr "执行本机应用程序"
 
-#: nativeappconfig.cpp:176
+#: nativeappconfig.cpp:175
 #, kde-format
 msgid "Native Application"
 msgstr "原生应用程序"
 
-#: nativeappconfig.cpp:241
+#: nativeappconfig.cpp:233
 #, kde-format
 msgid "Compiled Binary"
 msgstr "编译后的二进制文件"
 
-#: nativeappconfig.cpp:322
+#: nativeappconfig.cpp:314
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -305,37 +305,37 @@ msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "目标："
 
-#: nativeappjob.cpp:66
+#: nativeappjob.cpp:40
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr "没有指定环境组，似乎配置损坏，请检查运行配置“%1”。使用默认的环境组。"
 
-#: nativeappjob.cpp:142
+#: nativeappjob.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "任务已在运行"
 
-#: nativeappjob.cpp:143
+#: nativeappjob.cpp:153
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "“%1”已在执行。"
 
-#: nativeappjob.cpp:145
+#: nativeappjob.cpp:155
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "终止所有实例"
 
-#: nativeappjob.cpp:146
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "启动另一个"
 
-#: nativeappjob.cpp:149
+#: nativeappjob.cpp:159
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"

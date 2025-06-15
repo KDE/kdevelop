@@ -35,7 +35,6 @@ public:
     void emitProgress(const IFilterStrategy::Progress& progress);
 
     QString joinCommandLine() const;
-    QString jobDisplayName() const;
 
     template< typename T >
     static void mergeEnvironment( QProcessEnvironment& dest, const T& src );
@@ -55,8 +54,6 @@ public:
     QUrl m_workingDirectory;
     QString m_environmentProfile;
     QHash<QString, QString> m_environmentOverrides;
-    QString m_jobName;
-    bool m_outputStarted;
     bool m_executeOnHost = false;
     bool m_checkExitCode = true;
 };
@@ -67,8 +64,7 @@ OutputExecuteJobPrivate::OutputExecuteJobPrivate( OutputExecuteJob* owner ) :
     m_lineMaker( new ProcessLineMaker( m_owner ) ), // do not assign process to the line maker as we'll feed it data ourselves
     m_status( OutputExecuteJob::JobNotStarted ),
     m_properties( OutputExecuteJob::DisplayStdout ),
-    m_filteringStrategy( OutputModel::NoFilter ),
-    m_outputStarted( false )
+    m_filteringStrategy(OutputModel::NoFilter)
 {
 }
 
@@ -154,14 +150,8 @@ void OutputExecuteJob::setPrivilegedExecutionCommand( const QStringList& command
 
 void OutputExecuteJob::setJobName( const QString& name )
 {
-    Q_D(OutputExecuteJob);
-
-    d->m_jobName = name;
-
-    const QString jobDisplayName = d->jobDisplayName();
-    setObjectName(jobDisplayName);
-    setTitle(jobDisplayName);
-    setToolTitle(jobDisplayName);
+    setObjectName(name);
+    setTitle(name);
 }
 
 QUrl OutputExecuteJob::workingDirectory() const
@@ -226,15 +216,7 @@ void OutputExecuteJob::start()
 
         QFileInfo workingDirInfo( effectiveWorkingDirectory.toLocalFile() );
         if( !workingDirInfo.isDir() ) {
-            // If a working directory does not actually exist, either bail out or create it empty,
-            // depending on what we need by properties.
-            // We use a dedicated bool variable since !isDir() may also mean that it exists,
-            // but is not a directory, or a symlink to an inexistent object.
-            bool successfullyCreated = false;
-            if( !d->m_properties.testFlag( CheckWorkingDirectory ) ) {
-                successfullyCreated = QDir().mkdir( effectiveWorkingDirectory.toLocalFile() );
-            }
-            if( !successfullyCreated ) {
+            if (!QDir().mkdir(effectiveWorkingDirectory.toLocalFile())) {
                 setError( InvalidWorkingDirectoryError );
                 if( isBuilder ) {
                     setErrorText( i18n( "Build directory '%1' does not exist or is not a directory", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
@@ -277,10 +259,7 @@ void OutputExecuteJob::start()
                  &OutputModel::appendLines );
     }
 
-    if( !d->m_properties.testFlag( NoSilentOutput ) || verbosity() != Silent ) {
-        d->m_outputStarted = true;
-        startOutput();
-    }
+    startOutput();
 
     if( !effectiveWorkingDirectory.isEmpty() ) {
         d->m_process->setWorkingDirectory( effectiveWorkingDirectory.toLocalFile() );
@@ -375,12 +354,6 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
         case QProcess::UnknownError:
             errorValue = i18n("Exit code %1", d->m_process->exitCode());
             break;
-    }
-
-    // Show the tool view if it's hidden for the user to be able to diagnose errors.
-    if( !d->m_outputStarted ) {
-        d->m_outputStarted = true;
-        startOutput();
     }
 
     setError( FailedShownError );
@@ -595,20 +568,6 @@ QStringList OutputExecuteJobPrivate::effectiveCommandLine() const
         return QStringList() << m_owner->privilegedExecutionCommand() << QStringLiteral("--") << m_owner->commandLine();
     } else {
         return m_owner->commandLine();
-    }
-}
-
-QString OutputExecuteJobPrivate::jobDisplayName() const
-{
-    const QString joinedCommandLine = joinCommandLine();
-    if( m_properties.testFlag( OutputExecuteJob::AppendProcessString ) ) {
-        if( !m_jobName.isEmpty() ) {
-            return m_jobName + QLatin1String(": ") + joinedCommandLine;
-        } else {
-            return joinedCommandLine;
-        }
-    } else {
-        return m_jobName;
     }
 }
 

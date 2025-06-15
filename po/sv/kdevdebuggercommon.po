@@ -2,21 +2,21 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2024 Stefan Asserhäll <stefan.asserhall@gmail.com>
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2024, 2025 Stefan Asserhäll <stefan.asserhall@gmail.com>
 # Stefan Asserhall <stefan.asserhall@gmail.com>, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2024-05-03 08:33+0200\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"PO-Revision-Date: 2025-05-31 10:58+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 25.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: dialogs/processselection.cpp:148
@@ -101,17 +101,25 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Minnesdump:"
 
-#: mibreakpointcontroller.cpp:795
+#: mibreakpointcontroller.cpp:809
 #, kde-format
-msgid "<br>Old value: %1"
-msgstr "<br>Tidigare värde: %1"
+msgid ""
+"\n"
+"Old value: %1"
+msgstr ""
+"\n"
+"Gammalt värde: %1"
 
-#: mibreakpointcontroller.cpp:798
+#: mibreakpointcontroller.cpp:812
 #, kde-format
-msgid "<br>New value: %1"
-msgstr "<br>Nytt värde: %1"
+msgid ""
+"\n"
+"New value: %1"
+msgstr ""
+"\n"
+"Nytt värde: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -123,7 +131,7 @@ msgstr ""
 "behandlades. Skicka gärna in en felrapport. Avlusningssessionen avslutas nu "
 "för att undvika en potentiell krasch."
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -132,18 +140,18 @@ msgstr ""
 "Undantaget är: %1\n"
 "MI-svaret är: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Internt fel i avlusaren"
 
-#: midebugger.cpp:333 midebugsession.cpp:423
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Processen avslutades"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -152,12 +160,12 @@ msgstr ""
 "<b>Kunde inte starta avlusaren.</b><p>Kunde inte köra '%1'. Försäkra dig om "
 "att sökvägsnamnet är riktigt angivet."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "Processen misslyckades starta"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -168,13 +176,13 @@ msgstr ""
 "grund av det måste avlusningssessionen avslutas.<br>Försök att upprepa "
 "kraschen utan KDevelop och rapportera felet.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Avlusaren kraschade"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "Processen kraschade"
@@ -306,42 +314,42 @@ msgstr "Avlusa minnesdump"
 msgid "Debug process %1"
 msgstr "Avlusa processen %1"
 
-#: midebugsession.cpp:208
+#: midebugsession.cpp:202
 #, kde-format
 msgid "Running program"
 msgstr "Kör programmet"
 
-#: midebugsession.cpp:295
+#: midebugsession.cpp:288
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Ansluter till processen %1"
 
-#: midebugsession.cpp:326
+#: midebugsession.cpp:319
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Kunde inte ansluta avlusaren:</b><br />"
 
-#: midebugsession.cpp:336
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Undersöker minnesdump %1"
 
-#: midebugsession.cpp:408
+#: midebugsession.cpp:401
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Avlusare stoppad"
 
-#: midebugsession.cpp:428
+#: midebugsession.cpp:421
 #, kde-format
 msgid "Application is running"
 msgstr "Programmet kör"
 
-#: midebugsession.cpp:433
+#: midebugsession.cpp:426
 #, kde-format
 msgid "Application is paused"
 msgstr "Programmet gör paus"
 
-#: midebugsession.cpp:748
+#: midebugsession.cpp:741
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -350,39 +358,39 @@ msgstr ""
 "<b>Kommando till gdb skickat när avlusaren inte kör</b><br>Kommandot är:<br>"
 "%1"
 
-#: midebugsession.cpp:860
+#: midebugsession.cpp:853
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Felaktigt kommando till avlusaren</b><br>%1"
 
-#: midebugsession.cpp:996
+#: midebugsession.cpp:989
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Avslutades med returkoden: %1"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:991
 #, kde-format
 msgid "Exited normally"
 msgstr "Avslutade normalt"
 
-#: midebugsession.cpp:1005
+#: midebugsession.cpp:998
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Avslutades med signal %1"
 
-#: midebugsession.cpp:1040
+#: midebugsession.cpp:1033
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programmet tog emot signalen %1 (%2)"
 
-#: midebugsession.cpp:1172
+#: midebugsession.cpp:1165
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 kommando i kö\n"
 msgstr[1] "%1 kommandon i kö\n"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1166
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -390,12 +398,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 kommando behandlas av gdb\n"
 msgstr[1] "%1 kommandon behandlas av gdb\n"
 
-#: midebugsession.cpp:1174
+#: midebugsession.cpp:1167
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Avlusarens status: %1\n"
 
-#: midebugsession.cpp:1177
+#: midebugsession.cpp:1170
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -406,12 +414,12 @@ msgstr ""
 "Nuvarande kommandotext: '%2'\n"
 "Nuvarande kommandots originaltext: '%3'\n"
 
-#: midebugsession.cpp:1204
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>Fel i avlusaren</b><p>Avlusaren rapporterade följande fel:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(kör)"

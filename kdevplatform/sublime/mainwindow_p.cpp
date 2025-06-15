@@ -71,7 +71,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     action = new QAction(i18nc("@action", "Focus Editor"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_E);
-    connect(action, &QAction::triggered, this, &MainWindowPrivate::focusEditor);
+    connect(action, &QAction::triggered, m_mainWindow, &MainWindow::focusEditor);
     ac->addAction(QStringLiteral("focus_editor"), action);
 
     action = new QAction(i18nc("@action", "Hide/Restore Docks"), this);
@@ -96,6 +96,8 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     ac->addAction(QStringLiteral("docks_submenu"), toolViewsMenu);
 
     idealController = new IdealController(m_mainWindow);
+
+    connect(controller, &Controller::toolViewRemoved, idealController, &IdealController::toolViewRemoved);
 
     centralWidget = new QWidget;
     centralWidget->setObjectName(QStringLiteral("centralWidget"));
@@ -231,13 +233,6 @@ void MainWindowPrivate::setBackgroundVisible(bool v)
     splitterCentralWidget->setVisible(!v);
 }
 
-void MainWindowPrivate::focusEditor()
-{
-    if (View* view = m_mainWindow->activeView())
-        if (view->hasWidget())
-            view->widget()->setFocus(Qt::ShortcutFocusReason);
-}
-
 void MainWindowPrivate::toggleDocksShown()
 {
     idealController->toggleDocksShown();
@@ -339,13 +334,16 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         Sublime::View* activeView = d->activeView;
 
         for (View* view : std::as_const(index->views())) {
-            QWidget *widget = view->widget(container);
+            auto* widget = view->widget();
+            if (!widget) {
+                widget = view->initializeWidget(container);
+            }
 
             if (widget)
             {
                 if(!container->hasWidget(widget))
                 {
-                    container->addWidget(view, position);
+                    container->addWidget(view, widget, position);
                     d->viewContainers[view] = container;
                     d->widgetToView[widget] = view;
                 }
@@ -388,9 +386,6 @@ void MainWindowPrivate::clearArea()
         // FIXME should we really delete here??
         bool nonDestructive = true;
         idealController->removeView(view, nonDestructive);
-
-        if (view->hasWidget())
-            view->widget()->setParent(nullptr);
     }
 
     docks.clear();
@@ -398,9 +393,10 @@ void MainWindowPrivate::clearArea()
     //reparent all view widgets to 0 to prevent their deletion together with central
     //widget. this reparenting is necessary when switching areas inside the same mainwindow
     const auto views = area->views();
-    for (View* view : views) {
-        if (view->hasWidget())
-            view->widget()->setParent(nullptr);
+    for (const auto* const view : views) {
+        if (auto* const widget = view->widget()) {
+            widget->setParent(nullptr);
+        }
     }
     cleanCentralWidget();
     m_mainWindow->setActiveView(nullptr);
@@ -464,6 +460,13 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
 void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
 {
     idealController->raiseView(view);
+    // Raising a tool view shows it in the background and avoids giving it the focus.
+    // Treat raising as activation and update the active tool view accordingly.
+    // FIXME: Unfortunately, this manual activation produces inconsistent results (that depend on which particular
+    // tool view is raised) when another tool view has focus. In this scenario, raising an output tool view (such
+    // as Build) makes it the active tool view; but raising the Find/Replace in Files tool view first makes it
+    // the active tool view, then transfers the focus back and thus activates the previously focused tool view.
+    m_mainWindow->setActiveToolView(view);
 }
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
@@ -488,8 +491,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
     const bool wasActive = m_mainWindow->activeView() == view;
 
-    if (view->hasWidget()) {
-        auto* const viewWidget = view->widget();
+    if (auto* const viewWidget = view->widget()) {
         widgetToView.remove(viewWidget);
         container->removeWidget(viewWidget);
         viewWidget->setParent(nullptr);

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
 "PO-Revision-Date: 2023-12-27 18:41+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmai.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -172,35 +172,39 @@ msgstr ""
 "Najstarszy widok wyniku zostanie zamknięty\n"
 "gdy liczba widoków przekroczy tę wartość"
 
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
 msgstr "Budowanie"
 
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
 msgstr "Uruchamianie"
 
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Diagnozowanie"
 
-#: standardoutputview.cpp:124
+#: standardoutputview.cpp:89
 #, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "Testowanie"
+msgid "Analyze"
+msgstr ""
 
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "Zarządzanie wersjami"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Testowanie"
 
 #~ msgctxt "@title:menu"
 #~ msgid "Navigation"

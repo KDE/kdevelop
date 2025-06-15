@@ -1,17 +1,17 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2020.
+# SPDX-FileCopyrightText: 2014, 2015, 2019, 2020, 2025 Shinjo Park <kde@peremen.name>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2020-10-04 20:06+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-06-10 23:26+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 24.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: executescriptplugin.cpp:59
@@ -56,19 +56,19 @@ msgstr ""
 "셸 메타 문자가 '%1' 실행 설정의 인자로 추가되었습니다. 현재는 지원하지 않는 "
 "설정입니다. 중단합니다."
 
-#: executescriptplugin.cpp:171
+#: executescriptplugin.cpp:168
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "올바른 인터프리터를 지정하지 않았음"
 
-#: executescriptplugin.cpp:181
+#: executescriptplugin.cpp:180
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
 "'%1'. Aborting start."
 msgstr "실행 설정 '%1'에서 인터프리터의 따옴표 오류를 찾았습니다. 중단합니다."
 
-#: executescriptplugin.cpp:186
+#: executescriptplugin.cpp:185
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "
@@ -76,6 +76,15 @@ msgid ""
 msgstr ""
 "셸 메타 문자가 '%1' 실행 설정의 인터프리터로 추가되었습니다. 현재는 지원하지 "
 "않는 설정입니다. 중단합니다."
+
+#: executescriptplugin.cpp:195
+#, kde-format
+msgid ""
+"Splitting the interpreter command for the launch configuration '%1' yields "
+"an empty list. Aborting start."
+msgstr ""
+"실행 설정 '%1'에서 인터프리터 명령을 분할 시 빈 목록이 반환되었습니다. 중단합"
+"니다."
 
 #: scriptappconfig.cpp:83
 #, kde-format
@@ -282,12 +291,7 @@ msgctxt "@info:tooltip"
 msgid "Enter a remote host (user@host)"
 msgstr "원격 호스트 입력(user@host)"
 
-#: scriptappjob.cpp:76
-#, kde-format
-msgid "There is no active document to launch."
-msgstr "실행할 활성 문서가 없습니다."
-
-#: scriptappjob.cpp:98
+#: scriptappjob.cpp:43
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -296,37 +300,42 @@ msgstr ""
 "환경 프로필을 지정하지 않았습니다. 설정이 잘못된 것 같습니다. '%1' 실행 설정"
 "을 확인하십시오. 기본 환경 프로필을 사용합니다."
 
-#: scriptappjob.cpp:170
+#: scriptappjob.cpp:90
+#, kde-format
+msgid "There is no active document to launch."
+msgstr "실행할 활성 문서가 없습니다."
+
+#: scriptappjob.cpp:165
 #, kde-format
 msgid "Starting: %1"
 msgstr "시작 중: %1"
 
-#: scriptappjob.cpp:184
+#: scriptappjob.cpp:179
 #, kde-format
 msgid "*** Killed Application ***"
 msgstr "*** 앱 강제 종료됨 ***"
 
-#: scriptappjob.cpp:195
+#: scriptappjob.cpp:190
 #, kde-format
 msgid "*** Exited normally ***"
 msgstr "*** 정상적으로 종료됨 ***"
 
-#: scriptappjob.cpp:197
+#: scriptappjob.cpp:192
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
 msgstr "*** 종료됨, 반환 코드: %1 ***"
 
-#: scriptappjob.cpp:200
+#: scriptappjob.cpp:195
 #, kde-format
 msgid "*** Process aborted ***"
 msgstr "*** 프로세스 중단됨 ***"
 
-#: scriptappjob.cpp:203
+#: scriptappjob.cpp:198
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
 msgstr "*** 충돌함, 반환 코드: %1 ***"
 
-#: scriptappjob.cpp:218
+#: scriptappjob.cpp:213
 #, kde-format
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "

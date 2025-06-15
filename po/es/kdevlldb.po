@@ -1,15 +1,15 @@
 # Spanish translations for kdevlldb.po package.
-# Copyright (C) 2016 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2016-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2016.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2016, 2017, 2020, 2022.
+#
+# SPDX-FileCopyrightText: 2016, 2017, 2020, 2022, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2022-07-09 18:27+0200\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"PO-Revision-Date: 2025-05-17 02:04+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 22.04.3\n"
 
-#: controllers/framestackmodel.cpp:85
+#: controllers/framestackmodel.cpp:97
 #, kde-format
 msgid "(running)"
 msgstr "(en ejecución)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:49
+#: debuggerplugin.cpp:28 lldblauncher.cpp:48
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
@@ -91,12 +91,12 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Barra de herramientas del depurador"
 
-#: lldblauncher.cpp:54
+#: lldblauncher.cpp:53
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Depurar una aplicación nativa en LLDB"
 
-#: lldblauncher.cpp:79
+#: lldblauncher.cpp:78
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -105,7 +105,7 @@ msgstr ""
 "Ya se está depurando un programa. ¿Desea interrumpir la sesión actual de "
 "depuración y continuar con el lanzamiento?"
 
-#: lldblauncher.cpp:81
+#: lldblauncher.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
@@ -136,7 +136,7 @@ msgstr "Ejecutable del depurador:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to lldb-mi executable..."
-msgstr "Redefinir la ruta al ejecutable lldb-mi..."
+msgstr "Redefinir la ruta al ejecutable lldb-mi…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/lldbconfigpage.ui:49
@@ -249,30 +249,3 @@ msgstr "Ruta de trabajo remota:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/ruta/a/un/directorio/con/permisos/de/escritura/en/el/dispositivo"
-
-#~ msgid "Startup error"
-#~ msgstr "Error de inicio"
-
-#~ msgid "LLDB Error"
-#~ msgstr "Error de LLDB"
-
-#~ msgid "Debugger Configuration"
-#~ msgstr "Configuración del depurador"
-
-#~ msgid ""
-#~ "No environment profile specified, looks like a broken configuration, "
-#~ "please check run configuration '%1'. Using default environment profile."
-#~ msgstr ""
-#~ "No se ha especificado ningún perfil de entorno; parece que se trata de "
-#~ "una configuración dañada. Compruebe la configuración de ejecución «%1». "
-#~ "Se usa el perfil de entorno por omisión."
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Ejecutar"
-
-#~ msgid "/path/to/lldb-mi/"
-#~ msgstr "/ruta/a/lldb-mi/"
-
-#~ msgid "Arguments:"
-#~ msgstr "Argumentos:"

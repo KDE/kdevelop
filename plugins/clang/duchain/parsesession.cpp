@@ -18,6 +18,7 @@
 #include "util/clangutils.h"
 #include "headerguardassistant.h"
 
+#include <interfaces/icore.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/codegen/coderepresentation.h>
@@ -197,7 +198,6 @@ void addFrameworkDirectories(QVector<const char*>* args, QVector<QByteArray>* ot
         }
         QByteArray path = url.toLocalFile().toUtf8();
 
-        otherArgs->append(cliSwitch);
         otherArgs->append(path);
         args->append(cliSwitch);
         args->append(path.constData());
@@ -227,12 +227,18 @@ bool hasQtIncludes(const Path::List& includePaths)
     }) != includePaths.end();
 }
 
+const QString& definesFileTemplateName()
+{
+    static const QString ret = ICore::self()->sessionTemporaryDirectoryPath() + QLatin1String("/defines.XXXXXX");
+    return ret;
+}
 }
 
 ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, ClangIndex* index,
                                    const ClangParsingEnvironment& environment, Options options)
     : m_file(nullptr)
     , m_unit(nullptr)
+    , m_definesFile(definesFileTemplateName())
 {
     unsigned int flags = CXTranslationUnit_DetailedPreprocessingRecord
 #if CINDEX_VERSION_MINOR >= 34
@@ -255,6 +261,10 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
               |  CXTranslationUnit_PrecompiledPreamble;
     }
 
+    const auto totalSize = [](const auto& paths) {
+        return paths.system.size() + paths.project.size();
+    };
+
     const auto tuUrl = environment.translationUnitUrl();
     Q_ASSERT(!tuUrl.isEmpty());
 
@@ -262,13 +272,18 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     QVector<const char*> clangArguments;
 
     const auto& includes = environment.includes();
+    const auto& frameworkDirectories = environment.frameworkDirectories();
     const auto& pchInclude = environment.pchInclude();
+
+    static const auto extraArgs = ::extraArgs();
 
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> smartArgs;
-    smartArgs.reserve(includes.system.size() + includes.project.size()
-                      + pchInclude.isValid() + arguments.size() + 1);
-    clangArguments.reserve(smartArgs.size());
+
+    /// the number of arguments, for which one element is appended to smartArgs and two elements - to clangArguments
+    const auto argumentCountToDouble = totalSize(frameworkDirectories) + pchInclude.isValid() + 6;
+    smartArgs.reserve(totalSize(includes) + argumentCountToDouble);
+    clangArguments.reserve(arguments.size() + smartArgs.capacity() + argumentCountToDouble + extraArgs.size());
 
     std::transform(arguments.constBegin(), arguments.constEnd(),
                    std::back_inserter(clangArguments),
@@ -294,22 +309,23 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     }
 
     if (hasQtIncludes(includes.system)) {
-        const auto wrappedQtHeaders = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                             QStringLiteral("kdevclangsupport/wrappedQtHeaders"),
-                                                             QStandardPaths::LocateDirectory).toUtf8();
+        auto wrappedQtHeaders =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   QStringLiteral("kdevclangsupport/wrappedQtHeaders/QtCore/qobjectdefs.h"))
+                .toUtf8();
         if (!wrappedQtHeaders.isEmpty()) {
-            smartArgs << wrappedQtHeaders;
-            clangArguments << "-isystem" << wrappedQtHeaders.constData();
-            const QByteArray qtCore = wrappedQtHeaders + "/QtCore";
-            smartArgs << qtCore;
-            clangArguments << "-isystem" << qtCore.constData();
+            // add /path/to/wrappedQtHeaders/QtCore and /path/to/wrappedQtHeaders to the SYSTEM include search path
+            for (auto counter = 0; counter < 2; ++counter) {
+                // remove "/qobjectdefs.h" during the first iteration and "/QtCore" during the second one
+                wrappedQtHeaders.truncate(wrappedQtHeaders.lastIndexOf('/'));
+                smartArgs << wrappedQtHeaders;
+                clangArguments << "-isystem" << wrappedQtHeaders.constData();
+            }
         }
     }
 
     addIncludes(&clangArguments, &smartArgs, includes.system, "-isystem");
     addIncludes(&clangArguments, &smartArgs, includes.project, "-I");
-
-    const auto& frameworkDirectories = environment.frameworkDirectories();
     addFrameworkDirectories(&clangArguments, &smartArgs, frameworkDirectories.system, "-iframework");
     addFrameworkDirectories(&clangArguments, &smartArgs, frameworkDirectories.project, "-F");
 
@@ -330,7 +346,6 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     }
 
     // append extra args from environment variable
-    static const auto extraArgs = ::extraArgs();
     for (const QByteArray& arg : extraArgs) {
         clangArguments << arg.constData();
     }

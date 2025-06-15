@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-05-27 00:40+0000\n"
 "PO-Revision-Date: 2024-12-13 19:10+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -321,22 +321,22 @@ msgstr "Custom Include Path योजयन्तु"
 msgid "Open Project"
 msgstr "Open Project इति परियोजना"
 
-#: duchain/parsesession.cpp:560
+#: duchain/parsesession.cpp:575
 #, kde-format
 msgid "Requested here: %1"
 msgstr "अत्र अनुरोधितः: %1"
 
-#: duchain/parsesession.cpp:601
+#: duchain/parsesession.cpp:616
 #, kde-format
 msgid "In included file: %1"
 msgstr "समाविष्टसञ्चिकायां: %1"
 
-#: duchain/parsesession.cpp:624
+#: duchain/parsesession.cpp:639
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "हेडरः बहुसमावेशानां विरुद्धं न रक्षितः भवति"
 
-#: duchain/parsesession.cpp:625
+#: duchain/parsesession.cpp:640
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

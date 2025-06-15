@@ -43,6 +43,7 @@ public:
     QString terminal( KDevelop::ILaunchConfiguration* ) const override;
     QString nativeAppConfigTypeId() const override;
 
+private:
     NativeAppConfigType* m_configType;
 };
 

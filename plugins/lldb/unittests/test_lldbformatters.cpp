@@ -101,6 +101,7 @@ KDevelop::Breakpoint* LldbFormattersTest::addCodeBreakpoint(const QUrl& location
 void LldbFormattersTest::initTestCase()
 {
     AutoTestShell::init({QStringLiteral("kdevlldb"), QStringLiteral("kdevexecute")});
+    AutoTestShell::initializeNotifications();
     m_core = TestCore::initialize(Core::NoUi);
 
     m_iface = m_core->pluginController()

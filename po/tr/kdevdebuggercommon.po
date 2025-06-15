@@ -5,21 +5,21 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014, 2015.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2024-11-10 20:20+0300\n"
-"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"PO-Revision-Date: 2025-05-16 19:49+0300\n"
+"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -103,17 +103,25 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Çekirdek dosya:"
 
-#: mibreakpointcontroller.cpp:795
+#: mibreakpointcontroller.cpp:809
 #, kde-format
-msgid "<br>Old value: %1"
-msgstr "<br>Eski değer: %1"
+msgid ""
+"\n"
+"Old value: %1"
+msgstr ""
+"\n"
+"Eski değer: %1"
 
-#: mibreakpointcontroller.cpp:798
+#: mibreakpointcontroller.cpp:812
 #, kde-format
-msgid "<br>New value: %1"
-msgstr "<br>Yeni değer: %1"
+msgid ""
+"\n"
+"New value: %1"
+msgstr ""
+"\n"
+"Yeni değer: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -125,7 +133,7 @@ msgstr ""
 "hata ile karşılaştı. Lütfen bir hata raporu girin. Potansiyel çökmeyi "
 "engellemek için hata ayıklama oturumu sonlanacak"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -134,18 +142,18 @@ msgstr ""
 "Oluşan istisna: %1\n"
 "MI yanıtı: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "İç Hata Ayıklayıcısı Hatası"
 
-#: midebugger.cpp:333 midebugsession.cpp:423
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "Süreç çıktı"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -154,12 +162,12 @@ msgstr ""
 "<b>Hata ayıklayıcısı başlatılamadı.</b><p>“%1” çalıştırılamadı. Uygulama "
 "yolunun doğru bir şekilde verildiğinden emin olun."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "Süreç başlatılamadı"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -170,13 +178,13 @@ msgstr ""
 "yüzden hata ayıklama oturumu sonlandırıldı.<br>Çöküşü K Geliştir dışında "
 "yinelemeye ve bir hata raporu girmeye çalışın.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Hata Ayıklayıcısı Çöktü"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "Süreç çöktü"
@@ -307,42 +315,42 @@ msgstr "Çekirdek dosyanın hatalarını ayıkla"
 msgid "Debug process %1"
 msgstr "%1 sürecinin hatalarını ayıkla"
 
-#: midebugsession.cpp:208
+#: midebugsession.cpp:202
 #, kde-format
 msgid "Running program"
 msgstr "Çalışan uygulama"
 
-#: midebugsession.cpp:295
+#: midebugsession.cpp:288
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "%1 sürecine iliştiriliyor"
 
-#: midebugsession.cpp:326
+#: midebugsession.cpp:319
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Hata ayıklayıcısı iliştirilemedi:</b><br />"
 
-#: midebugsession.cpp:336
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Examining core file %1"
 msgstr "%1 çekirdek dosyası denetleniyor"
 
-#: midebugsession.cpp:408
+#: midebugsession.cpp:401
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Hata ayıklayıcısı durdu"
 
-#: midebugsession.cpp:428
+#: midebugsession.cpp:421
 #, kde-format
 msgid "Application is running"
 msgstr "Uygulama çalışıyor"
 
-#: midebugsession.cpp:433
+#: midebugsession.cpp:426
 #, kde-format
 msgid "Application is paused"
 msgstr "Uygulama duraklatıldı"
 
-#: midebugsession.cpp:748
+#: midebugsession.cpp:741
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -351,39 +359,39 @@ msgstr ""
 "<b>Hata ayıklayıcısı çalışmıyorken Gdb komutu gönderildi.</b><br>Gönderilen "
 "komut:<br> %1"
 
-#: midebugsession.cpp:860
+#: midebugsession.cpp:853
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Geçersiz hata ayıklayıcısı komutu</b><br>%1"
 
-#: midebugsession.cpp:996
+#: midebugsession.cpp:989
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "%1 dönüş koduyla çıkıldı"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:991
 #, kde-format
 msgid "Exited normally"
 msgstr "Normal olarak çıkıldı"
 
-#: midebugsession.cpp:1005
+#: midebugsession.cpp:998
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "%1 sinyaliyle çıkıldı"
 
-#: midebugsession.cpp:1040
+#: midebugsession.cpp:1033
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Uygulama %1 (%2) sinyali aldı"
 
-#: midebugsession.cpp:1172
+#: midebugsession.cpp:1165
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "Kuyrukta 1 komut var\n"
 msgstr[1] "Kuyrukta %1 komut var\n"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1166
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -391,12 +399,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 komut gdb tarafından çalıştırılıyor\n"
 msgstr[1] "%1 komut gdb tarafından çalıştırılıyor\n"
 
-#: midebugsession.cpp:1174
+#: midebugsession.cpp:1167
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Hata ayıklayıcısı durumu: %1\n"
 
-#: midebugsession.cpp:1177
+#: midebugsession.cpp:1170
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -407,14 +415,14 @@ msgstr ""
 "Geçerli komutun metni: “%2”\n"
 "Geçerli komutun özgün metni: “%3”\n"
 
-#: midebugsession.cpp:1204
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
 "<b>Hata ayıklayıcısı hatası</b><p>Hata ayıklayıcısı şu hatayı bildirdi:"
 "<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(çalışıyor)"

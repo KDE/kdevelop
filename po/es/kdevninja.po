@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevninja.po package.
+# Copyright (C) 2012-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2012, 2014, 2015, 2016, 2020.
+# SPDX-FileCopyrightText: 2012, 2014, 2015, 2016, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevninja\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-25 19:30+0200\n"
+"PO-Revision-Date: 2025-05-17 02:26+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -111,29 +112,3 @@ msgstr "Ninja (%1): %2"
 #, kde-format
 msgid "Ninja (%1)"
 msgstr "Ninja (%1)"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Build finished"
-#~ msgstr "Construcción finalizada"
-
-#~ msgid "Ninja Builder"
-#~ msgstr "Constructor Ninja"
-
-#~ msgid "Support for building Ninja projects"
-#~ msgstr "Uso de construcción de proyectos Ninja"
-
-#~ msgid "kdesu"
-#~ msgstr "kdesu"
-
-#~ msgid "kdesudo"
-#~ msgstr "kdesudo"
-
-#~ msgid "sudo"
-#~ msgstr "sudo"

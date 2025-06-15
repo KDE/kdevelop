@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevqmakemanager.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2011, 2014, 2015, 2017, 2020.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2014, 2015, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: kdevqmake\n"
+"Project-Id-Version: kdevqmakemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-25 19:35+0200\n"
+"PO-Revision-Date: 2025-05-17 02:21+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -137,46 +138,3 @@ msgstr "*** Colgado con el código: %1 ***"
 msgctxt "@action"
 msgid "Run QMake"
 msgstr "Ejecutar QMake"
-
-#~ msgid "QMake &binary:"
-#~ msgstr "&Binario de QMake:"
-
-#~ msgid "qmake-parser"
-#~ msgstr "qmake-parser"
-
-#~ msgid "Parse QMake project files"
-#~ msgstr "Analizar archivos de proyecto QMake"
-
-#~ msgid "Enable output of the debug AST"
-#~ msgstr "Activar salida del depurador AST"
-
-#~ msgid "QMake project files"
-#~ msgstr "Archivos de proyecto QMake"
-
-#~ msgid "QMake Manager"
-#~ msgstr "Gestor de QMake"
-
-#~ msgid "Support for managing QMake projects"
-#~ msgstr "Gestión de proyectos QMake"
-
-#~ msgid "QMake binary path is invalid."
-#~ msgstr "La ruta del binario de QMake no es válida."
-
-#~ msgid "QMake binary must be a local path."
-#~ msgstr "El binario de QMake debe estar en una ruta local."
-
-#~ msgid "Build folder is invalid."
-#~ msgstr "La carpeta de construcción no es válida."
-
-#~ msgid "Build folder must be a local path."
-#~ msgstr "La carpeta de construcción debe ser una ruta local."
-
-#~ msgid "Install prefix is invalid (may also be left empty)."
-#~ msgstr ""
-#~ "El prefijo de instalación no es válido (también se puede haber dejado "
-#~ "vacío)."
-
-#~ msgid "Install prefix must be a local path (may also be left empty)."
-#~ msgstr ""
-#~ "El prefijo de instalación debe ser una ruta local (también se puede haber "
-#~ "dejado vacío)."

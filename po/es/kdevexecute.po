@@ -1,14 +1,15 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevexecute.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2020.
-# Javier Viñal <fjvinal@gmail.com>, 2013.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2013 Javier Viñal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2020-07-25 19:11+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 02:00+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -66,46 +67,46 @@ msgstr ""
 "configuración de lanzamiento «%1»; esto es algo que no está permitido en la "
 "actualidad. Cancelando el inicio."
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:103
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr "Preguntar si está en ejecución"
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "Matar todas las instancias"
 
-#: nativeappconfig.cpp:106
+#: nativeappconfig.cpp:105
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "Iniciar otra"
 
-#: nativeappconfig.cpp:156
+#: nativeappconfig.cpp:155
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Configurar aplicación nativa"
 
-#: nativeappconfig.cpp:166
+#: nativeappconfig.cpp:165
 #, kde-format
 msgid "Executes Native Applications"
 msgstr "Ejecuta aplicaciones nativas"
 
-#: nativeappconfig.cpp:176
+#: nativeappconfig.cpp:175
 #, kde-format
 msgid "Native Application"
 msgstr "Aplicación nativa"
 
-#: nativeappconfig.cpp:241
+#: nativeappconfig.cpp:233
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Binario compilado"
 
-#: nativeappconfig.cpp:322
+#: nativeappconfig.cpp:314
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -324,7 +325,7 @@ msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Objetivos:"
 
-#: nativeappjob.cpp:66
+#: nativeappjob.cpp:40
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -334,110 +335,31 @@ msgstr ""
 "configuración dañada. Compruebe la configuración de ejecución «%1». Se usa "
 "el perfil de entorno por omisión."
 
-#: nativeappjob.cpp:142
+#: nativeappjob.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "El trabajo ya se está ejecutando"
 
-#: nativeappjob.cpp:143
+#: nativeappjob.cpp:153
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "«%1» ya está siendo ejecutado."
 
-#: nativeappjob.cpp:145
+#: nativeappjob.cpp:155
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "Matar todas las instancias"
 
-#: nativeappjob.cpp:146
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "Iniciar otra"
 
-#: nativeappjob.cpp:149
+#: nativeappjob.cpp:159
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr "Recordar la elección"
-
-#~ msgid "Enter arguments to give to the executable"
-#~ msgstr "Introduzca los argumentos a pasar al ejecutable"
-
-#~ msgid "Starting: %1"
-#~ msgstr "Iniciando: %1"
-
-#~ msgid "*** Killed Application ***"
-#~ msgstr "*** Aplicación matada ***"
-
-#~ msgid "*** Exited normally ***"
-#~ msgstr "*** Terminado normalmente ***"
-
-#~ msgid "*** Exited with return code: %1 ***"
-#~ msgstr "*** Terminado con código de retorno: %1 ***"
-
-#~ msgid "*** Process aborted ***"
-#~ msgstr "*** Proceso interrumpido ***"
-
-#~ msgid "*** Crashed with return code: %1 ***"
-#~ msgstr "*** Fallado con código de retorno: %1 ***"
-
-#~ msgid ""
-#~ "*** Could not start program '%1'. Make sure that the path is specified "
-#~ "correctly ***"
-#~ msgstr ""
-#~ "*** No se pudo iniciar el programa «%1». Asegúrese de que ha especificado "
-#~ "la ruta correctamente ***"
-
-#~ msgid "Enter a dependency to add to the list"
-#~ msgstr "Introduzca una dependencia para añadir a la lista"
-
-#~ msgid "Adds the listed target to the dependency list."
-#~ msgstr "Añade el objetivo listado a la lista de dependencias."
-
-#~ msgid "List of indirect dependent targets."
-#~ msgstr "Lista de objetivos indirectamente dependientes."
-
-#~ msgid ""
-#~ "This list should contain targets that the application does not directly "
-#~ "depend on, but for which an action needs to be taken before running the "
-#~ "application."
-#~ msgstr ""
-#~ "Esta lista debe contener objetivos de los que la aplicación no depende "
-#~ "directamente, pero para los que se necesita realizar alguna acción antes "
-#~ "de ejecutar la aplicación."
-
-#~ msgid "Removes the selected dependencies from the list."
-#~ msgstr "Elimina las dependencias seleccionadas de la lista."
-
-#~ msgid "Move a dependency up in the list."
-#~ msgstr "Mueve una dependencia arriba en la lista."
-
-#~ msgid "Moves the selected dependency down in the list."
-#~ msgstr "Mueve la dependencia seleccionada abajo en la lista."
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Execute support"
-#~ msgstr "Implementación de ejecución"
-
-#~ msgid ""
-#~ "This plugin allows running of programs with no instrumentor, ie. natively "
-#~ "by the current host."
-#~ msgstr ""
-#~ "Este complemento permite la ejecución de programas sin intrumentor (es "
-#~ "decir, de forma nativa) en la máquina actual."
-
-#~ msgid "Application"
-#~ msgstr "Aplicación"
-
-#~ msgid "Allows running of native apps"
-#~ msgstr "Permite ejecutar aplicaciones nativas"

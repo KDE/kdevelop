@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:39+0000\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
 "PO-Revision-Date: 2023-08-06 17:08+0300\n"
 "Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 22.12.3\n"
 
-#: controllers/framestackmodel.cpp:85
+#: controllers/framestackmodel.cpp:97
 #, kde-format
 msgid "(running)"
 msgstr "(εκτελείται)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:49
+#: debuggerplugin.cpp:28 lldblauncher.cpp:48
 #, kde-format
 msgid "LLDB"
 msgstr ""
@@ -81,19 +81,19 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr ""
 
-#: lldblauncher.cpp:54
+#: lldblauncher.cpp:53
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr ""
 
-#: lldblauncher.cpp:79
+#: lldblauncher.cpp:78
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 
-#: lldblauncher.cpp:81
+#: lldblauncher.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

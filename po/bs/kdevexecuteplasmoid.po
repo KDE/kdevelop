@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevphp.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2013-10-19 01:36+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: bs <bs@kde.org>\n"
@@ -20,30 +20,30 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: plasmoidexecutionconfig.cpp:116
+#: plasmoidexecutionconfig.cpp:118
 #, fuzzy, kde-format
 #| msgid "Configure Plasmoid Execution"
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "Konfiguriši izvršenje plazmoida"
 
-#: plasmoidexecutionconfig.cpp:126
+#: plasmoidexecutionconfig.cpp:128
 #, kde-format
 msgid "Display a plasmoid"
 msgstr "Prikaži plazmoid"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
+#: plasmoidexecutionconfig.cpp:138 plasmoidexecutionconfig.cpp:217
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Pokretač plazmoida"
 
-#: plasmoidexecutionconfig.cpp:182
+#: plasmoidexecutionconfig.cpp:180
 #, fuzzy, kde-format
 #| msgid "Couldn't resolve the dependency: %1"
 msgid "Could not resolve the dependency: %1"
 msgstr "Ne mogu razriješiti zavisnost: %1"
 
-#: plasmoidexecutionconfig.cpp:290
+#: plasmoidexecutionconfig.cpp:288
 #, fuzzy, kde-format
 #| msgid "Plasmoids"
 msgctxt "@title:menu"

@@ -1,21 +1,21 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2019, 2023.
+# SPDX-FileCopyrightText: 2025 Adrián Chaves (Gallaecio)
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-22 00:39+0000\n"
-"PO-Revision-Date: 2023-06-24 10:18+0200\n"
-"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 13:05+0200\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
+"Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -176,6 +176,12 @@ msgstr ""
 #, kde-format
 msgid "The current build directory is invalid"
 msgstr "O cartafol de construción actual é incorrecto"
+
+#: mintro/mesontests.cpp:80
+#, kde-format
+msgctxt "%1 - test case name"
+msgid "Meson Test \"%1\""
+msgstr "Proba «%1» de Meson"
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2024-07-20 00:38+0200\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"PO-Revision-Date: 2025-05-16 03:38+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -100,17 +100,25 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Core ფაილი:"
 
-#: mibreakpointcontroller.cpp:795
+#: mibreakpointcontroller.cpp:809
 #, kde-format
-msgid "<br>Old value: %1"
-msgstr "<br>ძველი მნიშვნელობა: %1"
+msgid ""
+"\n"
+"Old value: %1"
+msgstr ""
+"\n"
+"ძველი მნიშვნელობა: %1"
 
-#: mibreakpointcontroller.cpp:798
+#: mibreakpointcontroller.cpp:812
 #, kde-format
-msgid "<br>New value: %1"
-msgstr "<br>ახალი მნიშვნელობა: %1"
+msgid ""
+"\n"
+"New value: %1"
+msgstr ""
+"\n"
+"ახალი მნიშვნელობა: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -122,7 +130,7 @@ msgstr ""
 "დამუშავებისას. მოგვწერეთ შეცდომის ანგარიში. გამართვის სესია ახლა დასრულდება "
 "მოსალოდნელი ავარიის თავიდან ასაცილებლად"
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -131,18 +139,18 @@ msgstr ""
 "გამონაკლისია: %1\n"
 "MI-ის პასუხია: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "გამმართველის შიდა შეცდომა"
 
-#: midebugger.cpp:333 midebugsession.cpp:423
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "პროცესი დასრულდა"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -151,12 +159,12 @@ msgstr ""
 "<b>გამმართველის გაშვება შეუძლებელია.</b><p>'%1' ვერ გავუშვი. დარწმუნდით, რომ "
 "ბილიკი სწორადაა მითითებული."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "პროცესის გაშვების შეცდომა"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -168,13 +176,13 @@ msgstr ""
 "დასრულებაც.<br>სცადეთ, ეს ავარია KDevelop-ის გარეშე გამოიძახოთ და მისწერეთ "
 "ავტორს შეცდომის შესახებ.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "გამმართველი ავარიულად დასრულდა"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "პროცესი ავარიულად დასრულდა"
@@ -307,42 +315,42 @@ msgstr "Core ფაილის გამართვა"
 msgid "Debug process %1"
 msgstr "პროცესის გამართვა %1"
 
-#: midebugsession.cpp:208
+#: midebugsession.cpp:202
 #, kde-format
 msgid "Running program"
 msgstr "პროგრამის გაშვება"
 
-#: midebugsession.cpp:295
+#: midebugsession.cpp:288
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "პროცესზე (%1) მიმაგრება"
 
-#: midebugsession.cpp:326
+#: midebugsession.cpp:319
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>გამმართველის მიმაგრების შეცდომა:</b><br />"
 
-#: midebugsession.cpp:336
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Core ფაილის ანალიზი %1"
 
-#: midebugsession.cpp:408
+#: midebugsession.cpp:401
 #, kde-format
 msgid "Debugger stopped"
 msgstr "გამმართველი შეჩერდა"
 
-#: midebugsession.cpp:428
+#: midebugsession.cpp:421
 #, kde-format
 msgid "Application is running"
 msgstr "აპლიკაცია გაშვებულია"
 
-#: midebugsession.cpp:433
+#: midebugsession.cpp:426
 #, kde-format
 msgid "Application is paused"
 msgstr "აპლიკაცია შეჩერებულია"
 
-#: midebugsession.cpp:748
+#: midebugsession.cpp:741
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -351,39 +359,39 @@ msgstr ""
 "<b>Gdb-ის ბრძანება გაიგზავნა მაშინ, როცა გამმართველი გაშვებული არ იყო.</"
 "b><br>ბრძანება იყო:<br> %1"
 
-#: midebugsession.cpp:860
+#: midebugsession.cpp:853
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>გამმართველის ბრძანების შეცდომა</b><br>%1"
 
-#: midebugsession.cpp:996
+#: midebugsession.cpp:989
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "დასრულდა შეცდომის კოდით: %1"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:991
 #, kde-format
 msgid "Exited normally"
 msgstr "ნორმალური დასასრული"
 
-#: midebugsession.cpp:1005
+#: midebugsession.cpp:998
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "დასრულდა სიგნალით %1"
 
-#: midebugsession.cpp:1040
+#: midebugsession.cpp:1033
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "პროგრამამ მიიღო სიგნალი %1 (%2)"
 
-#: midebugsession.cpp:1172
+#: midebugsession.cpp:1165
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "რიგში 1 ბრძანებაა\n"
 msgstr[1] "რიგში %1 ბრძანებაა\n"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1166
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -391,12 +399,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "მიმდინარეობს 1 ბრძანების დაუშავება gdb-ის მიერ\n"
 msgstr[1] "მიმდინარეობს %1 ბრძანების დაუშავება gdb-ის მიერ\n"
 
-#: midebugsession.cpp:1174
+#: midebugsession.cpp:1167
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "გამმართველის მდგომარეობა: %1\n"
 
-#: midebugsession.cpp:1177
+#: midebugsession.cpp:1170
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -407,13 +415,13 @@ msgstr ""
 "მიმდინარე ბრძანების ტექსტი: '%2'\n"
 "მიმდინარე ბრძანების საწყისი ტექსტი: '%3'\n"
 
-#: midebugsession.cpp:1204
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
 "<b> გამმართველის შეცდომა</b><p>გამმართველმა დააბრუნა შეცდომა:</p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(გაშვებული)"

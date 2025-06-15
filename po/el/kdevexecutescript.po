@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecutescript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2019-08-28 09:46+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -68,12 +68,12 @@ msgstr ""
 "Ένας μεταχαρακτήρας φλοιού συμπεριελήφθη στα ορίσματα για τη διαμόρφωση "
 "εκκίνησης '%1', αυτό προς το παρόν δεν υποστηρίζεται. Έναρξη εγκατάλειψης."
 
-#: executescriptplugin.cpp:171
+#: executescriptplugin.cpp:168
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "Δεν ορίστηκε έγκυρος διερμηνέας"
 
-#: executescriptplugin.cpp:181
+#: executescriptplugin.cpp:180
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
@@ -82,7 +82,7 @@ msgstr ""
 "Ένδειξη σφάλματος στο διερμηνέα για τη διαμόρφωση εκκίνησης '%1'. Έναρξη "
 "εγκατάλειψης."
 
-#: executescriptplugin.cpp:186
+#: executescriptplugin.cpp:185
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "
@@ -90,6 +90,18 @@ msgid ""
 msgstr ""
 "Ένας μεταχαρακτήρας φλοιού συμπεριελήφθη στο διερμηνέα για τη διαμόρφωση "
 "εκκίνησης '%1', αυτό προς το παρόν δεν υποστηρίζεται. Έναρξη εγκατάλειψης."
+
+#: executescriptplugin.cpp:195
+#, fuzzy, kde-format
+#| msgid ""
+#| "There is a quoting error in the interpreter for the launch configuration "
+#| "'%1'. Aborting start."
+msgid ""
+"Splitting the interpreter command for the launch configuration '%1' yields "
+"an empty list. Aborting start."
+msgstr ""
+"Ένδειξη σφάλματος στο διερμηνέα για τη διαμόρφωση εκκίνησης '%1'. Έναρξη "
+"εγκατάλειψης."
 
 #: scriptappconfig.cpp:83
 #, kde-format
@@ -299,12 +311,7 @@ msgctxt "@info:tooltip"
 msgid "Enter a remote host (user@host)"
 msgstr "Εισαγάγετε έναν απομακρυσμένο υπολογιστή (user@example.com)"
 
-#: scriptappjob.cpp:76
-#, kde-format
-msgid "There is no active document to launch."
-msgstr "Δεν υπάρχει ενεργό έγγραφο για εκκίνηση."
-
-#: scriptappjob.cpp:98
+#: scriptappjob.cpp:43
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -314,37 +321,42 @@ msgstr ""
 "επιλέξτε run configuration '%1'. Με χρήση προκαθορισμένου προφίλ "
 "περιβάλλοντος."
 
-#: scriptappjob.cpp:170
+#: scriptappjob.cpp:90
+#, kde-format
+msgid "There is no active document to launch."
+msgstr "Δεν υπάρχει ενεργό έγγραφο για εκκίνηση."
+
+#: scriptappjob.cpp:165
 #, kde-format
 msgid "Starting: %1"
 msgstr "Εκκίνηση: %1"
 
-#: scriptappjob.cpp:184
+#: scriptappjob.cpp:179
 #, kde-format
 msgid "*** Killed Application ***"
 msgstr "*** Τερματισμός εφαρμογής ***"
 
-#: scriptappjob.cpp:195
+#: scriptappjob.cpp:190
 #, kde-format
 msgid "*** Exited normally ***"
 msgstr "*** Κανονική έξοδος ***"
 
-#: scriptappjob.cpp:197
+#: scriptappjob.cpp:192
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
 msgstr "*** Έξοδος με κωδικό επιστροφής: %1 ***"
 
-#: scriptappjob.cpp:200
+#: scriptappjob.cpp:195
 #, kde-format
 msgid "*** Process aborted ***"
 msgstr "*** Η διεργασία εγκαταλείφθηκε ***"
 
-#: scriptappjob.cpp:203
+#: scriptappjob.cpp:198
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
 msgstr "*** Κατάρρευση με κωδικό επιστροφής: %1 ***"
 
-#: scriptappjob.cpp:218
+#: scriptappjob.cpp:213
 #, kde-format
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "

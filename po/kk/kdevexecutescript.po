@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2013-11-11 04:52+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -63,12 +63,12 @@ msgstr ""
 "'%1' жегу баптауында, аргументінде мета символ тап болды. Әзірше ондайдың "
 "қолдауы жоқ. Жегу доғарылды."
 
-#: executescriptplugin.cpp:171
+#: executescriptplugin.cpp:168
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "Дұрыс интерпретаторы келтірілмеген"
 
-#: executescriptplugin.cpp:181
+#: executescriptplugin.cpp:180
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
@@ -77,7 +77,7 @@ msgstr ""
 "'%1' жегу баптауында, интерпретаторында тырнақша қолдану қатесі тап болды. "
 "Жегу доғарылды."
 
-#: executescriptplugin.cpp:186
+#: executescriptplugin.cpp:185
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "
@@ -85,6 +85,18 @@ msgid ""
 msgstr ""
 "'%1' жегу баптауында, интерпретаторында мета символ тап болды. Әзірше "
 "ондайдың қолдауы жоқ. Жегу доғарылды."
+
+#: executescriptplugin.cpp:195
+#, fuzzy, kde-format
+#| msgid ""
+#| "There is a quoting error in the interpreter for the launch configuration "
+#| "'%1'. Aborting start."
+msgid ""
+"Splitting the interpreter command for the launch configuration '%1' yields "
+"an empty list. Aborting start."
+msgstr ""
+"'%1' жегу баптауында, интерпретаторында тырнақша қолдану қатесі тап болды. "
+"Жегу доғарылды."
 
 #: scriptappconfig.cpp:83
 #, fuzzy, kde-format
@@ -313,12 +325,7 @@ msgctxt "@info:tooltip"
 msgid "Enter a remote host (user@host)"
 msgstr "Қашық хостын келтіру (user@example.com)"
 
-#: scriptappjob.cpp:76
-#, kde-format
-msgid "There is no active document to launch."
-msgstr ""
-
-#: scriptappjob.cpp:98
+#: scriptappjob.cpp:43
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -330,37 +337,42 @@ msgstr ""
 "Орталар тобы келтірілмеген, жегу баптауы жарамсыз секілді, '%1' жегу "
 "баптауын тексеріңіз. Әдетті орталар тобы қолданбақ."
 
-#: scriptappjob.cpp:170
+#: scriptappjob.cpp:90
+#, kde-format
+msgid "There is no active document to launch."
+msgstr ""
+
+#: scriptappjob.cpp:165
 #, kde-format
 msgid "Starting: %1"
 msgstr "Бастау: %1"
 
-#: scriptappjob.cpp:184
+#: scriptappjob.cpp:179
 #, kde-format
 msgid "*** Killed Application ***"
 msgstr "*** Құртып кетірген бағдарлама ***"
 
-#: scriptappjob.cpp:195
+#: scriptappjob.cpp:190
 #, kde-format
 msgid "*** Exited normally ***"
 msgstr "*** Дұрыс аяқталды ***"
 
-#: scriptappjob.cpp:197
+#: scriptappjob.cpp:192
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
 msgstr "*** Шығу коды: %1 ***"
 
-#: scriptappjob.cpp:200
+#: scriptappjob.cpp:195
 #, kde-format
 msgid "*** Process aborted ***"
 msgstr "*** Процес доғарылды ***"
 
-#: scriptappjob.cpp:203
+#: scriptappjob.cpp:198
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
 msgstr "*** Қирап шығу коды: %1 ***"
 
-#: scriptappjob.cpp:218
+#: scriptappjob.cpp:213
 #, kde-format
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "

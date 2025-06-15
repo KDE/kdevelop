@@ -164,6 +164,3 @@ msgstr "Soubor nastavení"
 msgctxt "@option:radio"
 msgid "User/Port Config"
 msgstr "Nastavení uživatele/portu"
-
-#~ msgid "error: %1"
-#~ msgstr "chyba: %1"

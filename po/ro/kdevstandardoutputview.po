@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
 "PO-Revision-Date: 2010-01-19 23:20+0200\n"
 "Last-Translator: Sergiu Bivol <sergiu.bivol@jurnaltv.md>\n"
 "Language-Team: Română <kde-i18n-ro@kde.org>\n"
@@ -161,39 +161,44 @@ msgid ""
 "the number of views exceeds this value"
 msgstr ""
 
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
 msgstr ""
 
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, fuzzy, kde-format
 #| msgid "Run"
 msgctxt "@title:window"
 msgid "Run"
 msgstr "Execută"
 
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Depanează"
 
-#: standardoutputview.cpp:124
-#, fuzzy, kde-format
-#| msgid "Test"
+#: standardoutputview.cpp:89
+#, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "Testează"
+msgid "Analyze"
+msgstr ""
 
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, fuzzy, kde-format
 #| msgid "Version Control"
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "Control versiune"
+
+#, fuzzy
+#~| msgid "Test"
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Testează"
 
 #~ msgctxt "@title:menu"
 #~ msgid "Navigation"

@@ -218,10 +218,7 @@ void CompileAnalyzer::raiseProblemsToolView()
 
 void CompileAnalyzer::raiseOutputToolView()
 {
-    core()->uiController()->findToolView(
-        i18ndc("kdevstandardoutputview", "@title:window", "Test"),
-        nullptr,
-        KDevelop::IUiController::FindFlags::Raise);
+    core()->uiController()->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Analyze"));
 }
 
 bool CompileAnalyzer::isRunning() const
@@ -262,10 +259,10 @@ void CompileAnalyzer::result(KJob* job)
     if (!core()->projectController()->projects().contains(m_model->project())) {
         m_model->reset();
     } else {
-        m_model->finishAddProblems();
+        const auto status = m_job->status();
+        m_model->finishAddProblems(status == OutputExecuteJob::JobStatus::JobSucceeded);
 
-        if (m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
-            m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled) {
+        if (status == OutputExecuteJob::JobStatus::JobSucceeded || status == OutputExecuteJob::JobStatus::JobCanceled) {
             raiseProblemsToolView();
         } else {
             raiseOutputToolView();

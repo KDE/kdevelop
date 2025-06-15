@@ -65,12 +65,6 @@ MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
     connect(m_procLineMaker, &ProcessLineMaker::receivedStderrLines,
             this, &MIDebugSession::inferiorStderrLines);
 
-    // forward tty output to process line maker
-    connect(this, &MIDebugSession::inferiorTtyStdout,
-            m_procLineMaker, &ProcessLineMaker::slotReceivedStdout);
-    connect(this, &MIDebugSession::inferiorTtyStderr,
-            m_procLineMaker, &ProcessLineMaker::slotReceivedStderr);
-
     // FIXME: see if this still works
     //connect(statusBarIndicator, SIGNAL(doubleClicked()),
     //        controller, SLOT(explainDebuggerStatus()));
@@ -233,8 +227,7 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
 
     m_tty.reset(new STTY(config_useExternalTerminal, config_ternimalName));
     if (!config_useExternalTerminal) {
-        connect(m_tty.get(), &STTY::OutOutput, this, &MIDebugSession::inferiorTtyStdout);
-        connect(m_tty.get(), &STTY::ErrOutput, this, &MIDebugSession::inferiorTtyStderr);
+        connect(m_tty.get(), &STTY::OutOutput, m_procLineMaker, &ProcessLineMaker::slotReceivedStdout);
     }
     QString tty(m_tty->getSlave());
 #ifndef Q_OS_WIN

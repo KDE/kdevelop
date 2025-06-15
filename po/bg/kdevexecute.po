@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2021-11-09 00:15+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -55,46 +55,46 @@ msgid ""
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:103
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr ""
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr ""
 
-#: nativeappconfig.cpp:106
+#: nativeappconfig.cpp:105
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappconfig.cpp:156
+#: nativeappconfig.cpp:155
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr ""
 
-#: nativeappconfig.cpp:166
+#: nativeappconfig.cpp:165
 #, kde-format
 msgid "Executes Native Applications"
 msgstr ""
 
-#: nativeappconfig.cpp:176
+#: nativeappconfig.cpp:175
 #, kde-format
 msgid "Native Application"
 msgstr ""
 
-#: nativeappconfig.cpp:241
+#: nativeappconfig.cpp:233
 #, kde-format
 msgid "Compiled Binary"
 msgstr ""
 
-#: nativeappconfig.cpp:322
+#: nativeappconfig.cpp:314
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -289,37 +289,37 @@ msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr ""
 
-#: nativeappjob.cpp:66
+#: nativeappjob.cpp:40
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
 
-#: nativeappjob.cpp:142
+#: nativeappjob.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr ""
 
-#: nativeappjob.cpp:143
+#: nativeappjob.cpp:153
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr ""
 
-#: nativeappjob.cpp:145
+#: nativeappjob.cpp:155
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr ""
 
-#: nativeappjob.cpp:146
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappjob.cpp:149
+#: nativeappjob.cpp:159
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"

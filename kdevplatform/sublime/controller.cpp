@@ -17,22 +17,32 @@
 #include "area.h"
 #include "view.h"
 #include "mainwindow.h"
+#include "sublimedefs.h"
+
 #include <debug.h>
+
+#include <algorithm>
 
 namespace Sublime {
 
 struct WidgetFinder {
-    explicit WidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
+    explicit WidgetFinder(QWidget* _w)
+        : w(_w)
+        , view(nullptr)
+    {
+        Q_ASSERT(w);
+    }
     Area::WalkerMode operator()(AreaIndex *index)
     {
-        for (View* v : std::as_const(index->views())) {
-            if (v->hasWidget() && (v->widget() == w))
-            {
-                view = v;
-                return Area::StopWalker;
-            }
+        const auto& views = index->views();
+        const auto it = std::find_if(views.cbegin(), views.cend(), [this](const View* v) {
+            return v->widget() == w;
+        });
+        if (it == views.cend()) {
+            return Area::ContinueWalker;
         }
-        return Area::ContinueWalker;
+        view = *it;
+        return Area::StopWalker;
     }
 
     QWidget* const w;
@@ -40,11 +50,15 @@ struct WidgetFinder {
 };
 
 struct ToolWidgetFinder {
-    explicit ToolWidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
+    explicit ToolWidgetFinder(QWidget* _w)
+        : w(_w)
+        , view(nullptr)
+    {
+        Q_ASSERT(w);
+    }
     Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
     {
-        if (v->hasWidget() && (v->widget() == w))
-        {
+        if (v->widget() == w) {
             view = v;
             return Area::StopWalker;
         }
@@ -343,9 +357,10 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         //find this widget in views
         WidgetFinder widgetFinder(w);
         area->walkViews(widgetFinder, area->rootIndex());
-        if (widgetFinder.view && widgetFinder.view != mw->activeView())
-        {
-            setActiveView(mw, widgetFinder.view);
+        if (widgetFinder.view) {
+            if (widgetFinder.view != mw->activeView()) {
+                setActiveView(mw, widgetFinder.view);
+            }
             ///@todo adymo: shall we filter out the event?
             return false;
         }
@@ -353,8 +368,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         //find this widget in tool views
         ToolWidgetFinder toolFinder(w);
         area->walkToolViews(toolFinder, Sublime::AllPositions);
-        if (toolFinder.view && toolFinder.view != mw->activeToolView())
-        {
+        if (toolFinder.view) {
             setActiveToolView(mw, toolFinder.view);
             ///@todo adymo: shall we filter out the event?
             return false;
@@ -371,27 +385,6 @@ const QList< MainWindow * > & Controller::mainWindows() const
     Q_D(const Controller);
 
     return d->controlledWindows;
-}
-
-
-void Controller::notifyToolViewRemoved(Sublime::View *view, Sublime::Position)
-{
-    emit aboutToRemoveToolView(view);
-}
-
-void Controller::notifyToolViewAdded(Sublime::View *view, Sublime::Position)
-{
-    emit toolViewAdded(view);
-}
-
-void Controller::notifyViewRemoved(Sublime::AreaIndex*, Sublime::View *view)
-{
-    emit aboutToRemoveView(view);
-}
-
-void Controller::notifyViewAdded(Sublime::AreaIndex*, Sublime::View *view)
-{
-    emit viewAdded(view);
 }
 
 void Controller::loadSettings()

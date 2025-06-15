@@ -49,6 +49,8 @@
 #include "settings/documentationpreferences.h"
 #include "settings/runtimespreferences.h"
 
+#include <algorithm>
+
 namespace KDevelop {
 
 class UiControllerPrivate {
@@ -122,6 +124,22 @@ public:
                 activeSublimeWindow = win;
             }
         }
+    }
+
+    /**
+     * Record the last active tool view action listener.
+     *
+     * @param toolViewWidget a non-null tool view widget that just became active
+     * @return whether @p toolViewWidget is a tool view action listener
+     */
+    bool setActiveActionListener(QWidget* toolViewWidget)
+    {
+        Q_ASSERT(toolViewWidget);
+        if (qobject_cast<IToolViewActionListener*>(toolViewWidget)) {
+            activeActionListener = toolViewWidget;
+            return true;
+        }
+        return false;
     }
 
     Core* const core;
@@ -260,22 +278,33 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     main->show();
 }
 
+Sublime::Area* UiController::restoredActiveArea()
+{
+    Q_D(const UiController);
+
+    return d->areasRestored ? activeArea() : nullptr;
+}
 
 QWidget* UiController::findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags)
 {
     Q_D(UiController);
 
-    if(!d->areasRestored || !activeArea())
+    auto* const area = restoredActiveArea();
+    if (!area) {
         return nullptr;
+    }
 
-    const QList<Sublime::View*> views = activeArea()->toolViews();
-    for (Sublime::View* view : views) {
-        auto* doc = qobject_cast<Sublime::ToolDocument*>(view->document());
-        if(doc && doc->title() == name && view->widget()) {
-            if(flags & Raise)
-                view->requestRaise();
-            return view->widget();
-        }
+    const auto& views = area->toolViews();
+    const auto it = std::find_if(views.cbegin(), views.cend(), [&name](const Sublime::View* view) {
+        return view->document()->title() == name;
+    });
+    if (it != views.cend()) {
+        auto* const view = *it;
+        auto* const widget = view->widget();
+        Q_ASSERT(widget);
+        if(flags & Raise)
+            area->raiseToolView(view);
+        return widget;
     }
 
     QWidget* ret = nullptr;
@@ -288,9 +317,11 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
             d->factoryDocuments.insert(factory, doc);
         }
 
-        Sublime::View* view = addToolViewToArea(factory, doc, activeArea());
-        if(view)
+        const auto* const view = addToolViewToArea(factory, doc, area);
+        if (view) {
             ret = view->widget();
+            Q_ASSERT(ret);
+        }
 
         if(flags & Raise)
             findToolView(name, factory, Raise);
@@ -299,19 +330,34 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
     return ret;
 }
 
+void UiController::raiseToolView(const QString& documentSpecifier)
+{
+    raiseToolView([&documentSpecifier](const Sublime::View* view) {
+        return view->document()->documentSpecifier() == documentSpecifier;
+    });
+}
+
 void UiController::raiseToolView(QWidget* toolViewWidget)
 {
-    Q_D(UiController);
+    raiseToolView([toolViewWidget](const Sublime::View* view) {
+        const auto* const widget = view->widget();
+        Q_ASSERT(widget);
+        return widget == toolViewWidget;
+    });
+}
 
-    if(!d->areasRestored)
+template<typename ToolViewPredicate>
+void UiController::raiseToolView(ToolViewPredicate isToolViewToRaise)
+{
+    auto* const area = restoredActiveArea();
+    if (!area) {
         return;
+    }
 
-    const QList<Sublime::View*> views = activeArea()->toolViews();
-    for (Sublime::View* view : views) {
-        if(view->widget() == toolViewWidget) {
-            view->requestRaise();
-            return;
-        }
+    const auto& views = area->toolViews();
+    const auto it = std::find_if(views.cbegin(), views.cend(), std::move(isToolViewToRaise));
+    if (it != views.cend()) {
+        area->raiseToolView(*it);
     }
 }
 
@@ -322,9 +368,10 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory, 
     if (!factory)
         return;
 
-    qCDebug(SHELL) ;
     auto *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
+
+    qCDebug(SHELL) << "UiController added tool view" << doc->documentSpecifier();
 
     /* Until areas are restored, we don't know which views should be really
        added, and which not, so we just record view availability.  */
@@ -339,25 +386,20 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory, 
 void KDevelop::UiController::raiseToolView(Sublime::View * view)
 {
     const auto areas = allAreas();
-    for (Sublime::Area* area : areas) {
-        if( area->toolViews().contains( view ) )
-            area->raiseToolView( view );
+    const auto it = std::find_if(areas.cbegin(), areas.cend(), [view](const Sublime::Area* area) {
+        return area->toolViews().contains(view);
+    });
+    if (it != areas.cend()) {
+        (*it)->raiseToolView(view);
     }
-
-    slotActiveToolViewChanged(view);
 }
 
 void UiController::slotActiveToolViewChanged(Sublime::View* view)
 {
     Q_D(UiController);
 
-    if (!view) {
-        return;
-    }
-
-    // record the last active tool view action listener
-    if (qobject_cast<IToolViewActionListener*>(view->widget())) {
-        d->activeActionListener = view->widget();
+    if (view) {
+        d->setActiveActionListener(view->widget());
     }
 }
 
@@ -371,9 +413,9 @@ void UiController::toolViewVisibilityRestored(const QList<Sublime::View*>& visib
 
     for (auto* const view : visibleToolViews) {
         Q_ASSERT(view);
-        auto* const widget = view->widget();
-        if (qobject_cast<IToolViewActionListener*>(widget)) {
-            d->activeActionListener = widget;
+        if (d->setActiveActionListener(view->widget())) {
+            // set the same active tool view for the main window in order to prevent bugs due to desynchronization
+            setActiveToolView(activeSublimeWindow(), view);
             break; // only one action listener can be active at a time, so no need to keep looking for another one
         }
     }
@@ -386,18 +428,18 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
     if (!factory)
         return;
 
-    qCDebug(SHELL) ;
-    //delete the tooldocument
     Sublime::ToolDocument *doc = d->factoryDocuments.value(factory);
 
-    ///@todo adymo: on document deletion all its views shall be also deleted
     for (Sublime::View* view : doc->views()) {
         const auto areas = allAreas();
         for (Sublime::Area *area : areas) {
-            if (area->removeToolView(view))
-                view->deleteLater();
+            area->removeToolView(view);
         }
     }
+
+    emit toolViewRemoved(doc);
+
+    qCDebug(SHELL) << "UiController removed tool view" << doc->documentSpecifier();
 
     d->factoryDocuments.remove(factory);
     delete doc;
@@ -467,7 +509,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
         it != d->factoryDocuments.constEnd(); ++it)
     {
         auto* item = new ViewSelectorItem(it.value()->title(), it.key(), list);
-        if (!item->factory->allowMultiple() && toolViewPresent(it.value(), mw->area())) {
+        if (toolViewPresent(it.value(), mw->area())) {
             // Disable item if the tool view is already present.
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
@@ -740,7 +782,7 @@ Sublime::View* UiController::addToolViewToArea(IToolViewFactory* factory,
         p == Sublime::AllPositions ? Sublime::dockAreaToPosition(factory->defaultPosition()) : p);
 
     connect(view, &Sublime::View::raise,
-            this, QOverload<Sublime::View*>::of(&UiController::raiseToolView));
+            this, static_cast<void (UiController::*)(Sublime::View*)>(&UiController::raiseToolView));
 
     factory->viewCreated(view);
     return view;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2022-01-20 18:53+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -18,28 +18,28 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: plasmoidexecutionconfig.cpp:116
+#: plasmoidexecutionconfig.cpp:118
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "اضبط تنفيذ البلازمويد"
 
-#: plasmoidexecutionconfig.cpp:126
+#: plasmoidexecutionconfig.cpp:128
 #, kde-format
 msgid "Display a plasmoid"
 msgstr "اعرض بلازوميدًا"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
+#: plasmoidexecutionconfig.cpp:138 plasmoidexecutionconfig.cpp:217
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "مُطلق البلازمويد"
 
-#: plasmoidexecutionconfig.cpp:182
+#: plasmoidexecutionconfig.cpp:180
 #, kde-format
 msgid "Could not resolve the dependency: %1"
 msgstr "تعذّر حلّ الاعتماديّة: %1"
 
-#: plasmoidexecutionconfig.cpp:290
+#: plasmoidexecutionconfig.cpp:288
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"

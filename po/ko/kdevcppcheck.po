@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-10-04 20:00+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -449,30 +449,28 @@ msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
 msgstr "현재 프로젝트를 Cppcheck로 분석"
 
-#: plugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "테스트"
-
-#: problemmodel.cpp:116
+#: problemmodel.cpp:117
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "분석이 완료되었습니다. 발견한 문제가 없습니다."
 
-#: problemmodel.cpp:137
+#: problemmodel.cpp:143
 #, kde-format
 msgid "Analysis started..."
 msgstr "분석이 시작되었습니다..."
 
-#: problemmodel.cpp:138
+#: problemmodel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
 msgstr "마지막 Cppcheck 분석 다시 실행 (%1)"
 
-#: problemmodel.cpp:140
+#: problemmodel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
 msgstr "마지막 Cppcheck 분석 다시 실행"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "테스트"

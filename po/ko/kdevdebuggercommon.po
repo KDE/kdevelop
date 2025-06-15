@@ -1,17 +1,17 @@
-# SPDX-FileCopyrightText: 2014, 2015, 2020, 2022, 2024 Shinjo Park <kde@peremen.name>
+# SPDX-FileCopyrightText: 2014, 2015, 2020, 2022, 2024, 2025 Shinjo Park <kde@peremen.name>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2024-08-21 00:34+0200\n"
+"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"PO-Revision-Date: 2025-06-10 23:25+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: dialogs/processselection.cpp:148
@@ -96,17 +96,25 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "코어 파일:"
 
-#: mibreakpointcontroller.cpp:795
+#: mibreakpointcontroller.cpp:809
 #, kde-format
-msgid "<br>Old value: %1"
-msgstr "<br>이전 값: %1"
+msgid ""
+"\n"
+"Old value: %1"
+msgstr ""
+"\n"
+"이전 값: %1"
 
-#: mibreakpointcontroller.cpp:798
+#: mibreakpointcontroller.cpp:812
 #, kde-format
-msgid "<br>New value: %1"
-msgstr "<br>새 값: %1"
+msgid ""
+"\n"
+"New value: %1"
+msgstr ""
+"\n"
+"새 값: %1"
 
-#: midebugger.cpp:315
+#: midebugger.cpp:317
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -118,7 +126,7 @@ msgstr ""
 "다. 버그를 보고해 주십시오. 더 이상의 충돌을 막으려고 디버그 세션을 종료합니"
 "다."
 
-#: midebugger.cpp:318
+#: midebugger.cpp:320
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -127,18 +135,18 @@ msgstr ""
 "예외: %1\n"
 "MI 응답: %2"
 
-#: midebugger.cpp:321
+#: midebugger.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "디버거 내부 오류"
 
-#: midebugger.cpp:333 midebugsession.cpp:423
+#: midebugger.cpp:335 midebugsession.cpp:416
 #, kde-format
 msgid "Process exited"
 msgstr "프로세스 종료됨"
 
-#: midebugger.cpp:342
+#: midebugger.cpp:344
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -147,12 +155,12 @@ msgstr ""
 "<b>디버거를 시작할 수 없습니다.</b><p>'%1'을(를) 실행할 수 없습니다. 경로가 "
 "올바른지 확인하십시오."
 
-#: midebugger.cpp:350
+#: midebugger.cpp:352
 #, kde-format
 msgid "Process failed to start"
 msgstr "프로세스를 시작할 수 없음"
 
-#: midebugger.cpp:355
+#: midebugger.cpp:357
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -163,13 +171,13 @@ msgstr ""
 "따라서 디버그 세션이 종료되었습니다.<br>KDevelop 밖에서도 충돌하는지 확인한 "
 "다음 버그를 보고해 주십시오.<br>"
 
-#: midebugger.cpp:360
+#: midebugger.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "디버거 충돌함"
 
-#: midebugger.cpp:363
+#: midebugger.cpp:365
 #, kde-format
 msgid "Process crashed"
 msgstr "프로세스 충돌함"
@@ -297,92 +305,92 @@ msgstr "코어 파일 디버그"
 msgid "Debug process %1"
 msgstr "프로세스 %1 디버그"
 
-#: midebugsession.cpp:208
+#: midebugsession.cpp:202
 #, kde-format
 msgid "Running program"
 msgstr "프로그램 실행 중"
 
-#: midebugsession.cpp:295
+#: midebugsession.cpp:288
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "%1 프로세스에 부착하는 중"
 
-#: midebugsession.cpp:326
+#: midebugsession.cpp:319
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>디버거를 부착할 수 없음:</b><br />"
 
-#: midebugsession.cpp:336
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Examining core file %1"
 msgstr "코어 파일 %1 시험 중"
 
-#: midebugsession.cpp:408
+#: midebugsession.cpp:401
 #, kde-format
 msgid "Debugger stopped"
 msgstr "디버거 중지됨"
 
-#: midebugsession.cpp:428
+#: midebugsession.cpp:421
 #, kde-format
 msgid "Application is running"
 msgstr "앱이 실행 중"
 
-#: midebugsession.cpp:433
+#: midebugsession.cpp:426
 #, kde-format
 msgid "Application is paused"
 msgstr "앱이 일시 정지됨"
 
-#: midebugsession.cpp:748
+#: midebugsession.cpp:741
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr "<b>디버거가 실행 중이 아닐 때 GDB 명령을 보냄</b><br>명령:<br>%1"
 
-#: midebugsession.cpp:860
+#: midebugsession.cpp:853
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>잘못된 디버거 명령</b><br>%1"
 
-#: midebugsession.cpp:996
+#: midebugsession.cpp:989
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "종료됨, 반환 코드: %1"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:991
 #, kde-format
 msgid "Exited normally"
 msgstr "정상적으로 종료됨"
 
-#: midebugsession.cpp:1005
+#: midebugsession.cpp:998
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "시그널 %1와(과) 함께 종료됨"
 
-#: midebugsession.cpp:1040
+#: midebugsession.cpp:1033
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "프로그램에서 시그널 %1(%2)을(를) 받음"
 
-#: midebugsession.cpp:1172
+#: midebugsession.cpp:1165
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "대기열에 명령 %1개 있음\n"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1166
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "GDB에서 명령 %1개 이미 저리 중\n"
 
-#: midebugsession.cpp:1174
+#: midebugsession.cpp:1167
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "디버거 상태: %1\n"
 
-#: midebugsession.cpp:1177
+#: midebugsession.cpp:1170
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -393,12 +401,12 @@ msgstr ""
 "현재 명령 텍스트: '%2'\n"
 "현재 명령 원래 텍스트: '%3'\n"
 
-#: midebugsession.cpp:1204
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>디버거 오류</b><p>디버거에서 다음 오류를 보고했습니다:<p><tt>%1"
 
-#: miframestackmodel.cpp:69
+#: miframestackmodel.cpp:71
 #, kde-format
 msgid "(running)"
 msgstr "(실행 중)"

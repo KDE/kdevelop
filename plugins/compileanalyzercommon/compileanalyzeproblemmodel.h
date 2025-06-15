@@ -31,7 +31,7 @@ public: // KDevelop::ProblemModel API
 public:
     void addProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
-    void finishAddProblems();
+    void finishAddProblems(bool jobSucceeded);
 
     void reset();
     void reset(KDevelop::IProject* project, const QUrl& path, bool allFiles);

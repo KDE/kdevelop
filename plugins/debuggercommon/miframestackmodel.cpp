@@ -9,6 +9,8 @@
 #include "midebugsession.h"
 #include "mi/micommand.h"
 
+#include <debuglog.h>
+
 #include <KLocalizedString>
 
 #include <algorithm>
@@ -97,14 +99,29 @@ struct FrameListHandler : public MICommandHandler
 
     void handle(const ResultRecord &r) override
     {
+        static const auto levelField = QStringLiteral("level");
         const Value& stack = r[QStringLiteral("stack")];
-        int first = stack[0][QStringLiteral("level")].toInt();
+        const auto& firstFrame = stack[0];
+
+        if (stack.size() == 1
+            && !firstFrame.hasField(levelField)
+            // If the hasField() call above does not throw an exception, firstFrame is guaranteed to be a TupleValue.
+            && static_cast<const TupleValue&>(firstFrame).results_by_name.empty()) {
+            // LLDB-MI replies with `stack=[{}]` if the session state is not paused.
+            // This occurs if the exec-continue command is queued and sent just before the stack-list-frames command.
+            qCDebug(DEBUGGERCOMMON) << "debugger replied with `stack=[{}]`, setting zero frames and no more frames";
+            model->setFrames(m_thread, {});
+            model->setHasMoreFrames(m_thread, false);
+            return;
+        }
+
+        const auto first = firstFrame[levelField].toInt();
         QVector<KDevelop::FrameStackModel::FrameItem> frames;
         frames.reserve(stack.size());
         for (int i = 0; i< stack.size(); ++i) {
             const Value& frame = stack[i];
             KDevelop::FrameStackModel::FrameItem f;
-            f.nr = frame[QStringLiteral("level")].toInt();
+            f.nr = frame[levelField].toInt();
             f.name = getFunctionOrAddress(frame);
             QPair<QString, int> loc = getSource(frame);
             f.file = QUrl::fromLocalFile(loc.first).adjusted(QUrl::NormalizePathSegments);

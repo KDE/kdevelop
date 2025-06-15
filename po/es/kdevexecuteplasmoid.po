@@ -1,14 +1,15 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevexecuteplasmoid.po package.
+# Copyright (C) 2013-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2013, 2015, 2016, 2017, 2020.
-# Javier Viñal <fjvinal@gmail.com>, 2013.
+# SPDX-FileCopyrightText: 2013, 2015, 2016, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2013 Javier Viñal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevexecuteplasmoid\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2020-07-25 19:11+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 02:00+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18,28 +19,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 20.07.80\n"
 
-#: plasmoidexecutionconfig.cpp:116
+#: plasmoidexecutionconfig.cpp:118
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
 msgstr "Configurar la ejecución de plasmoides"
 
-#: plasmoidexecutionconfig.cpp:126
+#: plasmoidexecutionconfig.cpp:128
 #, kde-format
 msgid "Display a plasmoid"
 msgstr "Mostrar un plasmoide"
 
-#: plasmoidexecutionconfig.cpp:136 plasmoidexecutionconfig.cpp:219
+#: plasmoidexecutionconfig.cpp:138 plasmoidexecutionconfig.cpp:217
 #, kde-format
 msgid "Plasmoid Launcher"
 msgstr "Lanzador de plasmoide"
 
-#: plasmoidexecutionconfig.cpp:182
+#: plasmoidexecutionconfig.cpp:180
 #, kde-format
 msgid "Could not resolve the dependency: %1"
 msgstr "No se puede resolver la dependencia: %1"
 
-#: plasmoidexecutionconfig.cpp:290
+#: plasmoidexecutionconfig.cpp:288
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"
@@ -118,65 +119,3 @@ msgstr "*** Terminado ***"
 #, kde-format
 msgid "Plasmoid failed to execute on %1"
 msgstr "Ha fallado la ejecución del plasmoide en %1"
-
-#~ msgid "planar"
-#~ msgstr "plano"
-
-#~ msgid "horizontal"
-#~ msgstr "horizontal"
-
-#~ msgid "vertical"
-#~ msgstr "vertical"
-
-#~ msgid "mediacenter"
-#~ msgstr "centro del medio"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "Enter a dependency to add to the list"
-#~ msgstr "Introduzca una dependencia para añadir a la lista"
-
-#~ msgid "Adds the listed target to the dependency list."
-#~ msgstr "Añade el objetivo listado a la lista de dependencias."
-
-#~ msgid "List of indirect dependent targets."
-#~ msgstr "Lista de objetivos indirectamente dependientes."
-
-#~ msgid ""
-#~ "This list should contain targets that the application does not directly "
-#~ "depend on, but for which an action needs to be taken before running the "
-#~ "application."
-#~ msgstr ""
-#~ "Esta lista debe contener objetivos de los que la aplicación no depende "
-#~ "directamente, pero para los que se debe realizar una acción antes de "
-#~ "ejecutar la aplicación."
-
-#~ msgid "Removes the selected dependencies from the list."
-#~ msgstr "Elimina las dependencias seleccionadas de la lista."
-
-#~ msgid "Move a dependency up in the list."
-#~ msgstr "Sube una dependencia en la lista."
-
-#~ msgid "Moves the selected dependency down in the list."
-#~ msgstr "Baja la dependencia seleccionada en la lista."
-
-#~ msgid "Ninja failed to compile %1"
-#~ msgstr "Ninja ha fallado al compilar %1"
-
-#~ msgid "Execute plasmoid support"
-#~ msgstr "Ejecutar la implementación de plasmoides"
-
-#~ msgid "Allows running of plasmoids"
-#~ msgstr "Permite ejecutar plasmoides"
-
-#~ msgid "Aleix Pol Gonzalez"
-#~ msgstr "Aleix Pol Gonzalez"
-
-#~ msgid "Author"
-#~ msgstr "Autor"

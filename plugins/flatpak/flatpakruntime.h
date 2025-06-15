@@ -13,6 +13,8 @@
 class KJob;
 class FlatpakPlugin;
 
+inline constexpr QLatin1String kdeFlatpakManifestFileName(".flatpak-manifest.json");
+
 class FlatpakRuntime : public KDevelop::IRuntime
 {
     Q_OBJECT
@@ -34,7 +36,14 @@ public:
     static KJob* createBuildDirectory(const KDevelop::Path &path, const KDevelop::Path &file, const QString &arch);
 
     KJob* rebuild();
-    QList<KJob*> exportBundle(const QString &path) const;
+
+    struct ExportBundle
+    {
+        QList<KJob*> jobs;
+        QString applicationId;
+    };
+    ExportBundle exportBundle(const QString& path) const;
+
     KJob* executeOnDevice(const QString &host, const QString &path) const;
 
     static QJsonObject config(const KDevelop::Path& path);

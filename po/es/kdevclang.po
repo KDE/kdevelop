@@ -1,15 +1,15 @@
 # Spanish translations for kdevclang.po package.
-# Copyright (C) 2016 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2016-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2016.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2016, 2017, 2018, 2019, 2020.
+#
+# SPDX-FileCopyrightText: 2016, 2017, 2018, 2019, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2020-07-20 17:06+0200\n"
+"POT-Creation-Date: 2025-05-27 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 01:53+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -329,22 +329,22 @@ msgstr "Añadir ruta de inclusión personalizada"
 msgid "Open Project"
 msgstr "Abrir proyecto"
 
-#: duchain/parsesession.cpp:560
+#: duchain/parsesession.cpp:575
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Solicitado aquí: %1"
 
-#: duchain/parsesession.cpp:601
+#: duchain/parsesession.cpp:616
 #, kde-format
 msgid "In included file: %1"
 msgstr "En el archivo incluido: %1"
 
-#: duchain/parsesession.cpp:624
+#: duchain/parsesession.cpp:639
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "La cabecera no está protegida contra inclusiones múltiples"
 
-#: duchain/parsesession.cpp:625
+#: duchain/parsesession.cpp:640
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "
@@ -373,43 +373,3 @@ msgstr "Declaración aplazada como «struct»"
 #, kde-format
 msgid "<parse error>"
 msgstr "<error de análisis>"
-
-#~ msgid "1 Byte"
-#~ msgid_plural "%1 Bytes"
-#~ msgstr[0] "1 byte"
-#~ msgstr[1] "%1 bytes"
-
-#~ msgid "1 Bit"
-#~ msgid_plural "%1 Bits"
-#~ msgstr[0] "1 bit"
-#~ msgstr[1] "%1 bits"
-
-#~ msgctxt "%1: bytes, %2: bits"
-#~ msgid "%1, %2"
-#~ msgstr "%1, %2"
-
-#~ msgid "<p>offset in parent: %1; size: %2 Bytes; aligned to: %3 Bytes</p>"
-#~ msgstr ""
-#~ "<p>desplazamiento en el padre: %1; tamaño: %2 bytes; alineado a: %3 "
-#~ "bytes</p>"
-
-#~ msgid "<p>size: %1 Bytes; aligned to: %2 Bytes</p>"
-#~ msgstr "<p>tamaño: %1 bytes; alineado a: %2 bytes</p>"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Code"
-#~ msgstr "Código"
-
-#, fuzzy
-#~| msgid "Clang Language Support"
-#~ msgid "C++ Language Support"
-#~ msgstr "Implementación del lenguaje Clang"
-
-#~ msgid "declaration"
-#~ msgstr "declaración"
-
-#~ msgid "definition"
-#~ msgstr "definición"
-
-#~ msgid "Form"
-#~ msgstr "Formulario"

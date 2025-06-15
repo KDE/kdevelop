@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2022-12-06 16:58+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 21.08.3\n"
 
-#: compileanalyzeproblemmodel.cpp:84
+#: compileanalyzeproblemmodel.cpp:85
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "Анализ завершён, ни одной проблемы не обнаружено."
 
-#: compileanalyzeproblemmodel.cpp:107
+#: compileanalyzeproblemmodel.cpp:113
 #, kde-format
 msgid "Analysis started..."
 msgstr "Анализ запущен…"
 
-#: compileanalyzeproblemmodel.cpp:110
+#: compileanalyzeproblemmodel.cpp:116
 #, kde-format
 msgctxt "@info:tooltip %2 is the path of the file"
 msgid "Re-run last %1 analysis (%2)"
 msgstr "Повторное выполнение последнего анализа с использованием %1 («%2»)"
 
-#: compileanalyzeproblemmodel.cpp:112
+#: compileanalyzeproblemmodel.cpp:118
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last %1 analysis"
@@ -75,12 +75,6 @@ msgstr ""
 "\n"
 "%2"
 
-#: compileanalyzer.cpp:222
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "Проверка"
-
 #: compileanalyzeutils.cpp:45
 #, kde-format
 msgid "Compilation database file not found: '%1'"
@@ -112,3 +106,7 @@ msgid ""
 msgstr ""
 "Ошибка JSON при разборе файла базы данных компиляции «%1»: документ не "
 "является массивом."
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Проверка"

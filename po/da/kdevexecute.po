@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2013-11-25 21:10+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -64,48 +64,48 @@ msgstr ""
 "Et skal meta-tegn var i den kørbare for kørselsopsætningen \"%1\", dette er "
 "ikke understøttet på nuværende tidspunkt. Afbryder start."
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:103
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr ""
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr ""
 
-#: nativeappconfig.cpp:106
+#: nativeappconfig.cpp:105
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappconfig.cpp:156
+#: nativeappconfig.cpp:155
 #, fuzzy, kde-format
 #| msgid "Configure Native Application"
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Konfigurér native applikation"
 
-#: nativeappconfig.cpp:166
+#: nativeappconfig.cpp:165
 #, fuzzy, kde-format
 #| msgid "Native Application"
 msgid "Executes Native Applications"
 msgstr "Native applikation"
 
-#: nativeappconfig.cpp:176
+#: nativeappconfig.cpp:175
 #, kde-format
 msgid "Native Application"
 msgstr "Native applikation"
 
-#: nativeappconfig.cpp:241
+#: nativeappconfig.cpp:233
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Oversat binær fil"
 
-#: nativeappconfig.cpp:322
+#: nativeappconfig.cpp:314
 #, fuzzy, kde-format
 #| msgid "Project Executables"
 msgctxt "@title:menu"
@@ -370,7 +370,7 @@ msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Mål:"
 
-#: nativeappjob.cpp:66
+#: nativeappjob.cpp:40
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -382,30 +382,30 @@ msgstr ""
 "Ingen miljøgruppe er angivet, det ligner en ødelagt konfiguration, tjek "
 "kørselskonfigurationen \"%1\". Brug standard miljøgruppe."
 
-#: nativeappjob.cpp:142
+#: nativeappjob.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr ""
 
-#: nativeappjob.cpp:143
+#: nativeappjob.cpp:153
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr ""
 
-#: nativeappjob.cpp:145
+#: nativeappjob.cpp:155
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr ""
 
-#: nativeappjob.cpp:146
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappjob.cpp:149
+#: nativeappjob.cpp:159
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"

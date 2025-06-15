@@ -87,6 +87,11 @@ public:
     /**Returns all areas that belong to this main-window*/
     QList<Area*> areas() const;
 
+    /**
+     * Give the keyboard input focus to the widget for the active view inside this main window.
+     */
+    void focusEditor();
+
     /** Sets a @p w widget that will be shown when there are no opened documents.
      * This method takes the ownership of @p w.
      * Pass @c nullptr for @p w for a blank background (default).

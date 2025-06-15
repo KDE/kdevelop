@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2022-04-24 19:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: compileanalyzeproblemmodel.cpp:84
+#: compileanalyzeproblemmodel.cpp:85
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "ანალიზი დასრულდა. პრობლემები გამოვლენილი არაა."
 
-#: compileanalyzeproblemmodel.cpp:107
+#: compileanalyzeproblemmodel.cpp:113
 #, kde-format
 msgid "Analysis started..."
 msgstr "ანალიზი დაწყებულია..."
 
-#: compileanalyzeproblemmodel.cpp:110
+#: compileanalyzeproblemmodel.cpp:116
 #, kde-format
 msgctxt "@info:tooltip %2 is the path of the file"
 msgid "Re-run last %1 analysis (%2)"
 msgstr "ბოლო %1 ანალიზის თავიდან გაშვება (%2)"
 
-#: compileanalyzeproblemmodel.cpp:112
+#: compileanalyzeproblemmodel.cpp:118
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last %1 analysis"
@@ -73,12 +73,6 @@ msgstr ""
 "\n"
 "%2"
 
-#: compileanalyzer.cpp:222
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "ტესტი"
-
 #: compileanalyzeutils.cpp:45
 #, kde-format
 msgid "Compilation database file not found: '%1'"
@@ -110,3 +104,7 @@ msgid ""
 msgstr ""
 "JSON-ის შეცდომა კომპილაციის ბაზის ფაილის '%1'-ის  დამუშავებისას: დოკუმენტი "
 "მასივს არ წარმოადგენს."
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "ტესტი"

@@ -108,25 +108,33 @@ void CTestRunJob::start()
 
     m_job = createTestJob(QStringLiteral("execute"), arguments, workingDirectory);
 
-    if (auto* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
-        auto* outputJob = cjob->findChild<OutputJob*>();
-        if (outputJob) {
-            outputJob->setVerbosity(m_verbosity);
-
-            QString testName = m_suite->name();
-            QString title;
-            if (cases_selected.count() == 1)
-                title = i18nc("running test %1, %2 test case", "CTest %1: %2", testName, cases_selected.value(0));
-            else
-                title = i18ncp("running test %1, %2 number of test cases", "CTest %2 (%1)", "CTest %2 (%1)",
-                               cases_selected.count(), testName);
-
-            outputJob->setTitle(title);
-
-            m_outputModel = qobject_cast<OutputModel*>(outputJob->model());
-            connect(m_outputModel, &QAbstractItemModel::rowsInserted, this, &CTestRunJob::rowsInserted);
+    // If the native app job that we are looking for has no dependency,
+    // it is run by itself. Cast to check this possibility.
+    auto* outputJob = qobject_cast<OutputJob*>(m_job);
+    if (!outputJob) {
+        // The native app job and its BuilderJob dependency can be
+        // packaged in an ExecuteCompositeJob. Try to find it there.
+        if (auto* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
+            outputJob = cjob->findChild<OutputJob*>();
         }
     }
+    if (outputJob) {
+        outputJob->setVerbosity(m_verbosity);
+
+        QString testName = m_suite->name();
+        QString title;
+        if (cases_selected.count() == 1)
+            title = i18nc("running test %1, %2 test case", "CTest %1: %2", testName, cases_selected.value(0));
+        else
+            title = i18ncp("running test %1, %2 number of test cases", "CTest %2 (%1)", "CTest %2 (%1)",
+                           cases_selected.count(), testName);
+
+        outputJob->setTitle(title);
+
+        m_outputModel = qobject_cast<OutputModel*>(outputJob->model());
+        connect(m_outputModel, &QAbstractItemModel::rowsInserted, this, &CTestRunJob::rowsInserted);
+    }
+
     connect(m_job, &KJob::finished, this, &CTestRunJob::processFinished);
 
     ICore::self()->testController()->notifyTestRunStarted(m_suite, cases_selected);

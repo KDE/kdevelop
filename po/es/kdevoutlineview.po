@@ -1,15 +1,15 @@
 # Spanish translations for kdevoutlineview.po package.
-# Copyright (C) 2018 This file is copyright:
+# Copyright (C) 2018-2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
 # Automatically generated, 2018.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2018, 2020.
+#
+# SPDX-FileCopyrightText: 2018, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevoutlineview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2020-07-25 19:30+0200\n"
+"PO-Revision-Date: 2025-05-17 02:26+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -47,7 +47,4 @@ msgstr "Ordenar elementos alfabéticamente"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Filtro..."
-
-#~ msgid "Outline View"
-#~ msgstr "Vista del esquema"
+msgstr "Filtro…"

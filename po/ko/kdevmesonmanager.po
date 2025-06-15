@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Shinjo Park <kde@peremen.name>, 2020.
+# SPDX-FileCopyrightText: 2020, 2025 Shinjo Park <kde@peremen.name>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-22 00:39+0000\n"
-"PO-Revision-Date: 2020-10-04 20:13+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-06-10 23:28+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -169,6 +169,12 @@ msgstr "'%1'의 조사 출력에 배열이나 객체가 없음"
 #, kde-format
 msgid "The current build directory is invalid"
 msgstr "현재 빌드 디렉터리가 잘못됨"
+
+#: mintro/mesontests.cpp:80
+#, kde-format
+msgctxt "%1 - test case name"
+msgid "Meson Test \"%1\""
+msgstr "\"%1\" Meson 테스트"
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format

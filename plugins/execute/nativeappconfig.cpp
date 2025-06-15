@@ -17,11 +17,11 @@
 #include "nativeappjob.h"
 #include <interfaces/iproject.h>
 #include <project/interfaces/iprojectfilemanager.h>
-#include <util/executecompositejob.h>
 
 #include <interfaces/iplugincontroller.h>
 
 #include "executeplugin.h"
+#include "iexecutepluginhelpers.h"
 #include "debug.h"
 #include <util/kdevstringhandler.h>
 #include "projecttargetscombobox.h"
@@ -99,7 +99,6 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     dependencyAction->setItemData(0, QStringLiteral("Nothing"));
     dependencyAction->setItemData(1, QStringLiteral("Build"));
     dependencyAction->setItemData(2, QStringLiteral("Install"));
-    dependencyAction->setItemData(3, QStringLiteral("SudoInstall"));
 
     killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Ask If Running"), NativeAppJob::askIfRunning);
     killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Kill All Instances"), NativeAppJob::killAllInstances);
@@ -191,21 +190,14 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     {
         auto* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
         Q_ASSERT(iface);
-        KJob* depjob = iface->dependencyJob( cfg );
-        QList<KJob*> l;
-        if( depjob )
-        {
-            l << depjob;
-        }
+
         auto nativeAppJob = new NativeAppJob( KDevelop::ICore::self()->runController(), cfg );
         QObject::connect(nativeAppJob, &NativeAppJob::killBeforeExecutingAgainChanged, KDevelop::ICore::self()->runController(), [cfg] (int newValue) {
             auto cfgGroup = cfg->config();
             cfgGroup.writeEntry(ExecutePlugin::killBeforeExecutingAgain, newValue);
         });
-        l << nativeAppJob;
 
-        return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
-
+        return makeJobWithDependency(nativeAppJob, *iface, cfg);
     }
     qCWarning(PLUGIN_EXECUTE) << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return nullptr;

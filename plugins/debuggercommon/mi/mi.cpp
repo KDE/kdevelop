@@ -7,6 +7,8 @@
 
 #include "mi.h"
 
+#include <QDebug>
+
 using namespace KDevMI::MI;
 
 
@@ -64,6 +66,11 @@ int StringLiteralValue::toInt(int base) const
     return result;
 }
 
+void StringLiteralValue::print(QDebug debug) const
+{
+    debug << literal_;
+}
+
 TupleValue::~TupleValue()
 {
     qDeleteAll(results);
@@ -80,6 +87,11 @@ const Value& TupleValue::operator[](const QString& variable) const
     if (!result)
         throw type_error();
     return *result->value;
+}
+
+void TupleValue::print(QDebug debug) const
+{
+    debug << results_by_name;
 }
 
 ListValue::~ListValue()
@@ -107,6 +119,26 @@ const Value& ListValue::operator[](int index) const
         throw type_error();
 }
 
+void ListValue::print(QDebug debug) const
+{
+    debug << results;
+}
 
+QDebug KDevMI::MI::operator<<(QDebug debug, const Value& value)
+{
+    value.print(debug);
+    return debug;
+}
 
-
+QDebug KDevMI::MI::operator<<(QDebug debug, const Result* result)
+{
+    if (!result) {
+        return debug << nullptr;
+    }
+    if (!result->value) {
+        const QDebugStateSaver saver(debug);
+        debug.nospace() << '(' << result->variable << ", null)";
+        return debug;
+    }
+    return debug << *result->value;
+}

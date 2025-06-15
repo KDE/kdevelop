@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-01-13 02:43+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
 "%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
 
-#: compileanalyzeproblemmodel.cpp:84
+#: compileanalyzeproblemmodel.cpp:85
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr ""
 
-#: compileanalyzeproblemmodel.cpp:107
+#: compileanalyzeproblemmodel.cpp:113
 #, kde-format
 msgid "Analysis started..."
 msgstr ""
 
-#: compileanalyzeproblemmodel.cpp:110
+#: compileanalyzeproblemmodel.cpp:116
 #, kde-format
 msgctxt "@info:tooltip %2 is the path of the file"
 msgid "Re-run last %1 analysis (%2)"
 msgstr ""
 
-#: compileanalyzeproblemmodel.cpp:112
+#: compileanalyzeproblemmodel.cpp:118
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last %1 analysis"
@@ -68,12 +68,6 @@ msgid ""
 "Unable to start check for '%1':\n"
 "\n"
 "%2"
-msgstr ""
-
-#: compileanalyzer.cpp:222
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
 msgstr ""
 
 #: compileanalyzeutils.cpp:45

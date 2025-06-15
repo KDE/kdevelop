@@ -6,20 +6,20 @@
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2010, 2012.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2010, 2011, 2012.
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2012, 2013, 2014.
-# SPDX-FileCopyrightText: 2023, 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023, 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2024-08-06 05:13+0900\n"
+"POT-Creation-Date: 2025-06-10 00:41+0000\n"
+"PO-Revision-Date: 2025-05-03 15:33+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -1391,102 +1391,102 @@ msgstr "印出產生的 token stream"
 msgid "code to parse"
 msgstr "要剖析的代碼"
 
-#: outputview/outputexecutejob.cpp:196
+#: outputview/outputexecutejob.cpp:186
 #, kde-format
 msgid "No build directory specified for a builder job."
 msgstr "編譯工作未指定編譯目錄。"
 
-#: outputview/outputexecutejob.cpp:198
+#: outputview/outputexecutejob.cpp:188
 #, kde-format
 msgid "No working directory specified for a process."
 msgstr "行程未指定工作目錄。"
 
-#: outputview/outputexecutejob.cpp:210
+#: outputview/outputexecutejob.cpp:200
 #, kde-format
 msgid "Invalid build directory '%1'"
 msgstr "無效的編譯目錄 '%1'"
 
-#: outputview/outputexecutejob.cpp:212
+#: outputview/outputexecutejob.cpp:202
 #, kde-format
 msgid "Invalid working directory '%1'"
 msgstr "無效的工作目錄 '%1'"
 
-#: outputview/outputexecutejob.cpp:219
+#: outputview/outputexecutejob.cpp:209
 #, kde-format
 msgid "Build directory '%1' is not a local path"
 msgstr "編譯目錄 '%1' 不是本地端路徑"
 
-#: outputview/outputexecutejob.cpp:221
+#: outputview/outputexecutejob.cpp:211
 #, kde-format
 msgid "Working directory '%1' is not a local path"
 msgstr "工作目錄 '%1' 不是本地端路徑"
 
-#: outputview/outputexecutejob.cpp:240
+#: outputview/outputexecutejob.cpp:222
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
 msgstr "編譯目錄 '%1' 不存在或不是目錄"
 
-#: outputview/outputexecutejob.cpp:242
+#: outputview/outputexecutejob.cpp:224
 #, kde-format
 msgid "Working directory '%1' does not exist or is not a directory"
 msgstr "工作目錄 '%1' 不存在或不是目錄"
 
-#: outputview/outputexecutejob.cpp:303
+#: outputview/outputexecutejob.cpp:282
 #, kde-format
 msgid "Failed to specify program to start: %1"
 msgstr "沒有正確指定要啟動的應用程式：%1"
 
-#: outputview/outputexecutejob.cpp:304
+#: outputview/outputexecutejob.cpp:283
 #, kde-format
 msgid "*** %1 ***"
 msgstr "*** %1 ***"
 
-#: outputview/outputexecutejob.cpp:330
+#: outputview/outputexecutejob.cpp:309
 #, kde-format
 msgid "*** Killed process ***"
 msgstr "*** 已中斷的行程 ***"
 
-#: outputview/outputexecutejob.cpp:334
+#: outputview/outputexecutejob.cpp:313
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
 msgstr "*** 警告：無法中斷此行程 ***"
 
-#: outputview/outputexecutejob.cpp:356
+#: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
 msgstr "%1 啟動失敗"
 
-#: outputview/outputexecutejob.cpp:360
+#: outputview/outputexecutejob.cpp:339
 #, kde-format
 msgid "%1 has crashed"
 msgstr "%1 已崩潰"
 
-#: outputview/outputexecutejob.cpp:364
+#: outputview/outputexecutejob.cpp:343
 #, kde-format
 msgid "Read error"
 msgstr "讀取錯誤"
 
-#: outputview/outputexecutejob.cpp:368
+#: outputview/outputexecutejob.cpp:347
 #, kde-format
 msgid "Write error"
 msgstr "寫入錯誤"
 
-#: outputview/outputexecutejob.cpp:372
+#: outputview/outputexecutejob.cpp:351
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr "等待行程的動作已逾時"
 
-#: outputview/outputexecutejob.cpp:376
+#: outputview/outputexecutejob.cpp:355
 #, kde-format
 msgid "Exit code %1"
 msgstr "離開代碼 %1"
 
-#: outputview/outputexecutejob.cpp:389
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** 失敗： %1 ***"
 
-#: outputview/outputexecutejob.cpp:407
+#: outputview/outputexecutejob.cpp:380
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** 已完成 ***"
@@ -2032,25 +2032,19 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "在編輯器中跳到執行的行數。"
 
-#: shell/debugcontroller.cpp:425
-#, kde-format
-msgctxt "@title:window"
-msgid "Debug"
-msgstr "除錯"
-
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "除錯啟動"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "除錯目前的啟動"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2275,7 +2269,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "註記"
 
-#: shell/documentcontroller.cpp:1287
+#: shell/documentcontroller.cpp:1288
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2317,18 +2311,16 @@ msgstr ""
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "目前已設定"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "目前未設定"
 
-#: shell/ktexteditorpluginintegration.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#: shell/ktexteditorpluginintegration.cpp:492
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
 msgstr "訊息"
@@ -2754,7 +2746,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "開啟現有的檔案 %1"
 
-#: shell/partcontroller.cpp:226
+#: shell/partcontroller.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
@@ -3289,24 +3281,24 @@ msgctxt "launch mode"
 msgid "Execute"
 msgstr "執行"
 
-#: shell/runcontroller.cpp:407
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "目前的啟動設定不支援 %1 模式。"
 
-#: shell/runcontroller.cpp:427
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "設定啟動器..."
 
-#: shell/runcontroller.cpp:430
+#: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "開啟啟動設定對話框"
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3314,25 +3306,25 @@ msgid ""
 "ones."
 msgstr "開啟對話框以設定新的啟動設定，或是變更目前的啟動設定。"
 
-#: shell/runcontroller.cpp:434
+#: shell/runcontroller.cpp:465
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "執行啟動"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:466
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "執行"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "執行目前的啟動"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3340,7 +3332,7 @@ msgid ""
 "configuration."
 msgstr "執行目前作用中的目標，或是目前啟動設定裡指定的程式。"
 
-#: shell/runcontroller.cpp:444
+#: shell/runcontroller.cpp:475
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3351,84 +3343,84 @@ msgstr "除錯"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:458
+#: shell/runcontroller.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "停止所有的工作"
 
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:490
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "全部停止"
 
-#: shell/runcontroller.cpp:462
+#: shell/runcontroller.cpp:493
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "停止所有執行中的工作"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:494
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "要求所有執行中的工作停止。"
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:500
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "停止"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:502
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "停止"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:503
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "允許停止個別工作的選單"
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:504
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "可以被個別停止的工作清單。"
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:508
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "目前的啟動設定"
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:509
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "目前的啟動設定"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:510
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "請選擇執行被撤銷時要執行哪個啟動設定。"
 
-#: shell/runcontroller.cpp:592
+#: shell/runcontroller.cpp:623
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> 未命名工作"
 
-#: shell/runcontroller.cpp:975
+#: shell/runcontroller.cpp:1006
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "新增 %1 啟動器"
 
-#: shell/runcontroller.cpp:1012
+#: shell/runcontroller.cpp:1043
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -4977,25 +4969,25 @@ msgstr "文件已被別人變更"
 msgid " Line: %1 Col: %2 "
 msgstr " 行: %1 欄: %2 "
 
-#: shell/uicontroller.cpp:79
+#: shell/uicontroller.cpp:81
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "程式碼"
 
-#: shell/uicontroller.cpp:90
+#: shell/uicontroller.cpp:92
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "除錯"
 
-#: shell/uicontroller.cpp:99
+#: shell/uicontroller.cpp:101
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "審閱"
 
-#: shell/uicontroller.cpp:458
+#: shell/uicontroller.cpp:500
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
@@ -5098,25 +5090,25 @@ msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "（按 Ctrl+Tab 來切換）"
 
-#: sublime/container.cpp:768
+#: sublime/container.cpp:772
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "複製檔案名稱"
 
-#: sublime/container.cpp:771
+#: sublime/container.cpp:775
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "關閉"
 
-#: sublime/container.cpp:773
+#: sublime/container.cpp:777
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "關閉所有其他的"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
@@ -5128,32 +5120,32 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "切換「%1」工具檢視"
 
-#: sublime/idealbuttonbarwidget.cpp:301
+#: sublime/idealbuttonbarwidget.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
 msgstr "點右鍵以新增工具檢視。"
 
-#: sublime/idealcontroller.cpp:133
-#, kde-format
-msgid "Left Button Bar"
-msgstr "左側按鍵列"
-
-#: sublime/idealcontroller.cpp:134
-#, kde-format
-msgid "Right Button Bar"
-msgstr "右側按鍵列"
-
-#: sublime/idealcontroller.cpp:139
-#, kde-format
-msgid "Bottom Button Bar"
-msgstr "底部按鍵列"
-
-#: sublime/idealcontroller.cpp:210
+#: sublime/idealcontroller.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1 工具列"
+
+#: sublime/idealcontroller.cpp:381
+#, kde-format
+msgid "Left Button Bar"
+msgstr "左側按鍵列"
+
+#: sublime/idealcontroller.cpp:382
+#, kde-format
+msgid "Right Button Bar"
+msgstr "右側按鍵列"
+
+#: sublime/idealcontroller.cpp:387
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr "底部按鍵列"
 
 #: sublime/idealdockwidget.cpp:123
 #, kde-format
@@ -5269,66 +5261,66 @@ msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "工具檢視"
 
-#: sublime/mainwindow_p.cpp:642
+#: sublime/mainwindow_p.cpp:644
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "關閉"
 
-#: sublime/mainwindow_p.cpp:643
+#: sublime/mainwindow_p.cpp:645
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "關閉訊息"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:268
 #, kde-format
 msgid "duchainify"
 msgstr "duchainify"
 
-#: util/duchainify/main.cpp:264
+#: util/duchainify/main.cpp:269
 #, kde-format
 msgid "DUChain builder application"
 msgstr "DUChain 建立器應用程式"
 
-#: util/duchainify/main.cpp:265
+#: util/duchainify/main.cpp:270
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(c) 2009 David Nolden"
 
-#: util/duchainify/main.cpp:271
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "file or directory"
 msgstr "檔案或目錄"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:279
 #, kde-format
 msgid "Show warnings"
 msgstr "顯示警告"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:281
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "顯示警告與除錯輸出"
 
-#: util/duchainify/main.cpp:278
+#: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr "強制更新與指定檔案相關的頂端內文"
 
-#: util/duchainify/main.cpp:282
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
 "all included files"
 msgstr "強制更新與指定檔案與所有引入檔相關的頂端內文"
 
-#: util/duchainify/main.cpp:284
+#: util/duchainify/main.cpp:289
 #, kde-format
 msgid "Number of threads to use"
 msgstr "使用執行緒的數量"
 
-#: util/duchainify/main.cpp:287
+#: util/duchainify/main.cpp:292
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5339,45 +5331,45 @@ msgstr ""
 "declarations (預設), all-declarations, all-declarations-and-uses, all-"
 "declarations-and-uses-and-AST"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr "剖析成功時印出完整的「定義-使用」鍊"
 
-#: util/duchainify/main.cpp:293
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
 msgstr ""
 
-#: util/duchainify/main.cpp:295
+#: util/duchainify/main.cpp:300
 #, fuzzy, kde-format
 #| msgid "Print complete Definition-Use Chain on successful parse"
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr "剖析成功時印出完整的「定義-使用」鍊"
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:303
 #, fuzzy, kde-format
 #| msgid "Print complete Definition-Use Chain on successful parse"
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr "剖析成功時印出完整的「定義-使用」鍊"
 
-#: util/duchainify/main.cpp:301
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr "定義印出宣告細節時的最高深度"
 
-#: util/duchainify/main.cpp:304
+#: util/duchainify/main.cpp:309
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr "傾印 DUChain 圖表（用 .dot 格式）"
 
-#: util/duchainify/main.cpp:306
+#: util/duchainify/main.cpp:311
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "印出在分析時遇到的問題"
 
-#: util/duchainify/main.cpp:308
+#: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr "遞迴傾印來自已匯入的內文的錯誤。"
@@ -5478,7 +5470,7 @@ msgstr "指令已離開，狀態為 %1。"
 #: vcs/dvcs/dvcsjob.cpp:370
 #, kde-format
 msgid "error: %1"
-msgstr ""
+msgstr "錯誤：%1"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -6060,6 +6052,10 @@ msgstr "與前一個版本的差異"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修訂版之間的差異"
+
+#~ msgctxt "@title:window"
+#~ msgid "Debug"
+#~ msgstr "除錯"
 
 #~ msgctxt "@option:check"
 #~ msgid "Recursive"

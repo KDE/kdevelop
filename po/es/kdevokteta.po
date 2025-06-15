@@ -1,14 +1,15 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevokteta.po package.
+# Copyright (C) 2010-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2010, 2011, 2012, 2020.
-# Kira J. Fernandez <kirajfdez@gmail.com>, 2010.
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2010 Kira J. Fernandez <kirajfdez@gmail.com>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevokteta\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2020-07-25 19:30+0200\n"
+"PO-Revision-Date: 2025-05-17 02:18+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -64,21 +65,4 @@ msgstr "Editor hexadecimal"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Manage Byte Array View Profiles..."
-msgstr "Gestionar perfiles de vista de arrays de bytes..."
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra,Kira J. Fernández"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net,kirajfdez@gmail.com"
-
-#~ msgid "Designer Layout Toolbar"
-#~ msgstr "Barra de herramientas de diseño"
-
-#~ msgid "Okteta Plugin for KDevelop"
-#~ msgstr "Complemento Okteta para KDevelop"
-
-#~ msgid "Provides simple Hex Editing"
-#~ msgstr "Proporciona edición hexadecimal sencilla"
+msgstr "Gestionar perfiles de vista de arrays de bytes…"

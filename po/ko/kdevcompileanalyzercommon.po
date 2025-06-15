@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-04-12 14:42+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 19.04.3\n"
 
-#: compileanalyzeproblemmodel.cpp:84
+#: compileanalyzeproblemmodel.cpp:85
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "분석이 완료되었습니다. 발견한 문제가 없습니다."
 
-#: compileanalyzeproblemmodel.cpp:107
+#: compileanalyzeproblemmodel.cpp:113
 #, kde-format
 msgid "Analysis started..."
 msgstr "분석이 시작되었습니다..."
 
-#: compileanalyzeproblemmodel.cpp:110
+#: compileanalyzeproblemmodel.cpp:116
 #, kde-format
 msgctxt "@info:tooltip %2 is the path of the file"
 msgid "Re-run last %1 analysis (%2)"
 msgstr "마지막 %1 분석 다시 실행(%2)"
 
-#: compileanalyzeproblemmodel.cpp:112
+#: compileanalyzeproblemmodel.cpp:118
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last %1 analysis"
@@ -72,12 +72,6 @@ msgstr ""
 "\n"
 "%2"
 
-#: compileanalyzer.cpp:222
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "테스트"
-
 #: compileanalyzeutils.cpp:45
 #, kde-format
 msgid "Compilation database file not found: '%1'"
@@ -108,3 +102,7 @@ msgid ""
 msgstr ""
 "컴파일 데이터베이스 파일 '%1'을(를) 분석하는 중 JSON 오류 발생: 문서가 배열"
 "이 아닙니다."
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "테스트"

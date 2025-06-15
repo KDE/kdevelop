@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-30 00:38+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-09-20 13:49+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -445,13 +445,13 @@ msgstr "Ανάλυση σουίτας δοκιμών %1"
 msgid "CTest"
 msgstr "CTest"
 
-#: testing/ctestrunjob.cpp:119
+#: testing/ctestrunjob.cpp:127
 #, kde-format
 msgctxt "running test %1, %2 test case"
 msgid "CTest %1: %2"
 msgstr "CTest %1: %2"
 
-#: testing/ctestrunjob.cpp:121
+#: testing/ctestrunjob.cpp:129
 #, kde-format
 msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"

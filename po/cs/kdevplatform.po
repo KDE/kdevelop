@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-10 00:41+0000\n"
 "PO-Revision-Date: 2024-07-22 16:56+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -1383,102 +1383,102 @@ msgstr ""
 msgid "code to parse"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:196
+#: outputview/outputexecutejob.cpp:186
 #, kde-format
 msgid "No build directory specified for a builder job."
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:198
+#: outputview/outputexecutejob.cpp:188
 #, kde-format
 msgid "No working directory specified for a process."
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:210
+#: outputview/outputexecutejob.cpp:200
 #, kde-format
 msgid "Invalid build directory '%1'"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:212
+#: outputview/outputexecutejob.cpp:202
 #, kde-format
 msgid "Invalid working directory '%1'"
 msgstr "Neplatný pracovní adresář '%1'"
 
-#: outputview/outputexecutejob.cpp:219
+#: outputview/outputexecutejob.cpp:209
 #, kde-format
 msgid "Build directory '%1' is not a local path"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:221
+#: outputview/outputexecutejob.cpp:211
 #, kde-format
 msgid "Working directory '%1' is not a local path"
 msgstr "Pracovní adresář '%1' není místní cesta"
 
-#: outputview/outputexecutejob.cpp:240
+#: outputview/outputexecutejob.cpp:222
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:242
+#: outputview/outputexecutejob.cpp:224
 #, kde-format
 msgid "Working directory '%1' does not exist or is not a directory"
 msgstr "Pracovní adresář '%1' neexistuje nebo není adresář"
 
-#: outputview/outputexecutejob.cpp:303
+#: outputview/outputexecutejob.cpp:282
 #, kde-format
 msgid "Failed to specify program to start: %1"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:304
+#: outputview/outputexecutejob.cpp:283
 #, kde-format
 msgid "*** %1 ***"
 msgstr "*** %1 ***"
 
-#: outputview/outputexecutejob.cpp:330
+#: outputview/outputexecutejob.cpp:309
 #, kde-format
 msgid "*** Killed process ***"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:334
+#: outputview/outputexecutejob.cpp:313
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:356
+#: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:360
+#: outputview/outputexecutejob.cpp:339
 #, kde-format
 msgid "%1 has crashed"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:364
+#: outputview/outputexecutejob.cpp:343
 #, kde-format
 msgid "Read error"
 msgstr "Chyba při čtení"
 
-#: outputview/outputexecutejob.cpp:368
+#: outputview/outputexecutejob.cpp:347
 #, kde-format
 msgid "Write error"
 msgstr "Chyba při zápisu"
 
-#: outputview/outputexecutejob.cpp:372
+#: outputview/outputexecutejob.cpp:351
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:376
+#: outputview/outputexecutejob.cpp:355
 #, kde-format
 msgid "Exit code %1"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:389
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** Selhání: %1 ***"
 
-#: outputview/outputexecutejob.cpp:407
+#: outputview/outputexecutejob.cpp:380
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** Dokončeno ***"
@@ -2010,25 +2010,19 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Skočí v editoru na  řádek s vykonávanou pozicí."
 
-#: shell/debugcontroller.cpp:425
-#, kde-format
-msgctxt "@title:window"
-msgid "Debug"
-msgstr "Ladění"
-
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr ""
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr ""
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2251,7 +2245,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "Poznamenat"
 
-#: shell/documentcontroller.cpp:1287
+#: shell/documentcontroller.cpp:1288
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2301,7 +2295,7 @@ msgctxt "a certain environment variable is ..."
 msgid "currently unset"
 msgstr ""
 
-#: shell/ktexteditorpluginintegration.cpp:491
+#: shell/ktexteditorpluginintegration.cpp:492
 #, kde-format
 msgctxt "@title:window"
 msgid "Messages"
@@ -2728,7 +2722,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "Otevřít existující soubor \"%1\""
 
-#: shell/partcontroller.cpp:226
+#: shell/partcontroller.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
@@ -3252,24 +3246,24 @@ msgctxt "launch mode"
 msgid "Execute"
 msgstr "Spustit"
 
-#: shell/runcontroller.cpp:407
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr ""
 
-#: shell/runcontroller.cpp:427
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr ""
 
-#: shell/runcontroller.cpp:430
+#: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr ""
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3277,25 +3271,25 @@ msgid ""
 "ones."
 msgstr ""
 
-#: shell/runcontroller.cpp:434
+#: shell/runcontroller.cpp:465
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr ""
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:466
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Spustit"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr ""
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3303,7 +3297,7 @@ msgid ""
 "configuration."
 msgstr ""
 
-#: shell/runcontroller.cpp:444
+#: shell/runcontroller.cpp:475
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3314,84 +3308,84 @@ msgstr "Ladit"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:458
+#: shell/runcontroller.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Zastavit všechny úlohy"
 
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:490
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Zastavit vše"
 
-#: shell/runcontroller.cpp:462
+#: shell/runcontroller.cpp:493
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Zastavit všechny běžící úlohy"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:494
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr ""
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:500
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Zastavit"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:502
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Zastavit"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:503
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr ""
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:504
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr ""
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:508
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr ""
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:509
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr ""
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:510
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
 
-#: shell/runcontroller.cpp:592
+#: shell/runcontroller.cpp:623
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr ""
 
-#: shell/runcontroller.cpp:975
+#: shell/runcontroller.cpp:1006
 #, kde-format
 msgid "New %1 Launcher"
 msgstr ""
 
-#: shell/runcontroller.cpp:1012
+#: shell/runcontroller.cpp:1043
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -4903,25 +4897,25 @@ msgstr ""
 msgid " Line: %1 Col: %2 "
 msgstr " Řádek: %1 Sloupec: %2 "
 
-#: shell/uicontroller.cpp:79
+#: shell/uicontroller.cpp:81
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "Kód"
 
-#: shell/uicontroller.cpp:90
+#: shell/uicontroller.cpp:92
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "Ladění"
 
-#: shell/uicontroller.cpp:99
+#: shell/uicontroller.cpp:101
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "Kontrola"
 
-#: shell/uicontroller.cpp:458
+#: shell/uicontroller.cpp:500
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
@@ -5024,25 +5018,25 @@ msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
-#: sublime/container.cpp:768
+#: sublime/container.cpp:772
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Zkopírovat název souboru"
 
-#: sublime/container.cpp:771
+#: sublime/container.cpp:775
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Zavřít"
 
-#: sublime/container.cpp:773
+#: sublime/container.cpp:777
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Zavřít všechny ostatní"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
@@ -5054,32 +5048,32 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr ""
 
-#: sublime/idealbuttonbarwidget.cpp:301
+#: sublime/idealbuttonbarwidget.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
 msgstr ""
 
-#: sublime/idealcontroller.cpp:133
-#, kde-format
-msgid "Left Button Bar"
-msgstr ""
-
-#: sublime/idealcontroller.cpp:134
-#, kde-format
-msgid "Right Button Bar"
-msgstr ""
-
-#: sublime/idealcontroller.cpp:139
-#, kde-format
-msgid "Bottom Button Bar"
-msgstr ""
-
-#: sublime/idealcontroller.cpp:210
+#: sublime/idealcontroller.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1 Panel nástrojů"
+
+#: sublime/idealcontroller.cpp:381
+#, kde-format
+msgid "Left Button Bar"
+msgstr ""
+
+#: sublime/idealcontroller.cpp:382
+#, kde-format
+msgid "Right Button Bar"
+msgstr ""
+
+#: sublime/idealcontroller.cpp:387
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr ""
 
 #: sublime/idealdockwidget.cpp:123
 #, kde-format
@@ -5195,66 +5189,66 @@ msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Nástrojové pohledy"
 
-#: sublime/mainwindow_p.cpp:642
+#: sublime/mainwindow_p.cpp:644
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Zavřít"
 
-#: sublime/mainwindow_p.cpp:643
+#: sublime/mainwindow_p.cpp:645
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "Zavřít zprávu"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:268
 #, kde-format
 msgid "duchainify"
 msgstr ""
 
-#: util/duchainify/main.cpp:264
+#: util/duchainify/main.cpp:269
 #, kde-format
 msgid "DUChain builder application"
 msgstr ""
 
-#: util/duchainify/main.cpp:265
+#: util/duchainify/main.cpp:270
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(c) 2009 David Nolden"
 
-#: util/duchainify/main.cpp:271
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "file or directory"
 msgstr "soubor nebo adresář"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:279
 #, kde-format
 msgid "Show warnings"
 msgstr "Zobrazit varování"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:281
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr ""
 
-#: util/duchainify/main.cpp:278
+#: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr ""
 
-#: util/duchainify/main.cpp:282
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
 "all included files"
 msgstr ""
 
-#: util/duchainify/main.cpp:284
+#: util/duchainify/main.cpp:289
 #, kde-format
 msgid "Number of threads to use"
 msgstr ""
 
-#: util/duchainify/main.cpp:287
+#: util/duchainify/main.cpp:292
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5262,43 +5256,43 @@ msgid ""
 "declarations-and-uses-and-AST"
 msgstr ""
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr ""
 
-#: util/duchainify/main.cpp:293
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
 msgstr ""
 
-#: util/duchainify/main.cpp:295
+#: util/duchainify/main.cpp:300
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:303
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
 
-#: util/duchainify/main.cpp:301
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
 
-#: util/duchainify/main.cpp:304
+#: util/duchainify/main.cpp:309
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr ""
 
-#: util/duchainify/main.cpp:306
+#: util/duchainify/main.cpp:311
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr ""
 
-#: util/duchainify/main.cpp:308
+#: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr ""
@@ -5976,6 +5970,6 @@ msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
 
-#~ msgctxt "@option:check"
-#~ msgid "Recursive"
-#~ msgstr "Rekurzivně"
+#~ msgctxt "@title:window"
+#~ msgid "Debug"
+#~ msgstr "Ladění"

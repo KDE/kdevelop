@@ -1,16 +1,16 @@
 # Translation of kdevmesonmanager.po to Catalan
-# Copyright (C) 2019-2024 This_file_is_part_of_KDE
+# Copyright (C) 2019-2025 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
+# SPDX-FileCopyrightText: 2019, 2020, 2021, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2019, 2020.
-# SPDX-FileCopyrightText: 2019, 2020, 2021, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-22 00:39+0000\n"
-"PO-Revision-Date: 2024-07-31 12:03+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-16 09:35+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -180,6 +180,12 @@ msgstr "La sortida d'introspecció de «%1» no conté cap matriu ni cap objecte
 #, kde-format
 msgid "The current build directory is invalid"
 msgstr "El directori de construcció actual no és vàlid"
+
+#: mintro/mesontests.cpp:80
+#, kde-format
+msgctxt "%1 - test case name"
+msgid "Meson Test \"%1\""
+msgstr "Prova de Meson «%1»"
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format
@@ -577,24 +583,3 @@ msgstr "Opcions predeterminades del projecte"
 #, kde-format
 msgid "New Option"
 msgstr "Opció nova"
-
-#~ msgid "Importing project failed"
-#~ msgstr "Ha fallat la importació del projecte"
-
-#~ msgid "Form"
-#~ msgstr "Formulari"
-
-#~ msgid "Basic configuration"
-#~ msgstr "Configuració bàsica"
-
-#~ msgid "Build type:"
-#~ msgstr "Tipus de construcció:"
-
-#~ msgid "Full path to the installation prefix"
-#~ msgstr "Camí complet amb el prefix d'instal·lació"
-
-#~ msgid "Installation prefix:"
-#~ msgstr "Prefix d'instal·lació:"
-
-#~ msgid "Build configuration"
-#~ msgstr "Configuració de la construcció"

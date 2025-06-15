@@ -1,16 +1,16 @@
 # Translation of kdevflatpak.po to Catalan
-# Copyright (C) 2017-2024 This_file_is_part_of_KDE
+# Copyright (C) 2017-2025 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
+# SPDX-FileCopyrightText: 2018, 2020, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2017.
-# SPDX-FileCopyrightText: 2018, 2020, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2024-10-30 10:32+0100\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-16 09:39+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -61,59 +61,86 @@ msgstr "Exporta %1"
 msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Paquet de Flatpak (*.flatpak)"
 
-#: flatpakplugin.cpp:234
+#: flatpakplugin.cpp:117
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export Bundle %1"
+msgstr "Paquet Flatpak d'exportació %1"
+
+#: flatpakplugin.cpp:236
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
 msgstr "Torna a construir l'entorn Flatpak: %1"
 
-#: flatpakplugin.cpp:241
+#: flatpakplugin.cpp:243
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
 msgstr "Construeix l'entorn Flatpak %1 per a %2"
 
-#: flatpakplugin.cpp:265
+#: flatpakplugin.cpp:267
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
 msgstr "Escolliu el nom de l'etiqueta"
 
-#: flatpakplugin.cpp:266
+#: flatpakplugin.cpp:268
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "Nom de la màquina del dispositiu:"
 
-#: flatpakruntime.cpp:57
+#: flatpakruntime.cpp:61
 #, kde-format
+msgctxt "@title:window"
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:157
+#: flatpakruntime.cpp:113
 #, kde-format
-msgid "Bundling"
-msgstr "Empaquetament"
+msgctxt "%1 - application ID or name"
+msgid "Flatpak Create %1"
+msgstr "Creació de Flatpak %1"
 
-#: flatpakruntime.cpp:179
+#: flatpakruntime.cpp:217
 #, kde-format
-msgid "Run on Device"
-msgstr "Executa en el dispositiu"
+msgctxt "%1 - application ID"
+msgid "Flatpak Finalize %1"
+msgstr "Finalització de Flatpak %1"
 
-#~ msgid "Export %1 to..."
-#~ msgstr "Exporta %1 a..."
+#: flatpakruntime.cpp:223
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export %1"
+msgstr "Exportació de Flatpak %1"
 
-#~ msgid "Creating Flatpak %1"
-#~ msgstr "S'està creant el Flatpak %1"
+#: flatpakruntime.cpp:226
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Bundle %1"
+msgstr "Paquet de Flatpak %1"
 
-#~ msgid "Transferring flatpak to %1"
-#~ msgstr "S'està transferint el Flatpak a %1"
+#: flatpakruntime.cpp:243
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Run %1 on %2"
+msgstr "Execució de Flatpak %1 a %2"
 
-#~ msgid "Transferring replicate.sh to %1"
-#~ msgstr "S'està transferint el replicate.sh a %1"
+#: flatpakruntime.cpp:248
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer .flatpak to %1"
+msgstr "Transferència de Flatpak a %1"
 
-#~ msgid "Installing %1 to %2"
-#~ msgstr "S'està instal·lant el %1 a %2"
+#: flatpakruntime.cpp:250
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer replicate.sh to %1"
+msgstr "Transferència de replicate.sh a %1"
 
-#~ msgid "Running %1 on %2"
-#~ msgstr "S'està executant %1 a %2"
+#: flatpakruntime.cpp:254
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Install %1 to %2"
+msgstr "Instal·lació de Flatpak %1 a %2"

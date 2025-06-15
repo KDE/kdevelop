@@ -395,7 +395,7 @@ msgstr "Carrega una plantilla des d'un fitxer"
 #: ui/licensechooser.ui:29
 #, kde-format
 msgid "Choose the license under which to place the generated content."
-msgstr "Escolliu la llicència amb què s'empararà el contingut generat."
+msgstr "Trieu la llicència amb què s'empararà el contingut generat."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/licensechooser.ui:44

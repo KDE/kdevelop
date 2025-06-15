@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
 "PO-Revision-Date: 2020-11-04 16:01-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -158,35 +158,39 @@ msgid ""
 "the number of views exceeds this value"
 msgstr ""
 
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
 msgstr "Compilar"
 
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
 msgstr "Executar"
 
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Depurar"
 
-#: standardoutputview.cpp:124
+#: standardoutputview.cpp:89
 #, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "Testar"
+msgid "Analyze"
+msgstr ""
 
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "Controle de versão"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Testar"
 
 #~ msgctxt "@title:menu"
 #~ msgid "Navigation"

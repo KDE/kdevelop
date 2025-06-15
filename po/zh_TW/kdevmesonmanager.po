@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-22 00:39+0000\n"
-"PO-Revision-Date: 2024-05-23 17:10+0900\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-24 21:36+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -168,6 +168,12 @@ msgstr ""
 #, kde-format
 msgid "The current build directory is invalid"
 msgstr "目前編譯目錄是無效的"
+
+#: mintro/mesontests.cpp:80
+#, kde-format
+msgctxt "%1 - test case name"
+msgid "Meson Test \"%1\""
+msgstr "Meson 測試 \"%1\""
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format
@@ -395,7 +401,7 @@ msgstr ""
 #: settings/mesonnewbuilddir.cpp:154
 #, kde-format
 msgid "Cannot use specified directory"
-msgstr ""
+msgstr "無法使用指定的目錄"
 
 #: settings/mesonnewbuilddir.cpp:157
 #, kde-format

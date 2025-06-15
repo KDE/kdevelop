@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-10 00:41+0000\n"
 "PO-Revision-Date: 2025-04-22 01:24+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -1394,102 +1394,102 @@ msgstr "생성된 토큰 스트림 출력"
 msgid "code to parse"
 msgstr "해석할 코드"
 
-#: outputview/outputexecutejob.cpp:196
+#: outputview/outputexecutejob.cpp:186
 #, kde-format
 msgid "No build directory specified for a builder job."
 msgstr "빌더 작업에 빌드 디렉터리를 지정하지 않았습니다."
 
-#: outputview/outputexecutejob.cpp:198
+#: outputview/outputexecutejob.cpp:188
 #, kde-format
 msgid "No working directory specified for a process."
 msgstr "프로세스에 지정한 작업 디렉터리가 없습니다."
 
-#: outputview/outputexecutejob.cpp:210
+#: outputview/outputexecutejob.cpp:200
 #, kde-format
 msgid "Invalid build directory '%1'"
 msgstr "잘못된 빌드 디렉터리 '%1'"
 
-#: outputview/outputexecutejob.cpp:212
+#: outputview/outputexecutejob.cpp:202
 #, kde-format
 msgid "Invalid working directory '%1'"
 msgstr "잘못된 작업 디렉터리 '%1'"
 
-#: outputview/outputexecutejob.cpp:219
+#: outputview/outputexecutejob.cpp:209
 #, kde-format
 msgid "Build directory '%1' is not a local path"
 msgstr "빌드 디렉터리 '%1'이(가) 로컬 경로가 아님"
 
-#: outputview/outputexecutejob.cpp:221
+#: outputview/outputexecutejob.cpp:211
 #, kde-format
 msgid "Working directory '%1' is not a local path"
 msgstr "작업 디렉터리 '%1'이(가) 로컬 경로가 아님"
 
-#: outputview/outputexecutejob.cpp:240
+#: outputview/outputexecutejob.cpp:222
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
 msgstr "빌드 디렉터리 '%1'이(가) 없거나 디렉터리가 아님"
 
-#: outputview/outputexecutejob.cpp:242
+#: outputview/outputexecutejob.cpp:224
 #, kde-format
 msgid "Working directory '%1' does not exist or is not a directory"
 msgstr "작업 디렉터리 '%1'이(가) 없거나 디렉터리가 아님"
 
-#: outputview/outputexecutejob.cpp:303
+#: outputview/outputexecutejob.cpp:282
 #, kde-format
 msgid "Failed to specify program to start: %1"
 msgstr "시작할 프로그램을 지정할 수 없음: %1"
 
-#: outputview/outputexecutejob.cpp:304
+#: outputview/outputexecutejob.cpp:283
 #, kde-format
 msgid "*** %1 ***"
 msgstr "*** %1 ***"
 
-#: outputview/outputexecutejob.cpp:330
+#: outputview/outputexecutejob.cpp:309
 #, kde-format
 msgid "*** Killed process ***"
 msgstr "*** 프로세스가 죽었음 ***"
 
-#: outputview/outputexecutejob.cpp:334
+#: outputview/outputexecutejob.cpp:313
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
 msgstr "*** 경고: 프로세스를 죽일 수 없음 ***"
 
-#: outputview/outputexecutejob.cpp:356
+#: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
 msgstr "%1을(를) 시작할 수 없음"
 
-#: outputview/outputexecutejob.cpp:360
+#: outputview/outputexecutejob.cpp:339
 #, kde-format
 msgid "%1 has crashed"
 msgstr "%1이(가) 충돌함"
 
-#: outputview/outputexecutejob.cpp:364
+#: outputview/outputexecutejob.cpp:343
 #, kde-format
 msgid "Read error"
 msgstr "읽기 오류"
 
-#: outputview/outputexecutejob.cpp:368
+#: outputview/outputexecutejob.cpp:347
 #, kde-format
 msgid "Write error"
 msgstr "쓰기 오류"
 
-#: outputview/outputexecutejob.cpp:372
+#: outputview/outputexecutejob.cpp:351
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr "프로세스 대기 시간이 초과됨"
 
-#: outputview/outputexecutejob.cpp:376
+#: outputview/outputexecutejob.cpp:355
 #, kde-format
 msgid "Exit code %1"
 msgstr "종료 코드 %1"
 
-#: outputview/outputexecutejob.cpp:389
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** 실패: %1 ***"
 
-#: outputview/outputexecutejob.cpp:407
+#: outputview/outputexecutejob.cpp:380
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** 완료됨 ***"
@@ -2045,25 +2045,19 @@ msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "편집기에서 실행하고 있는 줄로 이동합니다."
 
-#: shell/debugcontroller.cpp:425
-#, kde-format
-msgctxt "@title:window"
-msgid "Debug"
-msgstr "디버그"
-
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "디버그 시작"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "현재 시작 디버그"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2290,7 +2284,7 @@ msgctxt "@action"
 msgid "Annotate"
 msgstr "작성자 보기"
 
-#: shell/documentcontroller.cpp:1287
+#: shell/documentcontroller.cpp:1288
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2346,7 +2340,7 @@ msgctxt "a certain environment variable is ..."
 msgid "currently unset"
 msgstr "현재 설정되지 않음"
 
-#: shell/ktexteditorpluginintegration.cpp:491
+#: shell/ktexteditorpluginintegration.cpp:492
 #, kde-format
 msgctxt "@title:window"
 msgid "Messages"
@@ -2777,7 +2771,7 @@ msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
 msgstr "기존 파일 \"%1\" 열기"
 
-#: shell/partcontroller.cpp:226
+#: shell/partcontroller.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
@@ -3322,24 +3316,24 @@ msgctxt "launch mode"
 msgid "Execute"
 msgstr "실행"
 
-#: shell/runcontroller.cpp:407
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "현재 시작 설정은 '%1' 모드를 지원하지 않습니다."
 
-#: shell/runcontroller.cpp:427
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "시작 설정..."
 
-#: shell/runcontroller.cpp:430
+#: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "시작 설정 대화 상자 열기"
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3348,25 +3342,25 @@ msgid ""
 msgstr ""
 "새로운 시작 설정을 정의하거나 기존 시작 설정을 변경하는 대화 상자를 엽니다."
 
-#: shell/runcontroller.cpp:434
+#: shell/runcontroller.cpp:465
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "실행 시작"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:466
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "실행"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "현재 시작 실행"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3374,7 +3368,7 @@ msgid ""
 "configuration."
 msgstr "현재 활성화된 시작 설정에 지정한 대상 또는 프로그램을 실행합니다."
 
-#: shell/runcontroller.cpp:444
+#: shell/runcontroller.cpp:475
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3385,84 +3379,84 @@ msgstr "디버그"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:458
+#: shell/runcontroller.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "모든 작업 정지"
 
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:490
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "모두 정지"
 
-#: shell/runcontroller.cpp:462
+#: shell/runcontroller.cpp:493
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "현재 실행 중인 모든 작업 정지"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:494
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "실행 중인 모든 작업이 정지하도록 요청합니다."
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:500
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "정지"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:502
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "정지"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:503
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "개별 작업을 정지할 수 있는 메뉴"
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:504
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "개별적으로 정지할 수 있는 작업 목록입니다."
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:508
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "현재 시작 설정"
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:509
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "현재 시작 설정"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:510
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "실행 명령을 내렸을 때 실행할 시작 설정을 선택하십시오."
 
-#: shell/runcontroller.cpp:592
+#: shell/runcontroller.cpp:623
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> 이름 없는 작업"
 
-#: shell/runcontroller.cpp:975
+#: shell/runcontroller.cpp:1006
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "새 %1 실행기"
 
-#: shell/runcontroller.cpp:1012
+#: shell/runcontroller.cpp:1043
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -5055,25 +5049,25 @@ msgstr "파일이 외부에서 변경됨"
 msgid " Line: %1 Col: %2 "
 msgstr " 행: %1 열: %2 "
 
-#: shell/uicontroller.cpp:79
+#: shell/uicontroller.cpp:81
 #, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "코드"
 
-#: shell/uicontroller.cpp:90
+#: shell/uicontroller.cpp:92
 #, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "디버그"
 
-#: shell/uicontroller.cpp:99
+#: shell/uicontroller.cpp:101
 #, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "리뷰"
 
-#: shell/uicontroller.cpp:458
+#: shell/uicontroller.cpp:500
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
@@ -5176,25 +5170,25 @@ msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Ctrl+Tab을 눌러 전환)"
 
-#: sublime/container.cpp:768
+#: sublime/container.cpp:772
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "파일 이름 복사"
 
-#: sublime/container.cpp:771
+#: sublime/container.cpp:775
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "닫기"
 
-#: sublime/container.cpp:773
+#: sublime/container.cpp:777
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "다른 모두 닫기"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
@@ -5206,32 +5200,32 @@ msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "'%1' 도구 보기 전환"
 
-#: sublime/idealbuttonbarwidget.cpp:301
+#: sublime/idealbuttonbarwidget.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
 msgstr "오른쪽 단추를 클릭해서 새 도구 보기를 추가하십시오."
 
-#: sublime/idealcontroller.cpp:133
-#, kde-format
-msgid "Left Button Bar"
-msgstr "왼쪽 단추 표시줄"
-
-#: sublime/idealcontroller.cpp:134
-#, kde-format
-msgid "Right Button Bar"
-msgstr "오른쪽 단추 표시줄"
-
-#: sublime/idealcontroller.cpp:139
-#, kde-format
-msgid "Bottom Button Bar"
-msgstr "아래쪽 단추 표시줄"
-
-#: sublime/idealcontroller.cpp:210
+#: sublime/idealcontroller.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1 도구 모음"
+
+#: sublime/idealcontroller.cpp:381
+#, kde-format
+msgid "Left Button Bar"
+msgstr "왼쪽 단추 표시줄"
+
+#: sublime/idealcontroller.cpp:382
+#, kde-format
+msgid "Right Button Bar"
+msgstr "오른쪽 단추 표시줄"
+
+#: sublime/idealcontroller.cpp:387
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr "아래쪽 단추 표시줄"
 
 #: sublime/idealdockwidget.cpp:123
 #, kde-format
@@ -5347,66 +5341,66 @@ msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "도구 보기"
 
-#: sublime/mainwindow_p.cpp:642
+#: sublime/mainwindow_p.cpp:644
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "닫기"
 
-#: sublime/mainwindow_p.cpp:643
+#: sublime/mainwindow_p.cpp:645
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr "메시지 닫기"
 
-#: util/duchainify/main.cpp:263
+#: util/duchainify/main.cpp:268
 #, kde-format
 msgid "duchainify"
 msgstr "duchainify"
 
-#: util/duchainify/main.cpp:264
+#: util/duchainify/main.cpp:269
 #, kde-format
 msgid "DUChain builder application"
 msgstr "DUChain 빌더 앱"
 
-#: util/duchainify/main.cpp:265
+#: util/duchainify/main.cpp:270
 #, kde-format
 msgid "(c) 2009 David Nolden"
 msgstr "(c) 2009 David Nolden"
 
-#: util/duchainify/main.cpp:271
+#: util/duchainify/main.cpp:276
 #, kde-format
 msgid "file or directory"
 msgstr "파일이나 디렉터리"
 
-#: util/duchainify/main.cpp:274
+#: util/duchainify/main.cpp:279
 #, kde-format
 msgid "Show warnings"
 msgstr "경고 표시"
 
-#: util/duchainify/main.cpp:276
+#: util/duchainify/main.cpp:281
 #, kde-format
 msgid "Show warnings and debug output"
 msgstr "경고와 디버그 출력 표시"
 
-#: util/duchainify/main.cpp:278
+#: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr "지정한 파일의 최상위 콘텍스트 강제 업데이트"
 
-#: util/duchainify/main.cpp:282
+#: util/duchainify/main.cpp:287
 #, kde-format
 msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
 "all included files"
 msgstr "지정한 파일과 모든 포함된 파일의 최상위 콘텍스트 강제 업데이트"
 
-#: util/duchainify/main.cpp:284
+#: util/duchainify/main.cpp:289
 #, kde-format
 msgid "Number of threads to use"
 msgstr "사용할 스레드 개수"
 
-#: util/duchainify/main.cpp:287
+#: util/duchainify/main.cpp:292
 #, kde-format
 msgid ""
 "Features to build. Options: empty, simplified-visible-declarations, visible-"
@@ -5417,43 +5411,43 @@ msgstr ""
 "declarations(기본값), all-declarations, all-declarations-and-uses, all-"
 "declarations-and-uses-and-AST"
 
-#: util/duchainify/main.cpp:291
+#: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr "해석이 성공했을 때 완전한 정의-사용 체인 출력"
 
-#: util/duchainify/main.cpp:293
+#: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
 msgstr "콘텍스트를 출력할 때 부모 콘텍스트 출력"
 
-#: util/duchainify/main.cpp:295
+#: util/duchainify/main.cpp:300
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr "해석이 성공했을 때 완전한 DUChain 정의 저장소 출력"
 
-#: util/duchainify/main.cpp:298
+#: util/duchainify/main.cpp:303
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr "해석이 성공했을 때 완전한 DUChain PersistentSymbolTable 저장소 출력"
 
-#: util/duchainify/main.cpp:301
+#: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr "선언의 자세한 정보를 출력할 때 최대 깊이 정의"
 
-#: util/duchainify/main.cpp:304
+#: util/duchainify/main.cpp:309
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
 msgstr "DUChain 그래프 저장(.dot 형식으로)"
 
-#: util/duchainify/main.cpp:306
+#: util/duchainify/main.cpp:311
 #, kde-format
 msgid "Print problems encountered during parsing"
 msgstr "구문 분석 중 발생한 문제 출력"
 
-#: util/duchainify/main.cpp:308
+#: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
 msgstr "가져온 콘텍스트에서 오류를 재귀적으로 출력합니다."
@@ -6141,6 +6135,10 @@ msgstr "이전과 차이점"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "리비전간 차이점"
+
+#~ msgctxt "@title:window"
+#~ msgid "Debug"
+#~ msgstr "디버그"
 
 #~ msgctxt "@option:check"
 #~ msgid "Recursive"

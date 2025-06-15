@@ -1,13 +1,14 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevcontextbrowser.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2013, 2016, 2017, 2020.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2013, 2016, 2017, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcontextbrowser\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2020-07-20 17:12+0200\n"
+"PO-Revision-Date: 2025-05-17 01:55+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -141,39 +142,3 @@ msgstr "Desbloquear la vista actual"
 #, kde-format
 msgid "Code Browser Toolbar"
 msgstr "Barra de herramientas del navegador de código"
-
-#~ msgid "Outline..."
-#~ msgstr "Esquema..."
-
-#~ msgctxt "@title:menu"
-#~ msgid "Navigation"
-#~ msgstr "Navegación"
-
-#~ msgid "Enable/disable source browse mode"
-#~ msgstr "Activar/desactivar el modo de navegación de código"
-
-#~ msgid ""
-#~ "When this is enabled, you can browse the source-code by clicking in the "
-#~ "editor."
-#~ msgstr ""
-#~ "Si está activado podrá navegar el código fuente pulsando sobre él en el "
-#~ "editor."
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid ""
-#~ "This plugin shows information about the current language context in a "
-#~ "side view, and highlights relevant declarations and uses."
-#~ msgstr ""
-#~ "Este complemento muestra información sobre el contexto del lenguaje "
-#~ "actual en una vista lateral, resaltando declaraciones relevantes y sus "
-#~ "usos."
-
-#~ msgid "Shows information for the current context"
-#~ msgstr "Muestra información para el contexto actual"

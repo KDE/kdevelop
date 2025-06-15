@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
 "PO-Revision-Date: 2014-01-12 22:29+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -163,35 +163,39 @@ msgid ""
 "the number of views exceeds this value"
 msgstr ""
 
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
 msgstr "Izgradi"
 
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
 msgstr "Pokreni"
 
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Ispravka grešaka"
 
-#: standardoutputview.cpp:124
+#: standardoutputview.cpp:89
 #, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "Test"
+msgid "Analyze"
+msgstr ""
 
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "Upravljanje verzijama"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Test"
 
 #~ msgctxt "@title:menu"
 #~ msgid "Navigation"

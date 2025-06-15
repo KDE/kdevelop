@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2020-01-23 10:43+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -603,7 +603,7 @@ msgctxt "@title:window"
 msgid "Clazy Error"
 msgstr "Clazy tõrge"
 
-#: jobparameters.cpp:39
+#: jobparameters.cpp:41
 #, kde-format
 msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
@@ -612,22 +612,22 @@ msgstr ""
 "clazy-standalone asukohta ei suudetud leida. Määra see käsitsi, kui Clazy on "
 "ikka paigaldatud."
 
-#: jobparameters.cpp:42
+#: jobparameters.cpp:44
 #, kde-format
 msgid "clazy-standalone path is empty."
 msgstr "clazy-standalone asukoht on andmata."
 
-#: jobparameters.cpp:50
+#: jobparameters.cpp:52
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
 msgstr "clazy-standalone asukohta \"%1\" ei ole olemas."
 
-#: jobparameters.cpp:55
+#: jobparameters.cpp:57
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
 msgstr "clazy-standalone asukoht \"%1\" ei ole täitmisfail."
 
-#: jobparameters.cpp:64
+#: jobparameters.cpp:66
 #, kde-format
 msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
@@ -636,17 +636,17 @@ msgstr ""
 "Clazy dokumentatsiooni asukohta ei suudetud leida. Määra see käsitsi, kui "
 "Clazy on ikka paigaldatud."
 
-#: jobparameters.cpp:67
+#: jobparameters.cpp:69
 #, kde-format
 msgid "Clazy documentation path is empty."
 msgstr "Clazy dokumentatsiooni asukoht on andmata."
 
-#: jobparameters.cpp:75
+#: jobparameters.cpp:77
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
 msgstr "Clazy dokumentatsiooni asukohta \"%1\" ei ole olemas."
 
-#: jobparameters.cpp:80
+#: jobparameters.cpp:82
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
 msgstr "Clazy dokumentatsiooni asukoht \"%1\" ei ole kataloog."

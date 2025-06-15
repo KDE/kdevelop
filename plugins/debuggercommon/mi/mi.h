@@ -14,6 +14,8 @@
 
 #include <stdexcept>
 
+class QDebug;
+
 /**
 @author Roberto Raggi
 @author Vladimir Prus
@@ -225,6 +227,11 @@ namespace KDevMI { namespace MI {
             'index'. Otherwise, throws 'type_error'.
         */
         virtual const Value& operator[](int index) const;
+
+        /**
+         * Write this value to a given stream.
+         */
+        virtual void print(QDebug debug) const = 0;
     };
 
     /** @internal
@@ -254,6 +261,8 @@ namespace KDevMI { namespace MI {
         QString literal() const override;
         int toInt(int base) const override;
 
+        void print(QDebug debug) const override;
+
     private:
         QString literal_;
     };
@@ -267,6 +276,8 @@ namespace KDevMI { namespace MI {
 
         using Value::operator[];
         const Value& operator[](const QString& variable) const override;
+
+        void print(QDebug debug) const override;
 
         QList<Result*> results;
         QMap<QString, Result*> results_by_name;
@@ -284,8 +295,13 @@ namespace KDevMI { namespace MI {
         using Value::operator[];
         const Value& operator[](int index) const override;
 
+        void print(QDebug debug) const override;
+
         QList<Result*> results;
     };
+
+    QDebug operator<<(QDebug debug, const Value&);
+    QDebug operator<<(QDebug debug, const Result*);
 
     struct Record
     {

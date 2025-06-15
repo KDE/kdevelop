@@ -1,15 +1,15 @@
 # Spanish translations for kdevmesonmanager.po package.
-# Copyright (C) 2019 This file is copyright:
+# Copyright (C) 2019-2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
 # Automatically generated, 2019.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2019, 2020.
+#
+# SPDX-FileCopyrightText: 2019, 2020, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevmesonmanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-22 00:39+0000\n"
-"PO-Revision-Date: 2020-07-25 19:29+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 02:18+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.07.80\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -180,6 +180,12 @@ msgstr "La salida de introspección de «%1» no contiene un array ni un objeto"
 msgid "The current build directory is invalid"
 msgstr "El directorio de construcción actual no es válido"
 
+#: mintro/mesontests.cpp:80
+#, kde-format
+msgctxt "%1 - test case name"
+msgid "Meson Test \"%1\""
+msgstr "Prueba de Meson «%1»"
+
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format
 msgid "Failed to create a temporary file."
@@ -319,7 +325,7 @@ msgstr "Configuración de proyecto de meson"
 #: settings/mesonconfigpage.ui:41 settings/mesonconfigpage.ui:51
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, l_status)
 #. i18n: ectx: property (text), widget (QLabel, l_statusMessage)
@@ -327,7 +333,7 @@ msgstr "..."
 #: settings/mesonrewriterpage.ui:187
 #, kde-format
 msgid "Status message..."
-msgstr "Mensaje de estado..."
+msgstr "Mensaje de estado…"
 
 #. i18n: ectx: property (text), widget (QLabel, l_changed)
 #: settings/mesonconfigpage.ui:78 settings/mesonrewriterpage.ui:194
@@ -512,12 +518,12 @@ msgstr "Inicializando interfaz gráfica"
 #: settings/mesonrewriterpage.cpp:182
 #, kde-format
 msgid "Loading project data..."
-msgstr "Cargando datos del proyecto..."
+msgstr "Cargando datos del proyecto…"
 
 #: settings/mesonrewriterpage.cpp:185
 #, kde-format
 msgid "Writing project data..."
-msgstr "Escribiendo datos del proyecto..."
+msgstr "Escribiendo datos del proyecto…"
 
 #: settings/mesonrewriterpage.cpp:191
 #, kde-format
@@ -577,29 +583,3 @@ msgstr "Opciones predeterminadas del proyecto"
 #, kde-format
 msgid "New Option"
 msgstr "Nueva opción"
-
-#~ msgid "Importing project failed"
-#~ msgstr "La importación del proyecto ha fallado"
-
-#~ msgid "Extra meson configuration arguments"
-#~ msgstr "Argumentos adicionales de configuración de meson"
-
-#~ msgid "Basic configuration"
-#~ msgstr "Configuración básica"
-
-#~ msgid "Build type:"
-#~ msgstr "Tipo de construcción:"
-
-#~ msgid "Full path to the installation prefix"
-#~ msgstr "Ruta completa al prefijo de instalación"
-
-#~ msgid "Installation prefix:"
-#~ msgstr "Prefijo de instalación:"
-
-#~ msgid "Build configuration"
-#~ msgstr "Configuración de construcción"
-
-#~ msgid "TODO -- Implement in separate UI file"
-#~ msgstr ""
-#~ "POR HACER -- Implementar en un archivo de interfaz de usuario "
-#~ "independiente"

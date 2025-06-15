@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -57,25 +57,32 @@ msgid ""
 msgstr ""
 "在启动配置“%1”的参数中包含了一个 shell 元字符，现在尚未支持，停止启动。"
 
-#: executescriptplugin.cpp:171
+#: executescriptplugin.cpp:168
 #, kde-format
 msgid "No valid interpreter specified"
 msgstr "未指派有效的解释器"
 
-#: executescriptplugin.cpp:181
+#: executescriptplugin.cpp:180
 #, kde-format
 msgid ""
 "There is a quoting error in the interpreter for the launch configuration "
 "'%1'. Aborting start."
 msgstr "在启动配置“%1”的解释器中有一处引用错误。停止启动。"
 
-#: executescriptplugin.cpp:186
+#: executescriptplugin.cpp:185
 #, kde-format
 msgid ""
 "A shell meta character was included in the interpreter for the launch "
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
 "在启动配置“%1”的解释器中包含了一个 shell 元字符，现在尚未支持，停止启动。"
+
+#: executescriptplugin.cpp:195
+#, kde-format
+msgid ""
+"Splitting the interpreter command for the launch configuration '%1' yields "
+"an empty list. Aborting start."
+msgstr ""
 
 #: scriptappconfig.cpp:83
 #, kde-format
@@ -282,49 +289,49 @@ msgctxt "@info:tooltip"
 msgid "Enter a remote host (user@host)"
 msgstr "输入远程主机 (user@host)"
 
-#: scriptappjob.cpp:76
-#, kde-format
-msgid "There is no active document to launch."
-msgstr "无可执行的活动文档。"
-
-#: scriptappjob.cpp:98
+#: scriptappjob.cpp:43
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr "没有指定环境组，似乎配置损坏，请检查运行配置“%1”。使用默认的环境组。"
 
-#: scriptappjob.cpp:170
+#: scriptappjob.cpp:90
+#, kde-format
+msgid "There is no active document to launch."
+msgstr "无可执行的活动文档。"
+
+#: scriptappjob.cpp:165
 #, kde-format
 msgid "Starting: %1"
 msgstr "正在启动：%1"
 
-#: scriptappjob.cpp:184
+#: scriptappjob.cpp:179
 #, kde-format
 msgid "*** Killed Application ***"
 msgstr "*** 应用程序已杀死 ***"
 
-#: scriptappjob.cpp:195
+#: scriptappjob.cpp:190
 #, kde-format
 msgid "*** Exited normally ***"
 msgstr "*** 正常退出 ***"
 
-#: scriptappjob.cpp:197
+#: scriptappjob.cpp:192
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
 msgstr "*** 退出，返回值：%1 ***"
 
-#: scriptappjob.cpp:200
+#: scriptappjob.cpp:195
 #, kde-format
 msgid "*** Process aborted ***"
 msgstr "*** 进程已中止 ***"
 
-#: scriptappjob.cpp:203
+#: scriptappjob.cpp:198
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
 msgstr "*** 崩溃，返回值：%1 ***"
 
-#: scriptappjob.cpp:218
+#: scriptappjob.cpp:213
 #, kde-format
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "

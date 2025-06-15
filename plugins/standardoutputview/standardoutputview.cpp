@@ -27,7 +27,11 @@
 
 class OutputViewFactory : public KDevelop::IToolViewFactory{
 public:
-    explicit OutputViewFactory(const ToolViewData* data): m_data(data) {}
+    explicit OutputViewFactory(const ToolViewData* data)
+        : m_data(data)
+        , m_id{QLatin1String("org.kdevelop.OutputView.") + m_data->id}
+    {
+    }
     QWidget* create(QWidget *parent = nullptr) override
     {
         return new OutputWidget( parent, m_data );
@@ -42,144 +46,99 @@ public:
     }
     QString id() const override
     {
-        //NOTE: id must be unique, see e.g. https://bugs.kde.org/show_bug.cgi?id=287093
-        return QStringLiteral("org.kdevelop.OutputView.%1").arg(m_data->toolViewId);
+        return m_id;
     }
 private:
     const ToolViewData *m_data;
+    const QString m_id; ///< cached factory ID
 };
 
 StandardOutputView::StandardOutputView(QObject* parent, const KPluginMetaData& metaData, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevstandardoutputview"), parent, metaData)
 {
-    connect(KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::aboutToRemoveView,
-            this, &StandardOutputView::removeSublimeView);
-
-}
-
-void StandardOutputView::removeSublimeView( Sublime::View* v )
-{
-    auto it = m_toolViews.begin();
-    while (it != m_toolViews.end()) {
-        ToolViewData* d = it.value();
-        bool isErased = false;
-        if( d->views.contains(v) )
-        {
-            if( d->views.count() == 1 )
-            {
-                isErased = true;
-                it = m_toolViews.erase(it);
-                m_ids.removeAll( d->toolViewId );
-                delete d;
-            } else
-            {
-                d->views.removeAll(v);
-            }
-        }
-        if (!isErased) {
-            ++it;
-        }
-    }
 }
 
 StandardOutputView::~StandardOutputView()
 {
 }
 
-int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolView view )
+QString StandardOutputView::standardToolView(StandardToolView view)
 {
-    const auto standardViewIt = m_standardViews.constFind(view);
-    if (standardViewIt != m_standardViews.constEnd()) {
-        return *standardViewIt;
-    }
+    /// A convenience wrapper to call QIcon::fromTheme() once per standard tool view and to return the tool view ID.
+    const auto ensureRegistered = [this](QString toolViewId, const QString& title, ViewType type,
+                                         const QString& iconName, Options option = AddFilterAction) {
+        auto& toolView = m_toolViews[toolViewId];
+        if (!toolView) {
+            toolView = addToolView(toolViewId, title, type, QIcon::fromTheme(iconName), option);
+        }
+        return toolViewId;
+    };
 
-    int ret = -1;
     switch( view )
     {
     case KDevelop::IOutputView::BuildView:
-        ret = registerToolView(QStringLiteral("Build"), i18nc("@title:window", "Build"),
-                               KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("run-build")),
-                               KDevelop::IOutputView::AddFilterAction);
-        break;
+        return ensureRegistered(QStringLiteral("Build"), i18nc("@title:window", "Build"), HistoryView,
+                                QStringLiteral("run-build"));
     case KDevelop::IOutputView::RunView:
-        ret = registerToolView(QStringLiteral("Run"), i18nc("@title:window", "Run"),
-                               KDevelop::IOutputView::MultipleView, QIcon::fromTheme(QStringLiteral("system-run")),
-                               KDevelop::IOutputView::AddFilterAction);
-        break;
+        return ensureRegistered(QStringLiteral("Run"), i18nc("@title:window", "Run"), MultipleView,
+                                QStringLiteral("system-run"));
     case KDevelop::IOutputView::DebugView:
-        ret = registerToolView(QStringLiteral("Debug"), i18nc("@title:window", "Debug"),
-                               KDevelop::IOutputView::MultipleView, QIcon::fromTheme(QStringLiteral("debug-step-into")),
-                               KDevelop::IOutputView::AddFilterAction);
-        break;
-    case KDevelop::IOutputView::TestView:
-        // TODO: pass QByteArrayLiteral("Test") instead of QByteArray() and make the settings work.
-        // The settings are disabled for the Test output tool view, because all Test output views are currently
-        // unclosable and there is only one output tool view option right now: output view number limit, which
-        // automatically closes its views and has no effect if the views are not closable.
-        // AllowUserClose output view behavior is enabled by default, but 3 output jobs - CompileAnalyzeJob,
-        // cppcheck::Job and Heaptrack::Job - disable it by calling `setBehaviours(KDevelop::IOutputView::AutoScroll);`.
-        // 1cd05dd39bb67cbec7ce39a0237b64fb42e5fc95 introduced the first unclosable view in the cppcheck plugin with
-        // no surviving explanation. Other Test output views followed the example later. Ideally all output views should
-        // become closable, if there is no good reason to prevent closing and destroying them.
-        ret = registerToolView(QString(), i18nc("@title:window", "Test"), KDevelop::IOutputView::HistoryView,
-                               QIcon::fromTheme(QStringLiteral("system-run")));
-        break;
+        return ensureRegistered(QStringLiteral("Debug"), i18nc("@title:window", "Debug"), MultipleView,
+                                QStringLiteral("debug-step-into"));
+    case KDevelop::IOutputView::AnalyzeView:
+        return ensureRegistered(QStringLiteral("Analyze"), i18nc("@title:window", "Analyze"), HistoryView,
+                                QStringLiteral("dialog-ok"));
     case KDevelop::IOutputView::VcsView:
-        ret = registerToolView(QStringLiteral("VersionControl"), i18nc("@title:window", "Version Control"),
-                               KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
-        break;
+        return ensureRegistered(QStringLiteral("VersionControl"), i18nc("@title:window", "Version Control"),
+                                HistoryView, QStringLiteral("system-run"));
     }
-
-    Q_ASSERT(ret != -1);
-    m_standardViews[view] = ret;
-    return ret;
+    Q_UNREACHABLE();
 }
 
-int StandardOutputView::registerToolView(const QString& configSubgroupName, const QString& title,
-                                         KDevelop::IOutputView::ViewType type, const QIcon& icon, Options option,
-                                         const QList<QAction*>& actionList)
+void StandardOutputView::registerToolView(const QString& toolViewId, const QString& title,
+                                          KDevelop::IOutputView::ViewType type, const QIcon& icon, Options option,
+                                          const QList<QAction*>& actionList)
 {
-    // try to reuse existing tool view
-    for (ToolViewData* d : std::as_const(m_toolViews)) {
-        if ( d->type == type && d->title == title ) {
-            return d->toolViewId;
-        }
+    if (toolViewId.isEmpty()) {
+        qCWarning(PLUGIN_STANDARDOUTPUTVIEW).nospace()
+            << "registering a view with an empty ID, title " << title << " and type " << type
+            << "; an empty ID is not unique, so expect bugs!";
     }
 
-    // register new tool view
-    const int newid = m_ids.isEmpty() ? 0 : (m_ids.last() + 1);
-    qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Registering view" << title << "with type:" << type << "id:" << newid;
+    auto& toolView = m_toolViews[toolViewId];
+    if (toolView) {
+        qCDebug(PLUGIN_STANDARDOUTPUTVIEW)
+            << "reusing view" << toolViewId << "for title" << title << "and type" << type;
+        return;
+    }
+    toolView = addToolView(toolViewId, title, type, icon, option, actionList);
+}
+
+ToolViewData* StandardOutputView::addToolView(const QString& toolViewId, const QString& title, ViewType type,
+                                              const QIcon& icon, Options option, const QList<QAction*>& actionList)
+{
+    qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "adding view" << toolViewId << "with title" << title << "and type" << type;
+
     auto* tvdata = new ToolViewData( this );
-    tvdata->toolViewId = newid;
-    tvdata->configSubgroupName = configSubgroupName;
+    tvdata->id = toolViewId;
     tvdata->type = type;
     tvdata->title = title;
     tvdata->icon = icon;
     tvdata->plugin = this;
     tvdata->option = option;
     tvdata->actionList = actionList;
+
     core()->uiController()->addToolView( title, new OutputViewFactory( tvdata ) );
-    m_ids << newid;
-    m_toolViews[newid] = tvdata;
-    return newid;
+    return tvdata;
 }
 
-int StandardOutputView::registerOutputInToolView( int toolViewId,
-                                                  const QString& title,
-                                                  KDevelop::IOutputView::Behaviours behaviour )
+int StandardOutputView::registerOutputInToolView(const QString& toolViewId, const QString& title,
+                                                 KDevelop::IOutputView::Behaviours behaviour)
 {
     const auto toolViewIt = m_toolViews.constFind(toolViewId);
     if (toolViewIt == m_toolViews.constEnd())
         return -1;
-    int newid;
-    if( m_ids.isEmpty() )
-    {
-        newid = 0;
-    } else
-    {
-        newid = m_ids.last()+1;
-    }
-    m_ids << newid;
+    const auto newid = ++m_lastId;
     (*toolViewIt)->addOutput(newid, title, behaviour);
     return newid;
 }
@@ -189,9 +148,8 @@ void StandardOutputView::raiseOutput(int outputId)
     for (const auto* toolViewData : std::as_const(m_toolViews)) {
         if (toolViewData->outputdata.contains(outputId)) {
             for (Sublime::View* v : std::as_const(toolViewData->views)) {
-                if( v->hasWidget() )
-                {
-                    auto* w = qobject_cast<OutputWidget*>( v->widget() );
+                if (auto* const widget = v->widget()) {
+                    auto* const w = qobject_cast<OutputWidget*>(widget);
                     w->raiseOutput( outputId );
                     v->requestRaise();
                 }
@@ -240,22 +198,21 @@ void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* deleg
 // TODO: only StandardOutputViewTest calls this function, so output tool views are never removed in KDevelop.
 //       Calling Sublime::Area::removeToolView() in a loop does not completely remove
 //       a tool view, so consider calling IUiController::removeToolView() instead.
-//       StandardOutputView::registerToolView() calls IUiController::addToolView() but
+//       StandardOutputView::addToolView() calls IUiController::addToolView() but
 //       StandardOutputView::unload() does not call IUiController::removeToolView() as all
 //       other plugins do. This does not cause a crash when the user attempts to unload
 //       the Output View plugin on the Plugins tab of the Configure KDevelop dialog, because
 //       the unloading is prevented by the absence of the "X-KDevelop-Category": "Global"
 //       entry in kdevstandardoutputview.json (see df99304843fbdb593398e3d7d912e15cbd7c56b9).
-void StandardOutputView::removeToolView(int toolViewId)
+void StandardOutputView::removeToolView(const QString& toolViewId)
 {
     const auto toolViewIt = m_toolViews.find(toolViewId);
     if (toolViewIt != m_toolViews.end()) {
         ToolViewData* td = *toolViewIt;
         const auto views = td->views;
         for (Sublime::View* view : views) {
-            if( view->hasWidget() )
-            {
-                auto* outputWidget = qobject_cast<OutputWidget*>( view->widget() );
+            if (auto* const widget = view->widget()) {
+                auto* const outputWidget = qobject_cast<OutputWidget*>(widget);
                 for (auto it = td->outputdata.keyBegin(), end = td->outputdata.keyEnd(); it != end; ++it) {
                     outputWidget->removeOutput(*it);
                 }
@@ -274,9 +231,10 @@ OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
     for (ToolViewData* td : m_toolViews) {
         if( td->outputdata.contains( outputId ) )
         {
-            for (Sublime::View* view : std::as_const(td->views)) {
-                if( view->hasWidget() )
-                    return qobject_cast<OutputWidget*>( view->widget() );
+            for (const auto* const view : std::as_const(td->views)) {
+                if (auto* const widget = view->widget()) {
+                    return qobject_cast<OutputWidget*>(widget);
+                }
             }
         }
     }
@@ -288,9 +246,10 @@ void StandardOutputView::removeOutput( int outputId )
     for (ToolViewData* td : std::as_const(m_toolViews)) {
         const auto outputIt = td->outputdata.find(outputId);
         if (outputIt != td->outputdata.end()) {
-            for (Sublime::View* view : std::as_const(td->views)) {
-                if( view->hasWidget() )
-                    qobject_cast<OutputWidget*>( view->widget() )->removeOutput( outputId );
+            for (const auto* const view : std::as_const(td->views)) {
+                if (auto* const widget = view->widget()) {
+                    qobject_cast<OutputWidget*>(widget)->removeOutput(outputId);
+                }
             }
             td->outputdata.erase(outputIt);
         }

@@ -1,15 +1,15 @@
 # Spanish translations for kdevastyle.po package.
-# Copyright (C) 2017 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2017-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 # Automatically generated, 2017.
-# SPDX-FileCopyrightText: 2017, 2019, 2020, 2023 Eloy Cuadra <ecuadra@eloihr.net>
+#
+# SPDX-FileCopyrightText: 2017, 2019, 2020, 2023, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevastyle\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2023-09-16 11:24+0200\n"
+"PO-Revision-Date: 2025-05-17 01:52+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -491,7 +491,7 @@ msgid ""
 "'while', ...)"
 msgstr ""
 "Insertar espacio de relleno tras encabezados de paréntesis (por ejemplo, "
-"«if», «for», «while»...)"
+"«if», «for», «while»…)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:510
@@ -580,6 +580,3 @@ msgstr "Centro"
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Type"
 msgstr "Tipo"
-
-#~ msgid "Stroustrup"
-#~ msgstr "Stroustrup"

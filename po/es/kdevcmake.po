@@ -1,14 +1,15 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevcmake.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022, 2023.
-# Javier Viñal <fjvinal@gmail.com>, 2013.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022, 2023, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2013 Javier Viñal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-30 00:38+0000\n"
-"PO-Revision-Date: 2023-01-23 03:22+0100\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 01:54+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -426,134 +427,16 @@ msgstr "Analizar el conjunto de pruebas %1"
 msgid "CTest"
 msgstr "CTest"
 
-#: testing/ctestrunjob.cpp:119
+#: testing/ctestrunjob.cpp:127
 #, kde-format
 msgctxt "running test %1, %2 test case"
 msgid "CTest %1: %2"
 msgstr "CTest %1: %2"
 
-#: testing/ctestrunjob.cpp:121
+#: testing/ctestrunjob.cpp:129
 #, kde-format
 msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "%2 CTest (%1)"
 msgstr[1] "%2 CTests (%1)"
-
-#~ msgid ""
-#~ "KDevelop has found several possible root directories for your project, "
-#~ "please select the correct one."
-#~ msgstr ""
-#~ "KDevelop ha encontrado varios directorios raíz posibles para su proyecto. "
-#~ "Por favor, seleccione el correcto."
-
-#~ msgid "KDevelop - CMake Support"
-#~ msgstr "KDevelop - Implementación de CMake"
-
-#~ msgid "Add"
-#~ msgstr "Añadir"
-
-#~ msgid "Remove"
-#~ msgstr "Eliminar"
-
-#~ msgid "%1 is a deprecated command and should not be used"
-#~ msgstr "%1 es una orden desaconsejada y no debería usarse"
-
-#~ msgid "Unfinished function."
-#~ msgstr "Función sin finalizar."
-
-#~ msgid "You need to select a CMake executable."
-#~ msgstr "Debe seleccionar un ejecutable de CMake."
-
-#~ msgid "&CMake executable:"
-#~ msgstr "Eje&cutable de CMake:"
-
-#~ msgid "Configure a build directory"
-#~ msgstr "Configurar un directorio de construcción"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "CMake &Binary:"
-#~ msgstr "&Binario CMake:"
-
-#~ msgid "Build Type:"
-#~ msgstr "Tipo de construcción:"
-
-#~ msgid "CMake Binary:"
-#~ msgstr "Binario CMake:"
-
-#~ msgid "Installation Prefix"
-#~ msgstr "Prefijo de instalación"
-
-#~ msgid "Extra Arguments"
-#~ msgstr "Argumentos adicionales"
-
-#~ msgid "CMake Binary"
-#~ msgstr "Binario de CMake"
-
-#~ msgid "cmake is not installed"
-#~ msgstr "cmake no está instalado"
-
-#~ msgid ""
-#~ "Could not write CMake settings to file '%1'.\n"
-#~ "Check that you have write access to it"
-#~ msgstr ""
-#~ "No se ha sido posible escribir los ajustes de CMake en el archivo «%1».\n"
-#~ "Compruebe que tiene permiso para acceder a él."
-
-#~ msgid "CMake Documentation"
-#~ msgstr "Documentación de CMake"
-
-#~ msgid "Support for CMake documentation"
-#~ msgstr "Implementación de la documentación de CMake"
-
-#~ msgid "CMake Manager"
-#~ msgstr "Gestor de CMake"
-
-#~ msgid "Support for managing CMake projects"
-#~ msgstr "Gestión de proyectos CMake"
-
-#~ msgid "Jump to Target Definition"
-#~ msgstr "Saltar a la definición de destino"
-
-#~ msgid "Move files and folders within CMakeLists as follows:"
-#~ msgstr "Mover archivos y carpetas de CMakeLists como sigue:"
-
-#~ msgid "Changes to CMakeLists failed, abort move?"
-#~ msgstr ""
-#~ "Los cambios de CMakeLists han fallado. ¿Interrumpir el movimiento de "
-#~ "archivos?"
-
-#~ msgid "Remove files and folders from CMakeLists as follows:"
-#~ msgstr "Eliminar archivos y carpetas de CMakeLists como sigue:"
-
-#~ msgid "Changes to CMakeLists failed, abort deletion?"
-#~ msgstr "Los cambios de CMakeLists han fallado. ¿Interrumpir el borrado?"
-
-#~ msgid "Modify project targets as follows:"
-#~ msgstr "Modificar los objetivos del proyecto como sigue:"
-
-#~ msgid "Create folder '%1':"
-#~ msgstr "Crear la carpeta «%1»:"
-
-#~ msgid "Could not save the change."
-#~ msgstr "No se puede guardar la modificación."
-
-#~ msgid "Modify target '%1' as follows:"
-#~ msgstr "Modificar el objetivo «%1» como sigue:"
-
-#~ msgid "CMakeLists changes failed."
-#~ msgstr "Los cambios de CMakeLists han fallado."
-
-#~ msgid "Rename '%1' to '%2':"
-#~ msgstr "Cambiar el nombre de «%1» a «%2»:"
-
-#~ msgid "Changes to CMakeLists failed, abort rename?"
-#~ msgstr ""
-#~ "Los cambios de CMakeLists han fallado. ¿Interrumpir el cambio de nombre?"

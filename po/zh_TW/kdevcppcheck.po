@@ -1,20 +1,20 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2024-08-03 14:05+0900\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-07 10:02+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
@@ -96,13 +96,15 @@ msgid ""
 "are false positives with this option. Each result must be carefully "
 "investigated before you know if it is good or bad."
 msgstr ""
+"即使 Cppcheck 分析是非決定性的也允許其回報。使用此選項時會有不該被回報的項目"
+"被回報。每個結果都需要仔細檢查才能知道是否適用。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:63
 #, kde-format
 msgctxt "@option:check"
 msgid "Inconclusive analysis"
-msgstr ""
+msgstr "非決定性的分析"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:70
@@ -230,13 +232,15 @@ msgid ""
 "Add 'project' include directories to Cppcheck arguments. This option adds "
 "only paths related with project's root and build directories."
 msgstr ""
+"加入「專案」引入目錄到 Cppcheck 的參數。這個選項只會加入與專案根和建構目錄相"
+"關的路徑。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:167
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'project' include dirs"
-msgstr ""
+msgstr "使用「專案」引入目錄"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:180
@@ -246,13 +250,15 @@ msgid ""
 "<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
 ">Be careful with using this option - it can dramatically slow checking.</p>"
 msgstr ""
+"<p>加入其他「系統」的引入目錄到 Cppcheck 的參數。<br/><br/>使用此選項請小心—"
+"它可能會讓檢查變慢非常多。</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:183
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'system' include dirs"
-msgstr ""
+msgstr "使用「系統」引入目錄"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/projectconfigpage.ui:198
@@ -349,7 +355,7 @@ msgstr "Cppcheck"
 #: job.cpp:150
 #, kde-format
 msgid "Failed to start Cppcheck from \"%1\"."
-msgstr ""
+msgstr "從「%1」啟動 Cppcheck 失敗。"
 
 #: job.cpp:155
 #, kde-format
@@ -381,6 +387,10 @@ msgid ""
 "'XX' value can be found in any project's moc-generated file or in the "
 "<QtCore/qobjectdefs.h> header file."
 msgstr ""
+"這個專案看起來使用了 Qt 函式庫。要讓 cppcheck 正確運作，"
+"Q_MOC_OUTPUT_REVISION 必須已設定。不幸的是，本外掛程式無法自動找到該數值 - 您"
+"需要手動將 '-DQ_MOC_OUTPUT_REVISION=值' 加入額外參數來設定它。該設定的值可以"
+"在專案任何 moc 產生的檔案或是在 <QtCore/qobjectdefs.h> 標頭檔裡面找到。"
 
 #: parser.cpp:220
 #, kde-format
@@ -405,30 +415,28 @@ msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
 msgstr "使用 Cppcheck 分析目前專案"
 
-#: plugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Test"
-msgstr "測試"
-
-#: problemmodel.cpp:116
+#: problemmodel.cpp:117
 #, kde-format
 msgid "Analysis completed, no problems detected."
 msgstr "分析完成，未偵測到問題。"
 
-#: problemmodel.cpp:137
+#: problemmodel.cpp:143
 #, kde-format
 msgid "Analysis started..."
 msgstr "開始分析…"
 
-#: problemmodel.cpp:138
+#: problemmodel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
 msgstr "重新執行上次的 Cppcheck 分析 (%1)"
 
-#: problemmodel.cpp:140
+#: problemmodel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
 msgstr "重新執行上次的 Cppcheck 分析"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "測試"

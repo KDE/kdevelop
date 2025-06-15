@@ -1,17 +1,17 @@
-# SPDX-FileCopyrightText: 2014, 2015, 2019, 2020, 2021, 2023, 2024 Shinjo Park <kde@peremen.name>
+# SPDX-FileCopyrightText: 2014, 2015, 2019, 2020, 2021, 2023, 2024, 2025 Shinjo Park <kde@peremen.name>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2024-02-09 23:37+0100\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
+"PO-Revision-Date: 2025-06-10 23:28+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 24.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: outputwidget.cpp:44
@@ -153,35 +153,39 @@ msgstr ""
 "보기 개수가 이 값을 초과할 때\n"
 "오래된 출력 보기를 닫습니다"
 
-#: standardoutputview.cpp:100
+#: standardoutputview.cpp:80
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
 msgstr "빌드"
 
-#: standardoutputview.cpp:105
+#: standardoutputview.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
 msgstr "실행"
 
-#: standardoutputview.cpp:110
+#: standardoutputview.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "디버그"
 
-#: standardoutputview.cpp:124
+#: standardoutputview.cpp:89
 #, kde-format
 msgctxt "@title:window"
-msgid "Test"
-msgstr "테스트"
+msgid "Analyze"
+msgstr "분석"
 
-#: standardoutputview.cpp:128
+#: standardoutputview.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "버전 관리"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "테스트"
 
 #~ msgctxt "@title:menu"
 #~ msgid "Navigation"

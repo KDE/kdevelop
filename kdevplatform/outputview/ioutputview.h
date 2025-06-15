@@ -55,11 +55,13 @@ public:
 
     enum StandardToolView
     {
-        BuildView = 0 /**< the standard outputview for building output */,
-        RunView =   1 /**< the standard outputview for running apps */,
-        DebugView = 2 /**< the standard outputview for debugging apps */,
-        TestView  = 4 /**< the standard outputview for verbose test output */,
-        VcsView   = 8 /**< the standard outputview for VCS commands */
+        // clang-format off: keep the alignment of the documentation lines that share a prefix
+        BuildView       /**< the standard tool view for build output */,
+        RunView         /**< the standard tool view for program run output */,
+        DebugView       /**< the standard tool view for program debugging output */,
+        AnalyzeView     /**< the standard tool view for static code analysis output */,
+        VcsView         /**< the standard tool view for VCS command output */,
+        // clang-format on
     };
 
     virtual ~IOutputView();
@@ -70,35 +72,36 @@ public:
      * @param view the standard tool view to get the identifier for
      * @returns the identifier for the standard tool view
      */
-    virtual int standardToolView( StandardToolView view ) = 0;
+    virtual QString standardToolView(StandardToolView view) = 0;
 
     /**
-     * Register a new tool view for output with the given title, behaviour and type.
-     * If there already exists a tool view with this title and type return the existing id
-     * @param configSubgroupName the name of the config group used to save settings related to the view.
-     *                           An empty name disables settings for the tool view.
+     * Register an output tool view with a given ID and configuration.
+     *
+     * Do nothing if an output tool view with the given ID already exists.
+     *
+     * @param toolViewId a nonempty unique identifier of the output tool view
      * @param title the Title to be displayed on the tool view
      * @param type the type of view that should be created
      * @param icon the icon of the tool view
      * @param option the options of the tool view
      * @param actionList list of actions adding to the toolbar
-     * @returns an tool view id that identifies the new view and is used in the other
-     *          methods
      */
-    virtual int registerToolView(const QString& configSubgroupName, const QString& title, ViewType type = OneView,
-                                 const QIcon& icon = QIcon(), Options option = ShowItemsButton,
-                                 const QList<QAction*>& actionList = QList<QAction*>()) = 0;
+    virtual void registerToolView(const QString& toolViewId, const QString& title, ViewType type = OneView,
+                                  const QIcon& icon = QIcon(), Options option = ShowItemsButton,
+                                  const QList<QAction*>& actionList = QList<QAction*>()) = 0;
 
     /**
      * Register a new output view in a given tool view. How this new view is created depends
      * on the type of the tool view.
-     * @param toolViewId the id of the tool view, created by registerToolView
+     *
+     * @param toolViewId the ID of the tool view previously passed to
+     *        registerToolView() or returned from standardToolView()
      * @param title the title to use for the new output in the tool view
      * @param behaviour the Behaviour of the output
      * @returns the id of the output to supply to the other methods
      */
-    virtual int registerOutputInToolView( int toolViewId, const QString& title,
-                                          Behaviours behaviour = AllowUserClose ) = 0;
+    [[nodiscard]] virtual int registerOutputInToolView(const QString& toolViewId, const QString& title,
+                                                       Behaviours behaviour = AllowUserClose) = 0;
 
     /**
      * Raise a given view
@@ -132,7 +135,7 @@ public:
      *
      * @param toolViewId identifies the view to remove
      */
-    virtual void removeToolView(int toolViewId) = 0;
+    virtual void removeToolView(const QString& toolViewId) = 0;
 
     /**
      * Remove an output view from a tool view. Don't forget to emit outputRemoved
@@ -145,10 +148,9 @@ Q_SIGNALS:
     /**
      * Emitted after an output view is removed from a tool view.
      *
-     * @param toolViewId identifies the tool view, from which the output view is removed
      * @param outputId identifies the removed output
      */
-    void outputRemoved(int toolViewId, int outputId);
+    void outputRemoved(int outputId);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Behaviours)

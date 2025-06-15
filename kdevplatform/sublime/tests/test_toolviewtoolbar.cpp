@@ -11,13 +11,13 @@
 
 #include <QTextEdit>
 #include <QToolBar>
-#include <QStandardPaths>
 
 #include <sublime/view.h>
 #include <sublime/area.h>
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
 #include <sublime/tooldocument.h>
+#include <tests/corelesshelpers.h>
 
 using namespace Sublime;
 
@@ -46,7 +46,7 @@ private:
 
 void TestToolViewToolBar::initTestCase()
 {
-    QStandardPaths::setTestModeEnabled(true);
+    KDevelop::initCorelessTestCase();
 }
 
 void TestToolViewToolBar::init()

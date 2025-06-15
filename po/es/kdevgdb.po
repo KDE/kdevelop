@@ -1,14 +1,15 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kdevgdb.po package.
+# Copyright (C) 2008-2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2023.
-# Javier Viñal <fjvinal@gmail.com>, 2013.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2023, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2013 Javier Viñal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
-"Project-Id-Version: kdevcppdebugger\n"
+"Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-11 00:40+0000\n"
-"PO-Revision-Date: 2023-07-30 18:42+0200\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-05-17 02:02+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -165,7 +166,7 @@ msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Interrumpir la sesión actual"
 
-#: gdbconfigpage.cpp:166
+#: gdbconfigpage.cpp:160
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "Ejecuta una aplicación nativa en GDB"
@@ -214,7 +215,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to gdb executable..."
-msgstr "Redefinir la ruta al ejecutable gdb..."
+msgstr "Redefinir la ruta al ejecutable gdb…"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
@@ -339,7 +340,7 @@ msgstr ""
 "El cometido de este script es la ejecución de las órdenes necesarias para "
 "conectar con un ejecutable que funcione remotamente.\n"
 "\tshell sleep 5\tesperar a que comience el programa\n"
-"\ttarget remote ...\tconectar con el depurador remoto\n"
+"\ttarget remote …\tconectar con el depurador remoto\n"
 "\tcontinue\t[opcional] ejecutar la depuración hasta el primer punto de "
 "interrupción"
 
@@ -368,10 +369,10 @@ msgstr ""
 "p><p>Este script de consola se ejecuta una vez que el script gdb de "
 "configuración ha sido generado por gdb.</p><p>El propósito de este script "
 "consiste en iniciar realmente el proceso remoto.</p><p>1) Encuentra un modo "
-"de ejecutar una orden remotamente (rsh, ssh, telnet...)</p><p>2a) Ejecuta "
-"«gdbserver ... aplicación» en el sistema de destino.</p><p>o, si su "
-"ejecutable contiene inicialización de gdb:</p><p>2b) Ejecuta la «aplicación» "
-"en el sistema de destino.</p></body></html>"
+"de ejecutar una orden remotamente (rsh, ssh, telnet…)</p><p>2a) Ejecuta "
+"«gdbserver … aplicación» en el sistema de destino.</p><p>o, si su ejecutable "
+"contiene inicialización de gdb:</p><p>2b) Ejecuta la «aplicación» en el "
+"sistema de destino.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
 #: gdbconfigpage.ui:190
@@ -408,7 +409,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Script para conectar con la aplicación remota</"
 "p><p>Por ejemplo:</p><p>\tshell sleep 5\t# esperar a que comience el "
-"programa</p><p>\ttarget remote ...\t# conectar con el depurador remoto</p><p>"
+"programa</p><p>\ttarget remote …\t# conectar con el depurador remoto</p><p>"
 "\tcontinue\t#[ opcional] ejecutar la depuración hasta el primer punto de "
 "interrupción.</p></body></html>"
 
@@ -616,509 +617,3 @@ msgstr "Nuevo visor de memoria"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Abrir un nuevo visor de memoria"
-
-#~ msgid "<html><head/><body><p><br/></p></body></html>"
-#~ msgstr "<html><head/><body><p><br/></p></body></html>"
-
-#~ msgid "gdb error"
-#~ msgstr "Error gdb"
-
-#~ msgid "Startup error"
-#~ msgstr "Error de arranque"
-
-#~ msgid "Debugging Shell Not Found"
-#~ msgstr "Capa de depuración no encontrada"
-
-#~ msgid "Debugger Configuration"
-#~ msgstr "Configuración del depurador"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Ejecutar"
-
-#~ msgid "OK"
-#~ msgstr "Aceptar"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancelar"
-
-#~ msgid "Address Selector"
-#~ msgstr "Selector de dirección"
-
-#~ msgid "Change &address"
-#~ msgstr "C&ambiar dirección"
-
-#~ msgid "&Jump to Cursor"
-#~ msgstr "Sal&tar al cursor"
-
-#~ msgid "Sets the execution pointer to the current cursor position."
-#~ msgstr "Establece el puntero de ejecución a la posición actual del cursor."
-
-#~ msgid "&Run to Cursor"
-#~ msgstr "Ejecutar al &cursor"
-
-#~ msgid "Continues execution until the cursor position is reached."
-#~ msgstr "Continúa la ejecución hasta que se alcance la posición del cursor."
-
-#~ msgid "&AT&&T"
-#~ msgstr "&AT&&T"
-
-#~ msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
-#~ msgstr ""
-#~ "GDB usará el estilo de desensamblador de AT&T (por ejemplo, mov 0xc(%ebp),"
-#~ "%eax)."
-
-#~ msgid "&Intel"
-#~ msgstr "&Intel"
-
-#~ msgid ""
-#~ "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
-#~ "+0xc])."
-#~ msgstr ""
-#~ "GDB usará el estilo de desensamblador de Intel (por ejemplo, mov eax, "
-#~ "DWORD PTR [ebp+0xc])."
-
-#~ msgid "Disassembly flavor"
-#~ msgstr "Estilo de desensamblador"
-
-#~ msgid ""
-#~ "<b>Machine code display</b><p>A machine code view into your running "
-#~ "executable with the current instruction highlighted. You can step "
-#~ "instruction by instruction using the debuggers toolbar buttons of \"step "
-#~ "over\" instruction and \"step into\" instruction."
-#~ msgstr ""
-#~ "<b>Pantalla de código máquina</b><p>Una vista del código máquina del "
-#~ "programa que está siendo ejecutado con la instrucción actual resaltada. "
-#~ "Puede avanzar instrucción a instrucción usando los botones de la barra de "
-#~ "herramientas del depurador «avanzar sobre» la instrucción y «avanzar "
-#~ "dentro» de la instrucción."
-
-#~ msgid "Address"
-#~ msgstr "Dirección"
-
-#~ msgid "Function"
-#~ msgstr "Función"
-
-#~ msgid "Instruction"
-#~ msgstr "Instrucción"
-
-#~ msgid "Disassemble/Registers View"
-#~ msgstr "Vista de desensamblar/registros"
-
-#~ msgid "Binary"
-#~ msgstr "Binario"
-
-#~ msgid "Octal"
-#~ msgstr "Octal"
-
-#~ msgid "Decimal"
-#~ msgstr "Decimal"
-
-#~ msgid "Hexadecimal"
-#~ msgstr "Hexadecimal"
-
-#~ msgid "Raw"
-#~ msgstr "En bruto"
-
-#~ msgid "Unsigned"
-#~ msgstr "Sin signo"
-
-#~ msgid "General"
-#~ msgstr "General"
-
-#~ msgid "Flags"
-#~ msgstr "Indicadores"
-
-#~ msgid "VFP single-word"
-#~ msgstr "Palabra simple VFP"
-
-#~ msgid "VFP double-word"
-#~ msgstr "Palabra doble VFP"
-
-#~ msgid "VFP quad-word"
-#~ msgstr "Palabra cuádruple VFP"
-
-#~ msgid "FPU"
-#~ msgstr "FPU"
-
-#~ msgid "XMM"
-#~ msgstr "XMM"
-
-#~ msgid "Segment"
-#~ msgstr "Segmento"
-
-#~ msgid "Format"
-#~ msgstr "Formato"
-
-#~ msgid "Mode"
-#~ msgstr "Modo"
-
-#~ msgid "Update"
-#~ msgstr "Actualizar"
-
-#~ msgid "Address selector"
-#~ msgstr "Selector de dirección"
-
-#~ msgid "Select the address to disassemble around"
-#~ msgstr "Seleccione la dirección en torno a la que desensamblar"
-
-#~ msgid "Select address to disassemble around"
-#~ msgstr "Seleccione la dirección en torno a la que desensamblar"
-
-#~ msgid "Examine Core File..."
-#~ msgstr "Examinar archivo de volcado de memoria..."
-
-#~ msgid "Examine core file"
-#~ msgstr "Examina un archivo de volcado de memoria"
-
-#~ msgid ""
-#~ "<b>Examine core file</b><p>This loads a core file, which is typically "
-#~ "created after the application has crashed, e.g. with a segmentation "
-#~ "fault. The core file contains an image of the program memory at the time "
-#~ "it crashed, allowing you to do a post-mortem analysis.</p>"
-#~ msgstr ""
-#~ "<b>Examinar archivo de volcado de memoria</b><p>Esto carga un archivo de "
-#~ "volcado de memoria, que se crea normalmente tras un fallo de la "
-#~ "aplicación (por ejemplo, un error de segmentación). El archivo de volcado "
-#~ "de memoria contiene una imagen de la memoria del programa en el momento "
-#~ "de su error, permitiendo hacer un análisis posterior.</p>"
-
-#~ msgid "Attach to Process"
-#~ msgstr "Adjuntar a proceso"
-
-#~ msgid "Attach to process..."
-#~ msgstr "Adjuntar a proceso..."
-
-#~ msgid ""
-#~ "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
-#~ msgstr ""
-#~ "<b>Adjuntar a proceso</b><p>Conecta el depurador a un proceso en "
-#~ "ejecución.</p>"
-
-#~ msgid "KDevelop"
-#~ msgstr "KDevelop"
-
-#~ msgid "Evaluate: %1"
-#~ msgstr "Evaluar: %1"
-
-#~ msgid ""
-#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#~ "cursor.</p>"
-#~ msgstr ""
-#~ "<b>Evaluar expresión</b><p>Muestra el valor de la expresión que hay bajo "
-#~ "el cursor.</p>"
-
-#~ msgid "Watch: %1"
-#~ msgstr "Observar: %1"
-
-#~ msgid ""
-#~ "<b>Watch expression</b><p>Adds an expression under the cursor to the "
-#~ "Variables/Watch list.</p>"
-#~ msgstr ""
-#~ "<b>Observar expresión</b><p>Añade una expresión bajo el cursor a la lista "
-#~ "de variables/observaciones.</p>"
-
-#~ msgid "Choose a core file to examine..."
-#~ msgstr "Seleccione un archivo de volcado de memoria para examinar..."
-
-#~ msgid "Examining core file %1"
-#~ msgstr "Examinando archivo de volcado de memoria %1"
-
-#~ msgid "Debug core file"
-#~ msgstr "Depurar un archivo de volcado de memoria"
-
-#~ msgid "Choose a process to attach to..."
-#~ msgstr "Seleccione un proceso al que ajuntar..."
-
-#~ msgid "Not attaching to process %1: cannot attach the debugger to itself."
-#~ msgstr ""
-#~ "No se adjunta al proceso %1: no se puede adjuntar el depurador a sí mismo."
-
-#~ msgid "Attaching to process %1"
-#~ msgstr "Adjuntando al proceso %1"
-
-#~ msgid "Debug process %1"
-#~ msgstr "Depurar el proceso %1"
-
-#~ msgctxt "ProjectName: run configuration name"
-#~ msgid "%1: %2"
-#~ msgstr "%1: %2"
-
-#~ msgid "Attach to a process"
-#~ msgstr "Adjuntar a un proceso"
-
-#~ msgid "Select Core File"
-#~ msgstr "Seleccionar archivo de volcado de memoria"
-
-#~ msgid "Executable:"
-#~ msgstr "Ejecutable:"
-
-#~ msgid "Core File:"
-#~ msgstr "Archivo de volcado de memoria:"
-
-#~ msgid "<br>Old value: %1"
-#~ msgstr "<br>Valor anterior: %1"
-
-#~ msgid "<br>New value: %1"
-#~ msgstr "<br>Valor nuevo: %1"
-
-#~ msgid "Debugger stopped"
-#~ msgstr "Depurador detenido"
-
-#~ msgid "Process exited"
-#~ msgstr "Proceso terminado"
-
-#~ msgid "Application is running"
-#~ msgstr "La aplicación está en ejecución"
-
-#~ msgid "Application is paused"
-#~ msgstr "La aplicación está pausada"
-
-#~ msgid "Debugger error"
-#~ msgstr "Error del depurador"
-
-#~ msgid ""
-#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
-#~ "gdb output window and then stop the debugger"
-#~ msgstr ""
-#~ "<b>GDB terminó de modo anormal</b><p>Probablemente se trate de un error "
-#~ "en GDB. Examine la ventana de salida de «gdb» y detenga luego el depurador"
-
-#~ msgid "GDB exited abnormally"
-#~ msgstr "GDB terminó anormalmente"
-
-#~ msgid ""
-#~ "<b>Gdb command sent when debugger is not running</b><br>The command was:"
-#~ "<br> %1"
-#~ msgstr ""
-#~ "<b>Orden «gdb» enviada cuando no se está ejecutando el depurador</"
-#~ "b><br>La orden fue:<br> %1"
-
-#~ msgid "Internal error"
-#~ msgstr "Error interno"
-
-#~ msgid "<b>Invalid debugger command</b><br>%1"
-#~ msgstr "<b>Orden de depuración no válida</b><br>%1"
-
-#~ msgid "Invalid debugger command"
-#~ msgstr "Orden de depuración no válida"
-
-#~ msgid "Exited with return code: %1"
-#~ msgstr "Terminado con el código: %1"
-
-#~ msgid "Exited normally"
-#~ msgstr "Terminado normalmente"
-
-#~ msgid "Exited on signal %1"
-#~ msgstr "Terminado al recibir la señal %1"
-
-#~ msgid "Program received signal %1 (%2)"
-#~ msgstr "El programa ha recibido la señal %1 (%2)"
-
-#~ msgid "Running program"
-#~ msgstr "Programa en ejecución"
-
-#~ msgid "Warning"
-#~ msgstr "Advertencia"
-
-#~ msgid ""
-#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-#~ msgstr ""
-#~ "<b>Error de depuración</b><p>El depurador ha informado del siguiente "
-#~ "error:<p><tt>%1"
-
-#~ msgid "1 command in queue\n"
-#~ msgid_plural "%1 commands in queue\n"
-#~ msgstr[0] "1 orden en cola\n"
-#~ msgstr[1] "%1 órdenes en cola\n"
-
-#~ msgctxt "Only the 0 and 1 cases need to be translated"
-#~ msgid "1 command being processed by gdb\n"
-#~ msgid_plural "%1 commands being processed by gdb\n"
-#~ msgstr[0] "1 orden en proceso por gdb\n"
-#~ msgstr[1] "%1 órdenes en proceso por gdb\n"
-
-#~ msgid "Debugger state: %1\n"
-#~ msgstr "Estado del depurador: %1\n"
-
-#~ msgid ""
-#~ "Current command class: '%1'\n"
-#~ "Current command text: '%2'\n"
-#~ "Current command original text: '%3'\n"
-#~ msgstr ""
-#~ "Clase de la orden actual: «%1»\n"
-#~ "Texto de la orden actual: «%2»\n"
-#~ "Texto original de la orden actual: «%3»\n"
-
-#~ msgid "Debugger status"
-#~ msgstr "Estado del depurador"
-
-#~ msgid "<b>Could not attach debugger:</b><br />"
-#~ msgstr "<b>No se puede adjuntar el depurador.</b><br />"
-
-#~ msgctxt "<b>Internal debugger error</b>"
-#~ msgid ""
-#~ "<p>The debugger component encountered internal error while processing "
-#~ "reply from gdb. Please submit a bug report."
-#~ msgstr ""
-#~ "<p>El componente de depuración ha encontrado un error interno mientras "
-#~ "procesaba la respuesta de gdb. Por favor, informe de este fallo."
-
-#~ msgid ""
-#~ "The exception is: %1\n"
-#~ "The MI response is: %2"
-#~ msgstr ""
-#~ "La excepción es: %1\n"
-#~ "La respuesta MI es: %2"
-
-#~ msgid "Internal debugger error"
-#~ msgstr "Error interno del depurador"
-
-#~ msgid ""
-#~ "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
-#~ "path name is specified correctly."
-#~ msgstr ""
-#~ "<b>No se puede iniciar el depurador.</b><p>No se puede ejecutar «%1». "
-#~ "Asegúrese de que la ruta especificada es correcta."
-
-#~ msgid "Could not start debugger"
-#~ msgstr "No se puede iniciar el depurador"
-
-#~ msgid ""
-#~ "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
-#~ "<br>Try to reproduce the crash with plain gdb and report a bug.<br>"
-#~ msgstr ""
-#~ "<b>Gdb ha fallado.</b><p>Como consecuencia, la sesión de depuración no ha "
-#~ "terminado.<br>Trate de reproducir el fallo usando un «gdb» plano e "
-#~ "informe del fallo.<br>"
-
-#~ msgid "Gdb crashed"
-#~ msgstr "Gdb ha fallado"
-
-#~ msgid "(running)"
-#~ msgstr "(en ejecución)"
-
-#~ msgid ""
-#~ "Cannot use the tty* or pty* devices.\n"
-#~ "Check the settings on /dev/tty* and /dev/pty*\n"
-#~ "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add "
-#~ "the user to the tty group using \"usermod -aG tty username\"."
-#~ msgstr ""
-#~ "No se pueden usar los dispositivos tty* ni pty*\n"
-#~ "Compruebe las preferencias de /dev/tty* y de /dev/pty*\n"
-#~ "Es posible que necesite ejecutar «chmod ug+rw» sobre los dispositivos "
-#~ "tty* y pty* como usuario «root» o añadir el usuario al grupo tty usando "
-#~ "«usermod -aG tty usuario»."
-
-#~ msgid "%1 is incorrect terminal name"
-#~ msgstr "%1 es un nombre de terminal incorrecto"
-
-#~ msgid "Can't create a temporary file"
-#~ msgstr "No se puede crear un archivo temporal"
-
-#~ msgid ""
-#~ "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
-#~ "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
-#~ "do sleep 3600;done\""
-#~ msgstr ""
-#~ "No se puede recibir tty/pty de %1. Compruebe que %1 es realmente un "
-#~ "terminal y que acepta estos argumentos: -e sh -c \"tty> %2 ;exec<&-;"
-#~ "exec>&-;while :;do sleep 3600;done\""
-
-#~ msgid "Application interrupted"
-#~ msgstr "Aplicación interrumpida"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Eloy Cuadra"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net"
-
-#~ msgid "GDB Support"
-#~ msgstr "Implementación de GDB"
-
-#~ msgid ""
-#~ "This plugin provides a frontend for GDB, a source-level debugger for C, C+"
-#~ "+ and more."
-#~ msgstr ""
-#~ "Este complemento proporciona una interfaz para GDB, un depurador de "
-#~ "código fuente para C, C++ y otros lenguajes."
-
-#~ msgid "Run gdb in a special shell (mainly for automake projects)"
-#~ msgstr ""
-#~ "Ejecutar gdb en un entorno especial (principalmente para proyectos "
-#~ "automake)"
-
-#~ msgid ""
-#~ "If you want gdb to be executed by a special shell or tool insert it here. "
-#~ "The main use-case is for Automake based projects where the application is "
-#~ "actually only a script and <b>libtool</b> is needed to get it to run "
-#~ "inside gdb."
-#~ msgstr ""
-#~ "Si quiere que «gdb» sea ejecutado por un entorno o herramienta especial, "
-#~ "indíquelo aquí. El caso de uso principal es el de los proyectos basados "
-#~ "en Automake, donde la aplicación no es más que un script y necesita "
-#~ "<b>libtool</b> para poder ser ejecutada con «gdb»."
-
-#~ msgid ""
-#~ "If you want gdb to be executed by a special shell or tool insert it here. "
-#~ "The main use-case is for Automake based projects where the application is "
-#~ "actually only a script and libtool is needed to get it to run inside gdb."
-#~ msgstr ""
-#~ "Si quiere que «gdb» sea ejecutado por un entorno o herramienta especial, "
-#~ "indíquelo aquí. El caso de uso principal es el de los proyectos basados "
-#~ "en Automake, donde la aplicación no es más que un script y necesita "
-#~ "«libtool» para poder ser ejecutada con «gdb»."
-
-#~ msgid "Debugging &shell:"
-#~ msgstr "En&torno de depuración:"
-
-#~ msgid "Script to start remote application"
-#~ msgstr "Script para iniciar aplicación remota"
-
-#~ msgid "&Config gdb script:"
-#~ msgstr "&Configurar script «gdb»:"
-
-#~ msgid "Script to connect with remote application"
-#~ msgstr "Script para conectar con la aplicación remota"
-
-#~ msgid ""
-#~ "This script is sourced by gdb after the two preceding scripts have been "
-#~ "executed.\n"
-#~ "This script is intended for the actual commands needed to connect to a "
-#~ "remotely running executable.\n"
-#~ "\tshell sleep 5\twait for remote program to start\n"
-#~ "\ttarget remote ...\tconnect to the remote debugger\n"
-#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
-#~ msgstr ""
-#~ "Este script es generado por «gdb» una vez que se han ejecutado los dos "
-#~ "scripts precedentes.\n"
-#~ "Este script está pensado para las órdenes reales necesarias para conectar "
-#~ "a una aplicación que se está ejecutando remotamente.\n"
-#~ "\tshell sleep 5\tesperar a que se inicie el programa remoto\n"
-#~ "\ttarget remote ...\tconectarse al depurador remoto\n"
-#~ "\tcontinue\t[opcional] ejecutar la depuración hasta el primer punto de "
-#~ "interrupción."
-
-#~ msgid "kdevelop: Debug application console"
-#~ msgstr "kdevelop: Consola de la aplicación de depuración"
-
-#~ msgid "Support for running apps in GDB"
-#~ msgstr "Ejecución de aplicaciones en GDB"
-
-#, fuzzy
-#~| msgid "&Format"
-#~ msgid "Form"
-#~ msgstr "&Formato"
-
-#~ msgid "Start address:"
-#~ msgstr "Dirección inicial:"
-
-#~ msgid "End Address:"
-#~ msgstr "Dirección final:"
-
-#~ msgctxt "@action:button"
-#~ msgid "Display"
-#~ msgstr "Mostrar"

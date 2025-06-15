@@ -46,6 +46,17 @@ namespace {
     return groupName;
 }
 
+void optionallyFocusViewWidget(const Sublime::View* view, bool focus)
+{
+    if (!focus || !view) {
+        return; // nothing to do
+    }
+    auto* const widget = view->widget();
+    if (!widget->hasFocus()) {
+        widget->setFocus();
+    }
+}
+
 } // unnamed namespace
 
 namespace Sublime {
@@ -98,9 +109,7 @@ QList<View*> MainWindow::topViews() const
     QList<View*> topViews;
     const auto views = d->area->views();
     for (View* view : views) {
-        if(view->hasWidget())
-        {
-            QWidget* widget = view->widget();
+        if (const auto* const widget = view->widget()) {
             if(widget->parent() && widget->parent()->parent())
             {
                 auto* container = qobject_cast<Container*>(widget->parent()->parent());
@@ -158,6 +167,18 @@ void MainWindow::setArea(Area *area)
     connect(area, &Area::aboutToRemoveView, d, &MainWindowPrivate::aboutToRemoveView);
     connect(area, &Area::toolViewAdded, d, &MainWindowPrivate::toolViewAdded);
     connect(area, &Area::aboutToRemoveToolView, d, &MainWindowPrivate::aboutToRemoveToolView);
+}
+
+void MainWindow::focusEditor()
+{
+    Q_D(const MainWindow);
+
+    if (!d->activeView) {
+        return;
+    }
+    if (auto* const widget = d->activeView->widget()) {
+        widget->setFocus(Qt::ShortcutFocusReason);
+    }
 }
 
 void MainWindow::initializeStatusBar()
@@ -219,12 +240,13 @@ void MainWindow::activateView(Sublime::View* view, bool focus)
 
     if (d->activeView == view)
     {
-        if (focus && view && !view->widget()->hasFocus())
-            view->widget()->setFocus();
+        optionallyFocusViewWidget(view, focus);
         return;
     }
 
-    (*containerIt)->setCurrentWidget(view->widget());
+    auto* const widget = view->widget();
+    Q_ASSERT(widget);
+    (*containerIt)->setCurrentWidget(widget);
 
     setActiveView(view, focus);
     d->area->setActiveView(view);
@@ -237,9 +259,7 @@ void MainWindow::setActiveView(View *view, bool focus)
     View* oldActiveView = d->activeView;
 
     d->activeView = view;
-
-    if (focus && view && !view->widget()->hasFocus())
-        view->widget()->setFocus();
+    optionallyFocusViewWidget(view, focus);
 
     if(d->activeView != oldActiveView)
         emit activeViewChanged(view);
@@ -249,6 +269,9 @@ void Sublime::MainWindow::setActiveToolView(View *view)
 {
     Q_D(MainWindow);
 
+    if (d->activeToolView == view) {
+        return;
+    }
     d->activeToolView = view;
     emit activeToolViewChanged(view);
 }
