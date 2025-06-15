@@ -381,7 +381,7 @@ int main( int argc, char *argv[] )
     KAboutData aboutData(QStringLiteral("kdevelop"), i18n("KDevelop"),
                          QStringLiteral(KDEVELOP_VERSION_STRING " (" RELEASE_SERVICE_VERSION_STRING ")"),
                          i18n("The KDevelop Integrated Development Environment"), KAboutLicense::GPL,
-                         i18n("Copyright 1999-%1, The KDevelop developers", QStringLiteral("2024")), QString(),
+                         i18n("Copyright 1999-%1, The KDevelop developers", QStringLiteral("2025")), QString(),
                          QStringLiteral("https://www.kdevelop.org/"));
     aboutData.setDesktopFileName(QStringLiteral("org.kde.kdevelop"));
     aboutData.addAuthor(i18n("Igor Kushnir"),
