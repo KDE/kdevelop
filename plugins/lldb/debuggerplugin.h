@@ -36,10 +36,7 @@ public:
 class LldbDebuggerPlugin : public MIDebuggerPlugin
 {
     Q_OBJECT
-
 public:
-    friend class KDevMI::LLDB::DebugSession;
-
     explicit LldbDebuggerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~LldbDebuggerPlugin() override;
 
