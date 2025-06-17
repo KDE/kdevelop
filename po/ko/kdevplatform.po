@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-10 00:41+0000\n"
+"POT-Creation-Date: 2025-06-17 00:41+0000\n"
 "PO-Revision-Date: 2025-04-22 01:24+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -1805,111 +1805,111 @@ msgstr ""
 "community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">이 글</a>을 참조하십시오."
 
-#: shell/debugcontroller.cpp:112
+#: shell/debugcontroller.cpp:111
 #, kde-format
 msgid "Debugger"
 msgstr "디버거"
 
-#: shell/debugcontroller.cpp:142
+#: shell/debugcontroller.cpp:141
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "프레임 스택"
 
-#: shell/debugcontroller.cpp:147
+#: shell/debugcontroller.cpp:146
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "중단점"
 
-#: shell/debugcontroller.cpp:152
+#: shell/debugcontroller.cpp:151
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "변수"
 
-#: shell/debugcontroller.cpp:218
+#: shell/debugcontroller.cpp:217
 #, kde-format
 msgid "&Restart"
 msgstr "다시 시작(&R)"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:218
 #, kde-format
 msgid "Restart program"
 msgstr "프로그램 다시 시작"
 
-#: shell/debugcontroller.cpp:220
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "앱을 처음부터 다시 시작합니다."
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:225
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "인터럽트"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:226
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "앱 인터럽트"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "디버그하고 있는 프로세스나 현재 디버거 명령을 인터럽트합니다."
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:231
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "커서까지 실행(&C)"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "커서까지 실행"
 
-#: shell/debugcontroller.cpp:234
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "커서 위치에 도착할 때까지 실행을 계속합니다."
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "커서로 실행 위치 설정(&X)"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "커서 위치로 이동"
 
-#: shell/debugcontroller.cpp:241
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "커서 위치에 도착할 때까지 실행을 계속합니다."
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:244
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "한 단계 건너뜀(&O)"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "다음 줄로 한 단계 이동"
 
-#: shell/debugcontroller.cpp:248
+#: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1921,37 +1921,37 @@ msgstr ""
 "출한다면 해당 함수를 실행하고 함수 호출이 끝난 그 다음 줄에서 앱 실행을 정지"
 "합니다."
 
-#: shell/debugcontroller.cpp:256
+#: shell/debugcontroller.cpp:255
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "다음 명령으로(&T)"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:256
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "다음 단계 명령으로 이동"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:257
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "다음 어셈블리 명령으로 이동합니다."
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:262
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "다음 줄로 진입(&I)"
 
-#: shell/debugcontroller.cpp:265
+#: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "다음 구문으로 들어갑니다."
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:265
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1961,37 +1961,37 @@ msgstr ""
 "소스의 한 줄만 정확하게 실행합니다. 소스 줄이 함수 호출이라면 함수에 진입한 "
 "후 실행을 멈춥니다."
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:272
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "다음 명령으로 진입(&N)"
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "다음 명령으로 진입"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:274
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "다음 어셈블리 명령으로 진입합니다."
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:278
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "한 단계 밖으로(&U)"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "현재 함수 밖으로 진출"
 
-#: shell/debugcontroller.cpp:282
+#: shell/debugcontroller.cpp:281
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2004,60 +2004,60 @@ msgstr ""
 "수 호출 바로 다음 줄을 표시합니다. 앱 실행이 가장 바깥쪽 프레임(예: main())"
 "에 있으면 이 작업은 효과가 없습니다."
 
-#: shell/debugcontroller.cpp:290
+#: shell/debugcontroller.cpp:289
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "중단점 전환"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:290
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:291
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "중단점 전환"
 
-#: shell/debugcontroller.cpp:293
+#: shell/debugcontroller.cpp:292
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "편집기의 현재 줄에 중단점을 설정하거나 해제합니다."
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:296
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "현재 줄 표시"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:297
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "현재 실행 중인 위치 표시"
 
-#: shell/debugcontroller.cpp:299
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "편집기에서 실행하고 있는 줄로 이동합니다."
 
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:474 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "디버그 시작"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:476 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "현재 시작 디버그"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2066,19 +2066,19 @@ msgid ""
 msgstr ""
 "현재 활성화된 시작 설정에 지정한 대상 또는 프로그램을 디버거에서 실행합니다."
 
-#: shell/debugcontroller.cpp:481
+#: shell/debugcontroller.cpp:480
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "계속(&C)"
 
-#: shell/debugcontroller.cpp:483
+#: shell/debugcontroller.cpp:482
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "앱 계속 실행"
 
-#: shell/debugcontroller.cpp:484
+#: shell/debugcontroller.cpp:483
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

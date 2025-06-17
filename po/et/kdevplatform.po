@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-10 00:41+0000\n"
+"POT-Creation-Date: 2025-06-17 00:41+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1878,125 +1878,125 @@ msgstr ""
 "\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">sellest artiklist</a>."
 
-#: shell/debugcontroller.cpp:112
+#: shell/debugcontroller.cpp:111
 #, kde-format
 msgid "Debugger"
 msgstr "Silur"
 
-#: shell/debugcontroller.cpp:142
+#: shell/debugcontroller.cpp:141
 #, fuzzy, kde-format
 #| msgid "Frame Stack"
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Väljakutsete pinu"
 
-#: shell/debugcontroller.cpp:147
+#: shell/debugcontroller.cpp:146
 #, fuzzy, kde-format
 #| msgid "Breakpoints"
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Katkestuspunktid"
 
-#: shell/debugcontroller.cpp:152
+#: shell/debugcontroller.cpp:151
 #, fuzzy, kde-format
 #| msgid "Variables"
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Muutujad"
 
-#: shell/debugcontroller.cpp:218
+#: shell/debugcontroller.cpp:217
 #, kde-format
 msgid "&Restart"
 msgstr "&Käivita uuesti"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:218
 #, kde-format
 msgid "Restart program"
 msgstr "Käivita programm uuesti"
 
-#: shell/debugcontroller.cpp:220
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Käivitab rakenduse otsast peale."
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:225
 #, fuzzy, kde-format
 #| msgid "Interrupt"
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Katkesta"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:226
 #, fuzzy, kde-format
 #| msgid "Interrupt application"
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Katkesta rakenduse töö"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:227
 #, fuzzy, kde-format
 #| msgid "Interrupts the debugged process or current debugger command."
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Katkestab silumisprotsessi või parajasti täidetava siluri käsu."
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:231
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Täida &kursorini"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:232
 #, fuzzy, kde-format
 #| msgid "Run to cursor"
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Täida kursorini"
 
-#: shell/debugcontroller.cpp:234
+#: shell/debugcontroller.cpp:233
 #, fuzzy, kde-format
 #| msgid "Continues execution until the cursor position is reached."
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Täitmise jätkamine kuni kursori asukohani."
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:238
 #, fuzzy, kde-format
 #| msgid "Set E&xecution Position to Cursor"
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Määra täitmise asuko&haks kursor"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:239
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Hüppa kursorile"
 
-#: shell/debugcontroller.cpp:241
+#: shell/debugcontroller.cpp:240
 #, fuzzy, kde-format
 #| msgid "Continue execution from the current cursor position."
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Täitmise jätkamine alates kursori aktiivsest asukohast."
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:244
 #, fuzzy, kde-format
 #| msgid "Step &Over"
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Astu ül&e"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:246
 #, fuzzy, kde-format
 #| msgid "Step over the next line"
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Astu järgmisele reale"
 
-#: shell/debugcontroller.cpp:248
+#: shell/debugcontroller.cpp:247
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes one line of source in the current source file. If the source "
@@ -2012,42 +2012,42 @@ msgstr ""
 "väljakutse, täidetakse kogu funktsioon ning rakendus peatud funktsiooni "
 "väljakutsele järgneval real."
 
-#: shell/debugcontroller.cpp:256
+#: shell/debugcontroller.cpp:255
 #, fuzzy, kde-format
 #| msgid "Step over Ins&truction"
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "As&tu üle instruktsiooni"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:256
 #, fuzzy, kde-format
 #| msgid "Step over instruction"
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Astu üle instruktsiooni"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:257
 #, fuzzy, kde-format
 #| msgid "Steps over the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Astub üle järgmise assembleri instruktsiooni."
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:262
 #, fuzzy, kde-format
 #| msgid "Step &Into"
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Astu s&isse"
 
-#: shell/debugcontroller.cpp:265
+#: shell/debugcontroller.cpp:264
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Astu sisse järgmisesse lausesse"
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:265
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes exactly one line of source. If the source line is a call to a "
@@ -2060,42 +2060,42 @@ msgstr ""
 "Täidab täpselt ühe lähtekoodi rea. Kui rida on funktsiooni väljakutse, "
 "peatatakse täitmine pärast seda, kui on sisenetud funktsiooni."
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:272
 #, fuzzy, kde-format
 #| msgid "Step into I&nstruction"
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Astu i&nstruktsiooni sisse"
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:273
 #, fuzzy, kde-format
 #| msgid "Step into instruction"
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Astu instruktsiooni sisse"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:274
 #, fuzzy, kde-format
 #| msgid "Steps into the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Astub järgmise assembleri instruktsiooni sisse."
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:278
 #, fuzzy, kde-format
 #| msgid "Step O&ut"
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Ast&u välja"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:280
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Astub aktiivsest funktsioonist välja"
 
-#: shell/debugcontroller.cpp:282
+#: shell/debugcontroller.cpp:281
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes the application until the currently executing function is "
@@ -2114,67 +2114,67 @@ msgstr ""
 "täitmine käib kõige välimises kaadris (st. main()), ei ole sellel "
 "korraldusel mingit mõju."
 
-#: shell/debugcontroller.cpp:290
+#: shell/debugcontroller.cpp:289
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Lülita katkestuspunkti"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:290
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:291
 #, fuzzy, kde-format
 #| msgid "Toggle breakpoint"
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Lülita katkestuspunkti"
 
-#: shell/debugcontroller.cpp:293
+#: shell/debugcontroller.cpp:292
 #, fuzzy, kde-format
 #| msgid "Toggles the breakpoint at the current line in editor."
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Lülitab katkestuspunkti redaktori aktiivsel real."
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:296
 #, fuzzy, kde-format
 #| msgid "Show Current Line"
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Näita aktiivset rida"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:297
 #, fuzzy, kde-format
 #| msgid "Show the current execution position"
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Täitmise aktiivse asukoha näitamine"
 
-#: shell/debugcontroller.cpp:299
+#: shell/debugcontroller.cpp:298
 #, fuzzy, kde-format
 #| msgid "Jumps to the execution line in the editor."
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Liikumine täitmisreale redaktoris."
 
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:474 shell/runcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Silu käivitamist"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:476 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Aktiivse käivitamise silumine"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2184,21 +2184,21 @@ msgstr ""
 "Täidab sihtmärgi või programmi, mis on määratud aktiivses "
 "käivitamisseadistuses, siluri sees."
 
-#: shell/debugcontroller.cpp:481
+#: shell/debugcontroller.cpp:480
 #, fuzzy, kde-format
 #| msgid "&Continue"
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Jätka"
 
-#: shell/debugcontroller.cpp:483
+#: shell/debugcontroller.cpp:482
 #, fuzzy, kde-format
 #| msgid "Continue application execution"
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Rakenduse täitmise jätkamine"
 
-#: shell/debugcontroller.cpp:484
+#: shell/debugcontroller.cpp:483
 #, fuzzy, kde-format
 #| msgid ""
 #| "Continues the execution of your application in the debugger. This only "

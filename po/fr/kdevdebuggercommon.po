@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-17 00:41+0000\n"
 "PO-Revision-Date: 2025-05-17 16:51+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -153,7 +153,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Erreur interne du débogueur"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:412
 #, kde-format
 msgid "Process exited"
 msgstr "Le processus s'est terminé"
@@ -196,13 +196,13 @@ msgstr "Le débogueur a planté"
 msgid "Process crashed"
 msgstr "Le processus a planté"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:108
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Examiner un fichier « Core » avec %1"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:110
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -218,13 +218,13 @@ msgstr ""
 "brutalement, ce qui permet d'effectuer une analyse post mortem de "
 "l'application.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:122
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Attacher au processus avec %1"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:124
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -233,49 +233,17 @@ msgstr ""
 "<b>Attacher au processus</b><p>Attache le débogueur à un processus en cours "
 "d'exécution.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:137
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:217
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "Évaluer : %1"
-
-#: midebuggerplugin.cpp:219
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr ""
-"<b>Évaluer l'expression</b><p>Affiche la valeur de l'expression située sous "
-"le curseur.</p>"
-
-#: midebuggerplugin.cpp:227
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "Surveiller : %1"
-
-#: midebuggerplugin.cpp:229
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>Surveiller l'expression</b><p>Ajoute l'expression sous le curseur à la "
-"liste de surveillance des variables.</p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:205
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Choisir un fichier « core » à examiner..."
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
+#: midebuggerplugin.cpp:210 midebuggerplugin.cpp:230
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -284,25 +252,25 @@ msgstr ""
 "Il y a déjà un programme en cours de débogage. Voulez-vous arrêter la "
 "session de débogage en cours et continuer ?"
 
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:212 midebuggerplugin.cpp:232
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Annuler la session courante"
 
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:225
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Choisir un processus à attacher à..."
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:246
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Pas d'attachement au processus %1 : impossible d'attacher le débogueur à lui-"
 "même."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:266
 #, kde-format
 msgid "Debugger"
 msgstr "Débogueur"
@@ -328,42 +296,42 @@ msgstr "Déboguer un fichier « core »"
 msgid "Debug process %1"
 msgstr "Déboguer un processus %1"
 
-#: midebugsession.cpp:202
+#: midebugsession.cpp:198
 #, kde-format
 msgid "Running program"
 msgstr "Exécution du programme"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:284
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Attachement au processus %1"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:315
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Il est impossible d'attacher le débogueur :</b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:325
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Examen du fichier « core » %1"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:397
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Le débogueur est arrêté"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:417
 #, kde-format
 msgid "Application is running"
 msgstr "L'application est en cours d'exécution"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:422
 #, kde-format
 msgid "Application is paused"
 msgstr "L'application est en pause"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:737
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -372,39 +340,39 @@ msgstr ""
 "<b>Commande « gdb » envoyée quand le débogueur n'est pas en cours "
 "d'exécution</b><br>La commande était :<br> %1"
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:849
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Commande de débogueur non valable</b><br>%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:985
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "S'est terminé avec le code de retour : %1"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:987
 #, kde-format
 msgid "Exited normally"
 msgstr "Arrêté anormalement"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:994
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "S'est arrêté avec le signal %1"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1029
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Le programme a reçu le signal %1 (%2)"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1161
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 commande dans la file d'attente\n"
 msgstr[1] "%1 commandes dans la file d'attente\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1162
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -412,12 +380,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "%1 commande est en cours de traitement par GDB\n"
 msgstr[1] "%1 commandes sont en cours de traitement par GDB\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1163
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "État du débogueur : %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1166
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -428,7 +396,7 @@ msgstr ""
 "Texte de la commande actuelle : « %2 »\n"
 "Texte original de la commande actuelle : « %3 »\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1193
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -775,6 +743,30 @@ msgstr "Sélectionner l'adresse à désassembler"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Adresse à désassembler :"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "Évaluer : %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Évaluer l'expression</b><p>Affiche la valeur de l'expression située "
+#~ "sous le curseur.</p>"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "Surveiller : %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Surveiller l'expression</b><p>Ajoute l'expression sous le curseur à la "
+#~ "liste de surveillance des variables.</p>"
 
 #~ msgid "toolBar"
 #~ msgstr "Barre d'outils"

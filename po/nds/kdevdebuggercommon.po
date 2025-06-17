@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-17 00:41+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -159,7 +159,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Intern Fehlersöök-Fehler"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:412
 #, kde-format
 msgid "Process exited"
 msgstr "Perzess verlaten"
@@ -199,14 +199,14 @@ msgstr "Fehlersöker anhollen"
 msgid "Process crashed"
 msgstr "Perzess verlaten"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:108
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Karndatei bekieken..."
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:110
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -225,14 +225,14 @@ msgstr ""
 "Spiekertogriep-Fehler. De Karndatei bargt en Afbild vun den Programmspieker, "
 "as he bi den Afstört weer, so dat Du em later noch bekieken kannst.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:122
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Perzess griepen"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:124
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -242,83 +242,43 @@ msgid ""
 msgstr ""
 "<b>Perzess griepen</b><p>Lett den Fehlersöker en lopen Perzess griepen.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:137
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:217
-#, fuzzy, kde-format
-#| msgid "Evaluate: %1"
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "%1 utweerten"
-
-#: midebuggerplugin.cpp:219
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#| "cursor.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr ""
-"<b>Utdruck utweerten</b><p>Wiest den Weert vun den Utdruck ünner den Blinker."
-"</p>"
-
-#: midebuggerplugin.cpp:227
-#, fuzzy, kde-format
-#| msgid "Watch: %1"
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "%1 beluern"
-
-#: midebuggerplugin.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
-#| "Variables/Watch list.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>Utdruck beluern</b><p>Föögt den Utdruck ünner den Blinker na't "
-"Variabelnfinster ünner \"Beluern\" to.</p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:205
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Karndatei för't Bekieken utsöken..."
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
+#: midebuggerplugin.cpp:210 midebuggerplugin.cpp:230
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:212 midebuggerplugin.cpp:232
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:225
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Perzess för't Griepen utsöken..."
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:246
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Perzess %1 lett sik nich griepen: de Fehlersöker kann sik nich sülven "
 "griepen."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:266
 #, kde-format
 msgid "Debugger"
 msgstr "Fehlersöker"
@@ -344,42 +304,42 @@ msgstr "Fehlersöök binnen Karndatei"
 msgid "Debug process %1"
 msgstr "Fehlersöök in Perzess \"%1\""
 
-#: midebugsession.cpp:202
+#: midebugsession.cpp:198
 #, kde-format
 msgid "Running program"
 msgstr "Programm warrt utföhrt"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:284
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Perzess \"%1\" warrt grepen"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:315
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Fehlersöker lett sik nich griepen:</b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:325
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Karndatei \"%1\" warrt bekeken"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:397
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Fehlersöker anhollen"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:417
 #, kde-format
 msgid "Application is running"
 msgstr "Programm löppt"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:422
 #, kde-format
 msgid "Application is paused"
 msgstr "Programm wöör ophollen"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:737
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -388,39 +348,39 @@ msgstr ""
 "<b>\"gdb\"-Befehl geven, man de Fehlersöker löppt nich.</b><br>De Befehl "
 "weer:<br> %1"
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:849
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Leeg Fehlersöök-Befehl</b><br>%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:985
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Mit Utstiegkode %1 afslaten"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:987
 #, kde-format
 msgid "Exited normally"
 msgstr "Normaal beendt"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:994
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Na Signaal %1 verlaten"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1029
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programm hett Signaal %1 (%2) kregen"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1161
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 Befehl in de Reeg\n"
 msgstr[1] "%1 Befehlen in de Reeg\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1162
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -428,12 +388,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 Befehl warrt vun \"gdb\" afarbeidt\n"
 msgstr[1] "%1 Befehlen warrt vun \"gdb\" afarbeidt\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1163
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Fehlersöker-Status: %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1166
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -444,7 +404,7 @@ msgstr ""
 "Aktuell Befehltext: \"%2\"\n"
 "Aktuell Befehl-Orginaaltext: \"%3\"\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1193
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -824,6 +784,42 @@ msgstr "Söök de Adress ut, woneem Du ümto disassembleren wullt."
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Söök Adressen ut, woneem Du ümto disassembleren wullt."
+
+#, fuzzy
+#~| msgid "Evaluate: %1"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "%1 utweerten"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~| "cursor.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Utdruck utweerten</b><p>Wiest den Weert vun den Utdruck ünner den "
+#~ "Blinker.</p>"
+
+#, fuzzy
+#~| msgid "Watch: %1"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "%1 beluern"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~| "Variables/Watch list.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Utdruck beluern</b><p>Föögt den Utdruck ünner den Blinker na't "
+#~ "Variabelnfinster ünner \"Beluern\" to.</p>"
 
 #~ msgid "Could not start debugger"
 #~ msgstr "Fehlersöker lett sik nich opropen"

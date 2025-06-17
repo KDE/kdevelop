@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-17 00:41+0000\n"
 "PO-Revision-Date: 2021-06-28 00:20+0400\n"
 "Last-Translator: Kheyyam Gojayev <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -142,7 +142,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Daxili sazlayıcı xətası"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:412
 #, kde-format
 msgid "Process exited"
 msgstr "Proses başa çatdı"
@@ -183,13 +183,13 @@ msgstr "Sazlayıcı çökdü"
 msgid "Process crashed"
 msgstr "Proses çökdü"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:108
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "%1 ilə özək faylını öyrənin"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:110
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -203,62 +203,30 @@ msgstr ""
 "zamanı proqram yaddaşının sürətindən ibarət olur, və bu sizə çöküşdən sonra "
 "onu araşdırmağa imkan yaradır.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:122
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "%1 ilə prosesə qoşun"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:124
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>Prosesə qoşun</b><p>Sazlayıcını işlək prosesə qoşur.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:137
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:217
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "Qiymətləndirin: %1"
-
-#: midebuggerplugin.cpp:219
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr ""
-"<b>İfadəni qiymətləndirin</b><p>Kursorun altındakı ifadənin dəyərini "
-"göstərir.</p>"
-
-#: midebuggerplugin.cpp:227
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "İzləyin: %1"
-
-#: midebuggerplugin.cpp:229
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>İfadəni izləyin</b><p>Kursorun altındakı Dəyişənlər/İzlənmə siyahısına "
-"ifadə əlavə edir.</p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:205
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Araşdırmaq üçün özək faylını seçin..."
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
+#: midebuggerplugin.cpp:210 midebuggerplugin.cpp:230
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -267,23 +235,23 @@ msgstr ""
 "Bu proqram artıq sazlamadadır. Siz hazırda işlək sazlama sessiyasını ləğv "
 "edərək və davam etmək istəyirsiniz?"
 
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:212 midebuggerplugin.cpp:232
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:225
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Buna qoşmaq üçün örosesi seçin:..."
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:246
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "%1 prosesinə qoşulmur: sazlayıcı ğzünə qoşula bilməz."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:266
 #, kde-format
 msgid "Debugger"
 msgstr "Sazlayıcı"
@@ -309,42 +277,42 @@ msgstr "Sazlama özək faylı"
 msgid "Debug process %1"
 msgstr "Sazlama prosesi %1"
 
-#: midebugsession.cpp:202
+#: midebugsession.cpp:198
 #, kde-format
 msgid "Running program"
 msgstr "İşlək proqram"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:284
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "%1 prosesinə qoşulur"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:315
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Sazlayıcı qoşula bilmədi: </b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:325
 #, kde-format
 msgid "Examining core file %1"
 msgstr "%1 özək faylı araşdırılır"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:397
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Sazlayıcı dayandı"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:417
 #, kde-format
 msgid "Application is running"
 msgstr "Tətbiq işləyir"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:422
 #, kde-format
 msgid "Application is paused"
 msgstr "Tətbiq fasilədədir"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:737
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -352,39 +320,39 @@ msgid ""
 msgstr ""
 "<b>Sazlayıcı işləmədikdə gdb əmri göndərildi</b><br>Əmr belə idi: <br> %1"
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:849
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Səhv sazlayıcı əmri</b><br>%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:985
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Bu cavab kodu ilə bağlandı: %1"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:987
 #, kde-format
 msgid "Exited normally"
 msgstr "Normal halda bağlandı"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:994
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "%1 siqnalı ilə bağlandı"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1029
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Proqram %1 siqnalını aldı (%2)"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1161
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 əmr növbədədir\n"
 msgstr[1] "%1 əmr növbədədir\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1162
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -392,12 +360,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 əmr gdb tərəfindən işlənir\n"
 msgstr[1] "%1 əmr gdb tərəfindəb işlənir\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1163
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Sazlayıcının vəziyyəti: %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1166
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -408,7 +376,7 @@ msgstr ""
 "Hazırkı əmr mətni: %2'\n"
 "Hazırkı əmrin orijinal mətni: '%3'\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1193
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -748,3 +716,27 @@ msgstr "Ayrılması lazım olan mühitin ünvanını seçin"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Ayrılması lazım olan mühitin ünvanı:"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "Qiymətləndirin: %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>İfadəni qiymətləndirin</b><p>Kursorun altındakı ifadənin dəyərini "
+#~ "göstərir.</p>"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "İzləyin: %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>İfadəni izləyin</b><p>Kursorun altındakı Dəyişənlər/İzlənmə siyahısına "
+#~ "ifadə əlavə edir.</p>"

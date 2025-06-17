@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-17 00:41+0000\n"
 "PO-Revision-Date: 2013-12-15 19:17+0000\n"
 "Last-Translator: Nermina Ahmić <nahmic1@etf.unsa.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -157,7 +157,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Interna debagerska greška"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:412
 #, kde-format
 msgid "Process exited"
 msgstr "Proces izašao"
@@ -202,14 +202,14 @@ msgstr "Debager zaustavljen"
 msgid "Process crashed"
 msgstr "Proces izašao"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:108
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Ispitaj datoteku jezgra..."
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:110
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -228,14 +228,14 @@ msgstr ""
 "jezgra sadrži sliku programske memorije u trenutku kada se srušio, što vam "
 "omogućava da uradite post mortem analizu.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:122
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Priloži uz proces"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:124
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -244,79 +244,41 @@ msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>Priloži uz proces</b><p>Priloži debager uz izvršavani proces.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:137
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:217
-#, fuzzy, kde-format
-#| msgid "Evaluate: %1"
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "Izračunaj: %1"
-
-#: midebuggerplugin.cpp:219
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#| "cursor.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr "<b>Izračinaj izraz</b><p>Prikazuje vrijednost izraza pod kurzorom.</p>"
-
-#: midebuggerplugin.cpp:227
-#, fuzzy, kde-format
-#| msgid "Watch: %1"
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "Prati: %1"
-
-#: midebuggerplugin.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
-#| "Variables/Watch list.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>Prati izraz</b><p>Dodaje izraz pod kursorom na listu varijabli/praćenja.</"
-"p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:205
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Izaberi datoteku jezgra na ispitivanje..."
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
+#: midebuggerplugin.cpp:210 midebuggerplugin.cpp:230
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:212 midebuggerplugin.cpp:232
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:225
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Izaberite proces na koji se treba zakačiti..."
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:246
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "Ne kači se za proces %1: ne može se zakačiti za sam debager."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:266
 #, kde-format
 msgid "Debugger"
 msgstr "Ispravljač grešaka"
@@ -342,42 +304,42 @@ msgstr "Traži greške u datoteci jezgra"
 msgid "Debug process %1"
 msgstr "Traženje grešaka u procesu %1"
 
-#: midebugsession.cpp:202
+#: midebugsession.cpp:198
 #, kde-format
 msgid "Running program"
 msgstr "Izvršavam program"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:284
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Kačenje na proces %1"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:315
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Ne mobu prikačiti debager:</b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:325
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Ispitujem datoteku jezgra %1"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:397
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Debager zaustavljen"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:417
 #, kde-format
 msgid "Application is running"
 msgstr "Program se izvršava"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:422
 #, kde-format
 msgid "Application is paused"
 msgstr "Program je pauziran"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:737
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -386,32 +348,32 @@ msgstr ""
 "<b>Gdb komanda je poslana kada se debager nije izvršavao</b><br>Komanda je "
 "bila:<br> %1"
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:849
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Pogrešna debagerska komanda</b><br>%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:985
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Izašao s izlaznim kodom: %1"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:987
 #, kde-format
 msgid "Exited normally"
 msgstr "Izašao normalno"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:994
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Izašao na signal %1"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1029
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Program primio signal %1 (%2)"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1161
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -419,7 +381,7 @@ msgstr[0] "%1 komanda u redu čekanja\n"
 msgstr[1] "%1 komande u redu čekanja\n"
 msgstr[2] "%1 komandi u redu čekanja\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1162
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -428,12 +390,12 @@ msgstr[0] "%1 komandu obrađuje gdb\n"
 msgstr[1] "%1 komande obrađuje gdb\n"
 msgstr[2] "%1 komandi obrađuje gdb\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1163
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Debagersko stanje: %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1166
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -444,7 +406,7 @@ msgstr ""
 "Tekst trenutne naredbe: '%2'\n"
 "Originalni tekst trenutne naredbe: '%3'\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1193
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>Debagerska greška</b><p>Debager je javio sljedeću grešku:<p><tt>%1"
@@ -811,6 +773,41 @@ msgstr "Odaberi adresu za disasembliranje oko nje"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Odaberi adresu za disasembliranje oko nje"
+
+#, fuzzy
+#~| msgid "Evaluate: %1"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "Izračunaj: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~| "cursor.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Izračinaj izraz</b><p>Prikazuje vrijednost izraza pod kurzorom.</p>"
+
+#, fuzzy
+#~| msgid "Watch: %1"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "Prati: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~| "Variables/Watch list.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Prati izraz</b><p>Dodaje izraz pod kursorom na listu varijabli/"
+#~ "praćenja.</p>"
 
 #~ msgid "Could not start debugger"
 #~ msgstr "Ne mogu pokrenuti debager"

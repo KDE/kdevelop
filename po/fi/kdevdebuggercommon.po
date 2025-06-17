@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-17 00:41+0000\n"
 "PO-Revision-Date: 2023-04-17 16:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -154,7 +154,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Sisäinen virheenpaikanninvirhe"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:412
 #, kde-format
 msgid "Process exited"
 msgstr "Prossessi päättyi"
@@ -196,13 +196,13 @@ msgstr "Virheenpaikannin kaatui"
 msgid "Process crashed"
 msgstr "Prossessi päättyi"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:108
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Tutki muistivedostiedostoa ohjelmalla %1"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:110
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -216,13 +216,13 @@ msgstr ""
 "takia. Tiedosto sisältää vedoksen ohjelman kaatumishetken muistista, mikä "
 "mahdollistaa ajonjälkeisen analyysin.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:122
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Liity prosessiin ohjelmalla %1"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:124
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -231,56 +231,17 @@ msgstr ""
 "<b>Liity prosessiin</b><p>Liittää virheenpaikantimen käynnissä olevaan "
 "prosessiin.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:137
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) – %2"
 
-#: midebuggerplugin.cpp:217
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "Suorita: %1"
-
-#: midebuggerplugin.cpp:219
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#| "cursor.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr ""
-"<b>Määritä lausekkeen arvo</b><p>Näyttää kohdistimen kohdalla olevan "
-"lausekkeen arvon.</p>"
-
-#: midebuggerplugin.cpp:227
-#, fuzzy, kde-format
-#| msgid "Watch: %1"
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "Vahti: %1"
-
-#: midebuggerplugin.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
-#| "Variables/Watch list.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>Vahtilauseke</b><p>Lisää kohdistimen alla olevan lausekkeen Muuttujat-/"
-"Vahtiluetteloon.</p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:205
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Valitse tutkittava muistivedostiedosto…"
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
+#: midebuggerplugin.cpp:210 midebuggerplugin.cpp:230
 #, fuzzy, kde-format
 #| msgid ""
 #| "A program is already being debugged. Do you want to abort the currently "
@@ -292,24 +253,24 @@ msgstr ""
 "Tämän ohjelman virheiden paikantaminen on jo meneillään. Haluatko keskeyttää "
 "nykyisen virheenpaikannusistunnon ja jatkaa käynnistämistä?"
 
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
+#: midebuggerplugin.cpp:212 midebuggerplugin.cpp:232
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Keskeytä nykyinen istunto"
 
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:225
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Valitse prosessi, johon liitytään…"
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:246
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Ei liittynyt prosessiin %1: virheenpaikanninta ei voi liittää itseensä."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:266
 #, kde-format
 msgid "Debugger"
 msgstr "Virheenpaikannin"
@@ -335,42 +296,42 @@ msgstr "Virheenpaikannus muistivedostiedostosta"
 msgid "Debug process %1"
 msgstr "Paikanna prosessin %1 virheitä"
 
-#: midebugsession.cpp:202
+#: midebugsession.cpp:198
 #, kde-format
 msgid "Running program"
 msgstr "Suoritetaan ohjelmaa"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:284
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Liitytään prosessiin %1"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:315
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Virheenpaikantimen liittäminen epäonnistui:</b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:325
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Tutkitaan muistivedostiedostoa %1"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:397
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Virheenpaikannin pysähtyi"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:417
 #, kde-format
 msgid "Application is running"
 msgstr "Sovellus on käynnissä"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:422
 #, kde-format
 msgid "Application is paused"
 msgstr "Sovellus taukosi"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:737
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -379,39 +340,39 @@ msgstr ""
 "<b>Gdb-komento lähetetty, kun virheenpaikannus ei ole käynnissä</b><br /"
 ">Komento oli:<br /> %1"
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:849
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Virheellinen virheenpaikanninkomento</b><br />%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:985
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Päättyi paluuarvolla: %1"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:987
 #, kde-format
 msgid "Exited normally"
 msgstr "Päättyi normaalisti"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:994
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Päättyi signaalilla %1"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1029
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Ohjelma vastaanotti signaalin %1 (%2)"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1161
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 komento jonossa\n"
 msgstr[1] "%1 komentoa jonossa\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1162
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -419,12 +380,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "gdb on käsitellyt yhden komennon\n"
 msgstr[1] "gdb on käsitellyt %1 komentoa\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1163
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Virheenpaikantimen tila: %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1166
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -435,7 +396,7 @@ msgstr ""
 "Nykyinen komentoteksti: ”%2”\n"
 "Nykyisen komennon alkuperäisteksti: ”%3”\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1193
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -793,6 +754,40 @@ msgstr "Valitse purettava osoite"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Valitse purettava osoite"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "Suorita: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~| "cursor.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Määritä lausekkeen arvo</b><p>Näyttää kohdistimen kohdalla olevan "
+#~ "lausekkeen arvon.</p>"
+
+#, fuzzy
+#~| msgid "Watch: %1"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "Vahti: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~| "Variables/Watch list.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Vahtilauseke</b><p>Lisää kohdistimen alla olevan lausekkeen Muuttujat-/"
+#~ "Vahtiluetteloon.</p>"
 
 #~ msgid "Could not start debugger"
 #~ msgstr "Ei voitu käynnistää virheenpaikanninta"
