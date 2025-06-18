@@ -9,7 +9,6 @@
 
 #include "midebuggerplugin.h"
 
-#include "debugsession.h"
 #include "widgets/debuggerconsoleview.h"
 #include "widgets/disassemblewidget.h"
 
@@ -48,7 +47,7 @@ public:
 private:
     void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);
 
-    [[nodiscard]] DebugSession* createSessionObject() override;
+    [[nodiscard]] MIDebugSession* createSessionObject() override;
 
     DebuggerToolFactory<NonInterruptDebuggerConsoleView> *m_consoleFactory;
     DebuggerToolFactory<DisassembleWidget> *m_disassembleFactory;

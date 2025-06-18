@@ -8,7 +8,6 @@
 #define GDBDEBUGGERPLUGIN_H
 
 #include "midebuggerplugin.h"
-#include "debugsession.h"
 
 #include <QHash>
 #include <QVariantList>
@@ -37,7 +36,7 @@ public:
 private:
     void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);
 
-    [[nodiscard]] DebugSession* createSessionObject() override;
+    [[nodiscard]] MIDebugSession* createSessionObject() override;
 
     DebuggerToolFactory<DisassembleWidget>* disassemblefactory;
     DebuggerToolFactory<GDBOutputWidget, CppDebuggerPlugin>* gdbfactory;

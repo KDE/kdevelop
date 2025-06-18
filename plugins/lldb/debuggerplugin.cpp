@@ -7,6 +7,7 @@
 #include "debuggerplugin.h"
 
 #include "debuglog.h"
+#include "debugsession.h"
 #include "lldblauncher.h"
 #include "widgets/debuggerconsoleview.h"
 
@@ -116,7 +117,7 @@ LldbDebuggerPlugin::~LldbDebuggerPlugin()
 {
 }
 
-DebugSession* LldbDebuggerPlugin::createSessionObject()
+KDevMI::MIDebugSession* LldbDebuggerPlugin::createSessionObject()
 {
     return new DebugSession(this);
 }

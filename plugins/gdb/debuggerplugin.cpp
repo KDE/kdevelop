@@ -148,7 +148,7 @@ CppDebuggerPlugin::~CppDebuggerPlugin()
 {
 }
 
-DebugSession* CppDebuggerPlugin::createSessionObject()
+KDevMI::MIDebugSession* CppDebuggerPlugin::createSessionObject()
 {
     return new DebugSession(this);
 }
