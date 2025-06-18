@@ -697,23 +697,3 @@ msgstr "选择要反汇编的地址区域"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "要反汇编的地址区域："
-
-#~ msgctxt "@action:inmenu"
-#~ msgid "Evaluate: %1"
-#~ msgstr "计算：%1"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#~ "cursor.</p>"
-#~ msgstr "<b>计算表达式</b><p>显示光标下表达式的值。</p>"
-
-#~ msgctxt "@action:inmenu"
-#~ msgid "Watch: %1"
-#~ msgstr "监视：%1"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
-#~ "Variables/Watch list.</p>"
-#~ msgstr "<b>观察表达式</b><p>将光标下的表达式添加到变量/观察列表。</p>"
